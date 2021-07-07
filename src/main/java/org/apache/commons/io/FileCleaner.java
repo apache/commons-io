@@ -41,7 +41,6 @@ public class FileCleaner {
      */
     static final FileCleaningTracker theInstance = new FileCleaningTracker();
 
-    //-----------------------------------------------------------------------
     /**
      * Track the specified file, using the provided marker, deleting the file
      * when the marker instance is garbage collected.
@@ -104,7 +103,6 @@ public class FileCleaner {
         theInstance.track(path, marker, deleteStrategy);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Retrieve the number of files currently being tracked, and therefore
      * awaiting deletion.

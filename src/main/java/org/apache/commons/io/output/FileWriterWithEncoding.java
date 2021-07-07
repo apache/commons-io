@@ -210,7 +210,6 @@ public class FileWriterWithEncoding extends Writer {
         this.out = initWriter(file, charsetEncoder, append);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Initialize the wrapped file writer.
      * Ensure that a cleanup occurs if the writer creation fails.
@@ -249,7 +248,6 @@ public class FileWriterWithEncoding extends Writer {
         }
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Write a character.
      * @param idx the character to write

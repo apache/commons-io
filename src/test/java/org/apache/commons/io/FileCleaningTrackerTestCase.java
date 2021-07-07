@@ -85,7 +85,6 @@ public class FileCleaningTrackerTestCase {
         theInstance = null;
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testFileCleanerFile() throws Exception {
         final String path = testFile.getPath();
@@ -305,7 +304,6 @@ public class FileCleaningTrackerTestCase {
         assertFalse(theInstance.reaper.isAlive());
     }
 
-    //-----------------------------------------------------------------------
     private void pauseForDeleteToComplete(File file) {
         int count = 0;
         while(file.exists() && count++ < 40) {

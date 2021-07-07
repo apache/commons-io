@@ -55,7 +55,6 @@ public class LockableFileWriterTest {
         altLockFile = new File(altLockDir, file.getName() + ".lck");
     }
 
-    //-----------------------------------------------------------------------
     @Test public void testFileLocked() throws IOException {
 
         // open a valid lockable writer
@@ -89,7 +88,6 @@ public class LockableFileWriterTest {
         assertFalse(lockFile.exists());
     }
 
-    //-----------------------------------------------------------------------
     @Test public void testAlternateLockDir() throws IOException {
         // open a valid lockable writer
         try (LockableFileWriter lfw1 = new LockableFileWriter(file, "UTF-8" ,true, altLockDir.getAbsolutePath())){
@@ -111,7 +109,6 @@ public class LockableFileWriterTest {
         assertFalse(altLockFile.exists());
     }
 
-    //-----------------------------------------------------------------------
     @Test public void testFileNotLocked() throws IOException {
         // open a valid lockable writer
         try (LockableFileWriter lfw1 = new LockableFileWriter(file)) {
@@ -130,7 +127,6 @@ public class LockableFileWriterTest {
         assertFalse(lockFile.exists());
     }
 
-    //-----------------------------------------------------------------------
     @Test public void testConstructor_File_encoding_badEncoding() throws IOException {
         try (Writer writer = new LockableFileWriter(file, "BAD-ENCODE")) {
             fail();
@@ -143,7 +139,6 @@ public class LockableFileWriterTest {
         assertFalse(lockFile.exists());
     }
 
-    //-----------------------------------------------------------------------
     @Test public void testConstructor_File_directory() {
         try (Writer writer = new LockableFileWriter(temporaryFolder)) {
             fail();
@@ -156,7 +151,6 @@ public class LockableFileWriterTest {
         assertFalse(lockFile.exists());
     }
 
-    //-----------------------------------------------------------------------
     @Test public void testConstructor_File_nullFile() throws IOException {
         try (Writer writer = new LockableFileWriter((File) null)) {
             fail();
@@ -169,7 +163,6 @@ public class LockableFileWriterTest {
         assertFalse(lockFile.exists());
     }
 
-    //-----------------------------------------------------------------------
     @Test public void testConstructor_fileName_nullFile() throws IOException {
         try (Writer writer = new LockableFileWriter((String) null)) {
             fail();

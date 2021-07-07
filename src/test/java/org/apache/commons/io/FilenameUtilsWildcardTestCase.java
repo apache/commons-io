@@ -30,7 +30,6 @@ public class FilenameUtilsWildcardTestCase {
 
     private static final boolean WINDOWS = File.separatorChar == '\\';
 
-    //-----------------------------------------------------------------------
     // Testing:
     //   FilenameUtils.wildcardMatch(String,String)
 

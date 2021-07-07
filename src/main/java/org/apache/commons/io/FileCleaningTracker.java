@@ -66,7 +66,6 @@ public class FileCleaningTracker {
      */
     Thread reaper;
 
-    //-----------------------------------------------------------------------
     /**
      * Track the specified file, using the provided marker, deleting the file
      * when the marker instance is garbage collected.
@@ -143,7 +142,6 @@ public class FileCleaningTracker {
         trackers.add(new Tracker(path, deleteStrategy, marker, q));
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Retrieve the number of files currently being tracked, and therefore
      * awaiting deletion.
@@ -196,7 +194,6 @@ public class FileCleaningTracker {
         }
     }
 
-    //-----------------------------------------------------------------------
     /**
      * The reaper thread.
      */
@@ -231,7 +228,6 @@ public class FileCleaningTracker {
         }
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Inner class which acts as the reference for a file pending deletion.
      */

@@ -137,7 +137,6 @@ public class FilenameUtils {
     public FilenameUtils() {
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Determines if Windows file system is in use.
      *
@@ -147,7 +146,6 @@ public class FilenameUtils {
         return SYSTEM_SEPARATOR == WINDOWS_SEPARATOR;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Checks if the character is a separator.
      *
@@ -158,7 +156,6 @@ public class FilenameUtils {
         return ch == UNIX_SEPARATOR || ch == WINDOWS_SEPARATOR;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Normalizes a path, removing double and single dot path steps.
      * <p>
@@ -251,7 +248,6 @@ public class FilenameUtils {
         return doNormalize(fileName, separator, true);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Normalizes a path, removing double and single dot path steps,
      * and removing any final directory separator.
@@ -451,7 +447,6 @@ public class FilenameUtils {
         return new String(array, 0, size - 1);  // lose trailing separator
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Concatenates a fileName to a base path using normal command line style rules.
      * <p>
@@ -747,7 +742,6 @@ public class FilenameUtils {
         return lastSeparator > extensionPos ? NOT_FOUND : extensionPos;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Gets the prefix from a full fileName, such as {@code C:/}
      * or {@code ~/}.
@@ -1089,7 +1083,6 @@ public class FilenameUtils {
         return Math.max(offset1, offset2) + 1;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Removes the extension from a fileName.
      * <p>
@@ -1120,7 +1113,6 @@ public class FilenameUtils {
         return fileName.substring(0, index);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Checks whether two fileNames are equal exactly.
      * <p>
@@ -1151,7 +1143,6 @@ public class FilenameUtils {
         return equals(fileName1, fileName2, false, IOCase.SYSTEM);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Checks whether two fileNames are equal after both have been normalized.
      * <p>
@@ -1218,7 +1209,6 @@ public class FilenameUtils {
         return caseSensitivity.checkEquals(fileName1, fileName2);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Checks whether the extension of the fileName is that specified.
      * <p>
@@ -1304,7 +1294,6 @@ public class FilenameUtils {
         return false;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Checks a fileName to see if it matches the specified wildcard matcher,
      * always testing case-sensitive.

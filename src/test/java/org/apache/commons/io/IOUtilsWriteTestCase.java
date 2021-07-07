@@ -522,7 +522,6 @@ public class IOUtilsWriteTestCase {
         assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testWrite_charArrayToWriter() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);

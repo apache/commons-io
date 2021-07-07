@@ -70,7 +70,6 @@ public class DirectoryWalkerTestCaseJava4 {
     // Filter to exclude SVN files
     private static final IOFileFilter NOT_SVN = FileFilterUtils.makeSVNAware(null);
 
-    //-----------------------------------------------------------------------
 
     /**
      * Test Filtering

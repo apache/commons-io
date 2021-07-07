@@ -97,7 +97,6 @@ public class FilenameUtilsTestCase {
         }
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testNormalize() {
         assertNull(FilenameUtils.normalize(null));
@@ -305,7 +304,6 @@ public class FilenameUtilsTestCase {
         assertEquals("\\a\\c\\", FilenameUtils.normalize("\\a\\b\\..\\c\\", false));
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testNormalizeNoEndSeparator() {
         assertNull(FilenameUtils.normalizeNoEndSeparator(null));
@@ -469,7 +467,6 @@ public class FilenameUtilsTestCase {
         assertEquals("\\a\\c", FilenameUtils.normalizeNoEndSeparator("\\a\\b\\..\\c\\", false));
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testConcat() {
         assertNull(FilenameUtils.concat("", null));
@@ -509,7 +506,6 @@ public class FilenameUtilsTestCase {
         assertEquals("~user" + SEP, FilenameUtils.concat("a/b/", "~user"));
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testSeparatorsToUnix() {
         assertNull(FilenameUtils.separatorsToUnix(null));
@@ -549,7 +545,6 @@ public class FilenameUtilsTestCase {
         }
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testGetPrefixLength() {
         assertEquals(-1, FilenameUtils.getPrefixLength(null));
@@ -647,7 +642,6 @@ public class FilenameUtilsTestCase {
 
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testGetPrefix() {
         assertNull(FilenameUtils.getPrefix(null));
@@ -980,7 +974,6 @@ public class FilenameUtilsTestCase {
         assertEquals("../filename", FilenameUtils.removeExtension("../filename.ext"));
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testEquals() {
         assertTrue(FilenameUtils.equals(null, null));
@@ -1003,7 +996,6 @@ public class FilenameUtilsTestCase {
         assertFalse(FilenameUtils.equalsOnSystem("a\\b\\file.txt", "a/b/file.txt"));
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testEqualsNormalized() {
         assertTrue(FilenameUtils.equalsNormalized(null, null));
@@ -1046,7 +1038,6 @@ public class FilenameUtilsTestCase {
         assertFalse(FilenameUtils.equals("file.txt", "FILE.TXT", true, null));
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testIsExtension() {
         assertFalse(FilenameUtils.isExtension(null, (String) null));

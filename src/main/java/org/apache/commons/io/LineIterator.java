@@ -75,7 +75,6 @@ public class LineIterator implements Iterator<String>, Closeable {
         }
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Indicates whether the {@code Reader} has more lines.
      * If there is an {@code IOException} then {@link #close()} will
@@ -172,7 +171,6 @@ public class LineIterator implements Iterator<String>, Closeable {
         throw new UnsupportedOperationException("remove not supported");
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Closes a {@code LineIterator} quietly.
      *

@@ -246,7 +246,6 @@ public class FileUtilsTestCase {
         }
     }
 
-    //-----------------------------------------------------------------------
     void openOutputStream_noParent(final boolean createFile) throws Exception {
         final File file = new File("test.txt");
         assertNull(file.getParentFile());
@@ -318,7 +317,6 @@ public class FileUtilsTestCase {
         }
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void test_openInputStream_exists() throws Exception {
         final File file = new File(temporaryFolder, "test.txt");
@@ -399,7 +397,6 @@ public class FileUtilsTestCase {
         }
     }
 
-    //-----------------------------------------------------------------------
     // byteCountToDisplaySize
     @Test
     public void testByteCountToDisplaySizeBigInteger() {
@@ -482,7 +479,6 @@ public class FileUtilsTestCase {
         assertEquals(expectedValue, resultValue);
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testChecksumCRC32() throws Exception {
         // create a test file
@@ -1493,7 +1489,6 @@ public class FileUtilsTestCase {
         assertFalse(testFile.exists());
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testGetFile() {
         final File expected_A = new File("src");
@@ -2667,7 +2662,6 @@ public class FileUtilsTestCase {
         file.delete();
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testToFile1() throws Exception {
         final URL url = new URL("file", null, "a/b/c/file.txt");

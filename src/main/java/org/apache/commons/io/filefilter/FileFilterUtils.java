@@ -148,7 +148,6 @@ public class FileFilterUtils {
         return new AndFileFilter(toList(filters));
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Returns a filter that ANDs the two specified filters.
      *
@@ -164,7 +163,6 @@ public class FileFilterUtils {
         return new AndFileFilter(filter1, filter2);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Returns an {@code IOFileFilter} that wraps the
      * {@code FileFilter} instance.
@@ -523,7 +521,6 @@ public class FileFilterUtils {
         return filter == null ? cvsFilter : and(filter, cvsFilter);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Decorates a filter so that it only applies to directories and not to files.
      *
@@ -656,7 +653,6 @@ public class FileFilterUtils {
         return new PrefixFileFilter(prefix, caseSensitivity);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Returns a filter that returns true if the file is bigger than a certain size.
      *

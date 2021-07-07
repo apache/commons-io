@@ -33,7 +33,6 @@ public class FileUtilsWaitForTestCase {
     // This class has been broken out from FileUtilsTestCase
     // to solve issues as per BZ 38927
 
-    //-----------------------------------------------------------------------
     @Test
     public void testWaitFor() {
         FileUtils.waitFor(new File(""), -1);

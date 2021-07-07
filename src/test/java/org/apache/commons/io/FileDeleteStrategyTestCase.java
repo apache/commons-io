@@ -39,7 +39,6 @@ public class FileDeleteStrategyTestCase {
     @TempDir
     public File temporaryFolder;
 
-    //-----------------------------------------------------------------------
     @Test
     public void testDeleteNormal() throws Exception {
         final File baseDir = temporaryFolder;

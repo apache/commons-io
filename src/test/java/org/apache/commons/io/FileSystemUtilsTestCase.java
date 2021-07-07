@@ -42,7 +42,6 @@ public class FileSystemUtilsTestCase {
 
     private static final Duration NEG_1_TIMEOUT = Duration.ofMillis(-1);
 
-    //-----------------------------------------------------------------------
     @Test
     public void testGetFreeSpace_String() throws Exception {
         // test coverage, as we can't check value
@@ -92,7 +91,6 @@ public class FileSystemUtilsTestCase {
         }
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testGetFreeSpaceOS_String_NullPath() throws Exception {
         final FileSystemUtils fsu = new FileSystemUtils();
@@ -162,7 +160,6 @@ public class FileSystemUtilsTestCase {
         assertEquals(12345L, fsu.freeSpaceOS("", 2, true, NEG_1_TIMEOUT));
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testGetFreeSpaceWindows_String_ParseCommaFormatBytes() throws Exception {
         // this is the format of response when calling dir /c
@@ -183,7 +180,6 @@ public class FileSystemUtilsTestCase {
         assertEquals(41411551232L, fsu.freeSpaceWindows("", NEG_1_TIMEOUT));
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testGetFreeSpaceWindows_String_ParseCommaFormatBytes_Big() throws Exception {
         // test with very large free space
@@ -203,7 +199,6 @@ public class FileSystemUtilsTestCase {
         assertEquals(141411551232L, fsu.freeSpaceWindows("", NEG_1_TIMEOUT));
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testGetFreeSpaceWindows_String_ParseCommaFormatBytes_Small() throws Exception {
         // test with very large free space
@@ -223,7 +218,6 @@ public class FileSystemUtilsTestCase {
         assertEquals(1232L, fsu.freeSpaceWindows("", NEG_1_TIMEOUT));
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testGetFreeSpaceWindows_String_EmptyPath() throws Exception {
         final String lines =
@@ -333,7 +327,6 @@ public class FileSystemUtilsTestCase {
         assertThrows(IOException.class, () -> fsu.freeSpaceWindows("C:", NEG_1_TIMEOUT));
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testGetFreeSpaceUnix_String_EmptyPath() throws Exception {
         final String lines =
@@ -383,7 +376,6 @@ public class FileSystemUtilsTestCase {
         assertEquals(15770L, fsu.freeSpaceUnix("/", false, false, NEG_1_TIMEOUT));
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testGetFreeSpaceUnix_String_NormalResponseKbLinux() throws Exception {
         // from Sourceforge 'GNU bash, version 2.05b.0(1)-release (i386-redhat-linux-gnu)'
@@ -575,7 +567,6 @@ public class FileSystemUtilsTestCase {
         }
     }
 
-    //-----------------------------------------------------------------------
     static class MockFileSystemUtils extends FileSystemUtils {
         private final int exitCode;
         private final byte[] bytes;

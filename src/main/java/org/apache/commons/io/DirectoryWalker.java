@@ -316,7 +316,6 @@ public abstract class DirectoryWalker<T> {
         this.depthLimit = depthLimit;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Internal method that walks the directory hierarchy in a depth-first manner.
      * <p>
@@ -381,7 +380,6 @@ public abstract class DirectoryWalker<T> {
         checkIfCancelled(directory, depth, results);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Checks whether the walk has been cancelled by calling {@link #handleIsCancelled},
      * throwing a {@code CancelException} if it has.
@@ -469,7 +467,6 @@ public abstract class DirectoryWalker<T> {
         throw cancel;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Overridable callback method invoked at the start of processing.
      * <p>
@@ -609,7 +606,6 @@ public abstract class DirectoryWalker<T> {
         // do nothing - overridable by subclass
     }
 
-    //-----------------------------------------------------------------------
     /**
      * CancelException is thrown in DirectoryWalker to cancel the current
      * processing.

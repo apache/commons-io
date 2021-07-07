@@ -114,7 +114,6 @@ public class FileSystemUtils {
     public FileSystemUtils() {
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Returns the free space on a drive or volume by invoking
      * the command line.
@@ -146,7 +145,6 @@ public class FileSystemUtils {
         return INSTANCE.freeSpaceOS(path, OS, false, Duration.ofMillis(-1));
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Returns the free space on a drive or volume in kibibytes (1024 bytes)
      * by invoking the command line.
@@ -248,7 +246,6 @@ public class FileSystemUtils {
         return freeSpaceKb(new File(".").getAbsolutePath(), timeout);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Returns the free space on a drive or volume in a cross-platform manner.
      * Note that some OS's are NOT currently supported, including OS/390.
@@ -288,7 +285,6 @@ public class FileSystemUtils {
         }
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Find free space on the Windows platform using the 'dir' command.
      *
@@ -381,7 +377,6 @@ public class FileSystemUtils {
         return parseBytes(buf.toString(), path);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Find free space on the *nix platform using the 'df' command.
      *
@@ -440,7 +435,6 @@ public class FileSystemUtils {
         return parseBytes(freeSpace, path);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Parses the bytes from a string.
      *

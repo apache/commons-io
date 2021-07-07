@@ -38,7 +38,6 @@ public class IOCaseTestCase {
 
     private static final boolean WINDOWS = File.separatorChar == '\\';
 
-    //-----------------------------------------------------------------------
     @Test
     public void test_forName() {
         assertEquals(IOCase.SENSITIVE, IOCase.forName("Sensitive"));
@@ -81,7 +80,6 @@ public class IOCaseTestCase {
         assertFalse(IOCase.INSENSITIVE.isCaseSensitive());
         assertEquals(!WINDOWS, IOCase.SYSTEM.isCaseSensitive());
     }
-    //-----------------------------------------------------------------------
     @Test
     public void test_checkCompare_functionality() {
         assertTrue(IOCase.SENSITIVE.checkCompareTo("ABC", "") > 0);
@@ -121,7 +119,6 @@ public class IOCaseTestCase {
     }
 
 
-    //-----------------------------------------------------------------------
     @Test
     public void test_checkEquals_functionality() {
         assertFalse(IOCase.SENSITIVE.checkEquals("ABC", ""));
@@ -160,7 +157,6 @@ public class IOCaseTestCase {
         assertEquals(WINDOWS, IOCase.SYSTEM.checkEquals("ABC", "Abc"));
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void test_checkStartsWith_functionality() {
         assertTrue(IOCase.SENSITIVE.checkStartsWith("ABC", ""));
@@ -190,7 +186,6 @@ public class IOCaseTestCase {
         assertEquals(WINDOWS, IOCase.SYSTEM.checkStartsWith("ABC", "Ab"));
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void test_checkEndsWith_functionality() {
         assertTrue(IOCase.SENSITIVE.checkEndsWith("ABC", ""));
@@ -220,7 +215,6 @@ public class IOCaseTestCase {
         assertEquals(WINDOWS, IOCase.SYSTEM.checkEndsWith("ABC", "Bc"));
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void test_checkIndexOf_functionality() {
 
@@ -286,7 +280,6 @@ public class IOCaseTestCase {
         assertEquals(WINDOWS ? 1 : -1, IOCase.SYSTEM.checkIndexOf("ABC", 0, "Bc"));
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void test_checkRegionMatches_functionality() {
         assertTrue(IOCase.SENSITIVE.checkRegionMatches("ABC", 0, ""));
@@ -347,7 +340,6 @@ public class IOCaseTestCase {
         assertEquals(WINDOWS, IOCase.SYSTEM.checkRegionMatches("ABC", 0, "Ab"));
     }
 
-    //-----------------------------------------------------------------------
     private IOCase serialize(final IOCase value) throws Exception {
         final ByteArrayOutputStream buf = new ByteArrayOutputStream();
         final ObjectOutputStream out = new ObjectOutputStream(buf);

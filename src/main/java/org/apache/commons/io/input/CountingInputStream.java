@@ -43,7 +43,6 @@ public class CountingInputStream extends ProxyInputStream {
         super(in);
     }
 
-    //-----------------------------------------------------------------------
 
     /**
      * Skips the stream over the specified number of bytes, adding the skipped
@@ -74,7 +73,6 @@ public class CountingInputStream extends ProxyInputStream {
         }
     }
 
-    //-----------------------------------------------------------------------
     /**
      * The number of bytes that have passed through this stream.
      * <p>
