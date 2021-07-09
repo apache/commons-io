@@ -1,3 +1,80 @@
+Apache Commons IO 
+Version 2.11.0
+Release Notes
+
+INTRODUCTION:
+
+Commons IO is a package of Java utility classes like java.io.  
+Classes in this package are considered to be so standard and of such high 
+reuse as to justify existence in java.io.
+
+The Apache Commons IO library contains utility classes, stream implementations, file filters,
+file comparators, endian transformation classes, and much more.
+
+==============================================================================
+Apache Commons IO Version 2.11.0
+==============================================================================
+Java 8 required.
+
+Changes in this version include:
+
+
+Fixed Bugs:
+o IO-741:  FileUtils.listFiles does not list matching files if File parameter is a symbolic link. Thanks to Zach Sherman. 
+o IO-724:  FileUtils#deleteDirectory(File) exception Javadoc inaccurate update #245. Thanks to liran2000. 
+o          Minor changes #243. Thanks to Arturo Bernal. 
+o          Replace construction of FileInputStream and FileOutputStream objects with Files NIO APIs. #221. Thanks to Arturo Bernal. 
+o          Fix IndexOutOfBoundsException in IOExceptionList constructors. Thanks to Gary Gregory. 
+o          Remove IOException from the method signatures that no longer throw IOException.
+           This maintains binary compatibility but not source compatibility.
+           - FilenameUtils
+               directoryContains(String, String)
+           - BoundedReader
+               BoundedReader(java.io.Reader, int)
+           - IOUtils
+               lineIterator(java.io.InputStream, Charset)
+               lineIterator(java.io.InputStream, String)
+               toByteArray(String)
+               toInputStream(CharSequence, String)
+               toInputStream(String, String)
+               toString(byte[])
+               toString(byte[], String) Thanks to Gary Gregory. 
+
+Changes:
+o          Add SymbolicLinkFileFilter. Thanks to Gary Gregory. 
+o          Add test to make sure the setter of AndFileFilter works correctly #244. Thanks to trncate. 
+o          Add XmlStreamReader(Path). Thanks to Gary Gregory. 
+o          Bump mockito-inline from 3.11.0 to 3.11.2 #247. Thanks to Dependabot. 
+o          Bump jmh.version from 1.27 to 1.32 #237. Thanks to Dependabot. 
+o          Bump spotbugs from 4.2.3 to 4.3.0 #249. Thanks to Dependabot. 
+
+Compatibility with 2.6:
+Binary compatible: Yes.
+Source compatible: Yes.
+Semantic compatible: Yes.
+
+Commons IO 2.9.0 requires Java 8.
+Commons IO 2.8.0 requires Java 8.
+Commons IO 2.7 requires Java 8.
+Commons IO 2.6 requires Java 7.
+Commons IO 2.5 requires Java 6.
+Commons IO 2.4 requires Java 6.
+Commons IO 2.3 requires Java 6.
+Commons IO 2.2 requires Java 5.
+Commons IO 1.4 requires Java 1.3.
+
+Historical list of changes: https://commons.apache.org/proper/commons-io/changes-report.html
+
+For complete information on Apache Commons IO, including instructions on how to submit bug reports,
+patches, or suggestions for improvement, see the Apache Apache Commons IO website:
+
+https://commons.apache.org/proper/commons-io/
+
+Download page: https://commons.apache.org/proper/commons-io/download_io.cgi
+
+Have fun!
+-Apache Commons Team
+
 
 Apache Commons IO 
 Version 2.10.0
@@ -61,6 +138,7 @@ Download page: https://commons.apache.org/proper/commons-io/download_io.cgi
 
 Have fun!
 -Apache Commons Team
+
 
 Apache Commons IO 
 Version 2.8.0
