@@ -20,16 +20,21 @@ import java.io.IOException;
 import java.io.Reader;
 
 /**
- * Broken reader. This reader always throws an {@link IOException} from
- * all the {@link Reader} methods where the exception is declared.
+ * Broken reader. This reader always throws an {@link IOException} from all the {@link Reader} methods where the exception is declared.
  * <p>
- * This class is mostly useful for testing error handling in code that uses a
- * reader.
+ * This class is mostly useful for testing error handling in code that uses a reader.
  * </p>
  *
  * @since 2.7
  */
 public class BrokenReader extends Reader {
+
+    /**
+     * A singleton instance using a default IOException.
+     *
+     * @since 2.12.0
+     */
+    public static final BrokenReader INSTANCE = new BrokenReader();
 
     /**
      * The exception that is thrown by all methods of this class.
@@ -77,8 +82,8 @@ public class BrokenReader extends Reader {
      * Throws the configured exception.
      *
      * @param cbuf ignored
-     * @param off ignored
-     * @param len ignored
+     * @param off  ignored
+     * @param len  ignored
      * @return nothing
      * @throws IOException always thrown
      */

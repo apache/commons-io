@@ -17,6 +17,7 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
@@ -49,6 +50,11 @@ public class BrokenReaderTest {
         } catch (final IOException e) {
             assertEquals(exception, e);
         }
+    }
+
+    @Test
+    public void testInstance() {
+        assertNotNull(BrokenReader.INSTANCE);
     }
 
     @Test
