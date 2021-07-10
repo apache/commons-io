@@ -66,7 +66,7 @@ public enum IOCase {
 
     /**
      * Tests for cases sensitivity in a null-safe manner.
-     * 
+     *
      * @param caseSensitivity an IOCase.
      * @return true if the input is non-null and {@link #isCaseSensitive()}.
      * @since 2.10.0

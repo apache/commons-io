@@ -96,7 +96,7 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
 
     /** The regular expression pattern that will be used to match file names. */
     private final Pattern pattern;
-    
+
     /** How convert a path to a string. */
     private final Function<Path, String> pathToString;
 

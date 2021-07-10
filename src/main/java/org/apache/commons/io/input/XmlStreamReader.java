@@ -214,7 +214,7 @@ public class XmlStreamReader extends Reader {
                 inputStream.reset();
                 final BufferedReader bReader = new BufferedReader(new StringReader(
                         xmlProlog.substring(0, firstGT + 1)));
-                final StringBuffer prolog = new StringBuffer();
+                final StringBuilder prolog = new StringBuilder();
                 String line;
                 while ((line = bReader.readLine()) != null) {
                     prolog.append(line);
