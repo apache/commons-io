@@ -34,18 +34,18 @@ public class BrokenReaderTest {
 
     private IOException exception;
 
-    private Reader reader;
+    private Reader brokenReader;
 
     @BeforeEach
     public void setUp() {
         exception = new IOException("test exception");
-        reader = new BrokenReader(exception);
+        brokenReader = new BrokenReader(exception);
     }
 
     @Test
     public void testClose() {
         try {
-            reader.close();
+            brokenReader.close();
             fail("Expected exception not thrown.");
         } catch (final IOException e) {
             assertEquals(exception, e);
@@ -60,7 +60,7 @@ public class BrokenReaderTest {
     @Test
     public void testMark() {
         try {
-            reader.mark(1);
+            brokenReader.mark(1);
             fail("Expected exception not thrown.");
         } catch (final IOException e) {
             assertEquals(exception, e);
@@ -70,21 +70,21 @@ public class BrokenReaderTest {
     @Test
     public void testRead() {
         try {
-            reader.read();
+            brokenReader.read();
             fail("Expected exception not thrown.");
         } catch (final IOException e) {
             assertEquals(exception, e);
         }
 
         try {
-            reader.read(new char[1]);
+            brokenReader.read(new char[1]);
             fail("Expected exception not thrown.");
         } catch (final IOException e) {
             assertEquals(exception, e);
         }
 
         try {
-            reader.read(new char[1], 0, 1);
+            brokenReader.read(new char[1], 0, 1);
             fail("Expected exception not thrown.");
         } catch (final IOException e) {
             assertEquals(exception, e);
@@ -94,7 +94,7 @@ public class BrokenReaderTest {
     @Test
     public void testReady() {
         try {
-            reader.ready();
+            brokenReader.ready();
             fail("Expected exception not thrown.");
         } catch (final IOException e) {
             assertEquals(exception, e);
@@ -104,7 +104,7 @@ public class BrokenReaderTest {
     @Test
     public void testReset() {
         try {
-            reader.reset();
+            brokenReader.reset();
             fail("Expected exception not thrown.");
         } catch (final IOException e) {
             assertEquals(exception, e);
@@ -114,7 +114,7 @@ public class BrokenReaderTest {
     @Test
     public void testSkip() {
         try {
-            reader.skip(1);
+            brokenReader.skip(1);
             fail("Expected exception not thrown.");
         } catch (final IOException e) {
             assertEquals(exception, e);
