@@ -24,25 +24,22 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Test {@link ProxyReader}.
- *
  */
 public class ProxyReaderTest {
 
     @Test
     public void testNullCharArray() throws Exception {
-
-        final ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0));
-        proxy.read((char[])null);
-        proxy.read(null, 0, 0);
-        proxy.close();
+        try (final ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0))) {
+            proxy.read((char[]) null);
+            proxy.read(null, 0, 0);
+        }
     }
 
     @Test
     public void testNullCharBuffer() throws Exception {
-
-        final ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0));
-        proxy.read((CharBuffer)null);
-        proxy.close();
+        try (final ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0))) {
+            proxy.read((CharBuffer) null);
+        }
     }
 
     /** ProxyReader implementation */
@@ -57,10 +54,12 @@ public class ProxyReaderTest {
         CustomNullReader(final int len) {
             super(len);
         }
+
         @Override
         public int read(final char[] chars) throws IOException {
             return chars == null ? 0 : super.read(chars);
         }
+
         @Override
         public int read(final CharBuffer target) throws IOException {
             return target == null ? 0 : super.read(target);
