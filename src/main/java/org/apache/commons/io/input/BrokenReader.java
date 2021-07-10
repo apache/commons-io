@@ -37,6 +37,13 @@ public class BrokenReader extends Reader {
     private final IOException exception;
 
     /**
+     * Creates a new reader that always throws an {@link IOException}
+     */
+    public BrokenReader() {
+        this(new IOException("Broken reader"));
+    }
+
+    /**
      * Creates a new reader that always throws the given exception.
      *
      * @param exception the exception to be thrown
@@ -46,10 +53,24 @@ public class BrokenReader extends Reader {
     }
 
     /**
-     * Creates a new reader that always throws an {@link IOException}
+     * Throws the configured exception.
+     *
+     * @throws IOException always thrown
      */
-    public BrokenReader() {
-        this(new IOException("Broken reader"));
+    @Override
+    public void close() throws IOException {
+        throw exception;
+    }
+
+    /**
+     * Throws the configured exception.
+     *
+     * @param readAheadLimit ignored
+     * @throws IOException always thrown
+     */
+    @Override
+    public void mark(final int readAheadLimit) throws IOException {
+        throw exception;
     }
 
     /**
@@ -69,34 +90,11 @@ public class BrokenReader extends Reader {
     /**
      * Throws the configured exception.
      *
-     * @param n ignored
-     * @return nothing
-     * @throws IOException always thrown
-     */
-    @Override
-    public long skip(final long n) throws IOException {
-        throw exception;
-    }
-
-    /**
-     * Throws the configured exception.
-     *
      * @return nothing
      * @throws IOException always thrown
      */
     @Override
     public boolean ready() throws IOException {
-        throw exception;
-    }
-
-    /**
-     * Throws the configured exception.
-     *
-     * @param readAheadLimit ignored
-     * @throws IOException always thrown
-     */
-    @Override
-    public void mark(final int readAheadLimit) throws IOException {
         throw exception;
     }
 
@@ -113,10 +111,12 @@ public class BrokenReader extends Reader {
     /**
      * Throws the configured exception.
      *
+     * @param n ignored
+     * @return nothing
      * @throws IOException always thrown
      */
     @Override
-    public void close() throws IOException {
+    public long skip(final long n) throws IOException {
         throw exception;
     }
 
