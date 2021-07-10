@@ -23,33 +23,11 @@ import java.nio.CharBuffer;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test {@link ProxyReader}.
+ * Tests {@link ProxyReader}.
  */
 public class ProxyReaderTest {
 
-    @Test
-    public void testNullCharArray() throws Exception {
-        try (final ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0))) {
-            proxy.read((char[]) null);
-            proxy.read(null, 0, 0);
-        }
-    }
-
-    @Test
-    public void testNullCharBuffer() throws Exception {
-        try (final ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0))) {
-            proxy.read((CharBuffer) null);
-        }
-    }
-
-    /** ProxyReader implementation */
-    private static class ProxyReaderImpl extends ProxyReader {
-        ProxyReaderImpl(final Reader proxy) {
-            super(proxy);
-        }
-    }
-
-    /** Custom NullReader implementation */
+    /** Custom NullReader implementation. */
     private static class CustomNullReader extends NullReader {
         CustomNullReader(final int len) {
             super(len);
@@ -63,6 +41,28 @@ public class ProxyReaderTest {
         @Override
         public int read(final CharBuffer target) throws IOException {
             return target == null ? 0 : super.read(target);
+        }
+    }
+
+    /** ProxyReader implementation. */
+    private static class ProxyReaderImpl extends ProxyReader {
+        ProxyReaderImpl(final Reader proxy) {
+            super(proxy);
+        }
+    }
+
+    @Test
+    public void testNullCharArray() throws Exception {
+        try (final ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0))) {
+            proxy.read((char[]) null);
+            proxy.read(null, 0, 0);
+        }
+    }
+
+    @Test
+    public void testNullCharBuffer() throws Exception {
+        try (final ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0))) {
+            proxy.read((CharBuffer) null);
         }
     }
 }
