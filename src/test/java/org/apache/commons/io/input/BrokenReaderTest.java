@@ -42,6 +42,26 @@ public class BrokenReaderTest {
     }
 
     @Test
+    public void testClose() {
+        try {
+            reader.close();
+            fail("Expected exception not thrown.");
+        } catch (final IOException e) {
+            assertEquals(exception, e);
+        }
+    }
+
+    @Test
+    public void testMark() {
+        try {
+            reader.mark(1);
+            fail("Expected exception not thrown.");
+        } catch (final IOException e) {
+            assertEquals(exception, e);
+        }
+    }
+
+    @Test
     public void testRead() {
         try {
             reader.read();
@@ -66,29 +86,9 @@ public class BrokenReaderTest {
     }
 
     @Test
-    public void testSkip() {
-        try {
-            reader.skip(1);
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
-    }
-
-    @Test
     public void testReady() {
         try {
             reader.ready();
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
-    }
-
-    @Test
-    public void testMark() {
-        try {
-            reader.mark(1);
             fail("Expected exception not thrown.");
         } catch (final IOException e) {
             assertEquals(exception, e);
@@ -106,9 +106,9 @@ public class BrokenReaderTest {
     }
 
     @Test
-    public void testClose() {
+    public void testSkip() {
         try {
-            reader.close();
+            reader.skip(1);
             fail("Expected exception not thrown.");
         } catch (final IOException e) {
             assertEquals(exception, e);
