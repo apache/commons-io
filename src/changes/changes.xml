@@ -84,6 +84,9 @@ The <action> type attribute can be add,update,fix,remove.
             toString(byte[])
             toString(byte[], String)
       </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        Fix Javadoc links to the JRE.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Add SymbolicLinkFileFilter.
