@@ -46,9 +46,17 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <release version="2.13.0" date="2021-MM-DD" description="Java 8 required.">
+      <!-- FIX -->
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        Fix Javadoc links to the JRE.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add BrokenReader.INSTANCE.
+      </action>
+      <!-- UPDATE -->
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump Maven Javadoc plugin from 3.2.0 to 3.3.0.
       </action>
     </release>
     <release version="2.11.0" date="2021-07-09" description="Java 8 required.">
@@ -84,9 +92,6 @@ The <action> type attribute can be add,update,fix,remove.
             toString(byte[])
             toString(byte[], String)
       </action>
-      <action dev="ggregory" type="fix" due-to="Gary Gregory">
-        Fix Javadoc links to the JRE.
-      </action>
       <!-- ADD -->
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Add SymbolicLinkFileFilter.
@@ -103,12 +108,6 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump jmh.version from 1.27 to 1.32 #237.
-      </action>
-      <action dev="ggregory" type="update" due-to="Dependabot">
-        Bump spotbugs from 4.2.3 to 4.3.0 #249.
-      </action>
-      <action dev="ggregory" type="update" due-to="Dependabot">
-        Bump Maven Javadoc plugin from 3.2.0 to 3.3.0.
       </action>
     </release>
     <!-- The release date is the date RC is cut -->
