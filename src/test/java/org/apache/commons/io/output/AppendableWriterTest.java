@@ -34,29 +34,12 @@ public class AppendableWriterTest {
         out = new AppendableWriter<>(new StringBuilder());
     }
 
+    @SuppressWarnings("resource")
     @Test
-    public void testWriteInt() throws Exception {
-        out.write('F');
+    public void testAppendChar() throws Exception {
+        out.append('F');
 
         assertEquals("F", out.getAppendable().toString());
-    }
-
-    @Test
-    public void testWriteChars() throws Exception {
-        final String testData = "ABCD";
-
-        out.write(testData.toCharArray());
-
-        assertEquals(testData, out.getAppendable().toString());
-    }
-
-    @Test
-    public void testWriteString() throws Exception {
-        final String testData = "ABCD";
-
-        out.write(testData);
-
-        assertEquals(testData, out.getAppendable().toString());
     }
 
     @SuppressWarnings("resource")
@@ -81,11 +64,28 @@ public class AppendableWriterTest {
         assertEquals(testData.substring(1, 3) + "ul", out.getAppendable().toString());
     }
 
-    @SuppressWarnings("resource")
     @Test
-    public void testAppendChar() throws Exception {
-        out.append('F');
+    public void testWriteChars() throws Exception {
+        final String testData = "ABCD";
+
+        out.write(testData.toCharArray());
+
+        assertEquals(testData, out.getAppendable().toString());
+    }
+
+    @Test
+    public void testWriteInt() throws Exception {
+        out.write('F');
 
         assertEquals("F", out.getAppendable().toString());
+    }
+
+    @Test
+    public void testWriteString() throws Exception {
+        final String testData = "ABCD";
+
+        out.write(testData);
+
+        assertEquals(testData, out.getAppendable().toString());
     }
 }
