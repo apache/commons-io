@@ -27,9 +27,19 @@ import java.io.Writer;
 public class NullWriter extends Writer {
 
     /**
-     * A singleton.
+     * The singleton instance.
+     *
+     * @since 2.12.0
      */
-    public static final NullWriter NULL_WRITER = new NullWriter();
+    public static final NullWriter INSTANCE = new NullWriter();
+
+    /**
+     * The singleton instance.
+     *
+     * @deprecated Use {@link #INSTANCE}.
+     */
+    @Deprecated
+    public static final NullWriter NULL_WRITER = INSTANCE;
 
     /**
      * Constructs a new NullWriter.

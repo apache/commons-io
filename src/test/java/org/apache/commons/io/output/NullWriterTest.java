@@ -27,7 +27,7 @@ public class NullWriterTest {
     @Test
     public void testNull() {
         final char[] chars = { 'A', 'B', 'C' };
-        try (final NullWriter writer = NullWriter.NULL_WRITER) {
+        try (final NullWriter writer = NullWriter.INSTANCE) {
             writer.write(1);
             writer.write(chars);
             writer.write(chars, 1, 1);

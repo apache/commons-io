@@ -31,7 +31,7 @@ public class ThrowOnCloseWriter extends ProxyWriter {
      * Default ctor.
      */
     public ThrowOnCloseWriter() {
-        super(NullWriter.NULL_WRITER);
+        super(NullWriter.INSTANCE);
     }
 
     /**
