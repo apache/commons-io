@@ -106,6 +106,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump Maven Javadoc plugin from 3.2.0 to 3.3.0.
       </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump spotbugs-maven-plugin from 4.2.3 to 4.3.0 #250.
+      </action>
     </release>
     <release version="2.11.0" date="2021-07-09" description="Java 8 required.">
       <!-- FIX -->
