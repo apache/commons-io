@@ -37,6 +37,7 @@ public class CloseShieldWriterTest {
 
     private Writer shielded;
 
+    @SuppressWarnings("resource")
     @BeforeEach
     public void setUp() {
         original = spy(new StringBuilderWriter());

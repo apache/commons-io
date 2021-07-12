@@ -30,9 +30,8 @@ public class ThrowOnCloseInputStream extends ProxyInputStream {
     /**
      * Default ctor.
      */
-    @SuppressWarnings("resource")
     public ThrowOnCloseInputStream() {
-        super(new NullInputStream());
+        super(NullInputStream.INSTANCE);
     }
 
     /**

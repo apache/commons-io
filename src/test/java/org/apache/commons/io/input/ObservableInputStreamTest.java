@@ -253,7 +253,7 @@ public class ObservableInputStreamTest {
 
     @Test
     public void testGetObservers0() throws IOException {
-        try (final ObservableInputStream ois = new ObservableInputStream(new NullInputStream())) {
+        try (final ObservableInputStream ois = new ObservableInputStream(NullInputStream.INSTANCE)) {
             assertTrue(ois.getObservers().isEmpty());
         }
     }
@@ -261,7 +261,7 @@ public class ObservableInputStreamTest {
     @Test
     public void testGetObservers1() throws IOException {
         final DataViewObserver observer0 = new DataViewObserver();
-        try (final ObservableInputStream ois = new ObservableInputStream(new NullInputStream(), observer0)) {
+        try (final ObservableInputStream ois = new ObservableInputStream(NullInputStream.INSTANCE, observer0)) {
             assertEquals(observer0, ois.getObservers().get(0));
         }
     }
@@ -270,7 +270,7 @@ public class ObservableInputStreamTest {
     public void testGetObserversOrder() throws IOException {
         final DataViewObserver observer0 = new DataViewObserver();
         final DataViewObserver observer1 = new DataViewObserver();
-        try (final ObservableInputStream ois = new ObservableInputStream(new NullInputStream(), observer0, observer1)) {
+        try (final ObservableInputStream ois = new ObservableInputStream(NullInputStream.INSTANCE, observer0, observer1)) {
             assertEquals(observer0, ois.getObservers().get(0));
             assertEquals(observer1, ois.getObservers().get(1));
         }

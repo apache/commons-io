@@ -67,6 +67,13 @@ import java.io.InputStream;
  */
 public class NullInputStream extends InputStream {
 
+    /**
+     * The singleton instance.
+     *
+     * @since 2.12.0
+     */
+    public static final NullInputStream INSTANCE = new NullInputStream();
+
     private final long size;
     private long position;
     private long mark = -1;
