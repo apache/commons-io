@@ -31,8 +31,18 @@ public class NullPrintStream extends PrintStream {
 
     /**
      * The singleton instance.
+     *
+     * @since 2.12.0
      */
-    public static final NullPrintStream NULL_PRINT_STREAM = new NullPrintStream();
+    public static final NullPrintStream INSTANCE = new NullPrintStream();
+
+    /**
+     * The singleton instance.
+     *
+     * @deprecated Use {@link #INSTANCE}.
+     */
+    @Deprecated
+    public static final NullPrintStream NULL_PRINT_STREAM = INSTANCE;
 
     /**
      * Constructs an instance.

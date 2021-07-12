@@ -47,7 +47,7 @@ public class NullPrintStreamTest {
 
     @Test
     public void testNullSingleton() throws IOException {
-        try (final NullPrintStream nos = NullPrintStream.NULL_PRINT_STREAM) {
+        try (final NullPrintStream nos = NullPrintStream.INSTANCE) {
             process(nos);
         }
     }
