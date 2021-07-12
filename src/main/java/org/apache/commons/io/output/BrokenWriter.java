@@ -19,8 +19,6 @@ package org.apache.commons.io.output;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.apache.commons.io.input.ClosedReader;
-
 /**
  * Broken writer. This writer always throws an {@link IOException} from
  * all {@link Writer} methods.
