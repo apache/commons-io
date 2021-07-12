@@ -62,7 +62,7 @@ public class UncheckedFilterReader extends FilterReader {
         try {
             super.close();
         } catch (final IOException e) {
-            throw new UncheckedIOException(e);
+            throw uncheck(e);
         }
     }
 
@@ -74,7 +74,7 @@ public class UncheckedFilterReader extends FilterReader {
         try {
             super.mark(readAheadLimit);
         } catch (final IOException e) {
-            throw new UncheckedIOException(e);
+            throw uncheck(e);
         }
     }
 
@@ -86,7 +86,7 @@ public class UncheckedFilterReader extends FilterReader {
         try {
             return super.read();
         } catch (final IOException e) {
-            throw new UncheckedIOException(e);
+            throw uncheck(e);
         }
     }
 
@@ -98,7 +98,7 @@ public class UncheckedFilterReader extends FilterReader {
         try {
             return super.read(cbuf);
         } catch (final IOException e) {
-            throw new UncheckedIOException(e);
+            throw uncheck(e);
         }
     }
 
@@ -110,7 +110,7 @@ public class UncheckedFilterReader extends FilterReader {
         try {
             return super.read(cbuf, off, len);
         } catch (final IOException e) {
-            throw new UncheckedIOException(e);
+            throw uncheck(e);
         }
     }
 
@@ -122,7 +122,7 @@ public class UncheckedFilterReader extends FilterReader {
         try {
             return super.read(target);
         } catch (final IOException e) {
-            throw new UncheckedIOException(e);
+            throw uncheck(e);
         }
     }
 
@@ -134,7 +134,7 @@ public class UncheckedFilterReader extends FilterReader {
         try {
             return super.ready();
         } catch (final IOException e) {
-            throw new UncheckedIOException(e);
+            throw uncheck(e);
         }
     }
 
@@ -146,7 +146,7 @@ public class UncheckedFilterReader extends FilterReader {
         try {
             super.reset();
         } catch (final IOException e) {
-            throw new UncheckedIOException(e);
+            throw uncheck(e);
         }
     }
 
@@ -158,8 +158,12 @@ public class UncheckedFilterReader extends FilterReader {
         try {
             return super.skip(n);
         } catch (final IOException e) {
-            throw new UncheckedIOException(e);
+            throw uncheck(e);
         }
+    }
+
+    private UncheckedIOException uncheck(final IOException e) {
+        return new UncheckedIOException(e);
     }
 
 }
