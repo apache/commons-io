@@ -17,7 +17,7 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +28,6 @@ import org.junit.jupiter.api.Test;
 /**
  * JUnit Test Case for {@link BrokenInputStream}.
  */
-@SuppressWarnings("ResultOfMethodCallIgnored")
 public class BrokenInputStreamTest {
 
     private IOException exception;
@@ -42,67 +41,30 @@ public class BrokenInputStreamTest {
     }
 
     @Test
-    public void testRead() {
-        try {
-            stream.read();
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
-
-        try {
-            stream.read(new byte[1]);
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
-
-        try {
-            stream.read(new byte[1], 0, 1);
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
-    }
-
-    @Test
     public void testAvailable() {
-        try {
-            stream.available();
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
-    }
-
-    @Test
-    public void testSkip() {
-        try {
-            stream.skip(1);
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
-    }
-
-    @Test
-    public void testReset() {
-        try {
-            stream.reset();
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
+        assertEquals(exception, assertThrows(IOException.class, () -> stream.available()));
     }
 
     @Test
     public void testClose() {
-        try {
-            stream.close();
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
+        assertEquals(exception, assertThrows(IOException.class, () -> stream.close()));
+    }
+
+    @Test
+    public void testRead() {
+        assertEquals(exception, assertThrows(IOException.class, () -> stream.read()));
+        assertEquals(exception, assertThrows(IOException.class, () -> stream.read(new byte[1])));
+        assertEquals(exception, assertThrows(IOException.class, () -> stream.read(new byte[1], 0, 1)));
+    }
+
+    @Test
+    public void testReset() {
+        assertEquals(exception, assertThrows(IOException.class, () -> stream.reset()));
+    }
+
+    @Test
+    public void testSkip() {
+        assertEquals(exception, assertThrows(IOException.class, () -> stream.skip(1)));
     }
 
 }
