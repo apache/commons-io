@@ -17,7 +17,7 @@
 package org.apache.commons.io.output;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -41,47 +41,28 @@ public class BrokenOutputStreamTest {
     }
 
     @Test
-    public void testWrite() {
-        try {
-            stream.write(1);
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
-
-        try {
-            stream.write(new byte[1]);
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
-
-        try {
-            stream.write(new byte[1], 0, 1);
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
+    public void testClose() {
+        assertEquals(exception, assertThrows(IOException.class, () -> stream.close()));
     }
 
     @Test
     public void testFlush() {
-        try {
-            stream.flush();
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
+        assertEquals(exception, assertThrows(IOException.class, () -> stream.flush()));
     }
 
     @Test
-    public void testClose() {
-        try {
-            stream.close();
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
+    public void testWriteByteArray() {
+        assertEquals(exception, assertThrows(IOException.class, () -> stream.write(new byte[1])));
+    }
+
+    @Test
+    public void testWriteByteArrayIndexed() {
+        assertEquals(exception, assertThrows(IOException.class, () -> stream.write(new byte[1], 0, 1)));
+    }
+
+    @Test
+    public void testWriteInt() {
+        assertEquals(exception, assertThrows(IOException.class, () -> stream.write(1)));
     }
 
 }
