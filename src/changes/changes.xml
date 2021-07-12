@@ -83,9 +83,9 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add ClosedOutputStream.INSTANCE and deprecate CLOSED_OUTPUT_STREAM.
-      <action dev="ggregory" type="add" due-to="Gary Gregory">
-        Add ClosedWriter.INSTANCE and deprected CLOSED_WRITER.
       </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add ClosedWriter.INSTANCE and deprecate CLOSED_WRITER.
       </action>
       <!-- UPDATE -->
       <action dev="ggregory" type="update" due-to="Dependabot">
