@@ -17,7 +17,7 @@
 package org.apache.commons.io.output;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -32,56 +32,37 @@ public class BrokenWriterTest {
 
     private IOException exception;
 
-    private Writer writer;
+    private Writer brokenWriter;
 
     @BeforeEach
     public void setUp() {
         exception = new IOException("test exception");
-        writer = new BrokenWriter(exception);
+        brokenWriter = new BrokenWriter(exception);
     }
 
     @Test
-    public void testWrite() {
-        try {
-            writer.write(1);
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
+    public void testWriteInt() {
+        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.write(1)));
+    }
 
-        try {
-            writer.write(new char[1]);
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
+    @Test
+    public void testWriteCharArray() {
+        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.write(new char[1])));
+    }
 
-        try {
-            writer.write(new char[1], 0, 1);
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
+    @Test
+    public void testWriteCharArrayIndexed() {
+        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.write(new char[1], 0, 1)));
     }
 
     @Test
     public void testFlush() {
-        try {
-            writer.flush();
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
+        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.flush()));
     }
 
     @Test
     public void testClose() {
-        try {
-            writer.close();
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
+        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.close()));
     }
 
 }
