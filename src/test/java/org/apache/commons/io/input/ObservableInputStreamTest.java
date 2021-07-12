@@ -283,7 +283,7 @@ public class ObservableInputStreamTest {
         try (final ObservableInputStream ois = new ObservableInputStream(new ByteArrayInputStream(buffer),
             lengthObserver, methodCountObserver)) {
             assertEquals(IOUtils.DEFAULT_BUFFER_SIZE,
-                IOUtils.copy(ois, NullOutputStream.NULL_OUTPUT_STREAM, bufferSize));
+                IOUtils.copy(ois, NullOutputStream.INSTANCE, bufferSize));
         }
         assertEquals(IOUtils.DEFAULT_BUFFER_SIZE, lengthObserver.getTotal());
         assertEquals(1, methodCountObserver.getClosedCount());

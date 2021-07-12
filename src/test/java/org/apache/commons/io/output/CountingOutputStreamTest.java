@@ -76,7 +76,7 @@ public class CountingOutputStreamTest {
         final long size = (long) Integer.MAX_VALUE + (long) 1;
 
         final NullInputStream mock = new NullInputStream(size);
-        final CountingOutputStream cos = new CountingOutputStream(NullOutputStream.NULL_OUTPUT_STREAM);
+        final CountingOutputStream cos = new CountingOutputStream(NullOutputStream.INSTANCE);
 
         // Test integer methods
         IOUtils.copyLarge(mock, cos);

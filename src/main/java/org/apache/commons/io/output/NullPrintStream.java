@@ -39,7 +39,7 @@ public class NullPrintStream extends PrintStream {
      */
     public NullPrintStream() {
         // Relies on the default charset which is OK since we are not actually writing.
-        super(NullOutputStream.NULL_OUTPUT_STREAM);
+        super(NullOutputStream.INSTANCE);
     }
 
 }

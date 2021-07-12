@@ -31,7 +31,7 @@ public class ThrowOnCloseOutputStream extends ProxyOutputStream {
      * Default ctor.
      */
     public ThrowOnCloseOutputStream() {
-        super(NullOutputStream.NULL_OUTPUT_STREAM);
+        super(NullOutputStream.INSTANCE);
     }
 
     /**

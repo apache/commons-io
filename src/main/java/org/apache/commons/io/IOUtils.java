@@ -772,7 +772,7 @@ public class IOUtils {
      */
     public static long consume(final InputStream input)
             throws IOException {
-        return copyLarge(input, NullOutputStream.NULL_OUTPUT_STREAM, getByteArray());
+        return copyLarge(input, NullOutputStream.INSTANCE, getByteArray());
     }
 
     /**

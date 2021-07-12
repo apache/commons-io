@@ -39,9 +39,19 @@ public class NullOutputStream extends OutputStream {
     }
 
     /**
-     * The singleton.
+     * The singleton instance.
+     *
+     * @since 2.12.0
      */
-    public static final NullOutputStream NULL_OUTPUT_STREAM = new NullOutputStream();
+    public static final NullOutputStream INSTANCE = new NullOutputStream();
+
+    /**
+     * The singleton instance.
+     *
+     * @deprecated Use {@link #INSTANCE}.
+     */
+    @Deprecated
+    public static final NullOutputStream NULL_OUTPUT_STREAM = INSTANCE;
 
     /**
      * Does nothing - output to {@code /dev/null}.

@@ -87,7 +87,7 @@ public class IOUtilsCopyTestCase {
     public void testCopy_inputStreamToOutputStream_IO84() throws Exception {
         final long size = (long)Integer.MAX_VALUE + (long)1;
         final InputStream  in  = new NullInputStream(size);
-        final OutputStream out = NullOutputStream.NULL_OUTPUT_STREAM;
+        final OutputStream out = NullOutputStream.INSTANCE;
 
         // Test copy() method
         assertEquals(-1, IOUtils.copy(in, out));

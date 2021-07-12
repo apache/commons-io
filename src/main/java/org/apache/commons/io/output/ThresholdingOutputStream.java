@@ -40,7 +40,7 @@ public class ThresholdingOutputStream extends OutputStream {
     /**
      * Noop output stream getter function.
      */
-    private static final IOFunction<ThresholdingOutputStream, OutputStream> NOOP_OS_GETTER = os -> NullOutputStream.NULL_OUTPUT_STREAM;
+    private static final IOFunction<ThresholdingOutputStream, OutputStream> NOOP_OS_GETTER = os -> NullOutputStream.INSTANCE;
 
     /**
      * The threshold at which the event will be triggered.
