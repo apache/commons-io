@@ -48,7 +48,7 @@ The <action> type attribute can be add,update,fix,remove.
     <release version="2.13.0" date="2021-MM-DD" description="Java 8 required.">
       <!-- FIX -->
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
-        Fix Javadoc links to the JRE.
+        Fix Javadoc links to the JRE Javadoc 8.
       </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
