@@ -31,9 +31,19 @@ import java.io.OutputStream;
 public class ClosedOutputStream extends OutputStream {
 
     /**
-     * A singleton.
+     * The singleton instance.
+     *
+     * @since 2.12.0
      */
-    public static final ClosedOutputStream CLOSED_OUTPUT_STREAM = new ClosedOutputStream();
+    public static final ClosedOutputStream INSTANCE = new ClosedOutputStream();
+
+    /**
+     * The singleton instance.
+     *
+     * @deprecated Use {@link #INSTANCE}.
+     */
+    @Deprecated
+    public static final ClosedOutputStream CLOSED_OUTPUT_STREAM = INSTANCE;
 
     /**
      * Throws an {@link IOException} to indicate that the stream is closed.
