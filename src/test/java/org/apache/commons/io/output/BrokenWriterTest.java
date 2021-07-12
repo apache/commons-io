@@ -62,8 +62,20 @@ public class BrokenWriterTest {
     }
 
     @Test
+    @Disabled("What should happen here?")
+    public void testEquals() {
+        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.equals(null)));
+    }
+
+    @Test
     public void testFlush() {
         assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.flush()));
+    }
+
+    @Test
+    @Disabled("What should happen here?")
+    public void testHashCode() {
+        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.hashCode()));
     }
 
     @Test
