@@ -18,7 +18,7 @@ package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -29,7 +29,6 @@ import org.junit.jupiter.api.Test;
 /**
  * JUnit Test Case for {@link BrokenReader}.
  */
-@SuppressWarnings("ResultOfMethodCallIgnored")
 public class BrokenReaderTest {
 
     private IOException exception;
@@ -44,12 +43,7 @@ public class BrokenReaderTest {
 
     @Test
     public void testClose() {
-        try {
-            brokenReader.close();
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
+        assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.close()));
     }
 
     @Test
@@ -59,66 +53,37 @@ public class BrokenReaderTest {
 
     @Test
     public void testMark() {
-        try {
-            brokenReader.mark(1);
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
+        assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.mark(1)));
     }
 
     @Test
     public void testRead() {
-        try {
-            brokenReader.read();
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
+        assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.read()));
+    }
 
-        try {
-            brokenReader.read(new char[1]);
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
+    @Test
+    public void testReadCharArray() {
+        assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.read(new char[1])));
+    }
 
-        try {
-            brokenReader.read(new char[1], 0, 1);
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
+    @Test
+    public void testReadCharArrayIndexed() {
+        assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.read(new char[1], 0, 1)));
     }
 
     @Test
     public void testReady() {
-        try {
-            brokenReader.ready();
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
+        assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.ready()));
     }
 
     @Test
     public void testReset() {
-        try {
-            brokenReader.reset();
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
+        assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.reset()));
     }
 
     @Test
     public void testSkip() {
-        try {
-            brokenReader.skip(1);
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertEquals(exception, e);
-        }
+        assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.skip(1)));
     }
 
 }
