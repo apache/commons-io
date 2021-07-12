@@ -66,6 +66,13 @@ import java.io.Reader;
  */
 public class NullReader extends Reader {
 
+    /**
+     * The singleton instance.
+     *
+     * @since 2.12.0
+     */
+    public static final NullReader INSTANCE = new NullReader();
+
     private final long size;
     private long position;
     private long mark = -1;

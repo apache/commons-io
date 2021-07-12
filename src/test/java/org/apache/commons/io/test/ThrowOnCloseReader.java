@@ -30,9 +30,8 @@ public class ThrowOnCloseReader extends ProxyReader {
     /**
      * Default ctor.
      */
-    @SuppressWarnings("resource")
     public ThrowOnCloseReader() {
-        super(new NullReader());
+        super(NullReader.INSTANCE);
     }
 
     /**

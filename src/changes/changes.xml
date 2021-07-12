@@ -99,6 +99,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add NullInputStream.INSTANCE.
       </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add NullReader.INSTANCE.
+      </action>
       <!-- UPDATE -->
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump Maven Javadoc plugin from 3.2.0 to 3.3.0.
