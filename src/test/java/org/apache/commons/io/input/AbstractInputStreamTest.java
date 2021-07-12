@@ -30,9 +30,10 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Tests functionality of {@link BufferedFileChannelInputStream}.
- *
+ * <p>
  * This class was ported and adapted from Apache Spark commit 933dc6cb7b3de1d8ccaf73d124d6eb95b947ed19 where it was
  * called {@code GenericFileInputStreamSuite}.
+ * </p>
  */
 public abstract class AbstractInputStreamTest {
 
@@ -137,7 +138,7 @@ public abstract class AbstractInputStreamTest {
         final byte[] buf = new byte[1024];
         int read;
         while ((read = is.read(buf, 0, buf.length)) != -1) {
-
+            // empty
         }
 
         final int readAfterEOF = is.read(buf, 0, buf.length);
