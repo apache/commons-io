@@ -103,7 +103,7 @@ public class TaggedWriterTest  {
     @Test
     public void testOtherException() throws Exception {
         final IOException exception = new IOException("test exception");
-        try (final TaggedWriter writer = new TaggedWriter(ClosedWriter.CLOSED_WRITER)) {
+        try (final TaggedWriter writer = new TaggedWriter(ClosedWriter.INSTANCE)) {
 
             assertFalse(writer.isCauseOf(exception));
             assertFalse(writer.isCauseOf(new TaggedIOException(exception, UUID.randomUUID())));

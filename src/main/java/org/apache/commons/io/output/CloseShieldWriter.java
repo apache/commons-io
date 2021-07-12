@@ -60,7 +60,7 @@ public class CloseShieldWriter extends ProxyWriter {
      */
     @Override
     public void close() {
-        out = ClosedWriter.CLOSED_WRITER;
+        out = ClosedWriter.INSTANCE;
     }
 
 }
