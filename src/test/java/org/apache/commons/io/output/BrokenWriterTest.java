@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -41,8 +42,34 @@ public class BrokenWriterTest {
     }
 
     @Test
-    public void testWriteInt() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.write(1)));
+    public void testAppendChar() {
+        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.append('1')));
+    }
+
+    @Test
+    public void testAppendCharSequence() {
+        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.append("01")));
+    }
+
+    @Test
+    public void testAppendCharSequenceIndexed() {
+        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.append("01", 0, 1)));
+    }
+
+    @Test
+    public void testClose() {
+        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.close()));
+    }
+
+    @Test
+    public void testFlush() {
+        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.flush()));
+    }
+
+    @Test
+    @Disabled("What should happen here?")
+    public void testToString() {
+        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.toString()));
     }
 
     @Test
@@ -56,13 +83,18 @@ public class BrokenWriterTest {
     }
 
     @Test
-    public void testFlush() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.flush()));
+    public void testWriteInt() {
+        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.write(1)));
     }
 
     @Test
-    public void testClose() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.close()));
+    public void testWriteString() {
+        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.write("01")));
+    }
+
+    @Test
+    public void testWriteStringIndexed() {
+        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.write("01", 0, 1)));
     }
 
 }
