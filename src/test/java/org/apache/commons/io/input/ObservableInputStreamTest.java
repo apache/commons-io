@@ -129,21 +129,21 @@ public class ObservableInputStreamTest {
 
     @Test
     public void testBrokenInputStreamRead() throws IOException {
-        try (final ObservableInputStream ois = new ObservableInputStream(new BrokenInputStream())) {
+        try (final ObservableInputStream ois = new ObservableInputStream(BrokenInputStream.INSTANCE)) {
             assertThrows(IOException.class, () -> ois.read());
         }
     }
 
     @Test
     public void testBrokenInputStreamReadBuffer() throws IOException {
-        try (final ObservableInputStream ois = new ObservableInputStream(new BrokenInputStream())) {
+        try (final ObservableInputStream ois = new ObservableInputStream(BrokenInputStream.INSTANCE)) {
             assertThrows(IOException.class, () -> ois.read(new byte[1]));
         }
     }
 
     @Test
     public void testBrokenInputStreamReadSubBuffer() throws IOException {
-        try (final ObservableInputStream ois = new ObservableInputStream(new BrokenInputStream())) {
+        try (final ObservableInputStream ois = new ObservableInputStream(BrokenInputStream.INSTANCE)) {
             assertThrows(IOException.class, () -> ois.read(new byte[2], 0, 1));
         }
     }

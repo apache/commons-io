@@ -32,6 +32,13 @@ import java.io.InputStream;
 public class BrokenInputStream extends InputStream {
 
     /**
+     * The singleton instance.
+     *
+     * @since 2.12.0
+     */
+    public static final BrokenInputStream INSTANCE = new BrokenInputStream();
+    
+    /**
      * The exception that is thrown by all methods of this class.
      */
     private final IOException exception;
