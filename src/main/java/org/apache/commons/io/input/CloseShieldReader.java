@@ -60,7 +60,7 @@ public class CloseShieldReader extends ProxyReader {
      */
     @Override
     public void close() {
-        in = ClosedReader.CLOSED_READER;
+        in = ClosedReader.INSTANCE;
     }
 
 }

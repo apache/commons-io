@@ -67,7 +67,7 @@ public class UncheckedFilterReaderTest {
 
     @Test
     public void testMarkThrows() {
-        try (UncheckedFilterReader closedReader = UncheckedFilterReader.on(ClosedReader.CLOSED_READER)) {
+        try (UncheckedFilterReader closedReader = UncheckedFilterReader.on(ClosedReader.INSTANCE)) {
             closedReader.close();
             assertThrows(UncheckedIOException.class, () -> closedReader.mark(1));
         }
@@ -170,7 +170,7 @@ public class UncheckedFilterReaderTest {
 
     @Test
     public void testResetThrows() {
-        try (UncheckedFilterReader closedReader = UncheckedFilterReader.on(ClosedReader.CLOSED_READER)) {
+        try (UncheckedFilterReader closedReader = UncheckedFilterReader.on(ClosedReader.INSTANCE)) {
             closedReader.close();
             assertThrows(UncheckedIOException.class, () -> ucBrokenReader.reset());
         }

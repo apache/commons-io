@@ -74,7 +74,7 @@ public class UncheckedBufferedReaderTest {
 
     @Test
     public void testMarkThrows() {
-        try (UncheckedBufferedReader closedReader = UncheckedBufferedReader.on(ClosedReader.CLOSED_READER)) {
+        try (UncheckedBufferedReader closedReader = UncheckedBufferedReader.on(ClosedReader.INSTANCE)) {
             closedReader.close();
             assertThrows(UncheckedIOException.class, () -> closedReader.mark(1));
         }
@@ -191,7 +191,7 @@ public class UncheckedBufferedReaderTest {
 
     @Test
     public void testResetThrows() {
-        try (UncheckedBufferedReader closedReader = UncheckedBufferedReader.on(ClosedReader.CLOSED_READER)) {
+        try (UncheckedBufferedReader closedReader = UncheckedBufferedReader.on(ClosedReader.INSTANCE)) {
             closedReader.close();
             assertThrows(UncheckedIOException.class, () -> ucBrokenReader.reset());
         }

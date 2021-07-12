@@ -33,16 +33,26 @@ import java.io.Reader;
 public class ClosedReader extends Reader {
 
     /**
-     * A singleton.
+     * The singleton instance.
+     *
+     * @since 2.12.0
      */
-    public static final ClosedReader CLOSED_READER = new ClosedReader();
+    public static final ClosedReader INSTANCE = new ClosedReader();
+
+    /**
+     * The singleton instance.
+     *
+     * @deprecated {@link #INSTANCE}.
+     */
+    @Deprecated
+    public static final ClosedReader CLOSED_READER = INSTANCE;
 
     /**
      * Returns -1 to indicate that the stream is closed.
      *
      * @param cbuf ignored
-     * @param off  ignored
-     * @param len  ignored
+     * @param off ignored
+     * @param len ignored
      * @return always -1
      */
     @Override
