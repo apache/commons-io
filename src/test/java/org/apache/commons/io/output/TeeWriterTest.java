@@ -40,7 +40,7 @@ public class TeeWriterTest {
 
     @Test
     public void testArrayIOExceptionOnAppendChar1() throws IOException {
-        final Writer badW = new BrokenWriter();
+        final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final ProxyCollectionWriter tw = new ProxyCollectionWriter(badW, goodW, null);
         final char data = 'A';
@@ -56,7 +56,7 @@ public class TeeWriterTest {
 
     @Test
     public void testArrayIOExceptionOnAppendChar2() throws IOException {
-        final Writer badW = new BrokenWriter();
+        final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final ProxyCollectionWriter tw = new ProxyCollectionWriter(goodW, badW, null);
         final char data = 'A';
@@ -72,7 +72,7 @@ public class TeeWriterTest {
 
     @Test
     public void testArrayIOExceptionOnAppendCharSequence1() throws IOException {
-        final Writer badW = new BrokenWriter();
+        final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(badW, goodW, null);
         final String data = "A";
@@ -88,7 +88,7 @@ public class TeeWriterTest {
 
     @Test
     public void testArrayIOExceptionOnAppendCharSequence2() throws IOException {
-        final Writer badW = new BrokenWriter();
+        final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(goodW, badW, null);
         final String data = "A";
@@ -104,7 +104,7 @@ public class TeeWriterTest {
 
     @Test
     public void testArrayIOExceptionOnAppendCharSequenceIntInt1() throws IOException {
-        final Writer badW = new BrokenWriter();
+        final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(badW, goodW, null);
         final String data = "A";
@@ -120,7 +120,7 @@ public class TeeWriterTest {
 
     @Test
     public void testArrayIOExceptionOnAppendCharSequenceIntInt2() throws IOException {
-        final Writer badW = new BrokenWriter();
+        final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(goodW, badW, null);
         final String data = "A";
@@ -136,7 +136,7 @@ public class TeeWriterTest {
 
     @Test
     public void testArrayIOExceptionOnClose1() throws IOException {
-        final Writer badW = new BrokenWriter();
+        final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(badW, goodW, null);
         try {
@@ -151,7 +151,7 @@ public class TeeWriterTest {
 
     @Test
     public void testArrayIOExceptionOnClose2() throws IOException {
-        final Writer badW = new BrokenWriter();
+        final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(goodW, badW, null);
         try {
@@ -166,7 +166,7 @@ public class TeeWriterTest {
 
     @Test
     public void testArrayIOExceptionOnFlush1() throws IOException {
-        final Writer badW = new BrokenWriter();
+        final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(badW, goodW, null);
         try {
@@ -181,7 +181,7 @@ public class TeeWriterTest {
 
     @Test
     public void testArrayIOExceptionOnFlush2() throws IOException {
-        final Writer badW = new BrokenWriter();
+        final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(goodW, badW, null);
         try {
@@ -196,7 +196,7 @@ public class TeeWriterTest {
 
     @Test
     public void testArrayIOExceptionOnWriteCharArray1() throws IOException {
-        final Writer badW = new BrokenWriter();
+        final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(badW, goodW, null);
         final char[] data = { 'a' };
@@ -212,7 +212,7 @@ public class TeeWriterTest {
 
     @Test
     public void testArrayIOExceptionOnWriteCharArray2() throws IOException {
-        final Writer badW = new BrokenWriter();
+        final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(goodW, badW, null);
         final char[] data = { 'a' };
@@ -228,7 +228,7 @@ public class TeeWriterTest {
 
     @Test
     public void testArrayIOExceptionOnWriteCharArrayIntInt1() throws IOException {
-        final Writer badW = new BrokenWriter();
+        final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(badW, goodW, null);
         final char[] data = { 'a' };
@@ -244,7 +244,7 @@ public class TeeWriterTest {
 
     @Test
     public void testArrayIOExceptionOnWriteCharArrayIntInt2() throws IOException {
-        final Writer badW = new BrokenWriter();
+        final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(goodW, badW, null);
         final char[] data = { 'a' };
@@ -260,7 +260,7 @@ public class TeeWriterTest {
 
     @Test
     public void testArrayIOExceptionOnWriteInt1() throws IOException {
-        final Writer badW = new BrokenWriter();
+        final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(badW, goodW, null);
         final int data = 32;
@@ -276,7 +276,7 @@ public class TeeWriterTest {
 
     @Test
     public void testArrayIOExceptionOnWriteInt2() throws IOException {
-        final Writer badW = new BrokenWriter();
+        final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(goodW, badW, null);
         try {
@@ -292,7 +292,7 @@ public class TeeWriterTest {
 
     @Test
     public void testArrayIOExceptionOnWriteString1() throws IOException {
-        final Writer badW = new BrokenWriter();
+        final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(badW, goodW, null);
         final String data = "A";
@@ -308,7 +308,7 @@ public class TeeWriterTest {
 
     @Test
     public void testArrayIOExceptionOnWriteString2() throws IOException {
-        final Writer badW = new BrokenWriter();
+        final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(goodW, badW, null);
         final String data = "A";
@@ -325,7 +325,7 @@ public class TeeWriterTest {
 
     @Test
     public void testArrayIOExceptionOnWriteStringIntInt1() throws IOException {
-        final Writer badW = new BrokenWriter();
+        final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(badW, goodW, null);
         final String data = "A";
@@ -341,7 +341,7 @@ public class TeeWriterTest {
 
     @Test
     public void testArrayIOExceptionOnWriteStringIntInt2() throws IOException {
-        final Writer badW = new BrokenWriter();
+        final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(goodW, badW, null);
         final String data = "A";
@@ -358,7 +358,7 @@ public class TeeWriterTest {
 
     @Test
     public void testCollectionCloseBranchIOException() throws IOException {
-        final Writer badW = new BrokenWriter();
+        final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(Arrays.asList(goodW, badW, null));
         try {

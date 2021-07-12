@@ -19,6 +19,8 @@ package org.apache.commons.io.output;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.apache.commons.io.input.ClosedReader;
+
 /**
  * Broken writer. This writer always throws an {@link IOException} from
  * all {@link Writer} methods.
@@ -30,6 +32,13 @@ import java.io.Writer;
  * @since 2.0
  */
 public class BrokenWriter extends Writer {
+
+    /**
+     * The singleton instance.
+     *
+     * @since 2.12.0
+     */
+    public static final BrokenWriter INSTANCE = new BrokenWriter();
 
     /**
      * The exception that is thrown by all methods of this class.
