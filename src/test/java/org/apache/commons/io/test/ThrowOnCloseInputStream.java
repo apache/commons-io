@@ -28,7 +28,7 @@ import org.apache.commons.io.input.ProxyInputStream;
 public class ThrowOnCloseInputStream extends ProxyInputStream {
 
     /**
-     * Default ctor.
+     * Defaultconstructor.
      */
     public ThrowOnCloseInputStream() {
         super(NullInputStream.INSTANCE);

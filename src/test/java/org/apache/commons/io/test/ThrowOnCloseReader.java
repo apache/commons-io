@@ -28,7 +28,7 @@ import org.apache.commons.io.input.ProxyReader;
 public class ThrowOnCloseReader extends ProxyReader {
 
     /**
-     * Default ctor.
+     * Defaultconstructor.
      */
     public ThrowOnCloseReader() {
         super(NullReader.INSTANCE);

@@ -54,7 +54,7 @@ public class ReversedLinesFileReader implements Closeable {
         private int currentLastBytePos;
 
         /**
-         * ctor
+         * Constructs a new instance.
          *
          * @param no                     the part number
          * @param length                 its length

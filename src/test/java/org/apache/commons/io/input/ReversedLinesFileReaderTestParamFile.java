@@ -90,7 +90,7 @@ public class ReversedLinesFileReaderTestParamFile {
             filePath = Files.copy(filePath, fileSystem.getPath("/" + fileName));
         }
 
-        // We want to test null Charset in the ReversedLinesFileReader ctor.
+        // We want to test null Charset in the ReversedLinesFileReaderconstructor.
         final Charset charset = charsetName != null ? Charset.forName(charsetName) : null;
         try (ReversedLinesFileReader reversedLinesFileReader = blockSize == null
                 ? new ReversedLinesFileReader(filePath, charset)
