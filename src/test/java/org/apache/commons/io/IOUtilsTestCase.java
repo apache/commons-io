@@ -63,6 +63,7 @@ import java.util.List;
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.input.CircularInputStream;
 import org.apache.commons.io.input.NullInputStream;
+import org.apache.commons.io.input.StringInputStream;
 import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.io.output.StringBuilderWriter;
@@ -976,8 +977,7 @@ public class IOUtilsTestCase {
 
     @Test
     public void testReadFully_InputStream_Offset() throws Exception {
-        final byte[] bytes = "abcd1234".getBytes(StandardCharsets.UTF_8);
-        final ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
+        final StringInputStream stream = new StringInputStream("abcd1234", StandardCharsets.UTF_8);
         final byte[] buffer = "wx00000000".getBytes(StandardCharsets.UTF_8);
         IOUtils.readFully(stream, buffer, 2, 8);
         assertEquals("wxabcd1234", new String(buffer, 0, buffer.length, StandardCharsets.UTF_8));

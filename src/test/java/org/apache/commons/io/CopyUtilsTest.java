@@ -27,6 +27,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 
+import org.apache.commons.io.input.StringInputStream;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.io.test.ThrowOnCloseInputStream;
@@ -136,7 +137,7 @@ public class CopyUtilsTest {
         final String inDataStr = "data";
         final String charsetName = "UTF-8";
         final StringWriter writer = new StringWriter();
-        CopyUtils.copy(new ByteArrayInputStream(inDataStr.getBytes(charsetName)), writer, charsetName);
+        CopyUtils.copy(new StringInputStream(inDataStr, charsetName), writer, charsetName);
         assertEquals(inDataStr, writer.toString());
     }
 

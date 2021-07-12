@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
@@ -324,7 +323,7 @@ public class XmlStreamReaderUtilitiesTest {
     /** Mock {@link XmlStreamReader} implementation */
     private static class MockXmlStreamReader extends XmlStreamReader {
         MockXmlStreamReader(final String defaultEncoding) throws IOException {
-            super(new ByteArrayInputStream("".getBytes()), null, true, defaultEncoding);
+            super(new StringInputStream(), null, true, defaultEncoding);
         }
     }
 }

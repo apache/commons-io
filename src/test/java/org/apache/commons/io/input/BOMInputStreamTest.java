@@ -777,10 +777,9 @@ public class BOMInputStreamTest {
     }
 
     private boolean doesSaxSupportCharacterSet(final String charSetName) throws ParserConfigurationException, SAXException, IOException {
-        final byte[] data = ("<?xml version=\"1.0\" encoding=\"" + charSetName + "\"?><Z/>").getBytes(charSetName);
         final DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        try {
-            final InputSource is = new InputSource(new ByteArrayInputStream(data));
+        try (final StringInputStream byteStream = new StringInputStream("<?xml version=\"1.0\" encoding=\"" + charSetName + "\"?><Z/>", charSetName)) {
+            final InputSource is = new InputSource(byteStream);
             is.setEncoding(charSetName);
             documentBuilder.parse(is);
         } catch (final SAXParseException e) {

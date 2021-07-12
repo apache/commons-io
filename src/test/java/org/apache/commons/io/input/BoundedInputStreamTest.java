@@ -33,7 +33,7 @@ public class BoundedInputStreamTest {
     public void testReadSingle() throws Exception {
         BoundedInputStream bounded;
         final byte[] helloWorld = "Hello World".getBytes();
-        final byte[] hello      = "Hello".getBytes();
+        final byte[] hello = "Hello".getBytes();
 
         // limit = length
         bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length);
@@ -62,7 +62,7 @@ public class BoundedInputStreamTest {
 
         BoundedInputStream bounded;
         final byte[] helloWorld = "Hello World".getBytes();
-        final byte[] hello      = "Hello".getBytes();
+        final byte[] hello = "Hello".getBytes();
 
         bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld));
         compare("limit = -1", helloWorld, IOUtils.toByteArray(bounded));

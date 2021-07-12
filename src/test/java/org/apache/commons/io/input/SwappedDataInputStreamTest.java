@@ -53,7 +53,7 @@ public class SwappedDataInputStreamTest {
             0x07,
             0x08
         };
-        final ByteArrayInputStream bais = new ByteArrayInputStream( bytes );
+        final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         this.sdis = new SwappedDataInputStream( bais );
     }
 

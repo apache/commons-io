@@ -325,20 +325,20 @@ public class XmlStreamReaderTest {
     public void testRawContent() throws Exception {
         final String encoding = "UTF-8";
         final String xml = getXML("no-bom", XML3, encoding, encoding);
-        final ByteArrayInputStream is = new ByteArrayInputStream(xml.getBytes(encoding));
-        final XmlStreamReader xmlReader = new XmlStreamReader(is);
-        assertEquals(xmlReader.getEncoding(), encoding, "Check encoding");
-        assertEquals(xml, IOUtils.toString(xmlReader), "Check content");
+        try (final XmlStreamReader xmlReader = new XmlStreamReader(new StringInputStream(xml, encoding))) {
+            assertEquals(xmlReader.getEncoding(), encoding, "Check encoding");
+            assertEquals(xml, IOUtils.toString(xmlReader), "Check content");
+        }
     }
 
     @Test
     public void testHttpContent() throws Exception {
         final String encoding = "UTF-8";
         final String xml = getXML("no-bom", XML3, encoding, encoding);
-        final ByteArrayInputStream is = new ByteArrayInputStream(xml.getBytes(encoding));
-        final XmlStreamReader xmlReader = new XmlStreamReader(is, encoding);
-        assertEquals(xmlReader.getEncoding(), encoding, "Check encoding");
-        assertEquals(xml, IOUtils.toString(xmlReader), "Check content");
+        try (final XmlStreamReader xmlReader = new XmlStreamReader(new StringInputStream(xml, encoding))) {
+            assertEquals(xmlReader.getEncoding(), encoding, "Check encoding");
+            assertEquals(xml, IOUtils.toString(xmlReader), "Check content");
+        }
     }
 
     public void testAlternateDefaultEncoding(final String cT, final String bomEnc,

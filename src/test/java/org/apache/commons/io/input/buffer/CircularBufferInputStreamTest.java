@@ -79,20 +79,17 @@ public class CircularBufferInputStreamTest {
 
 	@Test
   public void testIO683() throws IOException {
-		final byte[] buffer = {0,1,-2,-2,-1,4};
-		try (
-			final ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
-			final CircularBufferInputStream cbis = new CircularBufferInputStream(bais)
-		){
-			int b;
-			int i = 0;
-			while((b = cbis.read()) != -1) {
-				assertEquals(buffer[i] & 0xFF,b, "byte at index " + i + " should be equal");
-				i++;
-			}
-			assertEquals(buffer.length, i, "Should have read all the bytes");
-		}
-	}
+      final byte[] buffer = {0, 1, -2, -2, -1, 4};
+      try (final ByteArrayInputStream bais = new ByteArrayInputStream(buffer); final CircularBufferInputStream cbis = new CircularBufferInputStream(bais)) {
+          int b;
+          int i = 0;
+          while ((b = cbis.read()) != -1) {
+              assertEquals(buffer[i] & 0xFF, b, "byte at index " + i + " should be equal");
+              i++;
+          }
+          assertEquals(buffer.length, i, "Should have read all the bytes");
+      }
+  }
 
 	/**
 	 * Create a large, but random input buffer.

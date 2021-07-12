@@ -16,9 +16,9 @@
  */
 package org.apache.commons.io.input.compatibility;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import org.apache.commons.io.input.StringInputStream;
 import org.apache.commons.io.input.XmlStreamReaderUtilitiesTest;
 
 /**
@@ -47,7 +47,7 @@ public class XmlStreamReaderUtilitiesCompatibilityTest extends XmlStreamReaderUt
     /** Mock {@link XmlStreamReader} implementation */
     private static class MockXmlStreamReader extends XmlStreamReader {
         MockXmlStreamReader(final String defaultEncoding) throws IOException {
-            super(new ByteArrayInputStream("".getBytes()), null, true, defaultEncoding);
+            super(new StringInputStream(), null, true, defaultEncoding);
         }
     }
 }

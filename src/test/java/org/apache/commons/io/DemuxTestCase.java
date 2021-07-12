@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import org.apache.commons.io.input.DemuxInputStream;
+import org.apache.commons.io.input.StringInputStream;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.output.DemuxOutputStream;
 import org.apache.commons.io.test.TestUtils;
@@ -93,7 +94,7 @@ public class DemuxTestCase {
     private void startReader(final String name,
                              final String data,
                              final DemuxInputStream demux) {
-        final ByteArrayInputStream input = new ByteArrayInputStream(data.getBytes());
+        final InputStream input = new StringInputStream(data);
         final ReaderThread thread = new ReaderThread(name, input, demux);
         threadMap.put(name, thread);
     }

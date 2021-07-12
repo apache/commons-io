@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 import org.junit.jupiter.api.Test;
@@ -27,52 +28,50 @@ import org.junit.jupiter.api.Test;
 public class WindowsLineEndingInputStreamTest {
     @Test
     public void simpleString() throws Exception {
-        assertEquals( "abc\r\n", roundtrip( "abc" ) );
+        assertEquals("abc\r\n", roundtrip("abc"));
     }
 
     @Test
     public void inTheMiddleOfTheLine() throws Exception {
-        assertEquals( "a\r\nbc\r\n", roundtrip( "a\r\nbc" ) );
+        assertEquals("a\r\nbc\r\n", roundtrip("a\r\nbc"));
     }
 
     @Test
     public void multipleBlankLines() throws Exception {
-        assertEquals( "a\r\n\r\nbc\r\n", roundtrip( "a\r\n\r\nbc" ) );
+        assertEquals("a\r\n\r\nbc\r\n", roundtrip("a\r\n\r\nbc"));
     }
 
     @Test
     public void twoLinesAtEnd() throws Exception {
-        assertEquals( "a\r\n\r\n", roundtrip( "a\r\n\r\n" ) );
+        assertEquals("a\r\n\r\n", roundtrip("a\r\n\r\n"));
     }
 
     @Test
     public void linuxLinefeeds() throws Exception {
-        final String roundtrip = roundtrip( "ab\nc", false );
-        assertEquals( "ab\r\nc", roundtrip );
+        final String roundtrip = roundtrip("ab\nc", false);
+        assertEquals("ab\r\nc", roundtrip);
     }
-
 
     @Test
     public void malformed() throws Exception {
-        assertEquals( "a\rbc", roundtrip( "a\rbc", false ) );
+        assertEquals("a\rbc", roundtrip("a\rbc", false));
     }
 
     @Test
     public void retainLineFeed() throws Exception {
-        assertEquals( "a\r\n\r\n", roundtrip( "a\r\n\r\n", false ) );
-        assertEquals( "a", roundtrip( "a", false ) );
+        assertEquals("a\r\n\r\n", roundtrip("a\r\n\r\n", false));
+        assertEquals("a", roundtrip("a", false));
     }
 
-    private String roundtrip( final String msg ) throws IOException {
-        return roundtrip( msg, true );
+    private String roundtrip(final String msg) throws IOException {
+        return roundtrip(msg, true);
     }
 
-    private String roundtrip( final String msg, final boolean ensure ) throws IOException {
-        final ByteArrayInputStream baos = new ByteArrayInputStream( msg.getBytes(StandardCharsets.UTF_8) );
-        final WindowsLineEndingInputStream lf = new WindowsLineEndingInputStream( baos, ensure );
-        final byte[] buf = new byte[100];
-        final int read = lf.read( buf );
-        lf.close();
-        return new String( buf, 0, read, StandardCharsets.UTF_8);
+    private String roundtrip(final String msg, final boolean ensure) throws IOException {
+        try (final WindowsLineEndingInputStream lf = new WindowsLineEndingInputStream(new StringInputStream(msg, StandardCharsets.UTF_8), ensure)) {
+            final byte[] buf = new byte[100];
+            final int read = lf.read(buf);
+            return new String(buf, 0, read, StandardCharsets.UTF_8);
+        }
     }
 }
