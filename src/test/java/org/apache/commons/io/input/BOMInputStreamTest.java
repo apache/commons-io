@@ -386,10 +386,6 @@ public class BOMInputStreamTest {
         }
     }
 
-
-
-
-
     @Test
     public void testReadEmpty() throws Exception {
         final byte[] data = {};
