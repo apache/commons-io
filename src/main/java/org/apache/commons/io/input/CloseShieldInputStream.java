@@ -61,7 +61,7 @@ public class CloseShieldInputStream extends ProxyInputStream {
      */
     @Override
     public void close() {
-        in = ClosedInputStream.CLOSED_INPUT_STREAM;
+        in = ClosedInputStream.INSTANCE;
     }
 
 }

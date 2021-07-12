@@ -125,7 +125,7 @@ public class UncheckedFilterInputStreamTest {
 
     @Test
     public void testResetThrows() {
-        try (UncheckedFilterInputStream closedReader = UncheckedFilterInputStream.on(ClosedInputStream.CLOSED_INPUT_STREAM)) {
+        try (UncheckedFilterInputStream closedReader = UncheckedFilterInputStream.on(ClosedInputStream.INSTANCE)) {
             closedReader.close();
             assertThrows(UncheckedIOException.class, () -> brokenInputStream.reset());
         }

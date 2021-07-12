@@ -21,12 +21,10 @@ import static org.apache.commons.io.IOUtils.EOF;
 import java.io.InputStream;
 
 /**
- * Closed input stream. This stream returns EOF to all attempts to read
- * something from the stream.
+ * Closed input stream. This stream returns EOF to all attempts to read something from the stream.
  * <p>
- * Typically uses of this class include testing for corner cases in methods
- * that accept input streams and acting as a sentinel value instead of a
- * {@code null} input stream.
+ * Typically uses of this class include testing for corner cases in methods that accept input streams and acting as a
+ * sentinel value instead of a {@code null} input stream.
  * </p>
  *
  * @since 1.4
@@ -34,9 +32,19 @@ import java.io.InputStream;
 public class ClosedInputStream extends InputStream {
 
     /**
-     * A singleton.
+     * The singleton instance.
+     *
+     * @since 2.12.0
      */
-    public static final ClosedInputStream CLOSED_INPUT_STREAM = new ClosedInputStream();
+    public static final ClosedInputStream INSTANCE = new ClosedInputStream();
+
+    /**
+     * The singleton instance.
+     *
+     * @deprecated Use {@link #INSTANCE}.
+     */
+    @Deprecated
+    public static final ClosedInputStream CLOSED_INPUT_STREAM = INSTANCE;
 
     /**
      * Returns -1 to indicate that the stream is closed.

@@ -306,7 +306,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
             final InputStreamConstructor<T> isConstructor) {
         int remaining = count;
         if (remaining == 0) {
-            return ClosedInputStream.CLOSED_INPUT_STREAM;
+            return ClosedInputStream.INSTANCE;
         }
         final List<T> list = new ArrayList<>(buffers.size());
         for (final byte[] buf : buffers) {
