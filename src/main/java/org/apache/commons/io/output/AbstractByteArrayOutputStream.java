@@ -162,7 +162,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
     /**
      * Writes the entire contents of the specified input stream to this
      * byte stream. Bytes from the input stream are read directly into the
-     * internal buffers of this streams.
+     * internal buffers of this stream.
      *
      * @param in the input stream to read from
      * @return total number of bytes read from the input stream
@@ -175,7 +175,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
     /**
      * Writes the entire contents of the specified input stream to this
      * byte stream. Bytes from the input stream are read directly into the
-     * internal buffers of this streams.
+     * internal buffers of this stream.
      *
      * @param in the input stream to read from
      * @return total number of bytes read from the input stream

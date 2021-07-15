@@ -342,9 +342,9 @@ public class IOUtils {
      * Returns a new char array of size {@link #DEFAULT_BUFFER_SIZE}.
      *
      * @return a new char array of size {@link #DEFAULT_BUFFER_SIZE}.
-     * @since 2.9.0
+     * @since 2.10.0
      */
-    private static char[] charArray() {
+    public static char[] charArray() {
         return charArray(DEFAULT_BUFFER_SIZE);
     }
 
@@ -355,9 +355,9 @@ public class IOUtils {
      *
      * @param size array size.
      * @return a new char array of the given size.
-     * @since 2.9.0
+     * @since 2.10.0
      */
-    private static char[] charArray(final int size) {
+    public static char[] charArray(final int size) {
         return new char[size];
     }
 
