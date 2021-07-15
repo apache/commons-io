@@ -512,7 +512,7 @@ public class FilenameUtils {
     /**
      * Determines whether the {@code parent} directory contains the {@code child} element (a file or directory).
      * <p>
-     * The files names are expected to be normalized.
+     * The files names are expected to be canonical.
      * </p>
      *
      * Edge cases:
@@ -533,7 +533,7 @@ public class FilenameUtils {
     public static boolean directoryContains(final String canonicalParent, final String canonicalChild) {
         Objects.requireNonNull(canonicalParent, "canonicalParent");
 
-        if (canonicalChild == null) {
+        if (canonicalChild == null || canonicalChild.isEmpty() || canonicalParent.isEmpty()) {
             return false;
         }
 
@@ -541,7 +541,13 @@ public class FilenameUtils {
             return false;
         }
 
-        return IOCase.SYSTEM.checkStartsWith(canonicalChild, canonicalParent);
+        final char separator = canonicalParent.charAt(0) == UNIX_SEPARATOR ? UNIX_SEPARATOR : WINDOWS_SEPARATOR;
+        final String parentWithEndSeparator =
+                canonicalParent.charAt(canonicalParent.length() - 1) == separator
+                        ? canonicalParent
+                        : canonicalParent + separator;
+
+        return IOCase.SYSTEM.checkStartsWith(canonicalChild, parentWithEndSeparator);
     }
 
     /**
