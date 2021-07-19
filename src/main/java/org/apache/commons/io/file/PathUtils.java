@@ -885,7 +885,7 @@ public final class PathUtils {
      * @see Files#readAllBytes(Path)
      * @since 2.12.0
      */
-    public static Object readString(final Path path, final Charset charset) throws IOException {
+    public static String readString(final Path path, final Charset charset) throws IOException {
         return new String(Files.readAllBytes(path), Charsets.toCharset(charset));
     }
 
