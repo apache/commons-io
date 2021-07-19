@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.URI;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.nio.file.CopyOption;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileVisitOption;
@@ -56,6 +57,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOExceptionList;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.file.Counters.PathCounters;
@@ -871,6 +873,20 @@ public final class PathUtils {
         } catch (final IOException e) {
             throw new UncheckedIOException(e);
         }
+    }
+
+    /**
+     * Reads the given path as a String.
+     *
+     * @param path The source path.
+     * @param charset How to convert bytes to a String.
+     * @return a new String
+     * @throws IOException if an I/O error occurs reading from the stream
+     * @see Files#readAllBytes(Path)
+     * @since 2.12.0
+     */
+    public static Object readString(final Path path, final Charset charset) throws IOException {
+        return new String(Files.readAllBytes(path), Charsets.toCharset(charset));
     }
 
     /**

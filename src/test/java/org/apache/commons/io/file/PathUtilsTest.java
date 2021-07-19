@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
@@ -34,6 +35,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.io.filefilter.NameFileFilter;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -216,6 +218,21 @@ public class PathUtilsTest extends TestArguments {
             assertEquals(PATH_FIXTURE, path.getFileName().toString());
             assertFalse(iterator.hasNext());
         }
+    }
+
+    @Test
+    public void testReadStringEmptyFile() throws IOException {
+        final Path path = Paths.get("src/test/resources/org/apache/commons/io/test-file-empty.bin");
+        assertEquals(StringUtils.EMPTY, PathUtils.readString(path, StandardCharsets.UTF_8));
+        assertEquals(StringUtils.EMPTY, PathUtils.readString(path, null));
+    }
+
+    @Test
+    public void testReadStringSimpleUtf8() throws IOException {
+        final Path path = Paths.get("src/test/resources/org/apache/commons/io/test-file-simple-utf8.bin");
+        final String expected = "ABC\r\n";
+        assertEquals(expected, PathUtils.readString(path, StandardCharsets.UTF_8));
+        assertEquals(expected, PathUtils.readString(path, null));
     }
 
 }
