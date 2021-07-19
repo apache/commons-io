@@ -879,9 +879,9 @@ public final class PathUtils {
      * Reads the given path as a String.
      *
      * @param path The source path.
-     * @param charset How to convert bytes to a String.
-     * @return a new String
-     * @throws IOException if an I/O error occurs reading from the stream
+     * @param charset How to convert bytes to a String, null uses the default Charset.
+     * @return a new String.
+     * @throws IOException if an I/O error occurs reading from the stream.
      * @see Files#readAllBytes(Path)
      * @since 2.12.0
      */
