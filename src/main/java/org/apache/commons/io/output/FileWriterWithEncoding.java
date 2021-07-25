@@ -54,33 +54,118 @@ public class FileWriterWithEncoding extends Writer {
     // Cannot extend ProxyWriter, as requires writer to be
     // known when super() is called
 
+    /**
+     * Initializes the wrapped file writer. Ensure that a cleanup occurs if the writer creation fails.
+     *
+     * @param file the file to be accessed
+     * @param encoding the encoding to use - may be Charset, CharsetEncoder or String, null uses the default Charset.
+     * @param append true to append
+     * @return the initialized writer
+     * @throws IOException if an error occurs
+     */
+    private static Writer initWriter(final File file, final Object encoding, final boolean append) throws IOException {
+        Objects.requireNonNull(file, "file");
+        OutputStream stream = null;
+        final boolean fileExistedAlready = file.exists();
+        try {
+            stream = Files.newOutputStream(file.toPath(), append ? StandardOpenOption.APPEND : StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            if (encoding == null || encoding instanceof Charset) {
+                return new OutputStreamWriter(stream, Charsets.toCharset((Charset) encoding));
+            }
+            if (encoding instanceof CharsetEncoder) {
+                return new OutputStreamWriter(stream, (CharsetEncoder) encoding);
+            }
+            return new OutputStreamWriter(stream, (String) encoding);
+        } catch (final IOException | RuntimeException ex) {
+            try {
+                IOUtils.close(stream);
+            } catch (final IOException e) {
+                ex.addSuppressed(e);
+            }
+            if (!fileExistedAlready) {
+                FileUtils.deleteQuietly(file);
+            }
+            throw ex;
+        }
+    }
+
     /** The writer to decorate. */
     private final Writer out;
 
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param fileName  the name of the file to write to, not null
-     * @param charsetName  the name of the requested charset, not null
-     * @throws NullPointerException if the file name or encoding is null
+     * @param file  the file to write to, not null
+     * @param charset  the encoding to use, not null
+     * @throws NullPointerException if the file or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(final String fileName, final String charsetName) throws IOException {
-        this(new File(fileName), charsetName, false);
+    public FileWriterWithEncoding(final File file, final Charset charset) throws IOException {
+        this(file, charset, false);
     }
 
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param fileName  the name of the file to write to, not null
-     * @param charsetName  the name of the requested charset, not null
-     * @param append  true if content should be appended, false to overwrite
-     * @throws NullPointerException if the file name or encoding is null
+     * @param file  the file to write to, not null.
+     * @param encoding  the name of the requested charset, null uses the default Charset.
+     * @param append  true if content should be appended, false to overwrite.
+     * @throws NullPointerException if the file is null.
+     * @throws IOException in case of an I/O error.
+     */
+    public FileWriterWithEncoding(final File file, final Charset encoding, final boolean append) throws IOException {
+        this.out = initWriter(file, encoding, append);
+    }
+
+    /**
+     * Constructs a FileWriterWithEncoding with a file encoding.
+     *
+     * @param file  the file to write to, not null
+     * @param charsetEncoder  the encoding to use, not null
+     * @throws NullPointerException if the file or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(final String fileName, final String charsetName, final boolean append)
+    public FileWriterWithEncoding(final File file, final CharsetEncoder charsetEncoder) throws IOException {
+        this(file, charsetEncoder, false);
+    }
+
+    /**
+     * Constructs a FileWriterWithEncoding with a file encoding.
+     *
+     * @param file  the file to write to, not null.
+     * @param charsetEncoder  the encoding to use, null uses the default Charset.
+     * @param append  true if content should be appended, false to overwrite.
+     * @throws NullPointerException if the file  is null.
+     * @throws IOException in case of an I/O error.
+     */
+    public FileWriterWithEncoding(final File file, final CharsetEncoder charsetEncoder, final boolean append)
             throws IOException {
-        this(new File(fileName), charsetName, append);
+        this.out = initWriter(file, charsetEncoder, append);
+    }
+
+    /**
+     * Constructs a FileWriterWithEncoding with a file encoding.
+     *
+     * @param file  the file to write to, not null
+     * @param charsetName  the name of the requested charset, not null
+     * @throws NullPointerException if the file or encoding is null
+     * @throws IOException in case of an I/O error
+     */
+    public FileWriterWithEncoding(final File file, final String charsetName) throws IOException {
+        this(file, charsetName, false);
+    }
+
+    /**
+     * Constructs a FileWriterWithEncoding with a file encoding.
+     *
+     * @param file  the file to write to, not null.
+     * @param charsetName  the name of the requested charset, null uses the default Charset.
+     * @param append  true if content should be appended, false to overwrite.
+     * @throws NullPointerException if the file is null.
+     * @throws IOException in case of an I/O error.
+     */
+    public FileWriterWithEncoding(final File file, final String charsetName, final boolean append) throws IOException {
+        this.out = initWriter(file, charsetName, append);
     }
 
     /**
@@ -138,122 +223,45 @@ public class FileWriterWithEncoding extends Writer {
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param file  the file to write to, not null
+     * @param fileName  the name of the file to write to, not null
      * @param charsetName  the name of the requested charset, not null
-     * @throws NullPointerException if the file or encoding is null
+     * @throws NullPointerException if the file name or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(final File file, final String charsetName) throws IOException {
-        this(file, charsetName, false);
+    public FileWriterWithEncoding(final String fileName, final String charsetName) throws IOException {
+        this(new File(fileName), charsetName, false);
     }
 
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param file  the file to write to, not null.
-     * @param charsetName  the name of the requested charset, null uses the default Charset.
-     * @param append  true if content should be appended, false to overwrite.
-     * @throws NullPointerException if the file is null.
-     * @throws IOException in case of an I/O error.
-     */
-    public FileWriterWithEncoding(final File file, final String charsetName, final boolean append) throws IOException {
-        this.out = initWriter(file, charsetName, append);
-    }
-
-    /**
-     * Constructs a FileWriterWithEncoding with a file encoding.
-     *
-     * @param file  the file to write to, not null
-     * @param charset  the encoding to use, not null
-     * @throws NullPointerException if the file or encoding is null
+     * @param fileName  the name of the file to write to, not null
+     * @param charsetName  the name of the requested charset, not null
+     * @param append  true if content should be appended, false to overwrite
+     * @throws NullPointerException if the file name or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(final File file, final Charset charset) throws IOException {
-        this(file, charset, false);
-    }
-
-    /**
-     * Constructs a FileWriterWithEncoding with a file encoding.
-     *
-     * @param file  the file to write to, not null.
-     * @param encoding  the name of the requested charset, null uses the default Charset.
-     * @param append  true if content should be appended, false to overwrite.
-     * @throws NullPointerException if the file is null.
-     * @throws IOException in case of an I/O error.
-     */
-    public FileWriterWithEncoding(final File file, final Charset encoding, final boolean append) throws IOException {
-        this.out = initWriter(file, encoding, append);
-    }
-
-    /**
-     * Constructs a FileWriterWithEncoding with a file encoding.
-     *
-     * @param file  the file to write to, not null
-     * @param charsetEncoder  the encoding to use, not null
-     * @throws NullPointerException if the file or encoding is null
-     * @throws IOException in case of an I/O error
-     */
-    public FileWriterWithEncoding(final File file, final CharsetEncoder charsetEncoder) throws IOException {
-        this(file, charsetEncoder, false);
-    }
-
-    /**
-     * Constructs a FileWriterWithEncoding with a file encoding.
-     *
-     * @param file  the file to write to, not null.
-     * @param charsetEncoder  the encoding to use, null uses the default Charset.
-     * @param append  true if content should be appended, false to overwrite.
-     * @throws NullPointerException if the file  is null.
-     * @throws IOException in case of an I/O error.
-     */
-    public FileWriterWithEncoding(final File file, final CharsetEncoder charsetEncoder, final boolean append)
+    public FileWriterWithEncoding(final String fileName, final String charsetName, final boolean append)
             throws IOException {
-        this.out = initWriter(file, charsetEncoder, append);
+        this(new File(fileName), charsetName, append);
     }
 
     /**
-     * Initializes the wrapped file writer. Ensure that a cleanup occurs if the writer creation fails.
-     *
-     * @param file the file to be accessed
-     * @param encoding the encoding to use - may be Charset, CharsetEncoder or String, null uses the default Charset.
-     * @param append true to append
-     * @return the initialized writer
-     * @throws IOException if an error occurs
-     */
-    private static Writer initWriter(final File file, final Object encoding, final boolean append) throws IOException {
-        Objects.requireNonNull(file, "file");
-        OutputStream stream = null;
-        final boolean fileExistedAlready = file.exists();
-        try {
-            stream = Files.newOutputStream(file.toPath(), append ? StandardOpenOption.APPEND : StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-            if (encoding == null || encoding instanceof Charset) {
-                return new OutputStreamWriter(stream, Charsets.toCharset((Charset) encoding));
-            }
-            if (encoding instanceof CharsetEncoder) {
-                return new OutputStreamWriter(stream, (CharsetEncoder) encoding);
-            }
-            return new OutputStreamWriter(stream, (String) encoding);
-        } catch (final IOException | RuntimeException ex) {
-            try {
-                IOUtils.close(stream);
-            } catch (final IOException e) {
-                ex.addSuppressed(e);
-            }
-            if (!fileExistedAlready) {
-                FileUtils.deleteQuietly(file);
-            }
-            throw ex;
-        }
-    }
-
-    /**
-     * Writes a character.
-     * @param idx the character to write
+     * Closes the stream.
      * @throws IOException if an I/O error occurs.
      */
      @Override
-    public void write(final int idx) throws IOException {
-        out.write(idx);
+    public void close() throws IOException {
+        out.close();
+    }
+
+    /**
+     * Flushes the stream.
+     * @throws IOException if an I/O error occurs.
+     */
+     @Override
+    public void flush() throws IOException {
+        out.flush();
     }
 
     /**
@@ -279,6 +287,16 @@ public class FileWriterWithEncoding extends Writer {
     }
 
     /**
+     * Writes a character.
+     * @param idx the character to write
+     * @throws IOException if an I/O error occurs.
+     */
+     @Override
+    public void write(final int idx) throws IOException {
+        out.write(idx);
+    }
+
+    /**
      * Writes the characters from a string.
      * @param str the string to write
      * @throws IOException if an I/O error occurs.
@@ -298,23 +316,5 @@ public class FileWriterWithEncoding extends Writer {
      @Override
     public void write(final String str, final int st, final int end) throws IOException {
         out.write(str, st, end);
-    }
-
-    /**
-     * Flushes the stream.
-     * @throws IOException if an I/O error occurs.
-     */
-     @Override
-    public void flush() throws IOException {
-        out.flush();
-    }
-
-    /**
-     * Closes the stream.
-     * @throws IOException if an I/O error occurs.
-     */
-     @Override
-    public void close() throws IOException {
-        out.close();
     }
 }
