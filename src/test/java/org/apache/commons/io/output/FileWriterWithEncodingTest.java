@@ -17,8 +17,8 @@
 package org.apache.commons.io.output;
 
 import static org.apache.commons.io.test.TestUtils.checkFile;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
 import java.nio.file.Files;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -108,13 +107,16 @@ public class FileWriterWithEncodingTest {
 
     @Test
     public void sameEncoding_Charset_constructor() throws Exception {
-        successfulRun(new FileWriterWithEncoding(file2, Charset.defaultCharset()));
+        try (final FileWriterWithEncoding writer = new FileWriterWithEncoding(file2, Charset.defaultCharset())) {
+            successfulRun(writer);
+        }
     }
 
     @Test
     public void sameEncoding_CharsetEncoder_constructor() throws Exception {
-        final CharsetEncoder enc = Charset.defaultCharset().newEncoder();
-        successfulRun(new FileWriterWithEncoding(file2, enc));
+        try (final FileWriterWithEncoding writer = new FileWriterWithEncoding(file2, Charset.defaultCharset().newEncoder())) {
+            successfulRun(writer);
+        }
     }
 
     @Test
@@ -129,23 +131,30 @@ public class FileWriterWithEncodingTest {
 
     @Test
     public void sameEncoding_string_Charset_constructor() throws Exception {
-        successfulRun(new FileWriterWithEncoding(file2.getPath(), Charset.defaultCharset()));
+        try (final FileWriterWithEncoding writer = new FileWriterWithEncoding(file2.getPath(), Charset.defaultCharset())) {
+            successfulRun(writer);
+        }
     }
 
     @Test
     public void sameEncoding_string_CharsetEncoder_constructor() throws Exception {
-        final CharsetEncoder enc = Charset.defaultCharset().newEncoder();
-        successfulRun(new FileWriterWithEncoding(file2.getPath(), enc));
+        try (final FileWriterWithEncoding writer = new FileWriterWithEncoding(file2.getPath(), Charset.defaultCharset().newEncoder())) {
+            successfulRun(writer);
+        }
     }
 
     @Test
     public void sameEncoding_string_constructor() throws Exception {
-        successfulRun(new FileWriterWithEncoding(file2, defaultEncoding));
+        try (final FileWriterWithEncoding writer = new FileWriterWithEncoding(file2, defaultEncoding)) {
+            successfulRun(writer);
+        }
     }
 
     @Test
     public void sameEncoding_string_string_constructor() throws Exception {
-        successfulRun(new FileWriterWithEncoding(file2.getPath(), defaultEncoding));
+        try (final FileWriterWithEncoding writer = new FileWriterWithEncoding(file2.getPath(), defaultEncoding)) {
+            successfulRun(writer);
+        }
     }
 
     @BeforeEach
