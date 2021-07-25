@@ -227,7 +227,7 @@ public class FileWriterWithEncoding extends Writer {
         OutputStream stream = null;
         final boolean fileExistedAlready = file.exists();
         try {
-            stream = Files.newOutputStream(file.toPath(),  append ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
+            stream = Files.newOutputStream(file.toPath(),  append ? StandardOpenOption.APPEND : StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
             if (encoding instanceof Charset) {
                 return new OutputStreamWriter(stream, (Charset)encoding);
             }
