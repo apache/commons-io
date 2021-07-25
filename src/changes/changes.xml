@@ -53,6 +53,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-744" dev="ggregory" type="fix" due-to="RBRi, Gary Gregory">
         FileWriterWithEncoding for an existing file no longer truncates the file. #251.
       </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        A null charset or charset name in FileWriterWithEncoding constructors uses the default Charset.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add BrokenReader.INSTANCE.

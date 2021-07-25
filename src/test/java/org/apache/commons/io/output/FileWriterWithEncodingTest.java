@@ -121,11 +121,8 @@ public class FileWriterWithEncodingTest {
 
     @Test
     public void sameEncoding_null_Charset_constructor() throws Exception {
-        try {
-            successfulRun(new FileWriterWithEncoding(file2, (Charset) null));
-            fail();
-        } catch (final NullPointerException ignore) {
-            // empty
+        try (final FileWriterWithEncoding writer = new FileWriterWithEncoding(file2, (Charset) null)) {
+            successfulRun(writer);
         }
     }
 
