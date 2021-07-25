@@ -221,20 +221,20 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file or encoding is null
      * @throws IOException if an error occurs
      */
-     private static Writer initWriter(final File file, final Object encoding, final boolean append) throws IOException {
+    private static Writer initWriter(final File file, final Object encoding, final boolean append) throws IOException {
         Objects.requireNonNull(file, "file");
         Objects.requireNonNull(encoding, "encoding");
         OutputStream stream = null;
         final boolean fileExistedAlready = file.exists();
         try {
-            stream = Files.newOutputStream(file.toPath(),  append ? StandardOpenOption.APPEND : StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            stream = Files.newOutputStream(file.toPath(), append ? StandardOpenOption.APPEND : StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
             if (encoding instanceof Charset) {
-                return new OutputStreamWriter(stream, (Charset)encoding);
+                return new OutputStreamWriter(stream, (Charset) encoding);
             }
             if (encoding instanceof CharsetEncoder) {
-                return new OutputStreamWriter(stream, (CharsetEncoder)encoding);
+                return new OutputStreamWriter(stream, (CharsetEncoder) encoding);
             }
-            return new OutputStreamWriter(stream, (String)encoding);
+            return new OutputStreamWriter(stream, (String) encoding);
         } catch (final IOException | RuntimeException ex) {
             try {
                 IOUtils.close(stream);
