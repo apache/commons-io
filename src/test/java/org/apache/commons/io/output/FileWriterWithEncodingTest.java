@@ -51,6 +51,103 @@ public class FileWriterWithEncodingTest {
     private String textContent;
     private final char[] anotherTestContent = {'f', 'z', 'x'};
 
+    @Test
+    public void constructor_File_directory() {
+        assertThrows(IOException.class, () -> {
+            try (Writer writer = new FileWriterWithEncoding(temporaryFolder, defaultEncoding)) {
+                // empty
+            }
+        });
+        assertFalse(file1.exists());
+    }
+
+    @Test
+    public void constructor_File_encoding_badEncoding() {
+        assertThrows(IOException.class, () -> {
+            try (Writer writer = new FileWriterWithEncoding(file1, "BAD-ENCODE")) {
+                // empty
+            }
+        });
+        assertFalse(file1.exists());
+    }
+
+    @Test
+    public void constructor_File_existingFile_withContent() throws Exception {
+        try (FileWriter fw1 = new FileWriter(file1);) {
+            fw1.write(textContent);
+            fw1.write(65);
+        }
+        assertEquals(1025, file1.length());
+
+        try (FileWriterWithEncoding fw1 = new FileWriterWithEncoding(file1, defaultEncoding)) {
+            fw1.write("ABcd");
+        }
+
+        assertEquals(4, file1.length());
+    }
+
+    @Test
+    public void constructor_File_nullFile() {
+        assertThrows(NullPointerException.class, () -> {
+            try (Writer writer = new FileWriterWithEncoding((File) null, defaultEncoding)) {
+                // empty
+            }
+        });
+        assertFalse(file1.exists());
+    }
+
+    @Test
+    public void constructor_fileName_nullFile() {
+        assertThrows(NullPointerException.class, () -> {
+            try (Writer writer = new FileWriterWithEncoding((String) null, defaultEncoding)) {
+                // empty
+            }
+        });
+        assertFalse(file1.exists());
+    }
+
+    @Test
+    public void sameEncoding_Charset_constructor() throws Exception {
+        successfulRun(new FileWriterWithEncoding(file2, Charset.defaultCharset()));
+    }
+
+    @Test
+    public void sameEncoding_CharsetEncoder_constructor() throws Exception {
+        final CharsetEncoder enc = Charset.defaultCharset().newEncoder();
+        successfulRun(new FileWriterWithEncoding(file2, enc));
+    }
+
+    @Test
+    public void sameEncoding_null_Charset_constructor() throws Exception {
+        try {
+            successfulRun(new FileWriterWithEncoding(file2, (Charset) null));
+            fail();
+        } catch (final NullPointerException ignore) {
+            // empty
+        }
+    }
+
+    @Test
+    public void sameEncoding_string_Charset_constructor() throws Exception {
+        successfulRun(new FileWriterWithEncoding(file2.getPath(), Charset.defaultCharset()));
+    }
+
+    @Test
+    public void sameEncoding_string_CharsetEncoder_constructor() throws Exception {
+        final CharsetEncoder enc = Charset.defaultCharset().newEncoder();
+        successfulRun(new FileWriterWithEncoding(file2.getPath(), enc));
+    }
+
+    @Test
+    public void sameEncoding_string_constructor() throws Exception {
+        successfulRun(new FileWriterWithEncoding(file2, defaultEncoding));
+    }
+
+    @Test
+    public void sameEncoding_string_string_constructor() throws Exception {
+        successfulRun(new FileWriterWithEncoding(file2.getPath(), defaultEncoding));
+    }
+
     @BeforeEach
     public void setUp() throws Exception {
         final File encodingFinder = new File(temporaryFolder, "finder.txt");
@@ -65,38 +162,6 @@ public class FileWriterWithEncodingTest {
             arr[i] = chars[i % chars.length];
         }
         textContent = new String(arr);
-    }
-
-    @Test
-    public void sameEncoding_string_constructor() throws Exception {
-        successfulRun(new FileWriterWithEncoding(file2, defaultEncoding));
-    }
-
-    @Test
-    public void sameEncoding_string_string_constructor() throws Exception {
-        successfulRun(new FileWriterWithEncoding(file2.getPath(), defaultEncoding));
-    }
-
-    @Test
-    public void sameEncoding_Charset_constructor() throws Exception {
-        successfulRun(new FileWriterWithEncoding(file2, Charset.defaultCharset()));
-    }
-
-    @Test
-    public void sameEncoding_string_Charset_constructor() throws Exception {
-        successfulRun(new FileWriterWithEncoding(file2.getPath(), Charset.defaultCharset()));
-    }
-
-    @Test
-    public void sameEncoding_CharsetEncoder_constructor() throws Exception {
-        final CharsetEncoder enc = Charset.defaultCharset().newEncoder();
-        successfulRun(new FileWriterWithEncoding(file2, enc));
-    }
-
-    @Test
-    public void sameEncoding_string_CharsetEncoder_constructor() throws Exception {
-        final CharsetEncoder enc = Charset.defaultCharset().newEncoder();
-        successfulRun(new FileWriterWithEncoding(file2.getPath(), enc));
     }
 
     private void successfulRun(final FileWriterWithEncoding fw21) throws Exception {
@@ -160,70 +225,5 @@ public class FileWriterWithEncodingTest {
 
         fw1.flush();
         fw2.flush();
-    }
-
-    @Test
-    public void constructor_File_encoding_badEncoding() {
-        assertThrows(IOException.class, () -> {
-            try (Writer writer = new FileWriterWithEncoding(file1, "BAD-ENCODE")) {
-                // empty
-            }
-        });
-        assertFalse(file1.exists());
-    }
-
-    @Test
-    public void constructor_File_directory() {
-        assertThrows(IOException.class, () -> {
-            try (Writer writer = new FileWriterWithEncoding(temporaryFolder, defaultEncoding)) {
-                // empty
-            }
-        });
-        assertFalse(file1.exists());
-    }
-
-    @Test
-    public void constructor_File_nullFile() {
-        assertThrows(NullPointerException.class, () -> {
-            try (Writer writer = new FileWriterWithEncoding((File) null, defaultEncoding)) {
-                // empty
-            }
-        });
-        assertFalse(file1.exists());
-    }
-
-    @Test
-    public void constructor_fileName_nullFile() {
-        assertThrows(NullPointerException.class, () -> {
-            try (Writer writer = new FileWriterWithEncoding((String) null, defaultEncoding)) {
-                // empty
-            }
-        });
-        assertFalse(file1.exists());
-    }
-
-    @Test
-    public void sameEncoding_null_Charset_constructor() throws Exception {
-        try {
-            successfulRun(new FileWriterWithEncoding(file2, (Charset) null));
-            fail();
-        } catch (final NullPointerException ignore) {
-            // empty
-        }
-    }
-
-    @Test
-    public void constructor_File_existingFile_withContent() throws Exception {
-        try (FileWriter fw1 = new FileWriter(file1);) {
-            fw1.write(textContent);
-            fw1.write(65);
-        }
-        assertEquals(1025, file1.length());
-
-        try (FileWriterWithEncoding fw1 = new FileWriterWithEncoding(file1, defaultEncoding)) {
-            fw1.write("ABcd");
-        }
-
-        assertEquals(4, file1.length());
     }
 }
