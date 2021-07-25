@@ -228,12 +228,10 @@ public class LockableFileWriter extends Writer {
      */
     private void testLockDir(final File lockDir) throws IOException {
         if (!lockDir.exists()) {
-            throw new IOException(
-                    "Could not find lockDir: " + lockDir.getAbsolutePath());
+            throw new IOException("Could not find lockDir: " + lockDir.getAbsolutePath());
         }
         if (!lockDir.canWrite()) {
-            throw new IOException(
-                    "Could not write to lockDir: " + lockDir.getAbsolutePath());
+            throw new IOException("Could not write to lockDir: " + lockDir.getAbsolutePath());
         }
     }
 
@@ -245,8 +243,7 @@ public class LockableFileWriter extends Writer {
     private void createLock() throws IOException {
         synchronized (LockableFileWriter.class) {
             if (!lockFile.createNewFile()) {
-                throw new IOException("Can't write file, lock " +
-                        lockFile.getAbsolutePath() + " exists");
+                throw new IOException("Can't write file, lock " + lockFile.getAbsolutePath() + " exists");
             }
             lockFile.deleteOnExit();
         }
@@ -265,8 +262,7 @@ public class LockableFileWriter extends Writer {
     private Writer initWriter(final File file, final Charset charset, final boolean append) throws IOException {
         final boolean fileExistedAlready = file.exists();
         try {
-            return new OutputStreamWriter(new FileOutputStream(file.getAbsolutePath(), append),
-                                          Charsets.toCharset(charset));
+            return new OutputStreamWriter(new FileOutputStream(file.getAbsolutePath(), append), Charsets.toCharset(charset));
 
         } catch (final IOException | RuntimeException ex) {
             FileUtils.deleteQuietly(lockFile);
