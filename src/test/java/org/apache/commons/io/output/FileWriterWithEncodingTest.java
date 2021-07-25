@@ -17,6 +17,7 @@
 package org.apache.commons.io.output;
 
 import static org.apache.commons.io.test.TestUtils.checkFile;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -195,6 +196,25 @@ public class FileWriterWithEncodingTest {
             ){ }
          });
         assertFalse(file1.exists());
+    }
+
+    @Test
+    public void constructor_File_existingFile_withContent() throws Exception {
+        try (
+                FileWriter fw1 = new FileWriter(file1);
+            ){
+                fw1.write(textContent);
+                fw1.write(65);
+            }
+        assertEquals(1025, file1.length());
+
+        try (
+                FileWriterWithEncoding fw1 = new FileWriterWithEncoding(file1, defaultEncoding)
+            ){
+                fw1.write("ABcd");
+            }
+
+        assertEquals(4, file1.length());
     }
 
     @Test
