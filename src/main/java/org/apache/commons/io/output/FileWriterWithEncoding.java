@@ -247,7 +247,7 @@ public class FileWriterWithEncoding extends Writer {
     }
 
     /**
-     * Write a character.
+     * Writes a character.
      * @param idx the character to write
      * @throws IOException if an I/O error occurs.
      */
@@ -257,7 +257,7 @@ public class FileWriterWithEncoding extends Writer {
     }
 
     /**
-     * Write the characters from an array.
+     * Writes the characters from an array.
      * @param chr the characters to write
      * @throws IOException if an I/O error occurs.
      */
@@ -267,7 +267,7 @@ public class FileWriterWithEncoding extends Writer {
     }
 
     /**
-     * Write the specified characters from an array.
+     * Writes the specified characters from an array.
      * @param chr the characters to write
      * @param st The start offset
      * @param end The number of characters to write
@@ -279,7 +279,7 @@ public class FileWriterWithEncoding extends Writer {
     }
 
     /**
-     * Write the characters from a string.
+     * Writes the characters from a string.
      * @param str the string to write
      * @throws IOException if an I/O error occurs.
      */
@@ -289,7 +289,7 @@ public class FileWriterWithEncoding extends Writer {
     }
 
     /**
-     * Write the specified characters from a string.
+     * Writes the specified characters from a string.
      * @param str the string to write
      * @param st The start offset
      * @param end The number of characters to write
@@ -301,7 +301,7 @@ public class FileWriterWithEncoding extends Writer {
     }
 
     /**
-     * Flush the stream.
+     * Flushes the stream.
      * @throws IOException if an I/O error occurs.
      */
      @Override
@@ -310,7 +310,7 @@ public class FileWriterWithEncoding extends Writer {
     }
 
     /**
-     * Close the stream.
+     * Closes the stream.
      * @throws IOException if an I/O error occurs.
      */
      @Override
