@@ -86,6 +86,20 @@ public class FileWriterWithEncodingTest {
     }
 
     @Test
+    public void constructorAppend_File_existingFile_withContent() throws Exception {
+        try (FileWriter fw1 = new FileWriter(file1);) {
+            fw1.write("ABcd");
+        }
+        assertEquals(4, file1.length());
+
+        try (FileWriterWithEncoding fw1 = new FileWriterWithEncoding(file1, defaultEncoding, true)) {
+            fw1.write("XyZ");
+        }
+
+        assertEquals(7, file1.length());
+    }
+
+    @Test
     public void constructor_File_nullFile() {
         assertThrows(NullPointerException.class, () -> {
             try (Writer writer = new FileWriterWithEncoding((File) null, defaultEncoding)) {
