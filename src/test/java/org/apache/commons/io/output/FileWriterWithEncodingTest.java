@@ -72,7 +72,7 @@ public class FileWriterWithEncodingTest {
 
     @Test
     public void constructor_File_existingFile_withContent() throws Exception {
-        try (FileWriter fw1 = new FileWriter(file1);) {
+        try (FileWriter fw1 = new FileWriter(file1)) {
             fw1.write(textContent);
             fw1.write(65);
         }
@@ -87,7 +87,7 @@ public class FileWriterWithEncodingTest {
 
     @Test
     public void constructorAppend_File_existingFile_withContent() throws Exception {
-        try (FileWriter fw1 = new FileWriter(file1);) {
+        try (FileWriter fw1 = new FileWriter(file1)) {
             fw1.write("ABcd");
         }
         assertEquals(4, file1.length());
