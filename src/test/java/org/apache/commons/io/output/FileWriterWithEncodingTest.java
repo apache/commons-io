@@ -59,7 +59,7 @@ public class FileWriterWithEncodingTest {
         });
         assertFalse(file1.exists());
     }
-
+    
     @Test
     public void constructor_File_encoding_badEncoding() {
         assertThrows(IOException.class, () -> {
@@ -103,6 +103,20 @@ public class FileWriterWithEncodingTest {
             }
         });
         assertFalse(file1.exists());
+    }
+
+    @Test
+    public void constructorAppend_File_existingFile_withContent() throws Exception {
+        try (FileWriter fw1 = new FileWriter(file1)) {
+            fw1.write("ABcd");
+        }
+        assertEquals(4, file1.length());
+
+        try (FileWriterWithEncoding fw1 = new FileWriterWithEncoding(file1, defaultEncoding, true)) {
+            fw1.write("XyZ");
+        }
+
+        assertEquals(7, file1.length());
     }
 
     @Test
