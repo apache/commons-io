@@ -85,6 +85,19 @@ There are six main areas included:
 <!-- ================================================== -->
 <section name="Releases">
 
+    <subsection name="Commons IO 2.12.0 (requires Java 8)">
+        <p>
+            Commons IO 2.12.0 requires a minimum of Java 8 -
+            <a href="https://commons.apache.org/io/download_io.cgi">Download now!</a>
+        </p>
+        <p>
+            View the
+            <a href="changes-report.html">Release Notes</a>
+            and
+            <a href="apidocs/index.html">Javadoc API documents</a>
+        </p>
+    </subsection>
+
     <subsection name="Commons IO 2.11.0 (requires Java 8)">
         <p>
             Commons IO 2.11.0 requires a minimum of Java 8 -
@@ -94,7 +107,7 @@ There are six main areas included:
             View the
             <a href="changes-report.html">Release Notes</a>
             and
-            <a href="apidocs/index.html">Javadoc API documents</a>
+            <a href="https://javadoc.io/doc/commons-io/commons-io/2.11.0/index.html">Javadoc API documents</a>
         </p>
     </subsection>
 
