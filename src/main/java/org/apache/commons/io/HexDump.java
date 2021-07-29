@@ -149,13 +149,11 @@ public class HexDump {
      *
      * @param _cbuffer the StringBuilder to dump the value in
      * @param value  the byte value to be dumped
-     * @return StringBuilder containing the dumped value.
      */
-    private static StringBuilder dump(final StringBuilder _cbuffer, final byte value) {
+    private static void dump(final StringBuilder _cbuffer, final byte value) {
         for (int j = 0; j < 2; j++) {
             _cbuffer.append(_hexcodes[value >> _shifts[j + 6] & 15]);
         }
-        return _cbuffer;
     }
 
 }

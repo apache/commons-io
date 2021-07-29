@@ -2625,16 +2625,14 @@ public class FileUtils {
      *
      * @param directory The {@code File} to check.
      * @param name The parameter name to use in the exception message in case of null input or if the file is not a directory.
-     * @return the given directory.
      * @throws NullPointerException if the given {@code File} is {@code null}.
      * @throws IllegalArgumentException if the given {@code File} does not exist or is not a directory.
      */
-    private static File requireDirectory(final File directory, final String name) {
+    private static void requireDirectory(final File directory, final String name) {
         Objects.requireNonNull(directory, name);
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException("Parameter '" + name + "' is not a directory: '" + directory + "'");
         }
-        return directory;
     }
 
     /**
@@ -2657,16 +2655,14 @@ public class FileUtils {
      *
      * @param directory The {@code File} to check.
      * @param name The parameter name to use in the exception message in case of null input.
-     * @return the given directory.
      * @throws NullPointerException if the given {@code File} is {@code null}.
      * @throws IllegalArgumentException if the given {@code File} exists but is not a directory.
      */
-    private static File requireDirectoryIfExists(final File directory, final String name) {
+    private static void requireDirectoryIfExists(final File directory, final String name) {
         Objects.requireNonNull(directory, name);
         if (directory.exists()) {
             requireDirectory(directory, name);
         }
-        return directory;
     }
 
     /**
@@ -2691,17 +2687,15 @@ public class FileUtils {
      *
      * @param file The {@code File} to check.
      * @param fileParamName The parameter name to use in the exception message in case of {@code null} input.
-     * @return the given file.
      * @throws NullPointerException if the given {@code File} is {@code null}.
      * @throws IllegalArgumentException if the given {@code File} does not exist.
      */
-    private static File requireExists(final File file, final String fileParamName) {
+    private static void requireExists(final File file, final String fileParamName) {
         Objects.requireNonNull(file, fileParamName);
         if (!file.exists()) {
             throw new IllegalArgumentException(
                 "File system element for parameter '" + fileParamName + "' does not exist: '" + file + "'");
         }
-        return file;
     }
 
     /**
@@ -2709,17 +2703,15 @@ public class FileUtils {
      *
      * @param file The {@code File} to check.
      * @param fileParamName The parameter name to use in the exception message in case of {@code null} input.
-     * @return the given file.
      * @throws NullPointerException if the given {@code File} is {@code null}.
      * @throws FileNotFoundException if the given {@code File} does not exist.
      */
-    private static File requireExistsChecked(final File file, final String fileParamName) throws FileNotFoundException {
+    private static void requireExistsChecked(final File file, final String fileParamName) throws FileNotFoundException {
         Objects.requireNonNull(file, fileParamName);
         if (!file.exists()) {
             throw new FileNotFoundException(
                 "File system element for parameter '" + fileParamName + "' does not exist: '" + file + "'");
         }
-        return file;
     }
 
     /**
@@ -2757,13 +2749,14 @@ public class FileUtils {
      *
      * @param file The {@code File} to check.
      * @param name The parameter name to use in the exception message in case of null input.
-     * @return the given directory.
      * @throws NullPointerException if the given {@code File} is {@code null}.
      * @throws IllegalArgumentException if the given {@code File} does exists but is not a directory.
      */
-    private static File requireFileIfExists(final File file, final String name) {
+    private static void requireFileIfExists(final File file, final String name) {
         Objects.requireNonNull(file, name);
-        return file.exists() ? requireFile(file, name) : file;
+        if (file.exists()) {
+            requireFile(file, name);
+        }
     }
 
     /**
