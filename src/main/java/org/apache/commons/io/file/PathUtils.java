@@ -20,6 +20,7 @@ package org.apache.commons.io.file;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UncheckedIOException;
 import java.net.URI;
 import java.net.URL;
@@ -36,6 +37,7 @@ import java.nio.file.NotDirectoryException;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.AclEntry;
 import java.nio.file.attribute.AclFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -831,6 +833,22 @@ public final class PathUtils {
     public static DirectoryStream<Path> newDirectoryStream(final Path dir, final PathFilter pathFilter)
         throws IOException {
         return Files.newDirectoryStream(dir, new DirectoryStreamFilter(pathFilter));
+    }
+
+    /**
+     * Creates a new OutputStream by opening or creating a file, returning an output stream that may be used to write bytes
+     * to the file.
+     * @param path the Path.
+     * @param append Whether or not to append.
+     *
+     * @return a new OutputStream.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.12.0
+     */
+    public static OutputStream newOutputStream(final Path path, final boolean append) throws IOException {
+        return Files.newOutputStream(path, append ?
+            new OpenOption[] {StandardOpenOption.APPEND} : 
+            new OpenOption[] {StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING});
     }
 
     /**

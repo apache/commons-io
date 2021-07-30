@@ -2365,6 +2365,20 @@ public class FileUtils {
     }
 
     /**
+     * Creates a new OutputStream by opening or creating a file, returning an output stream that may be used to write bytes
+     * to the file.
+     *
+     * @param append Whether or not to append.
+     * @param file the File.
+     * @return a new OutputStream.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.12.0
+     */
+    public static OutputStream newOutputStream(final File file, final boolean append) throws IOException {
+        return PathUtils.newOutputStream(file.toPath(), append);
+    }
+
+    /**
      * Opens a {@link FileInputStream} for the specified file, providing better error messages than simply calling
      * {@code new FileInputStream(file)}.
      * <p>
@@ -2581,13 +2595,13 @@ public class FileUtils {
         return readLines(file, Charsets.toCharset(charsetName));
     }
 
+
     private static void requireAbsent(final File file, final String name) throws FileExistsException {
         if (file.exists()) {
             throw new FileExistsException(
                 String.format("File element in parameter '%s' already exists: '%s'", name, file));
         }
     }
-
 
     /**
      * Throws IllegalArgumentException if the given files' canonical representations are equal.
@@ -3206,6 +3220,8 @@ public class FileUtils {
         write(file, data, charset, false);
     }
 
+    // Private method, must be invoked will a directory parameter
+
     /**
      * Writes a CharSequence to a file creating the file if it does not exist.
      *
@@ -3221,8 +3237,6 @@ public class FileUtils {
             throws IOException {
         writeStringToFile(file, Objects.toString(data, null), charset, append);
     }
-
-    // Private method, must be invoked will a directory parameter
 
     /**
      * Writes a CharSequence to a file creating the file if it does not exist.
@@ -3256,6 +3270,8 @@ public class FileUtils {
         write(file, data, Charsets.toCharset(charsetName), append);
     }
 
+    // Must be called with a directory
+
     /**
      * Writes a byte array to a file creating the file if it does not exist.
      * <p>
@@ -3271,8 +3287,6 @@ public class FileUtils {
     public static void writeByteArrayToFile(final File file, final byte[] data) throws IOException {
         writeByteArrayToFile(file, data, false);
     }
-
-    // Must be called with a directory
 
     /**
      * Writes a byte array to a file creating the file if it does not exist.
@@ -3357,6 +3371,7 @@ public class FileUtils {
         writeLines(file, null, lines, null, append);
     }
 
+
     /**
      * Writes the {@code toString()} value of each item in a collection to
      * the specified {@code File} line by line.
@@ -3372,7 +3387,6 @@ public class FileUtils {
             throws IOException {
         writeLines(file, null, lines, lineEnding, false);
     }
-
 
     /**
      * Writes the {@code toString()} value of each item in a collection to

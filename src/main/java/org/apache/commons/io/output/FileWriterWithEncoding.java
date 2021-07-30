@@ -23,9 +23,6 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
-import java.nio.file.Files;
-import java.nio.file.OpenOption;
-import java.nio.file.StandardOpenOption;
 import java.util.Objects;
 
 import org.apache.commons.io.Charsets;
@@ -67,9 +64,7 @@ public class FileWriterWithEncoding extends Writer {
         OutputStream stream = null;
         final boolean fileExistedAlready = file.exists();
         try {
-            stream = Files.newOutputStream(file.toPath(), append ?
-                new OpenOption[] {StandardOpenOption.APPEND} : 
-                new OpenOption[] {StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING});
+            stream = FileUtils.newOutputStream(file, append);
             if (encoding == null || encoding instanceof Charset) {
                 return new OutputStreamWriter(stream, Charsets.toCharset((Charset) encoding));
             }
