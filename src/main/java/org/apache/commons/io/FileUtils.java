@@ -2023,9 +2023,8 @@ public class FileUtils {
      * <p>
      * This method opens an {@code InputStream} for the file.
      * When you have finished with the iterator you should close the stream
-     * to free internal resources. This can be done by calling the
-     * {@link LineIterator#close()} or
-     * {@link LineIterator#closeQuietly(LineIterator)} method.
+     * to free internal resources. This can be done by using a try-with-resources block or calling the
+     * {@link LineIterator#close()} method.
      * </p>
      * <p>
      * The recommended usage pattern is:
