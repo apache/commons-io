@@ -223,6 +223,7 @@ public abstract class ProxyReader extends FilterReader {
      * @param n number of chars that the caller asked to be read
      * @throws IOException if the pre-processing fails
      */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void beforeRead(final int n) throws IOException {
         // noop
     }
@@ -244,6 +245,7 @@ public abstract class ProxyReader extends FilterReader {
      * @param n number of chars read, or -1 if the end of stream was reached
      * @throws IOException if the post-processing fails
      */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void afterRead(final int n) throws IOException {
         // noop
     }
