@@ -2372,6 +2372,7 @@ public class FileUtils {
      * @param file the File.
      * @return a new OutputStream.
      * @throws IOException if an I/O error occurs.
+     * @see PathUtils#newOutputStream(Path, boolean)
      * @since 2.12.0
      */
     public static OutputStream newOutputStream(final File file, final boolean append) throws IOException {

@@ -64,7 +64,7 @@ public class FileWriterWithEncoding extends Writer {
         OutputStream stream = null;
         final boolean fileExistedAlready = file.exists();
         try {
-            stream = FileUtils.newOutputStream(file, append);
+            stream = FileUtils.openOutputStream(file, append);
             if (encoding == null || encoding instanceof Charset) {
                 return new OutputStreamWriter(stream, Charsets.toCharset((Charset) encoding));
             }

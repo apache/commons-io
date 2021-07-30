@@ -843,6 +843,7 @@ public final class PathUtils {
      *
      * @return a new OutputStream.
      * @throws IOException if an I/O error occurs.
+     * @see Files#newOutputStream(Path, OpenOption...)
      * @since 2.12.0
      */
     public static OutputStream newOutputStream(final Path path, final boolean append) throws IOException {
