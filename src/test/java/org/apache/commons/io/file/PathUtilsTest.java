@@ -69,106 +69,78 @@ public class PathUtilsTest extends TestArguments {
 
     @Test
     public void testCopyDirectoryForDifferentFilesystemsWithAbsolutePath() throws IOException {
-        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName()).toAbsolutePath();
-        try {
-            final Path archivePath = Paths.get(TEST_JAR_PATH);
-            try (final FileSystem archive = openArchive(archivePath, false)) {
-                // relative jar -> absolute dir
-                Path sourceDir = archive.getPath("dir1");
-                PathUtils.copyDirectory(sourceDir, tempDir);
-                assertTrue(Files.exists(tempDir.resolve("f1")));
+        final Path archivePath = Paths.get(TEST_JAR_PATH);
+        try (final FileSystem archive = openArchive(archivePath, false)) {
+            // relative jar -> absolute dir
+            Path sourceDir = archive.getPath("dir1");
+            PathUtils.copyDirectory(sourceDir, tempDir);
+            assertTrue(Files.exists(tempDir.resolve("f1")));
 
-                // absolute jar -> absolute dir
-                sourceDir = archive.getPath("/next");
-                PathUtils.copyDirectory(sourceDir, tempDir);
-                assertTrue(Files.exists(tempDir.resolve("dir")));
-            }
-        } finally {
-            PathUtils.deleteDirectory(tempDir);
+            // absolute jar -> absolute dir
+            sourceDir = archive.getPath("/next");
+            PathUtils.copyDirectory(sourceDir, tempDir);
+            assertTrue(Files.exists(tempDir.resolve("dir")));
         }
     }
 
     @Test
     public void testCopyDirectoryForDifferentFilesystemsWithAbsolutePathReverse() throws IOException {
-        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
-        try {
-            try (final FileSystem archive = openArchive(tempDir.resolve(TEST_JAR_NAME), true)) {
-                // absolute dir -> relative jar
-                Path targetDir = archive.getPath("target");
-                Files.createDirectory(targetDir);
-                final Path sourceDir = Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2")
-                        .toAbsolutePath();
-                PathUtils.copyDirectory(sourceDir, targetDir);
-                assertTrue(Files.exists(targetDir.resolve("dirs-a-file-size-1")));
+        try (final FileSystem archive = openArchive(tempDir.resolve(TEST_JAR_NAME), true)) {
+            // absolute dir -> relative jar
+            Path targetDir = archive.getPath("target");
+            Files.createDirectory(targetDir);
+            final Path sourceDir = Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2").toAbsolutePath();
+            PathUtils.copyDirectory(sourceDir, targetDir);
+            assertTrue(Files.exists(targetDir.resolve("dirs-a-file-size-1")));
 
-                // absolute dir -> absolute jar
-                targetDir = archive.getPath("/");
-                PathUtils.copyDirectory(sourceDir, targetDir);
-                assertTrue(Files.exists(targetDir.resolve("dirs-a-file-size-1")));
-            }
-        } finally {
-            PathUtils.deleteDirectory(tempDir);
+            // absolute dir -> absolute jar
+            targetDir = archive.getPath("/");
+            PathUtils.copyDirectory(sourceDir, targetDir);
+            assertTrue(Files.exists(targetDir.resolve("dirs-a-file-size-1")));
         }
     }
 
     @Test
     public void testCopyDirectoryForDifferentFilesystemsWithRelativePath() throws IOException {
-        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
-        try {
-            final Path archivePath = Paths.get(TEST_JAR_PATH);
-            try (final FileSystem archive = openArchive(archivePath, false);
-                    final FileSystem targetArchive = openArchive(tempDir.resolve(TEST_JAR_NAME), true)) {
-                final Path targetDir = targetArchive.getPath("targetDir");
-                Files.createDirectory(targetDir);
-                // relative jar -> relative dir
-                Path sourceDir = archive.getPath("next");
-                PathUtils.copyDirectory(sourceDir, targetDir);
-                assertTrue(Files.exists(targetDir.resolve("dir")));
+        final Path archivePath = Paths.get(TEST_JAR_PATH);
+        try (final FileSystem archive = openArchive(archivePath, false); final FileSystem targetArchive = openArchive(tempDir.resolve(TEST_JAR_NAME), true)) {
+            final Path targetDir = targetArchive.getPath("targetDir");
+            Files.createDirectory(targetDir);
+            // relative jar -> relative dir
+            Path sourceDir = archive.getPath("next");
+            PathUtils.copyDirectory(sourceDir, targetDir);
+            assertTrue(Files.exists(targetDir.resolve("dir")));
 
-                // absolute jar -> relative dir
-                sourceDir = archive.getPath("/dir1");
-                PathUtils.copyDirectory(sourceDir, targetDir);
-                assertTrue(Files.exists(targetDir.resolve("f1")));
-            }
-        } finally {
-            PathUtils.deleteDirectory(tempDir);
+            // absolute jar -> relative dir
+            sourceDir = archive.getPath("/dir1");
+            PathUtils.copyDirectory(sourceDir, targetDir);
+            assertTrue(Files.exists(targetDir.resolve("f1")));
         }
     }
 
     @Test
     public void testCopyDirectoryForDifferentFilesystemsWithRelativePathReverse() throws IOException {
-        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
-        try {
-            try (final FileSystem archive = openArchive(tempDir.resolve(TEST_JAR_NAME), true)) {
-                // relative dir -> relative jar
-                Path targetDir = archive.getPath("target");
-                Files.createDirectory(targetDir);
-                final Path sourceDir = Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2");
-                PathUtils.copyDirectory(sourceDir, targetDir);
-                assertTrue(Files.exists(targetDir.resolve("dirs-a-file-size-1")));
+        try (final FileSystem archive = openArchive(tempDir.resolve(TEST_JAR_NAME), true)) {
+            // relative dir -> relative jar
+            Path targetDir = archive.getPath("target");
+            Files.createDirectory(targetDir);
+            final Path sourceDir = Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2");
+            PathUtils.copyDirectory(sourceDir, targetDir);
+            assertTrue(Files.exists(targetDir.resolve("dirs-a-file-size-1")));
 
-                // relative dir -> absolute jar
-                targetDir = archive.getPath("/");
-                PathUtils.copyDirectory(sourceDir, targetDir);
-                assertTrue(Files.exists(targetDir.resolve("dirs-a-file-size-1")));
-            }
-        } finally {
-            PathUtils.deleteDirectory(tempDir);
+            // relative dir -> absolute jar
+            targetDir = archive.getPath("/");
+            PathUtils.copyDirectory(sourceDir, targetDir);
+            assertTrue(Files.exists(targetDir.resolve("dirs-a-file-size-1")));
         }
     }
 
     @Test
     public void testCopyFile() throws IOException {
-        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
-        try {
-            final Path sourceFile = Paths
-                .get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/file-size-1.bin");
-            final Path targetFile = PathUtils.copyFileToDirectory(sourceFile, tempDir);
-            assertTrue(Files.exists(targetFile));
-            assertEquals(Files.size(sourceFile), Files.size(targetFile));
-        } finally {
-            PathUtils.deleteDirectory(tempDir);
-        }
+        final Path sourceFile = Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/file-size-1.bin");
+        final Path targetFile = PathUtils.copyFileToDirectory(sourceFile, tempDir);
+        assertTrue(Files.exists(targetFile));
+        assertEquals(Files.size(sourceFile), Files.size(targetFile));
     }
 
     @Test
