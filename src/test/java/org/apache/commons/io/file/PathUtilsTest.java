@@ -17,11 +17,13 @@
 
 package org.apache.commons.io.file;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
@@ -35,6 +37,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.io.filefilter.NameFileFilter;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -43,6 +46,10 @@ import org.junit.jupiter.api.io.TempDir;
  * Tests {@link PathUtils}.
  */
 public class PathUtilsTest extends TestArguments {
+
+    private static final String STRING_FIXTURE = "Hello World";
+
+    private static final byte[] BYTE_ARRAY_FIXTURE = STRING_FIXTURE.getBytes(StandardCharsets.UTF_8);
 
     private static final String TEST_JAR_NAME = "test.jar";
 
@@ -190,6 +197,34 @@ public class PathUtilsTest extends TestArguments {
     }
 
     @Test
+    public void testNewOutputStreamExistingFileAppendFalse() throws IOException {
+        testNewOutputStreamNewFile(false);
+        testNewOutputStreamNewFile(false);
+    }
+
+    @Test
+    public void testNewOutputStreamExistingFileAppendTrue() throws IOException {
+        testNewOutputStreamNewFile(true);
+        final Path file = writeToNewOutputStream(true);
+        assertArrayEquals(ArrayUtils.addAll(BYTE_ARRAY_FIXTURE, BYTE_ARRAY_FIXTURE), Files.readAllBytes(file));
+    }
+
+    public void testNewOutputStreamNewFile(final boolean append) throws IOException {
+        final Path file = writeToNewOutputStream(append);
+        assertArrayEquals(BYTE_ARRAY_FIXTURE, Files.readAllBytes(file));
+    }
+
+    @Test
+    public void testNewOutputStreamNewFileAppendFalse() throws IOException {
+        testNewOutputStreamNewFile(false);
+    }
+
+    @Test
+    public void testNewOutputStreamNewFileAppendTrue() throws IOException {
+        testNewOutputStreamNewFile(true);
+    }
+
+    @Test
     public void testReadStringEmptyFile() throws IOException {
         final Path path = Paths.get("src/test/resources/org/apache/commons/io/test-file-empty.bin");
         assertEquals(StringUtils.EMPTY, PathUtils.readString(path, StandardCharsets.UTF_8));
@@ -202,6 +237,17 @@ public class PathUtilsTest extends TestArguments {
         final String expected = "ABC\r\n";
         assertEquals(expected, PathUtils.readString(path, StandardCharsets.UTF_8));
         assertEquals(expected, PathUtils.readString(path, null));
+    }
+
+    /**
+     * Tests newOutputStream() here and don't use Files.write obviously.
+     */
+    private Path writeToNewOutputStream(final boolean append) throws IOException {
+        final Path file = tempDir.resolve("test1.txt");
+        try (OutputStream os = PathUtils.newOutputStream(file, append)) {
+            os.write(BYTE_ARRAY_FIXTURE);
+        }
+        return file;
     }
 
 }
