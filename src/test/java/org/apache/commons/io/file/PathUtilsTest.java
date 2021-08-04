@@ -57,17 +57,14 @@ public class PathUtilsTest extends TestArguments {
     public Path tempDir;
 
     private FileSystem openArchive(final Path p, final boolean createNew) throws IOException {
-        final FileSystem archive;
         if (createNew) {
             final Map<String, String> env = new HashMap<>();
             env.put("create", "true");
             final URI fileUri = p.toAbsolutePath().toUri();
             final URI uri = URI.create("jar:" + fileUri.toASCIIString());
-            archive = FileSystems.newFileSystem(uri, env, null);
-        } else {
-            archive = FileSystems.newFileSystem(p, (ClassLoader) null);
+            return FileSystems.newFileSystem(uri, env, null);
         }
-        return archive;
+        return FileSystems.newFileSystem(p, (ClassLoader) null);
     }
 
     @Test
