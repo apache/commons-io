@@ -122,10 +122,10 @@ public class StringBuilderWriterTest {
     @Test
     public void testWriteCharArrayPortion() throws IOException {
         try (final Writer writer = new StringBuilderWriter()) {
-        writer.write(FOOBAR_CHARS, 3, 3);
-        assertEquals("Bar", writer.toString());
-        writer.write(FOOBAR_CHARS, 0, 3);
-        assertEquals("BarFoo", writer.toString());
+            writer.write(FOOBAR_CHARS, 3, 3);
+            assertEquals("Bar", writer.toString());
+            writer.write(FOOBAR_CHARS, 0, 3);
+            assertEquals("BarFoo", writer.toString());
         }
     }
 
