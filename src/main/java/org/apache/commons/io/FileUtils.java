@@ -1924,7 +1924,7 @@ public class FileUtils {
         try {
             return StreamIterator.iterator(streamFiles(directory, recursive, extensions));
         } catch (final IOException e) {
-            throw new UncheckedIOException(directory.toString(), e);
+            throw UncheckedIOExceptions.create(directory, e);
         }
     }
 
@@ -1998,7 +1998,7 @@ public class FileUtils {
         try {
             return lastModified(file);
         } catch (final IOException e) {
-            throw new UncheckedIOException(file.toString(), e);
+            throw UncheckedIOExceptions.create(file, e);
         }
     }
 
@@ -2131,7 +2131,7 @@ public class FileUtils {
             final AccumulatorPathVisitor visitor = listAccumulate(directory, fileFilter, dirFilter);
             return visitor.getFileList().stream().map(Path::toFile).collect(Collectors.toList());
         } catch (final IOException e) {
-            throw new UncheckedIOException(directory.toString(), e);
+            throw UncheckedIOExceptions.create(directory, e);
         }
     }
 
@@ -2149,7 +2149,7 @@ public class FileUtils {
         try {
             return toList(streamFiles(directory, recursive, extensions));
         } catch (final IOException e) {
-            throw new UncheckedIOException(directory.toString(), e);
+            throw UncheckedIOExceptions.create(directory, e);
         }
     }
 
@@ -2180,7 +2180,7 @@ public class FileUtils {
             list.addAll(visitor.getDirList());
             return list.stream().map(Path::toFile).collect(Collectors.toList());
         } catch (final IOException e) {
-            throw new UncheckedIOException(directory.toString(), e);
+            throw UncheckedIOExceptions.create(directory, e);
         }
     }
 

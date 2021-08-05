@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Objects;
 
+import org.apache.commons.io.UncheckedIOExceptions;
+
 /**
  * An {@link Appendable} implementation that throws {@link UncheckedIOException} instead of {@link IOException}.
  *
@@ -43,7 +45,7 @@ class UncheckedAppendableImpl implements UncheckedAppendable {
         try {
             appendable.append(c);
         } catch (final IOException e) {
-            throw new UncheckedIOException(String.valueOf(c), e);
+            throw UncheckedIOExceptions.create(c, e);
         }
         return this;
     }
@@ -53,7 +55,7 @@ class UncheckedAppendableImpl implements UncheckedAppendable {
         try {
             appendable.append(csq);
         } catch (final IOException e) {
-            throw new UncheckedIOException(Objects.toString(csq), e);
+            throw UncheckedIOExceptions.create(csq, e);
         }
         return this;
     }
@@ -63,7 +65,7 @@ class UncheckedAppendableImpl implements UncheckedAppendable {
         try {
             appendable.append(csq, start, end);
         } catch (final IOException e) {
-            throw new UncheckedIOException(Objects.toString(csq), e);
+            throw UncheckedIOExceptions.create(csq, e);
         }
         return this;
     }
