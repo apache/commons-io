@@ -18,14 +18,14 @@ package org.apache.commons.io.input;
 
 import static org.apache.commons.io.IOUtils.EOF;
 
-import org.apache.commons.io.output.QueueOutputStream;
-
 import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import org.apache.commons.io.output.QueueOutputStream;
 
 /**
  * Simple alternative to JDK {@link java.io.PipedInputStream}; queue input stream provides what's written in queue

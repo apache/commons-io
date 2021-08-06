@@ -16,10 +16,10 @@
  */
 package org.apache.commons.io.input;
 
+import static java.lang.Math.min;
+
 import java.io.InputStream;
 import java.util.Objects;
-
-import static java.lang.Math.min;
 
 /**
  * This is an alternative to {@link java.io.ByteArrayInputStream}

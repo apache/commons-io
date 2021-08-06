@@ -16,8 +16,6 @@
  */
 package org.apache.commons.io.output;
 
-import org.apache.commons.io.input.QueueInputStream;
-
 import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
@@ -25,6 +23,8 @@ import java.io.PipedOutputStream;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import org.apache.commons.io.input.QueueInputStream;
 
 /**
  * Simple alternative to JDK {@link java.io.PipedOutputStream}; queue input stream provides what's written in queue

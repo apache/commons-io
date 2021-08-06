@@ -16,11 +16,10 @@
  */
 package org.apache.commons.io.output;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.input.ClosedInputStream;
+import static org.apache.commons.io.IOUtils.EOF;
 
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.SequenceInputStream;
 import java.io.UnsupportedEncodingException;
@@ -29,7 +28,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.apache.commons.io.IOUtils.EOF;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.ClosedInputStream;
 
 /**
  * This is the base class for implementing an output stream in which the data

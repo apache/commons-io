@@ -16,11 +16,11 @@
  */
 package org.apache.commons.io.output;
 
-import org.apache.commons.io.input.UnsynchronizedByteArrayInputStream;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import org.apache.commons.io.input.UnsynchronizedByteArrayInputStream;
 
 /**
  * Implements a version of {@link AbstractByteArrayOutputStream} <b>without</b> any concurrent thread safety.
