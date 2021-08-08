@@ -507,7 +507,7 @@ public class FileSystemUtils {
             ThreadMonitor.stop(monitor);
 
             if (proc.exitValue() != 0) {
-                // os command problem, throw exception
+                // OS command problem, throw exception
                 throw new IOException(
                         "Command line returned OS error code '" + proc.exitValue() +
                         "' for command " + Arrays.asList(cmdAttribs));
