@@ -21,9 +21,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.function.Supplier;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.file.PathUtils;
 
 /**
  * An output stream which will retain data in memory until a specified threshold is reached, and only then commit it to
@@ -50,7 +51,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     /**
      * The file to which output will be directed if the threshold is exceeded.
      */
-    private File outputFile;
+    private Path outputPath;
 
     /**
      * The temporary file prefix.
@@ -65,7 +66,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     /**
      * The directory to use for temporary files.
      */
-    private final File directory;
+    private final Path directory;
 
     /**
      * True when close() has been called successfully.
@@ -96,12 +97,12 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      * @param initialBufferSize The initial size of the in memory buffer.
      */
     private DeferredFileOutputStream(final int threshold, final File outputFile, final String prefix,
-        final String suffix, final File directory, final int initialBufferSize) {
+            final String suffix, final File directory, final int initialBufferSize) {
         super(threshold);
-        this.outputFile = outputFile;
+        this.outputPath = toPath(outputFile, null);
         this.prefix = prefix;
         this.suffix = suffix;
-        this.directory = directory;
+        this.directory = toPath(directory, PathUtils::getTempDirectory);
 
         memoryOutputStream = new ByteArrayOutputStream(initialBufferSize);
         currentOutputStream = memoryOutputStream;
@@ -200,7 +201,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      * @return The file for this output stream, or {@code null} if no such file exists.
      */
     public File getFile() {
-        return outputFile;
+        return outputPath != null ? outputPath.toFile() : null;
     }
 
     /**
@@ -235,10 +236,10 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     @Override
     protected void thresholdReached() throws IOException {
         if (prefix != null) {
-            outputFile = File.createTempFile(prefix, suffix, directory);
+            outputPath = Files.createTempFile(directory, prefix, suffix);
         }
-        FileUtils.forceMkdirParent(outputFile);
-        final OutputStream fos = Files.newOutputStream(outputFile.toPath());
+        PathUtils.createParentDirectories(outputPath);
+        final OutputStream fos = Files.newOutputStream(outputPath);
         try {
             memoryOutputStream.writeTo(fos);
         } catch (final IOException e) {
@@ -274,7 +275,11 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
         if (isInMemory()) {
             return memoryOutputStream.toInputStream();
         }
-        return Files.newInputStream(outputFile.toPath());
+        return Files.newInputStream(outputPath);
+    }
+
+    private Path toPath(final File file, final Supplier<Path> defaultPathSupplier) {
+        return file != null ? file.toPath() : defaultPathSupplier == null ? null : defaultPathSupplier.get();
     }
 
     /**
@@ -295,9 +300,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
         if (isInMemory()) {
             memoryOutputStream.writeTo(outputStream);
         } else {
-            try (InputStream fis = Files.newInputStream(outputFile.toPath())) {
-                IOUtils.copy(fis, outputStream);
-            }
+            Files.copy(outputPath, outputStream);
         }
     }
 }
