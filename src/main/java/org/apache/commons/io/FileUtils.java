@@ -2195,7 +2195,7 @@ public class FileUtils {
      * @see File#mkdirs()
      */
     private static File mkdirs(final File directory) throws IOException {
-        if ((directory != null) && (!directory.mkdirs() && !directory.isDirectory())) {
+        if (directory != null && !directory.mkdirs() && !directory.isDirectory()) {
             throw new IOException("Cannot create directory '" + directory + "'.");
         }
         return directory;
