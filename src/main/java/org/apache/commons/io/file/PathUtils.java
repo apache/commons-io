@@ -60,6 +60,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.Charsets;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOExceptionList;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.UncheckedIOExceptions;
@@ -300,10 +301,7 @@ public final class PathUtils {
      */
     public static Path createParentDirectories(final Path path, final FileAttribute<?>... attrs) throws IOException {
         final Path parent = path.getParent();
-        if (parent == null) {
-            return null;
-        }
-        return Files.createDirectories(parent, attrs);
+        return parent == null ? null : Files.createDirectories(parent, attrs);
     }
 
     /**
@@ -694,6 +692,17 @@ public final class PathUtils {
     public static List<AclEntry> getAclEntryList(final Path sourcePath) throws IOException {
         final AclFileAttributeView fileAttributeView = Files.getFileAttributeView(sourcePath, AclFileAttributeView.class);
         return fileAttributeView == null ? null : fileAttributeView.getAcl();
+    }
+
+    /**
+     * Returns a {@link Path} representing the system temporary directory.
+     *
+     * @return the system temporary directory.
+     *
+     * @since 2.12.0
+     */
+    public static Path getTempDirectory() {
+        return Paths.get(FileUtils.getTempDirectoryPath());
     }
 
     /**

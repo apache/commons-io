@@ -161,6 +161,12 @@ public class PathUtilsTest extends TestArguments {
     }
 
     @Test
+    public void testGetTempDirectory() {
+        final Path tempDirectory = Paths.get(System.getProperty("java.io.tmpdir"));
+        assertEquals(tempDirectory, PathUtils.getTempDirectory());
+    }
+
+    @Test
     public void testIsDirectory() throws IOException {
         assertFalse(PathUtils.isDirectory(null));
 
