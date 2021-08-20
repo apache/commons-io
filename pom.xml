@@ -264,7 +264,7 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-inline</artifactId>
-      <version>3.11.2</version>
+      <version>3.12.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
