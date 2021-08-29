@@ -36,7 +36,6 @@ class UncheckedAppendableImpl implements UncheckedAppendable {
     private final Appendable appendable;
 
     UncheckedAppendableImpl(final Appendable appendable) {
-        super();
         this.appendable = Objects.requireNonNull(appendable, "appendable");
     }
 
