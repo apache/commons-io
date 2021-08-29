@@ -32,7 +32,7 @@ public interface UncheckedAppendable extends Appendable {
 
     /**
      * Creates a new instance on the given Appendable.
-     * 
+     *
      * @param appendable The Appendable to uncheck.
      * @return a new instance.
      */
@@ -41,19 +41,20 @@ public interface UncheckedAppendable extends Appendable {
     }
 
     /**
-     * Rethrows {@link IOException} as {@link UncheckedIOException}.
+     * Appends per {@link Appendable#append(char)} but rethrows {@link IOException} as {@link UncheckedIOException}.
      */
     @Override
     UncheckedAppendable append(char c);
 
     /**
-     * Rethrows {@link IOException} as {@link UncheckedIOException}.
+     * Appends per {@link Appendable#append(CharSequence)} but rethrows {@link IOException} as {@link UncheckedIOException}.
      */
     @Override
     UncheckedAppendable append(CharSequence csq);
 
     /**
-     * Rethrows {@link IOException} as {@link UncheckedIOException}.
+     * Appends per {@link Appendable#append(CharSequence, int, int)} but rethrows {@link IOException} as
+     * {@link UncheckedIOException}.
      */
     @Override
     UncheckedAppendable append(CharSequence csq, int start, int end);
