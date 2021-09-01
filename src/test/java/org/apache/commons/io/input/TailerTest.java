@@ -435,7 +435,7 @@ public class TailerTest {
     private static class TestTailerListener extends TailerListenerAdapter {
 
         // Must be synchronized because it is written by one thread and read by another
-        private final List<String> lines = Collections.synchronizedList(new ArrayList<String>());
+        private final List<String> lines = Collections.synchronizedList(new ArrayList<>());
 
         volatile Exception exception;
 

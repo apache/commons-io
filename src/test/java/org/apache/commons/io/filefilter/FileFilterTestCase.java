@@ -312,7 +312,7 @@ public class FileFilterTestCase {
         assertFiltering(new AndFileFilter(filters), new File("test"), false);
         assertFiltering(new AndFileFilter(), new File("test"), false);
 
-        assertThrows(NullPointerException.class, () -> new AndFileFilter(falseFilter, (IOFileFilter) null));
+        assertThrows(NullPointerException.class, () -> new AndFileFilter(falseFilter, null));
         assertThrows(NullPointerException.class, () -> new AndFileFilter(null, falseFilter));
         assertThrows(NullPointerException.class, () -> new AndFileFilter((List<IOFileFilter>) null));
     }
@@ -790,7 +790,7 @@ public class FileFilterTestCase {
     @Test
     public void testFilterListNullParameters() {
         try {
-            FileFilterUtils.filterList(null, Collections.<File>emptyList());
+            FileFilterUtils.filterList(null, Collections.emptyList());
             fail();
         } catch (final IllegalArgumentException iae) {
             // Test passes, exception thrown for null filter
@@ -798,7 +798,7 @@ public class FileFilterTestCase {
 
         final IOFileFilter filter = FileFilterUtils.trueFileFilter();
         try {
-            FileFilterUtils.filterList(filter, Collections.singletonList((File) null));
+            FileFilterUtils.filterList(filter, Collections.singletonList(null));
         } catch (final IllegalArgumentException iae) {
             // Test passes, exception thrown for list containing null
         }
@@ -870,7 +870,7 @@ public class FileFilterTestCase {
     @Test
     public void testFilterSetNullParameters() {
         try {
-            FileFilterUtils.filterSet(null, Collections.<File>emptySet());
+            FileFilterUtils.filterSet(null, Collections.emptySet());
             fail();
         } catch (final IllegalArgumentException iae) {
             // Test passes, exception thrown for null filter
@@ -878,7 +878,7 @@ public class FileFilterTestCase {
 
         final IOFileFilter filter = FileFilterUtils.trueFileFilter();
         try {
-            FileFilterUtils.filterSet(filter, new HashSet<>(Collections.singletonList((File) null)));
+            FileFilterUtils.filterSet(filter, new HashSet<>(Collections.singletonList(null)));
         } catch (final IllegalArgumentException iae) {
             // Test passes, exception thrown for set containing null
         }
@@ -1355,7 +1355,7 @@ public class FileFilterTestCase {
         assertFalse(orFilter.accept(testFile.getParentFile(), testFile.getName()));
         assertEquals(FileVisitResult.TERMINATE, orFilter.accept(testPath, null));
 
-        assertThrows(NullPointerException.class, () -> new OrFileFilter(falseFilter, (IOFileFilter) null));
+        assertThrows(NullPointerException.class, () -> new OrFileFilter(falseFilter, null));
     }
 
     @Test
