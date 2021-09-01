@@ -143,7 +143,7 @@ The <action> type attribute can be add,update,fix,remove.
         Bump maven-enforcer-plugin from 3.0.0-M3 to 3.0.0 #255.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
-        Bump checkstyle from 8.44 to 8.45.1 #256, #257.
+        Bump checkstyle from 8.44 to 9.0 #256, #257, #266.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump junit-bom from 5.8.0-M1 to 5.8.0-RC1 #260.
