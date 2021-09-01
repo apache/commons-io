@@ -330,6 +330,7 @@ file comparators, endian transformation classes, and much more.
     <commons.javadoc.java.link>${commons.javadoc8.java.link}</commons.javadoc.java.link>
     <commons.javadoc.version>3.3.0</commons.javadoc.version>
     <checkstyle.plugin.version>3.1.2</checkstyle.plugin.version>
+    <checkstyle.impl.version>9.0</checkstyle.impl.version>
     <commons.jacoco.version>0.8.7</commons.jacoco.version>
     <commons.surefire.version>3.0.0-M5</commons.surefire.version>
     <commons.japicmp.version>0.15.3</commons.japicmp.version>
@@ -372,7 +373,7 @@ file comparators, endian transformation classes, and much more.
             <dependency>
               <groupId>com.puppycrawl.tools</groupId>
               <artifactId>checkstyle</artifactId>
-              <version>9.0</version>
+              <version>${checkstyle.impl.version}</version>
             </dependency>
           </dependencies>
         </plugin>      
