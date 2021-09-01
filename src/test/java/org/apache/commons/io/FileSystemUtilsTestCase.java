@@ -63,7 +63,7 @@ public class FileSystemUtilsTestCase {
             boolean kilobyteBlock = true;
             try (BufferedReader r = new BufferedReader(new InputStreamReader(proc.getInputStream()))){
                 final String line = r.readLine();
-                assertNotNull("Unexpected null line", line);
+                assertNotNull(line, "Unexpected null line");
                 if (line.contains("512")) {
                     kilobyteBlock = false;
                 }
