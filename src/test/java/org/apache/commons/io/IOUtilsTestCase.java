@@ -392,7 +392,7 @@ public class IOUtilsTestCase {
     @Test
     public void testCloseQuietly_CloseableIOException() {
         assertDoesNotThrow(() -> {
-            IOUtils.closeQuietly((Closeable) () -> {
+            IOUtils.closeQuietly(() -> {
                 throw new IOException();
             });
         });
@@ -598,7 +598,7 @@ public class IOUtilsTestCase {
     @Test
     public void testContentEqualsIgnoreEOL() throws Exception {
         {
-            assertTrue(IOUtils.contentEqualsIgnoreEOL((Reader) null, null));
+            assertTrue(IOUtils.contentEqualsIgnoreEOL(null, null));
         }
         {
             final Reader input1 = new CharArrayReader("".toCharArray());

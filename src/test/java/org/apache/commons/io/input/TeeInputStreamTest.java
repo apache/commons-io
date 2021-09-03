@@ -54,13 +54,13 @@ public class TeeInputStreamTest  {
 
     @Test
     public void testReadNothing() throws Exception {
-        assertEquals("", new String(output.toString(ASCII)));
+        assertEquals("", output.toString(ASCII));
     }
 
     @Test
     public void testReadOneByte() throws Exception {
         assertEquals('a', tee.read());
-        assertEquals("a", new String(output.toString(ASCII)));
+        assertEquals("a", output.toString(ASCII));
     }
 
     @Test
@@ -69,7 +69,7 @@ public class TeeInputStreamTest  {
         assertEquals('b', tee.read());
         assertEquals('c', tee.read());
         assertEquals(-1, tee.read());
-        assertEquals("abc", new String(output.toString(ASCII)));
+        assertEquals("abc", output.toString(ASCII));
     }
 
     @Test
@@ -80,7 +80,7 @@ public class TeeInputStreamTest  {
         assertEquals('b', buffer[1]);
         assertEquals('c', buffer[2]);
         assertEquals(-1, tee.read(buffer));
-        assertEquals("abc", new String(output.toString(ASCII)));
+        assertEquals("abc", output.toString(ASCII));
     }
 
     @Test
@@ -91,7 +91,7 @@ public class TeeInputStreamTest  {
         assertEquals('b', buffer[5]);
         assertEquals('c', buffer[6]);
         assertEquals(-1, tee.read(buffer, 4, 4));
-        assertEquals("abc", new String(output.toString(ASCII)));
+        assertEquals("abc", output.toString(ASCII));
     }
 
     @Test
@@ -100,7 +100,7 @@ public class TeeInputStreamTest  {
         assertEquals(1, tee.skip(1));
         assertEquals('c', tee.read());
         assertEquals(-1, tee.read());
-        assertEquals("ac", new String(output.toString(ASCII)));
+        assertEquals("ac", output.toString(ASCII));
     }
 
     @Test
@@ -112,7 +112,7 @@ public class TeeInputStreamTest  {
         assertEquals('b', tee.read());
         assertEquals('c', tee.read());
         assertEquals(-1, tee.read());
-        assertEquals("abbc", new String(output.toString(ASCII)));
+        assertEquals("abbc", output.toString(ASCII));
     }
 
     /**

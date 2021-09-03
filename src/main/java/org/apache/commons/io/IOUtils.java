@@ -463,7 +463,7 @@ public class IOUtils {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     public static void closeQuietly(final Closeable closeable) {
-        closeQuietly(closeable, (Consumer<IOException>) null);
+        closeQuietly(closeable, null);
     }
 
     /**

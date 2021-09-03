@@ -36,7 +36,7 @@ public class CharacterSetFilterReaderTest {
     @Test
     public void testInputSize0FilterSize0() throws IOException {
         final StringReader input = new StringReader("");
-        try (CharacterSetFilterReader reader = new CharacterSetFilterReader(input, new HashSet<Integer>(0))) {
+        try (CharacterSetFilterReader reader = new CharacterSetFilterReader(input, new HashSet<>(0))) {
             assertEquals(-1, reader.read());
         }
     }

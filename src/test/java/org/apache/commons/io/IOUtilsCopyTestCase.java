@@ -275,7 +275,7 @@ public class IOUtilsCopyTestCase {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
         final Appendable writer = new OutputStreamWriter(out, StandardCharsets.US_ASCII);
-        assertThrows(NullPointerException.class, () -> IOUtils.copy((Reader) null, writer));
+        assertThrows(NullPointerException.class, () -> IOUtils.copy(null, writer));
     }
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
