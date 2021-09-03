@@ -772,7 +772,7 @@ public class FilenameUtils {
             return null;
         }
         if (len > fileName.length()) {
-            requireNonNullChars(fileName + UNIX_NAME_SEPARATOR);
+            requireNonNullChars(fileName);
             return fileName + UNIX_NAME_SEPARATOR;
         }
         final String path = fileName.substring(0, len);
@@ -1405,8 +1405,8 @@ public class FilenameUtils {
      */
     private static void requireNonNullChars(final String path) {
         if (path.indexOf(0) >= 0) {
-            throw new IllegalArgumentException("Null byte present in file/path name. There are no "
-                + "known legitimate use cases for such data, but several injection attacks may use it");
+            throw new IllegalArgumentException(
+                "Null byte present in file/path name. There are no known legitimate use cases for such data, but several injection attacks may use it");
         }
     }
     /**
@@ -1491,7 +1491,7 @@ public class FilenameUtils {
     }
     /**
      * Returns '/' if given true, '\\' otherwise.
-     * 
+     *
      * @param unixSeparator which separator to return.
      * @return '/' if given true, '\\' otherwise.
      */
