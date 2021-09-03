@@ -134,10 +134,10 @@ public enum FileSystem {
             return LINUX;
         }
         if (IS_OS_MAC) {
-            return FileSystem.MAC_OSX;
+            return MAC_OSX;
         }
         if (IS_OS_WINDOWS) {
-            return FileSystem.WINDOWS;
+            return WINDOWS;
         }
         return GENERIC;
     }
