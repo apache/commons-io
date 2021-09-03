@@ -49,7 +49,7 @@ public class UncheckedFilterWriter extends FilterWriter {
      * @param writer a Writer object providing the underlying stream.
      * @throws NullPointerException if {@code writer} is {@code null}.
      */
-    protected UncheckedFilterWriter(Writer writer) {
+    protected UncheckedFilterWriter(final Writer writer) {
         super(writer);
     }
 
@@ -57,10 +57,10 @@ public class UncheckedFilterWriter extends FilterWriter {
      * Calls this method's super and rethrow {@link IOException} as {@link UncheckedIOException}.
      */
     @Override
-    public Writer append(char c) throws UncheckedIOException {
+    public Writer append(final char c) throws UncheckedIOException {
         try {
             return super.append(c);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw uncheck(e);
         }
     }
@@ -69,10 +69,10 @@ public class UncheckedFilterWriter extends FilterWriter {
      * Calls this method's super and rethrow {@link IOException} as {@link UncheckedIOException}.
      */
     @Override
-    public Writer append(CharSequence csq) throws UncheckedIOException {
+    public Writer append(final CharSequence csq) throws UncheckedIOException {
         try {
             return super.append(csq);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw uncheck(e);
         }
     }
@@ -81,10 +81,10 @@ public class UncheckedFilterWriter extends FilterWriter {
      * Calls this method's super and rethrow {@link IOException} as {@link UncheckedIOException}.
      */
     @Override
-    public Writer append(CharSequence csq, int start, int end) throws UncheckedIOException {
+    public Writer append(final CharSequence csq, final int start, final int end) throws UncheckedIOException {
         try {
             return super.append(csq, start, end);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw uncheck(e);
         }
     }
@@ -96,7 +96,7 @@ public class UncheckedFilterWriter extends FilterWriter {
     public void close() throws UncheckedIOException {
         try {
             super.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw uncheck(e);
         }
     }
@@ -108,12 +108,12 @@ public class UncheckedFilterWriter extends FilterWriter {
     public void flush() throws UncheckedIOException {
         try {
             super.flush();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw uncheck(e);
         }
     }
 
-    private UncheckedIOException uncheck(IOException e) {
+    private UncheckedIOException uncheck(final IOException e) {
         return new UncheckedIOException(e);
     }
 
@@ -121,10 +121,10 @@ public class UncheckedFilterWriter extends FilterWriter {
      * Calls this method's super and rethrow {@link IOException} as {@link UncheckedIOException}.
      */
     @Override
-    public void write(char[] cbuf) throws UncheckedIOException {
+    public void write(final char[] cbuf) throws UncheckedIOException {
         try {
             super.write(cbuf);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw uncheck(e);
         }
     }
@@ -133,10 +133,10 @@ public class UncheckedFilterWriter extends FilterWriter {
      * Calls this method's super and rethrow {@link IOException} as {@link UncheckedIOException}.
      */
     @Override
-    public void write(char[] cbuf, int off, int len) throws UncheckedIOException {
+    public void write(final char[] cbuf, final int off, final int len) throws UncheckedIOException {
         try {
             super.write(cbuf, off, len);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw uncheck(e);
         }
     }
@@ -145,10 +145,10 @@ public class UncheckedFilterWriter extends FilterWriter {
      * Calls this method's super and rethrow {@link IOException} as {@link UncheckedIOException}.
      */
     @Override
-    public void write(int c) throws UncheckedIOException {
+    public void write(final int c) throws UncheckedIOException {
         try {
             super.write(c);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw uncheck(e);
         }
     }
@@ -157,10 +157,10 @@ public class UncheckedFilterWriter extends FilterWriter {
      * Calls this method's super and rethrow {@link IOException} as {@link UncheckedIOException}.
      */
     @Override
-    public void write(String str) throws UncheckedIOException {
+    public void write(final String str) throws UncheckedIOException {
         try {
             super.write(str);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw uncheck(e);
         }
     }
@@ -169,10 +169,10 @@ public class UncheckedFilterWriter extends FilterWriter {
      * Calls this method's super and rethrow {@link IOException} as {@link UncheckedIOException}.
      */
     @Override
-    public void write(String str, int off, int len) throws UncheckedIOException {
+    public void write(final String str, final int off, final int len) throws UncheckedIOException {
         try {
             super.write(str, off, len);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw uncheck(e);
         }
     }

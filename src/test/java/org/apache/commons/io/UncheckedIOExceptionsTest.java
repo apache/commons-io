@@ -31,7 +31,7 @@ public class UncheckedIOExceptionsTest {
         final Object message = "test";
         try {
             throw UncheckedIOExceptions.create(message);
-        } catch (UncheckedIOException e) {
+        } catch (final UncheckedIOException e) {
             assertEquals(message, e.getMessage());
             assertEquals(message, e.getCause().getMessage());
         }
@@ -45,7 +45,7 @@ public class UncheckedIOExceptionsTest {
         final IOException ioe = new IOException(message2.toString());
         try {
             throw UncheckedIOExceptions.create(message1, ioe);
-        } catch (UncheckedIOException e) {
+        } catch (final UncheckedIOException e) {
             assertEquals(message1, e.getMessage());
             assertEquals(message2, e.getCause().getMessage());
         }

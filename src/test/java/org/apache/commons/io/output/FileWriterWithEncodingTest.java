@@ -59,7 +59,7 @@ public class FileWriterWithEncodingTest {
         });
         assertFalse(file1.exists());
     }
-    
+
     @Test
     public void constructor_File_encoding_badEncoding() {
         assertThrows(IOException.class, () -> {

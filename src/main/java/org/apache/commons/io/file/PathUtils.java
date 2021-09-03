@@ -813,7 +813,7 @@ public final class PathUtils {
     /**
      * Creates a new OutputStream by opening or creating a file, returning an output stream that may be used to write bytes
      * to the file.
-     * 
+     *
      * @param path the Path.
      * @param append Whether or not to append.
      *
@@ -825,7 +825,7 @@ public final class PathUtils {
     public static OutputStream newOutputStream(final Path path, final boolean append) throws IOException {
         // @formatter:off
         return Files.newOutputStream(path, append ?
-            new OpenOption[] {StandardOpenOption.CREATE, StandardOpenOption.APPEND} : 
+            new OpenOption[] {StandardOpenOption.CREATE, StandardOpenOption.APPEND} :
             new OpenOption[] {StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING});
         // @formatter:on
     }

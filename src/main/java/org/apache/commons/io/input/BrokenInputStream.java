@@ -37,7 +37,7 @@ public class BrokenInputStream extends InputStream {
      * @since 2.12.0
      */
     public static final BrokenInputStream INSTANCE = new BrokenInputStream();
-    
+
     /**
      * The exception that is thrown by all methods of this class.
      */
