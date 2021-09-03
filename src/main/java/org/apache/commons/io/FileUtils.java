@@ -2047,13 +2047,14 @@ public class FileUtils {
      *
      * @param file     the file to open for input, must not be {@code null}
      * @param charsetName the name of the requested charset, {@code null} means platform default
-     * @return an Iterator of the lines in the file, never {@code null}
+     * @return a LineIterator for lines in the file, never {@code null}; MUST be closed by the caller.
      * @throws NullPointerException if file is {@code null}.
      * @throws FileNotFoundException if the file does not exist, is a directory rather than a regular file, or for some
      *         other reason cannot be opened for reading.
      * @throws IOException if an I/O error occurs.
      * @since 1.2
      */
+    @SuppressWarnings("resource") // Caller closes the result LineIterator.
     public static LineIterator lineIterator(final File file, final String charsetName) throws IOException {
         InputStream inputStream = null;
         try {
