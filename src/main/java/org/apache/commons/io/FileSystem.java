@@ -233,7 +233,7 @@ public enum FileSystem {
      */
     FileSystem(final boolean caseSensitive, final boolean casePreserving, final int maxFileLength,
         final int maxPathLength, final char[] illegalFileNameChars, final String[] reservedFileNames,
-        final boolean supportsDriveLetter, char nameSeparator) {
+        final boolean supportsDriveLetter, final char nameSeparator) {
         this.maxFileNameLength = maxFileLength;
         this.maxPathLength = maxPathLength;
         this.illegalFileNameChars = Objects.requireNonNull(illegalFileNameChars, "illegalFileNameChars");
@@ -272,7 +272,7 @@ public enum FileSystem {
     }
 
     /**
-     * Gets the name separator, '\\' on Windows, '/' on Linux. 
+     * Gets the name separator, '\\' on Windows, '/' on Linux.
      * @return '\\' on Windows, '/' on Linux.
      *
      * @since 2.12.0
