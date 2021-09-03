@@ -218,6 +218,7 @@ public enum FileSystem {
     private final String[] reservedFileNames;
     private final boolean supportsDriveLetter;
     private final char nameSeparator;
+    private final char nameSeparatorOther;
 
     /**
      * Constructs a new instance.
@@ -242,6 +243,7 @@ public enum FileSystem {
         this.casePreserving = casePreserving;
         this.supportsDriveLetter = supportsDriveLetter;
         this.nameSeparator = nameSeparator;
+        this.nameSeparatorOther = FilenameUtils.flipSeparator(nameSeparator);
     }
 
     /**

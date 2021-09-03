@@ -121,24 +121,16 @@ public class FilenameUtils {
     /**
      * The separator character that is the opposite of the system separator.
      */
-    private static final char OTHER_SEPARATOR;
+    private static final char OTHER_SEPARATOR = flipSeparator(SYSTEM_NAME_SEPARATOR);
 
-    static {
-        if (isSystemWindows()) {
-            OTHER_SEPARATOR = UNIX_NAME_SEPARATOR;
-        } else {
-            OTHER_SEPARATOR = WINDOWS_NAME_SEPARATOR;
-        }
-    }
-
-    private static final Pattern IPV4_PATTERN =
-        Pattern.compile("^(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})$");
+    private static final Pattern IPV4_PATTERN = Pattern.compile("^(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})$");
 
     private static final int IPV4_MAX_OCTET_VALUE = 255;
 
     private static final int IPV6_MAX_HEX_GROUPS = 8;
 
     private static final int IPV6_MAX_HEX_DIGITS_PER_GROUP = 4;
+
     private static final int MAX_UNSIGNED_SHORT = 0xffff;
 
     private static final int BASE_16 = 16;
@@ -245,7 +237,7 @@ public class FilenameUtils {
             return false;
         }
 
-        final char separator = canonicalParent.charAt(0) == UNIX_NAME_SEPARATOR ? UNIX_NAME_SEPARATOR : WINDOWS_NAME_SEPARATOR;
+        final char separator = toSeparator(canonicalParent.charAt(0) == UNIX_NAME_SEPARATOR);
         final String parentWithEndSeparator = canonicalParent.charAt(canonicalParent.length() - 1) == separator ? canonicalParent : canonicalParent + separator;
 
         return IOCase.SYSTEM.checkStartsWith(canonicalChild, parentWithEndSeparator);
@@ -299,13 +291,11 @@ public class FilenameUtils {
             return null;
         }
         final int index = indexOfLastSeparator(fileName);
-        final int endIndex = index+separatorAdd;
+        final int endIndex = index + separatorAdd;
         if (prefix >= fileName.length() || index < 0 || prefix >= endIndex) {
             return EMPTY_STRING;
         }
-        final String path = fileName.substring(prefix, endIndex);
-        requireNonNullChars(path);
-        return path;
+        return requireNonNullChars(fileName.substring(prefix, endIndex));
     }
 
     /**
@@ -440,9 +430,7 @@ public class FilenameUtils {
      * @return true if the fileNames are equal, null equals null
      * @since 1.3
      */
-    public static boolean equals(
-            String fileName1, String fileName2,
-            final boolean normalized, IOCase caseSensitivity) {
+    public static boolean equals(String fileName1, String fileName2, final boolean normalized, IOCase caseSensitivity) {
 
         if (fileName1 == null || fileName2 == null) {
             return fileName1 == null && fileName2 == null;
@@ -674,9 +662,7 @@ public class FilenameUtils {
         if (fileName == null) {
             return null;
         }
-        requireNonNullChars(fileName);
-        final int index = indexOfLastSeparator(fileName);
-        return fileName.substring(index + 1);
+        return requireNonNullChars(fileName).substring(indexOfLastSeparator(fileName) + 1);
     }
 
     /**
@@ -775,9 +761,7 @@ public class FilenameUtils {
             requireNonNullChars(fileName);
             return fileName + UNIX_NAME_SEPARATOR;
         }
-        final String path = fileName.substring(0, len);
-        requireNonNullChars(path);
-        return path;
+        return requireNonNullChars(fileName.substring(0, len));
     }
 
     /**
@@ -994,8 +978,7 @@ public class FilenameUtils {
         if (isEmpty(extension)) {
             return indexOfExtension(fileName) == NOT_FOUND;
         }
-        final String fileExt = getExtension(fileName);
-        return fileExt.equals(extension);
+        return getExtension(fileName).equals(extension);
     }
 
     /**
@@ -1155,6 +1138,22 @@ public class FilenameUtils {
      */
     private static boolean isSeparator(final char ch) {
         return ch == UNIX_NAME_SEPARATOR || ch == WINDOWS_NAME_SEPARATOR;
+    }
+
+    /**
+     * Flips the Windows name separator to Linux and vice-versa.
+     *
+     * @param ch The Windows or Linux name separator.
+     * @return The Windows or Linux name separator.
+     */
+    static char flipSeparator(final char ch) {
+        if (ch == UNIX_NAME_SEPARATOR) {
+            return WINDOWS_NAME_SEPARATOR;
+        }
+        if (ch == WINDOWS_NAME_SEPARATOR) {
+            return UNIX_NAME_SEPARATOR;
+        }
+        throw new IllegalArgumentException(String.valueOf(ch));
     }
 
     /**
@@ -1402,12 +1401,14 @@ public class FilenameUtils {
      * This may be used for poison byte attacks.
      *
      * @param path the path to check
+     * @return The input
      */
-    private static void requireNonNullChars(final String path) {
+    private static String requireNonNullChars(final String path) {
         if (path.indexOf(0) >= 0) {
             throw new IllegalArgumentException(
                 "Null byte present in file/path name. There are no known legitimate use cases for such data, but several injection attacks may use it");
         }
+        return path;
     }
     /**
      * Converts all separators to the system separator.
@@ -1447,6 +1448,7 @@ public class FilenameUtils {
         }
         return path.replace(UNIX_NAME_SEPARATOR, WINDOWS_NAME_SEPARATOR);
     }
+
     /**
      * Splits a string into a number of tokens.
      * The text is split by '?' and '*'.
