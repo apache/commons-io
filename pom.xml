@@ -235,6 +235,10 @@ file comparators, endian transformation classes, and much more.
     <contributor>
       <name>Frank W. Zammetti</name>
     </contributor>
+    <contributor>
+      <name>Martin Grigorov</name>
+      <email>mgrigorov@apache.org</email>
+    </contributor>
   </contributors>
 
   <dependencyManagement>
@@ -342,6 +346,8 @@ file comparators, endian transformation classes, and much more.
     <commons.release.isDistModule>true</commons.release.isDistModule>
     <commons.releaseManagerName>Gary Gregory</commons.releaseManagerName>    
     <commons.releaseManagerKey>86fdc7e2a11262cb</commons.releaseManagerKey>
+    <moditect-maven-plugin.version>1.0.0.RC1</moditect-maven-plugin.version>
+    <moditect.skip>true</moditect.skip>
   </properties>
 
   <build>
@@ -483,6 +489,30 @@ file comparators, endian transformation classes, and much more.
         <groupId>com.github.siom79.japicmp</groupId>
         <artifactId>japicmp-maven-plugin</artifactId>
       </plugin>
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
+        <version>${moditect-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>add-module-infos</id>
+            <phase>package</phase>
+            <goals>
+              <goal>add-module-info</goal>
+            </goals>
+            <configuration>
+              <jvmVersion>9</jvmVersion>
+              <outputDirectory>${project.build.directory}</outputDirectory>
+              <overwriteExistingFiles>true</overwriteExistingFiles>
+              <module>
+                <moduleInfo>
+                  <name>commons.io</name>
+                </moduleInfo>
+              </module>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
@@ -599,6 +629,14 @@ file comparators, endian transformation classes, and much more.
           </plugin>
         </plugins>
       </build>
+    </profile>
+    <profile>
+      <id>release</id>
+      <properties>
+        <!-- Enable Moditect for releases. This requires JDK 9+ for the build -->
+        <moditect.skip>false</moditect.skip>
+        <maven.compiler.release>8</maven.compiler.release>
+      </properties>
     </profile>
   </profiles>
 </project>
