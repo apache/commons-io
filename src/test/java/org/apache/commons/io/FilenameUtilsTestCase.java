@@ -1184,4 +1184,21 @@ public class FilenameUtilsTestCase {
         assertFalse(FilenameUtils.isExtension("a.b\\file.txt", new ArrayList<>(Arrays.asList("TXT"))));
         assertFalse(FilenameUtils.isExtension("a.b\\file.txt", new ArrayList<>(Arrays.asList("TXT", "RTF"))));
     }
+
+    //-----------------------------------------------------------------------
+    @Test
+    public void testDirectoryContains() throws IOException {
+        assertTrue(FilenameUtils.directoryContains("/foo", "/foo/bar"));
+        assertTrue(FilenameUtils.directoryContains("/foo/", "/foo/bar"));
+        assertTrue(FilenameUtils.directoryContains("C:\\foo", "C:\\foo\\bar"));
+        assertTrue(FilenameUtils.directoryContains("C:\\foo\\", "C:\\foo\\bar"));
+
+        assertFalse(FilenameUtils.directoryContains("/foo", "/foo"));
+        assertFalse(FilenameUtils.directoryContains("/foo", "/foobar"));
+        assertFalse(FilenameUtils.directoryContains("C:\\foo", "C:\\foobar"));
+        assertFalse(FilenameUtils.directoryContains("/foo", null));
+        assertFalse(FilenameUtils.directoryContains("", ""));
+        assertFalse(FilenameUtils.directoryContains("", "/foo"));
+        assertFalse(FilenameUtils.directoryContains("/foo", ""));
+    }
 }

@@ -140,6 +140,19 @@ public class FileUtilsDirectoryContainsTestCase {
     }
 
     @Test
+    public void testFileHavingSamePrefixBug() throws IOException {
+        final File foo = new File(top, "foo");
+        final File foobar = new File(top, "foobar");
+        final File fooTxt = new File(top, "foo.txt");
+        foo.mkdir();
+        foobar.mkdir();
+        FileUtils.touch(fooTxt);
+
+        assertFalse(FileUtils.directoryContains(foo, foobar));
+        assertFalse(FileUtils.directoryContains(foo, fooTxt));
+    }
+
+    @Test
     public void testFileDoesNotExist() throws IOException {
         assertFalse(FileUtils.directoryContains(top, null));
         final File file = new File("DOESNOTEXIST");

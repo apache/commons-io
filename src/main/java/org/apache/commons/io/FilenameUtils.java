@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -539,9 +538,7 @@ public class FilenameUtils {
      * @see FileUtils#directoryContains(File, File)
      */
     public static boolean directoryContains(final String canonicalParent, final String canonicalChild) {
-        Objects.requireNonNull(canonicalParent, "canonicalParent");
-
-        if (canonicalChild == null) {
+        if (isEmpty(canonicalParent) || isEmpty(canonicalChild)) {
             return false;
         }
 
@@ -549,7 +546,14 @@ public class FilenameUtils {
             return false;
         }
 
-        return IOCase.SYSTEM.checkStartsWith(canonicalChild, canonicalParent);
+        final char separator = canonicalParent.charAt(0) == UNIX_SEPARATOR ? UNIX_SEPARATOR : WINDOWS_SEPARATOR;
+        final String parentWithEndSeparator = canonicalParent.charAt(canonicalParent.length() - 1) == separator ? canonicalParent : canonicalParent + separator;
+
+        return IOCase.SYSTEM.checkStartsWith(canonicalChild, parentWithEndSeparator);
+    }
+
+    private static boolean isEmpty(final String string) {
+        return string == null || string.isEmpty();
     }
 
     /**
@@ -1235,7 +1239,7 @@ public class FilenameUtils {
         }
         requireNonNullChars(fileName);
 
-        if (extension == null || extension.isEmpty()) {
+        if (isEmpty(extension)) {
             return indexOfExtension(fileName) == NOT_FOUND;
         }
         final String fileExt = getExtension(fileName);
