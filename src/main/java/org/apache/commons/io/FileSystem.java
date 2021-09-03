@@ -36,7 +36,7 @@ public enum FileSystem {
     /**
      * Generic file system.
      */
-    GENERIC(false, false, Integer.MAX_VALUE, Integer.MAX_VALUE, new char[] { 0 }, new String[] {}, false),
+    GENERIC(false, false, Integer.MAX_VALUE, Integer.MAX_VALUE, new char[] { 0 }, new String[] {}, false, '/'),
 
     /**
      * Linux file system.
@@ -48,7 +48,7 @@ public enum FileSystem {
             0,
              '/'
             // @formatter:on
-    }, new String[] {}, false),
+    }, new String[] {}, false, '/'),
 
     /**
      * MacOS file system.
@@ -61,7 +61,7 @@ public enum FileSystem {
             '/',
              ':'
             // @formatter:on
-    }, new String[] {}, false),
+    }, new String[] {}, false, '/'),
 
     /**
      * Windows file system.
@@ -87,7 +87,7 @@ public enum FileSystem {
                     // @formatter:on
             }, // KEEP THIS ARRAY SORTED!
             new String[] { "AUX", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "CON", "LPT1",
-                    "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9", "NUL", "PRN" }, true);
+                    "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9", "NUL", "PRN" }, true, '\\');
 
     /**
      * <p>
@@ -217,6 +217,7 @@ public enum FileSystem {
     private final int maxPathLength;
     private final String[] reservedFileNames;
     private final boolean supportsDriveLetter;
+    private final char nameSeparator;
 
     /**
      * Constructs a new instance.
@@ -228,10 +229,11 @@ public enum FileSystem {
      * @param illegalFileNameChars Illegal characters for this file system.
      * @param reservedFileNames The reserved file names.
      * @param supportsDriveLetter Whether this file system support driver letters.
+     * @param nameSeparator The name separator, '\\' on Windows, '/' on Linux.
      */
     FileSystem(final boolean caseSensitive, final boolean casePreserving, final int maxFileLength,
         final int maxPathLength, final char[] illegalFileNameChars, final String[] reservedFileNames,
-        final boolean supportsDriveLetter) {
+        final boolean supportsDriveLetter, char nameSeparator) {
         this.maxFileNameLength = maxFileLength;
         this.maxPathLength = maxPathLength;
         this.illegalFileNameChars = Objects.requireNonNull(illegalFileNameChars, "illegalFileNameChars");
@@ -239,6 +241,7 @@ public enum FileSystem {
         this.caseSensitive = caseSensitive;
         this.casePreserving = casePreserving;
         this.supportsDriveLetter = supportsDriveLetter;
+        this.nameSeparator = nameSeparator;
     }
 
     /**
@@ -266,6 +269,16 @@ public enum FileSystem {
      */
     public int getMaxPathLength() {
         return maxPathLength;
+    }
+
+    /**
+     * Gets the name separator, '\\' on Windows, '/' on Linux. 
+     * @return '\\' on Windows, '/' on Linux.
+     *
+     * @since 2.12.0
+     */
+    public char getNameSeparator() {
+        return nameSeparator;
     }
 
     /**
