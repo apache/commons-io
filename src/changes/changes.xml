@@ -56,6 +56,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
         A null charset or charset name in FileWriterWithEncoding constructors uses the default Charset.
       </action>
+      <action dev="ggregory" type="fix" due-to="Davide Angelocola">
+        Fix usage of assertNotNull #269.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add BrokenReader.INSTANCE.
