@@ -453,35 +453,43 @@ public class FilenameUtils {
      * The effect is equivalent to resultant directory after changing
      * directory to the first argument, followed by changing directory to
      * the second argument.
+     * </p>
      * <p>
      * The first argument is the base path, the second is the path to concatenate.
      * The returned path is always normalized via {@link #normalize(String)},
      * thus {@code ..} is handled.
+     * </p>
      * <p>
      * If {@code pathToAdd} is absolute (has an absolute prefix), then
      * it will be normalized and returned.
      * Otherwise, the paths will be joined, normalized and returned.
+     * </p>
      * <p>
      * The output will be the same on both Unix and Windows except
      * for the separator character.
+     * </p>
      * <pre>
      * /foo/      + bar        --&gt;  /foo/bar
      * /foo       + bar        --&gt;  /foo/bar
      * /foo       + /bar       --&gt;  /bar
      * /foo       + C:/bar     --&gt;  C:/bar
-     * /foo       + C:bar      --&gt;  C:bar (*)
+     * /foo       + C:bar      --&gt;  C:bar [1]
      * /foo/a/    + ../bar     --&gt;  /foo/bar
      * /foo/      + ../../bar  --&gt;  null
      * /foo/      + /bar       --&gt;  /bar
      * /foo/..    + /bar       --&gt;  /bar
      * /foo       + bar/c.txt  --&gt;  /foo/bar/c.txt
-     * /foo/c.txt + bar        --&gt;  /foo/c.txt/bar (!)
+     * /foo/c.txt + bar        --&gt;  /foo/c.txt/bar [2]
      * </pre>
-     * (*) Note that the Windows relative drive prefix is unreliable when
+     * <p>
+     * [1] Note that the Windows relative drive prefix is unreliable when
      * used with this method.
-     * (!) Note that the first parameter must be a path. If it ends with a name, then
+     * </p>
+     * <p>
+     * [2] Note that the first parameter must be a path. If it ends with a name, then
      * the name will be built into the concatenated path. If this might be a problem,
      * use {@link #getFullPath(String)} on the base path argument.
+     * </p>
      *
      * @param basePath  the base path to attach to, always treated as a path
      * @param fullFileNameToAdd  the fileName (or path) to attach to the base
