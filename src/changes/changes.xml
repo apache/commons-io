@@ -62,6 +62,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-727" dev="ggregory" type="fix" due-to="trungPa, Gary Gregory">
         FilenameUtils directoryContains() should handle files with the same prefix #217.
       </action>
+      <action issue="IO-746" dev="ggregory" type="add" due-to="Davide Angelocola">
+        Drop unnecessary casts and conversions #267.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add BrokenReader.INSTANCE.
@@ -134,9 +137,6 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add PathUtils.getTempDirectory().
-      </action>
-      <action issue="IO-746" dev="ggregory" type="add" due-to="Davide Angelocola">
-        Drop unnecessary casts and conversions #267.
       </action>
       <!-- UPDATE -->
       <action dev="ggregory" type="update" due-to="Dependabot">
