@@ -125,11 +125,16 @@ public enum FileSystem {
     private static final boolean IS_OS_WINDOWS = getOsMatchesName(OS_NAME_WINDOWS_PREFIX);
 
     /**
+     * The current FileSystem.
+     */
+    private static final FileSystem CURRENT = current();
+
+    /**
      * Gets the current file system.
      *
      * @return the current file system
      */
-    public static FileSystem getCurrent() {
+    private static FileSystem current() {
         if (IS_OS_LINUX) {
             return LINUX;
         }
@@ -140,6 +145,15 @@ public enum FileSystem {
             return WINDOWS;
         }
         return GENERIC;
+    }
+
+    /**
+     * Gets the current file system.
+     *
+     * @return the current file system
+     */
+    public static FileSystem getCurrent() {
+        return CURRENT;
     }
 
     /**
