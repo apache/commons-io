@@ -147,6 +147,12 @@ public class FileUtilsDirectoryContainsTestCase {
     }
 
     @Test
+    public void testIO466() throws IOException {
+        final File fooFile = new File(directory1.getParent(), "directory1.txt");
+        assertFalse(FileUtils.directoryContains(directory1, fooFile));
+    }
+
+    @Test
     public void testFileHavingSamePrefixBug() throws IOException {
         final File foo = new File(top, "foo");
         final File foobar = new File(top, "foobar");
