@@ -210,6 +210,18 @@ public enum FileSystem {
         return osName.toUpperCase(Locale.ROOT).startsWith(osNamePrefix.toUpperCase(Locale.ROOT));
     }
 
+    /**
+     * Null-safe replace.
+     *
+     * @param path the path to be changed, null ignored.
+     * @param oldChar the old character.
+     * @param newChar the new character.
+     * @return the new path.
+     */
+    private static String replace(final String path, final char oldChar, final char newChar) {
+        return path == null ? null : path.replace(oldChar, newChar);
+    }
+
     private final boolean casePreserving;
     private final boolean caseSensitive;
     private final char[] illegalFileNameChars;
@@ -218,6 +230,7 @@ public enum FileSystem {
     private final String[] reservedFileNames;
     private final boolean supportsDriveLetter;
     private final char nameSeparator;
+
     private final char nameSeparatorOther;
 
     /**
@@ -354,6 +367,17 @@ public enum FileSystem {
      */
     public boolean isReservedFileName(final CharSequence candidate) {
         return Arrays.binarySearch(reservedFileNames, candidate) >= 0;
+    }
+
+    /**
+     * Converts all separators to the Windows separator of backslash.
+     *
+     * @param path  the path to be changed, null ignored
+     * @return the updated path
+     * @since 2.12.0
+     */
+    public String normalizeSeparators(final String path) {
+        return replace(path, nameSeparatorOther, nameSeparator);
     }
 
     /**

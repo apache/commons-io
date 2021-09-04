@@ -32,19 +32,24 @@ import java.util.regex.Pattern;
  * When dealing with file names you can hit problems when moving from a Windows
  * based development machine to a Unix based production machine.
  * This class aims to help avoid those problems.
+ * </p>
  * <p>
  * <b>NOTE</b>: You may be able to avoid using this class entirely simply by
  * using JDK {@link java.io.File File} objects and the two argument constructor
  * {@link java.io.File#File(java.io.File, java.lang.String) File(File,String)}.
+ * </p>
  * <p>
  * Most methods on this class are designed to work the same on both Unix and Windows.
  * Those that don't include 'System', 'Unix' or 'Windows' in their name.
+ * </p>
  * <p>
  * Most methods recognize both separators (forward and back), and both
  * sets of prefixes. See the Javadoc of each method for details.
+ * </p>
  * <p>
  * This class defines six components within a file name
  * (example C:\dev\project\file.txt):
+ * </p>
  * <ul>
  * <li>the prefix - C:\</li>
  * <li>the path - dev\project\</li>
@@ -53,13 +58,16 @@ import java.util.regex.Pattern;
  * <li>the base name - file</li>
  * <li>the extension - txt</li>
  * </ul>
+ * <p>
  * Note that this class works best if directory file names end with a separator.
  * If you omit the last separator, it is impossible to determine if the file name
  * corresponds to a file or a directory. As a result, we have chosen to say
  * it corresponds to a file.
+ * </p>
  * <p>
  * This class only supports Unix and Windows style names.
  * Prefixes are matched as follows:
+ * </p>
  * <pre>
  * Windows:
  * a\b\c.txt           --&gt; ""          --&gt; relative
@@ -76,10 +84,13 @@ import java.util.regex.Pattern;
  * ~user/a/b/c.txt     --&gt; "~user/"    --&gt; named user
  * ~user               --&gt; "~user/"    --&gt; named user (slash added)
  * </pre>
+ * <p>
  * Both prefix styles are matched always, irrespective of the machine that you are
  * currently running on.
+ * </p>
  * <p>
  * Origin of code: Excalibur, Alexandria, Tomcat, Commons-Utils.
+ * </p>
  *
  * @since 1.1
  */
@@ -326,7 +337,7 @@ public class FilenameUtils {
         fileName.getChars(0, fileName.length(), array, 0);
 
         // fix separators throughout
-        final char otherSeparator = separator == SYSTEM_NAME_SEPARATOR ? OTHER_SEPARATOR : SYSTEM_NAME_SEPARATOR;
+        final char otherSeparator = flipSeparator(separator);
         for (int i = 0; i < array.length; i++) {
             if (array[i] == otherSeparator) {
                 array[i] = separator;
@@ -409,6 +420,7 @@ public class FilenameUtils {
      * <p>
      * No processing is performed on the fileNames other than comparison,
      * thus this is merely a null-safe case-sensitive equals.
+     * </p>
      *
      * @param fileName1  the first fileName to query, may be null
      * @param fileName2  the second fileName to query, may be null
@@ -456,6 +468,7 @@ public class FilenameUtils {
      * <p>
      * Both fileNames are first passed to {@link #normalize(String)}.
      * The check is then performed in a case-sensitive manner.
+     * </p>
      *
      * @param fileName1  the first fileName to query, may be null
      * @param fileName2  the second fileName to query, may be null
@@ -473,6 +486,7 @@ public class FilenameUtils {
      * Both fileNames are first passed to {@link #normalize(String)}.
      * The check is then performed case-sensitive on Unix and
      * case-insensitive on Windows.
+     * </p>
      *
      * @param fileName1  the first fileName to query, may be null
      * @param fileName2  the second fileName to query, may be null
@@ -488,6 +502,7 @@ public class FilenameUtils {
      * <p>
      * No processing is performed on the fileNames other than comparison.
      * The check is case-sensitive on Unix and case-insensitive on Windows.
+     * </p>
      *
      * @param fileName1  the first fileName to query, may be null
      * @param fileName2  the second fileName to query, may be null
@@ -525,6 +540,7 @@ public class FilenameUtils {
      * <p>
      * This method will handle a file in either Unix or Windows format.
      * The text after the last forward or backslash and before the last dot is returned.
+     * </p>
      * <pre>
      * a/b/c.txt --&gt; c
      * a.txt     --&gt; a
@@ -533,6 +549,7 @@ public class FilenameUtils {
      * </pre>
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
+     * </p>
      *
      * @param fileName  the fileName to query, null returns null
      * @return the name of the file without the path, or an empty string if none exists. Null bytes inside string
@@ -547,6 +564,7 @@ public class FilenameUtils {
      * <p>
      * This method returns the textual part of the fileName after the last dot.
      * There must be no directory separator after the dot.
+     * </p>
      * <pre>
      * foo.txt      --&gt; "txt"
      * a/b/c.jpg    --&gt; "jpg"
@@ -563,6 +581,7 @@ public class FilenameUtils {
      * alternate data stream (bar.txt) on the file foo.exe. The method used to return
      * ".txt" here, which would be misleading. Commons IO 2.7, and later versions, are throwing
      * an {@link IllegalArgumentException} for names like this.
+     * </p>
      *
      * @param fileName the fileName to retrieve the extension of.
      * @return the extension of the file or an empty string if none exists or {@code null}
@@ -587,6 +606,7 @@ public class FilenameUtils {
      * This method will handle a file in either Unix or Windows format.
      * The method is entirely text based, and returns the text before and
      * including the last forward or backslash.
+     * </p>
      * <pre>
      * C:\a\b\c.txt --&gt; C:\a\b\
      * ~/a/b/c.txt  --&gt; ~/a/b/
@@ -602,6 +622,7 @@ public class FilenameUtils {
      * </pre>
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
+     * </p>
      *
      * @param fileName  the fileName to query, null returns null
      * @return the path of the file, an empty string if none exists, null if invalid
@@ -617,6 +638,7 @@ public class FilenameUtils {
      * This method will handle a file in either Unix or Windows format.
      * The method is entirely text based, and returns the text before the
      * last forward or backslash.
+     * </p>
      * <pre>
      * C:\a\b\c.txt --&gt; C:\a\b
      * ~/a/b/c.txt  --&gt; ~/a/b
@@ -632,6 +654,7 @@ public class FilenameUtils {
      * </pre>
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
+     * </p>
      *
      * @param fileName  the fileName to query, null returns null
      * @return the path of the file, an empty string if none exists, null if invalid
@@ -645,6 +668,7 @@ public class FilenameUtils {
      * <p>
      * This method will handle a file in either Unix or Windows format.
      * The text after the last forward or backslash is returned.
+     * </p>
      * <pre>
      * a/b/c.txt --&gt; c.txt
      * a.txt     --&gt; a.txt
@@ -653,6 +677,7 @@ public class FilenameUtils {
      * </pre>
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
+     * </p>
      *
      * @param fileName  the fileName to query, null returns null
      * @return the name of the file without the path, or an empty string if none exists.
@@ -671,6 +696,7 @@ public class FilenameUtils {
      * This method will handle a file in either Unix or Windows format.
      * The method is entirely text based, and returns the text before and
      * including the last forward or backslash.
+     * </p>
      * <pre>
      * C:\a\b\c.txt --&gt; a\b\
      * ~/a/b/c.txt  --&gt; a/b/
@@ -680,9 +706,11 @@ public class FilenameUtils {
      * </pre>
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
+     * </p>
      * <p>
      * This method drops the prefix from the result.
      * See {@link #getFullPath(String)} for the method that retains the prefix.
+     * </p>
      *
      * @param fileName  the fileName to query, null returns null
      * @return the path of the file, an empty string if none exists, null if invalid.
@@ -699,6 +727,7 @@ public class FilenameUtils {
      * This method will handle a file in either Unix or Windows format.
      * The method is entirely text based, and returns the text before the
      * last forward or backslash.
+     * </p>
      * <pre>
      * C:\a\b\c.txt --&gt; a\b
      * ~/a/b/c.txt  --&gt; a/b
@@ -708,9 +737,11 @@ public class FilenameUtils {
      * </pre>
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
+     * </p>
      * <p>
      * This method drops the prefix from the result.
      * See {@link #getFullPathNoEndSeparator(String)} for the method that retains the prefix.
+     * </p>
      *
      * @param fileName  the fileName to query, null returns null
      * @return the path of the file, an empty string if none exists, null if invalid.
@@ -726,6 +757,7 @@ public class FilenameUtils {
      * <p>
      * This method will handle a file in either Unix or Windows format.
      * The prefix includes the first slash in the full fileName where applicable.
+     * </p>
      * <pre>
      * Windows:
      * a\b\c.txt           --&gt; ""          --&gt; relative
@@ -745,6 +777,7 @@ public class FilenameUtils {
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
      * ie. both Unix and Windows prefixes are matched regardless.
+     * </p>
      *
      * @param fileName  the fileName to query, null returns null
      * @return the prefix of the file, null if invalid. Null bytes inside string will be removed
@@ -768,10 +801,12 @@ public class FilenameUtils {
      * Returns the length of the fileName prefix, such as {@code C:/} or {@code ~/}.
      * <p>
      * This method will handle a file in either Unix or Windows format.
+     * </p>
      * <p>
      * The prefix length includes the first slash in the full fileName
      * if applicable. Thus, it is possible that the length returned is greater
      * than the length of the input string.
+     * </p>
      * <pre>
      * Windows:
      * a\b\c.txt           --&gt; 0           --&gt; relative
@@ -795,10 +830,12 @@ public class FilenameUtils {
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
      * ie. both Unix and Windows prefixes are matched regardless.
-     *
+     * </p>
+     * <p>
      * Note that a leading // (or \\) is used to indicate a UNC name on Windows.
      * These must be followed by a server name, so double-slashes are not collapsed
      * to a single slash at the start of the fileName.
+     * </p>
      *
      * @param fileName  the fileName to find the prefix in, null returns -1
      * @return the length of the prefix, -1 if invalid or null
@@ -1410,43 +1447,35 @@ public class FilenameUtils {
         }
         return path;
     }
+
     /**
      * Converts all separators to the system separator.
      *
-     * @param path  the path to be changed, null ignored
-     * @return the updated path
+     * @param path the path to be changed, null ignored.
+     * @return the updated path.
      */
     public static String separatorsToSystem(final String path) {
-        if (path == null) {
-            return null;
-        }
-        return isSystemWindows() ? separatorsToWindows(path) : separatorsToUnix(path);
+        return FileSystem.getCurrent().normalizeSeparators(path);
     }
 
     /**
      * Converts all separators to the Unix separator of forward slash.
      *
-     * @param path  the path to be changed, null ignored
-     * @return the updated path
+     * @param path the path to be changed, null ignored.
+     * @return the new path.
      */
     public static String separatorsToUnix(final String path) {
-        if (path == null || path.indexOf(WINDOWS_NAME_SEPARATOR) == NOT_FOUND) {
-            return path;
-        }
-        return path.replace(WINDOWS_NAME_SEPARATOR, UNIX_NAME_SEPARATOR);
+        return FileSystem.LINUX.normalizeSeparators(path);
     }
 
     /**
      * Converts all separators to the Windows separator of backslash.
      *
-     * @param path  the path to be changed, null ignored
-     * @return the updated path
+     * @param path the path to be changed, null ignored.
+     * @return the updated path.
      */
     public static String separatorsToWindows(final String path) {
-        if (path == null || path.indexOf(UNIX_NAME_SEPARATOR) == NOT_FOUND) {
-            return path;
-        }
-        return path.replace(UNIX_NAME_SEPARATOR, WINDOWS_NAME_SEPARATOR);
+        return FileSystem.WINDOWS.normalizeSeparators(path);
     }
 
     /**
@@ -1491,6 +1520,7 @@ public class FilenameUtils {
 
         return list.toArray(EMPTY_STRING_ARRAY);
     }
+
     /**
      * Returns '/' if given true, '\\' otherwise.
      *
@@ -1500,6 +1530,7 @@ public class FilenameUtils {
     private static char toSeparator(final boolean unixSeparator) {
         return unixSeparator ? UNIX_NAME_SEPARATOR : WINDOWS_NAME_SEPARATOR;
     }
+
     /**
      * Checks a fileName to see if it matches the specified wildcard matcher,
      * always testing case-sensitive.
