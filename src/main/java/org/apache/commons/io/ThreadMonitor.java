@@ -28,9 +28,9 @@ import java.time.Duration;
  * </p>
  *
  * <pre>
- *       long timeoutInMillis = 1000;
+ *       Duration timeout = Duration.ofSeconds(1);
  *       try {
- *           Thread monitor = ThreadMonitor.start(timeoutInMillis);
+ *           Thread monitor = ThreadMonitor.start(timeout);
  *           // do some work here
  *           ThreadMonitor.stop(monitor);
  *       } catch (InterruptedException e) {
