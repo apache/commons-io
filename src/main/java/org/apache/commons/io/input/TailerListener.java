@@ -59,7 +59,7 @@ public interface TailerListener {
     void handle(String line);
 
     /**
-     * Handles an Exception .
+     * Handles an Exception.
      * <p>
      * <b>Note:</b> this is called from the tailer thread.
      * @param ex the exception.
