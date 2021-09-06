@@ -111,26 +111,26 @@ public class FileFilterUtils {
      * Returns a filter that returns true if the file was last modified before
      * or at the specified cutoff time.
      *
-     * @param cutoff  the time threshold
+     * @param cutoffMillis  the time threshold
      * @return an appropriately configured age file filter
      * @see AgeFileFilter
      * @since 1.2
      */
-    public static IOFileFilter ageFileFilter(final long cutoff) {
-        return new AgeFileFilter(cutoff);
+    public static IOFileFilter ageFileFilter(final long cutoffMillis) {
+        return new AgeFileFilter(cutoffMillis);
     }
 
     /**
      * Returns a filter that filters files based on a cutoff time.
      *
-     * @param cutoff  the time threshold
+     * @param cutoffMillis  the time threshold
      * @param acceptOlder  if true, older files get accepted, if false, newer
      * @return an appropriately configured age file filter
      * @see AgeFileFilter
      * @since 1.2
      */
-    public static IOFileFilter ageFileFilter(final long cutoff, final boolean acceptOlder) {
-        return new AgeFileFilter(cutoff, acceptOlder);
+    public static IOFileFilter ageFileFilter(final long cutoffMillis, final boolean acceptOlder) {
+        return new AgeFileFilter(cutoffMillis, acceptOlder);
     }
 
     /**

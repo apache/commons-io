@@ -43,9 +43,11 @@ import java.nio.file.attribute.AclFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.DosFileAttributeView;
 import java.nio.file.attribute.FileAttribute;
+import java.nio.file.attribute.FileTime;
 import java.nio.file.attribute.PosixFileAttributeView;
 import java.nio.file.attribute.PosixFileAttributes;
 import java.nio.file.attribute.PosixFilePermission;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -766,6 +768,46 @@ public final class PathUtils {
      * Tests if the specified {@code Path} is newer than the specified time reference.
      *
      * @param file the {@code Path} of which the modification date must be compared
+     * @param fileTime the time reference.
+     * @param options options indicating how symbolic links are handled * @return true if the {@code Path} exists and has
+     *        been modified after the given time reference.
+     * @return true if the {@code Path} exists and has been modified after the given time reference.
+     * @throws IOException if an I/O error occurs.
+     * @throws NullPointerException if the file is {@code null}
+     * @since 2.12.0
+     */
+    public static boolean isNewer(final Path file, final FileTime fileTime, final LinkOption... options) throws IOException {
+        Objects.requireNonNull(file, "file");
+        if (Files.notExists(file)) {
+            return false;
+        }
+        return Files.getLastModifiedTime(file, options).compareTo(fileTime) > 0;
+    }
+
+    /**
+     * Tests if the specified {@code Path} is newer than the specified time reference.
+     *
+     * @param file the {@code Path} of which the modification date must be compared
+     * @param instant the time reference.
+     * @param options options indicating how symbolic links are handled * @return true if the {@code Path} exists and has
+     *        been modified after the given time reference.
+     * @return true if the {@code Path} exists and has been modified after the given time reference.
+     * @throws IOException if an I/O error occurs.
+     * @throws NullPointerException if the file is {@code null}
+     * @since 2.12.0
+     */
+    public static boolean isNewer(final Path file, final Instant instant, final LinkOption... options) throws IOException {
+        Objects.requireNonNull(file, "file");
+        if (Files.notExists(file)) {
+            return false;
+        }
+        return Files.getLastModifiedTime(file, options).toInstant().isAfter(instant);
+    }
+
+    /**
+     * Tests if the specified {@code Path} is newer than the specified time reference.
+     *
+     * @param file the {@code Path} of which the modification date must be compared
      * @param timeMillis the time reference measured in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
      * @param options options indicating how symbolic links are handled * @return true if the {@code Path} exists and has
      *        been modified after the given time reference.
@@ -775,11 +817,7 @@ public final class PathUtils {
      * @since 2.9.0
      */
     public static boolean isNewer(final Path file, final long timeMillis, final LinkOption... options) throws IOException {
-        Objects.requireNonNull(file, "file");
-        if (Files.notExists(file)) {
-            return false;
-        }
-        return Files.getLastModifiedTime(file, options).toMillis() > timeMillis;
+        return isNewer(file, FileTime.fromMillis(timeMillis), options);
     }
 
     /**

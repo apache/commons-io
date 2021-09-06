@@ -147,6 +147,15 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add FileSystem.normalizeSeparators().
       </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add PathUtils.isNewer(Path, FileTime, LinkOption...).
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add PathUtils.isNewer(Path, Instant, LinkOption...).
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add AgeFileFilter.AgeFileFilter(Instant, boolean).
+      </action>
       <!-- UPDATE -->
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump Maven Javadoc plugin from 3.2.0 to 3.3.0.
