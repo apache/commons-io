@@ -2302,7 +2302,7 @@ public class FileUtils {
             throws IOException {
         validateMoveParameters(srcFile, destFile);
         requireFile(srcFile, "srcFile");
-        requireAbsent(destFile, null);
+        requireAbsent(destFile, "destFile");
         final boolean rename = srcFile.renameTo(destFile);
         if (!rename) {
             copyFile(srcFile, destFile, copyOptions);
@@ -2599,8 +2599,7 @@ public class FileUtils {
 
     private static void requireAbsent(final File file, final String name) throws FileExistsException {
         if (file.exists()) {
-            throw new FileExistsException(
-                String.format("File element in parameter '%s' already exists: '%s'", name, file));
+            throw new FileExistsException(String.format("File element in parameter '%s' already exists: '%s'", name, file));
         }
     }
 
