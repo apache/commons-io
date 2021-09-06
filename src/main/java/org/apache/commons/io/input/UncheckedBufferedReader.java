@@ -59,7 +59,7 @@ public class UncheckedBufferedReader extends BufferedReader {
      * @param reader     A Reader
      * @param bufferSize Input-buffer size
      *
-     * @exception IllegalArgumentException If {@code bufferSize <= 0}
+     * @throws IllegalArgumentException If {@code bufferSize <= 0}
      */
     public UncheckedBufferedReader(final Reader reader, final int bufferSize) {
         super(reader, bufferSize);

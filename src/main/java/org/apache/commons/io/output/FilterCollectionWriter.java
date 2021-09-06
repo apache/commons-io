@@ -173,7 +173,7 @@ public class FilterCollectionWriter extends Writer {
     /**
      * Flushes the stream.
      *
-     * @exception IOException If an I/O error occurs
+     * @throws IOException If an I/O error occurs
      */
     @Override
     public void flush() throws IOException {
@@ -231,7 +231,7 @@ public class FilterCollectionWriter extends Writer {
      * @param off  Offset from which to start reading characters
      * @param len  Number of characters to be written
      *
-     * @exception IOException If an I/O error occurs
+     * @throws IOException If an I/O error occurs
      */
     @Override
     public void write(final char[] cbuf, final int off, final int len) throws IOException {
@@ -255,7 +255,7 @@ public class FilterCollectionWriter extends Writer {
     /**
      * Writes a single character.
      *
-     * @exception IOException If an I/O error occurs
+     * @throws IOException If an I/O error occurs
      */
     @Override
     public void write(final int c) throws IOException {
@@ -303,7 +303,7 @@ public class FilterCollectionWriter extends Writer {
      * @param off Offset from which to start reading characters
      * @param len Number of characters to be written
      *
-     * @exception IOException If an I/O error occurs
+     * @throws IOException If an I/O error occurs
      */
     @Override
     public void write(final String str, final int off, final int len) throws IOException {
