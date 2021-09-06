@@ -215,7 +215,7 @@ public class FileAlterationObserver extends AbstractFileAlterationObserver<File,
     }
 
     /**
-     * Initializes the observer.
+     * Initialize the observer.
      *
      * @throws Exception if an error occurs
      */
