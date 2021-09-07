@@ -68,6 +68,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-748" dev="ggregory" type="fix" due-to="Dirk Heinrichs, Gary Gregory">
         FileUtils.moveToDirectory() exception documentation and exception message error.
       </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        ThreadMonitor.sleep(Duration) ignores nanoseconds.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add BrokenReader.INSTANCE.

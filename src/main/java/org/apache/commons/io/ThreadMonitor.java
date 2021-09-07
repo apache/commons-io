@@ -17,6 +17,7 @@
 package org.apache.commons.io;
 
 import java.time.Duration;
+import java.time.Instant;
 
 /**
  * Monitors a thread, interrupting it if it reaches the specified timeout.
@@ -118,21 +119,21 @@ class ThreadMonitor implements Runnable {
      * Sleeps for a guaranteed minimum duration unless interrupted.
      *
      * This method exists because Thread.sleep(100) can sleep for 0, 70, 100 or 200ms or anything else
-     * it deems appropriate. Read the docs on Thread.sleep for further interesting details.
+     * it deems appropriate. Read {@link Thread#sleep()} for further interesting details.
      *
      * @param duration the sleep duration.
      * @throws InterruptedException if interrupted
      */
     private static void sleep(final Duration duration) throws InterruptedException {
-        // Ignore nanos for now.
-        final long millis = duration.toMillis();
-        final long finishAtMillis = System.currentTimeMillis() + millis;
-        long remainingMillis = millis;
+        final Instant finishInstant = Instant.now().plus(duration);
+        Duration remainingDuration = duration;
         do {
-            Thread.sleep(remainingMillis);
-            remainingMillis = finishAtMillis - System.currentTimeMillis();
-        } while (remainingMillis > 0);
+            Thread.sleep(remainingDuration.toMillis(), getNanosOfMiili(remainingDuration));
+            remainingDuration = Duration.between(Instant.now(), finishInstant);
+        } while (!remainingDuration.isNegative());
     }
 
-
+    private static int getNanosOfMiili(final Duration duration) {
+        return duration.getNano() % 1_000_000;
+    }
 }
