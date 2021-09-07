@@ -26,6 +26,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.Charset;
+import java.time.Duration;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -150,7 +151,7 @@ public class Tailer implements Runnable {
     /**
      * The amount of time to wait for the file to be updated.
      */
-    private final long delayMillis;
+    private final Duration delayDuration;
 
     /**
      * Whether to tail from the end or start of file
@@ -255,8 +256,24 @@ public class Tailer implements Runnable {
     public Tailer(final File file, final Charset charset, final TailerListener listener, final long delayMillis,
                   final boolean end, final boolean reOpen
             , final int bufSize) {
+        this(file, charset, listener, Duration.ofMillis(delayMillis), end, reOpen, bufSize);
+    }
+
+    /**
+     * Creates a Tailer for the given file, with a specified buffer size.
+     * @param file the file to follow.
+     * @param charset the Charset to be used for reading the file
+     * @param listener the TailerListener to use.
+     * @param delayDuration the delay between checks of the file for new content in milliseconds.
+     * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @param reOpen if true, close and reopen the file between reading chunks
+     * @param bufSize Buffer size
+     */
+    private Tailer(final File file, final Charset charset, final TailerListener listener, final Duration delayDuration,
+                  final boolean end, final boolean reOpen
+            , final int bufSize) {
         this.file = file;
-        this.delayMillis = delayMillis;
+        this.delayDuration = delayDuration;
         this.end = end;
 
         this.inbuf = IOUtils.byteArray(bufSize);
@@ -395,12 +412,22 @@ public class Tailer implements Runnable {
     }
 
     /**
-     * Return the delay in milliseconds.
+     * Gets the delay in milliseconds.
      *
      * @return the delay in milliseconds.
      */
     public long getDelay() {
-        return delayMillis;
+        return delayDuration.toMillis();
+    }
+
+    /**
+     * Gets the delay Duration.
+     *
+     * @return the delay Duration.
+     * @since 2.12.0
+     */
+    public Duration getDelayDuration() {
+        return delayDuration;
     }
 
     /**
@@ -420,7 +447,7 @@ public class Tailer implements Runnable {
                     listener.fileNotFound();
                 }
                 if (reader == null) {
-                    Thread.sleep(delayMillis);
+                    Thread.sleep(delayDuration.toMillis());
                 } else {
                     // The current position in the file
                     position = end ? file.length() : 0;
@@ -450,7 +477,7 @@ public class Tailer implements Runnable {
                     } catch (final FileNotFoundException e) {
                         // in this case we continue to use the previous reader and position values
                         listener.fileNotFound();
-                        Thread.sleep(delayMillis);
+                        Thread.sleep(delayDuration.toMillis());
                     }
                     continue;
                 }
@@ -475,7 +502,7 @@ public class Tailer implements Runnable {
                 if (reOpen && reader != null) {
                     reader.close();
                 }
-                Thread.sleep(delayMillis);
+                Thread.sleep(delayDuration.toMillis());
                 if (getRun() && reOpen) {
                     reader = new RandomAccessFile(file, RAF_MODE);
                     reader.seek(position);
