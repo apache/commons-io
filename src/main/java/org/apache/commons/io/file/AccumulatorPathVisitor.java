@@ -37,7 +37,7 @@ import org.apache.commons.io.file.Counters.PathCounters;
  * <pre>
  * Path dir = Paths.get("");
  * // We are interested in files older than one day
- * long cutoff = System.currentTimeMillis() - (24 * 60 * 60 * 1000);
+ * Instant cutoff = Instant.now().minus(Duration.ofDays(1));
  * AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new AgeFileFilter(cutoff));
  * //
  * // Walk one dir
