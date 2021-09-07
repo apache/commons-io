@@ -62,8 +62,9 @@ import org.apache.commons.io.output.UnsynchronizedByteArrayOutputStream;
  * General IO stream manipulation utilities.
  * <p>
  * This class provides static utility methods for input/output operations.
+ * </p>
  * <ul>
- * <li><b>[Deprecated]</b> closeQuietly - these methods close a stream ignoring nulls and exceptions
+ * <li>closeQuietly - these methods close a stream ignoring nulls and exceptions
  * <li>toXxx/read - these methods read data from a stream
  * <li>write - these methods write data to a stream
  * <li>copy - these methods copy all the data from one stream to another
@@ -76,13 +77,16 @@ import org.apache.commons.io.output.UnsynchronizedByteArrayOutputStream;
  * encouraged to always specify an encoding because relying on the platform
  * default can lead to unexpected results, for example when moving from
  * development to production.
+ * </p>
  * <p>
  * All the methods in this class that read a stream are buffered internally.
  * This means that there is no cause to use a {@code BufferedInputStream}
  * or {@code BufferedReader}. The default buffer size of 4K has been shown
  * to be efficient in tests.
+ * </p>
  * <p>
  * The various copy methods all delegate the actual copying to one of the following methods:
+ * </p>
  * <ul>
  * <li>{@link #copyLarge(InputStream, OutputStream, byte[])}</li>
  * <li>{@link #copyLarge(InputStream, OutputStream, long, long, byte[])}</li>
@@ -95,13 +99,16 @@ import org.apache.commons.io.output.UnsynchronizedByteArrayOutputStream;
  * <p>
  * Applications can re-use buffers by using the underlying methods directly.
  * This may improve performance for applications that need to do a lot of copying.
+ * </p>
  * <p>
  * Wherever possible, the methods in this class do <em>not</em> flush or close
  * the stream. This is to avoid making non-portable assumptions about the
  * streams' origin and further use. Thus the caller is still responsible for
  * closing streams after use.
+ * </p>
  * <p>
  * Origin of code: Excalibur.
+ * </p>
  */
 public class IOUtils {
     // NOTE: This class is focused on InputStream, OutputStream, Reader and
@@ -545,8 +552,10 @@ public class IOUtils {
      * <p>
      * Equivalent to {@link InputStream#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
+     * </p>
      * <p>
      * Example code:
+     * </p>
      * <pre>
      *   byte[] data = new byte[1024];
      *   InputStream in = null;
@@ -576,8 +585,10 @@ public class IOUtils {
      * <p>
      * Equivalent to {@link OutputStream#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
+     * </p>
      * <p>
      * Example code:
+     * </p>
      * <pre>
      * byte[] data = "Hello, World".getBytes();
      *
@@ -608,8 +619,10 @@ public class IOUtils {
      * <p>
      * Equivalent to {@link Reader#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
+     * </p>
      * <p>
      * Example code:
+     * </p>
      * <pre>
      *   char[] data = new char[1024];
      *   Reader in = null;
@@ -639,8 +652,10 @@ public class IOUtils {
      * <p>
      * Equivalent to {@link Selector#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
+     * </p>
      * <p>
      * Example code:
+     * </p>
      * <pre>
      *   Selector selector = null;
      *   try {
@@ -670,8 +685,10 @@ public class IOUtils {
      * <p>
      * Equivalent to {@link ServerSocket#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
+     * </p>
      * <p>
      * Example code:
+     * </p>
      * <pre>
      *   ServerSocket socket = null;
      *   try {
@@ -701,8 +718,10 @@ public class IOUtils {
      * <p>
      * Equivalent to {@link Socket#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
+     * </p>
      * <p>
      * Example code:
+     * </p>
      * <pre>
      *   Socket socket = null;
      *   try {
@@ -732,8 +751,10 @@ public class IOUtils {
      * <p>
      * Equivalent to {@link Writer#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
+     * </p>
      * <p>
      * Example code:
+     * </p>
      * <pre>
      *   Writer out = null;
      *   try {
@@ -901,6 +922,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally using
      * {@code BufferedReader} if they are not already buffered.
+     * </p>
      *
      * @param reader1 the first reader
      * @param reader2 the second reader
@@ -984,8 +1006,10 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedInputStream}.
+     * </p>
      * <p>
      * This method uses {@link InputStreamReader}.
+     * </p>
      *
      * @param input the {@code InputStream} to read from
      * @param writer the {@code Writer} to write to
@@ -1006,8 +1030,10 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedInputStream}.
+     * </p>
      * <p>
      * This method uses {@link InputStreamReader}.
+     * </p>
      *
      * @param input the {@code InputStream} to read from
      * @param writer the {@code Writer} to write to
@@ -1028,11 +1054,14 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedInputStream}.
+     * </p>
      * <p>
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * </p>
      * <p>
      * This method uses {@link InputStreamReader}.
+     * </p>
      *
      * @param input the {@code InputStream} to read from
      * @param writer the {@code Writer} to write to
@@ -1054,11 +1083,13 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedReader}.
+     * </p>
      * <p>
      * Large streams (over 2GB) will return a chars copied value of
      * {@code -1} after the copy has completed since the correct
      * number of chars cannot be returned as an int. For large streams
      * use the {@code copyLarge(Reader, Writer)} method.
+     * </p>
      *
      * @param reader the {@code Reader} to read from
      * @param output the {@code Appendable} to write to
@@ -1104,11 +1135,14 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedReader}.
+     * </p>
      * <p>
      * Due to the implementation of OutputStreamWriter, this method performs a
      * flush.
+     * </p>
      * <p>
      * This method uses {@link OutputStreamWriter}.
+     * </p>
      *
      * @param reader the {@code Reader} to read from
      * @param output the {@code OutputStream} to write to
@@ -1162,14 +1196,18 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedReader}.
+     * </p>
      * <p>
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * </p>
      * <p>
      * Due to the implementation of OutputStreamWriter, this method performs a
      * flush.
+     * </p>
      * <p>
      * This method uses {@link OutputStreamWriter}.
+     * </p>
      *
      * @param reader the {@code Reader} to read from
      * @param output the {@code OutputStream} to write to
@@ -1191,11 +1229,13 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedReader}.
+     * </p>
      * <p>
      * Large streams (over 2GB) will return a chars copied value of
      * {@code -1} after the copy has completed since the correct
      * number of chars cannot be returned as an int. For large streams
      * use the {@code copyLarge(Reader, Writer)} method.
+     * </p>
      *
      * @param reader the {@code Reader} to read.
      * @param writer the {@code Writer} to write.
@@ -1397,8 +1437,10 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedReader}.
+     * </p>
      * <p>
      * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
+     * </p>
      *
      * @param reader the {@code Reader} to source.
      * @param writer the {@code Writer} to target.
@@ -1416,7 +1458,7 @@ public class IOUtils {
      * <p>
      * This method uses the provided buffer, so there is no need to use a
      * {@code BufferedReader}.
-     * <p>
+     * </p>
      *
      * @param reader the {@code Reader} to source.
      * @param writer the {@code Writer} to target.
@@ -1442,8 +1484,10 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedReader}.
+     * </p>
      * <p>
      * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
+     * </p>
      *
      * @param reader the {@code Reader} to read from
      * @param writer the {@code Writer} to write to
@@ -1466,7 +1510,7 @@ public class IOUtils {
      * <p>
      * This method uses the provided buffer, so there is no need to use a
      * {@code BufferedReader}.
-     * <p>
+     * </p>
      *
      * @param reader the {@code Reader} to read from
      * @param writer the {@code Writer} to write to
@@ -1576,8 +1620,10 @@ public class IOUtils {
      * the iterator you should close the stream to free internal resources.
      * This can be done by using a try-with-resources block, closing the stream directly, or by calling
      * {@link LineIterator#close()}.
+     * </p>
      * <p>
      * The recommended usage pattern is:
+     * </p>
      * <pre>
      * try {
      *   LineIterator it = IOUtils.lineIterator(stream, charset);
@@ -1609,8 +1655,10 @@ public class IOUtils {
      * the iterator you should close the stream to free internal resources.
      * This can be done by using a try-with-resources block, closing the stream directly, or by calling
      * {@link LineIterator#close()}.
+     * </p>
      * <p>
      * The recommended usage pattern is:
+     * </p>
      * <pre>
      * try {
      *   LineIterator it = IOUtils.lineIterator(stream, "UTF-8");
@@ -1644,8 +1692,10 @@ public class IOUtils {
      * iterator you should close the reader to free internal resources.
      * This can be done by using a try-with-resources block, closing the reader directly, or by calling
      * {@link LineIterator#close()}.
+     * </p>
      * <p>
      * The recommended usage pattern is:
+     * </p>
      * <pre>
      * try {
      *   LineIterator it = IOUtils.lineIterator(reader);
@@ -1720,6 +1770,7 @@ public class IOUtils {
      * This implementation guarantees that it will read as many bytes
      * as possible before giving up; this may not always be the case for
      * subclasses of {@link ReadableByteChannel}.
+     * </p>
      *
      * @param input the byte channel to read
      * @param buffer byte buffer destination
@@ -1790,6 +1841,7 @@ public class IOUtils {
      * <p>
      * This allows for the possibility that {@link InputStream#read(byte[], int, int)} may
      * not read as many bytes as requested (most likely because of reaching EOF).
+     * </p>
      *
      * @param input where to read input from
      * @param buffer destination
@@ -1808,6 +1860,7 @@ public class IOUtils {
      * <p>
      * This allows for the possibility that {@link InputStream#read(byte[], int, int)} may
      * not read as many bytes as requested (most likely because of reaching EOF).
+     * </p>
      *
      * @param input where to read input from
      * @param buffer destination
@@ -1832,6 +1885,7 @@ public class IOUtils {
      * <p>
      * This allows for the possibility that {@link InputStream#read(byte[], int, int)} may
      * not read as many bytes as requested (most likely because of reaching EOF).
+     * </p>
      *
      * @param input where to read input from
      * @param length length to read, must be &gt;= 0
@@ -1852,6 +1906,7 @@ public class IOUtils {
      * <p>
      * This allows for the possibility that {@link ReadableByteChannel#read(ByteBuffer)} may
      * not read as many bytes as requested (most likely because of reaching EOF).
+     * </p>
      *
      * @param input the byte channel to read
      * @param buffer byte buffer destination
@@ -1872,6 +1927,7 @@ public class IOUtils {
      * <p>
      * This allows for the possibility that {@link Reader#read(char[], int, int)} may
      * not read as many characters as requested (most likely because of reaching EOF).
+     * </p>
      *
      * @param reader where to read input from
      * @param buffer destination
@@ -1889,6 +1945,7 @@ public class IOUtils {
      * <p>
      * This allows for the possibility that {@link Reader#read(char[], int, int)} may
      * not read as many characters as requested (most likely because of reaching EOF).
+     * </p>
      *
      * @param reader where to read input from
      * @param buffer destination
@@ -1913,6 +1970,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedInputStream}.
+     * </p>
      *
      * @param input the {@code InputStream} to read from, not null
      * @return the list of Strings, never null
@@ -1932,6 +1990,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedInputStream}.
+     * </p>
      *
      * @param input the {@code InputStream} to read from, not null
      * @param charset the charset to use, null means platform default
@@ -1951,9 +2010,11 @@ public class IOUtils {
      * <p>
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * </p>
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedInputStream}.
+     * </p>
      *
      * @param input the {@code InputStream} to read from, not null
      * @param charsetName the name of the requested charset, null means platform default
@@ -1975,6 +2036,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedReader}.
+     * </p>
      *
      * @param reader the {@code Reader} to read from, not null
      * @return the list of Strings, never null
@@ -1995,7 +2057,6 @@ public class IOUtils {
 
     /**
      * Gets the contents of a classpath resource as a byte array.
-     *
      * <p>
      * It is expected the given {@code name} to be absolute. The
      * behavior is not well-defined otherwise.
@@ -2013,7 +2074,6 @@ public class IOUtils {
 
     /**
      * Gets the contents of a classpath resource as a byte array.
-     *
      * <p>
      * It is expected the given {@code name} to be absolute. The
      * behavior is not well-defined otherwise.
@@ -2033,7 +2093,6 @@ public class IOUtils {
     /**
      * Gets the contents of a classpath resource as a String using the
      * specified character encoding.
-     *
      * <p>
      * It is expected the given {@code name} to be absolute. The
      * behavior is not well-defined otherwise.
@@ -2053,7 +2112,6 @@ public class IOUtils {
     /**
      * Gets the contents of a classpath resource as a String using the
      * specified character encoding.
-     *
      * <p>
      * It is expected the given {@code name} to be absolute. The
      * behavior is not well-defined otherwise.
@@ -2073,7 +2131,6 @@ public class IOUtils {
 
     /**
      * Gets a URL pointing to the given classpath resource.
-     *
      * <p>
      * It is expected the given {@code name} to be absolute. The
      * behavior is not well-defined otherwise.
@@ -2091,7 +2148,6 @@ public class IOUtils {
 
     /**
      * Gets a URL pointing to the given classpath resource.
-     *
      * <p>
      * It is expected the given {@code name} to be absolute. The
      * behavior is not well-defined otherwise.
@@ -2233,6 +2289,7 @@ public class IOUtils {
      * <p>
      * This allows for the possibility that {@link InputStream#skip(long)} may
      * not skip as many bytes as requested (most likely because of reaching EOF).
+     * </p>
      * <p>
      * Note that the implementation uses {@link #skip(InputStream, long)}.
      * This means that the method may be considerably less efficient than using the actual skip implementation,
@@ -2282,6 +2339,7 @@ public class IOUtils {
      * <p>
      * This allows for the possibility that {@link Reader#skip(long)} may
      * not skip as many characters as requested (most likely because of reaching EOF).
+     * </p>
      * <p>
      * Note that the implementation uses {@link #skip(Reader, long)}.
      * This means that the method may be considerably less efficient than using the actual skip implementation,
@@ -2308,16 +2366,19 @@ public class IOUtils {
      * same data as result InputStream.
      * <p>
      * This method is useful where,
+     * </p>
      * <ul>
      * <li>Source InputStream is slow.</li>
      * <li>It has network resources associated, so we cannot keep it open for
      * long time.</li>
      * <li>It has network timeout associated.</li>
      * </ul>
+     * <p>
      * It can be used in favor of {@link #toByteArray(InputStream)}, since it
      * avoids unnecessary allocation and copy of byte[].<br>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedInputStream}.
+     * </p>
      *
      * @param input Stream to be fully buffered.
      * @return A fully buffered stream.
@@ -2333,16 +2394,19 @@ public class IOUtils {
      * same data as result InputStream.
      * <p>
      * This method is useful where,
+     * </p>
      * <ul>
      * <li>Source InputStream is slow.</li>
      * <li>It has network resources associated, so we cannot keep it open for
      * long time.</li>
      * <li>It has network timeout associated.</li>
      * </ul>
+     * <p>
      * It can be used in favor of {@link #toByteArray(InputStream)}, since it
      * avoids unnecessary allocation and copy of byte[].<br>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedInputStream}.
+     * </p>
      *
      * @param input Stream to be fully buffered.
      * @param size the initial buffer size
@@ -2475,6 +2539,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedReader}.
+     * </p>
      *
      * @param reader the {@code Reader} to read from
      * @return the requested byte array
@@ -2493,6 +2558,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedReader}.
+     * </p>
      *
      * @param reader the {@code Reader} to read from
      * @param charset the charset to use, null means platform default
@@ -2514,9 +2580,11 @@ public class IOUtils {
      * <p>
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * </p>
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedReader}.
+     * </p>
      *
      * @param reader the {@code Reader} to read from
      * @param charsetName the name of the requested charset, null means platform default
@@ -2537,6 +2605,7 @@ public class IOUtils {
      * using the default character encoding of the platform.
      * <p>
      * This is the same as {@link String#getBytes()}.
+     * </p>
      *
      * @param input the {@code String} to convert
      * @return the requested byte array
@@ -2601,6 +2670,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedInputStream}.
+     * </p>
      *
      * @param inputStream the {@code InputStream} to read from
      * @return the requested character array
@@ -2620,6 +2690,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedInputStream}.
+     * </p>
      *
      * @param inputStream the {@code InputStream} to read from
      * @param charset the charset to use, null means platform default
@@ -2641,9 +2712,11 @@ public class IOUtils {
      * <p>
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * </p>
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedInputStream}.
+     * </p>
      *
      * @param inputStream the {@code InputStream} to read from
      * @param charsetName the name of the requested charset, null means platform default
@@ -2664,6 +2737,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedReader}.
+     * </p>
      *
      * @param reader the {@code Reader} to read from
      * @return the requested character array
@@ -2710,6 +2784,7 @@ public class IOUtils {
      * <p>
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * </p>
      *
      * @param input the CharSequence to convert
      * @param charsetName the name of the requested charset, null means platform default
@@ -2756,6 +2831,7 @@ public class IOUtils {
      * <p>
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * </p>
      *
      * @param input the string to convert
      * @param charsetName the name of the requested charset, null means platform default
@@ -2791,6 +2867,7 @@ public class IOUtils {
      * <p>
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * </p>
      *
      * @param input the byte array to read from
      * @param charsetName the name of the requested charset, null means platform default
@@ -2807,6 +2884,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedInputStream}.
+     * </p>
      *
      * @param input the {@code InputStream} to read from
      * @return the requested String
@@ -2847,9 +2925,11 @@ public class IOUtils {
      * <p>
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * </p>
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedInputStream}.
+     * </p>
      *
      * @param input the {@code InputStream} to read from
      * @param charsetName the name of the requested charset, null means platform default
@@ -2870,6 +2950,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@code BufferedReader}.
+     * </p>
      *
      * @param reader the {@code Reader} to read from
      * @return the requested String
@@ -2993,6 +3074,7 @@ public class IOUtils {
      * using the default character encoding of the platform.
      * <p>
      * This method uses {@link String#String(byte[])}.
+     * </p>
      *
      * @param data the byte array to write, do not modify during output,
      * null ignored
@@ -3012,6 +3094,7 @@ public class IOUtils {
      * using the specified character encoding.
      * <p>
      * This method uses {@link String#String(byte[], String)}.
+     * </p>
      *
      * @param data the byte array to write, do not modify during output,
      * null ignored
@@ -3033,8 +3116,10 @@ public class IOUtils {
      * <p>
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * </p>
      * <p>
      * This method uses {@link String#String(byte[], String)}.
+     * </p>
      *
      * @param data the byte array to write, do not modify during output,
      * null ignored
@@ -3057,6 +3142,7 @@ public class IOUtils {
      * <p>
      * This method uses {@link String#String(char[])} and
      * {@link String#getBytes()}.
+     * </p>
      *
      * @param data the char array to write, do not modify during output,
      * null ignored
@@ -3078,6 +3164,7 @@ public class IOUtils {
      * <p>
      * This method uses {@link String#String(char[])} and
      * {@link String#getBytes(String)}.
+     * </p>
      *
      * @param data the char array to write, do not modify during output,
      * null ignored
@@ -3099,9 +3186,11 @@ public class IOUtils {
      * <p>
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * </p>
      * <p>
      * This method uses {@link String#String(char[])} and
      * {@link String#getBytes(String)}.
+     * </p>
      *
      * @param data the char array to write, do not modify during output,
      * null ignored
@@ -3140,6 +3229,7 @@ public class IOUtils {
      * platform.
      * <p>
      * This method uses {@link String#getBytes()}.
+     * </p>
      *
      * @param data the {@code CharSequence} to write, null ignored
      * @param output the {@code OutputStream} to write to
@@ -3159,6 +3249,7 @@ public class IOUtils {
      * {@code OutputStream} using the specified character encoding.
      * <p>
      * This method uses {@link String#getBytes(String)}.
+     * </p>
      *
      * @param data the {@code CharSequence} to write, null ignored
      * @param output the {@code OutputStream} to write to
@@ -3180,8 +3271,10 @@ public class IOUtils {
      * <p>
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * </p>
      * <p>
      * This method uses {@link String#getBytes(String)}.
+     * </p>
      *
      * @param data the {@code CharSequence} to write, null ignored
      * @param output the {@code OutputStream} to write to
@@ -3219,6 +3312,7 @@ public class IOUtils {
      * platform.
      * <p>
      * This method uses {@link String#getBytes()}.
+     * </p>
      *
      * @param data the {@code String} to write, null ignored
      * @param output the {@code OutputStream} to write to
@@ -3238,6 +3332,7 @@ public class IOUtils {
      * {@code OutputStream} using the specified character encoding.
      * <p>
      * This method uses {@link String#getBytes(String)}.
+     * </p>
      *
      * @param data the {@code String} to write, null ignored
      * @param output the {@code OutputStream} to write to
@@ -3258,8 +3353,10 @@ public class IOUtils {
      * <p>
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * </p>
      * <p>
      * This method uses {@link String#getBytes(String)}.
+     * </p>
      *
      * @param data the {@code String} to write, null ignored
      * @param output the {@code OutputStream} to write to
@@ -3296,6 +3393,7 @@ public class IOUtils {
      * platform.
      * <p>
      * This method uses {@link String#getBytes()}.
+     * </p>
      *
      * @param data the {@code StringBuffer} to write, null ignored
      * @param output the {@code OutputStream} to write to
@@ -3316,8 +3414,10 @@ public class IOUtils {
      * <p>
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * </p>
      * <p>
      * This method uses {@link String#getBytes(String)}.
+     * </p>
      *
      * @param data the {@code StringBuffer} to write, null ignored
      * @param output the {@code OutputStream} to write to
@@ -3462,6 +3562,7 @@ public class IOUtils {
      * <p>
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * </p>
      *
      * @param lines the lines to write, null entries produce blank lines
      * @param lineEnding the line separator to use, null is system default
