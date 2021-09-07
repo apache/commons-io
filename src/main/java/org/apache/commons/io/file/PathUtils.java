@@ -1072,37 +1072,38 @@ public final class PathUtils {
     /**
      * Waits for the file system to propagate a file creation, with a timeout.
      * <p>
-     * This method repeatedly tests {@link File#exists()} until it returns true up to the maximum time specified in seconds.
+     * This method repeatedly tests {@link Files#exists(Path,LinkOption...)} until it returns true up to the maximum time
+     * specified.
      * </p>
      *
      * @param file the file to check, must not be {@code null}.
-     * @param duration the maximum time in seconds to wait.
+     * @param timeout the maximum time to wait.
      * @param options options indicating how symbolic links are handled.
      * @return true if file exists.
      * @throws NullPointerException if the file is {@code null}.
      * @since 2.12.0
      */
-    public static boolean waitFor(final Path file, final Duration duration, LinkOption... options) {
+    public static boolean waitFor(final Path file, final Duration timeout, LinkOption... options) {
         Objects.requireNonNull(file, "file");
-        final Instant finishInstant = Instant.now().plus(duration);
-        boolean wasInterrupted = false;
+        final Instant finishInstant = Instant.now().plus(timeout);
+        boolean interrupted = false;
         final long minSleepMillis = 100;
         try {
             while (!Files.exists(file, options)) {
-                final long remainingMillis = finishInstant.minusMillis(System.currentTimeMillis()).toEpochMilli();
-                if (remainingMillis < 0) {
+                final Instant now = Instant.now();
+                if (now.isAfter(finishInstant)) {
                     return false;
                 }
                 try {
-                    Thread.sleep(Math.min(minSleepMillis, remainingMillis));
+                    Thread.sleep(Math.min(minSleepMillis, finishInstant.minusMillis(now.toEpochMilli()).toEpochMilli()));
                 } catch (final InterruptedException ignore) {
-                    wasInterrupted = true;
+                    interrupted = true;
                 } catch (final Exception ex) {
                     break;
                 }
             }
         } finally {
-            if (wasInterrupted) {
+            if (interrupted) {
                 Thread.currentThread().interrupt();
             }
         }

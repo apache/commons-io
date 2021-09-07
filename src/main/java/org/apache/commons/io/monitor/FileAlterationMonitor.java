@@ -34,7 +34,7 @@ public final class FileAlterationMonitor implements Runnable {
 
     private static final FileAlterationObserver[] EMPTY_ARRAY = {};
 
-    private final long interval;
+    private final long intervalMillis;
     private final List<FileAlterationObserver> observers = new CopyOnWriteArrayList<>();
     private Thread thread;
     private ThreadFactory threadFactory;
@@ -44,17 +44,17 @@ public final class FileAlterationMonitor implements Runnable {
      * Constructs a monitor with a default interval of 10 seconds.
      */
     public FileAlterationMonitor() {
-        this(10000);
+        this(10_000);
     }
 
     /**
      * Constructs a monitor with the specified interval.
      *
-     * @param interval The amount of time in milliseconds to wait between
+     * @param intervalMillis The amount of time in milliseconds to wait between
      * checks of the file system.
      */
-    public FileAlterationMonitor(final long interval) {
-        this.interval = interval;
+    public FileAlterationMonitor(final long intervalMillis) {
+        this.intervalMillis = intervalMillis;
     }
 
     /**
@@ -98,7 +98,7 @@ public final class FileAlterationMonitor implements Runnable {
      * @return the interval
      */
     public long getInterval() {
-        return interval;
+        return intervalMillis;
     }
 
     /**
@@ -171,7 +171,7 @@ public final class FileAlterationMonitor implements Runnable {
      * @throws Exception if an error occurs initializing the observer
      */
     public synchronized void stop() throws Exception {
-        stop(interval);
+        stop(intervalMillis);
     }
 
     /**
@@ -211,7 +211,7 @@ public final class FileAlterationMonitor implements Runnable {
                 break;
             }
             try {
-                Thread.sleep(interval);
+                Thread.sleep(intervalMillis);
             } catch (final InterruptedException ignored) {
                 // ignore
             }
