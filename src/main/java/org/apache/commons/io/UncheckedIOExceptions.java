@@ -38,7 +38,8 @@ public class UncheckedIOExceptions {
      * @return a new UncheckedIOException.
      */
     public static UncheckedIOException create(final Object message) {
-        return new UncheckedIOException(Objects.toString(message), new IOException(Objects.toString(message)));
+        final String string = Objects.toString(message);
+        return new UncheckedIOException(string, new IOException(string));
     }
 
     /**
