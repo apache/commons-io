@@ -42,6 +42,7 @@ import java.nio.file.LinkOption;
 import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.FileTime;
 import java.time.Instant;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -1974,7 +1975,28 @@ public class FileUtils {
         // https://bugs.openjdk.java.net/browse/JDK-8177809
         // File.lastModified() is losing milliseconds (always ends in 000)
         // This bug is in OpenJDK 8 and 9, and fixed in 10.
-        return Files.getLastModifiedTime(Objects.requireNonNull(file.toPath(), "file")).toMillis();
+        return lastModifiedFileTime(file).toMillis();
+    }
+
+    /**
+     * Returns the last modification {@link FileTime} via
+     * {@link java.nio.file.Files#getLastModifiedTime(Path, LinkOption...)}.
+     * <p>
+     * Use this method to avoid issues with {@link File#lastModified()} like
+     * <a href="https://bugs.openjdk.java.net/browse/JDK-8177809">JDK-8177809</a> where {@link File#lastModified()} is
+     * losing milliseconds (always ends in 000). This bug exists in OpenJDK 8 and 9, and is fixed in 10.
+     * </p>
+     *
+     * @param file The File to query.
+     * @return See {@link java.nio.file.Files#getLastModifiedTime(Path, LinkOption...)}.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.12.0
+     */
+    public static FileTime lastModifiedFileTime(final File file) throws IOException {
+        // https://bugs.openjdk.java.net/browse/JDK-8177809
+        // File.lastModified() is losing milliseconds (always ends in 000)
+        // This bug is in OpenJDK 8 and 9, and fixed in 10.
+        return Files.getLastModifiedTime(Objects.requireNonNull(file.toPath(), "file"));
     }
 
     /**

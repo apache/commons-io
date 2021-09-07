@@ -100,7 +100,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
      *        cutoff).
      */
     public AgeFileFilter(final Date cutoffDate, final boolean acceptOlder) {
-        this(cutoffDate.getTime(), acceptOlder);
+        this(cutoffDate.toInstant(), acceptOlder);
     }
 
     /**
@@ -126,6 +126,17 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
     }
 
     /**
+     * Constructs a new age file filter for files equal to or older than a certain cutoff
+     *
+     * @param cutoffInstant The cutoff time threshold measured in milliseconds since the epoch (00:00:00 GMT, January 1,
+     *        1970).
+     * @since 2.12.0
+     */
+    public AgeFileFilter(final Instant cutoffInstant) {
+        this(cutoffInstant, true);
+    }
+
+    /**
      * Constructs a new age file filter for files on any one side of a certain cutoff.
      *
      * @param cutoffInstant The cutoff time threshold since the epoch (00:00:00 GMT, January 1,
@@ -146,7 +157,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
      *        1970).
      */
     public AgeFileFilter(final long cutoffMillis) {
-        this(cutoffMillis, true);
+        this(Instant.ofEpochMilli(cutoffMillis), true);
     }
 
     /**
