@@ -3162,7 +3162,7 @@ public class FileUtils {
     }
 
     /**
-     * Waits for NFS to propagate a file creation, imposing a timeout.
+     * Waits for the file system to propagate a file creation, with a timeout.
      * <p>
      * This method repeatedly tests {@link File#exists()} until it returns
      * true up to the maximum time specified in seconds.

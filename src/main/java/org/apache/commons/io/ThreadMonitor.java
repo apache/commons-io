@@ -47,7 +47,7 @@ class ThreadMonitor implements Runnable {
     /**
      * Start monitoring the current thread.
      *
-     * @param timeout The timeout amount in milliseconds
+     * @param timeout The timeout amount.
      * or no timeout if the value is zero or less
      * @return The monitor thread or {@code null}
      * if the timeout amount is not greater than zero
@@ -60,7 +60,7 @@ class ThreadMonitor implements Runnable {
      * Start monitoring the specified thread.
      *
      * @param thread The thread The thread to monitor
-     * @param timeout The timeout amount in milliseconds
+     * @param timeout The timeout amount.
      * or no timeout if the value is zero or less
      * @return The monitor thread or {@code null}
      * if the timeout amount is not greater than zero
@@ -90,8 +90,8 @@ class ThreadMonitor implements Runnable {
     /**
      * Constructs a new monitor.
      *
-     * @param thread The thread to monitor
-     * @param timeout The timeout amount in milliseconds
+     * @param thread The thread to monitor.
+     * @param timeout The timeout amount.
      */
     private ThreadMonitor(final Thread thread, final Duration timeout) {
         this.thread = thread;
