@@ -43,6 +43,7 @@ import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.FileTime;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -3175,28 +3176,7 @@ public class FileUtils {
      */
     public static boolean waitFor(final File file, final int seconds) {
         Objects.requireNonNull(file, "file");
-        final long finishAtMillis = System.currentTimeMillis() + (seconds * 1000L);
-        boolean wasInterrupted = false;
-        try {
-            while (!file.exists()) {
-                final long remainingMillis = finishAtMillis -  System.currentTimeMillis();
-                if (remainingMillis < 0){
-                    return false;
-                }
-                try {
-                    Thread.sleep(Math.min(100, remainingMillis));
-                } catch (final InterruptedException ignore) {
-                    wasInterrupted = true;
-                } catch (final Exception ex) {
-                    break;
-                }
-            }
-        } finally {
-            if (wasInterrupted) {
-                Thread.currentThread().interrupt();
-            }
-        }
-        return true;
+        return PathUtils.waitFor(file.toPath(), Duration.ofSeconds(seconds), PathUtils.EMPTY_LINK_OPTION_ARRAY);
     }
 
     /**

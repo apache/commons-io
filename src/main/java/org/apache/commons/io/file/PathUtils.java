@@ -47,6 +47,7 @@ import java.nio.file.attribute.FileTime;
 import java.nio.file.attribute.PosixFileAttributeView;
 import java.nio.file.attribute.PosixFileAttributes;
 import java.nio.file.attribute.PosixFilePermission;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1066,6 +1067,46 @@ public final class PathUtils {
      */
     public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final URI uri) throws IOException {
         return visitFileTree(visitor, Paths.get(uri));
+    }
+
+    /**
+     * Waits for the file system to propagate a file creation, with a timeout.
+     * <p>
+     * This method repeatedly tests {@link File#exists()} until it returns true up to the maximum time specified in seconds.
+     * </p>
+     *
+     * @param file the file to check, must not be {@code null}.
+     * @param duration the maximum time in seconds to wait.
+     * @param options options indicating how symbolic links are handled.
+     * @return true if file exists.
+     * @throws NullPointerException if the file is {@code null}.
+     * @since 2.12.0
+     */
+    public static boolean waitFor(final Path file, final Duration duration, LinkOption... options) {
+        Objects.requireNonNull(file, "file");
+        final Instant finishInstant = Instant.now().plus(duration);
+        boolean wasInterrupted = false;
+        final long minSleepMillis = 100;
+        try {
+            while (!Files.exists(file, options)) {
+                final long remainingMillis = finishInstant.minusMillis(System.currentTimeMillis()).toEpochMilli();
+                if (remainingMillis < 0) {
+                    return false;
+                }
+                try {
+                    Thread.sleep(Math.min(minSleepMillis, remainingMillis));
+                } catch (final InterruptedException ignore) {
+                    wasInterrupted = true;
+                } catch (final Exception ex) {
+                    break;
+                }
+            }
+        } finally {
+            if (wasInterrupted) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        return true;
     }
 
     /**

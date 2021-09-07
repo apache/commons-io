@@ -164,9 +164,12 @@ The <action> type attribute can be add,update,fix,remove.
         Add FileTimes.
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">
-        Update FileEntry to use FileTime instead of long for file time stamps.
+        Add PathUtils.waitFor(Path, Duration, LinkOption...).
       </action>
       <!-- UPDATE -->
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Update FileEntry to use FileTime instead of long for file time stamps.
+      </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump Maven Javadoc plugin from 3.2.0 to 3.3.0.
       </action>
