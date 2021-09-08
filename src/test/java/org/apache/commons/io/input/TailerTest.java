@@ -39,9 +39,12 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.TestResources;
@@ -149,19 +152,19 @@ public class TailerTest {
             }
             out.close(); // ensure data is written
 
-           final long testDelayMillis = delay * 10;
-           TestUtils.sleep(testDelayMillis);
-           final List<String> tailerlines = listener.getLines();
-           assertEquals(lines.size(), tailerlines.size(), "line count");
-           for(int i = 0,len = lines.size();i<len;i++){
-               final String expected = lines.get(i);
-               final String actual = tailerlines.get(i);
-               if (!expected.equals(actual)) {
-                   fail("Line: " + i
-                           + "\nExp: (" + expected.length() + ") " + expected
-                           + "\nAct: (" + actual.length() + ") "+ actual);
-               }
-           }
+            final long testDelayMillis = delay * 10;
+            TestUtils.sleep(testDelayMillis);
+            final List<String> tailerlines = listener.getLines();
+            assertEquals(lines.size(), tailerlines.size(), "line count");
+            for(int i = 0,len = lines.size();i<len;i++){
+                final String expected = lines.get(i);
+                final String actual = tailerlines.get(i);
+                if (!expected.equals(actual)) {
+                    fail("Line: " + i
+                            + "\nExp: (" + expected.length() + ") " + expected
+                            + "\nAct: (" + actual.length() + ") "+ actual);
+                }
+            }
         }
     }
 
@@ -290,13 +293,13 @@ public class TailerTest {
     }
 
     protected void createFile(final File file, final long size)
-        throws IOException {
+            throws IOException {
         if (!file.getParentFile().exists()) {
             throw new IOException("Cannot create file " + file
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output =
-                new BufferedOutputStream(Files.newOutputStream(file.toPath()))) {
+                     new BufferedOutputStream(Files.newOutputStream(file.toPath()))) {
             TestUtils.generateTestData(output, size);
         }
 
@@ -429,6 +432,168 @@ public class TailerTest {
         assertEquals("CRCR\r", lines.get(3), "line 4");
     }
 
+    @Test
+    public void testSimpleConstructor() throws Exception {
+        final File file = new File(temporaryFolder, "tailer-simple-constructor.txt");
+        createFile(file, 0);
+        final TestTailerListener listener = new TestTailerListener(1);
+        final Tailer tailer = new Tailer(file, listener);
+        final Thread thread = new Thread(tailer);
+        thread.start();
+        validateTailer(listener, tailer, file);
+    }
+
+    @Test
+    public void testSimpleConstructorWithDelay() throws Exception {
+        final File file = new File(temporaryFolder, "tailer-simple-constructor-with-delay.txt");
+        createFile(file, 0);
+        final TestTailerListener listener = new TestTailerListener(1);
+        final Tailer tailer = new Tailer(file, listener, 1500);
+        final Thread thread = new Thread(tailer);
+        thread.start();
+        validateTailer(listener, tailer, file);
+    }
+
+    @Test
+    public void testSimpleConstructorWithDelayAndFromStart() throws Exception {
+        final File file = new File(temporaryFolder, "tailer-simple-constructor-with-delay-and-from-start.txt");
+        createFile(file, 0);
+        final TestTailerListener listener = new TestTailerListener(1);
+        final Tailer tailer = new Tailer(file, listener, 1500, false);
+        final Thread thread = new Thread(tailer);
+        thread.start();
+        validateTailer(listener, tailer, file);
+    }
+
+    @Test
+    public void testSimpleConstructorWithDelayAndFromStartWithReopen() throws Exception {
+        final File file = new File(temporaryFolder, "tailer-simple-constructor-with-delay-and-from-start-with-reopen.txt");
+        createFile(file, 0);
+        final TestTailerListener listener = new TestTailerListener(1);
+        final Tailer tailer = new Tailer(file, listener, 1500, false, false);
+        final Thread thread = new Thread(tailer);
+        thread.start();
+        validateTailer(listener, tailer, file);
+    }
+
+    @Test
+    public void testSimpleConstructorWithDelayAndFromStartWithBufferSize() throws Exception {
+        final File file = new File(temporaryFolder, "tailer-simple-constructor-with-delay-and-from-start-with-buffersize.txt");
+        createFile(file, 0);
+        final TestTailerListener listener = new TestTailerListener(1);
+        final Tailer tailer = new Tailer(file, listener, 1500, false, 1024);
+        final Thread thread = new Thread(tailer);
+        thread.start();
+        validateTailer(listener, tailer, file);
+    }
+
+    @Test
+    public void testSimpleConstructorWithDelayAndFromStartWithReopenAndBufferSize() throws Exception {
+        final File file = new File(temporaryFolder, "tailer-simple-constructor-with-delay-and-from-start-with-reopen-and-buffersize.txt");
+        createFile(file, 0);
+        final TestTailerListener listener = new TestTailerListener(1);
+        final Tailer tailer = new Tailer(file, listener, 1500, false, true,1024);
+        final Thread thread = new Thread(tailer);
+        thread.start();
+        validateTailer(listener, tailer, file);
+    }
+
+    @Test
+    public void testSimpleConstructorWithDelayAndFromStartWithReopenAndBufferSizeAndCharset() throws Exception {
+        final File file = new File(temporaryFolder, "tailer-simple-constructor-with-delay-and-from-start-with-reopen-and-buffersize-and-charset.txt");
+        createFile(file, 0);
+        final TestTailerListener listener = new TestTailerListener(1);
+        final Tailer tailer = new Tailer(file, StandardCharsets.UTF_8, listener, 1500, false, true,1024);
+        final Thread thread = new Thread(tailer);
+        thread.start();
+        validateTailer(listener, tailer, file);
+    }
+
+    @Test
+    public void testCreate() throws Exception {
+        final File file = new File(temporaryFolder, "tailer-create.txt");
+        createFile(file, 0);
+        final TestTailerListener listener = new TestTailerListener(1);
+        final Tailer tailer = Tailer.create(file, listener);
+        validateTailer(listener, tailer, file);
+    }
+
+    @Test
+    public void testCreateWithDelay() throws Exception {
+        final File file = new File(temporaryFolder, "tailer-create-with-delay.txt");
+        createFile(file, 0);
+        final TestTailerListener listener = new TestTailerListener(1);
+        final Tailer tailer = Tailer.create(file, listener, 1500);
+        validateTailer(listener, tailer, file);
+    }
+
+    @Test
+    public void testCreateWithDelayAndFromStart() throws Exception {
+        final File file = new File(temporaryFolder, "tailer-create-with-delay-and-from-start.txt");
+        createFile(file, 0);
+        final TestTailerListener listener = new TestTailerListener(1);
+        final Tailer tailer = Tailer.create(file, listener, 1500, false);
+        validateTailer(listener, tailer, file);
+    }
+
+    @Test
+    public void testCreaterWithDelayAndFromStartWithReopen() throws Exception {
+        final File file = new File(temporaryFolder, "tailer-create-with-delay-and-from-start-with-reopen.txt");
+        createFile(file, 0);
+        final TestTailerListener listener = new TestTailerListener(1);
+        final Tailer tailer = Tailer.create(file, listener, 1500, false, false);
+        validateTailer(listener, tailer, file);
+    }
+
+    @Test
+    public void testCreateWithDelayAndFromStartWithBufferSize() throws Exception {
+        final File file = new File(temporaryFolder, "tailer-create-with-delay-and-from-start-with-buffersize.txt");
+        createFile(file, 0);
+        final TestTailerListener listener = new TestTailerListener(1);
+        final Tailer tailer = Tailer.create(file, listener, 1500, false, 1024);
+        validateTailer(listener, tailer, file);
+    }
+
+    @Test
+    public void testCreateWithDelayAndFromStartWithReopenAndBufferSize() throws Exception {
+        final File file = new File(temporaryFolder, "tailer-create-with-delay-and-from-start-with-reopen-and-buffersize.txt");
+        createFile(file, 0);
+        final TestTailerListener listener = new TestTailerListener(1);
+        final Tailer tailer = Tailer.create(file, listener, 1500, false, true,1024);
+        validateTailer(listener, tailer, file);
+    }
+
+    @Test
+    public void testCreateWithDelayAndFromStartWithReopenAndBufferSizeAndCharset() throws Exception {
+        final File file = new File(temporaryFolder, "tailer-create-with-delay-and-from-start-with-reopen-and-buffersize-and-charset.txt");
+        createFile(file, 0);
+        final TestTailerListener listener = new TestTailerListener(1);
+        final Tailer tailer = Tailer.create(file, StandardCharsets.UTF_8, listener, 1500, false, true,1024);
+        validateTailer(listener, tailer, file);
+    }
+
+    @Test
+    public void testBuilderWithNonStandardTailable() throws Exception {
+        final File file = new File(temporaryFolder, "tailer-create-with-delay-and-from-start-with-reopen-and-buffersize-and-charset.txt");
+        createFile(file, 0);
+        final TestTailerListener listener = new TestTailerListener(1);
+        final Tailer tailer = new Tailer.Builder(new NonStandardTailable(file), listener).build();
+        assertTrue(tailer.getTailable() instanceof NonStandardTailable);
+        validateTailer(listener, tailer, file);
+    }
+
+    private void validateTailer(final TestTailerListener listener, final Tailer tailer, final File file) throws Exception {
+        try {
+            write(file, "foo");
+            final int timeout = 30;
+            final TimeUnit timeoutUnit = TimeUnit.SECONDS;
+            assertTrue(listener.awaitExpectedLines(timeout, timeoutUnit), () -> String.format("await timed out after %s %s", timeout, timeoutUnit));
+            assertEquals(listener.getLines(), Lists.newArrayList("foo"), "lines");
+        } finally {
+            tailer.stop();
+        }
+    }
+
     /**
      * Test {@link TailerListener} implementation.
      */
@@ -436,6 +601,8 @@ public class TailerTest {
 
         // Must be synchronized because it is written by one thread and read by another
         private final List<String> lines = Collections.synchronizedList(new ArrayList<>());
+
+        private final CountDownLatch latch;
 
         volatile Exception exception;
 
@@ -447,9 +614,18 @@ public class TailerTest {
 
         volatile int reachedEndOfFile;
 
+        public TestTailerListener() {
+            latch = new CountDownLatch(1);
+        }
+
+        public TestTailerListener(final int expectedLines) {
+            latch = new CountDownLatch(expectedLines);
+        }
+
         @Override
         public void handle(final String line) {
             lines.add(line);
+            latch.countDown();
         }
 
         public List<String> getLines() {
@@ -483,6 +659,75 @@ public class TailerTest {
         @Override
         public void endOfFileReached() {
             reachedEndOfFile++; // not atomic, but OK because only updated here.
+        }
+
+        public boolean awaitExpectedLines(long timeout, TimeUnit timeUnit) throws InterruptedException {
+            return latch.await(timeout, timeUnit);
+        }
+    }
+
+    private static class NonStandardTailable implements Tailer.Tailable {
+        private final File file;
+
+        public NonStandardTailable(final File file) {
+            this.file = file;
+        }
+
+        @Override
+        public String getFileName() {
+            return file.getName();
+        }
+
+        @Override
+        public String getPathName() {
+            return file.getPath();
+        }
+
+        @Override
+        public long length() {
+            return file.length();
+        }
+
+        @Override
+        public long lastModified() throws IOException {
+            return FileUtils.lastModified(file);
+        }
+
+        @Override
+        public boolean exists() {
+            return file.exists();
+        }
+
+        @Override
+        public boolean isFileNewer(final long last) {
+            return FileUtils.isFileNewer(file, last);
+        }
+
+        @Override
+        public Tailer.RandomAccessTailable getRandomAccess(final String mode) throws FileNotFoundException {
+            return new Tailer.RandomAccessTailable() {
+                private final RandomAccessFile reader = new RandomAccessFile(file, mode);
+
+                @Override
+                public long getFilePointer() throws IOException {
+                    return reader.getFilePointer();
+                }
+
+                @Override
+                public void seek(final long position) throws IOException {
+                    reader.seek(position);
+                }
+
+                @Override
+                public int read(final byte[] b) throws IOException {
+                    return reader.read(b);
+                }
+
+                @Override
+                public void close() throws IOException {
+                    reader.close();
+                }
+            };
         }
     }
 }
