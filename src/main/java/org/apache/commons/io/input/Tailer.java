@@ -645,8 +645,7 @@ public class Tailer implements Runnable {
          * @param listener the TailerListener to use.
          */
         public Builder(final File file, final TailerListener listener) {
-            this.tailable = new FileTailable(file);
-            this.listener = listener;
+            this(new FileTailable(file), listener);
         }
 
         /**
@@ -657,6 +656,12 @@ public class Tailer implements Runnable {
          * @param listener the TailerListener to use.
          */
         public Builder(final Tailable tailable, final TailerListener listener) {
+            if (tailable == null) {
+                throw new NullPointerException("tailable");
+            }
+            if (listener == null) {
+                throw new NullPointerException("listener");
+            }
             this.tailable = tailable;
             this.listener = listener;
         }
@@ -668,6 +673,9 @@ public class Tailer implements Runnable {
          * @return Builder with specific charset
          */
         public Builder withCharset(final Charset charset) {
+            if (charset == null) {
+                throw new NullPointerException("charset");
+            }
             this.charset = charset;
             return this;
         }
@@ -690,6 +698,9 @@ public class Tailer implements Runnable {
          * @return Builder with specific delay duration
          */
         public Builder withDelayDuration(final Duration delayDuration) {
+            if (delayDuration == null) {
+                throw new NullPointerException("delayDuration");
+            }
             this.delayDuration = delayDuration;
             return this;
         }
@@ -775,6 +786,7 @@ public class Tailer implements Runnable {
          * was last modified, measured in milliseconds since the epoch
          * (00:00:00 GMT, January 1, 1970), or {@code 0L} if the
          * tailable does not exist or if an I/O error occurs
+         * @throws IOException if an I/O error occurs.
          */
         long lastModified() throws IOException;
 
