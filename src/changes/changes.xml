@@ -172,6 +172,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add org.apache.commons.io.input.Tailer.getDelayDuration().
       </action>
+      <action dev="jonfreedman" type="add" due-to="Jon Freedman">
+        Add Tailer.Tailable interface to allow tailing of remote files for example using jCIFS.
+      </action>
       <!-- UPDATE -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Update FileEntry to use FileTime instead of long for file time stamps.
@@ -246,7 +249,7 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <!-- UPDATE -->
       <action dev="ggregory" type="update" due-to="Dependabot">
-        Bump mockito-inline from 3.11.0 to 3.11.2 #247. 
+        Bump mockito-inline from 3.11.0 to 3.11.2 #247.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump jmh.version from 1.27 to 1.32 #237.
@@ -285,7 +288,7 @@ The <action> type attribute can be add,update,fix,remove.
         Bump checkstyle from 8.42 to 8.44 #241, #248.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
-        Bump mockito-inline from 3.10.0 to 3.11.0 #242. 
+        Bump mockito-inline from 3.10.0 to 3.11.0 #242.
       </action>
     </release>
     <release version="2.9.0" date="2021-05-22" description="Java 8 required.">
