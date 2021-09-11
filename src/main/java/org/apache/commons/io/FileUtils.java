@@ -1116,6 +1116,17 @@ public class FileUtils {
     }
 
     /**
+     * Gets the current directory.
+     *
+     * @return the current directory.
+     *
+     * @since 2.12.0
+     */
+    public static File current() {
+        return PathUtils.current().toFile();
+    }
+
+    /**
      * Decodes the specified URL as per RFC 3986, i.e. transforms
      * percent-encoded octets to characters by decoding with the UTF-8 character
      * set. This function is primarily intended for usage with
@@ -3601,4 +3612,5 @@ public class FileUtils {
     public FileUtils() { //NOSONAR
 
     }
+
 }
