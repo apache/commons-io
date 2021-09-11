@@ -35,7 +35,11 @@ public class FileUtilsWaitForTestCase {
     @Test
     public void testWaitFor() {
         FileUtils.waitFor(FileUtils.current(), -1);
-        FileUtils.waitFor(FileUtils.current(), 2);
+    }
+
+    @Test
+    public void testWaitForNegativeDuration() {
+        FileUtils.waitFor(FileUtils.current(), -1);
     }
 
     @Test
