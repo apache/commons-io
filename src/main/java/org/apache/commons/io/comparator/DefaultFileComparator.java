@@ -25,9 +25,11 @@ import java.util.Comparator;
  * <p>
  * This comparator can be used to sort lists or arrays of files
  * by using the default file comparison.
+ * </p>
  * <p>
  * Example of sorting a list of files using the
  * {@link #DEFAULT_COMPARATOR} singleton instance:
+ * </p>
  * <pre>
  *       List&lt;File&gt; list = ...
  *       ((AbstractFileComparator) DefaultFileComparator.DEFAULT_COMPARATOR).sort(list);
@@ -35,11 +37,11 @@ import java.util.Comparator;
  * <p>
  * Example of doing a <i>reverse</i> sort of an array of files using the
  * {@link #DEFAULT_REVERSE} singleton instance:
+ * </p>
  * <pre>
  *       File[] array = ...
  *       ((AbstractFileComparator) DefaultFileComparator.DEFAULT_REVERSE).sort(array);
  * </pre>
- * <p>
  *
  * @since 1.4
  */

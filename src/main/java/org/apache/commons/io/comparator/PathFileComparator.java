@@ -30,9 +30,11 @@ import org.apache.commons.io.IOCase;
  * system dependent case sensitive way. A number of singleton instances
  * are provided for the various case sensitivity options (using {@link IOCase})
  * and the reverse of those options.
+ * </p>
  * <p>
  * Example of a <i>case-sensitive</i> file path sort using the
  * {@link #PATH_COMPARATOR} singleton instance:
+ * </p>
  * <pre>
  *       List&lt;File&gt; list = ...
  *       ((AbstractFileComparator) PathFileComparator.PATH_COMPARATOR).sort(list);
@@ -40,12 +42,12 @@ import org.apache.commons.io.IOCase;
  * <p>
  * Example of a <i>reverse case-insensitive</i> file path sort using the
  * {@link #PATH_INSENSITIVE_REVERSE} singleton instance:
+ * </p>
  * <pre>
  *       File[] array = ...
  *       ((AbstractFileComparator) PathFileComparator.PATH_INSENSITIVE_REVERSE).sort(array);
  * </pre>
- * <p>
- *
+  *
  * @since 1.4
  */
 public class PathFileComparator extends AbstractFileComparator implements Serializable {

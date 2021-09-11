@@ -1923,7 +1923,6 @@ public class FileUtils {
      * <p>
      * The resulting iterator MUST be consumed in its entirety in order to close its underlying stream.
      * </p>
-     * <p>
      *
      * @param directory  the directory to search in
      * @param extensions an array of extensions, ex. {"java","xml"}. If this
