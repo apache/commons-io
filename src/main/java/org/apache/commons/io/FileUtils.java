@@ -2373,6 +2373,8 @@ public class FileUtils {
      *        IOException.
      * @throws NullPointerException if any of the given {@code File}s are {@code null}.
      * @throws FileExistsException if the directory or file exists in the destination directory.
+     * @throws FileNotFoundException if the file does not exist, is a directory rather than a regular file, or for some
+     *         other reason cannot be opened for reading.
      * @throws IOException if source or destination is invalid.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeeded.
      * @since 1.4
