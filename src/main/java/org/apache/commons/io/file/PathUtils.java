@@ -1107,7 +1107,7 @@ public final class PathUtils {
                 Thread.currentThread().interrupt();
             }
         }
-        return true;
+        return Files.exists(file, options);
     }
 
     /**

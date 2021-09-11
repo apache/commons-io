@@ -48,7 +48,7 @@ public class FileUtilsWaitForTestCase {
         final CountDownLatch started = new CountDownLatch(1);
         final Thread thread1 = new Thread(() -> {
             started.countDown();
-            FileUtils.waitFor(FileUtils.current(), 2);
+            assertTrue(FileUtils.waitFor(FileUtils.current(), 4));
             wasInterrupted.set(Thread.currentThread().isInterrupted());
         });
         thread1.start();
