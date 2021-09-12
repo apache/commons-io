@@ -1866,7 +1866,7 @@ public class FileUtils {
      * @param   file the path to the file.
      * @param   options options indicating how symbolic links are handled
      * @return  {@code true} if the file is a regular file; {@code false} if
-     *          the path is null, the file does not exist, is not a directory, or it cannot
+     *          the path is null, the file does not exist, is not a regular file, or it cannot
      *          be determined if the file is a regular file or not.
      * @throws SecurityException     In the case of the default provider, and a security manager is installed, the
      *                               {@link SecurityManager#checkRead(String) checkRead} method is invoked to check read
