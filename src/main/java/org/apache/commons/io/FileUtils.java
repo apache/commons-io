@@ -1144,14 +1144,14 @@ public class FileUtils {
         String decoded = url;
         if (url != null && url.indexOf('%') >= 0) {
             final int n = url.length();
-            final StringBuilder buffer = new StringBuilder();
-            final ByteBuffer bytes = ByteBuffer.allocate(n);
+            final StringBuilder builder = new StringBuilder();
+            final ByteBuffer byteBuffer = ByteBuffer.allocate(n);
             for (int i = 0; i < n; ) {
                 if (url.charAt(i) == '%') {
                     try {
                         do {
                             final byte octet = (byte) Integer.parseInt(url.substring(i + 1, i + 3), 16);
-                            bytes.put(octet);
+                            byteBuffer.put(octet);
                             i += 3;
                         } while (i < n && url.charAt(i) == '%');
                         continue;
@@ -1159,16 +1159,16 @@ public class FileUtils {
                         // malformed percent-encoded octet, fall through and
                         // append characters literally
                     } finally {
-                        if (bytes.position() > 0) {
-                            bytes.flip();
-                            buffer.append(StandardCharsets.UTF_8.decode(bytes).toString());
-                            bytes.clear();
+                        if (byteBuffer.position() > 0) {
+                            byteBuffer.flip();
+                            builder.append(StandardCharsets.UTF_8.decode(byteBuffer).toString());
+                            byteBuffer.clear();
                         }
                     }
                 }
-                buffer.append(url.charAt(i++));
+                builder.append(url.charAt(i++));
             }
-            decoded = buffer.toString();
+            decoded = builder.toString();
         }
         return decoded;
     }
