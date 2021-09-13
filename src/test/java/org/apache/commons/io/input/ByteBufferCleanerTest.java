@@ -23,7 +23,7 @@ import java.nio.ByteBuffer;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.Test;
 
-class ByteBufferCleanerTest {
+public class ByteBufferCleanerTest {
 
     @Test
     void testSupported() {
