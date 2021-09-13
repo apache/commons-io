@@ -506,7 +506,7 @@ file comparators, endian transformation classes, and much more.
               <overwriteExistingFiles>true</overwriteExistingFiles>
               <module>
                 <moduleInfo>
-                  <name>commons.io</name>
+                  <name>org.apache.commons.io</name>
                 </moduleInfo>
               </module>
             </configuration>
