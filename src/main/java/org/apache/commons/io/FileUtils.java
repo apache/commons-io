@@ -2269,7 +2269,7 @@ public class FileUtils {
     /**
      * Moves a directory to another directory.
      *
-     * @param src the file to be moved.
+     * @param source the file to be moved.
      * @param destDir the destination file.
      * @param createDestDir If {@code true} create the destination directory, otherwise if {@code false} throw an
      *        IOException.
@@ -2279,9 +2279,9 @@ public class FileUtils {
      * @throws IOException if an error occurs or setting the last-modified time didn't succeeded.
      * @since 1.4
      */
-    public static void moveDirectoryToDirectory(final File src, final File destDir, final boolean createDestDir)
+    public static void moveDirectoryToDirectory(final File source, final File destDir, final boolean createDestDir)
             throws IOException {
-        validateMoveParameters(src, destDir);
+        validateMoveParameters(source, destDir);
         if (!destDir.isDirectory()) {
             if (destDir.exists()) {
                 throw new IOException("Destination '" + destDir + "' is not a directory");
@@ -2292,7 +2292,7 @@ public class FileUtils {
             }
             mkdirs(destDir);
         }
-        moveDirectory(src, new File(destDir, src.getName()));
+        moveDirectory(source, new File(destDir, source.getName()));
     }
 
     /**
@@ -2308,6 +2308,7 @@ public class FileUtils {
      * @param destFile the destination file.
      * @throws NullPointerException if any of the given {@code File}s are {@code null}.
      * @throws FileExistsException if the destination file exists.
+     * @throws FileNotFoundException if the source file does not exist.
      * @throws IOException if source or destination is invalid.
      * @throws IOException if an error occurs.
      * @since 1.4
@@ -2327,6 +2328,7 @@ public class FileUtils {
      * @param copyOptions Copy options.
      * @throws NullPointerException if any of the given {@code File}s are {@code null}.
      * @throws FileExistsException if the destination file exists.
+     * @throws FileNotFoundException if the source file does not exist.
      * @throws IOException if source or destination is invalid.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeeded.
      * @since 2.9.0
@@ -2356,6 +2358,7 @@ public class FileUtils {
      *        IOException.
      * @throws NullPointerException if any of the given {@code File}s are {@code null}.
      * @throws FileExistsException if the destination file exists.
+     * @throws FileNotFoundException if the source file does not exist.
      * @throws IOException if source or destination is invalid.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeeded.
      * @since 1.4
@@ -2383,6 +2386,7 @@ public class FileUtils {
      *        IOException.
      * @throws NullPointerException if any of the given {@code File}s are {@code null}.
      * @throws FileExistsException if the directory or file exists in the destination directory.
+     * @throws FileNotFoundException if the source file does not exist.
      * @throws IOException if source or destination is invalid.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeeded.
      * @since 1.4
@@ -3160,9 +3164,9 @@ public class FileUtils {
      * <li>Throws {@link FileNotFoundException} if {@code source} does not exist</li>
      * </ul>
      *
-     * @param source      the file or directory to be moved
-     * @param destination the destination file or directory
-     * @throws FileNotFoundException if {@code source} file does not exist
+     * @param source      the file or directory to be moved.
+     * @param destination the destination file or directory.
+     * @throws FileNotFoundException if the source file does not exist.
      */
     private static void validateMoveParameters(final File source, final File destination) throws FileNotFoundException {
         Objects.requireNonNull(source, "source");
