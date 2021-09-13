@@ -244,7 +244,7 @@ public class ReadAheadInputStream extends InputStream {
             return activeBuffer.get() & 0xFF;
         }
         final byte[] oneByteArray = oneByte.get();
-        return read(oneByteArray, 0, 1) == EOF ? -1 : oneByteArray[0] & 0xFF;
+        return read(oneByteArray, 0, 1) == EOF ? EOF : oneByteArray[0] & 0xFF;
     }
 
     @Override
