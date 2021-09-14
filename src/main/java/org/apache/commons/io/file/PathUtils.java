@@ -943,6 +943,32 @@ public final class PathUtils {
     }
 
     /**
+     * Sets the given {@code targetFile}'s last modified time to the value from {@code sourceFile}.
+     *
+     * @param sourceFile The source path to query.
+     * @param targetFile The target path to set.
+     * @throws NullPointerException if sourceFile is {@code null}.
+     * @throws NullPointerException if targetFile is {@code null}.
+     * @throws IOException if setting the last-modified time failed.
+     * @since 2.12.0
+     */
+    public static void setLastModifiedTime(final Path sourceFile, final Path targetFile) throws IOException {
+        Objects.requireNonNull(sourceFile, "sourceFile");
+        Files.setLastModifiedTime(targetFile, Files.getLastModifiedTime(sourceFile));
+    }
+
+    /**
+     * Sets the last modified time of the given file path to now.
+     *
+     * @param path The file path to set.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.12.0
+     */
+    public static void setLastModifiedTime(final Path path) throws IOException {
+        Files.setLastModifiedTime(path, FileTime.from(Instant.now()));
+    }
+
+    /**
      * Sets the given Path to the {@code readOnly} value.
      * <p>
      * This behavior is OS dependent.

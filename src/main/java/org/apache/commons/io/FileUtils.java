@@ -2821,14 +2821,19 @@ public class FileUtils {
      * Sets the given {@code targetFile}'s last modified date to the value from {@code sourceFile}.
      *
      * @param sourceFile The source file to query.
-     * @param targetFile The target file to set.
+     * @param targetFile The target file or directory to set.
      * @throws NullPointerException if sourceFile is {@code null}.
      * @throws NullPointerException if targetFile is {@code null}.
      * @throws IOException if setting the last-modified time failed.
      */
     private static void setLastModified(final File sourceFile, final File targetFile) throws IOException {
         Objects.requireNonNull(sourceFile, "sourceFile");
-        setLastModified(targetFile, lastModified(sourceFile));
+        Objects.requireNonNull(targetFile, "targetFile");
+        if (targetFile.isFile()) {
+            PathUtils.setLastModifiedTime(targetFile.toPath(), sourceFile.toPath());
+        } else {
+            setLastModified(targetFile, lastModified(sourceFile));
+        }
     }
 
     /**
@@ -3133,7 +3138,7 @@ public class FileUtils {
         if (!file.exists()) {
             openOutputStream(file).close();
         }
-        setLastModified(file, System.currentTimeMillis());
+        PathUtils.setLastModifiedTime(file.toPath());
     }
 
     /**
