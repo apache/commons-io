@@ -267,6 +267,26 @@ public class FileUtils {
     }
 
     /**
+     * Returns a human-readable version of the file size, where the input represents a specific number of bytes.
+     * <p>
+     * If the size is over 1GB, the size is returned as the number of whole GB, i.e. the size is rounded down to the
+     * nearest GB boundary.
+     * </p>
+     * <p>
+     * Similarly for the 1MB and 1KB boundaries.
+     * </p>
+     *
+     * @param size the number of bytes
+     * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
+     * @see <a href="https://issues.apache.org/jira/browse/IO-226">IO-226 - should the rounding be changed?</a>
+     * @since 2.12.0
+     */
+    // See https://issues.apache.org/jira/browse/IO-226 - should the rounding be changed?
+    public static String byteCountToDisplaySize(final Number size) {
+        return byteCountToDisplaySize(size.longValue());
+    }
+
+    /**
      * Computes the checksum of a file using the specified checksum object. Multiple files may be checked using one
      * {@code Checksum} instance if desired simply by reusing the same checksum object. For example:
      *
@@ -1561,22 +1581,6 @@ public class FileUtils {
     }
 
     /**
-     * Tests if the specified {@code File} is newer than the specified {@code FileTime}.
-     *
-     * @param file the {@code File} of which the modification date must be compared.
-     * @param fileTime the file time reference.
-     * @return true if the {@code File} exists and has been modified after the given {@code FileTime}.
-     * @throws IOException if an I/O error occurs.
-     * @throws NullPointerException if the file or local date is {@code null}.
-     *
-     * @since 2.12.0
-     */
-    public static boolean isFileNewer(final File file, final FileTime fileTime) throws IOException {
-        Objects.requireNonNull(file, "file");
-        return PathUtils.isNewer(file.toPath(), fileTime);
-    }
-
-    /**
      * Tests if the specified {@code File} is newer than the specified {@code ChronoLocalDate}
      * at the specified time.
      *
@@ -1693,6 +1697,22 @@ public class FileUtils {
             // TODO Update method signature
             throw new UncheckedIOException(e);
         }
+    }
+
+    /**
+     * Tests if the specified {@code File} is newer than the specified {@code FileTime}.
+     *
+     * @param file the {@code File} of which the modification date must be compared.
+     * @param fileTime the file time reference.
+     * @return true if the {@code File} exists and has been modified after the given {@code FileTime}.
+     * @throws IOException if an I/O error occurs.
+     * @throws NullPointerException if the file or local date is {@code null}.
+     *
+     * @since 2.12.0
+     */
+    public static boolean isFileNewer(final File file, final FileTime fileTime) throws IOException {
+        Objects.requireNonNull(file, "file");
+        return PathUtils.isNewer(file.toPath(), fileTime);
     }
 
     /**
@@ -1864,7 +1884,28 @@ public class FileUtils {
      */
     public static boolean isFileOlder(final File file, final File reference) {
         requireExists(reference, "reference");
-        return isFileOlder(file, lastModifiedUnchecked(reference));
+        try {
+            return PathUtils.isOlder(file.toPath(), reference.toPath());
+        } catch (final IOException e) {
+            // TODO Update method signature
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    /**
+     * Tests if the specified {@code File} is older than the specified {@code FileTime}.
+     *
+     * @param file the {@code File} of which the modification date must be compared.
+     * @param fileTime the file time reference.
+     * @return true if the {@code File} exists and has been modified before the given {@code FileTime}.
+     * @throws IOException if an I/O error occurs.
+     * @throws NullPointerException if the file or local date is {@code null}.
+     *
+     * @since 2.12.0
+     */
+    public static boolean isFileOlder(final File file, final FileTime fileTime) throws IOException {
+        Objects.requireNonNull(file, "file");
+        return PathUtils.isOlder(file.toPath(), fileTime);
     }
 
     /**
@@ -1878,7 +1919,12 @@ public class FileUtils {
      */
     public static boolean isFileOlder(final File file, final Instant instant) {
         Objects.requireNonNull(instant, "instant");
-        return isFileOlder(file, instant.toEpochMilli());
+        try {
+            return PathUtils.isOlder(file.toPath(), instant);
+        } catch (final IOException e) {
+            // TODO Update method signature
+            throw new UncheckedIOException(e);
+        }
     }
 
     /**
@@ -1892,7 +1938,12 @@ public class FileUtils {
      */
     public static boolean isFileOlder(final File file, final long timeMillis) {
         Objects.requireNonNull(file, "file");
-        return file.exists() && lastModifiedUnchecked(file) < timeMillis;
+        try {
+            return PathUtils.isOlder(file.toPath(), timeMillis);
+        } catch (final IOException e) {
+            // TODO Update method signature
+            throw new UncheckedIOException(e);
+        }
     }
 
     /**
@@ -2008,6 +2059,9 @@ public class FileUtils {
      * Returns the last modification time in milliseconds via
      * {@link java.nio.file.Files#getLastModifiedTime(Path, LinkOption...)}.
      * <p>
+     * For the best precision, use {@link #lastModifiedFileTime(File)}.
+     * </p>
+     * <p>
      * Use this method to avoid issues with {@link File#lastModified()} like
      * <a href="https://bugs.openjdk.java.net/browse/JDK-8177809">JDK-8177809</a> where {@link File#lastModified()} is
      * losing milliseconds (always ends in 000). This bug exists in OpenJDK 8 and 9, and is fixed in 10.
@@ -2049,6 +2103,9 @@ public class FileUtils {
     /**
      * Returns the last modification time in milliseconds via
      * {@link java.nio.file.Files#getLastModifiedTime(Path, LinkOption...)}.
+     * <p>
+     * For the best precision, use {@link #lastModifiedFileTime(File)}.
+     * </p>
      * <p>
      * Use this method to avoid issues with {@link File#lastModified()} like
      * <a href="https://bugs.openjdk.java.net/browse/JDK-8177809">JDK-8177809</a> where {@link File#lastModified()} is

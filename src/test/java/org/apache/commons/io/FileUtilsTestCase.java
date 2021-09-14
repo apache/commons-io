@@ -459,6 +459,31 @@ public class FileUtilsTestCase {
     }
 
     @Test
+    public void testByteCountToDisplaySizeNumber() {
+        assertEquals("0 bytes", FileUtils.byteCountToDisplaySize(Integer.valueOf(0)));
+        assertEquals("1 bytes", FileUtils.byteCountToDisplaySize(Integer.valueOf(1)));
+        assertEquals("1023 bytes", FileUtils.byteCountToDisplaySize(Integer.valueOf(1023)));
+        assertEquals("1 KB", FileUtils.byteCountToDisplaySize(Integer.valueOf(1024)));
+        assertEquals("1 KB", FileUtils.byteCountToDisplaySize(Integer.valueOf(1025)));
+        assertEquals("1023 KB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024 * 1023)));
+        assertEquals("1 MB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024 * 1024)));
+        assertEquals("1 MB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024 * 1025)));
+        assertEquals("1023 MB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024 * 1024 * 1023)));
+        assertEquals("1 GB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024 * 1024 * 1024)));
+        assertEquals("1 GB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024 * 1024 * 1025)));
+        assertEquals("2 GB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024L * 1024 * 1024 * 2)));
+        assertEquals("1 GB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024 * 1024 * 1024 * 2 - 1)));
+        assertEquals("1 TB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024L * 1024 * 1024 * 1024)));
+        assertEquals("1 PB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024L * 1024 * 1024 * 1024 * 1024)));
+        assertEquals("1 EB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024L * 1024 * 1024 * 1024 * 1024 * 1024)));
+        assertEquals("7 EB", FileUtils.byteCountToDisplaySize(Long.valueOf(Long.MAX_VALUE)));
+        // Other MAX_VALUEs
+        assertEquals("63 KB", FileUtils.byteCountToDisplaySize(Integer.valueOf(Character.MAX_VALUE)));
+        assertEquals("31 KB", FileUtils.byteCountToDisplaySize(Short.valueOf(Short.MAX_VALUE)));
+        assertEquals("1 GB", FileUtils.byteCountToDisplaySize(Integer.valueOf(Integer.MAX_VALUE)));
+    }
+
+    @Test
     public void testChecksum() throws Exception {
         // create a test file
         final String text = "Imagination is more important than knowledge - Einstein";

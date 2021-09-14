@@ -231,7 +231,7 @@ public final class PathUtils {
      * @throws NullPointerException if the file is {@code null}
      */
     private static int compareLastModifiedTimeTo(final Path file, final FileTime fileTime, final LinkOption... options) throws IOException {
-        return Files.getLastModifiedTime(file, options).compareTo(fileTime);
+        return getLastModifiedTime(file, options).compareTo(fileTime);
     }
 
     /**
@@ -712,6 +712,10 @@ public final class PathUtils {
         return fileAttributeView == null ? null : fileAttributeView.getAcl();
     }
 
+    private static FileTime getLastModifiedTime(final Path path, final LinkOption... options) throws IOException {
+        return Files.getLastModifiedTime(Objects.requireNonNull(path, "path"), options);
+    }
+
     /**
      * Returns a {@link Path} representing the system temporary directory.
      *
@@ -819,8 +823,7 @@ public final class PathUtils {
      *
      * @param file the {@code Path} of which the modification date must be compared
      * @param instant the time reference.
-     * @param options options indicating how symbolic links are handled * @return true if the {@code Path} exists and has
-     *        been modified after the given time reference.
+     * @param options options indicating how symbolic links are handled.
      * @return true if the {@code Path} exists and has been modified after the given time reference.
      * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if the file is {@code null}
@@ -835,8 +838,7 @@ public final class PathUtils {
      *
      * @param file the {@code Path} of which the modification date must be compared
      * @param timeMillis the time reference measured in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
-     * @param options options indicating how symbolic links are handled * @return true if the {@code Path} exists and has
-     *        been modified after the given time reference.
+     * @param options options indicating how symbolic links are handled.
      * @return true if the {@code Path} exists and has been modified after the given time reference.
      * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if the file is {@code null}
@@ -857,7 +859,68 @@ public final class PathUtils {
      * @since 2.12.0
      */
     public static boolean isNewer(final Path file, final Path reference) throws IOException {
-        return isNewer(file, Files.getLastModifiedTime(reference));
+        return isNewer(file, getLastModifiedTime(reference));
+    }
+
+    /**
+     * Tests if the specified {@code Path} is older than the specified time reference.
+     *
+     * @param file the {@code Path} of which the modification date must be compared.
+     * @param fileTime the time reference.
+     * @param options options indicating how symbolic links are handled been modified after the given time reference.
+     * @return true if the {@code Path} exists and has been modified before the given time reference.
+     * @throws IOException if an I/O error occurs.
+     * @throws NullPointerException if the file is {@code null}
+     * @since 2.12.0
+     */
+    public static boolean isOlder(final Path file, final FileTime fileTime, final LinkOption... options) throws IOException {
+        if (notExists(file)) {
+            return false;
+        }
+        return compareLastModifiedTimeTo(file, fileTime, options) < 0;
+    }
+
+    /**
+     * Tests if the specified {@code Path} is older than the specified time reference.
+     *
+     * @param file the {@code Path} of which the modification date must be compared.
+     * @param instant the time reference.
+     * @param options options indicating how symbolic links are handled.
+     * @return true if the {@code Path} exists and has been modified after the given time reference.
+     * @throws IOException if an I/O error occurs.
+     * @throws NullPointerException if the file is {@code null}
+     * @since 2.12.0
+     */
+    public static boolean isOlder(final Path file, final Instant instant, final LinkOption... options) throws IOException {
+        return isOlder(file, FileTime.from(instant), options);
+    }
+
+    /**
+     * Tests if the specified {@code Path} is older than the specified time reference.
+     *
+     * @param file the {@code Path} of which the modification date must be compared
+     * @param timeMillis the time reference measured in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
+     * @param options options indicating how symbolic links are handled been modified after the given time reference.
+     * @return true if the {@code Path} exists and has been modified before the given time reference.
+     * @throws IOException if an I/O error occurs.
+     * @throws NullPointerException if the file is {@code null}
+     * @since 2.12.0
+     */
+    public static boolean isOlder(final Path file, final long timeMillis, final LinkOption... options) throws IOException {
+        return isOlder(file, FileTime.fromMillis(timeMillis), options);
+    }
+
+    /**
+     * Tests if the specified {@code Path} is older than the reference {@code Path}.
+     *
+     * @param file the {@code File} of which the modification date must be compared.
+     * @param reference the {@code File} of which the modification date is used.
+     * @return true if the {@code File} exists and has been modified before than the reference {@code File}.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.12.0
+     */
+    public static boolean isOlder(final Path file, final Path reference) throws IOException {
+        return isOlder(file, getLastModifiedTime(reference));
     }
 
     /**
@@ -1009,7 +1072,7 @@ public final class PathUtils {
      */
     public static void setLastModifiedTime(final Path sourceFile, final Path targetFile) throws IOException {
         Objects.requireNonNull(sourceFile, "sourceFile");
-        Files.setLastModifiedTime(targetFile, Files.getLastModifiedTime(sourceFile));
+        Files.setLastModifiedTime(targetFile, getLastModifiedTime(sourceFile));
     }
 
     /**
