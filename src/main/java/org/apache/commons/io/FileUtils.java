@@ -2427,7 +2427,7 @@ public class FileUtils {
      * @since 2.9.0
      */
     public static void moveFile(final File srcFile, final File destFile, final CopyOption... copyOptions)
-            throws IOException {
+        throws IOException {
         validateMoveParameters(srcFile, destFile);
         requireFile(srcFile, "srcFile");
         requireAbsent(destFile, "destFile");
@@ -2436,8 +2436,7 @@ public class FileUtils {
             copyFile(srcFile, destFile, copyOptions);
             if (!srcFile.delete()) {
                 FileUtils.deleteQuietly(destFile);
-                throw new IOException("Failed to delete original file '" + srcFile +
-                        "' after copy to '" + destFile + "'");
+                throw new IOException("Failed to delete original file '" + srcFile + "' after copy to '" + destFile + "'");
             }
         }
     }
