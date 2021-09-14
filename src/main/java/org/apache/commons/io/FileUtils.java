@@ -1561,6 +1561,22 @@ public class FileUtils {
     }
 
     /**
+     * Tests if the specified {@code File} is newer than the specified {@code FileTime}.
+     *
+     * @param file the {@code File} of which the modification date must be compared.
+     * @param fileTime the file time reference.
+     * @return true if the {@code File} exists and has been modified after the given {@code FileTime}.
+     * @throws IOException if an I/O error occurs.
+     * @throws NullPointerException if the file or local date is {@code null}.
+     *
+     * @since 2.12.0
+     */
+    public static boolean isFileNewer(final File file, final FileTime fileTime) throws IOException {
+        Objects.requireNonNull(file, "file");
+        return PathUtils.isNewer(file.toPath(), fileTime);
+    }
+
+    /**
      * Tests if the specified {@code File} is newer than the specified {@code ChronoLocalDate}
      * at the specified time.
      *
@@ -1637,7 +1653,12 @@ public class FileUtils {
      */
     public static boolean isFileNewer(final File file, final ChronoZonedDateTime<?> chronoZonedDateTime) {
         Objects.requireNonNull(chronoZonedDateTime, "chronoZonedDateTime");
-        return isFileNewer(file, chronoZonedDateTime.toInstant());
+        try {
+            return PathUtils.isNewer(file.toPath(), chronoZonedDateTime);
+        } catch (final IOException e) {
+            // TODO Update method signature
+            throw new UncheckedIOException(e);
+        }
     }
 
     /**
@@ -1666,7 +1687,12 @@ public class FileUtils {
      */
     public static boolean isFileNewer(final File file, final File reference) {
         requireExists(reference, "reference");
-        return isFileNewer(file, lastModifiedUnchecked(reference));
+        try {
+            return PathUtils.isNewer(file.toPath(), reference.toPath());
+        } catch (final IOException e) {
+            // TODO Update method signature
+            throw new UncheckedIOException(e);
+        }
     }
 
     /**
@@ -1681,7 +1707,12 @@ public class FileUtils {
      */
     public static boolean isFileNewer(final File file, final Instant instant) {
         Objects.requireNonNull(instant, "instant");
-        return isFileNewer(file, instant.toEpochMilli());
+        try {
+            return PathUtils.isNewer(file.toPath(), instant);
+        } catch (final IOException e) {
+            // TODO Update method signature
+            throw new UncheckedIOException(e);
+        }
     }
 
     /**
@@ -1695,7 +1726,12 @@ public class FileUtils {
      */
     public static boolean isFileNewer(final File file, final long timeMillis) {
         Objects.requireNonNull(file, "file");
-        return file.exists() && lastModifiedUnchecked(file) > timeMillis;
+        try {
+            return PathUtils.isNewer(file.toPath(), timeMillis);
+        } catch (final IOException e) {
+            // TODO Update method signature
+            throw new UncheckedIOException(e);
+        }
     }
 
     /**

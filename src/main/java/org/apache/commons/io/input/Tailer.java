@@ -26,6 +26,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.Charset;
+import java.nio.file.attribute.FileTime;
 import java.time.Duration;
 
 import org.apache.commons.io.FileUtils;
@@ -437,7 +438,7 @@ public class Tailer implements Runnable {
     public void run() {
         RandomAccessFile reader = null;
         try {
-            long last = 0; // The last time the file was checked for changes
+            FileTime last = FileTime.fromMillis(0); // The last time the file was checked for changes
             long position = 0; // position within the file
             // Open the file
             while (getRun() && reader == null) {
@@ -451,7 +452,7 @@ public class Tailer implements Runnable {
                 } else {
                     // The current position in the file
                     position = end ? file.length() : 0;
-                    last = FileUtils.lastModified(file);
+                    last = FileUtils.lastModifiedFileTime(file);
                     reader.seek(position);
                 }
             }
@@ -486,7 +487,7 @@ public class Tailer implements Runnable {
                 if (length > position) {
                     // The file has more content than it did last time
                     position = readLines(reader);
-                    last = FileUtils.lastModified(file);
+                    last = FileUtils.lastModifiedFileTime(file);
                 } else if (newer) {
                     /*
                      * This can happen if the file is truncated or overwritten with the exact same length of
@@ -497,7 +498,7 @@ public class Tailer implements Runnable {
 
                     // Now we can read new lines
                     position = readLines(reader);
-                    last = FileUtils.lastModified(file);
+                    last = FileUtils.lastModifiedFileTime(file);
                 }
                 if (reOpen && reader != null) {
                     reader.close();

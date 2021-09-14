@@ -49,6 +49,7 @@ import java.nio.file.attribute.PosixFileAttributes;
 import java.nio.file.attribute.PosixFilePermission;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.chrono.ChronoZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -217,6 +218,20 @@ public final class PathUtils {
      */
     public static PathCounters cleanDirectory(final Path directory, final DeleteOption... deleteOptions) throws IOException {
         return visitFileTree(new CleaningPathVisitor(Counters.longPathCounters(), deleteOptions), directory).getPathCounters();
+    }
+
+    /**
+     * Compares the specified {@code Path}'s last modified time to the given file time.
+     *
+     * @param file the {@code Path} of which the modification date must be compared
+     * @param fileTime the time reference.
+     * @param options options indicating how symbolic links are handled been modified after the given time reference.
+     * @return See {@link FileTime#compareTo(FileTime)}
+     * @throws IOException if an I/O error occurs.
+     * @throws NullPointerException if the file is {@code null}
+     */
+    private static int compareLastModifiedTimeTo(final Path file, final FileTime fileTime, final LinkOption... options) throws IOException {
+        return Files.getLastModifiedTime(file, options).compareTo(fileTime);
     }
 
     /**
@@ -511,7 +526,7 @@ public final class PathUtils {
         if (path1 == null || path2 == null) {
             return false;
         }
-        if (Files.notExists(path1) && Files.notExists(path2)) {
+        if (notExists(path1) && notExists(path2)) {
             return true;
         }
         final RelativeSortedPaths relativeSortedPaths = new RelativeSortedPaths(path1, path2, Integer.MAX_VALUE, linkOptions, fileVisitOption);
@@ -769,20 +784,34 @@ public final class PathUtils {
      * Tests if the specified {@code Path} is newer than the specified time reference.
      *
      * @param file the {@code Path} of which the modification date must be compared
+     * @param czdt the time reference.
+     * @param options options indicating how symbolic links are handled been modified after the given time reference.
+     * @return true if the {@code Path} exists and has been modified after the given time reference.
+     * @throws IOException if an I/O error occurs.
+     * @throws NullPointerException if the file is {@code null}
+     * @since 2.12.0
+     */
+    public static boolean isNewer(final Path file, final ChronoZonedDateTime<?> czdt, final LinkOption... options) throws IOException {
+        Objects.requireNonNull(czdt, "czdt");
+        return isNewer(file, czdt.toInstant(), options);
+    }
+
+    /**
+     * Tests if the specified {@code Path} is newer than the specified time reference.
+     *
+     * @param file the {@code Path} of which the modification date must be compared
      * @param fileTime the time reference.
-     * @param options options indicating how symbolic links are handled * @return true if the {@code Path} exists and has
-     *        been modified after the given time reference.
+     * @param options options indicating how symbolic links are handled been modified after the given time reference.
      * @return true if the {@code Path} exists and has been modified after the given time reference.
      * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if the file is {@code null}
      * @since 2.12.0
      */
     public static boolean isNewer(final Path file, final FileTime fileTime, final LinkOption... options) throws IOException {
-        Objects.requireNonNull(file, "file");
-        if (Files.notExists(file)) {
+        if (notExists(file)) {
             return false;
         }
-        return Files.getLastModifiedTime(file, options).compareTo(fileTime) > 0;
+        return compareLastModifiedTimeTo(file, fileTime, options) > 0;
     }
 
     /**
@@ -798,11 +827,7 @@ public final class PathUtils {
      * @since 2.12.0
      */
     public static boolean isNewer(final Path file, final Instant instant, final LinkOption... options) throws IOException {
-        Objects.requireNonNull(file, "file");
-        if (Files.notExists(file)) {
-            return false;
-        }
-        return Files.getLastModifiedTime(file, options).toInstant().isAfter(instant);
+        return isNewer(file, FileTime.from(instant), options);
     }
 
     /**
@@ -822,6 +847,20 @@ public final class PathUtils {
     }
 
     /**
+     * Tests if the specified {@code Path} is newer than the reference {@code Path}.
+     *
+     * @param file      the {@code File} of which the modification date must be compared.
+     * @param reference the {@code File} of which the modification date is used.
+     * @return true if the {@code File} exists and has been modified more
+     * recently than the reference {@code File}.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.12.0
+     */
+    public static boolean isNewer(final Path file, final Path reference) throws IOException {
+        return isNewer(file, Files.getLastModifiedTime(reference));
+    }
+
+    /**
      * Tests whether the specified {@code Path} is a regular file or not. Implemented as a null-safe delegate to
      * {@code Files.isRegularFile(Path path, LinkOption... options)}.
      *
@@ -836,6 +875,7 @@ public final class PathUtils {
     public static boolean isRegularFile(final Path path, final LinkOption... options) {
         return path != null && Files.isRegularFile(path, options);
     }
+
 
     /**
      * Creates a new DirectoryStream for Paths rooted at the given directory.
@@ -867,6 +907,10 @@ public final class PathUtils {
             new OpenOption[] {StandardOpenOption.CREATE, StandardOpenOption.APPEND} :
             new OpenOption[] {StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING});
         // @formatter:on
+    }
+
+    private static boolean notExists(final Path file) {
+        return Files.notExists(Objects.requireNonNull(file, "file"));
     }
 
     /**
@@ -943,6 +987,17 @@ public final class PathUtils {
     }
 
     /**
+     * Sets the last modified time of the given file path to now.
+     *
+     * @param path The file path to set.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.12.0
+     */
+    public static void setLastModifiedTime(final Path path) throws IOException {
+        Files.setLastModifiedTime(path, FileTime.from(Instant.now()));
+    }
+
+    /**
      * Sets the given {@code targetFile}'s last modified time to the value from {@code sourceFile}.
      *
      * @param sourceFile The source path to query.
@@ -955,17 +1010,6 @@ public final class PathUtils {
     public static void setLastModifiedTime(final Path sourceFile, final Path targetFile) throws IOException {
         Objects.requireNonNull(sourceFile, "sourceFile");
         Files.setLastModifiedTime(targetFile, Files.getLastModifiedTime(sourceFile));
-    }
-
-    /**
-     * Sets the last modified time of the given file path to now.
-     *
-     * @param path The file path to set.
-     * @throws IOException if an I/O error occurs.
-     * @since 2.12.0
-     */
-    public static void setLastModifiedTime(final Path path) throws IOException {
-        Files.setLastModifiedTime(path, FileTime.from(Instant.now()));
     }
 
     /**
@@ -1109,7 +1153,7 @@ public final class PathUtils {
      * @throws NullPointerException if the file is {@code null}.
      * @since 2.12.0
      */
-    public static boolean waitFor(final Path file, final Duration timeout, LinkOption... options) {
+    public static boolean waitFor(final Path file, final Duration timeout, final LinkOption... options) {
         Objects.requireNonNull(file, "file");
         final Instant finishInstant = Instant.now().plus(timeout);
         boolean interrupted = false;

@@ -23,8 +23,11 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.attribute.FileTime;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.file.attribute.FileTimes;
 import org.apache.commons.io.test.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,25 +53,22 @@ public class FileUtilsFileNewerTestCase {
         testFile1 = new File(temporaryFolder, "file1-test.txt");
         testFile2 = new File(temporaryFolder, "file2-test.txt");
         if (!testFile1.getParentFile().exists()) {
-            throw new IOException("Cannot create file " + testFile1
-                    + " as the parent directory does not exist");
+            throw new IOException("Cannot create file " + testFile1 + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output1 =
-                new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
+        try (final BufferedOutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
             TestUtils.generateTestData(output1, FILE1_SIZE);
         }
         if (!testFile2.getParentFile().exists()) {
-            throw new IOException("Cannot create file " + testFile2
-                    + " as the parent directory does not exist");
+            throw new IOException("Cannot create file " + testFile2 + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output =
-                new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()))) {
+        try (final BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()))) {
             TestUtils.generateTestData(output, FILE2_SIZE);
         }
     }
 
     /**
      * Tests the {@code isFileNewer(File, *)} methods which a "normal" file.
+     *
      * @throws IOException
      *
      * @see FileUtils#isFileNewer(File, long)
@@ -81,16 +81,17 @@ public class FileUtilsFileNewerTestCase {
             throw new IllegalStateException("The testFile1 should exist");
         }
 
-        final long fileLastModified = FileUtils.lastModified(testFile1);
-        final long TWO_SECOND = 2000;
+        final FileTime fileLastModified = Files.getLastModifiedTime(testFile1.toPath());
+        final long TWO_SECOND = 2;
 
-        testIsFileNewer("two second earlier is not newer" , testFile1, fileLastModified + TWO_SECOND, false);
-        testIsFileNewer("same time is not newer" , testFile1, fileLastModified, false);
-        testIsFileNewer("two second later is newer" , testFile1, fileLastModified - TWO_SECOND, true);
+        testIsFileNewer("two second earlier is not newer", testFile1, FileTimes.plusSeconds(fileLastModified, TWO_SECOND), false);
+        testIsFileNewer("same time is not newer", testFile1, fileLastModified, false);
+        testIsFileNewer("two second later is newer", testFile1, FileTimes.minusSeconds(fileLastModified, TWO_SECOND), true);
     }
 
     /**
      * Tests the {@code isFileNewer(File, *)} methods which a not existing file.
+     *
      * @throws IOException if an I/O error occurs.
      *
      * @see FileUtils#isFileNewer(File, long)
@@ -104,7 +105,7 @@ public class FileUtilsFileNewerTestCase {
             throw new IllegalStateException("The imaginary File exists");
         }
 
-        testIsFileNewer("imaginary file can be newer" , imaginaryFile, FileUtils.lastModified(testFile2), false);
+        testIsFileNewer("imaginary file can be newer", imaginaryFile, FileUtils.lastModifiedFileTime(testFile2), false);
     }
 
     /**
@@ -115,63 +116,57 @@ public class FileUtilsFileNewerTestCase {
      * <li>a {@code Date} which represents the time reference</li>
      * <li>a temporary file with the same last modification date as the time reference</li>
      * </ul>
-     * Then compares (with the needed {@code isFileNewer} method) the last modification date of
-     * the specified file with the specified time reference, the created {@code Date} and the temporary
-     * file.
-     * <br>
+     * Then compares (with the needed {@code isFileNewer} method) the last modification date of the specified file with the
+     * specified time reference, the created {@code Date} and the temporary file.
+     * <p>
      * The test is successful if the three comparisons return the specified wanted result.
      *
      * @param description describes the tested situation
      * @param file the file of which the last modification date is compared
-     * @param time the time reference measured in milliseconds since the epoch
+     * @param fileTime the time reference measured in milliseconds since the epoch
      * @param wantedResult the expected result
      * @throws IOException if an I/O error occurs.
-     *
-     * @see FileUtils#isFileNewer(File, long)
-     * @see FileUtils#isFileNewer(File, Date)
-     * @see FileUtils#isFileNewer(File, File)
      */
-    protected void testIsFileNewer(final String description, final File file, final long time, final boolean wantedResult) throws IOException  {
-        assertEquals(wantedResult, FileUtils.isFileNewer(file, time), description + " - time");
-        assertEquals(wantedResult, FileUtils.isFileNewer(file, new Date(time)), description + " - date");
+    protected void testIsFileNewer(final String description, final File file, final FileTime fileTime, final boolean wantedResult) throws IOException {
+        assertEquals(wantedResult, FileUtils.isFileNewer(file, fileTime), () -> description + " - FileTime");
+        assertEquals(wantedResult, FileUtils.isFileNewer(file, fileTime.toInstant()), () -> description + " - Instant");
 
         final File temporaryFile = testFile2;
-
-        temporaryFile.setLastModified(time);
-        assertEquals(time, FileUtils.lastModified(temporaryFile), "The temporary file hasn't the right last modification date");
-        assertEquals(wantedResult, FileUtils.isFileNewer(file, temporaryFile), description + " - file");
+        Files.setLastModifiedTime(temporaryFile.toPath(), fileTime);
+        assertEquals(fileTime, Files.getLastModifiedTime(temporaryFile.toPath()), "The temporary file hasn't the right last modification date");
+        assertEquals(wantedResult, FileUtils.isFileNewer(file, temporaryFile), () -> description + " - file");
     }
 
     /**
      * Tests the {@code isFileNewer(File, long)} method without specifying a {@code File}.
-     * <br>
+     * <p>
      * The test is successful if the method throws an {@code IllegalArgumentException}.
+     * </p>
      */
     @Test
     public void testIsFileNewerNoFile() {
-        assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(null,0),
-                "file");
+        assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(null, 0), "file");
     }
 
     /**
      * Tests the {@code isFileNewer(File, Date)} method without specifying a {@code Date}.
-     * <br>
+     * <p>
      * The test is successful if the method throws an {@code IllegalArgumentException}.
+     * </p>
      */
     @Test
     public void testIsFileNewerNoDate() {
-        assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(testFile1, (Date) null),
-                "date");
+        assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(testFile1, (Date) null), "date");
     }
 
     /**
      * Tests the {@code isFileNewer(File, File)} method without specifying a reference {@code File}.
-     * <br>
+     * <p>
      * The test is successful if the method throws an {@code IllegalArgumentException}.
+     * </p>
      */
     @Test
     public void testIsFileNewerNoFileReference() {
-        assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(testFile1, (File) null),
-                "reference");
+        assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(testFile1, (File) null), "reference");
     }
 }
