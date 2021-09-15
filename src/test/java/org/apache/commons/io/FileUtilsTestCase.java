@@ -1626,6 +1626,19 @@ public class FileUtilsTestCase {
     }
 
     @Test
+    public void testIsDirectory() throws IOException {
+        assertFalse(FileUtils.isDirectory(null));
+
+        assertTrue(FileUtils.isDirectory(temporaryFolder));
+        assertFalse(FileUtils.isDirectory(testFile1));
+
+        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
+        final File tempDirAsFile = tempDir.toFile();
+        Files.delete(tempDir);
+        assertFalse(FileUtils.isDirectory(tempDirAsFile));
+    }
+
+    @Test
     public void testIsEmptyDirectory() throws IOException {
         final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
         final File tempDirAsFile = tempDir.toFile();
@@ -1800,19 +1813,6 @@ public class FileUtilsTestCase {
 
         // Invalid reference File
         assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileOlder(oldFile, invalidFile));
-    }
-
-    @Test
-    public void testIsDirectory() throws IOException {
-        assertFalse(FileUtils.isDirectory(null));
-
-        assertTrue(FileUtils.isDirectory(temporaryFolder));
-        assertFalse(FileUtils.isDirectory(testFile1));
-
-        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
-        final File tempDirAsFile = tempDir.toFile();
-        Files.delete(tempDir);
-        assertFalse(FileUtils.isDirectory(tempDirAsFile));
     }
 
     @Test
