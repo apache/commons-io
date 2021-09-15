@@ -2608,11 +2608,8 @@ public class FileUtils {
      * @since 1.1
      */
     public static byte[] readFileToByteArray(final File file) throws IOException {
-        try (InputStream inputStream = openInputStream(file)) {
-            final long fileLength = file.length();
-            // file.length() may return 0 for system-dependent entities, treat 0 as unknown length - see IO-453
-            return fileLength > 0 ? IOUtils.toByteArray(inputStream, fileLength) : IOUtils.toByteArray(inputStream);
-        }
+        Objects.requireNonNull(file, "file");
+        return Files.readAllBytes(file.toPath());
     }
 
     /**
