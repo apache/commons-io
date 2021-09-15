@@ -154,6 +154,7 @@ public class FileUtilsTestCase {
      * List files recursively
      */
     private static final ListDirectoryWalker LIST_WALKER = new ListDirectoryWalker();
+
     @TempDir
     public File temporaryFolder;
 
@@ -184,16 +185,38 @@ public class FileUtilsTestCase {
     }
 
     private void createCircularSymLink(final File file) throws IOException {
-        if (!FilenameUtils.isSystemWindows()) {
-            Runtime.getRuntime()
-                    .exec("ln -s " + file + "/.. " + file + "/cycle");
-        } else {
+        assertTrue(file.exists());
+        final String linkName = file + "/cycle";
+        final String targetName = file + "/..";
+        assertTrue(file.exists());
+        final Path linkPath = Paths.get(linkName);
+        assertFalse(Files.exists(linkPath));
+        final Path targetPath = Paths.get(targetName);
+        assertTrue(Files.exists(targetPath));
+        try {
+            // May throw java.nio.file.FileSystemException: C:\Users\...\FileUtilsTestCase\cycle: A required privilege is not held by the client.
+            // On Windows, you are fine if you run a terminal with admin karma.
+            Files.createSymbolicLink(linkPath, targetPath);
+        } catch (final UnsupportedOperationException e) {
+            e.printStackTrace();
+            createCircularOsSymLink(linkName, targetName);
+        }
+        // Sanity check:
+        assertTrue(Files.isSymbolicLink(linkPath), () -> "Expected a sym link here: " + linkName);
+    }
+
+    private void createCircularOsSymLink(final String linkName, final String targetName) throws IOException {
+        if (FilenameUtils.isSystemWindows()) {
+            // Windows
             try {
-                Runtime.getRuntime()
-                        .exec("mklink /D " + file + "/cycle" + file + "/.. ");
-            } catch (final IOException ioe) { // So that tests run in FAT filesystems
-                //don't fail
+                Runtime.getRuntime().exec("mklink /D " + linkName + " " + targetName);
+            } catch (final IOException ioe) {
+                // So that tests run in FAT filesystems don't fail
+                ioe.printStackTrace();
             }
+        } else {
+            // Not Windows, assume Linux
+            Runtime.getRuntime().exec("ln -s " + targetName + " " + linkName);
         }
     }
 
@@ -814,10 +837,8 @@ public class FileUtilsTestCase {
         final File childDir = new File(parentDir, "child");
         createFilesForTestCopyDirectory(grandParentDir, parentDir, childDir);
 
-        final long expectedCount = LIST_WALKER.list(grandParentDir).size() +
-                LIST_WALKER.list(parentDir).size();
-        final long expectedSize = FileUtils.sizeOfDirectory(grandParentDir) +
-                FileUtils.sizeOfDirectory(parentDir);
+        final long expectedCount = LIST_WALKER.list(grandParentDir).size() + LIST_WALKER.list(parentDir).size();
+        final long expectedSize = FileUtils.sizeOfDirectory(grandParentDir) + FileUtils.sizeOfDirectory(parentDir);
         FileUtils.copyDirectory(parentDir, childDir);
         assertEquals(expectedCount, LIST_WALKER.list(grandParentDir).size());
         assertEquals(expectedSize, FileUtils.sizeOfDirectory(grandParentDir));
@@ -2538,7 +2559,7 @@ public class FileUtilsTestCase {
         file.delete();
         file.mkdir();
 
-        this.createCircularSymLink(file);
+        createCircularSymLink(file);
 
         assertEquals(TEST_DIRECTORY_SIZE_BI, FileUtils.sizeOfDirectoryAsBigInteger(file), "Unexpected directory size");
 
