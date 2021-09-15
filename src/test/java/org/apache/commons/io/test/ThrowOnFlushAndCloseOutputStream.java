@@ -43,15 +43,6 @@ public class ThrowOnFlushAndCloseOutputStream extends ProxyOutputStream {
         this.throwOnClose = throwOnClose;
     }
 
-    /** @see java.io.OutputStream#flush() */
-    @Override
-    public void flush() throws IOException {
-        if (throwOnFlush) {
-            fail(getClass().getSimpleName() + ".flush() called.");
-        }
-        super.flush();
-    }
-
     /** @see java.io.OutputStream#close() */
     @Override
     public void close() throws IOException {
@@ -59,6 +50,15 @@ public class ThrowOnFlushAndCloseOutputStream extends ProxyOutputStream {
             fail(getClass().getSimpleName() + ".close() called.");
         }
         super.close();
+    }
+
+    /** @see java.io.OutputStream#flush() */
+    @Override
+    public void flush() throws IOException {
+        if (throwOnFlush) {
+            fail(getClass().getSimpleName() + ".flush() called.");
+        }
+        super.flush();
     }
 
     public void off() {

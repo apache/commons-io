@@ -40,15 +40,77 @@ public class WriterOutputStreamTest {
 
     private final Random random = new Random();
 
-    private void testWithSingleByteWrite(final String testString, final String charsetName) throws IOException {
-        final byte[] bytes = testString.getBytes(charsetName);
+    @Test
+    public void testFlush() throws IOException {
         final StringWriter writer = new StringWriter();
-        try (final WriterOutputStream out = new WriterOutputStream(writer, charsetName)) {
-            for (final byte b : bytes) {
-                out.write(b);
+        try (final WriterOutputStream out = new WriterOutputStream(writer, "us-ascii", 1024, false)) {
+            out.write("abc".getBytes(StandardCharsets.US_ASCII));
+            assertEquals(0, writer.getBuffer().length());
+            out.flush();
+            assertEquals("abc", writer.toString());
+        }
+    }
+
+    @Test
+    public void testLargeUTF8WithBufferedWrite() throws IOException {
+        testWithBufferedWrite(LARGE_TEST_STRING, "UTF-8");
+    }
+
+    @Test
+    public void testLargeUTF8WithSingleByteWrite() throws IOException {
+        testWithSingleByteWrite(LARGE_TEST_STRING, "UTF-8");
+    }
+
+    @Test
+    public void testUTF16BEWithBufferedWrite() throws IOException {
+        testWithBufferedWrite(TEST_STRING, "UTF-16BE");
+    }
+
+    @Test
+    public void testUTF16BEWithSingleByteWrite() throws IOException {
+        testWithSingleByteWrite(TEST_STRING, "UTF-16BE");
+    }
+
+    @Test
+    public void testUTF16LEWithBufferedWrite() throws IOException {
+        testWithBufferedWrite(TEST_STRING, "UTF-16LE");
+    }
+
+    @Test
+    public void testUTF16LEWithSingleByteWrite() throws IOException {
+        testWithSingleByteWrite(TEST_STRING, "UTF-16LE");
+    }
+
+    @Test
+    public void testUTF16WithBufferedWrite() throws IOException {
+        try {
+            testWithBufferedWrite(TEST_STRING, "UTF-16");
+        } catch (final UnsupportedOperationException e) {
+            if (!System.getProperty("java.vendor").contains("IBM")) {
+                fail("This test should only throw UOE on IBM JDKs with broken UTF-16");
             }
         }
-        assertEquals(testString, writer.toString());
+    }
+
+    @Test
+    public void testUTF16WithSingleByteWrite() throws IOException {
+        try {
+            testWithSingleByteWrite(TEST_STRING, "UTF-16");
+        } catch (final UnsupportedOperationException e){
+            if (!System.getProperty("java.vendor").contains("IBM")){
+                fail("This test should only throw UOE on IBM JDKs with broken UTF-16");
+            }
+        }
+    }
+
+    @Test
+    public void testUTF8WithBufferedWrite() throws IOException {
+        testWithBufferedWrite(TEST_STRING, "UTF-8");
+    }
+
+    @Test
+    public void testUTF8WithSingleByteWrite() throws IOException {
+        testWithSingleByteWrite(TEST_STRING, "UTF-8");
     }
 
     private void testWithBufferedWrite(final String testString, final String charsetName) throws IOException {
@@ -65,78 +127,16 @@ public class WriterOutputStreamTest {
         assertEquals(testString, writer.toString());
     }
 
-    @Test
-    public void testUTF8WithSingleByteWrite() throws IOException {
-        testWithSingleByteWrite(TEST_STRING, "UTF-8");
-    }
 
-    @Test
-    public void testLargeUTF8WithSingleByteWrite() throws IOException {
-        testWithSingleByteWrite(LARGE_TEST_STRING, "UTF-8");
-    }
-
-    @Test
-    public void testUTF8WithBufferedWrite() throws IOException {
-        testWithBufferedWrite(TEST_STRING, "UTF-8");
-    }
-
-    @Test
-    public void testLargeUTF8WithBufferedWrite() throws IOException {
-        testWithBufferedWrite(LARGE_TEST_STRING, "UTF-8");
-    }
-
-    @Test
-    public void testUTF16WithSingleByteWrite() throws IOException {
-        try {
-            testWithSingleByteWrite(TEST_STRING, "UTF-16");
-        } catch (final UnsupportedOperationException e){
-            if (!System.getProperty("java.vendor").contains("IBM")){
-                fail("This test should only throw UOE on IBM JDKs with broken UTF-16");
-            }
-        }
-    }
-
-    @Test
-    public void testUTF16WithBufferedWrite() throws IOException {
-        try {
-            testWithBufferedWrite(TEST_STRING, "UTF-16");
-        } catch (final UnsupportedOperationException e) {
-            if (!System.getProperty("java.vendor").contains("IBM")) {
-                fail("This test should only throw UOE on IBM JDKs with broken UTF-16");
-            }
-        }
-    }
-
-    @Test
-    public void testUTF16BEWithSingleByteWrite() throws IOException {
-        testWithSingleByteWrite(TEST_STRING, "UTF-16BE");
-    }
-
-    @Test
-    public void testUTF16BEWithBufferedWrite() throws IOException {
-        testWithBufferedWrite(TEST_STRING, "UTF-16BE");
-    }
-
-    @Test
-    public void testUTF16LEWithSingleByteWrite() throws IOException {
-        testWithSingleByteWrite(TEST_STRING, "UTF-16LE");
-    }
-
-    @Test
-    public void testUTF16LEWithBufferedWrite() throws IOException {
-        testWithBufferedWrite(TEST_STRING, "UTF-16LE");
-    }
-
-
-    @Test
-    public void testFlush() throws IOException {
+    private void testWithSingleByteWrite(final String testString, final String charsetName) throws IOException {
+        final byte[] bytes = testString.getBytes(charsetName);
         final StringWriter writer = new StringWriter();
-        try (final WriterOutputStream out = new WriterOutputStream(writer, "us-ascii", 1024, false)) {
-            out.write("abc".getBytes(StandardCharsets.US_ASCII));
-            assertEquals(0, writer.getBuffer().length());
-            out.flush();
-            assertEquals("abc", writer.toString());
+        try (final WriterOutputStream out = new WriterOutputStream(writer, charsetName)) {
+            for (final byte b : bytes) {
+                out.write(b);
+            }
         }
+        assertEquals(testString, writer.toString());
     }
 
     @Test

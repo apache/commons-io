@@ -42,34 +42,302 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings({"unchecked", "rawtypes"}) // Java4
 public class DirectoryWalkerTestCaseJava4 {
 
+    /**
+     * Test DirectoryWalker implementation that finds files in a directory hierarchy
+     * applying a file filter.
+     */
+    static class TestCancelWalker extends DirectoryWalker {
+        private final String cancelFileName;
+        private final boolean suppressCancel;
+
+        TestCancelWalker(final String cancelFileName, final boolean suppressCancel) {
+            this.cancelFileName = cancelFileName;
+            this.suppressCancel = suppressCancel;
+        }
+
+        /**
+         * find files.
+         */
+        protected List find(final File startDirectory) throws IOException {
+            final List results = new ArrayList();
+            walk(startDirectory, results);
+            return results;
+        }
+
+        /**
+         * Handles Cancel.
+         */
+        @Override
+        protected void handleCancelled(final File startDirectory, final Collection results,
+                                       final CancelException cancel) throws IOException {
+            if (!suppressCancel) {
+                super.handleCancelled(startDirectory, results, cancel);
+            }
+        }
+
+        /**
+         * Handles a directory end by adding the File to the result set.
+         */
+        @Override
+        protected void handleDirectoryEnd(final File directory, final int depth, final Collection results) throws IOException {
+            results.add(directory);
+            if (cancelFileName.equals(directory.getName())) {
+                throw new CancelException(directory, depth);
+            }
+        }
+
+        /**
+         * Handles a file by adding the File to the result set.
+         */
+        @Override
+        protected void handleFile(final File file, final int depth, final Collection results) throws IOException {
+            results.add(file);
+            if (cancelFileName.equals(file.getName())) {
+                throw new CancelException(file, depth);
+            }
+        }
+    }
+    /**
+     * Test DirectoryWalker implementation that always returns false
+     * from handleDirectoryStart()
+     */
+    private static class TestFalseFileFinder extends TestFileFinder {
+
+        protected TestFalseFileFinder(final FileFilter filter, final int depthLimit) {
+            super(filter, depthLimit);
+        }
+
+        /**
+         * Always returns false.
+         */
+        @Override
+        protected boolean handleDirectory(final File directory, final int depth, final Collection results) {
+            return false;
+        }
+    }
+    /**
+     * Test DirectoryWalker implementation that finds files in a directory hierarchy
+     * applying a file filter.
+     */
+    private static class TestFileFinder extends DirectoryWalker {
+
+        protected TestFileFinder(final FileFilter filter, final int depthLimit) {
+            super(filter, depthLimit);
+        }
+
+        protected TestFileFinder(final IOFileFilter dirFilter, final IOFileFilter fileFilter, final int depthLimit) {
+            super(dirFilter, fileFilter, depthLimit);
+        }
+
+        /**
+         * find files.
+         */
+        protected List<File> find(final File startDirectory) {
+            final List<File> results = new ArrayList<>();
+            try {
+                walk(startDirectory, results);
+            } catch (final IOException ex) {
+                fail(ex.toString());
+            }
+            return results;
+        }
+
+        /**
+         * Handles a directory end by adding the File to the result set.
+         */
+        @Override
+        protected void handleDirectoryEnd(final File directory, final int depth, final Collection results) {
+            results.add(directory);
+        }
+
+        /**
+         * Handles a file by adding the File to the result set.
+         */
+        @Override
+        protected void handleFile(final File file, final int depth, final Collection results) {
+            results.add(file);
+        }
+    }
+    /**
+     * Test DirectoryWalker implementation that finds files in a directory hierarchy
+     * applying a file filter.
+     */
+    static class TestMultiThreadCancelWalker extends DirectoryWalker {
+        private final String cancelFileName;
+        private final boolean suppressCancel;
+        private boolean cancelled;
+        public List results;
+
+        TestMultiThreadCancelWalker(final String cancelFileName, final boolean suppressCancel) {
+            this.cancelFileName = cancelFileName;
+            this.suppressCancel = suppressCancel;
+        }
+
+        /**
+         * find files.
+         */
+        protected List find(final File startDirectory) throws IOException {
+            results = new ArrayList();
+            walk(startDirectory, results);
+            return results;
+        }
+
+        /**
+         * Handles Cancel.
+         */
+        @Override
+        protected void handleCancelled(final File startDirectory, final Collection results,
+                                       final CancelException cancel) throws IOException {
+            if (!suppressCancel) {
+                super.handleCancelled(startDirectory, results, cancel);
+            }
+        }
+
+        /**
+         * Handles a directory end by adding the File to the result set.
+         */
+        @Override
+        protected void handleDirectoryEnd(final File directory, final int depth, final Collection results) throws IOException {
+            results.add(directory);
+            assertFalse(cancelled);
+            if (cancelFileName.equals(directory.getName())) {
+                cancelled = true;
+            }
+        }
+
+        /**
+         * Handles a file by adding the File to the result set.
+         */
+        @Override
+        protected void handleFile(final File file, final int depth, final Collection results) throws IOException {
+            results.add(file);
+            assertFalse(cancelled);
+            if (cancelFileName.equals(file.getName())) {
+                cancelled = true;
+            }
+        }
+
+        /**
+         * Handles Cancelled.
+         */
+        @Override
+        protected boolean handleIsCancelled(final File file, final int depth, final Collection results) throws IOException {
+            return cancelled;
+        }
+    }
     // Directories
     private static final File current = new File(".");
     private static final File javaDir = new File("src/main/java");
     private static final File orgDir = new File(javaDir, "org");
     private static final File apacheDir = new File(orgDir, "apache");
+
     private static final File commonsDir = new File(apacheDir, "commons");
     private static final File ioDir = new File(commonsDir, "io");
     private static final File outputDir = new File(ioDir, "output");
     private static final File[] dirs = {orgDir, apacheDir, commonsDir, ioDir, outputDir};
-
     // Files
     private static final File filenameUtils = new File(ioDir, "FilenameUtils.java");
     private static final File ioUtils = new File(ioDir, "IOUtils.java");
+
     private static final File proxyWriter = new File(outputDir, "ProxyWriter.java");
     private static final File nullStream = new File(outputDir, "NullOutputStream.java");
     private static final File[] ioFiles = {filenameUtils, ioUtils};
     private static final File[] outputFiles = {proxyWriter, nullStream};
-
     // Filters
     private static final IOFileFilter dirsFilter = createNameFilter(dirs);
+
     private static final IOFileFilter iofilesFilter = createNameFilter(ioFiles);
+
+
     private static final IOFileFilter outputFilesFilter = createNameFilter(outputFiles);
+
     private static final IOFileFilter ioDirAndFilesFilter = new OrFileFilter(dirsFilter, iofilesFilter);
+
     private static final IOFileFilter dirsAndFilesFilter = new OrFileFilter(ioDirAndFilesFilter, outputFilesFilter);
 
     // Filter to exclude SVN files
     private static final IOFileFilter NOT_SVN = FileFilterUtils.makeSVNAware(null);
 
+    /**
+     * Create a name filter containing the names of the files
+     * in the array.
+     */
+    private static IOFileFilter createNameFilter(final File[] files) {
+        final String[] names = new String[files.length];
+        for (int i = 0; i < files.length; i++) {
+            names[i] = files[i].getName();
+        }
+        return new NameFileFilter(names);
+    }
+
+    /**
+     * Check the files in the array are in the results list.
+     */
+    private void checkContainsFiles(final String prefix, final File[] files, final Collection results) {
+        for (int i = 0; i < files.length; i++) {
+            assertTrue(results.contains(files[i]), prefix + "[" + i + "] " + files[i]);
+        }
+    }
+
+    /**
+     * Extract the directories.
+     */
+    private List directoriesOnly(final Collection<File> results) {
+        final List list = new ArrayList(results.size());
+        for (final File file : results) {
+            if (file.isDirectory()) {
+                list.add(file);
+            }
+        }
+        return list;
+    }
+
+    /**
+     * Extract the files.
+     */
+    private List filesOnly(final Collection<File> results) {
+        final List list = new ArrayList(results.size());
+        for (final File file : results) {
+            if (file.isFile()) {
+                list.add(file);
+            }
+        }
+        return list;
+    }
+
+    /**
+     * Test Cancel
+     * @throws IOException
+     */
+    @Test
+    public void testCancel() throws IOException {
+        String cancelName = null;
+
+        // Cancel on a file
+        try {
+            cancelName = "DirectoryWalker.java";
+            new TestCancelWalker(cancelName, false).find(javaDir);
+            fail("CancelException not thrown for '" + cancelName + "'");
+        } catch (final DirectoryWalker.CancelException cancel) {
+            assertEquals(cancelName, cancel.getFile().getName(), "File:  " + cancelName);
+            assertEquals(5, cancel.getDepth(), "Depth: " + cancelName);
+        }
+
+        // Cancel on a directory
+        try {
+            cancelName = "commons";
+            new TestCancelWalker(cancelName, false).find(javaDir);
+            fail("CancelException not thrown for '" + cancelName + "'");
+        } catch (final DirectoryWalker.CancelException cancel) {
+            assertEquals(cancelName, cancel.getFile().getName(), "File:  " + cancelName);
+            assertEquals(3, cancel.getDepth(), "Depth: " + cancelName);
+        }
+
+        // Suppress CancelException (use same file name as preceding test)
+        final List results = new TestCancelWalker(cancelName, true).find(javaDir);
+        final File lastFile = (File) results.get(results.size() - 1);
+        assertEquals(cancelName, lastFile.getName(), "Suppress:  " + cancelName);
+    }
 
     /**
      * Test Filtering
@@ -104,6 +372,8 @@ public class DirectoryWalkerTestCaseJava4 {
         assertTrue(results.contains(javaDir), "[B] Start Dir");
         assertTrue(results.contains(orgDir), "[B] Org Dir");
     }
+
+    // ------------ Convenience Test Methods ------------------------------------
 
     /**
      * Test Filtering and limit to depth 3
@@ -178,6 +448,21 @@ public class DirectoryWalkerTestCaseJava4 {
         checkContainsFiles("[DirAndFile4] File", ioFiles, resultFiles);
     }
 
+    // ------------ Test DirectoryWalker implementation --------------------------
+
+    /**
+     * test an invalid start directory
+     */
+    @Test
+    public void testHandleStartDirectoryFalse() {
+
+        final List<File> results = new TestFalseFileFinder(null, -1).find(current);
+        assertEquals(0, results.size(), "Result Size");
+
+    }
+
+    // ------------ Test DirectoryWalker implementation --------------------------
+
     /**
      * Test Limiting to current directory
      */
@@ -187,6 +472,8 @@ public class DirectoryWalkerTestCaseJava4 {
         assertEquals(1, results.size(), "Result Size");
         assertTrue(results.contains(new File(".")), "Current Dir");
     }
+
+    // ------------ Test DirectoryWalker implementation --------------------------
 
     /**
      * test an invalid start directory
@@ -206,100 +493,6 @@ public class DirectoryWalkerTestCaseJava4 {
         } catch (final NullPointerException ignore) {
             // expected result
         }
-    }
-
-    /**
-     * test an invalid start directory
-     */
-    @Test
-    public void testHandleStartDirectoryFalse() {
-
-        final List<File> results = new TestFalseFileFinder(null, -1).find(current);
-        assertEquals(0, results.size(), "Result Size");
-
-    }
-
-    // ------------ Convenience Test Methods ------------------------------------
-
-    /**
-     * Check the files in the array are in the results list.
-     */
-    private void checkContainsFiles(final String prefix, final File[] files, final Collection results) {
-        for (int i = 0; i < files.length; i++) {
-            assertTrue(results.contains(files[i]), prefix + "[" + i + "] " + files[i]);
-        }
-    }
-
-    /**
-     * Extract the directories.
-     */
-    private List directoriesOnly(final Collection<File> results) {
-        final List list = new ArrayList(results.size());
-        for (final File file : results) {
-            if (file.isDirectory()) {
-                list.add(file);
-            }
-        }
-        return list;
-    }
-
-    /**
-     * Extract the files.
-     */
-    private List filesOnly(final Collection<File> results) {
-        final List list = new ArrayList(results.size());
-        for (final File file : results) {
-            if (file.isFile()) {
-                list.add(file);
-            }
-        }
-        return list;
-    }
-
-    /**
-     * Create a name filter containing the names of the files
-     * in the array.
-     */
-    private static IOFileFilter createNameFilter(final File[] files) {
-        final String[] names = new String[files.length];
-        for (int i = 0; i < files.length; i++) {
-            names[i] = files[i].getName();
-        }
-        return new NameFileFilter(names);
-    }
-
-    /**
-     * Test Cancel
-     * @throws IOException
-     */
-    @Test
-    public void testCancel() throws IOException {
-        String cancelName = null;
-
-        // Cancel on a file
-        try {
-            cancelName = "DirectoryWalker.java";
-            new TestCancelWalker(cancelName, false).find(javaDir);
-            fail("CancelException not thrown for '" + cancelName + "'");
-        } catch (final DirectoryWalker.CancelException cancel) {
-            assertEquals(cancelName, cancel.getFile().getName(), "File:  " + cancelName);
-            assertEquals(5, cancel.getDepth(), "Depth: " + cancelName);
-        }
-
-        // Cancel on a directory
-        try {
-            cancelName = "commons";
-            new TestCancelWalker(cancelName, false).find(javaDir);
-            fail("CancelException not thrown for '" + cancelName + "'");
-        } catch (final DirectoryWalker.CancelException cancel) {
-            assertEquals(cancelName, cancel.getFile().getName(), "File:  " + cancelName);
-            assertEquals(3, cancel.getDepth(), "Depth: " + cancelName);
-        }
-
-        // Suppress CancelException (use same file name as preceding test)
-        final List results = new TestCancelWalker(cancelName, true).find(javaDir);
-        final File lastFile = (File) results.get(results.size() - 1);
-        assertEquals(cancelName, lastFile.getName(), "Suppress:  " + cancelName);
     }
 
     /**
@@ -337,199 +530,6 @@ public class DirectoryWalkerTestCaseJava4 {
         final File lastFile = (File) results.get(results.size() - 1);
         assertEquals(cancelName, lastFile.getName(), "Suppress:  " + cancelName);
 
-    }
-
-    // ------------ Test DirectoryWalker implementation --------------------------
-
-    /**
-     * Test DirectoryWalker implementation that finds files in a directory hierarchy
-     * applying a file filter.
-     */
-    private static class TestFileFinder extends DirectoryWalker {
-
-        protected TestFileFinder(final FileFilter filter, final int depthLimit) {
-            super(filter, depthLimit);
-        }
-
-        protected TestFileFinder(final IOFileFilter dirFilter, final IOFileFilter fileFilter, final int depthLimit) {
-            super(dirFilter, fileFilter, depthLimit);
-        }
-
-        /**
-         * find files.
-         */
-        protected List<File> find(final File startDirectory) {
-            final List<File> results = new ArrayList<>();
-            try {
-                walk(startDirectory, results);
-            } catch (final IOException ex) {
-                fail(ex.toString());
-            }
-            return results;
-        }
-
-        /**
-         * Handles a directory end by adding the File to the result set.
-         */
-        @Override
-        protected void handleDirectoryEnd(final File directory, final int depth, final Collection results) {
-            results.add(directory);
-        }
-
-        /**
-         * Handles a file by adding the File to the result set.
-         */
-        @Override
-        protected void handleFile(final File file, final int depth, final Collection results) {
-            results.add(file);
-        }
-    }
-
-    // ------------ Test DirectoryWalker implementation --------------------------
-
-    /**
-     * Test DirectoryWalker implementation that always returns false
-     * from handleDirectoryStart()
-     */
-    private static class TestFalseFileFinder extends TestFileFinder {
-
-        protected TestFalseFileFinder(final FileFilter filter, final int depthLimit) {
-            super(filter, depthLimit);
-        }
-
-        /**
-         * Always returns false.
-         */
-        @Override
-        protected boolean handleDirectory(final File directory, final int depth, final Collection results) {
-            return false;
-        }
-    }
-
-    // ------------ Test DirectoryWalker implementation --------------------------
-
-    /**
-     * Test DirectoryWalker implementation that finds files in a directory hierarchy
-     * applying a file filter.
-     */
-    static class TestCancelWalker extends DirectoryWalker {
-        private final String cancelFileName;
-        private final boolean suppressCancel;
-
-        TestCancelWalker(final String cancelFileName, final boolean suppressCancel) {
-            this.cancelFileName = cancelFileName;
-            this.suppressCancel = suppressCancel;
-        }
-
-        /**
-         * find files.
-         */
-        protected List find(final File startDirectory) throws IOException {
-            final List results = new ArrayList();
-            walk(startDirectory, results);
-            return results;
-        }
-
-        /**
-         * Handles a directory end by adding the File to the result set.
-         */
-        @Override
-        protected void handleDirectoryEnd(final File directory, final int depth, final Collection results) throws IOException {
-            results.add(directory);
-            if (cancelFileName.equals(directory.getName())) {
-                throw new CancelException(directory, depth);
-            }
-        }
-
-        /**
-         * Handles a file by adding the File to the result set.
-         */
-        @Override
-        protected void handleFile(final File file, final int depth, final Collection results) throws IOException {
-            results.add(file);
-            if (cancelFileName.equals(file.getName())) {
-                throw new CancelException(file, depth);
-            }
-        }
-
-        /**
-         * Handles Cancel.
-         */
-        @Override
-        protected void handleCancelled(final File startDirectory, final Collection results,
-                                       final CancelException cancel) throws IOException {
-            if (!suppressCancel) {
-                super.handleCancelled(startDirectory, results, cancel);
-            }
-        }
-    }
-
-    /**
-     * Test DirectoryWalker implementation that finds files in a directory hierarchy
-     * applying a file filter.
-     */
-    static class TestMultiThreadCancelWalker extends DirectoryWalker {
-        private final String cancelFileName;
-        private final boolean suppressCancel;
-        private boolean cancelled;
-        public List results;
-
-        TestMultiThreadCancelWalker(final String cancelFileName, final boolean suppressCancel) {
-            this.cancelFileName = cancelFileName;
-            this.suppressCancel = suppressCancel;
-        }
-
-        /**
-         * find files.
-         */
-        protected List find(final File startDirectory) throws IOException {
-            results = new ArrayList();
-            walk(startDirectory, results);
-            return results;
-        }
-
-        /**
-         * Handles a directory end by adding the File to the result set.
-         */
-        @Override
-        protected void handleDirectoryEnd(final File directory, final int depth, final Collection results) throws IOException {
-            results.add(directory);
-            assertFalse(cancelled);
-            if (cancelFileName.equals(directory.getName())) {
-                cancelled = true;
-            }
-        }
-
-        /**
-         * Handles a file by adding the File to the result set.
-         */
-        @Override
-        protected void handleFile(final File file, final int depth, final Collection results) throws IOException {
-            results.add(file);
-            assertFalse(cancelled);
-            if (cancelFileName.equals(file.getName())) {
-                cancelled = true;
-            }
-        }
-
-        /**
-         * Handles Cancelled.
-         */
-        @Override
-        protected boolean handleIsCancelled(final File file, final int depth, final Collection results) throws IOException {
-            return cancelled;
-        }
-
-        /**
-         * Handles Cancel.
-         */
-        @Override
-        protected void handleCancelled(final File startDirectory, final Collection results,
-                                       final CancelException cancel) throws IOException {
-            if (!suppressCancel) {
-                super.handleCancelled(startDirectory, results, cancel);
-            }
-        }
     }
 
 }

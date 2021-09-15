@@ -28,6 +28,26 @@ import org.junit.jupiter.api.Test;
 
 public class MarkShieldInputStreamTest {
 
+    private static class MarkTestableInputStream extends ProxyInputStream {
+        int markcount;
+        int readlimit;
+
+        public MarkTestableInputStream(final InputStream in) {
+            super(in);
+        }
+
+        @SuppressWarnings("sync-override")
+        @Override
+        public void mark(final int readlimit) {
+            // record that `mark` was called
+            this.markcount++;
+            this.readlimit = readlimit;
+
+            // invoke on super
+            super.mark(readlimit);
+        }
+    }
+
     @Test
     public void markIsNoOpWhenUnderlyingDoesNotSupport() throws IOException {
         try (final MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(64, false, false));
@@ -91,26 +111,6 @@ public class MarkShieldInputStreamTest {
         try (final MarkShieldInputStream msis = new MarkShieldInputStream(
                 new NullInputStream(64, true, false))) {
             assertThrows(UnsupportedOperationException.class, () -> msis.reset());
-        }
-    }
-
-    private static class MarkTestableInputStream extends ProxyInputStream {
-        int markcount;
-        int readlimit;
-
-        public MarkTestableInputStream(final InputStream in) {
-            super(in);
-        }
-
-        @SuppressWarnings("sync-override")
-        @Override
-        public void mark(final int readlimit) {
-            // record that `mark` was called
-            this.markcount++;
-            this.readlimit = readlimit;
-
-            // invoke on super
-            super.mark(readlimit);
         }
     }
 }

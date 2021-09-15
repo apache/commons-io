@@ -46,18 +46,6 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     }
 
     /**
-     * File system observer started checking event.
-     *
-     * @param observer The file system observer
-     */
-    @Override
-    public void onStart(final FileAlterationObserver observer) {
-        if (clearOnStart) {
-            clear();
-        }
-    }
-
-    /**
      * Clear file collections.
      */
     public void clear() {
@@ -124,16 +112,6 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     }
 
     /**
-     * Directory created Event.
-     *
-     * @param directory The directory created
-     */
-    @Override
-    public void onDirectoryCreate(final File directory) {
-        createdDirectories.add(directory);
-    }
-
-    /**
      * Directory changed Event.
      *
      * @param directory The directory changed
@@ -141,6 +119,16 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     @Override
     public void onDirectoryChange(final File directory) {
         changedDirectories.add(directory);
+    }
+
+    /**
+     * Directory created Event.
+     *
+     * @param directory The directory created
+     */
+    @Override
+    public void onDirectoryCreate(final File directory) {
+        createdDirectories.add(directory);
     }
 
     /**
@@ -154,16 +142,6 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     }
 
     /**
-     * File created Event.
-     *
-     * @param file The file created
-     */
-    @Override
-    public void onFileCreate(final File file) {
-        createdFiles.add(file);
-    }
-
-    /**
      * File changed Event.
      *
      * @param file The file changed
@@ -174,6 +152,16 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     }
 
     /**
+     * File created Event.
+     *
+     * @param file The file created
+     */
+    @Override
+    public void onFileCreate(final File file) {
+        createdFiles.add(file);
+    }
+
+    /**
      * File deleted Event.
      *
      * @param file The file deleted
@@ -181,6 +169,18 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     @Override
     public void onFileDelete(final File file) {
         deletedFiles.add(file);
+    }
+
+    /**
+     * File system observer started checking event.
+     *
+     * @param observer The file system observer
+     */
+    @Override
+    public void onStart(final FileAlterationObserver observer) {
+        if (clearOnStart) {
+            clear();
+        }
     }
 
     /**

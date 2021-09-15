@@ -31,6 +31,12 @@ import org.junit.jupiter.api.Test;
  */
 public class CountingOutputStreamTest {
 
+    private void assertByteArrayEquals(final String msg, final byte[] array, final int start, final int end) {
+        for (int i = start; i < end; i++) {
+            assertEquals(array[i], i-start, msg+": array[" + i + "] mismatch");
+        }
+    }
+
     @Test
     public void testCounting() throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -99,12 +105,6 @@ public class CountingOutputStreamTest {
         IOUtils.copyLarge(mock, cos);
         assertEquals(size, cos.getByteCount(), "getByteCount()");
         assertEquals(size, cos.resetByteCount(), "resetByteCount()");
-    }
-
-    private void assertByteArrayEquals(final String msg, final byte[] array, final int start, final int end) {
-        for (int i = start; i < end; i++) {
-            assertEquals(array[i], i-start, msg+": array[" + i + "] mismatch");
-        }
     }
 
 }

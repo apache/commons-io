@@ -34,24 +34,6 @@ import org.junit.jupiter.api.Test;
 public class TaggedOutputStreamTest  {
 
     @Test
-    public void testNormalStream() {
-        try (final ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
-            try (final OutputStream stream = new TaggedOutputStream(buffer)) {
-                stream.write('a');
-                stream.write(new byte[] { 'b' });
-                stream.write(new byte[] { 'c' }, 0, 1);
-                stream.flush();
-            }
-            assertEquals(3, buffer.size());
-            assertEquals('a', buffer.toByteArray()[0]);
-            assertEquals('b', buffer.toByteArray()[1]);
-            assertEquals('c', buffer.toByteArray()[2]);
-        } catch (final IOException e) {
-            fail("Unexpected exception thrown");
-        }
-    }
-
-    @Test
     public void testBrokenStream() {
         final IOException exception = new IOException("test exception");
         final TaggedOutputStream stream =
@@ -97,6 +79,24 @@ public class TaggedOutputStreamTest  {
             } catch (final IOException e2) {
                 assertEquals(exception, e2);
             }
+        }
+    }
+
+    @Test
+    public void testNormalStream() {
+        try (final ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+            try (final OutputStream stream = new TaggedOutputStream(buffer)) {
+                stream.write('a');
+                stream.write(new byte[] { 'b' });
+                stream.write(new byte[] { 'c' }, 0, 1);
+                stream.flush();
+            }
+            assertEquals(3, buffer.size());
+            assertEquals('a', buffer.toByteArray()[0]);
+            assertEquals('b', buffer.toByteArray()[1]);
+            assertEquals('c', buffer.toByteArray()[2]);
+        } catch (final IOException e) {
+            fail("Unexpected exception thrown");
         }
     }
 

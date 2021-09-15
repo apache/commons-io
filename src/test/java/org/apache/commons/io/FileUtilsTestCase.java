@@ -1275,6 +1275,38 @@ public class FileUtilsTestCase {
         //TODO Maybe test copy to itself like for copyFile()
     }
 
+    /**
+     * Tests a directory with one file of size 0.
+     */
+    @Test
+    public void testCountFolders1FileSize0() throws IOException {
+        assertEquals(0, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0").toFile()));
+    }
+
+    /**
+     * Tests a directory with one file of size 1.
+     */
+    @Test
+    public void testCountFolders1FileSize1() throws IOException {
+        assertEquals(1, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1").toFile()));
+    }
+
+    /**
+     * Tests a directory with two subdirectories, each containing one file of size 1.
+     */
+    @Test
+    public void testCountFolders2FileSize2() throws IOException {
+        assertEquals(2, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2").toFile()));
+    }
+
+    /**
+     * Tests a directory with two subdirectories, each containing one file of size 1.
+     */
+    @Test
+    public void testCountFolders2FileSize4() throws IOException {
+        assertEquals(8, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-4").toFile()));
+    }
+
     @Test
     public void testDecodeUrl() {
         assertEquals("", FileUtils.decodeUrl(""));
@@ -1345,6 +1377,8 @@ public class FileUtilsTestCase {
         assertFalse(testDirectory.exists(), "Check No Exist");
         assertFalse(testFile.exists(), "Check No Exist");
     }
+
+    // copyToDirectory
 
     @Test
     public void testDeleteQuietlyFile() throws IOException {
@@ -1417,8 +1451,6 @@ public class FileUtilsTestCase {
 
     }
 
-    // copyToDirectory
-
     @Test
     public void testForceDeleteAFile1() throws Exception {
         final File destination = new File(temporaryFolder, "copy1.txt");
@@ -1455,6 +1487,8 @@ public class FileUtilsTestCase {
         FileUtils.forceDelete(testDirectory);
         assertFalse(testDirectory.exists(), "TestDirectory must not exist");
     }
+
+    // forceDelete
 
     @Test
     public void testForceDeleteReadOnlyFile() throws Exception {
@@ -1515,6 +1549,8 @@ public class FileUtilsTestCase {
         assertFalse(testFile.exists());
     }
 
+    // copyFileToDirectory
+
     @Test
     public void testGetFile() {
         final File expected_A = new File("src");
@@ -1530,8 +1566,6 @@ public class FileUtilsTestCase {
             // expected
         }
     }
-
-    // forceDelete
 
     @Test
     public void testGetFile_Parent() {
@@ -1556,6 +1590,8 @@ public class FileUtilsTestCase {
         }
     }
 
+    // forceDelete
+
     @Test
     public void testGetTempDirectory() {
         final File tempDirectory = new File(System.getProperty("java.io.tmpdir"));
@@ -1568,8 +1604,6 @@ public class FileUtilsTestCase {
                 FileUtils.getTempDirectoryPath());
     }
 
-    // copyFileToDirectory
-
     @Test
     public void testGetUserDirectory() {
         final File userDirectory = new File(System.getProperty("user.home"));
@@ -1581,8 +1615,6 @@ public class FileUtilsTestCase {
         assertEquals(System.getProperty("user.home"),
                 FileUtils.getUserDirectoryPath());
     }
-
-    // forceDelete
 
     // This test relies on FileUtils.copyFile using File.length to check the output size
     @Test
@@ -2507,6 +2539,7 @@ public class FileUtilsTestCase {
         assertEquals("Hello /u1234", data);
     }
 
+
     @Test
     public void testReadFileToStringWithEncoding() throws Exception {
         final File file = new File(temporaryFolder, "read.obj");
@@ -2600,7 +2633,6 @@ public class FileUtilsTestCase {
         assertEquals(TEST_DIRECTORY_SIZE_BI, FileUtils.sizeOfAsBigInteger(temporaryFolder),
                 "Unexpected directory size");
     }
-
 
     @Test
     public void testSizeOfDirectory() throws Exception {
@@ -2997,6 +3029,7 @@ public class FileUtilsTestCase {
         assertEquals(expected, actual);
     }
 
+
     @Test
     public void testWriteLines_4arg() throws Exception {
         final Object[] data = {
@@ -3049,7 +3082,6 @@ public class FileUtilsTestCase {
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
-
 
     @Test
     public void testWriteLines_4argsWithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
@@ -3226,38 +3258,6 @@ public class FileUtilsTestCase {
                 + "this is brand new data";
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
-    }
-
-    /**
-     * Tests a directory with one file of size 0.
-     */
-    @Test
-    public void testCountFolders1FileSize0() throws IOException {
-        assertEquals(0, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0").toFile()));
-    }
-
-    /**
-     * Tests a directory with one file of size 1.
-     */
-    @Test
-    public void testCountFolders1FileSize1() throws IOException {
-        assertEquals(1, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1").toFile()));
-    }
-
-    /**
-     * Tests a directory with two subdirectories, each containing one file of size 1.
-     */
-    @Test
-    public void testCountFolders2FileSize2() throws IOException {
-        assertEquals(2, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2").toFile()));
-    }
-
-    /**
-     * Tests a directory with two subdirectories, each containing one file of size 1.
-     */
-    @Test
-    public void testCountFolders2FileSize4() throws IOException {
-        assertEquals(8, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-4").toFile()));
     }
 
 }

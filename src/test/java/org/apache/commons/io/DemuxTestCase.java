@@ -36,104 +36,6 @@ import org.junit.jupiter.api.Test;
  * Basic unit tests for the multiplexing streams.
  */
 public class DemuxTestCase {
-    private static final String T1 = "Thread1";
-    private static final String T2 = "Thread2";
-    private static final String T3 = "Thread3";
-    private static final String T4 = "Thread4";
-
-    private static final String DATA1 = "Data for thread1";
-    private static final String DATA2 = "Data for thread2";
-    private static final String DATA3 = "Data for thread3";
-    private static final String DATA4 = "Data for thread4";
-
-    private static final Random c_random = new Random();
-    private final HashMap<String, ByteArrayOutputStream> outputMap = new HashMap<>();
-    private final HashMap<String, Thread> threadMap = new HashMap<>();
-
-    private String getOutput(final String threadName) {
-        final ByteArrayOutputStream output =
-                outputMap.get(threadName);
-        assertNotNull(output, "getOutput()");
-
-        return output.toString(StandardCharsets.UTF_8);
-    }
-
-    private String getInput(final String threadName) {
-        final ReaderThread thread = (ReaderThread) threadMap.get(threadName);
-        assertNotNull(thread, "getInput()");
-
-        return thread.getData();
-    }
-
-    private void doStart() {
-        for (final String name : threadMap.keySet()) {
-            final Thread thread = threadMap.get(name);
-            thread.start();
-        }
-    }
-
-    private void doJoin()
-            throws Exception {
-        for (final String name : threadMap.keySet()) {
-            final Thread thread = threadMap.get(name);
-            thread.join();
-        }
-    }
-
-    private void startWriter(final String name,
-                             final String data,
-                             final DemuxOutputStream demux) {
-        final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        outputMap.put(name, output);
-        final WriterThread thread =
-                new WriterThread(name, data, output, demux);
-        threadMap.put(name, thread);
-    }
-
-    private void startReader(final String name,
-                             final String data,
-                             final DemuxInputStream demux) {
-        final InputStream input = new StringInputStream(data);
-        final ReaderThread thread = new ReaderThread(name, input, demux);
-        threadMap.put(name, thread);
-    }
-
-    @Test
-    public void testOutputStream()
-            throws Exception {
-        final DemuxOutputStream output = new DemuxOutputStream();
-        startWriter(T1, DATA1, output);
-        startWriter(T2, DATA2, output);
-        startWriter(T3, DATA3, output);
-        startWriter(T4, DATA4, output);
-
-        doStart();
-        doJoin();
-
-        assertEquals(DATA1, getOutput(T1), "Data1");
-        assertEquals(DATA2, getOutput(T2), "Data2");
-        assertEquals(DATA3, getOutput(T3), "Data3");
-        assertEquals(DATA4, getOutput(T4), "Data4");
-    }
-
-    @Test
-    public void testInputStream()
-            throws Exception {
-        final DemuxInputStream input = new DemuxInputStream();
-        startReader(T1, DATA1, input);
-        startReader(T2, DATA2, input);
-        startReader(T3, DATA3, input);
-        startReader(T4, DATA4, input);
-
-        doStart();
-        doJoin();
-
-        assertEquals(DATA1, getInput(T1), "Data1");
-        assertEquals(DATA2, getInput(T2), "Data2");
-        assertEquals(DATA3, getInput(T3), "Data3");
-        assertEquals(DATA4, getInput(T4), "Data4");
-    }
-
     private static class ReaderThread
             extends Thread {
         private final StringBuffer stringBuffer = new StringBuffer();
@@ -171,7 +73,6 @@ public class DemuxTestCase {
             }
         }
     }
-
     private static class WriterThread
             extends Thread {
         private final byte[] byteArray;
@@ -202,6 +103,105 @@ public class DemuxTestCase {
                 }
             }
         }
+    }
+    private static final String T1 = "Thread1";
+    private static final String T2 = "Thread2";
+
+    private static final String T3 = "Thread3";
+    private static final String T4 = "Thread4";
+    private static final String DATA1 = "Data for thread1";
+    private static final String DATA2 = "Data for thread2";
+
+    private static final String DATA3 = "Data for thread3";
+    private static final String DATA4 = "Data for thread4";
+    private static final Random c_random = new Random();
+
+    private final HashMap<String, ByteArrayOutputStream> outputMap = new HashMap<>();
+
+    private final HashMap<String, Thread> threadMap = new HashMap<>();
+
+    private void doJoin()
+            throws Exception {
+        for (final String name : threadMap.keySet()) {
+            final Thread thread = threadMap.get(name);
+            thread.join();
+        }
+    }
+
+    private void doStart() {
+        for (final String name : threadMap.keySet()) {
+            final Thread thread = threadMap.get(name);
+            thread.start();
+        }
+    }
+
+    private String getInput(final String threadName) {
+        final ReaderThread thread = (ReaderThread) threadMap.get(threadName);
+        assertNotNull(thread, "getInput()");
+
+        return thread.getData();
+    }
+
+    private String getOutput(final String threadName) {
+        final ByteArrayOutputStream output =
+                outputMap.get(threadName);
+        assertNotNull(output, "getOutput()");
+
+        return output.toString(StandardCharsets.UTF_8);
+    }
+
+    private void startReader(final String name,
+                             final String data,
+                             final DemuxInputStream demux) {
+        final InputStream input = new StringInputStream(data);
+        final ReaderThread thread = new ReaderThread(name, input, demux);
+        threadMap.put(name, thread);
+    }
+
+    private void startWriter(final String name,
+                             final String data,
+                             final DemuxOutputStream demux) {
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        outputMap.put(name, output);
+        final WriterThread thread =
+                new WriterThread(name, data, output, demux);
+        threadMap.put(name, thread);
+    }
+
+    @Test
+    public void testInputStream()
+            throws Exception {
+        final DemuxInputStream input = new DemuxInputStream();
+        startReader(T1, DATA1, input);
+        startReader(T2, DATA2, input);
+        startReader(T3, DATA3, input);
+        startReader(T4, DATA4, input);
+
+        doStart();
+        doJoin();
+
+        assertEquals(DATA1, getInput(T1), "Data1");
+        assertEquals(DATA2, getInput(T2), "Data2");
+        assertEquals(DATA3, getInput(T3), "Data3");
+        assertEquals(DATA4, getInput(T4), "Data4");
+    }
+
+    @Test
+    public void testOutputStream()
+            throws Exception {
+        final DemuxOutputStream output = new DemuxOutputStream();
+        startWriter(T1, DATA1, output);
+        startWriter(T2, DATA2, output);
+        startWriter(T3, DATA3, output);
+        startWriter(T4, DATA4, output);
+
+        doStart();
+        doJoin();
+
+        assertEquals(DATA1, getOutput(T1), "Data1");
+        assertEquals(DATA2, getOutput(T2), "Data2");
+        assertEquals(DATA3, getOutput(T3), "Data3");
+        assertEquals(DATA4, getOutput(T4), "Data4");
     }
 }
 

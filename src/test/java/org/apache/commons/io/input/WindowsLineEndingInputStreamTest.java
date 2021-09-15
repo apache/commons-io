@@ -25,23 +25,8 @@ import org.junit.jupiter.api.Test;
 
 public class WindowsLineEndingInputStreamTest {
     @Test
-    public void simpleString() throws Exception {
-        assertEquals("abc\r\n", roundtrip("abc"));
-    }
-
-    @Test
     public void inTheMiddleOfTheLine() throws Exception {
         assertEquals("a\r\nbc\r\n", roundtrip("a\r\nbc"));
-    }
-
-    @Test
-    public void multipleBlankLines() throws Exception {
-        assertEquals("a\r\n\r\nbc\r\n", roundtrip("a\r\n\r\nbc"));
-    }
-
-    @Test
-    public void twoLinesAtEnd() throws Exception {
-        assertEquals("a\r\n\r\n", roundtrip("a\r\n\r\n"));
     }
 
     @Test
@@ -53,6 +38,11 @@ public class WindowsLineEndingInputStreamTest {
     @Test
     public void malformed() throws Exception {
         assertEquals("a\rbc", roundtrip("a\rbc", false));
+    }
+
+    @Test
+    public void multipleBlankLines() throws Exception {
+        assertEquals("a\r\n\r\nbc\r\n", roundtrip("a\r\n\r\nbc"));
     }
 
     @Test
@@ -71,5 +61,15 @@ public class WindowsLineEndingInputStreamTest {
             final int read = lf.read(buf);
             return new String(buf, 0, read, StandardCharsets.UTF_8);
         }
+    }
+
+    @Test
+    public void simpleString() throws Exception {
+        assertEquals("abc\r\n", roundtrip("abc"));
+    }
+
+    @Test
+    public void twoLinesAtEnd() throws Exception {
+        assertEquals("a\r\n\r\n", roundtrip("a\r\n\r\n"));
     }
 }

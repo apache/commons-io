@@ -33,20 +33,10 @@ import org.junit.jupiter.api.Test;
  */
 public class TeeOutputStreamTest {
 
-    /**
-     * Tests that the branch {@code OutputStream} is closed when closing the main {@code OutputStream} throws an
-     * exception on {@link TeeOutputStream#close()}.
-     */
-    @Test
-    public void testIOExceptionOnCloseBranch() throws IOException {
-        final OutputStream badOs = new ThrowOnCloseOutputStream();
-        final ByteArrayOutputStream goodOs = mock(ByteArrayOutputStream.class);
-        final TeeOutputStream tos = new TeeOutputStream(goodOs, badOs);
-        try {
-            tos.close();
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOException e) {
-            verify(goodOs).close();
+    private void assertByteArrayEquals(final String msg, final byte[] array1, final byte[] array2) {
+        assertEquals(array1.length, array2.length, msg + ": array size mismatch");
+        for (int i = 0; i < array1.length; i++) {
+            assertEquals(array1[i], array2[i], msg + ": array[ " + i + "] mismatch");
         }
     }
 
@@ -59,6 +49,23 @@ public class TeeOutputStreamTest {
         final OutputStream badOs = new ThrowOnCloseOutputStream();
         final ByteArrayOutputStream goodOs = mock(ByteArrayOutputStream.class);
         final TeeOutputStream tos = new TeeOutputStream(badOs, goodOs);
+        try {
+            tos.close();
+            fail("Expected " + IOException.class.getName());
+        } catch (final IOException e) {
+            verify(goodOs).close();
+        }
+    }
+
+    /**
+     * Tests that the branch {@code OutputStream} is closed when closing the main {@code OutputStream} throws an
+     * exception on {@link TeeOutputStream#close()}.
+     */
+    @Test
+    public void testIOExceptionOnCloseBranch() throws IOException {
+        final OutputStream badOs = new ThrowOnCloseOutputStream();
+        final ByteArrayOutputStream goodOs = mock(ByteArrayOutputStream.class);
+        final TeeOutputStream tos = new TeeOutputStream(goodOs, badOs);
         try {
             tos.close();
             fail("Expected " + IOException.class.getName());
@@ -104,13 +111,6 @@ public class TeeOutputStreamTest {
             expected.close();
 
             tos.flush();
-        }
-    }
-
-    private void assertByteArrayEquals(final String msg, final byte[] array1, final byte[] array2) {
-        assertEquals(array1.length, array2.length, msg + ": array size mismatch");
-        for (int i = 0; i < array1.length; i++) {
-            assertEquals(array1[i], array2[i], msg + ": array[ " + i + "] mismatch");
         }
     }
 

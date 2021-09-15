@@ -46,35 +46,16 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
     }
 
     /**
-     * Test default constructor.
+     * Check all the File Collections have the expected sizes.
      */
-    @Test
-    public void testDefaultConstructor() {
-        final FileAlterationMonitor monitor = new FileAlterationMonitor();
-        assertEquals(10000, monitor.getInterval(), "Interval");
-    }
-
-    @Test
-    public void testCollectionConstructorShouldDoNothingWithNullCollection() {
-        final Collection<FileAlterationObserver> observers = null;
-        final FileAlterationMonitor monitor = new FileAlterationMonitor(0, observers);
-        assertFalse(monitor.getObservers().iterator().hasNext());
-    }
-
-    @Test
-    public void testCollectionConstructorShouldDoNothingWithNullObservers() {
-        final Collection<FileAlterationObserver> observers = new ArrayList<>(5);
-        final FileAlterationMonitor monitor = new FileAlterationMonitor(0, observers);
-        assertFalse(monitor.getObservers().iterator().hasNext());
-    }
-
-    @Test
-    public void testCollectionConstructor() {
-        observer = new FileAlterationObserver("foo");
-        final Collection<FileAlterationObserver> observers = Arrays.asList(observer);
-        final FileAlterationMonitor monitor = new FileAlterationMonitor(0, observers);
-        final Iterator<FileAlterationObserver> iterator = monitor.getObservers().iterator();
-        assertEquals(observer, iterator.next());
+    private void checkFile(final String label, final File file, final Collection<File> files) {
+        for (int i = 0; i < 20; i++) {
+            if (files.contains(file)) {
+                return; // found, test passes
+            }
+            TestUtils.sleepQuietly(pauseTime);
+        }
+        fail(label + " " + file + " not found");
     }
 
     /**
@@ -110,6 +91,38 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
         // Remove Observer
         monitor.removeObserver(observer);
         assertFalse(monitor.getObservers().iterator().hasNext(), "Observers[6]");
+    }
+
+    @Test
+    public void testCollectionConstructor() {
+        observer = new FileAlterationObserver("foo");
+        final Collection<FileAlterationObserver> observers = Arrays.asList(observer);
+        final FileAlterationMonitor monitor = new FileAlterationMonitor(0, observers);
+        final Iterator<FileAlterationObserver> iterator = monitor.getObservers().iterator();
+        assertEquals(observer, iterator.next());
+    }
+
+    @Test
+    public void testCollectionConstructorShouldDoNothingWithNullCollection() {
+        final Collection<FileAlterationObserver> observers = null;
+        final FileAlterationMonitor monitor = new FileAlterationMonitor(0, observers);
+        assertFalse(monitor.getObservers().iterator().hasNext());
+    }
+
+    @Test
+    public void testCollectionConstructorShouldDoNothingWithNullObservers() {
+        final Collection<FileAlterationObserver> observers = new ArrayList<>(5);
+        final FileAlterationMonitor monitor = new FileAlterationMonitor(0, observers);
+        assertFalse(monitor.getObservers().iterator().hasNext());
+    }
+
+    /**
+     * Test default constructor.
+     */
+    @Test
+    public void testDefaultConstructor() {
+        final FileAlterationMonitor monitor = new FileAlterationMonitor();
+        assertEquals(10000, monitor.getInterval(), "Interval");
     }
 
     /**
@@ -161,48 +174,6 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
     }
 
     /**
-     * Test using a thread factory.
-     * @throws Exception
-     */
-    @Test
-    public void testThreadFactory() throws Exception {
-        final long interval = 100;
-        listener.clear();
-        final FileAlterationMonitor monitor = new FileAlterationMonitor(interval, observer);
-        monitor.setThreadFactory(Executors.defaultThreadFactory());
-        assertEquals(interval, monitor.getInterval(), "Interval");
-        monitor.start();
-
-        // Create a File
-        checkCollectionsEmpty("A");
-        final File file2 = touch(new File(testDir, "file2.java"));
-        checkFile("Create", file2, listener.getCreatedFiles());
-        listener.clear();
-
-        // Delete a file
-        checkCollectionsEmpty("B");
-        file2.delete();
-        checkFile("Delete", file2, listener.getDeletedFiles());
-        listener.clear();
-
-        // Stop monitoring
-        monitor.stop();
-    }
-
-    /**
-     * Check all the File Collections have the expected sizes.
-     */
-    private void checkFile(final String label, final File file, final Collection<File> files) {
-        for (int i = 0; i < 20; i++) {
-            if (files.contains(file)) {
-                return; // found, test passes
-            }
-            TestUtils.sleepQuietly(pauseTime);
-        }
-        fail(label + " " + file + " not found");
-    }
-
-    /**
      * Test case for IO-535
      *
      * Verify that {@link FileAlterationMonitor#stop()} stops the created thread
@@ -234,5 +205,34 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
         for (final Thread thread : createdThreads) {
             assertFalse(thread.isAlive(), "The FileAlterationMonitor did not stop the threads it created.");
         }
+    }
+
+    /**
+     * Test using a thread factory.
+     * @throws Exception
+     */
+    @Test
+    public void testThreadFactory() throws Exception {
+        final long interval = 100;
+        listener.clear();
+        final FileAlterationMonitor monitor = new FileAlterationMonitor(interval, observer);
+        monitor.setThreadFactory(Executors.defaultThreadFactory());
+        assertEquals(interval, monitor.getInterval(), "Interval");
+        monitor.start();
+
+        // Create a File
+        checkCollectionsEmpty("A");
+        final File file2 = touch(new File(testDir, "file2.java"));
+        checkFile("Create", file2, listener.getCreatedFiles());
+        listener.clear();
+
+        // Delete a file
+        checkCollectionsEmpty("B");
+        file2.delete();
+        checkFile("Delete", file2, listener.getDeletedFiles());
+        listener.clear();
+
+        // Stop monitoring
+        monitor.stop();
     }
 }

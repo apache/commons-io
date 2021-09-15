@@ -1500,22 +1500,22 @@ public class IOUtilsTestCase {
     }
 
     @Test
-    public void testToByteArray_InputStream_SizeZero() throws Exception {
-
-        try (InputStream fin =Files.newInputStream(testFilePath)) {
-            final byte[] out = IOUtils.toByteArray(fin, 0);
-            assertNotNull(out, "Out cannot be null");
-            assertEquals(0, out.length, "Out length must be 0");
-        }
-    }
-
-    @Test
     public void testToByteArray_InputStream_SizeOne() throws Exception {
 
         try (InputStream fin = Files.newInputStream(testFilePath)) {
             final byte[] out = IOUtils.toByteArray(fin, 1);
             assertNotNull(out, "Out cannot be null");
             assertEquals(1, out.length, "Out length must be 1");
+        }
+    }
+
+    @Test
+    public void testToByteArray_InputStream_SizeZero() throws Exception {
+
+        try (InputStream fin =Files.newInputStream(testFilePath)) {
+            final byte[] out = IOUtils.toByteArray(fin, 0);
+            assertNotNull(out, "Out cannot be null");
+            assertEquals(0, out.length, "Out length must be 0");
         }
     }
 

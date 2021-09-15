@@ -84,19 +84,19 @@ public class SizeFileComparatorTest extends ComparatorAbstractTestCase {
      * Test a file which doesn't exist.
      */
     @Test
-    public void testNonexistantFile() {
-        final File nonexistantFile = new File(new File("."), "nonexistant.txt");
-        assertFalse(nonexistantFile.exists());
-        assertTrue(comparator.compare(nonexistantFile, moreFile) < 0, "less");
+    public void testCompareDirectorySizes() {
+        assertEquals(0, comparator.compare(smallerDir, largerDir), "sumDirectoryContents=false");
+        assertEquals(-1, SizeFileComparator.SIZE_SUMDIR_COMPARATOR.compare(smallerDir, largerDir), "less");
+        assertEquals(1, SizeFileComparator.SIZE_SUMDIR_REVERSE.compare(smallerDir, largerDir), "less");
     }
 
     /**
      * Test a file which doesn't exist.
      */
     @Test
-    public void testCompareDirectorySizes() {
-        assertEquals(0, comparator.compare(smallerDir, largerDir), "sumDirectoryContents=false");
-        assertEquals(-1, SizeFileComparator.SIZE_SUMDIR_COMPARATOR.compare(smallerDir, largerDir), "less");
-        assertEquals(1, SizeFileComparator.SIZE_SUMDIR_REVERSE.compare(smallerDir, largerDir), "less");
+    public void testNonexistantFile() {
+        final File nonexistantFile = new File(new File("."), "nonexistant.txt");
+        assertFalse(nonexistantFile.exists());
+        assertTrue(comparator.compare(nonexistantFile, moreFile) < 0, "less");
     }
 }

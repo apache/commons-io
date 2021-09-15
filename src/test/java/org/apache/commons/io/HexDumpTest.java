@@ -30,16 +30,6 @@ import org.junit.jupiter.api.Test;
  */
 public class HexDumpTest {
 
-    private char toHex(final int n) {
-        final char[] hexChars =
-                {
-                    '0', '1', '2', '3', '4', '5', '6', '7',
-                    '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
-                };
-
-        return hexChars[n % 16];
-    }
-
     @Test
     public void testDump()
             throws IOException {
@@ -230,5 +220,15 @@ public class HexDumpTest {
             rval = (char) c;
         }
         return rval;
+    }
+
+    private char toHex(final int n) {
+        final char[] hexChars =
+                {
+                    '0', '1', '2', '3', '4', '5', '6', '7',
+                    '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
+                };
+
+        return hexChars[n % 16];
     }
 }

@@ -32,6 +32,17 @@ import org.junit.jupiter.api.BeforeEach;
 public abstract class AbstractCloseableListTest {
     private final List<Closeable> closeableList = new ArrayList<>();
 
+    @AfterEach
+    public void cleanup() {
+        for (final Closeable c : closeableList) {
+            try {
+                c.close();
+            } catch (final IOException ignored) {
+                // ignore
+            }
+        }
+    }
+
     /**
      * Adds a Closeable to close after each test.
      *
@@ -47,16 +58,5 @@ public abstract class AbstractCloseableListTest {
     @BeforeEach
     public void setup() {
         closeableList.clear();
-    }
-
-    @AfterEach
-    public void cleanup() {
-        for (final Closeable c : closeableList) {
-            try {
-                c.close();
-            } catch (final IOException ignored) {
-                // ignore
-            }
-        }
     }
 }

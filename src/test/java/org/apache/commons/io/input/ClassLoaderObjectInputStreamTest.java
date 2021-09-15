@@ -39,6 +39,46 @@ public class ClassLoaderObjectInputStreamTest {
      */
 
 
+    private enum E {A, B, C}
+
+    private static class Test implements Serializable {
+        private static final long serialVersionUID = 1L;
+        private final int i;
+
+        private final Object o;
+
+        private final E e;
+
+        Test(final int i, final Object o) {
+            this.i = i;
+            this.e = E.A;
+            this.o = o;
+        }
+
+        private boolean equalObject(final Object other) {
+            if (this.o == null) {
+                return other == null;
+            }
+            return o.equals(other);
+        }
+
+        @Override
+        public boolean equals(final Object other) {
+            if (other instanceof Test) {
+                final Test tother = (Test) other;
+                return (this.i == tother.i)
+                        & (this.e == tother.e)
+                        & equalObject(tother.o);
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return super.hashCode();
+        }
+    }
+
     @org.junit.jupiter.api.Test
     public void testExpected() throws Exception {
 
@@ -76,65 +116,6 @@ public class ClassLoaderObjectInputStreamTest {
     }
 
     @org.junit.jupiter.api.Test
-    public void testPrimitiveLong() throws Exception {
-
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final ObjectOutputStream oos = new ObjectOutputStream(baos);
-
-        final long input = 12345L;
-        oos.writeLong(input);
-        oos.close();
-
-        final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        try (final ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
-                bais)) {
-            final long result = clois.readLong();
-
-            assertEquals(input, result);
-        }
-    }
-
-    private enum E {A, B, C}
-
-    private static class Test implements Serializable {
-        private static final long serialVersionUID = 1L;
-        private final int i;
-
-        private final Object o;
-
-        private final E e;
-
-        Test(final int i, final Object o) {
-            this.i = i;
-            this.e = E.A;
-            this.o = o;
-        }
-
-        @Override
-        public boolean equals(final Object other) {
-            if (other instanceof Test) {
-                final Test tother = (Test) other;
-                return (this.i == tother.i)
-                        & (this.e == tother.e)
-                        & equalObject(tother.o);
-            }
-            return false;
-        }
-
-        private boolean equalObject(final Object other) {
-            if (this.o == null) {
-                return other == null;
-            }
-            return o.equals(other);
-        }
-
-        @Override
-        public int hashCode() {
-            return super.hashCode();
-        }
-    }
-
-    @org.junit.jupiter.api.Test
     public void testObject1() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -167,6 +148,25 @@ public class ClassLoaderObjectInputStreamTest {
         try (final ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
                 bais)) {
             final Object result = clois.readObject();
+
+            assertEquals(input, result);
+        }
+    }
+
+    @org.junit.jupiter.api.Test
+    public void testPrimitiveLong() throws Exception {
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final ObjectOutputStream oos = new ObjectOutputStream(baos);
+
+        final long input = 12345L;
+        oos.writeLong(input);
+        oos.close();
+
+        final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        try (final ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
+                bais)) {
+            final long result = clois.readLong();
 
             assertEquals(input, result);
         }

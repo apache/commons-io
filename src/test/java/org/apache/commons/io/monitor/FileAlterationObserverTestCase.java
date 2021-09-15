@@ -44,6 +44,13 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
     }
 
     /**
+     * Call {@link FileAlterationObserver#checkAndNotify()}.
+     */
+    protected void checkAndNotify() {
+        observer.checkAndNotify();
+    }
+
+    /**
      * Test add/remove listeners.
      */
     @Test
@@ -67,24 +74,6 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
         observer.removeListener(listener);
         assertFalse(observer.getListeners().iterator().hasNext(), "Listeners[5]");
     }
-
-    /**
-     * Test toString().
-     */
-    @Test
-    public void testToString() {
-        final File file = new File("/foo");
-
-        FileAlterationObserver observer = new FileAlterationObserver(file);
-        assertEquals("FileAlterationObserver[file='" + file.getPath() +  "', listeners=0]",
-                observer.toString());
-
-        observer = new FileAlterationObserver(file, CanReadFileFilter.CAN_READ);
-        assertEquals("FileAlterationObserver[file='" + file.getPath() +  "', CanReadFileFilter, listeners=0]",
-                observer.toString());
-
-        assertEquals(file, observer.getDirectory());
-  }
 
     /**
      * Test checkAndNotify() method
@@ -206,63 +195,6 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
     }
 
     /**
-     * Test checkAndNotify() creating
-     * @throws IOException if an I/O error occurs.
-     */
-    @Test
-    public void testFileUpdate() throws IOException {
-        checkAndNotify();
-        checkCollectionsEmpty("A");
-        File testDirA = new File(testDir, "test-dir-A");
-        testDirA.mkdir();
-        testDir  = touch(testDir);
-        testDirA = touch(testDirA);
-        File testDirAFile1 = touch(new File(testDirA, "A-file1.java"));
-        final File testDirAFile2 = touch(new File(testDirA, "A-file2.java"));
-        File testDirAFile3 = touch(new File(testDirA, "A-file3.java"));
-        final File testDirAFile4 = touch(new File(testDirA, "A-file4.java"));
-        File testDirAFile5 = touch(new File(testDirA, "A-file5.java"));
-
-        checkAndNotify();
-        checkCollectionSizes("B", 1, 0, 0, 5, 0, 0);
-        assertTrue(listener.getCreatedFiles().contains(testDirAFile1), "B testDirAFile1");
-        assertTrue(listener.getCreatedFiles().contains(testDirAFile2), "B testDirAFile2");
-        assertTrue(listener.getCreatedFiles().contains(testDirAFile3), "B testDirAFile3");
-        assertTrue(listener.getCreatedFiles().contains(testDirAFile4), "B testDirAFile4");
-        assertTrue(listener.getCreatedFiles().contains(testDirAFile5), "B testDirAFile5");
-
-        assertTrue(testDirAFile1.exists(), "B testDirAFile1 exists");
-        assertTrue(testDirAFile2.exists(), "B testDirAFile2 exists");
-        assertTrue(testDirAFile3.exists(), "B testDirAFile3 exists");
-        assertTrue(testDirAFile4.exists(), "B testDirAFile4 exists");
-        assertTrue(testDirAFile5.exists(), "B testDirAFile5 exists");
-
-        checkAndNotify();
-        checkCollectionsEmpty("C");
-
-        // Update first entry
-        testDirAFile1 = touch(testDirAFile1);
-        testDirA      = touch(testDirA);
-        checkAndNotify();
-        checkCollectionSizes("D", 0, 1, 0, 0, 1, 0);
-        assertTrue(listener.getChangedFiles().contains(testDirAFile1), "D testDirAFile1");
-
-        // Update file with name between 2 entries
-        testDirAFile3 = touch(testDirAFile3);
-        testDirA      = touch(testDirA);
-        checkAndNotify();
-        checkCollectionSizes("E", 0, 1, 0, 0, 1, 0);
-        assertTrue(listener.getChangedFiles().contains(testDirAFile3), "E testDirAFile3");
-
-        // Update last entry
-        testDirAFile5 = touch(testDirAFile5);
-        testDirA      = touch(testDirA);
-        checkAndNotify();
-        checkCollectionSizes("F", 0, 1, 0, 0, 1, 0);
-        assertTrue(listener.getChangedFiles().contains(testDirAFile5), "F testDirAFile5");
-    }
-
-    /**
      * Test checkAndNotify() deleting
      * @throws IOException if an I/O error occurs.
      */
@@ -323,6 +255,63 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
     }
 
     /**
+     * Test checkAndNotify() creating
+     * @throws IOException if an I/O error occurs.
+     */
+    @Test
+    public void testFileUpdate() throws IOException {
+        checkAndNotify();
+        checkCollectionsEmpty("A");
+        File testDirA = new File(testDir, "test-dir-A");
+        testDirA.mkdir();
+        testDir  = touch(testDir);
+        testDirA = touch(testDirA);
+        File testDirAFile1 = touch(new File(testDirA, "A-file1.java"));
+        final File testDirAFile2 = touch(new File(testDirA, "A-file2.java"));
+        File testDirAFile3 = touch(new File(testDirA, "A-file3.java"));
+        final File testDirAFile4 = touch(new File(testDirA, "A-file4.java"));
+        File testDirAFile5 = touch(new File(testDirA, "A-file5.java"));
+
+        checkAndNotify();
+        checkCollectionSizes("B", 1, 0, 0, 5, 0, 0);
+        assertTrue(listener.getCreatedFiles().contains(testDirAFile1), "B testDirAFile1");
+        assertTrue(listener.getCreatedFiles().contains(testDirAFile2), "B testDirAFile2");
+        assertTrue(listener.getCreatedFiles().contains(testDirAFile3), "B testDirAFile3");
+        assertTrue(listener.getCreatedFiles().contains(testDirAFile4), "B testDirAFile4");
+        assertTrue(listener.getCreatedFiles().contains(testDirAFile5), "B testDirAFile5");
+
+        assertTrue(testDirAFile1.exists(), "B testDirAFile1 exists");
+        assertTrue(testDirAFile2.exists(), "B testDirAFile2 exists");
+        assertTrue(testDirAFile3.exists(), "B testDirAFile3 exists");
+        assertTrue(testDirAFile4.exists(), "B testDirAFile4 exists");
+        assertTrue(testDirAFile5.exists(), "B testDirAFile5 exists");
+
+        checkAndNotify();
+        checkCollectionsEmpty("C");
+
+        // Update first entry
+        testDirAFile1 = touch(testDirAFile1);
+        testDirA      = touch(testDirA);
+        checkAndNotify();
+        checkCollectionSizes("D", 0, 1, 0, 0, 1, 0);
+        assertTrue(listener.getChangedFiles().contains(testDirAFile1), "D testDirAFile1");
+
+        // Update file with name between 2 entries
+        testDirAFile3 = touch(testDirAFile3);
+        testDirA      = touch(testDirA);
+        checkAndNotify();
+        checkCollectionSizes("E", 0, 1, 0, 0, 1, 0);
+        assertTrue(listener.getChangedFiles().contains(testDirAFile3), "E testDirAFile3");
+
+        // Update last entry
+        testDirAFile5 = touch(testDirAFile5);
+        testDirA      = touch(testDirA);
+        checkAndNotify();
+        checkCollectionSizes("F", 0, 1, 0, 0, 1, 0);
+        assertTrue(listener.getChangedFiles().contains(testDirAFile5), "F testDirAFile5");
+    }
+
+    /**
      * Test checkAndNotify() method
      * @throws IOException if an I/O error occurs.
      */
@@ -376,9 +365,20 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
     }
 
     /**
-     * Call {@link FileAlterationObserver#checkAndNotify()}.
+     * Test toString().
      */
-    protected void checkAndNotify() {
-        observer.checkAndNotify();
-    }
+    @Test
+    public void testToString() {
+        final File file = new File("/foo");
+
+        FileAlterationObserver observer = new FileAlterationObserver(file);
+        assertEquals("FileAlterationObserver[file='" + file.getPath() +  "', listeners=0]",
+                observer.toString());
+
+        observer = new FileAlterationObserver(file, CanReadFileFilter.CAN_READ);
+        assertEquals("FileAlterationObserver[file='" + file.getPath() +  "', CanReadFileFilter, listeners=0]",
+                observer.toString());
+
+        assertEquals(file, observer.getDirectory());
+  }
 }

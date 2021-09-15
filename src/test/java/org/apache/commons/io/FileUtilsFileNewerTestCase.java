@@ -38,12 +38,12 @@ import org.junit.jupiter.api.io.TempDir;
  */
 public class FileUtilsFileNewerTestCase {
 
-    @TempDir
-    public File temporaryFolder;
-
     // Test data
     private static final int FILE1_SIZE = 1;
+
     private static final int FILE2_SIZE = 1024 * 4 + 1;
+    @TempDir
+    public File temporaryFolder;
 
     private File testFile1;
     private File testFile2;
@@ -90,25 +90,6 @@ public class FileUtilsFileNewerTestCase {
     }
 
     /**
-     * Tests the {@code isFileNewer(File, *)} methods which a not existing file.
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see FileUtils#isFileNewer(File, long)
-     * @see FileUtils#isFileNewer(File, Date)
-     * @see FileUtils#isFileNewer(File, File)
-     */
-    @Test
-    public void testIsFileNewerImaginaryFile() throws IOException {
-        final File imaginaryFile = new File(temporaryFolder, "imaginaryFile");
-        if (imaginaryFile.exists()) {
-            throw new IllegalStateException("The imaginary File exists");
-        }
-
-        testIsFileNewer("imaginary file can be newer", imaginaryFile, FileUtils.lastModifiedFileTime(testFile2), false);
-    }
-
-    /**
      * Tests the {@code isFileNewer(File, *)} methods which the specified conditions.
      *
      * Creates :
@@ -138,14 +119,22 @@ public class FileUtilsFileNewerTestCase {
     }
 
     /**
-     * Tests the {@code isFileNewer(File, long)} method without specifying a {@code File}.
-     * <p>
-     * The test is successful if the method throws an {@code IllegalArgumentException}.
-     * </p>
+     * Tests the {@code isFileNewer(File, *)} methods which a not existing file.
+     *
+     * @throws IOException if an I/O error occurs.
+     *
+     * @see FileUtils#isFileNewer(File, long)
+     * @see FileUtils#isFileNewer(File, Date)
+     * @see FileUtils#isFileNewer(File, File)
      */
     @Test
-    public void testIsFileNewerNoFile() {
-        assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(null, 0), "file");
+    public void testIsFileNewerImaginaryFile() throws IOException {
+        final File imaginaryFile = new File(temporaryFolder, "imaginaryFile");
+        if (imaginaryFile.exists()) {
+            throw new IllegalStateException("The imaginary File exists");
+        }
+
+        testIsFileNewer("imaginary file can be newer", imaginaryFile, FileUtils.lastModifiedFileTime(testFile2), false);
     }
 
     /**
@@ -157,6 +146,17 @@ public class FileUtilsFileNewerTestCase {
     @Test
     public void testIsFileNewerNoDate() {
         assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(testFile1, (Date) null), "date");
+    }
+
+    /**
+     * Tests the {@code isFileNewer(File, long)} method without specifying a {@code File}.
+     * <p>
+     * The test is successful if the method throws an {@code IllegalArgumentException}.
+     * </p>
+     */
+    @Test
+    public void testIsFileNewerNoFile() {
+        assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(null, 0), "file");
     }
 
     /**

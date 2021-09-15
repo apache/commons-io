@@ -33,79 +33,29 @@ import org.junit.jupiter.api.Test;
  */
 public class NullInputStreamTest {
 
+    private static final class TestNullInputStream extends NullInputStream {
+        public TestNullInputStream(final int size) {
+            super(size);
+        }
+        public TestNullInputStream(final int size, final boolean markSupported, final boolean throwEofException) {
+            super(size, markSupported, throwEofException);
+        }
+        @Override
+        protected int processByte() {
+            return (int)getPosition() - 1;
+        }
+        @Override
+        protected void processBytes(final byte[] bytes, final int offset, final int length) {
+            final int startPos = (int)getPosition() - length;
+            for (int i = offset; i < length; i++) {
+                bytes[i] = (byte)(startPos + i);
+            }
+        }
+
+    }
+
     // Use the same message as in java.io.InputStream.reset() in OpenJDK 8.0.275-1.
     private static final String MARK_RESET_NOT_SUPPORTED = "mark/reset not supported";
-
-    @Test
-    public void testRead() throws Exception {
-        final int size = 5;
-        final InputStream input = new TestNullInputStream(size);
-        for (int i = 0; i < size; i++) {
-            assertEquals(size - i, input.available(), "Check Size [" + i + "]");
-            assertEquals(i, input.read(), "Check Value [" + i + "]");
-        }
-        assertEquals(0, input.available(), "Available after contents all read");
-
-        // Check available is zero after End of file
-        assertEquals(-1, input.read(), "End of File");
-        assertEquals(0, input.available(), "Available after End of File");
-
-        // Test reading after the end of file
-        try {
-            final int result = input.read();
-            fail("Should have thrown an IOException, byte=[" + result + "]");
-        } catch (final IOException e) {
-            assertEquals("Read after end of file", e.getMessage());
-        }
-
-        // Close - should reset
-        input.close();
-        assertEquals(size, input.available(), "Available after close");
-    }
-
-    @Test
-    public void testReadByteArray() throws Exception {
-        final byte[] bytes = new byte[10];
-        final InputStream input = new TestNullInputStream(15);
-
-        // Read into array
-        final int count1 = input.read(bytes);
-        assertEquals(bytes.length, count1, "Read 1");
-        for (int i = 0; i < count1; i++) {
-            assertEquals(i, bytes[i], "Check Bytes 1");
-        }
-
-        // Read into array
-        final int count2 = input.read(bytes);
-        assertEquals(5, count2, "Read 2");
-        for (int i = 0; i < count2; i++) {
-            assertEquals(count1 + i, bytes[i], "Check Bytes 2");
-        }
-
-        // End of File
-        final int count3 = input.read(bytes);
-        assertEquals(-1, count3, "Read 3 (EOF)");
-
-        // Test reading after the end of file
-        try {
-            final int count4 = input.read(bytes);
-            fail("Should have thrown an IOException, byte=[" + count4 + "]");
-        } catch (final IOException e) {
-            assertEquals("Read after end of file", e.getMessage());
-        }
-
-        // reset by closing
-        input.close();
-
-        // Read into array using offset & length
-        final int offset = 2;
-        final int lth    = 4;
-        final int count5 = input.read(bytes, offset, lth);
-        assertEquals(lth, count5, "Read 5");
-        for (int i = offset; i < lth; i++) {
-            assertEquals(i, bytes[i], "Check Bytes 2");
-        }
-    }
 
     @Test
     public void testEOFException() throws Exception {
@@ -194,6 +144,80 @@ public class NullInputStreamTest {
     }
 
     @Test
+    public void testRead() throws Exception {
+        final int size = 5;
+        final InputStream input = new TestNullInputStream(size);
+        for (int i = 0; i < size; i++) {
+            assertEquals(size - i, input.available(), "Check Size [" + i + "]");
+            assertEquals(i, input.read(), "Check Value [" + i + "]");
+        }
+        assertEquals(0, input.available(), "Available after contents all read");
+
+        // Check available is zero after End of file
+        assertEquals(-1, input.read(), "End of File");
+        assertEquals(0, input.available(), "Available after End of File");
+
+        // Test reading after the end of file
+        try {
+            final int result = input.read();
+            fail("Should have thrown an IOException, byte=[" + result + "]");
+        } catch (final IOException e) {
+            assertEquals("Read after end of file", e.getMessage());
+        }
+
+        // Close - should reset
+        input.close();
+        assertEquals(size, input.available(), "Available after close");
+    }
+
+    @Test
+    public void testReadByteArray() throws Exception {
+        final byte[] bytes = new byte[10];
+        final InputStream input = new TestNullInputStream(15);
+
+        // Read into array
+        final int count1 = input.read(bytes);
+        assertEquals(bytes.length, count1, "Read 1");
+        for (int i = 0; i < count1; i++) {
+            assertEquals(i, bytes[i], "Check Bytes 1");
+        }
+
+        // Read into array
+        final int count2 = input.read(bytes);
+        assertEquals(5, count2, "Read 2");
+        for (int i = 0; i < count2; i++) {
+            assertEquals(count1 + i, bytes[i], "Check Bytes 2");
+        }
+
+        // End of File
+        final int count3 = input.read(bytes);
+        assertEquals(-1, count3, "Read 3 (EOF)");
+
+        // Test reading after the end of file
+        try {
+            final int count4 = input.read(bytes);
+            fail("Should have thrown an IOException, byte=[" + count4 + "]");
+        } catch (final IOException e) {
+            assertEquals("Read after end of file", e.getMessage());
+        }
+
+        // reset by closing
+        input.close();
+
+        // Read into array using offset & length
+        final int offset = 2;
+        final int lth    = 4;
+        final int count5 = input.read(bytes, offset, lth);
+        assertEquals(lth, count5, "Read 5");
+        for (int i = offset; i < lth; i++) {
+            assertEquals(i, bytes[i], "Check Bytes 2");
+        }
+    }
+
+
+    // ------------- Test NullInputStream implementation -------------
+
+    @Test
     public void testSkip() throws Exception {
         final InputStream input = new TestNullInputStream(10, true, false);
         assertEquals(0, input.read(), "Read 1");
@@ -209,29 +233,5 @@ public class NullInputStreamTest {
             assertEquals("Skip after end of file", e.getMessage(), "Skip after EOF IOException message");
         }
         input.close();
-    }
-
-
-    // ------------- Test NullInputStream implementation -------------
-
-    private static final class TestNullInputStream extends NullInputStream {
-        public TestNullInputStream(final int size) {
-            super(size);
-        }
-        public TestNullInputStream(final int size, final boolean markSupported, final boolean throwEofException) {
-            super(size, markSupported, throwEofException);
-        }
-        @Override
-        protected int processByte() {
-            return (int)getPosition() - 1;
-        }
-        @Override
-        protected void processBytes(final byte[] bytes, final int offset, final int length) {
-            final int startPos = (int)getPosition() - length;
-            for (int i = offset; i < length; i++) {
-                bytes[i] = (byte)(startPos + i);
-            }
-        }
-
     }
 }

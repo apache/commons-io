@@ -49,8 +49,74 @@ public class CharSequenceInputStreamTest {
 
     private final Random random = new Random();
 
+    private int checkAvail(final InputStream is, final int min) throws Exception {
+        final int available = is.available();
+        assertTrue(available >= min, "avail should be >= " + min + ", but was " + available);
+        return available;
+    }
+
     private Set<String> getRequiredCharsetNames() {
         return Charsets.requiredCharsets().keySet();
+    }
+
+private boolean isAvailabilityTestableForCharset(final String csName) {
+        return Charset.forName(csName).canEncode()
+                && !"COMPOUND_TEXT".equalsIgnoreCase(csName) && !"x-COMPOUND_TEXT".equalsIgnoreCase(csName)
+                && !isOddBallLegacyCharsetThatDoesNotSupportFrenchCharacters(csName);
+    }
+
+    private boolean isOddBallLegacyCharsetThatDoesNotSupportFrenchCharacters(final String csName) {
+        return "x-IBM1388".equalsIgnoreCase(csName) ||
+                "ISO-2022-CN".equalsIgnoreCase(csName) ||
+                "ISO-2022-JP".equalsIgnoreCase(csName) ||
+                "Shift_JIS".equalsIgnoreCase(csName);
+    }
+
+    @Test
+    public void testAvailable() throws Exception {
+        for (final String csName : Charset.availableCharsets().keySet()) {
+            // prevent java.lang.UnsupportedOperationException at sun.nio.cs.ext.ISO2022_CN.newEncoder.
+            // also try and avoid the following Effor on Continuum
+//            java.lang.UnsupportedOperationException: null
+//            at java.nio.CharBuffer.array(CharBuffer.java:940)
+//            at sun.nio.cs.ext.COMPOUND_TEXT_Encoder.encodeLoop(COMPOUND_TEXT_Encoder.java:75)
+//            at java.nio.charset.CharsetEncoder.encode(CharsetEncoder.java:544)
+//            at org.apache.commons.io.input.CharSequenceInputStream.fillBuffer(CharSequenceInputStream.java:120)
+//            at org.apache.commons.io.input.CharSequenceInputStream.read(CharSequenceInputStream.java:151)
+//            at org.apache.commons.io.input.CharSequenceInputStreamTest.testAvailableRead(CharSequenceInputStreamTest.java:412)
+//            at org.apache.commons.io.input.CharSequenceInputStreamTest.testAvailable(CharSequenceInputStreamTest.java:424)
+
+            try {
+                if (isAvailabilityTestableForCharset(csName)) {
+                    testAvailableSkip(csName);
+                    testAvailableRead(csName);
+                }
+            } catch (final UnsupportedOperationException e){
+                fail("Operation not supported for " + csName);
+            }
+        }
+    }
+
+    private void testAvailableRead(final String csName) throws Exception {
+        final String input = "test";
+        try (InputStream r = new CharSequenceInputStream(input, csName)) {
+            int available = checkAvail(r, input.length());
+            assertEquals(available - 1, r.skip(available - 1)); // skip all but one
+            available = checkAvail(r, 1);
+            final byte[] buff = new byte[available];
+            assertEquals(available, r.read(buff, 0, available));
+        }
+    }
+
+    private void testAvailableSkip(final String csName) throws Exception {
+        final String input = "test";
+        try (InputStream r = new CharSequenceInputStream(input, csName)) {
+            int available = checkAvail(r, input.length());
+            assertEquals(available - 1, r.skip(available - 1)); // skip all but one
+            available = checkAvail(r, 1);
+            assertEquals(1, r.skip(1));
+            available = checkAvail(r, 0);
+        }
     }
 
     private void testBufferedRead(final String testString, final String charsetName) throws IOException {
@@ -78,7 +144,7 @@ public class CharSequenceInputStreamTest {
         }
     }
 
-//    Unfortunately checking canEncode does not seem to work for all charsets:
+    //    Unfortunately checking canEncode does not seem to work for all charsets:
 //    testBufferedRead_AvailableCharset(org.apache.commons.io.input.CharSequenceInputStreamTest)  Time elapsed: 0.682 sec  <<< ERROR!
 //    java.lang.UnsupportedOperationException: null
 //        at java.nio.CharBuffer.array(CharBuffer.java:940)
@@ -351,71 +417,5 @@ public class CharSequenceInputStreamTest {
     @Test
     public void testSkip_UTF8() throws Exception {
         testSkip("UTF-8");
-    }
-
-    private int checkAvail(final InputStream is, final int min) throws Exception {
-        final int available = is.available();
-        assertTrue(available >= min, "avail should be >= " + min + ", but was " + available);
-        return available;
-    }
-
-    private void testAvailableSkip(final String csName) throws Exception {
-        final String input = "test";
-        try (InputStream r = new CharSequenceInputStream(input, csName)) {
-            int available = checkAvail(r, input.length());
-            assertEquals(available - 1, r.skip(available - 1)); // skip all but one
-            available = checkAvail(r, 1);
-            assertEquals(1, r.skip(1));
-            available = checkAvail(r, 0);
-        }
-    }
-
-    private void testAvailableRead(final String csName) throws Exception {
-        final String input = "test";
-        try (InputStream r = new CharSequenceInputStream(input, csName)) {
-            int available = checkAvail(r, input.length());
-            assertEquals(available - 1, r.skip(available - 1)); // skip all but one
-            available = checkAvail(r, 1);
-            final byte[] buff = new byte[available];
-            assertEquals(available, r.read(buff, 0, available));
-        }
-    }
-
-    @Test
-    public void testAvailable() throws Exception {
-        for (final String csName : Charset.availableCharsets().keySet()) {
-            // prevent java.lang.UnsupportedOperationException at sun.nio.cs.ext.ISO2022_CN.newEncoder.
-            // also try and avoid the following Effor on Continuum
-//            java.lang.UnsupportedOperationException: null
-//            at java.nio.CharBuffer.array(CharBuffer.java:940)
-//            at sun.nio.cs.ext.COMPOUND_TEXT_Encoder.encodeLoop(COMPOUND_TEXT_Encoder.java:75)
-//            at java.nio.charset.CharsetEncoder.encode(CharsetEncoder.java:544)
-//            at org.apache.commons.io.input.CharSequenceInputStream.fillBuffer(CharSequenceInputStream.java:120)
-//            at org.apache.commons.io.input.CharSequenceInputStream.read(CharSequenceInputStream.java:151)
-//            at org.apache.commons.io.input.CharSequenceInputStreamTest.testAvailableRead(CharSequenceInputStreamTest.java:412)
-//            at org.apache.commons.io.input.CharSequenceInputStreamTest.testAvailable(CharSequenceInputStreamTest.java:424)
-
-            try {
-                if (isAvailabilityTestableForCharset(csName)) {
-                    testAvailableSkip(csName);
-                    testAvailableRead(csName);
-                }
-            } catch (final UnsupportedOperationException e){
-                fail("Operation not supported for " + csName);
-            }
-        }
-    }
-
-    private boolean isAvailabilityTestableForCharset(final String csName) {
-        return Charset.forName(csName).canEncode()
-                && !"COMPOUND_TEXT".equalsIgnoreCase(csName) && !"x-COMPOUND_TEXT".equalsIgnoreCase(csName)
-                && !isOddBallLegacyCharsetThatDoesNotSupportFrenchCharacters(csName);
-    }
-
-    private boolean isOddBallLegacyCharsetThatDoesNotSupportFrenchCharacters(final String csName) {
-        return "x-IBM1388".equalsIgnoreCase(csName) ||
-                "ISO-2022-CN".equalsIgnoreCase(csName) ||
-                "ISO-2022-JP".equalsIgnoreCase(csName) ||
-                "Shift_JIS".equalsIgnoreCase(csName);
     }
 }

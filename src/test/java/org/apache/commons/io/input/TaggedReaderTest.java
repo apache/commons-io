@@ -35,30 +35,6 @@ import org.junit.jupiter.api.Test;
 public class TaggedReaderTest {
 
     @Test
-    public void testEmptyReader() throws IOException {
-        try (final Reader reader = new TaggedReader(ClosedReader.INSTANCE)) {
-            assertFalse(reader.ready());
-            assertEquals(-1, reader.read());
-            assertEquals(-1, reader.read(new char[1]));
-            assertEquals(-1, reader.read(new char[1], 0, 1));
-        }
-    }
-
-    @Test
-    public void testNormalReader() throws IOException {
-        try (final Reader reader = new TaggedReader(new StringReader("abc"))) {
-            assertTrue(reader.ready());
-            assertEquals('a', reader.read());
-            final char[] buffer = new char[1];
-            assertEquals(1, reader.read(buffer));
-            assertEquals('b', buffer[0]);
-            assertEquals(1, reader.read(buffer, 0, 1));
-            assertEquals('c', buffer[0]);
-            assertEquals(-1, reader.read());
-        }
-    }
-
-    @Test
     public void testBrokenReader() {
         final IOException exception = new IOException("test exception");
         final TaggedReader reader = new TaggedReader(new BrokenReader(exception));
@@ -103,6 +79,30 @@ public class TaggedReaderTest {
             } catch (final IOException e2) {
                 assertEquals(exception, e2);
             }
+        }
+    }
+
+    @Test
+    public void testEmptyReader() throws IOException {
+        try (final Reader reader = new TaggedReader(ClosedReader.INSTANCE)) {
+            assertFalse(reader.ready());
+            assertEquals(-1, reader.read());
+            assertEquals(-1, reader.read(new char[1]));
+            assertEquals(-1, reader.read(new char[1], 0, 1));
+        }
+    }
+
+    @Test
+    public void testNormalReader() throws IOException {
+        try (final Reader reader = new TaggedReader(new StringReader("abc"))) {
+            assertTrue(reader.ready());
+            assertEquals('a', reader.read());
+            final char[] buffer = new char[1];
+            assertEquals(1, reader.read(buffer));
+            assertEquals('b', buffer[0]);
+            assertEquals(1, reader.read(buffer, 0, 1));
+            assertEquals('c', buffer[0]);
+            assertEquals(-1, reader.read());
         }
     }
 

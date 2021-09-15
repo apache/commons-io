@@ -35,6 +35,10 @@ public class TestResources {
         return new File(getURI(fileName));
     }
 
+    public static InputStream getInputStream(final String fileName) {
+        return TestResources.class.getResourceAsStream(ROOT + fileName);
+    }
+
     public static Path getPath(final String fileName) throws URISyntaxException {
         return Paths.get(getURI(fileName));
     }
@@ -45,9 +49,5 @@ public class TestResources {
 
     public static URL getURL(final String fileName) {
         return TestResources.class.getResource(ROOT + fileName);
-    }
-
-    public static InputStream getInputStream(final String fileName) {
-        return TestResources.class.getResourceAsStream(ROOT + fileName);
     }
 }

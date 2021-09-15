@@ -88,14 +88,14 @@ public class CountersEqualsAndHashCodeTest {
     }
 
     @Test
-    public void testLongCounterMixEquals() {
-        testEquals(Counters.longCounter(), Counters.bigIntegerCounter());
-        testEquals(Counters.bigIntegerCounter(), Counters.longCounter());
+    public void testLongCounterHashCodes() {
+        testHashCodes(Counters.longCounter(), Counters.longCounter());
     }
 
     @Test
-    public void testLongCounterHashCodes() {
-        testHashCodes(Counters.longCounter(), Counters.longCounter());
+    public void testLongCounterMixEquals() {
+        testEquals(Counters.longCounter(), Counters.bigIntegerCounter());
+        testEquals(Counters.bigIntegerCounter(), Counters.longCounter());
     }
 
     @Test

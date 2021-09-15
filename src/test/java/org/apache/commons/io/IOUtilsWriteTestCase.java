@@ -94,29 +94,6 @@ public class IOUtilsWriteTestCase {
     }
 
     @Test
-    public void testWrite_byteArrayToWriter_nullData() throws Exception {
-        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        @SuppressWarnings("resource") // deliberately not closed
-        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
-        final Writer writer = new OutputStreamWriter(baout, StandardCharsets.US_ASCII);
-
-        IOUtils.write((byte[]) null, writer);
-        out.off();
-        writer.flush();
-
-        assertEquals(0, baout.size(), "Sizes differ");
-    }
-
-    @Test
-    public void testWrite_byteArrayToWriter_nullWriter() throws Exception {
-        try {
-            IOUtils.write(inData, (Writer) null);
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
-    }
-
-    @Test
     public void testWrite_byteArrayToWriter_Encoding() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
@@ -147,15 +124,6 @@ public class IOUtilsWriteTestCase {
     }
 
     @Test
-    public void testWrite_byteArrayToWriter_Encoding_nullWriter() throws Exception {
-        try {
-            IOUtils.write(inData, null, "UTF8");
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
-    }
-
-    @Test
     public void testWrite_byteArrayToWriter_Encoding_nullEncoding() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
@@ -171,6 +139,169 @@ public class IOUtilsWriteTestCase {
     }
 
     @Test
+    public void testWrite_byteArrayToWriter_Encoding_nullWriter() throws Exception {
+        try {
+            IOUtils.write(inData, null, "UTF8");
+            fail();
+        } catch (final NullPointerException ignore) {
+        }
+    }
+
+    @Test
+    public void testWrite_byteArrayToWriter_nullData() throws Exception {
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        @SuppressWarnings("resource") // deliberately not closed
+        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
+        final Writer writer = new OutputStreamWriter(baout, StandardCharsets.US_ASCII);
+
+        IOUtils.write((byte[]) null, writer);
+        out.off();
+        writer.flush();
+
+        assertEquals(0, baout.size(), "Sizes differ");
+    }
+
+    @Test
+    public void testWrite_byteArrayToWriter_nullWriter() throws Exception {
+        try {
+            IOUtils.write(inData, (Writer) null);
+            fail();
+        } catch (final NullPointerException ignore) {
+        }
+    }
+
+    @Test
+    public void testWrite_charArrayToOutputStream() throws Exception {
+        final String str = new String(inData, StandardCharsets.US_ASCII);
+
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
+
+        IOUtils.write(str.toCharArray(), out);
+        out.off();
+        out.flush();
+
+        assertEquals(inData.length, baout.size(), "Sizes differ");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
+    }
+
+    @Test
+    public void testWrite_charArrayToOutputStream_Encoding() throws Exception {
+        final String str = new String(inData, StandardCharsets.US_ASCII);
+
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
+
+        IOUtils.write(str.toCharArray(), out, "UTF16");
+        out.off();
+        out.flush();
+
+        byte[] bytes = baout.toByteArray();
+        bytes = new String(bytes, StandardCharsets.UTF_16).getBytes(StandardCharsets.US_ASCII);
+        assertArrayEquals(inData, bytes, "Content differs");
+    }
+
+    @Test
+    public void testWrite_charArrayToOutputStream_Encoding_nullData() throws Exception {
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
+
+        IOUtils.write((char[]) null, out);
+        out.off();
+        out.flush();
+
+        assertEquals(0, baout.size(), "Sizes differ");
+    }
+
+    @Test
+    public void testWrite_charArrayToOutputStream_Encoding_nullStream() throws Exception {
+        final String str = new String(inData, StandardCharsets.US_ASCII);
+        try {
+            IOUtils.write(str.toCharArray(), (OutputStream) null);
+            fail();
+        } catch (final NullPointerException ignore) {
+        }
+    }
+
+    @Test
+    public void testWrite_charArrayToOutputStream_nullData() throws Exception {
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
+
+        IOUtils.write((char[]) null, out);
+        out.off();
+        out.flush();
+
+        assertEquals(0, baout.size(), "Sizes differ");
+    }
+
+    @Test
+    public void testWrite_charArrayToOutputStream_nullEncoding() throws Exception {
+        final String str = new String(inData, StandardCharsets.US_ASCII);
+
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
+
+        IOUtils.write(str.toCharArray(), out, (String) null);
+        out.off();
+        out.flush();
+
+        assertEquals(inData.length, baout.size(), "Sizes differ");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
+    }
+
+    @Test
+    public void testWrite_charArrayToOutputStream_nullStream() throws Exception {
+        final String str = new String(inData, StandardCharsets.US_ASCII);
+        try {
+            IOUtils.write(str.toCharArray(), (OutputStream) null);
+            fail();
+        } catch (final NullPointerException ignore) {
+        }
+    }
+
+    @Test
+    public void testWrite_charArrayToWriter() throws Exception {
+        final String str = new String(inData, StandardCharsets.US_ASCII);
+
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        @SuppressWarnings("resource") // deliberately not closed
+        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
+        final Writer writer = new OutputStreamWriter(baout, StandardCharsets.US_ASCII);
+
+        IOUtils.write(str.toCharArray(), writer);
+        out.off();
+        writer.flush();
+
+        assertEquals(inData.length, baout.size(), "Sizes differ");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
+    }
+
+    @Test
+    public void testWrite_charArrayToWriter_Encoding_nullData() throws Exception {
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        @SuppressWarnings("resource") // deliberately not closed
+        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
+        final Writer writer = new OutputStreamWriter(baout, StandardCharsets.US_ASCII);
+
+        IOUtils.write((char[]) null, writer);
+        out.off();
+        writer.flush();
+
+        assertEquals(0, baout.size(), "Sizes differ");
+    }
+
+    @Test
+    public void testWrite_charArrayToWriter_Encoding_nullStream() throws Exception {
+        final String str = new String(inData, StandardCharsets.US_ASCII);
+        try {
+            IOUtils.write(str.toCharArray(), (Writer) null);
+            fail();
+        } catch (final NullPointerException ignore) {
+        }
+    }
+
+    @Test
     public void testWrite_charSequenceToOutputStream() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, StandardCharsets.US_ASCII));
 
@@ -183,28 +314,6 @@ public class IOUtilsWriteTestCase {
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
         assertArrayEquals(inData, baout.toByteArray(), "Content differs");
-    }
-
-    @Test
-    public void testWrite_charSequenceToOutputStream_nullData() throws Exception {
-        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
-
-        IOUtils.write((CharSequence) null, out);
-        out.off();
-        out.flush();
-
-        assertEquals(0, baout.size(), "Sizes differ");
-    }
-
-    @Test
-    public void testWrite_charSequenceToOutputStream_nullStream() throws Exception {
-        final CharSequence csq = new StringBuilder(new String(inData, StandardCharsets.US_ASCII));
-        try {
-            IOUtils.write(csq, (OutputStream) null);
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
     }
 
     @Test
@@ -246,6 +355,18 @@ public class IOUtilsWriteTestCase {
     }
 
     @Test
+    public void testWrite_charSequenceToOutputStream_nullData() throws Exception {
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
+
+        IOUtils.write((CharSequence) null, out);
+        out.off();
+        out.flush();
+
+        assertEquals(0, baout.size(), "Sizes differ");
+    }
+
+    @Test
     public void testWrite_charSequenceToOutputStream_nullEncoding() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, StandardCharsets.US_ASCII));
 
@@ -258,6 +379,16 @@ public class IOUtilsWriteTestCase {
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
         assertArrayEquals(inData, baout.toByteArray(), "Content differs");
+    }
+
+    @Test
+    public void testWrite_charSequenceToOutputStream_nullStream() throws Exception {
+        final CharSequence csq = new StringBuilder(new String(inData, StandardCharsets.US_ASCII));
+        try {
+            IOUtils.write(csq, (OutputStream) null);
+            fail();
+        } catch (final NullPointerException ignore) {
+        }
     }
 
     @Test
@@ -317,28 +448,6 @@ public class IOUtilsWriteTestCase {
     }
 
     @Test
-    public void testWrite_stringToOutputStream_nullData() throws Exception {
-        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
-
-        IOUtils.write((String) null, out);
-        out.off();
-        out.flush();
-
-        assertEquals(0, baout.size(), "Sizes differ");
-    }
-
-    @Test
-    public void testWrite_stringToOutputStream_nullStream() throws Exception {
-        final String str = new String(inData, StandardCharsets.US_ASCII);
-        try {
-            IOUtils.write(str, (OutputStream) null);
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
-    }
-
-    @Test
     public void testWrite_stringToOutputStream_Encoding() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
 
@@ -377,6 +486,18 @@ public class IOUtilsWriteTestCase {
     }
 
     @Test
+    public void testWrite_stringToOutputStream_nullData() throws Exception {
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
+
+        IOUtils.write((String) null, out);
+        out.off();
+        out.flush();
+
+        assertEquals(0, baout.size(), "Sizes differ");
+    }
+
+    @Test
     public void testWrite_stringToOutputStream_nullEncoding() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
 
@@ -389,6 +510,16 @@ public class IOUtilsWriteTestCase {
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
         assertArrayEquals(inData, baout.toByteArray(), "Content differs");
+    }
+
+    @Test
+    public void testWrite_stringToOutputStream_nullStream() throws Exception {
+        final String str = new String(inData, StandardCharsets.US_ASCII);
+        try {
+            IOUtils.write(str, (OutputStream) null);
+            fail();
+        } catch (final NullPointerException ignore) {
+        }
     }
 
     @Test
@@ -433,137 +564,6 @@ public class IOUtilsWriteTestCase {
     }
 
     @Test
-    public void testWrite_charArrayToOutputStream() throws Exception {
-        final String str = new String(inData, StandardCharsets.US_ASCII);
-
-        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
-
-        IOUtils.write(str.toCharArray(), out);
-        out.off();
-        out.flush();
-
-        assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
-    }
-
-    @Test
-    public void testWrite_charArrayToOutputStream_nullData() throws Exception {
-        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
-
-        IOUtils.write((char[]) null, out);
-        out.off();
-        out.flush();
-
-        assertEquals(0, baout.size(), "Sizes differ");
-    }
-
-    @Test
-    public void testWrite_charArrayToOutputStream_nullStream() throws Exception {
-        final String str = new String(inData, StandardCharsets.US_ASCII);
-        try {
-            IOUtils.write(str.toCharArray(), (OutputStream) null);
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
-    }
-
-    @Test
-    public void testWrite_charArrayToOutputStream_Encoding() throws Exception {
-        final String str = new String(inData, StandardCharsets.US_ASCII);
-
-        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
-
-        IOUtils.write(str.toCharArray(), out, "UTF16");
-        out.off();
-        out.flush();
-
-        byte[] bytes = baout.toByteArray();
-        bytes = new String(bytes, StandardCharsets.UTF_16).getBytes(StandardCharsets.US_ASCII);
-        assertArrayEquals(inData, bytes, "Content differs");
-    }
-
-    @Test
-    public void testWrite_charArrayToOutputStream_Encoding_nullData() throws Exception {
-        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
-
-        IOUtils.write((char[]) null, out);
-        out.off();
-        out.flush();
-
-        assertEquals(0, baout.size(), "Sizes differ");
-    }
-
-    @Test
-    public void testWrite_charArrayToOutputStream_Encoding_nullStream() throws Exception {
-        final String str = new String(inData, StandardCharsets.US_ASCII);
-        try {
-            IOUtils.write(str.toCharArray(), (OutputStream) null);
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
-    }
-
-    @Test
-    public void testWrite_charArrayToOutputStream_nullEncoding() throws Exception {
-        final String str = new String(inData, StandardCharsets.US_ASCII);
-
-        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
-
-        IOUtils.write(str.toCharArray(), out, (String) null);
-        out.off();
-        out.flush();
-
-        assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
-    }
-
-    @Test
-    public void testWrite_charArrayToWriter() throws Exception {
-        final String str = new String(inData, StandardCharsets.US_ASCII);
-
-        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        @SuppressWarnings("resource") // deliberately not closed
-        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
-        final Writer writer = new OutputStreamWriter(baout, StandardCharsets.US_ASCII);
-
-        IOUtils.write(str.toCharArray(), writer);
-        out.off();
-        writer.flush();
-
-        assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
-    }
-
-    @Test
-    public void testWrite_charArrayToWriter_Encoding_nullData() throws Exception {
-        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        @SuppressWarnings("resource") // deliberately not closed
-        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
-        final Writer writer = new OutputStreamWriter(baout, StandardCharsets.US_ASCII);
-
-        IOUtils.write((char[]) null, writer);
-        out.off();
-        writer.flush();
-
-        assertEquals(0, baout.size(), "Sizes differ");
-    }
-
-    @Test
-    public void testWrite_charArrayToWriter_Encoding_nullStream() throws Exception {
-        final String str = new String(inData, StandardCharsets.US_ASCII);
-        try {
-            IOUtils.write(str.toCharArray(), (Writer) null);
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
-    }
-
-    @Test
     public void testWriteLines_OutputStream() throws Exception {
         final Object[] data = {
                 "hello", new StringBuffer("world"), "", "this is", null, "some text"};
@@ -580,6 +580,84 @@ public class IOUtilsWriteTestCase {
         final String expected = "hello*world**this is**some text*";
         final String actual = baout.toString();
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testWriteLines_OutputStream_Encoding() throws Exception {
+        final Object[] data = {
+                "hello\u8364", new StringBuffer("world"), "", "this is", null, "some text"};
+        final List<Object> list = Arrays.asList(data);
+
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
+
+        IOUtils.writeLines(list, "*", out, "UTF-8");
+
+        out.off();
+        out.flush();
+
+        final String expected = "hello\u8364*world**this is**some text*";
+        final String actual = baout.toString("UTF-8");
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testWriteLines_OutputStream_Encoding_nullData() throws Exception {
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
+
+        IOUtils.writeLines(null, "*", out, "US-ASCII");
+        out.off();
+        out.flush();
+
+        assertEquals(0, baout.size(), "Sizes differ");
+    }
+
+    @Test
+    public void testWriteLines_OutputStream_Encoding_nullEncoding() throws Exception {
+        final Object[] data = {
+                "hello", new StringBuffer("world"), "", "this is", null, "some text"};
+        final List<Object> list = Arrays.asList(data);
+
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
+
+        IOUtils.writeLines(list, "*", out, (String) null);
+
+        out.off();
+        out.flush();
+
+        final String expected = "hello*world**this is**some text*";
+        final String actual = baout.toString();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testWriteLines_OutputStream_Encoding_nullSeparator() throws Exception {
+        final Object[] data = {"hello", "world"};
+        final List<Object> list = Arrays.asList(data);
+
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
+
+        IOUtils.writeLines(list, null, out, "US-ASCII");
+        out.off();
+        out.flush();
+
+        final String expected = "hello" + System.lineSeparator() + "world" + System.lineSeparator();
+        final String actual = baout.toString();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testWriteLines_OutputStream_Encoding_nullStream() throws Exception {
+        final Object[] data = {"hello", "world"};
+        final List<Object> list = Arrays.asList(data);
+        try {
+            IOUtils.writeLines(list, "*", null, "US-ASCII");
+            fail();
+        } catch (final NullPointerException ignore) {
+        }
     }
 
     @Test
@@ -620,84 +698,6 @@ public class IOUtilsWriteTestCase {
             fail();
         } catch (final NullPointerException ignore) {
         }
-    }
-
-    @Test
-    public void testWriteLines_OutputStream_Encoding() throws Exception {
-        final Object[] data = {
-                "hello\u8364", new StringBuffer("world"), "", "this is", null, "some text"};
-        final List<Object> list = Arrays.asList(data);
-
-        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
-
-        IOUtils.writeLines(list, "*", out, "UTF-8");
-
-        out.off();
-        out.flush();
-
-        final String expected = "hello\u8364*world**this is**some text*";
-        final String actual = baout.toString("UTF-8");
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void testWriteLines_OutputStream_Encoding_nullData() throws Exception {
-        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
-
-        IOUtils.writeLines(null, "*", out, "US-ASCII");
-        out.off();
-        out.flush();
-
-        assertEquals(0, baout.size(), "Sizes differ");
-    }
-
-    @Test
-    public void testWriteLines_OutputStream_Encoding_nullSeparator() throws Exception {
-        final Object[] data = {"hello", "world"};
-        final List<Object> list = Arrays.asList(data);
-
-        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
-
-        IOUtils.writeLines(list, null, out, "US-ASCII");
-        out.off();
-        out.flush();
-
-        final String expected = "hello" + System.lineSeparator() + "world" + System.lineSeparator();
-        final String actual = baout.toString();
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void testWriteLines_OutputStream_Encoding_nullStream() throws Exception {
-        final Object[] data = {"hello", "world"};
-        final List<Object> list = Arrays.asList(data);
-        try {
-            IOUtils.writeLines(list, "*", null, "US-ASCII");
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
-    }
-
-    @Test
-    public void testWriteLines_OutputStream_Encoding_nullEncoding() throws Exception {
-        final Object[] data = {
-                "hello", new StringBuffer("world"), "", "this is", null, "some text"};
-        final List<Object> list = Arrays.asList(data);
-
-        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
-
-        IOUtils.writeLines(list, "*", out, (String) null);
-
-        out.off();
-        out.flush();
-
-        final String expected = "hello*world**this is**some text*";
-        final String actual = baout.toString();
-        assertEquals(expected, actual);
     }
 
     @Test

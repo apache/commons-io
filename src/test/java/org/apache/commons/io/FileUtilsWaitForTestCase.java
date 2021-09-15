@@ -38,11 +38,6 @@ public class FileUtilsWaitForTestCase {
     }
 
     @Test
-    public void testWaitForNegativeDuration() {
-        FileUtils.waitFor(FileUtils.current(), -1);
-    }
-
-    @Test
     public void testWaitForInterrupted() throws InterruptedException {
         final AtomicBoolean wasInterrupted = new AtomicBoolean(false);
         final CountDownLatch started = new CountDownLatch(1);
@@ -56,6 +51,11 @@ public class FileUtilsWaitForTestCase {
         thread1.interrupt();
         thread1.join();
         assertTrue(wasInterrupted.get());
+    }
+
+    @Test
+    public void testWaitForNegativeDuration() {
+        FileUtils.waitFor(FileUtils.current(), -1);
     }
 
 }

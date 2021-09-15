@@ -56,16 +56,180 @@ import org.junit.jupiter.api.io.TempDir;
  */
 public class TailerTest {
 
+    /**
+     * Test {@link TailerListener} implementation.
+     */
+    private static class TestTailerListener extends TailerListenerAdapter {
+
+        // Must be synchronized because it is written by one thread and read by another
+        private final List<String> lines = Collections.synchronizedList(new ArrayList<>());
+
+        volatile Exception exception;
+
+        volatile int notFound;
+
+        volatile int rotated;
+
+        volatile int initialized;
+
+        volatile int reachedEndOfFile;
+
+        public void clear() {
+            lines.clear();
+        }
+
+        @Override
+        public void endOfFileReached() {
+            reachedEndOfFile++; // not atomic, but OK because only updated here.
+        }
+
+        @Override
+        public void fileNotFound() {
+            notFound++; // not atomic, but OK because only updated here.
+        }
+
+        @Override
+        public void fileRotated() {
+            rotated++; // not atomic, but OK because only updated here.
+        }
+
+        public List<String> getLines() {
+            return lines;
+        }
+
+        @Override
+        public void handle(final Exception e) {
+            exception = e;
+        }
+
+        @Override
+        public void handle(final String line) {
+            lines.add(line);
+        }
+
+        @Override
+        public void init(final Tailer tailer) {
+            initialized++; // not atomic, but OK because only updated here.
+        }
+    }
+
     @TempDir
     public static File temporaryFolder;
 
     private Tailer tailer;
+
+    protected void createFile(final File file, final long size)
+        throws IOException {
+        if (!file.getParentFile().exists()) {
+            throw new IOException("Cannot create file " + file
+                    + " as the parent directory does not exist");
+        }
+        try (final BufferedOutputStream output =
+                new BufferedOutputStream(Files.newOutputStream(file.toPath()))) {
+            TestUtils.generateTestData(output, size);
+        }
+
+        // try to make sure file is found
+        // (to stop continuum occasionally failing)
+        RandomAccessFile reader = null;
+        try {
+            while (reader == null) {
+                try {
+                    reader = new RandomAccessFile(file.getPath(), "r");
+                } catch (final FileNotFoundException ignore) {
+                }
+                try {
+                    TestUtils.sleep(200L);
+                } catch (final InterruptedException ignore) {
+                    // ignore
+                }
+            }
+        } finally {
+            try {
+                IOUtils.close(reader);
+            } catch (final IOException ignored) {
+                // ignored
+            }
+        }
+    }
 
     @AfterEach
     public void tearDown() {
         if (tailer != null) {
             tailer.stop();
         }
+    }
+
+    @Test
+    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
+    public void testBufferBreak() throws Exception {
+        final long delay = 50;
+
+        final File file = new File(temporaryFolder, "testBufferBreak.txt");
+        createFile(file, 0);
+        writeString(file, "SBTOURIST\n");
+
+        final TestTailerListener listener = new TestTailerListener();
+        tailer = new Tailer(file, listener, delay, false, 1);
+
+        final Thread thread = new Thread(tailer);
+        thread.start();
+
+        List<String> lines = listener.getLines();
+        while (lines.isEmpty() || !lines.get(lines.size() - 1).equals("SBTOURIST")) {
+            lines = listener.getLines();
+        }
+
+        listener.clear();
+    }
+
+    /*
+     * Tests [IO-357][Tailer] InterruptedException while the thead is sleeping is silently ignored.
+     */
+    @Test
+    public void testInterrupt() throws Exception {
+        final File file = new File(temporaryFolder, "nosuchfile");
+        assertFalse(file.exists(), "nosuchfile should not exist");
+        final TestTailerListener listener = new TestTailerListener();
+        // Use a long delay to try to make sure the test thread calls interrupt() while the tailer thread is sleeping.
+        final int delay = 1000;
+        final int idle = 50; // allow time for thread to work
+        tailer = new Tailer(file, listener, delay, false, IOUtils.DEFAULT_BUFFER_SIZE);
+        final Thread thread = new Thread(tailer);
+        thread.setDaemon(true);
+        thread.start();
+        TestUtils.sleep(idle);
+        thread.interrupt();
+        TestUtils.sleep(delay + idle);
+        assertNotNull(listener.exception, "Missing InterruptedException");
+        assertTrue(listener.exception instanceof InterruptedException, "Unexpected Exception: " + listener.exception);
+        assertEquals(1, listener.initialized, "Expected init to be called");
+        assertTrue(listener.notFound > 0, "fileNotFound should be called");
+        assertEquals(0, listener.rotated, "fileRotated should be not be called");
+        assertEquals(0, listener.reachedEndOfFile, "end of file never reached");
+    }
+
+    @Test
+    public void testIO335() throws Exception { // test CR behavior
+        // Create & start the Tailer
+        final long delayMillis = 50;
+        final File file = new File(temporaryFolder, "tailer-testio334.txt");
+        createFile(file, 0);
+        final TestTailerListener listener = new TestTailerListener();
+        tailer = new Tailer(file, listener, delayMillis, false);
+        final Thread thread = new Thread(tailer);
+        thread.start();
+
+        // Write some lines to the file
+        writeString(file, "CRLF\r\n", "LF\n", "CR\r", "CRCR\r\r", "trail");
+        final long testDelayMillis = delayMillis * 10;
+        TestUtils.sleep(testDelayMillis);
+        final List<String> lines = listener.getLines();
+        assertEquals(4, lines.size(), "line count");
+        assertEquals("CRLF", lines.get(0), "line 1");
+        assertEquals("LF", lines.get(1), "line 2");
+        assertEquals("CR", lines.get(2), "line 3");
+        assertEquals("CRCR\r", lines.get(3), "line 4");
     }
 
     @Test
@@ -95,29 +259,6 @@ public class TailerTest {
             lines = listener.getLines();
         }
         // System.out.println("Elapsed: " + (System.currentTimeMillis() - start));
-
-        listener.clear();
-    }
-
-    @Test
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
-    public void testBufferBreak() throws Exception {
-        final long delay = 50;
-
-        final File file = new File(temporaryFolder, "testBufferBreak.txt");
-        createFile(file, 0);
-        writeString(file, "SBTOURIST\n");
-
-        final TestTailerListener listener = new TestTailerListener();
-        tailer = new Tailer(file, listener, delay, false, 1);
-
-        final Thread thread = new Thread(tailer);
-        thread.start();
-
-        List<String> lines = listener.getLines();
-        while (lines.isEmpty() || !lines.get(lines.size() - 1).equals("SBTOURIST")) {
-            lines = listener.getLines();
-        }
 
         listener.clear();
     }
@@ -166,31 +307,41 @@ public class TailerTest {
     }
 
     @Test
-    public void testTailerEof() throws Exception {
-        // Create & start the Tailer
-        final long delay = 50;
-        final File file = new File(temporaryFolder, "tailer2-test.txt");
-        createFile(file, 0);
+    public void testStopWithNoFile() throws Exception {
+        final File file = new File(temporaryFolder,"nosuchfile");
+        assertFalse(file.exists(), "nosuchfile should not exist");
         final TestTailerListener listener = new TestTailerListener();
+        final int delay = 100;
+        final int idle = 50; // allow time for thread to work
+        tailer = Tailer.create(file, listener, delay, false);
+        TestUtils.sleep(idle);
+        tailer.stop();
+        TestUtils.sleep(delay+idle);
+        assertNull(listener.exception, "Should not generate Exception");
+        assertEquals(1 , listener.initialized, "Expected init to be called");
+        assertTrue(listener.notFound > 0, "fileNotFound should be called");
+        assertEquals(0 , listener.rotated, "fileRotated should be not be called");
+        assertEquals(0, listener.reachedEndOfFile, "end of file never reached");
+    }
+
+    @Test
+    public void testStopWithNoFileUsingExecutor() throws Exception {
+        final File file = new File(temporaryFolder,"nosuchfile");
+        assertFalse(file.exists(), "nosuchfile should not exist");
+        final TestTailerListener listener = new TestTailerListener();
+        final int delay = 100;
+        final int idle = 50; // allow time for thread to work
         tailer = new Tailer(file, listener, delay, false);
-        final Thread thread = new Thread(tailer);
-        thread.start();
-
-        // Write some lines to the file
-        writeString(file, "Line");
-
-        TestUtils.sleep(delay * 2);
-        List<String> lines = listener.getLines();
-        assertEquals(0, lines.size(), "1 line count");
-
-        writeString(file, " one\n");
-        TestUtils.sleep(delay * 2);
-        lines = listener.getLines();
-
-        assertEquals(1, lines.size(), "1 line count");
-        assertEquals("Line one", lines.get(0), "1 line 1");
-
-        listener.clear();
+        final Executor exec = new ScheduledThreadPoolExecutor(1);
+        exec.execute(tailer);
+        TestUtils.sleep(idle);
+        tailer.stop();
+        TestUtils.sleep(delay+idle);
+        assertNull(listener.exception, "Should not generate Exception");
+        assertEquals(1 , listener.initialized, "Expected init to be called");
+        assertTrue(listener.notFound > 0, "fileNotFound should be called");
+        assertEquals(0 , listener.rotated, "fileRotated should be not be called");
+        assertEquals(0, listener.reachedEndOfFile, "end of file never reached");
     }
 
     @Test
@@ -289,39 +440,32 @@ public class TailerTest {
         assertTrue(listener.reachedEndOfFile >= 3, "end of file reached at least 3 times");
     }
 
-    protected void createFile(final File file, final long size)
-        throws IOException {
-        if (!file.getParentFile().exists()) {
-            throw new IOException("Cannot create file " + file
-                    + " as the parent directory does not exist");
-        }
-        try (final BufferedOutputStream output =
-                new BufferedOutputStream(Files.newOutputStream(file.toPath()))) {
-            TestUtils.generateTestData(output, size);
-        }
+    @Test
+    public void testTailerEof() throws Exception {
+        // Create & start the Tailer
+        final long delay = 50;
+        final File file = new File(temporaryFolder, "tailer2-test.txt");
+        createFile(file, 0);
+        final TestTailerListener listener = new TestTailerListener();
+        tailer = new Tailer(file, listener, delay, false);
+        final Thread thread = new Thread(tailer);
+        thread.start();
 
-        // try to make sure file is found
-        // (to stop continuum occasionally failing)
-        RandomAccessFile reader = null;
-        try {
-            while (reader == null) {
-                try {
-                    reader = new RandomAccessFile(file.getPath(), "r");
-                } catch (final FileNotFoundException ignore) {
-                }
-                try {
-                    TestUtils.sleep(200L);
-                } catch (final InterruptedException ignore) {
-                    // ignore
-                }
-            }
-        } finally {
-            try {
-                IOUtils.close(reader);
-            } catch (final IOException ignored) {
-                // ignored
-            }
-        }
+        // Write some lines to the file
+        writeString(file, "Line");
+
+        TestUtils.sleep(delay * 2);
+        List<String> lines = listener.getLines();
+        assertEquals(0, lines.size(), "1 line count");
+
+        writeString(file, " one\n");
+        TestUtils.sleep(delay * 2);
+        lines = listener.getLines();
+
+        assertEquals(1, lines.size(), "1 line count");
+        assertEquals("Line one", lines.get(0), "1 line 1");
+
+        listener.clear();
     }
 
     /** Append some lines to a file */
@@ -339,150 +483,6 @@ public class TailerTest {
             for (final String string : strings) {
                 writer.write(string);
             }
-        }
-    }
-
-    @Test
-    public void testStopWithNoFile() throws Exception {
-        final File file = new File(temporaryFolder,"nosuchfile");
-        assertFalse(file.exists(), "nosuchfile should not exist");
-        final TestTailerListener listener = new TestTailerListener();
-        final int delay = 100;
-        final int idle = 50; // allow time for thread to work
-        tailer = Tailer.create(file, listener, delay, false);
-        TestUtils.sleep(idle);
-        tailer.stop();
-        TestUtils.sleep(delay+idle);
-        assertNull(listener.exception, "Should not generate Exception");
-        assertEquals(1 , listener.initialized, "Expected init to be called");
-        assertTrue(listener.notFound > 0, "fileNotFound should be called");
-        assertEquals(0 , listener.rotated, "fileRotated should be not be called");
-        assertEquals(0, listener.reachedEndOfFile, "end of file never reached");
-    }
-
-    /*
-     * Tests [IO-357][Tailer] InterruptedException while the thead is sleeping is silently ignored.
-     */
-    @Test
-    public void testInterrupt() throws Exception {
-        final File file = new File(temporaryFolder, "nosuchfile");
-        assertFalse(file.exists(), "nosuchfile should not exist");
-        final TestTailerListener listener = new TestTailerListener();
-        // Use a long delay to try to make sure the test thread calls interrupt() while the tailer thread is sleeping.
-        final int delay = 1000;
-        final int idle = 50; // allow time for thread to work
-        tailer = new Tailer(file, listener, delay, false, IOUtils.DEFAULT_BUFFER_SIZE);
-        final Thread thread = new Thread(tailer);
-        thread.setDaemon(true);
-        thread.start();
-        TestUtils.sleep(idle);
-        thread.interrupt();
-        TestUtils.sleep(delay + idle);
-        assertNotNull(listener.exception, "Missing InterruptedException");
-        assertTrue(listener.exception instanceof InterruptedException, "Unexpected Exception: " + listener.exception);
-        assertEquals(1, listener.initialized, "Expected init to be called");
-        assertTrue(listener.notFound > 0, "fileNotFound should be called");
-        assertEquals(0, listener.rotated, "fileRotated should be not be called");
-        assertEquals(0, listener.reachedEndOfFile, "end of file never reached");
-    }
-
-    @Test
-    public void testStopWithNoFileUsingExecutor() throws Exception {
-        final File file = new File(temporaryFolder,"nosuchfile");
-        assertFalse(file.exists(), "nosuchfile should not exist");
-        final TestTailerListener listener = new TestTailerListener();
-        final int delay = 100;
-        final int idle = 50; // allow time for thread to work
-        tailer = new Tailer(file, listener, delay, false);
-        final Executor exec = new ScheduledThreadPoolExecutor(1);
-        exec.execute(tailer);
-        TestUtils.sleep(idle);
-        tailer.stop();
-        TestUtils.sleep(delay+idle);
-        assertNull(listener.exception, "Should not generate Exception");
-        assertEquals(1 , listener.initialized, "Expected init to be called");
-        assertTrue(listener.notFound > 0, "fileNotFound should be called");
-        assertEquals(0 , listener.rotated, "fileRotated should be not be called");
-        assertEquals(0, listener.reachedEndOfFile, "end of file never reached");
-    }
-
-    @Test
-    public void testIO335() throws Exception { // test CR behavior
-        // Create & start the Tailer
-        final long delayMillis = 50;
-        final File file = new File(temporaryFolder, "tailer-testio334.txt");
-        createFile(file, 0);
-        final TestTailerListener listener = new TestTailerListener();
-        tailer = new Tailer(file, listener, delayMillis, false);
-        final Thread thread = new Thread(tailer);
-        thread.start();
-
-        // Write some lines to the file
-        writeString(file, "CRLF\r\n", "LF\n", "CR\r", "CRCR\r\r", "trail");
-        final long testDelayMillis = delayMillis * 10;
-        TestUtils.sleep(testDelayMillis);
-        final List<String> lines = listener.getLines();
-        assertEquals(4, lines.size(), "line count");
-        assertEquals("CRLF", lines.get(0), "line 1");
-        assertEquals("LF", lines.get(1), "line 2");
-        assertEquals("CR", lines.get(2), "line 3");
-        assertEquals("CRCR\r", lines.get(3), "line 4");
-    }
-
-    /**
-     * Test {@link TailerListener} implementation.
-     */
-    private static class TestTailerListener extends TailerListenerAdapter {
-
-        // Must be synchronized because it is written by one thread and read by another
-        private final List<String> lines = Collections.synchronizedList(new ArrayList<>());
-
-        volatile Exception exception;
-
-        volatile int notFound;
-
-        volatile int rotated;
-
-        volatile int initialized;
-
-        volatile int reachedEndOfFile;
-
-        @Override
-        public void handle(final String line) {
-            lines.add(line);
-        }
-
-        public List<String> getLines() {
-            return lines;
-        }
-
-        public void clear() {
-            lines.clear();
-        }
-
-        @Override
-        public void handle(final Exception e) {
-            exception = e;
-        }
-
-        @Override
-        public void init(final Tailer tailer) {
-            initialized++; // not atomic, but OK because only updated here.
-        }
-
-        @Override
-        public void fileNotFound() {
-            notFound++; // not atomic, but OK because only updated here.
-        }
-
-        @Override
-        public void fileRotated() {
-            rotated++; // not atomic, but OK because only updated here.
-        }
-
-        @Override
-        public void endOfFileReached() {
-            reachedEndOfFile++; // not atomic, but OK because only updated here.
         }
     }
 }

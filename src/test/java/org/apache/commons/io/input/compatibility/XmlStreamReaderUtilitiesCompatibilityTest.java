@@ -26,11 +26,10 @@ import org.apache.commons.io.input.XmlStreamReaderUtilitiesTest;
  */
 public class XmlStreamReaderUtilitiesCompatibilityTest extends XmlStreamReaderUtilitiesTest {
 
-    @Override
-    protected String calculateRawEncoding(final String bomEnc, final String xmlGuessEnc, final String xmlEnc,
-            final String defaultEncoding) throws IOException {
-        try (final MockXmlStreamReader mock = new MockXmlStreamReader(defaultEncoding)) {
-            return mock.calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc, null);
+    /** Mock {@link XmlStreamReader} implementation */
+    private static class MockXmlStreamReader extends XmlStreamReader {
+        MockXmlStreamReader(final String defaultEncoding) throws IOException {
+            super(new StringInputStream(), null, true, defaultEncoding);
         }
     }
     @Override
@@ -44,10 +43,11 @@ public class XmlStreamReaderUtilitiesCompatibilityTest extends XmlStreamReaderUt
         }
     }
 
-    /** Mock {@link XmlStreamReader} implementation */
-    private static class MockXmlStreamReader extends XmlStreamReader {
-        MockXmlStreamReader(final String defaultEncoding) throws IOException {
-            super(new StringInputStream(), null, true, defaultEncoding);
+    @Override
+    protected String calculateRawEncoding(final String bomEnc, final String xmlGuessEnc, final String xmlEnc,
+            final String defaultEncoding) throws IOException {
+        try (final MockXmlStreamReader mock = new MockXmlStreamReader(defaultEncoding)) {
+            return mock.calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc, null);
         }
     }
 }

@@ -32,6 +32,11 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 public class CountingPathVisitorTest extends TestArguments {
 
+    private void checkZeroCounts(final CountingPathVisitor visitor) {
+        Assertions.assertEquals(CountingPathVisitor.withLongCounters(), visitor);
+        Assertions.assertEquals(CountingPathVisitor.withBigIntegerCounters(), visitor);
+    }
+
     /**
      * Tests an empty folder.
      */
@@ -78,11 +83,6 @@ public class CountingPathVisitorTest extends TestArguments {
         checkZeroCounts(visitor);
         assertCounts(3, 2, 2, PathUtils.visitFileTree(visitor,
                 "src/test/resources/org/apache/commons/io/dirs-2-file-size-2"));
-    }
-
-    private void checkZeroCounts(final CountingPathVisitor visitor) {
-        Assertions.assertEquals(CountingPathVisitor.withLongCounters(), visitor);
-        Assertions.assertEquals(CountingPathVisitor.withBigIntegerCounters(), visitor);
     }
 
     @ParameterizedTest

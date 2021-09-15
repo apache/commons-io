@@ -57,6 +57,22 @@ public class PathUtilsDeleteFileTest {
         tempDir = Files.createTempDirectory(getClass().getCanonicalName());
     }
 
+    @Test
+    public void testDeleteBrokenLink() throws IOException {
+        assumeFalse(SystemUtils.IS_OS_WINDOWS);
+
+        final Path missingFile = tempDir.resolve("missing.txt");
+        final Path brokenLink = tempDir.resolve("broken.txt");
+        Files.createSymbolicLink(brokenLink, missingFile);
+
+        assertTrue(Files.exists(brokenLink, LinkOption.NOFOLLOW_LINKS));
+        assertFalse(Files.exists(missingFile, LinkOption.NOFOLLOW_LINKS));
+
+        PathUtils.deleteFile(brokenLink);
+
+        assertFalse(Files.exists(brokenLink, LinkOption.NOFOLLOW_LINKS), "Symbolic link not removed");
+    }
+
     /**
      * Tests a directory with one file of size 0.
      */
@@ -146,21 +162,5 @@ public class PathUtilsDeleteFileTest {
         PathUtils.deleteFile(resolved);
         // This will throw if not empty.
         Files.deleteIfExists(tempDir);
-    }
-
-    @Test
-    public void testDeleteBrokenLink() throws IOException {
-        assumeFalse(SystemUtils.IS_OS_WINDOWS);
-
-        final Path missingFile = tempDir.resolve("missing.txt");
-        final Path brokenLink = tempDir.resolve("broken.txt");
-        Files.createSymbolicLink(brokenLink, missingFile);
-
-        assertTrue(Files.exists(brokenLink, LinkOption.NOFOLLOW_LINKS));
-        assertFalse(Files.exists(missingFile, LinkOption.NOFOLLOW_LINKS));
-
-        PathUtils.deleteFile(brokenLink);
-
-        assertFalse(Files.exists(brokenLink, LinkOption.NOFOLLOW_LINKS), "Symbolic link not removed");
     }
 }

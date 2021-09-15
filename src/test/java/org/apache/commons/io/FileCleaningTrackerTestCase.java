@@ -47,12 +47,23 @@ public class FileCleaningTrackerTestCase {
     @TempDir
     public File temporaryFolder;
 
+    private File testFile;
+
+    private FileCleaningTracker theInstance;
     protected FileCleaningTracker newInstance() {
         return new FileCleaningTracker();
     }
 
-    private File testFile;
-    private FileCleaningTracker theInstance;
+    private void pauseForDeleteToComplete(File file) {
+        int count = 0;
+        while(file.exists() && count++ < 40) {
+            try {
+                TestUtils.sleep(500L);
+            } catch (final InterruptedException ignore) {
+            }
+            file = new File(file.getPath());
+        }
+    }
 
     /**
      */
@@ -60,6 +71,13 @@ public class FileCleaningTrackerTestCase {
     public void setUp() {
         testFile = new File(temporaryFolder, "file-test.txt");
         theInstance = newInstance();
+    }
+
+    private String showFailures() {
+        if (theInstance.deleteFailures.size() == 1) {
+            return "[Delete Failed: " + theInstance.deleteFailures.get(0) + "]";
+        }
+        return "[Delete Failures: " + theInstance.deleteFailures.size() + "]";
     }
 
     @AfterEach
@@ -86,29 +104,6 @@ public class FileCleaningTrackerTestCase {
     }
 
     @Test
-    public void testFileCleanerFile() throws Exception {
-        final String path = testFile.getPath();
-
-        assertFalse(testFile.exists());
-        RandomAccessFile r = new RandomAccessFile(testFile, "rw");
-        assertTrue(testFile.exists());
-
-        assertEquals(0, theInstance.getTrackCount());
-        theInstance.track(path, r);
-        assertEquals(1, theInstance.getTrackCount());
-
-        r.close();
-        testFile = null;
-        r = null;
-
-        waitUntilTrackCount();
-        pauseForDeleteToComplete(new File(path));
-
-        assertEquals(0, theInstance.getTrackCount());
-        assertFalse(new File(path).exists(), showFailures());
-    }
-
-    @Test
     public void testFileCleanerDirectory() throws Exception {
         TestUtils.createFile(testFile, 100);
         assertTrue(testFile.exists());
@@ -117,26 +112,6 @@ public class FileCleaningTrackerTestCase {
         Object obj = new Object();
         assertEquals(0, theInstance.getTrackCount());
         theInstance.track(temporaryFolder, obj);
-        assertEquals(1, theInstance.getTrackCount());
-
-        obj = null;
-
-        waitUntilTrackCount();
-
-        assertEquals(0, theInstance.getTrackCount());
-        assertTrue(testFile.exists());  // not deleted, as dir not empty
-        assertTrue(testFile.getParentFile().exists());  // not deleted, as dir not empty
-    }
-
-    @Test
-    public void testFileCleanerDirectory_NullStrategy() throws Exception {
-        TestUtils.createFile(testFile, 100);
-        assertTrue(testFile.exists());
-        assertTrue(temporaryFolder.exists());
-
-        Object obj = new Object();
-        assertEquals(0, theInstance.getTrackCount());
-        theInstance.track(temporaryFolder, obj, null);
         assertEquals(1, theInstance.getTrackCount());
 
         obj = null;
@@ -177,45 +152,23 @@ public class FileCleaningTrackerTestCase {
     }
 
     @Test
-    public void testFileCleanerNull() {
-        try {
-            theInstance.track((File) null, new Object());
-            fail();
-        } catch (final NullPointerException ex) {
-            // expected
-        }
-        try {
-            theInstance.track((File) null, new Object(), FileDeleteStrategy.NORMAL);
-            fail();
-        } catch (final NullPointerException ex) {
-            // expected
-        }
-        try {
-            theInstance.track((String) null, new Object());
-            fail();
-        } catch (final NullPointerException ex) {
-            // expected
-        }
-        try {
-            theInstance.track((String) null, new Object(), FileDeleteStrategy.NORMAL);
-            fail();
-        } catch (final NullPointerException ex) {
-            // expected
-        }
-    }
+    public void testFileCleanerDirectory_NullStrategy() throws Exception {
+        TestUtils.createFile(testFile, 100);
+        assertTrue(testFile.exists());
+        assertTrue(temporaryFolder.exists());
 
-    @Test
-    public void testFileCleanerExitWhenFinishedFirst() throws Exception {
-        assertFalse(theInstance.exitWhenFinished);
-        theInstance.exitWhenFinished();
-        assertTrue(theInstance.exitWhenFinished);
-        assertNull(theInstance.reaper);
+        Object obj = new Object();
+        assertEquals(0, theInstance.getTrackCount());
+        theInstance.track(temporaryFolder, obj, null);
+        assertEquals(1, theInstance.getTrackCount());
+
+        obj = null;
 
         waitUntilTrackCount();
 
         assertEquals(0, theInstance.getTrackCount());
-        assertTrue(theInstance.exitWhenFinished);
-        assertNull(theInstance.reaper);
+        assertTrue(testFile.exists());  // not deleted, as dir not empty
+        assertTrue(testFile.getParentFile().exists());  // not deleted, as dir not empty
     }
 
     @Test
@@ -304,21 +257,68 @@ public class FileCleaningTrackerTestCase {
         assertFalse(theInstance.reaper.isAlive());
     }
 
-    private void pauseForDeleteToComplete(File file) {
-        int count = 0;
-        while(file.exists() && count++ < 40) {
-            try {
-                TestUtils.sleep(500L);
-            } catch (final InterruptedException ignore) {
-            }
-            file = new File(file.getPath());
-        }
+    @Test
+    public void testFileCleanerExitWhenFinishedFirst() throws Exception {
+        assertFalse(theInstance.exitWhenFinished);
+        theInstance.exitWhenFinished();
+        assertTrue(theInstance.exitWhenFinished);
+        assertNull(theInstance.reaper);
+
+        waitUntilTrackCount();
+
+        assertEquals(0, theInstance.getTrackCount());
+        assertTrue(theInstance.exitWhenFinished);
+        assertNull(theInstance.reaper);
     }
-    private String showFailures() {
-        if (theInstance.deleteFailures.size() == 1) {
-            return "[Delete Failed: " + theInstance.deleteFailures.get(0) + "]";
+
+    @Test
+    public void testFileCleanerFile() throws Exception {
+        final String path = testFile.getPath();
+
+        assertFalse(testFile.exists());
+        RandomAccessFile r = new RandomAccessFile(testFile, "rw");
+        assertTrue(testFile.exists());
+
+        assertEquals(0, theInstance.getTrackCount());
+        theInstance.track(path, r);
+        assertEquals(1, theInstance.getTrackCount());
+
+        r.close();
+        testFile = null;
+        r = null;
+
+        waitUntilTrackCount();
+        pauseForDeleteToComplete(new File(path));
+
+        assertEquals(0, theInstance.getTrackCount());
+        assertFalse(new File(path).exists(), showFailures());
+    }
+    @Test
+    public void testFileCleanerNull() {
+        try {
+            theInstance.track((File) null, new Object());
+            fail();
+        } catch (final NullPointerException ex) {
+            // expected
         }
-        return "[Delete Failures: " + theInstance.deleteFailures.size() + "]";
+        try {
+            theInstance.track((File) null, new Object(), FileDeleteStrategy.NORMAL);
+            fail();
+        } catch (final NullPointerException ex) {
+            // expected
+        }
+        try {
+            theInstance.track((String) null, new Object());
+            fail();
+        } catch (final NullPointerException ex) {
+            // expected
+        }
+        try {
+            theInstance.track((String) null, new Object(), FileDeleteStrategy.NORMAL);
+            fail();
+        } catch (final NullPointerException ex) {
+            // expected
+        }
     }
 
     private void waitUntilTrackCount() throws Exception {

@@ -26,6 +26,23 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.Test;
 
 public class ChunkedWriterTest {
+    private OutputStreamWriter getOutputStreamWriter(final AtomicInteger numWrites) {
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        return new OutputStreamWriter(baos) {
+            @Override
+            public void write(final char[] cbuf, final int off, final int len) throws IOException {
+                numWrites.incrementAndGet();
+                super.write(cbuf, off, len);
+            }
+        };
+    }
+
+    @Test
+    public void negative_chunksize_not_permitted() {
+        assertThrows(IllegalArgumentException.class,
+               () -> new ChunkedWriter(new OutputStreamWriter(new ByteArrayOutputStream()), 0));
+    }
+
     @Test
     public void write_four_chunks() throws Exception {
         final AtomicInteger numWrites = new AtomicInteger();
@@ -48,22 +65,5 @@ public class ChunkedWriterTest {
                 assertEquals(2, numWrites.get());
             }
         }
-    }
-
-    private OutputStreamWriter getOutputStreamWriter(final AtomicInteger numWrites) {
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        return new OutputStreamWriter(baos) {
-            @Override
-            public void write(final char[] cbuf, final int off, final int len) throws IOException {
-                numWrites.incrementAndGet();
-                super.write(cbuf, off, len);
-            }
-        };
-    }
-
-    @Test
-    public void negative_chunksize_not_permitted() {
-        assertThrows(IllegalArgumentException.class,
-               () -> new ChunkedWriter(new OutputStreamWriter(new ByteArrayOutputStream()), 0));
     }
 }

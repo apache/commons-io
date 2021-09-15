@@ -63,36 +63,12 @@ public class QueueInputStreamTest {
 
     @ParameterizedTest(name = "inputData={0}")
     @MethodSource("inputData")
-    public void unbufferedReadWrite(final String inputData) throws IOException {
-        try (final QueueInputStream inputStream = new QueueInputStream();
-                final QueueOutputStream outputStream = inputStream.newQueueOutputStream()) {
-            writeUnbuffered(outputStream, inputData);
-            final String actualData = readUnbuffered(inputStream);
-            assertEquals(inputData, actualData);
-        }
-    }
-
-    @ParameterizedTest(name = "inputData={0}")
-    @MethodSource("inputData")
     public void bufferedReads(final String inputData) throws IOException {
         final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
         try (final BufferedInputStream inputStream = new BufferedInputStream(new QueueInputStream(queue));
                 final QueueOutputStream outputStream = new QueueOutputStream(queue)) {
             outputStream.write(inputData.getBytes(UTF_8));
             final String actualData = IOUtils.toString(inputStream, UTF_8);
-            assertEquals(inputData, actualData);
-        }
-    }
-
-    @ParameterizedTest(name = "inputData={0}")
-    @MethodSource("inputData")
-    public void bufferedWrites(final String inputData) throws IOException {
-        final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
-        try (final QueueInputStream inputStream = new QueueInputStream(queue);
-                final BufferedOutputStream outputStream = new BufferedOutputStream(new QueueOutputStream(queue), defaultBufferSize())) {
-            outputStream.write(inputData.getBytes(UTF_8));
-            outputStream.flush();
-            final String actualData = readUnbuffered(inputStream);
             assertEquals(inputData, actualData);
         }
     }
@@ -110,20 +86,21 @@ public class QueueInputStreamTest {
         }
     }
 
-    @Test
-    public void testNullArgument() {
-        assertThrows(NullPointerException.class, () -> new QueueInputStream(null), "queue is required");
+    @ParameterizedTest(name = "inputData={0}")
+    @MethodSource("inputData")
+    public void bufferedWrites(final String inputData) throws IOException {
+        final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
+        try (final QueueInputStream inputStream = new QueueInputStream(queue);
+                final BufferedOutputStream outputStream = new BufferedOutputStream(new QueueOutputStream(queue), defaultBufferSize())) {
+            outputStream.write(inputData.getBytes(UTF_8));
+            outputStream.flush();
+            final String actualData = readUnbuffered(inputStream);
+            assertEquals(inputData, actualData);
+        }
     }
 
     private int defaultBufferSize() {
         return 8192;
-    }
-
-    private void writeUnbuffered(final QueueOutputStream outputStream, final String inputData) throws InterruptedIOException {
-        final byte[] bytes = inputData.getBytes(UTF_8);
-        for (final byte oneByte : bytes) {
-            outputStream.write(oneByte);
-        }
     }
 
     private String readUnbuffered(final InputStream inputStream) throws IOException {
@@ -133,5 +110,28 @@ public class QueueInputStreamTest {
             byteArrayOutputStream.write(n);
         }
         return byteArrayOutputStream.toString("UTF-8");
+    }
+
+    @Test
+    public void testNullArgument() {
+        assertThrows(NullPointerException.class, () -> new QueueInputStream(null), "queue is required");
+    }
+
+    @ParameterizedTest(name = "inputData={0}")
+    @MethodSource("inputData")
+    public void unbufferedReadWrite(final String inputData) throws IOException {
+        try (final QueueInputStream inputStream = new QueueInputStream();
+                final QueueOutputStream outputStream = inputStream.newQueueOutputStream()) {
+            writeUnbuffered(outputStream, inputData);
+            final String actualData = readUnbuffered(inputStream);
+            assertEquals(inputData, actualData);
+        }
+    }
+
+    private void writeUnbuffered(final QueueOutputStream outputStream, final String inputData) throws InterruptedIOException {
+        final byte[] bytes = inputData.getBytes(UTF_8);
+        for (final byte oneByte : bytes) {
+            outputStream.write(oneByte);
+        }
     }
 }

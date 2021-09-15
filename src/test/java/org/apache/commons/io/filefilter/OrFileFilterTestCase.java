@@ -65,13 +65,13 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
   }
 
   @Override
-  protected List<Boolean> getFileResults() {
-    return this.testFileResults;
+  protected List<Boolean> getFilenameResults() {
+    return this.testFilenameResults;
   }
 
   @Override
-  protected List<Boolean> getFilenameResults() {
-    return this.testFilenameResults;
+  protected List<Boolean> getFileResults() {
+    return this.testFileResults;
   }
 
   @Override

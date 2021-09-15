@@ -64,6 +64,49 @@ public class CountingInputStreamTest {
     }
 
 
+    @Test
+    public void testEOF1() throws Exception {
+        final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);
+        try (final CountingInputStream cis = new CountingInputStream(bais)) {
+
+            int found = cis.read();
+            assertEquals(0, found);
+            assertEquals(1, cis.getCount());
+            found = cis.read();
+            assertEquals(0, found);
+            assertEquals(2, cis.getCount());
+            found = cis.read();
+            assertEquals(-1, found);
+            assertEquals(2, cis.getCount());
+        }
+    }
+
+    @Test
+    public void testEOF2() throws Exception {
+        final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);
+        try (final CountingInputStream cis = new CountingInputStream(bais)) {
+
+            final byte[] result = new byte[10];
+
+            final int found = cis.read(result);
+            assertEquals(2, found);
+            assertEquals(2, cis.getCount());
+        }
+    }
+
+    @Test
+    public void testEOF3() throws Exception {
+        final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);
+        try (final CountingInputStream cis = new CountingInputStream(bais)) {
+
+            final byte[] result = new byte[10];
+
+            final int found = cis.read(result, 0, 5);
+            assertEquals(2, found);
+            assertEquals(2, cis.getCount());
+        }
+    }
+
     /*
      * Test for files > 2GB in size - see issue IO-84
      */
@@ -115,6 +158,21 @@ public class CountingInputStreamTest {
     }
 
     @Test
+    public void testSkipping() throws IOException {
+        final String text = "Hello World!";
+        try (final CountingInputStream cis = new CountingInputStream(new StringInputStream(text))) {
+
+            assertEquals(6, cis.skip(6));
+            assertEquals(6, cis.getCount());
+            final byte[] result = new byte[6];
+            cis.read(result);
+
+            assertEquals("World!", new String(result));
+            assertEquals(12, cis.getCount());
+        }
+    }
+
+    @Test
     public void testZeroLength1() throws Exception {
         final ByteArrayInputStream bais = new ByteArrayInputStream(IOUtils.EMPTY_BYTE_ARRAY);
         try (final CountingInputStream cis = new CountingInputStream(bais)) {
@@ -148,64 +206,6 @@ public class CountingInputStreamTest {
             final int found = cis.read(result, 0, 5);
             assertEquals(-1, found);
             assertEquals(0, cis.getCount());
-        }
-    }
-
-    @Test
-    public void testEOF1() throws Exception {
-        final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);
-        try (final CountingInputStream cis = new CountingInputStream(bais)) {
-
-            int found = cis.read();
-            assertEquals(0, found);
-            assertEquals(1, cis.getCount());
-            found = cis.read();
-            assertEquals(0, found);
-            assertEquals(2, cis.getCount());
-            found = cis.read();
-            assertEquals(-1, found);
-            assertEquals(2, cis.getCount());
-        }
-    }
-
-    @Test
-    public void testEOF2() throws Exception {
-        final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);
-        try (final CountingInputStream cis = new CountingInputStream(bais)) {
-
-            final byte[] result = new byte[10];
-
-            final int found = cis.read(result);
-            assertEquals(2, found);
-            assertEquals(2, cis.getCount());
-        }
-    }
-
-    @Test
-    public void testEOF3() throws Exception {
-        final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);
-        try (final CountingInputStream cis = new CountingInputStream(bais)) {
-
-            final byte[] result = new byte[10];
-
-            final int found = cis.read(result, 0, 5);
-            assertEquals(2, found);
-            assertEquals(2, cis.getCount());
-        }
-    }
-
-    @Test
-    public void testSkipping() throws IOException {
-        final String text = "Hello World!";
-        try (final CountingInputStream cis = new CountingInputStream(new StringInputStream(text))) {
-
-            assertEquals(6, cis.skip(6));
-            assertEquals(6, cis.getCount());
-            final byte[] result = new byte[6];
-            cis.read(result);
-
-            assertEquals("World!", new String(result));
-            assertEquals(12, cis.getCount());
         }
     }
 

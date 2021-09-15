@@ -33,6 +33,11 @@ import org.junit.jupiter.api.Test;
 public class CharsetsTestCase {
 
     @Test
+    public void testIso8859_1() {
+        assertEquals("ISO-8859-1", Charsets.ISO_8859_1.name());
+    }
+
+    @Test
     public void testRequiredCharsets() {
         final SortedMap<String, Charset> requiredCharsets = Charsets.requiredCharsets();
         // test for what we expect to be there as of Java 6
@@ -43,11 +48,6 @@ public class CharsetsTestCase {
         assertEquals(requiredCharsets.get("UTF-16").name(), "UTF-16");
         assertEquals(requiredCharsets.get("UTF-16BE").name(), "UTF-16BE");
         assertEquals(requiredCharsets.get("UTF-16LE").name(), "UTF-16LE");
-    }
-
-    @Test
-    public void testIso8859_1() {
-        assertEquals("ISO-8859-1", Charsets.ISO_8859_1.name());
     }
 
     @Test

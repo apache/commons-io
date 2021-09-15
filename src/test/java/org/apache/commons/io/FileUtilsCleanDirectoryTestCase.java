@@ -43,22 +43,32 @@ public class FileUtilsCleanDirectoryTestCase {
     @TempDir
     public File top;
 
+    /** Only runs on Linux. */
+    private boolean chmod(final File file, final int mode, final boolean recurse) throws InterruptedException {
+        final List<String> args = new ArrayList<>();
+        args.add("chmod");
+
+        if (recurse) {
+            args.add("-R");
+        }
+
+        args.add(Integer.toString(mode));
+        args.add(file.getAbsolutePath());
+
+        final Process proc;
+
+        try {
+            proc = Runtime.getRuntime().exec(args.toArray(new String[args.size()]));
+        } catch (final IOException e) {
+            return false;
+        }
+        return proc.waitFor() == 0;
+    }
+
     // -----------------------------------------------------------------------
     @Test
     public void testCleanEmpty() throws Exception {
         assertEquals(0, top.list().length);
-
-        FileUtils.cleanDirectory(top);
-
-        assertEquals(0, top.list().length);
-    }
-
-    @Test
-    public void testDeletesRegular() throws Exception {
-        FileUtils.touch(new File(top, "regular"));
-        FileUtils.touch(new File(top, ".hidden"));
-
-        assertEquals(2, top.list().length);
 
         FileUtils.cleanDirectory(top);
 
@@ -80,22 +90,16 @@ public class FileUtilsCleanDirectoryTestCase {
         assertEquals(0, top.list().length);
     }
 
-    @DisabledOnOs(OS.WINDOWS)
     @Test
-    public void testThrowsOnNullList() throws Exception {
-        // test wont work if we can't restrict permissions on the
-        // directory, so skip it.
-        assumeTrue(chmod(top, 0, false));
+    public void testDeletesRegular() throws Exception {
+        FileUtils.touch(new File(top, "regular"));
+        FileUtils.touch(new File(top, ".hidden"));
 
-        try {
-            // cleanDirectory calls forceDelete
-            FileUtils.cleanDirectory(top);
-            fail("expected IOException");
-        } catch (final IOException e) {
-            assertEquals("Unknown I/O error listing contents of directory: " + top.getAbsolutePath(), e.getMessage());
-        } finally {
-            chmod(top, 755, false);
-        }
+        assertEquals(2, top.list().length);
+
+        FileUtils.cleanDirectory(top);
+
+        assertEquals(0, top.list().length);
     }
 
     @DisabledOnOs(OS.WINDOWS)
@@ -118,26 +122,22 @@ public class FileUtilsCleanDirectoryTestCase {
         }
     }
 
-    /** Only runs on Linux. */
-    private boolean chmod(final File file, final int mode, final boolean recurse) throws InterruptedException {
-        final List<String> args = new ArrayList<>();
-        args.add("chmod");
-
-        if (recurse) {
-            args.add("-R");
-        }
-
-        args.add(Integer.toString(mode));
-        args.add(file.getAbsolutePath());
-
-        final Process proc;
+    @DisabledOnOs(OS.WINDOWS)
+    @Test
+    public void testThrowsOnNullList() throws Exception {
+        // test wont work if we can't restrict permissions on the
+        // directory, so skip it.
+        assumeTrue(chmod(top, 0, false));
 
         try {
-            proc = Runtime.getRuntime().exec(args.toArray(new String[args.size()]));
+            // cleanDirectory calls forceDelete
+            FileUtils.cleanDirectory(top);
+            fail("expected IOException");
         } catch (final IOException e) {
-            return false;
+            assertEquals("Unknown I/O error listing contents of directory: " + top.getAbsolutePath(), e.getMessage());
+        } finally {
+            chmod(top, 755, false);
         }
-        return proc.waitFor() == 0;
     }
 
 }
