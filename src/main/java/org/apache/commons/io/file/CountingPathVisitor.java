@@ -18,6 +18,7 @@
 package org.apache.commons.io.file;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,18 +38,18 @@ public class CountingPathVisitor extends SimplePathVisitor {
     static final String[] EMPTY_STRING_ARRAY = {};
 
     /**
-     * Creates a new instance configured with a BigInteger {@link PathCounters}.
+     * Creates a new instance configured with a {@link BigInteger} {@link PathCounters}.
      *
-     * @return a new instance configured with a BigInteger {@link PathCounters}.
+     * @return a new instance configured with a {@link BigInteger} {@link PathCounters}.
      */
     public static CountingPathVisitor withBigIntegerCounters() {
         return new CountingPathVisitor(Counters.bigIntegerPathCounters());
     }
 
     /**
-     * Creates a new instance configured with a long {@link PathCounters}.
+     * Creates a new instance configured with a {@code long} {@link PathCounters}.
      *
-     * @return a new instance configured with a long {@link PathCounters}.
+     * @return a new instance configured with a {@code long} {@link PathCounters}.
      */
     public static CountingPathVisitor withLongCounters() {
         return new CountingPathVisitor(Counters.longPathCounters());
