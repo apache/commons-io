@@ -43,18 +43,18 @@ import java.nio.file.StandardOpenOption;
  * Note: Use of this class does not necessarily obviate the need to use a
  * {@link BufferedInputStream}. Depending on the use case, the use of buffering
  * may still further improve performance. For example:
- * 
+ *
  * <pre>
  * new BufferedInputStream(new GzipInputStream(new MemoryMappedFileInputStream(path))))
  * </pre>
- * 
+ *
  * will greatly outperform:
- * 
+ *
  * <pre>
  * new GzipInputStream(new MemoryMappedFileInputStream(path))
  * </pre>
- * 
- * @since 2.10.0
+ *
+ * @since 2.12.0
  */
 public class MemoryMappedFileInputStream extends InputStream {
     /**
@@ -73,11 +73,23 @@ public class MemoryMappedFileInputStream extends InputStream {
      * The starting position (within the file) of the next sliding buffer.
      */
     private long nextBufferPosition = 0;
-
+    
+    /** Constructs a {@link MemoryMappedFileInputStream} object.
+     * 
+     * @param file The path of the file to to open.
+     * @throws IOException If an I/O error occurs
+     */
     public MemoryMappedFileInputStream(final Path file) throws IOException {
         this(file, DEFAULT_BUFFER_SIZE);
     }
-
+    
+    /**
+     *  Constructs a {@link MemoryMappedFileInputStream} object.
+     * 
+     * @param file The path of the file to to open.
+     * @param bufferSize Size of the sliding buffer.
+     * @throws IOException If an I/O error occurs.
+     */
     public MemoryMappedFileInputStream(final Path file, final int bufferSize) throws IOException {
         this.bufferSize = bufferSize;
         this.channel = FileChannel.open(file, StandardOpenOption.READ);

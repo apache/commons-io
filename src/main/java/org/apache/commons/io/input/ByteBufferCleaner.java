@@ -24,10 +24,10 @@ import java.nio.ByteBuffer;
 /**
  * Utility to manually clean a direct {@link ByteBuffer}. Without manual
  * intervention, direct ByteBuffers will be cleaned eventually upon garbage
- * collection. However, this should be be relied upon since it may not occur in
- * a timely fashion - especially since off heap ByeBuffers don't put pressure on
- * the garbage collector.
- * 
+ * collection. However, this should not be be relied upon since it may not
+ * occur in a timely fashion - especially since off heap ByeBuffers don't put
+ * pressure on the garbage collector.
+ *
  * <p>
  * <b>Warning:</b> Do not attempt to use a direct {@link ByteBuffer} that has
  * been cleaned or bad things will happen. Don't use this class unless you can
@@ -36,8 +36,8 @@ import java.nio.ByteBuffer;
  * <p>
  * See <a href=https://bugs.openjdk.java.net/browse/JDK-4724038>JDK-4724038</a>
  * </p>
- * 
- * @since 2.10.0
+ *
+ * @since 2.12.0
  */
 class ByteBufferCleaner {
 
@@ -63,7 +63,7 @@ class ByteBufferCleaner {
 
     /**
      * Release memory held by the given {@link ByteBuffer}
-     * 
+     *
      * @param buffer to release
      */
     public static void clean(final ByteBuffer buffer) {
@@ -74,7 +74,7 @@ class ByteBufferCleaner {
      * Report if were able to load a suitable cleaner for the current JVM.
      * Attempting to call {@link #clean(ByteBuffer)} when this method returns false
      * will result in an exception
-     * 
+     *
      * @return {@code true} if cleaning is supported, {@code false} otherwise
      */
     public static boolean isSupported() {
