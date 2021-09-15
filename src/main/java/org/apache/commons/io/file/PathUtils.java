@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UncheckedIOException;
+import java.math.BigInteger;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -305,7 +306,18 @@ public final class PathUtils {
      * @throws IOException if an I/O error is thrown by a visitor method.
      */
     public static PathCounters countDirectory(final Path directory) throws IOException {
-        return visitFileTree(new CountingPathVisitor(Counters.longPathCounters()), directory).getPathCounters();
+        return visitFileTree(CountingPathVisitor.withLongCounters(), directory).getPathCounters();
+    }
+
+    /**
+     * Counts aspects of a directory including sub-directories.
+     *
+     * @param directory directory to delete.
+     * @return The visitor used to count the given directory.
+     * @throws IOException if an I/O error is thrown by a visitor method.
+     */
+    public static PathCounters countDirectoryAsBigInteger(final Path directory) throws IOException {
+        return visitFileTree(CountingPathVisitor.withBigIntegerCounters(), directory).getPathCounters();
     }
 
     /**
@@ -499,7 +511,7 @@ public final class PathUtils {
      * @param path1 The first directory.
      * @param path2 The second directory.
      * @return Whether the two directories contain the same files while considering file contents.
-     * @throws IOException if an I/O error is thrown by a visitor method
+     * @throws IOException if an I/O error is thrown by a visitor method.
      */
     public static boolean directoryAndFileContentEquals(final Path path1, final Path path2) throws IOException {
         return directoryAndFileContentEquals(path1, path2, EMPTY_LINK_OPTION_ARRAY, EMPTY_OPEN_OPTION_ARRAY, EMPTY_FILE_VISIT_OPTION_ARRAY);
@@ -515,7 +527,7 @@ public final class PathUtils {
      * @param openOptions options to open files.
      * @param fileVisitOption options to configure traversal.
      * @return Whether the two directories contain the same files while considering file contents.
-     * @throws IOException if an I/O error is thrown by a visitor method
+     * @throws IOException if an I/O error is thrown by a visitor method.
      */
     public static boolean directoryAndFileContentEquals(final Path path1, final Path path2, final LinkOption[] linkOptions, final OpenOption[] openOptions,
         final FileVisitOption[] fileVisitOption) throws IOException {
@@ -556,7 +568,7 @@ public final class PathUtils {
      * @param path1 The first directory.
      * @param path2 The second directory.
      * @return Whether the two directories contain the same files without considering file contents.
-     * @throws IOException if an I/O error is thrown by a visitor method
+     * @throws IOException if an I/O error is thrown by a visitor method.
      */
     public static boolean directoryContentEquals(final Path path1, final Path path2) throws IOException {
         return directoryContentEquals(path1, path2, Integer.MAX_VALUE, EMPTY_LINK_OPTION_ARRAY, EMPTY_FILE_VISIT_OPTION_ARRAY);
@@ -572,7 +584,7 @@ public final class PathUtils {
      * @param linkOptions options to follow links.
      * @param fileVisitOptions options to configure the traversal
      * @return Whether the two directories contain the same files without considering file contents.
-     * @throws IOException if an I/O error is thrown by a visitor method
+     * @throws IOException if an I/O error is thrown by a visitor method.
      */
     public static boolean directoryContentEquals(final Path path1, final Path path2, final int maxDepth, final LinkOption[] linkOptions,
         final FileVisitOption[] fileVisitOptions) throws IOException {
@@ -1123,6 +1135,94 @@ public final class PathUtils {
     }
 
     /**
+     * Returns the size of the specified file or directory. If the provided {@link File} is a regular file, then the file's
+     * length is returned. If the argument is a directory, then the size of the directory is calculated recursively. If a
+     * directory or subdirectory is security restricted, its size will not be included.
+     * <p>
+     * Note that overflow is not detected, and the return value may be negative if overflow occurs. See
+     * {@link #sizeOfAsBigInteger(Path)} for an alternative method that does not overflow.
+     * </p>
+     *
+     * @param path the regular file or directory to return the size of (must not be {@code null}).
+     * @return the length of the file, or recursive size of the directory, provided (in bytes).
+     * @throws NullPointerException if the file is {@code null}.
+     * @throws IllegalArgumentException if the file does not exist.
+     * @throws IOException if an I/O error occurs.
+     *
+     * @since 2.12.0
+     */
+    public static long sizeOf(final Path path) throws IOException {
+        requireExists(path, "path");
+        return Files.isDirectory(path) ? sizeOfDirectory(path) : Files.size(path);
+    }
+
+    /**
+     * Returns the size of the specified file or directory. If the provided {@link Path} is a regular file, then the file's
+     * length is returned. If the argument is a directory, then the size of the directory is calculated recursively. If a
+     * directory or subdirectory is security restricted, its size will not be included.
+     *
+     * @param path the regular file or directory to return the size of (must not be {@code null}).
+     * @return the length of the file, or recursive size of the directory, provided (in bytes).
+     * @throws NullPointerException if the file is {@code null}.
+     * @throws IllegalArgumentException if the file does not exist.
+     * @throws IOException if an I/O error occurs.
+     *
+     * @since 2.12.0
+     */
+    public static BigInteger sizeOfAsBigInteger(final Path path) throws IOException {
+        requireExists(path, "path");
+        return Files.isDirectory(path) ? sizeOfDirectoryAsBigInteger(path) : BigInteger.valueOf(Files.size(path));
+    }
+
+    /**
+     * Counts the size of a directory recursively (sum of the length of all files).
+     * <p>
+     * Note that overflow is not detected, and the return value may be negative if overflow occurs. See
+     * {@link #sizeOfDirectoryAsBigInteger(Path)} for an alternative method that does not overflow.
+     * </p>
+     *
+     * @param directory directory to inspect, must not be {@code null}.
+     * @return size of directory in bytes, 0 if directory is security restricted, a negative number when the real total is
+     *         greater than {@link Long#MAX_VALUE}.
+     * @throws NullPointerException if the directory is {@code null}.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.12.0
+     */
+    public static long sizeOfDirectory(final Path directory) throws IOException {
+        return countDirectory(directory).getByteCounter().getLong();
+    }
+
+    /**
+     * Counts the size of a directory recursively (sum of the length of all files).
+     *
+     * @param directory directory to inspect, must not be {@code null}.
+     * @return size of directory in bytes, 0 if directory is security restricted.
+     * @throws NullPointerException if the directory is {@code null}.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.12.0
+     */
+    public static BigInteger sizeOfDirectoryAsBigInteger(final Path directory) throws IOException {
+        return countDirectoryAsBigInteger(directory).getByteCounter().getBigInteger();
+    }
+
+    /**
+     * Requires that the given {@code File} exists and throws an {@link IllegalArgumentException} if it doesn't.
+     *
+     * @param file The {@code File} to check.
+     * @param fileParamName The parameter name to use in the exception message in case of {@code null} input.
+     * @return the given file.
+     * @throws NullPointerException if the given {@code File} is {@code null}.
+     * @throws IllegalArgumentException if the given {@code File} does not exist.
+     */
+    private static Path requireExists(final Path file, final String fileParamName) {
+        Objects.requireNonNull(file, fileParamName);
+        if (!Files.exists(file)) {
+            throw new IllegalArgumentException("File system element for parameter '" + fileParamName + "' does not exist: '" + file + "'");
+        }
+        return file;
+    }
+
+    /**
      * Converts an array of {@link FileVisitOption} to a {@link Set}.
      *
      * @param fileVisitOptions input array.
@@ -1142,9 +1242,10 @@ public final class PathUtils {
      * @param <T> See {@link Files#walkFileTree(Path,FileVisitor)}.
      * @return the given visitor.
      *
-     * @throws IOException if an I/O error is thrown by a visitor method
+     * @throws IOException if an I/O error is thrown by a visitor method.
      */
     public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final Path directory) throws IOException {
+        requireExists(directory, "directory");
         Files.walkFileTree(directory, visitor);
         return visitor;
     }
@@ -1161,7 +1262,7 @@ public final class PathUtils {
      * @param <T> See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
      * @return the given visitor.
      *
-     * @throws IOException if an I/O error is thrown by a visitor method
+     * @throws IOException if an I/O error is thrown by a visitor method.
      */
     public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final Path start, final Set<FileVisitOption> options,
         final int maxDepth) throws IOException {
@@ -1180,7 +1281,7 @@ public final class PathUtils {
      * @param <T> See {@link Files#walkFileTree(Path,FileVisitor)}.
      * @return the given visitor.
      *
-     * @throws IOException if an I/O error is thrown by a visitor method
+     * @throws IOException if an I/O error is thrown by a visitor method.
      */
     public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final String first, final String... more) throws IOException {
         return visitFileTree(visitor, Paths.get(first, more));
@@ -1196,7 +1297,7 @@ public final class PathUtils {
      * @param <T> See {@link Files#walkFileTree(Path,FileVisitor)}.
      * @return the given visitor.
      *
-     * @throws IOException if an I/O error is thrown by a visitor method
+     * @throws IOException if an I/O error is thrown by a visitor method.
      */
     public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final URI uri) throws IOException {
         return visitFileTree(visitor, Paths.get(uri));

@@ -42,6 +42,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -3225,6 +3226,38 @@ public class FileUtilsTestCase {
                 + "this is brand new data";
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
+    }
+
+    /**
+     * Tests a directory with one file of size 0.
+     */
+    @Test
+    public void testCountFolders1FileSize0() throws IOException {
+        assertEquals(0, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0").toFile()));
+    }
+
+    /**
+     * Tests a directory with one file of size 1.
+     */
+    @Test
+    public void testCountFolders1FileSize1() throws IOException {
+        assertEquals(1, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1").toFile()));
+    }
+
+    /**
+     * Tests a directory with two subdirectories, each containing one file of size 1.
+     */
+    @Test
+    public void testCountFolders2FileSize2() throws IOException {
+        assertEquals(2, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2").toFile()));
+    }
+
+    /**
+     * Tests a directory with two subdirectories, each containing one file of size 1.
+     */
+    @Test
+    public void testCountFolders2FileSize4() throws IOException {
+        assertEquals(8, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-4").toFile()));
     }
 
 }

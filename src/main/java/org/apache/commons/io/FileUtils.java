@@ -2184,7 +2184,7 @@ public class FileUtils {
     public static LineIterator lineIterator(final File file, final String charsetName) throws IOException {
         InputStream inputStream = null;
         try {
-            inputStream = openInputStream(file);
+            inputStream = Files.newInputStream(file.toPath());
             return IOUtils.lineIterator(inputStream, charsetName);
         } catch (final IOException | RuntimeException ex) {
             IOUtils.closeQuietly(inputStream, ex::addSuppressed);
@@ -2644,7 +2644,7 @@ public class FileUtils {
      * @since 2.3
      */
     public static String readFileToString(final File file, final Charset charsetName) throws IOException {
-        try (InputStream inputStream = openInputStream(file)) {
+        try (InputStream inputStream = Files.newInputStream(file.toPath())) {
             return IOUtils.toString(inputStream, Charsets.toCharset(charsetName));
         }
     }
@@ -2699,9 +2699,7 @@ public class FileUtils {
      * @since 2.3
      */
     public static List<String> readLines(final File file, final Charset charset) throws IOException {
-        try (InputStream inputStream = openInputStream(file)) {
-            return IOUtils.readLines(inputStream, Charsets.toCharset(charset));
-        }
+        return Files.readAllLines(file.toPath(), charset);
     }
 
     /**
@@ -2960,27 +2958,18 @@ public class FileUtils {
      *
      * @throws NullPointerException     if the file is {@code null}.
      * @throws IllegalArgumentException if the file does not exist.
+     * @throws UncheckedIOException if an IO error occurs.
      *
      * @since 2.0
      */
     public static long sizeOf(final File file) {
         requireExists(file, "file");
-        return file.isDirectory() ? sizeOfDirectory0(file) : file.length();
-    }
-
-    /**
-     * Gets the size of a file.
-     *
-     * @param file the file to check.
-     * @return the size of the file.
-     * @throws NullPointerException if the file is {@code null}.
-     */
-    private static long sizeOf0(final File file) {
-        Objects.requireNonNull(file, "file");
-        if (file.isDirectory()) {
-            return sizeOfDirectory0(file);
+        try {
+            return PathUtils.sizeOf(file.toPath());
+        } catch (IOException e) {
+            // TODO Update method signature
+            throw new UncheckedIOException(e);
         }
-        return file.length(); // will be 0 if file does not exist
     }
 
     /**
@@ -2998,23 +2987,18 @@ public class FileUtils {
      *
      * @throws NullPointerException     if the file is {@code null}.
      * @throws IllegalArgumentException if the file does not exist.
+     * @throws UncheckedIOException if an IO error occurs.
      *
      * @since 2.4
      */
     public static BigInteger sizeOfAsBigInteger(final File file) {
         requireExists(file, "file");
-        return file.isDirectory() ? sizeOfDirectoryBig0(file) : BigInteger.valueOf(file.length());
-    }
-
-    /**
-     * Returns the size of a file or directory.
-     *
-     * @param file The file or directory.
-     * @return the size
-     */
-    private static BigInteger sizeOfBig0(final File file) {
-        Objects.requireNonNull(file, "fileOrDir");
-        return file.isDirectory() ? sizeOfDirectoryBig0(file) : BigInteger.valueOf(file.length());
+        try {
+            return PathUtils.sizeOfAsBigInteger(file.toPath());
+        } catch (IOException e) {
+            // TODO Update method signature
+            throw new UncheckedIOException(e);
+        }
     }
 
     /**
@@ -3029,36 +3013,16 @@ public class FileUtils {
      * @return size of directory in bytes, 0 if directory is security restricted, a negative number when the real total
      * is greater than {@link Long#MAX_VALUE}.
      * @throws NullPointerException if the directory is {@code null}.
+     * @throws UncheckedIOException if an IO error occurs.
      */
     public static long sizeOfDirectory(final File directory) {
-        return sizeOfDirectory0(requireDirectoryExists(directory, "directory"));
-    }
-
-    /**
-     * Gets the size of a directory.
-     *
-     * @param directory the directory to check
-     * @return the size
-     * @throws NullPointerException if the directory is {@code null}.
-     */
-    private static long sizeOfDirectory0(final File directory) {
-        Objects.requireNonNull(directory, "directory");
-        final File[] files = directory.listFiles();
-        if (files == null) {  // null if security restricted
-            return 0L;
+        requireDirectoryExists(directory, "directory");
+        try {
+            return PathUtils.sizeOfDirectory(directory.toPath());
+        } catch (IOException e) {
+            // TODO Update method signature
+            throw new UncheckedIOException(e);
         }
-        long size = 0;
-
-        for (final File file : files) {
-            if (!isSymlink(file)) {
-                size += sizeOf0(file);
-                if (size < 0) {
-                    break;
-                }
-            }
-        }
-
-        return size;
     }
 
     /**
@@ -3067,34 +3031,18 @@ public class FileUtils {
      * @param directory directory to inspect, must not be {@code null}.
      * @return size of directory in bytes, 0 if directory is security restricted.
      * @throws NullPointerException if the directory is {@code null}.
+     * @throws UncheckedIOException if an IO error occurs.
      * @since 2.4
      */
     public static BigInteger sizeOfDirectoryAsBigInteger(final File directory) {
-        return sizeOfDirectoryBig0(requireDirectoryExists(directory, "directory"));
-    }
-
-    /**
-     * Computes the size of a directory.
-     *
-     * @param directory The directory.
-     * @return the size.
-     */
-    private static BigInteger sizeOfDirectoryBig0(final File directory) {
-        Objects.requireNonNull(directory, "directory");
-        final File[] files = directory.listFiles();
-        if (files == null) {
-            // null if security restricted
-            return BigInteger.ZERO;
-        }
-        BigInteger size = BigInteger.ZERO;
-
-        for (final File file : files) {
-            if (!isSymlink(file)) {
-                size = size.add(sizeOfBig0(file));
-            }
+        requireDirectoryExists(directory, "directory");
+        try {
+            return PathUtils.sizeOfDirectoryAsBigInteger(directory.toPath());
+        } catch (IOException e) {
+            // TODO Update method signature
+            throw new UncheckedIOException(e);
         }
 
-        return size;
     }
 
     /**
