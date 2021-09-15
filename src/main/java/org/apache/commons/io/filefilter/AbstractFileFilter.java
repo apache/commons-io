@@ -39,8 +39,37 @@ import org.apache.commons.io.file.PathVisitor;
  */
 public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
 
-    static FileVisitResult toFileVisitResult(final boolean accept, final Path path) {
+    static FileVisitResult toDefaultFileVisitResult(final boolean accept) {
         return accept ? FileVisitResult.CONTINUE : FileVisitResult.TERMINATE;
+    }
+
+    /**
+     * What to do when this filter accepts.
+     */
+    private final FileVisitResult onAccept;
+
+    /**
+     * What to do when this filter rejects.
+     */
+    private final FileVisitResult onReject;
+
+    /**
+     * Constructs a new instance.
+     */
+    public AbstractFileFilter() {
+        this(FileVisitResult.CONTINUE, FileVisitResult.TERMINATE);
+    }
+
+    /**
+     * Constructs a new instance.
+     *
+     * @param onAccept What to do on acceptance.
+     * @param onReject What to do on rejection.
+     * @since 2.12.0.
+     */
+    protected AbstractFileFilter(final FileVisitResult onAccept, final FileVisitResult onReject) {
+        this.onAccept = onAccept;
+        this.onReject = onReject;
     }
 
     /**
@@ -87,6 +116,16 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
     @Override
     public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attributes) throws IOException {
         return accept(dir, attributes);
+    }
+
+    /**
+     * Converts a boolean into a FileVisitResult.
+     *
+     * @param accept accepted or rejected.
+     * @return a FileVisitResult.
+     */
+    FileVisitResult toFileVisitResult(final boolean accept) {
+        return accept ? onAccept : onReject;
     }
 
     /**

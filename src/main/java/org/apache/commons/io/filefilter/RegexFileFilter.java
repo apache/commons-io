@@ -179,7 +179,7 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      */
     @Override
     public FileVisitResult accept(final Path path, final BasicFileAttributes attributes) {
-        return toFileVisitResult(pattern.matcher(pathToString.apply(path)).matches(), path);
+        return toFileVisitResult(pattern.matcher(pathToString.apply(path)).matches());
     }
 
     /**

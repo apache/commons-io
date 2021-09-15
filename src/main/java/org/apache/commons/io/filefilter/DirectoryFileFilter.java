@@ -105,7 +105,7 @@ public class DirectoryFileFilter extends AbstractFileFilter implements Serializa
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        return toFileVisitResult(Files.isDirectory(file), file);
+        return toFileVisitResult(Files.isDirectory(file));
     }
 
 }

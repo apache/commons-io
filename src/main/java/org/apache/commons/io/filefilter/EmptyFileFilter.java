@@ -120,10 +120,10 @@ public class EmptyFileFilter extends AbstractFileFilter implements Serializable 
         try {
             if (Files.isDirectory(file)) {
                 try (Stream<Path> stream = Files.list(file)) {
-                    return toFileVisitResult(!stream.findFirst().isPresent(), file);
+                    return toFileVisitResult(!stream.findFirst().isPresent());
                 }
             }
-            return toFileVisitResult(Files.size(file) == 0, file);
+            return toFileVisitResult(Files.size(file) == 0);
         } catch (final IOException e) {
             return handle(e);
         }

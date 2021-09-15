@@ -193,7 +193,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
         final Path fileName = file.getFileName();
-        return toFileVisitResult(accept(fileName == null ? null : fileName.toFile()), file);
+        return toFileVisitResult(accept(fileName == null ? null : fileName.toFile()));
     }
 
     private boolean accept(final String name) {

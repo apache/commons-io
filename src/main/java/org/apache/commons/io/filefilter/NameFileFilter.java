@@ -188,7 +188,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        return toFileVisitResult(acceptBaseName(Objects.toString(file.getFileName(), null)), file);
+        return toFileVisitResult(acceptBaseName(Objects.toString(file.getFileName(), null)));
     }
 
     private boolean acceptBaseName(final String baseName) {

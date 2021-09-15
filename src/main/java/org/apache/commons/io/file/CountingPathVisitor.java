@@ -26,6 +26,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Objects;
 
 import org.apache.commons.io.file.Counters.PathCounters;
+import org.apache.commons.io.filefilter.SymbolicLinkFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**
@@ -65,7 +66,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
      * @param pathCounter How to count path visits.
      */
     public CountingPathVisitor(final PathCounters pathCounter) {
-        this(pathCounter, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+        this(pathCounter, new SymbolicLinkFileFilter(FileVisitResult.TERMINATE, FileVisitResult.CONTINUE), TrueFileFilter.INSTANCE);
     }
 
     /**
@@ -149,6 +150,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
 
     @Override
     public FileVisitResult visitFile(final Path file, final BasicFileAttributes attributes) throws IOException {
+        // Note: A file can be a symbolic link to a directory.
         if (Files.exists(file) && fileFilter.accept(file, attributes) == FileVisitResult.CONTINUE) {
             updateFileCounters(file, attributes);
         }

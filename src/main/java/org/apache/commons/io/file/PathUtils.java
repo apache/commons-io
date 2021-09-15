@@ -315,6 +315,7 @@ public final class PathUtils {
      * @param directory directory to delete.
      * @return The visitor used to count the given directory.
      * @throws IOException if an I/O error is thrown by a visitor method.
+     * @since 2.12.0
      */
     public static PathCounters countDirectoryAsBigInteger(final Path directory) throws IOException {
         return visitFileTree(CountingPathVisitor.withBigIntegerCounters(), directory).getPathCounters();

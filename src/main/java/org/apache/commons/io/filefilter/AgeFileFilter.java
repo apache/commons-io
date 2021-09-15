@@ -207,7 +207,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
         } catch (final IOException e) {
             return handle(e);
         }
-        return toFileVisitResult(acceptOlder != newer, file);
+        return toFileVisitResult(acceptOlder != newer);
     }
 
     /**

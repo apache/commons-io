@@ -112,7 +112,7 @@ public class HiddenFileFilter extends AbstractFileFilter implements Serializable
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
         try {
-            return toFileVisitResult(Files.isHidden(file), file);
+            return toFileVisitResult(Files.isHidden(file));
         } catch (final IOException e) {
             return handle(e);
         }
