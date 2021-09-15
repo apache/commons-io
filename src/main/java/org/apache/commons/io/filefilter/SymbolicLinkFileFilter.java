@@ -41,7 +41,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * <h2>Using NIO</h2>
  * <pre>
  * final Path dir = Paths.get("");
- * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(SymbolicLinkFileFilter.FILE);
+ * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(SymbolicLinkFileFilter.INSTANCE);
  * //
  * // Walk one dir
  * Files.<b>walkFileTree</b>(dir, Collections.emptySet(), 1, visitor);
