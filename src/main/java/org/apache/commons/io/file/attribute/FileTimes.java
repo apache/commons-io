@@ -28,7 +28,7 @@ import java.time.Instant;
 public class FileTimes {
 
     /**
-     * Constant for the {@code 1970-01-01T00:00:00Z} epoch time stamp attribute.
+     * Constant for the {@code 1970-01-01T00:00:00Z} epoch as a time stamp attribute.
      *
      * @see Instant#EPOCH
      */

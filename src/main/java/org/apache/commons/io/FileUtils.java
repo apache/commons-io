@@ -1139,7 +1139,6 @@ public class FileUtils {
      * Gets the current directory.
      *
      * @return the current directory.
-     *
      * @since 2.12.0
      */
     public static File current() {
@@ -1697,7 +1696,6 @@ public class FileUtils {
      * @return true if the {@code File} exists and has been modified after the given {@code FileTime}.
      * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if the file or local date is {@code null}.
-     *
      * @since 2.12.0
      */
     public static boolean isFileNewer(final File file, final FileTime fileTime) throws IOException {
@@ -1708,11 +1706,10 @@ public class FileUtils {
     /**
      * Tests if the specified {@code File} is newer than the specified {@code Instant}.
      *
-     * @param file    the {@code File} of which the modification date must be compared.
+     * @param file the {@code File} of which the modification date must be compared.
      * @param instant the date reference.
      * @return true if the {@code File} exists and has been modified after the given {@code Instant}.
      * @throws NullPointerException if the file or instant is {@code null}.
-     *
      * @since 2.8.0
      */
     public static boolean isFileNewer(final File file, final Instant instant) {
@@ -1887,7 +1884,6 @@ public class FileUtils {
      * @return true if the {@code File} exists and has been modified before the given {@code FileTime}.
      * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if the file or local date is {@code null}.
-     *
      * @since 2.12.0
      */
     public static boolean isFileOlder(final File file, final FileTime fileTime) throws IOException {

@@ -224,7 +224,7 @@ public final class PathUtils {
     /**
      * Compares the specified {@code Path}'s last modified time to the given file time.
      *
-     * @param file the {@code Path} of which the modification date must be compared
+     * @param file the {@code Path} to test.
      * @param fileTime the time reference.
      * @param options options indicating how to handle symbolic links.
      * @return See {@link FileTime#compareTo(FileTime)}
@@ -312,9 +312,9 @@ public final class PathUtils {
     /**
      * Counts aspects of a directory including sub-directories.
      *
-     * @param directory directory to delete.
+     * @param directory directory to count.
      * @return The visitor used to count the given directory.
-     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @throws IOException if an I/O error occurs.
      * @since 2.12.0
      */
     public static PathCounters countDirectoryAsBigInteger(final Path directory) throws IOException {
@@ -734,7 +734,7 @@ public final class PathUtils {
     }
 
     /**
-     * Returns a {@link Path} representing the system temporary directory.
+     * Gets a {@link Path} representing the system temporary directory.
      *
      * @return the system temporary directory.
      *
@@ -804,7 +804,7 @@ public final class PathUtils {
     /**
      * Tests if the specified {@code Path} is newer than the specified time reference.
      *
-     * @param file the {@code Path} of which the modification date must be compared
+     * @param file the {@code Path} to test.
      * @param czdt the time reference.
      * @param options options indicating how to handle symbolic links.
      * @return true if the {@code Path} exists and has been modified after the given time reference.
@@ -820,7 +820,7 @@ public final class PathUtils {
     /**
      * Tests if the specified {@code Path} is newer than the specified time reference.
      *
-     * @param file the {@code Path} of which the modification date must be compared
+     * @param file the {@code Path} to test.
      * @param fileTime the time reference.
      * @param options options indicating how to handle symbolic links.
      * @return true if the {@code Path} exists and has been modified after the given time reference.
@@ -838,7 +838,7 @@ public final class PathUtils {
     /**
      * Tests if the specified {@code Path} is newer than the specified time reference.
      *
-     * @param file the {@code Path} of which the modification date must be compared
+     * @param file the {@code Path} to test.
      * @param instant the time reference.
      * @param options options indicating how to handle symbolic links.
      * @return true if the {@code Path} exists and has been modified after the given time reference.
@@ -853,7 +853,7 @@ public final class PathUtils {
     /**
      * Tests if the specified {@code Path} is newer than the specified time reference.
      *
-     * @param file the {@code Path} of which the modification date must be compared
+     * @param file the {@code Path} to test.
      * @param timeMillis the time reference measured in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
      * @param options options indicating how to handle symbolic links.
      * @return true if the {@code Path} exists and has been modified after the given time reference.
@@ -868,7 +868,7 @@ public final class PathUtils {
     /**
      * Tests if the specified {@code Path} is newer than the reference {@code Path}.
      *
-     * @param file      the {@code File} of which the modification date must be compared.
+     * @param file      the {@code File} to test.
      * @param reference the {@code File} of which the modification date is used.
      * @return true if the {@code File} exists and has been modified more
      * recently than the reference {@code File}.
@@ -882,7 +882,7 @@ public final class PathUtils {
     /**
      * Tests if the specified {@code Path} is older than the specified time reference.
      *
-     * @param file the {@code Path} of which the modification date must be compared.
+     * @param file the {@code Path} to test.
      * @param fileTime the time reference.
      * @param options options indicating how to handle symbolic links.
      * @return true if the {@code Path} exists and has been modified before the given time reference.
@@ -900,7 +900,7 @@ public final class PathUtils {
     /**
      * Tests if the specified {@code Path} is older than the specified time reference.
      *
-     * @param file the {@code Path} of which the modification date must be compared.
+     * @param file the {@code Path} to test.
      * @param instant the time reference.
      * @param options options indicating how to handle symbolic links.
      * @return true if the {@code Path} exists and has been modified after the given time reference.
@@ -915,7 +915,7 @@ public final class PathUtils {
     /**
      * Tests if the specified {@code Path} is older than the specified time reference.
      *
-     * @param file the {@code Path} of which the modification date must be compared
+     * @param file the {@code Path} to test.
      * @param timeMillis the time reference measured in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
      * @param options options indicating how to handle symbolic links.
      * @return true if the {@code Path} exists and has been modified before the given time reference.
@@ -930,7 +930,7 @@ public final class PathUtils {
     /**
      * Tests if the specified {@code Path} is older than the reference {@code Path}.
      *
-     * @param file the {@code File} of which the modification date must be compared.
+     * @param file the {@code File} to test.
      * @param reference the {@code File} of which the modification date is used.
      * @return true if the {@code File} exists and has been modified before than the reference {@code File}.
      * @throws IOException if an I/O error occurs.
@@ -975,7 +975,6 @@ public final class PathUtils {
      *
      * @param path the Path.
      * @param append Whether or not to append.
-     *
      * @return a new OutputStream.
      * @throws IOException if an I/O error occurs.
      * @see Files#newOutputStream(Path, OpenOption...)
@@ -1210,7 +1209,6 @@ public final class PathUtils {
      * @throws NullPointerException if the file is {@code null}.
      * @throws IllegalArgumentException if the file does not exist.
      * @throws IOException if an I/O error occurs.
-     *
      * @since 2.12.0
      */
     public static long sizeOf(final Path path) throws IOException {
@@ -1228,7 +1226,6 @@ public final class PathUtils {
      * @throws NullPointerException if the file is {@code null}.
      * @throws IllegalArgumentException if the file does not exist.
      * @throws IOException if an I/O error occurs.
-     *
      * @since 2.12.0
      */
     public static BigInteger sizeOfAsBigInteger(final Path path) throws IOException {
@@ -1237,7 +1234,7 @@ public final class PathUtils {
     }
 
     /**
-     * Counts the size of a directory recursively (sum of the length of all files).
+     * Counts the size of a directory recursively (sum of the size of all files).
      * <p>
      * Note that overflow is not detected, and the return value may be negative if overflow occurs. See
      * {@link #sizeOfDirectoryAsBigInteger(Path)} for an alternative method that does not overflow.
@@ -1255,7 +1252,7 @@ public final class PathUtils {
     }
 
     /**
-     * Counts the size of a directory recursively (sum of the length of all files).
+     * Counts the size of a directory recursively (sum of the size of all files).
      *
      * @param directory directory to inspect, must not be {@code null}.
      * @return size of directory in bytes, 0 if directory is security restricted.
