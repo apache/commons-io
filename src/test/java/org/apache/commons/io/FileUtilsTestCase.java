@@ -3073,6 +3073,14 @@ public class FileUtilsTestCase {
     }
 
     @Test
+    public void testWriteStringToFile4() throws Exception {
+        final File file = new File(temporaryFolder, "subdir/write.txt");
+        FileUtils.writeStringToFile(file, "Hello /u1234", (Charset) null);
+        final byte[] text = "Hello /u1234".getBytes();
+        TestUtils.assertEqualContent(text, file);
+    }
+
+    @Test
     public void testWriteStringToFileWithEncoding_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
