@@ -226,7 +226,7 @@ public final class PathUtils {
      *
      * @param file the {@code Path} of which the modification date must be compared
      * @param fileTime the time reference.
-     * @param options options indicating how symbolic links are handled been modified after the given time reference.
+     * @param options options indicating how to handle symbolic links.
      * @return See {@link FileTime#compareTo(FileTime)}
      * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if the file is {@code null}
@@ -749,7 +749,7 @@ public final class PathUtils {
      * {@code Files.isDirectory(Path path, LinkOption... options)}.
      *
      * @param path the path to the file.
-     * @param options options indicating how symbolic links are handled
+     * @param options options indicating how to handle symbolic links
      * @return {@code true} if the file is a directory; {@code false} if the path is null, the file does not exist, is not a
      *         directory, or it cannot be determined if the file is a directory or not.
      * @throws SecurityException In the case of the default provider, and a security manager is installed, the
@@ -806,7 +806,7 @@ public final class PathUtils {
      *
      * @param file the {@code Path} of which the modification date must be compared
      * @param czdt the time reference.
-     * @param options options indicating how symbolic links are handled been modified after the given time reference.
+     * @param options options indicating how to handle symbolic links.
      * @return true if the {@code Path} exists and has been modified after the given time reference.
      * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if the file is {@code null}
@@ -822,7 +822,7 @@ public final class PathUtils {
      *
      * @param file the {@code Path} of which the modification date must be compared
      * @param fileTime the time reference.
-     * @param options options indicating how symbolic links are handled been modified after the given time reference.
+     * @param options options indicating how to handle symbolic links.
      * @return true if the {@code Path} exists and has been modified after the given time reference.
      * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if the file is {@code null}
@@ -840,7 +840,7 @@ public final class PathUtils {
      *
      * @param file the {@code Path} of which the modification date must be compared
      * @param instant the time reference.
-     * @param options options indicating how symbolic links are handled.
+     * @param options options indicating how to handle symbolic links.
      * @return true if the {@code Path} exists and has been modified after the given time reference.
      * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if the file is {@code null}
@@ -855,7 +855,7 @@ public final class PathUtils {
      *
      * @param file the {@code Path} of which the modification date must be compared
      * @param timeMillis the time reference measured in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
-     * @param options options indicating how symbolic links are handled.
+     * @param options options indicating how to handle symbolic links.
      * @return true if the {@code Path} exists and has been modified after the given time reference.
      * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if the file is {@code null}
@@ -884,7 +884,7 @@ public final class PathUtils {
      *
      * @param file the {@code Path} of which the modification date must be compared.
      * @param fileTime the time reference.
-     * @param options options indicating how symbolic links are handled been modified after the given time reference.
+     * @param options options indicating how to handle symbolic links.
      * @return true if the {@code Path} exists and has been modified before the given time reference.
      * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if the file is {@code null}
@@ -902,7 +902,7 @@ public final class PathUtils {
      *
      * @param file the {@code Path} of which the modification date must be compared.
      * @param instant the time reference.
-     * @param options options indicating how symbolic links are handled.
+     * @param options options indicating how to handle symbolic links.
      * @return true if the {@code Path} exists and has been modified after the given time reference.
      * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if the file is {@code null}
@@ -917,7 +917,7 @@ public final class PathUtils {
      *
      * @param file the {@code Path} of which the modification date must be compared
      * @param timeMillis the time reference measured in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
-     * @param options options indicating how symbolic links are handled been modified after the given time reference.
+     * @param options options indicating how to handle symbolic links.
      * @return true if the {@code Path} exists and has been modified before the given time reference.
      * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if the file is {@code null}
@@ -946,7 +946,7 @@ public final class PathUtils {
      * {@code Files.isRegularFile(Path path, LinkOption... options)}.
      *
      * @param path the path to the file.
-     * @param options options indicating how symbolic links are handled
+     * @param options options indicating how to handle symbolic links.
      * @return {@code true} if the file is a regular file; {@code false} if the path is null, the file does not exist, is
      *         not a directory, or it cannot be determined if the file is a regular file or not.
      * @throws SecurityException In the case of the default provider, and a security manager is installed, the
@@ -1094,7 +1094,7 @@ public final class PathUtils {
      *
      * @param file The {@code File} to check.
      * @param fileParamName The parameter name to use in the exception message in case of {@code null} input.
-     * @param options options indicating how symbolic links are handled.
+     * @param options options indicating how to handle symbolic links.
      * @return the given file.
      * @throws NullPointerException if the given {@code File} is {@code null}.
      * @throws IllegalArgumentException if the given {@code File} does not exist.
@@ -1158,7 +1158,7 @@ public final class PathUtils {
      *
      * @param path The path to set.
      * @param readOnly true for read-only, false for not read-only.
-     * @param linkOptions options indicating how symbolic links are handled.
+     * @param linkOptions options indicating how to handle symbolic links.
      * @return The given path.
      * @throws IOException if an I/O error occurs.
      * @since 2.8.0
@@ -1357,7 +1357,7 @@ public final class PathUtils {
      *
      * @param file the file to check, must not be {@code null}.
      * @param timeout the maximum time to wait.
-     * @param options options indicating how symbolic links are handled.
+     * @param options options indicating how to handle symbolic links.
      * @return true if file exists.
      * @throws NullPointerException if the file is {@code null}.
      * @since 2.12.0
