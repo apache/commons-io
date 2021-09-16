@@ -1407,7 +1407,7 @@ public class FileUtils {
      * If the directory cannot be created (or the file already exists but is not a directory)
      * then an IOException is thrown.
      *
-     * @param directory directory to create, must not be {@code null}.
+     * @param directory directory to create, may be {@code null}.
      * @throws IOException if the directory was not created along with all its parent directories.
      * @throws IOException if the given file object is not a directory.
      * @throws SecurityException See {@link File#mkdirs()}.
@@ -2966,7 +2966,7 @@ public class FileUtils {
         requireExists(file, "file");
         try {
             return PathUtils.sizeOf(file.toPath());
-        } catch (IOException e) {
+        } catch (final IOException e) {
             // TODO Update method signature
             throw new UncheckedIOException(e);
         }
@@ -2995,7 +2995,7 @@ public class FileUtils {
         requireExists(file, "file");
         try {
             return PathUtils.sizeOfAsBigInteger(file.toPath());
-        } catch (IOException e) {
+        } catch (final IOException e) {
             // TODO Update method signature
             throw new UncheckedIOException(e);
         }
@@ -3019,7 +3019,7 @@ public class FileUtils {
         requireDirectoryExists(directory, "directory");
         try {
             return PathUtils.sizeOfDirectory(directory.toPath());
-        } catch (IOException e) {
+        } catch (final IOException e) {
             // TODO Update method signature
             throw new UncheckedIOException(e);
         }
@@ -3038,7 +3038,7 @@ public class FileUtils {
         requireDirectoryExists(directory, "directory");
         try {
             return PathUtils.sizeOfDirectoryAsBigInteger(directory.toPath());
-        } catch (IOException e) {
+        } catch (final IOException e) {
             // TODO Update method signature
             throw new UncheckedIOException(e);
         }

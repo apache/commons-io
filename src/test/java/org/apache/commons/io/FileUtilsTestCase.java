@@ -1516,6 +1516,9 @@ public class FileUtilsTestCase {
         // Tests with non-existent directory
         FileUtils.forceMkdir(testFile);
         assertTrue(testFile.exists(), "Directory was not created.");
+
+        // noop
+        FileUtils.forceMkdir(null);
     }
 
     @Test
