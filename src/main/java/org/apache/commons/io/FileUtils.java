@@ -2856,7 +2856,7 @@ public class FileUtils {
      * @param name The parameter name to use in the exception message.
      * @return the given file.
      * @throws NullPointerException if the given {@code File} is {@code null}.
-     * @throws IllegalArgumentException if the given {@code File} does not exist or is not a directory.
+     * @throws IllegalArgumentException if the given {@code File} does not exist or is not a file.
      */
     private static File requireFile(final File file, final String name) {
         Objects.requireNonNull(file, name);
