@@ -3379,7 +3379,7 @@ public class FileUtils {
      */
     public static void writeByteArrayToFile(final File file, final byte[] data, final int off, final int len,
                                             final boolean append) throws IOException {
-        try (OutputStream out = openOutputStream(file, append)) {
+        try (OutputStream out = newOutputStream(file, append)) {
             out.write(data, off, len);
         }
     }
@@ -3528,7 +3528,7 @@ public class FileUtils {
      */
     public static void writeLines(final File file, final String charsetName, final Collection<?> lines,
                                   final String lineEnding, final boolean append) throws IOException {
-        try (OutputStream out = new BufferedOutputStream(openOutputStream(file, append))) {
+        try (OutputStream out = new BufferedOutputStream(newOutputStream(file, append))) {
             IOUtils.writeLines(lines, lineEnding, out, charsetName);
         }
     }
@@ -3594,7 +3594,7 @@ public class FileUtils {
      */
     public static void writeStringToFile(final File file, final String data, final Charset charset,
                                          final boolean append) throws IOException {
-        try (OutputStream out = openOutputStream(file, append)) {
+        try (OutputStream out = newOutputStream(file, append)) {
             IOUtils.write(data, out, charset);
         }
     }

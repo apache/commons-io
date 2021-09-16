@@ -184,6 +184,10 @@ public class FileUtilsTestCase {
         }
     }
 
+    /**
+     * May throw java.nio.file.FileSystemException: C:\Users\...\FileUtilsTestCase\cycle: A required privilege is not held
+     * by the client. On Windows, you are fine if you run a terminal with admin karma.
+     */
     private void createCircularSymLink(final File file) throws IOException {
         assertTrue(file.exists());
         final String linkName = file + "/cycle";

@@ -493,7 +493,7 @@ public final class PathUtils {
             throw new NoSuchFileException(file.toString());
         }
         final PathCounters pathCounts = Counters.longPathCounters();
-        final boolean exists = Files.exists(file, linkOptions);
+        final boolean exists = exists(file, linkOptions);
         final long size = exists && !Files.isSymbolicLink(file) ? Files.size(file) : 0;
         if (overrideReadOnly(deleteOptions) && exists) {
             setReadOnly(file, false, linkOptions);
@@ -592,6 +592,10 @@ public final class PathUtils {
         return new RelativeSortedPaths(path1, path2, maxDepth, linkOptions, fileVisitOptions).equals;
     }
 
+    private static boolean exists(final Path path, final LinkOption... options) {
+        return Files.exists(Objects.requireNonNull(path, "path"), options);
+    }
+
     /**
      * Compares the file contents of two Paths to determine if they are equal or not.
      * <p>
@@ -634,8 +638,8 @@ public final class PathUtils {
         }
         final Path nPath1 = path1.normalize();
         final Path nPath2 = path2.normalize();
-        final boolean path1Exists = Files.exists(nPath1, linkOptions);
-        if (path1Exists != Files.exists(nPath2, linkOptions)) {
+        final boolean path1Exists = exists(nPath1, linkOptions);
+        if (path1Exists != exists(nPath2, linkOptions)) {
             return false;
         }
         if (!path1Exists) {
@@ -936,6 +940,7 @@ public final class PathUtils {
         return isOlder(file, getLastModifiedTime(reference));
     }
 
+
     /**
      * Tests whether the specified {@code Path} is a regular file or not. Implemented as a null-safe delegate to
      * {@code Files.isRegularFile(Path path, LinkOption... options)}.
@@ -951,7 +956,6 @@ public final class PathUtils {
     public static boolean isRegularFile(final Path path, final LinkOption... options) {
         return path != null && Files.isRegularFile(path, options);
     }
-
 
     /**
      * Creates a new DirectoryStream for Paths rooted at the given directory.
@@ -978,6 +982,13 @@ public final class PathUtils {
      * @since 2.12.0
      */
     public static OutputStream newOutputStream(final Path path, final boolean append) throws IOException {
+        Objects.requireNonNull(path, "path");
+        if (exists(path)) {
+            // requireFile(path, "path");
+            // requireCanWrite(path, "path");
+        } else {
+            createParentDirectories(path);
+        }
         // @formatter:off
         return Files.newOutputStream(path, append ?
             new OpenOption[] {StandardOpenOption.CREATE, StandardOpenOption.APPEND} :
@@ -985,8 +996,8 @@ public final class PathUtils {
         // @formatter:on
     }
 
-    private static boolean notExists(final Path file) {
-        return Files.notExists(Objects.requireNonNull(file, "file"));
+    private static boolean notExists(final Path path, final LinkOption... options) {
+        return Files.notExists(Objects.requireNonNull(path, "path"), options);
     }
 
     /**
@@ -1060,6 +1071,57 @@ public final class PathUtils {
             stream = comparator == null ? stream.sorted() : stream.sorted(comparator);
         }
         return stream.collect(Collectors.toList());
+    }
+
+    /**
+     * Throws an {@link IllegalArgumentException} if the file is not writable. This provides a more precise exception
+     * message than a plain access denied.
+     *
+     * @param file The file to test.
+     * @param name The parameter name to use in the exception message.
+     * @throws NullPointerException if the given {@code Path} is {@code null}.
+     * @throws IllegalArgumentException if the file is not writable.
+     */
+    private static void requireCanWrite(final Path file, final String name) {
+        Objects.requireNonNull(file, "file");
+        if (!Files.isWritable(file)) {
+            throw new IllegalArgumentException("File parameter '" + name + " is not writable: '" + file + "'");
+        }
+    }
+
+    /**
+     * Requires that the given {@code File} exists and throws an {@link IllegalArgumentException} if it doesn't.
+     *
+     * @param file The {@code File} to check.
+     * @param fileParamName The parameter name to use in the exception message in case of {@code null} input.
+     * @param options options indicating how symbolic links are handled.
+     * @return the given file.
+     * @throws NullPointerException if the given {@code File} is {@code null}.
+     * @throws IllegalArgumentException if the given {@code File} does not exist.
+     */
+    private static Path requireExists(final Path file, final String fileParamName, final LinkOption... options) {
+        Objects.requireNonNull(file, fileParamName);
+        if (!exists(file, options)) {
+            throw new IllegalArgumentException("File system element for parameter '" + fileParamName + "' does not exist: '" + file + "'");
+        }
+        return file;
+    }
+
+    /**
+     * Requires that the given {@code Path} is a regular file.
+     *
+     * @param file The {@code Path} to check.
+     * @param name The parameter name to use in the exception message.
+     * @return the given file.
+     * @throws NullPointerException if the given {@code Path} is {@code null}.
+     * @throws IllegalArgumentException if the given {@code Path} does not exist or is not a regular file.
+     */
+    private static Path requireFile(final Path file, final String name) {
+        Objects.requireNonNull(file, name);
+        if (!Files.isRegularFile(file)) {
+            throw new IllegalArgumentException("Parameter '" + name + "' is not a regular file: " + file);
+        }
+        return file;
     }
 
     /**
@@ -1137,8 +1199,7 @@ public final class PathUtils {
 
     /**
      * Returns the size of the specified file or directory. If the provided {@link File} is a regular file, then the file's
-     * length is returned. If the argument is a directory, then the size of the directory is calculated recursively. If a
-     * directory or subdirectory is security restricted, its size will not be included.
+     * length is returned. If the argument is a directory, then the size of the directory is calculated recursively.
      * <p>
      * Note that overflow is not detected, and the return value may be negative if overflow occurs. See
      * {@link #sizeOfAsBigInteger(Path)} for an alternative method that does not overflow.
@@ -1204,23 +1265,6 @@ public final class PathUtils {
      */
     public static BigInteger sizeOfDirectoryAsBigInteger(final Path directory) throws IOException {
         return countDirectoryAsBigInteger(directory).getByteCounter().getBigInteger();
-    }
-
-    /**
-     * Requires that the given {@code File} exists and throws an {@link IllegalArgumentException} if it doesn't.
-     *
-     * @param file The {@code File} to check.
-     * @param fileParamName The parameter name to use in the exception message in case of {@code null} input.
-     * @return the given file.
-     * @throws NullPointerException if the given {@code File} is {@code null}.
-     * @throws IllegalArgumentException if the given {@code File} does not exist.
-     */
-    private static Path requireExists(final Path file, final String fileParamName) {
-        Objects.requireNonNull(file, fileParamName);
-        if (!Files.exists(file)) {
-            throw new IllegalArgumentException("File system element for parameter '" + fileParamName + "' does not exist: '" + file + "'");
-        }
-        return file;
     }
 
     /**
@@ -1324,7 +1368,7 @@ public final class PathUtils {
         boolean interrupted = false;
         final long minSleepMillis = 100;
         try {
-            while (!Files.exists(file, options)) {
+            while (!exists(file, options)) {
                 final Instant now = Instant.now();
                 if (now.isAfter(finishInstant)) {
                     return false;
