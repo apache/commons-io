@@ -1061,7 +1061,7 @@ public class FileUtils {
      * @since 2.5
      */
     public static void copyToFile(final InputStream inputStream, final File file) throws IOException {
-        try (OutputStream out = openOutputStream(file)) {
+        try (OutputStream out = newOutputStream(file, false)) {
             IOUtils.copy(inputStream, out);
         }
     }
@@ -1088,7 +1088,7 @@ public class FileUtils {
      */
     public static void copyURLToFile(final URL source, final File destination) throws IOException {
         try (final InputStream stream = source.openStream()) {
-            copyInputStreamToFile(stream, destination);
+            Files.copy(stream, destination.toPath());
         }
     }
 
@@ -1305,11 +1305,7 @@ public class FileUtils {
     public static boolean directoryContains(final File directory, final File child) throws IOException {
         requireDirectoryExists(directory, "directory");
 
-        if (child == null) {
-            return false;
-        }
-
-        if (!directory.exists() || !child.exists()) {
+        if (child == null || !directory.exists() || !child.exists()) {
             return false;
         }
 
@@ -3158,7 +3154,7 @@ public class FileUtils {
     public static void touch(final File file) throws IOException {
         Objects.requireNonNull(file, "file");
         if (!file.exists()) {
-            openOutputStream(file).close();
+            newOutputStream(file, false).close();
         }
         PathUtils.setLastModifiedTime(file.toPath());
     }
