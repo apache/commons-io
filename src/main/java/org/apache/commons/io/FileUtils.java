@@ -1427,11 +1427,7 @@ public class FileUtils {
      */
     public static void forceMkdirParent(final File file) throws IOException {
         Objects.requireNonNull(file, "file");
-        final File parent = getParentFile(file);
-        if (parent == null) {
-            return;
-        }
-        forceMkdir(parent);
+        forceMkdir(getParentFile(file));
     }
 
     /**
@@ -1660,7 +1656,6 @@ public class FileUtils {
         try {
             return PathUtils.isNewer(file.toPath(), chronoZonedDateTime);
         } catch (final IOException e) {
-            // TODO Update method signature
             throw new UncheckedIOException(e);
         }
     }
@@ -1694,7 +1689,6 @@ public class FileUtils {
         try {
             return PathUtils.isNewer(file.toPath(), reference.toPath());
         } catch (final IOException e) {
-            // TODO Update method signature
             throw new UncheckedIOException(e);
         }
     }
@@ -1730,7 +1724,6 @@ public class FileUtils {
         try {
             return PathUtils.isNewer(file.toPath(), instant);
         } catch (final IOException e) {
-            // TODO Update method signature
             throw new UncheckedIOException(e);
         }
     }
@@ -1749,7 +1742,6 @@ public class FileUtils {
         try {
             return PathUtils.isNewer(file.toPath(), timeMillis);
         } catch (final IOException e) {
-            // TODO Update method signature
             throw new UncheckedIOException(e);
         }
     }
@@ -1887,7 +1879,6 @@ public class FileUtils {
         try {
             return PathUtils.isOlder(file.toPath(), reference.toPath());
         } catch (final IOException e) {
-            // TODO Update method signature
             throw new UncheckedIOException(e);
         }
     }
@@ -1922,7 +1913,6 @@ public class FileUtils {
         try {
             return PathUtils.isOlder(file.toPath(), instant);
         } catch (final IOException e) {
-            // TODO Update method signature
             throw new UncheckedIOException(e);
         }
     }
@@ -1941,7 +1931,6 @@ public class FileUtils {
         try {
             return PathUtils.isOlder(file.toPath(), timeMillis);
         } catch (final IOException e) {
-            // TODO Update method signature
             throw new UncheckedIOException(e);
         }
     }
@@ -2967,7 +2956,6 @@ public class FileUtils {
         try {
             return PathUtils.sizeOf(file.toPath());
         } catch (final IOException e) {
-            // TODO Update method signature
             throw new UncheckedIOException(e);
         }
     }
@@ -2996,7 +2984,6 @@ public class FileUtils {
         try {
             return PathUtils.sizeOfAsBigInteger(file.toPath());
         } catch (final IOException e) {
-            // TODO Update method signature
             throw new UncheckedIOException(e);
         }
     }
@@ -3020,7 +3007,6 @@ public class FileUtils {
         try {
             return PathUtils.sizeOfDirectory(directory.toPath());
         } catch (final IOException e) {
-            // TODO Update method signature
             throw new UncheckedIOException(e);
         }
     }
@@ -3039,7 +3025,6 @@ public class FileUtils {
         try {
             return PathUtils.sizeOfDirectoryAsBigInteger(directory.toPath());
         } catch (final IOException e) {
-            // TODO Update method signature
             throw new UncheckedIOException(e);
         }
 
