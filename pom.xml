@@ -235,6 +235,10 @@ file comparators, endian transformation classes, and much more.
     <contributor>
       <name>Frank W. Zammetti</name>
     </contributor>
+    <contributor>
+      <name>Martin Grigorov</name>
+      <email>mgrigorov@apache.org</email>
+    </contributor>
   </contributors>
 
   <dependencyManagement>
@@ -334,13 +338,15 @@ file comparators, endian transformation classes, and much more.
     <commons.jacoco.version>0.8.7</commons.jacoco.version>
     <commons.surefire.version>3.0.0-M5</commons.surefire.version>
     <commons.japicmp.version>0.15.3</commons.japicmp.version>
+    <commons.enforcer.version>3.0.0</commons.enforcer.version>
+    <commons.moditect.version>1.0.0.RC1</commons.moditect.version>
     <spotbugs.plugin.version>4.3.0</spotbugs.plugin.version>
     <spotbugs.impl.version>4.4.1</spotbugs.impl.version>
-    <jmh.version>1.33</jmh.version>    
+    <jmh.version>1.33</jmh.version>
     <japicmp.skip>false</japicmp.skip>
     <jacoco.skip>${env.JACOCO_SKIP}</jacoco.skip>
     <commons.release.isDistModule>true</commons.release.isDistModule>
-    <commons.releaseManagerName>Gary Gregory</commons.releaseManagerName>    
+    <commons.releaseManagerName>Gary Gregory</commons.releaseManagerName>
     <commons.releaseManagerKey>86fdc7e2a11262cb</commons.releaseManagerKey>
   </properties>
 
@@ -383,7 +389,7 @@ file comparators, endian transformation classes, and much more.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
-        <version>3.0.0</version>
+        <version>${commons.enforcer.version}</version>
         <executions>
           <execution>
             <id>enforce-maven</id>
@@ -559,7 +565,36 @@ file comparators, endian transformation classes, and much more.
       <properties>
         <!-- coverall version 4.3.0 does not work with java 9, see https://github.com/trautonen/coveralls-maven-plugin/issues/112 -->
         <coveralls.skip>true</coveralls.skip>
+        <maven.compiler.release>8</maven.compiler.release>
       </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.moditect</groupId>
+            <artifactId>moditect-maven-plugin</artifactId>
+            <version>${commons.moditect.version}</version>
+            <executions>
+              <execution>
+                <id>add-module-infos</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>add-module-info</goal>
+                </goals>
+                <configuration>
+                  <jvmVersion>9</jvmVersion>
+                  <outputDirectory>${project.build.directory}</outputDirectory>
+                  <overwriteExistingFiles>true</overwriteExistingFiles>
+                  <module>
+                    <moduleInfo>
+                      <name>org.apache.commons.io</name>
+                    </moduleInfo>
+                  </module>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
     <profile>
       <id>benchmark</id>
@@ -593,6 +628,33 @@ file comparators, endian transformation classes, and much more.
                     <argument>target/jmh-result.${benchmark}.json</argument>
                     <argument>${benchmark}</argument>
                   </arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <version>${commons.enforcer.version}</version>
+            <executions>
+              <execution>
+                <id>enforce-versions</id>
+                <goals>
+                  <goal>enforce</goal>
+                </goals>
+                <configuration>
+                  <rules>
+                   <requireJavaVersion>
+                      <version>9</version>
+                    </requireJavaVersion>
+                  </rules>
                 </configuration>
               </execution>
             </executions>
