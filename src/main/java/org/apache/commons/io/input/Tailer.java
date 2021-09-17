@@ -27,6 +27,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.Charset;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
 import java.time.Duration;
 
@@ -781,13 +783,9 @@ public class Tailer implements Runnable {
         long length();
 
         /**
-         * Returns the time that this tailable was last modified.
+         * Returns the last modification {@link FileTime}
          *
-         * @return A <code>long</code> value representing the time this tailable
-         * was last modified, measured in milliseconds since the epoch
-         * (00:00:00 GMT, January 1, 1970), or {@code 0L} if the
-         * tailable does not exist or if an I/O error occurs
-         * @throws IOException if an I/O error occurs.
+         * @return See {@link java.nio.file.Files#getLastModifiedTime(Path, LinkOption...)}.
          */
         FileTime lastModifiedFileTime() throws IOException;
 
@@ -800,13 +798,12 @@ public class Tailer implements Runnable {
         boolean exists();
 
         /**
-         * Tests if this tailable is newer than the specified time reference.
+         * Tests if this tailable is newer than the specified {@code FileTime}.
          *
-         * @param fileTime the time reference measured in milliseconds since the
-         *                   epoch (00:00:00 GMT, January 1, 1970).
-         * @return true if this tailable has been modified after the given time reference.
+         * @param fileTime the file time reference.
+         * @return true if the {@code File} exists and has been modified after the given {@code FileTime}.
          */
-        boolean isFileNewer(final FileTime fileTime);
+        boolean isFileNewer(final FileTime fileTime) throws IOException;
 
         /**
          * Creates a random access file stream to read from.
@@ -902,7 +899,7 @@ public class Tailer implements Runnable {
         }
 
         @Override
-        public boolean isFileNewer(final FileTime fileTime) {
+        public boolean isFileNewer(final FileTime fileTime) throws IOException {
             return FileUtils.isFileNewer(file, fileTime);
         }
 

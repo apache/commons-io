@@ -36,6 +36,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -67,6 +68,8 @@ public class TailerTest {
         // Must be synchronized because it is written by one thread and read by another
         private final List<String> lines = Collections.synchronizedList(new ArrayList<>());
 
+        private final CountDownLatch latch;
+
         volatile Exception exception;
 
         volatile int notFound;
@@ -76,6 +79,14 @@ public class TailerTest {
         volatile int initialized;
 
         volatile int reachedEndOfFile;
+
+        public TestTailerListener() {
+            latch = new CountDownLatch(1);
+        }
+
+        public TestTailerListener(final int expectedLines) {
+            latch = new CountDownLatch(expectedLines);
+        }
 
         public void clear() {
             lines.clear();
@@ -108,11 +119,81 @@ public class TailerTest {
         @Override
         public void handle(final String line) {
             lines.add(line);
+            latch.countDown();
         }
 
         @Override
         public void init(final Tailer tailer) {
             initialized++; // not atomic, but OK because only updated here.
+        }
+
+        public boolean awaitExpectedLines(long timeout, TimeUnit timeUnit) throws InterruptedException {
+            return latch.await(timeout, timeUnit);
+        }
+    }
+
+    private static class NonStandardTailable implements Tailer.Tailable {
+        private final File file;
+
+        public NonStandardTailable(final File file) {
+            this.file = file;
+        }
+
+        @Override
+        public String getFileName() {
+            return file.getName();
+        }
+
+        @Override
+        public String getPathName() {
+            return file.getPath();
+        }
+
+        @Override
+        public long length() {
+            return file.length();
+        }
+
+        @Override
+        public FileTime lastModifiedFileTime() throws IOException {
+            return FileUtils.lastModifiedFileTime(file);
+        }
+
+        @Override
+        public boolean exists() {
+            return file.exists();
+        }
+
+        @Override
+        public boolean isFileNewer(final FileTime fileTime) throws IOException {
+            return FileUtils.isFileNewer(file, fileTime);
+        }
+
+        @Override
+        public Tailer.RandomAccessTailable getRandomAccess(final String mode) throws FileNotFoundException {
+            return new Tailer.RandomAccessTailable() {
+                private final RandomAccessFile reader = new RandomAccessFile(file, mode);
+
+                @Override
+                public long getFilePointer() throws IOException {
+                    return reader.getFilePointer();
+                }
+
+                @Override
+                public void seek(final long position) throws IOException {
+                    reader.seek(position);
+                }
+
+                @Override
+                public int read(final byte[] b) throws IOException {
+                    return reader.read(b);
+                }
+
+                @Override
+                public void close() throws IOException {
+                    reader.close();
+                }
+            };
         }
     }
 
@@ -471,23 +552,6 @@ public class TailerTest {
         listener.clear();
     }
 
-    protected void createFile(final File file, final long size)
-        throws IOException {
-        if (!file.getParentFile().exists()) {
-            throw new IOException("Cannot create file " + file
-                    + " as the parent directory does not exist");
-        }
-        try (final BufferedOutputStream output =
-                new BufferedOutputStream(Files.newOutputStream(file.toPath()))) {
-            TestUtils.generateTestData(output, size);
-        }
-
-        assertEquals(1, lines.size(), "1 line count");
-        assertEquals("Line one", lines.get(0), "1 line 1");
-
-        listener.clear();
-    }
-
     /** Append some lines to a file */
     private void write(final File file, final String... lines) throws Exception {
         try (Writer writer = Files.newBufferedWriter(file.toPath(), StandardOpenOption.APPEND)) {
@@ -504,93 +568,6 @@ public class TailerTest {
                 writer.write(string);
             }
         }
-    }
-
-    @Test
-    public void testStopWithNoFile() throws Exception {
-        final File file = new File(temporaryFolder,"nosuchfile");
-        assertFalse(file.exists(), "nosuchfile should not exist");
-        final TestTailerListener listener = new TestTailerListener();
-        final int delay = 100;
-        final int idle = 50; // allow time for thread to work
-        tailer = Tailer.create(file, listener, delay, false);
-        TestUtils.sleep(idle);
-        tailer.stop();
-        TestUtils.sleep(delay+idle);
-        assertNull(listener.exception, "Should not generate Exception");
-        assertEquals(1 , listener.initialized, "Expected init to be called");
-        assertTrue(listener.notFound > 0, "fileNotFound should be called");
-        assertEquals(0 , listener.rotated, "fileRotated should be not be called");
-        assertEquals(0, listener.reachedEndOfFile, "end of file never reached");
-    }
-
-    /*
-     * Tests [IO-357][Tailer] InterruptedException while the thead is sleeping is silently ignored.
-     */
-    @Test
-    public void testInterrupt() throws Exception {
-        final File file = new File(temporaryFolder, "nosuchfile");
-        assertFalse(file.exists(), "nosuchfile should not exist");
-        final TestTailerListener listener = new TestTailerListener();
-        // Use a long delay to try to make sure the test thread calls interrupt() while the tailer thread is sleeping.
-        final int delay = 1000;
-        final int idle = 50; // allow time for thread to work
-        tailer = new Tailer(file, listener, delay, false, IOUtils.DEFAULT_BUFFER_SIZE);
-        final Thread thread = new Thread(tailer);
-        thread.setDaemon(true);
-        thread.start();
-        TestUtils.sleep(idle);
-        thread.interrupt();
-        TestUtils.sleep(delay + idle);
-        assertNotNull(listener.exception, "Missing InterruptedException");
-        assertTrue(listener.exception instanceof InterruptedException, "Unexpected Exception: " + listener.exception);
-        assertEquals(1, listener.initialized, "Expected init to be called");
-        assertTrue(listener.notFound > 0, "fileNotFound should be called");
-        assertEquals(0, listener.rotated, "fileRotated should be not be called");
-        assertEquals(0, listener.reachedEndOfFile, "end of file never reached");
-    }
-
-    @Test
-    public void testStopWithNoFileUsingExecutor() throws Exception {
-        final File file = new File(temporaryFolder,"nosuchfile");
-        assertFalse(file.exists(), "nosuchfile should not exist");
-        final TestTailerListener listener = new TestTailerListener();
-        final int delay = 100;
-        final int idle = 50; // allow time for thread to work
-        tailer = new Tailer(file, listener, delay, false);
-        final Executor exec = new ScheduledThreadPoolExecutor(1);
-        exec.execute(tailer);
-        TestUtils.sleep(idle);
-        tailer.stop();
-        TestUtils.sleep(delay+idle);
-        assertNull(listener.exception, "Should not generate Exception");
-        assertEquals(1 , listener.initialized, "Expected init to be called");
-        assertTrue(listener.notFound > 0, "fileNotFound should be called");
-        assertEquals(0 , listener.rotated, "fileRotated should be not be called");
-        assertEquals(0, listener.reachedEndOfFile, "end of file never reached");
-    }
-
-    @Test
-    public void testIO335() throws Exception { // test CR behavior
-        // Create & start the Tailer
-        final long delayMillis = 50;
-        final File file = new File(temporaryFolder, "tailer-testio334.txt");
-        createFile(file, 0);
-        final TestTailerListener listener = new TestTailerListener();
-        tailer = new Tailer(file, listener, delayMillis, false);
-        final Thread thread = new Thread(tailer);
-        thread.start();
-
-        // Write some lines to the file
-        writeString(file, "CRLF\r\n", "LF\n", "CR\r", "CRCR\r\r", "trail");
-        final long testDelayMillis = delayMillis * 10;
-        TestUtils.sleep(testDelayMillis);
-        final List<String> lines = listener.getLines();
-        assertEquals(4, lines.size(), "line count");
-        assertEquals("CRLF", lines.get(0), "line 1");
-        assertEquals("LF", lines.get(1), "line 2");
-        assertEquals("CR", lines.get(2), "line 3");
-        assertEquals("CRCR\r", lines.get(3), "line 4");
     }
 
     @Test
@@ -752,143 +729,6 @@ public class TailerTest {
             assertEquals(listener.getLines(), Lists.newArrayList("foo"), "lines");
         } finally {
             tailer.stop();
-        }
-    }
-
-    /**
-     * Test {@link TailerListener} implementation.
-     */
-    private static class TestTailerListener extends TailerListenerAdapter {
-
-        // Must be synchronized because it is written by one thread and read by another
-        private final List<String> lines = Collections.synchronizedList(new ArrayList<>());
-
-        private final CountDownLatch latch;
-
-        volatile Exception exception;
-
-        volatile int notFound;
-
-        volatile int rotated;
-
-        volatile int initialized;
-
-        volatile int reachedEndOfFile;
-
-        public TestTailerListener() {
-            latch = new CountDownLatch(1);
-        }
-
-        public TestTailerListener(final int expectedLines) {
-            latch = new CountDownLatch(expectedLines);
-        }
-
-        @Override
-        public void handle(final String line) {
-            lines.add(line);
-            latch.countDown();
-        }
-
-        public List<String> getLines() {
-            return lines;
-        }
-
-        public void clear() {
-            lines.clear();
-        }
-
-        @Override
-        public void handle(final Exception e) {
-            exception = e;
-        }
-
-        @Override
-        public void init(final Tailer tailer) {
-            initialized++; // not atomic, but OK because only updated here.
-        }
-
-        @Override
-        public void fileNotFound() {
-            notFound++; // not atomic, but OK because only updated here.
-        }
-
-        @Override
-        public void fileRotated() {
-            rotated++; // not atomic, but OK because only updated here.
-        }
-
-        @Override
-        public void endOfFileReached() {
-            reachedEndOfFile++; // not atomic, but OK because only updated here.
-        }
-
-        public boolean awaitExpectedLines(long timeout, TimeUnit timeUnit) throws InterruptedException {
-            return latch.await(timeout, timeUnit);
-        }
-    }
-
-    private static class NonStandardTailable implements Tailer.Tailable {
-        private final File file;
-
-        public NonStandardTailable(final File file) {
-            this.file = file;
-        }
-
-        @Override
-        public String getFileName() {
-            return file.getName();
-        }
-
-        @Override
-        public String getPathName() {
-            return file.getPath();
-        }
-
-        @Override
-        public long length() {
-            return file.length();
-        }
-
-        @Override
-        public long lastModified() throws IOException {
-            return FileUtils.lastModified(file);
-        }
-
-        @Override
-        public boolean exists() {
-            return file.exists();
-        }
-
-        @Override
-        public boolean isFileNewer(final long last) {
-            return FileUtils.isFileNewer(file, last);
-        }
-
-        @Override
-        public Tailer.RandomAccessTailable getRandomAccess(final String mode) throws FileNotFoundException {
-            return new Tailer.RandomAccessTailable() {
-                private final RandomAccessFile reader = new RandomAccessFile(file, mode);
-
-                @Override
-                public long getFilePointer() throws IOException {
-                    return reader.getFilePointer();
-                }
-
-                @Override
-                public void seek(final long position) throws IOException {
-                    reader.seek(position);
-                }
-
-                @Override
-                public int read(final byte[] b) throws IOException {
-                    return reader.read(b);
-                }
-
-                @Override
-                public void close() throws IOException {
-                    reader.close();
-                }
-            };
         }
     }
 }
