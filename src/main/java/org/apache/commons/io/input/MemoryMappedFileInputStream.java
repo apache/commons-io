@@ -73,19 +73,19 @@ public class MemoryMappedFileInputStream extends InputStream {
      * The starting position (within the file) of the next sliding buffer.
      */
     private long nextBufferPosition = 0;
-    
+
     /** Constructs a {@link MemoryMappedFileInputStream} object.
-     * 
+     *
      * @param file The path of the file to to open.
      * @throws IOException If an I/O error occurs
      */
     public MemoryMappedFileInputStream(final Path file) throws IOException {
         this(file, DEFAULT_BUFFER_SIZE);
     }
-    
+
     /**
      *  Constructs a {@link MemoryMappedFileInputStream} object.
-     * 
+     *
      * @param file The path of the file to to open.
      * @param bufferSize Size of the sliding buffer.
      * @throws IOException If an I/O error occurs.
