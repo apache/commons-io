@@ -41,7 +41,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * <h2>Using NIO</h2>
  * <pre>
  * final Path dir = Paths.get("");
- * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(SymbolicLinkFileFilter.FILE);
+ * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(SymbolicLinkFileFilter.INSTANCE);
  * //
  * // Walk one dir
  * Files.<b>walkFileTree</b>(dir, Collections.emptySet(), 1, visitor);
@@ -76,6 +76,17 @@ public class SymbolicLinkFileFilter extends AbstractFileFilter implements Serial
     }
 
     /**
+     * Constructs a new instance.
+     *
+     * @param onAccept What to do on acceptance.
+     * @param onReject What to do on rejection.
+     * @since 2.12.0.
+     */
+    public SymbolicLinkFileFilter(final FileVisitResult onAccept, final FileVisitResult onReject) {
+        super(onAccept, onReject);
+    }
+
+    /**
      * Checks to see if the file is a file.
      *
      * @param file  the File to check
@@ -87,14 +98,14 @@ public class SymbolicLinkFileFilter extends AbstractFileFilter implements Serial
     }
 
     /**
-     * Checks to see if the file is a file.
+     * Checks to see if the file is a symbolic link.
      * @param file  the File to check
      *
-     * @return true if the file is a file
+     * @return true if the file is a symbolic link.
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        return toFileVisitResult(Files.isSymbolicLink(file), file);
+        return toFileVisitResult(Files.isSymbolicLink(file));
     }
 
 }

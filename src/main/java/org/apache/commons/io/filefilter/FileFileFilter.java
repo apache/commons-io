@@ -105,7 +105,7 @@ public class FileFileFilter extends AbstractFileFilter implements Serializable {
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        return toFileVisitResult(Files.isRegularFile(file), file);
+        return toFileVisitResult(Files.isRegularFile(file));
     }
 
 }

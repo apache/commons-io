@@ -42,6 +42,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -153,6 +154,7 @@ public class FileUtilsTestCase {
      * List files recursively
      */
     private static final ListDirectoryWalker LIST_WALKER = new ListDirectoryWalker();
+
     @TempDir
     public File temporaryFolder;
 
@@ -182,17 +184,43 @@ public class FileUtilsTestCase {
         }
     }
 
+    /**
+     * May throw java.nio.file.FileSystemException: C:\Users\...\FileUtilsTestCase\cycle: A required privilege is not held
+     * by the client. On Windows, you are fine if you run a terminal with admin karma.
+     */
     private void createCircularSymLink(final File file) throws IOException {
-        if (!FilenameUtils.isSystemWindows()) {
-            Runtime.getRuntime()
-                    .exec("ln -s " + file + "/.. " + file + "/cycle");
-        } else {
+        assertTrue(file.exists());
+        final String linkName = file + "/cycle";
+        final String targetName = file + "/..";
+        assertTrue(file.exists());
+        final Path linkPath = Paths.get(linkName);
+        assertFalse(Files.exists(linkPath));
+        final Path targetPath = Paths.get(targetName);
+        assertTrue(Files.exists(targetPath));
+        try {
+            // May throw java.nio.file.FileSystemException: C:\Users\...\FileUtilsTestCase\cycle: A required privilege is not held by the client.
+            // On Windows, you are fine if you run a terminal with admin karma.
+            Files.createSymbolicLink(linkPath, targetPath);
+        } catch (final UnsupportedOperationException e) {
+            e.printStackTrace();
+            createCircularOsSymLink(linkName, targetName);
+        }
+        // Sanity check:
+        assertTrue(Files.isSymbolicLink(linkPath), () -> "Expected a sym link here: " + linkName);
+    }
+
+    private void createCircularOsSymLink(final String linkName, final String targetName) throws IOException {
+        if (FilenameUtils.isSystemWindows()) {
+            // Windows
             try {
-                Runtime.getRuntime()
-                        .exec("mklink /D " + file + "/cycle" + file + "/.. ");
-            } catch (final IOException ioe) { // So that tests run in FAT filesystems
-                //don't fail
+                Runtime.getRuntime().exec("mklink /D " + linkName + " " + targetName);
+            } catch (final IOException ioe) {
+                // So that tests run in FAT filesystems don't fail
+                ioe.printStackTrace();
             }
+        } else {
+            // Not Windows, assume Linux
+            Runtime.getRuntime().exec("ln -s " + targetName + " " + linkName);
         }
     }
 
@@ -459,6 +487,31 @@ public class FileUtilsTestCase {
     }
 
     @Test
+    public void testByteCountToDisplaySizeNumber() {
+        assertEquals("0 bytes", FileUtils.byteCountToDisplaySize(Integer.valueOf(0)));
+        assertEquals("1 bytes", FileUtils.byteCountToDisplaySize(Integer.valueOf(1)));
+        assertEquals("1023 bytes", FileUtils.byteCountToDisplaySize(Integer.valueOf(1023)));
+        assertEquals("1 KB", FileUtils.byteCountToDisplaySize(Integer.valueOf(1024)));
+        assertEquals("1 KB", FileUtils.byteCountToDisplaySize(Integer.valueOf(1025)));
+        assertEquals("1023 KB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024 * 1023)));
+        assertEquals("1 MB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024 * 1024)));
+        assertEquals("1 MB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024 * 1025)));
+        assertEquals("1023 MB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024 * 1024 * 1023)));
+        assertEquals("1 GB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024 * 1024 * 1024)));
+        assertEquals("1 GB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024 * 1024 * 1025)));
+        assertEquals("2 GB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024L * 1024 * 1024 * 2)));
+        assertEquals("1 GB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024 * 1024 * 1024 * 2 - 1)));
+        assertEquals("1 TB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024L * 1024 * 1024 * 1024)));
+        assertEquals("1 PB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024L * 1024 * 1024 * 1024 * 1024)));
+        assertEquals("1 EB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024L * 1024 * 1024 * 1024 * 1024 * 1024)));
+        assertEquals("7 EB", FileUtils.byteCountToDisplaySize(Long.valueOf(Long.MAX_VALUE)));
+        // Other MAX_VALUEs
+        assertEquals("63 KB", FileUtils.byteCountToDisplaySize(Integer.valueOf(Character.MAX_VALUE)));
+        assertEquals("31 KB", FileUtils.byteCountToDisplaySize(Short.valueOf(Short.MAX_VALUE)));
+        assertEquals("1 GB", FileUtils.byteCountToDisplaySize(Integer.valueOf(Integer.MAX_VALUE)));
+    }
+
+    @Test
     public void testChecksum() throws Exception {
         // create a test file
         final String text = "Imagination is more important than knowledge - Einstein";
@@ -526,12 +579,7 @@ public class FileUtilsTestCase {
 
     @Test
     public void testChecksumOnDirectory() throws Exception {
-        try {
-            FileUtils.checksum(new File("."), new CRC32());
-            fail();
-        } catch (final IllegalArgumentException ex) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.checksum(new File("."), new CRC32()));
     }
 
     @Test
@@ -540,22 +588,12 @@ public class FileUtilsTestCase {
         final String text = "Imagination is more important than knowledge - Einstein";
         final File file = new File(temporaryFolder, "checksum-test.txt");
         FileUtils.writeStringToFile(file, text, "US-ASCII");
-        try {
-            FileUtils.checksum(file, null);
-            fail();
-        } catch (final NullPointerException ex) {
-            // expected
-        }
+        assertThrows(NullPointerException.class, () -> FileUtils.checksum(file, null));
     }
 
     @Test
     public void testChecksumOnNullFile() throws Exception {
-        try {
-            FileUtils.checksum(null, new CRC32());
-            fail();
-        } catch (final NullPointerException ex) {
-            // expected
-        }
+        assertThrows(NullPointerException.class, () -> FileUtils.checksum(null, new CRC32()));
     }
 
     // Compare sizes of a directory tree using long and BigInteger methods
@@ -803,10 +841,8 @@ public class FileUtilsTestCase {
         final File childDir = new File(parentDir, "child");
         createFilesForTestCopyDirectory(grandParentDir, parentDir, childDir);
 
-        final long expectedCount = LIST_WALKER.list(grandParentDir).size() +
-                LIST_WALKER.list(parentDir).size();
-        final long expectedSize = FileUtils.sizeOfDirectory(grandParentDir) +
-                FileUtils.sizeOfDirectory(parentDir);
+        final long expectedCount = LIST_WALKER.list(grandParentDir).size() + LIST_WALKER.list(parentDir).size();
+        final long expectedSize = FileUtils.sizeOfDirectory(grandParentDir) + FileUtils.sizeOfDirectory(parentDir);
         FileUtils.copyDirectory(parentDir, childDir);
         assertEquals(expectedCount, LIST_WALKER.list(grandParentDir).size());
         assertEquals(expectedSize, FileUtils.sizeOfDirectory(grandParentDir));
@@ -1249,6 +1285,38 @@ public class FileUtilsTestCase {
         //TODO Maybe test copy to itself like for copyFile()
     }
 
+    /**
+     * Tests a directory with one file of size 0.
+     */
+    @Test
+    public void testCountFolders1FileSize0() throws IOException {
+        assertEquals(0, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0").toFile()));
+    }
+
+    /**
+     * Tests a directory with one file of size 1.
+     */
+    @Test
+    public void testCountFolders1FileSize1() throws IOException {
+        assertEquals(1, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1").toFile()));
+    }
+
+    /**
+     * Tests a directory with two subdirectories, each containing one file of size 1.
+     */
+    @Test
+    public void testCountFolders2FileSize2() throws IOException {
+        assertEquals(2, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2").toFile()));
+    }
+
+    /**
+     * Tests a directory with two subdirectories, each containing one file of size 1.
+     */
+    @Test
+    public void testCountFolders2FileSize4() throws IOException {
+        assertEquals(8, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-4").toFile()));
+    }
+
     @Test
     public void testDecodeUrl() {
         assertEquals("", FileUtils.decodeUrl(""));
@@ -1288,12 +1356,7 @@ public class FileUtilsTestCase {
 
     @Test
     public void testDeleteDirectoryWithNonDirectory() throws Exception {
-        try {
-            FileUtils.deleteDirectory(testFile1);
-            fail();
-        } catch (final IllegalArgumentException ex) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.deleteDirectory(testFile1));
     }
 
     @Test
@@ -1320,6 +1383,8 @@ public class FileUtilsTestCase {
         assertFalse(testFile.exists(), "Check No Exist");
     }
 
+    // copyToDirectory
+
     @Test
     public void testDeleteQuietlyFile() throws IOException {
         final File testFile = new File(temporaryFolder, "testDeleteQuietlyFile");
@@ -1342,23 +1407,14 @@ public class FileUtilsTestCase {
 
     @Test
     public void testDeleteQuietlyForNull() {
-        try {
-            FileUtils.deleteQuietly(null);
-        } catch (final Exception ex) {
-            fail(ex.getMessage());
-        }
+        FileUtils.deleteQuietly(null);
     }
 
     @Test
     public void testDeleteQuietlyNonExistent() {
         final File testFile = new File("testDeleteQuietlyNonExistent");
         assertFalse(testFile.exists());
-
-        try {
-            FileUtils.deleteQuietly(testFile);
-        } catch (final Exception ex) {
-            fail(ex.getMessage());
-        }
+        FileUtils.deleteQuietly(testFile);
     }
 
     /*
@@ -1391,8 +1447,6 @@ public class FileUtilsTestCase {
 
     }
 
-    // copyToDirectory
-
     @Test
     public void testForceDeleteAFile1() throws Exception {
         final File destination = new File(temporaryFolder, "copy1.txt");
@@ -1415,11 +1469,8 @@ public class FileUtilsTestCase {
     public void testForceDeleteAFile3() throws Exception {
         final File destination = new File(temporaryFolder, "no_such_file");
         assertFalse(destination.exists(), "Check No Exist");
-        try {
-            FileUtils.forceDelete(destination);
-            fail("Should generate FileNotFoundException");
-        } catch (final FileNotFoundException ignored) {
-        }
+        assertThrows(FileNotFoundException.class, () -> FileUtils.forceDelete(destination));
+
     }
 
     @Test
@@ -1429,6 +1480,8 @@ public class FileUtilsTestCase {
         FileUtils.forceDelete(testDirectory);
         assertFalse(testDirectory.exists(), "TestDirectory must not exist");
     }
+
+    // forceDelete
 
     @Test
     public void testForceDeleteReadOnlyFile() throws Exception {
@@ -1467,6 +1520,9 @@ public class FileUtilsTestCase {
         // Tests with non-existent directory
         FileUtils.forceMkdir(testFile);
         assertTrue(testFile.exists(), "Directory was not created.");
+
+        // noop
+        FileUtils.forceMkdir(null);
     }
 
     @Test
@@ -1497,15 +1553,9 @@ public class FileUtilsTestCase {
         assertEquals(expected_A, FileUtils.getFile("src"), "A");
         assertEquals(expected_B, FileUtils.getFile("src", "main"), "B");
         assertEquals(expected_C, FileUtils.getFile("src", "main", "java"), "C");
-        try {
-            FileUtils.getFile((String[]) null);
-            fail("Expected NullPointerException");
-        } catch (final NullPointerException e) {
-            // expected
-        }
-    }
+        assertThrows(NullPointerException.class, () -> FileUtils.getFile((String[]) null));
 
-    // forceDelete
+    }
 
     @Test
     public void testGetFile_Parent() {
@@ -1516,18 +1566,8 @@ public class FileUtilsTestCase {
         assertEquals(expected_A, FileUtils.getFile(parent, "src"), "A");
         assertEquals(expected_B, FileUtils.getFile(parent, "src", "main"), "B");
         assertEquals(expected_C, FileUtils.getFile(parent, "src", "main", "java"), "C");
-        try {
-            FileUtils.getFile(parent, (String[]) null);
-            fail("Expected NullPointerException");
-        } catch (final NullPointerException e) {
-            // expected
-        }
-        try {
-            FileUtils.getFile((File) null, "src");
-            fail("Expected NullPointerException");
-        } catch (final NullPointerException e) {
-            // expected
-        }
+        assertThrows(NullPointerException.class, () -> FileUtils.getFile(parent, (String[]) null));
+        assertThrows(NullPointerException.class, () -> FileUtils.getFile((File) null, "src"));
     }
 
     @Test
@@ -1538,11 +1578,8 @@ public class FileUtilsTestCase {
 
     @Test
     public void testGetTempDirectoryPath() {
-        assertEquals(System.getProperty("java.io.tmpdir"),
-                FileUtils.getTempDirectoryPath());
+        assertEquals(System.getProperty("java.io.tmpdir"), FileUtils.getTempDirectoryPath());
     }
-
-    // copyFileToDirectory
 
     @Test
     public void testGetUserDirectory() {
@@ -1552,11 +1589,8 @@ public class FileUtilsTestCase {
 
     @Test
     public void testGetUserDirectoryPath() {
-        assertEquals(System.getProperty("user.home"),
-                FileUtils.getUserDirectoryPath());
+        assertEquals(System.getProperty("user.home"), FileUtils.getUserDirectoryPath());
     }
-
-    // forceDelete
 
     // This test relies on FileUtils.copyFile using File.length to check the output size
     @Test
@@ -1591,13 +1625,21 @@ public class FileUtilsTestCase {
         final File dest = new File(src, "dir2");
         assertTrue(dest.mkdirs());
         assertTrue(src.exists());
-        try {
-            FileUtils.moveDirectoryToDirectory(src, dest, false);
-            fail("expected IOException");
-        } catch (final IOException ioe) {
-            // expected
-        }
+        assertThrows(IOException.class, () -> FileUtils.moveDirectoryToDirectory(src, dest, false));
         assertTrue(src.exists());
+    }
+
+    @Test
+    public void testIsDirectory() throws IOException {
+        assertFalse(FileUtils.isDirectory(null));
+
+        assertTrue(FileUtils.isDirectory(temporaryFolder));
+        assertFalse(FileUtils.isDirectory(testFile1));
+
+        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
+        final File tempDirAsFile = tempDir.toFile();
+        Files.delete(tempDir);
+        assertFalse(FileUtils.isDirectory(tempDirAsFile));
     }
 
     @Test
@@ -1706,13 +1748,7 @@ public class FileUtilsTestCase {
         assertFalse(FileUtils.isFileNewer(newFile, localDatePlusDay, localTime), "New File - Newer - LocalDate plus one day,ZoneId");
         assertFalse(FileUtils.isFileNewer(invalidFile, reference), "Invalid - Newer - File");
         final String invalidFileName = invalidFile.getName();
-        try {
-            FileUtils.isFileNewer(newFile, invalidFile);
-            fail("Should have cause IllegalArgumentException");
-        } catch (final IllegalArgumentException iae) {
-            final String message = iae.getMessage();
-            assertTrue(message.contains(invalidFileName), "Message should contain: " + invalidFileName + " but was: " + message);
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileNewer(newFile, invalidFile));
 
         // Test isFileOlder()
         assertTrue(FileUtils.isFileOlder(oldFile, reference), "Old File - Older - File");
@@ -1741,14 +1777,6 @@ public class FileUtilsTestCase {
 
         assertFalse(FileUtils.isFileOlder(invalidFile, reference), "Invalid - Older - File");
         assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileOlder(newFile, invalidFile));
-        try {
-            FileUtils.isFileOlder(newFile, invalidFile);
-            fail("Should have cause IllegalArgumentException");
-        } catch (final IllegalArgumentException iae) {
-            final String message = iae.getMessage();
-            assertTrue(message.contains(invalidFileName), "Message should contain: " + invalidFileName + " but was: " + message);
-        }
-
 
         // ----- Test isFileNewer() exceptions -----
         // Null File
@@ -1775,19 +1803,6 @@ public class FileUtilsTestCase {
 
         // Invalid reference File
         assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileOlder(oldFile, invalidFile));
-    }
-
-    @Test
-    public void testIsDirectory() throws IOException {
-        assertFalse(FileUtils.isDirectory(null));
-
-        assertTrue(FileUtils.isDirectory(temporaryFolder));
-        assertFalse(FileUtils.isDirectory(testFile1));
-
-        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
-        final File tempDirAsFile = tempDir.toFile();
-        Files.delete(tempDir);
-        assertFalse(FileUtils.isDirectory(tempDirAsFile));
     }
 
     @Test
@@ -2045,19 +2060,13 @@ public class FileUtilsTestCase {
     public void testMoveDirectory_Errors() throws Exception {
         assertThrows(NullPointerException.class, () -> FileUtils.moveDirectory(null, new File("foo")));
         assertThrows(NullPointerException.class, () -> FileUtils.moveDirectory(new File("foo"), null));
-        try {
-            FileUtils.moveDirectory(new File("nonexistant"), new File("foo"));
-            fail("Expected FileNotFoundException for source");
-        } catch (final FileNotFoundException e) {
-            // expected
-        }
+        assertThrows(FileNotFoundException.class, () -> FileUtils.moveDirectory(new File("nonexistant"), new File("foo")));
+
         final File testFile = new File(temporaryFolder, "testMoveDirectoryFile");
         if (!testFile.getParentFile().exists()) {
-            throw new IOException("Cannot create file " + testFile
-                    + " as the parent directory does not exist");
+            throw new IOException("Cannot create file " + testFile + " as the parent directory does not exist");
         }
-        final OutputStream output =
-                new BufferedOutputStream(Files.newOutputStream(testFile.toPath()));
+        final OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()));
         try {
             TestUtils.generateTestData(output, 0);
         } finally {
@@ -2068,12 +2077,9 @@ public class FileUtilsTestCase {
         final File testDestFile = new File(temporaryFolder, "testMoveDirectoryDest");
         testSrcFile.mkdir();
         testDestFile.mkdir();
-        try {
-            FileUtils.moveDirectory(testSrcFile, testDestFile);
-            fail("Expected FileExistsException when dest already exists");
-        } catch (final FileExistsException e) {
-            // expected
-        }
+        assertThrows(FileExistsException.class, () -> FileUtils.moveDirectory(testSrcFile, testDestFile),
+            "Expected FileExistsException when dest already exists");
+
     }
 
     @Test
@@ -2169,20 +2175,10 @@ public class FileUtilsTestCase {
         } finally {
             IOUtils.closeQuietly(output);
         }
-        try {
-            FileUtils.moveDirectoryToDirectory(testFile1, testFile2, true);
-            fail("Expected IOException when dest not a directory");
-        } catch (final IOException e) {
-            // expected
-        }
+        assertThrows(IOException.class, () -> FileUtils.moveDirectoryToDirectory(testFile1, testFile2, true));
 
         final File nonexistant = new File(temporaryFolder, "testMoveFileNonExistant");
-        try {
-            FileUtils.moveDirectoryToDirectory(testFile1, nonexistant, false);
-            fail("Expected IOException when dest does not exist and create=false");
-        } catch (final IOException e) {
-            // expected
-        }
+        assertThrows(IOException.class, () -> FileUtils.moveDirectoryToDirectory(testFile1, nonexistant, false));
     }
 
     @Test
@@ -2296,43 +2292,28 @@ public class FileUtilsTestCase {
     public void testMoveFile_Errors() throws Exception {
         assertThrows(NullPointerException.class, () -> FileUtils.moveFile(null, new File("foo")));
         assertThrows(NullPointerException.class, () -> FileUtils.moveFile(new File("foo"), null));
-        try {
-            FileUtils.moveFile(new File("nonexistant"), new File("foo"));
-            fail("Expected FileNotFoundException for source");
-        } catch (final FileNotFoundException e) {
-            // expected
-        }
+        assertThrows(FileNotFoundException.class, () -> FileUtils.moveFile(new File("nonexistant"), new File("foo")));
         assertThrows(IllegalArgumentException.class, () -> FileUtils.moveFile(temporaryFolder, new File("foo")));
         final File testSourceFile = new File(temporaryFolder, "testMoveFileSource");
         final File testDestFile = new File(temporaryFolder, "testMoveFileSource");
         if (!testSourceFile.getParentFile().exists()) {
-            throw new IOException("Cannot create file " + testSourceFile
-                    + " as the parent directory does not exist");
+            throw new IOException("Cannot create file " + testSourceFile + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output1 =
-                new BufferedOutputStream(Files.newOutputStream(testSourceFile.toPath()));
+        final BufferedOutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testSourceFile.toPath()));
         try {
             TestUtils.generateTestData(output1, 0);
         } finally {
             IOUtils.closeQuietly(output1);
         }
-        if (!testDestFile.getParentFile().exists()) {
-            throw new IOException("Cannot create file " + testDestFile
-                    + " as the parent directory does not exist");
-        }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(Files.newOutputStream(testDestFile.toPath()));
+        assertTrue(testDestFile.getParentFile().exists(), () -> "Cannot create file " + testDestFile + " as the parent directory does not exist");
+        final BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(testDestFile.toPath()));
         try {
             TestUtils.generateTestData(output, 0);
         } finally {
             IOUtils.closeQuietly(output);
         }
-        try {
-            FileUtils.moveFile(testSourceFile, testDestFile);
-            fail("Expected FileExistsException when dest already exists");
-        } catch (final FileExistsException e) {
-            // expected
-        }
+        assertThrows(FileExistsException.class, () -> FileUtils.moveFile(testSourceFile, testDestFile),
+            "Expected FileExistsException when dest already exists");
     }
 
     @Test
@@ -2387,12 +2368,7 @@ public class FileUtilsTestCase {
         assertThrows(IllegalArgumentException.class, () -> FileUtils.moveFileToDirectory(testFile1, testFile2, true));
 
         final File nonexistant = new File(temporaryFolder, "testMoveFileNonExistant");
-        try {
-            FileUtils.moveFileToDirectory(testFile1, nonexistant, false);
-            fail("Expected IOException when dest does not exist and create=false");
-        } catch (final IOException e) {
-            // expected
-        }
+        assertThrows(IOException.class, () -> FileUtils.moveFileToDirectory(testFile1, nonexistant, false));
     }
 
     @Test
@@ -2431,26 +2407,12 @@ public class FileUtilsTestCase {
 
     @Test
     public void testMoveToDirectory_Errors() throws Exception {
-        try {
-            FileUtils.moveDirectoryToDirectory(null, new File("foo"), true);
-            fail("Expected NullPointerException when source is null");
-        } catch (final NullPointerException e) {
-            // expected
-        }
-        try {
-            FileUtils.moveDirectoryToDirectory(new File("foo"), null, true);
-            fail("Expected NullPointerException when destination is null");
-        } catch (final NullPointerException e) {
-            // expected
-        }
+        assertThrows(NullPointerException.class, () -> FileUtils.moveDirectoryToDirectory(null, new File("foo"), true));
+        assertThrows(NullPointerException.class, () -> FileUtils.moveDirectoryToDirectory(new File("foo"), null, true));
         final File nonexistant = new File(temporaryFolder, "nonexistant");
         final File destDir = new File(temporaryFolder, "MoveToDirectoryDestDir");
-        try {
-            FileUtils.moveToDirectory(nonexistant, destDir, true);
-            fail("Expected IOException when source does not exist");
-        } catch (final IOException e) {
-            // expected
-        }
+        assertThrows(IOException.class, () -> FileUtils.moveToDirectory(nonexistant, destDir, true), "Expected IOException when source does not exist");
+
     }
 
     @Test
@@ -2480,6 +2442,7 @@ public class FileUtilsTestCase {
         final String data = FileUtils.readFileToString(file);
         assertEquals("Hello /u1234", data);
     }
+
 
     @Test
     public void testReadFileToStringWithEncoding() throws Exception {
@@ -2512,18 +2475,10 @@ public class FileUtilsTestCase {
         final File file = new File(temporaryFolder, getName());
 
         // Null argument
-        try {
-            FileUtils.sizeOf(null);
-            fail("Exception expected.");
-        } catch (final NullPointerException ignore) {
-        }
+        assertThrows(NullPointerException.class, () -> FileUtils.sizeOf(null));
 
         // Non-existent file
-        try {
-            FileUtils.sizeOf(file);
-            fail("Exception expected.");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.sizeOf(file));
 
         // Creates file
         file.createNewFile();
@@ -2545,18 +2500,9 @@ public class FileUtilsTestCase {
         final File file = new File(temporaryFolder, getName());
 
         // Null argument
-        try {
-            FileUtils.sizeOfAsBigInteger(null);
-            fail("Exception expected.");
-        } catch (final NullPointerException ignore) {
-        }
-
+        assertThrows(NullPointerException.class, () -> FileUtils.sizeOfAsBigInteger(null));
         // Non-existent file
-        try {
-            FileUtils.sizeOfAsBigInteger(file);
-            fail("Exception expected.");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.sizeOfAsBigInteger(file));
 
         // Creates file
         file.createNewFile();
@@ -2575,27 +2521,20 @@ public class FileUtilsTestCase {
                 "Unexpected directory size");
     }
 
-
     @Test
     public void testSizeOfDirectory() throws Exception {
         final File file = new File(temporaryFolder, getName());
 
+        // Null argument
+        assertThrows(NullPointerException.class, () -> FileUtils.sizeOfDirectory(null));
         // Non-existent file
-        try {
-            FileUtils.sizeOfDirectory(file);
-            fail("Exception expected.");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.sizeOfAsBigInteger(file));
 
         // Creates file
         file.createNewFile();
 
         // Existing file
-        try {
-            FileUtils.sizeOfDirectory(file);
-            fail("Exception expected.");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.sizeOfDirectory(file));
 
         // Existing directory
         file.delete();
@@ -2611,29 +2550,23 @@ public class FileUtilsTestCase {
     public void testSizeOfDirectoryAsBigInteger() throws Exception {
         final File file = new File(temporaryFolder, getName());
 
+        // Null argument
+        assertThrows(NullPointerException.class, () -> FileUtils.sizeOfDirectoryAsBigInteger(null));
         // Non-existent file
-        try {
-            FileUtils.sizeOfDirectoryAsBigInteger(file);
-            fail("Exception expected.");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.sizeOfDirectoryAsBigInteger(file));
 
         // Creates file
         file.createNewFile();
         file.deleteOnExit();
 
         // Existing file
-        try {
-            FileUtils.sizeOfDirectoryAsBigInteger(file);
-            fail("Exception expected.");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.sizeOfDirectoryAsBigInteger(file));
 
         // Existing directory
         file.delete();
         file.mkdir();
 
-        this.createCircularSymLink(file);
+        createCircularSymLink(file);
 
         assertEquals(TEST_DIRECTORY_SIZE_BI, FileUtils.sizeOfDirectoryAsBigInteger(file), "Unexpected directory size");
 
@@ -2642,12 +2575,8 @@ public class FileUtilsTestCase {
         file.mkdir();
 
         final File nonEmptyFile = new File(file, "nonEmptyFile" + System.nanoTime());
-        if (!nonEmptyFile.getParentFile().exists()) {
-            throw new IOException("Cannot create file " + nonEmptyFile
-                    + " as the parent directory does not exist");
-        }
-        final OutputStream output =
-                new BufferedOutputStream(Files.newOutputStream(nonEmptyFile.toPath()));
+        assertTrue(nonEmptyFile.getParentFile().exists(), () -> "Cannot create file " + nonEmptyFile + " as the parent directory does not exist");
+        final OutputStream output = new BufferedOutputStream(Files.newOutputStream(nonEmptyFile.toPath()));
         try {
             TestUtils.generateTestData(output, TEST_DIRECTORY_SIZE_GT_ZERO_BI.longValue());
         } finally {
@@ -2655,8 +2584,7 @@ public class FileUtilsTestCase {
         }
         nonEmptyFile.deleteOnExit();
 
-        assertEquals(TEST_DIRECTORY_SIZE_GT_ZERO_BI, FileUtils.sizeOfDirectoryAsBigInteger(file),
-                "Unexpected directory size");
+        assertEquals(TEST_DIRECTORY_SIZE_GT_ZERO_BI, FileUtils.sizeOfDirectoryAsBigInteger(file), "Unexpected directory size");
 
         nonEmptyFile.delete();
         file.delete();
@@ -2745,11 +2673,7 @@ public class FileUtilsTestCase {
                 new URL("file", null, "file1.txt"),
                 new URL("http", "jakarta.apache.org", "file1.txt"),
         };
-        try {
-            FileUtils.toFiles(urls);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.toFiles(urls));
     }
 
     @Test
@@ -2971,6 +2895,7 @@ public class FileUtilsTestCase {
         assertEquals(expected, actual);
     }
 
+
     @Test
     public void testWriteLines_4arg() throws Exception {
         final Object[] data = {
@@ -3023,7 +2948,6 @@ public class FileUtilsTestCase {
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
-
 
     @Test
     public void testWriteLines_4argsWithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
@@ -3147,6 +3071,14 @@ public class FileUtilsTestCase {
     @Test
     public void testWriteStringToFile3() throws Exception {
         final File file = new File(temporaryFolder, "write.txt");
+        FileUtils.writeStringToFile(file, "Hello /u1234", (Charset) null);
+        final byte[] text = "Hello /u1234".getBytes();
+        TestUtils.assertEqualContent(text, file);
+    }
+
+    @Test
+    public void testWriteStringToFile4() throws Exception {
+        final File file = new File(temporaryFolder, "subdir/write.txt");
         FileUtils.writeStringToFile(file, "Hello /u1234", (Charset) null);
         final byte[] text = "Hello /u1234".getBytes();
         TestUtils.assertEqualContent(text, file);

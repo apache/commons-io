@@ -303,7 +303,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
                     if (read != magicNumbers.length) {
                         return FileVisitResult.TERMINATE;
                     }
-                    return toFileVisitResult(Arrays.equals(this.magicNumbers, byteBuffer.array()), file);
+                    return toFileVisitResult(Arrays.equals(this.magicNumbers, byteBuffer.array()));
                 }
             }
             catch (final IOException ioe) {

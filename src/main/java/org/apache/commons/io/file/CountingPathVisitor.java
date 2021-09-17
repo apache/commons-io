@@ -18,6 +18,7 @@
 package org.apache.commons.io.file;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,6 +26,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Objects;
 
 import org.apache.commons.io.file.Counters.PathCounters;
+import org.apache.commons.io.filefilter.SymbolicLinkFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**
@@ -37,18 +39,18 @@ public class CountingPathVisitor extends SimplePathVisitor {
     static final String[] EMPTY_STRING_ARRAY = {};
 
     /**
-     * Creates a new instance configured with a BigInteger {@link PathCounters}.
+     * Creates a new instance configured with a {@link BigInteger} {@link PathCounters}.
      *
-     * @return a new instance configured with a BigInteger {@link PathCounters}.
+     * @return a new instance configured with a {@link BigInteger} {@link PathCounters}.
      */
     public static CountingPathVisitor withBigIntegerCounters() {
         return new CountingPathVisitor(Counters.bigIntegerPathCounters());
     }
 
     /**
-     * Creates a new instance configured with a long {@link PathCounters}.
+     * Creates a new instance configured with a {@code long} {@link PathCounters}.
      *
-     * @return a new instance configured with a long {@link PathCounters}.
+     * @return a new instance configured with a {@code long} {@link PathCounters}.
      */
     public static CountingPathVisitor withLongCounters() {
         return new CountingPathVisitor(Counters.longPathCounters());
@@ -64,7 +66,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
      * @param pathCounter How to count path visits.
      */
     public CountingPathVisitor(final PathCounters pathCounter) {
-        this(pathCounter, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+        this(pathCounter, new SymbolicLinkFileFilter(FileVisitResult.TERMINATE, FileVisitResult.CONTINUE), TrueFileFilter.INSTANCE);
     }
 
     /**
@@ -148,6 +150,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
 
     @Override
     public FileVisitResult visitFile(final Path file, final BasicFileAttributes attributes) throws IOException {
+        // Note: A file can be a symbolic link to a directory.
         if (Files.exists(file) && fileFilter.accept(file, attributes) == FileVisitResult.CONTINUE) {
             updateFileCounters(file, attributes);
         }

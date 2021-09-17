@@ -34,24 +34,6 @@ import org.junit.jupiter.api.Test;
 public class TaggedWriterTest  {
 
     @Test
-    public void testNormalWriter() {
-        try (final StringBuilderWriter buffer = new StringBuilderWriter()) {
-            try (final Writer writer = new TaggedWriter(buffer)) {
-                writer.write('a');
-                writer.write(new char[] { 'b' });
-                writer.write(new char[] { 'c' }, 0, 1);
-                writer.flush();
-            }
-            assertEquals(3, buffer.getBuilder().length());
-            assertEquals('a', buffer.getBuilder().charAt(0));
-            assertEquals('b', buffer.getBuilder().charAt(1));
-            assertEquals('c', buffer.getBuilder().charAt(2));
-        } catch (final IOException e) {
-            fail("Unexpected exception thrown");
-        }
-    }
-
-    @Test
     public void testBrokenWriter() {
         final IOException exception = new IOException("test exception");
         final TaggedWriter writer =
@@ -97,6 +79,24 @@ public class TaggedWriterTest  {
             } catch (final IOException e2) {
                 assertEquals(exception, e2);
             }
+        }
+    }
+
+    @Test
+    public void testNormalWriter() {
+        try (final StringBuilderWriter buffer = new StringBuilderWriter()) {
+            try (final Writer writer = new TaggedWriter(buffer)) {
+                writer.write('a');
+                writer.write(new char[] { 'b' });
+                writer.write(new char[] { 'c' }, 0, 1);
+                writer.flush();
+            }
+            assertEquals(3, buffer.getBuilder().length());
+            assertEquals('a', buffer.getBuilder().charAt(0));
+            assertEquals('b', buffer.getBuilder().charAt(1));
+            assertEquals('c', buffer.getBuilder().charAt(2));
+        } catch (final IOException e) {
+            fail("Unexpected exception thrown");
         }
     }
 

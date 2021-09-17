@@ -105,7 +105,7 @@ public class Counters {
     }
 
     /**
-     * Counts using a BigInteger number.
+     * Counts using a {@link BigInteger} number.
      */
     private static final class BigIntegerCounter implements Counter {
 
@@ -227,7 +227,7 @@ public class Counters {
     }
 
     /**
-     * Counts using a long number.
+     * Counts using a {@code long} number.
      */
     private final static class LongCounter implements Counter {
 

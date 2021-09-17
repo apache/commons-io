@@ -76,17 +76,17 @@ public class ReversedLinesFileReaderTestSimple {
     }
 
     @Test
-    public void testUnsupportedEncodingUTF16() throws URISyntaxException {
-        final File testFileEmpty = TestResources.getFile("/test-file-empty.bin");
-        assertThrows(UnsupportedEncodingException.class,
-            () -> new ReversedLinesFileReader(testFileEmpty, IOUtils.DEFAULT_BUFFER_SIZE, "UTF-16").close());
-    }
-
-    @Test
     public void testUnsupportedEncodingBig5() throws URISyntaxException {
         final File testFileEncodingBig5 = TestResources.getFile("/test-file-empty.bin");
         assertThrows(UnsupportedEncodingException.class,
             () -> new ReversedLinesFileReader(testFileEncodingBig5, IOUtils.DEFAULT_BUFFER_SIZE, "Big5").close());
+    }
+
+    @Test
+    public void testUnsupportedEncodingUTF16() throws URISyntaxException {
+        final File testFileEmpty = TestResources.getFile("/test-file-empty.bin");
+        assertThrows(UnsupportedEncodingException.class,
+            () -> new ReversedLinesFileReader(testFileEmpty, IOUtils.DEFAULT_BUFFER_SIZE, "UTF-16").close());
     }
 
 }

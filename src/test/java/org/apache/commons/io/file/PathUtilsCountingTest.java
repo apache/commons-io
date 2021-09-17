@@ -75,4 +75,14 @@ public class PathUtilsCountingTest {
                 .countDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2"));
         assertCounts(3, 2, 2, pathCounts);
     }
+
+    /**
+     * Tests a directory with two subdirectories, each containing one file of size 2.
+     */
+    @Test
+    public void testCountFolders2FileSize4() throws IOException {
+        final PathCounters pathCounts = PathUtils
+                .countDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-4"));
+        assertCounts(3, 4, 8, pathCounts);
+    }
 }

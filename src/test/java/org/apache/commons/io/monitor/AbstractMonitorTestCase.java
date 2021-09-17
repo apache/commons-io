@@ -50,38 +50,6 @@ public abstract class AbstractMonitorTestCase {
     /** Time in milliseconds to pause in tests */
     protected final long pauseTime = 100L;
 
-    @BeforeEach
-    public void setUp() {
-        final IOFileFilter files = FileFilterUtils.fileFileFilter();
-        final IOFileFilter javaSuffix = FileFilterUtils.suffixFileFilter(".java");
-        final IOFileFilter fileFilter = FileFilterUtils.and(files, javaSuffix);
-
-        final IOFileFilter directories = FileFilterUtils.directoryFileFilter();
-        final IOFileFilter visible = HiddenFileFilter.VISIBLE;
-        final IOFileFilter dirFilter = FileFilterUtils.and(directories, visible);
-
-        final IOFileFilter filter = FileFilterUtils.or(dirFilter, fileFilter);
-
-        createObserver(testDir, filter);
-    }
-
-    /**
-     * Create a {@link FileAlterationObserver}.
-     *
-     * @param file The directory to observe
-     * @param fileFilter The file filter to apply
-     */
-    protected void createObserver(final File file, final FileFilter fileFilter) {
-        observer = new FileAlterationObserver(file, fileFilter);
-        observer.addListener(listener);
-        observer.addListener(new FileAlterationListenerAdaptor());
-        try {
-            observer.initialize();
-        } catch (final Exception e) {
-            fail("Observer init() threw " + e);
-        }
-    }
-
     /**
      * Check all the Collections are empty
      *
@@ -121,6 +89,38 @@ public abstract class AbstractMonitorTestCase {
         assertEquals(fileCreate, listener.getCreatedFiles().size(), label + ": No. of files created");
         assertEquals(fileChange, listener.getChangedFiles().size(), label + ": No. of files changed");
         assertEquals(fileDelete, listener.getDeletedFiles().size(), label + ": No. of files deleted");
+    }
+
+    /**
+     * Create a {@link FileAlterationObserver}.
+     *
+     * @param file The directory to observe
+     * @param fileFilter The file filter to apply
+     */
+    protected void createObserver(final File file, final FileFilter fileFilter) {
+        observer = new FileAlterationObserver(file, fileFilter);
+        observer.addListener(listener);
+        observer.addListener(new FileAlterationListenerAdaptor());
+        try {
+            observer.initialize();
+        } catch (final Exception e) {
+            fail("Observer init() threw " + e);
+        }
+    }
+
+    @BeforeEach
+    public void setUp() {
+        final IOFileFilter files = FileFilterUtils.fileFileFilter();
+        final IOFileFilter javaSuffix = FileFilterUtils.suffixFileFilter(".java");
+        final IOFileFilter fileFilter = FileFilterUtils.and(files, javaSuffix);
+
+        final IOFileFilter directories = FileFilterUtils.directoryFileFilter();
+        final IOFileFilter visible = HiddenFileFilter.VISIBLE;
+        final IOFileFilter dirFilter = FileFilterUtils.and(directories, visible);
+
+        final IOFileFilter filter = FileFilterUtils.or(dirFilter, fileFilter);
+
+        createObserver(testDir, filter);
     }
 
     /**

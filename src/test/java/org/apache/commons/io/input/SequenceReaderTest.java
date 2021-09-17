@@ -65,14 +65,6 @@ public class SequenceReaderTest {
     }
 
     @Test
-    public void testReadClosedReader() throws IOException {
-        @SuppressWarnings("resource")
-        final Reader reader = new SequenceReader(new CharSequenceReader("FooBar"));
-        reader.close();
-        checkReadEof(reader);
-    }
-
-    @Test
     public void testMarkSupported() throws Exception {
         try (final Reader reader = new SequenceReader()) {
             assertFalse(reader.markSupported());
@@ -120,6 +112,14 @@ public class SequenceReaderTest {
             assertThrows(IndexOutOfBoundsException.class, () -> reader.read(chars, 10, 10));
             assertThrows(NullPointerException.class, () -> reader.read(null, 0, 10));
         }
+    }
+
+    @Test
+    public void testReadClosedReader() throws IOException {
+        @SuppressWarnings("resource")
+        final Reader reader = new SequenceReader(new CharSequenceReader("FooBar"));
+        reader.close();
+        checkReadEof(reader);
     }
 
     @Test

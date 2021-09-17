@@ -40,6 +40,59 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings("deprecation") // testing deprecated class
 public class FileSystemUtilsTestCase {
 
+    static class MockFileSystemUtils extends FileSystemUtils {
+        private final int exitCode;
+        private final byte[] bytes;
+        private final String cmd;
+
+        public MockFileSystemUtils(final int exitCode, final String lines) {
+            this(exitCode, lines, null);
+        }
+
+        public MockFileSystemUtils(final int exitCode, final String lines, final String cmd) {
+            this.exitCode = exitCode;
+            this.bytes = lines.getBytes();
+            this.cmd = cmd;
+        }
+
+        @Override
+        Process openProcess(final String[] params) {
+            if (cmd != null) {
+                assertEquals(cmd, params[params.length - 1]);
+            }
+            return new Process() {
+                @Override
+                public void destroy() {
+                }
+
+                @Override
+                public int exitValue() {
+                    return exitCode;
+                }
+
+                @Override
+                public InputStream getErrorStream() {
+                    return null;
+                }
+
+                @Override
+                public InputStream getInputStream() {
+                    return new ByteArrayInputStream(bytes);
+                }
+
+                @Override
+                public OutputStream getOutputStream() {
+                    return null;
+                }
+
+                @Override
+                public int waitFor() throws InterruptedException {
+                    return exitCode;
+                }
+            };
+        }
+    }
+
     private static final Duration NEG_1_TIMEOUT = Duration.ofMillis(-1);
 
     @Test
@@ -92,21 +145,6 @@ public class FileSystemUtilsTestCase {
     }
 
     @Test
-    public void testGetFreeSpaceOS_String_NullPath() throws Exception {
-        final FileSystemUtils fsu = new FileSystemUtils();
-        try {
-            fsu.freeSpaceOS(null, 1, false, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            fsu.freeSpaceOS(null, 1, true, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-        }
-    }
-
-    @Test
     public void testGetFreeSpaceOS_String_InitError() throws Exception {
         final FileSystemUtils fsu = new FileSystemUtils();
         try {
@@ -118,6 +156,21 @@ public class FileSystemUtilsTestCase {
             fsu.freeSpaceOS("", -1, true, NEG_1_TIMEOUT);
             fail();
         } catch (final IllegalStateException ignore) {
+        }
+    }
+
+    @Test
+    public void testGetFreeSpaceOS_String_NullPath() throws Exception {
+        final FileSystemUtils fsu = new FileSystemUtils();
+        try {
+            fsu.freeSpaceOS(null, 1, false, NEG_1_TIMEOUT);
+            fail();
+        } catch (final IllegalArgumentException ignore) {
+        }
+        try {
+            fsu.freeSpaceOS(null, 1, true, NEG_1_TIMEOUT);
+            fail();
+        } catch (final IllegalArgumentException ignore) {
         }
     }
 
@@ -137,18 +190,6 @@ public class FileSystemUtilsTestCase {
     }
 
     @Test
-    public void testGetFreeSpaceOS_String_Windows() throws Exception {
-        final FileSystemUtils fsu = new FileSystemUtils() {
-            @Override
-            protected long freeSpaceWindows(final String path, final Duration timeout) throws IOException {
-                return 12345L;
-            }
-        };
-        assertEquals(12345L, fsu.freeSpaceOS("", 1, false, NEG_1_TIMEOUT));
-        assertEquals(12345L / 1024, fsu.freeSpaceOS("", 1, true, NEG_1_TIMEOUT));
-    }
-
-    @Test
     public void testGetFreeSpaceOS_String_Unix() throws Exception {
         final FileSystemUtils fsu = new FileSystemUtils() {
             @Override
@@ -161,170 +202,15 @@ public class FileSystemUtilsTestCase {
     }
 
     @Test
-    public void testGetFreeSpaceWindows_String_ParseCommaFormatBytes() throws Exception {
-        // this is the format of response when calling dir /c
-        // we have now switched to dir /-c, so we should never get this
-        final String lines =
-                " Volume in drive C is HDD\n" +
-                        " Volume Serial Number is XXXX-YYYY\n" +
-                        "\n" +
-                        " Directory of C:\\Documents and Settings\\Xxxx\n" +
-                        "\n" +
-                        "19/08/2005  22:43    <DIR>          .\n" +
-                        "19/08/2005  22:43    <DIR>          ..\n" +
-                        "11/08/2005  01:07                81 build.properties\n" +
-                        "17/08/2005  21:44    <DIR>          Desktop\n" +
-                        "               7 File(s)        180,260 bytes\n" +
-                        "              10 Dir(s)  41,411,551,232 bytes free";
-        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        assertEquals(41411551232L, fsu.freeSpaceWindows("", NEG_1_TIMEOUT));
-    }
-
-    @Test
-    public void testGetFreeSpaceWindows_String_ParseCommaFormatBytes_Big() throws Exception {
-        // test with very large free space
-        final String lines =
-                " Volume in drive C is HDD\n" +
-                        " Volume Serial Number is XXXX-YYYY\n" +
-                        "\n" +
-                        " Directory of C:\\Documents and Settings\\Xxxx\n" +
-                        "\n" +
-                        "19/08/2005  22:43    <DIR>          .\n" +
-                        "19/08/2005  22:43    <DIR>          ..\n" +
-                        "11/08/2005  01:07                81 build.properties\n" +
-                        "17/08/2005  21:44    <DIR>          Desktop\n" +
-                        "               7 File(s)        180,260 bytes\n" +
-                        "              10 Dir(s)  141,411,551,232 bytes free";
-        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        assertEquals(141411551232L, fsu.freeSpaceWindows("", NEG_1_TIMEOUT));
-    }
-
-    @Test
-    public void testGetFreeSpaceWindows_String_ParseCommaFormatBytes_Small() throws Exception {
-        // test with very large free space
-        final String lines =
-                " Volume in drive C is HDD\n" +
-                        " Volume Serial Number is XXXX-YYYY\n" +
-                        "\n" +
-                        " Directory of C:\\Documents and Settings\\Xxxx\n" +
-                        "\n" +
-                        "19/08/2005  22:43    <DIR>          .\n" +
-                        "19/08/2005  22:43    <DIR>          ..\n" +
-                        "11/08/2005  01:07                81 build.properties\n" +
-                        "17/08/2005  21:44    <DIR>          Desktop\n" +
-                        "               7 File(s)        180,260 bytes\n" +
-                        "              10 Dir(s)  1,232 bytes free";
-        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        assertEquals(1232L, fsu.freeSpaceWindows("", NEG_1_TIMEOUT));
-    }
-
-    @Test
-    public void testGetFreeSpaceWindows_String_EmptyPath() throws Exception {
-        final String lines =
-                " Volume in drive C is HDD\n" +
-                        " Volume Serial Number is XXXX-YYYY\n" +
-                        "\n" +
-                        " Directory of C:\\Documents and Settings\\Xxxx\n" +
-                        "\n" +
-                        "19/08/2005  22:43    <DIR>          .\n" +
-                        "19/08/2005  22:43    <DIR>          ..\n" +
-                        "11/08/2005  01:07                81 build.properties\n" +
-                        "17/08/2005  21:44    <DIR>          Desktop\n" +
-                        "               7 File(s)         180260 bytes\n" +
-                        "              10 Dir(s)     41411551232 bytes free";
-        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines, "dir /a /-c ");
-        assertEquals(41411551232L, fsu.freeSpaceWindows("", NEG_1_TIMEOUT));
-    }
-
-    @Test
-    public void testGetFreeSpaceWindows_String_NormalResponse() throws Exception {
-        final String lines =
-                " Volume in drive C is HDD\n" +
-                        " Volume Serial Number is XXXX-YYYY\n" +
-                        "\n" +
-                        " Directory of C:\\Documents and Settings\\Xxxx\n" +
-                        "\n" +
-                        "19/08/2005  22:43    <DIR>          .\n" +
-                        "19/08/2005  22:43    <DIR>          ..\n" +
-                        "11/08/2005  01:07                81 build.properties\n" +
-                        "17/08/2005  21:44    <DIR>          Desktop\n" +
-                        "               7 File(s)         180260 bytes\n" +
-                        "              10 Dir(s)     41411551232 bytes free";
-        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines, "dir /a /-c \"C:\"");
-        assertEquals(41411551232L, fsu.freeSpaceWindows("C:", NEG_1_TIMEOUT));
-    }
-
-    @Test
-    public void testGetFreeSpaceWindows_String_StripDrive() throws Exception {
-        final String lines =
-                " Volume in drive C is HDD\n" +
-                        " Volume Serial Number is XXXX-YYYY\n" +
-                        "\n" +
-                        " Directory of C:\\Documents and Settings\\Xxxx\n" +
-                        "\n" +
-                        "19/08/2005  22:43    <DIR>          .\n" +
-                        "19/08/2005  22:43    <DIR>          ..\n" +
-                        "11/08/2005  01:07                81 build.properties\n" +
-                        "17/08/2005  21:44    <DIR>          Desktop\n" +
-                        "               7 File(s)         180260 bytes\n" +
-                        "              10 Dir(s)     41411551232 bytes free";
-        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines, "dir /a /-c \"C:\\somedir\"");
-        assertEquals(41411551232L, fsu.freeSpaceWindows("C:\\somedir", NEG_1_TIMEOUT));
-    }
-
-    @Test
-    public void testGetFreeSpaceWindows_String_quoted() throws Exception {
-        final String lines =
-                " Volume in drive C is HDD\n" +
-                        " Volume Serial Number is XXXX-YYYY\n" +
-                        "\n" +
-                        " Directory of C:\\Documents and Settings\\Xxxx\n" +
-                        "\n" +
-                        "19/08/2005  22:43    <DIR>          .\n" +
-                        "19/08/2005  22:43    <DIR>          ..\n" +
-                        "11/08/2005  01:07                81 build.properties\n" +
-                        "17/08/2005  21:44    <DIR>          Desktop\n" +
-                        "               7 File(s)         180260 bytes\n" +
-                        "              10 Dir(s)     41411551232 bytes free";
-        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines, "dir /a /-c \"C:\\somedir\"");
-        assertEquals(41411551232L, fsu.freeSpaceWindows("\"C:\\somedir\"", NEG_1_TIMEOUT));
-    }
-
-    @Test
-    public void testGetFreeSpaceWindows_String_EmptyResponse() {
-        final String lines = "";
-        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        try {
-            fsu.freeSpaceWindows("C:", NEG_1_TIMEOUT);
-            fail();
-        } catch (final IOException ignore) {
-        }
-    }
-
-    @Test
-    public void testGetFreeSpaceWindows_String_EmptyMultiLineResponse() {
-        final String lines = "\n\n";
-        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        assertThrows(IOException.class, () -> fsu.freeSpaceWindows("C:", NEG_1_TIMEOUT));
-    }
-
-    @Test
-    public void testGetFreeSpaceWindows_String_InvalidTextResponse() {
-        final String lines = "BlueScreenOfDeath";
-        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        assertThrows(IOException.class, () -> fsu.freeSpaceWindows("C:", NEG_1_TIMEOUT));
-    }
-
-    @Test
-    public void testGetFreeSpaceWindows_String_NoSuchDirectoryResponse() {
-        final String lines =
-                " Volume in drive C is HDD\n" +
-                        " Volume Serial Number is XXXX-YYYY\n" +
-                        "\n" +
-                        " Directory of C:\\Documents and Settings\\empty" +
-                        "\n";
-        final FileSystemUtils fsu = new MockFileSystemUtils(1, lines);
-        assertThrows(IOException.class, () -> fsu.freeSpaceWindows("C:", NEG_1_TIMEOUT));
+    public void testGetFreeSpaceOS_String_Windows() throws Exception {
+        final FileSystemUtils fsu = new FileSystemUtils() {
+            @Override
+            protected long freeSpaceWindows(final String path, final Duration timeout) throws IOException {
+                return 12345L;
+            }
+        };
+        assertEquals(12345L, fsu.freeSpaceOS("", 1, false, NEG_1_TIMEOUT));
+        assertEquals(12345L / 1024, fsu.freeSpaceOS("", 1, true, NEG_1_TIMEOUT));
     }
 
     @Test
@@ -356,78 +242,6 @@ public class FileSystemUtilsTestCase {
 
     }
 
-    @Test
-    public void testGetFreeSpaceUnix_String_NormalResponseLinux() throws Exception {
-        // from Sourceforge 'GNU bash, version 2.05b.0(1)-release (i386-redhat-linux-gnu)'
-        final String lines =
-                "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
-                        "/dev/xxx                497944    308528    189416  62% /";
-        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        assertEquals(189416L, fsu.freeSpaceUnix("/", false, false, NEG_1_TIMEOUT));
-    }
-
-    @Test
-    public void testGetFreeSpaceUnix_String_NormalResponseFreeBSD() throws Exception {
-        // from Apache 'FreeBSD 6.1-RELEASE (SMP-turbo)'
-        final String lines =
-                "Filesystem  1K-blocks      Used    Avail Capacity  Mounted on\n" +
-                        "/dev/xxxxxx    128990    102902    15770    87%    /";
-        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        assertEquals(15770L, fsu.freeSpaceUnix("/", false, false, NEG_1_TIMEOUT));
-    }
-
-    @Test
-    public void testGetFreeSpaceUnix_String_NormalResponseKbLinux() throws Exception {
-        // from Sourceforge 'GNU bash, version 2.05b.0(1)-release (i386-redhat-linux-gnu)'
-        // df, df -k and df -kP are all identical
-        final String lines =
-                "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
-                        "/dev/xxx                497944    308528    189416  62% /";
-        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        assertEquals(189416L, fsu.freeSpaceUnix("/", true, false, NEG_1_TIMEOUT));
-    }
-
-    @Test
-    public void testGetFreeSpaceUnix_String_NormalResponseKbFreeBSD() throws Exception {
-        // from Apache 'FreeBSD 6.1-RELEASE (SMP-turbo)'
-        // df and df -k are identical, but df -kP uses 512 blocks (not relevant as not used)
-        final String lines =
-                "Filesystem  1K-blocks      Used    Avail Capacity  Mounted on\n" +
-                        "/dev/xxxxxx    128990    102902    15770    87%    /";
-        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        assertEquals(15770L, fsu.freeSpaceUnix("/", true, false, NEG_1_TIMEOUT));
-    }
-
-    @Test
-    public void testGetFreeSpaceUnix_String_NormalResponseKbSolaris() throws Exception {
-        // from IO-91 - ' SunOS et 5.10 Generic_118822-25 sun4u sparc SUNW,Ultra-4'
-        // non-kb response does not contain free space - see IO-91
-        final String lines =
-                "Filesystem            kbytes    used   avail capacity  Mounted on\n" +
-                        "/dev/dsk/x0x0x0x0    1350955  815754  481163    63%";
-        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        assertEquals(481163L, fsu.freeSpaceUnix("/dev/dsk/x0x0x0x0", true, false, NEG_1_TIMEOUT));
-    }
-
-    @Test
-    public void testGetFreeSpaceUnix_String_LongResponse() throws Exception {
-        final String lines =
-                "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
-                        "xxx-yyyyyyy-zzz:/home/users/s\n" +
-                        "                      14428928  12956424   1472504  90% /home/users/s";
-        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        assertEquals(1472504L, fsu.freeSpaceUnix("/home/users/s", false, false, NEG_1_TIMEOUT));
-    }
-
-    @Test
-    public void testGetFreeSpaceUnix_String_LongResponseKb() throws Exception {
-        final String lines =
-                "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
-                        "xxx-yyyyyyy-zzz:/home/users/s\n" +
-                        "                      14428928  12956424   1472504  90% /home/users/s";
-        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        assertEquals(1472504L, fsu.freeSpaceUnix("/home/users/s", true, false, NEG_1_TIMEOUT));
-    }
     @Test
 
     public void testGetFreeSpaceUnix_String_EmptyResponse() {
@@ -567,57 +381,243 @@ public class FileSystemUtilsTestCase {
         }
     }
 
-    static class MockFileSystemUtils extends FileSystemUtils {
-        private final int exitCode;
-        private final byte[] bytes;
-        private final String cmd;
+    @Test
+    public void testGetFreeSpaceUnix_String_LongResponse() throws Exception {
+        final String lines =
+                "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
+                        "xxx-yyyyyyy-zzz:/home/users/s\n" +
+                        "                      14428928  12956424   1472504  90% /home/users/s";
+        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
+        assertEquals(1472504L, fsu.freeSpaceUnix("/home/users/s", false, false, NEG_1_TIMEOUT));
+    }
 
-        public MockFileSystemUtils(final int exitCode, final String lines) {
-            this(exitCode, lines, null);
+    @Test
+    public void testGetFreeSpaceUnix_String_LongResponseKb() throws Exception {
+        final String lines =
+                "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
+                        "xxx-yyyyyyy-zzz:/home/users/s\n" +
+                        "                      14428928  12956424   1472504  90% /home/users/s";
+        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
+        assertEquals(1472504L, fsu.freeSpaceUnix("/home/users/s", true, false, NEG_1_TIMEOUT));
+    }
+
+    @Test
+    public void testGetFreeSpaceUnix_String_NormalResponseFreeBSD() throws Exception {
+        // from Apache 'FreeBSD 6.1-RELEASE (SMP-turbo)'
+        final String lines =
+                "Filesystem  1K-blocks      Used    Avail Capacity  Mounted on\n" +
+                        "/dev/xxxxxx    128990    102902    15770    87%    /";
+        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
+        assertEquals(15770L, fsu.freeSpaceUnix("/", false, false, NEG_1_TIMEOUT));
+    }
+
+    @Test
+    public void testGetFreeSpaceUnix_String_NormalResponseKbFreeBSD() throws Exception {
+        // from Apache 'FreeBSD 6.1-RELEASE (SMP-turbo)'
+        // df and df -k are identical, but df -kP uses 512 blocks (not relevant as not used)
+        final String lines =
+                "Filesystem  1K-blocks      Used    Avail Capacity  Mounted on\n" +
+                        "/dev/xxxxxx    128990    102902    15770    87%    /";
+        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
+        assertEquals(15770L, fsu.freeSpaceUnix("/", true, false, NEG_1_TIMEOUT));
+    }
+
+    @Test
+    public void testGetFreeSpaceUnix_String_NormalResponseKbLinux() throws Exception {
+        // from Sourceforge 'GNU bash, version 2.05b.0(1)-release (i386-redhat-linux-gnu)'
+        // df, df -k and df -kP are all identical
+        final String lines =
+                "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
+                        "/dev/xxx                497944    308528    189416  62% /";
+        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
+        assertEquals(189416L, fsu.freeSpaceUnix("/", true, false, NEG_1_TIMEOUT));
+    }
+
+    @Test
+    public void testGetFreeSpaceUnix_String_NormalResponseKbSolaris() throws Exception {
+        // from IO-91 - ' SunOS et 5.10 Generic_118822-25 sun4u sparc SUNW,Ultra-4'
+        // non-kb response does not contain free space - see IO-91
+        final String lines =
+                "Filesystem            kbytes    used   avail capacity  Mounted on\n" +
+                        "/dev/dsk/x0x0x0x0    1350955  815754  481163    63%";
+        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
+        assertEquals(481163L, fsu.freeSpaceUnix("/dev/dsk/x0x0x0x0", true, false, NEG_1_TIMEOUT));
+    }
+
+    @Test
+    public void testGetFreeSpaceUnix_String_NormalResponseLinux() throws Exception {
+        // from Sourceforge 'GNU bash, version 2.05b.0(1)-release (i386-redhat-linux-gnu)'
+        final String lines =
+                "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
+                        "/dev/xxx                497944    308528    189416  62% /";
+        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
+        assertEquals(189416L, fsu.freeSpaceUnix("/", false, false, NEG_1_TIMEOUT));
+    }
+
+    @Test
+    public void testGetFreeSpaceWindows_String_EmptyMultiLineResponse() {
+        final String lines = "\n\n";
+        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
+        assertThrows(IOException.class, () -> fsu.freeSpaceWindows("C:", NEG_1_TIMEOUT));
+    }
+
+    @Test
+    public void testGetFreeSpaceWindows_String_EmptyPath() throws Exception {
+        final String lines =
+                " Volume in drive C is HDD\n" +
+                        " Volume Serial Number is XXXX-YYYY\n" +
+                        "\n" +
+                        " Directory of C:\\Documents and Settings\\Xxxx\n" +
+                        "\n" +
+                        "19/08/2005  22:43    <DIR>          .\n" +
+                        "19/08/2005  22:43    <DIR>          ..\n" +
+                        "11/08/2005  01:07                81 build.properties\n" +
+                        "17/08/2005  21:44    <DIR>          Desktop\n" +
+                        "               7 File(s)         180260 bytes\n" +
+                        "              10 Dir(s)     41411551232 bytes free";
+        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines, "dir /a /-c ");
+        assertEquals(41411551232L, fsu.freeSpaceWindows("", NEG_1_TIMEOUT));
+    }
+
+    @Test
+    public void testGetFreeSpaceWindows_String_EmptyResponse() {
+        final String lines = "";
+        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
+        try {
+            fsu.freeSpaceWindows("C:", NEG_1_TIMEOUT);
+            fail();
+        } catch (final IOException ignore) {
         }
+    }
 
-        public MockFileSystemUtils(final int exitCode, final String lines, final String cmd) {
-            this.exitCode = exitCode;
-            this.bytes = lines.getBytes();
-            this.cmd = cmd;
-        }
+    @Test
+    public void testGetFreeSpaceWindows_String_InvalidTextResponse() {
+        final String lines = "BlueScreenOfDeath";
+        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
+        assertThrows(IOException.class, () -> fsu.freeSpaceWindows("C:", NEG_1_TIMEOUT));
+    }
 
-        @Override
-        Process openProcess(final String[] params) {
-            if (cmd != null) {
-                assertEquals(cmd, params[params.length - 1]);
-            }
-            return new Process() {
-                @Override
-                public InputStream getErrorStream() {
-                    return null;
-                }
+    @Test
+    public void testGetFreeSpaceWindows_String_NormalResponse() throws Exception {
+        final String lines =
+                " Volume in drive C is HDD\n" +
+                        " Volume Serial Number is XXXX-YYYY\n" +
+                        "\n" +
+                        " Directory of C:\\Documents and Settings\\Xxxx\n" +
+                        "\n" +
+                        "19/08/2005  22:43    <DIR>          .\n" +
+                        "19/08/2005  22:43    <DIR>          ..\n" +
+                        "11/08/2005  01:07                81 build.properties\n" +
+                        "17/08/2005  21:44    <DIR>          Desktop\n" +
+                        "               7 File(s)         180260 bytes\n" +
+                        "              10 Dir(s)     41411551232 bytes free";
+        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines, "dir /a /-c \"C:\"");
+        assertEquals(41411551232L, fsu.freeSpaceWindows("C:", NEG_1_TIMEOUT));
+    }
+    @Test
+    public void testGetFreeSpaceWindows_String_NoSuchDirectoryResponse() {
+        final String lines =
+                " Volume in drive C is HDD\n" +
+                        " Volume Serial Number is XXXX-YYYY\n" +
+                        "\n" +
+                        " Directory of C:\\Documents and Settings\\empty" +
+                        "\n";
+        final FileSystemUtils fsu = new MockFileSystemUtils(1, lines);
+        assertThrows(IOException.class, () -> fsu.freeSpaceWindows("C:", NEG_1_TIMEOUT));
+    }
 
-                @Override
-                public InputStream getInputStream() {
-                    return new ByteArrayInputStream(bytes);
-                }
+    @Test
+    public void testGetFreeSpaceWindows_String_ParseCommaFormatBytes() throws Exception {
+        // this is the format of response when calling dir /c
+        // we have now switched to dir /-c, so we should never get this
+        final String lines =
+                " Volume in drive C is HDD\n" +
+                        " Volume Serial Number is XXXX-YYYY\n" +
+                        "\n" +
+                        " Directory of C:\\Documents and Settings\\Xxxx\n" +
+                        "\n" +
+                        "19/08/2005  22:43    <DIR>          .\n" +
+                        "19/08/2005  22:43    <DIR>          ..\n" +
+                        "11/08/2005  01:07                81 build.properties\n" +
+                        "17/08/2005  21:44    <DIR>          Desktop\n" +
+                        "               7 File(s)        180,260 bytes\n" +
+                        "              10 Dir(s)  41,411,551,232 bytes free";
+        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
+        assertEquals(41411551232L, fsu.freeSpaceWindows("", NEG_1_TIMEOUT));
+    }
 
-                @Override
-                public OutputStream getOutputStream() {
-                    return null;
-                }
+    @Test
+    public void testGetFreeSpaceWindows_String_ParseCommaFormatBytes_Big() throws Exception {
+        // test with very large free space
+        final String lines =
+                " Volume in drive C is HDD\n" +
+                        " Volume Serial Number is XXXX-YYYY\n" +
+                        "\n" +
+                        " Directory of C:\\Documents and Settings\\Xxxx\n" +
+                        "\n" +
+                        "19/08/2005  22:43    <DIR>          .\n" +
+                        "19/08/2005  22:43    <DIR>          ..\n" +
+                        "11/08/2005  01:07                81 build.properties\n" +
+                        "17/08/2005  21:44    <DIR>          Desktop\n" +
+                        "               7 File(s)        180,260 bytes\n" +
+                        "              10 Dir(s)  141,411,551,232 bytes free";
+        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
+        assertEquals(141411551232L, fsu.freeSpaceWindows("", NEG_1_TIMEOUT));
+    }
 
-                @Override
-                public int waitFor() throws InterruptedException {
-                    return exitCode;
-                }
+    @Test
+    public void testGetFreeSpaceWindows_String_ParseCommaFormatBytes_Small() throws Exception {
+        // test with very large free space
+        final String lines =
+                " Volume in drive C is HDD\n" +
+                        " Volume Serial Number is XXXX-YYYY\n" +
+                        "\n" +
+                        " Directory of C:\\Documents and Settings\\Xxxx\n" +
+                        "\n" +
+                        "19/08/2005  22:43    <DIR>          .\n" +
+                        "19/08/2005  22:43    <DIR>          ..\n" +
+                        "11/08/2005  01:07                81 build.properties\n" +
+                        "17/08/2005  21:44    <DIR>          Desktop\n" +
+                        "               7 File(s)        180,260 bytes\n" +
+                        "              10 Dir(s)  1,232 bytes free";
+        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
+        assertEquals(1232L, fsu.freeSpaceWindows("", NEG_1_TIMEOUT));
+    }
 
-                @Override
-                public int exitValue() {
-                    return exitCode;
-                }
+    @Test
+    public void testGetFreeSpaceWindows_String_quoted() throws Exception {
+        final String lines =
+                " Volume in drive C is HDD\n" +
+                        " Volume Serial Number is XXXX-YYYY\n" +
+                        "\n" +
+                        " Directory of C:\\Documents and Settings\\Xxxx\n" +
+                        "\n" +
+                        "19/08/2005  22:43    <DIR>          .\n" +
+                        "19/08/2005  22:43    <DIR>          ..\n" +
+                        "11/08/2005  01:07                81 build.properties\n" +
+                        "17/08/2005  21:44    <DIR>          Desktop\n" +
+                        "               7 File(s)         180260 bytes\n" +
+                        "              10 Dir(s)     41411551232 bytes free";
+        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines, "dir /a /-c \"C:\\somedir\"");
+        assertEquals(41411551232L, fsu.freeSpaceWindows("\"C:\\somedir\"", NEG_1_TIMEOUT));
+    }
 
-                @Override
-                public void destroy() {
-                }
-            };
-        }
+    @Test
+    public void testGetFreeSpaceWindows_String_StripDrive() throws Exception {
+        final String lines =
+                " Volume in drive C is HDD\n" +
+                        " Volume Serial Number is XXXX-YYYY\n" +
+                        "\n" +
+                        " Directory of C:\\Documents and Settings\\Xxxx\n" +
+                        "\n" +
+                        "19/08/2005  22:43    <DIR>          .\n" +
+                        "19/08/2005  22:43    <DIR>          ..\n" +
+                        "11/08/2005  01:07                81 build.properties\n" +
+                        "17/08/2005  21:44    <DIR>          Desktop\n" +
+                        "               7 File(s)         180260 bytes\n" +
+                        "              10 Dir(s)     41411551232 bytes free";
+        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines, "dir /a /-c \"C:\\somedir\"");
+        assertEquals(41411551232L, fsu.freeSpaceWindows("C:\\somedir", NEG_1_TIMEOUT));
     }
 
 }

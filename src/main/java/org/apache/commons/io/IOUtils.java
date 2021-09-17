@@ -3400,7 +3400,7 @@ public class IOUtils {
      * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
      * @since 1.1
-     * @deprecated replaced by write(CharSequence, OutputStream)
+     * @deprecated Use {@link #write(CharSequence, OutputStream)}
      */
     @Deprecated
     public static void write(final StringBuffer data, final OutputStream output) //NOSONAR
@@ -3427,7 +3427,7 @@ public class IOUtils {
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
      * .UnsupportedEncodingException} in version 2.2 if the encoding is not supported.
      * @since 1.1
-     * @deprecated replaced by write(CharSequence, OutputStream, String)
+     * @deprecated Use {@link #write(CharSequence, OutputStream, String)}.
      */
     @Deprecated
     public static void write(final StringBuffer data, final OutputStream output, final String charsetName) //NOSONAR
@@ -3445,7 +3445,7 @@ public class IOUtils {
      * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
      * @since 1.1
-     * @deprecated replaced by write(CharSequence, Writer)
+     * @deprecated Use {@link #write(CharSequence, Writer)}
      */
     @Deprecated
     public static void write(final StringBuffer data, final Writer writer) //NOSONAR

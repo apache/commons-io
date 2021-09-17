@@ -267,6 +267,26 @@ public class FileUtils {
     }
 
     /**
+     * Returns a human-readable version of the file size, where the input represents a specific number of bytes.
+     * <p>
+     * If the size is over 1GB, the size is returned as the number of whole GB, i.e. the size is rounded down to the
+     * nearest GB boundary.
+     * </p>
+     * <p>
+     * Similarly for the 1MB and 1KB boundaries.
+     * </p>
+     *
+     * @param size the number of bytes
+     * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
+     * @see <a href="https://issues.apache.org/jira/browse/IO-226">IO-226 - should the rounding be changed?</a>
+     * @since 2.12.0
+     */
+    // See https://issues.apache.org/jira/browse/IO-226 - should the rounding be changed?
+    public static String byteCountToDisplaySize(final Number size) {
+        return byteCountToDisplaySize(size.longValue());
+    }
+
+    /**
      * Computes the checksum of a file using the specified checksum object. Multiple files may be checked using one
      * {@code Checksum} instance if desired simply by reusing the same checksum object. For example:
      *
@@ -1041,7 +1061,7 @@ public class FileUtils {
      * @since 2.5
      */
     public static void copyToFile(final InputStream inputStream, final File file) throws IOException {
-        try (OutputStream out = openOutputStream(file)) {
+        try (OutputStream out = newOutputStream(file, false)) {
             IOUtils.copy(inputStream, out);
         }
     }
@@ -1068,7 +1088,7 @@ public class FileUtils {
      */
     public static void copyURLToFile(final URL source, final File destination) throws IOException {
         try (final InputStream stream = source.openStream()) {
-            copyInputStreamToFile(stream, destination);
+            Files.copy(stream, destination.toPath());
         }
     }
 
@@ -1116,6 +1136,16 @@ public class FileUtils {
     }
 
     /**
+     * Gets the current directory.
+     *
+     * @return the current directory.
+     * @since 2.12.0
+     */
+    public static File current() {
+        return PathUtils.current().toFile();
+    }
+
+    /**
      * Decodes the specified URL as per RFC 3986, i.e. transforms
      * percent-encoded octets to characters by decoding with the UTF-8 character
      * set. This function is primarily intended for usage with
@@ -1133,14 +1163,14 @@ public class FileUtils {
         String decoded = url;
         if (url != null && url.indexOf('%') >= 0) {
             final int n = url.length();
-            final StringBuilder buffer = new StringBuilder();
-            final ByteBuffer bytes = ByteBuffer.allocate(n);
+            final StringBuilder builder = new StringBuilder();
+            final ByteBuffer byteBuffer = ByteBuffer.allocate(n);
             for (int i = 0; i < n; ) {
                 if (url.charAt(i) == '%') {
                     try {
                         do {
                             final byte octet = (byte) Integer.parseInt(url.substring(i + 1, i + 3), 16);
-                            bytes.put(octet);
+                            byteBuffer.put(octet);
                             i += 3;
                         } while (i < n && url.charAt(i) == '%');
                         continue;
@@ -1148,16 +1178,16 @@ public class FileUtils {
                         // malformed percent-encoded octet, fall through and
                         // append characters literally
                     } finally {
-                        if (bytes.position() > 0) {
-                            bytes.flip();
-                            buffer.append(StandardCharsets.UTF_8.decode(bytes).toString());
-                            bytes.clear();
+                        if (byteBuffer.position() > 0) {
+                            byteBuffer.flip();
+                            builder.append(StandardCharsets.UTF_8.decode(byteBuffer).toString());
+                            byteBuffer.clear();
                         }
                     }
                 }
-                buffer.append(url.charAt(i++));
+                builder.append(url.charAt(i++));
             }
-            decoded = buffer.toString();
+            decoded = builder.toString();
         }
         return decoded;
     }
@@ -1274,11 +1304,7 @@ public class FileUtils {
     public static boolean directoryContains(final File directory, final File child) throws IOException {
         requireDirectoryExists(directory, "directory");
 
-        if (child == null) {
-            return false;
-        }
-
-        if (!directory.exists() || !child.exists()) {
+        if (child == null || !directory.exists() || !child.exists()) {
             return false;
         }
 
@@ -1376,7 +1402,7 @@ public class FileUtils {
      * If the directory cannot be created (or the file already exists but is not a directory)
      * then an IOException is thrown.
      *
-     * @param directory directory to create, must not be {@code null}.
+     * @param directory directory to create, may be {@code null}.
      * @throws IOException if the directory was not created along with all its parent directories.
      * @throws IOException if the given file object is not a directory.
      * @throws SecurityException See {@link File#mkdirs()}.
@@ -1396,11 +1422,7 @@ public class FileUtils {
      */
     public static void forceMkdirParent(final File file) throws IOException {
         Objects.requireNonNull(file, "file");
-        final File parent = getParentFile(file);
-        if (parent == null) {
-            return;
-        }
-        forceMkdir(parent);
+        forceMkdir(getParentFile(file));
     }
 
     /**
@@ -1626,7 +1648,11 @@ public class FileUtils {
      */
     public static boolean isFileNewer(final File file, final ChronoZonedDateTime<?> chronoZonedDateTime) {
         Objects.requireNonNull(chronoZonedDateTime, "chronoZonedDateTime");
-        return isFileNewer(file, chronoZonedDateTime.toInstant());
+        try {
+            return PathUtils.isNewer(file.toPath(), chronoZonedDateTime);
+        } catch (final IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     /**
@@ -1655,22 +1681,44 @@ public class FileUtils {
      */
     public static boolean isFileNewer(final File file, final File reference) {
         requireExists(reference, "reference");
-        return isFileNewer(file, lastModifiedUnchecked(reference));
+        try {
+            return PathUtils.isNewer(file.toPath(), reference.toPath());
+        } catch (final IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    /**
+     * Tests if the specified {@code File} is newer than the specified {@code FileTime}.
+     *
+     * @param file the {@code File} of which the modification date must be compared.
+     * @param fileTime the file time reference.
+     * @return true if the {@code File} exists and has been modified after the given {@code FileTime}.
+     * @throws IOException if an I/O error occurs.
+     * @throws NullPointerException if the file or local date is {@code null}.
+     * @since 2.12.0
+     */
+    public static boolean isFileNewer(final File file, final FileTime fileTime) throws IOException {
+        Objects.requireNonNull(file, "file");
+        return PathUtils.isNewer(file.toPath(), fileTime);
     }
 
     /**
      * Tests if the specified {@code File} is newer than the specified {@code Instant}.
      *
-     * @param file    the {@code File} of which the modification date must be compared.
+     * @param file the {@code File} of which the modification date must be compared.
      * @param instant the date reference.
      * @return true if the {@code File} exists and has been modified after the given {@code Instant}.
      * @throws NullPointerException if the file or instant is {@code null}.
-     *
      * @since 2.8.0
      */
     public static boolean isFileNewer(final File file, final Instant instant) {
         Objects.requireNonNull(instant, "instant");
-        return isFileNewer(file, instant.toEpochMilli());
+        try {
+            return PathUtils.isNewer(file.toPath(), instant);
+        } catch (final IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     /**
@@ -1684,7 +1732,11 @@ public class FileUtils {
      */
     public static boolean isFileNewer(final File file, final long timeMillis) {
         Objects.requireNonNull(file, "file");
-        return file.exists() && lastModifiedUnchecked(file) > timeMillis;
+        try {
+            return PathUtils.isNewer(file.toPath(), timeMillis);
+        } catch (final IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     /**
@@ -1817,7 +1869,26 @@ public class FileUtils {
      */
     public static boolean isFileOlder(final File file, final File reference) {
         requireExists(reference, "reference");
-        return isFileOlder(file, lastModifiedUnchecked(reference));
+        try {
+            return PathUtils.isOlder(file.toPath(), reference.toPath());
+        } catch (final IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    /**
+     * Tests if the specified {@code File} is older than the specified {@code FileTime}.
+     *
+     * @param file the {@code File} of which the modification date must be compared.
+     * @param fileTime the file time reference.
+     * @return true if the {@code File} exists and has been modified before the given {@code FileTime}.
+     * @throws IOException if an I/O error occurs.
+     * @throws NullPointerException if the file or local date is {@code null}.
+     * @since 2.12.0
+     */
+    public static boolean isFileOlder(final File file, final FileTime fileTime) throws IOException {
+        Objects.requireNonNull(file, "file");
+        return PathUtils.isOlder(file.toPath(), fileTime);
     }
 
     /**
@@ -1831,7 +1902,11 @@ public class FileUtils {
      */
     public static boolean isFileOlder(final File file, final Instant instant) {
         Objects.requireNonNull(instant, "instant");
-        return isFileOlder(file, instant.toEpochMilli());
+        try {
+            return PathUtils.isOlder(file.toPath(), instant);
+        } catch (final IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     /**
@@ -1845,7 +1920,11 @@ public class FileUtils {
      */
     public static boolean isFileOlder(final File file, final long timeMillis) {
         Objects.requireNonNull(file, "file");
-        return file.exists() && lastModifiedUnchecked(file) < timeMillis;
+        try {
+            return PathUtils.isOlder(file.toPath(), timeMillis);
+        } catch (final IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     /**
@@ -1855,7 +1934,7 @@ public class FileUtils {
      * @param   file the path to the file.
      * @param   options options indicating how symbolic links are handled
      * @return  {@code true} if the file is a regular file; {@code false} if
-     *          the path is null, the file does not exist, is not a directory, or it cannot
+     *          the path is null, the file does not exist, is not a regular file, or it cannot
      *          be determined if the file is a regular file or not.
      * @throws SecurityException     In the case of the default provider, and a security manager is installed, the
      *                               {@link SecurityManager#checkRead(String) checkRead} method is invoked to check read
@@ -1912,7 +1991,6 @@ public class FileUtils {
      * <p>
      * The resulting iterator MUST be consumed in its entirety in order to close its underlying stream.
      * </p>
-     * <p>
      *
      * @param directory  the directory to search in
      * @param extensions an array of extensions, ex. {"java","xml"}. If this
@@ -1962,6 +2040,9 @@ public class FileUtils {
      * Returns the last modification time in milliseconds via
      * {@link java.nio.file.Files#getLastModifiedTime(Path, LinkOption...)}.
      * <p>
+     * For the best precision, use {@link #lastModifiedFileTime(File)}.
+     * </p>
+     * <p>
      * Use this method to avoid issues with {@link File#lastModified()} like
      * <a href="https://bugs.openjdk.java.net/browse/JDK-8177809">JDK-8177809</a> where {@link File#lastModified()} is
      * losing milliseconds (always ends in 000). This bug exists in OpenJDK 8 and 9, and is fixed in 10.
@@ -2003,6 +2084,9 @@ public class FileUtils {
     /**
      * Returns the last modification time in milliseconds via
      * {@link java.nio.file.Files#getLastModifiedTime(Path, LinkOption...)}.
+     * <p>
+     * For the best precision, use {@link #lastModifiedFileTime(File)}.
+     * </p>
      * <p>
      * Use this method to avoid issues with {@link File#lastModified()} like
      * <a href="https://bugs.openjdk.java.net/browse/JDK-8177809">JDK-8177809</a> where {@link File#lastModified()} is
@@ -2081,7 +2165,7 @@ public class FileUtils {
     public static LineIterator lineIterator(final File file, final String charsetName) throws IOException {
         InputStream inputStream = null;
         try {
-            inputStream = openInputStream(file);
+            inputStream = Files.newInputStream(file.toPath());
             return IOUtils.lineIterator(inputStream, charsetName);
         } catch (final IOException | RuntimeException ex) {
             IOUtils.closeQuietly(inputStream, ex::addSuppressed);
@@ -2259,7 +2343,7 @@ public class FileUtils {
     /**
      * Moves a directory to another directory.
      *
-     * @param src the file to be moved.
+     * @param source the file to be moved.
      * @param destDir the destination file.
      * @param createDestDir If {@code true} create the destination directory, otherwise if {@code false} throw an
      *        IOException.
@@ -2269,9 +2353,9 @@ public class FileUtils {
      * @throws IOException if an error occurs or setting the last-modified time didn't succeeded.
      * @since 1.4
      */
-    public static void moveDirectoryToDirectory(final File src, final File destDir, final boolean createDestDir)
+    public static void moveDirectoryToDirectory(final File source, final File destDir, final boolean createDestDir)
             throws IOException {
-        validateMoveParameters(src, destDir);
+        validateMoveParameters(source, destDir);
         if (!destDir.isDirectory()) {
             if (destDir.exists()) {
                 throw new IOException("Destination '" + destDir + "' is not a directory");
@@ -2282,7 +2366,7 @@ public class FileUtils {
             }
             mkdirs(destDir);
         }
-        moveDirectory(src, new File(destDir, src.getName()));
+        moveDirectory(source, new File(destDir, source.getName()));
     }
 
     /**
@@ -2298,6 +2382,7 @@ public class FileUtils {
      * @param destFile the destination file.
      * @throws NullPointerException if any of the given {@code File}s are {@code null}.
      * @throws FileExistsException if the destination file exists.
+     * @throws FileNotFoundException if the source file does not exist.
      * @throws IOException if source or destination is invalid.
      * @throws IOException if an error occurs.
      * @since 1.4
@@ -2317,12 +2402,13 @@ public class FileUtils {
      * @param copyOptions Copy options.
      * @throws NullPointerException if any of the given {@code File}s are {@code null}.
      * @throws FileExistsException if the destination file exists.
+     * @throws FileNotFoundException if the source file does not exist.
      * @throws IOException if source or destination is invalid.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeeded.
      * @since 2.9.0
      */
     public static void moveFile(final File srcFile, final File destFile, final CopyOption... copyOptions)
-            throws IOException {
+        throws IOException {
         validateMoveParameters(srcFile, destFile);
         requireFile(srcFile, "srcFile");
         requireAbsent(destFile, "destFile");
@@ -2331,8 +2417,7 @@ public class FileUtils {
             copyFile(srcFile, destFile, copyOptions);
             if (!srcFile.delete()) {
                 FileUtils.deleteQuietly(destFile);
-                throw new IOException("Failed to delete original file '" + srcFile +
-                        "' after copy to '" + destFile + "'");
+                throw new IOException("Failed to delete original file '" + srcFile + "' after copy to '" + destFile + "'");
             }
         }
     }
@@ -2346,6 +2431,7 @@ public class FileUtils {
      *        IOException.
      * @throws NullPointerException if any of the given {@code File}s are {@code null}.
      * @throws FileExistsException if the destination file exists.
+     * @throws FileNotFoundException if the source file does not exist.
      * @throws IOException if source or destination is invalid.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeeded.
      * @since 1.4
@@ -2373,6 +2459,7 @@ public class FileUtils {
      *        IOException.
      * @throws NullPointerException if any of the given {@code File}s are {@code null}.
      * @throws FileExistsException if the directory or file exists in the destination directory.
+     * @throws FileNotFoundException if the source file does not exist.
      * @throws IOException if source or destination is invalid.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeeded.
      * @since 1.4
@@ -2502,11 +2589,8 @@ public class FileUtils {
      * @since 1.1
      */
     public static byte[] readFileToByteArray(final File file) throws IOException {
-        try (InputStream inputStream = openInputStream(file)) {
-            final long fileLength = file.length();
-            // file.length() may return 0 for system-dependent entities, treat 0 as unknown length - see IO-453
-            return fileLength > 0 ? IOUtils.toByteArray(inputStream, fileLength) : IOUtils.toByteArray(inputStream);
-        }
+        Objects.requireNonNull(file, "file");
+        return Files.readAllBytes(file.toPath());
     }
 
     /**
@@ -2541,7 +2625,7 @@ public class FileUtils {
      * @since 2.3
      */
     public static String readFileToString(final File file, final Charset charsetName) throws IOException {
-        try (InputStream inputStream = openInputStream(file)) {
+        try (InputStream inputStream = Files.newInputStream(file.toPath())) {
             return IOUtils.toString(inputStream, Charsets.toCharset(charsetName));
         }
     }
@@ -2596,9 +2680,7 @@ public class FileUtils {
      * @since 2.3
      */
     public static List<String> readLines(final File file, final Charset charset) throws IOException {
-        try (InputStream inputStream = openInputStream(file)) {
-            return IOUtils.readLines(inputStream, Charsets.toCharset(charset));
-        }
+        return Files.readAllLines(file.toPath(), charset);
     }
 
     /**
@@ -2766,7 +2848,7 @@ public class FileUtils {
      * @param name The parameter name to use in the exception message.
      * @return the given file.
      * @throws NullPointerException if the given {@code File} is {@code null}.
-     * @throws IllegalArgumentException if the given {@code File} does not exist or is not a directory.
+     * @throws IllegalArgumentException if the given {@code File} does not exist or is not a file.
      */
     private static File requireFile(final File file, final String name) {
         Objects.requireNonNull(file, name);
@@ -2807,14 +2889,19 @@ public class FileUtils {
      * Sets the given {@code targetFile}'s last modified date to the value from {@code sourceFile}.
      *
      * @param sourceFile The source file to query.
-     * @param targetFile The target file to set.
+     * @param targetFile The target file or directory to set.
      * @throws NullPointerException if sourceFile is {@code null}.
      * @throws NullPointerException if targetFile is {@code null}.
      * @throws IOException if setting the last-modified time failed.
      */
     private static void setLastModified(final File sourceFile, final File targetFile) throws IOException {
         Objects.requireNonNull(sourceFile, "sourceFile");
-        setLastModified(targetFile, lastModified(sourceFile));
+        Objects.requireNonNull(targetFile, "targetFile");
+        if (targetFile.isFile()) {
+            PathUtils.setLastModifiedTime(targetFile.toPath(), sourceFile.toPath());
+        } else {
+            setLastModified(targetFile, lastModified(sourceFile));
+        }
     }
 
     /**
@@ -2852,27 +2939,17 @@ public class FileUtils {
      *
      * @throws NullPointerException     if the file is {@code null}.
      * @throws IllegalArgumentException if the file does not exist.
+     * @throws UncheckedIOException if an IO error occurs.
      *
      * @since 2.0
      */
     public static long sizeOf(final File file) {
         requireExists(file, "file");
-        return file.isDirectory() ? sizeOfDirectory0(file) : file.length();
-    }
-
-    /**
-     * Gets the size of a file.
-     *
-     * @param file the file to check.
-     * @return the size of the file.
-     * @throws NullPointerException if the file is {@code null}.
-     */
-    private static long sizeOf0(final File file) {
-        Objects.requireNonNull(file, "file");
-        if (file.isDirectory()) {
-            return sizeOfDirectory0(file);
+        try {
+            return PathUtils.sizeOf(file.toPath());
+        } catch (final IOException e) {
+            throw new UncheckedIOException(e);
         }
-        return file.length(); // will be 0 if file does not exist
     }
 
     /**
@@ -2890,23 +2967,17 @@ public class FileUtils {
      *
      * @throws NullPointerException     if the file is {@code null}.
      * @throws IllegalArgumentException if the file does not exist.
+     * @throws UncheckedIOException if an IO error occurs.
      *
      * @since 2.4
      */
     public static BigInteger sizeOfAsBigInteger(final File file) {
         requireExists(file, "file");
-        return file.isDirectory() ? sizeOfDirectoryBig0(file) : BigInteger.valueOf(file.length());
-    }
-
-    /**
-     * Returns the size of a file or directory.
-     *
-     * @param file The file or directory.
-     * @return the size
-     */
-    private static BigInteger sizeOfBig0(final File file) {
-        Objects.requireNonNull(file, "fileOrDir");
-        return file.isDirectory() ? sizeOfDirectoryBig0(file) : BigInteger.valueOf(file.length());
+        try {
+            return PathUtils.sizeOfAsBigInteger(file.toPath());
+        } catch (final IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     /**
@@ -2921,36 +2992,15 @@ public class FileUtils {
      * @return size of directory in bytes, 0 if directory is security restricted, a negative number when the real total
      * is greater than {@link Long#MAX_VALUE}.
      * @throws NullPointerException if the directory is {@code null}.
+     * @throws UncheckedIOException if an IO error occurs.
      */
     public static long sizeOfDirectory(final File directory) {
-        return sizeOfDirectory0(requireDirectoryExists(directory, "directory"));
-    }
-
-    /**
-     * Gets the size of a directory.
-     *
-     * @param directory the directory to check
-     * @return the size
-     * @throws NullPointerException if the directory is {@code null}.
-     */
-    private static long sizeOfDirectory0(final File directory) {
-        Objects.requireNonNull(directory, "directory");
-        final File[] files = directory.listFiles();
-        if (files == null) {  // null if security restricted
-            return 0L;
+        requireDirectoryExists(directory, "directory");
+        try {
+            return PathUtils.sizeOfDirectory(directory.toPath());
+        } catch (final IOException e) {
+            throw new UncheckedIOException(e);
         }
-        long size = 0;
-
-        for (final File file : files) {
-            if (!isSymlink(file)) {
-                size += sizeOf0(file);
-                if (size < 0) {
-                    break;
-                }
-            }
-        }
-
-        return size;
     }
 
     /**
@@ -2959,34 +3009,17 @@ public class FileUtils {
      * @param directory directory to inspect, must not be {@code null}.
      * @return size of directory in bytes, 0 if directory is security restricted.
      * @throws NullPointerException if the directory is {@code null}.
+     * @throws UncheckedIOException if an IO error occurs.
      * @since 2.4
      */
     public static BigInteger sizeOfDirectoryAsBigInteger(final File directory) {
-        return sizeOfDirectoryBig0(requireDirectoryExists(directory, "directory"));
-    }
-
-    /**
-     * Computes the size of a directory.
-     *
-     * @param directory The directory.
-     * @return the size.
-     */
-    private static BigInteger sizeOfDirectoryBig0(final File directory) {
-        Objects.requireNonNull(directory, "directory");
-        final File[] files = directory.listFiles();
-        if (files == null) {
-            // null if security restricted
-            return BigInteger.ZERO;
-        }
-        BigInteger size = BigInteger.ZERO;
-
-        for (final File file : files) {
-            if (!isSymlink(file)) {
-                size = size.add(sizeOfBig0(file));
-            }
+        requireDirectoryExists(directory, "directory");
+        try {
+            return PathUtils.sizeOfDirectoryAsBigInteger(directory.toPath());
+        } catch (final IOException e) {
+            throw new UncheckedIOException(e);
         }
 
-        return size;
     }
 
     /**
@@ -3117,9 +3150,9 @@ public class FileUtils {
     public static void touch(final File file) throws IOException {
         Objects.requireNonNull(file, "file");
         if (!file.exists()) {
-            openOutputStream(file).close();
+            newOutputStream(file, false).close();
         }
-        setLastModified(file, System.currentTimeMillis());
+        PathUtils.setLastModifiedTime(file.toPath());
     }
 
     /**
@@ -3150,9 +3183,9 @@ public class FileUtils {
      * <li>Throws {@link FileNotFoundException} if {@code source} does not exist</li>
      * </ul>
      *
-     * @param source      the file or directory to be moved
-     * @param destination the destination file or directory
-     * @throws FileNotFoundException if {@code source} file does not exist
+     * @param source      the file or directory to be moved.
+     * @param destination the destination file or directory.
+     * @throws FileNotFoundException if the source file does not exist.
      */
     private static void validateMoveParameters(final File source, final File destination) throws FileNotFoundException {
         Objects.requireNonNull(source, "source");
@@ -3165,7 +3198,7 @@ public class FileUtils {
     /**
      * Waits for the file system to propagate a file creation, with a timeout.
      * <p>
-     * This method repeatedly tests {@link File#exists()} until it returns
+     * This method repeatedly tests {@link Files#exists(Path, LinkOption...)} until it returns
      * true up to the maximum time specified in seconds.
      * </p>
      *
@@ -3338,7 +3371,7 @@ public class FileUtils {
      */
     public static void writeByteArrayToFile(final File file, final byte[] data, final int off, final int len,
                                             final boolean append) throws IOException {
-        try (OutputStream out = openOutputStream(file, append)) {
+        try (OutputStream out = newOutputStream(file, append)) {
             out.write(data, off, len);
         }
     }
@@ -3487,7 +3520,7 @@ public class FileUtils {
      */
     public static void writeLines(final File file, final String charsetName, final Collection<?> lines,
                                   final String lineEnding, final boolean append) throws IOException {
-        try (OutputStream out = new BufferedOutputStream(openOutputStream(file, append))) {
+        try (OutputStream out = new BufferedOutputStream(newOutputStream(file, append))) {
             IOUtils.writeLines(lines, lineEnding, out, charsetName);
         }
     }
@@ -3553,7 +3586,7 @@ public class FileUtils {
      */
     public static void writeStringToFile(final File file, final String data, final Charset charset,
                                          final boolean append) throws IOException {
-        try (OutputStream out = openOutputStream(file, append)) {
+        try (OutputStream out = newOutputStream(file, append)) {
             IOUtils.write(data, out, charset);
         }
     }
@@ -3601,4 +3634,5 @@ public class FileUtils {
     public FileUtils() { //NOSONAR
 
     }
+
 }

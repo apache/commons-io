@@ -31,11 +31,11 @@ public class UncheckedIOExceptions {
     /**
      * Creates a new UncheckedIOException for the given detail message.
      * <p>
-     * This method exists because there is no String constructor in UncheckedIOException.
+     * This method exists because there is no String constructor in {@link UncheckedIOException}.
      * </p>
      *
      * @param message the detail message.
-     * @return a new UncheckedIOException.
+     * @return a new {@link UncheckedIOException}.
      */
     public static UncheckedIOException create(final Object message) {
         final String string = Objects.toString(message);
@@ -45,12 +45,12 @@ public class UncheckedIOExceptions {
     /**
      * Creates a new UncheckedIOException for the given detail message.
      * <p>
-     * This method exists because there is no String constructor in UncheckedIOException.
+     * This method exists because there is no String constructor in {@link UncheckedIOException}.
      * </p>
      *
      * @param message the detail message.
      * @param e cause the {@code IOException}.
-     * @return a new UncheckedIOException.
+     * @return a new {@link UncheckedIOException}.
      */
     public static UncheckedIOException create(final Object message, final IOException e) {
         return new UncheckedIOException(Objects.toString(message), e);

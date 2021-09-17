@@ -28,23 +28,8 @@ public class UnixLineEndingInputStreamTest
 {
 
     @Test
-    public void simpleString() throws Exception {
-        assertEquals( "abc\n", roundtrip( "abc" ) );
-    }
-
-    @Test
-    public void inTheMiddleOfTheLine() throws Exception {
-        assertEquals( "a\nbc\n", roundtrip( "a\r\nbc" ) );
-    }
-
-    @Test
-    public void multipleBlankLines() throws Exception {
-        assertEquals( "a\n\nbc\n", roundtrip( "a\r\n\r\nbc" ) );
-    }
-
-    @Test
-    public void twoLinesAtEnd() throws Exception {
-        assertEquals( "a\n\n", roundtrip( "a\r\n\r\n" ) );
+    public void crAtEnd() throws Exception {
+        assertEquals( "a\n", roundtrip( "a\r" ) );
     }
 
     @Test
@@ -62,10 +47,14 @@ public class UnixLineEndingInputStreamTest
     }
 
     @Test
-    public void crAtEnd() throws Exception {
-        assertEquals( "a\n", roundtrip( "a\r" ) );
+    public void inTheMiddleOfTheLine() throws Exception {
+        assertEquals( "a\nbc\n", roundtrip( "a\r\nbc" ) );
     }
 
+    @Test
+    public void multipleBlankLines() throws Exception {
+        assertEquals( "a\n\nbc\n", roundtrip( "a\r\n\r\nbc" ) );
+    }
 
     @Test
     public void retainLineFeed() throws Exception {
@@ -77,6 +66,7 @@ public class UnixLineEndingInputStreamTest
         return roundtrip( msg, true );
     }
 
+
     private String roundtrip( final String msg, final boolean ensure ) throws IOException {
         final ByteArrayInputStream baos = new ByteArrayInputStream( msg.getBytes(StandardCharsets.UTF_8) );
         final UnixLineEndingInputStream lf = new UnixLineEndingInputStream( baos, ensure );
@@ -84,6 +74,16 @@ public class UnixLineEndingInputStreamTest
         final int read = lf.read( buf );
         lf.close();
         return new String( buf, 0, read, StandardCharsets.UTF_8);
+    }
+
+    @Test
+    public void simpleString() throws Exception {
+        assertEquals( "abc\n", roundtrip( "abc" ) );
+    }
+
+    @Test
+    public void twoLinesAtEnd() throws Exception {
+        assertEquals( "a\n\n", roundtrip( "a\r\n\r\n" ) );
     }
 
 }

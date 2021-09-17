@@ -30,6 +30,29 @@ public class CircularBufferInputStreamTest {
 	private final Random rnd = new Random(1530960934483L); // System.currentTimeMillis(), when this test was written.
 	                                                       // Always using the same seed should ensure a reproducible test.
 
+	/**
+	 * Create a large, but random input buffer.
+	 */
+	private byte[] newInputBuffer() {
+		final byte[] buffer = new byte[16*512+rnd.nextInt(512)];
+		rnd.nextBytes(buffer);
+		return buffer;
+	}
+
+	@Test
+  public void testIO683() throws IOException {
+      final byte[] buffer = {0, 1, -2, -2, -1, 4};
+      try (final ByteArrayInputStream bais = new ByteArrayInputStream(buffer); final CircularBufferInputStream cbis = new CircularBufferInputStream(bais)) {
+          int b;
+          int i = 0;
+          while ((b = cbis.read()) != -1) {
+              assertEquals(buffer[i] & 0xFF, b, "byte at index " + i + " should be equal");
+              i++;
+          }
+          assertEquals(buffer.length, i, "Should have read all the bytes");
+      }
+  }
+
 	@Test
 	public void testRandomRead() throws Exception {
 		final byte[] inputBuffer = newInputBuffer();
@@ -75,28 +98,5 @@ public class CircularBufferInputStreamTest {
 			}
 		}
 		assertTrue(true, "Test finished OK");
-	}
-
-	@Test
-  public void testIO683() throws IOException {
-      final byte[] buffer = {0, 1, -2, -2, -1, 4};
-      try (final ByteArrayInputStream bais = new ByteArrayInputStream(buffer); final CircularBufferInputStream cbis = new CircularBufferInputStream(bais)) {
-          int b;
-          int i = 0;
-          while ((b = cbis.read()) != -1) {
-              assertEquals(buffer[i] & 0xFF, b, "byte at index " + i + " should be equal");
-              i++;
-          }
-          assertEquals(buffer.length, i, "Should have read all the bytes");
-      }
-  }
-
-	/**
-	 * Create a large, but random input buffer.
-	 */
-	private byte[] newInputBuffer() {
-		final byte[] buffer = new byte[16*512+rnd.nextInt(512)];
-		rnd.nextBytes(buffer);
-		return buffer;
 	}
 }

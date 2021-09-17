@@ -53,8 +53,8 @@ public interface TailerListener {
      * Handles a line from a Tailer.
      * <p>
      * <b>Note:</b> this is called from the tailer thread.
-     * @param line the line.
      * </p>
+     * @param line the line.
      */
     void handle(String line);
 
@@ -62,8 +62,8 @@ public interface TailerListener {
      * Handles an Exception.
      * <p>
      * <b>Note:</b> this is called from the tailer thread.
-     * @param ex the exception.
      * </p>
+     * @param ex the exception.
      */
     void handle(Exception ex);
 

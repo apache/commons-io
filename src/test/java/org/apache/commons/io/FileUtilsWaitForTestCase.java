@@ -18,7 +18,6 @@ package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.File;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -35,25 +34,28 @@ public class FileUtilsWaitForTestCase {
 
     @Test
     public void testWaitFor() {
-        FileUtils.waitFor(new File(""), -1);
-        FileUtils.waitFor(new File(""), 2);
+        FileUtils.waitFor(FileUtils.current(), -1);
     }
 
     @Test
     public void testWaitForInterrupted() throws InterruptedException {
         final AtomicBoolean wasInterrupted = new AtomicBoolean(false);
         final CountDownLatch started = new CountDownLatch(1);
-        final Runnable thread = () -> {
+        final Thread thread1 = new Thread(() -> {
             started.countDown();
-            FileUtils.waitFor(new File(""), 2);
-            wasInterrupted.set( Thread.currentThread().isInterrupted());
-        };
-        final Thread thread1 = new Thread(thread);
+            assertTrue(FileUtils.waitFor(FileUtils.current(), 4));
+            wasInterrupted.set(Thread.currentThread().isInterrupted());
+        });
         thread1.start();
         started.await();
         thread1.interrupt();
         thread1.join();
-        assertTrue( wasInterrupted.get() );
+        assertTrue(wasInterrupted.get());
+    }
+
+    @Test
+    public void testWaitForNegativeDuration() {
+        FileUtils.waitFor(FileUtils.current(), -1);
     }
 
 }

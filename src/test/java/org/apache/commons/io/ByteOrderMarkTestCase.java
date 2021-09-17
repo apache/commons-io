@@ -56,12 +56,33 @@ public class ByteOrderMarkTestCase  {
         assertNotNull(Charset.forName(ByteOrderMark.UTF_32LE.getCharsetName()));
     }
 
-    /** Test {@link ByteOrderMark#length()} */
+    /** Test Errors */
     @Test
-    public void testLength() {
-        assertEquals(1, TEST_BOM_1.length(), "test1 length");
-        assertEquals(2, TEST_BOM_2.length(), "test2 length");
-        assertEquals(3, TEST_BOM_3.length(), "test3 length");
+    public void errors() {
+        try {
+            new ByteOrderMark(null, 1,2,3);
+            fail("null charset name, expected IllegalArgumentException");
+        } catch (final IllegalArgumentException e) {
+            // expected
+        }
+        try {
+            new ByteOrderMark("", 1,2,3);
+            fail("no charset name, expected IllegalArgumentException");
+        } catch (final IllegalArgumentException e) {
+            // expected
+        }
+        try {
+            new ByteOrderMark("a", (int[])null);
+            fail("null bytes, expected IllegalArgumentException");
+        } catch (final IllegalArgumentException e) {
+            // expected
+        }
+        try {
+            new ByteOrderMark("b");
+            fail("empty bytes, expected IllegalArgumentException");
+        } catch (final IllegalArgumentException e) {
+            // expected
+        }
     }
 
     /** Test {@link ByteOrderMark#get(int)} */
@@ -109,33 +130,12 @@ public class ByteOrderMarkTestCase  {
         assertEquals(bomClassHash + 6, TEST_BOM_3.hashCode(), "hash test3 ");
     }
 
-    /** Test Errors */
+    /** Test {@link ByteOrderMark#length()} */
     @Test
-    public void errors() {
-        try {
-            new ByteOrderMark(null, 1,2,3);
-            fail("null charset name, expected IllegalArgumentException");
-        } catch (final IllegalArgumentException e) {
-            // expected
-        }
-        try {
-            new ByteOrderMark("", 1,2,3);
-            fail("no charset name, expected IllegalArgumentException");
-        } catch (final IllegalArgumentException e) {
-            // expected
-        }
-        try {
-            new ByteOrderMark("a", (int[])null);
-            fail("null bytes, expected IllegalArgumentException");
-        } catch (final IllegalArgumentException e) {
-            // expected
-        }
-        try {
-            new ByteOrderMark("b");
-            fail("empty bytes, expected IllegalArgumentException");
-        } catch (final IllegalArgumentException e) {
-            // expected
-        }
+    public void testLength() {
+        assertEquals(1, TEST_BOM_1.length(), "test1 length");
+        assertEquals(2, TEST_BOM_2.length(), "test2 length");
+        assertEquals(3, TEST_BOM_3.length(), "test3 length");
     }
 
     /** Test {@link ByteOrderMark#toString()} */

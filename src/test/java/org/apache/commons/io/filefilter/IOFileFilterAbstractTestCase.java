@@ -22,6 +22,72 @@ import java.io.File;
 
 public abstract class IOFileFilterAbstractTestCase {
 
+    class TesterFalseFileFilter extends FalseFileFilter {
+
+        private static final long serialVersionUID = -3603047664010401872L;
+        private boolean invoked;
+
+        @Override
+        public boolean accept(final File file) {
+            setInvoked(true);
+            return super.accept(file);
+        }
+
+        @Override
+        public boolean accept(final File file, final String str) {
+            setInvoked(true);
+            return super.accept(file, str);
+        }
+
+        public boolean isInvoked() {
+            return this.invoked;
+        }
+
+        public void reset() {
+            setInvoked(false);
+        }
+
+        public void setInvoked(final boolean invoked) {
+            this.invoked = invoked;
+        }
+    }
+
+    class TesterTrueFileFilter extends TrueFileFilter {
+
+        private static final long serialVersionUID = 1828930358172422914L;
+        private boolean invoked;
+
+        @Override
+        public boolean accept(final File file) {
+            setInvoked(true);
+            return super.accept(file);
+        }
+
+        @Override
+        public boolean accept(final File file, final String str) {
+            setInvoked(true);
+            return super.accept(file, str);
+        }
+
+        public boolean isInvoked() {
+            return this.invoked;
+        }
+
+        public void reset() {
+            setInvoked(false);
+        }
+
+        public void setInvoked(final boolean invoked) {
+            this.invoked = invoked;
+        }
+    }
+
+    public static void assertFalseFiltersInvoked(final int testNumber, final TesterFalseFileFilter[] filters, final boolean[] invoked) {
+        for (int i = 1; i < filters.length; i++) {
+            assertEquals(invoked[i - 1], filters[i].isInvoked(), "test " + testNumber + " filter " + i + " invoked");
+        }
+    }
+
     public static void assertFileFiltering(final int testNumber, final IOFileFilter filter, final File file, final boolean expected) {
         assertEquals(expected, filter.accept(file),
                 "test " + testNumber + " Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file);
@@ -56,12 +122,6 @@ public abstract class IOFileFilterAbstractTestCase {
         }
     }
 
-    public static void assertFalseFiltersInvoked(final int testNumber, final TesterFalseFileFilter[] filters, final boolean[] invoked) {
-        for (int i = 1; i < filters.length; i++) {
-            assertEquals(invoked[i - 1], filters[i].isInvoked(), "test " + testNumber + " filter " + i + " invoked");
-        }
-    }
-
     public static File determineWorkingDirectoryPath(final String key, final String defaultPath) {
         // Look for a system property to specify the working directory
         final String workingPathName = System.getProperty(key, defaultPath);
@@ -81,66 +141,6 @@ public abstract class IOFileFilterAbstractTestCase {
             if (filter != null) {
                 filter.reset();
             }
-        }
-    }
-
-    class TesterTrueFileFilter extends TrueFileFilter {
-
-        private static final long serialVersionUID = 1828930358172422914L;
-        private boolean invoked;
-
-        @Override
-        public boolean accept(final File file) {
-            setInvoked(true);
-            return super.accept(file);
-        }
-
-        @Override
-        public boolean accept(final File file, final String str) {
-            setInvoked(true);
-            return super.accept(file, str);
-        }
-
-        public boolean isInvoked() {
-            return this.invoked;
-        }
-
-        public void setInvoked(final boolean invoked) {
-            this.invoked = invoked;
-        }
-
-        public void reset() {
-            setInvoked(false);
-        }
-    }
-
-    class TesterFalseFileFilter extends FalseFileFilter {
-
-        private static final long serialVersionUID = -3603047664010401872L;
-        private boolean invoked;
-
-        @Override
-        public boolean accept(final File file) {
-            setInvoked(true);
-            return super.accept(file);
-        }
-
-        @Override
-        public boolean accept(final File file, final String str) {
-            setInvoked(true);
-            return super.accept(file, str);
-        }
-
-        public boolean isInvoked() {
-            return this.invoked;
-        }
-
-        public void setInvoked(final boolean invoked) {
-            this.invoked = invoked;
-        }
-
-        public void reset() {
-            setInvoked(false);
         }
     }
 }

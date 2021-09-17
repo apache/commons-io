@@ -126,7 +126,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
     }
 
     /**
-     * Constructs a new age file filter for files equal to or older than a certain cutoff
+     * Constructs a new age file filter for files equal to or older than a certain cutoff.
      *
      * @param cutoffInstant The cutoff time threshold measured in milliseconds since the epoch (00:00:00 GMT, January 1,
      *        1970).
@@ -207,7 +207,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
         } catch (final IOException e) {
             return handle(e);
         }
-        return toFileVisitResult(acceptOlder != newer, file);
+        return toFileVisitResult(acceptOlder != newer);
     }
 
     /**

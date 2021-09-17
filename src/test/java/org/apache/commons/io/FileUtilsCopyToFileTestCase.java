@@ -31,6 +31,25 @@ import org.junit.jupiter.api.io.TempDir;
  */
 public class FileUtilsCopyToFileTestCase {
 
+    private class CheckingInputStream extends ByteArrayInputStream {
+        private boolean closed;
+
+        public CheckingInputStream(final byte[] data) {
+            super(data);
+            closed = false;
+        }
+
+        @Override
+        public void close() throws IOException {
+            super.close();
+            closed = true;
+        }
+
+        public boolean isClosed() {
+            return closed;
+        }
+    }
+
     @TempDir
     public File temporaryFolder;
 
@@ -50,21 +69,6 @@ public class FileUtilsCopyToFileTestCase {
     }
 
     /**
-     * Tests that {@code copyToFile(InputStream, File)} does not close the input stream.
-     *
-     * @throws IOException
-     * @see FileUtils#copyToFile(InputStream, File)
-     * @see FileUtils#copyInputStreamToFile(InputStream, File)
-     */
-    @Test
-    public void testCopyToFile() throws IOException {
-        try(CheckingInputStream inputStream = new CheckingInputStream(testData)) {
-            FileUtils.copyToFile(inputStream, testFile);
-            assertFalse(inputStream.isClosed(), "inputStream should NOT be closed");
-        }
-    }
-
-    /**
      * Tests that {@code copyInputStreamToFile(InputStream, File)} closes the input stream.
      *
      * @throws IOException
@@ -79,22 +83,18 @@ public class FileUtilsCopyToFileTestCase {
         }
     }
 
-    private class CheckingInputStream extends ByteArrayInputStream {
-        private boolean closed;
-
-        public CheckingInputStream(final byte[] data) {
-            super(data);
-            closed = false;
-        }
-
-        @Override
-        public void close() throws IOException {
-            super.close();
-            closed = true;
-        }
-
-        public boolean isClosed() {
-            return closed;
+    /**
+     * Tests that {@code copyToFile(InputStream, File)} does not close the input stream.
+     *
+     * @throws IOException
+     * @see FileUtils#copyToFile(InputStream, File)
+     * @see FileUtils#copyInputStreamToFile(InputStream, File)
+     */
+    @Test
+    public void testCopyToFile() throws IOException {
+        try(CheckingInputStream inputStream = new CheckingInputStream(testData)) {
+            FileUtils.copyToFile(inputStream, testFile);
+            assertFalse(inputStream.isClosed(), "inputStream should NOT be closed");
         }
     }
 }

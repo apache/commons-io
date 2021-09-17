@@ -35,31 +35,6 @@ import org.junit.jupiter.api.Test;
 public class TaggedInputStreamTest  {
 
     @Test
-    public void testEmptyStream() throws IOException {
-        final InputStream stream = new TaggedInputStream(ClosedInputStream.INSTANCE);
-        assertEquals(0, stream.available());
-        assertEquals(-1, stream.read());
-        assertEquals(-1, stream.read(new byte[1]));
-        assertEquals(-1, stream.read(new byte[1], 0, 1));
-        stream.close();
-    }
-
-    @Test
-    public void testNormalStream() throws IOException {
-        final InputStream stream = new TaggedInputStream(
-                new ByteArrayInputStream(new byte[] { 'a', 'b', 'c' }));
-        assertEquals(3, stream.available());
-        assertEquals('a', stream.read());
-        final byte[] buffer = new byte[1];
-        assertEquals(1, stream.read(buffer));
-        assertEquals('b', buffer[0]);
-        assertEquals(1, stream.read(buffer, 0, 1));
-        assertEquals('c', buffer[0]);
-        assertEquals(-1, stream.read());
-        stream.close();
-    }
-
-    @Test
     public void testBrokenStream() {
         final IOException exception = new IOException("test exception");
         final TaggedInputStream stream =
@@ -106,6 +81,31 @@ public class TaggedInputStreamTest  {
                 assertEquals(exception, e2);
             }
         }
+    }
+
+    @Test
+    public void testEmptyStream() throws IOException {
+        final InputStream stream = new TaggedInputStream(ClosedInputStream.INSTANCE);
+        assertEquals(0, stream.available());
+        assertEquals(-1, stream.read());
+        assertEquals(-1, stream.read(new byte[1]));
+        assertEquals(-1, stream.read(new byte[1], 0, 1));
+        stream.close();
+    }
+
+    @Test
+    public void testNormalStream() throws IOException {
+        final InputStream stream = new TaggedInputStream(
+                new ByteArrayInputStream(new byte[] { 'a', 'b', 'c' }));
+        assertEquals(3, stream.available());
+        assertEquals('a', stream.read());
+        final byte[] buffer = new byte[1];
+        assertEquals(1, stream.read(buffer));
+        assertEquals('b', buffer[0]);
+        assertEquals(1, stream.read(buffer, 0, 1));
+        assertEquals('c', buffer[0]);
+        assertEquals(-1, stream.read());
+        stream.close();
     }
 
     @Test

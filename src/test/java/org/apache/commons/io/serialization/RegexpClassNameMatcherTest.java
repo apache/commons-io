@@ -29,17 +29,13 @@ import org.junit.jupiter.api.Test;
 public class RegexpClassNameMatcherTest {
 
     @Test
-    public void testSimplePatternFromString() {
-        final ClassNameMatcher ca = new RegexpClassNameMatcher("foo.*");
-        assertTrue(ca.matches("foo.should.match"));
-        assertFalse(ca.matches("bar.should.not.match"));
+    public void testNullPatternPattern() {
+        assertThrows(IllegalArgumentException.class, () -> new RegexpClassNameMatcher((Pattern)null));
     }
 
     @Test
-    public void testSimplePatternFromPattern() {
-        final ClassNameMatcher ca = new RegexpClassNameMatcher(Pattern.compile("foo.*"));
-        assertTrue(ca.matches("foo.should.match"));
-        assertFalse(ca.matches("bar.should.not.match"));
+    public void testNullStringPattern() {
+        assertThrows(NullPointerException.class, () -> new RegexpClassNameMatcher((String)null));
     }
 
     @Test
@@ -51,12 +47,16 @@ public class RegexpClassNameMatcherTest {
     }
 
     @Test
-    public void testNullStringPattern() {
-        assertThrows(NullPointerException.class, () -> new RegexpClassNameMatcher((String)null));
+    public void testSimplePatternFromPattern() {
+        final ClassNameMatcher ca = new RegexpClassNameMatcher(Pattern.compile("foo.*"));
+        assertTrue(ca.matches("foo.should.match"));
+        assertFalse(ca.matches("bar.should.not.match"));
     }
 
     @Test
-    public void testNullPatternPattern() {
-        assertThrows(IllegalArgumentException.class, () -> new RegexpClassNameMatcher((Pattern)null));
+    public void testSimplePatternFromString() {
+        final ClassNameMatcher ca = new RegexpClassNameMatcher("foo.*");
+        assertTrue(ca.matches("foo.should.match"));
+        assertFalse(ca.matches("bar.should.not.match"));
     }
 }

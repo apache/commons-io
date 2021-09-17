@@ -196,7 +196,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        return toFileVisitResult(accept(Objects.toString(file.getFileName(), null)), file);
+        return toFileVisitResult(accept(Objects.toString(file.getFileName(), null)));
     }
 
     private boolean accept(final String name) {

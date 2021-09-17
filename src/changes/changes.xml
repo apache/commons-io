@@ -65,7 +65,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-746" dev="ggregory" type="add" due-to="Davide Angelocola">
         Drop unnecessary casts and conversions #267.
       </action>
-      <action issue="IO-748" dev="ggregory" type="fix" due-to="Dirk Heinrichs, Gary Gregory">
+      <action issue="IO-748" dev="ggregory" type="fix" due-to="Dirk Heinrichs, Gary Gregory, Elango Ravi">
         FileUtils.moveToDirectory() exception documentation and exception message error.
       </action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
@@ -172,6 +172,30 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add org.apache.commons.io.input.Tailer.getDelayDuration().
       </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add FileUtils.current().
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add and use PathUtils.setLastModifiedTime(Path) for more precision.
+        Add and use PathUtils.setLastModifiedTime(Path, Path) for more precision.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add and use PathUtils.isNewer(Path, ChronoZonedDateTime, LinkOption...) for more precision.
+        Add and use PathUtils.isNewer(Path, Path) for more precision.
+        Add and use FileUtils.isNewer(File, FileTime) for more precision.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add and use PathUtils.isOlder(Path, FileTime, LinkOption...)
+        Add and use PathUtils.isOlder(Path, Instant, LinkOption...)
+        Add and use PathUtils.isOlder(Path, long, LinkOption...)
+        Add and use PathUtils.isOlder(Path, Path)
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add and use PathUtils.sizeOf(Path)
+        Add and use PathUtils.sizeOfAsBigInteger(Path)
+        Add and use PathUtils.sizeOfDirectory(Path)
+        Add and use PathUtils.sizeOfDirectoryAsBigInteger(Path)
+      </action>
       <action dev="jonfreedman" type="add" due-to="Jon Freedman">
         Add Tailer.Tailable interface to allow tailing of remote files for example using jCIFS.
       </action>
@@ -183,7 +207,7 @@ The <action> type attribute can be add,update,fix,remove.
         Bump Maven Javadoc plugin from 3.2.0 to 3.3.0.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
-        Bump spotbugs-maven-plugin from 4.2.3 to 4.4.0 #250, #259.
+        Bump spotbugs-maven-plugin from 4.2.3 to 4.4.1 #250, #259, #272.
       </action>
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Bump JUnit from 5.7.2 to 5.8.0-M1.
@@ -195,13 +219,16 @@ The <action> type attribute can be add,update,fix,remove.
         Bump checkstyle from 8.44 to 9.0 #256, #257, #266.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
-        Bump junit-bom from 5.8.0-M1 to 5.8.0-RC1 #260.
+        Bump junit-bom from 5.8.0-M1 to 5.8.0 #260, #271.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump mockito-inline from 3.11.2 to 3.12.4 #262, #264.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump jmh.version from 1.32 to 1.33 #258.
+      </action>
+      <action dev="mgrigorov" type="update">
+        IO-747 Make commons-io a JPMS module by adding module-info.class.
       </action>
     </release>
     <release version="2.11.0" date="2021-07-09" description="Java 8 required.">

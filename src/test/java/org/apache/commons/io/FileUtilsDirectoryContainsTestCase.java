@@ -124,35 +124,6 @@ public class FileUtilsDirectoryContainsTestCase {
     }
 
     @Test
-    public void testSameFile() throws IOException {
-        try {
-            assertTrue(FileUtils.directoryContains(file1, file1));
-            fail("Expected " + IllegalArgumentException.class.getName());
-        } catch (final IllegalArgumentException e) {
-            // expected
-        }
-    }
-
-    @Test
-    public void testIO466() throws IOException {
-            final File fooFile = new File(directory1.getParent(), "directory1.txt");
-            assertFalse(FileUtils.directoryContains(directory1, fooFile));
-    }
-
-    @Test
-    public void testFileHavingSamePrefixBug() throws IOException {
-        final File foo = new File(top, "foo");
-        final File foobar = new File(top, "foobar");
-        final File fooTxt = new File(top, "foo.txt");
-        foo.mkdir();
-        foobar.mkdir();
-        FileUtils.touch(fooTxt);
-
-        assertFalse(FileUtils.directoryContains(foo, foobar));
-        assertFalse(FileUtils.directoryContains(foo, fooTxt));
-    }
-
-    @Test
     public void testFileDoesNotExist() throws IOException {
         assertFalse(FileUtils.directoryContains(top, null));
         final File file = new File("DOESNOTEXIST");
@@ -170,6 +141,35 @@ public class FileUtilsDirectoryContainsTestCase {
         assertTrue(top.exists(), "Check directory exists");
         assertFalse(file.exists(), "Check file does not exist");
         assertFalse(FileUtils.directoryContains(top, file), "Directory does not contain unrealized file");
+    }
+
+    @Test
+    public void testFileHavingSamePrefixBug() throws IOException {
+        final File foo = new File(top, "foo");
+        final File foobar = new File(top, "foobar");
+        final File fooTxt = new File(top, "foo.txt");
+        foo.mkdir();
+        foobar.mkdir();
+        FileUtils.touch(fooTxt);
+
+        assertFalse(FileUtils.directoryContains(foo, foobar));
+        assertFalse(FileUtils.directoryContains(foo, fooTxt));
+    }
+
+    @Test
+    public void testIO466() throws IOException {
+            final File fooFile = new File(directory1.getParent(), "directory1.txt");
+            assertFalse(FileUtils.directoryContains(directory1, fooFile));
+    }
+
+    @Test
+    public void testSameFile() throws IOException {
+        try {
+            assertTrue(FileUtils.directoryContains(file1, file1));
+            fail("Expected " + IllegalArgumentException.class.getName());
+        } catch (final IllegalArgumentException e) {
+            // expected
+        }
     }
 
     @Test

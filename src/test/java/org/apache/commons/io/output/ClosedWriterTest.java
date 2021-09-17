@@ -28,19 +28,6 @@ import org.junit.jupiter.api.Test;
 public class ClosedWriterTest {
 
     /**
-     * Test the {@code write(cbuf, off, len)} method.
-     */
-    @Test
-    public void testWrite() {
-        try (ClosedWriter cw = new ClosedWriter()) {
-            cw.write(new char[0], 0, 0);
-            fail("write(cbuf, off, len)");
-        } catch (final IOException e) {
-            // expected
-        }
-    }
-
-    /**
      * Test the {@code flush()} method.
      */
     @Test
@@ -48,6 +35,19 @@ public class ClosedWriterTest {
         try (ClosedWriter cw = new ClosedWriter()) {
             cw.flush();
             fail("flush()");
+        } catch (final IOException e) {
+            // expected
+        }
+    }
+
+    /**
+     * Test the {@code write(cbuf, off, len)} method.
+     */
+    @Test
+    public void testWrite() {
+        try (ClosedWriter cw = new ClosedWriter()) {
+            cw.write(new char[0], 0, 0);
+            fail("write(cbuf, off, len)");
         } catch (final IOException e) {
             // expected
         }

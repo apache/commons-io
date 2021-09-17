@@ -27,6 +27,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.Charset;
+import java.nio.file.attribute.FileTime;
 import java.time.Duration;
 
 import org.apache.commons.io.FileUtils;
@@ -476,7 +477,7 @@ public class Tailer implements Runnable {
     public void run() {
         RandomAccessTailable reader = null;
         try {
-            long last = 0; // The last time the file was checked for changes
+            FileTime last = FileTime.fromMillis(0); // The last time the file was checked for changes
             long position = 0; // position within the file
             // Open the file
             while (getRun() && reader == null) {
@@ -490,7 +491,7 @@ public class Tailer implements Runnable {
                 } else {
                     // The current position in the file
                     position = end ? tailable.length() : 0;
-                    last = tailable.lastModified();
+                    last = tailable.lastModifiedFileTime();
                     reader.seek(position);
                 }
             }
@@ -525,7 +526,7 @@ public class Tailer implements Runnable {
                 if (length > position) {
                     // The file has more content than it did last time
                     position = readLines(reader);
-                    last = tailable.lastModified();
+                    last = tailable.lastModifiedFileTime();
                 } else if (newer) {
                     /*
                      * This can happen if the file is truncated or overwritten with the exact same length of
@@ -536,7 +537,7 @@ public class Tailer implements Runnable {
 
                     // Now we can read new lines
                     position = readLines(reader);
-                    last = tailable.lastModified();
+                    last = tailable.lastModifiedFileTime();
                 }
                 if (reOpen && reader != null) {
                     reader.close();
@@ -788,7 +789,7 @@ public class Tailer implements Runnable {
          * tailable does not exist or if an I/O error occurs
          * @throws IOException if an I/O error occurs.
          */
-        long lastModified() throws IOException;
+        FileTime lastModifiedFileTime() throws IOException;
 
         /**
          * Tests whether this tailable exists.
@@ -801,11 +802,11 @@ public class Tailer implements Runnable {
         /**
          * Tests if this tailable is newer than the specified time reference.
          *
-         * @param timeMillis the time reference measured in milliseconds since the
+         * @param fileTime the time reference measured in milliseconds since the
          *                   epoch (00:00:00 GMT, January 1, 1970).
          * @return true if this tailable has been modified after the given time reference.
          */
-        boolean isFileNewer(final long timeMillis);
+        boolean isFileNewer(final FileTime fileTime);
 
         /**
          * Creates a random access file stream to read from.
@@ -891,8 +892,8 @@ public class Tailer implements Runnable {
         }
 
         @Override
-        public long lastModified() throws IOException {
-            return FileUtils.lastModified(file);
+        public FileTime lastModifiedFileTime() throws IOException {
+            return FileUtils.lastModifiedFileTime(file);
         }
 
         @Override
@@ -901,8 +902,8 @@ public class Tailer implements Runnable {
         }
 
         @Override
-        public boolean isFileNewer(final long last) {
-            return FileUtils.isFileNewer(file, last);
+        public boolean isFileNewer(final FileTime fileTime) {
+            return FileUtils.isFileNewer(file, fileTime);
         }
 
         @Override

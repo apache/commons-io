@@ -113,6 +113,36 @@ public class RandomAccessFileInputStreamTest {
     }
 
     @Test
+    public void testReadByteArray() throws IOException {
+        try (final RandomAccessFileInputStream inputStream = new RandomAccessFileInputStream(createRandomAccessFile(),
+            true)) {
+            // A Test Line.
+            final int dataLen = 12;
+            final byte[] buffer = new byte[dataLen];
+            assertEquals(dataLen, inputStream.read(buffer));
+            assertArrayEquals("A Test Line.".getBytes(StandardCharsets.ISO_8859_1), buffer);
+            //
+            assertEquals(DATA_FILE_LEN - dataLen, inputStream.available());
+            assertEquals(DATA_FILE_LEN - dataLen, inputStream.availableLong());
+        }
+    }
+
+    @Test
+    public void testReadByteArrayBounds() throws IOException {
+        try (final RandomAccessFileInputStream inputStream = new RandomAccessFileInputStream(createRandomAccessFile(),
+            true)) {
+            // A Test Line.
+            final int dataLen = 12;
+            final byte[] buffer = new byte[dataLen];
+            assertEquals(dataLen, inputStream.read(buffer, 0, dataLen));
+            assertArrayEquals("A Test Line.".getBytes(StandardCharsets.ISO_8859_1), buffer);
+            //
+            assertEquals(DATA_FILE_LEN - dataLen, inputStream.available());
+            assertEquals(DATA_FILE_LEN - dataLen, inputStream.availableLong());
+        }
+    }
+
+    @Test
     public void testSkip() throws IOException {
 
         try (final RandomAccessFile file = createRandomAccessFile();
@@ -147,36 +177,6 @@ public class RandomAccessFileInputStreamTest {
             //
             assertEquals(0, inputStream.skip(1));
             assertEquals(0, inputStream.skip(1000000000000L));
-        }
-    }
-
-    @Test
-    public void testReadByteArray() throws IOException {
-        try (final RandomAccessFileInputStream inputStream = new RandomAccessFileInputStream(createRandomAccessFile(),
-            true)) {
-            // A Test Line.
-            final int dataLen = 12;
-            final byte[] buffer = new byte[dataLen];
-            assertEquals(dataLen, inputStream.read(buffer));
-            assertArrayEquals("A Test Line.".getBytes(StandardCharsets.ISO_8859_1), buffer);
-            //
-            assertEquals(DATA_FILE_LEN - dataLen, inputStream.available());
-            assertEquals(DATA_FILE_LEN - dataLen, inputStream.availableLong());
-        }
-    }
-
-    @Test
-    public void testReadByteArrayBounds() throws IOException {
-        try (final RandomAccessFileInputStream inputStream = new RandomAccessFileInputStream(createRandomAccessFile(),
-            true)) {
-            // A Test Line.
-            final int dataLen = 12;
-            final byte[] buffer = new byte[dataLen];
-            assertEquals(dataLen, inputStream.read(buffer, 0, dataLen));
-            assertArrayEquals("A Test Line.".getBytes(StandardCharsets.ISO_8859_1), buffer);
-            //
-            assertEquals(DATA_FILE_LEN - dataLen, inputStream.available());
-            assertEquals(DATA_FILE_LEN - dataLen, inputStream.availableLong());
         }
     }
 }

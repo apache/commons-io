@@ -40,6 +40,18 @@ import org.junit.jupiter.api.Test;
 public class CharSequenceReaderTest {
     private static final char NONE = (new char[1])[0];
 
+    private void checkArray(final char[] expected, final char[] actual) {
+        for (int i = 0; i < expected.length; i++) {
+            assertEquals(expected[i], actual[i], "Compare[" +i + "]");
+        }
+    }
+
+    private void checkRead(final Reader reader, final String expected) throws IOException {
+        for (int i = 0; i < expected.length(); i++) {
+            assertEquals(expected.charAt(i), (char)reader.read(), "Read[" + i + "] of '" + expected + "'");
+        }
+    }
+
     @Test
     public void testClose() throws IOException {
         final Reader reader = new CharSequenceReader("FooBar");
@@ -54,47 +66,11 @@ public class CharSequenceReaderTest {
     }
 
     @Test
-    public void testReady() throws IOException {
-        final Reader reader = new CharSequenceReader("FooBar");
-        assertTrue(reader.ready());
-        reader.skip(3);
-        assertTrue(reader.ready());
-        checkRead(reader, "Bar");
-        assertFalse(reader.ready());
-        reader.reset();
-        assertTrue(reader.ready());
-        reader.skip(2);
-        assertTrue(reader.ready());
-        reader.skip(10);
-        assertFalse(reader.ready());
-        reader.close();
-        assertTrue(reader.ready());
-        reader.skip(20);
-        assertFalse(reader.ready());
-
-        final Reader subReader = new CharSequenceReader("xFooBarx", 1, 7);
-        assertTrue(subReader.ready());
-        subReader.skip(3);
-        assertTrue(subReader.ready());
-        checkRead(subReader, "Bar");
-        assertFalse(subReader.ready());
-        subReader.reset();
-        assertTrue(subReader.ready());
-        subReader.skip(2);
-        assertTrue(subReader.ready());
-        subReader.skip(10);
-        assertFalse(subReader.ready());
-        subReader.close();
-        assertTrue(subReader.ready());
-        subReader.skip(20);
-        assertFalse(subReader.ready());
-    }
-
-    @Test
-    public void testMarkSupported() throws Exception {
-        try (final Reader reader = new CharSequenceReader("FooBar")) {
-            assertTrue(reader.markSupported());
-        }
+    public void testConstructor() {
+        assertThrows(IllegalArgumentException.class, () -> new CharSequenceReader("FooBar", -1, 6),
+                "Expected exception not thrown for negative start.");
+        assertThrows(IllegalArgumentException.class, () -> new CharSequenceReader("FooBar", 1, 0),
+                "Expected exception not thrown for end before start.");
     }
 
     @Test
@@ -124,30 +100,10 @@ public class CharSequenceReaderTest {
     }
 
     @Test
-    public void testSkip() throws IOException {
-        final Reader reader = new CharSequenceReader("FooBar");
-        assertEquals(3, reader.skip(3));
-        checkRead(reader, "Bar");
-        assertEquals(0, reader.skip(3));
-        reader.reset();
-        assertEquals(2, reader.skip(2));
-        assertEquals(4, reader.skip(10));
-        assertEquals(0, reader.skip(1));
-        reader.close();
-        assertEquals(6, reader.skip(20));
-        assertEquals(-1, reader.read());
-
-        final Reader subReader = new CharSequenceReader("xFooBarx", 1, 7);
-        assertEquals(3, subReader.skip(3));
-        checkRead(subReader, "Bar");
-        assertEquals(0, subReader.skip(3));
-        subReader.reset();
-        assertEquals(2, subReader.skip(2));
-        assertEquals(4, subReader.skip(10));
-        assertEquals(0, subReader.skip(1));
-        subReader.close();
-        assertEquals(6, subReader.skip(20));
-        assertEquals(-1, subReader.read());
+    public void testMarkSupported() throws Exception {
+        try (final Reader reader = new CharSequenceReader("FooBar")) {
+            assertTrue(reader.markSupported());
+        }
     }
 
     @Test
@@ -239,31 +195,41 @@ public class CharSequenceReaderTest {
         }
     }
 
-    private void checkRead(final Reader reader, final String expected) throws IOException {
-        for (int i = 0; i < expected.length(); i++) {
-            assertEquals(expected.charAt(i), (char)reader.read(), "Read[" + i + "] of '" + expected + "'");
-        }
-    }
-
-    private void checkArray(final char[] expected, final char[] actual) {
-        for (int i = 0; i < expected.length; i++) {
-            assertEquals(expected[i], actual[i], "Compare[" +i + "]");
-        }
-    }
-
     @Test
-    public void testConstructor() {
-        assertThrows(IllegalArgumentException.class, () -> new CharSequenceReader("FooBar", -1, 6),
-                "Expected exception not thrown for negative start.");
-        assertThrows(IllegalArgumentException.class, () -> new CharSequenceReader("FooBar", 1, 0),
-                "Expected exception not thrown for end before start.");
-    }
+    public void testReady() throws IOException {
+        final Reader reader = new CharSequenceReader("FooBar");
+        assertTrue(reader.ready());
+        reader.skip(3);
+        assertTrue(reader.ready());
+        checkRead(reader, "Bar");
+        assertFalse(reader.ready());
+        reader.reset();
+        assertTrue(reader.ready());
+        reader.skip(2);
+        assertTrue(reader.ready());
+        reader.skip(10);
+        assertFalse(reader.ready());
+        reader.close();
+        assertTrue(reader.ready());
+        reader.skip(20);
+        assertFalse(reader.ready());
 
-    @Test
-    @SuppressWarnings("resource") // don't really need to close CharSequenceReader here
-    public void testToString() {
-        assertEquals("FooBar", new CharSequenceReader("FooBar").toString());
-        assertEquals("FooBar", new CharSequenceReader("xFooBarx", 1, 7).toString());
+        final Reader subReader = new CharSequenceReader("xFooBarx", 1, 7);
+        assertTrue(subReader.ready());
+        subReader.skip(3);
+        assertTrue(subReader.ready());
+        checkRead(subReader, "Bar");
+        assertFalse(subReader.ready());
+        subReader.reset();
+        assertTrue(subReader.ready());
+        subReader.skip(2);
+        assertTrue(subReader.ready());
+        subReader.skip(10);
+        assertFalse(subReader.ready());
+        subReader.close();
+        assertTrue(subReader.ready());
+        subReader.skip(20);
+        assertFalse(subReader.ready());
     }
 
     @Test
@@ -311,5 +277,39 @@ public class CharSequenceReaderTest {
             assertEquals(-1, reader.read());
             assertEquals(-1, reader.read());
         }
+    }
+
+    @Test
+    public void testSkip() throws IOException {
+        final Reader reader = new CharSequenceReader("FooBar");
+        assertEquals(3, reader.skip(3));
+        checkRead(reader, "Bar");
+        assertEquals(0, reader.skip(3));
+        reader.reset();
+        assertEquals(2, reader.skip(2));
+        assertEquals(4, reader.skip(10));
+        assertEquals(0, reader.skip(1));
+        reader.close();
+        assertEquals(6, reader.skip(20));
+        assertEquals(-1, reader.read());
+
+        final Reader subReader = new CharSequenceReader("xFooBarx", 1, 7);
+        assertEquals(3, subReader.skip(3));
+        checkRead(subReader, "Bar");
+        assertEquals(0, subReader.skip(3));
+        subReader.reset();
+        assertEquals(2, subReader.skip(2));
+        assertEquals(4, subReader.skip(10));
+        assertEquals(0, subReader.skip(1));
+        subReader.close();
+        assertEquals(6, subReader.skip(20));
+        assertEquals(-1, subReader.read());
+    }
+
+    @Test
+    @SuppressWarnings("resource") // don't really need to close CharSequenceReader here
+    public void testToString() {
+        assertEquals("FooBar", new CharSequenceReader("FooBar").toString());
+        assertEquals("FooBar", new CharSequenceReader("xFooBarx", 1, 7).toString());
     }
 }

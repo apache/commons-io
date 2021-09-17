@@ -214,8 +214,7 @@ public class FileEntry implements Serializable {
     }
 
     /**
-     * Gets the last modified time from the last time it
-     * was checked.
+     * Gets the last modified time from the last time it was checked.
      *
      * @return the last modified time.
      * @since 2.12.0
@@ -235,8 +234,7 @@ public class FileEntry implements Serializable {
     }
 
     /**
-     * Sets the last modified time from the last time it
-     * was checked.
+     * Sets the last modified time from the last time it was checked.
      *
      * @param lastModified The last modified time.
      * @since 2.12.0

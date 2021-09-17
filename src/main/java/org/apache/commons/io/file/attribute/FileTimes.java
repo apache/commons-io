@@ -22,18 +22,85 @@ import java.time.Instant;
 
 /**
  * Helps use {@link FileTime}.
+ *
+ * @since 2.12.0
  */
 public class FileTimes {
 
     /**
-     * Constant for the 1970-01-01T00:00:00Z epoch time stamp attribute.
+     * Constant for the {@code 1970-01-01T00:00:00Z} epoch as a time stamp attribute.
      *
      * @see Instant#EPOCH
      */
     public static final FileTime EPOCH = FileTime.from(Instant.EPOCH);
 
+    /**
+     * Subtracts milliseconds from a source FileTime.
+     *
+     * @param fileTime The source FileTime.
+     * @param millisToSubtract The milliseconds to subtract.
+     * @return The resulting FileTime.
+     */
+    public static FileTime minusMillis(final FileTime fileTime, final long millisToSubtract) {
+        return FileTime.from(fileTime.toInstant().minusMillis(millisToSubtract));
+    }
+
+    /**
+     * Subtracts nanoseconds from a source FileTime.
+     *
+     * @param fileTime The source FileTime.
+     * @param nanosToSubtract The nanoseconds to subtract.
+     * @return The resulting FileTime.
+     */
+    public static FileTime minusNanos(final FileTime fileTime, final long nanosToSubtract) {
+        return FileTime.from(fileTime.toInstant().minusNanos(nanosToSubtract));
+    }
+
+    /**
+     * Subtracts seconds from a source FileTime.
+     *
+     * @param fileTime The source FileTime.
+     * @param secondsToSubtract The seconds to subtract.
+     * @return The resulting FileTime.
+     */
+    public static FileTime minusSeconds(final FileTime fileTime, final long secondsToSubtract) {
+        return FileTime.from(fileTime.toInstant().minusSeconds(secondsToSubtract));
+    }
+
+    /**
+     * Adds milliseconds to a source FileTime.
+     *
+     * @param fileTime The source FileTime.
+     * @param millisToAdd The milliseconds to add.
+     * @return The resulting FileTime.
+     */
+    public static FileTime plusMillis(final FileTime fileTime, final long millisToAdd) {
+        return FileTime.from(fileTime.toInstant().plusMillis(millisToAdd));
+    }
+
+    /**
+     * Adds nanoseconds from a source FileTime.
+     *
+     * @param fileTime The source FileTime.
+     * @param nanosToSubtract The nanoseconds to subtract.
+     * @return The resulting FileTime.
+     */
+    public static FileTime plusNanos(final FileTime fileTime, final long nanosToSubtract) {
+        return FileTime.from(fileTime.toInstant().plusNanos(nanosToSubtract));
+    }
+
+    /**
+     * Adds seconds to a source FileTime.
+     *
+     * @param fileTime The source FileTime.
+     * @param secondsToAdd The seconds to add.
+     * @return The resulting FileTime.
+     */
+    public static FileTime plusSeconds(final FileTime fileTime, final long secondsToAdd) {
+        return FileTime.from(fileTime.toInstant().plusSeconds(secondsToAdd));
+    }
+
     private FileTimes() {
         // No instances.
     }
-
 }

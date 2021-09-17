@@ -55,6 +55,75 @@ public class LockableFileWriterTest {
         altLockFile = new File(altLockDir, file.getName() + ".lck");
     }
 
+    @Test public void testAlternateLockDir() throws IOException {
+        // open a valid lockable writer
+        try (LockableFileWriter lfw1 = new LockableFileWriter(file, "UTF-8" ,true, altLockDir.getAbsolutePath())){
+            assertTrue(file.exists());
+            assertTrue(altLockFile.exists());
+
+            // try to open a second writer
+            try (LockableFileWriter lfw2 = new LockableFileWriter(file, StandardCharsets.UTF_8, true, altLockDir.getAbsolutePath())){
+                fail("Somehow able to open a locked file. ");
+            } catch(final IOException ioe) {
+                final String msg = ioe.getMessage();
+                assertTrue(msg.startsWith("Can't write file, lock "),
+                        "Exception message does not start correctly. ");
+                assertTrue(file.exists());
+                assertTrue(altLockFile.exists());
+            }
+        }
+        assertTrue(file.exists());
+        assertFalse(altLockFile.exists());
+    }
+
+    @Test public void testConstructor_File_directory() {
+        try (Writer writer = new LockableFileWriter(temporaryFolder)) {
+            fail();
+        } catch (final IOException ex) {
+            // expected
+            assertFalse(file.exists());
+            assertFalse(lockFile.exists());
+        }
+        assertFalse(file.exists());
+        assertFalse(lockFile.exists());
+    }
+
+    @Test public void testConstructor_File_encoding_badEncoding() throws IOException {
+        try (Writer writer = new LockableFileWriter(file, "BAD-ENCODE")) {
+            fail();
+        } catch (final UnsupportedCharsetException ex) {
+            // expected
+            assertFalse(file.exists());
+            assertFalse(lockFile.exists());
+        }
+        assertFalse(file.exists());
+        assertFalse(lockFile.exists());
+    }
+
+    @Test public void testConstructor_File_nullFile() throws IOException {
+        try (Writer writer = new LockableFileWriter((File) null)) {
+            fail();
+        } catch (final NullPointerException ex) {
+            // expected
+            assertFalse(file.exists());
+            assertFalse(lockFile.exists());
+        }
+        assertFalse(file.exists());
+        assertFalse(lockFile.exists());
+    }
+
+    @Test public void testConstructor_fileName_nullFile() throws IOException {
+        try (Writer writer = new LockableFileWriter((String) null)) {
+            fail();
+        } catch (final NullPointerException ex) {
+            // expected
+            assertFalse(file.exists());
+            assertFalse(lockFile.exists());
+        }
+        assertFalse(file.exists());
+        assertFalse(lockFile.exists());
+    }
+
     @Test public void testFileLocked() throws IOException {
 
         // open a valid lockable writer
@@ -88,27 +157,6 @@ public class LockableFileWriterTest {
         assertFalse(lockFile.exists());
     }
 
-    @Test public void testAlternateLockDir() throws IOException {
-        // open a valid lockable writer
-        try (LockableFileWriter lfw1 = new LockableFileWriter(file, "UTF-8" ,true, altLockDir.getAbsolutePath())){
-            assertTrue(file.exists());
-            assertTrue(altLockFile.exists());
-
-            // try to open a second writer
-            try (LockableFileWriter lfw2 = new LockableFileWriter(file, StandardCharsets.UTF_8, true, altLockDir.getAbsolutePath())){
-                fail("Somehow able to open a locked file. ");
-            } catch(final IOException ioe) {
-                final String msg = ioe.getMessage();
-                assertTrue(msg.startsWith("Can't write file, lock "),
-                        "Exception message does not start correctly. ");
-                assertTrue(file.exists());
-                assertTrue(altLockFile.exists());
-            }
-        }
-        assertTrue(file.exists());
-        assertFalse(altLockFile.exists());
-    }
-
     @Test public void testFileNotLocked() throws IOException {
         // open a valid lockable writer
         try (LockableFileWriter lfw1 = new LockableFileWriter(file)) {
@@ -124,54 +172,6 @@ public class LockableFileWriterTest {
             assertTrue(lockFile.exists());
         }
         assertTrue(file.exists());
-        assertFalse(lockFile.exists());
-    }
-
-    @Test public void testConstructor_File_encoding_badEncoding() throws IOException {
-        try (Writer writer = new LockableFileWriter(file, "BAD-ENCODE")) {
-            fail();
-        } catch (final UnsupportedCharsetException ex) {
-            // expected
-            assertFalse(file.exists());
-            assertFalse(lockFile.exists());
-        }
-        assertFalse(file.exists());
-        assertFalse(lockFile.exists());
-    }
-
-    @Test public void testConstructor_File_directory() {
-        try (Writer writer = new LockableFileWriter(temporaryFolder)) {
-            fail();
-        } catch (final IOException ex) {
-            // expected
-            assertFalse(file.exists());
-            assertFalse(lockFile.exists());
-        }
-        assertFalse(file.exists());
-        assertFalse(lockFile.exists());
-    }
-
-    @Test public void testConstructor_File_nullFile() throws IOException {
-        try (Writer writer = new LockableFileWriter((File) null)) {
-            fail();
-        } catch (final NullPointerException ex) {
-            // expected
-            assertFalse(file.exists());
-            assertFalse(lockFile.exists());
-        }
-        assertFalse(file.exists());
-        assertFalse(lockFile.exists());
-    }
-
-    @Test public void testConstructor_fileName_nullFile() throws IOException {
-        try (Writer writer = new LockableFileWriter((String) null)) {
-            fail();
-        } catch (final NullPointerException ex) {
-            // expected
-            assertFalse(file.exists());
-            assertFalse(lockFile.exists());
-        }
-        assertFalse(file.exists());
         assertFalse(lockFile.exists());
     }
 

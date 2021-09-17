@@ -40,14 +40,6 @@ public class XmlStreamWriterTest {
     private static final String TEXT_UNICODE = TEXT_LATIN1 + ", " + TEXT_LATIN7
             + ", " + TEXT_LATIN15 + ", " + TEXT_EUC_JP;
 
-    private static String createXmlContent(final String text, final String encoding) {
-        String xmlDecl = "<?xml version=\"1.0\"?>";
-        if (encoding != null) {
-            xmlDecl = "<?xml version=\"1.0\" encoding=\"" + encoding + "\"?>";
-        }
-        return xmlDecl + "\n<text>" + text + "</text>";
-    }
-
     private static void checkXmlContent(final String xml, final String encoding, final String defaultEncoding)
             throws IOException {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -75,10 +67,26 @@ public class XmlStreamWriterTest {
         checkXmlContent(xml, effectiveEncoding, defaultEncoding);
     }
 
+    private static String createXmlContent(final String text, final String encoding) {
+        String xmlDecl = "<?xml version=\"1.0\"?>";
+        if (encoding != null) {
+            xmlDecl = "<?xml version=\"1.0\" encoding=\"" + encoding + "\"?>";
+        }
+        return xmlDecl + "\n<text>" + text + "</text>";
+    }
+
     @Test
-    public void testNoXmlHeader() throws IOException {
-        final String xml = "<text>text with no XML header</text>";
-        checkXmlContent(xml, "UTF-8", null);
+    public void testDefaultEncoding() throws IOException {
+        checkXmlWriter(TEXT_UNICODE, null, null);
+        checkXmlWriter(TEXT_UNICODE, null, "UTF-8");
+        checkXmlWriter(TEXT_UNICODE, null, "UTF-16");
+        checkXmlWriter(TEXT_UNICODE, null, "UTF-16BE");
+        checkXmlWriter(TEXT_UNICODE, null, "ISO-8859-1");
+    }
+
+    @Test
+    public void testEBCDICEncoding() throws IOException {
+        checkXmlWriter("simple text in EBCDIC", "CP1047");
     }
 
     @Test
@@ -94,41 +102,13 @@ public class XmlStreamWriterTest {
     }
 
     @Test
-    public void testDefaultEncoding() throws IOException {
-        checkXmlWriter(TEXT_UNICODE, null, null);
-        checkXmlWriter(TEXT_UNICODE, null, "UTF-8");
-        checkXmlWriter(TEXT_UNICODE, null, "UTF-16");
-        checkXmlWriter(TEXT_UNICODE, null, "UTF-16BE");
-        checkXmlWriter(TEXT_UNICODE, null, "ISO-8859-1");
-    }
-
-    // Turkish language has specific rules to convert dotted and dottless i character.
-    @Test
-    @DefaultLocale(language = "tr")
-    public void testLowerCaseEncodingWithTurkishLocale_IO_557() throws IOException {
-        checkXmlWriter(TEXT_UNICODE, "utf-8");
-        checkXmlWriter(TEXT_LATIN1, "iso-8859-1");
-        checkXmlWriter(TEXT_LATIN7, "iso-8859-7");
+    public void testEUC_JPEncoding() throws IOException {
+        checkXmlWriter(TEXT_EUC_JP, "EUC-JP");
     }
 
     @Test
-    public void testUTF8Encoding() throws IOException {
-        checkXmlWriter(TEXT_UNICODE, "UTF-8");
-    }
-
-    @Test
-    public void testUTF16Encoding() throws IOException {
-        checkXmlWriter(TEXT_UNICODE, "UTF-16");
-    }
-
-    @Test
-    public void testUTF16BEEncoding() throws IOException {
-        checkXmlWriter(TEXT_UNICODE, "UTF-16BE");
-    }
-
-    @Test
-    public void testUTF16LEEncoding() throws IOException {
-        checkXmlWriter(TEXT_UNICODE, "UTF-16LE");
+    public void testLatin15Encoding() throws IOException {
+        checkXmlWriter(TEXT_LATIN15, "ISO-8859-15");
     }
 
     @Test
@@ -141,18 +121,38 @@ public class XmlStreamWriterTest {
         checkXmlWriter(TEXT_LATIN7, "ISO-8859-7");
     }
 
+    // Turkish language has specific rules to convert dotted and dottless i character.
     @Test
-    public void testLatin15Encoding() throws IOException {
-        checkXmlWriter(TEXT_LATIN15, "ISO-8859-15");
+    @DefaultLocale(language = "tr")
+    public void testLowerCaseEncodingWithTurkishLocale_IO_557() throws IOException {
+        checkXmlWriter(TEXT_UNICODE, "utf-8");
+        checkXmlWriter(TEXT_LATIN1, "iso-8859-1");
+        checkXmlWriter(TEXT_LATIN7, "iso-8859-7");
     }
 
     @Test
-    public void testEUC_JPEncoding() throws IOException {
-        checkXmlWriter(TEXT_EUC_JP, "EUC-JP");
+    public void testNoXmlHeader() throws IOException {
+        final String xml = "<text>text with no XML header</text>";
+        checkXmlContent(xml, "UTF-8", null);
     }
 
     @Test
-    public void testEBCDICEncoding() throws IOException {
-        checkXmlWriter("simple text in EBCDIC", "CP1047");
+    public void testUTF16BEEncoding() throws IOException {
+        checkXmlWriter(TEXT_UNICODE, "UTF-16BE");
+    }
+
+    @Test
+    public void testUTF16Encoding() throws IOException {
+        checkXmlWriter(TEXT_UNICODE, "UTF-16");
+    }
+
+    @Test
+    public void testUTF16LEEncoding() throws IOException {
+        checkXmlWriter(TEXT_UNICODE, "UTF-16LE");
+    }
+
+    @Test
+    public void testUTF8Encoding() throws IOException {
+        checkXmlWriter(TEXT_UNICODE, "UTF-8");
     }
 }

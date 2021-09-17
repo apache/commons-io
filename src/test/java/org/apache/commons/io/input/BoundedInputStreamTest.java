@@ -29,6 +29,36 @@ import org.junit.jupiter.api.Test;
  */
 public class BoundedInputStreamTest {
 
+    private void compare(final String msg, final byte[] expected, final byte[] actual) {
+        assertEquals(expected.length, actual.length, msg + " length");
+        for (int i = 0; i < expected.length; i++) {
+            assertEquals(expected[i], actual[i], msg + " byte[" + i + "]");
+        }
+    }
+
+    @Test
+    public void testReadArray() throws Exception {
+
+        BoundedInputStream bounded;
+        final byte[] helloWorld = "Hello World".getBytes();
+        final byte[] hello = "Hello".getBytes();
+
+        bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld));
+        compare("limit = -1", helloWorld, IOUtils.toByteArray(bounded));
+
+        bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), 0);
+        compare("limit = 0", IOUtils.EMPTY_BYTE_ARRAY, IOUtils.toByteArray(bounded));
+
+        bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length);
+        compare("limit = length", helloWorld, IOUtils.toByteArray(bounded));
+
+        bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length + 1);
+        compare("limit > length", helloWorld, IOUtils.toByteArray(bounded));
+
+        bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length - 6);
+        compare("limit < length", hello, IOUtils.toByteArray(bounded));
+    }
+
     @Test
     public void testReadSingle() throws Exception {
         BoundedInputStream bounded;
@@ -55,35 +85,5 @@ public class BoundedInputStreamTest {
             assertEquals(hello[i], bounded.read(), "limit < length byte[" + i + "]");
         }
         assertEquals(-1, bounded.read(), "limit < length end");
-    }
-
-    @Test
-    public void testReadArray() throws Exception {
-
-        BoundedInputStream bounded;
-        final byte[] helloWorld = "Hello World".getBytes();
-        final byte[] hello = "Hello".getBytes();
-
-        bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld));
-        compare("limit = -1", helloWorld, IOUtils.toByteArray(bounded));
-
-        bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), 0);
-        compare("limit = 0", IOUtils.EMPTY_BYTE_ARRAY, IOUtils.toByteArray(bounded));
-
-        bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length);
-        compare("limit = length", helloWorld, IOUtils.toByteArray(bounded));
-
-        bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length + 1);
-        compare("limit > length", helloWorld, IOUtils.toByteArray(bounded));
-
-        bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length - 6);
-        compare("limit < length", hello, IOUtils.toByteArray(bounded));
-    }
-
-    private void compare(final String msg, final byte[] expected, final byte[] actual) {
-        assertEquals(expected.length, actual.length, msg + " length");
-        for (int i = 0; i < expected.length; i++) {
-            assertEquals(expected[i], actual[i], msg + " byte[" + i + "]");
-        }
     }
 }

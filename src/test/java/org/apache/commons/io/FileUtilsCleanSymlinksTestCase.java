@@ -36,38 +36,19 @@ public class FileUtilsCleanSymlinksTestCase {
     @TempDir
     public File top;
 
-    @Test
-    public void testCleanDirWithSymlinkFile() throws Exception {
-        if (System.getProperty("os.name").startsWith("Win")) {
-            // Can't use "ln" for symlinks on the command line in Windows.
-            return;
-        }
+    private boolean setupSymlink(final File res, final File link) throws Exception {
+        // create symlink
+        final List<String> args = new ArrayList<>();
+        args.add("ln");
+        args.add("-s");
 
-        final File realOuter = new File(top, "realouter");
-        assertTrue(realOuter.mkdirs());
+        args.add(res.getAbsolutePath());
+        args.add(link.getAbsolutePath());
 
-        final File realInner = new File(realOuter, "realinner");
-        assertTrue(realInner.mkdirs());
+        final Process proc;
 
-        final File realFile = new File(realInner, "file1");
-        FileUtils.touch(realFile);
-        assertEquals(1, realInner.list().length);
-
-        final File randomFile = new File(top, "randomfile");
-        FileUtils.touch(randomFile);
-
-        final File symlinkFile = new File(realInner, "fakeinner");
-        assertTrue(setupSymlink(randomFile, symlinkFile));
-
-        assertEquals(2, realInner.list().length);
-
-        // assert contents of the real directory were removed including the symlink
-        FileUtils.cleanDirectory(realOuter);
-        assertEquals(0, realOuter.list().length);
-
-        // ensure that the contents of the symlink were NOT removed.
-        assertTrue(randomFile.exists());
-        assertFalse(symlinkFile.exists());
+        proc = Runtime.getRuntime().exec(args.toArray(new String[args.size()]));
+        return proc.waitFor() == 0;
     }
 
 
@@ -146,26 +127,82 @@ public class FileUtilsCleanSymlinksTestCase {
     }
 
     @Test
-    public void testStillClearsIfGivenDirectoryIsASymlink() throws Exception {
+    public void testCleanDirWithSymlinkFile() throws Exception {
         if (System.getProperty("os.name").startsWith("Win")) {
             // Can't use "ln" for symlinks on the command line in Windows.
             return;
         }
 
-        final File randomDirectory = new File(top, "randomDir");
-        assertTrue(randomDirectory.mkdirs());
+        final File realOuter = new File(top, "realouter");
+        assertTrue(realOuter.mkdirs());
 
-        FileUtils.touch(new File(randomDirectory, "randomfile"));
-        assertEquals(1, randomDirectory.list().length);
+        final File realInner = new File(realOuter, "realinner");
+        assertTrue(realInner.mkdirs());
 
-        final File symlinkDirectory = new File(top, "fakeDir");
-        assertTrue(setupSymlink(randomDirectory, symlinkDirectory));
+        final File realFile = new File(realInner, "file1");
+        FileUtils.touch(realFile);
+        assertEquals(1, realInner.list().length);
 
-        FileUtils.cleanDirectory(symlinkDirectory);
-        assertEquals(0, symlinkDirectory.list().length);
-        assertEquals(0, randomDirectory.list().length);
+        final File randomFile = new File(top, "randomfile");
+        FileUtils.touch(randomFile);
+
+        final File symlinkFile = new File(realInner, "fakeinner");
+        assertTrue(setupSymlink(randomFile, symlinkFile));
+
+        assertEquals(2, realInner.list().length);
+
+        // assert contents of the real directory were removed including the symlink
+        FileUtils.cleanDirectory(realOuter);
+        assertEquals(0, realOuter.list().length);
+
+        // ensure that the contents of the symlink were NOT removed.
+        assertTrue(randomFile.exists());
+        assertFalse(symlinkFile.exists());
     }
 
+
+    @Test
+    public void testCorrectlyIdentifySymlinkWithParentSymLink() throws Exception {
+        if (System.getProperty("os.name").startsWith("Win")) {
+            // Can't use "ln" for symlinks on the command line in Windows.
+            return;
+        }
+
+        final File realParent = new File(top, "realparent");
+        assertTrue(realParent.mkdirs());
+
+        final File symlinkParentDirectory = new File(top, "fakeparent");
+        assertTrue(setupSymlink(realParent, symlinkParentDirectory));
+
+        final File realChild = new File(symlinkParentDirectory, "realChild");
+        assertTrue(realChild.mkdirs());
+
+        final File symlinkChild = new File(symlinkParentDirectory, "fakeChild");
+        assertTrue(setupSymlink(realChild, symlinkChild));
+
+        assertTrue(FileUtils.isSymlink(symlinkChild));
+        assertFalse(FileUtils.isSymlink(realChild));
+    }
+
+    @Test
+    public void testIdentifiesBrokenSymlinkFile() throws Exception {
+        if (System.getProperty("os.name").startsWith("Win")) {
+            // Can't use "ln" for symlinks on the command line in Windows.
+            return;
+        }
+
+        final File noexistFile = new File(top, "noexist");
+        final File symlinkFile = new File(top, "fakeinner");
+        final File badSymlinkInPathFile = new File(symlinkFile, "fakeinner");
+        final File noexistParentFile = new File("noexist", "file");
+
+        assertTrue(setupSymlink(noexistFile, symlinkFile));
+
+        assertTrue(FileUtils.isSymlink(symlinkFile));
+        assertFalse(FileUtils.isSymlink(noexistFile));
+        assertFalse(FileUtils.isSymlink(noexistParentFile));
+        assertFalse(FileUtils.isSymlink(badSymlinkInPathFile));
+    }
 
     @Test
     public void testIdentifiesSymlinkDir() throws Exception {
@@ -202,61 +239,24 @@ public class FileUtilsCleanSymlinksTestCase {
     }
 
     @Test
-    public void testIdentifiesBrokenSymlinkFile() throws Exception {
+    public void testStillClearsIfGivenDirectoryIsASymlink() throws Exception {
         if (System.getProperty("os.name").startsWith("Win")) {
             // Can't use "ln" for symlinks on the command line in Windows.
             return;
         }
 
-        final File noexistFile = new File(top, "noexist");
-        final File symlinkFile = new File(top, "fakeinner");
-        final File badSymlinkInPathFile = new File(symlinkFile, "fakeinner");
-        final File noexistParentFile = new File("noexist", "file");
+        final File randomDirectory = new File(top, "randomDir");
+        assertTrue(randomDirectory.mkdirs());
 
-        assertTrue(setupSymlink(noexistFile, symlinkFile));
+        FileUtils.touch(new File(randomDirectory, "randomfile"));
+        assertEquals(1, randomDirectory.list().length);
 
-        assertTrue(FileUtils.isSymlink(symlinkFile));
-        assertFalse(FileUtils.isSymlink(noexistFile));
-        assertFalse(FileUtils.isSymlink(noexistParentFile));
-        assertFalse(FileUtils.isSymlink(badSymlinkInPathFile));
-    }
+        final File symlinkDirectory = new File(top, "fakeDir");
+        assertTrue(setupSymlink(randomDirectory, symlinkDirectory));
 
-    @Test
-    public void testCorrectlyIdentifySymlinkWithParentSymLink() throws Exception {
-        if (System.getProperty("os.name").startsWith("Win")) {
-            // Can't use "ln" for symlinks on the command line in Windows.
-            return;
-        }
-
-        final File realParent = new File(top, "realparent");
-        assertTrue(realParent.mkdirs());
-
-        final File symlinkParentDirectory = new File(top, "fakeparent");
-        assertTrue(setupSymlink(realParent, symlinkParentDirectory));
-
-        final File realChild = new File(symlinkParentDirectory, "realChild");
-        assertTrue(realChild.mkdirs());
-
-        final File symlinkChild = new File(symlinkParentDirectory, "fakeChild");
-        assertTrue(setupSymlink(realChild, symlinkChild));
-
-        assertTrue(FileUtils.isSymlink(symlinkChild));
-        assertFalse(FileUtils.isSymlink(realChild));
-    }
-
-    private boolean setupSymlink(final File res, final File link) throws Exception {
-        // create symlink
-        final List<String> args = new ArrayList<>();
-        args.add("ln");
-        args.add("-s");
-
-        args.add(res.getAbsolutePath());
-        args.add(link.getAbsolutePath());
-
-        final Process proc;
-
-        proc = Runtime.getRuntime().exec(args.toArray(new String[args.size()]));
-        return proc.waitFor() == 0;
+        FileUtils.cleanDirectory(symlinkDirectory);
+        assertEquals(0, symlinkDirectory.list().length);
+        assertEquals(0, randomDirectory.list().length);
     }
 
 }

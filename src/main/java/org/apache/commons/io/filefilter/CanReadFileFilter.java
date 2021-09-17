@@ -100,7 +100,7 @@ public class CanReadFileFilter extends AbstractFileFilter implements Serializabl
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        return toFileVisitResult(Files.isReadable(file), file);
+        return toFileVisitResult(Files.isReadable(file));
     }
 
 }

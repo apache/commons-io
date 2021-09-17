@@ -42,57 +42,19 @@ public class ReaderInputStreamTest {
 
     private final Random random = new Random();
 
-    private void testWithSingleByteRead(final String testString, final String charsetName) throws IOException {
-        final byte[] bytes = testString.getBytes(charsetName);
-        try (final ReaderInputStream in = new ReaderInputStream(new StringReader(testString), charsetName)) {
-            for (final byte b : bytes) {
-                final int read = in.read();
-                assertTrue(read >= 0);
-                assertTrue(read <= 255);
-                assertEquals(b, (byte) read);
-            }
-            assertEquals(-1, in.read());
-        }
-    }
-
-    private void testWithBufferedRead(final String testString, final String charsetName) throws IOException {
-        final byte[] expected = testString.getBytes(charsetName);
-        try (final ReaderInputStream in = new ReaderInputStream(new StringReader(testString), charsetName)) {
-            final byte[] buffer = new byte[128];
-            int offset = 0;
-            while (true) {
-                int bufferOffset = random.nextInt(64);
-                final int bufferLength = random.nextInt(64);
-                int read = in.read(buffer, bufferOffset, bufferLength);
-                if (read == -1) {
-                    assertEquals(offset, expected.length);
-                    break;
-                }
-                assertTrue(read <= bufferLength);
-                while (read > 0) {
-                    assertTrue(offset < expected.length);
-                    assertEquals(expected[offset], buffer[bufferOffset]);
-                    offset++;
-                    bufferOffset++;
-                    read--;
-                }
+    /*
+     * Tests https://issues.apache.org/jira/browse/IO-277
+     */
+    @Test
+    public void testCharsetMismatchInfiniteLoop() throws IOException {
+        // Input is UTF-8 bytes: 0xE0 0xB2 0xA0
+        final char[] inputChars = { (char) 0xE0, (char) 0xB2, (char) 0xA0 };
+        // Charset charset = Charset.forName("UTF-8"); // works
+        final Charset charset = StandardCharsets.US_ASCII; // infinite loop
+        try (ReaderInputStream stream = new ReaderInputStream(new CharArrayReader(inputChars), charset)) {
+            while (stream.read() != -1) {
             }
         }
-    }
-
-    @Test
-    public void testUTF8WithSingleByteRead() throws IOException {
-        testWithSingleByteRead(TEST_STRING, "UTF-8");
-    }
-
-    @Test
-    public void testLargeUTF8WithSingleByteRead() throws IOException {
-        testWithSingleByteRead(LARGE_TEST_STRING, "UTF-8");
-    }
-
-    @Test
-    public void testUTF8WithBufferedRead() throws IOException {
-        testWithBufferedRead(TEST_STRING, "UTF-8");
     }
 
     @Test
@@ -101,8 +63,8 @@ public class ReaderInputStreamTest {
     }
 
     @Test
-    public void testUTF16WithSingleByteRead() throws IOException {
-        testWithSingleByteRead(TEST_STRING, "UTF-16");
+    public void testLargeUTF8WithSingleByteRead() throws IOException {
+        testWithSingleByteRead(LARGE_TEST_STRING, "UTF-8");
     }
 
     @SuppressWarnings("deprecation")
@@ -131,18 +93,56 @@ public class ReaderInputStreamTest {
         }
     }
 
-    /*
-     * Tests https://issues.apache.org/jira/browse/IO-277
-     */
     @Test
-    public void testCharsetMismatchInfiniteLoop() throws IOException {
-        // Input is UTF-8 bytes: 0xE0 0xB2 0xA0
-        final char[] inputChars = { (char) 0xE0, (char) 0xB2, (char) 0xA0 };
-        // Charset charset = Charset.forName("UTF-8"); // works
-        final Charset charset = StandardCharsets.US_ASCII; // infinite loop
-        try (ReaderInputStream stream = new ReaderInputStream(new CharArrayReader(inputChars), charset)) {
-            while (stream.read() != -1) {
+    public void testUTF16WithSingleByteRead() throws IOException {
+        testWithSingleByteRead(TEST_STRING, "UTF-16");
+    }
+
+    @Test
+    public void testUTF8WithBufferedRead() throws IOException {
+        testWithBufferedRead(TEST_STRING, "UTF-8");
+    }
+
+    @Test
+    public void testUTF8WithSingleByteRead() throws IOException {
+        testWithSingleByteRead(TEST_STRING, "UTF-8");
+    }
+
+    private void testWithBufferedRead(final String testString, final String charsetName) throws IOException {
+        final byte[] expected = testString.getBytes(charsetName);
+        try (final ReaderInputStream in = new ReaderInputStream(new StringReader(testString), charsetName)) {
+            final byte[] buffer = new byte[128];
+            int offset = 0;
+            while (true) {
+                int bufferOffset = random.nextInt(64);
+                final int bufferLength = random.nextInt(64);
+                int read = in.read(buffer, bufferOffset, bufferLength);
+                if (read == -1) {
+                    assertEquals(offset, expected.length);
+                    break;
+                }
+                assertTrue(read <= bufferLength);
+                while (read > 0) {
+                    assertTrue(offset < expected.length);
+                    assertEquals(expected[offset], buffer[bufferOffset]);
+                    offset++;
+                    bufferOffset++;
+                    read--;
+                }
             }
+        }
+    }
+
+    private void testWithSingleByteRead(final String testString, final String charsetName) throws IOException {
+        final byte[] bytes = testString.getBytes(charsetName);
+        try (final ReaderInputStream in = new ReaderInputStream(new StringReader(testString), charsetName)) {
+            for (final byte b : bytes) {
+                final int read = in.read();
+                assertTrue(read >= 0);
+                assertTrue(read <= 255);
+                assertEquals(b, (byte) read);
+            }
+            assertEquals(-1, in.read());
         }
     }
 }

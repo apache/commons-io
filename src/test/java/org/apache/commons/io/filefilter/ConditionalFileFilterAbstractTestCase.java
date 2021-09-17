@@ -38,6 +38,26 @@ public abstract class ConditionalFileFilterAbstractTestCase extends IOFileFilter
     private File file;
     private File workingPath;
 
+    protected abstract IOFileFilter buildFilterUsingAdd(List<IOFileFilter> filters);
+
+    protected abstract IOFileFilter buildFilterUsingConstructor(List<IOFileFilter> filters);
+
+    protected abstract ConditionalFileFilter getConditionalFileFilter();
+
+    protected abstract String getDefaultWorkingPath();
+
+    protected abstract List<boolean[]> getFalseResults();
+
+    protected abstract List<Boolean> getFilenameResults();
+
+    protected abstract List<Boolean> getFileResults();
+
+    protected abstract List<List<IOFileFilter>> getTestFilters();
+
+    protected abstract List<boolean[]> getTrueResults();
+
+    protected abstract String getWorkingPathNamePropertyKey();
+
     @BeforeEach
     public void setUp() {
         this.workingPath = determineWorkingDirectoryPath(this.getWorkingPathNamePropertyKey(), this.getDefaultWorkingPath());
@@ -72,26 +92,37 @@ public abstract class ConditionalFileFilterAbstractTestCase extends IOFileFilter
     }
 
     @Test
-    public void testRemove() {
-        final List<TesterTrueFileFilter> filters = new ArrayList<>();
-        final ConditionalFileFilter fileFilter = this.getConditionalFileFilter();
-        filters.add(new TesterTrueFileFilter());
-        filters.add(new TesterTrueFileFilter());
-        filters.add(new TesterTrueFileFilter());
-        filters.add(new TesterTrueFileFilter());
-        for (final TesterTrueFileFilter filter : filters) {
-            fileFilter.removeFileFilter(filter);
-            assertFalse(fileFilter.getFileFilters().contains(filter), "file filter removed");
-        }
-        assertEquals(0, fileFilter.getFileFilters().size(), "file filters count");
-    }
+    public void testFilterBuiltUsingAdd() {
+        final List<List<IOFileFilter>> testFilters = this.getTestFilters();
+        final List<boolean[]> testTrueResults = this.getTrueResults();
+        final List<boolean[]> testFalseResults = this.getFalseResults();
+        final List<Boolean> testFileResults = this.getFileResults();
+        final List<Boolean> testFilenameResults = this.getFilenameResults();
 
-    @Test
-    public void testNoFilters() {
-        final ConditionalFileFilter fileFilter = this.getConditionalFileFilter();
-        final File file = new File(this.workingPath, TEST_FILE_NAME_PREFIX + 1 + TEST_FILE_TYPE);
-        assertFileFiltering(1, (IOFileFilter) fileFilter, file, false);
-        assertFilenameFiltering(1, (IOFileFilter) fileFilter, file, false);
+        for (int i = 1; i < testFilters.size(); i++) {
+            final List<IOFileFilter> filters = testFilters.get(i);
+            final boolean[] trueResults = testTrueResults.get(i);
+            final boolean[] falseResults = testFalseResults.get(i);
+            final boolean fileResults = testFileResults.get(i);
+            final boolean filenameResults = testFilenameResults.get(i);
+
+            // Test conditional AND filter created by passing filters to the constructor
+            final IOFileFilter filter = this.buildFilterUsingAdd(filters);
+
+            // Test as a file filter
+            resetTrueFilters(this.trueFilters);
+            resetFalseFilters(this.falseFilters);
+            assertFileFiltering(i, filter, this.file, fileResults);
+            assertTrueFiltersInvoked(i, trueFilters, trueResults);
+            assertFalseFiltersInvoked(i, falseFilters, falseResults);
+
+            // Test as a filename filter
+            resetTrueFilters(this.trueFilters);
+            resetFalseFilters(this.falseFilters);
+            assertFilenameFiltering(i, filter, this.file, filenameResults);
+            assertTrueFiltersInvoked(i, trueFilters, trueResults);
+            assertFalseFiltersInvoked(i, falseFilters, falseResults);
+        }
     }
 
     @Test
@@ -129,56 +160,25 @@ public abstract class ConditionalFileFilterAbstractTestCase extends IOFileFilter
     }
 
     @Test
-    public void testFilterBuiltUsingAdd() {
-        final List<List<IOFileFilter>> testFilters = this.getTestFilters();
-        final List<boolean[]> testTrueResults = this.getTrueResults();
-        final List<boolean[]> testFalseResults = this.getFalseResults();
-        final List<Boolean> testFileResults = this.getFileResults();
-        final List<Boolean> testFilenameResults = this.getFilenameResults();
-
-        for (int i = 1; i < testFilters.size(); i++) {
-            final List<IOFileFilter> filters = testFilters.get(i);
-            final boolean[] trueResults = testTrueResults.get(i);
-            final boolean[] falseResults = testFalseResults.get(i);
-            final boolean fileResults = testFileResults.get(i);
-            final boolean filenameResults = testFilenameResults.get(i);
-
-            // Test conditional AND filter created by passing filters to the constructor
-            final IOFileFilter filter = this.buildFilterUsingAdd(filters);
-
-            // Test as a file filter
-            resetTrueFilters(this.trueFilters);
-            resetFalseFilters(this.falseFilters);
-            assertFileFiltering(i, filter, this.file, fileResults);
-            assertTrueFiltersInvoked(i, trueFilters, trueResults);
-            assertFalseFiltersInvoked(i, falseFilters, falseResults);
-
-            // Test as a filename filter
-            resetTrueFilters(this.trueFilters);
-            resetFalseFilters(this.falseFilters);
-            assertFilenameFiltering(i, filter, this.file, filenameResults);
-            assertTrueFiltersInvoked(i, trueFilters, trueResults);
-            assertFalseFiltersInvoked(i, falseFilters, falseResults);
-        }
+    public void testNoFilters() {
+        final ConditionalFileFilter fileFilter = this.getConditionalFileFilter();
+        final File file = new File(this.workingPath, TEST_FILE_NAME_PREFIX + 1 + TEST_FILE_TYPE);
+        assertFileFiltering(1, (IOFileFilter) fileFilter, file, false);
+        assertFilenameFiltering(1, (IOFileFilter) fileFilter, file, false);
     }
 
-    protected abstract ConditionalFileFilter getConditionalFileFilter();
-
-    protected abstract IOFileFilter buildFilterUsingAdd(List<IOFileFilter> filters);
-
-    protected abstract IOFileFilter buildFilterUsingConstructor(List<IOFileFilter> filters);
-
-    protected abstract List<List<IOFileFilter>> getTestFilters();
-
-    protected abstract List<boolean[]> getTrueResults();
-
-    protected abstract List<boolean[]> getFalseResults();
-
-    protected abstract List<Boolean> getFileResults();
-
-    protected abstract List<Boolean> getFilenameResults();
-
-    protected abstract String getWorkingPathNamePropertyKey();
-
-    protected abstract String getDefaultWorkingPath();
+    @Test
+    public void testRemove() {
+        final List<TesterTrueFileFilter> filters = new ArrayList<>();
+        final ConditionalFileFilter fileFilter = this.getConditionalFileFilter();
+        filters.add(new TesterTrueFileFilter());
+        filters.add(new TesterTrueFileFilter());
+        filters.add(new TesterTrueFileFilter());
+        filters.add(new TesterTrueFileFilter());
+        for (final TesterTrueFileFilter filter : filters) {
+            fileFilter.removeFileFilter(filter);
+            assertFalse(fileFilter.getFileFilters().contains(filter), "file filter removed");
+        }
+        assertEquals(0, fileFilter.getFileFilters().size(), "file filters count");
+    }
 }

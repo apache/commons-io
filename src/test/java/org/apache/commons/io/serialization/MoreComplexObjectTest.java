@@ -41,6 +41,11 @@ public class MoreComplexObjectTest extends AbstractCloseableListTest {
     private InputStream inputStream;
     private MoreComplexObject original;
 
+    private void assertSerialization(final ObjectInputStream ois) throws ClassNotFoundException, IOException {
+        final MoreComplexObject copy = (MoreComplexObject) (ois.readObject());
+        assertEquals(original.toString(), copy.toString(), "Expecting same data after deserializing");
+    }
+
     @BeforeEach
     public void setupMoreComplexObject() throws IOException {
         original = new MoreComplexObject();
@@ -50,9 +55,16 @@ public class MoreComplexObjectTest extends AbstractCloseableListTest {
         inputStream = closeAfterEachTest(new ByteArrayInputStream(bos.toByteArray()));
     }
 
-    private void assertSerialization(final ObjectInputStream ois) throws ClassNotFoundException, IOException {
-        final MoreComplexObject copy = (MoreComplexObject) (ois.readObject());
-        assertEquals(original.toString(), copy.toString(), "Expecting same data after deserializing");
+    /** Trusting java.* is probably reasonable and avoids having to be too
+     *  detailed in the accepts.
+     */
+    @Test
+    public void trustJavaIncludingArrays() throws IOException, ClassNotFoundException {
+        assertSerialization(closeAfterEachTest(
+                new ValidatingObjectInputStream(inputStream)
+                .accept(MoreComplexObject.class)
+                .accept("java.*","[Ljava.*")
+        ));
     }
 
     /** Trusting java.lang.* and the array variants of that means we have
@@ -65,18 +77,6 @@ public class MoreComplexObjectTest extends AbstractCloseableListTest {
                 new ValidatingObjectInputStream(inputStream)
                 .accept(MoreComplexObject.class, ArrayList.class, Random.class)
                 .accept("java.lang.*","[Ljava.lang.*")
-        ));
-    }
-
-    /** Trusting java.* is probably reasonable and avoids having to be too
-     *  detailed in the accepts.
-     */
-    @Test
-    public void trustJavaIncludingArrays() throws IOException, ClassNotFoundException {
-        assertSerialization(closeAfterEachTest(
-                new ValidatingObjectInputStream(inputStream)
-                .accept(MoreComplexObject.class)
-                .accept("java.*","[Ljava.*")
         ));
     }
 

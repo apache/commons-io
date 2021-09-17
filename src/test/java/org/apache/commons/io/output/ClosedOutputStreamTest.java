@@ -28,19 +28,6 @@ import org.junit.jupiter.api.Test;
 public class ClosedOutputStreamTest {
 
     /**
-     * Test the {@code write(b)} method.
-     */
-    @Test
-    public void testWrite() {
-        try (ClosedOutputStream cos = new ClosedOutputStream()) {
-            cos.write('x');
-            fail("write(b)");
-        } catch (final IOException e) {
-            // expected
-        }
-    }
-
-    /**
      * Test the {@code flush()} method.
      */
     @Test
@@ -48,6 +35,19 @@ public class ClosedOutputStreamTest {
         try (ClosedOutputStream cos = new ClosedOutputStream()) {
             cos.flush();
             fail("flush()");
+        } catch (final IOException e) {
+            // expected
+        }
+    }
+
+    /**
+     * Test the {@code write(b)} method.
+     */
+    @Test
+    public void testWrite() {
+        try (ClosedOutputStream cos = new ClosedOutputStream()) {
+            cos.write('x');
+            fail("write(b)");
         } catch (final IOException e) {
             // expected
         }

@@ -23,7 +23,6 @@ import java.util.Objects;
 import org.apache.commons.io.IOUtils;
 
 /**
- *
  * An {@link InputStream} that repeats provided bytes for given target byte count.
  * <p>
  * Closing this input stream has no effect. The methods in this class can be called after the stream has been closed

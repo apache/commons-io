@@ -87,7 +87,7 @@ public class FileFilterTestCase {
     void assertFiltering(final IOFileFilter filter, final Path path, final boolean expected) {
         // Note. This only tests the (Path, Path) version if the parent of
         // the File passed in is not null
-        final FileVisitResult expectedFileVisitResult = AbstractFileFilter.toFileVisitResult(expected, path);
+        final FileVisitResult expectedFileVisitResult = AbstractFileFilter.toDefaultFileVisitResult(expected);
         assertEquals(expectedFileVisitResult, filter.accept(path, null),
             "Filter(Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for " + path);
 

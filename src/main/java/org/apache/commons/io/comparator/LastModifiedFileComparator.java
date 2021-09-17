@@ -28,9 +28,11 @@ import org.apache.commons.io.FileUtils;
  * <p>
  * This comparator can be used to sort lists or arrays of files
  * by their last modified date/time.
+ * </p>
  * <p>
  * Example of sorting a list of files using the
  * {@link #LASTMODIFIED_COMPARATOR} singleton instance:
+ * </p>
  * <pre>
  *       List&lt;File&gt; list = ...
  *       ((AbstractFileComparator) LastModifiedFileComparator.LASTMODIFIED_COMPARATOR).sort(list);
@@ -38,11 +40,11 @@ import org.apache.commons.io.FileUtils;
  * <p>
  * Example of doing a <i>reverse</i> sort of an array of files using the
  * {@link #LASTMODIFIED_REVERSE} singleton instance:
+ * </p>
  * <pre>
  *       File[] array = ...
  *       ((AbstractFileComparator) LastModifiedFileComparator.LASTMODIFIED_REVERSE).sort(array);
  * </pre>
- * <p>
  *
  * @since 1.4
  */

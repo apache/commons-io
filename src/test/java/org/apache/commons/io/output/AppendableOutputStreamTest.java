@@ -35,18 +35,18 @@ public class AppendableOutputStreamTest {
     }
 
     @Test
+    public void testWriteInt() throws Exception {
+        out.write('F');
+
+        assertEquals("F", out.getAppendable().toString());
+    }
+
+    @Test
     public void testWriteStringBuilder() throws Exception {
         final String testData = "ABCD";
 
         out.write(testData.getBytes());
 
         assertEquals(testData, out.getAppendable().toString());
-    }
-
-    @Test
-    public void testWriteInt() throws Exception {
-        out.write('F');
-
-        assertEquals("F", out.getAppendable().toString());
     }
 }

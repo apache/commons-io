@@ -77,14 +77,6 @@ public abstract class ComparatorAbstractTestCase {
     }
 
     /**
-     * Test comparator array sort is null safe.
-     */
-    @Test
-    public void testSortArrayNull() {
-        assertNull(comparator.sort((File[])null));
-    }
-
-    /**
      * Test the comparator array sort.
      */
     @Test
@@ -97,6 +89,14 @@ public abstract class ComparatorAbstractTestCase {
         assertSame(lessFile, files[0], "equal");
         assertSame(equalFile1, files[1], "less");
         assertSame(moreFile, files[2], "more");
+    }
+
+    /**
+     * Test comparator array sort is null safe.
+     */
+    @Test
+    public void testSortArrayNull() {
+        assertNull(comparator.sort((File[])null));
     }
 
     /**

@@ -30,21 +30,6 @@ import org.junit.jupiter.api.Test;
 public class ThreadMonitorTestCase {
 
     /**
-     * Test timeout.
-     */
-    @Test
-    public void testTimeout() {
-        try {
-            final Thread monitor = ThreadMonitor.start(Duration.ofMillis(100));
-            TestUtils.sleep(200);
-            ThreadMonitor.stop(monitor);
-            fail("Expected InterruptedException");
-        } catch (final InterruptedException e) {
-            // expected result - timeout
-        }
-    }
-
-    /**
      * Test task completed before timeout.
      */
     @Test
@@ -82,6 +67,21 @@ public class ThreadMonitorTestCase {
             ThreadMonitor.stop(monitor);
         } catch (final Exception e) {
             fail("Timeout 0, threw " + e);
+        }
+    }
+
+    /**
+     * Test timeout.
+     */
+    @Test
+    public void testTimeout() {
+        try {
+            final Thread monitor = ThreadMonitor.start(Duration.ofMillis(100));
+            TestUtils.sleep(200);
+            ThreadMonitor.stop(monitor);
+            fail("Expected InterruptedException");
+        } catch (final InterruptedException e) {
+            // expected result - timeout
         }
     }
 }

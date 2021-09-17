@@ -52,69 +52,6 @@ public class TeeInputStreamTest  {
         tee = new TeeInputStream(input, output);
     }
 
-    @Test
-    public void testReadNothing() throws Exception {
-        assertEquals("", output.toString(ASCII));
-    }
-
-    @Test
-    public void testReadOneByte() throws Exception {
-        assertEquals('a', tee.read());
-        assertEquals("a", output.toString(ASCII));
-    }
-
-    @Test
-    public void testReadEverything() throws Exception {
-        assertEquals('a', tee.read());
-        assertEquals('b', tee.read());
-        assertEquals('c', tee.read());
-        assertEquals(-1, tee.read());
-        assertEquals("abc", output.toString(ASCII));
-    }
-
-    @Test
-    public void testReadToArray() throws Exception {
-        final byte[] buffer = new byte[8];
-        assertEquals(3, tee.read(buffer));
-        assertEquals('a', buffer[0]);
-        assertEquals('b', buffer[1]);
-        assertEquals('c', buffer[2]);
-        assertEquals(-1, tee.read(buffer));
-        assertEquals("abc", output.toString(ASCII));
-    }
-
-    @Test
-    public void testReadToArrayWithOffset() throws Exception {
-        final byte[] buffer = new byte[8];
-        assertEquals(3, tee.read(buffer, 4, 4));
-        assertEquals('a', buffer[4]);
-        assertEquals('b', buffer[5]);
-        assertEquals('c', buffer[6]);
-        assertEquals(-1, tee.read(buffer, 4, 4));
-        assertEquals("abc", output.toString(ASCII));
-    }
-
-    @Test
-    public void testSkip() throws Exception {
-        assertEquals('a', tee.read());
-        assertEquals(1, tee.skip(1));
-        assertEquals('c', tee.read());
-        assertEquals(-1, tee.read());
-        assertEquals("ac", output.toString(ASCII));
-    }
-
-    @Test
-    public void testMarkReset() throws Exception {
-        assertEquals('a', tee.read());
-        tee.mark(1);
-        assertEquals('b', tee.read());
-        tee.reset();
-        assertEquals('b', tee.read());
-        assertEquals('c', tee.read());
-        assertEquals(-1, tee.read());
-        assertEquals("abbc", output.toString(ASCII));
-    }
-
     /**
      * Tests that the main {@code InputStream} is closed when closing the branch {@code OutputStream} throws an
      * exception on {@link TeeInputStream#close()}, if specified to do so.
@@ -161,6 +98,69 @@ public class TeeInputStreamTest  {
         } catch (final IOException e) {
             verify(goodOs).close();
         }
+    }
+
+    @Test
+    public void testMarkReset() throws Exception {
+        assertEquals('a', tee.read());
+        tee.mark(1);
+        assertEquals('b', tee.read());
+        tee.reset();
+        assertEquals('b', tee.read());
+        assertEquals('c', tee.read());
+        assertEquals(-1, tee.read());
+        assertEquals("abbc", output.toString(ASCII));
+    }
+
+    @Test
+    public void testReadEverything() throws Exception {
+        assertEquals('a', tee.read());
+        assertEquals('b', tee.read());
+        assertEquals('c', tee.read());
+        assertEquals(-1, tee.read());
+        assertEquals("abc", output.toString(ASCII));
+    }
+
+    @Test
+    public void testReadNothing() throws Exception {
+        assertEquals("", output.toString(ASCII));
+    }
+
+    @Test
+    public void testReadOneByte() throws Exception {
+        assertEquals('a', tee.read());
+        assertEquals("a", output.toString(ASCII));
+    }
+
+    @Test
+    public void testReadToArray() throws Exception {
+        final byte[] buffer = new byte[8];
+        assertEquals(3, tee.read(buffer));
+        assertEquals('a', buffer[0]);
+        assertEquals('b', buffer[1]);
+        assertEquals('c', buffer[2]);
+        assertEquals(-1, tee.read(buffer));
+        assertEquals("abc", output.toString(ASCII));
+    }
+
+    @Test
+    public void testReadToArrayWithOffset() throws Exception {
+        final byte[] buffer = new byte[8];
+        assertEquals(3, tee.read(buffer, 4, 4));
+        assertEquals('a', buffer[4]);
+        assertEquals('b', buffer[5]);
+        assertEquals('c', buffer[6]);
+        assertEquals(-1, tee.read(buffer, 4, 4));
+        assertEquals("abc", output.toString(ASCII));
+    }
+
+    @Test
+    public void testSkip() throws Exception {
+        assertEquals('a', tee.read());
+        assertEquals(1, tee.skip(1));
+        assertEquals('c', tee.read());
+        assertEquals(-1, tee.read());
+        assertEquals("ac", output.toString(ASCII));
     }
 
 }
