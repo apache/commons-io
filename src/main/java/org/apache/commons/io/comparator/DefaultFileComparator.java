@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 /**
- * Compare two files using the <b>default</b> {@link File#compareTo(File)} method.
+ * s two files using the <b>default</b> {@link File#compareTo(File)} method.
  * <p>
  * This comparator can be used to sort lists or arrays of files
  * by using the default file comparison.
@@ -56,7 +56,7 @@ public class DefaultFileComparator extends AbstractFileComparator implements Ser
     public static final Comparator<File> DEFAULT_REVERSE = new ReverseFileComparator(DEFAULT_COMPARATOR);
 
     /**
-     * Compare the two files using the {@link File#compareTo(File)} method.
+     * Compares the two files using the {@link File#compareTo(File)} method.
      *
      * @param file1 The first file to compare
      * @param file2 The second file to compare

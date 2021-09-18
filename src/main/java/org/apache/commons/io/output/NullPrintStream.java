@@ -20,7 +20,7 @@ package org.apache.commons.io.output;
 import java.io.PrintStream;
 
 /**
- * Writes all data to the famous <b>/dev/null</b>.
+ * Never prints data. Calls never go beyond this class.
  * <p>
  * This print stream has no destination (file/socket etc.) and all bytes written to it are ignored and lost.
  * </p>

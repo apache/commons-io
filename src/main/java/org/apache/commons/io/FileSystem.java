@@ -288,6 +288,7 @@ public enum FileSystem {
 
     /**
      * Gets the name separator, '\\' on Windows, '/' on Linux.
+     *
      * @return '\\' on Windows, '/' on Linux.
      *
      * @since 2.12.0
@@ -372,7 +373,7 @@ public enum FileSystem {
     /**
      * Converts all separators to the Windows separator of backslash.
      *
-     * @param path  the path to be changed, null ignored
+     * @param path the path to be changed, null ignored
      * @return the updated path
      * @since 2.12.0
      */

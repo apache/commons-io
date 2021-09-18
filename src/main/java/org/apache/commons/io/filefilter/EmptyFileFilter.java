@@ -37,7 +37,7 @@ import org.apache.commons.io.IOUtils;
  * </p>
  * <h2>Using Classic IO</h2>
  * <pre>
- * File dir = new File(".");
+ * File dir = FileUtils.current();
  * String[] files = dir.list(EmptyFileFilter.EMPTY);
  * for (String file : files) {
  *     System.out.println(file);
@@ -49,7 +49,7 @@ import org.apache.commons.io.IOUtils;
  * </p>
  *
  * <pre>
- * File dir = new File(".");
+ * File dir = FileUtils.current();
  * String[] files = dir.list(EmptyFileFilter.NOT_EMPTY);
  * for (String file : files) {
  *     System.out.println(file);
@@ -58,7 +58,7 @@ import org.apache.commons.io.IOUtils;
  *
  * <h2>Using NIO</h2>
  * <pre>
- * final Path dir = Paths.get("");
+ * final Path dir = PathUtils.current();
  * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(EmptyFileFilter.EMPTY);
  * //
  * // Walk one dir

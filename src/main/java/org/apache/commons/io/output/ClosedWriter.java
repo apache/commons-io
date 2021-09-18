@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
- * Throws an exception on all attempts to write with {@link #close()} implemented as a noop.
+ * Throws an IOException on all attempts to write with {@link #close()} implemented as a noop.
  * <p>
  * Typically uses of this class include testing for corner cases in methods that accept a writer and acting as a
  * sentinel value instead of a {@code null} writer.

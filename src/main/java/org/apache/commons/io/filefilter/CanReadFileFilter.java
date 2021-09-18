@@ -30,7 +30,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * </p>
  * <h2>Using Classic IO</h2>
  * <pre>
- * File dir = new File(".");
+ * File dir = FileUtils.current();
  * String[] files = dir.list(CanReadFileFilter.CAN_READ);
  * for (String file : files) {
  *     System.out.println(file);
@@ -41,7 +41,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * Example, showing how to print out a list of the current directory's <i>un-readable</i> files:
  *
  * <pre>
- * File dir = new File(".");
+ * File dir = FileUtils.current();
  * String[] files = dir.list(CanReadFileFilter.CANNOT_READ);
  * for (String file : files) {
  *     System.out.println(file);
@@ -52,7 +52,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * Example, showing how to print out a list of the current directory's <i>read-only</i> files:
  *
  * <pre>
- * File dir = new File(".");
+ * File dir = FileUtils.current();
  * String[] files = dir.list(CanReadFileFilter.READ_ONLY);
  * for (String file : files) {
  *     System.out.println(file);

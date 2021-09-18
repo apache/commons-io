@@ -45,18 +45,18 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
 
     private static final Comparator<?>[] EMPTY_COMPARATOR_ARRAY = {};
     private static final long serialVersionUID = -2224170307287243428L;
-    private static final Comparator<?>[] NO_COMPARATORS = {};
+
     private final Comparator<File>[] delegates;
 
     /**
-     * Create a composite comparator for the set of delegate comparators.
+     * Constructs a composite comparator for the set of delegate comparators.
      *
      * @param delegates The delegate file comparators
      */
     @SuppressWarnings("unchecked") // casts 1 & 2 must be OK because types are already correct
     public CompositeFileComparator(final Comparator<File>... delegates) {
         if (delegates == null) {
-            this.delegates = (Comparator<File>[]) NO_COMPARATORS;//1
+            this.delegates = (Comparator<File>[]) EMPTY_COMPARATOR_ARRAY;//1
         } else {
             this.delegates = (Comparator<File>[]) new Comparator<?>[delegates.length];//2
             System.arraycopy(delegates, 0, this.delegates, 0, delegates.length);
@@ -64,14 +64,14 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
     }
 
     /**
-     * Create a composite comparator for the set of delegate comparators.
+     * Constructs a composite comparator for the set of delegate comparators.
      *
      * @param delegates The delegate file comparators
      */
     @SuppressWarnings("unchecked") // casts 1 & 2 must be OK because types are already correct
     public CompositeFileComparator(final Iterable<Comparator<File>> delegates) {
         if (delegates == null) {
-            this.delegates = (Comparator<File>[]) NO_COMPARATORS; //1
+            this.delegates = (Comparator<File>[]) EMPTY_COMPARATOR_ARRAY; //1
         } else {
             final List<Comparator<File>> list = new ArrayList<>();
             for (final Comparator<File> comparator : delegates) {
@@ -82,7 +82,7 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
     }
 
     /**
-     * Compare the two files using delegate comparators.
+     * Compares the two files using delegate comparators.
      *
      * @param file1 The first file to compare
      * @param file2 The second file to compare

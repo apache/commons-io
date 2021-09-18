@@ -36,7 +36,7 @@ import org.apache.commons.io.IOCase;
  * e.g.
  *
  * <pre>
- * File dir = new File(".");
+ * File dir = FileUtils.current();
  * FileFilter fileFilter = new RegexFileFilter("^.*[tT]est(-\\d+)?\\.java$");
  * File[] files = dir.listFiles(fileFilter);
  * for (String file : files) {
@@ -47,7 +47,7 @@ import org.apache.commons.io.IOCase;
  * <h2>Using NIO</h2>
  *
  * <pre>
- * final Path dir = Paths.get("");
+ * final Path dir = PathUtils.current();
  * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new RegexFileFilter("^.*[tT]est(-\\d+)?\\.java$"));
  * //
  * // Walk one dir

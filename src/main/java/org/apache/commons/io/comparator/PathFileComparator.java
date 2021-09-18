@@ -76,14 +76,14 @@ public class PathFileComparator extends AbstractFileComparator implements Serial
     private final IOCase caseSensitivity;
 
     /**
-     * Construct a case sensitive file path comparator instance.
+     * Constructs a case sensitive file path comparator instance.
      */
     public PathFileComparator() {
         this.caseSensitivity = IOCase.SENSITIVE;
     }
 
     /**
-     * Construct a file path comparator instance with the specified case-sensitivity.
+     * Constructs a file path comparator instance with the specified case-sensitivity.
      *
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      */
@@ -92,7 +92,7 @@ public class PathFileComparator extends AbstractFileComparator implements Serial
     }
 
     /**
-     * Compare the paths of two files the specified case sensitivity.
+     * Compares the paths of two files the specified case sensitivity.
      *
      * @param file1 The first file to compare
      * @param file2 The second file to compare

@@ -20,11 +20,9 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
- * Broken writer. This writer always throws an {@link IOException} from
- * all {@link Writer} methods.
+ * Always throws an {@link IOException} from all {@link Writer} methods.
  * <p>
- * This class is mostly useful for testing error handling in code that uses a
- * writer.
+ * This class is mostly useful for testing error handling in code that uses a writer.
  * </p>
  *
  * @since 2.0

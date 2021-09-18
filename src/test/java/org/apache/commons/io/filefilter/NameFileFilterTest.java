@@ -28,6 +28,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.file.AccumulatorPathVisitor;
 import org.apache.commons.io.file.CounterAssertions;
 import org.apache.commons.io.file.Counters;
@@ -45,7 +46,7 @@ public class NameFileFilterTest {
      */
     @Test
     public void testJavadocExampleUsingIo() {
-        final File dir = new File(".");
+        final File dir = FileUtils.current();
         final String[] files = dir.list(new NameFileFilter("NOTICE.txt"));
         for (final String file : files) {
             // System.out.println(file);

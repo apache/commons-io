@@ -226,7 +226,7 @@ public class DirectoryWalkerTestCaseJava4 {
         }
     }
     // Directories
-    private static final File current = new File(".");
+    private static final File current = FileUtils.current();
     private static final File javaDir = new File("src/main/java");
     private static final File orgDir = new File(javaDir, "org");
     private static final File apacheDir = new File(orgDir, "apache");
@@ -470,7 +470,7 @@ public class DirectoryWalkerTestCaseJava4 {
     public void testLimitToCurrent() {
         final List<File> results = new TestFileFinder(null, 0).find(current);
         assertEquals(1, results.size(), "Result Size");
-        assertTrue(results.contains(new File(".")), "Current Dir");
+        assertTrue(results.contains(FileUtils.current()), "Current Dir");
     }
 
     // ------------ Test DirectoryWalker implementation --------------------------

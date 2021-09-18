@@ -579,7 +579,7 @@ public class FileUtilsTestCase {
 
     @Test
     public void testChecksumOnDirectory() throws Exception {
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.checksum(new File("."), new CRC32()));
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.checksum(FileUtils.current(), new CRC32()));
     }
 
     @Test

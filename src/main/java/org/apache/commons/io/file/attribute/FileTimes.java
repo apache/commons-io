@@ -17,6 +17,9 @@
 
 package org.apache.commons.io.file.attribute;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
 import java.time.Instant;
 
@@ -28,7 +31,7 @@ import java.time.Instant;
 public class FileTimes {
 
     /**
-     * Constant for the {@code 1970-01-01T00:00:00Z} epoch as a time stamp attribute.
+     * Constant for the {@code 1970-01-01T00:00:00Z} {@link Instant#EPOCH epoch} as a time stamp attribute.
      *
      * @see Instant#EPOCH
      */
@@ -68,6 +71,15 @@ public class FileTimes {
     }
 
     /**
+     * Returns the current instant FileTime from the system clock.
+     *
+     * @return the current instant FileTime from the system clock.
+     */
+    public static FileTime now() {
+        return FileTime.from(Instant.now());
+    }
+
+    /**
      * Adds milliseconds to a source FileTime.
      *
      * @param fileTime The source FileTime.
@@ -98,6 +110,16 @@ public class FileTimes {
      */
     public static FileTime plusSeconds(final FileTime fileTime, final long secondsToAdd) {
         return FileTime.from(fileTime.toInstant().plusSeconds(secondsToAdd));
+    }
+
+    /**
+     * Sets the last modified time of the given file path to now.
+     *
+     * @param path The file path to set.
+     * @throws IOException if an I/O error occurs.
+     */
+    public static void setLastModifiedTime(final Path path) throws IOException {
+        Files.setLastModifiedTime(path, now());
     }
 
     private FileTimes() {

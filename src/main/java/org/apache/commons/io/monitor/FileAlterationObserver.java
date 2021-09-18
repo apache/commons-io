@@ -46,7 +46,7 @@ import org.apache.commons.io.comparator.NameFileComparator;
  * <h2>Basic Usage</h2>
  * Create a {@link FileAlterationObserver} for the directory and register the listeners:
  * <pre>
- *      File directory = new File(new File("."), "src");
+ *      File directory = new File(FileUtils.current(), "src");
  *      FileAlterationObserver observer = new FileAlterationObserver(directory);
  *      observer.addListener(...);
  *      observer.addListener(...);

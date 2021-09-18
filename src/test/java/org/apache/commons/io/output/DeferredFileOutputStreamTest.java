@@ -32,6 +32,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.IntStream;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -179,7 +180,7 @@ public class DeferredFileOutputStreamTest {
 
         final String prefix = "commons-io-test";
         final String suffix = ".out";
-        final File tempDir = new File(".");
+        final File tempDir = FileUtils.current();
         final DeferredFileOutputStream dfos = new DeferredFileOutputStream(testBytes.length - 5, initialBufferSize,
             prefix, suffix, tempDir);
         assertNull(dfos.getFile(), "Check file is null-A");
@@ -244,7 +245,7 @@ public class DeferredFileOutputStreamTest {
 
         final String prefix = "commons-io-test";
         final String suffix = ".out";
-        final File tempDir = new File(".");
+        final File tempDir = FileUtils.current();
         final DeferredFileOutputStream dfos = new DeferredFileOutputStream(testBytes.length + 42, initialBufferSize,
             prefix, suffix, tempDir);
         assertNull(dfos.getFile(), "Check file is null-A");
@@ -268,7 +269,7 @@ public class DeferredFileOutputStreamTest {
 
         final String prefix = null;
         final String suffix = ".out";
-        final File tempDir = new File(".");
+        final File tempDir = FileUtils.current();
         try {
             new DeferredFileOutputStream(testBytes.length - 5, prefix, suffix, tempDir).close();
             fail("Expected IllegalArgumentException ");

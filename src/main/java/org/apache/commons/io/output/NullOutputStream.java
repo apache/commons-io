@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Writes all data to the famous <b>/dev/null</b>.
+ * Never writes data. Calls never go beyond this class.
  * <p>
  * This output stream has no destination (file/socket etc.) and all bytes written to it are ignored and lost.
  * </p>

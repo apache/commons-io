@@ -21,8 +21,10 @@ import static org.apache.commons.io.IOUtils.EOF;
 import java.io.IOException;
 import java.io.Reader;
 
+import org.apache.commons.io.IOUtils;
+
 /**
- * Closed reader. This reader returns EOF to all attempts to read something from it.
+ * Always returns {@link IOUtils#EOF} to all attempts to read something from it.
  * <p>
  * Typically uses of this class include testing for corner cases in methods that accept readers and acting as a sentinel
  * value instead of a {@code null} reader.

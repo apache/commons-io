@@ -30,7 +30,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * </p>
  * <h2>Using Classic IO</h2>
  * <pre>
- * File dir = new File(".");
+ * File dir = FileUtils.current();
  * String[] files = dir.list(CanWriteFileFilter.CAN_WRITE);
  * for (String file : files) {
  *     System.out.println(file);
@@ -41,7 +41,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * Example, showing how to print out a list of the current directory's <i>un-writable</i> files:
  *
  * <pre>
- * File dir = new File(".");
+ * File dir = FileUtils.current();
  * String[] files = dir.list(CanWriteFileFilter.CANNOT_WRITE);
  * for (String file : files) {
  *     System.out.println(file);

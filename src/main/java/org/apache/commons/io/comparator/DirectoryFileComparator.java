@@ -26,17 +26,18 @@ import java.util.Comparator;
  * This comparator can be used to sort lists or arrays by directories and files.
  * </p>
  * <p>
- * Example of sorting a list of files/directories using the
- * {@link #DIRECTORY_COMPARATOR} singleton instance:
+ * Example of sorting a list of files/directories using the {@link #DIRECTORY_COMPARATOR} singleton instance:
  * </p>
+ * 
  * <pre>
  *       List&lt;File&gt; list = ...
  *       ((AbstractFileComparator) DirectoryFileComparator.DIRECTORY_COMPARATOR).sort(list);
  * </pre>
  * <p>
- * Example of doing a <i>reverse</i> sort of an array of files/directories using the
- * {@link #DIRECTORY_REVERSE} singleton instance:
+ * Example of doing a <i>reverse</i> sort of an array of files/directories using the {@link #DIRECTORY_REVERSE}
+ * singleton instance:
  * </p>
+ * 
  * <pre>
  *       File[] array = ...
  *       ((AbstractFileComparator) DirectoryFileComparator.DIRECTORY_REVERSE).sort(array);
@@ -59,12 +60,11 @@ public class DirectoryFileComparator extends AbstractFileComparator implements S
     public static final Comparator<File> DIRECTORY_REVERSE = new ReverseFileComparator(DIRECTORY_COMPARATOR);
 
     /**
-     * Compare the two files using the {@link File#isDirectory()} method.
+     * Compares the two files using the {@link File#isDirectory()} method.
      *
-     * @param file1 The first file to compare
-     * @param file2 The second file to compare
-     * @return the result of calling file1's
-     * {@link File#compareTo(File)} with file2 as the parameter.
+     * @param file1 The first file to compare.
+     * @param file2 The second file to compare.
+     * @return the result of calling file1's {@link File#compareTo(File)} with file2 as the parameter.
      */
     @Override
     public int compare(final File file1, final File file2) {
@@ -72,10 +72,10 @@ public class DirectoryFileComparator extends AbstractFileComparator implements S
     }
 
     /**
-     * Convert type to numeric value.
+     * Converts type to numeric value.
      *
-     * @param file The file
-     * @return 1 for directories and 2 for files
+     * @param file The file.
+     * @return 1 for directories and 2 for files.
      */
     private int getType(final File file) {
         return file.isDirectory() ? TYPE_DIRECTORY : TYPE_FILE;

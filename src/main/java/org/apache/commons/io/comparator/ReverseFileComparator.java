@@ -31,7 +31,7 @@ class ReverseFileComparator extends AbstractFileComparator implements Serializab
     private final Comparator<File> delegate;
 
     /**
-     * Construct an instance with the specified delegate {@link Comparator}.
+     * Constructs an instance with the specified delegate {@link Comparator}.
      *
      * @param delegate The comparator to delegate to.
      */

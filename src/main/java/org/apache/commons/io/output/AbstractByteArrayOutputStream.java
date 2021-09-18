@@ -82,21 +82,19 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
      */
     protected void needNewBuffer(final int newcount) {
         if (currentBufferIndex < buffers.size() - 1) {
-            //Recycling old buffer
+            // Recycling old buffer
             filledBufferSum += currentBuffer.length;
 
             currentBufferIndex++;
             currentBuffer = buffers.get(currentBufferIndex);
         } else {
-            //Creating new buffer
+            // Creating new buffer
             final int newBufferSize;
             if (currentBuffer == null) {
                 newBufferSize = newcount;
                 filledBufferSum = 0;
             } else {
-                newBufferSize = Math.max(
-                    currentBuffer.length << 1,
-                    newcount - filledBufferSum);
+                newBufferSize = Math.max(currentBuffer.length << 1, newcount - filledBufferSum);
                 filledBufferSum += currentBuffer.length;
             }
 

@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.attribute.FileTime;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.file.attribute.FileTimes;
 import org.apache.commons.io.test.TestUtils;

@@ -212,7 +212,7 @@ public class FileSystemUtils {
      * <p>
      * Identical to:
      * <pre>
-     * freeSpaceKb(new File(".").getAbsolutePath())
+     * freeSpaceKb(FileUtils.current().getAbsolutePath())
      * </pre>
      * @return the amount of free drive space on the drive or volume in kilobytes
      * @throws IllegalStateException if an error occurred in initialisation
@@ -231,7 +231,7 @@ public class FileSystemUtils {
      * <p>
      * Identical to:
      * <pre>
-     * freeSpaceKb(new File(".").getAbsolutePath())
+     * freeSpaceKb(FileUtils.current().getAbsolutePath())
      * </pre>
      * @param timeout The timeout amount in milliseconds or no timeout if the value
      *  is zero or less
@@ -243,7 +243,7 @@ public class FileSystemUtils {
      */
     @Deprecated
     public static long freeSpaceKb(final long timeout) throws IOException {
-        return freeSpaceKb(new File(".").getAbsolutePath(), timeout);
+        return freeSpaceKb(FileUtils.current().getAbsolutePath(), timeout);
     }
 
     /**

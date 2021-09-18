@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.test.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -95,7 +96,7 @@ public class SizeFileComparatorTest extends ComparatorAbstractTestCase {
      */
     @Test
     public void testNonexistantFile() {
-        final File nonexistantFile = new File(new File("."), "nonexistant.txt");
+        final File nonexistantFile = new File(FileUtils.current(), "nonexistant.txt");
         assertFalse(nonexistantFile.exists());
         assertTrue(comparator.compare(nonexistantFile, moreFile) < 0, "less");
     }

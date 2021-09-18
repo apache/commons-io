@@ -31,7 +31,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * </p>
  * <h2>Using Classic IO</h2>
  * <pre>
- * File dir = new File(".");
+ * File dir = FileUtils.current();
  * String[] files = dir.list(CanExecuteFileFilter.CAN_EXECUTE);
  * for (String file : files) {
  *     System.out.println(file);
@@ -44,7 +44,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * </p>
  *
  * <pre>
- * File dir = new File(".");
+ * File dir = FileUtils.current();
  * String[] files = dir.list(CanExecuteFileFilter.CANNOT_EXECUTE);
  * for (int i = 0; i &lt; files.length; i++) {
  *     System.out.println(files[i]);

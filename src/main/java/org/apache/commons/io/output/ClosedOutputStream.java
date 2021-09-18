@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Throws an exception on all attempts to write to the stream.
+ * Throws an IOException on all attempts to write to the stream.
  * <p>
  * Typically uses of this class include testing for corner cases in methods that accept an output stream and acting as a
  * sentinel value instead of a {@code null} output stream.

@@ -80,14 +80,14 @@ public class ExtensionFileComparator extends AbstractFileComparator implements S
     private final IOCase caseSensitivity;
 
     /**
-     * Construct a case sensitive file extension comparator instance.
+     * Constructs a case sensitive file extension comparator instance.
      */
     public ExtensionFileComparator() {
         this.caseSensitivity = IOCase.SENSITIVE;
     }
 
     /**
-     * Construct a file extension comparator instance with the specified case-sensitivity.
+     * Constructs a file extension comparator instance with the specified case-sensitivity.
      *
      * @param caseSensitivity how to handle case sensitivity, null means case-sensitive
      */
@@ -96,7 +96,7 @@ public class ExtensionFileComparator extends AbstractFileComparator implements S
     }
 
     /**
-     * Compare the extensions of two files the specified case sensitivity.
+     * Compares the extensions of two files the specified case sensitivity.
      *
      * @param file1 The first file to compare
      * @param file2 The second file to compare

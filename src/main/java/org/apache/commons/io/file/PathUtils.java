@@ -79,6 +79,10 @@ import org.apache.commons.io.filefilter.IOFileFilter;
  */
 public final class PathUtils {
 
+    private static final OpenOption[] OPEN_OPTIONS_TRUNCATE = new OpenOption[] {StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING};
+
+    private static final OpenOption[] OPEN_OPTIONS_APPEND = new OpenOption[] {StandardOpenOption.CREATE, StandardOpenOption.APPEND};
+
     /**
      * Private worker/holder that computes and tracks relative path names and their equality. We reuse the sorted relative
      * lists when comparing directories.
@@ -222,14 +226,14 @@ public final class PathUtils {
     }
 
     /**
-     * Compares the specified {@code Path}'s last modified time to the given file time.
+     * Compares the given {@code Path}'s last modified time to the given file time.
      *
      * @param file the {@code Path} to test.
      * @param fileTime the time reference.
      * @param options options indicating how to handle symbolic links.
      * @return See {@link FileTime#compareTo(FileTime)}
      * @throws IOException if an I/O error occurs.
-     * @throws NullPointerException if the file is {@code null}
+     * @throws NullPointerException if the file is {@code null}.
      */
     private static int compareLastModifiedTimeTo(final Path file, final FileTime fileTime, final LinkOption... options) throws IOException {
         return getLastModifiedTime(file, options).compareTo(fileTime);
@@ -343,7 +347,7 @@ public final class PathUtils {
      * @since 2.9.0
      */
     public static Path current() {
-        return Paths.get("");
+        return Paths.get(".");
     }
 
     /**
@@ -720,7 +724,7 @@ public final class PathUtils {
      * Reads the access control list from a file attribute view.
      *
      * @param sourcePath the path to the file.
-     * @return a file attribute view of the specified type, or null if the attribute view type is not available.
+     * @return a file attribute view of the given type, or null if the attribute view type is not available.
      * @throws IOException if an I/O error occurs.
      * @since 2.8.0
      */
@@ -737,7 +741,6 @@ public final class PathUtils {
      * Gets a {@link Path} representing the system temporary directory.
      *
      * @return the system temporary directory.
-     *
      * @since 2.12.0
      */
     public static Path getTempDirectory() {
@@ -745,7 +748,7 @@ public final class PathUtils {
     }
 
     /**
-     * Tests whether the specified {@code Path} is a directory or not. Implemented as a null-safe delegate to
+     * Tests whether the given {@code Path} is a directory or not. Implemented as a null-safe delegate to
      * {@code Files.isDirectory(Path path, LinkOption... options)}.
      *
      * @param path the path to the file.
@@ -802,14 +805,14 @@ public final class PathUtils {
     }
 
     /**
-     * Tests if the specified {@code Path} is newer than the specified time reference.
+     * Tests if the given {@code Path} is newer than the given time reference.
      *
      * @param file the {@code Path} to test.
      * @param czdt the time reference.
      * @param options options indicating how to handle symbolic links.
      * @return true if the {@code Path} exists and has been modified after the given time reference.
      * @throws IOException if an I/O error occurs.
-     * @throws NullPointerException if the file is {@code null}
+     * @throws NullPointerException if the file is {@code null}.
      * @since 2.12.0
      */
     public static boolean isNewer(final Path file, final ChronoZonedDateTime<?> czdt, final LinkOption... options) throws IOException {
@@ -818,14 +821,14 @@ public final class PathUtils {
     }
 
     /**
-     * Tests if the specified {@code Path} is newer than the specified time reference.
+     * Tests if the given {@code Path} is newer than the given time reference.
      *
      * @param file the {@code Path} to test.
      * @param fileTime the time reference.
      * @param options options indicating how to handle symbolic links.
      * @return true if the {@code Path} exists and has been modified after the given time reference.
      * @throws IOException if an I/O error occurs.
-     * @throws NullPointerException if the file is {@code null}
+     * @throws NullPointerException if the file is {@code null}.
      * @since 2.12.0
      */
     public static boolean isNewer(final Path file, final FileTime fileTime, final LinkOption... options) throws IOException {
@@ -836,14 +839,14 @@ public final class PathUtils {
     }
 
     /**
-     * Tests if the specified {@code Path} is newer than the specified time reference.
+     * Tests if the given {@code Path} is newer than the given time reference.
      *
      * @param file the {@code Path} to test.
      * @param instant the time reference.
      * @param options options indicating how to handle symbolic links.
      * @return true if the {@code Path} exists and has been modified after the given time reference.
      * @throws IOException if an I/O error occurs.
-     * @throws NullPointerException if the file is {@code null}
+     * @throws NullPointerException if the file is {@code null}.
      * @since 2.12.0
      */
     public static boolean isNewer(final Path file, final Instant instant, final LinkOption... options) throws IOException {
@@ -851,14 +854,14 @@ public final class PathUtils {
     }
 
     /**
-     * Tests if the specified {@code Path} is newer than the specified time reference.
+     * Tests if the given {@code Path} is newer than the given time reference.
      *
      * @param file the {@code Path} to test.
      * @param timeMillis the time reference measured in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
      * @param options options indicating how to handle symbolic links.
      * @return true if the {@code Path} exists and has been modified after the given time reference.
      * @throws IOException if an I/O error occurs.
-     * @throws NullPointerException if the file is {@code null}
+     * @throws NullPointerException if the file is {@code null}.
      * @since 2.9.0
      */
     public static boolean isNewer(final Path file, final long timeMillis, final LinkOption... options) throws IOException {
@@ -866,7 +869,7 @@ public final class PathUtils {
     }
 
     /**
-     * Tests if the specified {@code Path} is newer than the reference {@code Path}.
+     * Tests if the given {@code Path} is newer than the reference {@code Path}.
      *
      * @param file      the {@code File} to test.
      * @param reference the {@code File} of which the modification date is used.
@@ -880,14 +883,14 @@ public final class PathUtils {
     }
 
     /**
-     * Tests if the specified {@code Path} is older than the specified time reference.
+     * Tests if the given {@code Path} is older than the given time reference.
      *
      * @param file the {@code Path} to test.
      * @param fileTime the time reference.
      * @param options options indicating how to handle symbolic links.
      * @return true if the {@code Path} exists and has been modified before the given time reference.
      * @throws IOException if an I/O error occurs.
-     * @throws NullPointerException if the file is {@code null}
+     * @throws NullPointerException if the file is {@code null}.
      * @since 2.12.0
      */
     public static boolean isOlder(final Path file, final FileTime fileTime, final LinkOption... options) throws IOException {
@@ -898,14 +901,14 @@ public final class PathUtils {
     }
 
     /**
-     * Tests if the specified {@code Path} is older than the specified time reference.
+     * Tests if the given {@code Path} is older than the given time reference.
      *
      * @param file the {@code Path} to test.
      * @param instant the time reference.
      * @param options options indicating how to handle symbolic links.
-     * @return true if the {@code Path} exists and has been modified after the given time reference.
+     * @return true if the {@code Path} exists and has been modified before the given time reference.
      * @throws IOException if an I/O error occurs.
-     * @throws NullPointerException if the file is {@code null}
+     * @throws NullPointerException if the file is {@code null}.
      * @since 2.12.0
      */
     public static boolean isOlder(final Path file, final Instant instant, final LinkOption... options) throws IOException {
@@ -913,14 +916,14 @@ public final class PathUtils {
     }
 
     /**
-     * Tests if the specified {@code Path} is older than the specified time reference.
+     * Tests if the given {@code Path} is older than the given time reference.
      *
      * @param file the {@code Path} to test.
      * @param timeMillis the time reference measured in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
      * @param options options indicating how to handle symbolic links.
      * @return true if the {@code Path} exists and has been modified before the given time reference.
      * @throws IOException if an I/O error occurs.
-     * @throws NullPointerException if the file is {@code null}
+     * @throws NullPointerException if the file is {@code null}.
      * @since 2.12.0
      */
     public static boolean isOlder(final Path file, final long timeMillis, final LinkOption... options) throws IOException {
@@ -928,7 +931,7 @@ public final class PathUtils {
     }
 
     /**
-     * Tests if the specified {@code Path} is older than the reference {@code Path}.
+     * Tests if the given {@code Path} is older than the reference {@code Path}.
      *
      * @param file the {@code File} to test.
      * @param reference the {@code File} of which the modification date is used.
@@ -942,7 +945,7 @@ public final class PathUtils {
 
 
     /**
-     * Tests whether the specified {@code Path} is a regular file or not. Implemented as a null-safe delegate to
+     * Tests whether the given {@code Path} is a regular file or not. Implemented as a null-safe delegate to
      * {@code Files.isRegularFile(Path path, LinkOption... options)}.
      *
      * @param path the path to the file.
@@ -988,11 +991,7 @@ public final class PathUtils {
         } else {
             createParentDirectories(path);
         }
-        // @formatter:off
-        return Files.newOutputStream(path, append ?
-            new OpenOption[] {StandardOpenOption.CREATE, StandardOpenOption.APPEND} :
-            new OpenOption[] {StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING});
-        // @formatter:on
+        return Files.newOutputStream(path, append ? OPEN_OPTIONS_APPEND : OPEN_OPTIONS_TRUNCATE);
     }
 
     private static boolean notExists(final Path path, final LinkOption... options) {
@@ -1124,17 +1123,6 @@ public final class PathUtils {
     }
 
     /**
-     * Sets the last modified time of the given file path to now.
-     *
-     * @param path The file path to set.
-     * @throws IOException if an I/O error occurs.
-     * @since 2.12.0
-     */
-    public static void setLastModifiedTime(final Path path) throws IOException {
-        Files.setLastModifiedTime(path, FileTime.from(Instant.now()));
-    }
-
-    /**
      * Sets the given {@code targetFile}'s last modified time to the value from {@code sourceFile}.
      *
      * @param sourceFile The source path to query.
@@ -1197,15 +1185,15 @@ public final class PathUtils {
     }
 
     /**
-     * Returns the size of the specified file or directory. If the provided {@link File} is a regular file, then the file's
-     * length is returned. If the argument is a directory, then the size of the directory is calculated recursively.
+     * Returns the size of the given file or directory. If the provided {@link Path} is a regular file, then the file's size
+     * is returned. If the argument is a directory, then the size of the directory is calculated recursively.
      * <p>
      * Note that overflow is not detected, and the return value may be negative if overflow occurs. See
      * {@link #sizeOfAsBigInteger(Path)} for an alternative method that does not overflow.
      * </p>
      *
-     * @param path the regular file or directory to return the size of (must not be {@code null}).
-     * @return the length of the file, or recursive size of the directory, provided (in bytes).
+     * @param path the regular file or directory to return the size of, must not be {@code null}.
+     * @return the length of the file, or recursive size of the directory, in bytes.
      * @throws NullPointerException if the file is {@code null}.
      * @throws IllegalArgumentException if the file does not exist.
      * @throws IOException if an I/O error occurs.
@@ -1217,9 +1205,8 @@ public final class PathUtils {
     }
 
     /**
-     * Returns the size of the specified file or directory. If the provided {@link Path} is a regular file, then the file's
-     * length is returned. If the argument is a directory, then the size of the directory is calculated recursively. If a
-     * directory or subdirectory is security restricted, its size will not be included.
+     * Returns the size of the given file or directory. If the provided {@link Path} is a regular file, then the file's size
+     * is returned. If the argument is a directory, then the size of the directory is calculated recursively.
      *
      * @param path the regular file or directory to return the size of (must not be {@code null}).
      * @return the length of the file, or recursive size of the directory, provided (in bytes).
@@ -1349,7 +1336,7 @@ public final class PathUtils {
      * Waits for the file system to propagate a file creation, with a timeout.
      * <p>
      * This method repeatedly tests {@link Files#exists(Path,LinkOption...)} until it returns true up to the maximum time
-     * specified.
+     * given.
      * </p>
      *
      * @param file the file to check, must not be {@code null}.
@@ -1383,7 +1370,7 @@ public final class PathUtils {
                 Thread.currentThread().interrupt();
             }
         }
-        return Files.exists(file, options);
+        return exists(file, options);
     }
 
     /**

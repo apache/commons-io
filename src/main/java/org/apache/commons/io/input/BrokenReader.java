@@ -20,9 +20,9 @@ import java.io.IOException;
 import java.io.Reader;
 
 /**
- * Broken reader. This reader always throws an {@link IOException} from all the {@link Reader} methods where the exception is declared.
+ * Always throws an {@link IOException} from all the {@link Reader} methods where the exception is declared.
  * <p>
- * This class is mostly useful for testing error handling in code that uses a reader.
+ * This class is mostly useful for testing error handling.
  * </p>
  *
  * @since 2.7

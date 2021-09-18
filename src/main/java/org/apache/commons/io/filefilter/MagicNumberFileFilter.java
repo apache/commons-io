@@ -40,7 +40,7 @@ import org.apache.commons.io.IOUtils;
  * </p>
  * <h2>Using Classic IO</h2>
  * <pre>
- * File dir = new File(".");
+ * File dir = FileUtils.current();
  * MagicNumberFileFilter javaClassFileFilter =
  *     MagicNumberFileFilter(new byte[] {(byte) 0xCA, (byte) 0xFE,
  *       (byte) 0xBA, (byte) 0xBE});
@@ -57,7 +57,7 @@ import org.apache.commons.io.IOUtils;
  * </p>
  *
  * <pre>
- * File dir = new File(".");
+ * File dir = FileUtils.current();
  * MagicNumberFileFilter tarFileFilter =
  *     MagicNumberFileFilter("ustar", 257);
  * String[] tarFiles = dir.list(tarFileFilter);
@@ -67,7 +67,7 @@ import org.apache.commons.io.IOUtils;
  * </pre>
  * <h2>Using NIO</h2>
  * <pre>
- * final Path dir = Paths.get("");
+ * final Path dir = PathUtils.current();
  * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(MagicNumberFileFilter("ustar", 257));
  * //
  * // Walk one dir

@@ -69,6 +69,7 @@ import org.apache.commons.io.file.Counters;
 import org.apache.commons.io.file.PathFilter;
 import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.io.file.StandardDeleteOption;
+import org.apache.commons.io.file.attribute.FileTimes;
 import org.apache.commons.io.filefilter.FileEqualsFileFilter;
 import org.apache.commons.io.filefilter.FileFileFilter;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -3152,7 +3153,7 @@ public class FileUtils {
         if (!file.exists()) {
             newOutputStream(file, false).close();
         }
-        PathUtils.setLastModifiedTime(file.toPath());
+        FileTimes.setLastModifiedTime(file.toPath());
     }
 
     /**

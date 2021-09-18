@@ -20,8 +20,10 @@ import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.InputStream;
 
+import org.apache.commons.io.IOUtils;
+
 /**
- * Closed input stream. This stream returns EOF to all attempts to read something from the stream.
+ * Always returns {@link IOUtils#EOF} to all attempts to read something from the stream.
  * <p>
  * Typically uses of this class include testing for corner cases in methods that accept input streams and acting as a
  * sentinel value instead of a {@code null} input stream.

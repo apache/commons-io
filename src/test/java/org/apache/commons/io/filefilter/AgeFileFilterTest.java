@@ -27,6 +27,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.file.AccumulatorPathVisitor;
 import org.apache.commons.io.file.CounterAssertions;
 import org.apache.commons.io.file.Counters;
@@ -44,7 +45,7 @@ public class AgeFileFilterTest {
      */
     @Test
     public void testJavadocExampleUsingIo() {
-        final File dir = new File(".");
+        final File dir = FileUtils.current();
         // We are interested in files older than one day
         final long cutoffMillis = System.currentTimeMillis();
         final String[] files = dir.list(new AgeFileFilter(cutoffMillis));

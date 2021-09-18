@@ -30,13 +30,13 @@ import java.util.List;
 abstract class AbstractFileComparator implements Comparator<File> {
 
     /**
-     * Sort an array of files.
+     * Sorts an array of files.
      * <p>
      * This method uses {@link Arrays#sort(Object[], Comparator)} and returns the original array.
      * </p>
      *
-     * @param files The files to sort, may be null
-     * @return The sorted array
+     * @param files The files to sort, may be null.
+     * @return The sorted array.
      * @since 2.0
      */
     public File[] sort(final File... files) {
@@ -47,13 +47,13 @@ abstract class AbstractFileComparator implements Comparator<File> {
     }
 
     /**
-     * Sort a List of files.
+     * Sorts a List of files.
      * <p>
      * This method uses {@link Collections#sort(List, Comparator)} and returns the original list.
      * </p>
      *
-     * @param files The files to sort, may be null
-     * @return The sorted list
+     * @param files The files to sort, may be null.
+     * @return The sorted list.
      * @since 2.0
      */
     public List<File> sort(final List<File> files) {
@@ -66,7 +66,7 @@ abstract class AbstractFileComparator implements Comparator<File> {
     /**
      * String representation of this file comparator.
      *
-     * @return String representation of this file comparator
+     * @return String representation of this file comparator.
      */
     @Override
     public String toString() {

@@ -19,7 +19,7 @@ package org.apache.commons.io.output;
 import java.io.Writer;
 
 /**
- * Writes all data to the famous <b>/dev/null</b>.
+ * Never writes data. Calls never go beyond this class.
  * <p>
  * This {@code Writer} has no destination (file/socket etc.) and all characters written to it are ignored and lost.
  * </p>

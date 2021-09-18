@@ -35,7 +35,7 @@ import org.apache.commons.io.file.PathUtils;
  * </p>
  * <h2>Using Classic IO</h2>
  * <pre>
- * Path dir = Paths.get("");
+ * Path dir = PathUtils.current();
  * // We are interested in files older than one day
  * Instant cutoff = Instant.now().minus(Duration.ofDays(1));
  * String[] files = dir.list(new AgeFileFilter(cutoff));
@@ -46,7 +46,7 @@ import org.apache.commons.io.file.PathUtils;
  *
  * <h2>Using NIO</h2>
  * <pre>
- * Path dir = Paths.get("");
+ * Path dir = PathUtils.current();
  * // We are interested in files older than one day
  * Instant cutoff = Instant.now().minus(Duration.ofDays(1));
  * AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new AgeFileFilter(cutoff));
@@ -128,8 +128,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
     /**
      * Constructs a new age file filter for files equal to or older than a certain cutoff.
      *
-     * @param cutoffInstant The cutoff time threshold measured in milliseconds since the epoch (00:00:00 GMT, January 1,
-     *        1970).
+     * @param cutoffInstant The cutoff time threshold since the epoch (00:00:00 GMT, January 1, 1970).
      * @since 2.12.0
      */
     public AgeFileFilter(final Instant cutoffInstant) {
@@ -139,10 +138,8 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
     /**
      * Constructs a new age file filter for files on any one side of a certain cutoff.
      *
-     * @param cutoffInstant The cutoff time threshold since the epoch (00:00:00 GMT, January 1,
-     *        1970).
-     * @param acceptOlder if true, older files (at or before the cutoff) are accepted, else newer ones (after the
-     *        cutoff).
+     * @param cutoffInstant The cutoff time threshold since the epoch (00:00:00 GMT, January 1, 1970).
+     * @param acceptOlder if true, older files (at or before the cutoff) are accepted, else newer ones (after the cutoff).
      * @since 2.12.0
      */
     public AgeFileFilter(final Instant cutoffInstant, final boolean acceptOlder) {

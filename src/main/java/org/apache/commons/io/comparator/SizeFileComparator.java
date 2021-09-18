@@ -74,18 +74,19 @@ public class SizeFileComparator extends AbstractFileComparator implements Serial
     private final boolean sumDirectoryContents;
 
     /**
-     * Construct a file size comparator instance (directories treated as zero size).
+     * Constructs a file size comparator instance (directories treated as zero size).
      */
     public SizeFileComparator() {
         this.sumDirectoryContents = false;
     }
 
     /**
-     * Construct a file size comparator instance specifying whether the size of
+     * Constructs a file size comparator instance specifying whether the size of
      * the directory contents should be aggregated.
      * <p>
      * If the {@code sumDirectoryContents} is {@code true} The size of
      * directories is calculated using  {@link FileUtils#sizeOfDirectory(File)}.
+     * </p>
      *
      * @param sumDirectoryContents {@code true} if the sum of the directories' contents
      *  should be calculated, otherwise {@code false} if directories should be treated
@@ -96,7 +97,7 @@ public class SizeFileComparator extends AbstractFileComparator implements Serial
     }
 
     /**
-     * Compare the length of two files.
+     * Compares the length of two files.
      *
      * @param file1 The first file to compare
      * @param file2 The second file to compare
