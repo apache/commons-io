@@ -28,7 +28,7 @@ import java.util.Comparator;
  * <p>
  * Example of sorting a list of files/directories using the {@link #DIRECTORY_COMPARATOR} singleton instance:
  * </p>
- * 
+ *
  * <pre>
  *       List&lt;File&gt; list = ...
  *       ((AbstractFileComparator) DirectoryFileComparator.DIRECTORY_COMPARATOR).sort(list);
