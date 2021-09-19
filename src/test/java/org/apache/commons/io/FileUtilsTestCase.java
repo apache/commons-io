@@ -184,6 +184,21 @@ public class FileUtilsTestCase {
         }
     }
 
+    private void createCircularOsSymLink(final String linkName, final String targetName) throws IOException {
+        if (FilenameUtils.isSystemWindows()) {
+            // Windows
+            try {
+                Runtime.getRuntime().exec("mklink /D " + linkName + " " + targetName);
+            } catch (final IOException ioe) {
+                // So that tests run in FAT filesystems don't fail
+                ioe.printStackTrace();
+            }
+        } else {
+            // Not Windows, assume Linux
+            Runtime.getRuntime().exec("ln -s " + targetName + " " + linkName);
+        }
+    }
+
     /**
      * May throw java.nio.file.FileSystemException: C:\Users\...\FileUtilsTestCase\cycle: A required privilege is not held
      * by the client. On Windows, you are fine if you run a terminal with admin karma.
@@ -207,21 +222,6 @@ public class FileUtilsTestCase {
         }
         // Sanity check:
         assertTrue(Files.isSymbolicLink(linkPath), () -> "Expected a sym link here: " + linkName);
-    }
-
-    private void createCircularOsSymLink(final String linkName, final String targetName) throws IOException {
-        if (FilenameUtils.isSystemWindows()) {
-            // Windows
-            try {
-                Runtime.getRuntime().exec("mklink /D " + linkName + " " + targetName);
-            } catch (final IOException ioe) {
-                // So that tests run in FAT filesystems don't fail
-                ioe.printStackTrace();
-            }
-        } else {
-            // Not Windows, assume Linux
-            Runtime.getRuntime().exec("ln -s " + targetName + " " + linkName);
-        }
     }
 
     private void createFilesForTestCopyDirectory(final File grandParentDir, final File parentDir, final File childDir) throws Exception {

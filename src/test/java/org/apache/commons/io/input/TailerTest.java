@@ -60,10 +60,6 @@ import com.google.common.collect.Lists;
  */
 public class TailerTest {
 
-    private static final int TEST_BUFFER_SIZE = 1024;
-
-    private static final int TEST_DELAY_MILLIS = 1500;
-
     private static class NonStandardTailable implements Tailer.Tailable {
 
         private final File file;
@@ -187,6 +183,10 @@ public class TailerTest {
             initialized++; // not atomic, but OK because only updated here.
         }
     }
+
+    private static final int TEST_BUFFER_SIZE = 1024;
+
+    private static final int TEST_DELAY_MILLIS = 1500;
 
     @TempDir
     public static File temporaryFolder;
