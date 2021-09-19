@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.lang.ref.ReferenceQueue;
@@ -50,6 +51,10 @@ public class FileCleaningTrackerTestCase {
     private File testFile;
 
     private FileCleaningTracker theInstance;
+    public RandomAccessFile createRandomAccessFile() throws FileNotFoundException {
+        return new RandomAccessFile(testFile, "rw");
+    }
+
     protected FileCleaningTracker newInstance() {
         return new FileCleaningTracker();
     }
@@ -195,7 +200,7 @@ public class FileCleaningTrackerTestCase {
         final String path = testFile.getPath();
 
         assertFalse(testFile.exists(), "1-testFile exists: " + testFile);
-        RandomAccessFile r = new RandomAccessFile(testFile, "rw");
+        RandomAccessFile r = createRandomAccessFile();
         assertTrue(testFile.exists(), "2-testFile exists");
 
         assertEquals(0, theInstance.getTrackCount(), "3-Track Count");
@@ -227,7 +232,7 @@ public class FileCleaningTrackerTestCase {
         final String path = testFile.getPath();
 
         assertFalse(testFile.exists());
-        RandomAccessFile r = new RandomAccessFile(testFile, "rw");
+        RandomAccessFile r = createRandomAccessFile();
         assertTrue(testFile.exists());
 
         assertEquals(0, theInstance.getTrackCount());
@@ -276,7 +281,7 @@ public class FileCleaningTrackerTestCase {
         final String path = testFile.getPath();
 
         assertFalse(testFile.exists());
-        RandomAccessFile r = new RandomAccessFile(testFile, "rw");
+        RandomAccessFile r = createRandomAccessFile();
         assertTrue(testFile.exists());
 
         assertEquals(0, theInstance.getTrackCount());
