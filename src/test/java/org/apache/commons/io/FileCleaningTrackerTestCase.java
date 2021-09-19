@@ -63,10 +63,7 @@ public class FileCleaningTrackerTestCase {
     private void pauseForDeleteToComplete(File file) {
         int count = 0;
         while(file.exists() && count++ < 40) {
-            try {
-                TestUtils.sleep(500L);
-            } catch (final InterruptedException ignore) {
-            }
+            TestUtils.sleepQuietly(500L);
             file = new File(file.getPath());
         }
     }
