@@ -51,7 +51,8 @@ public class FileCleaningTrackerTestCase {
     private File testFile;
 
     private FileCleaningTracker theInstance;
-    public RandomAccessFile createRandomAccessFile() throws FileNotFoundException {
+    
+    RandomAccessFile createRandomAccessFile() throws FileNotFoundException {
         return new RandomAccessFile(testFile, "rw");
     }
 
