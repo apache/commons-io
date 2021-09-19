@@ -212,6 +212,9 @@ public class TailerTest {
         } finally {
             IOUtils.closeQuietly(reader);
         }
+        // sanity checks
+        assertTrue(file.exists());
+        assertEquals(size, file.length());
     }
 
     @Test
@@ -667,23 +670,23 @@ public class TailerTest {
     @Test
     public void testTailerEof() throws Exception {
         // Create & start the Tailer
-        final long delay = 50;
+        final long delayMillis = 100;
         final File file = new File(temporaryFolder, "tailer2-test.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener();
-        try (Tailer tailer = new Tailer(file, listener, delay, false)) {
+        try (Tailer tailer = new Tailer(file, listener, delayMillis, false)) {
             final Thread thread = new Thread(tailer);
             thread.start();
 
             // Write some lines to the file
             writeString(file, "Line");
 
-            TestUtils.sleep(delay * 2);
+            TestUtils.sleep(delayMillis * 2);
             List<String> lines = listener.getLines();
             assertEquals(0, lines.size(), "1 line count");
 
             writeString(file, " one\n");
-            TestUtils.sleep(delay * 2);
+            TestUtils.sleep(delayMillis * 2);
             lines = listener.getLines();
 
             assertEquals(1, lines.size(), "1 line count");
