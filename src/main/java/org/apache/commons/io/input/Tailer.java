@@ -155,7 +155,7 @@ import org.apache.commons.io.file.attribute.FileTimes;
  *        alternative libraries such as jCIFS or <a href="https://commons.apache.org/proper/commons-vfs/">Apache Commons
  *        VFS</a>.
  */
-public class Tailer implements Runnable {
+public class Tailer implements Runnable, AutoCloseable {
 
     /**
      * Builds a {@link Tailer} with default values.
@@ -769,6 +769,14 @@ public class Tailer implements Runnable {
     }
 
     /**
+     * Requests the tailer to complete its current loop and return.
+     */
+    @Override
+    public void close() {
+        this.run = false;
+    }
+
+    /**
      * Gets the delay in milliseconds.
      *
      * @return the delay in milliseconds.
@@ -963,14 +971,17 @@ public class Tailer implements Runnable {
             } catch (final IOException e) {
                 listener.handle(e);
             }
-            stop();
+            close();
         }
     }
 
     /**
      * Requests the tailer to complete its current loop and return.
+     *
+     * @deprecated Use {@link #close()}.
      */
+    @Deprecated
     public void stop() {
-        this.run = false;
+        close();
     }
 }
