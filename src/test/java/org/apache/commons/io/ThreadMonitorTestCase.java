@@ -48,7 +48,6 @@ public class ThreadMonitorTestCase {
      */
     @Test
     public void testNoTimeout() {
-
         // timeout = -1
         try {
             final Thread monitor = ThreadMonitor.start(Duration.ofMillis(-1));
@@ -77,7 +76,7 @@ public class ThreadMonitorTestCase {
     public void testTimeout() {
         try {
             final Thread monitor = ThreadMonitor.start(Duration.ofMillis(100));
-            TestUtils.sleep(200);
+            TestUtils.sleep(400);
             ThreadMonitor.stop(monitor);
             fail("Expected InterruptedException");
         } catch (final InterruptedException e) {
