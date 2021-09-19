@@ -368,11 +368,11 @@ public class Tailer implements Runnable, AutoCloseable {
     public interface Tailable {
 
         /**
-         * Creates a random access file stream to read from.
+         * Creates a random access file stream to read.
          *
-         * @param mode the access mode {@link RandomAccessFile}
-         * @return a random access file stream to read from
-         * @throws FileNotFoundException if the tailable object does not exist
+         * @param mode the access mode, by default this is for {@link RandomAccessFile}.
+         * @return a random access file stream to read.
+         * @throws FileNotFoundException if the tailable object does not exist.
          */
         RandomAccessResourceBridge getRandomAccess(final String mode) throws FileNotFoundException;
 
