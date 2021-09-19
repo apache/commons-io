@@ -47,7 +47,7 @@ public class ThreadMonitorTestCase {
      * Test No timeout.
      */
     @Test
-    public void testNoTimeout() {
+    public void testNoTimeoutMinus1() {
         // timeout = -1
         try {
             final Thread monitor = ThreadMonitor.start(Duration.ofMillis(-1));
@@ -57,7 +57,13 @@ public class ThreadMonitorTestCase {
         } catch (final Exception e) {
             fail("Timeout -1, threw " + e);
         }
+    }
 
+    /**
+     * Test No timeout.
+     */
+    @Test
+    public void testNoTimeoutZero() {
         // timeout = 0
         try {
             final Thread monitor = ThreadMonitor.start(Duration.ZERO);
