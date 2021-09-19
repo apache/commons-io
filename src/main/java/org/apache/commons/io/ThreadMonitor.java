@@ -119,7 +119,7 @@ class ThreadMonitor implements Runnable {
      * Sleeps for a guaranteed minimum duration unless interrupted.
      *
      * This method exists because Thread.sleep(100) can sleep for 0, 70, 100 or 200ms or anything else
-     * it deems appropriate. Read {@link Thread#sleep()} for further interesting details.
+     * it deems appropriate. Read {@link Thread#sleep(long, int)}} for further interesting details.
      *
      * @param duration the sleep duration.
      * @throws InterruptedException if interrupted
