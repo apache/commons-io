@@ -22,21 +22,20 @@ import java.time.Instant;
 /**
  * Monitors a thread, interrupting it if it reaches the specified timeout.
  * <p>
- * This works by sleeping until the specified timeout amount and then
- * interrupting the thread being monitored. If the thread being monitored
- * completes its work before being interrupted, it should {@code interrupt()}
- * the <i>monitor</i> thread.
+ * This works by sleeping until the specified timeout amount and then interrupting the thread being monitored. If the
+ * thread being monitored completes its work before being interrupted, it should {@code interrupt()} the <i>monitor</i>
+ * thread.
  * </p>
  *
  * <pre>
- *       Duration timeout = Duration.ofSeconds(1);
- *       try {
- *           Thread monitor = ThreadMonitor.start(timeout);
- *           // do some work here
- *           ThreadMonitor.stop(monitor);
- *       } catch (InterruptedException e) {
- *           // timed amount was reached
- *       }
+ * Duration timeout = Duration.ofSeconds(1);
+ * try {
+ *     Thread monitor = ThreadMonitor.start(timeout);
+ *     // do some work here
+ *     ThreadMonitor.stop(monitor);
+ * } catch (InterruptedException e) {
+ *     // timed amount was reached
+ * }
  * </pre>
  *
  */
@@ -48,10 +47,8 @@ class ThreadMonitor implements Runnable {
     /**
      * Start monitoring the current thread.
      *
-     * @param timeout The timeout amount.
-     * or no timeout if the value is zero or less
-     * @return The monitor thread or {@code null}
-     * if the timeout amount is not greater than zero
+     * @param timeout The timeout amount. or no timeout if the value is zero or less.
+     * @return The monitor thread or {@code null} if the timeout amount is not greater than zero.
      */
     static Thread start(final Duration timeout) {
         return start(Thread.currentThread(), timeout);
@@ -61,10 +58,8 @@ class ThreadMonitor implements Runnable {
      * Start monitoring the specified thread.
      *
      * @param thread The thread The thread to monitor
-     * @param timeout The timeout amount.
-     * or no timeout if the value is zero or less
-     * @return The monitor thread or {@code null}
-     * if the timeout amount is not greater than zero
+     * @param timeout The timeout amount. or no timeout if the value is zero or less.
+     * @return The monitor thread or {@code null} if the timeout amount is not greater than zero.
      */
     static Thread start(final Thread thread, final Duration timeout) {
         if (timeout.isZero() || timeout.isNegative()) {
@@ -100,8 +95,7 @@ class ThreadMonitor implements Runnable {
     }
 
     /**
-     * Sleep until the specified timeout amount and then
-     * interrupt the thread being monitored.
+     * Sleep until the specified timeout amount and then interrupt the thread being monitored.
      *
      * @see Runnable#run()
      */
@@ -118,8 +112,8 @@ class ThreadMonitor implements Runnable {
     /**
      * Sleeps for a guaranteed minimum duration unless interrupted.
      *
-     * This method exists because Thread.sleep(100) can sleep for 0, 70, 100 or 200ms or anything else
-     * it deems appropriate. Read {@link Thread#sleep(long, int)}} for further interesting details.
+     * This method exists because Thread.sleep(100) can sleep for 0, 70, 100 or 200ms or anything else it deems appropriate.
+     * Read {@link Thread#sleep(long, int)}} for further interesting details.
      *
      * @param duration the sleep duration.
      * @throws InterruptedException if interrupted
