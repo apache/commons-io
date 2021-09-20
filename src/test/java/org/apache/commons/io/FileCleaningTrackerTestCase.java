@@ -53,7 +53,7 @@ public class FileCleaningTrackerTestCase {
     private FileCleaningTracker theInstance;
 
     RandomAccessFile createRandomAccessFile() throws FileNotFoundException {
-        return new RandomAccessFile(testFile, "rw");
+        return RandomAccessFileMode.READ_WRITE.create(testFile);
     }
 
     protected FileCleaningTracker newInstance() {

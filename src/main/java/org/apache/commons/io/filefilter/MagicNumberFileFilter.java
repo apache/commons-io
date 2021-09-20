@@ -30,6 +30,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.RandomAccessFileMode;
 
 /**
  * <p>
@@ -259,7 +260,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
     public boolean accept(final File file) {
         if (file != null && file.isFile() && file.canRead()) {
             try {
-                try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
+                try (RandomAccessFile randomAccessFile = RandomAccessFileMode.READ_ONLY.create(file)) {
                     final byte[] fileBytes = IOUtils.byteArray(this.magicNumbers.length);
                     randomAccessFile.seek(byteOffset);
                     final int read = randomAccessFile.read(fileBytes);

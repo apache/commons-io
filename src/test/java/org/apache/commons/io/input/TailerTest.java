@@ -47,6 +47,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.RandomAccessFileMode;
 import org.apache.commons.io.TestResources;
 import org.apache.commons.io.test.TestUtils;
 import org.junit.jupiter.api.AfterEach;
@@ -72,26 +73,26 @@ public class TailerTest {
         public Tailer.RandomAccessResourceBridge getRandomAccess(final String mode) throws FileNotFoundException {
             return new Tailer.RandomAccessResourceBridge() {
 
-                private final RandomAccessFile reader = new RandomAccessFile(file, mode);
+                private final RandomAccessFile randomAccessFile = new RandomAccessFile(file, mode);
 
                 @Override
                 public void close() throws IOException {
-                    reader.close();
+                    randomAccessFile.close();
                 }
 
                 @Override
                 public long getPointer() throws IOException {
-                    return reader.getFilePointer();
+                    return randomAccessFile.getFilePointer();
                 }
 
                 @Override
                 public int read(final byte[] b) throws IOException {
-                    return reader.read(b);
+                    return randomAccessFile.read(b);
                 }
 
                 @Override
                 public void seek(final long position) throws IOException {
-                    reader.seek(position);
+                    randomAccessFile.seek(position);
                 }
             };
         }
@@ -203,7 +204,7 @@ public class TailerTest {
         try {
             while (reader == null) {
                 try {
-                    reader = new RandomAccessFile(file.getPath(), "r");
+                    reader = RandomAccessFileMode.READ_ONLY.create(file);
                 } catch (final FileNotFoundException ignore) {
                     // ignore
                 }

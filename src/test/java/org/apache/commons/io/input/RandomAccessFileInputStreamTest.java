@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
 
+import org.apache.commons.io.RandomAccessFileMode;
 import org.junit.jupiter.api.Test;
 
 public class RandomAccessFileInputStreamTest {
@@ -36,7 +37,7 @@ public class RandomAccessFileInputStreamTest {
     private static final int DATA_FILE_LEN = 1430;
 
     private RandomAccessFile createRandomAccessFile() throws FileNotFoundException {
-        return new RandomAccessFile(DATA_FILE, "r");
+        return RandomAccessFileMode.READ_ONLY.create(DATA_FILE);
     }
 
     @Test
