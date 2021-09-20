@@ -45,7 +45,7 @@ class ThreadMonitor implements Runnable {
     private final Duration timeout;
 
     /**
-     * Start monitoring the current thread.
+     * Starts monitoring the current thread.
      *
      * @param timeout The timeout amount. or no timeout if the value is zero or less.
      * @return The monitor thread or {@code null} if the timeout amount is not greater than zero.
@@ -55,7 +55,7 @@ class ThreadMonitor implements Runnable {
     }
 
     /**
-     * Start monitoring the specified thread.
+     * Starts monitoring the specified thread.
      *
      * @param thread The thread The thread to monitor
      * @param timeout The timeout amount. or no timeout if the value is zero or less.
@@ -72,7 +72,7 @@ class ThreadMonitor implements Runnable {
     }
 
     /**
-     * Stop monitoring the specified thread.
+     * Stops monitoring the specified thread.
      *
      * @param thread The monitor thread, may be {@code null}.
      */
@@ -94,7 +94,7 @@ class ThreadMonitor implements Runnable {
     }
 
     /**
-     * Sleep until the specified timeout amount and then interrupt the thread being monitored.
+     * Sleeps until the specified timeout amount and then interrupt the thread being monitored.
      *
      * @see Runnable#run()
      */
