@@ -18,6 +18,7 @@ package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.Duration;
 
@@ -80,13 +81,10 @@ public class ThreadMonitorTestCase {
      */
     @Test
     public void testTimeout() {
-        try {
+        assertThrows(InterruptedException.class, () -> {
             final Thread monitor = ThreadMonitor.start(Duration.ofMillis(100));
             TestUtils.sleep(400);
             ThreadMonitor.stop(monitor);
-            fail("Expected InterruptedException");
-        } catch (final InterruptedException e) {
-            // expected result - timeout
-        }
+        });
     }
 }
