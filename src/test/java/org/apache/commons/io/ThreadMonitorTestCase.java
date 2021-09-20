@@ -36,8 +36,8 @@ public class ThreadMonitorTestCase {
     @Test
     public void testCompletedWithoutTimeout() {
         try {
-            final Thread monitor = ThreadMonitor.start(Duration.ofMillis(200));
-            TestUtils.sleep(100);
+            final Thread monitor = ThreadMonitor.start(Duration.ofMillis(400));
+            TestUtils.sleep(1);
             ThreadMonitor.stop(monitor);
         } catch (final InterruptedException e) {
             fail("Timed Out", e);
