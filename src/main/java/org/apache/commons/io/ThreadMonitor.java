@@ -75,7 +75,7 @@ class ThreadMonitor implements Runnable {
     /**
      * Stop monitoring the specified thread.
      *
-     * @param thread The monitor thread, may be {@code null}
+     * @param thread The monitor thread, may be {@code null}.
      */
     static void stop(final Thread thread) {
         if (thread != null) {
@@ -116,7 +116,7 @@ class ThreadMonitor implements Runnable {
      * Read {@link Thread#sleep(long, int)}} for further interesting details.
      *
      * @param duration the sleep duration.
-     * @throws InterruptedException if interrupted
+     * @throws InterruptedException if interrupted.
      */
     private static void sleep(final Duration duration) throws InterruptedException {
         final Instant finishInstant = Instant.now().plus(duration);
