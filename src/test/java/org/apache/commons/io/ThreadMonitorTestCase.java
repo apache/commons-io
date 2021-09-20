@@ -39,7 +39,7 @@ public class ThreadMonitorTestCase {
             TestUtils.sleep(100);
             ThreadMonitor.stop(monitor);
         } catch (final InterruptedException e) {
-            fail("Timed Out");
+            fail("Timed Out", e);
         }
     }
 
@@ -51,11 +51,11 @@ public class ThreadMonitorTestCase {
         // timeout = -1
         try {
             final Thread monitor = ThreadMonitor.start(Duration.ofMillis(-1));
-            assertNull(monitor,"Timeout -1, Monitor should be null");
+            assertNull(monitor, "Timeout -1, Monitor should be null");
             TestUtils.sleep(100);
             ThreadMonitor.stop(monitor);
         } catch (final Exception e) {
-            fail("Timeout -1, threw " + e);
+            fail("Timeout -1, threw " + e, e);
         }
     }
 
@@ -71,7 +71,7 @@ public class ThreadMonitorTestCase {
             TestUtils.sleep(100);
             ThreadMonitor.stop(monitor);
         } catch (final Exception e) {
-            fail("Timeout 0, threw " + e);
+            fail("Timeout 0, threw " + e, e);
         }
     }
 
@@ -90,4 +90,3 @@ public class ThreadMonitorTestCase {
         }
     }
 }
-
