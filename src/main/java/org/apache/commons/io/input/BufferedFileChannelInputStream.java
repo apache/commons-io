@@ -18,8 +18,6 @@ import static org.apache.commons.io.IOUtils.EOF;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
@@ -40,28 +38,11 @@ import org.apache.commons.io.IOUtils;
  *
  * @since 2.9.0
  */
-@SuppressWarnings("restriction")
 public final class BufferedFileChannelInputStream extends InputStream {
 
     private final ByteBuffer byteBuffer;
 
     private final FileChannel fileChannel;
-
-    private static final Class<?> DIRECT_BUFFER_CLASS = getDirectBufferClass();
-
-    private static Class<?> getDirectBufferClass() {
-        Class<?> res = null;
-        try {
-            res = Class.forName("sun.nio.ch.DirectBuffer");
-        } catch (final IllegalAccessError | ClassNotFoundException ignored) {
-            // ignored
-        }
-        return res;
-    }
-
-    private static boolean isDirectBuffer(final Object object) {
-        return DIRECT_BUFFER_CLASS != null && DIRECT_BUFFER_CLASS.isInstance(object);
-    }
 
     /**
      * Constructs a new instance for the given File.
@@ -115,75 +96,30 @@ public final class BufferedFileChannelInputStream extends InputStream {
 
     /**
      * Attempts to clean up a ByteBuffer if it is direct or memory-mapped. This uses an *unsafe* Sun API that will cause
-     * errors if one attempts to read from the disposed buffer. However, neither the bytes allocated to direct buffers
-     * nor file descriptors opened for memory-mapped buffers put pressure on the garbage collector. Waiting for garbage
+     * errors if one attempts to read from the disposed buffer. However, neither the bytes allocated to direct buffers nor
+     * file descriptors opened for memory-mapped buffers put pressure on the garbage collector. Waiting for garbage
      * collection may lead to the depletion of off-heap memory or huge numbers of open files. There's unfortunately no
      * standard API to manually dispose of these kinds of buffers.
      *
      * @param buffer the buffer to clean.
      */
     private void clean(final ByteBuffer buffer) {
-        if (isDirectBuffer(buffer)) {
+        if (buffer.isDirect()) {
             cleanDirectBuffer(buffer);
         }
     }
 
     /**
-     * In Java 8, the type of DirectBuffer.cleaner() was sun.misc.Cleaner, and it was possible to access the method
-     * sun.misc.Cleaner.clean() to invoke it. The type changed to jdk.internal.ref.Cleaner in later JDKs, and the
-     * .clean() method is not accessible even with reflection. However sun.misc.Unsafe added a invokeCleaner() method in
-     * JDK 9+ and this is still accessible with reflection.
+     * In Java 8, the type of {@code sun.nio.ch.DirectBuffer.cleaner()} was {@code sun.misc.Cleaner}, and it was possible to
+     * access the method {@code sun.misc.Cleaner.clean()} to invoke it. The type changed to {@code jdk.internal.ref.Cleaner}
+     * in later JDKs, and the {@code clean()} method is not accessible even with reflection. However {@code sun.misc.Unsafe}
+     * added an {@code invokeCleaner()} method in JDK 9+ and this is still accessible with reflection.
      *
      * @param buffer the buffer to clean. must be a DirectBuffer.
      */
     private void cleanDirectBuffer(final ByteBuffer buffer) {
-        //
-        // Ported from StorageUtils.scala.
-        //
-//      private val bufferCleaner: DirectBuffer => Unit =
-//      if (SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_9)) {
-//        val cleanerMethod =
-//          Utils.classForName("sun.misc.Unsafe").getMethod("invokeCleaner", classOf[ByteBuffer])
-//        val unsafeField = classOf[Unsafe].getDeclaredField("theUnsafe")
-//        unsafeField.setAccessible(true)
-//        val unsafe = unsafeField.get(null).asInstanceOf[Unsafe]
-//        buffer: DirectBuffer => cleanerMethod.invoke(unsafe, buffer)
-//      } else {
-//        val cleanerMethod = Utils.classForName("sun.misc.Cleaner").getMethod("clean")
-//        buffer: DirectBuffer => {
-//          // Careful to avoid the return type of .cleaner(), which changes with JDK
-//          val cleaner: AnyRef = buffer.cleaner()
-//          if (cleaner != null) {
-//            cleanerMethod.invoke(cleaner)
-//          }
-//        }
-//      }
-        //
-        final String specVer = System.getProperty("java.specification.version");
-        if ("1.8".equals(specVer)) {
-            // On Java 8, but also compiles on Java 11.
-            try {
-              final Class<?> clsCleaner = Class.forName("sun.misc.Cleaner");
-              final Method cleanerMethod = DIRECT_BUFFER_CLASS.getMethod("cleaner");
-              final Object cleaner = cleanerMethod.invoke(buffer);
-              if (cleaner != null) {
-                  final Method cleanMethod = clsCleaner.getMethod("clean");
-                  cleanMethod.invoke(cleaner);
-              }
-            } catch (final ReflectiveOperationException e) {
-                throw new IllegalStateException(e);
-            }
-        } else {
-            // On Java 9 and up, but compiles on Java 8.
-            try {
-                final Class<?> clsUnsafe = Class.forName("sun.misc.Unsafe");
-                final Method cleanerMethod = clsUnsafe.getMethod("invokeCleaner", ByteBuffer.class);
-                final Field unsafeField = clsUnsafe.getDeclaredField("theUnsafe");
-                unsafeField.setAccessible(true);
-                cleanerMethod.invoke(unsafeField.get(null), buffer);
-            } catch (final ReflectiveOperationException e) {
-                throw new IllegalStateException(e);
-            }
+        if (ByteBufferCleaner.isSupported()) {
+            ByteBufferCleaner.clean(buffer);
         }
     }
 

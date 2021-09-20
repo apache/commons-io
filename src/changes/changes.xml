@@ -74,6 +74,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Arturo Bernal">
         Fix Javadoc in ThreadMonitor#run() method. #273.
       </action>
+      <action issue="IO-726" dev="ggregory" type="fix" due-to="shollander, Gary Gregory">
+        Add MemoryMappedInputStream. #215.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add BrokenReader.INSTANCE.
