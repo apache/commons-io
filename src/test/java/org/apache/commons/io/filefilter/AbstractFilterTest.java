@@ -46,15 +46,13 @@ public class AbstractFilterTest {
     void assertFiltering(final IOFileFilter filter, final File file, final boolean expected) {
         // Note. This only tests the (File, String) version if the parent of
         // the File passed in is not null
-        assertEquals(expected, filter.accept(file),
-            "Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file);
+        assertEquals(expected, filter.accept(file), "Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file);
 
         if (file != null && file.getParentFile() != null) {
             assertEquals(expected, filter.accept(file.getParentFile(), file.getName()),
                 "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for " + file);
         } else if (file == null) {
-            assertEquals(expected, filter.accept(file),
-                "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null");
+            assertEquals(expected, filter.accept(file), "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null");
         }
         assertNotNull(filter.toString());
     }
@@ -68,8 +66,7 @@ public class AbstractFilterTest {
 
         if (path != null && path.getParent() != null) {
             assertEquals(expectedFileVisitResult, filter.accept(path, null),
-                "Filter(Path, Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for "
-                    + path);
+                "Filter(Path, Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for " + path);
         } else if (path == null) {
             assertEquals(expectedFileVisitResult, filter.accept(path, null),
                 "Filter(Path, Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for null");
@@ -168,8 +165,5 @@ public class AbstractFilterTest {
     boolean equalsLastModified(final File left, final File right) throws IOException {
         return Files.getLastModifiedTime(left.toPath()).equals(Files.getLastModifiedTime(right.toPath()));
     }
-
-    // -----------------------------------------------------------------------
-
 
 }
