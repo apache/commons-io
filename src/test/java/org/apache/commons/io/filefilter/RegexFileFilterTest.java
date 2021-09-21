@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link RegexFileFilter}.
  */
-public class RegexFileFilterTestCase {
+public class RegexFileFilterTest {
 
     public void assertFiltering(final IOFileFilter filter, final File file, final boolean expected) {
         // Note. This only tests the (File, String) version if the parent of

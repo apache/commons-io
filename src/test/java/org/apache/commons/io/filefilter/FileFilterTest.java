@@ -54,7 +54,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Used to test FileFilterUtils.
  */
-public class FileFilterTestCase extends AbstractFilterTest {
+public class FileFilterTest extends AbstractFilterTest {
 
     @Test
     public void testAgeFilter() throws Exception {

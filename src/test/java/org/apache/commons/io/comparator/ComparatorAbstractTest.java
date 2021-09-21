@@ -33,7 +33,7 @@ import org.junit.jupiter.api.io.TempDir;
 /**
  * Base Test case for Comparator implementations.
  */
-public abstract class ComparatorAbstractTestCase {
+public abstract class ComparatorAbstractTest {
 
     @TempDir
     public File dir;

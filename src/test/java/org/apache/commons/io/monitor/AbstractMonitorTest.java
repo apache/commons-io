@@ -35,7 +35,7 @@ import org.junit.jupiter.api.io.TempDir;
 /**
  * {@link FileAlterationObserver} Test Case.
  */
-public abstract class AbstractMonitorTestCase {
+public abstract class AbstractMonitorTest {
 
     /** File observer */
     protected FileAlterationObserver observer;

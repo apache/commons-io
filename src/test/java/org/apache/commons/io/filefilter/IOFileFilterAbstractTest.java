@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 
-public abstract class IOFileFilterAbstractTestCase {
+public abstract class IOFileFilterAbstractTest {
 
     class TesterFalseFileFilter extends FalseFileFilter {
 

@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
  *
  */
 @SuppressWarnings("deprecation") // testing deprecated code
-public class CharsetsTestCase {
+public class CharsetsTest {
 
     @Test
     public void testIso8859_1() {

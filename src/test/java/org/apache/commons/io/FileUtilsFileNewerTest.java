@@ -35,7 +35,7 @@ import org.junit.jupiter.api.io.TempDir;
 /**
  * This is used to test FileUtils for correctness.
  */
-public class FileUtilsFileNewerTestCase {
+public class FileUtilsFileNewerTest {
 
     // Test data
     private static final int FILE1_SIZE = 1;

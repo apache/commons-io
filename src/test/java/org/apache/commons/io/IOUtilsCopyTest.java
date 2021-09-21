@@ -49,7 +49,7 @@ import org.junit.jupiter.api.Test;
  *
  * @see IOUtils
  */
-public class IOUtilsCopyTestCase {
+public class IOUtilsCopyTest {
 
     /*
      * NOTE this is not particularly beautiful code. A better way to check for

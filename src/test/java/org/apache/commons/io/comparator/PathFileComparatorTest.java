@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Test case for {@link PathFileComparator}.
  */
-public class PathFileComparatorTest extends ComparatorAbstractTestCase {
+public class PathFileComparatorTest extends ComparatorAbstractTest {
 
 
     @BeforeEach

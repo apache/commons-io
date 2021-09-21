@@ -41,7 +41,7 @@ import org.junit.jupiter.api.io.TempDir;
  * This is used to test LineIterator for correctness.
  *
  */
-public class LineIteratorTestCase {
+public class LineIteratorTest {
 
     @TempDir
     public File temporaryFolder;

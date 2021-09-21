@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Basic unit tests for the multiplexing streams.
  */
-public class DemuxTestCase {
+public class DemuxTest {
     private static class ReaderThread
             extends Thread {
         private final StringBuffer stringBuffer = new StringBuffer();

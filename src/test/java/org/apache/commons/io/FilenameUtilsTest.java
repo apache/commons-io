@@ -42,7 +42,7 @@ import org.junit.jupiter.api.io.TempDir;
  *
  * @see FilenameUtils
  */
-public class FilenameUtilsTestCase {
+public class FilenameUtilsTest {
 
     private static final String SEP = "" + File.separatorChar;
 

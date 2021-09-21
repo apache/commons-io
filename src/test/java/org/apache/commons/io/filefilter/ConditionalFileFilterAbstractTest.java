@@ -27,7 +27,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public abstract class ConditionalFileFilterAbstractTestCase extends IOFileFilterAbstractTestCase {
+public abstract class ConditionalFileFilterAbstractTest extends IOFileFilterAbstractTest {
 
     private static final String TEST_FILE_NAME_PREFIX = "TestFile";
     private static final String TEST_FILE_TYPE = ".tst";

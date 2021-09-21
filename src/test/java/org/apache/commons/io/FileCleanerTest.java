@@ -22,7 +22,7 @@ package org.apache.commons.io;
  *
  * @see FileCleaner
  */
-public class FileCleanerTestCase extends FileCleaningTrackerTestCase {
+public class FileCleanerTest extends FileCleaningTrackerTest {
     @Override
     protected FileCleaningTracker newInstance() {
         return FileCleaner.getInstance();

@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests for {@link ThreadMonitor}.
  */
-public class ThreadMonitorTestCase {
+public class ThreadMonitorTest {
 
     /**
      * Test task completed before timeout.

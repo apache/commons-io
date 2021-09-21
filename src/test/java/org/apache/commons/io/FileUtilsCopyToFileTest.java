@@ -29,7 +29,7 @@ import org.junit.jupiter.api.io.TempDir;
 /**
  * This is used to test FileUtils for correctness.
  */
-public class FileUtilsCopyToFileTestCase {
+public class FileUtilsCopyToFileTest {
 
     private class CheckingInputStream extends ByteArrayInputStream {
         private boolean closed;

@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Test;
 
-public class FileSystemTestCase {
+public class FileSystemTest {
 
 
     @Test

@@ -29,7 +29,7 @@ import org.junit.jupiter.api.condition.OS;
  * Requires Windows admin karma or you get "You do not have sufficient privilege to perform this operation."
  */
 @EnabledOnOs(OS.WINDOWS)
-public class FileUtilsDeleteDirectoryWindowsTestCase extends FileUtilsDeleteDirectoryBaseTestCase {
+public class FileUtilsDeleteDirectoryWindowsTest extends FileUtilsDeleteDirectoryBaseTest {
 
     @Override
     protected boolean setupSymlink(final File res, final File link) throws Exception {

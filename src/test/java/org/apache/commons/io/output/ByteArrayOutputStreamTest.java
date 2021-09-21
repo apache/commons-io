@@ -38,7 +38,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Basic unit tests for the alternative ByteArrayOutputStream implementations.
  */
-public class ByteArrayOutputStreamTestCase {
+public class ByteArrayOutputStreamTest {
 
     private interface BAOSFactory<T extends AbstractByteArrayOutputStream> {
         T newInstance();

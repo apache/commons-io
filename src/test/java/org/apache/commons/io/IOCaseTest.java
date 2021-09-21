@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
  * This is used to test IOCase for correctness.
  *
  */
-public class IOCaseTestCase {
+public class IOCaseTest {
 
     private static final boolean WINDOWS = File.separatorChar == '\\';
 

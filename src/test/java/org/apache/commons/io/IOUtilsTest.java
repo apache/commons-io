@@ -86,7 +86,7 @@ import org.junit.jupiter.api.io.TempDir;
  * Due to interdependencies in IOUtils and IOUtilsTestlet, one bug may cause multiple tests to fail.
  */
 @SuppressWarnings("deprecation") // deliberately testing deprecated code
-public class IOUtilsTestCase {
+public class IOUtilsTest {
 
     private static final int FILE_SIZE = 1024 * 4 + 1;
 

@@ -82,7 +82,7 @@ import org.junit.jupiter.api.io.TempDir;
  * @see FileUtils
  */
 @SuppressWarnings({"deprecation", "ResultOfMethodCallIgnored"}) // unit tests include tests of many deprecated methods
-public class FileUtilsTestCase {
+public class FileUtilsTest {
 
     /**
      * DirectoryWalker implementation that recursively lists all files and directories.

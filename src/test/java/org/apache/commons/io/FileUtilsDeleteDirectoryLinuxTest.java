@@ -31,7 +31,7 @@ import org.junit.jupiter.api.condition.DisabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 
 @DisabledOnOs({OS.WINDOWS, OS.MAC})
-public class FileUtilsDeleteDirectoryLinuxTestCase extends FileUtilsDeleteDirectoryBaseTestCase {
+public class FileUtilsDeleteDirectoryLinuxTest extends FileUtilsDeleteDirectoryBaseTest {
 
 	/** Only runs on Linux. */
 	private boolean chmod(final File file, final int mode, final boolean recurse) throws InterruptedException {

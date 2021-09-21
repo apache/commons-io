@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Test;
  *
  */
 @SuppressWarnings("deprecation") // testing deprecated class
-public class FileSystemUtilsTestCase {
+public class FileSystemUtilsTest {
 
     static class MockFileSystemUtils extends FileSystemUtils {
         private final int exitCode;

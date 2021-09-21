@@ -30,7 +30,7 @@ import org.junit.jupiter.api.io.TempDir;
  * Test cases for FileUtils.deleteDirectory() method.
  *
  */
-public abstract class FileUtilsDeleteDirectoryBaseTestCase {
+public abstract class FileUtilsDeleteDirectoryBaseTest {
     @TempDir
     public File top;
 

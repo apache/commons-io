@@ -34,7 +34,7 @@ import org.junit.jupiter.api.io.TempDir;
  *
  * @see FileDeleteStrategy
  */
-public class FileDeleteStrategyTestCase {
+public class FileDeleteStrategyTest {
 
     @TempDir
     public File temporaryFolder;

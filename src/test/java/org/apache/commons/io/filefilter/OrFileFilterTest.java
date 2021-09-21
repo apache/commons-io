@@ -24,10 +24,10 @@ import org.junit.jupiter.api.BeforeEach;
 /**
  * Tests {@link IOFileFilter}.
  */
-public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase {
+public class OrFileFilterTest extends ConditionalFileFilterAbstractTest {
 
   private static final String DEFAULT_WORKING_PATH = "./OrFileFilterTestCase/";
-  private static final String WORKING_PATH_NAME_PROPERTY_KEY = OrFileFilterTestCase.class.getName() + ".workingDirectory";
+  private static final String WORKING_PATH_NAME_PROPERTY_KEY = OrFileFilterTest.class.getName() + ".workingDirectory";
 
   private List<List<IOFileFilter>> testFilters;
   private List<boolean[]> testTrueResults;

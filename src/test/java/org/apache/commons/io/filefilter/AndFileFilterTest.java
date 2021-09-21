@@ -28,10 +28,10 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link AndFileFilter}.
  */
-public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase {
+public class AndFileFilterTest extends ConditionalFileFilterAbstractTest {
 
   private static final String DEFAULT_WORKING_PATH = "./AndFileFilterTestCase/";
-  private static final String WORKING_PATH_NAME_PROPERTY_KEY = AndFileFilterTestCase.class.getName() + ".workingDirectory";
+  private static final String WORKING_PATH_NAME_PROPERTY_KEY = AndFileFilterTest.class.getName() + ".workingDirectory";
 
   private List<List<IOFileFilter>> testFilters;
   private List<boolean[]> testTrueResults;

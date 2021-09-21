@@ -38,7 +38,7 @@ import org.junit.jupiter.api.io.TempDir;
  * TODO Redo this test using
  * {@link Files#createSymbolicLink(java.nio.file.Path, java.nio.file.Path, java.nio.file.attribute.FileAttribute...)}.
  */
-public class FileUtilsCleanDirectoryTestCase {
+public class FileUtilsCleanDirectoryTest {
 
     @TempDir
     public File top;

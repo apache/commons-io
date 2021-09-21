@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Test case for {@link CompositeFileComparator}.
  */
-public class CompositeFileComparatorTest extends ComparatorAbstractTestCase {
+public class CompositeFileComparatorTest extends ComparatorAbstractTest {
 
     /**
      * Test Constructor with null array

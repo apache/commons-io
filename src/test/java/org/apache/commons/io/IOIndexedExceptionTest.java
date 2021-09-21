@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
  *
  * @since 2.7
  */
-public class IOIndexedExceptionTestCase {
+public class IOIndexedExceptionTest {
 
     @Test
     public void testEdge() {

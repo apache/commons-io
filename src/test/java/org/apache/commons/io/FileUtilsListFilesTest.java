@@ -35,7 +35,7 @@ import org.junit.jupiter.api.io.TempDir;
 /**
  * Test cases for FileUtils.listFiles() methods.
  */
-public class FileUtilsListFilesTestCase {
+public class FileUtilsListFilesTest {
 
     @TempDir
     public File temporaryFolder;

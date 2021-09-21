@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Test case for {@link SizeFileComparator}.
  */
-public class SizeFileComparatorTest extends ComparatorAbstractTestCase {
+public class SizeFileComparatorTest extends ComparatorAbstractTest {
 
     private File smallerDir;
     private File largerDir;

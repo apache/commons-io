@@ -43,7 +43,7 @@ import org.junit.jupiter.api.io.TempDir;
  *
  * @see FileCleaningTracker
  */
-public class FileCleaningTrackerTestCase {
+public class FileCleaningTrackerTest {
 
     @TempDir
     public File temporaryFolder;
