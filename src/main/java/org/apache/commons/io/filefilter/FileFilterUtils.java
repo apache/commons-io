@@ -579,13 +579,13 @@ public class FileFilterUtils {
      * Returns a filter that returns true if the file name matches the specified text.
      *
      * @param name  the file name
-     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @param ioCase  how to handle case sensitivity, null means case-sensitive
      * @return a name checking filter
      * @see NameFileFilter
      * @since 2.0
      */
-    public static IOFileFilter nameFileFilter(final String name, final IOCase caseSensitivity) {
-        return new NameFileFilter(name, caseSensitivity);
+    public static IOFileFilter nameFileFilter(final String name, final IOCase ioCase) {
+        return new NameFileFilter(name, ioCase);
     }
 
     /**
@@ -644,13 +644,13 @@ public class FileFilterUtils {
      * Returns a filter that returns true if the file name starts with the specified text.
      *
      * @param prefix  the file name prefix
-     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @param ioCase  how to handle case sensitivity, null means case-sensitive
      * @return a prefix checking filter
      * @see PrefixFileFilter
      * @since 2.0
      */
-    public static IOFileFilter prefixFileFilter(final String prefix, final IOCase caseSensitivity) {
-        return new PrefixFileFilter(prefix, caseSensitivity);
+    public static IOFileFilter prefixFileFilter(final String prefix, final IOCase ioCase) {
+        return new PrefixFileFilter(prefix, ioCase);
     }
 
     /**
@@ -709,13 +709,13 @@ public class FileFilterUtils {
      * Returns a filter that returns true if the file name ends with the specified text.
      *
      * @param suffix  the file name suffix
-     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @param ioCase  how to handle case sensitivity, null means case-sensitive
      * @return a suffix checking filter
      * @see SuffixFileFilter
      * @since 2.0
      */
-    public static IOFileFilter suffixFileFilter(final String suffix, final IOCase caseSensitivity) {
-        return new SuffixFileFilter(suffix, caseSensitivity);
+    public static IOFileFilter suffixFileFilter(final String suffix, final IOCase ioCase) {
+        return new SuffixFileFilter(suffix, ioCase);
     }
 
     /**

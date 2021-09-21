@@ -73,22 +73,22 @@ public class NameFileComparator extends AbstractFileComparator implements Serial
     public static final Comparator<File> NAME_SYSTEM_REVERSE = new ReverseFileComparator(NAME_SYSTEM_COMPARATOR);
 
     /** Whether the comparison is case sensitive. */
-    private final IOCase caseSensitivity;
+    private final IOCase ioCase;
 
     /**
      * Constructs a case sensitive file name comparator instance.
      */
     public NameFileComparator() {
-        this.caseSensitivity = IOCase.SENSITIVE;
+        this.ioCase = IOCase.SENSITIVE;
     }
 
     /**
      * Constructs a file name comparator instance with the specified case-sensitivity.
      *
-     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @param ioCase  how to handle case sensitivity, null means case-sensitive
      */
-    public NameFileComparator(final IOCase caseSensitivity) {
-        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+    public NameFileComparator(final IOCase ioCase) {
+        this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }
 
     /**
@@ -103,7 +103,7 @@ public class NameFileComparator extends AbstractFileComparator implements Serial
      */
     @Override
     public int compare(final File file1, final File file2) {
-        return caseSensitivity.checkCompareTo(file1.getName(), file2.getName());
+        return ioCase.checkCompareTo(file1.getName(), file2.getName());
     }
 
     /**
@@ -113,6 +113,6 @@ public class NameFileComparator extends AbstractFileComparator implements Serial
      */
     @Override
     public String toString() {
-        return super.toString() + "[caseSensitivity=" + caseSensitivity + "]";
+        return super.toString() + "[ioCase=" + ioCase + "]";
     }
 }

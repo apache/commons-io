@@ -67,12 +67,24 @@ public enum IOCase {
     /**
      * Tests for cases sensitivity in a null-safe manner.
      *
-     * @param caseSensitivity an IOCase.
+     * @param ioCase an IOCase.
      * @return true if the input is non-null and {@link #isCaseSensitive()}.
      * @since 2.10.0
      */
-    public static boolean isCaseSensitive(final IOCase caseSensitivity) {
-        return caseSensitivity != null && !caseSensitivity.isCaseSensitive();
+    public static boolean isCaseSensitive(final IOCase ioCase) {
+        return ioCase != null && !ioCase.isCaseSensitive();
+    }
+
+    /**
+     * Returns the given value if not-null, the defaultValue if null.
+     *
+     * @param value the value to test.
+     * @param defaultValue the default value.
+     * @return the given value if not-null, the defaultValue if null.
+     * @since 2.12.0
+     */
+    public static IOCase value(final IOCase value, final IOCase defaultValue) {
+        return value != null ? value : defaultValue;
     }
 
     /** Serialization version. */

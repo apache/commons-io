@@ -438,11 +438,11 @@ public class FilenameUtils {
      * @param fileName1  the first fileName to query, may be null
      * @param fileName2  the second fileName to query, may be null
      * @param normalized  whether to normalize the fileNames
-     * @param caseSensitivity  what case sensitivity rule to use, null means case-sensitive
+     * @param ioCase  what case sensitivity rule to use, null means case-sensitive
      * @return true if the fileNames are equal, null equals null
      * @since 1.3
      */
-    public static boolean equals(String fileName1, String fileName2, final boolean normalized, IOCase caseSensitivity) {
+    public static boolean equals(String fileName1, String fileName2, final boolean normalized, final IOCase ioCase) {
 
         if (fileName1 == null || fileName2 == null) {
             return fileName1 == null && fileName2 == null;
@@ -457,10 +457,7 @@ public class FilenameUtils {
                 return false;
             }
         }
-        if (caseSensitivity == null) {
-            caseSensitivity = IOCase.SENSITIVE;
-        }
-        return caseSensitivity.checkEquals(fileName1, fileName2);
+        return IOCase.value(ioCase, IOCase.SENSITIVE).checkEquals(fileName1, fileName2);
     }
 
     /**
@@ -1567,20 +1564,18 @@ public class FilenameUtils {
      *
      * @param fileName  the fileName to match on
      * @param wildcardMatcher  the wildcard string to match against
-     * @param caseSensitivity  what case sensitivity rule to use, null means case-sensitive
+     * @param ioCase  what case sensitivity rule to use, null means case-sensitive
      * @return true if the fileName matches the wildcard string
      * @since 1.3
      */
-    public static boolean wildcardMatch(final String fileName, final String wildcardMatcher, IOCase caseSensitivity) {
+    public static boolean wildcardMatch(final String fileName, final String wildcardMatcher, IOCase ioCase) {
         if (fileName == null && wildcardMatcher == null) {
             return true;
         }
         if (fileName == null || wildcardMatcher == null) {
             return false;
         }
-        if (caseSensitivity == null) {
-            caseSensitivity = IOCase.SENSITIVE;
-        }
+        ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
         final String[] wcs = splitOnTokens(wildcardMatcher);
         boolean anyChars = false;
         int textIdx = 0;
@@ -1618,16 +1613,16 @@ public class FilenameUtils {
                     // matching text token
                     if (anyChars) {
                         // any chars then try to locate text token
-                        textIdx = caseSensitivity.checkIndexOf(fileName, textIdx, wcs[wcsIdx]);
+                        textIdx = ioCase.checkIndexOf(fileName, textIdx, wcs[wcsIdx]);
                         if (textIdx == NOT_FOUND) {
                             // token not found
                             break;
                         }
-                        final int repeat = caseSensitivity.checkIndexOf(fileName, textIdx + 1, wcs[wcsIdx]);
+                        final int repeat = ioCase.checkIndexOf(fileName, textIdx + 1, wcs[wcsIdx]);
                         if (repeat >= 0) {
                             backtrack.push(new int[] {wcsIdx, repeat});
                         }
-                    } else if (!caseSensitivity.checkRegionMatches(fileName, textIdx, wcs[wcsIdx])) {
+                    } else if (!ioCase.checkRegionMatches(fileName, textIdx, wcs[wcsIdx])) {
                         // matching from current position
                         // couldn't match token
                         break;

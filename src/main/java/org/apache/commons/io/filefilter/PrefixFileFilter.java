@@ -71,7 +71,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
     private final String[] prefixes;
 
     /** Whether the comparison is case sensitive. */
-    private final IOCase caseSensitivity;
+    private final IOCase isCase;
 
     /**
      * Constructs a new Prefix file filter for a list of prefixes.
@@ -89,17 +89,17 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * specifying case-sensitivity.
      *
      * @param prefixes  the prefixes to allow, must not be null
-     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @param ioCase  how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the prefix list is null
      * @throws ClassCastException if the list does not contain Strings
      * @since 1.4
      */
-    public PrefixFileFilter(final List<String> prefixes, final IOCase caseSensitivity) {
+    public PrefixFileFilter(final List<String> prefixes, final IOCase ioCase) {
         if (prefixes == null) {
             throw new IllegalArgumentException("The list of prefixes must not be null");
         }
         this.prefixes = prefixes.toArray(EMPTY_STRING_ARRAY);
-        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+        this.isCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }
 
     /**
@@ -130,16 +130,16 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * specifying case-sensitivity.
      *
      * @param prefix  the prefix to allow, must not be null
-     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @param ioCase  how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the prefix is null
      * @since 1.4
      */
-    public PrefixFileFilter(final String prefix, final IOCase caseSensitivity) {
+    public PrefixFileFilter(final String prefix, final IOCase ioCase) {
         if (prefix == null) {
             throw new IllegalArgumentException("The prefix must not be null");
         }
         this.prefixes = new String[] {prefix};
-        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+        this.isCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }
 
     /**
@@ -147,17 +147,17 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * specifying case-sensitivity.
      *
      * @param prefixes  the prefixes to allow, must not be null
-     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @param ioCase  how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the prefix is null
      * @since 1.4
      */
-    public PrefixFileFilter(final String[] prefixes, final IOCase caseSensitivity) {
+    public PrefixFileFilter(final String[] prefixes, final IOCase ioCase) {
         if (prefixes == null) {
             throw new IllegalArgumentException("The array of prefixes must not be null");
         }
         this.prefixes = new String[prefixes.length];
         System.arraycopy(prefixes, 0, this.prefixes, 0, prefixes.length);
-        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+        this.isCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }
 
     /**
@@ -198,7 +198,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
 
     private boolean accept(final String name) {
         for (final String prefix : prefixes) {
-            if (caseSensitivity.checkStartsWith(name, prefix)) {
+            if (isCase.checkStartsWith(name, prefix)) {
                 return true;
             }
         }

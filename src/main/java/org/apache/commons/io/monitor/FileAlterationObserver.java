@@ -147,16 +147,14 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Construct an observer for the specified directory, file filter and
-     * file comparator.
+     * Construct an observer for the specified directory, file filter and file comparator.
      *
      * @param directoryName the name of the directory to observe
      * @param fileFilter The file filter or null if none
-     * @param caseSensitivity  what case sensitivity to use comparing file names, null means system sensitive
+     * @param ioCase what case sensitivity to use comparing file names, null means system sensitive
      */
-    public FileAlterationObserver(final String directoryName, final FileFilter fileFilter,
-                                  final IOCase caseSensitivity) {
-        this(new File(directoryName), fileFilter, caseSensitivity);
+    public FileAlterationObserver(final String directoryName, final FileFilter fileFilter, final IOCase ioCase) {
+        this(new File(directoryName), fileFilter, ioCase);
     }
 
     /**
@@ -184,22 +182,20 @@ public class FileAlterationObserver implements Serializable {
      *
      * @param directory the directory to observe
      * @param fileFilter The file filter or null if none
-     * @param caseSensitivity  what case sensitivity to use comparing file names, null means system sensitive
+     * @param ioCase  what case sensitivity to use comparing file names, null means system sensitive
      */
-    public FileAlterationObserver(final File directory, final FileFilter fileFilter, final IOCase caseSensitivity) {
-        this(new FileEntry(directory), fileFilter, caseSensitivity);
+    public FileAlterationObserver(final File directory, final FileFilter fileFilter, final IOCase ioCase) {
+        this(new FileEntry(directory), fileFilter, ioCase);
     }
 
     /**
-     * Constructs an observer for the specified directory, file filter and
-     * file comparator.
+     * Constructs an observer for the specified directory, file filter and file comparator.
      *
      * @param rootEntry the root directory to observe
      * @param fileFilter The file filter or null if none
-     * @param caseSensitivity  what case sensitivity to use comparing file names, null means system sensitive
+     * @param ioCase what case sensitivity to use comparing file names, null means system sensitive
      */
-    protected FileAlterationObserver(final FileEntry rootEntry, final FileFilter fileFilter,
-                                     final IOCase caseSensitivity) {
+    protected FileAlterationObserver(final FileEntry rootEntry, final FileFilter fileFilter, final IOCase ioCase) {
         if (rootEntry == null) {
             throw new IllegalArgumentException("Root entry is missing");
         }
@@ -208,11 +204,14 @@ public class FileAlterationObserver implements Serializable {
         }
         this.rootEntry = rootEntry;
         this.fileFilter = fileFilter;
-        if (caseSensitivity == null || caseSensitivity.equals(IOCase.SYSTEM)) {
+        switch (IOCase.value(ioCase, IOCase.SYSTEM)) {
+        case SYSTEM:
             this.comparator = NameFileComparator.NAME_SYSTEM_COMPARATOR;
-        } else if (caseSensitivity.equals(IOCase.INSENSITIVE)) {
+            break;
+        case INSENSITIVE:
             this.comparator = NameFileComparator.NAME_INSENSITIVE_COMPARATOR;
-        } else {
+            break;
+        default:
             this.comparator = NameFileComparator.NAME_COMPARATOR;
         }
     }
@@ -277,8 +276,7 @@ public class FileAlterationObserver implements Serializable {
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
     public void initialize() throws Exception {
         rootEntry.refresh(rootEntry.getFile());
-        final FileEntry[] children = doListFiles(rootEntry.getFile(), rootEntry);
-        rootEntry.setChildren(children);
+        rootEntry.setChildren(doListFiles(rootEntry.getFile(), rootEntry));
     }
 
     /**
@@ -360,8 +358,7 @@ public class FileAlterationObserver implements Serializable {
     private FileEntry createFileEntry(final FileEntry parent, final File file) {
         final FileEntry entry = parent.newChildInstance(file);
         entry.refresh(file);
-        final FileEntry[] children = doListFiles(file, entry);
-        entry.setChildren(children);
+        entry.setChildren(doListFiles(file, entry));
         return entry;
     }
 

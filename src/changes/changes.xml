@@ -202,6 +202,9 @@ The <action> type attribute can be add,update,fix,remove.
         Add and use PathUtils.sizeOfDirectory(Path).
         Add and use PathUtils.sizeOfDirectoryAsBigInteger(Path).
       </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add and use IOCase.value(IOCase, IOCase).
+      </action>
       <action dev="jonfreedman" type="add" due-to="Jon Freedman, Gary Gregory">
         Add Tailer.Tailable interface to allow tailing of remote files for example using jCIFS.
       </action>

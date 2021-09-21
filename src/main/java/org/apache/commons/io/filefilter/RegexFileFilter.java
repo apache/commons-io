@@ -87,11 +87,11 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
     /**
      * Converts IOCase to Pattern compilation flags.
      *
-     * @param caseSensitivity case-sensitivity.
+     * @param ioCase case-sensitivity.
      * @return Pattern compilation flags.
      */
-    private static int toFlags(final IOCase caseSensitivity) {
-        return IOCase.isCaseSensitive(caseSensitivity) ? Pattern.CASE_INSENSITIVE : 0;
+    private static int toFlags(final IOCase ioCase) {
+        return IOCase.isCaseSensitive(ioCase) ? Pattern.CASE_INSENSITIVE : 0;
     }
 
     /** The regular expression pattern that will be used to match file names. */
@@ -151,11 +151,11 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      * Constructs a new regular expression filter with the specified flags case sensitivity.
      *
      * @param pattern regular string expression to match
-     * @param caseSensitivity how to handle case sensitivity, null means case-sensitive
+     * @param ioCase how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the pattern is null
      */
-    public RegexFileFilter(final String pattern, final IOCase caseSensitivity) {
-        this(compile(pattern, toFlags(caseSensitivity)));
+    public RegexFileFilter(final String pattern, final IOCase ioCase) {
+        this(compile(pattern, toFlags(ioCase)));
     }
 
     /**

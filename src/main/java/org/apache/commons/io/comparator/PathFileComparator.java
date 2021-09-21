@@ -73,22 +73,22 @@ public class PathFileComparator extends AbstractFileComparator implements Serial
     public static final Comparator<File> PATH_SYSTEM_REVERSE = new ReverseFileComparator(PATH_SYSTEM_COMPARATOR);
 
     /** Whether the comparison is case sensitive. */
-    private final IOCase caseSensitivity;
+    private final IOCase ioCase;
 
     /**
      * Constructs a case sensitive file path comparator instance.
      */
     public PathFileComparator() {
-        this.caseSensitivity = IOCase.SENSITIVE;
+        this.ioCase = IOCase.SENSITIVE;
     }
 
     /**
      * Constructs a file path comparator instance with the specified case-sensitivity.
      *
-     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @param ioCase  how to handle case sensitivity, null means case-sensitive
      */
-    public PathFileComparator(final IOCase caseSensitivity) {
-        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+    public PathFileComparator(final IOCase ioCase) {
+        this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }
 
     /**
@@ -104,7 +104,7 @@ public class PathFileComparator extends AbstractFileComparator implements Serial
      */
     @Override
     public int compare(final File file1, final File file2) {
-        return caseSensitivity.checkCompareTo(file1.getPath(), file2.getPath());
+        return ioCase.checkCompareTo(file1.getPath(), file2.getPath());
     }
 
     /**
@@ -114,6 +114,6 @@ public class PathFileComparator extends AbstractFileComparator implements Serial
      */
     @Override
     public String toString() {
-        return super.toString() + "[caseSensitivity=" + caseSensitivity + "]";
+        return super.toString() + "[ioCase=" + ioCase + "]";
     }
 }

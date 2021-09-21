@@ -73,7 +73,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
     private final String[] suffixes;
 
     /** Whether the comparison is case sensitive. */
-    private final IOCase caseSensitivity;
+    private final IOCase ioCase;
 
     /**
      * Constructs a new Suffix file filter for a list of suffixes.
@@ -91,17 +91,17 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      * specifying case-sensitivity.
      *
      * @param suffixes  the suffixes to allow, must not be null
-     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @param ioCase  how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the suffix list is null
      * @throws ClassCastException if the list does not contain Strings
      * @since 1.4
      */
-    public SuffixFileFilter(final List<String> suffixes, final IOCase caseSensitivity) {
+    public SuffixFileFilter(final List<String> suffixes, final IOCase ioCase) {
         if (suffixes == null) {
             throw new IllegalArgumentException("The list of suffixes must not be null");
         }
         this.suffixes = suffixes.toArray(EMPTY_STRING_ARRAY);
-        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+        this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }
 
     /**
@@ -132,16 +132,16 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      * specifying case-sensitivity.
      *
      * @param suffix  the suffix to allow, must not be null
-     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @param ioCase  how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the suffix is null
      * @since 1.4
      */
-    public SuffixFileFilter(final String suffix, final IOCase caseSensitivity) {
+    public SuffixFileFilter(final String suffix, final IOCase ioCase) {
         if (suffix == null) {
             throw new IllegalArgumentException("The suffix must not be null");
         }
         this.suffixes = new String[] {suffix};
-        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+        this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }
 
     /**
@@ -149,17 +149,17 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      * specifying case-sensitivity.
      *
      * @param suffixes  the suffixes to allow, must not be null
-     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @param ioCase  how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the suffix array is null
      * @since 1.4
      */
-    public SuffixFileFilter(final String[] suffixes, final IOCase caseSensitivity) {
+    public SuffixFileFilter(final String[] suffixes, final IOCase ioCase) {
         if (suffixes == null) {
             throw new IllegalArgumentException("The array of suffixes must not be null");
         }
         this.suffixes = new String[suffixes.length];
         System.arraycopy(suffixes, 0, this.suffixes, 0, suffixes.length);
-        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+        this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }
 
     /**
@@ -199,7 +199,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
 
     private boolean accept(final String name) {
         for (final String suffix : this.suffixes) {
-            if (caseSensitivity.checkEndsWith(name, suffix)) {
+            if (ioCase.checkEndsWith(name, suffix)) {
                 return true;
             }
         }

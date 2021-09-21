@@ -77,22 +77,22 @@ public class ExtensionFileComparator extends AbstractFileComparator implements S
     public static final Comparator<File> EXTENSION_SYSTEM_REVERSE = new ReverseFileComparator(EXTENSION_SYSTEM_COMPARATOR);
 
     /** Whether the comparison is case sensitive. */
-    private final IOCase caseSensitivity;
+    private final IOCase ioCase;
 
     /**
      * Constructs a case sensitive file extension comparator instance.
      */
     public ExtensionFileComparator() {
-        this.caseSensitivity = IOCase.SENSITIVE;
+        this.ioCase = IOCase.SENSITIVE;
     }
 
     /**
      * Constructs a file extension comparator instance with the specified case-sensitivity.
      *
-     * @param caseSensitivity how to handle case sensitivity, null means case-sensitive
+     * @param ioCase how to handle case sensitivity, null means case-sensitive
      */
-    public ExtensionFileComparator(final IOCase caseSensitivity) {
-        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+    public ExtensionFileComparator(final IOCase ioCase) {
+        this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }
 
     /**
@@ -110,7 +110,7 @@ public class ExtensionFileComparator extends AbstractFileComparator implements S
     public int compare(final File file1, final File file2) {
         final String suffix1 = FilenameUtils.getExtension(file1.getName());
         final String suffix2 = FilenameUtils.getExtension(file2.getName());
-        return caseSensitivity.checkCompareTo(suffix1, suffix2);
+        return ioCase.checkCompareTo(suffix1, suffix2);
     }
 
     /**
@@ -120,6 +120,6 @@ public class ExtensionFileComparator extends AbstractFileComparator implements S
      */
     @Override
     public String toString() {
-        return super.toString() + "[caseSensitivity=" + caseSensitivity + "]";
+        return super.toString() + "[ioCase=" + ioCase + "]";
     }
 }
