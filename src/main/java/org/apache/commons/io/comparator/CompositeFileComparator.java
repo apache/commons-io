@@ -58,8 +58,7 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
         if (delegates == null) {
             this.delegates = (Comparator<File>[]) EMPTY_COMPARATOR_ARRAY;//1
         } else {
-            this.delegates = (Comparator<File>[]) new Comparator<?>[delegates.length];//2
-            System.arraycopy(delegates, 0, this.delegates, 0, delegates.length);
+            this.delegates = delegates.clone();//2
         }
     }
 

@@ -84,8 +84,7 @@ public class ByteOrderMark implements Serializable {
             throw new IllegalArgumentException("No bytes specified");
         }
         this.charsetName = charsetName;
-        this.bytes = new int[bytes.length];
-        System.arraycopy(bytes, 0, this.bytes, 0, bytes.length);
+        this.bytes = bytes.clone();
     }
 
     /**

@@ -151,8 +151,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
         if (names == null) {
             throw new IllegalArgumentException("The array of names must not be null");
         }
-        this.names = new String[names.length];
-        System.arraycopy(names, 0, this.names, 0, names.length);
+        this.names = names.clone();
         this.ioCase = toIOCase(ioCase);
     }
 

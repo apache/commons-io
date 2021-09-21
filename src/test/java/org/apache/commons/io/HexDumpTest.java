@@ -63,8 +63,7 @@ public class HexDumpTest {
             for (int k = 0; k < 16; k++) {
                 outputArray[offset++] = (byte) toAscii((j * 16) + k);
             }
-            System.arraycopy(HexDump.EOL.getBytes(), 0, outputArray, offset,
-                    HexDump.EOL.getBytes().length);
+            System.arraycopy(HexDump.EOL.getBytes(), 0, outputArray, offset, HexDump.EOL.getBytes().length);
         }
         byte[] actualOutput = stream.toByteArray();
 

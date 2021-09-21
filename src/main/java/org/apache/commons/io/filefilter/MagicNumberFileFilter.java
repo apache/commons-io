@@ -156,26 +156,26 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
      *     MagicNumberFileFilter(new byte[] {0xCA, 0xFE, 0xBA, 0xBE}, 0);
      * </pre>
      *
-     * @param magicNumber the magic number to look for in the file.
+     * @param magicNumbers the magic number to look for in the file.
      * @param offset the byte offset in the file to start comparing bytes.
      *
      * @throws IllegalArgumentException if {@code magicNumber} is
      *         {@code null}, or contains no bytes, or {@code offset}
      *         is a negative number.
      */
-    public MagicNumberFileFilter(final byte[] magicNumber, final long offset) {
-        if (magicNumber == null) {
+    public MagicNumberFileFilter(final byte[] magicNumbers, final long offset) {
+        if (magicNumbers == null) {
             throw new IllegalArgumentException("The magic number cannot be null");
         }
-        if (magicNumber.length == 0) {
+        if (magicNumbers.length == 0) {
             throw new IllegalArgumentException("The magic number must contain at least one byte");
         }
         if (offset < 0) {
             throw new IllegalArgumentException("The offset cannot be negative");
         }
 
-        this.magicNumbers = IOUtils.byteArray(magicNumber.length);
-        System.arraycopy(magicNumber, 0, this.magicNumbers, 0, magicNumber.length);
+        this.magicNumbers = IOUtils.byteArray(magicNumbers.length);
+        System.arraycopy(magicNumbers, 0, this.magicNumbers, 0, magicNumbers.length);
         this.byteOffset = offset;
     }
 
