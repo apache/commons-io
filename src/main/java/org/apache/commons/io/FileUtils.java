@@ -55,9 +55,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.CRC32;
@@ -2175,13 +2177,15 @@ public class FileUtils {
     }
 
     private static AccumulatorPathVisitor listAccumulate(final File directory, final IOFileFilter fileFilter,
-        final IOFileFilter dirFilter) throws IOException {
+        final IOFileFilter dirFilter, FileVisitOption... options) throws IOException {
         final boolean isDirFilterSet = dirFilter != null;
         final FileEqualsFileFilter rootDirFilter = new FileEqualsFileFilter(directory);
         final PathFilter dirPathFilter = isDirFilterSet ? rootDirFilter.or(dirFilter) : rootDirFilter;
         final AccumulatorPathVisitor visitor = new AccumulatorPathVisitor(Counters.noopPathCounters(), fileFilter,
             dirPathFilter);
-        Files.walkFileTree(directory.toPath(), Collections.emptySet(), toMaxDepth(isDirFilterSet), visitor);
+        Set<FileVisitOption> optionSet = new HashSet<>();
+        Collections.addAll(optionSet, options);
+        Files.walkFileTree(directory.toPath(), optionSet, toMaxDepth(isDirFilterSet), visitor);
         return visitor;
     }
 
@@ -2237,7 +2241,7 @@ public class FileUtils {
     public static Collection<File> listFiles(
         final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
         try {
-            final AccumulatorPathVisitor visitor = listAccumulate(directory, fileFilter, dirFilter);
+            final AccumulatorPathVisitor visitor = listAccumulate(directory, fileFilter, dirFilter, FileVisitOption.FOLLOW_LINKS);
             return visitor.getFileList().stream().map(Path::toFile).collect(Collectors.toList());
         } catch (final IOException e) {
             throw UncheckedIOExceptions.create(directory, e);
@@ -2284,7 +2288,7 @@ public class FileUtils {
     public static Collection<File> listFilesAndDirs(
         final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
         try {
-            final AccumulatorPathVisitor visitor = listAccumulate(directory, fileFilter, dirFilter);
+            final AccumulatorPathVisitor visitor = listAccumulate(directory, fileFilter, dirFilter, FileVisitOption.FOLLOW_LINKS);
             final List<Path> list = visitor.getFileList();
             list.addAll(visitor.getDirList());
             return list.stream().map(Path::toFile).collect(Collectors.toList());

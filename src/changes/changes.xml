@@ -77,6 +77,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-726" dev="ggregory" type="fix" due-to="shollander, Gary Gregory">
         Add MemoryMappedInputStream. #215.
       </action>
+      <action issue="IO-749" dev="ggregory" type="fix" due-to="haihuiyang, Gary Gregory">
+        FileUtils.listFiles() does not list matching files if File parameter is a symbolic link.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add BrokenReader.INSTANCE.
