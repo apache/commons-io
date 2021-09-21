@@ -80,6 +80,7 @@ import org.apache.commons.io.FilenameUtils;
 public class WildcardFilter extends AbstractFileFilter implements Serializable {
 
     private static final long serialVersionUID = -5037645902506953517L;
+
     /** The wildcards that will be used to match file names. */
     private final String[] wildcards;
 
