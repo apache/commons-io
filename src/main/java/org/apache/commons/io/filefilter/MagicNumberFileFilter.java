@@ -172,8 +172,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
             throw new IllegalArgumentException("The offset cannot be negative");
         }
 
-        this.magicNumbers = IOUtils.byteArray(magicNumbers.length);
-        System.arraycopy(magicNumbers, 0, this.magicNumbers, 0, magicNumbers.length);
+        this.magicNumbers = magicNumbers.clone();
         this.byteOffset = offset;
     }
 
