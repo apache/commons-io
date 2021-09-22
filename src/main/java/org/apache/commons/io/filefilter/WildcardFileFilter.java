@@ -138,9 +138,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      * @throws IllegalArgumentException if the pattern is null
      */
     public WildcardFileFilter(final String wildcard, final IOCase ioCase) {
-        if (wildcard == null) {
-            throw new IllegalArgumentException("The wildcard must not be null");
-        }
+        requireNonNull(wildcard, "wildcard");
         this.wildcards = new String[] { wildcard };
         this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }
@@ -153,9 +151,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      * @throws IllegalArgumentException if the pattern array is null
      */
     public WildcardFileFilter(final String[] wildcards, final IOCase ioCase) {
-        if (wildcards == null) {
-            throw new IllegalArgumentException("The wildcard array must not be null");
-        }
+        requireNonNull(wildcards, "wildcards");
         this.wildcards = wildcards.clone();
         this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }
