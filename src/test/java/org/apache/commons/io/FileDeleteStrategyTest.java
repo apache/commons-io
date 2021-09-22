@@ -18,6 +18,7 @@ package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -83,12 +84,7 @@ public class FileDeleteStrategyTest {
         assertTrue(subDir.exists());
         assertTrue(subFile.exists());
         // delete dir
-        try {
-            FileDeleteStrategy.NORMAL.delete(subDir);
-            fail();
-        } catch (final IOException ex) {
-            // expected
-        }
+        assertThrows(IOException.class, () -> FileDeleteStrategy.NORMAL.delete(subDir));
         assertTrue(subDir.exists());
         assertTrue(subFile.exists());
         // delete file
@@ -105,12 +101,7 @@ public class FileDeleteStrategyTest {
 
     @Test
     public void testDeleteNull() throws Exception {
-        try {
-            FileDeleteStrategy.NORMAL.delete(null);
-            fail();
-        } catch (final NullPointerException ex) {
-            // expected
-        }
+        assertThrows(NullPointerException.class, () -> FileDeleteStrategy.NORMAL.delete(null));
         assertTrue(FileDeleteStrategy.NORMAL.deleteQuietly(null));
     }
 

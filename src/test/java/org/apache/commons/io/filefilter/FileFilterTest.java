@@ -266,18 +266,8 @@ public class FileFilterTest extends AbstractFilterTest {
         assertFiltering(filter, testFile, false);
         assertNotNull(filter.toString()); // TODO better test
 
-        try {
-            new DelegateFileFilter((FileFilter) null);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        try {
-            new DelegateFileFilter((FilenameFilter) null);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-        }
-
+        assertThrows(IllegalArgumentException.class, () -> new DelegateFileFilter((FileFilter) null));
+        assertThrows(IllegalArgumentException.class, () -> new DelegateFileFilter((FilenameFilter) null));
     }
 
     @Test
@@ -356,26 +346,9 @@ public class FileFilterTest extends AbstractFilterTest {
         assertEquals(FileVisitResult.TERMINATE, listFilter.accept(bmpPath, null));
         assertEquals(FileVisitResult.TERMINATE, listFilter.accept(dirPath, null));
 
-        try {
-            new WildcardFilter((String) null);
-            fail();
-        } catch (final IllegalArgumentException ex) {
-            // expected
-        }
-
-        try {
-            new WildcardFilter((String[]) null);
-            fail();
-        } catch (final IllegalArgumentException ex) {
-            // expected
-        }
-
-        try {
-            new WildcardFilter((List<String>) null);
-            fail();
-        } catch (final IllegalArgumentException ex) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, () -> new WildcardFilter((String) null));
+        assertThrows(IllegalArgumentException.class, () -> new WildcardFilter((String[]) null));
+        assertThrows(IllegalArgumentException.class, () -> new WildcardFilter((List<String>) null));
     }
 
     @Test
@@ -596,12 +569,7 @@ public class FileFilterTest extends AbstractFilterTest {
     public void testFilterFilesArrayNullParameters() throws Exception {
         final File fileA = TestUtils.newFile(temporaryFolder, "A");
         final File fileB = TestUtils.newFile(temporaryFolder, "B");
-        try {
-            FileFilterUtils.filter(null, fileA, fileB);
-            fail();
-        } catch (final IllegalArgumentException iae) {
-            // Test passes, exception thrown for null filter
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileFilterUtils.filter(null, fileA, fileB));
 
         final IOFileFilter filter = FileFilterUtils.trueFileFilter();
         FileFilterUtils.filter(filter, fileA, null);
@@ -651,12 +619,7 @@ public class FileFilterTest extends AbstractFilterTest {
      */
     @Test
     public void testFilterListNullParameters() {
-        try {
-            FileFilterUtils.filterList(null, Collections.emptyList());
-            fail();
-        } catch (final IllegalArgumentException iae) {
-            // Test passes, exception thrown for null filter
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileFilterUtils.filterList(null, Collections.emptyList()));
 
         final IOFileFilter filter = FileFilterUtils.trueFileFilter();
         try {
@@ -676,12 +639,7 @@ public class FileFilterTest extends AbstractFilterTest {
     public void testFilterPathsArrayNullParameters() throws Exception {
         final Path fileA = TestUtils.newFile(temporaryFolder, "A").toPath();
         final Path fileB = TestUtils.newFile(temporaryFolder, "B").toPath();
-        try {
-            PathUtils.filter(null, fileA, fileB);
-            fail();
-        } catch (final NullPointerException iae) {
-            // Test passes, exception thrown for null filter
-        }
+        assertThrows(NullPointerException.class, () -> PathUtils.filter(null, fileA, fileB));
 
         final IOFileFilter filter = FileFilterUtils.trueFileFilter();
         PathUtils.filter(filter, fileA, null);
@@ -731,19 +689,10 @@ public class FileFilterTest extends AbstractFilterTest {
      */
     @Test
     public void testFilterSetNullParameters() {
-        try {
-            FileFilterUtils.filterSet(null, Collections.emptySet());
-            fail();
-        } catch (final IllegalArgumentException iae) {
-            // Test passes, exception thrown for null filter
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileFilterUtils.filterSet(null, Collections.emptySet()));
 
         final IOFileFilter filter = FileFilterUtils.trueFileFilter();
-        try {
-            FileFilterUtils.filterSet(filter, new HashSet<>(Collections.singletonList(null)));
-        } catch (final IllegalArgumentException iae) {
-            // Test passes, exception thrown for set containing null
-        }
+        FileFilterUtils.filterSet(filter, new HashSet<>(Collections.singletonList(null)));
 
         final Set<File> filteredSet = FileFilterUtils.filterSet(filter, (Set<File>) null);
         assertEquals(0, filteredSet.size());
@@ -917,42 +866,12 @@ public class FileFilterTest extends AbstractFilterTest {
 
     @Test
     public void testMagicNumberFileFilterValidation() {
-        try {
-            new MagicNumberFileFilter((String) null, 0);
-            fail();
-        } catch (final IllegalArgumentException iae) {
-            // expected
-        }
-        try {
-            new MagicNumberFileFilter("0", -1);
-            fail();
-        } catch (final IllegalArgumentException iae) {
-            // expected
-        }
-        try {
-            new MagicNumberFileFilter("", 0);
-            fail();
-        } catch (final IllegalArgumentException iae) {
-            // expected
-        }
-        try {
-            new MagicNumberFileFilter((byte[]) null, 0);
-            fail();
-        } catch (final IllegalArgumentException iae) {
-            // expected
-        }
-        try {
-            new MagicNumberFileFilter(new byte[] {0}, -1);
-            fail();
-        } catch (final IllegalArgumentException iae) {
-            // expected
-        }
-        try {
-            new MagicNumberFileFilter(new byte[] {}, 0);
-            fail();
-        } catch (final IllegalArgumentException iae) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, () -> new MagicNumberFileFilter((String) null, 0));
+        assertThrows(IllegalArgumentException.class, () -> new MagicNumberFileFilter("0", -1));
+        assertThrows(IllegalArgumentException.class, () -> new MagicNumberFileFilter("", 0));
+        assertThrows(IllegalArgumentException.class, () -> new MagicNumberFileFilter((byte[]) null, 0));
+        assertThrows(IllegalArgumentException.class, () -> new MagicNumberFileFilter(new byte[] {0}, -1));
+        assertThrows(IllegalArgumentException.class, () -> new MagicNumberFileFilter(new byte[] {}, 0));
     }
 
     @Test
@@ -997,7 +916,6 @@ public class FileFilterTest extends AbstractFilterTest {
         assertFiltering(filter2, file, false);
     }
 
-    // -----------------------------------------------------------------------
     @Test
     public void testMakeDirectoryOnly() throws Exception {
         assertSame(DirectoryFileFilter.DIRECTORY, FileFilterUtils.makeDirectoryOnly(null));
@@ -1279,23 +1197,9 @@ public class FileFilterTest extends AbstractFilterTest {
         assertEquals(FileVisitResult.TERMINATE, listFilter.accept(testPath, null));
         assertEquals(FileVisitResult.CONTINUE, listFilter.accept(fredPath, null));
 
-        try {
-            new PrefixFileFilter((String) null);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        try {
-            new PrefixFileFilter((String[]) null);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        try {
-            new PrefixFileFilter((List<String>) null);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> new PrefixFileFilter((String) null));
+        assertThrows(IllegalArgumentException.class, () -> new PrefixFileFilter((String[]) null));
+        assertThrows(IllegalArgumentException.class, () -> new PrefixFileFilter((List<String>) null));
     }
 
     @Test
@@ -1320,24 +1224,9 @@ public class FileFilterTest extends AbstractFilterTest {
         assertFiltering(filter, new File("FOO.test3"), true); // case-sensitive
         assertFiltering(filter, new File("BAR.test3"), true); // case-sensitive
 
-        try {
-            new PrefixFileFilter((String) null, IOCase.INSENSITIVE);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        try {
-            new PrefixFileFilter((String[]) null, IOCase.INSENSITIVE);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        try {
-            new PrefixFileFilter((List<String>) null, IOCase.INSENSITIVE);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-        }
-
+        assertThrows(IllegalArgumentException.class, () -> new PrefixFileFilter((String) null, IOCase.INSENSITIVE));
+        assertThrows(IllegalArgumentException.class, () -> new PrefixFileFilter((String[]) null, IOCase.INSENSITIVE));
+        assertThrows(IllegalArgumentException.class, () -> new PrefixFileFilter((List<String>) null, IOCase.INSENSITIVE));
         // FileFilterUtils.prefixFileFilter(String, IOCase) tests
         filter = FileFilterUtils.prefixFileFilter("bar", IOCase.INSENSITIVE);
         assertFiltering(filter, new File("foo.test2"), false);
@@ -1345,11 +1234,7 @@ public class FileFilterTest extends AbstractFilterTest {
         assertFiltering(filter, new File("FOO.test2"), false); // case-sensitive
         assertFiltering(filter, new File("BAR.test2"), true); // case-sensitive
 
-        try {
-            FileFilterUtils.prefixFileFilter(null, IOCase.INSENSITIVE);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileFilterUtils.prefixFileFilter(null, IOCase.INSENSITIVE));
     }
 
     @Test
@@ -1396,12 +1281,7 @@ public class FileFilterTest extends AbstractFilterTest {
         assertFiltering(filter7, largeFile, true);
         assertFiltering(filter8, largeFile, true);
 
-        try {
-            FileFilterUtils.sizeFileFilter(-1);
-            fail();
-        } catch (final IllegalArgumentException ex) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileFilterUtils.sizeFileFilter(-1));
     }
 
     @Test
@@ -1448,12 +1328,7 @@ public class FileFilterTest extends AbstractFilterTest {
         assertFiltering(filter7, largeFile, true);
         assertFiltering(filter8, largeFile, true);
 
-        try {
-            FileFilterUtils.sizeFileFilter(-1);
-            fail();
-        } catch (final IllegalArgumentException ex) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileFilterUtils.sizeFileFilter(-1));
     }
 
     @Test
@@ -1505,23 +1380,9 @@ public class FileFilterTest extends AbstractFilterTest {
         assertEquals(FileVisitResult.TERMINATE, listFilter.accept(testPath, null));
         assertEquals(FileVisitResult.CONTINUE, listFilter.accept(fredPath, null));
 
-        try {
-            new SuffixFileFilter((String) null);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        try {
-            new SuffixFileFilter((String[]) null);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        try {
-            new SuffixFileFilter((List<String>) null);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> new SuffixFileFilter((String) null));
+        assertThrows(IllegalArgumentException.class, () -> new SuffixFileFilter((String[]) null));
+        assertThrows(IllegalArgumentException.class, () -> new SuffixFileFilter((List<String>) null));
     }
 
     @Test
@@ -1546,34 +1407,16 @@ public class FileFilterTest extends AbstractFilterTest {
         assertFiltering(filter, new File("bar.TES"), true); // case-sensitive
         assertFiltering(filter, new File("bar.exe"), false);
 
-        try {
-            new SuffixFileFilter((String) null, IOCase.INSENSITIVE);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        try {
-            new SuffixFileFilter((String[]) null, IOCase.INSENSITIVE);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        try {
-            new SuffixFileFilter((List<String>) null, IOCase.INSENSITIVE);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> new SuffixFileFilter((String) null, IOCase.INSENSITIVE));
+        assertThrows(IllegalArgumentException.class, () -> new SuffixFileFilter((String[]) null, IOCase.INSENSITIVE));
+        assertThrows(IllegalArgumentException.class, () -> new SuffixFileFilter((List<String>) null, IOCase.INSENSITIVE));
 
         // FileFilterUtils.suffixFileFilter(String, IOCase) tests
         filter = FileFilterUtils.suffixFileFilter("est", IOCase.INSENSITIVE);
         assertFiltering(filter, new File("test"), true);
         assertFiltering(filter, new File("TEST"), true);
 
-        try {
-            FileFilterUtils.suffixFileFilter(null, IOCase.INSENSITIVE);
-            fail();
-        } catch (final IllegalArgumentException ex) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileFilterUtils.suffixFileFilter(null, IOCase.INSENSITIVE));
     }
 
     @Test

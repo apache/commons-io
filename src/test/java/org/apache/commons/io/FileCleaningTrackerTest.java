@@ -19,6 +19,7 @@ package org.apache.commons.io;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -32,6 +33,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.filefilter.PrefixFileFilter;
 import org.apache.commons.io.test.TestUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -183,12 +185,8 @@ public class FileCleaningTrackerTest {
 
         final String path = testFile.getPath();
         final Object marker = new Object();
-        try {
-            theInstance.track(path, marker);
-            fail();
-        } catch (final IllegalStateException ex) {
-            // expected
-        }
+        
+        assertThrows(IllegalStateException.class, () -> theInstance.track(path, marker));
         assertTrue(theInstance.exitWhenFinished);
         assertNull(theInstance.reaper);
     }
@@ -298,30 +296,10 @@ public class FileCleaningTrackerTest {
     }
     @Test
     public void testFileCleanerNull() {
-        try {
-            theInstance.track((File) null, new Object());
-            fail();
-        } catch (final NullPointerException ex) {
-            // expected
-        }
-        try {
-            theInstance.track((File) null, new Object(), FileDeleteStrategy.NORMAL);
-            fail();
-        } catch (final NullPointerException ex) {
-            // expected
-        }
-        try {
-            theInstance.track((String) null, new Object());
-            fail();
-        } catch (final NullPointerException ex) {
-            // expected
-        }
-        try {
-            theInstance.track((String) null, new Object(), FileDeleteStrategy.NORMAL);
-            fail();
-        } catch (final NullPointerException ex) {
-            // expected
-        }
+        assertThrows(NullPointerException.class, () -> theInstance.track((File) null, new Object()));
+        assertThrows(NullPointerException.class, () -> theInstance.track((File) null, new Object(), FileDeleteStrategy.NORMAL));
+        assertThrows(NullPointerException.class, () -> theInstance.track((String) null, new Object()));
+        assertThrows(NullPointerException.class, () -> theInstance.track((String) null, new Object(), FileDeleteStrategy.NORMAL));
     }
 
     private void waitUntilTrackCount() throws Exception {

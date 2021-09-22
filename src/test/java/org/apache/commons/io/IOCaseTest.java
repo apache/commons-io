@@ -19,12 +19,14 @@ package org.apache.commons.io;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
@@ -74,18 +76,9 @@ public class IOCaseTest {
         assertEquals(0, IOCase.SENSITIVE.checkCompareTo("ABC", "ABC"));
         assertEquals(0, IOCase.SENSITIVE.checkCompareTo("", ""));
 
-        try {
-            IOCase.SENSITIVE.checkCompareTo("ABC", null);
-            fail();
-        } catch (final NullPointerException ignore) {}
-        try {
-            IOCase.SENSITIVE.checkCompareTo(null, "ABC");
-            fail();
-        } catch (final NullPointerException ignore) {}
-        try {
-            IOCase.SENSITIVE.checkCompareTo(null, null);
-            fail();
-        } catch (final NullPointerException ignore) {}
+        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkCompareTo("ABC", null));
+        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkCompareTo(null, "ABC"));
+        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkCompareTo(null, null));
     }
 
     @Test
@@ -140,18 +133,9 @@ public class IOCaseTest {
         assertFalse(IOCase.SENSITIVE.checkEquals("", "ABC"));
         assertTrue(IOCase.SENSITIVE.checkEquals("", ""));
 
-        try {
-            IOCase.SENSITIVE.checkEquals("ABC", null);
-            fail();
-        } catch (final NullPointerException ignore) {}
-        try {
-            IOCase.SENSITIVE.checkEquals(null, "ABC");
-            fail();
-        } catch (final NullPointerException ignore) {}
-        try {
-            IOCase.SENSITIVE.checkEquals(null, null);
-            fail();
-        } catch (final NullPointerException ignore) {}
+        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkEquals("ABC", null));
+        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkEquals(null, "ABC"));
+        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkEquals(null, null));
     }
 
 
@@ -206,18 +190,9 @@ public class IOCaseTest {
         // too long
         assertEquals(-1,   IOCase.SENSITIVE.checkIndexOf("DEF", 0, "ABCDEFGHIJ"));
 
-        try {
-            IOCase.SENSITIVE.checkIndexOf("ABC", 0, null);
-            fail();
-        } catch (final NullPointerException ignore) {}
-        try {
-            IOCase.SENSITIVE.checkIndexOf(null, 0, "ABC");
-            fail();
-        } catch (final NullPointerException ignore) {}
-        try {
-            IOCase.SENSITIVE.checkIndexOf(null, 0, null);
-            fail();
-        } catch (final NullPointerException ignore) {}
+        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkIndexOf("ABC", 0, null));
+        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkIndexOf(null, 0, "ABC"));
+        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkIndexOf(null, 0, null));
     }
 
     @Test
@@ -254,30 +229,12 @@ public class IOCaseTest {
         assertFalse(IOCase.SENSITIVE.checkRegionMatches("", 1, "ABC"));
         assertFalse(IOCase.SENSITIVE.checkRegionMatches("", 1, ""));
 
-        try {
-            IOCase.SENSITIVE.checkRegionMatches("ABC", 0, null);
-            fail();
-        } catch (final NullPointerException ignore) {}
-        try {
-            IOCase.SENSITIVE.checkRegionMatches(null, 0, "ABC");
-            fail();
-        } catch (final NullPointerException ignore) {}
-        try {
-            IOCase.SENSITIVE.checkRegionMatches(null, 0, null);
-            fail();
-        } catch (final NullPointerException ignore) {}
-        try {
-            IOCase.SENSITIVE.checkRegionMatches("ABC", 1, null);
-            fail();
-        } catch (final NullPointerException ignore) {}
-        try {
-            IOCase.SENSITIVE.checkRegionMatches(null, 1, "ABC");
-            fail();
-        } catch (final NullPointerException ignore) {}
-        try {
-            IOCase.SENSITIVE.checkRegionMatches(null, 1, null);
-            fail();
-        } catch (final NullPointerException ignore) {}
+        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkRegionMatches("ABC", 0, null));
+        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkRegionMatches(null, 0, "ABC"));
+        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkRegionMatches(null, 0, null));
+        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkRegionMatches("ABC", 1, null));
+        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkRegionMatches(null, 1, "ABC"));
+        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkRegionMatches(null, 1, null));
     }
 
     @Test
@@ -314,14 +271,8 @@ public class IOCaseTest {
         assertEquals(IOCase.SENSITIVE, IOCase.forName("Sensitive"));
         assertEquals(IOCase.INSENSITIVE, IOCase.forName("Insensitive"));
         assertEquals(IOCase.SYSTEM, IOCase.forName("System"));
-        try {
-            IOCase.forName("Blah");
-            fail();
-        } catch (final IllegalArgumentException ignore) {}
-        try {
-            IOCase.forName(null);
-            fail();
-        } catch (final IllegalArgumentException ignore) {}
+        assertThrows(IllegalArgumentException.class, () -> IOCase.forName("Blah"));
+        assertThrows(IllegalArgumentException.class, () -> IOCase.forName(null));
     }
 
     @Test

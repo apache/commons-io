@@ -18,7 +18,7 @@ package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -33,7 +33,7 @@ import org.apache.commons.io.test.ThrowOnFlushAndCloseOutputStream;
 import org.junit.jupiter.api.Test;
 
 /**
- * JUnit tests for IOUtils write methods.
+ * Tests IOUtils write methods.
  *
  * @see IOUtils
  */
@@ -71,11 +71,7 @@ public class IOUtilsWriteTest {
 
     @Test
     public void testWrite_byteArrayToOutputStream_nullStream() throws Exception {
-        try {
-            IOUtils.write(inData, (OutputStream) null);
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
+        assertThrows(NullPointerException.class, () -> IOUtils.write(inData, (OutputStream) null));
     }
 
     @Test
@@ -140,11 +136,7 @@ public class IOUtilsWriteTest {
 
     @Test
     public void testWrite_byteArrayToWriter_Encoding_nullWriter() throws Exception {
-        try {
-            IOUtils.write(inData, null, "UTF8");
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
+        assertThrows(NullPointerException.class, () -> IOUtils.write(inData, null, "UTF8"));
     }
 
     @Test
@@ -163,11 +155,7 @@ public class IOUtilsWriteTest {
 
     @Test
     public void testWrite_byteArrayToWriter_nullWriter() throws Exception {
-        try {
-            IOUtils.write(inData, (Writer) null);
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
+        assertThrows(NullPointerException.class, () -> IOUtils.write(inData, (Writer) null));
     }
 
     @Test
@@ -216,11 +204,7 @@ public class IOUtilsWriteTest {
     @Test
     public void testWrite_charArrayToOutputStream_Encoding_nullStream() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
-        try {
-            IOUtils.write(str.toCharArray(), (OutputStream) null);
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
+        assertThrows(NullPointerException.class, () -> IOUtils.write(str.toCharArray(), (OutputStream) null));
     }
 
     @Test
@@ -253,11 +237,7 @@ public class IOUtilsWriteTest {
     @Test
     public void testWrite_charArrayToOutputStream_nullStream() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
-        try {
-            IOUtils.write(str.toCharArray(), (OutputStream) null);
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
+        assertThrows(NullPointerException.class, () -> IOUtils.write(str.toCharArray(), (OutputStream) null));
     }
 
     @Test
@@ -294,11 +274,7 @@ public class IOUtilsWriteTest {
     @Test
     public void testWrite_charArrayToWriter_Encoding_nullStream() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
-        try {
-            IOUtils.write(str.toCharArray(), (Writer) null);
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
+        assertThrows(NullPointerException.class, () -> IOUtils.write(str.toCharArray(), (Writer) null));
     }
 
     @Test
@@ -347,11 +323,7 @@ public class IOUtilsWriteTest {
     @Test
     public void testWrite_charSequenceToOutputStream_Encoding_nullStream() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, StandardCharsets.US_ASCII));
-        try {
-            IOUtils.write(csq, (OutputStream) null);
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
+        assertThrows(NullPointerException.class, () -> IOUtils.write(csq, (OutputStream) null));
     }
 
     @Test
@@ -384,11 +356,7 @@ public class IOUtilsWriteTest {
     @Test
     public void testWrite_charSequenceToOutputStream_nullStream() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, StandardCharsets.US_ASCII));
-        try {
-            IOUtils.write(csq, (OutputStream) null);
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
+        assertThrows(NullPointerException.class, () -> IOUtils.write(csq, (OutputStream) null));
     }
 
     @Test
@@ -425,11 +393,7 @@ public class IOUtilsWriteTest {
     @Test
     public void testWrite_charSequenceToWriter_Encoding_nullStream() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, StandardCharsets.US_ASCII));
-        try {
-            IOUtils.write(csq, (Writer) null);
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
+        assertThrows(NullPointerException.class, () -> IOUtils.write(csq, (Writer) null));
     }
 
     @Test
@@ -478,11 +442,7 @@ public class IOUtilsWriteTest {
     @Test
     public void testWrite_stringToOutputStream_Encoding_nullStream() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
-        try {
-            IOUtils.write(str, (OutputStream) null);
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
+        assertThrows(NullPointerException.class, () -> IOUtils.write(str, (OutputStream) null));
     }
 
     @Test
@@ -515,11 +475,7 @@ public class IOUtilsWriteTest {
     @Test
     public void testWrite_stringToOutputStream_nullStream() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
-        try {
-            IOUtils.write(str, (OutputStream) null);
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
+        assertThrows(NullPointerException.class, () -> IOUtils.write(str, (OutputStream) null));
     }
 
     @Test
@@ -556,11 +512,7 @@ public class IOUtilsWriteTest {
     @Test
     public void testWrite_stringToWriter_Encoding_nullStream() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
-        try {
-            IOUtils.write(str, (Writer) null);
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
+        assertThrows(NullPointerException.class, () -> IOUtils.write(str, (Writer) null));
     }
 
     @Test
@@ -653,11 +605,7 @@ public class IOUtilsWriteTest {
     public void testWriteLines_OutputStream_Encoding_nullStream() throws Exception {
         final Object[] data = {"hello", "world"};
         final List<Object> list = Arrays.asList(data);
-        try {
-            IOUtils.writeLines(list, "*", null, "US-ASCII");
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
+        assertThrows(NullPointerException.class, () -> IOUtils.writeLines(list, "*", null, "US-ASCII"));
     }
 
     @Test
@@ -693,11 +641,7 @@ public class IOUtilsWriteTest {
     public void testWriteLines_OutputStream_nullStream() throws Exception {
         final Object[] data = {"hello", "world"};
         final List<Object> list = Arrays.asList(data);
-        try {
-            IOUtils.writeLines(list, "*", (OutputStream) null);
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
+        assertThrows(NullPointerException.class, () -> IOUtils.writeLines(list, "*", (OutputStream) null));
     }
 
     @Test
@@ -758,11 +702,7 @@ public class IOUtilsWriteTest {
     public void testWriteLines_Writer_nullStream() throws Exception {
         final Object[] data = {"hello", "world"};
         final List<Object> list = Arrays.asList(data);
-        try {
-            IOUtils.writeLines(list, "*", (Writer) null);
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
+        assertThrows(NullPointerException.class, () -> IOUtils.writeLines(list, "*", (Writer) null));
     }
 
 }

@@ -147,46 +147,23 @@ public class FileSystemUtilsTest {
     @Test
     public void testGetFreeSpaceOS_String_InitError() throws Exception {
         final FileSystemUtils fsu = new FileSystemUtils();
-        try {
-            fsu.freeSpaceOS("", -1, false, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IllegalStateException ignore) {
-        }
-        try {
-            fsu.freeSpaceOS("", -1, true, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IllegalStateException ignore) {
-        }
+        assertThrows(IllegalStateException.class, () -> fsu.freeSpaceOS("", -1, false, NEG_1_TIMEOUT));
+        assertThrows(IllegalStateException.class, () -> fsu.freeSpaceOS("", -1, true, NEG_1_TIMEOUT));
     }
 
     @Test
     public void testGetFreeSpaceOS_String_NullPath() throws Exception {
         final FileSystemUtils fsu = new FileSystemUtils();
-        try {
-            fsu.freeSpaceOS(null, 1, false, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            fsu.freeSpaceOS(null, 1, true, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> fsu.freeSpaceOS(null, 1, false, NEG_1_TIMEOUT));
+        assertThrows(IllegalArgumentException.class, () -> fsu.freeSpaceOS(null, 1, true, NEG_1_TIMEOUT));
     }
 
     @Test
     public void testGetFreeSpaceOS_String_Other() throws Exception {
         final FileSystemUtils fsu = new FileSystemUtils();
-        try {
-            fsu.freeSpaceOS("", 0, false, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IllegalStateException ignore) {
-        }
-        try {
-            fsu.freeSpaceOS("", 0, true, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IllegalStateException ignore) {
-        }
+        assertThrows(IllegalStateException.class, () -> fsu.freeSpaceOS("", 0, false, NEG_1_TIMEOUT));
+        assertThrows(IllegalArgumentException.class, () -> fsu.freeSpaceOS(null, 1, true, NEG_1_TIMEOUT));
+        assertThrows(IllegalStateException.class, () -> fsu.freeSpaceOS("", 0, true, NEG_1_TIMEOUT));
     }
 
     @Test
@@ -219,27 +196,10 @@ public class FileSystemUtilsTest {
                 "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
                         "xxx:/home/users/s     14428928  12956424   1472504  90% /home/users/s";
         final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        try {
-            fsu.freeSpaceUnix("", false, false, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            fsu.freeSpaceUnix("", true, false, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            fsu.freeSpaceUnix("", true, true, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            fsu.freeSpaceUnix("", false, true, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-        }
-
+        assertThrows(IllegalArgumentException.class, () -> fsu.freeSpaceUnix("", false, false, NEG_1_TIMEOUT));
+        assertThrows(IllegalArgumentException.class, () -> fsu.freeSpaceUnix("", true, false, NEG_1_TIMEOUT));
+        assertThrows(IllegalArgumentException.class, () -> fsu.freeSpaceUnix("", true, true, NEG_1_TIMEOUT));
+        assertThrows(IllegalArgumentException.class, () -> fsu.freeSpaceUnix("", false, true, NEG_1_TIMEOUT));
     }
 
     @Test
@@ -247,26 +207,10 @@ public class FileSystemUtilsTest {
     public void testGetFreeSpaceUnix_String_EmptyResponse() {
         final String lines = "";
         final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        try {
-            fsu.freeSpaceUnix("/home/users/s", false, false, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IOException ignore) {
-        }
-        try {
-            fsu.freeSpaceUnix("/home/users/s", true, false, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IOException ignore) {
-        }
-        try {
-            fsu.freeSpaceUnix("/home/users/s", false, true, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IOException ignore) {
-        }
-        try {
-            fsu.freeSpaceUnix("/home/users/s", true, true, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IOException ignore) {
-        }
+        assertThrows(IOException.class, () -> fsu.freeSpaceUnix("/home/users/s", false, false, NEG_1_TIMEOUT));
+        assertThrows(IOException.class, () -> fsu.freeSpaceUnix("/home/users/s", true, false, NEG_1_TIMEOUT));
+        assertThrows(IOException.class, () -> fsu.freeSpaceUnix("/home/users/s", false, true, NEG_1_TIMEOUT));
+        assertThrows(IOException.class, () -> fsu.freeSpaceUnix("/home/users/s", true, true, NEG_1_TIMEOUT));
     }
 
     @Test
@@ -275,26 +219,10 @@ public class FileSystemUtilsTest {
                 "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
                         "                      14428928  12956424       100";
         final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        try {
-            fsu.freeSpaceUnix("/home/users/s", false, false, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IOException ignore) {
-        }
-        try {
-            fsu.freeSpaceUnix("/home/users/s", true, false, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IOException ignore) {
-        }
-        try {
-            fsu.freeSpaceUnix("/home/users/s", false, true, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IOException ignore) {
-        }
-        try {
-            fsu.freeSpaceUnix("/home/users/s", true, true, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IOException ignore) {
-        }
+        assertThrows(IOException.class, () -> fsu.freeSpaceUnix("/home/users/s", false, false, NEG_1_TIMEOUT));
+        assertThrows(IOException.class, () -> fsu.freeSpaceUnix("/home/users/s", true, false, NEG_1_TIMEOUT));
+        assertThrows(IOException.class, () -> fsu.freeSpaceUnix("/home/users/s", false, true, NEG_1_TIMEOUT));
+        assertThrows(IOException.class, () -> fsu.freeSpaceUnix("/home/users/s", true, true, NEG_1_TIMEOUT));
     }
 
     @Test
@@ -303,26 +231,10 @@ public class FileSystemUtilsTest {
                 "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
                         "xxx:/home/users/s     14428928  12956424   nnnnnnn  90% /home/users/s";
         final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        try {
-            fsu.freeSpaceUnix("/home/users/s", false, false, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IOException ignore) {
-        }
-        try {
-            fsu.freeSpaceUnix("/home/users/s", true, false, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IOException ignore) {
-        }
-        try {
-            fsu.freeSpaceUnix("/home/users/s", false, true, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IOException ignore) {
-        }
-        try {
-            fsu.freeSpaceUnix("/home/users/s", true, true, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IOException ignore) {
-        }
+        assertThrows(IOException.class, () -> fsu.freeSpaceUnix("/home/users/s", false, false, NEG_1_TIMEOUT));
+        assertThrows(IOException.class, () -> fsu.freeSpaceUnix("/home/users/s", true, false, NEG_1_TIMEOUT));
+        assertThrows(IOException.class, () -> fsu.freeSpaceUnix("/home/users/s", false, true, NEG_1_TIMEOUT));
+        assertThrows(IOException.class, () -> fsu.freeSpaceUnix("/home/users/s", true, true, NEG_1_TIMEOUT));
     }
 
     @Test
@@ -331,26 +243,10 @@ public class FileSystemUtilsTest {
                 "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
                         "xxx:/home/users/s     14428928  12956424        -1  90% /home/users/s";
         final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        try {
-            fsu.freeSpaceUnix("/home/users/s", false, false, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IOException ignore) {
-        }
-        try {
-            fsu.freeSpaceUnix("/home/users/s", true, false, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IOException ignore) {
-        }
-        try {
-            fsu.freeSpaceUnix("/home/users/s", false, true, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IOException ignore) {
-        }
-        try {
-            fsu.freeSpaceUnix("/home/users/s", true, true, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IOException ignore) {
-        }
+        assertThrows(IOException.class, () -> fsu.freeSpaceUnix("/home/users/s", false, false, NEG_1_TIMEOUT));
+        assertThrows(IOException.class, () -> fsu.freeSpaceUnix("/home/users/s", true, false, NEG_1_TIMEOUT));
+        assertThrows(IOException.class, () -> fsu.freeSpaceUnix("/home/users/s", false, true, NEG_1_TIMEOUT));
+        assertThrows(IOException.class, () -> fsu.freeSpaceUnix("/home/users/s", true, true, NEG_1_TIMEOUT));
     }
 
     @Test
@@ -359,26 +255,10 @@ public class FileSystemUtilsTest {
                 "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
                         "xxx-yyyyyyy-zzz:/home/users/s";
         final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        try {
-            fsu.freeSpaceUnix("/home/users/s", false, false, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IOException ignore) {
-        }
-        try {
-            fsu.freeSpaceUnix("/home/users/s", true, false, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IOException ignore) {
-        }
-        try {
-            fsu.freeSpaceUnix("/home/users/s", false, true, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IOException ignore) {
-        }
-        try {
-            fsu.freeSpaceUnix("/home/users/s", true, true, NEG_1_TIMEOUT);
-            fail();
-        } catch (final IOException ignore) {
-        }
+        assertThrows(IOException.class, () -> fsu.freeSpaceUnix("/home/users/s", false, false, NEG_1_TIMEOUT));
+        assertThrows(IOException.class, () -> fsu.freeSpaceUnix("/home/users/s", true, false, NEG_1_TIMEOUT));
+        assertThrows(IOException.class, () -> fsu.freeSpaceUnix("/home/users/s", false, true, NEG_1_TIMEOUT));
+        assertThrows(IOException.class, () -> fsu.freeSpaceUnix("/home/users/s", true, true, NEG_1_TIMEOUT));
     }
 
     @Test
@@ -483,11 +363,7 @@ public class FileSystemUtilsTest {
     public void testGetFreeSpaceWindows_String_EmptyResponse() {
         final String lines = "";
         final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        try {
-            fsu.freeSpaceWindows("C:", NEG_1_TIMEOUT);
-            fail();
-        } catch (final IOException ignore) {
-        }
+        assertThrows(IOException.class, () -> fsu.freeSpaceWindows("C:", NEG_1_TIMEOUT));
     }
 
     @Test

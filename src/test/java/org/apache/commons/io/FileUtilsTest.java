@@ -364,11 +364,7 @@ public class FileUtilsTest {
     @Test
     public void test_openInputStream_notExists() {
         final File directory = new File(temporaryFolder, "test.txt");
-        try (FileInputStream in = FileUtils.openInputStream(directory)) {
-            fail();
-        } catch (final IOException ioe) {
-            // expected
-        }
+        assertThrows(IOException.class, () -> FileUtils.openInputStream(directory));
     }
 
     @Test
@@ -418,11 +414,7 @@ public class FileUtilsTest {
                         "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
                         "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz";  // 300 chars
         final File file = new File(temporaryFolder, "a/" + longStr + "/test.txt");
-        try (FileOutputStream out = FileUtils.openOutputStream(file)) {
-            fail();
-        } catch (final IOException ioe) {
-            // expected
-        }
+        assertThrows(IOException.class, () -> FileUtils.openOutputStream(file));
     }
 
     // byteCountToDisplaySize

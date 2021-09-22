@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io.filefilter;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -115,33 +116,10 @@ public class RegexFileFilterTest {
 
     @Test
     public void testRegexEdgeCases() {
-        try {
-            new RegexFileFilter((String) null);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-            // expected
-        }
-
-        try {
-            new RegexFileFilter(null, Pattern.CASE_INSENSITIVE);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-            // expected
-        }
-
-        try {
-            new RegexFileFilter(null, IOCase.INSENSITIVE);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-            // expected
-        }
-
-        try {
-            new RegexFileFilter((java.util.regex.Pattern) null);
-            fail();
-        } catch (final IllegalArgumentException ignore) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, () -> new RegexFileFilter((String) null));
+        assertThrows(IllegalArgumentException.class, () -> new RegexFileFilter(null, Pattern.CASE_INSENSITIVE));
+        assertThrows(IllegalArgumentException.class, () -> new RegexFileFilter(null, IOCase.INSENSITIVE));
+        assertThrows(IllegalArgumentException.class, () -> new RegexFileFilter((java.util.regex.Pattern) null));
     }
 
     /**
