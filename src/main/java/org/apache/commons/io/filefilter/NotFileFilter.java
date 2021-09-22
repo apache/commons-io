@@ -84,8 +84,7 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
     }
 
     private FileVisitResult not(final FileVisitResult accept) {
-        return accept == FileVisitResult.CONTINUE ? FileVisitResult.TERMINATE
-            : FileVisitResult.CONTINUE;
+        return accept == FileVisitResult.CONTINUE ? FileVisitResult.TERMINATE : FileVisitResult.CONTINUE;
     }
 
     /**
