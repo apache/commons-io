@@ -164,9 +164,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
      *         is a negative number.
      */
     public MagicNumberFileFilter(final byte[] magicNumbers, final long offset) {
-        if (magicNumbers == null) {
-            throw new IllegalArgumentException("The magic number cannot be null");
-        }
+        requireNonNull(magicNumbers, "magicNumbers");
         if (magicNumbers.length == 0) {
             throw new IllegalArgumentException("The magic number must contain at least one byte");
         }

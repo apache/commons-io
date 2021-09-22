@@ -104,9 +104,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      * @throws ClassCastException if the list does not contain Strings
      */
     public WildcardFileFilter(final List<String> wildcards, final IOCase ioCase) {
-        if (wildcards == null) {
-            throw new IllegalArgumentException("The wildcard list must not be null");
-        }
+        requireNonNull(wildcards, "wildcards");
         this.wildcards = wildcards.toArray(EMPTY_STRING_ARRAY);
         this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }

@@ -78,9 +78,7 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      * @return a new Pattern.
      */
     private static Pattern compile(final String pattern, final int flags) {
-        if (pattern == null) {
-            throw new IllegalArgumentException("Pattern is missing");
-        }
+        requireNonNull(pattern, "pattern");
         return Pattern.compile(pattern, flags);
     }
 

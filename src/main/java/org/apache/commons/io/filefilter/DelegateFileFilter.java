@@ -39,26 +39,22 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
     /**
      * Constructs a delegate file filter around an existing FileFilter.
      *
-     * @param filter  the filter to decorate
+     * @param fileFilter  the filter to decorate
      */
-    public DelegateFileFilter(final FileFilter filter) {
-        if (filter == null) {
-            throw new IllegalArgumentException("The FileFilter must not be null");
-        }
-        this.fileFilter = filter;
+    public DelegateFileFilter(final FileFilter fileFilter) {
+        requireNonNull(fileFilter, "filter");
+        this.fileFilter = fileFilter;
         this.filenameFilter = null;
     }
 
     /**
      * Constructs a delegate file filter around an existing FilenameFilter.
      *
-     * @param filter  the filter to decorate
+     * @param filenameFilter  the filter to decorate
      */
-    public DelegateFileFilter(final FilenameFilter filter) {
-        if (filter == null) {
-            throw new IllegalArgumentException("The FilenameFilter must not be null");
-        }
-        this.filenameFilter = filter;
+    public DelegateFileFilter(final FilenameFilter filenameFilter) {
+        requireNonNull(filenameFilter, "filter");
+        this.filenameFilter = filenameFilter;
         this.fileFilter = null;
     }
 
