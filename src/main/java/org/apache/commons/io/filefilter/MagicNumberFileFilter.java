@@ -223,9 +223,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
      *         a negative number.
      */
     public MagicNumberFileFilter(final String magicNumber, final long offset) {
-        if (magicNumber == null) {
-            throw new IllegalArgumentException("The magic number cannot be null");
-        }
+        requireNonNull(magicNumber, "magicNumber");
         if (magicNumber.isEmpty()) {
             throw new IllegalArgumentException("The magic number must contain at least one byte");
         }
