@@ -488,7 +488,7 @@ public class FileUtils {
     }
 
     /**
-     * Converts a Collection containing java.io.File instanced into array
+     * Converts a Collection containing java.io.File instances into array
      * representation. This is to account for the difference between
      * File.listFiles() and FileUtils.listFiles().
      *
