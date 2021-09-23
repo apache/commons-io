@@ -45,7 +45,7 @@ public class MemoryMappedFileInputStreamTest {
     Path tempDir;
 
     @AfterEach
-    void cleanup() {
+    void afterEach() {
         // Ask to run the garbage collector to clean up memory mapped buffers,
         // otherwise the temporary files won't be able to be removed when running on
         // Windows. Calling gc() is just a hint to the VM.
