@@ -687,7 +687,7 @@ public class TailerTest {
             assertEquals(0, lines.size(), "1 line count");
 
             writeString(file, " one\n");
-            TestUtils.sleep(delayMillis * 2);
+            TestUtils.sleep(delayMillis * 4);
             lines = listener.getLines();
 
             assertEquals(1, lines.size(), "1 line count");
