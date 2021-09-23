@@ -52,11 +52,13 @@ public class ReversedLinesFileReaderTestParamFile {
         final Path sourcePath = TestResources.getPath("test-file-utf8-win-linebr.bin");
         final Path targetPath = Files.createTempFile("ReversedLinesFileReaderTestParamFile", ".bin");
         try (Reader input = Files.newBufferedReader(sourcePath, StandardCharsets.UTF_8);
-                Writer output = Files.newBufferedWriter(targetPath, Charset.defaultCharset())) {
+            Writer output = Files.newBufferedWriter(targetPath, Charset.defaultCharset())) {
             IOUtils.copyLarge(input, output);
         }
         // All tests
-        return Stream.of(Arguments.of(targetPath.toAbsolutePath().toString(), null, null, false, false),
+        // @formatter:off
+        return Stream.of(
+                Arguments.of(targetPath.toAbsolutePath().toString(), null, null, false, false),
                 Arguments.of("test-file-20byteslength.bin", "ISO_8859_1", null, false, true),
                 Arguments.of("test-file-iso8859-1-shortlines-win-linebr.bin", "ISO_8859_1", null, false, true),
                 Arguments.of("test-file-iso8859-1.bin", "ISO_8859_1", null, false, true),
@@ -75,13 +77,13 @@ public class ReversedLinesFileReaderTestParamFile {
                 Arguments.of("test-file-gbk.bin", "gbk", null, false, true),
                 Arguments.of("test-file-x-windows-949.bin", "x-windows-949", null, false, true),
                 Arguments.of("test-file-x-windows-950.bin", "x-windows-950", null, false, true)));
+        // @formatter:on
     }
 
     @ParameterizedTest(name = "{0}, encoding={1}, blockSize={2}, useNonDefaultFileSystem={3}, isResource={4}")
     @MethodSource
-    public void testDataIntegrityWithBufferedReader(final String fileName, final String charsetName,
-            final Integer blockSize, final boolean useNonDefaultFileSystem, final boolean isResource)
-            throws IOException, URISyntaxException {
+    public void testDataIntegrityWithBufferedReader(final String fileName, final String charsetName, final Integer blockSize,
+        final boolean useNonDefaultFileSystem, final boolean isResource) throws IOException, URISyntaxException {
 
         Path filePath = isResource ? TestResources.getPath(fileName) : Paths.get(fileName);
         FileSystem fileSystem = null;
@@ -92,9 +94,8 @@ public class ReversedLinesFileReaderTestParamFile {
 
         // We want to test null Charset in the ReversedLinesFileReaderconstructor.
         final Charset charset = charsetName != null ? Charset.forName(charsetName) : null;
-        try (ReversedLinesFileReader reversedLinesFileReader = blockSize == null
-                ? new ReversedLinesFileReader(filePath, charset)
-                : new ReversedLinesFileReader(filePath, blockSize, charset)) {
+        try (ReversedLinesFileReader reversedLinesFileReader = blockSize == null ? new ReversedLinesFileReader(filePath, charset)
+            : new ReversedLinesFileReader(filePath, blockSize, charset)) {
 
             final Stack<String> lineStack = new Stack<>();
             String line;
