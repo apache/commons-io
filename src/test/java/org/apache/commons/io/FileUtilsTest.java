@@ -1668,11 +1668,7 @@ public class FileUtilsTest {
         }
 
         do {
-            try {
-                TestUtils.sleep(1000);
-            } catch (final InterruptedException ie) {
-                // ignore
-            }
+            TestUtils.sleepQuietly(1000);
             if (!reference.getParentFile().exists()) {
                 throw new IOException("Cannot create file " + reference
                         + " as the parent directory does not exist");

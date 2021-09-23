@@ -33,9 +33,11 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.time.Duration;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.lang3.ThreadUtils;
 
 /**
  * Base class for testcases doing tests with files.
@@ -185,8 +187,7 @@ public abstract class TestUtils {
         }
     }
 
-    public static void generateTestData(final OutputStream out, final long size)
-            throws IOException {
+    public static void generateTestData(final OutputStream out, final long size) throws IOException {
         for (int i = 0; i < size; i++) {
             // output.write((byte)'X');
             // nice varied byte pattern compatible with Readers and Writers
@@ -207,23 +208,23 @@ public abstract class TestUtils {
     }
 
     /**
-     * Sleep for a guaranteed number of milliseconds unless interrupted.
+     * Sleeps for a guaranteed number of milliseconds unless interrupted.
      *
      * This method exists because Thread.sleep(100) can sleep for 0, 70, 100 or 200ms or anything else
      * it deems appropriate. Read the docs on Thread.sleep for further details.
      *
-     * @param millis the number of milliseconds to sleep for
-     * @throws InterruptedException if interrupted
+     * @param millis the number of milliseconds to sleep.
+     * @throws InterruptedException if interrupted.
      */
     public static void sleep(final long millis) throws InterruptedException {
-        final long finishAtMillis = System.currentTimeMillis() + millis;
-        long remainingMillis = millis;
-        do {
-            Thread.sleep(remainingMillis);
-            remainingMillis = finishAtMillis - System.currentTimeMillis();
-        } while (remainingMillis > 0);
+        ThreadUtils.sleep(Duration.ofMillis(millis));
     }
 
+    /**
+     * Sleeps and swallows InterruptedException.
+     *
+     * @param millis the number of milliseconds to sleep.
+     */
     public static void sleepQuietly(final long millis) {
         try {
             sleep(millis);

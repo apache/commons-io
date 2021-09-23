@@ -80,8 +80,11 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-749" dev="ggregory" type="fix" due-to="haihuiyang, Gary Gregory">
         FileUtils.listFiles() does not list matching files if File parameter is a symbolic link.
       </action>
-      <action issue="IO-749" dev="ggregory" type="fix" due-to="niranjanghule, Gary Gregory">
+      <action dev="ggregory" type="fix" due-to="niranjanghule, Gary Gregory">
         Fix typo in Javadocs for FileUtils#convertFileCollectionToFileArray() #276.
+      </action>
+      <action dev="ggregory" type="fix" due-to="DaGeRe, Gary Gregory">
+        Avoid Code Duplication: Reuse Sleep from ThreadMonitor #66.
       </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">

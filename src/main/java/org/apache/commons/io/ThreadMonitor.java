@@ -117,7 +117,7 @@ class ThreadMonitor implements Runnable {
      * @param duration the sleep duration.
      * @throws InterruptedException if interrupted.
      */
-    private static void sleep(final Duration duration) throws InterruptedException {
+    static void sleep(final Duration duration) throws InterruptedException {
         final Instant finishInstant = Instant.now().plus(duration);
         Duration remainingDuration = duration;
         do {
