@@ -650,8 +650,7 @@ public class FileUtils {
      * @throws IOException if an error occurs or setting the last-modified time didn't succeeded.
      * @since 1.4
      */
-    public static void copyDirectory(final File srcDir, final File destDir, final FileFilter filter,
-        final boolean preserveFileDate) throws IOException {
+    public static void copyDirectory(final File srcDir, final File destDir, final FileFilter filter, final boolean preserveFileDate) throws IOException {
         copyDirectory(srcDir, destDir, filter, preserveFileDate, StandardCopyOption.REPLACE_EXISTING);
     }
 
@@ -701,8 +700,8 @@ public class FileUtils {
      * @throws IOException if an error occurs or setting the last-modified time didn't succeeded.
      * @since 2.8.0
      */
-    public static void copyDirectory(final File srcDir, final File destDir, final FileFilter fileFilter,
-        final boolean preserveFileDate, final CopyOption... copyOptions) throws IOException {
+    public static void copyDirectory(final File srcDir, final File destDir, final FileFilter fileFilter, final boolean preserveFileDate,
+        final CopyOption... copyOptions) throws IOException {
         requireFileCopy(srcDir, destDir);
         requireDirectory(srcDir, "srcDir");
         requireCanonicalPathsNotEquals(srcDir, destDir);
@@ -721,8 +720,7 @@ public class FileUtils {
                 }
             }
         }
-        doCopyDirectory(srcDir, destDir, fileFilter, exclusionList,
-            preserveFileDate, preserveFileDate ? addCopyAttributes(copyOptions) : copyOptions);
+        doCopyDirectory(srcDir, destDir, fileFilter, exclusionList, preserveFileDate, preserveFileDate ? addCopyAttributes(copyOptions) : copyOptions);
     }
 
     /**
@@ -803,12 +801,12 @@ public class FileUtils {
      * @throws IOException if the output file length is not the same as the input file length after the copy completes
      * @see #copyFile(File, File, boolean, CopyOption...)
      */
-    public static void copyFile(final File srcFile, final File destFile, final boolean preserveFileDate)
-        throws IOException {
-        copyFile(srcFile, destFile,
-            preserveFileDate
+    public static void copyFile(final File srcFile, final File destFile, final boolean preserveFileDate) throws IOException {
+        // @formatter:off
+        copyFile(srcFile, destFile, preserveFileDate
                 ? new CopyOption[] {StandardCopyOption.COPY_ATTRIBUTES, StandardCopyOption.REPLACE_EXISTING}
                 : new CopyOption[] {StandardCopyOption.REPLACE_EXISTING});
+        // @formatter:on
     }
 
     /**
@@ -836,8 +834,7 @@ public class FileUtils {
      * @see #copyFileToDirectory(File, File, boolean)
      * @since 2.8.0
      */
-    public static void copyFile(final File srcFile, final File destFile, final boolean preserveFileDate, final CopyOption... copyOptions)
-        throws IOException {
+    public static void copyFile(final File srcFile, final File destFile, final boolean preserveFileDate, final CopyOption... copyOptions) throws IOException {
         copyFile(srcFile, destFile, preserveFileDate ? addCopyAttributes(copyOptions) : copyOptions);
     }
 
@@ -860,8 +857,7 @@ public class FileUtils {
      * @see StandardCopyOption
      * @since 2.9.0
      */
-    public static void copyFile(final File srcFile, final File destFile, final CopyOption... copyOptions)
-        throws IOException {
+    public static void copyFile(final File srcFile, final File destFile, final CopyOption... copyOptions) throws IOException {
         requireFileCopy(srcFile, destFile);
         requireFile(srcFile, "srcFile");
         requireCanonicalPathsNotEquals(srcFile, destFile);
@@ -944,8 +940,7 @@ public class FileUtils {
      * @see #copyFile(File, File, CopyOption...)
      * @since 1.3
      */
-    public static void copyFileToDirectory(final File sourceFile, final File destinationDir, final boolean preserveFileDate)
-            throws IOException {
+    public static void copyFileToDirectory(final File sourceFile, final File destinationDir, final boolean preserveFileDate) throws IOException {
         Objects.requireNonNull(sourceFile, "sourceFile");
         requireDirectoryIfExists(destinationDir, "destinationDir");
         copyFile(sourceFile, new File(destinationDir, sourceFile.getName()), preserveFileDate);
@@ -1327,8 +1322,8 @@ public class FileUtils {
      * @throws IOException if the directory was not created along with all its parent directories.
      * @throws IOException if the given file object is not a directory.
      */
-    private static void doCopyDirectory(final File srcDir, final File destDir, final FileFilter fileFilter,
-                                        final List<String> exclusionList, final boolean preserveDirDate, final CopyOption... copyOptions) throws IOException {
+    private static void doCopyDirectory(final File srcDir, final File destDir, final FileFilter fileFilter, final List<String> exclusionList,
+        final boolean preserveDirDate, final CopyOption... copyOptions) throws IOException {
         // recurse dirs, copy files.
         final File[] srcFiles = listFiles(srcDir, fileFilter);
         requireDirectoryIfExists(destDir, "destDir");
@@ -1983,8 +1978,7 @@ public class FileUtils {
      * @see org.apache.commons.io.filefilter.NameFileFilter
      * @since 1.2
      */
-    public static Iterator<File> iterateFiles(final File directory, final IOFileFilter fileFilter,
-        final IOFileFilter dirFilter) {
+    public static Iterator<File> iterateFiles(final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
         return listFiles(directory, fileFilter, dirFilter).iterator();
     }
 
@@ -2002,8 +1996,7 @@ public class FileUtils {
      * @return an iterator of java.io.File with the matching files
      * @since 1.2
      */
-    public static Iterator<File> iterateFiles(final File directory, final String[] extensions,
-        final boolean recursive) {
+    public static Iterator<File> iterateFiles(final File directory, final String[] extensions, final boolean recursive) {
         try {
             return StreamIterator.iterator(streamFiles(directory, recursive, extensions));
         } catch (final IOException e) {
@@ -2034,8 +2027,7 @@ public class FileUtils {
      * @see org.apache.commons.io.filefilter.NameFileFilter
      * @since 2.2
      */
-    public static Iterator<File> iterateFilesAndDirs(final File directory, final IOFileFilter fileFilter,
-        final IOFileFilter dirFilter) {
+    public static Iterator<File> iterateFilesAndDirs(final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
         return listFilesAndDirs(directory, fileFilter, dirFilter).iterator();
     }
 
@@ -2177,12 +2169,12 @@ public class FileUtils {
     }
 
     private static AccumulatorPathVisitor listAccumulate(final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter,
-        FileVisitOption... options) throws IOException {
+        final FileVisitOption... options) throws IOException {
         final boolean isDirFilterSet = dirFilter != null;
         final FileEqualsFileFilter rootDirFilter = new FileEqualsFileFilter(directory);
         final PathFilter dirPathFilter = isDirFilterSet ? rootDirFilter.or(dirFilter) : rootDirFilter;
         final AccumulatorPathVisitor visitor = new AccumulatorPathVisitor(Counters.noopPathCounters(), fileFilter, dirPathFilter);
-        Set<FileVisitOption> optionSet = new HashSet<>();
+        final Set<FileVisitOption> optionSet = new HashSet<>();
         Collections.addAll(optionSet, options);
         Files.walkFileTree(directory.toPath(), optionSet, toMaxDepth(isDirFilterSet), visitor);
         return visitor;
@@ -2237,8 +2229,7 @@ public class FileUtils {
      * @see org.apache.commons.io.filefilter.FileFilterUtils
      * @see org.apache.commons.io.filefilter.NameFileFilter
      */
-    public static Collection<File> listFiles(
-        final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
+    public static Collection<File> listFiles(final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
         try {
             final AccumulatorPathVisitor visitor = listAccumulate(directory, fileFilter, dirFilter, FileVisitOption.FOLLOW_LINKS);
             return visitor.getFileList().stream().map(Path::toFile).collect(Collectors.toList());
@@ -2284,8 +2275,7 @@ public class FileUtils {
      * @see org.apache.commons.io.filefilter.NameFileFilter
      * @since 2.2
      */
-    public static Collection<File> listFilesAndDirs(
-        final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
+    public static Collection<File> listFilesAndDirs(final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
         try {
             final AccumulatorPathVisitor visitor = listAccumulate(directory, fileFilter, dirFilter, FileVisitOption.FOLLOW_LINKS);
             final List<Path> list = visitor.getFileList();
@@ -2357,16 +2347,14 @@ public class FileUtils {
      * @throws IOException if an error occurs or setting the last-modified time didn't succeeded.
      * @since 1.4
      */
-    public static void moveDirectoryToDirectory(final File source, final File destDir, final boolean createDestDir)
-            throws IOException {
+    public static void moveDirectoryToDirectory(final File source, final File destDir, final boolean createDestDir) throws IOException {
         validateMoveParameters(source, destDir);
         if (!destDir.isDirectory()) {
             if (destDir.exists()) {
                 throw new IOException("Destination '" + destDir + "' is not a directory");
             }
             if (!createDestDir) {
-                throw new FileNotFoundException("Destination directory '" + destDir +
-                        "' does not exist [createDestDir=" + false + "]");
+                throw new FileNotFoundException("Destination directory '" + destDir + "' does not exist [createDestDir=" + false + "]");
             }
             mkdirs(destDir);
         }
@@ -2411,8 +2399,7 @@ public class FileUtils {
      * @throws IOException if an error occurs or setting the last-modified time didn't succeeded.
      * @since 2.9.0
      */
-    public static void moveFile(final File srcFile, final File destFile, final CopyOption... copyOptions)
-        throws IOException {
+    public static void moveFile(final File srcFile, final File destFile, final CopyOption... copyOptions) throws IOException {
         validateMoveParameters(srcFile, destFile);
         requireFile(srcFile, "srcFile");
         requireAbsent(destFile, "destFile");
@@ -2440,8 +2427,7 @@ public class FileUtils {
      * @throws IOException if an error occurs or setting the last-modified time didn't succeeded.
      * @since 1.4
      */
-    public static void moveFileToDirectory(final File srcFile, final File destDir, final boolean createDestDir)
-            throws IOException {
+    public static void moveFileToDirectory(final File srcFile, final File destDir, final boolean createDestDir) throws IOException {
         validateMoveParameters(srcFile, destDir);
         if (!destDir.exists() && createDestDir) {
             mkdirs(destDir);
@@ -2468,8 +2454,7 @@ public class FileUtils {
      * @throws IOException if an error occurs or setting the last-modified time didn't succeeded.
      * @since 1.4
      */
-    public static void moveToDirectory(final File src, final File destDir, final boolean createDestDir)
-            throws IOException {
+    public static void moveToDirectory(final File src, final File destDir, final boolean createDestDir) throws IOException {
         validateMoveParameters(src, destDir);
         if (src.isDirectory()) {
             moveDirectoryToDirectory(src, destDir, createDestDir);
@@ -2801,11 +2786,10 @@ public class FileUtils {
      * @param dstLen Destination file length
      * @throws IOException Thrown when the given sizes are not equal.
      */
-    private static void requireEqualSizes(final File srcFile, final File destFile, final long srcLen, final long dstLen)
-            throws IOException {
+    private static void requireEqualSizes(final File srcFile, final File destFile, final long srcLen, final long dstLen) throws IOException {
         if (srcLen != dstLen) {
-            throw new IOException("Failed to copy full contents from '" + srcFile + "' to '" + destFile
-                    + "' Expected length: " + srcLen + " Actual: " + dstLen);
+            throw new IOException(
+                "Failed to copy full contents from '" + srcFile + "' to '" + destFile + "' Expected length: " + srcLen + " Actual: " + dstLen);
         }
     }
 
@@ -3038,12 +3022,13 @@ public class FileUtils {
      * @throws IOException if an I/O error is thrown when accessing the starting file.
      * @since 2.9.0
      */
-    public static Stream<File> streamFiles(final File directory, final boolean recursive, final String... extensions)
-        throws IOException {
-        final IOFileFilter filter = extensions == null ? FileFileFilter.INSTANCE
+    public static Stream<File> streamFiles(final File directory, final boolean recursive, final String... extensions) throws IOException {
+        // @formatter:off
+        final IOFileFilter filter = extensions == null
+            ? FileFileFilter.INSTANCE
             : FileFileFilter.INSTANCE.and(new SuffixFileFilter(toSuffixes(extensions)));
-        return PathUtils.walk(directory.toPath(), filter, toMaxDepth(recursive), false, FileVisitOption.FOLLOW_LINKS)
-            .map(Path::toFile);
+        // @formatter:on
+        return PathUtils.walk(directory.toPath(), filter, toMaxDepth(recursive), false, FileVisitOption.FOLLOW_LINKS).map(Path::toFile);
     }
 
     /**
@@ -3272,8 +3257,7 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.3
      */
-    public static void write(final File file, final CharSequence data, final Charset charset, final boolean append)
-            throws IOException {
+    public static void write(final File file, final CharSequence data, final Charset charset, final boolean append) throws IOException {
         writeStringToFile(file, Objects.toString(data, null), charset, append);
     }
 
@@ -3304,8 +3288,7 @@ public class FileUtils {
      * .UnsupportedEncodingException} in version 2.2 if the encoding is not supported by the VM
      * @since 2.1
      */
-    public static void write(final File file, final CharSequence data, final String charsetName, final boolean append)
-            throws IOException {
+    public static void write(final File file, final CharSequence data, final String charsetName, final boolean append) throws IOException {
         write(file, data, Charsets.toCharset(charsetName), append);
     }
 
@@ -3337,8 +3320,7 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.1
      */
-    public static void writeByteArrayToFile(final File file, final byte[] data, final boolean append)
-            throws IOException {
+    public static void writeByteArrayToFile(final File file, final byte[] data, final boolean append) throws IOException {
         writeByteArrayToFile(file, data, 0, data.length, append);
     }
 
@@ -3354,8 +3336,7 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.5
      */
-    public static void writeByteArrayToFile(final File file, final byte[] data, final int off, final int len)
-            throws IOException {
+    public static void writeByteArrayToFile(final File file, final byte[] data, final int off, final int len) throws IOException {
         writeByteArrayToFile(file, data, off, len, false);
     }
 
@@ -3373,8 +3354,7 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.5
      */
-    public static void writeByteArrayToFile(final File file, final byte[] data, final int off, final int len,
-                                            final boolean append) throws IOException {
+    public static void writeByteArrayToFile(final File file, final byte[] data, final int off, final int len, final boolean append) throws IOException {
         try (OutputStream out = newOutputStream(file, append)) {
             out.write(data, off, len);
         }
@@ -3422,8 +3402,7 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 1.3
      */
-    public static void writeLines(final File file, final Collection<?> lines, final String lineEnding)
-            throws IOException {
+    public static void writeLines(final File file, final Collection<?> lines, final String lineEnding) throws IOException {
         writeLines(file, null, lines, lineEnding, false);
     }
 
@@ -3440,8 +3419,7 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.1
      */
-    public static void writeLines(final File file, final Collection<?> lines, final String lineEnding,
-                                  final boolean append) throws IOException {
+    public static void writeLines(final File file, final Collection<?> lines, final String lineEnding, final boolean append) throws IOException {
         writeLines(file, null, lines, lineEnding, append);
     }
 
@@ -3461,8 +3439,7 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since 1.1
      */
-    public static void writeLines(final File file, final String charsetName, final Collection<?> lines)
-            throws IOException {
+    public static void writeLines(final File file, final String charsetName, final Collection<?> lines) throws IOException {
         writeLines(file, charsetName, lines, null, false);
     }
 
@@ -3480,8 +3457,7 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since 2.1
      */
-    public static void writeLines(final File file, final String charsetName, final Collection<?> lines,
-                                  final boolean append) throws IOException {
+    public static void writeLines(final File file, final String charsetName, final Collection<?> lines, final boolean append) throws IOException {
         writeLines(file, charsetName, lines, null, append);
     }
 
@@ -3502,8 +3478,7 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since 1.1
      */
-    public static void writeLines(final File file, final String charsetName, final Collection<?> lines,
-                                  final String lineEnding) throws IOException {
+    public static void writeLines(final File file, final String charsetName, final Collection<?> lines, final String lineEnding) throws IOException {
         writeLines(file, charsetName, lines, lineEnding, false);
     }
 
@@ -3522,8 +3497,8 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since 2.1
      */
-    public static void writeLines(final File file, final String charsetName, final Collection<?> lines,
-                                  final String lineEnding, final boolean append) throws IOException {
+    public static void writeLines(final File file, final String charsetName, final Collection<?> lines, final String lineEnding, final boolean append)
+        throws IOException {
         try (OutputStream out = new BufferedOutputStream(newOutputStream(file, append))) {
             IOUtils.writeLines(lines, lineEnding, out, charsetName);
         }
@@ -3572,8 +3547,7 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since 2.4
      */
-    public static void writeStringToFile(final File file, final String data, final Charset charset)
-            throws IOException {
+    public static void writeStringToFile(final File file, final String data, final Charset charset) throws IOException {
         writeStringToFile(file, data, charset, false);
     }
 
@@ -3588,8 +3562,7 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.3
      */
-    public static void writeStringToFile(final File file, final String data, final Charset charset,
-                                         final boolean append) throws IOException {
+    public static void writeStringToFile(final File file, final String data, final Charset charset, final boolean append) throws IOException {
         try (OutputStream out = newOutputStream(file, append)) {
             IOUtils.write(data, out, charset);
         }
@@ -3625,8 +3598,7 @@ public class FileUtils {
      * .UnsupportedEncodingException} in version 2.2 if the encoding is not supported by the VM
      * @since 2.1
      */
-    public static void writeStringToFile(final File file, final String data, final String charsetName,
-                                         final boolean append) throws IOException {
+    public static void writeStringToFile(final File file, final String data, final String charsetName, final boolean append) throws IOException {
         writeStringToFile(file, data, Charsets.toCharset(charsetName), append);
     }
 
