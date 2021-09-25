@@ -537,6 +537,7 @@ public class FileSystemUtils {
             return lines;
 
         } catch (final InterruptedException ex) {
+            Thread.currentThread().interrupt();
             throw new IOException(
                     "Command line threw an InterruptedException " +
                     "for command " + Arrays.asList(cmdAttribs) + " timeout=" + timeout, ex);

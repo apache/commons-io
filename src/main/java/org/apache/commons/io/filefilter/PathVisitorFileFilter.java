@@ -50,7 +50,8 @@ public class PathVisitorFileFilter extends AbstractFileFilter {
     public boolean accept(final File file) {
         try {
             final Path path = file.toPath();
-            return visitFile(path, file.exists() ? PathUtils.readBasicFileAttributes(path) : null) == FileVisitResult.CONTINUE;
+            return visitFile(path,
+                file.exists() ? PathUtils.readBasicFileAttributes(path) : null) == FileVisitResult.CONTINUE;
         } catch (final IOException e) {
             return handle(e) == FileVisitResult.CONTINUE;
         }

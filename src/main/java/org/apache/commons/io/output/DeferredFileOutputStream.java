@@ -279,7 +279,16 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     }
 
     private Path toPath(final File file, final Supplier<Path> defaultPathSupplier) {
-        return file != null ? file.toPath() : defaultPathSupplier == null ? null : defaultPathSupplier.get();
+
+        if (file != null){
+            return file.toPath();
+        }
+
+        if (defaultPathSupplier == null){
+            return null;
+        }
+
+        return defaultPathSupplier.get();
     }
 
     /**

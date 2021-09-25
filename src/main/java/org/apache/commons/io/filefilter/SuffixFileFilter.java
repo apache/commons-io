@@ -97,7 +97,9 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      * @since 1.4
      */
     public SuffixFileFilter(final List<String> suffixes, final IOCase ioCase) {
-        requireNonNull(suffixes, "suffixes");
+        if (suffixes == null) {
+            throw new IllegalArgumentException("The list of suffixes must not be null");
+        }
         this.suffixes = suffixes.toArray(EMPTY_STRING_ARRAY);
         this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }
@@ -135,7 +137,9 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      * @since 1.4
      */
     public SuffixFileFilter(final String suffix, final IOCase ioCase) {
-        requireNonNull(suffix, "suffix");
+        if (suffix == null) {
+            throw new IllegalArgumentException("The suffix must not be null");
+        }
         this.suffixes = new String[] {suffix};
         this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }
@@ -150,7 +154,9 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      * @since 1.4
      */
     public SuffixFileFilter(final String[] suffixes, final IOCase ioCase) {
-        requireNonNull(suffixes, "suffixes");
+        if (suffixes == null) {
+            throw new IllegalArgumentException("The array of suffixes must not be null");
+        }
         this.suffixes = suffixes.clone();
         this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }

@@ -104,7 +104,9 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      * @throws ClassCastException if the list does not contain Strings
      */
     public WildcardFileFilter(final List<String> wildcards, final IOCase ioCase) {
-        requireNonNull(wildcards, "wildcards");
+        if (wildcards == null) {
+            throw new IllegalArgumentException("The wildcard list must not be null");
+        }
         this.wildcards = wildcards.toArray(EMPTY_STRING_ARRAY);
         this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }
@@ -138,7 +140,9 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      * @throws IllegalArgumentException if the pattern is null
      */
     public WildcardFileFilter(final String wildcard, final IOCase ioCase) {
-        requireNonNull(wildcard, "wildcard");
+        if (wildcard == null) {
+            throw new IllegalArgumentException("The wildcard must not be null");
+        }
         this.wildcards = new String[] { wildcard };
         this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }
@@ -151,7 +155,9 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      * @throws IllegalArgumentException if the pattern array is null
      */
     public WildcardFileFilter(final String[] wildcards, final IOCase ioCase) {
-        requireNonNull(wildcards, "wildcards");
+        if (wildcards == null) {
+            throw new IllegalArgumentException("The wildcard array must not be null");
+        }
         this.wildcards = wildcards.clone();
         this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }

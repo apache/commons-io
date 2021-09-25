@@ -94,7 +94,9 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      * @throws ClassCastException if the list does not contain Strings
      */
     public NameFileFilter(final List<String> names, final IOCase ioCase) {
-        requireNonNull(names, "names");
+        if (names == null) {
+            throw new IllegalArgumentException("The list of names must not be null");
+        }
         this.names = names.toArray(EMPTY_STRING_ARRAY);
         this.ioCase = toIOCase(ioCase);
     }

@@ -265,7 +265,6 @@ public class FileFilterUtils {
      */
     private static <R, A> R filterFiles(final IOFileFilter filter, final Stream<File> stream,
         final Collector<? super File, A, R> collector) {
-        //Objects.requireNonNull(filter, "filter");
         Objects.requireNonNull(collector, "collector");
         if (filter == null) {
             throw new IllegalArgumentException("file filter is null");

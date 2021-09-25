@@ -78,7 +78,9 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      * @return a new Pattern.
      */
     private static Pattern compile(final String pattern, final int flags) {
-        requireNonNull(pattern, "pattern");
+        if (pattern == null) {
+            throw new IllegalArgumentException("Pattern is missing");
+        }
         return Pattern.compile(pattern, flags);
     }
 
@@ -117,7 +119,9 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      * @since 2.10.0
      */
     public RegexFileFilter(final Pattern pattern, final Function<Path, String> pathToString) {
-        requireNonNull(pattern, "pattern");
+        if (pattern == null) {
+            throw new IllegalArgumentException("Pattern is missing");
+        }
         this.pattern = pattern;
         this.pathToString = pathToString;
     }

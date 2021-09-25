@@ -1675,6 +1675,6 @@ public class FilenameUtils {
     /**
      * Instances should NOT be constructed in standard programming.
      */
-    public FilenameUtils() {
+    private FilenameUtils() {
     }
 }

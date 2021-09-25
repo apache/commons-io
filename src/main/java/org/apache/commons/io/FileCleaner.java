@@ -41,6 +41,8 @@ public class FileCleaner {
      */
     static final FileCleaningTracker theInstance = new FileCleaningTracker();
 
+    private FileCleaner() {}
+
     /**
      * Track the specified file, using the provided marker, deleting the file
      * when the marker instance is garbage collected.

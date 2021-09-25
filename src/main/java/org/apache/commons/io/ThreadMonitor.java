@@ -104,6 +104,7 @@ class ThreadMonitor implements Runnable {
             sleep(timeout);
             thread.interrupt();
         } catch (final InterruptedException e) {
+            Thread.currentThread().interrupt();
             // timeout not reached
         }
     }
@@ -117,7 +118,7 @@ class ThreadMonitor implements Runnable {
      * @param duration the sleep duration.
      * @throws InterruptedException if interrupted.
      */
-    static void sleep(final Duration duration) throws InterruptedException {
+    private static void sleep(final Duration duration) throws InterruptedException {
         final Instant finishInstant = Instant.now().plus(duration);
         Duration remainingDuration = duration;
         do {

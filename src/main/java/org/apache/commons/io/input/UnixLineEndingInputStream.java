@@ -57,14 +57,14 @@ public class UnixLineEndingInputStream extends InputStream {
      * @throws IOException upon error
      */
     private int readWithUpdate() throws IOException {
-        final int target = this.target.read();
-        eofSeen = target == EOF;
+        int read = this.target.read();
+        eofSeen = read == EOF;
         if (eofSeen) {
-            return target;
+            return read;
         }
-        slashNSeen = target == LF;
-        slashRSeen = target == CR;
-        return target;
+        slashNSeen = read == LF;
+        slashRSeen = read == CR;
+        return read;
     }
 
     /**
@@ -76,7 +76,7 @@ public class UnixLineEndingInputStream extends InputStream {
         if (eofSeen) {
             return eofGame(previousWasSlashR);
         }
-        final int target = readWithUpdate();
+        int read = readWithUpdate();
         if (eofSeen) {
             return eofGame(previousWasSlashR);
         }
@@ -88,7 +88,7 @@ public class UnixLineEndingInputStream extends InputStream {
             return read();
         }
 
-        return target;
+        return read;
     }
 
     /**

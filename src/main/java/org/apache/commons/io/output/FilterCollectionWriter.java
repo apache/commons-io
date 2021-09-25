@@ -55,6 +55,10 @@ public class FilterCollectionWriter extends Writer {
      */
     protected final Collection<Writer> writers;
 
+    private static final String APPEND = "append";
+
+    private static final String WRITE = "write";
+
     /**
      * Creates a new filtered collection writer.
      *
@@ -104,7 +108,7 @@ public class FilterCollectionWriter extends Writer {
             i++;
         }
         if (notEmpty(causeList)) {
-            throw new IOExceptionList("append", causeList);
+            throw new IOExceptionList(APPEND, causeList);
         }
         return this;
     }
@@ -124,7 +128,7 @@ public class FilterCollectionWriter extends Writer {
             i++;
         }
         if (notEmpty(causeList)) {
-            throw new IOExceptionList("append", causeList);
+            throw new IOExceptionList(APPEND, causeList);
         }
         return this;
     }
@@ -145,7 +149,7 @@ public class FilterCollectionWriter extends Writer {
             i++;
         }
         if (notEmpty(causeList)) {
-            throw new IOExceptionList("append", causeList);
+            throw new IOExceptionList(APPEND, causeList);
         }
         return this;
     }
@@ -220,7 +224,7 @@ public class FilterCollectionWriter extends Writer {
             i++;
         }
         if (notEmpty(causeList)) {
-            throw new IOExceptionList("write", causeList);
+            throw new IOExceptionList(WRITE, causeList);
         }
     }
 
@@ -248,7 +252,7 @@ public class FilterCollectionWriter extends Writer {
             i++;
         }
         if (notEmpty(causeList)) {
-            throw new IOExceptionList("write", causeList);
+            throw new IOExceptionList(WRITE, causeList);
         }
     }
 
@@ -272,7 +276,7 @@ public class FilterCollectionWriter extends Writer {
             i++;
         }
         if (notEmpty(causeList)) {
-            throw new IOExceptionList("write", causeList);
+            throw new IOExceptionList(WRITE, causeList);
         }
     }
 
@@ -291,7 +295,7 @@ public class FilterCollectionWriter extends Writer {
             i++;
         }
         if (notEmpty(causeList)) {
-            throw new IOExceptionList("write", causeList);
+            throw new IOExceptionList(WRITE, causeList);
         }
 
     }
@@ -320,7 +324,7 @@ public class FilterCollectionWriter extends Writer {
             i++;
         }
         if (notEmpty(causeList)) {
-            throw new IOExceptionList("write", causeList);
+            throw new IOExceptionList(WRITE, causeList);
         }
 
     }

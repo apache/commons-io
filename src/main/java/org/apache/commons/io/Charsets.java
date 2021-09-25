@@ -60,6 +60,8 @@ public class Charsets {
     // correctly and without delay on all Java platforms.
     //
 
+    private Charsets() {}
+
     private static final SortedMap<String, Charset> STANDARD_CHARSET_MAP;
 
     static {

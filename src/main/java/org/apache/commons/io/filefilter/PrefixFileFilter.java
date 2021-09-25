@@ -95,7 +95,9 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * @since 1.4
      */
     public PrefixFileFilter(final List<String> prefixes, final IOCase ioCase) {
-        requireNonNull(prefixes, "prefixes");
+        if (prefixes == null) {
+            throw new IllegalArgumentException("The list of prefixes must not be null");
+        }
         this.prefixes = prefixes.toArray(EMPTY_STRING_ARRAY);
         this.isCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }
@@ -133,7 +135,9 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * @since 1.4
      */
     public PrefixFileFilter(final String prefix, final IOCase ioCase) {
-        requireNonNull(prefix, "prefix");
+        if (prefix == null) {
+            throw new IllegalArgumentException("The prefix must not be null");
+        }
         this.prefixes = new String[] {prefix};
         this.isCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }
@@ -148,7 +152,9 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * @since 1.4
      */
     public PrefixFileFilter(final String[] prefixes, final IOCase ioCase) {
-        requireNonNull(prefixes, "prefixes");
+        if (prefixes == null) {
+            throw new IllegalArgumentException("The array of prefixes must not be null");
+        }
         this.prefixes = prefixes.clone();
         this.isCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }

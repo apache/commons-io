@@ -58,7 +58,7 @@ public class FileEntry implements Serializable {
     private String name;
     private boolean exists;
     private boolean directory;
-    private FileTime lastModified = FileTimes.EPOCH;
+    private transient FileTime lastModified = FileTimes.EPOCH;
     private long length;
 
     /**

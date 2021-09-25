@@ -222,6 +222,7 @@ public class FileCleaningTracker {
                     }
                     tracker.clear();
                 } catch (final InterruptedException e) {
+                    Thread.currentThread().interrupt();
                     continue;
                 }
             }

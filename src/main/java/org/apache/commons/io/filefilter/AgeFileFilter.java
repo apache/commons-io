@@ -181,7 +181,8 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
      */
     @Override
     public boolean accept(final File file) {
-        return acceptOlder != FileUtils.isFileNewer(file, cutoffInstant);
+        final boolean newer = FileUtils.isFileNewer(file, cutoffInstant);
+        return acceptOlder != newer;
     }
 
     /**
@@ -197,11 +198,13 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
+        final boolean newer;
         try {
-            return toFileVisitResult(acceptOlder != PathUtils.isNewer(file, cutoffInstant));
+            newer = PathUtils.isNewer(file, cutoffInstant);
         } catch (final IOException e) {
             return handle(e);
         }
+        return toFileVisitResult(acceptOlder != newer);
     }
 
     /**

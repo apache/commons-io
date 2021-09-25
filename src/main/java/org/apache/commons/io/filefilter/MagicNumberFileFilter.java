@@ -164,7 +164,9 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
      *         is a negative number.
      */
     public MagicNumberFileFilter(final byte[] magicNumbers, final long offset) {
-        requireNonNull(magicNumbers, "magicNumbers");
+        if (magicNumbers == null) {
+            throw new IllegalArgumentException("The magic number cannot be null");
+        }
         if (magicNumbers.length == 0) {
             throw new IllegalArgumentException("The magic number must contain at least one byte");
         }
@@ -172,7 +174,8 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
             throw new IllegalArgumentException("The offset cannot be negative");
         }
 
-        this.magicNumbers = magicNumbers.clone();
+        this.magicNumbers = IOUtils.byteArray(magicNumbers.length);
+        System.arraycopy(magicNumbers, 0, this.magicNumbers, 0, magicNumbers.length);
         this.byteOffset = offset;
     }
 
@@ -222,7 +225,9 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
      *         a negative number.
      */
     public MagicNumberFileFilter(final String magicNumber, final long offset) {
-        requireNonNull(magicNumber, "magicNumber");
+        if (magicNumber == null) {
+            throw new IllegalArgumentException("The magic number cannot be null");
+        }
         if (magicNumber.isEmpty()) {
             throw new IllegalArgumentException("The magic number must contain at least one byte");
         }
@@ -230,7 +235,8 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
             throw new IllegalArgumentException("The offset cannot be negative");
         }
 
-        this.magicNumbers = magicNumber.getBytes(Charset.defaultCharset()); // explicitly uses the platform default charset
+        this.magicNumbers = magicNumber.getBytes(Charset.defaultCharset()); // explicitly uses the platform default
+                                                                            // charset
         this.byteOffset = offset;
     }
 

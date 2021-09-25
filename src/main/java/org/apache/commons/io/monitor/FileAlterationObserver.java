@@ -124,8 +124,8 @@ public class FileAlterationObserver implements Serializable {
     private static final long serialVersionUID = 1185122225658782848L;
     private final List<FileAlterationListener> listeners = new CopyOnWriteArrayList<>();
     private final FileEntry rootEntry;
-    private final FileFilter fileFilter;
-    private final Comparator<File> comparator;
+    private transient final FileFilter fileFilter;
+    private transient final Comparator<File> comparator;
 
     /**
      * Constructs an observer for the specified directory.
@@ -285,7 +285,7 @@ public class FileAlterationObserver implements Serializable {
      * @throws Exception if an error occurs
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
-    public void destroy() throws Exception {
+    public void destroy()  {
         // noop
     }
 

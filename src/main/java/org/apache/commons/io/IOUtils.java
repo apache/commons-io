@@ -194,6 +194,15 @@ public class IOUtils {
      */
     private static final ThreadLocal<char[]> SKIP_CHAR_BUFFER = ThreadLocal.withInitial(IOUtils::charArray);
 
+    private static final String INPUT_STREAM = "inputStream";
+
+    private static final String OUTPUT_STREAM = "outputStream";
+
+    private static final String LENGTH_TO_READ = "Length to read: ";
+
+    private static final String ACTUAL = " actual: ";
+
+    private static final String SKIP_COUNT_NON_NEGATIVE = "Skip count must be non-negative, actual: ";
     /**
      * Returns the given InputStream if it is already a {@link BufferedInputStream}, otherwise creates a
      * BufferedInputStream from the given InputStream.
@@ -207,7 +216,7 @@ public class IOUtils {
     public static BufferedInputStream buffer(final InputStream inputStream) {
         // reject null early on rather than waiting for IO operation to fail
         // not checked by BufferedInputStream
-        Objects.requireNonNull(inputStream, "inputStream");
+        Objects.requireNonNull(inputStream, INPUT_STREAM);
         return inputStream instanceof BufferedInputStream ?
                 (BufferedInputStream) inputStream : new BufferedInputStream(inputStream);
     }
@@ -226,7 +235,7 @@ public class IOUtils {
     public static BufferedInputStream buffer(final InputStream inputStream, final int size) {
         // reject null early on rather than waiting for IO operation to fail
         // not checked by BufferedInputStream
-        Objects.requireNonNull(inputStream, "inputStream");
+        Objects.requireNonNull(inputStream, INPUT_STREAM);
         return inputStream instanceof BufferedInputStream ?
                 (BufferedInputStream) inputStream : new BufferedInputStream(inputStream, size);
     }
@@ -244,7 +253,7 @@ public class IOUtils {
     public static BufferedOutputStream buffer(final OutputStream outputStream) {
         // reject null early on rather than waiting for IO operation to fail
         // not checked by BufferedInputStream
-        Objects.requireNonNull(outputStream, "outputStream");
+        Objects.requireNonNull(outputStream, OUTPUT_STREAM);
         return outputStream instanceof BufferedOutputStream ?
                 (BufferedOutputStream) outputStream : new BufferedOutputStream(outputStream);
     }
@@ -263,7 +272,7 @@ public class IOUtils {
     public static BufferedOutputStream buffer(final OutputStream outputStream, final int size) {
         // reject null early on rather than waiting for IO operation to fail
         // not checked by BufferedInputStream
-        Objects.requireNonNull(outputStream, "outputStream");
+        Objects.requireNonNull(outputStream, OUTPUT_STREAM);
         return outputStream instanceof BufferedOutputStream ?
                 (BufferedOutputStream) outputStream : new BufferedOutputStream(outputStream, size);
     }
@@ -1342,8 +1351,8 @@ public class IOUtils {
     @SuppressWarnings("resource") // streams are closed by the caller.
     public static long copyLarge(final InputStream inputStream, final OutputStream outputStream, final byte[] buffer)
         throws IOException {
-        Objects.requireNonNull(inputStream, "inputStream");
-        Objects.requireNonNull(outputStream, "outputStream");
+        Objects.requireNonNull(inputStream, INPUT_STREAM);
+        Objects.requireNonNull(outputStream, OUTPUT_STREAM);
         long count = 0;
         int n;
         while (EOF != (n = inputStream.read(buffer))) {
@@ -1876,7 +1885,7 @@ public class IOUtils {
             throws IOException {
         final int actual = read(input, buffer, offset, length);
         if (actual != length) {
-            throw new EOFException("Length to read: " + length + " actual: " + actual);
+            throw new EOFException(LENGTH_TO_READ + length + ACTUAL + actual);
         }
     }
 
@@ -1918,7 +1927,7 @@ public class IOUtils {
         final int expected = buffer.remaining();
         final int actual = read(input, buffer);
         if (actual != expected) {
-            throw new EOFException("Length to read: " + expected + " actual: " + actual);
+            throw new EOFException(LENGTH_TO_READ + expected + ACTUAL + actual);
         }
     }
 
@@ -1960,7 +1969,7 @@ public class IOUtils {
             throws IOException {
         final int actual = read(reader, buffer, offset, length);
         if (actual != length) {
-            throw new EOFException("Length to read: " + length + " actual: " + actual);
+            throw new EOFException(LENGTH_TO_READ + length + ACTUAL + actual);
         }
     }
 
@@ -2195,7 +2204,7 @@ public class IOUtils {
      */
     public static long skip(final InputStream input, final long toSkip) throws IOException {
         if (toSkip < 0) {
-            throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
+            throw new IllegalArgumentException(SKIP_COUNT_NON_NEGATIVE + toSkip);
         }
         /*
          * N.B. no need to synchronize access to SKIP_BYTE_BUFFER: - we don't care if the buffer is created multiple
@@ -2230,7 +2239,7 @@ public class IOUtils {
      */
     public static long skip(final ReadableByteChannel input, final long toSkip) throws IOException {
         if (toSkip < 0) {
-            throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
+            throw new IllegalArgumentException(SKIP_COUNT_NON_NEGATIVE + toSkip);
         }
         final ByteBuffer skipByteBuffer = ByteBuffer.allocate((int) Math.min(toSkip, DEFAULT_BUFFER_SIZE));
         long remain = toSkip;
@@ -2269,7 +2278,7 @@ public class IOUtils {
      */
     public static long skip(final Reader reader, final long toSkip) throws IOException {
         if (toSkip < 0) {
-            throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
+            throw new IllegalArgumentException(SKIP_COUNT_NON_NEGATIVE + toSkip);
         }
         long remain = toSkip;
         while (remain > 0) {
@@ -2310,7 +2319,7 @@ public class IOUtils {
         }
         final long skipped = skip(input, toSkip);
         if (skipped != toSkip) {
-            throw new EOFException("Bytes to skip: " + toSkip + " actual: " + skipped);
+            throw new EOFException("Bytes to skip: " + toSkip + ACTUAL + skipped);
         }
     }
 
@@ -2330,7 +2339,7 @@ public class IOUtils {
         }
         final long skipped = skip(input, toSkip);
         if (skipped != toSkip) {
-            throw new EOFException("Bytes to skip: " + toSkip + " actual: " + skipped);
+            throw new EOFException("Bytes to skip: " + toSkip + ACTUAL + skipped);
         }
     }
 
@@ -2357,7 +2366,7 @@ public class IOUtils {
     public static void skipFully(final Reader reader, final long toSkip) throws IOException {
         final long skipped = skip(reader, toSkip);
         if (skipped != toSkip) {
-            throw new EOFException("Chars to skip: " + toSkip + " actual: " + skipped);
+            throw new EOFException("Chars to skip: " + toSkip + ACTUAL + skipped);
         }
     }
 

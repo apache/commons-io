@@ -725,14 +725,14 @@ public class XmlStreamReader extends Reader {
                 ex = ex2;
             }
         }
-        String encoding = ex.getXmlEncoding();
-        if (encoding == null) {
-            encoding = ex.getContentTypeEncoding();
+        String xmlEncoding = ex.getXmlEncoding();
+        if (xmlEncoding == null) {
+            xmlEncoding = ex.getContentTypeEncoding();
         }
-        if (encoding == null) {
-            encoding = defaultEncoding == null ? UTF_8 : defaultEncoding;
+        if (xmlEncoding == null) {
+            xmlEncoding = defaultEncoding == null ? UTF_8 : defaultEncoding;
         }
-        return encoding;
+        return xmlEncoding;
     }
 
     /**

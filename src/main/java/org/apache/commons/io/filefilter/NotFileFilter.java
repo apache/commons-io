@@ -42,7 +42,9 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
      * @throws IllegalArgumentException if the filter is null
      */
     public NotFileFilter(final IOFileFilter filter) {
-        requireNonNull(filter, "filter");
+        if (filter == null) {
+            throw new IllegalArgumentException("The filter must not be null");
+        }
         this.filter = filter;
     }
 
@@ -82,7 +84,8 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
     }
 
     private FileVisitResult not(final FileVisitResult accept) {
-        return accept == FileVisitResult.CONTINUE ? FileVisitResult.TERMINATE : FileVisitResult.CONTINUE;
+        return accept == FileVisitResult.CONTINUE ? FileVisitResult.TERMINATE
+            : FileVisitResult.CONTINUE;
     }
 
     /**

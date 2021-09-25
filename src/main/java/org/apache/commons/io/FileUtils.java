@@ -55,11 +55,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.CRC32;
@@ -193,6 +191,14 @@ public class FileUtils {
      * An empty array of type {@code File}.
      */
     public static final File[] EMPTY_FILE_ARRAY = {};
+    
+    private static final String DEST_FILE = "destFile";
+
+    private static final String SOURCE_FILE = "sourceFile";
+
+    private static final String DIRECTORY = "directory";
+
+    private static final String DEST_DIR = "destDir";
 
     /**
      * Copies the given array and adds StandardCopyOption.COPY_ATTRIBUTES.
@@ -488,7 +494,7 @@ public class FileUtils {
     }
 
     /**
-     * Converts a Collection containing java.io.File instances into array
+     * Converts a Collection containing java.io.File instanced into array
      * representation. This is to account for the difference between
      * File.listFiles() and FileUtils.listFiles().
      *
@@ -866,9 +872,9 @@ public class FileUtils {
         requireFile(srcFile, "srcFile");
         requireCanonicalPathsNotEquals(srcFile, destFile);
         createParentDirectories(destFile);
-        requireFileIfExists(destFile, "destFile");
+        requireFileIfExists(destFile, DEST_FILE);
         if (destFile.exists()) {
-            requireCanWrite(destFile, "destFile");
+            requireCanWrite(destFile, DEST_FILE);
         }
 
         // On Windows, the last modified time is copied by default.
@@ -946,7 +952,7 @@ public class FileUtils {
      */
     public static void copyFileToDirectory(final File sourceFile, final File destinationDir, final boolean preserveFileDate)
             throws IOException {
-        Objects.requireNonNull(sourceFile, "sourceFile");
+        Objects.requireNonNull(sourceFile, SOURCE_FILE);
         requireDirectoryIfExists(destinationDir, "destinationDir");
         copyFile(sourceFile, new File(destinationDir, sourceFile.getName()), preserveFileDate);
     }
@@ -1005,7 +1011,7 @@ public class FileUtils {
      * @since 2.6
      */
     public static void copyToDirectory(final File sourceFile, final File destinationDir) throws IOException {
-        Objects.requireNonNull(sourceFile, "sourceFile");
+        Objects.requireNonNull(sourceFile, SOURCE_FILE);
         if (sourceFile.isFile()) {
             copyFileToDirectory(sourceFile, destinationDir);
         } else if (sourceFile.isDirectory()) {
@@ -1219,7 +1225,7 @@ public class FileUtils {
      * @throws IllegalArgumentException if {@code directory} is not a directory
      */
     public static void deleteDirectory(final File directory) throws IOException {
-        Objects.requireNonNull(directory, "directory");
+        Objects.requireNonNull(directory, DIRECTORY);
         if (!directory.exists()) {
             return;
         }
@@ -1305,7 +1311,7 @@ public class FileUtils {
      * @since 2.2
      */
     public static boolean directoryContains(final File directory, final File child) throws IOException {
-        requireDirectoryExists(directory, "directory");
+        requireDirectoryExists(directory, DIRECTORY);
 
         if (child == null || !directory.exists() || !child.exists()) {
             return false;
@@ -1331,9 +1337,9 @@ public class FileUtils {
                                         final List<String> exclusionList, final boolean preserveDirDate, final CopyOption... copyOptions) throws IOException {
         // recurse dirs, copy files.
         final File[] srcFiles = listFiles(srcDir, fileFilter);
-        requireDirectoryIfExists(destDir, "destDir");
+        requireDirectoryIfExists(destDir, DEST_DIR);
         mkdirs(destDir);
-        requireCanWrite(destDir, "destDir");
+        requireCanWrite(destDir, DEST_DIR);
         for (final File srcFile : srcFiles) {
             final File dstFile = new File(destDir, srcFile.getName());
             if (exclusionList == null || !exclusionList.contains(srcFile.getCanonicalPath())) {
@@ -1437,7 +1443,7 @@ public class FileUtils {
      * @since 2.1
      */
     public static File getFile(final File directory, final String... names) {
-        Objects.requireNonNull(directory, "directory");
+        Objects.requireNonNull(directory, DIRECTORY);
         Objects.requireNonNull(names, "names");
         File file = directory;
         for (final String name : names) {
@@ -2176,15 +2182,14 @@ public class FileUtils {
         }
     }
 
-    private static AccumulatorPathVisitor listAccumulate(final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter,
-        FileVisitOption... options) throws IOException {
+    private static AccumulatorPathVisitor listAccumulate(final File directory, final IOFileFilter fileFilter,
+        final IOFileFilter dirFilter) throws IOException {
         final boolean isDirFilterSet = dirFilter != null;
         final FileEqualsFileFilter rootDirFilter = new FileEqualsFileFilter(directory);
         final PathFilter dirPathFilter = isDirFilterSet ? rootDirFilter.or(dirFilter) : rootDirFilter;
-        final AccumulatorPathVisitor visitor = new AccumulatorPathVisitor(Counters.noopPathCounters(), fileFilter, dirPathFilter);
-        Set<FileVisitOption> optionSet = new HashSet<>();
-        Collections.addAll(optionSet, options);
-        Files.walkFileTree(directory.toPath(), optionSet, toMaxDepth(isDirFilterSet), visitor);
+        final AccumulatorPathVisitor visitor = new AccumulatorPathVisitor(Counters.noopPathCounters(), fileFilter,
+            dirPathFilter);
+        Files.walkFileTree(directory.toPath(), Collections.emptySet(), toMaxDepth(isDirFilterSet), visitor);
         return visitor;
     }
 
@@ -2199,7 +2204,7 @@ public class FileUtils {
      * @throws IOException if an I/O error occurs.
      */
     private static File[] listFiles(final File directory, final FileFilter fileFilter) throws IOException {
-        requireDirectoryExists(directory, "directory");
+        requireDirectoryExists(directory, DIRECTORY);
         final File[] files = fileFilter == null ? directory.listFiles() : directory.listFiles(fileFilter);
         if (files == null) {
             // null if the directory does not denote a directory, or if an I/O error occurs.
@@ -2240,7 +2245,7 @@ public class FileUtils {
     public static Collection<File> listFiles(
         final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
         try {
-            final AccumulatorPathVisitor visitor = listAccumulate(directory, fileFilter, dirFilter, FileVisitOption.FOLLOW_LINKS);
+            final AccumulatorPathVisitor visitor = listAccumulate(directory, fileFilter, dirFilter);
             return visitor.getFileList().stream().map(Path::toFile).collect(Collectors.toList());
         } catch (final IOException e) {
             throw UncheckedIOExceptions.create(directory, e);
@@ -2287,7 +2292,7 @@ public class FileUtils {
     public static Collection<File> listFilesAndDirs(
         final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
         try {
-            final AccumulatorPathVisitor visitor = listAccumulate(directory, fileFilter, dirFilter, FileVisitOption.FOLLOW_LINKS);
+            final AccumulatorPathVisitor visitor = listAccumulate(directory, fileFilter, dirFilter);
             final List<Path> list = visitor.getFileList();
             list.addAll(visitor.getDirList());
             return list.stream().map(Path::toFile).collect(Collectors.toList());
@@ -2330,7 +2335,7 @@ public class FileUtils {
     public static void moveDirectory(final File srcDir, final File destDir) throws IOException {
         validateMoveParameters(srcDir, destDir);
         requireDirectory(srcDir, "srcDir");
-        requireAbsent(destDir, "destDir");
+        requireAbsent(destDir, DEST_DIR);
         if (!srcDir.renameTo(destDir)) {
             if (destDir.getCanonicalPath().startsWith(srcDir.getCanonicalPath() + File.separator)) {
                 throw new IOException("Cannot move directory: " + srcDir + " to a subdirectory of itself: " + destDir);
@@ -2415,7 +2420,7 @@ public class FileUtils {
         throws IOException {
         validateMoveParameters(srcFile, destFile);
         requireFile(srcFile, "srcFile");
-        requireAbsent(destFile, "destFile");
+        requireAbsent(destFile, DEST_FILE);
         final boolean rename = srcFile.renameTo(destFile);
         if (!rename) {
             copyFile(srcFile, destFile, copyOptions);
@@ -2446,8 +2451,8 @@ public class FileUtils {
         if (!destDir.exists() && createDestDir) {
             mkdirs(destDir);
         }
-        requireExistsChecked(destDir, "destDir");
-        requireDirectory(destDir, "destDir");
+        requireExistsChecked(destDir, DEST_DIR);
+        requireDirectory(destDir, DEST_DIR);
         moveFile(srcFile, new File(destDir, srcFile.getName()));
     }
 
@@ -2899,7 +2904,7 @@ public class FileUtils {
      * @throws IOException if setting the last-modified time failed.
      */
     private static void setLastModified(final File sourceFile, final File targetFile) throws IOException {
-        Objects.requireNonNull(sourceFile, "sourceFile");
+        Objects.requireNonNull(sourceFile, SOURCE_FILE);
         Objects.requireNonNull(targetFile, "targetFile");
         if (targetFile.isFile()) {
             PathUtils.setLastModifiedTime(targetFile.toPath(), sourceFile.toPath());
@@ -2999,7 +3004,7 @@ public class FileUtils {
      * @throws UncheckedIOException if an IO error occurs.
      */
     public static long sizeOfDirectory(final File directory) {
-        requireDirectoryExists(directory, "directory");
+        requireDirectoryExists(directory, DIRECTORY);
         try {
             return PathUtils.sizeOfDirectory(directory.toPath());
         } catch (final IOException e) {
@@ -3017,7 +3022,7 @@ public class FileUtils {
      * @since 2.4
      */
     public static BigInteger sizeOfDirectoryAsBigInteger(final File directory) {
-        requireDirectoryExists(directory, "directory");
+        requireDirectoryExists(directory, DIRECTORY);
         try {
             return PathUtils.sizeOfDirectoryAsBigInteger(directory.toPath());
         } catch (final IOException e) {
