@@ -1476,8 +1476,6 @@ public class FileUtilsTest {
         assertFalse(testDirectory.exists(), "TestDirectory must not exist");
     }
 
-    // forceDelete
-
     @Test
     public void testForceDeleteReadOnlyFile() throws Exception {
         File destination = File.createTempFile("test-", ".txt");
