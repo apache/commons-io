@@ -1808,31 +1808,6 @@ public class FileUtilsTest {
     }
 
     @Test
-    public void testIterateFilesOnlyNoDirs() throws IOException {
-        final File directory = temporaryFolder;
-        assertTrue(new File(directory, "TEST").mkdir());
-        assertTrue(new File(directory, "test.txt").createNewFile());
-
-        final IOFileFilter filter = new WildcardFileFilter("*", IOCase.INSENSITIVE);
-        for (final Iterator<File> itFiles = FileUtils.iterateFiles(directory, filter, null); itFiles.hasNext();) {
-            final File file = itFiles.next();
-            assertFalse(file.isDirectory(), () -> file.getAbsolutePath());
-        }
-    }
-
-    @Test
-    public void testListFilesOnlyNoDirs() throws IOException {
-        final File directory = temporaryFolder;
-        assertTrue(new File(directory, "TEST").mkdir());
-        assertTrue(new File(directory, "test.txt").createNewFile());
-
-        final IOFileFilter filter = new WildcardFileFilter("*", IOCase.INSENSITIVE);
-        for (final File file : FileUtils.listFiles(directory, filter, null)) {
-            assertFalse(file.isDirectory(), () -> file.getAbsolutePath());
-        }
-    }
-
-    @Test
     public void testIterateFiles() throws Exception {
         final File srcDir = temporaryFolder;
         final File subDir = new File(srcDir, "list_test");
@@ -1944,6 +1919,19 @@ public class FileUtilsTest {
     }
 
     @Test
+    public void testIterateFilesOnlyNoDirs() throws IOException {
+        final File directory = temporaryFolder;
+        assertTrue(new File(directory, "TEST").mkdir());
+        assertTrue(new File(directory, "test.txt").createNewFile());
+
+        final IOFileFilter filter = new WildcardFileFilter("*", IOCase.INSENSITIVE);
+        for (final Iterator<File> itFiles = FileUtils.iterateFiles(directory, filter, null); itFiles.hasNext();) {
+            final File file = itFiles.next();
+            assertFalse(file.isDirectory(), () -> file.getAbsolutePath());
+        }
+    }
+
+    @Test
     public void testListFiles() throws Exception {
         final File srcDir = temporaryFolder;
         final File subDir = new File(srcDir, "list_test");
@@ -1990,6 +1978,18 @@ public class FileUtilsTest {
             assertEquals(foundFileNames.size(), expectedFileNames.length, () -> foundFileNames.toString());
         } finally {
             subDir.delete();
+        }
+    }
+
+    @Test
+    public void testListFilesOnlyNoDirs() throws IOException {
+        final File directory = temporaryFolder;
+        assertTrue(new File(directory, "TEST").mkdir());
+        assertTrue(new File(directory, "test.txt").createNewFile());
+
+        final IOFileFilter filter = new WildcardFileFilter("*", IOCase.INSENSITIVE);
+        for (final File file : FileUtils.listFiles(directory, filter, null)) {
+            assertFalse(file.isDirectory(), () -> file.getAbsolutePath());
         }
     }
 
