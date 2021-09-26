@@ -98,7 +98,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-716" dev="ggregory" type="fix" due-to="Marcono1234, Gary Gregory">
         ReaderInputStream enter infinite loop for too small buffer sizes.
       </action>
-      <action issue="IO-638" dev="ggregory" type="fix" due-to=", Gary Gregory">
+      <action issue="IO-638" dev="ggregory" type="fix" due-to="Thayne McCombs, Gary Gregory">
         Infinite loop in CharSequenceInputStream.read for 4-byte characters with UTF-8 and 3-byte buffer.
       </action>
       <!-- ADD -->
