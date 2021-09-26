@@ -228,6 +228,9 @@ public class ReaderInputStream extends InputStream {
         }
         encoderOut.compact();
         lastCoderResult = encoder.encode(encoderIn, encoderOut, endOfInput);
+        if (lastCoderResult.isError()) {
+            lastCoderResult.throwException();
+        }
         encoderOut.flip();
     }
 

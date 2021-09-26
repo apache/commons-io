@@ -92,6 +92,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-721" dev="ggregory" type="fix" due-to="Dirk Heinrichs, Gary Gregory">
         Wrong exception message in FileUtils.setLastModified(File, File).
       </action>
+      <action issue="IO-717" dev="ggregory" type="fix" due-to="Marcono1234, Gary Gregory">
+        Infinite loop in ReaderInputStream instead of throwing exception for CodingErrorAction.REPORT.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add BrokenReader.INSTANCE.
