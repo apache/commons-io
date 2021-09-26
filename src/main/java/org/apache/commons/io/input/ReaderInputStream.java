@@ -86,7 +86,14 @@ import java.util.Objects;
 public class ReaderInputStream extends InputStream {
     private static final int DEFAULT_BUFFER_SIZE = 1024;
 
+    private static int checkBufferSize(int bufferSize) {
+        if (bufferSize < 2) {
+            throw new IllegalArgumentException("Buffer size < 2");
+        }
+        return bufferSize;
+    }
     private final Reader reader;
+
     private final CharsetEncoder encoder;
 
     /**
@@ -101,8 +108,8 @@ public class ReaderInputStream extends InputStream {
      * buffer provided by the caller.
      */
     private final ByteBuffer encoderOut;
-
     private CoderResult lastCoderResult;
+
     private boolean endOfInput;
 
     /**
@@ -131,9 +138,9 @@ public class ReaderInputStream extends InputStream {
     /**
      * Constructs a new {@link ReaderInputStream}.
      *
-     * @param reader the target {@link Reader}
-     * @param charset the charset encoding
-     * @param bufferSize the size of the input buffer in number of characters
+     * @param reader the target {@link Reader}.
+     * @param charset the charset encoding.
+     * @param bufferSize the size of the input buffer in number of characters.
      */
     public ReaderInputStream(final Reader reader, final Charset charset, final int bufferSize) {
         // @formatter:off
@@ -141,7 +148,7 @@ public class ReaderInputStream extends InputStream {
              charset.newEncoder()
                     .onMalformedInput(CodingErrorAction.REPLACE)
                     .onUnmappableCharacter(CodingErrorAction.REPLACE),
-             bufferSize);
+             checkBufferSize(bufferSize));
         // @formatter:on
     }
 

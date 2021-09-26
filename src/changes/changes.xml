@@ -95,6 +95,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-717" dev="ggregory" type="fix" due-to="Marcono1234, Gary Gregory">
         Infinite loop in ReaderInputStream instead of throwing exception for CodingErrorAction.REPORT.
       </action>
+      <action issue="IO-716" dev="ggregory" type="fix" due-to="Marcono1234, Gary Gregory">
+        ReaderInputStream enter infinite loop for too small buffer sizes.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add BrokenReader.INSTANCE.

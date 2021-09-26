@@ -17,8 +17,8 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.CharArrayReader;
 import java.io.IOException;
@@ -50,6 +50,19 @@ public class ReaderInputStreamTest {
 
     private final Random random = new Random();
 
+    @Test
+    public void testBufferTooSmall() throws IOException {
+        assertThrows(IllegalArgumentException.class, () -> new ReaderInputStream(new StringReader("\uD800"), StandardCharsets.UTF_8, 1));
+    }
+    
+    @Test
+    @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
+    public void testBufferSmallest() throws IOException {
+        try (InputStream in = new ReaderInputStream(new StringReader("\uD800"), StandardCharsets.UTF_8, 2)) {
+            in.read();
+        }
+    }
+    
     /*
      * Tests https://issues.apache.org/jira/browse/IO-277
      */
