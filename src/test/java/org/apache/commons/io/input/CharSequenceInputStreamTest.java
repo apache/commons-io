@@ -29,6 +29,7 @@ import java.util.Random;
 import java.util.Set;
 
 import org.apache.commons.io.Charsets;
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -178,8 +179,7 @@ private boolean isAvailabilityTestableForCharset(final String csName) {
         final char[] inputChars = { (char) 0xE0, (char) 0xB2, (char) 0xA0 };
         final Charset charset = Charset.forName(csName); // infinite loop for US-ASCII, UTF-8 OK
         try (InputStream stream = new CharSequenceInputStream(new String(inputChars), charset, 512)) {
-            while (stream.read() != -1) {
-            }
+            IOUtils.toCharArray(stream, charset);
         }
     }
 

@@ -32,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
@@ -59,8 +60,7 @@ public class ReaderInputStreamTest {
         // Charset charset = Charset.forName("UTF-8"); // works
         final Charset charset = StandardCharsets.US_ASCII; // infinite loop
         try (ReaderInputStream stream = new ReaderInputStream(new CharArrayReader(inputChars), charset)) {
-            while (stream.read() != -1) {
-            }
+            IOUtils.toCharArray(stream, charset);
         }
     }
 
