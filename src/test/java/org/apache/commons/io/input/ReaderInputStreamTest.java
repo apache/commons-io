@@ -52,13 +52,16 @@ public class ReaderInputStreamTest {
 
     @Test
     public void testBufferTooSmall() throws IOException {
+        assertThrows(IllegalArgumentException.class, () -> new ReaderInputStream(new StringReader("\uD800"), StandardCharsets.UTF_8, -1));
+        assertThrows(IllegalArgumentException.class, () -> new ReaderInputStream(new StringReader("\uD800"), StandardCharsets.UTF_8, 0));
         assertThrows(IllegalArgumentException.class, () -> new ReaderInputStream(new StringReader("\uD800"), StandardCharsets.UTF_8, 1));
     }
     
     @Test
     @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
     public void testBufferSmallest() throws IOException {
-        try (InputStream in = new ReaderInputStream(new StringReader("\uD800"), StandardCharsets.UTF_8, 2)) {
+        final Charset charset = StandardCharsets.UTF_8;
+        try (InputStream in = new ReaderInputStream(new StringReader("\uD800"), charset, (int) ReaderInputStream.minBufferSize(charset.newEncoder()))) {
             in.read();
         }
     }
@@ -85,8 +88,9 @@ public class ReaderInputStreamTest {
     @Test
     @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
     public void testCodingErrorAction() throws IOException {
-        CharsetEncoder encoder = StandardCharsets.UTF_8.newEncoder().onMalformedInput(CodingErrorAction.REPORT);
-        try (InputStream in = new ReaderInputStream(new StringReader("\uD800aa"), encoder, 2)) {
+        final Charset charset = StandardCharsets.UTF_8;
+        CharsetEncoder encoder = charset.newEncoder().onMalformedInput(CodingErrorAction.REPORT);
+        try (InputStream in = new ReaderInputStream(new StringReader("\uD800aa"), encoder, (int) ReaderInputStream.minBufferSize(charset.newEncoder()))) {
             assertThrows(CharacterCodingException.class, in::read);
         }
     }

@@ -45,7 +45,7 @@ public class CharSequenceInputStream extends InputStream {
 
     private static final int NO_MARK = -1;
 
-    private final CharsetEncoder encoder;
+    private final CharsetEncoder charsetEncoder;
     private final CharBuffer cbuf;
     private final ByteBuffer bbuf;
 
@@ -73,16 +73,13 @@ public class CharSequenceInputStream extends InputStream {
      * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character
      */
     public CharSequenceInputStream(final CharSequence cs, final Charset charset, final int bufferSize) {
-        this.encoder = charset.newEncoder()
+        // @formatter:off
+        this.charsetEncoder = charset.newEncoder()
             .onMalformedInput(CodingErrorAction.REPLACE)
             .onUnmappableCharacter(CodingErrorAction.REPLACE);
+        // @formatter:on
         // Ensure that buffer is long enough to hold a complete character
-        final float maxBytesPerChar = encoder.maxBytesPerChar();
-        if (bufferSize < maxBytesPerChar) {
-            throw new IllegalArgumentException("Buffer size " + bufferSize + " is less than maxBytesPerChar " +
-                    maxBytesPerChar);
-        }
-        this.bbuf = ByteBuffer.allocate(bufferSize);
+        this.bbuf = ByteBuffer.allocate(ReaderInputStream.checkMinBufferSize(charsetEncoder, bufferSize));
         this.bbuf.flip();
         this.cbuf = CharBuffer.wrap(cs);
         this.mark_cbuf = NO_MARK;
@@ -141,7 +138,7 @@ public class CharSequenceInputStream extends InputStream {
      */
     private void fillBuffer() throws CharacterCodingException {
         this.bbuf.compact();
-        final CoderResult result = this.encoder.encode(this.cbuf, this.bbuf, true);
+        final CoderResult result = this.charsetEncoder.encode(this.cbuf, this.bbuf, true);
         if (result.isError()) {
             result.throwException();
         }
@@ -232,7 +229,7 @@ public class CharSequenceInputStream extends InputStream {
         if (this.mark_cbuf != NO_MARK) {
             // if cbuf is at 0, we have not started reading anything, so skip re-encoding
             if (this.cbuf.position() != 0) {
-                this.encoder.reset();
+                this.charsetEncoder.reset();
                 this.cbuf.rewind();
                 this.bbuf.rewind();
                 this.bbuf.limit(0); // rewind does not clear the buffer

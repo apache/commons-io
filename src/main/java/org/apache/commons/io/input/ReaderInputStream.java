@@ -30,51 +30,46 @@ import java.nio.charset.CodingErrorAction;
 import java.util.Objects;
 
 /**
- * {@link InputStream} implementation that reads a character stream from a {@link Reader}
- * and transforms it to a byte stream using a specified charset encoding. The stream
- * is transformed using a {@link CharsetEncoder} object, guaranteeing that all charset
- * encodings supported by the JRE are handled correctly. In particular for charsets such as
- * UTF-16, the implementation ensures that one and only one byte order marker
- * is produced.
+ * {@link InputStream} implementation that reads a character stream from a {@link Reader} and transforms it to a byte
+ * stream using a specified charset encoding. The stream is transformed using a {@link CharsetEncoder} object,
+ * guaranteeing that all charset encodings supported by the JRE are handled correctly. In particular for charsets such
+ * as UTF-16, the implementation ensures that one and only one byte order marker is produced.
  * <p>
- * Since in general it is not possible to predict the number of characters to be read from the
- * {@link Reader} to satisfy a read request on the {@link ReaderInputStream}, all reads from
- * the {@link Reader} are buffered. There is therefore no well defined correlation
- * between the current position of the {@link Reader} and that of the {@link ReaderInputStream}.
- * This also implies that in general there is no need to wrap the underlying {@link Reader}
+ * Since in general it is not possible to predict the number of characters to be read from the {@link Reader} to satisfy
+ * a read request on the {@link ReaderInputStream}, all reads from the {@link Reader} are buffered. There is therefore
+ * no well defined correlation between the current position of the {@link Reader} and that of the
+ * {@link ReaderInputStream}. This also implies that in general there is no need to wrap the underlying {@link Reader}
  * in a {@link java.io.BufferedReader}.
  * </p>
  * <p>
- * {@link ReaderInputStream} implements the inverse transformation of {@link java.io.InputStreamReader};
- * in the following example, reading from {@code in2} would return the same byte
- * sequence as reading from {@code in} (provided that the initial byte sequence is legal
- * with respect to the charset encoding):
+ * {@link ReaderInputStream} implements the inverse transformation of {@link java.io.InputStreamReader}; in the
+ * following example, reading from {@code in2} would return the same byte sequence as reading from {@code in} (provided
+ * that the initial byte sequence is legal with respect to the charset encoding):
  * </p>
+ * 
  * <pre>
  * InputStream inputStream = ...
  * Charset cs = ...
  * InputStreamReader reader = new InputStreamReader(inputStream, cs);
- * ReaderInputStream in2 = new ReaderInputStream(reader, cs);</pre>
+ * ReaderInputStream in2 = new ReaderInputStream(reader, cs);
+ * </pre>
  * <p>
- * {@link ReaderInputStream} implements the same transformation as {@link java.io.OutputStreamWriter},
- * except that the control flow is reversed: both classes transform a character stream
- * into a byte stream, but {@link java.io.OutputStreamWriter} pushes data to the underlying stream,
- * while {@link ReaderInputStream} pulls it from the underlying stream.
+ * {@link ReaderInputStream} implements the same transformation as {@link java.io.OutputStreamWriter}, except that the
+ * control flow is reversed: both classes transform a character stream into a byte stream, but
+ * {@link java.io.OutputStreamWriter} pushes data to the underlying stream, while {@link ReaderInputStream} pulls it
+ * from the underlying stream.
  * </p>
  * <p>
- * Note that while there are use cases where there is no alternative to using
- * this class, very often the need to use this class is an indication of a flaw
- * in the design of the code. This class is typically used in situations where an existing
- * API only accepts an {@link InputStream}, but where the most natural way to produce the data
- * is as a character stream, i.e. by providing a {@link Reader} instance. An example of a situation
- * where this problem may appear is when implementing the {@code javax.activation.DataSource}
- * interface from the Java Activation Framework.
+ * Note that while there are use cases where there is no alternative to using this class, very often the need to use
+ * this class is an indication of a flaw in the design of the code. This class is typically used in situations where an
+ * existing API only accepts an {@link InputStream}, but where the most natural way to produce the data is as a
+ * character stream, i.e. by providing a {@link Reader} instance. An example of a situation where this problem may
+ * appear is when implementing the {@code javax.activation.DataSource} interface from the Java Activation Framework.
  * </p>
  * <p>
- * Given the fact that the {@link Reader} class doesn't provide any way to predict whether the next
- * read operation will block or not, it is not possible to provide a meaningful
- * implementation of the {@link InputStream#available()} method. A call to this method
- * will always return 0. Also, this class doesn't support {@link InputStream#mark(int)}.
+ * Given the fact that the {@link Reader} class doesn't provide any way to predict whether the next read operation will
+ * block or not, it is not possible to provide a meaningful implementation of the {@link InputStream#available()}
+ * method. A call to this method will always return 0. Also, this class doesn't support {@link InputStream#mark(int)}.
  * </p>
  * <p>
  * Instances of {@link ReaderInputStream} are not thread safe.
@@ -86,35 +81,41 @@ import java.util.Objects;
 public class ReaderInputStream extends InputStream {
     private static final int DEFAULT_BUFFER_SIZE = 1024;
 
-    private static int checkBufferSize(int bufferSize) {
-        if (bufferSize < 2) {
-            throw new IllegalArgumentException("Buffer size < 2");
+    static int checkMinBufferSize(final CharsetEncoder charsetEncoder, final int bufferSize) {
+        final float minRequired = minBufferSize(charsetEncoder);
+        if (bufferSize < minRequired) {
+            throw new IllegalArgumentException(
+                String.format("Buffer size %,d must be at least %s for a CharsetEncoder %s.", bufferSize, minRequired, charsetEncoder.charset().displayName()));
         }
         return bufferSize;
     }
+
+    static float minBufferSize(final CharsetEncoder charsetEncoder) {
+        return charsetEncoder.maxBytesPerChar() * 2;
+    }
+
     private final Reader reader;
 
-    private final CharsetEncoder encoder;
+    private final CharsetEncoder charsetEncoder;
 
     /**
-     * CharBuffer used as input for the decoder. It should be reasonably
-     * large as we read data from the underlying Reader into this buffer.
+     * CharBuffer used as input for the decoder. It should be reasonably large as we read data from the underlying Reader
+     * into this buffer.
      */
     private final CharBuffer encoderIn;
-
     /**
-     * ByteBuffer used as output for the decoder. This buffer can be small
-     * as it is only used to transfer data from the decoder to the
-     * buffer provided by the caller.
+     * ByteBuffer used as output for the decoder. This buffer can be small as it is only used to transfer data from the
+     * decoder to the buffer provided by the caller.
      */
     private final ByteBuffer encoderOut;
+
     private CoderResult lastCoderResult;
 
     private boolean endOfInput;
 
     /**
-     * Constructs a new {@link ReaderInputStream} that uses the default character encoding
-     * with a default input buffer size of {@value #DEFAULT_BUFFER_SIZE} characters.
+     * Constructs a new {@link ReaderInputStream} that uses the default character encoding with a default input buffer size
+     * of {@value #DEFAULT_BUFFER_SIZE} characters.
      *
      * @param reader the target {@link Reader}
      * @deprecated 2.5 use {@link #ReaderInputStream(Reader, Charset)} instead
@@ -125,8 +126,8 @@ public class ReaderInputStream extends InputStream {
     }
 
     /**
-     * Constructs a new {@link ReaderInputStream} with a default input buffer size of
-     * {@value #DEFAULT_BUFFER_SIZE} characters.
+     * Constructs a new {@link ReaderInputStream} with a default input buffer size of {@value #DEFAULT_BUFFER_SIZE}
+     * characters.
      *
      * @param reader the target {@link Reader}
      * @param charset the charset encoding
@@ -148,7 +149,7 @@ public class ReaderInputStream extends InputStream {
              charset.newEncoder()
                     .onMalformedInput(CodingErrorAction.REPLACE)
                     .onUnmappableCharacter(CodingErrorAction.REPLACE),
-             checkBufferSize(bufferSize));
+             bufferSize);
         // @formatter:on
     }
 
@@ -156,33 +157,33 @@ public class ReaderInputStream extends InputStream {
      * Constructs a new {@link ReaderInputStream}.
      *
      * @param reader the target {@link Reader}
-     * @param encoder the charset encoder
+     * @param charsetEncoder the charset encoder
      * @since 2.1
      */
-    public ReaderInputStream(final Reader reader, final CharsetEncoder encoder) {
-        this(reader, encoder, DEFAULT_BUFFER_SIZE);
+    public ReaderInputStream(final Reader reader, final CharsetEncoder charsetEncoder) {
+        this(reader, charsetEncoder, DEFAULT_BUFFER_SIZE);
     }
 
     /**
      * Constructs a new {@link ReaderInputStream}.
      *
      * @param reader the target {@link Reader}
-     * @param encoder the charset encoder
+     * @param charsetEncoder the charset encoder
      * @param bufferSize the size of the input buffer in number of characters
      * @since 2.1
      */
-    public ReaderInputStream(final Reader reader, final CharsetEncoder encoder, final int bufferSize) {
+    public ReaderInputStream(final Reader reader, final CharsetEncoder charsetEncoder, final int bufferSize) {
         this.reader = reader;
-        this.encoder = encoder;
-        this.encoderIn = CharBuffer.allocate(bufferSize);
+        this.charsetEncoder = charsetEncoder;
+        this.encoderIn = CharBuffer.allocate(checkMinBufferSize(charsetEncoder, bufferSize));
         this.encoderIn.flip();
         this.encoderOut = ByteBuffer.allocate(128);
         this.encoderOut.flip();
     }
 
     /**
-     * Constructs a new {@link ReaderInputStream} with a default input buffer size of
-     * {@value #DEFAULT_BUFFER_SIZE} characters.
+     * Constructs a new {@link ReaderInputStream} with a default input buffer size of {@value #DEFAULT_BUFFER_SIZE}
+     * characters.
      *
      * @param reader the target {@link Reader}
      * @param charsetName the name of the charset encoding
@@ -203,8 +204,8 @@ public class ReaderInputStream extends InputStream {
     }
 
     /**
-     * Close the stream. This method will cause the underlying {@link Reader}
-     * to be closed.
+     * Close the stream. This method will cause the underlying {@link Reader} to be closed.
+     * 
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -215,8 +216,7 @@ public class ReaderInputStream extends InputStream {
     /**
      * Fills the internal char buffer from the reader.
      *
-     * @throws IOException
-     *             If an I/O error occurs
+     * @throws IOException If an I/O error occurs
      */
     private void fillBuffer() throws IOException {
         if (!endOfInput && (lastCoderResult == null || lastCoderResult.isUnderflow())) {
@@ -234,7 +234,7 @@ public class ReaderInputStream extends InputStream {
             encoderIn.flip();
         }
         encoderOut.compact();
-        lastCoderResult = encoder.encode(encoderIn, encoderOut, endOfInput);
+        lastCoderResult = charsetEncoder.encode(encoderIn, encoderOut, endOfInput);
         if (lastCoderResult.isError()) {
             lastCoderResult.throwException();
         }
@@ -244,8 +244,7 @@ public class ReaderInputStream extends InputStream {
     /**
      * Read a single byte.
      *
-     * @return either the byte read or {@code -1} if the end of the stream
-     *         has been reached
+     * @return either the byte read or {@code -1} if the end of the stream has been reached
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -265,8 +264,7 @@ public class ReaderInputStream extends InputStream {
      * Read the specified number of bytes into an array.
      *
      * @param b the byte array to read into
-     * @return the number of bytes read or {@code -1}
-     *         if the end of the stream has been reached
+     * @return the number of bytes read or {@code -1} if the end of the stream has been reached
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -280,8 +278,7 @@ public class ReaderInputStream extends InputStream {
      * @param array the byte array to read into
      * @param off the offset to start reading bytes into
      * @param len the number of bytes to read
-     * @return the number of bytes read or {@code -1}
-     *         if the end of the stream has been reached
+     * @return the number of bytes read or {@code -1} if the end of the stream has been reached
      * @throws IOException if an I/O error occurs.
      */
     @Override

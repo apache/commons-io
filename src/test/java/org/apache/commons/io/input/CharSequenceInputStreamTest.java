@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 import java.util.Set;
 
@@ -264,12 +265,14 @@ private boolean isAvailabilityTestableForCharset(final String csName) {
 
     @Test
     public void testIO_356_Loop_UTF16() throws Exception {
-        testIO_356_Loop("UTF-16", 4);
+        final Charset charset = StandardCharsets.UTF_16;
+        testIO_356_Loop(charset.displayName(), (int) ReaderInputStream.minBufferSize(charset.newEncoder()));
     }
 
     @Test
     public void testIO_356_Loop_UTF8() throws Exception {
-        testIO_356_Loop("UTF-8", 4);
+        final Charset charset = StandardCharsets.UTF_8;
+        testIO_356_Loop(charset.displayName(), (int) ReaderInputStream.minBufferSize(charset.newEncoder()));
     }
 
     @Test
