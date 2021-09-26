@@ -1169,6 +1169,9 @@ public final class PathUtils {
             // java.lang.IllegalArgumentException: 'unix:readonly' not recognized
             final PosixFileAttributes readAttributes = posixFileAttributeView.readAttributes();
             final Set<PosixFilePermission> permissions = readAttributes.permissions();
+            permissions.add(PosixFilePermission.OWNER_READ);
+            permissions.add(PosixFilePermission.GROUP_READ);
+            permissions.add(PosixFilePermission.OTHERS_READ);
             permissions.remove(PosixFilePermission.OWNER_WRITE);
             permissions.remove(PosixFilePermission.GROUP_WRITE);
             permissions.remove(PosixFilePermission.OTHERS_WRITE);

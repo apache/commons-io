@@ -101,6 +101,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-638" dev="ggregory" type="fix" due-to="Thayne McCombs, Gary Gregory">
         Infinite loop in CharSequenceInputStream.read for 4-byte characters with UTF-8 and 3-byte buffer.
       </action>
+      <action issue="IO-638" dev="ggregory" type="fix" due-to="Gary Gregory">
+        PathUtils.setReadOnly(Path, boolean, LinkOption...) should add READ_* file attributes when using POSIX.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add BrokenReader.INSTANCE.
