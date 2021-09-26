@@ -155,6 +155,9 @@ public class FileUtilsTest {
      */
     private static final ListDirectoryWalker LIST_WALKER = new ListDirectoryWalker();
 
+    /**
+     * The test temporary folder managed by JUnit.
+     */
     @TempDir
     public File temporaryFolder;
 
@@ -1805,6 +1808,31 @@ public class FileUtilsTest {
     }
 
     @Test
+    public void testIterateFilesOnlyNoDirs() throws IOException {
+        final File directory = temporaryFolder;
+        assertTrue(new File(directory, "TEST").mkdir());
+        assertTrue(new File(directory, "test.txt").createNewFile());
+
+        final IOFileFilter filter = new WildcardFileFilter("*", IOCase.INSENSITIVE);
+        for (final Iterator<File> itFiles = FileUtils.iterateFiles(directory, filter, null); itFiles.hasNext();) {
+            final File file = itFiles.next();
+            assertFalse(file.isDirectory(), () -> file.getAbsolutePath());
+        }
+    }
+
+    @Test
+    public void testListFilesOnlyNoDirs() throws IOException {
+        final File directory = temporaryFolder;
+        assertTrue(new File(directory, "TEST").mkdir());
+        assertTrue(new File(directory, "test.txt").createNewFile());
+
+        final IOFileFilter filter = new WildcardFileFilter("*", IOCase.INSENSITIVE);
+        for (final File file : FileUtils.listFiles(directory, filter, null)) {
+            assertFalse(file.isDirectory(), () -> file.getAbsolutePath());
+        }
+    }
+
+    @Test
     public void testIterateFiles() throws Exception {
         final File srcDir = temporaryFolder;
         final File subDir = new File(srcDir, "list_test");
@@ -1940,8 +1968,7 @@ public class FileUtilsTest {
                 }
             }
 
-            final Collection<File> actualFiles = FileUtils.listFiles(subDir, new WildcardFileFilter("*.*"),
-                new WildcardFileFilter("*"));
+            final Collection<File> actualFiles = FileUtils.listFiles(subDir, new WildcardFileFilter("*.*"), new WildcardFileFilter("*"));
 
             final int count = actualFiles.size();
             final Object[] fileObjs = actualFiles.toArray();

@@ -2231,7 +2231,7 @@ public class FileUtils {
      */
     public static Collection<File> listFiles(final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
         try {
-            final AccumulatorPathVisitor visitor = listAccumulate(directory, fileFilter, dirFilter, FileVisitOption.FOLLOW_LINKS);
+            final AccumulatorPathVisitor visitor = listAccumulate(directory, FileFileFilter.INSTANCE.and(fileFilter), dirFilter, FileVisitOption.FOLLOW_LINKS);
             return visitor.getFileList().stream().map(Path::toFile).collect(Collectors.toList());
         } catch (final IOException e) {
             throw UncheckedIOExceptions.create(directory, e);
