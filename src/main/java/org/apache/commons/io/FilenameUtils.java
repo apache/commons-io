@@ -1534,7 +1534,7 @@ public class FilenameUtils {
      * <p>
      * The wildcard matcher uses the characters '?' and '*' to represent a
      * single or multiple (zero or more) wildcard characters.
-     * This is the same as often found on Dos/Unix command lines.
+     * This is the same as often found on DOS/Unix command lines.
      * The check is case-sensitive always.
      * <pre>
      * wildcardMatch("c.txt", "*.txt")      --&gt; true
@@ -1652,7 +1652,7 @@ public class FilenameUtils {
      * <p>
      * The wildcard matcher uses the characters '?' and '*' to represent a
      * single or multiple (zero or more) wildcard characters.
-     * This is the same as often found on Dos/Unix command lines.
+     * This is the same as often found on DOS/Unix command lines.
      * The check is case-sensitive on Unix and case-insensitive on Windows.
      * <pre>
      * wildcardMatch("c.txt", "*.txt")      --&gt; true

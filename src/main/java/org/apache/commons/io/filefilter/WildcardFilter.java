@@ -36,7 +36,7 @@ import org.apache.commons.io.FilenameUtils;
  * <p>
  * The wildcard matcher uses the characters '?' and '*' to represent a
  * single or multiple wildcard characters.
- * This is the same as often found on Dos/Unix command lines.
+ * This is the same as often found on DOS/Unix command lines.
  * The extension check is case-sensitive.
  * See {@link FilenameUtils#wildcardMatch(String, String)} for more information.
  * </p>

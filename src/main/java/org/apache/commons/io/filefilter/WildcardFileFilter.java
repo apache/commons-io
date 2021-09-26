@@ -36,7 +36,7 @@ import org.apache.commons.io.IOCase;
  * <p>
  * The wildcard matcher uses the characters '?' and '*' to represent a
  * single or multiple wildcard characters.
- * This is the same as often found on Dos/Unix command lines.
+ * This is the same as often found on DOS/Unix command lines.
  * The check is case-sensitive by default.
  * See {@link FilenameUtils#wildcardMatchOnSystem(String,String)} for more information.
  * </p>
