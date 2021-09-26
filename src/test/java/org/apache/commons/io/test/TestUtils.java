@@ -33,6 +33,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Duration;
 
 import org.apache.commons.io.FileUtils;
@@ -52,9 +53,20 @@ public abstract class TestUtils {
      * @throws IOException If an I/O error occurs while reading the file contents
      */
     public static void assertEqualContent(final byte[] b0, final File file) throws IOException {
+        assertEqualContent(b0, file.toPath());
+    }
+
+    /**
+     * Assert that the content of a file is equal to that in a byte[].
+     *
+     * @param b0   the expected contents
+     * @param file the file to check
+     * @throws IOException If an I/O error occurs while reading the file contents
+     */
+    public static void assertEqualContent(final byte[] b0, final Path file) throws IOException {
         int count = 0, numRead = 0;
         final byte[] b1 = new byte[b0.length];
-        try (InputStream is = Files.newInputStream(file.toPath())) {
+        try (InputStream is = Files.newInputStream(file)) {
             while (count < b0.length && numRead >= 0) {
                 numRead = is.read(b1, count, b0.length);
                 count += numRead;
@@ -74,9 +86,20 @@ public abstract class TestUtils {
      * @throws IOException If an I/O error occurs while reading the file contents
      */
     public static void assertEqualContent(final char[] c0, final File file) throws IOException {
+        assertEqualContent(c0, file.toPath());
+    }
+
+    /**
+     * Assert that the content of a file is equal to that in a char[].
+     *
+     * @param c0   the expected contents
+     * @param file the file to check
+     * @throws IOException If an I/O error occurs while reading the file contents
+     */
+    public static void assertEqualContent(final char[] c0, final Path file) throws IOException {
         int count = 0, numRead = 0;
         final char[] c1 = new char[c0.length];
-        try (Reader ir = Files.newBufferedReader(file.toPath())) {
+        try (Reader ir = Files.newBufferedReader(file)) {
             while (count < c0.length && numRead >= 0) {
                 numRead = ir.read(c1, count, c0.length);
                 count += numRead;

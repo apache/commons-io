@@ -141,9 +141,9 @@ public final class PathUtils {
         }
     }
 
-    private static final OpenOption[] OPEN_OPTIONS_TRUNCATE = new OpenOption[] {StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING};
+    private static final OpenOption[] OPEN_OPTIONS_TRUNCATE = {StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING};
 
-    private static final OpenOption[] OPEN_OPTIONS_APPEND = new OpenOption[] {StandardOpenOption.CREATE, StandardOpenOption.APPEND};
+    private static final OpenOption[] OPEN_OPTIONS_APPEND = {StandardOpenOption.CREATE, StandardOpenOption.APPEND};
 
     /**
      * Empty {@link CopyOption} array.
@@ -1392,6 +1392,26 @@ public final class PathUtils {
         final FileVisitOption... options) throws IOException {
         return Files.walk(start, maxDepth, options)
             .filter(path -> pathFilter.accept(path, readAttributes ? readBasicFileAttributesUnchecked(path) : null) == FileVisitResult.CONTINUE);
+    }
+
+    /**
+     * Writes the given character sequence to a file at the given path.
+     *
+     * @param path The target file.
+     * @param charSequence The character sequence text.
+     * @param charset The Charset to encode the text.
+     * @param openOptions options How to open the file.
+     * @return The given path.
+     * @throws IOException if an I/O error occurs writing to or creating the file.
+     * @since 2.12.0
+     */
+    public static Path writeString(final Path path, final CharSequence charSequence, final Charset charset, final OpenOption... openOptions)
+        throws IOException {
+        // Check the text is not null before opening file.
+        Objects.requireNonNull(path, "path");
+        Objects.requireNonNull(charSequence, "charSequence");
+        Files.write(path, String.valueOf(charSequence).getBytes(Charsets.toCharset(charset)), openOptions);
+        return path;
     }
 
     /**

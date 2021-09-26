@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
@@ -37,6 +38,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.io.filefilter.NameFileFilter;
+import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
@@ -254,6 +256,14 @@ public class PathUtilsTest extends TestArguments {
             os.write(BYTE_ARRAY_FIXTURE);
         }
         return file;
+    }
+
+    @Test
+    public void testWriteStringToFile1() throws Exception {
+        final Path file = tempDir.resolve("write.txt");
+        PathUtils.writeString(file, "Hello /u1234", StandardCharsets.UTF_8);
+        final byte[] text = "Hello /u1234".getBytes(StandardCharsets.UTF_8);
+        TestUtils.assertEqualContent(text, file);
     }
 
 }
