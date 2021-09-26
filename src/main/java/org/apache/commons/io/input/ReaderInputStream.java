@@ -103,7 +103,7 @@ public class ReaderInputStream extends InputStream {
     private boolean endOfInput;
 
     /**
-     * Construct a new {@link ReaderInputStream}.
+     * Constructs a new {@link ReaderInputStream}.
      *
      * @param reader the target {@link Reader}
      * @param encoder the charset encoder
@@ -114,7 +114,7 @@ public class ReaderInputStream extends InputStream {
     }
 
     /**
-     * Construct a new {@link ReaderInputStream}.
+     * Constructs a new {@link ReaderInputStream}.
      *
      * @param reader the target {@link Reader}
      * @param encoder the charset encoder
@@ -131,7 +131,7 @@ public class ReaderInputStream extends InputStream {
     }
 
     /**
-     * Construct a new {@link ReaderInputStream}.
+     * Constructs a new {@link ReaderInputStream}.
      *
      * @param reader the target {@link Reader}
      * @param charset the charset encoding
@@ -146,7 +146,7 @@ public class ReaderInputStream extends InputStream {
     }
 
     /**
-     * Construct a new {@link ReaderInputStream} with a default input buffer size of
+     * Constructs a new {@link ReaderInputStream} with a default input buffer size of
      * {@value #DEFAULT_BUFFER_SIZE} characters.
      *
      * @param reader the target {@link Reader}
@@ -157,7 +157,7 @@ public class ReaderInputStream extends InputStream {
     }
 
     /**
-     * Construct a new {@link ReaderInputStream}.
+     * Constructs a new {@link ReaderInputStream}.
      *
      * @param reader the target {@link Reader}
      * @param charsetName the name of the charset encoding
@@ -168,7 +168,7 @@ public class ReaderInputStream extends InputStream {
     }
 
     /**
-     * Construct a new {@link ReaderInputStream} with a default input buffer size of
+     * Constructs a new {@link ReaderInputStream} with a default input buffer size of
      * {@value #DEFAULT_BUFFER_SIZE} characters.
      *
      * @param reader the target {@link Reader}
@@ -179,7 +179,7 @@ public class ReaderInputStream extends InputStream {
     }
 
     /**
-     * Construct a new {@link ReaderInputStream} that uses the default character encoding
+     * Constructs a new {@link ReaderInputStream} that uses the default character encoding
      * with a default input buffer size of {@value #DEFAULT_BUFFER_SIZE} characters.
      *
      * @param reader the target {@link Reader}

@@ -37,7 +37,7 @@ public class AppendableOutputStream <T extends Appendable> extends OutputStream 
     private final T appendable;
 
     /**
-     * Construct a new instance with the specified appendable.
+     * Constructs a new instance with the specified appendable.
      *
      * @param appendable the appendable to write to
      */

@@ -38,7 +38,7 @@ public class FileExistsException extends IOException {
     }
 
     /**
-     * Construct an instance with the specified message.
+     * Constructs an instance with the specified message.
      *
      * @param message The error message
      */
@@ -47,7 +47,7 @@ public class FileExistsException extends IOException {
     }
 
     /**
-     * Construct an instance with the specified file.
+     * Constructs an instance with the specified file.
      *
      * @param file The file that exists
      */

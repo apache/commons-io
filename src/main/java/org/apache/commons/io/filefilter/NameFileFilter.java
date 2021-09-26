@@ -124,7 +124,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
     }
 
     /**
-     * Construct a new name file filter specifying case-sensitivity.
+     * Constructs a new name file filter specifying case-sensitivity.
      *
      * @param name  the name to allow, must not be null
      * @param ioCase  how to handle case sensitivity, null means case-sensitive

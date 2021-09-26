@@ -264,7 +264,7 @@ public abstract class DirectoryWalker<T> {
     private final int depthLimit;
 
     /**
-     * Construct an instance with no filtering and unlimited <i>depth</i>.
+     * Constructs an instance with no filtering and unlimited <i>depth</i>.
      */
     protected DirectoryWalker() {
         this(null, -1);

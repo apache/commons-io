@@ -198,7 +198,7 @@ public class FileCleaningTracker {
      * The reaper thread.
      */
     private final class Reaper extends Thread {
-        /** Construct a new Reaper */
+        /** Constructs a new Reaper */
         Reaper() {
             super("File Reaper");
             setPriority(Thread.MAX_PRIORITY);

@@ -35,7 +35,7 @@ public class SequenceReader extends Reader {
     private Iterator<? extends Reader> readers;
 
     /**
-     * Construct a new instance with readers
+     * Constructs a new instance with readers
      *
      * @param readers the readers to read
      */
@@ -45,7 +45,7 @@ public class SequenceReader extends Reader {
     }
 
     /**
-     * Construct a new instance with readers
+     * Constructs a new instance with readers
      *
      * @param readers the readers to read
      */

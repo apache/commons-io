@@ -147,7 +147,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Construct an observer for the specified directory, file filter and file comparator.
+     * Constructs an observer for the specified directory, file filter and file comparator.
      *
      * @param directoryName the name of the directory to observe
      * @param fileFilter The file filter or null if none

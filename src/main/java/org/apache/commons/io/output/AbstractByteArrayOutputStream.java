@@ -328,7 +328,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
     protected interface InputStreamConstructor<T extends InputStream> {
 
         /**
-         * Construct an InputStream subclass.
+         * Constructs an InputStream subclass.
          *
          * @param buf the buffer
          * @param offset the offset into the buffer

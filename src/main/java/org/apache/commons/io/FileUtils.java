@@ -1424,7 +1424,7 @@ public class FileUtils {
     }
 
     /**
-     * Construct a file from the set of name elements.
+     * Constructs a file from the set of name elements.
      *
      * @param directory the parent directory.
      * @param names the name elements.
@@ -1442,7 +1442,7 @@ public class FileUtils {
     }
 
     /**
-     * Construct a file from the set of name elements.
+     * Constructs a file from the set of name elements.
      *
      * @param names the name elements.
      * @return the file.

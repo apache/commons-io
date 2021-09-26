@@ -85,7 +85,7 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
     private final String[] wildcards;
 
     /**
-     * Construct a new case-sensitive wildcard filter for a list of wildcards.
+     * Constructs a new case-sensitive wildcard filter for a list of wildcards.
      *
      * @param wildcards  the list of wildcards to match
      * @throws IllegalArgumentException if the pattern list is null
@@ -97,7 +97,7 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
     }
 
     /**
-     * Construct a new case-sensitive wildcard filter for a single wildcard.
+     * Constructs a new case-sensitive wildcard filter for a single wildcard.
      *
      * @param wildcard  the wildcard to match
      * @throws IllegalArgumentException if the pattern is null
@@ -108,7 +108,7 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
     }
 
     /**
-     * Construct a new case-sensitive wildcard filter for an array of wildcards.
+     * Constructs a new case-sensitive wildcard filter for an array of wildcards.
      *
      * @param wildcards  the array of wildcards to match
      * @throws IllegalArgumentException if the pattern array is null
