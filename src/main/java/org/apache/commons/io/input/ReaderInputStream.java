@@ -46,7 +46,7 @@ import java.util.Objects;
  * following example, reading from {@code in2} would return the same byte sequence as reading from {@code in} (provided
  * that the initial byte sequence is legal with respect to the charset encoding):
  * </p>
- * 
+ *
  * <pre>
  * InputStream inputStream = ...
  * Charset cs = ...
@@ -205,7 +205,7 @@ public class ReaderInputStream extends InputStream {
 
     /**
      * Close the stream. This method will cause the underlying {@link Reader} to be closed.
-     * 
+     *
      * @throws IOException if an I/O error occurs.
      */
     @Override
