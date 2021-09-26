@@ -32,11 +32,21 @@ import java.nio.charset.Charset;
 public class HexDump {
 
     /**
-     * Instances should NOT be constructed in standard programming.
+     * The line-separator (initializes to "line.separator" system property.
      */
-    public HexDump() {
-    }
+    public static final String EOL =
+            System.getProperty("line.separator");
 
+    private static final char[] _hexcodes =
+            {
+                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                'A', 'B', 'C', 'D', 'E', 'F'
+            };
+
+    private static final int[] _shifts =
+            {
+                28, 24, 20, 16, 12, 8, 4, 0
+            };
     /**
      * Dump an array of bytes to an OutputStream. The output is formatted
      * for human inspection, with a hexadecimal offset followed by the
@@ -113,21 +123,19 @@ public class HexDump {
             display_offset += chars_read;
         }
     }
-
     /**
-     * The line-separator (initializes to "line.separator" system property.
+     * Dump a byte value into a StringBuilder.
+     *
+     * @param _cbuffer the StringBuilder to dump the value in
+     * @param value  the byte value to be dumped
+     * @return StringBuilder containing the dumped value.
      */
-    public static final String EOL =
-            System.getProperty("line.separator");
-    private static final char[] _hexcodes =
-            {
-                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                'A', 'B', 'C', 'D', 'E', 'F'
-            };
-    private static final int[] _shifts =
-            {
-                28, 24, 20, 16, 12, 8, 4, 0
-            };
+    private static StringBuilder dump(final StringBuilder _cbuffer, final byte value) {
+        for (int j = 0; j < 2; j++) {
+            _cbuffer.append(_hexcodes[value >> _shifts[j + 6] & 15]);
+        }
+        return _cbuffer;
+    }
 
     /**
      * Dump a long value into a StringBuilder.
@@ -145,17 +153,9 @@ public class HexDump {
     }
 
     /**
-     * Dump a byte value into a StringBuilder.
-     *
-     * @param _cbuffer the StringBuilder to dump the value in
-     * @param value  the byte value to be dumped
-     * @return StringBuilder containing the dumped value.
+     * Instances should NOT be constructed in standard programming.
      */
-    private static StringBuilder dump(final StringBuilder _cbuffer, final byte value) {
-        for (int j = 0; j < 2; j++) {
-            _cbuffer.append(_hexcodes[value >> _shifts[j + 6] & 15]);
-        }
-        return _cbuffer;
+    public HexDump() {
     }
 
 }

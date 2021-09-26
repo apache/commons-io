@@ -74,44 +74,6 @@ public class Charsets {
     }
 
     /**
-     * Constructs a sorted map from canonical charset names to charset objects required of every implementation of the
-     * Java platform.
-     * <p>
-     * From the Java documentation <a href="https://docs.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html">
-     * Standard charsets</a>:
-     * </p>
-     *
-     * @return An immutable, case-insensitive map from canonical charset names to charset objects.
-     * @see Charset#availableCharsets()
-     * @since 2.5
-     */
-    public static SortedMap<String, Charset> requiredCharsets() {
-        return STANDARD_CHARSET_MAP;
-    }
-
-    /**
-     * Returns the given Charset or the default Charset if the given Charset is null.
-     *
-     * @param charset
-     *            A charset or null.
-     * @return the given Charset or the default Charset if the given Charset is null
-     */
-    public static Charset toCharset(final Charset charset) {
-        return charset == null ? Charset.defaultCharset() : charset;
-    }
-
-    /**
-     * Returns a Charset for the named charset. If the name is null, return the default Charset.
-     *
-     * @param charsetName The name of the requested charset, may be null.
-     * @return a Charset for the named charset.
-     * @throws UnsupportedCharsetException If the named charset is unavailable (unchecked exception).
-     */
-    public static Charset toCharset(final String charsetName) throws UnsupportedCharsetException {
-        return charsetName == null ? Charset.defaultCharset() : Charset.forName(charsetName);
-    }
-
-    /**
      * CharEncodingISO Latin Alphabet No. 1, a.k.a. ISO-LATIN-1.
      * <p>
      * Every implementation of the Java platform is required to support this character encoding.
@@ -193,4 +155,42 @@ public class Charsets {
      */
     @Deprecated
     public static final Charset UTF_8 = StandardCharsets.UTF_8;
+
+    /**
+     * Constructs a sorted map from canonical charset names to charset objects required of every implementation of the
+     * Java platform.
+     * <p>
+     * From the Java documentation <a href="https://docs.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html">
+     * Standard charsets</a>:
+     * </p>
+     *
+     * @return An immutable, case-insensitive map from canonical charset names to charset objects.
+     * @see Charset#availableCharsets()
+     * @since 2.5
+     */
+    public static SortedMap<String, Charset> requiredCharsets() {
+        return STANDARD_CHARSET_MAP;
+    }
+
+    /**
+     * Returns the given Charset or the default Charset if the given Charset is null.
+     *
+     * @param charset
+     *            A charset or null.
+     * @return the given Charset or the default Charset if the given Charset is null
+     */
+    public static Charset toCharset(final Charset charset) {
+        return charset == null ? Charset.defaultCharset() : charset;
+    }
+
+    /**
+     * Returns a Charset for the named charset. If the name is null, return the default Charset.
+     *
+     * @param charsetName The name of the requested charset, may be null.
+     * @return a Charset for the named charset.
+     * @throws UnsupportedCharsetException If the named charset is unavailable (unchecked exception).
+     */
+    public static Charset toCharset(final String charsetName) throws UnsupportedCharsetException {
+        return charsetName == null ? Charset.defaultCharset() : Charset.forName(charsetName);
+    }
 }

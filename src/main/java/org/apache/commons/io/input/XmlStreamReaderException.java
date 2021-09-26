@@ -96,21 +96,15 @@ public class XmlStreamReaderException extends IOException {
     }
 
     /**
-     * Returns the encoding guess based on the first bytes of the InputStream.
+     * Returns the encoding in the content-type used to attempt determining the
+     * encoding.
      *
-     * @return the encoding guess, null if it couldn't be guessed.
+     * @return the encoding in the content-type, null if there was not
+     *         content-type, no encoding in it or the encoding detection did not
+     *         involve HTTP.
      */
-    public String getXmlGuessEncoding() {
-        return xmlGuessEncoding;
-    }
-
-    /**
-     * Returns the encoding found in the XML prolog of the InputStream.
-     *
-     * @return the encoding of the XML prolog, null if none.
-     */
-    public String getXmlEncoding() {
-        return xmlEncoding;
+    public String getContentTypeEncoding() {
+        return contentTypeEncoding;
     }
 
     /**
@@ -125,14 +119,20 @@ public class XmlStreamReaderException extends IOException {
     }
 
     /**
-     * Returns the encoding in the content-type used to attempt determining the
-     * encoding.
+     * Returns the encoding found in the XML prolog of the InputStream.
      *
-     * @return the encoding in the content-type, null if there was not
-     *         content-type, no encoding in it or the encoding detection did not
-     *         involve HTTP.
+     * @return the encoding of the XML prolog, null if none.
      */
-    public String getContentTypeEncoding() {
-        return contentTypeEncoding;
+    public String getXmlEncoding() {
+        return xmlEncoding;
+    }
+
+    /**
+     * Returns the encoding guess based on the first bytes of the InputStream.
+     *
+     * @return the encoding guess, null if it couldn't be guessed.
+     */
+    public String getXmlGuessEncoding() {
+        return xmlGuessEncoding;
     }
 }

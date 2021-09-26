@@ -40,6 +40,15 @@ public class ChunkedOutputStream extends FilterOutputStream {
     private final int chunkSize;
 
     /**
+     * Creates a new stream that uses a chunk size of {@link #DEFAULT_CHUNK_SIZE}.
+     *
+     * @param stream the stream to wrap
+     */
+    public ChunkedOutputStream(final OutputStream stream) {
+        this(stream, DEFAULT_CHUNK_SIZE);
+    }
+
+    /**
      * Creates a new stream that uses the specified chunk size.
      *
      * @param stream the stream to wrap
@@ -52,15 +61,6 @@ public class ChunkedOutputStream extends FilterOutputStream {
            throw new IllegalArgumentException();
        }
        this.chunkSize = chunkSize;
-    }
-
-    /**
-     * Creates a new stream that uses a chunk size of {@link #DEFAULT_CHUNK_SIZE}.
-     *
-     * @param stream the stream to wrap
-     */
-    public ChunkedOutputStream(final OutputStream stream) {
-        this(stream, DEFAULT_CHUNK_SIZE);
     }
 
     /**

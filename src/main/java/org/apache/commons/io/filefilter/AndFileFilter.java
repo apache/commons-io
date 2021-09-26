@@ -73,6 +73,17 @@ public class AndFileFilter
     }
 
     /**
+     * Constructs a new instance for the give filters.
+     * @param fileFilters filters to OR.
+     *
+     * @since 2.9.0
+     */
+    public AndFileFilter(final IOFileFilter... fileFilters) {
+        this(Objects.requireNonNull(fileFilters, "fileFilters").length);
+        addFileFilter(fileFilters);
+    }
+
+    /**
      * Constructs a new file filter that ANDs the result of other filters.
      *
      * @param filter1  the first filter, must second be null
@@ -83,17 +94,6 @@ public class AndFileFilter
         this(2);
         addFileFilter(filter1);
         addFileFilter(filter2);
-    }
-
-    /**
-     * Constructs a new instance for the give filters.
-     * @param fileFilters filters to OR.
-     *
-     * @since 2.9.0
-     */
-    public AndFileFilter(final IOFileFilter... fileFilters) {
-        this(Objects.requireNonNull(fileFilters, "fileFilters").length);
-        addFileFilter(fileFilters);
     }
 
     /**

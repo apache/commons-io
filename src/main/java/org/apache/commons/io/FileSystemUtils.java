@@ -108,12 +108,6 @@ public class FileSystemUtils {
     }
 
     /**
-     * Instances should NOT be constructed in standard programming.
-     */
-    public FileSystemUtils() {
-    }
-
-    /**
      * Returns the free space on a drive or volume by invoking
      * the command line.
      * This method does not normalize the result, and typically returns
@@ -142,67 +136,6 @@ public class FileSystemUtils {
     @Deprecated
     public static long freeSpace(final String path) throws IOException {
         return INSTANCE.freeSpaceOS(path, OS, false, Duration.ofMillis(-1));
-    }
-
-    /**
-     * Returns the free space on a drive or volume in kibibytes (1024 bytes)
-     * by invoking the command line.
-     * <pre>
-     * FileSystemUtils.freeSpaceKb("C:");       // Windows
-     * FileSystemUtils.freeSpaceKb("/volume");  // *nix
-     * </pre>
-     * The free space is calculated via the command line.
-     * It uses 'dir /-c' on Windows, 'df -kP' on AIX/HP-UX and 'df -k' on other Unix.
-     * <p>
-     * In order to work, you must be running Windows, or have a implementation of
-     * Unix df that supports GNU format when passed -k (or -kP). If you are going
-     * to rely on this code, please check that it works on your OS by running
-     * some simple tests to compare the command line with the output from this class.
-     * If your operating system isn't supported, please raise a JIRA call detailing
-     * the exact result from df -k and as much other detail as possible, thanks.
-     *
-     * @param path  the path to get free space for, not null, not empty on Unix
-     * @return the amount of free drive space on the drive or volume in kilobytes
-     * @throws IllegalArgumentException if the path is invalid
-     * @throws IllegalStateException if an error occurred in initialisation
-     * @throws IOException if an error occurs when finding the free space
-     * @since 1.2, enhanced OS support in 1.3
-     * @deprecated As of 2.6 deprecated without replacement. Please use {@link java.nio.file.FileStore#getUsableSpace()}.
-     */
-    @Deprecated
-    public static long freeSpaceKb(final String path) throws IOException {
-        return freeSpaceKb(path, -1);
-    }
-    /**
-     * Returns the free space on a drive or volume in kibibytes (1024 bytes)
-     * by invoking the command line.
-     * <pre>
-     * FileSystemUtils.freeSpaceKb("C:");       // Windows
-     * FileSystemUtils.freeSpaceKb("/volume");  // *nix
-     * </pre>
-     * The free space is calculated via the command line.
-     * It uses 'dir /-c' on Windows, 'df -kP' on AIX/HP-UX and 'df -k' on other Unix.
-     * <p>
-     * In order to work, you must be running Windows, or have a implementation of
-     * Unix df that supports GNU format when passed -k (or -kP). If you are going
-     * to rely on this code, please check that it works on your OS by running
-     * some simple tests to compare the command line with the output from this class.
-     * If your operating system isn't supported, please raise a JIRA call detailing
-     * the exact result from df -k and as much other detail as possible, thanks.
-     *
-     * @param path  the path to get free space for, not null, not empty on Unix
-     * @param timeout The timeout amount in milliseconds or no timeout if the value
-     *  is zero or less
-     * @return the amount of free drive space on the drive or volume in kilobytes
-     * @throws IllegalArgumentException if the path is invalid
-     * @throws IllegalStateException if an error occurred in initialisation
-     * @throws IOException if an error occurs when finding the free space
-     * @since 2.0
-     * @deprecated As of 2.6 deprecated without replacement. Please use {@link java.nio.file.FileStore#getUsableSpace()}.
-     */
-    @Deprecated
-    public static long freeSpaceKb(final String path, final long timeout) throws IOException {
-        return INSTANCE.freeSpaceOS(path, OS, true, Duration.ofMillis(timeout));
     }
 
     /**
@@ -244,6 +177,73 @@ public class FileSystemUtils {
     public static long freeSpaceKb(final long timeout) throws IOException {
         return freeSpaceKb(FileUtils.current().getAbsolutePath(), timeout);
     }
+    /**
+     * Returns the free space on a drive or volume in kibibytes (1024 bytes)
+     * by invoking the command line.
+     * <pre>
+     * FileSystemUtils.freeSpaceKb("C:");       // Windows
+     * FileSystemUtils.freeSpaceKb("/volume");  // *nix
+     * </pre>
+     * The free space is calculated via the command line.
+     * It uses 'dir /-c' on Windows, 'df -kP' on AIX/HP-UX and 'df -k' on other Unix.
+     * <p>
+     * In order to work, you must be running Windows, or have a implementation of
+     * Unix df that supports GNU format when passed -k (or -kP). If you are going
+     * to rely on this code, please check that it works on your OS by running
+     * some simple tests to compare the command line with the output from this class.
+     * If your operating system isn't supported, please raise a JIRA call detailing
+     * the exact result from df -k and as much other detail as possible, thanks.
+     *
+     * @param path  the path to get free space for, not null, not empty on Unix
+     * @return the amount of free drive space on the drive or volume in kilobytes
+     * @throws IllegalArgumentException if the path is invalid
+     * @throws IllegalStateException if an error occurred in initialisation
+     * @throws IOException if an error occurs when finding the free space
+     * @since 1.2, enhanced OS support in 1.3
+     * @deprecated As of 2.6 deprecated without replacement. Please use {@link java.nio.file.FileStore#getUsableSpace()}.
+     */
+    @Deprecated
+    public static long freeSpaceKb(final String path) throws IOException {
+        return freeSpaceKb(path, -1);
+    }
+
+    /**
+     * Returns the free space on a drive or volume in kibibytes (1024 bytes)
+     * by invoking the command line.
+     * <pre>
+     * FileSystemUtils.freeSpaceKb("C:");       // Windows
+     * FileSystemUtils.freeSpaceKb("/volume");  // *nix
+     * </pre>
+     * The free space is calculated via the command line.
+     * It uses 'dir /-c' on Windows, 'df -kP' on AIX/HP-UX and 'df -k' on other Unix.
+     * <p>
+     * In order to work, you must be running Windows, or have a implementation of
+     * Unix df that supports GNU format when passed -k (or -kP). If you are going
+     * to rely on this code, please check that it works on your OS by running
+     * some simple tests to compare the command line with the output from this class.
+     * If your operating system isn't supported, please raise a JIRA call detailing
+     * the exact result from df -k and as much other detail as possible, thanks.
+     *
+     * @param path  the path to get free space for, not null, not empty on Unix
+     * @param timeout The timeout amount in milliseconds or no timeout if the value
+     *  is zero or less
+     * @return the amount of free drive space on the drive or volume in kilobytes
+     * @throws IllegalArgumentException if the path is invalid
+     * @throws IllegalStateException if an error occurred in initialisation
+     * @throws IOException if an error occurs when finding the free space
+     * @since 2.0
+     * @deprecated As of 2.6 deprecated without replacement. Please use {@link java.nio.file.FileStore#getUsableSpace()}.
+     */
+    @Deprecated
+    public static long freeSpaceKb(final String path, final long timeout) throws IOException {
+        return INSTANCE.freeSpaceOS(path, OS, true, Duration.ofMillis(timeout));
+    }
+
+    /**
+     * Instances should NOT be constructed in standard programming.
+     */
+    public FileSystemUtils() {
+    }
 
     /**
      * Returns the free space on a drive or volume in a cross-platform manner.
@@ -282,98 +282,6 @@ public class FileSystemUtils {
                 throw new IllegalStateException(
                   "Exception caught when determining operating system");
         }
-    }
-
-    /**
-     * Find free space on the Windows platform using the 'dir' command.
-     *
-     * @param path  the path to get free space for, including the colon
-     * @param timeout The timeout amount in milliseconds or no timeout if the value
-     *  is zero or less
-     * @return the amount of free drive space on the drive
-     * @throws IOException if an error occurs
-     */
-    long freeSpaceWindows(final String path, final Duration timeout) throws IOException {
-        String normPath = FilenameUtils.normalize(path, false);
-        if (normPath == null) {
-            throw new IllegalArgumentException(path);
-        }
-        if (!normPath.isEmpty() && normPath.charAt(0) != '"') {
-            normPath = "\"" + normPath + "\"";
-        }
-
-        // build and run the 'dir' command
-        final String[] cmdAttribs = {"cmd.exe", "/C", "dir /a /-c " + normPath};
-
-        // read in the output of the command to an ArrayList
-        final List<String> lines = performCommand(cmdAttribs, Integer.MAX_VALUE, timeout);
-
-        // now iterate over the lines we just read and find the LAST
-        // non-empty line (the free space bytes should be in the last element
-        // of the ArrayList anyway, but this will ensure it works even if it's
-        // not, still assuming it is on the last non-blank line)
-        for (int i = lines.size() - 1; i >= 0; i--) {
-            final String line = lines.get(i);
-            if (!line.isEmpty()) {
-                return parseDir(line, normPath);
-            }
-        }
-        // all lines are blank
-        throw new IOException(
-                "Command line 'dir /-c' did not return any info " +
-                "for path '" + normPath + "'");
-    }
-
-    /**
-     * Parses the Windows dir response last line
-     *
-     * @param line  the line to parse
-     * @param path  the path that was sent
-     * @return the number of bytes
-     * @throws IOException if an error occurs
-     */
-    long parseDir(final String line, final String path) throws IOException {
-        // read from the end of the line to find the last numeric
-        // character on the line, then continue until we find the first
-        // non-numeric character, and everything between that and the last
-        // numeric character inclusive is our free space bytes count
-        int bytesStart = 0;
-        int bytesEnd = 0;
-        int j = line.length() - 1;
-        innerLoop1: while (j >= 0) {
-            final char c = line.charAt(j);
-            if (Character.isDigit(c)) {
-              // found the last numeric character, this is the end of
-              // the free space bytes count
-              bytesEnd = j + 1;
-              break innerLoop1;
-            }
-            j--;
-        }
-        innerLoop2: while (j >= 0) {
-            final char c = line.charAt(j);
-            if (!Character.isDigit(c) && c != ',' && c != '.') {
-              // found the next non-numeric character, this is the
-              // beginning of the free space bytes count
-              bytesStart = j + 1;
-              break innerLoop2;
-            }
-            j--;
-        }
-        if (j < 0) {
-            throw new IOException(
-                    "Command line 'dir /-c' did not return valid info " +
-                    "for path '" + path + "'");
-        }
-
-        // remove commas and dots in the bytes count
-        final StringBuilder buf = new StringBuilder(line.substring(bytesStart, bytesEnd));
-        for (int k = 0; k < buf.length(); k++) {
-            if (buf.charAt(k) == ',' || buf.charAt(k) == '.') {
-                buf.deleteCharAt(k--);
-            }
-        }
-        return parseBytes(buf.toString(), path);
     }
 
     /**
@@ -435,6 +343,57 @@ public class FileSystemUtils {
     }
 
     /**
+     * Find free space on the Windows platform using the 'dir' command.
+     *
+     * @param path  the path to get free space for, including the colon
+     * @param timeout The timeout amount in milliseconds or no timeout if the value
+     *  is zero or less
+     * @return the amount of free drive space on the drive
+     * @throws IOException if an error occurs
+     */
+    long freeSpaceWindows(final String path, final Duration timeout) throws IOException {
+        String normPath = FilenameUtils.normalize(path, false);
+        if (normPath == null) {
+            throw new IllegalArgumentException(path);
+        }
+        if (!normPath.isEmpty() && normPath.charAt(0) != '"') {
+            normPath = "\"" + normPath + "\"";
+        }
+
+        // build and run the 'dir' command
+        final String[] cmdAttribs = {"cmd.exe", "/C", "dir /a /-c " + normPath};
+
+        // read in the output of the command to an ArrayList
+        final List<String> lines = performCommand(cmdAttribs, Integer.MAX_VALUE, timeout);
+
+        // now iterate over the lines we just read and find the LAST
+        // non-empty line (the free space bytes should be in the last element
+        // of the ArrayList anyway, but this will ensure it works even if it's
+        // not, still assuming it is on the last non-blank line)
+        for (int i = lines.size() - 1; i >= 0; i--) {
+            final String line = lines.get(i);
+            if (!line.isEmpty()) {
+                return parseDir(line, normPath);
+            }
+        }
+        // all lines are blank
+        throw new IOException(
+                "Command line 'dir /-c' did not return any info " +
+                "for path '" + normPath + "'");
+    }
+
+    /**
+     * Opens the process to the operating system.
+     *
+     * @param cmdAttribs  the command line parameters
+     * @return the process
+     * @throws IOException if an error occurs
+     */
+    Process openProcess(final String[] cmdAttribs) throws IOException {
+        return Runtime.getRuntime().exec(cmdAttribs);
+    }
+
+    /**
      * Parses the bytes from a string.
      *
      * @param freeSpace  the free space string
@@ -457,6 +416,58 @@ public class FileSystemUtils {
                     "Command line '" + DF + "' did not return numeric data as expected " +
                     "for path '" + path + "'- check path is valid", ex);
         }
+    }
+
+    /**
+     * Parses the Windows dir response last line
+     *
+     * @param line  the line to parse
+     * @param path  the path that was sent
+     * @return the number of bytes
+     * @throws IOException if an error occurs
+     */
+    long parseDir(final String line, final String path) throws IOException {
+        // read from the end of the line to find the last numeric
+        // character on the line, then continue until we find the first
+        // non-numeric character, and everything between that and the last
+        // numeric character inclusive is our free space bytes count
+        int bytesStart = 0;
+        int bytesEnd = 0;
+        int j = line.length() - 1;
+        innerLoop1: while (j >= 0) {
+            final char c = line.charAt(j);
+            if (Character.isDigit(c)) {
+              // found the last numeric character, this is the end of
+              // the free space bytes count
+              bytesEnd = j + 1;
+              break innerLoop1;
+            }
+            j--;
+        }
+        innerLoop2: while (j >= 0) {
+            final char c = line.charAt(j);
+            if (!Character.isDigit(c) && c != ',' && c != '.') {
+              // found the next non-numeric character, this is the
+              // beginning of the free space bytes count
+              bytesStart = j + 1;
+              break innerLoop2;
+            }
+            j--;
+        }
+        if (j < 0) {
+            throw new IOException(
+                    "Command line 'dir /-c' did not return valid info " +
+                    "for path '" + path + "'");
+        }
+
+        // remove commas and dots in the bytes count
+        final StringBuilder buf = new StringBuilder(line.substring(bytesStart, bytesEnd));
+        for (int k = 0; k < buf.length(); k++) {
+            if (buf.charAt(k) == ',' || buf.charAt(k) == '.') {
+                buf.deleteCharAt(k--);
+            }
+        }
+        return parseBytes(buf.toString(), path);
     }
 
     /**
@@ -549,17 +560,6 @@ public class FileSystemUtils {
                 proc.destroy();
             }
         }
-    }
-
-    /**
-     * Opens the process to the operating system.
-     *
-     * @param cmdAttribs  the command line parameters
-     * @return the process
-     * @throws IOException if an error occurs
-     */
-    Process openProcess(final String[] cmdAttribs) throws IOException {
-        return Runtime.getRuntime().exec(cmdAttribs);
     }
 
 }

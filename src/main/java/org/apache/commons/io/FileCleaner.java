@@ -42,6 +42,58 @@ public class FileCleaner {
     static final FileCleaningTracker theInstance = new FileCleaningTracker();
 
     /**
+     * Call this method to cause the file cleaner thread to terminate when
+     * there are no more objects being tracked for deletion.
+     * <p>
+     * In a simple environment, you don't need this method as the file cleaner
+     * thread will simply exit when the JVM exits. In a more complex environment,
+     * with multiple class loaders (such as an application server), you should be
+     * aware that the file cleaner thread will continue running even if the class
+     * loader it was started from terminates. This can constitute a memory leak.
+     * <p>
+     * For example, suppose that you have developed a web application, which
+     * contains the commons-io jar file in your WEB-INF/lib directory. In other
+     * words, the FileCleaner class is loaded through the class loader of your
+     * web application. If the web application is terminated, but the servlet
+     * container is still running, then the file cleaner thread will still exist,
+     * posing a memory leak.
+     * <p>
+     * This method allows the thread to be terminated. Simply call this method
+     * in the resource cleanup code, such as
+     * {@code javax.servlet.ServletContextListener.contextDestroyed(javax.servlet.ServletContextEvent)}.
+     * One called, no new objects can be tracked by the file cleaner.
+     * @deprecated Use {@link FileCleaningTracker#exitWhenFinished()}.
+     */
+    @Deprecated
+    public static synchronized void exitWhenFinished() {
+        theInstance.exitWhenFinished();
+    }
+
+    /**
+     * Returns the singleton instance, which is used by the deprecated, static methods.
+     * This is mainly useful for code, which wants to support the new
+     * {@link FileCleaningTracker} class while maintain compatibility with the
+     * deprecated {@link FileCleaner}.
+     *
+     * @return the singleton instance
+     */
+    public static FileCleaningTracker getInstance() {
+        return theInstance;
+    }
+
+    /**
+     * Retrieve the number of files currently being tracked, and therefore
+     * awaiting deletion.
+     *
+     * @return the number of files being tracked
+     * @deprecated Use {@link FileCleaningTracker#getTrackCount()}.
+     */
+    @Deprecated
+    public static int getTrackCount() {
+        return theInstance.getTrackCount();
+    }
+
+    /**
      * Track the specified file, using the provided marker, deleting the file
      * when the marker instance is garbage collected.
      * The {@link FileDeleteStrategy#NORMAL normal} deletion strategy will be used.
@@ -101,57 +153,5 @@ public class FileCleaner {
     @Deprecated
     public static void track(final String path, final Object marker, final FileDeleteStrategy deleteStrategy) {
         theInstance.track(path, marker, deleteStrategy);
-    }
-
-    /**
-     * Retrieve the number of files currently being tracked, and therefore
-     * awaiting deletion.
-     *
-     * @return the number of files being tracked
-     * @deprecated Use {@link FileCleaningTracker#getTrackCount()}.
-     */
-    @Deprecated
-    public static int getTrackCount() {
-        return theInstance.getTrackCount();
-    }
-
-    /**
-     * Call this method to cause the file cleaner thread to terminate when
-     * there are no more objects being tracked for deletion.
-     * <p>
-     * In a simple environment, you don't need this method as the file cleaner
-     * thread will simply exit when the JVM exits. In a more complex environment,
-     * with multiple class loaders (such as an application server), you should be
-     * aware that the file cleaner thread will continue running even if the class
-     * loader it was started from terminates. This can constitute a memory leak.
-     * <p>
-     * For example, suppose that you have developed a web application, which
-     * contains the commons-io jar file in your WEB-INF/lib directory. In other
-     * words, the FileCleaner class is loaded through the class loader of your
-     * web application. If the web application is terminated, but the servlet
-     * container is still running, then the file cleaner thread will still exist,
-     * posing a memory leak.
-     * <p>
-     * This method allows the thread to be terminated. Simply call this method
-     * in the resource cleanup code, such as
-     * {@code javax.servlet.ServletContextListener.contextDestroyed(javax.servlet.ServletContextEvent)}.
-     * One called, no new objects can be tracked by the file cleaner.
-     * @deprecated Use {@link FileCleaningTracker#exitWhenFinished()}.
-     */
-    @Deprecated
-    public static synchronized void exitWhenFinished() {
-        theInstance.exitWhenFinished();
-    }
-
-    /**
-     * Returns the singleton instance, which is used by the deprecated, static methods.
-     * This is mainly useful for code, which wants to support the new
-     * {@link FileCleaningTracker} class while maintain compatibility with the
-     * deprecated {@link FileCleaner}.
-     *
-     * @return the singleton instance
-     */
-    public static FileCleaningTracker getInstance() {
-        return theInstance;
     }
 }

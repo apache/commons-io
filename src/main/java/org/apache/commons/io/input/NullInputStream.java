@@ -120,24 +120,6 @@ public class NullInputStream extends InputStream {
     }
 
     /**
-     * Return the current position.
-     *
-     * @return the current position.
-     */
-    public long getPosition() {
-        return position;
-    }
-
-    /**
-     * Return the size this {@link InputStream} emulates.
-     *
-     * @return The size of the input stream to emulate.
-     */
-    public long getSize() {
-        return size;
-    }
-
-    /**
      * Return the number of bytes that can be read.
      *
      * @return The number of bytes that can be read.
@@ -168,6 +150,40 @@ public class NullInputStream extends InputStream {
     }
 
     /**
+     * Handle End of File.
+     *
+     * @return {@code -1} if {@code throwEofException} is
+     * set to {@code false}
+     * @throws EOFException if {@code throwEofException} is set
+     * to {@code true}.
+     */
+    private int doEndOfFile() throws EOFException {
+        eof = true;
+        if (throwEofException) {
+            throw new EOFException();
+        }
+        return EOF;
+    }
+
+    /**
+     * Return the current position.
+     *
+     * @return the current position.
+     */
+    public long getPosition() {
+        return position;
+    }
+
+    /**
+     * Return the size this {@link InputStream} emulates.
+     *
+     * @return The size of the input stream to emulate.
+     */
+    public long getSize() {
+        return size;
+    }
+
+    /**
      * Mark the current position.
      *
      * @param readlimit The number of bytes before this marked position
@@ -191,6 +207,32 @@ public class NullInputStream extends InputStream {
     @Override
     public boolean markSupported() {
         return markSupported;
+    }
+
+    /**
+     * Return a byte value for the  {@code read()} method.
+     * <p>
+     * This implementation returns zero.
+     *
+     * @return This implementation always returns zero.
+     */
+    protected int processByte() {
+        // do nothing - overridable by subclass
+        return 0;
+    }
+
+    /**
+     * Process the bytes for the {@code read(byte[], offset, length)}
+     * method.
+     * <p>
+     * This implementation leaves the byte array unchanged.
+     *
+     * @param bytes The byte array
+     * @param offset The offset to start at.
+     * @param length The number of bytes.
+     */
+    protected void processBytes(final byte[] bytes, final int offset, final int length) {
+        // do nothing - overridable by subclass
     }
 
     /**
@@ -313,48 +355,6 @@ public class NullInputStream extends InputStream {
             position = size;
         }
         return returnLength;
-    }
-
-    /**
-     * Return a byte value for the  {@code read()} method.
-     * <p>
-     * This implementation returns zero.
-     *
-     * @return This implementation always returns zero.
-     */
-    protected int processByte() {
-        // do nothing - overridable by subclass
-        return 0;
-    }
-
-    /**
-     * Process the bytes for the {@code read(byte[], offset, length)}
-     * method.
-     * <p>
-     * This implementation leaves the byte array unchanged.
-     *
-     * @param bytes The byte array
-     * @param offset The offset to start at.
-     * @param length The number of bytes.
-     */
-    protected void processBytes(final byte[] bytes, final int offset, final int length) {
-        // do nothing - overridable by subclass
-    }
-
-    /**
-     * Handle End of File.
-     *
-     * @return {@code -1} if {@code throwEofException} is
-     * set to {@code false}
-     * @throws EOFException if {@code throwEofException} is set
-     * to {@code true}.
-     */
-    private int doEndOfFile() throws EOFException {
-        eof = true;
-        if (throwEofException) {
-            throw new EOFException();
-        }
-        return EOF;
     }
 
 }

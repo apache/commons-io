@@ -27,19 +27,6 @@ import java.io.IOException;
 public class IOIndexedException extends IOException {
 
     private static final long serialVersionUID = 1L;
-    private final int index;
-
-    /**
-     * Creates a new exception.
-     *
-     * @param index index of this exception.
-     * @param cause cause exceptions.
-     */
-    public IOIndexedException(final int index, final Throwable cause) {
-        super(toMessage(index, cause), cause);
-        this.index = index;
-    }
-
     /**
      * Converts input to a suitable String for exception message.
      *
@@ -53,6 +40,19 @@ public class IOIndexedException extends IOException {
         final String name = cause == null ? unspecified : cause.getClass().getSimpleName();
         final String msg = cause == null ? unspecified : cause.getMessage();
         return String.format("%s #%,d: %s", name, index, msg);
+    }
+
+    private final int index;
+
+    /**
+     * Creates a new exception.
+     *
+     * @param index index of this exception.
+     * @param cause cause exceptions.
+     */
+    public IOIndexedException(final int index, final Throwable cause) {
+        super(toMessage(index, cause), cause);
+        this.index = index;
     }
 
     /**

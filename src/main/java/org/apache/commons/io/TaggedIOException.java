@@ -114,15 +114,6 @@ public class TaggedIOException extends IOExceptionWithCause {
     }
 
     /**
-     * Returns the serializable tag object.
-     *
-     * @return tag object
-     */
-    public Serializable getTag() {
-        return tag;
-    }
-
-    /**
      * Returns the wrapped exception. The only difference to the overridden
      * {@link Throwable#getCause()} method is the narrower return type.
      *
@@ -131,6 +122,15 @@ public class TaggedIOException extends IOExceptionWithCause {
     @Override
     public synchronized IOException getCause() {
         return (IOException) super.getCause();
+    }
+
+    /**
+     * Returns the serializable tag object.
+     *
+     * @return tag object
+     */
+    public Serializable getTag() {
+        return tag;
     }
 
 }

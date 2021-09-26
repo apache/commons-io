@@ -53,6 +53,18 @@ public class CharSequenceInputStream extends InputStream {
     private int mark_bbuf; // position in bbuf
 
     /**
+     * Constructor, calls {@link #CharSequenceInputStream(CharSequence, Charset, int)}
+     * with a buffer size of 2048.
+     *
+     * @param cs the input character sequence
+     * @param charset the character set name to use
+     * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character
+     */
+    public CharSequenceInputStream(final CharSequence cs, final Charset charset) {
+        this(cs, charset, BUFFER_SIZE);
+    }
+
+    /**
      * Constructor.
      *
      * @param cs the input character sequence
@@ -78,6 +90,18 @@ public class CharSequenceInputStream extends InputStream {
     }
 
     /**
+     * Constructor, calls {@link #CharSequenceInputStream(CharSequence, String, int)}
+     * with a buffer size of 2048.
+     *
+     * @param cs the input character sequence
+     * @param charset the character set name to use
+     * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character
+     */
+    public CharSequenceInputStream(final CharSequence cs, final String charset) {
+        this(cs, charset, BUFFER_SIZE);
+    }
+
+    /**
      * Constructor, calls {@link #CharSequenceInputStream(CharSequence, Charset, int)}.
      *
      * @param cs the input character sequence
@@ -90,27 +114,23 @@ public class CharSequenceInputStream extends InputStream {
     }
 
     /**
-     * Constructor, calls {@link #CharSequenceInputStream(CharSequence, Charset, int)}
-     * with a buffer size of 2048.
+     * Return an estimate of the number of bytes remaining in the byte stream.
+     * @return the count of bytes that can be read without blocking (or returning EOF).
      *
-     * @param cs the input character sequence
-     * @param charset the character set name to use
-     * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character
+     * @throws IOException if an error occurs (probably not possible)
      */
-    public CharSequenceInputStream(final CharSequence cs, final Charset charset) {
-        this(cs, charset, BUFFER_SIZE);
+    @Override
+    public int available() throws IOException {
+        // The cached entries are in bbuf; since encoding always creates at least one byte
+        // per character, we can add the two to get a better estimate (e.g. if bbuf is empty)
+        // Note that the previous implementation (2.4) could return zero even though there were
+        // encoded bytes still available.
+        return this.bbuf.remaining() + this.cbuf.remaining();
     }
 
-    /**
-     * Constructor, calls {@link #CharSequenceInputStream(CharSequence, String, int)}
-     * with a buffer size of 2048.
-     *
-     * @param cs the input character sequence
-     * @param charset the character set name to use
-     * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character
-     */
-    public CharSequenceInputStream(final CharSequence cs, final String charset) {
-        this(cs, charset, BUFFER_SIZE);
+    @Override
+    public void close() throws IOException {
+        // noop
     }
 
     /**
@@ -126,6 +146,43 @@ public class CharSequenceInputStream extends InputStream {
             result.throwException();
         }
         this.bbuf.flip();
+    }
+
+    /**
+     * {@inheritDoc}
+     * @param readlimit max read limit (ignored)
+     */
+    @Override
+    public synchronized void mark(final int readlimit) {
+        this.mark_cbuf = this.cbuf.position();
+        this.mark_bbuf = this.bbuf.position();
+        this.cbuf.mark();
+        this.bbuf.mark();
+        // It would be nice to be able to use mark & reset on the cbuf and bbuf;
+        // however the bbuf is re-used so that won't work
+    }
+
+    @Override
+    public boolean markSupported() {
+        return true;
+    }
+
+    @Override
+    public int read() throws IOException {
+        for (;;) {
+            if (this.bbuf.hasRemaining()) {
+                return this.bbuf.get() & 0xFF;
+            }
+            fillBuffer();
+            if (!this.bbuf.hasRemaining() && !this.cbuf.hasRemaining()) {
+                return EOF;
+            }
+        }
+    }
+
+    @Override
+    public int read(final byte[] b) throws IOException {
+        return read(b, 0, b.length);
     }
 
     @Override
@@ -157,72 +214,6 @@ public class CharSequenceInputStream extends InputStream {
             }
         }
         return bytesRead == 0 && !this.cbuf.hasRemaining() ? EOF : bytesRead;
-    }
-
-    @Override
-    public int read() throws IOException {
-        for (;;) {
-            if (this.bbuf.hasRemaining()) {
-                return this.bbuf.get() & 0xFF;
-            }
-            fillBuffer();
-            if (!this.bbuf.hasRemaining() && !this.cbuf.hasRemaining()) {
-                return EOF;
-            }
-        }
-    }
-
-    @Override
-    public int read(final byte[] b) throws IOException {
-        return read(b, 0, b.length);
-    }
-
-    @Override
-    public long skip(long n) throws IOException {
-        /*
-         * This could be made more efficient by using position to skip within the current buffer.
-         */
-        long skipped = 0;
-        while (n > 0 && available() > 0) {
-            this.read();
-            n--;
-            skipped++;
-        }
-        return skipped;
-    }
-
-    /**
-     * Return an estimate of the number of bytes remaining in the byte stream.
-     * @return the count of bytes that can be read without blocking (or returning EOF).
-     *
-     * @throws IOException if an error occurs (probably not possible)
-     */
-    @Override
-    public int available() throws IOException {
-        // The cached entries are in bbuf; since encoding always creates at least one byte
-        // per character, we can add the two to get a better estimate (e.g. if bbuf is empty)
-        // Note that the previous implementation (2.4) could return zero even though there were
-        // encoded bytes still available.
-        return this.bbuf.remaining() + this.cbuf.remaining();
-    }
-
-    @Override
-    public void close() throws IOException {
-        // noop
-    }
-
-    /**
-     * {@inheritDoc}
-     * @param readlimit max read limit (ignored)
-     */
-    @Override
-    public synchronized void mark(final int readlimit) {
-        this.mark_cbuf = this.cbuf.position();
-        this.mark_bbuf = this.bbuf.position();
-        this.cbuf.mark();
-        this.bbuf.mark();
-        // It would be nice to be able to use mark & reset on the cbuf and bbuf;
-        // however the bbuf is re-used so that won't work
     }
 
     @Override
@@ -262,8 +253,17 @@ public class CharSequenceInputStream extends InputStream {
     }
 
     @Override
-    public boolean markSupported() {
-        return true;
+    public long skip(long n) throws IOException {
+        /*
+         * This could be made more efficient by using position to skip within the current buffer.
+         */
+        long skipped = 0;
+        while (n > 0 && available() > 0) {
+            this.read();
+            n--;
+            skipped++;
+        }
+        return skipped;
     }
 
 }

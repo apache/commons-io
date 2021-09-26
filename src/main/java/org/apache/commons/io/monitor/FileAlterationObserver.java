@@ -130,36 +130,6 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Constructs an observer for the specified directory.
      *
-     * @param directoryName the name of the directory to observe
-     */
-    public FileAlterationObserver(final String directoryName) {
-        this(new File(directoryName));
-    }
-
-    /**
-     * Constructs an observer for the specified directory and file filter.
-     *
-     * @param directoryName the name of the directory to observe
-     * @param fileFilter The file filter or null if none
-     */
-    public FileAlterationObserver(final String directoryName, final FileFilter fileFilter) {
-        this(new File(directoryName), fileFilter);
-    }
-
-    /**
-     * Constructs an observer for the specified directory, file filter and file comparator.
-     *
-     * @param directoryName the name of the directory to observe
-     * @param fileFilter The file filter or null if none
-     * @param ioCase what case sensitivity to use comparing file names, null means system sensitive
-     */
-    public FileAlterationObserver(final String directoryName, final FileFilter fileFilter, final IOCase ioCase) {
-        this(new File(directoryName), fileFilter, ioCase);
-    }
-
-    /**
-     * Constructs an observer for the specified directory.
-     *
      * @param directory the directory to observe
      */
     public FileAlterationObserver(final File directory) {
@@ -217,22 +187,33 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Returns the directory being observed.
+     * Constructs an observer for the specified directory.
      *
-     * @return the directory being observed
+     * @param directoryName the name of the directory to observe
      */
-    public File getDirectory() {
-        return rootEntry.getFile();
+    public FileAlterationObserver(final String directoryName) {
+        this(new File(directoryName));
     }
 
     /**
-     * Returns the fileFilter.
+     * Constructs an observer for the specified directory and file filter.
      *
-     * @return the fileFilter
-     * @since 2.1
+     * @param directoryName the name of the directory to observe
+     * @param fileFilter The file filter or null if none
      */
-    public FileFilter getFileFilter() {
-        return fileFilter;
+    public FileAlterationObserver(final String directoryName, final FileFilter fileFilter) {
+        this(new File(directoryName), fileFilter);
+    }
+
+    /**
+     * Constructs an observer for the specified directory, file filter and file comparator.
+     *
+     * @param directoryName the name of the directory to observe
+     * @param fileFilter The file filter or null if none
+     * @param ioCase what case sensitivity to use comparing file names, null means system sensitive
+     */
+    public FileAlterationObserver(final String directoryName, final FileFilter fileFilter, final IOCase ioCase) {
+        this(new File(directoryName), fileFilter, ioCase);
     }
 
     /**
@@ -244,49 +225,6 @@ public class FileAlterationObserver implements Serializable {
         if (listener != null) {
             listeners.add(listener);
         }
-    }
-
-    /**
-     * Removes a file system listener.
-     *
-     * @param listener The file system listener
-     */
-    public void removeListener(final FileAlterationListener listener) {
-        if (listener != null) {
-            while (listeners.remove(listener)) {
-                // empty
-            }
-        }
-    }
-
-    /**
-     * Returns the set of registered file system listeners.
-     *
-     * @return The file system listeners
-     */
-    public Iterable<FileAlterationListener> getListeners() {
-        return listeners;
-    }
-
-    /**
-     * Initializes the observer.
-     *
-     * @throws Exception if an error occurs
-     */
-    @SuppressWarnings("unused") // Possibly thrown from subclasses.
-    public void initialize() throws Exception {
-        rootEntry.refresh(rootEntry.getFile());
-        rootEntry.setChildren(doListFiles(rootEntry.getFile(), rootEntry));
-    }
-
-    /**
-     * Final processing.
-     *
-     * @throws Exception if an error occurs
-     */
-    @SuppressWarnings("unused") // Possibly thrown from subclasses.
-    public void destroy() throws Exception {
-        // noop
     }
 
     /**
@@ -363,18 +301,13 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Lists the files
-     * @param file The file to list files for
-     * @param entry the parent entry
-     * @return The child files
+     * Final processing.
+     *
+     * @throws Exception if an error occurs
      */
-    private FileEntry[] doListFiles(final File file, final FileEntry entry) {
-        final File[] files = listFiles(file);
-        final FileEntry[] children = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_FILE_ENTRY_ARRAY;
-        for (int i = 0; i < files.length; i++) {
-            children[i] = createFileEntry(entry, files[i]);
-        }
-        return children;
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
+    public void destroy() throws Exception {
+        // noop
     }
 
     /**
@@ -397,6 +330,36 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
+     * Fires directory/file delete events to the registered listeners.
+     *
+     * @param entry The file entry
+     */
+    private void doDelete(final FileEntry entry) {
+        for (final FileAlterationListener listener : listeners) {
+            if (entry.isDirectory()) {
+                listener.onDirectoryDelete(entry.getFile());
+            } else {
+                listener.onFileDelete(entry.getFile());
+            }
+        }
+    }
+
+    /**
+     * Lists the files
+     * @param file The file to list files for
+     * @param entry the parent entry
+     * @return The child files
+     */
+    private FileEntry[] doListFiles(final File file, final FileEntry entry) {
+        final File[] files = listFiles(file);
+        final FileEntry[] children = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_FILE_ENTRY_ARRAY;
+        for (int i = 0; i < files.length; i++) {
+            children[i] = createFileEntry(entry, files[i]);
+        }
+        return children;
+    }
+
+    /**
      * Fires directory/file change events to the registered listeners.
      *
      * @param entry The previous file system entry
@@ -415,18 +378,42 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Fires directory/file delete events to the registered listeners.
+     * Returns the directory being observed.
      *
-     * @param entry The file entry
+     * @return the directory being observed
      */
-    private void doDelete(final FileEntry entry) {
-        for (final FileAlterationListener listener : listeners) {
-            if (entry.isDirectory()) {
-                listener.onDirectoryDelete(entry.getFile());
-            } else {
-                listener.onFileDelete(entry.getFile());
-            }
-        }
+    public File getDirectory() {
+        return rootEntry.getFile();
+    }
+
+    /**
+     * Returns the fileFilter.
+     *
+     * @return the fileFilter
+     * @since 2.1
+     */
+    public FileFilter getFileFilter() {
+        return fileFilter;
+    }
+
+    /**
+     * Returns the set of registered file system listeners.
+     *
+     * @return The file system listeners
+     */
+    public Iterable<FileAlterationListener> getListeners() {
+        return listeners;
+    }
+
+    /**
+     * Initializes the observer.
+     *
+     * @throws Exception if an error occurs
+     */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
+    public void initialize() throws Exception {
+        rootEntry.refresh(rootEntry.getFile());
+        rootEntry.setChildren(doListFiles(rootEntry.getFile(), rootEntry));
     }
 
     /**
@@ -448,6 +435,19 @@ public class FileAlterationObserver implements Serializable {
             Arrays.sort(children, comparator);
         }
         return children;
+    }
+
+    /**
+     * Removes a file system listener.
+     *
+     * @param listener The file system listener
+     */
+    public void removeListener(final FileAlterationListener listener) {
+        if (listener != null) {
+            while (listeners.remove(listener)) {
+                // empty
+            }
+        }
     }
 
     /**

@@ -255,9 +255,68 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 public abstract class DirectoryWalker<T> {
 
     /**
+     * CancelException is thrown in DirectoryWalker to cancel the current
+     * processing.
+     */
+    public static class CancelException extends IOException {
+
+        /** Serialization id. */
+        private static final long serialVersionUID = 1347339620135041008L;
+
+        /** The file being processed when the exception was thrown. */
+        private final File file;
+        /** The file depth when the exception was thrown. */
+        private final int depth;
+
+        /**
+         * Constructs a {@code CancelException} with
+         * the file and depth when cancellation occurred.
+         *
+         * @param file  the file when the operation was cancelled, may be null
+         * @param depth  the depth when the operation was cancelled, may be null
+         */
+        public CancelException(final File file, final int depth) {
+            this("Operation Cancelled", file, depth);
+        }
+
+        /**
+         * Constructs a {@code CancelException} with
+         * an appropriate message and the file and depth when
+         * cancellation occurred.
+         *
+         * @param message  the detail message
+         * @param file  the file when the operation was cancelled
+         * @param depth  the depth when the operation was cancelled
+         */
+        public CancelException(final String message, final File file, final int depth) {
+            super(message);
+            this.file = file;
+            this.depth = depth;
+        }
+
+        /**
+         * Returns the depth when the operation was cancelled.
+         *
+         * @return the depth when the operation was cancelled
+         */
+        public int getDepth() {
+            return depth;
+        }
+
+        /**
+         * Returns the file when the operation was cancelled.
+         *
+         * @return the file when the operation was cancelled
+         */
+        public File getFile() {
+            return file;
+        }
+    }
+    /**
      * The file filter to use to filter files and directories.
      */
     private final FileFilter filter;
+
     /**
      * The limit on the directory depth to walk.
      */
@@ -314,6 +373,232 @@ public abstract class DirectoryWalker<T> {
             this.filter = directoryFilter.or(fileFilter);
         }
         this.depthLimit = depthLimit;
+    }
+
+    /**
+     * Checks whether the walk has been cancelled by calling {@link #handleIsCancelled},
+     * throwing a {@code CancelException} if it has.
+     * <p>
+     * Writers of subclasses should not normally call this method as it is called
+     * automatically by the walk of the tree. However, sometimes a single method,
+     * typically {@link #handleFile}, may take a long time to run. In that case,
+     * you may wish to check for cancellation by calling this method.
+     * </p>
+     *
+     * @param file  the current file being processed
+     * @param depth  the current file level (starting directory = 0)
+     * @param results  the collection of result objects, may be updated
+     * @throws IOException if an I/O Error occurs
+     */
+    protected final void checkIfCancelled(final File file, final int depth, final Collection<T> results) throws
+            IOException {
+        if (handleIsCancelled(file, depth, results)) {
+            throw new CancelException(file, depth);
+        }
+    }
+
+    /**
+     * Overridable callback method invoked with the contents of each directory.
+     * <p>
+     * This implementation returns the files unchanged
+     * </p>
+     *
+     * @param directory  the current directory being processed
+     * @param depth  the current directory level (starting directory = 0)
+     * @param files the files (possibly filtered) in the directory, may be {@code null}
+     * @return the filtered list of files
+     * @throws IOException if an I/O Error occurs
+     * @since 2.0
+     */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
+    protected File[] filterDirectoryContents(final File directory, final int depth, final File... files) throws
+            IOException {
+        return files;
+    }
+
+    /**
+     * Overridable callback method invoked when the operation is cancelled.
+     * The file being processed when the cancellation occurred can be
+     * obtained from the exception.
+     * <p>
+     * This implementation just re-throws the {@link CancelException}.
+     * </p>
+     *
+     * @param startDirectory  the directory that the walk started from
+     * @param results  the collection of result objects, may be updated
+     * @param cancel  the exception throw to cancel further processing
+     * containing details at the point of cancellation.
+     * @throws IOException if an I/O Error occurs
+     */
+    protected void handleCancelled(final File startDirectory, final Collection<T> results,
+                       final CancelException cancel) throws IOException {
+        // re-throw exception - overridable by subclass
+        throw cancel;
+    }
+
+    /**
+     * Overridable callback method invoked to determine if a directory should be processed.
+     * <p>
+     * This method returns a boolean to indicate if the directory should be examined or not.
+     * If you return false, the entire directory and any subdirectories will be skipped.
+     * Note that this functionality is in addition to the filtering by file filter.
+     * </p>
+     * <p>
+     * This implementation does nothing and returns true.
+     * </p>
+     *
+     * @param directory  the current directory being processed
+     * @param depth  the current directory level (starting directory = 0)
+     * @param results  the collection of result objects, may be updated
+     * @return true to process this directory, false to skip this directory
+     * @throws IOException if an I/O Error occurs
+     */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
+    protected boolean handleDirectory(final File directory, final int depth, final Collection<T> results) throws
+            IOException {
+        // do nothing - overridable by subclass
+        return true;  // process directory
+    }
+
+    /**
+     * Overridable callback method invoked at the end of processing each directory.
+     * <p>
+     * This implementation does nothing.
+     * </p>
+     *
+     * @param directory  the directory being processed
+     * @param depth  the current directory level (starting directory = 0)
+     * @param results  the collection of result objects, may be updated
+     * @throws IOException if an I/O Error occurs
+     */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
+    protected void handleDirectoryEnd(final File directory, final int depth, final Collection<T> results) throws
+            IOException {
+        // do nothing - overridable by subclass
+    }
+
+    /**
+     * Overridable callback method invoked at the start of processing each directory.
+     * <p>
+     * This implementation does nothing.
+     * </p>
+     *
+     * @param directory  the current directory being processed
+     * @param depth  the current directory level (starting directory = 0)
+     * @param results  the collection of result objects, may be updated
+     * @throws IOException if an I/O Error occurs
+     */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
+    protected void handleDirectoryStart(final File directory, final int depth, final Collection<T> results) throws
+            IOException {
+        // do nothing - overridable by subclass
+    }
+
+    /**
+     * Overridable callback method invoked at the end of processing.
+     * <p>
+     * This implementation does nothing.
+     * </p>
+     *
+     * @param results  the collection of result objects, may be updated
+     * @throws IOException if an I/O Error occurs
+     */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
+    protected void handleEnd(final Collection<T> results) throws IOException {
+        // do nothing - overridable by subclass
+    }
+
+    /**
+     * Overridable callback method invoked for each (non-directory) file.
+     * <p>
+     * This implementation does nothing.
+     * </p>
+     *
+     * @param file  the current file being processed
+     * @param depth  the current directory level (starting directory = 0)
+     * @param results  the collection of result objects, may be updated
+     * @throws IOException if an I/O Error occurs
+     */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
+    protected void handleFile(final File file, final int depth, final Collection<T> results) throws IOException {
+        // do nothing - overridable by subclass
+    }
+
+    /**
+     * Overridable callback method invoked to determine if the entire walk
+     * operation should be immediately cancelled.
+     * <p>
+     * This method should be implemented by those subclasses that want to
+     * provide a public {@code cancel()} method available from another
+     * thread. The design pattern for the subclass should be as follows:
+     * </p>
+     * <pre>
+     *  public class FooDirectoryWalker extends DirectoryWalker {
+     *    private volatile boolean cancelled = false;
+     *
+     *    public void cancel() {
+     *        cancelled = true;
+     *    }
+     *    private void handleIsCancelled(File file, int depth, Collection results) {
+     *        return cancelled;
+     *    }
+     *    protected void handleCancelled(File startDirectory,
+     *              Collection results, CancelException cancel) {
+     *        // implement processing required when a cancellation occurs
+     *    }
+     *  }
+     * </pre>
+     * <p>
+     * If this method returns true, then the directory walk is immediately
+     * cancelled. The next callback method will be {@link #handleCancelled}.
+     * </p>
+     * <p>
+     * This implementation returns false.
+     * </p>
+     *
+     * @param file  the file or directory being processed
+     * @param depth  the current directory level (starting directory = 0)
+     * @param results  the collection of result objects, may be updated
+     * @return true if the walk has been cancelled
+     * @throws IOException if an I/O Error occurs
+     */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
+    protected boolean handleIsCancelled(
+            final File file, final int depth, final Collection<T> results) throws IOException {
+        // do nothing - overridable by subclass
+        return false;  // not cancelled
+    }
+
+    /**
+     * Overridable callback method invoked for each restricted directory.
+     * <p>
+     * This implementation does nothing.
+     * </p>
+     *
+     * @param directory  the restricted directory
+     * @param depth  the current directory level (starting directory = 0)
+     * @param results  the collection of result objects, may be updated
+     * @throws IOException if an I/O Error occurs
+     */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
+    protected void handleRestricted(final File directory, final int depth, final Collection<T> results) throws
+            IOException {
+        // do nothing - overridable by subclass
+    }
+
+    /**
+     * Overridable callback method invoked at the start of processing.
+     * <p>
+     * This implementation does nothing.
+     * </p>
+     *
+     * @param startDirectory  the directory to start from
+     * @param results  the collection of result objects, may be updated
+     * @throws IOException if an I/O Error occurs
+     */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
+    protected void handleStart(final File startDirectory, final Collection<T> results) throws IOException {
+        // do nothing - overridable by subclass
     }
 
     /**
@@ -378,290 +663,5 @@ public abstract class DirectoryWalker<T> {
             handleDirectoryEnd(directory, depth, results);
         }
         checkIfCancelled(directory, depth, results);
-    }
-
-    /**
-     * Checks whether the walk has been cancelled by calling {@link #handleIsCancelled},
-     * throwing a {@code CancelException} if it has.
-     * <p>
-     * Writers of subclasses should not normally call this method as it is called
-     * automatically by the walk of the tree. However, sometimes a single method,
-     * typically {@link #handleFile}, may take a long time to run. In that case,
-     * you may wish to check for cancellation by calling this method.
-     * </p>
-     *
-     * @param file  the current file being processed
-     * @param depth  the current file level (starting directory = 0)
-     * @param results  the collection of result objects, may be updated
-     * @throws IOException if an I/O Error occurs
-     */
-    protected final void checkIfCancelled(final File file, final int depth, final Collection<T> results) throws
-            IOException {
-        if (handleIsCancelled(file, depth, results)) {
-            throw new CancelException(file, depth);
-        }
-    }
-
-    /**
-     * Overridable callback method invoked to determine if the entire walk
-     * operation should be immediately cancelled.
-     * <p>
-     * This method should be implemented by those subclasses that want to
-     * provide a public {@code cancel()} method available from another
-     * thread. The design pattern for the subclass should be as follows:
-     * </p>
-     * <pre>
-     *  public class FooDirectoryWalker extends DirectoryWalker {
-     *    private volatile boolean cancelled = false;
-     *
-     *    public void cancel() {
-     *        cancelled = true;
-     *    }
-     *    private void handleIsCancelled(File file, int depth, Collection results) {
-     *        return cancelled;
-     *    }
-     *    protected void handleCancelled(File startDirectory,
-     *              Collection results, CancelException cancel) {
-     *        // implement processing required when a cancellation occurs
-     *    }
-     *  }
-     * </pre>
-     * <p>
-     * If this method returns true, then the directory walk is immediately
-     * cancelled. The next callback method will be {@link #handleCancelled}.
-     * </p>
-     * <p>
-     * This implementation returns false.
-     * </p>
-     *
-     * @param file  the file or directory being processed
-     * @param depth  the current directory level (starting directory = 0)
-     * @param results  the collection of result objects, may be updated
-     * @return true if the walk has been cancelled
-     * @throws IOException if an I/O Error occurs
-     */
-    @SuppressWarnings("unused") // Possibly thrown from subclasses.
-    protected boolean handleIsCancelled(
-            final File file, final int depth, final Collection<T> results) throws IOException {
-        // do nothing - overridable by subclass
-        return false;  // not cancelled
-    }
-
-    /**
-     * Overridable callback method invoked when the operation is cancelled.
-     * The file being processed when the cancellation occurred can be
-     * obtained from the exception.
-     * <p>
-     * This implementation just re-throws the {@link CancelException}.
-     * </p>
-     *
-     * @param startDirectory  the directory that the walk started from
-     * @param results  the collection of result objects, may be updated
-     * @param cancel  the exception throw to cancel further processing
-     * containing details at the point of cancellation.
-     * @throws IOException if an I/O Error occurs
-     */
-    protected void handleCancelled(final File startDirectory, final Collection<T> results,
-                       final CancelException cancel) throws IOException {
-        // re-throw exception - overridable by subclass
-        throw cancel;
-    }
-
-    /**
-     * Overridable callback method invoked at the start of processing.
-     * <p>
-     * This implementation does nothing.
-     * </p>
-     *
-     * @param startDirectory  the directory to start from
-     * @param results  the collection of result objects, may be updated
-     * @throws IOException if an I/O Error occurs
-     */
-    @SuppressWarnings("unused") // Possibly thrown from subclasses.
-    protected void handleStart(final File startDirectory, final Collection<T> results) throws IOException {
-        // do nothing - overridable by subclass
-    }
-
-    /**
-     * Overridable callback method invoked to determine if a directory should be processed.
-     * <p>
-     * This method returns a boolean to indicate if the directory should be examined or not.
-     * If you return false, the entire directory and any subdirectories will be skipped.
-     * Note that this functionality is in addition to the filtering by file filter.
-     * </p>
-     * <p>
-     * This implementation does nothing and returns true.
-     * </p>
-     *
-     * @param directory  the current directory being processed
-     * @param depth  the current directory level (starting directory = 0)
-     * @param results  the collection of result objects, may be updated
-     * @return true to process this directory, false to skip this directory
-     * @throws IOException if an I/O Error occurs
-     */
-    @SuppressWarnings("unused") // Possibly thrown from subclasses.
-    protected boolean handleDirectory(final File directory, final int depth, final Collection<T> results) throws
-            IOException {
-        // do nothing - overridable by subclass
-        return true;  // process directory
-    }
-
-    /**
-     * Overridable callback method invoked at the start of processing each directory.
-     * <p>
-     * This implementation does nothing.
-     * </p>
-     *
-     * @param directory  the current directory being processed
-     * @param depth  the current directory level (starting directory = 0)
-     * @param results  the collection of result objects, may be updated
-     * @throws IOException if an I/O Error occurs
-     */
-    @SuppressWarnings("unused") // Possibly thrown from subclasses.
-    protected void handleDirectoryStart(final File directory, final int depth, final Collection<T> results) throws
-            IOException {
-        // do nothing - overridable by subclass
-    }
-
-    /**
-     * Overridable callback method invoked with the contents of each directory.
-     * <p>
-     * This implementation returns the files unchanged
-     * </p>
-     *
-     * @param directory  the current directory being processed
-     * @param depth  the current directory level (starting directory = 0)
-     * @param files the files (possibly filtered) in the directory, may be {@code null}
-     * @return the filtered list of files
-     * @throws IOException if an I/O Error occurs
-     * @since 2.0
-     */
-    @SuppressWarnings("unused") // Possibly thrown from subclasses.
-    protected File[] filterDirectoryContents(final File directory, final int depth, final File... files) throws
-            IOException {
-        return files;
-    }
-
-    /**
-     * Overridable callback method invoked for each (non-directory) file.
-     * <p>
-     * This implementation does nothing.
-     * </p>
-     *
-     * @param file  the current file being processed
-     * @param depth  the current directory level (starting directory = 0)
-     * @param results  the collection of result objects, may be updated
-     * @throws IOException if an I/O Error occurs
-     */
-    @SuppressWarnings("unused") // Possibly thrown from subclasses.
-    protected void handleFile(final File file, final int depth, final Collection<T> results) throws IOException {
-        // do nothing - overridable by subclass
-    }
-
-    /**
-     * Overridable callback method invoked for each restricted directory.
-     * <p>
-     * This implementation does nothing.
-     * </p>
-     *
-     * @param directory  the restricted directory
-     * @param depth  the current directory level (starting directory = 0)
-     * @param results  the collection of result objects, may be updated
-     * @throws IOException if an I/O Error occurs
-     */
-    @SuppressWarnings("unused") // Possibly thrown from subclasses.
-    protected void handleRestricted(final File directory, final int depth, final Collection<T> results) throws
-            IOException {
-        // do nothing - overridable by subclass
-    }
-
-    /**
-     * Overridable callback method invoked at the end of processing each directory.
-     * <p>
-     * This implementation does nothing.
-     * </p>
-     *
-     * @param directory  the directory being processed
-     * @param depth  the current directory level (starting directory = 0)
-     * @param results  the collection of result objects, may be updated
-     * @throws IOException if an I/O Error occurs
-     */
-    @SuppressWarnings("unused") // Possibly thrown from subclasses.
-    protected void handleDirectoryEnd(final File directory, final int depth, final Collection<T> results) throws
-            IOException {
-        // do nothing - overridable by subclass
-    }
-
-    /**
-     * Overridable callback method invoked at the end of processing.
-     * <p>
-     * This implementation does nothing.
-     * </p>
-     *
-     * @param results  the collection of result objects, may be updated
-     * @throws IOException if an I/O Error occurs
-     */
-    @SuppressWarnings("unused") // Possibly thrown from subclasses.
-    protected void handleEnd(final Collection<T> results) throws IOException {
-        // do nothing - overridable by subclass
-    }
-
-    /**
-     * CancelException is thrown in DirectoryWalker to cancel the current
-     * processing.
-     */
-    public static class CancelException extends IOException {
-
-        /** Serialization id. */
-        private static final long serialVersionUID = 1347339620135041008L;
-
-        /** The file being processed when the exception was thrown. */
-        private final File file;
-        /** The file depth when the exception was thrown. */
-        private final int depth;
-
-        /**
-         * Constructs a {@code CancelException} with
-         * the file and depth when cancellation occurred.
-         *
-         * @param file  the file when the operation was cancelled, may be null
-         * @param depth  the depth when the operation was cancelled, may be null
-         */
-        public CancelException(final File file, final int depth) {
-            this("Operation Cancelled", file, depth);
-        }
-
-        /**
-         * Constructs a {@code CancelException} with
-         * an appropriate message and the file and depth when
-         * cancellation occurred.
-         *
-         * @param message  the detail message
-         * @param file  the file when the operation was cancelled
-         * @param depth  the depth when the operation was cancelled
-         */
-        public CancelException(final String message, final File file, final int depth) {
-            super(message);
-            this.file = file;
-            this.depth = depth;
-        }
-
-        /**
-         * Returns the file when the operation was cancelled.
-         *
-         * @return the file when the operation was cancelled
-         */
-        public File getFile() {
-            return file;
-        }
-
-        /**
-         * Returns the depth when the operation was cancelled.
-         *
-         * @return the depth when the operation was cancelled
-         */
-        public int getDepth() {
-            return depth;
-        }
     }
 }

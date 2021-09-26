@@ -114,11 +114,6 @@ import java.nio.charset.Charset;
 public class CopyUtils {
 
     /**
-     * Instances should NOT be constructed in standard programming.
-     */
-    public CopyUtils() { }
-
-    /**
      * Copies bytes from a {@code byte[]} to an {@code OutputStream}.
      * @param input the byte array to read from
      * @param output the {@code OutputStream} to write to
@@ -177,35 +172,6 @@ public class CopyUtils {
         return count;
     }
 
-    // ----------------------------------------------------------------
-    // Reader -> Writer
-    // ----------------------------------------------------------------
-
-    /**
-     * Copies chars from a {@code Reader} to a {@code Writer}.
-     * @param input the {@code Reader} to read from
-     * @param output the {@code Writer} to write to
-     * @return the number of characters copied
-     * @throws IOException In case of an I/O problem
-     */
-    public static int copy(
-            final Reader input,
-            final Writer output)
-                throws IOException {
-        final char[] buffer = IOUtils.getCharArray();
-        int count = 0;
-        int n;
-        while (EOF != (n = input.read(buffer))) {
-            output.write(buffer, 0, n);
-            count += n;
-        }
-        return count;
-    }
-
-    // ----------------------------------------------------------------
-    // InputStream -> Writer
-    // ----------------------------------------------------------------
-
     /**
      * Copies and convert bytes from an {@code InputStream} to chars on a
      * {@code Writer}.
@@ -224,6 +190,10 @@ public class CopyUtils {
         final InputStreamReader in = new InputStreamReader(input, Charset.defaultCharset());
         copy(in, output);
     }
+
+    // ----------------------------------------------------------------
+    // Reader -> Writer
+    // ----------------------------------------------------------------
 
     /**
      * Copies and convert bytes from an {@code InputStream} to chars on a
@@ -244,9 +214,8 @@ public class CopyUtils {
         copy(in, output);
     }
 
-
     // ----------------------------------------------------------------
-    // Reader -> OutputStream
+    // InputStream -> Writer
     // ----------------------------------------------------------------
 
     /**
@@ -294,9 +263,31 @@ public class CopyUtils {
         out.flush();
     }
 
+
     // ----------------------------------------------------------------
-    // String -> OutputStream
+    // Reader -> OutputStream
     // ----------------------------------------------------------------
+
+    /**
+     * Copies chars from a {@code Reader} to a {@code Writer}.
+     * @param input the {@code Reader} to read from
+     * @param output the {@code Writer} to write to
+     * @return the number of characters copied
+     * @throws IOException In case of an I/O problem
+     */
+    public static int copy(
+            final Reader input,
+            final Writer output)
+                throws IOException {
+        final char[] buffer = IOUtils.getCharArray();
+        int count = 0;
+        int n;
+        while (EOF != (n = input.read(buffer))) {
+            output.write(buffer, 0, n);
+            count += n;
+        }
+        return count;
+    }
 
     /**
      * Serialize chars from a {@code String} to bytes on an
@@ -321,6 +312,10 @@ public class CopyUtils {
         // have to flush here.
         out.flush();
     }
+
+    // ----------------------------------------------------------------
+    // String -> OutputStream
+    // ----------------------------------------------------------------
 
     /**
      * Serialize chars from a {@code String} to bytes on an
@@ -347,10 +342,6 @@ public class CopyUtils {
         out.flush();
     }
 
-    // ----------------------------------------------------------------
-    // String -> Writer
-    // ----------------------------------------------------------------
-
     /**
      * Copies chars from a {@code String} to a {@code Writer}.
      * @param input the {@code String} to read from
@@ -361,5 +352,14 @@ public class CopyUtils {
                 throws IOException {
         output.write(input);
     }
+
+    // ----------------------------------------------------------------
+    // String -> Writer
+    // ----------------------------------------------------------------
+
+    /**
+     * Instances should NOT be constructed in standard programming.
+     */
+    public CopyUtils() { }
 
 }

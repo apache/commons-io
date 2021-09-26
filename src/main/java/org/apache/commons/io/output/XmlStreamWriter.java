@@ -41,6 +41,8 @@ import org.apache.commons.io.input.XmlStreamReader;
 public class XmlStreamWriter extends Writer {
     private static final int BUFFER_SIZE = IOUtils.DEFAULT_BUFFER_SIZE;
 
+    static final Pattern ENCODING_PATTERN = XmlStreamReader.ENCODING_PATTERN;
+
     private final OutputStream out;
 
     private final String defaultEncoding;
@@ -50,28 +52,6 @@ public class XmlStreamWriter extends Writer {
     private Writer writer;
 
     private String encoding;
-
-    /**
-     * Constructs a new XML stream writer for the specified output stream
-     * with a default encoding of UTF-8.
-     *
-     * @param out The output stream
-     */
-    public XmlStreamWriter(final OutputStream out) {
-        this(out, null);
-    }
-
-    /**
-     * Constructs a new XML stream writer for the specified output stream
-     * with the specified default encoding.
-     *
-     * @param out The output stream
-     * @param defaultEncoding The default encoding if not encoding could be detected
-     */
-    public XmlStreamWriter(final OutputStream out, final String defaultEncoding) {
-        this.out = out;
-        this.defaultEncoding = defaultEncoding != null ? defaultEncoding : "UTF-8";
-    }
 
     /**
      * Constructs a new XML stream writer for the specified file
@@ -100,21 +80,25 @@ public class XmlStreamWriter extends Writer {
     }
 
     /**
-     * Returns the detected encoding.
+     * Constructs a new XML stream writer for the specified output stream
+     * with a default encoding of UTF-8.
      *
-     * @return the detected encoding
+     * @param out The output stream
      */
-    public String getEncoding() {
-        return encoding;
+    public XmlStreamWriter(final OutputStream out) {
+        this(out, null);
     }
 
     /**
-     * Returns the default encoding.
+     * Constructs a new XML stream writer for the specified output stream
+     * with the specified default encoding.
      *
-     * @return the default encoding
+     * @param out The output stream
+     * @param defaultEncoding The default encoding if not encoding could be detected
      */
-    public String getDefaultEncoding() {
-        return defaultEncoding;
+    public XmlStreamWriter(final OutputStream out, final String defaultEncoding) {
+        this.out = out;
+        this.defaultEncoding = defaultEncoding != null ? defaultEncoding : "UTF-8";
     }
 
     /**
@@ -130,18 +114,6 @@ public class XmlStreamWriter extends Writer {
             writer.write(xmlPrologWriter.toString());
         }
         writer.close();
-    }
-
-    /**
-     * Flushes the underlying writer.
-     *
-     * @throws IOException if an error occurs flushing the underlying writer
-     */
-    @Override
-    public void flush() throws IOException {
-        if (writer != null) {
-            writer.flush();
-        }
     }
 
     /**
@@ -200,6 +172,36 @@ public class XmlStreamWriter extends Writer {
     }
 
     /**
+     * Flushes the underlying writer.
+     *
+     * @throws IOException if an error occurs flushing the underlying writer
+     */
+    @Override
+    public void flush() throws IOException {
+        if (writer != null) {
+            writer.flush();
+        }
+    }
+
+    /**
+     * Returns the default encoding.
+     *
+     * @return the default encoding
+     */
+    public String getDefaultEncoding() {
+        return defaultEncoding;
+    }
+
+    /**
+     * Returns the detected encoding.
+     *
+     * @return the detected encoding
+     */
+    public String getEncoding() {
+        return encoding;
+    }
+
+    /**
      * Writes the characters to the underlying writer, detecting encoding.
      *
      * @param cbuf the buffer to write the characters from
@@ -215,6 +217,4 @@ public class XmlStreamWriter extends Writer {
             writer.write(cbuf, off, len);
         }
     }
-
-    static final Pattern ENCODING_PATTERN = XmlStreamReader.ENCODING_PATTERN;
 }

@@ -89,6 +89,12 @@ public class TrueFileFilter implements IOFileFilter, Serializable {
     }
 
     @Override
+    public IOFileFilter and(final IOFileFilter fileFilter) {
+        // TRUE AND expression <=> expression
+        return fileFilter;
+    }
+
+    @Override
     public IOFileFilter negate() {
         return FalseFileFilter.INSTANCE;
     }
@@ -97,12 +103,6 @@ public class TrueFileFilter implements IOFileFilter, Serializable {
     public IOFileFilter or(final IOFileFilter fileFilter) {
         // TRUE OR expression <=> true
         return INSTANCE;
-    }
-
-    @Override
-    public IOFileFilter and(final IOFileFilter fileFilter) {
-        // TRUE AND expression <=> expression
-        return fileFilter;
     }
 
     @Override

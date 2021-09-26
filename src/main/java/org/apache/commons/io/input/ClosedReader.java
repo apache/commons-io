@@ -49,6 +49,11 @@ public class ClosedReader extends Reader {
     @Deprecated
     public static final ClosedReader CLOSED_READER = INSTANCE;
 
+    @Override
+    public void close() throws IOException {
+        // noop
+    }
+
     /**
      * Returns -1 to indicate that the stream is closed.
      *
@@ -60,11 +65,6 @@ public class ClosedReader extends Reader {
     @Override
     public int read(final char[] cbuf, final int off, final int len) {
         return EOF;
-    }
-
-    @Override
-    public void close() throws IOException {
-        // noop
     }
 
 }

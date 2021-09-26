@@ -43,6 +43,16 @@ public class CircularBufferInputStream extends InputStream {
     private boolean eof;
 
     /**
+     * Creates a new instance, which filters the given input stream, and uses a reasonable default buffer size
+     * ({@link IOUtils#DEFAULT_BUFFER_SIZE}).
+     *
+     * @param inputStream The input stream, which is being buffered.
+     */
+    public CircularBufferInputStream(final InputStream inputStream) {
+        this(inputStream, IOUtils.DEFAULT_BUFFER_SIZE);
+    }
+
+    /**
      * Creates a new instance, which filters the given input stream, and uses the given buffer size.
      *
      * @param inputStream The input stream, which is being buffered.
@@ -58,14 +68,11 @@ public class CircularBufferInputStream extends InputStream {
         this.eof = false;
     }
 
-    /**
-     * Creates a new instance, which filters the given input stream, and uses a reasonable default buffer size
-     * ({@link IOUtils#DEFAULT_BUFFER_SIZE}).
-     *
-     * @param inputStream The input stream, which is being buffered.
-     */
-    public CircularBufferInputStream(final InputStream inputStream) {
-        this(inputStream, IOUtils.DEFAULT_BUFFER_SIZE);
+    @Override
+    public void close() throws IOException {
+        in.close();
+        eof = true;
+        buffer.clear();
     }
 
     /**
@@ -136,12 +143,5 @@ public class CircularBufferInputStream extends InputStream {
             targetBuffer[offset + i] = buffer.read();
         }
         return result;
-    }
-
-    @Override
-    public void close() throws IOException {
-        in.close();
-        eof = true;
-        buffer.clear();
     }
 }

@@ -42,6 +42,13 @@ public class BrokenWriter extends Writer {
     private final IOException exception;
 
     /**
+     * Creates a new writer that always throws an {@link IOException}
+     */
+    public BrokenWriter() {
+        this(new IOException("Broken writer"));
+    }
+
+    /**
      * Creates a new writer that always throws the given exception.
      *
      * @param exception the exception to be thrown
@@ -51,22 +58,12 @@ public class BrokenWriter extends Writer {
     }
 
     /**
-     * Creates a new writer that always throws an {@link IOException}
-     */
-    public BrokenWriter() {
-        this(new IOException("Broken writer"));
-    }
-
-    /**
      * Throws the configured exception.
      *
-     * @param cbuf ignored
-     * @param off ignored
-     * @param len ignored
      * @throws IOException always thrown
      */
     @Override
-    public void write(final char[] cbuf, final int off, final int len) throws IOException {
+    public void close() throws IOException {
         throw exception;
     }
 
@@ -83,10 +80,13 @@ public class BrokenWriter extends Writer {
     /**
      * Throws the configured exception.
      *
+     * @param cbuf ignored
+     * @param off ignored
+     * @param len ignored
      * @throws IOException always thrown
      */
     @Override
-    public void close() throws IOException {
+    public void write(final char[] cbuf, final int off, final int len) throws IOException {
         throw exception;
     }
 

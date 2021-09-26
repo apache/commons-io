@@ -31,66 +31,6 @@ import org.apache.commons.io.input.UnsynchronizedByteArrayInputStream;
 public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArrayOutputStream {
 
     /**
-     * Creates a new byte array output stream. The buffer capacity is initially
-     * {@value AbstractByteArrayOutputStream#DEFAULT_SIZE} bytes, though its size increases if necessary.
-     */
-    public UnsynchronizedByteArrayOutputStream() {
-        this(DEFAULT_SIZE);
-    }
-
-    /**
-     * Creates a new byte array output stream, with a buffer capacity of the specified size, in bytes.
-     *
-     * @param size the initial size
-     * @throws IllegalArgumentException if size is negative
-     */
-    public UnsynchronizedByteArrayOutputStream(final int size) {
-        if (size < 0) {
-            throw new IllegalArgumentException("Negative initial size: " + size);
-        }
-        needNewBuffer(size);
-    }
-
-    @Override
-    public void write(final byte[] b, final int off, final int len) {
-        if ((off < 0) || (off > b.length) || (len < 0) || ((off + len) > b.length) || ((off + len) < 0)) {
-            throw new IndexOutOfBoundsException(String.format("offset=%,d, length=%,d", off, len));
-        }
-        if (len == 0) {
-            return;
-        }
-        writeImpl(b, off, len);
-    }
-
-    @Override
-    public void write(final int b) {
-        writeImpl(b);
-    }
-
-    @Override
-    public int write(final InputStream in) throws IOException {
-        return writeImpl(in);
-    }
-
-    @Override
-    public int size() {
-        return count;
-    }
-
-    /**
-     * @see java.io.ByteArrayOutputStream#reset()
-     */
-    @Override
-    public void reset() {
-        resetImpl();
-    }
-
-    @Override
-    public void writeTo(final OutputStream out) throws IOException {
-        writeToImpl(out);
-    }
-
-    /**
      * Fetches entire contents of an {@code InputStream} and represent same data as result InputStream.
      * <p>
      * This method is useful where,
@@ -137,13 +77,73 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
         }
     }
 
+    /**
+     * Creates a new byte array output stream. The buffer capacity is initially
+     * {@value AbstractByteArrayOutputStream#DEFAULT_SIZE} bytes, though its size increases if necessary.
+     */
+    public UnsynchronizedByteArrayOutputStream() {
+        this(DEFAULT_SIZE);
+    }
+
+    /**
+     * Creates a new byte array output stream, with a buffer capacity of the specified size, in bytes.
+     *
+     * @param size the initial size
+     * @throws IllegalArgumentException if size is negative
+     */
+    public UnsynchronizedByteArrayOutputStream(final int size) {
+        if (size < 0) {
+            throw new IllegalArgumentException("Negative initial size: " + size);
+        }
+        needNewBuffer(size);
+    }
+
+    /**
+     * @see java.io.ByteArrayOutputStream#reset()
+     */
+    @Override
+    public void reset() {
+        resetImpl();
+    }
+
+    @Override
+    public int size() {
+        return count;
+    }
+
+    @Override
+    public byte[] toByteArray() {
+        return toByteArrayImpl();
+    }
+
     @Override
     public InputStream toInputStream() {
         return toInputStream(UnsynchronizedByteArrayInputStream::new);
     }
 
     @Override
-    public byte[] toByteArray() {
-        return toByteArrayImpl();
+    public void write(final byte[] b, final int off, final int len) {
+        if ((off < 0) || (off > b.length) || (len < 0) || ((off + len) > b.length) || ((off + len) < 0)) {
+            throw new IndexOutOfBoundsException(String.format("offset=%,d, length=%,d", off, len));
+        }
+        if (len == 0) {
+            return;
+        }
+        writeImpl(b, off, len);
+    }
+
+    @Override
+    public int write(final InputStream in) throws IOException {
+        return writeImpl(in);
+    }
+
+    @Override
+    public void write(final int b) {
+        writeImpl(b);
+    }
+
+    @Override
+    public void writeTo(final OutputStream out) throws IOException {
+        writeToImpl(out);
     }
 }

@@ -24,12 +24,16 @@ package org.apache.commons.io.input;
 public class TailerListenerAdapter implements TailerListener {
 
     /**
-     * The tailer will call this method during construction,
-     * giving the listener a method of stopping the tailer.
-     * @param tailer the tailer.
+     * Called each time the Tailer reaches the end of the file.
+     *
+     * <b>Note:</b> this is called from the tailer thread.
+     *
+     * Note: a future version of commons-io will pull this method up to the TailerListener interface,
+     * for now clients must subclass this class to use this feature.
+     *
+     * @since 2.5
      */
-    @Override
-    public void init(final Tailer tailer) {
+    public void endOfFileReached() {
         // noop
     }
 
@@ -53,15 +57,6 @@ public class TailerListenerAdapter implements TailerListener {
     }
 
     /**
-     * Handles a line from a Tailer.
-     * @param line the line.
-     */
-    @Override
-    public void handle(final String line) {
-        // noop
-    }
-
-    /**
      * Handles an Exception .
      * @param ex the exception.
      */
@@ -71,16 +66,21 @@ public class TailerListenerAdapter implements TailerListener {
     }
 
     /**
-     * Called each time the Tailer reaches the end of the file.
-     *
-     * <b>Note:</b> this is called from the tailer thread.
-     *
-     * Note: a future version of commons-io will pull this method up to the TailerListener interface,
-     * for now clients must subclass this class to use this feature.
-     *
-     * @since 2.5
+     * Handles a line from a Tailer.
+     * @param line the line.
      */
-    public void endOfFileReached() {
+    @Override
+    public void handle(final String line) {
+        // noop
+    }
+
+    /**
+     * The tailer will call this method during construction,
+     * giving the listener a method of stopping the tailer.
+     * @param tailer the tailer.
+     */
+    @Override
+    public void init(final Tailer tailer) {
         // noop
     }
 }

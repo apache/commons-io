@@ -141,28 +141,6 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * Checks to see if the file name matches one of the wildcards.
-     * @param file the file to check
-     *
-     * @return true if the file name matches one of the wildcards
-     * @since 2.9.0
-     */
-    @Override
-    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        if (Files.isDirectory(file)) {
-            return FileVisitResult.TERMINATE;
-        }
-
-        for (final String wildcard : wildcards) {
-            if (FilenameUtils.wildcardMatch(Objects.toString(file.getFileName(), null), wildcard)) {
-                return FileVisitResult.CONTINUE;
-            }
-        }
-
-        return FileVisitResult.TERMINATE;
-    }
-
-    /**
-     * Checks to see if the file name matches one of the wildcards.
      *
      * @param dir  the file directory
      * @param name  the file name
@@ -181,6 +159,28 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
         }
 
         return false;
+    }
+
+    /**
+     * Checks to see if the file name matches one of the wildcards.
+     * @param file the file to check
+     *
+     * @return true if the file name matches one of the wildcards
+     * @since 2.9.0
+     */
+    @Override
+    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
+        if (Files.isDirectory(file)) {
+            return FileVisitResult.TERMINATE;
+        }
+
+        for (final String wildcard : wildcards) {
+            if (FilenameUtils.wildcardMatch(Objects.toString(file.getFileName(), null), wildcard)) {
+                return FileVisitResult.CONTINUE;
+            }
+        }
+
+        return FileVisitResult.TERMINATE;
     }
 
 }

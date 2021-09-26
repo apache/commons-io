@@ -24,13 +24,6 @@ package org.apache.commons.io.input;
 public interface TailerListener {
 
     /**
-     * The tailer will call this method during construction,
-     * giving the listener a method of stopping the tailer.
-     * @param tailer the tailer.
-     */
-    void init(Tailer tailer);
-
-    /**
      * This method is called if the tailed file is not found.
      * <p>
      * <b>Note:</b> this is called from the tailer thread.
@@ -50,6 +43,15 @@ public interface TailerListener {
     void fileRotated();
 
     /**
+     * Handles an Exception.
+     * <p>
+     * <b>Note:</b> this is called from the tailer thread.
+     * </p>
+     * @param ex the exception.
+     */
+    void handle(Exception ex);
+
+    /**
      * Handles a line from a Tailer.
      * <p>
      * <b>Note:</b> this is called from the tailer thread.
@@ -59,12 +61,10 @@ public interface TailerListener {
     void handle(String line);
 
     /**
-     * Handles an Exception.
-     * <p>
-     * <b>Note:</b> this is called from the tailer thread.
-     * </p>
-     * @param ex the exception.
+     * The tailer will call this method during construction,
+     * giving the listener a method of stopping the tailer.
+     * @param tailer the tailer.
      */
-    void handle(Exception ex);
+    void init(Tailer tailer);
 
 }

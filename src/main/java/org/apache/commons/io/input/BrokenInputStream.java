@@ -42,15 +42,6 @@ public class BrokenInputStream extends InputStream {
     private final IOException exception;
 
     /**
-     * Creates a new stream that always throws the given exception.
-     *
-     * @param exception the exception to be thrown
-     */
-    public BrokenInputStream(final IOException exception) {
-        this.exception = exception;
-    }
-
-    /**
      * Creates a new stream that always throws an {@link IOException}
      */
     public BrokenInputStream() {
@@ -58,14 +49,12 @@ public class BrokenInputStream extends InputStream {
     }
 
     /**
-     * Throws the configured exception.
+     * Creates a new stream that always throws the given exception.
      *
-     * @return nothing
-     * @throws IOException always thrown
+     * @param exception the exception to be thrown
      */
-    @Override
-    public int read() throws IOException {
-        throw exception;
+    public BrokenInputStream(final IOException exception) {
+        this.exception = exception;
     }
 
     /**
@@ -82,12 +71,21 @@ public class BrokenInputStream extends InputStream {
     /**
      * Throws the configured exception.
      *
-     * @param n ignored
+     * @throws IOException always thrown
+     */
+    @Override
+    public void close() throws IOException {
+        throw exception;
+    }
+
+    /**
+     * Throws the configured exception.
+     *
      * @return nothing
      * @throws IOException always thrown
      */
     @Override
-    public long skip(final long n) throws IOException {
+    public int read() throws IOException {
         throw exception;
     }
 
@@ -104,10 +102,12 @@ public class BrokenInputStream extends InputStream {
     /**
      * Throws the configured exception.
      *
+     * @param n ignored
+     * @return nothing
      * @throws IOException always thrown
      */
     @Override
-    public void close() throws IOException {
+    public long skip(final long n) throws IOException {
         throw exception;
     }
 

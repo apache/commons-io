@@ -79,6 +79,17 @@ public class TaggedInputStream extends ProxyInputStream {
     }
 
     /**
+     * Tags any IOExceptions thrown, wrapping and re-throwing.
+     *
+     * @param e The IOException thrown
+     * @throws IOException if an I/O error occurs.
+     */
+    @Override
+    protected void handleIOException(final IOException e) throws IOException {
+        throw new TaggedIOException(e, tag);
+    }
+
+    /**
      * Tests if the given exception was caused by this stream.
      *
      * @param exception an exception
@@ -101,17 +112,6 @@ public class TaggedInputStream extends ProxyInputStream {
      */
     public void throwIfCauseOf(final Throwable throwable) throws IOException {
         TaggedIOException.throwCauseIfTaggedWith(throwable, tag);
-    }
-
-    /**
-     * Tags any IOExceptions thrown, wrapping and re-throwing.
-     *
-     * @param e The IOException thrown
-     * @throws IOException if an I/O error occurs.
-     */
-    @Override
-    protected void handleIOException(final IOException e) throws IOException {
-        throw new TaggedIOException(e, tag);
     }
 
 }

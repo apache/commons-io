@@ -60,6 +60,15 @@ public class TimestampedObserver extends Observer {
     }
 
     /**
+     * Gets the instant for when this instance was created.
+     *
+     * @return the instant for when this instance was created.
+     */
+    public Instant getOpenInstant() {
+        return openInstant;
+    }
+
+    /**
      * Gets the Duration between creation and close.
      *
      * @return the Duration between creation and close.
@@ -75,15 +84,6 @@ public class TimestampedObserver extends Observer {
      */
     public Duration getOpenToNowDuration() {
         return Duration.between(openInstant, Instant.now());
-    }
-
-    /**
-     * Gets the instant for when this instance was created.
-     *
-     * @return the instant for when this instance was created.
-     */
-    public Instant getOpenInstant() {
-        return openInstant;
     }
 
     @Override

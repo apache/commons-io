@@ -511,6 +511,22 @@ public class FilenameUtils {
     }
 
     /**
+     * Flips the Windows name separator to Linux and vice-versa.
+     *
+     * @param ch The Windows or Linux name separator.
+     * @return The Windows or Linux name separator.
+     */
+    static char flipSeparator(final char ch) {
+        if (ch == UNIX_NAME_SEPARATOR) {
+            return WINDOWS_NAME_SEPARATOR;
+        }
+        if (ch == WINDOWS_NAME_SEPARATOR) {
+            return UNIX_NAME_SEPARATOR;
+        }
+        throw new IllegalArgumentException(String.valueOf(ch));
+    }
+
+    /**
      * Special handling for NTFS ADS: Don't accept colon in the fileName.
      *
      * @param fileName a file name
@@ -1172,22 +1188,6 @@ public class FilenameUtils {
      */
     private static boolean isSeparator(final char ch) {
         return ch == UNIX_NAME_SEPARATOR || ch == WINDOWS_NAME_SEPARATOR;
-    }
-
-    /**
-     * Flips the Windows name separator to Linux and vice-versa.
-     *
-     * @param ch The Windows or Linux name separator.
-     * @return The Windows or Linux name separator.
-     */
-    static char flipSeparator(final char ch) {
-        if (ch == UNIX_NAME_SEPARATOR) {
-            return WINDOWS_NAME_SEPARATOR;
-        }
-        if (ch == WINDOWS_NAME_SEPARATOR) {
-            return UNIX_NAME_SEPARATOR;
-        }
-        throw new IllegalArgumentException(String.valueOf(ch));
     }
 
     /**

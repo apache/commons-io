@@ -46,17 +46,29 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
         }
 
         @Override
-        public void data(final int input) throws IOException {
-            messageDigest.update((byte) input);
+        public void data(final byte[] input, final int offset, final int length) throws IOException {
+            messageDigest.update(input, offset, length);
         }
 
         @Override
-        public void data(final byte[] input, final int offset, final int length) throws IOException {
-            messageDigest.update(input, offset, length);
+        public void data(final int input) throws IOException {
+            messageDigest.update((byte) input);
         }
     }
 
     private final MessageDigest messageDigest;
+
+    /**
+     * Creates a new instance, which calculates a signature on the given stream, using a {@link MessageDigest} with the
+     * "MD5" algorithm.
+     *
+     * @param inputStream the stream to calculate the message digest for
+     * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation for the specified
+     *         algorithm.
+     */
+    public MessageDigestCalculatingInputStream(final InputStream inputStream) throws NoSuchAlgorithmException {
+        this(inputStream, MessageDigest.getInstance("MD5"));
+    }
 
     /** Creates a new instance, which calculates a signature on the given stream,
      * using the given {@link MessageDigest}.
@@ -80,18 +92,6 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
     public MessageDigestCalculatingInputStream(final InputStream inputStream, final String algorithm)
         throws NoSuchAlgorithmException {
         this(inputStream, MessageDigest.getInstance(algorithm));
-    }
-
-    /**
-     * Creates a new instance, which calculates a signature on the given stream, using a {@link MessageDigest} with the
-     * "MD5" algorithm.
-     *
-     * @param inputStream the stream to calculate the message digest for
-     * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation for the specified
-     *         algorithm.
-     */
-    public MessageDigestCalculatingInputStream(final InputStream inputStream) throws NoSuchAlgorithmException {
-        this(inputStream, MessageDigest.getInstance("MD5"));
     }
 
     /** Returns the {@link MessageDigest}, which is being used for generating the

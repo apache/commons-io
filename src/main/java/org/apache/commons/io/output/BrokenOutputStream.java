@@ -37,6 +37,13 @@ public class BrokenOutputStream extends OutputStream {
     private final IOException exception;
 
     /**
+     * Creates a new stream that always throws an {@link IOException}
+     */
+    public BrokenOutputStream() {
+        this(new IOException("Broken output stream"));
+    }
+
+    /**
      * Creates a new stream that always throws the given exception.
      *
      * @param exception the exception to be thrown
@@ -46,20 +53,12 @@ public class BrokenOutputStream extends OutputStream {
     }
 
     /**
-     * Creates a new stream that always throws an {@link IOException}
-     */
-    public BrokenOutputStream() {
-        this(new IOException("Broken output stream"));
-    }
-
-    /**
      * Throws the configured exception.
      *
-     * @param b ignored
      * @throws IOException always thrown
      */
     @Override
-    public void write(final int b) throws IOException {
+    public void close() throws IOException {
         throw exception;
     }
 
@@ -76,10 +75,11 @@ public class BrokenOutputStream extends OutputStream {
     /**
      * Throws the configured exception.
      *
+     * @param b ignored
      * @throws IOException always thrown
      */
     @Override
-    public void close() throws IOException {
+    public void write(final int b) throws IOException {
         throw exception;
     }
 

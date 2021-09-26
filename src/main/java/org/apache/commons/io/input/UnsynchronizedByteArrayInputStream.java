@@ -118,6 +118,17 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
         return offset < eod ? eod - offset : 0;
     }
 
+    @SuppressWarnings("sync-override")
+    @Override
+    public void mark(final int readlimit) {
+        this.markedOffset = this.offset;
+    }
+
+    @Override
+    public boolean markSupported() {
+        return true;
+    }
+
     @Override
     public int read() {
         return offset < eod ? data[offset++] & 0xff : END_OF_STREAM;
@@ -152,6 +163,12 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
         return actualLen;
     }
 
+    @SuppressWarnings("sync-override")
+    @Override
+    public void reset() {
+        this.offset = this.markedOffset;
+    }
+
     @Override
     public long skip(final long n) {
         if (n < 0) {
@@ -165,22 +182,5 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
 
         offset += actualSkip;
         return actualSkip;
-    }
-
-    @Override
-    public boolean markSupported() {
-        return true;
-    }
-
-    @SuppressWarnings("sync-override")
-    @Override
-    public void mark(final int readlimit) {
-        this.markedOffset = this.offset;
-    }
-
-    @SuppressWarnings("sync-override")
-    @Override
-    public void reset() {
-        this.offset = this.markedOffset;
     }
 }

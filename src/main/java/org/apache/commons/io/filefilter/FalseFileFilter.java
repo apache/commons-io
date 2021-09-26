@@ -90,24 +90,24 @@ public class FalseFileFilter implements IOFileFilter, Serializable {
     }
 
     @Override
-    public IOFileFilter negate() {
-        return TrueFileFilter.INSTANCE;
-    }
-
-    @Override
-    public String toString() {
-        return TO_STRING;
-    }
-
-    @Override
     public IOFileFilter and(final IOFileFilter fileFilter) {
         // FALSE AND expression <=> FALSE
         return INSTANCE;
     }
 
     @Override
+    public IOFileFilter negate() {
+        return TrueFileFilter.INSTANCE;
+    }
+
+    @Override
     public IOFileFilter or(final IOFileFilter fileFilter) {
         // FALSE OR expression <=> expression
         return fileFilter;
+    }
+
+    @Override
+    public String toString() {
+        return TO_STRING;
     }
 }

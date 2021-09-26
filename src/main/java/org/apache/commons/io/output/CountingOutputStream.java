@@ -56,6 +56,20 @@ public class CountingOutputStream extends ProxyOutputStream {
     /**
      * The number of bytes that have passed through this stream.
      * <p>
+     * NOTE: This method is an alternative for {@code getCount()}.
+     * It was added because that method returns an integer which will
+     * result in incorrect count for files over 2GB.
+     *
+     * @return the number of bytes accumulated
+     * @since 1.3
+     */
+    public synchronized long getByteCount() {
+        return this.count;
+    }
+
+    /**
+     * The number of bytes that have passed through this stream.
+     * <p>
      * NOTE: From v1.3 this method throws an ArithmeticException if the
      * count is greater than can be expressed by an {@code int}.
      * See {@link #getByteCount()} for a method using a {@code long}.
@@ -74,6 +88,22 @@ public class CountingOutputStream extends ProxyOutputStream {
     /**
      * Set the byte count back to 0.
      * <p>
+     * NOTE: This method is an alternative for {@code resetCount()}.
+     * It was added because that method returns an integer which will
+     * result in incorrect count for files over 2GB.
+     *
+     * @return the count previous to resetting
+     * @since 1.3
+     */
+    public synchronized long resetByteCount() {
+        final long tmp = this.count;
+        this.count = 0;
+        return tmp;
+    }
+
+    /**
+     * Set the byte count back to 0.
+     * <p>
      * NOTE: From v1.3 this method throws an ArithmeticException if the
      * count is greater than can be expressed by an {@code int}.
      * See {@link #resetByteCount()} for a method using a {@code long}.
@@ -87,36 +117,6 @@ public class CountingOutputStream extends ProxyOutputStream {
             throw new ArithmeticException("The byte count " + result + " is too large to be converted to an int");
         }
         return (int) result;
-    }
-
-    /**
-     * The number of bytes that have passed through this stream.
-     * <p>
-     * NOTE: This method is an alternative for {@code getCount()}.
-     * It was added because that method returns an integer which will
-     * result in incorrect count for files over 2GB.
-     *
-     * @return the number of bytes accumulated
-     * @since 1.3
-     */
-    public synchronized long getByteCount() {
-        return this.count;
-    }
-
-    /**
-     * Set the byte count back to 0.
-     * <p>
-     * NOTE: This method is an alternative for {@code resetCount()}.
-     * It was added because that method returns an integer which will
-     * result in incorrect count for files over 2GB.
-     *
-     * @return the count previous to resetting
-     * @since 1.3
-     */
-    public synchronized long resetByteCount() {
-        final long tmp = this.count;
-        this.count = 0;
-        return tmp;
     }
 
 }

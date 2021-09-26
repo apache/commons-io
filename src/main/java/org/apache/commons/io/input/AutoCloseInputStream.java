@@ -48,6 +48,20 @@ public class AutoCloseInputStream extends ProxyInputStream {
     }
 
     /**
+     * Automatically closes the stream if the end of stream was reached.
+     *
+     * @param n number of bytes read, or -1 if no more bytes are available
+     * @throws IOException if the stream could not be closed
+     * @since 2.0
+     */
+    @Override
+    protected void afterRead(final int n) throws IOException {
+        if (n == EOF) {
+            close();
+        }
+    }
+
+    /**
      * Closes the underlying input stream and replaces the reference to it
      * with a {@link ClosedInputStream} instance.
      * <p>
@@ -64,20 +78,6 @@ public class AutoCloseInputStream extends ProxyInputStream {
     public void close() throws IOException {
         in.close();
         in = ClosedInputStream.INSTANCE;
-    }
-
-    /**
-     * Automatically closes the stream if the end of stream was reached.
-     *
-     * @param n number of bytes read, or -1 if no more bytes are available
-     * @throws IOException if the stream could not be closed
-     * @since 2.0
-     */
-    @Override
-    protected void afterRead(final int n) throws IOException {
-        if (n == EOF) {
-            close();
-        }
     }
 
     /**

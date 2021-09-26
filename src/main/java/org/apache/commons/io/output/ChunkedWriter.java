@@ -40,6 +40,14 @@ public class ChunkedWriter extends FilterWriter {
     private final int chunkSize;
 
     /**
+     * Creates a new writer that uses a chunk size of {@link #DEFAULT_CHUNK_SIZE}
+     * @param writer the writer to wrap
+     */
+    public ChunkedWriter(final Writer writer) {
+        this(writer, DEFAULT_CHUNK_SIZE);
+    }
+
+    /**
      * Creates a new writer that uses the specified chunk size.
      *
      * @param writer the writer to wrap
@@ -52,14 +60,6 @@ public class ChunkedWriter extends FilterWriter {
            throw new IllegalArgumentException();
        }
        this.chunkSize = chunkSize;
-    }
-
-    /**
-     * Creates a new writer that uses a chunk size of {@link #DEFAULT_CHUNK_SIZE}
-     * @param writer the writer to wrap
-     */
-    public ChunkedWriter(final Writer writer) {
-        this(writer, DEFAULT_CHUNK_SIZE);
     }
 
     /**

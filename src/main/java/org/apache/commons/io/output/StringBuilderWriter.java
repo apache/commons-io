@@ -119,15 +119,22 @@ public class StringBuilderWriter extends Writer implements Serializable {
 
 
     /**
-     * Writes a String to the {@link StringBuilder}.
+     * Returns the underlying builder.
      *
-     * @param value The value to write
+     * @return The underlying builder
+     */
+    public StringBuilder getBuilder() {
+        return builder;
+    }
+
+    /**
+     * Returns {@link StringBuilder#toString()}.
+     *
+     * @return The contents of the String builder.
      */
     @Override
-    public void write(final String value) {
-        if (value != null) {
-            builder.append(value);
-        }
+    public String toString() {
+        return builder.toString();
     }
 
     /**
@@ -145,21 +152,14 @@ public class StringBuilderWriter extends Writer implements Serializable {
     }
 
     /**
-     * Returns the underlying builder.
+     * Writes a String to the {@link StringBuilder}.
      *
-     * @return The underlying builder
-     */
-    public StringBuilder getBuilder() {
-        return builder;
-    }
-
-    /**
-     * Returns {@link StringBuilder#toString()}.
-     *
-     * @return The contents of the String builder.
+     * @param value The value to write
      */
     @Override
-    public String toString() {
-        return builder.toString();
+    public void write(final String value) {
+        if (value != null) {
+            builder.append(value);
+        }
     }
 }

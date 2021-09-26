@@ -79,10 +79,6 @@ import org.apache.commons.io.filefilter.IOFileFilter;
  */
 public final class PathUtils {
 
-    private static final OpenOption[] OPEN_OPTIONS_TRUNCATE = new OpenOption[] {StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING};
-
-    private static final OpenOption[] OPEN_OPTIONS_APPEND = new OpenOption[] {StandardOpenOption.CREATE, StandardOpenOption.APPEND};
-
     /**
      * Private worker/holder that computes and tracks relative path names and their equality. We reuse the sorted relative
      * lists when comparing directories.
@@ -144,6 +140,10 @@ public final class PathUtils {
             relativeFileList2 = tmpRelativeFileList2;
         }
     }
+
+    private static final OpenOption[] OPEN_OPTIONS_TRUNCATE = new OpenOption[] {StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING};
+
+    private static final OpenOption[] OPEN_OPTIONS_APPEND = new OpenOption[] {StandardOpenOption.CREATE, StandardOpenOption.APPEND};
 
     /**
      * Empty {@link CopyOption} array.

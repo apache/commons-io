@@ -135,12 +135,12 @@ public class CharSequenceReader extends Reader implements Serializable {
     }
 
     /**
-     * Returns the index in the character sequence to start reading from, taking into account its length.
-     *
-     * @return The start index in the character sequence (inclusive).
+     * Close resets the file back to the start and removes any marked position.
      */
-    private int start() {
-        return Math.min(charSequence.length(), start);
+    @Override
+    public void close() {
+        idx = start;
+        mark = start;
     }
 
     /**
@@ -154,25 +154,6 @@ public class CharSequenceReader extends Reader implements Serializable {
          * Use Integer.MAX_VALUE to get the same behavior as before - use the entire CharSequence.
          */
         return Math.min(charSequence.length(), end == null ? Integer.MAX_VALUE : end);
-    }
-
-    /**
-     * Close resets the file back to the start and removes any marked position.
-     */
-    @Override
-    public void close() {
-        idx = start;
-        mark = start;
-    }
-
-    /**
-     * Tells whether this stream is ready to be read.
-     *
-     * @return {@code true} if more characters from the character sequence are available, or {@code false} otherwise.
-     */
-    @Override
-    public boolean ready() {
-        return idx < end();
     }
 
     /**
@@ -261,6 +242,16 @@ public class CharSequenceReader extends Reader implements Serializable {
     }
 
     /**
+     * Tells whether this stream is ready to be read.
+     *
+     * @return {@code true} if more characters from the character sequence are available, or {@code false} otherwise.
+     */
+    @Override
+    public boolean ready() {
+        return idx < end();
+    }
+
+    /**
      * Reset the reader to the last marked position (or the beginning if
      * mark has not been called).
      */
@@ -288,6 +279,15 @@ public class CharSequenceReader extends Reader implements Serializable {
         final int count = dest - idx;
         idx = dest;
         return count;
+    }
+
+    /**
+     * Returns the index in the character sequence to start reading from, taking into account its length.
+     *
+     * @return The start index in the character sequence (inclusive).
+     */
+    private int start() {
+        return Math.min(charSequence.length(), start);
     }
 
     /**

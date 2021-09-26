@@ -51,10 +51,23 @@ public class LineIterator implements Iterator<String>, Closeable {
 
     // N.B. This class deliberately does not implement Iterable, see https://issues.apache.org/jira/browse/IO-181
 
+    /**
+     * Closes a {@code LineIterator} quietly.
+     *
+     * @param iterator The iterator to close, or {@code null}.
+     * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
+     * suppressed exceptions manually.
+     * @see Throwable#addSuppressed(java.lang.Throwable)
+     */
+    @Deprecated
+    public static void closeQuietly(final LineIterator iterator) {
+        IOUtils.closeQuietly(iterator);
+    }
     /** The reader that is being read. */
     private final BufferedReader bufferedReader;
     /** The current line. */
     private String cachedLine;
+
     /** A flag indicating if the iterator has been fully read. */
     private boolean finished;
 
@@ -73,6 +86,22 @@ public class LineIterator implements Iterator<String>, Closeable {
         } else {
             bufferedReader = new BufferedReader(reader);
         }
+    }
+
+    /**
+     * Closes the underlying {@code Reader}.
+     * This method is useful if you only want to process the first few
+     * lines of a larger file. If you do not close the iterator
+     * then the {@code Reader} remains open.
+     * This method can safely be called multiple times.
+     *
+     * @throws IOException if closing the underlying {@code Reader} fails.
+     */
+    @Override
+    public void close() throws IOException {
+        finished = true;
+        cachedLine = null;
+        IOUtils.close(bufferedReader);
     }
 
     /**
@@ -146,22 +175,6 @@ public class LineIterator implements Iterator<String>, Closeable {
     }
 
     /**
-     * Closes the underlying {@code Reader}.
-     * This method is useful if you only want to process the first few
-     * lines of a larger file. If you do not close the iterator
-     * then the {@code Reader} remains open.
-     * This method can safely be called multiple times.
-     *
-     * @throws IOException if closing the underlying {@code Reader} fails.
-     */
-    @Override
-    public void close() throws IOException {
-        finished = true;
-        cachedLine = null;
-        IOUtils.close(bufferedReader);
-    }
-
-    /**
      * Unsupported.
      *
      * @throws UnsupportedOperationException always
@@ -169,19 +182,6 @@ public class LineIterator implements Iterator<String>, Closeable {
     @Override
     public void remove() {
         throw new UnsupportedOperationException("remove not supported");
-    }
-
-    /**
-     * Closes a {@code LineIterator} quietly.
-     *
-     * @param iterator The iterator to close, or {@code null}.
-     * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
-     * suppressed exceptions manually.
-     * @see Throwable#addSuppressed(java.lang.Throwable)
-     */
-    @Deprecated
-    public static void closeQuietly(final LineIterator iterator) {
-        IOUtils.closeQuietly(iterator);
     }
 
 }

@@ -41,6 +41,26 @@ public class ProxyWriter extends FilterWriter {
     }
 
     /**
+     * Invoked by the write methods after the proxied call has returned
+     * successfully. The number of chars written (1 for the
+     * {@link #write(int)} method, buffer length for {@link #write(char[])},
+     * etc.) is given as an argument.
+     * <p>
+     * Subclasses can override this method to add common post-processing
+     * functionality without having to override all the write methods.
+     * The default implementation does nothing.
+     * </p>
+     *
+     * @since 2.0
+     * @param n number of chars written
+     * @throws IOException if the post-processing fails
+     */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
+    protected void afterWrite(final int n) throws IOException {
+        // noop
+    }
+
+    /**
      * Invokes the delegate's {@code append(char)} method.
      * @param c The character to write
      * @return this writer
@@ -53,6 +73,26 @@ public class ProxyWriter extends FilterWriter {
             beforeWrite(1);
             out.append(c);
             afterWrite(1);
+        } catch (final IOException e) {
+            handleIOException(e);
+        }
+        return this;
+    }
+
+    /**
+     * Invokes the delegate's {@code append(CharSequence)} method.
+     * @param csq The character sequence to write
+     * @return this writer
+     * @throws IOException if an I/O error occurs.
+     * @since 2.0
+     */
+    @Override
+    public Writer append(final CharSequence csq) throws IOException {
+        try {
+            final int len = IOUtils.length(csq);
+            beforeWrite(len);
+            out.append(csq);
+            afterWrite(len);
         } catch (final IOException e) {
             handleIOException(e);
         }
@@ -81,39 +121,59 @@ public class ProxyWriter extends FilterWriter {
     }
 
     /**
-     * Invokes the delegate's {@code append(CharSequence)} method.
-     * @param csq The character sequence to write
-     * @return this writer
-     * @throws IOException if an I/O error occurs.
+     * Invoked by the write methods before the call is proxied. The number
+     * of chars to be written (1 for the {@link #write(int)} method, buffer
+     * length for {@link #write(char[])}, etc.) is given as an argument.
+     * <p>
+     * Subclasses can override this method to add common pre-processing
+     * functionality without having to override all the write methods.
+     * The default implementation does nothing.
+     * </p>
+     *
      * @since 2.0
+     * @param n number of chars to be written
+     * @throws IOException if the pre-processing fails
      */
-    @Override
-    public Writer append(final CharSequence csq) throws IOException {
-        try {
-            final int len = IOUtils.length(csq);
-            beforeWrite(len);
-            out.append(csq);
-            afterWrite(len);
-        } catch (final IOException e) {
-            handleIOException(e);
-        }
-        return this;
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
+    protected void beforeWrite(final int n) throws IOException {
+        // noop
     }
 
     /**
-     * Invokes the delegate's {@code write(int)} method.
-     * @param c the character to write
+     * Invokes the delegate's {@code close()} method.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void write(final int c) throws IOException {
+    public void close() throws IOException {
+        IOUtils.close(out, this::handleIOException);
+    }
+
+    /**
+     * Invokes the delegate's {@code flush()} method.
+     * @throws IOException if an I/O error occurs.
+     */
+    @Override
+    public void flush() throws IOException {
         try {
-            beforeWrite(1);
-            out.write(c);
-            afterWrite(1);
+            out.flush();
         } catch (final IOException e) {
             handleIOException(e);
         }
+    }
+
+    /**
+     * Handle any IOExceptions thrown.
+     * <p>
+     * This method provides a point to implement custom exception
+     * handling. The default behavior is to re-throw the exception.
+     * </p>
+     *
+     * @param e The IOException thrown
+     * @throws IOException if an I/O error occurs.
+     * @since 2.0
+     */
+    protected void handleIOException(final IOException e) throws IOException {
+        throw e;
     }
 
     /**
@@ -152,6 +212,22 @@ public class ProxyWriter extends FilterWriter {
     }
 
     /**
+     * Invokes the delegate's {@code write(int)} method.
+     * @param c the character to write
+     * @throws IOException if an I/O error occurs.
+     */
+    @Override
+    public void write(final int c) throws IOException {
+        try {
+            beforeWrite(1);
+            out.write(c);
+            afterWrite(1);
+        } catch (final IOException e) {
+            handleIOException(e);
+        }
+    }
+
+    /**
      * Invokes the delegate's {@code write(String)} method.
      * @param str the string to write
      * @throws IOException if an I/O error occurs.
@@ -184,82 +260,6 @@ public class ProxyWriter extends FilterWriter {
         } catch (final IOException e) {
             handleIOException(e);
         }
-    }
-
-    /**
-     * Invokes the delegate's {@code flush()} method.
-     * @throws IOException if an I/O error occurs.
-     */
-    @Override
-    public void flush() throws IOException {
-        try {
-            out.flush();
-        } catch (final IOException e) {
-            handleIOException(e);
-        }
-    }
-
-    /**
-     * Invokes the delegate's {@code close()} method.
-     * @throws IOException if an I/O error occurs.
-     */
-    @Override
-    public void close() throws IOException {
-        IOUtils.close(out, this::handleIOException);
-    }
-
-    /**
-     * Invoked by the write methods before the call is proxied. The number
-     * of chars to be written (1 for the {@link #write(int)} method, buffer
-     * length for {@link #write(char[])}, etc.) is given as an argument.
-     * <p>
-     * Subclasses can override this method to add common pre-processing
-     * functionality without having to override all the write methods.
-     * The default implementation does nothing.
-     * </p>
-     *
-     * @since 2.0
-     * @param n number of chars to be written
-     * @throws IOException if the pre-processing fails
-     */
-    @SuppressWarnings("unused") // Possibly thrown from subclasses.
-    protected void beforeWrite(final int n) throws IOException {
-        // noop
-    }
-
-    /**
-     * Invoked by the write methods after the proxied call has returned
-     * successfully. The number of chars written (1 for the
-     * {@link #write(int)} method, buffer length for {@link #write(char[])},
-     * etc.) is given as an argument.
-     * <p>
-     * Subclasses can override this method to add common post-processing
-     * functionality without having to override all the write methods.
-     * The default implementation does nothing.
-     * </p>
-     *
-     * @since 2.0
-     * @param n number of chars written
-     * @throws IOException if the post-processing fails
-     */
-    @SuppressWarnings("unused") // Possibly thrown from subclasses.
-    protected void afterWrite(final int n) throws IOException {
-        // noop
-    }
-
-    /**
-     * Handle any IOExceptions thrown.
-     * <p>
-     * This method provides a point to implement custom exception
-     * handling. The default behavior is to re-throw the exception.
-     * </p>
-     *
-     * @param e The IOException thrown
-     * @throws IOException if an I/O error occurs.
-     * @since 2.0
-     */
-    protected void handleIOException(final IOException e) throws IOException {
-        throw e;
     }
 
 }

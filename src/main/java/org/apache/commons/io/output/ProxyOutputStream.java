@@ -46,19 +46,75 @@ public class ProxyOutputStream extends FilterOutputStream {
     }
 
     /**
-     * Invokes the delegate's {@code write(int)} method.
-     * @param idx the byte to write
+     * Invoked by the write methods after the proxied call has returned
+     * successfully. The number of bytes written (1 for the
+     * {@link #write(int)} method, buffer length for {@link #write(byte[])},
+     * etc.) is given as an argument.
+     * <p>
+     * Subclasses can override this method to add common post-processing
+     * functionality without having to override all the write methods.
+     * The default implementation does nothing.
+     *
+     * @since 2.0
+     * @param n number of bytes written
+     * @throws IOException if the post-processing fails
+     */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
+    protected void afterWrite(final int n) throws IOException {
+        // noop
+    }
+
+    /**
+     * Invoked by the write methods before the call is proxied. The number
+     * of bytes to be written (1 for the {@link #write(int)} method, buffer
+     * length for {@link #write(byte[])}, etc.) is given as an argument.
+     * <p>
+     * Subclasses can override this method to add common pre-processing
+     * functionality without having to override all the write methods.
+     * The default implementation does nothing.
+     *
+     * @since 2.0
+     * @param n number of bytes to be written
+     * @throws IOException if the pre-processing fails
+     */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
+    protected void beforeWrite(final int n) throws IOException {
+        // noop
+    }
+
+    /**
+     * Invokes the delegate's {@code close()} method.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void write(final int idx) throws IOException {
+    public void close() throws IOException {
+        IOUtils.close(out, this::handleIOException);
+    }
+
+    /**
+     * Invokes the delegate's {@code flush()} method.
+     * @throws IOException if an I/O error occurs.
+     */
+    @Override
+    public void flush() throws IOException {
         try {
-            beforeWrite(1);
-            out.write(idx);
-            afterWrite(1);
+            out.flush();
         } catch (final IOException e) {
             handleIOException(e);
         }
+    }
+
+    /**
+     * Handle any IOExceptions thrown.
+     * <p>
+     * This method provides a point to implement custom exception
+     * handling. The default behavior is to re-throw the exception.
+     * @param e The IOException thrown
+     * @throws IOException if an I/O error occurs.
+     * @since 2.0
+     */
+    protected void handleIOException(final IOException e) throws IOException {
+        throw e;
     }
 
     /**
@@ -97,75 +153,19 @@ public class ProxyOutputStream extends FilterOutputStream {
     }
 
     /**
-     * Invokes the delegate's {@code flush()} method.
+     * Invokes the delegate's {@code write(int)} method.
+     * @param idx the byte to write
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void flush() throws IOException {
+    public void write(final int idx) throws IOException {
         try {
-            out.flush();
+            beforeWrite(1);
+            out.write(idx);
+            afterWrite(1);
         } catch (final IOException e) {
             handleIOException(e);
         }
-    }
-
-    /**
-     * Invokes the delegate's {@code close()} method.
-     * @throws IOException if an I/O error occurs.
-     */
-    @Override
-    public void close() throws IOException {
-        IOUtils.close(out, this::handleIOException);
-    }
-
-    /**
-     * Invoked by the write methods before the call is proxied. The number
-     * of bytes to be written (1 for the {@link #write(int)} method, buffer
-     * length for {@link #write(byte[])}, etc.) is given as an argument.
-     * <p>
-     * Subclasses can override this method to add common pre-processing
-     * functionality without having to override all the write methods.
-     * The default implementation does nothing.
-     *
-     * @since 2.0
-     * @param n number of bytes to be written
-     * @throws IOException if the pre-processing fails
-     */
-    @SuppressWarnings("unused") // Possibly thrown from subclasses.
-    protected void beforeWrite(final int n) throws IOException {
-        // noop
-    }
-
-    /**
-     * Invoked by the write methods after the proxied call has returned
-     * successfully. The number of bytes written (1 for the
-     * {@link #write(int)} method, buffer length for {@link #write(byte[])},
-     * etc.) is given as an argument.
-     * <p>
-     * Subclasses can override this method to add common post-processing
-     * functionality without having to override all the write methods.
-     * The default implementation does nothing.
-     *
-     * @since 2.0
-     * @param n number of bytes written
-     * @throws IOException if the post-processing fails
-     */
-    @SuppressWarnings("unused") // Possibly thrown from subclasses.
-    protected void afterWrite(final int n) throws IOException {
-        // noop
-    }
-
-    /**
-     * Handle any IOExceptions thrown.
-     * <p>
-     * This method provides a point to implement custom exception
-     * handling. The default behavior is to re-throw the exception.
-     * @param e The IOException thrown
-     * @throws IOException if an I/O error occurs.
-     * @since 2.0
-     */
-    protected void handleIOException(final IOException e) throws IOException {
-        throw e;
     }
 
 }

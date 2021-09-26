@@ -31,15 +31,6 @@ final class RegexpClassNameMatcher implements ClassNameMatcher {
     private final Pattern pattern; // Class is thread-safe
 
     /**
-     * Constructs an object based on the specified regular expression.
-     *
-     * @param regex a regular expression for evaluating acceptable class names
-     */
-    public RegexpClassNameMatcher(final String regex) {
-        this(Pattern.compile(regex));
-    }
-
-    /**
      * Constructs an object based on the specified pattern.
      *
      * @param pattern a pattern for evaluating acceptable class names
@@ -50,6 +41,15 @@ final class RegexpClassNameMatcher implements ClassNameMatcher {
             throw new IllegalArgumentException("Null pattern");
         }
         this.pattern = pattern;
+    }
+
+    /**
+     * Constructs an object based on the specified regular expression.
+     *
+     * @param regex a regular expression for evaluating acceptable class names
+     */
+    public RegexpClassNameMatcher(final String regex) {
+        this(Pattern.compile(regex));
     }
 
     @Override

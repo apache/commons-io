@@ -29,11 +29,11 @@ import java.io.File;
 public interface FileAlterationListener {
 
     /**
-     * File system observer started checking event.
+     * Directory changed Event.
      *
-     * @param observer The file system observer
+     * @param directory The directory changed
      */
-    void onStart(final FileAlterationObserver observer);
+    void onDirectoryChange(final File directory);
 
     /**
      * Directory created Event.
@@ -43,25 +43,11 @@ public interface FileAlterationListener {
     void onDirectoryCreate(final File directory);
 
     /**
-     * Directory changed Event.
-     *
-     * @param directory The directory changed
-     */
-    void onDirectoryChange(final File directory);
-
-    /**
      * Directory deleted Event.
      *
      * @param directory The directory deleted
      */
     void onDirectoryDelete(final File directory);
-
-    /**
-     * File created Event.
-     *
-     * @param file The file created
-     */
-    void onFileCreate(final File file);
 
     /**
      * File changed Event.
@@ -71,11 +57,25 @@ public interface FileAlterationListener {
     void onFileChange(final File file);
 
     /**
+     * File created Event.
+     *
+     * @param file The file created
+     */
+    void onFileCreate(final File file);
+
+    /**
      * File deleted Event.
      *
      * @param file The file deleted
      */
     void onFileDelete(final File file);
+
+    /**
+     * File system observer started checking event.
+     *
+     * @param observer The file system observer
+     */
+    void onStart(final FileAlterationObserver observer);
 
     /**
      * File system observer finished checking event.

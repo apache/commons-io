@@ -119,6 +119,23 @@ public class TeeInputStream extends ProxyInputStream {
      * to the associated output stream.
      *
      * @param bts byte buffer
+     * @return number of bytes read, or -1 if the stream has ended
+     * @throws IOException if the stream could not be read (or written)
+     */
+    @Override
+    public int read(final byte[] bts) throws IOException {
+        final int n = super.read(bts);
+        if (n != EOF) {
+            branch.write(bts, 0, n);
+        }
+        return n;
+    }
+
+    /**
+     * Reads bytes from the proxied input stream and writes the read bytes
+     * to the associated output stream.
+     *
+     * @param bts byte buffer
      * @param st start offset within the buffer
      * @param end maximum number of bytes to read
      * @return number of bytes read, or -1 if the stream has ended
@@ -129,23 +146,6 @@ public class TeeInputStream extends ProxyInputStream {
         final int n = super.read(bts, st, end);
         if (n != EOF) {
             branch.write(bts, st, n);
-        }
-        return n;
-    }
-
-    /**
-     * Reads bytes from the proxied input stream and writes the read bytes
-     * to the associated output stream.
-     *
-     * @param bts byte buffer
-     * @return number of bytes read, or -1 if the stream has ended
-     * @throws IOException if the stream could not be read (or written)
-     */
-    @Override
-    public int read(final byte[] bts) throws IOException {
-        final int n = super.read(bts);
-        if (n != EOF) {
-            branch.write(bts, 0, n);
         }
         return n;
     }

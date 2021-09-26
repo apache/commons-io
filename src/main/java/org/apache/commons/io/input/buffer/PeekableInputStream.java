@@ -27,6 +27,15 @@ import java.util.Objects;
 public class PeekableInputStream extends CircularBufferInputStream {
 
     /**
+     * Creates a new instance, which filters the given input stream, and uses a reasonable default buffer size (8192).
+     *
+     * @param inputStream The input stream, which is being buffered.
+     */
+    public PeekableInputStream(final InputStream inputStream) {
+        super(inputStream);
+    }
+
+    /**
      * Creates a new instance, which filters the given input stream, and uses the given buffer size.
      *
      * @param inputStream The input stream, which is being buffered.
@@ -34,15 +43,6 @@ public class PeekableInputStream extends CircularBufferInputStream {
      */
     public PeekableInputStream(final InputStream inputStream, final int bufferSize) {
         super(inputStream, bufferSize);
-    }
-
-    /**
-     * Creates a new instance, which filters the given input stream, and uses a reasonable default buffer size (8192).
-     *
-     * @param inputStream The input stream, which is being buffered.
-     */
-    public PeekableInputStream(final InputStream inputStream) {
-        super(inputStream);
     }
 
     /**

@@ -54,19 +54,41 @@ public class WindowsLineEndingInputStream  extends InputStream {
     }
 
     /**
-     * Reads the next item from the target, updating internal flags in the process
-     * @return the next int read from the target stream
+     * Closes the stream. Also closes the underlying stream.
      * @throws IOException upon error
      */
-    private int readWithUpdate() throws IOException {
-        final int target = this.target.read();
-        eofSeen = target == EOF;
-        if (eofSeen) {
-            return target;
+    @Override
+    public void close() throws IOException {
+        super.close();
+        target.close();
+    }
+
+    /**
+     * Handles the EOF-handling at the end of the stream
+     * @return The next char to output to the stream
+     */
+    private int eofGame() {
+        if (!ensureLineFeedAtEndOfFile) {
+            return EOF;
         }
-        slashRSeen = target == CR;
-        slashNSeen = target == LF;
-        return target;
+        if (!slashNSeen && !slashRSeen) {
+            slashRSeen = true;
+            return CR;
+        }
+        if (!slashNSeen) {
+            slashRSeen = false;
+            slashNSeen = true;
+            return LF;
+        }
+        return EOF;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public synchronized void mark(final int readlimit) {
+        throw UnsupportedOperationExceptions.mark();
     }
 
     /**
@@ -94,40 +116,18 @@ public class WindowsLineEndingInputStream  extends InputStream {
     }
 
     /**
-     * Handles the EOF-handling at the end of the stream
-     * @return The next char to output to the stream
-     */
-    private int eofGame() {
-        if (!ensureLineFeedAtEndOfFile) {
-            return EOF;
-        }
-        if (!slashNSeen && !slashRSeen) {
-            slashRSeen = true;
-            return CR;
-        }
-        if (!slashNSeen) {
-            slashRSeen = false;
-            slashNSeen = true;
-            return LF;
-        }
-        return EOF;
-    }
-
-    /**
-     * Closes the stream. Also closes the underlying stream.
+     * Reads the next item from the target, updating internal flags in the process
+     * @return the next int read from the target stream
      * @throws IOException upon error
      */
-    @Override
-    public void close() throws IOException {
-        super.close();
-        target.close();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized void mark(final int readlimit) {
-        throw UnsupportedOperationExceptions.mark();
+    private int readWithUpdate() throws IOException {
+        final int target = this.target.read();
+        eofSeen = target == EOF;
+        if (eofSeen) {
+            return target;
+        }
+        slashRSeen = target == CR;
+        slashNSeen = target == LF;
+        return target;
     }
 }

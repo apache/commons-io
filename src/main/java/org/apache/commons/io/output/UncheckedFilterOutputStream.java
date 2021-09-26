@@ -64,10 +64,6 @@ public class UncheckedFilterOutputStream extends FilterOutputStream {
         }
     }
 
-    private void uncheck(final IOException e) {
-        throw new UncheckedIOException(e);
-    }
-
     /**
      * Calls this method's super and rethrow {@link IOException} as {@link UncheckedIOException}.
      */
@@ -78,6 +74,10 @@ public class UncheckedFilterOutputStream extends FilterOutputStream {
         } catch (final IOException e) {
             uncheck(e);
         }
+    }
+
+    private void uncheck(final IOException e) {
+        throw new UncheckedIOException(e);
     }
 
     /**

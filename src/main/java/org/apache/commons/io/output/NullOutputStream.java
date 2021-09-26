@@ -28,17 +28,6 @@ import java.io.OutputStream;
 public class NullOutputStream extends OutputStream {
 
     /**
-     * Deprecated in favor of {@link #NULL_OUTPUT_STREAM}.
-     *
-     * TODO: Will be private in 3.0.
-     *
-     * @deprecated Use {@link #NULL_OUTPUT_STREAM}.
-     */
-    @Deprecated
-    public NullOutputStream() {
-    }
-
-    /**
      * The singleton instance.
      *
      * @since 2.12.0
@@ -52,6 +41,28 @@ public class NullOutputStream extends OutputStream {
      */
     @Deprecated
     public static final NullOutputStream NULL_OUTPUT_STREAM = INSTANCE;
+
+    /**
+     * Deprecated in favor of {@link #NULL_OUTPUT_STREAM}.
+     *
+     * TODO: Will be private in 3.0.
+     *
+     * @deprecated Use {@link #NULL_OUTPUT_STREAM}.
+     */
+    @Deprecated
+    public NullOutputStream() {
+    }
+
+    /**
+     * Does nothing - output to {@code /dev/null}.
+     *
+     * @param b The bytes to write
+     * @throws IOException never
+     */
+    @Override
+    public void write(final byte[] b) throws IOException {
+        // To /dev/null
+    }
 
     /**
      * Does nothing - output to {@code /dev/null}.
@@ -72,17 +83,6 @@ public class NullOutputStream extends OutputStream {
      */
     @Override
     public void write(final int b) {
-        // To /dev/null
-    }
-
-    /**
-     * Does nothing - output to {@code /dev/null}.
-     *
-     * @param b The bytes to write
-     * @throws IOException never
-     */
-    @Override
-    public void write(final byte[] b) throws IOException {
         // To /dev/null
     }
 

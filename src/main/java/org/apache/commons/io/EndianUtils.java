@@ -40,21 +40,231 @@ import java.io.OutputStream;
 public class EndianUtils {
 
     /**
-     * Instances should NOT be constructed in standard programming.
+     * Reads the next byte from the input stream.
+     * @param input  the stream
+     * @return the byte
+     * @throws IOException if the end of file is reached
      */
-    public EndianUtils() {
+    private static int read(final InputStream input) throws IOException {
+        final int value = input.read();
+
+        if (EOF == value) {
+            throw new EOFException("Unexpected EOF reached");
+        }
+
+        return value;
     }
 
     // ========================================== Swapping routines
 
     /**
-     * Converts a "short" value between endian systems.
+     * Reads a "double" value from a byte array at a given offset. The value is
+     * converted to the opposed endian system while reading.
+     * @param data source byte array
+     * @param offset starting offset in the byte array
+     * @return the value read
+     */
+    public static double readSwappedDouble(final byte[] data, final int offset) {
+        return Double.longBitsToDouble( readSwappedLong( data, offset ) );
+    }
+
+    /**
+     * Reads a "double" value from an InputStream. The value is
+     * converted to the opposed endian system while reading.
+     * @param input source InputStream
+     * @return the value just read
+     * @throws IOException in case of an I/O problem
+     */
+    public static double readSwappedDouble(final InputStream input) throws IOException {
+        return Double.longBitsToDouble(readSwappedLong(input));
+    }
+
+    /**
+     * Reads a "float" value from a byte array at a given offset. The value is
+     * converted to the opposed endian system while reading.
+     * @param data source byte array
+     * @param offset starting offset in the byte array
+     * @return the value read
+     */
+    public static float readSwappedFloat(final byte[] data, final int offset) {
+        return Float.intBitsToFloat( readSwappedInteger( data, offset ) );
+    }
+
+    /**
+     * Reads a "float" value from an InputStream. The value is
+     * converted to the opposed endian system while reading.
+     * @param input source InputStream
+     * @return the value just read
+     * @throws IOException in case of an I/O problem
+     */
+    public static float readSwappedFloat(final InputStream input) throws IOException {
+        return Float.intBitsToFloat(readSwappedInteger(input));
+    }
+
+    /**
+     * Reads a "int" value from a byte array at a given offset. The value is
+     * converted to the opposed endian system while reading.
+     * @param data source byte array
+     * @param offset starting offset in the byte array
+     * @return the value read
+     */
+    public static int readSwappedInteger(final byte[] data, final int offset) {
+        return ( ( ( data[ offset + 0 ] & 0xff ) << 0 ) +
+            ( ( data[ offset + 1 ] & 0xff ) << 8 ) +
+            ( ( data[ offset + 2 ] & 0xff ) << 16 ) +
+            ( ( data[ offset + 3 ] & 0xff ) << 24 ) );
+    }
+
+    // ========================================== Swapping read/write routines
+
+    /**
+     * Reads a "int" value from an InputStream. The value is
+     * converted to the opposed endian system while reading.
+     * @param input source InputStream
+     * @return the value just read
+     * @throws IOException in case of an I/O problem
+     */
+    public static int readSwappedInteger(final InputStream input) throws IOException {
+        final int value1 = read(input);
+        final int value2 = read(input);
+        final int value3 = read(input);
+        final int value4 = read(input);
+
+        return ((value1 & 0xff) << 0) + ((value2 & 0xff) << 8) + ((value3 & 0xff) << 16) + ((value4 & 0xff) << 24);
+    }
+
+    /**
+     * Reads a "long" value from a byte array at a given offset. The value is
+     * converted to the opposed endian system while reading.
+     * @param data source byte array
+     * @param offset starting offset in the byte array
+     * @return the value read
+     */
+    public static long readSwappedLong(final byte[] data, final int offset) {
+        final long low = readSwappedInteger(data, offset);
+        final long high = readSwappedInteger(data, offset + 4);
+        return (high << 32) + (0xffffffffL & low);
+    }
+
+    /**
+     * Reads a "long" value from an InputStream. The value is
+     * converted to the opposed endian system while reading.
+     * @param input source InputStream
+     * @return the value just read
+     * @throws IOException in case of an I/O problem
+     */
+    public static long readSwappedLong(final InputStream input) throws IOException {
+        final byte[] bytes = new byte[8];
+        for (int i = 0; i < 8; i++) {
+            bytes[i] = (byte) read(input);
+        }
+        return readSwappedLong(bytes, 0);
+    }
+
+    /**
+     * Reads a "short" value from a byte array at a given offset. The value is
+     * converted to the opposed endian system while reading.
+     * @param data source byte array
+     * @param offset starting offset in the byte array
+     * @return the value read
+     */
+    public static short readSwappedShort(final byte[] data, final int offset) {
+        return (short)( ( ( data[ offset + 0 ] & 0xff ) << 0 ) +
+            ( ( data[ offset + 1 ] & 0xff ) << 8 ) );
+    }
+
+    /**
+     * Reads a "short" value from an InputStream. The value is
+     * converted to the opposed endian system while reading.
+     * @param input source InputStream
+     * @return the value just read
+     * @throws IOException in case of an I/O problem
+     */
+    public static short readSwappedShort(final InputStream input) throws IOException {
+        return (short) (((read(input) & 0xff) << 0) + ((read(input) & 0xff) << 8));
+    }
+
+    /**
+     * Reads an unsigned integer (32-bit) value from a byte array at a given
+     * offset. The value is converted to the opposed endian system while
+     * reading.
+     * @param data source byte array
+     * @param offset starting offset in the byte array
+     * @return the value read
+     */
+    public static long readSwappedUnsignedInteger(final byte[] data, final int offset) {
+        final long low = ( ( ( data[ offset + 0 ] & 0xff ) << 0 ) +
+                     ( ( data[ offset + 1 ] & 0xff ) << 8 ) +
+                     ( ( data[ offset + 2 ] & 0xff ) << 16 ) );
+
+        final long high = data[ offset + 3 ] & 0xff;
+
+        return (high << 24) + (0xffffffffL & low);
+    }
+
+    /**
+     * Reads a unsigned integer (32-bit) from an InputStream. The value is
+     * converted to the opposed endian system while reading.
+     * @param input source InputStream
+     * @return the value just read
+     * @throws IOException in case of an I/O problem
+     */
+    public static long readSwappedUnsignedInteger(final InputStream input) throws IOException {
+        final int value1 = read(input);
+        final int value2 = read(input);
+        final int value3 = read(input);
+        final int value4 = read(input);
+
+        final long low = (((value1 & 0xff) << 0) + ((value2 & 0xff) << 8) + ((value3 & 0xff) << 16));
+
+        final long high = value4 & 0xff;
+
+        return (high << 24) + (0xffffffffL & low);
+    }
+
+    /**
+     * Reads an unsigned short (16-bit) value from a byte array at a given
+     * offset. The value is converted to the opposed endian system while
+     * reading.
+     * @param data source byte array
+     * @param offset starting offset in the byte array
+     * @return the value read
+     */
+    public static int readSwappedUnsignedShort(final byte[] data, final int offset) {
+        return ( ( ( data[ offset + 0 ] & 0xff ) << 0 ) +
+            ( ( data[ offset + 1 ] & 0xff ) << 8 ) );
+    }
+
+    /**
+     * Reads a unsigned short (16-bit) from an InputStream. The value is
+     * converted to the opposed endian system while reading.
+     * @param input source InputStream
+     * @return the value just read
+     * @throws IOException in case of an I/O problem
+     */
+    public static int readSwappedUnsignedShort(final InputStream input) throws IOException {
+        final int value1 = read(input);
+        final int value2 = read(input);
+
+        return (((value1 & 0xff) << 0) + ((value2 & 0xff) << 8));
+    }
+
+    /**
+     * Converts a "double" value between endian systems.
      * @param value value to convert
      * @return the converted value
      */
-    public static short swapShort(final short value) {
-        return (short) ( ( ( ( value >> 0 ) & 0xff ) << 8 ) +
-            ( ( ( value >> 8 ) & 0xff ) << 0 ) );
+    public static double swapDouble(final double value) {
+        return Double.longBitsToDouble( swapLong( Double.doubleToLongBits( value ) ) );
+    }
+
+    /**
+     * Converts a "float" value between endian systems.
+     * @param value value to convert
+     * @return the converted value
+     */
+    public static float swapFloat(final float value) {
+        return Float.intBitsToFloat( swapInteger( Float.floatToIntBits( value ) ) );
     }
 
     /**
@@ -88,60 +298,57 @@ public class EndianUtils {
     }
 
     /**
-     * Converts a "float" value between endian systems.
+     * Converts a "short" value between endian systems.
      * @param value value to convert
      * @return the converted value
      */
-    public static float swapFloat(final float value) {
-        return Float.intBitsToFloat( swapInteger( Float.floatToIntBits( value ) ) );
+    public static short swapShort(final short value) {
+        return (short) ( ( ( ( value >> 0 ) & 0xff ) << 8 ) +
+            ( ( ( value >> 8 ) & 0xff ) << 0 ) );
     }
 
     /**
-     * Converts a "double" value between endian systems.
-     * @param value value to convert
-     * @return the converted value
-     */
-    public static double swapDouble(final double value) {
-        return Double.longBitsToDouble( swapLong( Double.doubleToLongBits( value ) ) );
-    }
-
-    // ========================================== Swapping read/write routines
-
-    /**
-     * Writes a "short" value to a byte array at a given offset. The value is
+     * Writes a "double" value to a byte array at a given offset. The value is
      * converted to the opposed endian system while writing.
      * @param data target byte array
      * @param offset starting offset in the byte array
      * @param value value to write
      */
-    public static void writeSwappedShort(final byte[] data, final int offset, final short value) {
-        data[ offset + 0 ] = (byte)( ( value >> 0 ) & 0xff );
-        data[ offset + 1 ] = (byte)( ( value >> 8 ) & 0xff );
+    public static void writeSwappedDouble(final byte[] data, final int offset, final double value) {
+        writeSwappedLong( data, offset, Double.doubleToLongBits( value ) );
     }
 
     /**
-     * Reads a "short" value from a byte array at a given offset. The value is
-     * converted to the opposed endian system while reading.
-     * @param data source byte array
-     * @param offset starting offset in the byte array
-     * @return the value read
+     * Writes a "double" value to an OutputStream. The value is
+     * converted to the opposed endian system while writing.
+     * @param output target OutputStream
+     * @param value value to write
+     * @throws IOException in case of an I/O problem
      */
-    public static short readSwappedShort(final byte[] data, final int offset) {
-        return (short)( ( ( data[ offset + 0 ] & 0xff ) << 0 ) +
-            ( ( data[ offset + 1 ] & 0xff ) << 8 ) );
+    public static void writeSwappedDouble(final OutputStream output, final double value) throws IOException {
+        writeSwappedLong(output, Double.doubleToLongBits(value));
     }
 
     /**
-     * Reads an unsigned short (16-bit) value from a byte array at a given
-     * offset. The value is converted to the opposed endian system while
-     * reading.
-     * @param data source byte array
+     * Writes a "float" value to a byte array at a given offset. The value is
+     * converted to the opposed endian system while writing.
+     * @param data target byte array
      * @param offset starting offset in the byte array
-     * @return the value read
+     * @param value value to write
      */
-    public static int readSwappedUnsignedShort(final byte[] data, final int offset) {
-        return ( ( ( data[ offset + 0 ] & 0xff ) << 0 ) +
-            ( ( data[ offset + 1 ] & 0xff ) << 8 ) );
+    public static void writeSwappedFloat(final byte[] data, final int offset, final float value) {
+        writeSwappedInteger( data, offset, Float.floatToIntBits( value ) );
+    }
+
+    /**
+     * Writes a "float" value to an OutputStream. The value is
+     * converted to the opposed endian system while writing.
+     * @param output target OutputStream
+     * @param value value to write
+     * @throws IOException in case of an I/O problem
+     */
+    public static void writeSwappedFloat(final OutputStream output, final float value) throws IOException {
+        writeSwappedInteger(output, Float.floatToIntBits(value));
     }
 
     /**
@@ -159,35 +366,17 @@ public class EndianUtils {
     }
 
     /**
-     * Reads a "int" value from a byte array at a given offset. The value is
-     * converted to the opposed endian system while reading.
-     * @param data source byte array
-     * @param offset starting offset in the byte array
-     * @return the value read
+     * Writes a "int" value to an OutputStream. The value is converted to the opposed endian system while writing.
+     *
+     * @param output target OutputStream
+     * @param value value to write
+     * @throws IOException in case of an I/O problem
      */
-    public static int readSwappedInteger(final byte[] data, final int offset) {
-        return ( ( ( data[ offset + 0 ] & 0xff ) << 0 ) +
-            ( ( data[ offset + 1 ] & 0xff ) << 8 ) +
-            ( ( data[ offset + 2 ] & 0xff ) << 16 ) +
-            ( ( data[ offset + 3 ] & 0xff ) << 24 ) );
-    }
-
-    /**
-     * Reads an unsigned integer (32-bit) value from a byte array at a given
-     * offset. The value is converted to the opposed endian system while
-     * reading.
-     * @param data source byte array
-     * @param offset starting offset in the byte array
-     * @return the value read
-     */
-    public static long readSwappedUnsignedInteger(final byte[] data, final int offset) {
-        final long low = ( ( ( data[ offset + 0 ] & 0xff ) << 0 ) +
-                     ( ( data[ offset + 1 ] & 0xff ) << 8 ) +
-                     ( ( data[ offset + 2 ] & 0xff ) << 16 ) );
-
-        final long high = data[ offset + 3 ] & 0xff;
-
-        return (high << 24) + (0xffffffffL & low);
+    public static void writeSwappedInteger(final OutputStream output, final int value) throws IOException {
+        output.write((byte) ((value >> 0) & 0xff));
+        output.write((byte) ((value >> 8) & 0xff));
+        output.write((byte) ((value >> 16) & 0xff));
+        output.write((byte) ((value >> 24) & 0xff));
     }
 
     /**
@@ -209,150 +398,6 @@ public class EndianUtils {
     }
 
     /**
-     * Reads a "long" value from a byte array at a given offset. The value is
-     * converted to the opposed endian system while reading.
-     * @param data source byte array
-     * @param offset starting offset in the byte array
-     * @return the value read
-     */
-    public static long readSwappedLong(final byte[] data, final int offset) {
-        final long low = readSwappedInteger(data, offset);
-        final long high = readSwappedInteger(data, offset + 4);
-        return (high << 32) + (0xffffffffL & low);
-    }
-
-    /**
-     * Writes a "float" value to a byte array at a given offset. The value is
-     * converted to the opposed endian system while writing.
-     * @param data target byte array
-     * @param offset starting offset in the byte array
-     * @param value value to write
-     */
-    public static void writeSwappedFloat(final byte[] data, final int offset, final float value) {
-        writeSwappedInteger( data, offset, Float.floatToIntBits( value ) );
-    }
-
-    /**
-     * Reads a "float" value from a byte array at a given offset. The value is
-     * converted to the opposed endian system while reading.
-     * @param data source byte array
-     * @param offset starting offset in the byte array
-     * @return the value read
-     */
-    public static float readSwappedFloat(final byte[] data, final int offset) {
-        return Float.intBitsToFloat( readSwappedInteger( data, offset ) );
-    }
-
-    /**
-     * Writes a "double" value to a byte array at a given offset. The value is
-     * converted to the opposed endian system while writing.
-     * @param data target byte array
-     * @param offset starting offset in the byte array
-     * @param value value to write
-     */
-    public static void writeSwappedDouble(final byte[] data, final int offset, final double value) {
-        writeSwappedLong( data, offset, Double.doubleToLongBits( value ) );
-    }
-
-    /**
-     * Reads a "double" value from a byte array at a given offset. The value is
-     * converted to the opposed endian system while reading.
-     * @param data source byte array
-     * @param offset starting offset in the byte array
-     * @return the value read
-     */
-    public static double readSwappedDouble(final byte[] data, final int offset) {
-        return Double.longBitsToDouble( readSwappedLong( data, offset ) );
-    }
-
-    /**
-     * Writes a "short" value to an OutputStream. The value is
-     * converted to the opposed endian system while writing.
-     * @param output target OutputStream
-     * @param value value to write
-     * @throws IOException in case of an I/O problem
-     */
-    public static void writeSwappedShort(final OutputStream output, final short value) throws IOException {
-        output.write((byte) ((value >> 0) & 0xff));
-        output.write((byte) ((value >> 8) & 0xff));
-    }
-
-    /**
-     * Reads a "short" value from an InputStream. The value is
-     * converted to the opposed endian system while reading.
-     * @param input source InputStream
-     * @return the value just read
-     * @throws IOException in case of an I/O problem
-     */
-    public static short readSwappedShort(final InputStream input) throws IOException {
-        return (short) (((read(input) & 0xff) << 0) + ((read(input) & 0xff) << 8));
-    }
-
-    /**
-     * Reads a unsigned short (16-bit) from an InputStream. The value is
-     * converted to the opposed endian system while reading.
-     * @param input source InputStream
-     * @return the value just read
-     * @throws IOException in case of an I/O problem
-     */
-    public static int readSwappedUnsignedShort(final InputStream input) throws IOException {
-        final int value1 = read(input);
-        final int value2 = read(input);
-
-        return (((value1 & 0xff) << 0) + ((value2 & 0xff) << 8));
-    }
-
-    /**
-     * Writes a "int" value to an OutputStream. The value is converted to the opposed endian system while writing.
-     *
-     * @param output target OutputStream
-     * @param value value to write
-     * @throws IOException in case of an I/O problem
-     */
-    public static void writeSwappedInteger(final OutputStream output, final int value) throws IOException {
-        output.write((byte) ((value >> 0) & 0xff));
-        output.write((byte) ((value >> 8) & 0xff));
-        output.write((byte) ((value >> 16) & 0xff));
-        output.write((byte) ((value >> 24) & 0xff));
-    }
-
-    /**
-     * Reads a "int" value from an InputStream. The value is
-     * converted to the opposed endian system while reading.
-     * @param input source InputStream
-     * @return the value just read
-     * @throws IOException in case of an I/O problem
-     */
-    public static int readSwappedInteger(final InputStream input) throws IOException {
-        final int value1 = read(input);
-        final int value2 = read(input);
-        final int value3 = read(input);
-        final int value4 = read(input);
-
-        return ((value1 & 0xff) << 0) + ((value2 & 0xff) << 8) + ((value3 & 0xff) << 16) + ((value4 & 0xff) << 24);
-    }
-
-    /**
-     * Reads a unsigned integer (32-bit) from an InputStream. The value is
-     * converted to the opposed endian system while reading.
-     * @param input source InputStream
-     * @return the value just read
-     * @throws IOException in case of an I/O problem
-     */
-    public static long readSwappedUnsignedInteger(final InputStream input) throws IOException {
-        final int value1 = read(input);
-        final int value2 = read(input);
-        final int value3 = read(input);
-        final int value4 = read(input);
-
-        final long low = (((value1 & 0xff) << 0) + ((value2 & 0xff) << 8) + ((value3 & 0xff) << 16));
-
-        final long high = value4 & 0xff;
-
-        return (high << 24) + (0xffffffffL & low);
-    }
-
-    /**
      * Writes a "long" value to an OutputStream. The value is
      * converted to the opposed endian system while writing.
      * @param output target OutputStream
@@ -371,77 +416,32 @@ public class EndianUtils {
     }
 
     /**
-     * Reads a "long" value from an InputStream. The value is
-     * converted to the opposed endian system while reading.
-     * @param input source InputStream
-     * @return the value just read
-     * @throws IOException in case of an I/O problem
+     * Writes a "short" value to a byte array at a given offset. The value is
+     * converted to the opposed endian system while writing.
+     * @param data target byte array
+     * @param offset starting offset in the byte array
+     * @param value value to write
      */
-    public static long readSwappedLong(final InputStream input) throws IOException {
-        final byte[] bytes = new byte[8];
-        for (int i = 0; i < 8; i++) {
-            bytes[i] = (byte) read(input);
-        }
-        return readSwappedLong(bytes, 0);
+    public static void writeSwappedShort(final byte[] data, final int offset, final short value) {
+        data[ offset + 0 ] = (byte)( ( value >> 0 ) & 0xff );
+        data[ offset + 1 ] = (byte)( ( value >> 8 ) & 0xff );
     }
 
     /**
-     * Writes a "float" value to an OutputStream. The value is
+     * Writes a "short" value to an OutputStream. The value is
      * converted to the opposed endian system while writing.
      * @param output target OutputStream
      * @param value value to write
      * @throws IOException in case of an I/O problem
      */
-    public static void writeSwappedFloat(final OutputStream output, final float value) throws IOException {
-        writeSwappedInteger(output, Float.floatToIntBits(value));
+    public static void writeSwappedShort(final OutputStream output, final short value) throws IOException {
+        output.write((byte) ((value >> 0) & 0xff));
+        output.write((byte) ((value >> 8) & 0xff));
     }
 
     /**
-     * Reads a "float" value from an InputStream. The value is
-     * converted to the opposed endian system while reading.
-     * @param input source InputStream
-     * @return the value just read
-     * @throws IOException in case of an I/O problem
+     * Instances should NOT be constructed in standard programming.
      */
-    public static float readSwappedFloat(final InputStream input) throws IOException {
-        return Float.intBitsToFloat(readSwappedInteger(input));
-    }
-
-    /**
-     * Writes a "double" value to an OutputStream. The value is
-     * converted to the opposed endian system while writing.
-     * @param output target OutputStream
-     * @param value value to write
-     * @throws IOException in case of an I/O problem
-     */
-    public static void writeSwappedDouble(final OutputStream output, final double value) throws IOException {
-        writeSwappedLong(output, Double.doubleToLongBits(value));
-    }
-
-    /**
-     * Reads a "double" value from an InputStream. The value is
-     * converted to the opposed endian system while reading.
-     * @param input source InputStream
-     * @return the value just read
-     * @throws IOException in case of an I/O problem
-     */
-    public static double readSwappedDouble(final InputStream input) throws IOException {
-        return Double.longBitsToDouble(readSwappedLong(input));
-    }
-
-    /**
-     * Reads the next byte from the input stream.
-     * @param input  the stream
-     * @return the byte
-     * @throws IOException if the end of file is reached
-     */
-    private static int read(final InputStream input) throws IOException {
-        final int value = input.read();
-
-        if (EOF == value) {
-            throw new EOFException("Unexpected EOF reached");
-        }
-
-        return value;
+    public EndianUtils() {
     }
 }

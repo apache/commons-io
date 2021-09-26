@@ -41,8 +41,26 @@ import java.time.Instant;
  */
 class ThreadMonitor implements Runnable {
 
-    private final Thread thread;
-    private final Duration timeout;
+    private static int getNanosOfMiili(final Duration duration) {
+        return duration.getNano() % 1_000_000;
+    }
+    /**
+     * Sleeps for a guaranteed minimum duration unless interrupted.
+     *
+     * This method exists because Thread.sleep(100) can sleep for 0, 70, 100 or 200ms or anything else it deems appropriate.
+     * Read {@link Thread#sleep(long, int)}} for further interesting details.
+     *
+     * @param duration the sleep duration.
+     * @throws InterruptedException if interrupted.
+     */
+    static void sleep(final Duration duration) throws InterruptedException {
+        final Instant finishInstant = Instant.now().plus(duration);
+        Duration remainingDuration = duration;
+        do {
+            Thread.sleep(remainingDuration.toMillis(), getNanosOfMiili(remainingDuration));
+            remainingDuration = Duration.between(Instant.now(), finishInstant);
+        } while (!remainingDuration.isNegative());
+    }
 
     /**
      * Starts monitoring the current thread.
@@ -82,6 +100,10 @@ class ThreadMonitor implements Runnable {
         }
     }
 
+    private final Thread thread;
+
+    private final Duration timeout;
+
     /**
      * Constructs a new monitor.
      *
@@ -106,27 +128,5 @@ class ThreadMonitor implements Runnable {
         } catch (final InterruptedException e) {
             // timeout not reached
         }
-    }
-
-    /**
-     * Sleeps for a guaranteed minimum duration unless interrupted.
-     *
-     * This method exists because Thread.sleep(100) can sleep for 0, 70, 100 or 200ms or anything else it deems appropriate.
-     * Read {@link Thread#sleep(long, int)}} for further interesting details.
-     *
-     * @param duration the sleep duration.
-     * @throws InterruptedException if interrupted.
-     */
-    static void sleep(final Duration duration) throws InterruptedException {
-        final Instant finishInstant = Instant.now().plus(duration);
-        Duration remainingDuration = duration;
-        do {
-            Thread.sleep(remainingDuration.toMillis(), getNanosOfMiili(remainingDuration));
-            remainingDuration = Duration.between(Instant.now(), finishInstant);
-        } while (!remainingDuration.isNegative());
-    }
-
-    private static int getNanosOfMiili(final Duration duration) {
-        return duration.getNano() % 1_000_000;
     }
 }

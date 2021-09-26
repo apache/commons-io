@@ -48,21 +48,21 @@ public class ClosedOutputStream extends OutputStream {
     /**
      * Throws an {@link IOException} to indicate that the stream is closed.
      *
+     * @throws IOException always thrown
+     */
+    @Override
+    public void flush() throws IOException {
+        throw new IOException("flush() failed: stream is closed");
+    }
+
+    /**
+     * Throws an {@link IOException} to indicate that the stream is closed.
+     *
      * @param b ignored
      * @throws IOException always thrown
      */
     @Override
     public void write(final int b) throws IOException {
         throw new IOException("write(" + b + ") failed: stream is closed");
-    }
-
-    /**
-     * Throws an {@link IOException} to indicate that the stream is closed.
-     *
-     * @throws IOException always thrown
-     */
-    @Override
-    public void flush() throws IOException {
-        throw new IOException("flush() failed: stream is closed");
     }
 }

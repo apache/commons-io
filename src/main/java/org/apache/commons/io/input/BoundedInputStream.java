@@ -54,6 +54,16 @@ public class BoundedInputStream extends InputStream {
 
     /**
      * Creates a new {@code BoundedInputStream} that wraps the given input
+     * stream and is unlimited.
+     *
+     * @param in The wrapped input stream
+     */
+    public BoundedInputStream(final InputStream in) {
+        this(in, EOF);
+    }
+
+    /**
+     * Creates a new {@code BoundedInputStream} that wraps the given input
      * stream and limits it to a certain size.
      *
      * @param in The wrapped input stream
@@ -67,13 +77,57 @@ public class BoundedInputStream extends InputStream {
     }
 
     /**
-     * Creates a new {@code BoundedInputStream} that wraps the given input
-     * stream and is unlimited.
-     *
-     * @param in The wrapped input stream
+     * {@inheritDoc}
      */
-    public BoundedInputStream(final InputStream in) {
-        this(in, EOF);
+    @Override
+    public int available() throws IOException {
+        if (max>=0 && pos>=max) {
+            return 0;
+        }
+        return in.available();
+    }
+
+    /**
+     * Invokes the delegate's {@code close()} method
+     * if {@link #isPropagateClose()} is {@code true}.
+     * @throws IOException if an I/O error occurs.
+     */
+    @Override
+    public void close() throws IOException {
+        if (propagateClose) {
+            in.close();
+        }
+    }
+
+    /**
+     * Indicates whether the {@link #close()} method
+     * should propagate to the underling {@link InputStream}.
+     *
+     * @return {@code true} if calling {@link #close()}
+     * propagates to the {@code close()} method of the
+     * underlying stream or {@code false} if it does not.
+     */
+    public boolean isPropagateClose() {
+        return propagateClose;
+    }
+
+    /**
+     * Invokes the delegate's {@code mark(int)} method.
+     * @param readlimit read ahead limit
+     */
+    @Override
+    public synchronized void mark(final int readlimit) {
+        in.mark(readlimit);
+        mark = pos;
+    }
+
+    /**
+     * Invokes the delegate's {@code markSupported()} method.
+     * @return true if mark is supported, otherwise false
+     */
+    @Override
+    public boolean markSupported() {
+        return in.markSupported();
     }
 
     /**
@@ -131,6 +185,29 @@ public class BoundedInputStream extends InputStream {
     }
 
     /**
+     * Invokes the delegate's {@code reset()} method.
+     * @throws IOException if an I/O error occurs.
+     */
+    @Override
+    public synchronized void reset() throws IOException {
+        in.reset();
+        pos = mark;
+    }
+
+    /**
+     * Set whether the {@link #close()} method
+     * should propagate to the underling {@link InputStream}.
+     *
+     * @param propagateClose {@code true} if calling
+     * {@link #close()} propagates to the {@code close()}
+     * method of the underlying stream or
+     * {@code false} if it does not.
+     */
+    public void setPropagateClose(final boolean propagateClose) {
+        this.propagateClose = propagateClose;
+    }
+
+    /**
      * Invokes the delegate's {@code skip(long)} method.
      * @param n the number of bytes to skip
      * @return the actual number of bytes skipped
@@ -145,88 +222,11 @@ public class BoundedInputStream extends InputStream {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int available() throws IOException {
-        if (max>=0 && pos>=max) {
-            return 0;
-        }
-        return in.available();
-    }
-
-    /**
      * Invokes the delegate's {@code toString()} method.
      * @return the delegate's {@code toString()}
      */
     @Override
     public String toString() {
         return in.toString();
-    }
-
-    /**
-     * Invokes the delegate's {@code close()} method
-     * if {@link #isPropagateClose()} is {@code true}.
-     * @throws IOException if an I/O error occurs.
-     */
-    @Override
-    public void close() throws IOException {
-        if (propagateClose) {
-            in.close();
-        }
-    }
-
-    /**
-     * Invokes the delegate's {@code reset()} method.
-     * @throws IOException if an I/O error occurs.
-     */
-    @Override
-    public synchronized void reset() throws IOException {
-        in.reset();
-        pos = mark;
-    }
-
-    /**
-     * Invokes the delegate's {@code mark(int)} method.
-     * @param readlimit read ahead limit
-     */
-    @Override
-    public synchronized void mark(final int readlimit) {
-        in.mark(readlimit);
-        mark = pos;
-    }
-
-    /**
-     * Invokes the delegate's {@code markSupported()} method.
-     * @return true if mark is supported, otherwise false
-     */
-    @Override
-    public boolean markSupported() {
-        return in.markSupported();
-    }
-
-    /**
-     * Indicates whether the {@link #close()} method
-     * should propagate to the underling {@link InputStream}.
-     *
-     * @return {@code true} if calling {@link #close()}
-     * propagates to the {@code close()} method of the
-     * underlying stream or {@code false} if it does not.
-     */
-    public boolean isPropagateClose() {
-        return propagateClose;
-    }
-
-    /**
-     * Set whether the {@link #close()} method
-     * should propagate to the underling {@link InputStream}.
-     *
-     * @param propagateClose {@code true} if calling
-     * {@link #close()} propagates to the {@code close()}
-     * method of the underlying stream or
-     * {@code false} if it does not.
-     */
-    public void setPropagateClose(final boolean propagateClose) {
-        this.propagateClose = propagateClose;
     }
 }

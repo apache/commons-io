@@ -49,13 +49,22 @@ class StreamIterator<E> implements Iterator<E>, Closeable {
         return new StreamIterator<>(stream).iterator;
     }
 
+    private final Iterator<E> iterator;
+
+    private final Stream<E> stream;
     private StreamIterator(final Stream<E> stream) {
         this.stream = Objects.requireNonNull(stream, "stream");
         this.iterator = stream.iterator();
     }
 
-    private final Iterator<E> iterator;
-    private final Stream<E> stream;
+    /**
+     * Closes the underlying stream.
+     */
+    @Override
+    public void close() {
+        stream.close();
+
+    }
 
     @Override
     public boolean hasNext() {
@@ -73,15 +82,6 @@ class StreamIterator<E> implements Iterator<E>, Closeable {
             close();
         }
         return next;
-    }
-
-    /**
-     * Closes the underlying stream.
-     */
-    @Override
-    public void close() {
-        stream.close();
-
     }
 
 }

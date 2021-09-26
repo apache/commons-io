@@ -59,8 +59,27 @@ import org.apache.commons.io.input.ClosedInputStream;
  */
 public abstract class AbstractByteArrayOutputStream extends OutputStream {
 
-    static final int DEFAULT_SIZE = 1024;
+    /**
+     * Constructor for an InputStream subclass.
+     *
+     * @param <T> the type of the InputStream.
+     */
+    @FunctionalInterface
+    protected interface InputStreamConstructor<T extends InputStream> {
 
+        /**
+         * Constructs an InputStream subclass.
+         *
+         * @param buf the buffer
+         * @param offset the offset into the buffer
+         * @param length the length of the buffer
+         *
+         * @return the InputStream subclass.
+         */
+        T construct(final byte[] buf, final int offset, final int length);
+    }
+
+    static final int DEFAULT_SIZE = 1024;
     /** The list of buffers, which grows and never reduces. */
     private final List<byte[]> buffers = new ArrayList<>();
     /** The index of the current buffer. */
@@ -71,8 +90,22 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
     private byte[] currentBuffer;
     /** The total count of bytes written. */
     protected int count;
+
     /** Flag to indicate if the buffers can be reused after reset */
     private boolean reuseBuffers = true;
+
+    /**
+     * Closing a {@code ByteArrayOutputStream} has no effect. The methods in
+     * this class can be called after the stream has been closed without
+     * generating an {@code IOException}.
+     *
+     * @throws IOException never (this method should not declare this exception
+     * but it has to now due to backwards compatibility)
+     */
+    @Override
+    public void close() throws IOException {
+        //nop
+    }
 
     /**
      * Makes a new buffer available either by allocating
@@ -105,120 +138,6 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
     }
 
     /**
-     * Writes the bytes to the byte array.
-     * @param b the bytes to write
-     * @param off The start offset
-     * @param len The number of bytes to write
-     */
-    @Override
-    public abstract void write(final byte[] b, final int off, final int len);
-
-    /**
-     * Writes the bytes to the byte array.
-     * @param b the bytes to write
-     * @param off The start offset
-     * @param len The number of bytes to write
-     */
-    protected void writeImpl(final byte[] b, final int off, final int len) {
-        final int newcount = count + len;
-        int remaining = len;
-        int inBufferPos = count - filledBufferSum;
-        while (remaining > 0) {
-            final int part = Math.min(remaining, currentBuffer.length - inBufferPos);
-            System.arraycopy(b, off + len - remaining, currentBuffer, inBufferPos, part);
-            remaining -= part;
-            if (remaining > 0) {
-                needNewBuffer(newcount);
-                inBufferPos = 0;
-            }
-        }
-        count = newcount;
-    }
-
-    /**
-     * Write a byte to byte array.
-     * @param b the byte to write
-     */
-    @Override
-    public abstract void write(final int b);
-
-    /**
-     * Write a byte to byte array.
-     * @param b the byte to write
-     */
-    protected void writeImpl(final int b) {
-        int inBufferPos = count - filledBufferSum;
-        if (inBufferPos == currentBuffer.length) {
-            needNewBuffer(count + 1);
-            inBufferPos = 0;
-        }
-        currentBuffer[inBufferPos] = (byte) b;
-        count++;
-    }
-
-
-    /**
-     * Writes the entire contents of the specified input stream to this
-     * byte stream. Bytes from the input stream are read directly into the
-     * internal buffers of this streams.
-     *
-     * @param in the input stream to read from
-     * @return total number of bytes read from the input stream
-     *         (and written to this stream)
-     * @throws IOException if an I/O error occurs while reading the input stream
-     * @since 1.4
-     */
-    public abstract int write(final InputStream in) throws IOException;
-
-    /**
-     * Writes the entire contents of the specified input stream to this
-     * byte stream. Bytes from the input stream are read directly into the
-     * internal buffers of this streams.
-     *
-     * @param in the input stream to read from
-     * @return total number of bytes read from the input stream
-     *         (and written to this stream)
-     * @throws IOException if an I/O error occurs while reading the input stream
-     * @since 2.7
-     */
-    protected int writeImpl(final InputStream in) throws IOException {
-        int readCount = 0;
-        int inBufferPos = count - filledBufferSum;
-        int n = in.read(currentBuffer, inBufferPos, currentBuffer.length - inBufferPos);
-        while (n != EOF) {
-            readCount += n;
-            inBufferPos += n;
-            count += n;
-            if (inBufferPos == currentBuffer.length) {
-                needNewBuffer(currentBuffer.length);
-                inBufferPos = 0;
-            }
-            n = in.read(currentBuffer, inBufferPos, currentBuffer.length - inBufferPos);
-        }
-        return readCount;
-    }
-
-    /**
-     * Returns the current size of the byte array.
-     *
-     * @return the current size of the byte array
-     */
-    public abstract int size();
-
-    /**
-     * Closing a {@code ByteArrayOutputStream} has no effect. The methods in
-     * this class can be called after the stream has been closed without
-     * generating an {@code IOException}.
-     *
-     * @throws IOException never (this method should not declare this exception
-     * but it has to now due to backwards compatibility)
-     */
-    @Override
-    public void close() throws IOException {
-        //nop
-    }
-
-    /**
      * @see java.io.ByteArrayOutputStream#reset()
      */
     public abstract void reset();
@@ -242,34 +161,47 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
         }
     }
 
-    /**
-     * Writes the entire contents of this byte stream to the
-     * specified output stream.
-     *
-     * @param out  the output stream to write to
-     * @throws IOException if an I/O error occurs, such as if the stream is closed
-     * @see java.io.ByteArrayOutputStream#writeTo(OutputStream)
-     */
-    public abstract void writeTo(final OutputStream out) throws IOException;
 
     /**
-     * Writes the entire contents of this byte stream to the
-     * specified output stream.
+     * Returns the current size of the byte array.
      *
-     * @param out  the output stream to write to
-     * @throws IOException if an I/O error occurs, such as if the stream is closed
-     * @see java.io.ByteArrayOutputStream#writeTo(OutputStream)
+     * @return the current size of the byte array
      */
-    protected void writeToImpl(final OutputStream out) throws IOException {
+    public abstract int size();
+
+    /**
+     * Gets the current contents of this byte stream as a byte array.
+     * The result is independent of this stream.
+     *
+     * @return the current contents of this output stream, as a byte array
+     * @see java.io.ByteArrayOutputStream#toByteArray()
+     */
+    public abstract byte[] toByteArray();
+
+    /**
+     * Gets the current contents of this byte stream as a byte array.
+     * The result is independent of this stream.
+     *
+     * @return the current contents of this output stream, as a byte array
+     * @see java.io.ByteArrayOutputStream#toByteArray()
+     */
+    protected byte[] toByteArrayImpl() {
         int remaining = count;
+        if (remaining == 0) {
+            return IOUtils.EMPTY_BYTE_ARRAY;
+        }
+        final byte[] newbuf = IOUtils.byteArray(remaining);
+        int pos = 0;
         for (final byte[] buf : buffers) {
             final int c = Math.min(buf.length, remaining);
-            out.write(buf, 0, c);
+            System.arraycopy(buf, 0, newbuf, pos, c);
+            pos += c;
             remaining -= c;
             if (remaining == 0) {
                 break;
             }
         }
+        return newbuf;
     }
 
     /**
@@ -320,61 +252,6 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
     }
 
     /**
-     * Constructor for an InputStream subclass.
-     *
-     * @param <T> the type of the InputStream.
-     */
-    @FunctionalInterface
-    protected interface InputStreamConstructor<T extends InputStream> {
-
-        /**
-         * Constructs an InputStream subclass.
-         *
-         * @param buf the buffer
-         * @param offset the offset into the buffer
-         * @param length the length of the buffer
-         *
-         * @return the InputStream subclass.
-         */
-        T construct(final byte[] buf, final int offset, final int length);
-    }
-
-    /**
-     * Gets the current contents of this byte stream as a byte array.
-     * The result is independent of this stream.
-     *
-     * @return the current contents of this output stream, as a byte array
-     * @see java.io.ByteArrayOutputStream#toByteArray()
-     */
-    public abstract byte[] toByteArray();
-
-    /**
-     * Gets the current contents of this byte stream as a byte array.
-     * The result is independent of this stream.
-     *
-     * @return the current contents of this output stream, as a byte array
-     * @see java.io.ByteArrayOutputStream#toByteArray()
-     */
-    protected byte[] toByteArrayImpl() {
-        int remaining = count;
-        if (remaining == 0) {
-            return IOUtils.EMPTY_BYTE_ARRAY;
-        }
-        final byte[] newbuf = IOUtils.byteArray(remaining);
-        int pos = 0;
-        for (final byte[] buf : buffers) {
-            final int c = Math.min(buf.length, remaining);
-            System.arraycopy(buf, 0, newbuf, pos, c);
-            pos += c;
-            remaining -= c;
-            if (remaining == 0) {
-                break;
-            }
-        }
-        return newbuf;
-    }
-
-    /**
      * Gets the current contents of this byte stream as a string
      * using the platform default charset.
      * @return the contents of the byte array as a String
@@ -392,6 +269,19 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
      * Gets the current contents of this byte stream as a string
      * using the specified encoding.
      *
+     * @param charset  the character encoding
+     * @return the string converted from the byte array
+     * @see java.io.ByteArrayOutputStream#toString(String)
+     * @since 2.5
+     */
+    public String toString(final Charset charset) {
+        return new String(toByteArray(), charset);
+    }
+
+    /**
+     * Gets the current contents of this byte stream as a string
+     * using the specified encoding.
+     *
      * @param enc  the name of the character encoding
      * @return the string converted from the byte array
      * @throws UnsupportedEncodingException if the encoding is not supported
@@ -402,16 +292,126 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
     }
 
     /**
-     * Gets the current contents of this byte stream as a string
-     * using the specified encoding.
-     *
-     * @param charset  the character encoding
-     * @return the string converted from the byte array
-     * @see java.io.ByteArrayOutputStream#toString(String)
-     * @since 2.5
+     * Writes the bytes to the byte array.
+     * @param b the bytes to write
+     * @param off The start offset
+     * @param len The number of bytes to write
      */
-    public String toString(final Charset charset) {
-        return new String(toByteArray(), charset);
+    @Override
+    public abstract void write(final byte[] b, final int off, final int len);
+
+    /**
+     * Writes the entire contents of the specified input stream to this
+     * byte stream. Bytes from the input stream are read directly into the
+     * internal buffers of this streams.
+     *
+     * @param in the input stream to read from
+     * @return total number of bytes read from the input stream
+     *         (and written to this stream)
+     * @throws IOException if an I/O error occurs while reading the input stream
+     * @since 1.4
+     */
+    public abstract int write(final InputStream in) throws IOException;
+
+    /**
+     * Write a byte to byte array.
+     * @param b the byte to write
+     */
+    @Override
+    public abstract void write(final int b);
+
+    /**
+     * Writes the bytes to the byte array.
+     * @param b the bytes to write
+     * @param off The start offset
+     * @param len The number of bytes to write
+     */
+    protected void writeImpl(final byte[] b, final int off, final int len) {
+        final int newcount = count + len;
+        int remaining = len;
+        int inBufferPos = count - filledBufferSum;
+        while (remaining > 0) {
+            final int part = Math.min(remaining, currentBuffer.length - inBufferPos);
+            System.arraycopy(b, off + len - remaining, currentBuffer, inBufferPos, part);
+            remaining -= part;
+            if (remaining > 0) {
+                needNewBuffer(newcount);
+                inBufferPos = 0;
+            }
+        }
+        count = newcount;
+    }
+
+    /**
+     * Writes the entire contents of the specified input stream to this
+     * byte stream. Bytes from the input stream are read directly into the
+     * internal buffers of this streams.
+     *
+     * @param in the input stream to read from
+     * @return total number of bytes read from the input stream
+     *         (and written to this stream)
+     * @throws IOException if an I/O error occurs while reading the input stream
+     * @since 2.7
+     */
+    protected int writeImpl(final InputStream in) throws IOException {
+        int readCount = 0;
+        int inBufferPos = count - filledBufferSum;
+        int n = in.read(currentBuffer, inBufferPos, currentBuffer.length - inBufferPos);
+        while (n != EOF) {
+            readCount += n;
+            inBufferPos += n;
+            count += n;
+            if (inBufferPos == currentBuffer.length) {
+                needNewBuffer(currentBuffer.length);
+                inBufferPos = 0;
+            }
+            n = in.read(currentBuffer, inBufferPos, currentBuffer.length - inBufferPos);
+        }
+        return readCount;
+    }
+
+    /**
+     * Write a byte to byte array.
+     * @param b the byte to write
+     */
+    protected void writeImpl(final int b) {
+        int inBufferPos = count - filledBufferSum;
+        if (inBufferPos == currentBuffer.length) {
+            needNewBuffer(count + 1);
+            inBufferPos = 0;
+        }
+        currentBuffer[inBufferPos] = (byte) b;
+        count++;
+    }
+
+    /**
+     * Writes the entire contents of this byte stream to the
+     * specified output stream.
+     *
+     * @param out  the output stream to write to
+     * @throws IOException if an I/O error occurs, such as if the stream is closed
+     * @see java.io.ByteArrayOutputStream#writeTo(OutputStream)
+     */
+    public abstract void writeTo(final OutputStream out) throws IOException;
+
+    /**
+     * Writes the entire contents of this byte stream to the
+     * specified output stream.
+     *
+     * @param out  the output stream to write to
+     * @throws IOException if an I/O error occurs, such as if the stream is closed
+     * @see java.io.ByteArrayOutputStream#writeTo(OutputStream)
+     */
+    protected void writeToImpl(final OutputStream out) throws IOException {
+        int remaining = count;
+        for (final byte[] buf : buffers) {
+            final int c = Math.min(buf.length, remaining);
+            out.write(buf, 0, c);
+            remaining -= c;
+            if (remaining == 0) {
+                break;
+            }
+        }
     }
 
 }

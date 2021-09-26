@@ -251,33 +251,6 @@ public class FileFilterUtils {
 
     /**
      * <p>
-     * Applies an {@link IOFileFilter} to the provided {@link File} stream and collects the accepted files.
-     * </p>
-     *
-     * @param filter the filter to apply to the stream of files.
-     * @param stream the stream of files on which to apply the filter.
-     * @param collector how to collect the end result.
-     *
-     * @param <R> the return type.
-     * @param <A> the mutable accumulation type of the reduction operation (often hidden as an implementation detail)
-     * @return a subset of files from the stream that is accepted by the filter.
-     * @throws IllegalArgumentException if the filter is {@code null}.
-     */
-    private static <R, A> R filterFiles(final IOFileFilter filter, final Stream<File> stream,
-        final Collector<? super File, A, R> collector) {
-        //Objects.requireNonNull(filter, "filter");
-        Objects.requireNonNull(collector, "collector");
-        if (filter == null) {
-            throw new IllegalArgumentException("file filter is null");
-        }
-        if (stream == null) {
-            return Stream.<File>empty().collect(collector);
-        }
-        return stream.filter(filter::accept).collect(collector);
-    }
-
-    /**
-     * <p>
      * Applies an {@link IOFileFilter} to the provided {@link File}
      * objects. The resulting array is a subset of the original file list that
      * matches the provided filter.
@@ -304,6 +277,33 @@ public class FileFilterUtils {
      */
     public static File[] filter(final IOFileFilter filter, final Iterable<File> files) {
         return filterList(filter, files).toArray(FileUtils.EMPTY_FILE_ARRAY);
+    }
+
+    /**
+     * <p>
+     * Applies an {@link IOFileFilter} to the provided {@link File} stream and collects the accepted files.
+     * </p>
+     *
+     * @param filter the filter to apply to the stream of files.
+     * @param stream the stream of files on which to apply the filter.
+     * @param collector how to collect the end result.
+     *
+     * @param <R> the return type.
+     * @param <A> the mutable accumulation type of the reduction operation (often hidden as an implementation detail)
+     * @return a subset of files from the stream that is accepted by the filter.
+     * @throws IllegalArgumentException if the filter is {@code null}.
+     */
+    private static <R, A> R filterFiles(final IOFileFilter filter, final Stream<File> stream,
+        final Collector<? super File, A, R> collector) {
+        //Objects.requireNonNull(filter, "filter");
+        Objects.requireNonNull(collector, "collector");
+        if (filter == null) {
+            throw new IllegalArgumentException("file filter is null");
+        }
+        if (stream == null) {
+            return Stream.<File>empty().collect(collector);
+        }
+        return stream.filter(filter::accept).collect(collector);
     }
 
     /**

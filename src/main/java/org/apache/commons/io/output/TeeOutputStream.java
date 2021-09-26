@@ -44,6 +44,39 @@ public class TeeOutputStream extends ProxyOutputStream {
     }
 
     /**
+     * Closes both output streams.
+     * <p>
+     * If closing the main output stream throws an exception, attempt to close the branch output stream.
+     * </p>
+     *
+     * <p>
+     * If closing the main and branch output streams both throw exceptions, which exceptions is thrown by this method is
+     * currently unspecified and subject to change.
+     * </p>
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    @Override
+    public void close() throws IOException {
+        try {
+            super.close();
+        } finally {
+            this.branch.close();
+        }
+    }
+
+    /**
+     * Flushes both streams.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    @Override
+    public void flush() throws IOException {
+        super.flush();
+        this.branch.flush();
+    }
+
+    /**
      * Writes the bytes to both streams.
      *
      * @param b the bytes to write
@@ -79,39 +112,6 @@ public class TeeOutputStream extends ProxyOutputStream {
     public synchronized void write(final int b) throws IOException {
         super.write(b);
         this.branch.write(b);
-    }
-
-    /**
-     * Flushes both streams.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    @Override
-    public void flush() throws IOException {
-        super.flush();
-        this.branch.flush();
-    }
-
-    /**
-     * Closes both output streams.
-     * <p>
-     * If closing the main output stream throws an exception, attempt to close the branch output stream.
-     * </p>
-     *
-     * <p>
-     * If closing the main and branch output streams both throw exceptions, which exceptions is thrown by this method is
-     * currently unspecified and subject to change.
-     * </p>
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    @Override
-    public void close() throws IOException {
-        try {
-            super.close();
-        } finally {
-            this.branch.close();
-        }
     }
 
 }

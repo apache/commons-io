@@ -119,6 +119,35 @@ public class NullReader extends Reader {
     }
 
     /**
+     * Closes this Reader - resets the internal state to
+     * the initial values.
+     *
+     * @throws IOException If an error occurs.
+     */
+    @Override
+    public void close() throws IOException {
+        eof = false;
+        position = 0;
+        mark = -1;
+    }
+
+    /**
+     * Handles End of File.
+     *
+     * @return {@code -1} if {@code throwEofException} is
+     * set to {@code false}
+     * @throws EOFException if {@code throwEofException} is set
+     * to {@code true}.
+     */
+    private int doEndOfFile() throws EOFException {
+        eof = true;
+        if (throwEofException) {
+            throw new EOFException();
+        }
+        return EOF;
+    }
+
+    /**
      * Returns the current position.
      *
      * @return the current position.
@@ -134,19 +163,6 @@ public class NullReader extends Reader {
      */
     public long getSize() {
         return size;
-    }
-
-    /**
-     * Closes this Reader - resets the internal state to
-     * the initial values.
-     *
-     * @throws IOException If an error occurs.
-     */
-    @Override
-    public void close() throws IOException {
-        eof = false;
-        position = 0;
-        mark = -1;
     }
 
     /**
@@ -173,6 +189,34 @@ public class NullReader extends Reader {
     @Override
     public boolean markSupported() {
         return markSupported;
+    }
+
+    /**
+     * Returns a character value for the  {@code read()} method.
+     * <p>
+     * This implementation returns zero.
+     * </p>
+     *
+     * @return This implementation always returns zero.
+     */
+    protected int processChar() {
+        // do nothing - overridable by subclass
+        return 0;
+    }
+
+    /**
+     * Process the characters for the {@code read(char[], offset, length)}
+     * method.
+     * <p>
+     * This implementation leaves the character array unchanged.
+     * </p>
+     *
+     * @param chars The character array
+     * @param offset The offset to start at.
+     * @param length The number of characters.
+     */
+    protected void processChars(final char[] chars, final int offset, final int length) {
+        // do nothing - overridable by subclass
     }
 
     /**
@@ -295,50 +339,6 @@ public class NullReader extends Reader {
             position = size;
         }
         return returnLength;
-    }
-
-    /**
-     * Returns a character value for the  {@code read()} method.
-     * <p>
-     * This implementation returns zero.
-     * </p>
-     *
-     * @return This implementation always returns zero.
-     */
-    protected int processChar() {
-        // do nothing - overridable by subclass
-        return 0;
-    }
-
-    /**
-     * Process the characters for the {@code read(char[], offset, length)}
-     * method.
-     * <p>
-     * This implementation leaves the character array unchanged.
-     * </p>
-     *
-     * @param chars The character array
-     * @param offset The offset to start at.
-     * @param length The number of characters.
-     */
-    protected void processChars(final char[] chars, final int offset, final int length) {
-        // do nothing - overridable by subclass
-    }
-
-    /**
-     * Handles End of File.
-     *
-     * @return {@code -1} if {@code throwEofException} is
-     * set to {@code false}
-     * @throws EOFException if {@code throwEofException} is set
-     * to {@code true}.
-     */
-    private int doEndOfFile() throws EOFException {
-        eof = true;
-        if (throwEofException) {
-            throw new EOFException();
-        }
-        return EOF;
     }
 
 }

@@ -88,21 +88,27 @@ public class ByteOrderMark implements Serializable {
     }
 
     /**
-     * Gets the name of the {@link java.nio.charset.Charset} the BOM represents.
+     * Indicates if this BOM's bytes equals another.
      *
-     * @return the character set name
+     * @param obj The object to compare to
+     * @return true if the bom's bytes are equal, otherwise
+     * false
      */
-    public String getCharsetName() {
-        return charsetName;
-    }
-
-    /**
-     * Gets the length of the BOM's bytes.
-     *
-     * @return the length of the BOM's bytes
-     */
-    public int length() {
-        return bytes.length;
+    @Override
+    public boolean equals(final Object obj) {
+        if (!(obj instanceof ByteOrderMark)) {
+            return false;
+        }
+        final ByteOrderMark bom = (ByteOrderMark)obj;
+        if (bytes.length != bom.length()) {
+            return false;
+        }
+        for (int i = 0; i < bytes.length; i++) {
+            if (bytes[i] != bom.get(i)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -129,27 +135,12 @@ public class ByteOrderMark implements Serializable {
     }
 
     /**
-     * Indicates if this BOM's bytes equals another.
+     * Gets the name of the {@link java.nio.charset.Charset} the BOM represents.
      *
-     * @param obj The object to compare to
-     * @return true if the bom's bytes are equal, otherwise
-     * false
+     * @return the character set name
      */
-    @Override
-    public boolean equals(final Object obj) {
-        if (!(obj instanceof ByteOrderMark)) {
-            return false;
-        }
-        final ByteOrderMark bom = (ByteOrderMark)obj;
-        if (bytes.length != bom.length()) {
-            return false;
-        }
-        for (int i = 0; i < bytes.length; i++) {
-            if (bytes[i] != bom.get(i)) {
-                return false;
-            }
-        }
-        return true;
+    public String getCharsetName() {
+        return charsetName;
     }
 
     /**
@@ -165,6 +156,15 @@ public class ByteOrderMark implements Serializable {
             hashCode += b;
         }
         return hashCode;
+    }
+
+    /**
+     * Gets the length of the BOM's bytes.
+     *
+     * @return the length of the BOM's bytes
+     */
+    public int length() {
+        return bytes.length;
     }
 
     /**

@@ -46,6 +46,15 @@ public class AppendableOutputStream <T extends Appendable> extends OutputStream 
     }
 
     /**
+     * Return the target appendable.
+     *
+     * @return the target appendable
+     */
+    public T getAppendable() {
+        return appendable;
+    }
+
+    /**
      * Write a character to the underlying appendable.
      *
      * @param b the character to write
@@ -54,15 +63,6 @@ public class AppendableOutputStream <T extends Appendable> extends OutputStream 
     @Override
     public void write(final int b) throws IOException {
         appendable.append((char)b);
-    }
-
-    /**
-     * Return the target appendable.
-     *
-     * @return the target appendable
-     */
-    public T getAppendable() {
-        return appendable;
     }
 
 }
