@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -151,8 +152,8 @@ public class PathUtilsDeleteFileTest {
         final Path resolved = tempDir.resolve("testSetReadOnlyFile.txt");
 
         // TEMP HACK
-        assertTrue(Files.getFileAttributeView(resolved, DosFileAttributeView.class) != null);
-        assertTrue(Files.getFileAttributeView(resolved, PosixFileAttributeView.class) == null);
+        assumeTrue(Files.getFileAttributeView(resolved, DosFileAttributeView.class) != null);
+        assumeTrue(Files.getFileAttributeView(resolved, PosixFileAttributeView.class) == null);
 
         PathUtils.writeString(resolved, "test", StandardCharsets.UTF_8);
         final boolean readable = Files.isReadable(resolved);
