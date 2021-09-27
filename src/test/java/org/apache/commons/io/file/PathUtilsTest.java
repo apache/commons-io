@@ -21,9 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
@@ -46,6 +45,7 @@ import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -257,8 +257,7 @@ public class PathUtilsTest extends TestArguments {
         final Path resolved = tempDir.resolve("testSetReadOnlyFile.txt");
 
         // TEMP HACK
-        assumeTrue(Files.getFileAttributeView(resolved, DosFileAttributeView.class) != null);
-        assumeTrue(Files.getFileAttributeView(resolved, PosixFileAttributeView.class) == null);
+        assumeFalse(SystemUtils.IS_OS_LINUX);
 
         PathUtils.writeString(resolved, "test", StandardCharsets.UTF_8);
         final boolean readable = Files.isReadable(resolved);
