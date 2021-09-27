@@ -88,9 +88,16 @@ public class BrokenReaderTest {
 
     @Test
     public void testTryWithResourcesThrows() throws IOException {
-        try (Reader newReader = new BrokenReader()) {
-            newReader.read();
-        }
+        assertThrows(IOException.class, () -> {
+            try (Reader newReader = new BrokenReader()) {
+                newReader.read();
+            }
+        });
+        assertThrows(IOException.class, () -> {
+            try (Reader newReader = new BrokenReader()) {
+                // noop
+            }
+        });
     }
 
 }
