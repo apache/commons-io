@@ -18,17 +18,23 @@
 package org.apache.commons.io.file;
 
 import static org.apache.commons.io.file.CounterAssertions.assertCounts;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.DosFileAttributeView;
+import java.nio.file.attribute.PosixFileAttributeView;
+import java.nio.file.attribute.PosixFilePermission;
+import java.util.Set;
 
 import org.apache.commons.io.file.Counters.PathCounters;
 import org.apache.commons.lang3.SystemUtils;
@@ -79,8 +85,7 @@ public class PathUtilsDeleteFileTest {
     @Test
     public void testDeleteFileDirectory1FileSize0() throws IOException {
         final String fileName = "file-size-0.bin";
-        PathUtils.copyFileToDirectory(
-                Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0/" + fileName), tempDir);
+        PathUtils.copyFileToDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0/" + fileName), tempDir);
         assertCounts(0, 1, 0, PathUtils.deleteFile(tempDir.resolve(fileName)));
         // This will throw if not empty.
         Files.deleteIfExists(tempDir);
@@ -92,8 +97,7 @@ public class PathUtilsDeleteFileTest {
     @Test
     public void testDeleteFileDirectory1FileSize1() throws IOException {
         final String fileName = "file-size-1.bin";
-        PathUtils.copyFileToDirectory(
-                Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/" + fileName), tempDir);
+        PathUtils.copyFileToDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/" + fileName), tempDir);
         assertCounts(0, 1, 1, PathUtils.deleteFile(tempDir.resolve(fileName)));
         // This will throw if not empty.
         Files.deleteIfExists(tempDir);
@@ -129,8 +133,7 @@ public class PathUtilsDeleteFileTest {
     @Test
     public void testDeleteReadOnlyFileDirectory1FileSize1() throws IOException {
         final String fileName = "file-size-1.bin";
-        PathUtils.copyFileToDirectory(
-            Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/" + fileName), tempDir);
+        PathUtils.copyFileToDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/" + fileName), tempDir);
         final Path resolved = tempDir.resolve(fileName);
         PathUtils.setReadOnly(resolved, true);
         if (SystemUtils.IS_OS_WINDOWS) {
@@ -143,14 +146,67 @@ public class PathUtilsDeleteFileTest {
         Files.deleteIfExists(tempDir);
     }
 
+    @Test
+    public void testSetReadOnlyFile() throws IOException {
+        final Path resolved = tempDir.resolve("testSetReadOnlyFile.txt");
+
+        // TEMP HACK
+        assertTrue(Files.getFileAttributeView(resolved, DosFileAttributeView.class) != null);
+        assertTrue(Files.getFileAttributeView(resolved, PosixFileAttributeView.class) == null);
+
+        PathUtils.writeString(resolved, "test", StandardCharsets.UTF_8);
+        final boolean readable = Files.isReadable(resolved);
+        final boolean writable = Files.isWritable(resolved);
+        final boolean regularFile = Files.isRegularFile(resolved);
+        final boolean executable = Files.isExecutable(resolved);
+        final boolean hidden = Files.isHidden(resolved);
+        final boolean directory = Files.isDirectory(resolved);
+        final boolean symbolicLink = Files.isSymbolicLink(resolved);
+        // Sanity checks
+        assertTrue(readable);
+        assertTrue(writable);
+        // Test A
+        PathUtils.setReadOnly(resolved, false);
+        assertEquals(true, Files.isReadable(resolved));
+        assertEquals(true, Files.isWritable(resolved));
+        assertEquals(regularFile, Files.isReadable(resolved));
+        assertEquals(executable, Files.isExecutable(resolved));
+        assertEquals(hidden, Files.isHidden(resolved));
+        assertEquals(directory, Files.isDirectory(resolved));
+        assertEquals(symbolicLink, Files.isSymbolicLink(resolved));
+        // Test B
+        PathUtils.setReadOnly(resolved, true);
+        assertEquals(true, Files.isReadable(resolved));
+        assertEquals(false, Files.isWritable(resolved));
+        final DosFileAttributeView dosFileAttributeView = Files.getFileAttributeView(resolved, DosFileAttributeView.class);
+        if (dosFileAttributeView != null) {
+            assertTrue(dosFileAttributeView.readAttributes().isReadOnly());
+        }
+        final PosixFileAttributeView posixFileAttributeView = Files.getFileAttributeView(resolved, PosixFileAttributeView.class);
+        if (posixFileAttributeView != null) {
+            // Not Windows
+            final Set<PosixFilePermission> permissions = posixFileAttributeView.readAttributes().permissions();
+            assertFalse(permissions.contains(PosixFilePermission.GROUP_WRITE), () -> permissions.toString());
+            assertFalse(permissions.contains(PosixFilePermission.OTHERS_WRITE), () -> permissions.toString());
+            assertFalse(permissions.contains(PosixFilePermission.OWNER_WRITE), () -> permissions.toString());
+        }
+        assertEquals(regularFile, Files.isReadable(resolved));
+        assertEquals(executable, Files.isExecutable(resolved));
+        assertEquals(hidden, Files.isHidden(resolved));
+        assertEquals(directory, Files.isDirectory(resolved));
+        assertEquals(symbolicLink, Files.isSymbolicLink(resolved));
+        //
+        PathUtils.setReadOnly(resolved, false);
+        PathUtils.deleteFile(resolved);
+    }
+
     /**
      * Tests a directory with one file of size 1.
      */
     @Test
     public void testSetReadOnlyFileDirectory1FileSize1() throws IOException {
         final String fileName = "file-size-1.bin";
-        PathUtils.copyFileToDirectory(
-            Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/" + fileName), tempDir);
+        PathUtils.copyFileToDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/" + fileName), tempDir);
         final Path resolved = tempDir.resolve(fileName);
         PathUtils.setReadOnly(resolved, true);
         if (SystemUtils.IS_OS_WINDOWS) {

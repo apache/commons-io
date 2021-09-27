@@ -104,6 +104,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-638" dev="ggregory" type="fix" due-to="Gary Gregory">
         PathUtils.setReadOnly(Path, boolean, LinkOption...) should add READ_* file attributes when using POSIX.
       </action>
+      <action issue="IO-638" dev="ggregory" type="fix" due-to="Gary Gregory">
+        PathUtils.setReadOnly(Path, boolean, LinkOption...) readOnly argument is always assumed true on POSIX.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add BrokenReader.INSTANCE.
