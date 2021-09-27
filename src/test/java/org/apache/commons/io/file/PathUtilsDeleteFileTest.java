@@ -147,60 +147,6 @@ public class PathUtilsDeleteFileTest {
         Files.deleteIfExists(tempDir);
     }
 
-    @Test
-    public void testSetReadOnlyFile() throws IOException {
-        final Path resolved = tempDir.resolve("testSetReadOnlyFile.txt");
-
-        // TEMP HACK
-        assumeTrue(Files.getFileAttributeView(resolved, DosFileAttributeView.class) != null);
-        assumeTrue(Files.getFileAttributeView(resolved, PosixFileAttributeView.class) == null);
-
-        PathUtils.writeString(resolved, "test", StandardCharsets.UTF_8);
-        final boolean readable = Files.isReadable(resolved);
-        final boolean writable = Files.isWritable(resolved);
-        final boolean regularFile = Files.isRegularFile(resolved);
-        final boolean executable = Files.isExecutable(resolved);
-        final boolean hidden = Files.isHidden(resolved);
-        final boolean directory = Files.isDirectory(resolved);
-        final boolean symbolicLink = Files.isSymbolicLink(resolved);
-        // Sanity checks
-        assertTrue(readable);
-        assertTrue(writable);
-        // Test A
-        PathUtils.setReadOnly(resolved, false);
-        assertEquals(true, Files.isReadable(resolved));
-        assertEquals(true, Files.isWritable(resolved));
-        assertEquals(regularFile, Files.isReadable(resolved));
-        assertEquals(executable, Files.isExecutable(resolved));
-        assertEquals(hidden, Files.isHidden(resolved));
-        assertEquals(directory, Files.isDirectory(resolved));
-        assertEquals(symbolicLink, Files.isSymbolicLink(resolved));
-        // Test B
-        PathUtils.setReadOnly(resolved, true);
-        assertEquals(true, Files.isReadable(resolved));
-        assertEquals(false, Files.isWritable(resolved));
-        final DosFileAttributeView dosFileAttributeView = Files.getFileAttributeView(resolved, DosFileAttributeView.class);
-        if (dosFileAttributeView != null) {
-            assertTrue(dosFileAttributeView.readAttributes().isReadOnly());
-        }
-        final PosixFileAttributeView posixFileAttributeView = Files.getFileAttributeView(resolved, PosixFileAttributeView.class);
-        if (posixFileAttributeView != null) {
-            // Not Windows
-            final Set<PosixFilePermission> permissions = posixFileAttributeView.readAttributes().permissions();
-            assertFalse(permissions.contains(PosixFilePermission.GROUP_WRITE), () -> permissions.toString());
-            assertFalse(permissions.contains(PosixFilePermission.OTHERS_WRITE), () -> permissions.toString());
-            assertFalse(permissions.contains(PosixFilePermission.OWNER_WRITE), () -> permissions.toString());
-        }
-        assertEquals(regularFile, Files.isReadable(resolved));
-        assertEquals(executable, Files.isExecutable(resolved));
-        assertEquals(hidden, Files.isHidden(resolved));
-        assertEquals(directory, Files.isDirectory(resolved));
-        assertEquals(symbolicLink, Files.isSymbolicLink(resolved));
-        //
-        PathUtils.setReadOnly(resolved, false);
-        PathUtils.deleteFile(resolved);
-    }
-
     /**
      * Tests a directory with one file of size 1.
      */

@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,9 +34,13 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.DosFileAttributeView;
+import java.nio.file.attribute.PosixFileAttributeView;
+import java.nio.file.attribute.PosixFilePermission;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.test.TestUtils;
@@ -247,6 +252,68 @@ public class PathUtilsTest extends TestArguments {
         assertEquals(expected, PathUtils.readString(path, null));
     }
 
+    @Test
+    public void testSetReadOnlyFile() throws IOException {
+        final Path resolved = tempDir.resolve("testSetReadOnlyFile.txt");
+
+        // TEMP HACK
+        assumeTrue(Files.getFileAttributeView(resolved, DosFileAttributeView.class) != null);
+        assumeTrue(Files.getFileAttributeView(resolved, PosixFileAttributeView.class) == null);
+
+        PathUtils.writeString(resolved, "test", StandardCharsets.UTF_8);
+        final boolean readable = Files.isReadable(resolved);
+        final boolean writable = Files.isWritable(resolved);
+        final boolean regularFile = Files.isRegularFile(resolved);
+        final boolean executable = Files.isExecutable(resolved);
+        final boolean hidden = Files.isHidden(resolved);
+        final boolean directory = Files.isDirectory(resolved);
+        final boolean symbolicLink = Files.isSymbolicLink(resolved);
+        // Sanity checks
+        assertTrue(readable);
+        assertTrue(writable);
+        // Test A
+        PathUtils.setReadOnly(resolved, false);
+        assertEquals(true, Files.isReadable(resolved));
+        assertEquals(true, Files.isWritable(resolved));
+        assertEquals(regularFile, Files.isReadable(resolved));
+        assertEquals(executable, Files.isExecutable(resolved));
+        assertEquals(hidden, Files.isHidden(resolved));
+        assertEquals(directory, Files.isDirectory(resolved));
+        assertEquals(symbolicLink, Files.isSymbolicLink(resolved));
+        // Test B
+        PathUtils.setReadOnly(resolved, true);
+        assertEquals(true, Files.isReadable(resolved));
+        assertEquals(false, Files.isWritable(resolved));
+        final DosFileAttributeView dosFileAttributeView = Files.getFileAttributeView(resolved, DosFileAttributeView.class);
+        if (dosFileAttributeView != null) {
+            assertTrue(dosFileAttributeView.readAttributes().isReadOnly());
+        }
+        final PosixFileAttributeView posixFileAttributeView = Files.getFileAttributeView(resolved, PosixFileAttributeView.class);
+        if (posixFileAttributeView != null) {
+            // Not Windows
+            final Set<PosixFilePermission> permissions = posixFileAttributeView.readAttributes().permissions();
+            assertFalse(permissions.contains(PosixFilePermission.GROUP_WRITE), () -> permissions.toString());
+            assertFalse(permissions.contains(PosixFilePermission.OTHERS_WRITE), () -> permissions.toString());
+            assertFalse(permissions.contains(PosixFilePermission.OWNER_WRITE), () -> permissions.toString());
+        }
+        assertEquals(regularFile, Files.isReadable(resolved));
+        assertEquals(executable, Files.isExecutable(resolved));
+        assertEquals(hidden, Files.isHidden(resolved));
+        assertEquals(directory, Files.isDirectory(resolved));
+        assertEquals(symbolicLink, Files.isSymbolicLink(resolved));
+        //
+        PathUtils.setReadOnly(resolved, false);
+        PathUtils.deleteFile(resolved);
+    }
+
+    @Test
+    public void testWriteStringToFile1() throws Exception {
+        final Path file = tempDir.resolve("write.txt");
+        PathUtils.writeString(file, "Hello /u1234", StandardCharsets.UTF_8);
+        final byte[] text = "Hello /u1234".getBytes(StandardCharsets.UTF_8);
+        TestUtils.assertEqualContent(text, file);
+    }
+
     /**
      * Tests newOutputStream() here and don't use Files.write obviously.
      */
@@ -258,12 +325,5 @@ public class PathUtilsTest extends TestArguments {
         return file;
     }
 
-    @Test
-    public void testWriteStringToFile1() throws Exception {
-        final Path file = tempDir.resolve("write.txt");
-        PathUtils.writeString(file, "Hello /u1234", StandardCharsets.UTF_8);
-        final byte[] text = "Hello /u1234".getBytes(StandardCharsets.UTF_8);
-        TestUtils.assertEqualContent(text, file);
-    }
-
+    
 }
