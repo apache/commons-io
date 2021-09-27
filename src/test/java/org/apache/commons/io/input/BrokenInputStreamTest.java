@@ -67,4 +67,18 @@ public class BrokenInputStreamTest {
         assertEquals(exception, assertThrows(IOException.class, () -> stream.skip(1)));
     }
 
+    @Test
+    public void testTryWithResources() {
+        IOException thrown = assertThrows(IOException.class, () -> {
+            try (InputStream newStream = new BrokenInputStream()) {
+                newStream.read();
+            }
+        });
+        assertEquals("Broken input stream", thrown.getMessage());
+
+        Throwable[] suppressed = thrown.getSuppressed();
+        assertEquals(1, suppressed.length);
+        assertEquals(IOException.class, suppressed[0].getClass());
+        assertEquals("Broken input stream", suppressed[0].getMessage());
+    }
 }

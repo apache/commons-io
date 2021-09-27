@@ -109,4 +109,19 @@ public class BrokenWriterTest {
         assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.write("01", 0, 1)));
     }
 
+    @Test
+    public void testTryWithResources() {
+        IOException thrown = assertThrows(IOException.class, () -> {
+            try (Writer newWriter = new BrokenWriter()) {
+                newWriter.write(1);
+            }
+        });
+        assertEquals("Broken writer", thrown.getMessage());
+
+        Throwable[] suppressed = thrown.getSuppressed();
+        assertEquals(1, suppressed.length);
+        assertEquals(IOException.class, suppressed[0].getClass());
+        assertEquals("Broken writer", suppressed[0].getMessage());
+    }
+
 }

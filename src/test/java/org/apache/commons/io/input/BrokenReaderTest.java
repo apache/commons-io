@@ -86,4 +86,19 @@ public class BrokenReaderTest {
         assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.skip(1)));
     }
 
+    @Test
+    public void testTryWithResources() {
+        IOException thrown = assertThrows(IOException.class, () -> {
+            try (Reader newReader = new BrokenReader()) {
+                newReader.read();
+            }
+        });
+        assertEquals("Broken reader", thrown.getMessage());
+
+        Throwable[] suppressed = thrown.getSuppressed();
+        assertEquals(1, suppressed.length);
+        assertEquals(IOException.class, suppressed[0].getClass());
+        assertEquals("Broken reader", suppressed[0].getMessage());
+    }
+
 }

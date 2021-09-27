@@ -18,6 +18,7 @@ package org.apache.commons.io.input;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.function.Supplier;
 
 /**
  * Always throws an {@link IOException} from all the {@link Reader} methods where the exception is declared.
@@ -37,15 +38,15 @@ public class BrokenReader extends Reader {
     public static final BrokenReader INSTANCE = new BrokenReader();
 
     /**
-     * The exception that is thrown by all methods of this class.
+     * A supplier for the exception that is thrown by all methods of this class.
      */
-    private final IOException exception;
+    private final Supplier<IOException> exceptionSupplier;
 
     /**
-     * Creates a new reader that always throws an {@link IOException}
+     * Creates a new reader that always throws an {@link IOException}.
      */
     public BrokenReader() {
-        this(new IOException("Broken reader"));
+        this(() -> new IOException("Broken reader"));
     }
 
     /**
@@ -54,7 +55,17 @@ public class BrokenReader extends Reader {
      * @param exception the exception to be thrown
      */
     public BrokenReader(final IOException exception) {
-        this.exception = exception;
+        this(() -> exception);
+    }
+
+    /**
+     * Creates a new reader that always throws an {@link IOException}
+     *
+     * @param exceptionSupplier a supplier for the exception to be thrown
+     * @since 2.12.0
+     */
+    public BrokenReader(final Supplier<IOException> exceptionSupplier) {
+        this.exceptionSupplier = exceptionSupplier;
     }
 
     /**
@@ -64,7 +75,7 @@ public class BrokenReader extends Reader {
      */
     @Override
     public void close() throws IOException {
-        throw exception;
+        throw exceptionSupplier.get();
     }
 
     /**
@@ -75,7 +86,7 @@ public class BrokenReader extends Reader {
      */
     @Override
     public void mark(final int readAheadLimit) throws IOException {
-        throw exception;
+        throw exceptionSupplier.get();
     }
 
     /**
@@ -89,7 +100,7 @@ public class BrokenReader extends Reader {
      */
     @Override
     public int read(final char[] cbuf, final int off, final int len) throws IOException {
-        throw exception;
+        throw exceptionSupplier.get();
     }
 
     /**
@@ -100,7 +111,7 @@ public class BrokenReader extends Reader {
      */
     @Override
     public boolean ready() throws IOException {
-        throw exception;
+        throw exceptionSupplier.get();
     }
 
     /**
@@ -110,7 +121,7 @@ public class BrokenReader extends Reader {
      */
     @Override
     public synchronized void reset() throws IOException {
-        throw exception;
+        throw exceptionSupplier.get();
     }
 
     /**
@@ -122,7 +133,7 @@ public class BrokenReader extends Reader {
      */
     @Override
     public long skip(final long n) throws IOException {
-        throw exception;
+        throw exceptionSupplier.get();
     }
 
 }
