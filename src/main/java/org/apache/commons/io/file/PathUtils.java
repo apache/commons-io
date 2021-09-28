@@ -1171,8 +1171,12 @@ public final class PathUtils {
             permissions.add(PosixFilePermission.OWNER_READ);
             permissions.add(PosixFilePermission.GROUP_READ);
             permissions.add(PosixFilePermission.OTHERS_READ);
-            List<PosixFilePermission> writePermissions = Arrays.asList(PosixFilePermission.OWNER_WRITE, PosixFilePermission.GROUP_WRITE,
+            // @formatter:off
+            final List<PosixFilePermission> writePermissions = Arrays.asList(
+                PosixFilePermission.OWNER_WRITE,
+                PosixFilePermission.GROUP_WRITE,
                 PosixFilePermission.OTHERS_WRITE);
+            // @formatter:on
             if (readOnly) {
                 permissions.removeAll(writePermissions);
             } else {
