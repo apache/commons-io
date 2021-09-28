@@ -27,16 +27,16 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
         java: [ 8, 11, 17 ]
         experimental: [false]
-        include:
-          - java: 18-ea
-            os: ubuntu-latest
-            experimental: true        
-          - java: 18-ea
-            os: windows-latest
-            experimental: true        
-          - java: 18-ea
-            os: macos-latest
-            experimental: true        
+#        include:
+#          - java: 18-ea
+#            os: ubuntu-latest
+#            experimental: true        
+#          - java: 18-ea
+#            os: windows-latest
+#            experimental: true        
+#          - java: 18-ea
+#            os: macos-latest
+#            experimental: true        
       fail-fast: false
         
     steps:
