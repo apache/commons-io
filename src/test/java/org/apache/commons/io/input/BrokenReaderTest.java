@@ -86,18 +86,4 @@ public class BrokenReaderTest {
         assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.skip(1)));
     }
 
-    @Test
-    public void testTryWithResourcesThrows() throws IOException {
-        assertThrows(IOException.class, () -> {
-            try (Reader newReader = new BrokenReader()) {
-                newReader.read();
-            }
-        });
-        assertThrows(IOException.class, () -> {
-            try (Reader newReader = new BrokenReader()) {
-                // noop
-            }
-        });
-    }
-
 }
