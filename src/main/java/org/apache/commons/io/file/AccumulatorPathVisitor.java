@@ -131,8 +131,7 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
      * @param dirFilter Filters which directories to count.
      * @since 2.9.0
      */
-    public AccumulatorPathVisitor(final PathCounters pathCounter, final PathFilter fileFilter,
-        final PathFilter dirFilter) {
+    public AccumulatorPathVisitor(final PathCounters pathCounter, final PathFilter fileFilter, final PathFilter dirFilter) {
         super(pathCounter, fileFilter, dirFilter);
     }
 

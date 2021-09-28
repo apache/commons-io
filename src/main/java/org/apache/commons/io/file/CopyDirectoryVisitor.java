@@ -48,8 +48,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
      * @param targetDirectory The target directory
      * @param copyOptions Specifies how the copying should be done.
      */
-    public CopyDirectoryVisitor(final PathCounters pathCounter, final Path sourceDirectory, final Path targetDirectory,
-        final CopyOption... copyOptions) {
+    public CopyDirectoryVisitor(final PathCounters pathCounter, final Path sourceDirectory, final Path targetDirectory, final CopyOption... copyOptions) {
         super(pathCounter);
         this.sourceDirectory = sourceDirectory;
         this.targetDirectory = targetDirectory;
@@ -67,8 +66,8 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
      * @param copyOptions Specifies how the copying should be done.
      * @since 2.9.0
      */
-    public CopyDirectoryVisitor(final PathCounters pathCounter, final PathFilter fileFilter, final PathFilter dirFilter,
-        final Path sourceDirectory, final Path targetDirectory, final CopyOption... copyOptions) {
+    public CopyDirectoryVisitor(final PathCounters pathCounter, final PathFilter fileFilter, final PathFilter dirFilter, final Path sourceDirectory,
+        final Path targetDirectory, final CopyOption... copyOptions) {
         super(pathCounter, fileFilter, dirFilter);
         this.sourceDirectory = sourceDirectory;
         this.targetDirectory = targetDirectory;

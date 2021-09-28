@@ -64,8 +64,7 @@ public class CleaningPathVisitor extends CountingPathVisitor {
      * @param skip The files to skip deleting.
      * @since 2.8.0
      */
-    public CleaningPathVisitor(final PathCounters pathCounter, final DeleteOption[] deleteOption,
-        final String... skip) {
+    public CleaningPathVisitor(final PathCounters pathCounter, final DeleteOption[] deleteOption, final String... skip) {
         super(pathCounter);
         final String[] temp = skip != null ? skip.clone() : EMPTY_STRING_ARRAY;
         Arrays.sort(temp);

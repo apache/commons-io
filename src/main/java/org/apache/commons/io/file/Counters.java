@@ -43,8 +43,7 @@ public class Counters {
          * @param directoryCounter the directory counter.
          * @param fileCounter the file counter.
          */
-        protected AbstractPathCounters(final Counter byteCounter, final Counter directoryCounter,
-            final Counter fileCounter) {
+        protected AbstractPathCounters(final Counter byteCounter, final Counter directoryCounter, final Counter fileCounter) {
             this.byteCounter = byteCounter;
             this.directoryCounter = directoryCounter;
             this.fileCounter = fileCounter;
