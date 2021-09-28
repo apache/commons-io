@@ -244,6 +244,12 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add PathUtils.writeString(Path, CharSequence, Charset, OpenOption...).
       </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add PathUtiFiles.getFileAttributeView() shorthands:
+          - PathUtils.getAclFileAttributeView(Path, LinkOption...)
+          - PathUtils.getDosFileAttributeView(Path, LinkOption...)
+          - PathUtils.getPosixFileAttributeView(Path, LinkOption...)
+      </action>      
       <!-- UPDATE -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Update FileEntry to use FileTime instead of long for file time stamps.

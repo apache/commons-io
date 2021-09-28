@@ -283,11 +283,11 @@ public class PathUtilsTest extends TestArguments {
         PathUtils.setReadOnly(resolved, true);
         assertEquals(true, Files.isReadable(resolved));
         assertEquals(false, Files.isWritable(resolved));
-        final DosFileAttributeView dosFileAttributeView = Files.getFileAttributeView(resolved, DosFileAttributeView.class);
+        final DosFileAttributeView dosFileAttributeView = PathUtils.getDosFileAttributeView(resolved);
         if (dosFileAttributeView != null) {
             assertTrue(dosFileAttributeView.readAttributes().isReadOnly());
         }
-        final PosixFileAttributeView posixFileAttributeView = Files.getFileAttributeView(resolved, PosixFileAttributeView.class);
+        final PosixFileAttributeView posixFileAttributeView = PathUtils.getPosixFileAttributeView(resolved);
         if (posixFileAttributeView != null) {
             // Not Windows
             final Set<PosixFilePermission> permissions = posixFileAttributeView.readAttributes().permissions();

@@ -729,12 +729,48 @@ public final class PathUtils {
      * @since 2.8.0
      */
     public static List<AclEntry> getAclEntryList(final Path sourcePath) throws IOException {
-        final AclFileAttributeView fileAttributeView = Files.getFileAttributeView(sourcePath, AclFileAttributeView.class);
+        final AclFileAttributeView fileAttributeView = getAclFileAttributeView(sourcePath);
         return fileAttributeView == null ? null : fileAttributeView.getAcl();
+    }
+
+    /**
+     * Shorthand for {@code Files.getFileAttributeView(path, AclFileAttributeView.class)}.
+     *
+     * @param path the path to the file.
+     * @param options how to handle symbolic links.
+     * @return a AclFileAttributeView, or {@code null} if the attribute view type is not available.
+     * @since 2.12.0
+     */
+    public static AclFileAttributeView getAclFileAttributeView(final Path path, final LinkOption... options) {
+        return Files.getFileAttributeView(path, AclFileAttributeView.class, options);
+    }
+
+    /**
+     * Shorthand for {@code Files.getFileAttributeView(path, DosFileAttributeView.class)}.
+     *
+     * @param path the path to the file.
+     * @param options how to handle symbolic links.
+     * @return a DosFileAttributeView, or {@code null} if the attribute view type is not available.
+     * @since 2.12.0
+     */
+    public static DosFileAttributeView getDosFileAttributeView(final Path path, final LinkOption... options) {
+        return Files.getFileAttributeView(path, DosFileAttributeView.class, options);
     }
 
     private static FileTime getLastModifiedTime(final Path path, final LinkOption... options) throws IOException {
         return Files.getLastModifiedTime(Objects.requireNonNull(path, "path"), options);
+    }
+
+    /**
+     * Shorthand for {@code Files.getFileAttributeView(path, PosixFileAttributeView.class)}.
+     *
+     * @param path the path to the file.
+     * @param options how to handle symbolic links.
+     * @return a PosixFileAttributeView, or {@code null} if the attribute view type is not available.
+     * @since 2.12.0
+     */
+    public static PosixFileAttributeView getPosixFileAttributeView(final Path path, final LinkOption... options) {
+        return Files.getFileAttributeView(path, PosixFileAttributeView.class, options);
     }
 
     /**
@@ -915,6 +951,7 @@ public final class PathUtils {
         return isOlder(file, FileTime.from(instant), options);
     }
 
+
     /**
      * Tests if the given {@code Path} is older than the given time reference.
      *
@@ -942,7 +979,6 @@ public final class PathUtils {
     public static boolean isOlder(final Path file, final Path reference) throws IOException {
         return isOlder(file, getLastModifiedTime(reference));
     }
-
 
     /**
      * Tests whether the given {@code Path} is a regular file or not. Implemented as a null-safe delegate to
@@ -1152,7 +1188,7 @@ public final class PathUtils {
      */
     public static Path setReadOnly(final Path path, final boolean readOnly, final LinkOption... linkOptions) throws IOException {
         final List<Exception> causeList = new ArrayList<>(2);
-        final DosFileAttributeView fileAttributeView = Files.getFileAttributeView(path, DosFileAttributeView.class, linkOptions);
+        final DosFileAttributeView fileAttributeView = getDosFileAttributeView(path, linkOptions);
         if (fileAttributeView != null) {
             // Windows 10
             try {
@@ -1163,7 +1199,7 @@ public final class PathUtils {
                 causeList.add(e);
             }
         }
-        final PosixFileAttributeView posixFileAttributeView = Files.getFileAttributeView(path, PosixFileAttributeView.class, linkOptions);
+        final PosixFileAttributeView posixFileAttributeView = getPosixFileAttributeView(path, linkOptions);
         if (posixFileAttributeView != null) {
             // Not Windows 10
             final PosixFileAttributes readAttributes = posixFileAttributeView.readAttributes();
