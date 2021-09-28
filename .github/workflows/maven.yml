@@ -28,13 +28,13 @@ jobs:
         java: [ 8, 11, 17 ]
         experimental: [false]
         include:
-          - java: 17-ea
+          - java: 18-ea
             os: ubuntu-latest
             experimental: true        
-          - java: 17-ea
+          - java: 18-ea
             os: windows-latest
             experimental: true        
-          - java: 17-ea
+          - java: 18-ea
             os: macos-latest
             experimental: true        
       fail-fast: false
