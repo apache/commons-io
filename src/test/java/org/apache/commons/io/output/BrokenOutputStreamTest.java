@@ -18,10 +18,8 @@ package org.apache.commons.io.output;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.io.IOException;
 import java.io.OutputStream;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -67,14 +65,14 @@ public class BrokenOutputStreamTest {
 
     @Test
     public void testTryWithResources() {
-        IOException thrown = assertThrows(IOException.class, () -> {
+        final IOException thrown = assertThrows(IOException.class, () -> {
             try (OutputStream newStream = new BrokenOutputStream()) {
                 newStream.write(1);
             }
         });
         assertEquals("Broken output stream", thrown.getMessage());
 
-        Throwable[] suppressed = thrown.getSuppressed();
+        final Throwable[] suppressed = thrown.getSuppressed();
         assertEquals(1, suppressed.length);
         assertEquals(IOException.class, suppressed[0].getClass());
         assertEquals("Broken output stream", suppressed[0].getMessage());

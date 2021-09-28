@@ -52,7 +52,7 @@ public class BrokenWriter extends Writer {
     /**
      * Creates a new writer that always throws the given exception.
      *
-     * @param exception the exception to be thrown
+     * @param exception the exception to be thrown.
      */
     public BrokenWriter(final IOException exception) {
         this(() -> exception);
@@ -61,7 +61,7 @@ public class BrokenWriter extends Writer {
     /**
      * Creates a new writer that always throws an {@link IOException}.
      *
-     * @param exceptionSupplier a supplier for the exception to be thrown
+     * @param exceptionSupplier a supplier for the exception to be thrown.
      * @since 2.12.0
      */
     public BrokenWriter(final Supplier<IOException> exceptionSupplier) {
