@@ -19,10 +19,8 @@ package org.apache.commons.io.input;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.io.IOException;
 import java.io.Reader;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -84,6 +82,21 @@ public class BrokenReaderTest {
     @Test
     public void testSkip() {
         assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.skip(1)));
+    }
+
+    @Test
+    public void testTryWithResources() {
+        final IOException thrown = assertThrows(IOException.class, () -> {
+            try (Reader newReader = new BrokenReader()) {
+                newReader.read();
+            }
+        });
+        assertEquals("Broken reader", thrown.getMessage());
+
+        final Throwable[] suppressed = thrown.getSuppressed();
+        assertEquals(1, suppressed.length);
+        assertEquals(IOException.class, suppressed[0].getClass());
+        assertEquals("Broken reader", suppressed[0].getMessage());
     }
 
 }

@@ -18,6 +18,7 @@ package org.apache.commons.io.output;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.function.Supplier;
 
 /**
  * Broken output stream. This stream always throws an {@link IOException} from
@@ -32,24 +33,41 @@ import java.io.OutputStream;
 public class BrokenOutputStream extends OutputStream {
 
     /**
-     * The exception that is thrown by all methods of this class.
+     * A singleton instance.
+     *
+     * @since 2.12.0
      */
-    private final IOException exception;
+    public static final BrokenOutputStream INSTANCE = new BrokenOutputStream();
 
     /**
-     * Creates a new stream that always throws an {@link IOException}
+     * A supplier for the exception that is thrown by all methods of this class.
+     */
+    private final Supplier<IOException> exceptionSupplier;
+
+    /**
+     * Creates a new stream that always throws an {@link IOException}.
      */
     public BrokenOutputStream() {
-        this(new IOException("Broken output stream"));
+        this(() -> new IOException("Broken output stream"));
     }
 
     /**
      * Creates a new stream that always throws the given exception.
      *
-     * @param exception the exception to be thrown
+     * @param exception the exception to be thrown.
      */
     public BrokenOutputStream(final IOException exception) {
-        this.exception = exception;
+        this(() -> exception);
+    }
+
+    /**
+     * Creates a new stream that always throws an {@link IOException}.
+     *
+     * @param exceptionSupplier a supplier for the exception to be thrown.
+     * @since 2.12.0
+     */
+    public BrokenOutputStream(final Supplier<IOException> exceptionSupplier) {
+        this.exceptionSupplier = exceptionSupplier;
     }
 
     /**
@@ -59,7 +77,7 @@ public class BrokenOutputStream extends OutputStream {
      */
     @Override
     public void close() throws IOException {
-        throw exception;
+        throw exceptionSupplier.get();
     }
 
     /**
@@ -69,7 +87,7 @@ public class BrokenOutputStream extends OutputStream {
      */
     @Override
     public void flush() throws IOException {
-        throw exception;
+        throw exceptionSupplier.get();
     }
 
     /**
@@ -80,7 +98,7 @@ public class BrokenOutputStream extends OutputStream {
      */
     @Override
     public void write(final int b) throws IOException {
-        throw exception;
+        throw exceptionSupplier.get();
     }
 
 }

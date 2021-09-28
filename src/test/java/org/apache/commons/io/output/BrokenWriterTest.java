@@ -18,10 +18,8 @@ package org.apache.commons.io.output;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.io.IOException;
 import java.io.Writer;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -107,6 +105,21 @@ public class BrokenWriterTest {
     @Test
     public void testWriteStringIndexed() {
         assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.write("01", 0, 1)));
+    }
+
+    @Test
+    public void testTryWithResources() {
+        final IOException thrown = assertThrows(IOException.class, () -> {
+            try (Writer newWriter = new BrokenWriter()) {
+                newWriter.write(1);
+            }
+        });
+        assertEquals("Broken writer", thrown.getMessage());
+
+        final Throwable[] suppressed = thrown.getSuppressed();
+        assertEquals(1, suppressed.length);
+        assertEquals(IOException.class, suppressed[0].getClass());
+        assertEquals("Broken writer", suppressed[0].getMessage());
     }
 
 }
