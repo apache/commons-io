@@ -16,7 +16,7 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.ByteBuffer;
 
@@ -30,19 +30,19 @@ public class ByteBufferCleanerTest {
 
     @Test
     void testCleanEmpty() {
-       ByteBuffer buffer = ByteBuffer.allocateDirect(10);
-       // There is no way verify that the buffer has been cleaned up, we are just verifying that
-       // clean() doesn't blow up
-       ByteBufferCleaner.clean(buffer);
+        final ByteBuffer buffer = ByteBuffer.allocateDirect(10);
+        // There is no way verify that the buffer has been cleaned up, we are just verifying that
+        // clean() doesn't blow up
+        ByteBufferCleaner.clean(buffer);
     }
-    
+
     @Test
     void testCleanFull() {
-       ByteBuffer buffer = ByteBuffer.allocateDirect(10);
-       buffer.put(RandomUtils.nextBytes(10), 0, 10);
-       // There is no way verify that the buffer has been cleaned up, we are just verifying that
-       // clean() doesn't blow up
-       ByteBufferCleaner.clean(buffer);
+        final ByteBuffer buffer = ByteBuffer.allocateDirect(10);
+        buffer.put(RandomUtils.nextBytes(10), 0, 10);
+        // There is no way verify that the buffer has been cleaned up, we are just verifying that
+        // clean() doesn't blow up
+        ByteBufferCleaner.clean(buffer);
     }
 
     @Test

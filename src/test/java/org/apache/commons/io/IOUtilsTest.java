@@ -644,7 +644,7 @@ public class IOUtilsTest {
     @Test
     public void testCopy_ByteArray_OutputStream() throws Exception {
         final File destination = TestUtils.newFile(temporaryFolder, "copy8.txt");
-        byte[] in;
+        final byte[] in;
         try (InputStream fin = Files.newInputStream(testFilePath)) {
             // Create our byte[]. Rely on testInputStreamToByteArray() to make sure this is valid.
             in = IOUtils.toByteArray(fin);
@@ -664,7 +664,7 @@ public class IOUtilsTest {
     @Test
     public void testCopy_ByteArray_Writer() throws Exception {
         final File destination = TestUtils.newFile(temporaryFolder, "copy7.txt");
-        byte[] in;
+        final byte[] in;
         try (InputStream fin = Files.newInputStream(testFilePath)) {
             // Create our byte[]. Rely on testInputStreamToByteArray() to make sure this is valid.
             in = IOUtils.toByteArray(fin);
@@ -682,7 +682,7 @@ public class IOUtilsTest {
     @Test
     public void testCopy_String_Writer() throws Exception {
         final File destination = TestUtils.newFile(temporaryFolder, "copy6.txt");
-        String str;
+        final String str;
         try (Reader fin = Files.newBufferedReader(testFilePath)) {
             // Create our String. Rely on testReaderToString() to make sure this is valid.
             str = IOUtils.toString(fin);
@@ -1386,7 +1386,7 @@ public class IOUtilsTest {
     @Test
     public void testStringToOutputStream() throws Exception {
         final File destination = TestUtils.newFile(temporaryFolder, "copy5.txt");
-        String str;
+        final String str;
         try (Reader fin = Files.newBufferedReader(testFilePath)) {
             // Create our String. Rely on testReaderToString() to make sure this is valid.
             str = IOUtils.toString(fin);
@@ -1557,7 +1557,7 @@ public class IOUtilsTest {
     @Test
     public void testToByteArray_URLConnection() throws Exception {
         final URLConnection urlConn = testFile.toURI().toURL().openConnection();
-        byte[] actual;
+        final byte[] actual;
         try {
             actual = IOUtils.toByteArray(urlConn);
         } finally {

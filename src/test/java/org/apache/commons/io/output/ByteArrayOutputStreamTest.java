@@ -42,6 +42,7 @@ public class ByteArrayOutputStreamTest {
 
     private interface BAOSFactory<T extends AbstractByteArrayOutputStream> {
         T newInstance();
+
         T newInstance(final int size);
     }
 
@@ -79,10 +80,8 @@ public class ByteArrayOutputStreamTest {
     }
 
     private static Stream<Arguments> baosFactories() {
-        return Stream.of(
-                Arguments.of(ByteArrayOutputStream.class.getSimpleName(), new ByteArrayOutputStreamFactory()),
-                Arguments.of(UnsynchronizedByteArrayOutputStream.class.getSimpleName(), new UnsynchronizedByteArrayOutputStreamFactory())
-        );
+        return Stream.of(Arguments.of(ByteArrayOutputStream.class.getSimpleName(), new ByteArrayOutputStreamFactory()),
+            Arguments.of(UnsynchronizedByteArrayOutputStream.class.getSimpleName(), new UnsynchronizedByteArrayOutputStreamFactory()));
     }
 
     private static boolean byteCmp(final byte[] src, final byte[] cmp) {
@@ -98,14 +97,13 @@ public class ByteArrayOutputStreamTest {
         final IOFunction<InputStream, InputStream> syncBaosToBufferedInputStream = ByteArrayOutputStream::toBufferedInputStream;
         final IOFunction<InputStream, InputStream> syncBaosToBufferedInputStreamWithSize = is -> ByteArrayOutputStream.toBufferedInputStream(is, 1024);
         final IOFunction<InputStream, InputStream> unSyncBaosToBufferedInputStream = UnsynchronizedByteArrayOutputStream::toBufferedInputStream;
-        final IOFunction<InputStream, InputStream> unSyncBaosToBufferedInputStreamWithSize = is -> UnsynchronizedByteArrayOutputStream.toBufferedInputStream(is, 1024);
+        final IOFunction<InputStream, InputStream> unSyncBaosToBufferedInputStreamWithSize = is -> UnsynchronizedByteArrayOutputStream.toBufferedInputStream(is,
+            1024);
 
-        return Stream.of(
-            Arguments.of("ByteArrayOutputStream.toBufferedInputStream(InputStream)", syncBaosToBufferedInputStream),
+        return Stream.of(Arguments.of("ByteArrayOutputStream.toBufferedInputStream(InputStream)", syncBaosToBufferedInputStream),
             Arguments.of("ByteArrayOutputStream.toBufferedInputStream(InputStream, int)", syncBaosToBufferedInputStreamWithSize),
             Arguments.of("UnsynchronizedByteArrayOutputStream.toBufferedInputStream(InputStream)", unSyncBaosToBufferedInputStream),
-            Arguments.of("UnsynchronizedByteArrayOutputStream.toBufferedInputStream(InputStream, int)", unSyncBaosToBufferedInputStreamWithSize)
-        );
+            Arguments.of("UnsynchronizedByteArrayOutputStream.toBufferedInputStream(InputStream, int)", unSyncBaosToBufferedInputStreamWithSize));
     }
 
     private void checkByteArrays(final byte[] expected, final byte[] actual) {
@@ -117,9 +115,7 @@ public class ByteArrayOutputStreamTest {
         }
     }
 
-    private void checkStreams(
-            final AbstractByteArrayOutputStream actual,
-            final java.io.ByteArrayOutputStream expected) {
+    private void checkStreams(final AbstractByteArrayOutputStream actual, final java.io.ByteArrayOutputStream expected) {
         assertEquals(expected.size(), actual.size(), "Sizes are not equal");
         final byte[] buf = actual.toByteArray();
         final byte[] refbuf = expected.toByteArray();
@@ -129,9 +125,7 @@ public class ByteArrayOutputStreamTest {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
     public void testInvalidParameterizedConstruction(final String baosName, final BAOSFactory<?> baosFactory) {
-        assertThrows(IllegalArgumentException.class, () ->
-                baosFactory.newInstance(-1)
-        );
+        assertThrows(IllegalArgumentException.class, () -> baosFactory.newInstance(-1));
     }
 
     @ParameterizedTest(name = "[{index}] {0}")
@@ -152,8 +146,7 @@ public class ByteArrayOutputStreamTest {
 
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
-    public void testInvalidWriteOffsetAndLenUnder(final String baosName, final BAOSFactory<?> baosFactory)
-        throws IOException {
+    public void testInvalidWriteOffsetAndLenUnder(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
         try (final AbstractByteArrayOutputStream baout = baosFactory.newInstance()) {
             assertThrows(IndexOutOfBoundsException.class, () -> baout.write(new byte[1], 1, -2));
         }
@@ -236,7 +229,7 @@ public class ByteArrayOutputStreamTest {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("toBufferedInputStreamFunctionFactories")
     public void testToBufferedInputStream(final String baosName, final IOFunction<InputStream, InputStream> toBufferedInputStreamFunction) throws IOException {
-        final byte data[] = {(byte)0xCA, (byte)0xFE, (byte)0xBA, (byte)0xBE};
+        final byte data[] = {(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE};
 
         try (final ByteArrayInputStream bain = new ByteArrayInputStream(data)) {
             assertEquals(data.length, bain.available());
@@ -252,7 +245,8 @@ public class ByteArrayOutputStreamTest {
 
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("toBufferedInputStreamFunctionFactories")
-    public void testToBufferedInputStreamEmpty(final String baosName, final IOFunction<InputStream, InputStream> toBufferedInputStreamFunction) throws IOException {
+    public void testToBufferedInputStreamEmpty(final String baosName, final IOFunction<InputStream, InputStream> toBufferedInputStreamFunction)
+        throws IOException {
         try (final ByteArrayInputStream bain = new ByteArrayInputStream(IOUtils.EMPTY_BYTE_ARRAY)) {
             assertEquals(0, bain.available());
 
@@ -356,9 +350,7 @@ public class ByteArrayOutputStreamTest {
         }
     }
 
-    private int writeData(final AbstractByteArrayOutputStream baout,
-                final java.io.ByteArrayOutputStream ref,
-                final int count) {
+    private int writeData(final AbstractByteArrayOutputStream baout, final java.io.ByteArrayOutputStream ref, final int count) {
         if (count > DATA.length) {
             throw new IllegalArgumentException("Requesting too many bytes");
         }
@@ -372,9 +364,7 @@ public class ByteArrayOutputStreamTest {
         return count;
     }
 
-    private int writeData(final AbstractByteArrayOutputStream baout,
-                final java.io.ByteArrayOutputStream ref,
-                final int[] instructions) {
+    private int writeData(final AbstractByteArrayOutputStream baout, final java.io.ByteArrayOutputStream ref, final int[] instructions) {
         int written = 0;
         for (final int instruction : instructions) {
             written += writeData(baout, ref, instruction);

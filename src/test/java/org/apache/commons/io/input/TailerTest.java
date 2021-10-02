@@ -50,7 +50,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.RandomAccessFileMode;
 import org.apache.commons.io.TestResources;
 import org.apache.commons.io.test.TestUtils;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 

@@ -383,7 +383,7 @@ public class ReadAheadInputStream extends InputStream {
             return n;
         }
         stateChangeLock.lock();
-        long skipped;
+        final long skipped;
         try {
             skipped = skipInternal(n);
         } finally {

@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -33,7 +32,6 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.filefilter.PrefixFileFilter;
 import org.apache.commons.io.test.TestUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -185,7 +183,7 @@ public class FileCleaningTrackerTest {
 
         final String path = testFile.getPath();
         final Object marker = new Object();
-        
+
         assertThrows(IllegalStateException.class, () -> theInstance.track(path, marker));
         assertTrue(theInstance.exitWhenFinished);
         assertNull(theInstance.reaper);
@@ -306,12 +304,14 @@ public class FileCleaningTrackerTest {
         System.gc();
         TestUtils.sleep(500);
         int count = 0;
-        while(theInstance.getTrackCount() != 0 && count++ < 5) {
+        while (theInstance.getTrackCount() != 0 && count++ < 5) {
             List<String> list = new ArrayList<>();
             try {
                 long i = 0;
                 while (theInstance.getTrackCount() != 0) {
-                    list.add("A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String " + (i++));
+                    list.add(
+                        "A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String "
+                            + (i++));
                 }
             } catch (final Throwable ignored) {
             }

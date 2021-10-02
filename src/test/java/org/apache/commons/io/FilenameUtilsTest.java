@@ -255,15 +255,15 @@ public class FilenameUtilsTest {
 
         if (FilenameUtils.isSystemWindows()) {
             // Special case handling for NTFS ADS names
-        	try {
-        		FilenameUtils.getExtension("foo.exe:bar.txt");
-        		throw new AssertionError("Expected Exception");
-        	} catch (final IllegalArgumentException e) {
-        		assertEquals("NTFS ADS separator (':') in file name is forbidden.", e.getMessage());
-        	}
+            try {
+                FilenameUtils.getExtension("foo.exe:bar.txt");
+                throw new AssertionError("Expected Exception");
+            } catch (final IllegalArgumentException e) {
+                assertEquals("NTFS ADS separator (':') in file name is forbidden.", e.getMessage());
+            }
         } else {
-        	// Upwards compatibility:
-        	assertEquals("txt", FilenameUtils.getExtension("foo.exe:bar.txt"));
+            // Upwards compatibility:
+            assertEquals("txt", FilenameUtils.getExtension("foo.exe:bar.txt"));
         }
     }
 
@@ -599,15 +599,15 @@ public class FilenameUtilsTest {
 
         if (FilenameUtils.isSystemWindows()) {
             // Special case handling for NTFS ADS names
-        	try {
-        		FilenameUtils.indexOfExtension("foo.exe:bar.txt");
-        		throw new AssertionError("Expected Exception");
-        	} catch (final IllegalArgumentException e) {
-        		assertEquals("NTFS ADS separator (':') in file name is forbidden.", e.getMessage());
-        	}
+            try {
+                FilenameUtils.indexOfExtension("foo.exe:bar.txt");
+                throw new AssertionError("Expected Exception");
+            } catch (final IllegalArgumentException e) {
+                assertEquals("NTFS ADS separator (':') in file name is forbidden.", e.getMessage());
+            }
         } else {
-        	// Upwards compatibility on other systems
-        	assertEquals(11, FilenameUtils.indexOfExtension("foo.exe:bar.txt"));
+            // Upwards compatibility on other systems
+            assertEquals(11, FilenameUtils.indexOfExtension("foo.exe:bar.txt"));
         }
 
     }
@@ -929,16 +929,14 @@ public class FilenameUtilsTest {
         assertEquals(SEP + SEP + "::1" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\::1\\a\\b\\c.txt"));
         assertEquals(SEP + SEP + "1::" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\1::\\a\\b\\c.txt"));
         assertEquals(SEP + SEP + "server.example.org" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\server.example.org\\a\\b\\c.txt"));
-        assertEquals(SEP + SEP + "server.sub.example.org" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\server.sub.example.org\\a\\b\\c.txt"));
+        assertEquals(SEP + SEP + "server.sub.example.org" + SEP + "a" + SEP + "b" + SEP + "c.txt",
+            FilenameUtils.normalize("\\\\server.sub.example.org\\a\\b\\c.txt"));
         assertEquals(SEP + SEP + "server." + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\server.\\a\\b\\c.txt"));
-        assertEquals(SEP + SEP + "1::127.0.0.1" + SEP + "a" + SEP + "b" + SEP + "c.txt",
-            FilenameUtils.normalize("\\\\1::127.0.0.1\\a\\b\\c.txt"));
+        assertEquals(SEP + SEP + "1::127.0.0.1" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\1::127.0.0.1\\a\\b\\c.txt"));
 
         // not valid IPv4 addresses but technically a valid "reg-name"s according to RFC1034
-        assertEquals(SEP + SEP + "127.0.0.256" + SEP + "a" + SEP + "b" + SEP + "c.txt",
-            FilenameUtils.normalize("\\\\127.0.0.256\\a\\b\\c.txt"));
-        assertEquals(SEP + SEP + "127.0.0.01" + SEP + "a" + SEP + "b" + SEP + "c.txt",
-            FilenameUtils.normalize("\\\\127.0.0.01\\a\\b\\c.txt"));
+        assertEquals(SEP + SEP + "127.0.0.256" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\127.0.0.256\\a\\b\\c.txt"));
+        assertEquals(SEP + SEP + "127.0.0.01" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\127.0.0.01\\a\\b\\c.txt"));
 
         assertNull(FilenameUtils.normalize("\\\\-server\\a\\b\\c.txt"));
         assertNull(FilenameUtils.normalize("\\\\.\\a\\b\\c.txt"));

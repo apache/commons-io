@@ -41,7 +41,8 @@ public class ReversedLinesFileReaderTestParamBlockSize {
     private static final String ISO_8859_1 = "ISO-8859-1";
 
     // "A Test Line. Special chars: Ã„Ã¤ÃœÃ¼Ã–Ã¶ÃŸ ÃƒÃ¡Ã©Ã­Ã¯Ã§Ã±Ã‚ Â©ÂµÂ¥Â£Â±Â²Â®"
-    private static final String TEST_LINE = "A Test Line. Special chars: \u00C4\u00E4\u00DC\u00FC\u00D6\u00F6\u00DF \u00C3\u00E1\u00E9\u00ED\u00EF\u00E7\u00F1\u00C2 \u00A9\u00B5\u00A5\u00A3\u00B1\u00B2\u00AE";
+    private static final String TEST_LINE = "A Test Line. Special chars: "
+        + "\u00C4\u00E4\u00DC\u00FC\u00D6\u00F6\u00DF \u00C3\u00E1\u00E9\u00ED\u00EF\u00E7\u00F1\u00C2 \u00A9\u00B5\u00A5\u00A3\u00B1\u00B2\u00AE";
 
     // Hiragana letters: ã��ã�‚ã�ƒã�„ã�…
     private static final String TEST_LINE_SHIFT_JIS1 = "Hiragana letters: \u3041\u3042\u3043\u3044\u3045";

@@ -25,78 +25,75 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-
 public class CircularBufferInputStreamTest {
-	private final Random rnd = new Random(1530960934483L); // System.currentTimeMillis(), when this test was written.
-	                                                       // Always using the same seed should ensure a reproducible test.
+    private final Random rnd = new Random(1530960934483L); // System.currentTimeMillis(), when this test was written.
+                                                           // Always using the same seed should ensure a reproducible test.
 
-	/**
-	 * Create a large, but random input buffer.
-	 */
-	private byte[] newInputBuffer() {
-		final byte[] buffer = new byte[16*512+rnd.nextInt(512)];
-		rnd.nextBytes(buffer);
-		return buffer;
-	}
+    /**
+     * Create a large, but random input buffer.
+     */
+    private byte[] newInputBuffer() {
+        final byte[] buffer = new byte[16 * 512 + rnd.nextInt(512)];
+        rnd.nextBytes(buffer);
+        return buffer;
+    }
 
-	@Test
-  public void testIO683() throws IOException {
-      final byte[] buffer = {0, 1, -2, -2, -1, 4};
-      try (final ByteArrayInputStream bais = new ByteArrayInputStream(buffer); final CircularBufferInputStream cbis = new CircularBufferInputStream(bais)) {
-          int b;
-          int i = 0;
-          while ((b = cbis.read()) != -1) {
-              assertEquals(buffer[i] & 0xFF, b, "byte at index " + i + " should be equal");
-              i++;
-          }
-          assertEquals(buffer.length, i, "Should have read all the bytes");
-      }
-  }
-
-	@Test
-	public void testRandomRead() throws Exception {
-		final byte[] inputBuffer = newInputBuffer();
-		final byte[] bufferCopy = new byte[inputBuffer.length];
-		final ByteArrayInputStream bais = new ByteArrayInputStream(inputBuffer);
-		@SuppressWarnings("resource")
-		final CircularBufferInputStream cbis = new CircularBufferInputStream(bais, 253);
-		int offset = 0;
-		final byte[] readBuffer = new byte[256];
-		while (offset < bufferCopy.length) {
-			switch (rnd.nextInt(2)) {
-			case 0:
-			{
-				final int res = cbis.read();
-				if (res == -1) {
-					throw new IllegalStateException("Unexpected EOF at offset " + offset);
-				}
-				if (inputBuffer[offset] != (byte) res) { // compare as bytes
-					throw new IllegalStateException("Expected " + inputBuffer[offset] + " at offset " + offset + ", got " + res);
-				}
-				++offset;
-				break;
-			}
-			case 1:
-			{
-				final int res = cbis.read(readBuffer, 0, rnd.nextInt(readBuffer.length+1));
-				if (res == -1) {
-					throw new IllegalStateException("Unexpected EOF at offset " + offset);
-				}
-        if (res == 0) {
-					throw new IllegalStateException("Unexpected zero-byte-result at offset " + offset);
-				}
-        for (int i = 0;  i < res;  i++) {
-            if (inputBuffer[offset] != readBuffer[i]) {
-                throw new IllegalStateException("Expected " + inputBuffer[offset] + " at offset " + offset + ", got " + readBuffer[i]);
+    @Test
+    public void testIO683() throws IOException {
+        final byte[] buffer = {0, 1, -2, -2, -1, 4};
+        try (final ByteArrayInputStream bais = new ByteArrayInputStream(buffer); final CircularBufferInputStream cbis = new CircularBufferInputStream(bais)) {
+            int b;
+            int i = 0;
+            while ((b = cbis.read()) != -1) {
+                assertEquals(buffer[i] & 0xFF, b, "byte at index " + i + " should be equal");
+                i++;
             }
-            ++offset;
+            assertEquals(buffer.length, i, "Should have read all the bytes");
         }
-				break;
-			}
-			default:
-				throw new IllegalStateException("Unexpected random choice value");
-			}
-		}
-		assertTrue(true, "Test finished OK");
-	}
+    }
+
+    @Test
+    public void testRandomRead() throws Exception {
+        final byte[] inputBuffer = newInputBuffer();
+        final byte[] bufferCopy = new byte[inputBuffer.length];
+        final ByteArrayInputStream bais = new ByteArrayInputStream(inputBuffer);
+        @SuppressWarnings("resource")
+        final CircularBufferInputStream cbis = new CircularBufferInputStream(bais, 253);
+        int offset = 0;
+        final byte[] readBuffer = new byte[256];
+        while (offset < bufferCopy.length) {
+            switch (rnd.nextInt(2)) {
+            case 0: {
+                final int res = cbis.read();
+                if (res == -1) {
+                    throw new IllegalStateException("Unexpected EOF at offset " + offset);
+                }
+                if (inputBuffer[offset] != (byte) res) { // compare as bytes
+                    throw new IllegalStateException("Expected " + inputBuffer[offset] + " at offset " + offset + ", got " + res);
+                }
+                ++offset;
+                break;
+            }
+            case 1: {
+                final int res = cbis.read(readBuffer, 0, rnd.nextInt(readBuffer.length + 1));
+                if (res == -1) {
+                    throw new IllegalStateException("Unexpected EOF at offset " + offset);
+                }
+                if (res == 0) {
+                    throw new IllegalStateException("Unexpected zero-byte-result at offset " + offset);
+                }
+                for (int i = 0; i < res; i++) {
+                    if (inputBuffer[offset] != readBuffer[i]) {
+                        throw new IllegalStateException("Expected " + inputBuffer[offset] + " at offset " + offset + ", got " + readBuffer[i]);
+                    }
+                    ++offset;
+                }
+                break;
+            }
+            default:
+                throw new IllegalStateException("Unexpected random choice value");
+            }
+        }
+        assertTrue(true, "Test finished OK");
+    }
 }

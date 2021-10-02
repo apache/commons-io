@@ -33,88 +33,87 @@ import org.junit.jupiter.api.condition.OS;
 @DisabledOnOs({OS.WINDOWS, OS.MAC})
 public class FileUtilsDeleteDirectoryLinuxTest extends FileUtilsDeleteDirectoryBaseTest {
 
-	/** Only runs on Linux. */
-	private boolean chmod(final File file, final int mode, final boolean recurse) throws InterruptedException {
-		final List<String> args = new ArrayList<>();
-		args.add("chmod");
+    /** Only runs on Linux. */
+    private boolean chmod(final File file, final int mode, final boolean recurse) throws InterruptedException {
+        final List<String> args = new ArrayList<>();
+        args.add("chmod");
 
-		if (recurse) {
-			args.add("-R");
-		}
+        if (recurse) {
+            args.add("-R");
+        }
 
-		args.add(Integer.toString(mode));
-		args.add(file.getAbsolutePath());
+        args.add(Integer.toString(mode));
+        args.add(file.getAbsolutePath());
 
-		final Process proc;
+        final Process proc;
 
-		try {
-			proc = Runtime.getRuntime().exec(args.toArray(new String[args.size()]));
-		} catch (final IOException e) {
-			return false;
-		}
-		return proc.waitFor() == 0;
-	}
+        try {
+            proc = Runtime.getRuntime().exec(args.toArray(new String[args.size()]));
+        } catch (final IOException e) {
+            return false;
+        }
+        return proc.waitFor() == 0;
+    }
 
-	@Override
-	protected boolean setupSymlink(final File res, final File link) throws Exception {
-		// create symlink
-		final List<String> args = new ArrayList<>();
-		args.add("ln");
-		args.add("-s");
+    @Override
+    protected boolean setupSymlink(final File res, final File link) throws Exception {
+        // create symlink
+        final List<String> args = new ArrayList<>();
+        args.add("ln");
+        args.add("-s");
 
-		args.add(res.getAbsolutePath());
-		args.add(link.getAbsolutePath());
+        args.add(res.getAbsolutePath());
+        args.add(link.getAbsolutePath());
 
-		final Process proc;
+        final Process proc;
 
-		proc = Runtime.getRuntime().exec(args.toArray(new String[args.size()]));
-		return proc.waitFor() == 0;
-	}
+        proc = Runtime.getRuntime().exec(args.toArray(new String[args.size()]));
+        return proc.waitFor() == 0;
+    }
 
-	@Test
-	public void testThrowsOnCannotDeleteFile() throws Exception {
-		final File nested = new File(top, "nested");
-		assertTrue(nested.mkdirs());
+    @Test
+    public void testThrowsOnCannotDeleteFile() throws Exception {
+        final File nested = new File(top, "nested");
+        assertTrue(nested.mkdirs());
 
-		final File file = new File(nested, "restricted");
-		FileUtils.touch(file);
+        final File file = new File(nested, "restricted");
+        FileUtils.touch(file);
 
-		assumeTrue(chmod(nested, 500, false));
+        assumeTrue(chmod(nested, 500, false));
 
-		try {
-			// deleteDirectory calls forceDelete
-			FileUtils.deleteDirectory(nested);
-			fail("expected IOException");
-		} catch (final IOException e) {
-			final IOExceptionList list = (IOExceptionList) e;
-			assertEquals("Cannot delete file: " + file.getAbsolutePath(), list.getCause(0).getMessage());
-		} finally {
-			chmod(nested, 755, false);
-			FileUtils.deleteDirectory(nested);
-		}
-		assertEquals(0, top.list().length);
-	}
+        try {
+            // deleteDirectory calls forceDelete
+            FileUtils.deleteDirectory(nested);
+            fail("expected IOException");
+        } catch (final IOException e) {
+            final IOExceptionList list = (IOExceptionList) e;
+            assertEquals("Cannot delete file: " + file.getAbsolutePath(), list.getCause(0).getMessage());
+        } finally {
+            chmod(nested, 755, false);
+            FileUtils.deleteDirectory(nested);
+        }
+        assertEquals(0, top.list().length);
+    }
 
-	@Test
-	public void testThrowsOnNullList() throws Exception {
-		final File nested = new File(top, "nested");
-		assertTrue(nested.mkdirs());
+    @Test
+    public void testThrowsOnNullList() throws Exception {
+        final File nested = new File(top, "nested");
+        assertTrue(nested.mkdirs());
 
-		// test wont work if we can't restrict permissions on the
-		// directory, so skip it.
-		assumeTrue(chmod(nested, 0, false));
+        // test wont work if we can't restrict permissions on the
+        // directory, so skip it.
+        assumeTrue(chmod(nested, 0, false));
 
-		try {
-			// cleanDirectory calls forceDelete
-			FileUtils.deleteDirectory(nested);
-			fail("expected IOException");
-		} catch (final IOException e) {
-			assertEquals("Unknown I/O error listing contents of directory: " + nested.getAbsolutePath(),
-					e.getMessage());
-		} finally {
-			chmod(nested, 755, false);
-			FileUtils.deleteDirectory(nested);
-		}
-		assertEquals(0, top.list().length);
-	}
+        try {
+            // cleanDirectory calls forceDelete
+            FileUtils.deleteDirectory(nested);
+            fail("expected IOException");
+        } catch (final IOException e) {
+            assertEquals("Unknown I/O error listing contents of directory: " + nested.getAbsolutePath(), e.getMessage());
+        } finally {
+            chmod(nested, 755, false);
+            FileUtils.deleteDirectory(nested);
+        }
+        assertEquals(0, top.list().length);
+    }
 }

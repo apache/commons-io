@@ -372,8 +372,10 @@ file comparators, endian transformation classes, and much more.
           <artifactId>maven-checkstyle-plugin</artifactId>
           <version>${checkstyle.plugin.version}</version>
           <configuration>
-            <configLocation>${basedir}/checkstyle.xml</configLocation>
+            <configLocation>${basedir}/src/conf/checkstyle.xml</configLocation>
+            <suppressionsLocation>${basedir}/src/conf/checkstyle-suppressions.xml</suppressionsLocation>
             <enableRulesSummary>false</enableRulesSummary>
+            <includeTestSourceDirectory>true</includeTestSourceDirectory>
           </configuration>
           <dependencies>
             <dependency>

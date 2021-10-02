@@ -56,7 +56,7 @@ public class ReaderInputStreamTest {
         assertThrows(IllegalArgumentException.class, () -> new ReaderInputStream(new StringReader("\uD800"), StandardCharsets.UTF_8, 0));
         assertThrows(IllegalArgumentException.class, () -> new ReaderInputStream(new StringReader("\uD800"), StandardCharsets.UTF_8, 1));
     }
-    
+
     @Test
     @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
     public void testBufferSmallest() throws IOException {
@@ -65,7 +65,7 @@ public class ReaderInputStreamTest {
             in.read();
         }
     }
-    
+
     /*
      * Tests https://issues.apache.org/jira/browse/IO-277
      */
@@ -89,7 +89,7 @@ public class ReaderInputStreamTest {
     @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
     public void testCodingErrorAction() throws IOException {
         final Charset charset = StandardCharsets.UTF_8;
-        CharsetEncoder encoder = charset.newEncoder().onMalformedInput(CodingErrorAction.REPORT);
+        final CharsetEncoder encoder = charset.newEncoder().onMalformedInput(CodingErrorAction.REPORT);
         try (InputStream in = new ReaderInputStream(new StringReader("\uD800aa"), encoder, (int) ReaderInputStream.minBufferSize(charset.newEncoder()))) {
             assertThrows(CharacterCodingException.class, in::read);
         }

@@ -324,5 +324,4 @@ public class PathUtilsTest extends TestArguments {
         return file;
     }
 
-    
 }

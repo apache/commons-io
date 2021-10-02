@@ -24,66 +24,60 @@ import java.nio.charset.StandardCharsets;
 
 import org.junit.jupiter.api.Test;
 
-public class UnixLineEndingInputStreamTest
-{
+public class UnixLineEndingInputStreamTest {
 
     @Test
     public void crAtEnd() throws Exception {
-        assertEquals( "a\n", roundtrip( "a\r" ) );
+        assertEquals("a\n", roundtrip("a\r"));
     }
 
     @Test
-    public void crOnlyEnsureAtEof()
-        throws Exception
-    {
-        assertEquals( "a\nb\n", roundtrip( "a\rb" ) );
+    public void crOnlyEnsureAtEof() throws Exception {
+        assertEquals("a\nb\n", roundtrip("a\rb"));
     }
 
     @Test
-    public void crOnlyNotAtEof()
-        throws Exception
-    {
-        assertEquals( "a\nb", roundtrip( "a\rb", false ) );
+    public void crOnlyNotAtEof() throws Exception {
+        assertEquals("a\nb", roundtrip("a\rb", false));
     }
 
     @Test
     public void inTheMiddleOfTheLine() throws Exception {
-        assertEquals( "a\nbc\n", roundtrip( "a\r\nbc" ) );
+        assertEquals("a\nbc\n", roundtrip("a\r\nbc"));
     }
 
     @Test
     public void multipleBlankLines() throws Exception {
-        assertEquals( "a\n\nbc\n", roundtrip( "a\r\n\r\nbc" ) );
+        assertEquals("a\n\nbc\n", roundtrip("a\r\n\r\nbc"));
     }
 
     @Test
     public void retainLineFeed() throws Exception {
-        assertEquals( "a\n\n", roundtrip( "a\r\n\r\n", false ) );
-        assertEquals( "a", roundtrip( "a", false ) );
+        assertEquals("a\n\n", roundtrip("a\r\n\r\n", false));
+        assertEquals("a", roundtrip("a", false));
     }
 
-    private String roundtrip( final String msg ) throws IOException {
-        return roundtrip( msg, true );
+    private String roundtrip(final String msg) throws IOException {
+        return roundtrip(msg, true);
     }
 
-
-    private String roundtrip( final String msg, final boolean ensure ) throws IOException {
-        final ByteArrayInputStream baos = new ByteArrayInputStream( msg.getBytes(StandardCharsets.UTF_8) );
-        final UnixLineEndingInputStream lf = new UnixLineEndingInputStream( baos, ensure );
+    private String roundtrip(final String msg, final boolean ensure) throws IOException {
+        final ByteArrayInputStream baos = new ByteArrayInputStream(msg.getBytes(StandardCharsets.UTF_8));
+        final UnixLineEndingInputStream lf = new UnixLineEndingInputStream(baos, ensure);
         final byte[] buf = new byte[100];
-        final int read = lf.read( buf );
+        final int read = lf.read(buf);
         lf.close();
-        return new String( buf, 0, read, StandardCharsets.UTF_8);
+        return new String(buf, 0, read, StandardCharsets.UTF_8);
     }
 
     @Test
     public void simpleString() throws Exception {
-        assertEquals( "abc\n", roundtrip( "abc" ) );
+        assertEquals("abc\n", roundtrip("abc"));
     }
 
     @Test
     public void twoLinesAtEnd() throws Exception {
-        assertEquals( "a\n\n", roundtrip( "a\r\n\r\n" ) );
+        assertEquals("a\n\n", roundtrip("a\r\n\r\n"));
     }
 
 }
