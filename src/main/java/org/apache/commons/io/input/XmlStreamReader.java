@@ -524,21 +524,21 @@ public class XmlStreamReader extends Reader {
      * It does a lenient charset encoding detection, check the constructor with
      * the lenient parameter for details.
      *
-     * @param conn URLConnection to create a Reader from.
+     * @param urlConnection URLConnection to create a Reader from.
      * @param defaultEncoding The default encoding
      * @throws IOException thrown if there is a problem reading the stream of
      *         the URLConnection.
      */
-    public XmlStreamReader(final URLConnection conn, final String defaultEncoding) throws IOException {
-        Objects.requireNonNull(conn, "conn");
+    public XmlStreamReader(final URLConnection urlConnection, final String defaultEncoding) throws IOException {
+        Objects.requireNonNull(urlConnection, "urlConnection");
         this.defaultEncoding = defaultEncoding;
         final boolean lenient = true;
-        final String contentType = conn.getContentType();
-        final InputStream inputStream = conn.getInputStream();
+        final String contentType = urlConnection.getContentType();
+        final InputStream inputStream = urlConnection.getInputStream();
         @SuppressWarnings("resource") // managed by the InputStreamReader tracked by this instance
         final BOMInputStream bom = new BOMInputStream(new BufferedInputStream(inputStream, IOUtils.DEFAULT_BUFFER_SIZE), false, BOMS);
         final BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
-        if (conn instanceof HttpURLConnection || contentType != null) {
+        if (urlConnection instanceof HttpURLConnection || contentType != null) {
             this.encoding = processHttpStream(bom, pis, contentType, lenient);
         } else {
             this.encoding = doRawStream(bom, pis, lenient);
