@@ -1109,16 +1109,19 @@ public class FileUtils {
      * @throws IOException if an IO error occurs during copying
      * @since 2.0
      */
-    public static void copyURLToFile(final URL source, final File destination,
-        final int connectionTimeoutMillis, final int readTimeoutMillis) throws IOException {
-        final URLConnection connection = source.openConnection();
-        connection.setConnectTimeout(connectionTimeoutMillis);
-        connection.setReadTimeout(readTimeoutMillis);
-        try (final InputStream stream = connection.getInputStream()) {
-            copyInputStreamToFile(stream, destination);
+    public static void copyURLToFile(final URL source, final File destination, final int connectionTimeoutMillis, final int readTimeoutMillis)
+        throws IOException {
+        final URLConnection urlConnection = source.openConnection();
+        try {
+            urlConnection.setConnectTimeout(connectionTimeoutMillis);
+            urlConnection.setReadTimeout(readTimeoutMillis);
+            try (final InputStream stream = urlConnection.getInputStream()) {
+                copyInputStreamToFile(stream, destination);
+            }
+        } finally {
+            IOUtils.close(urlConnection);
         }
     }
-
 
     /**
      * Creates all parent directories for a File object.
