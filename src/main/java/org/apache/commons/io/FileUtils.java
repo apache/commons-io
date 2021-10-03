@@ -30,7 +30,6 @@ import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.math.BigInteger;
 import java.net.URL;
-import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -1111,15 +1110,12 @@ public class FileUtils {
      */
     public static void copyURLToFile(final URL source, final File destination, final int connectionTimeoutMillis, final int readTimeoutMillis)
         throws IOException {
-        final URLConnection urlConnection = source.openConnection();
-        try {
+        try (final CloseableURLConnection urlConnection = CloseableURLConnection.open(source)) {
             urlConnection.setConnectTimeout(connectionTimeoutMillis);
             urlConnection.setReadTimeout(readTimeoutMillis);
             try (final InputStream stream = urlConnection.getInputStream()) {
                 copyInputStreamToFile(stream, destination);
             }
-        } finally {
-            IOUtils.close(urlConnection);
         }
     }
 

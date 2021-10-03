@@ -50,7 +50,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URL;
-import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.Selector;
@@ -1556,12 +1555,9 @@ public class IOUtilsTest {
 
     @Test
     public void testToByteArray_URLConnection() throws Exception {
-        final URLConnection urlConn = testFile.toURI().toURL().openConnection();
         final byte[] actual;
-        try {
-            actual = IOUtils.toByteArray(urlConn);
-        } finally {
-            IOUtils.close(urlConn);
+        try (final CloseableURLConnection urlConnection = CloseableURLConnection.open(testFile.toURI())) {
+            actual = IOUtils.toByteArray(urlConnection);
         }
         assertEquals(FILE_SIZE, actual.length);
     }

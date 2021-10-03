@@ -491,6 +491,7 @@ public class XmlStreamReader extends Reader {
      *         the URL.
      */
     public XmlStreamReader(final URL url) throws IOException {
+        // TODO URLConnection leak.
         this(url.openConnection());
     }
 

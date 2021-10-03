@@ -2641,25 +2641,22 @@ public class IOUtils {
      * @since 2.4
      */
     public static byte[] toByteArray(final URL url) throws IOException {
-        final URLConnection conn = url.openConnection();
-        try {
-            return IOUtils.toByteArray(conn);
-        } finally {
-            close(conn);
+        try (final CloseableURLConnection urlConnection = CloseableURLConnection.open(url)) {
+            return IOUtils.toByteArray(urlConnection);
         }
     }
 
     /**
      * Gets the contents of a {@code URLConnection} as a {@code byte[]}.
      *
-     * @param urlConn the {@code URLConnection} to read.
+     * @param urlConnection the {@code URLConnection} to read.
      * @return the requested byte array.
      * @throws NullPointerException if the urlConn is null.
      * @throws IOException if an I/O exception occurs.
      * @since 2.4
      */
-    public static byte[] toByteArray(final URLConnection urlConn) throws IOException {
-        try (InputStream inputStream = urlConn.getInputStream()) {
+    public static byte[] toByteArray(final URLConnection urlConnection) throws IOException {
+        try (InputStream inputStream = urlConnection.getInputStream()) {
             return IOUtils.toByteArray(inputStream);
         }
     }
