@@ -16,8 +16,28 @@
  */
 package org.apache.commons.io;
 
-import java.io.*;
-import java.net.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.CharArrayWriter;
+import java.io.Closeable;
+import java.io.EOFException;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
+import java.net.HttpURLConnection;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.channels.ReadableByteChannel;
@@ -32,8 +52,13 @@ import java.util.function.Consumer;
 
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.input.QueueInputStream;
-import org.apache.commons.io.output.*;
+import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.io.output.NullOutputStream;
+import org.apache.commons.io.output.QueueOutputStream;
+import org.apache.commons.io.output.StringBuilderWriter;
+import org.apache.commons.io.output.ThresholdingOutputStream;
+import org.apache.commons.io.output.UnsynchronizedByteArrayOutputStream;
 
 /**
  * General IO stream manipulation utilities.
@@ -186,7 +211,7 @@ public class IOUtils {
         // not checked by BufferedInputStream
         Objects.requireNonNull(inputStream, "inputStream");
         return inputStream instanceof BufferedInputStream ?
-            (BufferedInputStream) inputStream : new BufferedInputStream(inputStream);
+                (BufferedInputStream) inputStream : new BufferedInputStream(inputStream);
     }
 
     /**
@@ -205,7 +230,7 @@ public class IOUtils {
         // not checked by BufferedInputStream
         Objects.requireNonNull(inputStream, "inputStream");
         return inputStream instanceof BufferedInputStream ?
-            (BufferedInputStream) inputStream : new BufferedInputStream(inputStream, size);
+                (BufferedInputStream) inputStream : new BufferedInputStream(inputStream, size);
     }
 
     /**
@@ -223,7 +248,7 @@ public class IOUtils {
         // not checked by BufferedInputStream
         Objects.requireNonNull(outputStream, "outputStream");
         return outputStream instanceof BufferedOutputStream ?
-            (BufferedOutputStream) outputStream : new BufferedOutputStream(outputStream);
+                (BufferedOutputStream) outputStream : new BufferedOutputStream(outputStream);
     }
 
     /**
@@ -242,7 +267,7 @@ public class IOUtils {
         // not checked by BufferedInputStream
         Objects.requireNonNull(outputStream, "outputStream");
         return outputStream instanceof BufferedOutputStream ?
-            (BufferedOutputStream) outputStream : new BufferedOutputStream(outputStream, size);
+                (BufferedOutputStream) outputStream : new BufferedOutputStream(outputStream, size);
     }
 
     /**
@@ -1351,7 +1376,7 @@ public class IOUtils {
      */
     @SuppressWarnings("resource") // streams are closed by the caller.
     public static long copyLarge(final InputStream inputStream, final OutputStream outputStream, final byte[] buffer)
-            throws IOException {
+        throws IOException {
         Objects.requireNonNull(inputStream, "inputStream");
         Objects.requireNonNull(outputStream, "outputStream");
         long count = 0;
@@ -1388,13 +1413,8 @@ public class IOUtils {
      * @since 2.2
      */
     public static long copyLarge(final InputStream input, final OutputStream output, final long inputOffset,
-            final long length) throws IOException {
+                                 final long length) throws IOException {
         return copyLarge(input, output, inputOffset, length, getByteArray());
-    }
-
-    public static long copyLarge(final OutputStream output, final InputStream input, final long outputOffset, final long length)
-            throws IOException {
-        return copyLarge(output, input, outputOffset, length, getByteArray());
     }
 
     /**
@@ -1422,42 +1442,13 @@ public class IOUtils {
      * @since 2.2
      */
     public static long copyLarge(final InputStream input, final OutputStream output,
-            final long inputOffset, final long length, final byte[] buffer) throws IOException {
+                                 final long inputOffset, final long length, final byte[] buffer) throws IOException {
         if (inputOffset > 0) {
             skipFully(input, inputOffset);
         }
         if (length == 0) {
             return 0;
         }
-        final int bufferLength = buffer.length;
-        int bytesToRead = bufferLength;
-        if (length > 0 && length < bufferLength) {
-            bytesToRead = (int) length;
-        }
-        int read;
-        long totalRead = 0;
-        while (bytesToRead > 0 && EOF != (read = input.read(buffer, 0, bytesToRead))) {
-            output.write(buffer, 0, read);
-            totalRead += read;
-            if (length > 0) { // only adjust length if not reading to the end
-                // Note the cast must work because buffer.length is an integer
-                bytesToRead = (int) Math.min(length - totalRead, bufferLength);
-            }
-        }
-        return totalRead;
-    }
-
-    public static long copyLarge(
-            final OutputStream output,
-            final InputStream input,
-            final long outputOffset,
-            final long length,
-            final byte[] buffer)
-                    throws IOException {
-        if (outputOffset > 0) {
-            skipFully(input, outputOffset);
-        }
-        if (length == 0) { return 0; }
         final int bufferLength = buffer.length;
         int bytesToRead = bufferLength;
         if (length > 0 && length < bufferLength) {
@@ -1568,8 +1559,8 @@ public class IOUtils {
      * @since 2.2
      */
     public static long copyLarge(final Reader reader, final Writer writer, final long inputOffset, final long length,
-            final char[] buffer)
-                    throws IOException {
+                                 final char[] buffer)
+            throws IOException {
         if (inputOffset > 0) {
             skipFully(reader, inputOffset);
         }
@@ -2506,10 +2497,10 @@ public class IOUtils {
     public static byte[] toByteArray(final InputStream inputStream) throws IOException {
         // We use a ThresholdingOutputStream to avoid reading AND writing more than Integer.MAX_VALUE.
         try (final UnsynchronizedByteArrayOutputStream ubaOutput = new UnsynchronizedByteArrayOutputStream();
-                final ThresholdingOutputStream thresholdOuput = new ThresholdingOutputStream(Integer.MAX_VALUE, os -> {
-                    throw new IllegalArgumentException(
-                        String.format("Cannot read more than %,d into a byte array", Integer.MAX_VALUE));
-                }, os -> ubaOutput)) {
+            final ThresholdingOutputStream thresholdOuput = new ThresholdingOutputStream(Integer.MAX_VALUE, os -> {
+                throw new IllegalArgumentException(
+                    String.format("Cannot read more than %,d into a byte array", Integer.MAX_VALUE));
+            }, os -> ubaOutput)) {
             copy(inputStream, thresholdOuput);
             return ubaOutput.toByteArray();
         }
@@ -3562,7 +3553,7 @@ public class IOUtils {
      */
     @Deprecated
     public static void writeLines(final Collection<?> lines, final String lineEnding,
-            final OutputStream output) throws IOException {
+                                  final OutputStream output) throws IOException {
         writeLines(lines, lineEnding, output, Charset.defaultCharset());
     }
 
@@ -3580,7 +3571,7 @@ public class IOUtils {
      * @since 2.3
      */
     public static void writeLines(final Collection<?> lines, String lineEnding, final OutputStream output,
-            final Charset charset) throws IOException {
+                                  final Charset charset) throws IOException {
         if (lines == null) {
             return;
         }
@@ -3617,7 +3608,7 @@ public class IOUtils {
      * @since 1.1
      */
     public static void writeLines(final Collection<?> lines, final String lineEnding,
-            final OutputStream output, final String charsetName) throws IOException {
+                                  final OutputStream output, final String charsetName) throws IOException {
         writeLines(lines, lineEnding, output, Charsets.toCharset(charsetName));
     }
 
@@ -3633,7 +3624,7 @@ public class IOUtils {
      * @since 1.1
      */
     public static void writeLines(final Collection<?> lines, String lineEnding,
-            final Writer writer) throws IOException {
+                                  final Writer writer) throws IOException {
         if (lines == null) {
             return;
         }
