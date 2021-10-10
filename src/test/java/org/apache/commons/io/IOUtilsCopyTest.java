@@ -16,18 +16,7 @@
  */
 package org.apache.commons.io;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -43,6 +32,11 @@ import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.io.test.ThrowOnCloseInputStream;
 import org.apache.commons.io.test.ThrowOnFlushAndCloseOutputStream;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * JUnit tests for IOUtils copy methods.
@@ -78,6 +72,22 @@ public class IOUtilsCopyTest {
         assertEquals(inData.length, baout.size(), "Sizes differ");
         assertArrayEquals(inData, baout.toByteArray(), "Content differs");
         assertEquals(inData.length,count);
+    }
+
+    @SuppressWarnings("resource") // 'in' is deliberately not closed
+    @Test
+    public void testCopy_byteArrayOutputStreamToInputStream() throws Exception {
+        java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream();
+        out.write(inData);
+
+        final InputStream in = IOUtils.copy(out);
+
+        byte[] inData2 = new byte[FILE_SIZE];
+        int insize = in.read(inData2);
+
+        assertEquals(0, in.available(), "Not all bytes were read");
+        assertEquals(inData.length, insize, "Sizes differ");
+        assertArrayEquals(inData, inData2, "Content differs");
     }
 
     /**
