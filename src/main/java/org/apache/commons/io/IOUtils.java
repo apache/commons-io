@@ -989,14 +989,14 @@ public class IOUtils {
      * <p>
      * Example usage:
      * </p>
-     * 
+     *
      * <pre>
      * ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
      * outputStream.writeBytes("hello world".getBytes(UTF_8));
-     * 
+     *
      * InputStream inputStream = IOUtils.copy(outputStream);
      * </pre>
-     * 
+     *
      * @param outputStream the {@link java.io.ByteArrayOutputStream} to read.
      * @return the {@code QueueInputStream} filled with the content of the outputStream.
      * @throws NullPointerException if the {@link java.io.ByteArrayOutputStream} is {@code null}.
@@ -1007,8 +1007,8 @@ public class IOUtils {
     public static QueueInputStream copy(final java.io.ByteArrayOutputStream outputStream) throws IOException {
         Objects.requireNonNull(outputStream, "outputStream");
 
-        QueueInputStream in = new QueueInputStream();
-        QueueOutputStream out = in.newQueueOutputStream();
+        final QueueInputStream in = new QueueInputStream();
+        final QueueOutputStream out = in.newQueueOutputStream();
         outputStream.writeTo(out);
 
         return in;

@@ -83,13 +83,13 @@ public class IOUtilsCopyTest {
     @SuppressWarnings("resource") // 'in' is deliberately not closed
     @Test
     public void testCopy_byteArrayOutputStreamToInputStream() throws Exception {
-        java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream();
+        final java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream();
         out.write(inData);
 
         final InputStream in = IOUtils.copy(out);
 
-        byte[] inData2 = new byte[FILE_SIZE];
-        int insize = in.read(inData2);
+        final byte[] inData2 = new byte[FILE_SIZE];
+        final int insize = in.read(inData2);
 
         assertEquals(0, in.available(), "Not all bytes were read");
         assertEquals(inData.length, insize, "Sizes differ");
