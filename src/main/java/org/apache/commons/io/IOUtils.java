@@ -984,8 +984,9 @@ public class IOUtils {
     /**
      * Copies bytes from a {@link java.io.ByteArrayOutputStream} to a {@code QueueInputStream}.
      * <p>
-     * Unlike using JDK {@link PipedInputStream} and {@link PipedOutputStream} for this, this solution works safely in a single thread
-     * environment.
+     * Unlike using JDK {@link java.io.PipedInputStream} and {@link java.io.PipedOutputStream} for this, this
+     * solution works safely in a single thread environment.
+     * </p>
      * <p>
      * Example usage:
      * </p>
