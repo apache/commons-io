@@ -55,7 +55,6 @@ import org.apache.commons.io.input.QueueInputStream;
 import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
-import org.apache.commons.io.output.QueueOutputStream;
 import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.commons.io.output.ThresholdingOutputStream;
 import org.apache.commons.io.output.UnsynchronizedByteArrayOutputStream;
@@ -993,7 +992,7 @@ public class IOUtils {
      *
      * <pre>
      * ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-     * outputStream.writeBytes("hello world".getBytes(UTF_8));
+     * outputStream.writeBytes("hello world".getBytes(StandardCharsets.UTF_8));
      *
      * InputStream inputStream = IOUtils.copy(outputStream);
      * </pre>
@@ -1009,8 +1008,7 @@ public class IOUtils {
         Objects.requireNonNull(outputStream, "outputStream");
 
         final QueueInputStream in = new QueueInputStream();
-        final QueueOutputStream out = in.newQueueOutputStream();
-        outputStream.writeTo(out);
+        outputStream.writeTo(in.newQueueOutputStream());
 
         return in;
     }

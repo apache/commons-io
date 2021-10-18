@@ -96,6 +96,11 @@ public class IOUtilsCopyTest {
         assertArrayEquals(inData, inData2, "Content differs");
     }
 
+    @Test
+    public void testCopy_byteArrayOutputStreamToInputStream_nullOutputStream() {
+        assertThrows(NullPointerException.class, () -> IOUtils.copy(null));
+    }
+
     /**
      * Test Copying file > 2GB  - see issue# IO-84
      */
