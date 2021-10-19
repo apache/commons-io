@@ -270,7 +270,7 @@ public class FileUtilsTest {
                 assertTrue(expectedFilesAndDirs.contains(file),
                     () -> "Unexpected directory/file " + file + ", expected one of " + expectedFilesAndDirs);
             }
-            assertEquals(expectedFilesAndDirs.size(), filesCount, () -> actualFiles.toString());
+            assertEquals(expectedFilesAndDirs.size(), filesCount, actualFiles::toString);
         } finally {
             // MUST consume until the end in order to close the underlying stream.
             consumeRemaining(iterator);
@@ -1925,7 +1925,7 @@ public class FileUtilsTest {
         final IOFileFilter filter = new WildcardFileFilter("*", IOCase.INSENSITIVE);
         for (final Iterator<File> itFiles = FileUtils.iterateFiles(directory, filter, null); itFiles.hasNext();) {
             final File file = itFiles.next();
-            assertFalse(file.isDirectory(), () -> file.getAbsolutePath());
+            assertFalse(file.isDirectory(), file::getAbsolutePath);
         }
     }
 
@@ -1959,7 +1959,7 @@ public class FileUtilsTest {
             final int count = actualFiles.size();
             final Object[] fileObjs = actualFiles.toArray();
 
-            assertEquals(expectedFileNames.length, actualFiles.size(), () -> actualFiles.toString());
+            assertEquals(expectedFileNames.length, actualFiles.size(), actualFiles::toString);
 
             final Map<String, String> foundFileNames = new HashMap<>();
 
@@ -1973,7 +1973,7 @@ public class FileUtilsTest {
                 }
             }
 
-            assertEquals(foundFileNames.size(), expectedFileNames.length, () -> foundFileNames.toString());
+            assertEquals(foundFileNames.size(), expectedFileNames.length, foundFileNames::toString);
         } finally {
             subDir.delete();
         }
@@ -1987,7 +1987,7 @@ public class FileUtilsTest {
 
         final IOFileFilter filter = new WildcardFileFilter("*", IOCase.INSENSITIVE);
         for (final File file : FileUtils.listFiles(directory, filter, null)) {
-            assertFalse(file.isDirectory(), () -> file.getAbsolutePath());
+            assertFalse(file.isDirectory(), file::getAbsolutePath);
         }
     }
 

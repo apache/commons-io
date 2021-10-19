@@ -101,7 +101,7 @@ public class MarkShieldInputStreamTest {
         // test wrapping an underlying stream which does NOT support marking
         try (final MarkShieldInputStream msis = new MarkShieldInputStream(
                 new NullInputStream(64, false, false))) {
-            assertThrows(UnsupportedOperationException.class, () -> msis.reset());
+            assertThrows(UnsupportedOperationException.class, msis::reset);
         }
     }
 
@@ -110,7 +110,7 @@ public class MarkShieldInputStreamTest {
         // test wrapping an underlying stream which supports marking
         try (final MarkShieldInputStream msis = new MarkShieldInputStream(
                 new NullInputStream(64, true, false))) {
-            assertThrows(UnsupportedOperationException.class, () -> msis.reset());
+            assertThrows(UnsupportedOperationException.class, msis::reset);
         }
     }
 }

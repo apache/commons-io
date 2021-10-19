@@ -36,7 +36,7 @@ public interface UncheckedAppendable extends Appendable {
      * @param appendable The Appendable to uncheck.
      * @return a new instance.
      */
-    public static UncheckedAppendable on(final Appendable appendable) {
+    static UncheckedAppendable on(final Appendable appendable) {
         return new UncheckedAppendableImpl(appendable);
     }
 

@@ -137,7 +137,7 @@ public class IOFunctionTest {
     public void testComposeIOSupplier() throws IOException {
         final InputStream is = new ByteArrayInputStream(new byte[] {2, 3});
 
-        final IOSupplier<Integer> readByte = () -> is.read();
+        final IOSupplier<Integer> readByte = is::read;
         final IOFunction<Integer, Integer> squareInteger = i -> i * i;
         final IOSupplier<Integer> productFunction = squareInteger.compose(readByte);
 
