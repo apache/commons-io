@@ -308,9 +308,7 @@ public class LineIteratorTest {
             }
         };
         try (LineIterator li = new LineIterator(reader)) {
-            assertThrows(IllegalStateException.class, () -> {
-                li.hasNext();
-            });
+            assertThrows(IllegalStateException.class, li::hasNext);
         }
     }
 

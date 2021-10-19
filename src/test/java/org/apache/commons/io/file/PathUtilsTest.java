@@ -272,8 +272,8 @@ public class PathUtilsTest extends TestArguments {
         assertTrue(writable);
         // Test A
         PathUtils.setReadOnly(resolved, false);
-        assertEquals(true, Files.isReadable(resolved));
-        assertEquals(true, Files.isWritable(resolved));
+        assertTrue(Files.isReadable(resolved));
+        assertTrue(Files.isWritable(resolved));
         assertEquals(regularFile, Files.isReadable(resolved));
         assertEquals(executable, Files.isExecutable(resolved));
         assertEquals(hidden, Files.isHidden(resolved));
@@ -281,8 +281,8 @@ public class PathUtilsTest extends TestArguments {
         assertEquals(symbolicLink, Files.isSymbolicLink(resolved));
         // Test B
         PathUtils.setReadOnly(resolved, true);
-        assertEquals(true, Files.isReadable(resolved));
-        assertEquals(false, Files.isWritable(resolved));
+        assertTrue(Files.isReadable(resolved));
+        assertFalse(Files.isWritable(resolved));
         final DosFileAttributeView dosFileAttributeView = PathUtils.getDosFileAttributeView(resolved);
         if (dosFileAttributeView != null) {
             assertTrue(dosFileAttributeView.readAttributes().isReadOnly());
@@ -291,9 +291,9 @@ public class PathUtilsTest extends TestArguments {
         if (posixFileAttributeView != null) {
             // Not Windows
             final Set<PosixFilePermission> permissions = posixFileAttributeView.readAttributes().permissions();
-            assertFalse(permissions.contains(PosixFilePermission.GROUP_WRITE), () -> permissions.toString());
-            assertFalse(permissions.contains(PosixFilePermission.OTHERS_WRITE), () -> permissions.toString());
-            assertFalse(permissions.contains(PosixFilePermission.OWNER_WRITE), () -> permissions.toString());
+            assertFalse(permissions.contains(PosixFilePermission.GROUP_WRITE), permissions::toString);
+            assertFalse(permissions.contains(PosixFilePermission.OTHERS_WRITE), permissions::toString);
+            assertFalse(permissions.contains(PosixFilePermission.OWNER_WRITE), permissions::toString);
         }
         assertEquals(regularFile, Files.isReadable(resolved));
         assertEquals(executable, Files.isExecutable(resolved));

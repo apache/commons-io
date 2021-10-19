@@ -239,6 +239,9 @@ file comparators, endian transformation classes, and much more.
       <name>Martin Grigorov</name>
       <email>mgrigorov@apache.org</email>
     </contributor>
+    <contributor>
+      <name>Arturo Bernal</name>
+    </contributor>
   </contributors>
 
   <dependencyManagement>

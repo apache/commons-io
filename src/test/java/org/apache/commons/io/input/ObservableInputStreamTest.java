@@ -130,7 +130,7 @@ public class ObservableInputStreamTest {
     @Test
     public void testBrokenInputStreamRead() throws IOException {
         try (final ObservableInputStream ois = new ObservableInputStream(BrokenInputStream.INSTANCE)) {
-            assertThrows(IOException.class, () -> ois.read());
+            assertThrows(IOException.class, ois::read);
         }
     }
 
