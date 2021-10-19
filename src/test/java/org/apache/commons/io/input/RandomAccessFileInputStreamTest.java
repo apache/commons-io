@@ -72,7 +72,7 @@ public class RandomAccessFileInputStreamTest {
             try (final RandomAccessFileInputStream inputStream = new RandomAccessFileInputStream(file, true)) {
                 assertTrue(inputStream.isCloseOnClose());
             }
-            assertThrows(IOException.class, () -> file.read());
+            assertThrows(IOException.class, file::read);
         }
     }
 

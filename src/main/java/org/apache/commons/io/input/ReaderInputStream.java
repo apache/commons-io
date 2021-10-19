@@ -235,6 +235,9 @@ public class ReaderInputStream extends InputStream {
         }
         encoderOut.compact();
         lastCoderResult = charsetEncoder.encode(encoderIn, encoderOut, endOfInput);
+        if (endOfInput) {
+            lastCoderResult = charsetEncoder.flush(encoderOut);
+        }
         if (lastCoderResult.isError()) {
             lastCoderResult.throwException();
         }
@@ -292,17 +295,16 @@ public class ReaderInputStream extends InputStream {
             return 0; // Always return 0 if len == 0
         }
         while (len > 0) {
-            if (encoderOut.hasRemaining()) {
+            if (encoderOut.hasRemaining()) { // Data from the last read not fully copied
                 final int c = Math.min(encoderOut.remaining(), len);
                 encoderOut.get(array, off, c);
                 off += c;
                 len -= c;
                 read += c;
-            } else {
+            } else if (endOfInput) { // Already reach EOF in the last read
+                break;
+            } else { // Read again
                 fillBuffer();
-                if (endOfInput && !encoderOut.hasRemaining()) {
-                    break;
-                }
             }
         }
         return read == 0 && endOfInput ? EOF : read;

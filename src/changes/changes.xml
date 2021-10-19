@@ -114,6 +114,12 @@ The <action> type attribute can be add,update,fix,remove.
         FileUtils.copyURLToFile(URL, File, int, int) leaks its URLConnection.
         Called by FileUtils.copyURLToFile(URL, File).
       </action>
+      <action issue="IO-714" dev="ggregory" type="fix" due-to="kevinwang1975, Gary Gregory">
+        Fixed ReaderInputStream not calling CharsetEncoder.flush issue #283.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Arturo Bernal">
+        Minor changes #287.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add BrokenReader.INSTANCE.
@@ -257,6 +263,9 @@ The <action> type attribute can be add,update,fix,remove.
           - PathUtils.getDosFileAttributeView(Path, LinkOption...)
           - PathUtils.getPosixFileAttributeView(Path, LinkOption...)
       </action>      
+      <action issue="IO-747" dev="mgrigorov" type="add">
+        Make commons-io a JPMS module by adding module-info.class.
+      </action>
       <!-- UPDATE -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Update FileEntry to use FileTime instead of long for file time stamps.
@@ -265,7 +274,7 @@ The <action> type attribute can be add,update,fix,remove.
         Bump Maven Javadoc plugin from 3.2.0 to 3.3.0.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
-        Bump spotbugs-maven-plugin from 4.2.3 to 4.4.1 #250, #259, #272, #274.
+        Bump spotbugs-maven-plugin from 4.2.3 to 4.4.2 #250, #259, #272, #274, #285.
       </action>
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Bump JUnit from 5.7.2 to 5.8.0-M1.
@@ -274,7 +283,7 @@ The <action> type attribute can be add,update,fix,remove.
         Bump maven-enforcer-plugin from 3.0.0-M3 to 3.0.0 #255.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
-        Bump checkstyle from 8.44 to 9.0 #256, #257, #266.
+        Bump checkstyle from 8.44 to 9.0.1 #256, #257, #266, #279.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump junit-bom from 5.8.0-M1 to 5.8.1 #260, #271, #275.
@@ -285,8 +294,8 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump jmh.version from 1.32 to 1.33 #258.
       </action>
-      <action dev="mgrigorov" type="update">
-        IO-747 Make commons-io a JPMS module by adding module-info.class.
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump actions/checkout from 2.3.4 to 2.3.5 #286.
       </action>
     </release>
     <release version="2.11.0" date="2021-07-09" description="Java 8 required.">

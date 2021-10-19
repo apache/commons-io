@@ -29,12 +29,17 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 public class ReaderInputStreamTest {
     private static final String TEST_STRING = "\u00e0 peine arriv\u00e9s nous entr\u00e2mes dans sa chambre";
@@ -49,6 +54,26 @@ public class ReaderInputStreamTest {
     }
 
     private final Random random = new Random();
+
+    @ParameterizedTest
+    @MethodSource("charsetData")
+    public void testCharsetEncoderFlush(final String charsetName, final String data) throws IOException {
+        final Charset charset = Charset.forName(charsetName);
+        final byte[] expected = data.getBytes(charset);
+        try (InputStream in = new ReaderInputStream(new StringReader(data), charset)) {
+            final byte[] actual = IOUtils.toByteArray(in);
+            assertEquals(Arrays.toString(expected), Arrays.toString(actual));
+        }
+    }
+
+    static Stream<Arguments> charsetData() {
+        // @formatter:off
+        return Stream.of(
+                Arguments.of("Cp930", "\u0391"),
+                Arguments.of("ISO_8859_1", "A"),
+                Arguments.of("UTF-8", "\u0391"));
+        // @formatter:on
+    }
 
     @Test
     public void testBufferTooSmall() throws IOException {
