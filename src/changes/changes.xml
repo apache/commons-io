@@ -266,6 +266,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-747" dev="mgrigorov" type="add">
         Make commons-io a JPMS module by adding module-info.class.
       </action>
+      <action issue="IO-753" dev="ggregory" type="add" due-to="SebastianDietrich, Gary Gregory">
+        Add IOUtils method to copy output stream to input stream #281.
+      </action>
       <!-- UPDATE -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Update FileEntry to use FileTime instead of long for file time stamps.
