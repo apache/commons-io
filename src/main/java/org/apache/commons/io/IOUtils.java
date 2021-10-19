@@ -51,6 +51,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 import org.apache.commons.io.function.IOConsumer;
+import org.apache.commons.io.input.QueueInputStream;
 import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
@@ -977,6 +978,39 @@ public class IOUtils {
             return EOF;
         }
         return (int) count;
+    }
+
+    /**
+     * Copies bytes from a {@link java.io.ByteArrayOutputStream} to a {@code QueueInputStream}.
+     * <p>
+     * Unlike using JDK {@link java.io.PipedInputStream} and {@link java.io.PipedOutputStream} for this, this
+     * solution works safely in a single thread environment.
+     * </p>
+     * <p>
+     * Example usage:
+     * </p>
+     *
+     * <pre>
+     * ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+     * outputStream.writeBytes("hello world".getBytes(StandardCharsets.UTF_8));
+     *
+     * InputStream inputStream = IOUtils.copy(outputStream);
+     * </pre>
+     *
+     * @param outputStream the {@link java.io.ByteArrayOutputStream} to read.
+     * @return the {@code QueueInputStream} filled with the content of the outputStream.
+     * @throws NullPointerException if the {@link java.io.ByteArrayOutputStream} is {@code null}.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.12
+     */
+    @SuppressWarnings("resource") // streams are closed by the caller.
+    public static QueueInputStream copy(final java.io.ByteArrayOutputStream outputStream) throws IOException {
+        Objects.requireNonNull(outputStream, "outputStream");
+
+        final QueueInputStream in = new QueueInputStream();
+        outputStream.writeTo(in.newQueueOutputStream());
+
+        return in;
     }
 
     /**

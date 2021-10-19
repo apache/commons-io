@@ -80,6 +80,27 @@ public class IOUtilsCopyTest {
         assertEquals(inData.length,count);
     }
 
+    @SuppressWarnings("resource") // 'in' is deliberately not closed
+    @Test
+    public void testCopy_byteArrayOutputStreamToInputStream() throws Exception {
+        final java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream();
+        out.write(inData);
+
+        final InputStream in = IOUtils.copy(out);
+
+        final byte[] inData2 = new byte[FILE_SIZE];
+        final int insize = in.read(inData2);
+
+        assertEquals(0, in.available(), "Not all bytes were read");
+        assertEquals(inData.length, insize, "Sizes differ");
+        assertArrayEquals(inData, inData2, "Content differs");
+    }
+
+    @Test
+    public void testCopy_byteArrayOutputStreamToInputStream_nullOutputStream() {
+        assertThrows(NullPointerException.class, () -> IOUtils.copy(null));
+    }
+
     /**
      * Test Copying file > 2GB  - see issue# IO-84
      */
