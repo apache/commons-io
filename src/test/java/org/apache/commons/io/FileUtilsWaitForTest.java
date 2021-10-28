@@ -33,8 +33,8 @@ public class FileUtilsWaitForTest {
     // to solve issues as per BZ 38927
 
     @Test
-    public void testWaitFor() {
-        FileUtils.waitFor(FileUtils.current(), -1);
+    public void testWaitFor0() {
+        FileUtils.waitFor(FileUtils.current(), 0);
     }
 
     @Test
