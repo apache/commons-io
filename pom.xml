@@ -342,7 +342,7 @@ file comparators, endian transformation classes, and much more.
     <commons.surefire.version>3.0.0-M5</commons.surefire.version>
     <commons.japicmp.version>0.15.3</commons.japicmp.version>
     <commons.enforcer.version>3.0.0</commons.enforcer.version>
-    <commons.moditect.version>1.0.0.RC1</commons.moditect.version>
+    <commons.moditect.version>1.0.0.RC2</commons.moditect.version>
     <spotbugs.plugin.version>4.4.2.2</spotbugs.plugin.version>
     <spotbugs.impl.version>4.4.2</spotbugs.impl.version>
     <jmh.version>1.33</jmh.version>

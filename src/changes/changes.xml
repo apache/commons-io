@@ -300,6 +300,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump actions/checkout from 2.3.4 to 2.3.5 #286.
       </action>
+      <action dev="kinow" type="update" due-to="Dependabot">
+        Bump moditect-maven-plugin from 1.0.0.RC1 to 1.0.0.RC2 #280.
+      </action>
     </release>
     <release version="2.11.0" date="2021-07-09" description="Java 8 required.">
       <!-- FIX -->
