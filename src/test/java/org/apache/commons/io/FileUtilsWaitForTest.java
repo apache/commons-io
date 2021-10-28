@@ -37,6 +37,9 @@ public class FileUtilsWaitForTest {
         FileUtils.waitFor(FileUtils.current(), 0);
     }
 
+    /**
+     * TODO Fails randomly.
+     */
     @Test
     public void testWaitForInterrupted() throws InterruptedException {
         final AtomicBoolean wasInterrupted = new AtomicBoolean();
