@@ -40,18 +40,21 @@ import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Tests <a href="https://issues.apache.org/jira/browse/IO-751">IO-751</a>.
+ * <p>
+ * Must be run on macOS or Linux, not Windows.
+ * </p>
  */
 @Disabled
 public class DeleteDirectoryTest {
-
-    @TempDir
-    public File tempDir;
 
     @BeforeAll
     public static void beforeAll() throws IOException {
         // This test requires a POSIX file system, so not stock Windows 10.
         Assumptions.assumeTrue(PathUtils.isPosix(PathUtils.current()));
     }
+
+    @TempDir
+    public File tempDir;
 
     private void testDeleteDirectory(final IOConsumer<Path> deleter) throws IOException {
         final Path tempDirPath = tempDir.toPath();
