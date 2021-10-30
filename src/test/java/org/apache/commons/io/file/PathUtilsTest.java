@@ -20,6 +20,7 @@ package org.apache.commons.io.file;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
@@ -35,6 +36,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.DosFileAttributeView;
 import java.nio.file.attribute.PosixFileAttributeView;
+import java.nio.file.attribute.PosixFileAttributes;
 import java.nio.file.attribute.PosixFilePermission;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -187,6 +189,19 @@ public class PathUtilsTest extends TestArguments {
     }
 
     @Test
+    public void testIsPosix() throws IOException {
+        boolean isPosix;
+        try {
+            Files.getPosixFilePermissions(PathUtils.current());
+            isPosix = true;
+        } catch (UnsupportedOperationException e) {
+            isPosix = false;
+        }
+        assertEquals(isPosix, PathUtils.isPosix(PathUtils.current()));
+        assertEquals(false, PathUtils.isPosix(Paths.get("does not.exist")));
+    }
+
+    @Test
     public void testIsRegularFile() throws IOException {
         assertFalse(PathUtils.isRegularFile(null));
 
@@ -235,6 +250,19 @@ public class PathUtilsTest extends TestArguments {
     @Test
     public void testNewOutputStreamNewFileAppendTrue() throws IOException {
         testNewOutputStreamNewFile(true);
+    }
+
+    @Test
+    public void testReadAttributesPosix() throws IOException {
+        boolean isPosix;
+        try {
+            Files.getPosixFilePermissions(PathUtils.current());
+            isPosix = true;
+        } catch (UnsupportedOperationException e) {
+            isPosix = false;
+        }
+        assertEquals(isPosix, PathUtils.readAttributes(PathUtils.current(), PosixFileAttributes.class) != null);
+        assertNull(PathUtils.readAttributes(Paths.get("does not.exist"), PosixFileAttributes.class));
     }
 
     @Test

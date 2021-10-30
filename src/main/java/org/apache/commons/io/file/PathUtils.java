@@ -981,6 +981,41 @@ public final class PathUtils {
     }
 
     /**
+     * Tests whether the given path is on a POSIX file system.
+     *
+     * @param test The Path to test.
+     * @param options options indicating how to handle symbolic links.
+     * @return true if test is on a POSIX file system.
+     * @since 2.12.0
+     */
+    public static boolean isPosix(final Path test, final LinkOption... options) {
+        return readAttributes(test, PosixFileAttributes.class, options) != null;
+    }
+
+    /**
+     * Calls {@link Files#readAttributes(Path, Class, LinkOption...)} but returns null instead of throwing
+     * {@link UnsupportedOperationException} or {@link IOException}.
+     *
+     * @param <A> The {@code BasicFileAttributes} type
+     * @param test The Path to test.
+     * @param type the {@code Class} of the file attributes required to read.
+     * @param options options indicating how to handle symbolic links.
+     * @return the file attributes.
+     * @since 2.12.0
+     */
+    public static <A extends BasicFileAttributes> A readAttributes(final Path test, final Class<A> type, final LinkOption... options) {
+        try {
+            return Files.readAttributes(test, type, options);
+        } catch (final UnsupportedOperationException e) {
+            // For example, on Windows.
+            return null;
+        } catch (final IOException e) {
+            // For example, when the path does not exist.
+            return null;
+        }
+    }
+
+    /**
      * Tests whether the given {@code Path} is a regular file or not. Implemented as a null-safe delegate to
      * {@code Files.isRegularFile(Path path, LinkOption... options)}.
      *
