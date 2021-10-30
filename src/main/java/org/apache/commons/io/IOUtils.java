@@ -45,6 +45,7 @@ import java.nio.channels.Selector;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -521,11 +522,8 @@ public class IOUtils {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     public static void closeQuietly(final Closeable... closeables) {
-        if (closeables == null) {
-            return;
-        }
-        for (final Closeable closeable : closeables) {
-            closeQuietly(closeable);
+        if (closeables != null) {
+            Arrays.stream(closeables).forEach(IOUtils::closeQuietly);
         }
     }
 
@@ -1105,10 +1103,8 @@ public class IOUtils {
     @SuppressWarnings("resource") // streams are closed by the caller.
     public static QueueInputStream copy(final java.io.ByteArrayOutputStream outputStream) throws IOException {
         Objects.requireNonNull(outputStream, "outputStream");
-
         final QueueInputStream in = new QueueInputStream();
         outputStream.writeTo(in.newQueueOutputStream());
-
         return in;
     }
 
@@ -2198,11 +2194,9 @@ public class IOUtils {
         // What about the thread context class loader?
         // What about the system class loader?
         final URL resource = classLoader == null ? IOUtils.class.getResource(name) : classLoader.getResource(name);
-
         if (resource == null) {
             throw new IOException("Resource not found: " + name);
         }
-
         return resource;
     }
 
@@ -2559,11 +2553,9 @@ public class IOUtils {
      * @since 2.1
      */
     public static byte[] toByteArray(final InputStream input, final long size) throws IOException {
-
         if (size > Integer.MAX_VALUE) {
             throw new IllegalArgumentException("Size cannot be greater than Integer max value: " + size);
         }
-
         return toByteArray(input, (int) size);
     }
 
@@ -2873,8 +2865,7 @@ public class IOUtils {
      * @since 1.1
      */
     public static InputStream toInputStream(final String input, final String charsetName) {
-        final byte[] bytes = input.getBytes(Charsets.toCharset(charsetName));
-        return new ByteArrayInputStream(bytes);
+        return new ByteArrayInputStream(input.getBytes(Charsets.toCharset(charsetName)));
     }
 
     /**
@@ -3662,7 +3653,6 @@ public class IOUtils {
      * Instances should NOT be constructed in standard programming.
      */
     public IOUtils() { //NOSONAR
-
     }
 
 }
