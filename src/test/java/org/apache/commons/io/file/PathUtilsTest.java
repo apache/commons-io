@@ -20,7 +20,6 @@ package org.apache.commons.io.file;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
@@ -198,7 +197,6 @@ public class PathUtilsTest extends TestArguments {
             isPosix = false;
         }
         assertEquals(isPosix, PathUtils.isPosix(PathUtils.current()));
-        assertEquals(false, PathUtils.isPosix(Paths.get("does not.exist")));
     }
 
     @Test
@@ -262,7 +260,6 @@ public class PathUtilsTest extends TestArguments {
             isPosix = false;
         }
         assertEquals(isPosix, PathUtils.readAttributes(PathUtils.current(), PosixFileAttributes.class) != null);
-        assertNull(PathUtils.readAttributes(Paths.get("does not.exist"), PosixFileAttributes.class));
     }
 
     @Test

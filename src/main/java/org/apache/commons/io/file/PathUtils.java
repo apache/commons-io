@@ -43,6 +43,7 @@ import java.nio.file.attribute.AclEntry;
 import java.nio.file.attribute.AclFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.DosFileAttributeView;
+import java.nio.file.attribute.DosFileAttributes;
 import java.nio.file.attribute.FileAttribute;
 import java.nio.file.attribute.FileTime;
 import java.nio.file.attribute.PosixFileAttributeView;
@@ -989,30 +990,7 @@ public final class PathUtils {
      * @since 2.12.0
      */
     public static boolean isPosix(final Path test, final LinkOption... options) {
-        return readAttributes(test, PosixFileAttributes.class, options) != null;
-    }
-
-    /**
-     * Calls {@link Files#readAttributes(Path, Class, LinkOption...)} but returns null instead of throwing
-     * {@link UnsupportedOperationException} or {@link IOException}.
-     *
-     * @param <A> The {@code BasicFileAttributes} type
-     * @param test The Path to test.
-     * @param type the {@code Class} of the file attributes required to read.
-     * @param options options indicating how to handle symbolic links.
-     * @return the file attributes.
-     * @since 2.12.0
-     */
-    public static <A extends BasicFileAttributes> A readAttributes(final Path test, final Class<A> type, final LinkOption... options) {
-        try {
-            return Files.readAttributes(test, type, options);
-        } catch (final UnsupportedOperationException e) {
-            // For example, on Windows.
-            return null;
-        } catch (final IOException e) {
-            // For example, when the path does not exist.
-            return null;
-        }
+        return readPosixFileAttributes(test, options) != null;
     }
 
     /**
@@ -1083,32 +1061,94 @@ public final class PathUtils {
     }
 
     /**
-     * Shorthand for {@code Files.readAttributes(path, BasicFileAttributes.class)}
+     * Reads the BasicFileAttributes from the given path.
      *
      * @param path the path to read.
      * @return the path attributes.
      * @throws IOException if an I/O error occurs.
      * @since 2.9.0
+     * @deprecated Will be removed in 3.0.0 in favor of {@link #readBasicFileAttributes(Path, LinkOption...)}.
      */
+    @Deprecated
     public static BasicFileAttributes readBasicFileAttributes(final Path path) throws IOException {
         return Files.readAttributes(path, BasicFileAttributes.class);
     }
 
     /**
-     * Shorthand for {@code Files.readAttributes(path, BasicFileAttributes.class)} while wrapping {@link IOException} as
-     * {@link UncheckedIOException}.
+     * Reads the BasicFileAttributes from the given path. Returns null instead of throwing
+     * {@link UnsupportedOperationException}. Throws {@link UncheckedIOExceptions} instead of {@link IOException}.
+     *
+     * @param <A> The {@code BasicFileAttributes} type
+     * @param test The Path to test.
+     * @param type the {@code Class} of the file attributes required to read.
+     * @param options options indicating how to handle symbolic links.
+     * @return the file attributes.
+     * @see Files#readAttributes(Path, Class, LinkOption...)
+     * @since 2.12.0
+     */
+    public static <A extends BasicFileAttributes> A readAttributes(final Path test, final Class<A> type, final LinkOption... options) {
+        try {
+            return Files.readAttributes(test, type, options);
+        } catch (final UnsupportedOperationException e) {
+            // For example, on Windows.
+            return null;
+        } catch (final IOException e) {
+            throw UncheckedIOExceptions.create(test, e);
+        }
+    }
+
+    /**
+     * Reads the BasicFileAttributes from the given path. Returns null instead of throwing
+     * {@link UnsupportedOperationException}.
+     *
+     * @param path the path to read.
+     * @param options options indicating how to handle symbolic links.
+     * @return the path attributes.
+     * @since 2.12.0
+     */
+    public static BasicFileAttributes readBasicFileAttributes(final Path path, final LinkOption... options) {
+        return readAttributes(path, BasicFileAttributes.class, options);
+    }
+
+    /**
+     * Reads the BasicFileAttributes from the given path. Returns null instead of throwing
+     * {@link UnsupportedOperationException}.
      *
      * @param path the path to read.
      * @return the path attributes.
      * @throws UncheckedIOException if an I/O error occurs
      * @since 2.9.0
+     * @deprecated Use {@link #readBasicFileAttributes(Path, LinkOption...)}.
      */
+    @Deprecated
     public static BasicFileAttributes readBasicFileAttributesUnchecked(final Path path) {
-        try {
-            return readBasicFileAttributes(path);
-        } catch (final IOException e) {
-            throw UncheckedIOExceptions.create(path, e);
-        }
+        return readBasicFileAttributes(path, EMPTY_LINK_OPTION_ARRAY);
+    }
+
+    /**
+     * Reads the DosFileAttributes from the given path. Returns null instead of throwing
+     * {@link UnsupportedOperationException}.
+     *
+     * @param path the path to read.
+     * @param options options indicating how to handle symbolic links.
+     * @return the path attributes.
+     * @since 2.12.0
+     */
+    public static DosFileAttributes readDosFileAttributes(final Path path, final LinkOption... options) {
+        return readAttributes(path, DosFileAttributes.class, options);
+    }
+
+    /**
+     * Reads the PosixFileAttributes from the given path. Returns null instead of throwing
+     * {@link UnsupportedOperationException}.
+     *
+     * @param test The Path to test.
+     * @param options options indicating how to handle symbolic links.
+     * @return the file attributes.
+     * @since 2.12.0
+     */
+    public static PosixFileAttributes readPosixFileAttributes(final Path test, final LinkOption... options) {
+        return readAttributes(test, PosixFileAttributes.class, options);
     }
 
     /**
