@@ -128,6 +128,9 @@ public class ReaderInputStream extends InputStream {
      * Constructs a new {@link ReaderInputStream} with a default input buffer size of {@value #DEFAULT_BUFFER_SIZE}
      * characters.
      *
+     * <p>The encoder created for the specified charset will use {@link CodingErrorAction#REPLACE} for malformed input
+     * and unmappable characters.
+     *
      * @param reader the target {@link Reader}
      * @param charset the charset encoding
      */
@@ -137,6 +140,9 @@ public class ReaderInputStream extends InputStream {
 
     /**
      * Constructs a new {@link ReaderInputStream}.
+     *
+     * <p>The encoder created for the specified charset will use {@link CodingErrorAction#REPLACE} for malformed input
+     * and unmappable characters.
      *
      * @param reader the target {@link Reader}.
      * @param charset the charset encoding.
@@ -190,6 +196,9 @@ public class ReaderInputStream extends InputStream {
      * Constructs a new {@link ReaderInputStream} with a default input buffer size of {@value #DEFAULT_BUFFER_SIZE}
      * characters.
      *
+     * <p>The encoder created for the specified charset will use {@link CodingErrorAction#REPLACE} for malformed input
+     * and unmappable characters.
+     *
      * @param reader the target {@link Reader}
      * @param charsetName the name of the charset encoding
      */
@@ -199,6 +208,9 @@ public class ReaderInputStream extends InputStream {
 
     /**
      * Constructs a new {@link ReaderInputStream}.
+     *
+     * <p>The encoder created for the specified charset will use {@link CodingErrorAction#REPLACE} for malformed input
+     * and unmappable characters.
      *
      * @param reader the target {@link Reader}
      * @param charsetName the name of the charset encoding
