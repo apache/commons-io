@@ -54,10 +54,6 @@ public class CopyUtilsTest {
 
     private final byte[] inData = TestUtils.generateTestData(FILE_SIZE);
 
-    // ----------------------------------------------------------------
-    // Tests
-    // ----------------------------------------------------------------
-
     @Test
     public void copy_byteArrayToOutputStream() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -215,4 +211,4 @@ public class CopyUtilsTest {
         // Nothing to assert, the constructor is public and does not blow up.
     }
 
-} // CopyUtilsTest
+}
