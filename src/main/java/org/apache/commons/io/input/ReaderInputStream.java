@@ -156,6 +156,9 @@ public class ReaderInputStream extends InputStream {
     /**
      * Constructs a new {@link ReaderInputStream}.
      *
+     * <p>This constructor does not call {@link CharsetEncoder#reset() reset} on the provided encoder. The caller
+     * of this constructor should do this when providing an encoder which had already been in use.
+     *
      * @param reader the target {@link Reader}
      * @param charsetEncoder the charset encoder
      * @since 2.1
@@ -166,6 +169,9 @@ public class ReaderInputStream extends InputStream {
 
     /**
      * Constructs a new {@link ReaderInputStream}.
+     *
+     * <p>This constructor does not call {@link CharsetEncoder#reset() reset} on the provided encoder. The caller
+     * of this constructor should do this when providing an encoder which had already been in use.
      *
      * @param reader the target {@link Reader}
      * @param charsetEncoder the charset encoder
