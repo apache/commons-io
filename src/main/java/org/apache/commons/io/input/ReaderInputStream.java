@@ -67,9 +67,8 @@ import java.util.Objects;
  * appear is when implementing the {@code javax.activation.DataSource} interface from the Java Activation Framework.
  * </p>
  * <p>
- * Given the fact that the {@link Reader} class doesn't provide any way to predict whether the next read operation will
- * block or not, it is not possible to provide a meaningful implementation of the {@link InputStream#available()}
- * method. A call to this method will always return 0. Also, this class doesn't support {@link InputStream#mark(int)}.
+ * The {@link #available()} method of this class always returns 0. The methods {@link #mark(int)} and {@link #reset()}
+ * are not supported.
  * </p>
  * <p>
  * Instances of {@link ReaderInputStream} are not thread safe.
@@ -217,6 +216,16 @@ public class ReaderInputStream extends InputStream {
     @Override
     public void close() throws IOException {
         reader.close();
+    }
+
+    /**
+     * The implementation by {@link ReaderInputStream} always returns 0.
+     */
+    @Override
+    public int available() throws IOException {
+        // Could implement this using Reader.ready(), but would be rather cumbersome
+        // and probably not very efficient
+        return 0;
     }
 
     /**
