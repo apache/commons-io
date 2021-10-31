@@ -44,7 +44,6 @@ import org.junit.jupiter.api.io.TempDir;
  * Must be run on macOS or Linux, not Windows.
  * </p>
  */
-@Disabled
 public class DeleteDirectoryTest {
 
     @BeforeAll
@@ -89,6 +88,7 @@ public class DeleteDirectoryTest {
     }
 
     @Test
+    @Disabled
     public void testDeleteDirectoryWithFileUtils() throws IOException {
         testDeleteDirectory(dir -> FileUtils.deleteDirectory(dir.toFile()));
     }
@@ -99,6 +99,7 @@ public class DeleteDirectoryTest {
     }
 
     @Test
+    @Disabled
     public void testDeleteDirectoryWithPathUtilsOverrideReadOnly() throws IOException {
         testDeleteDirectory(dir -> PathUtils.deleteDirectory(dir, StandardDeleteOption.OVERRIDE_READ_ONLY));
     }
