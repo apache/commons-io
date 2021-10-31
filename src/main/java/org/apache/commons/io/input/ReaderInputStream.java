@@ -182,6 +182,18 @@ public class ReaderInputStream extends InputStream {
     }
 
     /**
+     * Internal constructor for use by {@link CharSequenceInputStream}.
+     */
+    ReaderInputStream(final CharSequence charSeq, final CharsetEncoder charsetEncoder) {
+        this.reader = NullReader.INSTANCE;
+        this.charsetEncoder = charsetEncoder;
+        this.encoderIn = CharBuffer.wrap(charSeq);
+        this.endOfInput = true; // reader has no chars
+        this.encoderOut = ByteBuffer.allocate(128);
+        this.encoderOut.flip();
+    }
+
+    /**
      * Constructs a new {@link ReaderInputStream} with a default input buffer size of {@value #DEFAULT_BUFFER_SIZE}
      * characters.
      *

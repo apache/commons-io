@@ -17,16 +17,11 @@
 
 package org.apache.commons.io.input;
 
-import static org.apache.commons.io.IOUtils.EOF;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
-import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
 import java.util.Objects;
 
@@ -35,6 +30,9 @@ import java.util.Objects;
  * <p>
  * <strong>Note:</strong> Supports {@link #mark(int)} and {@link #reset()}.
  * </p>
+ * <p>
+ * Instances of {@code CharSequenceInputStream} are not thread safe.
+ * </p>
  *
  * @since 2.2
  */
@@ -42,14 +40,17 @@ public class CharSequenceInputStream extends InputStream {
 
     private static final int BUFFER_SIZE = 2048;
 
-    private static final int NO_MARK = -1;
-
-    private final CharsetEncoder charsetEncoder;
-    private final CharBuffer cBuf;
-    private final ByteBuffer bBuf;
-
-    private int cBufMark; // position in cBuf
-    private int bBufMark; // position in bBuf
+    // Delegates to ReaderInputStream to avoid having to implement CharsetEncoder logic here as well
+    private final ReaderInputStream delegateStream;
+    /**
+     * Used for buffering after {@link #mark(int)} has been called, and for reading after
+     * {@link #reset()} has been called.
+     */
+    private ByteBuffer markBuffer;
+    /** Determines whether currently reading from {@link #markBuffer}. */
+    private boolean isReadingFromBuffer;
+    /** Whether mark is set and in case {@link #isReadingFromBuffer} {@code = false}, should be writing to buffer. */
+    private boolean hasMark;
 
     /**
      * Constructs a new instance with a buffer size of 2048.
@@ -71,17 +72,21 @@ public class CharSequenceInputStream extends InputStream {
      * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character.
      */
     public CharSequenceInputStream(final CharSequence cs, final Charset charset, final int bufferSize) {
+        Objects.requireNonNull(cs);
+        if (bufferSize < 1) {
+            throw new IllegalArgumentException("Buffer size must be >= 1");
+        }
+        // TODO: bufferSize is unused
+
         // @formatter:off
-        this.charsetEncoder = charset.newEncoder()
+        CharsetEncoder charsetEncoder = charset.newEncoder()
             .onMalformedInput(CodingErrorAction.REPLACE)
             .onUnmappableCharacter(CodingErrorAction.REPLACE);
         // @formatter:on
-        // Ensure that buffer is long enough to hold a complete character
-        this.bBuf = ByteBuffer.allocate(ReaderInputStream.checkMinBufferSize(charsetEncoder, bufferSize));
-        this.bBuf.flip();
-        this.cBuf = CharBuffer.wrap(cs);
-        this.cBufMark = NO_MARK;
-        this.bBufMark = NO_MARK;
+        this.delegateStream = new ReaderInputStream(cs, charsetEncoder);
+        this.markBuffer = null;
+        this.isReadingFromBuffer = false;
+        this.hasMark = false;
     }
 
     /**
@@ -115,11 +120,11 @@ public class CharSequenceInputStream extends InputStream {
      */
     @Override
     public int available() throws IOException {
-        // The cached entries are in bbuf; since encoding always creates at least one byte
-        // per character, we can add the two to get a better estimate (e.g. if bbuf is empty)
-        // Note that the previous implementation (2.4) could return zero even though there were
-        // encoded bytes still available.
-        return this.bBuf.remaining() + this.cBuf.remaining();
+        int availableMarkBytes = 0;
+        if (isReadingFromBuffer) {
+            availableMarkBytes = markBuffer.remaining();
+        }
+        return availableMarkBytes + delegateStream.available();
     }
 
     @Override
@@ -127,33 +132,32 @@ public class CharSequenceInputStream extends InputStream {
         // noop
     }
 
-    /**
-     * Fills the byte output buffer from the input char buffer.
-     *
-     * @throws CharacterCodingException
-     *             an error encoding data.
-     */
-    private void fillBuffer() throws CharacterCodingException {
-        this.bBuf.compact();
-        final CoderResult result = this.charsetEncoder.encode(this.cBuf, this.bBuf, true);
-        if (result.isError()) {
-            result.throwException();
-        }
-        this.bBuf.flip();
-    }
-
-    /**
-     * {@inheritDoc}
-     * @param readlimit max read limit (ignored).
-     */
     @Override
-    public synchronized void mark(final int readlimit) {
-        this.cBufMark = this.cBuf.position();
-        this.bBufMark = this.bBuf.position();
-        this.cBuf.mark();
-        this.bBuf.mark();
-        // It would be nice to be able to use mark & reset on the cbuf and bbuf;
-        // however the bbuf is re-used so that won't work
+    public synchronized void mark(final int readLimit) {
+        if (readLimit <= 0) {
+            hasMark = false;
+            if (!isReadingFromBuffer) {
+                markBuffer = null;
+            }
+        } else {
+            hasMark = true;
+
+            // When currently reading from buffer, keep using it for reading, but make sure
+            // that it has in total enough space to satisfy readLimit
+            if (isReadingFromBuffer) {
+                if (markBuffer.capacity() >= readLimit) {
+                    markBuffer.compact();
+                    markBuffer.flip();
+                } else {
+                    ByteBuffer oldBuffer = markBuffer;
+                    markBuffer = ByteBuffer.allocate(readLimit);
+                    markBuffer.put(oldBuffer);
+                    markBuffer.flip();
+                }
+            } else {
+                markBuffer = ByteBuffer.allocate(readLimit);
+            }
+        }
     }
 
     @Override
@@ -161,17 +165,40 @@ public class CharSequenceInputStream extends InputStream {
         return true;
     }
 
-    @Override
-    public int read() throws IOException {
-        for (;;) {
-            if (this.bBuf.hasRemaining()) {
-                return this.bBuf.get() & 0xFF;
-            }
-            fillBuffer();
-            if (!this.bBuf.hasRemaining() && !this.cBuf.hasRemaining()) {
-                return EOF;
+    private void checkReadAllFromBuffer() {
+        if (!markBuffer.hasRemaining()) {
+            isReadingFromBuffer = false;
+            if (hasMark) {
+                // If has mark continue writing after last read position
+                int oldLimit = markBuffer.limit();
+                markBuffer.limit(markBuffer.capacity());
+                markBuffer.position(oldLimit);
+            } else {
+                // Buffer is not reused for buffering marked bytes, can clear it
+                markBuffer = null;
             }
         }
+    }
+
+    @Override
+    public int read() throws IOException {
+        if (isReadingFromBuffer) {
+            int b = markBuffer.get();
+            checkReadAllFromBuffer();
+            return b;
+        }
+
+        int b = delegateStream.read();
+        if (b != -1 && hasMark) {
+            if (markBuffer.hasRemaining()) {
+                markBuffer.put((byte) b);
+            } else {
+                // Read past the mark readLimit
+                markBuffer = null;
+                hasMark = false;
+            }
+        }
+        return b;
     }
 
     @Override
@@ -188,75 +215,71 @@ public class CharSequenceInputStream extends InputStream {
         if (len == 0) {
             return 0; // must return 0 for zero length read
         }
-        if (!this.bBuf.hasRemaining() && !this.cBuf.hasRemaining()) {
-            return EOF;
+
+        if (isReadingFromBuffer) {
+            int bytesRead = Math.min(markBuffer.remaining(), len);
+            markBuffer.get(array, off, bytesRead);
+            checkReadAllFromBuffer();
+            return bytesRead;
         }
-        int bytesRead = 0;
-        while (len > 0) {
-            if (this.bBuf.hasRemaining()) {
-                final int chunk = Math.min(this.bBuf.remaining(), len);
-                this.bBuf.get(array, off, chunk);
-                off += chunk;
-                len -= chunk;
-                bytesRead += chunk;
+
+        int bytesRead = delegateStream.read(array, off, len);
+        if (bytesRead != -1 && hasMark) {
+            if (bytesRead <= markBuffer.remaining()) {
+                markBuffer.put(array, off, len);
             } else {
-                fillBuffer();
-                if (!this.bBuf.hasRemaining() && !this.cBuf.hasRemaining()) {
-                    break;
-                }
+                // Read past the mark readLimit
+                markBuffer = null;
+                hasMark = false;
             }
         }
-        return bytesRead == 0 && !this.cBuf.hasRemaining() ? EOF : bytesRead;
+        return bytesRead;
     }
 
     @Override
     public synchronized void reset() throws IOException {
-        //
-        // This is not the most efficient implementation, as it re-encodes from the beginning.
-        //
-        // Since the bbuf is re-used, in general it's necessary to re-encode the data.
-        //
-        // It should be possible to apply some optimisations however:
-        // + use mark/reset on the cbuf and bbuf. This would only work if the buffer had not been (re)filled since
-        // the mark. The code would have to catch InvalidMarkException - does not seem possible to check if mark is
-        // valid otherwise. + Try saving the state of the cbuf before each fillBuffer; it might be possible to
-        // restart from there.
-        //
-        if (this.cBufMark != NO_MARK) {
-            // if cbuf is at 0, we have not started reading anything, so skip re-encoding
-            if (this.cBuf.position() != 0) {
-                this.charsetEncoder.reset();
-                this.cBuf.rewind();
-                this.bBuf.rewind();
-                this.bBuf.limit(0); // rewind does not clear the buffer
-                while(this.cBuf.position() < this.cBufMark) {
-                    this.bBuf.rewind(); // empty the buffer (we only refill when empty during normal processing)
-                    this.bBuf.limit(0);
-                    fillBuffer();
-                }
-            }
-            if (this.cBuf.position() != this.cBufMark) {
-                throw new IllegalStateException("Unexpected CharBuffer position: actual=" + cBuf.position() + " " +
-                        "expected=" + this.cBufMark);
-            }
-            this.bBuf.position(this.bBufMark);
-            this.cBufMark = NO_MARK;
-            this.bBufMark = NO_MARK;
+        if (!hasMark) {
+            throw new IOException("No mark exists");
+        }
+
+        if (isReadingFromBuffer) {
+            // Currently still reading from buffer, so just reset to mark position
+            markBuffer.position(0);
+        } else if (markBuffer.position() > 0) {
+            markBuffer.flip();
+            isReadingFromBuffer = true;
         }
     }
 
     @Override
     public long skip(long n) throws IOException {
-        //
-        // This could be made more efficient by using position to skip within the current buffer.
-        //
-        long skipped = 0;
-        while (n > 0 && available() > 0) {
-            this.read();
-            n--;
-            skipped++;
+        if (n <= 0) {
+            return 0;
         }
-        return skipped;
-    }
 
+        if (isReadingFromBuffer) {
+            int toSkip = (int) Math.min(markBuffer.remaining(), n);
+            markBuffer.position(markBuffer.position() + toSkip);
+            checkReadAllFromBuffer();
+            return toSkip;
+        } else if (hasMark) {
+            if (markBuffer.hasRemaining()) {
+                // Directly read into markBuffer array
+                int bytesRead = read(markBuffer.array(), markBuffer.position(), markBuffer.remaining());
+                markBuffer.position(markBuffer.position() + bytesRead);
+                return bytesRead;
+            } else {
+                // Read past the mark readLimit
+                markBuffer = null;
+                hasMark = false;
+
+                // Call read() to make sure at least 1 byte is skipped; skip() might not skip any
+                read();
+                n--; // reduce for byte skipped by read()
+                return delegateStream.skip(n);
+            }
+        } else {
+            return delegateStream.skip(n);
+        }
+    }
 }

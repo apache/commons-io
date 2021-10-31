@@ -125,7 +125,8 @@ private boolean isAvailabilityTestableForCharset(final String csName) {
         final byte[] expected = testString.getBytes(charsetName);
         try (InputStream in = new CharSequenceInputStream(testString, charsetName, 512)) {
             final byte[] buffer = new byte[128];
-            int offset = 0;            while (true) {
+            int offset = 0;
+            while (true) {
                 int bufferOffset = random.nextInt(64);
                 final int bufferLength = random.nextInt(64);
                 int read = in.read(buffer, bufferOffset, bufferLength);
@@ -194,8 +195,8 @@ private boolean isAvailabilityTestableForCharset(final String csName) {
     // Test is broken if readFirst > 0
     // This is because the initial read fills the buffer from the CharSequence
     // so data1 gets the first buffer full; data2 will get the next buffer full
-    private void testIO_356(final int bufferSize, final int dataSize, final int readFirst, final String csName) throws Exception {
-        final CharSequenceInputStream is = new CharSequenceInputStream(ALPHABET, csName, bufferSize);
+    private void testIO_356(final int dataSize, final int readFirst, final String csName) throws Exception {
+        final CharSequenceInputStream is = new CharSequenceInputStream(ALPHABET, csName, 1);
 
         for (int i = 0; i < readFirst; i++) {
             final int ch = is.read();
@@ -217,62 +218,60 @@ private boolean isAvailabilityTestableForCharset(final String csName) {
         is.close();
 
         // data buffers should be identical
-        assertArrayEquals(data1, data2, "bufferSize=" + bufferSize + " dataSize=" + dataSize);
+        assertArrayEquals(data1, data2, "dataSize=" + dataSize);
     }
 
     @Test
     public void testIO_356_B10_D10_S0_UTF16() throws Exception {
-        testIO_356(10, 10, 0, "UTF-16");
+        testIO_356(10, 0, "UTF-16");
     }
 
     @Test
     public void testIO_356_B10_D10_S0_UTF8() throws Exception {
-        testIO_356(10, 10, 0, "UTF-8");
+        testIO_356(10, 0, "UTF-8");
     }
 
     @Test
     public void testIO_356_B10_D10_S1_UTF8() throws Exception {
-        testIO_356(10, 10, 1, "UTF-8");
+        testIO_356(10, 1, "UTF-8");
     }
 
     @Test
     public void testIO_356_B10_D10_S2_UTF8() throws Exception {
-        testIO_356(10, 10, 2, "UTF-8");
+        testIO_356(10, 2, "UTF-8");
     }
 
     @Test
     public void testIO_356_B10_D13_S0_UTF8() throws Exception {
-        testIO_356(10, 13, 0, "UTF-8");
+        testIO_356(13, 0, "UTF-8");
     }
 
     @Test
     public void testIO_356_B10_D13_S1_UTF8() throws Exception {
-        testIO_356(10, 13, 1, "UTF-8");
+        testIO_356(13, 1, "UTF-8");
     }
 
     @Test
     public void testIO_356_B10_D20_S0_UTF8() throws Exception {
-        testIO_356(10, 20, 0, "UTF-8");
+        testIO_356(20, 0, "UTF-8");
     }
 
     private void testIO_356_Loop(final String csName, final int maxBytesPerChar) throws Exception {
-        for (int bufferSize = maxBytesPerChar; bufferSize <= 10; bufferSize++) {
-            for (int dataSize = 1; dataSize <= 20; dataSize++) {
-                testIO_356(bufferSize, dataSize, 0, csName);
-            }
+        for (int dataSize = 1; dataSize <= 20; dataSize++) {
+            testIO_356(dataSize, 0, csName);
         }
     }
 
     @Test
     public void testIO_356_Loop_UTF16() throws Exception {
         final Charset charset = StandardCharsets.UTF_16;
-        testIO_356_Loop(charset.displayName(), (int) ReaderInputStream.minBufferSize(charset.newEncoder()));
+        testIO_356_Loop(charset.name(), 1);
     }
 
     @Test
     public void testIO_356_Loop_UTF8() throws Exception {
         final Charset charset = StandardCharsets.UTF_8;
-        testIO_356_Loop(charset.displayName(), (int) ReaderInputStream.minBufferSize(charset.newEncoder()));
+        testIO_356_Loop(charset.name(), 1);
     }
 
     @Test
@@ -303,7 +302,7 @@ private boolean isAvailabilityTestableForCharset(final String csName) {
     private void testMarkReset(final String csName) throws Exception {
         try (InputStream r = new CharSequenceInputStream("test", csName)) {
             assertEquals(2, r.skip(2));
-            r.mark(0);
+            r.mark(2);
             assertEquals('s', r.read(), csName);
             assertEquals('t', r.read(), csName);
             assertEquals(-1, r.read(), csName);
@@ -332,6 +331,19 @@ private boolean isAvailabilityTestableForCharset(final String csName) {
     @Test
     public void testMarkReset_UTF8() throws Exception {
         testMarkReset("UTF-8");
+    }
+
+    @Test
+    public void testResetWithoutRead() throws Exception {
+        try (InputStream r = new CharSequenceInputStream("abc", "UTF-8")) {
+            r.mark(3);
+            // Reset without having read anything
+            r.reset();
+            assertEquals('a', r.read());
+            assertEquals('b', r.read());
+            r.reset();
+            assertEquals('a', r.read());
+        }
     }
 
     @Test
