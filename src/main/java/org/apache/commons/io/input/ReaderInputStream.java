@@ -81,17 +81,11 @@ import java.util.Objects;
 public class ReaderInputStream extends InputStream {
     private static final int DEFAULT_BUFFER_SIZE = 1024;
 
-    static int checkMinBufferSize(final CharsetEncoder charsetEncoder, final int bufferSize) {
-        final float minRequired = minBufferSize(charsetEncoder);
-        if (bufferSize < minRequired) {
-            throw new IllegalArgumentException(
-                String.format("Buffer size %,d must be at least %s for a CharsetEncoder %s.", bufferSize, minRequired, charsetEncoder.charset().displayName()));
+    private static int checkMinBufferSize(final int bufferSize) {
+        if (bufferSize < 1) {
+            throw new IllegalArgumentException("Buffer size must be >= 1");
         }
         return bufferSize;
-    }
-
-    static float minBufferSize(final CharsetEncoder charsetEncoder) {
-        return charsetEncoder.maxBytesPerChar() * 2;
     }
 
     private final Reader reader;
@@ -102,16 +96,22 @@ public class ReaderInputStream extends InputStream {
      * CharBuffer used as input for the decoder. It should be reasonably large as we read data from the underlying Reader
      * into this buffer.
      */
-    private final CharBuffer encoderIn;
+    private CharBuffer encoderIn;
     /**
      * ByteBuffer used as output for the decoder. This buffer can be small as it is only used to transfer data from the
      * decoder to the buffer provided by the caller.
      */
-    private final ByteBuffer encoderOut;
+    private ByteBuffer encoderOut;
 
-    private CoderResult lastCoderResult;
-
-    private boolean endOfInput;
+    /** Whether the end of input from {@link #reader} has been reached. */
+    private boolean endOfInput = false;
+    /** Whether {@link #endOfInput} {@code = true} and all input has been encoded. */
+    private boolean encodedEndOfInput = false;
+    /**
+     * Whether {@link #encodedEndOfInput} {@code = true}, and {@link CharsetEncoder#flush(ByteBuffer)}
+     * was successful. That means the <i>encoding operation</i> (as defined by {@link CharsetEncoder}) is complete.
+     */
+    private boolean finishedEncoding = false;
 
     /**
      * Constructs a new {@link ReaderInputStream} that uses the default character encoding with a default input buffer size
@@ -175,8 +175,8 @@ public class ReaderInputStream extends InputStream {
     public ReaderInputStream(final Reader reader, final CharsetEncoder charsetEncoder, final int bufferSize) {
         this.reader = reader;
         this.charsetEncoder = charsetEncoder;
-        this.encoderIn = CharBuffer.allocate(checkMinBufferSize(charsetEncoder, bufferSize));
-        this.encoderIn.flip();
+        this.encoderIn = CharBuffer.allocate(checkMinBufferSize(bufferSize));
+        this.encoderIn.position(encoderIn.limit()); // pretend all chars have been consumed
         this.encoderOut = ByteBuffer.allocate(128);
         this.encoderOut.flip();
     }
@@ -213,33 +213,99 @@ public class ReaderInputStream extends InputStream {
         reader.close();
     }
 
+    private void fillInputBuffer() throws IOException {
+        assert !endOfInput;
+
+        if (encoderIn.position() > 0) {
+            encoderIn.compact();
+        } else {
+            // Explicitly requested to fill buffer, but there is no space left; increase its size
+            char[] oldEncoderInArray = encoderIn.array();
+            encoderIn = CharBuffer.allocate(encoderIn.capacity() * 2);
+            System.arraycopy(oldEncoderInArray, 0, encoderIn.array(), 0, oldEncoderInArray.length);
+            encoderIn.position(oldEncoderInArray.length);
+        }
+
+        final int position = encoderIn.position();
+
+        // We don't use Reader#read(CharBuffer) here because it is more efficient
+        // to write directly to the underlying char array (the default implementation
+        // copies data to a temporary char array).
+        final int c = reader.read(encoderIn.array(), position, encoderIn.remaining());
+        encoderIn.position(0);
+        if (c == EOF) {
+            endOfInput = true;
+            // Manually perform a 'flip' to prepare for reading from the buffer
+            encoderIn.limit(position);
+        } else {
+            // Manually perform a 'flip' to prepare for reading from the buffer
+            encoderIn.limit(position + c);
+        }
+    }
+
     /**
-     * Fills the internal char buffer from the reader.
+     * Encodes chars from the reader.
      *
      * @throws IOException If an I/O error occurs
      */
-    private void fillBuffer() throws IOException {
-        if (!endOfInput && (lastCoderResult == null || lastCoderResult.isUnderflow())) {
-            encoderIn.compact();
-            final int position = encoderIn.position();
-            // We don't use Reader#read(CharBuffer) here because it is more efficient
-            // to write directly to the underlying char array (the default implementation
-            // copies data to a temporary char array).
-            final int c = reader.read(encoderIn.array(), position, encoderIn.remaining());
-            if (c == EOF) {
-                endOfInput = true;
-            } else {
-                encoderIn.position(position + c);
+    private void encode() throws IOException {
+        if (finishedEncoding) {
+            return;
+        }
+
+        assert !encoderOut.hasRemaining();
+        encoderOut.clear();
+
+        if (!encodedEndOfInput) {
+            while (true) {
+                CoderResult coderResult = charsetEncoder.encode(encoderIn, encoderOut, endOfInput);
+                boolean madeProgress = encoderOut.position() > 0;
+
+                if (coderResult.isOverflow()) {
+                    if (madeProgress) {
+                        break;
+                    } else {
+                        // Did not make any encoding progress, must increase output buffer
+                        encoderOut = ByteBuffer.allocate(encoderOut.capacity() * 2);
+                    }
+                } else if (coderResult.isUnderflow()) {
+                    if (endOfInput) {
+                        encodedEndOfInput = true;
+                        break;
+                    } else if (madeProgress) {
+                        break;
+                    } else {
+                        // Did not make any encoding progress (most likely unpaired high surrogate is in buffer
+                        // and encoder waits for low surrogate)
+                        // Read more characters and repeat encoding loop
+                        fillInputBuffer();
+                    }
+                } else {
+                    coderResult.throwException();
+                }
             }
-            encoderIn.flip();
         }
-        encoderOut.compact();
-        lastCoderResult = charsetEncoder.encode(encoderIn, encoderOut, endOfInput);
-        if (endOfInput) {
-            lastCoderResult = charsetEncoder.flush(encoderOut);
-        }
-        if (lastCoderResult.isError()) {
-            lastCoderResult.throwException();
+
+        if (encodedEndOfInput) {
+            while (true) {
+                CoderResult coderResult = charsetEncoder.flush(encoderOut);
+
+                if (coderResult.isUnderflow()) {
+                    finishedEncoding = true;
+                    break;
+                } else if (coderResult.isOverflow()) {
+                    // Either made progress during flush or already made progress in regular encoding loop above
+                    boolean madeProgress = encoderOut.position() > 0;
+                    if (madeProgress) {
+                        break;
+                    } else {
+                        // Did not make any encoding progress, must increase output buffer
+                        encoderOut = ByteBuffer.allocate(encoderOut.capacity() * 2);
+                    }
+                } else {
+                    coderResult.throwException();
+                }
+            }
         }
         encoderOut.flip();
     }
@@ -256,8 +322,9 @@ public class ReaderInputStream extends InputStream {
             if (encoderOut.hasRemaining()) {
                 return encoderOut.get() & 0xFF;
             }
-            fillBuffer();
-            if (endOfInput && !encoderOut.hasRemaining()) {
+            encode();
+            if (!encoderOut.hasRemaining()) {
+                assert finishedEncoding;
                 return EOF;
             }
         }
@@ -301,12 +368,13 @@ public class ReaderInputStream extends InputStream {
                 off += c;
                 len -= c;
                 read += c;
-            } else if (endOfInput) { // Already reach EOF in the last read
+            } else if (finishedEncoding) { // Already reach EOF in the last read
                 break;
             } else { // Read again
-                fillBuffer();
+                encode();
             }
         }
-        return read == 0 && endOfInput ? EOF : read;
+        assert read > 0 || finishedEncoding;
+        return read == 0 ? EOF : read;
     }
 }
