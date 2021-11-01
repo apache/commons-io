@@ -339,20 +339,20 @@ public class FileUtils {
      * @throws IOException if an I/O error occurs.
      * @see #forceDelete(File)
      */
-    public static void cleanDirectory(final File directory) throws IOException {
-        final File[] files = listFiles(directory, null);
-
-        final List<Exception> causeList = new ArrayList<>();
-        for (final File file : files) {
-            try {
-                forceDelete(file);
-            } catch (final IOException ioe) {
-                causeList.add(ioe);
+    public static void cleanDirectory(final File directory) {
+        if (directory.exists()) {
+            if (directory.isDirectory()) {
+                if (Objects.requireNonNull(directory.listFiles(), "File is not directory").length != 0) {
+                    Arrays.stream(Objects.requireNonNull(directory.listFiles(), "File is not directory")).forEach(file -> {
+                        if (file.isDirectory() && Objects.requireNonNull(file.listFiles()).length != 0) {
+                            cleanDirectory(file);
+                        }
+                        file.delete();
+                    });
+                }
+            } else {
+                directory.delete();
             }
-        }
-
-        if (!causeList.isEmpty()) {
-            throw new IOExceptionList(directory.toString(), causeList);
         }
     }
 
