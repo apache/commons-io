@@ -130,10 +130,12 @@ public class FilenameUtilsTest {
         assertEquals(SEP + "c" + SEP + "d", FilenameUtils.concat("a/b/", "/c/d"));
         assertEquals("C:c" + SEP + "d", FilenameUtils.concat("a/b/", "C:c/d"));
         assertEquals("C:" + SEP + "c" + SEP + "d", FilenameUtils.concat("a/b/", "C:/c/d"));
-        assertEquals("~" + SEP + "c" + SEP + "d", FilenameUtils.concat("a/b/", "~/c/d"));
-        assertEquals("~user" + SEP + "c" + SEP + "d", FilenameUtils.concat("a/b/", "~user/c/d"));
-        assertEquals("~" + SEP, FilenameUtils.concat("a/b/", "~"));
-        assertEquals("~user" + SEP, FilenameUtils.concat("a/b/", "~user"));
+        assertEquals("a" + SEP + "b" + SEP + "~" + SEP + "c" + SEP + "d", FilenameUtils.concat("a/b/", "~/c/d"));
+        assertEquals("a" + SEP + "b" + SEP + "~user" + SEP + "c" + SEP + "d", FilenameUtils.concat("a/b/", "~user/c/d"));
+        assertEquals("a" + SEP + "b" + SEP + "~", FilenameUtils.concat("a/b/", "~"));
+        assertEquals("a" + SEP + "b" + SEP + "~user", FilenameUtils.concat("a/b/", "~user"));
+        assertEquals("a" + SEP + "b" + SEP + "~user" + SEP, FilenameUtils.concat("a/b/", "~user/"));
+        assertEquals("x" + SEP + "y" + SEP + "~abc.txt", FilenameUtils.concat("x/y/", "~abc.txt"));
     }
 
     //-----------------------------------------------------------------------
