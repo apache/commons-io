@@ -62,7 +62,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
      * @throws IOException if an error occurs.
      * @throws NullPointerException if the file is null.
      */
-    private static Writer initWriter(final File file, final Object encoding, final boolean append) throws IOException, UnsupportedCharsetException {
+    private static Writer initWriter(final File file, final Object encoding, final boolean append) throws IOException {
         Objects.requireNonNull(file, "file");
         OutputStream stream = null;
         final boolean fileExistedAlready = file.exists();
@@ -92,10 +92,10 @@ public class FileWriterWithEncoding extends ProxyWriter {
             if (!fileExistedAlready) {
                 FileUtils.deleteQuietly(file);
             }
-            if (ex instanceof IOException) {
-                throw ex;
-            } else {
+            if (ex instanceof UnsupportedCharsetException) {
                 throw new IOException(ex);
+            } else {
+                throw ex;
             }
         }
     }
@@ -144,7 +144,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
      * @throws IOException in case of an I/O error.
      */
     public FileWriterWithEncoding(final File file, final Charset charset, final boolean append) throws IOException {
-        super(initWriter(file, encoding, append));
+        super(initWriter(file, charset, append));
     }
 
     /**
