@@ -304,7 +304,7 @@ The <action> type attribute can be add,update,fix,remove.
         Bump jmh.version from 1.32 to 1.33 #258.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
-        Bump actions/checkout from 2.3.4 to 2.3.5 #286.
+        Bump actions/checkout from 2.3.4 to 2.4.0 #286, #298.
       </action>
       <action dev="kinow" type="update" due-to="Dependabot">
         Bump moditect-maven-plugin from 1.0.0.RC1 to 1.0.0.RC2 #280.
