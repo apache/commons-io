@@ -392,8 +392,19 @@ public class IOUtils {
      */
     public static void close(final Closeable... closeables) throws IOException {
         if (closeables != null) {
+            IOException ioexception = null;
             for (final Closeable closeable : closeables) {
-                close(closeable);
+                try {
+                    close(closeable);
+                } catch (IOException ex) {
+                    if (ioexception == null) {
+                        ioexception = new IOException("IOUtils.close failed");
+                    }
+                    ioexception.addSuppressed(ex);
+                }
+            }
+            if (ioexception != null) {
+                throw ioexception;
             }
         }
     }
@@ -410,6 +421,25 @@ public class IOUtils {
         if (closeable != null) {
             try {
                 closeable.close();
+            } catch (final IOException e) {
+                if (consumer != null) {
+                    consumer.accept(e);
+                }
+            }
+        }
+    }
+
+    /**
+     * Closes the given {@link Closeable} as a null-safe operation.
+     *
+     * @param closeables The resource(s) to close, may be null.
+     * @param consumer Consume the IOException thrown by {@link Closeable#close()}.
+     * @throws IOException if an I/O error occurs.
+     */
+    public static void close(final Closeable[] closeables, final IOConsumer<IOException> consumer) throws IOException {
+        if (closeables != null) {
+            try {
+                close(closeables);
             } catch (final IOException e) {
                 if (consumer != null) {
                     consumer.accept(e);
