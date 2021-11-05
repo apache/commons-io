@@ -392,19 +392,19 @@ public class IOUtils {
      */
     public static void close(final Closeable... closeables) throws IOException {
         if (closeables != null) {
-            IOException ioexception = null;
+            List<IOException> exceptions = null;
             for (final Closeable closeable : closeables) {
                 try {
                     close(closeable);
                 } catch (IOException ex) {
-                    if (ioexception == null) {
-                        ioexception = new IOException("IOUtils.close failed");
+                    if (exceptions == null) {
+                        exceptions = new ArrayList<>();
                     }
-                    ioexception.addSuppressed(ex);
+                    exceptions.add(ex);
                 }
             }
-            if (ioexception != null) {
-                throw ioexception;
+            if (exceptions != null) {
+                throw new IOExceptionList(exceptions);
             }
         }
     }
