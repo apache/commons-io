@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Tests IOExceptionWithCause
- *
  */
 public class IOExceptionWithCauseTest {
 
