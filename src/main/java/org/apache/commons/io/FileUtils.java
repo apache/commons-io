@@ -76,6 +76,7 @@ import org.apache.commons.io.filefilter.FileFileFilter;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.apache.commons.io.function.IOConsumer;
 
 /**
  * General file manipulation utilities.
@@ -340,17 +341,7 @@ public class FileUtils {
      * @see #forceDelete(File)
      */
     public static void cleanDirectory(final File directory) throws IOException {
-        final File[] files = listFiles(directory, null);
-
-        final List<IOException> causeList = new ArrayList<>();
-        for (final File file : files) {
-            try {
-                forceDelete(file);
-            } catch (final IOException ioe) {
-                causeList.add(ioe);
-            }
-        }
-        IOExceptionList.checkEmpty(causeList, directory);
+        IOConsumer.forEach(listFiles(directory, null), file -> forceDelete(file));
     }
 
     /**
@@ -363,17 +354,7 @@ public class FileUtils {
      * @see #forceDeleteOnExit(File)
      */
     private static void cleanDirectoryOnExit(final File directory) throws IOException {
-        final File[] files = listFiles(directory, null);
-
-        final List<IOException> causeList = new ArrayList<>();
-        for (final File file : files) {
-            try {
-                forceDeleteOnExit(file);
-            } catch (final IOException ioe) {
-                causeList.add(ioe);
-            }
-        }
-        IOExceptionList.checkEmpty(causeList, directory);
+        IOConsumer.forEach(listFiles(directory, null), file -> forceDeleteOnExit(file));
     }
 
     /**

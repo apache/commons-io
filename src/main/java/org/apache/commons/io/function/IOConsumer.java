@@ -20,6 +20,10 @@ package org.apache.commons.io.function;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
+
+import org.apache.commons.io.IOExceptionList;
+import org.apache.commons.io.IOIndexedException;
 
 /**
  * Like {@link Consumer} but throws {@link IOException}.
@@ -34,6 +38,32 @@ public interface IOConsumer<T> {
      * Package private constant; consider private.
      */
     IOConsumer<?> NOOP_IO_CONSUMER = t -> {/* noop */};
+
+    /**
+     * Performs an action for each element of this stream.
+     *
+     * @param <T> The element type.
+     * @param array The input to stream.
+     * @param action The action to apply to each input element.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.12.0
+     */
+    static <T> void forEach(final T[] array, final IOConsumer<T> action) throws IOException {
+        IOStreams.forEach(IOStreams.of(array), action);
+    }
+
+    /**
+     * Performs an action for each element of this stream.
+     *
+     * @param <T> The element type.
+     * @param stream The input to stream.
+     * @param action The action to apply to each input element.
+     * @throws IOExceptionList if an I/O error occurs.
+     * @since 2.12.0
+     */
+    static <T> void forEachIndexed(final Stream<T> stream, final IOConsumer<T> action) throws IOExceptionList {
+        IOStreams.forEachIndexed(stream, action, IOIndexedException::new);
+    }
 
     /**
      * Returns a constant NOOP consumer.
@@ -57,12 +87,11 @@ public interface IOConsumer<T> {
 
     /**
      * Returns a composed {@code IOConsumer} that performs, in sequence, this operation followed by the {@code after}
-     * operation. If performing either operation throws an exception, it is relayed to the caller of the composed
-     * operation. If performing this operation throws an exception, the {@code after} operation will not be performed.
+     * operation. If performing either operation throws an exception, it is relayed to the caller of the composed operation.
+     * If performing this operation throws an exception, the {@code after} operation will not be performed.
      *
      * @param after the operation to perform after this operation
-     * @return a composed {@code Consumer} that performs in sequence this operation followed by the {@code after}
-     *         operation
+     * @return a composed {@code Consumer} that performs in sequence this operation followed by the {@code after} operation
      * @throws NullPointerException if {@code after} is null
      */
     default IOConsumer<T> andThen(final IOConsumer<? super T> after) {

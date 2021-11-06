@@ -20,14 +20,15 @@ package org.apache.commons.io.output;
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.IOExceptionList;
 import org.apache.commons.io.IOIndexedException;
+import org.apache.commons.io.function.IOConsumer;
 
 /**
  * Abstract class for writing filtered character streams to a {@link Collection} of writers. This is in contrast to
@@ -44,6 +45,14 @@ import org.apache.commons.io.IOIndexedException;
  * @since 2.7
  */
 public class FilterCollectionWriter extends Writer {
+
+    @SuppressWarnings("rawtypes")
+    private static final Predicate NOT_NULL = e -> e != null;
+
+    @SuppressWarnings("unchecked")
+    private static <T> Predicate<T> notNull() {
+        return NOT_NULL;
+    }
 
     /**
      * Empty and immutable collection of writers.
@@ -73,92 +82,27 @@ public class FilterCollectionWriter extends Writer {
         this.writers = writers == null ? EMPTY_WRITERS : Arrays.asList(writers);
     }
 
-    /**
-     * Adds an indexed exception to the list.
-     *
-     * @param causeList The target list.
-     * @param i The index.
-     * @param e The cause.
-     * @return the given list or a new list on null input.
-     */
-    private List<IOException> add(List<IOException> causeList, final int i, final IOException e) {
-        if (causeList == null) {
-            causeList = new ArrayList<>();
-        }
-        causeList.add(new IOIndexedException(i, e));
-        return causeList;
-    }
-
     @Override
     public Writer append(final char c) throws IOException {
-        List<IOException> causeList = null;
-        int i = 0;
-        for (final Writer w : writers) {
-            if (w != null) {
-                try {
-                    w.append(c);
-                } catch (final IOException e) {
-                    causeList = add(causeList, i, e);
-                }
-            }
-            i++;
-        }
-        IOExceptionList.checkEmpty(causeList, "append(char)");
+        IOConsumer.forEachIndexed(writers(), w -> w.append(c));
         return this;
     }
 
     @Override
     public Writer append(final CharSequence csq) throws IOException {
-        List<IOException> causeList = null;
-        int i = 0;
-        for (final Writer w : writers) {
-            if (w != null) {
-                try {
-                    w.append(csq);
-                } catch (final IOException e) {
-                    causeList = add(causeList, i, e);
-                }
-            }
-            i++;
-        }
-        IOExceptionList.checkEmpty(causeList, "append(CharSequence)");
+        IOConsumer.forEachIndexed(writers(), w -> w.append(csq));
         return this;
     }
 
     @Override
     public Writer append(final CharSequence csq, final int start, final int end) throws IOException {
-
-        List<IOException> causeList = null;
-        int i = 0;
-        for (final Writer w : writers) {
-            if (w != null) {
-                try {
-                    w.append(csq, start, end);
-                } catch (final IOException e) {
-                    causeList = add(causeList, i, e);
-                }
-            }
-            i++;
-        }
-        IOExceptionList.checkEmpty(causeList, "append(CharSequence, int, int)");
+        IOConsumer.forEachIndexed(writers(), w -> w.append(csq, start, end));
         return this;
     }
 
     @Override
     public void close() throws IOException {
-        List<IOException> causeList = null;
-        int i = 0;
-        for (final Writer w : writers) {
-            if (w != null) {
-                try {
-                    w.close();
-                } catch (final IOException e) {
-                    causeList = add(causeList, i, e);
-                }
-            }
-            i++;
-        }
-        IOExceptionList.checkEmpty(causeList, "close()");
+        IOConsumer.forEachIndexed(writers(), Writer::close);
     }
 
     /**
@@ -168,36 +112,12 @@ public class FilterCollectionWriter extends Writer {
      */
     @Override
     public void flush() throws IOException {
-        List<IOException> causeList = null;
-        int i = 0;
-        for (final Writer w : writers) {
-            if (w != null) {
-                try {
-                    w.flush();
-                } catch (final IOException e) {
-                    causeList = add(causeList, i, e);
-                }
-            }
-            i++;
-        }
-        IOExceptionList.checkEmpty(causeList, "flush()");
+        IOConsumer.forEachIndexed(writers(), Writer::flush);
     }
 
     @Override
     public void write(final char[] cbuf) throws IOException {
-        List<IOException> causeList = null;
-        int i = 0;
-        for (final Writer w : writers) {
-            if (w != null) {
-                try {
-                    w.write(cbuf);
-                } catch (final IOException e) {
-                    causeList = add(causeList, i, e);
-                }
-            }
-            i++;
-        }
-        IOExceptionList.checkEmpty(causeList, "write(char[])");
+        IOConsumer.forEachIndexed(writers(), w -> w.write(cbuf));
     }
 
     /**
@@ -211,19 +131,7 @@ public class FilterCollectionWriter extends Writer {
      */
     @Override
     public void write(final char[] cbuf, final int off, final int len) throws IOException {
-        List<IOException> causeList = null;
-        int i = 0;
-        for (final Writer w : writers) {
-            if (w != null) {
-                try {
-                    w.write(cbuf, off, len);
-                } catch (final IOException e) {
-                    causeList = add(causeList, i, e);
-                }
-            }
-            i++;
-        }
-        IOExceptionList.checkEmpty(causeList, "write(char[], int, int)");
+        IOConsumer.forEachIndexed(writers(), w -> w.write(cbuf, off, len));
     }
 
     /**
@@ -233,36 +141,12 @@ public class FilterCollectionWriter extends Writer {
      */
     @Override
     public void write(final int c) throws IOException {
-        List<IOException> causeList = null;
-        int i = 0;
-        for (final Writer w : writers) {
-            if (w != null) {
-                try {
-                    w.write(c);
-                } catch (final IOException e) {
-                    causeList = add(causeList, i, e);
-                }
-            }
-            i++;
-        }
-        IOExceptionList.checkEmpty(causeList, "write(int)");
+        IOConsumer.forEachIndexed(writers(), w -> w.write(c));
     }
 
     @Override
     public void write(final String str) throws IOException {
-        List<IOException> causeList = null;
-        int i = 0;
-        for (final Writer w : writers) {
-            if (w != null) {
-                try {
-                    w.write(str);
-                } catch (final IOException e) {
-                    causeList = add(causeList, i, e);
-                }
-            }
-            i++;
-        }
-        IOExceptionList.checkEmpty(causeList, "write(String)");
+        IOConsumer.forEachIndexed(writers(), w -> w.write(str));
     }
 
     /**
@@ -276,19 +160,11 @@ public class FilterCollectionWriter extends Writer {
      */
     @Override
     public void write(final String str, final int off, final int len) throws IOException {
-        List<IOException> causeList = null;
-        int i = 0;
-        for (final Writer w : writers) {
-            if (w != null) {
-                try {
-                    w.write(str, off, len);
-                } catch (final IOException e) {
-                    causeList = add(causeList, i, e);
-                }
-            }
-            i++;
-        }
-        IOExceptionList.checkEmpty(causeList, "write(String, int, int)");
+        IOConsumer.forEachIndexed(writers(), w -> w.write(str, off, len));
+    }
+
+    private Stream<Writer> writers() {
+        return writers.stream().filter(notNull());
     }
 
 }
