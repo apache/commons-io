@@ -19,6 +19,7 @@ package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.EOFException;
@@ -77,6 +78,14 @@ public class IOExceptionListTest {
         final IOExceptionList sqlExceptionList = new IOExceptionList(null);
         assertNull(sqlExceptionList.getCause());
         assertTrue(sqlExceptionList.getCauseList().isEmpty());
+    }
+
+    @Test
+    public void testNullMessageArg() {
+        assertNotNull(new IOExceptionList(null, Collections.emptyList()).getMessage());
+        assertNotNull(new IOExceptionList(null, null).getMessage());
+        assertEquals("A", new IOExceptionList("A", Collections.emptyList()).getMessage());
+        assertEquals("A", new IOExceptionList("A", null).getMessage());
     }
 
     @Test

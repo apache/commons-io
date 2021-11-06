@@ -33,6 +33,10 @@ import java.util.List;
 public class IOExceptionList extends IOException {
 
     private static final long serialVersionUID = 1L;
+    private static String toMessage(final List<? extends Throwable> causeList) {
+        return String.format("%,d exceptions: %s", causeList == null ? 0 : causeList.size(), causeList);
+    }
+
     private final List<? extends Throwable> causeList;
 
     /**
@@ -41,7 +45,7 @@ public class IOExceptionList extends IOException {
      * @param causeList a list of cause exceptions.
      */
     public IOExceptionList(final List<? extends Throwable> causeList) {
-        this(String.format("%,d exceptions: %s", causeList == null ? 0 : causeList.size(), causeList), causeList);
+        this(toMessage(causeList), causeList);
     }
 
     /**
@@ -52,7 +56,7 @@ public class IOExceptionList extends IOException {
      * @since 2.9.0
      */
     public IOExceptionList(final String message, final List<? extends Throwable> causeList) {
-        super(message, causeList == null || causeList.isEmpty() ? null : causeList.get(0));
+        super(message != null ? message : toMessage(causeList), causeList == null || causeList.isEmpty() ? null : causeList.get(0));
         this.causeList = causeList == null ? Collections.emptyList() : causeList;
     }
 
