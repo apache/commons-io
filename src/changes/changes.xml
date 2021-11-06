@@ -120,6 +120,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Arturo Bernal">
         Minor changes #287.
       </action>
+      <action issue="IO-756" dev="ggregory" type="fix" due-to="wodencafe, Gary Gregory, Bruno P. Kinoshita">
+        Update FileWriterWithEncoding to extend ProxyWriter #296.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add BrokenReader.INSTANCE.
