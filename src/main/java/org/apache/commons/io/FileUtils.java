@@ -342,7 +342,7 @@ public class FileUtils {
     public static void cleanDirectory(final File directory) throws IOException {
         final File[] files = listFiles(directory, null);
 
-        final List<Exception> causeList = new ArrayList<>();
+        final List<IOException> causeList = new ArrayList<>();
         for (final File file : files) {
             try {
                 forceDelete(file);
@@ -350,10 +350,7 @@ public class FileUtils {
                 causeList.add(ioe);
             }
         }
-
-        if (!causeList.isEmpty()) {
-            throw new IOExceptionList(directory.toString(), causeList);
-        }
+        IOExceptionList.checkEmpty(causeList, directory);
     }
 
     /**
@@ -368,7 +365,7 @@ public class FileUtils {
     private static void cleanDirectoryOnExit(final File directory) throws IOException {
         final File[] files = listFiles(directory, null);
 
-        final List<Exception> causeList = new ArrayList<>();
+        final List<IOException> causeList = new ArrayList<>();
         for (final File file : files) {
             try {
                 forceDeleteOnExit(file);
@@ -376,10 +373,7 @@ public class FileUtils {
                 causeList.add(ioe);
             }
         }
-
-        if (!causeList.isEmpty()) {
-            throw new IOExceptionList(causeList);
-        }
+        IOExceptionList.checkEmpty(causeList, directory);
     }
 
     /**

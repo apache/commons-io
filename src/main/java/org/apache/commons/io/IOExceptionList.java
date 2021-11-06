@@ -20,6 +20,7 @@ package org.apache.commons.io;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A IOException based on a list of Throwable causes.
@@ -33,6 +34,25 @@ import java.util.List;
 public class IOExceptionList extends IOException {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * Throws this exception if the list is not null or empty.
+     *
+     * @param causeList The list to test.
+     * @param message The detail message, see {@link #getMessage()}.
+     * @throws IOExceptionList if the list is not null or empty.
+     * @since 2.12.0
+     */
+    public static void checkEmpty(final List<? extends Throwable> causeList, final Object message) throws IOExceptionList {
+        if (!isEmpty(causeList)) {
+            throw new IOExceptionList(Objects.toString(message, null), causeList);
+        }
+    }
+
+    private static boolean isEmpty(final List<? extends Throwable> causeList) {
+        return causeList == null || causeList.isEmpty();
+    }
+
     private static String toMessage(final List<? extends Throwable> causeList) {
         return String.format("%,d exceptions: %s", causeList == null ? 0 : causeList.size(), causeList);
     }
@@ -56,7 +76,7 @@ public class IOExceptionList extends IOException {
      * @since 2.9.0
      */
     public IOExceptionList(final String message, final List<? extends Throwable> causeList) {
-        super(message != null ? message : toMessage(causeList), causeList == null || causeList.isEmpty() ? null : causeList.get(0));
+        super(message != null ? message : toMessage(causeList), isEmpty(causeList) ? null : causeList.get(0));
         this.causeList = causeList == null ? Collections.emptyList() : causeList;
     }
 

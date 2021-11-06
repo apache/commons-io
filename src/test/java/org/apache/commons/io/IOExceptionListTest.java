@@ -18,8 +18,9 @@
 package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.EOFException;
@@ -48,6 +49,16 @@ public class IOExceptionListTest {
         // No CCE:
         final List<EOFException> causeList = sqlExceptionList.getCauseList();
         assertEquals(list, causeList);
+    }
+
+    @Test
+    public void testCheckEmpty() throws IOExceptionList {
+        IOExceptionList.checkEmpty(null, "");
+        IOExceptionList.checkEmpty(null, null);
+        IOExceptionList.checkEmpty(Collections.emptyList(), "");
+        IOExceptionList.checkEmpty(Collections.emptyList(), null);
+        assertThrows(IOExceptionList.class, () -> IOExceptionList.checkEmpty(Collections.singletonList(new Exception()), ""));
+        assertThrows(IOExceptionList.class, () -> IOExceptionList.checkEmpty(Collections.singletonList(new Exception()), null));
     }
 
     @Test

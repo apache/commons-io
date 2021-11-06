@@ -81,7 +81,7 @@ public class FilterCollectionWriter extends Writer {
      * @param e The cause.
      * @return the given list or a new list on null input.
      */
-    private List<Exception> add(List<Exception> causeList, final int i, final IOException e) {
+    private List<IOException> add(List<IOException> causeList, final int i, final IOException e) {
         if (causeList == null) {
             causeList = new ArrayList<>();
         }
@@ -91,7 +91,7 @@ public class FilterCollectionWriter extends Writer {
 
     @Override
     public Writer append(final char c) throws IOException {
-        List<Exception> causeList = null;
+        List<IOException> causeList = null;
         int i = 0;
         for (final Writer w : writers) {
             if (w != null) {
@@ -103,15 +103,13 @@ public class FilterCollectionWriter extends Writer {
             }
             i++;
         }
-        if (notEmpty(causeList)) {
-            throw new IOExceptionList("append", causeList);
-        }
+        IOExceptionList.checkEmpty(causeList, "append(char)");
         return this;
     }
 
     @Override
     public Writer append(final CharSequence csq) throws IOException {
-        List<Exception> causeList = null;
+        List<IOException> causeList = null;
         int i = 0;
         for (final Writer w : writers) {
             if (w != null) {
@@ -123,16 +121,14 @@ public class FilterCollectionWriter extends Writer {
             }
             i++;
         }
-        if (notEmpty(causeList)) {
-            throw new IOExceptionList("append", causeList);
-        }
+        IOExceptionList.checkEmpty(causeList, "append(CharSequence)");
         return this;
     }
 
     @Override
     public Writer append(final CharSequence csq, final int start, final int end) throws IOException {
 
-        List<Exception> causeList = null;
+        List<IOException> causeList = null;
         int i = 0;
         for (final Writer w : writers) {
             if (w != null) {
@@ -144,15 +140,13 @@ public class FilterCollectionWriter extends Writer {
             }
             i++;
         }
-        if (notEmpty(causeList)) {
-            throw new IOExceptionList("append", causeList);
-        }
+        IOExceptionList.checkEmpty(causeList, "append(CharSequence, int, int)");
         return this;
     }
 
     @Override
     public void close() throws IOException {
-        List<Exception> causeList = null;
+        List<IOException> causeList = null;
         int i = 0;
         for (final Writer w : writers) {
             if (w != null) {
@@ -164,10 +158,7 @@ public class FilterCollectionWriter extends Writer {
             }
             i++;
         }
-        if (notEmpty(causeList)) {
-            throw new IOExceptionList("close", causeList);
-        }
-
+        IOExceptionList.checkEmpty(causeList, "close()");
     }
 
     /**
@@ -177,7 +168,7 @@ public class FilterCollectionWriter extends Writer {
      */
     @Override
     public void flush() throws IOException {
-        List<Exception> causeList = null;
+        List<IOException> causeList = null;
         int i = 0;
         for (final Writer w : writers) {
             if (w != null) {
@@ -189,25 +180,12 @@ public class FilterCollectionWriter extends Writer {
             }
             i++;
         }
-        if (notEmpty(causeList)) {
-            throw new IOExceptionList("flush", causeList);
-        }
-
-    }
-
-    /**
-     * Tests if the given list is empty in a null-safe manner.
-     *
-     * @param causeList the list to test.
-     * @return true if empty or null.
-     */
-    private boolean notEmpty(final List<Exception> causeList) {
-        return causeList != null && !causeList.isEmpty();
+        IOExceptionList.checkEmpty(causeList, "flush()");
     }
 
     @Override
     public void write(final char[] cbuf) throws IOException {
-        List<Exception> causeList = null;
+        List<IOException> causeList = null;
         int i = 0;
         for (final Writer w : writers) {
             if (w != null) {
@@ -219,9 +197,7 @@ public class FilterCollectionWriter extends Writer {
             }
             i++;
         }
-        if (notEmpty(causeList)) {
-            throw new IOExceptionList("write", causeList);
-        }
+        IOExceptionList.checkEmpty(causeList, "write(char[])");
     }
 
     /**
@@ -235,7 +211,7 @@ public class FilterCollectionWriter extends Writer {
      */
     @Override
     public void write(final char[] cbuf, final int off, final int len) throws IOException {
-        List<Exception> causeList = null;
+        List<IOException> causeList = null;
         int i = 0;
         for (final Writer w : writers) {
             if (w != null) {
@@ -247,9 +223,7 @@ public class FilterCollectionWriter extends Writer {
             }
             i++;
         }
-        if (notEmpty(causeList)) {
-            throw new IOExceptionList("write", causeList);
-        }
+        IOExceptionList.checkEmpty(causeList, "write(char[], int, int)");
     }
 
     /**
@@ -259,7 +233,7 @@ public class FilterCollectionWriter extends Writer {
      */
     @Override
     public void write(final int c) throws IOException {
-        List<Exception> causeList = null;
+        List<IOException> causeList = null;
         int i = 0;
         for (final Writer w : writers) {
             if (w != null) {
@@ -271,14 +245,12 @@ public class FilterCollectionWriter extends Writer {
             }
             i++;
         }
-        if (notEmpty(causeList)) {
-            throw new IOExceptionList("write", causeList);
-        }
+        IOExceptionList.checkEmpty(causeList, "write(int)");
     }
 
     @Override
     public void write(final String str) throws IOException {
-        List<Exception> causeList = null;
+        List<IOException> causeList = null;
         int i = 0;
         for (final Writer w : writers) {
             if (w != null) {
@@ -290,10 +262,7 @@ public class FilterCollectionWriter extends Writer {
             }
             i++;
         }
-        if (notEmpty(causeList)) {
-            throw new IOExceptionList("write", causeList);
-        }
-
+        IOExceptionList.checkEmpty(causeList, "write(String)");
     }
 
     /**
@@ -307,7 +276,7 @@ public class FilterCollectionWriter extends Writer {
      */
     @Override
     public void write(final String str, final int off, final int len) throws IOException {
-        List<Exception> causeList = null;
+        List<IOException> causeList = null;
         int i = 0;
         for (final Writer w : writers) {
             if (w != null) {
@@ -319,10 +288,7 @@ public class FilterCollectionWriter extends Writer {
             }
             i++;
         }
-        if (notEmpty(causeList)) {
-            throw new IOExceptionList("write", causeList);
-        }
-
+        IOExceptionList.checkEmpty(causeList, "write(String, int, int)");
     }
 
 }

@@ -281,6 +281,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add PathUtils.readAttributes(Path, Class, LinkOption...). #290
       </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add IOExceptionList.checkEmpty(List, Object).
+      </action>
       <!-- UPDATE -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Update FileEntry to use FileTime instead of long for file time stamps.
