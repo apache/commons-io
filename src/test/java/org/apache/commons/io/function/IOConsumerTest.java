@@ -28,7 +28,7 @@ import org.apache.commons.io.test.ThrowOnCloseReader;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests {@linnk IOConsumer}.
+ * Tests {@link IOConsumer}.
  */
 public class IOConsumerTest {
 
