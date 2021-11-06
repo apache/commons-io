@@ -56,7 +56,7 @@ public interface IOConsumer<T> {
     void accept(T t) throws IOException;
 
     /**
-     * Returns a composed {@code IoConsumer} that performs, in sequence, this operation followed by the {@code after}
+     * Returns a composed {@code IOConsumer} that performs, in sequence, this operation followed by the {@code after}
      * operation. If performing either operation throws an exception, it is relayed to the caller of the composed
      * operation. If performing this operation throws an exception, the {@code after} operation will not be performed.
      *
