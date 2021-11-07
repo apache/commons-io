@@ -108,7 +108,7 @@ public class IOExceptionListTest {
         final PrintWriter pw = new PrintWriter(sw);
         sqlExceptionList.printStackTrace(pw);
         final String st = sw.toString();
-        assertTrue(st.startsWith("org.apache.commons.io.IOExceptionList: 1 exceptions: [java.io.EOFException]"));
+        assertTrue(st.startsWith("org.apache.commons.io.IOExceptionList: 1 exception(s): [java.io.EOFException]"));
         assertTrue(st.contains("Caused by: java.io.EOFException"));
     }
 }

@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * A IOException based on a list of Throwable causes.
+ * An IOException based on a list of Throwable causes.
  * <p>
  * The first exception in the list is used as this exception's cause and is accessible with the usual
  * {@link #getCause()} while the complete list is accessible with {@link #getCauseList()}.
@@ -54,7 +54,7 @@ public class IOExceptionList extends IOException {
     }
 
     private static String toMessage(final List<? extends Throwable> causeList) {
-        return String.format("%,d exceptions: %s", causeList == null ? 0 : causeList.size(), causeList);
+        return String.format("%,d exception(s): %s", causeList == null ? 0 : causeList.size(), causeList);
     }
 
     private final List<? extends Throwable> causeList;
@@ -100,7 +100,7 @@ public class IOExceptionList extends IOException {
      * @return The list of causes.
      */
     public <T extends Throwable> T getCause(final int index, final Class<T> clazz) {
-        return clazz.cast(causeList.get(index));
+        return clazz.cast(getCause(index));
     }
 
     /**
