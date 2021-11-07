@@ -16,13 +16,14 @@
  */
 package org.apache.commons.io;
 
-@SuppressWarnings("deprecation") // testing deprecated class
 /**
- * This is used to test FileCleaner for correctness.
+ * This is used to test {@link FileCleaner} for correctness.
  *
  * @see FileCleaner
  */
+@SuppressWarnings("deprecation") // testing deprecated class
 public class FileCleanerTest extends FileCleaningTrackerTest {
+
     @Override
     protected FileCleaningTracker newInstance() {
         return FileCleaner.getInstance();
