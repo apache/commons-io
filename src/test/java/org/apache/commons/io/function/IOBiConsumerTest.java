@@ -17,28 +17,32 @@
 
 package org.apache.commons.io.function;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.Closeable;
 import java.io.IOException;
-import java.io.StringReader;
+import java.util.concurrent.atomic.AtomicReference;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.test.ThrowOnCloseReader;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests {@link IOConsumer}.
+ * Tests {@link IOBiConsumer}.
  */
-public class IOConsumerTest {
+public class IOBiConsumerTest {
 
     @Test
-    public void testNoopIOConsumer() {
-        final Closeable nullCloseable = null;
-        final IOConsumer<IOException> noopConsumer = IOConsumer.noop(); // noop consumer doesn't throw
-        assertDoesNotThrow(() -> IOUtils.close(nullCloseable, noopConsumer));
-        assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), noopConsumer));
-        assertDoesNotThrow(() -> IOUtils.close(new ThrowOnCloseReader(new StringReader("s")), noopConsumer));
+    public void testAccept() throws IOException {
+        final AtomicReference<String> ref = new AtomicReference<>();
+        final IOBiConsumer<String, Integer> biConsumer = (s, i) -> ref.set(s + i);
+        biConsumer.accept("A", 1);
+        assertEquals("A1", ref.get());
+    }
 
+    @Test
+    public void testAndThen() throws IOException {
+        final AtomicReference<String> ref = new AtomicReference<>();
+        final IOBiConsumer<String, Integer> biConsumer1 = (s, i) -> ref.set(s + i);
+        final IOBiConsumer<String, Integer> biConsumer2 = (s, i) -> ref.set(ref.get() + i + s);
+        biConsumer1.andThen(biConsumer2).accept("B", 2);
+        assertEquals("B22B", ref.get());
     }
 }

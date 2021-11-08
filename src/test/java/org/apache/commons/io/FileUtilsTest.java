@@ -1482,7 +1482,7 @@ public class FileUtilsTest {
         assertTrue(destination.setReadOnly());
         assertTrue(destination.canRead());
         assertFalse(destination.canWrite());
-        // sanity check that File.delete() in deletes read-only files.
+        // sanity check that File.delete() deletes read-only files.
         assertTrue(destination.delete());
         destination = File.createTempFile("test-", ".txt");
         // real test

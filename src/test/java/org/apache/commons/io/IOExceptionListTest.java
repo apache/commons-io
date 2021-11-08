@@ -18,7 +18,9 @@
 package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.EOFException;
@@ -47,6 +49,16 @@ public class IOExceptionListTest {
         // No CCE:
         final List<EOFException> causeList = sqlExceptionList.getCauseList();
         assertEquals(list, causeList);
+    }
+
+    @Test
+    public void testCheckEmpty() throws IOExceptionList {
+        IOExceptionList.checkEmpty(null, "");
+        IOExceptionList.checkEmpty(null, null);
+        IOExceptionList.checkEmpty(Collections.emptyList(), "");
+        IOExceptionList.checkEmpty(Collections.emptyList(), null);
+        assertThrows(IOExceptionList.class, () -> IOExceptionList.checkEmpty(Collections.singletonList(new Exception()), ""));
+        assertThrows(IOExceptionList.class, () -> IOExceptionList.checkEmpty(Collections.singletonList(new Exception()), null));
     }
 
     @Test
@@ -80,6 +92,14 @@ public class IOExceptionListTest {
     }
 
     @Test
+    public void testNullMessageArg() {
+        assertNotNull(new IOExceptionList(null, Collections.emptyList()).getMessage());
+        assertNotNull(new IOExceptionList(null, null).getMessage());
+        assertEquals("A", new IOExceptionList("A", Collections.emptyList()).getMessage());
+        assertEquals("A", new IOExceptionList("A", null).getMessage());
+    }
+
+    @Test
     public void testPrintStackTrace() {
         final EOFException cause = new EOFException();
         final List<EOFException> list = Collections.singletonList(cause);
@@ -88,7 +108,7 @@ public class IOExceptionListTest {
         final PrintWriter pw = new PrintWriter(sw);
         sqlExceptionList.printStackTrace(pw);
         final String st = sw.toString();
-        assertTrue(st.startsWith("org.apache.commons.io.IOExceptionList: 1 exceptions: [java.io.EOFException]"));
+        assertTrue(st.startsWith("org.apache.commons.io.IOExceptionList: 1 exception(s): [java.io.EOFException]"));
         assertTrue(st.contains("Caused by: java.io.EOFException"));
     }
 }

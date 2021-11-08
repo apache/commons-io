@@ -20,9 +20,10 @@ package org.apache.commons.io;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
- * A IOException based on a list of Throwable causes.
+ * An IOException based on a list of Throwable causes.
  * <p>
  * The first exception in the list is used as this exception's cause and is accessible with the usual
  * {@link #getCause()} while the complete list is accessible with {@link #getCauseList()}.
@@ -33,6 +34,29 @@ import java.util.List;
 public class IOExceptionList extends IOException {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * Throws this exception if the list is not null or empty.
+     *
+     * @param causeList The list to test.
+     * @param message The detail message, see {@link #getMessage()}.
+     * @throws IOExceptionList if the list is not null or empty.
+     * @since 2.12.0
+     */
+    public static void checkEmpty(final List<? extends Throwable> causeList, final Object message) throws IOExceptionList {
+        if (!isEmpty(causeList)) {
+            throw new IOExceptionList(Objects.toString(message, null), causeList);
+        }
+    }
+
+    private static boolean isEmpty(final List<? extends Throwable> causeList) {
+        return causeList == null || causeList.isEmpty();
+    }
+
+    private static String toMessage(final List<? extends Throwable> causeList) {
+        return String.format("%,d exception(s): %s", causeList == null ? 0 : causeList.size(), causeList);
+    }
+
     private final List<? extends Throwable> causeList;
 
     /**
@@ -41,7 +65,7 @@ public class IOExceptionList extends IOException {
      * @param causeList a list of cause exceptions.
      */
     public IOExceptionList(final List<? extends Throwable> causeList) {
-        this(String.format("%,d exceptions: %s", causeList == null ? 0 : causeList.size(), causeList), causeList);
+        this(toMessage(causeList), causeList);
     }
 
     /**
@@ -52,7 +76,7 @@ public class IOExceptionList extends IOException {
      * @since 2.9.0
      */
     public IOExceptionList(final String message, final List<? extends Throwable> causeList) {
-        super(message, causeList == null || causeList.isEmpty() ? null : causeList.get(0));
+        super(message != null ? message : toMessage(causeList), isEmpty(causeList) ? null : causeList.get(0));
         this.causeList = causeList == null ? Collections.emptyList() : causeList;
     }
 
@@ -76,7 +100,7 @@ public class IOExceptionList extends IOException {
      * @return The list of causes.
      */
     public <T extends Throwable> T getCause(final int index, final Class<T> clazz) {
-        return clazz.cast(causeList.get(index));
+        return clazz.cast(getCause(index));
     }
 
     /**
