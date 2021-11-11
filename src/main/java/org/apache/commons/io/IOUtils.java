@@ -45,11 +45,11 @@ import java.nio.channels.Selector;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.input.QueueInputStream;
@@ -395,6 +395,25 @@ public class IOUtils {
     }
 
     /**
+     * Closes the entries in the given {@link Stream} as null-safe operations,
+     * and closes the underlying {@code Stream}.
+     *
+     * @param <T> The element type.
+     * @param closeables The resource(s) to close, may be null.
+     * @throws IOExceptionList if an I/O error occurs.
+     * @since 2.12.0
+     */
+    public static <T extends Closeable> void close(final Stream<T> closeables) throws IOExceptionList {
+        if (closeables != null) {
+            try {
+                IOConsumer.forEachIndexed(closeables, IOUtils::close);
+            } finally {
+                closeables.close();
+            }
+        }
+    }
+
+    /**
      * Closes the given {@link Closeable} as a null-safe operation.
      *
      * @param closeable The resource to close, may be null.
@@ -415,13 +434,36 @@ public class IOUtils {
     }
 
     /**
-     * Closes the given {@link Closeable} as a null-safe operation.
+     * Closes the entries in the given {@link Stream} as null-safe operations,
+     * and closes the underlying {@code Stream}.
      *
-     * @param closeables The resource(s) to close, may be null.
+     * @param <T> The element type.
      * @param consumer Consume the IOException thrown by {@link Closeable#close()}.
+     * @param closeables The resource(s) to close, may be null.
      * @throws IOException if an I/O error occurs.
      */
-    public static void close(final Closeable[] closeables, final IOConsumer<IOException> consumer) throws IOException {
+    public static <T extends Closeable> void close(final IOConsumer<IOException> consumer, final Stream<T> closeables) throws IOException {
+        if (closeables != null) {
+            try {
+                close(closeables);
+            } catch (final IOException e) {
+                if (consumer != null) {
+                    consumer.accept(e);
+                }
+            } finally {
+                closeables.close();
+            }
+        }
+    }
+
+    /**
+     * Closes the given {@link Closeable} as a null-safe operation.
+     *
+     * @param consumer Consume the IOException thrown by {@link Closeable#close()}.
+     * @param closeables The resource(s) to close, may be null.
+     * @throws IOException if an I/O error occurs.
+     */
+    public static void close(final IOConsumer<IOException> consumer, final Closeable... closeables) throws IOException {
         if (closeables != null) {
             try {
                 close(closeables);
@@ -538,7 +580,7 @@ public class IOUtils {
      */
     public static void closeQuietly(final Closeable... closeables) {
         if (closeables != null) {
-            Arrays.stream(closeables).forEach(IOUtils::closeQuietly);
+            IOConsumer.forEachQuietly(closeables, IOUtils::closeQuietly);
         }
     }
 
@@ -553,6 +595,64 @@ public class IOUtils {
         if (closeable != null) {
             try {
                 closeable.close();
+            } catch (final IOException e) {
+                if (consumer != null) {
+                    consumer.accept(e);
+                }
+            }
+        }
+    }
+
+    /**
+     * Closes the given {@link Stream} as a null-safe operation while consuming IOException by the given {@code consumer},
+     * and closes the underlying {@code Stream}.
+     *
+     * @param <T> The element type.
+     * @param closeables The resource(s) to close, may be null.
+     * @since 2.12.0
+     */
+    public static <T extends Closeable> void closeQuietly(final Stream<T> closeables) {
+        closeQuietly(null, closeables);
+    }
+
+    /**
+     * Closes the given {@link Stream} as a null-safe operation while consuming IOException by the given {@code consumer},
+     * and closes the underlying {@code Stream}.
+     *
+     * @param <T> The element type.
+     * @param consumer Consume the IOException thrown by {@link Closeable#close()}.
+     * @param closeables The resource(s) to close, may be null.
+     * @since 2.12.0
+     */
+    public static <T extends Closeable> void closeQuietly(final Consumer<IOException> consumer, final Stream<T> closeables) {
+        if (closeables != null) {
+            try {
+                close(closeables);
+            } catch (final IOException e) {
+                if (consumer != null) {
+                    consumer.accept(e);
+                }
+            } finally {
+                try {
+                    closeables.close();
+                } catch (Exception e) {
+                    // Do nothing.
+                }
+            }
+        }
+    }
+
+    /**
+     * Closes the given {@link Closeable}s as a null-safe operation while consuming IOException by the given {@code consumer}.
+     *
+     * @param consumer Consume the IOException thrown by {@link Closeable#close()}.
+     * @param closeables The resource(s) to close, may be null.
+     * @since 2.12.0
+     */
+    public static void closeQuietly(final Consumer<IOException> consumer, final Closeable... closeables) {
+        if (closeables != null) {
+            try {
+                close(closeables);
             } catch (final IOException e) {
                 if (consumer != null) {
                     consumer.accept(e);

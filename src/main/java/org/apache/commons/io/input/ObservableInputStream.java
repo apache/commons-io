@@ -186,7 +186,7 @@ public class ObservableInputStream extends ProxyInputStream {
     }
 
     /**
-     * Notifies the observers by invoking {@link Observer#finished()}.
+     * Notifies the observers by invoking {@link Observer#closed()}.
      *
      * @throws IOException Some observer has thrown an exception, which is being passed down.
      */

@@ -18,7 +18,9 @@
 package org.apache.commons.io.function;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -40,6 +42,29 @@ public interface IOConsumer<T> {
     IOConsumer<?> NOOP_IO_CONSUMER = t -> {/* noop */};
 
     /**
+     * Wraps an {@code IOConsumer} inside of a {@link Consumer}
+     * that throws {@link UncheckedIOException} for any {@link IOException}s
+     * that are thrown by the underlying {@code IOConsumer}.
+     *
+     * @param <T> The element type.
+     * @param consumer The {@code IOConsumer} to wrap.
+     * @return a {@code Consumer} that wraps the given {@code IOConsumer}.
+     * @since 2.12.0
+     */
+    static <T> Consumer<T> wrap(IOConsumer<T> consumer) {
+        return new Consumer<T>() {
+            @Override
+            public void accept(T t) {
+                try {
+                    consumer.accept(t);
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e);
+                }
+            }
+        };
+    }
+
+    /**
      * Performs an action for each element of this stream.
      *
      * @param <T> The element type.
@@ -50,6 +75,46 @@ public interface IOConsumer<T> {
      */
     static <T> void forEach(final T[] array, final IOConsumer<T> action) throws IOException {
         IOStreams.forEach(IOStreams.of(array), action);
+    }
+
+    /**
+     * Performs an action for each element of this array, returning
+     * a {@link Optional} that either contains an {@link IOException}
+     * if one occurred, or {@link Optional#empty()}.
+     *
+     * @param <T> The element type.
+     * @param array The input to stream.
+     * @param action The action to apply to each input element.
+     * @return a {@code Optional} that may wrap a {@code IOException}.
+     * @since 2.12.0
+     */
+    static <T> Optional<IOException> forEachQuietly(final T[] array, final IOConsumer<T> action) {
+        try {
+            IOStreams.forEach(IOStreams.of(array), action);
+            return Optional.empty();
+        } catch (IOException e) {
+            return Optional.of(e);
+        }
+    }
+
+    /**
+     * Performs an action for each element of this stream, returning
+     * a {@link Optional} that either contains an {@link IOExceptionList}
+     * if one occurred, or {@link Optional#empty()}.
+     *
+     * @param <T> The element type.
+     * @param stream The input to stream.
+     * @param action The action to apply to each input element.
+     * @return a {@code Optional} that may wrap a {@code IOExceptionList}.
+     * @since 2.12.0
+     */
+    static <T> Optional<IOExceptionList> forEachIndexedQuietly(final Stream<T> stream, final IOConsumer<T> action) {
+        try {
+            IOStreams.forEachIndexed(stream, action, IOIndexedException::new);
+            return Optional.empty();
+        } catch (IOExceptionList e) {
+            return Optional.of(e);
+        }
     }
 
     /**
@@ -86,12 +151,24 @@ public interface IOConsumer<T> {
     void accept(T t) throws IOException;
 
     /**
+     * Returns this {@code IOConsumer} wrapped inside of a {@link Consumer}
+     * that throws {@link UncheckedIOException} for any {@link IOException}s
+     * that are thrown by this {@code IOConsumer}.
+     *
+     * @return a {@code Consumer} that wraps this {@code IOConsumer}.
+     * @since 2.12.0
+     */
+    default Consumer<T> asConsumer() {
+        return wrap(this);
+    }
+
+    /**
      * Returns a composed {@code IOConsumer} that performs, in sequence, this operation followed by the {@code after}
      * operation. If performing either operation throws an exception, it is relayed to the caller of the composed operation.
      * If performing this operation throws an exception, the {@code after} operation will not be performed.
      *
      * @param after the operation to perform after this operation
-     * @return a composed {@code Consumer} that performs in sequence this operation followed by the {@code after} operation
+     * @return a composed {@code IOConsumer} that performs in sequence this operation followed by the {@code after} operation
      * @throws NullPointerException if {@code after} is null
      */
     default IOConsumer<T> andThen(final IOConsumer<? super T> after) {

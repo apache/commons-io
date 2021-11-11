@@ -52,20 +52,27 @@ class IOStreams {
 
     static <T> void forEachIndexed(final Stream<T> stream, final IOConsumer<T> action, final BiFunction<Integer, IOException, IOException> exSupplier)
         throws IOExceptionList {
-        final AtomicReference<List<IOException>> causeList = new AtomicReference<>();
+        final AtomicReference<List<Throwable>> causeList = new AtomicReference<>();
         final AtomicInteger index = new AtomicInteger();
-        stream.forEach(e -> {
-            try {
-                action.accept(e);
-            } catch (final IOException ioex) {
-                if (causeList.get() == null) {
-                    causeList.set(new ArrayList<>());
+        try {
+            stream.forEach(e -> {
+                try {
+                    action.accept(e);
+                } catch (final IOException ioex) {
+                    if (causeList.get() == null) {
+                        causeList.set(new ArrayList<>());
+                    }
+                    causeList.get().add(exSupplier.apply(index.get(), ioex));
                 }
-                causeList.get().add(exSupplier.apply(index.get(), ioex));
+                index.incrementAndGet();
+            });
+        }
+        catch (Throwable t) {
+            if (causeList.get() == null) {
+                causeList.set(new ArrayList<>());
             }
-            index.incrementAndGet();
-        });
+            causeList.get().add(t);
+        }
         IOExceptionList.checkEmpty(causeList.get(), "forEach");
     }
-
 }
