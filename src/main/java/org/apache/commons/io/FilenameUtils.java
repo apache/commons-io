@@ -201,7 +201,7 @@ public class FilenameUtils {
         if (prefix < 0) {
             return null;
         }
-        if (prefix > 0 && !fullFileNameToAdd.isEmpty() && '~' != (fullFileNameToAdd.charAt(0))) {
+        if (prefix > 0 && !fullFileNameToAdd.startsWith("~")) {
             return normalize(fullFileNameToAdd);
         }
         if (basePath == null) {
