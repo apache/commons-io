@@ -37,7 +37,7 @@ import java.io.OutputStream;
  * @since 1.4
  * @see ObservableInputStream
  */
-public class TeeInputStream extends ProxyInputStream {
+public class TeeInputStream extends TaggedInputStream {
 
     /**
      * The output stream that will receive a copy of all bytes read from the
@@ -93,7 +93,11 @@ public class TeeInputStream extends ProxyInputStream {
             super.close();
         } finally {
             if (closeBranch) {
-                branch.close();
+                try {
+                    branch.close();
+                } catch (IOException e) {
+                    handleIOException(e);
+                }
             }
         }
     }
@@ -109,7 +113,11 @@ public class TeeInputStream extends ProxyInputStream {
     public int read() throws IOException {
         final int ch = super.read();
         if (ch != EOF) {
-            branch.write(ch);
+            try {
+                branch.write(ch);
+            } catch (IOException e) {
+                handleIOException(e);
+            }
         }
         return ch;
     }
@@ -126,7 +134,11 @@ public class TeeInputStream extends ProxyInputStream {
     public int read(final byte[] bts) throws IOException {
         final int n = super.read(bts);
         if (n != EOF) {
-            branch.write(bts, 0, n);
+            try {
+                branch.write(bts, 0, n);
+            } catch (IOException e) {
+                handleIOException(e);
+            }
         }
         return n;
     }
@@ -145,7 +157,11 @@ public class TeeInputStream extends ProxyInputStream {
     public int read(final byte[] bts, final int st, final int end) throws IOException {
         final int n = super.read(bts, st, end);
         if (n != EOF) {
-            branch.write(bts, st, n);
+            try {
+                branch.write(bts, st, n);
+            } catch (IOException e) {
+                handleIOException(e);
+            }
         }
         return n;
     }

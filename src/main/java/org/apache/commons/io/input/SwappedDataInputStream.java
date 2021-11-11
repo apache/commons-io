@@ -33,7 +33,7 @@ import org.apache.commons.io.EndianUtils;
  * </p>
  *
  */
-public class SwappedDataInputStream extends ProxyInputStream implements DataInput {
+public class SwappedDataInputStream extends TaggedInputStream implements DataInput {
 
     /**
      * Constructs a SwappedDataInputStream.
@@ -65,7 +65,11 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
      */
     @Override
     public byte readByte() throws IOException, EOFException {
-        return (byte) in.read();
+        final int returnValue = super.read();
+        if (returnValue == EOF) {
+            handleIOException(new EOFException("Unexpected EOF reached"));
+        }
+        return (byte) returnValue;
     }
 
     /**
@@ -89,7 +93,14 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
      */
     @Override
     public double readDouble() throws IOException, EOFException {
-        return EndianUtils.readSwappedDouble(in);
+        double returnValue;
+        try {
+            returnValue = EndianUtils.readSwappedDouble(this);
+        } catch (IOException e) {
+            handleIOException(e);
+            returnValue = EOF;
+        }
+        return returnValue;
     }
 
     /**
@@ -101,7 +112,14 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
      */
     @Override
     public float readFloat() throws IOException, EOFException {
-        return EndianUtils.readSwappedFloat(in);
+        float returnValue;
+        try {
+            returnValue = EndianUtils.readSwappedFloat(this);
+        } catch (IOException e) {
+            handleIOException(e);
+            returnValue = EOF;
+        }
+        return returnValue;
     }
 
     /**
@@ -134,7 +152,8 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
             final int count = read(data, location, remaining);
 
             if (EOF == count) {
-                throw new EOFException();
+                handleIOException(new EOFException("Unexpected EOF reached"));
+                break; // Never reached, exception is thrown.
             }
 
             remaining -= count;
@@ -150,7 +169,14 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
      */
     @Override
     public int readInt() throws IOException, EOFException {
-        return EndianUtils.readSwappedInteger(in);
+        int returnValue;
+        try {
+            returnValue = EndianUtils.readSwappedInteger(this);
+        } catch (IOException e) {
+            handleIOException(e);
+            returnValue = EOF;
+        }
+        return returnValue;
     }
 
     /**
@@ -174,7 +200,14 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
      */
     @Override
     public long readLong() throws IOException, EOFException {
-        return EndianUtils.readSwappedLong(in);
+        long returnValue;
+        try {
+            returnValue = EndianUtils.readSwappedLong(this);
+        } catch (IOException e) {
+            handleIOException(e);
+            returnValue = EOF;
+        }
+        return returnValue;
     }
 
     /**
@@ -186,7 +219,14 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
      */
     @Override
     public short readShort() throws IOException, EOFException {
-        return EndianUtils.readSwappedShort(in);
+        short returnValue;
+        try {
+            returnValue = EndianUtils.readSwappedShort(this);
+        } catch (IOException e) {
+            handleIOException(e);
+            returnValue = EOF;
+        }
+        return returnValue;
     }
 
     /**
@@ -198,7 +238,11 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
      */
     @Override
     public int readUnsignedByte() throws IOException, EOFException {
-        return in.read();
+        final int returnValue = super.read();
+        if (returnValue == EOF) {
+            handleIOException(new EOFException("Unexpected EOF reached"));
+        }
+        return returnValue;
     }
 
     /**
@@ -210,7 +254,14 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
      */
     @Override
     public int readUnsignedShort() throws IOException, EOFException {
-        return EndianUtils.readSwappedUnsignedShort(in);
+        int returnValue;
+        try {
+            returnValue = EndianUtils.readSwappedUnsignedShort(this);
+        } catch (IOException e) {
+            handleIOException(e);
+            returnValue = EOF;
+        }
+        return returnValue;
     }
 
     /**
@@ -235,7 +286,7 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
      */
     @Override
     public int skipBytes(final int count) throws IOException, EOFException {
-        return (int) in.skip(count);
+        return (int) super.skip(count);
     }
 
 }

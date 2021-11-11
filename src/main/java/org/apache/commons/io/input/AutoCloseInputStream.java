@@ -36,7 +36,7 @@ import java.io.InputStream;
  *
  * @since 1.4
  */
-public class AutoCloseInputStream extends ProxyInputStream {
+public class AutoCloseInputStream extends TaggedInputStream {
 
     /**
      * Creates an automatically closing proxy for the given input stream.
@@ -76,7 +76,7 @@ public class AutoCloseInputStream extends ProxyInputStream {
      */
     @Override
     public void close() throws IOException {
-        in.close();
+        super.close();
         in = ClosedInputStream.INSTANCE;
     }
 

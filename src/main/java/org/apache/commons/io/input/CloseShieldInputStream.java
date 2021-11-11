@@ -28,7 +28,7 @@ import java.io.InputStream;
  *
  * @since 1.4
  */
-public class CloseShieldInputStream extends ProxyInputStream {
+public class CloseShieldInputStream extends TaggedInputStream {
 
     /**
      * Creates a proxy that shields the given input stream from being closed.

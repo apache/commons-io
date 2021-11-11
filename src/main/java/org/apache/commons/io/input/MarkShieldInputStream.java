@@ -33,7 +33,7 @@ import java.io.InputStream;
  *
  * @since 2.8.0
  */
-public class MarkShieldInputStream extends ProxyInputStream {
+public class MarkShieldInputStream extends TaggedInputStream {
 
     /**
      * Creates a proxy that shields the given input stream from being

@@ -29,7 +29,7 @@ import java.io.InputStream;
  * read as expected.
  * </p>
  */
-public class CountingInputStream extends ProxyInputStream {
+public class CountingInputStream extends TaggedInputStream {
 
     /** The count of bytes that have passed. */
     private long count;

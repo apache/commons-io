@@ -20,12 +20,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.io.input.NullInputStream;
-import org.apache.commons.io.input.ProxyInputStream;
+import org.apache.commons.io.input.TaggedInputStream;
 
 /**
  * Helper class for checking behavior of IO classes.
  */
-public class ThrowOnCloseInputStream extends ProxyInputStream {
+public class ThrowOnCloseInputStream extends TaggedInputStream {
 
     /**
      * Defaultconstructor.
@@ -44,7 +44,7 @@ public class ThrowOnCloseInputStream extends ProxyInputStream {
     /** @see java.io.InputStream#close() */
     @Override
     public void close() throws IOException {
-        throw new IOException(getClass().getSimpleName() + ".close() called.");
+        handleIOException(new IOException(getClass().getSimpleName() + ".close() called."));
     }
 
 }

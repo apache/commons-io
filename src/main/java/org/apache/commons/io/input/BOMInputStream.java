@@ -87,7 +87,7 @@ import org.apache.commons.io.IOUtils;
  * @see <a href="http://en.wikipedia.org/wiki/Byte_order_mark">Wikipedia - Byte Order Mark</a>
  * @since 2.0
  */
-public class BOMInputStream extends ProxyInputStream {
+public class BOMInputStream extends TaggedInputStream {
     /**
      * Compares ByteOrderMark objects in descending length order.
      */
@@ -195,7 +195,7 @@ public class BOMInputStream extends ProxyInputStream {
             firstBytes = new int[maxBomSize];
             // Read first maxBomSize bytes
             for (int i = 0; i < firstBytes.length; i++) {
-                firstBytes[i] = in.read();
+                firstBytes[i] = super.read();
                 fbLength++;
                 if (firstBytes[i] < 0) {
                     break;
@@ -267,7 +267,7 @@ public class BOMInputStream extends ProxyInputStream {
     public synchronized void mark(final int readlimit) {
         markFbIndex = fbIndex;
         markedAtStart = firstBytes == null;
-        in.mark(readlimit);
+        super.mark(readlimit);
     }
 
     /**
@@ -304,7 +304,7 @@ public class BOMInputStream extends ProxyInputStream {
     @Override
     public int read() throws IOException {
         final int b = readFirstBytes();
-        return b >= 0 ? b : in.read();
+        return b >= 0 ? b : super.read();
     }
 
     /**
@@ -346,7 +346,7 @@ public class BOMInputStream extends ProxyInputStream {
                 firstCount++;
             }
         }
-        final int secondCount = in.read(buf, off, len);
+        final int secondCount = super.read(buf, off, len);
         return secondCount < 0 ? firstCount > 0 ? firstCount : EOF : firstCount + secondCount;
     }
 
@@ -377,7 +377,7 @@ public class BOMInputStream extends ProxyInputStream {
             firstBytes = null;
         }
 
-        in.reset();
+        super.reset();
     }
 
     /**
@@ -395,6 +395,6 @@ public class BOMInputStream extends ProxyInputStream {
         while ((n > skipped) && (readFirstBytes() >= 0)) {
             skipped++;
         }
-        return in.skip(n - skipped) + skipped;
+        return super.skip(n - skipped) + skipped;
     }
 }
