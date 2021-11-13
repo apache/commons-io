@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 
 import org.apache.commons.io.IOExceptionList;
 import org.apache.commons.io.IOIndexedException;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.function.IOConsumer;
 
 /**
@@ -102,7 +103,7 @@ public class FilterCollectionWriter extends Writer {
 
     @Override
     public void close() throws IOException {
-        IOConsumer.forEachIndexed(writers(), Writer::close);
+        IOUtils.close(writers());
     }
 
     /**

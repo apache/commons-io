@@ -18,6 +18,7 @@
 package org.apache.commons.io;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -36,6 +37,30 @@ public class IOExceptionList extends IOException {
     private static final long serialVersionUID = 1L;
 
     /**
+     * Unwinds a {@code IOExceptionList} into a {@link List} of {@link Throwable}
+     * containing all of the underlying {@code Throwable} instances using
+     * {@link #getCauseList()}.
+     *
+     * Any instances of {@code IOExceptionList} encountered will be recursively
+     * unwound as well, and the contents of their {@code #getCauseList()} will
+     * be included in the returned {@code List}.
+     *
+     * @param ioExceptionList The {@code IOExceptionList} to recursively unwind,
+     * may be null, and {@code IOExceptionList#getCauseList()} may be null or empty.
+     * @return A {@code List} containing all of the {@code Throwable} instances
+     * inside the given {@code IOExceptionList} using {@code IOExceptionList#getCauseList()},
+     * this {@code List} will never contain instances of {@code IOExceptionList} itself.
+     * @since 2.12.0
+     */
+    public static List<Throwable> unwind(IOExceptionList ioExceptionList) {
+        if (ioExceptionList != null && !IOExceptionList.isEmpty(ioExceptionList.getCauseList())) {
+            return unwind(ioExceptionList.getCauseList());
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    /**
      * Throws this exception if the list is not null or empty.
      *
      * @param causeList The list to test.
@@ -47,6 +72,20 @@ public class IOExceptionList extends IOException {
         if (!isEmpty(causeList)) {
             throw new IOExceptionList(Objects.toString(message, null), causeList);
         }
+    }
+
+    private static List<Throwable> unwind(final List<? extends Throwable> causeList) {
+        final List<Throwable> exceptions = new ArrayList<>();
+        if (Objects.nonNull(causeList)) {
+            for (Throwable t : causeList) {
+                if (t instanceof IOExceptionList) {
+                    exceptions.addAll(unwind((IOExceptionList)t));
+                } else {
+                    exceptions.add(t);
+                }
+            }
+        }
+        return exceptions;
     }
 
     private static boolean isEmpty(final List<? extends Throwable> causeList) {

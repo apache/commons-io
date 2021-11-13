@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -57,8 +58,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
-
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.input.CircularInputStream;
 import org.apache.commons.io.input.NullInputStream;
@@ -67,7 +69,9 @@ import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.commons.io.test.TestUtils;
+import org.apache.commons.io.test.ThrowOnCloseInputStream;
 import org.apache.commons.io.test.ThrowOnCloseReader;
+import org.apache.commons.io.test.ThrowOnCloseWriter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -378,6 +382,22 @@ public class IOUtilsTest {
         assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), nullCloseable));
         assertThrows(IOException.class,
             () -> IOUtils.close(nullCloseable, new ThrowOnCloseReader(new StringReader("s"))));
+    }
+
+    @Test
+    public void testCloseMultiConsumer() {
+        final Collection<IOException> exceptionCollection = new HashSet<>();
+        final IOConsumer<IOException> checkConsumer = i -> {
+            exceptionCollection.add(i);
+        };
+
+        final Closeable[] closeables = {null, new ThrowOnCloseInputStream(), new ThrowOnCloseReader(), new ThrowOnCloseWriter()};
+        assertDoesNotThrow(() -> IOUtils.close(checkConsumer, closeables));
+        assertEquals(exceptionCollection.size(), 1);
+
+        final IOException exception = exceptionCollection.iterator().next();
+        assertInstanceOf(IOExceptionList.class, exception);
+        assertEquals(((IOExceptionList)exception).getCauseList().size(), 3);
     }
 
     @Test
