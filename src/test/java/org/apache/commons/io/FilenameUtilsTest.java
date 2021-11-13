@@ -1224,6 +1224,7 @@ public class FilenameUtilsTest {
         assertEquals("/a/b/c", FilenameUtils.separatorsToUnix("/a/b\\c"));
         assertEquals("/a/b/c", FilenameUtils.separatorsToUnix("\\a\\b\\c"));
         assertEquals("D:/a/b/c", FilenameUtils.separatorsToUnix("D:\\a\\b\\c"));
+        assertEquals("D:/a/b/~", FilenameUtils.separatorsToUnix("D:\\a\\b\\~"));
     }
 
     @Test
