@@ -35,10 +35,7 @@ import java.io.InputStream;
  *
  * @since 2.0
  */
-public class BoundedInputStream extends InputStream {
-
-    /** the wrapped input stream */
-    private final InputStream in;
+public class BoundedInputStream extends ProxyInputStream {
 
     /** the max length to provide */
     private final long max;
@@ -72,8 +69,8 @@ public class BoundedInputStream extends InputStream {
     public BoundedInputStream(final InputStream in, final long size) {
         // Some badly designed methods - eg the servlet API - overload length
         // such that "-1" means stream finished
+        super(in);
         this.max = size;
-        this.in = in;
     }
 
     /**
@@ -84,7 +81,7 @@ public class BoundedInputStream extends InputStream {
         if (max>=0 && pos>=max) {
             return 0;
         }
-        return in.available();
+        return super.available();
     }
 
     /**
@@ -95,7 +92,7 @@ public class BoundedInputStream extends InputStream {
     @Override
     public void close() throws IOException {
         if (propagateClose) {
-            in.close();
+            super.close();
         }
     }
 
@@ -117,17 +114,8 @@ public class BoundedInputStream extends InputStream {
      */
     @Override
     public synchronized void mark(final int readlimit) {
-        in.mark(readlimit);
+        super.mark(readlimit);
         mark = pos;
-    }
-
-    /**
-     * Invokes the delegate's {@code markSupported()} method.
-     * @return true if mark is supported, otherwise false
-     */
-    @Override
-    public boolean markSupported() {
-        return in.markSupported();
     }
 
     /**
@@ -142,7 +130,7 @@ public class BoundedInputStream extends InputStream {
         if (max >= 0 && pos >= max) {
             return EOF;
         }
-        final int result = in.read();
+        final int result = super.read();
         pos++;
         return result;
     }
@@ -174,7 +162,7 @@ public class BoundedInputStream extends InputStream {
             return EOF;
         }
         final long maxRead = max>=0 ? Math.min(len, max-pos) : len;
-        final int bytesRead = in.read(b, off, (int)maxRead);
+        final int bytesRead = super.read(b, off, (int)maxRead);
 
         if (bytesRead==EOF) {
             return EOF;
@@ -190,7 +178,7 @@ public class BoundedInputStream extends InputStream {
      */
     @Override
     public synchronized void reset() throws IOException {
-        in.reset();
+        super.reset();
         pos = mark;
     }
 
@@ -216,7 +204,7 @@ public class BoundedInputStream extends InputStream {
     @Override
     public long skip(final long n) throws IOException {
         final long toSkip = max>=0 ? Math.min(n, max-pos) : n;
-        final long skippedBytes = in.skip(toSkip);
+        final long skippedBytes = super.skip(toSkip);
         pos+=skippedBytes;
         return skippedBytes;
     }
