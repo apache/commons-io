@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 
 import org.apache.commons.io.IOExceptionList;
 import org.apache.commons.io.IOIndexedException;
+import org.apache.commons.io.UncheckedIOExceptions;
 
 /**
  * Like {@link Consumer} but throws {@link IOException}.
@@ -51,14 +52,37 @@ public interface IOConsumer<T> {
      * @return a {@code Consumer} that wraps the given {@code IOConsumer}.
      * @since 2.12.0
      */
-    static <T> Consumer<T> wrap(IOConsumer<T> consumer) {
+    static <T> Consumer<T> asConsumer(IOConsumer<T> consumer) {
         return new Consumer<T>() {
             @Override
             public void accept(T t) {
                 try {
                     consumer.accept(t);
                 } catch (IOException e) {
-                    throw new UncheckedIOException(e);
+                    throw UncheckedIOExceptions.create(String.format("%s thrown from %s", e.getClass().getName(), String.valueOf(consumer)), e);
+                }
+            }
+        };
+    }
+
+    /**
+     * Wraps a {@link Consumer} inside of a {@code IOConsumer}
+     * that catches {@link UncheckedIOException}s that are thrown by the underlying
+     * {@code IOConsumer} and rethrows them as {@link IOException}
+     *
+     * @param <T> The element type.
+     * @param consumer The {@code Consumer} to wrap.
+     * @return a {@code IOConsumer} that wraps the given {@code Consumer}.
+     * @since 2.12.0
+     */
+    static <T> IOConsumer<T> wrap(Consumer<T> consumer) {
+        return new IOConsumer<T>() {
+            @Override
+            public void accept(T t) throws IOException {
+                try {
+                    consumer.accept(t);
+                } catch (UncheckedIOException e) {
+                    throw e.getCause() == null ? new IOException(e) : e.getCause();
                 }
             }
         };
@@ -149,18 +173,6 @@ public interface IOConsumer<T> {
      * @throws IOException if an I/O error occurs.
      */
     void accept(T t) throws IOException;
-
-    /**
-     * Returns this {@code IOConsumer} wrapped inside of a {@link Consumer}
-     * that throws {@link UncheckedIOException} for any {@link IOException}s
-     * that are thrown by this {@code IOConsumer}.
-     *
-     * @return a {@code Consumer} that wraps this {@code IOConsumer}.
-     * @since 2.12.0
-     */
-    default Consumer<T> asConsumer() {
-        return wrap(this);
-    }
 
     /**
      * Returns a composed {@code IOConsumer} that performs, in sequence, this operation followed by the {@code after}

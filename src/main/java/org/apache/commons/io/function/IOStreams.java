@@ -19,10 +19,13 @@ package org.apache.commons.io.function;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.IOExceptionList;
@@ -52,27 +55,50 @@ class IOStreams {
 
     static <T> void forEachIndexed(final Stream<T> stream, final IOConsumer<T> action, final BiFunction<Integer, IOException, IOException> exSupplier)
         throws IOExceptionList {
-        final AtomicReference<List<Throwable>> causeList = new AtomicReference<>();
+        final LazyAtomicReference<List<Throwable>> causeList = new LazyAtomicReference<>(() -> new ArrayList<>());
         final AtomicInteger index = new AtomicInteger();
         try {
             stream.forEach(e -> {
                 try {
                     action.accept(e);
-                } catch (final IOException ioex) {
-                    if (causeList.get() == null) {
-                        causeList.set(new ArrayList<>());
+                } catch (final IOExceptionList ioexl) {
+                    final Collection<Throwable> exceptions = IOExceptionList.unwind(ioexl);
+                    for (final Throwable t : exceptions) {
+                        if (t instanceof IOException) {
+                            causeList.getLazy().add(exSupplier.apply(index.get(), (IOException)t));
+                        } else {
+                            causeList.getLazy().add(exSupplier.apply(index.get(), new IOException(t)));
+                        }
                     }
-                    causeList.get().add(exSupplier.apply(index.get(), ioex));
+                } catch (final IOException ioex) {
+                    causeList.getLazy().add(exSupplier.apply(index.get(), ioex));
+                } catch (final Throwable t) {
+                    causeList.getLazy().add(exSupplier.apply(index.get(), new IOException(t)));
                 }
                 index.incrementAndGet();
             });
         }
         catch (Throwable t) {
-            if (causeList.get() == null) {
-                causeList.set(new ArrayList<>());
-            }
-            causeList.get().add(t);
+            causeList.getLazy().add(exSupplier.apply(index.get(), new IOException(t)));
         }
         IOExceptionList.checkEmpty(causeList.get(), "forEach");
+    }
+
+    private static class LazyAtomicReference<T> extends AtomicReference<T> {
+
+        private static final long serialVersionUID = 1L;
+        private final Supplier<T> supplier;
+
+        public LazyAtomicReference(Supplier<T> supplier) {
+            Objects.requireNonNull(supplier);
+            this.supplier = supplier;
+        }
+
+        public final T getLazy() {
+            if (Objects.isNull(get())) {
+                set(supplier.get());
+            }
+            return get();
+        }
     }
 }
