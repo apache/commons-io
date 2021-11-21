@@ -97,11 +97,11 @@ public class DeleteDirectoryTest extends AbstractTempDirTest {
         final Charset charset = StandardCharsets.UTF_8;
         PathUtils.writeString(file, "Hello!", charset);
 
-        // A file is RO in POSIX if the parent is not W & E.
+        // A file is RO in POSIX if the parent is not W and not E.
         PathUtils.setReadOnly(file, true);
         final Set<PosixFilePermission> permissions = Files.getPosixFilePermissions(testDir);
-        assertFalse(Files.isWritable(testDir), () -> String.format("Directory '%s' should be Writable, permissions are %s ", testDir, permissions));
-        assertFalse(Files.isExecutable(testDir), () -> String.format("Directory '%s' should be Executable, permissions are %s ", testDir, permissions));
+        assertFalse(Files.isWritable(testDir), () -> String.format("Directory '%s' should NOT be Writable, permissions are %s ", testDir, permissions));
+        assertFalse(Files.isExecutable(testDir), () -> String.format("Directory '%s' should NOT be Executable, permissions are %s ", testDir, permissions));
 
         assertThrows(IOException.class, () -> PathUtils.delete(file));
         // Nothing happened, we're not even allowed to test attributes, so the file seems deleted, but it is not.
