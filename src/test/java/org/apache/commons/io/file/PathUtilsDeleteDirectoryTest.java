@@ -21,42 +21,24 @@ import static org.apache.commons.io.file.CounterAssertions.assertCounts;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
  * Tests {@link DeletingPathVisitor}.
  */
-public class PathUtilsDeleteDirectoryTest {
-
-    private Path tempDir;
-
-    @AfterEach
-    public void afterEach() throws IOException {
-        // backstop
-        if (Files.exists(tempDir) && PathUtils.isEmptyDirectory(tempDir)) {
-            Files.deleteIfExists(tempDir);
-        }
-    }
-
-    @BeforeEach
-    public void beforeEach() throws IOException {
-        tempDir = Files.createTempDirectory(getClass().getCanonicalName());
-    }
+public class PathUtilsDeleteDirectoryTest extends AbstractTempDirTest {
 
     /**
      * Tests a directory with one file of size 0.
      */
     @Test
     public void testDeleteDirectory1FileSize0() throws IOException {
-        PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0"), tempDir);
-        assertCounts(1, 1, 0, PathUtils.deleteDirectory(tempDir));
+        PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0"), tempDirPath);
+        assertCounts(1, 1, 0, PathUtils.deleteDirectory(tempDirPath));
         // This will throw if not empty.
-        Files.deleteIfExists(tempDir);
+        Files.deleteIfExists(tempDirPath);
     }
 
     /**
@@ -64,10 +46,10 @@ public class PathUtilsDeleteDirectoryTest {
      */
     private void testDeleteDirectory1FileSize0(final DeleteOption... options) throws IOException {
         // TODO Setup the test to use FileVisitOption.
-        PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0"), tempDir);
-        assertCounts(1, 1, 0, PathUtils.deleteDirectory(tempDir, options));
+        PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0"), tempDirPath);
+        assertCounts(1, 1, 0, PathUtils.deleteDirectory(tempDirPath, options));
         // This will throw if not empty.
-        Files.deleteIfExists(tempDir);
+        Files.deleteIfExists(tempDirPath);
     }
 
     @Test
@@ -85,10 +67,10 @@ public class PathUtilsDeleteDirectoryTest {
      */
     @Test
     public void testDeleteDirectory1FileSize1() throws IOException {
-        PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1"), tempDir);
-        assertCounts(1, 1, 1, PathUtils.deleteDirectory(tempDir));
+        PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1"), tempDirPath);
+        assertCounts(1, 1, 1, PathUtils.deleteDirectory(tempDirPath));
         // This will throw if not empty.
-        Files.deleteIfExists(tempDir);
+        Files.deleteIfExists(tempDirPath);
     }
 
     /**
@@ -96,10 +78,10 @@ public class PathUtilsDeleteDirectoryTest {
      */
     @Test
     public void testDeleteDirectory2FileSize2() throws IOException {
-        PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2"), tempDir);
-        assertCounts(3, 2, 2, PathUtils.deleteDirectory(tempDir));
+        PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2"), tempDirPath);
+        assertCounts(3, 2, 2, PathUtils.deleteDirectory(tempDirPath));
         // This will throw if not empty.
-        Files.deleteIfExists(tempDir);
+        Files.deleteIfExists(tempDirPath);
     }
 
     /**
@@ -107,8 +89,8 @@ public class PathUtilsDeleteDirectoryTest {
      */
     @Test
     public void testDeleteEmptyDirectory() throws IOException {
-        assertCounts(1, 0, 0, PathUtils.deleteDirectory(tempDir));
+        assertCounts(1, 0, 0, PathUtils.deleteDirectory(tempDirPath));
         // This will throw if not empty.
-        Files.deleteIfExists(tempDir);
+        Files.deleteIfExists(tempDirPath);
     }
 }

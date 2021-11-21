@@ -32,21 +32,18 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.file.AbstractTempDirTest;
 import org.apache.commons.io.test.TestUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 
 /**
  * This is used to test {@link FileCleaningTracker} for correctness.
  *
  * @see FileCleaningTracker
  */
-public class FileCleaningTrackerTest {
-
-    @TempDir
-    public File temporaryFolder;
+public class FileCleaningTrackerTest extends AbstractTempDirTest {
 
     private File testFile;
 
@@ -68,11 +65,9 @@ public class FileCleaningTrackerTest {
         }
     }
 
-    /**
-     */
     @BeforeEach
     public void setUp() {
-        testFile = new File(temporaryFolder, "file-test.txt");
+        testFile = new File(tempDirFile, "file-test.txt");
         theInstance = newInstance();
     }
 
@@ -110,11 +105,11 @@ public class FileCleaningTrackerTest {
     public void testFileCleanerDirectory() throws Exception {
         TestUtils.createFile(testFile, 100);
         assertTrue(testFile.exists());
-        assertTrue(temporaryFolder.exists());
+        assertTrue(tempDirFile.exists());
 
         Object obj = new Object();
         assertEquals(0, theInstance.getTrackCount());
-        theInstance.track(temporaryFolder, obj);
+        theInstance.track(tempDirFile, obj);
         assertEquals(1, theInstance.getTrackCount());
 
         obj = null;
@@ -137,11 +132,11 @@ public class FileCleaningTrackerTest {
             TestUtils.generateTestData(output, 100);
         }
         assertTrue(testFile.exists());
-        assertTrue(temporaryFolder.exists());
+        assertTrue(tempDirFile.exists());
 
         Object obj = new Object();
         assertEquals(0, theInstance.getTrackCount());
-        theInstance.track(temporaryFolder, obj, FileDeleteStrategy.FORCE);
+        theInstance.track(tempDirFile, obj, FileDeleteStrategy.FORCE);
         assertEquals(1, theInstance.getTrackCount());
 
         obj = null;
@@ -158,11 +153,11 @@ public class FileCleaningTrackerTest {
     public void testFileCleanerDirectory_NullStrategy() throws Exception {
         TestUtils.createFile(testFile, 100);
         assertTrue(testFile.exists());
-        assertTrue(temporaryFolder.exists());
+        assertTrue(tempDirFile.exists());
 
         Object obj = new Object();
         assertEquals(0, theInstance.getTrackCount());
-        theInstance.track(temporaryFolder, obj, null);
+        theInstance.track(tempDirFile, obj, null);
         assertEquals(1, theInstance.getTrackCount());
 
         obj = null;

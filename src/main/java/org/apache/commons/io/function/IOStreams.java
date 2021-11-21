@@ -65,7 +65,7 @@ class IOStreams {
             }
             index.incrementAndGet();
         });
-        IOExceptionList.checkEmpty(causeList.get(), "forEach");
+        IOExceptionList.checkEmpty(causeList.get(), null);
     }
 
 }

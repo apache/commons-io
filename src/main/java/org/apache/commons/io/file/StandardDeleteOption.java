@@ -27,7 +27,7 @@ import org.apache.commons.io.IOUtils;
 public enum StandardDeleteOption implements DeleteOption {
 
     /**
-     * Overrides the read-only attribute to allow deletion.
+     * Overrides the read-only attribute to allow deletion, on POSIX, this means Write and Execute on the parent.
      */
     OVERRIDE_READ_ONLY;
 
