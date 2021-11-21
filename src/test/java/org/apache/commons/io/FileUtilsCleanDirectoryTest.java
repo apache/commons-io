@@ -104,7 +104,10 @@ public class FileUtilsCleanDirectoryTest extends AbstractTempDirTest {
         final File file = new File(tempDirFile, "restricted");
         FileUtils.touch(file);
 
-        assumeTrue(chmod(tempDirFile, 500, false));
+        // 300 = owner: WE.
+        // 500 = owner: RE.
+        // 700 = owner: RWE.
+        assumeTrue(chmod(tempDirFile, 700, false));
 
         // cleanDirectory calls forceDelete
         FileUtils.cleanDirectory(tempDirFile);
