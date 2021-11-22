@@ -335,7 +335,7 @@ public final class PathUtils {
      * @since 2.9.0
      */
     public static Path createParentDirectories(final Path path, final FileAttribute<?>... attrs) throws IOException {
-        final Path parent = path.getParent();
+        final Path parent = getParent(path);
         return parent == null ? null : Files.createDirectories(parent, attrs);
     }
 
@@ -437,7 +437,7 @@ public final class PathUtils {
     public static PathCounters deleteDirectory(final Path directory, final DeleteOption... deleteOptions) throws IOException {
         final LinkOption[] linkOptions = PathUtils.NOFOLLOW_LINK_OPTION_ARRAY;
         // POSIX ops will noop on non-POSIX.
-        return withPosixFileAttributes(directory.getParent(), linkOptions, overrideReadOnly(deleteOptions),
+        return withPosixFileAttributes(getParent(directory), linkOptions, overrideReadOnly(deleteOptions),
                 pfa -> visitFileTree(new DeletingPathVisitor(Counters.longPathCounters(), linkOptions, deleteOptions), directory).getPathCounters());
     }
 
@@ -513,7 +513,7 @@ public final class PathUtils {
         } catch (final AccessDeniedException e) {
             // Ignore and try again below.
         }
-        final Path parent = file.getParent();
+        final Path parent = getParent(file);
         PosixFileAttributes posixFileAttributes = null;
         try {
             if (overrideReadOnly(deleteOptions)) {
@@ -533,18 +533,6 @@ public final class PathUtils {
             }
         }
         return pathCounts;
-    }
-
-    private static <R> R withPosixFileAttributes(final Path path, final LinkOption[] linkOptions, final boolean overrideReadOnly,
-            final IOFunction<PosixFileAttributes, R> function) throws IOException {
-        final PosixFileAttributes posixFileAttributes = overrideReadOnly ? readPosixFileAttributes(path, linkOptions) : null;
-        try {
-            return function.apply(posixFileAttributes);
-        } finally {
-            if (posixFileAttributes != null && path != null && Files.exists(path, linkOptions)) {
-                Files.setPosixFilePermissions(path, posixFileAttributes.permissions());
-            }
-        }
     }
 
     /**
@@ -799,6 +787,10 @@ public final class PathUtils {
         return Files.getLastModifiedTime(Objects.requireNonNull(path, "path"), options);
     }
 
+    private static Path getParent(final Path path) {
+        return path == null ? null : path.getParent();
+    }
+
     /**
      * Shorthand for {@code Files.getFileAttributeView(path, PosixFileAttributeView.class)}.
      *
@@ -1024,7 +1016,7 @@ public final class PathUtils {
      * @since 2.12.0
      */
     public static boolean isPosix(final Path test, final LinkOption... options) {
-        return readPosixFileAttributes(test, options) != null;
+        return exists(test, options) && readPosixFileAttributes(test, options) != null;
     }
 
     /**
@@ -1274,6 +1266,15 @@ public final class PathUtils {
         return file;
     }
 
+    private static boolean setDosReadOnly(final Path path, final boolean readOnly, final LinkOption... linkOptions) throws IOException {
+        final DosFileAttributeView dosFileAttributeView = getDosFileAttributeView(path, linkOptions);
+        if (dosFileAttributeView != null) {
+            dosFileAttributeView.setReadOnly(readOnly);
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Sets the given {@code targetFile}'s last modified time to the value from {@code sourceFile}.
      *
@@ -1287,81 +1288,6 @@ public final class PathUtils {
     public static void setLastModifiedTime(final Path sourceFile, final Path targetFile) throws IOException {
         Objects.requireNonNull(sourceFile, "sourceFile");
         Files.setLastModifiedTime(targetFile, getLastModifiedTime(sourceFile));
-    }
-
-    /**
-     * Sets the given Path to the {@code readOnly} value.
-     * <p>
-     * This behavior is OS dependent.
-     * </p>
-     *
-     * @param path The path to set.
-     * @param readOnly true for read-only, false for not read-only.
-     * @param linkOptions options indicating how to handle symbolic links.
-     * @return The given path.
-     * @throws IOException if an I/O error occurs.
-     * @since 2.8.0
-     */
-    public static Path setReadOnly(final Path path, final boolean readOnly, final LinkOption... linkOptions) throws IOException {
-        try {
-            // Windows is simplest
-            if (setDosReadOnly(path, readOnly, linkOptions)) {
-                return path;
-            }
-        } catch (final IOException e) {
-            // Retry with POSIX below.
-        }
-        if (!isPosix(path, linkOptions)) {
-            throw new IOException(String.format("DOS or POSIX file operations not available for '%s' %s", path, Arrays.toString(linkOptions)));
-        }
-        // POSIX
-        if (readOnly) {
-            // RO
-            // File, then parent dir (if any).
-            setPosixReadOnlyFile(path, readOnly, linkOptions);
-            setPosixDeletePermissions(path.getParent(), false, linkOptions);
-        } else {
-            // RE
-            // Parent dir (if any), then file.
-            setPosixDeletePermissions(path.getParent(), true, linkOptions);
-        }
-        return path;
-    }
-
-    private static void setPosixReadOnlyFile(final Path path, final boolean readOnly, final LinkOption... linkOptions) throws IOException {
-        // Not Windows 10
-        final Set<PosixFilePermission> permissions = Files.getPosixFilePermissions(path, linkOptions);
-        // @formatter:off
-        final List<PosixFilePermission> readPermissions = Arrays.asList(
-                PosixFilePermission.OWNER_READ
-                //PosixFilePermission.GROUP_READ,
-                //PosixFilePermission.OTHERS_READ
-            );
-        final List<PosixFilePermission> writePermissions = Arrays.asList(
-                PosixFilePermission.OWNER_WRITE
-                //PosixFilePermission.GROUP_WRITE,
-                //PosixFilePermission.OTHERS_WRITE
-            );
-        // @formatter:on
-        if (readOnly) {
-            // RO: We can read, we cannot write.
-            permissions.addAll(readPermissions);
-            permissions.removeAll(writePermissions);
-        } else {
-            // Not RO: We can read, we can write.
-            permissions.addAll(readPermissions);
-            permissions.addAll(writePermissions);
-        }
-        Files.setPosixFilePermissions(path, permissions);
-    }
-
-    private static boolean setDosReadOnly(final Path path, final boolean readOnly, final LinkOption... linkOptions) throws IOException {
-        final DosFileAttributeView dosFileAttributeView = getDosFileAttributeView(path, linkOptions);
-        if (dosFileAttributeView != null) {
-            dosFileAttributeView.setReadOnly(readOnly);
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -1411,6 +1337,73 @@ public final class PathUtils {
             return true;
         }
         return false;
+    }
+
+    private static void setPosixReadOnlyFile(final Path path, final boolean readOnly, final LinkOption... linkOptions) throws IOException {
+        // Not Windows 10
+        final Set<PosixFilePermission> permissions = Files.getPosixFilePermissions(path, linkOptions);
+        // @formatter:off
+        final List<PosixFilePermission> readPermissions = Arrays.asList(
+                PosixFilePermission.OWNER_READ
+                //PosixFilePermission.GROUP_READ,
+                //PosixFilePermission.OTHERS_READ
+            );
+        final List<PosixFilePermission> writePermissions = Arrays.asList(
+                PosixFilePermission.OWNER_WRITE
+                //PosixFilePermission.GROUP_WRITE,
+                //PosixFilePermission.OTHERS_WRITE
+            );
+        // @formatter:on
+        if (readOnly) {
+            // RO: We can read, we cannot write.
+            permissions.addAll(readPermissions);
+            permissions.removeAll(writePermissions);
+        } else {
+            // Not RO: We can read, we can write.
+            permissions.addAll(readPermissions);
+            permissions.addAll(writePermissions);
+        }
+        Files.setPosixFilePermissions(path, permissions);
+    }
+
+    /**
+     * Sets the given Path to the {@code readOnly} value.
+     * <p>
+     * This behavior is OS dependent.
+     * </p>
+     *
+     * @param path The path to set.
+     * @param readOnly true for read-only, false for not read-only.
+     * @param linkOptions options indicating how to handle symbolic links.
+     * @return The given path.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.8.0
+     */
+    public static Path setReadOnly(final Path path, final boolean readOnly, final LinkOption... linkOptions) throws IOException {
+        try {
+            // Windows is simplest
+            if (setDosReadOnly(path, readOnly, linkOptions)) {
+                return path;
+            }
+        } catch (final IOException e) {
+            // Retry with POSIX below.
+        }
+        final Path parent = getParent(path);
+        if (!isPosix(parent, linkOptions)) { // Test parent because we may not the permissions to test the file.
+            throw new IOException(String.format("DOS or POSIX file operations not available for '%s' %s", path, Arrays.toString(linkOptions)));
+        }
+        // POSIX
+        if (readOnly) {
+            // RO
+            // File, then parent dir (if any).
+            setPosixReadOnlyFile(path, readOnly, linkOptions);
+            setPosixDeletePermissions(parent, false, linkOptions);
+        } else {
+            // RE
+            // Parent dir (if any), then file.
+            setPosixDeletePermissions(parent, true, linkOptions);
+        }
+        return path;
     }
 
     /**
@@ -1616,6 +1609,18 @@ public final class PathUtils {
             final FileVisitOption... options) throws IOException {
         return Files.walk(start, maxDepth, options)
                 .filter(path -> pathFilter.accept(path, readAttributes ? readBasicFileAttributesUnchecked(path) : null) == FileVisitResult.CONTINUE);
+    }
+
+    private static <R> R withPosixFileAttributes(final Path path, final LinkOption[] linkOptions, final boolean overrideReadOnly,
+            final IOFunction<PosixFileAttributes, R> function) throws IOException {
+        final PosixFileAttributes posixFileAttributes = overrideReadOnly ? readPosixFileAttributes(path, linkOptions) : null;
+        try {
+            return function.apply(posixFileAttributes);
+        } finally {
+            if (posixFileAttributes != null && path != null && Files.exists(path, linkOptions)) {
+                Files.setPosixFilePermissions(path, posixFileAttributes.permissions());
+            }
+        }
     }
 
     /**
