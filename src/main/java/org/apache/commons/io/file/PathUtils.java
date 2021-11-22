@@ -1341,19 +1341,23 @@ public final class PathUtils {
             // Not Windows 10
             final PosixFileAttributes readAttributes = posixFileAttributeView.readAttributes();
             final Set<PosixFilePermission> permissions = readAttributes.permissions();
-            permissions.add(PosixFilePermission.OWNER_EXECUTE);
-            // permissions.add(PosixFilePermission.GROUP_EXECUTE);
-            // permissions.add(PosixFilePermission.OTHERS_EXECUTE);
             // @formatter:off
+            final List<PosixFilePermission> executePermissions = Arrays.asList(
+                    PosixFilePermission.OWNER_EXECUTE
+                    //PosixFilePermission.GROUP_EXECUTE,
+                    //PosixFilePermission.OTHERS_EXECUTE
+                );
             final List<PosixFilePermission> writePermissions = Arrays.asList(
-                PosixFilePermission.OWNER_WRITE
-                //PosixFilePermission.GROUP_WRITE,
-                //PosixFilePermission.OTHERS_WRITE
-            );
+                    PosixFilePermission.OWNER_WRITE
+                    //PosixFilePermission.GROUP_WRITE,
+                    //PosixFilePermission.OTHERS_WRITE
+                );
             // @formatter:on
             if (readOnly) {
+                permissions.removeAll(executePermissions);
                 permissions.removeAll(writePermissions);
             } else {
+                permissions.addAll(executePermissions);
                 permissions.addAll(writePermissions);
             }
             Files.setPosixFilePermissions(path, permissions);
