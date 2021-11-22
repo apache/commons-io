@@ -1319,7 +1319,7 @@ public final class PathUtils {
         if (readOnly) {
             // RO
             // File, then parent dir (if any).
-            final boolean set = setPosixReadOnly(path, readOnly, linkOptions);
+            final boolean set = setPosixReadOnlyFile(path, readOnly, linkOptions);
             setPosixDeletePermissions(path.getParent(), false, linkOptions);
             if (set) {
                 return path;
@@ -1335,17 +1335,17 @@ public final class PathUtils {
         throw new IOException(String.format("No DosFileAttributeView or PosixFileAttributeView for '%s' (linkOptions=%s)", path, Arrays.toString(linkOptions)));
     }
 
-    private static boolean setPosixReadOnly(final Path path, final boolean readOnly, final LinkOption... linkOptions) throws IOException {
+    private static boolean setPosixReadOnlyFile(final Path path, final boolean readOnly, final LinkOption... linkOptions) throws IOException {
         final PosixFileAttributeView posixFileAttributeView = getPosixFileAttributeView(path, linkOptions);
         if (posixFileAttributeView != null) {
             // Not Windows 10
             final PosixFileAttributes readAttributes = posixFileAttributeView.readAttributes();
             final Set<PosixFilePermission> permissions = readAttributes.permissions();
             // @formatter:off
-            final List<PosixFilePermission> executePermissions = Arrays.asList(
-                    PosixFilePermission.OWNER_EXECUTE
-                    //PosixFilePermission.GROUP_EXECUTE,
-                    //PosixFilePermission.OTHERS_EXECUTE
+            final List<PosixFilePermission> readPermissions = Arrays.asList(
+                    PosixFilePermission.OWNER_READ
+                    //PosixFilePermission.GROUP_READ,
+                    //PosixFilePermission.OTHERS_READ
                 );
             final List<PosixFilePermission> writePermissions = Arrays.asList(
                     PosixFilePermission.OWNER_WRITE
@@ -1354,10 +1354,12 @@ public final class PathUtils {
                 );
             // @formatter:on
             if (readOnly) {
-                permissions.removeAll(executePermissions);
+                // RO: We can read, we cannot write.
+                permissions.addAll(readPermissions);
                 permissions.removeAll(writePermissions);
             } else {
-                permissions.addAll(executePermissions);
+                // Not RO: We can read, we can write.
+                permissions.addAll(readPermissions);
                 permissions.addAll(writePermissions);
             }
             Files.setPosixFilePermissions(path, permissions);
@@ -1416,13 +1418,13 @@ public final class PathUtils {
         if (path != null) {
             final PosixFileAttributeView posixFileAttributeView = getPosixFileAttributeView(path, linkOptions);
             if (posixFileAttributeView != null) {
-                final Set<PosixFilePermission> currentPermissions = posixFileAttributeView.readAttributes().permissions();
+                final Set<PosixFilePermission> permissions = posixFileAttributeView.readAttributes().permissions();
                 if (addPermissions) {
-                    currentPermissions.addAll(updatePermissions);
+                    permissions.addAll(updatePermissions);
                 } else {
-                    currentPermissions.removeAll(updatePermissions);
+                    permissions.removeAll(updatePermissions);
                 }
-                Files.setPosixFilePermissions(path, currentPermissions);
+                Files.setPosixFilePermissions(path, permissions);
                 return true;
             }
         }
