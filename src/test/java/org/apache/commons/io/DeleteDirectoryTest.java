@@ -118,6 +118,7 @@ public class DeleteDirectoryTest extends AbstractTempDirTest {
     }
 
     @Test
+    @DisabledOnOs(OS.LINUX) // TODO
     public void testDeleteDirectoryWithPathUtilsOverrideReadOnly() throws IOException {
         testDeleteDirectory(dir -> PathUtils.deleteDirectory(dir, StandardDeleteOption.OVERRIDE_READ_ONLY));
     }
