@@ -494,7 +494,7 @@ public final class PathUtils {
      * @since 2.9.0
      */
     public static PathCounters deleteFile(final Path file, final LinkOption[] linkOptions, final DeleteOption... deleteOptions)
-            throws NoSuchFileException, IOException {
+        throws NoSuchFileException, IOException {
         //
         // TODO Needs clean up
         //
@@ -1310,6 +1310,9 @@ public final class PathUtils {
             }
         } catch (final IOException e) {
             // Retry with POSIX below.
+        }
+        if (!isPosix(path, linkOptions)) {
+            throw new IOException(String.format("DOS or POSIX file operations not available for '%s' %s", path, Arrays.toString(linkOptions)));
         }
         // POSIX
         if (readOnly) {
