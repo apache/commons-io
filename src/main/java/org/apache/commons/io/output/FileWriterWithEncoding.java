@@ -104,6 +104,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
      * @throws NullPointerException if the file is null.
      * @throws IOException in case of an I/O error.
      */
+    @SuppressWarnings("resource") // Call site is responsible for closing a new instance.
     public FileWriterWithEncoding(final File file, final Charset encoding, final boolean append) throws IOException {
         super(initWriter(file, encoding, append));
     }
@@ -129,6 +130,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
      * @throws NullPointerException if the file is null.
      * @throws IOException in case of an I/O error.
      */
+    @SuppressWarnings("resource") // Call site is responsible for closing a new instance.
     public FileWriterWithEncoding(final File file, final CharsetEncoder charsetEncoder, final boolean append) throws IOException {
         super(initWriter(file, charsetEncoder, append));
     }
@@ -154,6 +156,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
      * @throws NullPointerException if the file is null.
      * @throws IOException in case of an I/O error.
      */
+    @SuppressWarnings("resource") // Call site is responsible for closing a new instance.
     public FileWriterWithEncoding(final File file, final String charsetName, final boolean append) throws IOException {
         super(initWriter(file, charsetName, append));
     }
