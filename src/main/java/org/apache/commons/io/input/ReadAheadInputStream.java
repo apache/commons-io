@@ -283,7 +283,11 @@ public class ReadAheadInputStream extends InputStream {
         return len;
     }
 
-    /** Read data from underlyingInputStream to readAheadBuffer asynchronously. */
+    /** 
+     * Read data from underlyingInputStream to readAheadBuffer asynchronously.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     private void readAsync() throws IOException {
         stateChangeLock.lock();
         final byte[] arr;
@@ -398,6 +402,7 @@ public class ReadAheadInputStream extends InputStream {
      *
      * @param n the number of bytes to be skipped.
      * @return the actual number of bytes skipped.
+     * @throws IOException if an I/O error occurs.
      */
     private long skipInternal(final long n) throws IOException {
         assert stateChangeLock.isLocked();
