@@ -2676,6 +2676,7 @@ public class FileUtils {
      *
      * @param file1 The first file to compare.
      * @param file2 The second file to compare.
+     * @throws IOException if an I/O error occurs.
      * @throws IllegalArgumentException if the given files' canonical representations are equal.
      */
     private static void requireCanonicalPathsNotEquals(final File file1, final File file2) throws IOException {
