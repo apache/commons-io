@@ -54,7 +54,7 @@ The <action> type attribute can be add,update,fix,remove.
         FileWriterWithEncoding for an existing file no longer truncates the file. #251.
       </action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
-        A null charset or charset name in FileWriterWithEncoding constructors uses the default Charset.
+        A null Charset or Charset name in FileWriterWithEncoding constructors uses the default Charset.
       </action>
       <action dev="ggregory" type="fix" due-to="Davide Angelocola">
         Fix usage of assertNotNull #269.
