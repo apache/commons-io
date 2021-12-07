@@ -138,7 +138,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      */
     public WildcardFileFilter(final String wildcard, final IOCase ioCase) {
         requireNonNull(wildcard, "wildcard");
-        this.wildcards = new String[] { wildcard };
+        this.wildcards = new String[] {wildcard};
         this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }
 
