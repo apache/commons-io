@@ -22,7 +22,7 @@ import java.io.RandomAccessFile;
 import java.nio.file.Path;
 
 /**
- * Access modes and factory for {@link RandomAccessFile}.
+ * Access modes and factory methods for {@link RandomAccessFile}.
  *
  * @since 2.12.0
  */
