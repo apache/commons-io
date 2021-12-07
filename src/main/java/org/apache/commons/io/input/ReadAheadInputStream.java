@@ -283,7 +283,7 @@ public class ReadAheadInputStream extends InputStream {
         return len;
     }
 
-    /** 
+    /**
      * Read data from underlyingInputStream to readAheadBuffer asynchronously.
      *
      * @throws IOException if an I/O error occurs.
@@ -351,7 +351,7 @@ public class ReadAheadInputStream extends InputStream {
                 stateChangeLock.lock();
                 try {
                     readAheadBuffer.limit(off);
-                    if (read < 0 || (exception instanceof EOFException)) {
+                    if (read < 0 || exception instanceof EOFException) {
                         endOfStream = true;
                     } else if (exception != null) {
                         readAborted = true;
