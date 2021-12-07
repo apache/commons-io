@@ -43,7 +43,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class ReadAheadInputStream extends InputStream {
 
-    private static final ThreadLocal<byte[]> oneByte = ThreadLocal.withInitial(() -> new byte[1]);
+    private static final ThreadLocal<byte[]> BYTE_ARRAY_1 = ThreadLocal.withInitial(() -> new byte[1]);
 
     /**
      * Creates a new daemon executor service.
@@ -243,7 +243,7 @@ public class ReadAheadInputStream extends InputStream {
             // short path - just get one byte.
             return activeBuffer.get() & 0xFF;
         }
-        final byte[] oneByteArray = oneByte.get();
+        final byte[] oneByteArray = BYTE_ARRAY_1.get();
         return read(oneByteArray, 0, 1) == EOF ? EOF : oneByteArray[0] & 0xFF;
     }
 
