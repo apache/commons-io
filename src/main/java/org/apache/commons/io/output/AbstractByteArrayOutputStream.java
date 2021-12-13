@@ -205,7 +205,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
     }
 
     /**
-     * Gets the current contents of this byte stream as a Input Stream. The
+     * Gets the current contents of this byte stream as an Input Stream. The
      * returned stream is backed by buffers of {@code this} stream,
      * avoiding memory allocation and copy, thus saving space and time.<br>
      *
@@ -217,7 +217,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
     public abstract InputStream toInputStream();
 
     /**
-     * Gets the current contents of this byte stream as a Input Stream. The
+     * Gets the current contents of this byte stream as an Input Stream. The
      * returned stream is backed by buffers of {@code this} stream,
      * avoiding memory allocation and copy, thus saving space and time.<br>
      *
