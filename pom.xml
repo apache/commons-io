@@ -344,7 +344,7 @@ file comparators, endian transformation classes, and much more.
     <commons.enforcer.version>3.0.0</commons.enforcer.version>
     <commons.moditect.version>1.0.0.RC2</commons.moditect.version>
     <spotbugs.plugin.version>4.5.0.0</spotbugs.plugin.version>
-    <spotbugs.impl.version>4.5.1</spotbugs.impl.version>
+    <spotbugs.impl.version>4.5.2</spotbugs.impl.version>
     <jmh.version>1.33</jmh.version>
     <japicmp.skip>false</japicmp.skip>
     <jacoco.skip>${env.JACOCO_SKIP}</jacoco.skip>
