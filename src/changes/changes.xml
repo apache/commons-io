@@ -319,7 +319,7 @@ The <action> type attribute can be add,update,fix,remove.
         Bump mockito-inline from 3.11.2 to 4.2.0 #262, #264, #282, #306, #314.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
-        Bump jmh.version from 1.32 to 1.33 #258.
+        Bump jmh.version from 1.32 to 1.34 #258, #316.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump actions/checkout from 2.3.4 to 2.4.0 #286, #298.
