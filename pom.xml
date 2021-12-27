@@ -343,8 +343,8 @@ file comparators, endian transformation classes, and much more.
     <commons.japicmp.version>0.15.3</commons.japicmp.version>
     <commons.enforcer.version>3.0.0</commons.enforcer.version>
     <commons.moditect.version>1.0.0.RC2</commons.moditect.version>
-    <spotbugs.plugin.version>4.5.2.0</spotbugs.plugin.version>
-    <spotbugs.impl.version>4.5.2</spotbugs.impl.version>
+    <commons.spotbugs.plugin.version>4.5.2.0</commons.spotbugs.plugin.version>
+    <commons.spotbugs.impl.version>4.5.2</commons.spotbugs.impl.version>
     <jmh.version>1.34</jmh.version>
     <japicmp.skip>false</japicmp.skip>
     <jacoco.skip>${env.JACOCO_SKIP}</jacoco.skip>
@@ -478,12 +478,12 @@ file comparators, endian transformation classes, and much more.
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${spotbugs.plugin.version}</version>
+        <version>${commons.spotbugs.plugin.version}</version>
         <dependencies>
           <dependency>
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs</artifactId>
-            <version>${spotbugs.impl.version}</version>
+            <version>${commons.spotbugs.impl.version}</version>
          </dependency>
         </dependencies>
         <configuration>
@@ -506,7 +506,7 @@ file comparators, endian transformation classes, and much more.
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${spotbugs.plugin.version}</version>
+        <version>${commons.spotbugs.plugin.version}</version>
         <configuration>
           <excludeFilterFile>${basedir}/spotbugs-exclude-filter.xml</excludeFilterFile>
         </configuration>
