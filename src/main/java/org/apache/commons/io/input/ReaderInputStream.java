@@ -128,8 +128,10 @@ public class ReaderInputStream extends InputStream {
      * Constructs a new {@link ReaderInputStream} with a default input buffer size of {@value #DEFAULT_BUFFER_SIZE}
      * characters.
      *
-     * <p>The encoder created for the specified charset will use {@link CodingErrorAction#REPLACE} for malformed input
+     * <p>
+     * The encoder created for the specified charset will use {@link CodingErrorAction#REPLACE} for malformed input
      * and unmappable characters.
+     * </p>
      *
      * @param reader the target {@link Reader}
      * @param charset the charset encoding
@@ -141,8 +143,10 @@ public class ReaderInputStream extends InputStream {
     /**
      * Constructs a new {@link ReaderInputStream}.
      *
-     * <p>The encoder created for the specified charset will use {@link CodingErrorAction#REPLACE} for malformed input
+     * <p>
+     * The encoder created for the specified charset will use {@link CodingErrorAction#REPLACE} for malformed input
      * and unmappable characters.
+     * </p>
      *
      * @param reader the target {@link Reader}.
      * @param charset the charset encoding.
@@ -161,8 +165,10 @@ public class ReaderInputStream extends InputStream {
     /**
      * Constructs a new {@link ReaderInputStream}.
      *
-     * <p>This constructor does not call {@link CharsetEncoder#reset() reset} on the provided encoder. The caller
+     * <p>
+     * This constructor does not call {@link CharsetEncoder#reset() reset} on the provided encoder. The caller
      * of this constructor should do this when providing an encoder which had already been in use.
+     * </p>
      *
      * @param reader the target {@link Reader}
      * @param charsetEncoder the charset encoder
@@ -175,8 +181,10 @@ public class ReaderInputStream extends InputStream {
     /**
      * Constructs a new {@link ReaderInputStream}.
      *
-     * <p>This constructor does not call {@link CharsetEncoder#reset() reset} on the provided encoder. The caller
+     * <p>
+     * This constructor does not call {@link CharsetEncoder#reset() reset} on the provided encoder. The caller
      * of this constructor should do this when providing an encoder which had already been in use.
+     * </p>
      *
      * @param reader the target {@link Reader}
      * @param charsetEncoder the charset encoder
@@ -196,8 +204,10 @@ public class ReaderInputStream extends InputStream {
      * Constructs a new {@link ReaderInputStream} with a default input buffer size of {@value #DEFAULT_BUFFER_SIZE}
      * characters.
      *
-     * <p>The encoder created for the specified charset will use {@link CodingErrorAction#REPLACE} for malformed input
+     * <p>
+     * The encoder created for the specified charset will use {@link CodingErrorAction#REPLACE} for malformed input
      * and unmappable characters.
+     * </p>
      *
      * @param reader the target {@link Reader}
      * @param charsetName the name of the charset encoding
@@ -209,8 +219,10 @@ public class ReaderInputStream extends InputStream {
     /**
      * Constructs a new {@link ReaderInputStream}.
      *
-     * <p>The encoder created for the specified charset will use {@link CodingErrorAction#REPLACE} for malformed input
+     * <p>
+     * The encoder created for the specified charset will use {@link CodingErrorAction#REPLACE} for malformed input
      * and unmappable characters.
+     * </p>
      *
      * @param reader the target {@link Reader}
      * @param charsetName the name of the charset encoding
