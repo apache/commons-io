@@ -127,7 +127,10 @@ The <action> type attribute can be add,update,fix,remove.
         When deleting symlinks, File/PathUtils.deleteDirectory() changes file permissions of the target.
       </action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
-        ReaderInputStream maps null Charset, Charset name, and CharsetEmcoder to the platform default instead of throwing an NullPointerException.
+        ReaderInputStream maps null Charset, Charset name, and CharsetEmcoder to the platform default instead of throwing a NullPointerException.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        CharSequenceInputStream maps null Charset and Charset name to the platform default instead of throwing a NullPointerException.
       </action>
       <!-- ADD -->
       <action issue="IO-726" dev="ggregory" type="fix" due-to="shollander, Gary Gregory">

@@ -61,7 +61,7 @@ public class CharSequenceInputStreamTest {
         return Charsets.requiredCharsets().keySet();
     }
 
-private boolean isAvailabilityTestableForCharset(final String csName) {
+    private boolean isAvailabilityTestableForCharset(final String csName) {
         return Charset.forName(csName).canEncode()
                 && !"COMPOUND_TEXT".equalsIgnoreCase(csName) && !"x-COMPOUND_TEXT".equalsIgnoreCase(csName)
                 && !isOddBallLegacyCharsetThatDoesNotSupportFrenchCharacters(csName);
@@ -72,6 +72,22 @@ private boolean isAvailabilityTestableForCharset(final String csName) {
                 "ISO-2022-CN".equalsIgnoreCase(csName) ||
                 "ISO-2022-JP".equalsIgnoreCase(csName) ||
                 "Shift_JIS".equalsIgnoreCase(csName);
+    }
+
+    @Test
+    public void testNullCharset() throws IOException {
+        try (CharSequenceInputStream in = new CharSequenceInputStream("A", (Charset) null)) {
+            IOUtils.toByteArray(in);
+            assertEquals(Charset.defaultCharset(), in.getCharsetEncoder().charset());
+        }
+    }
+
+    @Test
+    public void testNullCharsetName() throws IOException {
+        try (CharSequenceInputStream in = new CharSequenceInputStream("A", (String) null)) {
+            IOUtils.toByteArray(in);
+            assertEquals(Charset.defaultCharset(), in.getCharsetEncoder().charset());
+        }
     }
 
     @Test

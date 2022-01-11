@@ -30,6 +30,8 @@ import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
 import java.util.Objects;
 
+import org.apache.commons.io.Charsets;
+
 /**
  * Implements an {@link InputStream} to read from String, StringBuffer, StringBuilder or CharBuffer.
  * <p>
@@ -66,13 +68,13 @@ public class CharSequenceInputStream extends InputStream {
      * Constructs a new instance.
      *
      * @param cs the input character sequence.
-     * @param charset the character set name to use.
+     * @param charset the character set name to use, null maps to the default Charset.
      * @param bufferSize the buffer size to use.
      * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character.
      */
     public CharSequenceInputStream(final CharSequence cs, final Charset charset, final int bufferSize) {
         // @formatter:off
-        this.charsetEncoder = charset.newEncoder()
+        this.charsetEncoder = Charsets.toCharset(charset).newEncoder()
             .onMalformedInput(CodingErrorAction.REPLACE)
             .onUnmappableCharacter(CodingErrorAction.REPLACE);
         // @formatter:on
@@ -99,12 +101,12 @@ public class CharSequenceInputStream extends InputStream {
      * Constructs a new instance.
      *
      * @param cs the input character sequence.
-     * @param charset the character set name to use.
+     * @param charset the character set name to use, null maps to the default Charset.
      * @param bufferSize the buffer size to use.
      * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character.
      */
     public CharSequenceInputStream(final CharSequence cs, final String charset, final int bufferSize) {
-        this(cs, Charset.forName(charset), bufferSize);
+        this(cs, Charsets.toCharset(charset), bufferSize);
     }
 
     /**
@@ -140,6 +142,15 @@ public class CharSequenceInputStream extends InputStream {
             result.throwException();
         }
         this.bBuf.flip();
+    }
+
+    /**
+     * Gets the CharsetEncoder.
+     *
+     * @return the CharsetEncoder.
+     */
+    CharsetEncoder getCharsetEncoder() {
+        return charsetEncoder;
     }
 
     /**
