@@ -18,23 +18,23 @@
 package org.apache.commons.io.charset;
 
 import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
+import java.nio.charset.CharsetDecoder;
 
 /**
- * Works with {@link CharsetEncoder}.
+ * Works with {@link CharsetDecoder}.
  *
  * @since 2.12.0
  */
-public class CharsetEncoders {
+public class CharsetDecoders {
 
     /**
-     * Returns the given non-null CharsetEncoder or a new default CharsetEncoder.
+     * Returns the given non-null CharsetDecoder or a new default CharsetDecoder.
      *
-     * @param charsetEncoder The CharsetEncoder to test.
-     * @return the given non-null CharsetEncoder or a new default CharsetEncoder.
+     * @param charsetDecoder The CharsetDecoder to test.
+     * @return the given non-null CharsetDecoder or a new default CharsetDecoder.
      */
-    public static CharsetEncoder toCharsetEncoder(CharsetEncoder charsetEncoder) {
-        return charsetEncoder != null ? charsetEncoder : Charset.defaultCharset().newEncoder();
+    public static CharsetDecoder toCharsetDecoder(CharsetDecoder charsetDecoder) {
+        return charsetDecoder != null ? charsetDecoder : Charset.defaultCharset().newDecoder();
     }
 
 }
