@@ -195,26 +195,26 @@ private boolean isAvailabilityTestableForCharset(final String csName) {
     // This is because the initial read fills the buffer from the CharSequence
     // so data1 gets the first buffer full; data2 will get the next buffer full
     private void testIO_356(final int bufferSize, final int dataSize, final int readFirst, final String csName) throws Exception {
-        final CharSequenceInputStream is = new CharSequenceInputStream(ALPHABET, csName, bufferSize);
+        final byte[] data1;
+        final byte[] data2;
+        try (final CharSequenceInputStream is = new CharSequenceInputStream(ALPHABET, csName, bufferSize)) {
+            for (int i = 0; i < readFirst; i++) {
+                final int ch = is.read();
+                assertNotEquals(-1, ch);
+            }
 
-        for (int i = 0; i < readFirst; i++) {
-            final int ch = is.read();
-            assertNotEquals(-1, ch);
+            is.mark(dataSize);
+
+            data1 = new byte[dataSize];
+            final int readCount1 = is.read(data1);
+            assertEquals(dataSize, readCount1);
+
+            is.reset(); // should allow data to be re-read
+
+            data2 = new byte[dataSize];
+            final int readCount2 = is.read(data2);
+            assertEquals(dataSize, readCount2);
         }
-
-        is.mark(dataSize);
-
-        final byte[] data1 = new byte[dataSize];
-        final int readCount1 = is.read(data1);
-        assertEquals(dataSize, readCount1);
-
-        is.reset(); // should allow data to be re-read
-
-        final byte[] data2 = new byte[dataSize];
-        final int readCount2 = is.read(data2);
-        assertEquals(dataSize, readCount2);
-
-        is.close();
 
         // data buffers should be identical
         assertArrayEquals(data1, data2, "bufferSize=" + bufferSize + " dataSize=" + dataSize);
