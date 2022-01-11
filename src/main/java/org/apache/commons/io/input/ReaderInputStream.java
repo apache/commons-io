@@ -29,6 +29,9 @@ import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
 import java.util.Objects;
 
+import org.apache.commons.io.Charsets;
+import org.apache.commons.io.charset.CharsetEncoders;
+
 /**
  * {@link InputStream} implementation that reads a character stream from a {@link Reader} and transforms it to a byte
  * stream using a specified charset encoding. The stream is transformed using a {@link CharsetEncoder} object,
@@ -146,7 +149,7 @@ public class ReaderInputStream extends InputStream {
     public ReaderInputStream(final Reader reader, final Charset charset, final int bufferSize) {
         // @formatter:off
         this(reader,
-             charset.newEncoder()
+            Charsets.toCharset(charset).newEncoder()
                     .onMalformedInput(CodingErrorAction.REPLACE)
                     .onUnmappableCharacter(CodingErrorAction.REPLACE),
              bufferSize);
@@ -168,14 +171,14 @@ public class ReaderInputStream extends InputStream {
      * Constructs a new {@link ReaderInputStream}.
      *
      * @param reader the target {@link Reader}
-     * @param charsetEncoder the charset encoder
+     * @param charsetEncoder the charset encoder, null defauls to the default Charset encoder.
      * @param bufferSize the size of the input buffer in number of characters
      * @since 2.1
      */
     public ReaderInputStream(final Reader reader, final CharsetEncoder charsetEncoder, final int bufferSize) {
         this.reader = reader;
-        this.charsetEncoder = charsetEncoder;
-        this.encoderIn = CharBuffer.allocate(checkMinBufferSize(charsetEncoder, bufferSize));
+        this.charsetEncoder = CharsetEncoders.toCharsetEncoder(charsetEncoder);
+        this.encoderIn = CharBuffer.allocate(checkMinBufferSize(this.charsetEncoder, bufferSize));
         this.encoderIn.flip();
         this.encoderOut = ByteBuffer.allocate(128);
         this.encoderOut.flip();
@@ -196,11 +199,11 @@ public class ReaderInputStream extends InputStream {
      * Constructs a new {@link ReaderInputStream}.
      *
      * @param reader the target {@link Reader}
-     * @param charsetName the name of the charset encoding
+     * @param charsetName the name of the charset encoding, null maps to the default Charset.
      * @param bufferSize the size of the input buffer in number of characters
      */
     public ReaderInputStream(final Reader reader, final String charsetName, final int bufferSize) {
-        this(reader, Charset.forName(charsetName), bufferSize);
+        this(reader, Charsets.toCharset(charsetName), bufferSize);
     }
 
     /**
@@ -242,6 +245,15 @@ public class ReaderInputStream extends InputStream {
             lastCoderResult.throwException();
         }
         encoderOut.flip();
+    }
+
+    /**
+     * Gets the CharsetEncoder.
+     *
+     * @return the CharsetEncoder.
+     */
+    CharsetEncoder getCharsetEncoder() {
+        return charsetEncoder;
     }
 
     /**

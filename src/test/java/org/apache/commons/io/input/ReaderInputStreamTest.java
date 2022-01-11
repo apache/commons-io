@@ -121,6 +121,39 @@ public class ReaderInputStreamTest {
     }
 
     @Test
+    @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
+    public void testConstructNullCharsetEncoder() throws IOException {
+        final Charset charset = Charset.defaultCharset();
+        final CharsetEncoder encoder = null;
+        try (ReaderInputStream in = new ReaderInputStream(new StringReader("ABC"), encoder, (int) ReaderInputStream.minBufferSize(charset.newEncoder()))) {
+            IOUtils.toByteArray(in);
+            assertEquals(Charset.defaultCharset(), in.getCharsetEncoder().charset());
+        }
+    }
+
+    @Test
+    @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
+    public void testConstructNullCharset() throws IOException {
+        final Charset charset = Charset.defaultCharset();
+        final Charset encoder = null;
+        try (ReaderInputStream in = new ReaderInputStream(new StringReader("ABC"), encoder, (int) ReaderInputStream.minBufferSize(charset.newEncoder()))) {
+            IOUtils.toByteArray(in);
+            assertEquals(Charset.defaultCharset(), in.getCharsetEncoder().charset());
+        }
+    }
+
+    @Test
+    @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
+    public void testConstructNullCharsetNameEncoder() throws IOException {
+        final Charset charset = Charset.defaultCharset();
+        final String encoder = null;
+        try (ReaderInputStream in = new ReaderInputStream(new StringReader("ABC"), encoder, (int) ReaderInputStream.minBufferSize(charset.newEncoder()))) {
+            IOUtils.toByteArray(in);
+            assertEquals(Charset.defaultCharset(), in.getCharsetEncoder().charset());
+        }
+    }
+
+    @Test
     public void testLargeUTF8WithBufferedRead() throws IOException {
         testWithBufferedRead(LARGE_TEST_STRING, "UTF-8");
     }
