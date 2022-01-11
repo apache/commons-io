@@ -32,20 +32,6 @@ import org.apache.commons.io.IOExceptionList;
  */
 class IOStreams {
 
-    /**
-     * Null-safe version of {@link Stream#of(Object[])}.
-     *
-     * Copied from Apache Commons Lang.
-     *
-     * @param <T> the type of stream elements.
-     * @param values the elements of the new stream, may be {@code null}.
-     * @return the new stream on {@code values} or {@link Stream#empty()}.
-     */
-    @SafeVarargs // Creating a stream from an array is safe
-    static <T> Stream<T> of(final T... values) {
-        return values == null ? Stream.empty() : Stream.of(values);
-    }
-
     static <T> void forEach(final Stream<T> stream, final IOConsumer<T> action) throws IOException {
         forEachIndexed(stream, action, (i, e) -> e);
     }
@@ -66,6 +52,20 @@ class IOStreams {
             index.incrementAndGet();
         });
         IOExceptionList.checkEmpty(causeList.get(), null);
+    }
+
+    /**
+     * Null-safe version of {@link Stream#of(Object[])}.
+     *
+     * Copied from Apache Commons Lang.
+     *
+     * @param <T> the type of stream elements.
+     * @param values the elements of the new stream, may be {@code null}.
+     * @return the new stream on {@code values} or {@link Stream#empty()}.
+     */
+    @SafeVarargs // Creating a stream from an array is safe
+    static <T> Stream<T> of(final T... values) {
+        return values == null ? Stream.empty() : Stream.of(values);
     }
 
 }
