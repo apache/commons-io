@@ -62,6 +62,21 @@ public class FileUtilsCleanDirectoryTest extends AbstractTempDirTest {
         return proc.waitFor() == 0;
     }
 
+    @DisabledOnOs(OS.WINDOWS)
+    @Test
+    public void testCleanDirectoryToForceDelete() throws Exception {
+        final File file = new File(tempDirFile, "restricted");
+        FileUtils.touch(file);
+
+        // 300 = owner: WE.
+        // 500 = owner: RE.
+        // 700 = owner: RWE.
+        assumeTrue(chmod(tempDirFile, 700, false));
+
+        // cleanDirectory calls forceDelete
+        FileUtils.cleanDirectory(tempDirFile);
+    }
+
     @Test
     public void testCleanEmpty() throws Exception {
         assertEquals(0, tempDirFile.list().length);
@@ -96,21 +111,6 @@ public class FileUtilsCleanDirectoryTest extends AbstractTempDirTest {
         FileUtils.cleanDirectory(tempDirFile);
 
         assertEquals(0, tempDirFile.list().length);
-    }
-
-    @DisabledOnOs(OS.WINDOWS)
-    @Test
-    public void testCleanDirectoryToForceDelete() throws Exception {
-        final File file = new File(tempDirFile, "restricted");
-        FileUtils.touch(file);
-
-        // 300 = owner: WE.
-        // 500 = owner: RE.
-        // 700 = owner: RWE.
-        assumeTrue(chmod(tempDirFile, 700, false));
-
-        // cleanDirectory calls forceDelete
-        FileUtils.cleanDirectory(tempDirFile);
     }
 
     @DisabledOnOs(OS.WINDOWS)

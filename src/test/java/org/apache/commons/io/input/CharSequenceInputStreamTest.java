@@ -75,22 +75,6 @@ public class CharSequenceInputStreamTest {
     }
 
     @Test
-    public void testNullCharset() throws IOException {
-        try (CharSequenceInputStream in = new CharSequenceInputStream("A", (Charset) null)) {
-            IOUtils.toByteArray(in);
-            assertEquals(Charset.defaultCharset(), in.getCharsetEncoder().charset());
-        }
-    }
-
-    @Test
-    public void testNullCharsetName() throws IOException {
-        try (CharSequenceInputStream in = new CharSequenceInputStream("A", (String) null)) {
-            IOUtils.toByteArray(in);
-            assertEquals(Charset.defaultCharset(), in.getCharsetEncoder().charset());
-        }
-    }
-
-    @Test
     public void testAvailable() throws Exception {
         for (final String csName : Charset.availableCharsets().keySet()) {
             // prevent java.lang.UnsupportedOperationException at sun.nio.cs.ext.ISO2022_CN.newEncoder.
@@ -354,6 +338,22 @@ public class CharSequenceInputStreamTest {
     public void testMarkSupported() throws Exception {
         try (InputStream r = new CharSequenceInputStream("test", "UTF-8")) {
             assertTrue(r.markSupported());
+        }
+    }
+
+    @Test
+    public void testNullCharset() throws IOException {
+        try (CharSequenceInputStream in = new CharSequenceInputStream("A", (Charset) null)) {
+            IOUtils.toByteArray(in);
+            assertEquals(Charset.defaultCharset(), in.getCharsetEncoder().charset());
+        }
+    }
+
+    @Test
+    public void testNullCharsetName() throws IOException {
+        try (CharSequenceInputStream in = new CharSequenceInputStream("A", (String) null)) {
+            IOUtils.toByteArray(in);
+            assertEquals(Charset.defaultCharset(), in.getCharsetEncoder().charset());
         }
     }
 
