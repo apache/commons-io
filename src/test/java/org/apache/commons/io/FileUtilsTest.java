@@ -1244,16 +1244,36 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final File file = new File(tempDirFile, getName());
         file.deleteOnExit();
 
-        // Loads resource
-        final String resourceName = "/java/lang/Object.class";
-        FileUtils.copyURLToFile(getClass().getResource(resourceName), file);
+        assertContentMatchesAfterCopyURLToFileFor("/java/lang/Object.class", file);
+        //TODO Maybe test copy to itself like for copyFile()
+    }
 
-        // Tests that resuorce was copied correctly
-        try (InputStream fis = Files.newInputStream(file.toPath())) {
+    private void assertContentMatchesAfterCopyURLToFileFor(String resourceName, File destination) throws IOException {
+        FileUtils.copyURLToFile(getClass().getResource(resourceName), destination);
+
+        try (InputStream fis = Files.newInputStream(destination.toPath())) {
             assertTrue(IOUtils.contentEquals(getClass().getResourceAsStream(resourceName), fis),
                     "Content is not equal.");
         }
-        //TODO Maybe test copy to itself like for copyFile()
+    }
+
+    @Test
+    public void testCopyURLToFileCreatesParentDirs() throws Exception {
+
+        final File file = managedTempDirPath.resolve("subdir").resolve(getName()).toFile();
+        file.deleteOnExit();
+
+        assertContentMatchesAfterCopyURLToFileFor("/java/lang/Object.class", file);
+    }
+
+    @Test
+    public void testCopyURLToFileReplacesExisting() throws Exception {
+
+        final File file = new File(tempDirFile, getName());
+        file.deleteOnExit();
+
+        assertContentMatchesAfterCopyURLToFileFor("/java/lang/Object.class", file);
+        assertContentMatchesAfterCopyURLToFileFor("/java/lang/String.class", file);
     }
 
     @Test
