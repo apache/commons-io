@@ -264,7 +264,6 @@ public class FilenameUtils {
      * @throws IllegalArgumentException if the result path contains the null character ({@code U+0000})
      */
     private static String doGetFullPath(final String fileName, final boolean includeSeparator) {
-        // TODO: Does not (indirectly) call requireNonNullChars in all cases for result
         if (fileName == null) {
             return null;
         }
@@ -452,9 +451,6 @@ public class FilenameUtils {
         if (fileName1 == null || fileName2 == null) {
             return fileName1 == null && fileName2 == null;
         }
-        // TODO: Should IllegalArgumentException thrown by `normalize` for null characters be
-        // handled? (and for example `false` be returned instead); If not, have to mention it
-        // in javadoc of this method and callers
         if (normalized) {
             fileName1 = normalize(fileName1);
             if (fileName1 == null) {
@@ -618,7 +614,6 @@ public class FilenameUtils {
         if (index == NOT_FOUND) {
             return EMPTY_STRING;
         }
-        // TODO: Should check for null characters?
         return fileName.substring(index + 1);
     }
 
