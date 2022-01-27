@@ -2449,7 +2449,7 @@ public class FileUtils {
      * @since 2.12.0
      */
     public static OutputStream newOutputStream(final File file, final boolean append) throws IOException {
-        return PathUtils.newOutputStream(file.toPath(), append);
+        return PathUtils.newOutputStream(Objects.requireNonNull(file, "file").toPath(), append);
     }
 
     /**
