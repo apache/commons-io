@@ -135,6 +135,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
         WriterOutputStream maps null Charset, Charset name, and CharsetEncoder name to the platform default instead of throwing a NullPointerException.
       </action>
+      <action dev="ggregory" type="fix" due-to="Chad Wilson, Gary Gregory">
+        FileUtils.copyURLToFile should create target parent directories and overwrite target file #319.
+      </action>
       <!-- ADD -->
       <action issue="IO-726" dev="ggregory" type="fix" due-to="shollander, Gary Gregory">
         Add MemoryMappedFileInputStream #215.

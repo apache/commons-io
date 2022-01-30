@@ -1060,7 +1060,9 @@ public class FileUtils {
      */
     public static void copyURLToFile(final URL source, final File destination) throws IOException {
         try (final InputStream stream = source.openStream()) {
-            Files.copy(stream, destination.toPath());
+            final Path path = destination.toPath();
+            PathUtils.createParentDirectories(path);
+            Files.copy(stream, path, StandardCopyOption.REPLACE_EXISTING);
         }
     }
 
