@@ -23,6 +23,8 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.util.Objects;
 
+import static org.apache.commons.io.file.PathUtils.EMPTY_LINK_OPTION_ARRAY;
+
 /**
  * A {@link java.nio.file.DirectoryStream.Filter DirectoryStream.Filter} that delegates to a {@link PathFilter}.
  * <p>
@@ -48,7 +50,7 @@ public class DirectoryStreamFilter implements DirectoryStream.Filter<Path> {
 
     @Override
     public boolean accept(final Path path) throws IOException {
-        return pathFilter.accept(path, PathUtils.readBasicFileAttributes(path)) == FileVisitResult.CONTINUE;
+        return pathFilter.accept(path, PathUtils.readBasicFileAttributes(path, EMPTY_LINK_OPTION_ARRAY)) == FileVisitResult.CONTINUE;
     }
 
     /**

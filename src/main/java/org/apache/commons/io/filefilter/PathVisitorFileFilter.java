@@ -28,6 +28,8 @@ import org.apache.commons.io.file.NoopPathVisitor;
 import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.io.file.PathVisitor;
 
+import static org.apache.commons.io.file.PathUtils.EMPTY_LINK_OPTION_ARRAY;
+
 /**
  * A file filter backed by a path visitor.
  *
@@ -50,7 +52,7 @@ public class PathVisitorFileFilter extends AbstractFileFilter {
     public boolean accept(final File file) {
         try {
             final Path path = file.toPath();
-            return visitFile(path, file.exists() ? PathUtils.readBasicFileAttributes(path) : null) == FileVisitResult.CONTINUE;
+            return visitFile(path, file.exists() ? PathUtils.readBasicFileAttributes(path, EMPTY_LINK_OPTION_ARRAY) : null) == FileVisitResult.CONTINUE;
         } catch (final IOException e) {
             return handle(e) == FileVisitResult.CONTINUE;
         }
@@ -58,12 +60,8 @@ public class PathVisitorFileFilter extends AbstractFileFilter {
 
     @Override
     public boolean accept(final File dir, final String name) {
-        try {
-            final Path path = dir.toPath().resolve(name);
-            return accept(path, PathUtils.readBasicFileAttributes(path)) == FileVisitResult.CONTINUE;
-        } catch (final IOException e) {
-            return handle(e) == FileVisitResult.CONTINUE;
-        }
+        final Path path = dir.toPath().resolve(name);
+        return accept(path, PathUtils.readBasicFileAttributes(path, EMPTY_LINK_OPTION_ARRAY)) == FileVisitResult.CONTINUE;
     }
 
     @Override
