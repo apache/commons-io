@@ -341,7 +341,7 @@ public class FileUtils {
      * @see #forceDelete(File)
      */
     public static void cleanDirectory(final File directory) throws IOException {
-        IOConsumer.forEach(listFiles(directory, null), file -> forceDelete(file));
+        IOConsumer.forEach(listFiles(directory, null), FileUtils::forceDelete);
     }
 
     /**
@@ -354,7 +354,7 @@ public class FileUtils {
      * @see #forceDeleteOnExit(File)
      */
     private static void cleanDirectoryOnExit(final File directory) throws IOException {
-        IOConsumer.forEach(listFiles(directory, null), file -> forceDeleteOnExit(file));
+        IOConsumer.forEach(listFiles(directory, null), FileUtils::forceDeleteOnExit);
     }
 
     /**

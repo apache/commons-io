@@ -23,6 +23,7 @@ import java.io.Writer;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -47,7 +48,7 @@ import org.apache.commons.io.function.IOConsumer;
 public class FilterCollectionWriter extends Writer {
 
     @SuppressWarnings("rawtypes")
-    private static final Predicate NOT_NULL = e -> e != null;
+    private static final Predicate NOT_NULL = Objects::nonNull;
 
     @SuppressWarnings("unchecked")
     private static <T> Predicate<T> notNull() {
