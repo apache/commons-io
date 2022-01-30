@@ -138,6 +138,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Chad Wilson, Gary Gregory">
         FileUtils.copyURLToFile should create target parent directories and overwrite target file #319.
       </action>
+      <action issue="IO-484" dev="ggregory" type="fix" due-to="Marcono1234, Gary Gregory">
+        Fix incorrect FilenameUtils Javadoc for null bytes #310.
+      </action>
       <!-- ADD -->
       <action issue="IO-726" dev="ggregory" type="fix" due-to="shollander, Gary Gregory">
         Add MemoryMappedFileInputStream #215.
