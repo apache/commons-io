@@ -37,13 +37,13 @@ public class HexDump {
     public static final String EOL =
             System.getProperty("line.separator");
 
-    private static final char[] _hexcodes =
+    private static final char[] HEX_CODES =
             {
                 '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
                 'A', 'B', 'C', 'D', 'E', 'F'
             };
 
-    private static final int[] _shifts =
+    private static final int[] SHIFTS =
             {
                 28, 24, 20, 16, 12, 8, 4, 0
             };
@@ -132,7 +132,7 @@ public class HexDump {
      */
     private static StringBuilder dump(final StringBuilder _cbuffer, final byte value) {
         for (int j = 0; j < 2; j++) {
-            _cbuffer.append(_hexcodes[value >> _shifts[j + 6] & 15]);
+            _cbuffer.append(HEX_CODES[value >> SHIFTS[j + 6] & 15]);
         }
         return _cbuffer;
     }
@@ -147,7 +147,7 @@ public class HexDump {
     private static StringBuilder dump(final StringBuilder _lbuffer, final long value) {
         for (int j = 0; j < 8; j++) {
             _lbuffer
-                    .append(_hexcodes[(int) (value >> _shifts[j]) & 15]);
+                    .append(HEX_CODES[(int) (value >> SHIFTS[j]) & 15]);
         }
         return _lbuffer;
     }
