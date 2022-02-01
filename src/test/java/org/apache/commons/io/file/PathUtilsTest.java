@@ -20,6 +20,7 @@ package org.apache.commons.io.file;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
@@ -28,6 +29,7 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -160,6 +162,12 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testCreateDirectoriesWithClashingSymlink() throws IOException {
+        Path symlinkedDir = createTempSymlinkedRelativeDir();
+        assertThrowsExactly(FileAlreadyExistsException.class, () -> PathUtils.createParentDirectories(symlinkedDir.resolve("child")));
+    }
+
+    @Test
     public void testGetTempDirectory() {
         final Path tempDirectory = Paths.get(System.getProperty("java.io.tmpdir"));
         assertEquals(tempDirectory, PathUtils.getTempDirectory());
@@ -239,6 +247,22 @@ public class PathUtilsTest extends AbstractTempDirTest {
     @Test
     public void testNewOutputStreamNewFileAppendTrue() throws IOException {
         testNewOutputStreamNewFile(true);
+    }
+
+    @Test
+    public void testNewOutputStreamNewFileInsideExistingSymlinkedDir() throws IOException {
+        Path symlinkDir = createTempSymlinkedRelativeDir();
+
+        final Path file = symlinkDir.resolve("test.txt");
+        assertThrowsExactly(FileAlreadyExistsException.class, () -> PathUtils.newOutputStream(file, false));
+    }
+
+    private Path createTempSymlinkedRelativeDir() throws IOException {
+        Path targetDir = tempDirPath.resolve("subdir");
+        Path symlinkDir = tempDirPath.resolve("symlinked-dir");
+        Files.createDirectory(targetDir);
+        Files.createSymbolicLink(symlinkDir, targetDir);
+        return symlinkDir;
     }
 
     @Test

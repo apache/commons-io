@@ -352,6 +352,17 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void test_openOutputStream_intoExistingSymlinkedDir() throws Exception {
+        Path symlinkedDir = createTempSymlinkedRelativeDir();
+
+        final File file = symlinkedDir.resolve("test.txt").toFile();
+        try (FileOutputStream out = FileUtils.openOutputStream(file)) {
+            out.write(0);
+        }
+        assertTrue(file.exists());
+    }
+
+    @Test
     public void test_openInputStream_exists() throws Exception {
         final File file = new File(tempDirFile, "test.txt");
         TestUtils.createLineBasedFile(file, new String[]{"Hello"});
@@ -3046,7 +3057,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testWriteStringToFile1() throws Exception {
+    public void testWriteStringToFileWithCharset() throws Exception {
         final File file = new File(tempDirFile, "write.txt");
         FileUtils.writeStringToFile(file, "Hello /u1234", "UTF8");
         final byte[] text = "Hello /u1234".getBytes(StandardCharsets.UTF_8);
@@ -3054,7 +3065,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testWriteStringToFile2() throws Exception {
+    public void testWriteStringToFileWithNullStringCharset() throws Exception {
         final File file = new File(tempDirFile, "write.txt");
         FileUtils.writeStringToFile(file, "Hello /u1234", (String) null);
         final byte[] text = "Hello /u1234".getBytes();
@@ -3062,7 +3073,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testWriteStringToFile3() throws Exception {
+    public void testWriteStringToFileWithNullCharset() throws Exception {
         final File file = new File(tempDirFile, "write.txt");
         FileUtils.writeStringToFile(file, "Hello /u1234", (Charset) null);
         final byte[] text = "Hello /u1234".getBytes();
@@ -3070,11 +3081,30 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testWriteStringToFile4() throws Exception {
+    public void testWriteStringToFileIntoNonExistentSubdir() throws Exception {
         final File file = new File(tempDirFile, "subdir/write.txt");
         FileUtils.writeStringToFile(file, "Hello /u1234", (Charset) null);
         final byte[] text = "Hello /u1234".getBytes();
         TestUtils.assertEqualContent(text, file);
+    }
+
+    @Test
+    public void testWriteStringToFileIntoSymlinkedDir() throws Exception {
+        Path symlinkDir = createTempSymlinkedRelativeDir();
+
+        File file = symlinkDir.resolve("file").toFile();
+        FileUtils.writeStringToFile(file, "Hello /u1234", StandardCharsets.UTF_8);
+
+        final byte[] text = "Hello /u1234".getBytes();
+        TestUtils.assertEqualContent(text, file);
+    }
+
+    private Path createTempSymlinkedRelativeDir() throws IOException {
+        Path targetDir = tempDirPath.resolve("subdir");
+        Path symlinkDir = tempDirPath.resolve("symlinked-dir");
+        Files.createDirectory(targetDir);
+        Files.createSymbolicLink(symlinkDir, targetDir);
+        return symlinkDir;
     }
 
     @Test
