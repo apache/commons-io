@@ -21,9 +21,13 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
+import org.apache.commons.io.Charsets;
+import org.apache.commons.io.charset.CharsetDecoders;
 import org.junit.jupiter.api.Test;
 
 public class WriterOutputStreamTest {
@@ -52,6 +56,16 @@ public class WriterOutputStreamTest {
     }
 
     @Test
+    public void testLargeUTF8CharsetWithBufferedWrite() throws IOException {
+        testWithBufferedWrite(LARGE_TEST_STRING, "UTF-8");
+    }
+
+    @Test
+    public void testLargeUTF8CharsetWithSingleByteWrite() throws IOException {
+        testWithSingleByteWrite(LARGE_TEST_STRING, StandardCharsets.UTF_8);
+    }
+
+    @Test
     public void testLargeUTF8WithBufferedWrite() throws IOException {
         testWithBufferedWrite(LARGE_TEST_STRING, "UTF-8");
     }
@@ -59,6 +73,21 @@ public class WriterOutputStreamTest {
     @Test
     public void testLargeUTF8WithSingleByteWrite() throws IOException {
         testWithSingleByteWrite(LARGE_TEST_STRING, "UTF-8");
+    }
+
+    @Test
+    public void testNullCharsetNameWithSingleByteWrite() throws IOException {
+        testWithSingleByteWrite(TEST_STRING, (String) null);
+    }
+
+    @Test
+    public void testNullCharsetWithSingleByteWrite() throws IOException {
+        testWithSingleByteWrite(TEST_STRING, (Charset) null);
+    }
+
+    @Test
+    public void testNullCharsetDecoderWithSingleByteWrite() throws IOException {
+        testWithSingleByteWrite(TEST_STRING, (CharsetDecoder) null);
     }
 
     @Test
@@ -128,8 +157,30 @@ public class WriterOutputStreamTest {
     }
 
 
+    private void testWithSingleByteWrite(final String testString, final Charset charset) throws IOException {
+        final byte[] bytes = testString.getBytes(Charsets.toCharset(charset));
+        final StringWriter writer = new StringWriter();
+        try (final WriterOutputStream out = new WriterOutputStream(writer, charset)) {
+            for (final byte b : bytes) {
+                out.write(b);
+            }
+        }
+        assertEquals(testString, writer.toString());
+    }
+
+    private void testWithSingleByteWrite(final String testString, final CharsetDecoder charsetDecoder) throws IOException {
+        final byte[] bytes = testString.getBytes(CharsetDecoders.toCharsetDecoder(charsetDecoder).charset());
+        final StringWriter writer = new StringWriter();
+        try (final WriterOutputStream out = new WriterOutputStream(writer, charsetDecoder)) {
+            for (final byte b : bytes) {
+                out.write(b);
+            }
+        }
+        assertEquals(testString, writer.toString());
+    }
+
     private void testWithSingleByteWrite(final String testString, final String charsetName) throws IOException {
-        final byte[] bytes = testString.getBytes(charsetName);
+        final byte[] bytes = testString.getBytes(Charsets.toCharset(charsetName));
         final StringWriter writer = new StringWriter();
         try (final WriterOutputStream out = new WriterOutputStream(writer, charsetName)) {
             for (final byte b : bytes) {

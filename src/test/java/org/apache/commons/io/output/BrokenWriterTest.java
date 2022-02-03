@@ -85,6 +85,21 @@ public class BrokenWriterTest {
     }
 
     @Test
+    public void testTryWithResources() {
+        final IOException thrown = assertThrows(IOException.class, () -> {
+            try (Writer newWriter = new BrokenWriter()) {
+                newWriter.write(1);
+            }
+        });
+        assertEquals("Broken writer", thrown.getMessage());
+
+        final Throwable[] suppressed = thrown.getSuppressed();
+        assertEquals(1, suppressed.length);
+        assertEquals(IOException.class, suppressed[0].getClass());
+        assertEquals("Broken writer", suppressed[0].getMessage());
+    }
+
+    @Test
     public void testWriteCharArray() {
         assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.write(new char[1])));
     }
@@ -107,21 +122,6 @@ public class BrokenWriterTest {
     @Test
     public void testWriteStringIndexed() {
         assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.write("01", 0, 1)));
-    }
-
-    @Test
-    public void testTryWithResources() {
-        final IOException thrown = assertThrows(IOException.class, () -> {
-            try (Writer newWriter = new BrokenWriter()) {
-                newWriter.write(1);
-            }
-        });
-        assertEquals("Broken writer", thrown.getMessage());
-
-        final Throwable[] suppressed = thrown.getSuppressed();
-        assertEquals(1, suppressed.length);
-        assertEquals(IOException.class, suppressed[0].getClass());
-        assertEquals("Broken writer", suppressed[0].getMessage());
     }
 
 }

@@ -87,6 +87,11 @@ public class DeleteDirectoryTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testDeleteDirectoryWithPathUtilsOverrideReadOnly() throws IOException {
+        testDeleteDirectory(dir -> PathUtils.deleteDirectory(dir, StandardDeleteOption.OVERRIDE_READ_ONLY));
+    }
+
+    @Test
     @DisabledOnOs(OS.LINUX) // TODO
     public void testDeleteFileCheckParentAccess() throws IOException {
         // Create a test directory
@@ -116,10 +121,5 @@ public class DeleteDirectoryTest extends AbstractTempDirTest {
         assertEquals(permissions, Files.getPosixFilePermissions(testDir), testDir::toString);
         assertFalse(Files.isWritable(testDir));
         assertFalse(Files.isExecutable(testDir));
-    }
-
-    @Test
-    public void testDeleteDirectoryWithPathUtilsOverrideReadOnly() throws IOException {
-        testDeleteDirectory(dir -> PathUtils.deleteDirectory(dir, StandardDeleteOption.OVERRIDE_READ_ONLY));
     }
 }

@@ -229,7 +229,7 @@ public class FilenameUtilsTest {
     }
 
     @Test
-    public void testGetBaseName_with_nullByte() {
+    public void testGetBaseName_with_null_character() {
         try {
             assertEquals("file.txt", FilenameUtils.getBaseName("fil\u0000e.txt.bak"));
         } catch (final IllegalArgumentException ignore) {
@@ -419,7 +419,7 @@ public class FilenameUtilsTest {
 
 
     @Test
-    public void testGetPath_with_nullbyte() {
+    public void testGetPath_with_null_character() {
         assertThrows(IllegalArgumentException.class, () -> FilenameUtils.getPath("~user/a/\u0000b/c.txt"));
     }
 
@@ -461,7 +461,7 @@ public class FilenameUtilsTest {
     }
 
     @Test
-    public void testGetPathNoEndSeparator_with_null_byte() {
+    public void testGetPathNoEndSeparator_with_null_character() {
         try {
             assertEquals("a/b", FilenameUtils.getPathNoEndSeparator("~user/a\u0000/b/c.txt"));
         } catch (final IllegalArgumentException ignore) {
@@ -515,7 +515,7 @@ public class FilenameUtilsTest {
     }
 
     @Test
-    public void testGetPrefix_with_nullbyte() {
+    public void testGetPrefix_with_null_character() {
         try {
             assertEquals("~user\\", FilenameUtils.getPrefix("~u\u0000ser\\a\\b\\c.txt"));
         } catch (final IllegalArgumentException ignore) {
@@ -957,7 +957,7 @@ public class FilenameUtilsTest {
     /**
      */
     @Test
-    public void testNormalize_with_nullbytes() {
+    public void testNormalize_with_null_character() {
         try {
             assertEquals("a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("a\\b/c\u0000.txt"));
         } catch (final IllegalArgumentException ignore) {

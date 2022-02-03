@@ -167,6 +167,15 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     private long testFile2Size;
 
+    private void assertContentMatchesAfterCopyURLToFileFor(final String resourceName, final File destination) throws IOException {
+        FileUtils.copyURLToFile(getClass().getResource(resourceName), destination);
+
+        try (InputStream fis = Files.newInputStream(destination.toPath());
+             InputStream expected = getClass().getResourceAsStream(resourceName)) {
+            assertTrue(IOUtils.contentEquals(expected, fis), "Content is not equal.");
+        }
+    }
+
     private void backDateFile10Minutes(final File testFile) throws IOException {
         final long mins10 = 1000 * 60 * 10;
         final long lastModified1 = getLastModifiedMillis(testFile);
@@ -616,21 +625,18 @@ public class FileUtilsTest extends AbstractTempDirTest {
         // Different files
         final File objFile1 =
                 new File(tempDirFile, getName() + ".object");
-        objFile1.deleteOnExit();
         FileUtils.copyURLToFile(
                 getClass().getResource("/java/lang/Object.class"),
                 objFile1);
 
         final File objFile1b =
                 new File(tempDirFile, getName() + ".object2");
-        objFile1.deleteOnExit();
         FileUtils.copyURLToFile(
                 getClass().getResource("/java/lang/Object.class"),
                 objFile1b);
 
         final File objFile2 =
                 new File(tempDirFile, getName() + ".collection");
-        objFile2.deleteOnExit();
         FileUtils.copyURLToFile(
                 getClass().getResource("/java/util/Collection.class"),
                 objFile2);
@@ -649,8 +655,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(FileUtils.contentEquals(file, file));
         assertTrue(FileUtils.contentEquals(file, file2));
     }
-
-    // toFiles
 
     @Test
     public void testContentEqualsIgnoreEOL() throws Exception {
@@ -672,15 +676,12 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
         // Different files
         final File tfile1 = new File(tempDirFile, getName() + ".txt1");
-        tfile1.deleteOnExit();
         FileUtils.write(tfile1, "123\r");
 
         final File tfile2 = new File(tempDirFile, getName() + ".txt2");
-        tfile1.deleteOnExit();
         FileUtils.write(tfile2, "123\n");
 
         final File tfile3 = new File(tempDirFile, getName() + ".collection");
-        tfile3.deleteOnExit();
         FileUtils.write(tfile3, "123\r\n2");
 
         assertTrue(FileUtils.contentEqualsIgnoreEOL(tfile1, tfile1, null));
@@ -839,7 +840,25 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(expectedSize > 0, "Size > 0");
     }
 
-    // toURLs
+//   @Test public void testToURLs2() throws Exception {
+//        File[] files = new File[] {
+//            new File(temporaryFolder, "file1.txt"),
+//            null,
+//        };
+//        URL[] urls = FileUtils.toURLs(files);
+//
+//        assertEquals(files.length, urls.length);
+//        assertTrue(urls[0].toExternalForm().startsWith("file:"));
+//        assertTrue(urls[0].toExternalForm().indexOf("file1.txt") > 0);
+//        assertEquals(null, urls[1]);
+//    }
+//
+//   @Test public void testToURLs3() throws Exception {
+//        File[] files = null;
+//        URL[] urls = FileUtils.toURLs(files);
+//
+//        assertEquals(0, urls.length);
+//    }
 
     @Test
     public void testCopyDirectoryToDirectory_NonExistingDest() throws Exception {
@@ -885,26 +904,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
         FileUtils.deleteDirectory(destDir);
     }
 
-//   @Test public void testToURLs2() throws Exception {
-//        File[] files = new File[] {
-//            new File(temporaryFolder, "file1.txt"),
-//            null,
-//        };
-//        URL[] urls = FileUtils.toURLs(files);
-//
-//        assertEquals(files.length, urls.length);
-//        assertTrue(urls[0].toExternalForm().startsWith("file:"));
-//        assertTrue(urls[0].toExternalForm().indexOf("file1.txt") > 0);
-//        assertEquals(null, urls[1]);
-//    }
-//
-//   @Test public void testToURLs3() throws Exception {
-//        File[] files = null;
-//        URL[] urls = FileUtils.toURLs(files);
-//
-//        assertEquals(0, urls.length);
-//    }
-
     @Test
     public void testCopyDirectoryToExistingDest() throws Exception {
         if (!testFile1.getParentFile().exists()) {
@@ -946,8 +945,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(new File(destDir, "sub/A.txt").exists());
     }
 
-    // contentEquals
-
     /* Test for IO-141 */
     @Test
     public void testCopyDirectoryToGrandChild() throws Exception {
@@ -972,8 +969,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
         FileUtils.copyDirectoryToDirectory(dir, dir);
         assertEquals(1, LIST_WALKER.list(dir).size());
     }
-
-    // copyURLToFile
 
     @Test
     public void testCopyDirectoryToNonExistingDest() throws Exception {
@@ -1029,8 +1024,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertEquals(getLastModifiedMillis(testFile1), getLastModifiedMillis(destination), "Check last modified date preserved");
     }
 
-    // forceMkdir
-
     @Test
     public void testCopyFile1ToDir() throws Exception {
         final File directory = new File(tempDirFile, "subdir");
@@ -1061,8 +1054,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertEquals(testFile2Size, destination.length(), "Check Full copy");
         assertEquals(getLastModifiedMillis(testFile1) , getLastModifiedMillis(destination), "Check last modified date preserved");
     }
-
-    // sizeOfDirectory
 
     @Test
     public void testCopyFile2ToDir() throws Exception {
@@ -1189,8 +1180,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
                 () -> FileUtils.copyToDirectory(new File(tempDirFile, "doesNotExists"), tempDirFile));
     }
 
-    // copyFile
-
     @Test
     public void testCopyToDirectoryWithFileSourceIsNull() {
         assertThrows(NullPointerException.class, () -> FileUtils.copyToDirectory((File) null, tempDirFile));
@@ -1242,25 +1231,27 @@ public class FileUtilsTest extends AbstractTempDirTest {
     public void testCopyURLToFile() throws Exception {
         // Creates file
         final File file = new File(tempDirFile, getName());
-        file.deleteOnExit();
-
-        // Loads resource
-        final String resourceName = "/java/lang/Object.class";
-        FileUtils.copyURLToFile(getClass().getResource(resourceName), file);
-
-        // Tests that resuorce was copied correctly
-        try (InputStream fis = Files.newInputStream(file.toPath())) {
-            assertTrue(IOUtils.contentEquals(getClass().getResourceAsStream(resourceName), fis),
-                    "Content is not equal.");
-        }
+        assertContentMatchesAfterCopyURLToFileFor("/java/lang/Object.class", file);
         //TODO Maybe test copy to itself like for copyFile()
+    }
+
+    @Test
+    public void testCopyURLToFileCreatesParentDirs() throws Exception {
+        final File file = managedTempDirPath.resolve("subdir").resolve(getName()).toFile();
+        assertContentMatchesAfterCopyURLToFileFor("/java/lang/Object.class", file);
+    }
+
+    @Test
+    public void testCopyURLToFileReplacesExisting() throws Exception {
+        final File file = new File(tempDirFile, getName());
+        assertContentMatchesAfterCopyURLToFileFor("/java/lang/Object.class", file);
+        assertContentMatchesAfterCopyURLToFileFor("/java/lang/String.class", file);
     }
 
     @Test
     public void testCopyURLToFileWithTimeout() throws Exception {
         // Creates file
         final File file = new File(tempDirFile, "testCopyURLToFileWithTimeout");
-        file.deleteOnExit();
 
         // Loads resource
         final String resourceName = "/java/lang/Object.class";
@@ -1495,7 +1486,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
         // Creates test file
         final File testFile = new File(tempDirFile, getName());
-        testFile.deleteOnExit();
         testFile.createNewFile();
         assertTrue(testFile.exists(), "Test file does not exist.");
 
@@ -2489,7 +2479,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
         // Creates file
         file.createNewFile();
-        file.deleteOnExit();
 
         // New file
         assertEquals(0, FileUtils.sizeOf(file));
@@ -2513,7 +2502,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
         // Creates file
         file.createNewFile();
-        file.deleteOnExit();
 
         // New file
         assertEquals(BigInteger.ZERO, FileUtils.sizeOfAsBigInteger(file));
@@ -2564,7 +2552,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
         // Creates file
         file.createNewFile();
-        file.deleteOnExit();
 
         // Existing file
         assertThrows(IllegalArgumentException.class, () -> FileUtils.sizeOfDirectoryAsBigInteger(file));
@@ -2589,7 +2576,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
         } finally {
             IOUtils.closeQuietly(output);
         }
-        nonEmptyFile.deleteOnExit();
 
         assertEquals(TEST_DIRECTORY_SIZE_GT_ZERO_BI, FileUtils.sizeOfDirectoryAsBigInteger(file), "Unexpected directory size");
 

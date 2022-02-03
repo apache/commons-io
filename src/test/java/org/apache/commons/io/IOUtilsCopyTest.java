@@ -65,23 +65,6 @@ public class IOUtilsCopyTest {
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
     @Test
-    public void testCopy_inputStreamToOutputStream() throws Exception {
-        InputStream in = new ByteArrayInputStream(inData);
-        in = new ThrowOnCloseInputStream(in);
-
-        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
-
-        final int count = IOUtils.copy(in, out);
-
-        assertEquals(0, in.available(), "Not all bytes were read");
-        assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
-        assertEquals(inData.length,count);
-    }
-
-    @SuppressWarnings("resource") // 'in' is deliberately not closed
-    @Test
     public void testCopy_byteArrayOutputStreamToInputStream() throws Exception {
         final java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream();
         out.write(inData);
@@ -99,6 +82,23 @@ public class IOUtilsCopyTest {
     @Test
     public void testCopy_byteArrayOutputStreamToInputStream_nullOutputStream() {
         assertThrows(NullPointerException.class, () -> IOUtils.copy(null));
+    }
+
+    @SuppressWarnings("resource") // 'in' is deliberately not closed
+    @Test
+    public void testCopy_inputStreamToOutputStream() throws Exception {
+        InputStream in = new ByteArrayInputStream(inData);
+        in = new ThrowOnCloseInputStream(in);
+
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
+
+        final int count = IOUtils.copy(in, out);
+
+        assertEquals(0, in.available(), "Not all bytes were read");
+        assertEquals(inData.length, baout.size(), "Sizes differ");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
+        assertEquals(inData.length,count);
     }
 
     /**

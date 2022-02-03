@@ -175,15 +175,12 @@ public class PathUtilsContentEqualsTest {
 
         // Different files
         final Path objFile1 = Paths.get(temporaryFolder.getAbsolutePath(), getName() + ".object");
-        objFile1.toFile().deleteOnExit();
         PathUtils.copyFile(getClass().getResource("/java/lang/Object.class"), objFile1);
 
         final Path objFile1b = Paths.get(temporaryFolder.getAbsolutePath(), getName() + ".object2");
-        objFile1b.toFile().deleteOnExit();
         PathUtils.copyFile(getClass().getResource("/java/lang/Object.class"), objFile1b);
 
         final Path objFile2 = Paths.get(temporaryFolder.getAbsolutePath(), getName() + ".collection");
-        objFile2.toFile().deleteOnExit();
         PathUtils.copyFile(getClass().getResource("/java/util/Collection.class"), objFile2);
 
         assertFalse(PathUtils.fileContentEquals(objFile1, objFile2));

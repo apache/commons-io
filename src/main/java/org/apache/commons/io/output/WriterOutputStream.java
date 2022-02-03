@@ -26,6 +26,9 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
 
+import org.apache.commons.io.Charsets;
+import org.apache.commons.io.charset.CharsetDecoders;
+
 /**
  * {@link OutputStream} implementation that transforms a byte stream to a
  * character stream using a specified charset encoding and writes the resulting
@@ -164,15 +167,16 @@ public class WriterOutputStream extends OutputStream {
      *                         output buffer will only be flushed when it overflows or when
      *                         {@link #flush()} or {@link #close()} is called.
      */
-    public WriterOutputStream(final Writer writer, final Charset charset, final int bufferSize,
-                              final boolean writeImmediately) {
+    public WriterOutputStream(final Writer writer, final Charset charset, final int bufferSize, final boolean writeImmediately) {
+        // @formatter:off
         this(writer,
-             charset.newDecoder()
+            Charsets.toCharset(charset).newDecoder()
                     .onMalformedInput(CodingErrorAction.REPLACE)
                     .onUnmappableCharacter(CodingErrorAction.REPLACE)
                     .replaceWith("?"),
              bufferSize,
              writeImmediately);
+        // @formatter:on
     }
 
     /**
@@ -201,11 +205,10 @@ public class WriterOutputStream extends OutputStream {
      *                         {@link #flush()} or {@link #close()} is called.
      * @since 2.1
      */
-    public WriterOutputStream(final Writer writer, final CharsetDecoder decoder, final int bufferSize,
-                              final boolean writeImmediately) {
-        checkIbmJdkWithBrokenUTF16( decoder.charset());
+    public WriterOutputStream(final Writer writer, final CharsetDecoder decoder, final int bufferSize, final boolean writeImmediately) {
+        checkIbmJdkWithBrokenUTF16(CharsetDecoders.toCharsetDecoder(decoder).charset());
         this.writer = writer;
-        this.decoder = decoder;
+        this.decoder = CharsetDecoders.toCharsetDecoder(decoder);
         this.writeImmediately = writeImmediately;
         decoderOut = CharBuffer.allocate(bufferSize);
     }
@@ -236,7 +239,7 @@ public class WriterOutputStream extends OutputStream {
      */
     public WriterOutputStream(final Writer writer, final String charsetName, final int bufferSize,
                               final boolean writeImmediately) {
-        this(writer, Charset.forName(charsetName), bufferSize, writeImmediately);
+        this(writer, Charsets.toCharset(charsetName), bufferSize, writeImmediately);
     }
 
     /**

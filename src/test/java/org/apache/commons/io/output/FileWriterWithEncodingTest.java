@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 import java.nio.file.Files;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -136,6 +137,20 @@ public class FileWriterWithEncodingTest {
     @Test
     public void sameEncoding_null_Charset_constructor() throws Exception {
         try (final FileWriterWithEncoding writer = new FileWriterWithEncoding(file2, (Charset) null)) {
+            successfulRun(writer);
+        }
+    }
+
+    @Test
+    public void sameEncoding_null_CharsetEncoder_constructor() throws Exception {
+        try (final FileWriterWithEncoding writer = new FileWriterWithEncoding(file2.getPath(), (CharsetEncoder) null)) {
+            successfulRun(writer);
+        }
+    }
+
+    @Test
+    public void sameEncoding_null_CharsetName_constructor() throws Exception {
+        try (final FileWriterWithEncoding writer = new FileWriterWithEncoding(file2.getPath(), (String) null)) {
             successfulRun(writer);
         }
     }

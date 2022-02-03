@@ -271,7 +271,7 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-inline</artifactId>
-      <version>4.1.0</version>
+      <version>4.3.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -335,17 +335,17 @@ file comparators, endian transformation classes, and much more.
     <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-io/</commons.scmPubUrl>
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
     <commons.javadoc.java.link>${commons.javadoc8.java.link}</commons.javadoc.java.link>
-    <commons.javadoc.version>3.3.0</commons.javadoc.version>
+    <commons.javadoc.version>3.3.1</commons.javadoc.version>
     <commons.checkstyle-plugin.version>3.1.2</commons.checkstyle-plugin.version>
-    <checkstyle.impl.version>9.2</checkstyle.impl.version>
+    <checkstyle.impl.version>9.2.1</checkstyle.impl.version>
     <commons.jacoco.version>0.8.7</commons.jacoco.version>
     <commons.surefire.version>3.0.0-M5</commons.surefire.version>
     <commons.japicmp.version>0.15.3</commons.japicmp.version>
     <commons.enforcer.version>3.0.0</commons.enforcer.version>
     <commons.moditect.version>1.0.0.RC2</commons.moditect.version>
-    <spotbugs.plugin.version>4.5.0.0</spotbugs.plugin.version>
-    <spotbugs.impl.version>4.5.0</spotbugs.impl.version>
-    <jmh.version>1.33</jmh.version>
+    <commons.spotbugs.plugin.version>4.5.2.0</commons.spotbugs.plugin.version>
+    <commons.spotbugs.impl.version>4.5.3</commons.spotbugs.impl.version>
+    <jmh.version>1.34</jmh.version>
     <japicmp.skip>false</japicmp.skip>
     <jacoco.skip>${env.JACOCO_SKIP}</jacoco.skip>
     <commons.release.isDistModule>true</commons.release.isDistModule>
@@ -478,12 +478,12 @@ file comparators, endian transformation classes, and much more.
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${spotbugs.plugin.version}</version>
+        <version>${commons.spotbugs.plugin.version}</version>
         <dependencies>
           <dependency>
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs</artifactId>
-            <version>${spotbugs.impl.version}</version>
+            <version>${commons.spotbugs.impl.version}</version>
          </dependency>
         </dependencies>
         <configuration>
@@ -506,7 +506,7 @@ file comparators, endian transformation classes, and much more.
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${spotbugs.plugin.version}</version>
+        <version>${commons.spotbugs.plugin.version}</version>
         <configuration>
           <excludeFilterFile>${basedir}/spotbugs-exclude-filter.xml</excludeFilterFile>
         </configuration>

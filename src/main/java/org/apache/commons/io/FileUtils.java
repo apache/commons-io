@@ -341,7 +341,7 @@ public class FileUtils {
      * @see #forceDelete(File)
      */
     public static void cleanDirectory(final File directory) throws IOException {
-        IOConsumer.forEach(listFiles(directory, null), file -> forceDelete(file));
+        IOConsumer.forEach(listFiles(directory, null), FileUtils::forceDelete);
     }
 
     /**
@@ -354,7 +354,7 @@ public class FileUtils {
      * @see #forceDeleteOnExit(File)
      */
     private static void cleanDirectoryOnExit(final File directory) throws IOException {
-        IOConsumer.forEach(listFiles(directory, null), file -> forceDeleteOnExit(file));
+        IOConsumer.forEach(listFiles(directory, null), FileUtils::forceDeleteOnExit);
     }
 
     /**
@@ -1060,7 +1060,9 @@ public class FileUtils {
      */
     public static void copyURLToFile(final URL source, final File destination) throws IOException {
         try (final InputStream stream = source.openStream()) {
-            Files.copy(stream, destination.toPath());
+            final Path path = destination.toPath();
+            PathUtils.createParentDirectories(path);
+            Files.copy(stream, path, StandardCopyOption.REPLACE_EXISTING);
         }
     }
 
@@ -2449,7 +2451,7 @@ public class FileUtils {
      * @since 2.12.0
      */
     public static OutputStream newOutputStream(final File file, final boolean append) throws IOException {
-        return PathUtils.newOutputStream(file.toPath(), append);
+        return PathUtils.newOutputStream(Objects.requireNonNull(file, "file").toPath(), append);
     }
 
     /**

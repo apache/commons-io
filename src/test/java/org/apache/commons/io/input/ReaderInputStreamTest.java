@@ -53,19 +53,6 @@ public class ReaderInputStreamTest {
         LARGE_TEST_STRING = buffer.toString();
     }
 
-    private final Random random = new Random();
-
-    @ParameterizedTest
-    @MethodSource("charsetData")
-    public void testCharsetEncoderFlush(final String charsetName, final String data) throws IOException {
-        final Charset charset = Charset.forName(charsetName);
-        final byte[] expected = data.getBytes(charset);
-        try (InputStream in = new ReaderInputStream(new StringReader(data), charset)) {
-            final byte[] actual = IOUtils.toByteArray(in);
-            assertEquals(Arrays.toString(expected), Arrays.toString(actual));
-        }
-    }
-
     static Stream<Arguments> charsetData() {
         // @formatter:off
         return Stream.of(
@@ -75,12 +62,7 @@ public class ReaderInputStreamTest {
         // @formatter:on
     }
 
-    @Test
-    public void testBufferTooSmall() throws IOException {
-        assertThrows(IllegalArgumentException.class, () -> new ReaderInputStream(new StringReader("\uD800"), StandardCharsets.UTF_8, -1));
-        assertThrows(IllegalArgumentException.class, () -> new ReaderInputStream(new StringReader("\uD800"), StandardCharsets.UTF_8, 0));
-        assertThrows(IllegalArgumentException.class, () -> new ReaderInputStream(new StringReader("\uD800"), StandardCharsets.UTF_8, 1));
-    }
+    private final Random random = new Random();
 
     @Test
     @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
@@ -88,6 +70,24 @@ public class ReaderInputStreamTest {
         final Charset charset = StandardCharsets.UTF_8;
         try (InputStream in = new ReaderInputStream(new StringReader("\uD800"), charset, (int) ReaderInputStream.minBufferSize(charset.newEncoder()))) {
             in.read();
+        }
+    }
+
+    @Test
+    public void testBufferTooSmall() throws IOException {
+        assertThrows(IllegalArgumentException.class, () -> new ReaderInputStream(new StringReader("\uD800"), StandardCharsets.UTF_8, -1));
+        assertThrows(IllegalArgumentException.class, () -> new ReaderInputStream(new StringReader("\uD800"), StandardCharsets.UTF_8, 0));
+        assertThrows(IllegalArgumentException.class, () -> new ReaderInputStream(new StringReader("\uD800"), StandardCharsets.UTF_8, 1));
+    }
+
+    @ParameterizedTest
+    @MethodSource("charsetData")
+    public void testCharsetEncoderFlush(final String charsetName, final String data) throws IOException {
+        final Charset charset = Charset.forName(charsetName);
+        final byte[] expected = data.getBytes(charset);
+        try (InputStream in = new ReaderInputStream(new StringReader(data), charset)) {
+            final byte[] actual = IOUtils.toByteArray(in);
+            assertEquals(Arrays.toString(expected), Arrays.toString(actual));
         }
     }
 
@@ -117,6 +117,39 @@ public class ReaderInputStreamTest {
         final CharsetEncoder encoder = charset.newEncoder().onMalformedInput(CodingErrorAction.REPORT);
         try (InputStream in = new ReaderInputStream(new StringReader("\uD800aa"), encoder, (int) ReaderInputStream.minBufferSize(charset.newEncoder()))) {
             assertThrows(CharacterCodingException.class, in::read);
+        }
+    }
+
+    @Test
+    @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
+    public void testConstructNullCharset() throws IOException {
+        final Charset charset = Charset.defaultCharset();
+        final Charset encoder = null;
+        try (ReaderInputStream in = new ReaderInputStream(new StringReader("ABC"), encoder, (int) ReaderInputStream.minBufferSize(charset.newEncoder()))) {
+            IOUtils.toByteArray(in);
+            assertEquals(Charset.defaultCharset(), in.getCharsetEncoder().charset());
+        }
+    }
+
+    @Test
+    @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
+    public void testConstructNullCharsetEncoder() throws IOException {
+        final Charset charset = Charset.defaultCharset();
+        final CharsetEncoder encoder = null;
+        try (ReaderInputStream in = new ReaderInputStream(new StringReader("ABC"), encoder, (int) ReaderInputStream.minBufferSize(charset.newEncoder()))) {
+            IOUtils.toByteArray(in);
+            assertEquals(Charset.defaultCharset(), in.getCharsetEncoder().charset());
+        }
+    }
+
+    @Test
+    @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
+    public void testConstructNullCharsetNameEncoder() throws IOException {
+        final Charset charset = Charset.defaultCharset();
+        final String encoder = null;
+        try (ReaderInputStream in = new ReaderInputStream(new StringReader("ABC"), encoder, (int) ReaderInputStream.minBufferSize(charset.newEncoder()))) {
+            IOUtils.toByteArray(in);
+            assertEquals(Charset.defaultCharset(), in.getCharsetEncoder().charset());
         }
     }
 

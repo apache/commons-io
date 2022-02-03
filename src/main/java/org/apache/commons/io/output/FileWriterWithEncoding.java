@@ -59,20 +59,20 @@ public class FileWriterWithEncoding extends ProxyWriter {
      */
     private static Writer initWriter(final File file, final Object encoding, final boolean append) throws IOException {
         Objects.requireNonNull(file, "file");
-        OutputStream stream = null;
+        OutputStream outputStream = null;
         final boolean fileExistedAlready = file.exists();
         try {
-            stream = FileUtils.newOutputStream(file, append);
+            outputStream = FileUtils.newOutputStream(file, append);
             if (encoding == null || encoding instanceof Charset) {
-                return new OutputStreamWriter(stream, Charsets.toCharset((Charset) encoding));
+                return new OutputStreamWriter(outputStream, Charsets.toCharset((Charset) encoding));
             }
             if (encoding instanceof CharsetEncoder) {
-                return new OutputStreamWriter(stream, (CharsetEncoder) encoding);
+                return new OutputStreamWriter(outputStream, (CharsetEncoder) encoding);
             }
-            return new OutputStreamWriter(stream, (String) encoding);
+            return new OutputStreamWriter(outputStream, (String) encoding);
         } catch (final IOException | RuntimeException ex) {
             try {
-                IOUtils.close(stream);
+                IOUtils.close(outputStream);
             } catch (final IOException e) {
                 ex.addSuppressed(e);
             }

@@ -51,21 +51,6 @@ public class BrokenOutputStreamTest {
     }
 
     @Test
-    public void testWriteByteArray() {
-        assertEquals(exception, assertThrows(IOException.class, () -> stream.write(new byte[1])));
-    }
-
-    @Test
-    public void testWriteByteArrayIndexed() {
-        assertEquals(exception, assertThrows(IOException.class, () -> stream.write(new byte[1], 0, 1)));
-    }
-
-    @Test
-    public void testWriteInt() {
-        assertEquals(exception, assertThrows(IOException.class, () -> stream.write(1)));
-    }
-
-    @Test
     public void testTryWithResources() {
         final IOException thrown = assertThrows(IOException.class, () -> {
             try (OutputStream newStream = new BrokenOutputStream()) {
@@ -78,6 +63,21 @@ public class BrokenOutputStreamTest {
         assertEquals(1, suppressed.length);
         assertEquals(IOException.class, suppressed[0].getClass());
         assertEquals("Broken output stream", suppressed[0].getMessage());
+    }
+
+    @Test
+    public void testWriteByteArray() {
+        assertEquals(exception, assertThrows(IOException.class, () -> stream.write(new byte[1])));
+    }
+
+    @Test
+    public void testWriteByteArrayIndexed() {
+        assertEquals(exception, assertThrows(IOException.class, () -> stream.write(new byte[1], 0, 1)));
+    }
+
+    @Test
+    public void testWriteInt() {
+        assertEquals(exception, assertThrows(IOException.class, () -> stream.write(1)));
     }
 
 }

@@ -45,12 +45,12 @@ import org.apache.commons.io.IOCase;
 public class FileFilterUtils {
 
     /* Constructed on demand and then cached */
-    private static final IOFileFilter cvsFilter = notFileFilter(
+    private static final IOFileFilter CVS_FILTER = notFileFilter(
             and(directoryFileFilter(), nameFileFilter("CVS")));
 
 
     /* Constructed on demand and then cached */
-    private static final IOFileFilter svnFilter = notFileFilter(
+    private static final IOFileFilter SVN_FILTER = notFileFilter(
             and(directoryFileFilter(), nameFileFilter(".svn")));
 
     /**
@@ -518,7 +518,7 @@ public class FileFilterUtils {
      * @since 1.1 (method existed but had bug in 1.0)
      */
     public static IOFileFilter makeCVSAware(final IOFileFilter filter) {
-        return filter == null ? cvsFilter : and(filter, cvsFilter);
+        return filter == null ? CVS_FILTER : and(filter, CVS_FILTER);
     }
 
     /**
@@ -561,7 +561,7 @@ public class FileFilterUtils {
      * @since 1.1
      */
     public static IOFileFilter makeSVNAware(final IOFileFilter filter) {
-        return filter == null ? svnFilter : and(filter, svnFilter);
+        return filter == null ? SVN_FILTER : and(filter, SVN_FILTER);
     }
 
     /**
