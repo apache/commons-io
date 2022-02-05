@@ -301,4 +301,10 @@ public class IOCaseTest {
         assertEquals("System", IOCase.SYSTEM.toString());
     }
 
+    @Test
+    public void test_isCaseSensitive_static() {
+        assertTrue(IOCase.isCaseSensitive(IOCase.SENSITIVE));
+        assertFalse(IOCase.isCaseSensitive(IOCase.INSENSITIVE));
+        assertEquals(!WINDOWS, IOCase.isCaseSensitive(IOCase.SYSTEM));
+    }
 }
