@@ -16,8 +16,6 @@
  */
 package org.apache.commons.io.filefilter;
 
-import org.apache.commons.io.IOCase;
-
 import java.io.File;
 import java.io.Serializable;
 import java.nio.file.FileVisitResult;
@@ -25,6 +23,8 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.function.Function;
 import java.util.regex.Pattern;
+
+import org.apache.commons.io.IOCase;
 
 /**
  * Filters files using supplied regular expression(s).
