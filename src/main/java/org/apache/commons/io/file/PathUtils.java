@@ -53,6 +53,7 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.chrono.ChronoZonedDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -176,13 +177,13 @@ public final class PathUtils {
      * @since 2.9.0
      */
     public static final LinkOption[] NOFOLLOW_LINK_OPTION_ARRAY = {LinkOption.NOFOLLOW_LINKS};
-    
+
     /**
      * A LinkOption used to follow link in this class, the inverse of {@link LinkOption#NOFOLLOW_LINKS}.
      *
      * @since 2.12.0
      */
-    public static final LinkOption FOLLOW_LINKS = null;
+    static final LinkOption NULL_LINK_OPTION = null;
 
     /**
      * Empty {@link OpenOption} array.
@@ -362,7 +363,7 @@ public final class PathUtils {
         return parent == null ? null : Files.createDirectories(parent, attrs);
     }
 
-    private static Path readIfSymbolicLink(Path path) throws IOException {
+    private static Path readIfSymbolicLink(final Path path) throws IOException {
         return Files.isSymbolicLink(path) ? Files.readSymbolicLink(path) : path;
     }
 
@@ -650,7 +651,8 @@ public final class PathUtils {
     }
 
     private static boolean exists(final Path path, final LinkOption... options) {
-        return Files.exists(Objects.requireNonNull(path, "path"), options);
+        Objects.requireNonNull(path, "path");
+        return options != null ? Files.exists(path, options) : Files.exists(path);
     }
 
     /**
@@ -1087,14 +1089,19 @@ public final class PathUtils {
      * @since 2.12.0
      */
     public static OutputStream newOutputStream(final Path path, final boolean append) throws IOException {
-        Objects.requireNonNull(path, "path");
-        if (exists(path)) {
+        return newOutputStream(path, EMPTY_LINK_OPTION_ARRAY, append ? OPEN_OPTIONS_APPEND : OPEN_OPTIONS_TRUNCATE);
+    }
+
+    static OutputStream newOutputStream(final Path path, final LinkOption[] linkOptions, final OpenOption... openOptions) throws IOException {
+        if (exists(path, linkOptions)) {
             // requireFile(path, "path");
             // requireCanWrite(path, "path");
         } else {
-            createParentDirectories(path);
+            createParentDirectories(path, linkOptions != null && linkOptions.length > 0 ? linkOptions[0] : NULL_LINK_OPTION);
         }
-        return Files.newOutputStream(path, append ? OPEN_OPTIONS_APPEND : OPEN_OPTIONS_TRUNCATE);
+        final List<OpenOption> list = new ArrayList<>(Arrays.asList(openOptions != null ? openOptions : EMPTY_OPEN_OPTION_ARRAY));
+        list.addAll(Arrays.asList(linkOptions != null ? linkOptions : EMPTY_LINK_OPTION_ARRAY));
+        return Files.newOutputStream(path, list.toArray(EMPTY_OPEN_OPTION_ARRAY));
     }
 
     private static boolean notExists(final Path path, final LinkOption... options) {

@@ -251,6 +251,14 @@ public class FileUtilsTest extends AbstractTempDirTest {
         FileUtils.writeStringToFile(file6, "File 6 in grandChild2", "UTF8");
     }
 
+    private Path createTempSymlinkedRelativeDir() throws IOException {
+        final Path targetDir = tempDirPath.resolve("subdir");
+        final Path symlinkDir = tempDirPath.resolve("symlinked-dir");
+        Files.createDirectory(targetDir);
+        Files.createSymbolicLink(symlinkDir, targetDir);
+        return symlinkDir;
+    }
+
     private long getLastModifiedMillis(final File file) throws IOException {
         return FileUtils.lastModified(file);
     }
@@ -388,6 +396,17 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final File directory = new File(tempDirFile, "subdir");
         directory.mkdirs();
         assertThrows(IllegalArgumentException.class, () -> FileUtils.openOutputStream(directory));
+    }
+
+    @Test
+    public void test_openOutputStream_intoExistingSymlinkedDir() throws Exception {
+        final Path symlinkedDir = createTempSymlinkedRelativeDir();
+
+        final File file = symlinkedDir.resolve("test.txt").toFile();
+        try (FileOutputStream out = FileUtils.openOutputStream(file)) {
+            out.write(0);
+        }
+        assertTrue(file.exists());
     }
 
     @Test
@@ -823,23 +842,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
         FileUtils.deleteDirectory(target);
     }
 
-    /* Test for IO-141 */
-    @Test
-    public void testCopyDirectoryToChild() throws Exception {
-        final File grandParentDir = new File(tempDirFile, "grandparent");
-        final File parentDir = new File(grandParentDir, "parent");
-        final File childDir = new File(parentDir, "child");
-        createFilesForTestCopyDirectory(grandParentDir, parentDir, childDir);
-
-        final long expectedCount = LIST_WALKER.list(grandParentDir).size() + LIST_WALKER.list(parentDir).size();
-        final long expectedSize = FileUtils.sizeOfDirectory(grandParentDir) + FileUtils.sizeOfDirectory(parentDir);
-        FileUtils.copyDirectory(parentDir, childDir);
-        assertEquals(expectedCount, LIST_WALKER.list(grandParentDir).size());
-        assertEquals(expectedSize, FileUtils.sizeOfDirectory(grandParentDir));
-        assertTrue(expectedCount > 0, "Count > 0");
-        assertTrue(expectedSize > 0, "Size > 0");
-    }
-
 //   @Test public void testToURLs2() throws Exception {
 //        File[] files = new File[] {
 //            new File(temporaryFolder, "file1.txt"),
@@ -859,6 +861,23 @@ public class FileUtilsTest extends AbstractTempDirTest {
 //
 //        assertEquals(0, urls.length);
 //    }
+
+    /* Test for IO-141 */
+    @Test
+    public void testCopyDirectoryToChild() throws Exception {
+        final File grandParentDir = new File(tempDirFile, "grandparent");
+        final File parentDir = new File(grandParentDir, "parent");
+        final File childDir = new File(parentDir, "child");
+        createFilesForTestCopyDirectory(grandParentDir, parentDir, childDir);
+
+        final long expectedCount = LIST_WALKER.list(grandParentDir).size() + LIST_WALKER.list(parentDir).size();
+        final long expectedSize = FileUtils.sizeOfDirectory(grandParentDir) + FileUtils.sizeOfDirectory(parentDir);
+        FileUtils.copyDirectory(parentDir, childDir);
+        assertEquals(expectedCount, LIST_WALKER.list(grandParentDir).size());
+        assertEquals(expectedSize, FileUtils.sizeOfDirectory(grandParentDir));
+        assertTrue(expectedCount > 0, "Count > 0");
+        assertTrue(expectedSize > 0, "Size > 0");
+    }
 
     @Test
     public void testCopyDirectoryToDirectory_NonExistingDest() throws Exception {
@@ -1339,6 +1358,8 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertThrows(IllegalArgumentException.class, () -> FileUtils.deleteDirectory(testFile1));
     }
 
+    // copyToDirectory
+
     @Test
     public void testDeleteQuietlyDir() throws IOException {
         final File testDirectory = new File(tempDirFile, "testDeleteQuietlyDir");
@@ -1362,8 +1383,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertFalse(testDirectory.exists(), "Check No Exist");
         assertFalse(testFile.exists(), "Check No Exist");
     }
-
-    // copyToDirectory
 
     @Test
     public void testDeleteQuietlyFile() throws IOException {
@@ -2428,6 +2447,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertEquals(31, data[2]);
     }
 
+
     @Test
     public void testReadFileToStringWithDefaultEncoding() throws Exception {
         final File file = new File(tempDirFile, "read.obj");
@@ -2439,7 +2459,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final String data = FileUtils.readFileToString(file);
         assertEquals("Hello /u1234", data);
     }
-
 
     @Test
     public void testReadFileToStringWithEncoding() throws Exception {
@@ -2872,6 +2891,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertEquals(expected, actual);
     }
 
+
     @Test
     public void testWriteLines_3argsWithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
@@ -2887,7 +2907,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
-
 
     @Test
     public void testWriteLines_4arg() throws Exception {
@@ -3046,34 +3065,29 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testWriteStringToFile1() throws Exception {
-        final File file = new File(tempDirFile, "write.txt");
-        FileUtils.writeStringToFile(file, "Hello /u1234", "UTF8");
-        final byte[] text = "Hello /u1234".getBytes(StandardCharsets.UTF_8);
-        TestUtils.assertEqualContent(text, file);
-    }
-
-    @Test
-    public void testWriteStringToFile2() throws Exception {
-        final File file = new File(tempDirFile, "write.txt");
-        FileUtils.writeStringToFile(file, "Hello /u1234", (String) null);
-        final byte[] text = "Hello /u1234".getBytes();
-        TestUtils.assertEqualContent(text, file);
-    }
-
-    @Test
-    public void testWriteStringToFile3() throws Exception {
-        final File file = new File(tempDirFile, "write.txt");
-        FileUtils.writeStringToFile(file, "Hello /u1234", (Charset) null);
-        final byte[] text = "Hello /u1234".getBytes();
-        TestUtils.assertEqualContent(text, file);
-    }
-
-    @Test
-    public void testWriteStringToFile4() throws Exception {
+    public void testWriteStringToFileIntoNonExistentSubdir() throws Exception {
         final File file = new File(tempDirFile, "subdir/write.txt");
         FileUtils.writeStringToFile(file, "Hello /u1234", (Charset) null);
         final byte[] text = "Hello /u1234".getBytes();
+        TestUtils.assertEqualContent(text, file);
+    }
+
+    @Test
+    public void testWriteStringToFileIntoSymlinkedDir() throws Exception {
+        final Path symlinkDir = createTempSymlinkedRelativeDir();
+
+        final File file = symlinkDir.resolve("file").toFile();
+        FileUtils.writeStringToFile(file, "Hello /u1234", StandardCharsets.UTF_8);
+
+        final byte[] text = "Hello /u1234".getBytes();
+        TestUtils.assertEqualContent(text, file);
+    }
+
+    @Test
+    public void testWriteStringToFileWithCharset() throws Exception {
+        final File file = new File(tempDirFile, "write.txt");
+        FileUtils.writeStringToFile(file, "Hello /u1234", "UTF8");
+        final byte[] text = "Hello /u1234".getBytes(StandardCharsets.UTF_8);
         TestUtils.assertEqualContent(text, file);
     }
 
@@ -3100,6 +3114,22 @@ public class FileUtilsTest extends AbstractTempDirTest {
                 + "this is brand new data";
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testWriteStringToFileWithNullCharset() throws Exception {
+        final File file = new File(tempDirFile, "write.txt");
+        FileUtils.writeStringToFile(file, "Hello /u1234", (Charset) null);
+        final byte[] text = "Hello /u1234".getBytes();
+        TestUtils.assertEqualContent(text, file);
+    }
+
+    @Test
+    public void testWriteStringToFileWithNullStringCharset() throws Exception {
+        final File file = new File(tempDirFile, "write.txt");
+        FileUtils.writeStringToFile(file, "Hello /u1234", (String) null);
+        final byte[] text = "Hello /u1234".getBytes();
+        TestUtils.assertEqualContent(text, file);
     }
 
     @Test

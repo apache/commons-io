@@ -33,6 +33,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.DosFileAttributeView;
@@ -69,7 +70,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
      * <li>tempDirPath/subdir</li>
      * <li>tempDirPath/symlinked-dir -> tempDirPath/subdir</li>
      * </ol>
-     * 
+     *
      * @return Path to tempDirPath/subdir
      * @throws IOException if an I/O error occurs or the parent directory does not exist.
      */
@@ -129,7 +130,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
     public void testCopyDirectoryForDifferentFilesystemsWithRelativePath() throws IOException {
         final Path archivePath = Paths.get(TEST_JAR_PATH);
         try (final FileSystem archive = openArchive(archivePath, false);
-                final FileSystem targetArchive = openArchive(tempDirPath.resolve(TEST_JAR_NAME), true)) {
+            final FileSystem targetArchive = openArchive(tempDirPath.resolve(TEST_JAR_NAME), true)) {
             final Path targetDir = targetArchive.getPath("targetDir");
             Files.createDirectory(targetDir);
             // relative jar -> relative dir
@@ -183,7 +184,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
     public void testCreateDirectoriesSymlink() throws IOException {
         final Path symlinkedDir = createTempSymlinkedRelativeDir();
         final String leafDirName = "child";
-        final Path newDirFollowed = PathUtils.createParentDirectories(symlinkedDir.resolve(leafDirName), PathUtils.FOLLOW_LINKS);
+        final Path newDirFollowed = PathUtils.createParentDirectories(symlinkedDir.resolve(leafDirName), PathUtils.NULL_LINK_OPTION);
         assertEquals(Files.readSymbolicLink(symlinkedDir), newDirFollowed);
     }
 
@@ -279,14 +280,18 @@ public class PathUtilsTest extends AbstractTempDirTest {
     public void testNewOutputStreamNewFileInsideExistingSymlinkedDir() throws IOException {
         final Path symlinkDir = createTempSymlinkedRelativeDir();
         final Path file = symlinkDir.resolve("test.txt");
-        assertThrowsExactly(FileAlreadyExistsException.class, () -> PathUtils.newOutputStream(file, false));
-    }
-
-    @Test
-    public void testNewOutputStreamNewFileInsideExistingSymlinkedDirFollow() throws IOException {
-        final Path symlinkDir = createTempSymlinkedRelativeDir();
-        final Path file = symlinkDir.resolve("test.txt");
-        assertThrowsExactly(FileAlreadyExistsException.class, () -> PathUtils.newOutputStream(file, false));
+        try (OutputStream outputStream = PathUtils.newOutputStream(file, new LinkOption[] {})) {
+            // empty
+        }
+        try (OutputStream outputStream = PathUtils.newOutputStream(file, null)) {
+            // empty
+        }
+        try (OutputStream outputStream = PathUtils.newOutputStream(file, true)) {
+            // empty
+        }
+        try (OutputStream outputStream = PathUtils.newOutputStream(file, false)) {
+            // empty
+        }
     }
 
     @Test
