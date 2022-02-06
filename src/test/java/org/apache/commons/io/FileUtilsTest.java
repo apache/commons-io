@@ -190,19 +190,8 @@ public class FileUtilsTest extends AbstractTempDirTest {
         }
     }
 
-    private void createCircularOsSymLink(final String linkName, final String targetName) throws IOException {
-        if (FilenameUtils.isSystemWindows()) {
-            // Windows
-            try {
-                Runtime.getRuntime().exec("mklink /D " + linkName + " " + targetName);
-            } catch (final IOException ioe) {
-                // So that tests run in FAT filesystems don't fail
-                ioe.printStackTrace();
-            }
-        } else {
-            // Not Windows, assume Linux
-            Runtime.getRuntime().exec("ln -s " + targetName + " " + linkName);
-        }
+    private Path createCircularOsSymLink(final String linkName, final String targetName) throws IOException {
+        return Files.createSymbolicLink(Paths.get(linkName), Paths.get(targetName));
     }
 
     /**
