@@ -20,6 +20,7 @@ package org.apache.commons.io.file;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
@@ -28,6 +29,7 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -60,6 +62,14 @@ public class PathUtilsTest extends AbstractTempDirTest {
     private static final String TEST_JAR_PATH = "src/test/resources/org/apache/commons/io/test.jar";
 
     private static final String PATH_FIXTURE = "NOTICE.txt";
+
+    private Path createTempSymlinkedRelativeDir() throws IOException {
+        final Path targetDir = tempDirPath.resolve("subdir");
+        final Path symlinkDir = tempDirPath.resolve("symlinked-dir");
+        Files.createDirectory(targetDir);
+        Files.createSymbolicLink(symlinkDir, targetDir);
+        return symlinkDir;
+    }
 
     private FileSystem openArchive(final Path p, final boolean createNew) throws IOException {
         if (createNew) {
@@ -160,6 +170,12 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testCreateDirectoriesWithClashingSymlink() throws IOException {
+        final Path symlinkedDir = createTempSymlinkedRelativeDir();
+        assertThrowsExactly(FileAlreadyExistsException.class, () -> PathUtils.createParentDirectories(symlinkedDir.resolve("child")));
+    }
+
+    @Test
     public void testGetTempDirectory() {
         final Path tempDirectory = Paths.get(System.getProperty("java.io.tmpdir"));
         assertEquals(tempDirectory, PathUtils.getTempDirectory());
@@ -184,7 +200,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
         try {
             Files.getPosixFilePermissions(PathUtils.current());
             isPosix = true;
-        } catch (UnsupportedOperationException e) {
+        } catch (final UnsupportedOperationException e) {
             isPosix = false;
         }
         assertEquals(isPosix, PathUtils.isPosix(PathUtils.current()));
@@ -242,12 +258,20 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testNewOutputStreamNewFileInsideExistingSymlinkedDir() throws IOException {
+        final Path symlinkDir = createTempSymlinkedRelativeDir();
+
+        final Path file = symlinkDir.resolve("test.txt");
+        assertThrowsExactly(FileAlreadyExistsException.class, () -> PathUtils.newOutputStream(file, false));
+    }
+
+    @Test
     public void testReadAttributesPosix() throws IOException {
         boolean isPosix;
         try {
             Files.getPosixFilePermissions(PathUtils.current());
             isPosix = true;
-        } catch (UnsupportedOperationException e) {
+        } catch (final UnsupportedOperationException e) {
             isPosix = false;
         }
         assertEquals(isPosix, PathUtils.readAttributes(PathUtils.current(), PosixFileAttributes.class) != null);
