@@ -288,6 +288,13 @@ public class IOCaseTest {
     }
 
     @Test
+    public void test_isCaseSensitive_static() {
+        assertTrue(IOCase.isCaseSensitive(IOCase.SENSITIVE));
+        assertFalse(IOCase.isCaseSensitive(IOCase.INSENSITIVE));
+        assertEquals(!WINDOWS, IOCase.isCaseSensitive(IOCase.SYSTEM));
+    }
+
+    @Test
     public void test_serialization() throws Exception {
         assertSame(IOCase.SENSITIVE, serialize(IOCase.SENSITIVE));
         assertSame(IOCase.INSENSITIVE, serialize(IOCase.INSENSITIVE));
@@ -299,12 +306,5 @@ public class IOCaseTest {
         assertEquals("Sensitive", IOCase.SENSITIVE.toString());
         assertEquals("Insensitive", IOCase.INSENSITIVE.toString());
         assertEquals("System", IOCase.SYSTEM.toString());
-    }
-
-    @Test
-    public void test_isCaseSensitive_static() {
-        assertTrue(IOCase.isCaseSensitive(IOCase.SENSITIVE));
-        assertFalse(IOCase.isCaseSensitive(IOCase.INSENSITIVE));
-        assertEquals(!WINDOWS, IOCase.isCaseSensitive(IOCase.SYSTEM));
     }
 }

@@ -144,6 +144,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-484" dev="ggregory" type="fix" due-to="Arturo Bernal">
         Change to uppercase variable constant. #323.
       </action>
+      <action issue="IO-484" dev="ggregory" type="fix" due-to="David Huang, Gary Gregory">
+        IOCase.isCaseSensitive(IOCase) result is backward #325.
+      </action>
       <!-- ADD -->
       <action issue="IO-726" dev="ggregory" type="fix" due-to="shollander, Gary Gregory">
         Add MemoryMappedFileInputStream #215.
