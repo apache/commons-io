@@ -67,7 +67,7 @@ public class DeletingPathVisitor extends CountingPathVisitor {
      * @since 2.8.0
      */
     public DeletingPathVisitor(final PathCounters pathCounter, final DeleteOption[] deleteOption, final String... skip) {
-        this(pathCounter, PathUtils.NOFOLLOW_LINK_OPTION_ARRAY, deleteOption, skip);
+        this(pathCounter, PathUtils.noFollowLinkOptionArray(), deleteOption, skip);
     }
 
     /**
@@ -86,7 +86,7 @@ public class DeletingPathVisitor extends CountingPathVisitor {
         this.skip = temp;
         this.overrideReadOnly = StandardDeleteOption.overrideReadOnly(deleteOption);
         // TODO Files.deleteIfExists() never follows links, so use LinkOption.NOFOLLOW_LINKS in other calls to Files.
-        this.linkOptions = linkOptions == null ? PathUtils.NOFOLLOW_LINK_OPTION_ARRAY : linkOptions.clone();
+        this.linkOptions = linkOptions == null ? PathUtils.noFollowLinkOptionArray() : linkOptions.clone();
     }
 
     /**

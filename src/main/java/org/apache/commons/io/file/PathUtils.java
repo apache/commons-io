@@ -175,7 +175,9 @@ public final class PathUtils {
      * {@link LinkOption} array for {@link LinkOption#NOFOLLOW_LINKS}.
      *
      * @since 2.9.0
+     * @deprecated Use {@link #noFollowLinkOptionArray()}.
      */
+    @Deprecated
     public static final LinkOption[] NOFOLLOW_LINK_OPTION_ARRAY = {LinkOption.NOFOLLOW_LINKS};
 
     /**
@@ -196,6 +198,13 @@ public final class PathUtils {
      * @since 2.9.0
      */
     public static final Path[] EMPTY_PATH_ARRAY = {};
+
+    /**
+     * Does allow to instantiate.
+     */
+    private PathUtils() {
+        // do not instantiate.
+    }
 
     /**
      * Accumulates file tree information in a {@link AccumulatorPathVisitor}.
@@ -363,10 +372,6 @@ public final class PathUtils {
         return parent == null ? null : Files.createDirectories(parent, attrs);
     }
 
-    private static Path readIfSymbolicLink(final Path path) throws IOException {
-        return Files.isSymbolicLink(path) ? Files.readSymbolicLink(path) : path;
-    }
-
     /**
      * Gets the current directory.
      *
@@ -463,7 +468,7 @@ public final class PathUtils {
      * @since 2.8.0
      */
     public static PathCounters deleteDirectory(final Path directory, final DeleteOption... deleteOptions) throws IOException {
-        final LinkOption[] linkOptions = PathUtils.NOFOLLOW_LINK_OPTION_ARRAY;
+        final LinkOption[] linkOptions = PathUtils.noFollowLinkOptionArray();
         // POSIX ops will noop on non-POSIX.
         return withPosixFileAttributes(getParent(directory), linkOptions, overrideReadOnly(deleteOptions),
             pfa -> visitFileTree(new DeletingPathVisitor(Counters.longPathCounters(), linkOptions, deleteOptions), directory).getPathCounters());
@@ -507,7 +512,7 @@ public final class PathUtils {
      */
     public static PathCounters deleteFile(final Path file, final DeleteOption... deleteOptions) throws IOException {
         // Files.deleteIfExists() never follows links, so use LinkOption.NOFOLLOW_LINKS in other calls to Files.
-        return deleteFile(file, NOFOLLOW_LINK_OPTION_ARRAY, deleteOptions);
+        return deleteFile(file, noFollowLinkOptionArray(), deleteOptions);
     }
 
     /**
@@ -1104,6 +1109,13 @@ public final class PathUtils {
         return Files.newOutputStream(path, list.toArray(EMPTY_OPEN_OPTION_ARRAY));
     }
 
+    /**
+     * @return the nofollowLinkOptionArray
+     */
+    public static LinkOption[] noFollowLinkOptionArray() {
+        return NOFOLLOW_LINK_OPTION_ARRAY.clone();
+    }
+
     private static boolean notExists(final Path path, final LinkOption... options) {
         return Files.notExists(Objects.requireNonNull(path, "path"), options);
     }
@@ -1197,6 +1209,10 @@ public final class PathUtils {
      */
     public static DosFileAttributes readDosFileAttributes(final Path path, final LinkOption... options) {
         return readAttributes(path, DosFileAttributes.class, options);
+    }
+
+    private static Path readIfSymbolicLink(final Path path) throws IOException {
+        return Files.isSymbolicLink(path) ? Files.readSymbolicLink(path) : path;
     }
 
     /**
@@ -1685,13 +1701,6 @@ public final class PathUtils {
         Objects.requireNonNull(charSequence, "charSequence");
         Files.write(path, String.valueOf(charSequence).getBytes(Charsets.toCharset(charset)), openOptions);
         return path;
-    }
-
-    /**
-     * Does allow to instantiate.
-     */
-    private PathUtils() {
-        // do not instantiate.
     }
 
 }
