@@ -58,11 +58,12 @@ public class CountingInputStream extends ProxyInputStream {
     }
 
     /**
-     * The number of bytes that have passed through this stream.
+     * Gets number of bytes that have passed through this stream.
      * <p>
      * NOTE: This method is an alternative for {@code getCount()}
      * and was added because that method returns an integer which will
      * result in incorrect count for files over 2GB.
+     * </p>
      *
      * @return the number of bytes accumulated
      * @since 1.3
@@ -72,11 +73,12 @@ public class CountingInputStream extends ProxyInputStream {
     }
 
     /**
-     * The number of bytes that have passed through this stream.
+     * Gets number of bytes that have passed through this stream.
      * <p>
      * NOTE: From v1.3 this method throws an ArithmeticException if the
      * count is greater than can be expressed by an {@code int}.
      * See {@link #getByteCount()} for a method using a {@code long}.
+     * </p>
      *
      * @return the number of bytes accumulated
      * @throws ArithmeticException if the byte count is too large
@@ -90,11 +92,12 @@ public class CountingInputStream extends ProxyInputStream {
     }
 
     /**
-     * Set the byte count back to 0.
+     * Resets the byte count back to 0.
      * <p>
      * NOTE: This method is an alternative for {@code resetCount()}
      * and was added because that method returns an integer which will
      * result in incorrect count for files over 2GB.
+     * </p>
      *
      * @return the count previous to resetting
      * @since 1.3
@@ -106,11 +109,12 @@ public class CountingInputStream extends ProxyInputStream {
     }
 
     /**
-     * Set the byte count back to 0.
+     * Resets the byte count back to 0.
      * <p>
      * NOTE: From v1.3 this method throws an ArithmeticException if the
      * count is greater than can be expressed by an {@code int}.
      * See {@link #resetByteCount()} for a method using a {@code long}.
+     * </p>
      *
      * @return the count previous to resetting
      * @throws ArithmeticException if the byte count is too large
