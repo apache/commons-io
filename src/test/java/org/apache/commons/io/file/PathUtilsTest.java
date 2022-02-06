@@ -270,7 +270,6 @@ public class PathUtilsTest extends AbstractTempDirTest {
     @Test
     public void testNewOutputStreamNewFileInsideExistingSymlinkedDir() throws IOException {
         final Path symlinkDir = createTempSymlinkedRelativeDir();
-
         final Path file = symlinkDir.resolve("test.txt");
         assertThrowsExactly(FileAlreadyExistsException.class, () -> PathUtils.newOutputStream(file, false));
     }
