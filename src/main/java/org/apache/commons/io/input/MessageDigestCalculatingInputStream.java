@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.Provider;
 
 
 /**
@@ -30,6 +31,11 @@ import java.security.NoSuchAlgorithmException;
  * are thread safe. So is {@link MessageDigestCalculatingInputStream}.
  */
 public class MessageDigestCalculatingInputStream extends ObservableInputStream {
+
+    /**
+     * The default message digest algorithm.
+     */
+    private static final String DEFAULT_ALGORITHM = "MD5";
 
     /**
      * Maintains the message digest.
@@ -61,13 +67,16 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
     /**
      * Creates a new instance, which calculates a signature on the given stream, using a {@link MessageDigest} with the
      * "MD5" algorithm.
+     * <p>
+     * The MD5  algorithm is weak and should not be used.
+     * </p>
      *
      * @param inputStream the stream to calculate the message digest for
      * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation for the specified
      *         algorithm.
      */
     public MessageDigestCalculatingInputStream(final InputStream inputStream) throws NoSuchAlgorithmException {
-        this(inputStream, MessageDigest.getInstance("MD5"));
+        this(inputStream, getDefaultMessageDigest());
     }
 
     /** Creates a new instance, which calculates a signature on the given stream,
@@ -92,6 +101,19 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
     public MessageDigestCalculatingInputStream(final InputStream inputStream, final String algorithm)
         throws NoSuchAlgorithmException {
         this(inputStream, MessageDigest.getInstance(algorithm));
+    }
+
+    /**
+     * Gets a MessageDigest object that implements the a digest algorithm.
+     *
+     * @return a Message Digest object that implements the specified algorithm.
+     *
+     * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation.
+     *
+     * @see Provider
+     */
+    static MessageDigest getDefaultMessageDigest() throws NoSuchAlgorithmException {
+        return MessageDigest.getInstance(DEFAULT_ALGORITHM);
     }
 
     /** Returns the {@link MessageDigest}, which is being used for generating the

@@ -24,7 +24,11 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests {@link MessageDigestCalculatingInputStream}.
+ */
 public class MessageDigestCalculatingInputStreamTest {
+
     public static byte[] generateRandomByteStream(final int pSize) {
         final byte[] buffer = new byte[pSize];
         final Random rnd = new Random();
@@ -36,12 +40,12 @@ public class MessageDigestCalculatingInputStreamTest {
     public void test() throws Exception {
         for (int i = 256; i < 8192; i = i * 2) {
             final byte[] buffer = generateRandomByteStream(i);
-            final MessageDigest md5Sum = MessageDigest.getInstance("MD5");
-            final byte[] expect = md5Sum.digest(buffer);
-            try (final MessageDigestCalculatingInputStream md5InputStream = new MessageDigestCalculatingInputStream(new ByteArrayInputStream(buffer))) {
-                md5InputStream.consume();
-                final byte[] got = md5InputStream.getMessageDigest().digest();
-                assertArrayEquals(expect, got);
+            final MessageDigest messageDigest = MessageDigestCalculatingInputStream.getDefaultMessageDigest();
+            final byte[] expect = messageDigest.digest(buffer);
+            try (final MessageDigestCalculatingInputStream messageDigestInputStream = new MessageDigestCalculatingInputStream(
+                new ByteArrayInputStream(buffer))) {
+                messageDigestInputStream.consume();
+                assertArrayEquals(expect, messageDigestInputStream.getMessageDigest().digest());
             }
         }
     }
