@@ -180,7 +180,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
             actualSkip = n;
         }
 
-        offset += actualSkip;
+        offset = Math.addExact(offset, Math.toIntExact(n));
         return actualSkip;
     }
 }
