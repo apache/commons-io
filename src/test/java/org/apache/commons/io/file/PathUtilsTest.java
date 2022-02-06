@@ -180,7 +180,15 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCreateDirectoriesWithClashingSymlink() throws IOException {
+    public void testCreateDirectoriesSymlink() throws IOException {
+        final Path symlinkedDir = createTempSymlinkedRelativeDir();
+        final String leafDirName = "child";
+        final Path newDirFollowed = PathUtils.createParentDirectories(symlinkedDir.resolve(leafDirName), PathUtils.FOLLOW_LINKS);
+        assertEquals(Files.readSymbolicLink(symlinkedDir), newDirFollowed);
+    }
+
+    @Test
+    public void testCreateDirectoriesSymlinkClashing() throws IOException {
         final Path symlinkedDir = createTempSymlinkedRelativeDir();
         assertThrowsExactly(FileAlreadyExistsException.class, () -> PathUtils.createParentDirectories(symlinkedDir.resolve("child")));
     }
@@ -269,6 +277,13 @@ public class PathUtilsTest extends AbstractTempDirTest {
 
     @Test
     public void testNewOutputStreamNewFileInsideExistingSymlinkedDir() throws IOException {
+        final Path symlinkDir = createTempSymlinkedRelativeDir();
+        final Path file = symlinkDir.resolve("test.txt");
+        assertThrowsExactly(FileAlreadyExistsException.class, () -> PathUtils.newOutputStream(file, false));
+    }
+
+    @Test
+    public void testNewOutputStreamNewFileInsideExistingSymlinkedDirFollow() throws IOException {
         final Path symlinkDir = createTempSymlinkedRelativeDir();
         final Path file = symlinkDir.resolve("test.txt");
         assertThrowsExactly(FileAlreadyExistsException.class, () -> PathUtils.newOutputStream(file, false));
