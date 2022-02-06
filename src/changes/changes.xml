@@ -317,7 +317,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add CharsetEncoders.
       </action>
-     <action dev="ggregory" type="add" due-to="Gary Gregory">
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add CharsetDecoders.
       </action>
       <!-- UPDATE -->
