@@ -337,7 +337,7 @@ file comparators, endian transformation classes, and much more.
     <commons.javadoc.java.link>${commons.javadoc8.java.link}</commons.javadoc.java.link>
     <commons.javadoc.version>3.3.1</commons.javadoc.version>
     <commons.checkstyle-plugin.version>3.1.2</commons.checkstyle-plugin.version>
-    <checkstyle.impl.version>9.2.1</checkstyle.impl.version>
+    <checkstyle.impl.version>9.3</checkstyle.impl.version>
     <commons.jacoco.version>0.8.7</commons.jacoco.version>
     <commons.surefire.version>3.0.0-M5</commons.surefire.version>
     <commons.japicmp.version>0.15.3</commons.japicmp.version>
