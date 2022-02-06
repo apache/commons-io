@@ -63,6 +63,16 @@ public class PathUtilsTest extends AbstractTempDirTest {
 
     private static final String PATH_FIXTURE = "NOTICE.txt";
 
+    /**
+     * Creates directory test fixtures.
+     * <ol>
+     * <li>tempDirPath/subdir</li>
+     * <li>tempDirPath/symlinked-dir -> tempDirPath/subdir</li>
+     * </ol>
+     * 
+     * @return Path to tempDirPath/subdir
+     * @throws IOException if an I/O error occurs or the parent directory does not exist.
+     */
     private Path createTempSymlinkedRelativeDir() throws IOException {
         final Path targetDir = tempDirPath.resolve("subdir");
         final Path symlinkDir = tempDirPath.resolve("symlinked-dir");
