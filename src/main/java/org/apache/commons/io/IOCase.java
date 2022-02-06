@@ -91,7 +91,7 @@ public enum IOCase {
      * @since 2.10.0
      */
     public static boolean isCaseSensitive(final IOCase ioCase) {
-        return ioCase != null && !ioCase.isCaseSensitive();
+        return ioCase != null && ioCase.isCaseSensitive();
     }
 
     /**
