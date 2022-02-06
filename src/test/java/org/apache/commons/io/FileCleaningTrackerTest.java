@@ -306,7 +306,7 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
                 while (theInstance.getTrackCount() != 0) {
                     list.add(
                         "A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String "
-                            + (i++));
+                            + i++);
                 }
             } catch (final Throwable ignored) {
             }

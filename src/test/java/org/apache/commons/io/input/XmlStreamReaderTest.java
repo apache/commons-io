@@ -284,7 +284,7 @@ public class XmlStreamReaderTest {
         final InputStream is = getXmlInputStream(bomEnc,
                 prologEnc == null ? XML2 : XML3, streamEnc, prologEnc);
         try {
-            (new XmlStreamReader(is, cT, false)).close();
+            new XmlStreamReader(is, cT, false).close();
             fail("It should have failed for HTTP Content-type " + cT + ", BOM "
                     + bomEnc + ", streamEnc " + streamEnc + " and prologEnc "
                     + prologEnc);

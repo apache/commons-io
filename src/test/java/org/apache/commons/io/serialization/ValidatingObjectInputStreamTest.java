@@ -67,7 +67,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     private void assertSerialization(final ObjectInputStream ois) throws ClassNotFoundException, IOException {
-        final MockSerializedClass result = (MockSerializedClass) (ois.readObject());
+        final MockSerializedClass result = (MockSerializedClass) ois.readObject();
         assertEquals(testObject, result);
     }
 

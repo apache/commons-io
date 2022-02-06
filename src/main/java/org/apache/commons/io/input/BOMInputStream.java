@@ -203,7 +203,7 @@ public class BOMInputStream extends ProxyInputStream {
             }
             // match BOM in firstBytes
             byteOrderMark = find();
-            if ((byteOrderMark != null) && !include) {
+            if (byteOrderMark != null && !include) {
                 if (byteOrderMark.length() < firstBytes.length) {
                     fbIndex = byteOrderMark.length();
                 } else {
@@ -392,7 +392,7 @@ public class BOMInputStream extends ProxyInputStream {
     @Override
     public long skip(final long n) throws IOException {
         int skipped = 0;
-        while ((n > skipped) && (readFirstBytes() >= 0)) {
+        while (n > skipped && readFirstBytes() >= 0) {
             skipped++;
         }
         return in.skip(n - skipped) + skipped;

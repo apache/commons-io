@@ -843,7 +843,7 @@ public class Tailer implements Runnable, AutoCloseable {
             long rePos = pos; // position to re-read
             int num;
             boolean seenCR = false;
-            while (getRun() && ((num = reader.read(inbuf)) != EOF)) {
+            while (getRun() && (num = reader.read(inbuf)) != EOF) {
                 for (int i = 0; i < num; i++) {
                     final byte ch = inbuf[i];
                     switch (ch) {

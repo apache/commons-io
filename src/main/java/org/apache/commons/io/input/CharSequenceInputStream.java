@@ -193,7 +193,7 @@ public class CharSequenceInputStream extends InputStream {
     @Override
     public int read(final byte[] array, int off, int len) throws IOException {
         Objects.requireNonNull(array, "array");
-        if (len < 0 || (off + len) > array.length) {
+        if (len < 0 || off + len > array.length) {
             throw new IndexOutOfBoundsException("Array Size=" + array.length + ", offset=" + off + ", length=" + len);
         }
         if (len == 0) {

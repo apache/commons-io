@@ -92,7 +92,7 @@ public class QueueInputStream extends InputStream {
     @Override
     public int read() {
         final Integer value = blockingQueue.poll();
-        return value == null ? EOF : ((0xFF) & value);
+        return value == null ? EOF : 0xFF & value;
     }
 
 }

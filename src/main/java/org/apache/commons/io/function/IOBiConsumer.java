@@ -52,7 +52,7 @@ public interface IOBiConsumer<T, U> {
      *         operation
      * @throws NullPointerException if {@code after} is null
      */
-    default IOBiConsumer<T, U> andThen(IOBiConsumer<? super T, ? super U> after) {
+    default IOBiConsumer<T, U> andThen(final IOBiConsumer<? super T, ? super U> after) {
         Objects.requireNonNull(after);
 
         return (l, r) -> {

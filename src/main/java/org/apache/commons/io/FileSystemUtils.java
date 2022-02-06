@@ -326,7 +326,7 @@ public class FileSystemUtils {
         StringTokenizer tok = new StringTokenizer(line2, " ");
         if (tok.countTokens() < 4) {
             // could be long Filesystem, thus data on third line
-            if ((tok.countTokens() != 1) || (lines.size() < 3)) {
+            if (tok.countTokens() != 1 || lines.size() < 3) {
                 throw new IOException(
                         "Command line '" + DF + "' did not return data as expected " +
                         "for path '" + path + "'- check path is valid");

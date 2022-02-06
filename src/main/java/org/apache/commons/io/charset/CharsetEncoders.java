@@ -33,7 +33,7 @@ public class CharsetEncoders {
      * @param charsetEncoder The CharsetEncoder to test.
      * @return the given non-null CharsetEncoder or a new default CharsetEncoder.
      */
-    public static CharsetEncoder toCharsetEncoder(CharsetEncoder charsetEncoder) {
+    public static CharsetEncoder toCharsetEncoder(final CharsetEncoder charsetEncoder) {
         return charsetEncoder != null ? charsetEncoder : Charset.defaultCharset().newEncoder();
     }
 

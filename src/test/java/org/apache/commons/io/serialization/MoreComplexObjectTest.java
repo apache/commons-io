@@ -42,7 +42,7 @@ public class MoreComplexObjectTest extends AbstractCloseableListTest {
     private MoreComplexObject original;
 
     private void assertSerialization(final ObjectInputStream ois) throws ClassNotFoundException, IOException {
-        final MoreComplexObject copy = (MoreComplexObject) (ois.readObject());
+        final MoreComplexObject copy = (MoreComplexObject) ois.readObject();
         assertEquals(original.toString(), copy.toString(), "Expecting same data after deserializing");
     }
 

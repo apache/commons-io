@@ -132,7 +132,7 @@ public abstract class TestUtils {
                 while (-1 != n0) {
                     n0 = is0.read(buf0);
                     n1 = is1.read(buf1);
-                    assertTrue((n0 == n1),
+                    assertTrue(n0 == n1,
                             "The files " + f0 + " and " + f1 +
                             " have differing number of bytes available (" + n0 + " vs " + n1 + ")");
 
@@ -214,7 +214,7 @@ public abstract class TestUtils {
         for (int i = 0; i < size; i++) {
             // output.write((byte)'X');
             // nice varied byte pattern compatible with Readers and Writers
-            out.write((byte) ((i % 127) + 1));
+            out.write((byte) (i % 127 + 1));
         }
     }
 
