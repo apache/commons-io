@@ -150,6 +150,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-758" dev="ggregory" type="fix" due-to="Marcono1234, Gary Gregory">
         Deprecate PathUtils.NOFOLLOW_LINK_OPTION_ARRAY in favor of noFollowLinkOptionArray().
       </action>
+      <action dev="ggregory" type="fix" due-to="Marcono1234, Gary Gregory">
+        Improve ReaderInputStream documentation #291.
+      </action>
       <!-- ADD -->
       <action issue="IO-726" dev="ggregory" type="fix" due-to="shollander, Gary Gregory">
         Add MemoryMappedFileInputStream #215.
