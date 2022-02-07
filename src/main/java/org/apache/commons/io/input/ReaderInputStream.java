@@ -243,16 +243,6 @@ public class ReaderInputStream extends InputStream {
     }
 
     /**
-     * The implementation by {@link ReaderInputStream} always returns 0.
-     */
-    @Override
-    public int available() throws IOException {
-        // Could implement this using Reader.ready(), but would be rather cumbersome
-        // and probably not very efficient
-        return 0;
-    }
-
-    /**
      * Fills the internal char buffer from the reader.
      *
      * @throws IOException If an I/O error occurs
