@@ -83,7 +83,7 @@ class CloseableURLConnection extends URLConnection implements AutoCloseable {
     }
 
     @Override
-    public Object getContent(@SuppressWarnings("rawtypes") final Class[] classes) throws IOException {
+    public Object getContent(final Class[] classes) throws IOException {
         return urlConnection.getContent(classes);
     }
 
