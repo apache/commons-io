@@ -1212,7 +1212,7 @@ public final class PathUtils {
     }
 
     private static Path readIfSymbolicLink(final Path path) throws IOException {
-        return Files.isSymbolicLink(path) ? Files.readSymbolicLink(path) : path;
+        return path != null ? Files.isSymbolicLink(path) ? Files.readSymbolicLink(path) : path : null;
     }
 
     /**

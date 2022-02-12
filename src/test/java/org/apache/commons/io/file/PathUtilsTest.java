@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
@@ -173,6 +174,22 @@ public class PathUtilsTest extends AbstractTempDirTest {
     @Test
     public void testCreateDirectoriesAlreadyExists() throws IOException {
         assertEquals(tempDirPath.getParent(), PathUtils.createParentDirectories(tempDirPath));
+    }
+
+    @Test
+    public void testCreateDirectoriesForRoots() throws IOException {
+        for (final File f : File.listRoots()) {
+            final Path path = f.toPath();
+            assertEquals(path.getParent(), PathUtils.createParentDirectories(path));
+        }
+    }
+
+    @Test
+    public void testCreateDirectoriesForRootsLinkOptionNull() throws IOException {
+        for (final File f : File.listRoots()) {
+            final Path path = f.toPath();
+            assertEquals(path.getParent(), PathUtils.createParentDirectories(path, (LinkOption) null));
+        }
     }
 
     @Test
