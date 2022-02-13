@@ -20,6 +20,7 @@ package org.apache.commons.io.file;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
@@ -176,11 +177,13 @@ public class PathUtilsTest extends AbstractTempDirTest {
         assertEquals(tempDirPath.getParent(), PathUtils.createParentDirectories(tempDirPath));
     }
 
+    @SuppressWarnings("resource") // FileSystems.getDefault() is a singleton
     @Test
     public void testCreateDirectoriesForRoots() throws IOException {
-        for (final File f : File.listRoots()) {
-            final Path path = f.toPath();
-            assertEquals(path.getParent(), PathUtils.createParentDirectories(path));
+        for (final Path path : FileSystems.getDefault().getRootDirectories()) {
+            final Path parent = path.getParent();
+            assertNull(parent);
+            assertEquals(parent, PathUtils.createParentDirectories(path));
         }
     }
 
