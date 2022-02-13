@@ -18,7 +18,6 @@ package org.apache.commons.io.comparator;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -49,7 +48,7 @@ abstract class AbstractFileComparator implements Comparator<File> {
     /**
      * Sorts a List of files.
      * <p>
-     * This method uses {@link Collections#sort(List, Comparator)} and returns the original list.
+     * This method uses {@link List#sort(Comparator)} and returns the original list.
      * </p>
      *
      * @param files The files to sort, may be null.
