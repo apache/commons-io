@@ -195,6 +195,15 @@ public class FileUtils {
     public static final File[] EMPTY_FILE_ARRAY = {};
 
     /**
+     * Instances should NOT be constructed in standard programming.
+     * @deprecated Will be private in 3.0.
+     */
+    @Deprecated
+    public FileUtils() { //NOSONAR
+
+    }
+
+    /**
      * Copies the given array and adds StandardCopyOption.COPY_ATTRIBUTES.
      *
      * @param copyOptions sorted copy options.
@@ -2648,6 +2657,7 @@ public class FileUtils {
         return Files.readAllLines(file.toPath(), charset);
     }
 
+
     /**
      * Reads the contents of a file line by line to a List of Strings. The file is always closed.
      *
@@ -2665,7 +2675,6 @@ public class FileUtils {
     public static List<String> readLines(final File file, final String charsetName) throws IOException {
         return readLines(file, Charsets.toCharset(charsetName));
     }
-
 
     private static void requireAbsent(final File file, final String name) throws FileExistsException {
         if (file.exists()) {
@@ -3208,6 +3217,8 @@ public class FileUtils {
         write(file, data, Charset.defaultCharset(), append);
     }
 
+    // Private method, must be invoked will a directory parameter
+
     /**
      * Writes a CharSequence to a file creating the file if it does not exist.
      *
@@ -3220,8 +3231,6 @@ public class FileUtils {
     public static void write(final File file, final CharSequence data, final Charset charset) throws IOException {
         write(file, data, charset, false);
     }
-
-    // Private method, must be invoked will a directory parameter
 
     /**
      * Writes a CharSequence to a file creating the file if it does not exist.
@@ -3252,6 +3261,8 @@ public class FileUtils {
         write(file, data, charsetName, false);
     }
 
+    // Must be called with a directory
+
     /**
      * Writes a CharSequence to a file creating the file if it does not exist.
      *
@@ -3268,8 +3279,6 @@ public class FileUtils {
     public static void write(final File file, final CharSequence data, final String charsetName, final boolean append) throws IOException {
         write(file, data, Charsets.toCharset(charsetName), append);
     }
-
-    // Must be called with a directory
 
     /**
      * Writes a byte array to a file creating the file if it does not exist.
@@ -3351,6 +3360,7 @@ public class FileUtils {
         writeLines(file, null, lines, null, false);
     }
 
+
     /**
      * Writes the {@code toString()} value of each item in a collection to
      * the specified {@code File} line by line.
@@ -3366,7 +3376,6 @@ public class FileUtils {
     public static void writeLines(final File file, final Collection<?> lines, final boolean append) throws IOException {
         writeLines(file, null, lines, null, append);
     }
-
 
     /**
      * Writes the {@code toString()} value of each item in a collection to
@@ -3577,15 +3586,6 @@ public class FileUtils {
      */
     public static void writeStringToFile(final File file, final String data, final String charsetName, final boolean append) throws IOException {
         writeStringToFile(file, data, Charsets.toCharset(charsetName), append);
-    }
-
-    /**
-     * Instances should NOT be constructed in standard programming.
-     * @deprecated Will be private in 3.0.
-     */
-    @Deprecated
-    public FileUtils() { //NOSONAR
-
     }
 
 }
