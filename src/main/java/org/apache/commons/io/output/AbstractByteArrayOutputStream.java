@@ -129,9 +129,9 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
             } else {
                 newBufferSize = Math.max(currentBuffer.length << 1, newcount - filledBufferSum);
                 filledBufferSum += currentBuffer.length;
+                currentBufferIndex++;
             }
 
-            currentBufferIndex++;
             currentBuffer = IOUtils.byteArray(newBufferSize);
             buffers.add(currentBuffer);
         }
