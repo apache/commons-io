@@ -26,6 +26,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.IOUtils;
@@ -34,6 +36,7 @@ import org.apache.commons.io.input.ClosedInputStream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Basic unit tests for the alternative ByteArrayOutputStream implementations.
@@ -348,6 +351,31 @@ public class ByteArrayOutputStreamTest {
             baout.write(IOUtils.EMPTY_BYTE_ARRAY, 0, 0);
             assertTrue(true, "Dummy");
         }
+    }
+
+    @ParameterizedTest(name = "[{index}] {0}")
+    @ValueSource(ints = {1024, 64})
+    public void testPrivateFieldOfCurrentBufferIndex(int size) throws NoSuchFieldException, IllegalAccessException {
+        // Use the default size and custom size.
+        ByteArrayOutputStream os = new ByteArrayOutputStream(size);
+
+        // Get private field object.
+        Field field = AbstractByteArrayOutputStream.class.getDeclaredField("currentBufferIndex");
+        field.setAccessible(true);
+
+        // Data for writing
+        final byte[] bytes = new byte[1024 * 2];
+        Arrays.fill(bytes, (byte) 1);
+
+        // Write data and test the value of the private field.
+        os.write(bytes, 0, size);     // create the first buffer
+        assertEquals(0, (int) field.get(os));
+
+        os.write(bytes, 0, 1);        // create the second buffer
+        assertEquals(1, (int) field.get(os));
+
+        os.write(bytes, 0, size * 2); // create the third buffer
+        assertEquals(2, (int) field.get(os));
     }
 
     private int writeData(final AbstractByteArrayOutputStream baout, final java.io.ByteArrayOutputStream ref, final int count) {
