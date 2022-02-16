@@ -357,10 +357,10 @@ public class ByteArrayOutputStreamTest {
     @ValueSource(ints = {1024, 64})
     public void testPrivateFieldOfCurrentBufferIndex(int size) throws NoSuchFieldException, IllegalAccessException {
         // Use the default size and custom size.
-        ByteArrayOutputStream os = new ByteArrayOutputStream(size);
+        final ByteArrayOutputStream os = new ByteArrayOutputStream(size);
 
         // Get private field object.
-        Field field = AbstractByteArrayOutputStream.class.getDeclaredField("currentBufferIndex");
+        final Field field = AbstractByteArrayOutputStream.class.getDeclaredField("currentBufferIndex");
         field.setAccessible(true);
 
         // Data for writing
