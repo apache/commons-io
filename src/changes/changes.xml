@@ -821,7 +821,7 @@ The <action> type attribute can be add,update,fix,remove.
         Update mockito-core from 3.3.3 to 3.5.9 #128, #133, #145, #149, #151.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
-        Update spotbugs from 4.0.6 to 4.1.1 #134.
+        Update spotbugs from 4.0.6 to 4.6.0 #134, #332.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
         Update actions/checkout from v2.3.1 to v2.3.2 #140.
