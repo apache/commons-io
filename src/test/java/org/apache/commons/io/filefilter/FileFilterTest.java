@@ -1208,21 +1208,21 @@ public class FileFilterTest extends AbstractFilterTest {
         IOFileFilter filter = new PrefixFileFilter(new String[] {"foo", "bar"}, IOCase.INSENSITIVE);
         assertFiltering(filter, new File("foo.test1"), true);
         assertFiltering(filter, new File("bar.test1"), true);
-        assertFiltering(filter, new File("FOO.test1"), true); // case-sensitive
-        assertFiltering(filter, new File("BAR.test1"), true); // case-sensitive
+        assertFiltering(filter, new File("FOO.test1"), true); // case-insensitive
+        assertFiltering(filter, new File("BAR.test1"), true); // case-insensitive
 
         filter = new PrefixFileFilter("bar", IOCase.INSENSITIVE);
         assertFiltering(filter, new File("foo.test2"), false);
         assertFiltering(filter, new File("bar.test2"), true);
-        assertFiltering(filter, new File("FOO.test2"), false); // case-sensitive
-        assertFiltering(filter, new File("BAR.test2"), true); // case-sensitive
+        assertFiltering(filter, new File("FOO.test2"), false); // case-insensitive
+        assertFiltering(filter, new File("BAR.test2"), true); // case-insensitive
 
         final List<String> prefixes = Arrays.asList("foo", "bar");
         filter = new PrefixFileFilter(prefixes, IOCase.INSENSITIVE);
         assertFiltering(filter, new File("foo.test3"), true);
         assertFiltering(filter, new File("bar.test3"), true);
-        assertFiltering(filter, new File("FOO.test3"), true); // case-sensitive
-        assertFiltering(filter, new File("BAR.test3"), true); // case-sensitive
+        assertFiltering(filter, new File("FOO.test3"), true); // case-insensitive
+        assertFiltering(filter, new File("BAR.test3"), true); // case-insensitive
 
         assertThrows(IllegalArgumentException.class, () -> new PrefixFileFilter((String) null, IOCase.INSENSITIVE));
         assertThrows(IllegalArgumentException.class, () -> new PrefixFileFilter((String[]) null, IOCase.INSENSITIVE));
@@ -1231,8 +1231,8 @@ public class FileFilterTest extends AbstractFilterTest {
         filter = FileFilterUtils.prefixFileFilter("bar", IOCase.INSENSITIVE);
         assertFiltering(filter, new File("foo.test2"), false);
         assertFiltering(filter, new File("bar.test2"), true);
-        assertFiltering(filter, new File("FOO.test2"), false); // case-sensitive
-        assertFiltering(filter, new File("BAR.test2"), true); // case-sensitive
+        assertFiltering(filter, new File("FOO.test2"), false); // case-insensitive
+        assertFiltering(filter, new File("BAR.test2"), true); // case-insensitive
 
         assertThrows(IllegalArgumentException.class, () -> FileFilterUtils.prefixFileFilter(null, IOCase.INSENSITIVE));
     }
