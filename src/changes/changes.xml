@@ -153,6 +153,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Marcono1234, Gary Gregory">
         Improve ReaderInputStream documentation #291.
       </action>
+      <action dev="ggregory" type="fix" due-to="richarda23">
+        Fix misleading comments in FileFilterTest #334.
+      </action>
       <!-- ADD -->
       <action issue="IO-726" dev="ggregory" type="fix" due-to="shollander, Gary Gregory">
         Add MemoryMappedFileInputStream #215.
