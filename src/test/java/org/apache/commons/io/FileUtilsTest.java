@@ -1623,6 +1623,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
         final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
         final File tempDirAsFile = tempDir.toFile();
+        assertTrue(FileUtils.isDirectory(tempDirAsFile));
         Files.delete(tempDir);
         assertFalse(FileUtils.isDirectory(tempDirAsFile));
     }

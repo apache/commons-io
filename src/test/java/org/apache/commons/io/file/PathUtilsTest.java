@@ -229,6 +229,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
         assertFalse(PathUtils.isDirectory(testFile1));
 
         final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
+        assertTrue(PathUtils.isDirectory(tempDir));
         Files.delete(tempDir);
         assertFalse(PathUtils.isDirectory(tempDir));
     }
