@@ -337,7 +337,7 @@ The <action> type attribute can be add,update,fix,remove.
         Update FileEntry to use FileTime instead of long for file time stamps.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot, Gary Gregory">
-        Bump Maven Javadoc plugin from 3.2.0 to 3.3.1.
+        Bump Maven Javadoc plugin from 3.2.0 to 3.3.2.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump spotbugs-maven-plugin from 4.2.3 to 4.5.3.0 #250, #259, #272, #274, #285, #288, #289, #305, #315, #326.
