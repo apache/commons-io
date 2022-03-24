@@ -153,6 +153,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Marcono1234, Gary Gregory">
         Improve ReaderInputStream documentation #291.
       </action>
+      <action dev="ggregory" type="fix" due-to="richarda23">
+        Fix misleading comments in FileFilterTest #334.
+      </action>
       <!-- ADD -->
       <action issue="IO-726" dev="ggregory" type="fix" due-to="shollander, Gary Gregory">
         Add MemoryMappedFileInputStream #215.
@@ -329,12 +332,12 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add PathUtils.createParentDirectories(Path, LinkOption, FileAttribute...).
       </action>
-      <!-- UPDATE -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Update FileEntry to use FileTime instead of long for file time stamps.
       </action>
+      <!-- UPDATE -->
       <action dev="ggregory" type="update" due-to="Dependabot, Gary Gregory">
-        Bump Maven Javadoc plugin from 3.2.0 to 3.3.1.
+        Bump Maven Javadoc plugin from 3.2.0 to 3.3.2.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump spotbugs-maven-plugin from 4.2.3 to 4.5.3.0 #250, #259, #272, #274, #285, #288, #289, #305, #315, #326.
@@ -363,8 +366,8 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="kinow" type="update" due-to="Dependabot">
         Bump moditect-maven-plugin from 1.0.0.RC1 to 1.0.0.RC2 #280.
       </action>
-      <action dev="kinow" type="update" due-to="Dependabot">
-        Bump junit-pioneer from 1.4.2 to 1.5.0 #304.
+      <action dev="kinow" type="update" due-to="Dependabot, Gary Gregory">
+        Bump junit-pioneer from 1.4.2 to 1.6.2 #304. #335.
       </action>
       <action dev="kinow" type="update" due-to="Dependabot">
         Bump actions/cache from 2.1.6 to 2.1.7 #307.
@@ -373,7 +376,7 @@ The <action> type attribute can be add,update,fix,remove.
         Bump spotbugs from 4.5.2 to 4.5.3 #313, #317.
       </action>
       <action dev="ggregory" type="update" due-to="Gary Gregory">
-        Bump japicmp-maven-plugin from 0.15.3 to 0.15.6.
+        Bump japicmp-maven-plugin from 0.15.3 to 0.15.7.
       </action>
     </release>
     <release version="2.11.0" date="2021-07-09" description="Java 8 required.">

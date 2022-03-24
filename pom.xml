@@ -265,7 +265,7 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.junit-pioneer</groupId>
       <artifactId>junit-pioneer</artifactId>
-      <version>1.6.1</version>
+      <version>1.6.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -335,12 +335,12 @@ file comparators, endian transformation classes, and much more.
     <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-io/</commons.scmPubUrl>
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
     <commons.javadoc.java.link>${commons.javadoc8.java.link}</commons.javadoc.java.link>
-    <commons.javadoc.version>3.3.1</commons.javadoc.version>
+    <commons.javadoc.version>3.3.2</commons.javadoc.version>
     <commons.checkstyle-plugin.version>3.1.2</commons.checkstyle-plugin.version>
     <checkstyle.impl.version>9.3</checkstyle.impl.version>
     <commons.jacoco.version>0.8.7</commons.jacoco.version>
     <commons.surefire.version>3.0.0-M5</commons.surefire.version>
-    <commons.japicmp.version>0.15.6</commons.japicmp.version>
+    <commons.japicmp.version>0.15.7</commons.japicmp.version>
     <commons.enforcer.version>3.0.0</commons.enforcer.version>
     <commons.moditect.version>1.0.0.RC2</commons.moditect.version>
     <commons.spotbugs.plugin.version>4.5.3.0</commons.spotbugs.plugin.version>
