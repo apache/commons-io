@@ -2540,7 +2540,7 @@ public class IOUtils {
      * (Arrays can have no more than Integer.MAX_VALUE entries anyway)
      *
      * @param input the {@code InputStream} to read from
-     * @param size the size of {@code InputStream}
+     * @param size the size of {@code InputStream} to read, where 0 < {@code size} <= min(Integer.MAX_VALUE, length of input stream).
      * @return byte [] the requested byte array, of length {@code size}
      * @throws IOException              if an I/O error occurs or {@code InputStream} length is less than {@code size}
      * @throws IllegalArgumentException if size is less than zero or size is greater than Integer.MAX_VALUE
