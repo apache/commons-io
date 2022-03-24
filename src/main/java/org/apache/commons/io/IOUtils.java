@@ -2497,13 +2497,13 @@ public class IOUtils {
 
     /**
      * Gets the contents of an {@code InputStream} as a {@code byte[]}. Use this method instead of
-     * {@code toByteArray(InputStream)} when {@code InputStream} size is known
+     * {@code toByteArray(InputStream)} when {@code InputStream} size is known.
      *
      * @param input the {@code InputStream} to read.
-     * @param size the size of {@code InputStream}.
-     * @return the requested byte array.
-     * @throws IOException if an I/O error occurs or {@code InputStream} size differ from parameter size.
-     * @throws IllegalArgumentException if size is less than zero.
+     * @param size the size of {@code InputStream} to read, where 0 < {@code size} <= length of input stream.
+     * @return A byte array of length {@size}.
+     * @throws IOException if an I/O error occurs or {@code InputStream} length is smaller than parameter {@code size}.
+     * @throws IllegalArgumentException if {@code size} is less than zero.
      * @since 2.1
      */
     public static byte[] toByteArray(final InputStream input, final int size) throws IOException {
