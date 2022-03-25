@@ -2497,13 +2497,13 @@ public class IOUtils {
 
     /**
      * Gets the contents of an {@code InputStream} as a {@code byte[]}. Use this method instead of
-     * {@code toByteArray(InputStream)} when {@code InputStream} size is known
+     * {@code toByteArray(InputStream)} when {@code InputStream} size is known.
      *
      * @param input the {@code InputStream} to read.
-     * @param size the size of {@code InputStream}.
-     * @return the requested byte array.
-     * @throws IOException if an I/O error occurs or {@code InputStream} size differ from parameter size.
-     * @throws IllegalArgumentException if size is less than zero.
+     * @param size the size of {@code InputStream} to read, where 0 &lt; {@code size} &lt;= length of input stream.
+     * @return byte [] of length {@code size}.
+     * @throws IOException if an I/O error occurs or {@code InputStream} length is smaller than parameter {@code size}.
+     * @throws IllegalArgumentException if {@code size} is less than zero.
      * @since 2.1
      */
     public static byte[] toByteArray(final InputStream input, final int size) throws IOException {
@@ -2540,10 +2540,9 @@ public class IOUtils {
      * (Arrays can have no more than Integer.MAX_VALUE entries anyway)
      *
      * @param input the {@code InputStream} to read from
-     * @param size the size of {@code InputStream}
-     * @return the requested byte array
-     * @throws IOException              if an I/O error occurs or {@code InputStream} size differ from parameter
-     * size
+     * @param size the size of {@code InputStream} to read, where 0 &lt; {@code size} &lt;= min(Integer.MAX_VALUE, length of input stream).
+     * @return byte [] the requested byte array, of length {@code size}
+     * @throws IOException              if an I/O error occurs or {@code InputStream} length is less than {@code size}
      * @throws IllegalArgumentException if size is less than zero or size is greater than Integer.MAX_VALUE
      * @see IOUtils#toByteArray(java.io.InputStream, int)
      * @since 2.1

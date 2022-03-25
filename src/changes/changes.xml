@@ -47,6 +47,9 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <release version="2.12.0" date="2021-MM-DD" description="Java 8 required.">
       <!-- FIX -->
+      <action issue="IO-697" dev="kinow" type="fix" due-to="otter606">
+        IOUtils.toByteArray size validation does not match documentation.
+      </action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
         Fix Javadoc links to the JRE Javadoc 8.
       </action>
