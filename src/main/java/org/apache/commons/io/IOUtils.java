@@ -2501,7 +2501,7 @@ public class IOUtils {
      *
      * @param input the {@code InputStream} to read.
      * @param size the size of {@code InputStream} to read, where 0 &lt; {@code size} &lt;= length of input stream.
-     * @return byte [] of length {@size}.
+     * @return byte [] of length {@code  size}.
      * @throws IOException if an I/O error occurs or {@code InputStream} length is smaller than parameter {@code size}.
      * @throws IllegalArgumentException if {@code size} is less than zero.
      * @since 2.1
