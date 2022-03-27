@@ -373,7 +373,7 @@ The <action> type attribute can be add,update,fix,remove.
         Bump junit-pioneer from 1.4.2 to 1.6.2 #304. #335.
       </action>
       <action dev="kinow" type="update" due-to="Dependabot">
-        Bump actions/cache from 2.1.6 to 2.1.7 #307.
+        Bump actions/cache from 2.1.6 to 3 #307, #337.
       </action>
       <action dev="kinow" type="update" due-to="Dependabot">
         Bump spotbugs from 4.5.2 to 4.5.3 #313, #317.
