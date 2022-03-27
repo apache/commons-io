@@ -1181,7 +1181,8 @@ public class FileUtils {
      *
      * @param file The file to delete.
      * @return the given file.
-     * @throws IOException if the file cannot be deleted.
+     * @throws NullPointerException     if the parameter is {@code null}
+     * @throws IOException              if the file cannot be deleted.
      * @see File#delete()
      * @since 2.9.0
      */
@@ -1196,6 +1197,7 @@ public class FileUtils {
      *
      * @param directory directory to delete
      * @throws IOException              in case deletion is unsuccessful
+     * @throws NullPointerException     if the parameter is {@code null}
      * @throws IllegalArgumentException if {@code directory} is not a directory
      */
     public static void deleteDirectory(final File directory) throws IOException {
@@ -3119,8 +3121,8 @@ public class FileUtils {
      * </p>
      *
      * @param file the File to touch.
-     * @throws IOException if an I/O problem occurs.
-     * @throws IOException if setting the last-modified time failed.
+     * @throws NullPointerException if the parameter is {@code null}.
+     * @throws IOException          if setting the last-modified time failed or an I/O problem occurs.
      */
     public static void touch(final File file) throws IOException {
         Objects.requireNonNull(file, "file");

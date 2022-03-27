@@ -1770,7 +1770,8 @@ public class IOUtils {
      * @param offset initial offset into buffer
      * @param length length to read, must be &gt;= 0
      * @return actual length read; may be less than requested if EOF was reached
-     * @throws IOException if a read error occurs
+     * @throws IllegalArgumentException if length is negative
+     * @throws IOException              if a read error occurs
      * @since 2.2
      */
     public static int read(final InputStream input, final byte[] buffer, final int offset, final int length)
@@ -1842,7 +1843,8 @@ public class IOUtils {
      * @param offset initial offset into buffer
      * @param length length to read, must be &gt;= 0
      * @return actual length read; may be less than requested if EOF was reached
-     * @throws IOException if a read error occurs
+     * @throws IllegalArgumentException if length is negative
+     * @throws IOException              if a read error occurs
      * @since 2.2
      */
     public static int read(final Reader reader, final char[] buffer, final int offset, final int length)
