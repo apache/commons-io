@@ -18,6 +18,7 @@ package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -247,6 +248,11 @@ public abstract class FileUtilsDeleteDirectoryBaseTest {
         FileUtils.deleteDirectory(nested);
 
         assertEquals(0, top.list().length);
+    }
+
+    @Test
+    public void testDeleteDirectoryNullArgument() {
+        assertThrows(NullPointerException.class, () -> FileUtils.deleteDirectory(null));
     }
 
 }

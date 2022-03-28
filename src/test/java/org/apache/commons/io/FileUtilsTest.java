@@ -2687,6 +2687,8 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     @Test
     public void testTouch() throws IOException {
+        assertThrows(NullPointerException.class, () -> FileUtils.touch(null));
+
         final File file = new File(tempDirFile, "touch.txt");
         if (file.exists()) {
             file.delete();

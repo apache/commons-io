@@ -753,7 +753,8 @@ public final class PathUtils {
      * @param paths the array of files to apply the filter to.
      *
      * @return a subset of {@code files} that is accepted by the file filter.
-     * @throws IllegalArgumentException if the filter is {@code null} or {@code files} contains a {@code null} value.
+     * @throws NullPointerException if the filter is {@code null}
+     * @throws IllegalArgumentException if {@code files} contains a {@code null} value.
      *
      * @since 2.9.0
      */
@@ -1552,6 +1553,7 @@ public final class PathUtils {
      * @return the given visitor.
      *
      * @throws IOException if an I/O error is thrown by a visitor method.
+     * @throws NullPointerException if the directory is {@code null}.
      */
     public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final Path directory) throws IOException {
         requireExists(directory, "directory");
@@ -1692,6 +1694,7 @@ public final class PathUtils {
      * @param openOptions options How to open the file.
      * @return The given path.
      * @throws IOException if an I/O error occurs writing to or creating the file.
+     * @throws NullPointerException if either {@code path} or {@code charSequence} is {@code null}.
      * @since 2.12.0
      */
     public static Path writeString(final Path path, final CharSequence charSequence, final Charset charset, final OpenOption... openOptions)
