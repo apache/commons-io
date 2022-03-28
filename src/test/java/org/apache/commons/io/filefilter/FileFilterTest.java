@@ -1079,18 +1079,8 @@ public class FileFilterTest extends AbstractFilterTest {
 
     @Test
     public void testNullFilters() {
-        try {
-            FileFilterUtils.toList((IOFileFilter) null);
-            fail("Expected IllegalArgumentException");
-        } catch (final IllegalArgumentException ignore) {
-            // expected
-        }
-        try {
-            FileFilterUtils.toList(new IOFileFilter[] {null});
-            fail("Expected IllegalArgumentException");
-        } catch (final IllegalArgumentException ignore) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, ()-> FileFilterUtils.toList((IOFileFilter) null));
+        assertThrows(IllegalArgumentException.class, ()-> FileFilterUtils.toList(new IOFileFilter[] {null}));
     }
 
     @Test
