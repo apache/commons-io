@@ -1041,17 +1041,13 @@ public class FileFilterTest extends AbstractFilterTest {
     @Test
     public void testNameFilterNullArgument() {
         final String test = null;
-        try {
-            new NameFileFilter(test);
-            fail("constructing a NameFileFilter with a null String argument should fail.");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final String failMessage = "constructing a NameFileFilter with a null String argument should fail.";
+        assertThrows(IllegalArgumentException.class, ()->new NameFileFilter(test),
+                failMessage );
 
-        try {
-            FileFilterUtils.nameFileFilter(test, IOCase.INSENSITIVE);
-            fail("constructing a NameFileFilter with a null String argument should fail.");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class,
+                ()-> FileFilterUtils.nameFileFilter(test, IOCase.INSENSITIVE),
+                failMessage);
     }
 
     @Test
