@@ -158,7 +158,7 @@ public class FileFilterTest extends AbstractFilterTest {
         assertFiltering(trueFilter.and(trueFilter), new File("foo.test"), true);
         assertFiltering(trueFilter.and(falseFilter), new File("foo.test"), false);
         assertFiltering(falseFilter.and(trueFilter), new File("foo.test"), false);
-        assertFiltering(falseFilter.and(trueFilter), new File("foo.test"), false);
+        assertFiltering(falseFilter.and(falseFilter), new File("foo.test"), false);
     }
 
     @Test
