@@ -158,7 +158,7 @@ public class FileFilterTest extends AbstractFilterTest {
         assertFiltering(trueFilter.and(trueFilter), new File("foo.test"), true);
         assertFiltering(trueFilter.and(falseFilter), new File("foo.test"), false);
         assertFiltering(falseFilter.and(trueFilter), new File("foo.test"), false);
-        assertFiltering(falseFilter.and(trueFilter), new File("foo.test"), false);
+        assertFiltering(falseFilter.and(falseFilter), new File("foo.test"), false);
     }
 
     @Test
@@ -622,13 +622,11 @@ public class FileFilterTest extends AbstractFilterTest {
         assertThrows(IllegalArgumentException.class, () -> FileFilterUtils.filterList(null, Collections.emptyList()));
 
         final IOFileFilter filter = FileFilterUtils.trueFileFilter();
-        try {
-            FileFilterUtils.filterList(filter, Collections.singletonList(null));
-        } catch (final IllegalArgumentException iae) {
-            // Test passes, exception thrown for list containing null
-        }
+        List<File> filteredList = FileFilterUtils.filterList(filter, Collections.singletonList(null));
+        assertEquals(1, filteredList.size());
+        assertEquals(null, filteredList.get(0));
 
-        final List<File> filteredList = FileFilterUtils.filterList(filter, (List<File>) null);
+        filteredList = FileFilterUtils.filterList(filter, (List<File>) null);
         assertEquals(0, filteredList.size());
     }
 
@@ -1043,17 +1041,13 @@ public class FileFilterTest extends AbstractFilterTest {
     @Test
     public void testNameFilterNullArgument() {
         final String test = null;
-        try {
-            new NameFileFilter(test);
-            fail("constructing a NameFileFilter with a null String argument should fail.");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final String failMessage = "constructing a NameFileFilter with a null String argument should fail.";
+        assertThrows(IllegalArgumentException.class, ()->new NameFileFilter(test),
+                failMessage );
 
-        try {
-            FileFilterUtils.nameFileFilter(test, IOCase.INSENSITIVE);
-            fail("constructing a NameFileFilter with a null String argument should fail.");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class,
+                ()-> FileFilterUtils.nameFileFilter(test, IOCase.INSENSITIVE),
+                failMessage);
     }
 
     @Test
@@ -1079,18 +1073,8 @@ public class FileFilterTest extends AbstractFilterTest {
 
     @Test
     public void testNullFilters() {
-        try {
-            FileFilterUtils.toList((IOFileFilter) null);
-            fail("Expected IllegalArgumentException");
-        } catch (final IllegalArgumentException ignore) {
-            // expected
-        }
-        try {
-            FileFilterUtils.toList(new IOFileFilter[] {null});
-            fail("Expected IllegalArgumentException");
-        } catch (final IllegalArgumentException ignore) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, ()-> FileFilterUtils.toList((IOFileFilter) null));
+        assertThrows(IllegalArgumentException.class, ()-> FileFilterUtils.toList(new IOFileFilter[] {null}));
     }
 
     @Test
