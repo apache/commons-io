@@ -622,13 +622,11 @@ public class FileFilterTest extends AbstractFilterTest {
         assertThrows(IllegalArgumentException.class, () -> FileFilterUtils.filterList(null, Collections.emptyList()));
 
         final IOFileFilter filter = FileFilterUtils.trueFileFilter();
-        try {
-            FileFilterUtils.filterList(filter, Collections.singletonList(null));
-        } catch (final IllegalArgumentException iae) {
-            // Test passes, exception thrown for list containing null
-        }
+        List<File> filteredList = FileFilterUtils.filterList(filter, Collections.singletonList(null));
+        assertEquals(1, filteredList.size());
+        assertEquals(null, filteredList.get(0));
 
-        final List<File> filteredList = FileFilterUtils.filterList(filter, (List<File>) null);
+        filteredList = FileFilterUtils.filterList(filter, (List<File>) null);
         assertEquals(0, filteredList.size());
     }
 
