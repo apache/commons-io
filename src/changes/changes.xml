@@ -159,6 +159,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="richarda23">
         Fix misleading comments in FileFilterTest #334.
       </action>
+      <action dev="ggregory" type="fix" due-to="Diego Marcilio">
+        Add missing javadoc for exceptions thrown for invalid arguments #339.
+      </action>
       <!-- ADD -->
       <action issue="IO-726" dev="ggregory" type="fix" due-to="shollander, Gary Gregory">
         Add MemoryMappedFileInputStream #215.
