@@ -913,12 +913,8 @@ public class IOUtilsTest {
             assertEquals(0, buffer.remaining());
             assertEquals(0, input.read(buffer));
             buffer.clear();
-            try {
-                IOUtils.readFully(input, buffer);
-                fail("Should have failed with EOFxception");
-            } catch (final EOFException expected) {
-                // expected
-            }
+            assertThrows(EOFException.class, ()->IOUtils.readFully(input, buffer),
+                    "Should have failed with EOFException");
         } finally {
             IOUtils.closeQuietly(input, fileInputStream);
         }
