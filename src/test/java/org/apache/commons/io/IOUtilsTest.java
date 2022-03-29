@@ -72,6 +72,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * This is used to test IOUtils for correctness. The following checks are performed:
@@ -177,30 +179,15 @@ public class IOUtilsTest {
 
     @Test
     public void testAsBufferedNull() {
-        try {
-            IOUtils.buffer((InputStream) null);
-            fail("Expected NullPointerException");
-        } catch (final NullPointerException npe) {
-            // expected
-        }
-        try {
-            IOUtils.buffer((OutputStream) null);
-            fail("Expected NullPointerException");
-        } catch (final NullPointerException npe) {
-            // expected
-        }
-        try {
-            IOUtils.buffer((Reader) null);
-            fail("Expected NullPointerException");
-        } catch (final NullPointerException npe) {
-            // expected
-        }
-        try {
-            IOUtils.buffer((Writer) null);
-            fail("Expected NullPointerException");
-        } catch (final NullPointerException npe) {
-            // expected
-        }
+        final String npeExpectedMessage = "Expected NullPointerException";
+        assertThrows(NullPointerException.class, ()->IOUtils.buffer((InputStream) null),
+                npeExpectedMessage );
+        assertThrows(NullPointerException.class, ()->IOUtils.buffer((OutputStream) null),
+                npeExpectedMessage);
+        assertThrows(NullPointerException.class, ()->IOUtils.buffer((Reader) null),
+                npeExpectedMessage);
+        assertThrows(NullPointerException.class, ()->IOUtils.buffer((Writer) null),
+                npeExpectedMessage);
     }
 
     @Test
@@ -1458,6 +1445,7 @@ public class IOUtilsTest {
             assertTrue(exc.getMessage().startsWith("Size must be equal or greater than zero"),
                 "Exception message does not start with \"Size must be equal or greater than zero\"");
         }
+
 
     }
 
