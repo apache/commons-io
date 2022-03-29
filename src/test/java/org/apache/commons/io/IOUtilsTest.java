@@ -935,26 +935,17 @@ public class IOUtilsTest {
     @Test
     public void testReadFully_InputStream_ByteArray() throws Exception {
         final int size = 1027;
-
         final byte[] buffer = new byte[size];
-
         final InputStream input = new ByteArrayInputStream(new byte[size]);
-        try {
-            IOUtils.readFully(input, buffer, 0, -1);
-            fail("Should have failed with IllegalArgumentException");
-        } catch (final IllegalArgumentException expected) {
-            // expected
-        }
+
+        assertThrows(IllegalArgumentException.class, ()-> IOUtils.readFully(input, buffer, 0, -1),
+                "Should have failed with IllegalArgumentException");
+
         IOUtils.readFully(input, buffer, 0, 0);
         IOUtils.readFully(input, buffer, 0, size - 1);
-        try {
-            IOUtils.readFully(input, buffer, 0, 2);
-            fail("Should have failed with EOFxception");
-        } catch (final EOFException expected) {
-            // expected
-        }
+        assertThrows(EOFException.class, ()-> IOUtils.readFully(input, buffer, 0, 2),
+                "Should have failed with EOFException");
         IOUtils.closeQuietly(input);
-
     }
 
     @Test
