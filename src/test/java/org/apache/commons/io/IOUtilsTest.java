@@ -1412,26 +1412,24 @@ public class IOUtilsTest {
     public void testToByteArray_InputStream_SizeIllegal() throws Exception {
 
         try (InputStream fin = Files.newInputStream(testFilePath)) {
-            IOUtils.toByteArray(fin, testFile.length() + 1);
-            fail("IOException expected");
-        } catch (final IOException exc) {
+            IOException exc = assertThrows(IOException.class,
+                    ()->IOUtils.toByteArray(fin, testFile.length() + 1),
+                    "Should have failed with IOException" );
             assertTrue(exc.getMessage().startsWith("Unexpected read size"),
                 "Exception message does not start with \"Unexpected read size\"");
         }
-
     }
 
     @Test
     public void testToByteArray_InputStream_SizeLong() throws Exception {
 
         try (InputStream fin = Files.newInputStream(testFilePath)) {
-            IOUtils.toByteArray(fin, (long) Integer.MAX_VALUE + 1);
-            fail("IOException expected");
-        } catch (final IllegalArgumentException exc) {
+            IllegalArgumentException exc = assertThrows(IllegalArgumentException.class,
+                    ()-> IOUtils.toByteArray(fin, (long) Integer.MAX_VALUE + 1),
+                    "Should have failed with IllegalArgumentException" );
             assertTrue(exc.getMessage().startsWith("Size cannot be greater than Integer max value"),
                 "Exception message does not start with \"Size cannot be greater than Integer max value\"");
         }
-
     }
 
     @Test
