@@ -973,12 +973,8 @@ public class IOUtilsTest {
             assertEquals(0, input.read(buffer));
             IOUtils.readFully(input, buffer);
             buffer.clear();
-            try {
-                IOUtils.readFully(input, buffer);
-                fail("Should have failed with EOFxception");
-            } catch (final EOFException expected) {
-                // expected
-            }
+            assertThrows(EOFException.class, ()->IOUtils.readFully(input, buffer),
+                    "Should have failed with EOFxception");
         } finally {
             IOUtils.closeQuietly(input, fileInputStream);
         }
@@ -987,24 +983,15 @@ public class IOUtilsTest {
     @Test
     public void testReadFully_Reader() throws Exception {
         final int size = 1027;
-
         final char[] buffer = new char[size];
-
         final Reader input = new CharArrayReader(new char[size]);
+
         IOUtils.readFully(input, buffer, 0, 0);
         IOUtils.readFully(input, buffer, 0, size - 3);
-        try {
-            IOUtils.readFully(input, buffer, 0, -1);
-            fail("Should have failed with IllegalArgumentException");
-        } catch (final IllegalArgumentException expected) {
-            // expected
-        }
-        try {
-            IOUtils.readFully(input, buffer, 0, 5);
-            fail("Should have failed with EOFException");
-        } catch (final EOFException expected) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, ()->IOUtils.readFully(input, buffer, 0, -1),
+                "Should have failed with IllegalArgumentException" );
+        assertThrows(EOFException.class, ()->IOUtils.readFully(input, buffer, 0, 5),
+                "Should have failed with EOFException" );
         IOUtils.closeQuietly(input);
     }
 
@@ -1292,22 +1279,14 @@ public class IOUtilsTest {
         final int size = 1027;
 
         final InputStream input = new ByteArrayInputStream(new byte[size]);
-        try {
-            IOUtils.skipFully(input, -1);
-            fail("Should have failed with IllegalArgumentException");
-        } catch (final IllegalArgumentException expected) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, ()->IOUtils.skipFully(input, -1),
+                "Should have failed with IllegalArgumentException" );
+
         IOUtils.skipFully(input, 0);
         IOUtils.skipFully(input, size - 1);
-        try {
-            IOUtils.skipFully(input, 2);
-            fail("Should have failed with IOException");
-        } catch (final IOException expected) {
-            // expected
-        }
+        assertThrows(IOException.class, ()->  IOUtils.skipFully(input, size -1),
+        "Should have failed with IOException" );
         IOUtils.closeQuietly(input);
-
     }
 
     @Test
@@ -1315,20 +1294,12 @@ public class IOUtilsTest {
         final FileInputStream fileInputStream = new FileInputStream(testFile);
         final FileChannel fileChannel = fileInputStream.getChannel();
         try {
-            try {
-                IOUtils.skipFully(fileChannel, -1);
-                fail("Should have failed with IllegalArgumentException");
-            } catch (final IllegalArgumentException expected) {
-                // expected
-            }
+            assertThrows(IllegalArgumentException.class, ()->IOUtils.skipFully(fileChannel, -1),
+                    "Should have failed with IllegalArgumentException" );
             IOUtils.skipFully(fileChannel, 0);
             IOUtils.skipFully(fileChannel, FILE_SIZE - 1);
-            try {
-                IOUtils.skipFully(fileChannel, 2);
-                fail("Should have failed with IOException");
-            } catch (final IOException expected) {
-                // expected
-            }
+            assertThrows(IOException.class, ()->IOUtils.skipFully(fileChannel, 2),
+                    "Should have failed with IOException" );
         } finally {
             IOUtils.closeQuietly(fileChannel, fileInputStream);
         }
@@ -1337,22 +1308,14 @@ public class IOUtilsTest {
     @Test
     public void testSkipFully_Reader() throws Exception {
         final int size = 1027;
-
         final Reader input = new CharArrayReader(new char[size]);
+
         IOUtils.skipFully(input, 0);
         IOUtils.skipFully(input, size - 3);
-        try {
-            IOUtils.skipFully(input, -1);
-            fail("Should have failed with IllegalArgumentException");
-        } catch (final IllegalArgumentException expected) {
-            // expected
-        }
-        try {
-            IOUtils.skipFully(input, 5);
-            fail("Should have failed with IOException");
-        } catch (final IOException expected) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, ()->IOUtils.skipFully(input, -1),
+                "Should have failed with IllegalArgumentException" );
+        assertThrows(IOException.class, ()->IOUtils.skipFully(input, 5),
+                "Should have failed with IOException" );
         IOUtils.closeQuietly(input);
     }
 
@@ -1426,14 +1389,12 @@ public class IOUtilsTest {
     public void testToByteArray_InputStream_NegativeSize() throws Exception {
 
         try (InputStream fin = Files.newInputStream(testFilePath)) {
-            IOUtils.toByteArray(fin, -1);
-            fail("IllegalArgumentException expected");
-        } catch (final IllegalArgumentException exc) {
+           IllegalArgumentException exc = assertThrows(IllegalArgumentException.class,
+                   ()->IOUtils.toByteArray(fin, -1),
+                    "Should have failed with IllegalArgumentException" );
             assertTrue(exc.getMessage().startsWith("Size must be equal or greater than zero"),
                 "Exception message does not start with \"Size must be equal or greater than zero\"");
         }
-
-
     }
 
     @Test
