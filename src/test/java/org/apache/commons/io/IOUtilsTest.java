@@ -1386,7 +1386,7 @@ public class IOUtilsTest {
     public void testToByteArray_InputStream_NegativeSize() throws Exception {
 
         try (InputStream fin = Files.newInputStream(testFilePath)) {
-           IllegalArgumentException exc = assertThrows(IllegalArgumentException.class,
+           final IllegalArgumentException exc = assertThrows(IllegalArgumentException.class,
                    ()->IOUtils.toByteArray(fin, -1), "Should have failed with IllegalArgumentException" );
             assertTrue(exc.getMessage().startsWith("Size must be equal or greater than zero"),
                 "Exception message does not start with \"Size must be equal or greater than zero\"");
@@ -1408,7 +1408,7 @@ public class IOUtilsTest {
     public void testToByteArray_InputStream_SizeIllegal() throws Exception {
 
         try (InputStream fin = Files.newInputStream(testFilePath)) {
-            IOException exc = assertThrows(IOException.class,
+            final IOException exc = assertThrows(IOException.class,
                     ()->IOUtils.toByteArray(fin, testFile.length() + 1), "Should have failed with IOException" );
             assertTrue(exc.getMessage().startsWith("Unexpected read size"),
                 "Exception message does not start with \"Unexpected read size\"");
@@ -1419,7 +1419,7 @@ public class IOUtilsTest {
     public void testToByteArray_InputStream_SizeLong() throws Exception {
 
         try (InputStream fin = Files.newInputStream(testFilePath)) {
-            IllegalArgumentException exc = assertThrows(IllegalArgumentException.class,
+            final IllegalArgumentException exc = assertThrows(IllegalArgumentException.class,
                     ()-> IOUtils.toByteArray(fin, (long) Integer.MAX_VALUE + 1),
                     "Should have failed with IllegalArgumentException" );
             assertTrue(exc.getMessage().startsWith("Size cannot be greater than Integer max value"),
