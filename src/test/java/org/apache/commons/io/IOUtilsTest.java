@@ -1284,7 +1284,7 @@ public class IOUtilsTest {
 
         IOUtils.skipFully(input, 0);
         IOUtils.skipFully(input, size - 1);
-        assertThrows(IOException.class, ()->  IOUtils.skipFully(input, size -1),
+        assertThrows(IOException.class, ()->  IOUtils.skipFully(input, 2),
         "Should have failed with IOException" );
         IOUtils.closeQuietly(input);
     }
@@ -1390,8 +1390,7 @@ public class IOUtilsTest {
 
         try (InputStream fin = Files.newInputStream(testFilePath)) {
            IllegalArgumentException exc = assertThrows(IllegalArgumentException.class,
-                   ()->IOUtils.toByteArray(fin, -1),
-                    "Should have failed with IllegalArgumentException" );
+                   ()->IOUtils.toByteArray(fin, -1), "Should have failed with IllegalArgumentException" );
             assertTrue(exc.getMessage().startsWith("Size must be equal or greater than zero"),
                 "Exception message does not start with \"Size must be equal or greater than zero\"");
         }
@@ -1413,8 +1412,7 @@ public class IOUtilsTest {
 
         try (InputStream fin = Files.newInputStream(testFilePath)) {
             IOException exc = assertThrows(IOException.class,
-                    ()->IOUtils.toByteArray(fin, testFile.length() + 1),
-                    "Should have failed with IOException" );
+                    ()->IOUtils.toByteArray(fin, testFile.length() + 1), "Should have failed with IOException" );
             assertTrue(exc.getMessage().startsWith("Unexpected read size"),
                 "Exception message does not start with \"Unexpected read size\"");
         }
