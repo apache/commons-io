@@ -65,6 +65,7 @@ import org.apache.commons.io.input.StringInputStream;
 import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.CountingOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
+import org.apache.commons.io.output.NullWriter;
 import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.io.test.ThrowOnCloseReader;
@@ -251,49 +252,17 @@ public class IOUtilsTest {
 
     @Test
     public void testAsBufferedWriter() {
-        final Writer is = new Writer() {
-            @Override
-            public void close() throws IOException {
-            }
-
-            @Override
-            public void flush() throws IOException {
-            }
-
-            @Override
-            public void write(final char[] cbuf, final int off, final int len) throws IOException {
-            }
-
-            @Override
-            public void write(final int b) throws IOException {
-            }
-        };
-        final BufferedWriter bis = IOUtils.buffer(is);
-        assertNotSame(is, bis);
+        final Writer nullWriter = NullWriter.INSTANCE;
+        final BufferedWriter bis = IOUtils.buffer(nullWriter);
+        assertNotSame(nullWriter, bis);
         assertSame(bis, IOUtils.buffer(bis));
     }
 
     @Test
     public void testAsBufferedWriterWithBufferSize() {
-        final Writer w = new Writer() {
-            @Override
-            public void close() throws IOException {
-            }
-
-            @Override
-            public void flush() throws IOException {
-            }
-
-            @Override
-            public void write(final char[] cbuf, final int off, final int len) throws IOException {
-            }
-
-            @Override
-            public void write(final int b) throws IOException {
-            }
-        };
-        final BufferedWriter bw = IOUtils.buffer(w, 2024);
-        assertNotSame(w, bw);
+        final Writer nullWriter = NullWriter.INSTANCE;
+        final BufferedWriter bw = IOUtils.buffer(nullWriter, 2024);
+        assertNotSame(nullWriter, bw);
         assertSame(bw, IOUtils.buffer(bw));
         assertSame(bw, IOUtils.buffer(bw, 1024));
     }
