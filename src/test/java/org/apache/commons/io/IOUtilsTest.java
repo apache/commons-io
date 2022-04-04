@@ -299,12 +299,13 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testAsWriterAppendable() {
+    public void testAsWriterAppendable() throws IOException {
         final Appendable a = new StringBuffer();
-        final Writer w = IOUtils.writer(a);
-        assertNotSame(w, a);
-        assertEquals(AppendableWriter.class, w.getClass());
-        assertSame(w, IOUtils.writer(w));
+        try (final Writer w = IOUtils.writer(a)) {
+            assertNotSame(w, a);
+            assertEquals(AppendableWriter.class, w.getClass());
+            assertSame(w, IOUtils.writer(w));
+        }
     }
 
     @Test
@@ -313,12 +314,13 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testAsWriterStringBuilder() {
+    public void testAsWriterStringBuilder() throws IOException {
         final Appendable a = new StringBuilder();
-        final Writer w = IOUtils.writer(a);
-        assertNotSame(w, a);
-        assertEquals(StringBuilderWriter.class, w.getClass());
-        assertSame(w, IOUtils.writer(w));
+        try (final Writer w = IOUtils.writer(a)) {
+            assertNotSame(w, a);
+            assertEquals(StringBuilderWriter.class, w.getClass());
+            assertSame(w, IOUtils.writer(w));
+        }
     }
 
     /**
