@@ -37,7 +37,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      *
      * @param out  the OutputStream to write to
      */
-    public CountingOutputStream( final OutputStream out ) {
+    public CountingOutputStream(final OutputStream out ) {
         super(out);
     }
 
