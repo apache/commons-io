@@ -63,10 +63,12 @@ import org.apache.commons.io.input.CircularInputStream;
 import org.apache.commons.io.input.NullInputStream;
 import org.apache.commons.io.input.StringInputStream;
 import org.apache.commons.io.output.AppendableWriter;
+import org.apache.commons.io.output.CountingOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.io.test.ThrowOnCloseReader;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -317,6 +319,39 @@ public class IOUtilsTest {
         assertNotSame(w, a);
         assertEquals(StringBuilderWriter.class, w.getClass());
         assertSame(w, IOUtils.writer(w));
+    }
+
+    /**
+     * IO-764 IOUtils.write() throws NegativeArraySizeException while writing big strings.
+     * <pre>
+     * java.lang.OutOfMemoryError: Java heap space
+     *     at java.lang.StringCoding.encode(StringCoding.java:350)
+     *     at java.lang.String.getBytes(String.java:941)
+     *     at org.apache.commons.io.IOUtils.write(IOUtils.java:3367)
+     *     at org.apache.commons.io.IOUtilsTest.testBigString(IOUtilsTest.java:1659)
+     * </pre>
+     */
+    @Test
+    public void testBigString() throws IOException {
+        // 3_000_000 is a size that we can allocate for the test string with Java 8 on the command line as:
+        // mvn clean test -Dtest=IOUtilsTest -DtestBigString=3000000
+        // 6_000_000 failed with the above
+        //
+        // TODO Can we mock the test string for this test to pretend to be larger?
+        // Mocking the length seems simple but how about the data?
+        final int repeat = Integer.getInteger("testBigString", 3_000_000);
+        String data;
+        try {
+            data = StringUtils.repeat("\uD83D", repeat);
+        } catch (OutOfMemoryError e) {
+            System.err.printf("Don't fail the test if we cannot build the fixture, just log, fixture size = %,d%n.", repeat);
+            e.printStackTrace();
+            return;
+        }
+        try (CountingOutputStream os = new CountingOutputStream(NullOutputStream.INSTANCE)) {
+            IOUtils.write(data, os, StandardCharsets.UTF_8);
+            assertEquals(repeat, os.getByteCount());
+        }
     }
 
     @Test
