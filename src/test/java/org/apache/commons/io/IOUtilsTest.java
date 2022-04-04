@@ -342,7 +342,7 @@ public class IOUtilsTest {
         // TODO Can we mock the test string for this test to pretend to be larger?
         // Mocking the length seems simple but how about the data?
         final int repeat = Integer.getInteger("testBigString", 3_000_000);
-        String data;
+        final String data;
         try {
             data = StringUtils.repeat("\uD83D", repeat);
         } catch (OutOfMemoryError e) {
