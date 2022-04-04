@@ -531,6 +531,8 @@ public class IOUtilsTest {
         assertTrue(IOUtils.contentEquals(new ByteArrayInputStream(dataAbc), new ByteArrayInputStream(dataAbc)));
         assertFalse(IOUtils.contentEquals(new ByteArrayInputStream(dataAbcd), new ByteArrayInputStream(dataAbc)));
         assertFalse(IOUtils.contentEquals(new ByteArrayInputStream(dataAbc), new ByteArrayInputStream(dataAbcd)));
+        assertFalse(IOUtils.contentEquals(new ByteArrayInputStream("apache".getBytes(StandardCharsets.UTF_8)),
+                new ByteArrayInputStream("apacha".getBytes(StandardCharsets.UTF_8))));
         // Tests with larger inputs that DEFAULT_BUFFER_SIZE in case internal buffers are used.
         final byte[] bytes2XDefaultA = new byte[IOUtils.DEFAULT_BUFFER_SIZE * 2];
         final byte[] bytes2XDefaultB = new byte[IOUtils.DEFAULT_BUFFER_SIZE * 2];
@@ -582,6 +584,7 @@ public class IOUtilsTest {
         assertTrue(IOUtils.contentEquals(new StringReader("ABC"), new StringReader("ABC")));
         assertFalse(IOUtils.contentEquals(new StringReader("ABCD"), new StringReader("ABC")));
         assertFalse(IOUtils.contentEquals(new StringReader("ABC"), new StringReader("ABCD")));
+        assertFalse(IOUtils.contentEquals(new StringReader("apache"), new StringReader("apacha")));
     }
 
     @Test
@@ -606,28 +609,48 @@ public class IOUtilsTest {
             assertTrue(IOUtils.contentEqualsIgnoreEOL(input1, input1));
         }
 
-        Reader r1;
-        Reader r2;
+        testSingleEOL("", "", true);
+        testSingleEOL("", "\n", false);
+        testSingleEOL("", "\r", false);
+        testSingleEOL("", "\r\n", false);
+        testSingleEOL("", "\r\r", false);
+        testSingleEOL("", "\n\n", false);
+        testSingleEOL("1", "1", true);
+        testSingleEOL("1", "2", false);
+        testSingleEOL("123\rabc", "123\nabc", true);
+        testSingleEOL("321", "321\r\n", true);
+        testSingleEOL("321", "321\r\naabb", false);
+        testSingleEOL("321", "321\n", true);
+        testSingleEOL("321", "321\r", true);
+        testSingleEOL("321", "321\r\n", true);
+        testSingleEOL("321", "321\r\r", false);
+        testSingleEOL("321", "321\n\r", false);
+        testSingleEOL("321\n", "321", true);
+        testSingleEOL("321\n", "321\n\r", false);
+        testSingleEOL("321\n", "321\r\n", true);
+        testSingleEOL("321\r", "321\r\n", true);
+        testSingleEOL("321\r\n", "321\r\n\r", false);
+        testSingleEOL("123", "1234", false);
+        testSingleEOL("1235", "1234", false);
+    }
 
-        r1 = new CharArrayReader("".toCharArray());
-        r2 = new CharArrayReader("".toCharArray());
-        assertTrue(IOUtils.contentEqualsIgnoreEOL(r1, r2));
-
-        r1 = new CharArrayReader("1".toCharArray());
-        r2 = new CharArrayReader("1".toCharArray());
-        assertTrue(IOUtils.contentEqualsIgnoreEOL(r1, r2));
-
-        r1 = new CharArrayReader("1".toCharArray());
-        r2 = new CharArrayReader("2".toCharArray());
-        assertFalse(IOUtils.contentEqualsIgnoreEOL(r1, r2));
-
-        r1 = new CharArrayReader("123\rabc".toCharArray());
-        r2 = new CharArrayReader("123\nabc".toCharArray());
-        assertTrue(IOUtils.contentEqualsIgnoreEOL(r1, r2));
-
-        r1 = new CharArrayReader("321".toCharArray());
-        r2 = new CharArrayReader("321\r\n".toCharArray());
-        assertTrue(IOUtils.contentEqualsIgnoreEOL(r1, r2));
+    public void testSingleEOL(String s1, String s2, boolean ifEquals) throws IOException {
+        assertEquals(ifEquals, IOUtils.contentEqualsIgnoreEOL(
+                new CharArrayReader(s1.toCharArray()),
+                new CharArrayReader(s2.toCharArray())
+        ), "failed at :{" + s1 + "," + s2 + "}");
+        assertEquals(ifEquals, IOUtils.contentEqualsIgnoreEOL(
+                new CharArrayReader(s2.toCharArray()),
+                new CharArrayReader(s1.toCharArray())
+        ), "failed at :{" + s2 + "," + s1 + "}");
+        assertTrue(IOUtils.contentEqualsIgnoreEOL(
+                new CharArrayReader(s1.toCharArray()),
+                new CharArrayReader(s1.toCharArray())
+        ),"failed at :{" + s1 + "," + s1 + "}");
+        assertTrue(IOUtils.contentEqualsIgnoreEOL(
+                new CharArrayReader(s2.toCharArray()),
+                new CharArrayReader(s2.toCharArray())
+        ), "failed at :{" + s2 + "," + s2 + "}");
     }
 
     @Test
