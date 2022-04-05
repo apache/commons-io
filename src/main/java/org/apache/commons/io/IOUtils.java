@@ -40,8 +40,10 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.Selector;
+import java.nio.channels.WritableByteChannel;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -3362,7 +3364,14 @@ public class IOUtils {
      */
     public static void write(final String data, final OutputStream output, final Charset charset) throws IOException {
         if (data != null) {
-            output.write(data.getBytes(Charsets.toCharset(charset)));
+           final Charset usableCharset = Charsets.toCharset(charset);
+
+           // A ByteBuffer needs to be used here, since calling getBytes directly on the String might result in NegativeArraySizeException
+           final ByteBuffer bytebuffer = usableCharset.encode(data);
+
+           // Since the underlying OutputStream should not be closed, the channel is not closed
+           final WritableByteChannel channel = Channels.newChannel(output);
+           channel.write(bytebuffer);
         }
     }
 
