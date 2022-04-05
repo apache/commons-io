@@ -601,7 +601,7 @@ public class IOUtilsTest {
         testSingleEOL("1235", "1234", false);
     }
 
-    public void testSingleEOL(String s1, String s2, boolean ifEquals) throws IOException {
+    public void testSingleEOL(final String s1, final String s2, final boolean ifEquals) throws IOException {
         assertEquals(ifEquals, IOUtils.contentEqualsIgnoreEOL(
                 new CharArrayReader(s1.toCharArray()),
                 new CharArrayReader(s2.toCharArray())
@@ -1662,7 +1662,7 @@ public class IOUtilsTest {
         final String data;
         try {
             data = StringUtils.repeat("\uD83D", repeat);
-        } catch (OutOfMemoryError e) {
+        } catch (final OutOfMemoryError e) {
             System.err.printf("Don't fail the test if we cannot build the fixture, just log, fixture size = %,d%n.", repeat);
             e.printStackTrace();
             return;
@@ -1676,7 +1676,7 @@ public class IOUtilsTest {
     @Test
     public void testWriteLittleString() throws IOException {
         final String data = "\uD83D";
-        // White-box test to check that not closing the internal channel is not a problem. 
+        // White-box test to check that not closing the internal channel is not a problem.
         for (int i = 0; i < 1_000_000; i++) {
             try (CountingOutputStream os = new CountingOutputStream(NullOutputStream.INSTANCE)) {
                 IOUtils.write(data, os, StandardCharsets.UTF_8);

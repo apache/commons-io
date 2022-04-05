@@ -3193,7 +3193,7 @@ public class IOUtils {
      */
     public static void write(final char[] data, final OutputStream output, final Charset charset) throws IOException {
         if (data != null) {
-            output.write(new String(data).getBytes(Charsets.toCharset(charset)));
+            write(new String(data), output, charset);
         }
     }
 
@@ -3452,9 +3452,9 @@ public class IOUtils {
      */
     @Deprecated
     public static void write(final StringBuffer data, final OutputStream output, final String charsetName) //NOSONAR
-            throws IOException {
+        throws IOException {
         if (data != null) {
-            output.write(data.toString().getBytes(Charsets.toCharset(charsetName)));
+            write(data.toString(), output, Charsets.toCharset(charsetName));
         }
     }
 
@@ -3568,11 +3568,12 @@ public class IOUtils {
             lineEnding = System.lineSeparator();
         }
         final Charset cs = Charsets.toCharset(charset);
+        final byte[] eolBytes = lineEnding.getBytes(cs);
         for (final Object line : lines) {
             if (line != null) {
-                output.write(line.toString().getBytes(cs));
+                write(line.toString(), output, cs);
             }
-            output.write(lineEnding.getBytes(cs));
+            output.write(eolBytes);
         }
     }
 
