@@ -292,39 +292,6 @@ public class IOUtilsTest {
         }
     }
 
-    /**
-     * IO-764 IOUtils.write() throws NegativeArraySizeException while writing big strings.
-     * <pre>
-     * java.lang.OutOfMemoryError: Java heap space
-     *     at java.lang.StringCoding.encode(StringCoding.java:350)
-     *     at java.lang.String.getBytes(String.java:941)
-     *     at org.apache.commons.io.IOUtils.write(IOUtils.java:3367)
-     *     at org.apache.commons.io.IOUtilsTest.testBigString(IOUtilsTest.java:1659)
-     * </pre>
-     */
-    @Test
-    public void testBigString() throws IOException {
-        // 3_000_000 is a size that we can allocate for the test string with Java 8 on the command line as:
-        // mvn clean test -Dtest=IOUtilsTest -DtestBigString=3000000
-        // 6_000_000 failed with the above
-        //
-        // TODO Can we mock the test string for this test to pretend to be larger?
-        // Mocking the length seems simple but how about the data?
-        final int repeat = Integer.getInteger("testBigString", 3_000_000);
-        final String data;
-        try {
-            data = StringUtils.repeat("\uD83D", repeat);
-        } catch (OutOfMemoryError e) {
-            System.err.printf("Don't fail the test if we cannot build the fixture, just log, fixture size = %,d%n.", repeat);
-            e.printStackTrace();
-            return;
-        }
-        try (CountingOutputStream os = new CountingOutputStream(NullOutputStream.INSTANCE)) {
-            IOUtils.write(data, os, StandardCharsets.UTF_8);
-            assertEquals(repeat, os.getByteCount());
-        }
-    }
-
     @Test
     public void testClose() {
         assertDoesNotThrow(() -> IOUtils.close((Closeable) null));
@@ -1671,6 +1638,51 @@ public class IOUtilsTest {
     @Test
     public void testToString_URL_CharsetNameNull() throws Exception {
         testToString_URL(null);
+    }
+
+    /**
+     * IO-764 IOUtils.write() throws NegativeArraySizeException while writing big strings.
+     * <pre>
+     * java.lang.OutOfMemoryError: Java heap space
+     *     at java.lang.StringCoding.encode(StringCoding.java:350)
+     *     at java.lang.String.getBytes(String.java:941)
+     *     at org.apache.commons.io.IOUtils.write(IOUtils.java:3367)
+     *     at org.apache.commons.io.IOUtilsTest.testBigString(IOUtilsTest.java:1659)
+     * </pre>
+     */
+    @Test
+    public void testWriteBigString() throws IOException {
+        // 3_000_000 is a size that we can allocate for the test string with Java 8 on the command line as:
+        // mvn clean test -Dtest=IOUtilsTest -DtestBigString=3000000
+        // 6_000_000 failed with the above
+        //
+        // TODO Can we mock the test string for this test to pretend to be larger?
+        // Mocking the length seems simple but how about the data?
+        final int repeat = Integer.getInteger("testBigString", 3_000_000);
+        final String data;
+        try {
+            data = StringUtils.repeat("\uD83D", repeat);
+        } catch (OutOfMemoryError e) {
+            System.err.printf("Don't fail the test if we cannot build the fixture, just log, fixture size = %,d%n.", repeat);
+            e.printStackTrace();
+            return;
+        }
+        try (CountingOutputStream os = new CountingOutputStream(NullOutputStream.INSTANCE)) {
+            IOUtils.write(data, os, StandardCharsets.UTF_8);
+            assertEquals(repeat, os.getByteCount());
+        }
+    }
+
+    @Test
+    public void testWriteLittleString() throws IOException {
+        final String data = "\uD83D";
+        // White-box test to check that not closing the internal channel is not a problem. 
+        for (int i = 0; i < 1_000_000; i++) {
+            try (CountingOutputStream os = new CountingOutputStream(NullOutputStream.INSTANCE)) {
+                IOUtils.write(data, os, StandardCharsets.UTF_8);
+                assertEquals(data.length(), os.getByteCount());
+            }
+        }
     }
 
 }

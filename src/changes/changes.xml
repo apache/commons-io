@@ -165,6 +165,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="richarda23">
         FileFilterTest minor fixes #340.
       </action>
+      <action issue="IO-764" dev="ggregory" type="fix" due-to="DaGeRe, Gary Gregory">
+        IOUtils.write() throws OutOfMemoryError/NegativeArraySizeException while writing big strings #343.
+      </action>
       <!-- ADD -->
       <action issue="IO-726" dev="ggregory" type="fix" due-to="shollander, Gary Gregory">
         Add MemoryMappedFileInputStream #215.

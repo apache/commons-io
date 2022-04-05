@@ -40,6 +40,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.Selector;
 import java.nio.charset.Charset;
@@ -968,10 +969,7 @@ public class IOUtils {
      */
     public static int copy(final InputStream inputStream, final OutputStream outputStream) throws IOException {
         final long count = copyLarge(inputStream, outputStream);
-        if (count > Integer.MAX_VALUE) {
-            return EOF;
-        }
-        return (int) count;
+        return count > Integer.MAX_VALUE ? EOF : (int) count;
     }
 
     /**
@@ -3360,9 +3358,13 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
+    @SuppressWarnings("resource")
     public static void write(final String data, final OutputStream output, final Charset charset) throws IOException {
         if (data != null) {
-            output.write(data.getBytes(Charsets.toCharset(charset)));
+            // Use Charset#encode(String), since calling String#getBytes(Charset) might result in
+            // NegativeArraySizeException or OutOfMemoryError.
+            // The underlying OutputStream should not be closed, so the channel is not closed.
+            Channels.newChannel(output).write(Charsets.toCharset(charset).encode(data));
         }
     }
 
