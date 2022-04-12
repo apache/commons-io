@@ -351,6 +351,12 @@ The <action> type attribute can be add,update,fix,remove.
         Add more tests for IOUtils.contentEqualsIgnoreEOL #137.
       </action>
       <!-- UPDATE -->
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump actions/checkout from 2.3.4 to 3 #286, #298, #330.
+      </action>
+      <action dev="kinow" type="update" due-to="Dependabot">
+        Bump actions/cache from 2.1.6 to 3 #307, #337.
+      </action>
       <action dev="ggregory" type="update" due-to="Dependabot, Gary Gregory">
         Bump Maven Javadoc plugin from 3.2.0 to 3.3.2.
       </action>
@@ -375,17 +381,11 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump jmh.version from 1.32 to 1.35 #258, #316, #342.
       </action>
-      <action dev="ggregory" type="update" due-to="Dependabot">
-        Bump actions/checkout from 2.3.4 to 3 #286, #298, #330.
-      </action>
       <action dev="kinow" type="update" due-to="Dependabot">
         Bump moditect-maven-plugin from 1.0.0.RC1 to 1.0.0.RC2 #280.
       </action>
       <action dev="kinow" type="update" due-to="Dependabot, Gary Gregory">
         Bump junit-pioneer from 1.4.2 to 1.6.2 #304. #335.
-      </action>
-      <action dev="kinow" type="update" due-to="Dependabot">
-        Bump actions/cache from 2.1.6 to 3 #307, #337.
       </action>
       <action dev="kinow" type="update" due-to="Dependabot">
         Bump spotbugs from 4.5.2 to 4.5.3 #313, #317.
