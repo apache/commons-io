@@ -87,6 +87,7 @@ public class IOExceptionList extends IOException {
      * @param index index in the cause list.
      * @return The list of causes.
      */
+    @SuppressWarnings("unchecked")
     public <T extends Throwable> T getCause(final int index) {
         return (T) causeList.get(index);
     }
@@ -109,6 +110,7 @@ public class IOExceptionList extends IOException {
      * @param <T> type of exception to return.
      * @return The list of causes.
      */
+    @SuppressWarnings("unchecked")
     public <T extends Throwable> List<T> getCauseList() {
         return (List<T>) causeList;
     }
@@ -120,6 +122,7 @@ public class IOExceptionList extends IOException {
      * @param clazz the target type
      * @return The list of causes.
      */
+    @SuppressWarnings("unchecked")
     public <T extends Throwable> List<T> getCauseList(final Class<T> clazz) {
         return (List<T>) causeList;
     }
