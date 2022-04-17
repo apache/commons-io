@@ -18,38 +18,21 @@
 package org.apache.commons.io.file;
 
 import static org.apache.commons.io.file.CounterAssertions.assertCounts;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Tests {@link DeletingPathVisitor}.
  */
 public class PathUtilsCleanDirectoryTest {
 
+    @TempDir
     private Path tempDir;
-
-    @AfterEach
-    public void afterEach() throws IOException {
-        // temp dir should still exist since we are cleaning and not deleting.
-        assertTrue(Files.exists(tempDir));
-        // backstop
-        if (Files.exists(tempDir) && PathUtils.isEmptyDirectory(tempDir)) {
-            Files.deleteIfExists(tempDir);
-        }
-    }
-
-    @BeforeEach
-    public void beforeEach() throws IOException {
-        tempDir = Files.createTempDirectory(getClass().getCanonicalName());
-    }
 
     /**
      * Tests a directory with one file of size 0.
