@@ -29,13 +29,6 @@ import org.junit.jupiter.api.Test;
 public class FileTimesTest {
 
     @Test
-    public void PlusMinusMillis() {
-        final int millis = 2;
-        assertEquals(Instant.EPOCH.plusMillis(millis), FileTimes.plusMillis(FileTimes.EPOCH, millis).toInstant());
-        assertEquals(Instant.EPOCH, FileTimes.plusMillis(FileTimes.EPOCH, 0).toInstant());
-    }
-
-    @Test
     public void testEpoch() {
         assertEquals(0, FileTimes.EPOCH.toMillis());
     }
@@ -59,6 +52,13 @@ public class FileTimesTest {
         final int seconds = 2;
         assertEquals(Instant.EPOCH.minusSeconds(seconds), FileTimes.minusSeconds(FileTimes.EPOCH, seconds).toInstant());
         assertEquals(Instant.EPOCH, FileTimes.minusSeconds(FileTimes.EPOCH, 0).toInstant());
+    }
+
+    @Test
+    public void testPlusMinusMillis() {
+        final int millis = 2;
+        assertEquals(Instant.EPOCH.plusMillis(millis), FileTimes.plusMillis(FileTimes.EPOCH, millis).toInstant());
+        assertEquals(Instant.EPOCH, FileTimes.plusMillis(FileTimes.EPOCH, 0).toInstant());
     }
 
     @Test
