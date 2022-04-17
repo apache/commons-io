@@ -28,7 +28,6 @@ import java.nio.file.StandardCopyOption;
 import org.apache.commons.io.file.Counters.PathCounters;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -37,8 +36,17 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 public class CopyDirectoryVisitorTest extends TestArguments {
 
-    @TempDir
     private Path targetDir;
+
+    @AfterEach
+    public void afterEach() throws IOException {
+        PathUtils.deleteDirectory(targetDir);
+    }
+
+    @BeforeEach
+    public void beforeEach() throws IOException {
+        targetDir = Files.createTempDirectory(getClass().getCanonicalName() + "-target");
+    }
 
     /**
      * Tests an empty folder.
@@ -46,9 +54,12 @@ public class CopyDirectoryVisitorTest extends TestArguments {
     @ParameterizedTest
     @MethodSource("pathCounters")
     public void testCopyDirectoryEmptyFolder(final PathCounters pathCounters) throws IOException {
-        try (final TempDirectory sourceDir = TempDirectory.create(getClass().getSimpleName())) {
-            assertCounts(1, 0, 0, PathUtils
-                .visitFileTree(new CopyDirectoryVisitor(pathCounters, sourceDir, targetDir, StandardCopyOption.REPLACE_EXISTING), sourceDir.unwrap()));
+        final Path sourceDir = Files.createTempDirectory(getClass().getSimpleName());
+        try {
+            assertCounts(1, 0, 0,
+                    PathUtils.visitFileTree(new CopyDirectoryVisitor(pathCounters, sourceDir, targetDir, StandardCopyOption.REPLACE_EXISTING), sourceDir));
+        } finally {
+            Files.deleteIfExists(sourceDir);
         }
     }
 
