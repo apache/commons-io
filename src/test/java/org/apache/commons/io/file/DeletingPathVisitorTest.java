@@ -25,9 +25,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.apache.commons.io.file.Counters.PathCounters;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -36,24 +35,12 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 public class DeletingPathVisitorTest extends TestArguments {
 
+    @TempDir
     private Path tempDir;
-
-    @AfterEach
-    public void afterEach() throws IOException {
-        // backstop
-        if (Files.exists(tempDir) && PathUtils.isEmptyDirectory(tempDir)) {
-            Files.deleteIfExists(tempDir);
-        }
-    }
 
     private void applyDeleteEmptyDirectory(final DeletingPathVisitor visitor) throws IOException {
         Files.walkFileTree(tempDir, visitor);
         assertCounts(1, 0, 0, visitor);
-    }
-
-    @BeforeEach
-    public void beforeEach() throws IOException {
-        tempDir = Files.createTempDirectory(getClass().getCanonicalName());
     }
 
     /**
