@@ -20,8 +20,6 @@ package org.apache.commons.io.file;
 import static org.apache.commons.io.file.CounterAssertions.assertCounts;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -44,11 +42,8 @@ public class CountingPathVisitorTest extends TestArguments {
     @MethodSource("countingPathVisitors")
     public void testCountEmptyFolder(final CountingPathVisitor visitor) throws IOException {
         checkZeroCounts(visitor);
-        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
-        try {
-            assertCounts(1, 0, 0, PathUtils.visitFileTree(visitor, tempDir));
-        } finally {
-            Files.deleteIfExists(tempDir);
+        try (final TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
+            assertCounts(1, 0, 0, PathUtils.visitFileTree(visitor, tempDir.unwrap()));
         }
     }
 
