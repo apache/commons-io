@@ -357,6 +357,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="kinow" type="update" due-to="Dependabot, Gary Gregory">
         Bump actions/cache from 2.1.6 to 3.0.2 #307, #337.
       </action>
+      <action dev="kinow" type="update" due-to="Dependabot">
+        Bump actions/setup-java from 2 to 3 #346.
+      </action>
       <action dev="ggregory" type="update" due-to="Dependabot, Gary Gregory">
         Bump Maven Javadoc plugin from 3.2.0 to 3.3.2.
       </action>
@@ -392,9 +395,6 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Bump japicmp-maven-plugin from 0.15.3 to 0.15.7.
-      </action>
-      <action dev="kinow" type="update" due-to="Dependabot">
-        Bump actions/setup-java from 2 to 3 #346.
       </action>
     </release>
     <release version="2.11.0" date="2021-07-09" description="Java 8 required.">
