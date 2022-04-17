@@ -220,6 +220,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
         assertEquals(tempDirectory, PathUtils.getTempDirectory());
     }
 
+    @SuppressWarnings("resource")
     @Test
     public void testIsDirectory() throws IOException {
         assertFalse(PathUtils.isDirectory(null));
@@ -228,10 +229,12 @@ public class PathUtilsTest extends AbstractTempDirTest {
         final Path testFile1 = Files.createTempFile(tempDirPath, "prefix", null);
         assertFalse(PathUtils.isDirectory(testFile1));
 
-        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
-        assertTrue(PathUtils.isDirectory(tempDir));
-        Files.delete(tempDir);
-        assertFalse(PathUtils.isDirectory(tempDir));
+        Path ref = null;
+        try (final TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
+            ref = tempDir.unwrap();
+            assertTrue(PathUtils.isDirectory(tempDir.unwrap()));
+        }
+        assertFalse(PathUtils.isDirectory(ref));
     }
 
     @Test

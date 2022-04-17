@@ -18,7 +18,6 @@
 package org.apache.commons.io.file;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -42,22 +41,16 @@ public class PathUtilsIsEmptyTest {
     public void testIsEmpty() throws IOException {
         Assertions.assertTrue(PathUtils.isEmpty(FILE_SIZE_0));
         Assertions.assertFalse(PathUtils.isEmpty(FILE_SIZE_1));
-        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
-        try {
-            Assertions.assertTrue(PathUtils.isEmpty(tempDir));
-        } finally {
-            Files.delete(tempDir);
+        try (final TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
+            Assertions.assertTrue(PathUtils.isEmpty(tempDir.unwrap()));
         }
         Assertions.assertFalse(PathUtils.isEmpty(DIR_SIZE_1));
     }
 
     @Test
     public void testIsEmptyDirectory() throws IOException {
-        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
-        try {
-            Assertions.assertTrue(PathUtils.isEmptyDirectory(tempDir));
-        } finally {
-            Files.delete(tempDir);
+        try (final TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
+            Assertions.assertTrue(PathUtils.isEmptyDirectory(tempDir.unwrap()));
         }
         Assertions.assertFalse(PathUtils.isEmptyDirectory(DIR_SIZE_1));
     }

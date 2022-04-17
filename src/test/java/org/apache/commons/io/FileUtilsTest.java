@@ -66,6 +66,7 @@ import java.util.zip.Checksum;
 import org.apache.commons.io.file.AbstractTempDirTest;
 import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.io.file.PathUtilsIsEmptyTest;
+import org.apache.commons.io.file.TempDirectory;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
@@ -1621,21 +1622,19 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(FileUtils.isDirectory(tempDirFile));
         assertFalse(FileUtils.isDirectory(testFile1));
 
-        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
-        final File tempDirAsFile = tempDir.toFile();
-        assertTrue(FileUtils.isDirectory(tempDirAsFile));
-        Files.delete(tempDir);
+        final File tempDirAsFile;
+        try (final TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
+            tempDirAsFile = tempDir.toFile();
+            assertTrue(FileUtils.isDirectory(tempDirAsFile));
+        }
         assertFalse(FileUtils.isDirectory(tempDirAsFile));
     }
 
     @Test
     public void testIsEmptyDirectory() throws IOException {
-        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
-        final File tempDirAsFile = tempDir.toFile();
-        try {
+        try (final TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
+            final File tempDirAsFile = tempDir.toFile();
             Assertions.assertTrue(FileUtils.isEmptyDirectory(tempDirAsFile));
-        } finally {
-            Files.delete(tempDir);
         }
         Assertions.assertFalse(FileUtils.isEmptyDirectory(PathUtilsIsEmptyTest.DIR_SIZE_1.toFile()));
     }

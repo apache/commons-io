@@ -20,8 +20,6 @@ package org.apache.commons.io.file;
 import static org.apache.commons.io.file.CounterAssertions.assertCounts;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.apache.commons.io.file.Counters.PathCounters;
@@ -37,12 +35,9 @@ public class PathUtilsCountingTest {
      */
     @Test
     public void testCountEmptyFolder() throws IOException {
-        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
-        try {
-            final PathCounters pathCounts = PathUtils.countDirectory(tempDir);
+        try (final TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
+            final PathCounters pathCounts = PathUtils.countDirectory(tempDir.unwrap());
             assertCounts(1, 0, 0, pathCounts);
-        } finally {
-            Files.deleteIfExists(tempDir);
         }
     }
 
