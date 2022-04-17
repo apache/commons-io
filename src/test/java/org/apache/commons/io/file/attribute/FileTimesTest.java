@@ -18,20 +18,102 @@
 package org.apache.commons.io.file.attribute;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.nio.file.attribute.FileTime;
 import java.time.Instant;
+import java.util.Date;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Tests {@link FileTimes}.
  */
 public class FileTimesTest {
 
+    public static Stream<Arguments> dateToNtfsProvider() {
+        // @formatter:off
+        return Stream.of(
+            Arguments.of("1601-01-01T00:00:00.000Z", 0),
+            Arguments.of("1601-01-01T00:00:00.000Z", 1),
+            Arguments.of("1600-12-31T23:59:59.999Z", -1),
+            Arguments.of("1601-01-01T00:00:00.001Z", FileTimes.HUNDRED_NANOS_PER_MILLISECOND),
+            Arguments.of("1601-01-01T00:00:00.001Z", FileTimes.HUNDRED_NANOS_PER_MILLISECOND + 1),
+            Arguments.of("1601-01-01T00:00:00.000Z", FileTimes.HUNDRED_NANOS_PER_MILLISECOND - 1),
+            Arguments.of("1600-12-31T23:59:59.999Z", -FileTimes.HUNDRED_NANOS_PER_MILLISECOND),
+            Arguments.of("1600-12-31T23:59:59.999Z", -FileTimes.HUNDRED_NANOS_PER_MILLISECOND + 1),
+            Arguments.of("1600-12-31T23:59:59.998Z", -FileTimes.HUNDRED_NANOS_PER_MILLISECOND - 1),
+            Arguments.of("1970-01-01T00:00:00.000Z", -FileTimes.WINDOWS_EPOCH_OFFSET),
+            Arguments.of("1970-01-01T00:00:00.000Z", -FileTimes.WINDOWS_EPOCH_OFFSET + 1),
+            Arguments.of("1970-01-01T00:00:00.001Z", -FileTimes.WINDOWS_EPOCH_OFFSET + FileTimes.HUNDRED_NANOS_PER_MILLISECOND),
+            Arguments.of("1969-12-31T23:59:59.999Z", -FileTimes.WINDOWS_EPOCH_OFFSET - 1),
+            Arguments.of("1969-12-31T23:59:59.999Z", -FileTimes.WINDOWS_EPOCH_OFFSET - FileTimes.HUNDRED_NANOS_PER_MILLISECOND));
+        // @formatter:on
+    }
+
+    public static Stream<Arguments> fileTimeToNtfsProvider() {
+        // @formatter:off
+        return Stream.of(
+            Arguments.of("1601-01-01T00:00:00.0000000Z", 0),
+            Arguments.of("1601-01-01T00:00:00.0000001Z", 1),
+            Arguments.of("1600-12-31T23:59:59.9999999Z", -1),
+            Arguments.of("1601-01-01T00:00:00.0010000Z", FileTimes.HUNDRED_NANOS_PER_MILLISECOND),
+            Arguments.of("1601-01-01T00:00:00.0010001Z", FileTimes.HUNDRED_NANOS_PER_MILLISECOND + 1),
+            Arguments.of("1601-01-01T00:00:00.0009999Z", FileTimes.HUNDRED_NANOS_PER_MILLISECOND - 1),
+            Arguments.of("1600-12-31T23:59:59.9990000Z", -FileTimes.HUNDRED_NANOS_PER_MILLISECOND),
+            Arguments.of("1600-12-31T23:59:59.9990001Z", -FileTimes.HUNDRED_NANOS_PER_MILLISECOND + 1),
+            Arguments.of("1600-12-31T23:59:59.9989999Z", -FileTimes.HUNDRED_NANOS_PER_MILLISECOND - 1),
+            Arguments.of("1970-01-01T00:00:00.0000000Z", -FileTimes.WINDOWS_EPOCH_OFFSET),
+            Arguments.of("1970-01-01T00:00:00.0000001Z", -FileTimes.WINDOWS_EPOCH_OFFSET + 1),
+            Arguments.of("1970-01-01T00:00:00.0010000Z", -FileTimes.WINDOWS_EPOCH_OFFSET + FileTimes.HUNDRED_NANOS_PER_MILLISECOND),
+            Arguments.of("1969-12-31T23:59:59.9999999Z", -FileTimes.WINDOWS_EPOCH_OFFSET - 1),
+            Arguments.of("1969-12-31T23:59:59.9990000Z", -FileTimes.WINDOWS_EPOCH_OFFSET - FileTimes.HUNDRED_NANOS_PER_MILLISECOND));
+        // @formatter:on
+    }
+
+    @ParameterizedTest
+    @MethodSource("dateToNtfsProvider")
+    public void testDateToFileTime(final String instant, final long ignored) {
+        final Instant parsedInstant = Instant.parse(instant);
+        final FileTime parsedFileTime = FileTime.from(parsedInstant);
+        final Date parsedDate = Date.from(parsedInstant);
+        assertEquals(parsedFileTime, FileTimes.toFileTime(parsedDate));
+    }
+
+    @ParameterizedTest
+    @MethodSource("dateToNtfsProvider")
+    public void testDateToNtfsTime(final String instant, final long ntfsTime) {
+        final long ntfsMillis = Math.floorDiv(ntfsTime, FileTimes.HUNDRED_NANOS_PER_MILLISECOND) * FileTimes.HUNDRED_NANOS_PER_MILLISECOND;
+        final Date parsed = Date.from(Instant.parse(instant));
+        assertEquals(ntfsMillis, FileTimes.toNtfsTime(parsed));
+    }
+
     @Test
     public void testEpoch() {
         assertEquals(0, FileTimes.EPOCH.toMillis());
     }
+
+    @ParameterizedTest
+    @MethodSource("fileTimeToNtfsProvider")
+    public void testFileTimeToDate(final String instant, final long ignored) {
+        final Instant parsedInstant = Instant.parse(instant);
+        final FileTime parsedFileTime = FileTime.from(parsedInstant);
+        final Date parsedDate = Date.from(parsedInstant);
+        assertEquals(parsedDate, FileTimes.toDate(parsedFileTime));
+    }
+
+    @ParameterizedTest
+    @MethodSource("fileTimeToNtfsProvider")
+    public void testFileTimeToNtfsTime(final String instant, final long ntfsTime) {
+        final FileTime parsed = FileTime.from(Instant.parse(instant));
+        assertEquals(ntfsTime, FileTimes.toNtfsTime(parsed));
+    }
+
+    //
 
     @Test
     public void testMinusMillis() {
@@ -54,6 +136,29 @@ public class FileTimesTest {
         assertEquals(Instant.EPOCH, FileTimes.minusSeconds(FileTimes.EPOCH, 0).toInstant());
     }
 
+    @ParameterizedTest
+    @MethodSource("dateToNtfsProvider")
+    public void testNtfsTimeToDate(final String instant, final long ntfsTime) {
+        assertEquals(Instant.parse(instant), FileTimes.ntfsTimeToDate(ntfsTime).toInstant());
+    }
+
+    @ParameterizedTest
+    @MethodSource("fileTimeToNtfsProvider")
+    public void testNtfsTimeToFileTime(final String instant, final long ntfsTime) {
+        final FileTime parsed = FileTime.from(Instant.parse(instant));
+        assertEquals(parsed, FileTimes.ntfsTimeToFileTime(ntfsTime));
+    }
+
+    @Test
+    public void testNullDateToNullFileTime() {
+        assertNull(FileTimes.toFileTime(null));
+    }
+
+    @Test
+    public void testNullFileTimeToNullDate() {
+        assertNull(FileTimes.toDate(null));
+    }
+
     @Test
     public void testPlusMinusMillis() {
         final int millis = 2;
@@ -74,5 +179,4 @@ public class FileTimesTest {
         assertEquals(Instant.EPOCH.plusSeconds(seconds), FileTimes.plusSeconds(FileTimes.EPOCH, seconds).toInstant());
         assertEquals(Instant.EPOCH, FileTimes.plusSeconds(FileTimes.EPOCH, 0).toInstant());
     }
-
 }
