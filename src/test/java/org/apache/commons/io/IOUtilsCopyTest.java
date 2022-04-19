@@ -31,9 +31,9 @@ import java.io.Writer;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.apache.commons.io.file.TempFile;
 import org.apache.commons.io.input.NullInputStream;
 import org.apache.commons.io.input.NullReader;
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -462,13 +462,9 @@ public class IOUtilsCopyTest {
         final URL in = getClass().getResource(name);
         assertNotNull(in, name);
 
-        final Path path = Files.createTempFile("testCopy_URLToFile", ".txt");
-        try {
+        try (final TempFile path = TempFile.create("testCopy_URLToFile", ".txt")) {
             IOUtils.copy(in, path.toFile());
-
-            assertArrayEquals(Files.readAllBytes(Paths.get("src/test/resources" + name)), Files.readAllBytes(path));
-        } finally {
-            Files.delete(path);
+            assertArrayEquals(Files.readAllBytes(Paths.get("src/test/resources" + name)), Files.readAllBytes(path.get()));
         }
     }
 

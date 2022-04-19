@@ -21,12 +21,12 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 import org.apache.commons.io.file.PathUtils;
+import org.apache.commons.io.file.TempFile;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -74,12 +74,12 @@ public class FileUtilsCopyDirectoryToDirectoryTest {
     @Test
     public void copyDirectoryToDirectoryThrowsIllegalExceptionWithCorrectMessageWhenSrcDirIsNotDirectory()
         throws IOException {
-        final File srcDir = File.createTempFile("notadireotry", null, temporaryFolder);
-        final File destDir = new File(temporaryFolder, "destinationDirectory");
-        destDir.mkdirs();
-        final String expectedMessage = String.format("Parameter 'sourceDir' is not a directory: '%s'",
-            srcDir);
-        assertExceptionTypeAndMessage(srcDir, destDir, IllegalArgumentException.class, expectedMessage);
+        try (final TempFile srcDir = TempFile.create("notadireotry", null)) {
+            final File destDir = new File(temporaryFolder, "destinationDirectory");
+            destDir.mkdirs();
+            final String expectedMessage = String.format("Parameter 'sourceDir' is not a directory: '%s'", srcDir);
+            assertExceptionTypeAndMessage(srcDir.toFile(), destDir, IllegalArgumentException.class, expectedMessage);
+        }
     }
 
     @Test
@@ -100,20 +100,20 @@ public class FileUtilsCopyDirectoryToDirectoryTest {
 
     @Test
     public void copyFileAndCheckAcl() throws IOException {
-        final Path sourcePath = Files.createTempFile("TempOutput", ".bin");
-        final Path destPath = Paths.get(temporaryFolder.getAbsolutePath(), "SomeFile.bin");
-        // Test copy attributes without replace FIRST.
-        FileUtils.copyFile(sourcePath.toFile(), destPath.toFile(), true, StandardCopyOption.COPY_ATTRIBUTES);
-        assertAclEntryList(sourcePath, destPath);
-        //
-        FileUtils.copyFile(sourcePath.toFile(), destPath.toFile());
-        assertAclEntryList(sourcePath, destPath);
-        //
-        FileUtils.copyFile(sourcePath.toFile(), destPath.toFile(), true, StandardCopyOption.REPLACE_EXISTING);
-        assertAclEntryList(sourcePath, destPath);
-        //
-        FileUtils.copyFile(sourcePath.toFile(), destPath.toFile(), true, StandardCopyOption.REPLACE_EXISTING,
-            StandardCopyOption.COPY_ATTRIBUTES);
-        assertAclEntryList(sourcePath, destPath);
+        try (final TempFile sourcePath = TempFile.create("TempOutput", ".bin")) {
+            final Path destPath = Paths.get(temporaryFolder.getAbsolutePath(), "SomeFile.bin");
+            // Test copy attributes without replace FIRST.
+            FileUtils.copyFile(sourcePath.toFile(), destPath.toFile(), true, StandardCopyOption.COPY_ATTRIBUTES);
+            assertAclEntryList(sourcePath.get(), destPath);
+            //
+            FileUtils.copyFile(sourcePath.toFile(), destPath.toFile());
+            assertAclEntryList(sourcePath.get(), destPath);
+            //
+            FileUtils.copyFile(sourcePath.toFile(), destPath.toFile(), true, StandardCopyOption.REPLACE_EXISTING);
+            assertAclEntryList(sourcePath.get(), destPath);
+            //
+            FileUtils.copyFile(sourcePath.toFile(), destPath.toFile(), true, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+            assertAclEntryList(sourcePath.get(), destPath);
+        }
     }
 }

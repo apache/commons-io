@@ -66,6 +66,8 @@ import java.util.zip.Checksum;
 import org.apache.commons.io.file.AbstractTempDirTest;
 import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.io.file.PathUtilsIsEmptyTest;
+import org.apache.commons.io.file.TempDirectory;
+import org.apache.commons.io.file.TempFile;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
@@ -1471,20 +1473,24 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     @Test
     public void testForceDeleteReadOnlyFile() throws Exception {
-        File destination = File.createTempFile("test-", ".txt");
-        assertTrue(destination.setReadOnly());
-        assertTrue(destination.canRead());
-        assertFalse(destination.canWrite());
-        // sanity check that File.delete() deletes read-only files.
-        assertTrue(destination.delete());
-        destination = File.createTempFile("test-", ".txt");
-        // real test
-        assertTrue(destination.setReadOnly());
-        assertTrue(destination.canRead());
-        assertFalse(destination.canWrite());
-        assertTrue(destination.exists(), "File doesn't exist to delete");
-        FileUtils.forceDelete(destination);
-        assertFalse(destination.exists(), "Check deletion");
+        try (TempFile destination = TempFile.create("test-", ".txt")) {
+            final File file = destination.toFile();
+            assertTrue(file.setReadOnly());
+            assertTrue(file.canRead());
+            assertFalse(file.canWrite());
+            // sanity check that File.delete() deletes read-only files.
+            assertTrue(file.delete());
+        }
+        try (TempFile destination = TempFile.create("test-", ".txt")) {
+            final File file = destination.toFile();
+            // real test
+            assertTrue(file.setReadOnly());
+            assertTrue(file.canRead());
+            assertFalse(file.canWrite());
+            assertTrue(file.exists(), "File doesn't exist to delete");
+            FileUtils.forceDelete(file);
+            assertFalse(file.exists(), "Check deletion");
+        }
     }
 
     @Test
@@ -1621,21 +1627,19 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(FileUtils.isDirectory(tempDirFile));
         assertFalse(FileUtils.isDirectory(testFile1));
 
-        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
-        final File tempDirAsFile = tempDir.toFile();
-        assertTrue(FileUtils.isDirectory(tempDirAsFile));
-        Files.delete(tempDir);
+        final File tempDirAsFile;
+        try (final TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
+            tempDirAsFile = tempDir.toFile();
+            assertTrue(FileUtils.isDirectory(tempDirAsFile));
+        }
         assertFalse(FileUtils.isDirectory(tempDirAsFile));
     }
 
     @Test
     public void testIsEmptyDirectory() throws IOException {
-        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
-        final File tempDirAsFile = tempDir.toFile();
-        try {
+        try (final TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
+            final File tempDirAsFile = tempDir.toFile();
             Assertions.assertTrue(FileUtils.isEmptyDirectory(tempDirAsFile));
-        } finally {
-            Files.delete(tempDir);
         }
         Assertions.assertFalse(FileUtils.isEmptyDirectory(PathUtilsIsEmptyTest.DIR_SIZE_1.toFile()));
     }

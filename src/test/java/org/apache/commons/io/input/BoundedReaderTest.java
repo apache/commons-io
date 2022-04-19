@@ -30,12 +30,12 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.file.TempFile;
 import org.junit.jupiter.api.Test;
 
 public class BoundedReaderTest {
@@ -197,15 +197,12 @@ public class BoundedReaderTest {
     }
 
     public void testLineNumberReaderAndFileReaderLastLine(final String data) throws IOException {
-        final Path path = Files.createTempFile(getClass().getSimpleName(), ".txt");
-        try {
+        try (final TempFile path = TempFile.create(getClass().getSimpleName(), ".txt")) {
             final File file = path.toFile();
             FileUtils.write(file, data, StandardCharsets.ISO_8859_1);
             try (Reader source = Files.newBufferedReader(file.toPath())) {
                 testLineNumberReader(source);
             }
-        } finally {
-            Files.delete(path);
         }
     }
 

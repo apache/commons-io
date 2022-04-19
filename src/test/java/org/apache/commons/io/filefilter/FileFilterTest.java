@@ -47,6 +47,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.file.PathUtils;
+import org.apache.commons.io.file.TempFile;
 import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Test;
@@ -196,20 +197,17 @@ public class FileFilterTest extends AbstractFilterTest {
     @Test
     public void testCanExecute() throws Exception {
         assumeTrue(SystemUtils.IS_OS_WINDOWS);
-        final File executableFile = File.createTempFile(getClass().getSimpleName(), ".temp");
-        final Path executablePath = executableFile.toPath();
-        try {
-            try (final BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(executableFile.toPath()))) {
+        try (final TempFile executablePath = TempFile.create(getClass().getSimpleName(), null)) {
+            final File executableFile = executablePath.toFile();
+            try (final BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(executablePath.get()))) {
                 TestUtils.generateTestData(output, 32);
             }
             assertTrue(executableFile.setExecutable(true));
+            assertFiltering(CanExecuteFileFilter.CAN_EXECUTE, executablePath.get(), true);
             assertFiltering(CanExecuteFileFilter.CAN_EXECUTE, executableFile, true);
-            assertFiltering(CanExecuteFileFilter.CAN_EXECUTE, executablePath, true);
             executableFile.setExecutable(false);
+            assertFiltering(CanExecuteFileFilter.CANNOT_EXECUTE, executablePath.get(), false);
             assertFiltering(CanExecuteFileFilter.CANNOT_EXECUTE, executableFile, false);
-            assertFiltering(CanExecuteFileFilter.CANNOT_EXECUTE, executablePath, false);
-        } finally {
-            executableFile.delete();
         }
     }
 
