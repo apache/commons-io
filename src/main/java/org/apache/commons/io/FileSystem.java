@@ -73,6 +73,8 @@ public enum FileSystem {
      *
      * @see <a href="https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file">Naming Conventions
      *      (microsoft.com)</a>
+     * @see <a href="https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea#consoles">
+     *      CreateFileA function - Consoles (microsoft.com)</a>
      */
     WINDOWS(false, true, 255,
             32000, new char[] {
@@ -86,8 +88,8 @@ public enum FileSystem {
                     '"', '*', '/', ':', '<', '>', '?', '\\', '|'
                     // @formatter:on
             }, // KEEP THIS ARRAY SORTED!
-            new String[] { "AUX", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "CON", "LPT1",
-                    "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9", "NUL", "PRN" }, true, '\\');
+            new String[] { "AUX", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "CON", "CONIN$", "CONOUT$",
+                    "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9", "NUL", "PRN" }, true, '\\');
 
     /**
      * <p>
