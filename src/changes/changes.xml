@@ -168,6 +168,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-764" dev="ggregory" type="fix" due-to="DaGeRe, Gary Gregory">
         IOUtils.write() throws OutOfMemoryError/NegativeArraySizeException while writing big strings #343.
       </action>
+      <action issue="IO-768" dev="ggregory" type="fix" due-to="Marcono1234, Michael Osipov">
+        Add reserved Windows file names CONIN$ and CONOUT$ to FileSystem #355.
+      </action>
       <!-- ADD -->
       <action issue="IO-726" dev="ggregory" type="fix" due-to="shollander, Gary Gregory">
         Add MemoryMappedFileInputStream #215.
