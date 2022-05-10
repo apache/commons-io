@@ -104,13 +104,12 @@ public class IOFunctionTest {
 
     @Test
     public void testApplyRaisesException() {
-        final IOFunction<InputStream, Integer> raiseException = is -> {
+        final IOFunction<InputStream, Integer> throwException = is -> {
             throw new IOException("Boom!");
         };
-        final InputStream is = new ByteArrayInputStream(new byte[] { (byte)0xa, (byte)0xb, (byte)0xc});
-
+        final InputStream is = new ByteArrayInputStream(new byte[] {(byte) 0xa, (byte) 0xb, (byte) 0xc});
         assertThrows(IOException.class, () -> {
-            raiseException.apply(is);
+            throwException.apply(is);
         });
     }
 
