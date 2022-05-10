@@ -27,6 +27,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -104,13 +105,10 @@ public class IOFunctionTest {
 
     @Test
     public void testApplyThrowsException() {
-        final IOFunction<InputStream, Integer> throwException = is -> {
+        final IOFunction<InputStream, Integer> throwException = function -> {
             throw new IOException("Boom!");
         };
-        final InputStream is = new ByteArrayInputStream(new byte[] {(byte) 0xa, (byte) 0xb, (byte) 0xc});
-        assertThrows(IOException.class, () -> {
-            throwException.apply(is);
-        });
+        assertThrows(IOException.class, () -> throwException.apply(new ByteArrayInputStream(ArrayUtils.EMPTY_BYTE_ARRAY)));
     }
 
     @Test
