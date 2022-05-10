@@ -29,6 +29,9 @@ import java.util.function.Supplier;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests {@link IOFunction}.
+ */
 public class IOFunctionTest {
 
     private static class Holder<T> {
