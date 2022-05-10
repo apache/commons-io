@@ -103,7 +103,7 @@ public class IOFunctionTest {
     }
 
     @Test
-    public void testApplyRaisesException() {
+    public void testApplyThrowsException() {
         final IOFunction<InputStream, Integer> throwException = is -> {
             throw new IOException("Boom!");
         };
