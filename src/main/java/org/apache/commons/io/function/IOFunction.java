@@ -125,7 +125,7 @@ public interface IOFunction<T, R> {
      * @param t the function argument
      * @return the function result
      *
-     * @throws IOException if the function throws an IOException
+     * @throws IOException if an I/O error occurs.
      */
     R apply(final T t) throws IOException;
 

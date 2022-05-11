@@ -33,8 +33,7 @@ public interface IOSupplier<T> {
      * Gets a result.
      *
      * @return a result
-     *
-     * @throws IOException if an IO error occurs whilst supplying the value.
+     * @throws IOException if an I/O error occurs.
      */
     T get() throws IOException;
 }
