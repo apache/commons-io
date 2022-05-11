@@ -39,6 +39,6 @@ public class IOConsumerTest {
         assertDoesNotThrow(() -> IOUtils.close(nullCloseable, noopConsumer));
         assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), noopConsumer));
         assertDoesNotThrow(() -> IOUtils.close(new ThrowOnCloseReader(new StringReader("s")), noopConsumer));
-
     }
+
 }
