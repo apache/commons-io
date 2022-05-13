@@ -23,6 +23,8 @@ import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.nio.CharBuffer;
 
+import org.apache.commons.io.UncheckedIO;
+
 /**
  * A {@link FilterReader} that throws {@link UncheckedIOException} instead of {@link IOException}.
  *
@@ -59,11 +61,7 @@ public class UncheckedFilterReader extends FilterReader {
      */
     @Override
     public void close() throws UncheckedIOException {
-        try {
-            super.close();
-        } catch (final IOException e) {
-            throw uncheck(e);
-        }
+        UncheckedIO.run(super::close);
     }
 
     /**
@@ -71,11 +69,7 @@ public class UncheckedFilterReader extends FilterReader {
      */
     @Override
     public void mark(final int readAheadLimit) throws UncheckedIOException {
-        try {
-            super.mark(readAheadLimit);
-        } catch (final IOException e) {
-            throw uncheck(e);
-        }
+        UncheckedIO.accept(super::mark, readAheadLimit);
     }
 
     /**
@@ -83,11 +77,7 @@ public class UncheckedFilterReader extends FilterReader {
      */
     @Override
     public int read() throws UncheckedIOException {
-        try {
-            return super.read();
-        } catch (final IOException e) {
-            throw uncheck(e);
-        }
+        return UncheckedIO.get(super::read);
     }
 
     /**
@@ -95,11 +85,7 @@ public class UncheckedFilterReader extends FilterReader {
      */
     @Override
     public int read(final char[] cbuf) throws UncheckedIOException {
-        try {
-            return super.read(cbuf);
-        } catch (final IOException e) {
-            throw uncheck(e);
-        }
+        return UncheckedIO.apply(super::read, cbuf);
     }
 
     /**
@@ -107,11 +93,7 @@ public class UncheckedFilterReader extends FilterReader {
      */
     @Override
     public int read(final char[] cbuf, final int off, final int len) throws UncheckedIOException {
-        try {
-            return super.read(cbuf, off, len);
-        } catch (final IOException e) {
-            throw uncheck(e);
-        }
+        return UncheckedIO.apply(super::read, cbuf, off, len);
     }
 
     /**
@@ -119,11 +101,7 @@ public class UncheckedFilterReader extends FilterReader {
      */
     @Override
     public int read(final CharBuffer target) throws UncheckedIOException {
-        try {
-            return super.read(target);
-        } catch (final IOException e) {
-            throw uncheck(e);
-        }
+        return UncheckedIO.apply(super::read, target);
     }
 
     /**
@@ -131,11 +109,7 @@ public class UncheckedFilterReader extends FilterReader {
      */
     @Override
     public boolean ready() throws UncheckedIOException {
-        try {
-            return super.ready();
-        } catch (final IOException e) {
-            throw uncheck(e);
-        }
+        return UncheckedIO.get(super::ready);
     }
 
     /**
@@ -143,11 +117,7 @@ public class UncheckedFilterReader extends FilterReader {
      */
     @Override
     public void reset() throws UncheckedIOException {
-        try {
-            super.reset();
-        } catch (final IOException e) {
-            throw uncheck(e);
-        }
+        UncheckedIO.run(super::reset);
     }
 
     /**
@@ -155,15 +125,7 @@ public class UncheckedFilterReader extends FilterReader {
      */
     @Override
     public long skip(final long n) throws UncheckedIOException {
-        try {
-            return super.skip(n);
-        } catch (final IOException e) {
-            throw uncheck(e);
-        }
-    }
-
-    private UncheckedIOException uncheck(final IOException e) {
-        return new UncheckedIOException(e);
+        return UncheckedIO.apply(super::skip, n);
     }
 
 }

@@ -1632,12 +1632,9 @@ public class FileUtils {
      * @since 2.8.0
      */
     public static boolean isFileNewer(final File file, final ChronoZonedDateTime<?> chronoZonedDateTime) {
+        Objects.requireNonNull(file, "file");
         Objects.requireNonNull(chronoZonedDateTime, "chronoZonedDateTime");
-        try {
-            return PathUtils.isNewer(file.toPath(), chronoZonedDateTime);
-        } catch (final IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        return UncheckedIO.get(() -> PathUtils.isNewer(file.toPath(), chronoZonedDateTime));
     }
 
     /**
@@ -1666,11 +1663,7 @@ public class FileUtils {
      */
     public static boolean isFileNewer(final File file, final File reference) {
         requireExists(reference, "reference");
-        try {
-            return PathUtils.isNewer(file.toPath(), reference.toPath());
-        } catch (final IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        return UncheckedIO.get(() -> PathUtils.isNewer(file.toPath(), reference.toPath()));
     }
 
     /**
@@ -1699,11 +1692,7 @@ public class FileUtils {
      */
     public static boolean isFileNewer(final File file, final Instant instant) {
         Objects.requireNonNull(instant, "instant");
-        try {
-            return PathUtils.isNewer(file.toPath(), instant);
-        } catch (final IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        return UncheckedIO.get(() -> PathUtils.isNewer(file.toPath(), instant));
     }
 
     /**
@@ -1717,11 +1706,7 @@ public class FileUtils {
      */
     public static boolean isFileNewer(final File file, final long timeMillis) {
         Objects.requireNonNull(file, "file");
-        try {
-            return PathUtils.isNewer(file.toPath(), timeMillis);
-        } catch (final IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        return UncheckedIO.get(() -> PathUtils.isNewer(file.toPath(), timeMillis));
     }
 
     /**
@@ -1854,11 +1839,7 @@ public class FileUtils {
      */
     public static boolean isFileOlder(final File file, final File reference) {
         requireExists(reference, "reference");
-        try {
-            return PathUtils.isOlder(file.toPath(), reference.toPath());
-        } catch (final IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        return UncheckedIO.get(() -> PathUtils.isOlder(file.toPath(), reference.toPath()));
     }
 
     /**
@@ -1887,11 +1868,7 @@ public class FileUtils {
      */
     public static boolean isFileOlder(final File file, final Instant instant) {
         Objects.requireNonNull(instant, "instant");
-        try {
-            return PathUtils.isOlder(file.toPath(), instant);
-        } catch (final IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        return UncheckedIO.get(() -> PathUtils.isOlder(file.toPath(), instant));
     }
 
     /**
@@ -1905,11 +1882,7 @@ public class FileUtils {
      */
     public static boolean isFileOlder(final File file, final long timeMillis) {
         Objects.requireNonNull(file, "file");
-        try {
-            return PathUtils.isOlder(file.toPath(), timeMillis);
-        } catch (final IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        return UncheckedIO.get(() -> PathUtils.isOlder(file.toPath(), timeMillis));
     }
 
     /**
@@ -1984,11 +1957,7 @@ public class FileUtils {
      * @since 1.2
      */
     public static Iterator<File> iterateFiles(final File directory, final String[] extensions, final boolean recursive) {
-        try {
-            return StreamIterator.iterator(streamFiles(directory, recursive, extensions));
-        } catch (final IOException e) {
-            throw UncheckedIOExceptions.create(directory, e);
-        }
+        return UncheckedIO.apply(d -> StreamIterator.iterator(streamFiles(d, recursive, extensions)), directory);
     }
 
     /**
@@ -2084,11 +2053,7 @@ public class FileUtils {
         // https://bugs.openjdk.java.net/browse/JDK-8177809
         // File.lastModified() is losing milliseconds (always ends in 000)
         // This bug is in OpenJDK 8 and 9, and fixed in 10.
-        try {
-            return lastModified(file);
-        } catch (final IOException e) {
-            throw UncheckedIOExceptions.create(file, e);
-        }
+        return UncheckedIO.apply(FileUtils::lastModified, file);
     }
 
     /**
@@ -2217,12 +2182,9 @@ public class FileUtils {
      * @see org.apache.commons.io.filefilter.NameFileFilter
      */
     public static Collection<File> listFiles(final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
-        try {
-            final AccumulatorPathVisitor visitor = listAccumulate(directory, FileFileFilter.INSTANCE.and(fileFilter), dirFilter, FileVisitOption.FOLLOW_LINKS);
-            return visitor.getFileList().stream().map(Path::toFile).collect(Collectors.toList());
-        } catch (final IOException e) {
-            throw UncheckedIOExceptions.create(directory, e);
-        }
+        final AccumulatorPathVisitor visitor = UncheckedIO
+            .apply(d -> listAccumulate(d, FileFileFilter.INSTANCE.and(fileFilter), dirFilter, FileVisitOption.FOLLOW_LINKS), directory);
+        return visitor.getFileList().stream().map(Path::toFile).collect(Collectors.toList());
     }
 
     /**
@@ -2236,11 +2198,7 @@ public class FileUtils {
      * @return a collection of java.io.File with the matching files
      */
     public static Collection<File> listFiles(final File directory, final String[] extensions, final boolean recursive) {
-        try {
-            return toList(streamFiles(directory, recursive, extensions));
-        } catch (final IOException e) {
-            throw UncheckedIOExceptions.create(directory, e);
-        }
+        return UncheckedIO.apply(d -> toList(streamFiles(d, recursive, extensions)), directory);
     }
 
     /**
@@ -2263,14 +2221,11 @@ public class FileUtils {
      * @since 2.2
      */
     public static Collection<File> listFilesAndDirs(final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
-        try {
-            final AccumulatorPathVisitor visitor = listAccumulate(directory, fileFilter, dirFilter, FileVisitOption.FOLLOW_LINKS);
-            final List<Path> list = visitor.getFileList();
-            list.addAll(visitor.getDirList());
-            return list.stream().map(Path::toFile).collect(Collectors.toList());
-        } catch (final IOException e) {
-            throw UncheckedIOExceptions.create(directory, e);
-        }
+        final AccumulatorPathVisitor visitor = UncheckedIO.apply(d -> listAccumulate(d, fileFilter, dirFilter, FileVisitOption.FOLLOW_LINKS),
+            directory);
+        final List<Path> list = visitor.getFileList();
+        list.addAll(visitor.getDirList());
+        return list.stream().map(Path::toFile).collect(Collectors.toList());
     }
 
     /**
@@ -2921,11 +2876,7 @@ public class FileUtils {
      */
     public static long sizeOf(final File file) {
         requireExists(file, "file");
-        try {
-            return PathUtils.sizeOf(file.toPath());
-        } catch (final IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        return UncheckedIO.get(() -> PathUtils.sizeOf(file.toPath()));
     }
 
     /**
@@ -2949,11 +2900,7 @@ public class FileUtils {
      */
     public static BigInteger sizeOfAsBigInteger(final File file) {
         requireExists(file, "file");
-        try {
-            return PathUtils.sizeOfAsBigInteger(file.toPath());
-        } catch (final IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        return UncheckedIO.get(() -> PathUtils.sizeOfAsBigInteger(file.toPath()));
     }
 
     /**
@@ -2972,11 +2919,7 @@ public class FileUtils {
      */
     public static long sizeOfDirectory(final File directory) {
         requireDirectoryExists(directory, "directory");
-        try {
-            return PathUtils.sizeOfDirectory(directory.toPath());
-        } catch (final IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        return UncheckedIO.get(() -> PathUtils.sizeOfDirectory(directory.toPath()));
     }
 
     /**
@@ -2990,12 +2933,7 @@ public class FileUtils {
      */
     public static BigInteger sizeOfDirectoryAsBigInteger(final File directory) {
         requireDirectoryExists(directory, "directory");
-        try {
-            return PathUtils.sizeOfDirectoryAsBigInteger(directory.toPath());
-        } catch (final IOException e) {
-            throw new UncheckedIOException(e);
-        }
-
+        return UncheckedIO.get(() -> PathUtils.sizeOfDirectoryAsBigInteger(directory.toPath()));
     }
 
     /**

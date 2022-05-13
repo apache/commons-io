@@ -22,7 +22,7 @@ import java.io.UncheckedIOException;
 import java.util.Objects;
 
 /**
- * Helps use {@link UncheckedIOException}.
+ * Helps use lambdas that throw {@link IOException} rethrow as {@link UncheckedIOException}.
  *
  * @since 2.12.0
  */
@@ -47,13 +47,12 @@ public class UncheckedIOExceptions {
      * <p>
      * This method exists because there is no String constructor in {@link UncheckedIOException}.
      * </p>
-     *
-     * @param message the detail message.
      * @param e cause the {@code IOException}.
+     * @param message the detail message.
+     *
      * @return a new {@link UncheckedIOException}.
      */
-    public static UncheckedIOException create(final Object message, final IOException e) {
+    public static UncheckedIOException wrap(final IOException e, final Object message) {
         return new UncheckedIOException(Objects.toString(message), e);
     }
-
 }

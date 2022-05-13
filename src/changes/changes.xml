@@ -353,6 +353,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-680" dev="ggregory" type="add" due-to="XenoAmess, sebbASF, Gary Gregory">
         Add more tests for IOUtils.contentEqualsIgnoreEOL #137.
       </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Reduce boilerplate through new UncheckedIO class and friends in org.apache.commons.io.function.
+      </action>
       <!-- UPDATE -->
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump actions/checkout from 2.3.4 to 3 #286, #298, #330.
