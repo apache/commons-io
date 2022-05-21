@@ -835,7 +835,7 @@ public class Tailer implements Runnable, AutoCloseable {
      *
      * @param reader The file to read
      * @return The new position after the lines have been read
-     * @throws java.io.IOException if an I/O error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     private long readLines(final RandomAccessResourceBridge reader) throws IOException {
         try (ByteArrayOutputStream lineBuf = new ByteArrayOutputStream(64)) {
