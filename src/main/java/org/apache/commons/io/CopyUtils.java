@@ -191,10 +191,6 @@ public class CopyUtils {
         copy(in, output);
     }
 
-    // ----------------------------------------------------------------
-    // Reader -> Writer
-    // ----------------------------------------------------------------
-
     /**
      * Copies and convert bytes from an {@code InputStream} to chars on a
      * {@code Writer}, using the specified encoding.
@@ -213,10 +209,6 @@ public class CopyUtils {
         final InputStreamReader in = new InputStreamReader(input, encoding);
         copy(in, output);
     }
-
-    // ----------------------------------------------------------------
-    // InputStream -> Writer
-    // ----------------------------------------------------------------
 
     /**
      * Serialize chars from a {@code Reader} to bytes on an
@@ -263,11 +255,6 @@ public class CopyUtils {
         out.flush();
     }
 
-
-    // ----------------------------------------------------------------
-    // Reader -> OutputStream
-    // ----------------------------------------------------------------
-
     /**
      * Copies chars from a {@code Reader} to a {@code Writer}.
      * @param input the {@code Reader} to read from
@@ -313,10 +300,6 @@ public class CopyUtils {
         out.flush();
     }
 
-    // ----------------------------------------------------------------
-    // String -> OutputStream
-    // ----------------------------------------------------------------
-
     /**
      * Serialize chars from a {@code String} to bytes on an
      * {@code OutputStream}, and
@@ -352,10 +335,6 @@ public class CopyUtils {
                 throws IOException {
         output.write(input);
     }
-
-    // ----------------------------------------------------------------
-    // String -> Writer
-    // ----------------------------------------------------------------
 
     /**
      * Instances should NOT be constructed in standard programming.

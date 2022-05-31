@@ -290,10 +290,6 @@ public class BOMInputStream extends ProxyInputStream {
         return true;
     }
 
-    // ----------------------------------------------------------------------------
-    // Implementation of InputStream
-    // ----------------------------------------------------------------------------
-
     /**
      * Invokes the delegate's {@code read()} method, detecting and optionally skipping BOM.
      *
