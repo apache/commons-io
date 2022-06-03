@@ -37,8 +37,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.function.IOFunction;
 import org.apache.commons.io.input.ClosedInputStream;
 import org.apache.commons.io.test.TestUtils;
-import org.apache.commons.io.test.ThrowOnCloseInputStream;
-import org.apache.commons.io.test.ThrowOnFlushAndCloseOutputStream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -360,20 +358,20 @@ public class ByteArrayOutputStreamTest {
         }
     }
 
-    private static final int FILE_SIZE = (1024 * 4) + 1;
-    private final byte[] inData = TestUtils.generateTestData(FILE_SIZE);
-
     @Test
     public void testToByteArrayImplAndResetImpl() throws Exception {
-        InputStream in = new ByteArrayInputStream(inData);
-        in = new ThrowOnCloseInputStream(in);
-        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
-        final Writer writer = new OutputStreamWriter(out, StandardCharsets.US_ASCII);
-        CopyUtils.copy(in, writer);
-        writer.flush();
-        baout.reset();
-        Assertions.assertEquals("", baout.toString());
+        final int file_size = (1024 * 4) + 1;
+        final byte[] inData = TestUtils.generateTestData(file_size);
+        try (InputStream in = new ByteArrayInputStream(inData)) {
+            try (ByteArrayOutputStream baout = new ByteArrayOutputStream()) {
+                try (Writer writer = new OutputStreamWriter(baout, StandardCharsets.US_ASCII)) {
+                    CopyUtils.copy(in, writer);
+                    writer.flush();
+                }
+                baout.reset();
+                Assertions.assertEquals("", baout.toString());
+            }
+        }
     }
 
     private int writeData(final AbstractByteArrayOutputStream baout, final java.io.ByteArrayOutputStream ref, final int count) {
