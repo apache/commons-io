@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.Writer;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
@@ -37,7 +36,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.function.IOFunction;
 import org.apache.commons.io.input.ClosedInputStream;
 import org.apache.commons.io.test.TestUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -360,8 +358,8 @@ public class ByteArrayOutputStreamTest {
 
     @Test
     public void testToByteArrayImplAndResetImpl() throws Exception {
-        final int file_size = (1024 * 4) + 1;
-        final byte[] inData = TestUtils.generateTestData(file_size);
+        final int fileSize = 4097;
+        final byte[] inData = TestUtils.generateTestData(fileSize);
         try (InputStream in = new ByteArrayInputStream(inData)) {
             try (ByteArrayOutputStream baout = new ByteArrayOutputStream()) {
                 try (Writer writer = new OutputStreamWriter(baout, StandardCharsets.US_ASCII)) {
@@ -369,7 +367,7 @@ public class ByteArrayOutputStreamTest {
                     writer.flush();
                 }
                 baout.reset();
-                Assertions.assertEquals("", baout.toString());
+                assertEquals("", baout.toString());
             }
         }
     }
