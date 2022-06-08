@@ -172,6 +172,9 @@ The <action> type attribute can be add,update,fix,remove.
         Add reserved Windows file names CONIN$ and CONOUT$ to FileSystem #355.
       </action>
       <!-- ADD -->
+      <action type="add" dev="ggregory" due-to="Gary Gregory">
+        Add GitHub coverage.yml.
+      </action>
       <action issue="IO-726" dev="ggregory" type="fix" due-to="shollander, Gary Gregory">
         Add MemoryMappedFileInputStream #215.
       </action>
