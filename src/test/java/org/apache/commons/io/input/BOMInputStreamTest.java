@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
@@ -408,18 +409,8 @@ public class BOMInputStreamTest {
     @Test
     public void testNoBoms() throws Exception {
         final byte[] data = { 'A', 'B', 'C' };
-        try {
-            new BOMInputStream(createUtf8DataStream(data, true), false, (ByteOrderMark[])null).close();
-            fail("Null BOMs, expected IllegalArgumentException");
-        } catch (final IllegalArgumentException e) {
-            // expected
-        }
-        try {
-            new BOMInputStream(createUtf8DataStream(data, true), false, new ByteOrderMark[0]).close();
-            fail("Null BOMs, expected IllegalArgumentException");
-        } catch (final IllegalArgumentException e) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, () -> new BOMInputStream(createUtf8DataStream(data, true), false, (ByteOrderMark[])null).close());
+        assertThrows(IllegalArgumentException.class, () -> new BOMInputStream(createUtf8DataStream(data, true), false, new ByteOrderMark[0]).close());
     }
 
     @Test
