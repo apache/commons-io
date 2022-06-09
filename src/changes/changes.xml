@@ -416,6 +416,9 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump maven-antrun-plugin from 3.0.0 to 3.1.0 #354.
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
+        Bump commons.surefire.version 3.0.0-M5 to 3.0.0-M7.
+      </action>
       </action>
     </release>
     <release version="2.11.0" date="2021-07-09" description="Java 8 required.">
