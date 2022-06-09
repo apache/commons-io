@@ -136,7 +136,6 @@ public class FilenameUtilsTest {
         assertEquals("~user" + SEP, FilenameUtils.concat("a/b/", "~user"));
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testDirectoryContains() {
         assertTrue(FilenameUtils.directoryContains("/foo", "/foo/bar"));
@@ -230,11 +229,7 @@ public class FilenameUtilsTest {
 
     @Test
     public void testGetBaseName_with_null_character() {
-        try {
-            assertEquals("file.txt", FilenameUtils.getBaseName("fil\u0000e.txt.bak"));
-        } catch (final IllegalArgumentException ignore) {
-
-        }
+        assertThrows(IllegalArgumentException.class, () -> FilenameUtils.getBaseName("fil\u0000e.txt.bak"));
     }
 
     @Test
