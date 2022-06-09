@@ -1279,7 +1279,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
      * Tests a directory with one file of size 0.
      */
     @Test
-    public void testCountFolders1FileSize0() throws IOException {
+    public void testCountFolders1FileSize0() {
         assertEquals(0, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0").toFile()));
     }
 
@@ -1287,7 +1287,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
      * Tests a directory with one file of size 1.
      */
     @Test
-    public void testCountFolders1FileSize1() throws IOException {
+    public void testCountFolders1FileSize1() {
         assertEquals(1, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1").toFile()));
     }
 
@@ -1295,7 +1295,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
      * Tests a directory with two subdirectories, each containing one file of size 1.
      */
     @Test
-    public void testCountFolders2FileSize2() throws IOException {
+    public void testCountFolders2FileSize2() {
         assertEquals(2, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2").toFile()));
     }
 
@@ -1303,7 +1303,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
      * Tests a directory with two subdirectories, each containing one file of size 1.
      */
     @Test
-    public void testCountFolders2FileSize4() throws IOException {
+    public void testCountFolders2FileSize4() {
         assertEquals(8, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-4").toFile()));
     }
 

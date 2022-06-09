@@ -74,7 +74,7 @@ public class ReaderInputStreamTest {
     }
 
     @Test
-    public void testBufferTooSmall() throws IOException {
+    public void testBufferTooSmall() {
         assertThrows(IllegalArgumentException.class, () -> new ReaderInputStream(new StringReader("\uD800"), StandardCharsets.UTF_8, -1));
         assertThrows(IllegalArgumentException.class, () -> new ReaderInputStream(new StringReader("\uD800"), StandardCharsets.UTF_8, 0));
         assertThrows(IllegalArgumentException.class, () -> new ReaderInputStream(new StringReader("\uD800"), StandardCharsets.UTF_8, 1));

@@ -138,7 +138,7 @@ public class FilenameUtilsTest {
 
     //-----------------------------------------------------------------------
     @Test
-    public void testDirectoryContains() throws IOException {
+    public void testDirectoryContains() {
         assertTrue(FilenameUtils.directoryContains("/foo", "/foo/bar"));
         assertTrue(FilenameUtils.directoryContains("/foo/", "/foo/bar"));
         assertTrue(FilenameUtils.directoryContains("C:\\foo", "C:\\foo\\bar"));

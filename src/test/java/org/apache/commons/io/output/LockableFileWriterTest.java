@@ -86,7 +86,7 @@ public class LockableFileWriterTest {
     }
 
     @Test
-    public void testConstructor_File_encoding_badEncoding() throws IOException {
+    public void testConstructor_File_encoding_badEncoding() {
         assertThrows(UnsupportedCharsetException.class, () -> new LockableFileWriter(file, "BAD-ENCODE"));
         assertFalse(file.exists());
         assertFalse(lockFile.exists());
@@ -96,7 +96,7 @@ public class LockableFileWriterTest {
     }
 
     @Test
-    public void testConstructor_File_nullFile() throws IOException {
+    public void testConstructor_File_nullFile() {
         assertThrows(NullPointerException.class, () -> new LockableFileWriter((File) null));
         assertFalse(file.exists());
         assertFalse(lockFile.exists());
@@ -106,7 +106,7 @@ public class LockableFileWriterTest {
     }
 
     @Test
-    public void testConstructor_fileName_nullFile() throws IOException {
+    public void testConstructor_fileName_nullFile() {
         assertThrows(NullPointerException.class, () -> new LockableFileWriter((String) null));
         assertFalse(file.exists());
         assertFalse(lockFile.exists());
