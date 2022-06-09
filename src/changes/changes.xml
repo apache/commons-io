@@ -369,6 +369,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="kinow" type="update" due-to="Dependabot">
         Bump actions/setup-java from 2 to 3 #346.
       </action>
+      <action dev="kinow" type="update" due-to="Dependabot">
+        Bump github/codeql-action from 1 to 2 #353.
+      </action>
       <action dev="ggregory" type="update" due-to="Dependabot, Gary Gregory">
         Bump Maven Javadoc plugin from 3.2.0 to 3.3.4.
       </action>
@@ -410,9 +413,6 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Bump jacoco-maven-plugin from 0.8.7 to 0.8.8.
-      </action>
-      <action dev="kinow" type="update" due-to="Dependabot">
-        Bump github/codeql-action from 1 to 2 #353.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump maven-antrun-plugin from 3.0.0 to 3.1.0 #354.
