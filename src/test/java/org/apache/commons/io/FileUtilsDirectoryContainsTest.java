@@ -17,9 +17,8 @@
 package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -115,12 +114,7 @@ public class FileUtilsDirectoryContainsTest {
     public void testDirectoryDoesNotExist() throws IOException {
         final File dir = new File("DOESNOTEXIST");
         assertFalse(dir.exists());
-        try {
-            assertFalse(FileUtils.directoryContains(dir, file1));
-            fail("Expected " + IllegalArgumentException.class.getName());
-        } catch (final IllegalArgumentException e) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.directoryContains(dir, file1));
     }
 
     @Test
@@ -164,12 +158,7 @@ public class FileUtilsDirectoryContainsTest {
 
     @Test
     public void testSameFile() throws IOException {
-        try {
-            assertTrue(FileUtils.directoryContains(file1, file1));
-            fail("Expected " + IllegalArgumentException.class.getName());
-        } catch (final IllegalArgumentException e) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.directoryContains(file1, file1));
     }
 
     @Test
@@ -178,10 +167,6 @@ public class FileUtilsDirectoryContainsTest {
         final File file = new File(dir, "DOESNOTEXIST2");
         assertFalse(dir.exists());
         assertFalse(file.exists());
-        try {
-            assertTrue(FileUtils.directoryContains(dir, file));
-        } catch (final IllegalArgumentException e) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.directoryContains(dir, file));
     }
 }

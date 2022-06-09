@@ -18,6 +18,7 @@ package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -59,16 +60,11 @@ public class NullInputStreamTest {
 
     @Test
     public void testEOFException() throws Exception {
-        final InputStream input = new TestNullInputStream(2, false, true);
-        assertEquals(0, input.read(), "Read 1");
-        assertEquals(1, input.read(), "Read 2");
-        try {
-            final int result = input.read();
-            fail("Should have thrown an EOFException, byte=[" + result + "]");
-        } catch (final EOFException e) {
-            // expected
+        try (final InputStream input = new TestNullInputStream(2, false, true)) {
+            assertEquals(0, input.read(), "Read 1");
+            assertEquals(1, input.read(), "Read 2");
+            assertThrows(EOFException.class, () -> input.read());
         }
-        input.close();
     }
 
     @Test
@@ -213,9 +209,6 @@ public class NullInputStreamTest {
             assertEquals(i, bytes[i], "Check Bytes 2");
         }
     }
-
-
-    // ------------- Test NullInputStream implementation -------------
 
     @Test
     public void testSkip() throws Exception {

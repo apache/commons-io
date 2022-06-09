@@ -18,6 +18,7 @@ package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -59,16 +60,11 @@ public class NullReaderTest {
 
     @Test
     public void testEOFException() throws Exception {
-        final Reader reader = new TestNullReader(2, false, true);
-        assertEquals(0, reader.read(), "Read 1");
-        assertEquals(1, reader.read(), "Read 2");
-        try {
-            final int result = reader.read();
-            fail("Should have thrown an EOFException, value=[" + result + "]");
-        } catch (final EOFException e) {
-            // expected
+        try (final Reader reader = new TestNullReader(2, false, true)) {
+            assertEquals(0, reader.read(), "Read 1");
+            assertEquals(1, reader.read(), "Read 2");
+            assertThrows(EOFException.class, () -> reader.read());
         }
-        reader.close();
     }
 
     @Test
@@ -210,9 +206,6 @@ public class NullReaderTest {
             assertEquals(i, chars[i], "Check Chars 3");
         }
     }
-
-
-    // ------------- Test NullReader implementation -------------
 
     @Test
     public void testSkip() throws Exception {

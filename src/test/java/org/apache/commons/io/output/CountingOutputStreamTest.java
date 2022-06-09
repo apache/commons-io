@@ -17,7 +17,7 @@
 package org.apache.commons.io.output;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -86,18 +86,8 @@ public class CountingOutputStreamTest {
 
         // Test integer methods
         IOUtils.copyLarge(mock, cos);
-        try {
-            cos.getCount();
-            fail("Expected getCount() to throw an ArithmeticException");
-        } catch (final ArithmeticException ae) {
-            // expected result
-        }
-        try {
-            cos.resetCount();
-            fail("Expected resetCount() to throw an ArithmeticException");
-        } catch (final ArithmeticException ae) {
-            // expected result
-        }
+        assertThrows(ArithmeticException.class, () -> cos.getCount());
+        assertThrows(ArithmeticException.class, () -> cos.resetCount());
 
         mock.close();
 

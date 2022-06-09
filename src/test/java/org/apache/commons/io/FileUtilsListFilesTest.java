@@ -18,9 +18,8 @@ package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -156,12 +155,7 @@ public class FileUtilsListFilesTest {
         assertTrue(filenames.contains("dummy-index.html"), "'dummy-index.html' is missing");
         assertFalse(filenames.contains("Entries"), "'Entries' shouldn't be found");
 
-        try {
-            FileUtils.listFiles(temporaryFolder, null, null);
-            fail("Expected error about null parameter");
-        } catch (final NullPointerException e) {
-            // expected
-        }
+        assertThrows(NullPointerException.class, () -> FileUtils.listFiles(temporaryFolder, null, null));
     }
 
     @Test

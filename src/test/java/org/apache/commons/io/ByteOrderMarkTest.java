@@ -21,8 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
-
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.nio.charset.Charset;
 
 import org.junit.jupiter.api.Test;
@@ -59,30 +58,10 @@ public class ByteOrderMarkTest  {
     /** Test Errors */
     @Test
     public void errors() {
-        try {
-            new ByteOrderMark(null, 1,2,3);
-            fail("null charset name, expected IllegalArgumentException");
-        } catch (final IllegalArgumentException e) {
-            // expected
-        }
-        try {
-            new ByteOrderMark("", 1,2,3);
-            fail("no charset name, expected IllegalArgumentException");
-        } catch (final IllegalArgumentException e) {
-            // expected
-        }
-        try {
-            new ByteOrderMark("a", (int[])null);
-            fail("null bytes, expected IllegalArgumentException");
-        } catch (final IllegalArgumentException e) {
-            // expected
-        }
-        try {
-            new ByteOrderMark("b");
-            fail("empty bytes, expected IllegalArgumentException");
-        } catch (final IllegalArgumentException e) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, () -> new ByteOrderMark(null, 1, 2, 3));
+        assertThrows(IllegalArgumentException.class, () -> new ByteOrderMark("", 1, 2, 3));
+        assertThrows(IllegalArgumentException.class, () -> new ByteOrderMark("a", (int[]) null));
+        assertThrows(IllegalArgumentException.class, () -> new ByteOrderMark("b"));
     }
 
     /** Test {@link ByteOrderMark#get(int)} */

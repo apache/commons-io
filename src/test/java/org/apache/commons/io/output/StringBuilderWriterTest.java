@@ -18,8 +18,6 @@ package org.apache.commons.io.output;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import java.io.IOException;
 import java.io.Writer;
 
@@ -86,13 +84,9 @@ public class StringBuilderWriterTest {
     @Test
     public void testClose() throws IOException {
         try (final Writer writer = new StringBuilderWriter()) {
-            try {
-                writer.append("Foo");
-                writer.close();
-                writer.append("Bar");
-            } catch (final Throwable t) {
-                fail("Threw: " + t);
-            }
+            writer.append("Foo");
+            writer.close();
+            writer.append("Bar");
             assertEquals("FooBar", writer.toString());
         }
     }

@@ -18,6 +18,7 @@ package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -513,12 +514,7 @@ public class DirectoryWalkerTest {
         assertEquals(1, results.size(), "Result Size");
         assertTrue(results.contains(invalidDir), "Current Dir");
 
-        try {
-            new TestFileFinder(null, -1).find(null);
-            fail("Null start directory didn't throw Exception");
-        } catch (final NullPointerException ignore) {
-            // expected result
-        }
+        assertThrows(NullPointerException.class, () -> new TestFileFinder(null, -1).find(null));
     }
 
     /**

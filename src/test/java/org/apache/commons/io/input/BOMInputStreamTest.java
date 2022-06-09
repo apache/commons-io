@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
@@ -461,8 +460,7 @@ public class BOMInputStreamTest {
     @Test
     public void testReadWithBOMUtf16Be() throws Exception {
         final byte[] data = "ABC".getBytes(StandardCharsets.UTF_16BE);
-        try (final BOMInputStream in = new BOMInputStream(createUtf16BeDataStream(data, true),
-                ByteOrderMark.UTF_16BE)) {
+        try (final BOMInputStream in = new BOMInputStream(createUtf16BeDataStream(data, true), ByteOrderMark.UTF_16BE)) {
             assertEquals(0, in.read());
             assertEquals('A', in.read());
             assertEquals(0, in.read());
@@ -473,20 +471,14 @@ public class BOMInputStreamTest {
             assertTrue(in.hasBOM(), "hasBOM()");
             assertTrue(in.hasBOM(ByteOrderMark.UTF_16BE), "hasBOM(UTF-16BE)");
             assertEquals(ByteOrderMark.UTF_16BE, in.getBOM(), "getBOM");
-            try {
-                in.hasBOM(ByteOrderMark.UTF_16LE);
-                fail("Expected IllegalArgumentException");
-            } catch (final IllegalArgumentException e) {
-                // expected - not configured for UTF-16LE
-            }
+            assertThrows(IllegalArgumentException.class, () -> in.hasBOM(ByteOrderMark.UTF_16LE));
         }
     }
 
     @Test
     public void testReadWithBOMUtf16Le() throws Exception {
         final byte[] data = "ABC".getBytes(StandardCharsets.UTF_16LE);
-        try (final BOMInputStream in = new BOMInputStream(createUtf16LeDataStream(data, true),
-                ByteOrderMark.UTF_16LE)) {
+        try (final BOMInputStream in = new BOMInputStream(createUtf16LeDataStream(data, true), ByteOrderMark.UTF_16LE)) {
             assertEquals('A', in.read());
             assertEquals(0, in.read());
             assertEquals('B', in.read());
@@ -497,12 +489,7 @@ public class BOMInputStreamTest {
             assertTrue(in.hasBOM(), "hasBOM()");
             assertTrue(in.hasBOM(ByteOrderMark.UTF_16LE), "hasBOM(UTF-16LE)");
             assertEquals(ByteOrderMark.UTF_16LE, in.getBOM(), "getBOM");
-            try {
-                in.hasBOM(ByteOrderMark.UTF_16BE);
-                fail("Expected IllegalArgumentException");
-            } catch (final IllegalArgumentException e) {
-                // expected - not configured for UTF-16BE
-            }
+            assertThrows(IllegalArgumentException.class, () -> in.hasBOM(ByteOrderMark.UTF_16BE));
         }
     }
 
@@ -528,12 +515,7 @@ public class BOMInputStreamTest {
             assertTrue(in.hasBOM(), "hasBOM()");
             assertTrue(in.hasBOM(ByteOrderMark.UTF_32BE), "hasBOM(UTF-32BE)");
             assertEquals(ByteOrderMark.UTF_32BE, in.getBOM(), "getBOM");
-            try {
-                in.hasBOM(ByteOrderMark.UTF_32LE);
-                fail("Expected IllegalArgumentException");
-            } catch (final IllegalArgumentException e) {
-                // expected - not configured for UTF-32LE
-            }
+            assertThrows(IllegalArgumentException.class, () -> in.hasBOM(ByteOrderMark.UTF_32LE));
         }
     }
 
@@ -559,12 +541,7 @@ public class BOMInputStreamTest {
             assertTrue(in.hasBOM(), "hasBOM()");
             assertTrue(in.hasBOM(ByteOrderMark.UTF_32LE), "hasBOM(UTF-32LE)");
             assertEquals(ByteOrderMark.UTF_32LE, in.getBOM(), "getBOM");
-            try {
-                in.hasBOM(ByteOrderMark.UTF_32BE);
-                fail("Expected IllegalArgumentException");
-            } catch (final IllegalArgumentException e) {
-                // expected - not configured for UTF-32BE
-            }
+            assertThrows(IllegalArgumentException.class, () -> in.hasBOM(ByteOrderMark.UTF_32BE));
         }
     }
 
@@ -579,12 +556,7 @@ public class BOMInputStreamTest {
             assertTrue(in.hasBOM(), "hasBOM()");
             assertTrue(in.hasBOM(ByteOrderMark.UTF_8), "hasBOM(UTF-8)");
             assertEquals(ByteOrderMark.UTF_8, in.getBOM(), "getBOM");
-            try {
-                in.hasBOM(ByteOrderMark.UTF_16BE);
-                fail("Expected IllegalArgumentException");
-            } catch (final IllegalArgumentException e) {
-                // expected - not configured for UTF-16BE
-            }
+            assertThrows(IllegalArgumentException.class, () -> in.hasBOM(ByteOrderMark.UTF_16BE));
         }
     }
 

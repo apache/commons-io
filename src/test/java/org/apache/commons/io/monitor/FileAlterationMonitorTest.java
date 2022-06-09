@@ -18,6 +18,7 @@ package org.apache.commons.io.monitor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -137,12 +138,8 @@ public class FileAlterationMonitorTest extends AbstractMonitorTest {
         assertEquals(interval, monitor.getInterval(), "Interval");
         monitor.start();
 
-        try {
-            monitor.start(); // try and start again
-            fail("Expected IllegalStateException");
-        } catch (final IllegalStateException e) {
-            // expected result, monitor already running
-        }
+        // try and start again
+        assertThrows(IllegalStateException.class, () -> monitor.start());
 
         // Create a File
         checkCollectionsEmpty("A");
@@ -165,12 +162,8 @@ public class FileAlterationMonitorTest extends AbstractMonitorTest {
         // Stop monitoring
         monitor.stop();
 
-        try {
-            monitor.stop(); // try and stop again
-            fail("Expected IllegalStateException");
-        } catch (final IllegalStateException e) {
-            // expected result, monitor already stopped
-        }
+        // try and stop again
+        assertThrows(IllegalStateException.class, () -> monitor.stop());
     }
 
     /**

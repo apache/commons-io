@@ -16,7 +16,7 @@
  */
 package org.apache.commons.io.output;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
@@ -31,12 +31,9 @@ public class ClosedOutputStreamTest {
      * Test the {@code flush()} method.
      */
     @Test
-    public void testFlush() {
+    public void testFlush() throws IOException {
         try (ClosedOutputStream cos = new ClosedOutputStream()) {
-            cos.flush();
-            fail("flush()");
-        } catch (final IOException e) {
-            // expected
+            assertThrows(IOException.class, () -> cos.flush());
         }
     }
 
@@ -44,12 +41,9 @@ public class ClosedOutputStreamTest {
      * Test the {@code write(b)} method.
      */
     @Test
-    public void testWrite() {
+    public void testWrite() throws IOException {
         try (ClosedOutputStream cos = new ClosedOutputStream()) {
-            cos.write('x');
-            fail("write(b)");
-        } catch (final IOException e) {
-            // expected
+            assertThrows(IOException.class, () -> cos.write('x'));
         }
     }
 

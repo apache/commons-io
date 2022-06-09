@@ -36,8 +36,7 @@ public class TaggedOutputStreamTest  {
     @Test
     public void testBrokenStream() {
         final IOException exception = new IOException("test exception");
-        final TaggedOutputStream stream =
-            new TaggedOutputStream(new BrokenOutputStream(exception));
+        final TaggedOutputStream stream = new TaggedOutputStream(new BrokenOutputStream(exception));
 
         // Test the write() method
         try {

@@ -21,8 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -457,11 +455,7 @@ public class FilenameUtilsTest {
 
     @Test
     public void testGetPathNoEndSeparator_with_null_character() {
-        try {
-            assertEquals("a/b", FilenameUtils.getPathNoEndSeparator("~user/a\u0000/b/c.txt"));
-        } catch (final IllegalArgumentException ignore) {
-
-        }
+        assertThrows(IllegalArgumentException.class, () -> FilenameUtils.getPathNoEndSeparator("~user/a\u0000/b/c.txt"));
     }
 
     @Test
@@ -511,11 +505,7 @@ public class FilenameUtilsTest {
 
     @Test
     public void testGetPrefix_with_null_character() {
-        try {
-            assertEquals("~user\\", FilenameUtils.getPrefix("~u\u0000ser\\a\\b\\c.txt"));
-        } catch (final IllegalArgumentException ignore) {
-
-        }
+        assertThrows(IllegalArgumentException.class, () -> FilenameUtils.getPrefix("~u\u0000ser\\a\\b\\c.txt"));
     }
 
     @Test
@@ -617,11 +607,7 @@ public class FilenameUtilsTest {
 
     @Test
     public void testInjectionFailure() {
-        try {
-            assertEquals("c", FilenameUtils.getName("a\\b\\\u0000c"));
-        } catch (final IllegalArgumentException ignore) {
-
-        }
+        assertThrows(IllegalArgumentException.class, () -> FilenameUtils.getName("a\\b\\\u0000c"));
     }
 
     @Test
@@ -659,11 +645,7 @@ public class FilenameUtilsTest {
 
     @Test
     public void testIsExtension_injection() {
-        try {
-            FilenameUtils.isExtension("a.b\\fi\u0000le.txt", "TXT");
-            fail("Should throw IAE");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> FilenameUtils.isExtension("a.b\\fi\u0000le.txt", "TXT"));
     }
 
     @Test
@@ -953,15 +935,8 @@ public class FilenameUtilsTest {
      */
     @Test
     public void testNormalize_with_null_character() {
-        try {
-            assertEquals("a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("a\\b/c\u0000.txt"));
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        try {
-            assertEquals("a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\u0000a\\b/c.txt"));
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> FilenameUtils.normalize("a\\b/c\u0000.txt"));
+        assertThrows(IllegalArgumentException.class, () -> FilenameUtils.normalize("\u0000a\\b/c.txt"));
     }
 
     @Test

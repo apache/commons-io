@@ -17,8 +17,7 @@
 package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
@@ -40,12 +39,7 @@ public class EndianUtilsTest  {
     @Test
     public void testEOFException() throws IOException {
         final ByteArrayInputStream input = new ByteArrayInputStream(new byte[] {});
-        try {
-            EndianUtils.readSwappedDouble(input);
-            fail("Expected EOFException");
-        } catch (final EOFException e) {
-            // expected
-        }
+        assertThrows(EOFException.class, () -> EndianUtils.readSwappedDouble(input));
     }
 
     @Test

@@ -36,8 +36,7 @@ public class TaggedWriterTest  {
     @Test
     public void testBrokenWriter() {
         final IOException exception = new IOException("test exception");
-        final TaggedWriter writer =
-            new TaggedWriter(new BrokenWriter(exception));
+        final TaggedWriter writer = new TaggedWriter(new BrokenWriter(exception));
 
         // Test the write() method
         try {
@@ -83,7 +82,7 @@ public class TaggedWriterTest  {
     }
 
     @Test
-    public void testNormalWriter() {
+    public void testNormalWriter() throws IOException {
         try (final StringBuilderWriter buffer = new StringBuilderWriter()) {
             try (final Writer writer = new TaggedWriter(buffer)) {
                 writer.write('a');
@@ -95,8 +94,6 @@ public class TaggedWriterTest  {
             assertEquals('a', buffer.getBuilder().charAt(0));
             assertEquals('b', buffer.getBuilder().charAt(1));
             assertEquals('c', buffer.getBuilder().charAt(2));
-        } catch (final IOException e) {
-            fail("Unexpected exception thrown");
         }
     }
 
@@ -104,21 +101,10 @@ public class TaggedWriterTest  {
     public void testOtherException() throws Exception {
         final IOException exception = new IOException("test exception");
         try (final TaggedWriter writer = new TaggedWriter(ClosedWriter.INSTANCE)) {
-
             assertFalse(writer.isCauseOf(exception));
             assertFalse(writer.isCauseOf(new TaggedIOException(exception, UUID.randomUUID())));
-
-            try {
-                writer.throwIfCauseOf(exception);
-            } catch (final IOException e) {
-                fail("Unexpected exception thrown");
-            }
-
-            try {
-                writer.throwIfCauseOf(new TaggedIOException(exception, UUID.randomUUID()));
-            } catch (final IOException e) {
-                fail("Unexpected exception thrown");
-            }
+            writer.throwIfCauseOf(exception);
+            writer.throwIfCauseOf(new TaggedIOException(exception, UUID.randomUUID()));
         }
     }
 

@@ -409,11 +409,10 @@ public class ProxyCollectionWriterTest {
 
     @Test
     public void testTee() throws IOException {
-        final StringBuilderWriter sbw1 = new StringBuilderWriter();
-        final StringBuilderWriter sbw2 = new StringBuilderWriter();
-        final StringBuilderWriter expected = new StringBuilderWriter();
-
-        try (final ProxyCollectionWriter tw = new ProxyCollectionWriter(sbw1, sbw2, null)) {
+        try (StringBuilderWriter sbw1 = new StringBuilderWriter();
+                StringBuilderWriter sbw2 = new StringBuilderWriter();
+                StringBuilderWriter expected = new StringBuilderWriter();
+                ProxyCollectionWriter tw = new ProxyCollectionWriter(sbw1, sbw2, null)) {
             for (int i = 0; i < 20; i++) {
                 tw.write(i);
                 expected.write(i);

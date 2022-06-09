@@ -17,8 +17,7 @@
 package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.IOException;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -61,7 +60,7 @@ public class HexDumpTest {
                 outputArray[offset++] = (byte) ' ';
             }
             for (int k = 0; k < 16; k++) {
-                outputArray[offset++] = (byte) toAscii((j * 16) + k);
+                outputArray[offset++] = (byte) toAscii(j * 16 + k);
             }
             System.arraycopy(HexDump.EOL.getBytes(), 0, outputArray, offset, HexDump.EOL.getBytes().length);
         }
@@ -94,7 +93,7 @@ public class HexDumpTest {
                 outputArray[offset++] = (byte) ' ';
             }
             for (int k = 0; k < 16; k++) {
-                outputArray[offset++] = (byte) toAscii((j * 16) + k);
+                outputArray[offset++] = (byte) toAscii(j * 16 + k);
             }
             System.arraycopy(HexDump.EOL.getBytes(), 0, outputArray, offset,
                     HexDump.EOL.getBytes().length);
@@ -127,7 +126,7 @@ public class HexDumpTest {
                 outputArray[offset++] = (byte) ' ';
             }
             for (int k = 0; k < 16; k++) {
-                outputArray[offset++] = (byte) toAscii((j * 16) + k);
+                outputArray[offset++] = (byte) toAscii(j * 16 + k);
             }
             System.arraycopy(HexDump.EOL.getBytes(), 0, outputArray, offset,
                     HexDump.EOL.getBytes().length);
@@ -141,7 +140,7 @@ public class HexDumpTest {
         // verify proper behavior with non-zero index
         stream = new ByteArrayOutputStream();
         HexDump.dump(testArray, 0x10000000, stream, 0x81);
-        outputArray = new byte[(8 * (73 + HexDump.EOL.length())) - 1];
+        outputArray = new byte[8 * (73 + HexDump.EOL.length()) - 1];
         for (int j = 0; j < 8; j++) {
             int offset = (73 + HexDump.EOL.length()) * j;
 
@@ -155,7 +154,7 @@ public class HexDumpTest {
             outputArray[offset++] = (byte) '1';
             outputArray[offset++] = (byte) ' ';
             for (int k = 0; k < 16; k++) {
-                final int index = 0x81 + (j * 16) + k;
+                final int index = 0x81 + j * 16 + k;
 
                 if (index < 0x100) {
                     outputArray[offset++] = (byte) toHex(index / 16);
@@ -167,7 +166,7 @@ public class HexDumpTest {
                 outputArray[offset++] = (byte) ' ';
             }
             for (int k = 0; k < 16; k++) {
-                final int index = 0x81 + (j * 16) + k;
+                final int index = 0x81 + j * 16 + k;
 
                 if (index < 0x100) {
                     outputArray[offset++] = (byte) toAscii(index);
@@ -183,39 +182,19 @@ public class HexDumpTest {
         }
 
         // verify proper behavior with negative index
-        try {
-            HexDump.dump(testArray, 0x10000000, new ByteArrayOutputStream(),
-                    -1);
-            fail("should have caught ArrayIndexOutOfBoundsException on negative index");
-        } catch (final ArrayIndexOutOfBoundsException ignored_exception) {
-
-            // as expected
-        }
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> HexDump.dump(testArray, 0x10000000, new ByteArrayOutputStream(), -1));
 
         // verify proper behavior with index that is too large
-        try {
-            HexDump.dump(testArray, 0x10000000, new ByteArrayOutputStream(),
-                    testArray.length);
-            fail("should have caught ArrayIndexOutOfBoundsException on large index");
-        } catch (final ArrayIndexOutOfBoundsException ignored_exception) {
-
-            // as expected
-        }
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> HexDump.dump(testArray, 0x10000000, new ByteArrayOutputStream(), testArray.length));
 
         // verify proper behavior with null stream
-        try {
-            HexDump.dump(testArray, 0x10000000, null, 0);
-            fail("should have caught IllegalArgumentException on negative index");
-        } catch (final IllegalArgumentException ignored_exception) {
-
-            // as expected
-        }
+        assertThrows(IllegalArgumentException.class, () -> HexDump.dump(testArray, 0x10000000, null, 0));
     }
 
     private char toAscii(final int c) {
         char rval = '.';
 
-        if ((c >= 32) && (c <= 126)) {
+        if (c >= 32 && c <= 126) {
             rval = (char) c;
         }
         return rval;

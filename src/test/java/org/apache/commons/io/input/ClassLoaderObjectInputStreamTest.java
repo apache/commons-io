@@ -66,8 +66,8 @@ public class ClassLoaderObjectInputStreamTest {
         public boolean equals(final Object other) {
             if (other instanceof Test) {
                 final Test tother = (Test) other;
-                return (this.i == tother.i)
-                        & (this.e == tother.e)
+                return this.i == tother.i
+                        & this.e == tother.e
                         & equalObject(tother.o);
             }
             return false;

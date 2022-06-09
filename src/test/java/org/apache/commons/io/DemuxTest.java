@@ -138,15 +138,12 @@ public class DemuxTest {
     private String getInput(final String threadName) {
         final ReaderThread thread = (ReaderThread) threadMap.get(threadName);
         assertNotNull(thread, "getInput()");
-
         return thread.getData();
     }
 
     private String getOutput(final String threadName) {
-        final ByteArrayOutputStream output =
-                outputMap.get(threadName);
+        final ByteArrayOutputStream output = outputMap.get(threadName);
         assertNotNull(output, "getOutput()");
-
         return output.toString(StandardCharsets.UTF_8);
     }
 
@@ -163,8 +160,7 @@ public class DemuxTest {
                              final DemuxOutputStream demux) {
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         outputMap.put(name, output);
-        final WriterThread thread =
-                new WriterThread(name, data, output, demux);
+        final WriterThread thread = new WriterThread(name, data, output, demux);
         threadMap.put(name, thread);
     }
 
