@@ -50,9 +50,6 @@ import org.xml.sax.SAXParseException;
  */
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class BOMInputStreamTest {
-    //----------------------------------------------------------------------------
-    //  Support code
-    //----------------------------------------------------------------------------
 
     /**
      *  A mock InputStream that expects {@code close()} to be called.
@@ -156,10 +153,6 @@ public class BOMInputStreamTest {
         }
         return new ByteArrayInputStream(data);
     }
-
-    //----------------------------------------------------------------------------
-    //  Test cases
-    //----------------------------------------------------------------------------
 
     private boolean doesSaxSupportCharacterSet(final String charSetName) throws ParserConfigurationException, SAXException, IOException {
         final DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
