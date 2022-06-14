@@ -328,7 +328,7 @@ public class ReaderInputStream extends InputStream {
     @Override
     public int read(final byte[] array, int off, int len) throws IOException {
         Objects.requireNonNull(array, "array");
-        if (len < 0 || off < 0 || (off + len) > array.length) {
+        if (len < 0 || off < 0 || off + len > array.length) {
             throw new IndexOutOfBoundsException("Array size=" + array.length + ", offset=" + off + ", length=" + len);
         }
         int read = 0;

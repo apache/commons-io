@@ -102,7 +102,7 @@ public class BoundedReader extends Reader {
             return EOF;
         }
 
-        if (markedAt >= 0 && (charsRead - markedAt) >= readAheadLimit) {
+        if (markedAt >= 0 && charsRead - markedAt >= readAheadLimit) {
             return EOF;
         }
         charsRead++;
