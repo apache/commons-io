@@ -21,9 +21,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
+
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
+/**
+ * Tests {@link FileSystem}.
+ */
 public class FileSystemTest {
 
 
@@ -61,6 +68,34 @@ public class FileSystemTest {
                 assertTrue(fs.isReservedFileName(candidate));
             }
         }
+    }
+
+    @Test
+    @EnabledOnOs(OS.WINDOWS)
+    public void testIsReservedFileNameOnWindows() throws IOException {
+        final FileSystem fs = FileSystem.WINDOWS;
+        for (final String candidate : fs.getReservedFileNames()) {
+            // System.out.printf("Reserved %s exists: %s%n", candidate, Files.exists(Paths.get(candidate)));
+            assertTrue(fs.isReservedFileName(candidate));
+            assertTrue(fs.isReservedFileName(candidate + ".txt"), candidate);
+        }
+
+// This can hang when trying to create files for some reserved names, but it is interesting to keep
+//
+//        for (final String candidate : fs.getReservedFileNames()) {
+//            System.out.printf("Testing %s%n", candidate);
+//            assertTrue(fs.isReservedFileName(candidate));
+//            final Path path = Paths.get(candidate);
+//            final boolean exists = Files.exists(path);
+//            try {
+//                PathUtils.writeString(path, "Hello World!", StandardCharsets.UTF_8);
+//            } catch (IOException ignored) {
+//                // Asking to create a reserved file either:
+//                // - Throws an exception, for example "AUX"
+//                // - Is a NOOP, for example "COM3"
+//            }
+//            assertEquals(exists, Files.exists(path), path.toString());
+//        }
     }
 
     @Test

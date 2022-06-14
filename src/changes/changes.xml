@@ -175,7 +175,10 @@ The <action> type attribute can be add,update,fix,remove.
         RegexFileFilter is no longer Serializable.
       </action>
       <action issue="IO-763" dev="ggregory" type="fix" due-to="Richard Adams, Gary Gregory">
-        [Javadoc] o.a.c.i.filefilter.FileFilterUtils doc does not match impl: missing some file filters
+        [Javadoc] FileFilterUtils doc does not match impl: missing some file filters.
+      </action>
+      <action issue="IO-762" dev="ggregory" type="fix" due-to="Leonidas Chiron, Gary Gregory">
+        FileSystem.WINDOWS.isReservedFileName doesn't check for file extension.
       </action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">
