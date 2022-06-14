@@ -444,9 +444,7 @@ public class FileAlterationObserver implements Serializable {
      */
     public void removeListener(final FileAlterationListener listener) {
         if (listener != null) {
-            while (listeners.remove(listener)) {
-                // empty
-            }
+            listeners.removeIf(listener::equals);
         }
     }
 
