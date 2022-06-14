@@ -36,7 +36,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 
 /**
- * Useful utilities for working with file filters. It provides access to all
+ * Useful utilities for working with file filters. It provides access to most
  * file filter implementations in this package so you don't have to import
  * every class you use.
  *
