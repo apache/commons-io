@@ -1093,10 +1093,7 @@ public final class PathUtils {
     }
 
     static OutputStream newOutputStream(final Path path, final LinkOption[] linkOptions, final OpenOption... openOptions) throws IOException {
-        if (exists(path, linkOptions)) {
-            // requireFile(path, "path");
-            // requireCanWrite(path, "path");
-        } else {
+        if (!exists(path, linkOptions)) {
             createParentDirectories(path, linkOptions != null && linkOptions.length > 0 ? linkOptions[0] : NULL_LINK_OPTION);
         }
         final List<OpenOption> list = new ArrayList<>(Arrays.asList(openOptions != null ? openOptions : EMPTY_OPEN_OPTION_ARRAY));
@@ -1267,22 +1264,6 @@ public final class PathUtils {
     }
 
     /**
-     * Throws an {@link IllegalArgumentException} if the file is not writable. This provides a more precise exception
-     * message than a plain access denied.
-     *
-     * @param file The file to test.
-     * @param name The parameter name to use in the exception message.
-     * @throws NullPointerException if the given {@code Path} is {@code null}.
-     * @throws IllegalArgumentException if the file is not writable.
-     */
-    private static void requireCanWrite(final Path file, final String name) {
-        Objects.requireNonNull(file, "file");
-        if (!Files.isWritable(file)) {
-            throw new IllegalArgumentException("File parameter '" + name + " is not writable: '" + file + "'");
-        }
-    }
-
-    /**
      * Requires that the given {@code File} exists and throws an {@link IllegalArgumentException} if it doesn't.
      *
      * @param file The {@code File} to check.
@@ -1296,23 +1277,6 @@ public final class PathUtils {
         Objects.requireNonNull(file, fileParamName);
         if (!exists(file, options)) {
             throw new IllegalArgumentException("File system element for parameter '" + fileParamName + "' does not exist: '" + file + "'");
-        }
-        return file;
-    }
-
-    /**
-     * Requires that the given {@code Path} is a regular file.
-     *
-     * @param file The {@code Path} to check.
-     * @param name The parameter name to use in the exception message.
-     * @return the given file.
-     * @throws NullPointerException if the given {@code Path} is {@code null}.
-     * @throws IllegalArgumentException if the given {@code Path} does not exist or is not a regular file.
-     */
-    private static Path requireFile(final Path file, final String name) {
-        Objects.requireNonNull(file, name);
-        if (!Files.isRegularFile(file)) {
-            throw new IllegalArgumentException("Parameter '" + name + "' is not a regular file: " + file);
         }
         return file;
     }
