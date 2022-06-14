@@ -171,6 +171,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-768" dev="ggregory" type="fix" due-to="Marcono1234, Michael Osipov">
         Add reserved Windows file names CONIN$ and CONOUT$ to FileSystem #355.
       </action>
+      <action issue="IO-773" dev="ggregory" type="fix" due-to="Dominik Reinarz, Gary Gregory">
+        RegexFileFilter is no longer Serializable.
+      </action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">
         Add GitHub coverage.yml.

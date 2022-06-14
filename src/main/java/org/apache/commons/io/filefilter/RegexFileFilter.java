@@ -104,8 +104,9 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      * @param pattern regular expression to match.
      * @throws IllegalArgumentException if the pattern is null.
      */
+    @SuppressWarnings("unchecked")
     public RegexFileFilter(final Pattern pattern) {
-        this(pattern, p -> p.getFileName().toString());
+        this(pattern, (Function<Path, String> & Serializable) p -> p.getFileName().toString());
     }
 
     /**
