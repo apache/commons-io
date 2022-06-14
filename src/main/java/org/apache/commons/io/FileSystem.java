@@ -36,12 +36,12 @@ public enum FileSystem {
     /**
      * Generic file system.
      */
-    GENERIC(false, false, Integer.MAX_VALUE, Integer.MAX_VALUE, new char[] { 0 }, new String[] {}, false, false, '/'),
+    GENERIC(false, false, Integer.MAX_VALUE, Integer.MAX_VALUE, new int[] { 0 }, new String[] {}, false, false, '/'),
 
     /**
      * Linux file system.
      */
-    LINUX(true, true, 255, 4096, new char[] {
+    LINUX(true, true, 255, 4096, new int[] {
             // KEEP THIS ARRAY SORTED!
             // @formatter:off
             // ASCII NUL
@@ -53,7 +53,7 @@ public enum FileSystem {
     /**
      * MacOS file system.
      */
-    MAC_OSX(true, true, 255, 1024, new char[] {
+    MAC_OSX(true, true, 255, 1024, new int[] {
             // KEEP THIS ARRAY SORTED!
             // @formatter:off
             // ASCII NUL
@@ -77,7 +77,7 @@ public enum FileSystem {
      *      CreateFileA function - Consoles (microsoft.com)</a>
      */
     WINDOWS(false, true, 255,
-            32000, new char[] {
+            32000, new int[] {
                     // KEEP THIS ARRAY SORTED!
                     // @formatter:off
                     // ASCII NUL
@@ -194,242 +194,6 @@ public enum FileSystem {
     }
 
     /**
-     * Decides if the operating system matches.
-     * <p>
-     * This method is package private instead of private to support unit test invocation.
-     * </p>
-     *
-     * @param osName
-     *            the actual OS name
-     * @param osNamePrefix
-     *            the prefix for the expected OS name
-     * @return true if matches, or false if not or can't determine
-     */
-    private static boolean isOsNameMatch(final String osName, final String osNamePrefix) {
-        if (osName == null) {
-            return false;
-        }
-        return osName.toUpperCase(Locale.ROOT).startsWith(osNamePrefix.toUpperCase(Locale.ROOT));
-    }
-
-    /**
-     * Null-safe replace.
-     *
-     * @param path the path to be changed, null ignored.
-     * @param oldChar the old character.
-     * @param newChar the new character.
-     * @return the new path.
-     */
-    private static String replace(final String path, final char oldChar, final char newChar) {
-        return path == null ? null : path.replace(oldChar, newChar);
-    }
-
-    private final boolean casePreserving;
-    private final boolean caseSensitive;
-    private final char[] illegalFileNameChars;
-    private final int maxFileNameLength;
-    private final int maxPathLength;
-    private final String[] reservedFileNames;
-    private final boolean reservedFileNamesExtensions;
-    private final boolean supportsDriveLetter;
-    private final char nameSeparator;
-    private final char nameSeparatorOther;
-
-    /**
-     * Constructs a new instance.
-     *
-     * @param caseSensitive Whether this file system is case sensitive.
-     * @param casePreserving Whether this file system is case preserving.
-     * @param maxFileLength The maximum length for file names. The file name does not include folders.
-     * @param maxPathLength The maximum length of the path to a file. This can include folders.
-     * @param illegalFileNameChars Illegal characters for this file system.
-     * @param reservedFileNames The reserved file names.
-     * @param reservedFileNamesExtensions TODO
-     * @param supportsDriveLetter Whether this file system support driver letters.
-     * @param nameSeparator The name separator, '\\' on Windows, '/' on Linux.
-     */
-    FileSystem(final boolean caseSensitive, final boolean casePreserving, final int maxFileLength,
-        final int maxPathLength, final char[] illegalFileNameChars, final String[] reservedFileNames,
-        final boolean reservedFileNamesExtensions, final boolean supportsDriveLetter, final char nameSeparator) {
-        this.maxFileNameLength = maxFileLength;
-        this.maxPathLength = maxPathLength;
-        this.illegalFileNameChars = Objects.requireNonNull(illegalFileNameChars, "illegalFileNameChars");
-        this.reservedFileNames = Objects.requireNonNull(reservedFileNames, "reservedFileNames");
-        this.reservedFileNamesExtensions = reservedFileNamesExtensions;
-        this.caseSensitive = caseSensitive;
-        this.casePreserving = casePreserving;
-        this.supportsDriveLetter = supportsDriveLetter;
-        this.nameSeparator = nameSeparator;
-        this.nameSeparatorOther = FilenameUtils.flipSeparator(nameSeparator);
-    }
-
-    /**
-     * Gets a cloned copy of the illegal characters for this file system.
-     *
-     * @return the illegal characters for this file system.
-     */
-    public char[] getIllegalFileNameChars() {
-        return this.illegalFileNameChars.clone();
-    }
-
-    /**
-     * Gets the maximum length for file names. The file name does not include folders.
-     *
-     * @return the maximum length for file names.
-     */
-    public int getMaxFileNameLength() {
-        return maxFileNameLength;
-    }
-
-    /**
-     * Gets the maximum length of the path to a file. This can include folders.
-     *
-     * @return the maximum length of the path to a file.
-     */
-    public int getMaxPathLength() {
-        return maxPathLength;
-    }
-
-    /**
-     * Gets the name separator, '\\' on Windows, '/' on Linux.
-     *
-     * @return '\\' on Windows, '/' on Linux.
-     *
-     * @since 2.12.0
-     */
-    public char getNameSeparator() {
-        return nameSeparator;
-    }
-
-    /**
-     * Gets a cloned copy of the reserved file names.
-     *
-     * @return the reserved file names.
-     */
-    public String[] getReservedFileNames() {
-        return reservedFileNames.clone();
-    }
-
-    /**
-     * Tests whether this file system preserves case.
-     *
-     * @return Whether this file system preserves case.
-     */
-    public boolean isCasePreserving() {
-        return casePreserving;
-    }
-
-    /**
-     * Tests whether this file system is case-sensitive.
-     *
-     * @return Whether this file system is case-sensitive.
-     */
-    public boolean isCaseSensitive() {
-        return caseSensitive;
-    }
-
-    /**
-     * Tests if the given character is illegal in a file name, {@code false} otherwise.
-     *
-     * @param c
-     *            the character to test
-     * @return {@code true} if the given character is illegal in a file name, {@code false} otherwise.
-     */
-    private boolean isIllegalFileNameChar(final char c) {
-        return Arrays.binarySearch(illegalFileNameChars, c) >= 0;
-    }
-
-    /**
-     * Tests if a candidate file name (without a path) such as {@code "filename.ext"} or {@code "filename"} is a
-     * potentially legal file name. If the file name length exceeds {@link #getMaxFileNameLength()}, or if it contains
-     * an illegal character then the check fails.
-     *
-     * @param candidate
-     *            a candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}
-     * @return {@code true} if the candidate name is legal
-     */
-    public boolean isLegalFileName(final CharSequence candidate) {
-        if (candidate == null || candidate.length() == 0 || candidate.length() > maxFileNameLength) {
-            return false;
-        }
-        if (isReservedFileName(candidate)) {
-            return false;
-        }
-        return candidate.chars().noneMatch(i -> isIllegalFileNameChar((char) i));
-    }
-
-    /**
-     * Tests whether the given string is a reserved file name.
-     *
-     * @param candidate
-     *            the string to test
-     * @return {@code true} if the given string is a reserved file name.
-     */
-    public boolean isReservedFileName(final CharSequence candidate) {
-        final CharSequence test = reservedFileNamesExtensions ? trimExtension(candidate) : candidate;
-        return Arrays.binarySearch(reservedFileNames, test) >= 0;
-    }
-
-    /**
-     * Converts all separators to the Windows separator of backslash.
-     *
-     * @param path the path to be changed, null ignored
-     * @return the updated path
-     * @since 2.12.0
-     */
-    public String normalizeSeparators(final String path) {
-        return replace(path, nameSeparatorOther, nameSeparator);
-    }
-
-    /**
-     * Tests whether this file system support driver letters.
-     * <p>
-     * Windows supports driver letters as do other operating systems. Whether these other OS's still support Java like
-     * OS/2, is a different matter.
-     * </p>
-     *
-     * @return whether this file system support driver letters.
-     * @since 2.9.0
-     * @see <a href="https://en.wikipedia.org/wiki/Drive_letter_assignment">Operating systems that use drive letter
-     *      assignment</a>
-     */
-    public boolean supportsDriveLetter() {
-        return supportsDriveLetter;
-    }
-
-    /**
-     * Converts a candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"} to a legal file
-     * name. Illegal characters in the candidate name are replaced by the {@code replacement} character. If the file
-     * name length exceeds {@link #getMaxFileNameLength()}, then the name is truncated to
-     * {@link #getMaxFileNameLength()}.
-     *
-     * @param candidate
-     *            a candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}
-     * @param replacement
-     *            Illegal characters in the candidate name are replaced by this character
-     * @return a String without illegal characters
-     */
-    public String toLegalFileName(final String candidate, final char replacement) {
-        if (isIllegalFileNameChar(replacement)) {
-            throw new IllegalArgumentException(
-                    String.format("The replacement character '%s' cannot be one of the %s illegal characters: %s",
-                            // %s does not work properly with NUL
-                            replacement == '\0' ? "\\0" : replacement, name(), Arrays.toString(illegalFileNameChars)));
-        }
-        final String truncated = candidate.length() > maxFileNameLength ? candidate.substring(0, maxFileNameLength)
-                : candidate;
-        boolean changed = false;
-        final char[] charArray = truncated.toCharArray();
-        for (int i = 0; i < charArray.length; i++) {
-            if (isIllegalFileNameChar(charArray[i])) {
-                charArray[i] = replacement;
-                changed = true;
-            }
-        }
-        return changed ? String.valueOf(charArray) : truncated;
-    }
-
-    /**
      * Copied from Apache Commons Lang CharSequenceUtils.
      *
      * Returns the index within {@code cs} of the first occurrence of the
@@ -500,6 +264,247 @@ public enum FileSystem {
             }
         }
         return -1;
+    }
+
+    /**
+     * Decides if the operating system matches.
+     * <p>
+     * This method is package private instead of private to support unit test invocation.
+     * </p>
+     *
+     * @param osName
+     *            the actual OS name
+     * @param osNamePrefix
+     *            the prefix for the expected OS name
+     * @return true if matches, or false if not or can't determine
+     */
+    private static boolean isOsNameMatch(final String osName, final String osNamePrefix) {
+        if (osName == null) {
+            return false;
+        }
+        return osName.toUpperCase(Locale.ROOT).startsWith(osNamePrefix.toUpperCase(Locale.ROOT));
+    }
+
+    /**
+     * Null-safe replace.
+     *
+     * @param path the path to be changed, null ignored.
+     * @param oldChar the old character.
+     * @param newChar the new character.
+     * @return the new path.
+     */
+    private static String replace(final String path, final char oldChar, final char newChar) {
+        return path == null ? null : path.replace(oldChar, newChar);
+    }
+    private final boolean casePreserving;
+    private final boolean caseSensitive;
+    private final int[] illegalFileNameChars;
+    private final int maxFileNameLength;
+    private final int maxPathLength;
+    private final String[] reservedFileNames;
+    private final boolean reservedFileNamesExtensions;
+    private final boolean supportsDriveLetter;
+    private final char nameSeparator;
+
+    private final char nameSeparatorOther;
+
+    /**
+     * Constructs a new instance.
+     *
+     * @param caseSensitive Whether this file system is case sensitive.
+     * @param casePreserving Whether this file system is case preserving.
+     * @param maxFileLength The maximum length for file names. The file name does not include folders.
+     * @param maxPathLength The maximum length of the path to a file. This can include folders.
+     * @param illegalFileNameChars Illegal characters for this file system.
+     * @param reservedFileNames The reserved file names.
+     * @param reservedFileNamesExtensions TODO
+     * @param supportsDriveLetter Whether this file system support driver letters.
+     * @param nameSeparator The name separator, '\\' on Windows, '/' on Linux.
+     */
+    FileSystem(final boolean caseSensitive, final boolean casePreserving, final int maxFileLength,
+        final int maxPathLength, final int[] illegalFileNameChars, final String[] reservedFileNames,
+        final boolean reservedFileNamesExtensions, final boolean supportsDriveLetter, final char nameSeparator) {
+        this.maxFileNameLength = maxFileLength;
+        this.maxPathLength = maxPathLength;
+        this.illegalFileNameChars = Objects.requireNonNull(illegalFileNameChars, "illegalFileNameChars");
+        this.reservedFileNames = Objects.requireNonNull(reservedFileNames, "reservedFileNames");
+        this.reservedFileNamesExtensions = reservedFileNamesExtensions;
+        this.caseSensitive = caseSensitive;
+        this.casePreserving = casePreserving;
+        this.supportsDriveLetter = supportsDriveLetter;
+        this.nameSeparator = nameSeparator;
+        this.nameSeparatorOther = FilenameUtils.flipSeparator(nameSeparator);
+    }
+
+    /**
+     * Gets a cloned copy of the illegal characters for this file system.
+     *
+     * @return the illegal characters for this file system.
+     */
+    public char[] getIllegalFileNameChars() {
+        final char[] chars = new char[illegalFileNameChars.length];
+        for (int i = 0; i < illegalFileNameChars.length; i++) {
+            chars[i] = (char) illegalFileNameChars[i];
+        }
+        return chars;
+    }
+
+    /**
+     * Gets a cloned copy of the illegal code points for this file system.
+     *
+     * @return the illegal code points for this file system.
+     * @since 2.12.0
+     */
+    public int[] getIllegalFileNameCodePoints() {
+        return this.illegalFileNameChars.clone();
+    }
+
+    /**
+     * Gets the maximum length for file names. The file name does not include folders.
+     *
+     * @return the maximum length for file names.
+     */
+    public int getMaxFileNameLength() {
+        return maxFileNameLength;
+    }
+
+    /**
+     * Gets the maximum length of the path to a file. This can include folders.
+     *
+     * @return the maximum length of the path to a file.
+     */
+    public int getMaxPathLength() {
+        return maxPathLength;
+    }
+
+    /**
+     * Gets the name separator, '\\' on Windows, '/' on Linux.
+     *
+     * @return '\\' on Windows, '/' on Linux.
+     *
+     * @since 2.12.0
+     */
+    public char getNameSeparator() {
+        return nameSeparator;
+    }
+
+    /**
+     * Gets a cloned copy of the reserved file names.
+     *
+     * @return the reserved file names.
+     */
+    public String[] getReservedFileNames() {
+        return reservedFileNames.clone();
+    }
+
+    /**
+     * Tests whether this file system preserves case.
+     *
+     * @return Whether this file system preserves case.
+     */
+    public boolean isCasePreserving() {
+        return casePreserving;
+    }
+
+    /**
+     * Tests whether this file system is case-sensitive.
+     *
+     * @return Whether this file system is case-sensitive.
+     */
+    public boolean isCaseSensitive() {
+        return caseSensitive;
+    }
+
+    /**
+     * Tests if the given character is illegal in a file name, {@code false} otherwise.
+     *
+     * @param c
+     *            the character to test
+     * @return {@code true} if the given character is illegal in a file name, {@code false} otherwise.
+     */
+    private boolean isIllegalFileNameChar(final int c) {
+        return Arrays.binarySearch(illegalFileNameChars, c) >= 0;
+    }
+
+    /**
+     * Tests if a candidate file name (without a path) such as {@code "filename.ext"} or {@code "filename"} is a
+     * potentially legal file name. If the file name length exceeds {@link #getMaxFileNameLength()}, or if it contains
+     * an illegal character then the check fails.
+     *
+     * @param candidate
+     *            a candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}
+     * @return {@code true} if the candidate name is legal
+     */
+    public boolean isLegalFileName(final CharSequence candidate) {
+        if (candidate == null || candidate.length() == 0 || candidate.length() > maxFileNameLength) {
+            return false;
+        }
+        if (isReservedFileName(candidate)) {
+            return false;
+        }
+        return candidate.chars().noneMatch(this::isIllegalFileNameChar);
+    }
+
+    /**
+     * Tests whether the given string is a reserved file name.
+     *
+     * @param candidate
+     *            the string to test
+     * @return {@code true} if the given string is a reserved file name.
+     */
+    public boolean isReservedFileName(final CharSequence candidate) {
+        final CharSequence test = reservedFileNamesExtensions ? trimExtension(candidate) : candidate;
+        return Arrays.binarySearch(reservedFileNames, test) >= 0;
+    }
+
+    /**
+     * Converts all separators to the Windows separator of backslash.
+     *
+     * @param path the path to be changed, null ignored
+     * @return the updated path
+     * @since 2.12.0
+     */
+    public String normalizeSeparators(final String path) {
+        return replace(path, nameSeparatorOther, nameSeparator);
+    }
+
+    /**
+     * Tests whether this file system support driver letters.
+     * <p>
+     * Windows supports driver letters as do other operating systems. Whether these other OS's still support Java like
+     * OS/2, is a different matter.
+     * </p>
+     *
+     * @return whether this file system support driver letters.
+     * @since 2.9.0
+     * @see <a href="https://en.wikipedia.org/wiki/Drive_letter_assignment">Operating systems that use drive letter
+     *      assignment</a>
+     */
+    public boolean supportsDriveLetter() {
+        return supportsDriveLetter;
+    }
+
+    /**
+     * Converts a candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"} to a legal file
+     * name. Illegal characters in the candidate name are replaced by the {@code replacement} character. If the file
+     * name length exceeds {@link #getMaxFileNameLength()}, then the name is truncated to
+     * {@link #getMaxFileNameLength()}.
+     *
+     * @param candidate
+     *            a candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}
+     * @param replacement
+     *            Illegal characters in the candidate name are replaced by this character
+     * @return a String without illegal characters
+     */
+    public String toLegalFileName(final String candidate, final char replacement) {
+        if (isIllegalFileNameChar(replacement)) {
+            // %s does not work properly with NUL
+            throw new IllegalArgumentException(String.format("The replacement character '%s' cannot be one of the %s illegal characters: %s",
+                replacement == '\0' ? "\\0" : replacement, name(), Arrays.toString(illegalFileNameChars)));
+        }
+        final String truncated = candidate.length() > maxFileNameLength ? candidate.substring(0, maxFileNameLength) : candidate;
+        final int[] array = truncated.chars().map(i -> isIllegalFileNameChar(i) ? replacement : i).toArray();
+        return new String(array, 0, array.length);
     }
 
     CharSequence trimExtension(final CharSequence cs) {
