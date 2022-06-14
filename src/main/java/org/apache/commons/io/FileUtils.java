@@ -745,7 +745,7 @@ public class FileUtils {
      * </p>
      * <p>
      * <strong>Note:</strong> This method tries to preserve the file's last modified date/times using
-     * {@link File#setLastModified(long)}, however it is not guaranteed that the operation will succeed. If the
+     * {@link StandardCopyOption#COPY_ATTRIBUTES}, however it is not guaranteed that the operation will succeed. If the
      * modification operation fails, the methods throws IOException.
      * </p>
      *
@@ -771,7 +771,7 @@ public class FileUtils {
      * </p>
      * <p>
      * <strong>Note:</strong> Setting {@code preserveFileDate} to {@code true} tries to preserve the file's last
-     * modified date/times using {@link File#setLastModified(long)}, however it is not guaranteed that the operation
+     * modified date/times using {@link StandardCopyOption#COPY_ATTRIBUTES}, however it is not guaranteed that the operation
      * will succeed. If the modification operation fails, the methods throws IOException.
      * </p>
      *
@@ -801,7 +801,7 @@ public class FileUtils {
      * </p>
      * <p>
      * <strong>Note:</strong> Setting {@code preserveFileDate} to {@code true} tries to preserve the file's last
-     * modified date/times using {@link File#setLastModified(long)}, however it is not guaranteed that the operation
+     * modified date/times using {@link StandardCopyOption#COPY_ATTRIBUTES}, however it is not guaranteed that the operation
      * will succeed. If the modification operation fails, the methods throws IOException.
      * </p>
      *
@@ -886,7 +886,7 @@ public class FileUtils {
      * </p>
      * <p>
      * <strong>Note:</strong> This method tries to preserve the file's last modified date/times using
-     * {@link File#setLastModified(long)}, however it is not guaranteed that the operation will succeed. If the
+     * {@link StandardCopyOption#COPY_ATTRIBUTES}, however it is not guaranteed that the operation will succeed. If the
      * modification operation fails, the methods throws IOException.
      * </p>
      *
@@ -910,7 +910,7 @@ public class FileUtils {
      * </p>
      * <p>
      * <strong>Note:</strong> Setting {@code preserveFileDate} to {@code true} tries to preserve the file's last
-     * modified date/times using {@link File#setLastModified(long)}, however it is not guaranteed that the operation
+     * modified date/times using {@link StandardCopyOption#COPY_ATTRIBUTES}, however it is not guaranteed that the operation
      * will succeed. If the modification operation fails, the methods throws IOException.
      * </p>
      *
@@ -963,13 +963,14 @@ public class FileUtils {
      * specified destination directory.
      * </p>
      * <p>
-     * The destination directory is created if it does not exist. If the destination directory did exist, then this
-     * method merges the source with the destination, with the source taking precedence.
+     * The destination directory is created if it does not exist. If the destination directory did exist, then this method
+     * merges the source with the destination, with the source taking precedence.
      * </p>
      * <p>
      * <strong>Note:</strong> This method tries to preserve the files' last modified date/times using
-     * {@link File#setLastModified(long)}, however it is not guaranteed that those operations will succeed. If the
-     * modification operation fails, the methods throws IOException.
+     * {@link StandardCopyOption#COPY_ATTRIBUTES} or {@link File#setLastModified(long)} depending on the input, however it
+     * is not guaranteed that those operations will succeed. If the modification operation fails, the methods throws
+     * IOException.
      * </p>
      *
      * @param sourceFile an existing file or directory to copy, must not be {@code null}.
