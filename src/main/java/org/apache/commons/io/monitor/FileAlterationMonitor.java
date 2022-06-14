@@ -129,9 +129,7 @@ public final class FileAlterationMonitor implements Runnable {
      */
     public void removeObserver(final FileAlterationObserver observer) {
         if (observer != null) {
-            while (observers.remove(observer)) {
-                // empty
-            }
+            observers.removeIf(observer::equals);
         }
     }
 
