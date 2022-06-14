@@ -437,6 +437,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Bump PMD implementation from 6.44.0 to 6.46.0.
       </action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
+        Bump PMD plugin from 3.16.0 to 3.17.0.
+      </action>
       </action>
     </release>
     <release version="2.11.0" date="2021-07-09" description="Java 8 required.">
