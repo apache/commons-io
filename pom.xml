@@ -357,7 +357,7 @@ file comparators, endian transformation classes, and much more.
 
   <build>
     <!-- japicmp:cmp needs package to work from a jar -->
-    <defaultGoal>clean verify apache-rat:check japicmp:cmp checkstyle:check javadoc:javadoc</defaultGoal>
+    <defaultGoal>clean verify apache-rat:check japicmp:cmp checkstyle:check pmd:check javadoc:javadoc</defaultGoal>
     <pluginManagement>
       <plugins>
         <plugin>

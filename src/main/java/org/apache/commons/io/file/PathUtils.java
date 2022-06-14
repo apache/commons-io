@@ -721,7 +721,7 @@ public final class PathUtils {
             // same file
             return true;
         }
-        try (InputStream inputStream1 = Files.newInputStream(nPath1, openOptions); 
+        try (InputStream inputStream1 = Files.newInputStream(nPath1, openOptions);
             InputStream inputStream2 = Files.newInputStream(nPath2, openOptions)) {
             return IOUtils.contentEquals(inputStream1, inputStream2);
         }

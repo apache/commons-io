@@ -124,7 +124,7 @@ public class ReversedLinesFileReader implements Closeable {
          *
          * @return the line or null
          */
-        private String readLine() {
+        private String readLine() { //NOPMD Bug in PMD
 
             String line = null;
             int newLineMatchByteCount;
