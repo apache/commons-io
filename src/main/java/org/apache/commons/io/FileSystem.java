@@ -355,7 +355,7 @@ public enum FileSystem {
         if (isReservedFileName(candidate)) {
             return false;
         }
-        return candidate.chars().anyMatch(i -> isIllegalFileNameChar((char) i));
+        return candidate.chars().noneMatch(i -> isIllegalFileNameChar((char) i));
     }
 
     /**
