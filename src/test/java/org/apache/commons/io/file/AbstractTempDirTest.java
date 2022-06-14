@@ -25,6 +25,9 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.io.TempDir;
 
+/**
+ * Provides services for test subclasses.
+ */
 public abstract class AbstractTempDirTest {
 
     /**
