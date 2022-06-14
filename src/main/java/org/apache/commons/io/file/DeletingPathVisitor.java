@@ -163,7 +163,7 @@ public class DeletingPathVisitor extends CountingPathVisitor {
                 try {
                     // deleteIfExists does not work for this case
                     Files.delete(file);
-                } catch (final NoSuchFileException e) {
+                } catch (final NoSuchFileException ignored) {
                     // ignore
                 }
             }

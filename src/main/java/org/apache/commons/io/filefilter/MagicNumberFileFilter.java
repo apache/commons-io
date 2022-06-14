@@ -264,7 +264,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
                     return Arrays.equals(this.magicNumbers, fileBytes);
                 }
             }
-            catch (final IOException ioe) {
+            catch (final IOException ignored) {
                 // Do nothing, fall through and do not accept file
             }
         }
@@ -301,7 +301,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
                     return toFileVisitResult(Arrays.equals(this.magicNumbers, byteBuffer.array()));
                 }
             }
-            catch (final IOException ioe) {
+            catch (final IOException ignored) {
                 // Do nothing, fall through and do not accept file
             }
         }

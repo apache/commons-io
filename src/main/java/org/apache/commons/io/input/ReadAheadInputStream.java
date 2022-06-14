@@ -227,8 +227,8 @@ public class ReadAheadInputStream extends InputStream {
         if (needToCloseUnderlyingInputStream) {
             try {
                 underlyingInputStream.close();
-            } catch (final IOException e) {
-                // TODO ?
+            } catch (final IOException ignored) {
+                // TODO Rethrow as UncheckedIOException?
             }
         }
     }

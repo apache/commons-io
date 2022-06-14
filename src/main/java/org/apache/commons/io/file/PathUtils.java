@@ -537,7 +537,7 @@ public final class PathUtils {
                 pathCounts.getByteCounter().add(size);
                 return pathCounts;
             }
-        } catch (final AccessDeniedException e) {
+        } catch (final AccessDeniedException ignored) {
             // Ignore and try again below.
         }
         final Path parent = getParent(file);
@@ -1436,7 +1436,7 @@ public final class PathUtils {
             if (setDosReadOnly(path, readOnly, linkOptions)) {
                 return path;
             }
-        } catch (final IOException e) {
+        } catch (final IOException ignored) {
             // Retry with POSIX below.
         }
         final Path parent = getParent(path);
