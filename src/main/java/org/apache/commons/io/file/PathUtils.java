@@ -200,13 +200,6 @@ public final class PathUtils {
     public static final Path[] EMPTY_PATH_ARRAY = {};
 
     /**
-     * Does allow to instantiate.
-     */
-    private PathUtils() {
-        // do not instantiate.
-    }
-
-    /**
      * Accumulates file tree information in a {@link AccumulatorPathVisitor}.
      *
      * @param directory The directory to accumulate information.
@@ -1702,6 +1695,13 @@ public final class PathUtils {
         Objects.requireNonNull(charSequence, "charSequence");
         Files.write(path, String.valueOf(charSequence).getBytes(Charsets.toCharset(charset)), openOptions);
         return path;
+    }
+
+    /**
+     * Does allow to instantiate.
+     */
+    private PathUtils() {
+        // do not instantiate.
     }
 
 }
