@@ -71,6 +71,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.UncheckedIO;
 import org.apache.commons.io.file.Counters.PathCounters;
+import org.apache.commons.io.file.attribute.FileTimes;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.function.IOFunction;
 
@@ -1531,6 +1532,26 @@ public final class PathUtils {
      */
     static Set<FileVisitOption> toFileVisitOptionSet(final FileVisitOption... fileVisitOptions) {
         return fileVisitOptions == null ? EnumSet.noneOf(FileVisitOption.class) : Stream.of(fileVisitOptions).collect(Collectors.toSet());
+    }
+
+    /**
+     * Implements behavior similar to the Unix "touch" utility. Creates a new file with size 0, or, if the file exists, just
+     * updates the file's modified time.
+     *
+     * @param file the file to touch.
+     * @return The given file.
+     * @throws NullPointerException if the parameter is {@code null}.
+     * @throws IOException if setting the last-modified time failed or an I/O problem occurs.\
+     * @since 2.12.0
+     */
+    public static Path touch(final Path file) throws IOException {
+        Objects.requireNonNull(file, "file");
+        if (!Files.exists(file)) {
+            Files.createFile(file);
+        } else {
+            FileTimes.setLastModifiedTime(file);
+        }
+        return file;
     }
 
     /**

@@ -2700,10 +2700,10 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertFalse(file.exists(), "Bad test: test file still exists");
         FileUtils.touch(file);
         assertTrue(file.exists(), "FileUtils.touch() created file");
-        final OutputStream out = Files.newOutputStream(file.toPath());
-        assertEquals(0, file.length(), "Created empty file.");
-        out.write(0);
-        out.close();
+        try (final OutputStream out = Files.newOutputStream(file.toPath())) {
+            assertEquals(0, file.length(), "Created empty file.");
+            out.write(0);
+        }
         assertEquals(1, file.length(), "Wrote one byte to file");
         final long y2k = new GregorianCalendar(2000, 0, 1).getTime().getTime();
         final boolean res = setLastModifiedMillis(file, y2k);  // 0L fails on Win98

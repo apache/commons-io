@@ -20,7 +20,9 @@ package org.apache.commons.io.file;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
@@ -39,11 +41,14 @@ import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.DosFileAttributeView;
+import java.nio.file.attribute.FileTime;
 import java.nio.file.attribute.PosixFileAttributes;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -84,6 +89,10 @@ public class PathUtilsTest extends AbstractTempDirTest {
         return symlinkDir;
     }
 
+    private Long getLastModifiedMillis(final Path file) throws IOException {
+        return Files.getLastModifiedTime(file).toMillis();
+    }
+
     private FileSystem openArchive(final Path p, final boolean createNew) throws IOException {
         if (createNew) {
             final Map<String, String> env = new HashMap<>();
@@ -93,6 +102,10 @@ public class PathUtilsTest extends AbstractTempDirTest {
             return FileSystems.newFileSystem(uri, env, null);
         }
         return FileSystems.newFileSystem(p, (ClassLoader) null);
+    }
+
+    private void setLastModifiedMillis(final Path file, final long millis) throws IOException {
+        Files.setLastModifiedTime(file, FileTime.fromMillis(millis));
     }
 
     @Test
@@ -405,6 +418,32 @@ public class PathUtilsTest extends AbstractTempDirTest {
         //
         PathUtils.setReadOnly(resolved, false);
         PathUtils.deleteFile(resolved);
+    }
+
+    @Test
+    public void testTouch() throws IOException {
+        assertThrows(NullPointerException.class, () -> FileUtils.touch(null));
+
+        final Path file = managedTempDirPath.resolve("touch.txt");
+        Files.deleteIfExists(file);
+        assertFalse(Files.exists(file), "Bad test: test file still exists");
+        PathUtils.touch(file);
+        assertTrue(Files.exists(file), "touch() created file");
+        try (final OutputStream out = Files.newOutputStream(file)) {
+            assertEquals(0, Files.size(file), "Created empty file.");
+            out.write(0);
+        }
+        assertEquals(1, Files.size(file), "Wrote one byte to file");
+        final long y2k = new GregorianCalendar(2000, 0, 1).getTime().getTime();
+        setLastModifiedMillis(file, y2k);  // 0L fails on Win98
+        assertEquals(y2k, getLastModifiedMillis(file), "Bad test: set lastModified set incorrect value");
+        final long nowMillis = System.currentTimeMillis();
+        PathUtils.touch(file);
+        assertEquals(1, Files.size(file), "FileUtils.touch() didn't empty the file.");
+        assertNotEquals(y2k, getLastModifiedMillis(file), "FileUtils.touch() changed lastModified");
+        final int delta = 3000;
+        assertTrue(getLastModifiedMillis(file) >= nowMillis - delta, "FileUtils.touch() changed lastModified to more than now-3s");
+        assertTrue(getLastModifiedMillis(file) <= nowMillis + delta, "FileUtils.touch() changed lastModified to less than now+3s");
     }
 
     @Test

@@ -70,7 +70,6 @@ import org.apache.commons.io.file.Counters;
 import org.apache.commons.io.file.PathFilter;
 import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.io.file.StandardDeleteOption;
-import org.apache.commons.io.file.attribute.FileTimes;
 import org.apache.commons.io.filefilter.FileEqualsFileFilter;
 import org.apache.commons.io.filefilter.FileFileFilter;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -3050,25 +3049,19 @@ public class FileUtils {
     }
 
     /**
-     * Implements the same behavior as the "touch" utility on Unix. It creates
-     * a new file with size 0 or, if the file exists already, it is opened and
-     * closed without modifying it, but updating the file date and time.
+     * Implements behavior similar to the Unix "touch" utility. Creates a new file with size 0, or, if the file exists, just
+     * updates the file's modified time.
      * <p>
-     * NOTE: As from v1.3, this method throws an IOException if the last
-     * modified date of the file cannot be set. Also, as from v1.3 this method
-     * creates parent directories if they do not exist.
+     * NOTE: As from v1.3, this method throws an IOException if the last modified date of the file cannot be set. Also, as
+     * from v1.3 this method creates parent directories if they do not exist.
      * </p>
      *
      * @param file the File to touch.
      * @throws NullPointerException if the parameter is {@code null}.
-     * @throws IOException          if setting the last-modified time failed or an I/O problem occurs.
+     * @throws IOException if setting the last-modified time failed or an I/O problem occurs.
      */
     public static void touch(final File file) throws IOException {
-        Objects.requireNonNull(file, "file");
-        if (!file.exists()) {
-            newOutputStream(file, false).close();
-        }
-        FileTimes.setLastModifiedTime(file.toPath());
+        PathUtils.touch(Objects.requireNonNull(file, "file").toPath());
     }
 
     /**
