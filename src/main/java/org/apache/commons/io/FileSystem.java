@@ -232,7 +232,6 @@ public enum FileSystem {
     private final String[] reservedFileNames;
     private final boolean supportsDriveLetter;
     private final char nameSeparator;
-
     private final char nameSeparatorOther;
 
     /**
