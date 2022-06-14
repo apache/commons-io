@@ -55,7 +55,7 @@ public class SizeFileComparatorTest extends ComparatorAbstractTest {
             throw new IOException("Cannot create file " + smallerFile
                     + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output2 =
+        try (BufferedOutputStream output2 =
                 new BufferedOutputStream(Files.newOutputStream(smallerFile.toPath()))) {
             TestUtils.generateTestData(output2, 32);
         }
@@ -63,7 +63,7 @@ public class SizeFileComparatorTest extends ComparatorAbstractTest {
             throw new IOException("Cannot create file " + equalFile
                     + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output1 =
+        try (BufferedOutputStream output1 =
                 new BufferedOutputStream(Files.newOutputStream(equalFile.toPath()))) {
             TestUtils.generateTestData(output1, 48);
         }
@@ -71,7 +71,7 @@ public class SizeFileComparatorTest extends ComparatorAbstractTest {
             throw new IOException("Cannot create file " + largerFile
                     + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output =
+        try (BufferedOutputStream output =
                 new BufferedOutputStream(Files.newOutputStream(largerFile.toPath()))) {
             TestUtils.generateTestData(output, 64);
         }

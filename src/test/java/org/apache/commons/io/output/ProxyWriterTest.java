@@ -34,7 +34,7 @@ public class ProxyWriterTest {
 
     @Test
     public void appendChar() throws Exception {
-        try (final StringBuilderWriter writer = new StringBuilderWriter();
+        try (StringBuilderWriter writer = new StringBuilderWriter();
                 final ProxyWriter proxy = new ProxyWriter(writer)) {
             proxy.append('c');
             assertEquals("c", writer.toString());
@@ -43,7 +43,7 @@ public class ProxyWriterTest {
 
     @Test
     public void appendCharSequence() throws Exception {
-        try (final StringBuilderWriter writer = new StringBuilderWriter();
+        try (StringBuilderWriter writer = new StringBuilderWriter();
                 final ProxyWriter proxy = new ProxyWriter(writer)) {
             proxy.append("ABC");
             assertEquals("ABC", writer.toString());
@@ -52,7 +52,7 @@ public class ProxyWriterTest {
 
     @Test
     public void appendCharSequence_with_offset() throws Exception {
-        try (final StringBuilderWriter writer = new StringBuilderWriter();
+        try (StringBuilderWriter writer = new StringBuilderWriter();
                 final ProxyWriter proxy = new ProxyWriter(writer)) {
             proxy.append("ABC", 1, 3);
             proxy.flush();
@@ -62,7 +62,7 @@ public class ProxyWriterTest {
 
     @Test
     public void exceptions_in_append_char() throws IOException {
-        try (final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 final OutputStreamWriter osw = new OutputStreamWriter(baos) {
                     @Override
                     public void write(final int c) throws IOException {
@@ -77,7 +77,7 @@ public class ProxyWriterTest {
 
     @Test
     public void exceptions_in_append_charSequence() throws IOException {
-        try (final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
+        try (OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
             public Writer append(final CharSequence csq) throws IOException {
                 throw new UnsupportedEncodingException("Bah");
@@ -91,7 +91,7 @@ public class ProxyWriterTest {
 
     @Test
     public void exceptions_in_append_charSequence_offset() throws IOException {
-        try (final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
+        try (OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
             public Writer append(final CharSequence csq, final int start, final int end) throws IOException {
                 throw new UnsupportedEncodingException("Bah");
@@ -106,13 +106,13 @@ public class ProxyWriterTest {
     @Test
     public void exceptions_in_close() {
         assertThrows(UnsupportedEncodingException.class, () -> {
-            try (final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
+            try (OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
                 @Override
                 public void close() throws IOException {
                     throw new UnsupportedEncodingException("Bah");
                 }
             }) {
-                try (final ProxyWriter proxy = new ProxyWriter(osw)) {
+                try (ProxyWriter proxy = new ProxyWriter(osw)) {
                     // noop
                 }
             }
@@ -121,7 +121,7 @@ public class ProxyWriterTest {
 
     @Test
     public void exceptions_in_flush() throws IOException {
-        try (final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
+        try (OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
             public void flush() throws IOException {
                 throw new UnsupportedEncodingException("Bah");
@@ -135,7 +135,7 @@ public class ProxyWriterTest {
 
     @Test
     public void exceptions_in_write_char_array() throws IOException {
-        try (final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
+        try (OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
             public void write(final char[] cbuf) throws IOException {
                 throw new UnsupportedEncodingException("Bah");
@@ -149,7 +149,7 @@ public class ProxyWriterTest {
 
     @Test
     public void exceptions_in_write_int() throws IOException {
-        try (final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
+        try (OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
             public void write(final int c) throws IOException {
                 throw new UnsupportedEncodingException("Bah");
@@ -163,7 +163,7 @@ public class ProxyWriterTest {
 
     @Test
     public void exceptions_in_write_offset_char_array() throws IOException {
-        try (final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
+        try (OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
             public void write(final char[] cbuf, final int off, final int len) throws IOException {
                 throw new UnsupportedEncodingException("Bah");
@@ -177,7 +177,7 @@ public class ProxyWriterTest {
 
     @Test
     public void exceptions_in_write_string() throws IOException {
-        try (final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
+        try (OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
             public void write(final String str) throws IOException {
                 throw new UnsupportedEncodingException("Bah");
@@ -191,7 +191,7 @@ public class ProxyWriterTest {
 
     @Test
     public void exceptions_in_write_string_offset() throws IOException {
-        try (final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
+        try (OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
             public void write(final String str, final int off, final int len) throws IOException {
                 throw new UnsupportedEncodingException("Bah");
@@ -205,7 +205,7 @@ public class ProxyWriterTest {
 
     @Test
     public void nullCharArray() throws Exception {
-        try (final ProxyWriter proxy = new ProxyWriter(NullWriter.INSTANCE)) {
+        try (ProxyWriter proxy = new ProxyWriter(NullWriter.INSTANCE)) {
             proxy.write((char[]) null);
             proxy.write((char[]) null, 0, 0);
         }
@@ -213,14 +213,14 @@ public class ProxyWriterTest {
 
     @Test
     public void nullCharSequence() throws Exception {
-        try (final ProxyWriter proxy = new ProxyWriter(NullWriter.INSTANCE)) {
+        try (ProxyWriter proxy = new ProxyWriter(NullWriter.INSTANCE)) {
             proxy.append(null);
         }
     }
 
     @Test
     public void nullString() throws Exception {
-        try (final ProxyWriter proxy = new ProxyWriter(NullWriter.INSTANCE)) {
+        try (ProxyWriter proxy = new ProxyWriter(NullWriter.INSTANCE)) {
             proxy.write((String) null);
             proxy.write((String) null, 0, 0);
         }
@@ -228,7 +228,7 @@ public class ProxyWriterTest {
 
     @Test
     public void writeCharArray() throws Exception {
-        try (final StringBuilderWriter writer = new StringBuilderWriter();
+        try (StringBuilderWriter writer = new StringBuilderWriter();
                 final ProxyWriter proxy = new ProxyWriter(writer)) {
             proxy.write(new char[] { 'A', 'B', 'C' });
             assertEquals("ABC", writer.toString());
@@ -237,7 +237,7 @@ public class ProxyWriterTest {
 
     @Test
     public void writeCharArrayPartial() throws Exception {
-        try (final StringBuilderWriter writer = new StringBuilderWriter();
+        try (StringBuilderWriter writer = new StringBuilderWriter();
                 final ProxyWriter proxy = new ProxyWriter(writer)) {
             proxy.write(new char[] { 'A', 'B', 'C' }, 1, 2);
             assertEquals("BC", writer.toString());
@@ -246,7 +246,7 @@ public class ProxyWriterTest {
 
     @Test
     public void writeInt() throws Exception {
-        try (final StringBuilderWriter writer = new StringBuilderWriter();
+        try (StringBuilderWriter writer = new StringBuilderWriter();
                 final ProxyWriter proxy = new ProxyWriter(writer)) {
             proxy.write(65);
             assertEquals("A", writer.toString());
@@ -255,7 +255,7 @@ public class ProxyWriterTest {
 
     @Test
     public void writeString() throws Exception {
-        try (final StringBuilderWriter writer = new StringBuilderWriter();
+        try (StringBuilderWriter writer = new StringBuilderWriter();
                 final ProxyWriter proxy = new ProxyWriter(writer)) {
             proxy.write("ABC");
             assertEquals("ABC", writer.toString());
@@ -264,7 +264,7 @@ public class ProxyWriterTest {
 
     @Test
     public void writeStringPartial() throws Exception {
-        try (final StringBuilderWriter writer = new StringBuilderWriter();
+        try (StringBuilderWriter writer = new StringBuilderWriter();
                 final ProxyWriter proxy = new ProxyWriter(writer)) {
             proxy.write("ABC", 1, 2);
             assertEquals("BC", writer.toString());

@@ -54,13 +54,13 @@ public class FileUtilsFileNewerTest {
         if (!testFile1.getParentFile().exists()) {
             throw new IOException("Cannot create file " + testFile1 + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
+        try (BufferedOutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
             TestUtils.generateTestData(output1, FILE1_SIZE);
         }
         if (!testFile2.getParentFile().exists()) {
             throw new IOException("Cannot create file " + testFile2 + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()))) {
+        try (BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()))) {
             TestUtils.generateTestData(output, FILE2_SIZE);
         }
     }

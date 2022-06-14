@@ -36,7 +36,7 @@ public class TempDirectoryTest {
     @Test
     public void testCreatePath() throws IOException {
         final TempDirectory ref;
-        try (final TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
+        try (TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
             ref = tempDir;
             assertTrue(FileUtils.isEmptyDirectory(tempDir.toFile()));
         }
@@ -51,7 +51,7 @@ public class TempDirectoryTest {
     @Test
     public void testCreateString() throws IOException {
         final TempDirectory ref;
-        try (final TempDirectory tempDir = TempDirectory.create(Paths.get("target"), getClass().getCanonicalName())) {
+        try (TempDirectory tempDir = TempDirectory.create(Paths.get("target"), getClass().getCanonicalName())) {
             ref = tempDir;
             assertTrue(FileUtils.isEmptyDirectory(tempDir.toFile()));
         }

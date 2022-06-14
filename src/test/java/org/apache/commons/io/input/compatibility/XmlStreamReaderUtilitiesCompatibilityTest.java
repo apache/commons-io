@@ -35,7 +35,7 @@ public class XmlStreamReaderUtilitiesCompatibilityTest extends XmlStreamReaderUt
     @Override
     protected String calculateHttpEncoding(final String httpContentType, final String bomEnc, final String xmlGuessEnc,
             final String xmlEnc, final boolean lenient, final String defaultEncoding) throws IOException {
-        try (final MockXmlStreamReader mock = new MockXmlStreamReader(defaultEncoding)) {
+        try (MockXmlStreamReader mock = new MockXmlStreamReader(defaultEncoding)) {
                 return mock.calculateHttpEncoding(
                         XmlStreamReader.getContentTypeMime(httpContentType),
                         XmlStreamReader.getContentTypeEncoding(httpContentType),
@@ -46,7 +46,7 @@ public class XmlStreamReaderUtilitiesCompatibilityTest extends XmlStreamReaderUt
     @Override
     protected String calculateRawEncoding(final String bomEnc, final String xmlGuessEnc, final String xmlEnc,
             final String defaultEncoding) throws IOException {
-        try (final MockXmlStreamReader mock = new MockXmlStreamReader(defaultEncoding)) {
+        try (MockXmlStreamReader mock = new MockXmlStreamReader(defaultEncoding)) {
             return mock.calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc, null);
         }
     }

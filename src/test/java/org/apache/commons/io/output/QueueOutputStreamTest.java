@@ -67,7 +67,7 @@ public class QueueOutputStreamTest {
 
     @Test
     public void writeInterrupted() throws Exception {
-        try (final QueueOutputStream outputStream = new QueueOutputStream(new LinkedBlockingQueue<>(1));
+        try (QueueOutputStream outputStream = new QueueOutputStream(new LinkedBlockingQueue<>(1));
                 final QueueInputStream inputStream = outputStream.newQueueInputStream()) {
 
             final int timeout = 1;
@@ -98,7 +98,7 @@ public class QueueOutputStreamTest {
 
     @Test
     public void writeString() throws Exception {
-        try (final QueueOutputStream outputStream = new QueueOutputStream();
+        try (QueueOutputStream outputStream = new QueueOutputStream();
                 final QueueInputStream inputStream = outputStream.newQueueInputStream()) {
             outputStream.write("ABC".getBytes(UTF_8));
             final String value = IOUtils.toString(inputStream, UTF_8);
@@ -108,7 +108,7 @@ public class QueueOutputStreamTest {
 
     @Test
     public void writeStringMultiThread() throws Exception {
-        try (final QueueOutputStream outputStream = callInThrowAwayThread(QueueOutputStream::new);
+        try (QueueOutputStream outputStream = callInThrowAwayThread(QueueOutputStream::new);
                 final QueueInputStream inputStream = callInThrowAwayThread(outputStream::newQueueInputStream)) {
             callInThrowAwayThread(() -> {
                 outputStream.write("ABC".getBytes(UTF_8));

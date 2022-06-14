@@ -131,7 +131,7 @@ public class ByteArrayOutputStreamTest {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
     public void testInvalidWriteLenUnder(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
-        try (final AbstractByteArrayOutputStream baout = baosFactory.newInstance()) {
+        try (AbstractByteArrayOutputStream baout = baosFactory.newInstance()) {
             assertThrows(IndexOutOfBoundsException.class, () -> baout.write(new byte[1], 0, -1));
         }
     }
@@ -139,7 +139,7 @@ public class ByteArrayOutputStreamTest {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
     public void testInvalidWriteOffsetAndLenOver(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
-        try (final AbstractByteArrayOutputStream baout = baosFactory.newInstance()) {
+        try (AbstractByteArrayOutputStream baout = baosFactory.newInstance()) {
             assertThrows(IndexOutOfBoundsException.class, () -> baout.write(new byte[1], 0, 2));
         }
     }
@@ -147,7 +147,7 @@ public class ByteArrayOutputStreamTest {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
     public void testInvalidWriteOffsetAndLenUnder(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
-        try (final AbstractByteArrayOutputStream baout = baosFactory.newInstance()) {
+        try (AbstractByteArrayOutputStream baout = baosFactory.newInstance()) {
             assertThrows(IndexOutOfBoundsException.class, () -> baout.write(new byte[1], 1, -2));
         }
     }
@@ -155,7 +155,7 @@ public class ByteArrayOutputStreamTest {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
     public void testInvalidWriteOffsetOver(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
-        try (final AbstractByteArrayOutputStream baout = baosFactory.newInstance()) {
+        try (AbstractByteArrayOutputStream baout = baosFactory.newInstance()) {
             assertThrows(IndexOutOfBoundsException.class, () -> baout.write(IOUtils.EMPTY_BYTE_ARRAY, 1, 0));
         }
     }
@@ -163,7 +163,7 @@ public class ByteArrayOutputStreamTest {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
     public void testInvalidWriteOffsetUnder(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
-        try (final AbstractByteArrayOutputStream baout = baosFactory.newInstance()) {
+        try (AbstractByteArrayOutputStream baout = baosFactory.newInstance()) {
             assertThrows(IndexOutOfBoundsException.class, () -> baout.write(null, -1, 0));
         }
     }
@@ -175,7 +175,7 @@ public class ByteArrayOutputStreamTest {
 
         // The ByteArrayOutputStream is initialized with 32 bytes to match
         // the original more closely for this test.
-        try (final AbstractByteArrayOutputStream baout = baosFactory.newInstance(32);
+        try (AbstractByteArrayOutputStream baout = baosFactory.newInstance(32);
             final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream()) {
 
             // First three writes
@@ -205,7 +205,7 @@ public class ByteArrayOutputStreamTest {
 
             // Write the commons Byte[]OutputStream to a java.io.Byte[]OutputStream
             // and vice-versa to test the writeTo() method.
-            try (final AbstractByteArrayOutputStream baout1 = baosFactory.newInstance(32)) {
+            try (AbstractByteArrayOutputStream baout1 = baosFactory.newInstance(32)) {
                 ref.writeTo(baout1);
                 final java.io.ByteArrayOutputStream ref1 = new java.io.ByteArrayOutputStream();
                 baout.writeTo(ref1);
@@ -218,7 +218,7 @@ public class ByteArrayOutputStreamTest {
 
                 // Make sure that empty ByteArrayOutputStreams really don't create garbage
                 // on toByteArray()
-                try (final AbstractByteArrayOutputStream baos1 = baosFactory.newInstance();
+                try (AbstractByteArrayOutputStream baos1 = baosFactory.newInstance();
                     final AbstractByteArrayOutputStream baos2 = baosFactory.newInstance()) {
                     assertSame(baos1.toByteArray(), baos2.toByteArray());
                 }
@@ -231,10 +231,10 @@ public class ByteArrayOutputStreamTest {
     public void testToBufferedInputStream(final String baosName, final IOFunction<InputStream, InputStream> toBufferedInputStreamFunction) throws IOException {
         final byte data[] = {(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE};
 
-        try (final ByteArrayInputStream bain = new ByteArrayInputStream(data)) {
+        try (ByteArrayInputStream bain = new ByteArrayInputStream(data)) {
             assertEquals(data.length, bain.available());
 
-            try (final InputStream buffered = toBufferedInputStreamFunction.apply(bain)) {
+            try (InputStream buffered = toBufferedInputStreamFunction.apply(bain)) {
                 assertEquals(data.length, buffered.available());
 
                 assertArrayEquals(data, IOUtils.toByteArray(buffered));
@@ -247,10 +247,10 @@ public class ByteArrayOutputStreamTest {
     @MethodSource("toBufferedInputStreamFunctionFactories")
     public void testToBufferedInputStreamEmpty(final String baosName, final IOFunction<InputStream, InputStream> toBufferedInputStreamFunction)
         throws IOException {
-        try (final ByteArrayInputStream bain = new ByteArrayInputStream(IOUtils.EMPTY_BYTE_ARRAY)) {
+        try (ByteArrayInputStream bain = new ByteArrayInputStream(IOUtils.EMPTY_BYTE_ARRAY)) {
             assertEquals(0, bain.available());
 
-            try (final InputStream buffered = toBufferedInputStreamFunction.apply(bain)) {
+            try (InputStream buffered = toBufferedInputStreamFunction.apply(bain)) {
                 assertEquals(0, buffered.available());
 
             }
@@ -260,7 +260,7 @@ public class ByteArrayOutputStreamTest {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
     public void testToInputStream(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
-        try (final AbstractByteArrayOutputStream baout = baosFactory.newInstance();
+        try (AbstractByteArrayOutputStream baout = baosFactory.newInstance();
             final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream()) {
 
             // Write 8224 bytes
@@ -270,7 +270,7 @@ public class ByteArrayOutputStreamTest {
             }
 
             // Get data before more writes
-            try (final InputStream in = baout.toInputStream()) {
+            try (InputStream in = baout.toInputStream()) {
                 byte refData[] = ref.toByteArray();
 
                 // Write some more data
@@ -282,7 +282,7 @@ public class ByteArrayOutputStreamTest {
                 checkByteArrays(refData, baoutData);
 
                 // Check all data written
-                try (final InputStream in2 = baout.toInputStream()) {
+                try (InputStream in2 = baout.toInputStream()) {
                     baoutData = IOUtils.toByteArray(in2);
                 }
                 refData = ref.toByteArray();
@@ -295,7 +295,7 @@ public class ByteArrayOutputStreamTest {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
     public void testToInputStreamEmpty(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
-        try (final AbstractByteArrayOutputStream baout = baosFactory.newInstance();
+        try (AbstractByteArrayOutputStream baout = baosFactory.newInstance();
             // Get data before more writes
             final InputStream in = baout.toInputStream()) {
             assertEquals(0, in.available());
@@ -307,7 +307,7 @@ public class ByteArrayOutputStreamTest {
     @MethodSource("baosFactories")
     public void testToInputStreamWithReset(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
         // Make sure reset() do not destroy InputStream returned from toInputStream()
-        try (final AbstractByteArrayOutputStream baout = baosFactory.newInstance();
+        try (AbstractByteArrayOutputStream baout = baosFactory.newInstance();
             final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream()) {
 
             // Write 8224 bytes
@@ -317,7 +317,7 @@ public class ByteArrayOutputStreamTest {
             }
 
             // Get data before reset
-            try (final InputStream in = baout.toInputStream()) {
+            try (InputStream in = baout.toInputStream()) {
                 byte refData[] = ref.toByteArray();
 
                 // Reset and write some new data
@@ -331,7 +331,7 @@ public class ByteArrayOutputStreamTest {
                 checkByteArrays(refData, baoutData);
 
                 // Check new data written after reset
-                try (final InputStream in2 = baout.toInputStream()) {
+                try (InputStream in2 = baout.toInputStream()) {
                     baoutData = IOUtils.toByteArray(in2);
                 }
                 refData = ref.toByteArray();
@@ -344,7 +344,7 @@ public class ByteArrayOutputStreamTest {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
     public void testWriteZero(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
-        try (final AbstractByteArrayOutputStream baout = baosFactory.newInstance()) {
+        try (AbstractByteArrayOutputStream baout = baosFactory.newInstance()) {
             baout.write(IOUtils.EMPTY_BYTE_ARRAY, 0, 0);
             assertTrue(true, "Dummy");
         }

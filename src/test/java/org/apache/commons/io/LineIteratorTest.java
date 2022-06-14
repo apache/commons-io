@@ -122,7 +122,7 @@ public class LineIteratorTest {
         final File testFile = new File(temporaryFolder, fileName);
         final List<String> lines = createLinesFile(testFile, encoding, lineCount);
 
-        try (final LineIterator iterator = FileUtils.lineIterator(testFile, encoding)) {
+        try (LineIterator iterator = FileUtils.lineIterator(testFile, encoding)) {
             assertThrows(UnsupportedOperationException.class, iterator::remove);
 
             int idx = 0;
@@ -147,7 +147,7 @@ public class LineIteratorTest {
         final File testFile = new File(temporaryFolder, "LineIterator-closeEarly.txt");
         createLinesFile(testFile, encoding, 3);
 
-        try (final LineIterator iterator = FileUtils.lineIterator(testFile, encoding)) {
+        try (LineIterator iterator = FileUtils.lineIterator(testFile, encoding)) {
             // get
             assertNotNull("Line expected", iterator.next());
             assertTrue(iterator.hasNext(), "More expected");
@@ -290,7 +290,7 @@ public class LineIteratorTest {
         final File testFile = new File(temporaryFolder, "LineIterator-nextOnly.txt");
         final List<String> lines = createLinesFile(testFile, encoding, 3);
 
-        try (final LineIterator iterator = FileUtils.lineIterator(testFile, encoding)) {
+        try (LineIterator iterator = FileUtils.lineIterator(testFile, encoding)) {
             for (int i = 0; i < lines.size(); i++) {
                 final String line = iterator.next();
                 assertEquals(lines.get(i), line, "next() line " + i);
@@ -334,7 +334,7 @@ public class LineIteratorTest {
         final File testFile = new File(temporaryFolder, "LineIterator-validEncoding.txt");
         createLinesFile(testFile, encoding, 3);
 
-        try (final LineIterator iterator = FileUtils.lineIterator(testFile, encoding)) {
+        try (LineIterator iterator = FileUtils.lineIterator(testFile, encoding)) {
             int count = 0;
             while (iterator.hasNext()) {
                 assertNotNull(iterator.next());

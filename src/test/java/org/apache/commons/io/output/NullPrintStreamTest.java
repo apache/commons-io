@@ -40,14 +40,14 @@ public class NullPrintStreamTest {
 
     @Test
     public void testNullNewInstance() throws IOException {
-        try (final NullPrintStream nos = new NullPrintStream()) {
+        try (NullPrintStream nos = new NullPrintStream()) {
             process(nos);
         }
     }
 
     @Test
     public void testNullSingleton() throws IOException {
-        try (final NullPrintStream nos = NullPrintStream.INSTANCE) {
+        try (NullPrintStream nos = NullPrintStream.INSTANCE) {
             process(nos);
         }
     }

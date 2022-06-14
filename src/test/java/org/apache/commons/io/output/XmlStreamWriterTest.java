@@ -92,7 +92,7 @@ public class XmlStreamWriterTest {
     @Test
     public void testEmpty() throws IOException {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        try (final XmlStreamWriter writer = new XmlStreamWriter(out)) {
+        try (XmlStreamWriter writer = new XmlStreamWriter(out)) {
             writer.flush();
             writer.write("");
             writer.flush();

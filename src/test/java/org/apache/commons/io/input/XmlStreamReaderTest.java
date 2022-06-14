@@ -134,7 +134,7 @@ public class XmlStreamReaderTest {
         for (final int element : bom) {
             baos.write(element);
         }
-        try (final Writer writer = new OutputStreamWriter(baos, streamEnc)) {
+        try (Writer writer = new OutputStreamWriter(baos, streamEnc)) {
             final String xmlDoc = getXML(bomType, xmlType, streamEnc, prologEnc);
             writer.write(xmlDoc);
 
@@ -273,7 +273,7 @@ public class XmlStreamReaderTest {
     public void testHttpContent() throws Exception {
         final String encoding = "UTF-8";
         final String xml = getXML("no-bom", XML3, encoding, encoding);
-        try (final XmlStreamReader xmlReader = new XmlStreamReader(new StringInputStream(xml, encoding))) {
+        try (XmlStreamReader xmlReader = new XmlStreamReader(new StringInputStream(xml, encoding))) {
             assertEquals(xmlReader.getEncoding(), encoding, "Check encoding");
             assertEquals(xml, IOUtils.toString(xmlReader), "Check content");
         }
@@ -326,7 +326,7 @@ public class XmlStreamReaderTest {
         final String[] encodings = { "iso8859-1", "us-ascii", "utf-8" };
         for (final String encoding : encodings) {
             final String xml = getXML("no-bom", XML3, encoding, encoding);
-            try (final ByteArrayInputStream is = new ByteArrayInputStream(xml.getBytes(encoding));
+            try (ByteArrayInputStream is = new ByteArrayInputStream(xml.getBytes(encoding));
                     final XmlStreamReader xmlReader = new XmlStreamReader(is)) {
                 assertTrue(encoding.equalsIgnoreCase(xmlReader.getEncoding()), "Check encoding : " + encoding);
                 assertEquals(xml, IOUtils.toString(xmlReader), "Check content");
@@ -426,7 +426,7 @@ public class XmlStreamReaderTest {
     public void testRawContent() throws Exception {
         final String encoding = "UTF-8";
         final String xml = getXML("no-bom", XML3, encoding, encoding);
-        try (final XmlStreamReader xmlReader = new XmlStreamReader(new StringInputStream(xml, encoding))) {
+        try (XmlStreamReader xmlReader = new XmlStreamReader(new StringInputStream(xml, encoding))) {
             assertEquals(xmlReader.getEncoding(), encoding, "Check encoding");
             assertEquals(xml, IOUtils.toString(xmlReader), "Check content");
         }

@@ -277,7 +277,7 @@ public final class PathUtils {
      * @see Files#copy(InputStream, Path, CopyOption...)
      */
     public static Path copyFile(final URL sourceFile, final Path targetFile, final CopyOption... copyOptions) throws IOException {
-        try (final InputStream inputStream = sourceFile.openStream()) {
+        try (InputStream inputStream = sourceFile.openStream()) {
             Files.copy(inputStream, targetFile, copyOptions);
             return targetFile;
         }
@@ -308,7 +308,7 @@ public final class PathUtils {
      * @see Files#copy(InputStream, Path, CopyOption...)
      */
     public static Path copyFileToDirectory(final URL sourceFile, final Path targetDirectory, final CopyOption... copyOptions) throws IOException {
-        try (final InputStream inputStream = sourceFile.openStream()) {
+        try (InputStream inputStream = sourceFile.openStream()) {
             Files.copy(inputStream, targetDirectory.resolve(sourceFile.getFile()), copyOptions);
             return targetDirectory;
         }
@@ -721,8 +721,8 @@ public final class PathUtils {
             // same file
             return true;
         }
-        try (final InputStream inputStream1 = Files.newInputStream(nPath1, openOptions);
-            final InputStream inputStream2 = Files.newInputStream(nPath2, openOptions)) {
+        try (InputStream inputStream1 = Files.newInputStream(nPath1, openOptions); 
+            InputStream inputStream2 = Files.newInputStream(nPath2, openOptions)) {
             return IOUtils.contentEquals(inputStream1, inputStream2);
         }
     }

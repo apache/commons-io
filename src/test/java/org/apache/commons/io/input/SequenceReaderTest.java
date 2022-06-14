@@ -57,7 +57,7 @@ public class SequenceReaderTest {
 
     @Test
     public void testClose() throws IOException {
-        try (final Reader reader = new SequenceReader(new CharSequenceReader("FooBar"))) {
+        try (Reader reader = new SequenceReader(new CharSequenceReader("FooBar"))) {
             checkRead(reader, "Foo");
             reader.close();
             checkReadEof(reader);
@@ -66,14 +66,14 @@ public class SequenceReaderTest {
 
     @Test
     public void testMarkSupported() throws Exception {
-        try (final Reader reader = new SequenceReader()) {
+        try (Reader reader = new SequenceReader()) {
             assertFalse(reader.markSupported());
         }
     }
 
     @Test
     public void testRead() throws IOException {
-        try (final Reader reader = new SequenceReader(new StringReader("Foo"), new StringReader("Bar"))) {
+        try (Reader reader = new SequenceReader(new StringReader("Foo"), new StringReader("Bar"))) {
             assertEquals('F', reader.read());
             assertEquals('o', reader.read());
             assertEquals('o', reader.read());
@@ -86,7 +86,7 @@ public class SequenceReaderTest {
 
     @Test
     public void testReadCharArray() throws IOException {
-        try (final Reader reader = new SequenceReader(new StringReader("Foo"), new StringReader("Bar"))) {
+        try (Reader reader = new SequenceReader(new StringReader("Foo"), new StringReader("Bar"))) {
             char[] chars = new char[2];
             assertEquals(2, reader.read(chars));
             checkArray(new char[] { 'F', 'o' }, chars);
@@ -103,7 +103,7 @@ public class SequenceReaderTest {
     @Test
     public void testReadCharArrayPortion() throws IOException {
         final char[] chars = new char[10];
-        try (final Reader reader = new SequenceReader(new StringReader("Foo"), new StringReader("Bar"))) {
+        try (Reader reader = new SequenceReader(new StringReader("Foo"), new StringReader("Bar"))) {
             assertEquals(3, reader.read(chars, 3, 3));
             checkArray(new char[] { NUL, NUL, NUL, 'F', 'o', 'o' }, chars);
             assertEquals(3, reader.read(chars, 0, 3));
@@ -127,7 +127,7 @@ public class SequenceReaderTest {
         final Collection<Reader> readers = new ArrayList<>();
         readers.add(new StringReader("F"));
         readers.add(new StringReader("B"));
-        try (final Reader reader = new SequenceReader(readers)) {
+        try (Reader reader = new SequenceReader(readers)) {
             assertEquals('F', reader.read());
             assertEquals('B', reader.read());
             checkReadEof(reader);
@@ -140,7 +140,7 @@ public class SequenceReaderTest {
         readers.add(new StringReader("F"));
         readers.add(new StringReader("B"));
         final Iterable<Reader> iterable = readers;
-        try (final Reader reader = new SequenceReader(iterable)) {
+        try (Reader reader = new SequenceReader(iterable)) {
             assertEquals('F', reader.read());
             assertEquals('B', reader.read());
             checkReadEof(reader);
@@ -149,7 +149,7 @@ public class SequenceReaderTest {
 
     @Test
     public void testReadLength0Readers() throws IOException {
-        try (final Reader reader = new SequenceReader(new StringReader(StringUtils.EMPTY),
+        try (Reader reader = new SequenceReader(new StringReader(StringUtils.EMPTY),
             new StringReader(StringUtils.EMPTY), new StringReader(StringUtils.EMPTY))) {
             checkReadEof(reader);
         }
@@ -157,7 +157,7 @@ public class SequenceReaderTest {
 
     @Test
     public void testReadLength1Readers() throws IOException {
-        try (final Reader reader = new SequenceReader(
+        try (Reader reader = new SequenceReader(
         // @formatter:off
             new StringReader("0"),
             new StringReader("1"),
@@ -176,7 +176,7 @@ public class SequenceReaderTest {
         final List<Reader> readers = new ArrayList<>();
         readers.add(new StringReader("F"));
         readers.add(new StringReader("B"));
-        try (final Reader reader = new SequenceReader(readers)) {
+        try (Reader reader = new SequenceReader(readers)) {
             assertEquals('F', reader.read());
             assertEquals('B', reader.read());
             checkReadEof(reader);
@@ -185,7 +185,7 @@ public class SequenceReaderTest {
 
     @Test
     public void testSkip() throws IOException {
-        try (final Reader reader = new SequenceReader(new StringReader("Foo"), new StringReader("Bar"))) {
+        try (Reader reader = new SequenceReader(new StringReader("Foo"), new StringReader("Bar"))) {
             assertEquals(3, reader.skip(3));
             checkRead(reader, "Bar");
             assertEquals(0, reader.skip(3));

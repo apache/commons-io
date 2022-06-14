@@ -292,7 +292,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
         if (file != null && Files.isRegularFile(file) && Files.isReadable(file)) {
             try {
-                try (final FileChannel fileChannel = FileChannel.open(file)) {
+                try (FileChannel fileChannel = FileChannel.open(file)) {
                     final ByteBuffer byteBuffer = ByteBuffer.allocate(this.magicNumbers.length);
                     final int read = fileChannel.read(byteBuffer);
                     if (read != magicNumbers.length) {

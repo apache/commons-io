@@ -75,7 +75,7 @@ public class UncheckedFilterReaderTest {
 
     @Test
     public void testRead() {
-        try (final UncheckedFilterReader uncheckedReader = UncheckedFilterReader.on(ucStringReader)) {
+        try (UncheckedFilterReader uncheckedReader = UncheckedFilterReader.on(ucStringReader)) {
             assertEquals('0', uncheckedReader.read());
             assertEquals('1', uncheckedReader.read());
             assertEquals(IOUtils.EOF, uncheckedReader.read());
@@ -85,7 +85,7 @@ public class UncheckedFilterReaderTest {
 
     @Test
     public void testReadCharArray() {
-        try (final UncheckedFilterReader uncheckedReader = UncheckedFilterReader.on(ucStringReader)) {
+        try (UncheckedFilterReader uncheckedReader = UncheckedFilterReader.on(ucStringReader)) {
             final char[] array = new char[1];
             assertEquals(1, uncheckedReader.read(array));
             assertEquals('0', array[0]);
@@ -102,7 +102,7 @@ public class UncheckedFilterReaderTest {
 
     @Test
     public void testReadCharArrayIndexed() {
-        try (final UncheckedFilterReader uncheckedReader = UncheckedFilterReader.on(ucStringReader)) {
+        try (UncheckedFilterReader uncheckedReader = UncheckedFilterReader.on(ucStringReader)) {
             final char[] array = new char[1];
             assertEquals(1, uncheckedReader.read(array, 0, 1));
             assertEquals('0', array[0]);
@@ -129,7 +129,7 @@ public class UncheckedFilterReaderTest {
 
     @Test
     public void testReadCharBuffer() {
-        try (final UncheckedFilterReader uncheckedReader = UncheckedFilterReader.on(ucStringReader)) {
+        try (UncheckedFilterReader uncheckedReader = UncheckedFilterReader.on(ucStringReader)) {
             final CharBuffer buffer = CharBuffer.wrap(new char[1]);
             assertEquals(1, uncheckedReader.read(buffer));
             buffer.flip();

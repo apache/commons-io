@@ -42,7 +42,7 @@ public class MessageDigestCalculatingInputStreamTest {
             final byte[] buffer = generateRandomByteStream(i);
             final MessageDigest messageDigest = MessageDigestCalculatingInputStream.getDefaultMessageDigest();
             final byte[] expect = messageDigest.digest(buffer);
-            try (final MessageDigestCalculatingInputStream messageDigestInputStream = new MessageDigestCalculatingInputStream(
+            try (MessageDigestCalculatingInputStream messageDigestInputStream = new MessageDigestCalculatingInputStream(
                 new ByteArrayInputStream(buffer))) {
                 messageDigestInputStream.consume();
                 assertArrayEquals(expect, messageDigestInputStream.getMessageDigest().digest());

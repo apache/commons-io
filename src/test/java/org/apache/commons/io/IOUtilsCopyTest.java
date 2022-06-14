@@ -462,7 +462,7 @@ public class IOUtilsCopyTest {
         final URL in = getClass().getResource(name);
         assertNotNull(in, name);
 
-        try (final TempFile path = TempFile.create("testCopy_URLToFile", ".txt")) {
+        try (TempFile path = TempFile.create("testCopy_URLToFile", ".txt")) {
             IOUtils.copy(in, path.toFile());
             assertArrayEquals(Files.readAllBytes(Paths.get("src/test/resources" + name)), Files.readAllBytes(path.get()));
         }

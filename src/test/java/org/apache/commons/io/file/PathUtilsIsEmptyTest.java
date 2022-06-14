@@ -41,7 +41,7 @@ public class PathUtilsIsEmptyTest {
     public void testIsEmpty() throws IOException {
         Assertions.assertTrue(PathUtils.isEmpty(FILE_SIZE_0));
         Assertions.assertFalse(PathUtils.isEmpty(FILE_SIZE_1));
-        try (final TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
+        try (TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
             Assertions.assertTrue(PathUtils.isEmpty(tempDir.get()));
         }
         Assertions.assertFalse(PathUtils.isEmpty(DIR_SIZE_1));
@@ -49,7 +49,7 @@ public class PathUtilsIsEmptyTest {
 
     @Test
     public void testIsEmptyDirectory() throws IOException {
-        try (final TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
+        try (TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
             Assertions.assertTrue(PathUtils.isEmptyDirectory(tempDir.get()));
         }
         Assertions.assertFalse(PathUtils.isEmptyDirectory(DIR_SIZE_1));

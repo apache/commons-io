@@ -66,7 +66,7 @@ public class UncheckedFilterInputStreamTest {
 
     @Test
     public void testRead() {
-        try (final UncheckedFilterInputStream uncheckedReader = UncheckedFilterInputStream.on(stringInputStream)) {
+        try (UncheckedFilterInputStream uncheckedReader = UncheckedFilterInputStream.on(stringInputStream)) {
             assertEquals('0', uncheckedReader.read());
             assertEquals('1', uncheckedReader.read());
             assertEquals(IOUtils.EOF, uncheckedReader.read());
@@ -76,7 +76,7 @@ public class UncheckedFilterInputStreamTest {
 
     @Test
     public void testReadByteArray() {
-        try (final UncheckedFilterInputStream uncheckedReader = UncheckedFilterInputStream.on(stringInputStream)) {
+        try (UncheckedFilterInputStream uncheckedReader = UncheckedFilterInputStream.on(stringInputStream)) {
             final byte[] array = new byte[1];
             assertEquals(1, uncheckedReader.read(array));
             assertEquals('0', array[0]);
@@ -93,7 +93,7 @@ public class UncheckedFilterInputStreamTest {
 
     @Test
     public void testReadByteArrayIndexed() {
-        try (final UncheckedFilterInputStream uncheckedReader = UncheckedFilterInputStream.on(stringInputStream)) {
+        try (UncheckedFilterInputStream uncheckedReader = UncheckedFilterInputStream.on(stringInputStream)) {
             final byte[] array = new byte[1];
             assertEquals(1, uncheckedReader.read(array, 0, 1));
             assertEquals('0', array[0]);

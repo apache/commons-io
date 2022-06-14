@@ -89,7 +89,7 @@ public class ClassLoaderObjectInputStreamTest {
         oos.writeObject(input);
 
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        try (final ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
+        try (ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
                 bais)) {
             final Object result = clois.readObject();
 
@@ -107,7 +107,7 @@ public class ClassLoaderObjectInputStreamTest {
         oos.writeObject(input);
 
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        try (final ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
+        try (ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
                 bais)) {
             final Object result = clois.readObject();
 
@@ -126,7 +126,7 @@ public class ClassLoaderObjectInputStreamTest {
         oos.close();
 
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        try (final ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
+        try (ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
                 bais)) {
             final Object result = clois.readObject();
 
@@ -145,7 +145,7 @@ public class ClassLoaderObjectInputStreamTest {
         oos.close();
 
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        try (final ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
+        try (ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
                 bais)) {
             final Object result = clois.readObject();
 
@@ -164,7 +164,7 @@ public class ClassLoaderObjectInputStreamTest {
         oos.close();
 
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        try (final ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
+        try (ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
                 bais)) {
             final long result = clois.readLong();
 
@@ -180,7 +180,7 @@ public class ClassLoaderObjectInputStreamTest {
         oos.writeObject(Boolean.FALSE);
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
 
-        try (final ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
+        try (ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
                 bais)) {
             final String[] interfaces = { Comparable.class.getName() };
             final Class<?> result = clois.resolveProxyClass(interfaces);
@@ -196,7 +196,7 @@ public class ClassLoaderObjectInputStreamTest {
         oos.writeObject(Boolean.FALSE);
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
 
-        try (final ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
+        try (ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
                 bais)) {
             final String[] interfaces = { Comparable.class.getName(), Serializable.class.getName(),
                     Runnable.class.getName() };

@@ -122,63 +122,63 @@ public class FileWriterWithEncodingTest {
 
     @Test
     public void sameEncoding_Charset_constructor() throws Exception {
-        try (final FileWriterWithEncoding writer = new FileWriterWithEncoding(file2, Charset.defaultCharset())) {
+        try (FileWriterWithEncoding writer = new FileWriterWithEncoding(file2, Charset.defaultCharset())) {
             successfulRun(writer);
         }
     }
 
     @Test
     public void sameEncoding_CharsetEncoder_constructor() throws Exception {
-        try (final FileWriterWithEncoding writer = new FileWriterWithEncoding(file2, Charset.defaultCharset().newEncoder())) {
+        try (FileWriterWithEncoding writer = new FileWriterWithEncoding(file2, Charset.defaultCharset().newEncoder())) {
             successfulRun(writer);
         }
     }
 
     @Test
     public void sameEncoding_null_Charset_constructor() throws Exception {
-        try (final FileWriterWithEncoding writer = new FileWriterWithEncoding(file2, (Charset) null)) {
+        try (FileWriterWithEncoding writer = new FileWriterWithEncoding(file2, (Charset) null)) {
             successfulRun(writer);
         }
     }
 
     @Test
     public void sameEncoding_null_CharsetEncoder_constructor() throws Exception {
-        try (final FileWriterWithEncoding writer = new FileWriterWithEncoding(file2.getPath(), (CharsetEncoder) null)) {
+        try (FileWriterWithEncoding writer = new FileWriterWithEncoding(file2.getPath(), (CharsetEncoder) null)) {
             successfulRun(writer);
         }
     }
 
     @Test
     public void sameEncoding_null_CharsetName_constructor() throws Exception {
-        try (final FileWriterWithEncoding writer = new FileWriterWithEncoding(file2.getPath(), (String) null)) {
+        try (FileWriterWithEncoding writer = new FileWriterWithEncoding(file2.getPath(), (String) null)) {
             successfulRun(writer);
         }
     }
 
     @Test
     public void sameEncoding_string_Charset_constructor() throws Exception {
-        try (final FileWriterWithEncoding writer = new FileWriterWithEncoding(file2.getPath(), Charset.defaultCharset())) {
+        try (FileWriterWithEncoding writer = new FileWriterWithEncoding(file2.getPath(), Charset.defaultCharset())) {
             successfulRun(writer);
         }
     }
 
     @Test
     public void sameEncoding_string_CharsetEncoder_constructor() throws Exception {
-        try (final FileWriterWithEncoding writer = new FileWriterWithEncoding(file2.getPath(), Charset.defaultCharset().newEncoder())) {
+        try (FileWriterWithEncoding writer = new FileWriterWithEncoding(file2.getPath(), Charset.defaultCharset().newEncoder())) {
             successfulRun(writer);
         }
     }
 
     @Test
     public void sameEncoding_string_constructor() throws Exception {
-        try (final FileWriterWithEncoding writer = new FileWriterWithEncoding(file2, defaultEncoding)) {
+        try (FileWriterWithEncoding writer = new FileWriterWithEncoding(file2, defaultEncoding)) {
             successfulRun(writer);
         }
     }
 
     @Test
     public void sameEncoding_string_string_constructor() throws Exception {
-        try (final FileWriterWithEncoding writer = new FileWriterWithEncoding(file2.getPath(), defaultEncoding)) {
+        try (FileWriterWithEncoding writer = new FileWriterWithEncoding(file2.getPath(), defaultEncoding)) {
             successfulRun(writer);
         }
     }

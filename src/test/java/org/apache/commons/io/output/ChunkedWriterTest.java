@@ -46,8 +46,8 @@ public class ChunkedWriterTest {
     @Test
     public void write_four_chunks() throws Exception {
         final AtomicInteger numWrites = new AtomicInteger();
-        try (final OutputStreamWriter osw = getOutputStreamWriter(numWrites)) {
-            try (final ChunkedWriter chunked = new ChunkedWriter(osw, 10)) {
+        try (OutputStreamWriter osw = getOutputStreamWriter(numWrites)) {
+            try (ChunkedWriter chunked = new ChunkedWriter(osw, 10)) {
                 chunked.write("0123456789012345678901234567891".toCharArray());
                 chunked.flush();
                 assertEquals(4, numWrites.get());
@@ -58,8 +58,8 @@ public class ChunkedWriterTest {
     @Test
     public void write_two_chunks_default_constructor() throws Exception {
         final AtomicInteger numWrites = new AtomicInteger();
-        try (final OutputStreamWriter osw = getOutputStreamWriter(numWrites)) {
-            try (final ChunkedWriter chunked = new ChunkedWriter(osw)) {
+        try (OutputStreamWriter osw = getOutputStreamWriter(numWrites)) {
+            try (ChunkedWriter chunked = new ChunkedWriter(osw)) {
                 chunked.write(new char[1024 * 4 + 1]);
                 chunked.flush();
                 assertEquals(2, numWrites.get());

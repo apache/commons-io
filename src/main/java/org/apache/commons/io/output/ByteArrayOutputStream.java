@@ -78,7 +78,7 @@ public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
      */
     public static InputStream toBufferedInputStream(final InputStream input, final int size)
         throws IOException {
-        try (final ByteArrayOutputStream output = new ByteArrayOutputStream(size)) {
+        try (ByteArrayOutputStream output = new ByteArrayOutputStream(size)) {
             output.write(input);
             return output.toInputStream();
         }

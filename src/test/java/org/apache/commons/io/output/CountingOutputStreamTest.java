@@ -40,7 +40,7 @@ public class CountingOutputStreamTest {
     @Test
     public void testCounting() throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try (final CountingOutputStream cos = new CountingOutputStream(baos)) {
+        try (CountingOutputStream cos = new CountingOutputStream(baos)) {
 
             for (int i = 0; i < 20; i++) {
                 cos.write(i);

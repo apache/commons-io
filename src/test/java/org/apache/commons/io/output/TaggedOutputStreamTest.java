@@ -83,8 +83,8 @@ public class TaggedOutputStreamTest  {
 
     @Test
     public void testNormalStream() {
-        try (final ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
-            try (final OutputStream stream = new TaggedOutputStream(buffer)) {
+        try (ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+            try (OutputStream stream = new TaggedOutputStream(buffer)) {
                 stream.write('a');
                 stream.write(new byte[] { 'b' });
                 stream.write(new byte[] { 'c' }, 0, 1);
@@ -102,7 +102,7 @@ public class TaggedOutputStreamTest  {
     @Test
     public void testOtherException() throws Exception {
         final IOException exception = new IOException("test exception");
-        try (final TaggedOutputStream stream = new TaggedOutputStream(ClosedOutputStream.INSTANCE)) {
+        try (TaggedOutputStream stream = new TaggedOutputStream(ClosedOutputStream.INSTANCE)) {
 
             assertFalse(stream.isCauseOf(exception));
             assertFalse(stream.isCauseOf(new TaggedIOException(exception, UUID.randomUUID())));

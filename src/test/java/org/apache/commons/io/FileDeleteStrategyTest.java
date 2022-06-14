@@ -49,7 +49,7 @@ public class FileDeleteStrategyTest {
             throw new IOException("Cannot create file " + subFile
                     + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output =
+        try (BufferedOutputStream output =
                 new BufferedOutputStream(Files.newOutputStream(subFile.toPath()))) {
             TestUtils.generateTestData(output, 16);
         }
@@ -75,7 +75,7 @@ public class FileDeleteStrategyTest {
             throw new IOException("Cannot create file " + subFile
                     + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output =
+        try (BufferedOutputStream output =
                 new BufferedOutputStream(Files.newOutputStream(subFile.toPath()))) {
             TestUtils.generateTestData(output, 16);
         }
@@ -114,7 +114,7 @@ public class FileDeleteStrategyTest {
             throw new IOException("Cannot create file " + subFile
                     + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output =
+        try (BufferedOutputStream output =
                 new BufferedOutputStream(Files.newOutputStream(subFile.toPath()))) {
             TestUtils.generateTestData(output, 16);
         }

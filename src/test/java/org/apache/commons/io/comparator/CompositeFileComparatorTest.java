@@ -86,7 +86,7 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTest {
                     + " as the parent directory does not exist");
         }
 
-        try (final BufferedOutputStream output3 =
+        try (BufferedOutputStream output3 =
                 new BufferedOutputStream(Files.newOutputStream(lessFile.toPath()))) {
             TestUtils.generateTestData(output3, 32);
         }
@@ -94,7 +94,7 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTest {
             throw new IOException("Cannot create file " + equalFile1
                     + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output2 =
+        try (BufferedOutputStream output2 =
                 new BufferedOutputStream(Files.newOutputStream(equalFile1.toPath()))) {
             TestUtils.generateTestData(output2, 48);
         }
@@ -102,7 +102,7 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTest {
             throw new IOException("Cannot create file " + equalFile2
                     + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output1 =
+        try (BufferedOutputStream output1 =
                 new BufferedOutputStream(Files.newOutputStream(equalFile2.toPath()))) {
             TestUtils.generateTestData(output1, 48);
         }
@@ -110,7 +110,7 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTest {
             throw new IOException("Cannot create file " + moreFile
                     + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output =
+        try (BufferedOutputStream output =
                 new BufferedOutputStream(Files.newOutputStream(moreFile.toPath()))) {
             TestUtils.generateTestData(output, 48);
         }

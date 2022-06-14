@@ -32,7 +32,7 @@ public class ThresholdingOutputStreamTest {
     @Test
     public void testSetByteCount() throws Exception {
         final AtomicBoolean reached = new AtomicBoolean(false);
-        try (final ThresholdingOutputStream tos = new ThresholdingOutputStream(3) {
+        try (ThresholdingOutputStream tos = new ThresholdingOutputStream(3) {
             {
                 setByteCount(2);
             }
@@ -59,7 +59,7 @@ public class ThresholdingOutputStreamTest {
         final AtomicBoolean reached = new AtomicBoolean();
         // Null threshold consumer
         reached.set(false);
-        try (final ThresholdingOutputStream tos = new ThresholdingOutputStream(1, null,
+        try (ThresholdingOutputStream tos = new ThresholdingOutputStream(1, null,
             os -> new ByteArrayOutputStream(4))) {
             tos.write('a');
             assertFalse(reached.get());
@@ -68,7 +68,7 @@ public class ThresholdingOutputStreamTest {
         }
         // Null output stream function
         reached.set(false);
-        try (final ThresholdingOutputStream tos = new ThresholdingOutputStream(1, os -> reached.set(true), null)) {
+        try (ThresholdingOutputStream tos = new ThresholdingOutputStream(1, os -> reached.set(true), null)) {
             tos.write('a');
             assertFalse(reached.get());
             tos.write('a');
@@ -76,7 +76,7 @@ public class ThresholdingOutputStreamTest {
         }
         // non-null inputs.
         reached.set(false);
-        try (final ThresholdingOutputStream tos = new ThresholdingOutputStream(1, os -> reached.set(true),
+        try (ThresholdingOutputStream tos = new ThresholdingOutputStream(1, os -> reached.set(true),
             os -> new ByteArrayOutputStream(4))) {
             tos.write('a');
             assertFalse(reached.get());
@@ -87,7 +87,7 @@ public class ThresholdingOutputStreamTest {
 
     @Test
     public void testThresholdIOConsumerIOException() throws Exception {
-        try (final ThresholdingOutputStream tos = new ThresholdingOutputStream(1, os -> {
+        try (ThresholdingOutputStream tos = new ThresholdingOutputStream(1, os -> {
             throw new IOException("Threshold reached.");
         }, os -> new ByteArrayOutputStream(4))) {
             tos.write('a');
@@ -97,7 +97,7 @@ public class ThresholdingOutputStreamTest {
 
     @Test
     public void testThresholdIOConsumerUncheckedException() throws Exception {
-        try (final ThresholdingOutputStream tos = new ThresholdingOutputStream(1, os -> {
+        try (ThresholdingOutputStream tos = new ThresholdingOutputStream(1, os -> {
             throw new IllegalStateException("Threshold reached.");
         }, os -> new ByteArrayOutputStream(4))) {
             tos.write('a');

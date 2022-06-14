@@ -34,7 +34,7 @@ public class CountingInputStreamTest {
     @Test
     public void testCounting() throws Exception {
         final String text = "A piece of text";
-        try (final CountingInputStream cis = new CountingInputStream(new StringInputStream(text))) {
+        try (CountingInputStream cis = new CountingInputStream(new StringInputStream(text))) {
 
             // have to declare this larger as we're going to read
             // off the end of the stream and input stream seems
@@ -67,7 +67,7 @@ public class CountingInputStreamTest {
     @Test
     public void testEOF1() throws Exception {
         final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);
-        try (final CountingInputStream cis = new CountingInputStream(bais)) {
+        try (CountingInputStream cis = new CountingInputStream(bais)) {
 
             int found = cis.read();
             assertEquals(0, found);
@@ -84,7 +84,7 @@ public class CountingInputStreamTest {
     @Test
     public void testEOF2() throws Exception {
         final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);
-        try (final CountingInputStream cis = new CountingInputStream(bais)) {
+        try (CountingInputStream cis = new CountingInputStream(bais)) {
 
             final byte[] result = new byte[10];
 
@@ -97,7 +97,7 @@ public class CountingInputStreamTest {
     @Test
     public void testEOF3() throws Exception {
         final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);
-        try (final CountingInputStream cis = new CountingInputStream(bais)) {
+        try (CountingInputStream cis = new CountingInputStream(bais)) {
 
             final byte[] result = new byte[10];
 
@@ -134,7 +134,7 @@ public class CountingInputStreamTest {
         final String text = "A piece of text";
         final byte[] bytes = text.getBytes();
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        try (final CountingInputStream cis = new CountingInputStream(bais)) {
+        try (CountingInputStream cis = new CountingInputStream(bais)) {
 
             final byte[] result = new byte[bytes.length];
 
@@ -150,7 +150,7 @@ public class CountingInputStreamTest {
     @Test
     public void testSkipping() throws IOException {
         final String text = "Hello World!";
-        try (final CountingInputStream cis = new CountingInputStream(new StringInputStream(text))) {
+        try (CountingInputStream cis = new CountingInputStream(new StringInputStream(text))) {
 
             assertEquals(6, cis.skip(6));
             assertEquals(6, cis.getCount());
@@ -165,7 +165,7 @@ public class CountingInputStreamTest {
     @Test
     public void testZeroLength1() throws Exception {
         final ByteArrayInputStream bais = new ByteArrayInputStream(IOUtils.EMPTY_BYTE_ARRAY);
-        try (final CountingInputStream cis = new CountingInputStream(bais)) {
+        try (CountingInputStream cis = new CountingInputStream(bais)) {
 
             final int found = cis.read();
             assertEquals(-1, found);
@@ -176,7 +176,7 @@ public class CountingInputStreamTest {
     @Test
     public void testZeroLength2() throws Exception {
         final ByteArrayInputStream bais = new ByteArrayInputStream(IOUtils.EMPTY_BYTE_ARRAY);
-        try (final CountingInputStream cis = new CountingInputStream(bais)) {
+        try (CountingInputStream cis = new CountingInputStream(bais)) {
 
             final byte[] result = new byte[10];
 
@@ -189,7 +189,7 @@ public class CountingInputStreamTest {
     @Test
     public void testZeroLength3() throws Exception {
         final ByteArrayInputStream bais = new ByteArrayInputStream(IOUtils.EMPTY_BYTE_ARRAY);
-        try (final CountingInputStream cis = new CountingInputStream(bais)) {
+        try (CountingInputStream cis = new CountingInputStream(bais)) {
 
             final byte[] result = new byte[10];
 

@@ -127,7 +127,7 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
             throw new IOException("Cannot create file " + testFile
                     + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output =
+        try (BufferedOutputStream output =
                 new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
             TestUtils.generateTestData(output, 100);
         }

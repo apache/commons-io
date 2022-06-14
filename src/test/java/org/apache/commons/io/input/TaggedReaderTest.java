@@ -84,7 +84,7 @@ public class TaggedReaderTest {
 
     @Test
     public void testEmptyReader() throws IOException {
-        try (final Reader reader = new TaggedReader(ClosedReader.INSTANCE)) {
+        try (Reader reader = new TaggedReader(ClosedReader.INSTANCE)) {
             assertFalse(reader.ready());
             assertEquals(-1, reader.read());
             assertEquals(-1, reader.read(new char[1]));
@@ -94,7 +94,7 @@ public class TaggedReaderTest {
 
     @Test
     public void testNormalReader() throws IOException {
-        try (final Reader reader = new TaggedReader(new StringReader("abc"))) {
+        try (Reader reader = new TaggedReader(new StringReader("abc"))) {
             assertTrue(reader.ready());
             assertEquals('a', reader.read());
             final char[] buffer = new char[1];
@@ -109,7 +109,7 @@ public class TaggedReaderTest {
     @Test
     public void testOtherException() throws Exception {
         final IOException exception = new IOException("test exception");
-        try (final TaggedReader reader = new TaggedReader(ClosedReader.INSTANCE)) {
+        try (TaggedReader reader = new TaggedReader(ClosedReader.INSTANCE)) {
 
             assertFalse(reader.isCauseOf(exception));
             assertFalse(reader.isCauseOf(new TaggedIOException(exception, UUID.randomUUID())));

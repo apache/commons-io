@@ -374,12 +374,12 @@ public class TeeWriterTest {
 
     @Test
     public void testConstructorsNull() throws IOException {
-        try (final TeeWriter teeWriter = new TeeWriter((Writer[]) null)) {
+        try (TeeWriter teeWriter = new TeeWriter((Writer[]) null)) {
             // Call any method, should not throw
             teeWriter.append('a');
             teeWriter.flush();
         }
-        try (final TeeWriter teeWriter = new TeeWriter((Collection<Writer>) null)) {
+        try (TeeWriter teeWriter = new TeeWriter((Collection<Writer>) null)) {
             // Call any method, should not throw
             teeWriter.append('a');
             teeWriter.flush();
@@ -393,7 +393,7 @@ public class TeeWriterTest {
         final StringBuilderWriter sbw2 = new StringBuilderWriter();
         final StringBuilderWriter expected = new StringBuilderWriter();
 
-        try (final TeeWriter tw = new TeeWriter(sbw1, sbw2, null)) {
+        try (TeeWriter tw = new TeeWriter(sbw1, sbw2, null)) {
             for (int i = 0; i < 20; i++) {
                 tw.write(i);
                 expected.write(i);

@@ -42,7 +42,7 @@ public class CountingPathVisitorTest extends TestArguments {
     @MethodSource("countingPathVisitors")
     public void testCountEmptyFolder(final CountingPathVisitor visitor) throws IOException {
         checkZeroCounts(visitor);
-        try (final TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
+        try (TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
             assertCounts(1, 0, 0, PathUtils.visitFileTree(visitor, tempDir.get()));
         }
     }

@@ -71,7 +71,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      */
     public static InputStream toBufferedInputStream(final InputStream input, final int size) throws IOException {
         // It does not matter if a ByteArrayOutputStream is not closed as close() is a no-op
-        try (final UnsynchronizedByteArrayOutputStream output = new UnsynchronizedByteArrayOutputStream(size)) {
+        try (UnsynchronizedByteArrayOutputStream output = new UnsynchronizedByteArrayOutputStream(size)) {
             output.write(input);
             return output.toInputStream();
         }

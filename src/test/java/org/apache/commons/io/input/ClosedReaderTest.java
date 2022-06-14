@@ -27,7 +27,7 @@ public class ClosedReaderTest {
 
     @Test
     public void testRead() throws Exception {
-        try (final ClosedReader cr = new ClosedReader()) {
+        try (ClosedReader cr = new ClosedReader()) {
             assertEquals(-1, cr.read(new char[10], 0, 10), "read(cbuf, off, len)");
         }
     }

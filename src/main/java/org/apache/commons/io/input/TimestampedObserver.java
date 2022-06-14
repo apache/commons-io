@@ -31,7 +31,7 @@ import org.apache.commons.io.input.ObservableInputStream.Observer;
  *
  * <pre>
  * final TimestampedObserver timetampedObserver = new TimestampedObserver();
- * try (final ObservableInputStream inputStream = new ObservableInputStream(...),
+ * try (ObservableInputStream inputStream = new ObservableInputStream(...),
  *     timetampedObserver)) {
  *     ...
  * }

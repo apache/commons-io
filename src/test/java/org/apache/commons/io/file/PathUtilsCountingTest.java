@@ -35,7 +35,7 @@ public class PathUtilsCountingTest {
      */
     @Test
     public void testCountEmptyFolder() throws IOException {
-        try (final TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
+        try (TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
             final PathCounters pathCounts = PathUtils.countDirectory(tempDir.get());
             assertCounts(1, 0, 0, pathCounts);
         }

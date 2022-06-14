@@ -197,7 +197,7 @@ public class CharSequenceInputStreamTest {
     private void testIO_356(final int bufferSize, final int dataSize, final int readFirst, final String csName) throws Exception {
         final byte[] data1;
         final byte[] data2;
-        try (final CharSequenceInputStream is = new CharSequenceInputStream(ALPHABET, csName, bufferSize)) {
+        try (CharSequenceInputStream is = new CharSequenceInputStream(ALPHABET, csName, bufferSize)) {
             for (int i = 0; i < readFirst; i++) {
                 final int ch = is.read();
                 assertNotEquals(-1, ch);

@@ -32,7 +32,7 @@ public class ChunkedOutputStreamTest {
     @Test
     public void defaultConstructor() throws IOException {
         final AtomicInteger numWrites = new AtomicInteger();
-        try (final ByteArrayOutputStream baos = newByteArrayOutputStream(numWrites);
+        try (ByteArrayOutputStream baos = newByteArrayOutputStream(numWrites);
             final ChunkedOutputStream chunked = new ChunkedOutputStream(baos)) {
             chunked.write(new byte[1024 * 4 + 1]);
             assertEquals(2, numWrites.get());
@@ -57,7 +57,7 @@ public class ChunkedOutputStreamTest {
     @Test
     public void write_four_chunks() throws Exception {
         final AtomicInteger numWrites = new AtomicInteger();
-        try (final ByteArrayOutputStream baos = newByteArrayOutputStream(numWrites);
+        try (ByteArrayOutputStream baos = newByteArrayOutputStream(numWrites);
             final ChunkedOutputStream chunked = new ChunkedOutputStream(baos, 10)) {
             chunked.write("0123456789012345678901234567891".getBytes());
             assertEquals(4, numWrites.get());

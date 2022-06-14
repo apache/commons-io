@@ -80,7 +80,7 @@ public class TeeOutputStreamTest {
         final ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
         final ByteArrayOutputStream expected = new ByteArrayOutputStream();
 
-        try (final TeeOutputStream tos = new TeeOutputStream(baos1, baos2)) {
+        try (TeeOutputStream tos = new TeeOutputStream(baos1, baos2)) {
             for (int i = 0; i < 20; i++) {
                 tos.write(i);
                 expected.write(i);

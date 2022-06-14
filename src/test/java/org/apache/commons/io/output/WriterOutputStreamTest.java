@@ -47,7 +47,7 @@ public class WriterOutputStreamTest {
     @Test
     public void testFlush() throws IOException {
         final StringWriter writer = new StringWriter();
-        try (final WriterOutputStream out = new WriterOutputStream(writer, "us-ascii", 1024, false)) {
+        try (WriterOutputStream out = new WriterOutputStream(writer, "us-ascii", 1024, false)) {
             out.write("abc".getBytes(StandardCharsets.US_ASCII));
             assertEquals(0, writer.getBuffer().length());
             out.flush();
@@ -145,7 +145,7 @@ public class WriterOutputStreamTest {
     private void testWithBufferedWrite(final String testString, final String charsetName) throws IOException {
         final byte[] expected = testString.getBytes(charsetName);
         final StringWriter writer = new StringWriter();
-        try (final WriterOutputStream out = new WriterOutputStream(writer, charsetName)) {
+        try (WriterOutputStream out = new WriterOutputStream(writer, charsetName)) {
             int offset = 0;
             while (offset < expected.length) {
                 final int length = Math.min(random.nextInt(128), expected.length - offset);
@@ -160,7 +160,7 @@ public class WriterOutputStreamTest {
     private void testWithSingleByteWrite(final String testString, final Charset charset) throws IOException {
         final byte[] bytes = testString.getBytes(Charsets.toCharset(charset));
         final StringWriter writer = new StringWriter();
-        try (final WriterOutputStream out = new WriterOutputStream(writer, charset)) {
+        try (WriterOutputStream out = new WriterOutputStream(writer, charset)) {
             for (final byte b : bytes) {
                 out.write(b);
             }
@@ -171,7 +171,7 @@ public class WriterOutputStreamTest {
     private void testWithSingleByteWrite(final String testString, final CharsetDecoder charsetDecoder) throws IOException {
         final byte[] bytes = testString.getBytes(CharsetDecoders.toCharsetDecoder(charsetDecoder).charset());
         final StringWriter writer = new StringWriter();
-        try (final WriterOutputStream out = new WriterOutputStream(writer, charsetDecoder)) {
+        try (WriterOutputStream out = new WriterOutputStream(writer, charsetDecoder)) {
             for (final byte b : bytes) {
                 out.write(b);
             }
@@ -182,7 +182,7 @@ public class WriterOutputStreamTest {
     private void testWithSingleByteWrite(final String testString, final String charsetName) throws IOException {
         final byte[] bytes = testString.getBytes(Charsets.toCharset(charsetName));
         final StringWriter writer = new StringWriter();
-        try (final WriterOutputStream out = new WriterOutputStream(writer, charsetName)) {
+        try (WriterOutputStream out = new WriterOutputStream(writer, charsetName)) {
             for (final byte b : bytes) {
                 out.write(b);
             }
@@ -193,7 +193,7 @@ public class WriterOutputStreamTest {
     @Test
     public void testWriteImmediately() throws IOException {
         final StringWriter writer = new StringWriter();
-        try (final WriterOutputStream out = new WriterOutputStream(writer, "us-ascii", 1024, true)) {
+        try (WriterOutputStream out = new WriterOutputStream(writer, "us-ascii", 1024, true)) {
             out.write("abc".getBytes(StandardCharsets.US_ASCII));
             assertEquals("abc", writer.toString());
         }

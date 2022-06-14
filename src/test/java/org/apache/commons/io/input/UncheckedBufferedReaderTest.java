@@ -82,7 +82,7 @@ public class UncheckedBufferedReaderTest {
 
     @Test
     public void testRead() {
-        try (final UncheckedBufferedReader uncheckedReader = UncheckedBufferedReader.on(ucStringReader)) {
+        try (UncheckedBufferedReader uncheckedReader = UncheckedBufferedReader.on(ucStringReader)) {
             assertEquals('0', uncheckedReader.read());
             assertEquals('1', uncheckedReader.read());
             assertEquals(IOUtils.EOF, uncheckedReader.read());
@@ -92,7 +92,7 @@ public class UncheckedBufferedReaderTest {
 
     @Test
     public void testReadCharArray() {
-        try (final UncheckedBufferedReader uncheckedReader = UncheckedBufferedReader.on(ucStringReader)) {
+        try (UncheckedBufferedReader uncheckedReader = UncheckedBufferedReader.on(ucStringReader)) {
             final char[] array = new char[1];
             assertEquals(1, uncheckedReader.read(array));
             assertEquals('0', array[0]);
@@ -109,7 +109,7 @@ public class UncheckedBufferedReaderTest {
 
     @Test
     public void testReadCharArrayIndexed() {
-        try (final UncheckedBufferedReader uncheckedReader = UncheckedBufferedReader.on(ucStringReader)) {
+        try (UncheckedBufferedReader uncheckedReader = UncheckedBufferedReader.on(ucStringReader)) {
             final char[] array = new char[1];
             assertEquals(1, uncheckedReader.read(array, 0, 1));
             assertEquals('0', array[0]);
@@ -136,7 +136,7 @@ public class UncheckedBufferedReaderTest {
 
     @Test
     public void testReadCharBuffer() {
-        try (final UncheckedBufferedReader uncheckedReader = UncheckedBufferedReader.on(ucStringReader)) {
+        try (UncheckedBufferedReader uncheckedReader = UncheckedBufferedReader.on(ucStringReader)) {
             final CharBuffer buffer = CharBuffer.wrap(new char[1]);
             assertEquals(1, uncheckedReader.read(buffer));
             buffer.flip();
@@ -162,7 +162,7 @@ public class UncheckedBufferedReaderTest {
 
     @Test
     public void testReadLine() {
-        try (final UncheckedBufferedReader uncheckedReader = UncheckedBufferedReader.on(ucStringReader)) {
+        try (UncheckedBufferedReader uncheckedReader = UncheckedBufferedReader.on(ucStringReader)) {
             assertEquals("01", uncheckedReader.readLine());
             assertEquals(IOUtils.EOF, uncheckedReader.read());
             assertEquals(IOUtils.EOF, uncheckedReader.read());

@@ -65,7 +65,7 @@ public class QueueInputStreamTest {
     @MethodSource("inputData")
     public void bufferedReads(final String inputData) throws IOException {
         final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
-        try (final BufferedInputStream inputStream = new BufferedInputStream(new QueueInputStream(queue));
+        try (BufferedInputStream inputStream = new BufferedInputStream(new QueueInputStream(queue));
                 final QueueOutputStream outputStream = new QueueOutputStream(queue)) {
             outputStream.write(inputData.getBytes(UTF_8));
             final String actualData = IOUtils.toString(inputStream, UTF_8);
@@ -77,7 +77,7 @@ public class QueueInputStreamTest {
     @MethodSource("inputData")
     public void bufferedReadWrite(final String inputData) throws IOException {
         final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
-        try (final BufferedInputStream inputStream = new BufferedInputStream(new QueueInputStream(queue));
+        try (BufferedInputStream inputStream = new BufferedInputStream(new QueueInputStream(queue));
                 final BufferedOutputStream outputStream = new BufferedOutputStream(new QueueOutputStream(queue), defaultBufferSize())) {
             outputStream.write(inputData.getBytes(UTF_8));
             outputStream.flush();
@@ -90,7 +90,7 @@ public class QueueInputStreamTest {
     @MethodSource("inputData")
     public void bufferedWrites(final String inputData) throws IOException {
         final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
-        try (final QueueInputStream inputStream = new QueueInputStream(queue);
+        try (QueueInputStream inputStream = new QueueInputStream(queue);
                 final BufferedOutputStream outputStream = new BufferedOutputStream(new QueueOutputStream(queue), defaultBufferSize())) {
             outputStream.write(inputData.getBytes(UTF_8));
             outputStream.flush();
@@ -120,7 +120,7 @@ public class QueueInputStreamTest {
     @ParameterizedTest(name = "inputData={0}")
     @MethodSource("inputData")
     public void unbufferedReadWrite(final String inputData) throws IOException {
-        try (final QueueInputStream inputStream = new QueueInputStream();
+        try (QueueInputStream inputStream = new QueueInputStream();
                 final QueueOutputStream outputStream = inputStream.newQueueOutputStream()) {
             writeUnbuffered(outputStream, inputData);
             final String actualData = readUnbuffered(inputStream);

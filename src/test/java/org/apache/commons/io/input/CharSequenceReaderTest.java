@@ -75,7 +75,7 @@ public class CharSequenceReaderTest {
 
     @Test
     public void testMark() throws IOException {
-        try (final Reader reader = new CharSequenceReader("FooBar")) {
+        try (Reader reader = new CharSequenceReader("FooBar")) {
             checkRead(reader, "Foo");
             reader.mark(0);
             checkRead(reader, "Bar");
@@ -86,7 +86,7 @@ public class CharSequenceReaderTest {
             reader.reset();
             checkRead(reader, "Foo");
         }
-        try (final Reader subReader = new CharSequenceReader("xFooBarx", 1, 7)) {
+        try (Reader subReader = new CharSequenceReader("xFooBarx", 1, 7)) {
             checkRead(subReader, "Foo");
             subReader.mark(0);
             checkRead(subReader, "Bar");
@@ -101,7 +101,7 @@ public class CharSequenceReaderTest {
 
     @Test
     public void testMarkSupported() throws Exception {
-        try (final Reader reader = new CharSequenceReader("FooBar")) {
+        try (Reader reader = new CharSequenceReader("FooBar")) {
             assertTrue(reader.markSupported());
         }
     }
@@ -116,14 +116,14 @@ public class CharSequenceReaderTest {
     }
 
     private void testRead(final CharSequence charSequence) throws IOException {
-        try (final Reader reader = new CharSequenceReader(charSequence)) {
+        try (Reader reader = new CharSequenceReader(charSequence)) {
             assertEquals('F', reader.read());
             assertEquals('o', reader.read());
             assertEquals('o', reader.read());
             assertEquals(-1, reader.read());
             assertEquals(-1, reader.read());
         }
-        try (final Reader reader = new CharSequenceReader(charSequence, 1, 5)) {
+        try (Reader reader = new CharSequenceReader(charSequence, 1, 5)) {
             assertEquals('o', reader.read());
             assertEquals('o', reader.read());
             assertEquals(-1, reader.read());
@@ -141,7 +141,7 @@ public class CharSequenceReaderTest {
     }
 
     private void testReadCharArray(final CharSequence charSequence) throws IOException {
-        try (final Reader reader = new CharSequenceReader(charSequence)) {
+        try (Reader reader = new CharSequenceReader(charSequence)) {
             char[] chars = new char[2];
             assertEquals(2, reader.read(chars));
             checkArray(new char[] { 'F', 'o' }, chars);
@@ -153,7 +153,7 @@ public class CharSequenceReaderTest {
             checkArray(new char[] { 'r', NONE, NONE }, chars);
             assertEquals(-1, reader.read(chars));
         }
-        try (final Reader reader = new CharSequenceReader(charSequence, 1, 5)) {
+        try (Reader reader = new CharSequenceReader(charSequence, 1, 5)) {
             char[] chars = new char[2];
             assertEquals(2, reader.read(chars));
             checkArray(new char[] { 'o', 'o' }, chars);
@@ -178,7 +178,7 @@ public class CharSequenceReaderTest {
 
     private void testReadCharArrayPortion(final CharSequence charSequence) throws IOException {
         final char[] chars = new char[10];
-        try (final Reader reader = new CharSequenceReader(charSequence)) {
+        try (Reader reader = new CharSequenceReader(charSequence)) {
             assertEquals(3, reader.read(chars, 3, 3));
             checkArray(new char[] { NONE, NONE, NONE, 'F', 'o', 'o' }, chars);
             assertEquals(3, reader.read(chars, 0, 3));
@@ -186,7 +186,7 @@ public class CharSequenceReaderTest {
             assertEquals(-1, reader.read(chars));
         }
         Arrays.fill(chars, NONE);
-        try (final Reader reader = new CharSequenceReader(charSequence, 1, 5)) {
+        try (Reader reader = new CharSequenceReader(charSequence, 1, 5)) {
             assertEquals(2, reader.read(chars, 3, 2));
             checkArray(new char[] { NONE, NONE, NONE, 'o', 'o', NONE }, chars);
             assertEquals(2, reader.read(chars, 0, 3));

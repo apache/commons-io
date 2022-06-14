@@ -83,8 +83,8 @@ public class TaggedWriterTest  {
 
     @Test
     public void testNormalWriter() throws IOException {
-        try (final StringBuilderWriter buffer = new StringBuilderWriter()) {
-            try (final Writer writer = new TaggedWriter(buffer)) {
+        try (StringBuilderWriter buffer = new StringBuilderWriter()) {
+            try (Writer writer = new TaggedWriter(buffer)) {
                 writer.write('a');
                 writer.write(new char[] { 'b' });
                 writer.write(new char[] { 'c' }, 0, 1);
@@ -100,7 +100,7 @@ public class TaggedWriterTest  {
     @Test
     public void testOtherException() throws Exception {
         final IOException exception = new IOException("test exception");
-        try (final TaggedWriter writer = new TaggedWriter(ClosedWriter.INSTANCE)) {
+        try (TaggedWriter writer = new TaggedWriter(ClosedWriter.INSTANCE)) {
             assertFalse(writer.isCauseOf(exception));
             assertFalse(writer.isCauseOf(new TaggedIOException(exception, UUID.randomUUID())));
             writer.throwIfCauseOf(exception);

@@ -74,7 +74,7 @@ public class FileUtilsCopyDirectoryToDirectoryTest {
     @Test
     public void copyDirectoryToDirectoryThrowsIllegalExceptionWithCorrectMessageWhenSrcDirIsNotDirectory()
         throws IOException {
-        try (final TempFile srcDir = TempFile.create("notadireotry", null)) {
+        try (TempFile srcDir = TempFile.create("notadireotry", null)) {
             final File destDir = new File(temporaryFolder, "destinationDirectory");
             destDir.mkdirs();
             final String expectedMessage = String.format("Parameter 'sourceDir' is not a directory: '%s'", srcDir);
@@ -100,7 +100,7 @@ public class FileUtilsCopyDirectoryToDirectoryTest {
 
     @Test
     public void copyFileAndCheckAcl() throws IOException {
-        try (final TempFile sourcePath = TempFile.create("TempOutput", ".bin")) {
+        try (TempFile sourcePath = TempFile.create("TempOutput", ".bin")) {
             final Path destPath = Paths.get(temporaryFolder.getAbsolutePath(), "SomeFile.bin");
             // Test copy attributes without replace FIRST.
             FileUtils.copyFile(sourcePath.toFile(), destPath.toFile(), true, StandardCopyOption.COPY_ATTRIBUTES);

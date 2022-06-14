@@ -60,7 +60,7 @@ public class NullInputStreamTest {
 
     @Test
     public void testEOFException() throws Exception {
-        try (final InputStream input = new TestNullInputStream(2, false, true)) {
+        try (InputStream input = new TestNullInputStream(2, false, true)) {
             assertEquals(0, input.read(), "Read 1");
             assertEquals(1, input.read(), "Read 2");
             assertThrows(EOFException.class, () -> input.read());

@@ -38,7 +38,7 @@ public class LastModifiedFileComparatorTest extends ComparatorAbstractTest {
         if (!olderFile.getParentFile().exists()) {
             throw new IOException("Cannot create file " + olderFile + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output2 = new BufferedOutputStream(Files.newOutputStream(olderFile.toPath()))) {
+        try (BufferedOutputStream output2 = new BufferedOutputStream(Files.newOutputStream(olderFile.toPath()))) {
             TestUtils.generateTestData(output2, 0);
         }
 
@@ -46,7 +46,7 @@ public class LastModifiedFileComparatorTest extends ComparatorAbstractTest {
         if (!equalFile.getParentFile().exists()) {
             throw new IOException("Cannot create file " + equalFile + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output1 = new BufferedOutputStream(Files.newOutputStream(equalFile.toPath()))) {
+        try (BufferedOutputStream output1 = new BufferedOutputStream(Files.newOutputStream(equalFile.toPath()))) {
             TestUtils.generateTestData(output1, 0);
         }
         do {
@@ -58,7 +58,7 @@ public class LastModifiedFileComparatorTest extends ComparatorAbstractTest {
         if (!newerFile.getParentFile().exists()) {
             throw new IOException("Cannot create file " + newerFile + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(newerFile.toPath()))) {
+        try (BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(newerFile.toPath()))) {
             TestUtils.generateTestData(output, 0);
         }
         do {

@@ -43,7 +43,7 @@ public class CopyDirectoryVisitorTest extends TestArguments {
     @ParameterizedTest
     @MethodSource("pathCounters")
     public void testCopyDirectoryEmptyFolder(final PathCounters pathCounters) throws IOException {
-        try (final TempDirectory sourceDir = TempDirectory.create(getClass().getSimpleName())) {
+        try (TempDirectory sourceDir = TempDirectory.create(getClass().getSimpleName())) {
             assertCounts(1, 0, 0, PathUtils
                 .visitFileTree(new CopyDirectoryVisitor(pathCounters, sourceDir, targetDir, StandardCopyOption.REPLACE_EXISTING), sourceDir.get()));
         }

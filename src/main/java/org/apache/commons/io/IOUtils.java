@@ -2485,10 +2485,9 @@ public class IOUtils {
      */
     public static byte[] toByteArray(final InputStream inputStream) throws IOException {
         // We use a ThresholdingOutputStream to avoid reading AND writing more than Integer.MAX_VALUE.
-        try (final UnsynchronizedByteArrayOutputStream ubaOutput = new UnsynchronizedByteArrayOutputStream();
-            final ThresholdingOutputStream thresholdOuput = new ThresholdingOutputStream(Integer.MAX_VALUE, os -> {
-                throw new IllegalArgumentException(
-                    String.format("Cannot read more than %,d into a byte array", Integer.MAX_VALUE));
+        try (UnsynchronizedByteArrayOutputStream ubaOutput = new UnsynchronizedByteArrayOutputStream();
+            ThresholdingOutputStream thresholdOuput = new ThresholdingOutputStream(Integer.MAX_VALUE, os -> {
+                throw new IllegalArgumentException(String.format("Cannot read more than %,d into a byte array", Integer.MAX_VALUE));
             }, os -> ubaOutput)) {
             copy(inputStream, thresholdOuput);
             return ubaOutput.toByteArray();
@@ -2589,7 +2588,7 @@ public class IOUtils {
      * @since 2.3
      */
     public static byte[] toByteArray(final Reader reader, final Charset charset) throws IOException {
-        try (final ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+        try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
             copy(reader, output, charset);
             return output.toByteArray();
         }
@@ -2662,7 +2661,7 @@ public class IOUtils {
      * @since 2.4
      */
     public static byte[] toByteArray(final URL url) throws IOException {
-        try (final CloseableURLConnection urlConnection = CloseableURLConnection.open(url)) {
+        try (CloseableURLConnection urlConnection = CloseableURLConnection.open(url)) {
             return IOUtils.toByteArray(urlConnection);
         }
     }
@@ -2930,7 +2929,7 @@ public class IOUtils {
      * @since 2.3
      */
     public static String toString(final InputStream input, final Charset charset) throws IOException {
-        try (final StringBuilderWriter sw = new StringBuilderWriter()) {
+        try (StringBuilderWriter sw = new StringBuilderWriter()) {
             copy(input, sw, charset);
             return sw.toString();
         }
@@ -2975,7 +2974,7 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      */
     public static String toString(final Reader reader) throws IOException {
-        try (final StringBuilderWriter sw = new StringBuilderWriter()) {
+        try (StringBuilderWriter sw = new StringBuilderWriter()) {
             copy(reader, sw);
             return sw.toString();
         }

@@ -394,12 +394,12 @@ public class ProxyCollectionWriterTest {
 
     @Test
     public void testConstructorsNull() throws IOException {
-        try (final ProxyCollectionWriter teeWriter = new ProxyCollectionWriter((Writer[]) null)) {
+        try (ProxyCollectionWriter teeWriter = new ProxyCollectionWriter((Writer[]) null)) {
             // Call any method, should not throw
             teeWriter.append('a');
             teeWriter.flush();
         }
-        try (final ProxyCollectionWriter teeWriter = new ProxyCollectionWriter((Collection<Writer>) null)) {
+        try (ProxyCollectionWriter teeWriter = new ProxyCollectionWriter((Collection<Writer>) null)) {
             // Call any method, should not throw
             teeWriter.append('a');
             teeWriter.flush();

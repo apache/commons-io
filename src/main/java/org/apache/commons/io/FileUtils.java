@@ -1068,7 +1068,7 @@ public class FileUtils {
      * @throws IOException if an IO error occurs during copying
      */
     public static void copyURLToFile(final URL source, final File destination) throws IOException {
-        try (final InputStream stream = source.openStream()) {
+        try (InputStream stream = source.openStream()) {
             final Path path = destination.toPath();
             PathUtils.createParentDirectories(path);
             Files.copy(stream, path, StandardCopyOption.REPLACE_EXISTING);
@@ -1096,10 +1096,10 @@ public class FileUtils {
      */
     public static void copyURLToFile(final URL source, final File destination, final int connectionTimeoutMillis, final int readTimeoutMillis)
         throws IOException {
-        try (final CloseableURLConnection urlConnection = CloseableURLConnection.open(source)) {
+        try (CloseableURLConnection urlConnection = CloseableURLConnection.open(source)) {
             urlConnection.setConnectTimeout(connectionTimeoutMillis);
             urlConnection.setReadTimeout(readTimeoutMillis);
-            try (final InputStream stream = urlConnection.getInputStream()) {
+            try (InputStream stream = urlConnection.getInputStream()) {
                 copyInputStreamToFile(stream, destination);
             }
         }

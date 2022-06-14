@@ -35,7 +35,7 @@ public class TempFileTest {
     @Test
     public void testCreatePath() throws IOException {
         final TempFile ref;
-        try (final TempFile tempDir = TempFile.create(Paths.get("target"), "prefix", ".suffix")) {
+        try (TempFile tempDir = TempFile.create(Paths.get("target"), "prefix", ".suffix")) {
             ref = tempDir;
             assertTrue(Files.exists(ref.get()));
         }
@@ -50,7 +50,7 @@ public class TempFileTest {
     @Test
     public void testCreateString() throws IOException {
         final TempFile ref;
-        try (final TempFile tempDir = TempFile.create(getClass().getCanonicalName(), ".suffix")) {
+        try (TempFile tempDir = TempFile.create(getClass().getCanonicalName(), ".suffix")) {
             ref = tempDir;
             assertTrue(Files.exists(ref.get()));
         }

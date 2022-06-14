@@ -270,7 +270,7 @@ public class IOUtilsTest {
     @Test
     public void testAsWriterAppendable() throws IOException {
         final Appendable a = new StringBuffer();
-        try (final Writer w = IOUtils.writer(a)) {
+        try (Writer w = IOUtils.writer(a)) {
             assertNotSame(w, a);
             assertEquals(AppendableWriter.class, w.getClass());
             assertSame(w, IOUtils.writer(w));
@@ -285,7 +285,7 @@ public class IOUtilsTest {
     @Test
     public void testAsWriterStringBuilder() throws IOException {
         final Appendable a = new StringBuilder();
-        try (final Writer w = IOUtils.writer(a)) {
+        try (Writer w = IOUtils.writer(a)) {
             assertNotSame(w, a);
             assertEquals(StringBuilderWriter.class, w.getClass());
             assertSame(w, IOUtils.writer(w));
@@ -1481,7 +1481,7 @@ public class IOUtilsTest {
     @Test
     public void testToByteArray_URLConnection() throws Exception {
         final byte[] actual;
-        try (final CloseableURLConnection urlConnection = CloseableURLConnection.open(testFile.toURI())) {
+        try (CloseableURLConnection urlConnection = CloseableURLConnection.open(testFile.toURI())) {
             actual = IOUtils.toByteArray(urlConnection);
         }
         assertEquals(FILE_SIZE, actual.length);

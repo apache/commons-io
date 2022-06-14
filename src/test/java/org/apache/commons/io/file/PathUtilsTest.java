@@ -111,7 +111,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
     @Test
     public void testCopyDirectoryForDifferentFilesystemsWithAbsolutePath() throws IOException {
         final Path archivePath = Paths.get(TEST_JAR_PATH);
-        try (final FileSystem archive = openArchive(archivePath, false)) {
+        try (FileSystem archive = openArchive(archivePath, false)) {
             // relative jar -> absolute dir
             Path sourceDir = archive.getPath("dir1");
             PathUtils.copyDirectory(sourceDir, tempDirPath);
@@ -126,7 +126,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
 
     @Test
     public void testCopyDirectoryForDifferentFilesystemsWithAbsolutePathReverse() throws IOException {
-        try (final FileSystem archive = openArchive(tempDirPath.resolve(TEST_JAR_NAME), true)) {
+        try (FileSystem archive = openArchive(tempDirPath.resolve(TEST_JAR_NAME), true)) {
             // absolute dir -> relative jar
             Path targetDir = archive.getPath("target");
             Files.createDirectory(targetDir);
@@ -144,7 +144,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
     @Test
     public void testCopyDirectoryForDifferentFilesystemsWithRelativePath() throws IOException {
         final Path archivePath = Paths.get(TEST_JAR_PATH);
-        try (final FileSystem archive = openArchive(archivePath, false);
+        try (FileSystem archive = openArchive(archivePath, false);
             final FileSystem targetArchive = openArchive(tempDirPath.resolve(TEST_JAR_NAME), true)) {
             final Path targetDir = targetArchive.getPath("targetDir");
             Files.createDirectory(targetDir);
@@ -162,7 +162,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
 
     @Test
     public void testCopyDirectoryForDifferentFilesystemsWithRelativePathReverse() throws IOException {
-        try (final FileSystem archive = openArchive(tempDirPath.resolve(TEST_JAR_NAME), true)) {
+        try (FileSystem archive = openArchive(tempDirPath.resolve(TEST_JAR_NAME), true)) {
             // relative dir -> relative jar
             Path targetDir = archive.getPath("target");
             Files.createDirectory(targetDir);
@@ -238,11 +238,11 @@ public class PathUtilsTest extends AbstractTempDirTest {
         assertFalse(PathUtils.isDirectory(null));
 
         assertTrue(PathUtils.isDirectory(tempDirPath));
-        try (final TempFile testFile1 = TempFile.create(tempDirPath, "prefix", null)) {
+        try (TempFile testFile1 = TempFile.create(tempDirPath, "prefix", null)) {
             assertFalse(PathUtils.isDirectory(testFile1.get()));
 
             Path ref = null;
-            try (final TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
+            try (TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
                 ref = tempDir.get();
                 assertTrue(PathUtils.isDirectory(tempDir.get()));
             }
@@ -267,7 +267,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
         assertFalse(PathUtils.isRegularFile(null));
 
         assertFalse(PathUtils.isRegularFile(tempDirPath));
-        try (final TempFile testFile1 = TempFile.create(tempDirPath, "prefix", null)) {
+        try (TempFile testFile1 = TempFile.create(tempDirPath, "prefix", null)) {
             assertTrue(PathUtils.isRegularFile(testFile1.get()));
 
             Files.delete(testFile1.get());
@@ -278,7 +278,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
     @Test
     public void testNewDirectoryStream() throws Exception {
         final PathFilter pathFilter = new NameFileFilter(PATH_FIXTURE);
-        try (final DirectoryStream<Path> stream = PathUtils.newDirectoryStream(PathUtils.current(), pathFilter)) {
+        try (DirectoryStream<Path> stream = PathUtils.newDirectoryStream(PathUtils.current(), pathFilter)) {
             final Iterator<Path> iterator = stream.iterator();
             final Path path = iterator.next();
             assertEquals(PATH_FIXTURE, path.getFileName().toString());
@@ -429,7 +429,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
         assertFalse(Files.exists(file), "Bad test: test file still exists");
         PathUtils.touch(file);
         assertTrue(Files.exists(file), "touch() created file");
-        try (final OutputStream out = Files.newOutputStream(file)) {
+        try (OutputStream out = Files.newOutputStream(file)) {
             assertEquals(0, Files.size(file), "Created empty file.");
             out.write(0);
         }

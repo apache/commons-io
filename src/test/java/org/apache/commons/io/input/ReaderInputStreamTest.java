@@ -167,7 +167,7 @@ public class ReaderInputStreamTest {
     @Test
     public void testReadZero() throws Exception {
         final String inStr = "test";
-        try (final ReaderInputStream inputStream = new ReaderInputStream(new StringReader(inStr))) {
+        try (ReaderInputStream inputStream = new ReaderInputStream(new StringReader(inStr))) {
             final byte[] bytes = new byte[30];
             assertEquals(0, inputStream.read(bytes, 0, 0));
             assertEquals(inStr.length(), inputStream.read(bytes, 0, inStr.length() + 1));
@@ -179,7 +179,7 @@ public class ReaderInputStreamTest {
     @SuppressWarnings("deprecation")
     @Test
     public void testReadZeroEmptyString() throws Exception {
-        try (final ReaderInputStream inputStream = new ReaderInputStream(new StringReader(""))) {
+        try (ReaderInputStream inputStream = new ReaderInputStream(new StringReader(""))) {
             final byte[] bytes = new byte[30];
             // Should always return 0 for length == 0
             assertEquals(0, inputStream.read(bytes, 0, 0));
@@ -206,7 +206,7 @@ public class ReaderInputStreamTest {
 
     private void testWithBufferedRead(final String testString, final String charsetName) throws IOException {
         final byte[] expected = testString.getBytes(charsetName);
-        try (final ReaderInputStream in = new ReaderInputStream(new StringReader(testString), charsetName)) {
+        try (ReaderInputStream in = new ReaderInputStream(new StringReader(testString), charsetName)) {
             final byte[] buffer = new byte[128];
             int offset = 0;
             while (true) {
@@ -231,7 +231,7 @@ public class ReaderInputStreamTest {
 
     private void testWithSingleByteRead(final String testString, final String charsetName) throws IOException {
         final byte[] bytes = testString.getBytes(charsetName);
-        try (final ReaderInputStream in = new ReaderInputStream(new StringReader(testString), charsetName)) {
+        try (ReaderInputStream in = new ReaderInputStream(new StringReader(testString), charsetName)) {
             for (final byte b : bytes) {
                 final int read = in.read();
                 assertTrue(read >= 0);

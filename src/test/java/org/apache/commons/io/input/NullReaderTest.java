@@ -60,7 +60,7 @@ public class NullReaderTest {
 
     @Test
     public void testEOFException() throws Exception {
-        try (final Reader reader = new TestNullReader(2, false, true)) {
+        try (Reader reader = new TestNullReader(2, false, true)) {
             assertEquals(0, reader.read(), "Read 1");
             assertEquals(1, reader.read(), "Read 2");
             assertThrows(EOFException.class, () -> reader.read());
