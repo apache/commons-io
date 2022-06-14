@@ -232,22 +232,21 @@ public class FileAlterationObserver implements Serializable {
      */
     public void checkAndNotify() {
 
-        /* fire onStart() */
+        // fire onStart()
         for (final FileAlterationListener listener : listeners) {
             listener.onStart(this);
         }
 
-        /* fire directory/file events */
+        // fire directory/file events
         final File rootFile = rootEntry.getFile();
         if (rootFile.exists()) {
             checkAndNotify(rootEntry, rootEntry.getChildren(), listFiles(rootFile));
         } else if (rootEntry.isExists()) {
             checkAndNotify(rootEntry, rootEntry.getChildren(), FileUtils.EMPTY_FILE_ARRAY);
-        } else {
-            // Didn't exist and still doesn't
         }
+        // Else: Didn't exist and still doesn't
 
-        /* fire onStop() */
+        // fire onStop()
         for (final FileAlterationListener listener : listeners) {
             listener.onStop(this);
         }
