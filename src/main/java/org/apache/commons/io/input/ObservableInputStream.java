@@ -169,10 +169,7 @@ public class ObservableInputStream extends ProxyInputStream {
      * @throws IOException The underlying {@link InputStream}, or either of the observers has thrown an exception.
      */
     public void consume() throws IOException {
-        final byte[] buffer = IOUtils.byteArray();
-        while (read(buffer) != EOF) {
-            // empty
-        }
+        IOUtils.consume(this);
     }
 
     /**
