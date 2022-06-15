@@ -205,7 +205,7 @@ public class Tailer implements Runnable, AutoCloseable {
         }
 
         /**
-         * Builds a new configured instance.
+         * Builds and starts a new configured instance.
          *
          * @return a new configured instance.
          */
