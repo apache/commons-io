@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.commons.io.FileUtils;
@@ -166,12 +167,8 @@ public class FileAlterationObserver implements Serializable {
      * @param ioCase what case sensitivity to use comparing file names, null means system sensitive
      */
     protected FileAlterationObserver(final FileEntry rootEntry, final FileFilter fileFilter, final IOCase ioCase) {
-        if (rootEntry == null) {
-            throw new IllegalArgumentException("Root entry is missing");
-        }
-        if (rootEntry.getFile() == null) {
-            throw new IllegalArgumentException("Root directory is missing");
-        }
+        Objects.requireNonNull(rootEntry, "rootEntry");
+        Objects.requireNonNull(rootEntry.getFile(), "rootEntry.getFile()");
         this.rootEntry = rootEntry;
         this.fileFilter = fileFilter;
         switch (IOCase.value(ioCase, IOCase.SYSTEM)) {
