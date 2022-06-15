@@ -172,12 +172,7 @@ public class BOMInputStream extends ProxyInputStream {
      * @return The matched BOM or null if none matched
      */
     private ByteOrderMark find() {
-        for (final ByteOrderMark bom : boms) {
-            if (matches(bom)) {
-                return bom;
-            }
-        }
-        return null;
+        return boms.stream().filter(this::matches).findFirst().orElse(null);
     }
 
     /**
