@@ -137,10 +137,10 @@ public class RegexFileFilterTest {
 
     @Test
     public void testRegexEdgeCases() {
-        assertThrows(IllegalArgumentException.class, () -> assertSerializable(new RegexFileFilter((String) null)));
-        assertThrows(IllegalArgumentException.class, () -> assertSerializable(new RegexFileFilter(null, Pattern.CASE_INSENSITIVE)));
-        assertThrows(IllegalArgumentException.class, () -> assertSerializable(new RegexFileFilter(null, IOCase.INSENSITIVE)));
-        assertThrows(IllegalArgumentException.class, () -> assertSerializable(new RegexFileFilter((java.util.regex.Pattern) null)));
+        assertThrows(NullPointerException.class, () -> assertSerializable(new RegexFileFilter((String) null)));
+        assertThrows(NullPointerException.class, () -> assertSerializable(new RegexFileFilter(null, Pattern.CASE_INSENSITIVE)));
+        assertThrows(NullPointerException.class, () -> assertSerializable(new RegexFileFilter(null, IOCase.INSENSITIVE)));
+        assertThrows(NullPointerException.class, () -> assertSerializable(new RegexFileFilter((java.util.regex.Pattern) null)));
     }
 
     /**

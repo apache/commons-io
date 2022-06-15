@@ -153,15 +153,15 @@ public class FileSystemUtilsTest {
     @Test
     public void testGetFreeSpaceOS_String_NullPath() throws Exception {
         final FileSystemUtils fsu = new FileSystemUtils();
-        assertThrows(IllegalArgumentException.class, () -> fsu.freeSpaceOS(null, 1, false, NEG_1_TIMEOUT));
-        assertThrows(IllegalArgumentException.class, () -> fsu.freeSpaceOS(null, 1, true, NEG_1_TIMEOUT));
+        assertThrows(NullPointerException.class, () -> fsu.freeSpaceOS(null, 1, false, NEG_1_TIMEOUT));
+        assertThrows(NullPointerException.class, () -> fsu.freeSpaceOS(null, 1, true, NEG_1_TIMEOUT));
     }
 
     @Test
     public void testGetFreeSpaceOS_String_Other() throws Exception {
         final FileSystemUtils fsu = new FileSystemUtils();
         assertThrows(IllegalStateException.class, () -> fsu.freeSpaceOS("", 0, false, NEG_1_TIMEOUT));
-        assertThrows(IllegalArgumentException.class, () -> fsu.freeSpaceOS(null, 1, true, NEG_1_TIMEOUT));
+        assertThrows(NullPointerException.class, () -> fsu.freeSpaceOS(null, 1, true, NEG_1_TIMEOUT));
         assertThrows(IllegalStateException.class, () -> fsu.freeSpaceOS("", 0, true, NEG_1_TIMEOUT));
     }
 

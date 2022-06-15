@@ -90,11 +90,11 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      *
      * @param names  the names to allow, must not be null
      * @param ioCase  how to handle case sensitivity, null means case-sensitive
-     * @throws IllegalArgumentException if the name list is null
+     * @throws NullPointerException if the name list is null
      * @throws ClassCastException if the list does not contain Strings
      */
     public NameFileFilter(final List<String> names, final IOCase ioCase) {
-        requireNonNull(names, "names");
+        Objects.requireNonNull(names, "names");
         this.names = names.toArray(EMPTY_STRING_ARRAY);
         this.ioCase = toIOCase(ioCase);
     }
@@ -128,12 +128,10 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      *
      * @param name  the name to allow, must not be null
      * @param ioCase  how to handle case sensitivity, null means case-sensitive
-     * @throws IllegalArgumentException if the name is null
+     * @throws NullPointerException if the name is null
      */
     public NameFileFilter(final String name, final IOCase ioCase) {
-        if (name == null) {
-            throw new IllegalArgumentException("The wildcard must not be null");
-        }
+        Objects.requireNonNull(name, "name");
         this.names = new String[] {name};
         this.ioCase = toIOCase(ioCase);
     }
@@ -143,12 +141,10 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      *
      * @param names  the names to allow, must not be null
      * @param ioCase  how to handle case sensitivity, null means case-sensitive
-     * @throws IllegalArgumentException if the names array is null
+     * @throws NullPointerException if the names array is null
      */
     public NameFileFilter(final String[] names, final IOCase ioCase) {
-        if (names == null) {
-            throw new IllegalArgumentException("The array of names must not be null");
-        }
+        Objects.requireNonNull(names, "names");
         this.names = names.clone();
         this.ioCase = toIOCase(ioCase);
     }

@@ -696,7 +696,7 @@ public class TailerTest {
         }
     }
 
-    private void validateTailer(final TestTailerListener listener, final Tailer tailer, final File file) throws Exception {
+    private void validateTailer(final TestTailerListener listener, final Tailer tailer, final File file) throws IOException, InterruptedException {
         write(file, "foo");
         final int timeout = 30;
         final TimeUnit timeoutUnit = TimeUnit.SECONDS;
@@ -705,7 +705,7 @@ public class TailerTest {
     }
 
     /** Appends lines to a file */
-    private void write(final File file, final String... lines) throws Exception {
+    private void write(final File file, final String... lines) throws IOException {
         try (Writer writer = Files.newBufferedWriter(file.toPath(), StandardOpenOption.APPEND)) {
             for (final String line : lines) {
                 writer.write(line + "\n");
@@ -714,7 +714,7 @@ public class TailerTest {
     }
 
     /** Appends strings to a file */
-    private void writeString(final File file, final String... strings) throws Exception {
+    private void writeString(final File file, final String... strings) throws IOException {
         try (Writer writer = Files.newBufferedWriter(file.toPath(), StandardOpenOption.APPEND)) {
             for (final String string : strings) {
                 writer.write(string);

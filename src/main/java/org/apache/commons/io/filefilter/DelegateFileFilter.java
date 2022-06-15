@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * This class turns a Java FileFilter or FilenameFilter into an IO FileFilter.
@@ -42,7 +43,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
      * @param fileFilter  the filter to decorate
      */
     public DelegateFileFilter(final FileFilter fileFilter) {
-        requireNonNull(fileFilter, "filter");
+        Objects.requireNonNull(fileFilter, "filter");
         this.fileFilter = fileFilter;
         this.filenameFilter = null;
     }
@@ -53,7 +54,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
      * @param filenameFilter  the filter to decorate
      */
     public DelegateFileFilter(final FilenameFilter filenameFilter) {
-        requireNonNull(filenameFilter, "filter");
+        Objects.requireNonNull(filenameFilter, "filter");
         this.filenameFilter = filenameFilter;
         this.fileFilter = null;
     }

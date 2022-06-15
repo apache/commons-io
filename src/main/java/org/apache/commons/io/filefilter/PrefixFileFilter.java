@@ -22,6 +22,7 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.io.IOCase;
 
@@ -77,7 +78,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * Constructs a new Prefix file filter for a list of prefixes.
      *
      * @param prefixes  the prefixes to allow, must not be null
-     * @throws IllegalArgumentException if the prefix list is null
+     * @throws NullPointerException if the prefix list is null
      * @throws ClassCastException if the list does not contain Strings
      */
     public PrefixFileFilter(final List<String> prefixes) {
@@ -90,12 +91,12 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      *
      * @param prefixes  the prefixes to allow, must not be null
      * @param ioCase  how to handle case sensitivity, null means case-sensitive
-     * @throws IllegalArgumentException if the prefix list is null
+     * @throws NullPointerException if the prefix list is null
      * @throws ClassCastException if the list does not contain Strings
      * @since 1.4
      */
     public PrefixFileFilter(final List<String> prefixes, final IOCase ioCase) {
-        requireNonNull(prefixes, "prefixes");
+        Objects.requireNonNull(prefixes, "prefixes");
         this.prefixes = prefixes.toArray(EMPTY_STRING_ARRAY);
         this.isCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }
@@ -133,7 +134,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * @since 1.4
      */
     public PrefixFileFilter(final String prefix, final IOCase ioCase) {
-        requireNonNull(prefix, "prefix");
+        Objects.requireNonNull(prefix, "prefix");
         this.prefixes = new String[] {prefix};
         this.isCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }
@@ -148,7 +149,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * @since 1.4
      */
     public PrefixFileFilter(final String[] prefixes, final IOCase ioCase) {
-        requireNonNull(prefixes, "prefixes");
+        Objects.requireNonNull(prefixes, "prefixes");
         this.prefixes = prefixes.clone();
         this.isCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }

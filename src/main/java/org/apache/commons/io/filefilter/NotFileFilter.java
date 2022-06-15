@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Objects;
 
 /**
  * This filter produces a logical NOT of the filters specified.
@@ -39,10 +40,10 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
      * Constructs a new file filter that NOTs the result of another filter.
      *
      * @param filter the filter, must not be null
-     * @throws IllegalArgumentException if the filter is null
+     * @throws NullPointerException if the filter is null
      */
     public NotFileFilter(final IOFileFilter filter) {
-        requireNonNull(filter, "filter");
+        Objects.requireNonNull(filter, "filter");
         this.filter = filter;
     }
 

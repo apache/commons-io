@@ -30,12 +30,12 @@ public class RegexpClassNameMatcherTest {
 
     @Test
     public void testNullPatternPattern() {
-        assertThrows(IllegalArgumentException.class, () -> new RegexpClassNameMatcher((Pattern)null));
+        assertThrows(NullPointerException.class, () -> new RegexpClassNameMatcher((Pattern) null));
     }
 
     @Test
     public void testNullStringPattern() {
-        assertThrows(NullPointerException.class, () -> new RegexpClassNameMatcher((String)null));
+        assertThrows(NullPointerException.class, () -> new RegexpClassNameMatcher((String) null));
     }
 
     @Test

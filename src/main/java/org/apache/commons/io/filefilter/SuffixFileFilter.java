@@ -97,7 +97,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      * @since 1.4
      */
     public SuffixFileFilter(final List<String> suffixes, final IOCase ioCase) {
-        requireNonNull(suffixes, "suffixes");
+        Objects.requireNonNull(suffixes, "suffixes");
         this.suffixes = suffixes.toArray(EMPTY_STRING_ARRAY);
         this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }
@@ -119,7 +119,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      * instance. This would be inadvisable however.
      *
      * @param suffixes  the suffixes to allow, must not be null
-     * @throws IllegalArgumentException if the suffix array is null
+     * @throws NullPointerException if the suffix array is null
      */
     public SuffixFileFilter(final String... suffixes) {
         this(suffixes, IOCase.SENSITIVE);
@@ -131,11 +131,11 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      *
      * @param suffix  the suffix to allow, must not be null
      * @param ioCase  how to handle case sensitivity, null means case-sensitive
-     * @throws IllegalArgumentException if the suffix is null
+     * @throws NullPointerException if the suffix is null
      * @since 1.4
      */
     public SuffixFileFilter(final String suffix, final IOCase ioCase) {
-        requireNonNull(suffix, "suffix");
+        Objects.requireNonNull(suffix, "suffix");
         this.suffixes = new String[] {suffix};
         this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }
@@ -146,11 +146,11 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      *
      * @param suffixes  the suffixes to allow, must not be null
      * @param ioCase  how to handle case sensitivity, null means case-sensitive
-     * @throws IllegalArgumentException if the suffix array is null
+     * @throws NullPointerException if the suffix array is null
      * @since 1.4
      */
     public SuffixFileFilter(final String[] suffixes, final IOCase ioCase) {
-        requireNonNull(suffixes, "suffixes");
+        Objects.requireNonNull(suffixes, "suffixes");
         this.suffixes = suffixes.clone();
         this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }

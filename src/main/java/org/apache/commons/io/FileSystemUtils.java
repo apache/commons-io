@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.StringTokenizer;
 
 /**
@@ -262,25 +263,22 @@ public class FileSystemUtils {
      *  is zero or less
      * @return the amount of free drive space on the drive or volume
      * @throws IllegalArgumentException if the path is invalid
-     * @throws IllegalStateException if an error occurred in initialisation
+     * @throws IllegalStateException if an error occurred in initialization
      * @throws IOException if an error occurs when finding the free space
      */
     long freeSpaceOS(final String path, final int os, final boolean kb, final Duration timeout) throws IOException {
-        if (path == null) {
-            throw new IllegalArgumentException("Path must not be null");
-        }
+        Objects.requireNonNull(path, "path");
         switch (os) {
-            case WINDOWS:
-                return kb ? freeSpaceWindows(path, timeout) / FileUtils.ONE_KB : freeSpaceWindows(path, timeout);
-            case UNIX:
-                return freeSpaceUnix(path, kb, false, timeout);
-            case POSIX_UNIX:
-                return freeSpaceUnix(path, kb, true, timeout);
-            case OTHER:
-                throw new IllegalStateException("Unsupported operating system");
-            default:
-                throw new IllegalStateException(
-                  "Exception caught when determining operating system");
+        case WINDOWS:
+            return kb ? freeSpaceWindows(path, timeout) / FileUtils.ONE_KB : freeSpaceWindows(path, timeout);
+        case UNIX:
+            return freeSpaceUnix(path, kb, false, timeout);
+        case POSIX_UNIX:
+            return freeSpaceUnix(path, kb, true, timeout);
+        case OTHER:
+            throw new IllegalStateException("Unsupported operating system");
+        default:
+            throw new IllegalStateException("Exception caught when determining operating system");
         }
     }
 

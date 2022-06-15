@@ -19,6 +19,7 @@ package org.apache.commons.io;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.util.Objects;
 
 /**
  * Dumps data in hexadecimal format.
@@ -74,21 +75,16 @@ public class HexDump {
      *         the data to stream
      * @throws ArrayIndexOutOfBoundsException if the index is
      *         outside the data array's bounds
-     * @throws IllegalArgumentException if the output stream is null
+     * @throws NullPointerException if the output stream is null
      */
-
     public static void dump(final byte[] data, final long offset,
                             final OutputStream stream, final int index)
-            throws IOException, ArrayIndexOutOfBoundsException,
-            IllegalArgumentException {
-
+            throws IOException, ArrayIndexOutOfBoundsException {
+        Objects.requireNonNull(stream, "stream");
         if (index < 0 || index >= data.length) {
             throw new ArrayIndexOutOfBoundsException(
                     "illegal index: " + index + " into array of length "
                     + data.length);
-        }
-        if (stream == null) {
-            throw new IllegalArgumentException("cannot write to nullstream");
         }
         long display_offset = offset + index;
         final StringBuilder buffer = new StringBuilder(74);

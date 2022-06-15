@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
@@ -78,7 +79,7 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      * @return a new Pattern.
      */
     private static Pattern compile(final String pattern, final int flags) {
-        requireNonNull(pattern, "pattern");
+        Objects.requireNonNull(pattern, "pattern");
         return Pattern.compile(pattern, flags);
     }
 
@@ -102,7 +103,7 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      * Constructs a new regular expression filter for a compiled regular expression
      *
      * @param pattern regular expression to match.
-     * @throws IllegalArgumentException if the pattern is null.
+     * @throws NullPointerException if the pattern is null.
      */
     @SuppressWarnings("unchecked")
     public RegexFileFilter(final Pattern pattern) {
@@ -114,11 +115,11 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      *
      * @param pattern regular expression to match.
      * @param pathToString How convert a path to a string.
-     * @throws IllegalArgumentException if the pattern is null.
+     * @throws NullPointerException if the pattern is null.
      * @since 2.10.0
      */
     public RegexFileFilter(final Pattern pattern, final Function<Path, String> pathToString) {
-        requireNonNull(pattern, "pattern");
+        Objects.requireNonNull(pattern, "pattern");
         this.pattern = pattern;
         this.pathToString = pathToString;
     }
@@ -127,7 +128,7 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      * Constructs a new regular expression filter.
      *
      * @param pattern regular string expression to match
-     * @throws IllegalArgumentException if the pattern is null
+     * @throws NullPointerException if the pattern is null
      */
     public RegexFileFilter(final String pattern) {
         this(pattern, 0);

@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.attribute.FileTime;
+import java.util.Objects;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.file.attribute.FileTimes;
@@ -77,10 +78,7 @@ public class FileEntry implements Serializable {
      * @param file The file being monitored
      */
     public FileEntry(final FileEntry parent, final File file) {
-        if (file == null) {
-            throw new IllegalArgumentException("File is null.");
-        }
-        this.file = file;
+        this.file = Objects.requireNonNull(file, "file");
         this.parent = parent;
         this.name = file.getName();
     }

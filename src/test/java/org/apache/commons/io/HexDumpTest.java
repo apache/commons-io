@@ -30,8 +30,7 @@ import org.junit.jupiter.api.Test;
 public class HexDumpTest {
 
     @Test
-    public void testDump()
-            throws IOException {
+    public void testDump() throws IOException {
         final byte[] testArray = new byte[256];
 
         for (int j = 0; j < 256; j++) {
@@ -188,7 +187,7 @@ public class HexDumpTest {
         assertThrows(ArrayIndexOutOfBoundsException.class, () -> HexDump.dump(testArray, 0x10000000, new ByteArrayOutputStream(), testArray.length));
 
         // verify proper behavior with null stream
-        assertThrows(IllegalArgumentException.class, () -> HexDump.dump(testArray, 0x10000000, null, 0));
+        assertThrows(NullPointerException.class, () -> HexDump.dump(testArray, 0x10000000, null, 0));
     }
 
     private char toAscii(final int c) {

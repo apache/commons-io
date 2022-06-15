@@ -39,13 +39,6 @@ import org.apache.commons.io.file.PathVisitor;
  */
 public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
 
-    static <T> T requireNonNull(final T obj, final String message) {
-        if (obj == null) {
-            throw new IllegalArgumentException(message);
-        }
-        return obj;
-    }
-
     static FileVisitResult toDefaultFileVisitResult(final boolean accept) {
         return accept ? FileVisitResult.CONTINUE : FileVisitResult.TERMINATE;
     }

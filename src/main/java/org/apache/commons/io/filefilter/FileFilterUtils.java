@@ -234,15 +234,13 @@ public class FileFilterUtils {
      *
      * @return a subset of {@code files} that is accepted by the
      *         file filter.
-     * @throws IllegalArgumentException if the filter is {@code null}
+     * @throws NullPointerException if the filter is {@code null}
      *         or {@code files} contains a {@code null} value.
      *
      * @since 2.0
      */
     public static File[] filter(final IOFileFilter filter, final File... files) {
-        if (filter == null) {
-            throw new IllegalArgumentException("file filter is null");
-        }
+        Objects.requireNonNull(filter, "filter");
         if (files == null) {
             return FileUtils.EMPTY_FILE_ARRAY;
         }
@@ -291,15 +289,12 @@ public class FileFilterUtils {
      * @param <R> the return type.
      * @param <A> the mutable accumulation type of the reduction operation (often hidden as an implementation detail)
      * @return a subset of files from the stream that is accepted by the filter.
-     * @throws IllegalArgumentException if the filter is {@code null}.
+     * @throws NullPointerException if the filter is {@code null}.
      */
     private static <R, A> R filterFiles(final IOFileFilter filter, final Stream<File> stream,
         final Collector<? super File, A, R> collector) {
-        //Objects.requireNonNull(filter, "filter");
+        Objects.requireNonNull(filter, "filter");
         Objects.requireNonNull(collector, "collector");
-        if (filter == null) {
-            throw new IllegalArgumentException("file filter is null");
-        }
         if (stream == null) {
             return Stream.<File>empty().collect(collector);
         }
@@ -723,20 +718,15 @@ public class FileFilterUtils {
      *
      * @param filters The file filters
      * @return The list of file filters
-     * @throws IllegalArgumentException if the filters are null or contain a
+     * @throws NullPointerException if the filters are null or contain a
      *         null value.
      * @since 2.0
      */
     public static List<IOFileFilter> toList(final IOFileFilter... filters) {
-        if (filters == null) {
-            throw new IllegalArgumentException("The filters must not be null");
-        }
+        Objects.requireNonNull(filters, "filters");
         final List<IOFileFilter> list = new ArrayList<>(filters.length);
         for (int i = 0; i < filters.length; i++) {
-            if (filters[i] == null) {
-                throw new IllegalArgumentException("The filter[" + i + "] is null");
-            }
-            list.add(filters[i]);
+            list.add(Objects.requireNonNull(filters[i], "filters[i]"));
         }
         return list;
     }

@@ -19,6 +19,7 @@ package org.apache.commons.io.comparator;
 import java.io.File;
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.Objects;
 
 /**
  * Reverses the result of comparing two {@link File} objects using the delegate {@link Comparator}.
@@ -36,10 +37,7 @@ class ReverseFileComparator extends AbstractFileComparator implements Serializab
      * @param delegate The comparator to delegate to.
      */
     public ReverseFileComparator(final Comparator<File> delegate) {
-        if (delegate == null) {
-            throw new IllegalArgumentException("Delegate comparator is missing");
-        }
-        this.delegate = delegate;
+        this.delegate = Objects.requireNonNull(delegate, "delegate");
     }
 
     /**

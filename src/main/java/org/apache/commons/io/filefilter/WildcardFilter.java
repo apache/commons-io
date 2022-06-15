@@ -88,11 +88,11 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
      * Constructs a new case-sensitive wildcard filter for a list of wildcards.
      *
      * @param wildcards  the list of wildcards to match
-     * @throws IllegalArgumentException if the pattern list is null
+     * @throws NullPointerException if the pattern list is null
      * @throws ClassCastException if the list does not contain Strings
      */
     public WildcardFilter(final List<String> wildcards) {
-        requireNonNull(wildcards, "wildcards");
+        Objects.requireNonNull(wildcards, "wildcards");
         this.wildcards = wildcards.toArray(EMPTY_STRING_ARRAY);
     }
 
@@ -100,10 +100,10 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
      * Constructs a new case-sensitive wildcard filter for a single wildcard.
      *
      * @param wildcard  the wildcard to match
-     * @throws IllegalArgumentException if the pattern is null
+     * @throws NullPointerException if the pattern is null
      */
     public WildcardFilter(final String wildcard) {
-        requireNonNull(wildcard, "wildcard");
+        Objects.requireNonNull(wildcard, "wildcard");
         this.wildcards = new String[] { wildcard };
     }
 
@@ -111,10 +111,10 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
      * Constructs a new case-sensitive wildcard filter for an array of wildcards.
      *
      * @param wildcards  the array of wildcards to match
-     * @throws IllegalArgumentException if the pattern array is null
+     * @throws NullPointerException if the pattern array is null
      */
     public WildcardFilter(final String... wildcards) {
-        requireNonNull(wildcards, "wildcards");
+        Objects.requireNonNull(wildcards, "wildcards");
         this.wildcards = wildcards.clone();
     }
 

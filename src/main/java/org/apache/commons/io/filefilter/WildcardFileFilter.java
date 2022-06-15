@@ -104,7 +104,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      * @throws ClassCastException if the list does not contain Strings
      */
     public WildcardFileFilter(final List<String> wildcards, final IOCase ioCase) {
-        requireNonNull(wildcards, "wildcards");
+        Objects.requireNonNull(wildcards, "wildcards");
         this.wildcards = wildcards.toArray(EMPTY_STRING_ARRAY);
         this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }
@@ -123,7 +123,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      * Constructs a new case-sensitive wildcard filter for an array of wildcards.
      *
      * @param wildcards  the array of wildcards to match
-     * @throws IllegalArgumentException if the pattern array is null
+     * @throws NullPointerException if the pattern array is null
      */
     public WildcardFileFilter(final String... wildcards) {
         this(wildcards, IOCase.SENSITIVE);
@@ -134,10 +134,10 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      *
      * @param wildcard  the wildcard to match, not null
      * @param ioCase  how to handle case sensitivity, null means case-sensitive
-     * @throws IllegalArgumentException if the pattern is null
+     * @throws NullPointerException if the pattern is null
      */
     public WildcardFileFilter(final String wildcard, final IOCase ioCase) {
-        requireNonNull(wildcard, "wildcard");
+        Objects.requireNonNull(wildcard, "wildcard");
         this.wildcards = new String[] {wildcard};
         this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }
@@ -147,10 +147,10 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      *
      * @param wildcards  the array of wildcards to match, not null
      * @param ioCase  how to handle case sensitivity, null means case-sensitive
-     * @throws IllegalArgumentException if the pattern array is null
+     * @throws NullPointerException if the pattern array is null
      */
     public WildcardFileFilter(final String[] wildcards, final IOCase ioCase) {
-        requireNonNull(wildcards, "wildcards");
+        Objects.requireNonNull(wildcards, "wildcards");
         this.wildcards = wildcards.clone();
         this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
     }

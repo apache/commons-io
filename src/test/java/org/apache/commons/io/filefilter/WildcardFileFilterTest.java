@@ -141,8 +141,8 @@ public class WildcardFileFilterTest extends AbstractFilterTest {
         assertEquals(FileVisitResult.TERMINATE, listFilter.accept(bmpPath, null));
         assertEquals(FileVisitResult.TERMINATE, listFilter.accept(dirPath, null));
 
-        assertThrows(IllegalArgumentException.class, () -> new WildcardFileFilter((String) null));
-        assertThrows(IllegalArgumentException.class, () -> new WildcardFileFilter((String[]) null));
-        assertThrows(IllegalArgumentException.class, () -> new WildcardFileFilter((List<String>) null));
+        assertThrows(NullPointerException.class, () -> new WildcardFileFilter((String) null));
+        assertThrows(NullPointerException.class, () -> new WildcardFileFilter((String[]) null));
+        assertThrows(NullPointerException.class, () -> new WildcardFileFilter((List<String>) null));
     }
 }
