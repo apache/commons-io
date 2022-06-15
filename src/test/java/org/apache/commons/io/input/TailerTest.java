@@ -247,7 +247,7 @@ public class TailerTest {
         final TestTailerListener listener = new TestTailerListener(1);
         try (Tailer tailer = new Tailer.Builder(new NonStandardTailable(file), listener).build()) {
             assertTrue(tailer.getTailable() instanceof NonStandardTailable);
-            validateTailer(listener, tailer, file);
+            validateTailer(listener, file);
         }
     }
 
@@ -257,7 +257,7 @@ public class TailerTest {
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
         try (Tailer tailer = Tailer.create(file, listener)) {
-            validateTailer(listener, tailer, file);
+            validateTailer(listener, file);
         }
     }
 
@@ -267,7 +267,7 @@ public class TailerTest {
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
         try (Tailer tailer = Tailer.create(file, listener, TEST_DELAY_MILLIS, false, false)) {
-            validateTailer(listener, tailer, file);
+            validateTailer(listener, file);
         }
     }
 
@@ -277,7 +277,7 @@ public class TailerTest {
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
         try (Tailer tailer = Tailer.create(file, listener, TEST_DELAY_MILLIS)) {
-            validateTailer(listener, tailer, file);
+            validateTailer(listener, file);
         }
     }
 
@@ -287,7 +287,7 @@ public class TailerTest {
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
         try (Tailer tailer = Tailer.create(file, listener, TEST_DELAY_MILLIS, false)) {
-            validateTailer(listener, tailer, file);
+            validateTailer(listener, file);
         }
     }
 
@@ -297,7 +297,7 @@ public class TailerTest {
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
         try (Tailer tailer = Tailer.create(file, listener, TEST_DELAY_MILLIS, false, TEST_BUFFER_SIZE)) {
-            validateTailer(listener, tailer, file);
+            validateTailer(listener, file);
         }
     }
 
@@ -307,7 +307,7 @@ public class TailerTest {
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
         try (Tailer tailer = Tailer.create(file, listener, TEST_DELAY_MILLIS, false, true, TEST_BUFFER_SIZE)) {
-            validateTailer(listener, tailer, file);
+            validateTailer(listener, file);
         }
     }
 
@@ -317,7 +317,7 @@ public class TailerTest {
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
         try (Tailer tailer = Tailer.create(file, StandardCharsets.UTF_8, listener, TEST_DELAY_MILLIS, false, true, TEST_BUFFER_SIZE)) {
-            validateTailer(listener, tailer, file);
+            validateTailer(listener, file);
         }
     }
 
@@ -454,7 +454,7 @@ public class TailerTest {
         try (Tailer tailer = new Tailer(file, listener)) {
             final Thread thread = new Thread(tailer);
             thread.start();
-            validateTailer(listener, tailer, file);
+            validateTailer(listener, file);
         }
     }
 
@@ -466,7 +466,7 @@ public class TailerTest {
         try (Tailer tailer = new Tailer(file, listener, TEST_DELAY_MILLIS)) {
             final Thread thread = new Thread(tailer);
             thread.start();
-            validateTailer(listener, tailer, file);
+            validateTailer(listener, file);
         }
     }
 
@@ -478,7 +478,7 @@ public class TailerTest {
         try (Tailer tailer = new Tailer(file, listener, TEST_DELAY_MILLIS, false)) {
             final Thread thread = new Thread(tailer);
             thread.start();
-            validateTailer(listener, tailer, file);
+            validateTailer(listener, file);
         }
     }
 
@@ -490,7 +490,7 @@ public class TailerTest {
         try (Tailer tailer = new Tailer(file, listener, TEST_DELAY_MILLIS, false, TEST_BUFFER_SIZE)) {
             final Thread thread = new Thread(tailer);
             thread.start();
-            validateTailer(listener, tailer, file);
+            validateTailer(listener, file);
         }
     }
 
@@ -502,7 +502,7 @@ public class TailerTest {
         try (Tailer tailer = new Tailer(file, listener, TEST_DELAY_MILLIS, false, false)) {
             final Thread thread = new Thread(tailer);
             thread.start();
-            validateTailer(listener, tailer, file);
+            validateTailer(listener, file);
         }
     }
 
@@ -514,7 +514,7 @@ public class TailerTest {
         try (Tailer tailer = new Tailer(file, listener, TEST_DELAY_MILLIS, false, true, TEST_BUFFER_SIZE)) {
             final Thread thread = new Thread(tailer);
             thread.start();
-            validateTailer(listener, tailer, file);
+            validateTailer(listener, file);
         }
     }
 
@@ -526,7 +526,7 @@ public class TailerTest {
         try (Tailer tailer = new Tailer(file, StandardCharsets.UTF_8, listener, TEST_DELAY_MILLIS, false, true, TEST_BUFFER_SIZE)) {
             final Thread thread = new Thread(tailer);
             thread.start();
-            validateTailer(listener, tailer, file);
+            validateTailer(listener, file);
         }
     }
 
@@ -696,7 +696,7 @@ public class TailerTest {
         }
     }
 
-    private void validateTailer(final TestTailerListener listener, final Tailer tailer, final File file) throws IOException, InterruptedException {
+    private void validateTailer(final TestTailerListener listener, final File file) throws IOException, InterruptedException {
         write(file, "foo");
         final int timeout = 30;
         final TimeUnit timeoutUnit = TimeUnit.SECONDS;
