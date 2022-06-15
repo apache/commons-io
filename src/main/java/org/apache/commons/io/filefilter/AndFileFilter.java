@@ -215,12 +215,7 @@ public class AndFileFilter
         final StringBuilder buffer = new StringBuilder();
         buffer.append(super.toString());
         buffer.append("(");
-        for (int i = 0; i < fileFilters.size(); i++) {
-            if (i > 0) {
-                buffer.append(",");
-            }
-            buffer.append(fileFilters.get(i));
-        }
+        append(fileFilters, buffer);
         buffer.append(")");
         return buffer.toString();
     }

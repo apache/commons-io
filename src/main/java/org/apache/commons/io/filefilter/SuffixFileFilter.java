@@ -209,14 +209,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
         final StringBuilder buffer = new StringBuilder();
         buffer.append(super.toString());
         buffer.append("(");
-        if (suffixes != null) {
-            for (int i = 0; i < suffixes.length; i++) {
-                if (i > 0) {
-                    buffer.append(",");
-                }
-                buffer.append(suffixes[i]);
-            }
-        }
+        append(suffixes, buffer);
         buffer.append(")");
         return buffer.toString();
     }
