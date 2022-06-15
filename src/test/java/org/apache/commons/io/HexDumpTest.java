@@ -39,10 +39,10 @@ public class HexDumpTest {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
         HexDump.dump(testArray, 0, stream, 0);
-        byte[] outputArray = new byte[16 * (73 + HexDump.EOL.length())];
+        byte[] outputArray = new byte[16 * (73 + System.lineSeparator().length())];
 
         for (int j = 0; j < 16; j++) {
-            int offset = (73 + HexDump.EOL.length()) * j;
+            int offset = (73 + System.lineSeparator().length()) * j;
 
             outputArray[offset++] = (byte) '0';
             outputArray[offset++] = (byte) '0';
@@ -61,7 +61,7 @@ public class HexDumpTest {
             for (int k = 0; k < 16; k++) {
                 outputArray[offset++] = (byte) toAscii(j * 16 + k);
             }
-            System.arraycopy(HexDump.EOL.getBytes(), 0, outputArray, offset, HexDump.EOL.getBytes().length);
+            System.arraycopy(System.lineSeparator().getBytes(), 0, outputArray, offset, System.lineSeparator().getBytes().length);
         }
         byte[] actualOutput = stream.toByteArray();
 
@@ -73,9 +73,9 @@ public class HexDumpTest {
         // verify proper behavior with non-zero offset
         stream = new ByteArrayOutputStream();
         HexDump.dump(testArray, 0x10000000, stream, 0);
-        outputArray = new byte[16 * (73 + HexDump.EOL.length())];
+        outputArray = new byte[16 * (73 + System.lineSeparator().length())];
         for (int j = 0; j < 16; j++) {
-            int offset = (73 + HexDump.EOL.length()) * j;
+            int offset = (73 + System.lineSeparator().length()) * j;
 
             outputArray[offset++] = (byte) '1';
             outputArray[offset++] = (byte) '0';
@@ -94,8 +94,8 @@ public class HexDumpTest {
             for (int k = 0; k < 16; k++) {
                 outputArray[offset++] = (byte) toAscii(j * 16 + k);
             }
-            System.arraycopy(HexDump.EOL.getBytes(), 0, outputArray, offset,
-                    HexDump.EOL.getBytes().length);
+            System.arraycopy(System.lineSeparator().getBytes(), 0, outputArray, offset,
+                    System.lineSeparator().getBytes().length);
         }
         actualOutput = stream.toByteArray();
         assertEquals(outputArray.length, actualOutput.length, "array size mismatch");
@@ -106,9 +106,9 @@ public class HexDumpTest {
         // verify proper behavior with negative offset
         stream = new ByteArrayOutputStream();
         HexDump.dump(testArray, 0xFF000000, stream, 0);
-        outputArray = new byte[16 * (73 + HexDump.EOL.length())];
+        outputArray = new byte[16 * (73 + System.lineSeparator().length())];
         for (int j = 0; j < 16; j++) {
-            int offset = (73 + HexDump.EOL.length()) * j;
+            int offset = (73 + System.lineSeparator().length()) * j;
 
             outputArray[offset++] = (byte) 'F';
             outputArray[offset++] = (byte) 'F';
@@ -127,8 +127,8 @@ public class HexDumpTest {
             for (int k = 0; k < 16; k++) {
                 outputArray[offset++] = (byte) toAscii(j * 16 + k);
             }
-            System.arraycopy(HexDump.EOL.getBytes(), 0, outputArray, offset,
-                    HexDump.EOL.getBytes().length);
+            System.arraycopy(System.lineSeparator().getBytes(), 0, outputArray, offset,
+                    System.lineSeparator().getBytes().length);
         }
         actualOutput = stream.toByteArray();
         assertEquals(outputArray.length, actualOutput.length, "array size mismatch");
@@ -139,9 +139,9 @@ public class HexDumpTest {
         // verify proper behavior with non-zero index
         stream = new ByteArrayOutputStream();
         HexDump.dump(testArray, 0x10000000, stream, 0x81);
-        outputArray = new byte[8 * (73 + HexDump.EOL.length()) - 1];
+        outputArray = new byte[8 * (73 + System.lineSeparator().length()) - 1];
         for (int j = 0; j < 8; j++) {
-            int offset = (73 + HexDump.EOL.length()) * j;
+            int offset = (73 + System.lineSeparator().length()) * j;
 
             outputArray[offset++] = (byte) '1';
             outputArray[offset++] = (byte) '0';
@@ -171,8 +171,8 @@ public class HexDumpTest {
                     outputArray[offset++] = (byte) toAscii(index);
                 }
             }
-            System.arraycopy(HexDump.EOL.getBytes(), 0, outputArray, offset,
-                    HexDump.EOL.getBytes().length);
+            System.arraycopy(System.lineSeparator().getBytes(), 0, outputArray, offset,
+                    System.lineSeparator().getBytes().length);
         }
         actualOutput = stream.toByteArray();
         assertEquals(outputArray.length, actualOutput.length, "array size mismatch");

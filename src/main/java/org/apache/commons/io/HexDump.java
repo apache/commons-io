@@ -26,17 +26,20 @@ import java.util.Objects;
  * <p>
  * Provides a single function to take an array of bytes and display it
  * in hexadecimal form.
+ * </p>
  * <p>
  * Origin of code: POI.
- *
+ * </p>
  */
 public class HexDump {
 
     /**
      * The line-separator (initializes to "line.separator" system property.
+     *
+     * @deprecated Use {@link System#lineSeparator()}.
      */
-    public static final String EOL =
-            System.getProperty("line.separator");
+    @Deprecated
+    public static final String EOL = System.lineSeparator();
 
     private static final char[] HEX_CODES =
             {
@@ -48,8 +51,9 @@ public class HexDump {
             {
                 28, 24, 20, 16, 12, 8, 4, 0
             };
+
     /**
-     * Dump an array of bytes to an OutputStream. The output is formatted
+     * Dumps an array of bytes to an OutputStream. The output is formatted
      * for human inspection, with a hexadecimal offset followed by the
      * hexadecimal values of the next 16 bytes of data and the printable ASCII
      * characters (if any) that those bytes represent printed per each line
@@ -61,9 +65,11 @@ public class HexDump {
      * offset argument should be set to 2048. The offset value printed
      * at the beginning of each line indicates where in that larger entity
      * the first byte on that line is located.
+     * </p>
      * <p>
      * All bytes between the given index (inclusive) and the end of the
      * data array are dumped.
+     * </p>
      *
      * @param data  the byte array to be dumped
      * @param offset  offset of the byte array within a larger entity
@@ -111,7 +117,7 @@ public class HexDump {
                     buffer.append('.');
                 }
             }
-            buffer.append(EOL);
+            buffer.append(System.lineSeparator());
             // make explicit the dependency on the default encoding
             stream.write(buffer.toString().getBytes(Charset.defaultCharset()));
             stream.flush();
@@ -119,8 +125,9 @@ public class HexDump {
             display_offset += chars_read;
         }
     }
+
     /**
-     * Dump a byte value into a StringBuilder.
+     * Dumps a byte value into a StringBuilder.
      *
      * @param _cbuffer the StringBuilder to dump the value in
      * @param value  the byte value to be dumped
@@ -134,7 +141,7 @@ public class HexDump {
     }
 
     /**
-     * Dump a long value into a StringBuilder.
+     * Dumps a long value into a StringBuilder.
      *
      * @param _lbuffer the StringBuilder to dump the value in
      * @param value  the long value to be dumped
