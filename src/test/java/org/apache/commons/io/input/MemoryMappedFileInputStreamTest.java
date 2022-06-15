@@ -50,6 +50,13 @@ public class MemoryMappedFileInputStreamTest {
         // otherwise the temporary files won't be able to be removed when running on
         // Windows. Calling gc() is just a hint to the VM.
         System.gc();
+        Thread.yield();
+        System.runFinalization();
+        Thread.yield();
+        System.gc();
+        Thread.yield();
+        System.runFinalization();
+        Thread.yield();
     }
 
     private Path createTestFile(final int size) throws IOException {
