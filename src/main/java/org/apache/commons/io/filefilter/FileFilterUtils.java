@@ -725,8 +725,8 @@ public class FileFilterUtils {
     public static List<IOFileFilter> toList(final IOFileFilter... filters) {
         Objects.requireNonNull(filters, "filters");
         final List<IOFileFilter> list = new ArrayList<>(filters.length);
-        for (int i = 0; i < filters.length; i++) {
-            list.add(Objects.requireNonNull(filters[i], "filters[i]"));
+        for (final IOFileFilter filter : filters) {
+            list.add(Objects.requireNonNull(filter, "filters[i]"));
         }
         return list;
     }
