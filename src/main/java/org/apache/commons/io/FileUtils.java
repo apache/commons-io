@@ -46,6 +46,7 @@ import java.nio.file.attribute.FileTime;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalTime;
+import java.time.OffsetTime;
 import java.time.ZoneId;
 import java.time.chrono.ChronoLocalDate;
 import java.time.chrono.ChronoLocalDateTime;
@@ -1541,7 +1542,6 @@ public class FileUtils {
      * @return true if the {@link File} exists and has been modified after the given
      * {@link ChronoLocalDate} at the current time.
      * @throws NullPointerException if the file or local date is {@code null}.
-     *
      * @since 2.8.0
      */
     public static boolean isFileNewer(final File file, final ChronoLocalDate chronoLocalDate) {
@@ -1563,7 +1563,6 @@ public class FileUtils {
      * @return true if the {@link File} exists and has been modified after the given
      * {@link ChronoLocalDate} at the given time.
      * @throws NullPointerException if the file, local date or zone ID is {@code null}.
-     *
      * @since 2.8.0
      */
     public static boolean isFileNewer(final File file, final ChronoLocalDate chronoLocalDate, final LocalTime localTime) {
@@ -1586,7 +1585,6 @@ public class FileUtils {
      * @return true if the {@link File} exists and has been modified after the given
      * {@link ChronoLocalDateTime} at the system-default time zone.
      * @throws NullPointerException if the file or local date time is {@code null}.
-     *
      * @since 2.8.0
      */
     public static boolean isFileNewer(final File file, final ChronoLocalDateTime<?> chronoLocalDateTime) {
@@ -1603,7 +1601,6 @@ public class FileUtils {
      * @return true if the {@link File} exists and has been modified after the given
      * {@link ChronoLocalDateTime} at the given {@link ZoneId}.
      * @throws NullPointerException if the file, local date time or zone ID is {@code null}.
-     *
      * @since 2.8.0
      */
     public static boolean isFileNewer(final File file, final ChronoLocalDateTime<?> chronoLocalDateTime, final ZoneId zoneId) {
@@ -1620,7 +1617,6 @@ public class FileUtils {
      * @return true if the {@link File} exists and has been modified after the given
      * {@link ChronoZonedDateTime}.
      * @throws NullPointerException if the file or zoned date time is {@code null}.
-     *
      * @since 2.8.0
      */
     public static boolean isFileNewer(final File file, final ChronoZonedDateTime<?> chronoZonedDateTime) {
@@ -1741,7 +1737,6 @@ public class FileUtils {
      * given {@link ChronoLocalDate} at the specified time.
      * @throws NullPointerException if the file, local date or local time is {@code null}.
      * @see ZoneId#systemDefault()
-     *
      * @since 2.8.0
      */
     public static boolean isFileOlder(final File file, final ChronoLocalDate chronoLocalDate, final LocalTime localTime) {
@@ -1765,7 +1760,6 @@ public class FileUtils {
      * {@link ChronoLocalDateTime} at the system-default time zone.
      * @throws NullPointerException if the file or local date time is {@code null}.
      * @see ZoneId#systemDefault()
-     *
      * @since 2.8.0
      */
     public static boolean isFileOlder(final File file, final ChronoLocalDateTime<?> chronoLocalDateTime) {
@@ -1782,7 +1776,6 @@ public class FileUtils {
      * @return true if the {@link File} exists and has been modified before the given
      * {@link ChronoLocalDateTime} at the given {@link ZoneId}.
      * @throws NullPointerException if the file, local date time or zone ID is {@code null}.
-     *
      * @since 2.8.0
      */
     public static boolean isFileOlder(final File file, final ChronoLocalDateTime<?> chronoLocalDateTime, final ZoneId zoneId) {
@@ -1799,7 +1792,6 @@ public class FileUtils {
      * @return true if the {@link File} exists and has been modified before the given
      * {@link ChronoZonedDateTime}.
      * @throws NullPointerException if the file or zoned date time is {@code null}.
-     *
      * @since 2.8.0
      */
     public static boolean isFileOlder(final File file, final ChronoZonedDateTime<?> chronoZonedDateTime) {
@@ -2863,7 +2855,6 @@ public class FileUtils {
      * @throws NullPointerException     if the file is {@code null}.
      * @throws IllegalArgumentException if the file does not exist.
      * @throws UncheckedIOException if an IO error occurs.
-     *
      * @since 2.0
      */
     public static long sizeOf(final File file) {
@@ -2887,7 +2878,6 @@ public class FileUtils {
      * @throws NullPointerException     if the file is {@code null}.
      * @throws IllegalArgumentException if the file does not exist.
      * @throws UncheckedIOException if an IO error occurs.
-     *
      * @since 2.4
      */
     public static BigInteger sizeOfAsBigInteger(final File file) {
@@ -3156,8 +3146,6 @@ public class FileUtils {
         write(file, data, charset, false);
     }
 
-    // Private method, must be invoked will a directory parameter
-
     /**
      * Writes a CharSequence to a file creating the file if it does not exist.
      *
@@ -3301,7 +3289,6 @@ public class FileUtils {
     public static void writeLines(final File file, final Collection<?> lines, final boolean append) throws IOException {
         writeLines(file, null, lines, null, append);
     }
-
 
     /**
      * Writes the {@code toString()} value of each item in a collection to
