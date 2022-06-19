@@ -51,7 +51,7 @@ public class AccumulatorPathVisitorTest {
     }
 
     @TempDir
-    Path tempDirFile;
+    Path tempDirPath;
 
     /**
      * Tests an empty folder.
@@ -61,7 +61,7 @@ public class AccumulatorPathVisitorTest {
     public void testEmptyFolder(final Supplier<AccumulatorPathVisitor> supplier) throws IOException {
         final AccumulatorPathVisitor accPathVisitor = supplier.get();
         final PathVisitorFileFilter countingFileFilter = new PathVisitorFileFilter(accPathVisitor);
-        Files.walkFileTree(tempDirFile, new AndFileFilter(countingFileFilter, DirectoryFileFilter.INSTANCE, EmptyFileFilter.EMPTY));
+        Files.walkFileTree(tempDirPath, new AndFileFilter(countingFileFilter, DirectoryFileFilter.INSTANCE, EmptyFileFilter.EMPTY));
         assertCounts(1, 0, 0, accPathVisitor.getPathCounters());
         assertEquals(1, accPathVisitor.getDirList().size());
         assertTrue(accPathVisitor.getFileList().isEmpty());
