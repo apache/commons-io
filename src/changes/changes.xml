@@ -180,6 +180,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-762" dev="ggregory" type="fix" due-to="Leonidas Chiron, Gary Gregory">
         FileSystem.WINDOWS.isReservedFileName doesn't check for file extension.
       </action>
+      <action issue="IO-772" dev="ggregory" type="fix" due-to="Dan Ziemba, Gary Gregory">
+        Confusing Javadoc on IOUtils#resourceToURL() and other resource* methods.
+      </action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">
         Add GitHub coverage.yml.

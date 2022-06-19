@@ -2082,16 +2082,15 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of a classpath resource as a byte array.
+     * Gets the contents of a resource as a byte array.
      * <p>
-     * It is expected the given {@code name} to be absolute. The
-     * behavior is not well-defined otherwise.
+     * Delegates to {@link #resourceToByteArray(String, ClassLoader) resourceToByteArray(String, null)}.
      * </p>
      *
-     * @param name name of the desired resource
+     * @param name The resource name.
      * @return the requested byte array
-     * @throws IOException if an I/O error occurs.
-     *
+     * @throws IOException if an I/O error occurs or the resource is not found.
+     * @see #resourceToByteArray(String, ClassLoader)
      * @since 2.6
      */
     public static byte[] resourceToByteArray(final String name) throws IOException {
@@ -2099,17 +2098,16 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of a classpath resource as a byte array.
+     * Gets the contents of a resource as a byte array.
      * <p>
-     * It is expected the given {@code name} to be absolute. The
-     * behavior is not well-defined otherwise.
+     * Delegates to {@link #resourceToURL(String, ClassLoader)}.
      * </p>
      *
-     * @param name name of the desired resource
+     * @param name The resource name.
      * @param classLoader the class loader that the resolution of the resource is delegated to
      * @return the requested byte array
-     * @throws IOException if an I/O error occurs.
-     *
+     * @throws IOException if an I/O error occurs or the resource is not found.
+     * @see #resourceToURL(String, ClassLoader)
      * @since 2.6
      */
     public static byte[] resourceToByteArray(final String name, final ClassLoader classLoader) throws IOException {
@@ -2117,18 +2115,16 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of a classpath resource as a String using the
-     * specified character encoding.
+     * Gets the contents of a resource as a String using the specified character encoding.
      * <p>
-     * It is expected the given {@code name} to be absolute. The
-     * behavior is not well-defined otherwise.
+     * Delegates to {@link #resourceToString(String, Charset, ClassLoader) resourceToString(String, Charset, null)}.
      * </p>
      *
-     * @param name     name of the desired resource
+     * @param name The resource name.
      * @param charset the charset to use, null means platform default
      * @return the requested String
-     * @throws IOException if an I/O error occurs.
-     *
+     * @throws IOException if an I/O error occurs or the resource is not found.
+     * @see #resourceToString(String, Charset, ClassLoader)
      * @since 2.6
      */
     public static String resourceToString(final String name, final Charset charset) throws IOException {
@@ -2136,19 +2132,17 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of a classpath resource as a String using the
-     * specified character encoding.
+     * Gets the contents of a resource as a String using the specified character encoding.
      * <p>
-     * It is expected the given {@code name} to be absolute. The
-     * behavior is not well-defined otherwise.
+     * Delegates to {@link #resourceToURL(String, ClassLoader)}.
      * </p>
      *
-     * @param name     name of the desired resource
-     * @param charset the charset to use, null means platform default
+     * @param name The resource name.
+     * @param charset the Charset to use, null means platform default
      * @param classLoader the class loader that the resolution of the resource is delegated to
      * @return the requested String
      * @throws IOException if an I/O error occurs.
-     *
+     * @see #resourceToURL(String, ClassLoader)
      * @since 2.6
      */
     public static String resourceToString(final String name, final Charset charset, final ClassLoader classLoader) throws IOException {
@@ -2156,16 +2150,14 @@ public class IOUtils {
     }
 
     /**
-     * Gets a URL pointing to the given classpath resource.
+     * Gets a URL pointing to the given resource.
      * <p>
-     * It is expected the given {@code name} to be absolute. The
-     * behavior is not well-defined otherwise.
+     * Delegates to {@link #resourceToURL(String, ClassLoader) resourceToURL(String, null)}.
      * </p>
      *
-     * @param name name of the desired resource
-     * @return the requested URL
-     * @throws IOException if an I/O error occurs.
-     *
+     * @param name The resource name.
+     * @return A URL object for reading the resource.
+     * @throws IOException if the resource is not found.
      * @since 2.6
      */
     public static URL resourceToURL(final String name) throws IOException {
@@ -2173,17 +2165,16 @@ public class IOUtils {
     }
 
     /**
-     * Gets a URL pointing to the given classpath resource.
+     * Gets a URL pointing to the given resource.
      * <p>
-     * It is expected the given {@code name} to be absolute. The
-     * behavior is not well-defined otherwise.
+     * If the {@code classLoader} is not null, call {@link ClassLoader#getResource(String)}, otherwise call
+     * {@link Class#getResource(String) IOUtils.class.getResource(name)}.
      * </p>
      *
-     * @param name        name of the desired resource
-     * @param classLoader the class loader that the resolution of the resource is delegated to
-     * @return the requested URL
-     * @throws IOException if an I/O error occurs.
-     *
+     * @param name The resource name.
+     * @param classLoader Delegate to this class loader if not null
+     * @return A URL object for reading the resource.
+     * @throws IOException if the resource is not found.
      * @since 2.6
      */
     public static URL resourceToURL(final String name, final ClassLoader classLoader) throws IOException {
