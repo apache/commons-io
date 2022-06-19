@@ -83,8 +83,8 @@ import org.apache.commons.io.output.UnsynchronizedByteArrayOutputStream;
  * </p>
  * <p>
  * All the methods in this class that read a stream are buffered internally.
- * This means that there is no cause to use a {@code BufferedInputStream}
- * or {@code BufferedReader}. The default buffer size of 4K has been shown
+ * This means that there is no cause to use a {@link BufferedInputStream}
+ * or {@link BufferedReader}. The default buffer size of 4K has been shown
  * to be efficient in tests.
  * </p>
  * <p>
@@ -428,7 +428,7 @@ public class IOUtils {
     }
 
     /**
-     * Closes a {@code Closeable} unconditionally.
+     * Closes a {@link Closeable} unconditionally.
      *
      * <p>
      * Equivalent to {@link Closeable#close()}, except any exceptions will be ignored. This is typically used in
@@ -473,7 +473,7 @@ public class IOUtils {
     }
 
     /**
-     * Closes a {@code Closeable} unconditionally.
+     * Closes a {@link Closeable} unconditionally.
      * <p>
      * Equivalent to {@link Closeable#close()}, except any exceptions will be ignored.
      * <p>
@@ -544,7 +544,7 @@ public class IOUtils {
     }
 
     /**
-     * Closes an {@code InputStream} unconditionally.
+     * Closes an {@link InputStream} unconditionally.
      * <p>
      * Equivalent to {@link InputStream#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
@@ -577,7 +577,7 @@ public class IOUtils {
     }
 
     /**
-     * Closes an {@code OutputStream} unconditionally.
+     * Closes an {@link OutputStream} unconditionally.
      * <p>
      * Equivalent to {@link OutputStream#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
@@ -611,7 +611,7 @@ public class IOUtils {
     }
 
     /**
-     * Closes an {@code Reader} unconditionally.
+     * Closes an {@link Reader} unconditionally.
      * <p>
      * Equivalent to {@link Reader#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
@@ -644,7 +644,7 @@ public class IOUtils {
     }
 
     /**
-     * Closes a {@code Selector} unconditionally.
+     * Closes a {@link Selector} unconditionally.
      * <p>
      * Equivalent to {@link Selector#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
@@ -677,7 +677,7 @@ public class IOUtils {
     }
 
     /**
-     * Closes a {@code ServerSocket} unconditionally.
+     * Closes a {@link ServerSocket} unconditionally.
      * <p>
      * Equivalent to {@link ServerSocket#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
@@ -710,7 +710,7 @@ public class IOUtils {
     }
 
     /**
-     * Closes a {@code Socket} unconditionally.
+     * Closes a {@link Socket} unconditionally.
      * <p>
      * Equivalent to {@link Socket#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
@@ -743,7 +743,7 @@ public class IOUtils {
     }
 
     /**
-     * Closes an {@code Writer} unconditionally.
+     * Closes an {@link Writer} unconditionally.
      * <p>
      * Equivalent to {@link Writer#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
@@ -775,12 +775,12 @@ public class IOUtils {
     }
 
     /**
-     * Consumes bytes from a {@code InputStream} and ignores them.
+     * Consumes bytes from a {@link InputStream} and ignores them.
      * <p>
      * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
      * </p>
      *
-     * @param input the {@code InputStream} to read.
+     * @param input the {@link InputStream} to read.
      * @return the number of bytes copied. or {@code 0} if {@code input is null}.
      * @throws NullPointerException if the InputStream is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
@@ -797,7 +797,7 @@ public class IOUtils {
      * not.
      * <p>
      * This method buffers the input internally using
-     * {@code BufferedInputStream} if they are not already buffered.
+     * {@link BufferedInputStream} if they are not already buffered.
      * </p>
      *
      * @param input1 the first stream
@@ -857,7 +857,7 @@ public class IOUtils {
     /**
      * Compares the contents of two Readers to determine if they are equal or not.
      * <p>
-     * This method buffers the input internally using {@code BufferedReader} if they are not already buffered.
+     * This method buffers the input internally using {@link BufferedReader} if they are not already buffered.
      * </p>
      *
      * @param input1 the first reader
@@ -917,7 +917,7 @@ public class IOUtils {
      * not, ignoring EOL characters.
      * <p>
      * This method buffers the input internally using
-     * {@code BufferedReader} if they are not already buffered.
+     * {@link BufferedReader} if they are not already buffered.
      * </p>
      *
      * @param reader1 the first reader
@@ -949,18 +949,18 @@ public class IOUtils {
     }
 
     /**
-     * Copies bytes from an {@code InputStream} to an {@code OutputStream}.
+     * Copies bytes from an {@link InputStream} to an {@link OutputStream}.
      * <p>
-     * This method buffers the input internally, so there is no need to use a {@code BufferedInputStream}.
+     * This method buffers the input internally, so there is no need to use a {@link BufferedInputStream}.
      * </p>
      * <p>
      * Large streams (over 2GB) will return a bytes copied value of {@code -1} after the copy has completed since
      * the correct number of bytes cannot be returned as an int. For large streams use the
-     * {@code copyLarge(InputStream, OutputStream)} method.
+     * {@link #copyLarge(InputStream, OutputStream)} method.
      * </p>
      *
-     * @param inputStream the {@code InputStream} to read.
-     * @param outputStream the {@code OutputStream} to write.
+     * @param inputStream the {@link InputStream} to read.
+     * @param outputStream the {@link OutputStream} to write.
      * @return the number of bytes copied, or -1 if greater than {@link Integer#MAX_VALUE}.
      * @throws NullPointerException if the InputStream is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
@@ -973,14 +973,14 @@ public class IOUtils {
     }
 
     /**
-     * Copies bytes from an {@code InputStream} to an {@code OutputStream} using an internal buffer of the
+     * Copies bytes from an {@link InputStream} to an {@link OutputStream} using an internal buffer of the
      * given size.
      * <p>
-     * This method buffers the input internally, so there is no need to use a {@code BufferedInputStream}.
+     * This method buffers the input internally, so there is no need to use a {@link BufferedInputStream}.
      * </p>
      *
-     * @param inputStream the {@code InputStream} to read.
-     * @param outputStream the {@code OutputStream} to write to
+     * @param inputStream the {@link InputStream} to read.
+     * @param outputStream the {@link OutputStream} to write to
      * @param bufferSize the bufferSize used to copy from the input to the output
      * @return the number of bytes copied.
      * @throws NullPointerException if the InputStream is {@code null}.
@@ -994,18 +994,18 @@ public class IOUtils {
     }
 
     /**
-     * Copies bytes from an {@code InputStream} to chars on a
-     * {@code Writer} using the default character encoding of the platform.
+     * Copies bytes from an {@link InputStream} to chars on a
+     * {@link Writer} using the default character encoding of the platform.
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedInputStream}.
+     * {@link BufferedInputStream}.
      * </p>
      * <p>
      * This method uses {@link InputStreamReader}.
      * </p>
      *
-     * @param input the {@code InputStream} to read from
-     * @param writer the {@code Writer} to write to
+     * @param input the {@link InputStream} to read from
+     * @param writer the {@link Writer} to write to
      * @throws NullPointerException if the input or output is null
      * @throws IOException          if an I/O error occurs
      * @since 1.1
@@ -1018,18 +1018,18 @@ public class IOUtils {
     }
 
     /**
-     * Copies bytes from an {@code InputStream} to chars on a
-     * {@code Writer} using the specified character encoding.
+     * Copies bytes from an {@link InputStream} to chars on a
+     * {@link Writer} using the specified character encoding.
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedInputStream}.
+     * {@link BufferedInputStream}.
      * </p>
      * <p>
      * This method uses {@link InputStreamReader}.
      * </p>
      *
-     * @param input the {@code InputStream} to read from
-     * @param writer the {@code Writer} to write to
+     * @param input the {@link InputStream} to read from
+     * @param writer the {@link Writer} to write to
      * @param inputCharset the charset to use for the input stream, null means platform default
      * @throws NullPointerException if the input or output is null
      * @throws IOException          if an I/O error occurs
@@ -1042,11 +1042,11 @@ public class IOUtils {
     }
 
     /**
-     * Copies bytes from an {@code InputStream} to chars on a
-     * {@code Writer} using the specified character encoding.
+     * Copies bytes from an {@link InputStream} to chars on a
+     * {@link Writer} using the specified character encoding.
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedInputStream}.
+     * {@link BufferedInputStream}.
      * </p>
      * <p>
      * Character encoding names can be found at
@@ -1056,8 +1056,8 @@ public class IOUtils {
      * This method uses {@link InputStreamReader}.
      * </p>
      *
-     * @param input the {@code InputStream} to read from
-     * @param writer the {@code Writer} to write to
+     * @param input the {@link InputStream} to read from
+     * @param writer the {@link Writer} to write to
      * @param inputCharsetName the name of the requested charset for the InputStream, null means platform default
      * @throws NullPointerException                         if the input or output is null
      * @throws IOException                                  if an I/O error occurs
@@ -1072,7 +1072,7 @@ public class IOUtils {
     }
 
     /**
-     * Copies bytes from a {@link java.io.ByteArrayOutputStream} to a {@code QueueInputStream}.
+     * Copies bytes from a {@link java.io.ByteArrayOutputStream} to a {@link QueueInputStream}.
      * <p>
      * Unlike using JDK {@link java.io.PipedInputStream} and {@link java.io.PipedOutputStream} for this, this
      * solution works safely in a single thread environment.
@@ -1089,7 +1089,7 @@ public class IOUtils {
      * </pre>
      *
      * @param outputStream the {@link java.io.ByteArrayOutputStream} to read.
-     * @return the {@code QueueInputStream} filled with the content of the outputStream.
+     * @return the {@link QueueInputStream} filled with the content of the outputStream.
      * @throws NullPointerException if the {@link java.io.ByteArrayOutputStream} is {@code null}.
      * @throws IOException if an I/O error occurs.
      * @since 2.12
@@ -1103,20 +1103,20 @@ public class IOUtils {
     }
 
     /**
-     * Copies chars from a {@code Reader} to a {@code Appendable}.
+     * Copies chars from a {@link Reader} to a {@link Appendable}.
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedReader}.
+     * {@link BufferedReader}.
      * </p>
      * <p>
      * Large streams (over 2GB) will return a chars copied value of
      * {@code -1} after the copy has completed since the correct
      * number of chars cannot be returned as an int. For large streams
-     * use the {@code copyLarge(Reader, Writer)} method.
+     * use the {@link #copyLarge(Reader, Writer)} method.
      * </p>
      *
-     * @param reader the {@code Reader} to read from
-     * @param output the {@code Appendable} to write to
+     * @param reader the {@link Reader} to read from
+     * @param output the {@link Appendable} to write to
      * @return the number of characters copied, or -1 if &gt; Integer.MAX_VALUE
      * @throws NullPointerException if the input or output is null
      * @throws IOException          if an I/O error occurs
@@ -1127,14 +1127,14 @@ public class IOUtils {
     }
 
     /**
-     * Copies chars from a {@code Reader} to an {@code Appendable}.
+     * Copies chars from a {@link Reader} to an {@link Appendable}.
      * <p>
      * This method uses the provided buffer, so there is no need to use a
-     * {@code BufferedReader}.
+     * {@link BufferedReader}.
      * </p>
      *
-     * @param reader the {@code Reader} to read from
-     * @param output the {@code Appendable} to write to
+     * @param reader the {@link Reader} to read from
+     * @param output the {@link Appendable} to write to
      * @param buffer the buffer to be used for the copy
      * @return the number of characters copied
      * @throws NullPointerException if the input or output is null
@@ -1153,12 +1153,12 @@ public class IOUtils {
     }
 
     /**
-     * Copies chars from a {@code Reader} to bytes on an
-     * {@code OutputStream} using the default character encoding of the
+     * Copies chars from a {@link Reader} to bytes on an
+     * {@link OutputStream} using the default character encoding of the
      * platform, and calling flush.
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedReader}.
+     * {@link BufferedReader}.
      * </p>
      * <p>
      * Due to the implementation of OutputStreamWriter, this method performs a
@@ -1168,8 +1168,8 @@ public class IOUtils {
      * This method uses {@link OutputStreamWriter}.
      * </p>
      *
-     * @param reader the {@code Reader} to read from
-     * @param output the {@code OutputStream} to write to
+     * @param reader the {@link Reader} to read from
+     * @param output the {@link OutputStream} to write to
      * @throws NullPointerException if the input or output is null
      * @throws IOException          if an I/O error occurs
      * @since 1.1
@@ -1182,12 +1182,12 @@ public class IOUtils {
     }
 
     /**
-     * Copies chars from a {@code Reader} to bytes on an
-     * {@code OutputStream} using the specified character encoding, and
+     * Copies chars from a {@link Reader} to bytes on an
+     * {@link OutputStream} using the specified character encoding, and
      * calling flush.
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedReader}.
+     * {@link BufferedReader}.
      * </p>
      * <p>
      * Due to the implementation of OutputStreamWriter, this method performs a
@@ -1197,8 +1197,8 @@ public class IOUtils {
      * This method uses {@link OutputStreamWriter}.
      * </p>
      *
-     * @param reader the {@code Reader} to read from
-     * @param output the {@code OutputStream} to write to
+     * @param reader the {@link Reader} to read from
+     * @param output the {@link OutputStream} to write to
      * @param outputCharset the charset to use for the OutputStream, null means platform default
      * @throws NullPointerException if the input or output is null
      * @throws IOException          if an I/O error occurs
@@ -1214,12 +1214,12 @@ public class IOUtils {
     }
 
     /**
-     * Copies chars from a {@code Reader} to bytes on an
-     * {@code OutputStream} using the specified character encoding, and
+     * Copies chars from a {@link Reader} to bytes on an
+     * {@link OutputStream} using the specified character encoding, and
      * calling flush.
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedReader}.
+     * {@link BufferedReader}.
      * </p>
      * <p>
      * Character encoding names can be found at
@@ -1233,8 +1233,8 @@ public class IOUtils {
      * This method uses {@link OutputStreamWriter}.
      * </p>
      *
-     * @param reader the {@code Reader} to read from
-     * @param output the {@code OutputStream} to write to
+     * @param reader the {@link Reader} to read from
+     * @param output the {@link OutputStream} to write to
      * @param outputCharsetName the name of the requested charset for the OutputStream, null means platform default
      * @throws NullPointerException                         if the input or output is null
      * @throws IOException                                  if an I/O error occurs
@@ -1249,20 +1249,20 @@ public class IOUtils {
     }
 
     /**
-     * Copies chars from a {@code Reader} to a {@code Writer}.
+     * Copies chars from a {@link Reader} to a {@link Writer}.
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedReader}.
+     * {@link BufferedReader}.
      * </p>
      * <p>
      * Large streams (over 2GB) will return a chars copied value of
      * {@code -1} after the copy has completed since the correct
      * number of chars cannot be returned as an int. For large streams
-     * use the {@code copyLarge(Reader, Writer)} method.
+     * use the {@link #copyLarge(Reader, Writer)} method.
      * </p>
      *
-     * @param reader the {@code Reader} to read.
-     * @param writer the {@code Writer} to write.
+     * @param reader the {@link Reader} to read.
+     * @param writer the {@link Writer} to write.
      * @return the number of characters copied, or -1 if &gt; Integer.MAX_VALUE
      * @throws NullPointerException if the input or output is null
      * @throws IOException          if an I/O error occurs
@@ -1277,16 +1277,16 @@ public class IOUtils {
     }
 
     /**
-     * Copies bytes from a {@code URL} to an {@code OutputStream}.
+     * Copies bytes from a {@link URL} to an {@link OutputStream}.
      * <p>
-     * This method buffers the input internally, so there is no need to use a {@code BufferedInputStream}.
+     * This method buffers the input internally, so there is no need to use a {@link BufferedInputStream}.
      * </p>
      * <p>
      * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
      * </p>
      *
-     * @param url the {@code URL} to read.
-     * @param file the {@code OutputStream} to write.
+     * @param url the {@link URL} to read.
+     * @param file the {@link OutputStream} to write.
      * @return the number of bytes copied.
      * @throws NullPointerException if the URL is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
@@ -1300,16 +1300,16 @@ public class IOUtils {
     }
 
     /**
-     * Copies bytes from a {@code URL} to an {@code OutputStream}.
+     * Copies bytes from a {@link URL} to an {@link OutputStream}.
      * <p>
-     * This method buffers the input internally, so there is no need to use a {@code BufferedInputStream}.
+     * This method buffers the input internally, so there is no need to use a {@link BufferedInputStream}.
      * </p>
      * <p>
      * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
      * </p>
      *
-     * @param url the {@code URL} to read.
-     * @param outputStream the {@code OutputStream} to write.
+     * @param url the {@link URL} to read.
+     * @param outputStream the {@link OutputStream} to write.
      * @return the number of bytes copied.
      * @throws NullPointerException if the URL is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
@@ -1323,18 +1323,18 @@ public class IOUtils {
     }
 
     /**
-     * Copies bytes from a large (over 2GB) {@code InputStream} to an
-     * {@code OutputStream}.
+     * Copies bytes from a large (over 2GB) {@link InputStream} to an
+     * {@link OutputStream}.
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedInputStream}.
+     * {@link BufferedInputStream}.
      * </p>
      * <p>
      * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
      * </p>
      *
-     * @param inputStream the {@code InputStream} to read.
-     * @param outputStream the {@code OutputStream} to write.
+     * @param inputStream the {@link InputStream} to read.
+     * @param outputStream the {@link OutputStream} to write.
      * @return the number of bytes copied.
      * @throws NullPointerException if the InputStream is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
@@ -1347,15 +1347,15 @@ public class IOUtils {
     }
 
     /**
-     * Copies bytes from a large (over 2GB) {@code InputStream} to an
-     * {@code OutputStream}.
+     * Copies bytes from a large (over 2GB) {@link InputStream} to an
+     * {@link OutputStream}.
      * <p>
      * This method uses the provided buffer, so there is no need to use a
-     * {@code BufferedInputStream}.
+     * {@link BufferedInputStream}.
      * </p>
      *
-     * @param inputStream the {@code InputStream} to read.
-     * @param outputStream the {@code OutputStream} to write.
+     * @param inputStream the {@link InputStream} to read.
+     * @param outputStream the {@link OutputStream} to write.
      * @param buffer the buffer to use for the copy
      * @return the number of bytes copied.
      * @throws NullPointerException if the InputStream is {@code null}.
@@ -1378,11 +1378,11 @@ public class IOUtils {
     }
 
     /**
-     * Copies some or all bytes from a large (over 2GB) {@code InputStream} to an
-     * {@code OutputStream}, optionally skipping input bytes.
+     * Copies some or all bytes from a large (over 2GB) {@link InputStream} to an
+     * {@link OutputStream}, optionally skipping input bytes.
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedInputStream}.
+     * {@link BufferedInputStream}.
      * </p>
      * <p>
      * Note that the implementation uses {@link #skip(InputStream, long)}.
@@ -1391,8 +1391,8 @@ public class IOUtils {
      * </p>
      * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
      *
-     * @param input the {@code InputStream} to read from
-     * @param output the {@code OutputStream} to write to
+     * @param input the {@link InputStream} to read from
+     * @param output the {@link OutputStream} to write to
      * @param inputOffset : number of bytes to skip from input before copying
      * -ve values are ignored
      * @param length : number of bytes to copy. -ve means all
@@ -1407,11 +1407,11 @@ public class IOUtils {
     }
 
     /**
-     * Copies some or all bytes from a large (over 2GB) {@code InputStream} to an
-     * {@code OutputStream}, optionally skipping input bytes.
+     * Copies some or all bytes from a large (over 2GB) {@link InputStream} to an
+     * {@link OutputStream}, optionally skipping input bytes.
      * <p>
      * This method uses the provided buffer, so there is no need to use a
-     * {@code BufferedInputStream}.
+     * {@link BufferedInputStream}.
      * </p>
      * <p>
      * Note that the implementation uses {@link #skip(InputStream, long)}.
@@ -1419,8 +1419,8 @@ public class IOUtils {
      * this is done to guarantee that the correct number of characters are skipped.
      * </p>
      *
-     * @param input the {@code InputStream} to read from
-     * @param output the {@code OutputStream} to write to
+     * @param input the {@link InputStream} to read from
+     * @param output the {@link OutputStream} to write to
      * @param inputOffset : number of bytes to skip from input before copying
      * -ve values are ignored
      * @param length : number of bytes to copy. -ve means all
@@ -1457,17 +1457,17 @@ public class IOUtils {
     }
 
     /**
-     * Copies chars from a large (over 2GB) {@code Reader} to a {@code Writer}.
+     * Copies chars from a large (over 2GB) {@link Reader} to a {@link Writer}.
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedReader}.
+     * {@link BufferedReader}.
      * </p>
      * <p>
      * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
      * </p>
      *
-     * @param reader the {@code Reader} to source.
-     * @param writer the {@code Writer} to target.
+     * @param reader the {@link Reader} to source.
+     * @param writer the {@link Writer} to target.
      * @return the number of characters copied
      * @throws NullPointerException if the input or output is null
      * @throws IOException          if an I/O error occurs
@@ -1478,14 +1478,14 @@ public class IOUtils {
     }
 
     /**
-     * Copies chars from a large (over 2GB) {@code Reader} to a {@code Writer}.
+     * Copies chars from a large (over 2GB) {@link Reader} to a {@link Writer}.
      * <p>
      * This method uses the provided buffer, so there is no need to use a
-     * {@code BufferedReader}.
+     * {@link BufferedReader}.
      * </p>
      *
-     * @param reader the {@code Reader} to source.
-     * @param writer the {@code Writer} to target.
+     * @param reader the {@link Reader} to source.
+     * @param writer the {@link Writer} to target.
      * @param buffer the buffer to be used for the copy
      * @return the number of characters copied
      * @throws NullPointerException if the input or output is null
@@ -1503,18 +1503,18 @@ public class IOUtils {
     }
 
     /**
-     * Copies some or all chars from a large (over 2GB) {@code InputStream} to an
-     * {@code OutputStream}, optionally skipping input chars.
+     * Copies some or all chars from a large (over 2GB) {@link InputStream} to an
+     * {@link OutputStream}, optionally skipping input chars.
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedReader}.
+     * {@link BufferedReader}.
      * </p>
      * <p>
      * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
      * </p>
      *
-     * @param reader the {@code Reader} to read from
-     * @param writer the {@code Writer} to write to
+     * @param reader the {@link Reader} to read from
+     * @param writer the {@link Writer} to write to
      * @param inputOffset : number of chars to skip from input before copying
      * -ve values are ignored
      * @param length : number of chars to copy. -ve means all
@@ -1529,15 +1529,15 @@ public class IOUtils {
     }
 
     /**
-     * Copies some or all chars from a large (over 2GB) {@code InputStream} to an
-     * {@code OutputStream}, optionally skipping input chars.
+     * Copies some or all chars from a large (over 2GB) {@link InputStream} to an
+     * {@link OutputStream}, optionally skipping input chars.
      * <p>
      * This method uses the provided buffer, so there is no need to use a
-     * {@code BufferedReader}.
+     * {@link BufferedReader}.
      * </p>
      *
-     * @param reader the {@code Reader} to read from
-     * @param writer the {@code Writer} to write to
+     * @param reader the {@link Reader} to read from
+     * @param writer the {@link Writer} to write to
      * @param inputOffset : number of chars to skip from input before copying
      * -ve values are ignored
      * @param length : number of chars to copy. -ve means all
@@ -1636,11 +1636,11 @@ public class IOUtils {
     }
 
     /**
-     * Returns an Iterator for the lines in an {@code InputStream}, using
+     * Returns an Iterator for the lines in an {@link InputStream}, using
      * the character encoding specified (or default encoding if null).
      * <p>
-     * {@code LineIterator} holds a reference to the open
-     * {@code InputStream} specified here. When you have finished with
+     * {@link LineIterator} holds a reference to the open
+     * {@link InputStream} specified here. When you have finished with
      * the iterator you should close the stream to free internal resources.
      * This can be done by using a try-with-resources block, closing the stream directly, or by calling
      * {@link LineIterator#close()}.
@@ -1660,7 +1660,7 @@ public class IOUtils {
      * }
      * </pre>
      *
-     * @param input the {@code InputStream} to read from, not null
+     * @param input the {@link InputStream} to read from, not null
      * @param charset the charset to use, null means platform default
      * @return an Iterator of the lines in the reader, never null
      * @throws IllegalArgumentException if the input is null
@@ -1671,11 +1671,11 @@ public class IOUtils {
     }
 
     /**
-     * Returns an Iterator for the lines in an {@code InputStream}, using
+     * Returns an Iterator for the lines in an {@link InputStream}, using
      * the character encoding specified (or default encoding if null).
      * <p>
-     * {@code LineIterator} holds a reference to the open
-     * {@code InputStream} specified here. When you have finished with
+     * {@link LineIterator} holds a reference to the open
+     * {@link InputStream} specified here. When you have finished with
      * the iterator you should close the stream to free internal resources.
      * This can be done by using a try-with-resources block, closing the stream directly, or by calling
      * {@link LineIterator#close()}.
@@ -1695,7 +1695,7 @@ public class IOUtils {
      * }
      * </pre>
      *
-     * @param input the {@code InputStream} to read from, not null
+     * @param input the {@link InputStream} to read from, not null
      * @param charsetName the encoding to use, null means platform default
      * @return an Iterator of the lines in the reader, never null
      * @throws IllegalArgumentException                     if the input is null
@@ -1709,10 +1709,10 @@ public class IOUtils {
     }
 
     /**
-     * Returns an Iterator for the lines in a {@code Reader}.
+     * Returns an Iterator for the lines in a {@link Reader}.
      * <p>
-     * {@code LineIterator} holds a reference to the open
-     * {@code Reader} specified here. When you have finished with the
+     * {@link LineIterator} holds a reference to the open
+     * {@link Reader} specified here. When you have finished with the
      * iterator you should close the reader to free internal resources.
      * This can be done by using a try-with-resources block, closing the reader directly, or by calling
      * {@link LineIterator#close()}.
@@ -1732,7 +1732,7 @@ public class IOUtils {
      * }
      * </pre>
      *
-     * @param reader the {@code Reader} to read from, not null
+     * @param reader the {@link Reader} to read from, not null
      * @return an Iterator of the lines in the reader, never null
      * @throws IllegalArgumentException if the reader is null
      * @since 1.2
@@ -1991,14 +1991,14 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of an {@code InputStream} as a list of Strings,
+     * Gets the contents of an {@link InputStream} as a list of Strings,
      * one entry per line, using the default character encoding of the platform.
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedInputStream}.
+     * {@link BufferedInputStream}.
      * </p>
      *
-     * @param input the {@code InputStream} to read from, not null
+     * @param input the {@link InputStream} to read from, not null
      * @return the list of Strings, never null
      * @throws NullPointerException if the input is null
      * @throws IOException          if an I/O error occurs
@@ -2011,14 +2011,14 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of an {@code InputStream} as a list of Strings,
+     * Gets the contents of an {@link InputStream} as a list of Strings,
      * one entry per line, using the specified character encoding.
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedInputStream}.
+     * {@link BufferedInputStream}.
      * </p>
      *
-     * @param input the {@code InputStream} to read from, not null
+     * @param input the {@link InputStream} to read from, not null
      * @param charset the charset to use, null means platform default
      * @return the list of Strings, never null
      * @throws NullPointerException if the input is null
@@ -2031,7 +2031,7 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of an {@code InputStream} as a list of Strings,
+     * Gets the contents of an {@link InputStream} as a list of Strings,
      * one entry per line, using the specified character encoding.
      * <p>
      * Character encoding names can be found at
@@ -2039,10 +2039,10 @@ public class IOUtils {
      * </p>
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedInputStream}.
+     * {@link BufferedInputStream}.
      * </p>
      *
-     * @param input the {@code InputStream} to read from, not null
+     * @param input the {@link InputStream} to read from, not null
      * @param charsetName the name of the requested charset, null means platform default
      * @return the list of Strings, never null
      * @throws NullPointerException                         if the input is null
@@ -2057,14 +2057,14 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of a {@code Reader} as a list of Strings,
+     * Gets the contents of a {@link Reader} as a list of Strings,
      * one entry per line.
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedReader}.
+     * {@link BufferedReader}.
      * </p>
      *
-     * @param reader the {@code Reader} to read from, not null
+     * @param reader the {@link Reader} to read from, not null
      * @return the list of Strings, never null
      * @throws NullPointerException if the input is null
      * @throws IOException          if an I/O error occurs
@@ -2386,7 +2386,7 @@ public class IOUtils {
     }
 
     /**
-     * Fetches entire contents of an {@code InputStream} and represent
+     * Fetches entire contents of an {@link InputStream} and represent
      * same data as result InputStream.
      * <p>
      * This method is useful where,
@@ -2401,7 +2401,7 @@ public class IOUtils {
      * It can be used in favor of {@link #toByteArray(InputStream)}, since it
      * avoids unnecessary allocation and copy of byte[].<br>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedInputStream}.
+     * {@link BufferedInputStream}.
      * </p>
      *
      * @param input Stream to be fully buffered.
@@ -2414,7 +2414,7 @@ public class IOUtils {
     }
 
     /**
-     * Fetches entire contents of an {@code InputStream} and represent
+     * Fetches entire contents of an {@link InputStream} and represent
      * same data as result InputStream.
      * <p>
      * This method is useful where,
@@ -2429,7 +2429,7 @@ public class IOUtils {
      * It can be used in favor of {@link #toByteArray(InputStream)}, since it
      * avoids unnecessary allocation and copy of byte[].<br>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedInputStream}.
+     * {@link BufferedInputStream}.
      * </p>
      *
      * @param input Stream to be fully buffered.
@@ -2472,13 +2472,13 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of an {@code InputStream} as a {@code byte[]}.
+     * Gets the contents of an {@link InputStream} as a {@code byte[]}.
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedInputStream}.
+     * {@link BufferedInputStream}.
      * </p>
      *
-     * @param inputStream the {@code InputStream} to read.
+     * @param inputStream the {@link InputStream} to read.
      * @return the requested byte array.
      * @throws NullPointerException if the InputStream is {@code null}.
      * @throws IOException if an I/O error occurs or reading more than {@link Integer#MAX_VALUE} occurs.
@@ -2495,13 +2495,13 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of an {@code InputStream} as a {@code byte[]}. Use this method instead of
-     * {@code toByteArray(InputStream)} when {@code InputStream} size is known.
+     * Gets the contents of an {@link InputStream} as a {@code byte[]}. Use this method instead of
+     * {@link #toByteArray(InputStream)} when {@link InputStream} size is known.
      *
-     * @param input the {@code InputStream} to read.
-     * @param size the size of {@code InputStream} to read, where 0 &lt; {@code size} &lt;= length of input stream.
+     * @param input the {@link InputStream} to read.
+     * @param size the size of {@link InputStream} to read, where 0 &lt; {@code size} &lt;= length of input stream.
      * @return byte [] of length {@code size}.
-     * @throws IOException if an I/O error occurs or {@code InputStream} length is smaller than parameter {@code size}.
+     * @throws IOException if an I/O error occurs or {@link InputStream} length is smaller than parameter {@code size}.
      * @throws IllegalArgumentException if {@code size} is less than zero.
      * @since 2.1
      */
@@ -2531,17 +2531,17 @@ public class IOUtils {
     }
 
     /**
-     * Gets contents of an {@code InputStream} as a {@code byte[]}.
-     * Use this method instead of {@code toByteArray(InputStream)}
-     * when {@code InputStream} size is known.
+     * Gets contents of an {@link InputStream} as a {@code byte[]}.
+     * Use this method instead of {@link #toByteArray(InputStream)}
+     * when {@link InputStream} size is known.
      * <b>NOTE:</b> the method checks that the length can safely be cast to an int without truncation
      * before using {@link IOUtils#toByteArray(java.io.InputStream, int)} to read into the byte array.
      * (Arrays can have no more than Integer.MAX_VALUE entries anyway)
      *
-     * @param input the {@code InputStream} to read from
-     * @param size the size of {@code InputStream} to read, where 0 &lt; {@code size} &lt;= min(Integer.MAX_VALUE, length of input stream).
+     * @param input the {@link InputStream} to read from
+     * @param size the size of {@link InputStream} to read, where 0 &lt; {@code size} &lt;= min(Integer.MAX_VALUE, length of input stream).
      * @return byte [] the requested byte array, of length {@code size}
-     * @throws IOException              if an I/O error occurs or {@code InputStream} length is less than {@code size}
+     * @throws IOException              if an I/O error occurs or {@link InputStream} length is less than {@code size}
      * @throws IllegalArgumentException if size is less than zero or size is greater than Integer.MAX_VALUE
      * @see IOUtils#toByteArray(java.io.InputStream, int)
      * @since 2.1
@@ -2554,14 +2554,14 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of a {@code Reader} as a {@code byte[]}
+     * Gets the contents of a {@link Reader} as a {@code byte[]}
      * using the default character encoding of the platform.
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedReader}.
+     * {@link BufferedReader}.
      * </p>
      *
-     * @param reader the {@code Reader} to read from
+     * @param reader the {@link Reader} to read from
      * @return the requested byte array
      * @throws NullPointerException if the input is null
      * @throws IOException          if an I/O error occurs
@@ -2573,14 +2573,14 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of a {@code Reader} as a {@code byte[]}
+     * Gets the contents of a {@link Reader} as a {@code byte[]}
      * using the specified character encoding.
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedReader}.
+     * {@link BufferedReader}.
      * </p>
      *
-     * @param reader the {@code Reader} to read from
+     * @param reader the {@link Reader} to read from
      * @param charset the charset to use, null means platform default
      * @return the requested byte array
      * @throws NullPointerException if the input is null
@@ -2595,7 +2595,7 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of a {@code Reader} as a {@code byte[]}
+     * Gets the contents of a {@link Reader} as a {@code byte[]}
      * using the specified character encoding.
      * <p>
      * Character encoding names can be found at
@@ -2603,10 +2603,10 @@ public class IOUtils {
      * </p>
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedReader}.
+     * {@link BufferedReader}.
      * </p>
      *
-     * @param reader the {@code Reader} to read from
+     * @param reader the {@link Reader} to read from
      * @param charsetName the name of the requested charset, null means platform default
      * @return the requested byte array
      * @throws NullPointerException                         if the input is null
@@ -2621,13 +2621,13 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of a {@code String} as a {@code byte[]}
+     * Gets the contents of a {@link String} as a {@code byte[]}
      * using the default character encoding of the platform.
      * <p>
      * This is the same as {@link String#getBytes()}.
      * </p>
      *
-     * @param input the {@code String} to convert
+     * @param input the {@link String} to convert
      * @return the requested byte array
      * @throws NullPointerException if the input is null
      * @deprecated 2.5 Use {@link String#getBytes()} instead
@@ -2639,9 +2639,9 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of a {@code URI} as a {@code byte[]}.
+     * Gets the contents of a {@link URI} as a {@code byte[]}.
      *
-     * @param uri the {@code URI} to read
+     * @param uri the {@link URI} to read
      * @return the requested byte array
      * @throws NullPointerException if the uri is null
      * @throws IOException          if an I/O exception occurs
@@ -2652,9 +2652,9 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of a {@code URL} as a {@code byte[]}.
+     * Gets the contents of a {@link URL} as a {@code byte[]}.
      *
-     * @param url the {@code URL} to read
+     * @param url the {@link URL} to read
      * @return the requested byte array
      * @throws NullPointerException if the input is null
      * @throws IOException          if an I/O exception occurs
@@ -2667,9 +2667,9 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of a {@code URLConnection} as a {@code byte[]}.
+     * Gets the contents of a {@link URLConnection} as a {@code byte[]}.
      *
-     * @param urlConnection the {@code URLConnection} to read.
+     * @param urlConnection the {@link URLConnection} to read.
      * @return the requested byte array.
      * @throws NullPointerException if the urlConn is null.
      * @throws IOException if an I/O exception occurs.
@@ -2682,14 +2682,14 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of an {@code InputStream} as a character array
+     * Gets the contents of an {@link InputStream} as a character array
      * using the default character encoding of the platform.
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedInputStream}.
+     * {@link BufferedInputStream}.
      * </p>
      *
-     * @param inputStream the {@code InputStream} to read from
+     * @param inputStream the {@link InputStream} to read from
      * @return the requested character array
      * @throws NullPointerException if the input is null
      * @throws IOException          if an I/O error occurs
@@ -2702,14 +2702,14 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of an {@code InputStream} as a character array
+     * Gets the contents of an {@link InputStream} as a character array
      * using the specified character encoding.
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedInputStream}.
+     * {@link BufferedInputStream}.
      * </p>
      *
-     * @param inputStream the {@code InputStream} to read from
+     * @param inputStream the {@link InputStream} to read from
      * @param charset the charset to use, null means platform default
      * @return the requested character array
      * @throws NullPointerException if the input is null
@@ -2724,7 +2724,7 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of an {@code InputStream} as a character array
+     * Gets the contents of an {@link InputStream} as a character array
      * using the specified character encoding.
      * <p>
      * Character encoding names can be found at
@@ -2732,10 +2732,10 @@ public class IOUtils {
      * </p>
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedInputStream}.
+     * {@link BufferedInputStream}.
      * </p>
      *
-     * @param inputStream the {@code InputStream} to read from
+     * @param inputStream the {@link InputStream} to read from
      * @param charsetName the name of the requested charset, null means platform default
      * @return the requested character array
      * @throws NullPointerException                         if the input is null
@@ -2750,13 +2750,13 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of a {@code Reader} as a character array.
+     * Gets the contents of a {@link Reader} as a character array.
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedReader}.
+     * {@link BufferedReader}.
      * </p>
      *
-     * @param reader the {@code Reader} to read from
+     * @param reader the {@link Reader} to read from
      * @return the requested character array
      * @throws NullPointerException if the input is null
      * @throws IOException          if an I/O error occurs
@@ -2895,14 +2895,14 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of an {@code InputStream} as a String
+     * Gets the contents of an {@link InputStream} as a String
      * using the default character encoding of the platform.
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedInputStream}.
+     * {@link BufferedInputStream}.
      * </p>
      *
-     * @param input the {@code InputStream} to read from
+     * @param input the {@link InputStream} to read from
      * @return the requested String
      * @throws NullPointerException if the input is null
      * @throws IOException          if an I/O error occurs
@@ -2914,14 +2914,14 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of an {@code InputStream} as a String
+     * Gets the contents of an {@link InputStream} as a String
      * using the specified character encoding.
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedInputStream}.
+     * {@link BufferedInputStream}.
      * </p>
      *
-     * @param input the {@code InputStream} to read from
+     * @param input the {@link InputStream} to read from
      * @param charset the charset to use, null means platform default
      * @return the requested String
      * @throws NullPointerException if the input is null
@@ -2936,7 +2936,7 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of an {@code InputStream} as a String
+     * Gets the contents of an {@link InputStream} as a String
      * using the specified character encoding.
      * <p>
      * Character encoding names can be found at
@@ -2944,10 +2944,10 @@ public class IOUtils {
      * </p>
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedInputStream}.
+     * {@link BufferedInputStream}.
      * </p>
      *
-     * @param input the {@code InputStream} to read from
+     * @param input the {@link InputStream} to read from
      * @param charsetName the name of the requested charset, null means platform default
      * @return the requested String
      * @throws NullPointerException                         if the input is null
@@ -2962,13 +2962,13 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of a {@code Reader} as a String.
+     * Gets the contents of a {@link Reader} as a String.
      * <p>
      * This method buffers the input internally, so there is no need to use a
-     * {@code BufferedReader}.
+     * {@link BufferedReader}.
      * </p>
      *
-     * @param reader the {@code Reader} to read from
+     * @param reader the {@link Reader} to read from
      * @return the requested String
      * @throws NullPointerException if the input is null
      * @throws IOException          if an I/O error occurs
@@ -3069,11 +3069,11 @@ public class IOUtils {
     }
 
     /**
-     * Writes bytes from a {@code byte[]} to an {@code OutputStream}.
+     * Writes bytes from a {@code byte[]} to an {@link OutputStream}.
      *
      * @param data the byte array to write, do not modify during output,
      * null ignored
-     * @param output the {@code OutputStream} to write to
+     * @param output the {@link OutputStream} to write to
      * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
      * @since 1.1
@@ -3086,7 +3086,7 @@ public class IOUtils {
     }
 
     /**
-     * Writes bytes from a {@code byte[]} to chars on a {@code Writer}
+     * Writes bytes from a {@code byte[]} to chars on a {@link Writer}
      * using the default character encoding of the platform.
      * <p>
      * This method uses {@link String#String(byte[])}.
@@ -3094,7 +3094,7 @@ public class IOUtils {
      *
      * @param data the byte array to write, do not modify during output,
      * null ignored
-     * @param writer the {@code Writer} to write to
+     * @param writer the {@link Writer} to write to
      * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
      * @since 1.1
@@ -3106,7 +3106,7 @@ public class IOUtils {
     }
 
     /**
-     * Writes bytes from a {@code byte[]} to chars on a {@code Writer}
+     * Writes bytes from a {@code byte[]} to chars on a {@link Writer}
      * using the specified character encoding.
      * <p>
      * This method uses {@link String#String(byte[], String)}.
@@ -3114,7 +3114,7 @@ public class IOUtils {
      *
      * @param data the byte array to write, do not modify during output,
      * null ignored
-     * @param writer the {@code Writer} to write to
+     * @param writer the {@link Writer} to write to
      * @param charset the charset to use, null means platform default
      * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
@@ -3127,7 +3127,7 @@ public class IOUtils {
     }
 
     /**
-     * Writes bytes from a {@code byte[]} to chars on a {@code Writer}
+     * Writes bytes from a {@code byte[]} to chars on a {@link Writer}
      * using the specified character encoding.
      * <p>
      * Character encoding names can be found at
@@ -3139,7 +3139,7 @@ public class IOUtils {
      *
      * @param data the byte array to write, do not modify during output,
      * null ignored
-     * @param writer the {@code Writer} to write to
+     * @param writer the {@link Writer} to write to
      * @param charsetName the name of the requested charset, null means platform default
      * @throws NullPointerException                         if output is null
      * @throws IOException                                  if an I/O error occurs
@@ -3154,7 +3154,7 @@ public class IOUtils {
 
     /**
      * Writes chars from a {@code char[]} to bytes on an
-     * {@code OutputStream}.
+     * {@link OutputStream}.
      * <p>
      * This method uses {@link String#String(char[])} and
      * {@link String#getBytes()}.
@@ -3162,7 +3162,7 @@ public class IOUtils {
      *
      * @param data the char array to write, do not modify during output,
      * null ignored
-     * @param output the {@code OutputStream} to write to
+     * @param output the {@link OutputStream} to write to
      * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
      * @since 1.1
@@ -3176,7 +3176,7 @@ public class IOUtils {
 
     /**
      * Writes chars from a {@code char[]} to bytes on an
-     * {@code OutputStream} using the specified character encoding.
+     * {@link OutputStream} using the specified character encoding.
      * <p>
      * This method uses {@link String#String(char[])} and
      * {@link String#getBytes(String)}.
@@ -3184,7 +3184,7 @@ public class IOUtils {
      *
      * @param data the char array to write, do not modify during output,
      * null ignored
-     * @param output the {@code OutputStream} to write to
+     * @param output the {@link OutputStream} to write to
      * @param charset the charset to use, null means platform default
      * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
@@ -3198,7 +3198,7 @@ public class IOUtils {
 
     /**
      * Writes chars from a {@code char[]} to bytes on an
-     * {@code OutputStream} using the specified character encoding.
+     * {@link OutputStream} using the specified character encoding.
      * <p>
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
@@ -3210,7 +3210,7 @@ public class IOUtils {
      *
      * @param data the char array to write, do not modify during output,
      * null ignored
-     * @param output the {@code OutputStream} to write to
+     * @param output the {@link OutputStream} to write to
      * @param charsetName the name of the requested charset, null means platform default
      * @throws NullPointerException                         if output is null
      * @throws IOException                                  if an I/O error occurs
@@ -3224,11 +3224,11 @@ public class IOUtils {
     }
 
     /**
-     * Writes chars from a {@code char[]} to a {@code Writer}
+     * Writes chars from a {@code char[]} to a {@link Writer}
      *
      * @param data the char array to write, do not modify during output,
      * null ignored
-     * @param writer the {@code Writer} to write to
+     * @param writer the {@link Writer} to write to
      * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
      * @since 1.1
@@ -3240,15 +3240,15 @@ public class IOUtils {
     }
 
     /**
-     * Writes chars from a {@code CharSequence} to bytes on an
-     * {@code OutputStream} using the default character encoding of the
+     * Writes chars from a {@link CharSequence} to bytes on an
+     * {@link OutputStream} using the default character encoding of the
      * platform.
      * <p>
      * This method uses {@link String#getBytes()}.
      * </p>
      *
-     * @param data the {@code CharSequence} to write, null ignored
-     * @param output the {@code OutputStream} to write to
+     * @param data the {@link CharSequence} to write, null ignored
+     * @param output the {@link OutputStream} to write to
      * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
      * @since 2.0
@@ -3261,14 +3261,14 @@ public class IOUtils {
     }
 
     /**
-     * Writes chars from a {@code CharSequence} to bytes on an
-     * {@code OutputStream} using the specified character encoding.
+     * Writes chars from a {@link CharSequence} to bytes on an
+     * {@link OutputStream} using the specified character encoding.
      * <p>
      * This method uses {@link String#getBytes(String)}.
      * </p>
      *
-     * @param data the {@code CharSequence} to write, null ignored
-     * @param output the {@code OutputStream} to write to
+     * @param data the {@link CharSequence} to write, null ignored
+     * @param output the {@link OutputStream} to write to
      * @param charset the charset to use, null means platform default
      * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
@@ -3282,8 +3282,8 @@ public class IOUtils {
     }
 
     /**
-     * Writes chars from a {@code CharSequence} to bytes on an
-     * {@code OutputStream} using the specified character encoding.
+     * Writes chars from a {@link CharSequence} to bytes on an
+     * {@link OutputStream} using the specified character encoding.
      * <p>
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
@@ -3292,8 +3292,8 @@ public class IOUtils {
      * This method uses {@link String#getBytes(String)}.
      * </p>
      *
-     * @param data the {@code CharSequence} to write, null ignored
-     * @param output the {@code OutputStream} to write to
+     * @param data the {@link CharSequence} to write, null ignored
+     * @param output the {@link OutputStream} to write to
      * @param charsetName the name of the requested charset, null means platform default
      * @throws NullPointerException        if output is null
      * @throws IOException                 if an I/O error occurs
@@ -3307,10 +3307,10 @@ public class IOUtils {
     }
 
     /**
-     * Writes chars from a {@code CharSequence} to a {@code Writer}.
+     * Writes chars from a {@link CharSequence} to a {@link Writer}.
      *
-     * @param data the {@code CharSequence} to write, null ignored
-     * @param writer the {@code Writer} to write to
+     * @param data the {@link CharSequence} to write, null ignored
+     * @param writer the {@link Writer} to write to
      * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
      * @since 2.0
@@ -3323,15 +3323,15 @@ public class IOUtils {
 
 
     /**
-     * Writes chars from a {@code String} to bytes on an
-     * {@code OutputStream} using the default character encoding of the
+     * Writes chars from a {@link String} to bytes on an
+     * {@link OutputStream} using the default character encoding of the
      * platform.
      * <p>
      * This method uses {@link String#getBytes()}.
      * </p>
      *
-     * @param data the {@code String} to write, null ignored
-     * @param output the {@code OutputStream} to write to
+     * @param data the {@link String} to write, null ignored
+     * @param output the {@link OutputStream} to write to
      * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
      * @since 1.1
@@ -3344,14 +3344,14 @@ public class IOUtils {
     }
 
     /**
-     * Writes chars from a {@code String} to bytes on an
-     * {@code OutputStream} using the specified character encoding.
+     * Writes chars from a {@link String} to bytes on an
+     * {@link OutputStream} using the specified character encoding.
      * <p>
      * This method uses {@link String#getBytes(String)}.
      * </p>
      *
-     * @param data the {@code String} to write, null ignored
-     * @param output the {@code OutputStream} to write to
+     * @param data the {@link String} to write, null ignored
+     * @param output the {@link OutputStream} to write to
      * @param charset the charset to use, null means platform default
      * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
@@ -3368,8 +3368,8 @@ public class IOUtils {
     }
 
     /**
-     * Writes chars from a {@code String} to bytes on an
-     * {@code OutputStream} using the specified character encoding.
+     * Writes chars from a {@link String} to bytes on an
+     * {@link OutputStream} using the specified character encoding.
      * <p>
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
@@ -3378,8 +3378,8 @@ public class IOUtils {
      * This method uses {@link String#getBytes(String)}.
      * </p>
      *
-     * @param data the {@code String} to write, null ignored
-     * @param output the {@code OutputStream} to write to
+     * @param data the {@link String} to write, null ignored
+     * @param output the {@link OutputStream} to write to
      * @param charsetName the name of the requested charset, null means platform default
      * @throws NullPointerException        if output is null
      * @throws IOException                 if an I/O error occurs
@@ -3393,10 +3393,10 @@ public class IOUtils {
     }
 
     /**
-     * Writes chars from a {@code String} to a {@code Writer}.
+     * Writes chars from a {@link String} to a {@link Writer}.
      *
-     * @param data the {@code String} to write, null ignored
-     * @param writer the {@code Writer} to write to
+     * @param data the {@link String} to write, null ignored
+     * @param writer the {@link Writer} to write to
      * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
      * @since 1.1
@@ -3408,15 +3408,15 @@ public class IOUtils {
     }
 
     /**
-     * Writes chars from a {@code StringBuffer} to bytes on an
-     * {@code OutputStream} using the default character encoding of the
+     * Writes chars from a {@link StringBuffer} to bytes on an
+     * {@link OutputStream} using the default character encoding of the
      * platform.
      * <p>
      * This method uses {@link String#getBytes()}.
      * </p>
      *
-     * @param data the {@code StringBuffer} to write, null ignored
-     * @param output the {@code OutputStream} to write to
+     * @param data the {@link StringBuffer} to write, null ignored
+     * @param output the {@link OutputStream} to write to
      * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
      * @since 1.1
@@ -3429,8 +3429,8 @@ public class IOUtils {
     }
 
     /**
-     * Writes chars from a {@code StringBuffer} to bytes on an
-     * {@code OutputStream} using the specified character encoding.
+     * Writes chars from a {@link StringBuffer} to bytes on an
+     * {@link OutputStream} using the specified character encoding.
      * <p>
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
@@ -3439,8 +3439,8 @@ public class IOUtils {
      * This method uses {@link String#getBytes(String)}.
      * </p>
      *
-     * @param data the {@code StringBuffer} to write, null ignored
-     * @param output the {@code OutputStream} to write to
+     * @param data the {@link StringBuffer} to write, null ignored
+     * @param output the {@link OutputStream} to write to
      * @param charsetName the name of the requested charset, null means platform default
      * @throws NullPointerException        if output is null
      * @throws IOException                 if an I/O error occurs
@@ -3458,10 +3458,10 @@ public class IOUtils {
     }
 
     /**
-     * Writes chars from a {@code StringBuffer} to a {@code Writer}.
+     * Writes chars from a {@link StringBuffer} to a {@link Writer}.
      *
-     * @param data the {@code StringBuffer} to write, null ignored
-     * @param writer the {@code Writer} to write to
+     * @param data the {@link StringBuffer} to write, null ignored
+     * @param writer the {@link Writer} to write to
      * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
      * @since 1.1
@@ -3476,13 +3476,13 @@ public class IOUtils {
     }
 
     /**
-     * Writes bytes from a {@code byte[]} to an {@code OutputStream} using chunked writes.
+     * Writes bytes from a {@code byte[]} to an {@link OutputStream} using chunked writes.
      * This is intended for writing very large byte arrays which might otherwise cause excessive
      * memory usage if the native code has to allocate a copy.
      *
      * @param data the byte array to write, do not modify during output,
      * null ignored
-     * @param output the {@code OutputStream} to write to
+     * @param output the {@link OutputStream} to write to
      * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
      * @since 2.5
@@ -3502,13 +3502,13 @@ public class IOUtils {
     }
 
     /**
-     * Writes chars from a {@code char[]} to a {@code Writer} using chunked writes.
+     * Writes chars from a {@code char[]} to a {@link Writer} using chunked writes.
      * This is intended for writing very large byte arrays which might otherwise cause excessive
      * memory usage if the native code has to allocate a copy.
      *
      * @param data the char array to write, do not modify during output,
      * null ignored
-     * @param writer the {@code Writer} to write to
+     * @param writer the {@link Writer} to write to
      * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
      * @since 2.5
@@ -3527,13 +3527,13 @@ public class IOUtils {
     }
 
     /**
-     * Writes the {@code toString()} value of each item in a collection to
-     * an {@code OutputStream} line by line, using the default character
+     * Writes the {@link #toString()} value of each item in a collection to
+     * an {@link OutputStream} line by line, using the default character
      * encoding of the platform and the specified line ending.
      *
      * @param lines the lines to write, null entries produce blank lines
      * @param lineEnding the line separator to use, null is system default
-     * @param output the {@code OutputStream} to write to, not null, not closed
+     * @param output the {@link OutputStream} to write to, not null, not closed
      * @throws NullPointerException if the output is null
      * @throws IOException          if an I/O error occurs
      * @since 1.1
@@ -3546,13 +3546,13 @@ public class IOUtils {
     }
 
     /**
-     * Writes the {@code toString()} value of each item in a collection to
-     * an {@code OutputStream} line by line, using the specified character
+     * Writes the {@link #toString()} value of each item in a collection to
+     * an {@link OutputStream} line by line, using the specified character
      * encoding and the specified line ending.
      *
      * @param lines the lines to write, null entries produce blank lines
      * @param lineEnding the line separator to use, null is system default
-     * @param output the {@code OutputStream} to write to, not null, not closed
+     * @param output the {@link OutputStream} to write to, not null, not closed
      * @param charset the charset to use, null means platform default
      * @throws NullPointerException if the output is null
      * @throws IOException          if an I/O error occurs
@@ -3577,8 +3577,8 @@ public class IOUtils {
     }
 
     /**
-     * Writes the {@code toString()} value of each item in a collection to
-     * an {@code OutputStream} line by line, using the specified character
+     * Writes the {@link #toString()} value of each item in a collection to
+     * an {@link OutputStream} line by line, using the specified character
      * encoding and the specified line ending.
      * <p>
      * Character encoding names can be found at
@@ -3587,7 +3587,7 @@ public class IOUtils {
      *
      * @param lines the lines to write, null entries produce blank lines
      * @param lineEnding the line separator to use, null is system default
-     * @param output the {@code OutputStream} to write to, not null, not closed
+     * @param output the {@link OutputStream} to write to, not null, not closed
      * @param charsetName the name of the requested charset, null means platform default
      * @throws NullPointerException                         if the output is null
      * @throws IOException                                  if an I/O error occurs
@@ -3602,12 +3602,12 @@ public class IOUtils {
     }
 
     /**
-     * Writes the {@code toString()} value of each item in a collection to
-     * a {@code Writer} line by line, using the specified line ending.
+     * Writes the {@link #toString()} value of each item in a collection to
+     * a {@link Writer} line by line, using the specified line ending.
      *
      * @param lines the lines to write, null entries produce blank lines
      * @param lineEnding the line separator to use, null is system default
-     * @param writer the {@code Writer} to write to, not null, not closed
+     * @param writer the {@link Writer} to write to, not null, not closed
      * @throws NullPointerException if the input is null
      * @throws IOException          if an I/O error occurs
      * @since 1.1
