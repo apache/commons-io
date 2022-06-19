@@ -16,6 +16,7 @@
  */
 
 /**
- * This package provides implementations of output classes, such as {@code OutputStream} and {@code Writer}.
+ * This package provides implementations of output classes, such as {@link java.io.OutputStream} and
+ * {@link java.io.Writer}.
  */
 package org.apache.commons.io.output;

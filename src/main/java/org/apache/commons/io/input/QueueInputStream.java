@@ -18,6 +18,7 @@ package org.apache.commons.io.input;
 
 import static org.apache.commons.io.IOUtils.EOF;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
@@ -47,8 +48,8 @@ import org.apache.commons.io.output.QueueOutputStream;
  * thread. Instances can be used longer after initial threads exited.
  * </p>
  * <p>
- * Closing a {@code QueueInputStream} has no effect. The methods in this class can be called after the stream has been
- * closed without generating an {@code IOException}.
+ * Closing a {@link QueueInputStream} has no effect. The methods in this class can be called after the stream has been
+ * closed without generating an {@link IOException}.
  * </p>
  *
  * @see QueueOutputStream

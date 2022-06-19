@@ -27,7 +27,7 @@ import java.util.function.IntPredicate;
  * A filter reader that removes a given set of characters represented as {@code int} code points, handy to remove known
  * junk characters from CSV files for example.
  * <p>
- * This class must convert each {@code int} read to an {@code Integer}. You can increase the Integer cache with a system
+ * This class must convert each {@code int} read to an {@link Integer}. You can increase the Integer cache with a system
  * property, see {@link Integer}.
  * </p>
  */

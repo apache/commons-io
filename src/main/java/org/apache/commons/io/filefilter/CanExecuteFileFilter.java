@@ -24,7 +24,7 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 
 /**
- * This filter accepts {@code File}s that can be executed.
+ * This filter accepts {@link File}s that can be executed.
  * <p>
  * Example, showing how to print out a list of the
  * current directory's <i>executable</i> files:

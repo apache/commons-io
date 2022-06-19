@@ -164,8 +164,8 @@ public class FileFilterUtils {
     }
 
     /**
-     * Returns an {@code IOFileFilter} that wraps the
-     * {@code FileFilter} instance.
+     * Returns an {@link IOFileFilter} that wraps the
+     * {@link FileFilter} instance.
      *
      * @param filter  the filter to be wrapped
      * @return a new filter that implements IOFileFilter
@@ -176,8 +176,8 @@ public class FileFilterUtils {
     }
 
     /**
-     * Returns an {@code IOFileFilter} that wraps the
-     * {@code FilenameFilter} instance.
+     * Returns an {@link IOFileFilter} that wraps the
+     * {@link FilenameFilter} instance.
      *
      * @param filter  the filter to be wrapped
      * @return a new filter that implements IOFileFilter

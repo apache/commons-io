@@ -238,9 +238,9 @@ public final class PathUtils {
     }
 
     /**
-     * Compares the given {@code Path}'s last modified time to the given file time.
+     * Compares the given {@link Path}'s last modified time to the given file time.
      *
-     * @param file the {@code Path} to test.
+     * @param file the {@link Path} to test.
      * @param fileTime the time reference.
      * @param options options indicating how to handle symbolic links.
      * @return See {@link FileTime#compareTo(FileTime)}
@@ -843,7 +843,7 @@ public final class PathUtils {
     }
 
     /**
-     * Tests whether the given {@code Path} is a directory or not. Implemented as a null-safe delegate to
+     * Tests whether the given {@link Path} is a directory or not. Implemented as a null-safe delegate to
      * {@code Files.isDirectory(Path path, LinkOption... options)}.
      *
      * @param path the path to the file.
@@ -900,12 +900,12 @@ public final class PathUtils {
     }
 
     /**
-     * Tests if the given {@code Path} is newer than the given time reference.
+     * Tests if the given {@link Path} is newer than the given time reference.
      *
-     * @param file the {@code Path} to test.
+     * @param file the {@link Path} to test.
      * @param czdt the time reference.
      * @param options options indicating how to handle symbolic links.
-     * @return true if the {@code Path} exists and has been modified after the given time reference.
+     * @return true if the {@link Path} exists and has been modified after the given time reference.
      * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if the file is {@code null}.
      * @since 2.12.0
@@ -916,12 +916,12 @@ public final class PathUtils {
     }
 
     /**
-     * Tests if the given {@code Path} is newer than the given time reference.
+     * Tests if the given {@link Path} is newer than the given time reference.
      *
-     * @param file the {@code Path} to test.
+     * @param file the {@link Path} to test.
      * @param fileTime the time reference.
      * @param options options indicating how to handle symbolic links.
-     * @return true if the {@code Path} exists and has been modified after the given time reference.
+     * @return true if the {@link Path} exists and has been modified after the given time reference.
      * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if the file is {@code null}.
      * @since 2.12.0
@@ -934,12 +934,12 @@ public final class PathUtils {
     }
 
     /**
-     * Tests if the given {@code Path} is newer than the given time reference.
+     * Tests if the given {@link Path} is newer than the given time reference.
      *
-     * @param file the {@code Path} to test.
+     * @param file the {@link Path} to test.
      * @param instant the time reference.
      * @param options options indicating how to handle symbolic links.
-     * @return true if the {@code Path} exists and has been modified after the given time reference.
+     * @return true if the {@link Path} exists and has been modified after the given time reference.
      * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if the file is {@code null}.
      * @since 2.12.0
@@ -949,12 +949,12 @@ public final class PathUtils {
     }
 
     /**
-     * Tests if the given {@code Path} is newer than the given time reference.
+     * Tests if the given {@link Path} is newer than the given time reference.
      *
-     * @param file the {@code Path} to test.
+     * @param file the {@link Path} to test.
      * @param timeMillis the time reference measured in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
      * @param options options indicating how to handle symbolic links.
-     * @return true if the {@code Path} exists and has been modified after the given time reference.
+     * @return true if the {@link Path} exists and has been modified after the given time reference.
      * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if the file is {@code null}.
      * @since 2.9.0
@@ -964,11 +964,11 @@ public final class PathUtils {
     }
 
     /**
-     * Tests if the given {@code Path} is newer than the reference {@code Path}.
+     * Tests if the given {@link Path} is newer than the reference {@link Path}.
      *
-     * @param file the {@code File} to test.
-     * @param reference the {@code File} of which the modification date is used.
-     * @return true if the {@code File} exists and has been modified more recently than the reference {@code File}.
+     * @param file the {@link File} to test.
+     * @param reference the {@link File} of which the modification date is used.
+     * @return true if the {@link File} exists and has been modified more recently than the reference {@link File}.
      * @throws IOException if an I/O error occurs.
      * @since 2.12.0
      */
@@ -977,12 +977,12 @@ public final class PathUtils {
     }
 
     /**
-     * Tests if the given {@code Path} is older than the given time reference.
+     * Tests if the given {@link Path} is older than the given time reference.
      *
-     * @param file the {@code Path} to test.
+     * @param file the {@link Path} to test.
      * @param fileTime the time reference.
      * @param options options indicating how to handle symbolic links.
-     * @return true if the {@code Path} exists and has been modified before the given time reference.
+     * @return true if the {@link Path} exists and has been modified before the given time reference.
      * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if the file is {@code null}.
      * @since 2.12.0
@@ -995,12 +995,12 @@ public final class PathUtils {
     }
 
     /**
-     * Tests if the given {@code Path} is older than the given time reference.
+     * Tests if the given {@link Path} is older than the given time reference.
      *
-     * @param file the {@code Path} to test.
+     * @param file the {@link Path} to test.
      * @param instant the time reference.
      * @param options options indicating how to handle symbolic links.
-     * @return true if the {@code Path} exists and has been modified before the given time reference.
+     * @return true if the {@link Path} exists and has been modified before the given time reference.
      * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if the file is {@code null}.
      * @since 2.12.0
@@ -1010,12 +1010,12 @@ public final class PathUtils {
     }
 
     /**
-     * Tests if the given {@code Path} is older than the given time reference.
+     * Tests if the given {@link Path} is older than the given time reference.
      *
-     * @param file the {@code Path} to test.
+     * @param file the {@link Path} to test.
      * @param timeMillis the time reference measured in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
      * @param options options indicating how to handle symbolic links.
-     * @return true if the {@code Path} exists and has been modified before the given time reference.
+     * @return true if the {@link Path} exists and has been modified before the given time reference.
      * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if the file is {@code null}.
      * @since 2.12.0
@@ -1025,11 +1025,11 @@ public final class PathUtils {
     }
 
     /**
-     * Tests if the given {@code Path} is older than the reference {@code Path}.
+     * Tests if the given {@link Path} is older than the reference {@link Path}.
      *
-     * @param file the {@code File} to test.
-     * @param reference the {@code File} of which the modification date is used.
-     * @return true if the {@code File} exists and has been modified before than the reference {@code File}.
+     * @param file the {@link File} to test.
+     * @param reference the {@link File} of which the modification date is used.
+     * @return true if the {@link File} exists and has been modified before than the reference {@link File}.
      * @throws IOException if an I/O error occurs.
      * @since 2.12.0
      */
@@ -1050,7 +1050,7 @@ public final class PathUtils {
     }
 
     /**
-     * Tests whether the given {@code Path} is a regular file or not. Implemented as a null-safe delegate to
+     * Tests whether the given {@link Path} is a regular file or not. Implemented as a null-safe delegate to
      * {@code Files.isRegularFile(Path path, LinkOption... options)}.
      *
      * @param path the path to the file.
@@ -1129,9 +1129,9 @@ public final class PathUtils {
      * Reads the BasicFileAttributes from the given path. Returns null instead of throwing
      * {@link UnsupportedOperationException}. Throws {@link UncheckedIO} instead of {@link IOException}.
      *
-     * @param <A> The {@code BasicFileAttributes} type
+     * @param <A> The {@link BasicFileAttributes} type
      * @param path The Path to test.
-     * @param type the {@code Class} of the file attributes required to read.
+     * @param type the {@link Class} of the file attributes required to read.
      * @param options options indicating how to handle symbolic links.
      * @return the file attributes.
      * @see Files#readAttributes(Path, Class, LinkOption...)
@@ -1264,14 +1264,14 @@ public final class PathUtils {
     }
 
     /**
-     * Requires that the given {@code File} exists and throws an {@link IllegalArgumentException} if it doesn't.
+     * Requires that the given {@link File} exists and throws an {@link IllegalArgumentException} if it doesn't.
      *
-     * @param file The {@code File} to check.
+     * @param file The {@link File} to check.
      * @param fileParamName The parameter name to use in the exception message in case of {@code null} input.
      * @param options options indicating how to handle symbolic links.
      * @return the given file.
-     * @throws NullPointerException if the given {@code File} is {@code null}.
-     * @throws IllegalArgumentException if the given {@code File} does not exist.
+     * @throws NullPointerException if the given {@link File} is {@code null}.
+     * @throws IllegalArgumentException if the given {@link File} does not exist.
      */
     private static Path requireExists(final Path file, final String fileParamName, final LinkOption... options) {
         Objects.requireNonNull(file, fileParamName);

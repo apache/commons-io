@@ -25,7 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 
 /**
- * This filter accepts {@code File}s that are hidden.
+ * This filter accepts {@link File}s that are hidden.
  * <p>
  * Example, showing how to print out a list of the
  * current directory's <i>hidden</i> files:

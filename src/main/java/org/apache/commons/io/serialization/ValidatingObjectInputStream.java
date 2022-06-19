@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * An {@code ObjectInputStream} that's restricted to deserialize
+ * An {@link ObjectInputStream} that's restricted to deserialize
  * a limited set of classes.
  *
  * <p>
@@ -113,7 +113,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
     }
 
     /**
-     * Called to throw {@code InvalidClassException} if an invalid
+     * Called to throw {@link InvalidClassException} if an invalid
      * class name is found during deserialization. Can be overridden, for example
      * to log those class names.
      *

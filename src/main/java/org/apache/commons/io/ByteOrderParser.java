@@ -41,10 +41,10 @@ public final class ByteOrderParser {
      * </ul>
      *
      * @param value
-     *            the {@code String} containing the ByteOrder representation to be parsed
+     *            the {@link String} containing the ByteOrder representation to be parsed
      * @return the ByteOrder represented by the string argument
      * @throws IllegalArgumentException
-     *             if the {@code String} containing the ByteOrder representation to be parsed is unknown.
+     *             if the {@link String} containing the ByteOrder representation to be parsed is unknown.
      */
     public static ByteOrder parseByteOrder(final String value) {
         if (ByteOrder.BIG_ENDIAN.toString().equals(value)) {

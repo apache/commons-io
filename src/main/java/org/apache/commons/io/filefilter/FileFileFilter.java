@@ -24,7 +24,7 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 
 /**
- * This filter accepts {@code File}s that are files (not directories).
+ * This filter accepts {@link File}s that are files (not directories).
  * <p>
  * For example, here is how to print out a list of the real files
  * within the current directory:

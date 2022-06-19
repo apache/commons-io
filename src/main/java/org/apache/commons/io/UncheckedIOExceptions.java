@@ -47,7 +47,7 @@ public class UncheckedIOExceptions {
      * <p>
      * This method exists because there is no String constructor in {@link UncheckedIOException}.
      * </p>
-     * @param e cause the {@code IOException}.
+     * @param e cause the {@link IOException}.
      * @param message the detail message.
      *
      * @return a new {@link UncheckedIOException}.

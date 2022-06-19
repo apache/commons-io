@@ -377,10 +377,10 @@ public class Tailer implements Runnable, AutoCloseable {
         RandomAccessResourceBridge getRandomAccess(final String mode) throws FileNotFoundException;
 
         /**
-         * Tests if this tailable is newer than the specified {@code FileTime}.
+         * Tests if this tailable is newer than the specified {@link FileTime}.
          *
          * @param fileTime the file time reference.
-         * @return true if the {@code File} exists and has been modified after the given {@code FileTime}.
+         * @return true if the {@link File} exists and has been modified after the given {@link FileTime}.
          * @throws IOException if an I/O error occurs.
          */
         boolean isNewer(final FileTime fileTime) throws IOException;

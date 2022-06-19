@@ -30,7 +30,7 @@ import org.apache.commons.io.IOUtils;
 /**
  * This filter accepts files or directories that are empty.
  * <p>
- * If the {@code File} is a directory it checks that it contains no files.
+ * If the {@link File} is a directory it checks that it contains no files.
  * </p>
  * <p>
  * Example, showing how to print out a list of the current directory's empty files/directories:

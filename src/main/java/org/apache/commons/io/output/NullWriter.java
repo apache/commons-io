@@ -21,7 +21,7 @@ import java.io.Writer;
 /**
  * Never writes data. Calls never go beyond this class.
  * <p>
- * This {@code Writer} has no destination (file/socket etc.) and all characters written to it are ignored and lost.
+ * This {@link Writer} has no destination (file/socket etc.) and all characters written to it are ignored and lost.
  * </p>
  */
 public class NullWriter extends Writer {

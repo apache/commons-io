@@ -53,7 +53,7 @@ public class BoundedInputStream extends InputStream {
     private boolean propagateClose = true;
 
     /**
-     * Creates a new {@code BoundedInputStream} that wraps the given input
+     * Creates a new {@link BoundedInputStream} that wraps the given input
      * stream and is unlimited.
      *
      * @param in The wrapped input stream
@@ -63,7 +63,7 @@ public class BoundedInputStream extends InputStream {
     }
 
     /**
-     * Creates a new {@code BoundedInputStream} that wraps the given input
+     * Creates a new {@link BoundedInputStream} that wraps the given input
      * stream and limits it to a certain size.
      *
      * @param in The wrapped input stream

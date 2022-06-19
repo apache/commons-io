@@ -43,7 +43,7 @@ import org.apache.commons.io.IOUtils;
 public class ObservableInputStream extends ProxyInputStream {
 
     /**
-     * Abstracts observer callback for {@code ObservableInputStream}s.
+     * Abstracts observer callback for {@link ObservableInputStream}s.
      */
     public static abstract class Observer {
 

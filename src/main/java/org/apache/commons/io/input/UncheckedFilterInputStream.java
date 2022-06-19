@@ -37,7 +37,7 @@ import org.apache.commons.io.UncheckedIO;
 public class UncheckedFilterInputStream extends FilterInputStream {
 
     /**
-     * Creates a {@code UncheckedFilterInputStream}.
+     * Creates a {@link UncheckedFilterInputStream}.
      *
      * @param inputStream the underlying input stream, or {@code null} if this instance is to be created without an
      *        underlying stream.
@@ -48,7 +48,7 @@ public class UncheckedFilterInputStream extends FilterInputStream {
     }
 
     /**
-     * Creates a {@code UncheckedFilterInputStream}.
+     * Creates a {@link UncheckedFilterInputStream}.
      *
      * @param inputStream the underlying input stream, or {@code null} if this instance is to be created without an
      *        underlying stream.

@@ -18,6 +18,7 @@ package org.apache.commons.io.output;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -30,7 +31,7 @@ import org.apache.commons.io.FileUtils;
  * FileWriter that will create and honor lock files to allow simple
  * cross thread file lock handling.
  * <p>
- * This class provides a simple alternative to {@code FileWriter}
+ * This class provides a simple alternative to {@link FileWriter}
  * that will use a lock file to prevent duplicate writes.
  * </p>
  * <p>

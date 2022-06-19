@@ -97,7 +97,7 @@ public class AndFileFilter
     }
 
     /**
-     * Constructs a new instance of {@code AndFileFilter}
+     * Constructs a new instance of {@link AndFileFilter}
      * with the specified list of filters.
      *
      * @param fileFilters  a List of IOFileFilter instances, copied.

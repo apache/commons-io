@@ -27,7 +27,7 @@ import org.apache.commons.io.function.IOFunction;
  * can be used, for example, to throw an exception if a maximum has been reached, or to switch the underlying stream
  * type when the threshold is exceeded.
  * <p>
- * This class overrides all {@code OutputStream} methods. However, these overrides ultimately call the corresponding
+ * This class overrides all {@link OutputStream} methods. However, these overrides ultimately call the corresponding
  * methods in the underlying output stream implementation.
  * </p>
  * <p>
@@ -142,7 +142,7 @@ public class ThresholdingOutputStream extends OutputStream {
     }
 
     /**
-     * Returns the underlying output stream, to which the corresponding {@code OutputStream} methods in this class will
+     * Returns the underlying output stream, to which the corresponding {@link OutputStream} methods in this class will
      * ultimately delegate.
      *
      * @return The underlying output stream.

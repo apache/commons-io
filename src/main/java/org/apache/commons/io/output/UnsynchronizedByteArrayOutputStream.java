@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io.output;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -31,7 +32,7 @@ import org.apache.commons.io.input.UnsynchronizedByteArrayInputStream;
 public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArrayOutputStream {
 
     /**
-     * Fetches entire contents of an {@code InputStream} and represent same data as result InputStream.
+     * Fetches entire contents of an {@link InputStream} and represent same data as result InputStream.
      * <p>
      * This method is useful where,
      * </p>
@@ -41,7 +42,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      * <li>It has network timeout associated.</li>
      * </ul>
      * It can be used in favor of {@link #toByteArray()}, since it avoids unnecessary allocation and copy of byte[].<br>
-     * This method buffers the input internally, so there is no need to use a {@code BufferedInputStream}.
+     * This method buffers the input internally, so there is no need to use a {@link BufferedInputStream}.
      *
      * @param input Stream to be fully buffered.
      * @return A fully buffered stream.
@@ -52,7 +53,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
     }
 
     /**
-     * Fetches entire contents of an {@code InputStream} and represent same data as result InputStream.
+     * Fetches entire contents of an {@link InputStream} and represent same data as result InputStream.
      * <p>
      * This method is useful where,
      * </p>
@@ -62,7 +63,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      * <li>It has network timeout associated.</li>
      * </ul>
      * It can be used in favor of {@link #toByteArray()}, since it avoids unnecessary allocation and copy of byte[].<br>
-     * This method buffers the input internally, so there is no need to use a {@code BufferedInputStream}.
+     * This method buffers the input internally, so there is no need to use a {@link BufferedInputStream}.
      *
      * @param input Stream to be fully buffered.
      * @param size the initial buffer size

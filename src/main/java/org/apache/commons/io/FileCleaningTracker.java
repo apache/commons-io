@@ -127,11 +127,11 @@ public class FileCleaningTracker {
         }
     }
     /**
-     * Queue of {@code Tracker} instances being watched.
+     * Queue of {@link Tracker} instances being watched.
      */
     ReferenceQueue<Object> q = new ReferenceQueue<>();
     /**
-     * Collection of {@code Tracker} instances in existence.
+     * Collection of {@link Tracker} instances in existence.
      */
     final Collection<Tracker> trackers = Collections.synchronizedSet(new HashSet<>()); // synchronized
     /**

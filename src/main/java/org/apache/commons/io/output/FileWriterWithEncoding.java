@@ -17,6 +17,7 @@
 package org.apache.commons.io.output;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -32,8 +33,8 @@ import org.apache.commons.io.IOUtils;
 /**
  * Writer of files that allows the encoding to be set.
  * <p>
- * This class provides a simple alternative to {@code FileWriter} that allows an encoding to be set. Unfortunately, it
- * cannot subclass {@code FileWriter}.
+ * This class provides a simple alternative to {@link FileWriter} that allows an encoding to be set. Unfortunately, it
+ * cannot subclass {@link FileWriter}.
  * </p>
  * <p>
  * By default, the file will be overwritten, but this may be changed to append.

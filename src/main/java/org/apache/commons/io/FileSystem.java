@@ -174,7 +174,7 @@ public enum FileSystem {
      * Gets a System property, defaulting to {@code null} if the property cannot be read.
      * </p>
      * <p>
-     * If a {@code SecurityException} is caught, the return value is {@code null} and a message is written to
+     * If a {@link SecurityException} is caught, the return value is {@code null} and a message is written to
      * {@code System.err}.
      * </p>
      *
@@ -222,7 +222,7 @@ public enum FileSystem {
      * <p>
      * There is no restriction on the value of {@code start}. If it
      * is negative, it has the same effect as if it were zero: the entire
-     * {@code CharSequence} may be searched. If it is greater than
+     * {@link CharSequence} may be searched. If it is greater than
      * the length of {@code cs}, it has the same effect as if it were
      * equal to the length of {@code cs}: {@code -1} is returned.
      * </p>
@@ -230,11 +230,11 @@ public enum FileSystem {
      * (Unicode code units).
      * </p>
      *
-     * @param cs  the {@code CharSequence} to be processed, not null
+     * @param cs  the {@link CharSequence} to be processed, not null
      * @param searchChar  the char to be searched for
      * @param start  the start index, negative starts at the string start
      * @return the index where the search char was found, -1 if not found
-     * @since 3.6 updated to behave more like {@code String}
+     * @since 3.6 updated to behave more like {@link String}
      */
     private static int indexOf(final CharSequence cs, final int searchChar, int start) {
         if (cs instanceof String) {

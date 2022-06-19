@@ -16,6 +16,6 @@
  */
 
 /**
- * This package provides implementations of input classes, such as {@code InputStream} and {@code Reader}.
+ * This package provides implementations of input classes, such as {@link java.io.InputStream} and {@link java.io.Reader}.
  */
 package org.apache.commons.io.input;

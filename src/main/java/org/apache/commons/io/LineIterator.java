@@ -24,9 +24,9 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * An Iterator over the lines in a {@code Reader}.
+ * An Iterator over the lines in a {@link Reader}.
  * <p>
- * {@code LineIterator} holds a reference to an open {@code Reader}.
+ * {@link LineIterator} holds a reference to an open {@link Reader}.
  * When you have finished with the iterator you should close the reader
  * to free internal resources. This can be done by closing the reader directly,
  * or by calling the {@link #close()} or {@link #closeQuietly(LineIterator)}
@@ -52,7 +52,7 @@ public class LineIterator implements Iterator<String>, Closeable {
     // N.B. This class deliberately does not implement Iterable, see https://issues.apache.org/jira/browse/IO-181
 
     /**
-     * Closes a {@code LineIterator} quietly.
+     * Closes a {@link LineIterator} quietly.
      *
      * @param iterator The iterator to close, or {@code null}.
      * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
@@ -72,9 +72,9 @@ public class LineIterator implements Iterator<String>, Closeable {
     private boolean finished;
 
     /**
-     * Constructs an iterator of the lines for a {@code Reader}.
+     * Constructs an iterator of the lines for a {@link Reader}.
      *
-     * @param reader the {@code Reader} to read from, not null
+     * @param reader the {@link Reader} to read from, not null
      * @throws IllegalArgumentException if the reader is null
      */
     public LineIterator(final Reader reader) throws IllegalArgumentException {
@@ -89,13 +89,13 @@ public class LineIterator implements Iterator<String>, Closeable {
     }
 
     /**
-     * Closes the underlying {@code Reader}.
+     * Closes the underlying {@link Reader}.
      * This method is useful if you only want to process the first few
      * lines of a larger file. If you do not close the iterator
-     * then the {@code Reader} remains open.
+     * then the {@link Reader} remains open.
      * This method can safely be called multiple times.
      *
-     * @throws IOException if closing the underlying {@code Reader} fails.
+     * @throws IOException if closing the underlying {@link Reader} fails.
      */
     @Override
     public void close() throws IOException {
@@ -105,8 +105,8 @@ public class LineIterator implements Iterator<String>, Closeable {
     }
 
     /**
-     * Indicates whether the {@code Reader} has more lines.
-     * If there is an {@code IOException} then {@link #close()} will
+     * Indicates whether the {@link Reader} has more lines.
+     * If there is an {@link IOException} then {@link #close()} will
      * be called on this instance.
      *
      * @return {@code true} if the Reader has more lines
@@ -149,7 +149,7 @@ public class LineIterator implements Iterator<String>, Closeable {
     }
 
     /**
-     * Returns the next line in the wrapped {@code Reader}.
+     * Returns the next line in the wrapped {@link Reader}.
      *
      * @return the next line from the input
      * @throws NoSuchElementException if there is no line to return
@@ -160,7 +160,7 @@ public class LineIterator implements Iterator<String>, Closeable {
     }
 
     /**
-     * Returns the next line in the wrapped {@code Reader}.
+     * Returns the next line in the wrapped {@link Reader}.
      *
      * @return the next line from the input
      * @throws NoSuchElementException if there is no line to return

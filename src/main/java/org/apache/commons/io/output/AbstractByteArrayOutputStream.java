@@ -38,9 +38,9 @@ import org.apache.commons.io.input.ClosedInputStream;
  * <p>
  * The data can be retrieved using {@code toByteArray()} and
  * {@code toString()}.
- * Closing an {@code AbstractByteArrayOutputStream} has no effect. The methods in
+ * Closing an {@link AbstractByteArrayOutputStream} has no effect. The methods in
  * this class can be called after the stream has been closed without
- * generating an {@code IOException}.
+ * generating an {@link IOException}.
  * </p>
  * <p>
  * This is the base for an alternative implementation of the
@@ -95,9 +95,9 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
     private boolean reuseBuffers = true;
 
     /**
-     * Closing a {@code ByteArrayOutputStream} has no effect. The methods in
+     * Closing a {@link ByteArrayOutputStream} has no effect. The methods in
      * this class can be called after the stream has been closed without
-     * generating an {@code IOException}.
+     * generating an {@link IOException}.
      *
      * @throws IOException never (this method should not declare this exception
      * but it has to now due to backwards compatibility)

@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io.output;
 
+import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
@@ -45,8 +46,8 @@ import org.apache.commons.io.input.QueueInputStream;
  * single thread or multiple threads. Also, unlike JDK classes, no special meaning is attached to initial or current
  * thread. Instances can be used longer after initial threads exited.
  * <p>
- * Closing a {@code QueueOutputStream} has no effect. The methods in this class can be called after the stream has been
- * closed without generating an {@code IOException}.
+ * Closing a {@link QueueOutputStream} has no effect. The methods in this class can be called after the stream has been
+ * closed without generating an {@link IOException}.
  * </p>
  *
  * @see QueueInputStream
