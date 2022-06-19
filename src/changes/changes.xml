@@ -372,7 +372,13 @@ The <action> type attribute can be add,update,fix,remove.
         Add PathUtils.touch(Path).
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">
-        Add Add FileSystem.getIllegalFileNameCodePoints().
+        Add FileSystem.getIllegalFileNameCodePoints().
+      </action>
+      <action dev="ggregory" type="add" due-to="Isira Seneviratne, Gary Gregory">
+        Add FileUtils.isFileNewer(File, ChronoLocalDate, OffsetTime).
+        Add FileUtils.isFileNewer(File, OffsetDateTime).
+        Add FileUtils.isFileOlder(File, ChronoLocalDate, OffsetTime).
+        Add FileUtils.isFileOlder(File, OffsetDateTime).
       </action>
       <!-- UPDATE -->
       <action dev="kinow" type="update" due-to="Dependabot, Gary Gregory">

@@ -48,7 +48,10 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1684,10 +1687,12 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final long now = date.getTime();
         final Instant instant = date.toInstant();
         final ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
+        final OffsetDateTime offsetDateTime = zonedDateTime.toOffsetDateTime();
         final LocalDateTime localDateTime = zonedDateTime.toLocalDateTime();
         final LocalDate localDate = zonedDateTime.toLocalDate();
         final LocalDate localDatePlusDay = localDate.plusDays(1);
         final LocalTime localTime = LocalTime.ofSecondOfDay(0);
+        final OffsetTime offsetTime = OffsetTime.of(localTime, ZoneOffset.UTC);
 
         do {
             try {
@@ -1714,24 +1719,30 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertFalse(FileUtils.isFileNewer(oldFile, now), "Old File - Newer - Mili");
         assertFalse(FileUtils.isFileNewer(oldFile, instant), "Old File - Newer - Instant");
         assertFalse(FileUtils.isFileNewer(oldFile, zonedDateTime), "Old File - Newer - ZonedDateTime");
+        assertFalse(FileUtils.isFileNewer(oldFile, offsetDateTime), "Old File - Newer - OffsetDateTime");
         assertFalse(FileUtils.isFileNewer(oldFile, localDateTime), "Old File - Newer - LocalDateTime");
         assertFalse(FileUtils.isFileNewer(oldFile, localDateTime, ZoneId.systemDefault()), "Old File - Newer - LocalDateTime,ZoneId");
         assertFalse(FileUtils.isFileNewer(oldFile, localDate), "Old File - Newer - LocalDate");
-        assertTrue(FileUtils.isFileNewer(oldFile, localDate, localTime), "Old File - Newer - LocalDate,ZoneId");
+        assertTrue(FileUtils.isFileNewer(oldFile, localDate, localTime), "Old File - Newer - LocalDate,LocalTime");
+        assertTrue(FileUtils.isFileNewer(oldFile, localDate, offsetTime), "Old File - Newer - LocalDate,OffsetTime");
         assertFalse(FileUtils.isFileNewer(oldFile, localDatePlusDay), "Old File - Newer - LocalDate plus one day");
-        assertFalse(FileUtils.isFileNewer(oldFile, localDatePlusDay, localTime), "Old File - Newer - LocalDate plus one day,ZoneId");
+        assertFalse(FileUtils.isFileNewer(oldFile, localDatePlusDay, localTime), "Old File - Newer - LocalDate plus one day,LocalTime");
+        assertFalse(FileUtils.isFileNewer(oldFile, localDatePlusDay, offsetTime), "Old File - Newer - LocalDate plus one day,OffsetTime");
 
         assertTrue(FileUtils.isFileNewer(newFile, reference), "New File - Newer - File");
         assertTrue(FileUtils.isFileNewer(newFile, date), "New File - Newer - Date");
         assertTrue(FileUtils.isFileNewer(newFile, now), "New File - Newer - Mili");
         assertTrue(FileUtils.isFileNewer(newFile, instant), "New File - Newer - Instant");
         assertTrue(FileUtils.isFileNewer(newFile, zonedDateTime), "New File - Newer - ZonedDateTime");
+        assertTrue(FileUtils.isFileNewer(newFile, offsetDateTime), "New File - Newer - OffsetDateTime");
         assertTrue(FileUtils.isFileNewer(newFile, localDateTime), "New File - Newer - LocalDateTime");
         assertTrue(FileUtils.isFileNewer(newFile, localDateTime, ZoneId.systemDefault()), "New File - Newer - LocalDateTime,ZoneId");
         assertFalse(FileUtils.isFileNewer(newFile, localDate), "New File - Newer - LocalDate");
-        assertTrue(FileUtils.isFileNewer(newFile, localDate, localTime), "New File - Newer - LocalDate,ZoneId");
+        assertTrue(FileUtils.isFileNewer(newFile, localDate, localTime), "New File - Newer - LocalDate,LocalTime");
+        assertTrue(FileUtils.isFileNewer(newFile, localDate, offsetTime), "New File - Newer - LocalDate,OffsetTime");
         assertFalse(FileUtils.isFileNewer(newFile, localDatePlusDay), "New File - Newer - LocalDate plus one day");
-        assertFalse(FileUtils.isFileNewer(newFile, localDatePlusDay, localTime), "New File - Newer - LocalDate plus one day,ZoneId");
+        assertFalse(FileUtils.isFileNewer(newFile, localDatePlusDay, localTime), "New File - Newer - LocalDate plus one day,LocalTime");
+        assertFalse(FileUtils.isFileNewer(newFile, localDatePlusDay, offsetTime), "New File - Newer - LocalDate plus one day,OffsetTime");
         assertFalse(FileUtils.isFileNewer(invalidFile, reference), "Invalid - Newer - File");
         final String invalidFileName = invalidFile.getName();
         assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileNewer(newFile, invalidFile));
@@ -1742,24 +1753,30 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(FileUtils.isFileOlder(oldFile, now), "Old File - Older - Mili");
         assertTrue(FileUtils.isFileOlder(oldFile, instant), "Old File - Older - Instant");
         assertTrue(FileUtils.isFileOlder(oldFile, zonedDateTime), "Old File - Older - ZonedDateTime");
+        assertTrue(FileUtils.isFileOlder(oldFile, offsetDateTime), "Old File - Older - OffsetDateTime");
         assertTrue(FileUtils.isFileOlder(oldFile, localDateTime), "Old File - Older - LocalDateTime");
         assertTrue(FileUtils.isFileOlder(oldFile, localDateTime, ZoneId.systemDefault()), "Old File - Older - LocalDateTime,LocalTime");
         assertTrue(FileUtils.isFileOlder(oldFile, localDate), "Old File - Older - LocalDate");
-        assertFalse(FileUtils.isFileOlder(oldFile, localDate, localTime), "Old File - Older - LocalDate,ZoneId");
+        assertFalse(FileUtils.isFileOlder(oldFile, localDate, localTime), "Old File - Older - LocalDate,LocalTime");
+        assertFalse(FileUtils.isFileOlder(oldFile, localDate, offsetTime), "Old File - Older - LocalDate,OffsetTime");
         assertTrue(FileUtils.isFileOlder(oldFile, localDatePlusDay), "Old File - Older - LocalDate plus one day");
         assertTrue(FileUtils.isFileOlder(oldFile, localDatePlusDay, localTime), "Old File - Older - LocalDate plus one day,LocalTime");
+        assertTrue(FileUtils.isFileOlder(oldFile, localDatePlusDay, offsetTime), "Old File - Older - LocalDate plus one day,OffsetTime");
 
         assertFalse(FileUtils.isFileOlder(newFile, reference), "New File - Older - File");
         assertFalse(FileUtils.isFileOlder(newFile, date), "New File - Older - Date");
         assertFalse(FileUtils.isFileOlder(newFile, now), "New File - Older - Mili");
         assertFalse(FileUtils.isFileOlder(newFile, instant), "New File - Older - Instant");
         assertFalse(FileUtils.isFileOlder(newFile, zonedDateTime), "New File - Older - ZonedDateTime");
+        assertFalse(FileUtils.isFileOlder(newFile, offsetDateTime), "New File - Older - OffsetDateTime");
         assertFalse(FileUtils.isFileOlder(newFile, localDateTime), "New File - Older - LocalDateTime");
         assertFalse(FileUtils.isFileOlder(newFile, localDateTime, ZoneId.systemDefault()), "New File - Older - LocalDateTime,ZoneId");
         assertTrue(FileUtils.isFileOlder(newFile, localDate), "New File - Older - LocalDate");
         assertFalse(FileUtils.isFileOlder(newFile, localDate, localTime), "New File - Older - LocalDate,LocalTime");
+        assertFalse(FileUtils.isFileOlder(newFile, localDate, offsetTime), "New File - Older - LocalDate,OffsetTime");
         assertTrue(FileUtils.isFileOlder(newFile, localDatePlusDay), "New File - Older - LocalDate plus one day");
         assertTrue(FileUtils.isFileOlder(newFile, localDatePlusDay, localTime), "New File - Older - LocalDate plus one day,LocalTime");
+        assertTrue(FileUtils.isFileOlder(newFile, localDatePlusDay, offsetTime), "New File - Older - LocalDate plus one day,OffsetTime");
 
         assertFalse(FileUtils.isFileOlder(invalidFile, reference), "Invalid - Older - File");
         assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileOlder(newFile, invalidFile));

@@ -46,6 +46,7 @@ import java.nio.file.attribute.FileTime;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalTime;
+import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZoneId;
 import java.time.chrono.ChronoLocalDate;
@@ -1497,7 +1498,7 @@ public class FileUtils {
 
     /**
      * Tests whether the specified {@link File} is a directory or not. Implemented as a
-     * null-safe delegate to {@code Files.isDirectory(Path path, LinkOption... options)}.
+     * null-safe delegate to {@link Files#isDirectory(Path path, LinkOption... options)}.
      *
      * @param   file the path to the file.
      * @param   options options indicating how symbolic links are handled
@@ -1569,6 +1570,24 @@ public class FileUtils {
         Objects.requireNonNull(chronoLocalDate, "chronoLocalDate");
         Objects.requireNonNull(localTime, "localTime");
         return isFileNewer(file, chronoLocalDate.atTime(localTime));
+    }
+
+    /**
+     * Tests if the specified {@link File} is newer than the specified {@link ChronoLocalDate} at the specified
+     * {@link OffsetTime}.
+     *
+     * @param file the {@link File} of which the modification date must be compared
+     * @param chronoLocalDate the date reference
+     * @param offsetTime the time reference
+     * @return true if the {@link File} exists and has been modified after the given {@link ChronoLocalDate} at the given
+     *         {@link OffsetTime}.
+     * @throws NullPointerException if the file, local date or zone ID is {@code null}
+     * @since 2.12.0
+     */
+    public static boolean isFileNewer(final File file, final ChronoLocalDate chronoLocalDate, final OffsetTime offsetTime) {
+        Objects.requireNonNull(chronoLocalDate, "chronoLocalDate");
+        Objects.requireNonNull(offsetTime, "offsetTime");
+        return isFileNewer(file, chronoLocalDate.atTime(offsetTime.toLocalTime()));
     }
 
     /**
@@ -1698,6 +1717,20 @@ public class FileUtils {
     }
 
     /**
+     * Tests if the specified {@link File} is newer than the specified {@link OffsetDateTime}.
+     *
+     * @param file the {@link File} of which the modification date must be compared
+     * @param offsetDateTime the date reference
+     * @return true if the {@link File} exists and has been modified before the given {@link OffsetDateTime}.
+     * @throws NullPointerException if the file or zoned date time is {@code null}
+     * @since 2.12.0
+     */
+    public static boolean isFileNewer(final File file, final OffsetDateTime offsetDateTime) {
+        Objects.requireNonNull(offsetDateTime, "offsetDateTime");
+        return isFileNewer(file, offsetDateTime.toInstant());
+    }
+
+    /**
      * Tests if the specified {@link File} is older than the specified {@link ChronoLocalDate}
      * at the current time.
      *
@@ -1743,6 +1776,24 @@ public class FileUtils {
         Objects.requireNonNull(chronoLocalDate, "chronoLocalDate");
         Objects.requireNonNull(localTime, "localTime");
         return isFileOlder(file, chronoLocalDate.atTime(localTime));
+    }
+
+    /**
+     * Tests if the specified {@link File} is older than the specified {@link ChronoLocalDate} at the specified
+     * {@link OffsetTime}.
+     *
+     * @param file the {@link File} of which the modification date must be compared
+     * @param chronoLocalDate the date reference
+     * @param offsetTime the time reference
+     * @return true if the {@link File} exists and has been modified after the given {@link ChronoLocalDate} at the given
+     *         {@link OffsetTime}.
+     * @throws NullPointerException if the file, local date or zone ID is {@code null}
+     * @since 2.12.0
+     */
+    public static boolean isFileOlder(final File file, final ChronoLocalDate chronoLocalDate, final OffsetTime offsetTime) {
+        Objects.requireNonNull(chronoLocalDate, "chronoLocalDate");
+        Objects.requireNonNull(offsetTime, "offsetTime");
+        return isFileOlder(file, chronoLocalDate.atTime(offsetTime.toLocalTime()));
     }
 
     /**
@@ -1870,8 +1921,22 @@ public class FileUtils {
     }
 
     /**
+     * Tests if the specified {@link File} is older than the specified {@link OffsetDateTime}.
+     *
+     * @param file the {@link File} of which the modification date must be compared
+     * @param offsetDateTime the date reference
+     * @return true if the {@link File} exists and has been modified before the given {@link OffsetDateTime}.
+     * @throws NullPointerException if the file or zoned date time is {@code null}
+     * @since 2.12.0
+     */
+    public static boolean isFileOlder(final File file, final OffsetDateTime offsetDateTime) {
+        Objects.requireNonNull(offsetDateTime, "offsetDateTime");
+        return isFileOlder(file, offsetDateTime.toInstant());
+    }
+
+    /**
      * Tests whether the specified {@link File} is a regular file or not. Implemented as a
-     * null-safe delegate to {@code Files.isRegularFile(Path path, LinkOption... options)}.
+     * null-safe delegate to {@link Files#isRegularFile(Path path, LinkOption... options)}.
      *
      * @param   file the path to the file.
      * @param   options options indicating how symbolic links are handled
