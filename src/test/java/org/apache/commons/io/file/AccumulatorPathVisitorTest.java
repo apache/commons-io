@@ -21,7 +21,6 @@ import static org.apache.commons.io.file.CounterAssertions.assertCounts;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -52,7 +51,7 @@ public class AccumulatorPathVisitorTest {
     }
 
     @TempDir
-    File tempDirFile;
+    Path tempDirFile;
 
     /**
      * Tests an empty folder.
@@ -60,11 +59,9 @@ public class AccumulatorPathVisitorTest {
     @ParameterizedTest
     @MethodSource("testParameters")
     public void testEmptyFolder(final Supplier<AccumulatorPathVisitor> supplier) throws IOException {
-        final Path tempDir = tempDirFile.toPath();
         final AccumulatorPathVisitor accPathVisitor = supplier.get();
         final PathVisitorFileFilter countingFileFilter = new PathVisitorFileFilter(accPathVisitor);
-        Files.walkFileTree(tempDir,
-            new AndFileFilter(countingFileFilter, DirectoryFileFilter.INSTANCE, EmptyFileFilter.EMPTY));
+        Files.walkFileTree(tempDirFile, new AndFileFilter(countingFileFilter, DirectoryFileFilter.INSTANCE, EmptyFileFilter.EMPTY));
         assertCounts(1, 0, 0, accPathVisitor.getPathCounters());
         assertEquals(1, accPathVisitor.getDirList().size());
         assertTrue(accPathVisitor.getFileList().isEmpty());
@@ -78,8 +75,7 @@ public class AccumulatorPathVisitorTest {
     public void testFolders1FileSize0(final Supplier<AccumulatorPathVisitor> supplier) throws IOException {
         final AccumulatorPathVisitor accPathVisitor = supplier.get();
         final PathVisitorFileFilter countingFileFilter = new PathVisitorFileFilter(accPathVisitor);
-        Files.walkFileTree(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0"),
-            countingFileFilter);
+        Files.walkFileTree(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0"), countingFileFilter);
         assertCounts(1, 1, 0, accPathVisitor.getPathCounters());
         assertEquals(1, accPathVisitor.getDirList().size());
         assertEquals(1, accPathVisitor.getFileList().size());
@@ -93,8 +89,7 @@ public class AccumulatorPathVisitorTest {
     public void testFolders1FileSize1(final Supplier<AccumulatorPathVisitor> supplier) throws IOException {
         final AccumulatorPathVisitor accPathVisitor = supplier.get();
         final PathVisitorFileFilter countingFileFilter = new PathVisitorFileFilter(accPathVisitor);
-        Files.walkFileTree(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1"),
-            countingFileFilter);
+        Files.walkFileTree(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1"), countingFileFilter);
         assertCounts(1, 1, 1, accPathVisitor.getPathCounters());
         assertEquals(1, accPathVisitor.getDirList().size());
         assertEquals(1, accPathVisitor.getFileList().size());
@@ -108,8 +103,7 @@ public class AccumulatorPathVisitorTest {
     public void testFolders2FileSize2(final Supplier<AccumulatorPathVisitor> supplier) throws IOException {
         final AccumulatorPathVisitor accPathVisitor = supplier.get();
         final PathVisitorFileFilter countingFileFilter = new PathVisitorFileFilter(accPathVisitor);
-        Files.walkFileTree(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2"),
-            countingFileFilter);
+        Files.walkFileTree(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2"), countingFileFilter);
         assertCounts(3, 2, 2, accPathVisitor.getPathCounters());
         assertEquals(3, accPathVisitor.getDirList().size());
         assertEquals(2, accPathVisitor.getFileList().size());
