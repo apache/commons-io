@@ -45,4 +45,11 @@ public class IOBiConsumerTest {
         biConsumer1.andThen(biConsumer2).accept("B", 2);
         assertEquals("B22B", ref.get());
     }
+
+    @Test
+    public void testNoopIOConsumer() throws IOException {
+        IOBiConsumer.noop().accept(null, null);
+        IOBiConsumer.NOOP.accept(null, null);
+    }
+
 }
