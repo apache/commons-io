@@ -55,8 +55,6 @@ public class EndianUtils {
         return value;
     }
 
-    // ========================================== Swapping routines
-
     /**
      * Reads a "double" value from a byte array at a given offset. The value is
      * converted to the opposed endian system while reading.
@@ -102,7 +100,7 @@ public class EndianUtils {
     }
 
     /**
-     * Reads a "int" value from a byte array at a given offset. The value is
+     * Reads an "int" value from a byte array at a given offset. The value is
      * converted to the opposed endian system while reading.
      * @param data source byte array
      * @param offset starting offset in the byte array
@@ -115,10 +113,8 @@ public class EndianUtils {
             ( ( data[ offset + 3 ] & 0xff ) << 24 );
     }
 
-    // ========================================== Swapping read/write routines
-
     /**
-     * Reads a "int" value from an InputStream. The value is
+     * Reads an "int" value from an InputStream. The value is
      * converted to the opposed endian system while reading.
      * @param input source InputStream
      * @return the value just read
@@ -268,7 +264,7 @@ public class EndianUtils {
     }
 
     /**
-     * Converts a "int" value between endian systems.
+     * Converts an "int" value between endian systems.
      * @param value value to convert
      * @return the converted value
      */
@@ -352,7 +348,7 @@ public class EndianUtils {
     }
 
     /**
-     * Writes a "int" value to a byte array at a given offset. The value is
+     * Writes an "int" value to a byte array at a given offset. The value is
      * converted to the opposed endian system while writing.
      * @param data target byte array
      * @param offset starting offset in the byte array
@@ -366,7 +362,7 @@ public class EndianUtils {
     }
 
     /**
-     * Writes a "int" value to an OutputStream. The value is converted to the opposed endian system while writing.
+     * Writes an "int" value to an OutputStream. The value is converted to the opposed endian system while writing.
      *
      * @param output target OutputStream
      * @param value value to write
