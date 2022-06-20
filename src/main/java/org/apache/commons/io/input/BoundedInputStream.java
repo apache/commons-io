@@ -81,7 +81,7 @@ public class BoundedInputStream extends InputStream {
      */
     @Override
     public int available() throws IOException {
-        if (max>=0 && pos>=max) {
+        if (max >= 0 && pos >= max) {
             return 0;
         }
         return in.available();
@@ -170,17 +170,17 @@ public class BoundedInputStream extends InputStream {
      */
     @Override
     public int read(final byte[] b, final int off, final int len) throws IOException {
-        if (max>=0 && pos>=max) {
+        if (max >= 0 && pos >= max) {
             return EOF;
         }
-        final long maxRead = max>=0 ? Math.min(len, max-pos) : len;
-        final int bytesRead = in.read(b, off, (int)maxRead);
+        final long maxRead = max >= 0 ? Math.min(len, max - pos) : len;
+        final int bytesRead = in.read(b, off, (int) maxRead);
 
-        if (bytesRead==EOF) {
+        if (bytesRead == EOF) {
             return EOF;
         }
 
-        pos+=bytesRead;
+        pos += bytesRead;
         return bytesRead;
     }
 
@@ -195,7 +195,7 @@ public class BoundedInputStream extends InputStream {
     }
 
     /**
-     * Set whether the {@link #close()} method
+     * Sets whether the {@link #close()} method
      * should propagate to the underling {@link InputStream}.
      *
      * @param propagateClose {@code true} if calling
@@ -215,9 +215,9 @@ public class BoundedInputStream extends InputStream {
      */
     @Override
     public long skip(final long n) throws IOException {
-        final long toSkip = max>=0 ? Math.min(n, max-pos) : n;
+        final long toSkip = max >= 0 ? Math.min(n, max - pos) : n;
         final long skippedBytes = in.skip(toSkip);
-        pos+=skippedBytes;
+        pos += skippedBytes;
         return skippedBytes;
     }
 
