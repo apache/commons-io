@@ -18,6 +18,7 @@
 package org.apache.commons.io.file;
 
 import java.io.IOException;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.apache.commons.io.file.Counters.PathCounters;
+import org.apache.commons.io.function.IOBiFunction;
 
 /**
  * Accumulates normalized paths during visitation.
@@ -133,6 +135,20 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
      */
     public AccumulatorPathVisitor(final PathCounters pathCounter, final PathFilter fileFilter, final PathFilter dirFilter) {
         super(pathCounter, fileFilter, dirFilter);
+    }
+
+    /**
+     * Constructs a new instance.
+     *
+     * @param pathCounter How to count path visits.
+     * @param fileFilter Filters which files to count.
+     * @param dirFilter Filters which directories to count.
+     * @param visitFileFailed Called on {@link #visitFileFailed(Path, IOException)}.
+     * @since 2.12.0
+     */
+    public AccumulatorPathVisitor(final PathCounters pathCounter, final PathFilter fileFilter, final PathFilter dirFilter,
+        final IOBiFunction<Path, IOException, FileVisitResult> visitFileFailed) {
+        super(pathCounter, fileFilter, dirFilter, visitFileFailed);
     }
 
     private void add(final List<Path> list, final Path dir) {

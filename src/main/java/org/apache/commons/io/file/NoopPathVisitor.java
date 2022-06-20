@@ -17,6 +17,12 @@
 
 package org.apache.commons.io.file;
 
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Path;
+
+import org.apache.commons.io.function.IOBiFunction;
+
 /**
  * A noop path visitor.
  *
@@ -28,4 +34,22 @@ public class NoopPathVisitor extends SimplePathVisitor {
      * The singleton instance.
      */
     public static final NoopPathVisitor INSTANCE = new NoopPathVisitor();
+
+    /**
+     * Constructs a new instance.
+     *
+     * @since 2.12.0
+     */
+    public NoopPathVisitor() {
+    }
+
+    /**
+     * Constructs a new instance.
+     *
+     * @param visitFileFailed Called on {@link #visitFileFailed(Path, IOException)}.
+     * @since 2.12.0
+     */
+    public NoopPathVisitor(final IOBiFunction<Path, IOException, FileVisitResult> visitFileFailed) {
+        super(visitFileFailed);
+    }
 }
