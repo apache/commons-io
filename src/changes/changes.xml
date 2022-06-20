@@ -183,7 +183,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-772" dev="ggregory" type="fix" due-to="Dan Ziemba, Gary Gregory">
         Confusing Javadoc on IOUtils#resourceToURL() and other resource* methods.
       </action>
-      <action issue="IO-564" dev="ggregory" type="fix" due-to=", Gary Gregory">
+      <action issue="IO-564" dev="ggregory" type="fix" due-to="Hao Zhong, Bernd Eckenfels, Pascal Schumacher, Gary Gregory">
         Pick up Javadoc from super for override write() methods in AbstractByteArrayOutputStream and ByteArrayOutputStream.
       </action>
       <!-- ADD -->
