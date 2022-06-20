@@ -37,6 +37,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnsupportedCharsetException;
 import java.nio.file.CopyOption;
 import java.nio.file.FileVisitOption;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.NotDirectoryException;
@@ -78,7 +79,6 @@ import org.apache.commons.io.filefilter.FileFileFilter;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.apache.commons.io.function.IOBiFunction;
 import org.apache.commons.io.function.IOConsumer;
 
 /**
@@ -2175,7 +2175,8 @@ public class FileUtils {
         final boolean isDirFilterSet = dirFilter != null;
         final FileEqualsFileFilter rootDirFilter = new FileEqualsFileFilter(directory);
         final PathFilter dirPathFilter = isDirFilterSet ? rootDirFilter.or(dirFilter) : rootDirFilter;
-        final AccumulatorPathVisitor visitor = new AccumulatorPathVisitor(Counters.noopPathCounters(), fileFilter, dirPathFilter, IOBiFunction.noop());
+        final AccumulatorPathVisitor visitor = new AccumulatorPathVisitor(Counters.noopPathCounters(), fileFilter, dirPathFilter,
+            (p, e) -> FileVisitResult.CONTINUE);
         final Set<FileVisitOption> optionSet = new HashSet<>();
         Collections.addAll(optionSet, options);
         Files.walkFileTree(directory.toPath(), optionSet, toMaxDepth(isDirFilterSet), visitor);
