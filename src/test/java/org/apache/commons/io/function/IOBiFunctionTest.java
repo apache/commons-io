@@ -18,6 +18,7 @@
 package org.apache.commons.io.function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
@@ -87,6 +88,12 @@ public class IOBiFunctionTest {
             throw new IOException("Boom!");
         };
         assertThrows(IOException.class, () -> isDirectory.apply(PathUtils.current(), PathUtils.EMPTY_LINK_OPTION_ARRAY));
+    }
+
+    @Test
+    public void testNoopIOConsumer() throws IOException {
+        assertNull(IOBiFunction.noop().apply(null, null));
+        assertNull(IOBiFunction.NOOP.apply(null, null));
     }
 
 }
