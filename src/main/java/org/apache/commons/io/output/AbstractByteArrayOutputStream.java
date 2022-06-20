@@ -95,12 +95,12 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
     private boolean reuseBuffers = true;
 
     /**
-     * Closing a {@link ByteArrayOutputStream} has no effect. The methods in
-     * this class can be called after the stream has been closed without
-     * generating an {@link IOException}.
+     * Does nothing.
      *
-     * @throws IOException never (this method should not declare this exception
-     * but it has to now due to backwards compatibility)
+     * The methods in this class can be called after the stream has been closed without generating an {@link IOException}.
+     *
+     * @throws IOException never (this method should not declare this exception but it has to now due to backwards
+     *         compatibility)
      */
     @Override
     public void close() throws IOException {
@@ -291,12 +291,6 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
         return new String(toByteArray(), enc);
     }
 
-    /**
-     * Writes the bytes to the byte array.
-     * @param b the bytes to write
-     * @param off The start offset
-     * @param len The number of bytes to write
-     */
     @Override
     public abstract void write(final byte[] b, final int off, final int len);
 
@@ -313,10 +307,6 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
      */
     public abstract int write(final InputStream in) throws IOException;
 
-    /**
-     * Write a byte to byte array.
-     * @param b the byte to write
-     */
     @Override
     public abstract void write(final int b);
 
