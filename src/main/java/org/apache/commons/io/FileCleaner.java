@@ -36,10 +36,11 @@ import java.io.File;
  */
 @Deprecated
 public class FileCleaner {
+
     /**
      * The instance to use for the deprecated, static methods.
      */
-    static final FileCleaningTracker INSTANCE = new FileCleaningTracker();
+    private static final FileCleaningTracker INSTANCE = new FileCleaningTracker();
 
     /**
      * Call this method to cause the file cleaner thread to terminate when
