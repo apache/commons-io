@@ -80,14 +80,19 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
     }
 
     static final int DEFAULT_SIZE = 1024;
+
     /** The list of buffers, which grows and never reduces. */
     private final List<byte[]> buffers = new ArrayList<>();
+
     /** The index of the current buffer. */
     private int currentBufferIndex;
+
     /** The total count of bytes in all the filled buffers. */
     private int filledBufferSum;
+
     /** The current buffer. */
     private byte[] currentBuffer;
+
     /** The total count of bytes written. */
     protected int count;
 
@@ -160,7 +165,6 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
             reuseBuffers = true;
         }
     }
-
 
     /**
      * Returns the current size of the byte array.
