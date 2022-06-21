@@ -789,9 +789,8 @@ public class XmlStreamReader extends Reader {
      * @return the encoding to be used
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    private String doRawStream(final BOMInputStream bom, final BOMInputStream pis, final boolean lenient)
-            throws IOException {
-        final String bomEnc      = bom.getBOMCharsetName();
+    private String doRawStream(final BOMInputStream bom, final BOMInputStream pis, final boolean lenient) throws IOException {
+        final String bomEnc = bom.getBOMCharsetName();
         final String xmlGuessEnc = pis.getBOMCharsetName();
         final String xmlEnc = getXmlProlog(pis, xmlGuessEnc);
         try {
