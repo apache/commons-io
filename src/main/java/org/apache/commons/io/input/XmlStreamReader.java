@@ -98,7 +98,7 @@ public class XmlStreamReader extends Reader {
         ByteOrderMark.UTF_32LE
     };
 
-    // UTF_16LE and UTF_32LE have the same two starting BOM bytes.
+    /** UTF_16LE and UTF_32LE have the same two starting BOM bytes. */
     private static final ByteOrderMark[] XML_GUESS_BYTES = {
         new ByteOrderMark(UTF_8,    0x3C, 0x3F, 0x78, 0x6D),
         new ByteOrderMark(UTF_16BE, 0x00, 0x3C, 0x00, 0x3F),
@@ -453,7 +453,6 @@ public class XmlStreamReader extends Reader {
         this(inputStream, httpContentType, lenient, null);
     }
 
-
     /**
      * Constructs a Reader using an InputStream and the associated content-type
      * header. This constructor is lenient regarding the encoding detection.
@@ -547,7 +546,6 @@ public class XmlStreamReader extends Reader {
      *         the URL.
      */
     public XmlStreamReader(final URL url) throws IOException {
-        // TODO URLConnection leak.
         this(Objects.requireNonNull(url, "url").openConnection(), null);
     }
 
@@ -580,14 +578,14 @@ public class XmlStreamReader extends Reader {
         final String contentType = urlConnection.getContentType();
         final InputStream inputStream = urlConnection.getInputStream();
         @SuppressWarnings("resource") // managed by the InputStreamReader tracked by this instance
-        final BOMInputStream bom = new BOMInputStream(new BufferedInputStream(inputStream, IOUtils.DEFAULT_BUFFER_SIZE), false, BOMS);
-        final BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
+        final BOMInputStream bomInput = new BOMInputStream(new BufferedInputStream(inputStream, IOUtils.DEFAULT_BUFFER_SIZE), false, BOMS);
+        final BOMInputStream piInput = new BOMInputStream(bomInput, true, XML_GUESS_BYTES);
         if (urlConnection instanceof HttpURLConnection || contentType != null) {
-            this.encoding = processHttpStream(bom, pis, contentType, lenient);
+            this.encoding = processHttpStream(bomInput, piInput, contentType, lenient);
         } else {
-            this.encoding = doRawStream(bom, pis, lenient);
+            this.encoding = doRawStream(bomInput, piInput, lenient);
         }
-        this.reader = new InputStreamReader(pis, encoding);
+        this.reader = new InputStreamReader(piInput, encoding);
     }
 
     /**
@@ -826,21 +824,20 @@ public class XmlStreamReader extends Reader {
     }
 
     /**
-     * Processes a HTTP stream.
+     * Processes an HTTP stream.
      *
-     * @param bom BOMInputStream to detect byte order marks
-     * @param pis BOMInputStream to guess XML encoding
+     * @param bomInput BOMInputStream to detect byte order marks
+     * @param piInput BOMInputStream to guess XML encoding
      * @param httpContentType The HTTP content type
-     * @param lenient indicates if the charset encoding detection should be
-     *        relaxed.
+     * @param lenient indicates if the charset encoding detection should be relaxed.
      * @return the encoding to be used
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    private String processHttpStream(final BOMInputStream bom, final BOMInputStream pis, final String httpContentType,
-        final boolean lenient) throws IOException {
-        final String bomEnc = bom.getBOMCharsetName();
-        final String xmlGuessEnc = pis.getBOMCharsetName();
-        final String xmlEnc = getXmlProlog(pis, xmlGuessEnc);
+    private String processHttpStream(final BOMInputStream bomInput, final BOMInputStream piInput, final String httpContentType, final boolean lenient)
+        throws IOException {
+        final String bomEnc = bomInput.getBOMCharsetName();
+        final String xmlGuessEnc = piInput.getBOMCharsetName();
+        final String xmlEnc = getXmlProlog(piInput, xmlGuessEnc);
         try {
             return calculateHttpEncoding(httpContentType, bomEnc, xmlGuessEnc, xmlEnc, lenient);
         } catch (final XmlStreamReaderException ex) {
