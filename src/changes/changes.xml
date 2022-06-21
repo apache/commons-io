@@ -390,7 +390,7 @@ The <action> type attribute can be add,update,fix,remove.
         Add IOBiConsumer.noop().
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">
-        Add IOUtils.closeQuietly(Collection&lt;Closeable&gt;).
+        Add IOUtils.closeQuietly(Iterable&lt;Closeable&gt;).
         Add IOUtils.closeQuietly(Stream&lt;Closeable&gt;).
       </action>
       <!-- UPDATE -->
