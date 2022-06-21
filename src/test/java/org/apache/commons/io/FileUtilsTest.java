@@ -2454,26 +2454,20 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertEquals(31, data[2]);
     }
 
-
     @Test
     public void testReadFileToStringWithDefaultEncoding() throws Exception {
         final File file = new File(tempDirFile, "read.obj");
-        final OutputStream out = Files.newOutputStream(file.toPath());
-        final byte[] text = "Hello /u1234".getBytes();
-        out.write(text);
-        out.close();
+        final String fixture = "Hello /u1234";
+        Files.write(file.toPath(), fixture.getBytes());
 
-        final String data = FileUtils.readFileToString(file);
-        assertEquals("Hello /u1234", data);
+        assertEquals(fixture, FileUtils.readFileToString(file));
     }
 
     @Test
     public void testReadFileToStringWithEncoding() throws Exception {
         final File file = new File(tempDirFile, "read.obj");
-        final OutputStream out = Files.newOutputStream(file.toPath());
         final byte[] text = "Hello /u1234".getBytes(StandardCharsets.UTF_8);
-        out.write(text);
-        out.close();
+        Files.write(file.toPath(), text);
 
         final String data = FileUtils.readFileToString(file, "UTF8");
         assertEquals("Hello /u1234", data);
