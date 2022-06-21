@@ -2445,11 +2445,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testReadFileToByteArray() throws Exception {
         final File file = new File(tempDirFile, "read.txt");
-        final OutputStream out = Files.newOutputStream(file.toPath());
-        out.write(11);
-        out.write(21);
-        out.write(31);
-        out.close();
+        Files.write(file.toPath(), new byte[] {11, 21, 31});
 
         final byte[] data = FileUtils.readFileToByteArray(file);
         assertEquals(3, data.length);
