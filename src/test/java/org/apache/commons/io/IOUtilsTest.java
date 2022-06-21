@@ -57,12 +57,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.function.IOConsumer;
+import org.apache.commons.io.input.BrokenInputStream;
 import org.apache.commons.io.input.CircularInputStream;
 import org.apache.commons.io.input.NullInputStream;
 import org.apache.commons.io.input.StringInputStream;
 import org.apache.commons.io.output.AppendableWriter;
+import org.apache.commons.io.output.BrokenOutputStream;
 import org.apache.commons.io.output.CountingOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.io.output.NullWriter;
@@ -339,18 +342,19 @@ public class IOUtilsTest {
 
     @Test
     public void testCloseQuietly_AllCloseableIOException() {
-        final Closeable closeable = () -> {
-            throw new IOException();
-        };
+        final Closeable closeable = BrokenInputStream.INSTANCE;
         assertDoesNotThrow(() -> IOUtils.closeQuietly(closeable, null, closeable));
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(Arrays.asList(closeable, null, closeable)));
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(Stream.of(closeable, null, closeable)));
     }
 
     @Test
     public void testCloseQuietly_CloseableIOException() {
         assertDoesNotThrow(() -> {
-            IOUtils.closeQuietly(() -> {
-                throw new IOException();
-            });
+            IOUtils.closeQuietly(BrokenInputStream.INSTANCE);
+        });
+        assertDoesNotThrow(() -> {
+            IOUtils.closeQuietly(BrokenOutputStream.INSTANCE);
         });
     }
 

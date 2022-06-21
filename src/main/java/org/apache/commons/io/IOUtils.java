@@ -51,6 +51,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.input.QueueInputStream;
@@ -473,6 +474,13 @@ public class IOUtils {
     }
 
     /**
+     * Avoids the need to type cast.
+     */
+    private static void closeQ(final Closeable closeable) {
+        closeQuietly(closeable, null);
+    }
+
+    /**
      * Closes a {@link Closeable} unconditionally.
      * <p>
      * Equivalent to {@link Closeable#close()}, except any exceptions will be ignored.
@@ -520,7 +528,7 @@ public class IOUtils {
      */
     public static void closeQuietly(final Closeable... closeables) {
         if (closeables != null) {
-            Arrays.stream(closeables).forEach(IOUtils::closeQuietly);
+            closeQuietly(Arrays.stream(closeables));
         }
     }
 
@@ -573,7 +581,39 @@ public class IOUtils {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     public static void closeQuietly(final InputStream input) {
-        closeQuietly((Closeable) input);
+        closeQ(input);
+    }
+
+    /**
+     * Closes an iterable of {@link Closeable} unconditionally.
+     * <p>
+     * Equivalent calling {@link Closeable#close()} on each element, except any exceptions will be ignored.
+     * </p>
+     *
+     * @param closeables the objects to close, may be null or already closed
+     * @see #closeQuietly(Closeable)
+     * @since 2.12.0
+     */
+    public static void closeQuietly(final Iterable<Closeable> closeables) {
+        if (closeables != null) {
+            closeables.forEach(IOUtils::closeQuietly);
+        }
+    }
+
+    /**
+     * Closes a stream of {@link Closeable} unconditionally.
+     * <p>
+     * Equivalent calling {@link Closeable#close()} on each element, except any exceptions will be ignored.
+     * </p>
+     *
+     * @param closeables the objects to close, may be null or already closed
+     * @see #closeQuietly(Closeable)
+     * @since 2.12.0
+     */
+    public static void closeQuietly(final Stream<Closeable> closeables) {
+        if (closeables != null) {
+            closeables.forEach(IOUtils::closeQuietly);
+        }
     }
 
     /**
@@ -607,7 +647,7 @@ public class IOUtils {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     public static void closeQuietly(final OutputStream output) {
-        closeQuietly((Closeable) output);
+        closeQ(output);
     }
 
     /**
@@ -640,7 +680,7 @@ public class IOUtils {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     public static void closeQuietly(final Reader reader) {
-        closeQuietly((Closeable) reader);
+        closeQ(reader);
     }
 
     /**
@@ -673,7 +713,7 @@ public class IOUtils {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     public static void closeQuietly(final Selector selector) {
-        closeQuietly((Closeable) selector);
+        closeQ(selector);
     }
 
     /**
@@ -706,7 +746,7 @@ public class IOUtils {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     public static void closeQuietly(final ServerSocket serverSocket) {
-        closeQuietly((Closeable) serverSocket);
+        closeQ(serverSocket);
     }
 
     /**
@@ -739,7 +779,7 @@ public class IOUtils {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     public static void closeQuietly(final Socket socket) {
-        closeQuietly((Closeable) socket);
+        closeQ(socket);
     }
 
     /**
@@ -771,7 +811,7 @@ public class IOUtils {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     public static void closeQuietly(final Writer writer) {
-        closeQuietly((Closeable) writer);
+        closeQ(writer);
     }
 
     /**
@@ -787,8 +827,7 @@ public class IOUtils {
      * @throws IOException if an I/O error occurs.
      * @since 2.8.0
      */
-    public static long consume(final InputStream input)
-            throws IOException {
+    public static long consume(final InputStream input) throws IOException {
         return copyLarge(input, NullOutputStream.INSTANCE, getByteArray());
     }
 
@@ -3297,6 +3336,7 @@ public class IOUtils {
         write(data, output, Charsets.toCharset(charsetName));
     }
 
+
     /**
      * Writes chars from a {@link CharSequence} to a {@link Writer}.
      *
@@ -3311,7 +3351,6 @@ public class IOUtils {
             write(data.toString(), writer);
         }
     }
-
 
     /**
      * Writes chars from a {@link String} to bytes on an
