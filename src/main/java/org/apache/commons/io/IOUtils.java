@@ -475,6 +475,8 @@ public class IOUtils {
 
     /**
      * Avoids the need to type cast.
+     *
+     * @param closeable the object to close, may be null
      */
     private static void closeQ(final Closeable closeable) {
         closeQuietly(closeable, null);
