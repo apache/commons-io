@@ -54,19 +54,17 @@ public class XmlStreamReaderUtilitiesTest {
     private static final String TXTXML = "text/xml";
 
     protected String calculateHttpEncoding(final String httpContentType, final String bomEnc, final String xmlGuessEnc,
-            final String xmlEnc, final boolean lenient, final String defaultEncoding) throws IOException {
-        final MockXmlStreamReader mock = new MockXmlStreamReader(defaultEncoding);
-        final String enc = mock.calculateHttpEncoding(httpContentType, bomEnc, xmlGuessEnc, xmlEnc, lenient);
-        mock.close();
-        return enc;
+        final String xmlEnc, final boolean lenient, final String defaultEncoding) throws IOException {
+        try (MockXmlStreamReader mock = new MockXmlStreamReader(defaultEncoding)) {
+            return mock.calculateHttpEncoding(httpContentType, bomEnc, xmlGuessEnc, xmlEnc, lenient);
+        }
     }
 
     protected String calculateRawEncoding(final String bomEnc, final String xmlGuessEnc, final String xmlEnc,
-            final String defaultEncoding) throws IOException {
-        final MockXmlStreamReader mock = new MockXmlStreamReader(defaultEncoding);
-        final String enc = mock.calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc);
-        mock.close();
-        return enc;
+        final String defaultEncoding) throws IOException {
+        try (MockXmlStreamReader mock = new MockXmlStreamReader(defaultEncoding)) {
+            return mock.calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc);
+        }
     }
 
     @SuppressWarnings("boxing")

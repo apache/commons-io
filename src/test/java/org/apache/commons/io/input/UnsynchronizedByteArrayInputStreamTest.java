@@ -38,17 +38,15 @@ public class UnsynchronizedByteArrayInputStreamTest {
         final byte[] one = new byte[1];
         final byte[] some = new byte[25];
 
-        UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(empty);
-        assertEquals(empty.length, is.available());
-
-        is.close();
-        is = new UnsynchronizedByteArrayInputStream(one);
-        assertEquals(one.length, is.available());
-
-        is.close();
-        is = new UnsynchronizedByteArrayInputStream(some);
-        assertEquals(some.length, is.available());
-        is.close();
+        try (UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(empty)) {
+            assertEquals(empty.length, is.available());
+        }
+        try (UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(one)) {
+            assertEquals(one.length, is.available());
+        }
+        try (UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(some)) {
+            assertEquals(some.length, is.available());
+        }
     }
 
     @Test

@@ -62,12 +62,11 @@ public class UnixLineEndingInputStreamTest {
     }
 
     private String roundtrip(final String msg, final boolean ensure) throws IOException {
-        final ByteArrayInputStream baos = new ByteArrayInputStream(msg.getBytes(StandardCharsets.UTF_8));
-        final UnixLineEndingInputStream lf = new UnixLineEndingInputStream(baos, ensure);
-        final byte[] buf = new byte[100];
-        final int read = lf.read(buf);
-        lf.close();
-        return new String(buf, 0, read, StandardCharsets.UTF_8);
+        try (final ByteArrayInputStream baos = new ByteArrayInputStream(msg.getBytes(StandardCharsets.UTF_8));
+            final UnixLineEndingInputStream lf = new UnixLineEndingInputStream(baos, ensure)) {
+            final byte[] buf = new byte[100];
+            return new String(buf, 0, lf.read(buf), StandardCharsets.UTF_8);
+        }
     }
 
     @Test

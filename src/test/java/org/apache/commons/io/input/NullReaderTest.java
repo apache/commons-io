@@ -71,51 +71,47 @@ public class NullReaderTest {
     public void testMarkAndReset() throws Exception {
         int position = 0;
         final int readlimit = 10;
-        @SuppressWarnings("resource") // this is actually closed
-        final Reader reader = new TestNullReader(100, true, false);
+        try (Reader reader = new TestNullReader(100, true, false)) {
 
-        assertTrue(reader.markSupported(), "Mark Should be Supported");
+            assertTrue(reader.markSupported(), "Mark Should be Supported");
 
-        // No Mark
-        try {
+            // No Mark
+            try {
+                reader.reset();
+                fail("Read limit exceeded, expected IOException ");
+            } catch (final IOException e) {
+                assertEquals("No position has been marked", e.getMessage(), "No Mark IOException message");
+            }
+
+            for (; position < 3; position++) {
+                assertEquals(position, reader.read(), "Read Before Mark [" + position + "]");
+            }
+
+            // Mark
+            reader.mark(readlimit);
+
+            // Read further
+            for (int i = 0; i < 3; i++) {
+                assertEquals(position + i, reader.read(), "Read After Mark [" + i + "]");
+            }
+
+            // Reset
             reader.reset();
-            fail("Read limit exceeded, expected IOException ");
-        } catch (final IOException e) {
-            assertEquals("No position has been marked", e.getMessage(), "No Mark IOException message");
+
+            // Read From marked position
+            for (int i = 0; i < readlimit + 1; i++) {
+                assertEquals(position + i, reader.read(), "Read After Reset [" + i + "]");
+            }
+
+            // Reset after read limit passed
+            try {
+                reader.reset();
+                fail("Read limit exceeded, expected IOException ");
+            } catch (final IOException e) {
+                assertEquals("Marked position [" + position + "] is no longer valid - passed the read limit [" + readlimit + "]", e.getMessage(),
+                    "Read limit IOException message");
+            }
         }
-
-        for (; position < 3; position++) {
-            assertEquals(position, reader.read(), "Read Before Mark [" + position +"]");
-        }
-
-        // Mark
-        reader.mark(readlimit);
-
-        // Read further
-        for (int i = 0; i < 3; i++) {
-            assertEquals(position + i, reader.read(), "Read After Mark [" + i +"]");
-        }
-
-        // Reset
-        reader.reset();
-
-        // Read From marked position
-        for (int i = 0; i < readlimit + 1; i++) {
-            assertEquals(position + i, reader.read(), "Read After Reset [" + i +"]");
-        }
-
-        // Reset after read limit passed
-        try {
-            reader.reset();
-            fail("Read limit exceeded, expected IOException ");
-        } catch (final IOException e) {
-            assertEquals("Marked position [" + position
-                         + "] is no longer valid - passed the read limit ["
-                         + readlimit + "]",
-                         e.getMessage(),
-                         "Read limit IOException message");
-        }
-        reader.close();
     }
 
     @Test
@@ -209,20 +205,19 @@ public class NullReaderTest {
 
     @Test
     public void testSkip() throws Exception {
-        final Reader reader = new TestNullReader(10, true, false);
-        assertEquals(0, reader.read(), "Read 1");
-        assertEquals(1, reader.read(), "Read 2");
-        assertEquals(5, reader.skip(5), "Skip 1");
-        assertEquals(7, reader.read(), "Read 3");
-        assertEquals(2, reader.skip(5), "Skip 2"); // only 2 left to skip
-        assertEquals(-1, reader.skip(5), "Skip 3 (EOF)"); // End of file
-        try {
-            reader.skip(5); //
-            fail("Expected IOException for skipping after end of file");
-        } catch (final IOException e) {
-            assertEquals("Skip after end of file", e.getMessage(),
-                    "Skip after EOF IOException message");
+        try (Reader reader = new TestNullReader(10, true, false)) {
+            assertEquals(0, reader.read(), "Read 1");
+            assertEquals(1, reader.read(), "Read 2");
+            assertEquals(5, reader.skip(5), "Skip 1");
+            assertEquals(7, reader.read(), "Read 3");
+            assertEquals(2, reader.skip(5), "Skip 2"); // only 2 left to skip
+            assertEquals(-1, reader.skip(5), "Skip 3 (EOF)"); // End of file
+            try {
+                reader.skip(5); //
+                fail("Expected IOException for skipping after end of file");
+            } catch (final IOException e) {
+                assertEquals("Skip after end of file", e.getMessage(), "Skip after EOF IOException message");
+            }
         }
-        reader.close();
     }
 }
