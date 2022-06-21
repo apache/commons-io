@@ -27,7 +27,6 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Tests {@link Charsets}.
- *
  */
 @SuppressWarnings("deprecation") // testing deprecated code
 public class CharsetsTest {
@@ -51,11 +50,22 @@ public class CharsetsTest {
     }
 
     @Test
-    public void testToCharset() {
+    public void testToCharset_String() {
         assertEquals(Charset.defaultCharset(), Charsets.toCharset((String) null));
         assertEquals(Charset.defaultCharset(), Charsets.toCharset((Charset) null));
         assertEquals(Charset.defaultCharset(), Charsets.toCharset(Charset.defaultCharset()));
         assertEquals(StandardCharsets.UTF_8, Charsets.toCharset(StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void testToCharset_String_Charset() {
+        assertEquals(null, Charsets.toCharset((String) null, null));
+        assertEquals(Charset.defaultCharset(), Charsets.toCharset((String) null, Charset.defaultCharset()));
+        assertEquals(Charset.defaultCharset(), Charsets.toCharset((Charset) null, Charset.defaultCharset()));
+        assertEquals(null, Charsets.toCharset((Charset) null, null));
+        assertEquals(Charset.defaultCharset(), Charsets.toCharset(Charset.defaultCharset(), Charset.defaultCharset()));
+        assertEquals(StandardCharsets.UTF_8, Charsets.toCharset(StandardCharsets.UTF_8, Charset.defaultCharset()));
+        assertEquals(StandardCharsets.UTF_8, Charsets.toCharset(StandardCharsets.UTF_8, null));
     }
 
     @Test
