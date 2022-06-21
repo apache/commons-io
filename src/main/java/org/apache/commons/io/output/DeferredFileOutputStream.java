@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 import org.apache.commons.io.file.PathUtils;
@@ -140,9 +141,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     public DeferredFileOutputStream(final int threshold, final int initialBufferSize, final String prefix,
         final String suffix, final File directory) {
         this(threshold, null, prefix, suffix, directory, initialBufferSize);
-        if (prefix == null) {
-            throw new IllegalArgumentException("Temporary file prefix is missing");
-        }
+        Objects.requireNonNull("prefix", prefix);
         if (initialBufferSize < 0) {
             throw new IllegalArgumentException("Initial buffer size must be atleast 0.");
         }
@@ -163,9 +162,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     public DeferredFileOutputStream(final int threshold, final String prefix, final String suffix,
         final File directory) {
         this(threshold, null, prefix, suffix, directory, AbstractByteArrayOutputStream.DEFAULT_SIZE);
-        if (prefix == null) {
-            throw new IllegalArgumentException("Temporary file prefix is missing");
-        }
+        Objects.requireNonNull(prefix, "prefix");
     }
 
     /**
@@ -180,7 +177,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     }
 
     /**
-     * Returns the data for this output stream as an array of bytes, assuming that the data has been retained in memory.
+     * Gets the data for this output stream as an array of bytes, assuming that the data has been retained in memory.
      * If the data was written to disk, this method returns {@code null}.
      *
      * @return The data for this output stream, or {@code null} if no such data is available.
@@ -190,7 +187,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     }
 
     /**
-     * Returns either the output file specified in the constructor or the temporary file created or null.
+     * Gets either the output file specified in the constructor or the temporary file created or null.
      * <p>
      * If the constructor specifying the file is used then it returns that same output file, even when threshold has not
      * been reached.
@@ -205,7 +202,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     }
 
     /**
-     * Returns the current output stream. This may be memory based or disk based, depending on the current state with
+     * Gets the current output stream. This may be memory based or disk based, depending on the current state with
      * respect to the threshold.
      *
      * @return The underlying output stream.
@@ -218,7 +215,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     }
 
     /**
-     * Determines whether or not the data for this output stream has been retained in memory.
+     * Tests whether or not the data for this output stream has been retained in memory.
      *
      * @return {@code true} if the data is available in memory; {@code false} otherwise.
      */
@@ -251,7 +248,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     }
 
     /**
-     * Gets the current contents of this byte stream as an {@link InputStream}.
+     * Converts the current contents of this byte stream to an {@link InputStream}.
      * If the data for this output stream has been retained in memory, the
      * returned stream is backed by buffers of {@code this} stream,
      * avoiding memory allocation and copy, thus saving space and time.<br>

@@ -244,7 +244,7 @@ public class DeferredFileOutputStreamTest {
         final String prefix = null;
         final String suffix = ".out";
         final File tempDir = FileUtils.current();
-        assertThrows(IllegalArgumentException.class, () -> new DeferredFileOutputStream(testBytes.length - 5, prefix, suffix, tempDir).close());
+        assertThrows(NullPointerException.class, () -> new DeferredFileOutputStream(testBytes.length - 5, prefix, suffix, tempDir).close());
     }
 
     /**

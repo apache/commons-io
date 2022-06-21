@@ -38,8 +38,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * This is used to test LineIterator for correctness.
- *
+ * Tests {@link LineIterator}.
  */
 public class LineIteratorTest {
 
@@ -54,11 +53,7 @@ public class LineIteratorTest {
             }
             assertFalse(iterator.hasNext(), "No more expected");
         } finally {
-            try {
-                IOUtils.close(iterator);
-            } catch (final IOException ignored) {
-                // Ignored
-            }
+            IOUtils.closeQuietly(iterator);
         }
     }
 
@@ -104,9 +99,6 @@ public class LineIteratorTest {
         }
         return lines;
     }
-
-
-    // -----------------------------------------------------------------------
 
     /**
      * Utility method to create and test a file with a specified number of lines.
@@ -166,21 +158,17 @@ public class LineIteratorTest {
 
     @Test
     public void testConstructor() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            try (LineIterator li = new LineIterator(null)) {
-            }
-        });
+        assertThrows(NullPointerException.class, () -> new LineIterator(null));
     }
 
-    private void testFiltering(final List<String> lines, final Reader reader) {
-        final LineIterator iterator = new LineIterator(reader) {
+    private void testFiltering(final List<String> lines, final Reader reader) throws IOException {
+        try (LineIterator iterator = new LineIterator(reader) {
             @Override
             protected boolean isValidLine(final String line) {
                 final char c = line.charAt(line.length() - 1);
                 return (c - 48) % 3 != 1;
             }
-        };
-        try {
+        }) {
             assertThrows(UnsupportedOperationException.class, iterator::remove);
 
             int idx = 0;
@@ -202,12 +190,6 @@ public class LineIteratorTest {
             // try calling next() after file processed
             assertThrows(NoSuchElementException.class, iterator::next);
             assertThrows(NoSuchElementException.class, iterator::nextLine);
-        } finally {
-            try {
-                IOUtils.close(iterator);
-            } catch (final IOException ignored) {
-                // Ignored
-            }
         }
     }
 
@@ -223,7 +205,6 @@ public class LineIteratorTest {
         this.testFiltering(lines, reader);
     }
 
-    // -----------------------------------------------------------------------
     @Test
     public void testFilteringFileReader() throws Exception {
         final String encoding = "UTF-8";

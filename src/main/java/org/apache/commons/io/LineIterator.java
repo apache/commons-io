@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 /**
  * An Iterator over the lines in a {@link Reader}.
@@ -78,9 +79,7 @@ public class LineIterator implements Iterator<String>, Closeable {
      * @throws IllegalArgumentException if the reader is null
      */
     public LineIterator(final Reader reader) throws IllegalArgumentException {
-        if (reader == null) {
-            throw new IllegalArgumentException("Reader must not be null");
-        }
+        Objects.requireNonNull(reader, "reader");
         if (reader instanceof BufferedReader) {
             bufferedReader = (BufferedReader) reader;
         } else {
