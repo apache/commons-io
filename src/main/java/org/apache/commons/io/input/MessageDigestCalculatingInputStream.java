@@ -24,16 +24,26 @@ import java.security.Provider;
 
 
 /**
- * This class is an example for using an {@link ObservableInputStream}. It
- * creates its own {@link org.apache.commons.io.input.ObservableInputStream.Observer},
- * which calculates a checksum using a MessageDigest, for example an MD5 sum.
- * <em>Note</em>: Neither {@link ObservableInputStream}, nor {@link MessageDigest},
- * are thread safe. So is {@link MessageDigestCalculatingInputStream}.
+ * This class is an example for using an {@link ObservableInputStream}. It creates its own
+ * {@link org.apache.commons.io.input.ObservableInputStream.Observer}, which calculates a checksum using a
+ * MessageDigest, for example an MD5 sum.
+ * <p>
+ * See the MessageDigest section in the
+ * <a href= "https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#MessageDigest"> Java
+ * Cryptography Architecture Standard Algorithm Name Documentation</a> for information about standard algorithm names.
+ * </p>
+ * <p>
+ * <em>Note</em>: Neither {@link ObservableInputStream}, nor {@link MessageDigest}, are thread safe. So is
+ * {@link MessageDigestCalculatingInputStream}.
+ * </p>
  */
 public class MessageDigestCalculatingInputStream extends ObservableInputStream {
 
     /**
      * The default message digest algorithm.
+     * <p>
+     * The MD5 cryptographic algorithm is weak and should not be used.
+     * </p>
      */
     private static final String DEFAULT_ALGORITHM = "MD5";
 
@@ -68,7 +78,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
      * Creates a new instance, which calculates a signature on the given stream, using a {@link MessageDigest} with the
      * "MD5" algorithm.
      * <p>
-     * The MD5  algorithm is weak and should not be used.
+     * The MD5 algorithm is weak and should not be used.
      * </p>
      *
      * @param inputStream the stream to calculate the message digest for
@@ -79,7 +89,8 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
         this(inputStream, getDefaultMessageDigest());
     }
 
-    /** Creates a new instance, which calculates a signature on the given stream,
+    /**
+     * Creates a new instance, which calculates a signature on the given stream,
      * using the given {@link MessageDigest}.
      * @param inputStream the stream to calculate the message digest for
      * @param messageDigest the message digest to use
@@ -94,7 +105,10 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
      * given algorithm.
      *
      * @param inputStream the stream to calculate the message digest for
-     * @param algorithm the name of the algorithm to use
+     * @param algorithm the name of the algorithm requested. See the MessageDigest section in the
+     *        <a href= "https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#MessageDigest">
+     *        Java Cryptography Architecture Standard Algorithm Name Documentation</a> for information about standard
+     *        algorithm names.
      * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation for the specified
      *         algorithm.
      */
@@ -104,24 +118,26 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
     }
 
     /**
-     * Gets a MessageDigest object that implements the a digest algorithm.
+     * Gets a MessageDigest object that implements the default digest algorithm.
      *
-     * @return a Message Digest object that implements the specified algorithm.
-     *
+     * @return a Message Digest object that implements the default algorithm.
      * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation.
-     *
      * @see Provider
      */
     static MessageDigest getDefaultMessageDigest() throws NoSuchAlgorithmException {
         return MessageDigest.getInstance(DEFAULT_ALGORITHM);
     }
 
-    /** Returns the {@link MessageDigest}, which is being used for generating the
+    /**
+     * Gets the {@link MessageDigest}, which is being used for generating the
      * checksum.
+     * <p>
      * <em>Note</em>: The checksum will only reflect the data, which has been read so far.
      * This is probably not, what you expect. Make sure, that the complete data has been
      * read, if that is what you want. The easiest way to do so is by invoking
      * {@link #consume()}.
+     * </p>
+     *
      * @return the message digest used
      */
     public MessageDigest getMessageDigest() {
