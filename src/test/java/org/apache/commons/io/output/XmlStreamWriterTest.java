@@ -88,10 +88,10 @@ public class XmlStreamWriterTest {
     @Test
     public void testDefaultEncoding() throws IOException {
         checkXmlWriter(TEXT_UNICODE, null, null);
-        checkXmlWriter(TEXT_UNICODE, null, "UTF-8");
-        checkXmlWriter(TEXT_UNICODE, null, "UTF-16");
-        checkXmlWriter(TEXT_UNICODE, null, "UTF-16BE");
-        checkXmlWriter(TEXT_UNICODE, null, "ISO-8859-1");
+        checkXmlWriter(TEXT_UNICODE, null, StandardCharsets.UTF_8.name());
+        checkXmlWriter(TEXT_UNICODE, null, StandardCharsets.UTF_16.name());
+        checkXmlWriter(TEXT_UNICODE, null, StandardCharsets.UTF_16BE.name());
+        checkXmlWriter(TEXT_UNICODE, null, StandardCharsets.ISO_8859_1.name());
     }
 
     @Test
@@ -123,7 +123,7 @@ public class XmlStreamWriterTest {
 
     @Test
     public void testLatin1Encoding() throws IOException {
-        checkXmlWriter(TEXT_LATIN1, "ISO-8859-1");
+        checkXmlWriter(TEXT_LATIN1, StandardCharsets.ISO_8859_1.name());
     }
 
     @Test
@@ -142,26 +142,26 @@ public class XmlStreamWriterTest {
 
     @Test
     public void testNoXmlHeader() throws IOException {
-        checkXmlContent("<text>text with no XML header</text>", "UTF-8", null);
+        checkXmlContent("<text>text with no XML header</text>", StandardCharsets.UTF_8.name(), null);
     }
 
     @Test
     public void testUTF16BEEncoding() throws IOException {
-        checkXmlWriter(TEXT_UNICODE, "UTF-16BE");
+        checkXmlWriter(TEXT_UNICODE, StandardCharsets.UTF_16BE.name());
     }
 
     @Test
     public void testUTF16Encoding() throws IOException {
-        checkXmlWriter(TEXT_UNICODE, "UTF-16");
+        checkXmlWriter(TEXT_UNICODE, StandardCharsets.UTF_16.name());
     }
 
     @Test
     public void testUTF16LEEncoding() throws IOException {
-        checkXmlWriter(TEXT_UNICODE, "UTF-16LE");
+        checkXmlWriter(TEXT_UNICODE, StandardCharsets.UTF_16LE.name());
     }
 
     @Test
     public void testUTF8Encoding() throws IOException {
-        checkXmlWriter(TEXT_UNICODE, "UTF-8");
+        checkXmlWriter(TEXT_UNICODE, StandardCharsets.UTF_8.name());
     }
 }

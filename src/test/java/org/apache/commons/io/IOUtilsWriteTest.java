@@ -543,13 +543,13 @@ public class IOUtilsWriteTest {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
 
-        IOUtils.writeLines(list, "*", out, "UTF-8");
+        IOUtils.writeLines(list, "*", out, StandardCharsets.UTF_8.name());
 
         out.off();
         out.flush();
 
         final String expected = "hello\u8364*world**this is**some text*";
-        final String actual = baout.toString("UTF-8");
+        final String actual = baout.toString(StandardCharsets.UTF_8.name());
         assertEquals(expected, actual);
     }
 

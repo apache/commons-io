@@ -30,6 +30,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -211,7 +212,7 @@ public class FileWriterWithEncodingTest {
 
     @Test
     public void testDifferentEncoding() throws Exception {
-        if (Charset.isSupported("UTF-16BE")) {
+        if (Charset.isSupported(StandardCharsets.UTF_16BE.name())) {
             try (FileWriter fw1 = new FileWriter(file1); // default encoding
                 FileWriterWithEncoding fw2 = new FileWriterWithEncoding(file2, defaultEncoding)) {
                 writeTestPayload(fw1, fw2);
@@ -226,7 +227,7 @@ public class FileWriterWithEncodingTest {
             assertTrue(file1.exists());
             assertTrue(file2.exists());
         }
-        if (Charset.isSupported("UTF-16LE")) {
+        if (Charset.isSupported(StandardCharsets.UTF_16LE.name())) {
             try (FileWriter fw1 = new FileWriter(file1); // default encoding
                 FileWriterWithEncoding fw2 = new FileWriterWithEncoding(file2, defaultEncoding)) {
                 writeTestPayload(fw1, fw2);

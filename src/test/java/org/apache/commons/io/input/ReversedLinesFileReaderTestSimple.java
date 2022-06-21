@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -86,7 +87,7 @@ public class ReversedLinesFileReaderTestSimple {
     public void testUnsupportedEncodingUTF16() throws URISyntaxException {
         final File testFileEmpty = TestResources.getFile("/test-file-empty.bin");
         assertThrows(UnsupportedEncodingException.class,
-            () -> new ReversedLinesFileReader(testFileEmpty, IOUtils.DEFAULT_BUFFER_SIZE, "UTF-16").close());
+            () -> new ReversedLinesFileReader(testFileEmpty, IOUtils.DEFAULT_BUFFER_SIZE, StandardCharsets.UTF_16.name()).close());
     }
 
 }

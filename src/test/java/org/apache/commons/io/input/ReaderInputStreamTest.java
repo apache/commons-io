@@ -42,6 +42,9 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 public class ReaderInputStreamTest {
+
+    private static final String UTF_16 = StandardCharsets.UTF_16.name();
+    private static final String UTF_8 = StandardCharsets.UTF_8.name();
     private static final String TEST_STRING = "\u00e0 peine arriv\u00e9s nous entr\u00e2mes dans sa chambre";
     private static final String LARGE_TEST_STRING;
 
@@ -58,7 +61,7 @@ public class ReaderInputStreamTest {
         return Stream.of(
                 Arguments.of("Cp930", "\u0391"),
                 Arguments.of("ISO_8859_1", "A"),
-                Arguments.of("UTF-8", "\u0391"));
+                Arguments.of(UTF_8, "\u0391"));
         // @formatter:on
     }
 
@@ -155,12 +158,12 @@ public class ReaderInputStreamTest {
 
     @Test
     public void testLargeUTF8WithBufferedRead() throws IOException {
-        testWithBufferedRead(LARGE_TEST_STRING, "UTF-8");
+        testWithBufferedRead(LARGE_TEST_STRING, UTF_8);
     }
 
     @Test
     public void testLargeUTF8WithSingleByteRead() throws IOException {
-        testWithSingleByteRead(LARGE_TEST_STRING, "UTF-8");
+        testWithSingleByteRead(LARGE_TEST_STRING, UTF_8);
     }
 
     @SuppressWarnings("deprecation")
@@ -191,17 +194,17 @@ public class ReaderInputStreamTest {
 
     @Test
     public void testUTF16WithSingleByteRead() throws IOException {
-        testWithSingleByteRead(TEST_STRING, "UTF-16");
+        testWithSingleByteRead(TEST_STRING, UTF_16);
     }
 
     @Test
     public void testUTF8WithBufferedRead() throws IOException {
-        testWithBufferedRead(TEST_STRING, "UTF-8");
+        testWithBufferedRead(TEST_STRING, UTF_8);
     }
 
     @Test
     public void testUTF8WithSingleByteRead() throws IOException {
-        testWithSingleByteRead(TEST_STRING, "UTF-8");
+        testWithSingleByteRead(TEST_STRING, UTF_8);
     }
 
     private void testWithBufferedRead(final String testString, final String charsetName) throws IOException {

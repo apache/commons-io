@@ -47,6 +47,11 @@ import com.google.common.jimfs.Jimfs;
  */
 public class ReversedLinesFileReaderTestParamFile {
 
+    private static final String UTF_16BE = StandardCharsets.ISO_8859_1.name();
+    private static final String UTF_16LE = StandardCharsets.UTF_16LE.name();
+    private static final String UTF_8 = StandardCharsets.UTF_8.name();
+    private static final String ISO_8859_1 = StandardCharsets.ISO_8859_1.name();
+
     public static Stream<Arguments> testDataIntegrityWithBufferedReader() throws IOException, URISyntaxException {
         // Make a file using the default encoding.
         final Path sourcePath = TestResources.getPath("test-file-utf8-win-linebr.bin");
@@ -59,20 +64,20 @@ public class ReversedLinesFileReaderTestParamFile {
         // @formatter:off
         return Stream.of(
                 Arguments.of(targetPath.toAbsolutePath().toString(), null, null, false, false),
-                Arguments.of("test-file-20byteslength.bin", "ISO_8859_1", null, false, true),
-                Arguments.of("test-file-iso8859-1-shortlines-win-linebr.bin", "ISO_8859_1", null, false, true),
-                Arguments.of("test-file-iso8859-1.bin", "ISO_8859_1", null, false, true),
+                Arguments.of("test-file-20byteslength.bin", ISO_8859_1, null, false, true),
+                Arguments.of("test-file-iso8859-1-shortlines-win-linebr.bin", ISO_8859_1, null, false, true),
+                Arguments.of("test-file-iso8859-1.bin", ISO_8859_1, null, false, true),
                 Arguments.of("test-file-shiftjis.bin", "Shift_JIS", null, false, true),
-                Arguments.of("test-file-utf16be.bin", "UTF-16BE", null, false, true),
-                Arguments.of("test-file-utf16le.bin", "UTF-16LE", null, false, true),
-                Arguments.of("test-file-utf8-cr-only.bin", "UTF-8", null, false, true),
-                Arguments.of("test-file-utf8-win-linebr.bin", "UTF-8", null, false, true,
-                Arguments.of("test-file-utf8-win-linebr.bin", "UTF-8", 1, false, true),
-                Arguments.of("test-file-utf8-win-linebr.bin", "UTF-8", 2, false, true),
-                Arguments.of("test-file-utf8-win-linebr.bin", "UTF-8", 3, false, true),
-                Arguments.of("test-file-utf8-win-linebr.bin", "UTF-8", 4, false, true),
-                Arguments.of("test-file-utf8.bin", "UTF-8", null, false, true),
-                Arguments.of("test-file-utf8.bin", "UTF-8", null, true, true),
+                Arguments.of("test-file-utf16be.bin", UTF_16BE, null, false, true),
+                Arguments.of("test-file-utf16le.bin", UTF_16LE, null, false, true),
+                Arguments.of("test-file-utf8-cr-only.bin", UTF_8, null, false, true),
+                Arguments.of("test-file-utf8-win-linebr.bin", UTF_8, null, false, true,
+                Arguments.of("test-file-utf8-win-linebr.bin", UTF_8, 1, false, true),
+                Arguments.of("test-file-utf8-win-linebr.bin", UTF_8, 2, false, true),
+                Arguments.of("test-file-utf8-win-linebr.bin", UTF_8, 3, false, true),
+                Arguments.of("test-file-utf8-win-linebr.bin", UTF_8, 4, false, true),
+                Arguments.of("test-file-utf8.bin", UTF_8, null, false, true),
+                Arguments.of("test-file-utf8.bin", UTF_8, null, true, true),
                 Arguments.of("test-file-windows-31j.bin", "windows-31j", null, false, true),
                 Arguments.of("test-file-gbk.bin", "gbk", null, false, true),
                 Arguments.of("test-file-x-windows-949.bin", "x-windows-949", null, false, true),

@@ -36,6 +36,8 @@ import org.junit.jupiter.api.Test;
 
 public class CharSequenceInputStreamTest {
 
+    private static final String UTF_16 = StandardCharsets.UTF_16.name();
+    private static final String UTF_8 = StandardCharsets.UTF_8.name();
     private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final String LARGE_TEST_STRING;
 
@@ -172,7 +174,7 @@ public class CharSequenceInputStreamTest {
 
     @Test
     public void testBufferedRead_UTF8() throws IOException {
-        testBufferedRead(TEST_STRING, "UTF-8");
+        testBufferedRead(TEST_STRING, UTF_8);
     }
 
     private void testCharsetMismatchInfiniteLoop(final String csName) throws IOException {
@@ -222,37 +224,37 @@ public class CharSequenceInputStreamTest {
 
     @Test
     public void testIO_356_B10_D10_S0_UTF16() throws Exception {
-        testIO_356(10, 10, 0, "UTF-16");
+        testIO_356(10, 10, 0, UTF_16);
     }
 
     @Test
     public void testIO_356_B10_D10_S0_UTF8() throws Exception {
-        testIO_356(10, 10, 0, "UTF-8");
+        testIO_356(10, 10, 0, UTF_8);
     }
 
     @Test
     public void testIO_356_B10_D10_S1_UTF8() throws Exception {
-        testIO_356(10, 10, 1, "UTF-8");
+        testIO_356(10, 10, 1, UTF_8);
     }
 
     @Test
     public void testIO_356_B10_D10_S2_UTF8() throws Exception {
-        testIO_356(10, 10, 2, "UTF-8");
+        testIO_356(10, 10, 2, UTF_8);
     }
 
     @Test
     public void testIO_356_B10_D13_S0_UTF8() throws Exception {
-        testIO_356(10, 13, 0, "UTF-8");
+        testIO_356(10, 13, 0, UTF_8);
     }
 
     @Test
     public void testIO_356_B10_D13_S1_UTF8() throws Exception {
-        testIO_356(10, 13, 1, "UTF-8");
+        testIO_356(10, 13, 1, UTF_8);
     }
 
     @Test
     public void testIO_356_B10_D20_S0_UTF8() throws Exception {
-        testIO_356(10, 20, 0, "UTF-8");
+        testIO_356(10, 20, 0, UTF_8);
     }
 
     private void testIO_356_Loop(final String csName, final int maxBytesPerChar) throws Exception {
@@ -284,7 +286,7 @@ public class CharSequenceInputStreamTest {
 
     @Test
     public void testLargeBufferedRead_UTF8() throws IOException {
-        testBufferedRead(LARGE_TEST_STRING, "UTF-8");
+        testBufferedRead(LARGE_TEST_STRING, UTF_8);
     }
 
     @Test
@@ -296,7 +298,7 @@ public class CharSequenceInputStreamTest {
 
     @Test
     public void testLargeSingleByteRead_UTF8() throws IOException {
-        testSingleByteRead(LARGE_TEST_STRING, "UTF-8");
+        testSingleByteRead(LARGE_TEST_STRING, UTF_8);
     }
 
     // This test is broken for charsets that don't create a single byte for each char
@@ -331,12 +333,12 @@ public class CharSequenceInputStreamTest {
 
     @Test
     public void testMarkReset_UTF8() throws Exception {
-        testMarkReset("UTF-8");
+        testMarkReset(UTF_8);
     }
 
     @Test
     public void testMarkSupported() throws Exception {
-        try (InputStream r = new CharSequenceInputStream("test", "UTF-8")) {
+        try (InputStream r = new CharSequenceInputStream("test", UTF_8)) {
             assertTrue(r.markSupported());
         }
     }
@@ -366,7 +368,7 @@ public class CharSequenceInputStreamTest {
 
     @Test
     public void testReadZero_EmptyString() throws Exception {
-        try (InputStream r = new CharSequenceInputStream("", "UTF-8")) {
+        try (InputStream r = new CharSequenceInputStream("", UTF_8)) {
             final byte[] bytes = new byte[30];
             assertEquals(0, r.read(bytes, 0, 0));
         }
@@ -401,12 +403,12 @@ public class CharSequenceInputStreamTest {
 
     @Test
     public void testSingleByteRead_UTF16() throws IOException {
-        testSingleByteRead(TEST_STRING, "UTF-16");
+        testSingleByteRead(TEST_STRING, UTF_16);
     }
 
     @Test
     public void testSingleByteRead_UTF8() throws IOException {
-        testSingleByteRead(TEST_STRING, "UTF-8");
+        testSingleByteRead(TEST_STRING, UTF_8);
     }
 
     // This is broken for charsets that don't map each char to a byte
@@ -435,6 +437,6 @@ public class CharSequenceInputStreamTest {
 
     @Test
     public void testSkip_UTF8() throws Exception {
-        testSkip("UTF-8");
+        testSkip(UTF_8);
     }
 }

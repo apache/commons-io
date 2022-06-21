@@ -99,7 +99,7 @@ public class CopyUtilsTest {
     @Test
     public void copy_inputStreamToWriterWithEncoding() throws Exception {
         final String inDataStr = "data";
-        final String charsetName = "UTF-8";
+        final String charsetName = StandardCharsets.UTF_8.name();
         final StringWriter writer = new StringWriter();
         CopyUtils.copy(new StringInputStream(inDataStr, charsetName), writer, charsetName);
         assertEquals(inDataStr, writer.toString());
@@ -160,7 +160,7 @@ public class CopyUtilsTest {
     @Test
     public void testCopy_byteArrayToWriterWithEncoding() throws Exception {
         final String inDataStr = "data";
-        final String charsetName = "UTF-8";
+        final String charsetName = StandardCharsets.UTF_8.name();
         final StringWriter writer = new StringWriter();
         CopyUtils.copy(inDataStr.getBytes(charsetName), writer, charsetName);
         assertEquals(inDataStr, writer.toString());

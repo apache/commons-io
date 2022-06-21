@@ -35,7 +35,7 @@ import java.util.Objects;
  * <p>
  * The recommended usage pattern is:
  * <pre>
- * LineIterator it = FileUtils.lineIterator(file, "UTF-8");
+ * LineIterator it = FileUtils.lineIterator(file, StandardCharsets.UTF_8.name());
  * try {
  *   while (it.hasNext()) {
  *     String line = it.nextLine();
@@ -64,8 +64,10 @@ public class LineIterator implements Iterator<String>, Closeable {
     public static void closeQuietly(final LineIterator iterator) {
         IOUtils.closeQuietly(iterator);
     }
+
     /** The reader that is being read. */
     private final BufferedReader bufferedReader;
+
     /** The current line. */
     private String cachedLine;
 

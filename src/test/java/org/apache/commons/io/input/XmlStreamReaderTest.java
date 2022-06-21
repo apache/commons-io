@@ -42,15 +42,15 @@ import org.junitpioneer.jupiter.DefaultLocale;
 
 public class XmlStreamReaderTest {
 
-    private static final String ISO_8859_1 = "ISO-8859-1";
-    private static final String US_ASCII = "US-ASCII";
-    private static final String UTF_16 = "UTF-16";
-    private static final String UTF_16LE = "UTF-16LE";
-    private static final String UTF_16BE = "UTF-16BE";
+    private static final String ISO_8859_1 = StandardCharsets.ISO_8859_1.name();
+    private static final String US_ASCII = StandardCharsets.US_ASCII.name();
+    private static final String UTF_16 = StandardCharsets.UTF_16.name();
+    private static final String UTF_16LE = StandardCharsets.UTF_16LE.name();
+    private static final String UTF_16BE = StandardCharsets.UTF_16BE.name();
     private static final String UTF_32 = "UTF-32";
     private static final String UTF_32LE = "UTF-32LE";
     private static final String UTF_32BE = "UTF-32BE";
-    private static final String UTF_8 = "UTF-8";
+    private static final String UTF_8 = StandardCharsets.UTF_8.name();
     private static final String XML5 = "xml-prolog-encoding-spaced-single-quotes";
     private static final String XML4 = "xml-prolog-encoding-single-quotes";
     private static final String XML3 = "xml-prolog-encoding-double-quotes";

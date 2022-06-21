@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.stream.IntStream;
 
 import org.apache.commons.io.TestResources;
@@ -37,8 +38,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 public class ReversedLinesFileReaderTestParamBlockSize {
 
-    private static final String UTF_8 = "UTF-8";
-    private static final String ISO_8859_1 = "ISO-8859-1";
+    private static final String UTF_8 = StandardCharsets.UTF_8.name();
+    private static final String ISO_8859_1 = StandardCharsets.ISO_8859_1.name();
 
     // "A Test Line. Special chars: Ã„Ã¤ÃœÃ¼Ã–Ã¶ÃŸ ÃƒÃ¡Ã©Ã­Ã¯Ã§Ã±Ã‚ Â©ÂµÂ¥Â£Â±Â²Â®"
     private static final String TEST_LINE = "A Test Line. Special chars: "
@@ -63,9 +64,11 @@ public class ReversedLinesFileReaderTestParamBlockSize {
     // x-windows-950 characters (Traditional Chinese)
     private static final String TEST_LINE_X_WINDOWS_950_1 = "\u660E\u8F38\u5B50\u4EAC";
     private static final String TEST_LINE_X_WINDOWS_950_2 = "\u7E41\u9AD4\u4E2D\u6587";
+
     static void assertEqualsAndNoLineBreaks(final String expected, final String actual) {
         assertEqualsAndNoLineBreaks(null, expected, actual);
     }
+
     static void assertEqualsAndNoLineBreaks(final String msg, final String expected, final String actual) {
         if (actual != null) {
             assertFalse(actual.contains(LF.getString()), "Line contains \\n: line=" + actual);
@@ -172,14 +175,14 @@ public class ReversedLinesFileReaderTestParamBlockSize {
     public void testUnsupportedEncodingUTF16(final int testParamBlockSize) throws URISyntaxException {
         final File testFileEmpty = TestResources.getFile("/test-file-empty.bin");
         assertThrows(UnsupportedEncodingException.class,
-                () -> new ReversedLinesFileReader(testFileEmpty, testParamBlockSize, "UTF-16").close());
+                () -> new ReversedLinesFileReader(testFileEmpty, testParamBlockSize, StandardCharsets.UTF_16.name()).close());
     }
 
     @ParameterizedTest(name = "BlockSize={0}")
     @MethodSource("blockSizes")
     public void testUTF16BEFile(final int testParamBlockSize) throws URISyntaxException, IOException {
         final File testFileUTF16BE = TestResources.getFile("/test-file-utf16be.bin");
-        reversedLinesFileReader = new ReversedLinesFileReader(testFileUTF16BE, testParamBlockSize, "UTF-16BE");
+        reversedLinesFileReader = new ReversedLinesFileReader(testFileUTF16BE, testParamBlockSize, StandardCharsets.UTF_16BE.name());
         assertFileWithShrinkingTestLines(reversedLinesFileReader);
     }
 
@@ -187,7 +190,7 @@ public class ReversedLinesFileReaderTestParamBlockSize {
     @MethodSource("blockSizes")
     public void testUTF16LEFile(final int testParamBlockSize) throws URISyntaxException, IOException {
         final File testFileUTF16LE = TestResources.getFile("/test-file-utf16le.bin");
-        reversedLinesFileReader = new ReversedLinesFileReader(testFileUTF16LE, testParamBlockSize, "UTF-16LE");
+        reversedLinesFileReader = new ReversedLinesFileReader(testFileUTF16LE, testParamBlockSize, StandardCharsets.UTF_16LE.name());
         assertFileWithShrinkingTestLines(reversedLinesFileReader);
     }
 

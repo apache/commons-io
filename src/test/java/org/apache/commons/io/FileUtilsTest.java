@@ -89,6 +89,8 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings({"deprecation", "ResultOfMethodCallIgnored"}) // unit tests include tests of many deprecated methods
 public class FileUtilsTest extends AbstractTempDirTest {
 
+    private static final String UTF_8 = StandardCharsets.UTF_8.name();
+
     /**
      * DirectoryWalker implementation that recursively lists all files and directories.
      */
@@ -1426,16 +1428,16 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
         final File file2 = new File(tempDirFile, "test2.txt");
 
-        FileUtils.writeStringToFile(file2, filename, "UTF-8");
+        FileUtils.writeStringToFile(file2, filename, UTF_8);
         assertTrue(file2.exists());
         assertTrue(file2.length() > 0);
 
-        final String file2contents = FileUtils.readFileToString(file2, "UTF-8");
+        final String file2contents = FileUtils.readFileToString(file2, UTF_8);
         assertEquals(filename, file2contents, "Second file's contents correct");
 
         assertTrue(file2.delete());
 
-        final String contents = FileUtils.readFileToString(new File(filename), "UTF-8");
+        final String contents = FileUtils.readFileToString(new File(filename), UTF_8);
         assertEquals("This is a test", contents, "FileUtils.fileRead()");
 
     }
@@ -2480,7 +2482,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
             final String[] data = {"hello", "/u1234", "", "this is", "some text"};
             TestUtils.createLineBasedFile(file, data);
 
-            final List<String> lines = FileUtils.readLines(file, "UTF-8");
+            final List<String> lines = FileUtils.readLines(file, UTF_8);
             assertEquals(Arrays.asList(data), lines);
         } finally {
             TestUtils.deleteFile(file);

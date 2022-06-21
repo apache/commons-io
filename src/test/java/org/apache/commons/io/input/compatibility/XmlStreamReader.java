@@ -27,6 +27,7 @@ import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.text.MessageFormat;
 import java.util.Locale;
@@ -68,15 +69,16 @@ import org.apache.commons.io.output.XmlStreamWriter;
  * @see XmlStreamWriter
  */
 public class XmlStreamReader extends Reader {
-    private static final String UTF_8 = "UTF-8";
 
-    private static final String US_ASCII = "US-ASCII";
+    private static final String UTF_8 = StandardCharsets.UTF_8.name();
 
-    private static final String UTF_16BE = "UTF-16BE";
+    private static final String US_ASCII = StandardCharsets.US_ASCII.name();
 
-    private static final String UTF_16LE = "UTF-16LE";
+    private static final String UTF_16BE = StandardCharsets.UTF_16BE.name();
 
-    private static final String UTF_16 = "UTF-16";
+    private static final String UTF_16LE = StandardCharsets.UTF_16LE.name();
+
+    private static final String UTF_16 = StandardCharsets.UTF_16.name();
 
     private static final String UTF_32BE = "UTF-32BE";
 

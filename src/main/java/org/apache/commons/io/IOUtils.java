@@ -1726,7 +1726,7 @@ public class IOUtils {
      * </p>
      * <pre>
      * try {
-     *   LineIterator it = IOUtils.lineIterator(stream, "UTF-8");
+     *   LineIterator it = IOUtils.lineIterator(stream, StandardCharsets.UTF_8.name());
      *   while (it.hasNext()) {
      *     String line = it.nextLine();
      *     /// do something with line

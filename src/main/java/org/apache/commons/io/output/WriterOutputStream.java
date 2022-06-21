@@ -25,6 +25,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.charset.CharsetDecoders;
@@ -83,7 +84,7 @@ public class WriterOutputStream extends OutputStream {
      * @param charset the charset to check the support for
      */
     private static void checkIbmJdkWithBrokenUTF16(final Charset charset){
-        if (!"UTF-16".equals(charset.name())) {
+        if (!StandardCharsets.UTF_16.name().equals(charset.name())) {
             return;
         }
         final String TEST_STRING_2 = "v\u00e9s";

@@ -26,6 +26,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Stream;
@@ -109,7 +110,7 @@ public class QueueInputStreamTest {
         while ((n = inputStream.read()) != -1) {
             byteArrayOutputStream.write(n);
         }
-        return byteArrayOutputStream.toString("UTF-8");
+        return byteArrayOutputStream.toString(StandardCharsets.UTF_8.name());
     }
 
     @Test

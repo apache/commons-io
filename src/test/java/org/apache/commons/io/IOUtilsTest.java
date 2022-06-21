@@ -92,6 +92,8 @@ import org.junit.jupiter.api.io.TempDir;
 @SuppressWarnings("deprecation") // deliberately testing deprecated code
 public class IOUtilsTest {
 
+    private static final String UTF_8 = StandardCharsets.UTF_8.name();
+
     private static final int FILE_SIZE = 1024 * 4 + 1;
 
     /** Determine if this is windows. */
@@ -1028,7 +1030,7 @@ public class IOUtilsTest {
             TestUtils.createLineBasedFile(file, data);
 
             in = Files.newInputStream(file.toPath());
-            final List<String> lines = IOUtils.readLines(in, "UTF-8");
+            final List<String> lines = IOUtils.readLines(in, UTF_8);
             assertEquals(Arrays.asList(data), lines);
             assertEquals(-1, in.read());
         } finally {
@@ -1449,7 +1451,7 @@ public class IOUtilsTest {
 
     @Test
     public void testToByteArray_Reader() throws IOException {
-        final String charsetName = "UTF-8";
+        final String charsetName = UTF_8;
         final byte[] expecteds = charsetName.getBytes(charsetName);
         byte[] actuals = IOUtils.toByteArray(new InputStreamReader(new ByteArrayInputStream(expecteds)));
         assertArrayEquals(expecteds, actuals);
@@ -1505,7 +1507,7 @@ public class IOUtilsTest {
     @Test
     public void testToCharArray_InputStream_CharsetName() throws Exception {
         try (InputStream fin = Files.newInputStream(testFilePath)) {
-            final char[] out = IOUtils.toCharArray(fin, "UTF-8");
+            final char[] out = IOUtils.toCharArray(fin, UTF_8);
             assertNotNull(out);
             assertEquals(0, fin.available(), "Not all chars were read");
             assertEquals(FILE_SIZE, out.length, "Wrong output size");
@@ -1539,7 +1541,7 @@ public class IOUtilsTest {
         inStream = IOUtils.toInputStream(csq, (String) null);
         bytes = IOUtils.toByteArray(inStream);
         assertEqualContent(csq.toString().getBytes(), bytes);
-        inStream = IOUtils.toInputStream(csq, "UTF-8");
+        inStream = IOUtils.toInputStream(csq, UTF_8);
         bytes = IOUtils.toByteArray(inStream);
         assertEqualContent(csq.toString().getBytes(StandardCharsets.UTF_8), bytes);
     }
@@ -1560,7 +1562,7 @@ public class IOUtilsTest {
         inStream = IOUtils.toInputStream(str, (String) null);
         bytes = IOUtils.toByteArray(inStream);
         assertEqualContent(str.getBytes(), bytes);
-        inStream = IOUtils.toInputStream(str, "UTF-8");
+        inStream = IOUtils.toInputStream(str, UTF_8);
         bytes = IOUtils.toByteArray(inStream);
         assertEqualContent(str.getBytes(StandardCharsets.UTF_8), bytes);
     }

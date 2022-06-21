@@ -601,7 +601,7 @@ public class TailerTest {
             listener.clear();
 
             // Check file does actually have all the lines
-            lines = FileUtils.readLines(file, "UTF-8");
+            lines = FileUtils.readLines(file, StandardCharsets.UTF_8);
             assertEquals(3, lines.size(), "3 line count");
             assertEquals("Line one", lines.get(0), "3 line 1");
             assertEquals("Line two", lines.get(1), "3 line 2");

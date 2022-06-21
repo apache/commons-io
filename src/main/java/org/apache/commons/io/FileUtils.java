@@ -2134,7 +2134,7 @@ public class FileUtils {
      * The recommended usage pattern is:
      * </p>
      * <pre>
-     * LineIterator it = FileUtils.lineIterator(file, "UTF-8");
+     * LineIterator it = FileUtils.lineIterator(file, StandardCharsets.UTF_8.name());
      * try {
      *   while (it.hasNext()) {
      *     String line = it.nextLine();
