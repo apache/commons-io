@@ -31,8 +31,7 @@ import java.io.ObjectOutputStream;
 import org.junit.jupiter.api.Test;
 
 /**
- * This is used to test IOCase for correctness.
- *
+ * Tests {@link IOCase}.
  */
 public class IOCaseTest {
 
@@ -40,10 +39,10 @@ public class IOCaseTest {
 
     private IOCase serialize(final IOCase value) throws Exception {
         final ByteArrayOutputStream buf = new ByteArrayOutputStream();
-        final ObjectOutputStream out = new ObjectOutputStream(buf);
-        out.writeObject(value);
-        out.flush();
-        out.close();
+        try (final ObjectOutputStream out = new ObjectOutputStream(buf)) {
+            out.writeObject(value);
+            out.flush();
+        }
 
         final ByteArrayInputStream bufin = new ByteArrayInputStream(buf.toByteArray());
         final ObjectInputStream in = new ObjectInputStream(bufin);
