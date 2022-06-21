@@ -17,6 +17,7 @@
 package org.apache.commons.io;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -34,13 +35,13 @@ public class ByteOrderMark implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /** UTF-8 BOM. */
-    public static final ByteOrderMark UTF_8    = new ByteOrderMark("UTF-8", 0xEF, 0xBB, 0xBF);
+    public static final ByteOrderMark UTF_8 = new ByteOrderMark(StandardCharsets.UTF_8.name(), 0xEF, 0xBB, 0xBF);
 
     /** UTF-16BE BOM (Big-Endian). */
-    public static final ByteOrderMark UTF_16BE = new ByteOrderMark("UTF-16BE", 0xFE, 0xFF);
+    public static final ByteOrderMark UTF_16BE = new ByteOrderMark(StandardCharsets.UTF_16BE.name(), 0xFE, 0xFF);
 
     /** UTF-16LE BOM (Little-Endian). */
-    public static final ByteOrderMark UTF_16LE = new ByteOrderMark("UTF-16LE", 0xFF, 0xFE);
+    public static final ByteOrderMark UTF_16LE = new ByteOrderMark(StandardCharsets.UTF_16LE.name(), 0xFF, 0xFE);
 
     /**
      * UTF-32BE BOM (Big-Endian).
