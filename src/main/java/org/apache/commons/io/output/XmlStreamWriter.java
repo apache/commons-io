@@ -24,9 +24,13 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.regex.Matcher;
 
+import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.XmlStreamReader;
 
@@ -43,13 +47,13 @@ public class XmlStreamWriter extends Writer {
 
     private final OutputStream out;
 
-    private final String defaultEncoding;
+    private final Charset defaultCharset;
 
-    private StringWriter xmlPrologWriter = new StringWriter(BUFFER_SIZE);
+    private StringWriter prologWriter = new StringWriter(BUFFER_SIZE);
 
     private Writer writer;
 
-    private String encoding;
+    private Charset charset;
 
     /**
      * Constructs a new XML stream writer for the specified file
@@ -84,7 +88,7 @@ public class XmlStreamWriter extends Writer {
      * @param out The output stream
      */
     public XmlStreamWriter(final OutputStream out) {
-        this(out, null);
+        this(out, StandardCharsets.UTF_8);
     }
 
     /**
@@ -95,8 +99,20 @@ public class XmlStreamWriter extends Writer {
      * @param defaultEncoding The default encoding if not encoding could be detected
      */
     public XmlStreamWriter(final OutputStream out, final String defaultEncoding) {
+        this(out, Charsets.toCharset(defaultEncoding, StandardCharsets.UTF_8));
+    }
+
+    /**
+     * Constructs a new XML stream writer for the specified output stream
+     * with the specified default encoding.
+     *
+     * @param out The output stream
+     * @param defaultEncoding The default encoding if not encoding could be detected
+     * @since 2.12.0
+     */
+    public XmlStreamWriter(final OutputStream out, final Charset defaultEncoding) {
         this.out = out;
-        this.defaultEncoding = defaultEncoding != null ? defaultEncoding : "UTF-8";
+        this.defaultCharset = Objects.requireNonNull(defaultEncoding);
     }
 
     /**
@@ -107,9 +123,9 @@ public class XmlStreamWriter extends Writer {
     @Override
     public void close() throws IOException {
         if (writer == null) {
-            encoding = defaultEncoding;
-            writer = new OutputStreamWriter(out, encoding);
-            writer.write(xmlPrologWriter.toString());
+            charset = defaultCharset;
+            writer = new OutputStreamWriter(out, charset);
+            writer.write(prologWriter.toString());
         }
         writer.close();
     }
@@ -125,11 +141,11 @@ public class XmlStreamWriter extends Writer {
     private void detectEncoding(final char[] cbuf, final int off, final int len)
             throws IOException {
         int size = len;
-        final StringBuffer xmlProlog = xmlPrologWriter.getBuffer();
+        final StringBuffer xmlProlog = prologWriter.getBuffer();
         if (xmlProlog.length() + len > BUFFER_SIZE) {
             size = BUFFER_SIZE - xmlProlog.length();
         }
-        xmlPrologWriter.write(cbuf, off, size);
+        prologWriter.write(cbuf, off, size);
 
         // try to determine encoding
         if (xmlProlog.length() >= 5) {
@@ -141,26 +157,26 @@ public class XmlStreamWriter extends Writer {
                     final Matcher m = XmlStreamReader.ENCODING_PATTERN.matcher(xmlProlog.substring(0,
                             xmlPrologEnd));
                     if (m.find()) {
-                        encoding = m.group(1).toUpperCase(Locale.ROOT);
-                        encoding = encoding.substring(1, encoding.length() - 1);
+                        final String encName = m.group(1).toUpperCase(Locale.ROOT);
+                        charset = Charset.forName(encName.substring(1, encName.length() - 1));
                     } else {
                         // no encoding found in XML prolog: using default
                         // encoding
-                        encoding = defaultEncoding;
+                        charset = defaultCharset;
                     }
                 } else if (xmlProlog.length() >= BUFFER_SIZE) {
                     // no encoding found in first characters: using default
                     // encoding
-                    encoding = defaultEncoding;
+                    charset = defaultCharset;
                 }
             } else {
                 // no XML prolog: using default encoding
-                encoding = defaultEncoding;
+                charset = defaultCharset;
             }
-            if (encoding != null) {
+            if (charset != null) {
                 // encoding has been chosen: let's do it
-                xmlPrologWriter = null;
-                writer = new OutputStreamWriter(out, encoding);
+                prologWriter = null;
+                writer = new OutputStreamWriter(out, charset);
                 writer.write(xmlProlog.toString());
                 if (len > size) {
                     writer.write(cbuf, off + size, len - size);
@@ -187,7 +203,7 @@ public class XmlStreamWriter extends Writer {
      * @return the default encoding
      */
     public String getDefaultEncoding() {
-        return defaultEncoding;
+        return defaultCharset.name();
     }
 
     /**
@@ -196,7 +212,7 @@ public class XmlStreamWriter extends Writer {
      * @return the detected encoding
      */
     public String getEncoding() {
-        return encoding;
+        return charset.name();
     }
 
     /**
@@ -209,7 +225,7 @@ public class XmlStreamWriter extends Writer {
      */
     @Override
     public void write(final char[] cbuf, final int off, final int len) throws IOException {
-        if (xmlPrologWriter != null) {
+        if (prologWriter != null) {
             detectEncoding(cbuf, off, len);
         } else {
             writer.write(cbuf, off, len);

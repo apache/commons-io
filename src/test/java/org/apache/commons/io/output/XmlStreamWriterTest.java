@@ -16,11 +16,14 @@
  */
 package org.apache.commons.io.output;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.DefaultLocale;
@@ -28,28 +31,35 @@ import org.junitpioneer.jupiter.DefaultLocale;
 /**
  */
 public class XmlStreamWriterTest {
-    /** french */
+
+    /** French */
     private static final String TEXT_LATIN1 = "eacute: \u00E9";
-    /** greek */
+
+    /** Greek */
     private static final String TEXT_LATIN7 = "alpha: \u03B1";
-    /** euro support */
+
+    /** Euro support */
     private static final String TEXT_LATIN15 = "euro: \u20AC";
-    /** japanese */
+
+    /** Japanese */
     private static final String TEXT_EUC_JP = "hiragana A: \u3042";
+
     /** Unicode: support everything */
     private static final String TEXT_UNICODE = TEXT_LATIN1 + ", " + TEXT_LATIN7
             + ", " + TEXT_LATIN15 + ", " + TEXT_EUC_JP;
 
-    private static void checkXmlContent(final String xml, final String encoding, final String defaultEncoding)
-            throws IOException {
+    private static void checkXmlContent(final String xml, final String encodingName, final String defaultEncodingName)
+        throws IOException {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        final XmlStreamWriter writer = new XmlStreamWriter(out, defaultEncoding);
+        final XmlStreamWriter writer = new XmlStreamWriter(out, defaultEncodingName);
         writer.write(xml);
         writer.close();
         final byte[] xmlContent = out.toByteArray();
-        assertTrue(encoding.equalsIgnoreCase(writer.getEncoding()));
-        assertArrayEquals(xml.getBytes(encoding), xmlContent);
-
+        final Charset charset = Charset.forName(encodingName);
+        final Charset writerCharset = Charset.forName(writer.getEncoding());
+        assertEquals(charset, writerCharset);
+        assertTrue(writerCharset.contains(charset), writerCharset.name());
+        assertArrayEquals(xml.getBytes(encodingName), xmlContent);
     }
 
     private static void checkXmlWriter(final String text, final String encoding)
@@ -62,7 +72,7 @@ public class XmlStreamWriterTest {
         final String xml = createXmlContent(text, encoding);
         String effectiveEncoding = encoding;
         if (effectiveEncoding == null) {
-            effectiveEncoding = defaultEncoding == null ? "UTF-8" : defaultEncoding;
+            effectiveEncoding = defaultEncoding == null ? StandardCharsets.UTF_8.name() : defaultEncoding;
         }
         checkXmlContent(xml, effectiveEncoding, defaultEncoding);
     }
@@ -121,7 +131,7 @@ public class XmlStreamWriterTest {
         checkXmlWriter(TEXT_LATIN7, "ISO-8859-7");
     }
 
-    // Turkish language has specific rules to convert dotted and dottless i character.
+    /** Turkish language has specific rules to convert dotted and dottless i character. */
     @Test
     @DefaultLocale(language = "tr")
     public void testLowerCaseEncodingWithTurkishLocale_IO_557() throws IOException {
@@ -132,8 +142,7 @@ public class XmlStreamWriterTest {
 
     @Test
     public void testNoXmlHeader() throws IOException {
-        final String xml = "<text>text with no XML header</text>";
-        checkXmlContent(xml, "UTF-8", null);
+        checkXmlContent("<text>text with no XML header</text>", "UTF-8", null);
     }
 
     @Test
