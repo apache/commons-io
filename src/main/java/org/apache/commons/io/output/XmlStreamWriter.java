@@ -26,7 +26,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Locale;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.XmlStreamReader;
@@ -39,9 +38,8 @@ import org.apache.commons.io.input.XmlStreamReader;
  * @since 2.0
  */
 public class XmlStreamWriter extends Writer {
-    private static final int BUFFER_SIZE = IOUtils.DEFAULT_BUFFER_SIZE;
 
-    static final Pattern ENCODING_PATTERN = XmlStreamReader.ENCODING_PATTERN;
+    private static final int BUFFER_SIZE = IOUtils.DEFAULT_BUFFER_SIZE;
 
     private final OutputStream out;
 
@@ -140,7 +138,7 @@ public class XmlStreamWriter extends Writer {
                 final int xmlPrologEnd = xmlProlog.indexOf("?>");
                 if (xmlPrologEnd > 0) {
                     // ok, full XML prolog written: let's extract encoding
-                    final Matcher m = ENCODING_PATTERN.matcher(xmlProlog.substring(0,
+                    final Matcher m = XmlStreamReader.ENCODING_PATTERN.matcher(xmlProlog.substring(0,
                             xmlPrologEnd));
                     if (m.find()) {
                         encoding = m.group(1).toUpperCase(Locale.ROOT);
