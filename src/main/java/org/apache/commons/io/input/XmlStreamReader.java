@@ -27,6 +27,7 @@ import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.MessageFormat;
@@ -72,19 +73,19 @@ import org.apache.commons.io.IOUtils;
  */
 public class XmlStreamReader extends Reader {
 
-    private static final String UTF_8 = "UTF-8";
+    private static final String UTF_8 = StandardCharsets.UTF_8.name();
 
-    private static final String US_ASCII = "US-ASCII";
+    private static final String US_ASCII = StandardCharsets.US_ASCII.name();
 
-    private static final String UTF_16BE = "UTF-16BE";
+    private static final String UTF_16BE = StandardCharsets.UTF_16BE.name();
 
-    private static final String UTF_16LE = "UTF-16LE";
+    private static final String UTF_16LE = StandardCharsets.UTF_16LE.name();
 
     private static final String UTF_32BE = "UTF-32BE";
 
     private static final String UTF_32LE = "UTF-32LE";
 
-    private static final String UTF_16 = "UTF-16";
+    private static final String UTF_16 = StandardCharsets.UTF_16.name();
 
     private static final String UTF_32 = "UTF-32";
 
@@ -446,7 +447,7 @@ public class XmlStreamReader extends Reader {
      *        relaxed.
      * @throws IOException thrown if there is a problem reading the file.
      * @throws XmlStreamReaderException thrown if the charset encoding could not
-     *         be determined according to the specs.
+     *         be determined according to the specification.
      */
     public XmlStreamReader(final InputStream inputStream, final String httpContentType,
             final boolean lenient) throws IOException {
@@ -492,7 +493,7 @@ public class XmlStreamReader extends Reader {
      * @param defaultEncoding The default encoding
      * @throws IOException thrown if there is a problem reading the file.
      * @throws XmlStreamReaderException thrown if the charset encoding could not
-     *         be determined according to the specs.
+     *         be determined according to the specification.
      */
     @SuppressWarnings("resource") // InputStream is managed through a InputStreamReader in this instance.
     public XmlStreamReader(final InputStream inputStream, final String httpContentType,
