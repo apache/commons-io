@@ -162,7 +162,7 @@ public class ProxyWriter extends FilterWriter {
     }
 
     /**
-     * Handle any IOExceptions thrown.
+     * Handles any IOExceptions thrown.
      * <p>
      * This method provides a point to implement custom exception
      * handling. The default behavior is to re-throw the exception.
