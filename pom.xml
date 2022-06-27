@@ -346,7 +346,7 @@ file comparators, endian transformation classes, and much more.
     <commons.spotbugs.plugin.version>4.7.0.0</commons.spotbugs.plugin.version>
     <commons.spotbugs.impl.version>4.7.1</commons.spotbugs.impl.version>
     <commons.pmd.version>3.17.0</commons.pmd.version>
-    <commons.pmd-impl.version>6.46.0</commons.pmd-impl.version>
+    <commons.pmd-impl.version>6.47.0</commons.pmd-impl.version>
     <jmh.version>1.35</jmh.version>
     <japicmp.skip>false</japicmp.skip>
     <jacoco.skip>${env.JACOCO_SKIP}</jacoco.skip>
