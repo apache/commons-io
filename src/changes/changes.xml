@@ -419,6 +419,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump spotbugs-maven-plugin from 4.2.3 to 4.7.0.0 #250, #259, #272, #274, #285, #288, #289, #305, #315, #326, #338, #360.
       </action>
+      <action dev="kinow" type="update" due-to="Gary Gregory, Dependabot">
+        Bump spotbugs from 4.5.2 to 4.7.1 #313, #317, #357.
+      </action>
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Bump JUnit from 5.7.2 to 5.8.0-M1.
       </action>
@@ -442,9 +445,6 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action dev="kinow" type="update" due-to="Dependabot, Gary Gregory">
         Bump junit-pioneer from 1.4.2 to 1.7.1 #304. #335, #362.
-      </action>
-      <action dev="kinow" type="update" due-to="Dependabot">
-        Bump spotbugs from 4.5.2 to 4.7.0 #313, #317, #357.
       </action>
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Bump japicmp-maven-plugin from 0.15.3 to 0.15.7.
