@@ -59,7 +59,7 @@ public class FileEntry implements Serializable {
     private String name;
     private boolean exists;
     private boolean directory;
-    private FileTime lastModified = FileTimes.EPOCH;
+    private SerializableFileTime lastModified = SerializableFileTime.EPOCH;
     private long length;
 
     /**
@@ -120,7 +120,7 @@ public class FileEntry implements Serializable {
      * @since 2.12.0
      */
     public FileTime getLastModifiedFileTime() {
-        return lastModified;
+        return lastModified.unwrap();
     }
 
     /**
@@ -211,7 +211,7 @@ public class FileEntry implements Serializable {
     public boolean refresh(final File file) {
         // cache original values
         final boolean origExists = exists;
-        final FileTime origLastModified = lastModified;
+        final SerializableFileTime origLastModified = lastModified;
         final boolean origDirectory = directory;
         final long origLength = length;
 
@@ -220,9 +220,9 @@ public class FileEntry implements Serializable {
         exists = Files.exists(file.toPath());
         directory = exists && file.isDirectory();
         try {
-            lastModified = exists ? FileUtils.lastModifiedFileTime(file) : FileTimes.EPOCH;
+            setLastModified(exists ? FileUtils.lastModifiedFileTime(file) : FileTimes.EPOCH);
         } catch (final IOException e) {
-            lastModified = FileTimes.EPOCH;
+            setLastModified(SerializableFileTime.EPOCH);
         }
         length = exists && !directory ? file.length() : 0;
 
@@ -266,6 +266,10 @@ public class FileEntry implements Serializable {
      * @since 2.12.0
      */
     public void setLastModified(final FileTime lastModified) {
+        setLastModified(new SerializableFileTime(lastModified));
+    }
+
+    void setLastModified(final SerializableFileTime lastModified) {
         this.lastModified = lastModified;
     }
 
@@ -276,7 +280,7 @@ public class FileEntry implements Serializable {
      * @param lastModified The last modified time in milliseconds.
      */
     public void setLastModified(final long lastModified) {
-        this.lastModified = FileTime.fromMillis(lastModified);
+        setLastModified(FileTime.fromMillis(lastModified));
     }
 
     /**
