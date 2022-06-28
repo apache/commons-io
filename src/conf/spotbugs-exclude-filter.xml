@@ -37,7 +37,7 @@
     <Bug pattern="DM_DEFAULT_ENCODING" />
   </Match>
 
-  <!--  Deprecated -->
+  <!-- Deprecated -->
   <Match>
     <Class name="org.apache.commons.io.file.PathUtils" />
     <Field name="NOFOLLOW_LINK_OPTION_ARRAY" />
