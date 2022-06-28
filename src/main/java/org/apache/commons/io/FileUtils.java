@@ -2799,8 +2799,7 @@ public class FileUtils {
     private static File requireExists(final File file, final String fileParamName) {
         Objects.requireNonNull(file, fileParamName);
         if (!file.exists()) {
-            throw new IllegalArgumentException(
-                "File system element for parameter '" + fileParamName + "' does not exist: '" + file + "'");
+            throw new IllegalArgumentException("File system element for parameter '" + fileParamName + "' does not exist: '" + file + "'");
         }
         return file;
     }
@@ -2817,8 +2816,7 @@ public class FileUtils {
     private static File requireExistsChecked(final File file, final String fileParamName) throws FileNotFoundException {
         Objects.requireNonNull(file, fileParamName);
         if (!file.exists()) {
-            throw new FileNotFoundException(
-                "File system element for parameter '" + fileParamName + "' does not exist: '" + file + "'");
+            throw new FileNotFoundException("File system element for parameter '" + fileParamName + "' does not exist: '" + file + "'");
         }
         return file;
     }

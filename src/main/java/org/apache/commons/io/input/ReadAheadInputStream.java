@@ -145,8 +145,7 @@ public class ReadAheadInputStream extends InputStream {
     private ReadAheadInputStream(final InputStream inputStream, final int bufferSizeInBytes,
         final ExecutorService executorService, final boolean shutdownExecutorService) {
         if (bufferSizeInBytes <= 0) {
-            throw new IllegalArgumentException(
-                "bufferSizeInBytes should be greater than 0, but the value is " + bufferSizeInBytes);
+            throw new IllegalArgumentException("bufferSizeInBytes should be greater than 0, but the value is " + bufferSizeInBytes);
         }
         this.executorService = Objects.requireNonNull(executorService, "executorService");
         this.underlyingInputStream = Objects.requireNonNull(inputStream, "inputStream");

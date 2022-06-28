@@ -102,8 +102,7 @@ public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
      */
     public ByteArrayOutputStream(final int size) {
         if (size < 0) {
-            throw new IllegalArgumentException(
-                "Negative initial size: " + size);
+            throw new IllegalArgumentException("Negative initial size: " + size);
         }
         synchronized (this) {
             needNewBuffer(size);

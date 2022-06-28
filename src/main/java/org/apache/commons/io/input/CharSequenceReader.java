@@ -116,12 +116,10 @@ public class CharSequenceReader extends Reader implements Serializable {
      */
     public CharSequenceReader(final CharSequence charSequence, final int start, final int end) {
         if (start < 0) {
-            throw new IllegalArgumentException(
-                    "Start index is less than zero: " + start);
+            throw new IllegalArgumentException("Start index is less than zero: " + start);
         }
         if (end < start) {
-            throw new IllegalArgumentException(
-                    "End index is less than start " + start + ": " + end);
+            throw new IllegalArgumentException("End index is less than start " + start + ": " + end);
         }
         // Don't check the start and end indexes against the CharSequence,
         // to let it grow and shrink without breaking existing behavior.
@@ -269,13 +267,12 @@ public class CharSequenceReader extends Reader implements Serializable {
     @Override
     public long skip(final long n) {
         if (n < 0) {
-            throw new IllegalArgumentException(
-                    "Number of characters to skip is less than zero: " + n);
+            throw new IllegalArgumentException("Number of characters to skip is less than zero: " + n);
         }
         if (idx >= end()) {
             return 0;
         }
-        final int dest = (int)Math.min(end(), idx + n);
+        final int dest = (int) Math.min(end(), idx + n);
         final int count = dest - idx;
         idx = dest;
         return count;
