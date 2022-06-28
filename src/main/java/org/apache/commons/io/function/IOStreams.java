@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 import org.apache.commons.io.IOExceptionList;
 
 /**
- * Keeps code package private for now.
+ * Keep this code package-private for now.
  */
 class IOStreams {
 
