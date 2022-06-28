@@ -28,6 +28,7 @@ import java.util.Objects;
 
 import org.apache.commons.io.file.PathFilter;
 import org.apache.commons.io.file.PathVisitor;
+import org.apache.commons.io.function.IOSupplier;
 
 /**
  * Abstracts the implementation of the {@link FileFilter} (IO), {@link FilenameFilter} (IO), {@link PathFilter} (NIO)
@@ -113,6 +114,14 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
                 buffer.append(",");
             }
             buffer.append(array[i]);
+        }
+    }
+
+    FileVisitResult get(final IOSupplier<FileVisitResult> supplier) {
+        try {
+            return supplier.get();
+        } catch (IOException e) {
+            return handle(e);
         }
     }
 

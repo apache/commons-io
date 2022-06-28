@@ -137,11 +137,7 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        try {
-            return toFileVisitResult(accept(Files.size(file)));
-        } catch (final IOException e) {
-            return handle(e);
-        }
+        return get(() -> toFileVisitResult(accept(Files.size(file))));
     }
 
     /**

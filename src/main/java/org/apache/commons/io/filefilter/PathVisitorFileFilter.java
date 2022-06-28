@@ -68,11 +68,7 @@ public class PathVisitorFileFilter extends AbstractFileFilter {
 
     @Override
     public FileVisitResult accept(final Path path, final BasicFileAttributes attributes) {
-        try {
-            return Files.isDirectory(path) ? pathVisitor.postVisitDirectory(path, null) : visitFile(path, attributes);
-        } catch (final IOException e) {
-            return handle(e);
-        }
+        return get(() -> Files.isDirectory(path) ? pathVisitor.postVisitDirectory(path, null) : visitFile(path, attributes));
     }
 
     @Override

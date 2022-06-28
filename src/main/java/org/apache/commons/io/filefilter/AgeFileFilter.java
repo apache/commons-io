@@ -17,7 +17,6 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
@@ -197,11 +196,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        try {
-            return toFileVisitResult(acceptOlder != PathUtils.isNewer(file, cutoffInstant));
-        } catch (final IOException e) {
-            return handle(e);
-        }
+        return get(() -> toFileVisitResult(acceptOlder != PathUtils.isNewer(file, cutoffInstant)));
     }
 
     /**

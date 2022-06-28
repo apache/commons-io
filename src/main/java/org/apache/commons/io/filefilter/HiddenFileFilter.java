@@ -17,7 +17,6 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -111,11 +110,7 @@ public class HiddenFileFilter extends AbstractFileFilter implements Serializable
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        try {
-            return toFileVisitResult(Files.isHidden(file));
-        } catch (final IOException e) {
-            return handle(e);
-        }
+        return get(() -> toFileVisitResult(Files.isHidden(file)));
     }
 
 }
