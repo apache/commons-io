@@ -44,5 +44,4 @@
     <Bug pattern="MS_PKGPROTECT" />
   </Match>
 
-
 </FindBugsFilter>
