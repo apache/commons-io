@@ -18,12 +18,12 @@ package org.apache.commons.io.monitor;
 import java.io.File;
 
 /**
- * A listener that receives events of file system modifications.
+ * Receives events of file system modifications.
  * <p>
  * Register {@link FileAlterationListener}s with a {@link FileAlterationObserver}.
+ * </p>
  *
  * @see FileAlterationObserver
- *
  * @since 2.0
  */
 public interface FileAlterationListener {
