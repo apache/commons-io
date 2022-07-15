@@ -230,9 +230,7 @@ public class FileAlterationObserver implements Serializable {
     public void checkAndNotify() {
 
         // fire onStart()
-        for (final FileAlterationListener listener : listeners) {
-            listener.onStart(this);
-        }
+        listeners.forEach(listener -> listener.onStart(this));
 
         // fire directory/file events
         final File rootFile = rootEntry.getFile();
@@ -244,9 +242,7 @@ public class FileAlterationObserver implements Serializable {
         // Else: Didn't exist and still doesn't
 
         // fire onStop()
-        for (final FileAlterationListener listener : listeners) {
-            listener.onStop(this);
-        }
+        listeners.forEach(listener -> listener.onStop(this));
     }
 
     /**
@@ -312,15 +308,14 @@ public class FileAlterationObserver implements Serializable {
      * @param entry The file entry
      */
     private void doCreate(final FileEntry entry) {
-        for (final FileAlterationListener listener : listeners) {
+        listeners.forEach(listener -> {
             if (entry.isDirectory()) {
                 listener.onDirectoryCreate(entry.getFile());
             } else {
                 listener.onFileCreate(entry.getFile());
             }
-        }
-        final FileEntry[] children = entry.getChildren();
-        for (final FileEntry aChildren : children) {
+        });
+        for (final FileEntry aChildren : entry.getChildren()) {
             doCreate(aChildren);
         }
     }
@@ -331,13 +326,13 @@ public class FileAlterationObserver implements Serializable {
      * @param entry The file entry
      */
     private void doDelete(final FileEntry entry) {
-        for (final FileAlterationListener listener : listeners) {
+        listeners.forEach(listener -> {
             if (entry.isDirectory()) {
                 listener.onDirectoryDelete(entry.getFile());
             } else {
                 listener.onFileDelete(entry.getFile());
             }
-        }
+        });
     }
 
     /**
@@ -363,13 +358,13 @@ public class FileAlterationObserver implements Serializable {
      */
     private void doMatch(final FileEntry entry, final File file) {
         if (entry.refresh(file)) {
-            for (final FileAlterationListener listener : listeners) {
+            listeners.forEach(listener -> {
                 if (entry.isDirectory()) {
                     listener.onDirectoryChange(file);
                 } else {
                     listener.onFileChange(file);
                 }
-            }
+            });
         }
     }
 
