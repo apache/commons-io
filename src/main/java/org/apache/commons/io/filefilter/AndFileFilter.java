@@ -112,15 +112,7 @@ public class AndFileFilter
      */
     @Override
     public boolean accept(final File file) {
-        if (isEmpty()) {
-            return false;
-        }
-        for (final IOFileFilter fileFilter : fileFilters) {
-            if (!fileFilter.accept(file)) {
-                return false;
-            }
-        }
-        return true;
+        return !isEmpty() && fileFilters.stream().allMatch(fileFilter -> fileFilter.accept(file));
     }
 
     /**
@@ -128,15 +120,7 @@ public class AndFileFilter
      */
     @Override
     public boolean accept(final File file, final String name) {
-        if (isEmpty()) {
-            return false;
-        }
-        for (final IOFileFilter fileFilter : fileFilters) {
-            if (!fileFilter.accept(file, name)) {
-                return false;
-            }
-        }
-        return true;
+        return !isEmpty() && fileFilters.stream().allMatch(fileFilter -> fileFilter.accept(file, name));
     }
 
     /**
@@ -145,15 +129,8 @@ public class AndFileFilter
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        if (isEmpty()) {
-            return FileVisitResult.TERMINATE;
-        }
-        for (final IOFileFilter fileFilter : fileFilters) {
-            if (fileFilter.accept(file, attributes) != FileVisitResult.CONTINUE) {
-                return FileVisitResult.TERMINATE;
-            }
-        }
-        return FileVisitResult.CONTINUE;
+        return isEmpty() ? FileVisitResult.TERMINATE
+                : toDefaultFileVisitResult(fileFilters.stream().allMatch(fileFilter -> fileFilter.accept(file, attributes) == FileVisitResult.CONTINUE));
     }
 
     /**

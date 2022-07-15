@@ -20,10 +20,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -40,19 +42,13 @@ public class FileUtilsListFilesTest {
     public File temporaryFolder;
 
     private Collection<String> filesToFilenames(final Collection<File> files) {
-        final Collection<String> filenames = new ArrayList<>(files.size());
-        for (final File file : files) {
-            filenames.add(file.getName());
-        }
-        return filenames;
+        return files.stream().map(File::getName).collect(Collectors.toList());
     }
 
     private Collection<String> filesToFilenames(final Iterator<File> files) {
-        final Collection<String> filenames = new ArrayList<>();
-        while (files.hasNext()) {
-            filenames.add(files.next().getName());
-        }
-        return filenames;
+        final Collection<String> fileNames = new ArrayList<>();
+        files.forEachRemaining(f -> fileNames.add(f.getName()));
+        return fileNames;
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")

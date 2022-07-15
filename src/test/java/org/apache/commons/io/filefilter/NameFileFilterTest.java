@@ -48,9 +48,6 @@ public class NameFileFilterTest {
     public void testJavadocExampleUsingIo() {
         final File dir = FileUtils.current();
         final String[] files = dir.list(new NameFileFilter("NOTICE.txt"));
-        for (final String file : files) {
-            // System.out.println(file);
-        }
         // End of Javadoc example
         assertEquals(1, files.length);
     }

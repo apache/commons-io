@@ -1005,13 +1005,7 @@ public class FilenameUtils {
         if (extensions == null || extensions.isEmpty()) {
             return indexOfExtension(fileName) == NOT_FOUND;
         }
-        final String fileExt = getExtension(fileName);
-        for (final String extension : extensions) {
-            if (fileExt.equals(extension)) {
-                return true;
-            }
-        }
-        return false;
+        return extensions.contains(getExtension(fileName));
     }
 
     /**

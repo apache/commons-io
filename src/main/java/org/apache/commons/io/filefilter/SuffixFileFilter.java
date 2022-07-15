@@ -23,6 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.IOCase;
 
@@ -191,12 +192,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
     }
 
     private boolean accept(final String name) {
-        for (final String suffix : this.suffixes) {
-            if (ioCase.checkEndsWith(name, suffix)) {
-                return true;
-            }
-        }
-        return false;
+        return Stream.of(suffixes).anyMatch(suffix -> ioCase.checkEndsWith(name, suffix));
     }
 
     /**

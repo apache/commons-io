@@ -26,7 +26,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.nio.file.spi.FileSystemProvider;
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -36,8 +35,7 @@ public class FileSystemProvidersTest {
 
     @Test
     public void testGetFileSystemProvider_all() throws URISyntaxException {
-        final List<FileSystemProvider> installedProviders = FileSystemProvider.installedProviders();
-        for (final FileSystemProvider fileSystemProvider : installedProviders) {
+        for (final FileSystemProvider fileSystemProvider : FileSystemProvider.installedProviders()) {
             final String scheme = fileSystemProvider.getScheme();
             final URI uri = new URI(scheme, "ssp", "fragment");
             assertEquals(scheme, FileSystemProviders.installed().getFileSystemProvider(uri).getScheme());

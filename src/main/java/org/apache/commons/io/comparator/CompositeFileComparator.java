@@ -18,9 +18,8 @@ package org.apache.commons.io.comparator;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
+import java.util.stream.StreamSupport;
 
 /**
  * Compare two files using a set of delegate file {@link Comparator}.
@@ -56,9 +55,9 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
     @SuppressWarnings("unchecked") // casts 1 & 2 must be OK because types are already correct
     public CompositeFileComparator(final Comparator<File>... delegates) {
         if (delegates == null) {
-            this.delegates = (Comparator<File>[]) EMPTY_COMPARATOR_ARRAY;//1
+            this.delegates = (Comparator<File>[]) EMPTY_COMPARATOR_ARRAY; //1
         } else {
-            this.delegates = delegates.clone();//2
+            this.delegates = delegates.clone(); //2
         }
     }
 
@@ -72,11 +71,7 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
         if (delegates == null) {
             this.delegates = (Comparator<File>[]) EMPTY_COMPARATOR_ARRAY; //1
         } else {
-            final List<Comparator<File>> list = new ArrayList<>();
-            for (final Comparator<File> comparator : delegates) {
-                list.add(comparator);
-            }
-            this.delegates = (Comparator<File>[]) list.toArray(EMPTY_COMPARATOR_ARRAY); //2
+            this.delegates = StreamSupport.stream(delegates.spliterator(), false).toArray(Comparator[]::new);
         }
     }
 

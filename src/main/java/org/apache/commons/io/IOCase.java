@@ -17,6 +17,7 @@
 package org.apache.commons.io;
 
 import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * Enumeration of IO case sensitivity.
@@ -75,12 +76,8 @@ public enum IOCase {
      * @throws IllegalArgumentException if the name is invalid
      */
     public static IOCase forName(final String name) {
-        for (final IOCase ioCase : IOCase.values()) {
-            if (ioCase.getName().equals(name)) {
-                return ioCase;
-            }
-        }
-        throw new IllegalArgumentException("Invalid IOCase name: " + name);
+        return Stream.of(IOCase.values()).filter(ioCase -> ioCase.getName().equals(name)).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Invalid IOCase name: " + name));
     }
 
     /**

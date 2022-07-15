@@ -107,12 +107,7 @@ public class OrFileFilter extends AbstractFileFilter implements ConditionalFileF
      */
     @Override
     public boolean accept(final File file) {
-        for (final IOFileFilter fileFilter : fileFilters) {
-            if (fileFilter.accept(file)) {
-                return true;
-            }
-        }
-        return false;
+        return fileFilters.stream().anyMatch(fileFilter -> fileFilter.accept(file));
     }
 
     /**
@@ -120,12 +115,7 @@ public class OrFileFilter extends AbstractFileFilter implements ConditionalFileF
      */
     @Override
     public boolean accept(final File file, final String name) {
-        for (final IOFileFilter fileFilter : fileFilters) {
-            if (fileFilter.accept(file, name)) {
-                return true;
-            }
-        }
-        return false;
+        return fileFilters.stream().anyMatch(fileFilter -> fileFilter.accept(file, name));
     }
 
     /**
@@ -133,12 +123,7 @@ public class OrFileFilter extends AbstractFileFilter implements ConditionalFileF
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        for (final IOFileFilter fileFilter : fileFilters) {
-            if (fileFilter.accept(file, attributes) == FileVisitResult.CONTINUE) {
-                return FileVisitResult.CONTINUE;
-            }
-        }
-        return FileVisitResult.TERMINATE;
+        return toDefaultFileVisitResult(fileFilters.stream().anyMatch(fileFilter -> fileFilter.accept(file, attributes) == FileVisitResult.CONTINUE));
     }
 
     /**

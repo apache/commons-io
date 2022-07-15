@@ -692,8 +692,7 @@ public class FileUtils {
             if (srcFiles.length > 0) {
                 exclusionList = new ArrayList<>(srcFiles.length);
                 for (final File srcFile : srcFiles) {
-                    final File copiedFile = new File(destDir, srcFile.getName());
-                    exclusionList.add(copiedFile.getCanonicalPath());
+                    exclusionList.add(new File(destDir, srcFile.getName()).getCanonicalPath());
                 }
             }
         }

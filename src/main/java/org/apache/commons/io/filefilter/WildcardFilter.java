@@ -24,6 +24,7 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -129,14 +130,7 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
         if (file.isDirectory()) {
             return false;
         }
-
-        for (final String wildcard : wildcards) {
-            if (FilenameUtils.wildcardMatch(file.getName(), wildcard)) {
-                return true;
-            }
-        }
-
-        return false;
+        return Stream.of(wildcards).anyMatch(wildcard -> FilenameUtils.wildcardMatch(file.getName(), wildcard));
     }
 
     /**
@@ -151,14 +145,7 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
         if (dir != null && new File(dir, name).isDirectory()) {
             return false;
         }
-
-        for (final String wildcard : wildcards) {
-            if (FilenameUtils.wildcardMatch(name, wildcard)) {
-                return true;
-            }
-        }
-
-        return false;
+        return Stream.of(wildcards).anyMatch(wildcard -> FilenameUtils.wildcardMatch(name, wildcard));
     }
 
     /**
@@ -173,14 +160,9 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
         if (Files.isDirectory(file)) {
             return FileVisitResult.TERMINATE;
         }
+        return toDefaultFileVisitResult(
+                Stream.of(wildcards).anyMatch(wildcard -> FilenameUtils.wildcardMatch(Objects.toString(file.getFileName(), null), wildcard)));
 
-        for (final String wildcard : wildcards) {
-            if (FilenameUtils.wildcardMatch(Objects.toString(file.getFileName(), null), wildcard)) {
-                return FileVisitResult.CONTINUE;
-            }
-        }
-
-        return FileVisitResult.TERMINATE;
     }
 
 }

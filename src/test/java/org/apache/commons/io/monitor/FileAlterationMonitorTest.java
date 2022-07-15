@@ -195,9 +195,7 @@ public class FileAlterationMonitorTest extends AbstractMonitorTest {
         Thread.sleep(10); // wait until the watcher thread enters Thread.sleep()
         monitor.stop(100);
 
-        for (final Thread thread : createdThreads) {
-            assertFalse(thread.isAlive(), "The FileAlterationMonitor did not stop the threads it created.");
-        }
+        createdThreads.forEach(thread -> assertFalse(thread.isAlive(), "The FileAlterationMonitor did not stop the threads it created."));
     }
 
     /**

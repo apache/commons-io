@@ -23,6 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.IOCase;
 
@@ -185,12 +186,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
     }
 
     private boolean acceptBaseName(final String baseName) {
-        for (final String testName : names) {
-            if (ioCase.checkEquals(baseName, testName)) {
-                return true;
-            }
-        }
-        return false;
+        return Stream.of(names).anyMatch(testName -> ioCase.checkEquals(baseName, testName));
     }
 
     private IOCase toIOCase(final IOCase ioCase) {

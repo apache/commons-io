@@ -38,9 +38,7 @@ public class OrFileFilterTest extends ConditionalFileFilterAbstractTest {
   @Override
   protected IOFileFilter buildFilterUsingAdd(final List<IOFileFilter> filters) {
     final OrFileFilter filter = new OrFileFilter();
-    for (final IOFileFilter filter1 : filters) {
-      filter.addFileFilter(filter1);
-    }
+    filters.forEach(filter::addFileFilter);
     return filter;
   }
 

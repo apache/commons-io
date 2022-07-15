@@ -23,6 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
@@ -191,12 +192,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
     }
 
     private boolean accept(final String name) {
-        for (final String wildcard : wildcards) {
-            if (FilenameUtils.wildcardMatch(name, wildcard, ioCase)) {
-                return true;
-            }
-        }
-        return false;
+        return Stream.of(wildcards).anyMatch(wildcard -> FilenameUtils.wildcardMatch(name, wildcard, ioCase));
     }
 
     /**

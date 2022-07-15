@@ -139,9 +139,7 @@ public final class FileAlterationMonitor implements Runnable {
     @Override
     public void run() {
         while (running) {
-            for (final FileAlterationObserver observer : observers) {
-                observer.checkAndNotify();
-            }
+            observers.forEach(FileAlterationObserver::checkAndNotify);
             if (!running) {
                 break;
             }

@@ -19,6 +19,8 @@ package org.apache.commons.io.filefilter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 public abstract class IOFileFilterAbstractTest {
 
@@ -129,18 +131,10 @@ public abstract class IOFileFilterAbstractTest {
     }
 
     public static void resetFalseFilters(final TesterFalseFileFilter[] filters) {
-        for (final TesterFalseFileFilter filter : filters) {
-            if (filter != null) {
-                filter.reset();
-            }
-        }
+        Stream.of(filters).filter(Objects::nonNull).forEach(TesterFalseFileFilter::reset);
     }
 
     public static void resetTrueFilters(final TesterTrueFileFilter[] filters) {
-        for (final TesterTrueFileFilter filter : filters) {
-            if (filter != null) {
-                filter.reset();
-            }
-        }
+        Stream.of(filters).filter(Objects::nonNull).forEach(TesterTrueFileFilter::reset);
     }
 }

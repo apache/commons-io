@@ -120,8 +120,7 @@ public class DemuxTest {
 
     private final HashMap<String, Thread> threadMap = new HashMap<>();
 
-    private void doJoin()
-            throws Exception {
+    private void doJoin() throws InterruptedException {
         for (final String name : threadMap.keySet()) {
             final Thread thread = threadMap.get(name);
             thread.join();
@@ -129,10 +128,7 @@ public class DemuxTest {
     }
 
     private void doStart() {
-        for (final String name : threadMap.keySet()) {
-            final Thread thread = threadMap.get(name);
-            thread.start();
-        }
+        threadMap.keySet().forEach(name -> threadMap.get(name).start());
     }
 
     private String getInput(final String threadName) {

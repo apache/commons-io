@@ -49,9 +49,6 @@ public class AgeFileFilterTest {
         // We are interested in files older than one day
         final long cutoffMillis = System.currentTimeMillis();
         final String[] files = dir.list(new AgeFileFilter(cutoffMillis));
-        for (final String file : files) {
-            // System.out.println(files[i]);
-        }
         // End of Javadoc example
         assertTrue(files.length > 0);
     }

@@ -22,6 +22,7 @@ import java.net.URL;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.spi.FileSystemProvider;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -61,7 +62,7 @@ public class FileSystemProviders {
      * Might make public later.
      */
     private FileSystemProviders(final List<FileSystemProvider> providers) {
-        this.providers = providers;
+        this.providers = providers != null ? providers : Collections.emptyList();
     }
 
     /**
@@ -78,14 +79,7 @@ public class FileSystemProviders {
             return FileSystems.getDefault().provider();
         }
         // Find provider.
-        if (providers != null) {
-            for (final FileSystemProvider provider : providers) {
-                if (provider.getScheme().equalsIgnoreCase(scheme)) {
-                    return provider;
-                }
-            }
-        }
-        return null;
+        return providers.stream().filter(provider -> provider.getScheme().equalsIgnoreCase(scheme)).findFirst().orElse(null);
     }
 
     /**

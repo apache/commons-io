@@ -85,9 +85,9 @@ public abstract class ConditionalFileFilterAbstractTest extends IOFileFilterAbst
             fileFilter.addFileFilter(filters.get(i));
             assertEquals(i + 1, fileFilter.getFileFilters().size(), "file filters count: ");
         }
-        for (final IOFileFilter filter : fileFilter.getFileFilters()) {
+        fileFilter.getFileFilters().forEach(filter -> {
             assertTrue(filters.contains(filter), "found file filter");
-        }
+        });
         assertEquals(filters.size(), fileFilter.getFileFilters().size(), "file filters count");
     }
 
@@ -175,10 +175,10 @@ public abstract class ConditionalFileFilterAbstractTest extends IOFileFilterAbst
         filters.add(new TesterTrueFileFilter());
         filters.add(new TesterTrueFileFilter());
         filters.add(new TesterTrueFileFilter());
-        for (final TesterTrueFileFilter filter : filters) {
+        filters.forEach(filter -> {
             fileFilter.removeFileFilter(filter);
             assertFalse(fileFilter.getFileFilters().contains(filter), "file filter removed");
-        }
+        });
         assertEquals(0, fileFilter.getFileFilters().size(), "file filters count");
     }
 }

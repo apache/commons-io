@@ -42,9 +42,7 @@ public class AndFileFilterTest extends ConditionalFileFilterAbstractTest {
   @Override
   protected IOFileFilter buildFilterUsingAdd(final List<IOFileFilter> filters) {
     final AndFileFilter filter = new AndFileFilter();
-    for (final IOFileFilter filter1 : filters) {
-      filter.addFileFilter(filter1);
-    }
+    filters.forEach(filter::addFileFilter);
     return filter;
   }
 

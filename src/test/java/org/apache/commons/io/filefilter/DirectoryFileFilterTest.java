@@ -48,9 +48,6 @@ public class DirectoryFileFilterTest {
     public void testJavadocExampleUsingIo() {
         final File dir = FileUtils.current();
         final String[] files = dir.list(DirectoryFileFilter.INSTANCE);
-        for (final String file : files) {
-            // System.out.println(files[i]);
-        }
         // End of Javadoc example
         assertTrue(files.length > 0);
     }
