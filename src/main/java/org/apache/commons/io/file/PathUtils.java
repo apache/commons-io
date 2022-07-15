@@ -214,7 +214,7 @@ public final class PathUtils {
     }
 
     /**
-     * Cleans a directory including sub-directories without deleting directories.
+     * Cleans a directory including subdirectories without deleting directories.
      *
      * @param directory directory to clean.
      * @return The visitation path counters.
@@ -225,7 +225,7 @@ public final class PathUtils {
     }
 
     /**
-     * Cleans a directory including sub-directories without deleting directories.
+     * Cleans a directory including subdirectories without deleting directories.
      *
      * @param directory directory to clean.
      * @param deleteOptions How to handle deletion.
@@ -315,7 +315,7 @@ public final class PathUtils {
     }
 
     /**
-     * Counts aspects of a directory including sub-directories.
+     * Counts aspects of a directory including subdirectories.
      *
      * @param directory directory to delete.
      * @return The visitor used to count the given directory.
@@ -326,7 +326,7 @@ public final class PathUtils {
     }
 
     /**
-     * Counts aspects of a directory including sub-directories.
+     * Counts aspects of a directory including subdirectories.
      *
      * @param directory directory to count.
      * @return The visitor used to count the given directory.
@@ -378,7 +378,7 @@ public final class PathUtils {
     }
 
     /**
-     * Deletes a file or directory. If the path is a directory, delete it and all sub-directories.
+     * Deletes a file or directory. If the path is a directory, delete it and all subdirectories.
      * <p>
      * The difference between File.delete() and this method are:
      * </p>
@@ -397,7 +397,7 @@ public final class PathUtils {
     }
 
     /**
-     * Deletes a file or directory. If the path is a directory, delete it and all sub-directories.
+     * Deletes a file or directory. If the path is a directory, delete it and all subdirectories.
      * <p>
      * The difference between File.delete() and this method are:
      * </p>
@@ -419,7 +419,7 @@ public final class PathUtils {
     }
 
     /**
-     * Deletes a file or directory. If the path is a directory, delete it and all sub-directories.
+     * Deletes a file or directory. If the path is a directory, delete it and all subdirectories.
      * <p>
      * The difference between File.delete() and this method are:
      * </p>
@@ -442,7 +442,7 @@ public final class PathUtils {
     }
 
     /**
-     * Deletes a directory including sub-directories.
+     * Deletes a directory including subdirectories.
      *
      * @param directory directory to delete.
      * @return The visitor used to delete the given directory.
@@ -453,7 +453,7 @@ public final class PathUtils {
     }
 
     /**
-     * Deletes a directory including sub-directories.
+     * Deletes a directory including subdirectories.
      *
      * @param directory directory to delete.
      * @param deleteOptions How to handle deletion.
@@ -469,7 +469,7 @@ public final class PathUtils {
     }
 
     /**
-     * Deletes a directory including sub-directories.
+     * Deletes a directory including subdirectories.
      *
      * @param directory directory to delete.
      * @param linkOptions How to handle symbolic links.
@@ -564,7 +564,7 @@ public final class PathUtils {
 
     /**
      * Compares the file sets of two Paths to determine if they are equal or not while considering file contents. The
-     * comparison includes all files in all sub-directories.
+     * comparison includes all files in all subdirectories.
      *
      * @param path1 The first directory.
      * @param path2 The second directory.
@@ -577,7 +577,7 @@ public final class PathUtils {
 
     /**
      * Compares the file sets of two Paths to determine if they are equal or not while considering file contents. The
-     * comparison includes all files in all sub-directories.
+     * comparison includes all files in all subdirectories.
      *
      * @param path1 The first directory.
      * @param path2 The second directory.
@@ -621,7 +621,7 @@ public final class PathUtils {
 
     /**
      * Compares the file sets of two Paths to determine if they are equal or not without considering file contents. The
-     * comparison includes all files in all sub-directories.
+     * comparison includes all files in all subdirectories.
      *
      * @param path1 The first directory.
      * @param path2 The second directory.
@@ -634,7 +634,7 @@ public final class PathUtils {
 
     /**
      * Compares the file sets of two Paths to determine if they are equal or not without considering file contents. The
-     * comparison includes all files in all sub-directories.
+     * comparison includes all files in all subdirectories.
      *
      * @param path1 The first directory.
      * @param path2 The second directory.

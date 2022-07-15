@@ -510,7 +510,7 @@ public class FileFilterUtils {
      *
      * @param filter  the filter to decorate, null means an unrestricted filter
      * @return the decorated filter, never null
-     * @since 1.1 (method existed but had bug in 1.0)
+     * @since 1.1 (method existed but had a bug in 1.0)
      */
     public static IOFileFilter makeCVSAware(final IOFileFilter filter) {
         return filter == null ? CVS_FILTER : and(filter, CVS_FILTER);

@@ -67,8 +67,8 @@ public class ClassLoaderObjectInputStreamTest {
         @Override
         public boolean equals(final Object other) {
             if (other instanceof Test) {
-                final Test tother = (Test) other;
-                return this.i == tother.i & this.e == tother.e & equalObject(tother.o);
+                final Test tOther = (Test) other;
+                return this.i == tOther.i & this.e == tOther.e & equalObject(tOther.o);
             }
             return false;
         }

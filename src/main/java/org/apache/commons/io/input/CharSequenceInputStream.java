@@ -117,8 +117,8 @@ public class CharSequenceInputStream extends InputStream {
      */
     @Override
     public int available() throws IOException {
-        // The cached entries are in bbuf; since encoding always creates at least one byte
-        // per character, we can add the two to get a better estimate (e.g. if bbuf is empty)
+        // The cached entries are in bBuf; since encoding always creates at least one byte
+        // per character, we can add the two to get a better estimate (e.g. if bBuf is empty)
         // Note that the previous implementation (2.4) could return zero even though there were
         // encoded bytes still available.
         return this.bBuf.remaining() + this.cBuf.remaining();
@@ -163,8 +163,8 @@ public class CharSequenceInputStream extends InputStream {
         this.bBufMark = this.bBuf.position();
         this.cBuf.mark();
         this.bBuf.mark();
-        // It would be nice to be able to use mark & reset on the cbuf and bbuf;
-        // however the bbuf is re-used so that won't work
+        // It would be nice to be able to use mark & reset on the cBuf and bBuf;
+        // however the bBuf is re-used so that won't work
     }
 
     @Override
@@ -225,16 +225,16 @@ public class CharSequenceInputStream extends InputStream {
         //
         // This is not the most efficient implementation, as it re-encodes from the beginning.
         //
-        // Since the bbuf is re-used, in general it's necessary to re-encode the data.
+        // Since the bBuf is re-used, in general it's necessary to re-encode the data.
         //
         // It should be possible to apply some optimisations however:
-        // + use mark/reset on the cbuf and bbuf. This would only work if the buffer had not been (re)filled since
+        // + use mark/reset on the cBuf and bBuf. This would only work if the buffer had not been (re)filled since
         // the mark. The code would have to catch InvalidMarkException - does not seem possible to check if mark is
-        // valid otherwise. + Try saving the state of the cbuf before each fillBuffer; it might be possible to
+        // valid otherwise. + Try saving the state of the cBuf before each fillBuffer; it might be possible to
         // restart from there.
         //
         if (this.cBufMark != NO_MARK) {
-            // if cbuf is at 0, we have not started reading anything, so skip re-encoding
+            // if cBuf is at 0, we have not started reading anything, so skip re-encoding
             if (this.cBuf.position() != 0) {
                 this.charsetEncoder.reset();
                 this.cBuf.rewind();

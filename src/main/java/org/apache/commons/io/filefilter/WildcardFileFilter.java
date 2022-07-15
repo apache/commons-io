@@ -82,7 +82,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
     /** The wildcards that will be used to match file names. */
     private final String[] wildcards;
 
-    /** Whether the comparison is case sensitive. */
+    /** Whether the comparison is case-sensitive. */
     private final IOCase ioCase;
 
     /**

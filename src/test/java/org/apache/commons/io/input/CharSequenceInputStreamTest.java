@@ -80,7 +80,7 @@ public class CharSequenceInputStreamTest {
     public void testAvailable() throws Exception {
         for (final String csName : Charset.availableCharsets().keySet()) {
             // prevent java.lang.UnsupportedOperationException at sun.nio.cs.ext.ISO2022_CN.newEncoder.
-            // also try and avoid the following Effor on Continuum
+            // also try and avoid the following exception
 //            java.lang.UnsupportedOperationException: null
 //            at java.nio.CharBuffer.array(CharBuffer.java:940)
 //            at sun.nio.cs.ext.COMPOUND_TEXT_Encoder.encodeLoop(COMPOUND_TEXT_Encoder.java:75)

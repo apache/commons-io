@@ -48,7 +48,7 @@ limitations under the License.
             </p>
             <p>
                 As an example, consider the task of reading bytes
-                from a URL, and printing them. This would typically done like this:
+                from a URL, and printing them. This would typically be done like this:
             </p>
 
             <source>

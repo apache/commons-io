@@ -70,7 +70,7 @@ public class BoundedInputStream extends InputStream {
      * @param size The maximum number of bytes to return
      */
     public BoundedInputStream(final InputStream in, final long size) {
-        // Some badly designed methods - eg the servlet API - overload length
+        // Some badly designed methods - e.g. the servlet API - overload length
         // such that "-1" means stream finished
         this.max = size;
         this.in = in;

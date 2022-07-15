@@ -937,7 +937,7 @@ The <action> type attribute can be add,update,fix,remove.
         Adding the CircularBufferInputStream, and the PeekableInputStream.
       </action>
       <action issue="IO-582" dev="jochen" type="fix" due-to="Bruno Palos">
-        Make methods in ObservableInputStream.Obsever public.
+        Make methods in ObservableInputStream.Observer public.
       </action>
       <action issue="IO-535" dev="pschumacher" type="fix" due-to="Svetlin Zarev, Anthony Raymond">
         Thread bug in FileAlterationMonitor#stop(int).
@@ -1304,7 +1304,7 @@ The <action> type attribute can be add,update,fix,remove.
          Added ChunkedOutputStream, ChunkedWriter
       </action>
       <action issue="IO-385" dev="sebb" type="fix">
-         FileUtils.doCopyFile can potentially loop for ever
+         FileUtils.doCopyFile can potentially loop forever
          Exit loop if no data to copy
       </action>
       <action issue="IO-383" dev="sebb" type="fix">
@@ -1373,7 +1373,7 @@ The <action> type attribute can be add,update,fix,remove.
         Added Javadoc.
       </action>
       <action issue="IO-372" dev="sebb" type="fix">
-        FileUtils.moveDirectory can produce misleading error message on failiure
+        FileUtils.moveDirectory can produce misleading error message on failure
       </action>
       <action issue="IO-375" dev="sebb" type="update">
         FilenameUtils.splitOnTokens(String text) check for '**' could be simplified
@@ -1490,7 +1490,7 @@ The <action> type attribute can be add,update,fix,remove.
 
     <release version="2.2" date="2012-March-26" description="New features and bug fixes.">
       <action issue="IO-313" dev="ggregory" type="add" due-to="ggregory">
-        Add IOUTils.toBufferedReader(Reader)
+        Add IOUtils.toBufferedReader(Reader)
       </action>
       <!-- Note: the issue was not raised by Manoj, but arose from IO-305 and tests he performed -->
       <action issue="IO-308" dev="sebb" type="add" due-to="Manoj Mokashi">

@@ -1300,8 +1300,8 @@ public class FilenameUtils {
      * the separator character.
      *
      * @param fileName  the fileName to normalize, null returns null
-     * @param unixSeparator {@code true} if a unix separator should
-     * be used or {@code false} if a windows separator should be used.
+     * @param unixSeparator {@code true} if a Unix separator should
+     * be used or {@code false} if a Windows separator should be used.
      * @return the normalized fileName, or null if invalid
      * @throws IllegalArgumentException if the fileName contains the null character ({@code U+0000})
      * @since 2.0
@@ -1394,8 +1394,8 @@ public class FilenameUtils {
      * </pre>
      *
      * @param fileName  the fileName to normalize, null returns null
-     * @param unixSeparator {@code true} if a unix separator should
-     * be used or {@code false} if a windows separator should be used.
+     * @param unixSeparator {@code true} if a Unix separator should
+     * be used or {@code false} if a Windows separator should be used.
      * @return the normalized fileName, or null if invalid
      * @throws IllegalArgumentException if the fileName contains the null character ({@code U+0000})
      * @since 2.0
@@ -1436,7 +1436,7 @@ public class FilenameUtils {
     }
 
     /**
-     * Checks the input for null characters ({@code U+0000}), a sign of unsanitized data being passed to to file level functions.
+     * Checks the input for null characters ({@code U+0000}), a sign of unsanitized data being passed to file level functions.
      *
      * This may be used for poison byte attacks.
      *

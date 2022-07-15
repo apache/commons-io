@@ -133,7 +133,7 @@ public class AccumulatorPathVisitorTest {
     }
 
     /**
-     * Tests IO-755 with a directory with 100 files, and delete all of them mid-way through the visit.
+     * Tests IO-755 with a directory with 100 files, and delete all of them midway through the visit.
      *
      * Random failure like:
      *
@@ -192,7 +192,7 @@ public class AccumulatorPathVisitorTest {
     }
 
     /**
-     * Tests IO-755 with a directory with 100 files, and delete all of them mid-way through the visit.
+     * Tests IO-755 with a directory with 100 files, and delete all of them midway through the visit.
      */
     @ParameterizedTest
     @MethodSource("testParametersIgnoreFailures")

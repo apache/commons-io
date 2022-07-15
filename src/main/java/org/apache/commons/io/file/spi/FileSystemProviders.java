@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Helps working with {@link FileSystemProvider}.
+ * Helps to work with {@link FileSystemProvider}.
  *
  * @since 2.9.0
  */

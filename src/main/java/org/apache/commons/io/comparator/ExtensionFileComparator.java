@@ -29,7 +29,7 @@ import org.apache.commons.io.IOCase;
  * <p>
  * This comparator can be used to sort lists or arrays of files
  * by their file extension either in a case-sensitive, case-insensitive or
- * system dependent case sensitive way. A number of singleton instances
+ * system dependent case-sensitive way. A number of singleton instances
  * are provided for the various case sensitivity options (using {@link IOCase})
  * and the reverse of those options.
  * </p>
@@ -76,11 +76,11 @@ public class ExtensionFileComparator extends AbstractFileComparator implements S
     /** Reverse system sensitive path comparator instance (see {@link IOCase#SYSTEM}) */
     public static final Comparator<File> EXTENSION_SYSTEM_REVERSE = new ReverseFileComparator(EXTENSION_SYSTEM_COMPARATOR);
 
-    /** Whether the comparison is case sensitive. */
+    /** Whether the comparison is case-sensitive. */
     private final IOCase ioCase;
 
     /**
-     * Constructs a case sensitive file extension comparator instance.
+     * Constructs a case-sensitive file extension comparator instance.
      */
     public ExtensionFileComparator() {
         this.ioCase = IOCase.SENSITIVE;

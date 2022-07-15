@@ -30,7 +30,7 @@ public class WindowsLineEndingInputStreamTest {
     }
 
     @Test
-    public void linuxLinefeeds() throws Exception {
+    public void linuxLineFeeds() throws Exception {
         final String roundtrip = roundtrip("ab\nc", false);
         assertEquals("ab\r\nc", roundtrip);
     }

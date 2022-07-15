@@ -92,7 +92,7 @@ limitations under the License.
                     o IO-389:  FileUtils.sizeOfDirectory can throw IllegalArgumentException Thanks to Austin Doupnik.
                     o IO-390:  FileUtils.sizeOfDirectoryAsBigInteger can overflow.
                              Ensure that recursive calls all use BigInteger
-                    o IO-385:  FileUtils.doCopyFile can potentially loop for ever
+                    o IO-385:  FileUtils.doCopyFile can potentially loop forever
                              Exit loop if no data to copy
                     o IO-383:  FileUtils.doCopyFile caches the file size; needs to be documented
                              Added Javadoc; show file lengths in exception message
@@ -107,7 +107,7 @@ limitations under the License.
                     o IO-354:  Commons IO Tailer does not respect UTF-8 Charset.
                     o IO-323:  What should happen in FileUtils.sizeOf[Directory] when an overflow takes place?
                             Added Javadoc.
-                    o IO-372:  FileUtils.moveDirectory can produce misleading error message on failiure
+                    o IO-372:  FileUtils.moveDirectory can produce misleading error message on failure
                     o IO-362:  IOUtils.contentEquals* methods returns false if input1 == input2, should return true. Thanks to mmadson, ggregory.
                     o IO-357:  [Tailer] InterruptedException while the thread is sleeping is silently ignored Thanks to mortenh.
                     o IO-352:  Spelling fixes. Thanks to scop.

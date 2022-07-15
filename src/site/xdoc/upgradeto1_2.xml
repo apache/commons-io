@@ -64,7 +64,7 @@ Bug fixes from 1.1
 Enhancements from 1.1
 ---------------------
 - AgeFileFilter/SizeFileFilter
-  New file filters that compares against the age and size of the file
+  New file filters that compare against the age and size of the file
 
 - FileSystemUtils.freeSpaceKb(drive)
   New method that unifies result to be in kilobytes [38574]

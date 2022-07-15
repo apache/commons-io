@@ -100,7 +100,7 @@ public class FileUtilsDeleteDirectoryLinuxTest extends FileUtilsDeleteDirectoryB
         final File nested = new File(top, "nested");
         assertTrue(nested.mkdirs());
 
-        // test wont work if we can't restrict permissions on the
+        // test won't work if we can't restrict permissions on the
         // directory, so skip it.
         assumeTrue(chmod(nested, 0, false));
 

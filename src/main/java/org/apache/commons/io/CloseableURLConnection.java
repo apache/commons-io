@@ -223,8 +223,8 @@ class CloseableURLConnection extends URLConnection implements AutoCloseable {
     }
 
     @Override
-    public void setAllowUserInteraction(final boolean allowuserinteraction) {
-        urlConnection.setAllowUserInteraction(allowuserinteraction);
+    public void setAllowUserInteraction(final boolean allowUserInteraction) {
+        urlConnection.setAllowUserInteraction(allowUserInteraction);
     }
 
     @Override
@@ -233,23 +233,23 @@ class CloseableURLConnection extends URLConnection implements AutoCloseable {
     }
 
     @Override
-    public void setDefaultUseCaches(final boolean defaultusecaches) {
-        urlConnection.setDefaultUseCaches(defaultusecaches);
+    public void setDefaultUseCaches(final boolean defaultUseCaches) {
+        urlConnection.setDefaultUseCaches(defaultUseCaches);
     }
 
     @Override
-    public void setDoInput(final boolean doinput) {
-        urlConnection.setDoInput(doinput);
+    public void setDoInput(final boolean doInput) {
+        urlConnection.setDoInput(doInput);
     }
 
     @Override
-    public void setDoOutput(final boolean dooutput) {
-        urlConnection.setDoOutput(dooutput);
+    public void setDoOutput(final boolean doOutput) {
+        urlConnection.setDoOutput(doOutput);
     }
 
     @Override
-    public void setIfModifiedSince(final long ifmodifiedsince) {
-        urlConnection.setIfModifiedSince(ifmodifiedsince);
+    public void setIfModifiedSince(final long ifModifiedSince) {
+        urlConnection.setIfModifiedSince(ifModifiedSince);
     }
 
     @Override
@@ -263,8 +263,8 @@ class CloseableURLConnection extends URLConnection implements AutoCloseable {
     }
 
     @Override
-    public void setUseCaches(final boolean usecaches) {
-        urlConnection.setUseCaches(usecaches);
+    public void setUseCaches(final boolean useCaches) {
+        urlConnection.setUseCaches(useCaches);
     }
 
     @Override

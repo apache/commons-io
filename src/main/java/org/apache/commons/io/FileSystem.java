@@ -311,8 +311,8 @@ public enum FileSystem {
     /**
      * Constructs a new instance.
      *
-     * @param caseSensitive Whether this file system is case sensitive.
-     * @param casePreserving Whether this file system is case preserving.
+     * @param caseSensitive Whether this file system is case-sensitive.
+     * @param casePreserving Whether this file system is case-preserving.
      * @param maxFileLength The maximum length for file names. The file name does not include folders.
      * @param maxPathLength The maximum length of the path to a file. This can include folders.
      * @param illegalFileNameChars Illegal characters for this file system.

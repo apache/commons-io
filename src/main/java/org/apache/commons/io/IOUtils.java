@@ -2255,7 +2255,7 @@ public class IOUtils {
         }
         /*
          * N.B. no need to synchronize access to SKIP_BYTE_BUFFER: - we don't care if the buffer is created multiple
-         * times (the data is ignored) - we always use the same size buffer, so if it it is recreated it will still be
+         * times (the data is ignored) - we always use the same size buffer, so if it is recreated it will still be
          * OK (if the buffer size were variable, we would need to synch. to ensure some other thread did not create a
          * smaller one)
          */
@@ -2518,10 +2518,10 @@ public class IOUtils {
     public static byte[] toByteArray(final InputStream inputStream) throws IOException {
         // We use a ThresholdingOutputStream to avoid reading AND writing more than Integer.MAX_VALUE.
         try (UnsynchronizedByteArrayOutputStream ubaOutput = new UnsynchronizedByteArrayOutputStream();
-            ThresholdingOutputStream thresholdOuput = new ThresholdingOutputStream(Integer.MAX_VALUE, os -> {
+            ThresholdingOutputStream thresholdOutput = new ThresholdingOutputStream(Integer.MAX_VALUE, os -> {
                 throw new IllegalArgumentException(String.format("Cannot read more than %,d into a byte array", Integer.MAX_VALUE));
             }, os -> ubaOutput)) {
-            copy(inputStream, thresholdOuput);
+            copy(inputStream, thresholdOutput);
             return ubaOutput.toByteArray();
         }
     }

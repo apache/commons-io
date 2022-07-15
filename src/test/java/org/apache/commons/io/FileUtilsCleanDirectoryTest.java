@@ -116,7 +116,7 @@ public class FileUtilsCleanDirectoryTest extends AbstractTempDirTest {
     @DisabledOnOs(OS.WINDOWS)
     @Test
     public void testThrowsOnNullList() throws Exception {
-        // test wont work if we can't restrict permissions on the
+        // test won't work if we can't restrict permissions on the
         // directory, so skip it.
         assumeTrue(chmod(tempDirFile, 0, false));
 

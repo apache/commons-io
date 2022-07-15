@@ -89,7 +89,7 @@ Enhancements from 1.3.2
   - Add new Reader implementation that handles any CharSequence (String,
     StringBuffer, StringBuilder or CharBuffer) 
 
-- ThesholdingOuputStream [IO-121]
+- ThresholdingOutputStream [IO-121]
   - Add a reset() method which sets the count of the bytes written back to zero.
 
 - DeferredFileOutputStream [IO-130]
@@ -108,10 +108,10 @@ Enhancements from 1.3.2
 - Add Singleton Constants to several stream classes [IO-143]
 
 - PrefixFileFilter [IO-126]
-  - Add faciltiy to specify case sensitivity on prefix matching
+  - Add facility to specify case sensitivity on prefix matching
 
 - SuffixFileFilter [IO-126]
-  - Add faciltiy to specify case sensitivity on suffix matching
+  - Add facility to specify case sensitivity on suffix matching
 
 - RegexFileFilter [IO-74]
   - Add new regular expression file filter implementation

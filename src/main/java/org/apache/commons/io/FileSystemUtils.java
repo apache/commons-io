@@ -188,7 +188,7 @@ public class FileSystemUtils {
      * The free space is calculated via the command line.
      * It uses 'dir /-c' on Windows, 'df -kP' on AIX/HP-UX and 'df -k' on other Unix.
      * <p>
-     * In order to work, you must be running Windows, or have a implementation of
+     * In order to work, you must be running Windows, or have an implementation of
      * Unix df that supports GNU format when passed -k (or -kP). If you are going
      * to rely on this code, please check that it works on your OS by running
      * some simple tests to compare the command line with the output from this class.
@@ -218,7 +218,7 @@ public class FileSystemUtils {
      * The free space is calculated via the command line.
      * It uses 'dir /-c' on Windows, 'df -kP' on AIX/HP-UX and 'df -k' on other Unix.
      * <p>
-     * In order to work, you must be running Windows, or have a implementation of
+     * In order to work, you must be running Windows, or have an implementation of
      * Unix df that supports GNU format when passed -k (or -kP). If you are going
      * to rely on this code, please check that it works on your OS by running
      * some simple tests to compare the command line with the output from this class.
@@ -484,8 +484,8 @@ public class FileSystemUtils {
         // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4784692
         // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4801027
         // http://forum.java.sun.com/thread.jspa?threadID=533029&messageID=2572018
-        // however, its still not perfect as the JDK support is so poor
-        // (see commons-exec or Ant for a better multi-threaded multi-os solution)
+        // however, it's still not perfect as the JDK support is so poor
+        // (see commons-exec or Ant for a better multithreaded multi-os solution)
 
         final List<String> lines = new ArrayList<>(20);
         Process proc = null;

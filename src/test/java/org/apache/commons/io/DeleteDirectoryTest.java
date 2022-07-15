@@ -40,7 +40,7 @@ import org.junit.jupiter.api.condition.OS;
 /**
  * Tests <a href="https://issues.apache.org/jira/browse/IO-751">IO-751</a>.
  * <p>
- * Must be run on a POSIX file system, macOS or Linux, disbled on Windows.
+ * Must be run on a POSIX file system, macOS or Linux, disabled on Windows.
  * </p>
  */
 @DisabledOnOs(OS.WINDOWS)

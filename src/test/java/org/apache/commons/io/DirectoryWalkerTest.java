@@ -249,11 +249,11 @@ public class DirectoryWalkerTest {
     private static final IOFileFilter dirsFilter        = createNameFilter(dirs);
 
 
-    private static final IOFileFilter iofilesFilter     = createNameFilter(ioFiles);
+    private static final IOFileFilter ioFilesFilter = createNameFilter(ioFiles);
 
     private static final IOFileFilter outputFilesFilter = createNameFilter(outputFiles);
 
-    private static final IOFileFilter ioDirAndFilesFilter = dirsFilter.or(iofilesFilter);
+    private static final IOFileFilter ioDirAndFilesFilter = dirsFilter.or(ioFilesFilter);
 
     private static final IOFileFilter dirsAndFilesFilter = ioDirAndFilesFilter.or(outputFilesFilter);
 
@@ -421,7 +421,7 @@ public class DirectoryWalkerTest {
      */
     @Test
     public void testFilterDirAndFile1() {
-        final List<File> results = new TestFileFinder(dirsFilter, iofilesFilter, -1).find(javaDir);
+        final List<File> results = new TestFileFinder(dirsFilter, ioFilesFilter, -1).find(javaDir);
         assertEquals(1 + dirs.length + ioFiles.length, results.size(), "[DirAndFile1] Result Size");
         assertTrue(results.contains(javaDir), "[DirAndFile1] Start Dir");
         checkContainsFiles("[DirAndFile1] Dir", dirs, results);
@@ -457,7 +457,7 @@ public class DirectoryWalkerTest {
      */
     @Test
     public void testFilterDirAndFile4() {
-        final List<File> results = new TestFileFinder(null, iofilesFilter, -1).find(javaDir);
+        final List<File> results = new TestFileFinder(null, ioFilesFilter, -1).find(javaDir);
         final List<File> resultFiles = filesOnly(results);
         assertEquals(ioFiles.length, resultFiles.size(), "[DirAndFile4] Result Size");
         assertTrue(results.contains(javaDir), "[DirAndFile4] Start Dir");

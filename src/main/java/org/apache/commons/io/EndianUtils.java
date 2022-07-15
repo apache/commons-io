@@ -196,7 +196,7 @@ public class EndianUtils {
     }
 
     /**
-     * Reads a unsigned integer (32-bit) from an InputStream. The value is
+     * Reads an unsigned integer (32-bit) from an InputStream. The value is
      * converted to the opposed endian system while reading.
      * @param input source InputStream
      * @return the value just read
@@ -226,7 +226,7 @@ public class EndianUtils {
     }
 
     /**
-     * Reads a unsigned short (16-bit) from an InputStream. The value is
+     * Reads an unsigned short (16-bit) from an InputStream. The value is
      * converted to the opposed endian system while reading.
      * @param input source InputStream
      * @return the value just read
