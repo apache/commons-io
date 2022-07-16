@@ -34,7 +34,7 @@ import java.util.Objects;
 public class HexDump {
 
     /**
-     * The line-separator (initializes to "line.separator" system property.
+     * The line-separator (initializes to "line.separator" system property).
      *
      * @deprecated Use {@link System#lineSeparator()}.
      */

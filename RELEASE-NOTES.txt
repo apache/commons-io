@@ -42,7 +42,7 @@ o          Remove IOException from the method signatures that no longer throw IO
 
 Changes:
 o          Add SymbolicLinkFileFilter. Thanks to Gary Gregory. 
-o          Add test to make sure the setter of AndFileFilter works correctly #244. Thanks to trncate. 
+o          Add test to make sure the setter of AndFileFilter works correctly #244. Thanks to trncate.
 o          Add XmlStreamReader(Path). Thanks to Gary Gregory. 
 o          Bump mockito-inline from 3.11.0 to 3.11.2 #247. Thanks to Dependabot. 
 o          Bump jmh.version from 1.27 to 1.32 #237. Thanks to Dependabot. 
@@ -287,7 +287,7 @@ o IO-662:  Refactor ByteArrayOutputStream into synchronized and unsynchronized v
 
 Fixed Bugs:
 o IO-589:  Some tests fail if the base path contains a space. 
-o IO-582:  Make methods in ObservableInputStream.Obsever public. Thanks to Bruno Palos. 
+o IO-582:  Make methods in ObservableInputStream.Observer public. Thanks to Bruno Palos.
 o IO-535:  Thread bug in FileAlterationMonitor.stop(int). Thanks to Svetlin Zarev, Anthony Raymond. 
 o IO-557:  Perform locale independent upper case conversions. Thanks to luccioman. 
 o IO-570:  Missing Javadoc in FilenameUtils causing Travis-CI build to fail. Thanks to Pranet Verma. 
@@ -554,7 +554,7 @@ o IO-338:  When a file is rotated, finish reading previous file prior to startin
 o IO-354:  Commons IO Tailer does not respect UTF-8 Charset. 
 o IO-323:  What should happen in FileUtils.sizeOf[Directory] when an overflow takes place?
         Added Javadoc. 
-o IO-372:  FileUtils.moveDirectory can produce misleading error message on failiure 
+o IO-372:  FileUtils.moveDirectory can produce misleading error message on failure
 o IO-362:  IOUtils.contentEquals* methods returns false if input1 == input2, should return true. Thanks to mmadson, ggregory. 
 o IO-357:  [Tailer] InterruptedException while the thread is sleeping is silently ignored Thanks to mortenh. 
 o IO-352:  Spelling fixes. Thanks to scop. 
@@ -671,7 +671,7 @@ Apache Commons IO Version 2.2
 Changes in this version include:
 
 New features:
-o Add IOUTils.toBufferedReader(Reader)  Issue: IO-313. Thanks to ggregory. 
+o Add IOUtils.toBufferedReader(Reader)  Issue: IO-313. Thanks to ggregory.
 o Allow applications to provide buffer (or size) for copyLarge methods.  Issue: IO-308. Thanks to Manoj Mokashi. 
 o New copyLarge() method in IOUtils that takes additional offset, length arguments  Issue: IO-305. Thanks to Manoj Mokashi. 
 o Use terabyte (TB), petabyte (PB) and exabyte (EB) in FileUtils.byteCountToDisplaySize(long size)  Issue: IO-287. Thanks to Ron Kuris, Gary Gregory. 
@@ -855,7 +855,7 @@ Bug fixes from 1.4
   * [IO-207] FileUtils - fix race condition in forceMkdir() method
   * [IO-217] FileUtils - fix copyDirectoryToDirectory() makes infinite loops
   * [IO-166] FileUtils - fix URL decoding in toFile(URL)
-  * [IO-190] FileUtils - fix copyDirectory not preserving lastmodified date on sub-directories
+  * [IO-190] FileUtils - fix copyDirectory not preserving lastmodified date on subdirectories
   * [IO-240] FileFilterUtils - ensure cvsFilter and svnFilter are only created once.
   * [IO-175] IOUtils - fix copyFile() issues with very large files
   * [IO-191] Improvements from static analysis
@@ -933,7 +933,7 @@ Enhancements from 1.3.2
   - Add new Reader implementation that handles any CharSequence (String,
     StringBuffer, StringBuilder or CharBuffer) 
 
-- ThesholdingOuputStream [IO-121]
+- ThresholdingOutputStream [IO-121]
   - Add a reset() method which sets the count of the bytes written back to zero.
 
 - DeferredFileOutputStream [IO-130]
@@ -952,10 +952,10 @@ Enhancements from 1.3.2
 - Add Singleton Constants to several stream classes [IO-143]
 
 - PrefixFileFilter [IO-126]
-  - Add faciltiy to specify case sensitivity on prefix matching
+  - Add facility to specify case sensitivity on prefix matching
 
 - SuffixFileFilter [IO-126]
-  - Add faciltiy to specify case sensitivity on suffix matching
+  - Add facility to specify case sensitivity on suffix matching
 
 - RegexFileFilter [IO-74]
   - Add new regular expression file filter implementation
@@ -1105,7 +1105,7 @@ Bug fixes from 1.2
   - Added a new copyLarge(Reader, Writer) method that returns a long
 
 - CountingInputStream/CountingOutputStream [IO-84]
-  - Methods were declared as int thus the count was innacurate for large streams
+  - Methods were declared as int thus the count was inaccurate for large streams
   - new long based methods getByteCount()/resetByteCount() added
   - existing methods changed to throw an exception if the count is greater than an int
 
@@ -1166,7 +1166,7 @@ Enhancements from 1.2
 - FileDeleteStrategy
 - FileCleaner    [IO-56,IO-70]
   - FileDeleteStrategy is a strategy for handling file deletion
-  - This can be used as a calback in FileCleaner
+  - This can be used as a callback in FileCleaner
   - Together these allow FileCleaner to do a forceDelete to kill directories
 
 - FileCleaner.exitWhenFinished [IO-99]
@@ -1296,7 +1296,7 @@ Semantic compatible - Yes, except:
     Generally this will make no difference
 
 - LockableFileWriter
-    Improved validation and now create directories if necesssary
+    Improved validation and now create directories if necessary
 
 plus these bug fixes may affect you semantically:
 - FileUtils.touch()  (Bug fix 29821)
@@ -1367,7 +1367,7 @@ Enhancements from 1.0
 - IOUtils - toCharArray(InputStream)  [28979]
           - toCharArray(InputStream,encoding)
           - toCharArray(Reader)
-    Reads a stream/reader into a charatcter array
+    Reads a stream/reader into a character array
 
 - IOUtils - readLines(InputStream)  [36214]
           - readLines(InputStream,encoding)

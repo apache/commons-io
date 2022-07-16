@@ -87,7 +87,7 @@ import org.junit.jupiter.api.io.TempDir;
  * <li>The output stream must not have been closed (a byte/char is written to test this, and subsequent size
  * checked)</li>
  * </ul>
- * Due to interdependencies in IOUtils and IOUtilsTestlet, one bug may cause multiple tests to fail.
+ * Due to interdependencies in IOUtils and IOUtilsTest, one bug may cause multiple tests to fail.
  */
 @SuppressWarnings("deprecation") // deliberately testing deprecated code
 public class IOUtilsTest {

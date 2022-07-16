@@ -41,7 +41,7 @@ import java.time.Instant;
  */
 class ThreadMonitor implements Runnable {
 
-    private static int getNanosOfMiili(final Duration duration) {
+    private static int getNanosOfMilli(final Duration duration) {
         return duration.getNano() % 1_000_000;
     }
     /**
@@ -57,7 +57,7 @@ class ThreadMonitor implements Runnable {
         final Instant finishInstant = Instant.now().plus(duration);
         Duration remainingDuration = duration;
         do {
-            Thread.sleep(remainingDuration.toMillis(), getNanosOfMiili(remainingDuration));
+            Thread.sleep(remainingDuration.toMillis(), getNanosOfMilli(remainingDuration));
             remainingDuration = Duration.between(Instant.now(), finishInstant);
         } while (!remainingDuration.isNegative());
     }
@@ -75,7 +75,7 @@ class ThreadMonitor implements Runnable {
     /**
      * Starts monitoring the specified thread.
      *
-     * @param thread The thread The thread to monitor
+     * @param thread The thread to monitor
      * @param timeout The timeout amount. or no timeout if the value is zero or less.
      * @return The monitor thread or {@code null} if the timeout amount is not greater than zero.
      */

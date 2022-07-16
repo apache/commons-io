@@ -28,7 +28,7 @@ import org.apache.commons.io.output.ProxyOutputStream;
 public class ThrowOnCloseOutputStream extends ProxyOutputStream {
 
     /**
-     * Defaultconstructor.
+     * Default constructor.
      */
     public ThrowOnCloseOutputStream() {
         super(NullOutputStream.INSTANCE);

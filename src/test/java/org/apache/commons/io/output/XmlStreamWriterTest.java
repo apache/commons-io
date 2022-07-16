@@ -131,7 +131,7 @@ public class XmlStreamWriterTest {
         checkXmlWriter(TEXT_LATIN7, "ISO-8859-7");
     }
 
-    /** Turkish language has specific rules to convert dotted and dottless i character. */
+    /** Turkish language has specific rules to convert dotted and dotless i character. */
     @Test
     @DefaultLocale(language = "tr")
     public void testLowerCaseEncodingWithTurkishLocale_IO_557() throws IOException {

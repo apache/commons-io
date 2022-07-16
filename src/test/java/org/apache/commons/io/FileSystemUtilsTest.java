@@ -98,7 +98,7 @@ public class FileSystemUtilsTest {
     public void testGetFreeSpace_String() throws Exception {
         // test coverage, as we can't check value
         if (File.separatorChar == '/') {
-            // have to figure out unix block size
+            // have to figure out Unix block size
             final String[] cmd;
             String osName = System.getProperty("os.name");
             osName = osName.toLowerCase(Locale.ENGLISH);
@@ -126,7 +126,7 @@ public class FileSystemUtilsTest {
             final long kb = FileSystemUtils.freeSpaceKb("/");
             // Assume disk space does not fluctuate
             // more than 1% between the above two calls;
-            // this also also small enough to verify freeSpaceKb uses
+            // this is also small enough to verify freeSpaceKb uses
             // kibibytes (1024) instead of SI kilobytes (1000)
             final double acceptableDelta = kb * 0.01d;
             if (kilobyteBlock) {

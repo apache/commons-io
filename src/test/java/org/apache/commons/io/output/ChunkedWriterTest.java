@@ -38,7 +38,7 @@ public class ChunkedWriterTest {
     }
 
     @Test
-    public void negative_chunksize_not_permitted() {
+    public void negative_chunkSize_not_permitted() {
         assertThrows(IllegalArgumentException.class,
                () -> new ChunkedWriter(new OutputStreamWriter(new ByteArrayOutputStream()), 0));
     }

@@ -74,7 +74,7 @@ public class FileUtilsCopyDirectoryToDirectoryTest {
     @Test
     public void copyDirectoryToDirectoryThrowsIllegalExceptionWithCorrectMessageWhenSrcDirIsNotDirectory()
         throws IOException {
-        try (TempFile srcDir = TempFile.create("notadireotry", null)) {
+        try (TempFile srcDir = TempFile.create("notadirectory", null)) {
             final File destDir = new File(temporaryFolder, "destinationDirectory");
             destDir.mkdirs();
             final String expectedMessage = String.format("Parameter 'sourceDir' is not a directory: '%s'", srcDir);

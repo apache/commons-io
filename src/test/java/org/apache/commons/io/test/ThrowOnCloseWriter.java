@@ -28,7 +28,7 @@ import org.apache.commons.io.output.ProxyWriter;
 public class ThrowOnCloseWriter extends ProxyWriter {
 
     /**
-     * Defaultconstructor.
+     * Default constructor.
      */
     public ThrowOnCloseWriter() {
         super(NullWriter.INSTANCE);

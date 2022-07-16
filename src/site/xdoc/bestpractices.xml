@@ -98,9 +98,9 @@ limitations under the License.
     
     <section name="Buffering streams">
         <p>
-            IO performance depends a lot from the buffering strategy. Usually, it's 
+            IO performance depends a lot on the buffering strategy. Usually, it's
             quite fast to read packets with the size of 512 or 1024 bytes because
-            these sizes match well with the packet sizes used on harddisks in 
+            these sizes match well with the packet sizes used on hard disks in
             file systems or file system caches. But as soon as you have to read only 
             a few bytes and that many times performance drops significantly.
         </p>

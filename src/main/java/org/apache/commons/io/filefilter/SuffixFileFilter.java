@@ -73,7 +73,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
     /** The file name suffixes to search for */
     private final String[] suffixes;
 
-    /** Whether the comparison is case sensitive. */
+    /** Whether the comparison is case-sensitive. */
     private final IOCase ioCase;
 
     /**

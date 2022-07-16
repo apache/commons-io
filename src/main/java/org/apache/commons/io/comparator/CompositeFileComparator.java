@@ -25,7 +25,7 @@ import java.util.stream.StreamSupport;
  * Compare two files using a set of delegate file {@link Comparator}.
  * <p>
  * This comparator can be used to sort lists or arrays of files
- * by combining a number other comparators.
+ * by combining a number of other comparators.
  * <p>
  * Example of sorting a list of files by type (i.e. directory or file)
  * and then by name:

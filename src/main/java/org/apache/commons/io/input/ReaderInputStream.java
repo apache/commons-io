@@ -190,7 +190,7 @@ public class ReaderInputStream extends InputStream {
      * </p>
      *
      * @param reader the target {@link Reader}
-     * @param charsetEncoder the charset encoder, null defauls to the default Charset encoder.
+     * @param charsetEncoder the charset encoder, null defaults to the default Charset encoder.
      * @param bufferSize the size of the input buffer in number of characters
      * @since 2.1
      */

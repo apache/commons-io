@@ -140,7 +140,7 @@ public class ReadAheadInputStream extends InputStream {
      * @param inputStream The underlying input stream.
      * @param bufferSizeInBytes The buffer size.
      * @param executorService An executor service for the read-ahead thread.
-     * @param shutdownExecutorService Whether or not to shutdown the given ExecutorService on close.
+     * @param shutdownExecutorService Whether or not to shut down the given ExecutorService on close.
      */
     private ReadAheadInputStream(final InputStream inputStream, final int bufferSizeInBytes,
         final ExecutorService executorService, final boolean shutdownExecutorService) {
@@ -268,7 +268,7 @@ public class ReadAheadInputStream extends InputStream {
                         return EOF;
                     }
                 }
-                // Swap the newly read read ahead buffer in place of empty active buffer.
+                // Swap the newly read ahead buffer in place of empty active buffer.
                 swapBuffers();
                 // After swapping buffers, trigger another async read for read ahead buffer.
                 readAsync();
@@ -448,7 +448,7 @@ public class ReadAheadInputStream extends InputStream {
         try {
             isWaiting.set(true);
             // There is only one reader, and one writer, so the writer should signal only once,
-            // but a while loop checking the wake up condition is still needed to avoid spurious wakeups.
+            // but a while loop checking the wake-up condition is still needed to avoid spurious wakeups.
             while (readInProgress) {
                 asyncReadComplete.await();
             }

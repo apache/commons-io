@@ -84,7 +84,7 @@ public class ReversedLinesFileReader implements Closeable {
         }
 
         /**
-         * Creates the buffer containing any left over bytes.
+         * Creates the buffer containing any leftover bytes.
          */
         private void createLeftOver() {
             final int lineLengthBytes = currentLastBytePos + 1;
@@ -404,7 +404,7 @@ public class ReversedLinesFileReader implements Closeable {
         while (line == null) {
             currentFilePart = currentFilePart.rollOver();
             if (currentFilePart == null) {
-                // no more fileparts: we're done, leave line set to null
+                // no more FileParts: we're done, leave line set to null
                 break;
             }
             line = currentFilePart.readLine();

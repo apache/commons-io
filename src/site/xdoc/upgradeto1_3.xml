@@ -88,12 +88,12 @@ Bug fixes from 1.2
 - IOUtils.copy [IO-84]
   - Copy methods could return inaccurate byte/char count for large streams
   - The copy(InputStream, OutputStream) method now returns -1 if the count is greater than an int
-  - The copy(Reader, Writer) method now throws now returns -1 if the count is greater than an int
+  - The copy(Reader, Writer) method now returns -1 if the count is greater than an int
   - Added a new copyLarge(InputStream, OutputStream) method that returns a long
   - Added a new copyLarge(Reader, Writer) method that returns a long
 
 - CountingInputStream/CountingOutputStream [IO-84]
-  - Methods were declared as int thus the count was innacurate for large streams
+  - Methods were declared as int thus the count was inaccurate for large streams
   - new long based methods getByteCount()/resetByteCount() added
   - existing methods changed to throw an exception if the count is greater than an int
 
@@ -154,7 +154,7 @@ Enhancements from 1.2
 - FileDeleteStrategy
 - FileCleaner    [IO-56,IO-70]
   - FileDeleteStrategy is a strategy for handling file deletion
-  - This can be used as a calback in FileCleaner
+  - This can be used as a callback in FileCleaner
   - Together these allow FileCleaner to do a forceDelete to kill directories
 
 - FileCleaner.exitWhenFinished [IO-99]

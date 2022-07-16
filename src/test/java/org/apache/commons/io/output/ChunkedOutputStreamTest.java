@@ -40,7 +40,7 @@ public class ChunkedOutputStreamTest {
     }
 
     @Test
-    public void negative_chunksize_not_permitted() {
+    public void negative_chunkSize_not_permitted() {
         assertThrows(IllegalArgumentException.class, () -> new ChunkedOutputStream(new ByteArrayOutputStream(), 0));
     }
 

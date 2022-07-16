@@ -72,7 +72,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
     /** The file names to search for */
     private final String[] names;
 
-    /** Whether the comparison is case sensitive. */
+    /** Whether the comparison is case-sensitive. */
     private final IOCase ioCase;
 
     /**

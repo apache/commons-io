@@ -97,7 +97,7 @@ public class MarkShieldInputStreamTest {
     }
 
     @Test
-    public void resetThrowsExceptionWhenUnderylingDoesNotSupport() throws IOException {
+    public void resetThrowsExceptionWhenUnderlyingDoesNotSupport() throws IOException {
         // test wrapping an underlying stream which does NOT support marking
         try (MarkShieldInputStream msis = new MarkShieldInputStream(
                 new NullInputStream(64, false, false))) {
@@ -106,7 +106,7 @@ public class MarkShieldInputStreamTest {
     }
 
     @Test
-    public void resetThrowsExceptionWhenUnderylingSupports() throws IOException {
+    public void resetThrowsExceptionWhenUnderlyingSupports() throws IOException {
         // test wrapping an underlying stream which supports marking
         try (MarkShieldInputStream msis = new MarkShieldInputStream(
                 new NullInputStream(64, true, false))) {

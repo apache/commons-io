@@ -73,7 +73,7 @@ public class MemoryMappedFileInputStream extends InputStream {
     /**
      * Constructs a new instance.
      *
-     * @param file The path of the file to to open.
+     * @param file The path of the file to open.
      * @throws IOException If an I/O error occurs
      */
     public MemoryMappedFileInputStream(final Path file) throws IOException {
@@ -83,7 +83,7 @@ public class MemoryMappedFileInputStream extends InputStream {
     /**
      * Constructs a new instance.
      *
-     * @param file The path of the file to to open.
+     * @param file The path of the file to open.
      * @param bufferSize Size of the sliding buffer.
      * @throws IOException If an I/O error occurs.
      */

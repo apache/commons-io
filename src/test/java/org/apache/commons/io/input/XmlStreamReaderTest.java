@@ -297,10 +297,10 @@ public class XmlStreamReaderTest {
     }
 
     protected void testHttpLenient(final String cT, final String bomEnc, final String streamEnc,
-        final String prologEnc, final String shouldbe) throws Exception {
+        final String prologEnc, final String shouldBe) throws Exception {
         try (InputStream is = getXmlInputStream(bomEnc, prologEnc == null ? XML2 : XML3, streamEnc, prologEnc);
             XmlStreamReader xmlReader = new XmlStreamReader(is, cT, true)) {
-            assertEquals(xmlReader.getEncoding(), shouldbe);
+            assertEquals(xmlReader.getEncoding(), shouldBe);
         }
     }
 
@@ -319,7 +319,7 @@ public class XmlStreamReaderTest {
         }
     }
 
-    // Turkish language has specific rules to convert dotted and dottless i character.
+    // Turkish language has specific rules to convert dotted and dotless i character.
     @Test
     @DefaultLocale(language = "tr")
     public void testLowerCaseEncodingWithTurkishLocale_IO_557() throws Exception {

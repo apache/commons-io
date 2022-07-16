@@ -27,7 +27,7 @@ import org.apache.commons.io.IOCase;
  * <p>
  * This comparator can be used to sort lists or arrays of files
  * by their name either in a case-sensitive, case-insensitive or
- * system dependent case sensitive way. A number of singleton instances
+ * system dependent case-sensitive way. A number of singleton instances
  * are provided for the various case sensitivity options (using {@link IOCase})
  * and the reverse of those options.
  * </p>
@@ -72,11 +72,11 @@ public class NameFileComparator extends AbstractFileComparator implements Serial
     /** Reverse system sensitive name comparator instance (see {@link IOCase#SYSTEM}) */
     public static final Comparator<File> NAME_SYSTEM_REVERSE = new ReverseFileComparator(NAME_SYSTEM_COMPARATOR);
 
-    /** Whether the comparison is case sensitive. */
+    /** Whether the comparison is case-sensitive. */
     private final IOCase ioCase;
 
     /**
-     * Constructs a case sensitive file name comparator instance.
+     * Constructs a case-sensitive file name comparator instance.
      */
     public NameFileComparator() {
         this.ioCase = IOCase.SENSITIVE;

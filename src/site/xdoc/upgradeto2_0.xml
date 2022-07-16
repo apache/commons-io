@@ -126,7 +126,7 @@ Bug fixes from 1.4
   * [IO-207] FileUtils - fix race condition in forceMkdir() method
   * [IO-217] FileUtils - fix copyDirectoryToDirectory() makes infinite loops
   * [IO-166] FileUtils - fix URL decoding in toFile(URL)
-  * [IO-190] FileUtils - fix copyDirectory not preserving lastmodified date on sub-directories
+  * [IO-190] FileUtils - fix copyDirectory not preserving lastmodified date on subdirectories
   * [IO-240] FileFilterUtils - ensure cvsFilter and svnFilter are only created once.
   * [IO-175] IOUtils - fix copyFile() issues with very large files
   * [IO-191] Improvements from static analysis

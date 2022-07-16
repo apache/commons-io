@@ -119,7 +119,7 @@ public class BOMInputStream extends ProxyInputStream {
     }
 
     /**
-     * Constructs a new BOM InputStream that detects a a {@link ByteOrderMark#UTF_8} and optionally includes it.
+     * Constructs a new BOM InputStream that detects a {@link ByteOrderMark#UTF_8} and optionally includes it.
      *
      * @param delegate
      *            the InputStream to delegate to

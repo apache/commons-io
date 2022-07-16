@@ -96,7 +96,7 @@ public abstract class IOFileFilterAbstractTest {
     }
 
     public static void assertFilenameFiltering(final int testNumber, final IOFileFilter filter, final File file, final boolean expected) {
-        // Assumes file has parent and is not passed as null
+        // Assumes file has a parent and is not passed as null
         assertEquals(expected, filter.accept(file.getParentFile(), file.getName()),
                 "test " + testNumber + " Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for " + file);
     }

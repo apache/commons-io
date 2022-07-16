@@ -39,7 +39,7 @@ public class CircularBufferInputStream extends InputStream {
     /** Internal buffer size. */
     protected final int bufferSize;
 
-    /** Whether we've see the input stream EOF. */
+    /** Whether we've seen the input stream EOF. */
     private boolean eof;
 
     /**

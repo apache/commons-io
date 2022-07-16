@@ -309,7 +309,7 @@ public class NullInputStream extends InputStream {
      *
      * @throws UnsupportedOperationException if mark is not supported.
      * @throws IOException If no position has been marked
-     * or the read limit has been exceed since the last position was
+     * or the read limit has been exceeded since the last position was
      * marked.
      */
     @Override

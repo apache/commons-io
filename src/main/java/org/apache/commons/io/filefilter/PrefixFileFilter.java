@@ -72,7 +72,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
     /** The file name prefixes to search for */
     private final String[] prefixes;
 
-    /** Whether the comparison is case sensitive. */
+    /** Whether the comparison is case-sensitive. */
     private final IOCase isCase;
 
     /**

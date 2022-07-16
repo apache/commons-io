@@ -47,7 +47,7 @@ Semantic compatible - Yes, except:
     Generally this will make no difference
 
 - LockableFileWriter
-    Improved validation and now create directories if necesssary
+    Improved validation and now create directories if necessary
 
 plus these bug fixes may affect you semantically:
 - FileUtils.touch()  (Bug fix 29821)
@@ -121,7 +121,7 @@ Enhancements from 1.0
 - IOUtils - toCharArray(InputStream)  [28979]
           - toCharArray(InputStream,encoding)
           - toCharArray(Reader)
-    Reads a stream/reader into a charatcter array
+    Reads a stream/reader into a character array
 
 - IOUtils - readLines(InputStream)  [36214]
           - readLines(InputStream,encoding)
@@ -195,7 +195,7 @@ Enhancements from 1.0
 - LockableFileWriter - encoding support [36825]
     Add support for character encodings to LockableFileWriter
     Improve the validation
-    Create directories if necesssary
+    Create directories if necessary
 
 - IOUtils and EndianUtils are no longer final  [28978]
     Allows developers to have subclasses if desired

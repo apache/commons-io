@@ -72,10 +72,10 @@ public class IOUtilsCopyTest {
         final InputStream in = IOUtils.copy(out);
 
         final byte[] inData2 = new byte[FILE_SIZE];
-        final int insize = in.read(inData2);
+        final int inSize = in.read(inData2);
 
         assertEquals(0, in.available(), "Not all bytes were read");
-        assertEquals(inData.length, insize, "Sizes differ");
+        assertEquals(inData.length, inSize, "Sizes differ");
         assertArrayEquals(inData, inData2, "Content differs");
     }
 

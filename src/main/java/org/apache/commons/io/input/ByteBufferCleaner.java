@@ -22,7 +22,7 @@ import java.nio.ByteBuffer;
 
 /**
  * Cleans a direct {@link ByteBuffer}. Without manual intervention, direct ByteBuffers will be cleaned eventually upon
- * garbage collection. However, this should not be be relied upon since it may not occur in a timely fashion -
+ * garbage collection. However, this should not be relied upon since it may not occur in a timely fashion -
  * especially since off heap ByeBuffers don't put pressure on the garbage collector.
  * <p>
  * <b>Warning:</b> Do not attempt to use a direct {@link ByteBuffer} that has been cleaned or bad things will happen.
