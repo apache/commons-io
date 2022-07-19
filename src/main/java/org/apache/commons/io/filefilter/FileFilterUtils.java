@@ -19,7 +19,6 @@ package org.apache.commons.io.filefilter;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -723,12 +722,7 @@ public class FileFilterUtils {
      * @since 2.0
      */
     public static List<IOFileFilter> toList(final IOFileFilter... filters) {
-        Objects.requireNonNull(filters, "filters");
-        final List<IOFileFilter> list = new ArrayList<>(filters.length);
-        for (final IOFileFilter filter : filters) {
-            list.add(Objects.requireNonNull(filter, "filters[i]"));
-        }
-        return list;
+        return Stream.of(Objects.requireNonNull(filters, "filters")).map(Objects::requireNonNull).collect(Collectors.toList());
     }
 
     /**

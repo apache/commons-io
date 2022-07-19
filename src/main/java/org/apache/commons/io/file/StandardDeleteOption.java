@@ -17,6 +17,8 @@
 
 package org.apache.commons.io.file;
 
+import java.util.stream.Stream;
+
 import org.apache.commons.io.IOUtils;
 
 /**
@@ -43,12 +45,7 @@ public enum StandardDeleteOption implements DeleteOption {
         if (IOUtils.length(options) == 0) {
             return false;
         }
-        for (final DeleteOption deleteOption : options) {
-            if (deleteOption == StandardDeleteOption.OVERRIDE_READ_ONLY) {
-                return true;
-            }
-        }
-        return false;
+        return Stream.of(options).anyMatch(e -> StandardDeleteOption.OVERRIDE_READ_ONLY == e);
     }
 
 }

@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadFactory;
+import java.util.stream.Stream;
 
 /**
  * A runnable that spawns a monitoring thread triggering any
@@ -86,9 +87,7 @@ public final class FileAlterationMonitor implements Runnable {
     public FileAlterationMonitor(final long interval, final FileAlterationObserver... observers) {
         this(interval);
         if (observers != null) {
-            for (final FileAlterationObserver observer : observers) {
-                addObserver(observer);
-            }
+            Stream.of(observers).forEach(this::addObserver);
         }
     }
 

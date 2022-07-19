@@ -18,6 +18,7 @@
 package org.apache.commons.io.function;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -40,7 +41,33 @@ public interface IOConsumer<T> {
     IOConsumer<?> NOOP_IO_CONSUMER = t -> {/* noop */};
 
     /**
-     * Performs an action for each element of this stream.
+     * Performs an action for each element of the collection.
+     *
+     * @param <T> The element type.
+     * @param collection The input to stream.
+     * @param action The action to apply to each input element.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.12.0
+     */
+    static <T> void forEach(final Collection<T> collection, final IOConsumer<T> action) throws IOException {
+        IOStreams.forEach(IOStreams.of(collection), action);
+    }
+
+    /**
+     * Performs an action for each element of the stream.
+     *
+     * @param <T> The element type.
+     * @param stream The input to stream.
+     * @param action The action to apply to each input element.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.12.0
+     */
+    static <T> void forEach(final Stream<T> stream, final IOConsumer<T> action) throws IOException {
+        IOStreams.forEach(stream, action);
+    }
+
+    /**
+     * Performs an action for each element of this array.
      *
      * @param <T> The element type.
      * @param array The input to stream.
@@ -53,7 +80,7 @@ public interface IOConsumer<T> {
     }
 
     /**
-     * Performs an action for each element of this stream.
+     * Performs an action for each element of the stream.
      *
      * @param <T> The element type.
      * @param stream The input to stream.

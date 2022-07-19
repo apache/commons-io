@@ -25,6 +25,7 @@ import java.util.Deque;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 /**
  * General file name and file path manipulation utilities.
@@ -1054,12 +1055,7 @@ public class FilenameUtils {
             return indexOfExtension(fileName) == NOT_FOUND;
         }
         final String fileExt = getExtension(fileName);
-        for (final String extension : extensions) {
-            if (fileExt.equals(extension)) {
-                return true;
-            }
-        }
-        return false;
+        return Stream.of(extensions).anyMatch(fileExt::equals);
     }
 
     /**

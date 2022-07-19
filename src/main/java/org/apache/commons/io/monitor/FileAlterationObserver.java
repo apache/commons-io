@@ -24,6 +24,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
@@ -315,9 +316,7 @@ public class FileAlterationObserver implements Serializable {
                 listener.onFileCreate(entry.getFile());
             }
         });
-        for (final FileEntry aChildren : entry.getChildren()) {
-            doCreate(aChildren);
-        }
+        Stream.of(entry.getChildren()).forEach(this::doCreate);
     }
 
     /**

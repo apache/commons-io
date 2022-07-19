@@ -357,7 +357,7 @@ The <action> type attribute can be add,update,fix,remove.
         Add IOBiConsumer.
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">
-        Add and reuse IOConsumer.forEach(T[], IOConsumer) and forEachIndexed(Stream, IOConsumer).
+        Add and reuse IOConsumer.forEach(*) and forEachIndexed(*).
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add CharsetEncoders.

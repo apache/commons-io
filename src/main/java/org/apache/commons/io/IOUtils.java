@@ -31,6 +31,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
+import java.io.UncheckedIOException;
 import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.ServerSocket;
@@ -45,12 +46,13 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.Selector;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.function.IOConsumer;
@@ -429,6 +431,15 @@ public class IOUtils {
     }
 
     /**
+     * Avoids the need to type cast.
+     *
+     * @param closeable the object to close, may be null
+     */
+    private static void closeQ(final Closeable closeable) {
+        closeQuietly(closeable, null);
+    }
+
+    /**
      * Closes a {@link Closeable} unconditionally.
      *
      * <p>
@@ -470,15 +481,6 @@ public class IOUtils {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     public static void closeQuietly(final Closeable closeable) {
-        closeQuietly(closeable, null);
-    }
-
-    /**
-     * Avoids the need to type cast.
-     *
-     * @param closeable the object to close, may be null
-     */
-    private static void closeQ(final Closeable closeable) {
         closeQuietly(closeable, null);
     }
 
@@ -597,22 +599,6 @@ public class IOUtils {
      * @since 2.12.0
      */
     public static void closeQuietly(final Iterable<Closeable> closeables) {
-        if (closeables != null) {
-            closeables.forEach(IOUtils::closeQuietly);
-        }
-    }
-
-    /**
-     * Closes a stream of {@link Closeable} unconditionally.
-     * <p>
-     * Equivalent calling {@link Closeable#close()} on each element, except any exceptions will be ignored.
-     * </p>
-     *
-     * @param closeables the objects to close, may be null or already closed
-     * @see #closeQuietly(Closeable)
-     * @since 2.12.0
-     */
-    public static void closeQuietly(final Stream<Closeable> closeables) {
         if (closeables != null) {
             closeables.forEach(IOUtils::closeQuietly);
         }
@@ -785,6 +771,22 @@ public class IOUtils {
     }
 
     /**
+     * Closes a stream of {@link Closeable} unconditionally.
+     * <p>
+     * Equivalent calling {@link Closeable#close()} on each element, except any exceptions will be ignored.
+     * </p>
+     *
+     * @param closeables the objects to close, may be null or already closed
+     * @see #closeQuietly(Closeable)
+     * @since 2.12.0
+     */
+    public static void closeQuietly(final Stream<Closeable> closeables) {
+        if (closeables != null) {
+            closeables.forEach(IOUtils::closeQuietly);
+        }
+    }
+
+    /**
      * Closes an {@link Writer} unconditionally.
      * <p>
      * Equivalent to {@link Writer#close()}, except any exceptions will be ignored.
@@ -895,6 +897,19 @@ public class IOUtils {
         }
     }
 
+    // TODO Consider making public
+    private static boolean contentEquals(final Iterator<?> iterator1, final Iterator<?> iterator2) {
+        while (iterator1.hasNext()) {
+            if (!iterator2.hasNext()) {
+                return false;
+            }
+            if (!Objects.equals(iterator1.next(), iterator2.next())) {
+                return false;
+            }
+        }
+        return !iterator2.hasNext();
+    }
+
     /**
      * Compares the contents of two Readers to determine if they are equal or not.
      * <p>
@@ -953,6 +968,28 @@ public class IOUtils {
         }
     }
 
+    // TODO Consider making public
+    private static boolean contentEquals(final Stream<?> stream1, final Stream<?> stream2) {
+        if (stream1 == stream2) {
+            return true;
+        }
+        if (stream1 == null || stream2 == null) {
+            return false;
+        }
+        return contentEquals(stream1.iterator(), stream2.iterator());
+    }
+
+    // TODO Consider making public
+    private static boolean contentEqualsIgnoreEOL(final BufferedReader reader1, final BufferedReader reader2) {
+        if (reader1 == reader2) {
+            return true;
+        }
+        if (reader1 == null || reader2 == null) {
+            return false;
+        }
+        return contentEquals(reader1.lines(), reader2.lines());
+    }
+
     /**
      * Compares the contents of two Readers to determine if they are equal or
      * not, ignoring EOL characters.
@@ -965,28 +1002,18 @@ public class IOUtils {
      * @param reader2 the second reader
      * @return true if the content of the readers are equal (ignoring EOL differences),  false otherwise
      * @throws NullPointerException if either input is null
-     * @throws IOException          if an I/O error occurs
+     * @throws UncheckedIOException if an I/O error occurs
      * @since 2.2
      */
     @SuppressWarnings("resource")
-    public static boolean contentEqualsIgnoreEOL(final Reader reader1, final Reader reader2)
-            throws IOException {
+    public static boolean contentEqualsIgnoreEOL(final Reader reader1, final Reader reader2) throws UncheckedIOException {
         if (reader1 == reader2) {
             return true;
         }
-        if (reader1 == null ^ reader2 == null) {
+        if (reader1 == null || reader2 == null) {
             return false;
         }
-        final BufferedReader br1 = toBufferedReader(reader1);
-        final BufferedReader br2 = toBufferedReader(reader2);
-
-        String line1 = br1.readLine();
-        String line2 = br2.readLine();
-        while (line1 != null && line1.equals(line2)) {
-            line1 = br1.readLine();
-            line2 = br2.readLine();
-        }
-        return Objects.equals(line1, line2);
+        return contentEqualsIgnoreEOL(toBufferedReader(reader1), toBufferedReader(reader2));
     }
 
     /**
@@ -2042,12 +2069,12 @@ public class IOUtils {
      * @param input the {@link InputStream} to read from, not null
      * @return the list of Strings, never null
      * @throws NullPointerException if the input is null
-     * @throws IOException          if an I/O error occurs
+     * @throws UncheckedIOException if an I/O error occurs
      * @since 1.1
      * @deprecated 2.5 use {@link #readLines(InputStream, Charset)} instead
      */
     @Deprecated
-    public static List<String> readLines(final InputStream input) throws IOException {
+    public static List<String> readLines(final InputStream input) throws UncheckedIOException {
         return readLines(input, Charset.defaultCharset());
     }
 
@@ -2063,12 +2090,11 @@ public class IOUtils {
      * @param charset the charset to use, null means platform default
      * @return the list of Strings, never null
      * @throws NullPointerException if the input is null
-     * @throws IOException          if an I/O error occurs
+     * @throws UncheckedIOException if an I/O error occurs
      * @since 2.3
      */
-    public static List<String> readLines(final InputStream input, final Charset charset) throws IOException {
-        final InputStreamReader reader = new InputStreamReader(input, Charsets.toCharset(charset));
-        return readLines(reader);
+    public static List<String> readLines(final InputStream input, final Charset charset) throws UncheckedIOException {
+        return readLines(new InputStreamReader(input, Charsets.toCharset(charset)));
     }
 
     /**
@@ -2087,13 +2113,13 @@ public class IOUtils {
      * @param charsetName the name of the requested charset, null means platform default
      * @return the list of Strings, never null
      * @throws NullPointerException                         if the input is null
-     * @throws IOException                                  if an I/O error occurs
+     * @throws UncheckedIOException                         if an I/O error occurs
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
      *                                                      .UnsupportedEncodingException} in version 2.2 if the
      *                                                      encoding is not supported.
      * @since 1.1
      */
-    public static List<String> readLines(final InputStream input, final String charsetName) throws IOException {
+    public static List<String> readLines(final InputStream input, final String charsetName) throws UncheckedIOException {
         return readLines(input, Charsets.toCharset(charsetName));
     }
 
@@ -2108,18 +2134,12 @@ public class IOUtils {
      * @param reader the {@link Reader} to read from, not null
      * @return the list of Strings, never null
      * @throws NullPointerException if the input is null
-     * @throws IOException          if an I/O error occurs
+     * @throws UncheckedIOException if an I/O error occurs
      * @since 1.1
      */
     @SuppressWarnings("resource") // reader wraps input and is the responsibility of the caller.
-    public static List<String> readLines(final Reader reader) throws IOException {
-        final BufferedReader bufReader = toBufferedReader(reader);
-        final List<String> list = new ArrayList<>();
-        String line;
-        while ((line = bufReader.readLine()) != null) {
-            list.add(line);
-        }
-        return list;
+    public static List<String> readLines(final Reader reader) throws UncheckedIOException {
+        return toBufferedReader(reader).lines().collect(Collectors.toList());
     }
 
     /**

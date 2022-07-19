@@ -19,6 +19,7 @@ package org.apache.commons.io.function;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -40,18 +41,35 @@ class IOStreams {
         throws IOExceptionList {
         final AtomicReference<List<IOException>> causeList = new AtomicReference<>();
         final AtomicInteger index = new AtomicInteger();
-        stream.forEach(e -> {
-            try {
-                action.accept(e);
-            } catch (final IOException ioex) {
-                if (causeList.get() == null) {
-                    causeList.set(new ArrayList<>());
+        final IOConsumer<T> actualAction = action != null ? action : IOConsumer.noop();
+        if (stream != null) {
+            stream.forEach(e -> {
+                try {
+                    actualAction.accept(e);
+                } catch (final IOException ioex) {
+                    if (causeList.get() == null) {
+                        causeList.set(new ArrayList<>());
+                    }
+                    if (exSupplier != null) {
+                        causeList.get().add(exSupplier.apply(index.get(), ioex));
+                    }
                 }
-                causeList.get().add(exSupplier.apply(index.get(), ioex));
-            }
-            index.incrementAndGet();
-        });
-        IOExceptionList.checkEmpty(causeList.get(), null);
+                index.incrementAndGet();
+            });
+            IOExceptionList.checkEmpty(causeList.get(), null);
+        }}
+
+    /**
+     * Null-safe version of {@link Collection#stream()}.
+     *
+     * Copied from Apache Commons Lang.
+     *
+     * @param <T> the type of stream elements.
+     * @param values the elements of the new stream, may be {@code null}.
+     * @return the new stream on {@code values} or {@link Stream#empty()}.
+     */
+    static <T> Stream<T> of(final Collection<T> values) {
+        return values == null ? Stream.empty() : values.stream();
     }
 
     /**

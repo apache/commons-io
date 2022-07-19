@@ -23,12 +23,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.StringTokenizer;
+import java.util.stream.Collectors;
 
 /**
  * General File System utilities.
@@ -487,7 +487,7 @@ public class FileSystemUtils {
         // however, it's still not perfect as the JDK support is so poor
         // (see commons-exec or Ant for a better multithreaded multi-os solution)
 
-        final List<String> lines = new ArrayList<>(20);
+        final List<String> lines;
         Process proc = null;
         InputStream in = null;
         OutputStream out = null;
@@ -503,12 +503,8 @@ public class FileSystemUtils {
             err = proc.getErrorStream();
             // default charset is most likely appropriate here
             inr = new BufferedReader(new InputStreamReader(in, Charset.defaultCharset()));
-            String line = inr.readLine();
-            while (line != null && lines.size() < max) {
-                line = line.toLowerCase(Locale.ENGLISH).trim();
-                lines.add(line);
-                line = inr.readLine();
-            }
+
+            lines = inr.lines().limit(max).map(line -> line.toLowerCase(Locale.ENGLISH).trim()).collect(Collectors.toList());
 
             proc.waitFor();
 
@@ -516,15 +512,11 @@ public class FileSystemUtils {
 
             if (proc.exitValue() != 0) {
                 // OS command problem, throw exception
-                throw new IOException(
-                        "Command line returned OS error code '" + proc.exitValue() +
-                        "' for command " + Arrays.asList(cmdAttribs));
+                throw new IOException("Command line returned OS error code '" + proc.exitValue() + "' for command " + Arrays.asList(cmdAttribs));
             }
             if (lines.isEmpty()) {
                 // unknown problem, throw exception
-                throw new IOException(
-                        "Command line did not return any info " +
-                        "for command " + Arrays.asList(cmdAttribs));
+                throw new IOException("Command line did not return any info " + "for command " + Arrays.asList(cmdAttribs));
             }
 
             inr.close();

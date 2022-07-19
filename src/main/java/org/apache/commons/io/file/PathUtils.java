@@ -820,7 +820,7 @@ public final class PathUtils {
      * where {@link File#lastModified()} looses milliseconds and always ends in 000. This bug is in OpenJDK 8 and 9, and
      * fixed in 11.
      * </p>
-     * 
+     *
      * @param file the file to query.
      * @return the file's last modified time.
      * @throws IOException Thrown if an I/O error occurs.

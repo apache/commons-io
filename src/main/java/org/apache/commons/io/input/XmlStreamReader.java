@@ -38,6 +38,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.function.IOConsumer;
 
 /**
  * Character stream that handles all the necessary Voodoo to figure out the
@@ -214,13 +215,9 @@ public class XmlStreamReader extends Reader {
             final int bytesRead = offset;
             if (bytesRead > 0) {
                 inputStream.reset();
-                final BufferedReader bReader = new BufferedReader(new StringReader(
-                        xmlProlog.substring(0, firstGT + 1)));
+                final BufferedReader bReader = new BufferedReader(new StringReader(xmlProlog.substring(0, firstGT + 1)));
                 final StringBuilder prolog = new StringBuilder();
-                String line;
-                while ((line = bReader.readLine()) != null) {
-                    prolog.append(line);
-                }
+                IOConsumer.forEach(bReader.lines(), prolog::append);
                 final Matcher m = ENCODING_PATTERN.matcher(prolog);
                 if (m.find()) {
                     encoding = m.group(1).toUpperCase(Locale.ROOT);

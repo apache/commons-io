@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * A {@link java.io.FileFilter} providing conditional OR logic across a list of file filters. This filter returns
@@ -141,9 +142,7 @@ public class OrFileFilter extends AbstractFileFilter implements ConditionalFileF
      * @since 2.9.0
      */
     public void addFileFilter(final IOFileFilter... fileFilters) {
-        for (final IOFileFilter fileFilter : Objects.requireNonNull(fileFilters, "fileFilters")) {
-            addFileFilter(fileFilter);
-        }
+        Stream.of(Objects.requireNonNull(fileFilters, "fileFilters")).forEach(this::addFileFilter);
     }
 
     /**
