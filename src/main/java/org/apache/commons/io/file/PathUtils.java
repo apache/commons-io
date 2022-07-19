@@ -24,6 +24,7 @@ import java.io.OutputStream;
 import java.io.UncheckedIOException;
 import java.math.BigInteger;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.AccessDeniedException;
@@ -810,6 +811,76 @@ public final class PathUtils {
      */
     public static DosFileAttributeView getDosFileAttributeView(final Path path, final LinkOption... options) {
         return Files.getFileAttributeView(path, DosFileAttributeView.class, options);
+    }
+
+    /**
+     * Gets the file's last modified time or null if the file does not exist.
+     * <p>
+     * The method provides a workaround for bug <a href="https://bugs.openjdk.java.net/browse/JDK-8177809">JDK-8177809</a>
+     * where {@link File#lastModified()} looses milliseconds and always ends in 000. This bug is in OpenJDK 8 and 9, and
+     * fixed in 11.
+     * </p>
+     * 
+     * @param file the file to query.
+     * @return the file's last modified time.
+     * @throws IOException Thrown if an I/O error occurs.
+     * @since 2.12.0
+     */
+    public static FileTime getLastModifiedFileTime(final File file) throws IOException {
+        return getLastModifiedFileTime(file.toPath(), null, EMPTY_LINK_OPTION_ARRAY);
+    }
+
+    /**
+     * Gets the file's last modified time or null if the file does not exist.
+     *
+     * @param path the file to query.
+     * @param options options indicating how symbolic links are handled.
+     * @return the file's last modified time.
+     * @throws IOException Thrown if an I/O error occurs.
+     * @since 2.12.0
+     */
+    public static FileTime getLastModifiedFileTime(final Path path, final LinkOption... options) throws IOException {
+        return getLastModifiedFileTime(path, null, options);
+    }
+
+    /**
+     * Gets the file's last modified time or null if the file does not exist.
+     *
+     * @param path the file to query.
+     * @param defaultIfAbsent Returns this file time of the file does not exist, may be null.
+     * @param options options indicating how symbolic links are handled.
+     * @return the file's last modified time.
+     * @throws IOException Thrown if an I/O error occurs.
+     * @since 2.12.0
+     */
+    public static FileTime getLastModifiedFileTime(final Path path, final FileTime defaultIfAbsent, final LinkOption... options) throws IOException {
+        return Files.exists(path) ? getLastModifiedTime(path, options) : defaultIfAbsent;
+    }
+
+    /**
+     * Gets the file's last modified time or null if the file does not exist.
+     *
+     * @param uri the file to query.
+     * @return the file's last modified time.
+     * @throws IOException Thrown if an I/O error occurs.
+     * @since 2.12.0
+     */
+    public static FileTime getLastModifiedFileTime(final URI uri) throws IOException {
+        return getLastModifiedFileTime(Paths.get(uri), null, EMPTY_LINK_OPTION_ARRAY);
+    }
+
+    /**
+     * Gets the file's last modified time or null if the file does not exist.
+     *
+     * @param url the file to query.
+     * @return the file's last modified time.
+     * @throws IOException Thrown if an I/O error occurs.
+     * @throws URISyntaxException if the URL is not formatted strictly according to to RFC2396 and cannot be converted to a
+     *         URI.
+     * @since 2.12.0
+     */
+    public static FileTime getLastModifiedFileTime(final URL url) throws IOException, URISyntaxException {
+        return getLastModifiedFileTime(url.toURI());
     }
 
     private static FileTime getLastModifiedTime(final Path path, final LinkOption... options) throws IOException {

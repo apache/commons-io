@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
@@ -31,6 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileAlreadyExistsException;
@@ -89,8 +91,16 @@ public class PathUtilsTest extends AbstractTempDirTest {
         return symlinkDir;
     }
 
+    private Path current() {
+        return PathUtils.current();
+    }
+
     private Long getLastModifiedMillis(final Path file) throws IOException {
         return Files.getLastModifiedTime(file).toMillis();
+    }
+
+    private Path getNonExistantPath() {
+        return Paths.get("/does not exist/for/certain");
     }
 
     private FileSystem openArchive(final Path p, final boolean createNew) throws IOException {
@@ -228,6 +238,37 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testGetLastModifiedFileTime_File_Present() throws IOException {
+        assertNotNull(PathUtils.getLastModifiedFileTime(current().toFile()));
+    }
+
+    @Test
+    public void testGetLastModifiedFileTime_Path_Absent() throws IOException {
+        assertNull(PathUtils.getLastModifiedFileTime(getNonExistantPath()));
+    }
+
+    @Test
+    public void testGetLastModifiedFileTime_Path_FileTime_Absent() throws IOException {
+        final FileTime fromMillis = FileTime.fromMillis(0);
+        assertEquals(fromMillis, PathUtils.getLastModifiedFileTime(getNonExistantPath(), fromMillis));
+    }
+
+    @Test
+    public void testGetLastModifiedFileTime_Path_Present() throws IOException {
+        assertNotNull(PathUtils.getLastModifiedFileTime(current()));
+    }
+
+    @Test
+    public void testGetLastModifiedFileTime_URI_Present() throws IOException {
+        assertNotNull(PathUtils.getLastModifiedFileTime(current().toUri()));
+    }
+
+    @Test
+    public void testGetLastModifiedFileTime_URL_Present() throws IOException, URISyntaxException {
+        assertNotNull(PathUtils.getLastModifiedFileTime(current().toUri().toURL()));
+    }
+
+    @Test
     public void testGetTempDirectory() {
         final Path tempDirectory = Paths.get(System.getProperty("java.io.tmpdir"));
         assertEquals(tempDirectory, PathUtils.getTempDirectory());
@@ -254,12 +295,12 @@ public class PathUtilsTest extends AbstractTempDirTest {
     public void testIsPosix() throws IOException {
         boolean isPosix;
         try {
-            Files.getPosixFilePermissions(PathUtils.current());
+            Files.getPosixFilePermissions(current());
             isPosix = true;
         } catch (final UnsupportedOperationException e) {
             isPosix = false;
         }
-        assertEquals(isPosix, PathUtils.isPosix(PathUtils.current()));
+        assertEquals(isPosix, PathUtils.isPosix(current()));
     }
 
     @Test
@@ -278,7 +319,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
     @Test
     public void testNewDirectoryStream() throws Exception {
         final PathFilter pathFilter = new NameFileFilter(PATH_FIXTURE);
-        try (DirectoryStream<Path> stream = PathUtils.newDirectoryStream(PathUtils.current(), pathFilter)) {
+        try (DirectoryStream<Path> stream = PathUtils.newDirectoryStream(current(), pathFilter)) {
             final Iterator<Path> iterator = stream.iterator();
             final Path path = iterator.next();
             assertEquals(PATH_FIXTURE, path.getFileName().toString());
@@ -336,12 +377,12 @@ public class PathUtilsTest extends AbstractTempDirTest {
     public void testReadAttributesPosix() throws IOException {
         boolean isPosix;
         try {
-            Files.getPosixFilePermissions(PathUtils.current());
+            Files.getPosixFilePermissions(current());
             isPosix = true;
         } catch (final UnsupportedOperationException e) {
             isPosix = false;
         }
-        assertEquals(isPosix, PathUtils.readAttributes(PathUtils.current(), PosixFileAttributes.class) != null);
+        assertEquals(isPosix, PathUtils.readAttributes(current(), PosixFileAttributes.class) != null);
     }
 
     @Test
