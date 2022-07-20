@@ -141,7 +141,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     public DeferredFileOutputStream(final int threshold, final int initialBufferSize, final String prefix,
         final String suffix, final File directory) {
         this(threshold, null, prefix, suffix, directory, initialBufferSize);
-        Objects.requireNonNull("prefix", prefix);
+        Objects.requireNonNull(prefix, "prefix");
         if (initialBufferSize < 0) {
             throw new IllegalArgumentException("Initial buffer size must be at least 0.");
         }
