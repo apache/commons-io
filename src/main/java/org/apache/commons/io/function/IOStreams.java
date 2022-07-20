@@ -19,12 +19,12 @@ package org.apache.commons.io.function;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.apache.commons.io.IOExceptionList;
 
@@ -33,34 +33,56 @@ import org.apache.commons.io.IOExceptionList;
  */
 class IOStreams {
 
-    static <T> void forEach(final Stream<T> stream, final IOConsumer<T> action) throws IOException {
-        forEachIndexed(stream, action, (i, e) -> e);
+    /**
+     * Accepts and throws an IOException.
+     *
+     * @param <T> The consumer type.
+     * @param consumer The consumer to accept.
+     * @param t the input argument.
+     * @throws IOException if an I/O error occurs; erased for the compiler.
+     */
+    static <T> void accept(final IOConsumer<T> consumer, T t) {
+        try {
+            consumer.accept(t);
+        } catch (IOException ex) {
+            rethrow(ex);
+        }
     }
 
-    static <T> void forEachIndexed(final Stream<T> stream, final IOConsumer<T> action, final BiFunction<Integer, IOException, IOException> exSupplier)
+    static <T> void forAll(final Stream<T> stream, final IOConsumer<T> action) throws IOExceptionList {
+        forAll(stream, action, (i, e) -> e);
+    }
+
+    static <T> void forAll(final Stream<T> stream, final IOConsumer<T> action, final BiFunction<Integer, IOException, IOException> exSupplier)
         throws IOExceptionList {
         final AtomicReference<List<IOException>> causeList = new AtomicReference<>();
         final AtomicInteger index = new AtomicInteger();
-        final IOConsumer<T> actualAction = action != null ? action : IOConsumer.noop();
-        if (stream != null) {
-            stream.forEach(e -> {
-                try {
-                    actualAction.accept(e);
-                } catch (final IOException ioex) {
-                    if (causeList.get() == null) {
-                        causeList.set(new ArrayList<>());
-                    }
-                    if (exSupplier != null) {
-                        causeList.get().add(exSupplier.apply(index.get(), ioex));
-                    }
+        final IOConsumer<T> actualAction = toIOConsumer(action);
+        of(stream).forEach(e -> {
+            try {
+                actualAction.accept(e);
+            } catch (IOException ex) {
+                if (causeList.get() == null) {
+                    // Only allocate if required
+                    causeList.set(new ArrayList<>());
                 }
-                index.incrementAndGet();
-            });
-            IOExceptionList.checkEmpty(causeList.get(), null);
-        }}
+                if (exSupplier != null) {
+                    causeList.get().add(exSupplier.apply(index.get(), ex));
+                }
+            }
+            index.incrementAndGet();
+        });
+        IOExceptionList.checkEmpty(causeList.get(), null);
+    }
+
+    @SuppressWarnings("unused") // IOStreams.rethrow() throws
+    static <T> void forEach(final Stream<T> stream, final IOConsumer<T> action) throws IOException {
+        final IOConsumer<T> actualAction = toIOConsumer(action);
+        of(stream).forEach(e -> accept(actualAction, e));
+    }
 
     /**
-     * Null-safe version of {@link Collection#stream()}.
+     * Null-safe version of {@link StreamSupport#stream(java.util.Spliterator, boolean)}.
      *
      * Copied from Apache Commons Lang.
      *
@@ -68,8 +90,12 @@ class IOStreams {
      * @param values the elements of the new stream, may be {@code null}.
      * @return the new stream on {@code values} or {@link Stream#empty()}.
      */
-    static <T> Stream<T> of(final Collection<T> values) {
-        return values == null ? Stream.empty() : values.stream();
+    static <T> Stream<T> of(final Iterable<T> values) {
+        return values == null ? Stream.empty() : StreamSupport.stream(values.spliterator(), false);
+    }
+
+    static <T> Stream<T> of(final Stream<T> stream) {
+        return stream == null ? Stream.empty() : stream;
     }
 
     /**
@@ -86,4 +112,20 @@ class IOStreams {
         return values == null ? Stream.empty() : Stream.of(values);
     }
 
+    /**
+     * Throws the given throwable.
+     *
+     * @param <T> The throwable cast type.
+     * @param throwable The throwable to rethrow.
+     * @return nothing because we throw.
+     * @throws T Always thrown.
+     */
+    @SuppressWarnings("unchecked")
+    static <T extends Throwable> RuntimeException rethrow(final Throwable throwable) throws T {
+        throw (T) throwable; // hack
+    }
+
+    static <T> IOConsumer<T> toIOConsumer(final IOConsumer<T> action) {
+        return action != null ? action : IOConsumer.noop();
+    }
 }

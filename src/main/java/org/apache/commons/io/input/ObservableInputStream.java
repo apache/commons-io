@@ -175,7 +175,7 @@ public class ObservableInputStream extends ProxyInputStream {
     }
 
     private void forEachObserver(final IOConsumer<Observer> action) throws IOException {
-        IOConsumer.forEach(observers, Objects.requireNonNull(action));
+        IOConsumer.forAll(observers, Objects.requireNonNull(action));
     }
 
     /**

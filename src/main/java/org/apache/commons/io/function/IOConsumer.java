@@ -18,7 +18,6 @@
 package org.apache.commons.io.function;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -41,7 +40,46 @@ public interface IOConsumer<T> {
     IOConsumer<?> NOOP_IO_CONSUMER = t -> {/* noop */};
 
     /**
-     * Performs an action for each element of the collection.
+     * Performs an action for each element of the collection gathering any exceptions.
+     *
+     * @param <T> The element type.
+     * @param collection The input to stream.
+     * @param action The action to apply to each input element.
+     * @throws IOExceptionList if any I/O errors occur.
+     * @since 2.12.0
+     */
+    static <T> void forAll(final Iterable<T> collection, final IOConsumer<T> action) throws IOExceptionList {
+        IOStreams.forAll(IOStreams.of(collection), action);
+    }
+
+    /**
+     * Performs an action for each element of the collection gathering any exceptions.
+     *
+     * @param <T> The element type.
+     * @param stream The input to stream.
+     * @param action The action to apply to each input element.
+     * @throws IOExceptionList if any I/O errors occur.
+     * @since 2.12.0
+     */
+    static <T> void forAll(final Stream<T> stream, final IOConsumer<T> action) throws IOExceptionList {
+        IOStreams.forAll(stream, action, IOIndexedException::new);
+    }
+
+    /**
+     * Performs an action for each element of the array gathering any exceptions.
+     *
+     * @param <T> The element type.
+     * @param array The input to stream.
+     * @param action The action to apply to each input element.
+     * @throws IOExceptionList if any I/O errors occur.
+     * @since 2.12.0
+     */
+    static <T> void forAll(final T[] array, final IOConsumer<T> action) throws IOExceptionList {
+        IOStreams.forAll(IOStreams.of(array), action);
+    }
+
+    /**
+     * Performs an action for each element of the collection, stopping at the first exception.
      *
      * @param <T> The element type.
      * @param collection The input to stream.
@@ -49,12 +87,12 @@ public interface IOConsumer<T> {
      * @throws IOException if an I/O error occurs.
      * @since 2.12.0
      */
-    static <T> void forEach(final Collection<T> collection, final IOConsumer<T> action) throws IOException {
+    static <T> void forEach(final Iterable<T> collection, final IOConsumer<T> action) throws IOException {
         IOStreams.forEach(IOStreams.of(collection), action);
     }
 
     /**
-     * Performs an action for each element of the stream.
+     * Performs an action for each element of the stream, stopping at the first exception.
      *
      * @param <T> The element type.
      * @param stream The input to stream.
@@ -67,7 +105,7 @@ public interface IOConsumer<T> {
     }
 
     /**
-     * Performs an action for each element of this array.
+     * Performs an action for each element of this array, stopping at the first exception.
      *
      * @param <T> The element type.
      * @param array The input to stream.
@@ -77,19 +115,6 @@ public interface IOConsumer<T> {
      */
     static <T> void forEach(final T[] array, final IOConsumer<T> action) throws IOException {
         IOStreams.forEach(IOStreams.of(array), action);
-    }
-
-    /**
-     * Performs an action for each element of the stream.
-     *
-     * @param <T> The element type.
-     * @param stream The input to stream.
-     * @param action The action to apply to each input element.
-     * @throws IOExceptionList if an I/O error occurs.
-     * @since 2.12.0
-     */
-    static <T> void forEachIndexed(final Stream<T> stream, final IOConsumer<T> action) throws IOExceptionList {
-        IOStreams.forEachIndexed(stream, action, IOIndexedException::new);
     }
 
     /**

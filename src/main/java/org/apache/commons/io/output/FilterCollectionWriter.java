@@ -85,25 +85,25 @@ public class FilterCollectionWriter extends Writer {
 
     @Override
     public Writer append(final char c) throws IOException {
-        forEachWriter(w -> w.append(c));
+        forAllWriters(w -> w.append(c));
         return this;
     }
 
     @Override
     public Writer append(final CharSequence csq) throws IOException {
-        forEachWriter(w -> w.append(csq));
+        forAllWriters(w -> w.append(csq));
         return this;
     }
 
     @Override
     public Writer append(final CharSequence csq, final int start, final int end) throws IOException {
-        forEachWriter(w -> w.append(csq, start, end));
+        forAllWriters(w -> w.append(csq, start, end));
         return this;
     }
 
     @Override
     public void close() throws IOException {
-        forEachWriter(Writer::close);
+        forAllWriters(Writer::close);
     }
 
     /**
@@ -113,16 +113,16 @@ public class FilterCollectionWriter extends Writer {
      */
     @Override
     public void flush() throws IOException {
-        forEachWriter(Writer::flush);
+        forAllWriters(Writer::flush);
     }
 
-    private void forEachWriter(final IOConsumer<Writer> action) throws IOExceptionList {
-        IOConsumer.forEachIndexed(writers(), action);
+    private void forAllWriters(final IOConsumer<Writer> action) throws IOExceptionList {
+        IOConsumer.forAll(writers(), action);
     }
 
     @Override
     public void write(final char[] cbuf) throws IOException {
-        forEachWriter(w -> w.write(cbuf));
+        forAllWriters(w -> w.write(cbuf));
     }
 
     /**
@@ -136,7 +136,7 @@ public class FilterCollectionWriter extends Writer {
      */
     @Override
     public void write(final char[] cbuf, final int off, final int len) throws IOException {
-        forEachWriter(w -> w.write(cbuf, off, len));
+        forAllWriters(w -> w.write(cbuf, off, len));
     }
 
     /**
@@ -146,12 +146,12 @@ public class FilterCollectionWriter extends Writer {
      */
     @Override
     public void write(final int c) throws IOException {
-        forEachWriter(w -> w.write(c));
+        forAllWriters(w -> w.write(c));
     }
 
     @Override
     public void write(final String str) throws IOException {
-        forEachWriter(w -> w.write(str));
+        forAllWriters(w -> w.write(str));
     }
 
     /**
@@ -165,7 +165,7 @@ public class FilterCollectionWriter extends Writer {
      */
     @Override
     public void write(final String str, final int off, final int len) throws IOException {
-        forEachWriter(w -> w.write(str, off, len));
+        forAllWriters(w -> w.write(str, off, len));
     }
 
     private Stream<Writer> writers() {
