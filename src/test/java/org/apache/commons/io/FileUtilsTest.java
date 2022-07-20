@@ -1939,10 +1939,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(new File(directory, "test.txt").createNewFile());
 
         final IOFileFilter filter = new WildcardFileFilter("*", IOCase.INSENSITIVE);
-        for (final Iterator<File> itFiles = FileUtils.iterateFiles(directory, filter, null); itFiles.hasNext();) {
-            final File file = itFiles.next();
-            assertFalse(file.isDirectory(), file::getAbsolutePath);
-        }
+        FileUtils.iterateFiles(directory, filter, null).forEachRemaining(file -> assertFalse(file.isDirectory(), file::getAbsolutePath));
     }
 
     @Test
