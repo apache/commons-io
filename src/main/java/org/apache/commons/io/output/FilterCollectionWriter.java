@@ -24,7 +24,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.IOExceptionList;
@@ -46,14 +45,6 @@ import org.apache.commons.io.function.IOConsumer;
  * @since 2.7
  */
 public class FilterCollectionWriter extends Writer {
-
-    @SuppressWarnings("rawtypes")
-    private static final Predicate NOT_NULL = Objects::nonNull;
-
-    @SuppressWarnings("unchecked")
-    private static <T> Predicate<T> notNull() {
-        return NOT_NULL;
-    }
 
     /**
      * Empty and immutable collection of writers.
@@ -85,20 +76,17 @@ public class FilterCollectionWriter extends Writer {
 
     @Override
     public Writer append(final char c) throws IOException {
-        forAllWriters(w -> w.append(c));
-        return this;
+        return forAllWriters(w -> w.append(c));
     }
 
     @Override
     public Writer append(final CharSequence csq) throws IOException {
-        forAllWriters(w -> w.append(csq));
-        return this;
+        return forAllWriters(w -> w.append(csq));
     }
 
     @Override
     public Writer append(final CharSequence csq, final int start, final int end) throws IOException {
-        forAllWriters(w -> w.append(csq, start, end));
-        return this;
+        return forAllWriters(w -> w.append(csq, start, end));
     }
 
     @Override
@@ -116,8 +104,9 @@ public class FilterCollectionWriter extends Writer {
         forAllWriters(Writer::flush);
     }
 
-    private void forAllWriters(final IOConsumer<Writer> action) throws IOExceptionList {
+    private FilterCollectionWriter forAllWriters(final IOConsumer<Writer> action) throws IOExceptionList {
         IOConsumer.forAll(writers(), action);
+        return this;
     }
 
     @Override
@@ -169,7 +158,7 @@ public class FilterCollectionWriter extends Writer {
     }
 
     private Stream<Writer> writers() {
-        return writers.stream().filter(notNull());
+        return writers.stream().filter(Objects::nonNull);
     }
 
 }
