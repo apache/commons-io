@@ -19,21 +19,20 @@ package org.apache.commons.io.comparator;
 import java.io.File;
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
  * Compare two files using a set of delegate file {@link Comparator}.
  * <p>
- * This comparator can be used to sort lists or arrays of files
- * by combining a number of other comparators.
+ * This comparator can be used to sort lists or arrays of files by combining a number of other comparators.
  * <p>
- * Example of sorting a list of files by type (i.e. directory or file)
- * and then by name:
+ * Example of sorting a list of files by type (i.e. directory or file) and then by name:
+ *
  * <pre>
- *       CompositeFileComparator comparator =
- *                       new CompositeFileComparator(
- *                                 (AbstractFileComparator) DirectoryFileComparator.DIRECTORY_COMPARATOR,
- *                                 (AbstractFileComparator) NameFileComparator.NAME_COMPARATOR);
+ *       CompositeFileComparator comparator = new CompositeFileComparator(
+ *           DirectoryFileComparator.DIRECTORY_COMPARATOR,
+ *           NameFileComparator.NAME_COMPARATOR);
  *       List&lt;File&gt; list = ...
  *       comparator.sort(list);
  * </pre>
@@ -52,13 +51,8 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
      *
      * @param delegates The delegate file comparators
      */
-    @SuppressWarnings("unchecked") // casts 1 & 2 must be OK because types are already correct
-    public CompositeFileComparator(final Comparator<File>... delegates) {
-        if (delegates == null) {
-            this.delegates = (Comparator<File>[]) EMPTY_COMPARATOR_ARRAY; //1
-        } else {
-            this.delegates = delegates.clone(); //2
-        }
+    public CompositeFileComparator(@SuppressWarnings("unchecked") final Comparator<File>... delegates) {
+        this.delegates = delegates == null ? emptyArray() : delegates.clone();
     }
 
     /**
@@ -66,13 +60,8 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
      *
      * @param delegates The delegate file comparators
      */
-    @SuppressWarnings("unchecked") // casts 1 & 2 must be OK because types are already correct
     public CompositeFileComparator(final Iterable<Comparator<File>> delegates) {
-        if (delegates == null) {
-            this.delegates = (Comparator<File>[]) EMPTY_COMPARATOR_ARRAY; //1
-        } else {
-            this.delegates = StreamSupport.stream(delegates.spliterator(), false).toArray(Comparator[]::new);
-        }
+        this.delegates = delegates == null ? emptyArray() : StreamSupport.stream(delegates.spliterator(), false).toArray(Comparator[]::new);
     }
 
     /**
@@ -80,19 +69,16 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
      *
      * @param file1 The first file to compare
      * @param file2 The second file to compare
-     * @return the first non-zero result returned from
-     * the delegate comparators or zero.
+     * @return the first non-zero result returned from the delegate comparators or zero.
      */
     @Override
     public int compare(final File file1, final File file2) {
-        int result = 0;
-        for (final Comparator<File> delegate : delegates) {
-            result = delegate.compare(file1, file2);
-            if (result != 0) {
-                break;
-            }
-        }
-        return result;
+        return Stream.of(delegates).map(delegate -> delegate.compare(file1, file2)).filter(r -> r != 0).findFirst().orElse(0);
+    }
+
+    @SuppressWarnings("unchecked") // types are already correct
+    private Comparator<File>[] emptyArray() {
+        return (Comparator<File>[]) EMPTY_COMPARATOR_ARRAY;
     }
 
     /**
