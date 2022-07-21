@@ -338,8 +338,7 @@ public class IOUtilsTest {
         assertDoesNotThrow(() -> IOUtils.close(closeables));
         assertDoesNotThrow(() -> IOUtils.close((Closeable[]) null));
         assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), nullCloseable));
-        assertThrows(IOException.class,
-            () -> IOUtils.close(nullCloseable, new ThrowOnCloseReader(new StringReader("s"))));
+        assertThrows(IOException.class, () -> IOUtils.close(nullCloseable, new ThrowOnCloseReader(new StringReader("s"))));
     }
 
     @Test
