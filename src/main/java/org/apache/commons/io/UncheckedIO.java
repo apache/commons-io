@@ -23,6 +23,7 @@ import java.io.UncheckedIOException;
 import org.apache.commons.io.function.IOBiFunction;
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.function.IOFunction;
+import org.apache.commons.io.function.IOQuadFunction;
 import org.apache.commons.io.function.IORunnable;
 import org.apache.commons.io.function.IOSupplier;
 import org.apache.commons.io.function.IOTriFunction;
@@ -53,7 +54,7 @@ public class UncheckedIO {
     /**
      * Applies an IO bi-function with the given arguments.
      *
-     * @param biFunction the function.
+     * @param function the function.
      * @param <T> the first function argument type.
      * @param <U> the second function argument type.
      * @param <R> the return type.
@@ -63,9 +64,9 @@ public class UncheckedIO {
      * @return the function result
      * @throws UncheckedIOException if an I/O error occurs.
      */
-    public static <T, U, R> R apply(final IOBiFunction<T, U, R> biFunction, final T t, final U u) {
+    public static <T, U, R> R apply(final IOBiFunction<T, U, R> function, final T t, final U u) {
         try {
-            return biFunction.apply(t, u);
+            return function.apply(t, u);
         } catch (final IOException e) {
             throw wrap(e);
         }
@@ -91,9 +92,34 @@ public class UncheckedIO {
     }
 
     /**
+     * Applies an IO quad-function with the given arguments.
+     *
+     * @param function the function.
+     * @param <T> the first function argument type.
+     * @param <U> the second function argument type.
+     * @param <V> the third function argument type.
+     * @param <W> the fourth function argument type.
+     * @param <R> the return type.
+     *
+     * @param t the first function argument
+     * @param u the second function argument
+     * @param v the third function argument
+     * @param w the fourth function argument
+     * @return the function result
+     * @throws UncheckedIOException if an I/O error occurs.
+     */
+    public static <T, U, V, W, R> R apply(final IOQuadFunction<T, U, V, W, R> function, final T t, final U u, final V v, final W w) {
+        try {
+            return function.apply(t, u, v, w);
+        } catch (final IOException e) {
+            throw wrap(e);
+        }
+    }
+
+    /**
      * Applies an IO tri-function with the given arguments.
      *
-     * @param triFunction the function.
+     * @param function the function.
      * @param <T> the first function argument type.
      * @param <U> the second function argument type.
      * @param <V> the third function argument type.
@@ -105,25 +131,12 @@ public class UncheckedIO {
      * @return the function result
      * @throws UncheckedIOException if an I/O error occurs.
      */
-    public static <T, U, V, R> R apply(final IOTriFunction<T, U, V, R> triFunction, final T t, final U u, final V v) {
+    public static <T, U, V, R> R apply(final IOTriFunction<T, U, V, R> function, final T t, final U u, final V v) {
         try {
-            return triFunction.apply(t, u, v);
+            return function.apply(t, u, v);
         } catch (final IOException e) {
             throw wrap(e);
         }
-    }
-
-    /**
-     * Creates a new UncheckedIOException for the given detail message.
-     * <p>
-     * This method exists because there is no String constructor in {@link UncheckedIOException}.
-     * </p>
-     *
-     * @param e The exception to wrap.
-     * @return a new {@link UncheckedIOException}.
-     */
-    private static UncheckedIOException wrap(final IOException e) {
-        return new UncheckedIOException(e);
     }
 
     /**
@@ -154,5 +167,18 @@ public class UncheckedIO {
         } catch (final IOException e) {
             throw wrap(e);
         }
+    }
+
+    /**
+     * Creates a new UncheckedIOException for the given detail message.
+     * <p>
+     * This method exists because there is no String constructor in {@link UncheckedIOException}.
+     * </p>
+     *
+     * @param e The exception to wrap.
+     * @return a new {@link UncheckedIOException}.
+     */
+    private static UncheckedIOException wrap(final IOException e) {
+        return new UncheckedIOException(e);
     }
 }
