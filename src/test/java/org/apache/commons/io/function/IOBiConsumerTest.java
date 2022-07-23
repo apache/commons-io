@@ -49,7 +49,6 @@ public class IOBiConsumerTest {
     @Test
     public void testNoopIOConsumer() throws IOException {
         IOBiConsumer.noop().accept(null, null);
-        IOBiConsumer.NOOP.accept(null, null);
     }
 
 }

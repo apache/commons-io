@@ -34,14 +34,7 @@ import java.util.function.BiConsumer;
 public interface IOBiConsumer<T, U> {
 
     /**
-     * NOOP singleton.
-     * @since 2.12.0
-     */
-    @SuppressWarnings("rawtypes")
-    IOBiConsumer NOOP = (t, u) -> {/* NOOP */};
-
-    /**
-     * Returns The NOOP singleton.
+     * Returns The no-op singleton.
      *
      * @param <T> the type of the first argument to the operation
      * @param <U> the type of the second argument to the operation
@@ -49,7 +42,7 @@ public interface IOBiConsumer<T, U> {
      * @since 2.12.0
      */
     static <T, U> IOBiConsumer<T, U> noop() {
-        return NOOP;
+        return Constants.IO_BI_CONSUMER;
     }
 
     /**
@@ -73,7 +66,6 @@ public interface IOBiConsumer<T, U> {
      */
     default IOBiConsumer<T, U> andThen(final IOBiConsumer<? super T, ? super U> after) {
         Objects.requireNonNull(after);
-
         return (l, r) -> {
             accept(l, r);
             after.accept(l, r);

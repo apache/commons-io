@@ -40,13 +40,7 @@ import java.util.function.Function;
 public interface IOBiFunction<T, U, R> {
 
     /**
-     * NOOP singleton.
-     */
-    @SuppressWarnings("rawtypes")
-    IOBiFunction NOOP = (t, u) -> null;
-
-    /**
-     * Returns The NOOP singleton.
+     * Returns The p singleton.
      *
      * @param <T> the type of the first argument to the function
      * @param <U> the type of the second argument to the function
@@ -54,7 +48,7 @@ public interface IOBiFunction<T, U, R> {
      * @return The NOOP singleton.
      */
     static <T, U, R> IOBiFunction<T, U, R> noop() {
-        return NOOP;
+        return Constants.IO_BI_FUNCTION;
     }
 
     /**

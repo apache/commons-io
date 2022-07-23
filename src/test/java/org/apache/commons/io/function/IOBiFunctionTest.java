@@ -93,7 +93,6 @@ public class IOBiFunctionTest {
     @Test
     public void testNoopIOConsumer() throws IOException {
         assertNull(IOBiFunction.noop().apply(null, null));
-        assertNull(IOBiFunction.NOOP.apply(null, null));
     }
 
 }

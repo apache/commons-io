@@ -40,7 +40,7 @@ public interface IOFunction<T, R> {
      * @return a function that always returns its input argument
      */
     static <T> IOFunction<T, T> identity() {
-        return t -> t;
+        return Constants.IO_FUNCTION_ID;
     }
 
     /**
