@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Function;
 
 import org.junit.jupiter.api.Test;
 
@@ -51,34 +50,6 @@ public class IOTriFunctionTest {
         assertEquals(Character.valueOf('a'), ref1.get());
         assertEquals(Short.valueOf((short) 1), ref2.get());
         assertEquals("z", ref3.get());
-    }
-
-    /**
-     * Tests {@link IOTriFunction#andThen(Function)}.
-     *
-     * @throws IOException thrown on test failure
-     */
-    @Test
-    public void testAndThenFunction() throws IOException {
-        final AtomicReference<Character> ref1 = new AtomicReference<>();
-        final AtomicReference<Short> ref2 = new AtomicReference<>();
-        final AtomicReference<String> ref3 = new AtomicReference<>();
-        final IOTriFunction<AtomicReference<Character>, AtomicReference<Short>, AtomicReference<String>, String> tri = (t, u, v) -> {
-            ref1.set(Character.valueOf('a'));
-            ref2.set(Short.valueOf((short) 1));
-            ref3.set("z");
-            return "9";
-        };
-        final Function<String, BigInteger> after = t -> {
-            ref1.set(Character.valueOf('b'));
-            ref2.set(Short.valueOf((short) 2));
-            ref3.set("zz");
-            return BigInteger.valueOf(Long.parseLong(t)).add(BigInteger.ONE);
-        };
-        assertEquals(BigInteger.TEN, tri.andThen(after).apply(ref1, ref2, ref3));
-        assertEquals(Character.valueOf('b'), ref1.get());
-        assertEquals(Short.valueOf((short) 2), ref2.get());
-        assertEquals("zz", ref3.get());
     }
 
     /**

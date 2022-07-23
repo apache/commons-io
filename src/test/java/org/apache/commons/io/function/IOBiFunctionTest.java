@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
-import java.util.function.Function;
 
 import org.apache.commons.io.file.PathUtils;
 import org.junit.jupiter.api.Test;
@@ -38,20 +37,6 @@ public class IOBiFunctionTest {
     @SuppressWarnings("unused")
     private boolean not(final boolean value) throws IOException {
         return !value;
-    }
-
-    /**
-     * Tests {@link IOBiFunction#andThen(Function)}.
-     *
-     * @throws IOException thrown on test failure
-     */
-    @Test
-    public void testAndThenFunction() throws IOException {
-        final IOBiFunction<Path, LinkOption[], Boolean> isDirectory = Files::isDirectory;
-        final Function<Boolean, Boolean> not = b -> !b;
-        assertEquals(true, isDirectory.apply(PathUtils.current(), PathUtils.EMPTY_LINK_OPTION_ARRAY));
-        final IOBiFunction<Path, LinkOption[], Boolean> andThen = isDirectory.andThen(not);
-        assertEquals(false, andThen.apply(PathUtils.current(), PathUtils.EMPTY_LINK_OPTION_ARRAY));
     }
 
     /**
