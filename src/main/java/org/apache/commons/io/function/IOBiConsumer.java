@@ -66,9 +66,9 @@ public interface IOBiConsumer<T, U> {
      */
     default IOBiConsumer<T, U> andThen(final IOBiConsumer<? super T, ? super U> after) {
         Objects.requireNonNull(after);
-        return (l, r) -> {
-            accept(l, r);
-            after.accept(l, r);
+        return (t, u) -> {
+            accept(t, u);
+            after.accept(t, u);
         };
     }
 }
