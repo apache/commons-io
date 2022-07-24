@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UncheckedIOException;
 
+import org.apache.commons.io.UncheckedIO;
+
 /**
  * A {@link FilterOutputStream} that throws {@link UncheckedIOException} instead of {@link UncheckedIOException}.
  *
@@ -57,11 +59,7 @@ public class UncheckedFilterOutputStream extends FilterOutputStream {
      */
     @Override
     public void close() throws UncheckedIOException {
-        try {
-            super.close();
-        } catch (final IOException e) {
-            uncheck(e);
-        }
+        UncheckedIO.run(super::close);
     }
 
     /**
@@ -69,15 +67,7 @@ public class UncheckedFilterOutputStream extends FilterOutputStream {
      */
     @Override
     public void flush() throws UncheckedIOException {
-        try {
-            super.flush();
-        } catch (final IOException e) {
-            uncheck(e);
-        }
-    }
-
-    private void uncheck(final IOException e) {
-        throw new UncheckedIOException(e);
+        UncheckedIO.run(super::flush);
     }
 
     /**
@@ -85,11 +75,7 @@ public class UncheckedFilterOutputStream extends FilterOutputStream {
      */
     @Override
     public void write(final byte[] b) throws UncheckedIOException {
-        try {
-            super.write(b);
-        } catch (final IOException e) {
-            uncheck(e);
-        }
+        UncheckedIO.accept(super::write, b);
     }
 
     /**
@@ -97,11 +83,7 @@ public class UncheckedFilterOutputStream extends FilterOutputStream {
      */
     @Override
     public void write(final byte[] b, final int off, final int len) throws UncheckedIOException {
-        try {
-            super.write(b, off, len);
-        } catch (final IOException e) {
-            uncheck(e);
-        }
+        UncheckedIO.accept(super::write, b, off, len);
     }
 
     /**
@@ -109,11 +91,7 @@ public class UncheckedFilterOutputStream extends FilterOutputStream {
      */
     @Override
     public void write(final int b) throws UncheckedIOException {
-        try {
-            super.write(b);
-        } catch (final IOException e) {
-            uncheck(e);
-        }
+        UncheckedIO.accept(super::write, b);
     }
 
 }
