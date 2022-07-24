@@ -23,6 +23,7 @@ import java.io.UncheckedIOException;
 import org.apache.commons.io.function.IOBiFunction;
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.function.IOFunction;
+import org.apache.commons.io.function.IOPredicate;
 import org.apache.commons.io.function.IOQuadFunction;
 import org.apache.commons.io.function.IORunnable;
 import org.apache.commons.io.function.IOSupplier;
@@ -170,6 +171,22 @@ public class UncheckedIO {
     }
 
     /**
+     * Tests an IO predicate
+     *
+     * @param <T> the type of the input to the predicate
+     * @param predicate the predicate
+     * @param t the input to the predicate
+     * @return {@code true} if the input argument matches the predicate, otherwise {@code false}
+     */
+    public static <T> boolean test(final IOPredicate<T> predicate, final T t) {
+        try {
+            return predicate.test(t);
+        } catch (final IOException e) {
+            throw wrap(e);
+        }
+    }
+
+    /**
      * Creates a new UncheckedIOException for the given detail message.
      * <p>
      * This method exists because there is no String constructor in {@link UncheckedIOException}.
@@ -180,5 +197,9 @@ public class UncheckedIO {
      */
     private static UncheckedIOException wrap(final IOException e) {
         return new UncheckedIOException(e);
+    }
+
+    private UncheckedIO() {
+        // no instances needed.
     }
 }
