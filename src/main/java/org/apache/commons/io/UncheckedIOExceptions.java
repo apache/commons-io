@@ -55,7 +55,7 @@ public class UncheckedIOExceptions {
     public static UncheckedIOException wrap(final IOException e, final Object message) {
         return new UncheckedIOException(Objects.toString(message), e);
     }
-    
+
     private UncheckedIOExceptions() {
         // no instance
     }
