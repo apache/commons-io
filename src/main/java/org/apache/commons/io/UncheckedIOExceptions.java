@@ -26,7 +26,7 @@ import java.util.Objects;
  *
  * @since 2.12.0
  */
-public class UncheckedIOExceptions {
+class UncheckedIOExceptions {
 
     /**
      * Creates a new UncheckedIOException for the given detail message.
