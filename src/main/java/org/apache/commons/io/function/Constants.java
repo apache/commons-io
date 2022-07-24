@@ -40,6 +40,16 @@ class Constants {
     @SuppressWarnings("rawtypes")
     static final IOFunction IO_FUNCTION_ID = t -> t;
 
+    /**
+     * Always false.
+     */
+    static final IOPredicate<Object> IO_PREDICATE_FALSE = t -> false;
+
+    /**
+     * Always true.
+     */
+    static final IOPredicate<Object> IO_PREDICATE_TRUE = t -> true;
+
     private Constants() {
         // We don't want instances
     }
