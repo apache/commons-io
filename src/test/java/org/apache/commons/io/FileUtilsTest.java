@@ -904,7 +904,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         subDir.mkdir();
         final File subFile = new File(subDir, "A.txt");
         FileUtils.writeStringToFile(subFile, "HELLO WORLD", "UTF8");
-        final File destDir = new File(System.getProperty("java.io.tmpdir"), "tmp-FileUtilsTestCase");
+        final File destDir = new File(FileUtils.getTempDirectoryPath(), "tmp-FileUtilsTestCase");
         FileUtils.deleteDirectory(destDir);
         final File actualDestDir = new File(destDir, srcDir.getName());
 
@@ -1014,7 +1014,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         subDir.mkdir();
         final File subFile = new File(subDir, "A.txt");
         FileUtils.writeStringToFile(subFile, "HELLO WORLD", "UTF8");
-        final File destDir = new File(System.getProperty("java.io.tmpdir"), "tmp-FileUtilsTestCase");
+        final File destDir = new File(FileUtils.getTempDirectoryPath(), "tmp-FileUtilsTestCase");
         FileUtils.deleteDirectory(destDir);
 
         FileUtils.copyDirectory(srcDir, destDir);
@@ -1568,7 +1568,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     @Test
     public void testGetTempDirectory() {
-        final File tempDirectory = new File(System.getProperty("java.io.tmpdir"));
+        final File tempDirectory = new File(FileUtils.getTempDirectoryPath());
         assertEquals(tempDirectory, FileUtils.getTempDirectory());
     }
 
