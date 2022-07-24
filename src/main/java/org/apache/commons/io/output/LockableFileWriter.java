@@ -135,7 +135,7 @@ public class LockableFileWriter extends Writer {
 
         // init lock file
         if (lockDir == null) {
-            lockDir = System.getProperty("java.io.tmpdir");
+            lockDir = FileUtils.getTempDirectoryPath();
         }
         final File lockDirFile = new File(lockDir);
         FileUtils.forceMkdir(lockDirFile);
