@@ -123,14 +123,13 @@ public class LockableFileWriter extends Writer {
      * @throws IOException in case of an I/O error
      * @since 2.3
      */
-    public LockableFileWriter(File file, final Charset charset, final boolean append,
-            String lockDir) throws IOException {
+    public LockableFileWriter(final File file, final Charset charset, final boolean append, String lockDir) throws IOException {
         // init file to create/append
-        file = file.getAbsoluteFile();
-        if (file.getParentFile() != null) {
-            FileUtils.forceMkdir(file.getParentFile());
+        final File absFile = file.getAbsoluteFile();
+        if (absFile.getParentFile() != null) {
+            FileUtils.forceMkdir(absFile.getParentFile());
         }
-        if (file.isDirectory()) {
+        if (absFile.isDirectory()) {
             throw new IOException("File specified is a directory");
         }
 
@@ -141,13 +140,13 @@ public class LockableFileWriter extends Writer {
         final File lockDirFile = new File(lockDir);
         FileUtils.forceMkdir(lockDirFile);
         testLockDir(lockDirFile);
-        lockFile = new File(lockDirFile, file.getName() + LCK);
+        lockFile = new File(lockDirFile, absFile.getName() + LCK);
 
         // check if locked
         createLock();
 
         // init wrapped writer
-        out = initWriter(file, charset, append);
+        out = initWriter(absFile, charset, append);
     }
 
     /**
