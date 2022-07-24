@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnsupportedCharsetException;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -48,7 +49,7 @@ public class LockableFileWriterTest {
     @BeforeEach
     public void setUp() {
         file = new File(temporaryFolder, "testlockfile");
-        lockDir = new File(System.getProperty("java.io.tmpdir"));
+        lockDir = FileUtils.getTempDirectory();
         lockFile = new File(lockDir, file.getName() + ".lck");
         altLockDir = temporaryFolder;
         altLockFile = new File(altLockDir, file.getName() + ".lck");
