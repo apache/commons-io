@@ -334,10 +334,12 @@ public class FilesUncheckTest {
     @Test
     public void testProbeContentType() {
         @SuppressWarnings("unused")
-        final String probeContentType = FilesUncheck.probeContentType(FILE_PATH_EMPTY);
+        String probeContentType = FilesUncheck.probeContentType(FILE_PATH_EMPTY);
         // Empirical: probeContentType is null on Windows
         // Empirical: probeContentType is "text/plain" on Ubuntu
-        assertEquals("text/xml", FilesUncheck.probeContentType(Paths.get("src/test/resources/org/apache/commons/io/testfileBOM.xml")));
+        probeContentType = FilesUncheck.probeContentType(Paths.get("src/test/resources/org/apache/commons/io/testfileBOM.xml"));
+        assertTrue("text/xml".equals(probeContentType) || "application/xml".equals(probeContentType));
+
     }
 
     @Test
