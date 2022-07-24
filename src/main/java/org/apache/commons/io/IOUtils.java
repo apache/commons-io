@@ -60,6 +60,7 @@ import org.apache.commons.io.input.QueueInputStream;
 import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
+import org.apache.commons.io.output.NullWriter;
 import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.commons.io.output.ThresholdingOutputStream;
 import org.apache.commons.io.output.UnsynchronizedByteArrayOutputStream;
@@ -827,7 +828,6 @@ public class IOUtils {
      * @param input the {@link InputStream} to read.
      * @return the number of bytes copied. or {@code 0} if {@code input is null}.
      * @throws NullPointerException if the InputStream is {@code null}.
-     * @throws NullPointerException if the OutputStream is {@code null}.
      * @throws IOException if an I/O error occurs.
      * @since 2.8.0
      */
