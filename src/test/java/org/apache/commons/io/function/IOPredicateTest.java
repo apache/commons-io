@@ -46,7 +46,7 @@ public class IOPredicateTest {
     private static final Object THROWING_EQUALS = new Object() {
         @Override
         public boolean equals(final Object obj) {
-            throw IOStream.rethrow(new IOException("Expected"));
+            throw IOStreams.rethrow(new IOException("Expected"));
         }
     };
 
