@@ -69,9 +69,9 @@ public class FilesUncheckTest {
 
     private static final FileAttribute<?>[] EMPTY_FILE_ATTRIBUTES_ARRAY = {};
 
-    private static final Path FILE_PATH_EMPTY = Paths.get("src/test/resources/org/apache/commons/io/test-file-empty.bin");
-
     private static final Path FILE_PATH_A = Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/file-size-1.bin");
+
+    private static final Path FILE_PATH_EMPTY = Paths.get("src/test/resources/org/apache/commons/io/test-file-empty.bin");
 
     private static final Path NEW_DIR_PATH = Paths.get("target/newdir");
 
@@ -293,18 +293,18 @@ public class FilesUncheckTest {
     }
 
     @Test
-    public void testNewDirectoryStreamPathString() {
+    public void testNewDirectoryStreamPathFilterOfQsuperPath() {
         Uncheck.run(() -> {
-            try (final DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(TARGET_PATH, "*.xml")) {
+            try (final DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(TARGET_PATH, e -> true)) {
                 directoryStream.forEach(e -> assertEquals(TARGET_PATH, e.getParent()));
             }
         });
     }
 
     @Test
-    public void testNewDirectoryStreamPathFilterOfQsuperPath() {
+    public void testNewDirectoryStreamPathString() {
         Uncheck.run(() -> {
-            try (final DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(TARGET_PATH, e -> true)) {
+            try (final DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(TARGET_PATH, "*.xml")) {
                 directoryStream.forEach(e -> assertEquals(TARGET_PATH, e.getParent()));
             }
         });
@@ -332,13 +332,18 @@ public class FilesUncheckTest {
 
     @Test
     public void testProbeContentType() {
-        @SuppressWarnings("unused")
+        // Empty file:
         String probeContentType = FilesUncheck.probeContentType(FILE_PATH_EMPTY);
         // Empirical: probeContentType is null on Windows
         // Empirical: probeContentType is "text/plain" on Ubuntu
+        // Empirical: probeContentType is ? on macOS
+        //
+        // BOM file:
         probeContentType = FilesUncheck.probeContentType(Paths.get("src/test/resources/org/apache/commons/io/testfileBOM.xml"));
-        assertTrue("text/xml".equals(probeContentType) || "application/xml".equals(probeContentType));
-
+        // Empirical: probeContentType is "text/plain" on Windows
+        // Empirical: probeContentType is "application/plain" on Ubuntu
+        // Empirical: probeContentType is ? on macOS
+        assertNotNull(probeContentType);
     }
 
     @Test
@@ -406,8 +411,13 @@ public class FilesUncheckTest {
     }
 
     @Test
-    public void testWalkPathIntFileVisitOptionArray() {
-        assertEquals(1, FilesUncheck.walk(TARGET_PATH, 0, FileVisitOption.FOLLOW_LINKS).count());
+    public void testWalkFileTreePathFileVisitorOfQsuperPath() {
+        assertEquals(TARGET_PATH, FilesUncheck.walkFileTree(TARGET_PATH, NoopPathVisitor.INSTANCE));
+    }
+
+    @Test
+    public void testWalkFileTreePathSetOfFileVisitOptionIntFileVisitorOfQsuperPath() {
+        assertEquals(TARGET_PATH, FilesUncheck.walkFileTree(TARGET_PATH, new HashSet<>(), 1, NoopPathVisitor.INSTANCE));
     }
 
     @Test
@@ -416,13 +426,8 @@ public class FilesUncheckTest {
     }
 
     @Test
-    public void testWalkFileTreePathFileVisitorOfQsuperPath() {
-        assertEquals(TARGET_PATH, FilesUncheck.walkFileTree(TARGET_PATH, NoopPathVisitor.INSTANCE));
-    }
-
-    @Test
-    public void testWalkFileTreePathSetOfFileVisitOptionIntFileVisitorOfQsuperPath() {
-        assertEquals(TARGET_PATH, FilesUncheck.walkFileTree(TARGET_PATH, new HashSet<>(), 1, NoopPathVisitor.INSTANCE));
+    public void testWalkPathIntFileVisitOptionArray() {
+        assertEquals(1, FilesUncheck.walk(TARGET_PATH, 0, FileVisitOption.FOLLOW_LINKS).count());
     }
 
     @Test
