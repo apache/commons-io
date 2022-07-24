@@ -239,6 +239,9 @@ public class UncheckedIO {
         return new UncheckedIOException(e);
     }
 
+    /**
+     * No instances needed.
+     */
     private UncheckedIO() {
         // no instances needed.
     }
