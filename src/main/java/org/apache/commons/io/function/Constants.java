@@ -26,7 +26,7 @@ class Constants {
      * No-op singleton.
      */
     @SuppressWarnings("rawtypes")
-    static final IOBiConsumer IO_BI_CONSUMER = (t, u) -> {/* NOOP */};
+    static final IOBiConsumer IO_BI_CONSUMER = (t, u) -> {/* No-op */};
 
     /**
      * No-op singleton.
@@ -49,6 +49,12 @@ class Constants {
      * Always true.
      */
     static final IOPredicate<Object> IO_PREDICATE_TRUE = t -> true;
+
+    /**
+     * No-op singleton.
+     */
+    @SuppressWarnings("rawtypes")
+    static final IOTriConsumer IO_TRI_CONSUMER = (t, u, v) -> {/* No-op */};
 
     private Constants() {
         // We don't want instances

@@ -357,7 +357,7 @@ The <action> type attribute can be add,update,fix,remove.
         Add IOExceptionList.checkEmpty(List, Object).
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">
-        Add IOBiConsumer.
+        Add IOBiConsumer, IOTriConsumer.
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add and reuse IOConsumer forAll(*), forEach(*), and forEachIndexed(*).

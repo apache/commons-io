@@ -20,6 +20,7 @@ package org.apache.commons.io;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
+import org.apache.commons.io.function.IOBiConsumer;
 import org.apache.commons.io.function.IOBiFunction;
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.function.IOFunction;
@@ -27,6 +28,7 @@ import org.apache.commons.io.function.IOPredicate;
 import org.apache.commons.io.function.IOQuadFunction;
 import org.apache.commons.io.function.IORunnable;
 import org.apache.commons.io.function.IOSupplier;
+import org.apache.commons.io.function.IOTriConsumer;
 import org.apache.commons.io.function.IOTriFunction;
 
 /**
@@ -37,10 +39,28 @@ import org.apache.commons.io.function.IOTriFunction;
 public class UncheckedIO {
 
     /**
+     * Accepts an IO consumer with the given arguments.
+     *
+     * @param <T> the first input type.
+     * @param <U> the second input type.
+     * @param t the first input argument.
+     * @param u the second input argument.
+     * @param consumer Consumes the value.
+     * @throws UncheckedIOException if an I/O error occurs.
+     */
+    public static <T, U> void accept(final IOBiConsumer<T, U> consumer, final T t, final U u) {
+        try {
+            consumer.accept(t, u);
+        } catch (final IOException e) {
+            throw wrap(e);
+        }
+    }
+
+    /**
      * Accepts an IO consumer with the given argument.
      *
-     * @param <T> the return type of the operations.
-     * @param t the consumer argument.
+     * @param <T> the input type.
+     * @param t the input argument.
      * @param consumer Consumes the value.
      * @throws UncheckedIOException if an I/O error occurs.
      */
@@ -53,7 +73,27 @@ public class UncheckedIO {
     }
 
     /**
-     * Applies an IO bi-function with the given arguments.
+     * Accepts an IO consumer with the given arguments.
+     *
+     * @param <T> the first input type.
+     * @param <U> the second input type.
+     * @param <V> the third input type.
+     * @param t the first input argument.
+     * @param u the second input argument.
+     * @param v the third input argument.
+     * @param consumer Consumes the value.
+     * @throws UncheckedIOException if an I/O error occurs.
+     */
+    public static <T, U, V> void accept(final IOTriConsumer<T, U, V> consumer, final T t, final U u, final V v) {
+        try {
+            consumer.accept(t, u, v);
+        } catch (final IOException e) {
+            throw wrap(e);
+        }
+    }
+
+    /**
+     * Applies an IO function with the given arguments.
      *
      * @param function the function.
      * @param <T> the first function argument type.
