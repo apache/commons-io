@@ -832,7 +832,23 @@ public class IOUtils {
      * @since 2.8.0
      */
     public static long consume(final InputStream input) throws IOException {
-        return copyLarge(input, NullOutputStream.INSTANCE, getByteArray());
+        return copyLarge(input, NullOutputStream.INSTANCE);
+    }
+
+    /**
+     * Consumes characters from a {@link Reader} and ignores them.
+     * <p>
+     * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
+     * </p>
+     *
+     * @param input the {@link Reader} to read.
+     * @return the number of bytes copied. or {@code 0} if {@code input is null}.
+     * @throws NullPointerException if the Reader is {@code null}.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.12.0
+     */
+    public static long consume(final Reader input) throws IOException {
+        return copyLarge(input, NullWriter.INSTANCE);
     }
 
     /**

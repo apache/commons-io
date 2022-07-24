@@ -63,6 +63,7 @@ import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.input.BrokenInputStream;
 import org.apache.commons.io.input.CircularInputStream;
 import org.apache.commons.io.input.NullInputStream;
+import org.apache.commons.io.input.NullReader;
 import org.apache.commons.io.input.StringInputStream;
 import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.BrokenOutputStream;
@@ -458,10 +459,26 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testConsume() throws Exception {
+    public void testConsumeInputStream() throws Exception {
         final long size = (long) Integer.MAX_VALUE + (long) 1;
         final InputStream in = new NullInputStream(size);
         final OutputStream out = NullOutputStream.INSTANCE;
+
+        // Test copy() method
+        assertEquals(-1, IOUtils.copy(in, out));
+
+        // reset the input
+        in.close();
+
+        // Test consume() method
+        assertEquals(size, IOUtils.consume(in), "consume()");
+    }
+
+    @Test
+    public void testConsumeReader() throws Exception {
+        final long size = (long) Integer.MAX_VALUE + (long) 1;
+        final Reader in = new NullReader(size);
+        final Writer out = NullWriter.INSTANCE;
 
         // Test copy() method
         assertEquals(-1, IOUtils.copy(in, out));
