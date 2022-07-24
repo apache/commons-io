@@ -23,7 +23,7 @@ import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.nio.CharBuffer;
 
-import org.apache.commons.io.UncheckedIO;
+import org.apache.commons.io.Uncheck;
 
 /**
  * A {@link FilterReader} that throws {@link UncheckedIOException} instead of {@link IOException}.
@@ -61,7 +61,7 @@ public class UncheckedFilterReader extends FilterReader {
      */
     @Override
     public void close() throws UncheckedIOException {
-        UncheckedIO.run(super::close);
+        Uncheck.run(super::close);
     }
 
     /**
@@ -69,7 +69,7 @@ public class UncheckedFilterReader extends FilterReader {
      */
     @Override
     public void mark(final int readAheadLimit) throws UncheckedIOException {
-        UncheckedIO.accept(super::mark, readAheadLimit);
+        Uncheck.accept(super::mark, readAheadLimit);
     }
 
     /**
@@ -77,7 +77,7 @@ public class UncheckedFilterReader extends FilterReader {
      */
     @Override
     public int read() throws UncheckedIOException {
-        return UncheckedIO.get(super::read);
+        return Uncheck.get(super::read);
     }
 
     /**
@@ -85,7 +85,7 @@ public class UncheckedFilterReader extends FilterReader {
      */
     @Override
     public int read(final char[] cbuf) throws UncheckedIOException {
-        return UncheckedIO.apply(super::read, cbuf);
+        return Uncheck.apply(super::read, cbuf);
     }
 
     /**
@@ -93,7 +93,7 @@ public class UncheckedFilterReader extends FilterReader {
      */
     @Override
     public int read(final char[] cbuf, final int off, final int len) throws UncheckedIOException {
-        return UncheckedIO.apply(super::read, cbuf, off, len);
+        return Uncheck.apply(super::read, cbuf, off, len);
     }
 
     /**
@@ -101,7 +101,7 @@ public class UncheckedFilterReader extends FilterReader {
      */
     @Override
     public int read(final CharBuffer target) throws UncheckedIOException {
-        return UncheckedIO.apply(super::read, target);
+        return Uncheck.apply(super::read, target);
     }
 
     /**
@@ -109,7 +109,7 @@ public class UncheckedFilterReader extends FilterReader {
      */
     @Override
     public boolean ready() throws UncheckedIOException {
-        return UncheckedIO.get(super::ready);
+        return Uncheck.get(super::ready);
     }
 
     /**
@@ -117,7 +117,7 @@ public class UncheckedFilterReader extends FilterReader {
      */
     @Override
     public void reset() throws UncheckedIOException {
-        UncheckedIO.run(super::reset);
+        Uncheck.run(super::reset);
     }
 
     /**
@@ -125,7 +125,7 @@ public class UncheckedFilterReader extends FilterReader {
      */
     @Override
     public long skip(final long n) throws UncheckedIOException {
-        return UncheckedIO.apply(super::skip, n);
+        return Uncheck.apply(super::skip, n);
     }
 
 }

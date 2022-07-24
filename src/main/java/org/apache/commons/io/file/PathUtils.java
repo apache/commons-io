@@ -70,7 +70,7 @@ import java.util.stream.Stream;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.UncheckedIO;
+import org.apache.commons.io.Uncheck;
 import org.apache.commons.io.file.Counters.PathCounters;
 import org.apache.commons.io.file.attribute.FileTimes;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -1198,7 +1198,7 @@ public final class PathUtils {
 
     /**
      * Reads the BasicFileAttributes from the given path. Returns null instead of throwing
-     * {@link UnsupportedOperationException}. Throws {@link UncheckedIO} instead of {@link IOException}.
+     * {@link UnsupportedOperationException}. Throws {@link Uncheck} instead of {@link IOException}.
      *
      * @param <A> The {@link BasicFileAttributes} type
      * @param path The Path to test.
@@ -1210,7 +1210,7 @@ public final class PathUtils {
      */
     public static <A extends BasicFileAttributes> A readAttributes(final Path path, final Class<A> type, final LinkOption... options) {
         try {
-            return path == null ? null : UncheckedIO.apply(Files::readAttributes, path, type, options);
+            return path == null ? null : Uncheck.apply(Files::readAttributes, path, type, options);
         } catch (final UnsupportedOperationException e) {
             // For example, on Windows.
             return null;

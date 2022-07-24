@@ -23,7 +23,7 @@ import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.nio.CharBuffer;
 
-import org.apache.commons.io.UncheckedIO;
+import org.apache.commons.io.Uncheck;
 
 /**
  * A {@link BufferedReader} that throws {@link UncheckedIOException} instead of {@link IOException}.
@@ -72,7 +72,7 @@ public class UncheckedBufferedReader extends BufferedReader {
      */
     @Override
     public void close() throws UncheckedIOException {
-        UncheckedIO.run(super::close);
+        Uncheck.run(super::close);
     }
 
     /**
@@ -80,7 +80,7 @@ public class UncheckedBufferedReader extends BufferedReader {
      */
     @Override
     public void mark(final int readAheadLimit) throws UncheckedIOException {
-        UncheckedIO.accept(super::mark, readAheadLimit);
+        Uncheck.accept(super::mark, readAheadLimit);
     }
 
     /**
@@ -88,7 +88,7 @@ public class UncheckedBufferedReader extends BufferedReader {
      */
     @Override
     public int read() throws UncheckedIOException {
-        return UncheckedIO.get(super::read);
+        return Uncheck.get(super::read);
     }
 
     /**
@@ -96,7 +96,7 @@ public class UncheckedBufferedReader extends BufferedReader {
      */
     @Override
     public int read(final char[] cbuf) throws UncheckedIOException {
-        return UncheckedIO.apply(super::read, cbuf);
+        return Uncheck.apply(super::read, cbuf);
     }
 
     /**
@@ -104,7 +104,7 @@ public class UncheckedBufferedReader extends BufferedReader {
      */
     @Override
     public int read(final char[] cbuf, final int off, final int len) throws UncheckedIOException {
-        return UncheckedIO.apply(super::read, cbuf, off, len);
+        return Uncheck.apply(super::read, cbuf, off, len);
     }
 
     /**
@@ -112,7 +112,7 @@ public class UncheckedBufferedReader extends BufferedReader {
      */
     @Override
     public int read(final CharBuffer target) throws UncheckedIOException {
-        return UncheckedIO.apply(super::read, target);
+        return Uncheck.apply(super::read, target);
     }
 
     /**
@@ -120,7 +120,7 @@ public class UncheckedBufferedReader extends BufferedReader {
      */
     @Override
     public String readLine() throws UncheckedIOException {
-        return UncheckedIO.get(super::readLine);
+        return Uncheck.get(super::readLine);
     }
 
     /**
@@ -128,7 +128,7 @@ public class UncheckedBufferedReader extends BufferedReader {
      */
     @Override
     public boolean ready() throws UncheckedIOException {
-        return UncheckedIO.get(super::ready);
+        return Uncheck.get(super::ready);
     }
 
     /**
@@ -136,7 +136,7 @@ public class UncheckedBufferedReader extends BufferedReader {
      */
     @Override
     public void reset() throws UncheckedIOException {
-        UncheckedIO.run(super::reset);
+        Uncheck.run(super::reset);
     }
 
     /**
@@ -144,7 +144,7 @@ public class UncheckedBufferedReader extends BufferedReader {
      */
     @Override
     public long skip(final long n) throws UncheckedIOException {
-        return UncheckedIO.apply(super::skip, n);
+        return Uncheck.apply(super::skip, n);
     }
 
 }

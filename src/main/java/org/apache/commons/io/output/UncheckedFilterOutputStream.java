@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UncheckedIOException;
 
-import org.apache.commons.io.UncheckedIO;
+import org.apache.commons.io.Uncheck;
 
 /**
  * A {@link FilterOutputStream} that throws {@link UncheckedIOException} instead of {@link UncheckedIOException}.
@@ -59,7 +59,7 @@ public class UncheckedFilterOutputStream extends FilterOutputStream {
      */
     @Override
     public void close() throws UncheckedIOException {
-        UncheckedIO.run(super::close);
+        Uncheck.run(super::close);
     }
 
     /**
@@ -67,7 +67,7 @@ public class UncheckedFilterOutputStream extends FilterOutputStream {
      */
     @Override
     public void flush() throws UncheckedIOException {
-        UncheckedIO.run(super::flush);
+        Uncheck.run(super::flush);
     }
 
     /**
@@ -75,7 +75,7 @@ public class UncheckedFilterOutputStream extends FilterOutputStream {
      */
     @Override
     public void write(final byte[] b) throws UncheckedIOException {
-        UncheckedIO.accept(super::write, b);
+        Uncheck.accept(super::write, b);
     }
 
     /**
@@ -83,7 +83,7 @@ public class UncheckedFilterOutputStream extends FilterOutputStream {
      */
     @Override
     public void write(final byte[] b, final int off, final int len) throws UncheckedIOException {
-        UncheckedIO.accept(super::write, b, off, len);
+        Uncheck.accept(super::write, b, off, len);
     }
 
     /**
@@ -91,7 +91,7 @@ public class UncheckedFilterOutputStream extends FilterOutputStream {
      */
     @Override
     public void write(final int b) throws UncheckedIOException {
-        UncheckedIO.accept(super::write, b);
+        Uncheck.accept(super::write, b);
     }
 
 }

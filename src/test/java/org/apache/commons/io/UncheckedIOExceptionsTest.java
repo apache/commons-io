@@ -25,7 +25,7 @@ import java.io.UncheckedIOException;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests {@link UncheckedIO}.
+ * Tests {@link Uncheck}.
  */
 public class UncheckedIOExceptionsTest {
 

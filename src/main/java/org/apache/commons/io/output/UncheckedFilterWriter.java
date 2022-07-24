@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.io.Writer;
 
+import org.apache.commons.io.Uncheck;
+
 /**
  * A {@link FilterWriter} that throws {@link UncheckedIOException} instead of {@link IOException}.
  *
@@ -58,11 +60,7 @@ public class UncheckedFilterWriter extends FilterWriter {
      */
     @Override
     public Writer append(final char c) throws UncheckedIOException {
-        try {
-            return super.append(c);
-        } catch (final IOException e) {
-            throw uncheck(e);
-        }
+        return Uncheck.apply(super::append, c);
     }
 
     /**
@@ -70,11 +68,7 @@ public class UncheckedFilterWriter extends FilterWriter {
      */
     @Override
     public Writer append(final CharSequence csq) throws UncheckedIOException {
-        try {
-            return super.append(csq);
-        } catch (final IOException e) {
-            throw uncheck(e);
-        }
+        return Uncheck.apply(super::append, csq);
     }
 
     /**
@@ -82,11 +76,7 @@ public class UncheckedFilterWriter extends FilterWriter {
      */
     @Override
     public Writer append(final CharSequence csq, final int start, final int end) throws UncheckedIOException {
-        try {
-            return super.append(csq, start, end);
-        } catch (final IOException e) {
-            throw uncheck(e);
-        }
+        return Uncheck.apply(super::append, csq, start, end);
     }
 
     /**
@@ -94,11 +84,7 @@ public class UncheckedFilterWriter extends FilterWriter {
      */
     @Override
     public void close() throws UncheckedIOException {
-        try {
-            super.close();
-        } catch (final IOException e) {
-            throw uncheck(e);
-        }
+        Uncheck.run(super::close);
     }
 
     /**
@@ -106,15 +92,7 @@ public class UncheckedFilterWriter extends FilterWriter {
      */
     @Override
     public void flush() throws UncheckedIOException {
-        try {
-            super.flush();
-        } catch (final IOException e) {
-            throw uncheck(e);
-        }
-    }
-
-    private UncheckedIOException uncheck(final IOException e) {
-        return new UncheckedIOException(e);
+        Uncheck.run(super::flush);
     }
 
     /**
@@ -122,11 +100,7 @@ public class UncheckedFilterWriter extends FilterWriter {
      */
     @Override
     public void write(final char[] cbuf) throws UncheckedIOException {
-        try {
-            super.write(cbuf);
-        } catch (final IOException e) {
-            throw uncheck(e);
-        }
+        Uncheck.accept(super::write, cbuf);
     }
 
     /**
@@ -134,11 +108,7 @@ public class UncheckedFilterWriter extends FilterWriter {
      */
     @Override
     public void write(final char[] cbuf, final int off, final int len) throws UncheckedIOException {
-        try {
-            super.write(cbuf, off, len);
-        } catch (final IOException e) {
-            throw uncheck(e);
-        }
+        Uncheck.accept(super::write, cbuf, off, len);
     }
 
     /**
@@ -146,11 +116,7 @@ public class UncheckedFilterWriter extends FilterWriter {
      */
     @Override
     public void write(final int c) throws UncheckedIOException {
-        try {
-            super.write(c);
-        } catch (final IOException e) {
-            throw uncheck(e);
-        }
+        Uncheck.accept(super::write, c);
     }
 
     /**
@@ -158,11 +124,7 @@ public class UncheckedFilterWriter extends FilterWriter {
      */
     @Override
     public void write(final String str) throws UncheckedIOException {
-        try {
-            super.write(str);
-        } catch (final IOException e) {
-            throw uncheck(e);
-        }
+        Uncheck.accept(super::write, str);
     }
 
     /**
@@ -170,11 +132,7 @@ public class UncheckedFilterWriter extends FilterWriter {
      */
     @Override
     public void write(final String str, final int off, final int len) throws UncheckedIOException {
-        try {
-            super.write(str, off, len);
-        } catch (final IOException e) {
-            throw uncheck(e);
-        }
+        Uncheck.accept(super::write, str, off, len);
     }
 
 }

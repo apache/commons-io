@@ -30,7 +30,7 @@ import org.apache.commons.io.function.IOTriFunction;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests {@link UncheckedIO}.
+ * Tests {@link Uncheck}.
  */
 public class UncheckedIOTest {
 
@@ -41,62 +41,62 @@ public class UncheckedIOTest {
     }
 
     /**
-     * Tests {@link UncheckedIO#accept(IOConsumer, Object)}.
+     * Tests {@link Uncheck#accept(IOConsumer, Object)}.
      */
     @Test
     public void testAccept() {
         final ByteArrayInputStream stream = newInputStream();
-        UncheckedIO.accept(n -> stream.skip(n), 1);
-        assertEquals('b', UncheckedIO.get(stream::read).intValue());
+        Uncheck.accept(n -> stream.skip(n), 1);
+        assertEquals('b', Uncheck.get(stream::read).intValue());
     }
 
     /**
-     * Tests {@link UncheckedIO#apply(IOFunction, Object)}.
+     * Tests {@link Uncheck#apply(IOFunction, Object)}.
      */
     @Test
     public void testApply1() {
         final ByteArrayInputStream stream = newInputStream();
-        assertEquals(1, UncheckedIO.apply(n -> stream.skip(n), 1).intValue());
-        assertEquals('b', UncheckedIO.get(stream::read).intValue());
+        assertEquals(1, Uncheck.apply(n -> stream.skip(n), 1).intValue());
+        assertEquals('b', Uncheck.get(stream::read).intValue());
     }
 
     /**
-     * Tests {@link UncheckedIO#apply(IOBiFunction, Object, Object)}.
+     * Tests {@link Uncheck#apply(IOBiFunction, Object, Object)}.
      */
     @Test
     public void testApply2() {
         final ByteArrayInputStream stream = newInputStream();
         final byte[] buf = new byte[BYTES.length];
-        assertEquals(1, UncheckedIO.apply((o, l) -> stream.read(buf, o, l), 0, 1).intValue());
+        assertEquals(1, Uncheck.apply((o, l) -> stream.read(buf, o, l), 0, 1).intValue());
         assertEquals('a', buf[0]);
     }
 
     /**
-     * Tests {@link UncheckedIO#apply(IOTriFunction, Object, Object, Object)}.
+     * Tests {@link Uncheck#apply(IOTriFunction, Object, Object, Object)}.
      */
     @Test
     public void testApply3() {
         final ByteArrayInputStream stream = newInputStream();
         final byte[] buf = new byte[BYTES.length];
-        assertEquals(1, UncheckedIO.apply((b, o, l) -> stream.read(b, o, l), buf, 0, 1).intValue());
+        assertEquals(1, Uncheck.apply((b, o, l) -> stream.read(b, o, l), buf, 0, 1).intValue());
         assertEquals('a', buf[0]);
     }
 
     /**
-     * Tests {@link UncheckedIO#get(IOSupplier)}.
+     * Tests {@link Uncheck#get(IOSupplier)}.
      */
     @Test
     public void testGet() {
-        assertEquals('a', UncheckedIO.get(() -> newInputStream().read()).intValue());
+        assertEquals('a', Uncheck.get(() -> newInputStream().read()).intValue());
     }
 
     /**
-     * Tests {@link UncheckedIO#run(IORunnable)}.
+     * Tests {@link Uncheck#run(IORunnable)}.
      */
     @Test
     public void testRun() {
         final ByteArrayInputStream stream = newInputStream();
-        UncheckedIO.run(() -> stream.skip(1));
-        assertEquals('b', UncheckedIO.get(stream::read).intValue());
+        Uncheck.run(() -> stream.skip(1));
+        assertEquals('b', Uncheck.get(stream::read).intValue());
     }
 }

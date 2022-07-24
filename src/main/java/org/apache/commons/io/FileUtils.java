@@ -1641,7 +1641,7 @@ public class FileUtils {
     public static boolean isFileNewer(final File file, final ChronoZonedDateTime<?> chronoZonedDateTime) {
         Objects.requireNonNull(file, "file");
         Objects.requireNonNull(chronoZonedDateTime, "chronoZonedDateTime");
-        return UncheckedIO.get(() -> PathUtils.isNewer(file.toPath(), chronoZonedDateTime));
+        return Uncheck.get(() -> PathUtils.isNewer(file.toPath(), chronoZonedDateTime));
     }
 
     /**
@@ -1670,7 +1670,7 @@ public class FileUtils {
      */
     public static boolean isFileNewer(final File file, final File reference) {
         requireExists(reference, "reference");
-        return UncheckedIO.get(() -> PathUtils.isNewer(file.toPath(), reference.toPath()));
+        return Uncheck.get(() -> PathUtils.isNewer(file.toPath(), reference.toPath()));
     }
 
     /**
@@ -1699,7 +1699,7 @@ public class FileUtils {
      */
     public static boolean isFileNewer(final File file, final Instant instant) {
         Objects.requireNonNull(instant, "instant");
-        return UncheckedIO.get(() -> PathUtils.isNewer(file.toPath(), instant));
+        return Uncheck.get(() -> PathUtils.isNewer(file.toPath(), instant));
     }
 
     /**
@@ -1713,7 +1713,7 @@ public class FileUtils {
      */
     public static boolean isFileNewer(final File file, final long timeMillis) {
         Objects.requireNonNull(file, "file");
-        return UncheckedIO.get(() -> PathUtils.isNewer(file.toPath(), timeMillis));
+        return Uncheck.get(() -> PathUtils.isNewer(file.toPath(), timeMillis));
     }
 
     /**
@@ -1874,7 +1874,7 @@ public class FileUtils {
      */
     public static boolean isFileOlder(final File file, final File reference) {
         requireExists(reference, "reference");
-        return UncheckedIO.get(() -> PathUtils.isOlder(file.toPath(), reference.toPath()));
+        return Uncheck.get(() -> PathUtils.isOlder(file.toPath(), reference.toPath()));
     }
 
     /**
@@ -1903,7 +1903,7 @@ public class FileUtils {
      */
     public static boolean isFileOlder(final File file, final Instant instant) {
         Objects.requireNonNull(instant, "instant");
-        return UncheckedIO.get(() -> PathUtils.isOlder(file.toPath(), instant));
+        return Uncheck.get(() -> PathUtils.isOlder(file.toPath(), instant));
     }
 
     /**
@@ -1917,7 +1917,7 @@ public class FileUtils {
      */
     public static boolean isFileOlder(final File file, final long timeMillis) {
         Objects.requireNonNull(file, "file");
-        return UncheckedIO.get(() -> PathUtils.isOlder(file.toPath(), timeMillis));
+        return Uncheck.get(() -> PathUtils.isOlder(file.toPath(), timeMillis));
     }
 
     /**
@@ -2006,7 +2006,7 @@ public class FileUtils {
      * @since 1.2
      */
     public static Iterator<File> iterateFiles(final File directory, final String[] extensions, final boolean recursive) {
-        return UncheckedIO.apply(d -> StreamIterator.iterator(streamFiles(d, recursive, extensions)), directory);
+        return Uncheck.apply(d -> StreamIterator.iterator(streamFiles(d, recursive, extensions)), directory);
     }
 
     /**
@@ -2102,7 +2102,7 @@ public class FileUtils {
         // https://bugs.openjdk.java.net/browse/JDK-8177809
         // File.lastModified() is losing milliseconds (always ends in 000)
         // This bug is in OpenJDK 8 and 9, and fixed in 10.
-        return UncheckedIO.apply(FileUtils::lastModified, file);
+        return Uncheck.apply(FileUtils::lastModified, file);
     }
 
     /**
@@ -2232,7 +2232,7 @@ public class FileUtils {
      * @see org.apache.commons.io.filefilter.NameFileFilter
      */
     public static Collection<File> listFiles(final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
-        final AccumulatorPathVisitor visitor = UncheckedIO
+        final AccumulatorPathVisitor visitor = Uncheck
             .apply(d -> listAccumulate(d, FileFileFilter.INSTANCE.and(fileFilter), dirFilter, FileVisitOption.FOLLOW_LINKS), directory);
         return visitor.getFileList().stream().map(Path::toFile).collect(Collectors.toList());
     }
@@ -2248,7 +2248,7 @@ public class FileUtils {
      * @return a collection of java.io.File with the matching files
      */
     public static Collection<File> listFiles(final File directory, final String[] extensions, final boolean recursive) {
-        return UncheckedIO.apply(d -> toList(streamFiles(d, recursive, extensions)), directory);
+        return Uncheck.apply(d -> toList(streamFiles(d, recursive, extensions)), directory);
     }
 
     /**
@@ -2271,7 +2271,7 @@ public class FileUtils {
      * @since 2.2
      */
     public static Collection<File> listFilesAndDirs(final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
-        final AccumulatorPathVisitor visitor = UncheckedIO.apply(d -> listAccumulate(d, fileFilter, dirFilter, FileVisitOption.FOLLOW_LINKS),
+        final AccumulatorPathVisitor visitor = Uncheck.apply(d -> listAccumulate(d, fileFilter, dirFilter, FileVisitOption.FOLLOW_LINKS),
             directory);
         final List<Path> list = visitor.getFileList();
         list.addAll(visitor.getDirList());
@@ -2923,7 +2923,7 @@ public class FileUtils {
      */
     public static long sizeOf(final File file) {
         requireExists(file, "file");
-        return UncheckedIO.get(() -> PathUtils.sizeOf(file.toPath()));
+        return Uncheck.get(() -> PathUtils.sizeOf(file.toPath()));
     }
 
     /**
@@ -2946,7 +2946,7 @@ public class FileUtils {
      */
     public static BigInteger sizeOfAsBigInteger(final File file) {
         requireExists(file, "file");
-        return UncheckedIO.get(() -> PathUtils.sizeOfAsBigInteger(file.toPath()));
+        return Uncheck.get(() -> PathUtils.sizeOfAsBigInteger(file.toPath()));
     }
 
     /**
@@ -2965,7 +2965,7 @@ public class FileUtils {
      */
     public static long sizeOfDirectory(final File directory) {
         requireDirectoryExists(directory, "directory");
-        return UncheckedIO.get(() -> PathUtils.sizeOfDirectory(directory.toPath()));
+        return Uncheck.get(() -> PathUtils.sizeOfDirectory(directory.toPath()));
     }
 
     /**
@@ -2979,7 +2979,7 @@ public class FileUtils {
      */
     public static BigInteger sizeOfDirectoryAsBigInteger(final File directory) {
         requireDirectoryExists(directory, "directory");
-        return UncheckedIO.get(() -> PathUtils.sizeOfDirectoryAsBigInteger(directory.toPath()));
+        return Uncheck.get(() -> PathUtils.sizeOfDirectoryAsBigInteger(directory.toPath()));
     }
 
     /**

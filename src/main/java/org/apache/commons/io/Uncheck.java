@@ -32,11 +32,11 @@ import org.apache.commons.io.function.IOTriConsumer;
 import org.apache.commons.io.function.IOTriFunction;
 
 /**
- * Helps use lambdas that throw {@link IOException} rethrow as {@link UncheckedIOException}.
+ * Unchecks calls by throwing {@link UncheckedIOException} instead of {@link IOException}.
  *
  * @since 2.12.0
  */
-public class UncheckedIO {
+public class Uncheck {
 
     /**
      * Accepts an IO consumer with the given arguments.
@@ -95,14 +95,13 @@ public class UncheckedIO {
     /**
      * Applies an IO function with the given arguments.
      *
-     * @param function the function.
      * @param <T> the first function argument type.
      * @param <U> the second function argument type.
      * @param <R> the return type.
-     *
-     * @param t the first function argument
-     * @param u the second function argument
-     * @return the function result
+     * @param function the function.
+     * @param t the first function argument.
+     * @param u the second function argument.
+     * @return the function result.
      * @throws UncheckedIOException if an I/O error occurs.
      */
     public static <T, U, R> R apply(final IOBiFunction<T, U, R> function, final T t, final U u) {
@@ -119,9 +118,8 @@ public class UncheckedIO {
      * @param function the function.
      * @param <T> the first function argument type.
      * @param <R> the return type.
-     *
-     * @param t the first function argument
-     * @return the function result
+     * @param t the first function argument.
+     * @return the function result.
      * @throws UncheckedIOException if an I/O error occurs.
      */
     public static <T, R> R apply(final IOFunction<T, R> function, final T t) {
@@ -141,12 +139,11 @@ public class UncheckedIO {
      * @param <V> the third function argument type.
      * @param <W> the fourth function argument type.
      * @param <R> the return type.
-     *
-     * @param t the first function argument
-     * @param u the second function argument
-     * @param v the third function argument
-     * @param w the fourth function argument
-     * @return the function result
+     * @param t the first function argument.
+     * @param u the second function argument.
+     * @param v the third function argument.
+     * @param w the fourth function argument.
+     * @return the function result.
      * @throws UncheckedIOException if an I/O error occurs.
      */
     public static <T, U, V, W, R> R apply(final IOQuadFunction<T, U, V, W, R> function, final T t, final U u, final V v, final W w) {
@@ -160,16 +157,15 @@ public class UncheckedIO {
     /**
      * Applies an IO tri-function with the given arguments.
      *
-     * @param function the function.
      * @param <T> the first function argument type.
      * @param <U> the second function argument type.
      * @param <V> the third function argument type.
      * @param <R> the return type.
-     *
-     * @param t the first function argument
-     * @param u the second function argument
-     * @param v the third function argument
-     * @return the function result
+     * @param function the function.
+     * @param t the first function argument.
+     * @param u the second function argument.
+     * @param v the third function argument.
+     * @return the function result.
      * @throws UncheckedIOException if an I/O error occurs.
      */
     public static <T, U, V, R> R apply(final IOTriFunction<T, U, V, R> function, final T t, final U u, final V v) {
@@ -211,12 +207,12 @@ public class UncheckedIO {
     }
 
     /**
-     * Tests an IO predicate
+     * Tests an IO predicate.
      *
-     * @param <T> the type of the input to the predicate
-     * @param predicate the predicate
-     * @param t the input to the predicate
-     * @return {@code true} if the input argument matches the predicate, otherwise {@code false}
+     * @param <T> the type of the input to the predicate.
+     * @param predicate the predicate.
+     * @param t the input to the predicate.
+     * @return {@code true} if the input argument matches the predicate, otherwise {@code false}.
      */
     public static <T> boolean test(final IOPredicate<T> predicate, final T t) {
         try {
@@ -242,7 +238,7 @@ public class UncheckedIO {
     /**
      * No instances needed.
      */
-    private UncheckedIO() {
+    private Uncheck() {
         // no instances needed.
     }
 }

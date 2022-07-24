@@ -22,7 +22,7 @@ import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import org.apache.commons.io.UncheckedIO;
+import org.apache.commons.io.Uncheck;
 
 /**
  * Like {@link Predicate} but throws {@link IOException}.
@@ -92,7 +92,7 @@ public interface IOPredicate<T> {
      * @return an unchecked Predicate.
      */
     default Predicate<T> asPredicate() {
-        return t -> UncheckedIO.test(this, t);
+        return t -> Uncheck.test(this, t);
     }
 
     /**

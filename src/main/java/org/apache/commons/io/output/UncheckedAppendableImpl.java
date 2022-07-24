@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Objects;
 
-import org.apache.commons.io.UncheckedIO;
+import org.apache.commons.io.Uncheck;
 
 /**
  * An {@link Appendable} implementation that throws {@link UncheckedIOException} instead of {@link IOException}.
@@ -41,19 +41,19 @@ class UncheckedAppendableImpl implements UncheckedAppendable {
 
     @Override
     public UncheckedAppendable append(final char c) {
-        UncheckedIO.apply(appendable::append, c);
+        Uncheck.apply(appendable::append, c);
         return this;
     }
 
     @Override
     public UncheckedAppendable append(final CharSequence csq) {
-        UncheckedIO.apply(appendable::append, csq);
+        Uncheck.apply(appendable::append, csq);
         return this;
     }
 
     @Override
     public UncheckedAppendable append(final CharSequence csq, final int start, final int end) {
-        UncheckedIO.apply(appendable::append, csq, start, end);
+        Uncheck.apply(appendable::append, csq, start, end);
         return this;
     }
 

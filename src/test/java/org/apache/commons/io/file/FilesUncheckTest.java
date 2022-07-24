@@ -53,7 +53,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.UncheckedIO;
+import org.apache.commons.io.Uncheck;
 import org.apache.commons.io.input.NullInputStream;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang3.ArrayUtils;
@@ -226,7 +226,7 @@ public class FilesUncheckTest {
 
     @Test
     public void testNewBufferedReaderPath() {
-        UncheckedIO.run(() -> {
+        Uncheck.run(() -> {
             try (BufferedReader reader = FilesUncheck.newBufferedReader(FILE_PATH_EMPTY)) {
                 IOUtils.consume(reader);
             }
@@ -235,7 +235,7 @@ public class FilesUncheckTest {
 
     @Test
     public void testNewBufferedReaderPathCharset() {
-        UncheckedIO.run(() -> {
+        Uncheck.run(() -> {
             try (BufferedReader reader = FilesUncheck.newBufferedReader(FILE_PATH_EMPTY, StandardCharsets.UTF_8)) {
                 IOUtils.consume(reader);
             }
@@ -245,7 +245,7 @@ public class FilesUncheckTest {
     @Test
     public void testNewBufferedWriterPathCharsetOpenOptionArray() {
         final Path tempPath = FilesUncheck.createTempFile(PREFIX, SUFFIX);
-        UncheckedIO.run(() -> {
+        Uncheck.run(() -> {
             try (BufferedWriter writer = FilesUncheck.newBufferedWriter(tempPath, StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING)) {
                 writer.append("test");
             }
@@ -256,7 +256,7 @@ public class FilesUncheckTest {
     @Test
     public void testNewBufferedWriterPathOpenOptionArray() {
         final Path tempPath = FilesUncheck.createTempFile(PREFIX, SUFFIX);
-        UncheckedIO.run(() -> {
+        Uncheck.run(() -> {
             try (BufferedWriter writer = FilesUncheck.newBufferedWriter(tempPath, StandardOpenOption.TRUNCATE_EXISTING)) {
                 writer.append("test");
             }
@@ -266,7 +266,7 @@ public class FilesUncheckTest {
 
     @Test
     public void testNewByteChannelPathOpenOptionArray() {
-        assertEquals(0, UncheckedIO.get(() -> {
+        assertEquals(0, Uncheck.get(() -> {
             try (SeekableByteChannel c = FilesUncheck.newByteChannel(FILE_PATH_EMPTY, StandardOpenOption.READ)) {
                 return c.size();
             }
@@ -277,7 +277,7 @@ public class FilesUncheckTest {
     public void testNewByteChannelPathSetOfQextendsOpenOptionFileAttributeOfQArray() {
         final Set<OpenOption> options = new HashSet<>();
         options.add(StandardOpenOption.READ);
-        assertEquals(0, UncheckedIO.get(() -> {
+        assertEquals(0, Uncheck.get(() -> {
             try (SeekableByteChannel c = FilesUncheck.newByteChannel(FILE_PATH_EMPTY, options, EMPTY_FILE_ATTRIBUTES_ARRAY)) {
                 return c.size();
             }
@@ -286,7 +286,7 @@ public class FilesUncheckTest {
 
     @Test
     public void testNewDirectoryStreamPath() {
-        UncheckedIO.run(() -> {
+        Uncheck.run(() -> {
             try (final DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(TARGET_PATH)) {
                 directoryStream.forEach(e -> assertEquals(TARGET_PATH, e.getParent()));
             }
@@ -295,7 +295,7 @@ public class FilesUncheckTest {
 
     @Test
     public void testNewDirectoryStreamPathString() {
-        UncheckedIO.run(() -> {
+        Uncheck.run(() -> {
             try (final DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(TARGET_PATH, "*.xml")) {
                 directoryStream.forEach(e -> assertEquals(TARGET_PATH, e.getParent()));
             }
@@ -304,7 +304,7 @@ public class FilesUncheckTest {
 
     @Test
     public void testNewDirectoryStreamPathFilterOfQsuperPath() {
-        UncheckedIO.run(() -> {
+        Uncheck.run(() -> {
             try (final DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(TARGET_PATH, e -> true)) {
                 directoryStream.forEach(e -> assertEquals(TARGET_PATH, e.getParent()));
             }
@@ -313,7 +313,7 @@ public class FilesUncheckTest {
 
     @Test
     public void testNewInputStream() {
-        assertEquals(0, UncheckedIO.get(() -> {
+        assertEquals(0, Uncheck.get(() -> {
             try (InputStream in = FilesUncheck.newInputStream(FILE_PATH_EMPTY, StandardOpenOption.READ)) {
                 return in.available();
             }
@@ -323,7 +323,7 @@ public class FilesUncheckTest {
     @Test
     public void testNewOutputStream() {
         final Path tempPath = FilesUncheck.createTempFile(PREFIX, SUFFIX);
-        UncheckedIO.run(() -> {
+        Uncheck.run(() -> {
             try (OutputStream stream = FilesUncheck.newOutputStream(tempPath, StandardOpenOption.TRUNCATE_EXISTING)) {
                 stream.write("test".getBytes());
             }

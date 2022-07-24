@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 
-import org.apache.commons.io.UncheckedIO;
+import org.apache.commons.io.Uncheck;
 
 /**
  * A {@link BufferedReader} that throws {@link UncheckedIOException} instead of {@link IOException}.
@@ -62,7 +62,7 @@ public class UncheckedFilterInputStream extends FilterInputStream {
      */
     @Override
     public int available() throws UncheckedIOException {
-        return UncheckedIO.get(super::available);
+        return Uncheck.get(super::available);
     }
 
     /**
@@ -70,7 +70,7 @@ public class UncheckedFilterInputStream extends FilterInputStream {
      */
     @Override
     public void close() throws UncheckedIOException {
-        UncheckedIO.run(super::close);
+        Uncheck.run(super::close);
     }
 
     /**
@@ -78,7 +78,7 @@ public class UncheckedFilterInputStream extends FilterInputStream {
      */
     @Override
     public int read() throws UncheckedIOException {
-        return UncheckedIO.get(super::read);
+        return Uncheck.get(super::read);
     }
 
     /**
@@ -86,7 +86,7 @@ public class UncheckedFilterInputStream extends FilterInputStream {
      */
     @Override
     public int read(final byte[] b) throws UncheckedIOException {
-        return UncheckedIO.apply(super::read, b);
+        return Uncheck.apply(super::read, b);
     }
 
     /**
@@ -94,7 +94,7 @@ public class UncheckedFilterInputStream extends FilterInputStream {
      */
     @Override
     public int read(final byte[] b, final int off, final int len) throws UncheckedIOException {
-        return UncheckedIO.apply(super::read, b, off, len);
+        return Uncheck.apply(super::read, b, off, len);
     }
 
     /**
@@ -102,7 +102,7 @@ public class UncheckedFilterInputStream extends FilterInputStream {
      */
     @Override
     public synchronized void reset() throws UncheckedIOException {
-        UncheckedIO.run(super::reset);
+        Uncheck.run(super::reset);
     }
 
     /**
@@ -110,7 +110,7 @@ public class UncheckedFilterInputStream extends FilterInputStream {
      */
     @Override
     public long skip(final long n) throws UncheckedIOException {
-        return UncheckedIO.apply(super::skip, n);
+        return Uncheck.apply(super::skip, n);
     }
 
 }

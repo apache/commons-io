@@ -44,7 +44,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.apache.commons.io.UncheckedIO;
+import org.apache.commons.io.Uncheck;
 
 /**
  * Delegates to {@link Files} to uncheck calls by throwing {@link UncheckedIOException} instead of {@link IOException}.
@@ -68,7 +68,7 @@ public class FilesUncheck {
      * @see Files#copy(InputStream, Path,CopyOption...)
      */
     public static long copy(final InputStream in, final Path target, final CopyOption... options) {
-        return UncheckedIO.apply(Files::copy, in, target, options);
+        return Uncheck.apply(Files::copy, in, target, options);
     }
 
     /**
@@ -81,7 +81,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static long copy(final Path source, final OutputStream out) {
-        return UncheckedIO.apply(Files::copy, source, out);
+        return Uncheck.apply(Files::copy, source, out);
     }
 
     /**
@@ -95,7 +95,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Path copy(final Path source, final Path target, final CopyOption... options) {
-        return UncheckedIO.apply(Files::copy, source, target, options);
+        return Uncheck.apply(Files::copy, source, target, options);
     }
 
     /**
@@ -108,7 +108,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Path createDirectories(final Path dir, final FileAttribute<?>... attrs) {
-        return UncheckedIO.apply(Files::createDirectories, dir, attrs);
+        return Uncheck.apply(Files::createDirectories, dir, attrs);
     }
 
     /**
@@ -121,7 +121,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Path createDirectory(final Path dir, final FileAttribute<?>... attrs) {
-        return UncheckedIO.apply(Files::createDirectory, dir, attrs);
+        return Uncheck.apply(Files::createDirectory, dir, attrs);
     }
 
     /**
@@ -134,7 +134,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Path createFile(final Path path, final FileAttribute<?>... attrs) {
-        return UncheckedIO.apply(Files::createFile, path, attrs);
+        return Uncheck.apply(Files::createFile, path, attrs);
     }
 
     /**
@@ -147,7 +147,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Path createLink(final Path link, final Path existing) {
-        return UncheckedIO.apply(Files::createLink, link, existing);
+        return Uncheck.apply(Files::createLink, link, existing);
     }
 
     /**
@@ -161,7 +161,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Path createSymbolicLink(final Path link, final Path target, final FileAttribute<?>... attrs) {
-        return UncheckedIO.apply(Files::createSymbolicLink, link, target, attrs);
+        return Uncheck.apply(Files::createSymbolicLink, link, target, attrs);
     }
 
     /**
@@ -175,7 +175,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Path createTempDirectory(final Path dir, final String prefix, final FileAttribute<?>... attrs) {
-        return UncheckedIO.apply(Files::createTempDirectory, dir, prefix, attrs);
+        return Uncheck.apply(Files::createTempDirectory, dir, prefix, attrs);
     }
 
     /**
@@ -188,7 +188,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Path createTempDirectory(final String prefix, final FileAttribute<?>... attrs) {
-        return UncheckedIO.apply(Files::createTempDirectory, prefix, attrs);
+        return Uncheck.apply(Files::createTempDirectory, prefix, attrs);
     }
 
     /**
@@ -203,7 +203,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Path createTempFile(final Path dir, final String prefix, final String suffix, final FileAttribute<?>... attrs) {
-        return UncheckedIO.apply(Files::createTempFile, dir, prefix, suffix, attrs);
+        return Uncheck.apply(Files::createTempFile, dir, prefix, suffix, attrs);
     }
 
     /**
@@ -217,7 +217,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Path createTempFile(final String prefix, final String suffix, final FileAttribute<?>... attrs) {
-        return UncheckedIO.apply(Files::createTempFile, prefix, suffix, attrs);
+        return Uncheck.apply(Files::createTempFile, prefix, suffix, attrs);
     }
 
     /**
@@ -227,7 +227,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static void delete(final Path path) {
-        UncheckedIO.accept(Files::delete, path);
+        Uncheck.accept(Files::delete, path);
     }
 
     /**
@@ -238,7 +238,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static boolean deleteIfExists(final Path path) {
-        return UncheckedIO.apply(Files::deleteIfExists, path);
+        return Uncheck.apply(Files::deleteIfExists, path);
     }
 
     /**
@@ -252,7 +252,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Object getAttribute(final Path path, final String attribute, final LinkOption... options) {
-        return UncheckedIO.apply(Files::getAttribute, path, attribute, options);
+        return Uncheck.apply(Files::getAttribute, path, attribute, options);
     }
 
     /**
@@ -263,7 +263,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static FileStore getFileStore(final Path path) {
-        return UncheckedIO.apply(Files::getFileStore, path);
+        return Uncheck.apply(Files::getFileStore, path);
     }
 
     /**
@@ -276,7 +276,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static FileTime getLastModifiedTime(final Path path, final LinkOption... options) {
-        return UncheckedIO.apply(Files::getLastModifiedTime, path, options);
+        return Uncheck.apply(Files::getLastModifiedTime, path, options);
     }
 
     /**
@@ -289,7 +289,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static UserPrincipal getOwner(final Path path, final LinkOption... options) {
-        return UncheckedIO.apply(Files::getOwner, path, options);
+        return Uncheck.apply(Files::getOwner, path, options);
     }
 
     /**
@@ -302,7 +302,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Set<PosixFilePermission> getPosixFilePermissions(final Path path, final LinkOption... options) {
-        return UncheckedIO.apply(Files::getPosixFilePermissions, path, options);
+        return Uncheck.apply(Files::getPosixFilePermissions, path, options);
     }
 
     /**
@@ -313,7 +313,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static boolean isHidden(final Path path) {
-        return UncheckedIO.apply(Files::isHidden, path);
+        return Uncheck.apply(Files::isHidden, path);
     }
 
     /**
@@ -326,7 +326,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static boolean isSameFile(final Path path, final Path path2) {
-        return UncheckedIO.apply(Files::isSameFile, path, path2);
+        return Uncheck.apply(Files::isSameFile, path, path2);
     }
 
     /**
@@ -337,7 +337,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Stream<String> lines(final Path path) {
-        return UncheckedIO.apply(Files::lines, path);
+        return Uncheck.apply(Files::lines, path);
     }
 
     /**
@@ -349,7 +349,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Stream<String> lines(final Path path, final Charset cs) {
-        return UncheckedIO.apply(Files::lines, path, cs);
+        return Uncheck.apply(Files::lines, path, cs);
     }
 
     /**
@@ -360,7 +360,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Stream<Path> list(final Path dir) {
-        return UncheckedIO.apply(Files::list, dir);
+        return Uncheck.apply(Files::list, dir);
     }
 
     /**
@@ -374,7 +374,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Path move(final Path source, final Path target, final CopyOption... options) {
-        return UncheckedIO.apply(Files::move, source, target, options);
+        return Uncheck.apply(Files::move, source, target, options);
     }
 
     /**
@@ -386,7 +386,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static BufferedReader newBufferedReader(final Path path) {
-        return UncheckedIO.apply(Files::newBufferedReader, path);
+        return Uncheck.apply(Files::newBufferedReader, path);
     }
 
     /**
@@ -399,7 +399,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static BufferedReader newBufferedReader(final Path path, final Charset cs) {
-        return UncheckedIO.apply(Files::newBufferedReader, path, cs);
+        return Uncheck.apply(Files::newBufferedReader, path, cs);
     }
 
     /**
@@ -413,7 +413,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static BufferedWriter newBufferedWriter(final Path path, final Charset cs, final OpenOption... options) {
-        return UncheckedIO.apply(Files::newBufferedWriter, path, cs, options);
+        return Uncheck.apply(Files::newBufferedWriter, path, cs, options);
     }
 
     /**
@@ -426,7 +426,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static BufferedWriter newBufferedWriter(final Path path, final OpenOption... options) {
-        return UncheckedIO.apply(Files::newBufferedWriter, path, options);
+        return Uncheck.apply(Files::newBufferedWriter, path, options);
     }
 
     /**
@@ -439,7 +439,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static SeekableByteChannel newByteChannel(final Path path, final OpenOption... options) {
-        return UncheckedIO.apply(Files::newByteChannel, path, options);
+        return Uncheck.apply(Files::newByteChannel, path, options);
     }
 
     /**
@@ -453,7 +453,7 @@ public class FilesUncheck {
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static SeekableByteChannel newByteChannel(final Path path, final Set<? extends OpenOption> options, final FileAttribute<?>... attrs) {
-        return UncheckedIO.apply(Files::newByteChannel, path, options, attrs);
+        return Uncheck.apply(Files::newByteChannel, path, options, attrs);
     }
 
     /**
@@ -464,7 +464,7 @@ public class FilesUncheck {
      * @return See delegate. See delegate.
      */
     public static DirectoryStream<Path> newDirectoryStream(final Path dir) {
-        return UncheckedIO.apply(Files::newDirectoryStream, dir);
+        return Uncheck.apply(Files::newDirectoryStream, dir);
     }
 
     /**
@@ -476,7 +476,7 @@ public class FilesUncheck {
      * @return See delegate.
      */
     public static DirectoryStream<Path> newDirectoryStream(final Path dir, final String glob) {
-        return UncheckedIO.apply(Files::newDirectoryStream, dir, glob);
+        return Uncheck.apply(Files::newDirectoryStream, dir, glob);
     }
 
     /**
@@ -488,7 +488,7 @@ public class FilesUncheck {
      * @return See delegate.
      */
     public static DirectoryStream<Path> newDirectoryStream(final Path dir, final DirectoryStream.Filter<? super Path> filter) {
-        return UncheckedIO.apply(Files::newDirectoryStream, dir, filter);
+        return Uncheck.apply(Files::newDirectoryStream, dir, filter);
     }
 
     /**
@@ -500,7 +500,7 @@ public class FilesUncheck {
      * @return See delegate.
      */
     public static InputStream newInputStream(final Path path, final OpenOption... options) {
-        return UncheckedIO.apply(Files::newInputStream, path, options);
+        return Uncheck.apply(Files::newInputStream, path, options);
     }
 
     /**
@@ -512,7 +512,7 @@ public class FilesUncheck {
      * @return See delegate.
      */
     public static OutputStream newOutputStream(final Path path, final OpenOption... options) {
-        return UncheckedIO.apply(Files::newOutputStream, path, options);
+        return Uncheck.apply(Files::newOutputStream, path, options);
     }
 
     /**
@@ -523,7 +523,7 @@ public class FilesUncheck {
      * @return See delegate.
      */
     public static String probeContentType(final Path path) {
-        return UncheckedIO.apply(Files::probeContentType, path);
+        return Uncheck.apply(Files::probeContentType, path);
     }
 
     /**
@@ -533,7 +533,7 @@ public class FilesUncheck {
      * @return See delegate.
      */
     public static byte[] readAllBytes(final Path path) {
-        return UncheckedIO.apply(Files::readAllBytes, path);
+        return Uncheck.apply(Files::readAllBytes, path);
     }
 
     /**
@@ -543,7 +543,7 @@ public class FilesUncheck {
      * @return See delegate.
      */
     public static List<String> readAllLines(final Path path) {
-        return UncheckedIO.apply(Files::readAllLines, path);
+        return Uncheck.apply(Files::readAllLines, path);
     }
 
     /**
@@ -555,7 +555,7 @@ public class FilesUncheck {
      * @return See delegate.
      */
     public static List<String> readAllLines(final Path path, final Charset cs) {
-        return UncheckedIO.apply(Files::readAllLines, path, cs);
+        return Uncheck.apply(Files::readAllLines, path, cs);
     }
 
     /**
@@ -569,7 +569,7 @@ public class FilesUncheck {
      * @return See delegate.
      */
     public static <A extends BasicFileAttributes> A readAttributes(final Path path, final Class<A> type, final LinkOption... options) {
-        return UncheckedIO.apply(Files::readAttributes, path, type, options);
+        return Uncheck.apply(Files::readAttributes, path, type, options);
     }
 
     /**
@@ -582,7 +582,7 @@ public class FilesUncheck {
      * @return See delegate.
      */
     public static Map<String, Object> readAttributes(final Path path, final String attributes, final LinkOption... options) {
-        return UncheckedIO.apply(Files::readAttributes, path, attributes, options);
+        return Uncheck.apply(Files::readAttributes, path, attributes, options);
     }
 
     /**
@@ -593,7 +593,7 @@ public class FilesUncheck {
      * @return See delegate.
      */
     public static Path readSymbolicLink(final Path link) {
-        return UncheckedIO.apply(Files::readSymbolicLink, link);
+        return Uncheck.apply(Files::readSymbolicLink, link);
     }
 
     /**
@@ -607,7 +607,7 @@ public class FilesUncheck {
      * @return See delegate.
      */
     public static Path setAttribute(final Path path, final String attribute, final Object value, final LinkOption... options) {
-        return UncheckedIO.apply(Files::setAttribute, path, attribute, value, options);
+        return Uncheck.apply(Files::setAttribute, path, attribute, value, options);
     }
 
     /**
@@ -619,7 +619,7 @@ public class FilesUncheck {
      * @return See delegate.
      */
     public static Path setLastModifiedTime(final Path path, final FileTime time) {
-        return UncheckedIO.apply(Files::setLastModifiedTime, path, time);
+        return Uncheck.apply(Files::setLastModifiedTime, path, time);
     }
 
     /**
@@ -631,7 +631,7 @@ public class FilesUncheck {
      * @return See delegate.
      */
     public static Path setOwner(final Path path, final UserPrincipal owner) {
-        return UncheckedIO.apply(Files::setOwner, path, owner);
+        return Uncheck.apply(Files::setOwner, path, owner);
     }
 
     /**
@@ -643,7 +643,7 @@ public class FilesUncheck {
      * @return See delegate.
      */
     public static Path setPosixFilePermissions(final Path path, final Set<PosixFilePermission> perms) {
-        return UncheckedIO.apply(Files::setPosixFilePermissions, path, perms);
+        return Uncheck.apply(Files::setPosixFilePermissions, path, perms);
     }
 
     /**
@@ -653,7 +653,7 @@ public class FilesUncheck {
      * @return See delegate.
      */
     public static long size(final Path path) {
-        return UncheckedIO.apply(Files::size, path);
+        return Uncheck.apply(Files::size, path);
     }
 
     /**
@@ -666,7 +666,7 @@ public class FilesUncheck {
      * @return See delegate.
      */
     public static Stream<Path> walk(final Path start, final int maxDepth, final FileVisitOption... options) {
-        return UncheckedIO.apply(Files::walk, start, maxDepth, options);
+        return Uncheck.apply(Files::walk, start, maxDepth, options);
     }
 
     /**
@@ -678,7 +678,7 @@ public class FilesUncheck {
      * @return See delegate.
      */
     public static Stream<Path> walk(final Path start, final FileVisitOption... options) {
-        return UncheckedIO.apply(Files::walk, start, options);
+        return Uncheck.apply(Files::walk, start, options);
     }
 
     /**
@@ -690,7 +690,7 @@ public class FilesUncheck {
      * @return See delegate.
      */
     public static Path walkFileTree(final Path start, final FileVisitor<? super Path> visitor) {
-        return UncheckedIO.apply(Files::walkFileTree, start, visitor);
+        return Uncheck.apply(Files::walkFileTree, start, visitor);
     }
 
     /**
@@ -704,7 +704,7 @@ public class FilesUncheck {
      * @return See delegate.
      */
     public static Path walkFileTree(final Path start, final Set<FileVisitOption> options, final int maxDepth, final FileVisitor<? super Path> visitor) {
-        return UncheckedIO.apply(Files::walkFileTree, start, options, maxDepth, visitor);
+        return Uncheck.apply(Files::walkFileTree, start, options, maxDepth, visitor);
     }
 
     /**
@@ -717,7 +717,7 @@ public class FilesUncheck {
      * @return See delegate.
      */
     public static Path write(final Path path, final byte[] bytes, final OpenOption... options) {
-        return UncheckedIO.apply(Files::write, path, bytes, options);
+        return Uncheck.apply(Files::write, path, bytes, options);
     }
 
     /**
@@ -731,7 +731,7 @@ public class FilesUncheck {
      * @return See delegate.
      */
     public static Path write(final Path path, final Iterable<? extends CharSequence> lines, final Charset cs, final OpenOption... options) {
-        return UncheckedIO.apply(Files::write, path, lines, cs, options);
+        return Uncheck.apply(Files::write, path, lines, cs, options);
     }
 
     /**
@@ -744,7 +744,7 @@ public class FilesUncheck {
      * @return See delegate.
      */
     public static Path write(final Path path, final Iterable<? extends CharSequence> lines, final OpenOption... options) {
-        return UncheckedIO.apply(Files::write, path, lines, options);
+        return Uncheck.apply(Files::write, path, lines, options);
     }
 
     /**
