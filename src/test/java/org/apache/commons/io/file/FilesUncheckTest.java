@@ -343,7 +343,6 @@ public class FilesUncheckTest {
         // Empirical: probeContentType is "text/plain" on Windows
         // Empirical: probeContentType is "application/plain" on Ubuntu
         // Empirical: probeContentType is ? on macOS
-        assertNotNull(probeContentType);
     }
 
     @Test
