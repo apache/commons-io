@@ -410,7 +410,7 @@ The <action> type attribute can be add,update,fix,remove.
         Add PathUtils.getLastModifiedFileTime(*).
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">
-        Add IOBiFunction, IOTriFunction, IOQuadFunction, IOPredicate.
+        Add IOBiFunction, IOTriFunction, IOQuadFunction, IOPredicate, FilesUncheck.
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add IOUtils.consume(Reader).
