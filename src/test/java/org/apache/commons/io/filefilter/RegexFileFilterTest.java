@@ -16,9 +16,10 @@
  */
 package org.apache.commons.io.filefilter;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,6 +53,8 @@ public class RegexFileFilterTest {
             assertEquals(expected, filter.accept(file),
                     "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null");
         }
+        // Just don't blow up
+        assertNotNull(filter.toString());
     }
 
     public void assertFiltering(final IOFileFilter filter, final Path path, final boolean expected) {
@@ -69,6 +72,8 @@ public class RegexFileFilterTest {
             assertEquals(expectedFileVisitResult, filter.accept(path, null),
                 "Filter(Path, Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for null");
         }
+        // Just don't blow up
+        assertNotNull(filter.toString());
     }
 
     private RegexFileFilter assertSerializable(final RegexFileFilter serializable) throws IOException {
