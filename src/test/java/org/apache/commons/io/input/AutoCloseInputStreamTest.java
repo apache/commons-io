@@ -22,8 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -34,7 +32,7 @@ public class AutoCloseInputStreamTest {
 
     private byte[] data;
 
-    private InputStream stream;
+    private AutoCloseInputStream stream;
 
     private boolean closed;
 
@@ -53,6 +51,13 @@ public class AutoCloseInputStreamTest {
     @Test
     public void testClose() throws IOException {
         stream.close();
+        assertTrue(closed, "closed");
+        assertEquals(-1, stream.read(), "read()");
+    }
+
+    @Test
+    public void testFinalize() throws Throwable {
+        stream.finalize();
         assertTrue(closed, "closed");
         assertEquals(-1, stream.read(), "read()");
     }
