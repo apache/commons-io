@@ -43,6 +43,7 @@ import org.apache.commons.io.filefilter.AndFileFilter;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.EmptyFileFilter;
 import org.apache.commons.io.filefilter.PathVisitorFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.function.IOBiFunction;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -59,7 +60,9 @@ public class AccumulatorPathVisitorTest {
         // @formatter:off
         return Stream.of(
             Arguments.of((Supplier<AccumulatorPathVisitor>) AccumulatorPathVisitor::withLongCounters),
-            Arguments.of((Supplier<AccumulatorPathVisitor>) AccumulatorPathVisitor::withBigIntegerCounters));
+            Arguments.of((Supplier<AccumulatorPathVisitor>) AccumulatorPathVisitor::withBigIntegerCounters),
+            Arguments.of((Supplier<AccumulatorPathVisitor>) () ->
+                AccumulatorPathVisitor.withBigIntegerCounters(TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)));
         // @formatter:on
     }
 
@@ -77,6 +80,9 @@ public class AccumulatorPathVisitorTest {
     @TempDir
     Path tempDirPath;
 
+    /**
+     * Tests the 0-argument constructor.
+     */
     @Test
     public void test0ArgConstructor() throws IOException {
         final AccumulatorPathVisitor accPathVisitor = new AccumulatorPathVisitor();
@@ -85,6 +91,8 @@ public class AccumulatorPathVisitorTest {
         assertCounts(0, 0, 0, accPathVisitor.getPathCounters());
         assertEquals(1, accPathVisitor.getDirList().size());
         assertTrue(accPathVisitor.getFileList().isEmpty());
+        assertEquals(accPathVisitor, accPathVisitor);
+        assertEquals(accPathVisitor.hashCode(), accPathVisitor.hashCode());
     }
 
     /**
@@ -99,6 +107,8 @@ public class AccumulatorPathVisitorTest {
         assertCounts(1, 0, 0, accPathVisitor.getPathCounters());
         assertEquals(1, accPathVisitor.getDirList().size());
         assertTrue(accPathVisitor.getFileList().isEmpty());
+        assertEquals(accPathVisitor, accPathVisitor);
+        assertEquals(accPathVisitor.hashCode(), accPathVisitor.hashCode());
     }
 
     /**
@@ -113,6 +123,8 @@ public class AccumulatorPathVisitorTest {
         assertCounts(1, 1, 0, accPathVisitor.getPathCounters());
         assertEquals(1, accPathVisitor.getDirList().size());
         assertEquals(1, accPathVisitor.getFileList().size());
+        assertEquals(accPathVisitor, accPathVisitor);
+        assertEquals(accPathVisitor.hashCode(), accPathVisitor.hashCode());
     }
 
     /**
@@ -127,6 +139,8 @@ public class AccumulatorPathVisitorTest {
         assertCounts(1, 1, 1, accPathVisitor.getPathCounters());
         assertEquals(1, accPathVisitor.getDirList().size());
         assertEquals(1, accPathVisitor.getFileList().size());
+        assertEquals(accPathVisitor, accPathVisitor);
+        assertEquals(accPathVisitor.hashCode(), accPathVisitor.hashCode());
     }
 
     /**
@@ -141,6 +155,8 @@ public class AccumulatorPathVisitorTest {
         assertCounts(3, 2, 2, accPathVisitor.getPathCounters());
         assertEquals(3, accPathVisitor.getDirList().size());
         assertEquals(2, accPathVisitor.getFileList().size());
+        assertEquals(accPathVisitor, accPathVisitor);
+        assertEquals(accPathVisitor.hashCode(), accPathVisitor.hashCode());
     }
 
     /**
@@ -200,6 +216,8 @@ public class AccumulatorPathVisitorTest {
             }
             executor.shutdownNow();
         }
+        assertEquals(accPathVisitor, accPathVisitor);
+        assertEquals(accPathVisitor.hashCode(), accPathVisitor.hashCode());
     }
 
     /**
@@ -234,6 +252,8 @@ public class AccumulatorPathVisitorTest {
         assertCounts(1, marker - 1, 0, accPathVisitor.getPathCounters());
         assertEquals(1, accPathVisitor.getDirList().size());
         assertEquals(marker - 1, accPathVisitor.getFileList().size());
+        assertEquals(accPathVisitor, accPathVisitor);
+        assertEquals(accPathVisitor.hashCode(), accPathVisitor.hashCode());
     }
 
 }
