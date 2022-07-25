@@ -36,6 +36,10 @@ import org.apache.commons.io.file.Counters.PathCounters;
  */
 public class CopyDirectoryVisitor extends CountingPathVisitor {
 
+    private static CopyOption[] toCopyOption(final CopyOption... copyOptions) {
+        return copyOptions == null ? PathUtils.EMPTY_COPY_OPTIONS : copyOptions.clone();
+    }
+
     private final CopyOption[] copyOptions;
     private final Path sourceDirectory;
     private final Path targetDirectory;
@@ -52,7 +56,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
         super(pathCounter);
         this.sourceDirectory = sourceDirectory;
         this.targetDirectory = targetDirectory;
-        this.copyOptions = copyOptions == null ? PathUtils.EMPTY_COPY_OPTIONS : copyOptions.clone();
+        this.copyOptions = toCopyOption(copyOptions);
     }
 
     /**
@@ -71,7 +75,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
         super(pathCounter, fileFilter, dirFilter);
         this.sourceDirectory = sourceDirectory;
         this.targetDirectory = targetDirectory;
-        this.copyOptions = copyOptions == null ? PathUtils.EMPTY_COPY_OPTIONS : copyOptions.clone();
+        this.copyOptions = toCopyOption(copyOptions);
     }
 
     /**

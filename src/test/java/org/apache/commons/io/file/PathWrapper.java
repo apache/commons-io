@@ -69,8 +69,15 @@ public abstract class PathWrapper implements Path {
     }
 
     @Override
-    public boolean equals(final Object other) {
-        return path.equals(other);
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof PathWrapper)) {
+            return false;
+        }
+        final PathWrapper other = (PathWrapper) obj;
+        return Objects.equals(path, other.path);
     }
 
     @Override
@@ -119,7 +126,7 @@ public abstract class PathWrapper implements Path {
 
     @Override
     public int hashCode() {
-        return path.hashCode();
+        return Objects.hash(path);
     }
 
     @Override
