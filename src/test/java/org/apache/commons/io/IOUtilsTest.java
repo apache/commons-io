@@ -348,6 +348,7 @@ public class IOUtilsTest {
         assertDoesNotThrow(() -> IOUtils.closeQuietly(closeable, null, closeable));
         assertDoesNotThrow(() -> IOUtils.closeQuietly(Arrays.asList(closeable, null, closeable)));
         assertDoesNotThrow(() -> IOUtils.closeQuietly(Stream.of(closeable, null, closeable)));
+        assertDoesNotThrow(() -> IOUtils.closeQuietly((Iterable<Closeable>) null));
     }
 
     @Test
