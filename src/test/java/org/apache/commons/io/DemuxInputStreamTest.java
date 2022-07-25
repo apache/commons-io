@@ -36,15 +36,13 @@ import org.junit.jupiter.api.Test;
  * Basic unit tests for the multiplexing streams.
  */
 public class DemuxInputStreamTest {
-    private static class ReaderThread
-            extends Thread {
+
+    private static class ReaderThread extends Thread {
         private final StringBuffer stringBuffer = new StringBuffer();
         private final InputStream inputStream;
         private final DemuxInputStream demuxInputStream;
 
-        ReaderThread(final String name,
-                     final InputStream input,
-                     final DemuxInputStream demux) {
+        ReaderThread(final String name, final InputStream input, final DemuxInputStream demux) {
             super(name);
             inputStream = input;
             demuxInputStream = demux;
@@ -61,7 +59,7 @@ public class DemuxInputStreamTest {
             try {
                 int ch = demuxInputStream.read();
                 while (-1 != ch) {
-                    //System.out.println( "Reading: " + (char)ch );
+                    // System.out.println( "Reading: " + (char)ch );
                     stringBuffer.append((char) ch);
 
                     final int sleepMillis = Math.abs(c_random.nextInt() % 10);
@@ -73,16 +71,13 @@ public class DemuxInputStreamTest {
             }
         }
     }
-    private static class WriterThread
-            extends Thread {
+
+    private static class WriterThread extends Thread {
         private final byte[] byteArray;
         private final OutputStream outputStream;
         private final DemuxOutputStream demuxOutputStream;
 
-        WriterThread(final String name,
-                     final String data,
-                     final OutputStream output,
-                     final DemuxOutputStream demux) {
+        WriterThread(final String name, final String data, final OutputStream output, final DemuxOutputStream demux) {
             super(name);
             outputStream = output;
             demuxOutputStream = demux;
@@ -94,7 +89,7 @@ public class DemuxInputStreamTest {
             demuxOutputStream.bindStream(outputStream);
             for (final byte element : byteArray) {
                 try {
-                    //System.out.println( "Writing: " + (char)byteArray[ i ] );
+                    // System.out.println( "Writing: " + (char)byteArray[ i ] );
                     demuxOutputStream.write(element);
                     final int sleepMillis = Math.abs(c_random.nextInt() % 10);
                     TestUtils.sleep(sleepMillis);
@@ -104,6 +99,7 @@ public class DemuxInputStreamTest {
             }
         }
     }
+
     private static final String T1 = "Thread1";
     private static final String T2 = "Thread2";
 
@@ -143,17 +139,13 @@ public class DemuxInputStreamTest {
         return output.toString(StandardCharsets.UTF_8);
     }
 
-    private void startReader(final String name,
-                             final String data,
-                             final DemuxInputStream demux) {
+    private void startReader(final String name, final String data, final DemuxInputStream demux) {
         final InputStream input = new StringInputStream(data);
         final ReaderThread thread = new ReaderThread(name, input, demux);
         threadMap.put(name, thread);
     }
 
-    private void startWriter(final String name,
-                             final String data,
-                             final DemuxOutputStream demux) {
+    private void startWriter(final String name, final String data, final DemuxOutputStream demux) {
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         outputMap.put(name, output);
         final WriterThread thread = new WriterThread(name, data, output, demux);
