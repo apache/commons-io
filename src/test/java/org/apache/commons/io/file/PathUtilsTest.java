@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileAlreadyExistsException;
@@ -51,6 +52,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -154,8 +156,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
     @Test
     public void testCopyDirectoryForDifferentFilesystemsWithRelativePath() throws IOException {
         final Path archivePath = Paths.get(TEST_JAR_PATH);
-        try (FileSystem archive = openArchive(archivePath, false);
-            final FileSystem targetArchive = openArchive(tempDirPath.resolve(TEST_JAR_NAME), true)) {
+        try (FileSystem archive = openArchive(archivePath, false); final FileSystem targetArchive = openArchive(tempDirPath.resolve(TEST_JAR_NAME), true)) {
             final Path targetDir = targetArchive.getPath("targetDir");
             Files.createDirectory(targetDir);
             // relative jar -> relative dir
@@ -191,6 +192,15 @@ public class PathUtilsTest extends AbstractTempDirTest {
     public void testCopyFile() throws IOException {
         final Path sourceFile = Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/file-size-1.bin");
         final Path targetFile = PathUtils.copyFileToDirectory(sourceFile, tempDirPath);
+        assertTrue(Files.exists(targetFile));
+        assertEquals(Files.size(sourceFile), Files.size(targetFile));
+    }
+
+    @Test
+    public void testCopyURL() throws IOException {
+        final Path sourceFile = Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/file-size-1.bin");
+        final URL url = new URL("file:///" + FilenameUtils.getPath(sourceFile.toAbsolutePath().toString()) + sourceFile.getFileName());
+        final Path targetFile = PathUtils.copyFileToDirectory(url, tempDirPath);
         assertTrue(Files.exists(targetFile));
         assertEquals(Files.size(sourceFile), Files.size(targetFile));
     }
@@ -476,7 +486,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
         }
         assertEquals(1, Files.size(file), "Wrote one byte to file");
         final long y2k = new GregorianCalendar(2000, 0, 1).getTime().getTime();
-        setLastModifiedMillis(file, y2k);  // 0L fails on Win98
+        setLastModifiedMillis(file, y2k); // 0L fails on Win98
         assertEquals(y2k, getLastModifiedMillis(file), "Bad test: set lastModified set incorrect value");
         final long nowMillis = System.currentTimeMillis();
         PathUtils.touch(file);

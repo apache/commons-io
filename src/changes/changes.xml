@@ -192,6 +192,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-776" dev="kinow" type="fix" due-to="Chris Povirk">
         Fix parameters to requireNonNull call in DeferredOutputSteam #368.
       </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        Fix PathUtils.copyFileToDirectory(URL,Path,CopyOption[]).
+      </action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">
         Add GitHub coverage.yml.

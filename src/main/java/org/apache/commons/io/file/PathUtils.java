@@ -69,6 +69,7 @@ import java.util.stream.Stream;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.Uncheck;
 import org.apache.commons.io.file.Counters.PathCounters;
@@ -310,8 +311,9 @@ public final class PathUtils {
      */
     public static Path copyFileToDirectory(final URL sourceFile, final Path targetDirectory, final CopyOption... copyOptions) throws IOException {
         try (InputStream inputStream = sourceFile.openStream()) {
-            Files.copy(inputStream, targetDirectory.resolve(sourceFile.getFile()), copyOptions);
-            return targetDirectory;
+            final Path resolve = targetDirectory.resolve(FilenameUtils.getName(sourceFile.getFile()));
+            Files.copy(inputStream, resolve, copyOptions);
+            return resolve;
         }
     }
 
