@@ -442,17 +442,17 @@ public class FilenameUtils {
      *
      * @param fileName1  the first fileName to query, may be null
      * @param fileName2  the second fileName to query, may be null
-     * @param normalized  whether to normalize the fileNames
+     * @param normalize  whether to normalize the fileNames
      * @param ioCase  what case sensitivity rule to use, null means case-sensitive
      * @return true if the fileNames are equal, null equals null
      * @since 1.3
      */
-    public static boolean equals(String fileName1, String fileName2, final boolean normalized, final IOCase ioCase) {
+    public static boolean equals(String fileName1, String fileName2, final boolean normalize, final IOCase ioCase) {
 
         if (fileName1 == null || fileName2 == null) {
             return fileName1 == null && fileName2 == null;
         }
-        if (normalized) {
+        if (normalize) {
             fileName1 = normalize(fileName1);
             if (fileName1 == null) {
                 return false;
