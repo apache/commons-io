@@ -18,6 +18,9 @@
 package org.apache.commons.io.file;
 
 import static org.apache.commons.io.file.CounterAssertions.assertCounts;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -68,7 +71,14 @@ public class CleaningPathVisitorTest extends TestArguments {
     @MethodSource("cleaningPathVisitors")
     public void testCleanFolders1FileSize0(final CleaningPathVisitor visitor) throws IOException {
         PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0"), tempDir);
-        assertCounts(1, 1, 0, PathUtils.visitFileTree(visitor, tempDir));
+        final CleaningPathVisitor visitFileTree = PathUtils.visitFileTree(visitor, tempDir);
+        assertCounts(1, 1, 0, visitFileTree);
+        assertSame(visitor, visitFileTree);
+        //
+        assertNotEquals(visitFileTree, CleaningPathVisitor.withLongCounters());
+        assertNotEquals(visitFileTree.hashCode(), CleaningPathVisitor.withLongCounters().hashCode());
+        assertEquals(visitFileTree, visitFileTree);
+        assertEquals(visitFileTree.hashCode(), visitFileTree.hashCode());
     }
 
     /**
@@ -78,7 +88,14 @@ public class CleaningPathVisitorTest extends TestArguments {
     @MethodSource("cleaningPathVisitors")
     public void testCleanFolders1FileSize1(final CleaningPathVisitor visitor) throws IOException {
         PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1"), tempDir);
-        assertCounts(1, 1, 1, PathUtils.visitFileTree(visitor, tempDir));
+        final CleaningPathVisitor visitFileTree = PathUtils.visitFileTree(visitor, tempDir);
+        assertCounts(1, 1, 1, visitFileTree);
+        assertSame(visitor, visitFileTree);
+        //
+        assertNotEquals(visitFileTree, CleaningPathVisitor.withLongCounters());
+        assertNotEquals(visitFileTree.hashCode(), CleaningPathVisitor.withLongCounters().hashCode());
+        assertEquals(visitFileTree, visitFileTree);
+        assertEquals(visitFileTree.hashCode(), visitFileTree.hashCode());
     }
 
     /**
@@ -90,10 +107,17 @@ public class CleaningPathVisitorTest extends TestArguments {
         PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1"), tempDir);
         final String skipFileName = "file-size-1.bin";
         final CountingPathVisitor visitor = new CleaningPathVisitor(pathCounters, skipFileName);
-        assertCounts(1, 1, 1, PathUtils.visitFileTree(visitor, tempDir));
+        final CountingPathVisitor visitFileTree = PathUtils.visitFileTree(visitor, tempDir);
+        assertCounts(1, 1, 1, visitFileTree);
+        assertSame(visitor, visitFileTree);
         final Path skippedFile = tempDir.resolve(skipFileName);
         Assertions.assertTrue(Files.exists(skippedFile));
         Files.delete(skippedFile);
+        //
+        assertNotEquals(visitFileTree, CleaningPathVisitor.withLongCounters());
+        assertNotEquals(visitFileTree.hashCode(), CleaningPathVisitor.withLongCounters().hashCode());
+        assertEquals(visitFileTree, visitFileTree);
+        assertEquals(visitFileTree.hashCode(), visitFileTree.hashCode());
     }
 
     /**
@@ -103,6 +127,13 @@ public class CleaningPathVisitorTest extends TestArguments {
     @MethodSource("cleaningPathVisitors")
     public void testCleanFolders2FileSize2(final CleaningPathVisitor visitor) throws IOException {
         PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2"), tempDir);
-        assertCounts(3, 2, 2, PathUtils.visitFileTree(visitor, tempDir));
+        final CleaningPathVisitor visitFileTree = PathUtils.visitFileTree(visitor, tempDir);
+        assertCounts(3, 2, 2, visitFileTree);
+        assertSame(visitor, visitFileTree);
+        //
+        assertNotEquals(visitFileTree, CleaningPathVisitor.withLongCounters());
+        assertNotEquals(visitFileTree.hashCode(), CleaningPathVisitor.withLongCounters().hashCode());
+        assertEquals(visitFileTree, visitFileTree);
+        assertEquals(visitFileTree.hashCode(), visitFileTree.hashCode());
     }
 }
