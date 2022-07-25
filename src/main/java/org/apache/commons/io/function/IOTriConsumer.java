@@ -40,7 +40,7 @@ public interface IOTriConsumer<T, U, V> {
      * @param <T> the type of the first argument to the operation
      * @param <U> the type of the second argument to the operation
      * @param <V> the type of the third argument to the operation
-     * @return The NOOP singleton.
+     * @return The no-op singleton.
      */
     static <T, U, V> IOTriConsumer<T, U, V> noop() {
         return Constants.IO_TRI_CONSUMER;

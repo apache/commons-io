@@ -433,9 +433,9 @@ public class Counters {
     }
 
     /**
-     * Returns the NOOP Counter.
+     * Returns the no-op Counter.
      *
-     * @return the NOOP Counter.
+     * @return the no-op Counter.
      * @since 2.9.0
      */
     public static Counter noopCounter() {
@@ -443,9 +443,9 @@ public class Counters {
     }
 
     /**
-     * Returns the NOOP PathCounters.
+     * Returns the no-op PathCounters.
      *
-     * @return the NOOP PathCounters.
+     * @return the no-op PathCounters.
      * @since 2.9.0
      */
     public static PathCounters noopPathCounters() {

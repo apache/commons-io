@@ -45,7 +45,7 @@ public interface IOBiFunction<T, U, R> {
      * @param <T> the type of the first argument to the function
      * @param <U> the type of the second argument to the function
      * @param <R> the type of the result of the function
-     * @return The NOOP singleton.
+     * @return The no-op singleton.
      */
     static <T, U, R> IOBiFunction<T, U, R> noop() {
         return Constants.IO_BI_FUNCTION;

@@ -118,10 +118,10 @@ public interface IOConsumer<T> {
     }
 
     /**
-     * Returns a constant NOOP consumer.
+     * Returns a constant no-op consumer.
      *
      * @param <T> Type consumer type.
-     * @return a constant NOOP consumer.
+     * @return a constant no-op consumer.
      * @since 2.9.0
      */
     @SuppressWarnings("unchecked")

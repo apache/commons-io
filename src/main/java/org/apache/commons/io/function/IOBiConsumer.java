@@ -38,7 +38,7 @@ public interface IOBiConsumer<T, U> {
      *
      * @param <T> the type of the first argument to the operation
      * @param <U> the type of the second argument to the operation
-     * @return The NOOP singleton.
+     * @return The no-op singleton.
      */
     static <T, U> IOBiConsumer<T, U> noop() {
         return Constants.IO_BI_CONSUMER;
