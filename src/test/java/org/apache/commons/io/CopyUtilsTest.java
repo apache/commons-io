@@ -143,6 +143,25 @@ public class CopyUtilsTest {
     }
 
     @Test
+    public void copy_stringToOutputStreamString() throws Exception {
+        final String str = new String(inData, StandardCharsets.US_ASCII);
+
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
+
+        CopyUtils.copy(str, out, StandardCharsets.US_ASCII.name());
+        //Note: this method *does* flush. It is equivalent to:
+        //  OutputStreamWriter _out = new OutputStreamWriter(fout);
+        //  IOUtils.copy( str, _out, 4096 ); // copy( Reader, Writer, int );
+        //  _out.flush();
+        //  out = fout;
+        // note: we don't flush here; this IOUtils method does it for us
+
+        assertEquals(inData.length, baout.size(), "Sizes differ");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
+    }
+
+    @Test
     public void copy_stringToWriter() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
 
