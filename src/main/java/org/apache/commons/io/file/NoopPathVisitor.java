@@ -37,8 +37,6 @@ public class NoopPathVisitor extends SimplePathVisitor {
 
     /**
      * Constructs a new instance.
-     *
-     * @since 2.12.0
      */
     public NoopPathVisitor() {
     }
