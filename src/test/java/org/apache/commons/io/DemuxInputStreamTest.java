@@ -161,39 +161,39 @@ public class DemuxInputStreamTest {
     }
 
     @Test
-    public void testInputStream()
-            throws Exception {
-        final DemuxInputStream input = new DemuxInputStream();
-        startReader(T1, DATA1, input);
-        startReader(T2, DATA2, input);
-        startReader(T3, DATA3, input);
-        startReader(T4, DATA4, input);
+    public void testInputStream() throws Exception {
+        try (final DemuxInputStream input = new DemuxInputStream()) {
+            startReader(T1, DATA1, input);
+            startReader(T2, DATA2, input);
+            startReader(T3, DATA3, input);
+            startReader(T4, DATA4, input);
 
-        doStart();
-        doJoin();
+            doStart();
+            doJoin();
 
-        assertEquals(DATA1, getInput(T1), "Data1");
-        assertEquals(DATA2, getInput(T2), "Data2");
-        assertEquals(DATA3, getInput(T3), "Data3");
-        assertEquals(DATA4, getInput(T4), "Data4");
+            assertEquals(DATA1, getInput(T1), "Data1");
+            assertEquals(DATA2, getInput(T2), "Data2");
+            assertEquals(DATA3, getInput(T3), "Data3");
+            assertEquals(DATA4, getInput(T4), "Data4");
+        }
     }
 
     @Test
-    public void testOutputStream()
-            throws Exception {
-        final DemuxOutputStream output = new DemuxOutputStream();
-        startWriter(T1, DATA1, output);
-        startWriter(T2, DATA2, output);
-        startWriter(T3, DATA3, output);
-        startWriter(T4, DATA4, output);
+    public void testOutputStream() throws Exception {
+        try (final DemuxOutputStream output = new DemuxOutputStream()) {
+            startWriter(T1, DATA1, output);
+            startWriter(T2, DATA2, output);
+            startWriter(T3, DATA3, output);
+            startWriter(T4, DATA4, output);
 
-        doStart();
-        doJoin();
+            doStart();
+            doJoin();
 
-        assertEquals(DATA1, getOutput(T1), "Data1");
-        assertEquals(DATA2, getOutput(T2), "Data2");
-        assertEquals(DATA3, getOutput(T3), "Data3");
-        assertEquals(DATA4, getOutput(T4), "Data4");
+            assertEquals(DATA1, getOutput(T1), "Data1");
+            assertEquals(DATA2, getOutput(T2), "Data2");
+            assertEquals(DATA3, getOutput(T3), "Data3");
+            assertEquals(DATA4, getOutput(T4), "Data4");
+        }
     }
 }
 
