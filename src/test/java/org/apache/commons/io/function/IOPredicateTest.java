@@ -67,6 +67,10 @@ public class IOPredicateTest {
     @Test
     public void testAndChecked() throws IOException {
         assertFalse(IS_HIDDEN.and(IS_HIDDEN).test(PATH_FIXTURE));
+        assertTrue(IOPredicate.alwaysTrue().and(IOPredicate.alwaysTrue()).test(PATH_FIXTURE));
+        assertFalse(IOPredicate.alwaysFalse().and(IOPredicate.alwaysTrue()).test(PATH_FIXTURE));
+        assertFalse(IOPredicate.alwaysTrue().and(IOPredicate.alwaysFalse()).test(PATH_FIXTURE));
+        assertFalse(IOPredicate.alwaysFalse().and(IOPredicate.alwaysFalse()).test(PATH_FIXTURE));
     }
 
     @Test
@@ -90,18 +94,25 @@ public class IOPredicateTest {
     @Test
     public void testIsEqualChecked() throws IOException {
         assertThrowsChecked(() -> IOPredicate.isEqual(THROWING_EQUALS).test("B"));
+        assertFalse(IOPredicate.isEqual(null).test("A"));
         assertTrue(IOPredicate.isEqual("B").test("B"));
+        assertFalse(IOPredicate.isEqual("A").test("B"));
+        assertFalse(IOPredicate.isEqual("B").test("A"));
     }
 
     @Test
     public void testIsEqualUnchecked() throws IOException {
         assertThrowsUnchecked(() -> IOPredicate.isEqual(THROWING_EQUALS).asPredicate().test("B"));
+        assertFalse(IOPredicate.isEqual(null).asPredicate().test("A"));
         assertTrue(IOPredicate.isEqual("B").asPredicate().test("B"));
+        assertFalse(IOPredicate.isEqual("A").asPredicate().test("B"));
+        assertFalse(IOPredicate.isEqual("B").asPredicate().test("A"));
     }
 
     @Test
     public void testNegateChecked() throws IOException {
         assertTrue(IS_HIDDEN.negate().test(PATH_FIXTURE));
+        assertFalse(IOPredicate.alwaysTrue().negate().test(PATH_FIXTURE));
     }
 
     @Test
@@ -114,6 +125,8 @@ public class IOPredicateTest {
     @Test
     public void testOrChecked() throws IOException {
         assertFalse(IS_HIDDEN.or(IS_HIDDEN).test(PATH_FIXTURE));
+        assertTrue(IOPredicate.alwaysTrue().or(IOPredicate.alwaysFalse()).test(PATH_FIXTURE));
+        assertTrue(IOPredicate.alwaysFalse().or(IOPredicate.alwaysTrue()).test(PATH_FIXTURE));
     }
 
     @Test
