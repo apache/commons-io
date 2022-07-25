@@ -80,7 +80,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * This is used to test IOUtils for correctness. The following checks are performed:
+ * This is used to test {@link IOUtils} for correctness. The following checks are performed:
  * <ul>
  * <li>The return must not be null, must be the same type and equals() to the method's second arg</li>
  * <li>All bytes must have been read from the source (available() == 0)</li>
