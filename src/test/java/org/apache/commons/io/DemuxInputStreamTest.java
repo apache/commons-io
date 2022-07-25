@@ -38,9 +38,9 @@ import org.junit.jupiter.api.Test;
 public class DemuxInputStreamTest {
 
     private static class ReaderThread extends Thread {
-        private final StringBuffer stringBuffer = new StringBuffer();
-        private final InputStream inputStream;
         private final DemuxInputStream demuxInputStream;
+        private final InputStream inputStream;
+        private final StringBuffer stringBuffer = new StringBuffer();
 
         ReaderThread(final String name, final InputStream input, final DemuxInputStream demux) {
             super(name);
@@ -74,8 +74,8 @@ public class DemuxInputStreamTest {
 
     private static class WriterThread extends Thread {
         private final byte[] byteArray;
-        private final OutputStream outputStream;
         private final DemuxOutputStream demuxOutputStream;
+        private final OutputStream outputStream;
 
         WriterThread(final String name, final String data, final OutputStream output, final DemuxOutputStream demux) {
             super(name);
@@ -100,17 +100,17 @@ public class DemuxInputStreamTest {
         }
     }
 
-    private static final String T1 = "Thread1";
-    private static final String T2 = "Thread2";
-
-    private static final String T3 = "Thread3";
-    private static final String T4 = "Thread4";
+    private static final Random c_random = new Random();
     private static final String DATA1 = "Data for thread1";
-    private static final String DATA2 = "Data for thread2";
 
+    private static final String DATA2 = "Data for thread2";
     private static final String DATA3 = "Data for thread3";
     private static final String DATA4 = "Data for thread4";
-    private static final Random c_random = new Random();
+    private static final String T1 = "Thread1";
+
+    private static final String T2 = "Thread2";
+    private static final String T3 = "Thread3";
+    private static final String T4 = "Thread4";
 
     private final HashMap<String, ByteArrayOutputStream> outputMap = new HashMap<>();
 
@@ -187,5 +187,11 @@ public class DemuxInputStreamTest {
             assertEquals(DATA4, getOutput(T4), "Data4");
         }
     }
-}
 
+    @Test
+    public void testReadEOF() throws Exception {
+        try (final DemuxInputStream input = new DemuxInputStream()) {
+            assertEquals(IOUtils.EOF, input.read());
+        }
+    }
+}
