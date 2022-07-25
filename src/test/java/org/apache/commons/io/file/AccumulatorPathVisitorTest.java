@@ -44,6 +44,7 @@ import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.EmptyFileFilter;
 import org.apache.commons.io.filefilter.PathVisitorFileFilter;
 import org.apache.commons.io.function.IOBiFunction;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -75,6 +76,16 @@ public class AccumulatorPathVisitorTest {
 
     @TempDir
     Path tempDirPath;
+
+    @Test
+    public void test0ArgConstructor() throws IOException {
+        final AccumulatorPathVisitor accPathVisitor = new AccumulatorPathVisitor();
+        final PathVisitorFileFilter countingFileFilter = new PathVisitorFileFilter(accPathVisitor);
+        Files.walkFileTree(tempDirPath, new AndFileFilter(countingFileFilter, DirectoryFileFilter.INSTANCE, EmptyFileFilter.EMPTY));
+        assertCounts(0, 0, 0, accPathVisitor.getPathCounters());
+        assertEquals(1, accPathVisitor.getDirList().size());
+        assertTrue(accPathVisitor.getFileList().isEmpty());
+    }
 
     /**
      * Tests an empty folder.
