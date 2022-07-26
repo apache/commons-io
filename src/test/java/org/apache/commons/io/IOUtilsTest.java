@@ -624,25 +624,6 @@ public class IOUtilsTest {
         testSingleEOL("1235", "1234", false);
     }
 
-    public void testSingleEOL(final String s1, final String s2, final boolean ifEquals) throws IOException {
-        assertEquals(ifEquals, IOUtils.contentEqualsIgnoreEOL(
-                new CharArrayReader(s1.toCharArray()),
-                new CharArrayReader(s2.toCharArray())
-        ), "failed at :{" + s1 + "," + s2 + "}");
-        assertEquals(ifEquals, IOUtils.contentEqualsIgnoreEOL(
-                new CharArrayReader(s2.toCharArray()),
-                new CharArrayReader(s1.toCharArray())
-        ), "failed at :{" + s2 + "," + s1 + "}");
-        assertTrue(IOUtils.contentEqualsIgnoreEOL(
-                new CharArrayReader(s1.toCharArray()),
-                new CharArrayReader(s1.toCharArray())
-        ),"failed at :{" + s1 + "," + s1 + "}");
-        assertTrue(IOUtils.contentEqualsIgnoreEOL(
-                new CharArrayReader(s2.toCharArray()),
-                new CharArrayReader(s2.toCharArray())
-        ), "failed at :{" + s2 + "," + s2 + "}");
-    }
-
     @Test
     public void testCopy_ByteArray_OutputStream() throws Exception {
         final File destination = TestUtils.newFile(temporaryFolder, "copy8.txt");
@@ -1160,8 +1141,6 @@ public class IOUtilsTest {
         assertEquals(fileSize, content.getBytes().length);
     }
 
-    // Tests from IO-305
-
     @Test
     public void testResourceToString_ExistingResourceAtSubPackage_WithClassLoader() throws Exception {
         final long fileSize = TestResources.getFile("FileUtilsTestDataCR.dat").length();
@@ -1171,6 +1150,8 @@ public class IOUtilsTest {
         assertNotNull(content);
         assertEquals(fileSize, content.getBytes().length);
     }
+
+    // Tests from IO-305
 
     @Test
     public void testResourceToString_NonExistingResource() {
@@ -1257,6 +1238,25 @@ public class IOUtilsTest {
     @Test
     public void testResourceToURL_Null_WithClassLoader() {
         assertThrows(NullPointerException.class, () -> IOUtils.resourceToURL(null, ClassLoader.getSystemClassLoader()));
+    }
+
+    public void testSingleEOL(final String s1, final String s2, final boolean ifEquals) throws IOException {
+        assertEquals(ifEquals, IOUtils.contentEqualsIgnoreEOL(
+                new CharArrayReader(s1.toCharArray()),
+                new CharArrayReader(s2.toCharArray())
+        ), "failed at :{" + s1 + "," + s2 + "}");
+        assertEquals(ifEquals, IOUtils.contentEqualsIgnoreEOL(
+                new CharArrayReader(s2.toCharArray()),
+                new CharArrayReader(s1.toCharArray())
+        ), "failed at :{" + s2 + "," + s1 + "}");
+        assertTrue(IOUtils.contentEqualsIgnoreEOL(
+                new CharArrayReader(s1.toCharArray()),
+                new CharArrayReader(s1.toCharArray())
+        ),"failed at :{" + s1 + "," + s1 + "}");
+        assertTrue(IOUtils.contentEqualsIgnoreEOL(
+                new CharArrayReader(s2.toCharArray()),
+                new CharArrayReader(s2.toCharArray())
+        ), "failed at :{" + s2 + "," + s2 + "}");
     }
 
     @Test

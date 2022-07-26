@@ -38,6 +38,11 @@ public abstract class FileUtilsDeleteDirectoryBaseTest {
     protected abstract boolean setupSymlink(final File res, final File link) throws Exception;
 
     @Test
+    public void testDeleteDirectoryNullArgument() {
+        assertThrows(NullPointerException.class, () -> FileUtils.deleteDirectory(null));
+    }
+
+    @Test
     public void testDeleteDirWithASymlinkDir() throws Exception {
 
         final File realOuter = new File(top, "realouter");
@@ -248,11 +253,6 @@ public abstract class FileUtilsDeleteDirectoryBaseTest {
         FileUtils.deleteDirectory(nested);
 
         assertEquals(0, top.list().length);
-    }
-
-    @Test
-    public void testDeleteDirectoryNullArgument() {
-        assertThrows(NullPointerException.class, () -> FileUtils.deleteDirectory(null));
     }
 
 }

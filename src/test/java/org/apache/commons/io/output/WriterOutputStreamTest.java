@@ -80,6 +80,11 @@ public class WriterOutputStreamTest {
     }
 
     @Test
+    public void testNullCharsetDecoderWithSingleByteWrite() throws IOException {
+        testWithSingleByteWrite(TEST_STRING, (CharsetDecoder) null);
+    }
+
+    @Test
     public void testNullCharsetNameWithSingleByteWrite() throws IOException {
         testWithSingleByteWrite(TEST_STRING, (String) null);
     }
@@ -87,11 +92,6 @@ public class WriterOutputStreamTest {
     @Test
     public void testNullCharsetWithSingleByteWrite() throws IOException {
         testWithSingleByteWrite(TEST_STRING, (Charset) null);
-    }
-
-    @Test
-    public void testNullCharsetDecoderWithSingleByteWrite() throws IOException {
-        testWithSingleByteWrite(TEST_STRING, (CharsetDecoder) null);
     }
 
     @Test

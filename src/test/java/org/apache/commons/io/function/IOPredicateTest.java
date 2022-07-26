@@ -92,6 +92,14 @@ public class IOPredicateTest {
     }
 
     @Test
+    public void testFalse() throws IOException {
+        assertFalse(Constants.IO_PREDICATE_FALSE.test("A"));
+        // Make sure we keep the argument type
+        final IOPredicate<String> alwaysFalse = IOPredicate.alwaysFalse();
+        assertFalse(alwaysFalse.test("A"));
+    }
+
+    @Test
     public void testIsEqualChecked() throws IOException {
         assertThrowsChecked(() -> IOPredicate.isEqual(THROWING_EQUALS).test("B"));
         assertFalse(IOPredicate.isEqual(null).test("A"));
@@ -145,14 +153,6 @@ public class IOPredicateTest {
     public void testTestUnchecked() {
         assertThrowsUnchecked(() -> THROWING_UNCHECKED_PREDICATE.test(null));
         assertTrue(Constants.IO_PREDICATE_TRUE.asPredicate().test("A"));
-    }
-
-    @Test
-    public void testFalse() throws IOException {
-        assertFalse(Constants.IO_PREDICATE_FALSE.test("A"));
-        // Make sure we keep the argument type
-        final IOPredicate<String> alwaysFalse = IOPredicate.alwaysFalse();
-        assertFalse(alwaysFalse.test("A"));
     }
 
     @Test

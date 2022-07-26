@@ -89,8 +89,6 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings({"deprecation", "ResultOfMethodCallIgnored"}) // unit tests include tests of many deprecated methods
 public class FileUtilsTest extends AbstractTempDirTest {
 
-    private static final String UTF_8 = StandardCharsets.UTF_8.name();
-
     /**
      * DirectoryWalker implementation that recursively lists all files and directories.
      */
@@ -132,6 +130,8 @@ public class FileUtilsTest extends AbstractTempDirTest {
             return super.length() - 1;
         }
     }
+
+    private static final String UTF_8 = StandardCharsets.UTF_8.name();
 
     /** Test data. */
     private static final long DATE3 = 1000000002000L;
