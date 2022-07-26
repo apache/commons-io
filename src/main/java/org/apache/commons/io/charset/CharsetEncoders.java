@@ -37,4 +37,9 @@ public class CharsetEncoders {
         return charsetEncoder != null ? charsetEncoder : Charset.defaultCharset().newEncoder();
     }
 
+    /** No instances. */
+    private CharsetEncoders() {
+        // No instances.
+    }
+
 }

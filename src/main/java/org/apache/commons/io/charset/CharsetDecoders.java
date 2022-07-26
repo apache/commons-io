@@ -37,4 +37,8 @@ public class CharsetDecoders {
         return charsetDecoder != null ? charsetDecoder : Charset.defaultCharset().newDecoder();
     }
 
+    /** No instances. */
+    private CharsetDecoders() {
+        // No instances.
+    }
 }
