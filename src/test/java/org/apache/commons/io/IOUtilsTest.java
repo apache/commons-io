@@ -49,6 +49,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.Selector;
@@ -439,6 +440,13 @@ public class IOUtilsTest {
                 }
             });
         });
+    }
+
+    @Test
+    public void testCloseURLConnection() {
+        assertDoesNotThrow(() -> IOUtils.close((URLConnection) null));
+        assertDoesNotThrow(() -> IOUtils.close(new URL("https://www.apache.org/").openConnection()));
+        assertDoesNotThrow(() -> IOUtils.close(new URL("file:///").openConnection()));
     }
 
     @Test
