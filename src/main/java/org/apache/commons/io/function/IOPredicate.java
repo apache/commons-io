@@ -22,8 +22,6 @@ import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import org.apache.commons.io.Uncheck;
-
 /**
  * Like {@link Predicate} but throws {@link IOException}.
  *

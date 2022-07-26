@@ -44,7 +44,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.apache.commons.io.Uncheck;
+import org.apache.commons.io.function.Uncheck;
 
 /**
  * Delegates to {@link Files} to uncheck calls by throwing {@link UncheckedIOException} instead of {@link IOException}.

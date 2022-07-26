@@ -15,21 +15,10 @@
  * limitations under the License.
  */
 
-package org.apache.commons.io;
+package org.apache.commons.io.function;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-
-import org.apache.commons.io.function.IOBiConsumer;
-import org.apache.commons.io.function.IOBiFunction;
-import org.apache.commons.io.function.IOConsumer;
-import org.apache.commons.io.function.IOFunction;
-import org.apache.commons.io.function.IOPredicate;
-import org.apache.commons.io.function.IOQuadFunction;
-import org.apache.commons.io.function.IORunnable;
-import org.apache.commons.io.function.IOSupplier;
-import org.apache.commons.io.function.IOTriConsumer;
-import org.apache.commons.io.function.IOTriFunction;
 
 /**
  * Unchecks calls by throwing {@link UncheckedIOException} instead of {@link IOException}.

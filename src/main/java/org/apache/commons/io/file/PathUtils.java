@@ -71,11 +71,11 @@ import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.Uncheck;
 import org.apache.commons.io.file.Counters.PathCounters;
 import org.apache.commons.io.file.attribute.FileTimes;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.function.IOFunction;
+import org.apache.commons.io.function.Uncheck;
 
 /**
  * NIO Path utilities.

@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Objects;
 
-import org.apache.commons.io.Uncheck;
+import org.apache.commons.io.function.Uncheck;
 
 /**
  * An {@link Appendable} implementation that throws {@link UncheckedIOException} instead of {@link IOException}.

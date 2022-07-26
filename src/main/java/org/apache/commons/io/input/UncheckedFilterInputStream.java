@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 
-import org.apache.commons.io.Uncheck;
+import org.apache.commons.io.function.Uncheck;
 
 /**
  * A {@link BufferedReader} that throws {@link UncheckedIOException} instead of {@link IOException}.

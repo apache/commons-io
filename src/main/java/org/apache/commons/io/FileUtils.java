@@ -80,6 +80,7 @@ import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.function.IOConsumer;
+import org.apache.commons.io.function.Uncheck;
 
 /**
  * General file manipulation utilities.

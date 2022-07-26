@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UncheckedIOException;
 
-import org.apache.commons.io.Uncheck;
+import org.apache.commons.io.function.Uncheck;
 
 /**
  * A {@link FilterOutputStream} that throws {@link UncheckedIOException} instead of {@link UncheckedIOException}.

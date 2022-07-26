@@ -23,7 +23,7 @@ import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.nio.CharBuffer;
 
-import org.apache.commons.io.Uncheck;
+import org.apache.commons.io.function.Uncheck;
 
 /**
  * A {@link FilterReader} that throws {@link UncheckedIOException} instead of {@link IOException}.

@@ -27,6 +27,7 @@ import org.apache.commons.io.function.IOFunction;
 import org.apache.commons.io.function.IORunnable;
 import org.apache.commons.io.function.IOSupplier;
 import org.apache.commons.io.function.IOTriFunction;
+import org.apache.commons.io.function.Uncheck;
 import org.junit.jupiter.api.Test;
 
 /**

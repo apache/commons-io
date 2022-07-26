@@ -27,7 +27,6 @@ import java.nio.file.Files;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.Uncheck;
 import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.io.test.ThrowOnCloseReader;
 import org.junit.jupiter.api.Test;
