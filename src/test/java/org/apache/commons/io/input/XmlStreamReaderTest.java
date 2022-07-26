@@ -31,7 +31,9 @@ import java.io.Writer;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -163,6 +165,7 @@ public class XmlStreamReaderTest {
         throws Exception {
         try (InputStream is = getXmlInputStream(bomEnc, prologEnc == null ? XML1 : XML3, streamEnc, prologEnc);
             XmlStreamReader xmlReader = new XmlStreamReader(is, cT, false, alternateEnc)) {
+            assertEquals(xmlReader.getDefaultEncoding(), alternateEnc);
             if (!streamEnc.equals(UTF_16)) {
                 // we can not assert things here because UTF-8, US-ASCII and
                 // ISO-8859-1 look alike for the chars used for detection
@@ -177,12 +180,73 @@ public class XmlStreamReaderTest {
     }
 
     @Test
+    protected void testConstructorFileInput() throws IOException {
+        try (XmlStreamReader reader = new XmlStreamReader(new File("pom.xml"))) {
+            // do nothing
+        }
+    }
+
+    @Test
+    protected void testConstructorFileInputNull() {
+        assertThrows(NullPointerException.class, () -> new XmlStreamReader((File) null));
+    }
+
+    @Test
+    protected void testConstructorInputStreamInput() throws IOException {
+        try (XmlStreamReader reader = new XmlStreamReader(Files.newInputStream(Paths.get("pom.xml")))) {
+            // do nothing
+        }
+    }
+
+    @Test
+    protected void testConstructorInputStreamInputNull() {
+        assertThrows(NullPointerException.class, () -> new XmlStreamReader((InputStream) null));
+    }
+
+    protected void testConstructorPathInput() throws IOException {
+        try (XmlStreamReader reader = new XmlStreamReader(Paths.get("pom.xml"))) {
+            // do nothing
+        }
+    }
+
+    @Test
+    protected void testConstructorPathInputNull() {
+        assertThrows(NullPointerException.class, () -> new XmlStreamReader((Path) null));
+    }
+
+    @Test
+    protected void testConstructorURLConnectionInput() throws IOException {
+        try (XmlStreamReader reader = new XmlStreamReader(new URL("https://www.apache.org/").openConnection(), UTF_8)) {
+            // do nothing
+        }
+    }
+
+    @Test
+    protected void testConstructorURLConnectionInputNull() {
+        assertThrows(NullPointerException.class, () -> new XmlStreamReader((URLConnection) null, US_ASCII));
+    }
+
+    @Test
+    protected void testConstructorURLInput() throws IOException {
+        try (XmlStreamReader reader = new XmlStreamReader(new URL("https://www.apache.org/"))) {
+            // do nothing
+        }
+    }
+
+    @Test
+    protected void testConstructorURLInputNull() throws IOException {
+        assertThrows(NullPointerException.class, () -> new XmlStreamReader((URL) null));
+    }
+
+    @Test
     public void testEncodingAttributeXML() throws Exception {
         try (InputStream is = new ByteArrayInputStream(ENCODING_ATTRIBUTE_XML.getBytes(StandardCharsets.UTF_8));
             XmlStreamReader xmlReader = new XmlStreamReader(is, "", true)) {
             assertEquals(xmlReader.getEncoding(), UTF_8);
         }
     }
+
+    // XML Stream generator
 
     @Test
     public void testHttp() throws Exception {
@@ -331,33 +395,6 @@ public class XmlStreamReaderTest {
                 assertEquals(xml, IOUtils.toString(xmlReader), "Check content");
             }
         }
-    }
-
-    @Test
-    protected void testNullFileInput() {
-        assertThrows(NullPointerException.class, () -> new XmlStreamReader((File) null));
-    }
-
-    @Test
-    protected void testNullInputStreamInput() {
-        assertThrows(NullPointerException.class, () -> new XmlStreamReader((InputStream) null));
-    }
-
-    @Test
-    protected void testNullPathInput() {
-        assertThrows(NullPointerException.class, () -> new XmlStreamReader((Path) null));
-    }
-
-    // XML Stream generator
-
-    @Test
-    protected void testNullURLConnectionInput() {
-        assertThrows(NullPointerException.class, () -> new XmlStreamReader((URLConnection) null, US_ASCII));
-    }
-
-    @Test
-    protected void testNullURLInput() {
-        assertThrows(NullPointerException.class, () -> new XmlStreamReader((URL) null));
     }
 
     protected void testRawBomInvalid(final String bomEnc, final String streamEnc,
