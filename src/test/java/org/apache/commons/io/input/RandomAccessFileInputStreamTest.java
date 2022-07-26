@@ -57,7 +57,7 @@ public class RandomAccessFileInputStreamTest {
     }
 
     @Test
-    public void testCtorCloseOnCloseFalse() throws IOException {
+    public void testConstructorCloseOnCloseFalse() throws IOException {
         try (RandomAccessFile file = createRandomAccessFile()) {
             try (RandomAccessFileInputStream inputStream = new RandomAccessFileInputStream(file, false)) {
                 assertFalse(inputStream.isCloseOnClose());
@@ -67,7 +67,7 @@ public class RandomAccessFileInputStreamTest {
     }
 
     @Test
-    public void testCtorCloseOnCloseTrue() throws IOException {
+    public void testConstructorCloseOnCloseTrue() throws IOException {
         try (RandomAccessFile file = createRandomAccessFile()) {
             try (RandomAccessFileInputStream inputStream = new RandomAccessFileInputStream(file, true)) {
                 assertTrue(inputStream.isCloseOnClose());
@@ -77,7 +77,17 @@ public class RandomAccessFileInputStreamTest {
     }
 
     @Test
-    public void testCtorNullFile() {
+    public void testConstructorFile() throws IOException {
+        try (RandomAccessFile file = createRandomAccessFile()) {
+            try (RandomAccessFileInputStream inputStream = new RandomAccessFileInputStream(file)) {
+                assertFalse(inputStream.isCloseOnClose());
+            }
+            file.read();
+        }
+    }
+
+    @Test
+    public void testConstructorFileNull() {
         assertThrows(NullPointerException.class, () -> new RandomAccessFileInputStream(null));
     }
 
