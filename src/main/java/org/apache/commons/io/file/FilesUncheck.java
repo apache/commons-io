@@ -468,18 +468,6 @@ public class FilesUncheck {
     }
 
     /**
-     * Delegates to {@link Files#newDirectoryStream(Path, String)} throwing {@link UncheckedIOException} instead of
-     * {@link IOException}.
-     *
-     * @param dir See delegate.
-     * @param glob See delegate.
-     * @return See delegate.
-     */
-    public static DirectoryStream<Path> newDirectoryStream(final Path dir, final String glob) {
-        return Uncheck.apply(Files::newDirectoryStream, dir, glob);
-    }
-
-    /**
      * Delegates to {@link Files#newDirectoryStream(Path, java.nio.file.DirectoryStream.Filter)} throwing
      * {@link UncheckedIOException} instead of {@link IOException}.
      *
@@ -489,6 +477,18 @@ public class FilesUncheck {
      */
     public static DirectoryStream<Path> newDirectoryStream(final Path dir, final DirectoryStream.Filter<? super Path> filter) {
         return Uncheck.apply(Files::newDirectoryStream, dir, filter);
+    }
+
+    /**
+     * Delegates to {@link Files#newDirectoryStream(Path, String)} throwing {@link UncheckedIOException} instead of
+     * {@link IOException}.
+     *
+     * @param dir See delegate.
+     * @param glob See delegate.
+     * @return See delegate.
+     */
+    public static DirectoryStream<Path> newDirectoryStream(final Path dir, final String glob) {
+        return Uncheck.apply(Files::newDirectoryStream, dir, glob);
     }
 
     /**
@@ -657,6 +657,18 @@ public class FilesUncheck {
     }
 
     /**
+     * Delegates to {@link Files#walk(Path, FileVisitOption...)} throwing {@link UncheckedIOException} instead of
+     * {@link IOException}.
+     *
+     * @param start See delegate.
+     * @param options See delegate.
+     * @return See delegate.
+     */
+    public static Stream<Path> walk(final Path start, final FileVisitOption... options) {
+        return Uncheck.apply(Files::walk, start, options);
+    }
+
+    /**
      * Delegates to {@link Files#walk(Path, int, FileVisitOption...)} throwing {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
@@ -667,18 +679,6 @@ public class FilesUncheck {
      */
     public static Stream<Path> walk(final Path start, final int maxDepth, final FileVisitOption... options) {
         return Uncheck.apply(Files::walk, start, maxDepth, options);
-    }
-
-    /**
-     * Delegates to {@link Files#walk(Path, FileVisitOption...)} throwing {@link UncheckedIOException} instead of
-     * {@link IOException}.
-     *
-     * @param start See delegate.
-     * @param options See delegate.
-     * @return See delegate.
-     */
-    public static Stream<Path> walk(final Path start, final FileVisitOption... options) {
-        return Uncheck.apply(Files::walk, start, options);
     }
 
     /**

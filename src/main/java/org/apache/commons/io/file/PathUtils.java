@@ -836,19 +836,6 @@ public final class PathUtils {
      * Gets the file's last modified time or null if the file does not exist.
      *
      * @param path the file to query.
-     * @param options options indicating how symbolic links are handled.
-     * @return the file's last modified time.
-     * @throws IOException Thrown if an I/O error occurs.
-     * @since 2.12.0
-     */
-    public static FileTime getLastModifiedFileTime(final Path path, final LinkOption... options) throws IOException {
-        return getLastModifiedFileTime(path, null, options);
-    }
-
-    /**
-     * Gets the file's last modified time or null if the file does not exist.
-     *
-     * @param path the file to query.
      * @param defaultIfAbsent Returns this file time of the file does not exist, may be null.
      * @param options options indicating how symbolic links are handled.
      * @return the file's last modified time.
@@ -857,6 +844,19 @@ public final class PathUtils {
      */
     public static FileTime getLastModifiedFileTime(final Path path, final FileTime defaultIfAbsent, final LinkOption... options) throws IOException {
         return Files.exists(path) ? getLastModifiedTime(path, options) : defaultIfAbsent;
+    }
+
+    /**
+     * Gets the file's last modified time or null if the file does not exist.
+     *
+     * @param path the file to query.
+     * @param options options indicating how symbolic links are handled.
+     * @return the file's last modified time.
+     * @throws IOException Thrown if an I/O error occurs.
+     * @since 2.12.0
+     */
+    public static FileTime getLastModifiedFileTime(final Path path, final LinkOption... options) throws IOException {
+        return getLastModifiedFileTime(path, null, options);
     }
 
     /**

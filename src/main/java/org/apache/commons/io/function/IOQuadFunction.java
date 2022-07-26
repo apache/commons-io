@@ -42,18 +42,6 @@ import java.util.function.Function;
 public interface IOQuadFunction<T, U, V, W, R> {
 
     /**
-     * Applies this function to the given arguments.
-     *
-     * @param t the first function argument
-     * @param u the second function argument
-     * @param v the third function argument
-     * @param w the fourth function argument
-     * @return the function result
-     * @throws IOException if an I/O error occurs.
-     */
-    R apply(T t, U u, V v, W w) throws IOException;
-
-    /**
      * Returns a composed function that first applies this function to its input, and then applies the {@code after}
      * function to the result. If evaluation of either function throws an exception, it is relayed to the caller of the
      * composed function.
@@ -67,4 +55,16 @@ public interface IOQuadFunction<T, U, V, W, R> {
         Objects.requireNonNull(after);
         return (final T t, final U u, final V v, final W w) -> after.apply(apply(t, u, v, w));
     }
+
+    /**
+     * Applies this function to the given arguments.
+     *
+     * @param t the first function argument
+     * @param u the second function argument
+     * @param v the third function argument
+     * @param w the fourth function argument
+     * @return the function result
+     * @throws IOException if an I/O error occurs.
+     */
+    R apply(T t, U u, V v, W w) throws IOException;
 }

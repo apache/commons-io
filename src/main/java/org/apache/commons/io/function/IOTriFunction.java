@@ -41,17 +41,6 @@ import java.util.function.Function;
 public interface IOTriFunction<T, U, V, R> {
 
     /**
-     * Applies this function to the given arguments.
-     *
-     * @param t the first function argument
-     * @param u the second function argument
-     * @param v the third function argument
-     * @return the function result
-     * @throws IOException if an I/O error occurs.
-     */
-    R apply(T t, U u, V v) throws IOException;
-
-    /**
      * Returns a composed function that first applies this function to its input, and then applies the {@code after}
      * function to the result. If evaluation of either function throws an exception, it is relayed to the caller of the
      * composed function.
@@ -65,5 +54,16 @@ public interface IOTriFunction<T, U, V, R> {
         Objects.requireNonNull(after);
         return (final T t, final U u, final V v) -> after.apply(apply(t, u, v));
     }
+
+    /**
+     * Applies this function to the given arguments.
+     *
+     * @param t the first function argument
+     * @param u the second function argument
+     * @param v the third function argument
+     * @return the function result
+     * @throws IOException if an I/O error occurs.
+     */
+    R apply(T t, U u, V v) throws IOException;
 
 }

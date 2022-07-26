@@ -97,9 +97,11 @@ public class XmlStreamWriter extends Writer {
      *
      * @param out The output stream
      * @param defaultEncoding The default encoding if not encoding could be detected
+     * @since 2.12.0
      */
-    public XmlStreamWriter(final OutputStream out, final String defaultEncoding) {
-        this(out, Charsets.toCharset(defaultEncoding, StandardCharsets.UTF_8));
+    public XmlStreamWriter(final OutputStream out, final Charset defaultEncoding) {
+        this.out = out;
+        this.defaultCharset = Objects.requireNonNull(defaultEncoding);
     }
 
     /**
@@ -108,11 +110,9 @@ public class XmlStreamWriter extends Writer {
      *
      * @param out The output stream
      * @param defaultEncoding The default encoding if not encoding could be detected
-     * @since 2.12.0
      */
-    public XmlStreamWriter(final OutputStream out, final Charset defaultEncoding) {
-        this.out = out;
-        this.defaultCharset = Objects.requireNonNull(defaultEncoding);
+    public XmlStreamWriter(final OutputStream out, final String defaultEncoding) {
+        this(out, Charsets.toCharset(defaultEncoding, StandardCharsets.UTF_8));
     }
 
     /**

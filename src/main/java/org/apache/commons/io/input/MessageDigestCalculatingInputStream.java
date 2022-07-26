@@ -40,14 +40,6 @@ import java.security.Provider;
 public class MessageDigestCalculatingInputStream extends ObservableInputStream {
 
     /**
-     * The default message digest algorithm.
-     * <p>
-     * The MD5 cryptographic algorithm is weak and should not be used.
-     * </p>
-     */
-    private static final String DEFAULT_ALGORITHM = "MD5";
-
-    /**
      * Maintains the message digest.
      */
     public static class MessageDigestMaintainingObserver extends Observer {
@@ -70,6 +62,25 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
         public void data(final int input) throws IOException {
             messageDigest.update((byte) input);
         }
+    }
+
+    /**
+     * The default message digest algorithm.
+     * <p>
+     * The MD5 cryptographic algorithm is weak and should not be used.
+     * </p>
+     */
+    private static final String DEFAULT_ALGORITHM = "MD5";
+
+    /**
+     * Gets a MessageDigest object that implements the default digest algorithm.
+     *
+     * @return a Message Digest object that implements the default algorithm.
+     * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation.
+     * @see Provider
+     */
+    static MessageDigest getDefaultMessageDigest() throws NoSuchAlgorithmException {
+        return MessageDigest.getInstance(DEFAULT_ALGORITHM);
     }
 
     private final MessageDigest messageDigest;
@@ -115,17 +126,6 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
     public MessageDigestCalculatingInputStream(final InputStream inputStream, final String algorithm)
         throws NoSuchAlgorithmException {
         this(inputStream, MessageDigest.getInstance(algorithm));
-    }
-
-    /**
-     * Gets a MessageDigest object that implements the default digest algorithm.
-     *
-     * @return a Message Digest object that implements the default algorithm.
-     * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation.
-     * @see Provider
-     */
-    static MessageDigest getDefaultMessageDigest() throws NoSuchAlgorithmException {
-        return MessageDigest.getInstance(DEFAULT_ALGORITHM);
     }
 
     /**

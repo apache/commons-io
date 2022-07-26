@@ -52,16 +52,6 @@ public interface IOBiFunction<T, U, R> {
     }
 
     /**
-     * Applies this function to the given arguments.
-     *
-     * @param t the first function argument
-     * @param u the second function argument
-     * @return the function result
-     * @throws IOException if an I/O error occurs.
-     */
-    R apply(T t, U u) throws IOException;
-
-    /**
      * Returns a composed function that first applies this function to its input, and then applies the {@code after}
      * function to the result. If evaluation of either function throws an exception, it is relayed to the caller of the
      * composed function.
@@ -75,4 +65,14 @@ public interface IOBiFunction<T, U, R> {
         Objects.requireNonNull(after);
         return (final T t, final U u) -> after.apply(apply(t, u));
     }
+
+    /**
+     * Applies this function to the given arguments.
+     *
+     * @param t the first function argument
+     * @param u the second function argument
+     * @return the function result
+     * @throws IOException if an I/O error occurs.
+     */
+    R apply(T t, U u) throws IOException;
 }

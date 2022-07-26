@@ -269,10 +269,6 @@ public class FileEntry implements Serializable {
         setLastModified(new SerializableFileTime(lastModified));
     }
 
-    void setLastModified(final SerializableFileTime lastModified) {
-        this.lastModified = lastModified;
-    }
-
     /**
      * Sets the last modified time from the last time it
      * was checked.
@@ -281,6 +277,10 @@ public class FileEntry implements Serializable {
      */
     public void setLastModified(final long lastModified) {
         setLastModified(FileTime.fromMillis(lastModified));
+    }
+
+    void setLastModified(final SerializableFileTime lastModified) {
+        this.lastModified = lastModified;
     }
 
     /**
