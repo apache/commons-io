@@ -16,9 +16,9 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.lang3.ArrayUtils.EMPTY_BYTE_ARRAY;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.apache.commons.lang3.ArrayUtils.EMPTY_BYTE_ARRAY;
 
 import java.io.IOException;
 import java.io.InputStream;

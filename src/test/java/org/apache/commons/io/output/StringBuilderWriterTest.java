@@ -18,6 +18,7 @@ package org.apache.commons.io.output;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
+
 import java.io.IOException;
 import java.io.Writer;
 

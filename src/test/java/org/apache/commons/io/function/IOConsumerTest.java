@@ -19,6 +19,7 @@ package org.apache.commons.io.function;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.StringReader;
