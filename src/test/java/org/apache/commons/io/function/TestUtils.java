@@ -18,33 +18,19 @@
 package org.apache.commons.io.function;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.util.function.Supplier;
+import java.util.concurrent.atomic.AtomicReference;
 
-/**
- * Like {@link Supplier} but throws {@link IOException}.
- *
- * @param <T> the return type of the operations.
- * @since 2.7
- */
-@FunctionalInterface
-public interface IOSupplier<T> {
+class TestUtils {
 
-    /**
-     * Converts this instance to a Supplier that throws {@link UncheckedIOException} instead of {@link IOException}.
-     *
-     * @return an unchecked Predicate.
-     * @since 2.12.0
-     */
-    default Supplier<T> asSupplier() {
-        return () -> Uncheck.get(this);
+    static <T> T compareAndSetThrows(final AtomicReference<T> ref, final T expected, final T update) throws IOException {
+        if (!ref.compareAndSet(expected, update)) {
+            throw new IOException("Unexpected");
+        }
+        return ref.get(); // same as update
     }
 
-    /**
-     * Gets a result.
-     *
-     * @return a result
-     * @throws IOException if an I/O error occurs.
-     */
-    T get() throws IOException;
+    static <T> T compareAndSetThrows(final AtomicReference<T> ref, final T update) throws IOException {
+        return compareAndSetThrows(ref, null, update);
+    }
+
 }

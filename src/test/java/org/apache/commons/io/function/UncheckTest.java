@@ -36,6 +36,7 @@ public class UncheckTest {
     private AtomicReference<String> ref1;
     private AtomicReference<String> ref2;
     private AtomicReference<String> ref3;
+
     private AtomicReference<String> ref4;
 
     @BeforeEach
@@ -53,8 +54,8 @@ public class UncheckTest {
         }, null, null));
         assertThrows(UncheckedIOException.class, () -> Uncheck.accept(TestConstants.THROWING_IO_BI_CONSUMER, null, null));
         Uncheck.accept((t, u) -> {
-            compareAndSet(ref1, t);
-            compareAndSet(ref2, u);
+            TestUtils.compareAndSetThrows(ref1, t);
+            TestUtils.compareAndSetThrows(ref2, u);
         }, "new1", "new2");
         assertEquals("new1", ref1.get());
         assertEquals("new2", ref2.get());
@@ -66,16 +67,8 @@ public class UncheckTest {
             throw new IOException();
         }, null));
         assertThrows(UncheckedIOException.class, () -> Uncheck.accept(TestConstants.THROWING_IO_CONSUMER, null));
-        Uncheck.accept(t -> compareAndSet(ref1, t), "new1");
+        Uncheck.accept(t -> TestUtils.compareAndSetThrows(ref1, t), "new1");
         assertEquals("new1", ref1.get());
-    }
-
-    private <T> T compareAndSet(final AtomicReference<T> ref, final T t) throws IOException {
-        if (!ref.compareAndSet(null, t)) {
-            // Tell the compiler this method throws a checked exception.
-            throw new IOException("Unexpected1");
-        }
-        return ref.get(); // same as t
     }
 
     @Test
@@ -85,9 +78,9 @@ public class UncheckTest {
         }, null, null, null));
         assertThrows(UncheckedIOException.class, () -> Uncheck.accept(TestConstants.THROWING_IO_TRI_CONSUMER, null, null, null));
         Uncheck.accept((t, u, v) -> {
-            compareAndSet(ref1, t);
-            compareAndSet(ref2, u);
-            compareAndSet(ref3, v);
+            TestUtils.compareAndSetThrows(ref1, t);
+            TestUtils.compareAndSetThrows(ref2, u);
+            TestUtils.compareAndSetThrows(ref3, v);
         }, "new1", "new2", "new3");
         assertEquals("new1", ref1.get());
         assertEquals("new2", ref2.get());
@@ -101,8 +94,8 @@ public class UncheckTest {
         }, null, null));
         assertThrows(UncheckedIOException.class, () -> Uncheck.apply(TestConstants.THROWING_IO_BI_FUNCTION, null, null));
         assertEquals("new0", Uncheck.apply((t, u) -> {
-            compareAndSet(ref1, t);
-            compareAndSet(ref2, u);
+            TestUtils.compareAndSetThrows(ref1, t);
+            TestUtils.compareAndSetThrows(ref2, u);
             return "new0";
         }, "new1", "new2"));
         assertEquals("new1", ref1.get());
@@ -115,7 +108,7 @@ public class UncheckTest {
             throw new IOException();
         }, null));
         assertThrows(UncheckedIOException.class, () -> Uncheck.apply(TestConstants.THROWING_IO_FUNCTION, null));
-        Uncheck.apply(t -> compareAndSet(ref1, t), "new1");
+        Uncheck.apply(t -> TestUtils.compareAndSetThrows(ref1, t), "new1");
         assertEquals("new1", ref1.get());
     }
 
@@ -126,10 +119,10 @@ public class UncheckTest {
         }, null, null, null, null));
         assertThrows(UncheckedIOException.class, () -> Uncheck.apply(TestConstants.THROWING_IO_QUAD_FUNCTION, null, null, null, null));
         assertEquals("new0", Uncheck.apply((t, u, v, w) -> {
-            compareAndSet(ref1, t);
-            compareAndSet(ref2, u);
-            compareAndSet(ref3, v);
-            compareAndSet(ref4, w);
+            TestUtils.compareAndSetThrows(ref1, t);
+            TestUtils.compareAndSetThrows(ref2, u);
+            TestUtils.compareAndSetThrows(ref3, v);
+            TestUtils.compareAndSetThrows(ref4, w);
             return "new0";
         }, "new1", "new2", "new3", "new4"));
         assertEquals("new1", ref1.get());
@@ -145,9 +138,9 @@ public class UncheckTest {
         }, null, null, null));
         assertThrows(UncheckedIOException.class, () -> Uncheck.apply(TestConstants.THROWING_IO_TRI_FUNCTION, null, null, null));
         assertEquals("new0", Uncheck.apply((t, u, v) -> {
-            compareAndSet(ref1, t);
-            compareAndSet(ref2, u);
-            compareAndSet(ref3, v);
+            TestUtils.compareAndSetThrows(ref1, t);
+            TestUtils.compareAndSetThrows(ref2, u);
+            TestUtils.compareAndSetThrows(ref3, v);
             return "new0";
         }, "new1", "new2", "new3"));
         assertEquals("new1", ref1.get());
@@ -161,7 +154,7 @@ public class UncheckTest {
             throw new IOException();
         }));
         assertThrows(UncheckedIOException.class, () -> Uncheck.get(TestConstants.THROWING_IO_SUPPLIER));
-        assertEquals("new1", Uncheck.get(() -> compareAndSet(ref1, "new1")));
+        assertEquals("new1", Uncheck.get(() -> TestUtils.compareAndSetThrows(ref1, "new1")));
         assertEquals("new1", ref1.get());
     }
 
@@ -171,7 +164,7 @@ public class UncheckTest {
             throw new IOException();
         }));
         assertThrows(UncheckedIOException.class, () -> Uncheck.run(TestConstants.THROWING_IO_RUNNABLE));
-        Uncheck.run(() -> compareAndSet(ref1, "new1"));
+        Uncheck.run(() -> TestUtils.compareAndSetThrows(ref1, "new1"));
         assertEquals("new1", ref1.get());
     }
 
@@ -181,7 +174,7 @@ public class UncheckTest {
             throw new IOException();
         }, null));
         assertThrows(UncheckedIOException.class, () -> Uncheck.test(TestConstants.THROWING_IO_PREDICATE, null));
-        assertTrue(Uncheck.test(t -> compareAndSet(ref1, t).equals(t), "new1"));
+        assertTrue(Uncheck.test(t -> TestUtils.compareAndSetThrows(ref1, t).equals(t), "new1"));
         assertEquals("new1", ref1.get());
     }
 
