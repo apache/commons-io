@@ -50,11 +50,7 @@ public class IOPredicateTest {
         }
     };
 
-    private static IOPredicate<Object> THROWING_IOPREDICATE = e -> {
-        throw new IOException("Failure");
-    };
-
-    private static final Predicate<Object> THROWING_UNCHECKED_PREDICATE = THROWING_IOPREDICATE.asPredicate();
+    private static final Predicate<Object> THROWING_UNCHECKED_PREDICATE = TestConstants.THROWING_IO_PREDICATE.asPredicate();
 
     private void assertThrowsChecked(final Executable executable) {
         assertThrows(IOException.class, executable);
@@ -145,7 +141,7 @@ public class IOPredicateTest {
 
     @Test
     public void testTestChecked() throws IOException {
-        assertThrowsChecked(() -> THROWING_IOPREDICATE.test(null));
+        assertThrowsChecked(() -> TestConstants.THROWING_IO_PREDICATE.test(null));
         assertTrue(Constants.IO_PREDICATE_TRUE.test("A"));
     }
 
