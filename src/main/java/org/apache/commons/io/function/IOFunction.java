@@ -18,6 +18,7 @@
 package org.apache.commons.io.function;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -127,6 +128,17 @@ public interface IOFunction<T, R> {
      * @throws IOException if an I/O error occurs.
      */
     R apply(final T t) throws IOException;
+
+    /**
+     * Converts this instance to a {@link Function} that throws {@link UncheckedIOException} instead of
+     * {@link IOException}.
+     *
+     * @return an unchecked Function.
+     * @since 2.12.0
+     */
+    default Function<T, R> asFunction() {
+        return t -> Uncheck.apply(this, t);
+    }
 
     /**
      * Returns a composed {@link IOFunction} that first applies the {@code before}
