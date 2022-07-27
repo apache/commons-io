@@ -18,6 +18,7 @@
 package org.apache.commons.io.function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -25,6 +26,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.file.PathUtils;
 import org.junit.jupiter.api.Test;
@@ -73,6 +76,15 @@ public class IOBiFunctionTest {
             throw new IOException("Boom!");
         };
         assertThrows(IOException.class, () -> isDirectory.apply(PathUtils.current(), PathUtils.EMPTY_LINK_OPTION_ARRAY));
+    }
+
+    @Test
+    public void testAsBiFunction() throws IOException {
+        final Map<String, Long> map = new HashMap<>();
+        map.put("1", 0L);
+        final IOBiFunction<String, Long, Long> f = (t, u) -> Files.size(PathUtils.current());
+        map.computeIfPresent("1", f.asBiFunction());
+        assertNotEquals(0L, map.get("1"));
     }
 
     @Test
