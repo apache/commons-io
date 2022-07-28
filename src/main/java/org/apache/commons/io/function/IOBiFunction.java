@@ -79,7 +79,7 @@ public interface IOBiFunction<T, U, R> {
     R apply(T t, U u) throws IOException;
 
     /**
-     * Converts this instance to a {@link BiFunction} that throws {@link UncheckedIOException} instead of
+     * Creates a {@link BiFunction} for this instance that throws {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
      * @return an unchecked BiFunction.

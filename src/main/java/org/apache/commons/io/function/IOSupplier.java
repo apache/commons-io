@@ -31,7 +31,7 @@ import java.util.function.Supplier;
 public interface IOSupplier<T> {
 
     /**
-     * Converts this instance to a Supplier that throws {@link UncheckedIOException} instead of {@link IOException}.
+     * Creates a {@link Supplier} for this instance that throws {@link UncheckedIOException} instead of {@link IOException}.
      *
      * @return an unchecked Predicate.
      * @since 2.12.0

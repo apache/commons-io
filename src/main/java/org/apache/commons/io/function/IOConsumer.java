@@ -156,8 +156,7 @@ public interface IOConsumer<T> {
     }
 
     /**
-     * Converts this instance to a {@link Consumer} that throws {@link UncheckedIOException} instead of
-     * {@link IOException}.
+     * Creates a {@link Consumer} for this instance that throws {@link UncheckedIOException} instead of {@link IOException}.
      *
      * @return an unchecked Consumer.
      * @since 2.12.0

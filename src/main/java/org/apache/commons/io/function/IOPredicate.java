@@ -85,7 +85,7 @@ public interface IOPredicate<T> {
     }
 
     /**
-     * Converts this instance to a {@link Predicate} that throws {@link UncheckedIOException} instead of
+     * Creates a {@link Predicate} for this instance that throws {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
      * @return an unchecked Predicate.

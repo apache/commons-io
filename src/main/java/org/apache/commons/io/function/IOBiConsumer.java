@@ -73,7 +73,7 @@ public interface IOBiConsumer<T, U> {
     }
 
     /**
-     * Converts this instance to a {@link BiConsumer} that throws {@link UncheckedIOException} instead of
+     * Creates a {@link BiConsumer} for this instance that throws {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
      * @return an unchecked BiConsumer.
