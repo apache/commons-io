@@ -19,6 +19,8 @@ package org.apache.commons.io.function;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -93,6 +95,8 @@ public class IOPredicateTest {
         // Make sure we keep the argument type
         final IOPredicate<String> alwaysFalse = IOPredicate.alwaysFalse();
         assertFalse(alwaysFalse.test("A"));
+        assertEquals(IOPredicate.alwaysFalse(), IOPredicate.alwaysFalse());
+        assertSame(IOPredicate.alwaysFalse(), IOPredicate.alwaysFalse());
     }
 
     @Test
@@ -157,6 +161,8 @@ public class IOPredicateTest {
         // Make sure we keep the argument type
         final IOPredicate<String> alwaysTrue = IOPredicate.alwaysTrue();
         assertTrue(alwaysTrue.test("A"));
+        assertEquals(IOPredicate.alwaysTrue(), IOPredicate.alwaysTrue());
+        assertSame(IOPredicate.alwaysTrue(), IOPredicate.alwaysTrue());
     }
 
 }
