@@ -38,7 +38,13 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.file.TempFile;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests {@link BoundedReader}.
+ */
 public class BoundedReaderTest {
+
+    private static final Duration TIMEOUT = Duration.ofSeconds(10);
+
     private static final String STRING_END_NO_EOL = "0\n1\n2";
 
     private static final String STRING_END_EOL = "0\n1\n2\n";
@@ -208,27 +214,27 @@ public class BoundedReaderTest {
 
     @Test
     public void testLineNumberReaderAndFileReaderLastLineEolNo() {
-        assertTimeout(Duration.ofMillis(5000), () -> testLineNumberReaderAndFileReaderLastLine(STRING_END_NO_EOL));
+        assertTimeout(TIMEOUT, () -> testLineNumberReaderAndFileReaderLastLine(STRING_END_NO_EOL));
     }
 
     @Test
     public void testLineNumberReaderAndFileReaderLastLineEolYes() {
-        assertTimeout(Duration.ofMillis(5000), () -> testLineNumberReaderAndFileReaderLastLine(STRING_END_EOL));
+        assertTimeout(TIMEOUT, () -> testLineNumberReaderAndFileReaderLastLine(STRING_END_EOL));
     }
 
     @Test
     public void testLineNumberReaderAndStringReaderLastLineEolNo() {
-        assertTimeout(Duration.ofMillis(5000), () -> testLineNumberReader(new StringReader(STRING_END_NO_EOL)));
+        assertTimeout(TIMEOUT, () -> testLineNumberReader(new StringReader(STRING_END_NO_EOL)));
     }
 
     @Test
     public void testLineNumberReaderAndStringReaderLastLineEolYes() {
-        assertTimeout(Duration.ofMillis(5000), () -> testLineNumberReader(new StringReader(STRING_END_EOL)));
+        assertTimeout(TIMEOUT, () -> testLineNumberReader(new StringReader(STRING_END_EOL)));
     }
 
     @Test
     public void testReadBytesEOF() {
-        assertTimeout(Duration.ofMillis(5000), () -> {
+        assertTimeout(TIMEOUT, () -> {
             final BoundedReader mr = new BoundedReader(sr, 3);
             try (BufferedReader br = new BufferedReader(mr)) {
                 br.readLine();
