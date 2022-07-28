@@ -42,7 +42,7 @@ import java.util.function.Function;
 public interface IOBiFunction<T, U, R> {
 
     /**
-     * Returns The p singleton.
+     * Returns the no-op singleton.
      *
      * @param <T> the type of the first argument to the function
      * @param <U> the type of the second argument to the function
@@ -54,7 +54,7 @@ public interface IOBiFunction<T, U, R> {
     }
 
     /**
-     * Returns a composed function that first applies this function to its input, and then applies the {@code after}
+     * Creates a composed function that first applies this function to its input, and then applies the {@code after}
      * function to the result. If evaluation of either function throws an exception, it is relayed to the caller of the
      * composed function.
      *
@@ -82,7 +82,7 @@ public interface IOBiFunction<T, U, R> {
      * Creates a {@link BiFunction} for this instance that throws {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @return an unchecked BiFunction.
+     * @return an UncheckedIOException BiFunction.
      */
     default BiFunction<T, U, R> asBiFunction() {
         return (t, u) -> Uncheck.apply(this, t, u);

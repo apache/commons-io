@@ -122,7 +122,7 @@ public interface IOFunction<T, R> {
     /**
      * Creates a {@link Function} for this instance that throws {@link UncheckedIOException} instead of {@link IOException}.
      *
-     * @return an unchecked Function.
+     * @return an UncheckedIOException Function.
      * @since 2.12.0
      */
     default Function<T, R> asFunction() {

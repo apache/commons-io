@@ -41,7 +41,7 @@ import java.util.function.Function;
 public interface IOTriFunction<T, U, V, R> {
 
     /**
-     * Returns a composed function that first applies this function to its input, and then applies the {@code after}
+     * Creates a composed function that first applies this function to its input, and then applies the {@code after}
      * function to the result. If evaluation of either function throws an exception, it is relayed to the caller of the
      * composed function.
      *

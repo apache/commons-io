@@ -54,7 +54,7 @@ public interface IOPredicate<T> {
     }
 
     /**
-     * Returns a predicate that tests if two arguments are equal using {@link Objects#equals(Object, Object)}.
+     * Creates a predicate that tests if two arguments are equal using {@link Objects#equals(Object, Object)}.
      *
      * @param <T> the type of arguments to the predicate
      * @param target the object to compare for equality, may be {@code null}
@@ -65,7 +65,7 @@ public interface IOPredicate<T> {
     }
 
     /**
-     * Returns a composed predicate that represents a short-circuiting logical AND of this predicate and another. When
+     * Creates a composed predicate that represents a short-circuiting logical AND of this predicate and another. When
      * evaluating the composed predicate, if this predicate is {@code false}, then the {@code other} predicate is not
      * evaluated.
      *
@@ -88,14 +88,14 @@ public interface IOPredicate<T> {
      * Creates a {@link Predicate} for this instance that throws {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @return an unchecked Predicate.
+     * @return an UncheckedIOException Predicate.
      */
     default Predicate<T> asPredicate() {
         return t -> Uncheck.test(this, t);
     }
 
     /**
-     * Returns a predicate that represents the logical negation of this predicate.
+     * Creates a predicate that represents the logical negation of this predicate.
      *
      * @return a predicate that represents the logical negation of this predicate
      */
@@ -104,7 +104,7 @@ public interface IOPredicate<T> {
     }
 
     /**
-     * Returns a composed predicate that represents a short-circuiting logical OR of this predicate and another. When
+     * Creates a composed predicate that represents a short-circuiting logical OR of this predicate and another. When
      * evaluating the composed predicate, if this predicate is {@code true}, then the {@code other} predicate is not
      * evaluated.
      *

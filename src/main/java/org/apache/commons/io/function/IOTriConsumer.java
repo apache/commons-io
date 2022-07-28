@@ -35,7 +35,7 @@ import java.util.function.BiConsumer;
 public interface IOTriConsumer<T, U, V> {
 
     /**
-     * Returns The no-op singleton.
+     * Returns the no-op singleton.
      *
      * @param <T> the type of the first argument to the operation
      * @param <U> the type of the second argument to the operation
@@ -57,7 +57,7 @@ public interface IOTriConsumer<T, U, V> {
     void accept(T t, U u, V v) throws IOException;
 
     /**
-     * Returns a composed {@link IOTriConsumer} that performs, in sequence, this operation followed by the {@code after}
+     * Creates a composed {@link IOTriConsumer} that performs, in sequence, this operation followed by the {@code after}
      * operation. If performing either operation throws an exception, it is relayed to the caller of the composed operation.
      * If performing this operation throws an exception, the {@code after} operation will not be performed.
      *

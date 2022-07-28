@@ -33,7 +33,7 @@ public interface IOSupplier<T> {
     /**
      * Creates a {@link Supplier} for this instance that throws {@link UncheckedIOException} instead of {@link IOException}.
      *
-     * @return an unchecked Predicate.
+     * @return an UncheckedIOException Supplier.
      * @since 2.12.0
      */
     default Supplier<T> asSupplier() {

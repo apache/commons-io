@@ -35,7 +35,7 @@ import java.util.function.BiConsumer;
 public interface IOBiConsumer<T, U> {
 
     /**
-     * Returns The no-op singleton.
+     * Returns the no-op singleton.
      *
      * @param <T> the type of the first argument to the operation
      * @param <U> the type of the second argument to the operation
@@ -55,7 +55,7 @@ public interface IOBiConsumer<T, U> {
     void accept(T t, U u) throws IOException;
 
     /**
-     * Returns a composed {@link IOBiConsumer} that performs, in sequence, this operation followed by the {@code after}
+     * Creates a composed {@link IOBiConsumer} that performs, in sequence, this operation followed by the {@code after}
      * operation. If performing either operation throws an exception, it is relayed to the caller of the composed operation.
      * If performing this operation throws an exception, the {@code after} operation will not be performed.
      *
@@ -76,7 +76,8 @@ public interface IOBiConsumer<T, U> {
      * Creates a {@link BiConsumer} for this instance that throws {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @return an unchecked BiConsumer.
+     * @return an UncheckedIOException BiConsumer.
+     * @throws UncheckedIOException Wraps an {@link IOException}.
      * @since 2.12.0
      */
     default BiConsumer<T, U> asBiConsumer() {

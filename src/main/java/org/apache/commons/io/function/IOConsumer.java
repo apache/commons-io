@@ -36,7 +36,7 @@ import org.apache.commons.io.IOIndexedException;
 public interface IOConsumer<T> {
 
     /**
-     * Package private constant; consider private.
+     * Consider private.
      */
     IOConsumer<?> NOOP_IO_CONSUMER = t -> {/* noop */};
 
@@ -119,7 +119,7 @@ public interface IOConsumer<T> {
     }
 
     /**
-     * Returns a constant no-op consumer.
+     * Returns the constant no-op consumer.
      *
      * @param <T> Type consumer type.
      * @return a constant no-op consumer.
@@ -158,7 +158,7 @@ public interface IOConsumer<T> {
     /**
      * Creates a {@link Consumer} for this instance that throws {@link UncheckedIOException} instead of {@link IOException}.
      *
-     * @return an unchecked Consumer.
+     * @return an UncheckedIOException Consumer.
      * @since 2.12.0
      */
     default Consumer<T> asConsumer() {

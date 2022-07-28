@@ -31,7 +31,7 @@ public interface IORunnable {
     /**
      * Creates a {@link Runnable} for this instance that throws {@link UncheckedIOException} instead of {@link IOException}.
      *
-     * @return an unchecked Predicate.
+     * @return an UncheckedIOException Predicate.
      */
     default Runnable asRunnable() {
         return () -> Uncheck.run(this);
