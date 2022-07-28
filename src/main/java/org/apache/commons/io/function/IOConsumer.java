@@ -18,6 +18,7 @@
 package org.apache.commons.io.function;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -153,4 +154,16 @@ public interface IOConsumer<T> {
             after.accept(t);
         };
     }
+
+    /**
+     * Converts this instance to a {@link Consumer} that throws {@link UncheckedIOException} instead of
+     * {@link IOException}.
+     *
+     * @return an unchecked Consumer.
+     * @since 2.12.0
+     */
+    default Consumer<T> asConsumer() {
+        return t -> Uncheck.accept(this, t);
+    }
+
 }

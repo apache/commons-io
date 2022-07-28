@@ -19,11 +19,14 @@ package org.apache.commons.io.function;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.StringReader;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.io.IOUtils;
@@ -56,6 +59,16 @@ public class IOConsumerTest {
         consumer1.andThen(consumer2).accept("B");
         assertEquals("B12B", ref.get());
     }
+
+    @Test
+    public void testAsConsumer() throws IOException {
+        assertThrows(UncheckedIOException.class, () -> Optional.of("a").ifPresent(TestConstants.THROWING_IO_CONSUMER.asConsumer()));
+        final AtomicReference<String> ref = new AtomicReference<>();
+        final IOConsumer<String> consumer1 = s -> ref.set(s + "1");
+        Optional.of("a").ifPresent(consumer1.asConsumer());
+        assertEquals("a1", ref.get());
+    }
+
 
     @Test
     public void testNoop() {
