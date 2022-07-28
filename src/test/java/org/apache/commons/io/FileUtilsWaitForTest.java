@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
  * <p>
  * This class has been broken out from FileUtilsTestCase to solve issues as per BZ 38927
  * </p>
- * 
+ *
  * @see FileUtils
  */
 public class FileUtilsWaitForTest {
