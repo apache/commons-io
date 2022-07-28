@@ -18,6 +18,7 @@
 package org.apache.commons.io.function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
@@ -52,6 +53,7 @@ public class IOSupplierTest {
         assertThrows(UncheckedIOException.class, () -> TestConstants.THROWING_IO_SUPPLIER.asSupplier().get());
         assertEquals("new1", getThrowsNone(() -> TestUtils.compareAndSetThrows(ref1, "new1")));
         assertEquals("new1", ref1.get());
+        assertNotEquals(TestConstants.THROWING_IO_SUPPLIER.asSupplier(), TestConstants.THROWING_IO_SUPPLIER.asSupplier());
     }
 
     @Test
