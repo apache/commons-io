@@ -18,8 +18,12 @@
 package org.apache.commons.io.function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.jupiter.api.Test;
@@ -44,6 +48,17 @@ public class IOBiConsumerTest {
         final IOBiConsumer<String, Integer> biConsumer2 = (s, i) -> ref.set(ref.get() + i + s);
         biConsumer1.andThen(biConsumer2).accept("B", 2);
         assertEquals("B22B", ref.get());
+    }
+
+    @Test
+    public void testAsBiConsumer() throws IOException {
+        final Map<String, Integer> map = new HashMap<>();
+        map.put("a", 1);
+        assertThrows(UncheckedIOException.class, () -> map.forEach(TestConstants.THROWING_IO_BI_CONSUMER.asBiConsumer()));
+        final AtomicReference<String> ref = new AtomicReference<>();
+        final IOBiConsumer<String, Integer> consumer1 = (t, u) -> ref.set(t + u);
+        map.forEach(consumer1.asBiConsumer());
+        assertEquals("a1", ref.get());
     }
 
     @Test

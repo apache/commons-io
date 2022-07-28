@@ -69,7 +69,6 @@ public class IOConsumerTest {
         assertEquals("a1", ref.get());
     }
 
-
     @Test
     public void testNoop() {
         final Closeable nullCloseable = null;

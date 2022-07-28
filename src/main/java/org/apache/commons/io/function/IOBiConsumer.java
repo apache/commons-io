@@ -18,6 +18,7 @@
 package org.apache.commons.io.function;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
@@ -70,4 +71,16 @@ public interface IOBiConsumer<T, U> {
             after.accept(t, u);
         };
     }
+
+    /**
+     * Converts this instance to a {@link BiConsumer} that throws {@link UncheckedIOException} instead of
+     * {@link IOException}.
+     *
+     * @return an unchecked BiConsumer.
+     * @since 2.12.0
+     */
+    default BiConsumer<T, U> asBiConsumer() {
+        return (t, u) -> Uncheck.accept(this, t, u);
+    }
+
 }
