@@ -18,6 +18,7 @@
 package org.apache.commons.io.function;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 
 /**
  * Like {@link Runnable} but throws {@link IOException}.
@@ -26,6 +27,15 @@ import java.io.IOException;
  */
 @FunctionalInterface
 public interface IORunnable {
+
+    /**
+     * Creates a {@link Runnable} for this instance that throws {@link UncheckedIOException} instead of {@link IOException}.
+     *
+     * @return an unchecked Predicate.
+     */
+    default Runnable asRunnable() {
+        return () -> Uncheck.run(this);
+    }
 
     /**
      * Like {@link Runnable#run()} but throws {@link IOException}.

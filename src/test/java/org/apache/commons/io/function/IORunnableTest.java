@@ -18,10 +18,16 @@
 package org.apache.commons.io.function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.apache.commons.io.file.PathUtils;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -40,6 +46,13 @@ public class IORunnableTest {
         final IORunnable runnable = () -> ref.set("A1");
         runnable.run();
         assertEquals("A1", ref.get());
+    }
+
+    @Test
+    public void testAsRunnable() throws Exception {
+        assertThrows(UncheckedIOException.class, () -> Executors.callable(TestConstants.THROWING_IO_RUNNABLE.asRunnable()).call());
+        final IORunnable runnable = () -> Files.size(PathUtils.current());
+        assertNull(Executors.callable(runnable.asRunnable()).call());
     }
 
 }
