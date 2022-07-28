@@ -25,12 +25,13 @@ import org.junit.jupiter.api.Test;
 
 /**
  * This is used to test FileUtils.waitFor() method for correctness.
- *
+ * <p>
+ * This class has been broken out from FileUtilsTestCase to solve issues as per BZ 38927
+ * </p>
+ * 
  * @see FileUtils
  */
 public class FileUtilsWaitForTest {
-    // This class has been broken out from FileUtilsTestCase
-    // to solve issues as per BZ 38927
 
     @Test
     public void testWaitFor0() {
