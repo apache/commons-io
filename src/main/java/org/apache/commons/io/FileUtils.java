@@ -687,8 +687,7 @@ public class FileUtils {
         // Cater for destination being directory within the source directory (see IO-141)
         List<String> exclusionList = null;
         final String srcDirCanonicalPath = srcDir.getCanonicalPath();
-        final String destDirCanonicalPath = destDir.getCanonicalPath();
-        if (destDirCanonicalPath.startsWith(srcDirCanonicalPath)) {
+        if (destDir.getCanonicalFile().toPath().startsWith(srcDirCanonicalPath)) {
             final File[] srcFiles = listFiles(srcDir, fileFilter);
             if (srcFiles.length > 0) {
                 exclusionList = new ArrayList<>(srcFiles.length);
