@@ -60,10 +60,10 @@ public class FilesUncheck {
      * Delegates to {@link Files#copy(InputStream, Path,CopyOption...)} throwing {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @param in See delegate. See delegate.
-     * @param target See delegate. See delegate.
-     * @param options See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param in See delegate.
+     * @param target See delegate.
+     * @param options See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      * @see Files#copy(InputStream, Path,CopyOption...)
      */
@@ -75,9 +75,9 @@ public class FilesUncheck {
      * Delegates to {@link Files#copy(Path, OutputStream)} throwing {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @param source See delegate. See delegate. See delegate.
-     * @param out See delegate. See delegate. See delegate.
-     * @return See delegate. See delegate. See delegate.
+     * @param source See delegate. See delegate.
+     * @param out See delegate. See delegate.
+     * @return See delegate. See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static long copy(final Path source, final OutputStream out) {
@@ -88,10 +88,10 @@ public class FilesUncheck {
      * Delegates to {@link Files#copy(Path, Path, CopyOption...)} throwing {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @param source See delegate. See delegate.
-     * @param target See delegate. See delegate.
-     * @param options See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param source See delegate.
+     * @param target See delegate.
+     * @param options See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Path copy(final Path source, final Path target, final CopyOption... options) {
@@ -102,9 +102,9 @@ public class FilesUncheck {
      * Delegates to {@link Files#createDirectories(Path, FileAttribute...)} throwing {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @param dir See delegate. See delegate.
-     * @param attrs See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param dir See delegate.
+     * @param attrs See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Path createDirectories(final Path dir, final FileAttribute<?>... attrs) {
@@ -115,9 +115,9 @@ public class FilesUncheck {
      * Delegates to {@link Files#createDirectory(Path, FileAttribute...)} throwing {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @param dir See delegate. See delegate.
-     * @param attrs See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param dir See delegate.
+     * @param attrs See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Path createDirectory(final Path dir, final FileAttribute<?>... attrs) {
@@ -128,9 +128,9 @@ public class FilesUncheck {
      * Delegates to {@link Files#createFile(Path, FileAttribute...)} throwing {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @param path See delegate. See delegate.
-     * @param attrs See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param path See delegate.
+     * @param attrs See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Path createFile(final Path path, final FileAttribute<?>... attrs) {
@@ -141,9 +141,9 @@ public class FilesUncheck {
      * Delegates to {@link Files#createLink(Path, Path)} throwing {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @param link See delegate. See delegate.
-     * @param existing See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param link See delegate.
+     * @param existing See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Path createLink(final Path link, final Path existing) {
@@ -154,10 +154,10 @@ public class FilesUncheck {
      * Delegates to {@link Files#createSymbolicLink(Path, Path, FileAttribute...)} throwing {@link UncheckedIOException}
      * instead of {@link IOException}.
      *
-     * @param link See delegate. See delegate.
-     * @param target See delegate. See delegate.
-     * @param attrs See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param link See delegate.
+     * @param target See delegate.
+     * @param attrs See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Path createSymbolicLink(final Path link, final Path target, final FileAttribute<?>... attrs) {
@@ -168,10 +168,10 @@ public class FilesUncheck {
      * Delegates to {@link Files#createTempDirectory(Path, String, FileAttribute...)} throwing {@link UncheckedIOException}
      * instead of {@link IOException}.
      *
-     * @param dir See delegate. See delegate.
-     * @param prefix See delegate. See delegate.
-     * @param attrs See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param dir See delegate.
+     * @param prefix See delegate.
+     * @param attrs See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Path createTempDirectory(final Path dir, final String prefix, final FileAttribute<?>... attrs) {
@@ -182,9 +182,9 @@ public class FilesUncheck {
      * Delegates to {@link Files#createTempDirectory(String, FileAttribute...)} throwing {@link UncheckedIOException}
      * instead of {@link IOException}.
      *
-     * @param prefix See delegate. See delegate.
-     * @param attrs See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param prefix See delegate.
+     * @param attrs See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Path createTempDirectory(final String prefix, final FileAttribute<?>... attrs) {
@@ -195,11 +195,11 @@ public class FilesUncheck {
      * Delegates to {@link Files#createTempFile(Path, String, String, FileAttribute...)} throwing
      * {@link UncheckedIOException} instead of {@link IOException}.
      *
-     * @param dir See delegate. See delegate.
-     * @param prefix See delegate. See delegate.
-     * @param suffix See delegate. See delegate.
-     * @param attrs See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param dir See delegate.
+     * @param prefix See delegate.
+     * @param suffix See delegate.
+     * @param attrs See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Path createTempFile(final Path dir, final String prefix, final String suffix, final FileAttribute<?>... attrs) {
@@ -210,10 +210,10 @@ public class FilesUncheck {
      * Delegates to {@link Files#createTempFile(String, String, FileAttribute...)} throwing {@link UncheckedIOException}
      * instead of {@link IOException}.
      *
-     * @param prefix See delegate. See delegate.
-     * @param suffix See delegate. See delegate.
-     * @param attrs See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param prefix See delegate.
+     * @param suffix See delegate.
+     * @param attrs See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Path createTempFile(final String prefix, final String suffix, final FileAttribute<?>... attrs) {
@@ -223,7 +223,7 @@ public class FilesUncheck {
     /**
      * Delegates to {@link Files#delete(Path)} throwing {@link UncheckedIOException} instead of {@link IOException}.
      *
-     * @param path See delegate. See delegate.
+     * @param path See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static void delete(final Path path) {
@@ -233,8 +233,8 @@ public class FilesUncheck {
     /**
      * Delegates to {@link Files#deleteIfExists(Path)} throwing {@link UncheckedIOException} instead of {@link IOException}.
      *
-     * @param path See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param path See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static boolean deleteIfExists(final Path path) {
@@ -245,10 +245,10 @@ public class FilesUncheck {
      * Delegates to {@link Files#getAttribute(Path, String, LinkOption...)} throwing {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @param path See delegate. See delegate.
-     * @param attribute See delegate. See delegate.
-     * @param options See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param path See delegate.
+     * @param attribute See delegate.
+     * @param options See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Object getAttribute(final Path path, final String attribute, final LinkOption... options) {
@@ -258,8 +258,8 @@ public class FilesUncheck {
     /**
      * Delegates to {@link Files#getFileStore(Path)} throwing {@link UncheckedIOException} instead of {@link IOException}.
      *
-     * @param path See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param path See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static FileStore getFileStore(final Path path) {
@@ -270,9 +270,9 @@ public class FilesUncheck {
      * Delegates to {@link Files#getLastModifiedTime(Path, LinkOption...)} throwing {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @param path See delegate. See delegate.
-     * @param options See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param path See delegate.
+     * @param options See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static FileTime getLastModifiedTime(final Path path, final LinkOption... options) {
@@ -283,9 +283,9 @@ public class FilesUncheck {
      * Delegates to {@link Files#getOwner(Path, LinkOption...)} throwing {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @param path See delegate. See delegate.
-     * @param options See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param path See delegate.
+     * @param options See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static UserPrincipal getOwner(final Path path, final LinkOption... options) {
@@ -296,9 +296,9 @@ public class FilesUncheck {
      * Delegates to {@link Files#getPosixFilePermissions(Path, LinkOption...)} throwing {@link UncheckedIOException} instead
      * of {@link IOException}.
      *
-     * @param path See delegate. See delegate.
-     * @param options See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param path See delegate.
+     * @param options See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Set<PosixFilePermission> getPosixFilePermissions(final Path path, final LinkOption... options) {
@@ -308,8 +308,8 @@ public class FilesUncheck {
     /**
      * Delegates to {@link Files#isHidden(Path)} throwing {@link UncheckedIOException} instead of {@link IOException}.
      *
-     * @param path See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param path See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static boolean isHidden(final Path path) {
@@ -320,9 +320,9 @@ public class FilesUncheck {
      * Delegates to {@link Files#isSameFile(Path, Path)} throwing {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @param path See delegate. See delegate.
-     * @param path2 See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param path See delegate.
+     * @param path2 See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static boolean isSameFile(final Path path, final Path path2) {
@@ -332,8 +332,8 @@ public class FilesUncheck {
     /**
      * Delegates to {@link Files#lines(Path)} throwing {@link UncheckedIOException} instead of {@link IOException}.
      *
-     * @param path See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param path See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Stream<String> lines(final Path path) {
@@ -343,9 +343,9 @@ public class FilesUncheck {
     /**
      * Delegates to {@link Files#lines(Path, Charset)} throwing {@link UncheckedIOException} instead of {@link IOException}.
      *
-     * @param path See delegate. See delegate.
-     * @param cs See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param path See delegate.
+     * @param cs See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Stream<String> lines(final Path path, final Charset cs) {
@@ -355,8 +355,8 @@ public class FilesUncheck {
     /**
      * Delegates to {@link Files#list(Path)} throwing {@link UncheckedIOException} instead of {@link IOException}.
      *
-     * @param dir See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param dir See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Stream<Path> list(final Path dir) {
@@ -367,10 +367,10 @@ public class FilesUncheck {
      * Delegates to {@link Files#move(Path, Path, CopyOption...)} throwing {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @param source See delegate. See delegate.
-     * @param target See delegate. See delegate.
-     * @param options See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param source See delegate.
+     * @param target See delegate.
+     * @param options See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static Path move(final Path source, final Path target, final CopyOption... options) {
@@ -381,8 +381,8 @@ public class FilesUncheck {
      * Delegates to {@link Files#newBufferedReader(Path)} throwing {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @param path See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param path See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static BufferedReader newBufferedReader(final Path path) {
@@ -393,9 +393,9 @@ public class FilesUncheck {
      * Delegates to {@link Files#newBufferedReader(Path, Charset)} throwing {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @param path See delegate. See delegate.
-     * @param cs See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param path See delegate.
+     * @param cs See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static BufferedReader newBufferedReader(final Path path, final Charset cs) {
@@ -406,10 +406,10 @@ public class FilesUncheck {
      * Delegates to {@link Files#newBufferedWriter(Path, Charset, OpenOption...)} throwing {@link UncheckedIOException}
      * instead of {@link IOException}.
      *
-     * @param path See delegate. See delegate.
-     * @param cs See delegate. See delegate.
-     * @param options See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param path See delegate.
+     * @param cs See delegate.
+     * @param options See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static BufferedWriter newBufferedWriter(final Path path, final Charset cs, final OpenOption... options) {
@@ -420,9 +420,9 @@ public class FilesUncheck {
      * Delegates to {@link Files#newBufferedWriter(Path, OpenOption...)} throwing {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @param path See delegate. See delegate.
-     * @param options See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param path See delegate.
+     * @param options See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static BufferedWriter newBufferedWriter(final Path path, final OpenOption... options) {
@@ -433,9 +433,9 @@ public class FilesUncheck {
      * Delegates to {@link Files#newByteChannel(Path, OpenOption...)} throwing {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @param path See delegate. See delegate.
-     * @param options See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param path See delegate.
+     * @param options See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static SeekableByteChannel newByteChannel(final Path path, final OpenOption... options) {
@@ -446,10 +446,10 @@ public class FilesUncheck {
      * Delegates to {@link Files#newByteChannel(Path, Set, FileAttribute...)} throwing {@link UncheckedIOException} instead
      * of {@link IOException}.
      *
-     * @param path See delegate. See delegate.
-     * @param options See delegate. See delegate.
-     * @param attrs See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param path See delegate.
+     * @param options See delegate.
+     * @param attrs See delegate.
+     * @return See delegate.
      * @throws UncheckedIOException Wraps an {@link IOException}.
      */
     public static SeekableByteChannel newByteChannel(final Path path, final Set<? extends OpenOption> options, final FileAttribute<?>... attrs) {
@@ -460,8 +460,8 @@ public class FilesUncheck {
      * Delegates to {@link Files#newDirectoryStream(Path)} throwing {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
-     * @param dir See delegate. See delegate.
-     * @return See delegate. See delegate.
+     * @param dir See delegate.
+     * @return See delegate.
      */
     public static DirectoryStream<Path> newDirectoryStream(final Path dir) {
         return Uncheck.apply(Files::newDirectoryStream, dir);
