@@ -40,6 +40,8 @@ class TestConstants {
         throw new IOException("Failure");
     };
 
+    static IOBinaryOperator<?> THROWING_IO_BINARY_OPERATOR = (t, u) -> throwIOException();
+
     static IOComparator<Object> THROWING_IO_COMPARATOR = (t, u) -> throwIOException();
 
     static IOConsumer<Object> THROWING_IO_CONSUMER = t -> {

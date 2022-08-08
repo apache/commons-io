@@ -33,9 +33,14 @@ class TestUtils {
         return ref.get(); // same as update
     }
 
-        @SuppressWarnings("unchecked")
-        static <T> IOUnaryOperator<T> throwingIOUnaryOperator() {
-            return (IOUnaryOperator<T>) TestConstants.THROWING_IO_UNARY_OPERATOR;
-        }
+    @SuppressWarnings("unchecked")
+    static <T> IOBinaryOperator<T> throwingIOBinaryOperator() {
+        return (IOBinaryOperator<T>) TestConstants.THROWING_IO_BINARY_OPERATOR;
+    }
+
+    @SuppressWarnings("unchecked")
+    static <T> IOUnaryOperator<T> throwingIOUnaryOperator() {
+        return (IOUnaryOperator<T>) TestConstants.THROWING_IO_UNARY_OPERATOR;
+    }
 
 }
