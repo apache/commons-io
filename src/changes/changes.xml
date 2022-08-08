@@ -183,17 +183,23 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-772" dev="ggregory" type="fix" due-to="Dan Ziemba, Gary Gregory">
         Confusing Javadoc on IOUtils#resourceToURL() and other resource* methods.
       </action>
+      <action issue="IO-443" dev="ggregory" type="fix" due-to="Dan Ziemba, Gary Gregory">
+        FileUtils.copyFile methods throw an unnecessary "Failed to copy full contents from" exception.
+      </action>
       <action issue="IO-564" dev="ggregory" type="fix" due-to="Hao Zhong, Bernd Eckenfels, Pascal Schumacher, Gary Gregory">
         Pick up Javadoc from super for override write() methods in AbstractByteArrayOutputStream and ByteArrayOutputStream.
       </action>
       <action dev="ggregory" type="fix" due-to="Marc Wrobel">
-        Fix minor typos #367
+        Fix minor typos #367.
       </action>
       <action issue="IO-776" dev="kinow" type="fix" due-to="Chris Povirk">
         Fix parameters to requireNonNull call in DeferredOutputSteam #368.
       </action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
         Fix PathUtils.copyFileToDirectory(URL,Path,CopyOption[]).
+      </action>
+      <action issue="IO-386" dev="ggregory" type="fix" due-to="Sebb, Bernd Eckenfels, zhipengxu, Gary Gregory">
+        FileUtils.doCopyFile uses different methods to check the file sizes.
       </action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">

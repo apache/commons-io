@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -1586,22 +1585,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testGetUserDirectoryPath() {
         assertEquals(System.getProperty("user.home"), FileUtils.getUserDirectoryPath());
-    }
-
-    // This test relies on FileUtils.copyFile using File.length to check the output size
-    @Test
-    public void testIncorrectOutputSize() {
-        final File inFile = new File("pom.xml");
-        final File outFile = new ShorterFile("target/pom.tmp"); // it will report a shorter file
-        try {
-            FileUtils.copyFile(inFile, outFile);
-            fail("Expected IOException");
-        } catch (final Exception e) {
-            final String msg = e.toString();
-            assertTrue(msg.contains("Failed to copy full contents"), msg);
-        } finally {
-            outFile.delete(); // tidy up
-        }
     }
 
     @Test

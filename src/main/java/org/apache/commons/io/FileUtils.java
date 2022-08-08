@@ -829,7 +829,6 @@ public class FileUtils {
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
      * @throws FileNotFoundException if the source does not exist.
      * @throws IllegalArgumentException if source is not a file.
-     * @throws IOException if the output file length is not the same as the input file length after the copy completes.
      * @throws IOException if an I/O error occurs.
      * @see StandardCopyOption
      * @since 2.9.0
@@ -843,12 +842,8 @@ public class FileUtils {
         if (destFile.exists()) {
             requireCanWrite(destFile, "destFile");
         }
-
         // On Windows, the last modified time is copied by default.
         Files.copy(srcFile.toPath(), destFile.toPath(), copyOptions);
-
-        // TODO IO-386: Do we still need this check?
-        requireEqualSizes(srcFile, destFile, srcFile.length(), destFile.length());
     }
 
     /**
@@ -2769,22 +2764,6 @@ public class FileUtils {
             requireDirectory(directory, name);
         }
         return directory;
-    }
-
-    /**
-     * Requires that two file lengths are equal.
-     *
-     * @param srcFile Source file.
-     * @param destFile Destination file.
-     * @param srcLen Source file length.
-     * @param dstLen Destination file length
-     * @throws IOException Thrown when the given sizes are not equal.
-     */
-    private static void requireEqualSizes(final File srcFile, final File destFile, final long srcLen, final long dstLen) throws IOException {
-        if (srcLen != dstLen) {
-            throw new IOException(
-                "Failed to copy full contents from '" + srcFile + "' to '" + destFile + "' Expected length: " + srcLen + " Actual: " + dstLen);
-        }
     }
 
     /**
