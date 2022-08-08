@@ -3066,12 +3066,7 @@ public class FileUtils {
      * @throws NullPointerException if the parameter is null
      */
     private static String[] toSuffixes(final String... extensions) {
-        Objects.requireNonNull(extensions, "extensions");
-        final String[] suffixes = new String[extensions.length];
-        for (int i = 0; i < extensions.length; i++) {
-            suffixes[i] = "." + extensions[i];
-        }
-        return suffixes;
+        return Stream.of(Objects.requireNonNull(extensions, "extensions")).map(e -> "." + e).toArray(String[]::new);
     }
 
     /**
