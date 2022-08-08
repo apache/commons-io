@@ -32,49 +32,29 @@ class TestConstants {
 
     static final Path ABS_PATH_B = Paths.get("NOTICE.txt").toAbsolutePath();
 
-    static IOBiConsumer<Object, Object> THROWING_IO_BI_CONSUMER = (t, u) -> {
-        throw new IOException("Failure");
-    };
+    static IOBiConsumer<Object, Object> THROWING_IO_BI_CONSUMER = (t, u) -> throwIOException();
 
-    static IOBiFunction<Object, Object, Object> THROWING_IO_BI_FUNCTION = (t, u) -> {
-        throw new IOException("Failure");
-    };
+    static IOBiFunction<Object, Object, Object> THROWING_IO_BI_FUNCTION = (t, u) -> throwIOException();
 
     static IOBinaryOperator<?> THROWING_IO_BINARY_OPERATOR = (t, u) -> throwIOException();
 
     static IOComparator<Object> THROWING_IO_COMPARATOR = (t, u) -> throwIOException();
 
-    static IOConsumer<Object> THROWING_IO_CONSUMER = t -> {
-        throw new IOException("Failure");
-    };
+    static IOConsumer<Object> THROWING_IO_CONSUMER = t -> throwIOException();
 
-    static IOFunction<Object, Object> THROWING_IO_FUNCTION = t -> {
-        throw new IOException("Failure");
-    };
+    static IOFunction<Object, Object> THROWING_IO_FUNCTION = t -> throwIOException();
 
-    static IOPredicate<Object> THROWING_IO_PREDICATE = t -> {
-        throw new IOException("Failure");
-    };
+    static IOPredicate<Object> THROWING_IO_PREDICATE = t -> throwIOException();
 
-    static IOQuadFunction<Object, Object, Object, Object, Object> THROWING_IO_QUAD_FUNCTION = (t, u, v, w) -> {
-        throw new IOException("Failure");
-    };
+    static IOQuadFunction<Object, Object, Object, Object, Object> THROWING_IO_QUAD_FUNCTION = (t, u, v, w) -> throwIOException();
 
-    static IORunnable THROWING_IO_RUNNABLE = () -> {
-        throw new IOException("Failure");
-    };
+    static IORunnable THROWING_IO_RUNNABLE = () -> throwIOException();
 
-    static IOSupplier<Object> THROWING_IO_SUPPLIER = () -> {
-        throw new IOException("Failure");
-    };
+    static IOSupplier<Object> THROWING_IO_SUPPLIER = () -> throwIOException();
 
-    static IOTriConsumer<Object, Object, Object> THROWING_IO_TRI_CONSUMER = (t, u, v) -> {
-        throw new IOException("Failure");
-    };
+    static IOTriConsumer<Object, Object, Object> THROWING_IO_TRI_CONSUMER = (t, u, v) -> throwIOException();
 
-    static IOTriFunction<Object, Object, Object, Object> THROWING_IO_TRI_FUNCTION = (t, u, v) -> {
-        throw new IOException("Failure");
-    };
+    static IOTriFunction<Object, Object, Object, Object> THROWING_IO_TRI_FUNCTION = (t, u, v) -> throwIOException();
 
     static IOUnaryOperator<?> THROWING_IO_UNARY_OPERATOR = t -> throwIOException();
 

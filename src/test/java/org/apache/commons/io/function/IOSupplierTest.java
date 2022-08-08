@@ -35,11 +35,11 @@ public class IOSupplierTest {
 
     private AtomicReference<String> ref1;
 
-    private String getThrows(IOSupplier<String> supplier) throws IOException {
+    private String getThrows(final IOSupplier<String> supplier) throws IOException {
         return supplier.get();
     }
 
-    private String getThrowsNone(IOSupplier<String> supplier) {
+    private String getThrowsNone(final IOSupplier<String> supplier) {
         return supplier.asSupplier().get();
     }
 
