@@ -166,6 +166,24 @@ public class Uncheck {
     }
 
     /**
+     * Compares the arguments with the comparator.
+     *
+     * @param <T> the first function argument type.
+     * @param comparator the function.
+     * @param t the first function argument.
+     * @param u the second function argument.
+     * @return the comparator result.
+     * @throws UncheckedIOException if an I/O error occurs.
+     */
+    public static <T> int compare(final IOComparator<T> comparator, final T t, final T u) {
+        try {
+            return comparator.compare(t, u);
+        } catch (final IOException e) {
+            throw wrap(e);
+        }
+    }
+
+    /**
      * Gets the result from an IO supplier.
      *
      * @param <T> the return type of the operations.

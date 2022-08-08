@@ -19,12 +19,28 @@ package org.apache.commons.io.function;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.function.Predicate;
 
 /**
  * Test fixtures for this package.
  */
 class TestConstants {
+
+    static final Path ABS_PATH_A = Paths.get("LICENSE.txt").toAbsolutePath();
+
+    static final Path ABS_PATH_B = Paths.get("NOTICE.txt").toAbsolutePath();
+
+    static IOBiConsumer<Object, Object> THROWING_IO_BI_CONSUMER = (t, u) -> {
+        throw new IOException("Failure");
+    };
+
+    static IOBiFunction<Object, Object, Object> THROWING_IO_BI_FUNCTION = (t, u) -> {
+        throw new IOException("Failure");
+    };
+
+    static IOComparator<Object> THROWING_IO_COMPARATOR = (t, u) -> throwIOException();
 
     static IOConsumer<Object> THROWING_IO_CONSUMER = t -> {
         throw new IOException("Failure");
@@ -34,11 +50,7 @@ class TestConstants {
         throw new IOException("Failure");
     };
 
-    static IOBiFunction<Object, Object, Object> THROWING_IO_BI_FUNCTION = (t, u) -> {
-        throw new IOException("Failure");
-    };
-
-    static IOTriFunction<Object, Object, Object, Object> THROWING_IO_TRI_FUNCTION = (t, u, v) -> {
+    static IOPredicate<Object> THROWING_IO_PREDICATE = t -> {
         throw new IOException("Failure");
     };
 
@@ -46,15 +58,11 @@ class TestConstants {
         throw new IOException("Failure");
     };
 
-    static IOSupplier<Object> THROWING_IO_SUPPLIER = () -> {
-        throw new IOException("Failure");
-    };
-
     static IORunnable THROWING_IO_RUNNABLE = () -> {
         throw new IOException("Failure");
     };
 
-    static IOBiConsumer<Object, Object> THROWING_IO_BI_CONSUMER = (t, u) -> {
+    static IOSupplier<Object> THROWING_IO_SUPPLIER = () -> {
         throw new IOException("Failure");
     };
 
@@ -62,12 +70,16 @@ class TestConstants {
         throw new IOException("Failure");
     };
 
-    static IOPredicate<Object> THROWING_IO_PREDICATE = t -> {
+    static IOTriFunction<Object, Object, Object, Object> THROWING_IO_TRI_FUNCTION = (t, u, v) -> {
         throw new IOException("Failure");
     };
 
     static Predicate<Object> THROWING_PREDICATE = t -> {
         throw new UncheckedIOException(new IOException("Failure"));
     };
+
+    private static <T> T throwIOException() throws IOException {
+        throw new IOException("Failure");
+    }
 
 }
