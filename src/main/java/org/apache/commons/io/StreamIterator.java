@@ -52,6 +52,7 @@ class StreamIterator<E> implements Iterator<E>, Closeable {
     private final Iterator<E> iterator;
 
     private final Stream<E> stream;
+
     private StreamIterator(final Stream<E> stream) {
         this.stream = Objects.requireNonNull(stream, "stream");
         this.iterator = stream.iterator();
@@ -63,7 +64,6 @@ class StreamIterator<E> implements Iterator<E>, Closeable {
     @Override
     public void close() {
         stream.close();
-
     }
 
     @Override
