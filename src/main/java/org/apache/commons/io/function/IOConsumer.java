@@ -42,40 +42,41 @@ public interface IOConsumer<T> {
 
     /**
      * Performs an action for each element of the collection gathering any exceptions.
+     * @param action The action to apply to each input element.
+     * @param collection The input to stream.
      *
      * @param <T> The element type.
-     * @param collection The input to stream.
-     * @param action The action to apply to each input element.
      * @throws IOExceptionList if any I/O errors occur.
      * @since 2.12.0
      */
-    static <T> void forAll(final Iterable<T> collection, final IOConsumer<T> action) throws IOExceptionList {
+    static <T> void forAll(final IOConsumer<T> action, final Iterable<T> collection) throws IOExceptionList {
         IOStreams.forAll(IOStreams.of(collection), action);
     }
 
     /**
      * Performs an action for each element of the collection gathering any exceptions.
+     * @param action The action to apply to each input element.
+     * @param stream The input to stream.
      *
      * @param <T> The element type.
-     * @param stream The input to stream.
-     * @param action The action to apply to each input element.
      * @throws IOExceptionList if any I/O errors occur.
      * @since 2.12.0
      */
-    static <T> void forAll(final Stream<T> stream, final IOConsumer<T> action) throws IOExceptionList {
+    static <T> void forAll(final IOConsumer<T> action, final Stream<T> stream) throws IOExceptionList {
         IOStreams.forAll(stream, action, IOIndexedException::new);
     }
 
     /**
      * Performs an action for each element of the array gathering any exceptions.
+     * @param action The action to apply to each input element.
+     * @param array The input to stream.
      *
      * @param <T> The element type.
-     * @param array The input to stream.
-     * @param action The action to apply to each input element.
      * @throws IOExceptionList if any I/O errors occur.
      * @since 2.12.0
      */
-    static <T> void forAll(final T[] array, final IOConsumer<T> action) throws IOExceptionList {
+    @SafeVarargs
+    static <T> void forAll(final IOConsumer<T> action, final T... array) throws IOExceptionList {
         IOStreams.forAll(IOStreams.of(array), action);
     }
 

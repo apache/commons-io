@@ -396,7 +396,7 @@ public class IOUtils {
      * @since 2.8.0
      */
     public static void close(final Closeable... closeables) throws IOExceptionList {
-        IOConsumer.forAll(closeables, IOUtils::close);
+        IOConsumer.forAll(IOUtils::close, closeables);
     }
 
     /**

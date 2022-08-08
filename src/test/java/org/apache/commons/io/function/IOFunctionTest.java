@@ -17,6 +17,7 @@
 
 package org.apache.commons.io.function;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -114,7 +115,7 @@ public class IOFunctionTest {
     }
 
     @Test
-    public void testAsFunction() throws IOException {
+    public void testAsFunction() {
         assertThrows(UncheckedIOException.class, () -> Optional.of("a").map(TestConstants.THROWING_IO_FUNCTION.asFunction()).get());
         assertEquals("a", Optional.of("a").map(IOFunction.identity().asFunction()).get());
     }
@@ -165,9 +166,10 @@ public class IOFunctionTest {
 
     @Test
     public void testIdentity() throws IOException {
-        final IOFunction<InputStream, InputStream> identityFunction = IOFunction.identity();
-        try (InputStream is = new ByteArrayInputStream(new byte[] {(byte) 0xa, (byte) 0xb, (byte) 0xc})) {
-            assertEquals(is, identityFunction.apply(is));
-        }
+        assertEquals(IOFunction.identity(), IOFunction.identity());
+        final IOFunction<byte[], byte[]> identityFunction = IOFunction.identity();
+        final byte[] buf = new byte[] {(byte) 0xa, (byte) 0xb, (byte) 0xc};
+        assertEquals(buf, identityFunction.apply(buf));
+        assertArrayEquals(buf, identityFunction.apply(buf));
     }
 }

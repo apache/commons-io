@@ -79,7 +79,7 @@ public class IOBiFunctionTest {
     }
 
     @Test
-    public void testAsBiFunction() throws IOException {
+    public void testAsBiFunction() {
         final Map<String, Long> map = new HashMap<>();
         map.put("1", 0L);
         final IOBiFunction<String, Long, Long> f = (t, u) -> Files.size(PathUtils.current());

@@ -52,8 +52,10 @@ public class IOBinaryOperatorStreamTest {
         assertEquals(TestConstants.ABS_PATH_A, Stream.of(TestConstants.ABS_PATH_A, TestConstants.ABS_PATH_A).reduce(MIN_BY_BO).get());
     }
 
+    /**
+     */
     @Test
-    public void testMaxBy() throws IOException {
+    public void testMaxBy() {
         assertEquals(TestConstants.ABS_PATH_A, Stream.of(TestConstants.ABS_PATH_A, TestConstants.ABS_PATH_A).reduce(MAX_BY_BO).get());
         // in-line lambda ok:
         final IOBinaryOperator<Path> binIoOp = IOBinaryOperator.maxBy((t, u) -> t.toRealPath().compareTo(u));
@@ -68,7 +70,7 @@ public class IOBinaryOperatorStreamTest {
     }
 
     @Test
-    public void testMinBy() throws IOException {
+    public void testMinBy() {
         assertEquals(TestConstants.ABS_PATH_A, Stream.of(TestConstants.ABS_PATH_A, TestConstants.ABS_PATH_A).reduce(MIN_BY_BO).get());
         // in-line lambda ok:
         final IOBinaryOperator<Path> binIoOp = IOBinaryOperator.minBy((t, u) -> t.toRealPath().compareTo(u));

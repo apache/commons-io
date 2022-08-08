@@ -39,6 +39,11 @@ class TestUtils {
     }
 
     @SuppressWarnings("unchecked")
+    static <T> IOConsumer<T> throwingIOConsumer() {
+        return (IOConsumer<T>) TestConstants.THROWING_IO_CONSUMER;
+    }
+
+    @SuppressWarnings("unchecked")
     static <T> IOUnaryOperator<T> throwingIOUnaryOperator() {
         return (IOUnaryOperator<T>) TestConstants.THROWING_IO_UNARY_OPERATOR;
     }

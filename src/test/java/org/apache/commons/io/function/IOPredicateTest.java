@@ -48,7 +48,7 @@ public class IOPredicateTest {
     private static final Object THROWING_EQUALS = new Object() {
         @Override
         public boolean equals(final Object obj) {
-            throw IOStreams.rethrow(new IOException("Expected"));
+            throw Erase.rethrow(new IOException("Expected"));
         }
     };
 
@@ -109,7 +109,7 @@ public class IOPredicateTest {
     }
 
     @Test
-    public void testIsEqualUnchecked() throws IOException {
+    public void testIsEqualUnchecked() {
         assertThrowsUnchecked(() -> IOPredicate.isEqual(THROWING_EQUALS).asPredicate().test("B"));
         assertFalse(IOPredicate.isEqual(null).asPredicate().test("A"));
         assertTrue(IOPredicate.isEqual("B").asPredicate().test("B"));

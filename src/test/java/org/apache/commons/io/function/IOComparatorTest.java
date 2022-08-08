@@ -39,7 +39,7 @@ public class IOComparatorTest {
     static final IOComparator<Path> REAL_PATH_COMP = (final Path t, final Path u) -> t.toRealPath().compareTo(u);
 
     @Test
-    public void testAsComparator() throws IOException {
+    public void testAsComparator() {
         assertEquals(0, REAL_PATH_COMP.asComparator().compare(TestConstants.ABS_PATH_A, TestConstants.ABS_PATH_A));
         assertThrows(UncheckedIOException.class,
             () -> TestConstants.THROWING_IO_COMPARATOR.asComparator().compare(TestConstants.ABS_PATH_A, TestConstants.ABS_PATH_B));
@@ -56,7 +56,7 @@ public class IOComparatorTest {
     }
 
     @Test
-    public void testThrowing() throws IOException {
+    public void testThrowing() {
         assertThrows(IOException.class, () -> TestConstants.THROWING_IO_COMPARATOR.compare(TestConstants.ABS_PATH_A, TestConstants.ABS_PATH_B));
     }
 

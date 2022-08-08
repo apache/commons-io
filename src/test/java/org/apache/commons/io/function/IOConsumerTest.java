@@ -26,9 +26,12 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Stream;
 
+import org.apache.commons.io.IOExceptionList;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.io.test.ThrowOnCloseReader;
@@ -61,12 +64,45 @@ public class IOConsumerTest {
     }
 
     @Test
-    public void testAsConsumer() throws IOException {
-        assertThrows(UncheckedIOException.class, () -> Optional.of("a").ifPresent(TestConstants.THROWING_IO_CONSUMER.asConsumer()));
+    public void testAsConsumer() {
+        assertThrows(UncheckedIOException.class, () -> Optional.of("a").ifPresent(TestUtils.throwingIOConsumer().asConsumer()));
         final AtomicReference<String> ref = new AtomicReference<>();
         final IOConsumer<String> consumer1 = s -> ref.set(s + "1");
         Optional.of("a").ifPresent(consumer1.asConsumer());
         assertEquals("a1", ref.get());
+    }
+
+    @Test
+    public void testForAllArray() throws IOException {
+        IOConsumer.forAll(TestUtils.throwingIOConsumer(), (String[]) null);
+        assertThrows(IOExceptionList.class, () -> IOConsumer.forAll(TestUtils.throwingIOConsumer(), new String[] {"1"}));
+
+        final AtomicReference<String> ref = new AtomicReference<>();
+        final IOConsumer<String> consumer1 = s -> ref.set(s + "2");
+        IOConsumer.forAll(consumer1, new String[] {"1"});
+        assertEquals("12", ref.get());
+    }
+
+    @Test
+    public void testForAllIterable() throws IOException {
+        IOConsumer.forAll(TestUtils.throwingIOConsumer(), (Iterable<Object>) null);
+        assertThrows(IOExceptionList.class, () -> IOConsumer.forAll(TestUtils.throwingIOConsumer(), Arrays.asList("1")));
+
+        final AtomicReference<String> ref = new AtomicReference<>();
+        final IOConsumer<String> consumer1 = s -> ref.set(s + "2");
+        IOConsumer.forAll(consumer1, Arrays.asList("1"));
+        assertEquals("12", ref.get());
+    }
+
+    @Test
+    public void testForAllStream() throws IOException {
+        IOConsumer.forAll(TestUtils.throwingIOConsumer(), (Stream<Object>) null);
+        assertThrows(IOExceptionList.class, () -> IOConsumer.forAll(TestUtils.throwingIOConsumer(), Arrays.asList("1").stream()));
+
+        final AtomicReference<String> ref = new AtomicReference<>();
+        final IOConsumer<String> consumer1 = s -> ref.set(s + "2");
+        IOConsumer.forAll(consumer1, Arrays.asList("1").stream());
+        assertEquals("12", ref.get());
     }
 
     @Test
@@ -77,6 +113,5 @@ public class IOConsumerTest {
         assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), noopConsumer));
         assertDoesNotThrow(() -> IOUtils.close(new ThrowOnCloseReader(new StringReader("s")), noopConsumer));
     }
-
 
 }

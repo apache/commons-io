@@ -51,7 +51,7 @@ public class IOBiConsumerTest {
     }
 
     @Test
-    public void testAsBiConsumer() throws IOException {
+    public void testAsBiConsumer() {
         final Map<String, Integer> map = new HashMap<>();
         map.put("a", 1);
         assertThrows(UncheckedIOException.class, () -> map.forEach(TestConstants.THROWING_IO_BI_CONSUMER.asBiConsumer()));

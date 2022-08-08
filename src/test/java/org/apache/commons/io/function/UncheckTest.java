@@ -66,7 +66,7 @@ public class UncheckTest {
         assertThrows(UncheckedIOException.class, () -> Uncheck.accept(t -> {
             throw new IOException();
         }, null));
-        assertThrows(UncheckedIOException.class, () -> Uncheck.accept(TestConstants.THROWING_IO_CONSUMER, null));
+        assertThrows(UncheckedIOException.class, () -> Uncheck.accept(TestUtils.throwingIOConsumer(), null));
         Uncheck.accept(t -> TestUtils.compareAndSetThrows(ref1, t), "new1");
         assertEquals("new1", ref1.get());
     }

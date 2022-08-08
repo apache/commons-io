@@ -105,7 +105,7 @@ public class FilterCollectionWriter extends Writer {
     }
 
     private FilterCollectionWriter forAllWriters(final IOConsumer<Writer> action) throws IOExceptionList {
-        IOConsumer.forAll(writers(), action);
+        IOConsumer.forAll(action, writers());
         return this;
     }
 
