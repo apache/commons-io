@@ -2002,7 +2002,7 @@ public class FileUtils {
      * @since 1.2
      */
     public static Iterator<File> iterateFiles(final File directory, final String[] extensions, final boolean recursive) {
-        return Uncheck.apply(d -> StreamIterator.iterator(streamFiles(d, recursive, extensions)), directory);
+        return Uncheck.apply(d -> streamFiles(d, recursive, extensions).iterator(), directory);
     }
 
     /**
