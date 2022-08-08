@@ -74,6 +74,8 @@ class TestConstants {
         throw new IOException("Failure");
     };
 
+    static IOUnaryOperator<?> THROWING_IO_UNARY_OPERATOR = t -> throwIOException();
+
     static Predicate<Object> THROWING_PREDICATE = t -> {
         throw new UncheckedIOException(new IOException("Failure"));
     };

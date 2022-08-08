@@ -22,6 +22,10 @@ import java.util.concurrent.atomic.AtomicReference;
 
 class TestUtils {
 
+    static <T> T compareAndSetThrows(final AtomicReference<T> ref, final T update) throws IOException {
+        return compareAndSetThrows(ref, null, update);
+    }
+
     static <T> T compareAndSetThrows(final AtomicReference<T> ref, final T expected, final T update) throws IOException {
         if (!ref.compareAndSet(expected, update)) {
             throw new IOException("Unexpected");
@@ -29,8 +33,9 @@ class TestUtils {
         return ref.get(); // same as update
     }
 
-    static <T> T compareAndSetThrows(final AtomicReference<T> ref, final T update) throws IOException {
-        return compareAndSetThrows(ref, null, update);
-    }
+        @SuppressWarnings("unchecked")
+        static <T> IOUnaryOperator<T> throwingIOUnaryOperator() {
+            return (IOUnaryOperator<T>) TestConstants.THROWING_IO_UNARY_OPERATOR;
+        }
 
 }
