@@ -482,8 +482,8 @@ public class ReversedLinesFileReader implements Closeable {
      * @throws IOException if an I/O error occurs.
      */
     public void seek (long pos) throws IOException {
-        long block = pos / blockSize + 1;
-        int blockLength = (int) (pos % blockSize);
+        final long block = pos / blockSize + 1;
+        final int blockLength = (int) (pos % blockSize);
         channel.position(pos);
         this.currentFilePart = new FilePart(block, blockLength, null);
 

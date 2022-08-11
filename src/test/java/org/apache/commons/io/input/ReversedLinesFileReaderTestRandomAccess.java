@@ -33,7 +33,11 @@ import org.junit.jupiter.api.Test;
 public class ReversedLinesFileReaderTestRandomAccess {
 
   private ReversedLinesFileReader reversedLinesFileReader;
-  private static final String testLine1 = "A Test Line. Special chars: \u00C4\u00E4\u00DC\u00FC\u00D6\u00F6\u00DF \u00C3\u00E1\u00E9\u00ED\u00EF\u00E7\u00F1\u00C2 \u00A9\u00B5\u00A5\u00A3";
+  private static final String testLine1 =
+          "A Test Line. Special chars: "
+                  .concat("\u00C4\u00E4\u00DC\u00FC\u00D6\u00F6\u00DF ")
+                  .concat("\u00C3\u00E1\u00E9\u00ED\u00EF\u00E7\u00F1\u00C2 ")
+                  .concat("\u00A9\u00B5\u00A5\u00A3");
   private static final String testLine2 = testLine1 +"\u00B1";
   private static final String testLine3 = testLine2 +"\u00B2";
   private static final String testLine4 = testLine3 +"\u00AE";
@@ -46,7 +50,7 @@ public class ReversedLinesFileReaderTestRandomAccess {
           // ignore
       }
   }
-  
+
   @Test
   public void testSeekO() throws URISyntaxException, IOException {
       final File testFile = TestResources.getFile("/test-file-utf8-win-linebr.bin");
