@@ -36,17 +36,18 @@ public class TimestampedObserverTest {
     @Test
     public void test() throws IOException, InterruptedException {
         final Instant before = Instant.now();
-        Thread.sleep(20); // Some OS' clock granularity may be high.
+        // Some OS' clock granularity may be high.
+        Thread.sleep(20);
         final TimestampedObserver timestampedObserver = new TimestampedObserver();
+        // Java 8 instant resolution is not great.
+        Thread.sleep(20);
         // toString() should not blow up before close().
         assertNotNull(timestampedObserver.toString());
         assertTrue(timestampedObserver.getOpenInstant().isAfter(before));
         assertTrue(timestampedObserver.getOpenToNowDuration().toNanos() > 0);
         assertNull(timestampedObserver.getCloseInstant());
-        final byte[] buffer = MessageDigestCalculatingInputStreamTest
-            .generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
-        try (ObservableInputStream ois = new ObservableInputStream(new ByteArrayInputStream(buffer),
-            timestampedObserver)) {
+        final byte[] buffer = MessageDigestCalculatingInputStreamTest.generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
+        try (ObservableInputStream ois = new ObservableInputStream(new ByteArrayInputStream(buffer), timestampedObserver)) {
             assertTrue(timestampedObserver.getOpenInstant().isAfter(before));
             assertTrue(timestampedObserver.getOpenToNowDuration().toNanos() > 0);
         }
