@@ -1522,7 +1522,7 @@ public class FileUtils {
 
     /**
      * Tests if the specified {@link File} is newer than the specified {@link ChronoLocalDate}
-     * at the current time.
+     * at the end of day.
      *
      * <p>Note: The input date is assumed to be in the system default time-zone with the time
      * part set to the current time. To use a non-default time-zone use the method
@@ -1538,7 +1538,7 @@ public class FileUtils {
      * @since 2.8.0
      */
     public static boolean isFileNewer(final File file, final ChronoLocalDate chronoLocalDate) {
-        return isFileNewer(file, chronoLocalDate, LocalTime.now());
+        return isFileNewer(file, chronoLocalDate, LocalTime.MAX);
     }
 
     /**
@@ -1724,7 +1724,7 @@ public class FileUtils {
 
     /**
      * Tests if the specified {@link File} is older than the specified {@link ChronoLocalDate}
-     * at the current time.
+     * at the end of day.
      *
      * <p>Note: The input date is assumed to be in the system default time-zone with the time
      * part set to the current time. To use a non-default time-zone use the method
@@ -1742,7 +1742,7 @@ public class FileUtils {
      * @since 2.8.0
      */
     public static boolean isFileOlder(final File file, final ChronoLocalDate chronoLocalDate) {
-        return isFileOlder(file, chronoLocalDate, LocalTime.now());
+        return isFileOlder(file, chronoLocalDate, LocalTime.MAX);
     }
 
     /**
