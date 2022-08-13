@@ -111,6 +111,7 @@ import org.apache.commons.io.function.Uncheck;
  * </p>
  */
 public class FileUtils {
+
     /**
      * The number of bytes in a kilobyte.
      */
@@ -1231,7 +1232,6 @@ public class FileUtils {
      * @param file file or directory to delete, can be {@code null}
      * @return {@code true} if the file or directory was deleted, otherwise
      * {@code false}
-     *
      * @since 1.4
      */
     public static boolean deleteQuietly(final File file) {
@@ -1452,7 +1452,6 @@ public class FileUtils {
      * Returns a {@link File} representing the system temporary directory.
      *
      * @return the system temporary directory.
-     *
      * @since 2.0
      */
     public static File getTempDirectory() {
@@ -1463,7 +1462,6 @@ public class FileUtils {
      * Returns the path to the system temporary directory.
      *
      * @return the path to the system temporary directory.
-     *
      * @since 2.0
      */
     public static String getTempDirectoryPath() {
@@ -1474,7 +1472,6 @@ public class FileUtils {
      * Returns a {@link File} representing the user's home directory.
      *
      * @return the user's home directory.
-     *
      * @since 2.0
      */
     public static File getUserDirectory() {
@@ -1485,7 +1482,6 @@ public class FileUtils {
      * Returns the path to the user's home directory.
      *
      * @return the path to the user's home directory.
-     *
      * @since 2.0
      */
     public static String getUserDirectoryPath() {
@@ -1743,7 +1739,6 @@ public class FileUtils {
      * @throws NullPointerException if the file or local date is {@code null}.
      * @see ZoneId#systemDefault()
      * @see LocalTime#now()
-     *
      * @since 2.8.0
      */
     public static boolean isFileOlder(final File file, final ChronoLocalDate chronoLocalDate) {
