@@ -1612,10 +1612,12 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final Path refPath = refFile.toPath();
         final Path newPath = newFile.toPath();
         // FileTimes
-        final FileTime oldFileTime = FileTime.from(millis * 1, TimeUnit.MILLISECONDS);
-        final FileTime refFileTime = FileTime.from(millis * 2, TimeUnit.MILLISECONDS);
-        final FileTime testFileTime = FileTime.from(millis * 3, TimeUnit.MILLISECONDS);
-        final FileTime newFileTime = FileTime.from(millis * 4, TimeUnit.MILLISECONDS);
+        // TODO What is wrong with Java 8 on macOS? Or is this a macOS file system issue?
+        final long actualMillis = SystemUtils.IS_OS_MAC && SystemUtils.IS_JAVA_1_8 ? millis + 1000 : millis;
+        final FileTime oldFileTime = FileTime.from(actualMillis * 1, TimeUnit.MILLISECONDS);
+        final FileTime refFileTime = FileTime.from(actualMillis * 2, TimeUnit.MILLISECONDS);
+        final FileTime testFileTime = FileTime.from(actualMillis * 3, TimeUnit.MILLISECONDS);
+        final FileTime newFileTime = FileTime.from(actualMillis * 4, TimeUnit.MILLISECONDS);
 
         // Create fixtures
         try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(oldPath))) {
