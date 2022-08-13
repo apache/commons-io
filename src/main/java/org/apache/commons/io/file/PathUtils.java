@@ -1175,7 +1175,9 @@ public final class PathUtils {
     }
 
     /**
-     * @return the nofollowLinkOptionArray
+     * Copy of the {@link LinkOption} array for {@link LinkOption#NOFOLLOW_LINKS}.
+     *
+     * @return Copy of the {@link LinkOption} array for {@link LinkOption#NOFOLLOW_LINKS}.
      */
     public static LinkOption[] noFollowLinkOptionArray() {
         return NOFOLLOW_LINK_OPTION_ARRAY.clone();
