@@ -857,7 +857,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
 //        assertEquals(0, urls.length);
 //    }
 
-    /* Test for IO-141 */
+    /** Tests IO-141 */
     @Test
     public void testCopyDirectoryToChild() throws Exception {
         final File grandParentDir = new File(tempDirFile, "grandparent");
@@ -959,7 +959,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(new File(destDir, "sub/A.txt").exists());
     }
 
-    /* Test for IO-141 */
+    /** Test IO-141 */
     @Test
     public void testCopyDirectoryToGrandChild() throws Exception {
         final File grandParentDir = new File(tempDirFile, "grandparent");
@@ -975,7 +975,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(expectedSize > 0, "Size > 0");
     }
 
-    /* Test for IO-217 FileUtils.copyDirectoryToDirectory makes infinite loops */
+    /** Tests IO-217 FileUtils.copyDirectoryToDirectory makes infinite loops */
     @Test
     public void testCopyDirectoryToItself() throws Exception {
         final File dir = new File(tempDirFile, "itself");
@@ -1353,8 +1353,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertThrows(IllegalArgumentException.class, () -> FileUtils.deleteDirectory(testFile1));
     }
 
-    // copyToDirectory
-
     @Test
     public void testDeleteQuietlyDir() throws IOException {
         final File testDirectory = new File(tempDirFile, "testDeleteQuietlyDir");
@@ -1411,8 +1409,8 @@ public class FileUtilsTest extends AbstractTempDirTest {
         FileUtils.deleteQuietly(testFile);
     }
 
-    /*
-     *  Test the FileUtils implementation.
+    /**
+     * Tests the FileUtils implementation.
      */
     @Test
     public void testFileUtils() throws Exception {
@@ -1632,7 +1630,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
         Assertions.assertFalse(FileUtils.isEmptyDirectory(PathUtilsIsEmptyTest.DIR_SIZE_1.toFile()));
     }
 
-    // isFileNewer / isFileOlder
     @Test
     public void testIsFileNewerOlder() throws Exception {
         final File reference = new File(tempDirFile, "FileUtils-reference.txt");
