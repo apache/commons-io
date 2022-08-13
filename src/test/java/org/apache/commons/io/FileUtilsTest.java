@@ -1645,26 +1645,17 @@ public class FileUtilsTest extends AbstractTempDirTest {
             throw new IOException("Cannot create file " + oldFile
                     + " as the parent directory does not exist");
         }
-        final OutputStream output1 =
-                new BufferedOutputStream(Files.newOutputStream(oldFile.toPath()));
-        try {
+        try (final OutputStream output1 = new BufferedOutputStream(Files.newOutputStream(oldFile.toPath()))) {
             TestUtils.generateTestData(output1, 0);
-        } finally {
-            IOUtils.closeQuietly(output1);
         }
 
         do {
             TestUtils.sleepQuietly(1000);
             if (!reference.getParentFile().exists()) {
-                throw new IOException("Cannot create file " + reference
-                        + " as the parent directory does not exist");
+                throw new IOException("Cannot create file " + reference + " as the parent directory does not exist");
             }
-            final OutputStream output =
-                    new BufferedOutputStream(Files.newOutputStream(reference.toPath()));
-            try {
+            try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(reference.toPath()))) {
                 TestUtils.generateTestData(output, 0);
-            } finally {
-                IOUtils.closeQuietly(output);
             }
         } while (getLastModifiedMillis(oldFile) == getLastModifiedMillis(reference));
 
@@ -1689,12 +1680,8 @@ public class FileUtilsTest extends AbstractTempDirTest {
                 throw new IOException("Cannot create file " + newFile
                         + " as the parent directory does not exist");
             }
-            final OutputStream output =
-                    new BufferedOutputStream(Files.newOutputStream(newFile.toPath()));
-            try {
+            try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(newFile.toPath()))) {
                 TestUtils.generateTestData(output, 0);
-            } finally {
-                IOUtils.closeQuietly(output);
             }
         } while (getLastModifiedMillis(reference) == getLastModifiedMillis(newFile));
 
@@ -2353,22 +2340,15 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final File testFile1 = new File(tempDirFile, "testMoveFileFile1");
         final File testFile2 = new File(tempDirFile, "testMoveFileFile2");
         if (!testFile1.getParentFile().exists()) {
-            throw new IOException("Cannot create file " + testFile1
-                    + " as the parent directory does not exist");
+            throw new IOException("Cannot create file " + testFile1 + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output1 =
-                new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()));
-        try {
+        try (final BufferedOutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
             TestUtils.generateTestData(output1, 0);
-        } finally {
-            IOUtils.closeQuietly(output1);
         }
         if (!testFile2.getParentFile().exists()) {
-            throw new IOException("Cannot create file " + testFile2
-                    + " as the parent directory does not exist");
+            throw new IOException("Cannot create file " + testFile2 + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()));
+        final BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()));
         try {
             TestUtils.generateTestData(output, 0);
         } finally {
