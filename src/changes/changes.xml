@@ -433,6 +433,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add IOConsumer.asConsumer().
       </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add TimestampedObserver.isClosed().
+      </action>
       <!-- UPDATE -->
       <action dev="kinow" type="update" due-to="Dependabot, Gary Gregory">
         Bump actions/cache from 2.1.6 to 3.0.7 #307, #337.

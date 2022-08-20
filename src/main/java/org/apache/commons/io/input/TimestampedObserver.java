@@ -86,6 +86,16 @@ public class TimestampedObserver extends Observer {
         return Duration.between(openInstant, Instant.now());
     }
 
+    /**
+     * Tests whether {@link #closed()} has been called.
+     *
+     * @return whether {@link #closed()} has been called.
+     * @since 2.12.0
+     */
+    public boolean isClosed() {
+        return closeInstant != null;
+    }
+
     @Override
     public String toString() {
         return "TimestampedObserver [openInstant=" + openInstant + ", closeInstant=" + closeInstant + "]";

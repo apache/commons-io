@@ -20,6 +20,7 @@ package org.apache.commons.io.input;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -39,6 +40,7 @@ public class TimestampedObserverTest {
         // Some OS' clock granularity may be high.
         Thread.sleep(20);
         final TimestampedObserver timestampedObserver = new TimestampedObserver();
+        assertFalse(timestampedObserver.isClosed());
         // Java 8 instant resolution is not great.
         Thread.sleep(20);
         // toString() should not blow up before close().
@@ -46,11 +48,14 @@ public class TimestampedObserverTest {
         assertTrue(timestampedObserver.getOpenInstant().isAfter(before));
         assertTrue(timestampedObserver.getOpenToNowDuration().toNanos() > 0);
         assertNull(timestampedObserver.getCloseInstant());
+        assertFalse(timestampedObserver.isClosed());
         final byte[] buffer = MessageDigestCalculatingInputStreamTest.generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
         try (ObservableInputStream ois = new ObservableInputStream(new ByteArrayInputStream(buffer), timestampedObserver)) {
             assertTrue(timestampedObserver.getOpenInstant().isAfter(before));
             assertTrue(timestampedObserver.getOpenToNowDuration().toNanos() > 0);
+            assertFalse(timestampedObserver.isClosed());
         }
+        assertTrue(timestampedObserver.isClosed());
         assertTrue(timestampedObserver.getOpenInstant().isAfter(before));
         assertTrue(timestampedObserver.getOpenToNowDuration().toNanos() > 0);
         assertTrue(timestampedObserver.getCloseInstant().isAfter(timestampedObserver.getOpenInstant()));
