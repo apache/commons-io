@@ -1552,7 +1552,7 @@ public class IOUtilsTest {
 
     /**
      * Test for {@link IOUtils#toInputStream(CharSequence)} and {@link IOUtils#toInputStream(CharSequence, String)}.
-     * Note, this test utilizes on {@link IOUtils#toByteArray(java.io.InputStream)} and so relies on
+     * Note, this test utilizes on {@link IOUtils#toByteArray(InputStream)} and so relies on
      * {@link #testToByteArray_InputStream()} to ensure this method functions correctly.
      *
      * @throws Exception on error
@@ -1573,7 +1573,7 @@ public class IOUtilsTest {
 
     /**
      * Test for {@link IOUtils#toInputStream(String)} and {@link IOUtils#toInputStream(String, String)}. Note, this test
-     * utilizes on {@link IOUtils#toByteArray(java.io.InputStream)} and so relies on
+     * utilizes on {@link IOUtils#toByteArray(InputStream)} and so relies on
      * {@link #testToByteArray_InputStream()} to ensure this method functions correctly.
      *
      * @throws Exception on error
@@ -1714,6 +1714,20 @@ public class IOUtilsTest {
                 assertEquals(data.length(), os.getByteCount());
             }
         }
+    }
+
+    @Test
+    public void testByteArrayWithIllegalSize() {
+        try {
+            int size = -1;
+            byte[] bytes = IOUtils.byteArray(size);
+
+            size = 0;
+            bytes = IOUtils.byteArray(size);
+        }catch (Exception e) {
+            assertEquals(e.getClass().getName(), IllegalArgumentException.class.getName());
+        }
+
     }
 
 }

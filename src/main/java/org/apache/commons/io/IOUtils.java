@@ -346,9 +346,15 @@ public class IOUtils {
      *
      * @param size array size.
      * @return a new byte array of the given size.
+     *
+     * @exception  IllegalArgumentException  If {@code size <= 0}
+     *
      * @since 2.9.0
      */
     public static byte[] byteArray(final int size) {
+        if (size <= 0) {
+            throw new IllegalArgumentException("byte size <= 0");
+        }
         return new byte[size];
     }
 
@@ -479,7 +485,7 @@ public class IOUtils {
      * @param closeable the objects to close, may be null or already closed
      * @since 2.0
      *
-     * @see Throwable#addSuppressed(java.lang.Throwable)
+     * @see Throwable#addSuppressed(Throwable)
      */
     public static void closeQuietly(final Closeable closeable) {
         closeQuietly(closeable, null);
@@ -529,7 +535,7 @@ public class IOUtils {
      * @param closeables the objects to close, may be null or already closed
      * @see #closeQuietly(Closeable)
      * @since 2.5
-     * @see Throwable#addSuppressed(java.lang.Throwable)
+     * @see Throwable#addSuppressed(Throwable)
      */
     public static void closeQuietly(final Closeable... closeables) {
         if (closeables != null) {
@@ -583,7 +589,7 @@ public class IOUtils {
      * </p>
      *
      * @param input the InputStream to close, may be null or already closed
-     * @see Throwable#addSuppressed(java.lang.Throwable)
+     * @see Throwable#addSuppressed(Throwable)
      */
     public static void closeQuietly(final InputStream input) {
         closeQ(input);
@@ -633,7 +639,7 @@ public class IOUtils {
      * </p>
      *
      * @param output the OutputStream to close, may be null or already closed
-     * @see Throwable#addSuppressed(java.lang.Throwable)
+     * @see Throwable#addSuppressed(Throwable)
      */
     public static void closeQuietly(final OutputStream output) {
         closeQ(output);
@@ -666,7 +672,7 @@ public class IOUtils {
      * </p>
      *
      * @param reader the Reader to close, may be null or already closed
-     * @see Throwable#addSuppressed(java.lang.Throwable)
+     * @see Throwable#addSuppressed(Throwable)
      */
     public static void closeQuietly(final Reader reader) {
         closeQ(reader);
@@ -699,7 +705,7 @@ public class IOUtils {
      *
      * @param selector the Selector to close, may be null or already closed
      * @since 2.2
-     * @see Throwable#addSuppressed(java.lang.Throwable)
+     * @see Throwable#addSuppressed(Throwable)
      */
     public static void closeQuietly(final Selector selector) {
         closeQ(selector);
@@ -732,7 +738,7 @@ public class IOUtils {
      *
      * @param serverSocket the ServerSocket to close, may be null or already closed
      * @since 2.2
-     * @see Throwable#addSuppressed(java.lang.Throwable)
+     * @see Throwable#addSuppressed(Throwable)
      */
     public static void closeQuietly(final ServerSocket serverSocket) {
         closeQ(serverSocket);
@@ -765,7 +771,7 @@ public class IOUtils {
      *
      * @param socket the Socket to close, may be null or already closed
      * @since 2.0
-     * @see Throwable#addSuppressed(java.lang.Throwable)
+     * @see Throwable#addSuppressed(Throwable)
      */
     public static void closeQuietly(final Socket socket) {
         closeQ(socket);
@@ -813,7 +819,7 @@ public class IOUtils {
      * </p>
      *
      * @param writer the Writer to close, may be null or already closed
-     * @see Throwable#addSuppressed(java.lang.Throwable)
+     * @see Throwable#addSuppressed(Throwable)
      */
     public static void closeQuietly(final Writer writer) {
         closeQ(writer);
@@ -2603,7 +2609,7 @@ public class IOUtils {
      * Use this method instead of {@link #toByteArray(InputStream)}
      * when {@link InputStream} size is known.
      * <b>NOTE:</b> the method checks that the length can safely be cast to an int without truncation
-     * before using {@link IOUtils#toByteArray(java.io.InputStream, int)} to read into the byte array.
+     * before using {@link IOUtils#toByteArray(InputStream, int)} to read into the byte array.
      * (Arrays can have no more than Integer.MAX_VALUE entries anyway)
      *
      * @param input the {@link InputStream} to read from
@@ -2611,7 +2617,7 @@ public class IOUtils {
      * @return byte [] the requested byte array, of length {@code size}
      * @throws IOException              if an I/O error occurs or {@link InputStream} length is less than {@code size}
      * @throws IllegalArgumentException if size is less than zero or size is greater than Integer.MAX_VALUE
-     * @see IOUtils#toByteArray(java.io.InputStream, int)
+     * @see IOUtils#toByteArray(InputStream, int)
      * @since 2.1
      */
     public static byte[] toByteArray(final InputStream input, final long size) throws IOException {
