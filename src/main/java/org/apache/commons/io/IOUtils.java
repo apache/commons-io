@@ -347,7 +347,7 @@ public class IOUtils {
      * @param size array size.
      * @return a new byte array of the given size.
      *
-     * @exception  IllegalArgumentException  If {@code size <= 0}
+     * @throws IllegalArgumentException If {@code size <= 0}
      *
      * @since 2.9.0
      */
