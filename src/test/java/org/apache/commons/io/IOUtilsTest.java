@@ -1717,13 +1717,18 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testByteArrayWithIllegalSize() {
+    public void testByteArrayWithZeroSize() {
+        assertThrows(IllegalArgumentException.class,() -> {
+            int size = 0;
+            byte[] bytes = IOUtils.byteArray(size);
+        });
+    }
+
+    @Test
+    public void testByteArrayWithNegativeSize() {
         assertThrows(IllegalArgumentException.class,() -> {
             int size = -1;
             byte[] bytes = IOUtils.byteArray(size);
-
-            size = 0;
-            bytes = IOUtils.byteArray(size);
         });
     }
 
