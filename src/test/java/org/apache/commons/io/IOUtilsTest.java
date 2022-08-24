@@ -79,6 +79,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * This is used to test {@link IOUtils} for correctness. The following checks are performed:
@@ -1716,18 +1718,12 @@ public class IOUtilsTest {
         }
     }
 
-    @Test
-    public void testByteArrayWithZeroSize() {
-        assertThrows(IllegalArgumentException.class,() -> {
-            int size = 0;
-            byte[] bytes = IOUtils.byteArray(size);
-        });
-    }
 
-    @Test
-    public void testByteArrayWithNegativeSize() {
+    @ParameterizedTest
+    @ValueSource(ints = { -1, 0 })
+    public void testByteArrayWithIllegalSize(int size) {
+        System.out.println("size=" + size);
         assertThrows(IllegalArgumentException.class,() -> {
-            int size = -1;
             byte[] bytes = IOUtils.byteArray(size);
         });
     }
