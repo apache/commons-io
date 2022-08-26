@@ -341,20 +341,15 @@ public class IOUtils {
 
     /**
      * Returns a new byte array of the given size.
+     * Throws java.lang.NegativeArraySizeException if the size is negative.
      *
      * TODO Consider guarding or warning against large allocations...
      *
      * @param size array size.
      * @return a new byte array of the given size.
-     *
-     * @throws IllegalArgumentException If {@code size <= 0}
-     *
      * @since 2.9.0
      */
     public static byte[] byteArray(final int size) {
-        if (size <= 0) {
-            throw new IllegalArgumentException("byte size <= 0");
-        }
         return new byte[size];
     }
 

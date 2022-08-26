@@ -1718,12 +1718,10 @@ public class IOUtilsTest {
         }
     }
 
-
-    @ParameterizedTest
-    @ValueSource(ints = { -1, 0 })
-    public void testByteArrayWithIllegalSize(int size) {
-        System.out.println("size=" + size);
-        assertThrows(IllegalArgumentException.class,() -> {
+    @Test
+    public void testByteArrayWithNegativeSize() {
+        int size = -1;
+        assertThrows(NegativeArraySizeException.class,() -> {
             byte[] bytes = IOUtils.byteArray(size);
         });
     }
