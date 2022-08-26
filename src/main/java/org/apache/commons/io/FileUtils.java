@@ -3538,6 +3538,7 @@ public class FileUtils {
     /**
      * Instances should NOT be constructed in standard programming.
      */
+    @Deprecated
     public FileUtils() { //NOSONAR
 
     }
