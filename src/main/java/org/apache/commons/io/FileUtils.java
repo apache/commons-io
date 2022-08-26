@@ -35,7 +35,14 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnsupportedCharsetException;
-import java.nio.file.*;
+import java.nio.file.CopyOption;
+import java.nio.file.FileVisitOption;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.NotDirectoryException;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
@@ -49,7 +56,6 @@ import java.time.chrono.ChronoLocalDate;
 import java.time.chrono.ChronoLocalDateTime;
 import java.time.chrono.ChronoZonedDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -766,7 +772,7 @@ public class FileUtils {
     public static void copyFile(final File srcFile, final File destFile, final boolean preserveFileDate) throws IOException {
         // @formatter:off
         copyFile(srcFile, destFile, preserveFileDate, new CopyOption[] {StandardCopyOption.REPLACE_EXISTING});
-        // @formatter:ond
+        // @formatter:on
     }
 
     /**
@@ -1301,7 +1307,7 @@ public class FileUtils {
                 if (srcFile.isDirectory()) {
                     doCopyDirectory(srcFile, dstFile, fileFilter, exclusionList, preserveDirDate, copyOptions);
                 } else {
-                    copyFile(srcFile, dstFile, copyOptions);
+                    copyFile(srcFile, dstFile, preserveDirDate, copyOptions);
                 }
             }
         }
@@ -2377,7 +2383,8 @@ public class FileUtils {
         requireAbsent(destFile, "destFile");
         final boolean rename = srcFile.renameTo(destFile);
         if (!rename) {
-            copyFile(srcFile, destFile, copyOptions);
+            // Don't interfere with file date on move, handled by StandardCopyOption.COPY_ATTRIBUTES
+            copyFile(srcFile, destFile, false, copyOptions);
             if (!srcFile.delete()) {
                 FileUtils.deleteQuietly(destFile);
                 throw new IOException("Failed to delete original file '" + srcFile + "' after copy to '" + destFile + "'");
@@ -2829,68 +2836,30 @@ public class FileUtils {
     }
 
     /**
-     * Sets the given {@code targetFile}'s last modified date to the value from {@code sourceFile}.
-     *
-     * @param sourceFile The source file to query.
-     * @param targetFile The target file or directory to set.
-     * @throws NullPointerException if sourceFile is {@code null}.
-     * @throws NullPointerException if targetFile is {@code null}.
-     * @throws IOException if setting the last-modified time failed.
-     */
-    @Deprecated
-    // TODO: Candidate for removal
-    private static void setLastModified(final File sourceFile, final File targetFile) throws IOException {
-        Objects.requireNonNull(sourceFile, "sourceFile");
-        Objects.requireNonNull(targetFile, "targetFile");
-        // FIXME: Document the reasoning for two separate functions
-        if (targetFile.isFile()) {
-            // call Files#setLastModifiedTime(Path, FileTime)}
-            PathUtils.setLastModifiedTime(targetFile.toPath(), sourceFile.toPath());
-        } else {
-            // call File#setLastModified(long)
-            setLastModified(targetFile, lastModified(sourceFile));
-        }
-    }
-
-    /**
      * Set file lastModifiedTime, lastAccessTime and creationTime to match source file
      *
      * @param sourceFile The source file to query.
      * @param targetFile The target file or directory to set.
      * @throws NullPointerException if sourceFile is {@code null}.
      * @throws NullPointerException if targetFile is {@code null}.
-     * @throws IOException
+     * @throws IOException if setting the last-modified time failed.
      */
     private static void setTimes(final File sourceFile, final File targetFile) throws IOException {
         Objects.requireNonNull(sourceFile, "sourceFile");
         Objects.requireNonNull(targetFile, "targetFile");
         try {
             // Set creation, modified, last accessed to match source file
-            BasicFileAttributes srcAttr = Files.readAttributes(sourceFile.toPath(), BasicFileAttributes.class);
-            BasicFileAttributeView destAttr = Files.getFileAttributeView(targetFile.toPath(), BasicFileAttributeView.class);
+            final BasicFileAttributes srcAttr = Files.readAttributes(sourceFile.toPath(), BasicFileAttributes.class);
+            final BasicFileAttributeView destAttrView = Files.getFileAttributeView(targetFile.toPath(), BasicFileAttributeView.class);
             // null guards are not needed; BasicFileAttributes.setTimes(...) is null safe
-            destAttr.setTimes(srcAttr.lastModifiedTime(), srcAttr.lastAccessTime(), srcAttr.creationTime());
+            destAttrView.setTimes(srcAttr.lastModifiedTime(), srcAttr.lastAccessTime(), srcAttr.creationTime());
         } catch(IOException unused) {
             // Fallback: Only set modified time to match source file
             targetFile.setLastModified(sourceFile.lastModified());
         }
-    }
 
-    /**
-     * Sets the given {@code targetFile}'s last modified date to the given value.
-     *
-     * @param file The source file to query.
-     * @param timeMillis The new last-modified time, measured in milliseconds since the epoch 01-01-1970 GMT.
-     * @throws NullPointerException if file is {@code null}.
-     * @throws IOException if setting the last-modified time failed.
-     */
-    @Deprecated
-    // TODO: Candidate for removal
-    private static void setLastModified(final File file, final long timeMillis) throws IOException {
-        Objects.requireNonNull(file, "file");
-        if (!file.setLastModified(timeMillis)) {
-            throw new IOException(String.format("Failed setLastModified(%s) on '%s'", timeMillis, file));
-        }
+        // TODO: (Help!) Determine historically why setLastModified(File, File) needed PathUtils.setLastModifiedTime() if
+        //  sourceFile.isFile() was true, but needed setLastModifiedTime(File, long) if sourceFile.isFile() was false
     }
 
     /**

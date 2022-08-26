@@ -44,7 +44,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.AclFileAttributeView;
 import java.nio.file.attribute.FileTime;
+import java.nio.file.attribute.PosixFilePermission;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -64,6 +66,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
@@ -816,6 +819,18 @@ public class FileUtilsTest extends AbstractTempDirTest {
         if (!SystemUtils.IS_OS_WINDOWS) {
             assertNotEquals(DATE3, getLastModifiedMillis(targetFile));
         }
+
+        // Test permission of copied file match destination folder
+        if (!SystemUtils.IS_OS_WINDOWS) {
+            final Set<PosixFilePermission> parentPerms = Files.getPosixFilePermissions(target.getParentFile().toPath());
+            final Set<PosixFilePermission> targetPerms = Files.getPosixFilePermissions(target.toPath());
+            assertEquals(parentPerms, targetPerms);
+        } else {
+            final AclFileAttributeView parentView = Files.getFileAttributeView(target.getParentFile().toPath(), AclFileAttributeView.class);
+            final AclFileAttributeView targetView = Files.getFileAttributeView(target.toPath(), AclFileAttributeView.class);
+            assertEquals(parentView.getAcl(), targetView.getAcl());
+        }
+
         FileUtils.deleteDirectory(target);
 
         // Test with preserveFileDate enabled
