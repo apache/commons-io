@@ -877,7 +877,7 @@ public final class PathUtils {
      * @param url the file to query.
      * @return the file's last modified time.
      * @throws IOException Thrown if an I/O error occurs.
-     * @throws URISyntaxException if the URL is not formatted strictly according to to RFC2396 and cannot be converted to a
+     * @throws URISyntaxException if the URL is not formatted strictly according to RFC2396 and cannot be converted to a
      *         URI.
      * @since 2.12.0
      */
