@@ -201,6 +201,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-386" dev="ggregory" type="fix" due-to="Sebb, Bernd Eckenfels, zhipengxu, Gary Gregory">
         FileUtils.doCopyFile uses different methods to check the file sizes.
       </action>
+      <action dev="ggregory" type="fix" due-to="Michael Ernst">
+        Fix typos #375.
+      </action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">
         Add GitHub coverage.yml.
@@ -508,6 +511,9 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action dev="kinow" type="update" due-to="Dependabot">
         Bump exec-maven-plugin from 3.0.0 to 3.1.0 #369.
+      </action>
+      <action dev="kinow" type="update" due-to="Dependabot">
+        Bump maven-checkstyle-plugin from 3.1.2 to 3.2.0 #376.
       </action>
     </release>
     <release version="2.11.0" date="2021-07-09" description="Java 8 required.">

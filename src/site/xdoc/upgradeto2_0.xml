@@ -72,7 +72,7 @@ Enhancements from 1.4
              - Annotate with @Override and @Deprecated
 
   * [IO-178] New BOMInputStream and ByteOrderMark implementations - to detect and optionally exclude an initial Byte Order mark (BOM)
-  * [IO-197] New BoundedInputStream (copied from from Apache JackRabbit)
+  * [IO-197] New BoundedInputStream (copied from Apache JackRabbit)
   * [IO-193] New Broken Input and Output streams
   * [IO-132] New File Listener/Monitor facility
   * [IO-158] New ReaderInputStream and WriterOutputStream implementations
