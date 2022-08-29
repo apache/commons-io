@@ -261,7 +261,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         return symlinkDir;
     }
 
-    private Set<String> getFilePathSet(List<File> files) {
+    private Set<String> getFilePathSet(final List<File> files) {
         return files.stream().map(f -> {
             try {
                 return f.getCanonicalPath();
@@ -1041,8 +1041,8 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertEquals(expectedSize, FileUtils.sizeOfDirectory(grandParentDir));
         assertTrue(expectedCount > 0, "Count > 0");
         assertTrue(expectedSize > 0, "Size > 0");
-        Set<String> initFilePaths = getFilePathSet(initFiles);
-        Set<String> newFilePaths = getFilePathSet(latestFiles);
+        final Set<String> initFilePaths = getFilePathSet(initFiles);
+        final Set<String> newFilePaths = getFilePathSet(latestFiles);
         newFilePaths.removeAll(initFilePaths);
         assertEquals(parFiles.size(), newFilePaths.size());
     }
@@ -3068,7 +3068,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final byte[] text = "Hello /u1234".getBytes();
         TestUtils.assertEqualContent(text, file);
     }
-    
+
     @Test
     public void testWriteWithEncoding_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
