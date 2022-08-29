@@ -37,7 +37,7 @@ import java.util.stream.Stream;
  * <p>
  * <b>NOTE</b>: You may be able to avoid using this class entirely simply by
  * using JDK {@link java.io.File File} objects and the two argument constructor
- * {@link java.io.File#File(java.io.File, java.lang.String) File(File,String)}.
+ * {@link java.io.File#File(java.io.File, String) File(File,String)}.
  * </p>
  * <p>
  * Most methods on this class are designed to work the same on both Unix and Windows.
