@@ -47,7 +47,7 @@ Semantic compatible - Yes
 Commons IO 1.4 introduces four new implementations which depend on JDK 1.4 features
 (CharSequenceReader, FileWriterWithEncoding, IOExceptionWithCause and RegexFileFilter).
 It has been built with the JDK source and target options set to JDK 1.3 and, except for
-those implementations, can be used with JDK 1.3 (see IO IO-127).
+those implementations, can be used with JDK 1.3 (see IO-127).
 
 
 Deprecations from 1.3.2

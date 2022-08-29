@@ -68,6 +68,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
@@ -233,7 +234,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(Files.isSymbolicLink(linkPath), () -> "Expected a sym link here: " + linkName);
     }
 
-    private void createFilesForTestCopyDirectory(final File grandParentDir, final File parentDir, final File childDir) throws Exception {
+    private void createFilesForTestCopyDirectory(final File grandParentDir, final File parentDir, final File childDir) throws IOException {
         final File childDir2 = new File(parentDir, "child2");
         final File grandChildDir = new File(childDir, "grandChild");
         final File grandChild2Dir = new File(childDir2, "grandChild2");
@@ -260,6 +261,16 @@ public class FileUtilsTest extends AbstractTempDirTest {
         Files.createDirectory(targetDir);
         Files.createSymbolicLink(symlinkDir, targetDir);
         return symlinkDir;
+    }
+
+    private Set<String> getFilePathSet(final List<File> files) {
+        return files.stream().map(f -> {
+            try {
+                return f.getCanonicalPath();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }).collect(Collectors.toSet());
     }
 
     private long getLastModifiedMillis(final File file) throws IOException {
@@ -773,7 +784,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyDirectoryFiltered() throws Exception {
+    public void testCopyDirectoryFiltered() throws IOException {
         final File grandParentDir = new File(tempDirFile, "grandparent");
         final File parentDir = new File(grandParentDir, "parent");
         final File childDir = new File(parentDir, "child");
@@ -789,6 +800,26 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertEquals("child", files.get(1).getName());
         assertEquals("file3.txt", files.get(2).getName());
     }
+
+//   @Test public void testToURLs2() throws Exception {
+//        File[] files = new File[] {
+//            new File(temporaryFolder, "file1.txt"),
+//            null,
+//        };
+//        URL[] urls = FileUtils.toURLs(files);
+//
+//        assertEquals(files.length, urls.length);
+//        assertTrue(urls[0].toExternalForm().startsWith("file:"));
+//        assertTrue(urls[0].toExternalForm().indexOf("file1.txt") > 0);
+//        assertEquals(null, urls[1]);
+//    }
+//
+//   @Test public void testToURLs3() throws Exception {
+//        File[] files = null;
+//        URL[] urls = FileUtils.toURLs(files);
+//
+//        assertEquals(0, urls.length);
+//    }
 
     @Test
     public void testCopyDirectoryPreserveDates() throws Exception {
@@ -857,29 +888,9 @@ public class FileUtilsTest extends AbstractTempDirTest {
         FileUtils.deleteDirectory(target);
     }
 
-//   @Test public void testToURLs2() throws Exception {
-//        File[] files = new File[] {
-//            new File(temporaryFolder, "file1.txt"),
-//            null,
-//        };
-//        URL[] urls = FileUtils.toURLs(files);
-//
-//        assertEquals(files.length, urls.length);
-//        assertTrue(urls[0].toExternalForm().startsWith("file:"));
-//        assertTrue(urls[0].toExternalForm().indexOf("file1.txt") > 0);
-//        assertEquals(null, urls[1]);
-//    }
-//
-//   @Test public void testToURLs3() throws Exception {
-//        File[] files = null;
-//        URL[] urls = FileUtils.toURLs(files);
-//
-//        assertEquals(0, urls.length);
-//    }
-
     /** Tests IO-141 */
     @Test
-    public void testCopyDirectoryToChild() throws Exception {
+    public void testCopyDirectoryToChild() throws IOException {
         final File grandParentDir = new File(tempDirFile, "grandparent");
         final File parentDir = new File(grandParentDir, "parent");
         final File childDir = new File(parentDir, "child");
@@ -965,7 +976,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     /** Test IO-141 */
     @Test
-    public void testCopyDirectoryToGrandChild() throws Exception {
+    public void testCopyDirectoryToGrandChild() throws IOException {
         final File grandParentDir = new File(tempDirFile, "grandparent");
         final File parentDir = new File(grandParentDir, "parent");
         final File childDir = new File(parentDir, "child");
@@ -1020,6 +1031,34 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertEquals(sizeOfSrcDirectory, FileUtils.sizeOfDirectory(destDir), "Check size");
         assertTrue(new File(destDir, "sub/A.txt").exists());
         FileUtils.deleteDirectory(destDir);
+    }
+
+    /**
+     * Test for https://github.com/apache/commons-io/pull/371. The dir name 'par' is a substring of
+     * the dir name 'parent' which is the parent of the 'parent/child' dir.
+     */
+    @Test
+    public void testCopyDirectoryWithPotentialFalsePartialMatch() throws IOException {
+        final File grandParentDir = new File(tempDirFile, "grandparent");
+        final File parentDir = new File(grandParentDir, "parent");
+        final File parDir = new File(grandParentDir, "par");
+        final File childDir = new File(parentDir, "child");
+        createFilesForTestCopyDirectory(grandParentDir, parDir, childDir);
+
+        final List<File> initFiles = LIST_WALKER.list(grandParentDir);
+        final List<File> parFiles = LIST_WALKER.list(parDir);
+        final long expectedCount = initFiles.size() + parFiles.size();
+        final long expectedSize = FileUtils.sizeOfDirectory(grandParentDir) + FileUtils.sizeOfDirectory(parDir);
+        FileUtils.copyDirectory(parDir, childDir);
+        final List<File> latestFiles = LIST_WALKER.list(grandParentDir);
+        assertEquals(expectedCount, latestFiles.size());
+        assertEquals(expectedSize, FileUtils.sizeOfDirectory(grandParentDir));
+        assertTrue(expectedCount > 0, "Count > 0");
+        assertTrue(expectedSize > 0, "Size > 0");
+        final Set<String> initFilePaths = getFilePathSet(initFiles);
+        final Set<String> newFilePaths = getFilePathSet(latestFiles);
+        newFilePaths.removeAll(initFilePaths);
+        assertEquals(parFiles.size(), newFilePaths.size());
     }
 
     @Test
@@ -2772,6 +2811,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         TestUtils.assertEqualContent(text, file);
     }
 
+
     @Test
     public void testWriteLines_3arg_nullSeparator() throws Exception {
         final Object[] data = {
@@ -2802,7 +2842,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
-
 
     @Test
     public void testWriteLines_3argsWithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {

@@ -632,7 +632,7 @@ public class TailerTest {
             assertEquals(1, listener.initialized, "Expected init to be called");
             // assertEquals(0 , listener.notFound, "fileNotFound should not be called"); // there is a window when it might be
             // called
-            assertEquals(1, listener.rotated, "fileRotated should be be called");
+            assertEquals(1, listener.rotated, "fileRotated should be called");
         }
     }
 
