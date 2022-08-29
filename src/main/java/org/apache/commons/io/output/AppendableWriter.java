@@ -29,7 +29,7 @@ import java.util.Objects;
  * </p>
  *
  * @since 2.7
- * @see java.lang.Appendable
+ * @see Appendable
  *
  * @param <T> The type of the {@link Appendable} wrapped by this AppendableWriter.
  */

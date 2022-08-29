@@ -479,7 +479,7 @@ public class IOUtils {
      * @param closeable the objects to close, may be null or already closed
      * @since 2.0
      *
-     * @see Throwable#addSuppressed(java.lang.Throwable)
+     * @see Throwable#addSuppressed(Throwable)
      */
     public static void closeQuietly(final Closeable closeable) {
         closeQuietly(closeable, null);
@@ -529,7 +529,7 @@ public class IOUtils {
      * @param closeables the objects to close, may be null or already closed
      * @see #closeQuietly(Closeable)
      * @since 2.5
-     * @see Throwable#addSuppressed(java.lang.Throwable)
+     * @see Throwable#addSuppressed(Throwable)
      */
     public static void closeQuietly(final Closeable... closeables) {
         if (closeables != null) {
@@ -583,7 +583,7 @@ public class IOUtils {
      * </p>
      *
      * @param input the InputStream to close, may be null or already closed
-     * @see Throwable#addSuppressed(java.lang.Throwable)
+     * @see Throwable#addSuppressed(Throwable)
      */
     public static void closeQuietly(final InputStream input) {
         closeQ(input);
@@ -633,7 +633,7 @@ public class IOUtils {
      * </p>
      *
      * @param output the OutputStream to close, may be null or already closed
-     * @see Throwable#addSuppressed(java.lang.Throwable)
+     * @see Throwable#addSuppressed(Throwable)
      */
     public static void closeQuietly(final OutputStream output) {
         closeQ(output);
@@ -666,7 +666,7 @@ public class IOUtils {
      * </p>
      *
      * @param reader the Reader to close, may be null or already closed
-     * @see Throwable#addSuppressed(java.lang.Throwable)
+     * @see Throwable#addSuppressed(Throwable)
      */
     public static void closeQuietly(final Reader reader) {
         closeQ(reader);
@@ -699,7 +699,7 @@ public class IOUtils {
      *
      * @param selector the Selector to close, may be null or already closed
      * @since 2.2
-     * @see Throwable#addSuppressed(java.lang.Throwable)
+     * @see Throwable#addSuppressed(Throwable)
      */
     public static void closeQuietly(final Selector selector) {
         closeQ(selector);
@@ -732,7 +732,7 @@ public class IOUtils {
      *
      * @param serverSocket the ServerSocket to close, may be null or already closed
      * @since 2.2
-     * @see Throwable#addSuppressed(java.lang.Throwable)
+     * @see Throwable#addSuppressed(Throwable)
      */
     public static void closeQuietly(final ServerSocket serverSocket) {
         closeQ(serverSocket);
@@ -765,7 +765,7 @@ public class IOUtils {
      *
      * @param socket the Socket to close, may be null or already closed
      * @since 2.0
-     * @see Throwable#addSuppressed(java.lang.Throwable)
+     * @see Throwable#addSuppressed(Throwable)
      */
     public static void closeQuietly(final Socket socket) {
         closeQ(socket);
@@ -813,7 +813,7 @@ public class IOUtils {
      * </p>
      *
      * @param writer the Writer to close, may be null or already closed
-     * @see Throwable#addSuppressed(java.lang.Throwable)
+     * @see Throwable#addSuppressed(Throwable)
      */
     public static void closeQuietly(final Writer writer) {
         closeQ(writer);
