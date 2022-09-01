@@ -28,7 +28,7 @@ import java.io.InputStream;
  * <p>
  * This class is typically used in cases where an input stream that supports
  * marking needs to be passed to a component that wants to explicitly mark
- * the stream, but it it is not desirable to allow marking of the stream.
+ * the stream, but it is not desirable to allow marking of the stream.
  * </p>
  *
  * @since 2.8.0

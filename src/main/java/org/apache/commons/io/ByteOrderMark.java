@@ -149,7 +149,7 @@ public class ByteOrderMark implements Serializable {
      * Computes the hashcode for this BOM.
      *
      * @return the hashcode for this BOM.
-     * @see java.lang.Object#hashCode()
+     * @see Object#hashCode()
      */
     @Override
     public int hashCode() {
