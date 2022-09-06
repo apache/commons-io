@@ -1630,6 +1630,28 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testIO575() throws IOException {
+        final Path sourceDir = Files.createTempDirectory("source-dir");
+        final String filename = "some-file";
+        final Path sourceFile = Files.createFile(sourceDir.resolve(filename));
+
+        assertEquals(SystemUtils.IS_OS_WINDOWS, sourceFile.toFile().canExecute());
+
+        sourceFile.toFile().setExecutable(true);
+
+        assertTrue(sourceFile.toFile().canExecute());
+
+        final Path destDir = Files.createTempDirectory("some-empty-destination");
+
+        FileUtils.copyDirectory(sourceDir.toFile(), destDir.toFile());
+
+        final Path destFile = destDir.resolve(filename);
+
+        assertTrue(destFile.toFile().exists());
+        assertTrue(destFile.toFile().canExecute());
+    }
+
+    @Test
     public void testIsDirectory() throws IOException {
         assertFalse(FileUtils.isDirectory(null));
 
