@@ -467,4 +467,25 @@ public class ReversedLinesFileReader implements Closeable {
         return lines.isEmpty() ? EMPTY_STRING : String.join(System.lineSeparator(), lines) + System.lineSeparator();
     }
 
+    /**
+     * Returns the current offset in this file
+     * @return the current offset
+     * @throws IOException if an I/O error occurs.
+     */
+    public long getFilePointer() throws IOException {
+        return channel.position();
+    }
+
+    /**
+     * Sets the file-pointer offset, measured from the beginning of this file, at which the next read occurs.
+     * @param pos the offset value to be set
+     * @throws IOException if an I/O error occurs.
+     */
+    public void seek (long pos) throws IOException {
+        final long block = pos / blockSize + 1;
+        final int blockLength = (int) (pos % blockSize);
+        channel.position(pos);
+        this.currentFilePart = new FilePart(block, blockLength, null);
+
+    }
 }
