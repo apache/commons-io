@@ -456,7 +456,7 @@ The <action> type attribute can be add,update,fix,remove.
         Bump Maven Javadoc plugin from 3.2.0 to 3.4.1.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
-        Bump spotbugs-maven-plugin from 4.2.3 to 4.7.1.1 #250, #259, #272, #274, #285, #288, #289, #305, #315, #326, #338, #360, #366, #370.
+        Bump spotbugs-maven-plugin from 4.2.3 to 4.7.2.0 #250, #259, #272, #274, #285, #288, #289, #305, #315, #326, #338, #360, #366, #370, #380.
       </action>
       <action dev="kinow" type="update" due-to="Gary Gregory, Dependabot">
         Bump spotbugs from 4.5.2 to 4.7.2 #313, #317, #357, #382.
