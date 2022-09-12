@@ -28,6 +28,7 @@ import java.util.function.Consumer;
  * Like {@link Iterator} but throws {@link IOException}.
  *
  * @param <E> the type of elements returned by this iterator.
+ * @since 2.12.0
  */
 public interface IOIterator<E> {
 
