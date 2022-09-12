@@ -29,6 +29,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang3.JavaVersion;
+import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -84,8 +86,10 @@ public class IOIteratorTest {
 
     @Test
     public void testRemove() throws IOException {
-        assertThrows(IllegalStateException.class, iterator::remove);
-        assertThrows(IllegalStateException.class, iterator::remove);
+        final Class<? extends Exception> exClass = SystemUtils.isJavaVersionAtMost(JavaVersion.JAVA_1_8) ? IllegalStateException.class
+            : UnsupportedOperationException.class;
+        assertThrows(exClass, iterator::remove);
+        assertThrows(exClass, iterator::remove);
         iterator.next();
         assertThrows(UnsupportedOperationException.class, iterator::remove);
         assertThrows(UnsupportedOperationException.class, iterator::remove);
