@@ -932,6 +932,14 @@ public class FilenameUtilsTest {
         assertNull(FilenameUtils.normalize("\\\\..\\foo"));
     }
 
+    /**
+     */
+    @Test
+    public void testNormalize_with_null_character() {
+        assertThrows(IllegalArgumentException.class, () -> FilenameUtils.normalize("a\\b/c\u0000.txt"));
+        assertThrows(IllegalArgumentException.class, () -> FilenameUtils.normalize("\u0000a\\b/c.txt"));
+    }
+
     @Test
     public void testNormalizeFromJavaDoc() {
         // Examples from javadoc
@@ -955,14 +963,6 @@ public class FilenameUtilsTest {
 
         assertEquals(SEP + SEP + "foo" + SEP + "bar", FilenameUtils.normalize("//foo//./bar"));
         assertEquals(SEP + SEP + "foo" + SEP + "bar", FilenameUtils.normalize("\\\\foo\\\\.\\bar"));
-    }
-
-    /**
-     */
-    @Test
-    public void testNormalize_with_null_character() {
-        assertThrows(IllegalArgumentException.class, () -> FilenameUtils.normalize("a\\b/c\u0000.txt"));
-        assertThrows(IllegalArgumentException.class, () -> FilenameUtils.normalize("\u0000a\\b/c.txt"));
     }
 
     @Test
