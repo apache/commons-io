@@ -934,7 +934,7 @@ public class FilenameUtilsTest {
 
     @Test
     public void testNormalizeFromJavaDoc() {
-    	// Examples from javadoc
+        // Examples from javadoc
         assertEquals(SEP + "foo" + SEP, FilenameUtils.normalize("/foo//"));
         assertEquals(SEP + "foo" + SEP, FilenameUtils.normalize(SEP + "foo" + SEP + "." + SEP));
         assertEquals(SEP + "bar", FilenameUtils.normalize(SEP + "foo" + SEP + ".." + SEP + "bar"));
@@ -952,11 +952,11 @@ public class FilenameUtilsTest {
         assertNull(FilenameUtils.normalize("C:" + SEP + ".." + SEP + "bar"));
         assertEquals("~" + SEP + "bar" + SEP, FilenameUtils.normalize("~" + SEP + "foo" + SEP + ".." + SEP + "bar" + SEP));
         assertNull(FilenameUtils.normalize("~" + SEP + ".." + SEP + "bar"));
-        
+
         assertEquals(SEP + SEP + "foo" + SEP + "bar", FilenameUtils.normalize("//foo//./bar"));
         assertEquals(SEP + SEP + "foo" + SEP + "bar", FilenameUtils.normalize("\\\\foo\\\\.\\bar"));
     }
-    
+
     /**
      */
     @Test
