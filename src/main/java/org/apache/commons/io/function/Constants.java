@@ -20,7 +20,7 @@ package org.apache.commons.io.function;
 /**
  * Defines package-private constants.
  */
-class Constants {
+final class Constants {
 
     /**
      * No-op singleton.
