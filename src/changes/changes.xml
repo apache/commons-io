@@ -204,6 +204,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Michael Ernst">
         Fix typos #375.
       </action>
+      <action issue="IO-611" dev="ggregory" type="fix" due-to="Fedor Urvanov">
+        FilenameUtils.normalize javadoc and tests #383.
+      </action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">
         Add GitHub coverage.yml.
