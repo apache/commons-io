@@ -21,7 +21,7 @@ import java.io.IOException;
 /**
  * Erases {@link IOException} for the compiler but still throws that exception at runtime.
  */
-class Erase {
+final class Erase {
 
     /**
      * Delegates to the given {@link IOBiConsumer} but erases its {@link IOException} for the compiler, while still throwing
