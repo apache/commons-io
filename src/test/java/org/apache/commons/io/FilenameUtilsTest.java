@@ -932,6 +932,31 @@ public class FilenameUtilsTest {
         assertNull(FilenameUtils.normalize("\\\\..\\foo"));
     }
 
+    @Test
+    public void testNormalizeFromJavaDoc() {
+        // Examples from javadoc
+        assertEquals(SEP + "foo" + SEP, FilenameUtils.normalize("/foo//"));
+        assertEquals(SEP + "foo" + SEP, FilenameUtils.normalize(SEP + "foo" + SEP + "." + SEP));
+        assertEquals(SEP + "bar", FilenameUtils.normalize(SEP + "foo" + SEP + ".." + SEP + "bar"));
+        assertEquals(SEP + "bar" + SEP, FilenameUtils.normalize(SEP + "foo" + SEP + ".." + SEP + "bar" + SEP));
+        assertEquals(SEP + "baz", FilenameUtils.normalize(SEP + "foo" + SEP + ".." + SEP + "bar" + SEP + ".." + SEP + "baz"));
+        assertEquals(SEP + SEP + "foo" + SEP + "bar", FilenameUtils.normalize("//foo//./bar"));
+        assertNull(FilenameUtils.normalize(SEP + ".." + SEP));
+        assertNull(FilenameUtils.normalize(".." + SEP + "foo"));
+        assertEquals("foo" + SEP, FilenameUtils.normalize("foo" + SEP + "bar" + SEP + ".."));
+        assertNull(FilenameUtils.normalize("foo" + SEP + ".." + SEP + ".." + SEP + "bar"));
+        assertEquals("bar", FilenameUtils.normalize("foo" + SEP + ".." + SEP + "bar"));
+        assertEquals(SEP + SEP + "server" + SEP + "bar", FilenameUtils.normalize(SEP + SEP + "server" + SEP + "foo" + SEP + ".." + SEP + "bar"));
+        assertNull(FilenameUtils.normalize(SEP + SEP + "server" + SEP + ".." + SEP + "bar"));
+        assertEquals("C:" + SEP + "bar", FilenameUtils.normalize("C:" + SEP + "foo" + SEP + ".." + SEP + "bar"));
+        assertNull(FilenameUtils.normalize("C:" + SEP + ".." + SEP + "bar"));
+        assertEquals("~" + SEP + "bar" + SEP, FilenameUtils.normalize("~" + SEP + "foo" + SEP + ".." + SEP + "bar" + SEP));
+        assertNull(FilenameUtils.normalize("~" + SEP + ".." + SEP + "bar"));
+
+        assertEquals(SEP + SEP + "foo" + SEP + "bar", FilenameUtils.normalize("//foo//./bar"));
+        assertEquals(SEP + SEP + "foo" + SEP + "bar", FilenameUtils.normalize("\\\\foo\\\\.\\bar"));
+    }
+
     /**
      */
     @Test

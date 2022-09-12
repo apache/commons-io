@@ -1234,7 +1234,7 @@ public class FilenameUtils {
      * /foo/../bar          --&gt;   /bar
      * /foo/../bar/         --&gt;   /bar/
      * /foo/../bar/../baz   --&gt;   /baz
-     * //foo//./bar         --&gt;   /foo/bar
+     * //foo//./bar         --&gt;   //foo/bar
      * /../                 --&gt;   null
      * ../foo               --&gt;   null
      * foo/bar/..           --&gt;   foo/
