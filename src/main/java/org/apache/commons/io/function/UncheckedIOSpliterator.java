@@ -80,6 +80,4 @@ final class UncheckedIOSpliterator<T> implements Spliterator<T> {
         return Uncheck.get(delegate::trySplit).unwrap();
     }
 
-
-
 }
