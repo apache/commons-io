@@ -85,6 +85,14 @@ public class IOSpliteratorTest {
     }
 
     @Test
+    public void testForEachRemainingAsSpliterator() {
+        final List<Path> list = new ArrayList<>();
+        spliterator.asSpliterator().forEachRemaining(list::add);
+        assertEquals(2, list.size());
+        assertEquals(newPathList(), list);
+    }
+
+    @Test
     public void testGetComparator() throws IOException {
         if (spliterator.hasCharacteristics(Spliterator.SORTED)) {
             assertEquals(spliterator.unwrap().getComparator(), spliterator.getComparator());
