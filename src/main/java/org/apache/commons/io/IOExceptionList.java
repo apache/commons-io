@@ -19,6 +19,7 @@ package org.apache.commons.io;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,7 +32,7 @@ import java.util.Objects;
  *
  * @since 2.7
  */
-public class IOExceptionList extends IOException {
+public class IOExceptionList extends IOException implements Iterable<Throwable> {
 
     private static final long serialVersionUID = 1L;
 
@@ -122,6 +123,11 @@ public class IOExceptionList extends IOException {
      */
     public <T extends Throwable> List<T> getCauseList(final Class<T> clazz) {
         return (List<T>) causeList;
+    }
+
+    @Override
+    public Iterator<Throwable> iterator() {
+        return getCauseList().iterator();
     }
 
 }

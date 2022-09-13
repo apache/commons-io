@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.EOFException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -65,6 +66,22 @@ public class IOExceptionListTest {
     public void testEmptyList() {
         new IOExceptionList(Collections.emptyList());
         new IOExceptionList("foo", Collections.emptyList());
+    }
+
+    @Test
+    public void testIterable() {
+        final EOFException cause = new EOFException();
+        final List<EOFException> list = Collections.singletonList(cause);
+        final IOExceptionList sqlExceptionList = new IOExceptionList("Hello", list);
+        //
+        assertEquals(list, sqlExceptionList.getCauseList());
+        // No CCE:
+        final List<EOFException> causeList = sqlExceptionList.getCauseList();
+        assertEquals(list, causeList);
+        //
+        final List<Throwable> list2 = new ArrayList<>();
+        sqlExceptionList.forEach(list2::add);
+        assertEquals(list2, causeList);
     }
 
     @Test
