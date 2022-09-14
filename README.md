@@ -48,6 +48,7 @@ Apache Commons IO
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/commons-io/commons-io/badge.svg?gav=true)](https://maven-badges.herokuapp.com/maven-central/commons-io/commons-io/?gav=true)
 [![Javadocs](https://javadoc.io/badge/commons-io/commons-io/2.11.0.svg)](https://javadoc.io/doc/commons-io/commons-io/2.11.0)
 [![CodeQL](https://github.com/apache/commons-io/workflows/CodeQL/badge.svg)](https://github.com/apache/commons-io/actions/workflows/codeql-analysis.yml?query=workflow%3ACodeQL)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/apache/commons-io/badge)](https://api.securityscorecards.dev/projects/github.com/apache/commons-io)
 
 The Apache Commons IO library contains utility classes, stream implementations, file filters,
 file comparators, endian transformation classes, and much more.
