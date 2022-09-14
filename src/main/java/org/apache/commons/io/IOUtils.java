@@ -346,6 +346,7 @@ public class IOUtils {
      *
      * @param size array size.
      * @return a new byte array of the given size.
+     * @throws NegativeArraySizeException if the size is negative.
      * @since 2.9.0
      */
     public static byte[] byteArray(final int size) {
@@ -2603,7 +2604,7 @@ public class IOUtils {
      * Use this method instead of {@link #toByteArray(InputStream)}
      * when {@link InputStream} size is known.
      * <b>NOTE:</b> the method checks that the length can safely be cast to an int without truncation
-     * before using {@link IOUtils#toByteArray(java.io.InputStream, int)} to read into the byte array.
+     * before using {@link IOUtils#toByteArray(InputStream, int)} to read into the byte array.
      * (Arrays can have no more than Integer.MAX_VALUE entries anyway)
      *
      * @param input the {@link InputStream} to read from
@@ -2611,7 +2612,7 @@ public class IOUtils {
      * @return byte [] the requested byte array, of length {@code size}
      * @throws IOException              if an I/O error occurs or {@link InputStream} length is less than {@code size}
      * @throws IllegalArgumentException if size is less than zero or size is greater than Integer.MAX_VALUE
-     * @see IOUtils#toByteArray(java.io.InputStream, int)
+     * @see IOUtils#toByteArray(InputStream, int)
      * @since 2.1
      */
     public static byte[] toByteArray(final InputStream input, final long size) throws IOException {
@@ -3718,7 +3719,9 @@ public class IOUtils {
 
     /**
      * Instances should NOT be constructed in standard programming.
+     * @deprecated Will be private in 3.0.
      */
+    @Deprecated
     public IOUtils() { //NOSONAR
     }
 
