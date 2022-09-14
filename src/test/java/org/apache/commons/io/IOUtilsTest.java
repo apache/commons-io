@@ -1718,9 +1718,7 @@ public class IOUtilsTest {
 
     @Test
     public void testByteArrayWithNegativeSize() {
-        assertThrows(NegativeArraySizeException.class,() -> {
-            IOUtils.byteArray(-1);
-        });
+        assertThrows(NegativeArraySizeException.class,() -> IOUtils.byteArray(-1));
     }
 
 }
