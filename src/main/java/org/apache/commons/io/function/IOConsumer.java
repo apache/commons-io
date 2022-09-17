@@ -43,14 +43,14 @@ public interface IOConsumer<T> {
     /**
      * Performs an action for each element of the collection gathering any exceptions.
      * @param action The action to apply to each input element.
-     * @param collection The input to stream.
+     * @param iterable The input to stream.
      *
      * @param <T> The element type.
      * @throws IOExceptionList if any I/O errors occur.
      * @since 2.12.0
      */
-    static <T> void forAll(final IOConsumer<T> action, final Iterable<T> collection) throws IOExceptionList {
-        IOStreams.forAll(IOStreams.of(collection), action);
+    static <T> void forAll(final IOConsumer<T> action, final Iterable<T> iterable) throws IOExceptionList {
+        IOStreams.forAll(IOStreams.of(iterable), action);
     }
 
     /**
@@ -84,13 +84,13 @@ public interface IOConsumer<T> {
      * Performs an action for each element of the collection, stopping at the first exception.
      *
      * @param <T> The element type.
-     * @param collection The input to stream.
+     * @param iterable The input to stream.
      * @param action The action to apply to each input element.
      * @throws IOException if an I/O error occurs.
      * @since 2.12.0
      */
-    static <T> void forEach(final Iterable<T> collection, final IOConsumer<T> action) throws IOException {
-        IOStreams.forEach(IOStreams.of(collection), action);
+    static <T> void forEach(final Iterable<T> iterable, final IOConsumer<T> action) throws IOException {
+        IOStreams.forEach(IOStreams.of(iterable), action);
     }
 
     /**
