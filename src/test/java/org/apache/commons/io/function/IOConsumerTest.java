@@ -73,36 +73,75 @@ public class IOConsumerTest {
     }
 
     @Test
-    public void testForAllArray() throws IOException {
+    public void testForAllArrayOf1() throws IOException {
         IOConsumer.forAll(TestUtils.throwingIOConsumer(), (String[]) null);
+        IOConsumer.forAll(null, (String[]) null);
         assertThrows(IOExceptionList.class, () -> IOConsumer.forAll(TestUtils.throwingIOConsumer(), new String[] {"1"}));
-
-        final AtomicReference<String> ref = new AtomicReference<>();
-        final IOConsumer<String> consumer1 = s -> ref.set(s + "2");
+        //
+        final AtomicReference<String> ref = new AtomicReference<>("0");
+        final IOConsumer<String> consumer1 = s -> ref.set(ref.get() + s);
         IOConsumer.forAll(consumer1, new String[] {"1"});
-        assertEquals("12", ref.get());
+        assertEquals("01", ref.get());
     }
 
     @Test
-    public void testForAllIterable() throws IOException {
+    public void testForAllArrayOf2() throws IOException {
+        IOConsumer.forAll(TestUtils.throwingIOConsumer(), (String[]) null);
+        IOConsumer.forAll(null, (String[]) null);
+        assertThrows(IOExceptionList.class, () -> IOConsumer.forAll(TestUtils.throwingIOConsumer(), new String[] {"1", "2"}));
+        //
+        final AtomicReference<String> ref = new AtomicReference<>("0");
+        final IOConsumer<String> consumer1 = s -> ref.set(ref.get() + s);
+        IOConsumer.forAll(consumer1, new String[] {"1", "2"});
+        assertEquals("012", ref.get());
+    }
+
+    @Test
+    public void testForAllIterableOf1() throws IOException {
         IOConsumer.forAll(TestUtils.throwingIOConsumer(), (Iterable<Object>) null);
+        IOConsumer.forAll(null, (Iterable<Object>) null);
         assertThrows(IOExceptionList.class, () -> IOConsumer.forAll(TestUtils.throwingIOConsumer(), Arrays.asList("1")));
 
-        final AtomicReference<String> ref = new AtomicReference<>();
-        final IOConsumer<String> consumer1 = s -> ref.set(s + "2");
+        final AtomicReference<String> ref = new AtomicReference<>("0");
+        final IOConsumer<String> consumer1 = s -> ref.set(ref.get() + s);
         IOConsumer.forAll(consumer1, Arrays.asList("1"));
-        assertEquals("12", ref.get());
+        assertEquals("01", ref.get());
     }
 
     @Test
-    public void testForAllStream() throws IOException {
+    public void testForAllIterableOf2() throws IOException {
+        IOConsumer.forAll(TestUtils.throwingIOConsumer(), (Iterable<Object>) null);
+        IOConsumer.forAll(null, (Iterable<Object>) null);
+        assertThrows(IOExceptionList.class, () -> IOConsumer.forAll(TestUtils.throwingIOConsumer(), Arrays.asList("1", "2")));
+
+        final AtomicReference<String> ref = new AtomicReference<>("0");
+        final IOConsumer<String> consumer1 = s -> ref.set(ref.get() + s);
+        IOConsumer.forAll(consumer1, Arrays.asList("1", "2"));
+        assertEquals("012", ref.get());
+    }
+
+    @Test
+    public void testForAllStreamOf1() throws IOException {
         IOConsumer.forAll(TestUtils.throwingIOConsumer(), (Stream<Object>) null);
+        IOConsumer.forAll(null, (Stream<Object>) null);
         assertThrows(IOExceptionList.class, () -> IOConsumer.forAll(TestUtils.throwingIOConsumer(), Arrays.asList("1").stream()));
 
-        final AtomicReference<String> ref = new AtomicReference<>();
-        final IOConsumer<String> consumer1 = s -> ref.set(s + "2");
+        final AtomicReference<String> ref = new AtomicReference<>("0");
+        final IOConsumer<String> consumer1 = s -> ref.set(ref.get() + s);
         IOConsumer.forAll(consumer1, Arrays.asList("1").stream());
-        assertEquals("12", ref.get());
+        assertEquals("01", ref.get());
+    }
+
+    @Test
+    public void testForAllStreamOf2() throws IOException {
+        IOConsumer.forAll(TestUtils.throwingIOConsumer(), (Stream<Object>) null);
+        IOConsumer.forAll(null, (Stream<Object>) null);
+        assertThrows(IOExceptionList.class, () -> IOConsumer.forAll(TestUtils.throwingIOConsumer(), Arrays.asList("1", "2").stream()));
+
+        final AtomicReference<String> ref = new AtomicReference<>("0");
+        final IOConsumer<String> consumer1 = s -> ref.set(ref.get() + s);
+        IOConsumer.forAll(consumer1, Arrays.asList("1", "2").stream());
+        assertEquals("012", ref.get());
     }
 
     @Test
