@@ -51,11 +51,15 @@ public class IOExceptionList extends IOException implements Iterable<Throwable> 
     }
 
     private static boolean isEmpty(final List<? extends Throwable> causeList) {
-        return causeList == null || causeList.isEmpty();
+        return size(causeList) == 0;
+    }
+
+    private static int size(final List<? extends Throwable> causeList) {
+        return causeList != null ? causeList.size() : 0;
     }
 
     private static String toMessage(final List<? extends Throwable> causeList) {
-        return String.format("%,d exception(s): %s", causeList == null ? 0 : causeList.size(), causeList);
+        return String.format("%,d exception(s): %s", size(causeList), causeList);
     }
 
     private final List<? extends Throwable> causeList;
