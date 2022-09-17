@@ -25,7 +25,7 @@ import java.io.UncheckedIOException;
  *
  * @since 2.12.0
  */
-public class Uncheck {
+public final class Uncheck {
 
     /**
      * Accepts an IO consumer with the given arguments.
