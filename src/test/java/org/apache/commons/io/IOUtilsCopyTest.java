@@ -45,9 +45,7 @@ import org.apache.commons.io.test.ThrowOnFlushAndCloseOutputStream;
 import org.junit.jupiter.api.Test;
 
 /**
- * JUnit tests for IOUtils copy methods.
- *
- * @see IOUtils
+ * Test {@link IOUtils} copy methods.
  */
 public class IOUtilsCopyTest {
 
@@ -59,7 +57,6 @@ public class IOUtilsCopyTest {
      */
 
     private static final int FILE_SIZE = 1024 * 4 + 1;
-
 
     private final byte[] inData = TestUtils.generateTestData(FILE_SIZE);
 
@@ -288,7 +285,6 @@ public class IOUtilsCopyTest {
 
         // Test copyLarge() method
         assertEquals(size, IOUtils.copyLarge(reader, writer), "copy()");
-
     }
 
     @Test
@@ -419,8 +415,8 @@ public class IOUtilsCopyTest {
         assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
-    /*
-     * Test Copying file > 2GB  - see issue# IO-84
+    /**
+     * Tests Copying file > 2GB  - see issue# IO-84
      */
     @Test
     public void testCopy_readerToWriter_IO84() throws Exception {
@@ -436,7 +432,6 @@ public class IOUtilsCopyTest {
 
         // Test copyLarge() method
         assertEquals(size, IOUtils.copyLarge(reader, writer), "copyLarge()");
-
     }
 
     @Test
