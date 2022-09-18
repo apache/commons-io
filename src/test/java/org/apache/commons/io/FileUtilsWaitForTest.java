@@ -52,6 +52,7 @@ public class FileUtilsWaitForTest {
             wasInterrupted.set(Thread.currentThread().isInterrupted());
         });
         thread1.start();
+        // Make sure the thread does not finish before we interrupt it:
         started.countDown();
         thread1.interrupt();
         started.await();
