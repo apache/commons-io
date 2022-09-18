@@ -42,9 +42,9 @@ public interface IOConsumer<T> {
 
     /**
      * Performs an action for each element of the collection gathering any exceptions.
+     *
      * @param action The action to apply to each input element.
      * @param iterable The input to stream.
-     *
      * @param <T> The element type.
      * @throws IOExceptionList if any I/O errors occur.
      * @since 2.12.0
@@ -55,9 +55,9 @@ public interface IOConsumer<T> {
 
     /**
      * Performs an action for each element of the collection gathering any exceptions.
+     *
      * @param action The action to apply to each input element.
      * @param stream The input to stream.
-     *
      * @param <T> The element type.
      * @throws IOExceptionList if any I/O errors occur.
      * @since 2.12.0
@@ -68,9 +68,9 @@ public interface IOConsumer<T> {
 
     /**
      * Performs an action for each element of the array gathering any exceptions.
+     *
      * @param action The action to apply to each input element.
      * @param array The input to stream.
-     *
      * @param <T> The element type.
      * @throws IOExceptionList if any I/O errors occur.
      * @since 2.12.0
