@@ -23,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -93,7 +92,7 @@ public class IOSpliteratorTest {
     }
 
     @Test
-    public void testGetComparator() throws IOException {
+    public void testGetComparator() {
         if (spliterator.hasCharacteristics(Spliterator.SORTED)) {
             assertEquals(spliterator.unwrap().getComparator(), spliterator.getComparator());
             assertEquals(spliterator.unwrap().getComparator(), spliterator.asSpliterator().getComparator());
