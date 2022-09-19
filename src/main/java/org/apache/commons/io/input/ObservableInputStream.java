@@ -23,7 +23,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.function.IOConsumer;
@@ -175,7 +174,7 @@ public class ObservableInputStream extends ProxyInputStream {
     }
 
     private void forEachObserver(final IOConsumer<Observer> action) throws IOException {
-        IOConsumer.forAll(Objects.requireNonNull(action), observers);
+        IOConsumer.forAll(action, observers);
     }
 
     /**

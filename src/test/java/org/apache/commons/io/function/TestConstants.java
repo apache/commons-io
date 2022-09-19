@@ -62,8 +62,16 @@ class TestConstants {
         throw new UncheckedIOException(new IOException("Failure"));
     };
 
-    private static <T> T throwIOException() throws IOException {
-        throw new IOException("Failure");
+    static <T> T throwIOException() throws IOException {
+        return throwIOException("Failure");
+    }
+
+    static <T> T throwIOException(final String message) throws IOException {
+        throw new IOException(message);
+    }
+
+    static <T> T throwRuntimeException(final String message) {
+        throw new RuntimeException(message);
     }
 
 }

@@ -51,7 +51,7 @@ public class IOSupplierTest {
     @Test
     public void testAsSupplier() {
         assertThrows(UncheckedIOException.class, () -> TestConstants.THROWING_IO_SUPPLIER.asSupplier().get());
-        assertEquals("new1", getThrowsNone(() -> TestUtils.compareAndSetThrows(ref1, "new1")));
+        assertEquals("new1", getThrowsNone(() -> TestUtils.compareAndSetThrowsIO(ref1, "new1")));
         assertEquals("new1", ref1.get());
         assertNotEquals(TestConstants.THROWING_IO_SUPPLIER.asSupplier(), TestConstants.THROWING_IO_SUPPLIER.asSupplier());
     }
@@ -62,7 +62,7 @@ public class IOSupplierTest {
         assertThrows(IOException.class, () -> {
             throw new IOException();
         });
-        assertEquals("new1", getThrows(() -> TestUtils.compareAndSetThrows(ref1, "new1")));
+        assertEquals("new1", getThrows(() -> TestUtils.compareAndSetThrowsIO(ref1, "new1")));
         assertEquals("new1", ref1.get());
     }
 
