@@ -87,7 +87,7 @@ public class FileUtilsDeleteDirectoryLinuxTest extends FileUtilsDeleteDirectoryB
             fail("expected IOException");
         } catch (final IOException e) {
             final IOExceptionList list = (IOExceptionList) e;
-            assertEquals("Cannot delete file: " + file.getAbsolutePath(), list.getCause(0).getMessage());
+            assertTrue(list.getCause(0).getMessage().endsWith("Cannot delete file: " + file.getAbsolutePath()));
         } finally {
             chmod(nested, 755, false);
             FileUtils.deleteDirectory(nested);
