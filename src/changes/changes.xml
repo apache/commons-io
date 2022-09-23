@@ -497,8 +497,8 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Bump japicmp-maven-plugin from 0.15.3 to 0.15.7.
       </action>
-      <action dev="ggregory" type="update" due-to="Gary Gregory">
-        Bump commons-parent from 52 to 53.
+      <action dev="ggregory" type="update" due-to="Gary Gregory, Dependabot">
+        Bump commons-parent from 52 to 54 #388.
       </action>
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Bump jacoco-maven-plugin from 0.8.7 to 0.8.8.
