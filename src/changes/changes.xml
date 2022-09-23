@@ -480,7 +480,7 @@ The <action> type attribute can be add,update,fix,remove.
         Bump checkstyle from 8.44 to 9.3 #256, #257, #266, #279, #292. #308.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
-        Bump junit-bom from 5.8.0-M1 to 5.9.0 #260, #271, #275, #309.
+        Bump junit-bom from 5.8.0-M1 to 5.9.1 #260, #271, #275, #309, #386.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot, Gary Gregory">
         Bump mockito-inline from 3.11.2 to 4.8.0 #262, #264, #282, #306, #314, #331, #348, #359, #381.
