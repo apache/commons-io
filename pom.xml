@@ -363,7 +363,7 @@ file comparators, endian transformation classes, and much more.
         <plugin>
           <groupId>org.apache.rat</groupId>
           <artifactId>apache-rat-plugin</artifactId>
-          <version>0.14</version>
+          <version>0.15</version>
           <configuration>
             <excludes>
               <exclude>src/test/resources/**/*.bin</exclude>
