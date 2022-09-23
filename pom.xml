@@ -567,7 +567,11 @@ file comparators, endian transformation classes, and much more.
     <profile>
       <id>java9+</id>
       <activation>
-        <jdk>[9,)</jdk>
+        <!-- 
+        Fails on Java 11 and Windows:
+        Error:  Failed to execute goal org.moditect:moditect-maven-plugin:1.0.0.RC2:add-module-info (add-module-infos) on project commons-io: Execution add-module-infos of goal org.moditect:moditect-maven-plugin:1.0.0.RC2:add-module-info failed: Couldn't add module-info.class to JAR: D:\a\commons-io\commons-io\target\commons-io-2.12.0-SNAPSHOT.jar: The process cannot access the file because it is being used by another process. -> [Help 1]
+        -->
+        <jdk>[9,11)</jdk>
       </activation>
       <properties>
         <!-- coverall version 4.3.0 does not work with java 9, see https://github.com/trautonen/coveralls-maven-plugin/issues/112 -->
