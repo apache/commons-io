@@ -576,7 +576,7 @@ file comparators, endian transformation classes, and much more.
       </properties>
     </profile>
     <profile>
-      <id>java9+</id>
+      <id>java9-moditect</id>
       <activation>
         <!-- 
         Fails on Java 11 and Windows:
