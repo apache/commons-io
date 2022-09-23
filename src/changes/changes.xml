@@ -524,6 +524,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="kinow" type="update" due-to="Dependabot">
         Bump maven-checkstyle-plugin from 3.1.2 to 3.2.0 #376.
       </action>
+      <action dev="kinow" type="update" due-to="Dependabot">
+        Bump apache-rat-plugin from 0.14 to 0.15 #387.
+      </action>
     </release>
     <release version="2.11.0" date="2021-07-09" description="Java 8 required.">
       <!-- FIX -->
