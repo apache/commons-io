@@ -565,6 +565,17 @@ file comparators, endian transformation classes, and much more.
       </build>
     </profile>
     <profile>
+      <id>java9-compile</id>
+      <activation>
+        <jdk>[9,)</jdk>
+      </activation>
+      <properties>
+        <!-- coverall version 4.3.0 does not work with java 9, see https://github.com/trautonen/coveralls-maven-plugin/issues/112 -->
+        <coveralls.skip>true</coveralls.skip>
+        <maven.compiler.release>8</maven.compiler.release>
+      </properties>
+    </profile>
+    <profile>
       <id>java9+</id>
       <activation>
         <!-- 
@@ -573,11 +584,6 @@ file comparators, endian transformation classes, and much more.
         -->
         <jdk>[9,11)</jdk>
       </activation>
-      <properties>
-        <!-- coverall version 4.3.0 does not work with java 9, see https://github.com/trautonen/coveralls-maven-plugin/issues/112 -->
-        <coveralls.skip>true</coveralls.skip>
-        <maven.compiler.release>8</maven.compiler.release>
-      </properties>
       <build>
         <plugins>
           <plugin>
