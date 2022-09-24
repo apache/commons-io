@@ -495,7 +495,7 @@ The <action> type attribute can be add,update,fix,remove.
         Bump junit-pioneer from 1.4.2 to 1.7.1 #304. #335, #362.
       </action>
       <action dev="ggregory" type="update" due-to="Gary Gregory">
-        Bump japicmp-maven-plugin from 0.15.3 to 0.15.7.
+        Bump japicmp-maven-plugin from 0.15.3 to 0.16.0.
       </action>
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Bump commons-parent from 52 to 53.
