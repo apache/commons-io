@@ -590,16 +590,17 @@ public class IOUtilsTest {
         {
             assertTrue(IOUtils.contentEqualsIgnoreEOL(null, null));
         }
+        final char[] empty = {};
         {
-            final Reader input1 = new CharArrayReader("".toCharArray());
+            final Reader input1 = new CharArrayReader(empty);
             assertFalse(IOUtils.contentEqualsIgnoreEOL(null, input1));
         }
         {
-            final Reader input1 = new CharArrayReader("".toCharArray());
+            final Reader input1 = new CharArrayReader(empty);
             assertFalse(IOUtils.contentEqualsIgnoreEOL(input1, null));
         }
         {
-            final Reader input1 = new CharArrayReader("".toCharArray());
+            final Reader input1 = new CharArrayReader(empty);
             assertTrue(IOUtils.contentEqualsIgnoreEOL(input1, input1));
         }
         {
