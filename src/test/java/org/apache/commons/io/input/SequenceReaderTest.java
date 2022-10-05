@@ -56,7 +56,7 @@ public class SequenceReaderTest {
     }
 
     @Test
-    public void testClose() throws IOException {
+    public void testAutoClose() throws IOException {
         try (Reader reader = new SequenceReader(new CharSequenceReader("FooBar"))) {
             checkRead(reader, "Foo");
             reader.close();
@@ -65,6 +65,12 @@ public class SequenceReaderTest {
     }
 
     @Test
+    public void testClose() throws IOException {
+        final Reader reader = new SequenceReader(new CharSequenceReader("FooBar"));
+        checkRead(reader, "Foo");
+        reader.close();
+        checkReadEof(reader);
+    }
     public void testMarkSupported() throws Exception {
         try (Reader reader = new SequenceReader()) {
             assertFalse(reader.markSupported());
