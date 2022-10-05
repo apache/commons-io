@@ -16,9 +16,12 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -26,6 +29,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
@@ -71,6 +75,72 @@ public class SequenceReaderTest {
         reader.close();
         checkReadEof(reader);
     }
+
+    @Test
+    public void testCloseReaders() {
+        final AtomicBoolean closeEmptyReader = new AtomicBoolean(false);
+        final Reader emptyReader = new Reader() {
+            @Override
+            public int read(char[] cbuf, int off, int len) throws IOException {
+                if (closeEmptyReader.get()) {
+                    throw new IOException("emptyReader already closed");
+                }
+
+                return EOF;
+            }
+
+            @Override
+            public void close() throws IOException {
+                closeEmptyReader.set(true);
+            }
+        };
+
+        final AtomicBoolean closeReader1 = new AtomicBoolean(false);
+        final Reader reader1 = new Reader() {
+            private final char[] content = new char[]{'A'};
+            private int position = 0;
+
+            @Override
+            public int read(char[] cbuf, int off, int len) throws IOException {
+                if (closeReader1.get()) {
+                    throw new IOException("reader1 already closed");
+                }
+
+                if (off < 0) {
+                    throw new IndexOutOfBoundsException("off is negative");
+                } else if (len < 0) {
+                    throw new IndexOutOfBoundsException("len is negative");
+                } else if (len > cbuf.length - off) {
+                    throw new IndexOutOfBoundsException("len is greater than cbuf.length - off");
+                }
+
+                if (position > 0) {
+                    return EOF;
+                }
+
+                cbuf[off] = content[0];
+                position++;
+                return 1;
+            }
+
+            @Override
+            public void close() throws IOException {
+                closeReader1.set(true);
+            }
+        };
+
+        try (SequenceReader sequenceReader = new SequenceReader(reader1, emptyReader)) {
+            assertEquals('A', sequenceReader.read());
+            assertEquals(EOF, sequenceReader.read());
+        } catch (IOException e) {
+            fail("No IOException expected");
+        } finally {
+            assertTrue(closeEmptyReader.get());
+            assertTrue(closeReader1.get());
+        }
+    }
+
+    @Test
     public void testMarkSupported() throws Exception {
         try (Reader reader = new SequenceReader()) {
             assertFalse(reader.markSupported());

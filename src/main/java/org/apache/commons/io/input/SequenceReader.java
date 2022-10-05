@@ -20,9 +20,12 @@ import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
+import org.apache.commons.io.IOExceptionList;
 
 /**
  * Provides the contents of multiple Readers in sequence.
@@ -33,6 +36,7 @@ public class SequenceReader extends Reader {
 
     private Reader reader;
     private Iterator<? extends Reader> readers;
+    private Iterable<? extends Reader> readersIterable;
 
     /**
      * Constructs a new instance with readers
@@ -40,7 +44,8 @@ public class SequenceReader extends Reader {
      * @param readers the readers to read
      */
     public SequenceReader(final Iterable<? extends Reader> readers) {
-        this.readers = Objects.requireNonNull(readers, "readers").iterator();
+        this.readersIterable = Objects.requireNonNull(readers, "readers");
+        this.readers = readers.iterator();
         this.reader = nextReader();
     }
 
@@ -60,8 +65,26 @@ public class SequenceReader extends Reader {
      */
     @Override
     public void close() throws IOException {
+        if (readersIterable == null) {
+            // already closed
+            return;
+        }
+
+        final List<IOException> ioExceptionList = new ArrayList<>();
+        for (Reader reader : readersIterable) {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                ioExceptionList.add(e);
+            }
+        }
+        this.readersIterable = null;
         this.readers = null;
         this.reader = null;
+
+        if (!ioExceptionList.isEmpty()) {
+            throw new IOExceptionList(ioExceptionList);
+        }
     }
 
     /**
