@@ -343,9 +343,7 @@ public class FileAlterationObserver implements Serializable {
     private FileEntry[] doListFiles(final File file, final FileEntry entry) {
         final File[] files = listFiles(file);
         final FileEntry[] children = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_FILE_ENTRY_ARRAY;
-        for (int i = 0; i < files.length; i++) {
-            children[i] = createFileEntry(entry, files[i]);
-        }
+        Arrays.setAll(children, i -> createFileEntry(entry, files[i]));
         return children;
     }
 
