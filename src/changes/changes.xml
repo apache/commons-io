@@ -453,7 +453,7 @@ The <action> type attribute can be add,update,fix,remove.
         Bump actions/cache from 2.1.6 to 3.0.10 #307, #337, #393.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot, Gary Gregory">
-        Bump actions/checkout from 2.3.4 to 3.0.2 #286, #298, #330.
+        Bump actions/checkout from 2.3.4 to 3.1.0 #286, #298, #330, #392.
       </action>
       <action dev="kinow" type="update" due-to="Dependabot">
         Bump actions/setup-java from 2 to 3.5.1 #346.
