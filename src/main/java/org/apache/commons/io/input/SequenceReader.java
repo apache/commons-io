@@ -20,19 +20,24 @@ import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.SequenceInputStream;
+import java.io.UncheckedIOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Objects;
 
 /**
- * Provides the contents of multiple Readers in sequence.
+ * Provides the contents of multiple {@link Reader}s in sequence.
+ * <p>
+ * Like {@link SequenceInputStream} but for {@link Reader} arguments.
+ * </p>
  *
  * @since 2.7
  */
 public class SequenceReader extends Reader {
 
     private Reader reader;
-    private Iterator<? extends Reader> readers;
+    private final Iterator<? extends Reader> readers;
 
     /**
      * Constructs a new instance with readers
@@ -41,7 +46,11 @@ public class SequenceReader extends Reader {
      */
     public SequenceReader(final Iterable<? extends Reader> readers) {
         this.readers = Objects.requireNonNull(readers, "readers").iterator();
-        this.reader = nextReader();
+        try {
+            this.reader = nextReader();
+        } catch (final IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     /**
@@ -60,17 +69,27 @@ public class SequenceReader extends Reader {
      */
     @Override
     public void close() throws IOException {
-        this.readers = null;
-        this.reader = null;
+        do { // NOPMD
+             // empty
+        } while (nextReader() != null);
     }
 
     /**
      * Returns the next available reader or null if done.
      *
-     * @return the next available reader or null
+     * @return the next available reader or null.
+     * @throws IOException IOException  If an I/O error occurs.
      */
-    private Reader nextReader() {
-        return this.readers.hasNext() ? this.readers.next() : null;
+    private Reader nextReader() throws IOException {
+        if (reader != null) {
+            reader.close();
+        }
+        if (readers.hasNext()) {
+            reader = readers.next();
+        } else {
+            reader = null;
+        }
+        return reader;
     }
 
     /*
@@ -86,7 +105,7 @@ public class SequenceReader extends Reader {
             if (c != EOF) {
                 break;
             }
-            reader = nextReader();
+            nextReader();
         }
         return c;
     }
@@ -106,7 +125,7 @@ public class SequenceReader extends Reader {
         while (reader != null) {
             final int readLen = reader.read(cbuf, off, len);
             if (readLen == EOF) {
-                reader = nextReader();
+                nextReader();
             } else {
                 count += readLen;
                 off += readLen;
