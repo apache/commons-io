@@ -24,6 +24,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -47,7 +48,7 @@ public class FileUtilsCleanSymlinksTest {
 
         final Process proc;
 
-        proc = Runtime.getRuntime().exec(args.toArray(new String[args.size()]));
+        proc = Runtime.getRuntime().exec(args.toArray(ArrayUtils.EMPTY_STRING_ARRAY));
         return proc.waitFor() == 0;
     }
 

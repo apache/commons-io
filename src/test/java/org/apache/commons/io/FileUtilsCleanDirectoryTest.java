@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.file.AbstractTempDirTest;
+import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledOnOs;
 import org.junit.jupiter.api.condition.OS;
@@ -55,7 +56,7 @@ public class FileUtilsCleanDirectoryTest extends AbstractTempDirTest {
         final Process proc;
 
         try {
-            proc = Runtime.getRuntime().exec(args.toArray(new String[args.size()]));
+            proc = Runtime.getRuntime().exec(args.toArray(ArrayUtils.EMPTY_STRING_ARRAY));
         } catch (final IOException e) {
             return false;
         }

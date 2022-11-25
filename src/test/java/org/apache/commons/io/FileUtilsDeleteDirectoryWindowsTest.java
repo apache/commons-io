@@ -22,6 +22,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 
@@ -47,7 +48,7 @@ public class FileUtilsDeleteDirectoryWindowsTest extends FileUtilsDeleteDirector
         args.add(link.getAbsolutePath());
         args.add(res.getAbsolutePath());
 
-        final Process proc = Runtime.getRuntime().exec(args.toArray(new String[args.size()]));
+        final Process proc = Runtime.getRuntime().exec(args.toArray(ArrayUtils.EMPTY_STRING_ARRAY));
         final InputStream errorStream = proc.getErrorStream();
         final int rc = proc.waitFor();
         System.err.print(IOUtils.toString(errorStream, Charset.defaultCharset()));
