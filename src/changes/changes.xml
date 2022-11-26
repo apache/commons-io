@@ -513,7 +513,7 @@ The <action> type attribute can be add,update,fix,remove.
         Bump commons.surefire.version 3.0.0-M5 to 3.0.0-M7.
       </action>
       <action dev="ggregory" type="update" due-to="Gary Gregory">
-        Bump PMD from 6.44.0 to 6.51.0.
+        Bump PMD from 6.44.0 to 6.52.0.
       </action>
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Bump maven-pmd-plugin from 3.16.0 to 3.19.0.
