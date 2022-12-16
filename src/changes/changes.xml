@@ -486,7 +486,7 @@ The <action> type attribute can be add,update,fix,remove.
         Bump junit-bom from 5.8.0-M1 to 5.9.1 #260, #271, #275, #309, #386.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot, Gary Gregory">
-        Bump mockito-inline from 3.11.2 to 4.9.0 #262, #264, #282, #306, #314, #331, #348, #359, #381, #399, #405.
+        Bump mockito-inline from 3.11.2 to 4.10.0 #262, #264, #282, #306, #314, #331, #348, #359, #381, #399, #405, #414.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump jmh.version from 1.32 to 1.36 #258, #316, #342, #404.
