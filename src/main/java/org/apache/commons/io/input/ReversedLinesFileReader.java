@@ -29,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -90,8 +91,7 @@ public class ReversedLinesFileReader implements Closeable {
             final int lineLengthBytes = currentLastBytePos + 1;
             if (lineLengthBytes > 0) {
                 // create left over for next block
-                leftOver = IOUtils.byteArray(lineLengthBytes);
-                System.arraycopy(data, 0, leftOver, 0, lineLengthBytes);
+                leftOver = Arrays.copyOf(data, lineLengthBytes);
             } else {
                 leftOver = null;
             }
@@ -149,8 +149,7 @@ public class ReversedLinesFileReader implements Closeable {
                     if (lineLengthBytes < 0) {
                         throw new IllegalStateException("Unexpected negative line length=" + lineLengthBytes);
                     }
-                    final byte[] lineData = IOUtils.byteArray(lineLengthBytes);
-                    System.arraycopy(data, lineStart, lineData, 0, lineLengthBytes);
+                    final byte[] lineData = Arrays.copyOfRange(data, lineStart, lineStart + lineLengthBytes);
 
                     line = new String(lineData, charset);
 
