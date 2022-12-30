@@ -192,7 +192,6 @@ public class HexDump {
 
         try (OutputStreamWriter out = new OutputStreamWriter(CloseShieldOutputStream.wrap(stream), Charset.defaultCharset())) {
             dump(data, offset, out, index, data.length - index);
-            out.flush();
         }
     }
 
