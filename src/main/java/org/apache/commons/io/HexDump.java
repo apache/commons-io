@@ -63,15 +63,17 @@ public class HexDump {
      * of output.
      *
      * @param data  the byte array to be dumped
-     * @param out  the Appendable to which the data is to be written
+     * @param appendable  the Appendable to which the data is to be written
      *
      * @throws IOException is thrown if anything goes wrong writing
      *         the data to appendable
+     * @throws NullPointerException if the output appendable is null
+     *
+     * @since 2.12.0
      */
-
-    public static void dump(final byte[] data, final Appendable out)
+    public static void dump(final byte[] data, final Appendable appendable)
             throws IOException {
-        dump(data, 0, out, 0, data.length);
+        dump(data, 0, appendable, 0, data.length);
     }
 
     /**
@@ -91,7 +93,7 @@ public class HexDump {
      *
      * @param data  the byte array to be dumped
      * @param offset  offset of the byte array within a larger entity
-     * @param out  the Appendable to which the data is to be written
+     * @param appendable  the Appendable to which the data is to be written
      * @param index initial index into the byte array
      * @param length number of bytes to dump from the array
      *
@@ -100,12 +102,14 @@ public class HexDump {
      * @throws ArrayIndexOutOfBoundsException if the index or length is
      *         outside the data array's bounds
      * @throws NullPointerException if the output appendable is null
+     *
+     * @since 2.12.0
      */
     public static void dump(final byte[] data, final long offset,
-                            final Appendable out, final int index,
+                            final Appendable appendable, final int index,
                             final int length)
             throws IOException, ArrayIndexOutOfBoundsException {
-        Objects.requireNonNull(out, "out");
+        Objects.requireNonNull(appendable, "appendable");
         if (index < 0 || index >= data.length) {
             throw new ArrayIndexOutOfBoundsException(
                     "illegal index: " + index + " into array of length "
@@ -144,7 +148,7 @@ public class HexDump {
                 }
             }
             buffer.append(System.lineSeparator());
-            out.append(buffer);
+            appendable.append(buffer);
             buffer.setLength(0);
             display_offset += chars_read;
         }
@@ -186,7 +190,6 @@ public class HexDump {
             throws IOException, ArrayIndexOutOfBoundsException {
         Objects.requireNonNull(stream, "stream");
 
-        // make explicit the dependency on the default encoding
         try (OutputStreamWriter out = new OutputStreamWriter(CloseShieldOutputStream.wrap(stream), Charset.defaultCharset())) {
             dump(data, offset, out, index, data.length - index);
             out.flush();
