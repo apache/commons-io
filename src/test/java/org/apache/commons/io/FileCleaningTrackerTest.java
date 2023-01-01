@@ -315,7 +315,7 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
             TestUtils.sleep(1000);
         }
         if (theInstance.getTrackCount() != 0) {
-            throw new IllegalStateException("Your JVM is not releasing References, try running the testcase with less memory (-Xmx)");
+            throw new IllegalStateException("Your JVM is not releasing References, try running the test with less memory (-Xmx)");
         }
 
     }

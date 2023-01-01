@@ -41,7 +41,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.ThreadUtils;
 
 /**
- * Base class for testcases doing tests with files.
+ * Base class for tests doing tests with files.
  */
 public abstract class TestUtils {
 
