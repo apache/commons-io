@@ -45,7 +45,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3.2.0
+      uses: actions/checkout@v3.3.0
       with:
         persist-credentials: false
     - uses: actions/cache@v3.2.2
