@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.IOException;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.io.test.ThrowOnCloseOutputStream;
 import org.junit.jupiter.api.Test;
 
 
@@ -255,14 +256,7 @@ public class HexDumpTest {
         assertThrows(NullPointerException.class, () -> HexDump.dump(testArray, 0x10000000, null, 0));
 
         // verify output stream is not closed by the dump method
-        stream = new ByteArrayOutputStream() {
-            @Override
-            public void close() throws IOException {
-                throw new IOException("Unexpected call to close method");
-            }
-        };
-
-        HexDump.dump(testArray, 0, stream, 0);
+        HexDump.dump(testArray, 0, new ThrowOnCloseOutputStream(new ByteArrayOutputStream()), 0);
     }
 
     private char toAscii(final int c) {
