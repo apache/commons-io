@@ -253,6 +253,16 @@ public class HexDumpTest {
 
         // verify proper behavior with null stream
         assertThrows(NullPointerException.class, () -> HexDump.dump(testArray, 0x10000000, null, 0));
+
+        // verify output stream is not closed by the dump method
+        stream = new ByteArrayOutputStream() {
+            @Override
+            public void close() throws IOException {
+                throw new IOException("Unexpected call to close method");
+            }
+        };
+
+        HexDump.dump(testArray, 0, stream, 0);
     }
 
     private char toAscii(final int c) {
