@@ -329,7 +329,6 @@ file comparators, endian transformation classes, and much more.
     <commons.moditect.version>1.0.0.RC2</commons.moditect.version>
     <commons.spotbugs.plugin.version>4.7.3.0</commons.spotbugs.plugin.version>
     <commons.spotbugs.impl.version>4.7.3</commons.spotbugs.impl.version>
-    <commons.pmd.version>3.19.0</commons.pmd.version>
     <commons.pmd-impl.version>6.52.0</commons.pmd-impl.version>
     <jmh.version>1.36</jmh.version>
     <japicmp.skip>false</japicmp.skip>
