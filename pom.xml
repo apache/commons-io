@@ -326,7 +326,6 @@ file comparators, endian transformation classes, and much more.
     <commons.javadoc.version>3.4.1</commons.javadoc.version>
     <commons.checkstyle-plugin.version>3.2.0</commons.checkstyle-plugin.version>
     <checkstyle.impl.version>9.3</checkstyle.impl.version>
-    <commons.jacoco.version>0.8.8</commons.jacoco.version>
     <commons.surefire.version>3.0.0-M7</commons.surefire.version>
     <commons.japicmp.version>0.16.0</commons.japicmp.version>
     <commons.enforcer.version>3.1.0</commons.enforcer.version>
