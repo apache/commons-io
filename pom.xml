@@ -324,7 +324,6 @@ file comparators, endian transformation classes, and much more.
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
     <commons.javadoc.java.link>${commons.javadoc8.java.link}</commons.javadoc.java.link>
     <checkstyle.impl.version>9.3</checkstyle.impl.version>
-    <commons.japicmp.version>0.16.0</commons.japicmp.version>
     <commons.enforcer.version>3.1.0</commons.enforcer.version>
     <commons.moditect.version>1.0.0.RC2</commons.moditect.version>
     <commons.spotbugs.plugin.version>4.7.3.0</commons.spotbugs.plugin.version>
