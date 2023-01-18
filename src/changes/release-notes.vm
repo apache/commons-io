@@ -451,7 +451,7 @@ o IO-442: Javadoc contradictory for FileFilterUtils.ageFileFilter(cutoff) and
 o IO-534: FileUtilTestCase.testForceDeleteDir() should not delete testDirectory
           parent.
 o IO-528: Fix Tailer.run race condition runaway logging. Thanks to Dave Moten.
-o IO-483: getPrefixLength return -1 if unix file contains colon.
+o IO-483: getPrefixLength return -1 if Unix file contains colon.
           Thanks to Marko Vasic.
 o IO-520: FileUtilsTestCase#testContentEqualsIgnoreEOL fails on Windows.
 o IO-516: .gitattributes not correctly applied. Thanks to Jason Pyeron.

@@ -1208,7 +1208,7 @@ The <action> type attribute can be add,update,fix,remove.
         fix Tailer.run race condition runaway logging
       </action>
       <action issue="IO-483" dev="kinow" type="fix" due-to="Marko Vasic">
-        getPrefixLength return -1 if unix file contains colon
+        getPrefixLength return -1 if Unix file contains colon
       </action>
       <action issue="IO-520" dev="pschumacher" type="fix">
         FileUtilsTestCase#testContentEqualsIgnoreEOL fails on Windows
