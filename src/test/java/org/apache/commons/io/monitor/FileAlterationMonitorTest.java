@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -30,6 +31,7 @@ import java.util.Iterator;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
+import org.apache.commons.io.ThreadUtils;
 import org.apache.commons.io.test.TestUtils;
 import org.junit.jupiter.api.Test;
 
@@ -192,7 +194,7 @@ public class FileAlterationMonitorTest extends AbstractMonitorTest {
         monitor.start();
         assertFalse(createdThreads.isEmpty());
 
-        Thread.sleep(10); // wait until the watcher thread enters Thread.sleep()
+        ThreadUtils.sleep(Duration.ofMillis(10)); // wait until the watcher thread enters Thread.sleep()
         monitor.stop(100);
 
         createdThreads.forEach(thread -> assertFalse(thread.isAlive(), "The FileAlterationMonitor did not stop the threads it created."));

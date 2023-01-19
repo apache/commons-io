@@ -454,6 +454,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-784" dev="ggregory" type="add" due-to="Fredrik Kjellberg, Gary Gregory">
         Add support for Appendable to HexDump #418.
       </action>
+      <action dev="ggregory" type="add" due-to="DaGeRe, Gary Gregory">
+        Add and use ThreadUtils.
+      </action>
       <!-- UPDATE -->
       <action dev="kinow" type="update" due-to="Dependabot, Gary Gregory">
         Bump actions/cache from 2.1.6 to 3.0.10 #307, #337, #393.

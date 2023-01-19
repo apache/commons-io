@@ -71,6 +71,7 @@ import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.ThreadUtils;
 import org.apache.commons.io.file.Counters.PathCounters;
 import org.apache.commons.io.file.attribute.FileTimes;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -1691,7 +1692,7 @@ public final class PathUtils {
                     return false;
                 }
                 try {
-                    Thread.sleep(Math.min(minSleepMillis, finishInstant.minusMillis(now.toEpochMilli()).toEpochMilli()));
+                    ThreadUtils.sleep(Duration.ofMillis(Math.min(minSleepMillis, finishInstant.minusMillis(now.toEpochMilli()).toEpochMilli())));
                 } catch (final InterruptedException ignore) {
                     interrupted = true;
                 } catch (final Exception ex) {

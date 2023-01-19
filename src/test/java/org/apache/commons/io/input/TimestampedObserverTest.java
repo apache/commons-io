@@ -17,16 +17,18 @@
 
 package org.apache.commons.io.input;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.time.Duration;
 import java.time.Instant;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.ThreadUtils;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -38,11 +40,11 @@ public class TimestampedObserverTest {
     public void test() throws IOException, InterruptedException {
         final Instant before = Instant.now();
         // Some OS' clock granularity may be high.
-        Thread.sleep(20);
+        ThreadUtils.sleep(Duration.ofMillis(20));
         final TimestampedObserver timestampedObserver = new TimestampedObserver();
         assertFalse(timestampedObserver.isClosed());
         // Java 8 instant resolution is not great.
-        Thread.sleep(20);
+        ThreadUtils.sleep(Duration.ofMillis(20));
         // toString() should not blow up before close().
         assertNotNull(timestampedObserver.toString());
         assertTrue(timestampedObserver.getOpenInstant().isAfter(before));

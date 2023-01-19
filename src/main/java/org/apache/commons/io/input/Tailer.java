@@ -36,6 +36,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.ThreadUtils;
 import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.io.file.attribute.FileTimes;
 
@@ -899,7 +900,7 @@ public class Tailer implements Runnable, AutoCloseable {
                     listener.fileNotFound();
                 }
                 if (reader == null) {
-                    Thread.sleep(delayDuration.toMillis());
+                    ThreadUtils.sleep(delayDuration);
                 } else {
                     // The current position in the file
                     position = tailAtEnd ? tailable.size() : 0;
@@ -929,7 +930,7 @@ public class Tailer implements Runnable, AutoCloseable {
                     } catch (final FileNotFoundException e) {
                         // in this case we continue to use the previous reader and position values
                         listener.fileNotFound();
-                        Thread.sleep(delayDuration.toMillis());
+                        ThreadUtils.sleep(delayDuration);
                     }
                     continue;
                 }
@@ -954,7 +955,7 @@ public class Tailer implements Runnable, AutoCloseable {
                 if (reOpen && reader != null) {
                     reader.close();
                 }
-                Thread.sleep(delayDuration.toMillis());
+                ThreadUtils.sleep(delayDuration);
                 if (getRun() && reOpen) {
                     reader = tailable.getRandomAccess(RAF_READ_ONLY_MODE);
                     reader.seek(position);

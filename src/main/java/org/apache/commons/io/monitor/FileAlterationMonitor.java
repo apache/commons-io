@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io.monitor;
 
+import java.time.Duration;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +24,8 @@ import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadFactory;
 import java.util.stream.Stream;
+
+import org.apache.commons.io.ThreadUtils;
 
 /**
  * A runnable that spawns a monitoring thread triggering any
@@ -143,7 +146,7 @@ public final class FileAlterationMonitor implements Runnable {
                 break;
             }
             try {
-                Thread.sleep(intervalMillis);
+                ThreadUtils.sleep(Duration.ofMillis(intervalMillis));
             } catch (final InterruptedException ignored) {
                 // ignore
             }
