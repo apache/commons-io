@@ -89,6 +89,7 @@ public class FilterCollectionWriter extends Writer {
         return forAllWriters(w -> w.append(csq, start, end));
     }
 
+    @SuppressWarnings("resource") // no allocation
     @Override
     public void close() throws IOException {
         forAllWriters(Writer::close);
@@ -99,6 +100,7 @@ public class FilterCollectionWriter extends Writer {
      *
      * @throws IOException If an I/O error occurs
      */
+    @SuppressWarnings("resource") // no allocation
     @Override
     public void flush() throws IOException {
         forAllWriters(Writer::flush);
@@ -109,6 +111,7 @@ public class FilterCollectionWriter extends Writer {
         return this;
     }
 
+    @SuppressWarnings("resource") // no allocation
     @Override
     public void write(final char[] cbuf) throws IOException {
         forAllWriters(w -> w.write(cbuf));
@@ -120,9 +123,9 @@ public class FilterCollectionWriter extends Writer {
      * @param cbuf Buffer of characters to be written
      * @param off  Offset from which to start reading characters
      * @param len  Number of characters to be written
-     *
      * @throws IOException If an I/O error occurs
      */
+    @SuppressWarnings("resource") // no allocation
     @Override
     public void write(final char[] cbuf, final int off, final int len) throws IOException {
         forAllWriters(w -> w.write(cbuf, off, len));
@@ -133,11 +136,13 @@ public class FilterCollectionWriter extends Writer {
      *
      * @throws IOException If an I/O error occurs
      */
+    @SuppressWarnings("resource") // no allocation
     @Override
     public void write(final int c) throws IOException {
         forAllWriters(w -> w.write(c));
     }
 
+    @SuppressWarnings("resource") // no allocation
     @Override
     public void write(final String str) throws IOException {
         forAllWriters(w -> w.write(str));
@@ -149,9 +154,9 @@ public class FilterCollectionWriter extends Writer {
      * @param str String to be written
      * @param off Offset from which to start reading characters
      * @param len Number of characters to be written
-     *
      * @throws IOException If an I/O error occurs
      */
+    @SuppressWarnings("resource") // no allocation
     @Override
     public void write(final String str, final int off, final int len) throws IOException {
         forAllWriters(w -> w.write(str, off, len));
