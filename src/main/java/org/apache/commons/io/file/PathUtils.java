@@ -567,6 +567,16 @@ public final class PathUtils {
     }
 
     /**
+     * Delegates to {@link File#deleteOnExit()}.
+     *
+     * @param path the path to delete.
+     * @since 3.13.0
+     */
+    public static void deleteOnExit(Path path) {
+        Objects.requireNonNull(path.toFile()).deleteOnExit();
+    }
+
+    /**
      * Compares the file sets of two Paths to determine if they are equal or not while considering file contents. The
      * comparison includes all files in all subdirectories.
      *

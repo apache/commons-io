@@ -18,12 +18,11 @@ package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOExceptionList;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.AfterEach;
@@ -41,7 +40,7 @@ public abstract class AbstractInputStreamTest {
 
     private byte[] randomBytes;
 
-    protected File inputFile;
+    protected Path inputFile;
 
     protected InputStream[] inputStreams;
 
@@ -49,13 +48,13 @@ public abstract class AbstractInputStreamTest {
     public void setUp() throws IOException {
         // Create a byte array of size 2 MB with random bytes
         randomBytes = RandomUtils.nextBytes(2 * 1024 * 1024);
-        inputFile = File.createTempFile("temp-file", ".tmp");
-        FileUtils.writeByteArrayToFile(inputFile, randomBytes);
+        inputFile = Files.createTempFile("temp-file", ".tmp");
+        Files.write(inputFile, randomBytes);
     }
 
     @AfterEach
-    public void tearDown() throws IOExceptionList {
-        inputFile.delete();
+    public void tearDown() throws IOException {
+        Files.delete(inputFile);
         IOUtils.close(inputStreams);
     }
 
