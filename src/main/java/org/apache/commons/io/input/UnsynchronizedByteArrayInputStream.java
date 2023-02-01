@@ -18,6 +18,7 @@ package org.apache.commons.io.input;
 
 import static java.lang.Math.min;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Objects;
 
@@ -26,6 +27,7 @@ import java.util.Objects;
  * which removes the synchronization overhead for non-concurrent
  * access; as such this class is not thread-safe.
  *
+ * @see ByteArrayInputStream
  * @since 2.7
  */
 //@NotThreadSafe
