@@ -192,6 +192,7 @@ public class ReadAheadInputStream extends InputStream {
                 isUnderlyingInputStreamBeingClosed = true;
             }
         } finally {
+            BYTE_ARRAY_1.remove();
             stateChangeLock.unlock();
         }
 
@@ -221,6 +222,7 @@ public class ReadAheadInputStream extends InputStream {
                 needToCloseUnderlyingInputStream = true;
             }
         } finally {
+            BYTE_ARRAY_1.remove();
             stateChangeLock.unlock();
         }
         if (needToCloseUnderlyingInputStream) {
