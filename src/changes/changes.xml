@@ -460,6 +460,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-786" dev="ggregory" type="add" due-to="Gary Gregory">
         Add UnsynchronizedFilterInputStream.
       </action>
+      <action issue="IO-786" dev="ggregory" type="add" due-to="Gary Gregory, Benoit Tellier">
+        Add UnsynchronizedBufferedInputStream.
+      </action>
       <!-- UPDATE -->
       <action dev="kinow" type="update" due-to="Dependabot, Gary Gregory">
         Bump actions/cache from 2.1.6 to 3.0.10 #307, #337, #393.
