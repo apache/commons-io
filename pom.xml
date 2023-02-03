@@ -253,7 +253,7 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.junit-pioneer</groupId>
       <artifactId>junit-pioneer</artifactId>
-      <version>1.9.1</version>
+      <version>2.0.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
