@@ -323,7 +323,6 @@ file comparators, endian transformation classes, and much more.
     <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-io/</commons.scmPubUrl>
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
     <commons.javadoc.java.link>${commons.javadoc8.java.link}</commons.javadoc.java.link>
-    <checkstyle.impl.version>9.3</checkstyle.impl.version>
     <commons.enforcer.version>3.2.1</commons.enforcer.version>
     <commons.moditect.version>1.0.0.RC2</commons.moditect.version>
     <jmh.version>1.36</jmh.version>
@@ -354,20 +353,12 @@ file comparators, endian transformation classes, and much more.
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
-          <version>${commons.checkstyle-plugin.version}</version>
           <configuration>
             <configLocation>${basedir}/src/conf/checkstyle.xml</configLocation>
             <suppressionsLocation>${basedir}/src/conf/checkstyle-suppressions.xml</suppressionsLocation>
             <enableRulesSummary>false</enableRulesSummary>
             <includeTestSourceDirectory>true</includeTestSourceDirectory>
           </configuration>
-          <dependencies>
-            <dependency>
-              <groupId>com.puppycrawl.tools</groupId>
-              <artifactId>checkstyle</artifactId>
-              <version>${checkstyle.impl.version}</version>
-            </dependency>
-          </dependencies>
         </plugin>      
       </plugins>
     </pluginManagement>
