@@ -2667,6 +2667,7 @@ public class FileUtils {
             }
         }
     }
+    
     /**
      * Reads the contents of a file line by line to a List of Strings.
      * The file is always closed.
