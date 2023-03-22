@@ -606,7 +606,7 @@ public class TailerTest {
             assertEquals("Line one", lines.get(0), "3 line 1");
             assertEquals("Line two", lines.get(1), "3 line 2");
             assertEquals("Line three", lines.get(2), "3 line 3");
-    
+
             // Check file does actually have filter the lines
             lines = FileUtils.readLines(file, StandardCharsets.UTF_8, line -> !line.contains("two"));
             assertEquals(2, lines.size(), "2 line count");
