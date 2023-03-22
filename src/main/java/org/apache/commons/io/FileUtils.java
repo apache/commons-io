@@ -2642,7 +2642,7 @@ public class FileUtils {
     public static List<String> readLines(final File file) throws IOException {
         return readLines(file, Charset.defaultCharset());
     }
-    
+
     /**
      * Reads the contents of a file line by line to a List of Strings.
      * The file is always closed.
@@ -2661,13 +2661,14 @@ public class FileUtils {
         try (final BufferedReader reader = newBufferedReader(file.toPath(), charset)) {
             for (;;) {
                 final String line = reader.readLine();
-                if (line == null)
+                if (line == null) {
                     break;
+                }
                 consumer.accept(line);
             }
         }
     }
-    
+
     /**
      * Reads the contents of a file line by line to a List of Strings.
      * The file is always closed.
