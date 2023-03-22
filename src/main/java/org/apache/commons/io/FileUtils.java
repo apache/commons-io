@@ -18,6 +18,7 @@ package org.apache.commons.io;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -63,6 +64,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.CRC32;
@@ -81,6 +84,8 @@ import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.function.Uncheck;
+
+import static org.apache.commons.io.file.FilesUncheck.newBufferedReader;
 
 /**
  * General file manipulation utilities.
@@ -2636,6 +2641,54 @@ public class FileUtils {
     @Deprecated
     public static List<String> readLines(final File file) throws IOException {
         return readLines(file, Charset.defaultCharset());
+    }
+    
+    /**
+     * Reads the contents of a file line by line to a List of Strings.
+     * The file is always closed.
+     *
+     * @param file     the file to read, must not be {@code null}
+     * @param charset the charset to use, {@code null} means platform default
+     * @param consumer consume line, {@code null} means platform default
+     * @throws NullPointerException if file is {@code null}.
+     * @throws FileNotFoundException if the file does not exist, is a directory rather than a regular file, or for some
+     *         other reason cannot be opened for reading.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.3
+     */
+    public static void readLines(final File file, final Charset charset, final Consumer<String> consumer) throws IOException {
+        Objects.requireNonNull(consumer);
+        try (final BufferedReader reader = newBufferedReader(file.toPath(), charset)) {
+            for (;;) {
+                final String line = reader.readLine();
+                if (line == null)
+                    break;
+                consumer.accept(line);
+            }
+        }
+    }
+    /**
+     * Reads the contents of a file line by line to a List of Strings.
+     * The file is always closed.
+     *
+     * @param file     the file to read, must not be {@code null}
+     * @param charset the charset to use, {@code null} means platform default
+     * @param filter filter line, {@code null} means platform default
+     * @return the list of Strings representing each line in the file, never {@code null}
+     * @throws NullPointerException if file is {@code null}.
+     * @throws FileNotFoundException if the file does not exist, is a directory rather than a regular file, or for some
+     *         other reason cannot be opened for reading.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.3
+     */
+    public static List<String> readLines(final File file, final Charset charset, final Predicate<String> filter) throws IOException {
+        final List<String> result = new ArrayList<>();
+        readLines(file, charset, line -> {
+            if (Boolean.TRUE.equals(filter.test(line))) {
+                result.add(line);
+            }
+        });
+        return result;
     }
 
     /**
