@@ -37,7 +37,6 @@
             <item name="Mailing lists"        href="/mail-lists.html"/>
             <item name="Issue Tracking"       href="/issue-tracking.html"/>
             <item name="Team"                 href="/team.html"/>
-            <item name="Tasks"                href="/tasks.html"/>
             <item name="Proposal"             href="/proposal.html"/>
             <item name="Source repository"    href="/scm.html"/>
         </menu>
