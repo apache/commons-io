@@ -34,7 +34,6 @@ import org.junit.jupiter.api.Test;
 
 /**
  * This is used to test FileSystemUtils.
- *
  */
 @SuppressWarnings("deprecation") // testing deprecated class
 public class FileSystemUtilsTest {

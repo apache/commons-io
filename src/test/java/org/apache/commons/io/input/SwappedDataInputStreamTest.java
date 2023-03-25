@@ -33,7 +33,6 @@ import org.junit.jupiter.api.Test;
 /**
  * Test for the SwappedDataInputStream. This also
  * effectively tests the underlying EndianUtils Stream methods.
- *
  */
 
 public class SwappedDataInputStreamTest {

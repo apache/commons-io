@@ -39,7 +39,6 @@ import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Tests that the encoding is actually set and used.
- *
  */
 public class FileWriterWithEncodingTest {
 

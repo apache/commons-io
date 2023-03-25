@@ -30,7 +30,6 @@ import org.junit.jupiter.api.Test;
 
 /**
  * JUnit Test Case for {@link NullInputStream}.
- *
  */
 public class NullInputStreamTest {
 

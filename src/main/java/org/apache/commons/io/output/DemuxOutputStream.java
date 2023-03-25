@@ -23,7 +23,6 @@ import org.apache.commons.io.IOUtils;
 
 /**
  * Forwards data to a stream that has been associated with this thread.
- *
  */
 public class DemuxOutputStream extends OutputStream {
     private final InheritableThreadLocal<OutputStream> outputStreamThreadLocal = new InheritableThreadLocal<>();

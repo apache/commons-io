@@ -38,7 +38,6 @@ import org.junit.jupiter.api.Test;
  * This is used to test DirectoryWalker for correctness.
  *
  * @see DirectoryWalker
- *
  */
 public class DirectoryWalkerTest {
 

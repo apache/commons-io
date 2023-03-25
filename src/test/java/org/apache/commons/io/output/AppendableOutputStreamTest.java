@@ -23,7 +23,6 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for {@link AppendableOutputStream}.
- *
  */
 public class AppendableOutputStreamTest {
 

@@ -27,7 +27,6 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Tests the CountingInputStream.
- *
  */
 public class CountingInputStreamTest {
 

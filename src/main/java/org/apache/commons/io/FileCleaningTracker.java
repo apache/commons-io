@@ -39,7 +39,6 @@ import java.util.Objects;
  * longer needed. This is done by invoking the method
  * {@link #exitWhenFinished}, typically in
  * {@code javax.servlet.ServletContextListener.contextDestroyed(javax.servlet.ServletContextEvent)} or similar.
- *
  */
 public class FileCleaningTracker {
 

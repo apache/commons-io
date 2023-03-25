@@ -35,7 +35,6 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Test case for {@link CharSequenceReader}.
- *
  */
 public class CharSequenceReaderTest {
     private static final char NONE = (new char[1])[0];

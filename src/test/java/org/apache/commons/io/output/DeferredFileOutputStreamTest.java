@@ -42,7 +42,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Unit tests for the {@code DeferredFileOutputStream} class.
- *
  */
 public class DeferredFileOutputStreamTest {
 

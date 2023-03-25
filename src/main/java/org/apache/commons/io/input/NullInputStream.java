@@ -63,7 +63,6 @@ import java.io.InputStream;
  * </pre>
  *
  * @since 1.3
- *
  */
 public class NullInputStream extends InputStream {
 

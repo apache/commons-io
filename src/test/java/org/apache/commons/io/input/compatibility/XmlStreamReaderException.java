@@ -28,7 +28,6 @@ import java.io.InputStream;
  * InputStream given to the XmlStreamReader cannot be used as that one has been
  * already read.
  * </p>
- *
  */
 public class XmlStreamReaderException extends org.apache.commons.io.input.XmlStreamReaderException {
 

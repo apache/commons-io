@@ -23,7 +23,6 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for {@link AppendableWriter}.
- *
  */
 public class AppendableWriterTest {
 
