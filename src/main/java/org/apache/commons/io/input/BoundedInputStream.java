@@ -37,19 +37,19 @@ import java.io.InputStream;
  */
 public class BoundedInputStream extends InputStream {
 
-    /** the wrapped input stream */
-    private final InputStream in;
+    /** The wrapped input stream */
+    private final InputStream inputStream;
 
-    /** the max length to provide */
-    private final long max;
+    /** The max length to provide */
+    private final long maxLength;
 
-    /** the number of bytes already returned */
+    /** The number of bytes already returned */
     private long pos;
 
-    /** the marked position */
+    /** The marked position */
     private long mark = EOF;
 
-    /** flag if close should be propagated */
+    /** Flag if close should be propagated */
     private boolean propagateClose = true;
 
     /**
@@ -66,14 +66,14 @@ public class BoundedInputStream extends InputStream {
      * Creates a new {@link BoundedInputStream} that wraps the given input
      * stream and limits it to a certain size.
      *
-     * @param in The wrapped input stream
-     * @param size The maximum number of bytes to return
+     * @param inputStream The wrapped input stream
+     * @param maxLength The maximum number of bytes to return
      */
-    public BoundedInputStream(final InputStream in, final long size) {
+    public BoundedInputStream(final InputStream inputStream, final long maxLength) {
         // Some badly designed methods - e.g. the servlet API - overload length
         // such that "-1" means stream finished
-        this.max = size;
-        this.in = in;
+        this.maxLength = maxLength;
+        this.inputStream = inputStream;
     }
 
     /**
@@ -81,10 +81,10 @@ public class BoundedInputStream extends InputStream {
      */
     @Override
     public int available() throws IOException {
-        if (max >= 0 && pos >= max) {
+        if (maxLength >= 0 && pos >= maxLength) {
             return 0;
         }
-        return in.available();
+        return inputStream.available();
     }
 
     /**
@@ -95,7 +95,7 @@ public class BoundedInputStream extends InputStream {
     @Override
     public void close() throws IOException {
         if (propagateClose) {
-            in.close();
+            inputStream.close();
         }
     }
 
@@ -117,7 +117,7 @@ public class BoundedInputStream extends InputStream {
      */
     @Override
     public synchronized void mark(final int readlimit) {
-        in.mark(readlimit);
+        inputStream.mark(readlimit);
         mark = pos;
     }
 
@@ -127,7 +127,7 @@ public class BoundedInputStream extends InputStream {
      */
     @Override
     public boolean markSupported() {
-        return in.markSupported();
+        return inputStream.markSupported();
     }
 
     /**
@@ -139,10 +139,10 @@ public class BoundedInputStream extends InputStream {
      */
     @Override
     public int read() throws IOException {
-        if (max >= 0 && pos >= max) {
+        if (maxLength >= 0 && pos >= maxLength) {
             return EOF;
         }
-        final int result = in.read();
+        final int result = inputStream.read();
         pos++;
         return result;
     }
@@ -170,11 +170,11 @@ public class BoundedInputStream extends InputStream {
      */
     @Override
     public int read(final byte[] b, final int off, final int len) throws IOException {
-        if (max >= 0 && pos >= max) {
+        if (maxLength >= 0 && pos >= maxLength) {
             return EOF;
         }
-        final long maxRead = max >= 0 ? Math.min(len, max - pos) : len;
-        final int bytesRead = in.read(b, off, (int) maxRead);
+        final long maxRead = maxLength >= 0 ? Math.min(len, maxLength - pos) : len;
+        final int bytesRead = inputStream.read(b, off, (int) maxRead);
 
         if (bytesRead == EOF) {
             return EOF;
@@ -190,7 +190,7 @@ public class BoundedInputStream extends InputStream {
      */
     @Override
     public synchronized void reset() throws IOException {
-        in.reset();
+        inputStream.reset();
         pos = mark;
     }
 
@@ -215,8 +215,8 @@ public class BoundedInputStream extends InputStream {
      */
     @Override
     public long skip(final long n) throws IOException {
-        final long toSkip = max >= 0 ? Math.min(n, max - pos) : n;
-        final long skippedBytes = in.skip(toSkip);
+        final long toSkip = maxLength >= 0 ? Math.min(n, maxLength - pos) : n;
+        final long skippedBytes = inputStream.skip(toSkip);
         pos += skippedBytes;
         return skippedBytes;
     }
@@ -227,6 +227,6 @@ public class BoundedInputStream extends InputStream {
      */
     @Override
     public String toString() {
-        return in.toString();
+        return inputStream.toString();
     }
 }
