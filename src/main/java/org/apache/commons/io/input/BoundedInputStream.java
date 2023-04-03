@@ -37,19 +37,19 @@ import java.io.InputStream;
  */
 public class BoundedInputStream extends InputStream {
 
-    /** The wrapped input stream */
+    /** The wrapped input stream. */
     private final InputStream inputStream;
 
-    /** The max length to provide */
+    /** The max length to read. */
     private final long maxLength;
 
-    /** The number of bytes already returned */
+    /** The number of bytes already returned. */
     private long pos;
 
-    /** The marked position */
+    /** The marked position. */
     private long mark = EOF;
 
-    /** Flag if close should be propagated */
+    /** Flag if close should be propagated. */
     private boolean propagateClose = true;
 
     /**
