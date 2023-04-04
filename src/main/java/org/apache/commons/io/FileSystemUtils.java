@@ -20,7 +20,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.time.Duration;
 import java.util.Arrays;
@@ -489,63 +488,39 @@ public class FileSystemUtils {
 
         final List<String> lines;
         Process proc = null;
-        InputStream in = null;
-        OutputStream out = null;
-        InputStream err = null;
-        BufferedReader inr = null;
         try {
 
             final Thread monitor = ThreadMonitor.start(timeout);
 
             proc = openProcess(cmdAttribs);
-            in = proc.getInputStream();
-            out = proc.getOutputStream();
-            err = proc.getErrorStream();
-            // default charset is most likely appropriate here
-            inr = new BufferedReader(new InputStreamReader(in, Charset.defaultCharset()));
 
-            lines = inr.lines().limit(max).map(line -> line.toLowerCase(Locale.ENGLISH).trim()).collect(Collectors.toList());
+            try (InputStream in = proc.getInputStream();
+                 // default charset is most likely appropriate here
+                 InputStreamReader isr = new InputStreamReader(in, Charset.defaultCharset());
+                 BufferedReader inr = new BufferedReader(isr)) {
 
-            proc.waitFor();
+                lines = inr.lines().limit(max).map(line -> line.toLowerCase(Locale.ENGLISH).trim()).collect(Collectors.toList());
 
-            ThreadMonitor.stop(monitor);
+                proc.waitFor();
 
-            if (proc.exitValue() != 0) {
-                // OS command problem, throw exception
-                throw new IOException("Command line returned OS error code '" + proc.exitValue() + "' for command " + Arrays.asList(cmdAttribs));
-            }
-            if (lines.isEmpty()) {
-                // unknown problem, throw exception
-                throw new IOException("Command line did not return any info " + "for command " + Arrays.asList(cmdAttribs));
-            }
+                ThreadMonitor.stop(monitor);
 
-            inr.close();
-            inr = null;
-
-            in.close();
-            in = null;
-
-            if (out != null) {
-                out.close();
-                out = null;
-            }
-
-            if (err != null) {
-                err.close();
-                err = null;
+                if (proc.exitValue() != 0) {
+                    // OS command problem, throw exception
+                    throw new IOException("Command line returned OS error code '" + proc.exitValue() + "' for command " + Arrays.asList(cmdAttribs));
+                }
+                if (lines.isEmpty()) {
+                    // unknown problem, throw exception
+                    throw new IOException("Command line did not return any info " + "for command " + Arrays.asList(cmdAttribs));
+                }
             }
 
             return lines;
-
         } catch (final InterruptedException ex) {
             throw new IOException(
                     "Command line threw an InterruptedException " +
                     "for command " + Arrays.asList(cmdAttribs) + " timeout=" + timeout, ex);
         } finally {
-            IOUtils.closeQuietly(in);
-            IOUtils.closeQuietly(out);
-            IOUtils.closeQuietly(err);
-            IOUtils.closeQuietly(inr);
             if (proc != null) {
                 proc.destroy();
             }
