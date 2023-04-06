@@ -33,12 +33,14 @@ import java.util.Objects;
  * This utility creates a background thread to handle file deletion.
  * Each file to be deleted is registered with a handler object.
  * When the handler object is garbage collected, the file is deleted.
+ * </p>
  * <p>
  * In an environment with multiple class loaders (a servlet container, for
  * example), you should consider stopping the background thread if it is no
  * longer needed. This is done by invoking the method
  * {@link #exitWhenFinished}, typically in
  * {@code javax.servlet.ServletContextListener.contextDestroyed(javax.servlet.ServletContextEvent)} or similar.
+ * </p>
  */
 public class FileCleaningTracker {
 
@@ -56,7 +58,7 @@ public class FileCleaningTracker {
         }
 
         /**
-         * Run the reaper thread that will delete files as their associated
+         * Runs the reaper thread that will delete files as their associated
          * marker objects are reclaimed by the garbage collector.
          */
         @Override
@@ -77,6 +79,7 @@ public class FileCleaningTracker {
             }
         }
     }
+
     /**
      * Inner class which acts as the reference for a file pending deletion.
      */
@@ -86,6 +89,7 @@ public class FileCleaningTracker {
          * The full path to the file being tracked.
          */
         private final String path;
+
         /**
          * The strategy for deleting files.
          */
@@ -125,14 +129,17 @@ public class FileCleaningTracker {
             return path;
         }
     }
+
     /**
      * Queue of {@link Tracker} instances being watched.
      */
     ReferenceQueue<Object> q = new ReferenceQueue<>();
+
     /**
      * Collection of {@link Tracker} instances in existence.
      */
     final Collection<Tracker> trackers = Collections.synchronizedSet(new HashSet<>()); // synchronized
+
     /**
      * Collection of File paths that failed to delete.
      */
@@ -201,7 +208,7 @@ public class FileCleaningTracker {
     }
 
     /**
-     * Return the file paths that failed to delete.
+     * Gets the file paths that failed to delete.
      *
      * @return the file paths that failed to delete
      * @since 2.0
@@ -211,7 +218,7 @@ public class FileCleaningTracker {
     }
 
     /**
-     * Retrieve the number of files currently being tracked, and therefore
+     * Gets the number of files currently being tracked, and therefore
      * awaiting deletion.
      *
      * @return the number of files being tracked
@@ -234,7 +241,7 @@ public class FileCleaningTracker {
     }
 
     /**
-     * Track the specified file, using the provided marker, deleting the file
+     * Tracks the specified file, using the provided marker, deleting the file
      * when the marker instance is garbage collected.
      * The specified deletion strategy is used.
      *
@@ -249,7 +256,7 @@ public class FileCleaningTracker {
     }
 
     /**
-     * Track the specified file, using the provided marker, deleting the file
+     * Tracks the specified file, using the provided marker, deleting the file
      * when the marker instance is garbage collected.
      * The {@link FileDeleteStrategy#NORMAL normal} deletion strategy will be used.
      *
@@ -262,7 +269,7 @@ public class FileCleaningTracker {
     }
 
     /**
-     * Track the specified file, using the provided marker, deleting the file
+     * Tracks the specified file, using the provided marker, deleting the file
      * when the marker instance is garbage collected.
      * The specified deletion strategy is used.
      *
