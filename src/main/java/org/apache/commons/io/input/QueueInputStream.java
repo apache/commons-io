@@ -20,6 +20,7 @@ import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.Objects;
@@ -58,21 +59,33 @@ import org.apache.commons.io.output.QueueOutputStream;
 public class QueueInputStream extends InputStream {
 
     private final BlockingQueue<Integer> blockingQueue;
+    private final boolean blockingRead;
 
     /**
-     * Constructs a new instance with no limit to its internal buffer size.
+     * Constructs a new instance with no limit to its internal buffer size and in non-blocking read mode
      */
     public QueueInputStream() {
         this(new LinkedBlockingQueue<>());
     }
 
     /**
-     * Constructs a new instance with given buffer
+     * Constructs a new instance with given buffer and in non-blocking read mode
      *
      * @param blockingQueue backing queue for the stream
      */
     public QueueInputStream(final BlockingQueue<Integer> blockingQueue) {
+        this(blockingQueue, false);
+    }
+
+    /**
+     * Constructs a new instance with given buffer
+     *
+     * @param blockingQueue backing queue for the stream
+     * @param blockingRead if true, {@link #read()} will wait if necessary until a queue element becomes available.
+     */
+    public QueueInputStream(final BlockingQueue<Integer> blockingQueue, final boolean blockingRead) {
         this.blockingQueue = Objects.requireNonNull(blockingQueue, "blockingQueue");
+        this.blockingRead = blockingRead;
     }
 
     /**
@@ -86,12 +99,24 @@ public class QueueInputStream extends InputStream {
     }
 
     /**
-     * Reads and returns a single byte.
+     * Reads and returns a single byte. In blocking read mode, the method will wait if necessary until a queue element
+     * becomes available. In non-blocking read mode, the method will return -1 immediately if the queue is empty.
      *
      * @return either the byte read or {@code -1} if the end of the stream has been reached
+     * @throws InterruptedIOException if the thread is interrupted while reading from the queue.
      */
     @Override
-    public int read() {
+    public int read() throws InterruptedIOException {
+        if (blockingRead) {
+            try {
+                return blockingQueue.take();
+            } catch (final InterruptedException e) {
+                Thread.currentThread().interrupt();
+                final InterruptedIOException ioException = new InterruptedIOException();
+                ioException.initCause(e);
+                throw ioException;
+            }
+        }
         final Integer value = blockingQueue.poll();
         return value == null ? EOF : 0xFF & value;
     }

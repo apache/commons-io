@@ -18,6 +18,7 @@ package org.apache.commons.io.input;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.BufferedInputStream;
@@ -25,16 +26,19 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InterruptedIOException;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.QueueOutputStream;
 import org.apache.commons.io.output.QueueOutputStreamTest;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -105,10 +109,17 @@ public class QueueInputStreamTest {
     }
 
     private String readUnbuffered(final InputStream inputStream) throws IOException {
+        return readUnbuffered(inputStream, Integer.MAX_VALUE);
+    }
+
+    private String readUnbuffered(final InputStream inputStream, final int maxBytes) throws IOException {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        int n = -1;
-        while ((n = inputStream.read()) != -1) {
-            byteArrayOutputStream.write(n);
+        for (int numBytesRead = 0; numBytesRead < maxBytes; numBytesRead++) {
+            final int valueRead = inputStream.read();
+            if (valueRead == -1 || Thread.currentThread().isInterrupted()) {
+                break;
+            }
+            byteArrayOutputStream.write(valueRead);
         }
         return byteArrayOutputStream.toString(StandardCharsets.UTF_8.name());
     }
@@ -129,10 +140,50 @@ public class QueueInputStreamTest {
         }
     }
 
-    private void writeUnbuffered(final QueueOutputStream outputStream, final String inputData) throws InterruptedIOException {
-        final byte[] bytes = inputData.getBytes(UTF_8);
-        for (final byte oneByte : bytes) {
-            outputStream.write(oneByte);
+    @ParameterizedTest(name = "inputData={0}")
+    @MethodSource("inputData")
+    public void blockingReadWrite(final String inputData) throws Exception {
+        if (inputData.isEmpty()) {
+            return;
         }
+        
+        final Duration timeout = Duration.ofMillis(500);
+        try (QueueInputStream inputStream = new QueueInputStream(new LinkedBlockingQueue<>(), true);
+                final QueueOutputStream outputStream = inputStream.newQueueOutputStream()) {
+
+            assertNull(readInBackgroundThread(inputStream, inputData.length(), timeout));
+
+            writeUnbuffered(outputStream, inputData);
+            assertEquals(inputData, readInBackgroundThread(inputStream, inputData.length(), timeout));
+
+            assertNull(readInBackgroundThread(inputStream, inputData.length(), timeout));
+        }
+    }
+
+    private String readInBackgroundThread(final QueueInputStream inputStream, final int maxBytes,
+        final Duration timeout) throws InterruptedException {
+        final BlockingQueue<String> outputQueue = new LinkedBlockingQueue<>();
+        final CountDownLatch exitedSignal = new CountDownLatch(1);
+        final Thread thread = new Thread(() -> {
+            try {
+                outputQueue.add(readUnbuffered(inputStream, maxBytes));
+            } catch (final IOException e) {
+                outputQueue.add(ExceptionUtils.getStackTrace(e));
+            }
+            exitedSignal.countDown();
+        });
+        thread.setDaemon(true);
+        thread.setName(getClass().getSimpleName());
+        thread.start();
+
+        final String output = outputQueue.poll(timeout.toMillis(), TimeUnit.MILLISECONDS);
+        thread.interrupt();
+        exitedSignal.await();
+        return output;
+    }
+
+    private void writeUnbuffered(final QueueOutputStream outputStream, final String inputData) throws IOException {
+        final byte[] bytes = inputData.getBytes(UTF_8);
+        outputStream.write(bytes, 0, bytes.length);
     }
 }
