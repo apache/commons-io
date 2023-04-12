@@ -20,6 +20,8 @@ import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * Writer which breaks larger output blocks into chunks.
  * Native code may need to copy the input array; if the write buffer
@@ -32,7 +34,7 @@ public class ChunkedWriter extends FilterWriter {
     /**
      * The default chunk size to use, i.e. {@value} bytes.
      */
-    private static final int DEFAULT_CHUNK_SIZE = 1024 * 4;
+    private static final int DEFAULT_CHUNK_SIZE = IOUtils.DEFAULT_BUFFER_SIZE;
 
     /**
      * The maximum chunk size to us when writing data arrays

@@ -28,6 +28,7 @@ import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.Charsets;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.charset.CharsetDecoders;
 
 /**
@@ -76,7 +77,7 @@ import org.apache.commons.io.charset.CharsetDecoders;
  * @since 2.0
  */
 public class WriterOutputStream extends OutputStream {
-    private static final int BUFFER_SIZE = 1024;
+    private static final int BUFFER_SIZE = IOUtils.DEFAULT_BUFFER_SIZE;
 
     /**
      * Check if the JDK in use properly supports the given charset.

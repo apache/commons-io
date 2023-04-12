@@ -30,6 +30,7 @@ import java.nio.charset.CodingErrorAction;
 import java.util.Objects;
 
 import org.apache.commons.io.Charsets;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.charset.CharsetEncoders;
 
 /**
@@ -81,7 +82,6 @@ import org.apache.commons.io.charset.CharsetEncoders;
  * @since 2.0
  */
 public class ReaderInputStream extends InputStream {
-    private static final int DEFAULT_BUFFER_SIZE = 1024;
 
     static int checkMinBufferSize(final CharsetEncoder charsetEncoder, final int bufferSize) {
         final float minRequired = minBufferSize(charsetEncoder);
@@ -116,8 +116,8 @@ public class ReaderInputStream extends InputStream {
     private boolean endOfInput;
 
     /**
-     * Constructs a new {@link ReaderInputStream} that uses the default character encoding with a default input buffer size
-     * of {@value #DEFAULT_BUFFER_SIZE} characters.
+     * Constructs a new {@link ReaderInputStream} that uses the default character encoding with a default input buffer size of
+     * {@value IOUtils#DEFAULT_BUFFER_SIZE} characters.
      *
      * @param reader the target {@link Reader}
      * @deprecated 2.5 use {@link #ReaderInputStream(Reader, Charset)} instead
@@ -128,19 +128,17 @@ public class ReaderInputStream extends InputStream {
     }
 
     /**
-     * Constructs a new {@link ReaderInputStream} with a default input buffer size of {@value #DEFAULT_BUFFER_SIZE}
-     * characters.
+     * Constructs a new {@link ReaderInputStream} with a default input buffer size of {@value IOUtils#DEFAULT_BUFFER_SIZE} characters.
      *
      * <p>
-     * The encoder created for the specified charset will use {@link CodingErrorAction#REPLACE} for malformed input
-     * and unmappable characters.
+     * The encoder created for the specified charset will use {@link CodingErrorAction#REPLACE} for malformed input and unmappable characters.
      * </p>
      *
-     * @param reader the target {@link Reader}
+     * @param reader  the target {@link Reader}
      * @param charset the charset encoding
      */
     public ReaderInputStream(final Reader reader, final Charset charset) {
-        this(reader, charset, DEFAULT_BUFFER_SIZE);
+        this(reader, charset, IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -178,7 +176,7 @@ public class ReaderInputStream extends InputStream {
      * @since 2.1
      */
     public ReaderInputStream(final Reader reader, final CharsetEncoder charsetEncoder) {
-        this(reader, charsetEncoder, DEFAULT_BUFFER_SIZE);
+        this(reader, charsetEncoder, IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -204,19 +202,17 @@ public class ReaderInputStream extends InputStream {
     }
 
     /**
-     * Constructs a new {@link ReaderInputStream} with a default input buffer size of {@value #DEFAULT_BUFFER_SIZE}
-     * characters.
+     * Constructs a new {@link ReaderInputStream} with a default input buffer size of {@value IOUtils#DEFAULT_BUFFER_SIZE} characters.
      *
      * <p>
-     * The encoder created for the specified charset will use {@link CodingErrorAction#REPLACE} for malformed input
-     * and unmappable characters.
+     * The encoder created for the specified charset will use {@link CodingErrorAction#REPLACE} for malformed input and unmappable characters.
      * </p>
      *
-     * @param reader the target {@link Reader}
+     * @param reader      the target {@link Reader}
      * @param charsetName the name of the charset encoding
      */
     public ReaderInputStream(final Reader reader, final String charsetName) {
-        this(reader, charsetName, DEFAULT_BUFFER_SIZE);
+        this(reader, charsetName, IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
     /**

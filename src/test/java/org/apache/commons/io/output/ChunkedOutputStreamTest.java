@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -34,7 +35,7 @@ public class ChunkedOutputStreamTest {
         final AtomicInteger numWrites = new AtomicInteger();
         try (ByteArrayOutputStream baos = newByteArrayOutputStream(numWrites);
             final ChunkedOutputStream chunked = new ChunkedOutputStream(baos)) {
-            chunked.write(new byte[1024 * 4 + 1]);
+            chunked.write(new byte[IOUtils.DEFAULT_BUFFER_SIZE + 1]);
             assertEquals(2, numWrites.get());
         }
     }

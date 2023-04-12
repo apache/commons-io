@@ -31,6 +31,7 @@ import java.nio.charset.CodingErrorAction;
 import java.util.Objects;
 
 import org.apache.commons.io.Charsets;
+import org.apache.commons.io.IOUtils;
 
 /**
  * Implements an {@link InputStream} to read from String, StringBuffer, StringBuilder or CharBuffer.
@@ -42,8 +43,6 @@ import org.apache.commons.io.Charsets;
  */
 public class CharSequenceInputStream extends InputStream {
 
-    private static final int BUFFER_SIZE = 2048;
-
     private static final int NO_MARK = -1;
 
     private final CharsetEncoder charsetEncoder;
@@ -54,14 +53,14 @@ public class CharSequenceInputStream extends InputStream {
     private int bBufMark; // position in bBuf
 
     /**
-     * Constructs a new instance with a buffer size of 2048.
+     * Constructs a new instance with a buffer size of {@link IOUtils#DEFAULT_BUFFER_SIZE}.
      *
      * @param cs the input character sequence.
      * @param charset the character set name to use.
      * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character.
      */
     public CharSequenceInputStream(final CharSequence cs, final Charset charset) {
-        this(cs, charset, BUFFER_SIZE);
+        this(cs, charset, IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -87,14 +86,14 @@ public class CharSequenceInputStream extends InputStream {
     }
 
     /**
-     * Constructs a new instance with a buffer size of 2048.
+     * Constructs a new instance with a buffer size of {@link IOUtils#DEFAULT_BUFFER_SIZE}.
      *
      * @param cs the input character sequence.
      * @param charset the character set name to use.
      * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character.
      */
     public CharSequenceInputStream(final CharSequence cs, final String charset) {
-        this(cs, charset, BUFFER_SIZE);
+        this(cs, charset, IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
     /**

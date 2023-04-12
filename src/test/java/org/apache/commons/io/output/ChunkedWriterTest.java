@@ -23,9 +23,12 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
 public class ChunkedWriterTest {
+
+    @SuppressWarnings("resource") // closed by caller.
     private OutputStreamWriter getOutputStreamWriter(final AtomicInteger numWrites) {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         return new OutputStreamWriter(baos) {
@@ -60,7 +63,7 @@ public class ChunkedWriterTest {
         final AtomicInteger numWrites = new AtomicInteger();
         try (OutputStreamWriter osw = getOutputStreamWriter(numWrites)) {
             try (ChunkedWriter chunked = new ChunkedWriter(osw)) {
-                chunked.write(new char[1024 * 4 + 1]);
+                chunked.write(new char[IOUtils.DEFAULT_BUFFER_SIZE + 1]);
                 chunked.flush();
                 assertEquals(2, numWrites.get());
             }
