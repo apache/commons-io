@@ -32,22 +32,17 @@ import org.apache.commons.io.IOUtils;
 public class ChunkedOutputStream extends FilterOutputStream {
 
     /**
-     * The default chunk size to use, i.e. {@value} bytes.
-     */
-    private static final int DEFAULT_CHUNK_SIZE = IOUtils.DEFAULT_BUFFER_SIZE;
-
-    /**
      * The maximum chunk size to us when writing data arrays
      */
     private final int chunkSize;
 
     /**
-     * Creates a new stream that uses a chunk size of {@link #DEFAULT_CHUNK_SIZE}.
+     * Creates a new stream that uses a chunk size of {@link IOUtils#DEFAULT_BUFFER_SIZE}.
      *
      * @param stream the stream to wrap
      */
     public ChunkedOutputStream(final OutputStream stream) {
-        this(stream, DEFAULT_CHUNK_SIZE);
+        this(stream, IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
     /**
