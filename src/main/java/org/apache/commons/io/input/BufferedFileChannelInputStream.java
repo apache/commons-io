@@ -58,11 +58,11 @@ public final class BufferedFileChannelInputStream extends InputStream {
      * Constructs a new instance for the given File and buffer size.
      *
      * @param file The file to stream.
-     * @param bufferSizeInBytes buffer size.
+     * @param bufferSize buffer size.
      * @throws IOException If an I/O error occurs
      */
-    public BufferedFileChannelInputStream(final File file, final int bufferSizeInBytes) throws IOException {
-        this(file.toPath(), bufferSizeInBytes);
+    public BufferedFileChannelInputStream(final File file, final int bufferSize) throws IOException {
+        this(file.toPath(), bufferSize);
     }
 
     /**
@@ -79,13 +79,13 @@ public final class BufferedFileChannelInputStream extends InputStream {
      * Constructs a new instance for the given Path and buffer size.
      *
      * @param path The path to stream.
-     * @param bufferSizeInBytes buffer size.
+     * @param bufferSize buffer size.
      * @throws IOException If an I/O error occurs
      */
-    public BufferedFileChannelInputStream(final Path path, final int bufferSizeInBytes) throws IOException {
+    public BufferedFileChannelInputStream(final Path path, final int bufferSize) throws IOException {
         Objects.requireNonNull(path, "path");
         fileChannel = FileChannel.open(path, StandardOpenOption.READ);
-        byteBuffer = ByteBuffer.allocateDirect(bufferSizeInBytes);
+        byteBuffer = ByteBuffer.allocateDirect(bufferSize);
         byteBuffer.flip();
     }
 
