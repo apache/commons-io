@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.InterruptedIOException;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -58,34 +59,43 @@ import org.apache.commons.io.output.QueueOutputStream;
  */
 public class QueueInputStream extends InputStream {
 
-    private final BlockingQueue<Integer> blockingQueue;
-    private final boolean blockingRead;
+    final BlockingQueue<Integer> blockingQueue;
 
     /**
-     * Constructs a new instance with no limit to its internal buffer size and in non-blocking read mode
+     * Constructs a new instance with no limit to its internal queue size
      */
     public QueueInputStream() {
         this(new LinkedBlockingQueue<>());
     }
 
     /**
-     * Constructs a new instance with given buffer and in non-blocking read mode
+     * Constructs a new instance with given queue
      *
      * @param blockingQueue backing queue for the stream
      */
     public QueueInputStream(final BlockingQueue<Integer> blockingQueue) {
-        this(blockingQueue, false);
+        this.blockingQueue = Objects.requireNonNull(blockingQueue, "blockingQueue");
     }
 
     /**
-     * Constructs a new instance with given buffer
+     * Creates a blocking QueueOutputStream with no limit to its internal queue size. Its {@link #read()} method
+     * will block or wait if necessary until a queue element becomes available.
+     *
+     * @return blocking QueueOutputStream
+     */
+    public static QueueInputStream createBlockingQueueInputStream() {
+        return createBlockingQueueInputStream(new LinkedBlockingQueue<>());
+    }
+
+    /**
+     * Creates a new QueueOutputStream with given queue. Its {@link #read()} method will block or wait if
+     * necessary until a queue element becomes available.
      *
      * @param blockingQueue backing queue for the stream
-     * @param blockingRead if true, {@link #read()} will wait if necessary until a queue element becomes available.
+     * @return blocking QueueOutputStream
      */
-    public QueueInputStream(final BlockingQueue<Integer> blockingQueue, final boolean blockingRead) {
-        this.blockingQueue = Objects.requireNonNull(blockingQueue, "blockingQueue");
-        this.blockingRead = blockingRead;
+    public static QueueInputStream createBlockingQueueInputStream(final BlockingQueue<Integer> blockingQueue) {
+        return new BlockingQueueInputStream(blockingQueue);
     }
 
     /**
@@ -99,26 +109,33 @@ public class QueueInputStream extends InputStream {
     }
 
     /**
-     * Reads and returns a single byte. In blocking read mode, the method will wait if necessary until a queue element
-     * becomes available. In non-blocking read mode, the method will return -1 immediately if the queue is empty.
+     * Reads and returns a single byte.
      *
-     * @return either the byte read or {@code -1} if the end of the stream has been reached
-     * @throws InterruptedIOException if the thread is interrupted while reading from the queue.
+     * @return either the byte read or {@code -1} immediately if the queue is empty.
      */
     @Override
-    public int read() throws InterruptedIOException {
-        if (blockingRead) {
+    public int read() {
+        final Integer value = blockingQueue.poll();
+        return value == null ? EOF : 0xFF & value;
+    }
+
+    private static class BlockingQueueInputStream extends QueueInputStream {
+
+        public BlockingQueueInputStream(final BlockingQueue<Integer> blockingQueue) {
+            super(blockingQueue);
+        }
+
+        @Override
+        public int read() {
             try {
                 return blockingQueue.take();
             } catch (final InterruptedException e) {
                 Thread.currentThread().interrupt();
                 final InterruptedIOException ioException = new InterruptedIOException();
                 ioException.initCause(e);
-                throw ioException;
+                // throw runtime unchecked exception to maintain backward-compatibilty
+                throw new UncheckedIOException(ioException);
             }
         }
-        final Integer value = blockingQueue.poll();
-        return value == null ? EOF : 0xFF & value;
     }
-
 }

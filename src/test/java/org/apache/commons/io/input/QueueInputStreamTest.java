@@ -17,6 +17,7 @@
 package org.apache.commons.io.input;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.commons.io.input.QueueInputStream.createBlockingQueueInputStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -146,9 +147,9 @@ public class QueueInputStreamTest {
         if (inputData.isEmpty()) {
             return;
         }
-        
+
         final Duration timeout = Duration.ofMillis(500);
-        try (QueueInputStream inputStream = new QueueInputStream(new LinkedBlockingQueue<>(), true);
+        try (QueueInputStream inputStream = createBlockingQueueInputStream();
                 final QueueOutputStream outputStream = inputStream.newQueueOutputStream()) {
 
             assertNull(readInBackgroundThread(inputStream, inputData.length(), timeout));
@@ -167,10 +168,11 @@ public class QueueInputStreamTest {
         final Thread thread = new Thread(() -> {
             try {
                 outputQueue.add(readUnbuffered(inputStream, maxBytes));
-            } catch (final IOException e) {
+            } catch (final Exception e) {
                 outputQueue.add(ExceptionUtils.getStackTrace(e));
+            } finally {
+                exitedSignal.countDown();
             }
-            exitedSignal.countDown();
         });
         thread.setDaemon(true);
         thread.setName(getClass().getSimpleName());
