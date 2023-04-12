@@ -236,7 +236,7 @@ public class ReaderInputStream extends InputStream {
     }
 
     /**
-     * Close the stream. This method will cause the underlying {@link Reader} to be closed.
+     * Closes the stream. This method will cause the underlying {@link Reader} to be closed.
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -286,7 +286,7 @@ public class ReaderInputStream extends InputStream {
     }
 
     /**
-     * Read a single byte.
+     * Reads a single byte.
      *
      * @return either the byte read or {@code -1} if the end of the stream has been reached
      * @throws IOException if an I/O error occurs.
@@ -305,7 +305,7 @@ public class ReaderInputStream extends InputStream {
     }
 
     /**
-     * Read the specified number of bytes into an array.
+     * Reads the specified number of bytes into an array.
      *
      * @param b the byte array to read into
      * @return the number of bytes read or {@code -1} if the end of the stream has been reached
@@ -317,7 +317,7 @@ public class ReaderInputStream extends InputStream {
     }
 
     /**
-     * Read the specified number of bytes into an array.
+     * Reads the specified number of bytes into an array.
      *
      * @param array the byte array to read into
      * @param off the offset to start reading bytes into
