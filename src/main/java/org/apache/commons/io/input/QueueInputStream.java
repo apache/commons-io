@@ -133,7 +133,8 @@ public class QueueInputStream extends InputStream {
                 Thread.currentThread().interrupt();
                 final InterruptedIOException ioException = new InterruptedIOException();
                 ioException.initCause(e);
-                // throw runtime unchecked exception to maintain backward-compatibilty
+                // throw runtime unchecked exception to maintain signature backward-compatibilty of
+                // super class' read method, which does not declare any exception
                 throw new UncheckedIOException(ioException);
             }
         }
