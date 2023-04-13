@@ -36,12 +36,12 @@ public enum FileSystem {
     /**
      * Generic file system.
      */
-    GENERIC(false, false, Integer.MAX_VALUE, Integer.MAX_VALUE, new int[] { 0 }, new String[] {}, false, false, '/'),
+    GENERIC(4096, false, false, Integer.MAX_VALUE, Integer.MAX_VALUE, new int[] { 0 }, new String[] {}, false, false, '/'),
 
     /**
      * Linux file system.
      */
-    LINUX(true, true, 255, 4096, new int[] {
+    LINUX(8192, true, true, 255, 4096, new int[] {
             // KEEP THIS ARRAY SORTED!
             // @formatter:off
             // ASCII NUL
@@ -53,7 +53,7 @@ public enum FileSystem {
     /**
      * MacOS file system.
      */
-    MAC_OSX(true, true, 255, 1024, new int[] {
+    MAC_OSX(4096, true, true, 255, 1024, new int[] {
             // KEEP THIS ARRAY SORTED!
             // @formatter:off
             // ASCII NUL
@@ -76,8 +76,9 @@ public enum FileSystem {
      * @see <a href="https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea#consoles">
      *      CreateFileA function - Consoles (microsoft.com)</a>
      */
-    WINDOWS(false, true, 255,
-            32000, new int[] {
+    WINDOWS(4096, false, true,
+            255, 32000, // KEEP THIS ARRAY SORTED!
+            new int[] {
                     // KEEP THIS ARRAY SORTED!
                     // @formatter:off
                     // ASCII NUL
@@ -87,9 +88,8 @@ public enum FileSystem {
                     29, 30, 31,
                     '"', '*', '/', ':', '<', '>', '?', '\\', '|'
                     // @formatter:on
-            }, // KEEP THIS ARRAY SORTED!
-            new String[] { "AUX", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "CON", "CONIN$", "CONOUT$",
-                    "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9", "NUL", "PRN" }, true, true, '\\');
+            }, new String[] { "AUX", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "CON", "CONIN$", "CONOUT$",
+                            "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9", "NUL", "PRN" }, true, true, '\\');
 
     /**
      * <p>
@@ -296,6 +296,8 @@ public enum FileSystem {
     private static String replace(final String path, final char oldChar, final char newChar) {
         return path == null ? null : path.replace(oldChar, newChar);
     }
+
+    private final int blockSize;
     private final boolean casePreserving;
     private final boolean caseSensitive;
     private final int[] illegalFileNameChars;
@@ -305,12 +307,12 @@ public enum FileSystem {
     private final boolean reservedFileNamesExtensions;
     private final boolean supportsDriveLetter;
     private final char nameSeparator;
-
     private final char nameSeparatorOther;
 
     /**
      * Constructs a new instance.
      *
+     * @param blockSize file allocation block size in bytes.
      * @param caseSensitive Whether this file system is case-sensitive.
      * @param casePreserving Whether this file system is case-preserving.
      * @param maxFileLength The maximum length for file names. The file name does not include folders.
@@ -321,9 +323,10 @@ public enum FileSystem {
      * @param supportsDriveLetter Whether this file system support driver letters.
      * @param nameSeparator The name separator, '\\' on Windows, '/' on Linux.
      */
-    FileSystem(final boolean caseSensitive, final boolean casePreserving, final int maxFileLength,
-        final int maxPathLength, final int[] illegalFileNameChars, final String[] reservedFileNames,
-        final boolean reservedFileNamesExtensions, final boolean supportsDriveLetter, final char nameSeparator) {
+    FileSystem(final int blockSize, final boolean caseSensitive, final boolean casePreserving,
+        final int maxFileLength, final int maxPathLength, final int[] illegalFileNameChars,
+        final String[] reservedFileNames, final boolean reservedFileNamesExtensions, final boolean supportsDriveLetter, final char nameSeparator) {
+        this.blockSize = blockSize;
         this.maxFileNameLength = maxFileLength;
         this.maxPathLength = maxPathLength;
         this.illegalFileNameChars = Objects.requireNonNull(illegalFileNameChars, "illegalFileNameChars");
@@ -334,6 +337,16 @@ public enum FileSystem {
         this.supportsDriveLetter = supportsDriveLetter;
         this.nameSeparator = nameSeparator;
         this.nameSeparatorOther = FilenameUtils.flipSeparator(nameSeparator);
+    }
+
+    /**
+     * Gets the file allocation block size in bytes.
+     * @return the file allocation block size in bytes.
+     *
+     * @since 2.12.0
+     */
+    public int getBlockSize() {
+        return blockSize;
     }
 
     /**

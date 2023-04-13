@@ -21,8 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
@@ -33,6 +31,10 @@ import org.junit.jupiter.api.condition.OS;
  */
 public class FileSystemTest {
 
+    @Test
+    public void testGetBlockSize() {
+        assertTrue(FileSystem.getCurrent().getBlockSize() >= 0);
+    }
 
     @Test
     public void testGetCurrent() {
@@ -72,7 +74,7 @@ public class FileSystemTest {
 
     @Test
     @EnabledOnOs(OS.WINDOWS)
-    public void testIsReservedFileNameOnWindows() throws IOException {
+    public void testIsReservedFileNameOnWindows() {
         final FileSystem fs = FileSystem.WINDOWS;
         for (final String candidate : fs.getReservedFileNames()) {
             // System.out.printf("Reserved %s exists: %s%n", candidate, Files.exists(Paths.get(candidate)));
