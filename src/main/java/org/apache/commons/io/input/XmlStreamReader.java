@@ -27,6 +27,7 @@ import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,6 +38,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.ByteOrderMark;
+import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.function.IOConsumer;
@@ -97,6 +99,7 @@ public class XmlStreamReader extends Reader {
      * <p>
      * For example:
      * </p>
+     *
      * <pre>{@code
      * XmlStreamReader r = XmlStreamReader.builder()
      *   .setPath(path)
@@ -109,18 +112,14 @@ public class XmlStreamReader extends Reader {
      */
     public static class Builder extends AbstractStreamBuilder<XmlStreamReader, Builder> {
 
+        private boolean nullCharset = true;
         private boolean lenient = true;
         private String httpContentType;
-
-        public Builder setHttpContentType(final String httpContentType) {
-            this.httpContentType = httpContentType;
-            return this;
-        }
 
         @SuppressWarnings("resource")
         @Override
         public XmlStreamReader get() throws IOException {
-            final String defaultEncoding = getCharset().equals(getCharsetDefault()) ? null : getCharset().name();
+            final String defaultEncoding = nullCharset ? null : getCharset().name();
             // @formatter:off
             return httpContentType == null
                     ? new XmlStreamReader(getOrigin().getInputStream(), lenient, defaultEncoding)
@@ -128,21 +127,28 @@ public class XmlStreamReader extends Reader {
             // @formatter:on
         }
 
+        @Override
+        public Builder setCharset(final Charset charset) {
+            nullCharset = charset == null;
+            return super.setCharset(charset);
+        }
+
+        @Override
+        public Builder setCharset(final String charset) {
+            nullCharset = charset == null;
+            return super.setCharset(Charsets.toCharset(charset, getCharsetDefault()));
+        }
+
+        public Builder setHttpContentType(final String httpContentType) {
+            this.httpContentType = httpContentType;
+            return this;
+        }
+
         public Builder setLenient(final boolean lenient) {
             this.lenient = lenient;
             return this;
         }
 
-    }
-
-    /**
-     * Constructs a new {@link Builder}.
-     *
-     * @return a new {@link Builder}.
-     * @since 2.12.0
-     */
-    public static Builder builder() {
-        return new Builder();
     }
 
     private static final String UTF_8 = StandardCharsets.UTF_8.name();
@@ -189,6 +195,16 @@ public class XmlStreamReader extends Reader {
     private static final String HTTP_EX_2 = "Invalid encoding, CT-MIME [{0}] CT-Enc [{1}] BOM [{2}] XML guess [{3}] XML prolog [{4}], encoding mismatch";
 
     private static final String HTTP_EX_3 = "Invalid encoding, CT-MIME [{0}] CT-Enc [{1}] BOM [{2}] XML guess [{3}] XML prolog [{4}], Invalid MIME";
+
+    /**
+     * Constructs a new {@link Builder}.
+     *
+     * @return a new {@link Builder}.
+     * @since 2.12.0
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
 
     /**
      * Gets the charset parameter value, NULL if not present, NULL if httpContentType is NULL.
