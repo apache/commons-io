@@ -32,16 +32,56 @@ import java.util.regex.Matcher;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.input.XmlStreamReader;
 
 /**
- * Character stream that handles all the necessary Voodoo to figure out the
+ * Character stream that handles all the necessary work to figure out the
  * charset encoding of the XML document written to the stream.
  *
  * @see XmlStreamReader
  * @since 2.0
  */
 public class XmlStreamWriter extends Writer {
+
+    /**
+     * Builds a new {@link XmlStreamWriter} instance.
+     * <p>
+     * For example:
+     * </p>
+     * <pre>{@code
+     * WriterOutputStream w = WriterOutputStream.builder()
+     *   .setPath(path)
+     *   .setCharset(StandardCharsets.UTF_8)
+     *   .get()}
+     * </pre>
+     * <p>
+     * @since 2.12.02
+     */
+    public static class Builder extends AbstractStreamBuilder<XmlStreamWriter, Builder> {
+
+        public Builder() {
+            setCharsetDefault(StandardCharsets.UTF_8);
+            setCharset(StandardCharsets.UTF_8);
+        }
+
+        @SuppressWarnings("resource")
+        @Override
+        public XmlStreamWriter get() throws IOException {
+            return new XmlStreamWriter(getOrigin().getOutputStream(), getCharset());
+        }
+
+    }
+
+    /**
+     * Constructs a new {@link Builder}.
+     *
+     * @return a new {@link Builder}.
+     * @since 2.12.0
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
 
     private static final int BUFFER_SIZE = IOUtils.DEFAULT_BUFFER_SIZE;
 
@@ -62,7 +102,9 @@ public class XmlStreamWriter extends Writer {
      * @param file The file to write to
      * @throws FileNotFoundException if there is an error creating or
      * opening the file
+     * @deprecated Use {@link #builder()}
      */
+    @Deprecated
     public XmlStreamWriter(final File file) throws FileNotFoundException {
         this(file, null);
     }
@@ -75,7 +117,9 @@ public class XmlStreamWriter extends Writer {
      * @param defaultEncoding The default encoding if not encoding could be detected
      * @throws FileNotFoundException if there is an error creating or
      * opening the file
+     * @deprecated Use {@link #builder()}
      */
+    @Deprecated
     @SuppressWarnings("resource")
     public XmlStreamWriter(final File file, final String defaultEncoding) throws FileNotFoundException {
         this(new FileOutputStream(file), defaultEncoding);
@@ -86,7 +130,9 @@ public class XmlStreamWriter extends Writer {
      * with a default encoding of UTF-8.
      *
      * @param out The output stream
+     * @deprecated Use {@link #builder()}
      */
+    @Deprecated
     public XmlStreamWriter(final OutputStream out) {
         this(out, StandardCharsets.UTF_8);
     }
@@ -97,9 +143,8 @@ public class XmlStreamWriter extends Writer {
      *
      * @param out The output stream
      * @param defaultEncoding The default encoding if not encoding could be detected
-     * @since 2.12.0
      */
-    public XmlStreamWriter(final OutputStream out, final Charset defaultEncoding) {
+    private XmlStreamWriter(final OutputStream out, final Charset defaultEncoding) {
         this.out = out;
         this.defaultCharset = Objects.requireNonNull(defaultEncoding);
     }
@@ -110,7 +155,9 @@ public class XmlStreamWriter extends Writer {
      *
      * @param out The output stream
      * @param defaultEncoding The default encoding if not encoding could be detected
+     * @deprecated Use {@link #builder()}
      */
+    @Deprecated
     public XmlStreamWriter(final OutputStream out, final String defaultEncoding) {
         this(out, Charsets.toCharset(defaultEncoding, StandardCharsets.UTF_8));
     }

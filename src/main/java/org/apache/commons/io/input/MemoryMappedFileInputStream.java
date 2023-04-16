@@ -27,6 +27,8 @@ import java.nio.channels.FileChannel.MapMode;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
+import org.apache.commons.io.build.AbstractStreamBuilder;
+
 /**
  * An {@link InputStream} that utilizes memory mapped files to improve performance. A sliding window of the file is
  * mapped to memory to avoid mapping the entire file to memory at one time. The size of the sliding buffer is
@@ -55,11 +57,50 @@ import java.nio.file.StandardOpenOption;
 public class MemoryMappedFileInputStream extends InputStream {
 
     /**
+     * Builds a new {@link ReaderInputStream} instance.
+     * <p>
+     * For example:
+     * </p>
+     * <pre>{@code
+     * MemoryMappedFileInputStream s = MemoryMappedFileInputStream.builder()
+     *   .setPath(path)
+     *   .setBufferSize(256 * 1024)
+     *   .get()}
+     * </pre>
+     * <p>
+     * @since 2.12.0
+     */
+    public static class Builder extends AbstractStreamBuilder<MemoryMappedFileInputStream, Builder> {
+
+        public Builder() {
+            setBufferSizeDefault(DEFAULT_BUFFER_SIZE);
+            setBufferSize(DEFAULT_BUFFER_SIZE);
+        }
+
+        @Override
+        public MemoryMappedFileInputStream get() throws IOException {
+            return new MemoryMappedFileInputStream(getOrigin().getPath(), getBufferSize());
+        }
+    }
+
+    /**
      * Default size of the sliding memory mapped buffer. We use 256K, equal to 65536 pages (given a 4K page size).
      * Increasing the value beyond the default size will generally not provide any increase in throughput.
      */
     private static final int DEFAULT_BUFFER_SIZE = 256 * 1024;
+
     private static final ByteBuffer EMPTY_BUFFER = ByteBuffer.wrap(new byte[0]).asReadOnlyBuffer();
+
+    /**
+     * Constructs a new {@link Builder}.
+     *
+     * @return a new {@link Builder}.
+     * @since 2.12.0
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
     private final int bufferSize;
     private final FileChannel channel;
     private ByteBuffer buffer = EMPTY_BUFFER;
@@ -75,7 +116,9 @@ public class MemoryMappedFileInputStream extends InputStream {
      *
      * @param file The path of the file to open.
      * @throws IOException If an I/O error occurs
+     * @deprecated Use {@link #builder()}
      */
+    @Deprecated
     public MemoryMappedFileInputStream(final Path file) throws IOException {
         this(file, DEFAULT_BUFFER_SIZE);
     }
@@ -86,7 +129,9 @@ public class MemoryMappedFileInputStream extends InputStream {
      * @param file The path of the file to open.
      * @param bufferSize Size of the sliding buffer.
      * @throws IOException If an I/O error occurs.
+     * @deprecated Use {@link #builder()}
      */
+    @Deprecated
     public MemoryMappedFileInputStream(final Path file, final int bufferSize) throws IOException {
         this.bufferSize = bufferSize;
         this.channel = FileChannel.open(file, StandardOpenOption.READ);
@@ -117,6 +162,10 @@ public class MemoryMappedFileInputStream extends InputStream {
         if (closed) {
             throw new IOException("Stream closed");
         }
+    }
+
+    int getBufferSize() {
+        return bufferSize;
     }
 
     private void nextBuffer() throws IOException {

@@ -37,6 +37,8 @@ import java.util.Objects;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.ThreadUtils;
+import org.apache.commons.io.build.AbstractOrigin;
+import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.io.file.attribute.FileTimes;
 
@@ -64,17 +66,10 @@ import org.apache.commons.io.file.attribute.FileTimes;
  * <h2>2. Using a Tailer</h2>
  *
  * <p>
- * You can create and use a Tailer in one of four ways:
+ * You can create and use a Tailer in one of three ways:
  * </p>
  * <ul>
  * <li>Using a {@link Builder}</li>
- * <li>Using one of the static helper methods:
- * <ul>
- * <li>{@link Tailer#create(File, TailerListener)}</li>
- * <li>{@link Tailer#create(File, TailerListener, long)}</li>
- * <li>{@link Tailer#create(File, TailerListener, long, boolean)}</li>
- * </ul>
- * </li>
  * <li>Using an {@link java.util.concurrent.Executor}</li>
  * <li>Using a {@link Thread}</li>
  * </ul>
@@ -87,17 +82,14 @@ import org.apache.commons.io.file.attribute.FileTimes;
  *
  * <pre>
  * TailerListener listener = new MyTailerListener();
- * Tailer tailer = new Tailer.Builder(file, listener).withDelayDuration(delay).build();
+ * Tailer tailer = Tailer.builder()
+ *   .setFile(file)
+ *   .setTailerListener(listener)
+ *   .setDelayDuration(delay)
+ *   .get();
  * </pre>
  *
- * <h3>2.2 Using the static helper method</h3>
- *
- * <pre>
- * TailerListener listener = new MyTailerListener();
- * Tailer tailer = Tailer.create(file, listener, delay);
- * </pre>
- *
- * <h3>2.3 Using an Executor</h3>
+ * <h3>2.2 Using an Executor</h3>
  *
  * <pre>
  * TailerListener listener = new MyTailerListener();
@@ -114,7 +106,7 @@ import org.apache.commons.io.file.attribute.FileTimes;
  * </pre>
  *
  *
- * <h3>2.4 Using a Thread</h3>
+ * <h3>2.3 Using a Thread</h3>
  *
  * <pre>
  * TailerListener listener = new MyTailerListener();
@@ -160,58 +152,40 @@ public class Tailer implements Runnable, AutoCloseable {
 
     /**
      * Builds a {@link Tailer} with default values.
-     *
+     * <p>
+     * For example:
+     * </p>
+     * <pre>{@code
+     * Tailer t = Tailer.builder()
+     *   .setPath(path)
+     *   .setCharset(StandardCharsets.UTF_8)
+     *   .setDelayDuration(Duration.ofSeconds(1))
+     *   .setReOpen(false)
+     *   .setStartThread(true)
+     *   .setTailable(tailable)
+     *   .setTailerListener(tailerListener)
+     *   .setTailFromEnd(false)
+     *   .get()}
+     * </pre>
+     * <p>
      * @since 2.12.0
      */
-    public static class Builder {
+    public static class Builder extends AbstractStreamBuilder<Tailer, Builder> {
 
-        private final Tailable tailable;
-        private final TailerListener tailerListener;
-        private Charset charset = DEFAULT_CHARSET;
-        private int bufferSize = IOUtils.DEFAULT_BUFFER_SIZE;
+        private Tailable tailable;
+        private TailerListener tailerListener;
         private Duration delayDuration = Duration.ofMillis(DEFAULT_DELAY_MILLIS);
         private boolean end;
         private boolean reOpen;
         private boolean startThread = true;
-
-        /**
-         * Creates a builder.
-         *
-         * @param file the file to follow.
-         * @param listener the TailerListener to use.
-         */
-        public Builder(final File file, final TailerListener listener) {
-            this(file.toPath(), listener);
-        }
-
-        /**
-         * Creates a builder.
-         *
-         * @param file the file to follow.
-         * @param listener the TailerListener to use.
-         */
-        public Builder(final Path file, final TailerListener listener) {
-            this(new TailablePath(file), listener);
-        }
-
-        /**
-         * Creates a builder.
-         *
-         * @param tailable the tailable to follow.
-         * @param tailerListener the TailerListener to use.
-         */
-        public Builder(final Tailable tailable, final TailerListener tailerListener) {
-            this.tailable = Objects.requireNonNull(tailable, "tailable");
-            this.tailerListener = Objects.requireNonNull(tailerListener, "tailerListener");
-        }
-
         /**
          * Builds and starts a new configured instance.
          *
          * @return a new configured instance.
          */
-        public Tailer build() {
-            final Tailer tailer = new Tailer(tailable, charset, tailerListener, delayDuration, end, reOpen, bufferSize);
+        @Override
+        public Tailer get() {
+            final Tailer tailer = new Tailer(tailable, getCharset(), tailerListener, delayDuration, end, reOpen, getBufferSize());
             if (startThread) {
                 final Thread thread = new Thread(tailer);
                 thread.setDaemon(true);
@@ -221,45 +195,29 @@ public class Tailer implements Runnable, AutoCloseable {
         }
 
         /**
-         * Sets the buffer size.
-         *
-         * @param bufferSize Buffer size.
-         * @return Builder with specific buffer size.
-         */
-        public Builder withBufferSize(final int bufferSize) {
-            this.bufferSize = bufferSize;
-            return this;
-        }
-
-        /**
-         * Sets the Charset.
-         *
-         * @param charset the Charset to be used for reading the file.
-         * @return Builder with specific Charset.
-         */
-        public Builder withCharset(final Charset charset) {
-            this.charset = Objects.requireNonNull(charset, "charset");
-            return this;
-        }
-
-        /**
          * Sets the delay duration.
          *
          * @param delayDuration the delay between checks of the file for new content.
-         * @return Builder with specific delay duration.
+         * @return this
          */
-        public Builder withDelayDuration(final Duration delayDuration) {
+        public Builder setDelayDuration(final Duration delayDuration) {
             this.delayDuration = Objects.requireNonNull(delayDuration, "delayDuration");
             return this;
+        }
+
+        @Override
+        protected Builder setOrigin(final AbstractOrigin<?, ?> origin) {
+            setTailable(new TailablePath(origin.getPath()));
+            return super.setOrigin(origin);
         }
 
         /**
          * Sets the re-open behavior.
          *
          * @param reOpen whether to close/reopen the file between chunks
-         * @return Builder with specific re-open behavior
+         * @return this
          */
-        public Builder withReOpen(final boolean reOpen) {
+        public Builder setReOpen(final boolean reOpen) {
             this.reOpen = reOpen;
             return this;
         }
@@ -268,10 +226,32 @@ public class Tailer implements Runnable, AutoCloseable {
          * Sets the daemon thread startup behavior.
          *
          * @param startThread whether to create a daemon thread automatically.
-         * @return Builder with specific daemon thread startup behavior.
+         * @return this
          */
-        public Builder withStartThread(final boolean startThread) {
+        public Builder setStartThread(final boolean startThread) {
             this.startThread = startThread;
+            return this;
+        }
+
+        /**
+         * Sets the tailable.
+         *
+         * @param tailable the tailable.
+         * @return this.
+         */
+        public Builder setTailable(final Tailable tailable) {
+            this.tailable = Objects.requireNonNull(tailable, "tailable");
+            return this;
+        }
+
+        /**
+         * Sets the listener.
+         *
+         * @param tailerListener the listener.
+         * @return this
+         */
+        public Builder setTailerListener(final TailerListener tailerListener) {
+            this.tailerListener = Objects.requireNonNull(tailerListener, "tailerListener");
             return this;
         }
 
@@ -279,9 +259,9 @@ public class Tailer implements Runnable, AutoCloseable {
          * Sets the tail start behavior.
          *
          * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
-         * @return Builder with specific tail start behavior.
+         * @return this
          */
-        public Builder withTailFromEnd(final boolean end) {
+        public Builder setTailFromEnd(final boolean end) {
             this.end = end;
             return this;
         }
@@ -455,6 +435,16 @@ public class Tailer implements Runnable, AutoCloseable {
     private static final Charset DEFAULT_CHARSET = Charset.defaultCharset();
 
     /**
+     * Constructs a new {@link Builder}.
+     *
+     * @return Creates a new {@link Builder}.
+     * @since 2.12.0
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    /**
      * Creates and starts a Tailer for the given file.
      *
      * @param file the file to follow.
@@ -465,19 +455,21 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param reOpen whether to close/reopen the file between chunks.
      * @param bufferSize buffer size.
      * @return The new tailer.
-     * @deprecated Use {@link Builder}.
+     * @deprecated Use {@link #builder()}.
      */
     @Deprecated
     public static Tailer create(final File file, final Charset charset, final TailerListener listener, final long delayMillis, final boolean end,
         final boolean reOpen, final int bufferSize) {
         //@formatter:off
-        return new Builder(file, listener)
-                .withCharset(charset)
-                .withDelayDuration(Duration.ofMillis(delayMillis))
-                .withTailFromEnd(end)
-                .withReOpen(reOpen)
-                .withBufferSize(bufferSize)
-                .build();
+        return builder()
+                .setFile(file)
+                .setTailerListener(listener)
+                .setCharset(charset)
+                .setDelayDuration(Duration.ofMillis(delayMillis))
+                .setTailFromEnd(end)
+                .setReOpen(reOpen)
+                .setBufferSize(bufferSize)
+                .get();
         //@formatter:on
     }
 
@@ -487,11 +479,16 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param file the file to follow.
      * @param listener the TailerListener to use.
      * @return The new tailer.
-     * @deprecated Use {@link Builder}.
+     * @deprecated Use {@link #builder()}.
      */
     @Deprecated
     public static Tailer create(final File file, final TailerListener listener) {
-        return new Builder(file, listener).build();
+        //@formatter:off
+        return builder()
+                .setFile(file)
+                .setTailerListener(listener)
+                .get();
+        //@formatter:on
     }
 
     /**
@@ -501,14 +498,16 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param listener the TailerListener to use.
      * @param delayMillis the delay between checks of the file for new content in milliseconds.
      * @return The new tailer.
-     * @deprecated Use {@link Builder}.
+     * @deprecated Use {@link #builder()}.
      */
     @Deprecated
     public static Tailer create(final File file, final TailerListener listener, final long delayMillis) {
         //@formatter:off
-        return new Builder(file, listener)
-                .withDelayDuration(Duration.ofMillis(delayMillis))
-                .build();
+        return builder()
+                .setFile(file)
+                .setTailerListener(listener)
+                .setDelayDuration(Duration.ofMillis(delayMillis))
+                .get();
         //@formatter:on
     }
 
@@ -520,15 +519,17 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param delayMillis the delay between checks of the file for new content in milliseconds.
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @return The new tailer.
-     * @deprecated Use {@link Builder}.
+     * @deprecated Use {@link #builder()}.
      */
     @Deprecated
     public static Tailer create(final File file, final TailerListener listener, final long delayMillis, final boolean end) {
         //@formatter:off
-        return new Builder(file, listener)
-                .withDelayDuration(Duration.ofMillis(delayMillis))
-                .withTailFromEnd(end)
-                .build();
+        return builder()
+                .setFile(file)
+                .setTailerListener(listener)
+                .setDelayDuration(Duration.ofMillis(delayMillis))
+                .setTailFromEnd(end)
+                .get();
         //@formatter:on
     }
 
@@ -541,16 +542,18 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @param reOpen whether to close/reopen the file between chunks.
      * @return The new tailer.
-     * @deprecated Use {@link Builder}.
+     * @deprecated Use {@link #builder()}.
      */
     @Deprecated
     public static Tailer create(final File file, final TailerListener listener, final long delayMillis, final boolean end, final boolean reOpen) {
         //@formatter:off
-        return new Builder(file, listener)
-                .withDelayDuration(Duration.ofMillis(delayMillis))
-                .withTailFromEnd(end)
-                .withReOpen(reOpen)
-                .build();
+        return builder()
+                .setFile(file)
+                .setTailerListener(listener)
+                .setDelayDuration(Duration.ofMillis(delayMillis))
+                .setTailFromEnd(end)
+                .setReOpen(reOpen)
+                .get();
         //@formatter:on
     }
 
@@ -564,18 +567,20 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param reOpen whether to close/reopen the file between chunks.
      * @param bufferSize buffer size.
      * @return The new tailer.
-     * @deprecated Use {@link Builder}.
+     * @deprecated Use {@link #builder()}.
      */
     @Deprecated
     public static Tailer create(final File file, final TailerListener listener, final long delayMillis, final boolean end, final boolean reOpen,
         final int bufferSize) {
         //@formatter:off
-        return new Builder(file, listener)
-                .withDelayDuration(Duration.ofMillis(delayMillis))
-                .withTailFromEnd(end)
-                .withReOpen(reOpen)
-                .withBufferSize(bufferSize)
-                .build();
+        return builder()
+                .setFile(file)
+                .setTailerListener(listener)
+                .setDelayDuration(Duration.ofMillis(delayMillis))
+                .setTailFromEnd(end)
+                .setReOpen(reOpen)
+                .setBufferSize(bufferSize)
+                .get();
         //@formatter:on
     }
 
@@ -588,16 +593,18 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @param bufferSize buffer size.
      * @return The new tailer.
-     * @deprecated Use {@link Builder}.
+     * @deprecated Use {@link #builder()}.
      */
     @Deprecated
     public static Tailer create(final File file, final TailerListener listener, final long delayMillis, final boolean end, final int bufferSize) {
         //@formatter:off
-        return new Builder(file, listener)
-                .withDelayDuration(Duration.ofMillis(delayMillis))
-                .withTailFromEnd(end)
-                .withBufferSize(bufferSize)
-                .build();
+        return builder()
+                .setFile(file)
+                .setTailerListener(listener)
+                .setDelayDuration(Duration.ofMillis(delayMillis))
+                .setTailFromEnd(end)
+                .setBufferSize(bufferSize)
+                .get();
         //@formatter:on
     }
 
@@ -651,7 +658,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @param reOpen if true, close and reopen the file between reading chunks
      * @param bufSize Buffer size
-     * @deprecated Use {@link Builder}.
+     * @deprecated Use {@link #builder()}.
      */
     @Deprecated
     public Tailer(final File file, final Charset charset, final TailerListener listener, final long delayMillis, final boolean end, final boolean reOpen,
@@ -664,7 +671,7 @@ public class Tailer implements Runnable, AutoCloseable {
      *
      * @param file The file to follow.
      * @param listener the TailerListener to use.
-     * @deprecated Use {@link Builder}.
+     * @deprecated Use {@link #builder()}.
      */
     @Deprecated
     public Tailer(final File file, final TailerListener listener) {
@@ -677,7 +684,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param file the file to follow.
      * @param listener the TailerListener to use.
      * @param delayMillis the delay between checks of the file for new content in milliseconds.
-     * @deprecated Use {@link Builder}.
+     * @deprecated Use {@link #builder()}.
      */
     @Deprecated
     public Tailer(final File file, final TailerListener listener, final long delayMillis) {
@@ -691,7 +698,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param listener the TailerListener to use.
      * @param delayMillis the delay between checks of the file for new content in milliseconds.
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
-     * @deprecated Use {@link Builder}.
+     * @deprecated Use {@link #builder()}.
      */
     @Deprecated
     public Tailer(final File file, final TailerListener listener, final long delayMillis, final boolean end) {
@@ -706,7 +713,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param delayMillis the delay between checks of the file for new content in milliseconds.
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @param reOpen if true, close and reopen the file between reading chunks
-     * @deprecated Use {@link Builder}.
+     * @deprecated Use {@link #builder()}.
      */
     @Deprecated
     public Tailer(final File file, final TailerListener listener, final long delayMillis, final boolean end, final boolean reOpen) {
@@ -722,7 +729,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @param reOpen if true, close and reopen the file between reading chunks
      * @param bufferSize Buffer size
-     * @deprecated Use {@link Builder}.
+     * @deprecated Use {@link #builder()}.
      */
     @Deprecated
     public Tailer(final File file, final TailerListener listener, final long delayMillis, final boolean end, final boolean reOpen, final int bufferSize) {
@@ -737,7 +744,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param delayMillis the delay between checks of the file for new content in milliseconds.
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @param bufferSize Buffer size
-     * @deprecated Use {@link Builder}.
+     * @deprecated Use {@link #builder()}.
      */
     @Deprecated
     public Tailer(final File file, final TailerListener listener, final long delayMillis, final boolean end, final int bufferSize) {
@@ -757,13 +764,13 @@ public class Tailer implements Runnable, AutoCloseable {
      */
     private Tailer(final Tailable tailable, final Charset charset, final TailerListener listener, final Duration delayDuration, final boolean end,
         final boolean reOpen, final int bufferSize) {
-        this.tailable = tailable;
+        this.tailable = Objects.requireNonNull(tailable, "tailable");
+        this.listener = Objects.requireNonNull(listener, "listener");
         this.delayDuration = delayDuration;
         this.tailAtEnd = end;
         this.inbuf = IOUtils.byteArray(bufferSize);
 
         // Save and prepare the listener
-        this.listener = listener;
         listener.init(this);
         this.reOpen = reOpen;
         this.charset = charset;

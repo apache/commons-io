@@ -40,10 +40,10 @@ public class UncheckedFilterOutputStreamTest {
 
     @SuppressWarnings("resource")
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws IOException {
         exception = new IOException("test exception");
         brokenWriter = UncheckedFilterOutputStream.on(new BrokenOutputStream(exception));
-        stringWriter = UncheckedFilterOutputStream.on(new WriterOutputStream(new StringWriter(), Charset.defaultCharset()));
+        stringWriter = UncheckedFilterOutputStream.on(WriterOutputStream.builder().setWriter(new StringWriter()).setCharset(Charset.defaultCharset()).get());
     }
 
     @Test

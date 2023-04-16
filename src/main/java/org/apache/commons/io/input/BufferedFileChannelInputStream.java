@@ -25,6 +25,8 @@ import java.nio.file.StandardOpenOption;
 import java.util.Objects;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.build.AbstractStreamBuilder;
+import org.apache.commons.io.output.DeferredFileOutputStream;
 
 /**
  * {@link InputStream} implementation which uses direct buffer to read a file to avoid extra copy of data between Java
@@ -40,6 +42,48 @@ import org.apache.commons.io.IOUtils;
  */
 public final class BufferedFileChannelInputStream extends InputStream {
 
+    /**
+     * Builds a new {@link DeferredFileOutputStream} instance.
+     * <p>
+     * Using File IO:
+     * </p>
+     * <pre>{@code
+     * BufferedFileChannelInputStream s = BufferedFileChannelInputStream.builder()
+     *   .setFile(file)
+     *   .setBufferSize(4096)
+     *   .get()}
+     * </pre>
+     * <p>
+     * Using NIO Path:
+     * </p>
+     * <pre>{@code
+     * BufferedFileChannelInputStream s = BufferedFileChannelInputStream.builder()
+     *   .setPath(path)
+     *   .setBufferSize(4096)
+     *   .get()}
+     * </pre>
+     *
+     * @since 2.12.02
+     */
+    public static class Builder extends AbstractStreamBuilder<BufferedFileChannelInputStream, Builder> {
+
+        @Override
+        public BufferedFileChannelInputStream get() throws IOException {
+            return new BufferedFileChannelInputStream(getOrigin().getPath(), getBufferSize());
+        }
+
+    }
+
+    /**
+     * Constructs a new {@link Builder}.
+     *
+     * @return a new {@link Builder}.
+     * @since 2.12.0
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
     private final ByteBuffer byteBuffer;
 
     private final FileChannel fileChannel;
@@ -49,7 +93,9 @@ public final class BufferedFileChannelInputStream extends InputStream {
      *
      * @param file The file to stream.
      * @throws IOException If an I/O error occurs
+     * @deprecated Use {@link #builder()}
      */
+    @Deprecated
     public BufferedFileChannelInputStream(final File file) throws IOException {
         this(file, IOUtils.DEFAULT_BUFFER_SIZE);
     }
@@ -60,7 +106,9 @@ public final class BufferedFileChannelInputStream extends InputStream {
      * @param file The file to stream.
      * @param bufferSize buffer size.
      * @throws IOException If an I/O error occurs
+     * @deprecated Use {@link #builder()}
      */
+    @Deprecated
     public BufferedFileChannelInputStream(final File file, final int bufferSize) throws IOException {
         this(file.toPath(), bufferSize);
     }
@@ -70,7 +118,9 @@ public final class BufferedFileChannelInputStream extends InputStream {
      *
      * @param path The path to stream.
      * @throws IOException If an I/O error occurs
+     * @deprecated Use {@link #builder()}
      */
+    @Deprecated
     public BufferedFileChannelInputStream(final Path path) throws IOException {
         this(path, IOUtils.DEFAULT_BUFFER_SIZE);
     }
@@ -81,7 +131,9 @@ public final class BufferedFileChannelInputStream extends InputStream {
      * @param path The path to stream.
      * @param bufferSize buffer size.
      * @throws IOException If an I/O error occurs
+     * @deprecated Use {@link #builder()}
      */
+    @Deprecated
     public BufferedFileChannelInputStream(final Path path, final int bufferSize) throws IOException {
         Objects.requireNonNull(path, "path");
         fileChannel = FileChannel.open(path, StandardOpenOption.READ);

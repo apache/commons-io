@@ -161,27 +161,45 @@ public class XmlStreamReaderTest {
         return new ByteArrayInputStream(baos.toByteArray());
     }
 
-    public void testAlternateDefaultEncoding(final String cT, final String bomEnc, final String streamEnc, final String prologEnc, final String alternateEnc)
-        throws Exception {
+    public void testAlternateDefaultEncoding(final String contentType, final String bomEnc, final String streamEnc, final String prologEnc,
+            final String alternateEnc) throws Exception {
         try (InputStream is = getXmlInputStream(bomEnc, prologEnc == null ? XML1 : XML3, streamEnc, prologEnc);
-            XmlStreamReader xmlReader = new XmlStreamReader(is, cT, false, alternateEnc)) {
-            assertEquals(xmlReader.getDefaultEncoding(), alternateEnc);
-            if (!streamEnc.equals(UTF_16)) {
-                // we can not assert things here because UTF-8, US-ASCII and
-                // ISO-8859-1 look alike for the chars used for detection
-                // (niallp 2010-10-06 - I re-instated the check below - the tests(6) passed)
-                final String enc = alternateEnc != null ? alternateEnc : streamEnc;
-                assertEquals(xmlReader.getEncoding(), enc);
-            } else {
-                // String enc = (alternateEnc != null) ? alternateEnc : streamEnc;
-                assertEquals(xmlReader.getEncoding().substring(0, streamEnc.length()), streamEnc);
-            }
+                XmlStreamReader xmlReader = new XmlStreamReader(is, contentType, false, alternateEnc)) {
+            testAlternateDefaultEncoding(streamEnc, alternateEnc, xmlReader);
+        }
+        try (InputStream is = getXmlInputStream(bomEnc, prologEnc == null ? XML1 : XML3, streamEnc, prologEnc);
+        // @formatter:off
+            XmlStreamReader xmlReader = XmlStreamReader.builder()
+                    .setInputStream(is)
+                    .setHttpContentType(contentType)
+                    .setLenient(false)
+                    .setCharset(alternateEnc)
+                    .get()) {
+            // @formatter:on
+            testAlternateDefaultEncoding(streamEnc, alternateEnc, xmlReader);
+        }
+    }
+
+    private void testAlternateDefaultEncoding(final String streamEnc, final String alternateEnc, XmlStreamReader xmlReader) {
+        assertEquals(xmlReader.getDefaultEncoding(), alternateEnc);
+        if (!streamEnc.equals(UTF_16)) {
+            // we can not assert things here because UTF-8, US-ASCII and
+            // ISO-8859-1 look alike for the chars used for detection
+            // (niallp 2010-10-06 - I re-instated the check below - the tests(6) passed)
+            final String enc = alternateEnc != null ? alternateEnc : streamEnc;
+            assertEquals(xmlReader.getEncoding(), enc);
+        } else {
+            // String enc = (alternateEnc != null) ? alternateEnc : streamEnc;
+            assertEquals(xmlReader.getEncoding().substring(0, streamEnc.length()), streamEnc);
         }
     }
 
     @Test
     protected void testConstructorFileInput() throws IOException {
         try (XmlStreamReader reader = new XmlStreamReader(new File("pom.xml"))) {
+            // do nothing
+        }
+        try (XmlStreamReader reader = XmlStreamReader.builder().setFile("pom.xml").get()) {
             // do nothing
         }
     }
@@ -193,7 +211,12 @@ public class XmlStreamReaderTest {
 
     @Test
     protected void testConstructorInputStreamInput() throws IOException {
-        try (XmlStreamReader reader = new XmlStreamReader(Files.newInputStream(Paths.get("pom.xml")))) {
+        final Path path = Paths.get("pom.xml");
+        try (XmlStreamReader reader = new XmlStreamReader(Files.newInputStream(path))) {
+            // do nothing
+        }
+        try (@SuppressWarnings("resource")
+        XmlStreamReader reader = XmlStreamReader.builder().setInputStream(Files.newInputStream(path)).get()) {
             // do nothing
         }
     }
@@ -203,8 +226,12 @@ public class XmlStreamReaderTest {
         assertThrows(NullPointerException.class, () -> new XmlStreamReader((InputStream) null));
     }
 
+    @Test
     protected void testConstructorPathInput() throws IOException {
         try (XmlStreamReader reader = new XmlStreamReader(Paths.get("pom.xml"))) {
+            // do nothing
+        }
+        try (XmlStreamReader reader = XmlStreamReader.builder().setPath("pom.xml").get()) {
             // do nothing
         }
     }
@@ -234,14 +261,24 @@ public class XmlStreamReaderTest {
     }
 
     @Test
-    protected void testConstructorURLInputNull() throws IOException {
+    protected void testConstructorURLInputNull() {
         assertThrows(NullPointerException.class, () -> new XmlStreamReader((URL) null));
     }
 
     @Test
     public void testEncodingAttributeXML() throws Exception {
         try (InputStream is = new ByteArrayInputStream(ENCODING_ATTRIBUTE_XML.getBytes(StandardCharsets.UTF_8));
-            XmlStreamReader xmlReader = new XmlStreamReader(is, "", true)) {
+                XmlStreamReader xmlReader = new XmlStreamReader(is, "", true)) {
+            assertEquals(xmlReader.getEncoding(), UTF_8);
+        }
+        try (InputStream is = new ByteArrayInputStream(ENCODING_ATTRIBUTE_XML.getBytes(StandardCharsets.UTF_8));
+                // @formatter:off
+                XmlStreamReader xmlReader = XmlStreamReader.builder()
+                    .setInputStream(is)
+                    .setHttpContentType("")
+                    .setLenient(true)
+                    .get()) {
+            // @formatter:on
             assertEquals(xmlReader.getEncoding(), UTF_8);
         }
     }
@@ -397,12 +434,13 @@ public class XmlStreamReaderTest {
         }
     }
 
+    @SuppressWarnings("resource")
     protected void testRawBomInvalid(final String bomEnc, final String streamEnc,
         final String prologEnc) throws Exception {
         final InputStream is = getXmlInputStream(bomEnc, XML3, streamEnc, prologEnc);
         XmlStreamReader xmlReader = null;
         try {
-            xmlReader = new XmlStreamReader(is, false);
+            xmlReader = XmlStreamReader.builder().setInputStream(is).setLenient(false).get();
             final String foundEnc = xmlReader.getEncoding();
             fail("Expected IOException for BOM " + bomEnc + ", streamEnc " + streamEnc + " and prologEnc " + prologEnc
                 + ": found " + foundEnc);

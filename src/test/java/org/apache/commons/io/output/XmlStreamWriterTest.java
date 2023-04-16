@@ -29,6 +29,7 @@ import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.DefaultLocale;
 
 /**
+ * Tests {@link XmlStreamWriter}.
  */
 public class XmlStreamWriterTest {
 
@@ -48,15 +49,18 @@ public class XmlStreamWriterTest {
     private static final String TEXT_UNICODE = TEXT_LATIN1 + ", " + TEXT_LATIN7
             + ", " + TEXT_LATIN15 + ", " + TEXT_EUC_JP;
 
+    @SuppressWarnings("resource")
     private static void checkXmlContent(final String xml, final String encodingName, final String defaultEncodingName)
-        throws IOException {
+            throws IOException {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        final XmlStreamWriter writer = new XmlStreamWriter(out, defaultEncodingName);
-        writer.write(xml);
-        writer.close();
+        final XmlStreamWriter writerCheck;
+        try (final XmlStreamWriter writer = XmlStreamWriter.builder().setOutputStream(out).setCharset(defaultEncodingName).get()) {
+            writerCheck = writer;
+            writer.write(xml);
+        }
         final byte[] xmlContent = out.toByteArray();
         final Charset charset = Charset.forName(encodingName);
-        final Charset writerCharset = Charset.forName(writer.getEncoding());
+        final Charset writerCharset = Charset.forName(writerCheck.getEncoding());
         assertEquals(charset, writerCharset);
         assertTrue(writerCharset.contains(charset), writerCharset.name());
         assertArrayEquals(xml.getBytes(encodingName), xmlContent);
@@ -101,8 +105,16 @@ public class XmlStreamWriterTest {
 
     @Test
     public void testEmpty() throws IOException {
-        final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        try (XmlStreamWriter writer = new XmlStreamWriter(out)) {
+        try (final ByteArrayOutputStream out = new ByteArrayOutputStream();
+                XmlStreamWriter writer = new XmlStreamWriter(out)) {
+            writer.flush();
+            writer.write("");
+            writer.flush();
+            writer.write(".");
+            writer.flush();
+        }
+        try (final ByteArrayOutputStream out = new ByteArrayOutputStream();
+                XmlStreamWriter writer = XmlStreamWriter.builder().setOutputStream(out).get()) {
             writer.flush();
             writer.write("");
             writer.flush();

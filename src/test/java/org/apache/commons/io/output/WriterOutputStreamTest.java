@@ -149,7 +149,7 @@ public class WriterOutputStreamTest {
     private void testWithBufferedWrite(final String testString, final String charsetName) throws IOException {
         final byte[] expected = testString.getBytes(charsetName);
         final StringWriter writer = new StringWriter();
-        try (WriterOutputStream out = new WriterOutputStream(writer, charsetName)) {
+        try (WriterOutputStream out = WriterOutputStream.builder().setWriter(writer).setCharset(charsetName).get()) {
             int offset = 0;
             while (offset < expected.length) {
                 final int length = Math.min(random.nextInt(128), expected.length - offset);
@@ -163,33 +163,45 @@ public class WriterOutputStreamTest {
 
     private void testWithSingleByteWrite(final String testString, final Charset charset) throws IOException {
         final byte[] bytes = testString.getBytes(Charsets.toCharset(charset));
-        final StringWriter writer = new StringWriter();
+        StringWriter writer = new StringWriter();
         try (WriterOutputStream out = new WriterOutputStream(writer, charset)) {
-            for (final byte b : bytes) {
-                out.write(b);
-            }
+            writeOneAtATime(bytes, out);
+        }
+        assertEquals(testString, writer.toString());
+        //
+        writer = new StringWriter();
+        try (WriterOutputStream out = WriterOutputStream.builder().setWriter(writer).setCharset(charset).get()) {
+            writeOneAtATime(bytes, out);
         }
         assertEquals(testString, writer.toString());
     }
 
     private void testWithSingleByteWrite(final String testString, final CharsetDecoder charsetDecoder) throws IOException {
         final byte[] bytes = testString.getBytes(CharsetDecoders.toCharsetDecoder(charsetDecoder).charset());
-        final StringWriter writer = new StringWriter();
+        StringWriter writer = new StringWriter();
         try (WriterOutputStream out = new WriterOutputStream(writer, charsetDecoder)) {
-            for (final byte b : bytes) {
-                out.write(b);
-            }
+            writeOneAtATime(bytes, out);
+        }
+        assertEquals(testString, writer.toString());
+        //
+        writer = new StringWriter();
+        try (WriterOutputStream out = WriterOutputStream.builder().setWriter(writer).setCharsetDecoder(charsetDecoder).get()) {
+            writeOneAtATime(bytes, out);
         }
         assertEquals(testString, writer.toString());
     }
 
     private void testWithSingleByteWrite(final String testString, final String charsetName) throws IOException {
         final byte[] bytes = testString.getBytes(Charsets.toCharset(charsetName));
-        final StringWriter writer = new StringWriter();
+        StringWriter writer = new StringWriter();
         try (WriterOutputStream out = new WriterOutputStream(writer, charsetName)) {
-            for (final byte b : bytes) {
-                out.write(b);
-            }
+            writeOneAtATime(bytes, out);
+        }
+        assertEquals(testString, writer.toString());
+        //
+        writer = new StringWriter();
+        try (WriterOutputStream out = WriterOutputStream.builder().setWriter(writer).setCharset(charsetName).get()) {
+            writeOneAtATime(bytes, out);
         }
         assertEquals(testString, writer.toString());
     }
@@ -200,6 +212,23 @@ public class WriterOutputStreamTest {
         try (WriterOutputStream out = new WriterOutputStream(writer, "us-ascii", 1024, true)) {
             out.write("abc".getBytes(StandardCharsets.US_ASCII));
             assertEquals("abc", writer.toString());
+        }
+        // @formatter:off
+        try (WriterOutputStream out = WriterOutputStream.builder()
+                .setWriter(writer)
+                .setCharset("us-ascii")
+                .setBufferSize(1024)
+                .setWriteImmediately(true)
+                .get()) {
+            // @formatter:on
+            out.write("abc".getBytes(StandardCharsets.US_ASCII));
+            assertEquals("abcabc", writer.toString());
+        }
+    }
+
+    private void writeOneAtATime(final byte[] bytes, WriterOutputStream out) throws IOException {
+        for (final byte b : bytes) {
+            out.write(b);
         }
     }
 }

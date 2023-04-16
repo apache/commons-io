@@ -265,7 +265,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         return files.stream().map(f -> {
             try {
                 return f.getCanonicalPath();
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 throw new RuntimeException(e);
             }
         }).collect(Collectors.toSet());
@@ -410,6 +410,13 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertThrows(IllegalArgumentException.class, () -> FileUtils.openOutputStream(directory));
     }
 
+    /**
+     * Requires admin privileges on Windows.
+     *
+     * @throws Exception For example java.nio.file.FileSystemException:
+     *                   C:\Users\you\AppData\Local\Temp\junit2324629522183300191\FileUtilsTest8613879743106252609\symlinked-dir: A required privilege is
+     *                   not held by the client.
+     */
     @Test
     public void test_openOutputStream_intoExistingSymlinkedDir() throws Exception {
         final Path symlinkedDir = createTempSymlinkedRelativeDir();
@@ -1841,7 +1848,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
             final String notSubSubFileName = "not.txt";
             TestUtils.generateTestData(new File(notSubSubDir, notSubSubFileName), 1);
 
-            final WildcardFileFilter allFilesFileFilter = new WildcardFileFilter("*.*");
+            final WildcardFileFilter allFilesFileFilter = WildcardFileFilter.builder().setWildcards("*.*").get();
             final NameFileFilter dirFilter = new NameFileFilter("subSubDir");
             iterator = FileUtils.iterateFiles(subDir, allFilesFileFilter, dirFilter);
 
@@ -1890,9 +1897,9 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(subDir3.mkdir());
         assertTrue(subDir4.mkdir());
         final File someFile = new File(subDir2, "a.txt");
-        final WildcardFileFilter fileFilterAllFiles = new WildcardFileFilter("*.*");
-        final WildcardFileFilter fileFilterAllDirs = new WildcardFileFilter("*");
-        final WildcardFileFilter fileFilterExtTxt = new WildcardFileFilter("*.txt");
+        final WildcardFileFilter fileFilterAllFiles =  WildcardFileFilter.builder().setWildcards("*.*").get();
+        final WildcardFileFilter fileFilterAllDirs = WildcardFileFilter.builder().setWildcards("*").get();
+        final WildcardFileFilter fileFilterExtTxt = WildcardFileFilter.builder().setWildcards("*.txt").get();
         try {
             try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(someFile.toPath()))) {
                 TestUtils.generateTestData(output, 100);
@@ -1929,7 +1936,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(new File(directory, "TEST").mkdir());
         assertTrue(new File(directory, "test.txt").createNewFile());
 
-        final IOFileFilter filter = new WildcardFileFilter("*", IOCase.INSENSITIVE);
+        final IOFileFilter filter = WildcardFileFilter.builder().setWildcards("*").setIoCase(IOCase.INSENSITIVE).get();
         FileUtils.iterateFiles(directory, filter, null).forEachRemaining(file -> assertFalse(file.isDirectory(), file::getAbsolutePath));
     }
 
@@ -1942,8 +1949,8 @@ public class FileUtilsTest extends AbstractTempDirTest {
         subDir2.mkdir();
         try {
 
-            final String[] expectedFileNames = {"a.txt", "b.txt", "c.txt", "d.txt", "e.txt", "f.txt"};
-            final int[] fileSizes = {123, 234, 345, 456, 678, 789};
+            final String[] expectedFileNames = { "a.txt", "b.txt", "c.txt", "d.txt", "e.txt", "f.txt" };
+            final int[] fileSizes = { 123, 234, 345, 456, 678, 789 };
 
             for (int i = 0; i < expectedFileNames.length; ++i) {
                 final File theFile = new File(subDir, expectedFileNames[i]);
@@ -1955,7 +1962,11 @@ public class FileUtilsTest extends AbstractTempDirTest {
                 }
             }
 
-            final Collection<File> actualFiles = FileUtils.listFiles(subDir, new WildcardFileFilter("*.*"), new WildcardFileFilter("*"));
+            // @formatter:off
+            final Collection<File> actualFiles = FileUtils.listFiles(subDir,
+                    WildcardFileFilter.builder().setWildcards("*.*").get(),
+                    WildcardFileFilter.builder().setWildcards("*").get());
+            // @formatter:on
 
             final int count = actualFiles.size();
             final Object[] fileObjs = actualFiles.toArray();
@@ -1986,7 +1997,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(new File(directory, "TEST").mkdir());
         assertTrue(new File(directory, "test.txt").createNewFile());
 
-        final IOFileFilter filter = new WildcardFileFilter("*", IOCase.INSENSITIVE);
+        final IOFileFilter filter = WildcardFileFilter.builder().setWildcards("*").setIoCase(IOCase.INSENSITIVE).get();
         for (final File file : FileUtils.listFiles(directory, filter, null)) {
             assertFalse(file.isDirectory(), file::getAbsolutePath);
         }
@@ -2012,8 +2023,11 @@ public class FileUtilsTest extends AbstractTempDirTest {
             final File subDir3 = new File(subDir2, "subdir3");
             subDir3.mkdir();
 
-            final Collection<File> files = FileUtils.listFilesAndDirs(subDir1, new WildcardFileFilter("*.*"),
-                new WildcardFileFilter("*"));
+            // @formatter:off
+            final Collection<File> files = FileUtils.listFilesAndDirs(subDir1,
+                    WildcardFileFilter.builder().setWildcards("*.*").get(),
+                    WildcardFileFilter.builder().setWildcards("*").get());
+            // @formatter:on
 
             assertEquals(4, files.size());
             assertTrue(files.contains(subDir1), "Should contain the directory.");
@@ -2492,6 +2506,13 @@ public class FileUtilsTest extends AbstractTempDirTest {
                 "Unexpected directory size");
     }
 
+    /**
+     * Requires admin privileges on Windows.
+     *
+     * @throws Exception For example java.nio.file.FileSystemException:
+     *                   C:\Users\you\AppData\Local\Temp\junit2324629522183300191\FileUtilsTest8613879743106252609\symlinked-dir: A required privilege is
+     *                   not held by the client.
+     */
     @Test
     public void testSizeOfDirectory() throws Exception {
         final File file = new File(tempDirFile, getName());
@@ -2517,6 +2538,13 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertEquals(TEST_DIRECTORY_SIZE, FileUtils.sizeOfDirectory(file), "Unexpected directory size");
     }
 
+    /**
+     * Requires admin privileges on Windows.
+     *
+     * @throws Exception For example java.nio.file.FileSystemException:
+     *                   C:\Users\you\AppData\Local\Temp\junit2324629522183300191\FileUtilsTest8613879743106252609\symlinked-dir: A required privilege is
+     *                   not held by the client.
+     */
     @Test
     public void testSizeOfDirectoryAsBigInteger() throws Exception {
         final File file = new File(tempDirFile, getName());
@@ -3031,6 +3059,13 @@ public class FileUtilsTest extends AbstractTempDirTest {
         TestUtils.assertEqualContent(text, file);
     }
 
+    /**
+     * Requires admin privileges on Windows.
+     *
+     * @throws Exception For example java.nio.file.FileSystemException:
+     *                   C:\Users\you\AppData\Local\Temp\junit2324629522183300191\FileUtilsTest8613879743106252609\symlinked-dir: A required privilege is
+     *                   not held by the client.
+     */
     @Test
     public void testWriteStringToFileIntoSymlinkedDir() throws Exception {
         final Path symlinkDir = createTempSymlinkedRelativeDir();

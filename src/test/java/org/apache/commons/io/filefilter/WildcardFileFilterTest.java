@@ -46,24 +46,28 @@ public class WildcardFileFilterTest extends AbstractFilterTest {
         assertFiltering(filter, new File("log.txt"), true);
         assertFiltering(filter, new File("log.TXT"), false);
         //
+        filter = WildcardFileFilter.builder().setWildcards("*.txt").setIoCase(IOCase.SENSITIVE).get();
+        assertFiltering(filter, new File("log.txt"), true);
+        assertFiltering(filter, new File("log.TXT"), false);
+        //
         assertFiltering(filter, new File("log.txt").toPath(), true);
         assertFiltering(filter, new File("log.TXT").toPath(), false);
 
-        filter = new WildcardFileFilter("*.txt", IOCase.INSENSITIVE);
+        filter = WildcardFileFilter.builder().setWildcards("*.txt").setIoCase(IOCase.INSENSITIVE).get();
         assertFiltering(filter, new File("log.txt"), true);
         assertFiltering(filter, new File("log.TXT"), true);
         //
         assertFiltering(filter, new File("log.txt").toPath(), true);
         assertFiltering(filter, new File("log.TXT").toPath(), true);
 
-        filter = new WildcardFileFilter("*.txt", IOCase.SYSTEM);
+        filter = WildcardFileFilter.builder().setWildcards("*.txt").setIoCase(IOCase.SYSTEM).get();
         assertFiltering(filter, new File("log.txt"), true);
         assertFiltering(filter, new File("log.TXT"), WINDOWS);
         //
         assertFiltering(filter, new File("log.txt").toPath(), true);
         assertFiltering(filter, new File("log.TXT").toPath(), WINDOWS);
 
-        filter = new WildcardFileFilter("*.txt", null);
+        filter = WildcardFileFilter.builder().setWildcards("*.txt").setIoCase(null).get();
         assertFiltering(filter, new File("log.txt"), true);
         assertFiltering(filter, new File("log.TXT"), false);
         //
@@ -78,29 +82,38 @@ public class WildcardFileFilterTest extends AbstractFilterTest {
         assertFiltering(filter, new File("Test.java").toPath(), true);
         assertFiltering(filter, new File("Test.class").toPath(), true);
         assertFiltering(filter, new File("Test.jsp").toPath(), false);
+        //
+        filter = WildcardFileFilter.builder().setWildcards("*.java", "*.class").get();
+        assertFiltering(filter, new File("Test.java"), true);
+        assertFiltering(filter, new File("Test.class"), true);
+        assertFiltering(filter, new File("Test.jsp"), false);
+        //
+        assertFiltering(filter, new File("Test.java").toPath(), true);
+        assertFiltering(filter, new File("Test.class").toPath(), true);
+        assertFiltering(filter, new File("Test.jsp").toPath(), false);
 
-        filter = new WildcardFileFilter(new String[] {"*.java", "*.class"}, IOCase.SENSITIVE);
+        filter = WildcardFileFilter.builder().setWildcards("*.java", "*.class").setIoCase(IOCase.SENSITIVE).get();
         assertFiltering(filter, new File("Test.java"), true);
         assertFiltering(filter, new File("Test.JAVA"), false);
         //
         assertFiltering(filter, new File("Test.java").toPath(), true);
         assertFiltering(filter, new File("Test.JAVA").toPath(), false);
 
-        filter = new WildcardFileFilter(new String[] {"*.java", "*.class"}, IOCase.INSENSITIVE);
+        filter = WildcardFileFilter.builder().setWildcards("*.java", "*.class").setIoCase(IOCase.INSENSITIVE).get();
         assertFiltering(filter, new File("Test.java"), true);
         assertFiltering(filter, new File("Test.JAVA"), true);
         //
         assertFiltering(filter, new File("Test.java").toPath(), true);
         assertFiltering(filter, new File("Test.JAVA").toPath(), true);
 
-        filter = new WildcardFileFilter(new String[] {"*.java", "*.class"}, IOCase.SYSTEM);
+        filter = WildcardFileFilter.builder().setWildcards("*.java", "*.class").setIoCase(IOCase.SYSTEM).get();
         assertFiltering(filter, new File("Test.java"), true);
         assertFiltering(filter, new File("Test.JAVA"), WINDOWS);
         //
         assertFiltering(filter, new File("Test.java").toPath(), true);
         assertFiltering(filter, new File("Test.JAVA").toPath(), WINDOWS);
 
-        filter = new WildcardFileFilter(new String[] {"*.java", "*.class"}, null);
+        filter = WildcardFileFilter.builder().setWildcards("*.java", "*.class").setIoCase(null).get();
         assertFiltering(filter, new File("Test.java"), true);
         assertFiltering(filter, new File("Test.JAVA"), false);
         //
@@ -108,7 +121,7 @@ public class WildcardFileFilterTest extends AbstractFilterTest {
         assertFiltering(filter, new File("Test.JAVA").toPath(), false);
 
         final List<String> patternList = Arrays.asList("*.txt", "*.xml", "*.gif");
-        final IOFileFilter listFilter = new WildcardFileFilter(patternList);
+        final IOFileFilter listFilter = WildcardFileFilter.builder().setWildcards(patternList).get();
         assertFiltering(listFilter, new File("Test.txt"), true);
         assertFiltering(listFilter, new File("Test.xml"), true);
         assertFiltering(listFilter, new File("Test.gif"), true);

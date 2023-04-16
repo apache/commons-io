@@ -245,7 +245,7 @@ public class TailerTest {
         final File file = new File(temporaryFolder, "tailer-create-with-delay-and-from-start-with-reopen-and-buffersize-and-charset.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
-        try (Tailer tailer = new Tailer.Builder(new NonStandardTailable(file), listener).build()) {
+        try (Tailer tailer = Tailer.builder().setTailable(new NonStandardTailable(file)).setTailerListener(listener).get()) {
             assertTrue(tailer.getTailable() instanceof NonStandardTailable);
             validateTailer(listener, file);
         }
@@ -541,6 +541,9 @@ public class TailerTest {
             TestUtils.sleep(idle);
         }
         TestUtils.sleep(delay + idle);
+        if (listener.exception != null) {
+            listener.exception.printStackTrace();
+        }
         assertNull(listener.exception, "Should not generate Exception");
         assertEquals(1, listener.initialized, "Expected init to be called");
         assertTrue(listener.notFound > 0, "fileNotFound should be called");

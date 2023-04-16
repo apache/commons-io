@@ -107,10 +107,14 @@ public class ReversedLinesFileReaderTestParamBlockSize {
 
     @ParameterizedTest(name = "BlockSize={0}")
     @MethodSource("blockSizes")
-    public void testEmptyFile(final int testParamBlockSize) throws URISyntaxException, IOException {
+    public void testEmptyFile(final int blockSize) throws URISyntaxException, IOException {
         final File testFileEmpty = TestResources.getFile("/test-file-empty.bin");
-        reversedLinesFileReader = new ReversedLinesFileReader(testFileEmpty, testParamBlockSize, UTF_8);
-        assertNull(reversedLinesFileReader.readLine());
+        try (ReversedLinesFileReader reader = new ReversedLinesFileReader(testFileEmpty, blockSize, UTF_8)) {
+            assertNull(reader.readLine());
+        }
+        try (ReversedLinesFileReader reader = ReversedLinesFileReader.builder().setFile(testFileEmpty).setBufferSize(blockSize).setCharset(UTF_8).get()) {
+            assertNull(reader.readLine());
+        }
     }
 
     @Test

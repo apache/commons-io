@@ -29,12 +29,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.apache.commons.io.build.AbstractStreamBuilder;
+
 /**
- * Implements {@link InputStream} to asynchronously read ahead from an underlying input stream when a specified amount
- * of data has been read from the current buffer. It does so by maintaining two buffers: an active buffer and a read
- * ahead buffer. The active buffer contains data which should be returned when a read() call is issued. The read ahead
- * buffer is used to asynchronously read from the underlying input stream. When the current active buffer is exhausted,
- * we flip the two buffers so that we can start reading from the read ahead buffer without being blocked by disk I/O.
+ * Implements {@link InputStream} to asynchronously read ahead from an underlying input stream when a specified amount of data has been read from the current
+ * buffer. It does so by maintaining two buffers: an active buffer and a read ahead buffer. The active buffer contains data which should be returned when a
+ * read() call is issued. The read ahead buffer is used to asynchronously read from the underlying input stream. When the current active buffer is exhausted, we
+ * flip the two buffers so that we can start reading from the read ahead buffer without being blocked by disk I/O.
  * <p>
  * This class was ported and adapted from Apache Spark commit 933dc6cb7b3de1d8ccaf73d124d6eb95b947ed19.
  * </p>
@@ -42,6 +43,54 @@ import java.util.concurrent.locks.ReentrantLock;
  * @since 2.9.0
  */
 public class ReadAheadInputStream extends InputStream {
+
+    /**
+     * Builds a new {@link ReaderInputStream} instance.
+     * <p>
+     * For example:
+     * </p>
+     * <pre>{@code
+     * ReadAheadInputStream s = ReadAheadInputStream.builder()
+     *   .setPath(path)
+     *   .setExecutorService(Executors.newSingleThreadExecutor(ReadAheadInputStream::newThread))
+     *   .get()}
+     * </pre>
+     * <p>
+     * @since 2.12.02
+     */
+    public static class Builder extends AbstractStreamBuilder<ReadAheadInputStream, Builder> {
+
+        private ExecutorService executorService;
+
+        @SuppressWarnings("resource")
+        @Override
+        public ReadAheadInputStream get() throws IOException {
+            return new ReadAheadInputStream(getOrigin().getInputStream(), getBufferSize(), executorService != null ? executorService : newExecutorService(),
+                    executorService == null);
+        }
+
+        /**
+         * Sets the executor service for the read-ahead thread.
+         *
+         * @param executorService the executor service for the read-ahead thread.
+         * @return this
+         */
+        public Builder setExecutorService(final ExecutorService executorService) {
+            this.executorService = executorService;
+            return this;
+        }
+
+    }
+
+    /**
+     * Constructs a new {@link Builder}.
+     *
+     * @return a new {@link Builder}.
+     * @since 2.12.0
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
 
     private static final ThreadLocal<byte[]> BYTE_ARRAY_1 = ThreadLocal.withInitial(() -> new byte[1]);
 
@@ -115,9 +164,11 @@ public class ReadAheadInputStream extends InputStream {
     /**
      * Creates an instance with the specified buffer size and read-ahead threshold
      *
-     * @param inputStream The underlying input stream.
+     * @param inputStream       The underlying input stream.
      * @param bufferSizeInBytes The buffer size.
+     * @deprecated Use {@link #builder()}
      */
+    @Deprecated
     public ReadAheadInputStream(final InputStream inputStream, final int bufferSizeInBytes) {
         this(inputStream, bufferSizeInBytes, newExecutorService(), true);
     }
@@ -125,25 +176,26 @@ public class ReadAheadInputStream extends InputStream {
     /**
      * Creates an instance with the specified buffer size and read-ahead threshold
      *
-     * @param inputStream The underlying input stream.
+     * @param inputStream       The underlying input stream.
      * @param bufferSizeInBytes The buffer size.
-     * @param executorService An executor service for the read-ahead thread.
+     * @param executorService   An executor service for the read-ahead thread.
+     * @deprecated Use {@link #builder()}
      */
-    public ReadAheadInputStream(final InputStream inputStream, final int bufferSizeInBytes,
-        final ExecutorService executorService) {
+    @Deprecated
+    public ReadAheadInputStream(final InputStream inputStream, final int bufferSizeInBytes, final ExecutorService executorService) {
         this(inputStream, bufferSizeInBytes, executorService, false);
     }
 
     /**
      * Creates an instance with the specified buffer size and read-ahead threshold
      *
-     * @param inputStream The underlying input stream.
-     * @param bufferSizeInBytes The buffer size.
-     * @param executorService An executor service for the read-ahead thread.
+     * @param inputStream             The underlying input stream.
+     * @param bufferSizeInBytes       The buffer size.
+     * @param executorService         An executor service for the read-ahead thread.
      * @param shutdownExecutorService Whether or not to shut down the given ExecutorService on close.
      */
-    private ReadAheadInputStream(final InputStream inputStream, final int bufferSizeInBytes,
-        final ExecutorService executorService, final boolean shutdownExecutorService) {
+    private ReadAheadInputStream(final InputStream inputStream, final int bufferSizeInBytes, final ExecutorService executorService,
+            final boolean shutdownExecutorService) {
         if (bufferSizeInBytes <= 0) {
             throw new IllegalArgumentException("bufferSizeInBytes should be greater than 0, but the value is " + bufferSizeInBytes);
         }
@@ -396,8 +448,8 @@ public class ReadAheadInputStream extends InputStream {
     }
 
     /**
-     * Internal skip function which should be called only from skip(). The assumption is that the stateChangeLock is
-     * already acquired in the caller before calling this function.
+     * Internal skip function which should be called only from skip(). The assumption is that the stateChangeLock is already acquired in the caller before
+     * calling this function.
      *
      * @param n the number of bytes to be skipped.
      * @return the actual number of bytes skipped.

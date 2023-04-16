@@ -59,6 +59,12 @@ public class FileWriterWithEncodingTest {
             }
         });
         assertFalse(file1.exists());
+        assertThrows(IOException.class, () -> {
+            try (Writer writer = FileWriterWithEncoding.builder().setFile(temporaryFolder).setCharset(defaultEncoding).get()) {
+                // empty
+            }
+        });
+        assertFalse(file1.exists());
     }
 
     @Test
@@ -80,6 +86,12 @@ public class FileWriterWithEncodingTest {
         assertEquals(1025, file1.length());
 
         try (FileWriterWithEncoding fw1 = new FileWriterWithEncoding(file1, defaultEncoding)) {
+            fw1.write("ABcd");
+        }
+
+        assertEquals(4, file1.length());
+
+        try (FileWriterWithEncoding fw1 = FileWriterWithEncoding.builder().setFile(file1).setCharset(defaultEncoding).get()) {
             fw1.write("ABcd");
         }
 
@@ -118,6 +130,18 @@ public class FileWriterWithEncodingTest {
         }
 
         assertEquals(7, file1.length());
+
+        // @formatter:off
+        try (FileWriterWithEncoding fw1 = FileWriterWithEncoding.builder()
+                .setFile(file1)
+                .setCharset(defaultEncoding)
+                .setAppend(true)
+                .get()) {
+            fw1.write("XyZ");
+        }
+        // @formatter:on
+
+        assertEquals(10, file1.length());
     }
 
     @Test
@@ -125,6 +149,14 @@ public class FileWriterWithEncodingTest {
         try (FileWriterWithEncoding writer = new FileWriterWithEncoding(file2, Charset.defaultCharset())) {
             successfulRun(writer);
         }
+        // @formatter:off
+        try (FileWriterWithEncoding writer = FileWriterWithEncoding.builder()
+                .setFile(file2)
+                .setCharset(Charset.defaultCharset())
+                .get()) {
+            successfulRun(writer);
+        }
+        // @formatter:on
     }
 
     @Test
@@ -132,6 +164,14 @@ public class FileWriterWithEncodingTest {
         try (FileWriterWithEncoding writer = new FileWriterWithEncoding(file2, Charset.defaultCharset().newEncoder())) {
             successfulRun(writer);
         }
+        // @formatter:off
+        try (FileWriterWithEncoding writer = FileWriterWithEncoding.builder()
+                .setFile(file2)
+                .setCharsetEncoder(Charset.defaultCharset().newEncoder())
+                .get()) {
+            successfulRun(writer);
+        }
+        // @formatter:on
     }
 
     @Test
@@ -144,6 +184,12 @@ public class FileWriterWithEncodingTest {
     @Test
     public void sameEncoding_null_CharsetEncoder_constructor() throws Exception {
         try (FileWriterWithEncoding writer = new FileWriterWithEncoding(file2.getPath(), (CharsetEncoder) null)) {
+            successfulRun(writer);
+        }
+        try (FileWriterWithEncoding writer = FileWriterWithEncoding.builder().setFile(file2.getPath()).get()) {
+            successfulRun(writer);
+        }
+        try (FileWriterWithEncoding writer = FileWriterWithEncoding.builder().setFile(file2.getPath()).setCharsetEncoder(null).get()) {
             successfulRun(writer);
         }
     }
@@ -160,6 +206,14 @@ public class FileWriterWithEncodingTest {
         try (FileWriterWithEncoding writer = new FileWriterWithEncoding(file2.getPath(), Charset.defaultCharset())) {
             successfulRun(writer);
         }
+        // @formatter:off
+        try (FileWriterWithEncoding writer = FileWriterWithEncoding.builder()
+                .setFile(file2.getPath())
+                .setCharset(Charset.defaultCharset())
+                .get()) {
+            successfulRun(writer);
+        }
+        // @formatter:on
     }
 
     @Test
@@ -181,6 +235,14 @@ public class FileWriterWithEncodingTest {
         try (FileWriterWithEncoding writer = new FileWriterWithEncoding(file2.getPath(), defaultEncoding)) {
             successfulRun(writer);
         }
+        // @formatter:off
+        try (FileWriterWithEncoding writer = FileWriterWithEncoding.builder()
+                .setFile(file2.getPath())
+                .setCharset(defaultEncoding)
+                .get()) {
+            successfulRun(writer);
+        }
+        // @formatter:on
     }
 
     @BeforeEach

@@ -24,8 +24,8 @@ import org.junit.jupiter.api.BeforeEach;
 /**
  * Tests functionality of {@link BufferedFileChannelInputStream}.
  *
- * This class was ported and adapted from Apache Spark commit 933dc6cb7b3de1d8ccaf73d124d6eb95b947ed19 where it was
- * called {@code BufferedFileChannelInputStreamSuite}.
+ * This class was ported and adapted from Apache Spark commit 933dc6cb7b3de1d8ccaf73d124d6eb95b947ed19 where it was called
+ * {@code BufferedFileChannelInputStreamSuite}.
  */
 public class BufferedFileChannelInputStreamTest extends AbstractInputStreamTest {
 
@@ -37,7 +37,10 @@ public class BufferedFileChannelInputStreamTest extends AbstractInputStreamTest 
         // @formatter:off
         inputStreams = new InputStream[] {
             new BufferedFileChannelInputStream(inputFile), // default
-            new BufferedFileChannelInputStream(inputFile, 123) // small, unaligned buffer
+            new BufferedFileChannelInputStream(inputFile, 123), // small, unaligned buffer size
+            BufferedFileChannelInputStream.builder().setPath(inputFile).get(), // default
+            BufferedFileChannelInputStream.builder().setPath(inputFile).setBufferSize(123).get(), // small, unaligned buffer size
+            BufferedFileChannelInputStream.builder().setURI(inputFile.toUri()).setBufferSize(1024).get() // URI and buffer size
         };
         //@formatter:on
     }

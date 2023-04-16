@@ -231,7 +231,50 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    void testSmallFile() throws IOException {
+    void testSkipToEndOfCurrentBufferBuilder() throws IOException {
+        // setup
+        final Path file = createTestFile(100);
+        final byte[] expectedData = Files.readAllBytes(file);
+
+        // test
+        try (MemoryMappedFileInputStream inputStream = MemoryMappedFileInputStream.builder().setPath(file).setBufferSize(10).get()) {
+            assertEquals(10, inputStream.getBufferSize());
+            IOUtils.toByteArray(inputStream, 5);
+            assertEquals(5, inputStream.skip(5));
+            final byte[] data = IOUtils.toByteArray(inputStream);
+            // verify
+            assertArrayEquals(Arrays.copyOfRange(expectedData, 10, expectedData.length), data);
+        }
+    }
+
+    @Test
+    void testSmallFileBuilder() throws IOException {
+        // setup
+        final Path file = createTestFile(100);
+        final byte[] expectedData = Files.readAllBytes(file);
+
+        // test
+        try (InputStream inputStream = MemoryMappedFileInputStream.builder().setFile(file.toFile()).get()) {
+            // verify
+            assertArrayEquals(expectedData, IOUtils.toByteArray(inputStream));
+        }
+    }
+
+    @Test
+    void testSmallPathBuilder() throws IOException {
+        // setup
+        final Path file = createTestFile(100);
+        final byte[] expectedData = Files.readAllBytes(file);
+
+        // test
+        try (InputStream inputStream = MemoryMappedFileInputStream.builder().setPath(file).get()) {
+            // verify
+            assertArrayEquals(expectedData, IOUtils.toByteArray(inputStream));
+        }
+    }
+
+    @Test
+    void testSmallPath() throws IOException {
         // setup
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);
