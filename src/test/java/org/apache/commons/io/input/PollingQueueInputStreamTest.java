@@ -14,26 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.io.input;
 
 import java.util.concurrent.BlockingQueue;
 
-import org.apache.commons.io.output.QueueOutputStreamTest;
+import org.apache.commons.io.input.AbstractBlockingQueueInputStream.PollingQueueInputStream;
 
 /**
- * Test {@link QueueInputStream}.
- *
- * @see {@link QueueOutputStreamTest}
+ * Tests {@link PollingQueueInputStream}.
  */
-public class QueueInputStreamTest extends AbstractBlockingQueueInputStreamTest {
+public class PollingQueueInputStreamTest extends AbstractBlockingQueueInputStreamTest {
 
     @Override
     protected AbstractBlockingQueueInputStream newQueueInputStream() {
-        return new QueueInputStream();
+        return new PollingQueueInputStream();
     }
 
     @Override
     protected AbstractBlockingQueueInputStream newQueueInputStream(final BlockingQueue<Integer> queue) {
-        return new QueueInputStream(queue);
+        return new PollingQueueInputStream(queue);
     }
+
 }

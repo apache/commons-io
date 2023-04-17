@@ -19,10 +19,8 @@ package org.apache.commons.io.input;
 import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
-import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -54,10 +52,10 @@ import org.apache.commons.io.output.QueueOutputStream;
  *
  * @see QueueOutputStream
  * @since 2.9.0
+ * @deprecated Use {@link AbstractBlockingQueueInputStream.PollingQueueInputStream}
  */
-public class QueueInputStream extends InputStream {
-
-    private final BlockingQueue<Integer> blockingQueue;
+@Deprecated
+public class QueueInputStream extends AbstractBlockingQueueInputStream {
 
     /**
      * Constructs a new instance with no limit to its internal buffer size.
@@ -67,22 +65,12 @@ public class QueueInputStream extends InputStream {
     }
 
     /**
-     * Constructs a new instance with given buffer
+     * Constructs a new instance with given queue.
      *
-     * @param blockingQueue backing queue for the stream
+     * @param blockingQueue backing queue for the stream.
      */
     public QueueInputStream(final BlockingQueue<Integer> blockingQueue) {
-        this.blockingQueue = Objects.requireNonNull(blockingQueue, "blockingQueue");
-    }
-
-    /**
-     * Creates a new QueueOutputStream instance connected to this. Writes to the output stream will be visible to this
-     * input stream.
-     *
-     * @return QueueOutputStream connected to this stream
-     */
-    public QueueOutputStream newQueueOutputStream() {
-        return new QueueOutputStream(blockingQueue);
+        super(blockingQueue);
     }
 
     /**
@@ -92,7 +80,7 @@ public class QueueInputStream extends InputStream {
      */
     @Override
     public int read() {
-        final Integer value = blockingQueue.poll();
+        final Integer value = getBlockingQueue().poll();
         return value == null ? EOF : 0xFF & value;
     }
 
