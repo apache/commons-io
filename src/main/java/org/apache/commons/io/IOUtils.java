@@ -2008,7 +2008,7 @@ public class IOUtils {
      * @since 2.5
      */
     public static byte[] readFully(final InputStream input, final int length) throws IOException {
-        final byte[] buffer = IOUtils.byteArray(length);
+        final byte[] buffer = byteArray(length);
         readFully(input, buffer, 0, buffer.length);
         return buffer;
     }
@@ -2585,7 +2585,7 @@ public class IOUtils {
             return EMPTY_BYTE_ARRAY;
         }
 
-        final byte[] data = IOUtils.byteArray(size);
+        final byte[] data = byteArray(size);
         int offset = 0;
         int read;
 
@@ -2718,7 +2718,7 @@ public class IOUtils {
      * @since 2.4
      */
     public static byte[] toByteArray(final URI uri) throws IOException {
-        return IOUtils.toByteArray(uri.toURL());
+        return toByteArray(uri.toURL());
     }
 
     /**
@@ -2732,7 +2732,7 @@ public class IOUtils {
      */
     public static byte[] toByteArray(final URL url) throws IOException {
         try (CloseableURLConnection urlConnection = CloseableURLConnection.open(url)) {
-            return IOUtils.toByteArray(urlConnection);
+            return toByteArray(urlConnection);
         }
     }
 
@@ -2747,7 +2747,7 @@ public class IOUtils {
      */
     public static byte[] toByteArray(final URLConnection urlConnection) throws IOException {
         try (InputStream inputStream = urlConnection.getInputStream()) {
-            return IOUtils.toByteArray(inputStream);
+            return toByteArray(inputStream);
         }
     }
 
