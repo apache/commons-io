@@ -1059,11 +1059,9 @@ public class FileUtils {
      * @throws IOException if an IO error occurs during copying
      */
     public static void copyURLToFile(final URL source, final File destination) throws IOException {
-        try (InputStream stream = source.openStream()) {
-            final Path path = destination.toPath();
-            PathUtils.createParentDirectories(path);
-            Files.copy(stream, path, StandardCopyOption.REPLACE_EXISTING);
-        }
+        final Path path = destination.toPath();
+        PathUtils.createParentDirectories(path);
+        PathUtils.copy(source::openStream, path, StandardCopyOption.REPLACE_EXISTING);
     }
 
     /**
@@ -2597,9 +2595,7 @@ public class FileUtils {
      * @since 2.3
      */
     public static String readFileToString(final File file, final Charset charsetName) throws IOException {
-        try (InputStream inputStream = Files.newInputStream(file.toPath())) {
-            return IOUtils.toString(inputStream, Charsets.toCharset(charsetName));
-        }
+        return IOUtils.toString(() -> Files.newInputStream(file.toPath()), Charsets.toCharset(charsetName));
     }
 
     /**

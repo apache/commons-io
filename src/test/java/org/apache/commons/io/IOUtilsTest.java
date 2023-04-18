@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -53,6 +54,7 @@ import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.Selector;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -1611,6 +1613,16 @@ public class IOUtilsTest {
             assertEquals(0, fin.available(), "Not all bytes were read");
             assertEquals(FILE_SIZE, out.length(), "Wrong output size");
         }
+    }
+
+    @Test
+    public void testToString_InputStreamSupplier() throws Exception {
+        final String out = IOUtils.toString(() -> Files.newInputStream(testFilePath), Charset.defaultCharset());
+        assertNotNull(out);
+        assertEquals(FILE_SIZE, out.length(), "Wrong output size");
+        assertNull(IOUtils.toString(null, Charset.defaultCharset(), () -> null));
+        assertNull(IOUtils.toString(() -> null, Charset.defaultCharset(), () -> null));
+        assertEquals("A", IOUtils.toString(null, Charset.defaultCharset(), () -> "A"));
     }
 
     @Test

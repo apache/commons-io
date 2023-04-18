@@ -57,7 +57,7 @@ import org.apache.commons.io.function.Uncheck;
 public class FilesUncheck {
 
     /**
-     * Delegates to {@link Files#copy(InputStream, Path,CopyOption...)} throwing {@link UncheckedIOException} instead of
+     * Delegates to {@link Files#copy(InputStream, Path, CopyOption...)} throwing {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
      * @param in See delegate.

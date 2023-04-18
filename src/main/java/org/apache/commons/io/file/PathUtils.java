@@ -76,6 +76,7 @@ import org.apache.commons.io.file.Counters.PathCounters;
 import org.apache.commons.io.file.attribute.FileTimes;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.function.IOFunction;
+import org.apache.commons.io.function.IOSupplier;
 import org.apache.commons.io.function.Uncheck;
 
 /**
@@ -255,6 +256,22 @@ public final class PathUtils {
     }
 
     /**
+     * Copies the InputStream from the supplier with {@link Files#copy(InputStream, Path, CopyOption...)}.
+     *
+     * @param in Supplies the InputStream.
+     * @param target See {@link Files#copy(InputStream, Path, CopyOption...)}.
+     * @param copyOptions See {@link Files#copy(InputStream, Path, CopyOption...)}.
+     * @return See {@link Files#copy(InputStream, Path, CopyOption...)}
+     * @throws IOException See {@link Files#copy(InputStream, Path, CopyOption...)}
+     * @since 2.12.0
+     */
+    public static long copy(final IOSupplier<InputStream> in, final Path target, final CopyOption... copyOptions) throws IOException {
+        try (InputStream inputStream = in.get()) {
+            return Files.copy(inputStream, target, copyOptions);
+        }
+    }
+
+    /**
      * Copies a directory to another directory.
      *
      * @param sourceDirectory The source directory.
@@ -280,10 +297,8 @@ public final class PathUtils {
      * @see Files#copy(InputStream, Path, CopyOption...)
      */
     public static Path copyFile(final URL sourceFile, final Path targetFile, final CopyOption... copyOptions) throws IOException {
-        try (InputStream inputStream = sourceFile.openStream()) {
-            Files.copy(inputStream, targetFile, copyOptions);
-            return targetFile;
-        }
+        copy(sourceFile::openStream, targetFile, copyOptions);
+        return targetFile;
     }
 
     /**
@@ -311,11 +326,9 @@ public final class PathUtils {
      * @see Files#copy(InputStream, Path, CopyOption...)
      */
     public static Path copyFileToDirectory(final URL sourceFile, final Path targetDirectory, final CopyOption... copyOptions) throws IOException {
-        try (InputStream inputStream = sourceFile.openStream()) {
-            final Path resolve = targetDirectory.resolve(FilenameUtils.getName(sourceFile.getFile()));
-            Files.copy(inputStream, resolve, copyOptions);
-            return resolve;
-        }
+        final Path resolve = targetDirectory.resolve(FilenameUtils.getName(sourceFile.getFile()));
+        copy(sourceFile::openStream, resolve, copyOptions);
+        return resolve;
     }
 
     /**
@@ -572,7 +585,7 @@ public final class PathUtils {
      * @param path the path to delete.
      * @since 3.13.0
      */
-    public static void deleteOnExit(Path path) {
+    public static void deleteOnExit(final Path path) {
         Objects.requireNonNull(path.toFile()).deleteOnExit();
     }
 

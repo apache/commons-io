@@ -56,6 +56,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.function.IOConsumer;
+import org.apache.commons.io.function.IOSupplier;
 import org.apache.commons.io.input.QueueInputStream;
 import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -1089,7 +1090,7 @@ public class IOUtils {
      * This method uses {@link InputStreamReader}.
      * </p>
      *
-     * @param input the {@link InputStream} to read from
+     * @param input the {@link InputStream} to read
      * @param writer the {@link Writer} to write to
      * @throws NullPointerException if the input or output is null
      * @throws IOException          if an I/O error occurs
@@ -1113,7 +1114,7 @@ public class IOUtils {
      * This method uses {@link InputStreamReader}.
      * </p>
      *
-     * @param input the {@link InputStream} to read from
+     * @param input the {@link InputStream} to read
      * @param writer the {@link Writer} to write to
      * @param inputCharset the charset to use for the input stream, null means platform default
      * @throws NullPointerException if the input or output is null
@@ -1141,7 +1142,7 @@ public class IOUtils {
      * This method uses {@link InputStreamReader}.
      * </p>
      *
-     * @param input the {@link InputStream} to read from
+     * @param input the {@link InputStream} to read
      * @param writer the {@link Writer} to write to
      * @param inputCharsetName the name of the requested charset for the InputStream, null means platform default
      * @throws NullPointerException                         if the input or output is null
@@ -1200,7 +1201,7 @@ public class IOUtils {
      * use the {@link #copyLarge(Reader, Writer)} method.
      * </p>
      *
-     * @param reader the {@link Reader} to read from
+     * @param reader the {@link Reader} to read
      * @param output the {@link Appendable} to write to
      * @return the number of characters copied, or -1 if &gt; Integer.MAX_VALUE
      * @throws NullPointerException if the input or output is null
@@ -1218,7 +1219,7 @@ public class IOUtils {
      * {@link BufferedReader}.
      * </p>
      *
-     * @param reader the {@link Reader} to read from
+     * @param reader the {@link Reader} to read
      * @param output the {@link Appendable} to write to
      * @param buffer the buffer to be used for the copy
      * @return the number of characters copied
@@ -1253,7 +1254,7 @@ public class IOUtils {
      * This method uses {@link OutputStreamWriter}.
      * </p>
      *
-     * @param reader the {@link Reader} to read from
+     * @param reader the {@link Reader} to read
      * @param output the {@link OutputStream} to write to
      * @throws NullPointerException if the input or output is null
      * @throws IOException          if an I/O error occurs
@@ -1282,7 +1283,7 @@ public class IOUtils {
      * This method uses {@link OutputStreamWriter}.
      * </p>
      *
-     * @param reader the {@link Reader} to read from
+     * @param reader the {@link Reader} to read
      * @param output the {@link OutputStream} to write to
      * @param outputCharset the charset to use for the OutputStream, null means platform default
      * @throws NullPointerException if the input or output is null
@@ -1318,7 +1319,7 @@ public class IOUtils {
      * This method uses {@link OutputStreamWriter}.
      * </p>
      *
-     * @param reader the {@link Reader} to read from
+     * @param reader the {@link Reader} to read
      * @param output the {@link OutputStream} to write to
      * @param outputCharsetName the name of the requested charset for the OutputStream, null means platform default
      * @throws NullPointerException                         if the input or output is null
@@ -1476,7 +1477,7 @@ public class IOUtils {
      * </p>
      * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
      *
-     * @param input the {@link InputStream} to read from
+     * @param input the {@link InputStream} to read
      * @param output the {@link OutputStream} to write to
      * @param inputOffset : number of bytes to skip from input before copying
      * -ve values are ignored
@@ -1504,7 +1505,7 @@ public class IOUtils {
      * this is done to guarantee that the correct number of characters are skipped.
      * </p>
      *
-     * @param input the {@link InputStream} to read from
+     * @param input the {@link InputStream} to read
      * @param output the {@link OutputStream} to write to
      * @param inputOffset : number of bytes to skip from input before copying
      * -ve values are ignored
@@ -1598,7 +1599,7 @@ public class IOUtils {
      * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
      * </p>
      *
-     * @param reader the {@link Reader} to read from
+     * @param reader the {@link Reader} to read
      * @param writer the {@link Writer} to write to
      * @param inputOffset : number of chars to skip from input before copying
      * -ve values are ignored
@@ -1621,7 +1622,7 @@ public class IOUtils {
      * {@link BufferedReader}.
      * </p>
      *
-     * @param reader the {@link Reader} to read from
+     * @param reader the {@link Reader} to read
      * @param writer the {@link Writer} to write to
      * @param inputOffset : number of chars to skip from input before copying
      * -ve values are ignored
@@ -1745,7 +1746,7 @@ public class IOUtils {
      * }
      * </pre>
      *
-     * @param input the {@link InputStream} to read from, not null
+     * @param input the {@link InputStream} to read, not null
      * @param charset the charset to use, null means platform default
      * @return an Iterator of the lines in the reader, never null
      * @throws IllegalArgumentException if the input is null
@@ -1780,7 +1781,7 @@ public class IOUtils {
      * }
      * </pre>
      *
-     * @param input the {@link InputStream} to read from, not null
+     * @param input the {@link InputStream} to read, not null
      * @param charsetName the encoding to use, null means platform default
      * @return an Iterator of the lines in the reader, never null
      * @throws IllegalArgumentException                     if the input is null
@@ -1817,7 +1818,7 @@ public class IOUtils {
      * }
      * </pre>
      *
-     * @param reader the {@link Reader} to read from, not null
+     * @param reader the {@link Reader} to read, not null
      * @return an Iterator of the lines in the reader, never null
      * @throws IllegalArgumentException if the reader is null
      * @since 1.2
@@ -2083,7 +2084,7 @@ public class IOUtils {
      * {@link BufferedInputStream}.
      * </p>
      *
-     * @param input the {@link InputStream} to read from, not null
+     * @param input the {@link InputStream} to read, not null
      * @return the list of Strings, never null
      * @throws NullPointerException if the input is null
      * @throws UncheckedIOException if an I/O error occurs
@@ -2103,7 +2104,7 @@ public class IOUtils {
      * {@link BufferedInputStream}.
      * </p>
      *
-     * @param input the {@link InputStream} to read from, not null
+     * @param input the {@link InputStream} to read, not null
      * @param charset the charset to use, null means platform default
      * @return the list of Strings, never null
      * @throws NullPointerException if the input is null
@@ -2126,7 +2127,7 @@ public class IOUtils {
      * {@link BufferedInputStream}.
      * </p>
      *
-     * @param input the {@link InputStream} to read from, not null
+     * @param input the {@link InputStream} to read, not null
      * @param charsetName the name of the requested charset, null means platform default
      * @return the list of Strings, never null
      * @throws NullPointerException                         if the input is null
@@ -2148,7 +2149,7 @@ public class IOUtils {
      * {@link BufferedReader}.
      * </p>
      *
-     * @param reader the {@link Reader} to read from, not null
+     * @param reader the {@link Reader} to read, not null
      * @return the list of Strings, never null
      * @throws NullPointerException if the input is null
      * @throws UncheckedIOException if an I/O error occurs
@@ -2607,7 +2608,7 @@ public class IOUtils {
      * before using {@link IOUtils#toByteArray(InputStream, int)} to read into the byte array.
      * (Arrays can have no more than Integer.MAX_VALUE entries anyway)
      *
-     * @param input the {@link InputStream} to read from
+     * @param input the {@link InputStream} to read
      * @param size the size of {@link InputStream} to read, where 0 &lt; {@code size} &lt;= min(Integer.MAX_VALUE, length of input stream).
      * @return byte [] the requested byte array, of length {@code size}
      * @throws IOException              if an I/O error occurs or {@link InputStream} length is less than {@code size}
@@ -2630,7 +2631,7 @@ public class IOUtils {
      * {@link BufferedReader}.
      * </p>
      *
-     * @param reader the {@link Reader} to read from
+     * @param reader the {@link Reader} to read
      * @return the requested byte array
      * @throws NullPointerException if the input is null
      * @throws IOException          if an I/O error occurs
@@ -2649,7 +2650,7 @@ public class IOUtils {
      * {@link BufferedReader}.
      * </p>
      *
-     * @param reader the {@link Reader} to read from
+     * @param reader the {@link Reader} to read
      * @param charset the charset to use, null means platform default
      * @return the requested byte array
      * @throws NullPointerException if the input is null
@@ -2675,7 +2676,7 @@ public class IOUtils {
      * {@link BufferedReader}.
      * </p>
      *
-     * @param reader the {@link Reader} to read from
+     * @param reader the {@link Reader} to read
      * @param charsetName the name of the requested charset, null means platform default
      * @return the requested byte array
      * @throws NullPointerException                         if the input is null
@@ -2758,7 +2759,7 @@ public class IOUtils {
      * {@link BufferedInputStream}.
      * </p>
      *
-     * @param inputStream the {@link InputStream} to read from
+     * @param inputStream the {@link InputStream} to read
      * @return the requested character array
      * @throws NullPointerException if the input is null
      * @throws IOException          if an I/O error occurs
@@ -2778,7 +2779,7 @@ public class IOUtils {
      * {@link BufferedInputStream}.
      * </p>
      *
-     * @param inputStream the {@link InputStream} to read from
+     * @param inputStream the {@link InputStream} to read
      * @param charset the charset to use, null means platform default
      * @return the requested character array
      * @throws NullPointerException if the input is null
@@ -2804,7 +2805,7 @@ public class IOUtils {
      * {@link BufferedInputStream}.
      * </p>
      *
-     * @param inputStream the {@link InputStream} to read from
+     * @param inputStream the {@link InputStream} to read
      * @param charsetName the name of the requested charset, null means platform default
      * @return the requested character array
      * @throws NullPointerException                         if the input is null
@@ -2825,7 +2826,7 @@ public class IOUtils {
      * {@link BufferedReader}.
      * </p>
      *
-     * @param reader the {@link Reader} to read from
+     * @param reader the {@link Reader} to read
      * @return the requested character array
      * @throws NullPointerException if the input is null
      * @throws IOException          if an I/O error occurs
@@ -2935,7 +2936,7 @@ public class IOUtils {
      * Gets the contents of a {@code byte[]} as a String
      * using the default character encoding of the platform.
      *
-     * @param input the byte array to read from
+     * @param input the byte array to read
      * @return the requested String
      * @throws NullPointerException if the input is null
      * @deprecated 2.5 Use {@link String#String(byte[])} instead
@@ -2954,7 +2955,7 @@ public class IOUtils {
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      * </p>
      *
-     * @param input the byte array to read from
+     * @param input the byte array to read
      * @param charsetName the name of the requested charset, null means platform default
      * @return the requested String
      * @throws NullPointerException if the input is null
@@ -2971,7 +2972,7 @@ public class IOUtils {
      * {@link BufferedInputStream}.
      * </p>
      *
-     * @param input the {@link InputStream} to read from
+     * @param input the {@link InputStream} to read
      * @return the requested String
      * @throws NullPointerException if the input is null
      * @throws IOException          if an I/O error occurs
@@ -2990,7 +2991,7 @@ public class IOUtils {
      * {@link BufferedInputStream}.
      * </p>
      *
-     * @param input the {@link InputStream} to read from
+     * @param input the {@link InputStream} to read
      * @param charset the charset to use, null means platform default
      * @return the requested String
      * @throws NullPointerException if the input is null
@@ -3016,7 +3017,7 @@ public class IOUtils {
      * {@link BufferedInputStream}.
      * </p>
      *
-     * @param input the {@link InputStream} to read from
+     * @param input the {@link InputStream} to read
      * @param charsetName the name of the requested charset, null means platform default
      * @return the requested String
      * @throws NullPointerException                         if the input is null
@@ -3031,13 +3032,59 @@ public class IOUtils {
     }
 
     /**
+     * Gets the contents of an {@link InputStream} from a supplier as a String
+     * using the specified character encoding.
+     * <p>
+     * This method buffers the input internally, so there is no need to use a
+     * {@link BufferedInputStream}.
+     * </p>
+     *
+     * @param input supplies the {@link InputStream} to read
+     * @param charset the charset to use, null means platform default
+     * @return the requested String
+     * @throws NullPointerException if the input is null
+     * @throws IOException          if an I/O error occurs
+     * @since 2.12.0
+     */
+    public static String toString(final IOSupplier<InputStream> input, final Charset charset) throws IOException {
+        return toString(input, charset, () -> {
+            throw new NullPointerException("input");
+        });
+    }
+
+    /**
+     * Gets the contents of an {@link InputStream} from a supplier as a String
+     * using the specified character encoding.
+     * <p>
+     * This method buffers the input internally, so there is no need to use a
+     * {@link BufferedInputStream}.
+     * </p>
+     *
+     * @param input supplies the {@link InputStream} to read
+     * @param charset the charset to use, null means platform default
+     * @param defaultString the default return value if the supplier or its value is null.
+     * @return the requested String
+     * @throws NullPointerException if the input is null
+     * @throws IOException          if an I/O error occurs
+     * @since 2.12.0
+     */
+    public static String toString(final IOSupplier<InputStream> input, final Charset charset, final IOSupplier<String> defaultString) throws IOException {
+        if (input == null) {
+            return defaultString.get();
+        }
+        try (InputStream inputStream = input.get()) {
+            return inputStream != null ? toString(inputStream, charset) : defaultString.get();
+        }
+    }
+
+    /**
      * Gets the contents of a {@link Reader} as a String.
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@link BufferedReader}.
      * </p>
      *
-     * @param reader the {@link Reader} to read from
+     * @param reader the {@link Reader} to read
      * @return the requested String
      * @throws NullPointerException if the input is null
      * @throws IOException          if an I/O error occurs
@@ -3116,9 +3163,7 @@ public class IOUtils {
      * @since 2.3
      */
     public static String toString(final URL url, final Charset encoding) throws IOException {
-        try (InputStream inputStream = url.openStream()) {
-            return toString(inputStream, encoding);
-        }
+        return toString(url::openStream, encoding);
     }
 
     /**
