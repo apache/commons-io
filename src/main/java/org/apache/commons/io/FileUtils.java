@@ -2853,7 +2853,7 @@ public class FileUtils {
             final BasicFileAttributeView destAttrView = Files.getFileAttributeView(targetFile.toPath(), BasicFileAttributeView.class);
             // null guards are not needed; BasicFileAttributes.setTimes(...) is null safe
             destAttrView.setTimes(srcAttr.lastModifiedTime(), srcAttr.lastAccessTime(), srcAttr.creationTime());
-        } catch(IOException unused) {
+        } catch (IOException unused) {
             // Fallback: Only set modified time to match source file
             targetFile.setLastModified(sourceFile.lastModified());
         }
