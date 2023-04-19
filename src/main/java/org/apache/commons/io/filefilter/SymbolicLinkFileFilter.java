@@ -61,6 +61,20 @@ import java.nio.file.attribute.BasicFileAttributes;
  * @see FileFilterUtils#fileFileFilter()
  */
 public class SymbolicLinkFileFilter extends AbstractFileFilter implements Serializable {
+    /*
+     * Note to developers: The unit test needs to create symbolic links to files. However, on
+     * Windows, this can't be done without admin privileges. This class is designed to allow a
+     * unit test to works around this by doing two things: 1) This separates the class logic from
+     * the call to identify a symbolic link, and 2) It allows the unit test to override that
+     * symbolic link call on Windows only.
+     * This means we can write unit tests will run on all machines. On Windows, the unit test
+     * can't create a symbolic link without admin privileges, so the unit tests won't
+     * completely test all the necessary behavior on Windows, but they will still test the class
+     * logic. Be careful not to break this, but be aware of it when writing unit tests. You can
+     * still maintain this class and its unit tests on Windows. The one method that won't get
+     * tested on Windows is not likely to change, and will be tested properly when it gets run
+     * on Apache servers.
+     */
 
     /**
      * Singleton instance of file filter.
