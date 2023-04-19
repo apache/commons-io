@@ -29,7 +29,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests {@link SymbolicLinkFileFilter}.
@@ -48,7 +50,7 @@ public class SymbolicLinkFileFilterTest {
     private static File testLinkFile;           // symbolic link to hard file
     private static String linkName;             // Name of link file
     private static Path testLinkPath;           // symbolic link to hard file Path
-    private static File targetDirFile;          // 
+    private static File targetDirFile;          //
     private static Path targetDirPath;          // hard directory Path
     private static Path testLinkDirPath;        // symbolic link to hardDirectory
     private static File testLinkDirFile;
@@ -93,11 +95,11 @@ public class SymbolicLinkFileFilterTest {
      */
     @BeforeAll
     static void testSetup() throws IOException {
-        BiFunction<Path, Path, Path> symbolicLinkCreator;
+        final BiFunction<Path, Path, Path> symbolicLinkCreator;
 
         // We can't create symbolic links on Windows without admin privileges,
         // so iff that's our OS, we mock them.
-        String os = System.getProperty("os.name");
+        final String os = System.getProperty("os.name");
         if (os.toLowerCase().contains("windows")) {
             symbolicLinkCreator = SymbolicLinkFileFilterTest::createMockSymbolicLink;
             filter = createMockFilter();
@@ -110,7 +112,7 @@ public class SymbolicLinkFileFilterTest {
         testTargetPath = testTargetFile.toPath();
         parentDirectoryFile = testTargetFile.getParentFile();
         // parent directory
-        Path parentDirectoryPath = parentDirectoryFile.toPath();
+        final Path parentDirectoryPath = parentDirectoryFile.toPath();
         linkName = "SLFF_LinkTo" + testTargetFile.getName();
         testLinkPath = symbolicLinkCreator.apply(parentDirectoryPath.resolve(linkName), testTargetPath);
         testLinkFile = testLinkPath.toFile();

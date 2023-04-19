@@ -104,7 +104,7 @@ public class SymbolicLinkFileFilter extends AbstractFileFilter implements Serial
      * Checks to see if the file is a symbolic link.
      *
      * @param file  the File to check
-     * @return true if the file exists and is a symbolic link to either another file or a directory, 
+     * @return true if the file exists and is a symbolic link to either another file or a directory,
      *         false otherwise.
      */
     @Override
@@ -127,11 +127,11 @@ public class SymbolicLinkFileFilter extends AbstractFileFilter implements Serial
      * Package access, so the unit test may override to mock it. To
      * facilitate unit testing, all calls to test if the file is a symbolic should go
      * through this method. (See the unit test for why.)
-     * 
+     *
      * @param filePath The filePath to test
      * @return true if the file exists and is a symbolic link to either a file or directory, false otherwise.
      */
-    boolean isSymbolicLink(Path filePath) {
+    boolean isSymbolicLink(final Path filePath) {
         return Files.isSymbolicLink(filePath);
     }
 }
