@@ -475,9 +475,6 @@ The <action> type attribute can be add,update,fix,remove.
         Add builders and avoid creating more constructors for all permutations of current options.
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory, maxxedev">
-        Add PollingQueueInputStream and TakingQueueInputStream to replace QueueInputStream. See also #447.
-      </action>
-      <action dev="ggregory" type="add" due-to="Gary Gregory, maxxedev">
         Refactor using new Supplier API IOUtils.toString(IOSupplier&lt;InputStream&gt;, Charset[, IOSupplier&lt;String&gt;]).
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory, maxxedev">
