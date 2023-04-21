@@ -22,9 +22,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.time.Duration;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.output.QueueOutputStream;
 
@@ -58,21 +60,38 @@ import org.apache.commons.io.output.QueueOutputStream;
 public class QueueInputStream extends InputStream {
 
     private final BlockingQueue<Integer> blockingQueue;
+    private final long waitTimeMillis;
 
     /**
-     * Constructs a new instance with no limit to its internal buffer size.
+     * Constructs a new instance with no limit to its internal buffer size and zero wait time.
      */
     public QueueInputStream() {
         this(new LinkedBlockingQueue<>());
     }
 
     /**
-     * Constructs a new instance with given buffer
+     * Constructs a new instance with given buffer and zero wait time.
      *
      * @param blockingQueue backing queue for the stream
      */
     public QueueInputStream(final BlockingQueue<Integer> blockingQueue) {
+        this(blockingQueue, Duration.ofMillis(0));
+    }
+
+    /**
+     * Constructs a new instance with given buffer and wait time.
+     *
+     * @param blockingQueue backing queue for the stream
+     * @param waitTime how long to wait if necessary for a queue element is available
+     * @since 2.12.0
+     */
+    public QueueInputStream(final BlockingQueue<Integer> blockingQueue, final Duration waitTime) {
         this.blockingQueue = Objects.requireNonNull(blockingQueue, "blockingQueue");
+        Objects.requireNonNull(waitTime, "waitTime");
+        if (waitTime.toMillis() < 0) {
+            throw new IllegalArgumentException("waitTime must not be negative");
+        }
+        this.waitTimeMillis = waitTime.toMillis();
     }
 
     /**
@@ -88,12 +107,20 @@ public class QueueInputStream extends InputStream {
     /**
      * Reads and returns a single byte.
      *
-     * @return either the byte read or {@code -1} if the end of the stream has been reached
+     * @return either the byte read or {@code -1} if the wait time elapses before a queue element is available
+     * @throws IllegalStateException if thread is interrupted while waiting
      */
     @Override
     public int read() {
-        final Integer value = blockingQueue.poll();
-        return value == null ? EOF : 0xFF & value;
+        try {
+            final Integer value = blockingQueue.poll(waitTimeMillis, TimeUnit.MILLISECONDS);
+            return value == null ? EOF : 0xFF & value;
+        } catch (final InterruptedException e) {
+            Thread.currentThread().interrupt();
+            // throw runtime unchecked exception to maintain signature backward-compatibilty of
+            // this read method, which does not declare IOException
+            throw new IllegalStateException(e);
+        }
     }
 
 }
