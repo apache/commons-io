@@ -54,7 +54,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      *   .setThreshold(threshold)
      *   .get()}
      * </pre>
-     * @since 2.12.02
+     * @since 2.12.0
      */
     public static class Builder extends AbstractStreamBuilder<DeferredFileOutputStream, Builder> {
 

@@ -45,7 +45,7 @@ public class RandomAccessFileInputStream extends InputStream {
      *   .get()}
      * </pre>
      * <p>
-     * @since 2.12.02
+     * @since 2.12.0
      */
     public static class Builder extends AbstractStreamBuilder<RandomAccessFileInputStream, Builder> {
 

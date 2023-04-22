@@ -79,7 +79,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
     /**
      * Builds a new {@link WildcardFileFilter} instance.
      *
-     * @since 2.12.02
+     * @since 2.12.0
      */
     public static class Builder extends AbstractSupplier<WildcardFileFilter, Builder> {
 

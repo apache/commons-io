@@ -63,7 +63,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
      *   .get()}
      * </pre>
      *
-     * @since 2.12.02
+     * @since 2.12.0
      */
     public static class Builder extends AbstractStreamBuilder<BufferedFileChannelInputStream, Builder> {
 
