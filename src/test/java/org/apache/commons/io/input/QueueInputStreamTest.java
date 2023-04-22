@@ -140,6 +140,18 @@ public class QueueInputStreamTest {
     }
 
     @Test
+    public void testResetArguments() throws IOException {
+        try (QueueInputStream queueInputStream = QueueInputStream.builder().setTimeout(null).get()) {
+            assertEquals(Duration.ZERO, queueInputStream.getTimeout());
+            assertEquals(0, queueInputStream.getBlockingQueue().size());
+        }
+        try (QueueInputStream queueInputStream = QueueInputStream.builder().setBlockingQueue(null).get()) {
+            assertEquals(Duration.ZERO, queueInputStream.getTimeout());
+            assertEquals(0, queueInputStream.getBlockingQueue().size());
+        }
+    }
+
+    @Test
     @DisplayName("If read is interrupted while waiting, then exception is thrown")
     public void testTimeoutInterrupted() throws Exception {
         try (QueueInputStream inputStream = QueueInputStream.builder().setTimeout(Duration.ofMinutes(2)).get();

@@ -81,7 +81,7 @@ public class QueueInputStream extends InputStream {
         private Duration timeout = Duration.ZERO;
 
         @Override
-        public QueueInputStream get() throws IOException {
+        public QueueInputStream get() {
             return new QueueInputStream(blockingQueue, timeout);
         }
 
@@ -151,6 +151,24 @@ public class QueueInputStream extends InputStream {
     private QueueInputStream(final BlockingQueue<Integer> blockingQueue, final Duration timeout) {
         this.blockingQueue = Objects.requireNonNull(blockingQueue, "blockingQueue");
         this.timeoutMillis = Objects.requireNonNull(timeout, "timeout").toMillis();
+    }
+
+    /**
+     * Gets the blocking queue.
+     *
+     * @return the blocking queue.
+     */
+    BlockingQueue<Integer> getBlockingQueue() {
+        return blockingQueue;
+    }
+
+    /**
+     * Gets the timeout duration.
+     *
+     * @return the timeout duration.
+     */
+    Duration getTimeout() {
+        return Duration.ofMillis(timeoutMillis);
     }
 
     /**
