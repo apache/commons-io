@@ -28,15 +28,16 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.output.QueueOutputStream;
 
 /**
- * Simple alternative to JDK {@link java.io.PipedInputStream}; queue input stream provides what's written in queue
- * output stream.
+ * Simple alternative to JDK {@link java.io.PipedInputStream}; queue input stream provides what's written in queue output stream.
  *
  * <p>
  * Example usage:
  * </p>
+ *
  * <pre>
  * QueueInputStream inputStream = new QueueInputStream();
  * QueueOutputStream outputStream = inputStream.newQueueOutputStream();
@@ -45,13 +46,12 @@ import org.apache.commons.io.output.QueueOutputStream;
  * inputStream.read();
  * </pre>
  * <p>
- * Unlike JDK {@link PipedInputStream} and {@link PipedOutputStream}, queue input/output streams may be used safely in a
- * single thread or multiple threads. Also, unlike JDK classes, no special meaning is attached to initial or current
- * thread. Instances can be used longer after initial threads exited.
+ * Unlike JDK {@link PipedInputStream} and {@link PipedOutputStream}, queue input/output streams may be used safely in a single thread or multiple threads.
+ * Also, unlike JDK classes, no special meaning is attached to initial or current thread. Instances can be used longer after initial threads exited.
  * </p>
  * <p>
- * Closing a {@link QueueInputStream} has no effect. The methods in this class can be called after the stream has been
- * closed without generating an {@link IOException}.
+ * Closing a {@link QueueInputStream} has no effect. The methods in this class can be called after the stream has been closed without generating an
+ * {@link IOException}.
  * </p>
  *
  * @see QueueOutputStream
@@ -59,8 +59,72 @@ import org.apache.commons.io.output.QueueOutputStream;
  */
 public class QueueInputStream extends InputStream {
 
+    /**
+     * Builds a new {@link QueueInputStream} instance.
+     * <p>
+     * For example:
+     * </p>
+     *
+     * <pre>{@code
+     * QueueInputStream s = QueueInputStream.builder()
+     *   .setBlockingQueue(new LinkedBlockingQueue<>())
+     *   .setTimeout(Duration.ZERO)
+     *   .get()}
+     * </pre>
+     * <p>
+     *
+     * @since 2.12.0
+     */
+    public static class Builder extends AbstractStreamBuilder<QueueInputStream, Builder> {
+
+        private BlockingQueue<Integer> blockingQueue = new LinkedBlockingQueue<>();
+        private Duration timeout = Duration.ZERO;
+
+        @Override
+        public QueueInputStream get() throws IOException {
+            return new QueueInputStream(blockingQueue, timeout);
+        }
+
+        /**
+         * Sets backing queue for the stream.
+         *
+         * @param blockingQueue backing queue for the stream.
+         * @return this
+         */
+        public Builder setBlockingQueue(final BlockingQueue<Integer> blockingQueue) {
+            this.blockingQueue = blockingQueue != null ? blockingQueue : new LinkedBlockingQueue<>();
+            return this;
+        }
+
+        /**
+         * Sets the polling timeout.
+         *
+         * @param timeout the polling timeout.
+         * @return this.
+         */
+        public Builder setTimeout(final Duration timeout) {
+            if (timeout != null && timeout.toMillis() < 0) {
+                throw new IllegalArgumentException("waitTime must not be negative");
+            }
+            this.timeout = timeout != null ? timeout : Duration.ZERO;
+            return this;
+        }
+
+    }
+
+    /**
+     * Constructs a new {@link Builder}.
+     *
+     * @return a new {@link Builder}.
+     * @since 2.12.0
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
     private final BlockingQueue<Integer> blockingQueue;
-    private final long waitTimeMillis;
+
+    private final long timeoutMillis;
 
     /**
      * Constructs a new instance with no limit to its internal buffer size and zero wait time.
@@ -72,7 +136,7 @@ public class QueueInputStream extends InputStream {
     /**
      * Constructs a new instance with given buffer and zero wait time.
      *
-     * @param blockingQueue backing queue for the stream
+     * @param blockingQueue backing queue for the stream.
      */
     public QueueInputStream(final BlockingQueue<Integer> blockingQueue) {
         this(blockingQueue, Duration.ZERO);
@@ -81,24 +145,18 @@ public class QueueInputStream extends InputStream {
     /**
      * Constructs a new instance with given buffer and wait time.
      *
-     * @param blockingQueue backing queue for the stream
-     * @param waitTime how long to wait if necessary for a queue element is available
-     * @since 2.12.0
+     * @param blockingQueue backing queue for the stream.
+     * @param timeout       how long to wait before giving up when polling the queue.
      */
-    public QueueInputStream(final BlockingQueue<Integer> blockingQueue, final Duration waitTime) {
+    private QueueInputStream(final BlockingQueue<Integer> blockingQueue, final Duration timeout) {
         this.blockingQueue = Objects.requireNonNull(blockingQueue, "blockingQueue");
-        Objects.requireNonNull(waitTime, "waitTime");
-        if (waitTime.toMillis() < 0) {
-            throw new IllegalArgumentException("waitTime must not be negative");
-        }
-        this.waitTimeMillis = waitTime.toMillis();
+        this.timeoutMillis = Objects.requireNonNull(timeout, "timeout").toMillis();
     }
 
     /**
-     * Creates a new QueueOutputStream instance connected to this. Writes to the output stream will be visible to this
-     * input stream.
+     * Creates a new QueueOutputStream instance connected to this. Writes to the output stream will be visible to this input stream.
      *
-     * @return QueueOutputStream connected to this stream
+     * @return QueueOutputStream connected to this stream.
      */
     public QueueOutputStream newQueueOutputStream() {
         return new QueueOutputStream(blockingQueue);
@@ -107,13 +165,13 @@ public class QueueInputStream extends InputStream {
     /**
      * Reads and returns a single byte.
      *
-     * @return either the byte read or {@code -1} if the wait time elapses before a queue element is available
-     * @throws IllegalStateException if thread is interrupted while waiting
+     * @return either the byte read or {@code -1} if the wait time elapses before a queue element is available.
+     * @throws IllegalStateException if thread is interrupted while waiting.
      */
     @Override
     public int read() {
         try {
-            final Integer value = blockingQueue.poll(waitTimeMillis, TimeUnit.MILLISECONDS);
+            final Integer value = blockingQueue.poll(timeoutMillis, TimeUnit.MILLISECONDS);
             return value == null ? EOF : 0xFF & value;
         } catch (final InterruptedException e) {
             Thread.currentThread().interrupt();
