@@ -111,6 +111,14 @@ public class QueueInputStreamTest {
         return 8192;
     }
 
+    @Test
+    public void invalidArguments() {
+        assertThrows(NullPointerException.class, () -> new QueueInputStream(null), "queue is required");
+        assertThrows(NullPointerException.class, () -> new QueueInputStream(new LinkedBlockingQueue<>(), null), "waitTime is required");
+        assertThrows(IllegalArgumentException.class, () -> new QueueInputStream(new LinkedBlockingQueue<>(), Duration.ofMillis(-1)),
+                "waitTime must not be negative");
+    }
+
     private String readUnbuffered(final InputStream inputStream) throws IOException {
         return readUnbuffered(inputStream, Integer.MAX_VALUE);
     }
@@ -129,51 +137,6 @@ public class QueueInputStreamTest {
             }
         }
         return byteArrayOutputStream.toString(StandardCharsets.UTF_8.name());
-    }
-
-    @Test
-    public void invalidArguments() {
-        assertThrows(NullPointerException.class, () -> new QueueInputStream(null), "queue is required");
-        assertThrows(NullPointerException.class, () -> new QueueInputStream(new LinkedBlockingQueue<>(), null), "waitTime is required");
-        assertThrows(IllegalArgumentException.class, () -> new QueueInputStream(new LinkedBlockingQueue<>(), Duration.ofMillis(-1)),
-                "waitTime must not be negative");
-    }
-
-    @ParameterizedTest(name = "inputData={0}")
-    @MethodSource("inputData")
-    public void unbufferedReadWrite(final String inputData) throws IOException {
-        try (QueueInputStream inputStream = new QueueInputStream();
-                final QueueOutputStream outputStream = inputStream.newQueueOutputStream()) {
-            writeUnbuffered(outputStream, inputData);
-            final String actualData = readUnbuffered(inputStream);
-            assertEquals(inputData, actualData);
-        }
-    }
-
-    @ParameterizedTest(name = "inputData={0}")
-    @MethodSource("inputData")
-    public void unbufferedReadWriteWithTimeout(final String inputData) throws IOException {
-        try (QueueInputStream inputStream = new QueueInputStream(new LinkedBlockingQueue<>(), Duration.ofMinutes(2));
-                final QueueOutputStream outputStream = inputStream.newQueueOutputStream()) {
-            writeUnbuffered(outputStream, inputData);
-            final String actualData = assertTimeout(Duration.ofSeconds(1), () -> readUnbuffered(inputStream, inputData.length()));
-            assertEquals(inputData, actualData);
-        }
-    }
-
-    @Test
-    @DisplayName("If data is not available in queue, then read will wait until wait time elapses")
-    public void timeoutUnavailableData() throws IOException {
-        try (QueueInputStream inputStream = new QueueInputStream(new LinkedBlockingQueue<>(), Duration.ofMillis(500));
-                final QueueOutputStream outputStream = inputStream.newQueueOutputStream()) {
-
-            final Stopwatch stopwatch = Stopwatch.createStarted();
-            final String actualData = assertTimeout(Duration.ofSeconds(1), () -> readUnbuffered(inputStream, 3));
-            stopwatch.stop();
-            assertEquals("", actualData);
-
-            assertTrue(stopwatch.elapsed(TimeUnit.MILLISECONDS) >= 500);
-        }
     }
 
     @Test
@@ -199,6 +162,43 @@ public class QueueInputStreamTest {
             thread.interrupt();
             latch.await(500, TimeUnit.MILLISECONDS);
             assertTrue(result.get());
+        }
+    }
+
+    @Test
+    @DisplayName("If data is not available in queue, then read will wait until wait time elapses")
+    public void timeoutUnavailableData() throws IOException {
+        try (QueueInputStream inputStream = new QueueInputStream(new LinkedBlockingQueue<>(), Duration.ofMillis(500));
+                final QueueOutputStream outputStream = inputStream.newQueueOutputStream()) {
+
+            final Stopwatch stopwatch = Stopwatch.createStarted();
+            final String actualData = assertTimeout(Duration.ofSeconds(1), () -> readUnbuffered(inputStream, 3));
+            stopwatch.stop();
+            assertEquals("", actualData);
+
+            assertTrue(stopwatch.elapsed(TimeUnit.MILLISECONDS) >= 500);
+        }
+    }
+
+    @ParameterizedTest(name = "inputData={0}")
+    @MethodSource("inputData")
+    public void unbufferedReadWrite(final String inputData) throws IOException {
+        try (QueueInputStream inputStream = new QueueInputStream();
+                final QueueOutputStream outputStream = inputStream.newQueueOutputStream()) {
+            writeUnbuffered(outputStream, inputData);
+            final String actualData = readUnbuffered(inputStream);
+            assertEquals(inputData, actualData);
+        }
+    }
+
+    @ParameterizedTest(name = "inputData={0}")
+    @MethodSource("inputData")
+    public void unbufferedReadWriteWithTimeout(final String inputData) throws IOException {
+        try (QueueInputStream inputStream = new QueueInputStream(new LinkedBlockingQueue<>(), Duration.ofMinutes(2));
+                final QueueOutputStream outputStream = inputStream.newQueueOutputStream()) {
+            writeUnbuffered(outputStream, inputData);
+            final String actualData = assertTimeout(Duration.ofSeconds(1), () -> readUnbuffered(inputStream, inputData.length()));
+            assertEquals(inputData, actualData);
         }
     }
 
