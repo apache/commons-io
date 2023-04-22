@@ -38,6 +38,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -52,8 +53,6 @@ import org.apache.commons.io.TestResources;
 import org.apache.commons.io.test.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-
-import com.google.common.collect.Lists;
 
 /**
  * Test for {@link Tailer}.
@@ -704,7 +703,7 @@ public class TailerTest {
         final int timeout = 30;
         final TimeUnit timeoutUnit = TimeUnit.SECONDS;
         assertTrue(listener.awaitExpectedLines(timeout, timeoutUnit), () -> String.format("await timed out after %s %s", timeout, timeoutUnit));
-        assertEquals(listener.getLines(), Lists.newArrayList("foo"), "lines");
+        assertEquals(listener.getLines(), Arrays.asList("foo"), "lines");
     }
 
     /** Appends lines to a file */
