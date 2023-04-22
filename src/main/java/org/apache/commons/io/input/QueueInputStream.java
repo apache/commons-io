@@ -75,7 +75,7 @@ public class QueueInputStream extends InputStream {
      * @param blockingQueue backing queue for the stream
      */
     public QueueInputStream(final BlockingQueue<Integer> blockingQueue) {
-        this(blockingQueue, Duration.ofMillis(0));
+        this(blockingQueue, Duration.ZERO);
     }
 
     /**
