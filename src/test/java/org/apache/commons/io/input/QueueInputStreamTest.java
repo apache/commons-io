@@ -55,6 +55,7 @@ import java.util.stream.Stream;
 public class QueueInputStreamTest {
 
     public static Stream<Arguments> inputData() {
+        // @formatter:off
         return Stream.of(Arguments.of(""),
                 Arguments.of("1"),
                 Arguments.of("12"),
@@ -67,6 +68,7 @@ public class QueueInputStreamTest {
                 Arguments.of(StringUtils.repeat("A", 8192)),
                 Arguments.of(StringUtils.repeat("A", 8193)),
                 Arguments.of(StringUtils.repeat("A", 8192 * 4)));
+        // @formatter:on
     }
 
     @ParameterizedTest(name = "inputData={0}")
