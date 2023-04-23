@@ -103,8 +103,8 @@ public class QueueInputStream extends InputStream {
          * @return this.
          */
         public Builder setTimeout(final Duration timeout) {
-            if (timeout != null && timeout.toMillis() < 0) {
-                throw new IllegalArgumentException("waitTime must not be negative");
+            if (timeout != null && timeout.toNanos() < 0) {
+                throw new IllegalArgumentException("timeout must not be negative");
             }
             this.timeout = timeout != null ? timeout : Duration.ZERO;
             return this;
@@ -124,17 +124,17 @@ public class QueueInputStream extends InputStream {
 
     private final BlockingQueue<Integer> blockingQueue;
 
-    private final long timeoutMillis;
+    private final long timeoutNanos;
 
     /**
-     * Constructs a new instance with no limit to its internal buffer size and zero wait time.
+     * Constructs a new instance with no limit to its internal queue size and zero timeout.
      */
     public QueueInputStream() {
         this(new LinkedBlockingQueue<>());
     }
 
     /**
-     * Constructs a new instance with given buffer and zero wait time.
+     * Constructs a new instance with given queue and zero timeout.
      *
      * @param blockingQueue backing queue for the stream.
      */
@@ -143,14 +143,14 @@ public class QueueInputStream extends InputStream {
     }
 
     /**
-     * Constructs a new instance with given buffer and wait time.
+     * Constructs a new instance with given queue and timeout.
      *
      * @param blockingQueue backing queue for the stream.
      * @param timeout       how long to wait before giving up when polling the queue.
      */
     private QueueInputStream(final BlockingQueue<Integer> blockingQueue, final Duration timeout) {
         this.blockingQueue = Objects.requireNonNull(blockingQueue, "blockingQueue");
-        this.timeoutMillis = Objects.requireNonNull(timeout, "timeout").toMillis();
+        this.timeoutNanos = Objects.requireNonNull(timeout, "timeout").toNanos();
     }
 
     /**
@@ -168,7 +168,7 @@ public class QueueInputStream extends InputStream {
      * @return the timeout duration.
      */
     Duration getTimeout() {
-        return Duration.ofMillis(timeoutMillis);
+        return Duration.ofNanos(timeoutNanos);
     }
 
     /**
@@ -183,13 +183,13 @@ public class QueueInputStream extends InputStream {
     /**
      * Reads and returns a single byte.
      *
-     * @return either the byte read or {@code -1} if the wait time elapses before a queue element is available.
+     * @return the byte read, or {@code -1} if a timeout occurs before a queue element is available.
      * @throws IllegalStateException if thread is interrupted while waiting.
      */
     @Override
     public int read() {
         try {
-            final Integer value = blockingQueue.poll(timeoutMillis, TimeUnit.MILLISECONDS);
+            final Integer value = blockingQueue.poll(timeoutNanos, TimeUnit.NANOSECONDS);
             return value == null ? EOF : 0xFF & value;
         } catch (final InterruptedException e) {
             Thread.currentThread().interrupt();
