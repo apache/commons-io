@@ -218,6 +218,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-790" dev="ggregory" type="fix" due-to="Miguel Muñoz, Gary Gregory">
         Fix symbolic link file filter #450.
       </action>
+      <action issue="IO-790" dev="ggregory" type="fix" due-to="maxxedev, Gary Gregory, Bruno P. Kinoshita">
+        Apply nanoseconds precision for QueueInputStream timeout duration. #453.
+      </action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">
         Add GitHub coverage.yml.
