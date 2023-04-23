@@ -32,7 +32,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.IOUtils;
@@ -158,7 +158,7 @@ public class QueueInputStreamTest {
                 final QueueOutputStream outputStream = inputStream.newQueueOutputStream()) {
 
             // read in a background thread
-            final AtomicReference<Boolean> result = new AtomicReference<>();
+            final AtomicBoolean result = new AtomicBoolean();
             final CountDownLatch latch = new CountDownLatch(1);
             final Thread thread = new Thread(() -> {
                 // when thread is interrupted, verify ...
@@ -205,8 +205,10 @@ public class QueueInputStreamTest {
     @ParameterizedTest(name = "inputData={0}")
     @MethodSource("inputData")
     public void testUnbufferedReadWriteWithTimeout(final String inputData) throws IOException {
-        try (QueueInputStream inputStream = QueueInputStream.builder().setTimeout(Duration.ofMinutes(2)).get();
+        final Duration timeout = Duration.ofMinutes(2);
+        try (QueueInputStream inputStream = QueueInputStream.builder().setTimeout(timeout).get();
                 final QueueOutputStream outputStream = inputStream.newQueueOutputStream()) {
+            assertEquals(timeout, inputStream.getTimeout());
             writeUnbuffered(outputStream, inputData);
             final String actualData = assertTimeout(Duration.ofSeconds(1), () -> readUnbuffered(inputStream, inputData.length()));
             assertEquals(inputData, actualData);
