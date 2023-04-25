@@ -330,6 +330,7 @@ public class XmlStreamReader extends Reader {
      * </p>
      *
      * @param file File to create a Reader from.
+     * @throws NullPointerException if the input is {@code null}.
      * @throws IOException thrown if there is a problem reading the file.
      * @deprecated Use {@link #builder()}
      */
@@ -348,6 +349,7 @@ public class XmlStreamReader extends Reader {
      * </p>
      *
      * @param inputStream InputStream to create a Reader from.
+     * @throws NullPointerException if the input stream is {@code null}.
      * @throws IOException thrown if there is a problem reading the stream.
      * @deprecated Use {@link #builder()}
      */
@@ -382,6 +384,7 @@ public class XmlStreamReader extends Reader {
      *
      * @param inputStream InputStream to create a Reader from.
      * @param lenient     indicates if the charset encoding detection should be relaxed.
+     * @throws NullPointerException if the input stream is {@code null}.
      * @throws IOException              thrown if there is a problem reading the stream.
      * @throws XmlStreamReaderException thrown if the charset encoding could not be determined according to the specs.
      * @deprecated Use {@link #builder()}
@@ -418,6 +421,7 @@ public class XmlStreamReader extends Reader {
      * @param inputStream     InputStream to create a Reader from.
      * @param lenient         indicates if the charset encoding detection should be relaxed.
      * @param defaultEncoding The default encoding
+     * @throws NullPointerException if the input stream is {@code null}.
      * @throws IOException              thrown if there is a problem reading the stream.
      * @throws XmlStreamReaderException thrown if the charset encoding could not be determined according to the specs.
      * @deprecated Use {@link #builder()}
@@ -445,6 +449,7 @@ public class XmlStreamReader extends Reader {
      *
      * @param inputStream     InputStream to create the reader from.
      * @param httpContentType content-type header to use for the resolution of the charset encoding.
+     * @throws NullPointerException if the input stream is {@code null}.
      * @throws IOException thrown if there is a problem reading the file.
      * @deprecated Use {@link #builder()}
      */
@@ -481,6 +486,7 @@ public class XmlStreamReader extends Reader {
      * @param inputStream     InputStream to create the reader from.
      * @param httpContentType content-type header to use for the resolution of the charset encoding.
      * @param lenient         indicates if the charset encoding detection should be relaxed.
+     * @throws NullPointerException if the input stream is {@code null}.
      * @throws IOException              thrown if there is a problem reading the file.
      * @throws XmlStreamReaderException thrown if the charset encoding could not be determined according to the specification.
      * @deprecated Use {@link #builder()}
@@ -519,6 +525,7 @@ public class XmlStreamReader extends Reader {
      * @param httpContentType content-type header to use for the resolution of the charset encoding.
      * @param lenient         indicates if the charset encoding detection should be relaxed.
      * @param defaultEncoding The default encoding
+     * @throws NullPointerException if the input stream is {@code null}.
      * @throws IOException              thrown if there is a problem reading the file.
      * @throws XmlStreamReaderException thrown if the charset encoding could not be determined according to the specification.
      * @deprecated Use {@link #builder()}
@@ -545,6 +552,7 @@ public class XmlStreamReader extends Reader {
      * </p>
      *
      * @param file File to create a Reader from.
+     * @throws NullPointerException if the input is {@code null}.
      * @throws IOException thrown if there is a problem reading the file.
      * @since 2.11.0
      * @deprecated Use {@link #builder()}
@@ -568,6 +576,7 @@ public class XmlStreamReader extends Reader {
      * </p>
      *
      * @param url URL to create a Reader from.
+     * @throws NullPointerException if the input is {@code null}.
      * @throws IOException thrown if there is a problem reading the stream of the URL.
      */
     public XmlStreamReader(final URL url) throws IOException {
@@ -589,6 +598,7 @@ public class XmlStreamReader extends Reader {
      *
      * @param urlConnection   URLConnection to create a Reader from.
      * @param defaultEncoding The default encoding
+     * @throws NullPointerException if the input is {@code null}.
      * @throws IOException thrown if there is a problem reading the stream of the URLConnection.
      */
     public XmlStreamReader(final URLConnection urlConnection, final String defaultEncoding) throws IOException {
