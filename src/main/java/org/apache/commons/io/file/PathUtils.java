@@ -709,7 +709,7 @@ public final class PathUtils {
      * @param linkOptions options specifying how files are followed.
      * @param openOptions options specifying how files are opened.
      * @return true if the content of the streams are equal or they both don't exist, false otherwise.
-     * @throws NullPointerException if either input is null.
+     * @throws NullPointerException if openOptions is null.
      * @throws IOException if an I/O error occurs.
      * @see org.apache.commons.io.FileUtils#contentEquals(java.io.File, java.io.File)
      */
