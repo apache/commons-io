@@ -404,12 +404,13 @@ public class BOMInputStreamTest {
         assertThrows(IllegalArgumentException.class, () -> new BOMInputStream(createUtf8Input(data, true), false, (ByteOrderMark[]) null).close());
         assertThrows(IllegalArgumentException.class, () -> new BOMInputStream(createUtf8Input(data, true), false, new ByteOrderMark[0]).close());
         //
-        assertThrows(IllegalArgumentException.class, () -> BOMInputStream.builder()
+        try (final BOMInputStream bomInputStream = BOMInputStream.builder()
                 .setInputStream(createUtf8Input(data, true))
                 .setInclude(true)
                 .setByteOrderMarks((ByteOrderMark[]) null)
-                .get()
-                .close());
+                .get()) {
+            assertEquals(BOMInputStream.Builder.DEFAULT[0], bomInputStream.getBOM());
+        }
         assertThrows(IllegalArgumentException.class, () -> BOMInputStream.builder()
                 .setInputStream(createUtf8Input(data, true))
                 .setInclude(true)

@@ -107,8 +107,10 @@ public class BOMInputStream extends ProxyInputStream {
      */
     public static class Builder extends AbstractStreamBuilder<BOMInputStream, Builder> {
 
+        static final ByteOrderMark[] DEFAULT = { ByteOrderMark.UTF_8 };
+
         private boolean include;
-        private ByteOrderMark[] byteOrderMarks = { ByteOrderMark.UTF_8 };
+        private ByteOrderMark[] byteOrderMarks = DEFAULT;
 
         @SuppressWarnings("resource")
         @Override
@@ -123,7 +125,7 @@ public class BOMInputStream extends ProxyInputStream {
          * @return this
          */
         public Builder setByteOrderMarks(final ByteOrderMark[] byteOrderMarks) {
-            this.byteOrderMarks = byteOrderMarks;
+            this.byteOrderMarks = byteOrderMarks != null ? byteOrderMarks.clone() : DEFAULT;
             return this;
         }
 
@@ -177,7 +179,7 @@ public class BOMInputStream extends ProxyInputStream {
      */
     @Deprecated
     public BOMInputStream(final InputStream delegate) {
-        this(delegate, false, ByteOrderMark.UTF_8);
+        this(delegate, false, Builder.DEFAULT);
     }
 
     /**
@@ -191,7 +193,7 @@ public class BOMInputStream extends ProxyInputStream {
      */
     @Deprecated
     public BOMInputStream(final InputStream delegate, final boolean include) {
-        this(delegate, include, ByteOrderMark.UTF_8);
+        this(delegate, include, Builder.DEFAULT);
     }
 
     /**
