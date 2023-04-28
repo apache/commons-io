@@ -23,10 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -408,26 +406,20 @@ public class DeferredFileOutputStreamTest {
      *
      * @param testFile The file containing the test output.
      */
-    private void verifyResultFile(final File testFile) {
+    private void verifyResultFile(final File testFile) throws IOException {
+        final InputStream fis = Files.newInputStream(testFile.toPath());
+        assertEquals(testBytes.length, fis.available());
+
+        final byte[] resultBytes = new byte[testBytes.length];
+        assertEquals(testBytes.length, fis.read(resultBytes));
+
+        assertArrayEquals(resultBytes, testBytes);
+        assertEquals(-1, fis.read(resultBytes));
+
         try {
-            final InputStream fis = Files.newInputStream(testFile.toPath());
-            assertEquals(testBytes.length, fis.available());
-
-            final byte[] resultBytes = new byte[testBytes.length];
-            assertEquals(testBytes.length, fis.read(resultBytes));
-
-            assertArrayEquals(resultBytes, testBytes);
-            assertEquals(-1, fis.read(resultBytes));
-
-            try {
-                fis.close();
-            } catch (final IOException e) {
-                // Ignore an exception on close
-            }
-        } catch (final FileNotFoundException e) {
-            fail("Unexpected FileNotFoundException");
+            fis.close();
         } catch (final IOException e) {
-            fail("Unexpected IOException");
+            // Ignore an exception on close
         }
     }
 }
