@@ -407,19 +407,14 @@ public class DeferredFileOutputStreamTest {
      * @param testFile The file containing the test output.
      */
     private void verifyResultFile(final File testFile) throws IOException {
-        final InputStream fis = Files.newInputStream(testFile.toPath());
-        assertEquals(testBytes.length, fis.available());
+        try (final InputStream fis = Files.newInputStream(testFile.toPath())) {
+            assertEquals(testBytes.length, fis.available());
 
-        final byte[] resultBytes = new byte[testBytes.length];
-        assertEquals(testBytes.length, fis.read(resultBytes));
+            final byte[] resultBytes = new byte[testBytes.length];
+            assertEquals(testBytes.length, fis.read(resultBytes));
 
-        assertArrayEquals(resultBytes, testBytes);
-        assertEquals(-1, fis.read(resultBytes));
-
-        try {
-            fis.close();
-        } catch (final IOException e) {
-            // Ignore an exception on close
+            assertArrayEquals(resultBytes, testBytes);
+            assertEquals(-1, fis.read(resultBytes));
         }
     }
 }
