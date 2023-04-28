@@ -16,7 +16,6 @@
  */
 package org.apache.commons.io;
 
-
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -27,11 +26,10 @@ import java.nio.charset.Charset;
 
 import org.junit.jupiter.api.Test;
 
-
 /**
  * Test for {@link ByteOrderMark}.
  */
-public class ByteOrderMarkTest  {
+public class ByteOrderMarkTest {
 
     private static final ByteOrderMark TEST_BOM_1 = new ByteOrderMark("test1", 1);
     private static final ByteOrderMark TEST_BOM_2 = new ByteOrderMark("test2", 1, 2);
@@ -60,6 +58,17 @@ public class ByteOrderMarkTest  {
     @SuppressWarnings("EqualsWithItself")
     @Test
     public void testEquals() {
+        assertEquals(ByteOrderMark.UTF_16BE, ByteOrderMark.UTF_16BE);
+        assertEquals(ByteOrderMark.UTF_16LE, ByteOrderMark.UTF_16LE);
+        assertEquals(ByteOrderMark.UTF_32BE, ByteOrderMark.UTF_32BE);
+        assertEquals(ByteOrderMark.UTF_32LE, ByteOrderMark.UTF_32LE);
+        assertEquals(ByteOrderMark.UTF_8, ByteOrderMark.UTF_8);
+
+        assertNotEquals(ByteOrderMark.UTF_8, ByteOrderMark.UTF_16BE);
+        assertNotEquals(ByteOrderMark.UTF_8, ByteOrderMark.UTF_16LE);
+        assertNotEquals(ByteOrderMark.UTF_8, ByteOrderMark.UTF_32BE);
+        assertNotEquals(ByteOrderMark.UTF_8, ByteOrderMark.UTF_32LE);
+
         assertEquals(TEST_BOM_1, TEST_BOM_1, "test1 equals");
         assertEquals(TEST_BOM_2, TEST_BOM_2, "test2 equals");
         assertEquals(TEST_BOM_3, TEST_BOM_3, "test3 equals");
@@ -74,11 +83,11 @@ public class ByteOrderMarkTest  {
     /** Tests {@link ByteOrderMark#getBytes()} */
     @Test
     public void testGetBytes() {
-        assertArrayEquals(TEST_BOM_1.getBytes(), new byte[]{(byte) 1}, "test1 bytes");
+        assertArrayEquals(TEST_BOM_1.getBytes(), new byte[] { (byte) 1 }, "test1 bytes");
         TEST_BOM_1.getBytes()[0] = 2;
-        assertArrayEquals(TEST_BOM_1.getBytes(), new byte[]{(byte) 1}, "test1 bytes");
-        assertArrayEquals(TEST_BOM_2.getBytes(), new byte[]{(byte) 1, (byte) 2}, "test1 bytes");
-        assertArrayEquals(TEST_BOM_3.getBytes(), new byte[]{(byte) 1, (byte) 2, (byte) 3}, "test1 bytes");
+        assertArrayEquals(TEST_BOM_1.getBytes(), new byte[] { (byte) 1 }, "test1 bytes");
+        assertArrayEquals(TEST_BOM_2.getBytes(), new byte[] { (byte) 1, (byte) 2 }, "test1 bytes");
+        assertArrayEquals(TEST_BOM_3.getBytes(), new byte[] { (byte) 1, (byte) 2, (byte) 3 }, "test1 bytes");
     }
 
     /** Tests {@link ByteOrderMark#getCharsetName()} */
@@ -120,8 +129,8 @@ public class ByteOrderMarkTest  {
     /** Tests {@link ByteOrderMark#toString()} */
     @Test
     public void testToString() {
-        assertEquals("ByteOrderMark[test1: 0x1]",          TEST_BOM_1.toString(), "test1 ");
-        assertEquals("ByteOrderMark[test2: 0x1,0x2]",      TEST_BOM_2.toString(), "test2 ");
-        assertEquals("ByteOrderMark[test3: 0x1,0x2,0x3]",  TEST_BOM_3.toString(), "test3 ");
+        assertEquals("ByteOrderMark[test1: 0x1]", TEST_BOM_1.toString(), "test1 ");
+        assertEquals("ByteOrderMark[test2: 0x1,0x2]", TEST_BOM_2.toString(), "test2 ");
+        assertEquals("ByteOrderMark[test3: 0x1,0x2,0x3]", TEST_BOM_3.toString(), "test3 ");
     }
 }
