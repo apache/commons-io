@@ -770,9 +770,7 @@ public class FileUtils {
      * @see #copyFile(File, File, boolean, CopyOption...)
      */
     public static void copyFile(final File srcFile, final File destFile, final boolean preserveFileDate) throws IOException {
-        // @formatter:off
-        copyFile(srcFile, destFile, preserveFileDate, new CopyOption[] {StandardCopyOption.REPLACE_EXISTING});
-        // @formatter:on
+        copyFile(srcFile, destFile, preserveFileDate, new CopyOption[] { StandardCopyOption.REPLACE_EXISTING });
     }
 
     /**
