@@ -813,10 +813,8 @@ public class FileUtils {
         Files.copy(srcFile.toPath(), destFile.toPath(), copyOptions);
 
         // On Windows, the last modified time is copied by default.
-        if (preserveFileDate) {
-            if (!setTimes(srcFile, destFile)) {
-                throw new IOException("Cannot set the file time.");
-            }
+        if (preserveFileDate && !setTimes(srcFile, destFile)) {
+            throw new IOException("Cannot set the file time.");
         }
     }
 
