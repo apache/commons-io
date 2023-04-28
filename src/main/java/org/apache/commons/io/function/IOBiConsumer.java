@@ -41,6 +41,7 @@ public interface IOBiConsumer<T, U> {
      * @param <U> the type of the second argument to the operation
      * @return The no-op singleton.
      */
+    @SuppressWarnings("unchecked")
     static <T, U> IOBiConsumer<T, U> noop() {
         return Constants.IO_BI_CONSUMER;
     }

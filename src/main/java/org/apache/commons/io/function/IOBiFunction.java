@@ -49,6 +49,7 @@ public interface IOBiFunction<T, U, R> {
      * @param <R> the type of the result of the function
      * @return The no-op singleton.
      */
+    @SuppressWarnings("unchecked")
     static <T, U, R> IOBiFunction<T, U, R> noop() {
         return Constants.IO_BI_FUNCTION;
     }

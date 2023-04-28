@@ -42,6 +42,7 @@ public interface IOTriConsumer<T, U, V> {
      * @param <V> the type of the third argument to the operation
      * @return The no-op singleton.
      */
+    @SuppressWarnings("unchecked")
     static <T, U, V> IOTriConsumer<T, U, V> noop() {
         return Constants.IO_TRI_CONSUMER;
     }

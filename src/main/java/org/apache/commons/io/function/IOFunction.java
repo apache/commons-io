@@ -40,6 +40,7 @@ public interface IOFunction<T, R> {
      * @param <T> the type of the input and output objects to the function
      * @return a function that always returns its input argument
      */
+    @SuppressWarnings("unchecked")
     static <T> IOFunction<T, T> identity() {
         return Constants.IO_FUNCTION_ID;
     }
