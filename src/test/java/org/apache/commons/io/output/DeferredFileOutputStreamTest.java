@@ -182,7 +182,7 @@ public class DeferredFileOutputStreamTest {
     }
 
     /**
-     * Test specifying a temporary file and the threshold is reached.
+     * Tests specifying a temporary file and the threshold is reached.
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
@@ -218,7 +218,7 @@ public class DeferredFileOutputStreamTest {
     }
 
     /**
-     * Test specifying a temporary file and the threshold is reached.
+     * Tests specifying a temporary file and the threshold is reached.
      * @throws IOException
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
@@ -254,7 +254,7 @@ public class DeferredFileOutputStreamTest {
     }
 
     /**
-     * Test specifying a temporary file and the threshold not reached.
+     * Tests specifying a temporary file and the threshold not reached.
      * @throws IOException
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
@@ -273,7 +273,7 @@ public class DeferredFileOutputStreamTest {
     }
 
     /**
-     * Test specifying a temporary file and the threshold is reached.
+     * Tests specifying a temporary file and the threshold is reached.
      *
      * @throws Exception
      */
@@ -320,7 +320,7 @@ public class DeferredFileOutputStreamTest {
     }
 
     /**
-     * Test whether writeTo() properly writes large content.
+     * Tests whether writeTo() properly writes large content.
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
@@ -347,7 +347,7 @@ public class DeferredFileOutputStreamTest {
     }
 
     /**
-     * Test whether writeTo() properly writes large content.
+     * Tests whether writeTo() properly writes large content.
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
@@ -374,7 +374,7 @@ public class DeferredFileOutputStreamTest {
     }
 
     /**
-     * Test whether writeTo() properly writes small content.
+     * Tests whether writeTo() properly writes small content.
      * @throws IOException
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
