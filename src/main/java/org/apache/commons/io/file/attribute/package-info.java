@@ -16,6 +16,6 @@
  */
 
 /**
- * Helps use {@link java.nio.file.attribute}.
+ * Provides help using {@link java.nio.file.attribute} types.
  */
 package org.apache.commons.io.file.attribute;

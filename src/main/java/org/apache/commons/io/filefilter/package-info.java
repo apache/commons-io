@@ -16,7 +16,7 @@
  */
 
 /**
- * This package defines an interface (IOFileFilter) that combines both
+ * Provides the an interface {@link org.apache.commons.io.filefilter.IOFileFilter IOFileFilter} that combines both
  * {@link java.io.FileFilter} and {@link java.io.FilenameFilter}.
  * <p>Besides that the package offers a series of ready-to-use implementations of the
  * IOFileFilter interface including implementation that allow you to combine

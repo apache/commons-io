@@ -16,7 +16,7 @@
  */
 
 /**
- * This package defines utility classes for working with streams, readers, writers and files. The most commonly used classes are described here:
+ * Provides classes for working with streams, readers, writers and files. The most commonly used classes are described here:
  * <p>
  * <b>IOUtils</b> is the most frequently used class. It provides operations to read, write, copy and close streams.
  * </p>

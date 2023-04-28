@@ -16,7 +16,7 @@
  */
 
 /**
- * This package provides extensions in the realm of {@link java.nio.file.spi}.
+ * Provides extensions in the realm of {@link java.nio.file.spi}.
  *
  * @since 2.9.0
  */

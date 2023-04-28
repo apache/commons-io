@@ -16,6 +16,6 @@
  */
 
 /**
- * This package defines IO-only related functional interfaces for lambda expressions and method references.
+ * Provides IO-only related functional interfaces for lambda expressions and method references.
  */
 package org.apache.commons.io.function;

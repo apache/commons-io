@@ -16,7 +16,7 @@
  */
 
 /**
- * This package provides various {@link java.util.Comparator} implementations
+ * Provides various {@link java.util.Comparator} implementations
  * for {@link java.io.File}s.
  * <h2>Sorting</h2>
  * <p>

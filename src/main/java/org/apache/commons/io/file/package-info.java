@@ -16,6 +16,6 @@
  */
 
 /**
- * This package provides extensions in the realm of {@link java.nio.file}.
+ * Provides extensions in the realm of {@link java.nio.file}.
  */
 package org.apache.commons.io.file;

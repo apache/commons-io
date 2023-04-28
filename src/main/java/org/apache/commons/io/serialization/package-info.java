@@ -16,6 +16,6 @@
  */
 
 /**
- * This package provides a framework for controlling the deserialization of classes.
+ * Provides a framework for controlling the deserialization of classes.
  */
 package org.apache.commons.io.serialization;

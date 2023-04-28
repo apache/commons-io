@@ -16,7 +16,7 @@
  */
 
 /**
- * This package provides implementations of buffered input classes, such as
+ * Provides implementations of buffered input classes, such as
  * {@link org.apache.commons.io.input.buffer.CircularBufferInputStream} and
  * {@link org.apache.commons.io.input.buffer.PeekableInputStream}.
  */

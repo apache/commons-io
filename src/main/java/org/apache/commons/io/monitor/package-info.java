@@ -16,6 +16,6 @@
  */
 
 /**
- * This package provides a component for monitoring file system events (directory and file create, update and delete events).
+ * Provides a component for monitoring file system events (directory and file create, update and delete events).
  */
 package org.apache.commons.io.monitor;
