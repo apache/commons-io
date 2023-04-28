@@ -813,8 +813,10 @@ public class FileUtils {
         Files.copy(srcFile.toPath(), destFile.toPath(), copyOptions);
 
         // On Windows, the last modified time is copied by default.
-        if(preserveFileDate) {
-            setTimes(srcFile, destFile);
+        if (preserveFileDate) {
+            if (!setTimes(srcFile, destFile)) {
+                throw new IOException("Cannot set the file time.");
+            }
         }
     }
 
@@ -2836,11 +2838,13 @@ public class FileUtils {
      *
      * @param sourceFile The source file to query.
      * @param targetFile The target file or directory to set.
+     * @return {@code true} if and only if the operation succeeded;
+     *          {@code false} otherwise
      * @throws NullPointerException if sourceFile is {@code null}.
      * @throws NullPointerException if targetFile is {@code null}.
      * @throws IOException if setting the last-modified time failed.
      */
-    private static void setTimes(final File sourceFile, final File targetFile) throws IOException {
+    private static boolean setTimes(final File sourceFile, final File targetFile) throws IOException {
         Objects.requireNonNull(sourceFile, "sourceFile");
         Objects.requireNonNull(targetFile, "targetFile");
         try {
@@ -2849,9 +2853,10 @@ public class FileUtils {
             final BasicFileAttributeView destAttrView = Files.getFileAttributeView(targetFile.toPath(), BasicFileAttributeView.class);
             // null guards are not needed; BasicFileAttributes.setTimes(...) is null safe
             destAttrView.setTimes(srcAttr.lastModifiedTime(), srcAttr.lastAccessTime(), srcAttr.creationTime());
-        } catch (IOException unused) {
+            return true;
+        } catch (IOException ignored) {
             // Fallback: Only set modified time to match source file
-            targetFile.setLastModified(sourceFile.lastModified());
+            return targetFile.setLastModified(sourceFile.lastModified());
         }
 
         // TODO: (Help!) Determine historically why setLastModified(File, File) needed PathUtils.setLastModifiedTime() if
