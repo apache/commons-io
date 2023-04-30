@@ -107,7 +107,7 @@ public class BOMInputStream extends ProxyInputStream {
      */
     public static class Builder extends AbstractStreamBuilder<BOMInputStream, Builder> {
 
-        static final ByteOrderMark[] DEFAULT = { ByteOrderMark.UTF_8 };
+        private static final ByteOrderMark[] DEFAULT = { ByteOrderMark.UTF_8 };
 
         private boolean include;
         private ByteOrderMark[] byteOrderMarks = DEFAULT;
@@ -140,12 +140,18 @@ public class BOMInputStream extends ProxyInputStream {
             return this;
         }
 
+        // for test access
+        static ByteOrderMark getDefaultBOM() {
+            return DEFAULT[0];
+        }
+
     }
 
     /**
      * Compares ByteOrderMark objects in descending length order.
      */
     private static final Comparator<ByteOrderMark> ByteOrderMarkLengthComparator = Comparator.comparing(ByteOrderMark::length).reversed();
+
 
     /**
      * Constructs a new {@link Builder}.
