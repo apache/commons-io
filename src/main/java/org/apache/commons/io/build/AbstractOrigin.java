@@ -45,6 +45,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      */
     public static class FileOrigin extends AbstractOrigin<File, FileOrigin> {
 
+        /**
+         * Constructs a new instance for the given origin.
+         *
+         * @param origin The origin.
+         */
         public FileOrigin(final File origin) {
             super(origin);
         }
@@ -69,6 +74,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      */
     public static class InputStreamOrigin extends AbstractOrigin<InputStream, InputStreamOrigin> {
 
+        /**
+         * Constructs a new instance for the given origin.
+         *
+         * @param origin The origin.
+         */
         public InputStreamOrigin(final InputStream origin) {
             super(origin);
         }
@@ -88,6 +98,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      */
     public static class OutputStreamOrigin extends AbstractOrigin<OutputStream, OutputStreamOrigin> {
 
+        /**
+         * Constructs a new instance for the given origin.
+         *
+         * @param origin The origin.
+         */
         public OutputStreamOrigin(final OutputStream origin) {
             super(origin);
         }
@@ -104,6 +119,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      */
     public static class PathOrigin extends AbstractOrigin<Path, PathOrigin> {
 
+        /**
+         * Constructs a new instance for the given origin.
+         *
+         * @param origin The origin.
+         */
         public PathOrigin(final Path origin) {
             super(origin);
         }
@@ -128,6 +148,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      */
     public static class ReaderOrigin extends AbstractOrigin<Reader, ReaderOrigin> {
 
+        /**
+         * Constructs a new instance for the given origin.
+         *
+         * @param origin The origin.
+         */
         public ReaderOrigin(final Reader origin) {
             super(origin);
         }
@@ -143,6 +168,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      */
     public static class URIOrigin extends AbstractOrigin<URI, URIOrigin> {
 
+        /**
+         * Constructs a new instance for the given origin.
+         *
+         * @param origin The origin.
+         */
         public URIOrigin(final URI origin) {
             super(origin);
         }
@@ -172,6 +202,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      */
     public static class WriterOrigin extends AbstractOrigin<Writer, WriterOrigin> {
 
+        /**
+         * Constructs a new instance for the given origin.
+         *
+         * @param origin The origin.
+         */
         public WriterOrigin(final Writer origin) {
             super(origin);
         }

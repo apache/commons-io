@@ -44,6 +44,12 @@ import org.apache.commons.io.build.AbstractOrigin.WriterOrigin;
  */
 public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier<T, B>> extends AbstractSupplier<T, B> {
 
+    /**
+     * Throws {@link IllegalArgumentException} if the initialBufferSize is less than zero.
+     *
+     * @param initialBufferSize the value to test.
+     * @return the input value.
+     */
     protected static int checkBufferSize(final int initialBufferSize) {
         if (initialBufferSize < 0) {
             throw new IllegalArgumentException("Initial buffer size must be at least 0.");
