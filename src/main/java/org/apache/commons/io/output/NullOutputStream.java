@@ -43,11 +43,11 @@ public class NullOutputStream extends OutputStream {
     public static final NullOutputStream NULL_OUTPUT_STREAM = INSTANCE;
 
     /**
-     * Deprecated in favor of {@link #NULL_OUTPUT_STREAM}.
+     * Deprecated in favor of {@link #INSTANCE}.
      *
      * TODO: Will be private in 3.0.
      *
-     * @deprecated Use {@link #NULL_OUTPUT_STREAM}.
+     * @deprecated Use {@link #INSTANCE}.
      */
     @Deprecated
     public NullOutputStream() {
