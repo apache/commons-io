@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 /**
- * s two files using the <b>default</b> {@link File#compareTo(File)} method.
+ * Compares two files using the <b>default</b> {@link File#compareTo(File)} method.
  * <p>
  * This comparator can be used to sort lists or arrays of files
  * by using the default file comparison.
