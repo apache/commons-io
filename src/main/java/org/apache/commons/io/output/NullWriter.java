@@ -43,7 +43,10 @@ public class NullWriter extends Writer {
 
     /**
      * Constructs a new NullWriter.
+     *
+     * @deprecated Use {@link #INSTANCE}.
      */
+    @Deprecated
     public NullWriter() {
     }
 
