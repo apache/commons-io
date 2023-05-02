@@ -33,6 +33,10 @@ import java.util.stream.Stream;
  * list return {@code true}. Otherwise, it returns {@code false}.
  * Checking of the file filter list stops when the first filter returns
  * {@code false}.
+ * <h2>Deprecating Serialization</h2>
+ * <p>
+ * <em>Serialization is deprecated and will be removed in 3.0.</em>
+ * </p>
  *
  * @since 1.0
  * @see FileFilterUtils#and(IOFileFilter...)

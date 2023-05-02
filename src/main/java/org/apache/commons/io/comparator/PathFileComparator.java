@@ -47,7 +47,10 @@ import org.apache.commons.io.IOCase;
  *       File[] array = ...
  *       ((AbstractFileComparator) PathFileComparator.PATH_INSENSITIVE_REVERSE).sort(array);
  * </pre>
-  *
+ * <h2>Deprecating Serialization</h2>
+ * <p>
+ * <em>Serialization is deprecated and will be removed in 3.0.</em>
+ * </p>
  * @since 1.4
  */
 public class PathFileComparator extends AbstractFileComparator implements Serializable {

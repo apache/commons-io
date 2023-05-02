@@ -25,6 +25,10 @@ import java.util.Objects;
 
 /**
  * This filter produces a logical NOT of the filters specified.
+ * <h2>Deprecating Serialization</h2>
+ * <p>
+ * <em>Serialization is deprecated and will be removed in 3.0.</em>
+ * </p>
  *
  * @since 1.0
  * @see FileFilterUtils#notFileFilter(IOFileFilter)

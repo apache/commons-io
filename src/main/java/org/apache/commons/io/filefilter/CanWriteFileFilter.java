@@ -36,10 +36,9 @@ import java.nio.file.attribute.BasicFileAttributes;
  *     System.out.println(file);
  * }
  * </pre>
- *
  * <p>
  * Example, showing how to print out a list of the current directory's <i>un-writable</i> files:
- *
+ * </p>
  * <pre>
  * File dir = FileUtils.current();
  * String[] files = dir.list(CanWriteFileFilter.CANNOT_WRITE);
@@ -47,9 +46,13 @@ import java.nio.file.attribute.BasicFileAttributes;
  *     System.out.println(file);
  * }
  * </pre>
- *
  * <p>
  * <b>N.B.</b> For read-only files, use {@code CanReadFileFilter.READ_ONLY}.
+ * </p>
+ * <h2>Deprecating Serialization</h2>
+ * <p>
+ * <em>Serialization is deprecated and will be removed in 3.0.</em>
+ * </p>
  *
  * @since 1.3
  */
