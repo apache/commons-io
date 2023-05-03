@@ -57,7 +57,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
 public class MemoryMappedFileInputStream extends InputStream {
 
     /**
-     * Builds a new {@link ReaderInputStream} instance.
+     * Builds a new {@link MemoryMappedFileInputStream} instance.
      * <p>
      * For example:
      * </p>
