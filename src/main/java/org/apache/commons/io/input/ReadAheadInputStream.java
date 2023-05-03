@@ -45,7 +45,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
 public class ReadAheadInputStream extends InputStream {
 
     /**
-     * Builds a new {@link ReaderInputStream} instance.
+     * Builds a new {@link ReadAheadInputStream} instance.
      * <p>
      * For example:
      * </p>
