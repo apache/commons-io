@@ -69,6 +69,9 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
     /**
      * A {@link File} origin.
+     * <p>
+     * Starting from this origin, you can get a byte array, a file, an input stream, an output stream, a path, a reader, and a writer. 
+     * </p>
      */
     public static class FileOrigin extends AbstractOrigin<File, FileOrigin> {
 
@@ -146,6 +149,9 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
     /**
      * A {@link Path} origin.
+     * <p>
+     * Starting from this origin, you can get a byte array, a file, an input stream, an output stream, a path, a reader, and a writer. 
+     * </p>
      */
     public static class PathOrigin extends AbstractOrigin<Path, PathOrigin> {
 
