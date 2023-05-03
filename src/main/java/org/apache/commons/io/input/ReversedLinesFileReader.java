@@ -47,7 +47,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
 public class ReversedLinesFileReader implements Closeable {
 
     /**
-     * Builds a new {@link ReaderInputStream} instance.
+     * Builds a new {@link ReversedLinesFileReader} instance.
      * <p>
      * For example:
      * </p>
