@@ -92,7 +92,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
 public class BOMInputStream extends ProxyInputStream {
 
     /**
-     * Builds a new {@link ReaderInputStream} instance.
+     * Builds a new {@link BOMInputStream} instance.
      * <p>
      * For example:
      * </p>
