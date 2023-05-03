@@ -24,7 +24,7 @@ import java.time.Instant;
  *
  * @since 2.12.0
  */
-public class ThreadUtils {
+public final class ThreadUtils {
 
     private static int getNanosOfMilli(final Duration duration) {
         return duration.getNano() % 1_000_000;

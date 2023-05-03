@@ -25,7 +25,7 @@ import java.nio.charset.CharsetEncoder;
  *
  * @since 2.12.0
  */
-public class CharsetEncoders {
+public final class CharsetEncoders {
 
     /**
      * Returns the given non-null CharsetEncoder or a new default CharsetEncoder.
