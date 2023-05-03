@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.nio.CharBuffer;
-import java.nio.charset.Charset;
 
 import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.function.Uncheck;
@@ -65,7 +64,7 @@ public final class UncheckedBufferedReader extends BufferedReader {
         @Override
         public UncheckedBufferedReader get() {
             // This an unchecked class, so this method is as well.
-            return Uncheck.get(() -> new UncheckedBufferedReader(getOrigin().getReader(Charset.defaultCharset()), getBufferSize()));
+            return Uncheck.get(() -> new UncheckedBufferedReader(getOrigin().getReader(getCharset()), getBufferSize()));
         }
 
     }
