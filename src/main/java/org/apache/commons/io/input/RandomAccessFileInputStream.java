@@ -34,7 +34,7 @@ import org.apache.commons.io.output.DeferredFileOutputStream;
 public class RandomAccessFileInputStream extends InputStream {
 
     /**
-     * Builds a new {@link DeferredFileOutputStream} instance.
+     * Builds a new {@link RandomAccessFileInputStream} instance.
      * <p>
      * For example:
      * </p>
