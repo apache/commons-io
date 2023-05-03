@@ -73,6 +73,8 @@ public class XmlStreamWriter extends Writer {
 
     }
 
+    private static final int BUFFER_SIZE = IOUtils.DEFAULT_BUFFER_SIZE;
+
     /**
      * Constructs a new {@link Builder}.
      *
@@ -82,8 +84,6 @@ public class XmlStreamWriter extends Writer {
     public static Builder builder() {
         return new Builder();
     }
-
-    private static final int BUFFER_SIZE = IOUtils.DEFAULT_BUFFER_SIZE;
 
     private final OutputStream out;
 

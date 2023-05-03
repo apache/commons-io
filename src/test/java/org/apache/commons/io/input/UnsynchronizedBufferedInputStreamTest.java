@@ -44,8 +44,6 @@ import org.junit.jupiter.api.Test;
  */
 public class UnsynchronizedBufferedInputStreamTest {
 
-    private static final int BUFFER_SIZE = 4096;
-
     static class MyUnsynchronizedBufferedInputStream extends UnsynchronizedBufferedInputStream {
         static byte[] buf;
 
@@ -60,6 +58,10 @@ public class UnsynchronizedBufferedInputStreamTest {
         }
     }
 
+    private static final int BUFFER_SIZE = 4096;
+
+    public static final String DATA = StringUtils.repeat("This is a test.", 500);
+
     Path fileName;
 
     private BufferedInputStream is;
@@ -67,8 +69,6 @@ public class UnsynchronizedBufferedInputStreamTest {
     private InputStream isFile;
 
     byte[] ibuf = new byte[BUFFER_SIZE];
-
-    public static final String DATA = StringUtils.repeat("This is a test.", 500);
 
     /**
      * Sets up the fixture, for example, open a network connection. This method is called before a test is executed.

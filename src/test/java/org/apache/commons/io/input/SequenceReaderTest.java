@@ -48,19 +48,19 @@ public class SequenceReaderTest {
         }
 
         @Override
-        public int read(final char[] cbuf, final int off, final int len) throws IOException {
-            checkOpen();
-            close();
-            return EOF;
-        }
-
-        @Override
         public void close() throws IOException {
             closed = true;
         }
 
         public boolean isClosed() {
             return closed;
+        }
+
+        @Override
+        public int read(final char[] cbuf, final int off, final int len) throws IOException {
+            checkOpen();
+            close();
+            return EOF;
         }
     };
 

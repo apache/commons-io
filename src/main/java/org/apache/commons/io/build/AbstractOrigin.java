@@ -242,29 +242,6 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     }
 
     /**
-     * Gets a new Reader on the origin, buffered by default.
-     *
-     * @param charset the charset to use for decoding
-     * @return a new Reader on the origin.
-     * @throws IOException if an I/O error occurs opening the file.
-     */
-    public Reader getReader(final Charset charset) throws IOException {
-        return Files.newBufferedReader(getPath(), charset);
-    }
-
-    /**
-     * Gets a new Writer on the origin, buffered by default.
-     *
-     * @param charset the charset to use for encoding
-     * @param options options specifying how the file is opened
-     * @return a new Writer on the origin.
-     * @throws IOException if an I/O error occurs opening or creating the file.
-     */
-    public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
-        return Files.newBufferedWriter(getPath(), charset, options);
-    }
-
-    /**
      * Gets this origin as a Path, if possible.
      *
      * @return this origin as a Path, if possible.
@@ -302,6 +279,29 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      */
     public Path getPath() {
         throw new UnsupportedOperationException(origin.toString());
+    }
+
+    /**
+     * Gets a new Reader on the origin, buffered by default.
+     *
+     * @param charset the charset to use for decoding
+     * @return a new Reader on the origin.
+     * @throws IOException if an I/O error occurs opening the file.
+     */
+    public Reader getReader(final Charset charset) throws IOException {
+        return Files.newBufferedReader(getPath(), charset);
+    }
+
+    /**
+     * Gets a new Writer on the origin, buffered by default.
+     *
+     * @param charset the charset to use for encoding
+     * @param options options specifying how the file is opened
+     * @return a new Writer on the origin.
+     * @throws IOException if an I/O error occurs opening or creating the file.
+     */
+    public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
+        return Files.newBufferedWriter(getPath(), charset, options);
     }
 
     @Override

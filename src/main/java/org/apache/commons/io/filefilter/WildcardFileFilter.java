@@ -133,6 +133,8 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
 
     }
 
+    private static final long serialVersionUID = -7426486598995782105L;
+
     /**
      * Constructs a new {@link Builder}.
      *
@@ -142,8 +144,6 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
     public static Builder builder() {
         return new Builder();
     }
-
-    private static final long serialVersionUID = -7426486598995782105L;
 
     private static <T> T requireWildcards(final T wildcards) {
         return Objects.requireNonNull(wildcards, "wildcards");

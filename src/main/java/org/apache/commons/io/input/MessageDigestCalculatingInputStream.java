@@ -97,16 +97,6 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
     }
 
     /**
-     * Constructs a new {@link Builder}.
-     *
-     * @return a new {@link Builder}.
-     * @since 2.12.0
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    /**
      * Maintains the message digest.
      */
     public static class MessageDigestMaintainingObserver extends Observer {
@@ -139,6 +129,16 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
      * </p>
      */
     private static final String DEFAULT_ALGORITHM = "MD5";
+
+    /**
+     * Constructs a new {@link Builder}.
+     *
+     * @return a new {@link Builder}.
+     * @since 2.12.0
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
 
     /**
      * Gets a MessageDigest object that implements the default digest algorithm.

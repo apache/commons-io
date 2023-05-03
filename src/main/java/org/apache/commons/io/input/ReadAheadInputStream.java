@@ -82,6 +82,8 @@ public class ReadAheadInputStream extends InputStream {
 
     }
 
+    private static final ThreadLocal<byte[]> BYTE_ARRAY_1 = ThreadLocal.withInitial(() -> new byte[1]);
+
     /**
      * Constructs a new {@link Builder}.
      *
@@ -91,8 +93,6 @@ public class ReadAheadInputStream extends InputStream {
     public static Builder builder() {
         return new Builder();
     }
-
-    private static final ThreadLocal<byte[]> BYTE_ARRAY_1 = ThreadLocal.withInitial(() -> new byte[1]);
 
     /**
      * Creates a new daemon executor service.

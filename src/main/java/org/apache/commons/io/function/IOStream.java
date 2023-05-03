@@ -74,44 +74,6 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
     }
 
     /**
-     * Performs an action for each element gathering any exceptions.
-     *
-     * @param action The action to apply to each element.
-     * @throws IOExceptionList if any I/O errors occur.
-     */
-    default void forAll(final IOConsumer<T> action) throws IOExceptionList {
-        forAll(action, (i, e) -> e);
-    }
-
-    /**
-     * Performs an action for each element gathering any exceptions.
-     *
-     * @param action The action to apply to each element.
-     * @param exSupplier The exception supplier.
-     * @throws IOExceptionList if any I/O errors occur.
-     */
-    default void forAll(final IOConsumer<T> action, final BiFunction<Integer, IOException, IOException> exSupplier) throws IOExceptionList {
-        final AtomicReference<List<IOException>> causeList = new AtomicReference<>();
-        final AtomicInteger index = new AtomicInteger();
-        final IOConsumer<T> safeAction = IOStreams.toIOConsumer(action);
-        unwrap().forEach(e -> {
-            try {
-                safeAction.accept(e);
-            } catch (final IOException innerEx) {
-                if (causeList.get() == null) {
-                    // Only allocate if required
-                    causeList.set(new ArrayList<>());
-                }
-                if (exSupplier != null) {
-                    causeList.get().add(exSupplier.apply(index.get(), innerEx));
-                }
-            }
-            index.incrementAndGet();
-        });
-        IOExceptionList.checkEmpty(causeList.get(), null);
-    }
-
-    /**
      * Like {@link Stream#iterate(Object, UnaryOperator)} but for IO.
      *
      * @param <T> the type of stream elements.
@@ -350,6 +312,44 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
     @SuppressWarnings("unused") // thrown by Erase.
     default LongStream flatMapToLong(final IOFunction<? super T, ? extends LongStream> mapper) throws IOException {
         return unwrap().flatMapToLong(t -> Erase.apply(mapper, t));
+    }
+
+    /**
+     * Performs an action for each element gathering any exceptions.
+     *
+     * @param action The action to apply to each element.
+     * @throws IOExceptionList if any I/O errors occur.
+     */
+    default void forAll(final IOConsumer<T> action) throws IOExceptionList {
+        forAll(action, (i, e) -> e);
+    }
+
+    /**
+     * Performs an action for each element gathering any exceptions.
+     *
+     * @param action The action to apply to each element.
+     * @param exSupplier The exception supplier.
+     * @throws IOExceptionList if any I/O errors occur.
+     */
+    default void forAll(final IOConsumer<T> action, final BiFunction<Integer, IOException, IOException> exSupplier) throws IOExceptionList {
+        final AtomicReference<List<IOException>> causeList = new AtomicReference<>();
+        final AtomicInteger index = new AtomicInteger();
+        final IOConsumer<T> safeAction = IOStreams.toIOConsumer(action);
+        unwrap().forEach(e -> {
+            try {
+                safeAction.accept(e);
+            } catch (final IOException innerEx) {
+                if (causeList.get() == null) {
+                    // Only allocate if required
+                    causeList.set(new ArrayList<>());
+                }
+                if (exSupplier != null) {
+                    causeList.get().add(exSupplier.apply(index.get(), innerEx));
+                }
+            }
+            index.incrementAndGet();
+        });
+        IOExceptionList.checkEmpty(causeList.get(), null);
     }
 
     /**

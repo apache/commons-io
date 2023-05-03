@@ -256,16 +256,6 @@ public class ReaderInputStreamTest {
         testWithSingleByteRead(TEST_STRING, UTF_8);
     }
 
-    private void testWithBufferedRead(final String testString, final String charsetName) throws IOException {
-        final byte[] expected = testString.getBytes(charsetName);
-        try (ReaderInputStream in = new ReaderInputStream(new StringReader(testString), charsetName)) {
-            testWithBufferedRead(expected, in);
-        }
-        try (ReaderInputStream in = ReaderInputStream.builder().setReader(new StringReader(testString)).setCharset(charsetName).get()) {
-            testWithBufferedRead(expected, in);
-        }
-    }
-
     private void testWithBufferedRead(final byte[] expected, final ReaderInputStream in) throws IOException {
         final byte[] buffer = new byte[128];
         int offset = 0;
@@ -285,6 +275,16 @@ public class ReaderInputStreamTest {
                 bufferOffset++;
                 read--;
             }
+        }
+    }
+
+    private void testWithBufferedRead(final String testString, final String charsetName) throws IOException {
+        final byte[] expected = testString.getBytes(charsetName);
+        try (ReaderInputStream in = new ReaderInputStream(new StringReader(testString), charsetName)) {
+            testWithBufferedRead(expected, in);
+        }
+        try (ReaderInputStream in = ReaderInputStream.builder().setReader(new StringReader(testString)).setCharset(charsetName).get()) {
+            testWithBufferedRead(expected, in);
         }
     }
 

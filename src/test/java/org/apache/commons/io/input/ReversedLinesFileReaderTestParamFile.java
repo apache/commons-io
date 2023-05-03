@@ -85,30 +85,6 @@ public class ReversedLinesFileReaderTestParamFile {
         // @formatter:on
     }
 
-    @ParameterizedTest(name = "{0}, encoding={1}, blockSize={2}, useNonDefaultFileSystem={3}, isResource={4}")
-    @MethodSource
-    public void testDataIntegrityWithBufferedReader(final String fileName, final String charsetName, final Integer blockSize,
-            final boolean useNonDefaultFileSystem, final boolean isResource) throws IOException, URISyntaxException {
-
-        Path filePath = isResource ? TestResources.getPath(fileName) : Paths.get(fileName);
-        FileSystem fileSystem = null;
-        if (useNonDefaultFileSystem) {
-            fileSystem = Jimfs.newFileSystem(Configuration.unix());
-            filePath = Files.copy(filePath, fileSystem.getPath("/" + fileName));
-        }
-
-        // We want to test null Charset in the ReversedLinesFileReaderconstructor.
-        final Charset charset = charsetName != null ? Charset.forName(charsetName) : null;
-        try (ReversedLinesFileReader reversedLinesFileReader = blockSize == null ? new ReversedLinesFileReader(filePath, charset)
-                : new ReversedLinesFileReader(filePath, blockSize, charset)) {
-            testDataIntegrityWithBufferedReader(filePath, fileSystem, charset, reversedLinesFileReader);
-        }
-        try (ReversedLinesFileReader reversedLinesFileReader = ReversedLinesFileReader.builder().setPath(filePath).setBufferSize(blockSize).setCharset(charset)
-                .get()) {
-            testDataIntegrityWithBufferedReader(filePath, fileSystem, charset, reversedLinesFileReader);
-        }
-    }
-
     private void testDataIntegrityWithBufferedReader(Path filePath, FileSystem fileSystem, final Charset charset,
             ReversedLinesFileReader reversedLinesFileReader) throws IOException {
         final Stack<String> lineStack = new Stack<>();
@@ -130,6 +106,30 @@ public class ReversedLinesFileReaderTestParamFile {
 
         if (fileSystem != null) {
             fileSystem.close();
+        }
+    }
+
+    @ParameterizedTest(name = "{0}, encoding={1}, blockSize={2}, useNonDefaultFileSystem={3}, isResource={4}")
+    @MethodSource
+    public void testDataIntegrityWithBufferedReader(final String fileName, final String charsetName, final Integer blockSize,
+            final boolean useNonDefaultFileSystem, final boolean isResource) throws IOException, URISyntaxException {
+
+        Path filePath = isResource ? TestResources.getPath(fileName) : Paths.get(fileName);
+        FileSystem fileSystem = null;
+        if (useNonDefaultFileSystem) {
+            fileSystem = Jimfs.newFileSystem(Configuration.unix());
+            filePath = Files.copy(filePath, fileSystem.getPath("/" + fileName));
+        }
+
+        // We want to test null Charset in the ReversedLinesFileReaderconstructor.
+        final Charset charset = charsetName != null ? Charset.forName(charsetName) : null;
+        try (ReversedLinesFileReader reversedLinesFileReader = blockSize == null ? new ReversedLinesFileReader(filePath, charset)
+                : new ReversedLinesFileReader(filePath, blockSize, charset)) {
+            testDataIntegrityWithBufferedReader(filePath, fileSystem, charset, reversedLinesFileReader);
+        }
+        try (ReversedLinesFileReader reversedLinesFileReader = ReversedLinesFileReader.builder().setPath(filePath).setBufferSize(blockSize).setCharset(charset)
+                .get()) {
+            testDataIntegrityWithBufferedReader(filePath, fileSystem, charset, reversedLinesFileReader);
         }
     }
 }

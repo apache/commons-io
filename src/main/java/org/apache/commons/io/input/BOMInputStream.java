@@ -109,7 +109,12 @@ public class BOMInputStream extends ProxyInputStream {
 
         private static final ByteOrderMark[] DEFAULT = { ByteOrderMark.UTF_8 };
 
+        // for test access
+        static ByteOrderMark getDefaultBOM() {
+            return DEFAULT[0];
+        }
         private boolean include;
+
         private ByteOrderMark[] byteOrderMarks = DEFAULT;
 
         @SuppressWarnings("resource")
@@ -138,11 +143,6 @@ public class BOMInputStream extends ProxyInputStream {
         public Builder setInclude(final boolean include) {
             this.include = include;
             return this;
-        }
-
-        // for test access
-        static ByteOrderMark getDefaultBOM() {
-            return DEFAULT[0];
         }
 
     }

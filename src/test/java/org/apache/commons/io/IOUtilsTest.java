@@ -302,6 +302,11 @@ public class IOUtilsTest {
     }
 
     @Test
+    public void testByteArrayWithNegativeSize() {
+        assertThrows(NegativeArraySizeException.class, () -> IOUtils.byteArray(-1));
+    }
+
+    @Test
     public void testClose() {
         assertDoesNotThrow(() -> IOUtils.close((Closeable) null));
         assertDoesNotThrow(() -> IOUtils.close(new StringReader("s")));
@@ -1152,6 +1157,8 @@ public class IOUtilsTest {
         assertEquals(fileSize, content.getBytes().length);
     }
 
+    // Tests from IO-305
+
     @Test
     public void testResourceToString_ExistingResourceAtSubPackage_WithClassLoader() throws Exception {
         final long fileSize = TestResources.getFile("FileUtilsTestDataCR.dat").length();
@@ -1161,8 +1168,6 @@ public class IOUtilsTest {
         assertNotNull(content);
         assertEquals(fileSize, content.getBytes().length);
     }
-
-    // Tests from IO-305
 
     @Test
     public void testResourceToString_NonExistingResource() {
@@ -1727,11 +1732,6 @@ public class IOUtilsTest {
                 assertEquals(data.length(), os.getByteCount());
             }
         }
-    }
-
-    @Test
-    public void testByteArrayWithNegativeSize() {
-        assertThrows(NegativeArraySizeException.class, () -> IOUtils.byteArray(-1));
     }
 
 }
