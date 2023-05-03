@@ -48,7 +48,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
 public class FileWriterWithEncoding extends ProxyWriter {
 
     /**
-     * Builds a new {@link DeferredFileOutputStream} instance.
+     * Builds a new {@link FileWriterWithEncoding} instance.
      * <p>
      * Using a CharsetEncoder:
      * </p>
