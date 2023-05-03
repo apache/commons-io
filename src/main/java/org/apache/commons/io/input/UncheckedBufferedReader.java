@@ -22,7 +22,9 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.nio.CharBuffer;
+import java.nio.charset.Charset;
 
+import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.function.Uncheck;
 
 /**
@@ -36,23 +38,45 @@ import org.apache.commons.io.function.Uncheck;
 public class UncheckedBufferedReader extends BufferedReader {
 
     /**
-     * Creates a new buffered reader.
-     *
-     * @param reader a Reader object providing the underlying stream.
-     * @return a new UncheckedBufferedReader.
-     * @throws NullPointerException if {@code reader} is {@code null}.
+     * Builds a new {@link UncheckedBufferedReader} instance.
+     * <p>
+     * Using File IO:
+     * </p>
+     * <pre>{@code
+     * UncheckedBufferedReader s = UncheckedBufferedReader.builder()
+     *   .setFile(file)
+     *   .setBufferSize(8192)
+     *   .setCharset(Charset.defaultCharset())
+     *   .get()}
+     * </pre>
+     * <p>
+     * Using NIO Path:
+     * </p>
+     * <pre>{@code
+     * UncheckedBufferedReader s = UncheckedBufferedReader.builder()
+     *   .setPath(path)
+     *   .setBufferSize(8192)
+     *   .setCharset(Charset.defaultCharset())
+     *   .get()}
+     * </pre>
      */
-    public static UncheckedBufferedReader on(final Reader reader) {
-        return new UncheckedBufferedReader(reader);
+    public static class Builder extends AbstractStreamBuilder<UncheckedBufferedReader, Builder> {
+
+        @Override
+        public UncheckedBufferedReader get() {
+            // This an unchecked class, so this method is as well.
+            return Uncheck.get(() -> new UncheckedBufferedReader(getOrigin().getReader(Charset.defaultCharset()), getBufferSize()));
+        }
+
     }
 
     /**
-     * Creates a buffering character-input stream that uses a default-sized input buffer.
+     * Constructs a new {@link Builder}.
      *
-     * @param reader A Reader
+     * @return a new {@link Builder}.
      */
-    public UncheckedBufferedReader(final Reader reader) {
-        super(reader);
+    public static Builder builder() {
+        return new Builder();
     }
 
     /**
@@ -63,7 +87,7 @@ public class UncheckedBufferedReader extends BufferedReader {
      *
      * @throws IllegalArgumentException If {@code bufferSize <= 0}
      */
-    public UncheckedBufferedReader(final Reader reader, final int bufferSize) {
+    private UncheckedBufferedReader(final Reader reader, final int bufferSize) {
         super(reader, bufferSize);
     }
 
