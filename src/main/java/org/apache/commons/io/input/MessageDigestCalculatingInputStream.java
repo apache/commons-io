@@ -41,7 +41,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
 public class MessageDigestCalculatingInputStream extends ObservableInputStream {
 
     /**
-     * Builds a new {@link ReaderInputStream} instance.
+     * Builds a new {@link MessageDigestCalculatingInputStream} instance.
      * <p>
      * For example:
      * </p>
