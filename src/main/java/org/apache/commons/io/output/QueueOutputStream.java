@@ -80,7 +80,7 @@ public class QueueOutputStream extends OutputStream {
      * @return QueueInputStream connected to this stream
      */
     public QueueInputStream newQueueInputStream() {
-        return new QueueInputStream(blockingQueue);
+        return QueueInputStream.builder().setBlockingQueue(blockingQueue).get();
     }
 
     /**

@@ -137,7 +137,9 @@ public class QueueInputStream extends InputStream {
      * Constructs a new instance with given queue and zero timeout.
      *
      * @param blockingQueue backing queue for the stream.
+     * @deprecated Use {@link #builder()}.
      */
+    @Deprecated
     public QueueInputStream(final BlockingQueue<Integer> blockingQueue) {
         this(blockingQueue, Duration.ZERO);
     }
