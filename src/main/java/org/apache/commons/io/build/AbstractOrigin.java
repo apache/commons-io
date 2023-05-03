@@ -32,7 +32,12 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 /**
- * Abstracts the origin of data for builders like a {@link File}, {@link Path}, and so on.
+ * Abstracts the origin of data for builders like a {@link File}, {@link Path}, {@link Reader}, {@link Writer}, {@link InputStream}, {@link OutputStream}, and
+ * {@link URI}.
+ * <p>
+ * Some methods may throw {@link UnsupportedOperationException} if that method is not implemented in a concrete subclass, see {@link #getFile()} and
+ * {@link #getPath()}.
+ * </p>
  *
  * @param <T> the type of instances to build.
  * @param <B> the type of builder subclass.
@@ -245,6 +250,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * Gets this origin as a Path, if possible.
      *
      * @return this origin as a Path, if possible.
+     * @throws UnsupportedOperationException if this method is not implemented in a concrete subclass.
      */
     public File getFile() {
         throw new UnsupportedOperationException(origin.toString());
@@ -276,6 +282,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * Gets this origin as a Path, if possible.
      *
      * @return this origin as a Path, if possible.
+     * @throws UnsupportedOperationException if this method is not implemented in a concrete subclass.
      */
     public Path getPath() {
         throw new UnsupportedOperationException(origin.toString());
