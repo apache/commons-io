@@ -275,7 +275,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     /**
      * Gets this origin as a Path, if possible.
      *
-     * @return this origin as a Path\, if possible.
+     * @return this origin as a Path, if possible.
      */
     public Path getPath() {
         throw new UnsupportedOperationException(origin.toString());
