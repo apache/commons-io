@@ -117,6 +117,11 @@ public class BOMInputStream extends ProxyInputStream {
 
         private ByteOrderMark[] byteOrderMarks = DEFAULT;
 
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to an InputStream.
+         */
         @SuppressWarnings("resource")
         @Override
         public BOMInputStream get() throws IOException {

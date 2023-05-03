@@ -26,9 +26,8 @@ import java.util.Objects;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
- * This is an alternative to {@link java.io.ByteArrayInputStream}
- * which removes the synchronization overhead for non-concurrent
- * access; as such this class is not thread-safe.
+ * This is an alternative to {@link java.io.ByteArrayInputStream} which removes the synchronization overhead for non-concurrent access; as such this class is
+ * not thread-safe.
  *
  * @see ByteArrayInputStream
  * @since 2.7
@@ -41,6 +40,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      * <p>
      * Using a Byte Array:
      * </p>
+     *
      * <pre>{@code
      * UnsynchronizedByteArrayInputStream s = UnsynchronizedByteArrayInputStream.builder()
      *   .setByteArray(byteArray)
@@ -51,6 +51,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      * <p>
      * Using File IO:
      * </p>
+     *
      * <pre>{@code
      * UnsynchronizedByteArrayInputStream s = UnsynchronizedByteArrayInputStream.builder()
      *   .setFile(file)
@@ -61,6 +62,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      * <p>
      * Using NIO Path:
      * </p>
+     *
      * <pre>{@code
      * UnsynchronizedByteArrayInputStream s = UnsynchronizedByteArrayInputStream.builder()
      *   .setPath(path)
@@ -74,18 +76,23 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
         private int offset;
         private int length;
 
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to a byte array.
+         */
         @Override
         public UnsynchronizedByteArrayInputStream get() throws IOException {
             return new UnsynchronizedByteArrayInputStream(getOrigin().getByteArray(), offset, length);
         }
 
         @Override
-        public Builder setByteArray(byte[] origin) {
+        public Builder setByteArray(final byte[] origin) {
             length = Objects.requireNonNull(origin, "origin").length;
             return super.setByteArray(origin);
         }
 
-        public Builder setLength(int length) {
+        public Builder setLength(final int length) {
             if (length < 0) {
                 throw new IllegalArgumentException("length cannot be negative");
             }
@@ -93,7 +100,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
             return this;
         }
 
-        public Builder setOffset(int offset) {
+        public Builder setOffset(final int offset) {
             if (offset < 0) {
                 throw new IllegalArgumentException("offset cannot be negative");
             }
@@ -125,8 +132,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
     /**
      * End Of Data.
      *
-     * Similar to data.length,
-     * i.e. the last readable offset + 1.
+     * Similar to data.length, i.e. the last readable offset + 1.
      */
     private final int eod;
 
@@ -157,7 +163,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
     /**
      * Creates a new byte array input stream.
      *
-     * @param data the buffer
+     * @param data   the buffer
      * @param offset the offset into the buffer
      *
      * @throws IllegalArgumentException if the offset is less than zero
@@ -178,7 +184,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
     /**
      * Creates a new byte array input stream.
      *
-     * @param data the buffer
+     * @param data   the buffer
      * @param offset the offset into the buffer
      * @param length the length of the buffer
      *

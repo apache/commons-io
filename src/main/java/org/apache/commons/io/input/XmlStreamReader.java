@@ -116,6 +116,11 @@ public class XmlStreamReader extends Reader {
         private boolean lenient = true;
         private String httpContentType;
 
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to an InputStream.
+         */
         @SuppressWarnings("resource")
         @Override
         public XmlStreamReader get() throws IOException {

@@ -2555,7 +2555,7 @@ public class IOUtils {
      */
     public static byte[] toByteArray(final InputStream inputStream) throws IOException {
         // We use a ThresholdingOutputStream to avoid reading AND writing more than Integer.MAX_VALUE.
-        try (UnsynchronizedByteArrayOutputStream ubaOutput = new UnsynchronizedByteArrayOutputStream();
+        try (UnsynchronizedByteArrayOutputStream ubaOutput = UnsynchronizedByteArrayOutputStream.builder().get();
             ThresholdingOutputStream thresholdOutput = new ThresholdingOutputStream(Integer.MAX_VALUE, os -> {
                 throw new IllegalArgumentException(String.format("Cannot read more than %,d into a byte array", Integer.MAX_VALUE));
             }, os -> ubaOutput)) {

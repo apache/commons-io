@@ -51,6 +51,11 @@ public class RandomAccessFileInputStream extends InputStream {
         private RandomAccessFile randomAccessFile;
         private boolean closeOnClose;
 
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to a File.
+         */
         @SuppressWarnings("resource") // Caller closes depending on settings
         @Override
         public RandomAccessFileInputStream get() throws IOException {

@@ -65,6 +65,11 @@ public class XmlStreamWriter extends Writer {
             setCharset(StandardCharsets.UTF_8);
         }
 
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to an OutputStream.
+         */
         @SuppressWarnings("resource")
         @Override
         public XmlStreamWriter get() throws IOException {

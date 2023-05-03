@@ -62,6 +62,11 @@ public class ReadAheadInputStream extends InputStream {
 
         private ExecutorService executorService;
 
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to an InputStream.
+         */
         @SuppressWarnings("resource")
         @Override
         public ReadAheadInputStream get() throws IOException {

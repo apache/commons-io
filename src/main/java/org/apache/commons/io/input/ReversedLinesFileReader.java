@@ -68,6 +68,11 @@ public class ReversedLinesFileReader implements Closeable {
             setBufferSize(DEFAULT_BLOCK_SIZE);
         }
 
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
+         */
         @Override
         public ReversedLinesFileReader get() throws IOException {
             return new ReversedLinesFileReader(getOrigin().getPath(), getBufferSize(), getCharset());

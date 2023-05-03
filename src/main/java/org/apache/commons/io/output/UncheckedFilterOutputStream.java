@@ -33,7 +33,7 @@ import org.apache.commons.io.function.Uncheck;
  * @see UncheckedIOException
  * @since 2.12.0
  */
-public class UncheckedFilterOutputStream extends FilterOutputStream {
+public final class UncheckedFilterOutputStream extends FilterOutputStream {
 
     /**
      * Builds a new {@link UncheckedFilterOutputStream} instance.
@@ -56,6 +56,11 @@ public class UncheckedFilterOutputStream extends FilterOutputStream {
      */
     public static class Builder extends AbstractStreamBuilder<UncheckedFilterOutputStream, Builder> {
 
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to an OutputStream.
+         */
         @SuppressWarnings("resource")
         @Override
         public UncheckedFilterOutputStream get() throws IOException {
@@ -79,7 +84,7 @@ public class UncheckedFilterOutputStream extends FilterOutputStream {
      * @param outputStream the underlying output stream, or {@code null} if this instance is to be created without an
      *        underlying stream.
      */
-    public UncheckedFilterOutputStream(final OutputStream outputStream) {
+    private UncheckedFilterOutputStream(final OutputStream outputStream) {
         super(outputStream);
     }
 

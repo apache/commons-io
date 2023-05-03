@@ -67,6 +67,11 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
             }
         }
 
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to an InputStream.
+         */
         @SuppressWarnings("resource")
         @Override
         public MessageDigestCalculatingInputStream get() throws IOException {

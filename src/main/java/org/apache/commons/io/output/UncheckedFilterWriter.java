@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.io.Writer;
 
+import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.function.Uncheck;
 
 /**
@@ -32,17 +33,49 @@ import org.apache.commons.io.function.Uncheck;
  * @see UncheckedIOException
  * @since 2.12.0
  */
-public class UncheckedFilterWriter extends FilterWriter {
+public final class UncheckedFilterWriter extends FilterWriter {
 
     /**
-     * Creates a new filtered writer.
-     *
-     * @param writer a Writer object providing the underlying stream.
-     * @return a new UncheckedFilterReader.
-     * @throws NullPointerException if {@code writer} is {@code null}.
+     * Builds a new {@link UncheckedFilterWriter} instance.
+     * <p>
+     * Using File IO:
+     * </p>
+     * <pre>{@code
+     * UncheckedFilterWriter s = UncheckedFilterWriter.builder()
+     *   .setFile(file)
+     *   .get()}
+     * </pre>
+     * <p>
+     * Using NIO Path:
+     * </p>
+     * <pre>{@code
+     * UncheckedFilterWriter s = UncheckedFilterWriter.builder()
+     *   .setPath(path)
+     *   .get()}
+     * </pre>
      */
-    public static UncheckedFilterWriter on(final Writer writer) {
-        return new UncheckedFilterWriter(writer);
+    public static class Builder extends AbstractStreamBuilder<UncheckedFilterWriter, Builder> {
+
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to a Writer.
+         */
+        @SuppressWarnings("resource")
+        @Override
+        public UncheckedFilterWriter get() throws IOException {
+            return new UncheckedFilterWriter(getOrigin().getWriter(getCharset()));
+        }
+
+    }
+
+    /**
+     * Constructs a new {@link Builder}.
+     *
+     * @return a new {@link Builder}.
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
     /**
@@ -51,7 +84,7 @@ public class UncheckedFilterWriter extends FilterWriter {
      * @param writer a Writer object providing the underlying stream.
      * @throws NullPointerException if {@code writer} is {@code null}.
      */
-    protected UncheckedFilterWriter(final Writer writer) {
+    private UncheckedFilterWriter(final Writer writer) {
         super(writer);
     }
 

@@ -39,10 +39,10 @@ public class UncheckedFilterWriterTest {
 
     @SuppressWarnings("resource")
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws IOException {
         exception = new IOException("test exception");
-        brokenWriter = UncheckedFilterWriter.on(new BrokenWriter(exception));
-        stringWriter = UncheckedFilterWriter.on(new StringWriter());
+        brokenWriter = UncheckedFilterWriter.builder().setWriter(new BrokenWriter(exception)).get();
+        stringWriter = UncheckedFilterWriter.builder().setWriter(new StringWriter()).get();
     }
 
     @SuppressWarnings("resource")

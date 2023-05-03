@@ -57,7 +57,7 @@ public class UnsynchronizedFilterInputStreamTest {
     protected void setUp() throws IOException {
         fileName = Files.createTempFile(getClass().getSimpleName(), ".tst");
         Files.write(fileName, DATA.getBytes("UTF-8"));
-        is = new UnsynchronizedFilterInputStream(Files.newInputStream(fileName));
+        is = UnsynchronizedFilterInputStream.builder().setInputStream(Files.newInputStream(fileName)).get();
     }
 
     /**

@@ -72,6 +72,11 @@ public class LockableFileWriter extends Writer {
             setBufferSize(AbstractByteArrayOutputStream.DEFAULT_SIZE);
         }
 
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to a File.
+         */
         @Override
         public LockableFileWriter get() throws IOException {
             return new LockableFileWriter(getOrigin().getFile(), getCharset(), append, lockDirectory.getFile().toString());

@@ -96,6 +96,11 @@ public class ReaderInputStream extends InputStream {
 
         private CharsetEncoder charsetEncoder = super.getCharset().newEncoder();
 
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to a Reader.
+         */
         @SuppressWarnings("resource")
         @Override
         public ReaderInputStream get() throws IOException {

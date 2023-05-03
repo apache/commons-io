@@ -71,6 +71,11 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
      */
     public static class Builder extends AbstractStreamBuilder<UnsynchronizedBufferedInputStream, Builder> {
 
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to an InputStream.
+         */
         @SuppressWarnings("resource") // Caller closes.
         @Override
         public UnsynchronizedBufferedInputStream get() throws IOException {
@@ -312,7 +317,7 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
                 if (fillBuffer(localIn, localBuf) == IOUtils.EOF) {
                     return required == length ? IOUtils.EOF : length - required;
                 }
-                // localBuf may have been invalidated by fillbuf
+                // localBuf may have been invalidated by fillBuffer()
                 if (localBuf != buffer) {
                     localBuf = buffer;
                     if (localBuf == null) {

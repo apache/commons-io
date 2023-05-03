@@ -70,7 +70,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     /**
      * A {@link File} origin.
      * <p>
-     * Starting from this origin, you can get a byte array, a file, an input stream, an output stream, a path, a reader, and a writer. 
+     * Starting from this origin, you can get a byte array, a file, an input stream, an output stream, a path, a reader, and a writer.
      * </p>
      */
     public static class FileOrigin extends AbstractOrigin<File, FileOrigin> {
@@ -150,7 +150,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     /**
      * A {@link Path} origin.
      * <p>
-     * Starting from this origin, you can get a byte array, a file, an input stream, an output stream, a path, a reader, and a writer. 
+     * Starting from this origin, you can get a byte array, a file, an input stream, an output stream, a path, a reader, and a writer.
      * </p>
      */
     public static class PathOrigin extends AbstractOrigin<Path, PathOrigin> {
@@ -280,6 +280,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      *
      * @return this origin as a byte array, if possible.
      * @throws IOException if an I/O error occurs.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
      */
     public byte[] getByteArray() throws IOException {
         return Files.readAllBytes(getPath());
@@ -301,6 +302,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * @param options options specifying how the file is opened
      * @return this origin as an InputStream, if possible.
      * @throws IOException if an I/O error occurs.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
      */
     public InputStream getInputStream(final OpenOption... options) throws IOException {
         return Files.newInputStream(getPath(), options);
@@ -312,6 +314,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * @param options options specifying how the file is opened
      * @return this origin as an OutputStream, if possible.
      * @throws IOException if an I/O error occurs.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
      */
     public OutputStream getOutputStream(final OpenOption... options) throws IOException {
         return Files.newOutputStream(getPath(), options);
@@ -345,6 +348,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * @param options options specifying how the file is opened
      * @return a new Writer on the origin.
      * @throws IOException if an I/O error occurs opening or creating the file.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
      */
     public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
         return Files.newBufferedWriter(getPath(), charset, options);

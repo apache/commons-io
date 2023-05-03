@@ -48,7 +48,6 @@ public class UnsynchronizedFilterInputStream extends InputStream {
      * <pre>{@code
      * UnsynchronizedFilterInputStream s = UnsynchronizedFilterInputStream.builder()
      *   .setFile(file)
-     *   .setBufferSize(8192)
      *   .get()}
      * </pre>
      * <p>
@@ -57,12 +56,16 @@ public class UnsynchronizedFilterInputStream extends InputStream {
      * <pre>{@code
      * UnsynchronizedFilterInputStream s = UnsynchronizedFilterInputStream.builder()
      *   .setPath(path)
-     *   .setBufferSize(8192)
      *   .get()}
      * </pre>
      */
     public static class Builder extends AbstractStreamBuilder<UnsynchronizedFilterInputStream, Builder> {
 
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to an InputStream.
+         */
         @SuppressWarnings("resource") // Caller closes.
         @Override
         public UnsynchronizedFilterInputStream get() throws IOException {
@@ -90,7 +93,7 @@ public class UnsynchronizedFilterInputStream extends InputStream {
      *
      * @param inputStream the non-null InputStream to filter reads on.
      */
-    protected UnsynchronizedFilterInputStream(final InputStream inputStream) {
+    UnsynchronizedFilterInputStream(final InputStream inputStream) {
         this.inputStream = inputStream;
     }
 

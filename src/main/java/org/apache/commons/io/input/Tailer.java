@@ -205,6 +205,11 @@ public class Tailer implements Runnable, AutoCloseable {
             return this;
         }
 
+        /**
+         * Sets the origin.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
+         */
         @Override
         protected Builder setOrigin(final AbstractOrigin<?, ?> origin) {
             setTailable(new TailablePath(origin.getPath()));

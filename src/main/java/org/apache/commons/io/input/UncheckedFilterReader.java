@@ -57,6 +57,11 @@ public final class UncheckedFilterReader extends FilterReader {
      */
     public static class Builder extends AbstractStreamBuilder<UncheckedFilterReader, Builder> {
 
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to a Reader.
+         */
         @Override
         public UncheckedFilterReader get() {
             // This an unchecked class, so this method is as well.

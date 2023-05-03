@@ -54,7 +54,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  *
  * @since 2.12.0
  */
-public class MemoryMappedFileInputStream extends InputStream {
+public final class MemoryMappedFileInputStream extends InputStream {
 
     /**
      * Builds a new {@link MemoryMappedFileInputStream} instance.
@@ -77,6 +77,11 @@ public class MemoryMappedFileInputStream extends InputStream {
             setBufferSize(DEFAULT_BUFFER_SIZE);
         }
 
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
+         */
         @Override
         public MemoryMappedFileInputStream get() throws IOException {
             return new MemoryMappedFileInputStream(getOrigin().getPath(), getBufferSize());
@@ -115,24 +120,10 @@ public class MemoryMappedFileInputStream extends InputStream {
      * Constructs a new instance.
      *
      * @param file The path of the file to open.
-     * @throws IOException If an I/O error occurs
-     * @deprecated Use {@link #builder()}
-     */
-    @Deprecated
-    public MemoryMappedFileInputStream(final Path file) throws IOException {
-        this(file, DEFAULT_BUFFER_SIZE);
-    }
-
-    /**
-     * Constructs a new instance.
-     *
-     * @param file The path of the file to open.
      * @param bufferSize Size of the sliding buffer.
      * @throws IOException If an I/O error occurs.
-     * @deprecated Use {@link #builder()}
      */
-    @Deprecated
-    public MemoryMappedFileInputStream(final Path file, final int bufferSize) throws IOException {
+    private MemoryMappedFileInputStream(final Path file, final int bufferSize) throws IOException {
         this.bufferSize = bufferSize;
         this.channel = FileChannel.open(file, StandardOpenOption.READ);
     }
