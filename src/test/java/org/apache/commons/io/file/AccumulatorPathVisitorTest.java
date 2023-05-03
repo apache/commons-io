@@ -74,8 +74,7 @@ public class AccumulatorPathVisitorTest {
             Arguments.of((Supplier<AccumulatorPathVisitor>) () -> new AccumulatorPathVisitor(
                 Counters.bigIntegerPathCounters(),
                 CountingPathVisitor.defaultDirFilter(),
-                CountingPathVisitor.defaultFileFilter(),
-                IOBiFunction.noop())));
+                CountingPathVisitor.defaultFileFilter())));
         // @formatter:on
     }
 

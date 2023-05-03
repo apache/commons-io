@@ -31,7 +31,7 @@ import java.util.Objects;
  *
  * @since 2.9.0
  */
-public class FileSystemProviders {
+public class FileSystemProviders { // NOPMD Class will be final in 3.0.
 
     private static final FileSystemProviders INSTALLED = new FileSystemProviders(FileSystemProvider.installedProviders());
 

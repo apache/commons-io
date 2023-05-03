@@ -458,6 +458,15 @@ file comparators, endian transformation classes, and much more.
         <groupId>com.github.siom79.japicmp</groupId>
         <artifactId>japicmp-maven-plugin</artifactId>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <configuration>
+          <rulesets>
+            <ruleset>src/conf/maven-pmd-plugin.xml</ruleset>
+          </rulesets>
+		</configuration>
+      </plugin>
     </plugins>
   </build>
 
