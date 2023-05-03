@@ -43,7 +43,8 @@ public class UncheckedFilterOutputStreamTest {
     public void setUp() throws IOException {
         exception = new IOException("test exception");
         brokenWriter = UncheckedFilterOutputStream.builder().setOutputStream(new BrokenOutputStream(exception)).get();
-        stringWriter = UncheckedFilterOutputStream.builder().setOutputStream(WriterOutputStream.builder().setWriter(new StringWriter()).setCharset(Charset.defaultCharset()).get()).get();
+        stringWriter = UncheckedFilterOutputStream.builder()
+                .setOutputStream(WriterOutputStream.builder().setWriter(new StringWriter()).setCharset(Charset.defaultCharset()).get()).get();
     }
 
     @Test
