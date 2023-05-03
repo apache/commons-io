@@ -26,7 +26,6 @@ import java.util.Objects;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractStreamBuilder;
-import org.apache.commons.io.output.DeferredFileOutputStream;
 
 /**
  * {@link InputStream} implementation which uses direct buffer to read a file to avoid extra copy of data between Java

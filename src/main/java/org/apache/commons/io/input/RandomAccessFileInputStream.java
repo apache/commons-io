@@ -24,7 +24,6 @@ import java.util.Objects;
 
 import org.apache.commons.io.RandomAccessFileMode;
 import org.apache.commons.io.build.AbstractStreamBuilder;
-import org.apache.commons.io.output.DeferredFileOutputStream;
 
 /**
  * Streams data from a {@link RandomAccessFile} starting at its current position.
