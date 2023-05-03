@@ -42,19 +42,6 @@ import java.util.function.Function;
 public interface IOBiFunction<T, U, R> {
 
     /**
-     * Returns the no-op singleton.
-     *
-     * @param <T> the type of the first argument to the function
-     * @param <U> the type of the second argument to the function
-     * @param <R> the type of the result of the function
-     * @return The no-op singleton.
-     */
-    @SuppressWarnings("unchecked")
-    static <T, U, R> IOBiFunction<T, U, R> noop() {
-        return Constants.IO_BI_FUNCTION;
-    }
-
-    /**
      * Creates a composed function that first applies this function to its input, and then applies the {@code after}
      * function to the result. If evaluation of either function throws an exception, it is relayed to the caller of the
      * composed function.

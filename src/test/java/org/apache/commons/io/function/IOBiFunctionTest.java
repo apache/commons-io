@@ -87,9 +87,4 @@ public class IOBiFunctionTest {
         assertNotEquals(0L, map.get("1"));
     }
 
-    @Test
-    public void testNoopIOConsumer() throws IOException {
-        assertNull(IOBiFunction.noop().apply(null, null));
-    }
-
 }
