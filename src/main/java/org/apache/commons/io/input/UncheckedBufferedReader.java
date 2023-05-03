@@ -35,7 +35,7 @@ import org.apache.commons.io.function.Uncheck;
  * @see UncheckedIOException
  * @since 2.12.0
  */
-public class UncheckedBufferedReader extends BufferedReader {
+public final class UncheckedBufferedReader extends BufferedReader {
 
     /**
      * Builds a new {@link UncheckedBufferedReader} instance.
