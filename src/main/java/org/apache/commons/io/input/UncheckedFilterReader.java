@@ -23,6 +23,7 @@ import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.nio.CharBuffer;
 
+import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.function.Uncheck;
 
 /**
@@ -33,17 +34,44 @@ import org.apache.commons.io.function.Uncheck;
  * @see UncheckedIOException
  * @since 2.12.0
  */
-public class UncheckedFilterReader extends FilterReader {
+public final class UncheckedFilterReader extends FilterReader {
 
     /**
-     * Creates a new filtered reader.
-     *
-     * @param reader a Reader object providing the underlying stream.
-     * @return a new UncheckedFilterReader.
-     * @throws NullPointerException if {@code reader} is {@code null}.
+     * Builds a new {@link UncheckedFilterReader} instance.
+     * <p>
+     * Using File IO:
+     * </p>
+     * <pre>{@code
+     * UncheckedFilterReader s = UncheckedFilterReader.builder()
+     *   .setFile(file)
+     *   .get()}
+     * </pre>
+     * <p>
+     * Using NIO Path:
+     * </p>
+     * <pre>{@code
+     * UncheckedFilterReader s = UncheckedFilterReader.builder()
+     *   .setPath(path)
+     *   .get()}
+     * </pre>
      */
-    public static UncheckedFilterReader on(final Reader reader) {
-        return new UncheckedFilterReader(reader);
+    public static class Builder extends AbstractStreamBuilder<UncheckedFilterReader, Builder> {
+
+        @Override
+        public UncheckedFilterReader get() {
+            // This an unchecked class, so this method is as well.
+            return Uncheck.get(() -> new UncheckedFilterReader(getOrigin().getReader(getCharset())));
+        }
+
+    }
+
+    /**
+     * Constructs a new {@link Builder}.
+     *
+     * @return a new {@link Builder}.
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
     /**
@@ -52,7 +80,7 @@ public class UncheckedFilterReader extends FilterReader {
      * @param reader a Reader object providing the underlying stream.
      * @throws NullPointerException if {@code reader} is {@code null}.
      */
-    public UncheckedFilterReader(final Reader reader) {
+    private UncheckedFilterReader(final Reader reader) {
         super(reader);
     }
 

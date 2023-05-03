@@ -48,6 +48,28 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     /**
      * A {@link File} origin.
      */
+    public static class ByteArrayOrigin extends AbstractOrigin<byte[], ByteArrayOrigin> {
+
+        /**
+         * Constructs a new instance for the given origin.
+         *
+         * @param origin The origin.
+         */
+        public ByteArrayOrigin(final byte[] origin) {
+            super(origin);
+        }
+
+        @Override
+        public byte[] getByteArray() {
+            // No conversion
+            return get();
+        }
+
+    }
+
+    /**
+     * A {@link File} origin.
+     */
     public static class FileOrigin extends AbstractOrigin<File, FileOrigin> {
 
         /**
@@ -61,6 +83,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public File getFile() {
+            // No conversion
             return get();
         }
 
@@ -90,6 +113,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public InputStream getInputStream(final OpenOption... options) {
+            // No conversion
             return get();
         }
 
@@ -114,6 +138,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public OutputStream getOutputStream(final OpenOption... options) {
+            // No conversion
             return get();
         }
 
@@ -140,6 +165,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public Path getPath() {
+            // No conversion
             return get();
         }
 
@@ -164,6 +190,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public Reader getReader(final Charset charset) throws IOException {
+            // No conversion
             return get();
         }
     }
@@ -180,11 +207,6 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          */
         public URIOrigin(final URI origin) {
             super(origin);
-        }
-
-        @Override
-        public URI get() {
-            return origin;
         }
 
         @Override
@@ -218,6 +240,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
+            // No conversion
             return get();
         }
     }
@@ -244,6 +267,16 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     @Override
     public T get() {
         return origin;
+    }
+
+    /**
+     * Gets this origin as a byte array, if possible.
+     *
+     * @return this origin as a byte array, if possible.
+     * @throws IOException if an I/O error occurs.
+     */
+    public byte[] getByteArray() throws IOException {
+        return Files.readAllBytes(getPath());
     }
 
     /**

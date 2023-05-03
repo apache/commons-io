@@ -27,6 +27,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 
+import org.apache.commons.io.build.AbstractOrigin.ByteArrayOrigin;
 import org.apache.commons.io.build.AbstractOrigin.FileOrigin;
 import org.apache.commons.io.build.AbstractOrigin.InputStreamOrigin;
 import org.apache.commons.io.build.AbstractOrigin.OutputStreamOrigin;
@@ -55,6 +56,16 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
             throw new IllegalArgumentException("Initial buffer size must be at least 0.");
         }
         return initialBufferSize;
+    }
+
+    /**
+     * Creates a new byte array origin for a byte array.
+     *
+     * @param origin the file.
+     * @return a new file origin
+     */
+    protected static ByteArrayOrigin newByteArrayOrigin(final byte[] origin) {
+        return new ByteArrayOrigin(origin);
     }
 
     /**
@@ -178,6 +189,16 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
      */
     protected boolean hasOrigin() {
         return origin != null;
+    }
+
+    /**
+     * Sets a new origin.
+     *
+     * @param origin the new origin.
+     * @return this
+     */
+    public B setByteArray(final byte[] origin) {
+        return setOrigin(newByteArrayOrigin(origin));
     }
 
     /**

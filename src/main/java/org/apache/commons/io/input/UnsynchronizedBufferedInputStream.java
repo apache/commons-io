@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
  * An unsynchronized version of {@link BufferedInputStream}, not thread-safe.
@@ -45,11 +46,43 @@ import org.apache.commons.io.IOUtils;
  * @since 2.12.0
  */
 //@NotThreadSafe
-public class UnsynchronizedBufferedInputStream extends UnsynchronizedFilterInputStream {
+public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilterInputStream {
+
+    /**
+     * Builds a new {@link UnsynchronizedBufferedInputStream} instance.
+     * <p>
+     * Using File IO:
+     * </p>
+     * <pre>{@code
+     * UnsynchronizedBufferedInputStream s = UnsynchronizedBufferedInputStream.builder()
+     *   .setFile(file)
+     *   .setBufferSize(8192)
+     *   .get()}
+     * </pre>
+     * <p>
+     * Using NIO Path:
+     * </p>
+     * <pre>{@code
+     * UnsynchronizedBufferedInputStream s = UnsynchronizedBufferedInputStream.builder()
+     *   .setPath(path)
+     *   .setBufferSize(8192)
+     *   .get()}
+     * </pre>
+     */
+    public static class Builder extends AbstractStreamBuilder<UnsynchronizedBufferedInputStream, Builder> {
+
+        @SuppressWarnings("resource") // Caller closes.
+        @Override
+        public UnsynchronizedBufferedInputStream get() throws IOException {
+            return new UnsynchronizedBufferedInputStream(getOrigin().getInputStream(), getBufferSize());
+        }
+
+    }
+
     /**
      * The buffer containing the current bytes read from the target InputStream.
      */
-    protected volatile byte[] buf;
+    protected volatile byte[] buffer;
 
     /**
      * The total number of bytes inside the byte array {@code buf}.
@@ -59,28 +92,17 @@ public class UnsynchronizedBufferedInputStream extends UnsynchronizedFilterInput
     /**
      * The current limit, which when passed, invalidates the current mark.
      */
-    protected int marklimit;
+    protected int markLimit;
 
     /**
      * The currently marked position. -1 indicates no mark has been set or the mark has been invalidated.
      */
-    protected int markpos = IOUtils.EOF;
+    protected int markPos = IOUtils.EOF;
 
     /**
      * The current position within the byte array {@code buf}.
      */
     protected int pos;
-
-    /**
-     * Constructs a new {@code BufferedInputStream} on the {@link InputStream} {@code in}. The default buffer size (8 KB) is allocated and all reads can now be
-     * filtered through this stream.
-     *
-     * @param in the InputStream the buffer reads from.
-     */
-    public UnsynchronizedBufferedInputStream(final InputStream in) {
-        super(in);
-        buf = new byte[IOUtils.DEFAULT_BUFFER_SIZE];
-    }
 
     /**
      * Constructs a new {@code BufferedInputStream} on the {@link InputStream} {@code in}. The buffer size is specified by the parameter {@code size} and all
@@ -90,12 +112,12 @@ public class UnsynchronizedBufferedInputStream extends UnsynchronizedFilterInput
      * @param size the size of buffer to allocate.
      * @throws IllegalArgumentException if {@code size < 0}.
      */
-    public UnsynchronizedBufferedInputStream(final InputStream in, final int size) {
+    private UnsynchronizedBufferedInputStream(final InputStream in, final int size) {
         super(in);
         if (size <= 0) {
             throw new IllegalArgumentException("Size must be > 0");
         }
-        buf = new byte[size];
+        buffer = new byte[size];
     }
 
     /**
@@ -107,8 +129,8 @@ public class UnsynchronizedBufferedInputStream extends UnsynchronizedFilterInput
      */
     @Override
     public int available() throws IOException {
-        final InputStream localIn = in; // 'in' could be invalidated by close()
-        if (buf == null || localIn == null) {
+        final InputStream localIn = inputStream; // 'in' could be invalidated by close()
+        if (buffer == null || localIn == null) {
             throw new IOException("Stream is closed");
         }
         return count - pos + localIn.available();
@@ -121,45 +143,49 @@ public class UnsynchronizedBufferedInputStream extends UnsynchronizedFilterInput
      */
     @Override
     public void close() throws IOException {
-        buf = null;
-        final InputStream localIn = in;
-        in = null;
+        buffer = null;
+        final InputStream localIn = inputStream;
+        inputStream = null;
         if (localIn != null) {
             localIn.close();
         }
     }
 
-    private int fillbuf(final InputStream localIn, byte[] localBuf) throws IOException {
-        if (markpos == IOUtils.EOF || pos - markpos >= marklimit) {
+    private int fillBuffer(final InputStream localIn, byte[] localBuf) throws IOException {
+        if (markPos == IOUtils.EOF || pos - markPos >= markLimit) {
             /* Mark position not set or exceeded readlimit */
             final int result = localIn.read(localBuf);
             if (result > 0) {
-                markpos = IOUtils.EOF;
+                markPos = IOUtils.EOF;
                 pos = 0;
                 count = result;
             }
             return result;
         }
-        if (markpos == 0 && marklimit > localBuf.length) {
+        if (markPos == 0 && markLimit > localBuf.length) {
             /* Increase buffer size to accommodate the readlimit */
             int newLength = localBuf.length * 2;
-            if (newLength > marklimit) {
-                newLength = marklimit;
+            if (newLength > markLimit) {
+                newLength = markLimit;
             }
             final byte[] newbuf = new byte[newLength];
             System.arraycopy(localBuf, 0, newbuf, 0, localBuf.length);
             // Reassign buf, which will invalidate any local references
             // FIXME: what if buf was null?
-            localBuf = buf = newbuf;
-        } else if (markpos > 0) {
-            System.arraycopy(localBuf, markpos, localBuf, 0, localBuf.length - markpos);
+            localBuf = buffer = newbuf;
+        } else if (markPos > 0) {
+            System.arraycopy(localBuf, markPos, localBuf, 0, localBuf.length - markPos);
         }
         /* Set the new position and mark position */
-        pos -= markpos;
-        count = markpos = 0;
+        pos -= markPos;
+        count = markPos = 0;
         final int bytesread = localIn.read(localBuf, pos, localBuf.length - pos);
         count = bytesread <= 0 ? pos : pos + bytesread;
         return bytesread;
+    }
+
+    byte[] getBuffer() {
+        return buffer;
     }
 
     /**
@@ -172,8 +198,8 @@ public class UnsynchronizedBufferedInputStream extends UnsynchronizedFilterInput
      */
     @Override
     public void mark(final int readlimit) {
-        marklimit = readlimit;
-        markpos = pos;
+        markLimit = readlimit;
+        markPos = pos;
     }
 
     /**
@@ -199,19 +225,19 @@ public class UnsynchronizedBufferedInputStream extends UnsynchronizedFilterInput
     public int read() throws IOException {
         // Use local refs since buf and in may be invalidated by an
         // unsynchronized close()
-        byte[] localBuf = buf;
-        final InputStream localIn = in;
+        byte[] localBuf = buffer;
+        final InputStream localIn = inputStream;
         if (localBuf == null || localIn == null) {
             throw new IOException("Stream is closed");
         }
 
         /* Are there buffered bytes available? */
-        if (pos >= count && fillbuf(localIn, localBuf) == IOUtils.EOF) {
+        if (pos >= count && fillBuffer(localIn, localBuf) == IOUtils.EOF) {
             return IOUtils.EOF; /* no, fill buffer */
         }
         // localBuf may have been invalidated by fillbuf
-        if (localBuf != buf) {
-            localBuf = buf;
+        if (localBuf != buffer) {
+            localBuf = buffer;
             if (localBuf == null) {
                 throw new IOException("Stream is closed");
             }
@@ -241,7 +267,7 @@ public class UnsynchronizedBufferedInputStream extends UnsynchronizedFilterInput
     public int read(final byte[] buffer, int offset, final int length) throws IOException {
         // Use local ref since buf may be invalidated by an unsynchronized
         // close()
-        byte[] localBuf = buf;
+        byte[] localBuf = buffer;
         if (localBuf == null) {
             throw new IOException("Stream is closed");
         }
@@ -252,7 +278,7 @@ public class UnsynchronizedBufferedInputStream extends UnsynchronizedFilterInput
         if (length == 0) {
             return 0;
         }
-        final InputStream localIn = in;
+        final InputStream localIn = inputStream;
         if (localIn == null) {
             throw new IOException("Stream is closed");
         }
@@ -277,18 +303,18 @@ public class UnsynchronizedBufferedInputStream extends UnsynchronizedFilterInput
             /*
              * If we're not marked and the required size is greater than the buffer, simply read the bytes directly bypassing the buffer.
              */
-            if (markpos == IOUtils.EOF && required >= localBuf.length) {
+            if (markPos == IOUtils.EOF && required >= localBuf.length) {
                 read = localIn.read(buffer, offset, required);
                 if (read == IOUtils.EOF) {
                     return required == length ? IOUtils.EOF : length - required;
                 }
             } else {
-                if (fillbuf(localIn, localBuf) == IOUtils.EOF) {
+                if (fillBuffer(localIn, localBuf) == IOUtils.EOF) {
                     return required == length ? IOUtils.EOF : length - required;
                 }
                 // localBuf may have been invalidated by fillbuf
-                if (localBuf != buf) {
-                    localBuf = buf;
+                if (localBuf != buffer) {
+                    localBuf = buffer;
                     if (localBuf == null) {
                         throw new IOException("Stream is closed");
                     }
@@ -318,13 +344,13 @@ public class UnsynchronizedBufferedInputStream extends UnsynchronizedFilterInput
      */
     @Override
     public void reset() throws IOException {
-        if (buf == null) {
+        if (buffer == null) {
             throw new IOException("Stream is closed");
         }
-        if (IOUtils.EOF == markpos) {
+        if (IOUtils.EOF == markPos) {
             throw new IOException("Mark has been invalidated");
         }
-        pos = markpos;
+        pos = markPos;
     }
 
     /**
@@ -338,8 +364,8 @@ public class UnsynchronizedBufferedInputStream extends UnsynchronizedFilterInput
     public long skip(final long amount) throws IOException {
         // Use local refs since buf and in may be invalidated by an
         // unsynchronized close()
-        final byte[] localBuf = buf;
-        final InputStream localIn = in;
+        final byte[] localBuf = buffer;
+        final InputStream localIn = inputStream;
         if (localBuf == null) {
             throw new IOException("Stream is closed");
         }
@@ -357,8 +383,8 @@ public class UnsynchronizedBufferedInputStream extends UnsynchronizedFilterInput
         long read = count - pos;
         pos = count;
 
-        if (markpos != IOUtils.EOF && amount <= marklimit) {
-            if (fillbuf(localIn, localBuf) == IOUtils.EOF) {
+        if (markPos != IOUtils.EOF && amount <= markLimit) {
+            if (fillBuffer(localIn, localBuf) == IOUtils.EOF) {
                 return read;
             }
             if (count - pos >= amount - read) {

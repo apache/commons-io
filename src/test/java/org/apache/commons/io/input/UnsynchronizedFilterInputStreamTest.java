@@ -39,12 +39,6 @@ import org.junit.jupiter.api.Test;
  */
 public class UnsynchronizedFilterInputStreamTest {
 
-    static class MyUnsynchronizedFilterInputStream extends UnsynchronizedFilterInputStream {
-        public MyUnsynchronizedFilterInputStream(final InputStream is) {
-            super(is);
-        }
-    }
-
     public static final String DATA = StringUtils.repeat("This is a test.", 500);
 
     private Path fileName;
@@ -63,7 +57,7 @@ public class UnsynchronizedFilterInputStreamTest {
     protected void setUp() throws IOException {
         fileName = Files.createTempFile(getClass().getSimpleName(), ".tst");
         Files.write(fileName, DATA.getBytes("UTF-8"));
-        is = new MyUnsynchronizedFilterInputStream(Files.newInputStream(fileName));
+        is = new UnsynchronizedFilterInputStream(Files.newInputStream(fileName));
     }
 
     /**

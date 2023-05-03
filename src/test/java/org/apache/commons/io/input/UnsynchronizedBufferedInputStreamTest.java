@@ -18,7 +18,6 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -43,20 +42,6 @@ import org.junit.jupiter.api.Test;
  * </p>
  */
 public class UnsynchronizedBufferedInputStreamTest {
-
-    static class MyUnsynchronizedBufferedInputStream extends UnsynchronizedBufferedInputStream {
-        static byte[] buf;
-
-        MyUnsynchronizedBufferedInputStream(final InputStream is) {
-            super(is);
-            buf = super.buf;
-        }
-
-        MyUnsynchronizedBufferedInputStream(final InputStream is, final int size) {
-            super(is, size);
-            buf = super.buf;
-        }
-    }
 
     private static final int BUFFER_SIZE = 4096;
 
@@ -203,12 +188,7 @@ public class UnsynchronizedBufferedInputStreamTest {
         // is.read should now throw an exception because it will have to be filled.
         assertThrows(IOException.class, () -> is.read());
 
-        // regression test for harmony-2407
-        new MyUnsynchronizedBufferedInputStream(null);
-        assertNotNull(MyUnsynchronizedBufferedInputStream.buf);
-        MyUnsynchronizedBufferedInputStream.buf = null;
-        new MyUnsynchronizedBufferedInputStream(null, 100);
-        assertNotNull(MyUnsynchronizedBufferedInputStream.buf);
+        assertThrows(NullPointerException.class, () -> UnsynchronizedBufferedInputStream.builder().setInputStream(null).setBufferSize(100).get());
     }
 
     /**

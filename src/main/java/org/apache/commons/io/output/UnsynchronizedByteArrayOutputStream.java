@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.apache.commons.io.function.Uncheck;
 import org.apache.commons.io.input.UnsynchronizedByteArrayInputStream;
 
 /**
@@ -119,7 +120,14 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
 
     @Override
     public InputStream toInputStream() {
-        return toInputStream(UnsynchronizedByteArrayInputStream::new);
+        // @formatter:off
+        return toInputStream((buffer, offset, length) -> Uncheck
+                .get(() -> UnsynchronizedByteArrayInputStream.builder()
+                        .setByteArray(buffer)
+                        .setOffset(offset)
+                        .setLength(length)
+                        .get()));
+        // @formatter:on
     }
 
     @Override

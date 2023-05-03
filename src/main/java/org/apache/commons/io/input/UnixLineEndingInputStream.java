@@ -30,11 +30,11 @@ import java.io.InputStream;
  */
 public class UnixLineEndingInputStream extends InputStream {
 
-    private boolean slashNSeen;
+    private boolean atSlashLf;
 
-    private boolean slashRSeen;
+    private boolean atSlashCr;
 
-    private boolean eofSeen;
+    private boolean atEos;
 
     private final InputStream target;
 
@@ -43,11 +43,11 @@ public class UnixLineEndingInputStream extends InputStream {
     /**
      * Creates an input stream that filters another stream
      *
-     * @param in                        The input stream to wrap
+     * @param inputStream                        The input stream to wrap
      * @param ensureLineFeedAtEndOfFile true to ensure that the file ends with LF
      */
-    public UnixLineEndingInputStream(final InputStream in, final boolean ensureLineFeedAtEndOfFile) {
-        this.target = in;
+    public UnixLineEndingInputStream(final InputStream inputStream, final boolean ensureLineFeedAtEndOfFile) {
+        this.target = inputStream;
         this.ensureLineFeedAtEndOfFile = ensureLineFeedAtEndOfFile;
     }
 
@@ -62,16 +62,17 @@ public class UnixLineEndingInputStream extends InputStream {
     }
 
     /**
-     * Handles the EOF-handling at the end of the stream
-     * @param previousWasSlashR Indicates if the last seen was a \r
-     * @return The next char to output to the stream
+     * Handles the end of stream condition.
+     *
+     * @param previousWasSlashCr Indicates if the last seen was a {@code \r}.
+     * @return The next char to output to the stream.
      */
-    private int eofGame(final boolean previousWasSlashR) {
-        if (previousWasSlashR || !ensureLineFeedAtEndOfFile) {
+    private int handleEos(final boolean previousWasSlashCr) {
+        if (previousWasSlashCr || !ensureLineFeedAtEndOfFile) {
             return EOF;
         }
-        if (!slashNSeen) {
-            slashNSeen = true;
+        if (!atSlashLf) {
+            atSlashLf = true;
             return LF;
         }
         return EOF;
@@ -90,19 +91,19 @@ public class UnixLineEndingInputStream extends InputStream {
      */
     @Override
     public int read() throws IOException {
-        final boolean previousWasSlashR = slashRSeen;
-        if (eofSeen) {
-            return eofGame(previousWasSlashR);
+        final boolean previousWasSlashR = atSlashCr;
+        if (atEos) {
+            return handleEos(previousWasSlashR);
         }
         final int target = readWithUpdate();
-        if (eofSeen) {
-            return eofGame(previousWasSlashR);
+        if (atEos) {
+            return handleEos(previousWasSlashR);
         }
-        if (slashRSeen) {
+        if (atSlashCr) {
             return LF;
         }
 
-        if (previousWasSlashR && slashNSeen) {
+        if (previousWasSlashR && atSlashLf) {
             return read();
         }
 
@@ -116,12 +117,12 @@ public class UnixLineEndingInputStream extends InputStream {
      */
     private int readWithUpdate() throws IOException {
         final int target = this.target.read();
-        eofSeen = target == EOF;
-        if (eofSeen) {
+        atEos = target == EOF;
+        if (atEos) {
             return target;
         }
-        slashNSeen = target == LF;
-        slashRSeen = target == CR;
+        atSlashLf = target == LF;
+        atSlashCr = target == CR;
         return target;
     }
 }

@@ -19,8 +19,11 @@ package org.apache.commons.io.input;
 import static java.lang.Math.min;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
+
+import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
  * This is an alternative to {@link java.io.ByteArrayInputStream}
@@ -34,9 +37,85 @@ import java.util.Objects;
 public class UnsynchronizedByteArrayInputStream extends InputStream {
 
     /**
+     * Builds a new {@link UnsynchronizedByteArrayInputStream} instance.
+     * <p>
+     * Using a Byte Array:
+     * </p>
+     * <pre>{@code
+     * UnsynchronizedByteArrayInputStream s = UnsynchronizedByteArrayInputStream.builder()
+     *   .setByteArray(byteArray)
+     *   .setOffset(0)
+     *   .setLength(byteArray.length)
+     *   .get()}
+     * </pre>
+     * <p>
+     * Using File IO:
+     * </p>
+     * <pre>{@code
+     * UnsynchronizedByteArrayInputStream s = UnsynchronizedByteArrayInputStream.builder()
+     *   .setFile(file)
+     *   .setOffset(0)
+     *   .setLength(byteArray.length)
+     *   .get()}
+     * </pre>
+     * <p>
+     * Using NIO Path:
+     * </p>
+     * <pre>{@code
+     * UnsynchronizedByteArrayInputStream s = UnsynchronizedByteArrayInputStream.builder()
+     *   .setPath(path)
+     *   .setOffset(0)
+     *   .setLength(byteArray.length)
+     *   .get()}
+     * </pre>
+     */
+    public static class Builder extends AbstractStreamBuilder<UnsynchronizedByteArrayInputStream, Builder> {
+
+        private int offset;
+        private int length;
+
+        @Override
+        public UnsynchronizedByteArrayInputStream get() throws IOException {
+            return new UnsynchronizedByteArrayInputStream(getOrigin().getByteArray(), offset, length);
+        }
+
+        @Override
+        public Builder setByteArray(byte[] origin) {
+            length = Objects.requireNonNull(origin, "origin").length;
+            return super.setByteArray(origin);
+        }
+
+        public Builder setLength(int length) {
+            if (length < 0) {
+                throw new IllegalArgumentException("length cannot be negative");
+            }
+            this.length = length;
+            return this;
+        }
+
+        public Builder setOffset(int offset) {
+            if (offset < 0) {
+                throw new IllegalArgumentException("offset cannot be negative");
+            }
+            this.offset = offset;
+            return this;
+        }
+
+    }
+
+    /**
      * The end of stream marker.
      */
     public static final int END_OF_STREAM = -1;
+
+    /**
+     * Constructs a new {@link Builder}.
+     *
+     * @return a new {@link Builder}.
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
 
     /**
      * The underlying data buffer.
@@ -65,7 +144,9 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      * Creates a new byte array input stream.
      *
      * @param data the buffer
+     * @deprecated Use {@link #builder()}.
      */
+    @Deprecated
     public UnsynchronizedByteArrayInputStream(final byte[] data) {
         this.data = Objects.requireNonNull(data, "data");
         this.offset = 0;
@@ -80,7 +161,9 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      * @param offset the offset into the buffer
      *
      * @throws IllegalArgumentException if the offset is less than zero
+     * @deprecated Use {@link #builder()}.
      */
+    @Deprecated
     public UnsynchronizedByteArrayInputStream(final byte[] data, final int offset) {
         Objects.requireNonNull(data, "data");
         if (offset < 0) {
@@ -92,7 +175,6 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
         this.markedOffset = this.offset;
     }
 
-
     /**
      * Creates a new byte array input stream.
      *
@@ -101,7 +183,9 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      * @param length the length of the buffer
      *
      * @throws IllegalArgumentException if the offset or length less than zero
+     * @deprecated Use {@link #builder()}.
      */
+    @Deprecated
     public UnsynchronizedByteArrayInputStream(final byte[] data, final int offset, final int length) {
         if (offset < 0) {
             throw new IllegalArgumentException("offset cannot be negative");
