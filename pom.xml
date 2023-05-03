@@ -52,7 +52,7 @@ file comparators, endian transformation classes, and much more.
     <connection>scm:git:https://gitbox.apache.org/repos/asf/commons-io.git</connection>
     <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/commons-io.git</developerConnection>
     <url>https://gitbox.apache.org/repos/asf?p=commons-io.git</url>
-    <tag>rel/commons-io-2.11.0</tag>
+    <tag>rel/commons-io-2.12.0</tag>
   </scm>
 
   <developers>
@@ -293,7 +293,7 @@ file comparators, endian transformation classes, and much more.
     <maven.compiler.target>1.8</maven.compiler.target>
     <commons.componentid>io</commons.componentid>
     <commons.module.name>org.apache.commons.io</commons.module.name>
-    <commons.rc.version>RC1</commons.rc.version>
+    <commons.rc.version>RC2</commons.rc.version>
     <commons.bc.version>2.11.0</commons.bc.version>
     <commons.release.version>2.12.0</commons.release.version>
     <commons.release.desc>(requires Java 8)</commons.release.desc>
@@ -323,7 +323,6 @@ file comparators, endian transformation classes, and much more.
     <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-io/</commons.scmPubUrl>
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
     <commons.javadoc.java.link>${commons.javadoc8.java.link}</commons.javadoc.java.link>
-    <commons.enforcer.version>3.3.0</commons.enforcer.version>
     <commons.moditect.version>1.0.0.RC3</commons.moditect.version>
     <jmh.version>1.36</jmh.version>
     <japicmp.skip>false</japicmp.skip>
@@ -363,26 +362,6 @@ file comparators, endian transformation classes, and much more.
       </plugins>
     </pluginManagement>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <version>${commons.enforcer.version}</version>
-        <executions>
-          <execution>
-            <id>enforce-maven</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <configuration>
-              <rules>
-                <requireMavenVersion>
-                  <version>3.0.5</version>
-                </requireMavenVersion>
-              </rules>    
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -615,33 +594,6 @@ file comparators, endian transformation classes, and much more.
                     <argument>target/jmh-result.${benchmark}.json</argument>
                     <argument>${benchmark}</argument>
                   </arguments>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>release</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-enforcer-plugin</artifactId>
-            <version>${commons.enforcer.version}</version>
-            <executions>
-              <execution>
-                <id>enforce-versions</id>
-                <goals>
-                  <goal>enforce</goal>
-                </goals>
-                <configuration>
-                  <rules>
-                   <requireJavaVersion>
-                      <version>9</version>
-                    </requireJavaVersion>
-                  </rules>
                 </configuration>
               </execution>
             </executions>
