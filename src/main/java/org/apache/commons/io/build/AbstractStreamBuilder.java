@@ -32,19 +32,6 @@ import org.apache.commons.io.IOUtils;
 public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T, B>> extends AbstractOriginSupplier<T, B> {
 
     /**
-     * Throws {@link IllegalArgumentException} if the initialBufferSize is less than zero.
-     *
-     * @param initialBufferSize the value to test.
-     * @return the input value.
-     */
-    protected static int checkBufferSize(final int initialBufferSize) {
-        if (initialBufferSize < 0) {
-            throw new IllegalArgumentException("Initial buffer size must be at least 0.");
-        }
-        return initialBufferSize;
-    }
-
-    /**
      * The buffer size, defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
      */
     private int bufferSize = IOUtils.DEFAULT_BUFFER_SIZE;
