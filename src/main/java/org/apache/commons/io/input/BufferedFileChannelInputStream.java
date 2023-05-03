@@ -43,7 +43,7 @@ import org.apache.commons.io.output.DeferredFileOutputStream;
 public final class BufferedFileChannelInputStream extends InputStream {
 
     /**
-     * Builds a new {@link DeferredFileOutputStream} instance.
+     * Builds a new {@link BufferedFileChannelInputStream} instance.
      * <p>
      * Using File IO:
      * </p>
