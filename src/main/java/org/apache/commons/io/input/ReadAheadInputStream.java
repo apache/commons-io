@@ -17,6 +17,7 @@ import static org.apache.commons.io.IOUtils.EOF;
 
 // import javax.annotation.concurrent.GuardedBy;
 import java.io.EOFException;
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
@@ -42,7 +43,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  *
  * @since 2.9.0
  */
-public class ReadAheadInputStream extends InputStream {
+public class ReadAheadInputStream extends FilterInputStream {
 
     /**
      * Builds a new {@link ReadAheadInputStream} instance.
@@ -158,8 +159,6 @@ public class ReadAheadInputStream extends InputStream {
     // Whether there is a reader waiting for data.
     private final AtomicBoolean isWaiting = new AtomicBoolean(false);
 
-    private final InputStream underlyingInputStream;
-
     private final ExecutorService executorService;
 
     private final boolean shutdownExecutorService;
@@ -201,11 +200,11 @@ public class ReadAheadInputStream extends InputStream {
      */
     private ReadAheadInputStream(final InputStream inputStream, final int bufferSizeInBytes, final ExecutorService executorService,
             final boolean shutdownExecutorService) {
+        super(Objects.requireNonNull(inputStream, "inputStream"));
         if (bufferSizeInBytes <= 0) {
             throw new IllegalArgumentException("bufferSizeInBytes should be greater than 0, but the value is " + bufferSizeInBytes);
         }
         this.executorService = Objects.requireNonNull(executorService, "executorService");
-        this.underlyingInputStream = Objects.requireNonNull(inputStream, "inputStream");
         this.shutdownExecutorService = shutdownExecutorService;
         this.activeBuffer = ByteBuffer.allocate(bufferSizeInBytes);
         this.readAheadBuffer = ByteBuffer.allocate(bufferSizeInBytes);
@@ -262,7 +261,7 @@ public class ReadAheadInputStream extends InputStream {
                 throw iio;
             } finally {
                 if (isSafeToCloseUnderlyingInputStream) {
-                    underlyingInputStream.close();
+                    super.close();
                 }
             }
         }
@@ -282,7 +281,7 @@ public class ReadAheadInputStream extends InputStream {
         }
         if (needToCloseUnderlyingInputStream) {
             try {
-                underlyingInputStream.close();
+                super.close();
             } catch (final IOException ignored) {
                 // TODO Rethrow as UncheckedIOException?
             }
@@ -389,7 +388,7 @@ public class ReadAheadInputStream extends InputStream {
                 // try to fill the read ahead buffer.
                 // if a reader is waiting, possibly return early.
                 do {
-                    read = underlyingInputStream.read(arr, off, len);
+                    read = in.read(arr, off, len);
                     if (read <= 0) {
                         break;
                     }
@@ -486,7 +485,7 @@ public class ReadAheadInputStream extends InputStream {
         activeBuffer.flip();
         readAheadBuffer.position(0);
         readAheadBuffer.flip();
-        final long skippedFromInputStream = underlyingInputStream.skip(toSkip);
+        final long skippedFromInputStream = in.skip(toSkip);
         readAsync();
         return skippedBytes + skippedFromInputStream;
     }

@@ -30,13 +30,13 @@ import java.io.InputStream;
  */
 public class WindowsLineEndingInputStream  extends InputStream {
 
-    private boolean slashRSeen;
+    private boolean atSlashCr;
 
-    private boolean slashNSeen;
+    private boolean atSlashN;
 
     private boolean injectSlashN;
 
-    private boolean eofSeen;
+    private boolean atEos;
 
     private final InputStream target;
 
@@ -71,13 +71,13 @@ public class WindowsLineEndingInputStream  extends InputStream {
         if (!ensureLineFeedAtEndOfFile) {
             return EOF;
         }
-        if (!slashNSeen && !slashRSeen) {
-            slashRSeen = true;
+        if (!atSlashN && !atSlashCr) {
+            atSlashCr = true;
             return CR;
         }
-        if (!slashNSeen) {
-            slashRSeen = false;
-            slashNSeen = true;
+        if (!atSlashN) {
+            atSlashCr = false;
+            atSlashN = true;
             return LF;
         }
         return EOF;
@@ -96,16 +96,16 @@ public class WindowsLineEndingInputStream  extends InputStream {
      */
     @Override
     public int read() throws IOException {
-        if (eofSeen) {
+        if (atEos) {
             return eofGame();
         }
         if (injectSlashN) {
             injectSlashN = false;
             return LF;
         }
-        final boolean prevWasSlashR = slashRSeen;
+        final boolean prevWasSlashR = atSlashCr;
         final int target = readWithUpdate();
-        if (eofSeen) {
+        if (atEos) {
             return eofGame();
         }
         if (target == LF && !prevWasSlashR) {
@@ -122,12 +122,12 @@ public class WindowsLineEndingInputStream  extends InputStream {
      */
     private int readWithUpdate() throws IOException {
         final int target = this.target.read();
-        eofSeen = target == EOF;
-        if (eofSeen) {
+        atEos = target == EOF;
+        if (atEos) {
             return target;
         }
-        slashRSeen = target == CR;
-        slashNSeen = target == LF;
+        atSlashCr = target == CR;
+        atSlashN = target == LF;
         return target;
     }
 }
