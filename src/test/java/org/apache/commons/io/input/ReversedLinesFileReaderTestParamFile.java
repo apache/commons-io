@@ -85,8 +85,8 @@ public class ReversedLinesFileReaderTestParamFile {
         // @formatter:on
     }
 
-    private void testDataIntegrityWithBufferedReader(Path filePath, FileSystem fileSystem, final Charset charset,
-            ReversedLinesFileReader reversedLinesFileReader) throws IOException {
+    private void testDataIntegrityWithBufferedReader(final Path filePath, final FileSystem fileSystem, final Charset charset,
+            final ReversedLinesFileReader reversedLinesFileReader) throws IOException {
         final Stack<String> lineStack = new Stack<>();
         String line;
 

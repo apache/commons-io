@@ -119,7 +119,7 @@ public class HexDump {
         final StringBuilder buffer = new StringBuilder(74);
 
         // TODO Use Objects.checkFromIndexSize(index, length, data.length) when upgrading to JDK9
-        if (length < 0 || (index + length) > data.length) {
+        if (length < 0 || index + length > data.length) {
             throw new ArrayIndexOutOfBoundsException(String.format("Range [%s, %<s + %s) out of bounds for length %s", index, length, data.length));
         }
 

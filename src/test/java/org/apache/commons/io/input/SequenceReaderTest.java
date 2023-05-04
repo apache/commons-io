@@ -62,7 +62,7 @@ public class SequenceReaderTest {
             close();
             return EOF;
         }
-    };
+    }
 
     private static final char NUL = 0;
 
@@ -115,9 +115,11 @@ public class SequenceReaderTest {
 
                 if (off < 0) {
                     throw new IndexOutOfBoundsException("off is negative");
-                } else if (len < 0) {
+                }
+                if (len < 0) {
                     throw new IndexOutOfBoundsException("len is negative");
-                } else if (len > cbuf.length - off) {
+                }
+                if (len > cbuf.length - off) {
                     throw new IndexOutOfBoundsException("len is greater than cbuf.length - off");
                 }
 

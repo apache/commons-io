@@ -518,14 +518,7 @@ public class XmlStreamReader extends Reader {
     public XmlStreamReader(final URLConnection conn) throws IOException {
         defaultEncoding = staticDefaultEncoding;
         final boolean lenient = true;
-        if (conn instanceof HttpURLConnection) {
-            try {
-                doHttpStream(conn.getInputStream(), conn.getContentType(),
-                        lenient);
-            } catch (final XmlStreamReaderException ex) {
-                doLenientDetection(conn.getContentType(), ex);
-            }
-        } else if (conn.getContentType() != null) {
+        if (conn instanceof HttpURLConnection || conn.getContentType() != null) {
             try {
                 doHttpStream(conn.getInputStream(), conn.getContentType(),
                         lenient);

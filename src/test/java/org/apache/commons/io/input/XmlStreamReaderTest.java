@@ -180,7 +180,7 @@ public class XmlStreamReaderTest {
         }
     }
 
-    private void testAlternateDefaultEncoding(final String streamEnc, final String alternateEnc, XmlStreamReader xmlReader) {
+    private void testAlternateDefaultEncoding(final String streamEnc, final String alternateEnc, final XmlStreamReader xmlReader) {
         assertEquals(xmlReader.getDefaultEncoding(), alternateEnc);
         if (!streamEnc.equals(UTF_16)) {
             // we can not assert things here because UTF-8, US-ASCII and

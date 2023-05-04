@@ -119,7 +119,7 @@ public interface IOSpliterator<T> {
      * @return {@code false} if no remaining elements existed upon entry to this method, else {@code true}.
      * @throws NullPointerException if the specified action is null
      */
-    default boolean tryAdvance(IOConsumer<? super T> action) {
+    default boolean tryAdvance(final IOConsumer<? super T> action) {
         return unwrap().tryAdvance(Objects.requireNonNull(action, "action").asConsumer());
     }
 
