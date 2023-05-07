@@ -98,6 +98,7 @@ public class BOMInputStream extends ProxyInputStream {
      * </p>
      * <pre>{@code
      * BOMInputStream s = BOMInputStream.builder()
+     *   .setPath(path)
      *   .setByteOrderMarks(ByteOrderMark.UTF_8)
      *   .setInclude(false)
      *   .get()}
@@ -113,9 +114,10 @@ public class BOMInputStream extends ProxyInputStream {
         static ByteOrderMark getDefaultBOM() {
             return DEFAULT[0];
         }
-        private boolean include;
 
         private ByteOrderMark[] byteOrderMarks = DEFAULT;
+
+        private boolean include;
 
         /**
          * Constructs a new instance.
@@ -168,18 +170,18 @@ public class BOMInputStream extends ProxyInputStream {
         return new Builder();
     }
 
-    private final boolean include;
-
     /**
      * BOMs are sorted from longest to shortest.
      */
     private final List<ByteOrderMark> boms;
+
     private ByteOrderMark byteOrderMark;
-    private int[] firstBytes;
-    private int fbLength;
     private int fbIndex;
-    private int markFbIndex;
+    private int fbLength;
+    private int[] firstBytes;
+    private final boolean include;
     private boolean markedAtStart;
+    private int markFbIndex;
 
     /**
      * Constructs a new BOM InputStream that excludes a {@link ByteOrderMark#UTF_8} BOM.
