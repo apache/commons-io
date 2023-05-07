@@ -30,15 +30,15 @@ import java.io.InputStream;
  */
 public class UnixLineEndingInputStream extends InputStream {
 
-    private boolean atSlashLf;
+    private boolean atEos;
 
     private boolean atSlashCr;
 
-    private boolean atEos;
+    private boolean atSlashLf;
 
-    private final InputStream target;
+    private final InputStream in;
 
-    private final boolean ensureLineFeedAtEndOfFile;
+    private final boolean lineFeedAtEndOfFile;
 
     /**
      * Creates an input stream that filters another stream
@@ -47,8 +47,8 @@ public class UnixLineEndingInputStream extends InputStream {
      * @param ensureLineFeedAtEndOfFile true to ensure that the file ends with LF
      */
     public UnixLineEndingInputStream(final InputStream inputStream, final boolean ensureLineFeedAtEndOfFile) {
-        this.target = inputStream;
-        this.ensureLineFeedAtEndOfFile = ensureLineFeedAtEndOfFile;
+        this.in = inputStream;
+        this.lineFeedAtEndOfFile = ensureLineFeedAtEndOfFile;
     }
 
     /**
@@ -58,7 +58,7 @@ public class UnixLineEndingInputStream extends InputStream {
     @Override
     public void close() throws IOException {
         super.close();
-        target.close();
+        in.close();
     }
 
     /**
@@ -68,7 +68,7 @@ public class UnixLineEndingInputStream extends InputStream {
      * @return The next char to output to the stream.
      */
     private int handleEos(final boolean previousWasSlashCr) {
-        if (previousWasSlashCr || !ensureLineFeedAtEndOfFile) {
+        if (previousWasSlashCr || !lineFeedAtEndOfFile) {
             return EOF;
         }
         if (!atSlashLf) {
@@ -116,13 +116,13 @@ public class UnixLineEndingInputStream extends InputStream {
      * @throws IOException upon error
      */
     private int readWithUpdate() throws IOException {
-        final int target = this.target.read();
+        final int target = this.in.read();
         atEos = target == EOF;
         if (atEos) {
             return target;
         }
-        atSlashLf = target == LF;
         atSlashCr = target == CR;
+        atSlashLf = target == LF;
         return target;
     }
 }
