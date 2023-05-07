@@ -101,24 +101,24 @@ public class ReadAheadInputStream extends FilterInputStream {
     }
 
     /**
-     * Creates a new daemon executor service.
-     *
-     * @return a new daemon executor service.
-     */
-    private static ExecutorService newExecutorService() {
-        return Executors.newSingleThreadExecutor(ReadAheadInputStream::newThread);
-    }
-
-    /**
      * Creates a new daemon thread.
      *
      * @param r the thread's runnable.
      * @return a new daemon thread.
      */
-    private static Thread newThread(final Runnable r) {
+    private static Thread newDaemonThread(final Runnable r) {
         final Thread thread = new Thread(r, "commons-io-read-ahead");
         thread.setDaemon(true);
         return thread;
+    }
+
+    /**
+     * Creates a new daemon executor service.
+     *
+     * @return a new daemon executor service.
+     */
+    private static ExecutorService newExecutorService() {
+        return Executors.newSingleThreadExecutor(ReadAheadInputStream::newDaemonThread);
     }
 
     private final ReentrantLock stateChangeLock = new ReentrantLock();
