@@ -178,6 +178,7 @@ public class Tailer implements Runnable, AutoCloseable {
         private boolean end;
         private boolean reOpen;
         private boolean startThread = true;
+
         /**
          * Builds and starts a new configured instance.
          *
