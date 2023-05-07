@@ -221,6 +221,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-790" dev="ggregory" type="fix" due-to="maxxedev, Gary Gregory, Bruno P. Kinoshita">
         Apply nanoseconds precision for QueueInputStream timeout duration. #453.
       </action>
+      <action dev="ggregory" type="fix" due-to="Marcono1234">
+        Fix overflow for FileUtilsTest constants #456.
+      </action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">
         Add GitHub coverage.yml.
