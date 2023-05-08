@@ -34,6 +34,8 @@ import java.nio.file.attribute.FileTime;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.ThreadUtils;
@@ -160,6 +162,7 @@ public class Tailer implements Runnable, AutoCloseable {
      *   .setPath(path)
      *   .setCharset(StandardCharsets.UTF_8)
      *   .setDelayDuration(Duration.ofSeconds(1))
+     *   .setExecutorService(Executors.newSingleThreadExecutor(Builder::newDaemonThread))
      *   .setReOpen(false)
      *   .setStartThread(true)
      *   .setTailable(tailable)
@@ -172,15 +175,30 @@ public class Tailer implements Runnable, AutoCloseable {
      */
     public static class Builder extends AbstractStreamBuilder<Tailer, Builder> {
 
+        /**
+         * Creates a new daemon thread.
+         *
+         * @param runnable the thread's runnable.
+         * @return a new daemon thread.
+         */
+        private static Thread newDaemonThread(final Runnable runnable) {
+            final Thread thread = new Thread(runnable, "commons-io-tailer");
+            thread.setDaemon(true);
+            return thread;
+        }
+
         private Tailable tailable;
         private TailerListener tailerListener;
         private Duration delayDuration = Duration.ofMillis(DEFAULT_DELAY_MILLIS);
         private boolean end;
         private boolean reOpen;
         private boolean startThread = true;
+        private ExecutorService executorService = Executors.newSingleThreadExecutor(Builder::newDaemonThread);
 
         /**
          * Builds and starts a new configured instance.
+         *
+         * The tailer is started if {@code startThread} is true.
          *
          * @return a new configured instance.
          */
@@ -188,9 +206,7 @@ public class Tailer implements Runnable, AutoCloseable {
         public Tailer get() {
             final Tailer tailer = new Tailer(tailable, getCharset(), tailerListener, delayDuration, end, reOpen, getBufferSize());
             if (startThread) {
-                final Thread thread = new Thread(tailer);
-                thread.setDaemon(true);
-                thread.start();
+                executorService.submit(tailer);
             }
             return tailer;
         }
@@ -203,6 +219,17 @@ public class Tailer implements Runnable, AutoCloseable {
          */
         public Builder setDelayDuration(final Duration delayDuration) {
             this.delayDuration = Objects.requireNonNull(delayDuration, "delayDuration");
+            return this;
+        }
+
+        /**
+         * Sets an executor service to use when startThread is true.
+         *
+         * @param executorService
+         * @return this
+         */
+        public Builder setExecutorService(final ExecutorService executorService) {
+            this.executorService = executorService;
             return this;
         }
 
