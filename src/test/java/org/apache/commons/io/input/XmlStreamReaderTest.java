@@ -392,7 +392,7 @@ public class XmlStreamReaderTest {
                 new XmlStreamReader(is, cT, false).close();
                 fail("It should have failed for HTTP Content-type " + cT + ", BOM " + bomEnc + ", streamEnc " + streamEnc + " and prologEnc " + prologEnc);
             } catch (final IOException ex) {
-                assertTrue(ex.getMessage().contains("Invalid encoding,"));
+                assertTrue(ex.getMessage().contains("Illegal encoding,"));
             }
         }
     }
@@ -445,7 +445,7 @@ public class XmlStreamReaderTest {
             fail("Expected IOException for BOM " + bomEnc + ", streamEnc " + streamEnc + " and prologEnc " + prologEnc
                 + ": found " + foundEnc);
         } catch (final IOException ex) {
-            assertTrue(ex.getMessage().contains("Invalid encoding,"));
+            assertTrue(ex.getMessage().contains("Illegal encoding,"));
         }
         if (xmlReader != null) {
             xmlReader.close();

@@ -87,10 +87,10 @@ public class CircularByteBuffer {
     public void add(final byte[] targetBuffer, final int offset, final int length) {
         Objects.requireNonNull(targetBuffer, "Buffer");
         if (offset < 0 || offset >= targetBuffer.length) {
-            throw new IllegalArgumentException("Invalid offset: " + offset);
+            throw new IllegalArgumentException("Illegal offset: " + offset);
         }
         if (length < 0) {
-            throw new IllegalArgumentException("Invalid length: " + length);
+            throw new IllegalArgumentException("Illegal length: " + length);
         }
         if (currentNumberOfBytes + length > buffer.length) {
             throw new IllegalStateException("No space available");
@@ -182,10 +182,10 @@ public class CircularByteBuffer {
     public boolean peek(final byte[] sourceBuffer, final int offset, final int length) {
         Objects.requireNonNull(sourceBuffer, "Buffer");
         if (offset < 0 || offset >= sourceBuffer.length) {
-            throw new IllegalArgumentException("Invalid offset: " + offset);
+            throw new IllegalArgumentException("Illegal offset: " + offset);
         }
         if (length < 0 || length > buffer.length) {
-            throw new IllegalArgumentException("Invalid length: " + length);
+            throw new IllegalArgumentException("Illegal length: " + length);
         }
         if (length < currentNumberOfBytes) {
             return false;
@@ -239,10 +239,10 @@ public class CircularByteBuffer {
     public void read(final byte[] targetBuffer, final int targetOffset, final int length) {
         Objects.requireNonNull(targetBuffer, "targetBuffer");
         if (targetOffset < 0 || targetOffset >= targetBuffer.length) {
-            throw new IllegalArgumentException("Invalid offset: " + targetOffset);
+            throw new IllegalArgumentException("Illegal offset: " + targetOffset);
         }
         if (length < 0 || length > buffer.length) {
-            throw new IllegalArgumentException("Invalid length: " + length);
+            throw new IllegalArgumentException("Illegal length: " + length);
         }
         if (targetOffset + length > targetBuffer.length) {
             throw new IllegalArgumentException("The supplied byte array contains only "

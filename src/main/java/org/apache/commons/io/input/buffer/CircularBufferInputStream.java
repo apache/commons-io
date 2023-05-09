@@ -59,7 +59,7 @@ public class CircularBufferInputStream extends FilterInputStream {
     public CircularBufferInputStream(final InputStream inputStream, final int bufferSize) {
         super(Objects.requireNonNull(inputStream, "inputStream"));
         if (bufferSize <= 0) {
-            throw new IllegalArgumentException("Invalid bufferSize: " + bufferSize);
+            throw new IllegalArgumentException("Illegal bufferSize: " + bufferSize);
         }
         this.buffer = new CircularByteBuffer(bufferSize);
         this.bufferSize = bufferSize;

@@ -41,7 +41,7 @@ public class XmlStreamReaderUtilitiesTest {
     private static final String HTTPMGS1 = "BOM must be NULL";
     private static final String HTTPMGS2 = "encoding mismatch";
 
-    private static final String HTTPMGS3 = "Invalid MIME";
+    private static final String HTTPMGS3 = "Illegal MIME";
     private static final String APPXML         = "application/xml";
     private static final String APPXML_UTF8    = "application/xml;charset=UTF-8";
     private static final String APPXML_UTF16   = "application/xml;charset=UTF-16";
@@ -100,7 +100,7 @@ public class XmlStreamReaderUtilitiesTest {
             checkHttpEncoding("XmlStreamReaderException", lenient, httpContentType, bomEnc, xmlGuessEnc, xmlEnc, defaultEncoding);
             fail("Expected XmlStreamReaderException");
         } catch (final XmlStreamReaderException e) {
-            assertTrue(e.getMessage().startsWith("Invalid encoding"), "Msg Start: " + e.getMessage());
+            assertTrue(e.getMessage().startsWith("Illegal encoding"), "Msg Start: " + e.getMessage());
             assertTrue(e.getMessage().endsWith(msgSuffix), "Msg End: " + e.getMessage());
             assertEquals(bomEnc, e.getBomEncoding(), "bomEnc");
             assertEquals(xmlGuessEnc, e.getXmlGuessEncoding(), "xmlGuessEnc");
@@ -131,7 +131,7 @@ public class XmlStreamReaderUtilitiesTest {
             checkRawEncoding("XmlStreamReaderException", bomEnc, xmlGuessEnc, xmlEnc, defaultEncoding);
             fail("Expected XmlStreamReaderException");
         } catch (final XmlStreamReaderException e) {
-            assertTrue(e.getMessage().startsWith("Invalid encoding"), "Msg Start: " + e.getMessage());
+            assertTrue(e.getMessage().startsWith("Illegal encoding"), "Msg Start: " + e.getMessage());
             assertTrue(e.getMessage().endsWith(msgSuffix), "Msg End: "   + e.getMessage());
             assertEquals(bomEnc, e.getBomEncoding(), "bomEnc");
             assertEquals(xmlGuessEnc, e.getXmlGuessEncoding(), "xmlGuessEnc");
