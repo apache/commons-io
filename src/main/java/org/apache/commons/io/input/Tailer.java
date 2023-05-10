@@ -223,9 +223,9 @@ public class Tailer implements Runnable, AutoCloseable {
         }
 
         /**
-         * Sets an executor service to use when startThread is true.
+         * Sets the executor service to use when startThread is true.
          *
-         * @param executorService
+         * @param executorService the executor service to use when startThread is true.
          * @return this
          */
         public Builder setExecutorService(final ExecutorService executorService) {
