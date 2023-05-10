@@ -231,7 +231,7 @@ public class Tailer implements Runnable, AutoCloseable {
          * @return this
          */
         public Builder setExecutorService(final ExecutorService executorService) {
-            this.executorService = Objects.requireNonNull(executorService, "executorService");;
+            this.executorService = Objects.requireNonNull(executorService, "executorService");
             return this;
         }
 
