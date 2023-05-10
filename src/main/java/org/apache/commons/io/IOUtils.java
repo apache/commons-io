@@ -195,12 +195,12 @@ public class IOUtils {
     /**
      * Internal byte array buffer.
      */
-    private static final ThreadLocal<byte[]> SKIP_BYTE_BUFFER = ThreadLocal.withInitial(IOUtils::byteArray);
+    private static final ThreadLocal<byte[]> SCRATCH_BYTE_BUFFER = ThreadLocal.withInitial(IOUtils::byteArray);
 
     /**
      * Internal byte array buffer.
      */
-    private static final ThreadLocal<char[]> SKIP_CHAR_BUFFER = ThreadLocal.withInitial(IOUtils::charArray);
+    private static final ThreadLocal<char[]> SCRATCH_CHAR_BUFFER = ThreadLocal.withInitial(IOUtils::charArray);
 
     /**
      * Returns the given InputStream if it is already a {@link BufferedInputStream}, otherwise creates a
@@ -879,7 +879,7 @@ public class IOUtils {
         }
 
         // reuse one
-        final byte[] array1 = getByteArray();
+        final byte[] array1 = getScratchByteArray();
         // allocate another
         final byte[] array2 = byteArray();
         int pos1;
@@ -950,7 +950,7 @@ public class IOUtils {
         }
 
         // reuse one
-        final char[] array1 = getCharArray();
+        final char[] array1 = getScratchCharArray();
         // but allocate another
         final char[] array2 = charArray();
         int pos1;
@@ -1489,7 +1489,7 @@ public class IOUtils {
      */
     public static long copyLarge(final InputStream input, final OutputStream output, final long inputOffset,
                                  final long length) throws IOException {
-        return copyLarge(input, output, inputOffset, length, getByteArray());
+        return copyLarge(input, output, inputOffset, length, getScratchByteArray());
     }
 
     /**
@@ -1560,7 +1560,7 @@ public class IOUtils {
      * @since 1.3
      */
     public static long copyLarge(final Reader reader, final Writer writer) throws IOException {
-        return copyLarge(reader, writer, getCharArray());
+        return copyLarge(reader, writer, getScratchCharArray());
     }
 
     /**
@@ -1611,7 +1611,7 @@ public class IOUtils {
      */
     public static long copyLarge(final Reader reader, final Writer writer, final long inputOffset, final long length)
             throws IOException {
-        return copyLarge(reader, writer, inputOffset, length, getCharArray());
+        return copyLarge(reader, writer, inputOffset, length, getScratchCharArray());
     }
 
     /**
@@ -1664,8 +1664,8 @@ public class IOUtils {
      *
      * @return the thread local byte array.
      */
-    static byte[] getByteArray() {
-        return SKIP_BYTE_BUFFER.get();
+    static byte[] getScratchByteArray() {
+        return SCRATCH_BYTE_BUFFER.get();
     }
 
     /**
@@ -1673,8 +1673,8 @@ public class IOUtils {
      *
      * @return the thread local char array.
      */
-    static char[] getCharArray() {
-        return SKIP_CHAR_BUFFER.get();
+    static char[] getScratchCharArray() {
+        return SCRATCH_CHAR_BUFFER.get();
     }
 
     /**
@@ -2300,7 +2300,7 @@ public class IOUtils {
         long remain = toSkip;
         while (remain > 0) {
             // See https://issues.apache.org/jira/browse/IO-203 for why we use read() rather than delegating to skip()
-            final byte[] byteArray = getByteArray();
+            final byte[] byteArray = getScratchByteArray();
             final long n = input.read(byteArray, 0, (int) Math.min(remain, byteArray.length));
             if (n < 0) { // EOF
                 break;
@@ -2368,7 +2368,7 @@ public class IOUtils {
         long remain = toSkip;
         while (remain > 0) {
             // See https://issues.apache.org/jira/browse/IO-203 for why we use read() rather than delegating to skip()
-            final char[] charArray = getCharArray();
+            final char[] charArray = getScratchCharArray();
             final long n = reader.read(charArray, 0, (int) Math.min(remain, charArray.length));
             if (n < 0) { // EOF
                 break;
