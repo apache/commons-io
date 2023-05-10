@@ -175,6 +175,8 @@ public class Tailer implements Runnable, AutoCloseable {
      */
     public static class Builder extends AbstractStreamBuilder<Tailer, Builder> {
 
+        private static final Duration DEFAULT_DELAY_DURATION = Duration.ofMillis(DEFAULT_DELAY_MILLIS);
+
         /**
          * Creates a new daemon thread.
          *
@@ -189,7 +191,7 @@ public class Tailer implements Runnable, AutoCloseable {
 
         private Tailable tailable;
         private TailerListener tailerListener;
-        private Duration delayDuration = Duration.ofMillis(DEFAULT_DELAY_MILLIS);
+        private Duration delayDuration = DEFAULT_DELAY_DURATION;
         private boolean end;
         private boolean reOpen;
         private boolean startThread = true;
@@ -212,13 +214,13 @@ public class Tailer implements Runnable, AutoCloseable {
         }
 
         /**
-         * Sets the delay duration.
+         * Sets the delay duration. null resets to the default delay of one second.
          *
          * @param delayDuration the delay between checks of the file for new content.
          * @return this
          */
         public Builder setDelayDuration(final Duration delayDuration) {
-            this.delayDuration = Objects.requireNonNull(delayDuration, "delayDuration");
+            this.delayDuration = delayDuration != null ? delayDuration : DEFAULT_DELAY_DURATION;
             return this;
         }
 
@@ -229,7 +231,7 @@ public class Tailer implements Runnable, AutoCloseable {
          * @return this
          */
         public Builder setExecutorService(final ExecutorService executorService) {
-            this.executorService = executorService;
+            this.executorService = Objects.requireNonNull(executorService, "executorService");;
             return this;
         }
 
