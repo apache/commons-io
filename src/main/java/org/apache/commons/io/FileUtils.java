@@ -1088,12 +1088,13 @@ public class FileUtils {
     }
 
     /**
-     * Creates all parent directories for a File object.
+     * Creates all parent directories for a File object, including any necessary but nonexistent
+     * parent directories. If a directory already exists, nothing happens; null input is a noop.
      *
      * @param file the File that may need parents, may be null.
      * @return The parent directory, or {@code null} if the given file does not name a parent
      * @throws IOException if the directory was not created along with all its parent directories.
-     * @throws IOException if the given file object is not null and not a directory.
+     * @throws SecurityException See {@link File#mkdirs()}.
      * @since 2.9.0
      */
     public static File createParentDirectories(final File file) throws IOException {
@@ -1279,7 +1280,8 @@ public class FileUtils {
     }
 
     /**
-     * Internal copy directory method.
+     * Internal copy directory method. Creates all destination parent directories,
+     * including any necessary but nonexistent parent directories.
      *
      * @param srcDir the validated source directory, must not be {@code null}.
      * @param destDir the validated destination directory, must not be {@code null}.
@@ -1288,7 +1290,7 @@ public class FileUtils {
      * @param preserveDirDate preserve the directories last modified dates.
      * @param copyOptions options specifying how the copy should be done, see {@link StandardCopyOption}.
      * @throws IOException if the directory was not created along with all its parent directories.
-     * @throws IOException if the given file object is not a directory.
+     * @throws SecurityException See {@link File#mkdirs()}.
      */
     private static void doCopyDirectory(final File srcDir, final File destDir, final FileFilter fileFilter, final List<String> exclusionList,
         final boolean preserveDirDate, final CopyOption... copyOptions) throws IOException {
@@ -1363,10 +1365,10 @@ public class FileUtils {
 
     /**
      * Makes a directory, including any necessary but nonexistent parent
-     * directories. If a file already exists with specified name but it is
-     * not a directory then an IOException is thrown.
+     * directories. If a file already exists with the specified name but it is
+     * not a directory then an {@link IOException} is thrown.
      * If the directory cannot be created (or the file already exists but is not a directory)
-     * then an IOException is thrown.
+     * then an {@link IOException} is thrown.
      *
      * @param directory directory to create, may be {@code null}.
      * @throws IOException if the directory was not created along with all its parent directories.
@@ -1430,10 +1432,10 @@ public class FileUtils {
     }
 
     /**
-     * Gets the parent of the given file. The given file may be bull and a file's parent may as well be null.
+     * Gets the parent of the given file. The given file may be null. Note that a file's parent may be null as well.
      *
-     * @param file The file to query.
-     * @return The parent file or {@code null}.
+     * @param file The file to query, may be null.
+     * @return The parent file or {@code null}. Note that a file's parent may be null as well.
      */
     private static File getParentFile(final File file) {
         return file == null ? null : file.getParentFile();
@@ -2262,9 +2264,13 @@ public class FileUtils {
 
     /**
      * Calls {@link File#mkdirs()} and throws an exception on failure.
+     * <p>
+     * Creates all directories for a File object, including any necessary but nonexistent
+     * parent directories. If a directory already exists, nothing happens; null input is a noop.
+     * </p>
      *
-     * @param directory the receiver for {@code mkdirs()}, may be null.
-     * @return the given file, may be null.
+     * @param directory the receiver for {@code mkdirs()}, passing null is a noop.
+     * @return the given directory.
      * @throws IOException if the directory was not created along with all its parent directories.
      * @throws IOException if the given file object is not a directory.
      * @throws SecurityException See {@link File#mkdirs()}.
@@ -2309,7 +2315,8 @@ public class FileUtils {
     }
 
     /**
-     * Moves a directory to another directory.
+     * Moves a directory to another directory. Creates all destination parent directories,
+     * including any necessary but nonexistent parent directories, if enabled.
      *
      * @param source the file to be moved.
      * @param destDir the destination file.
@@ -2318,7 +2325,9 @@ public class FileUtils {
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
      * @throws IllegalArgumentException if the source or destination is invalid.
      * @throws FileNotFoundException if the source does not exist.
+     * @throws IOException if the directory was not created along with all its parent directories, if enabled.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
+     * @throws SecurityException See {@link File#mkdirs()}.
      * @since 1.4
      */
     public static void moveDirectoryToDirectory(final File source, final File destDir, final boolean createDestDir) throws IOException {
@@ -2389,7 +2398,8 @@ public class FileUtils {
     }
 
     /**
-     * Moves a file to a directory.
+     * Moves a file to a directory. Creates all destination parent directories,
+     * including any necessary but nonexistent parent directories, if enabled.
      *
      * @param srcFile the file to be moved.
      * @param destDir the destination file.
@@ -2399,7 +2409,9 @@ public class FileUtils {
      * @throws FileExistsException if the destination file exists.
      * @throws FileNotFoundException if the source file does not exist.
      * @throws IOException if source or destination is invalid.
+     * @throws IOException if the directory was not created along with all its parent directories, if enabled.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
+     * @throws SecurityException See {@link File#mkdirs()}.
      * @since 1.4
      */
     public static void moveFileToDirectory(final File srcFile, final File destDir, final boolean createDestDir) throws IOException {
@@ -3096,6 +3108,7 @@ public class FileUtils {
      *
      * @param source      the file or directory to be moved.
      * @param destination the destination file or directory.
+     * @throws NullPointerException if any of the given {@link File}s are {@code null}.
      * @throws FileNotFoundException if the source file does not exist.
      */
     private static void validateMoveParameters(final File source, final File destination) throws FileNotFoundException {

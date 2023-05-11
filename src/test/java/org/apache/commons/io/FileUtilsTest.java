@@ -1183,6 +1183,14 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testCreateParentDirectories() throws IOException {
+        // If a directory already exists, nothing happens.
+        FileUtils.createParentDirectories(FileUtils.current());
+        // null is a noop
+        FileUtils.createParentDirectories(null);
+    }
+
+    @Test
     public void testCopyToDirectoryWithDirectory() throws IOException {
         final File destDirectory = new File(tempDirFile, "destination");
         if (!destDirectory.exists()) {
