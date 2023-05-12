@@ -77,6 +77,8 @@ import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.io.test.ThrowOnCloseReader;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -125,6 +127,13 @@ public class IOUtilsTest {
     /** Assert that the contents of two byte arrays are the same. */
     private void assertEqualContent(final byte[] b0, final byte[] b1) {
         assertArrayEquals(b0, b1, "Content not equal according to java.util.Arrays#equals()");
+    }
+
+    @BeforeAll
+    @AfterAll
+    public static void beforeAll() {
+        // Not required, just to exercise the method and make sure there are no adverse side-effect when recycling thread locals.
+        IO.clear();
     }
 
     @BeforeEach

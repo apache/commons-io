@@ -193,14 +193,24 @@ public class IOUtils {
     public static final String LINE_SEPARATOR_WINDOWS = StandardLineSeparator.CRLF.getString();
 
     /**
-     * Internal byte array buffer.
+     * Internal byte array buffer, intended for both reading and writing.
      */
-    private static final ThreadLocal<byte[]> SCRATCH_BYTE_BUFFER = ThreadLocal.withInitial(IOUtils::byteArray);
+    private static final ThreadLocal<byte[]> SCRATCH_BYTE_BUFFER_RW = ThreadLocal.withInitial(IOUtils::byteArray);
 
     /**
-     * Internal byte array buffer.
+     * Internal byte array buffer, intended for write only operations.
      */
-    private static final ThreadLocal<char[]> SCRATCH_CHAR_BUFFER = ThreadLocal.withInitial(IOUtils::charArray);
+    private static final byte[] SCRATCH_BYTE_BUFFER_WO = byteArray();
+
+    /**
+     * Internal char array buffer, intended for both reading and writing.
+     */
+    private static final ThreadLocal<char[]> SCRATCH_CHAR_BUFFER_RW = ThreadLocal.withInitial(IOUtils::charArray);
+
+    /**
+     * Internal char array buffer, intended for write only operations.
+     */
+    private static final char[] SCRATCH_CHAR_BUFFER_WO = charArray();
 
     /**
      * Returns the given InputStream if it is already a {@link BufferedInputStream}, otherwise creates a
@@ -375,6 +385,21 @@ public class IOUtils {
      */
     private static char[] charArray(final int size) {
         return new char[size];
+    }
+
+    /**
+     * Clears any state.
+     * <ul>
+     * <li>Removes the current thread's value for thread-local variables.</li>
+     * <li>Sets static scratch arrays to 0s.</li>
+     * </ul>
+     * @see IO#clear()
+     */
+    static void clear() {
+        SCRATCH_BYTE_BUFFER_RW.remove();
+        SCRATCH_CHAR_BUFFER_RW.remove();
+        Arrays.fill(SCRATCH_BYTE_BUFFER_WO, (byte) 0);
+        Arrays.fill(SCRATCH_CHAR_BUFFER_WO, (char) 0);
     }
 
     /**
@@ -1660,21 +1685,39 @@ public class IOUtils {
     }
 
     /**
-     * Gets the thread local byte array.
+     * Gets the internal byte array buffer, intended for both reading and writing.
      *
-     * @return the thread local byte array.
+     * @return the internal byte array buffer, intended for both reading and writing.
      */
-    static byte[] getScratchByteArray() {
-        return SCRATCH_BYTE_BUFFER.get();
+    private static byte[] getScratchByteArray() {
+        return SCRATCH_BYTE_BUFFER_RW.get();
     }
 
     /**
-     * Gets the thread local char array.
+     * Gets the internal byte array intended for write only operations.
      *
-     * @return the thread local char array.
+     * @return the internal byte array intended for write only operations.
+     */
+    private static byte[] getScratchByteArrayWriteOnly() {
+        return SCRATCH_BYTE_BUFFER_WO;
+    }
+
+    /**
+     * Gets the char byte array buffer, intended for both reading and writing.
+     *
+     * @return the char byte array buffer, intended for both reading and writing.
      */
     static char[] getScratchCharArray() {
-        return SCRATCH_CHAR_BUFFER.get();
+        return SCRATCH_CHAR_BUFFER_RW.get();
+    }
+
+    /**
+     * Gets the internal char array intended for write only operations.
+     *
+     * @return the internal char array intended for write only operations.
+     */
+    private static char[] getScratchCharArrayWriteOnly() {
+        return SCRATCH_CHAR_BUFFER_WO;
     }
 
     /**
@@ -2291,16 +2334,15 @@ public class IOUtils {
         if (toSkip < 0) {
             throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
         }
-        /*
-         * N.B. no need to synchronize access to SKIP_BYTE_BUFFER: - we don't care if the buffer is created multiple
-         * times (the data is ignored) - we always use the same size buffer, so if it is recreated it will still be
-         * OK (if the buffer size were variable, we would need to synch. to ensure some other thread did not create a
-         * smaller one)
-         */
+        //
+        // No need to synchronize access to SCRATCH_BYTE_BUFFER_WO: We don't care if the buffer is written multiple
+        // times or in parallel since the data is ignored. We reuse the same buffer, if the buffer size were variable or read-write,
+        // we would need to synch or use a thread local to ensure some other thread safety.
+        //
         long remain = toSkip;
         while (remain > 0) {
             // See https://issues.apache.org/jira/browse/IO-203 for why we use read() rather than delegating to skip()
-            final byte[] byteArray = getScratchByteArray();
+            final byte[] byteArray = getScratchByteArrayWriteOnly();
             final long n = input.read(byteArray, 0, (int) Math.min(remain, byteArray.length));
             if (n < 0) { // EOF
                 break;
@@ -2368,7 +2410,7 @@ public class IOUtils {
         long remain = toSkip;
         while (remain > 0) {
             // See https://issues.apache.org/jira/browse/IO-203 for why we use read() rather than delegating to skip()
-            final char[] charArray = getScratchCharArray();
+            final char[] charArray = getScratchCharArrayWriteOnly();
             final long n = reader.read(charArray, 0, (int) Math.min(remain, charArray.length));
             if (n < 0) { // EOF
                 break;
