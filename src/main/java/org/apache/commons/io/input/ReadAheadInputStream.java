@@ -299,6 +299,7 @@ public class ReadAheadInputStream extends FilterInputStream {
             return activeBuffer.get() & 0xFF;
         }
         final byte[] oneByteArray = BYTE_ARRAY_1.get();
+        oneByteArray[0] = 0;
         return read(oneByteArray, 0, 1) == EOF ? EOF : oneByteArray[0] & 0xFF;
     }
 

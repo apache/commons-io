@@ -1685,12 +1685,34 @@ public class IOUtils {
     }
 
     /**
+     * Fills the given array with 0s.
+     *
+     * @param arr The array to fill.
+     * @return The given array.
+     */
+    private static byte[] fill0(final byte[] arr) {
+        Arrays.fill(arr, (byte) 0);
+        return arr;
+    }
+
+    /**
+     * Fills the given array with 0s.
+     *
+     * @param arr The array to fill.
+     * @return The given array.
+     */
+    private static char[] fill0(final char[] arr) {
+        Arrays.fill(arr, (char) 0);
+        return arr;
+    }
+
+    /**
      * Gets the internal byte array buffer, intended for both reading and writing.
      *
      * @return the internal byte array buffer, intended for both reading and writing.
      */
-    private static byte[] getScratchByteArray() {
-        return SCRATCH_BYTE_BUFFER_RW.get();
+    static byte[] getScratchByteArray() {
+        return fill0(SCRATCH_BYTE_BUFFER_RW.get());
     }
 
     /**
@@ -1698,8 +1720,8 @@ public class IOUtils {
      *
      * @return the internal byte array intended for write only operations.
      */
-    private static byte[] getScratchByteArrayWriteOnly() {
-        return SCRATCH_BYTE_BUFFER_WO;
+    static byte[] getScratchByteArrayWriteOnly() {
+        return fill0(SCRATCH_BYTE_BUFFER_WO);
     }
 
     /**
@@ -1708,7 +1730,7 @@ public class IOUtils {
      * @return the char byte array buffer, intended for both reading and writing.
      */
     static char[] getScratchCharArray() {
-        return SCRATCH_CHAR_BUFFER_RW.get();
+        return fill0(SCRATCH_CHAR_BUFFER_RW.get());
     }
 
     /**
@@ -1716,8 +1738,8 @@ public class IOUtils {
      *
      * @return the internal char array intended for write only operations.
      */
-    private static char[] getScratchCharArrayWriteOnly() {
-        return SCRATCH_CHAR_BUFFER_WO;
+    static char[] getScratchCharArrayWriteOnly() {
+        return fill0(SCRATCH_CHAR_BUFFER_WO);
     }
 
     /**
