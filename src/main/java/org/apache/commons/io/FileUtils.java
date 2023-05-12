@@ -1088,12 +1088,12 @@ public class FileUtils {
     }
 
     /**
-     * Creates all parent directories for a File object, including any necessary but nonexistent
-     * parent directories. If a directory already exists, nothing happens; null input is a noop.
+     * Creates all parent directories for a File object, including any necessary but nonexistent parent directories. If a parent directory already exists or is
+     * null, nothing happens.
      *
      * @param file the File that may need parents, may be null.
-     * @return The parent directory, or {@code null} if the given file does not name a parent
-     * @throws IOException if the directory was not created along with all its parent directories.
+     * @return The parent directory, or {@code null} if the given File does have a parent.
+     * @throws IOException       if the directory was not created along with all its parent directories.
      * @throws SecurityException See {@link File#mkdirs()}.
      * @since 2.9.0
      */
@@ -1364,33 +1364,39 @@ public class FileUtils {
     }
 
     /**
-     * Makes a directory, including any necessary but nonexistent parent
-     * directories. If a file already exists with the specified name but it is
-     * not a directory then an {@link IOException} is thrown.
-     * If the directory cannot be created (or the file already exists but is not a directory)
-     * then an {@link IOException} is thrown.
+     * Calls {@link File#mkdirs()} and throws an {@link IOException} on failure.
+     * <p>
+     * Creates all directories for a File object, including any necessary but nonexistent parent directories. If the {@code directory} already exists or is
+     * null, nothing happens.
+     * </p>
      *
-     * @param directory directory to create, may be {@code null}.
-     * @throws IOException if the directory was not created along with all its parent directories.
-     * @throws IOException if the given file object is not a directory.
+     * @param directory the receiver for {@code mkdirs()}. If the {@code directory} already exists or is null, nothing happens.
+     * @throws IOException       if the directory was not created along with all its parent directories.
+     * @throws IOException       if the given file object is not a directory.
      * @throws SecurityException See {@link File#mkdirs()}.
+     * @see File#mkdirs()
      */
     public static void forceMkdir(final File directory) throws IOException {
         mkdirs(directory);
     }
 
     /**
-     * Makes any necessary but nonexistent parent directories for a given File. If the parent directory cannot be
-     * created then an IOException is thrown.
+     * Calls {@link File#mkdirs()} and throws an {@link IOException} on failure.
+     * <p>
+     * Creates all directories for a File object, including any necessary but nonexistent parent directories. If the {@code directory} already exists or is
+     * null, nothing happens.
+     * </p>
      *
-     * @param file file with parent to create, must not be {@code null}.
+     * @param file file with parents to create, must not be {@code null}.
      * @throws NullPointerException if the file is {@code null}.
-     * @throws IOException          if the parent directory cannot be created.
+     * @throws IOException          if the directory was not created along with all its parent directories.
+     * @throws IOException          if the given file object is not a directory.
+     * @throws SecurityException    See {@link File#mkdirs()}.
+     * @see File#mkdirs()
      * @since 2.5
      */
     public static void forceMkdirParent(final File file) throws IOException {
-        Objects.requireNonNull(file, "file");
-        forceMkdir(getParentFile(file));
+        forceMkdir(getParentFile(Objects.requireNonNull(file, "file")));
     }
 
     /**
@@ -2263,16 +2269,16 @@ public class FileUtils {
     }
 
     /**
-     * Calls {@link File#mkdirs()} and throws an exception on failure.
+     * Calls {@link File#mkdirs()} and throws an {@link IOException} on failure.
      * <p>
-     * Creates all directories for a File object, including any necessary but nonexistent
-     * parent directories. If a directory already exists, nothing happens; null input is a noop.
+     * Creates all directories for a File object, including any necessary but nonexistent parent directories. If the {@code directory} already exists or is
+     * null, nothing happens.
      * </p>
      *
-     * @param directory the receiver for {@code mkdirs()}, passing null is a noop.
+     * @param directory the receiver for {@code mkdirs()}. If the {@code directory} already exists or is null, nothing happens.
      * @return the given directory.
-     * @throws IOException if the directory was not created along with all its parent directories.
-     * @throws IOException if the given file object is not a directory.
+     * @throws IOException       if the directory was not created along with all its parent directories.
+     * @throws IOException       if the given file object is not a directory.
      * @throws SecurityException See {@link File#mkdirs()}.
      * @see File#mkdirs()
      */
@@ -2316,7 +2322,7 @@ public class FileUtils {
 
     /**
      * Moves a directory to another directory. Creates all destination parent directories,
-     * including any necessary but nonexistent parent directories, if enabled.
+     * including any necessary but nonexistent parent directories, if {@code createDestDir} is true.
      *
      * @param source the file to be moved.
      * @param destDir the destination file.
@@ -2399,7 +2405,7 @@ public class FileUtils {
 
     /**
      * Moves a file to a directory. Creates all destination parent directories,
-     * including any necessary but nonexistent parent directories, if enabled.
+     * including any necessary but nonexistent parent directories, if {@code createDestDir} is true.
      *
      * @param srcFile the file to be moved.
      * @param destDir the destination file.
@@ -2425,20 +2431,22 @@ public class FileUtils {
     }
 
     /**
-     * Moves a file or directory to the destination directory.
+     * Moves a file or directory to a destination directory.
+     * <p>
+     * Creates all destination parent directories, including any necessary but nonexistent parent directories, if {@code createDestDir} is true.
+     * </p>
      * <p>
      * When the destination is on another file system, do a "copy and delete".
      * </p>
      *
-     * @param src the file or directory to be moved.
-     * @param destDir the destination directory.
-     * @param createDestDir If {@code true} create the destination directory, otherwise if {@code false} throw an
-     *        IOException.
-     * @throws NullPointerException if any of the given {@link File}s are {@code null}.
-     * @throws FileExistsException if the directory or file exists in the destination directory.
+     * @param src           the file or directory to be moved.
+     * @param destDir       the destination directory.
+     * @param createDestDir If {@code true} create the destination directory, otherwise if {@code false} throw an IOException.
+     * @throws NullPointerException  if any of the given {@link File}s are {@code null}.
+     * @throws FileExistsException   if the directory or file exists in the destination directory.
      * @throws FileNotFoundException if the source file does not exist.
-     * @throws IOException if source or destination is invalid.
-     * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
+     * @throws IOException           if source or destination is invalid.
+     * @throws IOException           if an error occurs or setting the last-modified time didn't succeed.
      * @since 1.4
      */
     public static void moveToDirectory(final File src, final File destDir, final boolean createDestDir) throws IOException {
