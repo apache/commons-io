@@ -113,7 +113,7 @@ public class FileSystemUtils {
      * the command line.
      * This method does not normalize the result, and typically returns
      * bytes on Windows, 512 byte units on OS X and kilobytes on Unix.
-     * As this is not very useful, this method is deprecated in favour
+     * As this is not very useful, this method is deprecated in favor
      * of {@link #freeSpaceKb(String)} which returns a result in kilobytes.
      * <p>
      * Note that some OS's are NOT currently supported, including OS/390,
@@ -128,7 +128,7 @@ public class FileSystemUtils {
      * @param path  the path to get free space for, not null, not empty on Unix
      * @return the amount of free drive space on the drive or volume
      * @throws IllegalArgumentException if the path is invalid
-     * @throws IllegalStateException if an error occurred in initialisation
+     * @throws IllegalStateException if an error occurred in initialization
      * @throws IOException if an error occurs when finding the free space
      * @since 1.1, enhanced OS support in 1.2 and 1.3
      * @deprecated Use freeSpaceKb(String)
@@ -148,7 +148,7 @@ public class FileSystemUtils {
      * freeSpaceKb(FileUtils.current().getAbsolutePath())
      * </pre>
      * @return the amount of free drive space on the drive or volume in kilobytes
-     * @throws IllegalStateException if an error occurred in initialisation
+     * @throws IllegalStateException if an error occurred in initialization
      * @throws IOException if an error occurs when finding the free space
      * @since 2.0
      * @deprecated As of 2.6 deprecated without replacement. Please use {@link java.nio.file.FileStore#getUsableSpace()}.
@@ -169,7 +169,7 @@ public class FileSystemUtils {
      * @param timeout The timeout amount in milliseconds or no timeout if the value
      *  is zero or less
      * @return the amount of free drive space on the drive or volume in kilobytes
-     * @throws IllegalStateException if an error occurred in initialisation
+     * @throws IllegalStateException if an error occurred in initialization
      * @throws IOException if an error occurs when finding the free space
      * @since 2.0
      * @deprecated As of 2.6 deprecated without replacement. Please use {@link java.nio.file.FileStore#getUsableSpace()}.
@@ -198,7 +198,7 @@ public class FileSystemUtils {
      * @param path  the path to get free space for, not null, not empty on Unix
      * @return the amount of free drive space on the drive or volume in kilobytes
      * @throws IllegalArgumentException if the path is invalid
-     * @throws IllegalStateException if an error occurred in initialisation
+     * @throws IllegalStateException if an error occurred in initialization
      * @throws IOException if an error occurs when finding the free space
      * @since 1.2, enhanced OS support in 1.3
      * @deprecated As of 2.6 deprecated without replacement. Please use {@link java.nio.file.FileStore#getUsableSpace()}.
@@ -230,7 +230,7 @@ public class FileSystemUtils {
      *  is zero or less
      * @return the amount of free drive space on the drive or volume in kilobytes
      * @throws IllegalArgumentException if the path is invalid
-     * @throws IllegalStateException if an error occurred in initialisation
+     * @throws IllegalStateException if an error occurred in initialization
      * @throws IOException if an error occurs when finding the free space
      * @since 2.0
      * @deprecated As of 2.6 deprecated without replacement. Please use {@link java.nio.file.FileStore#getUsableSpace()}.
@@ -291,7 +291,7 @@ public class FileSystemUtils {
      * @param timeout The timeout amount in milliseconds or no timeout if the value
      *  is zero or less
      * @return the amount of free drive space on the volume
-     * @throws IOException if an error occurs
+     * @throws IOException If an I/O error occurs
      */
     long freeSpaceUnix(final String path, final boolean kb, final boolean posix, final Duration timeout)
             throws IOException {
@@ -307,16 +307,13 @@ public class FileSystemUtils {
         if (posix) {
             flags += "P";
         }
-        final String[] cmdAttribs =
-            flags.length() > 1 ? new String[] {DF, flags, path} : new String[] {DF, path};
+        final String[] cmdAttribs = flags.length() > 1 ? new String[] { DF, flags, path } : new String[] { DF, path };
 
         // perform the command, asking for up to 3 lines (header, interesting, overflow)
         final List<String> lines = performCommand(cmdAttribs, 3, timeout);
         if (lines.size() < 2) {
             // unknown problem, throw exception
-            throw new IOException(
-                    "Command line '" + DF + "' did not return info as expected " +
-                    "for path '" + path + "'- response was " + lines);
+            throw new IOException("Command line '" + DF + "' did not return info as expected for path '" + path + "'- response was " + lines);
         }
         final String line2 = lines.get(1); // the line we're interested in
 
@@ -325,9 +322,7 @@ public class FileSystemUtils {
         if (tok.countTokens() < 4) {
             // could be long Filesystem, thus data on third line
             if (tok.countTokens() != 1 || lines.size() < 3) {
-                throw new IOException(
-                        "Command line '" + DF + "' did not return data as expected " +
-                        "for path '" + path + "'- check path is valid");
+                throw new IOException("Command line '" + DF + "' did not return data as expected for path '" + path + "'- check path is valid");
             }
             final String line3 = lines.get(2); // the line may be interested in
             tok = new StringTokenizer(line3, " ");
@@ -347,7 +342,7 @@ public class FileSystemUtils {
      * @param timeout The timeout amount in milliseconds or no timeout if the value
      *  is zero or less
      * @return the amount of free drive space on the drive
-     * @throws IOException if an error occurs
+     * @throws IOException If an I/O error occurs
      */
     long freeSpaceWindows(final String path, final Duration timeout) throws IOException {
         String normPath = FilenameUtils.normalize(path, false);
@@ -359,7 +354,7 @@ public class FileSystemUtils {
         }
 
         // build and run the 'dir' command
-        final String[] cmdAttribs = {"cmd.exe", "/C", "dir /a /-c " + normPath};
+        final String[] cmdAttribs = { "cmd.exe", "/C", "dir /a /-c " + normPath };
 
         // read in the output of the command to an ArrayList
         final List<String> lines = performCommand(cmdAttribs, Integer.MAX_VALUE, timeout);
@@ -375,9 +370,7 @@ public class FileSystemUtils {
             }
         }
         // all lines are blank
-        throw new IOException(
-                "Command line 'dir /-c' did not return any info " +
-                "for path '" + normPath + "'");
+        throw new IOException("Command line 'dir /-c' did not return any info for path '" + normPath + "'");
     }
 
     /**
@@ -385,7 +378,7 @@ public class FileSystemUtils {
      *
      * @param cmdAttribs  the command line parameters
      * @return the process
-     * @throws IOException if an error occurs
+     * @throws IOException If an I/O error occurs
      */
     Process openProcess(final String[] cmdAttribs) throws IOException {
         return Runtime.getRuntime().exec(cmdAttribs);
@@ -397,22 +390,18 @@ public class FileSystemUtils {
      * @param freeSpace  the free space string
      * @param path  the path
      * @return the number of bytes
-     * @throws IOException if an error occurs
+     * @throws IOException If an I/O error occurs
      */
     long parseBytes(final String freeSpace, final String path) throws IOException {
         try {
             final long bytes = Long.parseLong(freeSpace);
             if (bytes < 0) {
-                throw new IOException(
-                        "Command line '" + DF + "' did not find free space in response " +
-                        "for path '" + path + "'- check path is valid");
+                throw new IOException("Command line '" + DF + "' did not find free space in response for path '" + path + "'- check path is valid");
             }
             return bytes;
 
         } catch (final NumberFormatException ex) {
-            throw new IOException(
-                    "Command line '" + DF + "' did not return numeric data as expected " +
-                    "for path '" + path + "'- check path is valid", ex);
+            throw new IOException("Command line '" + DF + "' did not return numeric data as expected for path '" + path + "'- check path is valid", ex);
         }
     }
 
@@ -422,7 +411,7 @@ public class FileSystemUtils {
      * @param line  the line to parse
      * @param path  the path that was sent
      * @return the number of bytes
-     * @throws IOException if an error occurs
+     * @throws IOException If an I/O error occurs
      */
     long parseDir(final String line, final String path) throws IOException {
         // read from the end of the line to find the last numeric
@@ -435,27 +424,25 @@ public class FileSystemUtils {
         innerLoop1: while (j >= 0) {
             final char c = line.charAt(j);
             if (Character.isDigit(c)) {
-              // found the last numeric character, this is the end of
-              // the free space bytes count
-              bytesEnd = j + 1;
-              break innerLoop1;
+                // found the last numeric character, this is the end of
+                // the free space bytes count
+                bytesEnd = j + 1;
+                break innerLoop1;
             }
             j--;
         }
         innerLoop2: while (j >= 0) {
             final char c = line.charAt(j);
             if (!Character.isDigit(c) && c != ',' && c != '.') {
-              // found the next non-numeric character, this is the
-              // beginning of the free space bytes count
-              bytesStart = j + 1;
-              break innerLoop2;
+                // found the next non-numeric character, this is the
+                // beginning of the free space bytes count
+                bytesStart = j + 1;
+                break innerLoop2;
             }
             j--;
         }
         if (j < 0) {
-            throw new IOException(
-                    "Command line 'dir /-c' did not return valid info " +
-                    "for path '" + path + "'");
+            throw new IOException("Command line 'dir /-c' did not return valid info for path '" + path + "'");
         }
 
         // remove commas and dots in the bytes count
@@ -479,73 +466,42 @@ public class FileSystemUtils {
      * @throws IOException if an error occurs
      */
     List<String> performCommand(final String[] cmdAttribs, final int max, final Duration timeout) throws IOException {
-        // this method does what it can to avoid the 'Too many open files' error
+        //
+        // This method does what it can to avoid the 'Too many open files' error
         // based on trial and error and these links:
         // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4784692
         // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4801027
         // http://forum.java.sun.com/thread.jspa?threadID=533029&messageID=2572018
         // however, it's still not perfect as the JDK support is so poor
         // (see commons-exec or Ant for a better multithreaded multi-OS solution)
+        //
+        final Process proc = openProcess(cmdAttribs);
+        final Thread monitor = ThreadMonitor.start(timeout);
+        try (InputStream in = proc.getInputStream();
+                OutputStream out = proc.getOutputStream();
+                // default Charset is most likely appropriate here
+                InputStream err = proc.getErrorStream();
+                // If in is null here, InputStreamReader throws NullPointerException
+                BufferedReader inr = new BufferedReader(new InputStreamReader(in, Charset.defaultCharset()))) {
 
-        final List<String> lines;
-        Process proc = null;
-        InputStream in = null;
-        OutputStream out = null;
-        InputStream err = null;
-        BufferedReader inr = null;
-        try {
-
-            final Thread monitor = ThreadMonitor.start(timeout);
-
-            proc = openProcess(cmdAttribs);
-            in = proc.getInputStream();
-            out = proc.getOutputStream();
-            err = proc.getErrorStream();
-            // default Charset is most likely appropriate here
-            inr = new BufferedReader(new InputStreamReader(in, Charset.defaultCharset()));
-
-            lines = inr.lines().limit(max).map(line -> line.toLowerCase(Locale.getDefault()).trim()).collect(Collectors.toList());
-
+            final List<String> lines = inr.lines().limit(max).map(line -> line.toLowerCase(Locale.getDefault()).trim()).collect(Collectors.toList());
             proc.waitFor();
-
             ThreadMonitor.stop(monitor);
 
             if (proc.exitValue() != 0) {
-                // OS command problem, throw exception
+                // Command problem, throw exception
                 throw new IOException("Command line returned OS error code '" + proc.exitValue() + "' for command " + Arrays.asList(cmdAttribs));
             }
             if (lines.isEmpty()) {
-                // unknown problem, throw exception
-                throw new IOException("Command line did not return any info " + "for command " + Arrays.asList(cmdAttribs));
-            }
-
-            inr.close();
-            inr = null;
-
-            in.close();
-            in = null;
-
-            if (out != null) {
-                out.close();
-                out = null;
-            }
-
-            if (err != null) {
-                err.close();
-                err = null;
+                // Unknown problem, throw exception
+                throw new IOException("Command line did not return any info for command " + Arrays.asList(cmdAttribs));
             }
 
             return lines;
 
         } catch (final InterruptedException ex) {
-            throw new IOException(
-                    "Command line threw an InterruptedException " +
-                    "for command " + Arrays.asList(cmdAttribs) + " timeout=" + timeout, ex);
+            throw new IOException("Command line threw an InterruptedException for command " + Arrays.asList(cmdAttribs) + " timeout=" + timeout, ex);
         } finally {
-            IOUtils.closeQuietly(in);
-            IOUtils.closeQuietly(out);
-            IOUtils.closeQuietly(err);
-            IOUtils.closeQuietly(inr);
             if (proc != null) {
                 proc.destroy();
             }
