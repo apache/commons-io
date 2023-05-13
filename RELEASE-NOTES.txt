@@ -174,6 +174,9 @@ o IO-611:  Better docs in IOUtils and IOUtils.byteArray(int size) #374. Thanks t
 o IO-782:  SequenceReader should close readers when its close method is called #391. Thanks to Matteo Di Giovinazzo, Gary Gregory. 
 o IO-790:  Fix symbolic link file filter #450. Thanks to Miguel Muñoz, Gary Gregory. 
 o IO-790:  Apply nanoseconds precision for QueueInputStream timeout duration. #453. Thanks to maxxedev, Gary Gregory, Bruno P. Kinoshita. 
+o           Fix overflow for FileUtilsTest constants #456. Thanks to Marcono1234. 
+o           Serialization is deprecated and will be removed in 3.0. Thanks to Gary Gregory. 
+o           FileSystemUtils.performCommand(String[], int, Duration): Use Locale.getDefault() instead of ENGLISH. Thanks to Gary Gregory. 
 o IO-726:  Add MemoryMappedFileInputStream #215. Thanks to shollander, Gary Gregory. 
 
 Changes:
@@ -190,7 +193,7 @@ o           Bump checkstyle from 8.44 to 9.3 #256, #257, #266, #279, #292. #308.
 o           Bump junit-bom from 5.8.0-M1 to 5.9.1 #260, #271, #275, #309, #386. Thanks to Dependabot. 
 o           Bump mockito-inline from 3.11.2 to 4.11.0 #262, #264, #282, #306, #314, #331, #348, #359, #381, #399, #405, #414, #420. Thanks to Dependabot, Gary Gregory. 
 o           Bump jmh.version from 1.32 to 1.36 #258, #316, #342, #404. Thanks to Dependabot. 
-o           Bump moditect-maven-plugin from 1.0.0.RC1 to 1.0.0.RC3 #280, #439. Thanks to Dependabot. 
+o           Bump moditect-maven-plugin from 1.0.0.RC1 to 1.0.0.Final #280, #439, #445. Thanks to Dependabot. 
 o           Bump junit-pioneer from 1.4.2 to 1.9.1 #304. #335, #362, #402, #406, #409. Thanks to Dependabot, Gary Gregory. 
 o           Bump japicmp-maven-plugin from 0.15.3 to 0.16.0. Thanks to Gary Gregory. 
 o           Bump commons-parent from 52 to 57 #388, #415, #421, #184. Thanks to Gary Gregory, Dependabot. 
