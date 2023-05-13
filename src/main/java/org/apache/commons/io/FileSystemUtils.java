@@ -485,7 +485,7 @@ public class FileSystemUtils {
         // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4801027
         // http://forum.java.sun.com/thread.jspa?threadID=533029&messageID=2572018
         // however, it's still not perfect as the JDK support is so poor
-        // (see commons-exec or Ant for a better multithreaded multi-os solution)
+        // (see commons-exec or Ant for a better multithreaded multi-OS solution)
 
         final List<String> lines;
         Process proc = null;
@@ -501,10 +501,10 @@ public class FileSystemUtils {
             in = proc.getInputStream();
             out = proc.getOutputStream();
             err = proc.getErrorStream();
-            // default charset is most likely appropriate here
+            // default Charset is most likely appropriate here
             inr = new BufferedReader(new InputStreamReader(in, Charset.defaultCharset()));
 
-            lines = inr.lines().limit(max).map(line -> line.toLowerCase(Locale.ENGLISH).trim()).collect(Collectors.toList());
+            lines = inr.lines().limit(max).map(line -> line.toLowerCase(Locale.getDefault()).trim()).collect(Collectors.toList());
 
             proc.waitFor();
 

@@ -227,6 +227,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
         Serialization is deprecated and will be removed in 3.0.
       </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        FileSystemUtils.performCommand(String[], int, Duration): Use Locale.getDefault() instead of ENGLISH.
+      </action>
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">
         Add GitHub coverage.yml.
