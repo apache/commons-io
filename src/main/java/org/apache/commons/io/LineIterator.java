@@ -80,6 +80,7 @@ public class LineIterator implements Iterator<String>, Closeable {
      * @param reader the {@link Reader} to read from, not null
      * @throws IllegalArgumentException if the reader is null
      */
+    @SuppressWarnings("resource") // Caller closes Reader
     public LineIterator(final Reader reader) throws IllegalArgumentException {
         Objects.requireNonNull(reader, "reader");
         if (reader instanceof BufferedReader) {
