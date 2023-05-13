@@ -43,6 +43,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -244,7 +245,11 @@ public class TailerTest {
         final File file = new File(temporaryFolder, "tailer-create-with-delay-and-from-start-with-reopen-and-buffersize-and-charset.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
-        try (Tailer tailer = Tailer.builder().setTailable(new NonStandardTailable(file)).setTailerListener(listener).get()) {
+        try (Tailer tailer = Tailer.builder()
+                .setExecutorService(Executors.newSingleThreadExecutor())
+                .setTailable(new NonStandardTailable(file))
+                .setTailerListener(listener)
+                .get()) {
             assertTrue(tailer.getTailable() instanceof NonStandardTailable);
             validateTailer(listener, file);
         }

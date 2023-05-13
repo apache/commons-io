@@ -26,16 +26,13 @@ import java.util.Objects;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractStreamBuilder;
-import org.apache.commons.io.output.DeferredFileOutputStream;
 
 /**
- * {@link InputStream} implementation which uses direct buffer to read a file to avoid extra copy of data between Java
- * and native memory which happens when using {@link java.io.BufferedInputStream}. Unfortunately, this is not something
- * already available in JDK, {@code sun.nio.ch.ChannelInputStream} supports reading a file using NIO, but does not
- * support buffering.
+ * {@link InputStream} implementation which uses direct buffer to read a file to avoid extra copy of data between Java and native memory which happens when
+ * using {@link java.io.BufferedInputStream}. Unfortunately, this is not something already available in JDK, {@code sun.nio.ch.ChannelInputStream} supports
+ * reading a file using NIO, but does not support buffering.
  * <p>
- * This class was ported and adapted from Apache Spark commit 933dc6cb7b3de1d8ccaf73d124d6eb95b947ed19 where it was
- * called {@code NioBufferedFileInputStream}.
+ * This class was ported and adapted from Apache Spark commit 933dc6cb7b3de1d8ccaf73d124d6eb95b947ed19 where it was called {@code NioBufferedFileInputStream}.
  * </p>
  *
  * @since 2.9.0
@@ -43,10 +40,11 @@ import org.apache.commons.io.output.DeferredFileOutputStream;
 public final class BufferedFileChannelInputStream extends InputStream {
 
     /**
-     * Builds a new {@link DeferredFileOutputStream} instance.
+     * Builds a new {@link BufferedFileChannelInputStream} instance.
      * <p>
      * Using File IO:
      * </p>
+     *
      * <pre>{@code
      * BufferedFileChannelInputStream s = BufferedFileChannelInputStream.builder()
      *   .setFile(file)
@@ -56,6 +54,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
      * <p>
      * Using NIO Path:
      * </p>
+     *
      * <pre>{@code
      * BufferedFileChannelInputStream s = BufferedFileChannelInputStream.builder()
      *   .setPath(path)
@@ -67,6 +66,11 @@ public final class BufferedFileChannelInputStream extends InputStream {
      */
     public static class Builder extends AbstractStreamBuilder<BufferedFileChannelInputStream, Builder> {
 
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
+         */
         @Override
         public BufferedFileChannelInputStream get() throws IOException {
             return new BufferedFileChannelInputStream(getOrigin().getPath(), getBufferSize());
@@ -103,7 +107,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
     /**
      * Constructs a new instance for the given File and buffer size.
      *
-     * @param file The file to stream.
+     * @param file       The file to stream.
      * @param bufferSize buffer size.
      * @throws IOException If an I/O error occurs
      * @deprecated Use {@link #builder()}
@@ -128,7 +132,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
     /**
      * Constructs a new instance for the given Path and buffer size.
      *
-     * @param path The path to stream.
+     * @param path       The path to stream.
      * @param bufferSize buffer size.
      * @throws IOException If an I/O error occurs
      * @deprecated Use {@link #builder()}
@@ -147,11 +151,10 @@ public final class BufferedFileChannelInputStream extends InputStream {
     }
 
     /**
-     * Attempts to clean up a ByteBuffer if it is direct or memory-mapped. This uses an *unsafe* Sun API that will cause
-     * errors if one attempts to read from the disposed buffer. However, neither the bytes allocated to direct buffers nor
-     * file descriptors opened for memory-mapped buffers put pressure on the garbage collector. Waiting for garbage
-     * collection may lead to the depletion of off-heap memory or huge numbers of open files. There's unfortunately no
-     * standard API to manually dispose of these kinds of buffers.
+     * Attempts to clean up a ByteBuffer if it is direct or memory-mapped. This uses an *unsafe* Sun API that will cause errors if one attempts to read from the
+     * disposed buffer. However, neither the bytes allocated to direct buffers nor file descriptors opened for memory-mapped buffers put pressure on the garbage
+     * collector. Waiting for garbage collection may lead to the depletion of off-heap memory or huge numbers of open files. There's unfortunately no standard
+     * API to manually dispose of these kinds of buffers.
      *
      * @param buffer the buffer to clean.
      */
@@ -162,10 +165,10 @@ public final class BufferedFileChannelInputStream extends InputStream {
     }
 
     /**
-     * In Java 8, the type of {@code sun.nio.ch.DirectBuffer.cleaner()} was {@code sun.misc.Cleaner}, and it was possible to
-     * access the method {@code sun.misc.Cleaner.clean()} to invoke it. The type changed to {@code jdk.internal.ref.Cleaner}
-     * in later JDKs, and the {@code clean()} method is not accessible even with reflection. However {@code sun.misc.Unsafe}
-     * added an {@code invokeCleaner()} method in JDK 9+ and this is still accessible with reflection.
+     * In Java 8, the type of {@code sun.nio.ch.DirectBuffer.cleaner()} was {@code sun.misc.Cleaner}, and it was possible to access the method
+     * {@code sun.misc.Cleaner.clean()} to invoke it. The type changed to {@code jdk.internal.ref.Cleaner} in later JDKs, and the {@code clean()} method is not
+     * accessible even with reflection. However {@code sun.misc.Unsafe} added an {@code invokeCleaner()} method in JDK 9+ and this is still accessible with
+     * reflection.
      *
      * @param buffer the buffer to clean. must be a DirectBuffer.
      */

@@ -95,6 +95,11 @@ public class WriterOutputStream extends OutputStream {
             this.charsetDecoder = getCharset().newDecoder();
         }
 
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to a Writer.
+         */
         @SuppressWarnings("resource")
         @Override
         public WriterOutputStream get() throws IOException {
@@ -157,7 +162,7 @@ public class WriterOutputStream extends OutputStream {
     }
 
     /**
-     * Check if the JDK in use properly supports the given charset.
+     * Checks if the JDK in use properly supports the given charset.
      *
      * @param charset the charset to check the support for
      */

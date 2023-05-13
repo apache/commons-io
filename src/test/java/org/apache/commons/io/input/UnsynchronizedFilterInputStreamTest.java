@@ -39,19 +39,13 @@ import org.junit.jupiter.api.Test;
  */
 public class UnsynchronizedFilterInputStreamTest {
 
-    static class MyUnsynchronizedFilterInputStream extends UnsynchronizedFilterInputStream {
-        public MyUnsynchronizedFilterInputStream(final InputStream is) {
-            super(is);
-        }
-    }
+    public static final String DATA = StringUtils.repeat("This is a test.", 500);
 
     private Path fileName;
 
     private InputStream is;
 
     byte[] ibuf = new byte[4096];
-
-    public static final String DATA = StringUtils.repeat("This is a test.", 500);
 
     /**
      * Sets up the fixture, for example, open a network connection. This method is called before a test is executed.
@@ -63,7 +57,7 @@ public class UnsynchronizedFilterInputStreamTest {
     protected void setUp() throws IOException {
         fileName = Files.createTempFile(getClass().getSimpleName(), ".tst");
         Files.write(fileName, DATA.getBytes("UTF-8"));
-        is = new MyUnsynchronizedFilterInputStream(Files.newInputStream(fileName));
+        is = UnsynchronizedFilterInputStream.builder().setInputStream(Files.newInputStream(fileName)).get();
     }
 
     /**

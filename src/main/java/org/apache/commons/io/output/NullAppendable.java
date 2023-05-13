@@ -27,7 +27,7 @@ import java.io.IOException;
  *
  * @since 2.8.0
  */
-public class NullAppendable implements Appendable {
+public class NullAppendable implements Appendable { // NOPMD Class will be final in 3.0.
 
     /**
      * A singleton.

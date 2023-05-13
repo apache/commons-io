@@ -19,7 +19,6 @@ package org.apache.commons.io.function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
@@ -85,11 +84,6 @@ public class IOBiFunctionTest {
         final IOBiFunction<String, Long, Long> f = (t, u) -> Files.size(PathUtils.current());
         map.computeIfPresent("1", f.asBiFunction());
         assertNotEquals(0L, map.get("1"));
-    }
-
-    @Test
-    public void testNoopIOConsumer() throws IOException {
-        assertNull(IOBiFunction.noop().apply(null, null));
     }
 
 }

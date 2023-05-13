@@ -18,6 +18,7 @@ package org.apache.commons.io.input;
 
 import static org.apache.commons.io.IOUtils.EOF;
 
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -31,10 +32,7 @@ import java.io.InputStream;
  *
  * @since 2.0
  */
-public class BoundedInputStream extends InputStream {
-
-    /** The wrapped input stream. */
-    private final InputStream inputStream;
+public class BoundedInputStream extends FilterInputStream {
 
     /** The max count of bytes to read. */
     private final long maxCount;
@@ -68,8 +66,8 @@ public class BoundedInputStream extends InputStream {
     public BoundedInputStream(final InputStream inputStream, final long maxLength) {
         // Some badly designed methods - e.g. the servlet API - overload length
         // such that "-1" means stream finished
+        super(inputStream);
         this.maxCount = maxLength;
-        this.inputStream = inputStream;
     }
 
     /**
@@ -81,7 +79,7 @@ public class BoundedInputStream extends InputStream {
             onMaxLength(maxCount, count);
             return 0;
         }
-        return inputStream.available();
+        return in.available();
     }
 
     /**
@@ -93,7 +91,7 @@ public class BoundedInputStream extends InputStream {
     @Override
     public void close() throws IOException {
         if (propagateClose) {
-            inputStream.close();
+            in.close();
         }
     }
 
@@ -140,7 +138,7 @@ public class BoundedInputStream extends InputStream {
      */
     @Override
     public synchronized void mark(final int readlimit) {
-        inputStream.mark(readlimit);
+        in.mark(readlimit);
         mark = count;
     }
 
@@ -151,7 +149,7 @@ public class BoundedInputStream extends InputStream {
      */
     @Override
     public boolean markSupported() {
-        return inputStream.markSupported();
+        return in.markSupported();
     }
 
     /**
@@ -180,7 +178,7 @@ public class BoundedInputStream extends InputStream {
             onMaxLength(maxCount, count);
             return EOF;
         }
-        final int result = inputStream.read();
+        final int result = in.read();
         count++;
         return result;
     }
@@ -215,7 +213,7 @@ public class BoundedInputStream extends InputStream {
             return EOF;
         }
         final long maxRead = maxCount >= 0 ? Math.min(len, maxCount - count) : len;
-        final int bytesRead = inputStream.read(b, off, (int) maxRead);
+        final int bytesRead = in.read(b, off, (int) maxRead);
 
         if (bytesRead == EOF) {
             return EOF;
@@ -232,7 +230,7 @@ public class BoundedInputStream extends InputStream {
      */
     @Override
     public synchronized void reset() throws IOException {
-        inputStream.reset();
+        in.reset();
         count = mark;
     }
 
@@ -259,7 +257,7 @@ public class BoundedInputStream extends InputStream {
     @Override
     public long skip(final long n) throws IOException {
         final long toSkip = maxCount >= 0 ? Math.min(n, maxCount - count) : n;
-        final long skippedBytes = inputStream.skip(toSkip);
+        final long skippedBytes = in.skip(toSkip);
         count += skippedBytes;
         return skippedBytes;
     }
@@ -271,6 +269,6 @@ public class BoundedInputStream extends InputStream {
      */
     @Override
     public String toString() {
-        return inputStream.toString();
+        return in.toString();
     }
 }

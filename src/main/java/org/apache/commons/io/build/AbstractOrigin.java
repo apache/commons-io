@@ -32,7 +32,12 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 /**
- * Abstracts the origin of data for builders like a {@link File}, {@link Path}, and so on.
+ * Abstracts the origin of data for builders like a {@link File}, {@link Path}, {@link Reader}, {@link Writer}, {@link InputStream}, {@link OutputStream}, and
+ * {@link URI}.
+ * <p>
+ * Some methods may throw {@link UnsupportedOperationException} if that method is not implemented in a concrete subclass, see {@link #getFile()} and
+ * {@link #getPath()}.
+ * </p>
  *
  * @param <T> the type of instances to build.
  * @param <B> the type of builder subclass.
@@ -43,14 +48,45 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     /**
      * A {@link File} origin.
      */
+    public static class ByteArrayOrigin extends AbstractOrigin<byte[], ByteArrayOrigin> {
+
+        /**
+         * Constructs a new instance for the given origin.
+         *
+         * @param origin The origin.
+         */
+        public ByteArrayOrigin(final byte[] origin) {
+            super(origin);
+        }
+
+        @Override
+        public byte[] getByteArray() {
+            // No conversion
+            return get();
+        }
+
+    }
+
+    /**
+     * A {@link File} origin.
+     * <p>
+     * Starting from this origin, you can get a byte array, a file, an input stream, an output stream, a path, a reader, and a writer.
+     * </p>
+     */
     public static class FileOrigin extends AbstractOrigin<File, FileOrigin> {
 
+        /**
+         * Constructs a new instance for the given origin.
+         *
+         * @param origin The origin.
+         */
         public FileOrigin(final File origin) {
             super(origin);
         }
 
         @Override
         public File getFile() {
+            // No conversion
             return get();
         }
 
@@ -69,12 +105,18 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      */
     public static class InputStreamOrigin extends AbstractOrigin<InputStream, InputStreamOrigin> {
 
+        /**
+         * Constructs a new instance for the given origin.
+         *
+         * @param origin The origin.
+         */
         public InputStreamOrigin(final InputStream origin) {
             super(origin);
         }
 
         @Override
         public InputStream getInputStream(final OpenOption... options) {
+            // No conversion
             return get();
         }
 
@@ -88,12 +130,18 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      */
     public static class OutputStreamOrigin extends AbstractOrigin<OutputStream, OutputStreamOrigin> {
 
+        /**
+         * Constructs a new instance for the given origin.
+         *
+         * @param origin The origin.
+         */
         public OutputStreamOrigin(final OutputStream origin) {
             super(origin);
         }
 
         @Override
         public OutputStream getOutputStream(final OpenOption... options) {
+            // No conversion
             return get();
         }
 
@@ -101,9 +149,17 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
     /**
      * A {@link Path} origin.
+     * <p>
+     * Starting from this origin, you can get a byte array, a file, an input stream, an output stream, a path, a reader, and a writer.
+     * </p>
      */
     public static class PathOrigin extends AbstractOrigin<Path, PathOrigin> {
 
+        /**
+         * Constructs a new instance for the given origin.
+         *
+         * @param origin The origin.
+         */
         public PathOrigin(final Path origin) {
             super(origin);
         }
@@ -115,6 +171,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public Path getPath() {
+            // No conversion
             return get();
         }
 
@@ -128,12 +185,18 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      */
     public static class ReaderOrigin extends AbstractOrigin<Reader, ReaderOrigin> {
 
+        /**
+         * Constructs a new instance for the given origin.
+         *
+         * @param origin The origin.
+         */
         public ReaderOrigin(final Reader origin) {
             super(origin);
         }
 
         @Override
         public Reader getReader(final Charset charset) throws IOException {
+            // No conversion
             return get();
         }
     }
@@ -143,13 +206,13 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      */
     public static class URIOrigin extends AbstractOrigin<URI, URIOrigin> {
 
+        /**
+         * Constructs a new instance for the given origin.
+         *
+         * @param origin The origin.
+         */
         public URIOrigin(final URI origin) {
             super(origin);
-        }
-
-        @Override
-        public URI get() {
-            return origin;
         }
 
         @Override
@@ -172,12 +235,18 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      */
     public static class WriterOrigin extends AbstractOrigin<Writer, WriterOrigin> {
 
+        /**
+         * Constructs a new instance for the given origin.
+         *
+         * @param origin The origin.
+         */
         public WriterOrigin(final Writer origin) {
             super(origin);
         }
 
         @Override
         public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
+            // No conversion
             return get();
         }
     }
@@ -207,6 +276,61 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     }
 
     /**
+     * Gets this origin as a byte array, if possible.
+     *
+     * @return this origin as a byte array, if possible.
+     * @throws IOException if an I/O error occurs.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
+     */
+    public byte[] getByteArray() throws IOException {
+        return Files.readAllBytes(getPath());
+    }
+
+    /**
+     * Gets this origin as a Path, if possible.
+     *
+     * @return this origin as a Path, if possible.
+     * @throws UnsupportedOperationException if this method is not implemented in a concrete subclass.
+     */
+    public File getFile() {
+        throw new UnsupportedOperationException(origin.toString());
+    }
+
+    /**
+     * Gets this origin as an InputStream, if possible.
+     *
+     * @param options options specifying how the file is opened
+     * @return this origin as an InputStream, if possible.
+     * @throws IOException if an I/O error occurs.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
+     */
+    public InputStream getInputStream(final OpenOption... options) throws IOException {
+        return Files.newInputStream(getPath(), options);
+    }
+
+    /**
+     * Gets this origin as an OutputStream, if possible.
+     *
+     * @param options options specifying how the file is opened
+     * @return this origin as an OutputStream, if possible.
+     * @throws IOException if an I/O error occurs.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
+     */
+    public OutputStream getOutputStream(final OpenOption... options) throws IOException {
+        return Files.newOutputStream(getPath(), options);
+    }
+
+    /**
+     * Gets this origin as a Path, if possible.
+     *
+     * @return this origin as a Path, if possible.
+     * @throws UnsupportedOperationException if this method is not implemented in a concrete subclass.
+     */
+    public Path getPath() {
+        throw new UnsupportedOperationException(origin.toString());
+    }
+
+    /**
      * Gets a new Reader on the origin, buffered by default.
      *
      * @param charset the charset to use for decoding
@@ -224,49 +348,10 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * @param options options specifying how the file is opened
      * @return a new Writer on the origin.
      * @throws IOException if an I/O error occurs opening or creating the file.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
      */
     public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
         return Files.newBufferedWriter(getPath(), charset, options);
-    }
-
-    /**
-     * Gets this origin as a Path, if possible.
-     *
-     * @return this origin as a Path, if possible.
-     */
-    public File getFile() {
-        throw new UnsupportedOperationException(origin.toString());
-    }
-
-    /**
-     * Gets this origin as an InputStream, if possible.
-     *
-     * @param options options specifying how the file is opened
-     * @return this origin as an InputStream, if possible.
-     * @throws IOException if an I/O error occurs.
-     */
-    public InputStream getInputStream(final OpenOption... options) throws IOException {
-        return Files.newInputStream(getPath(), options);
-    }
-
-    /**
-     * Gets this origin as an OutputStream, if possible.
-     *
-     * @param options options specifying how the file is opened
-     * @return this origin as an OutputStream, if possible.
-     * @throws IOException if an I/O error occurs.
-     */
-    public OutputStream getOutputStream(final OpenOption... options) throws IOException {
-        return Files.newOutputStream(getPath(), options);
-    }
-
-    /**
-     * Gets this origin as a Path, if possible.
-     *
-     * @return this origin as a Path\, if possible.
-     */
-    public Path getPath() {
-        throw new UnsupportedOperationException(origin.toString());
     }
 
     @Override

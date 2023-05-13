@@ -18,7 +18,6 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -46,19 +45,7 @@ public class UnsynchronizedBufferedInputStreamTest {
 
     private static final int BUFFER_SIZE = 4096;
 
-    static class MyUnsynchronizedBufferedInputStream extends UnsynchronizedBufferedInputStream {
-        static byte[] buf;
-
-        MyUnsynchronizedBufferedInputStream(final InputStream is) {
-            super(is);
-            buf = super.buf;
-        }
-
-        MyUnsynchronizedBufferedInputStream(final InputStream is, final int size) {
-            super(is, size);
-            buf = super.buf;
-        }
-    }
+    public static final String DATA = StringUtils.repeat("This is a test.", 500);
 
     Path fileName;
 
@@ -67,8 +54,6 @@ public class UnsynchronizedBufferedInputStreamTest {
     private InputStream isFile;
 
     byte[] ibuf = new byte[BUFFER_SIZE];
-
-    public static final String DATA = StringUtils.repeat("This is a test.", 500);
 
     /**
      * Sets up the fixture, for example, open a network connection. This method is called before a test is executed.
@@ -203,12 +188,7 @@ public class UnsynchronizedBufferedInputStreamTest {
         // is.read should now throw an exception because it will have to be filled.
         assertThrows(IOException.class, () -> is.read());
 
-        // regression test for harmony-2407
-        new MyUnsynchronizedBufferedInputStream(null);
-        assertNotNull(MyUnsynchronizedBufferedInputStream.buf);
-        MyUnsynchronizedBufferedInputStream.buf = null;
-        new MyUnsynchronizedBufferedInputStream(null, 100);
-        assertNotNull(MyUnsynchronizedBufferedInputStream.buf);
+        assertThrows(NullPointerException.class, () -> UnsynchronizedBufferedInputStream.builder().setInputStream(null).setBufferSize(100).get());
     }
 
     /**

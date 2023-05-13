@@ -150,6 +150,7 @@ public class RegexFileFilterTest {
 
     /**
      * Tests https://issues.apache.org/jira/browse/IO-733.
+     *
      * @throws IOException
      */
     @SuppressWarnings("unchecked")

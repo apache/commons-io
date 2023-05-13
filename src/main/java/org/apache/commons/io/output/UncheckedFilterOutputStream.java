@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UncheckedIOException;
 
+import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.function.Uncheck;
 
 /**
@@ -32,16 +33,49 @@ import org.apache.commons.io.function.Uncheck;
  * @see UncheckedIOException
  * @since 2.12.0
  */
-public class UncheckedFilterOutputStream extends FilterOutputStream {
+public final class UncheckedFilterOutputStream extends FilterOutputStream {
 
     /**
-     * Creates a new instance.
-     *
-     * @param outputStream an OutputStream object providing the underlying stream.
-     * @return a new UncheckedFilterOutputStream.
+     * Builds a new {@link UncheckedFilterOutputStream} instance.
+     * <p>
+     * Using File IO:
+     * </p>
+     * <pre>{@code
+     * UncheckedFilterOutputStream s = UncheckedFilterOutputStream.builder()
+     *   .setFile(file)
+     *   .get()}
+     * </pre>
+     * <p>
+     * Using NIO Path:
+     * </p>
+     * <pre>{@code
+     * UncheckedFilterOutputStream s = UncheckedFilterOutputStream.builder()
+     *   .setPath(path)
+     *   .get()}
+     * </pre>
      */
-    public static UncheckedFilterOutputStream on(final OutputStream outputStream) {
-        return new UncheckedFilterOutputStream(outputStream);
+    public static class Builder extends AbstractStreamBuilder<UncheckedFilterOutputStream, Builder> {
+
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to an OutputStream.
+         */
+        @SuppressWarnings("resource")
+        @Override
+        public UncheckedFilterOutputStream get() throws IOException {
+            return new UncheckedFilterOutputStream(getOrigin().getOutputStream());
+        }
+
+    }
+
+    /**
+     * Constructs a new {@link Builder}.
+     *
+     * @return a new {@link Builder}.
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
     /**
@@ -50,7 +84,7 @@ public class UncheckedFilterOutputStream extends FilterOutputStream {
      * @param outputStream the underlying output stream, or {@code null} if this instance is to be created without an
      *        underlying stream.
      */
-    public UncheckedFilterOutputStream(final OutputStream outputStream) {
+    private UncheckedFilterOutputStream(final OutputStream outputStream) {
         super(outputStream);
     }
 

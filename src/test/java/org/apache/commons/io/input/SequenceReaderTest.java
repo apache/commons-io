@@ -48,13 +48,6 @@ public class SequenceReaderTest {
         }
 
         @Override
-        public int read(final char[] cbuf, final int off, final int len) throws IOException {
-            checkOpen();
-            close();
-            return EOF;
-        }
-
-        @Override
         public void close() throws IOException {
             closed = true;
         }
@@ -62,7 +55,14 @@ public class SequenceReaderTest {
         public boolean isClosed() {
             return closed;
         }
-    };
+
+        @Override
+        public int read(final char[] cbuf, final int off, final int len) throws IOException {
+            checkOpen();
+            close();
+            return EOF;
+        }
+    }
 
     private static final char NUL = 0;
 
@@ -115,9 +115,11 @@ public class SequenceReaderTest {
 
                 if (off < 0) {
                     throw new IndexOutOfBoundsException("off is negative");
-                } else if (len < 0) {
+                }
+                if (len < 0) {
                     throw new IndexOutOfBoundsException("len is negative");
-                } else if (len > cbuf.length - off) {
+                }
+                if (len > cbuf.length - off) {
                     throw new IndexOutOfBoundsException("len is greater than cbuf.length - off");
                 }
 

@@ -24,7 +24,6 @@ import java.util.Objects;
 
 import org.apache.commons.io.RandomAccessFileMode;
 import org.apache.commons.io.build.AbstractStreamBuilder;
-import org.apache.commons.io.output.DeferredFileOutputStream;
 
 /**
  * Streams data from a {@link RandomAccessFile} starting at its current position.
@@ -34,7 +33,7 @@ import org.apache.commons.io.output.DeferredFileOutputStream;
 public class RandomAccessFileInputStream extends InputStream {
 
     /**
-     * Builds a new {@link DeferredFileOutputStream} instance.
+     * Builds a new {@link RandomAccessFileInputStream} instance.
      * <p>
      * For example:
      * </p>
@@ -52,6 +51,11 @@ public class RandomAccessFileInputStream extends InputStream {
         private RandomAccessFile randomAccessFile;
         private boolean closeOnClose;
 
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to a File.
+         */
         @SuppressWarnings("resource") // Caller closes depending on settings
         @Override
         public RandomAccessFileInputStream get() throws IOException {

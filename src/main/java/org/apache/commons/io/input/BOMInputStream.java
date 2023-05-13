@@ -92,12 +92,13 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
 public class BOMInputStream extends ProxyInputStream {
 
     /**
-     * Builds a new {@link ReaderInputStream} instance.
+     * Builds a new {@link BOMInputStream} instance.
      * <p>
      * For example:
      * </p>
      * <pre>{@code
      * BOMInputStream s = BOMInputStream.builder()
+     *   .setPath(path)
      *   .setByteOrderMarks(ByteOrderMark.UTF_8)
      *   .setInclude(false)
      *   .get()}
@@ -107,11 +108,22 @@ public class BOMInputStream extends ProxyInputStream {
      */
     public static class Builder extends AbstractStreamBuilder<BOMInputStream, Builder> {
 
-        static final ByteOrderMark[] DEFAULT = { ByteOrderMark.UTF_8 };
+        private static final ByteOrderMark[] DEFAULT = { ByteOrderMark.UTF_8 };
 
-        private boolean include;
+        // for test access
+        static ByteOrderMark getDefaultBOM() {
+            return DEFAULT[0];
+        }
+
         private ByteOrderMark[] byteOrderMarks = DEFAULT;
 
+        private boolean include;
+
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to an InputStream.
+         */
         @SuppressWarnings("resource")
         @Override
         public BOMInputStream get() throws IOException {
@@ -147,6 +159,7 @@ public class BOMInputStream extends ProxyInputStream {
      */
     private static final Comparator<ByteOrderMark> ByteOrderMarkLengthComparator = Comparator.comparing(ByteOrderMark::length).reversed();
 
+
     /**
      * Constructs a new {@link Builder}.
      *
@@ -157,18 +170,18 @@ public class BOMInputStream extends ProxyInputStream {
         return new Builder();
     }
 
-    private final boolean include;
-
     /**
      * BOMs are sorted from longest to shortest.
      */
     private final List<ByteOrderMark> boms;
+
     private ByteOrderMark byteOrderMark;
-    private int[] firstBytes;
-    private int fbLength;
     private int fbIndex;
-    private int markFbIndex;
+    private int fbLength;
+    private int[] firstBytes;
+    private final boolean include;
     private boolean markedAtStart;
+    private int markFbIndex;
 
     /**
      * Constructs a new BOM InputStream that excludes a {@link ByteOrderMark#UTF_8} BOM.

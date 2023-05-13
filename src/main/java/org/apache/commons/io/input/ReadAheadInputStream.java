@@ -17,6 +17,7 @@ import static org.apache.commons.io.IOUtils.EOF;
 
 // import javax.annotation.concurrent.GuardedBy;
 import java.io.EOFException;
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
@@ -42,10 +43,10 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  *
  * @since 2.9.0
  */
-public class ReadAheadInputStream extends InputStream {
+public class ReadAheadInputStream extends FilterInputStream {
 
     /**
-     * Builds a new {@link ReaderInputStream} instance.
+     * Builds a new {@link ReadAheadInputStream} instance.
      * <p>
      * For example:
      * </p>
@@ -62,6 +63,11 @@ public class ReadAheadInputStream extends InputStream {
 
         private ExecutorService executorService;
 
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to an InputStream.
+         */
         @SuppressWarnings("resource")
         @Override
         public ReadAheadInputStream get() throws IOException {
@@ -82,6 +88,8 @@ public class ReadAheadInputStream extends InputStream {
 
     }
 
+    private static final ThreadLocal<byte[]> BYTE_ARRAY_1 = ThreadLocal.withInitial(() -> new byte[1]);
+
     /**
      * Constructs a new {@link Builder}.
      *
@@ -92,7 +100,17 @@ public class ReadAheadInputStream extends InputStream {
         return new Builder();
     }
 
-    private static final ThreadLocal<byte[]> BYTE_ARRAY_1 = ThreadLocal.withInitial(() -> new byte[1]);
+    /**
+     * Creates a new daemon thread.
+     *
+     * @param r the thread's runnable.
+     * @return a new daemon thread.
+     */
+    private static Thread newDaemonThread(final Runnable r) {
+        final Thread thread = new Thread(r, "commons-io-read-ahead");
+        thread.setDaemon(true);
+        return thread;
+    }
 
     /**
      * Creates a new daemon executor service.
@@ -100,19 +118,7 @@ public class ReadAheadInputStream extends InputStream {
      * @return a new daemon executor service.
      */
     private static ExecutorService newExecutorService() {
-        return Executors.newSingleThreadExecutor(ReadAheadInputStream::newThread);
-    }
-
-    /**
-     * Creates a new daemon thread.
-     *
-     * @param r the thread's runnable.
-     * @return a new daemon thread.
-     */
-    private static Thread newThread(final Runnable r) {
-        final Thread thread = new Thread(r, "commons-io-read-ahead");
-        thread.setDaemon(true);
-        return thread;
+        return Executors.newSingleThreadExecutor(ReadAheadInputStream::newDaemonThread);
     }
 
     private final ReentrantLock stateChangeLock = new ReentrantLock();
@@ -152,8 +158,6 @@ public class ReadAheadInputStream extends InputStream {
 
     // Whether there is a reader waiting for data.
     private final AtomicBoolean isWaiting = new AtomicBoolean(false);
-
-    private final InputStream underlyingInputStream;
 
     private final ExecutorService executorService;
 
@@ -196,11 +200,11 @@ public class ReadAheadInputStream extends InputStream {
      */
     private ReadAheadInputStream(final InputStream inputStream, final int bufferSizeInBytes, final ExecutorService executorService,
             final boolean shutdownExecutorService) {
+        super(Objects.requireNonNull(inputStream, "inputStream"));
         if (bufferSizeInBytes <= 0) {
             throw new IllegalArgumentException("bufferSizeInBytes should be greater than 0, but the value is " + bufferSizeInBytes);
         }
         this.executorService = Objects.requireNonNull(executorService, "executorService");
-        this.underlyingInputStream = Objects.requireNonNull(inputStream, "inputStream");
         this.shutdownExecutorService = shutdownExecutorService;
         this.activeBuffer = ByteBuffer.allocate(bufferSizeInBytes);
         this.readAheadBuffer = ByteBuffer.allocate(bufferSizeInBytes);
@@ -257,7 +261,7 @@ public class ReadAheadInputStream extends InputStream {
                 throw iio;
             } finally {
                 if (isSafeToCloseUnderlyingInputStream) {
-                    underlyingInputStream.close();
+                    super.close();
                 }
             }
         }
@@ -277,7 +281,7 @@ public class ReadAheadInputStream extends InputStream {
         }
         if (needToCloseUnderlyingInputStream) {
             try {
-                underlyingInputStream.close();
+                super.close();
             } catch (final IOException ignored) {
                 // TODO Rethrow as UncheckedIOException?
             }
@@ -295,6 +299,7 @@ public class ReadAheadInputStream extends InputStream {
             return activeBuffer.get() & 0xFF;
         }
         final byte[] oneByteArray = BYTE_ARRAY_1.get();
+        oneByteArray[0] = 0;
         return read(oneByteArray, 0, 1) == EOF ? EOF : oneByteArray[0] & 0xFF;
     }
 
@@ -384,7 +389,7 @@ public class ReadAheadInputStream extends InputStream {
                 // try to fill the read ahead buffer.
                 // if a reader is waiting, possibly return early.
                 do {
-                    read = underlyingInputStream.read(arr, off, len);
+                    read = in.read(arr, off, len);
                     if (read <= 0) {
                         break;
                     }
@@ -481,7 +486,7 @@ public class ReadAheadInputStream extends InputStream {
         activeBuffer.flip();
         readAheadBuffer.position(0);
         readAheadBuffer.flip();
-        final long skippedFromInputStream = underlyingInputStream.skip(toSkip);
+        final long skippedFromInputStream = in.skip(toSkip);
         readAsync();
         return skippedBytes + skippedFromInputStream;
     }

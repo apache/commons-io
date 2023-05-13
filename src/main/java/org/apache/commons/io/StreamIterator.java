@@ -29,7 +29,7 @@ import java.util.stream.Stream;
  * @param <E> The stream and iterator type.
  * @since 2.9.0
  */
-class StreamIterator<E> implements Iterator<E>, Closeable {
+final class StreamIterator<E> implements Iterator<E>, Closeable {
 
     /**
      * Wraps and presents a stream as a closable resource that automatically closes itself when reaching the end of

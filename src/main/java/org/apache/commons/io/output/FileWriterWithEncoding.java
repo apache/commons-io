@@ -48,7 +48,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
 public class FileWriterWithEncoding extends ProxyWriter {
 
     /**
-     * Builds a new {@link DeferredFileOutputStream} instance.
+     * Builds a new {@link FileWriterWithEncoding} instance.
      * <p>
      * Using a CharsetEncoder:
      * </p>
@@ -77,6 +77,11 @@ public class FileWriterWithEncoding extends ProxyWriter {
 
         private CharsetEncoder charsetEncoder = super.getCharset().newEncoder();
 
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to a File.
+         */
         @SuppressWarnings("resource")
         @Override
         public FileWriterWithEncoding get() throws IOException {

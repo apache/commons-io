@@ -18,6 +18,7 @@ package org.apache.commons.io.input.buffer;
 
 import static org.apache.commons.io.IOUtils.EOF;
 
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
@@ -28,10 +29,7 @@ import org.apache.commons.io.IOUtils;
  * Implements a buffered input stream, which is internally based on a {@link CircularByteBuffer}. Unlike the
  * {@link java.io.BufferedInputStream}, this one doesn't need to reallocate byte arrays internally.
  */
-public class CircularBufferInputStream extends InputStream {
-
-    /** What we are streaming, used to fill the internal buffer. */
-    protected final InputStream in;
+public class CircularBufferInputStream extends FilterInputStream {
 
     /** Internal buffer. */
     protected final CircularByteBuffer buffer;
@@ -58,11 +56,12 @@ public class CircularBufferInputStream extends InputStream {
      * @param inputStream The input stream, which is being buffered.
      * @param bufferSize The size of the {@link CircularByteBuffer}, which is used internally.
      */
+    @SuppressWarnings("resource") // Caller closes InputStream
     public CircularBufferInputStream(final InputStream inputStream, final int bufferSize) {
+        super(Objects.requireNonNull(inputStream, "inputStream"));
         if (bufferSize <= 0) {
-            throw new IllegalArgumentException("Invalid bufferSize: " + bufferSize);
+            throw new IllegalArgumentException("Illegal bufferSize: " + bufferSize);
         }
-        this.in = Objects.requireNonNull(inputStream, "inputStream");
         this.buffer = new CircularByteBuffer(bufferSize);
         this.bufferSize = bufferSize;
         this.eof = false;
@@ -70,7 +69,7 @@ public class CircularBufferInputStream extends InputStream {
 
     @Override
     public void close() throws IOException {
-        in.close();
+        super.close();
         eof = true;
         buffer.clear();
     }
@@ -119,11 +118,6 @@ public class CircularBufferInputStream extends InputStream {
             return EOF;
         }
         return buffer.read() & 0xFF; // return unsigned byte
-    }
-
-    @Override
-    public int read(final byte[] buffer) throws IOException {
-        return read(buffer, 0, buffer.length);
     }
 
     @Override

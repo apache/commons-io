@@ -28,7 +28,12 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.file.attribute.FileTimes;
 
 /**
- * Wraps a {@link FileTime} and allows it to be serializable.
+ * Wraps a {@link FileTime} and allows it to be Serializable.
+ *
+ * <h2>Deprecating Serialization</h2>
+ * <p>
+ * <em>Serialization is deprecated and will be removed in 3.0.</em>
+ * </p>
  */
 class SerializableFileTime implements Serializable {
 

@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @since 2.12.0
  */
-public class FileTimes {
+public final class FileTimes {
 
     /**
      * Constant for the {@code 1970-01-01T00:00:00Z} {@link Instant#EPOCH epoch} as a time stamp attribute.

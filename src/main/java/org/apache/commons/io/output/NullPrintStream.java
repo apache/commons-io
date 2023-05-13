@@ -46,7 +46,10 @@ public class NullPrintStream extends PrintStream {
 
     /**
      * Constructs an instance.
+     *
+     * @deprecated Use {@link #INSTANCE}.
      */
+    @Deprecated
     public NullPrintStream() {
         // Relies on the default charset which is OK since we are not actually writing.
         super(NullOutputStream.INSTANCE);

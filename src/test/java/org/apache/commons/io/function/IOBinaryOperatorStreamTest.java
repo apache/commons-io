@@ -47,7 +47,7 @@ public class IOBinaryOperatorStreamTest {
     @Test
     public void testAsBinaryOperator() {
         assertThrows(UncheckedIOException.class,
-            () -> Stream.of(TestConstants.ABS_PATH_A, TestConstants.ABS_PATH_A).reduce((TestUtils.<Path>throwingIOBinaryOperator()).asBinaryOperator()).get());
+            () -> Stream.of(TestConstants.ABS_PATH_A, TestConstants.ABS_PATH_A).reduce(TestUtils.<Path>throwingIOBinaryOperator().asBinaryOperator()).get());
         assertEquals(TestConstants.ABS_PATH_A, Stream.of(TestConstants.ABS_PATH_A, TestConstants.ABS_PATH_A).reduce(MAX_BY_BO).get());
         assertEquals(TestConstants.ABS_PATH_A, Stream.of(TestConstants.ABS_PATH_A, TestConstants.ABS_PATH_A).reduce(MIN_BY_BO).get());
     }

@@ -226,7 +226,7 @@ public class WriterOutputStreamTest {
         }
     }
 
-    private void writeOneAtATime(final byte[] bytes, WriterOutputStream out) throws IOException {
+    private void writeOneAtATime(final byte[] bytes, final WriterOutputStream out) throws IOException {
         for (final byte b : bytes) {
             out.write(b);
         }

@@ -30,17 +30,17 @@ import java.io.InputStream;
  */
 public class WindowsLineEndingInputStream  extends InputStream {
 
-    private boolean slashRSeen;
+    private boolean atEos;
 
-    private boolean slashNSeen;
+    private boolean atSlashCr;
 
-    private boolean injectSlashN;
+    private boolean atSlashLf;
 
-    private boolean eofSeen;
+    private final InputStream in;
 
-    private final InputStream target;
+    private boolean injectSlashLf;
 
-    private final boolean ensureLineFeedAtEndOfFile;
+    private final boolean lineFeedAtEndOfFile;
 
     /**
      * Creates an input stream that filters another stream
@@ -49,35 +49,37 @@ public class WindowsLineEndingInputStream  extends InputStream {
      * @param ensureLineFeedAtEndOfFile true to ensure that the file ends with CRLF
      */
     public WindowsLineEndingInputStream(final InputStream in, final boolean ensureLineFeedAtEndOfFile) {
-        this.target = in;
-        this.ensureLineFeedAtEndOfFile = ensureLineFeedAtEndOfFile;
+        this.in = in;
+        this.lineFeedAtEndOfFile = ensureLineFeedAtEndOfFile;
     }
 
     /**
      * Closes the stream. Also closes the underlying stream.
+     *
      * @throws IOException upon error
      */
     @Override
     public void close() throws IOException {
         super.close();
-        target.close();
+        in.close();
     }
 
     /**
-     * Handles the EOF-handling at the end of the stream
+     * Handles the end of stream condition.
+     *
      * @return The next char to output to the stream
      */
-    private int eofGame() {
-        if (!ensureLineFeedAtEndOfFile) {
+    private int handleEos() {
+        if (!lineFeedAtEndOfFile) {
             return EOF;
         }
-        if (!slashNSeen && !slashRSeen) {
-            slashRSeen = true;
+        if (!atSlashLf && !atSlashCr) {
+            atSlashCr = true;
             return CR;
         }
-        if (!slashNSeen) {
-            slashRSeen = false;
-            slashNSeen = true;
+        if (!atSlashLf) {
+            atSlashCr = false;
+            atSlashLf = true;
             return LF;
         }
         return EOF;
@@ -96,20 +98,20 @@ public class WindowsLineEndingInputStream  extends InputStream {
      */
     @Override
     public int read() throws IOException {
-        if (eofSeen) {
-            return eofGame();
+        if (atEos) {
+            return handleEos();
         }
-        if (injectSlashN) {
-            injectSlashN = false;
+        if (injectSlashLf) {
+            injectSlashLf = false;
             return LF;
         }
-        final boolean prevWasSlashR = slashRSeen;
+        final boolean prevWasSlashR = atSlashCr;
         final int target = readWithUpdate();
-        if (eofSeen) {
-            return eofGame();
+        if (atEos) {
+            return handleEos();
         }
         if (target == LF && !prevWasSlashR) {
-            injectSlashN = true;
+            injectSlashLf = true;
             return CR;
         }
         return target;
@@ -121,13 +123,13 @@ public class WindowsLineEndingInputStream  extends InputStream {
      * @throws IOException upon error
      */
     private int readWithUpdate() throws IOException {
-        final int target = this.target.read();
-        eofSeen = target == EOF;
-        if (eofSeen) {
+        final int target = this.in.read();
+        atEos = target == EOF;
+        if (atEos) {
             return target;
         }
-        slashRSeen = target == CR;
-        slashNSeen = target == LF;
+        atSlashCr = target == CR;
+        atSlashLf = target == LF;
         return target;
     }
 }

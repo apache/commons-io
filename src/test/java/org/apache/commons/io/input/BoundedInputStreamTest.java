@@ -48,7 +48,7 @@ public class BoundedInputStreamTest {
         // limit = length
         bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length) {
             @Override
-            protected void onMaxLength(long max, long readCount) {
+            protected void onMaxLength(final long max, final long readCount) {
                 boolRef.set(true);
             }
         };
@@ -63,7 +63,7 @@ public class BoundedInputStreamTest {
         boolRef.set(false);
         bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length + 1) {
             @Override
-            protected void onMaxLength(long max, long readCount) {
+            protected void onMaxLength(final long max, final long readCount) {
                 boolRef.set(true);
             }
         };
@@ -78,7 +78,7 @@ public class BoundedInputStreamTest {
         boolRef.set(false);
         bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), hello.length) {
             @Override
-            protected void onMaxLength(long max, long readCount) {
+            protected void onMaxLength(final long max, final long readCount) {
                 boolRef.set(true);
             }
         };

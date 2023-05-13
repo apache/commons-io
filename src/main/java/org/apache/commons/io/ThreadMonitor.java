@@ -37,7 +37,7 @@ import java.time.Duration;
  * }
  * </pre>
  */
-class ThreadMonitor implements Runnable {
+final class ThreadMonitor implements Runnable {
 
     /**
      * Starts monitoring the current thread.

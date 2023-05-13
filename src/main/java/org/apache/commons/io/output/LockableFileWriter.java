@@ -72,6 +72,11 @@ public class LockableFileWriter extends Writer {
             setBufferSize(AbstractByteArrayOutputStream.DEFAULT_SIZE);
         }
 
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to a File.
+         */
         @Override
         public LockableFileWriter get() throws IOException {
             return new LockableFileWriter(getOrigin().getFile(), getCharset(), append, lockDirectory.getFile().toString());
@@ -204,7 +209,7 @@ public class LockableFileWriter extends Writer {
      * @deprecated Use {@link #builder()}
      */
     @Deprecated
-    public LockableFileWriter(final File file, final Charset charset, final boolean append, String lockDir) throws IOException {
+    public LockableFileWriter(final File file, final Charset charset, final boolean append, final String lockDir) throws IOException {
         // init file to create/append
         final File absFile = Objects.requireNonNull(file, "file").getAbsoluteFile();
         if (absFile.getParentFile() != null) {
@@ -215,10 +220,7 @@ public class LockableFileWriter extends Writer {
         }
 
         // init lock file
-        if (lockDir == null) {
-            lockDir = FileUtils.getTempDirectoryPath();
-        }
-        final File lockDirFile = new File(lockDir);
+        final File lockDirFile = new File(lockDir != null ? lockDir : FileUtils.getTempDirectoryPath());
         FileUtils.forceMkdir(lockDirFile);
         testLockDir(lockDirFile);
         lockFile = new File(lockDirFile, absFile.getName() + LCK);

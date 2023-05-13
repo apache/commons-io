@@ -28,9 +28,11 @@ import org.apache.commons.io.FileUtils;
  * <p>
  * This comparator can be used to sort lists or arrays of files
  * by their length/size.
+ * </p>
  * <p>
  * Example of sorting a list of files using the
  * {@link #SIZE_COMPARATOR} singleton instance:
+ * </p>
  * <pre>
  *       List&lt;File&gt; list = ...
  *       ((AbstractFileComparator) SizeFileComparator.SIZE_COMPARATOR).sort(list);
@@ -38,6 +40,7 @@ import org.apache.commons.io.FileUtils;
  * <p>
  * Example of doing a <i>reverse</i> sort of an array of files using the
  * {@link #SIZE_REVERSE} singleton instance:
+ * </p>
  * <pre>
  *       File[] array = ...
  *       ((AbstractFileComparator) SizeFileComparator.SIZE_REVERSE).sort(array);
@@ -45,6 +48,11 @@ import org.apache.commons.io.FileUtils;
  * <p>
  * <strong>N.B.</strong> Directories are treated as <b>zero size</b> unless
  * {@code sumDirectoryContents} is {@code true}.
+ * </p>
+ * <h2>Deprecating Serialization</h2>
+ * <p>
+ * <em>Serialization is deprecated and will be removed in 3.0.</em>
+ * </p>
  *
  * @since 1.4
  */

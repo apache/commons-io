@@ -63,6 +63,10 @@ import org.apache.commons.io.file.PathUtils;
  * System.out.println(visitor.getDirList());
  * System.out.println(visitor.getFileList());
  * </pre>
+ * <h2>Deprecating Serialization</h2>
+ * <p>
+ * <em>Serialization is deprecated and will be removed in 3.0.</em>
+ * </p>
  *
  * @see FileFilterUtils#ageFileFilter(Date)
  * @see FileFilterUtils#ageFileFilter(File)

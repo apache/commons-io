@@ -266,7 +266,7 @@ public class CopyUtils {
             final Reader input,
             final Writer output)
                 throws IOException {
-        final char[] buffer = IOUtils.getCharArray();
+        final char[] buffer = IOUtils.getScratchCharArray();
         int count = 0;
         int n;
         while (EOF != (n = input.read(buffer))) {

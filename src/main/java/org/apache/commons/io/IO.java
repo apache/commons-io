@@ -14,32 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.apache.commons.io.charset;
-
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
+package org.apache.commons.io;
 
 /**
- * Works with {@link CharsetEncoder}.
- *
- * @since 2.12.0
+ * Component-wide operations on Apache Commons IO.
  */
-public final class CharsetEncoders {
+class IO {
 
     /**
-     * Returns the given non-null CharsetEncoder or a new default CharsetEncoder.
-     *
-     * @param charsetEncoder The CharsetEncoder to test.
-     * @return the given non-null CharsetEncoder or a new default CharsetEncoder.
+     * Clears any state, throughout Apache Commons IO. Handy for tests.
      */
-    public static CharsetEncoder toCharsetEncoder(final CharsetEncoder charsetEncoder) {
-        return charsetEncoder != null ? charsetEncoder : Charset.defaultCharset().newEncoder();
-    }
-
-    /** No instances. */
-    private CharsetEncoders() {
-        // No instances.
+    static void clear() {
+        IOUtils.clear();
     }
 
 }

@@ -142,13 +142,13 @@ public class FileUtilsTest extends AbstractTempDirTest {
     private static final String UTF_8 = StandardCharsets.UTF_8.name();
 
     /** Test data. */
-    private static final long DATE3 = 1000000002000L;
+    private static final long DATE3 = 1_000_000_002_000L;
 
     /** Test data. */
-    private static final long DATE2 = 1000000001000L;
+    private static final long DATE2 = 1_000_000_001_000L;
 
     /** Test data. */
-    private static final long DATE1 = 1000000000000L;
+    private static final long DATE1 = 1_000_000_000_000L;
 
     /**
      * Size of test directory.
@@ -513,7 +513,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertEquals("1 GB", FileUtils.byteCountToDisplaySize(1024 * 1024 * 1024));
         assertEquals("1 GB", FileUtils.byteCountToDisplaySize(1024 * 1024 * 1025));
         assertEquals("2 GB", FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 2));
-        assertEquals("1 GB", FileUtils.byteCountToDisplaySize(1024 * 1024 * 1024 * 2 - 1));
+        assertEquals("1 GB", FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 2 - 1));
         assertEquals("1 TB", FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 1024));
         assertEquals("1 PB", FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 1024 * 1024));
         assertEquals("1 EB", FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 1024 * 1024 * 1024));
@@ -538,7 +538,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertEquals("1 GB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024 * 1024 * 1024)));
         assertEquals("1 GB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024 * 1024 * 1025)));
         assertEquals("2 GB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024L * 1024 * 1024 * 2)));
-        assertEquals("1 GB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024 * 1024 * 1024 * 2 - 1)));
+        assertEquals("1 GB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024L * 1024 * 1024 * 2 - 1)));
         assertEquals("1 TB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024L * 1024 * 1024 * 1024)));
         assertEquals("1 PB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024L * 1024 * 1024 * 1024 * 1024)));
         assertEquals("1 EB", FileUtils.byteCountToDisplaySize(Long.valueOf(1024L * 1024 * 1024 * 1024 * 1024 * 1024)));
@@ -1183,6 +1183,14 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testCreateParentDirectories() throws IOException {
+        // If a directory already exists, nothing happens.
+        FileUtils.createParentDirectories(FileUtils.current());
+        // null is a noop
+        FileUtils.createParentDirectories(null);
+    }
+
+    @Test
     public void testCopyToDirectoryWithDirectory() throws IOException {
         final File destDirectory = new File(tempDirFile, "destination");
         if (!destDirectory.exists()) {
@@ -1759,7 +1767,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertFalse(FileUtils.isFileNewer(newFile, localDatePlusDay), "New File - Newer - LocalDate plus one day");
         assertFalse(FileUtils.isFileNewer(newFile, localDatePlusDay, localTime0), "New File - Newer - LocalDate plus one day,LocalTime");
         assertFalse(FileUtils.isFileNewer(newFile, localDatePlusDay, offsetTime0), "New File - Newer - LocalDate plus one day,OffsetTime");
-        assertFalse(FileUtils.isFileNewer(invalidFile, refFile), "Invalid - Newer - File");
+        assertFalse(FileUtils.isFileNewer(invalidFile, refFile), "Illegal - Newer - File");
         assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileNewer(newFile, invalidFile));
 
         // Test isFileOlder()
@@ -1793,7 +1801,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(FileUtils.isFileOlder(newFile, localDatePlusDay, localTime0), "New File - Older - LocalDate plus one day,LocalTime");
         assertTrue(FileUtils.isFileOlder(newFile, localDatePlusDay, offsetTime0), "New File - Older - LocalDate plus one day,OffsetTime");
 
-        assertFalse(FileUtils.isFileOlder(invalidFile, refFile), "Invalid - Older - File");
+        assertFalse(FileUtils.isFileOlder(invalidFile, refFile), "Illegal - Older - File");
         assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileOlder(newFile, invalidFile));
 
         // Null File

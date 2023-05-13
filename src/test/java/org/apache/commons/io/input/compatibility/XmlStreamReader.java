@@ -98,19 +98,19 @@ public class XmlStreamReader extends Reader {
             Pattern.MULTILINE);
 
     private static final MessageFormat RAW_EX_1 = new MessageFormat(
-            "Invalid encoding, BOM [{0}] XML guess [{1}] XML prolog [{2}] encoding mismatch");
+            "Illegal encoding, BOM [{0}] XML guess [{1}] XML prolog [{2}] encoding mismatch");
 
     private static final MessageFormat RAW_EX_2 = new MessageFormat(
-            "Invalid encoding, BOM [{0}] XML guess [{1}] XML prolog [{2}] unknown BOM");
+            "Illegal encoding, BOM [{0}] XML guess [{1}] XML prolog [{2}] unknown BOM");
 
     private static final MessageFormat HTTP_EX_1 = new MessageFormat(
-            "Invalid encoding, CT-MIME [{0}] CT-Enc [{1}] BOM [{2}] XML guess [{3}] XML prolog [{4}], BOM must be NULL");
+            "Illegal encoding, CT-MIME [{0}] CT-Enc [{1}] BOM [{2}] XML guess [{3}] XML prolog [{4}], BOM must be NULL");
 
     private static final MessageFormat HTTP_EX_2 = new MessageFormat(
-            "Invalid encoding, CT-MIME [{0}] CT-Enc [{1}] BOM [{2}] XML guess [{3}] XML prolog [{4}], encoding mismatch");
+            "Illegal encoding, CT-MIME [{0}] CT-Enc [{1}] BOM [{2}] XML guess [{3}] XML prolog [{4}], encoding mismatch");
 
     private static final MessageFormat HTTP_EX_3 = new MessageFormat(
-            "Invalid encoding, CT-MIME [{0}] CT-Enc [{1}] BOM [{2}] XML guess [{3}] XML prolog [{4}], Invalid MIME");
+            "Illegal encoding, CT-MIME [{0}] CT-Enc [{1}] BOM [{2}] XML guess [{3}] XML prolog [{4}], Illegal MIME");
 
     // returns the BOM in the stream, NULL if not present,
     // if there was BOM the in the stream it is consumed
@@ -518,14 +518,7 @@ public class XmlStreamReader extends Reader {
     public XmlStreamReader(final URLConnection conn) throws IOException {
         defaultEncoding = staticDefaultEncoding;
         final boolean lenient = true;
-        if (conn instanceof HttpURLConnection) {
-            try {
-                doHttpStream(conn.getInputStream(), conn.getContentType(),
-                        lenient);
-            } catch (final XmlStreamReaderException ex) {
-                doLenientDetection(conn.getContentType(), ex);
-            }
-        } else if (conn.getContentType() != null) {
+        if (conn instanceof HttpURLConnection || conn.getContentType() != null) {
             try {
                 doHttpStream(conn.getInputStream(), conn.getContentType(),
                         lenient);

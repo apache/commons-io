@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 /**
- * s two files using the <b>default</b> {@link File#compareTo(File)} method.
+ * Compares two files using the <b>default</b> {@link File#compareTo(File)} method.
  * <p>
  * This comparator can be used to sort lists or arrays of files
  * by using the default file comparison.
@@ -42,6 +42,10 @@ import java.util.Comparator;
  *       File[] array = ...
  *       ((AbstractFileComparator) DefaultFileComparator.DEFAULT_REVERSE).sort(array);
  * </pre>
+ * <h2>Deprecating Serialization</h2>
+ * <p>
+ * <em>Serialization is deprecated and will be removed in 3.0.</em>
+ * </p>
  *
  * @since 1.4
  */

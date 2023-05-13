@@ -28,7 +28,10 @@ import java.io.Writer;
  * For safe usage with multiple {@link Thread}s then
  * {@code java.io.StringWriter} should be used.
  * </p>
- *
+ * <h2>Deprecating Serialization</h2>
+ * <p>
+ * <em>Serialization is deprecated and will be removed in 3.0.</em>
+ * </p>
  * @since 2.0
  */
 public class StringBuilderWriter extends Writer implements Serializable {

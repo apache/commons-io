@@ -63,7 +63,7 @@ public enum IOCase {
      * versa, then the value of the case-sensitivity flag will change.
      * </p>
      */
-    SYSTEM("System", !FilenameUtils.isSystemWindows());
+    SYSTEM("System", FileSystem.getCurrent().isCaseSensitive());
 
     /** Serialization version. */
     private static final long serialVersionUID = -6343169151696340687L;
@@ -77,7 +77,7 @@ public enum IOCase {
      */
     public static IOCase forName(final String name) {
         return Stream.of(IOCase.values()).filter(ioCase -> ioCase.getName().equals(name)).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Invalid IOCase name: " + name));
+                .orElseThrow(() -> new IllegalArgumentException("Illegal IOCase name: " + name));
     }
 
     /**

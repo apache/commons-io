@@ -24,24 +24,25 @@ import java.time.Instant;
  *
  * @since 2.12.0
  */
-public class ThreadUtils {
+public final class ThreadUtils {
 
-    static int getNanosOfMilli(final Duration duration) {
+    private static int getNanosOfMilli(final Duration duration) {
         return duration.getNano() % 1_000_000;
     }
 
     /**
      * Sleeps for a guaranteed minimum duration unless interrupted.
-     *
-     * This method exists because Thread.sleep(100) can sleep for 0, 70, 100 or 200ms or anything else it deems appropriate.
-     * Read {@link Thread#sleep(long, int)}} for further interesting details.
-     *
-     * TODO The above needs confirmation now that we've been on Java 8 for a while.
+     * <p>
+     * This method exists because Thread.sleep(100) can sleep for 0, 70, 100 or 200ms or anything else it deems appropriate. Read
+     * {@link Thread#sleep(long, int)}} for further interesting details.
+     * </p>
      *
      * @param duration the sleep duration.
-     * @throws InterruptedException if interrupted.
+     * @throws InterruptedException if interrupted
+     * @see Thread#sleep(long, int)
      */
     public static void sleep(final Duration duration) throws InterruptedException {
+        // Using this method avoids depending on the vagaries of the precision and accuracy of system timers and schedulers.
         final Instant finishInstant = Instant.now().plus(duration);
         Duration remainingDuration = duration;
         do {

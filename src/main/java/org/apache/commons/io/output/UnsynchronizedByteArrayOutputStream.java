@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.apache.commons.io.build.AbstractStreamBuilder;
+import org.apache.commons.io.function.Uncheck;
 import org.apache.commons.io.input.UnsynchronizedByteArrayInputStream;
 
 /**
@@ -30,6 +32,48 @@ import org.apache.commons.io.input.UnsynchronizedByteArrayInputStream;
  */
 //@NotThreadSafe
 public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArrayOutputStream {
+
+    /**
+     * Builds a new {@link UnsynchronizedByteArrayOutputStream} instance.
+     * <p>
+     * Using File IO:
+     * </p>
+     * <pre>{@code
+     * UnsynchronizedByteArrayOutputStream s = UnsynchronizedByteArrayOutputStream.builder()
+     *   .setBufferSize(8192)
+     *   .get()}
+     * </pre>
+     * <p>
+     * Using NIO Path:
+     * </p>
+     * <pre>{@code
+     * UnsynchronizedByteArrayOutputStream s = UnsynchronizedByteArrayOutputStream.builder()
+     *   .setBufferSize(8192)
+     *   .get()}
+     * </pre>
+     */
+    public static class Builder extends AbstractStreamBuilder<UnsynchronizedByteArrayOutputStream, Builder> {
+
+        /**
+         * Constructs a new instance.
+         *
+         * Only uses the buffer size attribute.
+         */
+        @Override
+        public UnsynchronizedByteArrayOutputStream get() {
+            return new UnsynchronizedByteArrayOutputStream(getBufferSize());
+        }
+
+    }
+
+    /**
+     * Constructs a new {@link Builder}.
+     *
+     * @return a new {@link Builder}.
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
 
     /**
      * Fetches entire contents of an {@link InputStream} and represent same data as result InputStream.
@@ -72,7 +116,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      */
     public static InputStream toBufferedInputStream(final InputStream input, final int size) throws IOException {
         // It does not matter if a ByteArrayOutputStream is not closed as close() is a no-op
-        try (UnsynchronizedByteArrayOutputStream output = new UnsynchronizedByteArrayOutputStream(size)) {
+        try (UnsynchronizedByteArrayOutputStream output = builder().setBufferSize(size).get()) {
             output.write(input);
             return output.toInputStream();
         }
@@ -80,8 +124,11 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
 
     /**
      * Creates a new byte array output stream. The buffer capacity is initially
+     *
      * {@value AbstractByteArrayOutputStream#DEFAULT_SIZE} bytes, though its size increases if necessary.
+     * @deprecated Use {@link #builder()}.
      */
+    @Deprecated
     public UnsynchronizedByteArrayOutputStream() {
         this(DEFAULT_SIZE);
     }
@@ -91,7 +138,9 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      *
      * @param size the initial size
      * @throws IllegalArgumentException if size is negative
+     * @deprecated Use {@link #builder()}.
      */
+    @Deprecated
     public UnsynchronizedByteArrayOutputStream(final int size) {
         if (size < 0) {
             throw new IllegalArgumentException("Negative initial size: " + size);
@@ -119,7 +168,14 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
 
     @Override
     public InputStream toInputStream() {
-        return toInputStream(UnsynchronizedByteArrayInputStream::new);
+        // @formatter:off
+        return toInputStream((buffer, offset, length) -> Uncheck
+                .get(() -> UnsynchronizedByteArrayInputStream.builder()
+                        .setByteArray(buffer)
+                        .setOffset(offset)
+                        .setLength(length)
+                        .get()));
+        // @formatter:on
     }
 
     @Override

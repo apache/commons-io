@@ -71,6 +71,10 @@ import org.apache.commons.io.build.AbstractSupplier;
  * System.out.println(visitor.getDirList());
  * System.out.println(visitor.getFileList());
  * </pre>
+ * <h2>Deprecating Serialization</h2>
+ * <p>
+ * <em>Serialization is deprecated and will be removed in 3.0.</em>
+ * </p>
  *
  * @since 1.3
  */
@@ -129,6 +133,8 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
 
     }
 
+    private static final long serialVersionUID = -7426486598995782105L;
+
     /**
      * Constructs a new {@link Builder}.
      *
@@ -138,8 +144,6 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
     public static Builder builder() {
         return new Builder();
     }
-
-    private static final long serialVersionUID = -7426486598995782105L;
 
     private static <T> T requireWildcards(final T wildcards) {
         return Objects.requireNonNull(wildcards, "wildcards");

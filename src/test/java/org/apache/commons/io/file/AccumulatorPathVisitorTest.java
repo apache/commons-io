@@ -46,7 +46,6 @@ import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.EmptyFileFilter;
 import org.apache.commons.io.filefilter.PathVisitorFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.apache.commons.io.function.IOBiFunction;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -74,8 +73,7 @@ public class AccumulatorPathVisitorTest {
             Arguments.of((Supplier<AccumulatorPathVisitor>) () -> new AccumulatorPathVisitor(
                 Counters.bigIntegerPathCounters(),
                 CountingPathVisitor.defaultDirFilter(),
-                CountingPathVisitor.defaultFileFilter(),
-                IOBiFunction.noop())));
+                CountingPathVisitor.defaultFileFilter())));
         // @formatter:on
     }
 

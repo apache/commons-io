@@ -24,6 +24,10 @@ import java.util.Objects;
 
 /**
  * This class turns a Java FileFilter or FilenameFilter into an IO FileFilter.
+ * <h2>Deprecating Serialization</h2>
+ * <p>
+ * <em>Serialization is deprecated and will be removed in 3.0.</em>
+ * </p>
  *
  * @since 1.0
  * @see FileFilterUtils#asFileFilter(FileFilter)

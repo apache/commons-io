@@ -41,7 +41,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
 public class MessageDigestCalculatingInputStream extends ObservableInputStream {
 
     /**
-     * Builds a new {@link ReaderInputStream} instance.
+     * Builds a new {@link MessageDigestCalculatingInputStream} instance.
      * <p>
      * For example:
      * </p>
@@ -67,6 +67,11 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
             }
         }
 
+        /**
+         * Constructs a new instance.
+         *
+         * @throws UnsupportedOperationException if the origin cannot be converted to an InputStream.
+         */
         @SuppressWarnings("resource")
         @Override
         public MessageDigestCalculatingInputStream get() throws IOException {
@@ -94,16 +99,6 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
             this.messageDigest = MessageDigest.getInstance(algorithm);
         }
 
-    }
-
-    /**
-     * Constructs a new {@link Builder}.
-     *
-     * @return a new {@link Builder}.
-     * @since 2.12.0
-     */
-    public static Builder builder() {
-        return new Builder();
     }
 
     /**
@@ -139,6 +134,16 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
      * </p>
      */
     private static final String DEFAULT_ALGORITHM = "MD5";
+
+    /**
+     * Constructs a new {@link Builder}.
+     *
+     * @return a new {@link Builder}.
+     * @since 2.12.0
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
 
     /**
      * Gets a MessageDigest object that implements the default digest algorithm.
