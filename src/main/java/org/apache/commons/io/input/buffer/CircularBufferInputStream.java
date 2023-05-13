@@ -56,6 +56,7 @@ public class CircularBufferInputStream extends FilterInputStream {
      * @param inputStream The input stream, which is being buffered.
      * @param bufferSize The size of the {@link CircularByteBuffer}, which is used internally.
      */
+    @SuppressWarnings("resource") // Caller closes InputStream
     public CircularBufferInputStream(final InputStream inputStream, final int bufferSize) {
         super(Objects.requireNonNull(inputStream, "inputStream"));
         if (bufferSize <= 0) {
