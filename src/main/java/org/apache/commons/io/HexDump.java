@@ -185,6 +185,7 @@ public class HexDump {
      *         outside the data array's bounds
      * @throws NullPointerException if the output stream is null
      */
+    @SuppressWarnings("resource") // Caller closes stream
     public static void dump(final byte[] data, final long offset,
                             final OutputStream stream, final int index)
             throws IOException, ArrayIndexOutOfBoundsException {
