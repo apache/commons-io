@@ -770,7 +770,7 @@ public class FileUtils {
      * @see #copyFile(File, File, boolean, CopyOption...)
      */
     public static void copyFile(final File srcFile, final File destFile, final boolean preserveFileDate) throws IOException {
-        copyFile(srcFile, destFile, preserveFileDate, new CopyOption[] { StandardCopyOption.REPLACE_EXISTING });
+        copyFile(srcFile, destFile, preserveFileDate, StandardCopyOption.REPLACE_EXISTING);
     }
 
     /**
@@ -2322,9 +2322,9 @@ public class FileUtils {
 
     /**
      * Moves a directory to another directory.
-     * <p> 
+     * <p>
      * If {@code createDestDir} is true, creates all destination parent directories, including any necessary but nonexistent parent directories.
-     * </p> 
+     * </p>
      *
      * @param source the file to be moved.
      * @param destDir the destination file.
@@ -2407,9 +2407,9 @@ public class FileUtils {
 
     /**
      * Moves a file to a directory.
-     * <p> 
+     * <p>
      * If {@code createDestDir} is true, creates all destination parent directories, including any necessary but nonexistent parent directories.
-     * </p> 
+     * </p>
      *
      * @param srcFile the file to be moved.
      * @param destDir the destination file.
@@ -2436,9 +2436,9 @@ public class FileUtils {
 
     /**
      * Moves a file or directory to a destination directory.
-     * <p> 
+     * <p>
      * If {@code createDestDir} is true, creates all destination parent directories, including any necessary but nonexistent parent directories.
-     * </p> 
+     * </p>
      * <p>
      * When the destination is on another file system, do a "copy and delete".
      * </p>
