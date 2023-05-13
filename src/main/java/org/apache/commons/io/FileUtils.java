@@ -1364,10 +1364,10 @@ public class FileUtils {
     }
 
     /**
-     * Calls {@link File#mkdirs()} and throws an {@link IOException} on failure.
-     * <p>
      * Creates all directories for a File object, including any necessary but nonexistent parent directories. If the {@code directory} already exists or is
      * null, nothing happens.
+     * <p>
+     * Calls {@link File#mkdirs()} and throws an {@link IOException} on failure.
      * </p>
      *
      * @param directory the receiver for {@code mkdirs()}. If the {@code directory} already exists or is null, nothing happens.
@@ -2321,8 +2321,10 @@ public class FileUtils {
     }
 
     /**
-     * Moves a directory to another directory. Creates all destination parent directories,
-     * including any necessary but nonexistent parent directories, if {@code createDestDir} is true.
+     * Moves a directory to another directory.
+     * <p> 
+     * If {@code createDestDir} is true, creates all destination parent directories, including any necessary but nonexistent parent directories.
+     * </p> 
      *
      * @param source the file to be moved.
      * @param destDir the destination file.
@@ -2404,8 +2406,10 @@ public class FileUtils {
     }
 
     /**
-     * Moves a file to a directory. Creates all destination parent directories,
-     * including any necessary but nonexistent parent directories, if {@code createDestDir} is true.
+     * Moves a file to a directory.
+     * <p> 
+     * If {@code createDestDir} is true, creates all destination parent directories, including any necessary but nonexistent parent directories.
+     * </p> 
      *
      * @param srcFile the file to be moved.
      * @param destDir the destination file.
@@ -2432,9 +2436,9 @@ public class FileUtils {
 
     /**
      * Moves a file or directory to a destination directory.
-     * <p>
-     * Creates all destination parent directories, including any necessary but nonexistent parent directories, if {@code createDestDir} is true.
-     * </p>
+     * <p> 
+     * If {@code createDestDir} is true, creates all destination parent directories, including any necessary but nonexistent parent directories.
+     * </p> 
      * <p>
      * When the destination is on another file system, do a "copy and delete".
      * </p>
