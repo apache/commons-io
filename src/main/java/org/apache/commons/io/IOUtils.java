@@ -2664,6 +2664,50 @@ public class IOUtils {
         return data;
     }
 
+
+    /**
+     *
+     * Gets the contents of an {@link InputStream} as a {@code byte[]}.Use this method when you want to specify the
+     * indexes that you want to read from the InputStream.
+     *
+     * @param input
+     * @param offset The offset from the start of the InputStream to start ready - index based
+     * @param length The end of the InputStream to stop reading - index based
+     * @return byte[]
+     * @throws IOException if an I/O error occurs or {@link InputStream} length is smaller than parameter {@code size}.
+     * @throws NullPointerException if offset is greater than length or array index is out of bounds
+     * @throws IllegalArgumentException if {@code size} is less than zero.
+     * @since 2.12.0
+     */
+    public static byte[] toByteArray(final InputStream input, final int offset, final int length) throws IOException {
+
+        if (length < 0) {
+            throw new IllegalArgumentException("Size must be equal or greater than zero: " + length);
+        }
+        if (offset < 0 ) {
+            throw new IllegalArgumentException("Offset must be grater than or equal to zero: " + offset);
+        }
+        if (length < offset) {
+            throw new IllegalArgumentException("Length must be greater than or equal to offset: " + offset);
+        }
+
+        // read inputStream to byte[] -
+        final byte[] data = byteArray(input.available());
+        input.read(data, 0, length + 1);
+
+        // create new byte[] to read from the offset
+        int arraySize = length - offset;
+        byte[] responseData = byteArray(arraySize + 1);
+        int k = 0;
+
+        for (int i = offset; i <= length; i++) {
+            responseData[k] = data[i];
+            k++;
+        }
+
+        return responseData;
+    }
+
     /**
      * Gets contents of an {@link InputStream} as a {@code byte[]}.
      * Use this method instead of {@link #toByteArray(InputStream)}

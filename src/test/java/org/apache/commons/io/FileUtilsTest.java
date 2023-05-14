@@ -81,6 +81,7 @@ import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.io.test.TestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -2444,6 +2445,57 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertEquals(11, data[0]);
         assertEquals(21, data[1]);
         assertEquals(31, data[2]);
+    }
+
+    @Test
+    public void testReadFileToByteArrayOffsetAndLength() throws Exception {
+        final File file = new File(tempDirFile, "read.txt");
+        final byte[] arr = new byte[] {10, 20, 30, 40 ,50, 60, 70};
+        Files.write(file.toPath(), arr);
+
+        final byte[] data = FileUtils.readFileToByteArray(file, 2, 5);
+        assertEquals(4, data.length);
+        assertEquals(30, data[0]); // arrayOffSet
+        assertEquals(60, data[3]); // arrayLength
+    }
+
+    @Test
+    public void testReadFileToByteArrayOffsetAndLengthSameValue() throws Exception {
+        final File file = new File(tempDirFile, "read.txt");
+        final byte[] arr = new byte[] {10, 20, 30, 40 ,50, 60, 70};
+        Files.write(file.toPath(), arr);
+
+        final byte[] data = FileUtils.readFileToByteArray(file, 2, 2);
+        assertEquals(1, data.length);
+        assertEquals(30, data[0]); // return one byte
+    }
+
+    @Test
+    public void testReadFileToByteArrayOffsetAndLengthZero() throws Exception {
+        final File file = new File(tempDirFile, "read.txt");
+        final byte[] arr = new byte[] {10, 20, 30, 40 ,50, 60, 70};
+        Files.write(file.toPath(), arr);
+
+        final byte[] data = FileUtils.readFileToByteArray(file, 0, 0);
+        assertEquals(1, data.length);
+        assertEquals(10, data[0]); // return one byte
+    }
+
+
+    @Test()
+    public void testReadFileToByteArrayOffsetAndLengthException() {
+
+        final File file = new File(tempDirFile, "read.txt");
+        final byte[] arr = new byte[] {10, 20, 30, 40, 50, 60, 70};
+
+        try {
+            Files.write(file.toPath(), arr);
+            FileUtils.readFileToByteArray(file, 2, 1);
+        } catch (IOException | IllegalArgumentException ex) {
+            assertEquals("Length must be greater than or equal to offset: " + 2, ex.getMessage());
+        }
+
+
     }
 
     @Test

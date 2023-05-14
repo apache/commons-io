@@ -2582,6 +2582,29 @@ public class FileUtils {
     }
 
     /**
+     * Reads the contents of a file into a byte[]. Start reading from offSet in file index to specific length.
+     *
+     * @param file the file to read, nust not be {@code null}
+     * @param arrayOffset read from an offset in the file
+     * @param arrayLength read file up to certain length based on index
+     * @return byte[]
+     * @throws IOException if an I/O error occurs
+     * @since 2.12.0
+     */
+    public static byte[] readFileToByteArray(final File file, final int arrayOffset, int arrayLength) throws IOException {
+        Objects.requireNonNull(file, "file");
+        try (InputStream inputStream = openInputStream(file)) {
+            final long fileLength = file.length();
+            // file.length() may return 0 for system-dependent entities, treat 0 as unknown length - see IO-453
+            return fileLength > 0 ? IOUtils.toByteArray(inputStream, arrayOffset, arrayLength) : IOUtils.toByteArray(inputStream);
+        }
+
+
+    }
+
+
+
+    /**
      * Reads the contents of a file into a String using the default encoding for the VM.
      * The file is always closed.
      *
