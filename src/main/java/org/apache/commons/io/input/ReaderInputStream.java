@@ -189,7 +189,7 @@ public class ReaderInputStream extends InputStream {
      *
      * @param reader  the target {@link Reader}
      * @param charset the charset encoding
-     * @deprecated Use {@link ReaderInputStream#builder()} instead
+     * @deprecated Use {@link ReaderInputStream#builder()} instead, will be protected for subclasses.
      */
     @Deprecated
     public ReaderInputStream(final Reader reader, final Charset charset) {
