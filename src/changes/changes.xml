@@ -47,6 +47,12 @@ The <action> type attribute can be add,update,fix,remove.
   </properties>
 
   <body>
+    <release version="2.12.1" date="2023-MM-DD" description="Java 8 required.">
+      <!-- FIX -->
+      <action issue="IO-791" dev="ggregory" type="fix" due-to="Chad Wilson, Gary Gregory">
+        Regression in FileUtils.touch - no longer creates parent directories.
+      </action>
+    </release>
     <release version="2.12.0" date="2023-05-13" description="Java 8 required.">
       <!-- FIX -->
       <action issue="IO-697" dev="kinow" type="fix" due-to="otter606">

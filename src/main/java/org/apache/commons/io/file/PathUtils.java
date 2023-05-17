@@ -1599,7 +1599,7 @@ public final class PathUtils {
 
     /**
      * Implements behavior similar to the Unix "touch" utility. Creates a new file with size 0, or, if the file exists, just
-     * updates the file's modified time.
+     * updates the file's modified time. this method creates parent directories if they do not exist.
      *
      * @param file the file to touch.
      * @return The given file.
@@ -1610,6 +1610,7 @@ public final class PathUtils {
     public static Path touch(final Path file) throws IOException {
         Objects.requireNonNull(file, "file");
         if (!Files.exists(file)) {
+            createParentDirectories(file);
             Files.createFile(file);
         } else {
             FileTimes.setLastModifiedTime(file);

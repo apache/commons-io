@@ -2732,6 +2732,19 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testTouchDirDoesNotExist() throws Exception {
+        final File file = new File("target/does-not-exist", "touchme.txt");
+        final File parentDir = file.getParentFile();
+        file.delete();
+        parentDir.delete();
+        assertFalse(parentDir.exists());
+        assertFalse(file.exists());
+        FileUtils.touch(file);
+        assertTrue(parentDir.exists());
+        assertTrue(file.exists());
+    }
+
+    @Test
     public void testToURLs1() throws Exception {
         final File[] files = {
                 new File(tempDirFile, "file1.txt"),
