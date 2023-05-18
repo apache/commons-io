@@ -492,7 +492,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param reOpen whether to close/reopen the file between chunks.
      * @param bufferSize buffer size.
      * @return The new tailer.
-     * @deprecated Use {@link #builder()}.
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}.
      */
     @Deprecated
     public static Tailer create(final File file, final Charset charset, final TailerListener listener, final long delayMillis, final boolean end,
@@ -516,7 +516,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param file the file to follow.
      * @param listener the TailerListener to use.
      * @return The new tailer.
-     * @deprecated Use {@link #builder()}.
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}.
      */
     @Deprecated
     public static Tailer create(final File file, final TailerListener listener) {
@@ -535,7 +535,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param listener the TailerListener to use.
      * @param delayMillis the delay between checks of the file for new content in milliseconds.
      * @return The new tailer.
-     * @deprecated Use {@link #builder()}.
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}.
      */
     @Deprecated
     public static Tailer create(final File file, final TailerListener listener, final long delayMillis) {
@@ -556,7 +556,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param delayMillis the delay between checks of the file for new content in milliseconds.
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @return The new tailer.
-     * @deprecated Use {@link #builder()}.
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}.
      */
     @Deprecated
     public static Tailer create(final File file, final TailerListener listener, final long delayMillis, final boolean end) {
@@ -579,7 +579,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @param reOpen whether to close/reopen the file between chunks.
      * @return The new tailer.
-     * @deprecated Use {@link #builder()}.
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}.
      */
     @Deprecated
     public static Tailer create(final File file, final TailerListener listener, final long delayMillis, final boolean end, final boolean reOpen) {
@@ -604,7 +604,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param reOpen whether to close/reopen the file between chunks.
      * @param bufferSize buffer size.
      * @return The new tailer.
-     * @deprecated Use {@link #builder()}.
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}.
      */
     @Deprecated
     public static Tailer create(final File file, final TailerListener listener, final long delayMillis, final boolean end, final boolean reOpen,
@@ -630,7 +630,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @param bufferSize buffer size.
      * @return The new tailer.
-     * @deprecated Use {@link #builder()}.
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}.
      */
     @Deprecated
     public static Tailer create(final File file, final TailerListener listener, final long delayMillis, final boolean end, final int bufferSize) {
@@ -695,7 +695,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @param reOpen if true, close and reopen the file between reading chunks
      * @param bufSize Buffer size
-     * @deprecated Use {@link #builder()}.
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}.
      */
     @Deprecated
     public Tailer(final File file, final Charset charset, final TailerListener listener, final long delayMillis, final boolean end, final boolean reOpen,
@@ -708,7 +708,7 @@ public class Tailer implements Runnable, AutoCloseable {
      *
      * @param file The file to follow.
      * @param listener the TailerListener to use.
-     * @deprecated Use {@link #builder()}.
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}.
      */
     @Deprecated
     public Tailer(final File file, final TailerListener listener) {
@@ -721,7 +721,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param file the file to follow.
      * @param listener the TailerListener to use.
      * @param delayMillis the delay between checks of the file for new content in milliseconds.
-     * @deprecated Use {@link #builder()}.
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}.
      */
     @Deprecated
     public Tailer(final File file, final TailerListener listener, final long delayMillis) {
@@ -735,7 +735,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param listener the TailerListener to use.
      * @param delayMillis the delay between checks of the file for new content in milliseconds.
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
-     * @deprecated Use {@link #builder()}.
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}.
      */
     @Deprecated
     public Tailer(final File file, final TailerListener listener, final long delayMillis, final boolean end) {
@@ -750,7 +750,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param delayMillis the delay between checks of the file for new content in milliseconds.
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @param reOpen if true, close and reopen the file between reading chunks
-     * @deprecated Use {@link #builder()}.
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}.
      */
     @Deprecated
     public Tailer(final File file, final TailerListener listener, final long delayMillis, final boolean end, final boolean reOpen) {
@@ -766,7 +766,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @param reOpen if true, close and reopen the file between reading chunks
      * @param bufferSize Buffer size
-     * @deprecated Use {@link #builder()}.
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}.
      */
     @Deprecated
     public Tailer(final File file, final TailerListener listener, final long delayMillis, final boolean end, final boolean reOpen, final int bufferSize) {
@@ -781,7 +781,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param delayMillis the delay between checks of the file for new content in milliseconds.
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @param bufferSize Buffer size
-     * @deprecated Use {@link #builder()}.
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}.
      */
     @Deprecated
     public Tailer(final File file, final TailerListener listener, final long delayMillis, final boolean end, final int bufferSize) {
