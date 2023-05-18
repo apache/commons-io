@@ -31,12 +31,12 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
 public class StringInputStream extends ReaderInputStream {
 
     /**
-     * Builds a new {@link ReaderInputStream} instance.
+     * Builds a new {@link StringInputStream} instance.
      * <p>
      * For example:
      * </p>
      * <pre>{@code
-     * ReaderInputStream s = ReaderInputStream.builder()
+     * ReaderInputStream s = new StringInputStream.Builder()
      *   .setString("String")
      *   .setCharsetEncoder(Charset.defaultCharset())
      *   .get()}
