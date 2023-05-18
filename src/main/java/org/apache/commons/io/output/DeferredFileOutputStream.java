@@ -55,7 +55,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      *   .setPrefix(prefix)
      *   .setSuffix(suffix)
      *   .setThreshold(threshold)
-     *   .get()}
+     *   .get();}
      * </pre>
      * @since 2.12.0
      */

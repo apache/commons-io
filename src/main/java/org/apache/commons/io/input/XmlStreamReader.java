@@ -107,9 +107,8 @@ public class XmlStreamReader extends Reader {
      * XmlStreamReader r = XmlStreamReader.builder()
      *   .setPath(path)
      *   .setCharset(StandardCharsets.UTF_8)
-     *   .get()}
+     *   .get();}
      * </pre>
-     * <p>
      *
      * @since 2.12.0
      */

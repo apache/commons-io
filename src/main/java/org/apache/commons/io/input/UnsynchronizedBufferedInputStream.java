@@ -60,7 +60,7 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
      * UnsynchronizedBufferedInputStream s = UnsynchronizedBufferedInputStream.builder()
      *   .setFile(file)
      *   .setBufferSize(8192)
-     *   .get()}
+     *   .get();}
      * </pre>
      * <p>
      * Using NIO Path:
@@ -69,7 +69,7 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
      * UnsynchronizedBufferedInputStream s = UnsynchronizedBufferedInputStream.builder()
      *   .setPath(path)
      *   .setBufferSize(8192)
-     *   .get()}
+     *   .get();}
      * </pre>
      */
     public static class Builder extends AbstractStreamBuilder<UnsynchronizedBufferedInputStream, Builder> {

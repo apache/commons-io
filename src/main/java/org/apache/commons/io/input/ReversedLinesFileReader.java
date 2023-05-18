@@ -58,9 +58,9 @@ public class ReversedLinesFileReader implements Closeable {
      *   .setPath(path)
      *   .setBufferSize(4096)
      *   .setCharset(StandardCharsets.UTF_8)
-     *   .get()}
+     *   .get();}
      * </pre>
-     * <p>
+     *
      * @since 2.12.0
      */
     public static class Builder extends AbstractStreamBuilder<ReversedLinesFileReader, Builder> {

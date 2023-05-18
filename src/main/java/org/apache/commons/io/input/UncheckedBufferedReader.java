@@ -49,7 +49,7 @@ public final class UncheckedBufferedReader extends BufferedReader {
      *   .setFile(file)
      *   .setBufferSize(8192)
      *   .setCharset(Charset.defaultCharset())
-     *   .get()}
+     *   .get();}
      * </pre>
      * <p>
      * Using NIO Path:
@@ -59,7 +59,7 @@ public final class UncheckedBufferedReader extends BufferedReader {
      *   .setPath(path)
      *   .setBufferSize(8192)
      *   .setCharset(Charset.defaultCharset())
-     *   .get()}
+     *   .get();}
      * </pre>
      */
     public static class Builder extends AbstractStreamBuilder<UncheckedBufferedReader, Builder> {

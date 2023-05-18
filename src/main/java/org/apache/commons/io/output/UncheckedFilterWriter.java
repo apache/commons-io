@@ -46,7 +46,7 @@ public final class UncheckedFilterWriter extends FilterWriter {
      * <pre>{@code
      * UncheckedFilterWriter s = UncheckedFilterWriter.builder()
      *   .setFile(file)
-     *   .get()}
+     *   .get();}
      * </pre>
      * <p>
      * Using NIO Path:
@@ -54,7 +54,7 @@ public final class UncheckedFilterWriter extends FilterWriter {
      * <pre>{@code
      * UncheckedFilterWriter s = UncheckedFilterWriter.builder()
      *   .setPath(path)
-     *   .get()}
+     *   .get();}
      * </pre>
      */
     public static class Builder extends AbstractStreamBuilder<UncheckedFilterWriter, Builder> {

@@ -55,9 +55,9 @@ public class XmlStreamWriter extends Writer {
      * WriterOutputStream w = WriterOutputStream.builder()
      *   .setPath(path)
      *   .setCharset(StandardCharsets.UTF_8)
-     *   .get()}
+     *   .get();}
      * </pre>
-     * <p>
+     *
      * @since 2.12.0
      */
     public static class Builder extends AbstractStreamBuilder<XmlStreamWriter, Builder> {

@@ -98,26 +98,24 @@ public class BOMInputStream extends ProxyInputStream {
 
     /**
      * Builds a new {@link BOMInputStream} instance.
-     * <h2>
-     * Using NIO
-     * </2>
+     *
+     * <h2>Using NIO</h2>
      * <pre>{@code
      * BOMInputStream s = BOMInputStream.builder()
      *   .setPath(Paths.get("MyFile.xml"))
      *   .setByteOrderMarks(ByteOrderMark.UTF_8)
      *   .setInclude(false)
-     *   .get()}
+     *   .get();}
      * </pre>
-     * <h2>
-     * Using IO
-     * </2>
+     * <h2>Using IO</h2>
      * <pre>{@code
      * BOMInputStream s = BOMInputStream.builder()
      *   .setFile(new File("MyFile.xml"))
      *   .setByteOrderMarks(ByteOrderMark.UTF_8)
      *   .setInclude(false)
-     *   .get()}
+     *   .get();}
      * </pre>
+     *
      * @since 2.12.0
      */
     public static class Builder extends AbstractStreamBuilder<BOMInputStream, Builder> {

@@ -89,9 +89,9 @@ public class ReaderInputStream extends InputStream {
      * ReaderInputStream s = ReaderInputStream.builder()
      *   .setPath(path)
      *   .setCharsetEncoder(Charset.defaultCharset().newEncoder())
-     *   .get()}
+     *   .get();}
      * </pre>
-     * <p>
+     *
      * @since 2.12.0
      */
     public static class Builder extends AbstractStreamBuilder<ReaderInputStream, Builder> {

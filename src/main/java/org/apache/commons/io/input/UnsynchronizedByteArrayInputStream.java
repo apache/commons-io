@@ -49,7 +49,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      *   .setByteArray(byteArray)
      *   .setOffset(0)
      *   .setLength(byteArray.length)
-     *   .get()}
+     *   .get();}
      * </pre>
      * <p>
      * Using File IO:
@@ -60,7 +60,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      *   .setFile(file)
      *   .setOffset(0)
      *   .setLength(byteArray.length)
-     *   .get()}
+     *   .get();}
      * </pre>
      * <p>
      * Using NIO Path:
@@ -71,7 +71,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      *   .setPath(path)
      *   .setOffset(0)
      *   .setLength(byteArray.length)
-     *   .get()}
+     *   .get();}
      * </pre>
      */
     public static class Builder extends AbstractStreamBuilder<UnsynchronizedByteArrayInputStream, Builder> {

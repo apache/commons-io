@@ -57,9 +57,9 @@ public class ReadAheadInputStream extends FilterInputStream {
      * ReadAheadInputStream s = ReadAheadInputStream.builder()
      *   .setPath(path)
      *   .setExecutorService(Executors.newSingleThreadExecutor(ReadAheadInputStream::newThread))
-     *   .get()}
+     *   .get();}
      * </pre>
-     * <p>
+     *
      * @since 2.12.0
      */
     public static class Builder extends AbstractStreamBuilder<ReadAheadInputStream, Builder> {

@@ -60,9 +60,9 @@ public class LockableFileWriter extends Writer {
      *   .setPath(path)
      *   .setAppend(false)
      *   .setLockDirectory("Some/Directory")
-     *   .get()}
+     *   .get();}
      * </pre>
-     * <p>
+     *
      * @since 2.12.0
      */
     public static class Builder extends AbstractStreamBuilder<LockableFileWriter, Builder> {

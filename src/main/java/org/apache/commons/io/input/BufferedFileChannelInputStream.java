@@ -52,7 +52,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
      * BufferedFileChannelInputStream s = BufferedFileChannelInputStream.builder()
      *   .setFile(file)
      *   .setBufferSize(4096)
-     *   .get()}
+     *   .get();}
      * </pre>
      * <p>
      * Using NIO Path:
@@ -62,7 +62,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
      * BufferedFileChannelInputStream s = BufferedFileChannelInputStream.builder()
      *   .setPath(path)
      *   .setBufferSize(4096)
-     *   .get()}
+     *   .get();}
      * </pre>
      *
      * @since 2.12.0

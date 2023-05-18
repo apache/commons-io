@@ -45,14 +45,23 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * <p>
  * To build an instance, see {@link Builder}.
  * </p>
- * <pre>
- * new BufferedInputStream(new GzipInputStream(new MemoryMappedFileInputStream(path))))
+ * <pre>{@code
+ * BufferedInputStream s = new BufferedInputStream(new GzipInputStream(MemoryMappedFileInputStream.builder()
+ *   .setPath(path)
+ *   .setBufferSize(256 * 1024)
+ *   .get()));}
  * </pre>
  * <p>
  * should outperform:
  * </p>
  * <pre>
  * new GzipInputStream(new MemoryMappedFileInputStream(path))
+ * </pre>
+ * <pre>{@code
+ * GzipInputStream s = new GzipInputStream(MemoryMappedFileInputStream.builder()
+ *   .setPath(path)
+ *   .setBufferSize(256 * 1024)
+ *   .get());}
  * </pre>
  *
  * @since 2.12.0
@@ -68,9 +77,9 @@ public final class MemoryMappedFileInputStream extends InputStream {
      * MemoryMappedFileInputStream s = MemoryMappedFileInputStream.builder()
      *   .setPath(path)
      *   .setBufferSize(256 * 1024)
-     *   .get()}
+     *   .get();}
      * </pre>
-     * <p>
+     *
      * @since 2.12.0
      */
     public static class Builder extends AbstractStreamBuilder<MemoryMappedFileInputStream, Builder> {

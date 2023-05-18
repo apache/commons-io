@@ -51,7 +51,7 @@ public class UnsynchronizedFilterInputStream extends InputStream {
      * <pre>{@code
      * UnsynchronizedFilterInputStream s = UnsynchronizedFilterInputStream.builder()
      *   .setFile(file)
-     *   .get()}
+     *   .get();}
      * </pre>
      * <p>
      * Using NIO Path:
@@ -59,7 +59,7 @@ public class UnsynchronizedFilterInputStream extends InputStream {
      * <pre>{@code
      * UnsynchronizedFilterInputStream s = UnsynchronizedFilterInputStream.builder()
      *   .setPath(path)
-     *   .get()}
+     *   .get();}
      * </pre>
      */
     public static class Builder extends AbstractStreamBuilder<UnsynchronizedFilterInputStream, Builder> {

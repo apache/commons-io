@@ -60,7 +60,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
      *   .setPath(path)
      *   .setAppend(false)
      *   .setCharsetEncoder(StandardCharsets.UTF_8.newEncoder())
-     *   .get()}
+     *   .get();}
      * </pre>
      * <p>
      * Using a Charset:
@@ -70,8 +70,9 @@ public class FileWriterWithEncoding extends ProxyWriter {
      *   .setPath(path)
      *   .setAppend(false)
      *   .setCharsetEncoder(StandardCharsets.UTF_8)
-     *   .get()}
+     *   .get();}
      * </pre>
+     *
      * @since 2.12.0
      */
     public static class Builder extends AbstractStreamBuilder<FileWriterWithEncoding, Builder> {

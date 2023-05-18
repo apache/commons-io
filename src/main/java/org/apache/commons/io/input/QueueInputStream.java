@@ -71,9 +71,8 @@ public class QueueInputStream extends InputStream {
      * QueueInputStream s = QueueInputStream.builder()
      *   .setBlockingQueue(new LinkedBlockingQueue<>())
      *   .setTimeout(Duration.ZERO)
-     *   .get()}
+     *   .get();}
      * </pre>
-     * <p>
      *
      * @since 2.12.0
      */

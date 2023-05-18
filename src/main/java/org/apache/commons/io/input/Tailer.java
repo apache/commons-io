@@ -170,9 +170,9 @@ public class Tailer implements Runnable, AutoCloseable {
      *   .setTailable(tailable)
      *   .setTailerListener(tailerListener)
      *   .setTailFromEnd(false)
-     *   .get()}
+     *   .get();}
      * </pre>
-     * <p>
+     *
      * @since 2.12.0
      */
     public static class Builder extends AbstractStreamBuilder<Tailer, Builder> {

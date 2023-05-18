@@ -44,7 +44,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      * <pre>{@code
      * UnsynchronizedByteArrayOutputStream s = UnsynchronizedByteArrayOutputStream.builder()
      *   .setBufferSize(8192)
-     *   .get()}
+     *   .get();}
      * </pre>
      * <p>
      * Using NIO Path:
@@ -52,7 +52,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      * <pre>{@code
      * UnsynchronizedByteArrayOutputStream s = UnsynchronizedByteArrayOutputStream.builder()
      *   .setBufferSize(8192)
-     *   .get()}
+     *   .get();}
      * </pre>
      */
     public static class Builder extends AbstractStreamBuilder<UnsynchronizedByteArrayOutputStream, Builder> {

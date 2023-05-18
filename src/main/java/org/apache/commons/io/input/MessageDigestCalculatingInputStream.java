@@ -52,9 +52,9 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
      * MessageDigestCalculatingInputStream s = MessageDigestCalculatingInputStream.builder()
      *   .setPath(path)
      *   .setMessageDigest("SHA-512")
-     *   .get()}
+     *   .get();}
      * </pre>
-     * <p>
+     *
      * @since 2.12.0
      */
     public static class Builder extends AbstractStreamBuilder<MessageDigestCalculatingInputStream, Builder> {

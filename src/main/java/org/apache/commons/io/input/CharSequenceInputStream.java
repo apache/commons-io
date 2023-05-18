@@ -55,8 +55,9 @@ public class CharSequenceInputStream extends InputStream {
      *   .setBufferSize(8192)
      *   .setCharSequence("String")
      *   .setCharsetEncoder(Charset.defaultCharset())
-     *   .get()}
+     *   .get();}
      * </pre>
+     *
      * @since 2.13.0
      */
     public static class Builder extends AbstractStreamBuilder<CharSequenceInputStream, Builder> {

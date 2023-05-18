@@ -47,7 +47,7 @@ public final class UncheckedFilterReader extends FilterReader {
      * <pre>{@code
      * UncheckedFilterReader s = UncheckedFilterReader.builder()
      *   .setFile(file)
-     *   .get()}
+     *   .get();}
      * </pre>
      * <p>
      * Using NIO Path:
@@ -55,7 +55,7 @@ public final class UncheckedFilterReader extends FilterReader {
      * <pre>{@code
      * UncheckedFilterReader s = UncheckedFilterReader.builder()
      *   .setPath(path)
-     *   .get()}
+     *   .get();}
      * </pre>
      */
     public static class Builder extends AbstractStreamBuilder<UncheckedFilterReader, Builder> {

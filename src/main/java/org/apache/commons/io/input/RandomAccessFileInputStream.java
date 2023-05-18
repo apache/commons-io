@@ -43,9 +43,9 @@ public class RandomAccessFileInputStream extends InputStream {
      * RandomAccessFileInputStream s = RandomAccessFileInputStream.builder()
      *   .setPath(path)
      *   .setCloseOnClose(true)
-     *   .get()}
+     *   .get();}
      * </pre>
-     * <p>
+     *
      * @since 2.12.0
      */
     public static class Builder extends AbstractStreamBuilder<RandomAccessFileInputStream, Builder> {

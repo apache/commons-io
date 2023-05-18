@@ -47,7 +47,7 @@ public final class UncheckedFilterInputStream extends FilterInputStream {
      * <pre>{@code
      * UncheckedFilterInputStream s = UncheckedFilterInputStream.builder()
      *   .setFile(file)
-     *   .get()}
+     *   .get();}
      * </pre>
      * <p>
      * Using NIO Path:
@@ -55,7 +55,7 @@ public final class UncheckedFilterInputStream extends FilterInputStream {
      * <pre>{@code
      * UncheckedFilterInputStream s = UncheckedFilterInputStream.builder()
      *   .setPath(path)
-     *   .get()}
+     *   .get();}
      * </pre>
      */
     public static class Builder extends AbstractStreamBuilder<UncheckedFilterInputStream, Builder> {
