@@ -127,6 +127,7 @@ public class CopyUtils {
      * Copies and convert bytes from a {@code byte[]} to chars on a
      * {@link Writer}.
      * The platform's default encoding is used for the byte-to-char conversion.
+     *
      * @param input the byte array to read from
      * @param output the {@link Writer} to write to
      * @throws IOException In case of an I/O problem
@@ -141,6 +142,7 @@ public class CopyUtils {
     /**
      * Copies and convert bytes from a {@code byte[]} to chars on a
      * {@link Writer}, using the specified encoding.
+     *
      * @param input the byte array to read from
      * @param output the {@link Writer} to write to
      * @param encoding The name of a supported character encoding. See the
@@ -156,6 +158,7 @@ public class CopyUtils {
     /**
      * Copies bytes from an {@link InputStream} to an
      * {@link OutputStream}.
+     *
      * @param input the {@link InputStream} to read from
      * @param output the {@link OutputStream} to write to
      * @return the number of bytes copied
@@ -176,6 +179,7 @@ public class CopyUtils {
      * Copies and convert bytes from an {@link InputStream} to chars on a
      * {@link Writer}.
      * The platform's default encoding is used for the byte-to-char conversion.
+     *
      * @param input the {@link InputStream} to read from
      * @param output the {@link Writer} to write to
      * @throws IOException In case of an I/O problem
@@ -194,6 +198,7 @@ public class CopyUtils {
     /**
      * Copies and convert bytes from an {@link InputStream} to chars on a
      * {@link Writer}, using the specified encoding.
+     *
      * @param input the {@link InputStream} to read from
      * @param output the {@link Writer} to write to
      * @param encoding The name of a supported character encoding. See the
@@ -214,6 +219,7 @@ public class CopyUtils {
      * Serialize chars from a {@link Reader} to bytes on an
      * {@link OutputStream}, and flush the {@link OutputStream}.
      * Uses the default platform encoding.
+     *
      * @param input the {@link Reader} to read from
      * @param output the {@link OutputStream} to write to
      * @throws IOException In case of an I/O problem
@@ -235,6 +241,7 @@ public class CopyUtils {
     /**
      * Serialize chars from a {@link Reader} to bytes on an
      * {@link OutputStream}, and flush the {@link OutputStream}.
+     *
      * @param input the {@link Reader} to read from
      * @param output the {@link OutputStream} to write to
      * @param encoding The name of a supported character encoding. See the
@@ -257,6 +264,7 @@ public class CopyUtils {
 
     /**
      * Copies chars from a {@link Reader} to a {@link Writer}.
+     *
      * @param input the {@link Reader} to read from
      * @param output the {@link Writer} to write to
      * @return the number of characters copied
@@ -281,6 +289,7 @@ public class CopyUtils {
      * {@link OutputStream}, and
      * flush the {@link OutputStream}.
      * Uses the platform default encoding.
+     *
      * @param input the {@link String} to read from
      * @param output the {@link OutputStream} to write to
      * @throws IOException In case of an I/O problem
@@ -304,6 +313,7 @@ public class CopyUtils {
      * Serialize chars from a {@link String} to bytes on an
      * {@link OutputStream}, and
      * flush the {@link OutputStream}.
+     *
      * @param input the {@link String} to read from
      * @param output the {@link OutputStream} to write to
      * @param encoding The name of a supported character encoding. See the
@@ -327,6 +337,7 @@ public class CopyUtils {
 
     /**
      * Copies chars from a {@link String} to a {@link Writer}.
+     *
      * @param input the {@link String} to read from
      * @param output the {@link Writer} to write to
      * @throws IOException In case of an I/O problem
