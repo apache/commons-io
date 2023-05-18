@@ -41,7 +41,8 @@ public class UncheckedFilterInputStreamTest {
     @SuppressWarnings("resource")
     @BeforeEach
     public void beforeEach() {
-        stringInputStream = UncheckedFilterInputStream.builder().setInputStream(new BufferedInputStream(new StringInputStream("01"))).get();
+        stringInputStream = UncheckedFilterInputStream.builder().setInputStream(new BufferedInputStream(new StringInputStream.Builder().setString("01").get()))
+                .get();
         exception = new IOException("test exception");
         brokenInputStream = UncheckedFilterInputStream.builder().setInputStream(new BrokenInputStream(exception)).get();
     }

@@ -56,7 +56,8 @@ public class WindowsLineEndingInputStreamTest {
     }
 
     private String roundtrip(final String msg, final boolean ensure) throws IOException {
-        try (WindowsLineEndingInputStream lf = new WindowsLineEndingInputStream(new StringInputStream(msg, StandardCharsets.UTF_8), ensure)) {
+        try (WindowsLineEndingInputStream lf = new WindowsLineEndingInputStream(
+                new StringInputStream.Builder().setString(msg).setCharset(StandardCharsets.UTF_8).get(), ensure)) {
             final byte[] buf = new byte[100];
             final int read = lf.read(buf);
             return new String(buf, 0, read, StandardCharsets.UTF_8);

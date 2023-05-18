@@ -152,14 +152,15 @@ public class BOMInputStreamTest {
         return new ByteArrayInputStream(data);
     }
 
-    private boolean doesSaxSupportCharacterSet(final String charSetName) throws ParserConfigurationException, SAXException, IOException {
+    private boolean doesSaxSupportCharacterSet(final String charsetName) throws ParserConfigurationException, SAXException, IOException {
         final DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        try (StringInputStream byteStream = new StringInputStream("<?xml version=\"1.0\" encoding=\"" + charSetName + "\"?><Z/>", charSetName)) {
+        try (StringInputStream byteStream = new StringInputStream.Builder().setString("<?xml version=\"1.0\" encoding=\"" + charsetName + "\"?><Z/>")
+                .setCharset(charsetName).get()) {
             final InputSource is = new InputSource(byteStream);
-            is.setEncoding(charSetName);
+            is.setEncoding(charsetName);
             documentBuilder.parse(is);
         } catch (final SAXParseException e) {
-            if (e.getMessage().contains(charSetName)) {
+            if (e.getMessage().contains(charsetName)) {
                 return false;
             }
         }

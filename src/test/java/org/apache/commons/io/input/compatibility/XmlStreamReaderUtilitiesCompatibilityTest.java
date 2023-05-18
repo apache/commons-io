@@ -29,7 +29,7 @@ public class XmlStreamReaderUtilitiesCompatibilityTest extends XmlStreamReaderUt
     /** Mock {@link XmlStreamReader} implementation */
     private static class MockXmlStreamReader extends XmlStreamReader {
         MockXmlStreamReader(final String defaultEncoding) throws IOException {
-            super(new StringInputStream(), null, true, defaultEncoding);
+            super(new StringInputStream.Builder().setString("").get(), null, true, defaultEncoding);
         }
     }
     @Override

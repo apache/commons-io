@@ -140,7 +140,7 @@ public class DemuxInputStreamTest {
     }
 
     private void startReader(final String name, final String data, final DemuxInputStream demux) {
-        final InputStream input = new StringInputStream(data);
+        final InputStream input = new StringInputStream.Builder().setString(data).get();
         final ReaderThread thread = new ReaderThread(name, input, demux);
         threadMap.put(name, thread);
     }

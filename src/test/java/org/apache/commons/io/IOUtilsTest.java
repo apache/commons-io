@@ -966,7 +966,7 @@ public class IOUtilsTest {
 
     @Test
     public void testReadFully_InputStream_Offset() throws Exception {
-        final StringInputStream stream = new StringInputStream("abcd1234", StandardCharsets.UTF_8);
+        final StringInputStream stream = new StringInputStream.Builder().setString("abcd1234").setCharset(StandardCharsets.UTF_8).get();
         final byte[] buffer = "wx00000000".getBytes(StandardCharsets.UTF_8);
         IOUtils.readFully(stream, buffer, 2, 8);
         assertEquals("wxabcd1234", new String(buffer, 0, buffer.length, StandardCharsets.UTF_8));

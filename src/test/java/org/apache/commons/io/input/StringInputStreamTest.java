@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.StringInputStream.Builder;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -32,14 +33,14 @@ public class StringInputStreamTest {
 
     @Test
     public void testStringConstructorString() throws IOException {
-        try (StringInputStream input = StringInputStream.on("01")) {
+        try (StringInputStream input = new Builder().setString("01").get()) {
             assertEquals("01", IOUtils.toString(input, Charset.defaultCharset()));
         }
     }
 
     @Test
     public void testStringConstructorStringCharset() throws IOException {
-        try (StringInputStream input = new StringInputStream("01", Charset.defaultCharset())) {
+        try (StringInputStream input = new Builder().setString("01").setCharset(Charset.defaultCharset()).get()) {
             assertEquals("01", IOUtils.toString(input, Charset.defaultCharset()));
         }
     }

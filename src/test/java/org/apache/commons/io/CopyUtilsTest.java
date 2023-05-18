@@ -101,7 +101,7 @@ public class CopyUtilsTest {
         final String inDataStr = "data";
         final String charsetName = StandardCharsets.UTF_8.name();
         final StringWriter writer = new StringWriter();
-        CopyUtils.copy(new StringInputStream(inDataStr, charsetName), writer, charsetName);
+        CopyUtils.copy(new StringInputStream.Builder().setString(inDataStr).setCharset(charsetName).get(), writer, charsetName);
         assertEquals(inDataStr, writer.toString());
     }
 
