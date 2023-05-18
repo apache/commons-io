@@ -61,7 +61,10 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  *
  * <pre>
  * boolean include = true;
- * BOMInputStream bomIn = BOMInputStream.builder().setInputStream(in).setInclude(include).get();
+ * BOMInputStream bomIn = BOMInputStream.builder()
+ *     .setInputStream(in)
+ *     .setInclude(include)
+ *     .get();
  * if (bomIn.hasBOM()) {
  *     // has a UTF-8 BOM
  * }
