@@ -173,7 +173,7 @@ public class ReadAheadInputStream extends FilterInputStream {
      *
      * @param inputStream       The underlying input stream.
      * @param bufferSizeInBytes The buffer size.
-     * @deprecated Use {@link #builder()}
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}
      */
     @Deprecated
     public ReadAheadInputStream(final InputStream inputStream, final int bufferSizeInBytes) {
@@ -186,7 +186,7 @@ public class ReadAheadInputStream extends FilterInputStream {
      * @param inputStream       The underlying input stream.
      * @param bufferSizeInBytes The buffer size.
      * @param executorService   An executor service for the read-ahead thread.
-     * @deprecated Use {@link #builder()}
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}
      */
     @Deprecated
     public ReadAheadInputStream(final InputStream inputStream, final int bufferSizeInBytes, final ExecutorService executorService) {
