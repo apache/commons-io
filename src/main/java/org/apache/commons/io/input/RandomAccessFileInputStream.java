@@ -111,7 +111,7 @@ public class RandomAccessFileInputStream extends InputStream {
      * Constructs a new instance configured to leave the underlying file open when this stream is closed.
      *
      * @param file The file to stream.
-     * @deprecated Use {@link #builder()}
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}
      */
     @Deprecated
     public RandomAccessFileInputStream(final RandomAccessFile file) {
@@ -123,7 +123,7 @@ public class RandomAccessFileInputStream extends InputStream {
      *
      * @param file         The file to stream.
      * @param closeOnClose Whether to close the underlying file when this stream is closed.
-     * @deprecated Use {@link #builder()}
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}
      */
     @Deprecated
     public RandomAccessFileInputStream(final RandomAccessFile file, final boolean closeOnClose) {
