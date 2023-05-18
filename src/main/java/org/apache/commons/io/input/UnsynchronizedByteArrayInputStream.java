@@ -153,7 +153,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      * Creates a new byte array input stream.
      *
      * @param data the buffer
-     * @deprecated Use {@link #builder()}.
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}.
      */
     @Deprecated
     public UnsynchronizedByteArrayInputStream(final byte[] data) {
@@ -170,7 +170,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      * @param offset the offset into the buffer
      *
      * @throws IllegalArgumentException if the offset is less than zero
-     * @deprecated Use {@link #builder()}.
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}.
      */
     @Deprecated
     public UnsynchronizedByteArrayInputStream(final byte[] data, final int offset) {
@@ -192,7 +192,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      * @param length the length of the buffer
      *
      * @throws IllegalArgumentException if the offset or length less than zero
-     * @deprecated Use {@link #builder()}.
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}.
      */
     @Deprecated
     public UnsynchronizedByteArrayInputStream(final byte[] data, final int offset, final int length) {
