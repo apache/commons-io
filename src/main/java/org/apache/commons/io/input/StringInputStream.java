@@ -20,6 +20,7 @@ package org.apache.commons.io.input;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.nio.charset.Charset;
+import java.util.Objects;
 
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
@@ -28,13 +29,14 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  *
  * @since 2.13.0
  */
-public class StringInputStream extends ReaderInputStream {
+public final class StringInputStream extends ReaderInputStream {
 
     /**
      * Builds a new {@link StringInputStream} instance.
      * <p>
      * For example:
      * </p>
+     *
      * <pre>{@code
      * ReaderInputStream s = new StringInputStream.Builder()
      *   .setString("String")
@@ -57,18 +59,26 @@ public class StringInputStream extends ReaderInputStream {
             return new StringInputStream(string, getCharset());
         }
 
-        public Builder setString(final String string) {
-            this.string = string;
+        /**
+         * Sets the non-null string.
+         *
+         * @param source The source string, MUST not be null.
+         * @return this.
+         */
+        public Builder setString(final String source) {
+            this.string = Objects.requireNonNull(source, "source");
             return this;
         }
 
     }
+
     /**
      * Creates a new instance on a String for a Charset.
      *
-     * @param source The source string, MUST not be null.
-     * @param charset The source charset, MUST not be null.
+     * @param source  The source string, MUST not be null.
+     * @param charset The source charset, null defaults to {@link Charset#defaultCharset()}.
      */
+    @SuppressWarnings("deprecation")
     private StringInputStream(final String source, final Charset charset) {
         super(new StringReader(source), charset);
     }
