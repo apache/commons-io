@@ -46,10 +46,11 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * To build an instance, see {@link Builder}.
  * </p>
  * <pre>{@code
- * BufferedInputStream s = new BufferedInputStream(new GzipInputStream(MemoryMappedFileInputStream.builder()
- *   .setPath(path)
- *   .setBufferSize(256 * 1024)
- *   .get()));}
+ * BufferedInputStream s = new BufferedInputStream(new GzipInputStream(
+ *   MemoryMappedFileInputStream.builder()
+ *     .setPath(path)
+ *     .setBufferSize(256 * 1024)
+ *     .get()));}
  * </pre>
  * <p>
  * should outperform:
@@ -58,10 +59,11 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * new GzipInputStream(new MemoryMappedFileInputStream(path))
  * </pre>
  * <pre>{@code
- * GzipInputStream s = new GzipInputStream(MemoryMappedFileInputStream.builder()
- *   .setPath(path)
- *   .setBufferSize(256 * 1024)
- *   .get());}
+ * GzipInputStream s = new GzipInputStream(
+ *   MemoryMappedFileInputStream.builder()
+ *     .setPath(path)
+ *     .setBufferSize(256 * 1024)
+ *     .get());}
  * </pre>
  *
  * @since 2.12.0

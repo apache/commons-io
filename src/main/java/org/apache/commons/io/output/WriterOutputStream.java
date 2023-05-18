@@ -54,7 +54,10 @@ import org.apache.commons.io.charset.CharsetDecoders;
  * OutputStream out = ...
  * Charset cs = ...
  * OutputStreamWriter writer = new OutputStreamWriter(out, cs);
- * WriterOutputStream out2 = new WriterOutputStream(writer, cs);
+ * WriterOutputStream out2 = WriterOutputStream.builder()
+ *   .setWriter(writer)
+ *   .setCharset(cs)
+ *   .get();
  * </pre>
  * <p>
  * {@link WriterOutputStream} implements the same transformation as {@link java.io.InputStreamReader}, except that the control flow is reversed: both classes

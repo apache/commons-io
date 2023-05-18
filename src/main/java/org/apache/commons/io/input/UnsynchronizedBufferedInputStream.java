@@ -39,7 +39,10 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * </p>
  *
  * <pre>
- * UnsynchronizedBufferedInputStream buf = new UnsynchronizedBufferedInputStream(new FileInputStream(&quot;file.java&quot;));
+ * UnsynchronizedBufferedInputStream s = new UnsynchronizedBufferedInputStream.Builder().
+ *   .setInputStream(new FileInputStream(&quot;file.java&quot;))
+ *   .setBufferSize(8192)
+ *   .get();
  * </pre>
  * <p>
  * Provenance: Apache Harmony and modified.

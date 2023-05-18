@@ -87,6 +87,8 @@ public class CharSequenceInputStream extends InputStream {
 
     }
 
+    private static final int NO_MARK = -1;
+
     /**
      * Constructs a new {@link Builder}.
      *
@@ -96,8 +98,6 @@ public class CharSequenceInputStream extends InputStream {
     public static Builder builder() {
         return new Builder();
     }
-
-    private static final int NO_MARK = -1;
 
     private final CharsetEncoder charsetEncoder;
     private final CharBuffer cBuf;

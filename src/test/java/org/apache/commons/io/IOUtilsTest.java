@@ -111,6 +111,13 @@ public class IOUtilsTest {
      * methods are called. (JT)
      */
 
+    @BeforeAll
+    @AfterAll
+    public static void beforeAll() {
+        // Not required, just to exercise the method and make sure there are no adverse side-effect when recycling thread locals.
+        IO.clear();
+    }
+
     @TempDir
     public File temporaryFolder;
 
@@ -128,13 +135,6 @@ public class IOUtilsTest {
     /** Assert that the contents of two byte arrays are the same. */
     private void assertEqualContent(final byte[] b0, final byte[] b1) {
         assertArrayEquals(b0, b1, "Content not equal according to java.util.Arrays#equals()");
-    }
-
-    @BeforeAll
-    @AfterAll
-    public static void beforeAll() {
-        // Not required, just to exercise the method and make sure there are no adverse side-effect when recycling thread locals.
-        IO.clear();
     }
 
     @BeforeEach

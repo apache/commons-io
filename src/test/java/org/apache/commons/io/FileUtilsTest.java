@@ -1183,14 +1183,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCreateParentDirectories() throws IOException {
-        // If a directory already exists, nothing happens.
-        FileUtils.createParentDirectories(FileUtils.current());
-        // null is a noop
-        FileUtils.createParentDirectories(null);
-    }
-
-    @Test
     public void testCopyToDirectoryWithDirectory() throws IOException {
         final File destDirectory = new File(tempDirFile, "destination");
         if (!destDirectory.exists()) {
@@ -1355,6 +1347,14 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testCountFolders2FileSize4() {
         assertEquals(8, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-4").toFile()));
+    }
+
+    @Test
+    public void testCreateParentDirectories() throws IOException {
+        // If a directory already exists, nothing happens.
+        FileUtils.createParentDirectories(FileUtils.current());
+        // null is a noop
+        FileUtils.createParentDirectories(null);
     }
 
     @Test
