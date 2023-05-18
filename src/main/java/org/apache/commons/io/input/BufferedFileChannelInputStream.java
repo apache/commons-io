@@ -100,7 +100,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
      *
      * @param file The file to stream.
      * @throws IOException If an I/O error occurs
-     * @deprecated Use {@link #builder()}
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}
      */
     @Deprecated
     public BufferedFileChannelInputStream(final File file) throws IOException {
@@ -113,7 +113,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
      * @param file       The file to stream.
      * @param bufferSize buffer size.
      * @throws IOException If an I/O error occurs
-     * @deprecated Use {@link #builder()}
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}
      */
     @Deprecated
     public BufferedFileChannelInputStream(final File file, final int bufferSize) throws IOException {
@@ -125,7 +125,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
      *
      * @param path The path to stream.
      * @throws IOException If an I/O error occurs
-     * @deprecated Use {@link #builder()}
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}
      */
     @Deprecated
     public BufferedFileChannelInputStream(final Path path) throws IOException {
@@ -138,7 +138,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
      * @param path       The path to stream.
      * @param bufferSize buffer size.
      * @throws IOException If an I/O error occurs
-     * @deprecated Use {@link #builder()}
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}
      */
     @Deprecated
     public BufferedFileChannelInputStream(final Path path, final int bufferSize) throws IOException {
