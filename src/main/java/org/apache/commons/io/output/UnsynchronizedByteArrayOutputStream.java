@@ -129,7 +129,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      * Creates a new byte array output stream. The buffer capacity is initially
      *
      * {@value AbstractByteArrayOutputStream#DEFAULT_SIZE} bytes, though its size increases if necessary.
-     * @deprecated Use {@link #builder()}.
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}.
      */
     @Deprecated
     public UnsynchronizedByteArrayOutputStream() {
@@ -141,7 +141,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      *
      * @param size the initial size
      * @throws IllegalArgumentException if size is negative
-     * @deprecated Use {@link #builder()}.
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}.
      */
     @Deprecated
     public UnsynchronizedByteArrayOutputStream(final int size) {

@@ -109,7 +109,7 @@ public class XmlStreamWriter extends Writer {
      * @param file The file to write to
      * @throws FileNotFoundException if there is an error creating or
      * opening the file
-     * @deprecated Use {@link #builder()}
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}
      */
     @Deprecated
     public XmlStreamWriter(final File file) throws FileNotFoundException {
@@ -124,7 +124,7 @@ public class XmlStreamWriter extends Writer {
      * @param defaultEncoding The default encoding if not encoding could be detected
      * @throws FileNotFoundException if there is an error creating or
      * opening the file
-     * @deprecated Use {@link #builder()}
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}
      */
     @Deprecated
     @SuppressWarnings("resource")
@@ -137,7 +137,7 @@ public class XmlStreamWriter extends Writer {
      * with a default encoding of UTF-8.
      *
      * @param out The output stream
-     * @deprecated Use {@link #builder()}
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}
      */
     @Deprecated
     public XmlStreamWriter(final OutputStream out) {
@@ -162,7 +162,7 @@ public class XmlStreamWriter extends Writer {
      *
      * @param out The output stream
      * @param defaultEncoding The default encoding if not encoding could be detected
-     * @deprecated Use {@link #builder()}
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}
      */
     @Deprecated
     public XmlStreamWriter(final OutputStream out, final String defaultEncoding) {
