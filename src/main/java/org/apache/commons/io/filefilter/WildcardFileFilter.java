@@ -177,7 +177,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      * @param wildcards the list of wildcards to match, not null
      * @throws IllegalArgumentException if the pattern list is null
      * @throws ClassCastException       if the list does not contain Strings
-     * @deprecated Use {@link #builder()}
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}
      */
     @Deprecated
     public WildcardFileFilter(final List<String> wildcards) {
@@ -191,7 +191,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      * @param ioCase    how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the pattern list is null
      * @throws ClassCastException       if the list does not contain Strings
-     * @deprecated Use {@link #builder()}
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}
      */
     @Deprecated
     public WildcardFileFilter(final List<String> wildcards, final IOCase ioCase) {
@@ -203,7 +203,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      *
      * @param wildcard the wildcard to match
      * @throws IllegalArgumentException if the pattern is null
-     * @deprecated Use {@link #builder()}
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}
      */
     @Deprecated
     public WildcardFileFilter(final String wildcard) {
@@ -215,7 +215,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      *
      * @param wildcards the array of wildcards to match
      * @throws NullPointerException if the pattern array is null
-     * @deprecated Use {@link #builder()}
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}
      */
     @Deprecated
     public WildcardFileFilter(final String... wildcards) {
@@ -228,7 +228,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      * @param wildcard the wildcard to match, not null
      * @param ioCase   how to handle case sensitivity, null means case-sensitive
      * @throws NullPointerException if the pattern is null
-     * @deprecated Use {@link #builder()}
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}
      */
     @Deprecated
     public WildcardFileFilter(final String wildcard, final IOCase ioCase) {
@@ -241,7 +241,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      * @param wildcards the array of wildcards to match, not null
      * @param ioCase    how to handle case sensitivity, null means case-sensitive
      * @throws NullPointerException if the pattern array is null
-     * @deprecated Use {@link #builder()}
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}
      */
     @Deprecated
     public WildcardFileFilter(final String[] wildcards, final IOCase ioCase) {
