@@ -51,7 +51,6 @@ public class StringInputStream extends ReaderInputStream {
          * Constructs a new instance.
          *
          * Only uses the String and Charset aspects of this builder.
-         * @throws UnsupportedOperationException if the origin cannot be converted to a Reader.
          */
         @Override
         public StringInputStream get() {
