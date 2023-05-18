@@ -48,7 +48,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * <p>
  * To build an instance, see {@link Builder}.
  * </p>
- * <h2>Example 1 - Detect and exclude a UTF-8 BOM</h2>
+ * <h2>Example 1 - Detecting and excluding a UTF-8 BOM</h2>
  *
  * <pre>
  * BOMInputStream bomIn = BOMInputStream.builder().setInputStream(in).get();
@@ -57,7 +57,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * }
  * </pre>
  *
- * <h2>Example 2 - Detect a UTF-8 BOM (but don't exclude it)</h2>
+ * <h2>Example 2 - Detecting a UTF-8 BOM without excluding it</h2>
  *
  * <pre>
  * boolean include = true;
@@ -70,7 +70,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * }
  * </pre>
  *
- * <h2>Example 3 - Detect Multiple BOMs</h2>
+ * <h2>Example 3 - Detecting Multiple BOMs</h2>
  *
  * <pre>
  * BOMInputStream bomIn = BOMInputStream.builder()
