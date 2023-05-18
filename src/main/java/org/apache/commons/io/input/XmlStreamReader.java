@@ -62,6 +62,9 @@ import org.apache.commons.io.output.XmlStreamWriter;
  * the character encoding of a feed</a>.
  * </p>
  * <p>
+ * To build an instance, see {@link Builder}.
+ * </p>
+ * <p>
  * Originally developed for <a href="http://rome.dev.java.net">ROME</a> under Apache License 2.0.
  * </p>
  *

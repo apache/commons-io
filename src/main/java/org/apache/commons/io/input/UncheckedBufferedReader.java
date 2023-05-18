@@ -28,6 +28,9 @@ import org.apache.commons.io.function.Uncheck;
 
 /**
  * A {@link BufferedReader} that throws {@link UncheckedIOException} instead of {@link IOException}.
+ * <p>
+ * To build an instance, see {@link Builder}.
+ * </p>
  *
  * @see BufferedReader
  * @see IOException

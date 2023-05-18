@@ -33,7 +33,9 @@ import org.apache.commons.io.output.QueueOutputStream;
 
 /**
  * Simple alternative to JDK {@link java.io.PipedInputStream}; queue input stream provides what's written in queue output stream.
- *
+ * <p>
+ * To build an instance, see {@link Builder}.
+ * </p>
  * <p>
  * Example usage:
  * </p>

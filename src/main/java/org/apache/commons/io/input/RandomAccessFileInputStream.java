@@ -27,7 +27,9 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
  * Streams data from a {@link RandomAccessFile} starting at its current position.
- *
+ * <p>
+ * To build an instance, see {@link Builder}.
+ * </p>
  * @since 2.8.0
  */
 public class RandomAccessFileInputStream extends InputStream {

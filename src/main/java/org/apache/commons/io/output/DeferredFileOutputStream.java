@@ -32,6 +32,9 @@ import org.apache.commons.io.file.PathUtils;
  * An output stream which will retain data in memory until a specified threshold is reached, and only then commit it to disk. If the stream is closed before the
  * threshold is reached, the data will not be written to disk at all.
  * <p>
+ * To build an instance, see {@link Builder}.
+ * </p>
+ * <p>
  * This class originated in FileUpload processing. In this use case, you do not know in advance the size of the file being uploaded. If the file is small you
  * want to store it in memory (for speed), but if the file is large you want to store it to file (to avoid memory issues).
  * </p>

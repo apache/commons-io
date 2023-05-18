@@ -39,8 +39,10 @@ import org.apache.commons.io.StandardLineSeparator;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
- * Reads lines in a file reversely (similar to a BufferedReader, but starting at
- * the last line). Useful for e.g. searching in log files.
+ * Reads lines in a file reversely (similar to a BufferedReader, but starting at the last line). Useful for e.g. searching in log files.
+ * <p>
+ * To build an instance, see {@link Builder}.
+ * </p>
  *
  * @since 2.2
  */

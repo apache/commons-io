@@ -28,6 +28,9 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * This class is an example for using an {@link ObservableInputStream}. It creates its own {@link org.apache.commons.io.input.ObservableInputStream.Observer},
  * which calculates a checksum using a MessageDigest, for example an MD5 sum.
  * <p>
+ * To build an instance, see {@link Builder}.
+ * </p>
+ * <p>
  * See the MessageDigest section in the <a href= "https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#MessageDigest"> Java
  * Cryptography Architecture Standard Algorithm Name Documentation</a> for information about standard algorithm names.
  * </p>

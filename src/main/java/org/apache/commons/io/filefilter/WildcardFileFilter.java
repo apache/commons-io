@@ -39,13 +39,16 @@ import org.apache.commons.io.build.AbstractSupplier;
  * command lines. The check is case-sensitive by default. See {@link FilenameUtils#wildcardMatchOnSystem(String,String)} for more information.
  * </p>
  * <p>
+ * To build an instance, see {@link Builder}.
+ * </p>
+ * <p>
  * For example:
  * </p>
  * <h2>Using Classic IO</h2>
  *
  * <pre>
  * File dir = FileUtils.current();
- * FileFilter fileFilter = new WildcardFileFilter("*test*.java~*~");
+ * FileFilter fileFilter = WildcardFileFilter.builder().setWildcards("*test*.java~*~").get();
  * File[] files = dir.listFiles(fileFilter);
  * for (String file : files) {
  *     System.out.println(file);
@@ -56,7 +59,8 @@ import org.apache.commons.io.build.AbstractSupplier;
  *
  * <pre>
  * final Path dir = PathUtils.current();
- * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new WildcardFileFilter("*test*.java~*~"));
+ * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(
+ *     WildcardFileFilter.builder().setWildcards("*test*.java~*~").get());
  * //
  * // Walk one dir
  * Files.<b>walkFileTree</b>(dir, Collections.emptySet(), 1, visitor);

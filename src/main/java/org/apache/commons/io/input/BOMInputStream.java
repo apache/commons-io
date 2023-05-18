@@ -45,11 +45,13 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * <li>UTF-32BE - {@link ByteOrderMark#UTF_32LE}</li>
  * <li>UTF-32LE - {@link ByteOrderMark#UTF_32BE}</li>
  * </ul>
- *
+ * <p>
+ * To build an instance, see {@link Builder}.
+ * </p>
  * <h2>Example 1 - Detect and exclude a UTF-8 BOM</h2>
  *
  * <pre>
- * BOMInputStream bomIn = new BOMInputStream(in);
+ * BOMInputStream bomIn = BOMInputStream.builder().setInputStream(in).get();
  * if (bomIn.hasBOM()) {
  *     // has a UTF-8 BOM
  * }
@@ -59,7 +61,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  *
  * <pre>
  * boolean include = true;
- * BOMInputStream bomIn = new BOMInputStream(in, include);
+ * BOMInputStream bomIn = BOMInputStream.builder().setInputStream(in).setInclude(include).get();
  * if (bomIn.hasBOM()) {
  *     // has a UTF-8 BOM
  * }
@@ -68,10 +70,10 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * <h2>Example 3 - Detect Multiple BOMs</h2>
  *
  * <pre>
- * BOMInputStream bomIn = new BOMInputStream(in,
- *   ByteOrderMark.UTF_16LE, ByteOrderMark.UTF_16BE,
- *   ByteOrderMark.UTF_32LE, ByteOrderMark.UTF_32BE
- *   );
+ * BOMInputStream bomIn = BOMInputStream.builder()
+ *   .setInputStream(in)
+ *   .setByteOrderMarks(ByteOrderMark.UTF_16LE, ByteOrderMark.UTF_16BE, ByteOrderMark.UTF_32LE, ByteOrderMark.UTF_32BE)
+ *   .get();
  * if (bomIn.hasBOM() == false) {
  *     // No BOM found
  * } else if (bomIn.hasBOM(ByteOrderMark.UTF_16LE)) {
@@ -136,7 +138,7 @@ public class BOMInputStream extends ProxyInputStream {
          * @param byteOrderMarks the ByteOrderMarks to detect and optionally exclude.
          * @return this
          */
-        public Builder setByteOrderMarks(final ByteOrderMark[] byteOrderMarks) {
+        public Builder setByteOrderMarks(final ByteOrderMark... byteOrderMarks) {
             this.byteOrderMarks = byteOrderMarks != null ? byteOrderMarks.clone() : DEFAULT;
             return this;
         }

@@ -46,7 +46,9 @@ import org.apache.commons.io.file.attribute.FileTimes;
 
 /**
  * Simple implementation of the UNIX "tail -f" functionality.
- *
+ * <p>
+ * To build an instance, see {@link Builder}.
+ * </p>
  * <h2>1. Create a TailerListener implementation</h2>
  * <p>
  * First you need to create a {@link TailerListener} implementation; ({@link TailerListenerAdapter} is provided for

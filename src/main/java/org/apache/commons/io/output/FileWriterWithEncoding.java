@@ -42,6 +42,9 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * The encoding must be specified using either the name of the {@link Charset}, the {@link Charset}, or a {@link CharsetEncoder}. If the default encoding is
  * required then use the {@link java.io.FileWriter} directly, rather than this implementation.
  * </p>
+ * <p>
+ * To build an instance, see {@link Builder}.
+ * </p>
  *
  * @since 1.4
  */

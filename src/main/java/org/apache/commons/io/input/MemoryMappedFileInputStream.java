@@ -42,6 +42,9 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * Note: Use of this class does not necessarily obviate the need to use a {@link BufferedInputStream}. Depending on the
  * use case, the use of buffering may still further improve performance. For example:
  * </p>
+ * <p>
+ * To build an instance, see {@link Builder}.
+ * </p>
  * <pre>
  * new BufferedInputStream(new GzipInputStream(new MemoryMappedFileInputStream(path))))
  * </pre>

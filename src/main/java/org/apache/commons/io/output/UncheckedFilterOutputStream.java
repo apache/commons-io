@@ -27,6 +27,9 @@ import org.apache.commons.io.function.Uncheck;
 
 /**
  * A {@link FilterOutputStream} that throws {@link UncheckedIOException} instead of {@link UncheckedIOException}.
+ * <p>
+ * To build an instance, see {@link Builder}.
+ * </p>
  *
  * @see FilterOutputStream
  * @see UncheckedIOException

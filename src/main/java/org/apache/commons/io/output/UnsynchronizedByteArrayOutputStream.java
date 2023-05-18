@@ -27,6 +27,9 @@ import org.apache.commons.io.input.UnsynchronizedByteArrayInputStream;
 
 /**
  * Implements a version of {@link AbstractByteArrayOutputStream} <b>without</b> any concurrent thread safety.
+ * <p>
+ * To build an instance, see {@link Builder}.
+ * </p>
  *
  * @since 2.7
  */

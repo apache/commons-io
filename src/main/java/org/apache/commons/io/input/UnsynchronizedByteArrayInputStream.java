@@ -28,6 +28,9 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
 /**
  * This is an alternative to {@link java.io.ByteArrayInputStream} which removes the synchronization overhead for non-concurrent access; as such this class is
  * not thread-safe.
+ * <p>
+ * To build an instance, see {@link Builder}.
+ * </p>
  *
  * @see ByteArrayInputStream
  * @since 2.7

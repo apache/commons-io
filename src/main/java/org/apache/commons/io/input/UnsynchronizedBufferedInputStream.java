@@ -32,6 +32,9 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * takes place when filling that buffer, but this is usually outweighed by the performance benefits.
  * </p>
  * <p>
+ * To build an instance, see {@link Builder}.
+ * </p>
+ * <p>
  * A typical application pattern for the class looks like this:
  * </p>
  *

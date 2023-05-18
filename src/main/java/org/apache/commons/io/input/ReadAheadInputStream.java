@@ -38,6 +38,9 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * read() call is issued. The read ahead buffer is used to asynchronously read from the underlying input stream. When the current active buffer is exhausted, we
  * flip the two buffers so that we can start reading from the read ahead buffer without being blocked by disk I/O.
  * <p>
+ * To build an instance, see {@link Builder}.
+ * </p>
+ * <p>
  * This class was ported and adapted from Apache Spark commit 933dc6cb7b3de1d8ccaf73d124d6eb95b947ed19.
  * </p>
  *

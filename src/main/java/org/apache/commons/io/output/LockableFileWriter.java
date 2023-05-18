@@ -44,6 +44,9 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * By default, the file will be overwritten, but this may be changed to append. The lock directory may be specified, but defaults to the system property
  * {@code java.io.tmpdir}. The encoding may also be specified, and defaults to the platform default.
  * </p>
+ * <p>
+ * To build an instance, see {@link Builder}.
+ * </p>
  */
 public class LockableFileWriter extends Writer {
 

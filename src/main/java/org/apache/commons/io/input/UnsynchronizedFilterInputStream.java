@@ -31,6 +31,9 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * and provide some additional functionality on top of it usually inherit from this class.
  * </p>
  * <p>
+ * To build an instance, see {@link Builder}.
+ * </p>
+ * <p>
  * Provenance: Apache Harmony and modified.
  * </p>
  *

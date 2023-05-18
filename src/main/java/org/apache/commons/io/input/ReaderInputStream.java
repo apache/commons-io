@@ -48,7 +48,9 @@ import org.apache.commons.io.charset.CharsetEncoders;
  * {@link ReaderInputStream} implements the inverse transformation of {@link java.io.InputStreamReader}; in the following example, reading from {@code in2}
  * would return the same byte sequence as reading from {@code in} (provided that the initial byte sequence is legal with respect to the charset encoding):
  * </p>
- *
+ * <p>
+ * To build an instance, see {@link Builder}.
+ * </p>
  * <pre>
  * InputStream inputStream = ...
  * Charset cs = ...

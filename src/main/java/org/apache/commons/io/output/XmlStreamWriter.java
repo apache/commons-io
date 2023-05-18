@@ -36,8 +36,10 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.input.XmlStreamReader;
 
 /**
- * Character stream that handles all the necessary work to figure out the
- * charset encoding of the XML document written to the stream.
+ * Character stream that handles all the necessary work to figure out the charset encoding of the XML document written to the stream.
+ * <p>
+ * To build an instance, see {@link Builder}.
+ * </p>
  *
  * @see XmlStreamReader
  * @since 2.0

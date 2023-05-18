@@ -42,20 +42,25 @@ import org.apache.commons.io.charset.CharsetDecoders;
  * is called. In general there is therefore no need to wrap the underlying {@link Writer} in a {@link java.io.BufferedWriter}. {@link WriterOutputStream} can
  * also be instructed to flush the buffer after each write operation. In this case, all available data is written immediately to the underlying {@link Writer},
  * implying that the current position of the {@link Writer} is correlated to the current position of the {@link WriterOutputStream}.
+ * </p>
  * <p>
  * {@link WriterOutputStream} implements the inverse transformation of {@link java.io.OutputStreamWriter}; in the following example, writing to {@code out2}
  * would have the same result as writing to {@code out} directly (provided that the byte sequence is legal with respect to the charset encoding):
- *
+ * </p>
+ * <p>
+ * To build an instance, see {@link Builder}.
+ * </p>
  * <pre>
  * OutputStream out = ...
  * Charset cs = ...
  * OutputStreamWriter writer = new OutputStreamWriter(out, cs);
  * WriterOutputStream out2 = new WriterOutputStream(writer, cs);
  * </pre>
- *
+ * <p>
  * {@link WriterOutputStream} implements the same transformation as {@link java.io.InputStreamReader}, except that the control flow is reversed: both classes
  * transform a byte stream into a character stream, but {@link java.io.InputStreamReader} pulls data from the underlying stream, while
  * {@link WriterOutputStream} pushes it to the underlying stream.
+ * </p>
  * <p>
  * Note that while there are use cases where there is no alternative to using this class, very often the need to use this class is an indication of a flaw in
  * the design of the code. This class is typically used in situations where an existing API only accepts an {@link OutputStream} object, but where the stream is

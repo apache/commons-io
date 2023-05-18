@@ -26,7 +26,9 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
  * An {@link InputStream} on a String.
- *
+ * <p>
+ * To build an instance, see {@link Builder}.
+ * </p>
  * @since 2.13.0
  */
 public final class StringInputStream extends ReaderInputStream {

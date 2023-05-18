@@ -32,6 +32,9 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * using {@link java.io.BufferedInputStream}. Unfortunately, this is not something already available in JDK, {@code sun.nio.ch.ChannelInputStream} supports
  * reading a file using NIO, but does not support buffering.
  * <p>
+ * To build an instance, see {@link Builder}.
+ * </p>
+ * <p>
  * This class was ported and adapted from Apache Spark commit 933dc6cb7b3de1d8ccaf73d124d6eb95b947ed19 where it was called {@code NioBufferedFileInputStream}.
  * </p>
  *
