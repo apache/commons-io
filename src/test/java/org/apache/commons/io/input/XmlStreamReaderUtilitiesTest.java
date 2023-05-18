@@ -33,7 +33,7 @@ public class XmlStreamReaderUtilitiesTest {
     /** Mock {@link XmlStreamReader} implementation */
     private static class MockXmlStreamReader extends XmlStreamReader {
         MockXmlStreamReader(final String defaultEncoding) throws IOException {
-            super(new StringInputStream.Builder().setString("").get(), null, true, defaultEncoding);
+            super(CharSequenceInputStream.builder().setCharSequence("").get(), null, true, defaultEncoding);
         }
     }
     private static final String RAWMGS1 = "encoding mismatch";

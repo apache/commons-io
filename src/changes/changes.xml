@@ -53,9 +53,10 @@ The <action> type attribute can be add,update,fix,remove.
         Regression in FileUtils.touch() - no longer creates parent directories.
       </action>
       <!-- ADD -->
-      <action issue="IO-793" dev="ggregory" type="add" due-to="Gary Gregory, K P">
-        Add StringInputStream. StringInputStream.java should be in main source folder.
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        Add CharSequenceInputStream.Builder.
       </action>
+      <!-- UPDATE -->
     </release>
     <release version="2.12.0" date="2023-05-13" description="Java 8 required.">
       <!-- FIX -->

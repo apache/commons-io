@@ -64,10 +64,10 @@ import java.util.stream.Stream;
 
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.input.BrokenInputStream;
+import org.apache.commons.io.input.CharSequenceInputStream;
 import org.apache.commons.io.input.CircularInputStream;
 import org.apache.commons.io.input.NullInputStream;
 import org.apache.commons.io.input.NullReader;
-import org.apache.commons.io.input.StringInputStream;
 import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.BrokenOutputStream;
 import org.apache.commons.io.output.CountingOutputStream;
@@ -966,7 +966,7 @@ public class IOUtilsTest {
 
     @Test
     public void testReadFully_InputStream_Offset() throws Exception {
-        final StringInputStream stream = new StringInputStream.Builder().setString("abcd1234").setCharset(StandardCharsets.UTF_8).get();
+        final InputStream stream = CharSequenceInputStream.builder().setCharSequence("abcd1234").setCharset(StandardCharsets.UTF_8).get();
         final byte[] buffer = "wx00000000".getBytes(StandardCharsets.UTF_8);
         IOUtils.readFully(stream, buffer, 2, 8);
         assertEquals("wxabcd1234", new String(buffer, 0, buffer.length, StandardCharsets.UTF_8));

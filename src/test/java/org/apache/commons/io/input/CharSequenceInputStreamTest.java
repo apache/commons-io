@@ -184,6 +184,9 @@ public class CharSequenceInputStreamTest {
         try (InputStream stream = new CharSequenceInputStream(new String(inputChars), charset, 512)) {
             IOUtils.toCharArray(stream, charset);
         }
+        try (InputStream stream = CharSequenceInputStream.builder().setCharSequence(new String(inputChars)).setCharset(charset).setBufferSize(512).get()) {
+            IOUtils.toCharArray(stream, charset);
+        }
     }
 
     @Test
@@ -338,7 +341,11 @@ public class CharSequenceInputStreamTest {
 
     @Test
     public void testMarkSupported() throws Exception {
-        try (InputStream r = new CharSequenceInputStream("test", UTF_8)) {
+        try (@SuppressWarnings("deprecation")
+        InputStream r = new CharSequenceInputStream("test", UTF_8)) {
+            assertTrue(r.markSupported());
+        }
+        try (InputStream r = CharSequenceInputStream.builder().setCharSequence("test").setCharset(UTF_8).get()) {
             assertTrue(r.markSupported());
         }
     }
@@ -349,11 +356,19 @@ public class CharSequenceInputStreamTest {
             IOUtils.toByteArray(in);
             assertEquals(Charset.defaultCharset(), in.getCharsetEncoder().charset());
         }
+        try (CharSequenceInputStream in = CharSequenceInputStream.builder().setCharSequence("test").setCharset((Charset) null).get()) {
+            IOUtils.toByteArray(in);
+            assertEquals(Charset.defaultCharset(), in.getCharsetEncoder().charset());
+        }
     }
 
     @Test
     public void testNullCharsetName() throws IOException {
         try (CharSequenceInputStream in = new CharSequenceInputStream("A", (String) null)) {
+            IOUtils.toByteArray(in);
+            assertEquals(Charset.defaultCharset(), in.getCharsetEncoder().charset());
+        }
+        try (CharSequenceInputStream in = CharSequenceInputStream.builder().setCharSequence("test").setCharset((String) null).get()) {
             IOUtils.toByteArray(in);
             assertEquals(Charset.defaultCharset(), in.getCharsetEncoder().charset());
         }

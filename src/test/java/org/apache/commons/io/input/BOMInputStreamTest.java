@@ -154,7 +154,7 @@ public class BOMInputStreamTest {
 
     private boolean doesSaxSupportCharacterSet(final String charsetName) throws ParserConfigurationException, SAXException, IOException {
         final DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        try (StringInputStream byteStream = new StringInputStream.Builder().setString("<?xml version=\"1.0\" encoding=\"" + charsetName + "\"?><Z/>")
+        try (InputStream byteStream = CharSequenceInputStream.builder().setCharSequence("<?xml version=\"1.0\" encoding=\"" + charsetName + "\"?><Z/>")
                 .setCharset(charsetName).get()) {
             final InputSource is = new InputSource(byteStream);
             is.setEncoding(charsetName);

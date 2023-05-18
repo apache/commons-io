@@ -379,7 +379,7 @@ public class XmlStreamReaderTest {
     public void testHttpContent() throws Exception {
         final String encoding = UTF_8;
         final String xml = getXML("no-bom", XML3, encoding, encoding);
-        try (XmlStreamReader xmlReader = new XmlStreamReader(new StringInputStream.Builder().setString(xml).setCharset(encoding).get())) {
+        try (XmlStreamReader xmlReader = new XmlStreamReader(CharSequenceInputStream.builder().setCharSequence(xml).setCharset(encoding).get())) {
             assertEquals(xmlReader.getEncoding(), encoding, "Check encoding");
             assertEquals(xml, IOUtils.toString(xmlReader), "Check content");
         }
@@ -505,7 +505,7 @@ public class XmlStreamReaderTest {
     public void testRawContent() throws Exception {
         final String encoding = UTF_8;
         final String xml = getXML("no-bom", XML3, encoding, encoding);
-        try (XmlStreamReader xmlReader = new XmlStreamReader(new StringInputStream.Builder().setString(xml).setCharset(encoding).get())) {
+        try (XmlStreamReader xmlReader = new XmlStreamReader(CharSequenceInputStream.builder().setCharSequence(xml).setCharset(encoding).get())) {
             assertEquals(xmlReader.getEncoding(), encoding, "Check encoding");
             assertEquals(xml, IOUtils.toString(xmlReader), "Check content");
         }

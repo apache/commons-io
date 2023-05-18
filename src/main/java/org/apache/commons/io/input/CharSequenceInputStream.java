@@ -32,6 +32,7 @@ import java.util.Objects;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
  * Implements an {@link InputStream} to read from String, StringBuffer, StringBuilder or CharBuffer.
@@ -42,6 +43,58 @@ import org.apache.commons.io.IOUtils;
  * @since 2.2
  */
 public class CharSequenceInputStream extends InputStream {
+
+    /**
+     * Builds a new {@link CharSequenceInputStream} instance.
+     * <p>
+     * For example:
+     * </p>
+     *
+     * <pre>{@code
+     * CharSequenceInputStream s = CharSequenceInputStream.builder()
+     *   .setBufferSize(8192)
+     *   .setCharSequence("String")
+     *   .setCharsetEncoder(Charset.defaultCharset())
+     *   .get()}
+     * </pre>
+     * @since 2.13.0
+     */
+    public static class Builder extends AbstractStreamBuilder<CharSequenceInputStream, Builder> {
+
+        private CharSequence source;
+
+        /**
+         * Constructs a new instance.
+         *
+         * Uses the buffer size, CharSequence, and Charset aspects.
+         */
+        @Override
+        public CharSequenceInputStream get() {
+            return new CharSequenceInputStream(source, getCharset(), getBufferSize());
+        }
+
+        /**
+         * Sets the non-null CharSequence.
+         *
+         * @param source The source string, MUST not be null.
+         * @return this.
+         */
+        public Builder setCharSequence(final CharSequence source) {
+            this.source = Objects.requireNonNull(source, "source");
+            return this;
+        }
+
+    }
+
+    /**
+     * Constructs a new {@link Builder}.
+     *
+     * @return a new {@link Builder}.
+     * @since 2.12.0
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
 
     private static final int NO_MARK = -1;
 
@@ -58,7 +111,9 @@ public class CharSequenceInputStream extends InputStream {
      * @param cs the input character sequence.
      * @param charset the character set name to use.
      * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character.
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}
      */
+    @Deprecated
     public CharSequenceInputStream(final CharSequence cs, final Charset charset) {
         this(cs, charset, IOUtils.DEFAULT_BUFFER_SIZE);
     }
@@ -70,7 +125,9 @@ public class CharSequenceInputStream extends InputStream {
      * @param charset the character set name to use, null maps to the default Charset.
      * @param bufferSize the buffer size to use.
      * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character.
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}
      */
+    @Deprecated
     public CharSequenceInputStream(final CharSequence cs, final Charset charset, final int bufferSize) {
         // @formatter:off
         this.charsetEncoder = Charsets.toCharset(charset).newEncoder()
@@ -91,7 +148,9 @@ public class CharSequenceInputStream extends InputStream {
      * @param cs the input character sequence.
      * @param charset the character set name to use.
      * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character.
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}
      */
+    @Deprecated
     public CharSequenceInputStream(final CharSequence cs, final String charset) {
         this(cs, charset, IOUtils.DEFAULT_BUFFER_SIZE);
     }
@@ -103,7 +162,9 @@ public class CharSequenceInputStream extends InputStream {
      * @param charset the character set name to use, null maps to the default Charset.
      * @param bufferSize the buffer size to use.
      * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character.
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}
      */
+    @Deprecated
     public CharSequenceInputStream(final CharSequence cs, final String charset, final int bufferSize) {
         this(cs, Charsets.toCharset(charset), bufferSize);
     }
