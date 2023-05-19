@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.function.Uncheck;
 import org.apache.commons.io.input.UnsynchronizedByteArrayInputStream;
@@ -59,8 +60,12 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
 
         /**
          * Constructs a new instance.
+         * <p>
+         * This builder use the aspect buffer size.
+         * </p>
          *
-         * Only uses the buffer size attribute.
+         * @return a new instance.
+         * @see AbstractOrigin#getByteArray()
          */
         @Override
         public UnsynchronizedByteArrayOutputStream get() {
