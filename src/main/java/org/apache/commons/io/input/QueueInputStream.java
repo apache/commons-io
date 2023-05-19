@@ -81,6 +81,14 @@ public class QueueInputStream extends InputStream {
         private BlockingQueue<Integer> blockingQueue = new LinkedBlockingQueue<>();
         private Duration timeout = Duration.ZERO;
 
+        /**
+         * Constructs a new instance.
+         * <p>
+         * This builder use the aspects BlockingQueue and timeout.
+         * </p>
+         *
+         * @return a new instance.
+         */
         @Override
         public QueueInputStream get() {
             return new QueueInputStream(blockingQueue, timeout);

@@ -18,10 +18,12 @@ package org.apache.commons.io.input;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.OpenOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Provider;
 
+import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
@@ -72,8 +74,17 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
 
         /**
          * Constructs a new instance.
+         * <p>
+         * This builder use the aspects InputStream and MessageDigest.
+         * </p>
+         * <p>
+         * You must provide an origin that can be converted to an InputStream by this builder, otherwise, this call will throw an
+         * {@link UnsupportedOperationException}.
+         * </p>
          *
-         * @throws UnsupportedOperationException if the origin cannot be converted to an InputStream.
+         * @return a new instance.
+         * @throws UnsupportedOperationException if the origin cannot provide an InputStream.
+         * @see AbstractOrigin#getInputStream(OpenOption...)
          */
         @SuppressWarnings("resource")
         @Override
