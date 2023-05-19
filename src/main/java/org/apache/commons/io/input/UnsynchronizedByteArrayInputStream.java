@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
+import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
@@ -81,8 +82,17 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
 
         /**
          * Constructs a new instance.
+         * <p>
+         * This builder use the aspects byte[], offset and length.
+         * </p>
+         * <p>
+         * You must provide an origin that can be converted to a byte[] by this builder, otherwise, this call will throw an
+         * {@link UnsupportedOperationException}.
+         * </p>
          *
-         * @throws UnsupportedOperationException if the origin cannot be converted to a byte array.
+         * @return a new instance.
+         * @throws UnsupportedOperationException if the origin cannot provide a byte[].
+         * @see AbstractOrigin#getByteArray()
          */
         @Override
         public UnsynchronizedByteArrayInputStream get() throws IOException {
