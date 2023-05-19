@@ -27,6 +27,7 @@ import java.nio.channels.FileChannel.MapMode;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
+import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
@@ -93,8 +94,17 @@ public final class MemoryMappedFileInputStream extends InputStream {
 
         /**
          * Constructs a new instance.
+         * <p>
+         * This builder use the aspects Path and buffer size.
+         * </p>
+         * <p>
+         * You must provide an origin that can be converted to a Path by this builder, otherwise, this call will throw an
+         * {@link UnsupportedOperationException}.
+         * </p>
          *
-         * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
+         * @return a new instance.
+         * @throws UnsupportedOperationException if the origin cannot provide a Path.
+         * @see AbstractOrigin#getPath()
          */
         @Override
         public MemoryMappedFileInputStream get() throws IOException {
