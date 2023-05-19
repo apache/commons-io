@@ -66,8 +66,12 @@ public class CharSequenceInputStream extends InputStream {
 
         /**
          * Constructs a new instance.
+         * <p>
+         * This builder use the aspects the buffer size, CharSequence, and Charset.
+         * </p>
          *
-         * Uses the buffer size, CharSequence, and Charset aspects.
+         * @return a new instance.
+         * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character.
          */
         @Override
         public CharSequenceInputStream get() {
