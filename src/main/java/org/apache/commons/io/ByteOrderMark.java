@@ -22,7 +22,17 @@ import java.util.Locale;
 import java.util.Objects;
 
 /**
- * Byte Order Mark (BOM) representation - see {@link org.apache.commons.io.input.BOMInputStream}.
+ * Byte Order Mark (BOM) representation. See {@link org.apache.commons.io.input.BOMInputStream}.
+ * <p>
+ * We define the follow BOM constants:
+ * </p>
+ * <ul>
+ * <li>{@link #UTF_16BE}</li>
+ * <li>{@link #UTF_16LE}</li>
+ * <li>{@link #UTF_32BE}</li>
+ * <li>{@link #UTF_32LE}</li>
+ * <li>{@link #UTF_8}</li>
+ * </ul>
  * <h2>Deprecating Serialization</h2>
  * <p>
  * <em>Serialization is deprecated and will be removed in 3.0.</em>
@@ -38,17 +48,47 @@ public class ByteOrderMark implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /** UTF-8 BOM. */
+    /**
+     * UTF-8 BOM.
+     * <p>
+     * This BOM is:
+     * </p>
+     * <pre>
+     * 0xEF 0xBB 0xBF
+     * </pre>
+     */
     public static final ByteOrderMark UTF_8 = new ByteOrderMark(StandardCharsets.UTF_8.name(), 0xEF, 0xBB, 0xBF);
 
-    /** UTF-16BE BOM (Big-Endian). */
+    /**
+     * UTF-16BE BOM (Big-Endian).
+     * <p>
+     * This BOM is:
+     * </p>
+     * <pre>
+     * 0xFE 0xFF
+     * </pre>
+     */
     public static final ByteOrderMark UTF_16BE = new ByteOrderMark(StandardCharsets.UTF_16BE.name(), 0xFE, 0xFF);
 
-    /** UTF-16LE BOM (Little-Endian). */
+    /**
+     * UTF-16LE BOM (Little-Endian).
+     * <p>
+     * This BOM is:
+     * </p>
+     * <pre>
+     * 0xFF 0xFE
+     * </pre>
+     */
     public static final ByteOrderMark UTF_16LE = new ByteOrderMark(StandardCharsets.UTF_16LE.name(), 0xFF, 0xFE);
 
     /**
      * UTF-32BE BOM (Big-Endian).
+     * <p>
+     * This BOM is:
+     * </p>
+     * <pre>
+     * 0x00 0x00 0xFE 0xFF
+     * </pre>
      *
      * @since 2.2
      */
@@ -56,6 +96,12 @@ public class ByteOrderMark implements Serializable {
 
     /**
      * UTF-32LE BOM (Little-Endian).
+     * <p>
+     * This BOM is:
+     * </p>
+     * <pre>
+     * 0xFF 0xFE 0x00 0x00
+     * </pre>
      *
      * @since 2.2
      */
@@ -150,9 +196,9 @@ public class ByteOrderMark implements Serializable {
     }
 
     /**
-     * Computes the hashcode for this BOM.
+     * Computes the hash code for this BOM.
      *
-     * @return the hashcode for this BOM.
+     * @return the hash code for this BOM.
      * @see Object#hashCode()
      */
     @Override
