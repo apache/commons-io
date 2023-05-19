@@ -28,6 +28,7 @@ import java.util.Objects;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
@@ -83,8 +84,17 @@ public class FileWriterWithEncoding extends ProxyWriter {
 
         /**
          * Constructs a new instance.
+         * <p>
+         * This builder use the aspects File, CharsetEncoder, and append.
+         * </p>
+         * <p>
+         * You must provide an origin that can be converted to a File by this builder, otherwise, this call will throw an
+         * {@link UnsupportedOperationException}.
+         * </p>
          *
-         * @throws UnsupportedOperationException if the origin cannot be converted to a File.
+         * @return a new instance.
+         * @throws UnsupportedOperationException if the origin cannot provide a File.
+         * @see AbstractOrigin#getFile()
          */
         @SuppressWarnings("resource")
         @Override
