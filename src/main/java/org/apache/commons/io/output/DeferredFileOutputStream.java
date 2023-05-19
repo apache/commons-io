@@ -72,6 +72,14 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
             setBufferSize(AbstractByteArrayOutputStream.DEFAULT_SIZE);
         }
 
+        /**
+         * Constructs a new instance.
+         * <p>
+         * This builder use the aspects threshold, outputFile, prefix, suffix, directory, buffer size.
+         * </p>
+         *
+         * @return a new instance.
+         */
         @Override
         public DeferredFileOutputStream get() {
             return new DeferredFileOutputStream(threshold, outputFile, prefix, suffix, directory, getBufferSize());
@@ -208,6 +216,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      * @param suffix            Suffix to use for the temporary file.
      * @param directory         Temporary file directory.
      * @param initialBufferSize The initial size of the in memory buffer.
+     * @throws IllegalArgumentException if initialBufferSize &lt; 0.
      */
     private DeferredFileOutputStream(final int threshold, final File outputFile, final String prefix, final String suffix, final File directory,
             final int initialBufferSize) {
@@ -216,8 +225,8 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
         this.prefix = prefix;
         this.suffix = suffix;
         this.directory = toPath(directory, PathUtils::getTempDirectory);
-        memoryOutputStream = new ByteArrayOutputStream(checkBufferSize(initialBufferSize));
-        currentOutputStream = memoryOutputStream;
+        this.memoryOutputStream = new ByteArrayOutputStream(checkBufferSize(initialBufferSize));
+        this.currentOutputStream = memoryOutputStream;
     }
 
     /**
