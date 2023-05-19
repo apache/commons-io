@@ -17,6 +17,7 @@
 
 package org.apache.commons.io.build;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -63,6 +64,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         public byte[] getByteArray() {
             // No conversion
             return get();
+        }
+
+        @Override
+        public InputStream getInputStream(final OpenOption... options) throws IOException {
+            return new ByteArrayInputStream(getByteArray());
         }
 
     }

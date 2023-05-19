@@ -51,6 +51,10 @@ public class MessageDigestCalculatingInputStreamTest {
                 messageDigestInputStream.consume();
                 assertArrayEquals(expect, messageDigestInputStream.getMessageDigest().digest());
             }
+            try (MessageDigestCalculatingInputStream messageDigestInputStream = MessageDigestCalculatingInputStream.builder().setByteArray(buffer).get()) {
+                messageDigestInputStream.consume();
+                assertArrayEquals(expect, messageDigestInputStream.getMessageDigest().digest());
+            }
         }
     }
 
