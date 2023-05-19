@@ -143,7 +143,7 @@ public class BOMInputStream extends ProxyInputStream {
          * {@link UnsupportedOperationException}.
          * </p>
          *
-         * @throws UnsupportedOperationException if the origin provide an InputStream.
+         * @throws UnsupportedOperationException if the origin cannot provide an InputStream.
          * @see AbstractOrigin#getInputStream(OpenOption...)
          */
         @SuppressWarnings("resource")
