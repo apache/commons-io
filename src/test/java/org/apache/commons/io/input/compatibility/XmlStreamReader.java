@@ -351,7 +351,7 @@ public class XmlStreamReader extends Reader {
      *        relaxed.
      * @throws IOException thrown if there is a problem reading the stream.
      * @throws XmlStreamReaderException thrown if the charset encoding could not
-     *         be determined according to the specs.
+     *         be determined according to the specification.
      */
     public XmlStreamReader(final InputStream inputStream, final boolean lenient) throws IOException,
             XmlStreamReaderException {
@@ -419,7 +419,7 @@ public class XmlStreamReader extends Reader {
      *        relaxed.
      * @throws IOException thrown if there is a problem reading the file.
      * @throws XmlStreamReaderException thrown if the charset encoding could not
-     *         be determined according to the specs.
+     *         be determined according to the specification.
      */
     public XmlStreamReader(final InputStream inputStream, final String httpContentType,
             final boolean lenient) throws IOException, XmlStreamReaderException {
@@ -458,7 +458,7 @@ public class XmlStreamReader extends Reader {
      * @param defaultEncoding the default encoding to use
      * @throws IOException thrown if there is a problem reading the file.
      * @throws XmlStreamReaderException thrown if the charset encoding could not
-     *         be determined according to the specs.
+     *         be determined according to the specification.
      */
     public XmlStreamReader(final InputStream inputStream, final String httpContentType,
             final boolean lenient, final String defaultEncoding) throws IOException,
