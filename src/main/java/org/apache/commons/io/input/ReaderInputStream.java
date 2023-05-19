@@ -31,6 +31,7 @@ import java.util.Objects;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.charset.CharsetEncoders;
 
@@ -103,8 +104,17 @@ public class ReaderInputStream extends InputStream {
 
         /**
          * Constructs a new instance.
+         * <p>
+         * This builder use the aspects Reader, Charset, CharsetEncoder, buffer size.
+         * </p>
+         * <p>
+         * You must provide an origin that can be converted to a Reader by this builder, otherwise, this call will throw an
+         * {@link UnsupportedOperationException}.
+         * </p>
          *
-         * @throws UnsupportedOperationException if the origin cannot be converted to a Reader.
+         * @return a new instance.
+         * @throws UnsupportedOperationException if the origin cannot provide a Reader.
+         * @see AbstractOrigin#getReader(Charset)
          */
         @SuppressWarnings("resource")
         @Override
