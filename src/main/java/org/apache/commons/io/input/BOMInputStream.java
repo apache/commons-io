@@ -125,7 +125,7 @@ public class BOMInputStream extends ProxyInputStream {
         private static final ByteOrderMark[] DEFAULT = { ByteOrderMark.UTF_8 };
 
         // for test access
-        static ByteOrderMark getDefaultBOM() {
+        static ByteOrderMark getDefaultByteOrderMark() {
             return DEFAULT[0];
         }
 
