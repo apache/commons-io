@@ -23,6 +23,7 @@ import java.io.RandomAccessFile;
 import java.util.Objects;
 
 import org.apache.commons.io.RandomAccessFileMode;
+import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
@@ -55,8 +56,19 @@ public class RandomAccessFileInputStream extends InputStream {
 
         /**
          * Constructs a new instance.
+         * <p>
+         * This builder use the aspects RandomAccessFile or File, and closeOnClose. Only set one of RandomAccessFile or an origin that can be converted to a
+         * File.
+         * </p>
+         * <p>
+         * If RandomAccessFile is not set, then you must provide an origin that can be converted to a File by this builder, otherwise, this call will throw an
+         * {@link UnsupportedOperationException}.
+         * </p>
          *
-         * @throws UnsupportedOperationException if the origin cannot be converted to a File.
+         * @return a new instance.
+         * @throws IllegalStateException if both RandomAccessFile and origin are set.
+         * @throws UnsupportedOperationException if the origin cannot provide a File.
+         * @see AbstractOrigin#getFile()
          */
         @SuppressWarnings("resource") // Caller closes depending on settings
         @Override
