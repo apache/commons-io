@@ -20,6 +20,7 @@ import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.OpenOption;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -27,6 +28,7 @@ import java.util.Objects;
 
 import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
@@ -133,8 +135,16 @@ public class BOMInputStream extends ProxyInputStream {
 
         /**
          * Constructs a new instance.
+         * <p>
+         * This builder use the aspects InputStream, include, and ByteOrderMark[].
+         * </p>
+         * <p>
+         * You must provide an origin that can be converted to an InputStream by this builder, otherwise, this call will throw an
+         * {@link UnsupportedOperationException}.
+         * </p>
          *
-         * @throws UnsupportedOperationException if the origin cannot be converted to an InputStream.
+         * @throws UnsupportedOperationException if the origin provide an InputStream.
+         * @see AbstractOrigin#getInputStream(OpenOption...)
          */
         @SuppressWarnings("resource")
         @Override
@@ -144,6 +154,9 @@ public class BOMInputStream extends ProxyInputStream {
 
         /**
          * Sets the ByteOrderMarks to detect and optionally exclude.
+         * <p>
+         * The default is {@link ByteOrderMark#UTF_8}.
+         * </p>
          *
          * @param byteOrderMarks the ByteOrderMarks to detect and optionally exclude.
          * @return this
@@ -155,6 +168,9 @@ public class BOMInputStream extends ProxyInputStream {
 
         /**
          * Sets whether to include the UTF-8 BOM (true) or to exclude it (false).
+         * <p>
+         * The default is false.
+         * </p>
          *
          * @param include true to include the UTF-8 BOM or false to exclude it. return this;
          * @return this
