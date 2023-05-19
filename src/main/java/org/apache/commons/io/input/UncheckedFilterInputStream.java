@@ -22,7 +22,9 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
+import java.nio.file.OpenOption;
 
+import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.function.Uncheck;
 
@@ -60,6 +62,20 @@ public final class UncheckedFilterInputStream extends FilterInputStream {
      */
     public static class Builder extends AbstractStreamBuilder<UncheckedFilterInputStream, Builder> {
 
+        /**
+         * Constructs a new instance.
+         * <p>
+         * This builder use the aspect InputStream.
+         * </p>
+         * <p>
+         * You must provide an origin that can be converted to an InputStream by this builder, otherwise, this call will throw an
+         * {@link UnsupportedOperationException}.
+         * </p>
+         *
+         * @return a new instance.
+         * @throws UnsupportedOperationException if the origin cannot provide an InputStream.
+         * @see AbstractOrigin#getInputStream(OpenOption...)
+         */
         @Override
         public UncheckedFilterInputStream get() {
             // This an unchecked class, so this method is as well.
