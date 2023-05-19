@@ -200,11 +200,12 @@ public class Tailer implements Runnable, AutoCloseable {
         private ExecutorService executorService = Executors.newSingleThreadExecutor(Builder::newDaemonThread);
 
         /**
-         * Builds and starts a new configured instance.
+         * Constructs a new instance.
+         * <p>
+         * This builder use the aspects tailable, Charset, TailerListener, delayDuration, end, reOpen, buffer size.
+         * </p>
          *
-         * The tailer is started if {@code startThread} is true.
-         *
-         * @return a new configured instance.
+         * @return a new instance.
          */
         @Override
         public Tailer get() {
