@@ -26,12 +26,14 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.OpenOption;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Matcher;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.input.XmlStreamReader;
 
@@ -69,8 +71,18 @@ public class XmlStreamWriter extends Writer {
 
         /**
          * Constructs a new instance.
+         * <p>
+         * This builder use the aspect OutputStream and Charset.
+         * </p>
+         * <p>
+         * You must provide an origin that can be converted to an OutputStream by this builder, otherwise, this call will throw an
+         * {@link UnsupportedOperationException}.
+         * </p>
          *
-         * @throws UnsupportedOperationException if the origin cannot be converted to an OutputStream.
+         * @return a new instance.
+         * @throws UnsupportedOperationException if the origin cannot provide an OutputStream.
+         * @throws IOException                   if an I/O error occurs.
+         * @see AbstractOrigin#getInputStream(OpenOption...)
          */
         @SuppressWarnings("resource")
         @Override
