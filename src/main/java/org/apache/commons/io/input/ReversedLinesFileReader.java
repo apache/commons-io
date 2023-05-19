@@ -36,6 +36,7 @@ import java.util.List;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileSystem;
 import org.apache.commons.io.StandardLineSeparator;
+import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
@@ -72,8 +73,17 @@ public class ReversedLinesFileReader implements Closeable {
 
         /**
          * Constructs a new instance.
+         * <p>
+         * This builder use the aspects Path, Charset, buffer size.
+         * </p>
+         * <p>
+         * You must provide an origin that can be converted to a Path by this builder, otherwise, this call will throw an
+         * {@link UnsupportedOperationException}.
+         * </p>
          *
-         * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
+         * @return a new instance.
+         * @throws UnsupportedOperationException if the origin cannot provide a Path.
+         * @see AbstractOrigin#getPath()
          */
         @Override
         public ReversedLinesFileReader get() throws IOException {
