@@ -24,6 +24,7 @@ import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.StandardOpenOption;
 import java.util.Random;
 
 import org.apache.commons.io.Charsets;
@@ -219,6 +220,7 @@ public class WriterOutputStreamTest {
                 .setCharset("us-ascii")
                 .setBufferSize(1024)
                 .setWriteImmediately(true)
+                .setOpenOptions(StandardOpenOption.CREATE, StandardOpenOption.READ, StandardOpenOption.WRITE)
                 .get()) {
             // @formatter:on
             out.write("abc".getBytes(StandardCharsets.US_ASCII));

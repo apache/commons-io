@@ -29,18 +29,21 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import org.apache.commons.io.RandomAccessFileMode;
 import org.junit.jupiter.api.Test;
 
 public class RandomAccessFileInputStreamTest {
 
-    private static final String DATA_FILE = "src/test/resources/org/apache/commons/io/test-file-iso8859-1.bin";
+    private static final String DATA_FILE_NAME = "src/test/resources/org/apache/commons/io/test-file-iso8859-1.bin";
+    private static final Path DATA_PATH = Paths.get(DATA_FILE_NAME);
     private static final int DATA_FILE_LEN = 1430;
 
     private RandomAccessFile createRandomAccessFile() throws FileNotFoundException {
-        return RandomAccessFileMode.READ_ONLY.create(DATA_FILE);
+        return RandomAccessFileMode.READ_ONLY.create(DATA_FILE_NAME);
     }
 
     @Test
@@ -63,7 +66,7 @@ public class RandomAccessFileInputStreamTest {
     @Test
     public void testBuilderFile() throws IOException {
         try (RandomAccessFile file = createRandomAccessFile()) {
-            try (RandomAccessFileInputStream inputStream = RandomAccessFileInputStream.builder().setFile(new File(DATA_FILE)).get()) {
+            try (RandomAccessFileInputStream inputStream = RandomAccessFileInputStream.builder().setFile(new File(DATA_FILE_NAME)).get()) {
                 assertFalse(inputStream.isCloseOnClose());
                 assertNotEquals(-1, inputStream.getRandomAccessFile().read());
             }
@@ -75,7 +78,20 @@ public class RandomAccessFileInputStreamTest {
     @Test
     public void testBuilderPath() throws IOException {
         try (RandomAccessFile file = createRandomAccessFile()) {
-            try (RandomAccessFileInputStream inputStream = RandomAccessFileInputStream.builder().setPath(Paths.get(DATA_FILE)).get()) {
+            try (RandomAccessFileInputStream inputStream = RandomAccessFileInputStream.builder().setPath(DATA_PATH).get()) {
+                assertFalse(inputStream.isCloseOnClose());
+                assertNotEquals(-1, inputStream.getRandomAccessFile().read());
+            }
+            file.read();
+        }
+    }
+
+    @SuppressWarnings("resource") // instance variable access
+    @Test
+    public void testBuilderPathOpenOptions() throws IOException {
+        try (RandomAccessFile file = createRandomAccessFile()) {
+            try (RandomAccessFileInputStream inputStream = RandomAccessFileInputStream.builder().setPath(DATA_PATH).setOpenOptions(StandardOpenOption.READ)
+                    .get()) {
                 assertFalse(inputStream.isCloseOnClose());
                 assertNotEquals(-1, inputStream.getRandomAccessFile().read());
             }

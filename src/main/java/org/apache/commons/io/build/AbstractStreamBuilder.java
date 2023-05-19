@@ -17,10 +17,16 @@
 
 package org.apache.commons.io.build;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Writer;
 import java.nio.charset.Charset;
+import java.nio.file.OpenOption;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.file.PathUtils;
 
 /**
  * Abstracts building a typed instance of {@code T}.
@@ -30,6 +36,8 @@ import org.apache.commons.io.IOUtils;
  * @since 2.12.0
  */
 public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T, B>> extends AbstractOriginSupplier<T, B> {
+
+    private static final OpenOption[] DEFAULT_OPEN_OPTIONS = PathUtils.EMPTY_OPEN_OPTION_ARRAY;
 
     /**
      * The buffer size, defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
@@ -50,6 +58,8 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * The Charset, defaults to {@link Charset#defaultCharset()}.
      */
     private Charset charsetDefault = Charset.defaultCharset();
+
+    private OpenOption[] openOptions = DEFAULT_OPEN_OPTIONS;
 
     /**
      * Gets the buffer size, defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
@@ -85,6 +95,49 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      */
     protected Charset getCharsetDefault() {
         return charsetDefault;
+    }
+
+    /**
+     * Gets an input stream from the origin with open options.
+     *
+     * @return An input stream
+     * @throws IOException                   if an I/O error occurs.
+     * @throws UnsupportedOperationException if the origin cannot be converted to an InputStream.
+     * @see AbstractOrigin#getInputStream(OpenOption...)
+     * @since 2.13.0
+     */
+    protected InputStream getInputStream() throws IOException {
+        return getOrigin().getInputStream(getOpenOptions());
+    }
+
+    protected OpenOption[] getOpenOptions() {
+        return openOptions;
+    }
+
+    /**
+     * Gets an output stream from the origin with open options.
+     *
+     * @return An input stream
+     * @throws IOException                   if an I/O error occurs.
+     * @throws UnsupportedOperationException if the origin cannot be converted to an OututStream.
+     * @see AbstractOrigin#getOutputStream(OpenOption...)
+     * @since 2.13.0
+     */
+    protected OutputStream getOutputStream() throws IOException {
+        return getOrigin().getOutputStream(getOpenOptions());
+    }
+
+    /**
+     * Gets an writer from the origin with open options.
+     *
+     * @return An writer.
+     * @throws IOException                   if an I/O error occurs.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a Writer.
+     * @see AbstractOrigin#getOutputStream(OpenOption...)
+     * @since 2.13.0
+     */
+    protected Writer getWriter() throws IOException {
+        return getOrigin().getWriter(getCharset(), getOpenOptions());
     }
 
     /**
@@ -167,6 +220,27 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      */
     protected B setCharsetDefault(final Charset defaultCharset) {
         this.charsetDefault = defaultCharset;
+        return asThis();
+    }
+
+    /**
+     * Sets the OpenOption[].
+     * <p>
+     * Normally used with InputStream, OutputStream, and Writer.
+     * </p>
+     * <p>
+     * Subclasses may ignore this setting.
+     * </p>
+     *
+     * @param openOptions the OpenOption[] name, null resets to the default.
+     * @return this.
+     * @since 2.13.0
+     * @see #setInputStream(InputStream)
+     * @see #setOutputStream(OutputStream)
+     * @see #setWriter(Writer)
+     */
+    public B setOpenOptions(final OpenOption... openOptions) {
+        this.openOptions = openOptions != null ? openOptions : DEFAULT_OPEN_OPTIONS;
         return asThis();
     }
 }

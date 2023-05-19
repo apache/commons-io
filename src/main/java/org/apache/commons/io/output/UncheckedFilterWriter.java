@@ -21,10 +21,7 @@ import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.io.Writer;
-import java.nio.charset.Charset;
-import java.nio.file.OpenOption;
 
-import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.function.Uncheck;
 
@@ -65,7 +62,7 @@ public final class UncheckedFilterWriter extends FilterWriter {
         /**
          * Constructs a new instance.
          * <p>
-         * This builder use the aspects Writer and Charset.
+         * This builder use the aspects Writer, OpenOption[], and Charset.
          * </p>
          * <p>
          * You must provide an origin that can be converted to a Writer by this builder, otherwise, this call will throw an
@@ -74,12 +71,12 @@ public final class UncheckedFilterWriter extends FilterWriter {
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a Writer.
-         * @see AbstractOrigin#getWriter(Charset, OpenOption...)
+         * @see #getWriter()
          */
         @SuppressWarnings("resource")
         @Override
         public UncheckedFilterWriter get() throws IOException {
-            return new UncheckedFilterWriter(getOrigin().getWriter(getCharset()));
+            return new UncheckedFilterWriter(getWriter());
         }
 
     }

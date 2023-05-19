@@ -26,11 +26,9 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.OpenOption;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.charset.CharsetDecoders;
 
@@ -108,7 +106,7 @@ public class WriterOutputStream extends OutputStream {
         /**
          * Constructs a new instance.
          * <p>
-         * This builder use the aspect Writer, Charset, CharsetDecoder, buffer size and writeImmediately.
+         * This builder use the aspect Writer, OpenOption[], Charset, CharsetDecoder, buffer size and writeImmediately.
          * </p>
          * <p>
          * You must provide an origin that can be converted to a Writer by this builder, otherwise, this call will throw an
@@ -117,12 +115,12 @@ public class WriterOutputStream extends OutputStream {
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a Writer.
-         * @see AbstractOrigin#getWriter(Charset, OpenOption...)
+         * @see #getWriter()
          */
         @SuppressWarnings("resource")
         @Override
         public WriterOutputStream get() throws IOException {
-            return new WriterOutputStream(getOrigin().getWriter(getCharset()), charsetDecoder, getBufferSize(), writeImmediately);
+            return new WriterOutputStream(getWriter(), charsetDecoder, getBufferSize(), writeImmediately);
         }
 
         @Override

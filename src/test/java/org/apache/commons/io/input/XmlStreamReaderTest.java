@@ -34,6 +34,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -200,6 +201,16 @@ public class XmlStreamReaderTest {
             // do nothing
         }
         try (XmlStreamReader reader = XmlStreamReader.builder().setFile("pom.xml").get()) {
+            // do nothing
+        }
+    }
+
+    @Test
+    protected void testConstructorFileInputOpenOptions() throws IOException {
+        try (XmlStreamReader reader = new XmlStreamReader(new File("pom.xml"))) {
+            // do nothing
+        }
+        try (XmlStreamReader reader = XmlStreamReader.builder().setFile("pom.xml").setOpenOptions(StandardOpenOption.READ).get()) {
             // do nothing
         }
     }

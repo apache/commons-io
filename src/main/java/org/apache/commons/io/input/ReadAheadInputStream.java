@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
 import java.nio.ByteBuffer;
-import java.nio.file.OpenOption;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -31,7 +30,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
@@ -71,7 +69,7 @@ public class ReadAheadInputStream extends FilterInputStream {
         /**
          * Constructs a new instance.
          * <p>
-         * This builder use the aspects InputStream, buffer size, ExecutorService.
+         * This builder use the aspects InputStream, OpenOption[], buffer size, ExecutorService.
          * </p>
          * <p>
          * You must provide an origin that can be converted to an InputStream by this builder, otherwise, this call will throw an
@@ -80,12 +78,12 @@ public class ReadAheadInputStream extends FilterInputStream {
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide an InputStream.
-         * @see AbstractOrigin#getInputStream(OpenOption...)
+         * @see #getInputStream()
          */
         @SuppressWarnings("resource")
         @Override
         public ReadAheadInputStream get() throws IOException {
-            return new ReadAheadInputStream(getOrigin().getInputStream(), getBufferSize(), executorService != null ? executorService : newExecutorService(),
+            return new ReadAheadInputStream(getInputStream(), getBufferSize(), executorService != null ? executorService : newExecutorService(),
                     executorService == null);
         }
 

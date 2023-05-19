@@ -30,7 +30,6 @@ import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.Locale;
@@ -41,7 +40,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.output.XmlStreamWriter;
@@ -123,7 +121,7 @@ public class XmlStreamReader extends Reader {
         /**
          * Constructs a new instance.
          * <p>
-         * This builder use the aspect InputStream, httpContentType, lenient, and defaultEncoding.
+         * This builder use the aspect InputStream, OpenOption[], httpContentType, lenient, and defaultEncoding.
          * </p>
          * <p>
          * You must provide an origin that can be converted to an InputStream by this builder, otherwise, this call will throw an
@@ -134,7 +132,7 @@ public class XmlStreamReader extends Reader {
          * @throws UnsupportedOperationException if the origin cannot provide an InputStream.
          * @throws IOException                   thrown if there is a problem reading the stream.
          * @throws XmlStreamReaderException      thrown if the charset encoding could not be determined according to the specification.
-         * @see AbstractOrigin#getInputStream(OpenOption...)
+         * @see #getInputStream()
          */
         @SuppressWarnings("resource")
         @Override
@@ -142,8 +140,8 @@ public class XmlStreamReader extends Reader {
             final String defaultEncoding = nullCharset ? null : getCharset().name();
             // @formatter:off
             return httpContentType == null
-                    ? new XmlStreamReader(getOrigin().getInputStream(), lenient, defaultEncoding)
-                    : new XmlStreamReader(getOrigin().getInputStream(), httpContentType, lenient, defaultEncoding);
+                    ? new XmlStreamReader(getInputStream(), lenient, defaultEncoding)
+                    : new XmlStreamReader(getInputStream(), httpContentType, lenient, defaultEncoding);
             // @formatter:on
         }
 

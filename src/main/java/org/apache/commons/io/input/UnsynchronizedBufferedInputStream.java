@@ -20,10 +20,8 @@ package org.apache.commons.io.input;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.OpenOption;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
@@ -82,7 +80,7 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
         /**
          * Constructs a new instance.
          * <p>
-         * This builder use the aspects InputStream and buffer size.
+         * This builder use the aspects InputStream, OpenOption[] and buffer size.
          * </p>
          * <p>
          * You must provide an origin that can be converted to an InputStream by this builder, otherwise, this call will throw an
@@ -91,12 +89,12 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide an InputStream.
-         * @see AbstractOrigin#getInputStream(OpenOption...)
+         * @see #getInputStream()
          */
         @SuppressWarnings("resource") // Caller closes.
         @Override
         public UnsynchronizedBufferedInputStream get() throws IOException {
-            return new UnsynchronizedBufferedInputStream(getOrigin().getInputStream(), getBufferSize());
+            return new UnsynchronizedBufferedInputStream(getInputStream(), getBufferSize());
         }
 
     }

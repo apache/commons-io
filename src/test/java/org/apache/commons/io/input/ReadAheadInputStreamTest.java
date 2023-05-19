@@ -18,6 +18,7 @@ package org.apache.commons.io.input;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.StandardOpenOption;
 
 import org.junit.jupiter.api.BeforeEach;
 
@@ -54,6 +55,7 @@ public class ReadAheadInputStreamTest extends AbstractInputStreamTest {
                 // Tests unaligned buffers, wrapped bigger than outer.
                 ReadAheadInputStream.builder().setInputStream(new BufferedFileChannelInputStream(inputFile, 321)).setBufferSize(123).get(),
                 // Tests unaligned buffers, wrapped smaller than outer.
-                ReadAheadInputStream.builder().setInputStream(new BufferedFileChannelInputStream(inputFile, 123)).setBufferSize(321).get() };
+                ReadAheadInputStream.builder().setInputStream(new BufferedFileChannelInputStream(inputFile, 123)).setBufferSize(321).get(),
+                ReadAheadInputStream.builder().setPath(inputFile).setOpenOptions(StandardOpenOption.READ).get() };
     }
 }

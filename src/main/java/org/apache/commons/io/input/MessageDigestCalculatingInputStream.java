@@ -18,12 +18,10 @@ package org.apache.commons.io.input;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.OpenOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Provider;
 
-import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
@@ -75,7 +73,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
         /**
          * Constructs a new instance.
          * <p>
-         * This builder use the aspects InputStream and MessageDigest.
+         * This builder use the aspects InputStream, OpenOption[], and MessageDigest.
          * </p>
          * <p>
          * You must provide an origin that can be converted to an InputStream by this builder, otherwise, this call will throw an
@@ -84,12 +82,12 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide an InputStream.
-         * @see AbstractOrigin#getInputStream(OpenOption...)
+         * @see #getInputStream()
          */
         @SuppressWarnings("resource")
         @Override
         public MessageDigestCalculatingInputStream get() throws IOException {
-            return new MessageDigestCalculatingInputStream(getOrigin().getInputStream(), messageDigest);
+            return new MessageDigestCalculatingInputStream(getInputStream(), messageDigest);
         }
 
         /**

@@ -18,6 +18,7 @@ package org.apache.commons.io.input;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.StandardOpenOption;
 
 import org.junit.jupiter.api.BeforeEach;
 
@@ -40,7 +41,8 @@ public class BufferedFileChannelInputStreamTest extends AbstractInputStreamTest 
             new BufferedFileChannelInputStream(inputFile, 123), // small, unaligned buffer size
             BufferedFileChannelInputStream.builder().setPath(inputFile).get(), // default
             BufferedFileChannelInputStream.builder().setPath(inputFile).setBufferSize(123).get(), // small, unaligned buffer size
-            BufferedFileChannelInputStream.builder().setURI(inputFile.toUri()).setBufferSize(1024).get() // URI and buffer size
+            BufferedFileChannelInputStream.builder().setURI(inputFile.toUri()).setBufferSize(1024).get(), // URI and buffer size
+            BufferedFileChannelInputStream.builder().setPath(inputFile).setOpenOptions(StandardOpenOption.READ).get(), // open options
         };
         //@formatter:on
     }

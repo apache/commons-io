@@ -20,7 +20,6 @@ import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.OpenOption;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -28,7 +27,6 @@ import java.util.Objects;
 
 import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
@@ -136,7 +134,7 @@ public class BOMInputStream extends ProxyInputStream {
         /**
          * Constructs a new instance.
          * <p>
-         * This builder use the aspects InputStream, include, and ByteOrderMark[].
+         * This builder use the aspects InputStream, OpenOption[], include, and ByteOrderMark[].
          * </p>
          * <p>
          * You must provide an origin that can be converted to an InputStream by this builder, otherwise, this call will throw an
@@ -145,12 +143,12 @@ public class BOMInputStream extends ProxyInputStream {
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide an InputStream.
-         * @see AbstractOrigin#getInputStream(OpenOption...)
+         * @see #getInputStream()
          */
         @SuppressWarnings("resource")
         @Override
         public BOMInputStream get() throws IOException {
-            return new BOMInputStream(getOrigin().getInputStream(), include, byteOrderMarks);
+            return new BOMInputStream(getInputStream(), include, byteOrderMarks);
         }
 
         /**
