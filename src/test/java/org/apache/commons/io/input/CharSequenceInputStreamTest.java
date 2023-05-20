@@ -396,6 +396,33 @@ public class CharSequenceInputStreamTest {
         }
     }
 
+    private void testResetBeforeEnd(final CharSequenceInputStream inputStream) throws IOException {
+        inputStream.mark(1);
+        assertEquals('1', inputStream.read());
+        inputStream.reset();
+        assertEquals('1', inputStream.read());
+        assertEquals('2', inputStream.read());
+        inputStream.reset();
+        assertEquals('1', inputStream.read());
+        assertEquals('2', inputStream.read());
+        assertEquals('3', inputStream.read());
+        inputStream.reset();
+        assertEquals('1', inputStream.read());
+        assertEquals('2', inputStream.read());
+        assertEquals('3', inputStream.read());
+        assertEquals('4', inputStream.read());
+        inputStream.reset();
+        assertEquals('1', inputStream.read());
+    }
+
+    @Test
+    @Disabled("[IO-795] CharSequenceInputStream.reset() only works once")
+    public void testResetBeforeEndSetCharSequence() throws IOException {
+        try (final CharSequenceInputStream inputStream = CharSequenceInputStream.builder().setCharSequence("1234").get()) {
+            testResetBeforeEnd(inputStream);
+        }
+    }
+
     private void testSingleByteRead(final String testString, final String charsetName) throws IOException {
         final byte[] bytes = testString.getBytes(charsetName);
         try (InputStream in = new CharSequenceInputStream(testString, charsetName, 512)) {
