@@ -33,6 +33,7 @@ import java.util.Objects;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractStreamBuilder;
+import org.apache.commons.io.function.Uncheck;
 
 /**
  * Implements an {@link InputStream} to read from String, StringBuffer, StringBuilder or CharBuffer.
@@ -62,12 +63,10 @@ public class CharSequenceInputStream extends InputStream {
      */
     public static class Builder extends AbstractStreamBuilder<CharSequenceInputStream, Builder> {
 
-        private CharSequence source;
-
         /**
          * Constructs a new instance.
          * <p>
-         * This builder use the aspects the buffer size, CharSequence, and Charset.
+         * This builder use the aspects the CharSequence, buffer size, and Charset.
          * </p>
          *
          * @return a new instance.
@@ -75,18 +74,7 @@ public class CharSequenceInputStream extends InputStream {
          */
         @Override
         public CharSequenceInputStream get() {
-            return new CharSequenceInputStream(source, getCharset(), getBufferSize());
-        }
-
-        /**
-         * Sets the non-null CharSequence.
-         *
-         * @param source The source string, MUST not be null.
-         * @return this.
-         */
-        public Builder setCharSequence(final CharSequence source) {
-            this.source = Objects.requireNonNull(source, "source");
-            return this;
+            return Uncheck.get(() -> new CharSequenceInputStream(getCharSequence(), getCharset(), getBufferSize()));
         }
 
     }
@@ -292,7 +280,7 @@ public class CharSequenceInputStream extends InputStream {
         //
         // Since the bBuf is re-used, in general it's necessary to re-encode the data.
         //
-        // It should be possible to apply some optimisations however:
+        // It should be possible to apply some optimizations however:
         // + use mark/reset on the cBuf and bBuf. This would only work if the buffer had not been (re)filled since
         // the mark. The code would have to catch InvalidMarkException - does not seem possible to check if mark is
         // valid otherwise. + Try saving the state of the cBuf before each fillBuffer; it might be possible to

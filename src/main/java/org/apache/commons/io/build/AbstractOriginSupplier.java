@@ -28,6 +28,7 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 import org.apache.commons.io.build.AbstractOrigin.ByteArrayOrigin;
+import org.apache.commons.io.build.AbstractOrigin.CharSequenceOrigin;
 import org.apache.commons.io.build.AbstractOrigin.FileOrigin;
 import org.apache.commons.io.build.AbstractOrigin.InputStreamOrigin;
 import org.apache.commons.io.build.AbstractOrigin.OutputStreamOrigin;
@@ -48,18 +49,29 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
     /**
      * Creates a new byte array origin for a byte array.
      *
-     * @param origin the file.
-     * @return a new file origin
+     * @param origin the byte array.
+     * @return a new byte array origin.
      */
     protected static ByteArrayOrigin newByteArrayOrigin(final byte[] origin) {
         return new ByteArrayOrigin(origin);
     }
 
     /**
+     * Creates a new CharSequence origin for a CharSequence.
+     *
+     * @param origin the CharSequence.
+     * @return a new file origin.
+     * @since 2.13.0
+     */
+    protected static CharSequenceOrigin newCharSequenceOrigin(final CharSequence origin) {
+        return new CharSequenceOrigin(origin);
+    }
+
+    /**
      * Creates a new file origin for a file.
      *
      * @param origin the file.
-     * @return a new file origin
+     * @return a new file origin.
      */
     protected static FileOrigin newFileOrigin(final File origin) {
         return new FileOrigin(origin);
@@ -69,7 +81,7 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
      * Creates a new file origin for a file path.
      *
      * @param origin the file path.
-     * @return a new file origin
+     * @return a new file origin.
      */
     protected static FileOrigin newFileOrigin(final String origin) {
         return new FileOrigin(new File(origin));
@@ -79,7 +91,7 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
      * Creates a new input stream origin for a file.
      *
      * @param origin the input stream.
-     * @return a new input stream origin
+     * @return a new input stream origin.
      */
     protected static InputStreamOrigin newInputStreamOrigin(final InputStream origin) {
         return new InputStreamOrigin(origin);
@@ -89,7 +101,7 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
      * Creates a new output stream origin for a file.
      *
      * @param origin the output stream.
-     * @return a new output stream origin
+     * @return a new output stream origin.
      */
     protected static OutputStreamOrigin newOutputStreamOrigin(final OutputStream origin) {
         return new OutputStreamOrigin(origin);
@@ -99,7 +111,7 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
      * Creates a new path origin for a file.
      *
      * @param origin the path.
-     * @return a new path origin
+     * @return a new path origin.
      */
     protected static PathOrigin newPathOrigin(final Path origin) {
         return new PathOrigin(origin);
@@ -109,7 +121,7 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
      * Creates a new path name origin for a path name.
      *
      * @param origin the path name.
-     * @return a new path name origin
+     * @return a new path name origin.
      */
     protected static PathOrigin newPathOrigin(final String origin) {
         return new PathOrigin(Paths.get(origin));
@@ -119,7 +131,7 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
      * Creates a new reader origin for a reader.
      *
      * @param origin the reader.
-     * @return a new reader origin
+     * @return a new reader origin.
      */
     protected static ReaderOrigin newReaderOrigin(final Reader origin) {
         return new ReaderOrigin(origin);
@@ -129,7 +141,7 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
      * Creates a new reader origin for a URI.
      *
      * @param origin the URI.
-     * @return a new URI origin
+     * @return a new URI origin.
      */
     protected static URIOrigin newURIOrigin(final URI origin) {
         return new URIOrigin(origin);
@@ -139,7 +151,7 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
      * Creates a new writer origin for a file.
      *
      * @param origin the writer.
-     * @return a new writer origin
+     * @return a new writer .
      */
     protected static WriterOrigin newWriterOrigin(final Writer origin) {
         return new WriterOrigin(origin);
@@ -186,6 +198,17 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
      */
     public B setByteArray(final byte[] origin) {
         return setOrigin(newByteArrayOrigin(origin));
+    }
+
+    /**
+     * Sets a new origin.
+     *
+     * @param origin the new origin.
+     * @return this
+     * @since 2.13.0
+     */
+    public B setCharSequence(final CharSequence origin) {
+        return setOrigin(newCharSequenceOrigin(origin));
     }
 
     /**

@@ -21,6 +21,8 @@ import static org.apache.commons.io.IOUtils.EOF;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.commons.io.build.AbstractStreamBuilder;
+
 /**
  * Proxy stream that closes and discards the underlying stream as soon as the
  * end of input has been reached or when the stream is explicitly closed.
@@ -39,10 +41,62 @@ import java.io.InputStream;
 public class AutoCloseInputStream extends ProxyInputStream {
 
     /**
+     * Builds a new {@link AutoCloseInputStream} instance.
+     * <p>
+     * For example:
+     * </p>
+     *
+     * <pre>{@code
+     * AutoCloseInputStream s = AutoCloseInputStream.builder()
+     *   .setPath(path)
+     *   .get();}
+     * </pre>
+     *
+     * <pre>{@code
+     * AutoCloseInputStream s = AutoCloseInputStream.builder()
+     *   .setInputStream(inputStream)
+     *   .get();}
+     * </pre>
+     *
+     * @since 2.13.0
+     */
+    public static class Builder extends AbstractStreamBuilder<AutoCloseInputStream, Builder> {
+
+        /**
+         * Constructs a new instance.
+         * <p>
+         * This builder use the aspect InputStream.
+         * </p>
+         *
+         * @return a new instance.
+         * @throws IOException              if an I/O error occurs.
+         * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character.
+         */
+        @SuppressWarnings("resource") // Caller closes
+        @Override
+        public AutoCloseInputStream get() throws IOException {
+            return new AutoCloseInputStream(getInputStream());
+        }
+
+    }
+
+    /**
+     * Constructs a new {@link Builder}.
+     *
+     * @return a new {@link Builder}.
+     * @since 2.12.0
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    /**
      * Creates an automatically closing proxy for the given input stream.
      *
      * @param in underlying input stream
+     * @deprecated Use {@link #builder()} and {@link Builder#get()}
      */
+    @Deprecated
     public AutoCloseInputStream(final InputStream in) {
         super(in);
     }

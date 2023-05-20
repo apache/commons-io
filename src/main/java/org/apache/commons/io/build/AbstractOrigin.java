@@ -68,7 +68,37 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public InputStream getInputStream(final OpenOption... options) throws IOException {
-            return new ByteArrayInputStream(getByteArray());
+            return new ByteArrayInputStream(origin);
+        }
+
+    }
+
+    /**
+     * A {@link CharSequence} origin.
+     */
+    public static class CharSequenceOrigin extends AbstractOrigin<CharSequence, CharSequenceOrigin> {
+
+        /**
+         * Constructs a new instance for the given origin.
+         *
+         * @param origin The origin.
+         */
+        public CharSequenceOrigin(final CharSequence origin) {
+            super(origin);
+        }
+
+        @Override
+        public CharSequence getCharSequence(final Charset charset) {
+            // No conversion
+            return get();
+        }
+
+        @Override
+        public InputStream getInputStream(final OpenOption... options) throws IOException {
+            // TODO Pass in a Charset? Consider if call sites actually need this.
+            return new ByteArrayInputStream(origin.toString().getBytes(Charset.defaultCharset()));
+            // Needs [IO-795] CharSequenceInputStream.reset() only works once.
+            // return CharSequenceInputStream.builder().setCharSequence(getCharSequence(Charset.defaultCharset())).get();
         }
 
     }
@@ -290,6 +320,18 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      */
     public byte[] getByteArray() throws IOException {
         return Files.readAllBytes(getPath());
+    }
+
+    /**
+     * Gets this origin as a byte array, if possible.
+     *
+     * @param charset The charset to use if conversion from bytes is needed.
+     * @return this origin as a byte array, if possible.
+     * @throws IOException if an I/O error occurs.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
+     */
+    public CharSequence getCharSequence(final Charset charset) throws IOException {
+        return new String(getByteArray(), charset);
     }
 
     /**

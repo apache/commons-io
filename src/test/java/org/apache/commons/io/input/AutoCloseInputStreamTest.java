@@ -39,7 +39,7 @@ public class AutoCloseInputStreamTest {
 
     @BeforeEach
     public void setUp() {
-        data = new byte[] {'x', 'y', 'z'};
+        data = new byte[] { 'x', 'y', 'z' };
         stream = new AutoCloseInputStream(new ByteArrayInputStream(data) {
             @Override
             public void close() {
@@ -106,9 +106,34 @@ public class AutoCloseInputStreamTest {
     }
 
     @Test
-    public void testResetBeforeEnd() throws IOException {
-        final String inputStr = "1234";
-        final AutoCloseInputStream inputStream = new AutoCloseInputStream(new ByteArrayInputStream(inputStr.getBytes()));
+    public void testResetBeforeEndCtor() throws IOException {
+        try (final AutoCloseInputStream inputStream = new AutoCloseInputStream(new ByteArrayInputStream("1234".getBytes()))) {
+            testResetBeforeEnd(inputStream);
+        }
+    }
+
+    @Test
+    public void testResetBeforeEndSetInputStream() throws IOException {
+        try (final AutoCloseInputStream inputStream = AutoCloseInputStream.builder().setInputStream(new ByteArrayInputStream("1234".getBytes())).get()) {
+            testResetBeforeEnd(inputStream);
+        }
+    }
+
+    @Test
+    public void testResetBeforeEndSetByteArray() throws IOException {
+        try (final AutoCloseInputStream inputStream = AutoCloseInputStream.builder().setByteArray("1234".getBytes()).get()) {
+            testResetBeforeEnd(inputStream);
+        }
+    }
+
+    @Test
+    public void testResetBeforeEndSetCharSequence() throws IOException {
+        try (final AutoCloseInputStream inputStream = AutoCloseInputStream.builder().setCharSequence("1234").get()) {
+            testResetBeforeEnd(inputStream);
+        }
+    }
+
+    private void testResetBeforeEnd(final AutoCloseInputStream inputStream) throws IOException {
         inputStream.mark(1);
         assertEquals('1', inputStream.read());
         inputStream.reset();

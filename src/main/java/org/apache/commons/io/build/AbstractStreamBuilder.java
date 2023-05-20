@@ -80,6 +80,19 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     }
 
     /**
+     * Gets a CharSequence from the origin with a Charset.
+     *
+     * @return An input stream
+     * @throws IOException                   if an I/O error occurs.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a CharSequence.
+     * @see AbstractOrigin#getCharSequence(Charset)
+     * @since 2.13.0
+     */
+    protected CharSequence getCharSequence() throws IOException {
+        return getOrigin().getCharSequence(getCharset());
+    }
+
+    /**
      * Gets the Charset, defaults to {@link Charset#defaultCharset()}.
      *
      * @return the Charset, defaults to {@link Charset#defaultCharset()}.
