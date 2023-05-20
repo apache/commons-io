@@ -166,10 +166,13 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
      * Checks whether the origin is null.
      *
      * @return the origin.
-     * @throws NullPointerException if the {@code origin} is {@code null}
+     * @throws IllegalStateException if the {@code origin} is {@code null}.
      */
     protected AbstractOrigin<?, ?> checkOrigin() {
-        return Objects.requireNonNull(origin, "origin");
+        if (origin == null) {
+            throw new IllegalStateException("origin == null");
+        }
+        return origin;
     }
 
     /**

@@ -78,12 +78,13 @@ public final class UncheckedBufferedReader extends BufferedReader {
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a Reader.
+         * @throws IllegalStateException if the {@code origin} is {@code null}.
          * @see AbstractOrigin#getReader(Charset)
          */
         @Override
         public UncheckedBufferedReader get() {
             // This an unchecked class, so this method is as well.
-            return Uncheck.get(() -> new UncheckedBufferedReader(getOrigin().getReader(getCharset()), getBufferSize()));
+            return Uncheck.get(() -> new UncheckedBufferedReader(checkOrigin().getReader(getCharset()), getBufferSize()));
         }
 
     }

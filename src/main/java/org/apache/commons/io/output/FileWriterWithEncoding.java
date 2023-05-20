@@ -94,6 +94,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a File.
+         * @throws IllegalStateException if the {@code origin} is {@code null}.
          * @see AbstractOrigin#getFile()
          */
         @SuppressWarnings("resource")
@@ -103,7 +104,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
                 throw new IllegalStateException(String.format("Mismatched Charset(%s) and CharsetEncoder(%s)", getCharset(), charsetEncoder.charset()));
             }
             final Object encoder = charsetEncoder != null ? charsetEncoder : getCharset();
-            return new FileWriterWithEncoding(FileWriterWithEncoding.initWriter(getOrigin().getFile(), encoder, append));
+            return new FileWriterWithEncoding(FileWriterWithEncoding.initWriter(checkOrigin().getFile(), encoder, append));
         }
 
         /**

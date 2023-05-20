@@ -23,6 +23,7 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.file.OpenOption;
+import java.nio.file.Path;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
@@ -85,11 +86,12 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @return An input stream
      * @throws IOException                   if an I/O error occurs.
      * @throws UnsupportedOperationException if the origin cannot be converted to a CharSequence.
+     * @throws IllegalStateException if the {@code origin} is {@code null}.
      * @see AbstractOrigin#getCharSequence(Charset)
      * @since 2.13.0
      */
     protected CharSequence getCharSequence() throws IOException {
-        return getOrigin().getCharSequence(getCharset());
+        return checkOrigin().getCharSequence(getCharset());
     }
 
     /**
@@ -117,10 +119,11 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @throws IOException                   if an I/O error occurs.
      * @throws UnsupportedOperationException if the origin cannot be converted to an InputStream.
      * @see AbstractOrigin#getInputStream(OpenOption...)
+     * @throws IllegalStateException if the {@code origin} is {@code null}.
      * @since 2.13.0
      */
     protected InputStream getInputStream() throws IOException {
-        return getOrigin().getInputStream(getOpenOptions());
+        return checkOrigin().getInputStream(getOpenOptions());
     }
 
     protected OpenOption[] getOpenOptions() {
@@ -128,16 +131,30 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     }
 
     /**
-     * Gets an output stream from the origin with open options.
+     * Gets an OutputStream from the origin with open options.
      *
-     * @return An input stream
+     * @return An OutputStream
      * @throws IOException                   if an I/O error occurs.
      * @throws UnsupportedOperationException if the origin cannot be converted to an OututStream.
+     * @throws IllegalStateException if the {@code origin} is {@code null}.
      * @see AbstractOrigin#getOutputStream(OpenOption...)
      * @since 2.13.0
      */
     protected OutputStream getOutputStream() throws IOException {
-        return getOrigin().getOutputStream(getOpenOptions());
+        return checkOrigin().getOutputStream(getOpenOptions());
+    }
+
+    /**
+     * Gets a Path from the origin.
+     *
+     * @return A Path
+     * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
+     * @throws IllegalStateException if the {@code origin} is {@code null}.
+     * @see AbstractOrigin#getPath()
+     * @since 2.13.0
+     */
+    protected Path getPath() {
+        return checkOrigin().getPath();
     }
 
     /**
@@ -146,15 +163,16 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @return An writer.
      * @throws IOException                   if an I/O error occurs.
      * @throws UnsupportedOperationException if the origin cannot be converted to a Writer.
+     * @throws IllegalStateException if the {@code origin} is {@code null}.
      * @see AbstractOrigin#getOutputStream(OpenOption...)
      * @since 2.13.0
      */
     protected Writer getWriter() throws IOException {
-        return getOrigin().getWriter(getCharset(), getOpenOptions());
+        return checkOrigin().getWriter(getCharset(), getOpenOptions());
     }
 
     /**
-     * Sets the buffer size.
+     * Sets the buffer size. Invalid input (bufferSize &lt;= 0) resets the value to its default.
      * <p>
      * Subclasses may ignore this setting.
      * </p>
@@ -163,7 +181,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @return this.
      */
     public B setBufferSize(final int bufferSize) {
-        this.bufferSize = bufferSize >= 0 ? bufferSize : bufferSizeDefault;
+        this.bufferSize = bufferSize > 0 ? bufferSize : bufferSizeDefault;
         return asThis();
     }
 

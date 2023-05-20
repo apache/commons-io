@@ -87,11 +87,12 @@ public class LockableFileWriter extends Writer {
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a File.
+         * @throws IllegalStateException if the {@code origin} is {@code null}.
          * @see AbstractOrigin#getFile()
          */
         @Override
         public LockableFileWriter get() throws IOException {
-            return new LockableFileWriter(getOrigin().getFile(), getCharset(), append, lockDirectory.getFile().toString());
+            return new LockableFileWriter(checkOrigin().getFile(), getCharset(), append, lockDirectory.getFile().toString());
         }
 
         /**

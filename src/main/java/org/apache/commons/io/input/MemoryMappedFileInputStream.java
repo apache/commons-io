@@ -108,7 +108,7 @@ public final class MemoryMappedFileInputStream extends InputStream {
          */
         @Override
         public MemoryMappedFileInputStream get() throws IOException {
-            return new MemoryMappedFileInputStream(getOrigin().getPath(), getBufferSize());
+            return new MemoryMappedFileInputStream(getPath(), getBufferSize());
         }
     }
 

@@ -86,7 +86,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
          */
         @Override
         public BufferedFileChannelInputStream get() throws IOException {
-            return new BufferedFileChannelInputStream(getOrigin().getPath(), getBufferSize());
+            return new BufferedFileChannelInputStream(getPath(), getBufferSize());
         }
 
     }

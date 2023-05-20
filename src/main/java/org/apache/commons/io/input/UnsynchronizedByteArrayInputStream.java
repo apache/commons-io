@@ -92,11 +92,12 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a byte[].
+         * @throws IllegalStateException if the {@code origin} is {@code null}.
          * @see AbstractOrigin#getByteArray()
          */
         @Override
         public UnsynchronizedByteArrayInputStream get() throws IOException {
-            return new UnsynchronizedByteArrayInputStream(getOrigin().getByteArray(), offset, length);
+            return new UnsynchronizedByteArrayInputStream(checkOrigin().getByteArray(), offset, length);
         }
 
         @Override

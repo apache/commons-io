@@ -114,12 +114,13 @@ public class ReaderInputStream extends InputStream {
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a Reader.
+         * @throws IllegalStateException if the {@code origin} is {@code null}.
          * @see AbstractOrigin#getReader(Charset)
          */
         @SuppressWarnings("resource")
         @Override
         public ReaderInputStream get() throws IOException {
-            return new ReaderInputStream(getOrigin().getReader(getCharset()), charsetEncoder, getBufferSize());
+            return new ReaderInputStream(checkOrigin().getReader(getCharset()), charsetEncoder, getBufferSize());
         }
 
         @Override

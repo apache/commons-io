@@ -87,7 +87,7 @@ public class ReversedLinesFileReader implements Closeable {
          */
         @Override
         public ReversedLinesFileReader get() throws IOException {
-            return new ReversedLinesFileReader(getOrigin().getPath(), getBufferSize(), getCharset());
+            return new ReversedLinesFileReader(getPath(), getBufferSize(), getCharset());
         }
 
     }

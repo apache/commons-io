@@ -74,12 +74,13 @@ public final class UncheckedFilterReader extends FilterReader {
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a Reader.
+         * @throws IllegalStateException if the {@code origin} is {@code null}.
          * @see AbstractOrigin#getReader(Charset)
          */
         @Override
         public UncheckedFilterReader get() {
             // This an unchecked class, so this method is as well.
-            return Uncheck.get(() -> new UncheckedFilterReader(getOrigin().getReader(getCharset())));
+            return Uncheck.get(() -> new UncheckedFilterReader(checkOrigin().getReader(getCharset())));
         }
 
     }

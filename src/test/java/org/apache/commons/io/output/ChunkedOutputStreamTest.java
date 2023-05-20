@@ -30,21 +30,6 @@ import org.junit.jupiter.api.Test;
  */
 public class ChunkedOutputStreamTest {
 
-    @Test
-    public void defaultConstructor() throws IOException {
-        final AtomicInteger numWrites = new AtomicInteger();
-        try (ByteArrayOutputStream baos = newByteArrayOutputStream(numWrites);
-            final ChunkedOutputStream chunked = new ChunkedOutputStream(baos)) {
-            chunked.write(new byte[IOUtils.DEFAULT_BUFFER_SIZE + 1]);
-            assertEquals(2, numWrites.get());
-        }
-    }
-
-    @Test
-    public void negative_chunkSize_not_permitted() {
-        assertThrows(IllegalArgumentException.class, () -> new ChunkedOutputStream(new ByteArrayOutputStream(), 0));
-    }
-
     private ByteArrayOutputStream newByteArrayOutputStream(final AtomicInteger numWrites) {
         return new ByteArrayOutputStream() {
             @Override
@@ -56,12 +41,51 @@ public class ChunkedOutputStreamTest {
     }
 
     @Test
-    public void write_four_chunks() throws Exception {
+    public void testDefaultBuilder() throws IOException {
         final AtomicInteger numWrites = new AtomicInteger();
         try (ByteArrayOutputStream baos = newByteArrayOutputStream(numWrites);
-            final ChunkedOutputStream chunked = new ChunkedOutputStream(baos, 10)) {
+                final ChunkedOutputStream chunked = ChunkedOutputStream.builder().setOutputStream(baos).get()) {
+            chunked.write(new byte[IOUtils.DEFAULT_BUFFER_SIZE + 1]);
+            assertEquals(2, numWrites.get());
+        }
+        assertThrows(IllegalStateException.class, () -> ChunkedOutputStream.builder().get());
+    }
+
+    @Test
+    public void testDefaultConstructor() throws IOException {
+        final AtomicInteger numWrites = new AtomicInteger();
+        try (ByteArrayOutputStream baos = newByteArrayOutputStream(numWrites);
+                final ChunkedOutputStream chunked = new ChunkedOutputStream(baos)) {
+            chunked.write(new byte[IOUtils.DEFAULT_BUFFER_SIZE + 1]);
+            assertEquals(2, numWrites.get());
+        }
+    }
+
+    @Test
+    public void testNegativeChunkSize() throws IOException {
+        assertThrows(IllegalArgumentException.class, () -> new ChunkedOutputStream(new ByteArrayOutputStream(), -1));
+        // Builder resets invalid input to the default.
+        try (ChunkedOutputStream os = ChunkedOutputStream.builder().setOutputStream(new ByteArrayOutputStream()).setBufferSize(-1).get()) {
+            assertEquals(IOUtils.DEFAULT_BUFFER_SIZE, os.getChunkSize());
+        }
+    }
+
+    @Test
+    public void testWriteFourChunks() throws Exception {
+        final AtomicInteger numWrites = new AtomicInteger();
+        try (ByteArrayOutputStream baos = newByteArrayOutputStream(numWrites);
+                final ChunkedOutputStream chunked = new ChunkedOutputStream(baos, 10)) {
             chunked.write("0123456789012345678901234567891".getBytes());
             assertEquals(4, numWrites.get());
+        }
+    }
+
+    @Test
+    public void testZeroChunkSize() throws IOException {
+        assertThrows(IllegalArgumentException.class, () -> new ChunkedOutputStream(new ByteArrayOutputStream(), 0));
+        // Builder resets invalid input to the default.
+        try (ChunkedOutputStream os = ChunkedOutputStream.builder().setOutputStream(new ByteArrayOutputStream()).setBufferSize(0).get()) {
+            assertEquals(IOUtils.DEFAULT_BUFFER_SIZE, os.getChunkSize());
         }
     }
 

@@ -134,7 +134,7 @@ public class LockableFileWriterTest {
         assertFalse(file.exists());
         assertFalse(lockFile.exists());
         //
-        assertThrows(NullPointerException.class, () -> LockableFileWriter.builder().get());
+        assertThrows(IllegalStateException.class, () -> LockableFileWriter.builder().get());
         assertFalse(file.exists());
         assertFalse(lockFile.exists());
         // again
