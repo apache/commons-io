@@ -47,7 +47,7 @@ import java.util.Objects;
 public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends AbstractSupplier<T, B> {
 
     /**
-     * A {@link File} origin.
+     * A {@code byte[]} origin.
      */
     public static class ByteArrayOrigin extends AbstractOrigin<byte[], ByteArrayOrigin> {
 
