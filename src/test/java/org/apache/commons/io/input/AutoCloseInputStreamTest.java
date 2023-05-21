@@ -105,16 +105,28 @@ public class AutoCloseInputStreamTest {
         assertEquals(-1, stream.read(b, 0, b.length), "read(b, off, len)");
     }
 
-    @Test
-    public void testResetBeforeEndCtor() throws IOException {
-        try (final AutoCloseInputStream inputStream = new AutoCloseInputStream(new ByteArrayInputStream("1234".getBytes()))) {
-            testResetBeforeEnd(inputStream);
-        }
+    private void testResetBeforeEnd(final AutoCloseInputStream inputStream) throws IOException {
+        inputStream.mark(1);
+        assertEquals('1', inputStream.read());
+        inputStream.reset();
+        assertEquals('1', inputStream.read());
+        assertEquals('2', inputStream.read());
+        inputStream.reset();
+        assertEquals('1', inputStream.read());
+        assertEquals('2', inputStream.read());
+        assertEquals('3', inputStream.read());
+        inputStream.reset();
+        assertEquals('1', inputStream.read());
+        assertEquals('2', inputStream.read());
+        assertEquals('3', inputStream.read());
+        assertEquals('4', inputStream.read());
+        inputStream.reset();
+        assertEquals('1', inputStream.read());
     }
 
     @Test
-    public void testResetBeforeEndSetInputStream() throws IOException {
-        try (final AutoCloseInputStream inputStream = AutoCloseInputStream.builder().setInputStream(new ByteArrayInputStream("1234".getBytes())).get()) {
+    public void testResetBeforeEndCtor() throws IOException {
+        try (final AutoCloseInputStream inputStream = new AutoCloseInputStream(new ByteArrayInputStream("1234".getBytes()))) {
             testResetBeforeEnd(inputStream);
         }
     }
@@ -133,23 +145,11 @@ public class AutoCloseInputStreamTest {
         }
     }
 
-    private void testResetBeforeEnd(final AutoCloseInputStream inputStream) throws IOException {
-        inputStream.mark(1);
-        assertEquals('1', inputStream.read());
-        inputStream.reset();
-        assertEquals('1', inputStream.read());
-        assertEquals('2', inputStream.read());
-        inputStream.reset();
-        assertEquals('1', inputStream.read());
-        assertEquals('2', inputStream.read());
-        assertEquals('3', inputStream.read());
-        inputStream.reset();
-        assertEquals('1', inputStream.read());
-        assertEquals('2', inputStream.read());
-        assertEquals('3', inputStream.read());
-        assertEquals('4', inputStream.read());
-        inputStream.reset();
-        assertEquals('1', inputStream.read());
+    @Test
+    public void testResetBeforeEndSetInputStream() throws IOException {
+        try (final AutoCloseInputStream inputStream = AutoCloseInputStream.builder().setInputStream(new ByteArrayInputStream("1234".getBytes())).get()) {
+            testResetBeforeEnd(inputStream);
+        }
     }
 
 }

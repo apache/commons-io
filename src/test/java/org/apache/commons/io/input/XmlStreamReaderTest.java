@@ -206,6 +206,11 @@ public class XmlStreamReaderTest {
     }
 
     @Test
+    protected void testConstructorFileInputNull() {
+        assertThrows(NullPointerException.class, () -> new XmlStreamReader((File) null));
+    }
+
+    @Test
     protected void testConstructorFileInputOpenOptions() throws IOException {
         try (XmlStreamReader reader = new XmlStreamReader(new File("pom.xml"))) {
             // do nothing
@@ -213,11 +218,6 @@ public class XmlStreamReaderTest {
         try (XmlStreamReader reader = XmlStreamReader.builder().setFile("pom.xml").setOpenOptions(StandardOpenOption.READ).get()) {
             // do nothing
         }
-    }
-
-    @Test
-    protected void testConstructorFileInputNull() {
-        assertThrows(NullPointerException.class, () -> new XmlStreamReader((File) null));
     }
 
     @Test
