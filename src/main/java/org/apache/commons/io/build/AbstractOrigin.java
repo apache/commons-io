@@ -21,7 +21,9 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URI;
@@ -31,6 +33,10 @@ import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.ReaderInputStream;
+import org.apache.commons.io.output.WriterOutputStream;
 
 /**
  * Abstracts the origin of data for builders like a {@link File}, {@link Path}, {@link Reader}, {@link Writer}, {@link InputStream}, {@link OutputStream}, and
@@ -71,6 +77,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return new ByteArrayInputStream(origin);
         }
 
+        @Override
+        public Reader getReader(final Charset charset) throws IOException {
+            return new InputStreamReader(getInputStream(), charset);
+        }
+
     }
 
     /**
@@ -88,6 +99,12 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         }
 
         @Override
+        public byte[] getByteArray() {
+            // TODO Pass in a Charset? Consider if call sites actually need this.
+            return origin.toString().getBytes(Charset.defaultCharset());
+        }
+
+        @Override
         public CharSequence getCharSequence(final Charset charset) {
             // No conversion
             return get();
@@ -99,6 +116,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return new ByteArrayInputStream(origin.toString().getBytes(Charset.defaultCharset()));
             // Needs [IO-795] CharSequenceInputStream.reset() only works once.
             // return CharSequenceInputStream.builder().setCharSequence(getCharSequence(Charset.defaultCharset())).get();
+        }
+
+        @Override
+        public Reader getReader(final Charset charset) throws IOException {
+            return new InputStreamReader(getInputStream(), charset);
         }
 
     }
@@ -136,7 +158,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     /**
      * An {@link InputStream} origin.
      * <p>
-     * This origin cannot provide other aspects.
+     * This origin cannot provide some of the other aspects.
      * </p>
      */
     public static class InputStreamOrigin extends AbstractOrigin<InputStream, InputStreamOrigin> {
@@ -151,9 +173,19 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         }
 
         @Override
+        public byte[] getByteArray() throws IOException {
+            return IOUtils.toByteArray(origin);
+        }
+
+        @Override
         public InputStream getInputStream(final OpenOption... options) {
             // No conversion
             return get();
+        }
+
+        @Override
+        public Reader getReader(final Charset charset) throws IOException {
+            return new InputStreamReader(getInputStream(), charset);
         }
 
     }
@@ -161,7 +193,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     /**
      * An {@link OutputStream} origin.
      * <p>
-     * This origin cannot provide other aspects.
+     * This origin cannot provide some of the other aspects.
      * </p>
      */
     public static class OutputStreamOrigin extends AbstractOrigin<OutputStream, OutputStreamOrigin> {
@@ -181,6 +213,10 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return get();
         }
 
+        @Override
+        public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
+            return new OutputStreamWriter(origin, charset);
+        }
     }
 
     /**
@@ -228,6 +264,23 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          */
         public ReaderOrigin(final Reader origin) {
             super(origin);
+        }
+
+        @Override
+        public byte[] getByteArray() throws IOException {
+            // TODO Pass in a Charset? Consider if call sites actually need this.
+            return IOUtils.toByteArray(origin, Charset.defaultCharset());
+        }
+
+        @Override
+        public CharSequence getCharSequence(final Charset charset) throws IOException {
+            return IOUtils.toString(origin);
+        }
+
+        @Override
+        public InputStream getInputStream(final OpenOption... options) throws IOException {
+            // TODO Pass in a Charset? Consider if call sites actually need this.
+            return ReaderInputStream.builder().setReader(origin).setCharset(Charset.defaultCharset()).get();
         }
 
         @Override
@@ -281,6 +334,12 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         }
 
         @Override
+        public OutputStream getOutputStream(final OpenOption... options) throws IOException {
+            // TODO Pass in a Charset? Consider if call sites actually need this.
+            return WriterOutputStream.builder().setWriter(origin).setCharset(Charset.defaultCharset()).get();
+        }
+
+        @Override
         public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
             // No conversion
             return get();
@@ -315,7 +374,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * Gets this origin as a byte array, if possible.
      *
      * @return this origin as a byte array, if possible.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException                   if an I/O error occurs.
      * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
      */
     public byte[] getByteArray() throws IOException {
@@ -327,7 +386,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      *
      * @param charset The charset to use if conversion from bytes is needed.
      * @return this origin as a byte array, if possible.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException                   if an I/O error occurs.
      * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
      */
     public CharSequence getCharSequence(final Charset charset) throws IOException {
@@ -349,7 +408,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      *
      * @param options options specifying how the file is opened
      * @return this origin as an InputStream, if possible.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException                   if an I/O error occurs.
      * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
      */
     public InputStream getInputStream(final OpenOption... options) throws IOException {
@@ -361,7 +420,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      *
      * @param options options specifying how the file is opened
      * @return this origin as an OutputStream, if possible.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException                   if an I/O error occurs.
      * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
      */
     public OutputStream getOutputStream(final OpenOption... options) throws IOException {
@@ -395,7 +454,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * @param charset the charset to use for encoding
      * @param options options specifying how the file is opened
      * @return a new Writer on the origin.
-     * @throws IOException if an I/O error occurs opening or creating the file.
+     * @throws IOException                   if an I/O error occurs opening or creating the file.
      * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
      */
     public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
