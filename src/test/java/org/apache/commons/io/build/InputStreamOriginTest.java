@@ -18,6 +18,8 @@ package org.apache.commons.io.build;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import org.apache.commons.io.build.AbstractOrigin.InputStreamOrigin;
@@ -34,8 +36,8 @@ public class InputStreamOriginTest extends AbstractOriginTest<InputStream, Input
 
     @SuppressWarnings("resource")
     @BeforeEach
-    public void beforeEach() {
-        setOriginRo(new InputStreamOrigin(CharSequenceInputStream.builder().setCharSequence("Hello").get()));
+    public void beforeEach() throws FileNotFoundException {
+        setOriginRo(new InputStreamOrigin(new FileInputStream(FILE_NAME_RO)));
         setOriginRw(new InputStreamOrigin(CharSequenceInputStream.builder().setCharSequence("World").get()));
     }
 

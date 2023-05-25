@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io.build;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.IOException;
@@ -36,7 +37,8 @@ import org.junit.jupiter.api.Test;
  */
 public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
 
-    protected static final String FILE_NAME_RO = "src/test/resources/org/apache/commons/io/test-file-20byteslength.bin";
+    protected static final String FILE_RES_RO = "/org/apache/commons/io/test-file-20byteslength.bin";
+    protected static final String FILE_NAME_RO = "src/test/resources" + FILE_RES_RO;
     protected static final String FILE_NAME_RW = "target/" + AbstractOriginTest.class.getSimpleName() + ".txt";
 
     protected AbstractOrigin<T, B> originRo;
@@ -61,6 +63,21 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
     @Test
     public void testGetByteArray() throws IOException {
         assertNotNull(getOriginRo().getByteArray());
+    }
+
+    @Test
+    public void testGetByteArrayAt_0_0() throws IOException {
+        assertArrayEquals(new byte[] {}, getOriginRo().getByteArray(0, 0));
+    }
+
+    @Test
+    public void testGetByteArrayAt_0_1() throws IOException {
+        assertArrayEquals(new byte[] { '1' }, getOriginRo().getByteArray(0, 1));
+    }
+
+    @Test
+    public void testGetByteArrayAt_1_1() throws IOException {
+        assertArrayEquals(new byte[] { '2' }, getOriginRo().getByteArray(1, 1));
     }
 
     @Test

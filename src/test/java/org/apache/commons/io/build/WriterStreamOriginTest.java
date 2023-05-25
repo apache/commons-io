@@ -47,6 +47,27 @@ public class WriterStreamOriginTest extends AbstractOriginTest<Writer, WriterOri
 
     @Override
     @Test
+    public void testGetByteArrayAt_0_0() {
+        // Cannot convert a OutputStream to a byte[].
+        assertThrows(UnsupportedOperationException.class, super::testGetByteArrayAt_0_0);
+    }
+
+    @Override
+    @Test
+    public void testGetByteArrayAt_0_1() {
+        // Cannot convert a OutputStream to a byte[].
+        assertThrows(UnsupportedOperationException.class, super::testGetByteArrayAt_0_1);
+    }
+
+    @Override
+    @Test
+    public void testGetByteArrayAt_1_1() {
+        // Cannot convert a OutputStream to a byte[].
+        assertThrows(UnsupportedOperationException.class, super::testGetByteArrayAt_1_1);
+    }
+
+    @Override
+    @Test
     public void testGetCharSequence() {
         // Cannot convert a Writer to a CharSequence.
         assertThrows(UnsupportedOperationException.class, super::testGetCharSequence);

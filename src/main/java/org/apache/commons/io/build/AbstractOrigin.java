@@ -32,6 +32,7 @@ import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Objects;
 
 import org.apache.commons.io.IOUtils;
@@ -379,6 +380,27 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      */
     public byte[] getByteArray() throws IOException {
         return Files.readAllBytes(getPath());
+    }
+
+    /**
+     * Gets this origin as a byte array, if possible.
+     *
+     * @param from the initial index of the range to be copied, inclusive.
+     * @param length How many bytes to copy.
+     * @return this origin as a byte array, if possible.
+     * @throws IOException                   if an I/O error occurs.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
+     * @since 2.13.0
+     */
+    public byte[] getByteArray(final long from, final int length) throws IOException {
+        final byte[] bytes = getByteArray();
+        final int start = (int) from;
+        // We include a separate check for int overflow.
+        if (start < 0 || length < 0 || start + length < 0 || start + length > bytes.length) {
+            throw new IllegalArgumentException("Couldn't read array (start: " + start + ", length: " + length
+                    + ", data length: " + bytes.length + ").");
+        }
+        return Arrays.copyOfRange(bytes, start, start + length);
     }
 
     /**

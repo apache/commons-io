@@ -18,6 +18,11 @@ package org.apache.commons.io.build;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractOrigin.CharSequenceOrigin;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,8 +35,8 @@ import org.junit.jupiter.api.Test;
 public class CharSequenceOriginTest extends AbstractOriginTest<CharSequence, CharSequenceOrigin> {
 
     @BeforeEach
-    public void beforeEach() {
-        setOriginRo(new CharSequenceOrigin("Hello"));
+    public void beforeEach() throws FileNotFoundException, IOException {
+        setOriginRo(new CharSequenceOrigin(IOUtils.resourceToString(FILE_RES_RO, StandardCharsets.UTF_8)));
         setOriginRw(new CharSequenceOrigin("World"));
     }
 

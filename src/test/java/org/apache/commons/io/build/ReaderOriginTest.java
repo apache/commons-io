@@ -18,6 +18,8 @@ package org.apache.commons.io.build;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.Reader;
 
 import org.apache.commons.io.build.AbstractOrigin.ReaderOrigin;
@@ -34,8 +36,8 @@ public class ReaderOriginTest extends AbstractOriginTest<Reader, ReaderOrigin> {
 
     @SuppressWarnings("resource")
     @BeforeEach
-    public void beforeEach() {
-        setOriginRo(new ReaderOrigin(new CharSequenceReader("Hello")));
+    public void beforeEach() throws FileNotFoundException {
+        setOriginRo(new ReaderOrigin(new FileReader(FILE_NAME_RO)));
         setOriginRw(new ReaderOrigin(new CharSequenceReader("World")));
     }
 

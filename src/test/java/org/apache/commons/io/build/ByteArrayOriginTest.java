@@ -18,6 +18,10 @@ package org.apache.commons.io.build;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import org.apache.commons.io.build.AbstractOrigin.ByteArrayOrigin;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,8 +34,8 @@ import org.junit.jupiter.api.Test;
 public class ByteArrayOriginTest extends AbstractOriginTest<byte[], ByteArrayOrigin> {
 
     @BeforeEach
-    public void beforeEach() {
-        setOriginRo(new ByteArrayOrigin(new byte[] { 0 }));
+    public void beforeEach() throws IOException {
+        setOriginRo(new ByteArrayOrigin(Files.readAllBytes(Paths.get(FILE_NAME_RO))));
         setOriginRw(new ByteArrayOrigin(new byte[] { 1 }));
     }
 
