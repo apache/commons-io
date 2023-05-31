@@ -26,6 +26,9 @@ import java.io.RandomAccessFile;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests {@link RandomAccessFiles}.
+ */
 public class RandomAccessFilesTest {
 
     protected static final String FILE_RES_RO = "/org/apache/commons/io/test-file-20byteslength.bin";
