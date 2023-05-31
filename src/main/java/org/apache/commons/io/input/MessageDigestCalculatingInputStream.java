@@ -178,7 +178,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
      *
      * @param inputStream the stream to calculate the message digest for
      * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation for the specified algorithm.
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}.
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public MessageDigestCalculatingInputStream(final InputStream inputStream) throws NoSuchAlgorithmException {
@@ -190,7 +190,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
      *
      * @param inputStream   the stream to calculate the message digest for
      * @param messageDigest the message digest to use
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}.
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public MessageDigestCalculatingInputStream(final InputStream inputStream, final MessageDigest messageDigest) {
@@ -206,7 +206,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
      *                    <a href= "https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#MessageDigest"> Java Cryptography
      *                    Architecture Standard Algorithm Name Documentation</a> for information about standard algorithm names.
      * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation for the specified algorithm.
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}.
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public MessageDigestCalculatingInputStream(final InputStream inputStream, final String algorithm) throws NoSuchAlgorithmException {

@@ -97,7 +97,7 @@ public class ChunkedOutputStream extends FilterOutputStream {
      * Creates a new stream that uses a chunk size of {@link IOUtils#DEFAULT_BUFFER_SIZE}.
      *
      * @param stream the stream to wrap
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public ChunkedOutputStream(final OutputStream stream) {
@@ -110,7 +110,7 @@ public class ChunkedOutputStream extends FilterOutputStream {
      * @param stream    the stream to wrap
      * @param chunkSize the chunk size to use; must be a positive number.
      * @throws IllegalArgumentException if the chunk size is &lt;= 0
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public ChunkedOutputStream(final OutputStream stream, final int chunkSize) {

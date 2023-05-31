@@ -350,7 +350,7 @@ public class XmlStreamReader extends Reader {
      * @param file File to create a Reader from.
      * @throws NullPointerException if the input is {@code null}.
      * @throws IOException thrown if there is a problem reading the file.
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public XmlStreamReader(final File file) throws IOException {
@@ -369,7 +369,7 @@ public class XmlStreamReader extends Reader {
      * @param inputStream InputStream to create a Reader from.
      * @throws NullPointerException if the input stream is {@code null}.
      * @throws IOException thrown if there is a problem reading the stream.
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public XmlStreamReader(final InputStream inputStream) throws IOException {
@@ -405,7 +405,7 @@ public class XmlStreamReader extends Reader {
      * @throws NullPointerException if the input stream is {@code null}.
      * @throws IOException              thrown if there is a problem reading the stream.
      * @throws XmlStreamReaderException thrown if the charset encoding could not be determined according to the specification.
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public XmlStreamReader(final InputStream inputStream, final boolean lenient) throws IOException {
@@ -442,7 +442,7 @@ public class XmlStreamReader extends Reader {
      * @throws NullPointerException if the input stream is {@code null}.
      * @throws IOException              thrown if there is a problem reading the stream.
      * @throws XmlStreamReaderException thrown if the charset encoding could not be determined according to the specification.
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     @SuppressWarnings("resource") // InputStream is managed through a InputStreamReader in this instance.
@@ -469,7 +469,7 @@ public class XmlStreamReader extends Reader {
      * @param httpContentType content-type header to use for the resolution of the charset encoding.
      * @throws NullPointerException if the input stream is {@code null}.
      * @throws IOException thrown if there is a problem reading the file.
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public XmlStreamReader(final InputStream inputStream, final String httpContentType) throws IOException {
@@ -507,7 +507,7 @@ public class XmlStreamReader extends Reader {
      * @throws NullPointerException if the input stream is {@code null}.
      * @throws IOException              thrown if there is a problem reading the file.
      * @throws XmlStreamReaderException thrown if the charset encoding could not be determined according to the specification.
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public XmlStreamReader(final InputStream inputStream, final String httpContentType, final boolean lenient) throws IOException {
@@ -546,7 +546,7 @@ public class XmlStreamReader extends Reader {
      * @throws NullPointerException if the input stream is {@code null}.
      * @throws IOException              thrown if there is a problem reading the file.
      * @throws XmlStreamReaderException thrown if the charset encoding could not be determined according to the specification.
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     @SuppressWarnings("resource") // InputStream is managed through a InputStreamReader in this instance.
@@ -573,7 +573,7 @@ public class XmlStreamReader extends Reader {
      * @throws NullPointerException if the input is {@code null}.
      * @throws IOException thrown if there is a problem reading the file.
      * @since 2.11.0
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     @SuppressWarnings("resource") // InputStream is managed through another reader in this instance.

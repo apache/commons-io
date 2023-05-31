@@ -94,7 +94,7 @@ public class AutoCloseInputStream extends ProxyInputStream {
      * Creates an automatically closing proxy for the given input stream.
      *
      * @param in underlying input stream
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public AutoCloseInputStream(final InputStream in) {

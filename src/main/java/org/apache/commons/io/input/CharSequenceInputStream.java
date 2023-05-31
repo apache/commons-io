@@ -104,7 +104,7 @@ public class CharSequenceInputStream extends InputStream {
      * @param cs the input character sequence.
      * @param charset the character set name to use.
      * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character.
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public CharSequenceInputStream(final CharSequence cs, final Charset charset) {
@@ -118,7 +118,7 @@ public class CharSequenceInputStream extends InputStream {
      * @param charset the character set name to use, null maps to the default Charset.
      * @param bufferSize the buffer size to use.
      * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character.
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public CharSequenceInputStream(final CharSequence cs, final Charset charset, final int bufferSize) {
@@ -141,7 +141,7 @@ public class CharSequenceInputStream extends InputStream {
      * @param cs the input character sequence.
      * @param charset the character set name to use.
      * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character.
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public CharSequenceInputStream(final CharSequence cs, final String charset) {
@@ -155,7 +155,7 @@ public class CharSequenceInputStream extends InputStream {
      * @param charset the character set name to use, null maps to the default Charset.
      * @param bufferSize the buffer size to use.
      * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character.
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public CharSequenceInputStream(final CharSequence cs, final String charset, final int bufferSize) {

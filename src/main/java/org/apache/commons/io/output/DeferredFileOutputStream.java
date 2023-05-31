@@ -200,7 +200,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      *
      * @param threshold  The number of bytes at which to trigger an event.
      * @param outputFile The file to which data is saved beyond the threshold.
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public DeferredFileOutputStream(final int threshold, final File outputFile) {
@@ -236,7 +236,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      * @param initialBufferSize The initial size of the in memory buffer.
      * @param outputFile        The file to which data is saved beyond the threshold.
      * @since 2.5
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public DeferredFileOutputStream(final int threshold, final int initialBufferSize, final File outputFile) {
@@ -252,7 +252,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      * @param suffix            Suffix to use for the temporary file.
      * @param directory         Temporary file directory.
      * @since 2.5
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public DeferredFileOutputStream(final int threshold, final int initialBufferSize, final String prefix, final String suffix, final File directory) {
@@ -268,7 +268,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      * @param suffix    Suffix to use for the temporary file.
      * @param directory Temporary file directory.
      * @since 1.4
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public DeferredFileOutputStream(final int threshold, final String prefix, final String suffix, final File directory) {

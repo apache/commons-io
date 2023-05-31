@@ -233,7 +233,7 @@ public class WriterOutputStream extends OutputStream {
      * characters. The output buffer will only be flushed when it overflows or when {@link #flush()} or {@link #close()} is called.
      *
      * @param writer the target {@link Writer}
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public WriterOutputStream(final Writer writer) {
@@ -246,7 +246,7 @@ public class WriterOutputStream extends OutputStream {
      *
      * @param writer  the target {@link Writer}
      * @param charset the charset encoding
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public WriterOutputStream(final Writer writer, final Charset charset) {
@@ -262,7 +262,7 @@ public class WriterOutputStream extends OutputStream {
      * @param writeImmediately If {@code true} the output buffer will be flushed after each write operation, i.e. all available data will be written to the
      *                         underlying {@link Writer} immediately. If {@code false}, the output buffer will only be flushed when it overflows or when
      *                         {@link #flush()} or {@link #close()} is called.
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public WriterOutputStream(final Writer writer, final Charset charset, final int bufferSize, final boolean writeImmediately) {
@@ -284,7 +284,7 @@ public class WriterOutputStream extends OutputStream {
      * @param writer  the target {@link Writer}
      * @param decoder the charset decoder
      * @since 2.1
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public WriterOutputStream(final Writer writer, final CharsetDecoder decoder) {
@@ -301,7 +301,7 @@ public class WriterOutputStream extends OutputStream {
      *                         underlying {@link Writer} immediately. If {@code false}, the output buffer will only be flushed when it overflows or when
      *                         {@link #flush()} or {@link #close()} is called.
      * @since 2.1
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public WriterOutputStream(final Writer writer, final CharsetDecoder decoder, final int bufferSize, final boolean writeImmediately) {
@@ -318,7 +318,7 @@ public class WriterOutputStream extends OutputStream {
      *
      * @param writer      the target {@link Writer}
      * @param charsetName the name of the charset encoding
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public WriterOutputStream(final Writer writer, final String charsetName) {
@@ -334,7 +334,7 @@ public class WriterOutputStream extends OutputStream {
      * @param writeImmediately If {@code true} the output buffer will be flushed after each write operation, i.e. all available data will be written to the
      *                         underlying {@link Writer} immediately. If {@code false}, the output buffer will only be flushed when it overflows or when
      *                         {@link #flush()} or {@link #close()} is called.
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public WriterOutputStream(final Writer writer, final String charsetName, final int bufferSize, final boolean writeImmediately) {

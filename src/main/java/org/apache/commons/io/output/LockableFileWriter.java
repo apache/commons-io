@@ -158,7 +158,7 @@ public class LockableFileWriter extends Writer {
      * @param file the file to write to, not null
      * @throws NullPointerException if the file is null
      * @throws IOException          in case of an I/O error
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public LockableFileWriter(final File file) throws IOException {
@@ -172,7 +172,7 @@ public class LockableFileWriter extends Writer {
      * @param append true if content should be appended, false to overwrite
      * @throws NullPointerException if the file is null
      * @throws IOException          in case of an I/O error
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public LockableFileWriter(final File file, final boolean append) throws IOException {
@@ -202,7 +202,7 @@ public class LockableFileWriter extends Writer {
      * @throws NullPointerException if the file is null
      * @throws IOException          in case of an I/O error
      * @since 2.3
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public LockableFileWriter(final File file, final Charset charset) throws IOException {
@@ -219,7 +219,7 @@ public class LockableFileWriter extends Writer {
      * @throws NullPointerException if the file is null
      * @throws IOException          in case of an I/O error
      * @since 2.3
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public LockableFileWriter(final File file, final Charset charset, final boolean append, final String lockDir) throws IOException {
@@ -254,7 +254,7 @@ public class LockableFileWriter extends Writer {
      * @throws IOException                                  in case of an I/O error
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io.UnsupportedEncodingException} in version 2.2 if the encoding is not
      *                                                      supported.
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public LockableFileWriter(final File file, final String charsetName) throws IOException {
@@ -272,7 +272,7 @@ public class LockableFileWriter extends Writer {
      * @throws IOException                                  in case of an I/O error
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io.UnsupportedEncodingException} in version 2.2 if the encoding is not
      *                                                      supported.
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public LockableFileWriter(final File file, final String charsetName, final boolean append, final String lockDir) throws IOException {
@@ -285,7 +285,7 @@ public class LockableFileWriter extends Writer {
      * @param fileName the file to write to, not null
      * @throws NullPointerException if the file is null
      * @throws IOException          in case of an I/O error
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public LockableFileWriter(final String fileName) throws IOException {
@@ -299,7 +299,7 @@ public class LockableFileWriter extends Writer {
      * @param append   true if content should be appended, false to overwrite
      * @throws NullPointerException if the file is null
      * @throws IOException          in case of an I/O error
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public LockableFileWriter(final String fileName, final boolean append) throws IOException {
@@ -314,7 +314,7 @@ public class LockableFileWriter extends Writer {
      * @param lockDir  the directory in which the lock file should be held
      * @throws NullPointerException if the file is null
      * @throws IOException          in case of an I/O error
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public LockableFileWriter(final String fileName, final boolean append, final String lockDir) throws IOException {

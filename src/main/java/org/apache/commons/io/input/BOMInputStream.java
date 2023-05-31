@@ -219,7 +219,7 @@ public class BOMInputStream extends ProxyInputStream {
      *
      * @param delegate
      *            the InputStream to delegate to
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public BOMInputStream(final InputStream delegate) {
@@ -233,7 +233,7 @@ public class BOMInputStream extends ProxyInputStream {
      *            the InputStream to delegate to
      * @param include
      *            true to include the UTF-8 BOM or false to exclude it
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public BOMInputStream(final InputStream delegate, final boolean include) {
@@ -249,7 +249,7 @@ public class BOMInputStream extends ProxyInputStream {
      *            true to include the specified BOMs or false to exclude them
      * @param boms
      *            The BOMs to detect and optionally exclude
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public BOMInputStream(final InputStream delegate, final boolean include, final ByteOrderMark... boms) {
@@ -272,7 +272,7 @@ public class BOMInputStream extends ProxyInputStream {
      *            the InputStream to delegate to
      * @param boms
      *            The BOMs to detect and exclude
-     * @deprecated Use {@link #builder()} and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public BOMInputStream(final InputStream delegate, final ByteOrderMark... boms) {
