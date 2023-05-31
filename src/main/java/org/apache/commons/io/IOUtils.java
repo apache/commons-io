@@ -57,6 +57,7 @@ import java.util.stream.Stream;
 
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.function.IOSupplier;
+import org.apache.commons.io.function.IOTriFunction;
 import org.apache.commons.io.input.QueueInputStream;
 import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -1914,7 +1915,7 @@ public class IOUtils {
      * as possible before giving up; this may not always be the case for
      * subclasses of {@link InputStream}.
      *
-     * @param input where to read input from
+     * @param input where to read input
      * @param buffer destination
      * @param offset initial offset into buffer
      * @param length length to read, must be &gt;= 0
@@ -1925,14 +1926,32 @@ public class IOUtils {
      */
     public static int read(final InputStream input, final byte[] buffer, final int offset, final int length)
             throws IOException {
+        return read(input::read, buffer, offset, length);
+    }
+
+    /**
+     * Reads bytes from an input. This implementation guarantees that it will read as many bytes as possible before giving up; this may not always be the case
+     * for subclasses of {@link InputStream}.
+     *
+     * @param input  How to read input
+     * @param buffer destination
+     * @param offset initial offset into buffer
+     * @param length length to read, must be &gt;= 0
+     * @return actual length read; may be less than requested if EOF was reached
+     * @throws IllegalArgumentException if length is negative
+     * @throws IOException              if a read error occurs
+     * @since 2.2
+     */
+    static int read(final IOTriFunction<byte[], Integer, Integer, Integer> input, final byte[] buffer, final int offset, final int length)
+            throws IOException {
         if (length < 0) {
             throw new IllegalArgumentException("Length must not be negative: " + length);
         }
         int remaining = length;
         while (remaining > 0) {
             final int location = length - remaining;
-            final int count = input.read(buffer, offset + location, remaining);
-            if (EOF == count) { // EOF
+            final int count = input.apply(buffer, offset + location, remaining);
+            if (EOF == count) {
                 break;
             }
             remaining -= count;
@@ -2640,28 +2659,7 @@ public class IOUtils {
      * @since 2.1
      */
     public static byte[] toByteArray(final InputStream input, final int size) throws IOException {
-
-        if (size < 0) {
-            throw new IllegalArgumentException("Size must be equal or greater than zero: " + size);
-        }
-
-        if (size == 0) {
-            return EMPTY_BYTE_ARRAY;
-        }
-
-        final byte[] data = byteArray(size);
-        int offset = 0;
-        int read;
-
-        while (offset < size && (read = input.read(data, offset, size - offset)) != EOF) {
-            offset += read;
-        }
-
-        if (offset != size) {
-            throw new IOException("Unexpected read size, current: " + offset + ", expected: " + size);
-        }
-
-        return data;
+        return toByteArray(input::read, size);
     }
 
     /**
@@ -2685,6 +2683,40 @@ public class IOUtils {
             throw new IllegalArgumentException("Size cannot be greater than Integer max value: " + size);
         }
         return toByteArray(input, (int) size);
+    }
+
+    /**
+     * Gets the contents of an input as a {@code byte[]}.
+     *
+     * @param input the input to read.
+     * @param size the size of the input to read, where 0 &lt; {@code size} &lt;= length of input.
+     * @return byte [] of length {@code size}.
+     * @throws IOException if an I/O error occurs or input length is smaller than parameter {@code size}.
+     * @throws IllegalArgumentException if {@code size} is less than zero.
+     */
+    static byte[] toByteArray(final IOTriFunction<byte[], Integer, Integer, Integer> input, final int size) throws IOException {
+
+        if (size < 0) {
+            throw new IllegalArgumentException("Size must be equal or greater than zero: " + size);
+        }
+
+        if (size == 0) {
+            return EMPTY_BYTE_ARRAY;
+        }
+
+        final byte[] data = byteArray(size);
+        int offset = 0;
+        int read;
+
+        while (offset < size && (read = input.apply(data, offset, size - offset)) != EOF) {
+            offset += read;
+        }
+
+        if (offset != size) {
+            throw new IOException("Unexpected read size, current: " + offset + ", expected: " + size);
+        }
+
+        return data;
     }
 
     /**

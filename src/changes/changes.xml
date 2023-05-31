@@ -61,6 +61,12 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-796" dev="ggregory" type="fix" due-to="Giacomo Boccardo, Gary Gregory">
         FileAlreadyExistsException in PathUtils.createParentDirectories(Path, LinkOption, FileAttribute...).
       </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        Only read the relevant portion of a file in AbstractOrigin.FileOrigin.getByteArray(long, int)
+      </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        Only read the relevant portion of a file in AbstractOrigin.PathOrigin.getByteArray(long, int)
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add CharSequenceInputStream.Builder.
@@ -76,6 +82,9 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add AbstractOrigin.getByteArray(long, int).
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add and use RandomAccessFiles.
       </action>
       <!-- UPDATE -->
       <action dev="ggregory" type="update" due-to="Gary Gregory, Dependabot">
