@@ -122,7 +122,11 @@ public class BOMInputStream extends ProxyInputStream {
 
         private static final ByteOrderMark[] DEFAULT = { ByteOrderMark.UTF_8 };
 
-        /** For test access. */
+        /**
+         * For test access.
+         *
+         * @return the default byte order mark
+         */
         static ByteOrderMark getDefaultByteOrderMark() {
             return DEFAULT[0];
         }
