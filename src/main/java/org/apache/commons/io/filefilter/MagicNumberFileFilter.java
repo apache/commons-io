@@ -90,14 +90,18 @@ import org.apache.commons.io.RandomAccessFiles;
  * <em>Serialization is deprecated and will be removed in 3.0.</em>
  * </p>
  *
+ * <h2>Deprecating Serialization</h2>
+ * <p>
+ * <em>Serialization is deprecated and will be removed in 3.0.</em>
+ * </p>
+ *
  * @since 2.0
  * @see FileFilterUtils#magicNumberFileFilter(byte[])
  * @see FileFilterUtils#magicNumberFileFilter(String)
  * @see FileFilterUtils#magicNumberFileFilter(byte[], long)
  * @see FileFilterUtils#magicNumberFileFilter(String, long)
  */
-public class MagicNumberFileFilter extends AbstractFileFilter implements
-        Serializable {
+public class MagicNumberFileFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * The serialization version unique identifier.
