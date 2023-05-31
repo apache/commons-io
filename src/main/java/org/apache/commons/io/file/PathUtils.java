@@ -356,6 +356,9 @@ public final class PathUtils {
 
     /**
      * Creates the parent directories for the given {@code path}.
+     * <p>
+     * If the parent directory already exists, then return it.
+     * <p>
      *
      * @param path The path to a file (or directory).
      * @param attrs An optional list of file attributes to set atomically when creating the directories.
@@ -369,6 +372,9 @@ public final class PathUtils {
 
     /**
      * Creates the parent directories for the given {@code path}.
+     * <p>
+     * If the parent directory already exists, then return it.
+     * <p>
      *
      * @param path The path to a file (or directory).
      * @param linkOption A {@link LinkOption} or null.
@@ -377,10 +383,15 @@ public final class PathUtils {
      * @throws IOException if an I/O error occurs.
      * @since 2.12.0
      */
-    public static Path createParentDirectories(final Path path, final LinkOption linkOption, final FileAttribute<?>... attrs) throws IOException {
+    public static Path createParentDirectories(final Path path, final LinkOption linkOption,
+            final FileAttribute<?>... attrs) throws IOException {
         Path parent = getParent(path);
         parent = linkOption == LinkOption.NOFOLLOW_LINKS ? parent : readIfSymbolicLink(parent);
-        return parent == null ? null : Files.createDirectories(parent, attrs);
+        if (parent == null) {
+            return null;
+        }
+        final boolean exists = linkOption == null ? Files.exists(parent) : Files.exists(parent, linkOption);
+        return exists ? parent : Files.createDirectories(parent, attrs);
     }
 
     /**
