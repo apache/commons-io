@@ -20,7 +20,7 @@ package org.apache.commons.io.build;
 import org.apache.commons.io.function.IOSupplier;
 
 /**
- * Abstracts supplying a typed instance of {@code T}. Use to implement the builder pattern.
+ * Abstracts supplying an instance of {@code T}. Use to implement the builder pattern.
  *
  * @param <T> the type of instances to build.
  * @param <B> the type of builder subclass.
