@@ -37,7 +37,7 @@ import org.apache.commons.io.build.AbstractOrigin.URIOrigin;
 import org.apache.commons.io.build.AbstractOrigin.WriterOrigin;
 
 /**
- * Abstracts building a typed instance of {@code T}.
+ * Abstracts building an instance of {@code T}.
  *
  * @param <T> the type of instances to build.
  * @param <B> the type of builder subclass.
