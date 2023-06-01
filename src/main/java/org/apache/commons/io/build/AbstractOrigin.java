@@ -414,19 +414,19 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * Gets this origin as a byte array, if possible.
      *
      * @param position the initial index of the range to be copied, inclusive.
-     * @param length How many bytes to copy.
+     * @param length   How many bytes to copy.
      * @return this origin as a byte array, if possible.
-     * @throws IOException                   if an I/O error occurs.
      * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
+     * @throws ArithmeticException           if the {@code position} overflows an int
+     * @throws IOException                   if an I/O error occurs.
      * @since 2.13.0
      */
     public byte[] getByteArray(final long position, final int length) throws IOException {
         final byte[] bytes = getByteArray();
-        final int start = (int) position;
-        // We include a separate check for int overflow.
+        // Checks for int overflow.
+        final int start = Math.toIntExact(position);
         if (start < 0 || length < 0 || start + length < 0 || start + length > bytes.length) {
-            throw new IllegalArgumentException("Couldn't read array (start: " + start + ", length: " + length
-                    + ", data length: " + bytes.length + ").");
+            throw new IllegalArgumentException("Couldn't read array (start: " + start + ", length: " + length + ", data length: " + bytes.length + ").");
         }
         return Arrays.copyOfRange(bytes, start, start + length);
     }
