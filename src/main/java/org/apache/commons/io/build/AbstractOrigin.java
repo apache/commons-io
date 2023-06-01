@@ -524,6 +524,6 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
     @Override
     public String toString() {
-        return origin.toString();
+        return getClass().getSimpleName() + "[" + origin.toString() + "]";
     }
 }
