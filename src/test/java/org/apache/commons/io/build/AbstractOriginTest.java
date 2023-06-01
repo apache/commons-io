@@ -25,6 +25,8 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
@@ -62,7 +64,7 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
 
     @Test
     public void testGetByteArray() throws IOException {
-        assertNotNull(getOriginRo().getByteArray());
+        assertArrayEquals(Files.readAllBytes(Paths.get(FILE_NAME_RO)), getOriginRo().getByteArray());
     }
 
     @Test
