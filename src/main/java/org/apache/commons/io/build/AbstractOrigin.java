@@ -86,6 +86,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return new InputStreamReader(getInputStream(), charset);
         }
 
+        @Override
+        public long size() throws IOException {
+            return origin.length;
+        }
+
     }
 
     /**
@@ -125,6 +130,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         @Override
         public Reader getReader(final Charset charset) throws IOException {
             return new InputStreamReader(getInputStream(), charset);
+        }
+
+        @Override
+        public long size() throws IOException {
+            return origin.length();
         }
 
     }
@@ -499,6 +509,17 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      */
     public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
         return Files.newBufferedWriter(getPath(), charset, options);
+    }
+
+    /**
+     * Gets the size of the origin, if possible.
+     *
+     * @return the size of the origin in bytes or characters.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.13.0
+     */
+    public long size() throws IOException {
+        return Files.size(getPath());
     }
 
     @Override

@@ -102,4 +102,11 @@ public class OutputStreamOriginTest extends AbstractOriginTest<OutputStream, Out
         assertThrows(UnsupportedOperationException.class, super::testGetReader);
     }
 
+    @Override
+    @Test
+    public void testSize() {
+        // Cannot convert a Writer to a size.
+        assertThrows(UnsupportedOperationException.class, super::testSize);
+    }
+
 }

@@ -17,6 +17,7 @@
 package org.apache.commons.io.build;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.IOException;
@@ -123,5 +124,10 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
         try (final Writer writer = getOriginRw().getWriter(Charset.defaultCharset())) {
             assertNotNull(writer);
         }
+    }
+
+    @Test
+    public void testSize() throws IOException {
+        assertEquals(Files.size(Paths.get(FILE_NAME_RO)), getOriginRo().getByteArray().length);
     }
 }
