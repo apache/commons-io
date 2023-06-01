@@ -156,7 +156,6 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             super(origin);
         }
 
-
         @Override
         public byte[] getByteArray(final long position, final int length) throws IOException {
             try (RandomAccessFile raf = RandomAccessFileMode.READ_ONLY.create(origin)) {
@@ -450,7 +449,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * @throws UnsupportedOperationException if this method is not implemented in a concrete subclass.
      */
     public File getFile() {
-        throw new UnsupportedOperationException("getFile() from " + origin.toString());
+        throw new UnsupportedOperationException(String.format("%s#getFile() for origin %s", getClass().getSimpleName(), origin));
     }
 
     /**
@@ -484,7 +483,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * @throws UnsupportedOperationException if this method is not implemented in a concrete subclass.
      */
     public Path getPath() {
-        throw new UnsupportedOperationException("getPath() from " + origin.toString());
+        throw new UnsupportedOperationException(String.format("%s#getPath() for origin %s", getClass().getSimpleName(), origin));
     }
 
     /**
