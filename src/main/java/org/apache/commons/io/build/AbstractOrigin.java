@@ -449,7 +449,8 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * @throws UnsupportedOperationException if this method is not implemented in a concrete subclass.
      */
     public File getFile() {
-        throw new UnsupportedOperationException(String.format("%s#getFile() for origin %s", getClass().getSimpleName(), origin));
+        throw new UnsupportedOperationException(
+                String.format("%s#getFile() for %s origin %s", getClass().getSimpleName(), origin.getClass().getSimpleName(), origin));
     }
 
     /**
@@ -483,7 +484,8 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * @throws UnsupportedOperationException if this method is not implemented in a concrete subclass.
      */
     public Path getPath() {
-        throw new UnsupportedOperationException(String.format("%s#getPath() for origin %s", getClass().getSimpleName(), origin));
+        throw new UnsupportedOperationException(
+                String.format("%s#getPath() for %s origin %s", getClass().getSimpleName(), origin.getClass().getSimpleName(), origin));
     }
 
     /**
