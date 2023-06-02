@@ -129,8 +129,9 @@ public class ReaderInputStream extends InputStream {
 
         @Override
         public Builder setCharset(final Charset charset) {
-            charsetEncoder = charset.newEncoder();
-            return super.setCharset(charset);
+            super.setCharset(charset);
+            charsetEncoder = getCharset().newEncoder();
+            return this;
         }
 
         /**

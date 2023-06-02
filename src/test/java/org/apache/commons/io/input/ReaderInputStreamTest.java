@@ -243,8 +243,18 @@ public class ReaderInputStreamTest {
     }
 
     @Test
+    public void testResetCharset() {
+        assertNotNull(ReaderInputStream.builder().setReader(new StringReader("\uD800")).setCharset((Charset) null).getCharset());
+    }
+
+    @Test
     public void testResetCharsetEncoder() {
         assertNotNull(ReaderInputStream.builder().setReader(new StringReader("\uD800")).setCharsetEncoder(null).getCharsetEncoder());
+    }
+
+    @Test
+    public void testResetCharsetName() {
+        assertNotNull(ReaderInputStream.builder().setReader(new StringReader("\uD800")).setCharset((String) null).getCharset());
     }
 
     @Test

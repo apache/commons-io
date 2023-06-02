@@ -99,7 +99,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      *
      * @return the Charset, defaults to {@link Charset#defaultCharset()}.
      */
-    protected Charset getCharset() {
+    public Charset getCharset() {
         return charset;
     }
 
