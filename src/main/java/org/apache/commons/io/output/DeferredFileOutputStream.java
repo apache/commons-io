@@ -342,7 +342,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
         if (prefix != null) {
             outputPath = Files.createTempFile(directory, prefix, suffix);
         }
-        PathUtils.createParentDirectories(outputPath);
+        PathUtils.createParentDirectories(outputPath, null, PathUtils.EMPTY_FILE_ATTRIBUTE_ARRAY);
         final OutputStream fos = Files.newOutputStream(outputPath);
         try {
             memoryOutputStream.writeTo(fos);
