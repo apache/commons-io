@@ -172,7 +172,7 @@ public class CharSequenceInputStream extends InputStream {
     public int available() throws IOException {
         // The cached entries are in bBuf; since encoding always creates at least one byte
         // per character, we can add the two to get a better estimate (e.g. if bBuf is empty)
-        // Note that the previous implementation (2.4) could return zero even though there were
+        // Note that the implementation in 2.4 could return zero even though there were
         // encoded bytes still available.
         return this.bBuf.remaining() + this.cBuf.remaining();
     }
