@@ -26,7 +26,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * JUnit Test Case for {@link BrokenInputStream}.
+ * Tests {@link BrokenInputStream}.
  */
 public class BrokenInputStreamTest {
 

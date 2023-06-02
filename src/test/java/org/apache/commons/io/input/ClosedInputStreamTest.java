@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 /**
- * JUnit Test Case for {@link ClosedInputStream}.
+ * Tests {@link ClosedInputStream}.
  */
 public class ClosedInputStreamTest {
 

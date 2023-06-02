@@ -30,7 +30,7 @@ import org.apache.commons.io.TaggedIOException;
 import org.junit.jupiter.api.Test;
 
 /**
- * JUnit Test Case for {@link TaggedInputStream}.
+ * Tests {@link TaggedInputStream}.
  */
 public class TaggedInputStreamTest  {
 

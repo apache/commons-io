@@ -29,7 +29,7 @@ import java.io.Reader;
 import org.junit.jupiter.api.Test;
 
 /**
- * JUnit Test Case for {@link NullReader}.
+ * Tests {@link NullReader}.
  */
 public class NullReaderTest {
 

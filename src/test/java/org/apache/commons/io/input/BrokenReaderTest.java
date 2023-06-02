@@ -27,7 +27,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * JUnit Test Case for {@link BrokenReader}.
+ * Tests {@link BrokenReader}.
  */
 public class BrokenReaderTest {
 

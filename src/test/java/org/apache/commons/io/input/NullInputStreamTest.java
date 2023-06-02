@@ -29,7 +29,7 @@ import java.io.InputStream;
 import org.junit.jupiter.api.Test;
 
 /**
- * JUnit Test Case for {@link NullInputStream}.
+ * Tests {@link NullInputStream}.
  */
 public class NullInputStreamTest {
 
