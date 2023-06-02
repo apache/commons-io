@@ -31,6 +31,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 
+/**
+ * Tests {@link FileUtils}.
+ */
 @DisabledOnOs({OS.WINDOWS, OS.MAC})
 public class FileUtilsDeleteDirectoryLinuxTest extends FileUtilsDeleteDirectoryBaseTest {
 

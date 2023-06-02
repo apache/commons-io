@@ -45,7 +45,7 @@ import org.apache.commons.io.test.ThrowOnFlushAndCloseOutputStream;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test {@link IOUtils} copy methods.
+ * Tests {@link IOUtils} copy methods.
  */
 public class IOUtilsCopyTest {
 

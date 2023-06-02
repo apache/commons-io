@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings("deprecation") // these are test cases for the deprecated CopyUtils
 
 /**
- * JUnit tests for CopyUtils.
+ * Test for {@link CopyUtils}.
  *
  * @see CopyUtils
  */

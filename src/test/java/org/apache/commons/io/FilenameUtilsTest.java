@@ -38,9 +38,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * This is used to test FilenameUtils for correctness.
- *
- * @see FilenameUtils
+ * Tests {@link FilenameUtils}.
  */
 public class FilenameUtilsTest {
 

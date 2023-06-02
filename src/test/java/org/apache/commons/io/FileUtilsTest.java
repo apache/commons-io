@@ -90,9 +90,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 /**
- * This is used to test FileUtils for correctness.
- *
- * @see FileUtils
+ * Tests {@link FileUtils}.
  */
 @SuppressWarnings({"deprecation", "ResultOfMethodCallIgnored"}) // unit tests include tests of many deprecated methods
 public class FileUtilsTest extends AbstractTempDirTest {

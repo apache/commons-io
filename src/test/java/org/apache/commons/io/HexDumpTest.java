@@ -25,8 +25,8 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.test.ThrowOnCloseOutputStream;
 import org.junit.jupiter.api.Test;
 
-
 /**
+ * Tests {@link HexDump}.
  */
 public class HexDumpTest {
 

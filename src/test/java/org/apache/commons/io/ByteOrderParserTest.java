@@ -23,6 +23,9 @@ import java.nio.ByteOrder;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * Test for {@link ByteOrderParser}.
+ */
 public class ByteOrderParserTest {
 
     private ByteOrder parseByteOrder(final String value) {

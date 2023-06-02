@@ -27,7 +27,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 /**
- * JUnit Test Case for {@link TaggedIOException}.
+ * Tests {@link TaggedIOException}.
  */
 public class TaggedIOExceptionTest {
 

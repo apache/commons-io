@@ -35,9 +35,7 @@ import org.apache.commons.io.filefilter.NameFileFilter;
 import org.junit.jupiter.api.Test;
 
 /**
- * This is used to test DirectoryWalker for correctness.
- *
- * @see DirectoryWalker
+ * Tests {@link DirectoryWalker}.
  */
 public class DirectoryWalkerTest {
 

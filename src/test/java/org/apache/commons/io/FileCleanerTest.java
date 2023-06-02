@@ -17,9 +17,7 @@
 package org.apache.commons.io;
 
 /**
- * This is used to test {@link FileCleaner} for correctness.
- *
- * @see FileCleaner
+ * Tests {@link FileCleaner}.
  */
 @SuppressWarnings("deprecation") // testing deprecated class
 public class FileCleanerTest extends FileCleaningTrackerTest {

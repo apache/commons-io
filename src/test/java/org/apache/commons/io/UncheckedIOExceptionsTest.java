@@ -22,11 +22,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
-import org.apache.commons.io.function.Uncheck;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests {@link Uncheck}.
+ * Tests {@link UncheckedIOExceptions}.
  */
 public class UncheckedIOExceptionsTest {
 

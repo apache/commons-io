@@ -33,7 +33,7 @@ import java.util.Locale;
 import org.junit.jupiter.api.Test;
 
 /**
- * This is used to test FileSystemUtils.
+ * Tests {@link FileSystemUtils}.
  */
 @SuppressWarnings("deprecation") // testing deprecated class
 public class FileSystemUtilsTest {

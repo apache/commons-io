@@ -27,6 +27,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 /**
+ * Tests {@link EndianUtils}.
  */
 public class EndianUtilsTest  {
 

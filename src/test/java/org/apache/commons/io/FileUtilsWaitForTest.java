@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.jupiter.api.Test;
 
 /**
- * This is used to test FileUtils.waitFor() method for correctness.
+ * Tests FileUtils.waitFor().
  * <p>
  * This class has been broken out from FileUtilsTestCase to solve issues as per BZ 38927
  * </p>

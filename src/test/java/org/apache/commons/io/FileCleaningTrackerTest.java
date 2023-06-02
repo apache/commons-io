@@ -39,9 +39,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * This is used to test {@link FileCleaningTracker} for correctness.
- *
- * @see FileCleaningTracker
+ * Tests {@link FileCleaningTracker}.
  */
 public class FileCleaningTrackerTest extends AbstractTempDirTest {
 

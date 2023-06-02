@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Test cases for FileUtils.listFiles() methods.
+ * Tests FileUtils.listFiles() methods.
  */
 public class FileUtilsListFilesTest {
 

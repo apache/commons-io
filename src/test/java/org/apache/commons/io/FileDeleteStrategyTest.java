@@ -30,9 +30,7 @@ import org.apache.commons.io.test.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 /**
- * Test for FileDeleteStrategy.
- *
- * @see FileDeleteStrategy
+ * Tests {@link FileDeleteStrategy}.
  */
 public class FileDeleteStrategyTest {
 

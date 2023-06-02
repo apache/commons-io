@@ -27,8 +27,6 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Tests {@link IOIndexedException}.
- *
- * @since 2.7
  */
 public class IOIndexedExceptionTest {
 

@@ -33,7 +33,7 @@ import org.apache.commons.io.test.TestUtils;
 import org.junit.jupiter.api.Test;
 
 /**
- * Basic unit tests for the multiplexing streams.
+ * Tests {@link DemuxInputStream}.
  */
 public class DemuxInputStreamTest {
 

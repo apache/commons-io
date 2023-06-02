@@ -26,6 +26,9 @@ import java.util.Locale;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests {@link FilenameUtils} {@code wildcardMatch()} methods.
+ */
 public class FilenameUtilsWildcardTest {
 
     private static final boolean WINDOWS = File.separatorChar == '\\';

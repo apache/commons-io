@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * This is used to test FileUtils for correctness.
+ * Tests {@link FileUtils}.
  */
 public class FileUtilsFileNewerTest {
 
