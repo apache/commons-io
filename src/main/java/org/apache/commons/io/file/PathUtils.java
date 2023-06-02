@@ -167,6 +167,13 @@ public final class PathUtils {
     public static final DeleteOption[] EMPTY_DELETE_OPTION_ARRAY = {};
 
     /**
+     * Empty {@link FileAttribute} array.
+     *
+     * @since 2.13.0
+     */
+    public static final FileAttribute<?>[] EMPTY_FILE_ATTRIBUTE_ARRAY = {};
+
+    /**
      * Empty {@link FileVisitOption} array.
      */
     public static final FileVisitOption[] EMPTY_FILE_VISIT_OPTION_ARRAY = {};
