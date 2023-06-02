@@ -18,6 +18,7 @@ package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -239,6 +240,11 @@ public class ReaderInputStreamTest {
             assertEquals(0, inputStream.read(bytes, 0, 0));
             assertEquals(-1, inputStream.read(bytes, 0, 1));
         }
+    }
+
+    @Test
+    public void testResetCharsetEncoder() {
+        assertNotNull(ReaderInputStream.builder().setReader(new StringReader("\uD800")).setCharsetEncoder(null).getCharsetEncoder());
     }
 
     @Test

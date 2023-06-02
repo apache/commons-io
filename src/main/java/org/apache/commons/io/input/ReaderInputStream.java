@@ -123,6 +123,10 @@ public class ReaderInputStream extends InputStream {
             return new ReaderInputStream(checkOrigin().getReader(getCharset()), charsetEncoder, getBufferSize());
         }
 
+        CharsetEncoder getCharsetEncoder() {
+            return charsetEncoder;
+        }
+
         @Override
         public Builder setCharset(final Charset charset) {
             charsetEncoder = charset.newEncoder();
@@ -132,12 +136,12 @@ public class ReaderInputStream extends InputStream {
         /**
          * Sets the charset encoder.
          *
-         * @param charsetEncoder the charset encoder.
+         * @param charsetEncoder the charset encoder, null resets to a default encoder.
          * @return this
          */
         public Builder setCharsetEncoder(final CharsetEncoder charsetEncoder) {
-            this.charsetEncoder = charsetEncoder;
-            super.setCharset(charsetEncoder.charset());
+            this.charsetEncoder = CharsetEncoders.toCharsetEncoder(charsetEncoder);
+            super.setCharset(this.charsetEncoder.charset());
             return this;
         }
 
