@@ -23,6 +23,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests {@link FullClassNameMatcher}.
+ */
 public class FullClassNameMatcherTest {
 
     private static final String [] NAMES_ARRAY = { Integer.class.getName(), Long.class.getName() };

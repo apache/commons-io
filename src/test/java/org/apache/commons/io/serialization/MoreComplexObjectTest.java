@@ -32,9 +32,10 @@ import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-/** This is more an example than a test - deserialize our {@link MoreComplexObject}
- *  to verify which settings it requires, as the object uses a number of primitive
- *  and java.* member objects.
+/** 
+ * This is more an example than a test - deserialize our {@link MoreComplexObject}
+ * to verify which settings it requires, as the object uses a number of primitive
+ * and java.* member objects.
  */
 public class MoreComplexObjectTest extends AbstractCloseableListTest {
 

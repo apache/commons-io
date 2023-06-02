@@ -26,6 +26,9 @@ import java.util.regex.Pattern;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests {@link RegexpClassNameMatcher}.
+ */
 public class RegexpClassNameMatcherTest {
 
     @Test

@@ -36,6 +36,9 @@ import java.util.regex.Pattern;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests {@link ValidatingObjectInputStream}.
+ */
 public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     private static final ClassNameMatcher ALWAYS_TRUE = className -> true;
     private MockSerializedClass testObject;
