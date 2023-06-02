@@ -1926,6 +1926,9 @@ public class IOUtils {
      */
     public static int read(final InputStream input, final byte[] buffer, final int offset, final int length)
             throws IOException {
+        if (length == 0) {
+            return 0;
+        }
         return read(input::read, buffer, offset, length);
     }
 
@@ -2659,7 +2662,10 @@ public class IOUtils {
      * @since 2.1
      */
     public static byte[] toByteArray(final InputStream input, final int size) throws IOException {
-        return toByteArray(input::read, size);
+        if (size == 0) {
+            return EMPTY_BYTE_ARRAY;
+        }
+        return toByteArray(Objects.requireNonNull(input, "input")::read, size);
     }
 
     /**
