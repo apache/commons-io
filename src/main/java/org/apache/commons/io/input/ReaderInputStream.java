@@ -138,7 +138,7 @@ public class ReaderInputStream extends InputStream {
         public Builder setCharsetEncoder(final CharsetEncoder charsetEncoder) {
             this.charsetEncoder = charsetEncoder;
             super.setCharset(charsetEncoder.charset());
-            return asThis();
+            return this;
         }
 
     }
