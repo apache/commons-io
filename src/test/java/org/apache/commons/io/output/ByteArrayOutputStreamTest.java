@@ -36,7 +36,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 /**
- * Basic unit tests for the alternative ByteArrayOutputStream implementations.
+ * Tests the alternative ByteArrayOutputStream implementations.
  */
 public class ByteArrayOutputStreamTest {
 

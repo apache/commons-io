@@ -22,7 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Unit tests for {@link AppendableWriter}.
+ * Tests {@link AppendableWriter}.
  */
 public class AppendableWriterTest {
 

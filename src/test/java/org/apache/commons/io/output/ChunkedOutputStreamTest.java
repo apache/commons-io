@@ -26,7 +26,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test the chunked output stream
+ * Tests {@link ChunkedOutputStream}.
  */
 public class ChunkedOutputStreamTest {
 

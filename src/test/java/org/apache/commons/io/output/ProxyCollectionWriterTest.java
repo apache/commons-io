@@ -33,7 +33,7 @@ import org.apache.commons.io.IOIndexedException;
 import org.junit.jupiter.api.Test;
 
 /**
- * JUnit Test Case for {@link ProxyCollectionWriter}.
+ * Tests {@link ProxyCollectionWriter}.
  */
 public class ProxyCollectionWriterTest {
 

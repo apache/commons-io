@@ -29,7 +29,7 @@ import org.apache.commons.io.test.ThrowOnCloseOutputStream;
 import org.junit.jupiter.api.Test;
 
 /**On
- * JUnit Test Case for {@link TeeOutputStream}.
+ * Tests {@link TeeOutputStream}.
  */
 public class TeeOutputStreamTest {
 

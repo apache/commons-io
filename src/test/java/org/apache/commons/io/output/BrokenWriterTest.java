@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
- * JUnit Test Case for {@link BrokenWriter}.
+ * Tests {@link BrokenWriter}.
  */
 public class BrokenWriterTest {
 

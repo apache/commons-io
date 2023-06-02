@@ -31,7 +31,11 @@ import org.apache.commons.io.Charsets;
 import org.apache.commons.io.charset.CharsetDecoders;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests {@link WriterOutputStream}.
+ */
 public class WriterOutputStreamTest {
+
     private static final String UTF_16LE = StandardCharsets.UTF_16LE.name();
     private static final String UTF_16BE = StandardCharsets.UTF_16BE.name();
     private static final String UTF_16 = StandardCharsets.UTF_16.name();

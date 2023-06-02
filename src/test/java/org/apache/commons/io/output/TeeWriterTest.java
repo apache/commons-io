@@ -33,7 +33,7 @@ import org.apache.commons.io.IOIndexedException;
 import org.junit.jupiter.api.Test;
 
 /**
- * JUnit Test Case for {@link TeeWriter}.
+ * Tests {@link TeeWriter}.
  */
 @SuppressWarnings("resource") // not necessary to close these resources
 public class TeeWriterTest {

@@ -27,6 +27,7 @@ import org.apache.commons.io.input.NullInputStream;
 import org.junit.jupiter.api.Test;
 
 /**
+ * Tests {@link CountingOutputStream}.
  */
 public class CountingOutputStreamTest {
 

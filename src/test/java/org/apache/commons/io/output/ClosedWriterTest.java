@@ -23,7 +23,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 /**
- * JUnit Test Case for {@link ClosedWriter}.
+ * Tests {@link ClosedWriter}.
  */
 public class ClosedWriterTest {
 

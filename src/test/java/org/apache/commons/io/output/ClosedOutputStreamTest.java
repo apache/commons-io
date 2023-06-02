@@ -23,7 +23,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 /**
- * JUnit Test Case for {@link ClosedOutputStream}.
+ * Tests {@link ClosedOutputStream}.
  */
 public class ClosedOutputStreamTest {
 

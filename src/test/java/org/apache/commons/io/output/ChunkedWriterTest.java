@@ -26,6 +26,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests {@link ChunkedWriter}.
+ */
 public class ChunkedWriterTest {
 
     @SuppressWarnings("resource") // closed by caller.

@@ -16,14 +16,12 @@
  */
 package org.apache.commons.io.output;
 
-
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-
 /**
- * Really not a lot to do here, but checking that no Exceptions are thrown.
+ * Tests {@link NullOutputStream}.
  */
 public class NullOutputStreamTest {
 
