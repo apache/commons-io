@@ -23,7 +23,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test case for {@link DirectoryFileComparator}.
+ * Tests {@link DirectoryFileComparator}.
  */
 public class DirectoryFileComparatorTest extends ComparatorAbstractTest {
 

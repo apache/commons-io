@@ -26,7 +26,7 @@ import org.apache.commons.io.test.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 
 /**
- * Test case for {@link LastModifiedFileComparator}.
+ * Tests {@link LastModifiedFileComparator}.
  */
 public class LastModifiedFileComparatorTest extends ComparatorAbstractTest {
 

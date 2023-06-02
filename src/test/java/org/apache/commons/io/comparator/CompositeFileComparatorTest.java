@@ -32,7 +32,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test case for {@link CompositeFileComparator}.
+ * Tests {@link CompositeFileComparator}.
  */
 public class CompositeFileComparatorTest extends ComparatorAbstractTest {
 

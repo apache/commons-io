@@ -31,7 +31,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test case for {@link SizeFileComparator}.
+ * Tests {@link SizeFileComparator}.
  */
 public class SizeFileComparatorTest extends ComparatorAbstractTest {
 
