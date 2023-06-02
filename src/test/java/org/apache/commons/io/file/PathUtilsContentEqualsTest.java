@@ -30,6 +30,9 @@ import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+/**
+ * Tests {@link PathUtils}.
+ */
 public class PathUtilsContentEqualsTest {
 
     @TempDir

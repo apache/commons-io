@@ -26,6 +26,9 @@ import org.apache.commons.io.file.Counters.PathCounters;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+/**
+ * Tests {@link Counter} and implementations.
+ */
 public class CountersTest extends TestArguments {
 
     @ParameterizedTest
