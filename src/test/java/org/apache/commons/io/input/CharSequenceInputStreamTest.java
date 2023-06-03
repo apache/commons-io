@@ -19,11 +19,13 @@ package org.apache.commons.io.input;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
@@ -434,6 +436,21 @@ public class CharSequenceInputStreamTest {
             }
             assertEquals(-1, in.read());
         }
+    }
+
+    @Test
+    public void testResetCharset() {
+        assertNotNull(CharSequenceInputStream.builder().setReader(new StringReader("\uD800")).setCharset((Charset) null).getCharset());
+    }
+
+    @Test
+    public void testResetCharsetEncoder() {
+        assertNotNull(CharSequenceInputStream.builder().setReader(new StringReader("\uD800")).setCharsetEncoder(null).getCharsetEncoder());
+    }
+
+    @Test
+    public void testResetCharsetName() {
+        assertNotNull(CharSequenceInputStream.builder().setReader(new StringReader("\uD800")).setCharset((String) null).getCharset());
     }
 
     @Test

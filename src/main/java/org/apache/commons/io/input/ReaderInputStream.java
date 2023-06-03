@@ -100,7 +100,7 @@ public class ReaderInputStream extends InputStream {
      */
     public static class Builder extends AbstractStreamBuilder<ReaderInputStream, Builder> {
 
-        private CharsetEncoder charsetEncoder = super.getCharset().newEncoder();
+        private CharsetEncoder charsetEncoder = newEncoder(getCharset());
 
         /**
          * Constructs a new instance.
@@ -130,22 +130,30 @@ public class ReaderInputStream extends InputStream {
         @Override
         public Builder setCharset(final Charset charset) {
             super.setCharset(charset);
-            charsetEncoder = getCharset().newEncoder();
+            charsetEncoder = newEncoder(getCharset());
             return this;
         }
 
         /**
-         * Sets the charset encoder.
+         * Sets the charset encoder. Assumes that the caller has configured the encoder.
          *
-         * @param charsetEncoder the charset encoder, null resets to a default encoder.
+         * @param newEncoder the charset encoder, null resets to a default encoder.
          * @return this
          */
-        public Builder setCharsetEncoder(final CharsetEncoder charsetEncoder) {
-            this.charsetEncoder = CharsetEncoders.toCharsetEncoder(charsetEncoder);
-            super.setCharset(this.charsetEncoder.charset());
+        public Builder setCharsetEncoder(final CharsetEncoder newEncoder) {
+            charsetEncoder = CharsetEncoders.toCharsetEncoder(newEncoder, () -> newEncoder(getCharsetDefault()));
+            super.setCharset(charsetEncoder.charset());
             return this;
         }
 
+    }
+
+    private static CharsetEncoder newEncoder(final Charset charset) {
+        // @formatter:off
+        return Charsets.toCharset(charset).newEncoder()
+                .onMalformedInput(CodingErrorAction.REPLACE)
+                .onUnmappableCharacter(CodingErrorAction.REPLACE);
+        // @formatter:on
     }
 
     /**

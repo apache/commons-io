@@ -33,6 +33,7 @@ import java.util.Objects;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractStreamBuilder;
+import org.apache.commons.io.charset.CharsetEncoders;
 import org.apache.commons.io.function.Uncheck;
 
 /**
@@ -50,18 +51,30 @@ public class CharSequenceInputStream extends InputStream {
      * <p>
      * For example:
      * </p>
-     *
+     * <h2>Using a Charset</h2>
      * <pre>{@code
      * CharSequenceInputStream s = CharSequenceInputStream.builder()
      *   .setBufferSize(8192)
      *   .setCharSequence("String")
-     *   .setCharsetEncoder(Charset.defaultCharset())
+     *   .setCharset(Charset.defaultCharset())
+     *   .get();}
+     * </pre>
+     * <h2>Using a CharsetEncoder</h2>
+     * <pre>{@code
+     * CharSequenceInputStream s = CharSequenceInputStream.builder()
+     *   .setBufferSize(8192)
+     *   .setCharSequence("String")
+     *   .setCharsetEncoder(Charset.defaultCharset().newEncoder()
+     *     .onMalformedInput(CodingErrorAction.REPLACE)
+     *     .onUnmappableCharacter(CodingErrorAction.REPLACE))
      *   .get();}
      * </pre>
      *
      * @since 2.13.0
      */
     public static class Builder extends AbstractStreamBuilder<CharSequenceInputStream, Builder> {
+
+        private CharsetEncoder charsetEncoder = newEncoder(getCharset());
 
         /**
          * Constructs a new instance.
@@ -74,7 +87,31 @@ public class CharSequenceInputStream extends InputStream {
          */
         @Override
         public CharSequenceInputStream get() {
-            return Uncheck.get(() -> new CharSequenceInputStream(getCharSequence(), getCharset(), getBufferSize()));
+            return Uncheck.get(() -> new CharSequenceInputStream(getCharSequence(), getBufferSize(), charsetEncoder));
+        }
+
+        CharsetEncoder getCharsetEncoder() {
+            return charsetEncoder;
+        }
+
+        @Override
+        public Builder setCharset(final Charset charset) {
+            super.setCharset(charset);
+            charsetEncoder = newEncoder(getCharset());
+            return this;
+        }
+
+        /**
+         * Sets the charset encoder. Assumes that the caller has configured the encoder.
+         *
+         * @param newEncoder the charset encoder.
+         * @return this
+         * @since 2.13.0
+         */
+        public Builder setCharsetEncoder(final CharsetEncoder newEncoder) {
+            charsetEncoder = CharsetEncoders.toCharsetEncoder(newEncoder, () -> newEncoder(getCharsetDefault()));
+            super.setCharset(charsetEncoder.charset());
+            return this;
         }
 
     }
@@ -91,12 +128,19 @@ public class CharSequenceInputStream extends InputStream {
         return new Builder();
     }
 
-    private final CharsetEncoder charsetEncoder;
-    private final CharBuffer cBuf;
-    private final ByteBuffer bBuf;
+    private static CharsetEncoder newEncoder(final Charset charset) {
+        // @formatter:off
+        return Charsets.toCharset(charset).newEncoder()
+                .onMalformedInput(CodingErrorAction.REPLACE)
+                .onUnmappableCharacter(CodingErrorAction.REPLACE);
+        // @formatter:on
+    }
 
-    private int cBufMark; // position in cBuf
+    private final ByteBuffer bBuf;
     private int bBufMark; // position in bBuf
+    private final CharBuffer cBuf;
+    private int cBufMark; // position in cBuf
+    private final CharsetEncoder charsetEncoder;
 
     /**
      * Constructs a new instance with a buffer size of {@link IOUtils#DEFAULT_BUFFER_SIZE}.
@@ -123,10 +167,12 @@ public class CharSequenceInputStream extends InputStream {
     @Deprecated
     public CharSequenceInputStream(final CharSequence cs, final Charset charset, final int bufferSize) {
         // @formatter:off
-        this.charsetEncoder = Charsets.toCharset(charset).newEncoder()
-            .onMalformedInput(CodingErrorAction.REPLACE)
-            .onUnmappableCharacter(CodingErrorAction.REPLACE);
+        this(cs, bufferSize, newEncoder(charset));
         // @formatter:on
+    }
+
+    private CharSequenceInputStream(final CharSequence cs, final int bufferSize, final CharsetEncoder charsetEncoder) {
+        this.charsetEncoder = charsetEncoder;
         // Ensure that buffer is long enough to hold a complete character
         this.bBuf = ByteBuffer.allocate(ReaderInputStream.checkMinBufferSize(charsetEncoder, bufferSize));
         this.bBuf.flip();

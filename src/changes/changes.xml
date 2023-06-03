@@ -99,7 +99,13 @@ The <action> type attribute can be add,update,fix,remove.
         Add AbstractOrigin.size().
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">
-        PathUtils.EMPTY_FILE_ATTRIBUTE_ARRAY.
+        Add PathUtils.EMPTY_FILE_ATTRIBUTE_ARRAY.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add CharSequenceInputStream.Builder.setCharsetEncoder(CharsetEncoder).
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add CharsetEncoders.toCharsetEncoder(CharsetEncoder, Supplier&lt;CharsetEncoder&gt;).
       </action>
       <!-- UPDATE -->
       <action dev="ggregory" type="update" due-to="Gary Gregory, Dependabot">
