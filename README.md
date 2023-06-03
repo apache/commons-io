@@ -46,7 +46,7 @@ Apache Commons IO
 [![GitHub Actions Status](https://github.com/apache/commons-io/workflows/Java%20CI/badge.svg)](https://github.com/apache/commons-io/actions)
 [![Coverage Status](https://codecov.io/gh/apache/commons-io/branch/master/graph/badge.svg)](https://app.codecov.io/gh/apache/commons-io)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/commons-io/commons-io/badge.svg?gav=true)](https://maven-badges.herokuapp.com/maven-central/commons-io/commons-io/?gav=true)
-[![Javadocs](https://javadoc.io/badge/commons-io/commons-io/2.12.0.svg)](https://javadoc.io/doc/commons-io/commons-io/2.12.0)
+[![Javadocs](https://javadoc.io/badge/commons-io/commons-io/2.13.0.svg)](https://javadoc.io/doc/commons-io/commons-io/2.13.0)
 [![CodeQL](https://github.com/apache/commons-io/workflows/CodeQL/badge.svg)](https://github.com/apache/commons-io/actions/workflows/codeql-analysis.yml?query=workflow%3ACodeQL)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/apache/commons-io/badge)](https://api.securityscorecards.dev/projects/github.com/apache/commons-io)
 
@@ -64,13 +64,13 @@ Where can I get the latest release?
 -----------------------------------
 You can download source and binaries from our [download page](https://commons.apache.org/proper/commons-io/download_io.cgi).
 
-Alternatively, you can pull it from the central Maven repositories:
+Alternatively, you can pull it from  the central Maven repositories:
 
 ```xml
 <dependency>
   <groupId>commons-io</groupId>
   <artifactId>commons-io</artifactId>
-  <version>2.12.0</version>
+  <version>2.13.0</version>
 </dependency>
 ```
 

@@ -1,6 +1,78 @@
 Apache Commons IO 
+Version 2.13.0
+Release Notes
+
+INTRODUCTION:
+
+Commons IO is a package of Java utility classes like java.io.  
+Classes in this package are considered to be so standard and of such high 
+reuse as to justify existence in java.io.
+
+The Apache Commons IO library contains utility classes, stream implementations, file filters,
+file comparators, endian transformation classes, and much more.
+
+Java 8 required.
+
+Changes in this version include:
+
+New features:
+o           Add CharSequenceInputStream.Builder. Thanks to Gary Gregory. 
+o           Add ChunkedOutputStream.Builder. Thanks to Gary Gregory. 
+o           Add AbstractStreamBuilder.setOpenOptions(OpenOption...). Thanks to Gary Gregory. 
+o           Add some missing conversions to AbstractOrigin subclasses. Thanks to Gary Gregory. 
+o           Add AbstractOrigin.getByteArray(long, int). Thanks to Gary Gregory. 
+o           Add and use RandomAccessFiles. Thanks to Gary Gregory. 
+o           Add AbstractOrigin.size(). Thanks to Gary Gregory. 
+o           Add PathUtils.EMPTY_FILE_ATTRIBUTE_ARRAY. Thanks to Gary Gregory. 
+o           Add CharSequenceInputStream.Builder.setCharsetEncoder(CharsetEncoder). Thanks to Gary Gregory. 
+o           Add CharsetEncoders.toCharsetEncoder(CharsetEncoder, Supplier<CharsetEncoder>). Thanks to Gary Gregory. 
+
+Fixed Bugs:
+o IO-791:  Regression in FileUtils.touch() - no longer creates parent directories. Thanks to Chad Wilson, Gary Gregory. 
+o           ByteArrayOrigin should be able convert a byte[] to a ByteArrayInputStream. Thanks to Gary Gregory. 
+o           AbstractOriginSupplier.checkOrigin() now throws IllegalStateException instead of NullPointerException. Thanks to Gary Gregory. 
+o IO-796:  FileAlreadyExistsException in PathUtils.createParentDirectories(Path, LinkOption, FileAttribute...). Thanks to Giacomo Boccardo, Gary Gregory. 
+o           Only read the relevant portion of a file in AbstractOrigin.FileOrigin.getByteArray(long, int) Thanks to Gary Gregory. 
+o           Only read the relevant portion of a file in AbstractOrigin.PathOrigin.getByteArray(long, int) Thanks to Gary Gregory. 
+o IO-798:  DeferredFileOutputStream throws exception when system temp dir is a symlink. Thanks to Shai Shapira, Gary Gregory. 
+o           ReaderInputStream.Builder.setCharsetEncoder(null) should reset to a default object, not throw an NPE. Thanks to Gary Gregory. 
+o           ReaderInputStream.Builder.setCharset(null) should reset to a default object, not throw an NPE. Thanks to Gary Gregory. 
+
+Changes:
+o           Bump commons-parent from 57 to 58. Thanks to Gary Gregory, Dependabot. 
+
+Compatibility with 2.6:
+Binary compatible: Yes.
+Source compatible: Yes.
+Semantic compatible: Yes.
+
+Commons IO 2.9.0 requires Java 8.
+Commons IO 2.8.0 requires Java 8.
+Commons IO 2.7 requires Java 8.
+Commons IO 2.6 requires Java 7.
+Commons IO 2.5 requires Java 6.
+Commons IO 2.4 requires Java 6.
+Commons IO 2.3 requires Java 6.
+Commons IO 2.2 requires Java 5.
+Commons IO 1.4 requires Java 1.3.
+
+Historical list of changes: https://commons.apache.org/proper/commons-io/changes-report.html
+
+For complete information on Apache Commons IO, including instructions on how to submit bug reports,
+patches, or suggestions for improvement, see the Apache Commons IO website:
+
+https://commons.apache.org/proper/commons-io/
+
+Download page: https://commons.apache.org/proper/commons-io/download_io.cgi
+
+Have fun!
+-Apache Commons Team
+
+Apache Commons IO 
 Version 2.12.0
 Release Notes
+
+==============================================================================
 
 INTRODUCTION:
 
