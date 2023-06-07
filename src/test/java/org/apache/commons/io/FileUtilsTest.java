@@ -2477,8 +2477,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         Files.write(file.toPath(), arr);
 
         final byte[] data = FileUtils.readFileToByteArray(file, 0, 0);
-        assertEquals(1, data.length);
-        assertEquals(10, data[0]); // return one byte
+        assertEquals(0, data.length);// return one byte
     }
 
 

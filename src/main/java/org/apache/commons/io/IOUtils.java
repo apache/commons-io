@@ -2691,18 +2691,23 @@ public class IOUtils {
             throw new IllegalArgumentException("Length must be greater than or equal to offset: " + offset);
         }
 
-        // read inputStream to byte[] -
+        // read inputStream to byte[]
         final byte[] data = byteArray(input.available());
         input.read(data, 0, length + 1);
 
         // create new byte[] to read from the offset
         int arraySize = length - offset;
-        byte[] responseData = byteArray(arraySize + 1);
-        int k = 0;
+        byte[] responseData;
+        if (arraySize == 0) {
+            responseData = byteArray(0);
+        } else {
+            responseData = byteArray(arraySize + 1);
+            int k = 0;
 
-        for (int i = offset; i <= length; i++) {
-            responseData[k] = data[i];
-            k++;
+            for (int i = offset; i <= length; i++) {
+                responseData[k] = data[i];
+                k++;
+            }
         }
 
         return responseData;
