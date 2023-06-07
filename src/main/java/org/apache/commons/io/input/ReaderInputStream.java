@@ -339,7 +339,10 @@ public class ReaderInputStream extends InputStream {
      * @throws IOException If an I/O error occurs
      */
     private void fillBuffer() throws IOException {
-        if (!endOfInput && (lastCoderResult == null || lastCoderResult.isUnderflow())) {
+        if (endOfInput) {
+            return;
+        }
+        if (lastCoderResult == null || lastCoderResult.isUnderflow()) {
             encoderIn.compact();
             final int position = encoderIn.position();
             // We don't use Reader#read(CharBuffer) here because it is more efficient
