@@ -67,10 +67,10 @@ The <action> type attribute can be add,update,fix,remove.
         FileAlreadyExistsException in PathUtils.createParentDirectories(Path, LinkOption, FileAttribute...).
       </action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
-        Only read the relevant portion of a file in AbstractOrigin.FileOrigin.getByteArray(long, int)
+        Only read the relevant portion of a file in AbstractOrigin.FileOrigin.getByteArray(long, int).
       </action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
-        Only read the relevant portion of a file in AbstractOrigin.PathOrigin.getByteArray(long, int)
+        Only read the relevant portion of a file in AbstractOrigin.PathOrigin.getByteArray(long, int).
       </action>
       <action dev="ggregory" type="fix" due-to="Shai Shapira, Gary Gregory" issue="IO-798">
         DeferredFileOutputStream throws exception when system temp dir is a symlink.
