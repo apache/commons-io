@@ -47,6 +47,11 @@ The <action> type attribute can be add,update,fix,remove.
   </properties>
 
   <body>
+    <release version="2.13.1" date="2023-MM-DD" description="Java 8 required.">
+      <action dev="ggregory" type="fix" issue="IO-799" due-to="Jeroen van der Vegt, Gary Gregory">
+        ReaderInputStream.read() throws an exception instead of returning -1 when called again after returning -1.
+      </action>
+    </release>    
     <release version="2.13.0" date="2023-06-03" description="Java 8 required.">
       <!-- FIX -->
       <action issue="IO-791" dev="ggregory" type="fix" due-to="Chad Wilson, Gary Gregory">

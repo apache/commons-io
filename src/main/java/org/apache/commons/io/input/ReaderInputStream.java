@@ -339,6 +339,9 @@ public class ReaderInputStream extends InputStream {
      * @throws IOException If an I/O error occurs
      */
     private void fillBuffer() throws IOException {
+        if (endOfInput) {
+            return;
+        }
         if (!endOfInput && (lastCoderResult == null || lastCoderResult.isUnderflow())) {
             encoderIn.compact();
             final int position = encoderIn.position();

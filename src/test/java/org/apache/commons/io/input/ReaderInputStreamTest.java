@@ -209,6 +209,17 @@ public class ReaderInputStreamTest {
         testWithSingleByteRead(LARGE_TEST_STRING, UTF_8);
     }
 
+    @Test
+    public void testReadEofTwice() throws IOException {
+        try (ReaderInputStream reader = ReaderInputStream.builder().setCharset(StandardCharsets.UTF_8).setReader(new StringReader("123")).get()) {
+            assertEquals('1', reader.read());
+            assertEquals('2', reader.read());
+            assertEquals('3', reader.read());
+            assertEquals(-1, reader.read());
+            assertEquals(-1, reader.read());
+        }
+    }
+
     @SuppressWarnings("deprecation")
     @Test
     public void testReadZero() throws Exception {
@@ -220,7 +231,6 @@ public class ReaderInputStreamTest {
             testReadZero(inStr, inputStream);
         }
     }
-
     private void testReadZero(final String inStr, final ReaderInputStream inputStream) throws IOException {
         final byte[] bytes = new byte[30];
         assertEquals(0, inputStream.read(bytes, 0, 0));
