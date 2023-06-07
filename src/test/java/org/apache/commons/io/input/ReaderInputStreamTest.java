@@ -314,6 +314,7 @@ public class ReaderInputStreamTest {
                 assertEquals(b, (byte) read);
             }
             assertEquals(-1, in.read());
+            assertEquals(-1, in.read());
         }
     }
 }
