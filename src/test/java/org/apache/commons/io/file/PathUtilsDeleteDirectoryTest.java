@@ -18,9 +18,12 @@
 package org.apache.commons.io.file;
 
 import static org.apache.commons.io.file.CounterAssertions.assertCounts;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.junit.jupiter.api.Test;
@@ -29,6 +32,18 @@ import org.junit.jupiter.api.Test;
  * Tests {@link DeletingPathVisitor}.
  */
 public class PathUtilsDeleteDirectoryTest extends AbstractTempDirTest {
+
+    @Test
+    public void testDeleteAbsentDirectory() throws IOException {
+        final Path absent = tempDirPath.resolve("ThisDirectoryDoesNotExist");
+        assertFalse(Files.exists(absent));
+        final Class<IllegalArgumentException> expectedType = IllegalArgumentException.class;
+        assertThrows(expectedType, () -> PathUtils.deleteDirectory(absent));
+        assertThrows(expectedType, () -> PathUtils.deleteDirectory(absent, StandardDeleteOption.OVERRIDE_READ_ONLY));
+        assertThrows(expectedType, () -> PathUtils.deleteDirectory(absent, PathUtils.EMPTY_DELETE_OPTION_ARRAY));
+        // This will throw if not empty.
+        Files.deleteIfExists(tempDirPath);
+    }
 
     /**
      * Tests a directory with one file of size 0.
