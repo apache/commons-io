@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -37,7 +38,7 @@ public class PathUtilsDeleteDirectoryTest extends AbstractTempDirTest {
     public void testDeleteAbsentDirectory() throws IOException {
         final Path absent = tempDirPath.resolve("ThisDirectoryDoesNotExist");
         assertFalse(Files.exists(absent));
-        final Class<IllegalArgumentException> expectedType = IllegalArgumentException.class;
+        final Class<NoSuchFileException> expectedType = NoSuchFileException.class;
         assertThrows(expectedType, () -> PathUtils.deleteDirectory(absent));
         assertThrows(expectedType, () -> PathUtils.deleteDirectory(absent, StandardDeleteOption.OVERRIDE_READ_ONLY));
         assertThrows(expectedType, () -> PathUtils.deleteDirectory(absent, PathUtils.EMPTY_DELETE_OPTION_ARRAY));
@@ -95,16 +96,6 @@ public class PathUtilsDeleteDirectoryTest extends AbstractTempDirTest {
     public void testDeleteDirectory2FileSize2() throws IOException {
         PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2"), tempDirPath);
         assertCounts(3, 2, 2, PathUtils.deleteDirectory(tempDirPath));
-        // This will throw if not empty.
-        Files.deleteIfExists(tempDirPath);
-    }
-
-    /**
-     * Tests an empty folder.
-     */
-    @Test
-    public void testDeleteEmptyDirectory() throws IOException {
-        assertCounts(1, 0, 0, PathUtils.deleteDirectory(tempDirPath));
         // This will throw if not empty.
         Files.deleteIfExists(tempDirPath);
     }

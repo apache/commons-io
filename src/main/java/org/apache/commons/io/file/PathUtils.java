@@ -1650,7 +1650,6 @@ public final class PathUtils {
      * @throws NullPointerException if the directory is {@code null}.
      */
     public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final Path directory) throws IOException {
-        requireExists(directory, "directory");
         Files.walkFileTree(directory, visitor);
         return visitor;
     }
