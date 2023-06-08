@@ -1646,6 +1646,7 @@ public final class PathUtils {
      * @param <T> See {@link Files#walkFileTree(Path,FileVisitor)}.
      * @return the given visitor.
      *
+     * @throws NoSuchFileException if the directory does not exist.
      * @throws IOException if an I/O error is thrown by a visitor method.
      * @throws NullPointerException if the directory is {@code null}.
      */
