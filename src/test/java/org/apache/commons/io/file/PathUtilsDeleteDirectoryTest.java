@@ -99,4 +99,14 @@ public class PathUtilsDeleteDirectoryTest extends AbstractTempDirTest {
         // This will throw if not empty.
         Files.deleteIfExists(tempDirPath);
     }
+
+    /**
+     * Tests an empty folder.
+     */
+    @Test
+    public void testDeleteEmptyDirectory() throws IOException {
+        assertCounts(1, 0, 0, PathUtils.deleteDirectory(tempDirPath));
+        // This will throw if not empty.
+        Files.deleteIfExists(tempDirPath);
+    }
 }
