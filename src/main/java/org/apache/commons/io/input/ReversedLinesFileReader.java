@@ -280,7 +280,7 @@ public class ReversedLinesFileReader implements Closeable {
      *
      * @param file the file to be read
      * @throws IOException if an I/O error occurs.
-     * @deprecated Use {@link ReaderInputStream#builder()} instead
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public ReversedLinesFileReader(final File file) throws IOException {
@@ -295,7 +295,7 @@ public class ReversedLinesFileReader implements Closeable {
      * @param charset the charset to use, null uses the default Charset.
      * @throws IOException if an I/O error occurs.
      * @since 2.5
-     * @deprecated Use {@link ReaderInputStream#builder()} instead
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public ReversedLinesFileReader(final File file, final Charset charset) throws IOException {
@@ -312,7 +312,7 @@ public class ReversedLinesFileReader implements Closeable {
      * @param charset  the encoding of the file, null uses the default Charset.
      * @throws IOException if an I/O error occurs.
      * @since 2.3
-     * @deprecated Use {@link ReaderInputStream#builder()} instead
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public ReversedLinesFileReader(final File file, final int blockSize, final Charset charset) throws IOException {
@@ -333,7 +333,7 @@ public class ReversedLinesFileReader implements Closeable {
      *                                                      in version 2.2 if the
      *                                                      encoding is not
      *                                                      supported.
-     * @deprecated Use {@link ReaderInputStream#builder()} instead
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public ReversedLinesFileReader(final File file, final int blockSize, final String charsetName) throws IOException {
@@ -348,7 +348,7 @@ public class ReversedLinesFileReader implements Closeable {
      * @param charset the charset to use, null uses the default Charset.
      * @throws IOException if an I/O error occurs.
      * @since 2.7
-     * @deprecated Use {@link ReaderInputStream#builder()} instead
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public ReversedLinesFileReader(final Path file, final Charset charset) throws IOException {
@@ -365,7 +365,7 @@ public class ReversedLinesFileReader implements Closeable {
      * @param charset  the encoding of the file, null uses the default Charset.
      * @throws IOException if an I/O error occurs.
      * @since 2.7
-     * @deprecated Use {@link ReaderInputStream#builder()} instead
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public ReversedLinesFileReader(final Path file, final int blockSize, final Charset charset) throws IOException {
@@ -439,7 +439,7 @@ public class ReversedLinesFileReader implements Closeable {
      *                                                      encoding is not
      *                                                      supported.
      * @since 2.7
-     * @deprecated Use {@link ReaderInputStream#builder()} instead
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
     public ReversedLinesFileReader(final Path file, final int blockSize, final String charsetName) throws IOException {
