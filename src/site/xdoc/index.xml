@@ -85,162 +85,42 @@ There are six main areas included:
 <!-- ================================================== -->
 <section name="Releases">
 
-    <subsection name="Commons IO 2.13.0 (requires Java 8)">
+    <subsection name="Latest Release (Java 8 and up)">
         <p>
             Commons IO 2.13.0 requires a minimum of Java 8 -
-            <a href="https://commons.apache.org/io/download_io.cgi">Download now!</a>
+            <a href="https://commons.apache.org/io/download_io.cgi">Download now</a>.
         </p>
         <p>
             View the
             <a href="changes-report.html">Release Notes</a>
             and
-            <a href="apidocs/index.html">Javadoc API documents</a>
+            <a href="apidocs/index.html">Javadoc API documents</a>.
         </p>
     </subsection>
 
-    <subsection name="Commons IO 2.12.0 (requires Java 8)">
+    <subsection name="Previous Releases">
         <p>
-            Commons IO 2.12.0 requires a minimum of Java 8 -
-            <a href="https://commons.apache.org/io/download_io.cgi">Download now!</a>
+          See the <a href="https://archive.apache.org/dist/commons/io/">download archive</a> 
+          and <a href="https://javadoc.io/doc/commons-io/commons-io/">Javadoc archive</a>.
         </p>
         <p>
-            View the
-            <a href="changes-report.html">Release Notes</a>
-            and
-            <a href="https://javadoc.io/doc/commons-io/commons-io/2.12.0/index.html">Javadoc API documents</a>
+          The Java platform requirements are:
         </p>
+        <ul>
+          <li>Version 2.13.0 requires Java 8.</li>
+          <li>Version 2.12.0 requires Java 8.</li>
+          <li>Version 2.11.0 requires Java 8.</li>
+          <li>Version 2.10.0 requires Java 8.</li>
+          <li>Version 2.9.0 requires Java 8.</li>
+          <li>Version 2.8.0 requires Java 8.</li>
+          <li>Version 2.7 requires Java 8.</li>
+          <li>Version 2.6 requires Java 7.</li>
+          <li>Version 2.5 requires Java 6.</li>
+          <li>Version 2.4 requires Java 6.</li>
+          <li>Version 2.3 requires Java 6.</li>
+          <li>Version 2.2 requires Java 5.</li>
+        </ul>
     </subsection>
-
-    <subsection name="Commons IO 2.11.0 (requires Java 8)">
-        <p>
-            Commons IO 2.11.0 requires a minimum of Java 8 -
-            <a href="https://commons.apache.org/io/download_io.cgi">Download now!</a>
-        </p>
-        <p>
-            View the
-            <a href="changes-report.html">Release Notes</a>
-            and
-            <a href="https://javadoc.io/doc/commons-io/commons-io/2.11.0/index.html">Javadoc API documents</a>
-        </p>
-    </subsection>
-
-    <subsection name="Commons IO 2.10.0 (requires Java 8)">
-        <p>
-            Commons IO 2.10.0 requires a minimum of Java 8 -
-            <a href="https://commons.apache.org/io/download_io.cgi">Download now!</a>
-        </p>
-        <p>
-            View the
-            <a href="changes-report.html">Release Notes</a>
-            and
-            <a href="https://javadoc.io/doc/commons-io/commons-io/2.10.0/index.html">Javadoc API documents</a>
-        </p>
-    </subsection>
-
-    <subsection name="Commons IO 2.9.0 (requires Java 8)">
-        <p>
-            Commons IO 2.9.0 requires a minimum of Java 8 -
-            <a href="https://commons.apache.org/io/download_io.cgi">Download now!</a>
-        </p>
-        <p>
-            View the
-            <a href="changes-report.html">Release Notes</a>
-            and
-            <a href="https://javadoc.io/doc/commons-io/commons-io/2.9.0/index.html">Javadoc API documents</a>
-        </p>
-    </subsection>
-
-    <subsection name="Commons IO 2.8.0 (requires Java 8)">
-        <p>
-            Commons IO 2.8.0 requires a minimum of Java 8 -
-            <a href="https://commons.apache.org/io/download_io.cgi">Download now!</a>
-        </p>
-        <p>
-            View the
-            <a href="changes-report.html">Release Notes</a>
-            and
-            <a href="https://javadoc.io/doc/commons-io/commons-io/2.8.0/index.html">Javadoc API documents</a>
-        </p>
-    </subsection>
-
-    <subsection name="Commons IO 2.7 (requires Java 8)">
-        <p>
-            Commons IO 2.7 requires a minimum of Java 8 -
-            <a href="https://commons.apache.org/io/download_io.cgi">Download now!</a>
-        </p>
-        <p>
-            View the
-            <a href="changes-report.html">Release Notes</a>
-            and
-            <a href="https://javadoc.io/doc/commons-io/commons-io/2.7/index.html">Javadoc API documents</a>
-        </p>
-    </subsection>
-
-    <subsection name="Commons IO 2.6 (requires Java 7)">
-        <p>
-            Commons IO 2.6 requires a minimum of Java 7 -
-            <a href="https://commons.apache.org/io/download_io.cgi">Download now!</a>
-        </p>
-        <p>
-            View the
-            <a href="upgradeto2_6.html">Release Notes</a>
-            and
-            <a href="https://javadoc.io/doc/commons-io/commons-io/2.6/index.html">Javadoc API documents</a>
-        </p>
-    </subsection>
-
-    <subsection name="Commons IO 2.5 (requires Java 6)">
-        <p>
-            Commons IO 2.5 requires a minimum of Java 6 -
-            <a href="https://commons.apache.org/io/download_io.cgi">Download now!</a>
-        </p>
-        <p>
-            View the
-            <a href="upgradeto2_5.html">Release Notes</a>
-            and
-            <a href="https://javadoc.io/doc/commons-io/commons-io/2.5/index.html">Javadoc API documents</a>
-        </p>
-    </subsection>
-
-    <subsection name="Commons IO 2.4 (requires Java 6)">
-<p>
-    Commons IO 2.4 requires a minimum of JDK 1.6 -
-<a href="https://commons.apache.org/io/download_io.cgi">Download now!</a>
-</p>
-<p>
-View the <a href="upgradeto2_4.html">Release Notes</a> and
-<a href="https://javadoc.io/doc/commons-io/commons-io/2.4/index.html">Javadoc API documents</a>
-</p>
-</subsection>
-
-    <subsection name="Commons IO 2.3 (requires Java 6)">
-<p>
-    Commons IO 2.3 requires a minimum of JDK 1.6 -
-<a href="https://commons.apache.org/io/download_io.cgi">Download now!</a>
-</p>
-<p>
-View the <a href="upgradeto2_3.html">Release Notes</a> and
-<a href="https://javadoc.io/doc/commons-io/commons-io/2.3/index.html">Javadoc API documents</a>
-</p>
-</subsection>
-
-<subsection name="Commons IO 2.2 (requires Java 5)">
-<p>
-Commons IO 2.2 requires a minimum of JDK 1.5 -
-<a href="https://commons.apache.org/io/download_io.cgi">Download now!</a>
-</p> 
-<p>
-View the <a href="upgradeto2_2.html">Release Notes</a> and
-<a href="https://javadoc.io/doc/commons-io/commons-io/2.2/index.html">Javadoc API documents</a>
-</p> 
-</subsection>
-
-<subsection name="Older Releases">
-<p>
-For previous releases, see the <a href="https://archive.apache.org/dist/commons/io/">Apache Archive</a>
-and <a href="https://javadoc.io/doc/commons-io/commons-io/">Javadoc Archive</a>
-</p> 
-</subsection>
 
 </section>
 <!-- ================================================== -->
