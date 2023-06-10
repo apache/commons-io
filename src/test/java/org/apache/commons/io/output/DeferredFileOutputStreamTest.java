@@ -200,7 +200,8 @@ public class DeferredFileOutputStreamTest {
                 .setDirectory(tempDir)
                 .get();
         // @formatter:on
-        assertNull(dfos.getFile(), "Check file is null-A");
+        assertNull(dfos.getFile(), "Check File is null-A");
+        assertNull(dfos.getPath(), "Check Path is null-A");
         dfos.write(testBytes, 0, testBytes.length);
         dfos.close();
         assertFalse(dfos.isInMemory());
@@ -237,7 +238,8 @@ public class DeferredFileOutputStreamTest {
                 .setDirectory(tempDir)
                 .get();
         // @formatter:on
-        assertNull(dfos.getFile(), "Check file is null-A");
+        assertNull(dfos.getFile(), "Check File is null-A");
+        assertNull(dfos.getPath(), "Check Path is null-A");
         dfos.write(testBytes, 0, testBytes.length);
         dfos.close();
         assertFalse(dfos.isInMemory());
@@ -265,7 +267,8 @@ public class DeferredFileOutputStreamTest {
         final String suffix = ".out";
         final File tempDir = FileUtils.current();
         final DeferredFileOutputStream dfos = new DeferredFileOutputStream(testBytes.length + 42, initialBufferSize, prefix, suffix, tempDir);
-        assertNull(dfos.getFile(), "Check file is null-A");
+        assertNull(dfos.getFile(), "Check File is null-A");
+        assertNull(dfos.getPath(), "Check Path is null-A");
         dfos.write(testBytes, 0, testBytes.length);
         dfos.close();
         assertTrue(dfos.isInMemory());

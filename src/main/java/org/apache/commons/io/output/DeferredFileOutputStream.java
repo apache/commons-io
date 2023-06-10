@@ -297,17 +297,32 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     }
 
     /**
-     * Gets either the output file specified in the constructor or the temporary file created or null.
+     * Gets either the output File specified in the constructor or the temporary File created or null.
      * <p>
-     * If the constructor specifying the file is used then it returns that same output file, even when threshold has not been reached.
+     * If the constructor specifying the File is used then it returns that same output File, even when threshold has not been reached.
      * <p>
-     * If constructor specifying a temporary file prefix/suffix is used then the temporary file created once the threshold is reached is returned If the
+     * If constructor specifying a temporary File prefix/suffix is used then the temporary File created once the threshold is reached is returned if the
      * threshold was not reached then {@code null} is returned.
      *
-     * @return The file for this output stream, or {@code null} if no such file exists.
+     * @return The File for this output stream, or {@code null} if no such File exists.
      */
     public File getFile() {
         return outputPath != null ? outputPath.toFile() : null;
+    }
+
+    /**
+     * Gets either the output Path specified in the constructor or the temporary Path created or null.
+     * <p>
+     * If the constructor specifying the file is used then it returns that same output Path, even when threshold has not been reached.
+     * <p>
+     * If constructor specifying a temporary Path prefix/suffix is used then the temporary Path created once the threshold is reached is returned if the
+     * threshold was not reached then {@code null} is returned.
+     *
+     * @return The Path for this output stream, or {@code null} if no such Path exists.
+     * @since 2.14.0
+     */
+    public Path getPath() {
+        return outputPath;
     }
 
     /**
