@@ -60,6 +60,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.function.IOConsumer;
@@ -1310,13 +1311,53 @@ public class IOUtilsTest {
     public void testSkipFully_InputStream() throws Exception {
         final int size = 1027;
 
-        final InputStream input = new ByteArrayInputStream(new byte[size]);
-        assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1), "Should have failed with IllegalArgumentException");
+        try (final InputStream input = new ByteArrayInputStream(new byte[size])) {
+            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1), "Should have failed with IllegalArgumentException");
 
-        IOUtils.skipFully(input, 0);
-        IOUtils.skipFully(input, size - 1);
-        assertThrows(IOException.class, () -> IOUtils.skipFully(input, 2), "Should have failed with IOException");
-        IOUtils.closeQuietly(input);
+            IOUtils.skipFully(input, 0);
+            IOUtils.skipFully(input, size - 1);
+            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 2), "Should have failed with IOException");
+        }
+    }
+
+    @Test
+    public void testSkipFully_InputStream_Buffer_New_bytes() throws Exception {
+        final int size = 1027;
+        final Supplier<byte[]> bas = () -> new byte[size];
+        try (final InputStream input = new ByteArrayInputStream(new byte[size])) {
+            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1, bas), "Should have failed with IllegalArgumentException");
+
+            IOUtils.skipFully(input, 0, bas);
+            IOUtils.skipFully(input, size - 1, bas);
+            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 2, bas), "Should have failed with IOException");
+        }
+    }
+
+    @Test
+    public void testSkipFully_InputStream_Buffer_Resuse_bytes() throws Exception {
+        final int size = 1027;
+        final byte[] ba = new byte[size];
+        final Supplier<byte[]> bas = () -> ba;
+        try (final InputStream input = new ByteArrayInputStream(new byte[size])) {
+            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1, bas), "Should have failed with IllegalArgumentException");
+
+            IOUtils.skipFully(input, 0, bas);
+            IOUtils.skipFully(input, size - 1, bas);
+            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 2, bas), "Should have failed with IOException");
+        }
+    }
+
+    @Test
+    public void testSkipFully_InputStream_Buffer_Resuse_ThreadLocal() throws Exception {
+        final int size = 1027;
+        final ThreadLocal<byte[]> tl = ThreadLocal.withInitial(() -> new byte[size]);
+        try (final InputStream input = new ByteArrayInputStream(new byte[size])) {
+            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1, tl::get), "Should have failed with IllegalArgumentException");
+
+            IOUtils.skipFully(input, 0, tl::get);
+            IOUtils.skipFully(input, size - 1, tl::get);
+            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 2, tl::get), "Should have failed with IOException");
+        }
     }
 
     @Test
@@ -1336,13 +1377,12 @@ public class IOUtilsTest {
     @Test
     public void testSkipFully_Reader() throws Exception {
         final int size = 1027;
-        final Reader input = new CharArrayReader(new char[size]);
-
-        IOUtils.skipFully(input, 0);
-        IOUtils.skipFully(input, size - 3);
-        assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1), "Should have failed with IllegalArgumentException");
-        assertThrows(IOException.class, () -> IOUtils.skipFully(input, 5), "Should have failed with IOException");
-        IOUtils.closeQuietly(input);
+        try (final Reader input = new CharArrayReader(new char[size])) {
+            IOUtils.skipFully(input, 0);
+            IOUtils.skipFully(input, size - 3);
+            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1), "Should have failed with IllegalArgumentException");
+            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 5), "Should have failed with IOException");
+        }
     }
 
     @Test

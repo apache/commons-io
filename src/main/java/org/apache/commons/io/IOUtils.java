@@ -52,8 +52,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.zip.InflaterInputStream;
 
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.function.IOSupplier;
@@ -2375,6 +2377,36 @@ public class IOUtils {
      * @since 2.0
      */
     public static long skip(final InputStream input, final long toSkip) throws IOException {
+        return skip(input, toSkip, IOUtils::getScratchByteArrayWriteOnly);
+    }
+
+    /**
+     * Skips bytes from an input byte stream.
+     * <p>
+     * Intended for special cases when customization of the temporary buffer is needed because, for example, a nested input stream has requirements for the
+     * bytes read. For example, when using {@link InflaterInputStream}s from multiple threads.
+     * </p>
+     * <p>
+     * This implementation guarantees that it will read as many bytes as possible before giving up; this may not always be the case for skip() implementations
+     * in subclasses of {@link InputStream}.
+     * </p>
+     * <p>
+     * Note that the implementation uses {@link InputStream#read(byte[], int, int)} rather than delegating to {@link InputStream#skip(long)}. This means that
+     * the method may be considerably less efficient than using the actual skip implementation, this is done to guarantee that the correct number of bytes are
+     * skipped.
+     * </p>
+     *
+     * @param input              byte stream to skip
+     * @param toSkip             number of bytes to skip.
+     * @param skipBufferSupplier Supplies the buffer to use for reading.
+     * @return number of bytes actually skipped.
+     * @throws IOException              if there is a problem reading the file
+     * @throws IllegalArgumentException if toSkip is negative
+     * @see InputStream#skip(long)
+     * @see <a href="https://issues.apache.org/jira/browse/IO-203">IO-203 - Add skipFully() method for InputStreams</a>
+     * @since 2.14.0
+     */
+    public static long skip(final InputStream input, final long toSkip, final Supplier<byte[]> skipBufferSupplier) throws IOException {
         if (toSkip < 0) {
             throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
         }
@@ -2385,9 +2417,9 @@ public class IOUtils {
         //
         long remain = toSkip;
         while (remain > 0) {
+            final byte[] skipBuffer = skipBufferSupplier.get();
             // See https://issues.apache.org/jira/browse/IO-203 for why we use read() rather than delegating to skip()
-            final byte[] byteArray = getScratchByteArrayWriteOnly();
-            final long n = input.read(byteArray, 0, (int) Math.min(remain, byteArray.length));
+            final long n = input.read(skipBuffer, 0, (int) Math.min(remain, skipBuffer.length));
             if (n < 0) { // EOF
                 break;
             }
@@ -2485,10 +2517,40 @@ public class IOUtils {
      * @since 2.0
      */
     public static void skipFully(final InputStream input, final long toSkip) throws IOException {
+        final long skipped = skip(input, toSkip, IOUtils::getScratchByteArrayWriteOnly);
+        if (skipped != toSkip) {
+            throw new EOFException("Bytes to skip: " + toSkip + " actual: " + skipped);
+        }
+    }
+
+    /**
+     * Skips the requested number of bytes or fail if there are not enough left.
+     * <p>
+     * Intended for special cases when customization of the temporary buffer is needed because, for example, a nested input stream has requirements for the
+     * bytes read. For example, when using {@link InflaterInputStream}s from multiple threads.
+     * </p>
+     * <p>
+     * This allows for the possibility that {@link InputStream#skip(long)} may not skip as many bytes as requested (most likely because of reaching EOF).
+     * </p>
+     * <p>
+     * Note that the implementation uses {@link #skip(InputStream, long)}. This means that the method may be considerably less efficient than using the actual
+     * skip implementation, this is done to guarantee that the correct number of characters are skipped.
+     * </p>
+     *
+     * @param input              stream to skip
+     * @param toSkip             the number of bytes to skip
+     * @param skipBufferSupplier Supplies the buffer to use for reading.
+     * @throws IOException              if there is a problem reading the file
+     * @throws IllegalArgumentException if toSkip is negative
+     * @throws EOFException             if the number of bytes skipped was incorrect
+     * @see InputStream#skip(long)
+     * @since 2.14.0
+     */
+    public static void skipFully(final InputStream input, final long toSkip, final Supplier<byte[]> skipBufferSupplier) throws IOException {
         if (toSkip < 0) {
             throw new IllegalArgumentException("Bytes to skip must not be negative: " + toSkip);
         }
-        final long skipped = skip(input, toSkip);
+        final long skipped = skip(input, toSkip, skipBufferSupplier);
         if (skipped != toSkip) {
             throw new EOFException("Bytes to skip: " + toSkip + " actual: " + skipped);
         }
