@@ -247,7 +247,7 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
         final String path = testFile.getPath();
 
         assertFalse(testFile.exists(), "1-testFile exists: " + testFile);
-        
+
         // Do NOT used a try-with-resources statement here or the test will fail.
         RandomAccessFile raf = createRandomAccessFile();
         assertTrue(testFile.exists(), "2-testFile exists");
