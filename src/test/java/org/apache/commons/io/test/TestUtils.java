@@ -164,14 +164,20 @@ public abstract class TestUtils {
         }
     }
 
-    public static void createFile(final File file, final long size)
-            throws IOException {
+    public static void createFile(final File file, final long size) throws IOException {
         if (!file.getParentFile().exists()) {
-            throw new IOException("Cannot create file " + file
-                    + " as the parent directory does not exist");
+            throw new IOException("Cannot create file " + file + " as the parent directory does not exist");
         }
-        try (BufferedOutputStream output =
-                new BufferedOutputStream(Files.newOutputStream(file.toPath()))) {
+        try (BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(file.toPath()))) {
+            generateTestData(output, size);
+        }
+    }
+
+    public static void createFile(final Path file, final long size) throws IOException {
+        if (!Files.exists(file.getParent())) {
+            throw new IOException("Cannot create file " + file + " as the parent directory does not exist");
+        }
+        try (BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(file))) {
             generateTestData(output, size);
         }
     }

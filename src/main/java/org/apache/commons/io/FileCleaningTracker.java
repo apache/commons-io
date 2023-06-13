@@ -19,6 +19,7 @@ package org.apache.commons.io;
 import java.io.File;
 import java.lang.ref.PhantomReference;
 import java.lang.ref.ReferenceQueue;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -253,6 +254,36 @@ public class FileCleaningTracker {
     public void track(final File file, final Object marker, final FileDeleteStrategy deleteStrategy) {
         Objects.requireNonNull(file, "file");
         addTracker(file.getPath(), marker, deleteStrategy);
+    }
+
+    /**
+     * Tracks the specified file, using the provided marker, deleting the file
+     * when the marker instance is garbage collected.
+     * The {@link FileDeleteStrategy#NORMAL normal} deletion strategy will be used.
+     *
+     * @param file  the file to be tracked, not null
+     * @param marker  the marker object used to track the file, not null
+     * @throws NullPointerException if the file is null
+     * @since 2.14.0
+     */
+    public void track(final Path file, final Object marker) {
+        track(file, marker, null);
+    }
+
+    /**
+     * Tracks the specified file, using the provided marker, deleting the file
+     * when the marker instance is garbage collected.
+     * The specified deletion strategy is used.
+     *
+     * @param file  the file to be tracked, not null
+     * @param marker  the marker object used to track the file, not null
+     * @param deleteStrategy  the strategy to delete the file, null means normal
+     * @throws NullPointerException if the file is null
+     * @since 2.14.0
+     */
+    public void track(final Path file, final Object marker, final FileDeleteStrategy deleteStrategy) {
+        Objects.requireNonNull(file, "file");
+        addTracker(file.toAbsolutePath().toString(), marker, deleteStrategy);
     }
 
     /**
