@@ -228,7 +228,7 @@ public class FileCleaningTracker {
     }
 
     /**
-     * Track the specified file, using the provided marker, deleting the file
+     * Tracks the specified file, using the provided marker, deleting the file
      * when the marker instance is garbage collected.
      * The {@link FileDeleteStrategy#NORMAL normal} deletion strategy will be used.
      *
