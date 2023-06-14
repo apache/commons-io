@@ -36,12 +36,15 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
+import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public class ReaderInputStreamTest {
 
@@ -200,6 +203,22 @@ public class ReaderInputStreamTest {
     }
 
     @Test
+    public void testIo803StringReaderSanityCheck() {
+        final StringReader reader = new StringReader("");
+        final InputSource inputSource = new InputSource(reader);
+        assertThrows(SAXException.class, () -> DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputSource));
+    }
+
+    @Test
+    public void testIo803SAXException() throws IOException {
+        final StringReader reader = new StringReader("");
+        try (final ReaderInputStream inputStream = ReaderInputStream.builder().setCharset(StandardCharsets.UTF_8).setReader(reader).get()) {
+            final InputSource inputSource = new InputSource(inputStream);
+            assertThrows(SAXException.class, () -> DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputSource));
+        }
+    }
+
+    @Test
     public void testLargeUTF8WithBufferedRead() throws IOException {
         testWithBufferedRead(LARGE_TEST_STRING, UTF_8);
     }
@@ -231,6 +250,7 @@ public class ReaderInputStreamTest {
             testReadZero(inStr, inputStream);
         }
     }
+
     private void testReadZero(final String inStr, final ReaderInputStream inputStream) throws IOException {
         final byte[] bytes = new byte[30];
         assertEquals(0, inputStream.read(bytes, 0, 0));
