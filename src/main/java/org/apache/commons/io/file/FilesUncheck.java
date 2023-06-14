@@ -42,6 +42,7 @@ import java.nio.file.attribute.UserPrincipal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiPredicate;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.function.Uncheck;
@@ -239,6 +240,22 @@ public final class FilesUncheck {
      */
     public static boolean deleteIfExists(final Path path) {
         return Uncheck.apply(Files::deleteIfExists, path);
+    }
+
+    /**
+     * Delegates to {@link Files#find(Path, int, BiPredicate, FileVisitOption...)} throwing {@link UncheckedIOException} instead of {@link IOException}.
+     *
+     * @param start    See delegate.
+     * @param maxDepth See delegate.
+     * @param matcher  See delegate.
+     * @param options  See delegate.
+     * @return See delegate.
+     * @throws UncheckedIOException Wraps an {@link IOException}.
+     * @since 2.14.0
+     */
+    public static Stream<Path> find(final Path start, final int maxDepth, final BiPredicate<Path, BasicFileAttributes> matcher,
+            final FileVisitOption... options) {
+        return Uncheck.apply(Files::find, start, maxDepth, matcher, options);
     }
 
     /**

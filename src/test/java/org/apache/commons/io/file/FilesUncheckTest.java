@@ -165,6 +165,11 @@ public class FilesUncheckTest {
     }
 
     @Test
+    public void testFind() {
+        assertNotNull(FilesUncheck.find(FILE_PATH_EMPTY, 0, (t, u) -> false));
+    }
+
+    @Test
     public void testGetAttribute() {
         assertEquals(0L, FilesUncheck.getAttribute(FILE_PATH_EMPTY, "basic:size", LinkOption.NOFOLLOW_LINKS));
     }
