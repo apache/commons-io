@@ -43,7 +43,7 @@ jobs:
       fail-fast: false
         
     steps:
-    - uses: actions/checkout@v3.5.2
+    - uses: actions/checkout@v3.5.3
       with:
         persist-credentials: false
     - uses: actions/cache@v3.3.1
