@@ -65,6 +65,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" issue="IO-799" due-to="Jeroen van der Vegt, Gary Gregory">
         ReaderInputStream.read() throws an exception instead of returning -1 when called again after returning -1.
       </action>
+      <action dev="ggregory" type="fix" issue="IO-804" due-to="Elliotte Rusty Harold, Gary Gregory">
+        FileUtils.forceMkdirParent() Javadoc is likely incorrect.
+      </action>
       <!-- UPDATE -->
     </release>    
     <release version="2.13.0" date="2023-06-03" description="Java 8 required.">

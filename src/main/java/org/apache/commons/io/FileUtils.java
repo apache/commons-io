@@ -1381,16 +1381,15 @@ public class FileUtils {
     }
 
     /**
-     * Calls {@link File#mkdirs()} and throws an {@link IOException} on failure.
+     * Creates all directories for a File object, including any necessary but nonexistent parent directories. If the parent directory already exists or is null,
+     * nothing happens.
      * <p>
-     * Creates all directories for a File object, including any necessary but nonexistent parent directories. If the {@code directory} already exists or is
-     * null, nothing happens.
+     * Calls {@link File#mkdirs()} for the parent of @{code file}.
      * </p>
      *
      * @param file file with parents to create, must not be {@code null}.
      * @throws NullPointerException if the file is {@code null}.
      * @throws IOException          if the directory was not created along with all its parent directories.
-     * @throws IOException          if the given file object is not a directory.
      * @throws SecurityException    See {@link File#mkdirs()}.
      * @see File#mkdirs()
      * @since 2.5
