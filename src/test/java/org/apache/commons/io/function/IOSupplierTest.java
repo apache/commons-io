@@ -35,7 +35,7 @@ public class IOSupplierTest {
 
     private AtomicReference<String> ref1;
 
-    private String getThrows(final IOSupplier<String> supplier) throws IOException {
+    private String getThrowsIO(final IOSupplier<String> supplier) throws IOException {
         return supplier.get();
     }
 
@@ -62,7 +62,7 @@ public class IOSupplierTest {
         assertThrows(IOException.class, () -> {
             throw new IOException();
         });
-        assertEquals("new1", getThrows(() -> TestUtils.compareAndSetThrowsIO(ref1, "new1")));
+        assertEquals("new1", getThrowsIO(() -> TestUtils.compareAndSetThrowsIO(ref1, "new1")));
         assertEquals("new1", ref1.get());
     }
 
