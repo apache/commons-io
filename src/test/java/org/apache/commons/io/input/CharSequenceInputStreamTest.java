@@ -425,19 +425,6 @@ public class CharSequenceInputStreamTest {
         }
     }
 
-    private void testSingleByteRead(final String testString, final String charsetName) throws IOException {
-        final byte[] bytes = testString.getBytes(charsetName);
-        try (InputStream in = new CharSequenceInputStream(testString, charsetName, 512)) {
-            for (final byte b : bytes) {
-                final int read = in.read();
-                assertTrue(read >= 0, "read " + read + " >=0 ");
-                assertTrue(read <= 255, "read " + read + " <= 255");
-                assertEquals(b, (byte) read, "Should agree with input");
-            }
-            assertEquals(-1, in.read());
-        }
-    }
-
     @Test
     public void testResetCharset() {
         assertNotNull(CharSequenceInputStream.builder().setReader(new StringReader("\uD800")).setCharset((Charset) null).getCharset());
@@ -451,6 +438,19 @@ public class CharSequenceInputStreamTest {
     @Test
     public void testResetCharsetName() {
         assertNotNull(CharSequenceInputStream.builder().setReader(new StringReader("\uD800")).setCharset((String) null).getCharset());
+    }
+
+    private void testSingleByteRead(final String testString, final String charsetName) throws IOException {
+        final byte[] bytes = testString.getBytes(charsetName);
+        try (InputStream in = new CharSequenceInputStream(testString, charsetName, 512)) {
+            for (final byte b : bytes) {
+                final int read = in.read();
+                assertTrue(read >= 0, "read " + read + " >=0 ");
+                assertTrue(read <= 255, "read " + read + " <= 255");
+                assertEquals(b, (byte) read, "Should agree with input");
+            }
+            assertEquals(-1, in.read());
+        }
     }
 
     @Test

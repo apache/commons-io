@@ -44,6 +44,10 @@ class TestConstants {
 
     static IOFunction<Object, Object> THROWING_IO_FUNCTION = t -> throwIOException();
 
+    static IOIntSupplier THROWING_IO_INT_SUPPLIER = () -> throwIOException();
+
+    static IOLongSupplier THROWING_IO_LONG_SUPPLIER = () -> throwIOException();
+
     static IOPredicate<Object> THROWING_IO_PREDICATE = t -> throwIOException();
 
     static IOQuadFunction<Object, Object, Object, Object, Object> THROWING_IO_QUAD_FUNCTION = (t, u, v, w) -> throwIOException();

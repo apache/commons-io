@@ -37,6 +37,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -203,19 +204,19 @@ public class ReaderInputStreamTest {
     }
 
     @Test
-    public void testIo803StringReaderSanityCheck() {
-        final StringReader reader = new StringReader("");
-        final InputSource inputSource = new InputSource(reader);
-        assertThrows(SAXException.class, () -> DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputSource));
-    }
-
-    @Test
     public void testIo803SAXException() throws IOException {
         final StringReader reader = new StringReader("");
         try (final ReaderInputStream inputStream = ReaderInputStream.builder().setCharset(StandardCharsets.UTF_8).setReader(reader).get()) {
             final InputSource inputSource = new InputSource(inputStream);
             assertThrows(SAXException.class, () -> DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputSource));
         }
+    }
+
+    @Test
+    public void testIo803StringReaderSanityCheck() {
+        final StringReader reader = new StringReader("");
+        final InputSource inputSource = new InputSource(reader);
+        assertThrows(SAXException.class, () -> DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputSource));
     }
 
     @Test

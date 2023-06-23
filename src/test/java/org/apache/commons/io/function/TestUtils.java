@@ -18,9 +18,33 @@
 package org.apache.commons.io.function;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 class TestUtils {
+
+    static int compareAndSetThrowsIO(final AtomicInteger ref, final int update) throws IOException {
+        return compareAndSetThrowsIO(ref, 0, update);
+    }
+
+    static int compareAndSetThrowsIO(final AtomicInteger ref, final int expected, final int update) throws IOException {
+        if (!ref.compareAndSet(expected, update)) {
+            throw new IOException("Unexpected");
+        }
+        return ref.get(); // same as update
+    }
+
+    static long compareAndSetThrowsIO(final AtomicLong ref, final long update) throws IOException {
+        return compareAndSetThrowsIO(ref, 0, update);
+    }
+
+    static long compareAndSetThrowsIO(final AtomicLong ref, final long expected, final long update) throws IOException {
+        if (!ref.compareAndSet(expected, update)) {
+            throw new IOException("Unexpected");
+        }
+        return ref.get(); // same as update
+    }
 
     static <T> T compareAndSetThrowsIO(final AtomicReference<T> ref, final T update) throws IOException {
         return compareAndSetThrowsIO(ref, null, update);

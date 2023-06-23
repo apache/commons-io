@@ -61,6 +61,18 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add FilesUncheck.find(Path, int, BiPredicate%lt;Path, BasicFileAttributes&gt;, FileVisitOption...)
       </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add IOIntSupplier.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add Uncheck.getAsInt(IOIntSupplier).
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add IOLongSupplier.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add Uncheck.getAsLong(IOLongSupplier).
+      </action>
       <!-- FIX -->
       <action dev="ggregory" type="fix" issue="IO-799" due-to="Jeroen van der Vegt, Gary Gregory">
         ReaderInputStream.read() throws an exception instead of returning -1 when called again after returning -1.

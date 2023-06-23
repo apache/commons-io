@@ -148,14 +148,6 @@ public class ReaderInputStream extends InputStream {
 
     }
 
-    private static CharsetEncoder newEncoder(final Charset charset) {
-        // @formatter:off
-        return Charsets.toCharset(charset).newEncoder()
-                .onMalformedInput(CodingErrorAction.REPLACE)
-                .onUnmappableCharacter(CodingErrorAction.REPLACE);
-        // @formatter:on
-    }
-
     /**
      * Constructs a new {@link Builder}.
      *
@@ -177,6 +169,14 @@ public class ReaderInputStream extends InputStream {
 
     static float minBufferSize(final CharsetEncoder charsetEncoder) {
         return charsetEncoder.maxBytesPerChar() * 2;
+    }
+
+    private static CharsetEncoder newEncoder(final Charset charset) {
+        // @formatter:off
+        return Charsets.toCharset(charset).newEncoder()
+                .onMalformedInput(CodingErrorAction.REPLACE)
+                .onUnmappableCharacter(CodingErrorAction.REPLACE);
+        // @formatter:on
     }
 
     private final Reader reader;

@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -36,8 +37,8 @@ public class UncheckTest {
     private AtomicReference<String> ref1;
     private AtomicReference<String> ref2;
     private AtomicReference<String> ref3;
-
     private AtomicReference<String> ref4;
+    private AtomicInteger atomicInt;
 
     @BeforeEach
     public void initEach() {
@@ -45,6 +46,7 @@ public class UncheckTest {
         ref2 = new AtomicReference<>();
         ref3 = new AtomicReference<>();
         ref4 = new AtomicReference<>();
+        atomicInt = new AtomicInteger();
     }
 
     @Test
@@ -156,6 +158,16 @@ public class UncheckTest {
         assertThrows(UncheckedIOException.class, () -> Uncheck.get(TestConstants.THROWING_IO_SUPPLIER));
         assertEquals("new1", Uncheck.get(() -> TestUtils.compareAndSetThrowsIO(ref1, "new1")));
         assertEquals("new1", ref1.get());
+    }
+
+    @Test
+    public void testGetAsInt() {
+        assertThrows(UncheckedIOException.class, () -> Uncheck.getAsInt(() -> {
+            throw new IOException();
+        }));
+        assertThrows(UncheckedIOException.class, () -> Uncheck.getAsInt(TestConstants.THROWING_IO_INT_SUPPLIER));
+        assertEquals(1, Uncheck.getAsInt(() -> TestUtils.compareAndSetThrowsIO(atomicInt, 1)));
+        assertEquals(1, atomicInt.get());
     }
 
     @Test

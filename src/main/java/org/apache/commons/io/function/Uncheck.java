@@ -200,6 +200,38 @@ public final class Uncheck {
     }
 
     /**
+     * Gets the result from an IO int supplier.
+     *
+     * @param supplier Supplies the return value.
+     * @return result from the supplier.
+     * @throws UncheckedIOException if an I/O error occurs.
+     * @since 2.14.0
+     */
+    public static int getAsInt(final IOIntSupplier supplier) {
+        try {
+            return supplier.getAsInt();
+        } catch (final IOException e) {
+            throw wrap(e);
+        }
+    }
+
+    /**
+     * Gets the result from an IO long supplier.
+     *
+     * @param supplier Supplies the return value.
+     * @return result from the supplier.
+     * @throws UncheckedIOException if an I/O error occurs.
+     * @since 2.14.0
+     */
+    public static long getAsLong(final IOLongSupplier supplier) {
+        try {
+            return supplier.getAsLong();
+        } catch (final IOException e) {
+            throw wrap(e);
+        }
+    }
+
+    /**
      * Runs an IO runnable.
      *
      * @param runnable The runnable to run.

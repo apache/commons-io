@@ -112,46 +112,6 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testFileCleanerDirectoryFileSource() throws Exception {
-        TestUtils.createFile(testFile, 100);
-        assertTrue(testFile.exists());
-        assertTrue(tempDirFile.exists());
-
-        Object obj = new Object();
-        assertEquals(0, theInstance.getTrackCount());
-        theInstance.track(tempDirFile, obj);
-        assertEquals(1, theInstance.getTrackCount());
-
-        obj = null;
-
-        waitUntilTrackCount();
-
-        assertEquals(0, theInstance.getTrackCount());
-        assertTrue(testFile.exists());  // not deleted, as dir not empty
-        assertTrue(testFile.getParentFile().exists());  // not deleted, as dir not empty
-    }
-
-    @Test
-    public void testFileCleanerDirectoryPathSource() throws Exception {
-        TestUtils.createFile(testPath, 100);
-        assertTrue(Files.exists(testPath));
-        assertTrue(Files.exists(tempDirPath));
-
-        Object obj = new Object();
-        assertEquals(0, theInstance.getTrackCount());
-        theInstance.track(tempDirPath, obj);
-        assertEquals(1, theInstance.getTrackCount());
-
-        obj = null;
-
-        waitUntilTrackCount();
-
-        assertEquals(0, theInstance.getTrackCount());
-        assertTrue(Files.exists(testPath));  // not deleted, as dir not empty
-        assertTrue(Files.exists(testPath.getParent()));  // not deleted, as dir not empty
-    }
-
-    @Test
     public void testFileCleanerDirectory_ForceStrategy_FileSource() throws Exception {
         if (!testFile.getParentFile().exists()) {
             throw new IOException("Cannot create file " + testFile
@@ -225,6 +185,46 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
         assertEquals(0, theInstance.getTrackCount());
         assertTrue(testFile.exists());  // not deleted, as dir not empty
         assertTrue(testFile.getParentFile().exists());  // not deleted, as dir not empty
+    }
+
+    @Test
+    public void testFileCleanerDirectoryFileSource() throws Exception {
+        TestUtils.createFile(testFile, 100);
+        assertTrue(testFile.exists());
+        assertTrue(tempDirFile.exists());
+
+        Object obj = new Object();
+        assertEquals(0, theInstance.getTrackCount());
+        theInstance.track(tempDirFile, obj);
+        assertEquals(1, theInstance.getTrackCount());
+
+        obj = null;
+
+        waitUntilTrackCount();
+
+        assertEquals(0, theInstance.getTrackCount());
+        assertTrue(testFile.exists());  // not deleted, as dir not empty
+        assertTrue(testFile.getParentFile().exists());  // not deleted, as dir not empty
+    }
+
+    @Test
+    public void testFileCleanerDirectoryPathSource() throws Exception {
+        TestUtils.createFile(testPath, 100);
+        assertTrue(Files.exists(testPath));
+        assertTrue(Files.exists(tempDirPath));
+
+        Object obj = new Object();
+        assertEquals(0, theInstance.getTrackCount());
+        theInstance.track(tempDirPath, obj);
+        assertEquals(1, theInstance.getTrackCount());
+
+        obj = null;
+
+        waitUntilTrackCount();
+
+        assertEquals(0, theInstance.getTrackCount());
+        assertTrue(Files.exists(testPath));  // not deleted, as dir not empty
+        assertTrue(Files.exists(testPath.getParent()));  // not deleted, as dir not empty
     }
 
     @Test
