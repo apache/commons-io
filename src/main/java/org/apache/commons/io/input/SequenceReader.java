@@ -21,10 +21,11 @@ import static org.apache.commons.io.IOUtils.EOF;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.SequenceInputStream;
-import java.io.UncheckedIOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Objects;
+
+import org.apache.commons.io.function.Uncheck;
 
 /**
  * Provides the contents of multiple {@link Reader}s in sequence.
@@ -46,11 +47,7 @@ public class SequenceReader extends Reader {
      */
     public SequenceReader(final Iterable<? extends Reader> readers) {
         this.readers = Objects.requireNonNull(readers, "readers").iterator();
-        try {
-            this.reader = nextReader();
-        } catch (final IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        this.reader = Uncheck.get(this::nextReader);
     }
 
     /**
