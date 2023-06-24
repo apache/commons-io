@@ -235,6 +235,25 @@ public class UncheckTest {
         assertEquals(1, atomicInt.get());
     }
 
+    @Test
+    public void testGetAsIntMessage() {
+        // No exception
+        assertThrows(UncheckedIOException.class, () -> Uncheck.getAsInt(() -> {
+            throw new IOException();
+        }, () -> CUSTOM_MESSAGE));
+        assertThrows(UncheckedIOException.class, () -> Uncheck.getAsInt(TestConstants.THROWING_IO_INT_SUPPLIER, () -> CUSTOM_MESSAGE));
+        assertEquals(1, Uncheck.getAsInt(() -> TestUtils.compareAndSetThrowsIO(atomicInt, 1), () -> CUSTOM_MESSAGE));
+        assertEquals(1, atomicInt.get());
+        // exception
+        final IOException expected = new IOException(CAUSE_MESSAGE);
+        try {
+            Uncheck.getAsInt(() -> new BrokenInputStream(expected).read(), () -> CUSTOM_MESSAGE);
+            fail();
+        } catch (final UncheckedIOException e) {
+            assertUncheckedIOException(expected, e);
+        }
+    }
+
     /**
      * Tests {@link Uncheck#get(IOSupplier, Supplier)}.
      */

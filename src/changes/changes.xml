@@ -65,10 +65,10 @@ The <action> type attribute can be add,update,fix,remove.
         Add IOIntSupplier.
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">
-        Add Uncheck.getAsInt(IOIntSupplier).
+        Add IOLongSupplier.
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">
-        Add IOLongSupplier.
+        Add Uncheck.getAsInt(IOIntSupplier [, Supplier&lt;String&gt;]).
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add Uncheck.getAsLong(IOLongSupplier).

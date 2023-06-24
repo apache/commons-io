@@ -234,6 +234,23 @@ public final class Uncheck {
     }
 
     /**
+     * Gets the result from an IO int supplier.
+     *
+     * @param supplier Supplies the return value.
+     * @param message The UncheckedIOException message if an I/O error occurs.
+     * @return result from the supplier.
+     * @throws UncheckedIOException if an I/O error occurs.
+     * @since 2.14.0
+     */
+    public static int getAsInt(final IOIntSupplier supplier, final Supplier<String> message) {
+        try {
+            return supplier.getAsInt();
+        } catch (final IOException e) {
+            throw wrap(e, message);
+        }
+    }
+
+    /**
      * Gets the result from an IO long supplier.
      *
      * @param supplier Supplies the return value.
