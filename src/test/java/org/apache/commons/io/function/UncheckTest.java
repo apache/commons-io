@@ -26,6 +26,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
@@ -43,6 +44,7 @@ public class UncheckTest {
     private static final String CUSTOM_MESSAGE = "Custom message";
 
     private AtomicInteger atomicInt;
+    private AtomicLong atomicLong;
     private AtomicReference<String> ref1;
     private AtomicReference<String> ref2;
     private AtomicReference<String> ref3;
@@ -62,6 +64,7 @@ public class UncheckTest {
         ref3 = new AtomicReference<>();
         ref4 = new AtomicReference<>();
         atomicInt = new AtomicInteger();
+        atomicLong = new AtomicLong();
     }
 
     private ByteArrayInputStream newInputStream() {
@@ -233,6 +236,16 @@ public class UncheckTest {
         assertThrows(UncheckedIOException.class, () -> Uncheck.getAsInt(TestConstants.THROWING_IO_INT_SUPPLIER));
         assertEquals(1, Uncheck.getAsInt(() -> TestUtils.compareAndSetThrowsIO(atomicInt, 1)));
         assertEquals(1, atomicInt.get());
+    }
+
+    @Test
+    public void testGetAsLong() {
+        assertThrows(UncheckedIOException.class, () -> Uncheck.getAsLong(() -> {
+            throw new IOException();
+        }));
+        assertThrows(UncheckedIOException.class, () -> Uncheck.getAsLong(TestConstants.THROWING_IO_LONG_SUPPLIER));
+        assertEquals(1L, Uncheck.getAsLong(() -> TestUtils.compareAndSetThrowsIO(atomicLong, 1L)));
+        assertEquals(1L, atomicLong.get());
     }
 
     @Test
