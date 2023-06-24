@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link Uncheck}.
  */
-public class UncheckedIOTest {
+public class UncheckIOTest {
 
     private static final byte[] BYTES = {'a', 'b'};
 
