@@ -73,6 +73,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add Uncheck.getAsLong(IOLongSupplier).
       </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add Uncheck.run(IORunnable, Supplier&lt;String&gt;)
+      </action>
       <!-- FIX -->
       <action dev="ggregory" type="fix" issue="IO-799" due-to="Jeroen van der Vegt, Gary Gregory">
         ReaderInputStream.read() throws an exception instead of returning -1 when called again after returning -1.

@@ -19,6 +19,7 @@ package org.apache.commons.io.function;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.function.Supplier;
 
 /**
  * Unchecks calls by throwing {@link UncheckedIOException} instead of {@link IOException}.
@@ -246,6 +247,22 @@ public final class Uncheck {
     }
 
     /**
+     * Runs an IO runnable.
+     *
+     * @param runnable The runnable to run.
+     * @param message The UncheckedIOException message if an I/O error occurs.
+     * @throws UncheckedIOException if an I/O error occurs.
+     * @since 2.14.0
+     */
+    public static void run(final IORunnable runnable, final Supplier<String> message) {
+        try {
+            runnable.run();
+        } catch (final IOException e) {
+            throw wrap(e, message);
+        }
+    }
+
+    /**
      * Tests an IO predicate.
      *
      * @param <T> the type of the input to the predicate.
@@ -262,16 +279,24 @@ public final class Uncheck {
     }
 
     /**
-     * Creates a new UncheckedIOException for the given detail message.
-     * <p>
-     * This method exists because there is no String constructor in {@link UncheckedIOException}.
-     * </p>
+     * Creates a new UncheckedIOException for the given exception.
      *
      * @param e The exception to wrap.
      * @return a new {@link UncheckedIOException}.
      */
     private static UncheckedIOException wrap(final IOException e) {
         return new UncheckedIOException(e);
+    }
+
+    /**
+     * Creates a new UncheckedIOException for the given exception and detail message.
+     *
+     * @param e The exception to wrap.
+     * @param message The UncheckedIOException message if an I/O error occurs.
+     * @return a new {@link UncheckedIOException}.
+     */
+    private static UncheckedIOException wrap(final IOException e, final Supplier<String> message) {
+        return new UncheckedIOException(message.get(), e);
     }
 
     /**

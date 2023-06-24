@@ -18,8 +18,11 @@
 package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 
 import org.apache.commons.io.function.IOBiFunction;
 import org.apache.commons.io.function.IOConsumer;
@@ -28,6 +31,7 @@ import org.apache.commons.io.function.IORunnable;
 import org.apache.commons.io.function.IOSupplier;
 import org.apache.commons.io.function.IOTriFunction;
 import org.apache.commons.io.function.Uncheck;
+import org.apache.commons.io.input.BrokenInputStream;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -35,7 +39,9 @@ import org.junit.jupiter.api.Test;
  */
 public class UncheckIOTest {
 
-    private static final byte[] BYTES = {'a', 'b'};
+    private static final String CAUSE_MESSAGE = "CauseMessage";
+    private static final String CUSTOM_MESSAGE = "Custom message";
+    private static final byte[] BYTES = { 'a', 'b' };
 
     private ByteArrayInputStream newInputStream() {
         return new ByteArrayInputStream(BYTES);
@@ -99,5 +105,28 @@ public class UncheckIOTest {
         final ByteArrayInputStream stream = newInputStream();
         Uncheck.run(() -> stream.skip(1));
         assertEquals('b', Uncheck.get(stream::read).intValue());
+    }
+
+    /**
+     * Tests {@link Uncheck#run(IORunnable)}.
+     *
+     * @throws IOException
+     */
+    @Test
+    public void testRunMessage() throws IOException {
+        final ByteArrayInputStream stream = newInputStream();
+        Uncheck.run(() -> stream.skip(1), () -> CUSTOM_MESSAGE);
+        assertEquals('b', Uncheck.get(stream::read).intValue());
+        final IOException expected = new IOException(CAUSE_MESSAGE);
+        //
+        try {
+            Uncheck.run(() -> new BrokenInputStream(expected).read(), () -> CUSTOM_MESSAGE);
+            fail();
+        } catch (final UncheckedIOException e) {
+            assertEquals(CUSTOM_MESSAGE, e.getMessage());
+            final IOException cause = e.getCause();
+            assertEquals(expected.getClass(), cause.getClass());
+            assertEquals(CAUSE_MESSAGE, cause.getMessage());
+        }
     }
 }
