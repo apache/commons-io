@@ -23,7 +23,7 @@ import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
 /**
- * Like {@link IOLongSupplier} but throws {@link IOException}.
+ * Like {@link LongSupplier} but throws {@link IOException}.
  *
  * @since 2.14.0
  */
