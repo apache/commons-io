@@ -86,6 +86,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" issue="IO-804" due-to="Elliotte Rusty Harold, Gary Gregory">
         FileUtils.forceMkdirParent() Javadoc is likely incorrect.
       </action>
+      <action dev="ggregory" type="fix" due-to="step-security-bot, Gary Gregory">
+        [StepSecurity] ci: Harden GitHub Actions #461.
+      </action>
       <!-- UPDATE -->
     </release>    
     <release version="2.13.0" date="2023-06-03" description="Java 8 required.">
