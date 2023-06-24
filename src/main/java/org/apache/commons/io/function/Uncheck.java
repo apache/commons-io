@@ -201,6 +201,23 @@ public final class Uncheck {
     }
 
     /**
+     * Gets the result from an IO supplier.
+     *
+     * @param <T> the return type of the operations.
+     * @param supplier Supplies the return value.
+     * @param message The UncheckedIOException message if an I/O error occurs.
+     * @return result from the supplier.
+     * @throws UncheckedIOException if an I/O error occurs.
+     */
+    public static <T> T get(final IOSupplier<T> supplier, final Supplier<String> message) {
+        try {
+            return supplier.get();
+        } catch (final IOException e) {
+            throw wrap(e, message);
+        }
+    }
+
+    /**
      * Gets the result from an IO int supplier.
      *
      * @param supplier Supplies the return value.

@@ -43,6 +43,13 @@ public class UncheckIOTest {
     private static final String CUSTOM_MESSAGE = "Custom message";
     private static final byte[] BYTES = { 'a', 'b' };
 
+    private void assertUncheckedIOException(final IOException expected, final UncheckedIOException e) {
+        assertEquals(CUSTOM_MESSAGE, e.getMessage());
+        final IOException cause = e.getCause();
+        assertEquals(expected.getClass(), cause.getClass());
+        assertEquals(CAUSE_MESSAGE, cause.getMessage());
+    }
+
     private ByteArrayInputStream newInputStream() {
         return new ByteArrayInputStream(BYTES);
     }
@@ -98,6 +105,23 @@ public class UncheckIOTest {
     }
 
     /**
+     * Tests {@link Uncheck#get(IOSupplier, Supplier)}.
+     */
+    @Test
+    public void testGetMessage() {
+        // No exception
+        assertEquals('a', Uncheck.get(() -> newInputStream().read()).intValue(), () -> CUSTOM_MESSAGE);
+        // Exception
+        final IOException expected = new IOException(CAUSE_MESSAGE);
+        try {
+            Uncheck.get(() -> new BrokenInputStream(expected).read(), () -> CUSTOM_MESSAGE);
+            fail();
+        } catch (final UncheckedIOException e) {
+            assertUncheckedIOException(expected, e);
+        }
+    }
+
+    /**
      * Tests {@link Uncheck#run(IORunnable)}.
      */
     @Test
@@ -108,25 +132,23 @@ public class UncheckIOTest {
     }
 
     /**
-     * Tests {@link Uncheck#run(IORunnable)}.
+     * Tests {@link Uncheck#run(IORunnable, Supplier))}.
      *
      * @throws IOException
      */
     @Test
     public void testRunMessage() throws IOException {
+        // No exception
         final ByteArrayInputStream stream = newInputStream();
         Uncheck.run(() -> stream.skip(1), () -> CUSTOM_MESSAGE);
         assertEquals('b', Uncheck.get(stream::read).intValue());
         final IOException expected = new IOException(CAUSE_MESSAGE);
-        //
+        // Exception
         try {
             Uncheck.run(() -> new BrokenInputStream(expected).read(), () -> CUSTOM_MESSAGE);
             fail();
         } catch (final UncheckedIOException e) {
-            assertEquals(CUSTOM_MESSAGE, e.getMessage());
-            final IOException cause = e.getCause();
-            assertEquals(expected.getClass(), cause.getClass());
-            assertEquals(CAUSE_MESSAGE, cause.getMessage());
+            assertUncheckedIOException(expected, e);
         }
     }
 }
