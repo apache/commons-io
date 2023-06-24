@@ -239,16 +239,6 @@ public class UncheckTest {
     }
 
     @Test
-    public void testGetAsLong() {
-        assertThrows(UncheckedIOException.class, () -> Uncheck.getAsLong(() -> {
-            throw new IOException();
-        }));
-        assertThrows(UncheckedIOException.class, () -> Uncheck.getAsLong(TestConstants.THROWING_IO_LONG_SUPPLIER));
-        assertEquals(1L, Uncheck.getAsLong(() -> TestUtils.compareAndSetThrowsIO(atomicLong, 1L)));
-        assertEquals(1L, atomicLong.get());
-    }
-
-    @Test
     public void testGetAsIntMessage() {
         // No exception
         assertThrows(UncheckedIOException.class, () -> Uncheck.getAsInt(() -> {
@@ -261,6 +251,35 @@ public class UncheckTest {
         final IOException expected = new IOException(CAUSE_MESSAGE);
         try {
             Uncheck.getAsInt(() -> new BrokenInputStream(expected).read(), () -> CUSTOM_MESSAGE);
+            fail();
+        } catch (final UncheckedIOException e) {
+            assertUncheckedIOException(expected, e);
+        }
+    }
+
+    @Test
+    public void testGetAsLong() {
+        assertThrows(UncheckedIOException.class, () -> Uncheck.getAsLong(() -> {
+            throw new IOException();
+        }));
+        assertThrows(UncheckedIOException.class, () -> Uncheck.getAsLong(TestConstants.THROWING_IO_LONG_SUPPLIER));
+        assertEquals(1L, Uncheck.getAsLong(() -> TestUtils.compareAndSetThrowsIO(atomicLong, 1L)));
+        assertEquals(1L, atomicLong.get());
+    }
+
+    @Test
+    public void testGetAsLongMessage() {
+        // No exception
+        assertThrows(UncheckedIOException.class, () -> Uncheck.getAsLong(() -> {
+            throw new IOException();
+        }, () -> CUSTOM_MESSAGE));
+        assertThrows(UncheckedIOException.class, () -> Uncheck.getAsLong(TestConstants.THROWING_IO_LONG_SUPPLIER, () -> CUSTOM_MESSAGE));
+        assertEquals(1L, Uncheck.getAsLong(() -> TestUtils.compareAndSetThrowsIO(atomicLong, 1L), () -> CUSTOM_MESSAGE));
+        assertEquals(1L, atomicLong.get());
+        // exception
+        final IOException expected = new IOException(CAUSE_MESSAGE);
+        try {
+            Uncheck.getAsLong(() -> new BrokenInputStream(expected).read(), () -> CUSTOM_MESSAGE);
             fail();
         } catch (final UncheckedIOException e) {
             assertUncheckedIOException(expected, e);

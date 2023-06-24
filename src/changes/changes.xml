@@ -71,7 +71,7 @@ The <action> type attribute can be add,update,fix,remove.
         Add Uncheck.getAsInt(IOIntSupplier [, Supplier&lt;String&gt;]).
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">
-        Add Uncheck.getAsLong(IOLongSupplier).
+        Add Uncheck.getAsLong(IOLongSupplier [, Supplier&lt;String&gt;]).
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add Uncheck.run(IORunnable, Supplier&lt;String&gt;)
