@@ -1074,7 +1074,12 @@ public class FilenameUtils {
         // verify that address subgroups are legal
         for (int i = 1; i <= 4; i++) {
             final String ipSegment = m.group(i);
-            final int iIpSegment = Integer.parseInt(ipSegment);
+            final int iIpSegment;
+            try {
+                iIpSegment = Integer.parseInt(ipSegment);
+            } catch (final NumberFormatException e) {
+                return false;
+            }
             if (iIpSegment > IPV4_MAX_OCTET_VALUE) {
                 return false;
             }
