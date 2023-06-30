@@ -20,6 +20,7 @@ package org.apache.commons.io.filefilter;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
+import java.util.Objects;
 
 /**
  * Delegates matching to a {@link PathMatcher}.
@@ -36,11 +37,11 @@ public class PathMatcherFileFilter extends AbstractFileFilter {
      * @param pathMatcher The PathMatcher delegate.
      */
     public PathMatcherFileFilter(final PathMatcher pathMatcher) {
-        this.pathMatcher = pathMatcher;
+        this.pathMatcher = Objects.requireNonNull(pathMatcher, "pathMatcher");
     }
 
     @Override
-    public boolean accept(File file) {
+    public boolean accept(final File file) {
         return file != null && matches(file.toPath());
     }
     @Override
