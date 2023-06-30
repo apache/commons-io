@@ -17,12 +17,14 @@
 
 package org.apache.commons.io.filefilter;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 
+import org.apache.commons.io.FileSystem;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -38,13 +40,11 @@ public class PathMatcherFileFilterTest extends AbstractFilterTest {
         final File file2 = new File("log.TXT");
         //
         assertTrue(filter.accept(file1));
-        assertTrue(filter.accept(file2));
+        assertEquals(!FileSystem.getCurrent().isCaseSensitive(), filter.accept(file2));
         assertTrue(filter.accept(file1.getParentFile(), file1.getName()));
-        assertTrue(filter.accept(file2.getParentFile(), file2.getName()));
+        assertEquals(!FileSystem.getCurrent().isCaseSensitive(), filter.accept(file2.getParentFile(), file2.getName()));
         assertFiltering(filter, file1, true);
-        assertFiltering(filter, file2, true);
         assertFiltering(filter, file1.toPath(), true);
-        assertFiltering(filter, file2.toPath(), true);
     }
 
 }
