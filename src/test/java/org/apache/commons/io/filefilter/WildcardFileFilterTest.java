@@ -138,13 +138,18 @@ public class WildcardFileFilterTest extends AbstractFilterTest {
         final Path bmpPath = bmpFile.toPath();
         final File dirFile = new File("src/java");
         final Path dirPath = dirFile.toPath();
+        // File
         assertTrue(listFilter.accept(txtFile));
         assertFalse(listFilter.accept(bmpFile));
         assertFalse(listFilter.accept(dirFile));
+        // Path
+        assertTrue(listFilter.matches(txtPath));
+        assertFalse(listFilter.matches(bmpPath));
+        assertFalse(listFilter.matches(dirPath));
         //
-        assertEquals(FileVisitResult.CONTINUE, listFilter.accept(txtFile.toPath(), null));
-        assertEquals(FileVisitResult.TERMINATE, listFilter.accept(bmpFile.toPath(), null));
-        assertEquals(FileVisitResult.TERMINATE, listFilter.accept(dirFile.toPath(), null));
+        assertEquals(FileVisitResult.CONTINUE, listFilter.accept(txtPath, null));
+        assertEquals(FileVisitResult.TERMINATE, listFilter.accept(bmpPath, null));
+        assertEquals(FileVisitResult.TERMINATE, listFilter.accept(dirPath, null));
 
         assertTrue(listFilter.accept(txtFile.getParentFile(), txtFile.getName()));
         assertFalse(listFilter.accept(bmpFile.getParentFile(), bmpFile.getName()));

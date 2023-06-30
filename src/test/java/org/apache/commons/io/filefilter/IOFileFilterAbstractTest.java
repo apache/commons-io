@@ -93,6 +93,8 @@ public abstract class IOFileFilterAbstractTest {
     public static void assertFileFiltering(final int testNumber, final IOFileFilter filter, final File file, final boolean expected) {
         assertEquals(expected, filter.accept(file),
                 "test " + testNumber + " Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file);
+        assertEquals(expected, filter.matches(file.toPath()),
+                "test " + testNumber + " Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file);
     }
 
     public static void assertFilenameFiltering(final int testNumber, final IOFileFilter filter, final File file, final boolean expected) {
@@ -107,13 +109,17 @@ public abstract class IOFileFilterAbstractTest {
         assertEquals(expected, filter.accept(file),
             "test " + testNumber + " Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file);
         assertEquals(expected, filter.accept(file.toPath(), null),
-            "test " + testNumber + " Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file);
+                "test " + testNumber + " Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file);
 
         if (file != null && file.getParentFile() != null) {
             assertEquals(expected, filter.accept(file.getParentFile(), file.getName()),
                     "test " + testNumber + " Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for " + file);
+            assertEquals(expected, filter.matches(file.toPath()),
+                    "test " + testNumber + " Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file);
         } else if (file == null) {
             assertEquals(expected, filter.accept(file),
+                    "test " + testNumber + " Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null");
+            assertEquals(expected, filter.matches(null),
                     "test " + testNumber + " Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null");
         }
     }

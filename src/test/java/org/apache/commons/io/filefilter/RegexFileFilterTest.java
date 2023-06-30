@@ -49,8 +49,12 @@ public class RegexFileFilterTest {
         if (file != null && file.getParentFile() != null) {
             assertEquals(expected, filter.accept(file.getParentFile(), file.getName()),
                     "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for " + file);
+            assertEquals(expected, filter.matches(file.toPath()),
+                    "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for " + file);
         } else if (file == null) {
             assertEquals(expected, filter.accept(file),
+                    "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null");
+            assertEquals(expected, filter.matches(null),
                     "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null");
         }
         // Just don't blow up
@@ -62,7 +66,9 @@ public class RegexFileFilterTest {
         // the Path passed in is not null
         final FileVisitResult expectedFileVisitResult = AbstractFileFilter.toDefaultFileVisitResult(expected);
         assertEquals(expectedFileVisitResult, filter.accept(path, null),
-            "Filter(Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for " + path);
+                "Filter(Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for " + path);
+        assertEquals(expectedFileVisitResult != FileVisitResult.TERMINATE, filter.matches(path),
+                "Filter(Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for " + path);
 
         if (path != null && path.getParent() != null) {
             assertEquals(expectedFileVisitResult, filter.accept(path, null),

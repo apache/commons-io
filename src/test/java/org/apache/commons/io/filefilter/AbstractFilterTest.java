@@ -50,9 +50,10 @@ public class AbstractFilterTest {
 
         if (file != null && file.getParentFile() != null) {
             assertEquals(expected, filter.accept(file.getParentFile(), file.getName()),
-                "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for " + file);
+                    "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for " + file);
         } else if (file == null) {
-            assertEquals(expected, filter.accept(file), "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null");
+            assertEquals(expected, filter.accept(null), "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null");
+            assertEquals(expected, filter.matches(null), "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null");
         }
         assertNotNull(filter.toString());
     }
@@ -66,10 +67,14 @@ public class AbstractFilterTest {
 
         if (path != null && path.getParent() != null) {
             assertEquals(expectedFileVisitResult, filter.accept(path, null),
-                "Filter(Path, Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for " + path);
+                    "Filter(Path, Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for " + path);
+            assertEquals(expectedFileVisitResult != FileVisitResult.TERMINATE, filter.matches(path),
+                    "Filter(Path, Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for " + path);
         } else if (path == null) {
             assertEquals(expectedFileVisitResult, filter.accept(path, null),
-                "Filter(Path, Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for null");
+                    "Filter(Path, Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for null");
+            assertEquals(expectedFileVisitResult != FileVisitResult.TERMINATE, filter.matches(path),
+                    "Filter(Path, Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for null");
         }
         assertNotNull(filter.toString());
     }

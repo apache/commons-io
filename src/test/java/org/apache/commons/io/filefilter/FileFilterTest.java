@@ -328,9 +328,14 @@ public class FileFilterTest extends AbstractFilterTest {
         assertFiltering(listFilter, new File("Test.gif").toPath(), true);
         assertFiltering(listFilter, new File("Test.bmp").toPath(), false);
 
+        // File
         assertTrue(listFilter.accept(txtFile));
         assertFalse(listFilter.accept(bmpFile));
         assertFalse(listFilter.accept(dirFile));
+        // Path
+        assertTrue(listFilter.matches(txtPath));
+        assertFalse(listFilter.matches(bmpPath));
+        assertFalse(listFilter.matches(dirPath));
         //
         assertEquals(FileVisitResult.CONTINUE, listFilter.accept(txtPath, null));
         assertEquals(FileVisitResult.TERMINATE, listFilter.accept(bmpPath, null));
@@ -1109,9 +1114,11 @@ public class FileFilterTest extends AbstractFilterTest {
 
         assertTrue(orFilter.accept(testFile.getParentFile(), testFile.getName()));
         assertEquals(FileVisitResult.CONTINUE, orFilter.accept(testPath, null));
+        assertTrue(orFilter.matches(testPath));
         orFilter.removeFileFilter(trueFilter);
         assertFalse(orFilter.accept(testFile.getParentFile(), testFile.getName()));
         assertEquals(FileVisitResult.TERMINATE, orFilter.accept(testPath, null));
+        assertFalse(orFilter.matches(testPath));
 
         assertThrows(NullPointerException.class, () -> new OrFileFilter(falseFilter, null));
     }
@@ -1165,6 +1172,9 @@ public class FileFilterTest extends AbstractFilterTest {
         //
         assertEquals(FileVisitResult.CONTINUE, filter.accept(testPath, null));
         assertEquals(FileVisitResult.TERMINATE, filter.accept(fredPath, null));
+        //
+        assertTrue(filter.matches(testPath));
+        assertFalse(filter.matches(fredPath));
 
         final List<String> prefixes = Arrays.asList("foo", "fre");
         final IOFileFilter listFilter = new PrefixFileFilter(prefixes);
@@ -1174,6 +1184,9 @@ public class FileFilterTest extends AbstractFilterTest {
         //
         assertEquals(FileVisitResult.TERMINATE, listFilter.accept(testPath, null));
         assertEquals(FileVisitResult.CONTINUE, listFilter.accept(fredPath, null));
+        //
+        assertFalse(listFilter.matches(testPath));
+        assertTrue(listFilter.matches(fredPath));
 
         assertThrows(NullPointerException.class, () -> new PrefixFileFilter((String) null));
         assertThrows(NullPointerException.class, () -> new PrefixFileFilter((String[]) null));
@@ -1348,6 +1361,9 @@ public class FileFilterTest extends AbstractFilterTest {
         //
         assertEquals(FileVisitResult.CONTINUE, filter.accept(testPath, null));
         assertEquals(FileVisitResult.TERMINATE, filter.accept(fredPath, null));
+        //
+        assertTrue(filter.matches(testPath));
+        assertFalse(filter.matches(fredPath));
 
         final List<String> prefixes = Arrays.asList("ood", "red");
         final IOFileFilter listFilter = new SuffixFileFilter(prefixes);

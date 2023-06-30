@@ -56,7 +56,8 @@ public class SymbolicLinkFileFilterTest {
     private static Path targetDirPath; // hard directory Path
     private static Path testLinkDirPath; // symbolic link to hardDirectory
     private static File testLinkDirFile;
-    private static File missingFile; // non-existent file
+    private static File missingFileFile; // non-existent file
+    private static Path missingFilePath; // non-existent file
     private static SymbolicLinkFileFilter filter;
 
     // Mock filter for testing on Windows.
@@ -127,7 +128,8 @@ public class SymbolicLinkFileFilterTest {
         targetDirFile = targetDirPath.toFile();
         testLinkDirPath = symbolicLinkCreator.apply(parentDirectoryPath.resolve(DIRECTORY_LINK_NAME), targetDirPath);
         testLinkDirFile = testLinkDirPath.toFile();
-        missingFile = new File(parentDirectoryPath.toFile(), MISSING);
+        missingFileFile = new File(parentDirectoryPath.toFile(), MISSING);
+        missingFilePath = missingFileFile.toPath();
     }
 
     @Test
@@ -147,7 +149,7 @@ public class SymbolicLinkFileFilterTest {
 
     @Test
     public void testFileFilter_missingFile() {
-        assertFalse(filter.accept(missingFile));
+        assertFalse(filter.accept(missingFileFile));
     }
 
     @Test
@@ -183,30 +185,37 @@ public class SymbolicLinkFileFilterTest {
     @Test
     public void testPathFilter_HardDirectory() {
         assertEquals(FileVisitResult.TERMINATE, filter.accept(targetDirPath, null));
+        assertFalse(filter.matches(targetDirPath));
     }
 
     @Test
     public void testPathFilter_HardFile() {
         assertEquals(FileVisitResult.TERMINATE, filter.accept(testTargetPath, null));
+        assertFalse(filter.matches(testTargetPath));
     }
 
     @Test
     public void testPathFilter_Link() {
         assertEquals(FileVisitResult.CONTINUE, filter.accept(testLinkPath, null));
+        assertTrue(filter.matches(testLinkPath));
+
     }
 
     @Test
     public void testPathFilter_missingFile() {
-        assertEquals(FileVisitResult.TERMINATE, filter.accept(missingFile.toPath(), null));
+        assertEquals(FileVisitResult.TERMINATE, filter.accept(missingFilePath, null));
+        assertFalse(filter.matches(missingFilePath));
     }
 
     @Test
     public void testPathFilter_PathLink() {
         assertEquals(FileVisitResult.CONTINUE, filter.accept(testLinkDirPath, null));
+        assertTrue(filter.matches(testLinkDirPath));
     }
 
     @Test
     public void testSymbolicLinkFileFilter() {
         assertEquals(FileVisitResult.TERMINATE, SymbolicLinkFileFilter.INSTANCE.accept(PathUtils.current(), null));
+        assertFalse(filter.matches(PathUtils.current()));
     }
 }
