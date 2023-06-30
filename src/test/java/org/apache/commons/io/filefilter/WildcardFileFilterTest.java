@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -34,7 +35,7 @@ import org.junit.jupiter.api.Test;
 public class WildcardFileFilterTest extends AbstractFilterTest {
 
     @Test
-    public void testWildcard() {
+    public void testWildcard() throws IOException {
         IOFileFilter filter = new WildcardFileFilter("*.txt");
         assertFiltering(filter, new File("log.txt"), true);
         assertFiltering(filter, new File("log.TXT"), false);

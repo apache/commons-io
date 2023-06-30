@@ -293,6 +293,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements Seriali
             try {
                 try (FileChannel fileChannel = FileChannel.open(file)) {
                     final ByteBuffer byteBuffer = ByteBuffer.allocate(this.magicNumbers.length);
+                    fileChannel.position(byteOffset);
                     final int read = fileChannel.read(byteBuffer);
                     if (read != magicNumbers.length) {
                         return FileVisitResult.TERMINATE;

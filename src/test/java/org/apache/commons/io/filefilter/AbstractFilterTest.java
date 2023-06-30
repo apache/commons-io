@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 
 import org.apache.commons.io.IOCase;
 import org.junit.jupiter.api.io.TempDir;
@@ -43,7 +44,7 @@ public class AbstractFilterTest {
     @TempDir
     public File temporaryFolder;
 
-    void assertFiltering(final IOFileFilter filter, final File file, final boolean expected) {
+    void assertFiltering(final IOFileFilter filter, final File file, final boolean expected) throws IOException {
         // Note. This only tests the (File, String) version if the parent of
         // the File passed in is not null
         assertEquals(expected, filter.accept(file), "Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file);
@@ -51,6 +52,13 @@ public class AbstractFilterTest {
         if (file != null && file.getParentFile() != null) {
             assertEquals(expected, filter.accept(file.getParentFile(), file.getName()),
                     "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for " + file);
+            final Path path = file.toPath();
+            assertEquals(expected, filter.accept(path, null) != FileVisitResult.TERMINATE, filter::toString);
+            if (Files.isRegularFile(path)) {
+                assertEquals(expected, filter.accept(path, Files.readAttributes(path, BasicFileAttributes.class)) != FileVisitResult.TERMINATE,
+                        filter::toString);
+            }
+            assertEquals(expected, filter.matches(path), filter::toString);
         } else if (file == null) {
             assertEquals(expected, filter.accept(null), "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null");
             assertEquals(expected, filter.matches(null), "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null");
@@ -63,7 +71,7 @@ public class AbstractFilterTest {
         // the File passed in is not null
         final FileVisitResult expectedFileVisitResult = AbstractFileFilter.toDefaultFileVisitResult(expected);
         assertEquals(expectedFileVisitResult, filter.accept(path, null),
-            "Filter(Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for " + path);
+                "Filter(Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for " + path);
 
         if (path != null && path.getParent() != null) {
             assertEquals(expectedFileVisitResult, filter.accept(path, null),
@@ -79,7 +87,7 @@ public class AbstractFilterTest {
         assertNotNull(filter.toString());
     }
 
-    void assertFooBarFileFiltering(IOFileFilter filter) {
+    void assertFooBarFileFiltering(IOFileFilter filter) throws IOException {
         assertFiltering(filter, new File("foo"), true);
         assertFiltering(filter, new File("foo"), true);
         assertFiltering(filter, new File("bar"), true);
@@ -89,7 +97,7 @@ public class AbstractFilterTest {
         assertFiltering(filter, new File("bar").toPath(), true);
         assertFiltering(filter, new File("fred").toPath(), false);
 
-        filter = new NameFileFilter(new String[] {"foo", "bar"}, IOCase.SENSITIVE);
+        filter = new NameFileFilter(new String[] { "foo", "bar" }, IOCase.SENSITIVE);
         assertFiltering(filter, new File("foo"), true);
         assertFiltering(filter, new File("bar"), true);
         assertFiltering(filter, new File("FOO"), false);
@@ -99,7 +107,7 @@ public class AbstractFilterTest {
         assertFiltering(filter, new File("FOO").toPath(), false);
         assertFiltering(filter, new File("BAR").toPath(), false);
 
-        filter = new NameFileFilter(new String[] {"foo", "bar"}, IOCase.INSENSITIVE);
+        filter = new NameFileFilter(new String[] { "foo", "bar" }, IOCase.INSENSITIVE);
         assertFiltering(filter, new File("foo"), true);
         assertFiltering(filter, new File("bar"), true);
         assertFiltering(filter, new File("FOO"), true);
@@ -109,7 +117,7 @@ public class AbstractFilterTest {
         assertFiltering(filter, new File("FOO").toPath(), true);
         assertFiltering(filter, new File("BAR").toPath(), true);
 
-        filter = new NameFileFilter(new String[] {"foo", "bar"}, IOCase.SYSTEM);
+        filter = new NameFileFilter(new String[] { "foo", "bar" }, IOCase.SYSTEM);
         assertFiltering(filter, new File("foo"), true);
         assertFiltering(filter, new File("bar"), true);
         assertFiltering(filter, new File("FOO"), WINDOWS);
@@ -119,7 +127,7 @@ public class AbstractFilterTest {
         assertFiltering(filter, new File("FOO").toPath(), WINDOWS);
         assertFiltering(filter, new File("BAR").toPath(), WINDOWS);
 
-        filter = new NameFileFilter(new String[] {"foo", "bar"}, null);
+        filter = new NameFileFilter(new String[] { "foo", "bar" }, null);
         assertFiltering(filter, new File("foo"), true);
         assertFiltering(filter, new File("bar"), true);
         assertFiltering(filter, new File("FOO"), false);
