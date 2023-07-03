@@ -211,17 +211,6 @@ public class RandomAccessFileInputStream extends InputStream {
         return randomAccessFile.read(bytes, offset, length);
     }
 
-    /**
-     * Delegates to the underlying file.
-     *
-     * @param position See {@link RandomAccessFile#seek(long)}.
-     * @throws IOException See {@link RandomAccessFile#seek(long)}.
-     * @see RandomAccessFile#seek(long)
-     */
-    private void seek(final long position) throws IOException {
-        randomAccessFile.seek(position);
-    }
-
     @Override
     public long skip(final long skipCount) throws IOException {
         if (skipCount <= 0) {
@@ -235,7 +224,7 @@ public class RandomAccessFileInputStream extends InputStream {
         final long targetPos = filePointer + skipCount;
         final long newPos = targetPos > fileLength ? fileLength - 1 : targetPos;
         if (newPos > 0) {
-            seek(newPos);
+            randomAccessFile.seek(newPos);
         }
         return randomAccessFile.getFilePointer() - filePointer;
     }
