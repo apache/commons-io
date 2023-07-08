@@ -95,7 +95,7 @@ public class IOUtilsCopyTest {
         assertEquals(0, in.available(), "Not all bytes were read");
         assertEquals(inData.length, baout.size(), "Sizes differ");
         assertArrayEquals(inData, baout.toByteArray(), "Content differs");
-        assertEquals(inData.length,count);
+        assertEquals(inData.length, count);
     }
 
     /**
@@ -161,7 +161,7 @@ public class IOUtilsCopyTest {
         assertEquals(0, in.available(), "Not all bytes were read");
         assertEquals(inData.length, baout.size(), "Sizes differ");
         assertArrayEquals(inData, baout.toByteArray(), "Content differs");
-        assertEquals(inData.length,count);
+        assertEquals(inData.length, count);
     }
 
     @SuppressWarnings({ "resource", "deprecation" }) // 'in' is deliberately not closed

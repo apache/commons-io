@@ -121,7 +121,7 @@ public class XmlStreamReaderUtilitiesTest {
         builder.append("xmlGuessEnc=[").append(xmlGuessEnc).append("], ");
         builder.append("xmlEnc=[").append(xmlEnc).append("], ");
         builder.append("defaultEncoding=[").append(defaultEncoding).append("],");
-        final String encoding = calculateRawEncoding(bomEnc,xmlGuessEnc,xmlEnc, defaultEncoding);
+        final String encoding = calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc, defaultEncoding);
         assertEquals(expected, encoding, builder.toString());
     }
 

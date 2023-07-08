@@ -47,7 +47,7 @@ public class DirectoryWalkerTest {
         private final String cancelFileName;
         private final boolean suppressCancel;
 
-        TestCancelWalker(final String cancelFileName,final boolean suppressCancel) {
+        TestCancelWalker(final String cancelFileName, final boolean suppressCancel) {
             this.cancelFileName = cancelFileName;
             this.suppressCancel = suppressCancel;
         }
