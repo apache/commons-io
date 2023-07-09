@@ -330,7 +330,7 @@ public final class Uncheck {
     }
 
     /**
-     * Creates a new UncheckedIOException for the given exception.
+     * Constructs a new UncheckedIOException for the given exception.
      *
      * @param e The exception to wrap.
      * @return a new {@link UncheckedIOException}.
@@ -340,7 +340,7 @@ public final class Uncheck {
     }
 
     /**
-     * Creates a new UncheckedIOException for the given exception and detail message.
+     * Constructs a new UncheckedIOException for the given exception and detail message.
      *
      * @param e The exception to wrap.
      * @param message The UncheckedIOException message if an I/O error occurs.

@@ -46,7 +46,7 @@ import org.apache.commons.io.build.AbstractOrigin.WriterOrigin;
 public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier<T, B>> extends AbstractSupplier<T, B> {
 
     /**
-     * Creates a new byte array origin for a byte array.
+     * Constructs a new byte array origin for a byte array.
      *
      * @param origin the byte array.
      * @return a new byte array origin.
@@ -56,7 +56,7 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
     }
 
     /**
-     * Creates a new CharSequence origin for a CharSequence.
+     * Constructs a new CharSequence origin for a CharSequence.
      *
      * @param origin the CharSequence.
      * @return a new file origin.
@@ -67,7 +67,7 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
     }
 
     /**
-     * Creates a new file origin for a file.
+     * Constructs a new file origin for a file.
      *
      * @param origin the file.
      * @return a new file origin.
@@ -77,7 +77,7 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
     }
 
     /**
-     * Creates a new file origin for a file path.
+     * Constructs a new file origin for a file path.
      *
      * @param origin the file path.
      * @return a new file origin.
@@ -87,7 +87,7 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
     }
 
     /**
-     * Creates a new input stream origin for a file.
+     * Constructs a new input stream origin for a file.
      *
      * @param origin the input stream.
      * @return a new input stream origin.
@@ -97,7 +97,7 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
     }
 
     /**
-     * Creates a new output stream origin for a file.
+     * Constructs a new output stream origin for a file.
      *
      * @param origin the output stream.
      * @return a new output stream origin.
@@ -107,7 +107,7 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
     }
 
     /**
-     * Creates a new path origin for a file.
+     * Constructs a new path origin for a file.
      *
      * @param origin the path.
      * @return a new path origin.
@@ -117,7 +117,7 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
     }
 
     /**
-     * Creates a new path name origin for a path name.
+     * Constructs a new path name origin for a path name.
      *
      * @param origin the path name.
      * @return a new path name origin.
@@ -127,7 +127,7 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
     }
 
     /**
-     * Creates a new reader origin for a reader.
+     * Constructs a new reader origin for a reader.
      *
      * @param origin the reader.
      * @return a new reader origin.
@@ -137,7 +137,7 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
     }
 
     /**
-     * Creates a new reader origin for a URI.
+     * Constructs a new reader origin for a URI.
      *
      * @param origin the URI.
      * @return a new URI origin.
@@ -147,7 +147,7 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
     }
 
     /**
-     * Creates a new writer origin for a file.
+     * Constructs a new writer origin for a file.
      *
      * @param origin the writer.
      * @return a new writer .

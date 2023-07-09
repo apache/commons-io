@@ -113,7 +113,7 @@ public class ReadAheadInputStream extends FilterInputStream {
     }
 
     /**
-     * Creates a new daemon thread.
+     * Constructs a new daemon thread.
      *
      * @param r the thread's runnable.
      * @return a new daemon thread.
@@ -125,7 +125,7 @@ public class ReadAheadInputStream extends FilterInputStream {
     }
 
     /**
-     * Creates a new daemon executor service.
+     * Constructs a new daemon executor service.
      *
      * @return a new daemon executor service.
      */
@@ -178,7 +178,7 @@ public class ReadAheadInputStream extends FilterInputStream {
     private final Condition asyncReadComplete = stateChangeLock.newCondition();
 
     /**
-     * Creates an instance with the specified buffer size and read-ahead threshold
+     * Constructs an instance with the specified buffer size and read-ahead threshold
      *
      * @param inputStream       The underlying input stream.
      * @param bufferSizeInBytes The buffer size.
@@ -190,7 +190,7 @@ public class ReadAheadInputStream extends FilterInputStream {
     }
 
     /**
-     * Creates an instance with the specified buffer size and read-ahead threshold
+     * Constructs an instance with the specified buffer size and read-ahead threshold
      *
      * @param inputStream       The underlying input stream.
      * @param bufferSizeInBytes The buffer size.
@@ -203,7 +203,7 @@ public class ReadAheadInputStream extends FilterInputStream {
     }
 
     /**
-     * Creates an instance with the specified buffer size and read-ahead threshold
+     * Constructs an instance with the specified buffer size and read-ahead threshold
      *
      * @param inputStream             The underlying input stream.
      * @param bufferSizeInBytes       The buffer size.

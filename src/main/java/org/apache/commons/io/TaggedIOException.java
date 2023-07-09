@@ -103,7 +103,7 @@ public class TaggedIOException extends IOExceptionWithCause {
     private final Serializable tag;
 
     /**
-     * Creates a tagged wrapper for the given exception.
+     * Constructs a tagged wrapper for the given exception.
      *
      * @param original the exception to be tagged
      * @param tag tag of this exception

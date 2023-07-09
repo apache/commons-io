@@ -135,7 +135,7 @@ public class ThresholdingOutputStream extends OutputStream {
     }
 
     /**
-     * Returns the number of bytes that have been written to this output stream.
+     * Gets the number of bytes that have been written to this output stream.
      *
      * @return The number of bytes written.
      */
@@ -169,7 +169,7 @@ public class ThresholdingOutputStream extends OutputStream {
     }
 
     /**
-     * Returns the threshold, in bytes, at which an event will be triggered.
+     * Gets the threshold, in bytes, at which an event will be triggered.
      *
      * @return The threshold point, in bytes.
      */
@@ -178,7 +178,7 @@ public class ThresholdingOutputStream extends OutputStream {
     }
 
     /**
-     * Determines whether or not the configured threshold has been exceeded for this output stream.
+     * Tests whether or not the configured threshold has been exceeded for this output stream.
      *
      * @return {@code true} if the threshold has been reached; {@code false} otherwise.
      */

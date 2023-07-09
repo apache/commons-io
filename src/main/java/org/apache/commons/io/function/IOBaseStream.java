@@ -34,7 +34,7 @@ import java.util.stream.Stream;
 public interface IOBaseStream<T, S extends IOBaseStream<T, S, B>, B extends BaseStream<T, B>> extends Closeable {
 
     /**
-     * Creates a {@link BaseStream} for this instance that throws {@link UncheckedIOException} instead of
+     * Constructs a {@link BaseStream} for this instance that throws {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
      * @return an {@link UncheckedIOException} {@link BaseStream}.

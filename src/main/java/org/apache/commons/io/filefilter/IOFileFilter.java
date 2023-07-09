@@ -76,7 +76,7 @@ public interface IOFileFilter extends FileFilter, FilenameFilter, PathFilter, Pa
     }
 
     /**
-     * Creates a new "and" filter with this filter.
+     * Constructs a new "and" filter with this filter.
      *
      * @param fileFilter the filter to "and".
      * @return a new filter.
@@ -99,7 +99,7 @@ public interface IOFileFilter extends FileFilter, FilenameFilter, PathFilter, Pa
     }
 
     /**
-     * Creates a new "not" filter with this filter.
+     * Constructs a new "not" filter with this filter.
      *
      * @return a new filter.
      * @since 2.9.0
@@ -109,7 +109,7 @@ public interface IOFileFilter extends FileFilter, FilenameFilter, PathFilter, Pa
     }
 
     /**
-     * Creates a new "or" filter with this filter.
+     * Constructs a new "or" filter with this filter.
      *
      * @param fileFilter the filter to "or".
      * @return a new filter.

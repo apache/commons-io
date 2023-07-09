@@ -91,7 +91,7 @@ public final class UncheckedFilterWriter extends FilterWriter {
     }
 
     /**
-     * Creates a new filtered writer.
+     * Constructs a new filtered writer.
      *
      * @param writer a Writer object providing the underlying stream.
      * @throws NullPointerException if {@code writer} is {@code null}.

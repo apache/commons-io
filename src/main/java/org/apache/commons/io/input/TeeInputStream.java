@@ -51,7 +51,7 @@ public class TeeInputStream extends ProxyInputStream {
     private final boolean closeBranch;
 
     /**
-     * Creates a TeeInputStream that proxies the given {@link InputStream}
+     * Constructs a TeeInputStream that proxies the given {@link InputStream}
      * and copies all read bytes to the given {@link OutputStream}. The given
      * output stream will not be closed when this stream gets closed.
      *
@@ -63,7 +63,7 @@ public class TeeInputStream extends ProxyInputStream {
     }
 
     /**
-     * Creates a TeeInputStream that proxies the given {@link InputStream}
+     * Constructs a TeeInputStream that proxies the given {@link InputStream}
      * and copies all read bytes to the given {@link OutputStream}. The given
      * output stream will be closed when this stream gets closed if the
      * closeBranch parameter is {@code true}.

@@ -110,7 +110,7 @@ public class ObservableInputStream extends ProxyInputStream {
     private final List<Observer> observers;
 
     /**
-     * Creates a new ObservableInputStream for the given InputStream.
+     * Constructs a new ObservableInputStream for the given InputStream.
      *
      * @param inputStream the input stream to observe.
      */
@@ -119,7 +119,7 @@ public class ObservableInputStream extends ProxyInputStream {
     }
 
     /**
-     * Creates a new ObservableInputStream for the given InputStream.
+     * Constructs a new ObservableInputStream for the given InputStream.
      *
      * @param inputStream the input stream to observe.
      * @param observers List of observer callbacks.
@@ -130,7 +130,7 @@ public class ObservableInputStream extends ProxyInputStream {
     }
 
     /**
-     * Creates a new ObservableInputStream for the given InputStream.
+     * Constructs a new ObservableInputStream for the given InputStream.
      *
      * @param inputStream the input stream to observe.
      * @param observers List of observer callbacks.

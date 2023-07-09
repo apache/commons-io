@@ -32,7 +32,7 @@ import java.util.Collection;
 public class TeeWriter extends ProxyCollectionWriter {
 
     /**
-     * Creates a new filtered collection writer.
+     * Constructs a new filtered collection writer.
      *
      * @param writers Writers to provide the underlying targets.
      */
@@ -41,7 +41,7 @@ public class TeeWriter extends ProxyCollectionWriter {
     }
 
     /**
-     * Creates a new filtered collection writer.
+     * Constructs a new filtered collection writer.
      *
      * @param writers Writers to provide the underlying targets.
      */

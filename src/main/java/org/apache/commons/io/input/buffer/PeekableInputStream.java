@@ -29,7 +29,7 @@ import org.apache.commons.io.IOUtils;
 public class PeekableInputStream extends CircularBufferInputStream {
 
     /**
-     * Creates a new instance, which filters the given input stream, and uses a reasonable default buffer size ({@link IOUtils#DEFAULT_BUFFER_SIZE}).
+     * Constructs a new instance, which filters the given input stream, and uses a reasonable default buffer size ({@link IOUtils#DEFAULT_BUFFER_SIZE}).
      *
      * @param inputStream The input stream, which is being buffered.
      */
@@ -38,7 +38,7 @@ public class PeekableInputStream extends CircularBufferInputStream {
     }
 
     /**
-     * Creates a new instance, which filters the given input stream, and uses the given buffer size.
+     * Constructs a new instance, which filters the given input stream, and uses the given buffer size.
      *
      * @param inputStream The input stream, which is being buffered.
      * @param bufferSize The size of the {@link CircularByteBuffer}, which is used internally.

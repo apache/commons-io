@@ -73,7 +73,7 @@ public class TaggedReader extends ProxyReader {
     private final Serializable tag = UUID.randomUUID();
 
     /**
-     * Creates a tagging decorator for the given reader.
+     * Constructs a tagging decorator for the given reader.
      *
      * @param proxy reader to be decorated
      */

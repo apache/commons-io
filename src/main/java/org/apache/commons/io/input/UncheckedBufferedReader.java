@@ -99,7 +99,7 @@ public final class UncheckedBufferedReader extends BufferedReader {
     }
 
     /**
-     * Creates a buffering character-input stream that uses an input buffer of the specified size.
+     * Constructs a buffering character-input stream that uses an input buffer of the specified size.
      *
      * @param reader     A Reader
      * @param bufferSize Input-buffer size

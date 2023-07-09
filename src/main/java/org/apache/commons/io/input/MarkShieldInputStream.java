@@ -36,7 +36,7 @@ import java.io.InputStream;
 public class MarkShieldInputStream extends ProxyInputStream {
 
     /**
-     * Creates a proxy that shields the given input stream from being
+     * Constructs a proxy that shields the given input stream from being
      * marked or rest.
      *
      * @param in underlying input stream

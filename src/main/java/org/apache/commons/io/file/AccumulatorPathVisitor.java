@@ -61,7 +61,7 @@ import org.apache.commons.io.function.IOBiFunction;
 public class AccumulatorPathVisitor extends CountingPathVisitor {
 
     /**
-     * Creates a new instance configured with a BigInteger {@link PathCounters}.
+     * Constructs a new instance configured with a BigInteger {@link PathCounters}.
      *
      * @return a new instance configured with a BigInteger {@link PathCounters}.
      */
@@ -70,7 +70,7 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
     }
 
     /**
-     * Creates a new instance configured with a BigInteger {@link PathCounters}.
+     * Constructs a new instance configured with a BigInteger {@link PathCounters}.
      *
      * @param fileFilter Filters files to accumulate and count.
      * @param dirFilter Filters directories to accumulate and count.
@@ -83,7 +83,7 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
     }
 
     /**
-     * Creates a new instance configured with a long {@link PathCounters}.
+     * Constructs a new instance configured with a long {@link PathCounters}.
      *
      * @return a new instance configured with a long {@link PathCounters}.
      */
@@ -92,7 +92,7 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
     }
 
     /**
-     * Creates a new instance configured with a long {@link PathCounters}.
+     * Constructs a new instance configured with a long {@link PathCounters}.
      *
      * @param fileFilter Filters files to accumulate and count.
      * @param dirFilter Filters directories to accumulate and count.

@@ -70,7 +70,7 @@ public class TaggedWriter extends ProxyWriter {
     private final Serializable tag = UUID.randomUUID();
 
     /**
-     * Creates a tagging decorator for the given writer.
+     * Constructs a tagging decorator for the given writer.
      *
      * @param proxy writer to be decorated
      */

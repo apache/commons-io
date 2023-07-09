@@ -46,7 +46,7 @@ public class XmlStreamReaderException extends IOException {
     private final String contentTypeEncoding;
 
     /**
-     * Creates an exception instance if the charset encoding could not be
+     * Constructs an exception instance if the charset encoding could not be
      * determined.
      * <p>
      * Instances of this exception are thrown by the XmlStreamReader.
@@ -63,7 +63,7 @@ public class XmlStreamReaderException extends IOException {
     }
 
     /**
-     * Creates an exception instance if the charset encoding could not be
+     * Constructs an exception instance if the charset encoding could not be
      * determined.
      * <p>
      * Instances of this exception are thrown by the XmlStreamReader.

@@ -43,14 +43,14 @@ public class BrokenReader extends Reader {
     private final Supplier<IOException> exceptionSupplier;
 
     /**
-     * Creates a new reader that always throws an {@link IOException}.
+     * Constructs a new reader that always throws an {@link IOException}.
      */
     public BrokenReader() {
         this(() -> new IOException("Broken reader"));
     }
 
     /**
-     * Creates a new reader that always throws the given exception.
+     * Constructs a new reader that always throws the given exception.
      *
      * @param exception the exception to be thrown.
      */
@@ -59,7 +59,7 @@ public class BrokenReader extends Reader {
     }
 
     /**
-     * Creates a new reader that always throws an {@link IOException}
+     * Constructs a new reader that always throws an {@link IOException}
      *
      * @param exceptionSupplier a supplier for the exception to be thrown.
      * @since 2.12.0

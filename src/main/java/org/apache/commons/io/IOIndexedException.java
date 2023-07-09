@@ -45,7 +45,7 @@ public class IOIndexedException extends IOException {
     private final int index;
 
     /**
-     * Creates a new exception.
+     * Constructs a new exception.
      *
      * @param index index of this exception.
      * @param cause cause exceptions.

@@ -70,7 +70,7 @@ public class TaggedOutputStream extends ProxyOutputStream {
     private final Serializable tag = UUID.randomUUID();
 
     /**
-     * Creates a tagging decorator for the given output stream.
+     * Constructs a tagging decorator for the given output stream.
      *
      * @param proxy output stream to be decorated
      */

@@ -56,7 +56,7 @@ public class CircularInputStream extends InputStream {
     private final long targetByteCount;
 
     /**
-     * Creates an instance from the specified array of bytes.
+     * Constructs an instance from the specified array of bytes.
      *
      * @param repeatContent Input buffer to be repeated this buffer is not copied.
      * @param targetByteCount How many bytes the read. A negative number means an infinite target count.

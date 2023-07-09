@@ -31,7 +31,7 @@ import java.io.Writer;
 public class CloseShieldWriter extends ProxyWriter {
 
     /**
-     * Creates a proxy that shields the given writer from being closed.
+     * Constructs a proxy that shields the given writer from being closed.
      *
      * @param writer the writer to wrap
      * @return the created proxy
@@ -42,7 +42,7 @@ public class CloseShieldWriter extends ProxyWriter {
     }
 
     /**
-     * Creates a proxy that shields the given writer from being closed.
+     * Constructs a proxy that shields the given writer from being closed.
      *
      * @param writer underlying writer
      * @deprecated Using this constructor prevents IDEs from warning if the

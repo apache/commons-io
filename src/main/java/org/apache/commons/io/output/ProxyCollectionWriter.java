@@ -36,7 +36,7 @@ import org.apache.commons.io.IOUtils;
 public class ProxyCollectionWriter extends FilterCollectionWriter {
 
     /**
-     * Creates a new proxy collection writer.
+     * Constructs a new proxy collection writer.
      *
      * @param writers Writers object to provide the underlying targets.
      */
@@ -45,7 +45,7 @@ public class ProxyCollectionWriter extends FilterCollectionWriter {
     }
 
     /**
-     * Creates a new proxy collection writer.
+     * Constructs a new proxy collection writer.
      *
      * @param writers Writers to provide the underlying targets.
      */

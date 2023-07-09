@@ -183,7 +183,7 @@ public class QueueInputStream extends InputStream {
     }
 
     /**
-     * Creates a new QueueOutputStream instance connected to this. Writes to the output stream will be visible to this input stream.
+     * Constructs a new QueueOutputStream instance connected to this. Writes to the output stream will be visible to this input stream.
      *
      * @return QueueOutputStream connected to this stream.
      */

@@ -42,7 +42,7 @@ public class ChunkedWriter extends FilterWriter {
     private final int chunkSize;
 
     /**
-     * Creates a new writer that uses a chunk size of {@link #DEFAULT_CHUNK_SIZE}
+     * Constructs a new writer that uses a chunk size of {@link #DEFAULT_CHUNK_SIZE}
      * @param writer the writer to wrap
      */
     public ChunkedWriter(final Writer writer) {
@@ -50,7 +50,7 @@ public class ChunkedWriter extends FilterWriter {
     }
 
     /**
-     * Creates a new writer that uses the specified chunk size.
+     * Constructs a new writer that uses the specified chunk size.
      *
      * @param writer the writer to wrap
      * @param chunkSize the chunk size to use; must be a positive number.
@@ -65,7 +65,8 @@ public class ChunkedWriter extends FilterWriter {
     }
 
     /**
-     * writes the data buffer in chunks to the underlying writer
+     * Writes the data buffer in chunks to the underlying writer.
+     *
      * @param data The data
      * @param srcOffset the offset
      * @param length the number of bytes to write

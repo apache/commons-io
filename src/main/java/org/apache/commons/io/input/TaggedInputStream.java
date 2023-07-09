@@ -74,7 +74,7 @@ public class TaggedInputStream extends ProxyInputStream {
     private final Serializable tag = UUID.randomUUID();
 
     /**
-     * Creates a tagging decorator for the given input stream.
+     * Constructs a tagging decorator for the given input stream.
      *
      * @param proxy input stream to be decorated
      */

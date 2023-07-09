@@ -183,7 +183,7 @@ public class FileEntry implements Serializable {
     }
 
     /**
-     * Creates a new child instance.
+     * Constructs a new child instance.
      * <p>
      * Custom implementations should override this method to return
      * a new instance of the appropriate type.

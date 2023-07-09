@@ -94,7 +94,7 @@ public class ChunkedOutputStream extends FilterOutputStream {
     private final int chunkSize;
 
     /**
-     * Creates a new stream that uses a chunk size of {@link IOUtils#DEFAULT_BUFFER_SIZE}.
+     * Constructs a new stream that uses a chunk size of {@link IOUtils#DEFAULT_BUFFER_SIZE}.
      *
      * @param stream the stream to wrap
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
@@ -105,7 +105,7 @@ public class ChunkedOutputStream extends FilterOutputStream {
     }
 
     /**
-     * Creates a new stream that uses the specified chunk size.
+     * Constructs a new stream that uses the specified chunk size.
      *
      * @param stream    the stream to wrap
      * @param chunkSize the chunk size to use; must be a positive number.

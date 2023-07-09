@@ -57,7 +57,7 @@ public enum RandomAccessFileMode {
     }
 
     /**
-     * Creates a random access file stream to read from, and optionally to write to, the file specified by the {@link File}
+     * Constructs a random access file stream to read from, and optionally to write to, the file specified by the {@link File}
      * argument.
      *
      * @param file the file object
@@ -69,7 +69,7 @@ public enum RandomAccessFileMode {
     }
 
     /**
-     * Creates a random access file stream to read from, and optionally to write to, the file specified by the {@link File}
+     * Constructs a random access file stream to read from, and optionally to write to, the file specified by the {@link File}
      * argument.
      *
      * @param file the file object
@@ -81,7 +81,7 @@ public enum RandomAccessFileMode {
     }
 
     /**
-     * Creates a random access file stream to read from, and optionally to write to, the file specified by the {@link File}
+     * Constructs a random access file stream to read from, and optionally to write to, the file specified by the {@link File}
      * argument.
      *
      * @param file the file object

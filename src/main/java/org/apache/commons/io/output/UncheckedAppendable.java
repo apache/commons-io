@@ -31,7 +31,7 @@ import java.io.UncheckedIOException;
 public interface UncheckedAppendable extends Appendable {
 
     /**
-     * Creates a new instance on the given Appendable.
+     * Constructs a new instance on the given Appendable.
      *
      * @param appendable The Appendable to uncheck.
      * @return a new instance.

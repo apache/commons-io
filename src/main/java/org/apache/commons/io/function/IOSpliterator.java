@@ -43,7 +43,7 @@ public interface IOSpliterator<T> {
     }
 
     /**
-     * Creates a {@link Spliterator} for this instance that throws {@link UncheckedIOException} instead of
+     * Constructs a {@link Spliterator} for this instance that throws {@link UncheckedIOException} instead of
      * {@link IOException}.
      *
      * @return an {@link UncheckedIOException} {@link Spliterator}.

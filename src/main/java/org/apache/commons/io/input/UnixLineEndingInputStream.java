@@ -41,7 +41,7 @@ public class UnixLineEndingInputStream extends InputStream {
     private final boolean lineFeedAtEndOfFile;
 
     /**
-     * Creates an input stream that filters another stream
+     * Constructs an input stream that filters another stream
      *
      * @param inputStream                        The input stream to wrap
      * @param ensureLineFeedAtEndOfFile true to ensure that the file ends with LF

@@ -31,7 +31,7 @@ import java.io.Reader;
 public class CloseShieldReader extends ProxyReader {
 
     /**
-     * Creates a proxy that shields the given reader from being closed.
+     * Constructs a proxy that shields the given reader from being closed.
      *
      * @param reader the reader to wrap
      * @return the created proxy
@@ -42,7 +42,7 @@ public class CloseShieldReader extends ProxyReader {
     }
 
     /**
-     * Creates a proxy that shields the given reader from being closed.
+     * Constructs a proxy that shields the given reader from being closed.
      *
      * @param reader underlying reader
      * @deprecated Using this constructor prevents IDEs from warning if the

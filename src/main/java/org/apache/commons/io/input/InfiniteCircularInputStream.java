@@ -32,7 +32,7 @@ import java.io.InputStream;
 public class InfiniteCircularInputStream extends CircularInputStream {
 
     /**
-     * Creates an instance from the specified array of bytes.
+     * Constructs an instance from the specified array of bytes.
      *
      * @param repeatContent Input buffer to be repeated this buffer is not copied.
      */

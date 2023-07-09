@@ -95,7 +95,7 @@ public final class UncheckedFilterReader extends FilterReader {
     }
 
     /**
-     * Creates a new filtered reader.
+     * Constructs a new filtered reader.
      *
      * @param reader a Reader object providing the underlying stream.
      * @throws NullPointerException if {@code reader} is {@code null}.

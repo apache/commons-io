@@ -43,7 +43,7 @@ public class WindowsLineEndingInputStream  extends InputStream {
     private final boolean lineFeedAtEndOfFile;
 
     /**
-     * Creates an input stream that filters another stream
+     * Constructs an input stream that filters another stream
      *
      * @param in                        The input stream to wrap
      * @param ensureLineFeedAtEndOfFile true to ensure that the file ends with CRLF

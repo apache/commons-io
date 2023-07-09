@@ -91,7 +91,7 @@ public final class UncheckedFilterOutputStream extends FilterOutputStream {
     }
 
     /**
-     * Creates an output stream filter built on top of the specified underlying output stream.
+     * Constructs an output stream filter built on top of the specified underlying output stream.
      *
      * @param outputStream the underlying output stream, or {@code null} if this instance is to be created without an
      *        underlying stream.

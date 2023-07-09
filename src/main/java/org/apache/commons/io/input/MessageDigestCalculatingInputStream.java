@@ -120,7 +120,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
         private final MessageDigest messageDigest;
 
         /**
-         * Creates an MessageDigestMaintainingObserver for the given MessageDigest.
+         * Constructs an MessageDigestMaintainingObserver for the given MessageDigest.
          *
          * @param messageDigest the message digest to use
          */
@@ -171,7 +171,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
     private final MessageDigest messageDigest;
 
     /**
-     * Creates a new instance, which calculates a signature on the given stream, using a {@link MessageDigest} with the "MD5" algorithm.
+     * Constructs a new instance, which calculates a signature on the given stream, using a {@link MessageDigest} with the "MD5" algorithm.
      * <p>
      * The MD5 algorithm is weak and should not be used.
      * </p>
@@ -186,7 +186,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
     }
 
     /**
-     * Creates a new instance, which calculates a signature on the given stream, using the given {@link MessageDigest}.
+     * Constructs a new instance, which calculates a signature on the given stream, using the given {@link MessageDigest}.
      *
      * @param inputStream   the stream to calculate the message digest for
      * @param messageDigest the message digest to use
@@ -199,7 +199,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
     }
 
     /**
-     * Creates a new instance, which calculates a signature on the given stream, using a {@link MessageDigest} with the given algorithm.
+     * Constructs a new instance, which calculates a signature on the given stream, using a {@link MessageDigest} with the given algorithm.
      *
      * @param inputStream the stream to calculate the message digest for
      * @param algorithm   the name of the algorithm requested. See the MessageDigest section in the

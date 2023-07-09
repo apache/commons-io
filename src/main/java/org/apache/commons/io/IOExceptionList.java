@@ -65,7 +65,7 @@ public class IOExceptionList extends IOException implements Iterable<Throwable> 
     private final List<? extends Throwable> causeList;
 
     /**
-     * Creates a new exception caused by a list of exceptions.
+     * Constructs a new exception caused by a list of exceptions.
      *
      * @param causeList a list of cause exceptions.
      */
@@ -74,7 +74,7 @@ public class IOExceptionList extends IOException implements Iterable<Throwable> 
     }
 
     /**
-     * Creates a new exception caused by a list of exceptions.
+     * Constructs a new exception caused by a list of exceptions.
      *
      * @param message The detail message, see {@link #getMessage()}.
      * @param causeList a list of cause exceptions.

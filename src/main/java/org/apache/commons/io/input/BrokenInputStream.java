@@ -43,14 +43,14 @@ public class BrokenInputStream extends InputStream {
     private final Supplier<IOException> exceptionSupplier;
 
     /**
-     * Creates a new stream that always throws an {@link IOException}.
+     * Constructs a new stream that always throws an {@link IOException}.
      */
     public BrokenInputStream() {
         this(() -> new IOException("Broken input stream"));
     }
 
     /**
-     * Creates a new stream that always throws the given exception.
+     * Constructs a new stream that always throws the given exception.
      *
      * @param exception the exception to be thrown.
      */
@@ -59,7 +59,7 @@ public class BrokenInputStream extends InputStream {
     }
 
     /**
-     * Creates a new stream that always throws an {@link IOException}.
+     * Constructs a new stream that always throws an {@link IOException}.
      *
      * @param exceptionSupplier a supplier for the exception to be thrown.
      * @since 2.12.0

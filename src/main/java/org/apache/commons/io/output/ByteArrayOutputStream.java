@@ -86,7 +86,7 @@ public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
     }
 
     /**
-     * Creates a new byte array output stream. The buffer capacity is
+     * Constructs a new byte array output stream. The buffer capacity is
      * initially {@value AbstractByteArrayOutputStream#DEFAULT_SIZE} bytes, though its size increases if necessary.
      */
     public ByteArrayOutputStream() {
@@ -94,7 +94,7 @@ public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
     }
 
     /**
-     * Creates a new byte array output stream, with a buffer capacity of
+     * Constructs a new byte array output stream, with a buffer capacity of
      * the specified size, in bytes.
      *
      * @param size  the initial size

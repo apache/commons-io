@@ -132,7 +132,7 @@ public class ReversedLinesFileReader implements Closeable {
         }
 
         /**
-         * Creates the buffer containing any leftover bytes.
+         * Constructs the buffer containing any leftover bytes.
          */
         private void createLeftOver() {
             final int lineLengthBytes = currentLastBytePos + 1;
@@ -275,7 +275,7 @@ public class ReversedLinesFileReader implements Closeable {
     private boolean trailingNewlineOfFileSkipped;
 
     /**
-     * Creates a ReversedLinesFileReader with default block size of 4KB and the
+     * Constructs a ReversedLinesFileReader with default block size of 4KB and the
      * platform's default encoding.
      *
      * @param file the file to be read
@@ -288,7 +288,7 @@ public class ReversedLinesFileReader implements Closeable {
     }
 
     /**
-     * Creates a ReversedLinesFileReader with default block size of 4KB and the
+     * Constructs a ReversedLinesFileReader with default block size of 4KB and the
      * specified encoding.
      *
      * @param file    the file to be read
@@ -303,7 +303,7 @@ public class ReversedLinesFileReader implements Closeable {
     }
 
     /**
-     * Creates a ReversedLinesFileReader with the given block size and encoding.
+     * Constructs a ReversedLinesFileReader with the given block size and encoding.
      *
      * @param file      the file to be read
      * @param blockSize size of the internal buffer (for ideal performance this
@@ -320,7 +320,7 @@ public class ReversedLinesFileReader implements Closeable {
     }
 
     /**
-     * Creates a ReversedLinesFileReader with the given block size and encoding.
+     * Constructs a ReversedLinesFileReader with the given block size and encoding.
      *
      * @param file      the file to be read
      * @param blockSize size of the internal buffer (for ideal performance this
@@ -341,7 +341,7 @@ public class ReversedLinesFileReader implements Closeable {
     }
 
     /**
-     * Creates a ReversedLinesFileReader with default block size of 4KB and the
+     * Constructs a ReversedLinesFileReader with default block size of 4KB and the
      * specified encoding.
      *
      * @param file    the file to be read
@@ -356,7 +356,7 @@ public class ReversedLinesFileReader implements Closeable {
     }
 
     /**
-     * Creates a ReversedLinesFileReader with the given block size and encoding.
+     * Constructs a ReversedLinesFileReader with the given block size and encoding.
      *
      * @param file      the file to be read
      * @param blockSize size of the internal buffer (for ideal performance this
@@ -425,7 +425,7 @@ public class ReversedLinesFileReader implements Closeable {
     }
 
     /**
-     * Creates a ReversedLinesFileReader with the given block size and encoding.
+     * Constructs a ReversedLinesFileReader with the given block size and encoding.
      *
      * @param file        the file to be read
      * @param blockSize   size of the internal buffer (for ideal performance this

@@ -37,7 +37,7 @@ import org.apache.commons.io.file.Counters.PathCounters;
 public class DeletingPathVisitor extends CountingPathVisitor {
 
     /**
-     * Creates a new instance configured with a BigInteger {@link PathCounters}.
+     * Constructs a new instance configured with a BigInteger {@link PathCounters}.
      *
      * @return a new instance configured with a BigInteger {@link PathCounters}.
      */
@@ -46,7 +46,7 @@ public class DeletingPathVisitor extends CountingPathVisitor {
     }
 
     /**
-     * Creates a new instance configured with a long {@link PathCounters}.
+     * Constructs a new instance configured with a long {@link PathCounters}.
      *
      * @return a new instance configured with a long {@link PathCounters}.
      */

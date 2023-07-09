@@ -31,7 +31,7 @@ import java.io.InputStream;
 public class CloseShieldInputStream extends ProxyInputStream {
 
     /**
-     * Creates a proxy that shields the given input stream from being closed.
+     * Constructs a proxy that shields the given input stream from being closed.
      *
      * @param inputStream the input stream to wrap
      * @return the created proxy
@@ -42,7 +42,7 @@ public class CloseShieldInputStream extends ProxyInputStream {
     }
 
     /**
-     * Creates a proxy that shields the given input stream from being closed.
+     * Constructs a proxy that shields the given input stream from being closed.
      *
      * @param inputStream underlying input stream
      * @deprecated Using this constructor prevents IDEs from warning if the

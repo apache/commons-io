@@ -57,7 +57,7 @@ public class FilterCollectionWriter extends Writer {
     protected final Collection<Writer> writers;
 
     /**
-     * Creates a new filtered collection writer.
+     * Constructs a new filtered collection writer.
      *
      * @param writers Writers to provide the underlying targets.
      */
@@ -66,7 +66,7 @@ public class FilterCollectionWriter extends Writer {
     }
 
     /**
-     * Creates a new filtered collection writer.
+     * Constructs a new filtered collection writer.
      *
      * @param writers Writers to provide the underlying targets.
      */

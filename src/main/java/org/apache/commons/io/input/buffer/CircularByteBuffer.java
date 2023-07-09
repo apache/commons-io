@@ -34,14 +34,14 @@ public class CircularByteBuffer {
     private int currentNumberOfBytes;
 
     /**
-     * Creates a new instance with a reasonable default buffer size ({@link IOUtils#DEFAULT_BUFFER_SIZE}).
+     * Constructs a new instance with a reasonable default buffer size ({@link IOUtils#DEFAULT_BUFFER_SIZE}).
      */
     public CircularByteBuffer() {
         this(IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
     /**
-     * Creates a new instance with the given buffer size.
+     * Constructs a new instance with the given buffer size.
      *
      * @param size the size of buffer to create
      */

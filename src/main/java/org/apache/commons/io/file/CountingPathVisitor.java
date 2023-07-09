@@ -49,7 +49,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
     }
 
     /**
-     * Creates a new instance configured with a {@link BigInteger} {@link PathCounters}.
+     * Constructs a new instance configured with a {@link BigInteger} {@link PathCounters}.
      *
      * @return a new instance configured with a {@link BigInteger} {@link PathCounters}.
      */
@@ -58,7 +58,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
     }
 
     /**
-     * Creates a new instance configured with a {@code long} {@link PathCounters}.
+     * Constructs a new instance configured with a {@code long} {@link PathCounters}.
      *
      * @return a new instance configured with a {@code long} {@link PathCounters}.
      */

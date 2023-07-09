@@ -31,7 +31,7 @@ import java.io.OutputStream;
 public class CloseShieldOutputStream extends ProxyOutputStream {
 
     /**
-     * Creates a proxy that shields the given output stream from being closed.
+     * Constructs a proxy that shields the given output stream from being closed.
      *
      * @param outputStream the output stream to wrap
      * @return the created proxy
@@ -42,7 +42,7 @@ public class CloseShieldOutputStream extends ProxyOutputStream {
     }
 
     /**
-     * Creates a proxy that shields the given output stream from being closed.
+     * Constructs a proxy that shields the given output stream from being closed.
      *
      * @param outputStream underlying output stream
      * @deprecated Using this constructor prevents IDEs from warning if the

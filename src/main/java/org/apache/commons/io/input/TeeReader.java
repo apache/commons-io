@@ -47,7 +47,7 @@ public class TeeReader extends ProxyReader {
     private final boolean closeBranch;
 
     /**
-     * Creates a TeeReader that proxies the given {@link Reader} and copies all read characters to the given
+     * Constructs a TeeReader that proxies the given {@link Reader} and copies all read characters to the given
      * {@link Writer}. The given writer will not be closed when this reader gets closed.
      *
      * @param input  reader to be proxied
@@ -58,7 +58,7 @@ public class TeeReader extends ProxyReader {
     }
 
     /**
-     * Creates a TeeReader that proxies the given {@link Reader} and copies all read characters to the given
+     * Constructs a TeeReader that proxies the given {@link Reader} and copies all read characters to the given
      * {@link Writer}. The given writer will be closed when this reader gets closed if the closeBranch parameter is
      * {@code true}.
      *

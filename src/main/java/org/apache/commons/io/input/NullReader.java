@@ -82,7 +82,7 @@ public class NullReader extends Reader {
     private final boolean markSupported;
 
     /**
-     * Creates a {@link Reader} that emulates a size 0 reader
+     * Constructs a {@link Reader} that emulates a size 0 reader
      * which supports marking and does not throw EOFException.
      *
      * @since 2.7
@@ -92,7 +92,7 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Creates a {@link Reader} that emulates a specified size
+     * Constructs a {@link Reader} that emulates a specified size
      * which supports marking and does not throw EOFException.
      *
      * @param size The size of the reader to emulate.
@@ -102,7 +102,7 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Creates a {@link Reader} that emulates a specified
+     * Constructs a {@link Reader} that emulates a specified
      * size with option settings.
      *
      * @param size The size of the reader to emulate.

@@ -161,7 +161,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
     private int markedOffset;
 
     /**
-     * Creates a new byte array input stream.
+     * Constructs a new byte array input stream.
      *
      * @param data the buffer
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
@@ -175,7 +175,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
     }
 
     /**
-     * Creates a new byte array input stream.
+     * Constructs a new byte array input stream.
      *
      * @param data   the buffer
      * @param offset the offset into the buffer
@@ -196,7 +196,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
     }
 
     /**
-     * Creates a new byte array input stream.
+     * Constructs a new byte array input stream.
      *
      * @param data   the buffer
      * @param offset the offset into the buffer
