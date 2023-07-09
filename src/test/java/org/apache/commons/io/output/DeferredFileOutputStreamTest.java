@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.stream.IntStream;
 
 import org.apache.commons.io.FileUtils;
@@ -195,14 +196,14 @@ public class DeferredFileOutputStreamTest {
 
         final String prefix = "commons-io-test";
         final String suffix = ".out";
-        final File tempDir = FileUtils.current();
+        final Path tempDir = Paths.get("target");
         // @formatter:off
         final DeferredFileOutputStream dfos = DeferredFileOutputStream.builder()
                 .setThreshold(testBytes.length - 5)
                 .setBufferSize(initialBufferSize)
                 .setPrefix(prefix)
                 .setSuffix(suffix)
-                .setDirectory(tempDir)
+                .setDirectory(tempDir.toFile())
                 .get();
         // @formatter:on
         assertNull(dfos.getFile(), "Check File is null-A");
@@ -216,7 +217,7 @@ public class DeferredFileOutputStreamTest {
         assertTrue(dfos.getFile().exists(), "Check file exists");
         assertTrue(dfos.getFile().getName().startsWith(prefix), "Check prefix");
         assertTrue(dfos.getFile().getName().endsWith(suffix), "Check suffix");
-        assertEquals(tempDir.getPath(), dfos.getFile().getParent(), "Check dir");
+        assertEquals(tempDir, dfos.getPath().getParent(), "Check dir");
 
         verifyResultFile(dfos.getFile());
 
