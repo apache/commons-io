@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 public class ThresholdingOutputStreamTest {
 
     @Test
-    public void testSetByteCount() throws Exception {
+    public void testSetByteCount_Stream() throws Exception {
         final AtomicBoolean reached = new AtomicBoolean(false);
         try (ThresholdingOutputStream tos = new ThresholdingOutputStream(3) {
             {
@@ -42,6 +42,31 @@ public class ThresholdingOutputStreamTest {
 
             @Override
             protected OutputStream getStream() throws IOException {
+                return new ByteArrayOutputStream(4);
+            }
+
+            @Override
+            protected void thresholdReached() throws IOException {
+                reached.set(true);
+            }
+        }) {
+            tos.write('a');
+            assertFalse(reached.get());
+            tos.write('a');
+            assertTrue(reached.get());
+        }
+    }
+
+    @Test
+    public void testSetByteCount_OutputStream() throws Exception {
+        final AtomicBoolean reached = new AtomicBoolean(false);
+        try (ThresholdingOutputStream tos = new ThresholdingOutputStream(3) {
+            {
+                setByteCount(2);
+            }
+
+            @Override
+            protected OutputStream getOutputStream() throws IOException {
                 return new ByteArrayOutputStream(4);
             }
 

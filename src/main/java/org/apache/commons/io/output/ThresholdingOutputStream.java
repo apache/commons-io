@@ -118,6 +118,7 @@ public class ThresholdingOutputStream extends OutputStream {
         } catch (final IOException ignored) {
             // ignore
         }
+        // TODO for 4.0: Replace with getOutputStream()
         getStream().close();
     }
 
@@ -129,6 +130,7 @@ public class ThresholdingOutputStream extends OutputStream {
     @SuppressWarnings("resource") // the underlying stream is managed by a subclass.
     @Override
     public void flush() throws IOException {
+        // TODO for 4.0: Replace with getOutputStream()
         getStream().flush();
     }
 
@@ -142,14 +144,27 @@ public class ThresholdingOutputStream extends OutputStream {
     }
 
     /**
-     * Returns the underlying output stream, to which the corresponding {@link OutputStream} methods in this class will
+     * Gets the underlying output stream, to which the corresponding {@link OutputStream} methods in this class will
      * ultimately delegate.
      *
      * @return The underlying output stream.
-     *
      * @throws IOException if an error occurs.
+     * @deprecated Use {@link #getOutputStream()}.
      */
+    @Deprecated
     protected OutputStream getStream() throws IOException {
+        return getOutputStream();
+    }
+
+    /**
+     * Gets the underlying output stream, to which the corresponding {@link OutputStream} methods in this class will
+     * ultimately delegate.
+     *
+     * @return The underlying output stream.
+     * @throws IOException if an error occurs.
+     * @since 2.14.0
+     */
+    protected OutputStream getOutputStream() throws IOException {
         return outputStreamGetter.apply(this);
     }
 
@@ -212,6 +227,7 @@ public class ThresholdingOutputStream extends OutputStream {
     @Override
     public void write(final byte[] b) throws IOException {
         checkThreshold(b.length);
+        // TODO for 4.0: Replace with getOutputStream()
         getStream().write(b);
         written += b.length;
     }
@@ -229,6 +245,7 @@ public class ThresholdingOutputStream extends OutputStream {
     @Override
     public void write(final byte[] b, final int off, final int len) throws IOException {
         checkThreshold(len);
+        // TODO for 4.0: Replace with getOutputStream()
         getStream().write(b, off, len);
         written += len;
     }
@@ -244,6 +261,7 @@ public class ThresholdingOutputStream extends OutputStream {
     @Override
     public void write(final int b) throws IOException {
         checkThreshold(1);
+        // TODO for 4.0: Replace with getOutputStream()
         getStream().write(b);
         written++;
     }
