@@ -203,6 +203,7 @@ public class DeferredFileOutputStreamTest {
                 .setBufferSize(initialBufferSize)
                 .setPrefix(prefix)
                 .setSuffix(suffix)
+                .setDirectory(tempDir)
                 .setDirectory(tempDir.toFile())
                 .get();
         // @formatter:on
@@ -235,7 +236,7 @@ public class DeferredFileOutputStreamTest {
 
         final String prefix = "commons-io-test";
         final String suffix = null;
-        final File tempDir = null;
+        final Path tempDir = null;
         // @formatter:off
         final DeferredFileOutputStream dfos = DeferredFileOutputStream.builder()
                 .setThreshold(testBytes.length - 5)
