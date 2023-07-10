@@ -127,8 +127,13 @@ public class ReversedLinesFileReaderTestParamFile {
                 : new ReversedLinesFileReader(filePath, blockSize, charset)) {
             testDataIntegrityWithBufferedReader(filePath, fileSystem, charset, reversedLinesFileReader);
         }
-        try (ReversedLinesFileReader reversedLinesFileReader = ReversedLinesFileReader.builder().setPath(filePath).setBufferSize(blockSize).setCharset(charset)
+        // @formatter:off
+        try (ReversedLinesFileReader reversedLinesFileReader = ReversedLinesFileReader.builder()
+                .setPath(filePath)
+                .setBufferSize(blockSize)
+                .setCharset(charset)
                 .get()) {
+            // @formatter:on
             testDataIntegrityWithBufferedReader(filePath, fileSystem, charset, reversedLinesFileReader);
         }
     }
