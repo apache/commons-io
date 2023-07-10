@@ -24,10 +24,11 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
+import java.util.function.IntUnaryOperator;
+
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.file.PathUtils;
-import org.apache.commons.io.function.IntToIntFunction;
 
 /**
  * Abstracts building a typed instance of {@code T}.
@@ -72,12 +73,12 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     /**
      * The default checking behavior for a buffer size request. Throws a {@link IllegalArgumentException} by default.
      */
-    private final IntToIntFunction defaultSizeChecker = size -> size > bufferSizeMax ? throwIae(size, bufferSizeMax) : size;
+    private final IntUnaryOperator defaultSizeChecker = size -> size > bufferSizeMax ? throwIae(size, bufferSizeMax) : size;
 
     /**
      * The checking behavior for a buffer size request.
      */
-    private IntToIntFunction bufferSizeChecker = defaultSizeChecker;
+    private IntUnaryOperator bufferSizeChecker = defaultSizeChecker;
 
     /**
      * Applies the buffer size request.
@@ -233,7 +234,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @return this
      * @since 2.14.0
      */
-    public B setBufferSizeChecker(final IntToIntFunction bufferSizeChecker) {
+    public B setBufferSizeChecker(final IntUnaryOperator bufferSizeChecker) {
         this.bufferSizeChecker = bufferSizeChecker != null ? bufferSizeChecker : defaultSizeChecker;
         return asThis();
     }
