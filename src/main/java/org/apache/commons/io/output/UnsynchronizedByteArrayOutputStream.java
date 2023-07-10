@@ -146,7 +146,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      *
      * @param size the initial size
      * @throws IllegalArgumentException if size is negative
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}. Will be private in 3.0.0.
      */
     @Deprecated
     public UnsynchronizedByteArrayOutputStream(final int size) {
