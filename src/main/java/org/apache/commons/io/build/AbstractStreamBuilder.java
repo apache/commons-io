@@ -24,10 +24,10 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
-
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.file.PathUtils;
+import org.apache.commons.io.function.IntToIntFunction;
 
 /**
  * Abstracts building a typed instance of {@code T}.
@@ -37,6 +37,8 @@ import org.apache.commons.io.file.PathUtils;
  * @since 2.12.0
  */
 public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T, B>> extends AbstractOriginSupplier<T, B> {
+
+    private static final int DEFAULT_MAX_VALUE = Integer.MAX_VALUE;
 
     private static final OpenOption[] DEFAULT_OPEN_OPTIONS = PathUtils.EMPTY_OPEN_OPTION_ARRAY;
 
@@ -51,6 +53,11 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     private int bufferSizeDefault = IOUtils.DEFAULT_BUFFER_SIZE;
 
     /**
+     * The maximum buffer size.
+     */
+    private int bufferSizeMax = DEFAULT_MAX_VALUE;
+
+    /**
      * The Charset, defaults to {@link Charset#defaultCharset()}.
      */
     private Charset charset = Charset.defaultCharset();
@@ -61,6 +68,26 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     private Charset charsetDefault = Charset.defaultCharset();
 
     private OpenOption[] openOptions = DEFAULT_OPEN_OPTIONS;
+
+    /**
+     * The default checking behavior for a buffer size request. Throws a {@link IllegalArgumentException} by default.
+     */
+    private final IntToIntFunction defaultSizeChecker = size -> size > bufferSizeMax ? throwIae(size, bufferSizeMax) : size;
+
+    /**
+     * The checking behavior for a buffer size request.
+     */
+    private IntToIntFunction bufferSizeChecker = defaultSizeChecker;
+
+    /**
+     * Applies the buffer size request.
+     *
+     * @param size the size request.
+     * @return the size to use, usually the input, or can throw an unchecked exception, like {@link IllegalArgumentException}.
+     */
+    private int checkBufferSize(final int size) {
+        return bufferSizeChecker.applyAsInt(size);
+    }
 
     /**
      * Gets the buffer size, defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
@@ -86,7 +113,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @return An input stream
      * @throws IOException                   if an I/O error occurs.
      * @throws UnsupportedOperationException if the origin cannot be converted to a CharSequence.
-     * @throws IllegalStateException if the {@code origin} is {@code null}.
+     * @throws IllegalStateException         if the {@code origin} is {@code null}.
      * @see AbstractOrigin#getCharSequence(Charset)
      * @since 2.13.0
      */
@@ -136,7 +163,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @return An OutputStream
      * @throws IOException                   if an I/O error occurs.
      * @throws UnsupportedOperationException if the origin cannot be converted to an OututStream.
-     * @throws IllegalStateException if the {@code origin} is {@code null}.
+     * @throws IllegalStateException         if the {@code origin} is {@code null}.
      * @see AbstractOrigin#getOutputStream(OpenOption...)
      * @since 2.13.0
      */
@@ -149,7 +176,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      *
      * @return A Path
      * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
-     * @throws IllegalStateException if the {@code origin} is {@code null}.
+     * @throws IllegalStateException         if the {@code origin} is {@code null}.
      * @see AbstractOrigin#getPath()
      * @since 2.13.0
      */
@@ -163,7 +190,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @return An writer.
      * @throws IOException                   if an I/O error occurs.
      * @throws UnsupportedOperationException if the origin cannot be converted to a Writer.
-     * @throws IllegalStateException if the {@code origin} is {@code null}.
+     * @throws IllegalStateException         if the {@code origin} is {@code null}.
      * @see AbstractOrigin#getOutputStream(OpenOption...)
      * @since 2.13.0
      */
@@ -181,7 +208,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @return this.
      */
     public B setBufferSize(final int bufferSize) {
-        this.bufferSize = bufferSize > 0 ? bufferSize : bufferSizeDefault;
+        this.bufferSize = checkBufferSize(bufferSize > 0 ? bufferSize : bufferSizeDefault);
         return asThis();
     }
 
@@ -200,6 +227,18 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     }
 
     /**
+     * Sets the buffer size checker function. Throws a {@link IllegalArgumentException} by default.
+     *
+     * @param bufferSizeChecker the buffer size checker function. null resets to the default behavior.
+     * @return this
+     * @since 2.14.0
+     */
+    public B setBufferSizeChecker(final IntToIntFunction bufferSizeChecker) {
+        this.bufferSizeChecker = bufferSizeChecker != null ? bufferSizeChecker : defaultSizeChecker;
+        return asThis();
+    }
+
+    /**
      * Sets the buffer size for subclasses to initialize.
      * <p>
      * Subclasses may ignore this setting.
@@ -210,6 +249,19 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      */
     protected B setBufferSizeDefault(final int bufferSizeDefault) {
         this.bufferSizeDefault = bufferSizeDefault;
+        return asThis();
+    }
+
+    /**
+     * The maximum buffer size checked by the buffer size checker. Values less or equal to 0, resets to the int max value. By default, if this value is
+     * exceeded, this methods throws an {@link IllegalArgumentException}.
+     *
+     * @param bufferSizeMax maximum buffer size checked by the buffer size checker.
+     * @return this.
+     * @since 2.14.0
+     */
+    public B setBufferSizeMax(final int bufferSizeMax) {
+        this.bufferSizeMax = bufferSizeMax > 0 ? bufferSizeMax : DEFAULT_MAX_VALUE;
         return asThis();
     }
 
@@ -273,5 +325,9 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     public B setOpenOptions(final OpenOption... openOptions) {
         this.openOptions = openOptions != null ? openOptions : DEFAULT_OPEN_OPTIONS;
         return asThis();
+    }
+
+    private int throwIae(final int size, final int max) {
+        throw new IllegalArgumentException(String.format("Request %,d exceeds maximum %,d", size, max));
     }
 }
