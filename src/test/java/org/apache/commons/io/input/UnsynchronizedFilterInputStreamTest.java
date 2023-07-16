@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -56,7 +57,7 @@ public class UnsynchronizedFilterInputStreamTest {
     @BeforeEach
     protected void setUp() throws IOException {
         fileName = Files.createTempFile(getClass().getSimpleName(), ".tst");
-        Files.write(fileName, DATA.getBytes("UTF-8"));
+        Files.write(fileName, DATA.getBytes(StandardCharsets.UTF_8));
         is = UnsynchronizedFilterInputStream.builder().setInputStream(Files.newInputStream(fileName)).get();
     }
 
