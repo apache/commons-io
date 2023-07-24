@@ -38,7 +38,7 @@ public class XmlStreamReaderUtilitiesTest {
     }
     private static final String RAWMGS1 = "encoding mismatch";
     private static final String RAWMGS2 = "unknown BOM";
-    private static final String HTTPMGS1 = "BOM must be NULL";
+    private static final String HTTPMGS1 = "BOM must be null";
     private static final String HTTPMGS2 = "encoding mismatch";
 
     private static final String HTTPMGS3 = "Illegal MIME";
