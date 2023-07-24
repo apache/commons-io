@@ -202,7 +202,7 @@ public class XmlStreamReader extends Reader {
     /**
      * Pattern capturing the encoding of the "xml" processing instruction.
      */
-    public static final Pattern ENCODING_PATTERN = Pattern.compile("<\\?xml.*encoding[\\s]*=[\\s]*((?:\".[^\"]*\")|(?:'.[^']*'))", Pattern.MULTILINE);
+    public static final Pattern ENCODING_PATTERN = Pattern.compile("^<\\?xml.*encoding[\\s]*=[\\s]*((?:\".[^\"]*\")|(?:'.[^']*'))", Pattern.MULTILINE);
 
     private static final String RAW_EX_1 = "Illegal encoding, BOM [{0}] XML guess [{1}] XML prolog [{2}] encoding mismatch";
 
