@@ -215,7 +215,7 @@ public enum FileSystem {
      * (this.codePointAt(<i>k</i>) == searchChar) &amp;&amp; (<i>k</i> &gt;= start)
      * </pre></blockquote>
      * <p>
-     * is true. In either case, if no such character occurs inm {@code cs}
+     * is true. In either case, if no such character occurs in {@code cs}
      * at or after position {@code start}, then
      * {@code -1} is returned.
      * </p>
