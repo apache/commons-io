@@ -107,14 +107,14 @@ public class IOBaseStreamTest {
         baseStream = createStreamOfPaths();
         ioBaseStream = createIOBaseStream();
         ioBaseStreamPath = createIOBaseStreamPath();
-        ioBaseStreamAdapter = createIOBaseStreamApapter();
+        ioBaseStreamAdapter = createIOBaseStreamAdapter();
     }
 
     private IOBaseStreamFixture<Path, ?, Stream<Path>> createIOBaseStream() {
         return new IOBaseStreamFixture<>(createStreamOfPaths());
     }
 
-    private IOStream<Path> createIOBaseStreamApapter() {
+    private IOStream<Path> createIOBaseStreamAdapter() {
         return IOStreamAdapter.adapt(createStreamOfPaths());
     }
 
