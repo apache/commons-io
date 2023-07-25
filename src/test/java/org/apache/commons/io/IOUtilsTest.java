@@ -1334,7 +1334,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testSkipFully_InputStream_Buffer_Resuse_bytes() throws Exception {
+    public void testSkipFully_InputStream_Buffer_Reuse_bytes() throws Exception {
         final int size = 1027;
         final byte[] ba = new byte[size];
         final Supplier<byte[]> bas = () -> ba;
@@ -1348,7 +1348,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testSkipFully_InputStream_Buffer_Resuse_ThreadLocal() throws Exception {
+    public void testSkipFully_InputStream_Buffer_Reuse_ThreadLocal() throws Exception {
         final int size = 1027;
         final ThreadLocal<byte[]> tl = ThreadLocal.withInitial(() -> new byte[size]);
         try (final InputStream input = new ByteArrayInputStream(new byte[size])) {
