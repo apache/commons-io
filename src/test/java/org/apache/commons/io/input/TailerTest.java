@@ -266,7 +266,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testCreaterWithDelayAndFromStartWithReopen() throws Exception {
+    public void testCreatorWithDelayAndFromStartWithReopen() throws Exception {
         final File file = new File(temporaryFolder, "tailer-create-with-delay-and-from-start-with-reopen.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
