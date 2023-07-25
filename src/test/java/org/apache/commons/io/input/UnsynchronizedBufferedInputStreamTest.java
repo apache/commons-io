@@ -410,11 +410,11 @@ public class UnsynchronizedBufferedInputStreamTest {
     @Test
     public void test_reset_scenario1() throws IOException {
         final byte[] input = "12345678900".getBytes();
-        final BufferedInputStream buffis = new BufferedInputStream(new ByteArrayInputStream(input));
-        buffis.read();
-        buffis.mark(5);
-        buffis.skip(5);
-        buffis.reset();
+        final BufferedInputStream bufin = new BufferedInputStream(new ByteArrayInputStream(input));
+        bufin.read();
+        bufin.mark(5);
+        bufin.skip(5);
+        bufin.reset();
     }
 
     /**
@@ -425,10 +425,10 @@ public class UnsynchronizedBufferedInputStreamTest {
     @Test
     public void test_reset_scenario2() throws IOException {
         final byte[] input = "12345678900".getBytes();
-        final BufferedInputStream buffis = new BufferedInputStream(new ByteArrayInputStream(input));
-        buffis.mark(5);
-        buffis.skip(6);
-        buffis.reset();
+        final BufferedInputStream bufin = new BufferedInputStream(new ByteArrayInputStream(input));
+        bufin.mark(5);
+        bufin.skip(6);
+        bufin.reset();
     }
 
     /**
