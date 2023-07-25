@@ -1513,10 +1513,10 @@ public class IOUtilsTest {
     public void testToByteArray_Reader() throws IOException {
         final String charsetName = UTF_8;
         final byte[] expecteds = charsetName.getBytes(charsetName);
-        byte[] actuals = IOUtils.toByteArray(new InputStreamReader(new ByteArrayInputStream(expecteds)));
-        assertArrayEquals(expecteds, actuals);
-        actuals = IOUtils.toByteArray(new InputStreamReader(new ByteArrayInputStream(expecteds)), charsetName);
-        assertArrayEquals(expecteds, actuals);
+        byte[] actual = IOUtils.toByteArray(new InputStreamReader(new ByteArrayInputStream(expecteds)));
+        assertArrayEquals(expecteds, actual);
+        actual = IOUtils.toByteArray(new InputStreamReader(new ByteArrayInputStream(expecteds)), charsetName);
+        assertArrayEquals(expecteds, actual);
     }
 
     @Test
