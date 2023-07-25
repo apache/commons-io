@@ -1512,11 +1512,11 @@ public class IOUtilsTest {
     @Test
     public void testToByteArray_Reader() throws IOException {
         final String charsetName = UTF_8;
-        final byte[] expecteds = charsetName.getBytes(charsetName);
-        byte[] actual = IOUtils.toByteArray(new InputStreamReader(new ByteArrayInputStream(expecteds)));
-        assertArrayEquals(expecteds, actual);
-        actual = IOUtils.toByteArray(new InputStreamReader(new ByteArrayInputStream(expecteds)), charsetName);
-        assertArrayEquals(expecteds, actual);
+        final byte[] expected = charsetName.getBytes(charsetName);
+        byte[] actual = IOUtils.toByteArray(new InputStreamReader(new ByteArrayInputStream(expected)));
+        assertArrayEquals(expected, actual);
+        actual = IOUtils.toByteArray(new InputStreamReader(new ByteArrayInputStream(expected)), charsetName);
+        assertArrayEquals(expected, actual);
     }
 
     @Test
