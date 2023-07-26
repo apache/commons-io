@@ -214,7 +214,7 @@ public class IOStreamTest {
     public void testForaAllIOConsumer() throws IOException {
         // compile vs type
         assertThrows(IOException.class, () -> IOStream.of("A").forAll(TestUtils.throwingIOConsumer()));
-        // compile vs inlnine
+        // compile vs inline
         assertThrows(IOException.class, () -> IOStream.of("A").forAll(e -> {
             throw new IOException("Failure");
         }));
@@ -229,7 +229,7 @@ public class IOStreamTest {
     public void testForaAllIOConsumerBiFunction() throws IOException {
         // compile vs type
         assertThrows(IOException.class, () -> IOStream.of("A").forAll(TestUtils.throwingIOConsumer(), (i, e) -> e));
-        // compile vs inlnine
+        // compile vs inline
         assertThrows(IOException.class, () -> IOStream.of("A").forAll(e -> {
             throw new IOException("Failure");
         }, (i, e) -> e));
@@ -244,7 +244,7 @@ public class IOStreamTest {
     public void testForaAllIOConsumerBiFunctionNull() throws IOException {
         // compile vs type
         assertDoesNotThrow(() -> IOStream.of("A").forAll(TestUtils.throwingIOConsumer(), null));
-        // compile vs inlnine
+        // compile vs inline
         assertDoesNotThrow(() -> IOStream.of("A").forAll(e -> {
             throw new IOException("Failure");
         }, null));
@@ -259,7 +259,7 @@ public class IOStreamTest {
     public void testForEachIOConsumerOfQsuperT() throws IOException {
         // compile vs type
         assertThrows(IOException.class, () -> IOStream.of("A").forEach(TestUtils.throwingIOConsumer()));
-        // compile vs inlnine
+        // compile vs inline
         assertThrows(IOException.class, () -> IOStream.of("A").forEach(e -> {
             throw new IOException("Failure");
         }));
@@ -274,7 +274,7 @@ public class IOStreamTest {
     public void testForEachOrdered() throws IOException {
         // compile vs type
         assertThrows(IOException.class, () -> IOStream.of("A").forEach(TestUtils.throwingIOConsumer()));
-        // compile vs inlnine
+        // compile vs inline
         assertThrows(IOException.class, () -> IOStream.of("A").forEach(e -> {
             throw new IOException("Failure");
         }));

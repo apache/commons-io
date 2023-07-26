@@ -1088,8 +1088,8 @@ public class FileUtils {
     }
 
     /**
-     * Creates all parent directories for a File object, including any necessary but nonexistent parent directories. If a parent directory already exists or is
-     * null, nothing happens.
+     * Creates all parent directories for a File object, including any necessary but non-existent parent directories. If a parent directory already exists or
+     * is null, nothing happens.
      *
      * @param file the File that may need parents, may be null.
      * @return The parent directory, or {@code null} if the given File does have a parent.
@@ -1281,7 +1281,7 @@ public class FileUtils {
 
     /**
      * Internal copy directory method. Creates all destination parent directories,
-     * including any necessary but nonexistent parent directories.
+     * including any necessary but non-existent parent directories.
      *
      * @param srcDir the validated source directory, must not be {@code null}.
      * @param destDir the validated destination directory, must not be {@code null}.
@@ -1364,7 +1364,7 @@ public class FileUtils {
     }
 
     /**
-     * Creates all directories for a File object, including any necessary but nonexistent parent directories. If the {@code directory} already exists or is
+     * Creates all directories for a File object, including any necessary but non-existent parent directories. If the {@code directory} already exists or is
      * null, nothing happens.
      * <p>
      * Calls {@link File#mkdirs()} and throws an {@link IOException} on failure.
@@ -1381,8 +1381,8 @@ public class FileUtils {
     }
 
     /**
-     * Creates all directories for a File object, including any necessary but nonexistent parent directories. If the parent directory already exists or is null,
-     * nothing happens.
+     * Creates all directories for a File object, including any necessary but non-existent parent directories. If the parent directory already exists or is
+     * null, nothing happens.
      * <p>
      * Calls {@link File#mkdirs()} for the parent of @{code file}.
      * </p>
@@ -2270,7 +2270,7 @@ public class FileUtils {
     /**
      * Calls {@link File#mkdirs()} and throws an {@link IOException} on failure.
      * <p>
-     * Creates all directories for a File object, including any necessary but nonexistent parent directories. If the {@code directory} already exists or is
+     * Creates all directories for a File object, including any necessary but non-existent parent directories. If the {@code directory} already exists or is
      * null, nothing happens.
      * </p>
      *
@@ -2322,7 +2322,7 @@ public class FileUtils {
     /**
      * Moves a directory to another directory.
      * <p>
-     * If {@code createDestDir} is true, creates all destination parent directories, including any necessary but nonexistent parent directories.
+     * If {@code createDestDir} is true, creates all destination parent directories, including any necessary but non-existent parent directories.
      * </p>
      *
      * @param source the file to be moved.
@@ -2407,7 +2407,7 @@ public class FileUtils {
     /**
      * Moves a file to a directory.
      * <p>
-     * If {@code createDestDir} is true, creates all destination parent directories, including any necessary but nonexistent parent directories.
+     * If {@code createDestDir} is true, creates all destination parent directories, including any necessary but non-existent parent directories.
      * </p>
      *
      * @param srcFile the file to be moved.
@@ -2436,7 +2436,7 @@ public class FileUtils {
     /**
      * Moves a file or directory to a destination directory.
      * <p>
-     * If {@code createDestDir} is true, creates all destination parent directories, including any necessary but nonexistent parent directories.
+     * If {@code createDestDir} is true, creates all destination parent directories, including any necessary but non-existent parent directories.
      * </p>
      * <p>
      * When the destination is on another file system, do a "copy and delete".

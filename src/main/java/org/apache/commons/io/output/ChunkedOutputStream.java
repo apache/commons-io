@@ -68,7 +68,7 @@ public class ChunkedOutputStream extends FilterOutputStream {
          *
          * @return a new instance.
          * @throws IOException                   if an I/O error occurs.
-         * @throws UnsupportedOperationException if the origin cannot be converted to an OututStream.
+         * @throws UnsupportedOperationException if the origin cannot be converted to an OutputStream.
          * @see #getOutputStream()
          */
         @Override

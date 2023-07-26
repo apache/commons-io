@@ -163,7 +163,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      *
      * @return An OutputStream
      * @throws IOException                   if an I/O error occurs.
-     * @throws UnsupportedOperationException if the origin cannot be converted to an OututStream.
+     * @throws UnsupportedOperationException if the origin cannot be converted to an OutputStream.
      * @throws IllegalStateException         if the {@code origin} is {@code null}.
      * @see AbstractOrigin#getOutputStream(OpenOption...)
      * @since 2.13.0

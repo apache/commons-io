@@ -1747,7 +1747,7 @@ Enhancements from 1.0
 - LockableFileWriter - encoding support [36825]
     Add support for character encodings to LockableFileWriter
     Improve the validation
-    Create directories if necesssary
+    Create directories if necessary
 
 - IOUtils and EndianUtils are no longer final  [28978]
     Allows developers to have subclasses if desired   

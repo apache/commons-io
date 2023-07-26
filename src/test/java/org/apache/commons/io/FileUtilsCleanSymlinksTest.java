@@ -192,16 +192,16 @@ public class FileUtilsCleanSymlinksTest {
             return;
         }
 
-        final File noexistFile = new File(top, "noexist");
+        final File nonExistentFile = new File(top, "non-existent");
         final File symlinkFile = new File(top, "fakeinner");
         final File badSymlinkInPathFile = new File(symlinkFile, "fakeinner");
-        final File noexistParentFile = new File("noexist", "file");
+        final File nonExistentParentFile = new File("non-existent", "file");
 
-        assertTrue(setupSymlink(noexistFile, symlinkFile));
+        assertTrue(setupSymlink(nonExistentFile, symlinkFile));
 
         assertTrue(FileUtils.isSymlink(symlinkFile));
-        assertFalse(FileUtils.isSymlink(noexistFile));
-        assertFalse(FileUtils.isSymlink(noexistParentFile));
+        assertFalse(FileUtils.isSymlink(nonExistentFile));
+        assertFalse(FileUtils.isSymlink(nonExistentParentFile));
         assertFalse(FileUtils.isSymlink(badSymlinkInPathFile));
     }
 

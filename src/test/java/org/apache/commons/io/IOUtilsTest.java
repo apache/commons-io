@@ -1334,7 +1334,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testSkipFully_InputStream_Buffer_Resuse_bytes() throws Exception {
+    public void testSkipFully_InputStream_Buffer_Reuse_bytes() throws Exception {
         final int size = 1027;
         final byte[] ba = new byte[size];
         final Supplier<byte[]> bas = () -> ba;
@@ -1348,7 +1348,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testSkipFully_InputStream_Buffer_Resuse_ThreadLocal() throws Exception {
+    public void testSkipFully_InputStream_Buffer_Reuse_ThreadLocal() throws Exception {
         final int size = 1027;
         final ThreadLocal<byte[]> tl = ThreadLocal.withInitial(() -> new byte[size]);
         try (final InputStream input = new ByteArrayInputStream(new byte[size])) {
@@ -1512,11 +1512,11 @@ public class IOUtilsTest {
     @Test
     public void testToByteArray_Reader() throws IOException {
         final String charsetName = UTF_8;
-        final byte[] expecteds = charsetName.getBytes(charsetName);
-        byte[] actuals = IOUtils.toByteArray(new InputStreamReader(new ByteArrayInputStream(expecteds)));
-        assertArrayEquals(expecteds, actuals);
-        actuals = IOUtils.toByteArray(new InputStreamReader(new ByteArrayInputStream(expecteds)), charsetName);
-        assertArrayEquals(expecteds, actuals);
+        final byte[] expected = charsetName.getBytes(charsetName);
+        byte[] actual = IOUtils.toByteArray(new InputStreamReader(new ByteArrayInputStream(expected)));
+        assertArrayEquals(expected, actual);
+        actual = IOUtils.toByteArray(new InputStreamReader(new ByteArrayInputStream(expected)), charsetName);
+        assertArrayEquals(expected, actual);
     }
 
     @Test

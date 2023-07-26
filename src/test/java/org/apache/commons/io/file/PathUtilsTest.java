@@ -99,7 +99,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
         return Files.getLastModifiedTime(file).toMillis();
     }
 
-    private Path getNonExistantPath() {
+    private Path getNonExistentPath() {
         return Paths.get("/does not exist/for/certain");
     }
 
@@ -252,13 +252,13 @@ public class PathUtilsTest extends AbstractTempDirTest {
 
     @Test
     public void testGetLastModifiedFileTime_Path_Absent() throws IOException {
-        assertNull(PathUtils.getLastModifiedFileTime(getNonExistantPath()));
+        assertNull(PathUtils.getLastModifiedFileTime(getNonExistentPath()));
     }
 
     @Test
     public void testGetLastModifiedFileTime_Path_FileTime_Absent() throws IOException {
         final FileTime fromMillis = FileTime.fromMillis(0);
-        assertEquals(fromMillis, PathUtils.getLastModifiedFileTime(getNonExistantPath(), fromMillis));
+        assertEquals(fromMillis, PathUtils.getLastModifiedFileTime(getNonExistentPath(), fromMillis));
     }
 
     @Test

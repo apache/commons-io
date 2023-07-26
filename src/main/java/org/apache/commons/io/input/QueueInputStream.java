@@ -204,7 +204,7 @@ public class QueueInputStream extends InputStream {
             return value == null ? EOF : 0xFF & value;
         } catch (final InterruptedException e) {
             Thread.currentThread().interrupt();
-            // throw runtime unchecked exception to maintain signature backward-compatibilty of
+            // throw runtime unchecked exception to maintain signature backward-compatibility of
             // this read method, which does not declare IOException
             throw new IllegalStateException(e);
         }

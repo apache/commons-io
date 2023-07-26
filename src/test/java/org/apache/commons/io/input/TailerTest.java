@@ -266,7 +266,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testCreaterWithDelayAndFromStartWithReopen() throws Exception {
+    public void testCreatorWithDelayAndFromStartWithReopen() throws Exception {
         final File file = new File(temporaryFolder, "tailer-create-with-delay-and-from-start-with-reopen.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
@@ -326,7 +326,7 @@ public class TailerTest {
     }
 
     /*
-     * Tests [IO-357][Tailer] InterruptedException while the thead is sleeping is silently ignored.
+     * Tests [IO-357][Tailer] InterruptedException while the thread is sleeping is silently ignored.
      */
     @Test
     public void testInterrupt() throws Exception {

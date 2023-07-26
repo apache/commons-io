@@ -30,12 +30,12 @@ import org.apache.commons.io.input.ObservableInputStream.Observer;
  * </p>
  *
  * <pre>
- * final TimestampedObserver timetampedObserver = new TimestampedObserver();
+ * final TimestampedObserver timestampedObserver = new TimestampedObserver();
  * try (ObservableInputStream inputStream = new ObservableInputStream(...),
- *     timetampedObserver)) {
+ *     timestampedObserver)) {
  *     ...
  * }
- * System.out.printf("IO duration: %s%n", timetampedObserver.getOpenToCloseDuration());
+ * System.out.printf("IO duration: %s%n", timestampedObserver.getOpenToCloseDuration());
  * </pre>
  *
  * @since 2.9.0
