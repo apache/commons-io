@@ -2101,7 +2101,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     public void testMoveDirectory_Errors() throws Exception {
         assertThrows(NullPointerException.class, () -> FileUtils.moveDirectory(null, new File("foo")));
         assertThrows(NullPointerException.class, () -> FileUtils.moveDirectory(new File("foo"), null));
-        assertThrows(FileNotFoundException.class, () -> FileUtils.moveDirectory(new File("nonexistant"), new File("foo")));
+        assertThrows(FileNotFoundException.class, () -> FileUtils.moveDirectory(new File("non-existent"), new File("foo")));
 
         final File testFile = new File(tempDirFile, "testMoveDirectoryFile");
         if (!testFile.getParentFile().exists()) {
@@ -2201,8 +2201,8 @@ public class FileUtilsTest extends AbstractTempDirTest {
         }
         assertThrows(IOException.class, () -> FileUtils.moveDirectoryToDirectory(testFile1, testFile2, true));
 
-        final File nonexistant = new File(tempDirFile, "testMoveFileNonExistant");
-        assertThrows(IOException.class, () -> FileUtils.moveDirectoryToDirectory(testFile1, nonexistant, false));
+        final File nonExistent = new File(tempDirFile, "testMoveFileNonExistent");
+        assertThrows(IOException.class, () -> FileUtils.moveDirectoryToDirectory(testFile1, nonExistent, false));
     }
 
     @Test
@@ -2316,7 +2316,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     public void testMoveFile_Errors() throws Exception {
         assertThrows(NullPointerException.class, () -> FileUtils.moveFile(null, new File("foo")));
         assertThrows(NullPointerException.class, () -> FileUtils.moveFile(new File("foo"), null));
-        assertThrows(FileNotFoundException.class, () -> FileUtils.moveFile(new File("nonexistant"), new File("foo")));
+        assertThrows(FileNotFoundException.class, () -> FileUtils.moveFile(new File("non-existent"), new File("foo")));
         assertThrows(IllegalArgumentException.class, () -> FileUtils.moveFile(tempDirFile, new File("foo")));
         final File testSourceFile = new File(tempDirFile, "testMoveFileSource");
         final File testDestFile = new File(tempDirFile, "testMoveFileSource");
@@ -2384,8 +2384,8 @@ public class FileUtilsTest extends AbstractTempDirTest {
         }
         assertThrows(IllegalArgumentException.class, () -> FileUtils.moveFileToDirectory(testFile1, testFile2, true));
 
-        final File nonexistant = new File(tempDirFile, "testMoveFileNonExistant");
-        assertThrows(IOException.class, () -> FileUtils.moveFileToDirectory(testFile1, nonexistant, false));
+        final File nonExistent = new File(tempDirFile, "testMoveFileNonExistent");
+        assertThrows(IOException.class, () -> FileUtils.moveFileToDirectory(testFile1, nonExistent, false));
     }
 
     @Test
@@ -2426,9 +2426,9 @@ public class FileUtilsTest extends AbstractTempDirTest {
     public void testMoveToDirectory_Errors() throws Exception {
         assertThrows(NullPointerException.class, () -> FileUtils.moveDirectoryToDirectory(null, new File("foo"), true));
         assertThrows(NullPointerException.class, () -> FileUtils.moveDirectoryToDirectory(new File("foo"), null, true));
-        final File nonexistant = new File(tempDirFile, "nonexistant");
+        final File nonExistent = new File(tempDirFile, "non-existent");
         final File destDir = new File(tempDirFile, "MoveToDirectoryDestDir");
-        assertThrows(IOException.class, () -> FileUtils.moveToDirectory(nonexistant, destDir, true), "Expected IOException when source does not exist");
+        assertThrows(IOException.class, () -> FileUtils.moveToDirectory(nonExistent, destDir, true), "Expected IOException when source does not exist");
 
     }
 
@@ -2592,7 +2592,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         file.delete();
         file.mkdir();
 
-        final File nonEmptyFile = new File(file, "nonEmptyFile" + System.nanoTime());
+        final File nonEmptyFile = new File(file, "non-emptyFile" + System.nanoTime());
         assertTrue(nonEmptyFile.getParentFile().exists(), () -> "Cannot create file " + nonEmptyFile + " as the parent directory does not exist");
         final OutputStream output = new BufferedOutputStream(Files.newOutputStream(nonEmptyFile.toPath()));
         try {
