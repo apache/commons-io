@@ -88,7 +88,7 @@ public class UnsynchronizedBufferedInputStreamTest {
      */
     @Test
     public void test_available() throws IOException {
-        assertTrue(is.available() == DATA.length(), "Returned incorrect number of available bytes");
+        assertEquals(DATA.length(), is.available(), "Returned incorrect number of available bytes");
 
         // Test that a closed stream throws an IOE for available()
         final BufferedInputStream bis = new BufferedInputStream(new ByteArrayInputStream(new byte[] { 'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd' }));
@@ -272,7 +272,7 @@ public class UnsynchronizedBufferedInputStreamTest {
     public void test_read() throws IOException {
         final InputStreamReader isr = new InputStreamReader(is);
         final int c = isr.read();
-        assertTrue(c == DATA.charAt(0), "read returned incorrect char");
+        assertEquals(DATA.charAt(0), c, "read returned incorrect char");
 
         final byte[] bytes = new byte[256];
         for (int i = 0; i < 256; i++) {
@@ -333,7 +333,7 @@ public class UnsynchronizedBufferedInputStreamTest {
         })) {
             bufin.read();
             final int result = bufin.read(new byte[2], 0, 2);
-            assertTrue(result == 1, () -> "Incorrect result: " + result);
+            assertEquals(1, result, () -> "Incorrect result: " + result);
         }
     }
 
