@@ -56,7 +56,7 @@ public class CopyDirectoryVisitorTest extends TestArguments {
             final CopyDirectoryVisitor visitFileTree = PathUtils.visitFileTree(supplier.get(), sourceDir.get());
             assertCounts(1, 0, 0, visitFileTree);
             assertArrayEquals(EXPECTED_COPY_OPTIONS, visitFileTree.getCopyOptions());
-            assertEquals(sourceDir.get(), ((PathWrapper) visitFileTree.getSourceDirectory()).get());
+            assertEquals(sourceDir.get(), ((AbstractPathWrapper) visitFileTree.getSourceDirectory()).get());
             assertEquals(sourceDir, visitFileTree.getSourceDirectory());
             assertEquals(targetDir, visitFileTree.getTargetDirectory());
             assertEquals(targetDir, visitFileTree.getTargetDirectory());

@@ -28,7 +28,7 @@ import org.apache.commons.io.file.Counters.PathCounters;
  *
  * @since 2.12.0
  */
-public class DeletablePath extends PathWrapper implements Closeable {
+public class DeletablePath extends AbstractPathWrapper implements Closeable {
 
     /**
      * Constructs a new instance wrapping the given delegate.

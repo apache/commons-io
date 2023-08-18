@@ -37,7 +37,7 @@ import java.util.function.Consumer;
  *
  * @since 2.12.0
  */
-public abstract class PathWrapper implements Path {
+public abstract class AbstractPathWrapper implements Path {
 
     /**
      * The path delegate.
@@ -49,7 +49,7 @@ public abstract class PathWrapper implements Path {
      *
      * @param path The path to wrap.
      */
-    protected PathWrapper(final Path path) {
+    protected AbstractPathWrapper(final Path path) {
         this.path = Objects.requireNonNull(path, "path");
     }
 
@@ -73,10 +73,10 @@ public abstract class PathWrapper implements Path {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof PathWrapper)) {
+        if (!(obj instanceof AbstractPathWrapper)) {
             return false;
         }
-        final PathWrapper other = (PathWrapper) obj;
+        final AbstractPathWrapper other = (AbstractPathWrapper) obj;
         return Objects.equals(path, other.path);
     }
 

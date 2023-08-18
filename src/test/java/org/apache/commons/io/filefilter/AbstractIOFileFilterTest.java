@@ -22,7 +22,7 @@ import java.io.File;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-public abstract class IOFileFilterAbstractTest {
+public abstract class AbstractIOFileFilterTest {
 
     class TesterFalseFileFilter extends FalseFileFilter {
 
