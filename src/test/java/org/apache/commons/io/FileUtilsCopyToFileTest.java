@@ -60,7 +60,7 @@ public class FileUtilsCopyToFileTest {
     @BeforeEach
     public void setUp() throws Exception {
         testFile = new File(temporaryFolder, "file1-test.txt");
-        if(!testFile.getParentFile().exists()) {
+        if (!testFile.getParentFile().exists()) {
             throw new IOException("Cannot create file " + testFile +
                 " as the parent directory does not exist");
         }
