@@ -89,7 +89,7 @@ public class IOUtilsMultithreadedSkipTest {
         }
         final int numSkips = (random.nextInt(bytes.length) / 100) + 1;
 
-        final int skips[] = generateSkips(bytes, numSkips, random);
+        final int[] skips = generateSkips(bytes, numSkips, random);
         final int[] expected;
         try (final InputStream inflate = inflate(bytes)) {
             expected = generateExpected(inflate, skips);
