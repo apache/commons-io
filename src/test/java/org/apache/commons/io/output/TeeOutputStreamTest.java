@@ -17,7 +17,7 @@
 package org.apache.commons.io.output;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -49,12 +49,9 @@ public class TeeOutputStreamTest {
         final OutputStream badOs = new ThrowOnCloseOutputStream();
         final ByteArrayOutputStream goodOs = mock(ByteArrayOutputStream.class);
         final TeeOutputStream tos = new TeeOutputStream(badOs, goodOs);
-        try {
-            tos.close();
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOException e) {
-            verify(goodOs).close();
-        }
+
+        assertThrows(IOException.class, tos::close);
+        verify(goodOs).close();
     }
 
     /**
@@ -66,12 +63,9 @@ public class TeeOutputStreamTest {
         final OutputStream badOs = new ThrowOnCloseOutputStream();
         final ByteArrayOutputStream goodOs = mock(ByteArrayOutputStream.class);
         final TeeOutputStream tos = new TeeOutputStream(goodOs, badOs);
-        try {
-            tos.close();
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOException e) {
-            verify(goodOs).close();
-        }
+
+        assertThrows(IOException.class, tos::close);
+        verify(goodOs).close();
     }
 
     @Test

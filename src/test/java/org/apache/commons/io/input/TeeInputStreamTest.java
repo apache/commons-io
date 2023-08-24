@@ -17,7 +17,7 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -67,12 +67,8 @@ public class TeeInputStreamTest  {
         verify(goodIs).close();
 
         final TeeInputStream closingTis = new TeeInputStream(goodIs, badOs, true);
-        try {
-            closingTis.close();
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOException e) {
-            verify(goodIs, times(2)).close();
-        }
+        assertThrows(IOException.class, closingTis::close);
+        verify(goodIs, times(2)).close();
     }
 
     /**
@@ -85,20 +81,12 @@ public class TeeInputStreamTest  {
         final ByteArrayOutputStream goodOs = mock(ByteArrayOutputStream.class);
 
         final TeeInputStream nonClosingTis = new TeeInputStream(badIs, goodOs, false);
-        try {
-            nonClosingTis.close();
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOException e) {
-            verify(goodOs, never()).close();
-        }
+        assertThrows(IOException.class, nonClosingTis::close);
+        verify(goodOs, never()).close();
 
         final TeeInputStream closingTis = new TeeInputStream(badIs, goodOs, true);
-        try {
-            closingTis.close();
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOException e) {
-            verify(goodOs).close();
-        }
+        assertThrows(IOException.class, closingTis::close);
+        verify(goodOs).close();
     }
 
     @Test

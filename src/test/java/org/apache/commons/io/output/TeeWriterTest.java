@@ -17,8 +17,8 @@
 package org.apache.commons.io.output;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -39,99 +39,81 @@ import org.junit.jupiter.api.Test;
 public class TeeWriterTest {
 
     @Test
-    public void testArrayIOExceptionOnAppendChar1() throws IOException {
+    public void testArrayIOExceptionOnAppendChar1() {
         final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final ProxyCollectionWriter tw = new ProxyCollectionWriter(badW, goodW, null);
         final char data = 'A';
-        try {
-            tw.append(data);
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOExceptionList e) {
-            verify(goodW).append(data);
-            assertEquals(1, e.getCauseList().size());
-            assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
-        }
+
+        final IOExceptionList e = assertThrows(IOExceptionList.class, () -> tw.append(data));
+        verify(goodW).append(data);
+        assertEquals(1, e.getCauseList().size());
+        assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
     }
 
     @Test
-    public void testArrayIOExceptionOnAppendChar2() throws IOException {
+    public void testArrayIOExceptionOnAppendChar2() {
         final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final ProxyCollectionWriter tw = new ProxyCollectionWriter(goodW, badW, null);
         final char data = 'A';
-        try {
-            tw.append(data);
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOExceptionList e) {
-            verify(goodW).append(data);
-            assertEquals(1, e.getCauseList().size());
-            assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
-        }
+
+        final IOExceptionList e = assertThrows(IOExceptionList.class, () -> tw.append(data));
+        verify(goodW).append(data);
+        assertEquals(1, e.getCauseList().size());
+        assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
     }
 
     @Test
-    public void testArrayIOExceptionOnAppendCharSequence1() throws IOException {
+    public void testArrayIOExceptionOnAppendCharSequence1() {
         final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(badW, goodW, null);
         final String data = "A";
-        try {
-            tw.append(data);
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOExceptionList e) {
-            verify(goodW).append(data);
-            assertEquals(1, e.getCauseList().size());
-            assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
-        }
+
+        final IOExceptionList e = assertThrows(IOExceptionList.class, () -> tw.append(data));
+        verify(goodW).append(data);
+        assertEquals(1, e.getCauseList().size());
+        assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
     }
 
     @Test
-    public void testArrayIOExceptionOnAppendCharSequence2() throws IOException {
+    public void testArrayIOExceptionOnAppendCharSequence2() {
         final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(goodW, badW, null);
         final String data = "A";
-        try {
-            tw.append(data);
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOExceptionList e) {
-            verify(goodW).append(data);
-            assertEquals(1, e.getCauseList().size());
-            assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
-        }
+
+        final IOExceptionList e = assertThrows(IOExceptionList.class, () -> tw.append(data));
+        verify(goodW).append(data);
+        assertEquals(1, e.getCauseList().size());
+        assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
     }
 
     @Test
-    public void testArrayIOExceptionOnAppendCharSequenceIntInt1() throws IOException {
+    public void testArrayIOExceptionOnAppendCharSequenceIntInt1() {
         final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(badW, goodW, null);
         final String data = "A";
-        try {
-            tw.append(data, 0, 0);
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOExceptionList e) {
-            verify(goodW).append(data, 0, 0);
-            assertEquals(1, e.getCauseList().size());
-            assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
-        }
+
+        final IOExceptionList e = assertThrows(IOExceptionList.class, () -> tw.append(data, 0, 0));
+        verify(goodW).append(data, 0, 0);
+        assertEquals(1, e.getCauseList().size());
+        assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
     }
 
     @Test
-    public void testArrayIOExceptionOnAppendCharSequenceIntInt2() throws IOException {
+    public void testArrayIOExceptionOnAppendCharSequenceIntInt2() {
         final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(goodW, badW, null);
         final String data = "A";
-        try {
-            tw.append(data, 0, 0);
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOExceptionList e) {
-            verify(goodW).append(data, 0, 0);
-            assertEquals(1, e.getCauseList().size());
-            assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
-        }
+
+        final IOExceptionList e = assertThrows(IOExceptionList.class, () -> tw.append(data, 0, 0));
+        verify(goodW).append(data, 0, 0);
+        assertEquals(1, e.getCauseList().size());
+        assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
     }
 
     @Test
@@ -139,14 +121,11 @@ public class TeeWriterTest {
         final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(badW, goodW, null);
-        try {
-            tw.close();
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOExceptionList e) {
-            verify(goodW).close();
-            assertEquals(1, e.getCauseList().size());
-            assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
-        }
+
+        final IOExceptionList e = assertThrows(IOExceptionList.class, tw::close);
+        verify(goodW).close();
+        assertEquals(1, e.getCauseList().size());
+        assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
     }
 
     @Test
@@ -154,44 +133,35 @@ public class TeeWriterTest {
         final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(goodW, badW, null);
-        try {
-            tw.close();
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOExceptionList e) {
-            verify(goodW).close();
-            assertEquals(1, e.getCauseList().size());
-            assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
-        }
+
+        final IOExceptionList e = assertThrows(IOExceptionList.class, tw::close);
+        verify(goodW).close();
+        assertEquals(1, e.getCauseList().size());
+        assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
     }
 
     @Test
-    public void testArrayIOExceptionOnFlush1() throws IOException {
+    public void testArrayIOExceptionOnFlush1() {
         final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(badW, goodW, null);
-        try {
-            tw.flush();
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOExceptionList e) {
-            verify(goodW).flush();
-            assertEquals(1, e.getCauseList().size());
-            assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
-        }
+
+        final IOExceptionList e = assertThrows(IOExceptionList.class, tw::flush);
+        verify(goodW).flush();
+        assertEquals(1, e.getCauseList().size());
+        assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
     }
 
     @Test
-    public void testArrayIOExceptionOnFlush2() throws IOException {
+    public void testArrayIOExceptionOnFlush2() {
         final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(goodW, badW, null);
-        try {
-            tw.flush();
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOExceptionList e) {
-            verify(goodW).flush();
-            assertEquals(1, e.getCauseList().size());
-            assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
-        }
+
+        final IOExceptionList e = assertThrows(IOExceptionList.class, tw::flush);
+        verify(goodW).flush();
+        assertEquals(1, e.getCauseList().size());
+        assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
     }
 
     @Test
@@ -200,14 +170,11 @@ public class TeeWriterTest {
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(badW, goodW, null);
         final char[] data = { 'a' };
-        try {
-            tw.write(data);
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOExceptionList e) {
-            verify(goodW).write(data);
-            assertEquals(1, e.getCauseList().size());
-            assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
-        }
+
+        final IOExceptionList e = assertThrows(IOExceptionList.class, () -> tw.write(data));
+        verify(goodW).write(data);
+        assertEquals(1, e.getCauseList().size());
+        assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
     }
 
     @Test
@@ -216,144 +183,114 @@ public class TeeWriterTest {
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(goodW, badW, null);
         final char[] data = { 'a' };
-        try {
-            tw.write(data);
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOExceptionList e) {
-            verify(goodW).write(data);
-            assertEquals(1, e.getCauseList().size());
-            assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
-        }
+
+        final IOExceptionList e = assertThrows(IOExceptionList.class, () -> tw.write(data));
+        verify(goodW).write(data);
+        assertEquals(1, e.getCauseList().size());
+        assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
     }
 
     @Test
-    public void testArrayIOExceptionOnWriteCharArrayIntInt1() throws IOException {
+    public void testArrayIOExceptionOnWriteCharArrayIntInt1() {
         final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(badW, goodW, null);
         final char[] data = { 'a' };
-        try {
-            tw.write(data, 0, 0);
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOExceptionList e) {
-            verify(goodW).write(data, 0, 0);
-            assertEquals(1, e.getCauseList().size());
-            assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
-        }
+
+        final IOExceptionList e = assertThrows(IOExceptionList.class, () -> tw.write(data, 0, 0));
+        verify(goodW).write(data, 0, 0);
+        assertEquals(1, e.getCauseList().size());
+        assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
     }
 
     @Test
-    public void testArrayIOExceptionOnWriteCharArrayIntInt2() throws IOException {
+    public void testArrayIOExceptionOnWriteCharArrayIntInt2() {
         final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(goodW, badW, null);
         final char[] data = { 'a' };
-        try {
-            tw.write(data, 0, 0);
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOExceptionList e) {
-            verify(goodW).write(data, 0, 0);
-            assertEquals(1, e.getCauseList().size());
-            assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
-        }
+
+        final IOExceptionList e = assertThrows(IOExceptionList.class, () -> tw.write(data, 0, 0));
+        verify(goodW).write(data, 0, 0);
+        assertEquals(1, e.getCauseList().size());
+        assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
     }
 
     @Test
-    public void testArrayIOExceptionOnWriteInt1() throws IOException {
+    public void testArrayIOExceptionOnWriteInt1() {
         final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(badW, goodW, null);
         final int data = 32;
-        try {
-            tw.write(data);
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOExceptionList e) {
-            verify(goodW).write(data);
-            assertEquals(1, e.getCauseList().size());
-            assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
-        }
+
+        final IOExceptionList e = assertThrows(IOExceptionList.class, () -> tw.write(data));
+        verify(goodW).write(data);
+        assertEquals(1, e.getCauseList().size());
+        assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
     }
 
     @Test
-    public void testArrayIOExceptionOnWriteInt2() throws IOException {
+    public void testArrayIOExceptionOnWriteInt2() {
         final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(goodW, badW, null);
-        try {
-            tw.write(32);
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOExceptionList e) {
-            verify(goodW).write(32);
-            assertEquals(1, e.getCauseList().size());
-            assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
 
-        }
+        final IOExceptionList e = assertThrows(IOExceptionList.class, () -> tw.write(32));
+        verify(goodW).write(32);
+        assertEquals(1, e.getCauseList().size());
+        assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
     }
 
     @Test
-    public void testArrayIOExceptionOnWriteString1() throws IOException {
+    public void testArrayIOExceptionOnWriteString1() {
         final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(badW, goodW, null);
         final String data = "A";
-        try {
-            tw.write(data);
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOExceptionList e) {
-            verify(goodW).write(data);
-            assertEquals(1, e.getCauseList().size());
-            assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
-        }
+
+        final IOExceptionList e = assertThrows(IOExceptionList.class, () -> tw.write(data));
+        verify(goodW).write(data);
+        assertEquals(1, e.getCauseList().size());
+        assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
     }
 
     @Test
-    public void testArrayIOExceptionOnWriteString2() throws IOException {
+    public void testArrayIOExceptionOnWriteString2() {
         final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(goodW, badW, null);
         final String data = "A";
-        try {
-            tw.write(data);
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOExceptionList e) {
-            verify(goodW).write(data);
-            assertEquals(1, e.getCauseList().size());
-            assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
 
-        }
+        final IOExceptionList e = assertThrows(IOExceptionList.class, () -> tw.write(data));
+        verify(goodW).write(data);
+        assertEquals(1, e.getCauseList().size());
+        assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
     }
 
     @Test
-    public void testArrayIOExceptionOnWriteStringIntInt1() throws IOException {
+    public void testArrayIOExceptionOnWriteStringIntInt1() {
         final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(badW, goodW, null);
         final String data = "A";
-        try {
-            tw.write(data, 0, 0);
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOExceptionList e) {
-            verify(goodW).write(data, 0, 0);
-            assertEquals(1, e.getCauseList().size());
-            assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
-        }
+
+        final IOExceptionList e = assertThrows(IOExceptionList.class, () -> tw.write(data, 0, 0));
+        verify(goodW).write(data, 0, 0);
+        assertEquals(1, e.getCauseList().size());
+        assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
     }
 
     @Test
-    public void testArrayIOExceptionOnWriteStringIntInt2() throws IOException {
+    public void testArrayIOExceptionOnWriteStringIntInt2() {
         final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(goodW, badW, null);
         final String data = "A";
-        try {
-            tw.write(data, 0, 0);
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOExceptionList e) {
-            verify(goodW).write(data, 0, 0);
-            assertEquals(1, e.getCauseList().size());
-            assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
 
-        }
+        final IOExceptionList e = assertThrows(IOExceptionList.class, () -> tw.write(data, 0, 0));
+        verify(goodW).write(data, 0, 0);
+        assertEquals(1, e.getCauseList().size());
+        assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
     }
 
     @Test
@@ -361,15 +298,11 @@ public class TeeWriterTest {
         final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(Arrays.asList(goodW, badW, null));
-        try {
-            tw.close();
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOExceptionList e) {
-            verify(goodW).close();
-            assertEquals(1, e.getCauseList().size());
-            assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
 
-        }
+        final IOExceptionList e = assertThrows(IOExceptionList.class, tw::close);
+        verify(goodW).close();
+        assertEquals(1, e.getCauseList().size());
+        assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
     }
 
     @Test

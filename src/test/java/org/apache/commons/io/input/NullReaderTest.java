@@ -75,12 +75,8 @@ public class NullReaderTest {
             assertTrue(reader.markSupported(), "Mark Should be Supported");
 
             // No Mark
-            try {
-                reader.reset();
-                fail("Read limit exceeded, expected IOException ");
-            } catch (final IOException e) {
-                assertEquals("No position has been marked", e.getMessage(), "No Mark IOException message");
-            }
+            final IOException resetException = assertThrows(IOException.class, reader::reset);
+            assertEquals("No position has been marked", resetException.getMessage(), "No Mark IOException message");
 
             for (; position < 3; position++) {
                 assertEquals(position, reader.read(), "Read Before Mark [" + position + "]");
@@ -103,13 +99,9 @@ public class NullReaderTest {
             }
 
             // Reset after read limit passed
-            try {
-                reader.reset();
-                fail("Read limit exceeded, expected IOException ");
-            } catch (final IOException e) {
-                assertEquals("Marked position [" + position + "] is no longer valid - passed the read limit [" + readlimit + "]", e.getMessage(),
+            final IOException e = assertThrows(IOException.class, reader::reset);
+            assertEquals("Marked position [" + position + "] is no longer valid - passed the read limit [" + readlimit + "]", e.getMessage(),
                     "Read limit IOException message");
-            }
         }
     }
 
@@ -211,12 +203,9 @@ public class NullReaderTest {
             assertEquals(7, reader.read(), "Read 3");
             assertEquals(2, reader.skip(5), "Skip 2"); // only 2 left to skip
             assertEquals(-1, reader.skip(5), "Skip 3 (EOF)"); // End of file
-            try {
-                reader.skip(5); //
-                fail("Expected IOException for skipping after end of file");
-            } catch (final IOException e) {
-                assertEquals("Skip after end of file", e.getMessage(), "Skip after EOF IOException message");
-            }
+
+            final IOException e = assertThrows(IOException.class, () -> reader.skip(5));
+            assertEquals("Skip after end of file", e.getMessage(), "Skip after EOF IOException message");
         }
     }
 }

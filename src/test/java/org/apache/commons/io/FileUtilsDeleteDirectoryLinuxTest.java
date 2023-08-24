@@ -17,8 +17,8 @@
 package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.File;
@@ -87,11 +87,8 @@ public class FileUtilsDeleteDirectoryLinuxTest extends AbstractFileUtilsDeleteDi
 
         try {
             // deleteDirectory calls forceDelete
-            FileUtils.deleteDirectory(nested);
-            fail("expected IOException");
-        } catch (final IOException e) {
-            final IOExceptionList list = (IOExceptionList) e;
-            assertTrue(list.getCause(0).getMessage().endsWith("Cannot delete file: " + file.getAbsolutePath()));
+            final IOExceptionList ioExceptionList = (IOExceptionList) assertThrows(IOException.class, () -> FileUtils.deleteDirectory(nested));
+            assertTrue(ioExceptionList.getCause(0).getMessage().endsWith("Cannot delete file: " + file.getAbsolutePath()));
         } finally {
             chmod(nested, 755, false);
             FileUtils.deleteDirectory(nested);
@@ -110,9 +107,7 @@ public class FileUtilsDeleteDirectoryLinuxTest extends AbstractFileUtilsDeleteDi
 
         try {
             // cleanDirectory calls forceDelete
-            FileUtils.deleteDirectory(nested);
-            fail("expected IOException");
-        } catch (final IOException e) {
+            final IOException e = assertThrows(IOException.class, () -> FileUtils.deleteDirectory(nested));
             assertEquals("Unknown I/O error listing contents of directory: " + nested.getAbsolutePath(), e.getMessage());
         } finally {
             chmod(nested, 755, false);

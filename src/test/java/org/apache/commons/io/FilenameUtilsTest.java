@@ -249,12 +249,8 @@ public class FilenameUtilsTest {
 
         if (FilenameUtils.isSystemWindows()) {
             // Special case handling for NTFS ADS names
-            try {
-                FilenameUtils.getExtension("foo.exe:bar.txt");
-                throw new AssertionError("Expected Exception");
-            } catch (final IllegalArgumentException e) {
-                assertEquals("NTFS ADS separator (':') in file name is forbidden.", e.getMessage());
-            }
+            final IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> FilenameUtils.getExtension("foo.exe:bar.txt"));
+            assertEquals("NTFS ADS separator (':') in file name is forbidden.", e.getMessage());
         } else {
             // Upwards compatibility:
             assertEquals("txt", FilenameUtils.getExtension("foo.exe:bar.txt"));
@@ -585,12 +581,8 @@ public class FilenameUtilsTest {
 
         if (FilenameUtils.isSystemWindows()) {
             // Special case handling for NTFS ADS names
-            try {
-                FilenameUtils.indexOfExtension("foo.exe:bar.txt");
-                throw new AssertionError("Expected Exception");
-            } catch (final IllegalArgumentException e) {
-                assertEquals("NTFS ADS separator (':') in file name is forbidden.", e.getMessage());
-            }
+            final IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> FilenameUtils.indexOfExtension("foo.exe:bar.txt"));
+            assertEquals("NTFS ADS separator (':') in file name is forbidden.", e.getMessage());
         } else {
             // Upwards compatibility on other systems
             assertEquals(11, FilenameUtils.indexOfExtension("foo.exe:bar.txt"));
