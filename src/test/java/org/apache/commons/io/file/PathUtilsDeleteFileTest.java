@@ -107,6 +107,14 @@ public class PathUtilsDeleteFileTest {
         Files.deleteIfExists(tempDir);
     }
 
+    /**
+     * Tests a file that does not exist in force-deletion mode.
+     */
+    @Test
+    public void testForceDeleteFileDoesNotExist() throws IOException {
+        Assertions.assertThrows(IOException.class, () -> PathUtils.deleteFile(tempDir.resolve("nonexistent").resolve("file-does-not-exist.bin"), StandardDeleteOption.OVERRIDE_READ_ONLY));
+    }
+
     private void testDeleteFileEmpty(final PathCounters pathCounts) {
         assertCounts(0, 0, 0, pathCounts);
     }

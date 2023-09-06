@@ -589,6 +589,8 @@ public final class PathUtils {
                 pathCounts.getFileCounter().increment();
                 pathCounts.getByteCounter().add(size);
             }
+        } catch (UncheckedIOException x) {
+            throw x.getCause();
         } finally {
             if (posixFileAttributes != null) {
                 Files.setPosixFilePermissions(parent, posixFileAttributes.permissions());
@@ -1158,6 +1160,7 @@ public final class PathUtils {
      * @param test The Path to test.
      * @param options options indicating how to handle symbolic links.
      * @return true if test is on a POSIX file system.
+     * @throws UncheckedIOException rather than {@link IOException}
      * @since 2.12.0
      */
     public static boolean isPosix(final Path test, final LinkOption... options) {
@@ -1244,13 +1247,14 @@ public final class PathUtils {
 
     /**
      * Reads the BasicFileAttributes from the given path. Returns null instead of throwing
-     * {@link UnsupportedOperationException}. Throws {@link Uncheck} instead of {@link IOException}.
+     * {@link UnsupportedOperationException}.
      *
      * @param <A> The {@link BasicFileAttributes} type
      * @param path The Path to test.
      * @param type the {@link Class} of the file attributes required to read.
      * @param options options indicating how to handle symbolic links.
      * @return the file attributes.
+     * @throws UncheckedIOException rather than {@link IOException}
      * @see Files#readAttributes(Path, Class, LinkOption...)
      * @since 2.12.0
      */
@@ -1284,6 +1288,7 @@ public final class PathUtils {
      * @param path the path to read.
      * @param options options indicating how to handle symbolic links.
      * @return the path attributes.
+     * @throws UncheckedIOException rather than {@link IOException}
      * @since 2.12.0
      */
     public static BasicFileAttributes readBasicFileAttributes(final Path path, final LinkOption... options) {
@@ -1312,6 +1317,7 @@ public final class PathUtils {
      * @param path the path to read.
      * @param options options indicating how to handle symbolic links.
      * @return the path attributes.
+     * @throws UncheckedIOException rather than {@link IOException}
      * @since 2.12.0
      */
     public static DosFileAttributes readDosFileAttributes(final Path path, final LinkOption... options) {
@@ -1329,6 +1335,7 @@ public final class PathUtils {
      * @param path The Path to read.
      * @param options options indicating how to handle symbolic links.
      * @return the file attributes.
+     * @throws UncheckedIOException rather than {@link IOException}
      * @since 2.12.0
      */
     public static BasicFileAttributes readOsFileAttributes(final Path path, final LinkOption... options) {
@@ -1343,6 +1350,7 @@ public final class PathUtils {
      * @param path The Path to read.
      * @param options options indicating how to handle symbolic links.
      * @return the file attributes.
+     * @throws UncheckedIOException rather than {@link IOException}
      * @since 2.12.0
      */
     public static PosixFileAttributes readPosixFileAttributes(final Path path, final LinkOption... options) {
@@ -1769,7 +1777,12 @@ public final class PathUtils {
 
     private static <R> R withPosixFileAttributes(final Path path, final LinkOption[] linkOptions, final boolean overrideReadOnly,
         final IOFunction<PosixFileAttributes, R> function) throws IOException {
-        final PosixFileAttributes posixFileAttributes = overrideReadOnly ? readPosixFileAttributes(path, linkOptions) : null;
+        final PosixFileAttributes posixFileAttributes;
+        try {
+            posixFileAttributes = overrideReadOnly ? readPosixFileAttributes(path, linkOptions) : null;
+        } catch (UncheckedIOException x) {
+            throw x.getCause();
+        }
         try {
             return function.apply(posixFileAttributes);
         } finally {

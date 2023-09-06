@@ -18,6 +18,7 @@
 package org.apache.commons.io.file;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
@@ -48,7 +49,11 @@ public class DirectoryStreamFilter implements DirectoryStream.Filter<Path> {
 
     @Override
     public boolean accept(final Path path) throws IOException {
-        return pathFilter.accept(path, PathUtils.readBasicFileAttributes(path, PathUtils.EMPTY_LINK_OPTION_ARRAY)) == FileVisitResult.CONTINUE;
+        try {
+            return pathFilter.accept(path, PathUtils.readBasicFileAttributes(path, PathUtils.EMPTY_LINK_OPTION_ARRAY)) == FileVisitResult.CONTINUE;
+        } catch (UncheckedIOException x) {
+            throw x.getCause();
+        }
     }
 
     /**
