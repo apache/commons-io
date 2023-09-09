@@ -530,12 +530,9 @@ public class XmlStreamReaderTest {
 
     protected void testRawNoBomInvalid(final String encoding) throws Exception {
         try (final InputStream is = getXmlInputStream("no-bom", XML3, encoding, encoding)) {
-            try {
-                new XmlStreamReader(is, false).close();
-                fail("It should have failed");
-            } catch (final IOException ex) {
-                assertTrue(ex.getMessage().contains("Invalid encoding,"));
-            }
+            final XmlStreamReader xmlStreamReader = new XmlStreamReader(is, false);
+            final IOException ex = assertThrows(IOException.class, xmlStreamReader::close);
+            assertTrue(ex.getMessage().contains("Invalid encoding,"));
         }
     }
 

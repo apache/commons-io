@@ -17,8 +17,8 @@
 package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.File;
@@ -123,9 +123,7 @@ public class FileUtilsCleanDirectoryTest extends AbstractTempDirTest {
 
         try {
             // cleanDirectory calls forceDelete
-            FileUtils.cleanDirectory(tempDirFile);
-            fail("expected IOException");
-        } catch (final IOException e) {
+            final IOException e = assertThrows(IOException.class, () -> FileUtils.cleanDirectory(tempDirFile));
             assertEquals("Unknown I/O error listing contents of directory: " + tempDirFile.getAbsolutePath(), e.getMessage());
         } finally {
             chmod(tempDirFile, 755, false);

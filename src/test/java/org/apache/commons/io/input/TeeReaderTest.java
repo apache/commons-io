@@ -17,7 +17,7 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -66,12 +66,8 @@ public class TeeReaderTest  {
         verify(goodR).close();
 
         final TeeReader closingTr = new TeeReader(goodR, badW, true);
-        try {
-            closingTr.close();
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOException e) {
-            verify(goodR, times(2)).close();
-        }
+        final IOException e = assertThrows(IOException.class, closingTr::close);
+        verify(goodR, times(2)).close();
     }
 
     /**
@@ -84,21 +80,12 @@ public class TeeReaderTest  {
         final StringWriter goodW = mock(StringWriter.class);
 
         final TeeReader nonClosingTr = new TeeReader(badR, goodW, false);
-        try {
-            nonClosingTr.close();
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOException e) {
-            verify(goodW, never()).close();
-        }
+        assertThrows(IOException.class, nonClosingTr::close);
+        verify(goodW, never()).close();
 
         final TeeReader closingTr = new TeeReader(badR, goodW, true);
-        try {
-            closingTr.close();
-            fail("Expected " + IOException.class.getName());
-        } catch (final IOException e) {
-            //Assert.assertTrue(goodW.closed);
-            verify(goodW).close();
-        }
+        assertThrows(IOException.class, closingTr::close);
+        verify(goodW).close();
     }
 
     @Test

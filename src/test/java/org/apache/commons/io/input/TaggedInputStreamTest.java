@@ -18,8 +18,8 @@ package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -41,46 +41,22 @@ public class TaggedInputStreamTest  {
             new TaggedInputStream(new BrokenInputStream(exception));
 
         // Test the available() method
-        try {
-            stream.available();
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertTrue(stream.isCauseOf(e));
-            try {
-                stream.throwIfCauseOf(e);
-                fail("Expected exception not thrown.");
-            } catch (final IOException e2) {
-                assertEquals(exception, e2);
-            }
-        }
+        final IOException exceptionAvailable = assertThrows(IOException.class, stream::available);
+        assertTrue(stream.isCauseOf(exceptionAvailable));
+        final IOException exceptionAvailableCause = assertThrows(IOException.class, () -> stream.throwIfCauseOf(exceptionAvailable));
+        assertEquals(exception, exceptionAvailableCause);
 
         // Test the read() method
-        try {
-            stream.read();
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertTrue(stream.isCauseOf(e));
-            try {
-                stream.throwIfCauseOf(e);
-                fail("Expected exception not thrown.");
-            } catch (final IOException e2) {
-                assertEquals(exception, e2);
-            }
-        }
+        final IOException exceptionRead = assertThrows(IOException.class, stream::read);
+        assertTrue(stream.isCauseOf(exceptionRead));
+        final IOException exceptionReadCause = assertThrows(IOException.class, () -> stream.throwIfCauseOf(exceptionRead));
+        assertEquals(exception, exceptionReadCause);
 
         // Test the close() method
-        try {
-            stream.close();
-            fail("Expected exception not thrown.");
-        } catch (final IOException e) {
-            assertTrue(stream.isCauseOf(e));
-            try {
-                stream.throwIfCauseOf(e);
-                fail("Expected exception not thrown.");
-            } catch (final IOException e2) {
-                assertEquals(exception, e2);
-            }
-        }
+        final IOException exceptionClose = assertThrows(IOException.class, stream::close);
+        assertTrue(stream.isCauseOf(exceptionClose));
+        final IOException exceptionCloseCause = assertThrows(IOException.class, () -> stream.throwIfCauseOf(exceptionClose));
+        assertEquals(exception, exceptionCloseCause);
     }
 
     @Test

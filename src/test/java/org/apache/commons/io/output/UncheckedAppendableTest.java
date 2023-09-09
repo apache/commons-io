@@ -17,7 +17,7 @@
 package org.apache.commons.io.output;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -64,32 +64,20 @@ public class UncheckedAppendableTest {
 
     @Test
     public void testAppendCharSequenceIndexedThrows() {
-        try {
-            appendableBroken.append("a", 0, 1);
-            fail("Expected exception not thrown.");
-        } catch (final UncheckedIOException e) {
-            assertEquals(exception, e.getCause());
-        }
+        final UncheckedIOException e = assertThrows(UncheckedIOException.class, () -> appendableBroken.append("a", 0, 1));
+        assertEquals(exception, e.getCause());
     }
 
     @Test
     public void testAppendCharSequenceThrows() {
-        try {
-            appendableBroken.append("a");
-            fail("Expected exception not thrown.");
-        } catch (final UncheckedIOException e) {
-            assertEquals(exception, e.getCause());
-        }
+        final UncheckedIOException e = assertThrows(UncheckedIOException.class, () -> appendableBroken.append("a"));
+        assertEquals(exception, e.getCause());
     }
 
     @Test
     public void testAppendCharThrows() {
-        try {
-            appendableBroken.append('a');
-            fail("Expected exception not thrown.");
-        } catch (final UncheckedIOException e) {
-            assertEquals(exception, e.getCause());
-        }
+        final UncheckedIOException e2 = assertThrows(UncheckedIOException.class, () -> appendableBroken.append('a'));
+        assertEquals(exception, e2.getCause());
     }
 
     @Test
