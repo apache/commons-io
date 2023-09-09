@@ -67,6 +67,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Josh Soref, Gary Gregory">
         Spelling #468.
       </action>
+      <action dev="ggregory" type="fix" due-to="Jakub Kupczyk">
+        Use assertThrows #475.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add DeferredFileOutputStream.getPath().
