@@ -1,3 +1,83 @@
+
+Apache Commons IO 
+Version 2.14.0
+Release Notes
+
+INTRODUCTION:
+
+Commons IO is a package of Java utility classes like java.io.  
+Classes in this package are considered to be so standard and of such high 
+reuse as to justify existence in java.io.
+
+The Apache Commons IO library contains utility classes, stream implementations, file filters,
+file comparators, endian transformation classes, and much more.
+
+Java 8 required.
+
+Changes in this version include:
+
+New features:
+o           Add DeferredFileOutputStream.getPath(). Thanks to Gary Gregory. 
+o           Add FileCleaningTracker.track(Path, Object[, FileDeleteStrategy]). Thanks to Gary Gregory. 
+o           Add IOUtils.skip[Fully](InputStream, long, Supplier<byte[]>). Thanks to Gary Gregory. 
+o           Add FilesUncheck.find(Path, int, BiPredicate%lt;Path, BasicFileAttributes>, FileVisitOption...) Thanks to Gary Gregory. 
+o           Add IOIntSupplier. Thanks to Gary Gregory. 
+o           Add IOLongSupplier. Thanks to Gary Gregory. 
+o           Add Uncheck.getAsInt(IOIntSupplier [, Supplier<String>]). Thanks to Gary Gregory. 
+o           Add Uncheck.getAsLong(IOLongSupplier [, Supplier<String>]). Thanks to Gary Gregory. 
+o           Add Uncheck.run(IORunnable, Supplier<String>) Thanks to Gary Gregory. 
+o           Add Uncheck.get(IOSupplier, Supplier<String>) Thanks to Gary Gregory. 
+o           IOFileFilter now also extends java.nio.file.PathMatcher. Thanks to Gary Gregory. 
+o           Add PathMatcherFileFilter to adapt java.nio.file.PathMatcher. Thanks to Gary Gregory. 
+o           Add ThresholdingOutputStream.getOutputStream() and deprecate getStream(). Thanks to Gary Gregory. 
+o           Add DeferredFileOutputStream.Builder.setOutputFile(Path). Thanks to Gary Gregory. 
+o           Add DeferredFileOutputStream.Builder.setDirectory(Path). Thanks to Gary Gregory. 
+o           Add AbstractStreamBuilder.setBufferSizeChecker(IntToIntFunction). Thanks to Gary Gregory. 
+o           Add AbstractStreamBuilder.setBufferSizeMax(int). Thanks to Gary Gregory. 
+
+Fixed Bugs:
+o IO-799:  ReaderInputStream.read() throws an exception instead of returning -1 when called again after returning -1. Thanks to Jeroen van der Vegt, Gary Gregory. 
+o IO-804:  FileUtils.forceMkdirParent() Javadoc is incorrect. Thanks to Elliotte Rusty Harold, Gary Gregory. 
+o           [StepSecurity] ci: Harden GitHub Actions #461. Thanks to step-security-bot, Gary Gregory. 
+o           MagicNumberFileFilter.accept(Path, BasicFileAttributes) doesn't its byteOffset before reading. Thanks to Gary Gregory. 
+o           Javadoc improvements. Thanks to Gary Gregory. 
+o           Spelling #468. Thanks to Josh Soref, Gary Gregory. 
+o           Use assertThrows #475. Thanks to Jakub Kupczyk. 
+
+Changes:
+o           Bump jimfs from 1.2 to 1.3.0 #465 (tests). Thanks to Dependabot. 
+o           Bump commons-parent from 58 to 62. Thanks to Gary Gregory. 
+o           Bump commons-lang3 from 3.12 to 3.13.0. Thanks to Gary Gregory. 
+
+Compatibility with 2.6:
+Binary compatible: Yes.
+Source compatible: Yes.
+Semantic compatible: Yes.
+
+Commons IO 2.9.0 requires Java 8.
+Commons IO 2.8.0 requires Java 8.
+Commons IO 2.7 requires Java 8.
+Commons IO 2.6 requires Java 7.
+Commons IO 2.5 requires Java 6.
+Commons IO 2.4 requires Java 6.
+Commons IO 2.3 requires Java 6.
+Commons IO 2.2 requires Java 5.
+Commons IO 1.4 requires Java 1.3.
+
+Historical list of changes: https://commons.apache.org/proper/commons-io/changes-report.html
+
+For complete information on Apache Commons IO, including instructions on how to submit bug reports,
+patches, or suggestions for improvement, see the Apache Commons IO website:
+
+https://commons.apache.org/proper/commons-io/
+
+Download page: https://commons.apache.org/proper/commons-io/download_io.cgi
+
+Have fun!
+-Apache Commons Team
+
+==============================================================================
+
 Apache Commons IO 
 Version 2.13.0
 Release Notes
