@@ -59,7 +59,7 @@ The <action> type attribute can be add,update,fix,remove.
         [StepSecurity] ci: Harden GitHub Actions #461.
       </action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
-        MagicNumberFileFilter.accept(Path, BasicFileAttributes) doesn't its byteOffset before reading.
+        MagicNumberFileFilter.accept(Path, BasicFileAttributes) doesn't set its byteOffset before reading.
       </action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
         Javadoc improvements.
