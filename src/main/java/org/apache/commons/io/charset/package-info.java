@@ -17,6 +17,7 @@
 
 /**
  * Provides classes to work with code from {@link java.nio.charset}.
+ *
  * @since 2.12.0
  */
 package org.apache.commons.io.charset;

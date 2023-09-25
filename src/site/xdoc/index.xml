@@ -16,92 +16,103 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <document>
- <properties>
-  <title>Commons IO Overview</title>
-  <author email="dev@commons.apache.org">Commons Documentation Team</author>
- </properties>
-<body>
-<!-- ================================================== -->
-<section name="Apache Commons IO">
-<p>
-Apache Commons IO is a library of utilities to assist with developing IO functionality.
-</p>
-<p>
-There are six main areas included:
-</p>
-<ul>
-	<li>
-		<a
-			href="apidocs/index.html?org/apache/commons/io/package-summary.html">io</a>
-		- This package defines utility classes for working with streams, readers, writers and files.
-	</li>
-	<li>
-		<a
-			href="apidocs/index.html?org/apache/commons/io/comparator/package-summary.html">comparator</a>
-		- This package provides various Comparator implementations for Files.
-	</li>
-	<li>
-		<a
-			href="apidocs/index.html?org/apache/commons/io/file/package-summary.html">file</a>
-		- This package provides extensions in the realm of java.nio.file.
-	</li>
-	<li>
-		<a
-			href="apidocs/index.html?org/apache/commons/io/filefilter/package-summary.html">filefilter</a>
-		- This package defines an interface (IOFileFilter) that combines both FileFilter and FilenameFilter.
-	</li>
-	<li>
-		<a
-			href="apidocs/index.html?org/apache/commons/io/function/package-summary.html">function</a>
-		- This package defines IO-only related functional interfaces for lambda expressions and method references.
-	</li>
-	<li>
-		<a
-			href="apidocs/index.html?org/apache/commons/io/input/package-summary.html">input</a>
-		- This package provides implementations of input classes, such as InputStream and Reader.
-	</li>
-	<li>
-		<a
-			href="apidocs/index.html?org/apache/commons/io/input/buffer/package-summary.html">input.buffer</a>
-		- This package provides implementations of buffered input classes, such as CircularBufferInputStream and PeekableInputStream.
-	</li>
-	<li>
-		<a
-			href="apidocs/index.html?org/apache/commons/io/monitor/package-summary.html">monitor</a>
-		- This package provides a component for monitoring file system events (directory and file create, update and delete events).
-	</li>
-	<li>
-		<a
-			href="apidocs/index.html?org/apache/commons/io/output/package-summary.html">output</a>
-		- This package provides implementations of output classes, such as OutputStream and Writer.
-	</li>
-	<li>
-		<a
-			href="apidocs/index.html?org/apache/commons/io/serialization/package-summary.html">serialization</a>
-		- This package provides a framework for controlling the deserialization of classes.
-	</li>
-</ul>
-</section>
-<!-- ================================================== -->
-<section name="Releases">
+  <properties>
+    <title>Commons IO Overview</title>
+    <author email="dev@commons.apache.org">Commons Documentation Team</author>
+  </properties>
+  <body>
+    <!-- ================================================== -->
+    <section name="Apache Commons IO">
+      <p>
+        Apache Commons IO is a library of utilities to assist with developing IO functionality.
+      </p>
+      <p>
+        There are six main areas included:
+      </p>
+      <ul>
+        <li>
+          <a href="apidocs/index.html?org/apache/commons/io/package-summary.html">io</a>
+          - This package defines utility classes for working with streams, readers, writers and files.
+        </li>
+        <li>
+          <a href="apidocs/index.html?org/apache/commons/io/build/package-summary.html">build</a>
+          - This package provides classes to implement IO builders.
+        </li>
+        <li>
+          <a href="apidocs/index.html?org/apache/commons/io/charset/package-summary.html">charset</a>
+          - This package provides classes to work with code from <code>java.nio.charset</code>.
+        </li>
+        <li>
+          <a href="apidocs/index.html?org/apache/commons/io/comparator/package-summary.html">comparator</a>
+          - This package provides various Comparator implementations for Files and Paths.
+        </li>
+        <li>
+          <a href="apidocs/index.html?org/apache/commons/io/file/package-summary.html">file</a>
+          - This package provides extensions in the realm of java.nio.file.
+        </li>
+        <li>
+          <a href="apidocs/index.html?org/apache/commons/io/file/attribute/package-summary.html">file.attribute</a>
+          - This package provides help using <code>java.nio.file.attribute</code> types.
+        </li>
+        <li>
+          <a href="apidocs/index.html?org/apache/commons/io/file/spi/package-summary.html">file SPI</a>
+          - This package provides extensions in the realm of <code>java.nio.file.spi</code>.
+        </li>
+        <li>
+          <a href="apidocs/index.html?org/apache/commons/io/filefilter/package-summary.html">filefilter</a>
+          - This package defines an interface (IOFileFilter) that combines both FileFilter and FilenameFilter.
+        </li>
+        <li>
+          <a href="apidocs/index.html?org/apache/commons/io/function/package-summary.html">function</a>
+          - This package defines IO-only related functional interfaces for lambda expressions and method references.
+        </li>
+        <li>
+          <a href="apidocs/index.html?org/apache/commons/io/input/package-summary.html">input</a>
+          - This package provides implementations of input classes, such as InputStream and Reader.
+        </li>
+        <li>
+          <a href="apidocs/index.html?org/apache/commons/io/input/buffer/package-summary.html">input.buffer</a>
+          - This package provides implementations of buffered input classes, such as CircularBufferInputStream and PeekableInputStream.
+        </li>
+        <li>
+          <a href="apidocs/index.html?org/apache/commons/io/monitor/package-summary.html">monitor</a>
+          - This package provides a component for monitoring file system events (directory and file create, update and delete events).
+        </li>
+        <li>
+          <a href="apidocs/index.html?org/apache/commons/io/output/package-summary.html">output</a>
+          - This package provides implementations of output classes, such as OutputStream and Writer.
+        </li>
+        <li>
+          <a href="apidocs/index.html?org/apache/commons/io/serialization/package-summary.html">serialization</a>
+          - This package provides a framework for controlling the deserialization of classes.
+        </li>
+      </ul>
+    </section>
+    <!-- ================================================== -->
+    <section name="Releases">
 
-    <subsection name="Latest Release (Java 8 and up)">
+      <subsection name="Latest Release (Java 8 and up)">
         <p>
-            Commons IO 2.13.0 requires a minimum of Java 8 -
-            <a href="https://commons.apache.org/io/download_io.cgi">Download now</a>.
+          Commons IO 2.13.0 requires a minimum of Java 8 -
+          <a href="https://commons.apache.org/io/download_io.cgi">Download now</a>
+          .
         </p>
         <p>
-            View the
-            <a href="changes-report.html">Release Notes</a>
-            and
-            <a href="apidocs/index.html">Javadoc API documents</a>.
+          View the
+          <a href="changes-report.html">Release Notes</a>
+          and
+          <a href="apidocs/index.html">Javadoc API documents</a>
+          .
         </p>
-    </subsection>
+      </subsection>
 
-    <subsection name="Previous Releases">
+      <subsection name="Previous Releases">
         <p>
-          See the <a href="https://archive.apache.org/dist/commons/io/">download archive</a> 
-          and <a href="https://javadoc.io/doc/commons-io/commons-io/">Javadoc archive</a>.
+          See the
+          <a href="https://archive.apache.org/dist/commons/io/">download archive</a>
+          and
+          <a href="https://javadoc.io/doc/commons-io/commons-io/">Javadoc archive</a>
+          .
         </p>
         <p>
           The Java platform requirements are:
@@ -121,23 +132,27 @@ There are six main areas included:
           <li>Version 2.3 requires Java 6.</li>
           <li>Version 2.2 requires Java 5.</li>
         </ul>
-    </subsection>
+      </subsection>
 
-</section>
-<!-- ================================================== -->
-<section name="Support">
-<p>
-The <a href="mail-lists.html">commons mailing lists</a> act as the main support forum.
-The user list is suitable for most library usage queries.
-The dev list is intended for the development discussion.
-Please remember that the lists are shared between all commons components,
-so prefix your email by [io].
-</p>
-<p>
-Issues may be reported via <a href="issue-tracking.html">ASF JIRA</a>.
-Please read the instructions carefully to submit a useful bug report or enhancement request.
-</p>
-</section>
-<!-- ================================================== -->
-</body>
+    </section>
+    <!-- ================================================== -->
+    <section name="Support">
+      <p>
+        The
+        <a href="mail-lists.html">commons mailing lists</a>
+        act as the main support forum.
+        The user list is suitable for most library usage queries.
+        The dev list is intended for the development discussion.
+        Please remember that the lists are shared between all commons components,
+        so prefix your email by [io].
+      </p>
+      <p>
+        Issues may be reported via
+        <a href="issue-tracking.html">ASF JIRA</a>
+        .
+        Please read the instructions carefully to submit a useful bug report or enhancement request.
+      </p>
+    </section>
+    <!-- ================================================== -->
+  </body>
 </document>
