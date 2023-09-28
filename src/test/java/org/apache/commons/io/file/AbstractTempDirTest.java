@@ -19,6 +19,7 @@ package org.apache.commons.io.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -52,4 +53,8 @@ public abstract class AbstractTempDirTest {
         tempDirFile = tempDirPath.toFile();
     }
 
+
+    protected final boolean isPosixFilePermissionsSupported() {
+        return FileSystems.getDefault().supportedFileAttributeViews().contains("posix");
+    }
 }

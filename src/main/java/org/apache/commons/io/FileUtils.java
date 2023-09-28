@@ -2570,9 +2570,8 @@ public class FileUtils {
      * @param file the file to read, must not be {@code null}
      * @return the file contents, never {@code null}
      * @throws NullPointerException if file is {@code null}.
-     * @throws FileNotFoundException if the file does not exist, is a directory rather than a regular file, or for some
-     *         other reason cannot be opened for reading.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException if an I/O error occurs, including when the file does not exist, is a directory rather than a
+     *         regular file, or for some other reason why the file cannot be opened for reading.
      * @since 1.1
      */
     public static byte[] readFileToByteArray(final File file) throws IOException {
@@ -2587,9 +2586,8 @@ public class FileUtils {
      * @param file the file to read, must not be {@code null}
      * @return the file contents, never {@code null}
      * @throws NullPointerException if file is {@code null}.
-     * @throws FileNotFoundException if the file does not exist, is a directory rather than a regular file, or for some
-     *         other reason cannot be opened for reading.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException if an I/O error occurs, including when the file does not exist, is a directory rather than a
+     *         regular file, or for some other reason why the file cannot be opened for reading.
      * @since 1.3.1
      * @deprecated 2.5 use {@link #readFileToString(File, Charset)} instead (and specify the appropriate encoding)
      */
@@ -2606,9 +2604,8 @@ public class FileUtils {
      * @param charsetName the name of the requested charset, {@code null} means platform default
      * @return the file contents, never {@code null}
      * @throws NullPointerException if file is {@code null}.
-     * @throws FileNotFoundException if the file does not exist, is a directory rather than a regular file, or for some
-     *         other reason cannot be opened for reading.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException if an I/O error occurs, including when the file does not exist, is a directory rather than a
+     *         regular file, or for some other reason why the file cannot be opened for reading.
      * @since 2.3
      */
     public static String readFileToString(final File file, final Charset charsetName) throws IOException {
@@ -2622,9 +2619,8 @@ public class FileUtils {
      * @param charsetName the name of the requested charset, {@code null} means platform default
      * @return the file contents, never {@code null}
      * @throws NullPointerException if file is {@code null}.
-     * @throws FileNotFoundException if the file does not exist, is a directory rather than a regular file, or for some
-     *         other reason cannot be opened for reading.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException if an I/O error occurs, including when the file does not exist, is a directory rather than a
+     *         regular file, or for some other reason why the file cannot be opened for reading.
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
      * .UnsupportedEncodingException} in version 2.2 if the named charset is unavailable.
      * @since 2.3
@@ -2640,9 +2636,8 @@ public class FileUtils {
      * @param file the file to read, must not be {@code null}
      * @return the list of Strings representing each line in the file, never {@code null}
      * @throws NullPointerException if file is {@code null}.
-     * @throws FileNotFoundException if the file does not exist, is a directory rather than a regular file, or for some
-     *         other reason cannot be opened for reading.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException if an I/O error occurs, including when the file does not exist, is a directory rather than a
+     *         regular file, or for some other reason why the file cannot be opened for reading.
      * @since 1.3
      * @deprecated 2.5 use {@link #readLines(File, Charset)} instead (and specify the appropriate encoding)
      */
@@ -2659,9 +2654,8 @@ public class FileUtils {
      * @param charset the charset to use, {@code null} means platform default
      * @return the list of Strings representing each line in the file, never {@code null}
      * @throws NullPointerException if file is {@code null}.
-     * @throws FileNotFoundException if the file does not exist, is a directory rather than a regular file, or for some
-     *         other reason cannot be opened for reading.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException if an I/O error occurs, including when the file does not exist, is a directory rather than a
+     *         regular file, or for some other reason why the file cannot be opened for reading.
      * @since 2.3
      */
     public static List<String> readLines(final File file, final Charset charset) throws IOException {
@@ -2675,9 +2669,8 @@ public class FileUtils {
      * @param charsetName the name of the requested charset, {@code null} means platform default
      * @return the list of Strings representing each line in the file, never {@code null}
      * @throws NullPointerException if file is {@code null}.
-     * @throws FileNotFoundException if the file does not exist, is a directory rather than a regular file, or for some
-     *         other reason cannot be opened for reading.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException if an I/O error occurs, including when the file does not exist, is a directory rather than a
+     *         regular file, or for some other reason why the file cannot be opened for reading.
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
      * .UnsupportedEncodingException} in version 2.2 if the named charset is unavailable.
      * @since 1.1

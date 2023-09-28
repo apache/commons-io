@@ -40,6 +40,7 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.charset.UnsupportedCharsetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -47,6 +48,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.AclFileAttributeView;
 import java.nio.file.attribute.FileTime;
 import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -86,6 +88,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIf;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -2445,6 +2448,23 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testReadFileToByteArray_Errors() {
+        assertThrows(NullPointerException.class, () -> FileUtils.readFileToByteArray(null));
+        assertThrows(IOException.class, () -> FileUtils.readFileToByteArray(new File("non-exsistent")));
+        assertThrows(IOException.class, () -> FileUtils.readFileToByteArray(tempDirFile));
+    }
+
+    @Test
+    @EnabledIf("isPosixFilePermissionsSupported")
+    public void testReadFileToByteArray_IOExceptionOnPosixFileSystem() throws Exception {
+        final File file = TestUtils.newFile(tempDirFile, "cant-read.txt");
+        TestUtils.createFile(file, 100);
+        Files.setPosixFilePermissions(file.toPath(), PosixFilePermissions.fromString("---------"));
+
+        assertThrows(IOException.class, () -> FileUtils.readFileToByteArray(file));
+    }
+
+    @Test
     public void testReadFileToStringWithDefaultEncoding() throws Exception {
         final File file = new File(tempDirFile, "read.obj");
         final String fixture = "Hello /u1234";
@@ -2464,6 +2484,24 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testReadFileToString_Errors() {
+        assertThrows(NullPointerException.class, () -> FileUtils.readFileToString(null));
+        assertThrows(IOException.class, () -> FileUtils.readFileToString(new File("non-exsistent")));
+        assertThrows(IOException.class, () -> FileUtils.readFileToString(tempDirFile));
+        assertThrows(UnsupportedCharsetException.class, () -> FileUtils.readFileToString(tempDirFile, "unsupported-charset"));
+    }
+
+    @Test
+    @EnabledIf("isPosixFilePermissionsSupported")
+    public void testReadFileToString_IOExceptionOnPosixFileSystem() throws Exception {
+        final File file = TestUtils.newFile(tempDirFile, "cant-read.txt");
+        TestUtils.createFile(file, 100);
+        Files.setPosixFilePermissions(file.toPath(), PosixFilePermissions.fromString("---------"));
+
+        assertThrows(IOException.class, () -> FileUtils.readFileToString(file));
+    }
+
+    @Test
     public void testReadLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
         try {
@@ -2475,6 +2513,24 @@ public class FileUtilsTest extends AbstractTempDirTest {
         } finally {
             TestUtils.deleteFile(file);
         }
+    }
+
+    @Test
+    public void testReadLines_Errors() {
+        assertThrows(NullPointerException.class, () -> FileUtils.readLines(null));
+        assertThrows(IOException.class, () -> FileUtils.readLines(new File("non-exsistent")));
+        assertThrows(IOException.class, () -> FileUtils.readLines(tempDirFile));
+        assertThrows(UnsupportedCharsetException.class, () -> FileUtils.readLines(tempDirFile, "unsupported-charset"));
+    }
+
+    @Test
+    @EnabledIf("isPosixFilePermissionsSupported")
+    public void testReadLines_IOExceptionOnPosixFileSystem() throws Exception {
+        final File file = TestUtils.newFile(tempDirFile, "cant-read.txt");
+        TestUtils.createFile(file, 100);
+        Files.setPosixFilePermissions(file.toPath(), PosixFilePermissions.fromString("---------"));
+
+        assertThrows(IOException.class, () -> FileUtils.readLines(file));
     }
 
     @Test
