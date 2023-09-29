@@ -17,7 +17,7 @@
 
 /**
  * Provides various {@link java.util.Comparator} implementations
- * for {@link java.io.File}s.
+ * for {@link java.io.File}s and {@link java.nio.file.Path}.
  * <h2>Sorting</h2>
  * <p>
  * All the comparators include <i>convenience</i> utility <code>sort(File...)</code> and
