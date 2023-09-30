@@ -51,6 +51,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" issue="IO-810" due-to="Gregor Dschung, Gary Gregory">
         Javadoc in FileUtils does not reflect code for thrown exceptions
       </action>
+      <action dev="ggregory" type="fix" issue="IO-812" due-to="Adam Rauch, Gary Gregory">
+        Javadoc should mention closing Streams based on file resources.
+      </action>
     </release>
     <release version="2.14.0" date="2023-09-24" description="Java 8 required.">
       <!-- FIX -->
