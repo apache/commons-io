@@ -220,7 +220,9 @@ public class FilesUncheckTest {
 
     @Test
     public void testList() {
-        assertEquals(1, FilesUncheck.list(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0")).count());
+        try (Stream<Path> stream = FilesUncheck.list(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0"))) {
+            assertEquals(1, stream.count());
+        }
     }
 
     @Test
