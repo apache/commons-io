@@ -1996,7 +1996,28 @@ public class FileUtils {
      * @since 1.2
      */
     public static Iterator<File> iterateFiles(final File directory, final String[] extensions, final boolean recursive) {
-        return Uncheck.apply(d -> streamFiles(d, recursive, extensions).iterator(), directory);
+        return Uncheck.apply(d -> {
+            Stream<File> stream = streamFiles(d, recursive, extensions);
+            Iterator<File> iter = stream.iterator();
+
+            // Wrap the iterator to allow closing the stream after consumption
+            return new Iterator<File>(){
+                @Override
+                public boolean hasNext() {
+                    boolean ret = iter.hasNext();
+
+                    if (!ret)
+                        stream.close();
+
+                    return ret;
+                }
+
+                @Override
+                public File next() {
+                    return iter.next();
+                }
+            };
+        }, directory);
     }
 
     /**
@@ -2238,7 +2259,11 @@ public class FileUtils {
      * @return a collection of java.io.File with the matching files
      */
     public static Collection<File> listFiles(final File directory, final String[] extensions, final boolean recursive) {
-        return Uncheck.apply(d -> toList(streamFiles(d, recursive, extensions)), directory);
+        return Uncheck.apply(d -> {
+            try (Stream<File> fileStream = streamFiles(d, recursive, extensions)) {
+                return toList(fileStream);
+            }
+        }, directory);
     }
 
     /**
