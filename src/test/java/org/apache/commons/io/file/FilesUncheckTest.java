@@ -210,12 +210,16 @@ public class FilesUncheckTest {
 
     @Test
     public void testLinesPath() {
-        assertEquals(0, FilesUncheck.lines(FILE_PATH_EMPTY).count());
+        try (Stream<String> stream = FilesUncheck.lines(FILE_PATH_EMPTY)) {
+            assertEquals(0, stream.count());
+        }
     }
 
     @Test
     public void testLinesPathCharset() {
-        assertEquals(0, FilesUncheck.lines(FILE_PATH_EMPTY, StandardCharsets.UTF_8).count());
+        try (Stream<String> stream = FilesUncheck.lines(FILE_PATH_EMPTY, StandardCharsets.UTF_8)) {
+            assertEquals(0, stream.count());
+        }
     }
 
     @Test
