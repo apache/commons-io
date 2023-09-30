@@ -46,6 +46,12 @@ public class FileUtilsListFilesTest {
         return files.stream().map(File::getName).collect(Collectors.toList());
     }
 
+    /**
+     * Consumes and closes the underlying stream.
+     *
+     * @param files The iterator to consume.
+     * @return a new collection.
+     */
     private Collection<String> filesToFilenames(final Iterator<File> files) {
         final Collection<String> fileNames = new ArrayList<>();
         // Iterator.forEachRemaining() closes the underlying stream.
@@ -91,7 +97,7 @@ public class FileUtilsListFilesTest {
 
         Iterator<File> files = FileUtils.iterateFiles(temporaryFolder, extensions, false);
         try {
-            Collection<String> filenames = filesToFilenames(files);
+            final Collection<String> filenames = filesToFilenames(files);
             assertEquals(1, filenames.size());
             assertTrue(filenames.contains("dummy-build.xml"));
             assertFalse(filenames.contains("README"));
@@ -103,7 +109,7 @@ public class FileUtilsListFilesTest {
 
         try {
             files = FileUtils.iterateFiles(temporaryFolder, extensions, true);
-            Collection<String> filenames = filesToFilenames(files);
+            final Collection<String> filenames = filesToFilenames(files);
             assertEquals(4, filenames.size());
             assertTrue(filenames.contains("dummy-file.txt"));
             assertFalse(filenames.contains("dummy-index.html"));
@@ -114,7 +120,7 @@ public class FileUtilsListFilesTest {
 
         files = FileUtils.iterateFiles(temporaryFolder, null, false);
         try {
-            Collection<String> filenames = filesToFilenames(files);
+            final Collection<String> filenames = filesToFilenames(files);
             assertEquals(2, filenames.size());
             assertTrue(filenames.contains("dummy-build.xml"));
             assertTrue(filenames.contains("README"));
