@@ -1989,7 +1989,7 @@ public class FileUtils {
      * </p>
      *
      * @param directory  the directory to search in
-     * @param extensions an array of extensions, ex. {"java","xml"}. If this
+     * @param extensions an array of extensions, for example, {"java","xml"}. If this
      *                   parameter is {@code null}, all files are returned.
      * @param recursive  if true all subdirectories are searched as well
      * @return an iterator of java.io.File with the matching files
@@ -2232,7 +2232,7 @@ public class FileUtils {
      * which match an array of extensions.
      *
      * @param directory  the directory to search in
-     * @param extensions an array of extensions, ex. {"java","xml"}. If this
+     * @param extensions an array of extensions, for example, {"java","xml"}. If this
      *                   parameter is {@code null}, all files are returned.
      * @param recursive  if true all subdirectories are searched as well
      * @return a collection of java.io.File with the matching files
@@ -2970,8 +2970,8 @@ public class FileUtils {
      *
      * @param directory  the directory to search in
      * @param recursive  if true all subdirectories are searched as well
-     * @param extensions an array of extensions, ex. {"java","xml"}. If this parameter is {@code null}, all files are returned.
-     * @return an iterator of java.io.File with the matching files
+     * @param extensions an array of extensions, for example, {"java","xml"}. If this parameter is {@code null}, all files are returned.
+     * @return a Stream of {@link File} for matching files.
      * @throws IOException if an I/O error is thrown when accessing the starting file.
      * @since 2.9.0
      */
