@@ -88,14 +88,19 @@ public class IOBinaryOperatorStreamTest {
     public void testReduce() throws IOException {
         // A silly example to pass in a IOBinaryOperator.
         final Path current = PathUtils.current();
-        final Path expected = Files.list(current).reduce((t, u) -> {
-            try {
-                return t.toRealPath();
-            } catch (final IOException e) {
-                return fail(e);
-            }
-        }).get();
-        assertEquals(expected, Files.list(current).reduce(REAL_PATH_BO).get());
+        final Path expected;
+        try (Stream<Path> stream = Files.list(current)) {
+            expected = stream.reduce((t, u) -> {
+                try {
+                    return t.toRealPath();
+                } catch (final IOException e) {
+                    return fail(e);
+                }
+            }).get();
+        }
+        try (Stream<Path> stream = Files.list(current)) {
+            assertEquals(expected, stream.reduce(REAL_PATH_BO).get());
+        }
     }
 
 }
