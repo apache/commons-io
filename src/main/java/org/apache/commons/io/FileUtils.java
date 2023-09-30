@@ -2224,7 +2224,7 @@ public class FileUtils {
     public static Collection<File> listFiles(final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
         final AccumulatorPathVisitor visitor = Uncheck
             .apply(d -> listAccumulate(d, FileFileFilter.INSTANCE.and(fileFilter), dirFilter, FileVisitOption.FOLLOW_LINKS), directory);
-        return visitor.getFileList().stream().map(Path::toFile).collect(Collectors.toList());
+        return toList(visitor.getFileList().stream().map(Path::toFile));
     }
 
     /**
@@ -2265,7 +2265,7 @@ public class FileUtils {
             directory);
         final List<Path> list = visitor.getFileList();
         list.addAll(visitor.getDirList());
-        return list.stream().map(Path::toFile).collect(Collectors.toList());
+        return toList(list.stream().map(Path::toFile));
     }
 
     /**
@@ -3046,8 +3046,11 @@ public class FileUtils {
     }
 
     /**
-     * Consumes all of the given stream and <em>closes</em> it because FileTreeWalker.next() calls {@code top.stream().close()}.
-     *
+     * Consumes all of the given stream.
+     * <p>
+     * When called from a FileTreeWalker, the walker <em>closes</em> the stream because {@link FileTreeWalker#next()} calls {@code top.stream().close()}.
+     * </p>
+     * 
      * @param stream The stream to consume.
      * @return a new List.
      */
