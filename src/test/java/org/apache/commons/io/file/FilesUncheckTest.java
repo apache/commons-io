@@ -50,6 +50,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.function.Uncheck;
@@ -166,7 +167,9 @@ public class FilesUncheckTest {
 
     @Test
     public void testFind() {
-        assertNotNull(FilesUncheck.find(FILE_PATH_EMPTY, 0, (t, u) -> false));
+        try (Stream<Path> find = FilesUncheck.find(FILE_PATH_EMPTY, 0, (t, u) -> false)) {
+            assertNotNull(find);
+        }
     }
 
     @Test

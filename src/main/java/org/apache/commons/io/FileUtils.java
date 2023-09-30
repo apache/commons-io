@@ -36,6 +36,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnsupportedCharsetException;
 import java.nio.file.CopyOption;
+import java.nio.file.DirectoryStream;
 import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -2960,13 +2961,16 @@ public class FileUtils {
     }
 
     /**
-     * Streams over the files in a given directory (and optionally
-     * its subdirectories) which match an array of extensions.
+     * Streams over the files in a given directory (and optionally its subdirectories) which match an array of extensions.
+     * <p>
+     * The returned {@link Stream} may wrap one or more {@link DirectoryStream}s. When you require timely disposal of file system resources, use a
+     * {@code try}-with-resources block to ensure invocation of the stream's {@link Stream#close()} method after the stream operations are completed. Calling a
+     * closed stream causes a {@link IllegalStateException}.
+     * </p>
      *
      * @param directory  the directory to search in
      * @param recursive  if true all subdirectories are searched as well
-     * @param extensions an array of extensions, ex. {"java","xml"}. If this
-     *                   parameter is {@code null}, all files are returned.
+     * @param extensions an array of extensions, ex. {"java","xml"}. If this parameter is {@code null}, all files are returned.
      * @return an iterator of java.io.File with the matching files
      * @throws IOException if an I/O error is thrown when accessing the starting file.
      * @since 2.9.0

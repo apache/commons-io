@@ -1182,8 +1182,12 @@ public final class PathUtils {
 
     /**
      * Creates a new DirectoryStream for Paths rooted at the given directory.
+     * <p>
+     * If you don't use the try-with-resources construct, then you must call the stream's {@link Stream#close()} method after iteration is complete to free any
+     * resources held for the open directory.
+     * </p>
      *
-     * @param dir the path to the directory to stream.
+     * @param dir        the path to the directory to stream.
      * @param pathFilter the directory stream filter.
      * @return a new instance.
      * @throws IOException if an I/O error occurs.
@@ -1751,6 +1755,11 @@ public final class PathUtils {
 
     /**
      * Returns a stream of filtered paths.
+     * <p>
+     * The returned {@link Stream} may wrap one or more {@link DirectoryStream}s. When you require timely disposal of file system resources, use a
+     * {@code try}-with-resources block to ensure invocation of the stream's {@link Stream#close()} method after the stream operations are completed. Calling a
+     * closed stream causes a {@link IllegalStateException}.
+     * </p>
      *
      * @param start the start path
      * @param pathFilter the path filter
