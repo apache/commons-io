@@ -3050,7 +3050,7 @@ public class FileUtils {
      * <p>
      * When called from a FileTreeWalker, the walker <em>closes</em> the stream because {@link FileTreeWalker#next()} calls {@code top.stream().close()}.
      * </p>
-     * 
+     *
      * @param stream The stream to consume.
      * @return a new List.
      */
