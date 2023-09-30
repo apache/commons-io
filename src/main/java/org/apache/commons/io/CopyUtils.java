@@ -103,7 +103,7 @@ import java.nio.charset.Charset;
  * method variants to specify the encoding, each row may
  * correspond to up to 2 methods.
  * <p>
- * Origin of code: Excalibur.
+ * Provenance: Excalibur.
  *
  * @deprecated Use IOUtils. Will be removed in 3.0.
  *  Methods renamed to IOUtils.write() or IOUtils.copy().

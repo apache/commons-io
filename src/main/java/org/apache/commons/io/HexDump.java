@@ -31,7 +31,7 @@ import org.apache.commons.io.output.CloseShieldOutputStream;
  * in hexadecimal form.
  * </p>
  * <p>
- * Origin of code: POI.
+ * Provenance: POI.
  * </p>
  */
 public class HexDump {

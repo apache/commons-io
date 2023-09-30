@@ -90,7 +90,7 @@ import java.util.stream.Stream;
  * currently running on.
  * </p>
  * <p>
- * Origin of code: Excalibur, Alexandria, Tomcat, Commons-Utils.
+ * Provenance: Excalibur, Alexandria, Tomcat, Commons-Utils.
  * </p>
  *
  * @since 1.1

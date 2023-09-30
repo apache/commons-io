@@ -118,7 +118,7 @@ import org.apache.commons.io.output.UnsynchronizedByteArrayOutputStream;
  * closing streams after use.
  * </p>
  * <p>
- * Origin of code: Excalibur.
+ * Provenance: Excalibur.
  * </p>
  */
 public class IOUtils {

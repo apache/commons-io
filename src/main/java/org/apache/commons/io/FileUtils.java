@@ -109,7 +109,7 @@ import org.apache.commons.io.function.Uncheck;
  * {@link SecurityException} are not documented in the Javadoc.
  * </p>
  * <p>
- * Origin of code: Excalibur, Alexandria, Commons-Utils
+ * Provenance: Excalibur, Alexandria, Commons-Utils
  * </p>
  */
 public class FileUtils {

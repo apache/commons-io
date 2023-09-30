@@ -34,7 +34,7 @@ import java.io.OutputStream;
  * This class helps you solve this incompatibility.
  * </p>
  * <p>
- * Origin of code: Excalibur
+ * Provenance: Excalibur
  * </p>
  *
  * @see org.apache.commons.io.input.SwappedDataInputStream
