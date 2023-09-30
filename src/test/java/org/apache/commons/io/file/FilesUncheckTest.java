@@ -435,12 +435,16 @@ public class FilesUncheckTest {
 
     @Test
     public void testWalkPathFileVisitOptionArray() {
-        assertTrue(0 < FilesUncheck.walk(TARGET_PATH, FileVisitOption.FOLLOW_LINKS).count());
+        try (Stream<Path> stream = FilesUncheck.walk(TARGET_PATH, FileVisitOption.FOLLOW_LINKS)) {
+            assertTrue(0 < stream.count());
+        }
     }
 
     @Test
     public void testWalkPathIntFileVisitOptionArray() {
-        assertEquals(1, FilesUncheck.walk(TARGET_PATH, 0, FileVisitOption.FOLLOW_LINKS).count());
+        try (Stream<Path> stream = FilesUncheck.walk(TARGET_PATH, 0, FileVisitOption.FOLLOW_LINKS)) {
+            assertEquals(1, stream.count());
+        }
     }
 
     @Test
