@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.lang3.function.Consumers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -47,6 +48,7 @@ public class FileUtilsListFilesTest {
 
     private Collection<String> filesToFilenames(final Iterator<File> files) {
         final Collection<String> fileNames = new ArrayList<>();
+        // Iterator.forEachRemaining() closes the underlying stream.
         files.forEachRemaining(f -> fileNames.add(f.getName()));
         return fileNames;
     }
@@ -88,24 +90,39 @@ public class FileUtilsListFilesTest {
         final String[] extensions = { "xml", "txt" };
 
         Iterator<File> files = FileUtils.iterateFiles(temporaryFolder, extensions, false);
-        Collection<String> filenames = filesToFilenames(files);
-        assertEquals(1, filenames.size());
-        assertTrue(filenames.contains("dummy-build.xml"));
-        assertFalse(filenames.contains("README"));
-        assertFalse(filenames.contains("dummy-file.txt"));
+        try {
+            Collection<String> filenames = filesToFilenames(files);
+            assertEquals(1, filenames.size());
+            assertTrue(filenames.contains("dummy-build.xml"));
+            assertFalse(filenames.contains("README"));
+            assertFalse(filenames.contains("dummy-file.txt"));
+        } finally {
+            // Backstop in case filesToFilenames() failure.
+            files.forEachRemaining(Consumers.nop());
+        }
 
-        files = FileUtils.iterateFiles(temporaryFolder, extensions, true);
-        filenames = filesToFilenames(files);
-        assertEquals(4, filenames.size());
-        assertTrue(filenames.contains("dummy-file.txt"));
-        assertFalse(filenames.contains("dummy-index.html"));
+        try {
+            files = FileUtils.iterateFiles(temporaryFolder, extensions, true);
+            Collection<String> filenames = filesToFilenames(files);
+            assertEquals(4, filenames.size());
+            assertTrue(filenames.contains("dummy-file.txt"));
+            assertFalse(filenames.contains("dummy-index.html"));
+        } finally {
+            // Backstop in case filesToFilenames() failure.
+            files.forEachRemaining(Consumers.nop());
+        }
 
         files = FileUtils.iterateFiles(temporaryFolder, null, false);
-        filenames = filesToFilenames(files);
-        assertEquals(2, filenames.size());
-        assertTrue(filenames.contains("dummy-build.xml"));
-        assertTrue(filenames.contains("README"));
-        assertFalse(filenames.contains("dummy-file.txt"));
+        try {
+            Collection<String> filenames = filesToFilenames(files);
+            assertEquals(2, filenames.size());
+            assertTrue(filenames.contains("dummy-build.xml"));
+            assertTrue(filenames.contains("README"));
+            assertFalse(filenames.contains("dummy-file.txt"));
+        } finally {
+            // Backstop in case filesToFilenames() failure.
+            files.forEachRemaining(Consumers.nop());
+        }
     }
 
     @Test

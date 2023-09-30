@@ -3045,6 +3045,12 @@ public class FileUtils {
         return files;
     }
 
+    /**
+     * Consumes all of the given stream and <em>closes</em> it because FileTreeWalker.next() calls {@code top.stream().close()}.
+     *
+     * @param stream The stream to consume.
+     * @return a new List.
+     */
     private static List<File> toList(final Stream<File> stream) {
         return stream.collect(Collectors.toList());
     }
