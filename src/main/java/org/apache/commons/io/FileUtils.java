@@ -2228,7 +2228,7 @@ public class FileUtils {
     }
 
     /**
-     * Finds files within a given directory (and optionally its subdirectories)
+     * Lists files within a given directory (and optionally its subdirectories)
      * which match an array of extensions.
      *
      * @param directory  the directory to search in
@@ -2238,7 +2238,9 @@ public class FileUtils {
      * @return a collection of java.io.File with the matching files
      */
     public static Collection<File> listFiles(final File directory, final String[] extensions, final boolean recursive) {
-        return Uncheck.apply(d -> toList(streamFiles(d, recursive, extensions)), directory);
+        try (Stream<File> fileStream = Uncheck.get(() -> streamFiles(directory, recursive, extensions))) {
+            return toList(fileStream);
+        }
     }
 
     /**

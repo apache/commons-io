@@ -55,7 +55,10 @@ The <action> type attribute can be add,update,fix,remove.
         Javadoc should mention closing Streams based on file resources.
       </action>
       <action dev="ggregory" type="fix" issue="IO-811" due-to="Adam Rauch, Gary Gregory">
-        In tests, Files.walk() direct and indirect callers fail to close the returned Stream&lt;Path&gt;.
+        In tests, Files.walk() direct and indirect callers fail to close the returned Stream.
+      </action>
+      <action dev="ggregory" type="fix" issue="IO-811" due-to="Adam Rauch, Gary Gregory">
+        FileUtils.listFiles(File, String[], boolean) fails to close its internal Stream.
       </action>
     </release>
     <release version="2.14.0" date="2023-09-24" description="Java 8 is required.">
