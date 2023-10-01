@@ -452,12 +452,12 @@ public class FileUtils {
     }
 
     /**
-     * Converts a Collection containing java.io.File instances into array
+     * Converts a Collection containing {@link File} instances into array
      * representation. This is to account for the difference between
      * File.listFiles() and FileUtils.listFiles().
      *
-     * @param files a Collection containing java.io.File instances
-     * @return an array of java.io.File
+     * @param files a Collection containing {@link File} instances
+     * @return an array of {@link File}
      */
     public static File[] convertFileCollectionToFileArray(final Collection<File> files) {
         return files.toArray(EMPTY_FILE_ARRAY);
@@ -1972,7 +1972,7 @@ public class FileUtils {
      * @param dirFilter  optional filter to apply when finding subdirectories.
      *                   If this parameter is {@code null}, subdirectories will not be included in the
      *                   search. Use TrueFileFilter.INSTANCE to match all directories.
-     * @return an iterator of java.io.File for the matching files
+     * @return an iterator of {@link File} for the matching files
      * @see org.apache.commons.io.filefilter.FileFilterUtils
      * @see org.apache.commons.io.filefilter.NameFileFilter
      * @since 1.2
@@ -1992,7 +1992,7 @@ public class FileUtils {
      * @param extensions an array of extensions, for example, {"java","xml"}. If this
      *                   parameter is {@code null}, all files are returned.
      * @param recursive  if true all subdirectories are searched as well
-     * @return an iterator of java.io.File with the matching files
+     * @return an iterator of {@link File} with the matching files
      * @since 1.2
      */
     public static Iterator<File> iterateFiles(final File directory, final String[] extensions, final boolean recursive) {
@@ -2017,7 +2017,7 @@ public class FileUtils {
      * @param dirFilter  optional filter to apply when finding subdirectories.
      *                   If this parameter is {@code null}, subdirectories will not be included in the
      *                   search. Use TrueFileFilter.INSTANCE to match all directories.
-     * @return an iterator of java.io.File for the matching files
+     * @return an iterator of {@link File} for the matching files
      * @see org.apache.commons.io.filefilter.FileFilterUtils
      * @see org.apache.commons.io.filefilter.NameFileFilter
      * @since 2.2
@@ -2217,7 +2217,7 @@ public class FileUtils {
      * @param dirFilter  optional filter to apply when finding subdirectories.
      *                   If this parameter is {@code null}, subdirectories will not be included in the
      *                   search. Use {@link TrueFileFilter#INSTANCE} to match all directories.
-     * @return a collection of java.io.File with the matching files
+     * @return a collection of {@link File} with the matching files
      * @see org.apache.commons.io.filefilter.FileFilterUtils
      * @see org.apache.commons.io.filefilter.NameFileFilter
      */
@@ -2235,7 +2235,7 @@ public class FileUtils {
      * @param extensions an array of extensions, for example, {"java","xml"}. If this
      *                   parameter is {@code null}, all files are returned.
      * @param recursive  if true all subdirectories are searched as well
-     * @return a collection of java.io.File with the matching files
+     * @return a collection of {@link File} with the matching files
      */
     public static Collection<File> listFiles(final File directory, final String[] extensions, final boolean recursive) {
         try (Stream<File> fileStream = Uncheck.get(() -> streamFiles(directory, recursive, extensions))) {
@@ -2256,7 +2256,7 @@ public class FileUtils {
      * @param dirFilter  optional filter to apply when finding subdirectories.
      *                   If this parameter is {@code null}, subdirectories will not be included in the
      *                   search. Use TrueFileFilter.INSTANCE to match all directories.
-     * @return a collection of java.io.File with the matching files
+     * @return a collection of {@link File} with the matching files
      * @see org.apache.commons.io.FileUtils#listFiles
      * @see org.apache.commons.io.filefilter.FileFilterUtils
      * @see org.apache.commons.io.filefilter.NameFileFilter
