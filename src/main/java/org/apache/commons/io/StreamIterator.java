@@ -45,7 +45,7 @@ final class StreamIterator<E> implements Iterator<E>, Closeable {
      * @param stream The stream iterate.
      * @return A new iterator.
      */
-    public static <T> Iterator<T> iterator(final Stream<T> stream) {
+    public static <T> StreamIterator<T> iterator(final Stream<T> stream) {
         return new StreamIterator<>(stream);
     }
 
