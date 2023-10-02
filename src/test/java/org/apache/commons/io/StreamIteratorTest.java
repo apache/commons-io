@@ -21,14 +21,31 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Tests {@link StreamIterator}.
+ */
 public class StreamIteratorTest {
+
     @Test
-    public void testStreamIterator() {
+    public void testForEachRemaining() {
+        final AtomicBoolean closed = new AtomicBoolean();
+        final Iterator<Integer> iter = StreamIterator.iterator(Stream.of(1, 2, 3).onClose(() -> closed.set(true)));
+        final AtomicInteger sum = new AtomicInteger();
+
+        iter.forEachRemaining(sum::addAndGet);
+
+        assertEquals(6, sum.get());
+        assertTrue(closed.get());
+    }
+
+    @Test
+    public void testHasNext() {
         final AtomicBoolean closed = new AtomicBoolean();
         final Iterator<Integer> iter = StreamIterator.iterator(Stream.of(1, 2, 3).onClose(() -> closed.set(true)));
         int sum = 0;
