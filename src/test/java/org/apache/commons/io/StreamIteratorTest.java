@@ -29,8 +29,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class StreamIteratorTest {
     @Test
     public void testStreamIterator() {
-        AtomicBoolean closed = new AtomicBoolean(false);
-        Iterator<Integer> iter = StreamIterator.iterator(Stream.of(1, 2, 3).onClose(() -> closed.set(true)));
+        final AtomicBoolean closed = new AtomicBoolean();
+        final Iterator<Integer> iter = StreamIterator.iterator(Stream.of(1, 2, 3).onClose(() -> closed.set(true)));
         int sum = 0;
 
         while (iter.hasNext()) {
