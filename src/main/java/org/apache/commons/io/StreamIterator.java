@@ -45,14 +45,15 @@ final class StreamIterator<E> implements Iterator<E>, Closeable {
      * @param stream The stream iterate.
      * @return A new iterator.
      */
-    @SuppressWarnings("resource") // Caller MUST close or iterate to the end.
     public static <T> Iterator<T> iterator(final Stream<T> stream) {
-        return new StreamIterator<>(stream).iterator;
+        return new StreamIterator<>(stream);
     }
 
     private final Iterator<E> iterator;
 
     private final Stream<E> stream;
+
+    private boolean closed;
 
     private StreamIterator(final Stream<E> stream) {
         this.stream = Objects.requireNonNull(stream, "stream");
@@ -64,11 +65,16 @@ final class StreamIterator<E> implements Iterator<E>, Closeable {
      */
     @Override
     public void close() {
+        closed = true;
         stream.close();
     }
 
     @Override
     public boolean hasNext() {
+        if (closed) {
+            // Calling Iterator#hasNext() on a closed java.nio.file.FileTreeIterator causes an IllegalStateException.
+            return false;
+        }
         final boolean hasNext = iterator.hasNext();
         if (!hasNext) {
             close();
