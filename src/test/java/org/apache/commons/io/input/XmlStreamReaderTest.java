@@ -30,6 +30,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,6 +38,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
@@ -569,6 +571,29 @@ public class XmlStreamReaderTest {
     @Test
     public void testRawNoBomUtf8() throws Exception {
         testRawNoBomValid(UTF_8);
+    }
+
+    private void parseCharset(String hdr, String enc) throws Exception {
+            try (InputStream stream = new ByteArrayInputStream(hdr.getBytes(StandardCharsets.UTF_8))) {
+                try (XmlStreamReader xml = new XmlStreamReader(stream)) {
+                    String getenc = xml.getEncoding();
+                    assertEquals(enc.toUpperCase(Locale.ROOT), getenc, enc);
+                }
+            };
+    }
+    @Test
+    public void testIO_815() throws Exception {
+        System.out.println(XmlStreamReader.ENCODING_PATTERN);
+        MessageFormat fmt = new MessageFormat("<?xml version=\"1.0\" encoding=''{0}''?>\n<root>text</root>");
+        for (final Map.Entry<String, Charset> entry : Charset.availableCharsets().entrySet()) {
+            String csName = entry.getKey();
+            String header = fmt.format(new Object[]{csName});
+            parseCharset(header, csName);
+            for (final String alias : entry.getValue().aliases()) {
+                header = fmt.format(new Object[]{alias});
+                parseCharset(header, alias);
+            }
+        }
     }
 
     protected void testRawNoBomValid(final String encoding) throws Exception {
