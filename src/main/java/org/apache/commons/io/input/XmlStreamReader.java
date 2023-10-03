@@ -209,8 +209,14 @@ public class XmlStreamReader extends Reader {
     // @formatter:off
             "^<\\?xml\\s+"
             + "version\\s*=\\s*(?:(?:\"1\\.[0-9]+\")|(?:'1.[0-9]+'))\\s+"
-            + "encoding\\s*=\\s*((?:\"[A-Za-z]([A-Za-z0-9\\._]|-)*\")|(?:'[A-Za-z]([A-Za-z0-9\\\\._]|-)*'))",
+            + "encoding\\s*=\\s*"
+            + "((?:\"[A-Za-z0-9][A-Za-z0-9._+:-]*\")"  // double-quoted
+            +  "|(?:'[A-Za-z0-9][A-Za-z0-9._+:-]*'))", // single-quoted
             Pattern.MULTILINE);
+    // N.B. the documented pattern is
+    // EncName   ::=   [A-Za-z] ([A-Za-z0-9._] | '-')*
+    // However this does not match all the aliases that are supported by Java.
+    // e.g.  '437', 'ISO_8859-1:1987' and 'ebcdic-de-273+euro'
     // @formatter:on
 
     private static final String RAW_EX_1 = "Illegal encoding, BOM [{0}] XML guess [{1}] XML prolog [{2}] encoding mismatch";
