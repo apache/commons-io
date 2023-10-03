@@ -573,25 +573,22 @@ public class XmlStreamReaderTest {
         testRawNoBomValid(UTF_8);
     }
 
-    private void parseCharset(String hdr, String enc) throws Exception {
-            try (InputStream stream = new ByteArrayInputStream(hdr.getBytes(StandardCharsets.UTF_8))) {
-                try (XmlStreamReader xml = new XmlStreamReader(stream)) {
-                    String getenc = xml.getEncoding();
+    private void parseCharset(final String hdr, final String enc) throws Exception {
+            try (final InputStream stream = new ByteArrayInputStream(hdr.getBytes(StandardCharsets.UTF_8))) {
+                try (final XmlStreamReader xml = new XmlStreamReader(stream)) {
+                    final String getenc = xml.getEncoding();
                     assertEquals(enc.toUpperCase(Locale.ROOT), getenc, enc);
                 }
             };
     }
     @Test
     public void testIO_815() throws Exception {
-        System.out.println(XmlStreamReader.ENCODING_PATTERN);
-        MessageFormat fmt = new MessageFormat("<?xml version=\"1.0\" encoding=''{0}''?>\n<root>text</root>");
+        final MessageFormat fmt = new MessageFormat("<?xml version=\"1.0\" encoding=''{0}''?>\n<root>text</root>");
         for (final Map.Entry<String, Charset> entry : Charset.availableCharsets().entrySet()) {
-            String csName = entry.getKey();
-            String header = fmt.format(new Object[]{csName});
-            parseCharset(header, csName);
+            final String csName = entry.getKey();
+            parseCharset(fmt.format(new Object[]{csName}), csName);
             for (final String alias : entry.getValue().aliases()) {
-                header = fmt.format(new Object[]{alias});
-                parseCharset(header, alias);
+                parseCharset(fmt.format(new Object[]{alias}), alias);
             }
         }
     }
