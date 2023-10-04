@@ -41,9 +41,12 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.io.CharsetsTest;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.function.IOFunction;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junitpioneer.jupiter.DefaultLocale;
 
 public class XmlStreamReaderTest {
@@ -582,19 +585,17 @@ public class XmlStreamReaderTest {
         }
     }
 
-    @Test
-    public void testIO_815() throws Exception {
+    @ParameterizedTest(name = "{0}")
+    @MethodSource(CharsetsTest.AVAIL_CHARSETS)
+    public void testIO_815(final String csName) throws Exception {
         final MessageFormat fmt = new MessageFormat("<?xml version=\"1.0\" encoding=''{0}''?>\n<root>text</root>");
-        for (final Map.Entry<String, Charset> entry : Charset.availableCharsets().entrySet()) {
-            final String csName = entry.getKey();
-            final IOFunction<InputStream, XmlStreamReader> factoryCtor = XmlStreamReader::new;
-            final IOFunction<InputStream, XmlStreamReader> factoryBuilder = stream ->  XmlStreamReader.builder().setInputStream(stream).get();
-            parseCharset(fmt.format(new Object[] { csName }), csName, factoryCtor);
-            parseCharset(fmt.format(new Object[] { csName }), csName, factoryBuilder);
-            for (final String alias : entry.getValue().aliases()) {
-                parseCharset(fmt.format(new Object[] { alias }), alias, factoryCtor);
-                parseCharset(fmt.format(new Object[] { alias }), alias, factoryBuilder);
-            }
+        final IOFunction<InputStream, XmlStreamReader> factoryCtor = XmlStreamReader::new;
+        final IOFunction<InputStream, XmlStreamReader> factoryBuilder = stream -> XmlStreamReader.builder().setInputStream(stream).get();
+        parseCharset(fmt.format(new Object[] { csName }), csName, factoryCtor);
+        parseCharset(fmt.format(new Object[] { csName }), csName, factoryBuilder);
+        for (final String alias : Charset.forName(csName).aliases()) {
+            parseCharset(fmt.format(new Object[] { alias }), alias, factoryCtor);
+            parseCharset(fmt.format(new Object[] { alias }), alias, factoryBuilder);
         }
     }
 
