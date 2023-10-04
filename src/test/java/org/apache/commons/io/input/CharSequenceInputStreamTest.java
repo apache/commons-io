@@ -159,13 +159,12 @@ public class CharSequenceInputStreamTest {
 //        at sun.nio.cs.ext.COMPOUND_TEXT_Encoder.encodeLoop(COMPOUND_TEXT_Encoder.java:75)
 //        at java.nio.charset.CharsetEncoder.encode(CharsetEncoder.java:544)
 //        at org.apache.commons.io.input.CharSequenceInputStream.fillBuffer(CharSequenceInputStream.java:111)
-    @Test
-    public void testBufferedRead_AvailableCharset() throws IOException {
-        for (final String csName : Charset.availableCharsets().keySet()) {
-            // prevent java.lang.UnsupportedOperationException at sun.nio.cs.ext.ISO2022_CN.newEncoder.
-            if (isAvailabilityTestableForCharset(csName)) {
-                testBufferedRead(TEST_STRING, csName);
-            }
+    @ParameterizedTest(name = "{0}")
+    @MethodSource(CharsetsTest.AVAIL_CHARSETS)
+    public void testBufferedRead_AvailableCharset(final String csName) throws IOException {
+        // prevent java.lang.UnsupportedOperationException at sun.nio.cs.ext.ISO2022_CN.newEncoder.
+        if (isAvailabilityTestableForCharset(csName)) {
+            testBufferedRead(TEST_STRING, csName);
         }
     }
 
