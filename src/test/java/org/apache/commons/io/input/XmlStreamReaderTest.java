@@ -574,12 +574,12 @@ public class XmlStreamReaderTest {
     }
 
     private void parseCharset(final String hdr, final String enc) throws Exception {
-            try (final InputStream stream = new ByteArrayInputStream(hdr.getBytes(StandardCharsets.UTF_8))) {
-                try (final XmlStreamReader xml = new XmlStreamReader(stream)) {
-                    final String getenc = xml.getEncoding();
-                    assertEquals(enc.toUpperCase(Locale.ROOT), getenc, enc);
-                }
-            };
+        try (final InputStream stream = new ByteArrayInputStream(hdr.getBytes(StandardCharsets.UTF_8))) {
+            try (final XmlStreamReader xml = new XmlStreamReader(stream)) {
+                final String getenc = xml.getEncoding();
+                assertEquals(enc.toUpperCase(Locale.ROOT), getenc, enc);
+            }
+        }
     }
 
     @Test
@@ -587,9 +587,9 @@ public class XmlStreamReaderTest {
         final MessageFormat fmt = new MessageFormat("<?xml version=\"1.0\" encoding=''{0}''?>\n<root>text</root>");
         for (final Map.Entry<String, Charset> entry : Charset.availableCharsets().entrySet()) {
             final String csName = entry.getKey();
-            parseCharset(fmt.format(new Object[]{csName}), csName);
+            parseCharset(fmt.format(new Object[] { csName }), csName);
             for (final String alias : entry.getValue().aliases()) {
-                parseCharset(fmt.format(new Object[]{alias}), alias);
+                parseCharset(fmt.format(new Object[] { alias }), alias);
             }
         }
     }
