@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Set;
 import java.util.SortedMap;
 
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,20 @@ import org.junit.jupiter.api.Test;
  */
 @SuppressWarnings("deprecation") // testing deprecated code
 public class CharsetsTest {
+
+    /**
+     * For parameterized tests.
+     */
+    public static final String AVAIL_CHARSETS = "org.apache.commons.io.CharsetsTest#availableCharsetsKeySet";
+
+    /**
+     * For parameterized tests.
+     *
+     * @return {@code Charset.availableCharsets().keySet()}.
+     */
+    public static Set<String> availableCharsetsKeySet() {
+        return Charset.availableCharsets().keySet();
+    }
 
     @Test
     public void testIso8859_1() {

@@ -32,9 +32,12 @@ import java.util.Random;
 import java.util.Set;
 
 import org.apache.commons.io.Charsets;
+import org.apache.commons.io.CharsetsTest;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 public class CharSequenceInputStreamTest {
 
@@ -78,11 +81,11 @@ public class CharSequenceInputStreamTest {
                 "Shift_JIS".equalsIgnoreCase(csName);
     }
 
-    @Test
-    public void testAvailable() throws Exception {
-        for (final String csName : Charset.availableCharsets().keySet()) {
-            // prevent java.lang.UnsupportedOperationException at sun.nio.cs.ext.ISO2022_CN.newEncoder.
-            // also try and avoid the following exception
+    @ParameterizedTest(name = "{0}")
+    @MethodSource(CharsetsTest.AVAIL_CHARSETS)
+    public void testAvailable(final String csName) throws Exception {
+        // prevent java.lang.UnsupportedOperationException at sun.nio.cs.ext.ISO2022_CN.newEncoder.
+        // also try and avoid the following exception
 //            java.lang.UnsupportedOperationException: null
 //            at java.nio.CharBuffer.array(CharBuffer.java:940)
 //            at sun.nio.cs.ext.COMPOUND_TEXT_Encoder.encodeLoop(COMPOUND_TEXT_Encoder.java:75)
@@ -92,14 +95,13 @@ public class CharSequenceInputStreamTest {
 //            at org.apache.commons.io.input.CharSequenceInputStreamTest.testAvailableRead(CharSequenceInputStreamTest.java:412)
 //            at org.apache.commons.io.input.CharSequenceInputStreamTest.testAvailable(CharSequenceInputStreamTest.java:424)
 
-            try {
-                if (isAvailabilityTestableForCharset(csName)) {
-                    testAvailableSkip(csName);
-                    testAvailableRead(csName);
-                }
-            } catch (final UnsupportedOperationException e){
-                fail("Operation not supported for " + csName);
+        try {
+            if (isAvailabilityTestableForCharset(csName)) {
+                testAvailableSkip(csName);
+                testAvailableRead(csName);
             }
+        } catch (final UnsupportedOperationException e) {
+            fail("Operation not supported for " + csName);
         }
     }
 
