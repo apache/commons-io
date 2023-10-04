@@ -42,6 +42,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.function.IOFunction;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.DefaultLocale;
 
@@ -573,11 +574,10 @@ public class XmlStreamReaderTest {
         testRawNoBomValid(UTF_8);
     }
 
-    private void parseCharset(final String hdr, final String enc) throws Exception {
+    private void parseCharset(final String hdr, final String enc, final IOFunction<InputStream, XmlStreamReader> factory) throws Exception {
         try (final InputStream stream = new ByteArrayInputStream(hdr.getBytes(StandardCharsets.UTF_8))) {
-            try (final XmlStreamReader xml = new XmlStreamReader(stream)) {
-                final String getenc = xml.getEncoding();
-                assertEquals(enc.toUpperCase(Locale.ROOT), getenc, enc);
+            try (final XmlStreamReader xml = factory.apply(stream)) {
+                assertEquals(enc.toUpperCase(Locale.ROOT), xml.getEncoding(), enc);
             }
         }
     }
@@ -587,9 +587,13 @@ public class XmlStreamReaderTest {
         final MessageFormat fmt = new MessageFormat("<?xml version=\"1.0\" encoding=''{0}''?>\n<root>text</root>");
         for (final Map.Entry<String, Charset> entry : Charset.availableCharsets().entrySet()) {
             final String csName = entry.getKey();
-            parseCharset(fmt.format(new Object[] { csName }), csName);
+            final IOFunction<InputStream, XmlStreamReader> factoryCtor = XmlStreamReader::new;
+            final IOFunction<InputStream, XmlStreamReader> factoryBuilder = stream ->  XmlStreamReader.builder().setInputStream(stream).get();
+            parseCharset(fmt.format(new Object[] { csName }), csName, factoryCtor);
+            parseCharset(fmt.format(new Object[] { csName }), csName, factoryBuilder);
             for (final String alias : entry.getValue().aliases()) {
-                parseCharset(fmt.format(new Object[] { alias }), alias);
+                parseCharset(fmt.format(new Object[] { alias }), alias, factoryCtor);
+                parseCharset(fmt.format(new Object[] { alias }), alias, factoryBuilder);
             }
         }
     }
