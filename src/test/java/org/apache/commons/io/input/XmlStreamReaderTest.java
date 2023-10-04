@@ -581,6 +581,7 @@ public class XmlStreamReaderTest {
                 }
             };
     }
+
     @Test
     public void testIO_815() throws Exception {
         final MessageFormat fmt = new MessageFormat("<?xml version=\"1.0\" encoding=''{0}''?>\n<root>text</root>");
