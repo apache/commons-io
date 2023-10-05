@@ -23,13 +23,14 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
- * Wraps and presents a stream as a closable {@link Iterator} resource that automatically closes itself when reaching the end of stream.
+ * Wraps and presents a {@link Stream} as an {@link AutoCloseable} {@link Iterator} resource that automatically closes itself when reaching the end of stream.
+ *
  * <h2>Warning</h2>
  * <p>
  * In order to close the stream, the call site MUST either close the stream it allocated OR call the iterator until the end.
  * </p>
  *
- * @param <E> The stream and iterator type.
+ * @param <E> The {@link Stream} and {@link Iterator} type.
  * @since 2.9.0
  */
 final class StreamIterator<E> implements Iterator<E>, Closeable {
