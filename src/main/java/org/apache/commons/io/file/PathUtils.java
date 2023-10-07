@@ -1249,9 +1249,9 @@ public final class PathUtils {
     /**
      * Reads the BasicFileAttributes from the given path. Returns null if the attributes can't be read.
      *
-     * @param <A> the {@link BasicFileAttributes} type
-     * @param path the Path to test.
-     * @param type the {@link Class} of the file attributes required to read
+     * @param <A> The {@link BasicFileAttributes} type
+     * @param path The Path to test.
+     * @param type the {@link Class} of the file attributes required to read.
      * @param options options indicating how to handle symbolic links
      * @return the file attributes or null if the attributes can't be read
      * @see Files#readAttributes(Path, Class, LinkOption...)
@@ -1270,8 +1270,8 @@ public final class PathUtils {
      * Reads the BasicFileAttributes from the given path.
      *
      * @param path the path to read.
-     * @return the path attributes
-     * @throws IOException if an I/O error occurs
+     * @return the path attributes.
+     * @throws IOException if an I/O error occurs.
      * @since 2.9.0
      */
     public static BasicFileAttributes readBasicFileAttributes(final Path path) throws IOException {
@@ -1283,8 +1283,8 @@ public final class PathUtils {
      * can't be read.
      *
      * @param path the path to read.
-     * @param options options indicating how to handle symbolic links
-     * @return the path attributes
+     * @param options options indicating how to handle symbolic links.
+     * @return the path attributes.
      * @since 2.12.0
      */
     public static BasicFileAttributes readBasicFileAttributes(final Path path, final LinkOption... options) {
@@ -1310,8 +1310,8 @@ public final class PathUtils {
      * can't be read.
      *
      * @param path the path to read.
-     * @param options options indicating how to handle symbolic links
-     * @return the path attributes
+     * @param options options indicating how to handle symbolic links.
+     * @return the path attributes.
      * @since 2.12.0
      */
     public static DosFileAttributes readDosFileAttributes(final Path path, final LinkOption... options) {
@@ -1327,8 +1327,8 @@ public final class PathUtils {
      * can't be read.
      *
      * @param path the Path to read.
-     * @param options options indicating how to handle symbolic links
-     * @return the file attributes
+     * @param options options indicating how to handle symbolic links.
+     * @return the file attributes.
      * @since 2.12.0
      */
     public static BasicFileAttributes readOsFileAttributes(final Path path, final LinkOption... options) {
