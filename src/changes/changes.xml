@@ -48,6 +48,7 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <release version="2.14.1" date="202Y-MM-DD" description="Java 8 is required.">
+      <!-- FIX -->
       <action dev="sebb" type="fix" issue="IO-810" due-to="Laurence Gonsalves">
         XmlStreamReader encoding match RE is too strict
       </action>
@@ -69,6 +70,11 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" issue="IO-811" due-to="Adam Rauch, Gary Gregory">
         StreamIterator fails to close its internal Stream.
       </action>
+      <action dev="ggregory" type="fix" issue="IO-814" due-to="Elliotte Rusty Harold, Gary Gregory">
+        Don't throw UncheckedIOException #491. 
+      </action>
+      <!-- ADD -->
+      <!-- UPDATE -->
     </release>
     <release version="2.14.0" date="2023-09-24" description="Java 8 is required.">
       <!-- FIX -->
