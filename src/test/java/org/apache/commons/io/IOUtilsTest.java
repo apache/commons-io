@@ -1761,13 +1761,4 @@ public class IOUtilsTest {
         }
     }
 
-    @Test
-    public void testWriteLines() throws IOException {
-        final String[] data = {"The", "quick"};
-        final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        IOUtils.writeLines(Arrays.asList(data), "\n", out, "UTF-16");
-        final String result = new String(out.toByteArray(), StandardCharsets.UTF_16);
-        assertEquals("The\nquick\n", result);
-    }
-
 }

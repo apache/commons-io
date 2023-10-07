@@ -45,7 +45,6 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.Selector;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Collection;
@@ -3829,15 +3828,11 @@ public class IOUtils {
      * an {@link OutputStream} line by line, using the specified character
      * encoding and the specified line ending.
      *
-     * UTF-16 is written big-endian with no byte order mark.
-     * For little endian, use UTF-16LE. For a BOM, write it to the stream
-     * before calling this method.
-     *
      * @param lines the lines to write, null entries produce blank lines
      * @param lineEnding the line separator to use, null is system default
      * @param output the {@link OutputStream} to write to, not null, not closed
      * @param charset the charset to use, null means platform default
-     * @throws NullPointerException if output is null
+     * @throws NullPointerException if the output is null
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
@@ -3849,11 +3844,7 @@ public class IOUtils {
         if (lineEnding == null) {
             lineEnding = System.lineSeparator();
         }
-        Charset cs = Charsets.toCharset(charset);
-        // don't write a BOM
-        if (cs == StandardCharsets.UTF_16) {
-            cs = StandardCharsets.UTF_16BE;
-        }
+        final Charset cs = Charsets.toCharset(charset);
         final byte[] eolBytes = lineEnding.getBytes(cs);
         for (final Object line : lines) {
             if (line != null) {
