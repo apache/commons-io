@@ -1309,7 +1309,7 @@ public final class PathUtils {
      * Reads the DosFileAttributes from the given path. Returns null if the attributes
      * can't be read.
      *
-     * @param path The path to read.
+     * @param path the path to read.
      * @param options options indicating how to handle symbolic links.
      * @return the path attributes.
      * @since 2.12.0
@@ -1326,7 +1326,7 @@ public final class PathUtils {
      * Reads the PosixFileAttributes or DosFileAttributes from the given path. Returns null if the attributes
      * can't be read.
      *
-     * @param path the Path to read.
+     * @param path The Path to read.
      * @param options options indicating how to handle symbolic links.
      * @return the file attributes.
      * @since 2.12.0
