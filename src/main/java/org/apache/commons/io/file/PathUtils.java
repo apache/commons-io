@@ -1804,7 +1804,7 @@ public final class PathUtils {
     }
 
     /**
-     * Prevent instantiation
+     * Prevents instantiation.
      */
     private PathUtils() {
         // do not instantiate.
