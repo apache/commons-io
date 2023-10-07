@@ -1768,7 +1768,6 @@ public class IOUtilsTest {
         IOUtils.writeLines(Arrays.asList(data), "\n", out, "UTF-16");
         String result = new String(out.toByteArray(), StandardCharsets.UTF_16);
         assertEquals("The\nquick\n", result);
-    }
-    
+    }  
     
 }
