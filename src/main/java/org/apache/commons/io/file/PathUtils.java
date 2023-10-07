@@ -1252,8 +1252,8 @@ public final class PathUtils {
      * @param <A> The {@link BasicFileAttributes} type
      * @param path The Path to test.
      * @param type the {@link Class} of the file attributes required to read.
-     * @param options options indicating how to handle symbolic links
-     * @return the file attributes or null if the attributes can't be read
+     * @param options options indicating how to handle symbolic links.
+     * @return the file attributes or null if the attributes can't be read.
      * @see Files#readAttributes(Path, Class, LinkOption...)
      * @since 2.12.0
      */
@@ -1295,7 +1295,7 @@ public final class PathUtils {
      * Reads the BasicFileAttributes from the given path. Returns null if the attributes
      * can't be read.
      *
-     * @param path the Path to read.
+     * @param path the path to read.
      * @return the path attributes.
      * @since 2.9.0
      * @deprecated Use {@link #readBasicFileAttributes(Path, LinkOption...)}.
@@ -1309,7 +1309,7 @@ public final class PathUtils {
      * Reads the DosFileAttributes from the given path. Returns null if the attributes
      * can't be read.
      *
-     * @param path the path to read.
+     * @param path The path to read.
      * @param options options indicating how to handle symbolic links.
      * @return the path attributes.
      * @since 2.12.0
