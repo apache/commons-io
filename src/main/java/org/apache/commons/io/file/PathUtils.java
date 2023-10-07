@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UncheckedIOException;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -77,7 +76,6 @@ import org.apache.commons.io.file.attribute.FileTimes;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.function.IOFunction;
 import org.apache.commons.io.function.IOSupplier;
-import org.apache.commons.io.function.Uncheck;
 
 /**
  * NIO Path utilities.
