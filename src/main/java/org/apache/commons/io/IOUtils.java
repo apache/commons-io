@@ -3828,12 +3828,16 @@ public class IOUtils {
      * Writes the {@link #toString()} value of each item in a collection to
      * an {@link OutputStream} line by line, using the specified character
      * encoding and the specified line ending.
+     * 
+     * UTF-16 is written big-endian with no byte order mark.
+     * For little endian, use UTF-16LE. For a BOM, write it to the stream
+     * before calling this method.
      *
      * @param lines the lines to write, null entries produce blank lines
      * @param lineEnding the line separator to use, null is system default
      * @param output the {@link OutputStream} to write to, not null, not closed
      * @param charset the charset to use, null means platform default
-     * @throws NullPointerException if the output is null
+     * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
