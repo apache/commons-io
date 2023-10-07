@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UncheckedIOException;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -77,7 +76,6 @@ import org.apache.commons.io.file.attribute.FileTimes;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.function.IOFunction;
 import org.apache.commons.io.function.IOSupplier;
-import org.apache.commons.io.function.Uncheck;
 
 /**
  * NIO Path utilities.
@@ -1247,21 +1245,20 @@ public final class PathUtils {
     }
 
     /**
-     * Reads the BasicFileAttributes from the given path. Returns null instead of throwing
-     * {@link UnsupportedOperationException}. Throws {@link Uncheck} instead of {@link IOException}.
+     * Reads the BasicFileAttributes from the given path. Returns null if the attributes can't be read.
      *
      * @param <A> The {@link BasicFileAttributes} type
      * @param path The Path to test.
      * @param type the {@link Class} of the file attributes required to read.
      * @param options options indicating how to handle symbolic links.
-     * @return the file attributes.
+     * @return the file attributes or null if the attributes can't be read.
      * @see Files#readAttributes(Path, Class, LinkOption...)
      * @since 2.12.0
      */
     public static <A extends BasicFileAttributes> A readAttributes(final Path path, final Class<A> type, final LinkOption... options) {
         try {
-            return path == null ? null : Uncheck.apply(Files::readAttributes, path, type, options);
-        } catch (final UnsupportedOperationException e) {
+            return path == null ? null : Files.readAttributes(path, type, options);
+        } catch (final UnsupportedOperationException | IOException e) {
             // For example, on Windows.
             return null;
         }
@@ -1274,16 +1271,14 @@ public final class PathUtils {
      * @return the path attributes.
      * @throws IOException if an I/O error occurs.
      * @since 2.9.0
-     * @deprecated Will be removed in 3.0.0 in favor of {@link #readBasicFileAttributes(Path, LinkOption...)}.
      */
-    @Deprecated
     public static BasicFileAttributes readBasicFileAttributes(final Path path) throws IOException {
         return Files.readAttributes(path, BasicFileAttributes.class);
     }
 
     /**
-     * Reads the BasicFileAttributes from the given path. Returns null instead of throwing
-     * {@link UnsupportedOperationException}.
+     * Reads the BasicFileAttributes from the given path. Returns null if the attributes
+     * can't be read.
      *
      * @param path the path to read.
      * @param options options indicating how to handle symbolic links.
@@ -1295,12 +1290,11 @@ public final class PathUtils {
     }
 
     /**
-     * Reads the BasicFileAttributes from the given path. Returns null instead of throwing
-     * {@link UnsupportedOperationException}.
+     * Reads the BasicFileAttributes from the given path. Returns null if the attributes
+     * can't be read.
      *
      * @param path the path to read.
      * @return the path attributes.
-     * @throws UncheckedIOException if an I/O error occurs
      * @since 2.9.0
      * @deprecated Use {@link #readBasicFileAttributes(Path, LinkOption...)}.
      */
@@ -1310,8 +1304,8 @@ public final class PathUtils {
     }
 
     /**
-     * Reads the DosFileAttributes from the given path. Returns null instead of throwing
-     * {@link UnsupportedOperationException}.
+     * Reads the DosFileAttributes from the given path. Returns null if the attributes
+     * can't be read.
      *
      * @param path the path to read.
      * @param options options indicating how to handle symbolic links.
@@ -1327,8 +1321,8 @@ public final class PathUtils {
     }
 
     /**
-     * Reads the PosixFileAttributes or DosFileAttributes from the given path. Returns null instead of throwing
-     * {@link UnsupportedOperationException}.
+     * Reads the PosixFileAttributes or DosFileAttributes from the given path. Returns null if the attributes
+     * can't be read.
      *
      * @param path The Path to read.
      * @param options options indicating how to handle symbolic links.
@@ -1810,7 +1804,7 @@ public final class PathUtils {
     }
 
     /**
-     * Does allow to instantiate.
+     * Prevents instantiation.
      */
     private PathUtils() {
         // do not instantiate.
