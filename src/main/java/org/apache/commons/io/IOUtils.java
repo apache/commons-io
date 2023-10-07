@@ -3828,10 +3828,11 @@ public class IOUtils {
      * Writes the {@link #toString()} value of each item in a collection to
      * an {@link OutputStream} line by line, using the specified character
      * encoding and the specified line ending.
-     *
+     * <p>
      * UTF-16 is written big-endian with no byte order mark.
      * For little endian, use UTF-16LE. For a BOM, write it to the stream
      * before calling this method.
+     * </p>
      *
      * @param lines the lines to write, null entries produce blank lines
      * @param lineEnding the line separator to use, null is system default
@@ -3842,14 +3843,14 @@ public class IOUtils {
      * @since 2.3
      */
     public static void writeLines(final Collection<?> lines, String lineEnding, final OutputStream output,
-                                  final Charset charset) throws IOException {
+            final Charset charset) throws IOException {
         if (lines == null) {
             return;
         }
         if (lineEnding == null) {
             lineEnding = System.lineSeparator();
         }
-        Charset cs = Charsets.toCharset(charset);
+        Charset cs = StandardCharsets.UTF_16.equals(Charsets.toCharset(charset)) ? StandardCharsets.UTF_16 : StandardCharsets.UTF_16BE;
         // don't write a BOM
         if (cs == StandardCharsets.UTF_16) {
             cs = StandardCharsets.UTF_16BE;
