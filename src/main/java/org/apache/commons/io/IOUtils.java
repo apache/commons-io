@@ -45,6 +45,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.Selector;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Collection;
@@ -3844,7 +3845,11 @@ public class IOUtils {
         if (lineEnding == null) {
             lineEnding = System.lineSeparator();
         }
-        final Charset cs = Charsets.toCharset(charset);
+        Charset cs = Charsets.toCharset(charset);
+        // don't write a BOM
+        if (cs == StandardCharsets.UTF_16) {
+        	cs = StandardCharsets.UTF_16BE;
+        }
         final byte[] eolBytes = lineEnding.getBytes(cs);
         for (final Object line : lines) {
             if (line != null) {
