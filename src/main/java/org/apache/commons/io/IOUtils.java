@@ -45,6 +45,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.Selector;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Collection;
@@ -3827,28 +3828,36 @@ public class IOUtils {
      * Writes the {@link #toString()} value of each item in a collection to
      * an {@link OutputStream} line by line, using the specified character
      * encoding and the specified line ending.
+     * <p>
+     * UTF-16 is written big-endian with no byte order mark.
+     * For little endian, use UTF-16LE. For a BOM, write it to the stream
+     * before calling this method.
+     * </p>
      *
      * @param lines the lines to write, null entries produce blank lines
      * @param lineEnding the line separator to use, null is system default
      * @param output the {@link OutputStream} to write to, not null, not closed
      * @param charset the charset to use, null means platform default
-     * @throws NullPointerException if the output is null
+     * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
     public static void writeLines(final Collection<?> lines, String lineEnding, final OutputStream output,
-                                  final Charset charset) throws IOException {
+            Charset charset) throws IOException {
         if (lines == null) {
             return;
         }
         if (lineEnding == null) {
             lineEnding = System.lineSeparator();
         }
-        final Charset cs = Charsets.toCharset(charset);
-        final byte[] eolBytes = lineEnding.getBytes(cs);
+        if (StandardCharsets.UTF_16.equals(charset)) {
+            // don't write a BOM
+            charset = StandardCharsets.UTF_16BE;
+        }
+        final byte[] eolBytes = lineEnding.getBytes(charset);
         for (final Object line : lines) {
             if (line != null) {
-                write(line.toString(), output, cs);
+                write(line.toString(), output, charset);
             }
             output.write(eolBytes);
         }

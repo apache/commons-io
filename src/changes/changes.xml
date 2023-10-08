@@ -71,7 +71,10 @@ The <action> type attribute can be add,update,fix,remove.
         StreamIterator fails to close its internal Stream.
       </action>
       <action dev="ggregory" type="fix" issue="IO-814" due-to="Elliotte Rusty Harold, Gary Gregory">
-        Don't throw UncheckedIOException #491. 
+        Don't throw UncheckedIOException #491.
+      </action>
+      <action dev="ggregory" type="fix" issue="IO-414" due-to="Elliotte Rusty Harold, Gary Gregory">
+        Don't write a BOM on every (or any) line #492.
       </action>
       <action dev="ggregory" type="fix" issue="IO-814" due-to="Gary Gregory">
         RandomAccessFileMode.create(Path) provides a better NullPointerException message.         
