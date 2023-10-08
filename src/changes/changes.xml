@@ -82,6 +82,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
         Improve performance of PathUtils.fileContentEquals(Path, Path) by about 60%, see PathUtilsContentEqualsBenchmark.
       </action>
+      <action dev="ggregory" type="fix" due-to="Elliotte Rusty Harold">
+        Remove unused test code #494.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add org.apache.commons.io.channels.FileChannels.
