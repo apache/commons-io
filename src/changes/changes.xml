@@ -47,7 +47,7 @@ The <action> type attribute can be add,update,fix,remove.
   </properties>
 
   <body>
-    <release version="2.14.1" date="202Y-MM-DD" description="Java 8 is required.">
+    <release version="2.15.0" date="202Y-MM-DD" description="Java 8 is required.">
       <!-- FIX -->
       <action dev="sebb" type="fix" issue="IO-810" due-to="Laurence Gonsalves">
         XmlStreamReader encoding match RE is too strict.
@@ -73,7 +73,28 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" issue="IO-814" due-to="Elliotte Rusty Harold, Gary Gregory">
         Don't throw UncheckedIOException #491. 
       </action>
+      <action dev="ggregory" type="fix" issue="IO-814" due-to="Gary Gregory">
+        RandomAccessFileMode.create(Path) provides a better NullPointerException message.         
+      </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        Improve performance of PathUtils.fileContentEquals(Path, Path, LinkOption[], OpenOption[]) by about 60%, see PathUtilsContentEqualsBenchmark.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        Improve performance of PathUtils.fileContentEquals(Path, Path) by about 60%, see PathUtilsContentEqualsBenchmark.
+      </action>
       <!-- ADD -->
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add org.apache.commons.io.channels.FileChannels.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add RandomAccessFiles#contentEquals(RandomAccessFile, RandomAccessFile).
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add RandomAccessFiles#reset(RandomAccessFile).
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add PathUtilsContentEqualsBenchmark.
+      </action>
       <!-- UPDATE -->
     </release>
     <release version="2.14.0" date="2023-09-24" description="Java 8 is required.">
