@@ -353,16 +353,13 @@ public class FileUtils {
      * This method checks to see if the two files are different lengths or if they point to the same file, before
      * resorting to byte-by-byte comparison of the contents.
      * </p>
-     * <p>
-     * Code origin: Avalon
-     * </p>
      *
      * @param file1 the first file
      * @param file2 the second file
      * @return true if the content of the files are equal or they both don't exist, false otherwise
      * @throws IllegalArgumentException when an input is not a file.
      * @throws IOException If an I/O error occurs.
-     * @see org.apache.commons.io.file.PathUtils#fileContentEquals(Path,Path,java.nio.file.LinkOption[],java.nio.file.OpenOption...)
+     * @see PathUtils#fileContentEquals(Path,Path)
      */
     public static boolean contentEquals(final File file1, final File file2) throws IOException {
         if (file1 == null && file2 == null) {
@@ -394,9 +391,7 @@ public class FileUtils {
             return true;
         }
 
-        try (InputStream input1 = Files.newInputStream(file1.toPath()); InputStream input2 = Files.newInputStream(file2.toPath())) {
-            return IOUtils.contentEquals(input1, input2);
-        }
+        return PathUtils.fileContentEquals(file1.toPath(), file2.toPath());
     }
 
     /**

@@ -85,6 +85,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
         Improve performance of PathUtils.fileContentEquals(Path, Path) by about 60%, see PathUtilsContentEqualsBenchmark.
       </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        Improve performance of FileUtils.contentEquals(File, File) by about 60%, see PathUtilsContentEqualsBenchmark.
+      </action>
       <action dev="ggregory" type="fix" due-to="Elliotte Rusty Harold">
         Remove unused test code #494.
       </action>
