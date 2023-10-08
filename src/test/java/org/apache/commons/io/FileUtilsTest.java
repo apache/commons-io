@@ -2829,25 +2829,25 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testWrite_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
 
-        FileUtils.write(file, "this is brand new data", false);
+        FileUtils.write(file, "this is brand new data", StandardCharsets.UTF_8, false);
 
         final String expected = "this is brand new data";
-        final String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
         assertEquals(expected, actual);
     }
 
     @Test
     public void testWrite_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
 
-        FileUtils.write(file, "this is brand new data", true);
+        FileUtils.write(file, "this is brand new data", StandardCharsets.UTF_8, true);
 
         final String expected = "This line was there before you..."
                 + "this is brand new data";
-        final String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
         assertEquals(expected, actual);
     }
 
@@ -2862,25 +2862,25 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testWriteByteArrayToFile_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
 
-        FileUtils.writeByteArrayToFile(file, "this is brand new data".getBytes(), false);
+        FileUtils.writeByteArrayToFile(file, "this is brand new data".getBytes(StandardCharsets.UTF_8), false);
 
         final String expected = "this is brand new data";
-        final String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
         assertEquals(expected, actual);
     }
 
     @Test
     public void testWriteByteArrayToFile_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
 
-        FileUtils.writeByteArrayToFile(file, "this is brand new data".getBytes(), true);
+        FileUtils.writeByteArrayToFile(file, "this is brand new data".getBytes(StandardCharsets.UTF_8), true);
 
         final String expected = "This line was there before you..."
                 + "this is brand new data";
-        final String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
         assertEquals(expected, actual);
     }
 
@@ -2897,7 +2897,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testWriteByteArrayToFile_WithOffsetAndLength_WithAppendOptionTrue_ShouldDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
 
         final byte[] data = "SKIP_THIS_this is brand new data_AND_SKIP_THIS".getBytes(StandardCharsets.UTF_8);
         FileUtils.writeByteArrayToFile(file, data, 10, 22, false);
@@ -2910,7 +2910,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testWriteByteArrayToFile_WithOffsetAndLength_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
 
         final byte[] data = "SKIP_THIS_this is brand new data_AND_SKIP_THIS".getBytes(StandardCharsets.UTF_8);
         FileUtils.writeByteArrayToFile(file, data, 10, 22, true);
@@ -2956,7 +2956,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testWriteLines_3argsWithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
 
         final List<String> linesToAppend = Arrays.asList("my first line", "The second Line");
         FileUtils.writeLines(file, linesToAppend, false);
@@ -3056,95 +3056,95 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testWriteLines_5argsWithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
 
         final List<String> linesToAppend = Arrays.asList("my first line", "The second Line");
-        FileUtils.writeLines(file, null, linesToAppend, null, false);
+        FileUtils.writeLines(file, "UTF-8", linesToAppend, null, false);
 
         final String expected = "my first line"
                 + System.lineSeparator() + "The second Line"
                 + System.lineSeparator();
-        final String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
         assertEquals(expected, actual);
     }
 
     @Test
     public void testWriteLines_5argsWithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
 
         final List<String> linesToAppend = Arrays.asList("my first line", "The second Line");
-        FileUtils.writeLines(file, null, linesToAppend, null, true);
+        FileUtils.writeLines(file, "UTF-8", linesToAppend, null, true);
 
         final String expected = "This line was there before you..."
                 + "my first line"
                 + System.lineSeparator() + "The second Line"
                 + System.lineSeparator();
-        final String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
         assertEquals(expected, actual);
     }
 
     @Test
     public void testWriteLinesEncoding_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
 
         final List<String> linesToAppend = Arrays.asList("my first line", "The second Line");
-        FileUtils.writeLines(file, null, linesToAppend, false);
+        FileUtils.writeLines(file, "UTF-8", linesToAppend, false);
 
         final String expected = "my first line"
                 + System.lineSeparator() + "The second Line"
                 + System.lineSeparator();
-        final String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
         assertEquals(expected, actual);
     }
 
     @Test
     public void testWriteLinesEncoding_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
 
         final List<String> linesToAppend = Arrays.asList("my first line", "The second Line");
-        FileUtils.writeLines(file, null, linesToAppend, true);
+        FileUtils.writeLines(file, "UTF-8", linesToAppend, true);
 
         final String expected = "This line was there before you..."
                 + "my first line"
                 + System.lineSeparator() + "The second Line"
                 + System.lineSeparator();
-        final String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
         assertEquals(expected, actual);
     }
 
     @Test
     public void testWriteStringToFile_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
 
-        FileUtils.writeStringToFile(file, "this is brand new data", false);
+        FileUtils.writeStringToFile(file, "this is brand new data", StandardCharsets.UTF_8, false);
 
         final String expected = "this is brand new data";
-        final String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
         assertEquals(expected, actual);
     }
 
     @Test
     public void testWriteStringToFile_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
 
-        FileUtils.writeStringToFile(file, "this is brand new data", true);
+        FileUtils.writeStringToFile(file, "this is brand new data", StandardCharsets.UTF_8, true);
 
         final String expected = "This line was there before you..."
                 + "this is brand new data";
-        final String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
         assertEquals(expected, actual);
     }
 
     @Test
     public void testWriteStringToFileIntoNonExistentSubdir() throws Exception {
         final File file = new File(tempDirFile, "subdir/write.txt");
-        FileUtils.writeStringToFile(file, "Hello /u1234", (Charset) null);
-        final byte[] text = "Hello /u1234".getBytes();
+        FileUtils.writeStringToFile(file, "Hello /u1234", StandardCharsets.UTF_8);
+        final byte[] text = "Hello /u1234".getBytes(StandardCharsets.UTF_8);
         TestUtils.assertEqualContent(text, file);
     }
 
@@ -3177,25 +3177,25 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testWriteStringToFileWithEncoding_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
 
-        FileUtils.writeStringToFile(file, "this is brand new data", (String) null, false);
+        FileUtils.writeStringToFile(file, "this is brand new data", StandardCharsets.UTF_8, false);
 
         final String expected = "this is brand new data";
-        final String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
         assertEquals(expected, actual);
     }
 
     @Test
     public void testWriteStringToFileWithEncoding_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
 
-        FileUtils.writeStringToFile(file, "this is brand new data", (String) null, true);
+        FileUtils.writeStringToFile(file, "this is brand new data", StandardCharsets.UTF_8, true);
 
         final String expected = "This line was there before you..."
                 + "this is brand new data";
-        final String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
         assertEquals(expected, actual);
     }
 
@@ -3218,25 +3218,25 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testWriteWithEncoding_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
 
-        FileUtils.write(file, "this is brand new data", (String) null, false);
+        FileUtils.write(file, "this is brand new data", "UTF-8", false);
 
         final String expected = "this is brand new data";
-        final String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
         assertEquals(expected, actual);
     }
 
     @Test
     public void testWriteWithEncoding_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
 
-        FileUtils.write(file, "this is brand new data", (String) null, true);
+        FileUtils.write(file, "this is brand new data", "UTF-8", true);
 
         final String expected = "This line was there before you..."
                 + "this is brand new data";
-        final String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
         assertEquals(expected, actual);
     }
 
