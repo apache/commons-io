@@ -3843,22 +3843,21 @@ public class IOUtils {
      * @since 2.3
      */
     public static void writeLines(final Collection<?> lines, String lineEnding, final OutputStream output,
-            final Charset charset) throws IOException {
+            Charset charset) throws IOException {
         if (lines == null) {
             return;
         }
         if (lineEnding == null) {
             lineEnding = System.lineSeparator();
         }
-        Charset cs = StandardCharsets.UTF_16.equals(Charsets.toCharset(charset)) ? StandardCharsets.UTF_16 : StandardCharsets.UTF_16BE;
-        // don't write a BOM
-        if (cs == StandardCharsets.UTF_16) {
-            cs = StandardCharsets.UTF_16BE;
+        if (StandardCharsets.UTF_16.equals(charset)) {
+        	// don't write a BOM
+        	charset = StandardCharsets.UTF_16BE;
         }
-        final byte[] eolBytes = lineEnding.getBytes(cs);
+        final byte[] eolBytes = lineEnding.getBytes(charset);
         for (final Object line : lines) {
             if (line != null) {
-                write(line.toString(), output, cs);
+                write(line.toString(), output, charset);
             }
             output.write(eolBytes);
         }
