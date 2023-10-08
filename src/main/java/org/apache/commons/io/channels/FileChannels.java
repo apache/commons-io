@@ -32,13 +32,6 @@ import org.apache.commons.io.IOUtils;
 public final class FileChannels {
 
     /**
-     * Don't instantiate.
-     */
-    private FileChannels() {
-        // no-op
-    }
-
-    /**
      * Tests if two RandomAccessFiles contents are equal.
      *
      * @param channel1       A FileChannel.
@@ -83,5 +76,12 @@ public final class FileChannels {
 
     private static long size(final FileChannel channel) throws IOException {
         return channel != null ? channel.size() : 0;
+    }
+
+    /**
+     * Don't instantiate.
+     */
+    private FileChannels() {
+        // no-op
     }
 }

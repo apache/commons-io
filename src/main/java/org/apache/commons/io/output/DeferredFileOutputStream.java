@@ -265,28 +265,6 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     }
 
     /**
-     * Constructs an instance of this class which will trigger an event at the specified threshold, and save data either to a file beyond that point.
-     *
-     * @param threshold         The number of bytes at which to trigger an event.
-     * @param outputFile        The file to which data is saved beyond the threshold.
-     * @param prefix            Prefix to use for the temporary file.
-     * @param suffix            Suffix to use for the temporary file.
-     * @param directory         Temporary file directory.
-     * @param initialBufferSize The initial size of the in memory buffer.
-     * @throws IllegalArgumentException if initialBufferSize &lt; 0.
-     */
-    private DeferredFileOutputStream(final int threshold, final Path outputFile, final String prefix, final String suffix, final Path directory,
-            final int initialBufferSize) {
-        super(threshold);
-        this.outputPath = toPath(outputFile, null);
-        this.prefix = prefix;
-        this.suffix = suffix;
-        this.directory = toPath(directory, PathUtils::getTempDirectory);
-        this.memoryOutputStream = new ByteArrayOutputStream(checkBufferSize(initialBufferSize));
-        this.currentOutputStream = memoryOutputStream;
-    }
-
-    /**
      * Constructs an instance of this class which will trigger an event at the specified threshold, and save data to a file beyond that point.
      *
      * @param threshold         The number of bytes at which to trigger an event.
@@ -314,6 +292,28 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     @Deprecated
     public DeferredFileOutputStream(final int threshold, final int initialBufferSize, final String prefix, final String suffix, final File directory) {
         this(threshold, null, Objects.requireNonNull(prefix, "prefix"), suffix, directory, initialBufferSize);
+    }
+
+    /**
+     * Constructs an instance of this class which will trigger an event at the specified threshold, and save data either to a file beyond that point.
+     *
+     * @param threshold         The number of bytes at which to trigger an event.
+     * @param outputFile        The file to which data is saved beyond the threshold.
+     * @param prefix            Prefix to use for the temporary file.
+     * @param suffix            Suffix to use for the temporary file.
+     * @param directory         Temporary file directory.
+     * @param initialBufferSize The initial size of the in memory buffer.
+     * @throws IllegalArgumentException if initialBufferSize &lt; 0.
+     */
+    private DeferredFileOutputStream(final int threshold, final Path outputFile, final String prefix, final String suffix, final Path directory,
+            final int initialBufferSize) {
+        super(threshold);
+        this.outputPath = toPath(outputFile, null);
+        this.prefix = prefix;
+        this.suffix = suffix;
+        this.directory = toPath(directory, PathUtils::getTempDirectory);
+        this.memoryOutputStream = new ByteArrayOutputStream(checkBufferSize(initialBufferSize));
+        this.currentOutputStream = memoryOutputStream;
     }
 
     /**

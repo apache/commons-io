@@ -92,19 +92,19 @@ public class PathUtilsContentEqualsBenchmark {
     }
 
     @Benchmark
-    public boolean[] testProposal_contentEquals() throws IOException {
-        final boolean[] res = new boolean[1];
-        res[0] = newFileContentEquals(bigFile1, bigFile2);
-        return res;
-    }
-
-    @Benchmark
     public void testCurrent_fileContentEquals_Blackhole(final Blackhole blackhole) throws IOException {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 blackhole.consume(PathUtils.fileContentEquals(bigFile1, bigFile2));
             }
         }
+    }
+
+    @Benchmark
+    public boolean[] testProposal_contentEquals() throws IOException {
+        final boolean[] res = new boolean[1];
+        res[0] = newFileContentEquals(bigFile1, bigFile2);
+        return res;
     }
 
     @Benchmark

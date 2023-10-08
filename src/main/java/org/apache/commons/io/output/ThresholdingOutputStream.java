@@ -149,11 +149,10 @@ public class ThresholdingOutputStream extends OutputStream {
      *
      * @return The underlying output stream.
      * @throws IOException if an error occurs.
-     * @deprecated Use {@link #getOutputStream()}.
+     * @since 2.14.0
      */
-    @Deprecated
-    protected OutputStream getStream() throws IOException {
-        return getOutputStream();
+    protected OutputStream getOutputStream() throws IOException {
+        return outputStreamGetter.apply(this);
     }
 
     /**
@@ -162,10 +161,11 @@ public class ThresholdingOutputStream extends OutputStream {
      *
      * @return The underlying output stream.
      * @throws IOException if an error occurs.
-     * @since 2.14.0
+     * @deprecated Use {@link #getOutputStream()}.
      */
-    protected OutputStream getOutputStream() throws IOException {
-        return outputStreamGetter.apply(this);
+    @Deprecated
+    protected OutputStream getStream() throws IOException {
+        return getOutputStream();
     }
 
     /**

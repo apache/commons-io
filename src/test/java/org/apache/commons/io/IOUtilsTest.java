@@ -1750,6 +1750,15 @@ public class IOUtilsTest {
     }
 
     @Test
+    public void testWriteLines() throws IOException {
+        final String[] data = {"The", "quick"};
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        IOUtils.writeLines(Arrays.asList(data), "\n", out, "UTF-16");
+        final String result = new String(out.toByteArray(), StandardCharsets.UTF_16);
+        assertEquals("The\nquick\n", result);
+    }
+
+    @Test
     public void testWriteLittleString() throws IOException {
         final String data = "\uD83D";
         // White-box test to check that not closing the internal channel is not a problem.
@@ -1759,15 +1768,6 @@ public class IOUtilsTest {
                 assertEquals(data.length(), os.getByteCount());
             }
         }
-    }
-
-    @Test
-    public void testWriteLines() throws IOException {
-        final String[] data = {"The", "quick"};
-        final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        IOUtils.writeLines(Arrays.asList(data), "\n", out, "UTF-16");
-        final String result = new String(out.toByteArray(), StandardCharsets.UTF_16);
-        assertEquals("The\nquick\n", result);
     }
 
 }

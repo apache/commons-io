@@ -266,16 +266,6 @@ public class TailerTest {
     }
 
     @Test
-    public void testCreatorWithDelayAndFromStartWithReopen() throws Exception {
-        final File file = new File(temporaryFolder, "tailer-create-with-delay-and-from-start-with-reopen.txt");
-        createFile(file, 0);
-        final TestTailerListener listener = new TestTailerListener(1);
-        try (Tailer tailer = Tailer.create(file, listener, TEST_DELAY_MILLIS, false, false)) {
-            validateTailer(listener, file);
-        }
-    }
-
-    @Test
     public void testCreateWithDelay() throws Exception {
         final File file = new File(temporaryFolder, "tailer-create-with-delay.txt");
         createFile(file, 0);
@@ -321,6 +311,16 @@ public class TailerTest {
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
         try (Tailer tailer = Tailer.create(file, StandardCharsets.UTF_8, listener, TEST_DELAY_MILLIS, false, true, TEST_BUFFER_SIZE)) {
+            validateTailer(listener, file);
+        }
+    }
+
+    @Test
+    public void testCreatorWithDelayAndFromStartWithReopen() throws Exception {
+        final File file = new File(temporaryFolder, "tailer-create-with-delay-and-from-start-with-reopen.txt");
+        createFile(file, 0);
+        final TestTailerListener listener = new TestTailerListener(1);
+        try (Tailer tailer = Tailer.create(file, listener, TEST_DELAY_MILLIS, false, false)) {
             validateTailer(listener, file);
         }
     }

@@ -2446,6 +2446,24 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testReadFileToString_Errors() {
+        assertThrows(NullPointerException.class, () -> FileUtils.readFileToString(null));
+        assertThrows(IOException.class, () -> FileUtils.readFileToString(new File("non-exsistent")));
+        assertThrows(IOException.class, () -> FileUtils.readFileToString(tempDirFile));
+        assertThrows(UnsupportedCharsetException.class, () -> FileUtils.readFileToString(tempDirFile, "unsupported-charset"));
+    }
+
+    @Test
+    @EnabledIf("isPosixFilePermissionsSupported")
+    public void testReadFileToString_IOExceptionOnPosixFileSystem() throws Exception {
+        final File file = TestUtils.newFile(tempDirFile, "cant-read.txt");
+        TestUtils.createFile(file, 100);
+        Files.setPosixFilePermissions(file.toPath(), PosixFilePermissions.fromString("---------"));
+
+        assertThrows(IOException.class, () -> FileUtils.readFileToString(file));
+    }
+
+    @Test
     public void testReadFileToStringWithDefaultEncoding() throws Exception {
         final File file = new File(tempDirFile, "read.obj");
         final String fixture = "Hello /u1234";
@@ -2462,24 +2480,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
         final String data = FileUtils.readFileToString(file, "UTF8");
         assertEquals("Hello /u1234", data);
-    }
-
-    @Test
-    public void testReadFileToString_Errors() {
-        assertThrows(NullPointerException.class, () -> FileUtils.readFileToString(null));
-        assertThrows(IOException.class, () -> FileUtils.readFileToString(new File("non-exsistent")));
-        assertThrows(IOException.class, () -> FileUtils.readFileToString(tempDirFile));
-        assertThrows(UnsupportedCharsetException.class, () -> FileUtils.readFileToString(tempDirFile, "unsupported-charset"));
-    }
-
-    @Test
-    @EnabledIf("isPosixFilePermissionsSupported")
-    public void testReadFileToString_IOExceptionOnPosixFileSystem() throws Exception {
-        final File file = TestUtils.newFile(tempDirFile, "cant-read.txt");
-        TestUtils.createFile(file, 100);
-        Files.setPosixFilePermissions(file.toPath(), PosixFilePermissions.fromString("---------"));
-
-        assertThrows(IOException.class, () -> FileUtils.readFileToString(file));
     }
 
     @Test
