@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
 import java.nio.file.Path;
+import java.util.Objects;
 
 /**
  * Access modes and factory methods for {@link RandomAccessFile}.
@@ -77,7 +78,7 @@ public enum RandomAccessFileMode {
      * @throws FileNotFoundException See {@link RandomAccessFile#RandomAccessFile(File, String)}.
      */
     public RandomAccessFile create(final Path file) throws FileNotFoundException {
-        return create(file.toFile());
+        return create(Objects.requireNonNull(file.toFile(), "file"));
     }
 
     /**
