@@ -70,6 +70,9 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
         private String suffix;
         private Path directory;
 
+        /**
+         * Constructs a new builder.
+         */
         public Builder() {
             setBufferSizeDefault(AbstractByteArrayOutputStream.DEFAULT_SIZE);
             setBufferSize(AbstractByteArrayOutputStream.DEFAULT_SIZE);
