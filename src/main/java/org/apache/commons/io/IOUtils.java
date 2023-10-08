@@ -3852,7 +3852,7 @@ public class IOUtils {
         }
         if (StandardCharsets.UTF_16.equals(charset)) {
             // don't write a BOM
-        	charset = StandardCharsets.UTF_16BE;
+            charset = StandardCharsets.UTF_16BE;
         }
         final byte[] eolBytes = lineEnding.getBytes(charset);
         for (final Object line : lines) {
