@@ -126,20 +126,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
         }
     }
 
-    // Test helper class to pretend a file is shorter than it is
-    private static class ShorterFile extends File {
-        private static final long serialVersionUID = 1L;
-
-        public ShorterFile(final String pathname) {
-            super(pathname);
-        }
-
-        @Override
-        public long length() {
-            return super.length() - 1;
-        }
-    }
-
     private static final String UTF_8 = StandardCharsets.UTF_8.name();
 
     /** Test data. */
@@ -170,11 +156,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
      * List files recursively
      */
     private static final ListDirectoryWalker LIST_WALKER = new ListDirectoryWalker();
-
-    /**
-     * Delay in milliseconds to make sure test for "last modified date" are accurate
-     */
-    //private static final int LAST_MODIFIED_DELAY = 600;
 
     private File testFile1;
     private File testFile2;

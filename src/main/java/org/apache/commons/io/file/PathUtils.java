@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -69,7 +70,8 @@ import java.util.stream.Stream;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.RandomAccessFileMode;
+import org.apache.commons.io.RandomAccessFiles;
 import org.apache.commons.io.ThreadUtils;
 import org.apache.commons.io.file.Counters.PathCounters;
 import org.apache.commons.io.file.attribute.FileTimes;
@@ -717,20 +719,20 @@ public final class PathUtils {
     /**
      * Compares the file contents of two Paths to determine if they are equal or not.
      * <p>
-     * File content is accessed through {@link Files#newInputStream(Path,OpenOption...)}.
+     * File content is accessed through {@link RandomAccessFileMode#create(Path)}.
      * </p>
      *
      * @param path1 the first stream.
      * @param path2 the second stream.
      * @param linkOptions options specifying how files are followed.
-     * @param openOptions options specifying how files are opened.
+     * @param openOptions ignored.
      * @return true if the content of the streams are equal or they both don't exist, false otherwise.
      * @throws NullPointerException if openOptions is null.
      * @throws IOException if an I/O error occurs.
      * @see org.apache.commons.io.FileUtils#contentEquals(java.io.File, java.io.File)
      */
     public static boolean fileContentEquals(final Path path1, final Path path2, final LinkOption[] linkOptions, final OpenOption[] openOptions)
-        throws IOException {
+            throws IOException {
         if (path1 == null && path2 == null) {
             return true;
         }
@@ -764,9 +766,9 @@ public final class PathUtils {
             // same file
             return true;
         }
-        try (InputStream inputStream1 = Files.newInputStream(nPath1, openOptions);
-            InputStream inputStream2 = Files.newInputStream(nPath2, openOptions)) {
-            return IOUtils.contentEquals(inputStream1, inputStream2);
+        try (RandomAccessFile raf1 = RandomAccessFileMode.READ_ONLY.create(path1.toRealPath(linkOptions));
+                RandomAccessFile raf2 = RandomAccessFileMode.READ_ONLY.create(path2.toRealPath(linkOptions))) {
+            return RandomAccessFiles.contentEquals(raf1, raf2);
         }
     }
 
