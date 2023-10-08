@@ -894,7 +894,6 @@ public class IOUtils {
      * @param input2 the second stream
      * @return true if the content of the streams are equal or they both don't
      * exist, false otherwise
-     * @throws NullPointerException if either input is null
      * @throws IOException          if an I/O error occurs
      */
     public static boolean contentEquals(final InputStream input1, final InputStream input2) throws IOException {
