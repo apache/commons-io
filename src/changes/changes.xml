@@ -108,6 +108,9 @@ The <action> type attribute can be add,update,fix,remove.
         Add PathUtilsContentEqualsBenchmark.
       </action>
       <!-- UPDATE -->
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
+        Bump org.apache.commons:commons-parent from 62 to 64.
+      </action>
     </release>
     <release version="2.14.0" date="2023-09-24" description="Java 8 is required.">
       <!-- FIX -->
