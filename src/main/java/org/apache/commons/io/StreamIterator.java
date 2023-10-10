@@ -30,7 +30,7 @@ import java.util.stream.Stream;
  * </p>
  *
  * @param <E> The {@link Stream} and {@link Iterator} type.
- * @since 2.9.0
+ * @since 2.15.0
  */
 public final class StreamIterator<E> implements Iterator<E>, AutoCloseable {
 
