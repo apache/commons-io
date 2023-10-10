@@ -32,7 +32,7 @@ import java.util.stream.Stream;
  * @param <E> The {@link Stream} and {@link Iterator} type.
  * @since 2.9.0
  */
-final class StreamIterator<E> implements Iterator<E>, AutoCloseable {
+public final class StreamIterator<E> implements Iterator<E>, AutoCloseable {
 
     /**
      * Wraps and presents a stream as a closable resource that automatically closes itself when reaching the end of stream.

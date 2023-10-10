@@ -107,6 +107,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add PathUtilsContentEqualsBenchmark.
       </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add org.apache.commons.io.StreamIterator.
+      </action>
       <!-- UPDATE -->
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Bump org.apache.commons:commons-parent from 62 to 64.
