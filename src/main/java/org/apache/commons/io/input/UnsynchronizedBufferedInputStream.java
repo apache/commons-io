@@ -105,7 +105,7 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
     protected volatile byte[] buffer;
 
     /**
-     * The total number of bytes inside the byte array {@code buf}.
+     * The total number of bytes inside the byte array {@code buffer}.
      */
     protected int count;
 
@@ -120,7 +120,7 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
     protected int markPos = IOUtils.EOF;
 
     /**
-     * The current position within the byte array {@code buf}.
+     * The current position within the byte array {@code buffer}.
      */
     protected int pos;
 
@@ -190,8 +190,8 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
             }
             final byte[] newbuf = new byte[newLength];
             System.arraycopy(localBuf, 0, newbuf, 0, localBuf.length);
-            // Reassign buf, which will invalidate any local references
-            // FIXME: what if buf was null?
+            // Reassign buffer, which will invalidate any local references
+            // FIXME: what if buffer was null?
             localBuf = buffer = newbuf;
         } else if (markPos > 0) {
             System.arraycopy(localBuf, markPos, localBuf, 0, localBuf.length - markPos);
