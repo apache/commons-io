@@ -189,8 +189,8 @@ public class UnsynchronizedBufferedInputStreamTest {
         // is.read should now throw an exception because it will have to be filled.
         assertThrows(IOException.class, () -> is.read());
 
-        assertThrows(NullPointerException.class, () -> UnsynchronizedBufferedInputStream.builder().setInputStream(null).setBufferSize(100).get());
-        assertThrows(NullPointerException.class, () -> UnsynchronizedBufferedInputStream.builder().setInputStream(null));
+        assertThrows(NullPointerException.class, () -> new UnsynchronizedBufferedInputStream.Builder().setInputStream(null).setBufferSize(100).get());
+        assertThrows(NullPointerException.class, () -> new UnsynchronizedBufferedInputStream.Builder().setInputStream(null));
     }
 
     /**
