@@ -176,7 +176,7 @@ public class UnsynchronizedBufferedInputStreamTest {
         // Test for method java.io.BufferedInputStream(java.io.InputStream, int)
 
         // Create buffer with exact size of file
-        is = new BufferedInputStream(isFile, this.DATA.length());
+        is = new BufferedInputStream(isFile, DATA.length());
         // Ensure buffer gets filled by evaluating one read
         is.read();
         // Close underlying FileInputStream, all but 1 buffered bytes should
@@ -184,7 +184,7 @@ public class UnsynchronizedBufferedInputStreamTest {
         isFile.close();
         // Read the remaining buffered characters, no IOException should
         // occur.
-        is.skip(this.DATA.length() - 2);
+        is.skip(DATA.length() - 2);
         is.read();
         // is.read should now throw an exception because it will have to be filled.
         assertThrows(IOException.class, () -> is.read());
