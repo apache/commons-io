@@ -61,6 +61,9 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
 
         private MessageDigest messageDigest;
 
+        /**
+         * Constructs a new Builder.
+         */
         public Builder() {
             try {
                 this.messageDigest = getDefaultMessageDigest();

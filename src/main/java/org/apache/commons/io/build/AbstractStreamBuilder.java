@@ -154,6 +154,11 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
         return checkOrigin().getInputStream(getOpenOptions());
     }
 
+    /**
+     * Gets the OpenOption.
+     *
+     * @return the OpenOption.
+     */
     protected OpenOption[] getOpenOptions() {
         return openOptions;
     }

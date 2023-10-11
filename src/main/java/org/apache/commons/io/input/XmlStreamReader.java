@@ -157,11 +157,23 @@ public class XmlStreamReader extends Reader {
             return super.setCharset(Charsets.toCharset(charset, getCharsetDefault()));
         }
 
+        /**
+         * Sets the HTTP content type.
+         *
+         * @param httpContentType the HTTP content type.
+         * @return this.
+         */
         public Builder setHttpContentType(final String httpContentType) {
             this.httpContentType = httpContentType;
             return this;
         }
 
+        /**
+         * Sets the lenient toggle.
+         *
+         * @param lenient the lenient toggle.
+         * @return this.
+         */
         public Builder setLenient(final boolean lenient) {
             this.lenient = lenient;
             return this;

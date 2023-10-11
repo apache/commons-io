@@ -87,6 +87,9 @@ public final class MemoryMappedFileInputStream extends InputStream {
      */
     public static class Builder extends AbstractStreamBuilder<MemoryMappedFileInputStream, Builder> {
 
+        /**
+         * Constructs a new Builder.
+         */
         public Builder() {
             setBufferSizeDefault(DEFAULT_BUFFER_SIZE);
             setBufferSize(DEFAULT_BUFFER_SIZE);

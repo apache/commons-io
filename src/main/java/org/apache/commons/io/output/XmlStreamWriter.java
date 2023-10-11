@@ -62,6 +62,9 @@ public class XmlStreamWriter extends Writer {
      */
     public static class Builder extends AbstractStreamBuilder<XmlStreamWriter, Builder> {
 
+        /**
+         * Constructs a new Builder.
+         */
         public Builder() {
             setCharsetDefault(StandardCharsets.UTF_8);
             setCharset(StandardCharsets.UTF_8);

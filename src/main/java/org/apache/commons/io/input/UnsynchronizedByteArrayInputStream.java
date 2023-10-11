@@ -106,6 +106,12 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
             return super.setByteArray(origin);
         }
 
+        /**
+         * Sets the length.
+         *
+         * @param length Must be greater or equal to 0.
+         * @return this.
+         */
         public Builder setLength(final int length) {
             if (length < 0) {
                 throw new IllegalArgumentException("length cannot be negative");
@@ -114,6 +120,12 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
             return this;
         }
 
+        /**
+         * Sets the offset.
+         *
+         * @param offset Must be greater or equal to 0.
+         * @return this.
+         */
         public Builder setOffset(final int offset) {
             if (offset < 0) {
                 throw new IllegalArgumentException("offset cannot be negative");

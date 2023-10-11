@@ -99,6 +99,9 @@ public class WriterOutputStream extends OutputStream {
         private CharsetDecoder charsetDecoder;
         private boolean writeImmediately;
 
+        /**
+         * Constructs a new Builder.
+         */
         public Builder() {
             this.charsetDecoder = getCharset().newDecoder();
         }
