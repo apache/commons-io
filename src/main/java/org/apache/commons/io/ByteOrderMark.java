@@ -115,7 +115,14 @@ public class ByteOrderMark implements Serializable {
      */
     public static final char UTF_BOM = '\uFEFF';
 
+    /**
+     * Charset name.
+     */
     private final String charsetName;
+
+    /**
+     * Bytes.
+     */
     private final int[] bytes;
 
     /**
