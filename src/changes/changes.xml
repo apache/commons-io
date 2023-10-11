@@ -94,6 +94,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="sebbASF">
         [Javadoc] IOUtils#contentEquals does not throw NullPointerException #496.
       </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        Fix CodeQL warnings in UnsynchronizedBufferedInputStream: Implicit narrowing conversion in compound assignment.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add org.apache.commons.io.channels.FileChannels.
