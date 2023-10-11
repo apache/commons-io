@@ -27,7 +27,7 @@ import org.apache.commons.io.input.XmlStreamReaderUtilitiesTest;
 public class XmlStreamReaderUtilitiesCompatibilityTest extends XmlStreamReaderUtilitiesTest {
 
     /** Mock {@link XmlStreamReader} implementation */
-    private static class MockXmlStreamReader extends XmlStreamReader {
+    private static final class MockXmlStreamReader extends XmlStreamReader {
         MockXmlStreamReader(final String defaultEncoding) throws IOException {
             super(CharSequenceInputStream.builder().setCharSequence("").get(), null, true, defaultEncoding);
         }

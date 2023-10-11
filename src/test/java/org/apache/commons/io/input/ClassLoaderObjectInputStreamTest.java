@@ -43,7 +43,7 @@ public class ClassLoaderObjectInputStreamTest {
         A, B, C
     }
 
-    private static class Test implements Serializable {
+    private static final class Test implements Serializable {
         private static final long serialVersionUID = 1L;
         private final int i;
 

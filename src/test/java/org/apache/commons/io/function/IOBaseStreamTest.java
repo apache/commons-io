@@ -67,7 +67,7 @@ public class IOBaseStreamTest {
     /**
      * Implements IOBaseStream with a concrete type.
      */
-    private static class IOBaseStreamPathFixture<B extends BaseStream<Path, B>> extends IOBaseStreamFixture<Path, IOBaseStreamPathFixture<B>, B> {
+    private static final class IOBaseStreamPathFixture<B extends BaseStream<Path, B>> extends IOBaseStreamFixture<Path, IOBaseStreamPathFixture<B>, B> {
 
         private IOBaseStreamPathFixture(final B baseStream) {
             super(baseStream);
@@ -80,7 +80,7 @@ public class IOBaseStreamTest {
 
     }
 
-    private static class MyRuntimeException extends RuntimeException {
+    private static final class MyRuntimeException extends RuntimeException {
 
         private static final long serialVersionUID = 1L;
 

@@ -52,7 +52,7 @@ public class BOMInputStreamTest {
     /**
      *  A mock InputStream that expects {@code close()} to be called.
      */
-    private static class ExpectCloseInputStream extends InputStream {
+    private static final class ExpectCloseInputStream extends InputStream {
         private boolean _closeCalled;
 
         public void assertCloseCalled() {

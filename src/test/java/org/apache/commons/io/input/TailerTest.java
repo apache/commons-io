@@ -60,7 +60,7 @@ import org.junit.jupiter.api.io.TempDir;
  */
 public class TailerTest {
 
-    private static class NonStandardTailable implements Tailer.Tailable {
+    private static final class NonStandardTailable implements Tailer.Tailable {
 
         private final File file;
 
@@ -115,7 +115,7 @@ public class TailerTest {
     /**
      * Test {@link TailerListener} implementation.
      */
-    private static class TestTailerListener extends TailerListenerAdapter {
+    private static final class TestTailerListener extends TailerListenerAdapter {
 
         // Must be synchronized because it is written by one thread and read by another
         private final List<String> lines = Collections.synchronizedList(new ArrayList<>());

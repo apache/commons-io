@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 
 public class MarkShieldInputStreamTest {
 
-    private static class MarkTestableInputStream extends ProxyInputStream {
+    private static final class MarkTestableInputStream extends ProxyInputStream {
         int markcount;
         int readlimit;
 

@@ -48,6 +48,9 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
     private static final Comparator<?>[] EMPTY_COMPARATOR_ARRAY = {};
     private static final long serialVersionUID = -2224170307287243428L;
 
+    /**
+     * Delegates.
+     */
     private final Comparator<File>[] delegates;
 
     /**

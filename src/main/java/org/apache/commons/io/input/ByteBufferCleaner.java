@@ -38,7 +38,7 @@ class ByteBufferCleaner {
         void clean(ByteBuffer buffer) throws ReflectiveOperationException;
     }
 
-    private static class Java8Cleaner implements Cleaner {
+    private static final class Java8Cleaner implements Cleaner {
 
         private final Method cleanerMethod;
         private final Method cleanMethod;
@@ -57,7 +57,7 @@ class ByteBufferCleaner {
         }
     }
 
-    private static class Java9Cleaner implements Cleaner {
+    private static final class Java9Cleaner implements Cleaner {
 
         private final Object theUnsafe;
         private final Method invokeCleaner;

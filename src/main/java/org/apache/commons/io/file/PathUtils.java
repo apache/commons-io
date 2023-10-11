@@ -90,7 +90,7 @@ public final class PathUtils {
      * Private worker/holder that computes and tracks relative path names and their equality. We reuse the sorted relative
      * lists when comparing directories.
      */
-    private static class RelativeSortedPaths {
+    private static final class RelativeSortedPaths {
 
         final boolean equals;
         // final List<Path> relativeDirList1; // might need later?
@@ -365,7 +365,7 @@ public final class PathUtils {
      * Creates the parent directories for the given {@code path}.
      * <p>
      * If the parent directory already exists, then return it.
-     * <p>
+     * </p>
      *
      * @param path The path to a file (or directory).
      * @param attrs An optional list of file attributes to set atomically when creating the directories.
@@ -381,7 +381,7 @@ public final class PathUtils {
      * Creates the parent directories for the given {@code path}.
      * <p>
      * If the parent directory already exists, then return it.
-     * <p>
+     * </p>
      *
      * @param path The path to a file (or directory).
      * @param linkOption A {@link LinkOption} or null.

@@ -90,7 +90,7 @@ public class DirectoryWalkerTest {
      * Test DirectoryWalker implementation that always returns false
      * from handleDirectoryStart()
      */
-    private static class TestFalseFileFinder extends TestFileFinder {
+    private static final class TestFalseFileFinder extends TestFileFinder {
 
         protected TestFalseFileFinder(final FileFilter filter, final int depthLimit) {
             super(filter, depthLimit);
@@ -143,7 +143,7 @@ public class DirectoryWalkerTest {
      * Test DirectoryWalker implementation that finds files in a directory hierarchy
      * applying a file filter.
      */
-    private static class TestFileFinderString extends DirectoryWalker<String> {
+    private static final class TestFileFinderString extends DirectoryWalker<String> {
 
         protected TestFileFinderString(final FileFilter filter, final int depthLimit) {
             super(filter, depthLimit);

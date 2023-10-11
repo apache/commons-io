@@ -66,6 +66,9 @@ public class ReversedLinesFileReader implements Closeable {
      */
     public static class Builder extends AbstractStreamBuilder<ReversedLinesFileReader, Builder> {
 
+        /**
+         * Constructs a new Builder.
+         */
         public Builder() {
             setBufferSizeDefault(DEFAULT_BLOCK_SIZE);
             setBufferSize(DEFAULT_BLOCK_SIZE);

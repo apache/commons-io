@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
  */
 public class DemuxInputStreamTest {
 
-    private static class ReaderThread extends Thread {
+    private static final class ReaderThread extends Thread {
         private final DemuxInputStream demuxInputStream;
         private final InputStream inputStream;
         private final StringBuffer stringBuffer = new StringBuffer();
@@ -72,7 +72,7 @@ public class DemuxInputStreamTest {
         }
     }
 
-    private static class WriterThread extends Thread {
+    private static final class WriterThread extends Thread {
         private final byte[] byteArray;
         private final DemuxOutputStream demuxOutputStream;
         private final OutputStream outputStream;

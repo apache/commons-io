@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
  */
 public class ObservableInputStreamTest {
 
-    private static class DataViewObserver extends MethodCountObserver {
+    private static final class DataViewObserver extends MethodCountObserver {
         private byte[] buffer;
         private int lastValue = -1;
         private int length = -1;
@@ -55,7 +55,7 @@ public class ObservableInputStreamTest {
         }
     }
 
-    private static class LengthObserver extends Observer {
+    private static final class LengthObserver extends Observer {
         private long total;
 
         @Override

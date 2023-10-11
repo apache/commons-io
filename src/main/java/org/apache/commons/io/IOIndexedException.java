@@ -42,6 +42,9 @@ public class IOIndexedException extends IOException {
         return String.format("%s #%,d: %s", name, index, msg);
     }
 
+    /**
+     * Index.
+     */
     private final int index;
 
     /**

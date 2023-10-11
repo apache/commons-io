@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 public class ProxyReaderTest {
 
     /** Custom NullReader implementation. */
-    private static class CustomNullReader extends NullReader {
+    private static final class CustomNullReader extends NullReader {
         CustomNullReader(final int len) {
             super(len);
         }
@@ -45,7 +45,7 @@ public class ProxyReaderTest {
     }
 
     /** ProxyReader implementation. */
-    private static class ProxyReaderImpl extends ProxyReader {
+    private static final class ProxyReaderImpl extends ProxyReader {
         ProxyReaderImpl(final Reader proxy) {
             super(proxy);
         }

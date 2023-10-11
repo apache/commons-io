@@ -102,7 +102,7 @@ public class DirectoryWalkerTestCaseJava4 {
      * Test DirectoryWalker implementation that always returns false
      * from handleDirectoryStart()
      */
-    private static class TestFalseFileFinder extends TestFileFinder {
+    private static final class TestFalseFileFinder extends TestFileFinder {
 
         protected TestFalseFileFinder(final FileFilter filter, final int depthLimit) {
             super(filter, depthLimit);

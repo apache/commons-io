@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Test;
  */
 public class IOFunctionTest {
 
-    private static class Holder<T> {
+    private static final class Holder<T> {
         T value;
     }
 

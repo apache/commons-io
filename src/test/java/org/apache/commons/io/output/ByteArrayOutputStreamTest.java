@@ -46,7 +46,7 @@ public class ByteArrayOutputStreamTest {
         T newInstance(final int size);
     }
 
-    private static class ByteArrayOutputStreamFactory implements BAOSFactory<ByteArrayOutputStream> {
+    private static final class ByteArrayOutputStreamFactory implements BAOSFactory<ByteArrayOutputStream> {
         @Override
         public ByteArrayOutputStream newInstance() {
             return new ByteArrayOutputStream();
@@ -58,7 +58,7 @@ public class ByteArrayOutputStreamTest {
         }
     }
 
-    private static class UnsynchronizedByteArrayOutputStreamFactory implements BAOSFactory<UnsynchronizedByteArrayOutputStream> {
+    private static final class UnsynchronizedByteArrayOutputStreamFactory implements BAOSFactory<UnsynchronizedByteArrayOutputStream> {
         @Override
         public UnsynchronizedByteArrayOutputStream newInstance() {
             return new UnsynchronizedByteArrayOutputStream();
