@@ -190,6 +190,7 @@ public class UnsynchronizedBufferedInputStreamTest {
         assertThrows(IOException.class, () -> is.read());
 
         assertThrows(NullPointerException.class, () -> UnsynchronizedBufferedInputStream.builder().setInputStream(null).setBufferSize(100).get());
+        assertThrows(NullPointerException.class, () -> UnsynchronizedBufferedInputStream.builder().setInputStream(null));
     }
 
     /**
