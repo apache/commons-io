@@ -1444,7 +1444,7 @@ public class FileUtils {
 
     /**
      * Returns a {@link File} representing the system temporary directory.
-     *
+     * 
      * @return the system temporary directory.
      * @since 2.0
      */
@@ -1453,8 +1453,38 @@ public class FileUtils {
     }
 
     /**
-     * Returns the path to the system temporary directory.
+     * Returns the path to the system temporary directory with the option to include or disinclude the trailing 
+     * file separator. 
      *
+     * @param includeTrailingSeparator switch indicating whether or not you want the returned path to include a 
+     * trailing file separator. 
+     * @return the path to the system temporary directory with or without the trailing file separator as per 
+     * caller supplied argument.
+     * @since 2.14.1
+     */
+    public static String getTempDirectoryPathConsistent(boolean includeTrailingSeparator) {
+        String tempDir = System.getProperty("java.io.tmpdir");
+        String tempDirLastChar = tempDir.substring(tempDir.length() - 1);
+        String systemFileSeparator = System.getProperty("file.separator");
+        if (includeTrailingSeparator) {
+            tempDir = tempDirLastChar.equals(systemFileSeparator) 
+                            ? tempDir 
+                            : tempDir + systemFileSeparator;
+        } else {
+            tempDir = tempDirLastChar.equals(systemFileSeparator) 
+                            ? tempDir.substring(0, tempDir.length() - 1) 
+                            : tempDir;
+        }
+
+        return tempDir;
+    }
+
+    /**
+     * Returns the path to the system temporary directory.
+     * 
+     * @apiNote this method relies on Java system property 'java.io.tmpdir' which may or may not return a path with 
+     * a trailing file separator, depending on the OS Java is running in. If you need the temp directory reported in a
+     * consistent manner across all OS environments, use {@link #getTempDirectoryPathConsistent(boolean)}.
      * @return the path to the system temporary directory.
      * @since 2.0
      */
