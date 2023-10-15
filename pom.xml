@@ -257,6 +257,20 @@ file comparators, endian transformation classes, and much more.
       <scope>test</scope>
     </dependency>
     <dependency>
+      <!-- Java 21 support, revisit for Mockito 5 -->
+      <groupId>net.bytebuddy</groupId>
+      <artifactId>byte-buddy</artifactId>
+      <version>${commons.bytebuddy.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <!-- Java 21 support, revisit for Mockito 5 -->
+      <groupId>net.bytebuddy</groupId>
+      <artifactId>byte-buddy-agent</artifactId>
+      <version>${commons.bytebuddy.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-inline</artifactId>
       <version>4.11.0</version>
@@ -325,6 +339,7 @@ file comparators, endian transformation classes, and much more.
     <commons.javadoc.java.link>${commons.javadoc8.java.link}</commons.javadoc.java.link>
     <commons.moditect.version>1.0.0.Final</commons.moditect.version>
     <jmh.version>1.37</jmh.version>
+    <commons.bytebuddy.version>1.14.9</commons.bytebuddy.version>
     <japicmp.skip>false</japicmp.skip>
     <jacoco.skip>${env.JACOCO_SKIP}</jacoco.skip>
     <commons.release.isDistModule>true</commons.release.isDistModule>
@@ -387,7 +402,8 @@ file comparators, endian transformation classes, and much more.
           </classpathDependencyExcludes>
           <forkCount>1</forkCount>
           <reuseForks>false</reuseForks>
-          <!-- limit memory size see IO-161 -->
+          <!-- Limit memory size see IO-161 -->
+          <!-- Mockito inline may need -XX:+EnableDynamicAgentLoading -->
           <argLine>${argLine} -Xmx25M</argLine>
           <includes>
             <!-- Only include test classes, not test data -->
