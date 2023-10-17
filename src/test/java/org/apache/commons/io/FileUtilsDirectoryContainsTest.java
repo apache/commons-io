@@ -112,7 +112,7 @@ public class FileUtilsDirectoryContainsTest {
     }
 
     @Test
-    public void testDirectoryDoesNotExist() throws IOException {
+    public void testDirectoryDoesNotExist() {
         final File dir = new File("DOESNOTEXIST");
         assertFalse(dir.exists());
         assertThrows(IllegalArgumentException.class, () -> FileUtils.directoryContains(dir, file1));
@@ -158,12 +158,12 @@ public class FileUtilsDirectoryContainsTest {
     }
 
     @Test
-    public void testSameFile() throws IOException {
+    public void testSameFile() {
         assertThrows(IllegalArgumentException.class, () -> FileUtils.directoryContains(file1, file1));
     }
 
     @Test
-    public void testUnrealizedContainment() throws IOException {
+    public void testUnrealizedContainment() {
         final File dir = new File("DOESNOTEXIST");
         final File file = new File(dir, "DOESNOTEXIST2");
         assertFalse(dir.exists());

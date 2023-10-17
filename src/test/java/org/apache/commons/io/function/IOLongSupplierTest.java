@@ -49,7 +49,7 @@ public class IOLongSupplierTest {
     }
 
     @Test
-    public void testAsSupplier() throws IOException {
+    public void testAsSupplier() {
         assertThrows(UncheckedIOException.class, () -> TestConstants.THROWING_IO_LONG_SUPPLIER.asSupplier().getAsLong());
         assertEquals(1L, getThrowsNone(() -> TestUtils.compareAndSetThrowsIO(atomicLong, 1L)));
         assertEquals(1L, atomicLong.get());

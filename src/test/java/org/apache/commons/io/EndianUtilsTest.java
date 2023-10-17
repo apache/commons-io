@@ -38,7 +38,7 @@ public class EndianUtilsTest  {
     }
 
     @Test
-    public void testEOFException() throws IOException {
+    public void testEOFException() {
         final ByteArrayInputStream input = new ByteArrayInputStream(new byte[] {});
         assertThrows(EOFException.class, () -> EndianUtils.readSwappedDouble(input));
     }

@@ -1257,7 +1257,7 @@ public class IOUtilsTest {
         assertThrows(NullPointerException.class, () -> IOUtils.resourceToURL(null, ClassLoader.getSystemClassLoader()));
     }
 
-    public void testSingleEOL(final String s1, final String s2, final boolean ifEquals) throws IOException {
+    public void testSingleEOL(final String s1, final String s2, final boolean ifEquals) {
         assertEquals(ifEquals, IOUtils.contentEqualsIgnoreEOL(
                 new CharArrayReader(s1.toCharArray()),
                 new CharArrayReader(s2.toCharArray())

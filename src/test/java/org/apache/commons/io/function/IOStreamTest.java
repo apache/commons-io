@@ -402,7 +402,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testOnCloseMultipleHandlers() throws IOException {
+    public void testOnCloseMultipleHandlers() {
         //
         final AtomicReference<String> ref = new AtomicReference<>();
         // Sanity check
