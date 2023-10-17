@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Provider;
+import java.util.Objects;
 
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
@@ -126,9 +127,10 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
          * Constructs an MessageDigestMaintainingObserver for the given MessageDigest.
          *
          * @param messageDigest the message digest to use
+         * @throws NullPointerException if messageDigest is null.
          */
         public MessageDigestMaintainingObserver(final MessageDigest messageDigest) {
-            this.messageDigest = messageDigest;
+            this.messageDigest = Objects.requireNonNull(messageDigest, "messageDigest");
         }
 
         @Override
@@ -193,6 +195,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
      *
      * @param inputStream   the stream to calculate the message digest for
      * @param messageDigest the message digest to use
+     * @throws NullPointerException if messageDigest is null.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated

@@ -97,6 +97,14 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
         Fix CodeQL warnings in UnsynchronizedBufferedInputStream: Implicit narrowing conversion in compound assignment.
       </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        MessageDigestCalculatingInputStream.MessageDigestMaintainingObserver.MessageDigestMaintainingObserver(MessageDigest) now throws a NullPointerException
+        if the MessageDigest is null.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        MessageDigestCalculatingInputStream.MessageDigestCalculatingInputStream(InputStream, MessageDigest) now throws a NullPointerException
+        if the MessageDigest is null.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add org.apache.commons.io.channels.FileChannels.
