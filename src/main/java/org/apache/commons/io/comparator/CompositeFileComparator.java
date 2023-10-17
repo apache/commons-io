@@ -19,6 +19,7 @@ package org.apache.commons.io.comparator;
 import java.io.File;
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.function.IntFunction;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -68,7 +69,8 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
      * @param delegates The delegate file comparators
      */
     public CompositeFileComparator(final Iterable<Comparator<File>> delegates) {
-        this.delegates = delegates == null ? emptyArray() : StreamSupport.stream(delegates.spliterator(), false).toArray(Comparator[]::new);
+        this.delegates = delegates == null ? emptyArray()
+                : StreamSupport.stream(delegates.spliterator(), false).toArray((IntFunction<Comparator<File>[]>) Comparator[]::new);
     }
 
     /**
