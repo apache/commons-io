@@ -1598,18 +1598,38 @@ public class FileUtilsTest extends AbstractTempDirTest {
     public void testGetTempDirectoryPathConsistentNoTrailingSeparator() {
         String tempDirectoryPath = FileUtils.getTempDirectoryPathConsistent(false);
         assertTrue(tempDirectoryPath.startsWith(System.getProperty("java.io.tmpdir")));
+
         String systemFileSeparator = System.getProperty("file.separator");
         String lastCharOfTempDirectoryPath = tempDirectoryPath.substring(tempDirectoryPath.length() - 1);
         assertNotEquals(lastCharOfTempDirectoryPath, systemFileSeparator);
+
+        String lastCharOfJavaReportedTempDirectoryPath = 
+            System.getProperty("java.io.tmpdir").substring(tempDirectoryPath.length() - 1);
+
+        if (lastCharOfJavaReportedTempDirectoryPath.equals(systemFileSeparator)) {
+            assertEquals(System.getProperty("java.io.tmpdir").length() - 1, tempDirectoryPath.length());
+        } else {
+            assertEquals(System.getProperty("java.io.tmpdir").length(), tempDirectoryPath.length());
+        }
     }
 
     @Test
     public void testGetTempDirectoryPathConsistentWithTrailingSeparator() {
         String tempDirectoryPath = FileUtils.getTempDirectoryPathConsistent(true);
         assertTrue(tempDirectoryPath.startsWith(System.getProperty("java.io.tmpdir")));
+
         String systemFileSeparator = System.getProperty("file.separator");
         String lastCharOfTempDirectoryPath = tempDirectoryPath.substring( tempDirectoryPath.length() - 1);
         assertEquals(lastCharOfTempDirectoryPath, systemFileSeparator);
+
+        String lastCharOfJavaReportedTempDirectoryPath = 
+            System.getProperty("java.io.tmpdir").substring(tempDirectoryPath.length() - 1);
+
+        if (lastCharOfJavaReportedTempDirectoryPath.equals(systemFileSeparator)) {
+            assertEquals(System.getProperty("java.io.tmpdir").length(), tempDirectoryPath.length());
+        } else {
+            assertEquals(System.getProperty("java.io.tmpdir").length(), tempDirectoryPath.length() - 1);
+        }
     }  
 
     @Test

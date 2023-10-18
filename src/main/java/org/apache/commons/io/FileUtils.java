@@ -1453,7 +1453,7 @@ public class FileUtils {
     }
 
     /**
-     * Returns the path to the system temporary directory with the option to include or disinclude the trailing 
+     * Returns the path to the system temporary directory with the option to include or exclude the trailing 
      * file separator. 
      *
      * @param includeTrailingSeparator switch indicating whether or not you want the returned path to include a 
