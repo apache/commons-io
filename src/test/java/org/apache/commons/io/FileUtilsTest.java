@@ -1597,6 +1597,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testGetTempDirectoryPathConsistentNoTrailingSeparator() {
         String tempDirectoryPath = FileUtils.getTempDirectoryPathConsistent(false);
+        assertTrue(tempDirectoryPath.startsWith(System.getProperty("java.io.tmpdir")));
         String systemFileSeparator = System.getProperty("file.separator");
         String lastCharOfTempDirectoryPath = tempDirectoryPath.substring(tempDirectoryPath.length() - 1);
         assertNotEquals(lastCharOfTempDirectoryPath, systemFileSeparator);
@@ -1605,6 +1606,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testGetTempDirectoryPathConsistentWithTrailingSeparator() {
         String tempDirectoryPath = FileUtils.getTempDirectoryPathConsistent(true);
+        assertTrue(tempDirectoryPath.startsWith(System.getProperty("java.io.tmpdir")));
         String systemFileSeparator = System.getProperty("file.separator");
         String lastCharOfTempDirectoryPath = tempDirectoryPath.substring( tempDirectoryPath.length() - 1);
         assertEquals(lastCharOfTempDirectoryPath, systemFileSeparator);
