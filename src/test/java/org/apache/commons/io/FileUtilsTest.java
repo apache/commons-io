@@ -1587,7 +1587,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     public void testGetTempDirectory() {
         final File tempDirectory = new File(FileUtils.getTempDirectoryPath());
         assertEquals(tempDirectory, FileUtils.getTempDirectory());
-    }  
+    } 
 
     @Test
     public void testGetTempDirectoryPath() {

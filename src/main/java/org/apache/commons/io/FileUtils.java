@@ -1444,7 +1444,7 @@ public class FileUtils {
 
     /**
      * Returns a {@link File} representing the system temporary directory.
-     * 
+     *
      * @return the system temporary directory.
      * @since 2.0
      */
@@ -1483,7 +1483,7 @@ public class FileUtils {
      * Returns the path to the system temporary directory.
      * 
      * @apiNote this method relies on Java system property 'java.io.tmpdir' which may or may not return a path with 
-     * a trailing file separator, depending on the OS Java is running in. If you need the temp directory reported in a
+     * a trailing file separator, depending on the OS environment. If you need the temp directory reported in a
      * consistent manner across all OS environments, use {@link #getTempDirectoryPathConsistent(boolean)}.
      * @return the path to the system temporary directory.
      * @since 2.0
