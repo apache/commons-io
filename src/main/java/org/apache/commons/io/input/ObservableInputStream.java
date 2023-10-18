@@ -39,7 +39,7 @@ import org.apache.commons.io.function.IOConsumer;
  * be used.
  * </p>
  *
- * @see MessageDigestCalculatingInputStream
+ * @see MessageDigestInputStream
  */
 public class ObservableInputStream extends ProxyInputStream {
 

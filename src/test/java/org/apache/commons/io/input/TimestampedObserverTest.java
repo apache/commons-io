@@ -51,7 +51,7 @@ public class TimestampedObserverTest {
         assertTrue(timestampedObserver.getOpenToNowDuration().toNanos() > 0);
         assertNull(timestampedObserver.getCloseInstant());
         assertFalse(timestampedObserver.isClosed());
-        final byte[] buffer = MessageDigestCalculatingInputStreamTest.generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
+        final byte[] buffer = MessageDigestInputStreamTest.generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
         try (ObservableInputStream ois = new ObservableInputStream(new ByteArrayInputStream(buffer), timestampedObserver)) {
             assertTrue(timestampedObserver.getOpenInstant().isAfter(before));
             assertTrue(timestampedObserver.getOpenToNowDuration().toNanos() > 0);
@@ -68,7 +68,7 @@ public class TimestampedObserverTest {
     @Test
     public void testExample() throws IOException {
         final TimestampedObserver timestampedObserver = new TimestampedObserver();
-        final byte[] buffer = MessageDigestCalculatingInputStreamTest
+        final byte[] buffer = MessageDigestInputStreamTest
             .generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
         try (ObservableInputStream ois = new ObservableInputStream(new ByteArrayInputStream(buffer),
             timestampedObserver)) {

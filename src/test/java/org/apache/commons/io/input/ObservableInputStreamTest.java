@@ -153,8 +153,7 @@ public class ObservableInputStreamTest {
      */
     @Test
     public void testDataByteCalled_add() throws Exception {
-        final byte[] buffer = MessageDigestCalculatingInputStreamTest
-            .generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
+        final byte[] buffer = MessageDigestInputStreamTest.generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
         final DataViewObserver lko = new DataViewObserver();
         try (ObservableInputStream ois = new ObservableInputStream(new ByteArrayInputStream(buffer))) {
             assertEquals(-1, lko.lastValue);
@@ -185,8 +184,7 @@ public class ObservableInputStreamTest {
      */
     @Test
     public void testDataByteCalled_ctor() throws Exception {
-        final byte[] buffer = MessageDigestCalculatingInputStreamTest
-            .generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
+        final byte[] buffer = MessageDigestInputStreamTest.generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
         final DataViewObserver lko = new DataViewObserver();
         try (ObservableInputStream ois = new ObservableInputStream(new ByteArrayInputStream(buffer), lko)) {
             assertEquals(-1, lko.lastValue);
@@ -216,10 +214,9 @@ public class ObservableInputStreamTest {
      */
     @Test
     public void testDataBytesCalled() throws Exception {
-        final byte[] buffer = MessageDigestCalculatingInputStreamTest
-            .generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
+        final byte[] buffer = MessageDigestInputStreamTest.generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
         try (ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
-            final ObservableInputStream ois = new ObservableInputStream(bais)) {
+                final ObservableInputStream ois = new ObservableInputStream(bais)) {
             final DataViewObserver observer = new DataViewObserver();
             final byte[] readBuffer = new byte[23];
             assertNull(observer.buffer);

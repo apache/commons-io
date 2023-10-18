@@ -20,40 +20,57 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 import java.io.ByteArrayInputStream;
 import java.security.MessageDigest;
-import java.util.Random;
 
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.codec.digest.MessageDigestAlgorithms;
+import org.apache.commons.io.input.MessageDigestCalculatingInputStream.Builder;
 import org.junit.jupiter.api.Test;
 
 /**
  * Tests {@link MessageDigestCalculatingInputStream}.
  */
+@SuppressWarnings("deprecation")
 public class MessageDigestCalculatingInputStreamTest {
 
-    public static byte[] generateRandomByteStream(final int pSize) {
-        final byte[] buffer = new byte[pSize];
-        final Random rnd = new Random();
-        rnd.nextBytes(buffer);
-        return buffer;
-    }
-
     @Test
-    public void test() throws Exception {
+    public void testNormalUse() throws Exception {
         for (int i = 256; i < 8192; i = i * 2) {
-            final byte[] buffer = generateRandomByteStream(i);
-            final MessageDigest messageDigest = MessageDigestCalculatingInputStream.getDefaultMessageDigest();
-            final byte[] expect = messageDigest.digest(buffer);
+            final byte[] buffer = MessageDigestInputStreamTest.generateRandomByteStream(i);
+            final MessageDigest defaultMessageDigest = MessageDigestCalculatingInputStream.getDefaultMessageDigest();
+            final byte[] defaultExpect = defaultMessageDigest.digest(buffer);
+            // Defaults
             try (MessageDigestCalculatingInputStream messageDigestInputStream = new MessageDigestCalculatingInputStream(new ByteArrayInputStream(buffer))) {
                 messageDigestInputStream.consume();
-                assertArrayEquals(expect, messageDigestInputStream.getMessageDigest().digest());
+                assertArrayEquals(defaultExpect, messageDigestInputStream.getMessageDigest().digest());
             }
             try (MessageDigestCalculatingInputStream messageDigestInputStream = MessageDigestCalculatingInputStream.builder()
                     .setInputStream(new ByteArrayInputStream(buffer)).get()) {
                 messageDigestInputStream.consume();
-                assertArrayEquals(expect, messageDigestInputStream.getMessageDigest().digest());
+                assertArrayEquals(defaultExpect, messageDigestInputStream.getMessageDigest().digest());
             }
             try (MessageDigestCalculatingInputStream messageDigestInputStream = MessageDigestCalculatingInputStream.builder().setByteArray(buffer).get()) {
                 messageDigestInputStream.consume();
-                assertArrayEquals(expect, messageDigestInputStream.getMessageDigest().digest());
+                assertArrayEquals(defaultExpect, messageDigestInputStream.getMessageDigest().digest());
+            }
+            // SHA-512
+            final byte[] sha512Expect = DigestUtils.sha512(buffer);
+            {
+                final Builder builder = MessageDigestCalculatingInputStream.builder();
+                builder.setMessageDigest(MessageDigestAlgorithms.SHA_512);
+                builder.setInputStream(new ByteArrayInputStream(buffer));
+                try (MessageDigestCalculatingInputStream messageDigestInputStream = builder.get()) {
+                    messageDigestInputStream.consume();
+                    assertArrayEquals(sha512Expect, messageDigestInputStream.getMessageDigest().digest());
+                }
+            }
+            {
+                final Builder builder = MessageDigestCalculatingInputStream.builder();
+                builder.setMessageDigest(MessageDigestAlgorithms.SHA_512);
+                builder.setInputStream(new ByteArrayInputStream(buffer));
+                try (MessageDigestCalculatingInputStream messageDigestInputStream = builder.get()) {
+                    messageDigestInputStream.consume();
+                    assertArrayEquals(sha512Expect, messageDigestInputStream.getMessageDigest().digest());
+                }
             }
         }
     }

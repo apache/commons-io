@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.Provider;
 import java.util.Objects;
 
 import org.apache.commons.io.build.AbstractStreamBuilder;
@@ -36,28 +35,32 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * Cryptography Architecture Standard Algorithm Name Documentation</a> for information about standard algorithm names.
  * </p>
  * <p>
- * <em>Note</em>: Neither {@link ObservableInputStream}, nor {@link MessageDigest}, are thread safe, so is {@link MessageDigestCalculatingInputStream}.
+ * You must specify a message digest algorithm name or instance.
  * </p>
- * @deprecated Use {@link MessageDigestInputStream}.
+ * <p>
+ * <em>Note</em>: Neither {@link ObservableInputStream}, nor {@link MessageDigest}, are thread safe, so is {@link MessageDigestInputStream}.
+ * </p>
+ *
+ * @since 2.15.0
  */
-@Deprecated
-public class MessageDigestCalculatingInputStream extends ObservableInputStream {
+public final class MessageDigestInputStream extends ObservableInputStream {
 
     /**
-     * Builds a new {@link MessageDigestCalculatingInputStream} instance.
+     * Builds new {@link MessageDigestInputStream} instances.
      * <p>
      * For example:
      * </p>
      * <pre>{@code
-     * MessageDigestCalculatingInputStream s = MessageDigestCalculatingInputStream.builder()
+     * MessageDigestInputStream s = MessageDigestInputStream.builder()
      *   .setPath(path)
      *   .setMessageDigest("SHA-512")
      *   .get();}
      * </pre>
-     *
-     * @since 2.12.0
+     * <p>
+     * You must specify a message digest algorithm name or instance.
+     * </p>
      */
-    public static class Builder extends AbstractStreamBuilder<MessageDigestCalculatingInputStream, Builder> {
+    public static class Builder extends AbstractStreamBuilder<MessageDigestInputStream, Builder> {
 
         private MessageDigest messageDigest;
 
@@ -65,12 +68,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
          * Constructs a new Builder.
          */
         public Builder() {
-            try {
-                this.messageDigest = getDefaultMessageDigest();
-            } catch (final NoSuchAlgorithmException e) {
-                // Should not happen.
-                throw new IllegalStateException(e);
-            }
+            // empty
         }
 
         /**
@@ -89,8 +87,8 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
          */
         @SuppressWarnings("resource")
         @Override
-        public MessageDigestCalculatingInputStream get() throws IOException {
-            return new MessageDigestCalculatingInputStream(getInputStream(), messageDigest);
+        public MessageDigestInputStream get() throws IOException {
+            return new MessageDigestInputStream(getInputStream(), messageDigest);
         }
 
         /**
@@ -100,9 +98,11 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
          * </p>
          *
          * @param messageDigest the message digest.
+         * @return this
          */
-        public void setMessageDigest(final MessageDigest messageDigest) {
+        public Builder setMessageDigest(final MessageDigest messageDigest) {
             this.messageDigest = messageDigest;
+            return this;
         }
 
         /**
@@ -114,10 +114,12 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
          * @param algorithm the name of the algorithm. See the MessageDigest section in the
          *                  <a href= "https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#MessageDigest"> Java Cryptography
          *                  Architecture Standard Algorithm Name Documentation</a> for information about standard algorithm names.
+         * @return this
          * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation for the specified algorithm.
          */
-        public void setMessageDigest(final String algorithm) throws NoSuchAlgorithmException {
+        public Builder setMessageDigest(final String algorithm) throws NoSuchAlgorithmException {
             this.messageDigest = MessageDigest.getInstance(algorithm);
+            return this;
         }
 
     }
@@ -126,6 +128,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
      * Maintains the message digest.
      */
     public static class MessageDigestMaintainingObserver extends Observer {
+
         private final MessageDigest messageDigest;
 
         /**
@@ -150,50 +153,15 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
     }
 
     /**
-     * The default message digest algorithm.
-     * <p>
-     * The MD5 cryptographic algorithm is weak and should not be used.
-     * </p>
-     */
-    private static final String DEFAULT_ALGORITHM = "MD5";
-
-    /**
      * Constructs a new {@link Builder}.
      *
      * @return a new {@link Builder}.
-     * @since 2.12.0
      */
     public static Builder builder() {
         return new Builder();
     }
 
-    /**
-     * Gets a MessageDigest object that implements the default digest algorithm.
-     *
-     * @return a Message Digest object that implements the default algorithm.
-     * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation.
-     * @see Provider
-     */
-    static MessageDigest getDefaultMessageDigest() throws NoSuchAlgorithmException {
-        return MessageDigest.getInstance(DEFAULT_ALGORITHM);
-    }
-
     private final MessageDigest messageDigest;
-
-    /**
-     * Constructs a new instance, which calculates a signature on the given stream, using a {@link MessageDigest} with the "MD5" algorithm.
-     * <p>
-     * The MD5 algorithm is weak and should not be used.
-     * </p>
-     *
-     * @param inputStream the stream to calculate the message digest for
-     * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation for the specified algorithm.
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
-     */
-    @Deprecated
-    public MessageDigestCalculatingInputStream(final InputStream inputStream) throws NoSuchAlgorithmException {
-        this(inputStream, getDefaultMessageDigest());
-    }
 
     /**
      * Constructs a new instance, which calculates a signature on the given stream, using the given {@link MessageDigest}.
@@ -204,30 +172,10 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
      * @param inputStream   the stream to calculate the message digest for
      * @param messageDigest the message digest to use
      * @throws NullPointerException if messageDigest is null.
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
-    @Deprecated
-    public MessageDigestCalculatingInputStream(final InputStream inputStream, final MessageDigest messageDigest) {
+    private MessageDigestInputStream(final InputStream inputStream, final MessageDigest messageDigest) {
         super(inputStream, new MessageDigestMaintainingObserver(messageDigest));
         this.messageDigest = messageDigest;
-    }
-
-    /**
-     * Constructs a new instance, which calculates a signature on the given stream, using a {@link MessageDigest} with the given algorithm.
-     * <p>
-     * The MD5 cryptographic algorithm is weak and should not be used.
-     * </p>
-     *
-     * @param inputStream the stream to calculate the message digest for
-     * @param algorithm   the name of the algorithm requested. See the MessageDigest section in the
-     *                    <a href= "https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#MessageDigest"> Java Cryptography
-     *                    Architecture Standard Algorithm Name Documentation</a> for information about standard algorithm names.
-     * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation for the specified algorithm.
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
-     */
-    @Deprecated
-    public MessageDigestCalculatingInputStream(final InputStream inputStream, final String algorithm) throws NoSuchAlgorithmException {
-        this(inputStream, MessageDigest.getInstance(algorithm));
     }
 
     /**
