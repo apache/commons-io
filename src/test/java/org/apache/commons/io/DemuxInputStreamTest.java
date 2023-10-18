@@ -62,7 +62,7 @@ public class DemuxInputStreamTest {
                     // System.out.println( "Reading: " + (char)ch );
                     stringBuffer.append((char) ch);
 
-                    final int sleepMillis = Math.abs(c_random.nextInt() % 10);
+                    final int sleepMillis = Math.abs(RANDOM.nextInt() % 10);
                     TestUtils.sleep(sleepMillis);
                     ch = demuxInputStream.read();
                 }
@@ -91,7 +91,7 @@ public class DemuxInputStreamTest {
                 try {
                     // System.out.println( "Writing: " + (char)byteArray[ i ] );
                     demuxOutputStream.write(element);
-                    final int sleepMillis = Math.abs(c_random.nextInt() % 10);
+                    final int sleepMillis = Math.abs(RANDOM.nextInt() % 10);
                     TestUtils.sleep(sleepMillis);
                 } catch (final Exception e) {
                     e.printStackTrace();
@@ -100,7 +100,7 @@ public class DemuxInputStreamTest {
         }
     }
 
-    private static final Random c_random = new Random();
+    private static final Random RANDOM = new Random();
     private static final String DATA1 = "Data for thread1";
 
     private static final String DATA2 = "Data for thread2";
