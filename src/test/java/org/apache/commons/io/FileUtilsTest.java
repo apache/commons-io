@@ -1436,7 +1436,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     public void testFileUtils() throws Exception {
         // Loads file from classpath
         final File file1 = new File(tempDirFile, "test.txt");
-        final String filename = file1.getAbsolutePath();
+        final String fileName = file1.getAbsolutePath();
 
         //Create test file on-the-fly (used to be in CVS)
         try (OutputStream out = Files.newOutputStream(file1.toPath())) {
@@ -1445,16 +1445,16 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
         final File file2 = new File(tempDirFile, "test2.txt");
 
-        FileUtils.writeStringToFile(file2, filename, UTF_8);
+        FileUtils.writeStringToFile(file2, fileName, UTF_8);
         assertTrue(file2.exists());
         assertTrue(file2.length() > 0);
 
         final String file2contents = FileUtils.readFileToString(file2, UTF_8);
-        assertEquals(filename, file2contents, "Second file's contents correct");
+        assertEquals(fileName, file2contents, "Second file's contents correct");
 
         assertTrue(file2.delete());
 
-        final String contents = FileUtils.readFileToString(new File(filename), UTF_8);
+        final String contents = FileUtils.readFileToString(new File(fileName), UTF_8);
         assertEquals("This is a test", contents, "FileUtils.fileRead()");
 
     }
@@ -1629,8 +1629,8 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testIO575() throws IOException {
         final Path sourceDir = Files.createTempDirectory("source-dir");
-        final String filename = "some-file";
-        final Path sourceFile = Files.createFile(sourceDir.resolve(filename));
+        final String fileName = "some-file";
+        final Path sourceFile = Files.createFile(sourceDir.resolve(fileName));
 
         assertEquals(SystemUtils.IS_OS_WINDOWS, sourceFile.toFile().canExecute());
 
@@ -1642,7 +1642,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
         FileUtils.copyDirectory(sourceDir.toFile(), destDir.toFile());
 
-        final Path destFile = destDir.resolve(filename);
+        final Path destFile = destDir.resolve(fileName);
 
         assertTrue(destFile.toFile().exists());
         assertTrue(destFile.toFile().canExecute());

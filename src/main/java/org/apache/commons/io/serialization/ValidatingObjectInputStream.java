@@ -109,7 +109,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
         return this;
     }
 
-    /** 
+    /**
      * Checks that the class name conforms to requirements.
      *
      * @param name The class name

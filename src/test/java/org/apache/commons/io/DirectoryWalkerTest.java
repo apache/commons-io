@@ -234,12 +234,12 @@ public class DirectoryWalkerTest {
     private static final File outputDir    = new File(ioDir, "output");
     private static final File[] dirs       = {orgDir, apacheDir, commonsDir, ioDir, outputDir};
     // Files
-    private static final File filenameUtils = new File(ioDir, "FilenameUtils.java");
+    private static final File fileNameUtils = new File(ioDir, "FilenameUtils.java");
 
     private static final File ioUtils       = new File(ioDir, "IOUtils.java");
     private static final File proxyWriter   = new File(outputDir, "ProxyWriter.java");
     private static final File nullStream    = new File(outputDir, "NullOutputStream.java");
-    private static final File[] ioFiles     = {filenameUtils, ioUtils};
+    private static final File[] ioFiles     = {fileNameUtils, ioUtils};
     private static final File[] outputFiles = {proxyWriter, nullStream};
 
     // Filters

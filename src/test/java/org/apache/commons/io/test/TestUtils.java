@@ -224,11 +224,11 @@ public abstract class TestUtils {
         }
     }
 
-    public static File newFile(final File testDirectory, final String filename) throws IOException {
-        final File destination = new File(testDirectory, filename);
+    public static File newFile(final File testDirectory, final String fileName) throws IOException {
+        final File destination = new File(testDirectory, fileName);
         /*
-        assertTrue( filename + "Test output data file shouldn't previously exist",
-                    !destination.exists() );
+        assertTrue(fileName + "Test output data file shouldn't previously exist",
+                    !destination.exists());
         */
         if (destination.exists()) {
             FileUtils.forceDelete(destination);
