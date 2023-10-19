@@ -176,7 +176,9 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
         return super.resolveClass(osc);
     }
 
-    /** Check that the classname conforms to requirements.
+    /** 
+     * Checks that the class name conforms to requirements.
+     *
      * @param name The class name
      * @throws InvalidClassException when a non-accepted class is encountered
      */
