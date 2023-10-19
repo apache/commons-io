@@ -172,7 +172,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
 
     @Override
     protected Class<?> resolveClass(final ObjectStreamClass osc) throws IOException, ClassNotFoundException {
-        validateClassName(osc.getName());
+        checkClassName(osc.getName());
         return super.resolveClass(osc);
     }
 
@@ -182,7 +182,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * @param name The class name
      * @throws InvalidClassException when a non-accepted class is encountered
      */
-    private void validateClassName(final String name) throws InvalidClassException {
+    private void checkClassName(final String name) throws InvalidClassException {
         // Reject has precedence over accept
         for (final ClassNameMatcher m : rejectMatchers) {
             if (m.matches(name)) {
