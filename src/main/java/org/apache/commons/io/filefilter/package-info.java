@@ -40,7 +40,7 @@
  * </tr>
  * <tr>
  * <td><a href="NameFileFilter.html">NameFileFilter</a></td>
- * <td>Filter based on a filename</td>
+ * <td>Filter based on a file name</td>
  * </tr>
  * <tr>
  * <td><a href="WildcardFileFilter.html">WildcardFileFilter</a></td>

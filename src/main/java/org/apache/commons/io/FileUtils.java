@@ -3000,8 +3000,8 @@ public class FileUtils {
         if (url == null || !"file".equalsIgnoreCase(url.getProtocol())) {
             return null;
         }
-        final String filename = url.getFile().replace('/', File.separatorChar);
-        return new File(decodeUrl(filename));
+        final String fileName = url.getFile().replace('/', File.separatorChar);
+        return new File(decodeUrl(fileName));
     }
 
     /**

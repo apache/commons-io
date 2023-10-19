@@ -24,7 +24,7 @@
  * <b>FileUtils</b> provides operations based around the JDK File class. These include reading, writing, copying, comparing and deleting.
  * </p>
  * <p>
- * <b>FilenameUtils</b> provides utilities based on filenames. This utility class manipulates filenames without using File objects. It aims to simplify the
+ * <b>FilenameUtils</b> provides utilities based on filenames. This utility class manipulates file names without using File objects. It aims to simplify the
  * transition between Windows and Unix. Before using this class however, you should consider whether you should be using File objects.
  * </p>
  * <p>
