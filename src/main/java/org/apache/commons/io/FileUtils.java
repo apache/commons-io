@@ -1445,7 +1445,7 @@ public class FileUtils {
     /**
      * Returns a {@link File} representing the system temporary directory.
      *
-     * @return the system temporary directory.
+     * @return the system temporary directory as a File
      * @since 2.0
      */
     public static File getTempDirectory() {
@@ -1455,7 +1455,12 @@ public class FileUtils {
     /**
      * Returns the path to the system temporary directory.
      *
-     * @return the path to the system temporary directory.
+     * @apiNote this method relies on the Java system property 'java.io.tmpdir' 
+     * which may or may not have a trailing file separator.
+     * This can affect code that uses String processing to manipulate pathnames rather
+     * than the standard libary methods in classes such as {@link java.io.File}
+     *
+     * @return the path to the system temporary directory as a String
      * @since 2.0
      */
     public static String getTempDirectoryPath() {
