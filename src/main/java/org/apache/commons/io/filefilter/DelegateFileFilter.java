@@ -39,7 +39,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
     /** The File filter */
     private final FileFilter fileFilter;
     /** The Filename filter */
-    private final FilenameFilter filenameFilter;
+    private final FilenameFilter fileNameFilter;
 
     /**
      * Constructs a delegate file filter around an existing FileFilter.
@@ -49,7 +49,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
     public DelegateFileFilter(final FileFilter fileFilter) {
         Objects.requireNonNull(fileFilter, "filter");
         this.fileFilter = fileFilter;
-        this.filenameFilter = null;
+        this.fileNameFilter = null;
     }
 
     /**
@@ -59,7 +59,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
      */
     public DelegateFileFilter(final FilenameFilter filenameFilter) {
         Objects.requireNonNull(filenameFilter, "filter");
-        this.filenameFilter = filenameFilter;
+        this.fileNameFilter = filenameFilter;
         this.fileFilter = null;
     }
 
@@ -86,8 +86,8 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
      */
     @Override
     public boolean accept(final File dir, final String name) {
-        if (filenameFilter != null) {
-            return filenameFilter.accept(dir, name);
+        if (fileNameFilter != null) {
+            return fileNameFilter.accept(dir, name);
         }
         return super.accept(dir, name);
     }
@@ -99,7 +99,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
      */
     @Override
     public String toString() {
-        final String delegate = fileFilter != null ? fileFilter.toString() : filenameFilter.toString();
+        final String delegate = fileFilter != null ? fileFilter.toString() : fileNameFilter.toString();
         return super.toString() + "(" + delegate + ")";
     }
 
