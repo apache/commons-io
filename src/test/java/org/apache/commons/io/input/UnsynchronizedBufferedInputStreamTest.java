@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.UnsynchronizedBufferedInputStream.Builder;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,7 +50,7 @@ public class UnsynchronizedBufferedInputStreamTest {
 
     Path fileName;
 
-    private BufferedInputStream is;
+    private UnsynchronizedBufferedInputStream is;
 
     private InputStream isFile;
 
@@ -67,7 +67,11 @@ public class UnsynchronizedBufferedInputStreamTest {
         Files.write(fileName, DATA.getBytes(StandardCharsets.UTF_8));
 
         isFile = Files.newInputStream(fileName);
-        is = new BufferedInputStream(isFile);
+        is = builder().setInputStream(isFile).get();
+    }
+
+    private Builder builder() {
+        return new UnsynchronizedBufferedInputStream.Builder();
     }
 
     /**
@@ -82,7 +86,7 @@ public class UnsynchronizedBufferedInputStreamTest {
     }
 
     /**
-     * Tests java.io.BufferedInputStream#available()
+     * Tests {@link UnsynchronizedBufferedInputStream#available()}.
      *
      * @throws IOException Thrown on test failure.
      */
@@ -91,7 +95,8 @@ public class UnsynchronizedBufferedInputStreamTest {
         assertEquals(DATA.length(), is.available(), "Returned incorrect number of available bytes");
 
         // Test that a closed stream throws an IOE for available()
-        final BufferedInputStream bis = new BufferedInputStream(new ByteArrayInputStream(new byte[] { 'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd' }));
+        final UnsynchronizedBufferedInputStream bis = builder()
+                .setInputStream(new ByteArrayInputStream(new byte[] { 'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd' })).get();
         final int available = bis.available();
         bis.close();
         assertTrue(available != 0);
@@ -100,18 +105,13 @@ public class UnsynchronizedBufferedInputStreamTest {
     }
 
     /**
-     * Tests java.io.BufferedInputStream#close()
+     * Tests {@link UnsynchronizedBufferedInputStream#close()}.
      *
      * @throws IOException Thrown on test failure.
      */
     @Test
     public void test_close() throws IOException {
-        new BufferedInputStream(isFile).close();
-
-        // regression for HARMONY-667
-        try (BufferedInputStream buf = new BufferedInputStream(null, 5)) {
-            // closes
-        }
+        builder().setInputStream(isFile).get().close();
 
         try (InputStream in = new InputStream() {
             Object lock = new Object();
@@ -140,7 +140,7 @@ public class UnsynchronizedBufferedInputStreamTest {
                 return 1;
             }
         }) {
-            final BufferedInputStream bufin = new BufferedInputStream(in);
+            final UnsynchronizedBufferedInputStream bufin = builder().setInputStream(in).get();
             final Thread thread = new Thread(() -> {
                 try {
                     Thread.sleep(1000);
@@ -155,28 +155,24 @@ public class UnsynchronizedBufferedInputStreamTest {
     }
 
     /*
-     * Tests java.io.BufferedInputStream(InputStream)
+     * Tests {@link UnsynchronizedBufferedInputStream#Builder()}.
      */
     @Test
-    public void test_ConstructorLjava_io_InputStream() throws IOException {
-        try (BufferedInputStream str = new BufferedInputStream(null)) {
-            assertThrows(IOException.class, () -> str.read(), "Expected an IOException");
-        }
+    public void test_ConstructorLjava_io_InputStream() {
+        assertThrows(NullPointerException.class, () -> builder().setInputStream(null).get());
     }
 
     /*
-     * Tests java.io.BufferedInputStream(InputStream)
+     * Tests {@link UnsynchronizedBufferedInputStream#Builder()}.
      */
     @Test
     public void test_ConstructorLjava_io_InputStreamI() throws IOException {
-        try (BufferedInputStream str = new BufferedInputStream(null, 1)) {
-            assertThrows(IOException.class, () -> str.read(), "Expected an IOException");
-        }
+        assertThrows(NullPointerException.class, () -> builder().setInputStream(null).setBufferSize(1).get());
 
-        // Test for method java.io.BufferedInputStream(java.io.InputStream, int)
+        // Test for method UnsynchronizedBufferedInputStream(InputStream, int)
 
         // Create buffer with exact size of file
-        is = new BufferedInputStream(isFile, DATA.length());
+        is = builder().setInputStream(isFile).setBufferSize(DATA.length()).get();
         // Ensure buffer gets filled by evaluating one read
         is.read();
         // Close underlying FileInputStream, all but 1 buffered bytes should
@@ -189,12 +185,12 @@ public class UnsynchronizedBufferedInputStreamTest {
         // is.read should now throw an exception because it will have to be filled.
         assertThrows(IOException.class, () -> is.read());
 
-        assertThrows(NullPointerException.class, () -> new UnsynchronizedBufferedInputStream.Builder().setInputStream(null).setBufferSize(100).get());
-        assertThrows(NullPointerException.class, () -> new UnsynchronizedBufferedInputStream.Builder().setInputStream(null));
+        assertThrows(NullPointerException.class, () -> builder().setInputStream(null).setBufferSize(100).get());
+        assertThrows(NullPointerException.class, () -> builder().setInputStream(null));
     }
 
     /**
-     * Tests java.io.BufferedInputStream#mark(int)
+     * Tests {@link UnsynchronizedBufferedInputStream#mark(int)}.
      *
      * @throws IOException Thrown on test failure.
      */
@@ -214,21 +210,21 @@ public class UnsynchronizedBufferedInputStreamTest {
         for (int i = 0; i < 256; i++) {
             bytes[i] = (byte) i;
         }
-        InputStream in = new BufferedInputStream(new ByteArrayInputStream(bytes), 12);
+        InputStream in = builder().setInputStream(new ByteArrayInputStream(bytes)).setBufferSize(12).get();
         in.skip(6);
         in.mark(14);
         in.read(new byte[14], 0, 14);
         in.reset();
         assertTrue(in.read() == 6 && in.read() == 7, "Wrong bytes");
 
-        in = new BufferedInputStream(new ByteArrayInputStream(bytes), 12);
+        in = builder().setInputStream(new ByteArrayInputStream(bytes)).setBufferSize(12).get();
         in.skip(6);
         in.mark(8);
         in.skip(7);
         in.reset();
         assertTrue(in.read() == 6 && in.read() == 7, "Wrong bytes 2");
 
-        BufferedInputStream buf = new BufferedInputStream(new ByteArrayInputStream(new byte[] { 0, 1, 2, 3, 4 }), 2);
+        UnsynchronizedBufferedInputStream buf = builder().setInputStream(new ByteArrayInputStream(new byte[] { 0, 1, 2, 3, 4 })).setBufferSize(2).get();
         buf.mark(3);
         bytes = new byte[3];
         int result = buf.read(bytes);
@@ -238,7 +234,7 @@ public class UnsynchronizedBufferedInputStreamTest {
         assertEquals(2, bytes[2], "Assert 2:");
         assertEquals(3, buf.read(), "Assert 3:");
 
-        buf = new BufferedInputStream(new ByteArrayInputStream(new byte[] { 0, 1, 2, 3, 4 }), 2);
+        buf = builder().setInputStream(new ByteArrayInputStream(new byte[] { 0, 1, 2, 3, 4 })).setBufferSize(2).get();
         buf.mark(3);
         bytes = new byte[4];
         result = buf.read(bytes);
@@ -250,14 +246,14 @@ public class UnsynchronizedBufferedInputStreamTest {
         assertEquals(4, buf.read(), "Assert 8:");
         assertEquals(-1, buf.read(), "Assert 9:");
 
-        buf = new BufferedInputStream(new ByteArrayInputStream(new byte[] { 0, 1, 2, 3, 4 }), 2);
+        buf = builder().setInputStream(new ByteArrayInputStream(new byte[] { 0, 1, 2, 3, 4 })).setBufferSize(2).get();
         buf.mark(Integer.MAX_VALUE);
         buf.read();
         buf.close();
     }
 
     /**
-     * Tests java.io.BufferedInputStream#markSupported()
+     * Tests {@link UnsynchronizedBufferedInputStream#markSupported()}.
      */
     @Test
     public void test_markSupported() {
@@ -265,7 +261,7 @@ public class UnsynchronizedBufferedInputStreamTest {
     }
 
     /**
-     * Tests java.io.BufferedInputStream#read()
+     * Tests {@link UnsynchronizedBufferedInputStream#read()}.
      *
      * @throws IOException Thrown on test failure.
      */
@@ -279,7 +275,7 @@ public class UnsynchronizedBufferedInputStreamTest {
         for (int i = 0; i < 256; i++) {
             bytes[i] = (byte) i;
         }
-        final InputStream in = new BufferedInputStream(new ByteArrayInputStream(bytes), 12);
+        final InputStream in = builder().setInputStream(new ByteArrayInputStream(bytes)).setBufferSize(12).get();
         assertEquals(0, in.read(), "Wrong initial byte"); // Fill the buffer
         final byte[] buf = new byte[14];
         in.read(buf, 0, 14); // Read greater than the buffer
@@ -288,7 +284,7 @@ public class UnsynchronizedBufferedInputStreamTest {
     }
 
     /**
-     * Tests java.io.BufferedInputStream#read(byte[], int, int)
+     * Tests {@link UnsynchronizedBufferedInputStream#read(byte[], int, int)}.
      *
      * @throws IOException Thrown on test failure.
      */
@@ -300,7 +296,7 @@ public class UnsynchronizedBufferedInputStreamTest {
         is.read(buf1, 0, buf1.length);
         assertTrue(new String(buf1, 0, buf1.length).equals(DATA.substring(3000, 3100)), "Failed to read correct data");
 
-        try (BufferedInputStream bufin = new BufferedInputStream(new InputStream() {
+        try (UnsynchronizedBufferedInputStream bufin = builder().setInputStream(new InputStream() {
             int size = 2, pos = 0;
 
             byte[] contents = new byte[size];
@@ -331,7 +327,7 @@ public class UnsynchronizedBufferedInputStreamTest {
                 pos += toRead;
                 return toRead;
             }
-        })) {
+        }).get()) {
             bufin.read();
             final int result = bufin.read(new byte[2], 0, 2);
             assertEquals(1, result, () -> "Incorrect result: " + result);
@@ -339,26 +335,7 @@ public class UnsynchronizedBufferedInputStreamTest {
     }
 
     /**
-     * Tests java.io.BufferedInputStream#read(byte[], int, int)
-     *
-     * @throws IOException Thrown on test failure.
-     */
-    @Test
-    public void test_read$BII_Exception() throws IOException {
-        final BufferedInputStream bis = new BufferedInputStream(null);
-        assertThrows(NullPointerException.class, () -> bis.read(null, -1, -1));
-
-        assertThrows(IndexOutOfBoundsException.class, () -> bis.read(new byte[0], -1, -1));
-        assertThrows(IndexOutOfBoundsException.class, () -> bis.read(new byte[0], 1, -1));
-        assertThrows(IndexOutOfBoundsException.class, () -> bis.read(new byte[0], 1, 1));
-
-        bis.close();
-
-        assertThrows(IOException.class, () -> bis.read(null, -1, -1));
-    }
-
-    /**
-     * Tests java.io.BufferedInputStream#reset()
+     * Tests {@link UnsynchronizedBufferedInputStream#reset()}.
      *
      * @throws IOException Thrown on test failure.
      */
@@ -373,7 +350,7 @@ public class UnsynchronizedBufferedInputStreamTest {
         is.reset();
         assertTrue(new String(buf1, 0, buf1.length).equals(new String(buf2, 0, buf2.length)), "Reset failed");
 
-        final BufferedInputStream bIn = new BufferedInputStream(new ByteArrayInputStream("1234567890".getBytes()));
+        final UnsynchronizedBufferedInputStream bIn = builder().setInputStream(new ByteArrayInputStream("1234567890".getBytes())).get();
         bIn.mark(10);
         for (int i = 0; i < 11; i++) {
             bIn.read();
@@ -382,36 +359,14 @@ public class UnsynchronizedBufferedInputStreamTest {
     }
 
     /**
-     * Tests java.io.BufferedInputStream#reset()
-     *
-     * @throws IOException Thrown on test failure.
-     */
-    @Test
-    public void test_reset_Exception() throws IOException {
-        final BufferedInputStream bis = new BufferedInputStream(null);
-
-        // throws IOException with message "Mark has been invalidated"
-        assertThrows(IOException.class, () -> bis.reset());
-
-        // does not throw IOException
-        bis.mark(1);
-        bis.reset();
-
-        bis.close();
-
-        // throws IOException with message "stream is closed"
-        assertThrows(IOException.class, () -> bis.reset());
-    }
-
-    /**
-     * Tests java.io.BufferedInputStream#reset()
+     * Tests {@link UnsynchronizedBufferedInputStream#reset()}.
      *
      * @throws IOException Thrown on test failure.
      */
     @Test
     public void test_reset_scenario1() throws IOException {
         final byte[] input = "12345678900".getBytes();
-        final BufferedInputStream bufin = new BufferedInputStream(new ByteArrayInputStream(input));
+        final UnsynchronizedBufferedInputStream bufin = builder().setInputStream(new ByteArrayInputStream(input)).get();
         bufin.read();
         bufin.mark(5);
         bufin.skip(5);
@@ -419,33 +374,31 @@ public class UnsynchronizedBufferedInputStreamTest {
     }
 
     /**
-     * Tests java.io.BufferedInputStream#reset()
+     * Tests {@link UnsynchronizedBufferedInputStream#reset()}.
      *
      * @throws IOException Thrown on test failure.
      */
     @Test
     public void test_reset_scenario2() throws IOException {
         final byte[] input = "12345678900".getBytes();
-        final BufferedInputStream bufin = new BufferedInputStream(new ByteArrayInputStream(input));
+        final UnsynchronizedBufferedInputStream bufin = builder().setInputStream(new ByteArrayInputStream(input)).get();
         bufin.mark(5);
         bufin.skip(6);
         bufin.reset();
     }
 
     /**
-     * Tests java.io.BufferedInputStream#skip(long)
+     * Tests {@link UnsynchronizedBufferedInputStream#skip(long)}.
      *
      * @throws IOException Thrown on test failure.
      */
     @Test
     public void test_skip_NullInputStream() throws IOException {
-        try (BufferedInputStream buf = new BufferedInputStream(null, 5)) {
-            assertEquals(0, buf.skip(0));
-        }
+        assertThrows(NullPointerException.class, () -> builder().setInputStream(null).setBufferSize(5).get());
     }
 
     /**
-     * Tests java.io.BufferedInputStream#skip(long)
+     * Tests {@link UnsynchronizedBufferedInputStream#skip(long)}.
      *
      * @throws IOException Thrown on test failure.
      */
@@ -457,10 +410,5 @@ public class UnsynchronizedBufferedInputStreamTest {
         is.read(buf1, 0, buf1.length);
         is.reset();
         assertTrue(new String(buf1, 0, buf1.length).equals(DATA.substring(1000, 1010)), "Failed to skip to correct position");
-
-        // regression for HARMONY-667
-        try (BufferedInputStream buf = new BufferedInputStream(null, 5)) {
-            assertThrows(IOException.class, () -> buf.skip(10));
-        }
     }
 }
