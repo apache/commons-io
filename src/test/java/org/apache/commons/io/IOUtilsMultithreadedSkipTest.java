@@ -87,7 +87,7 @@ public class IOUtilsMultithreadedSkipTest {
         try (final InputStream inputStream = getClass().getResourceAsStream(FIXTURE)) {
             bytes = IOUtils.toByteArray(inputStream);
         }
-        final int numSkips = (random.nextInt(bytes.length) / 100) + 1;
+        final int numSkips = random.nextInt(bytes.length) / 100 + 1;
 
         final int[] skips = generateSkips(bytes, numSkips, random);
         final int[] expected;
