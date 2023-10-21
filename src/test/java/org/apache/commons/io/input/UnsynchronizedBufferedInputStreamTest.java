@@ -56,6 +56,10 @@ public class UnsynchronizedBufferedInputStreamTest {
 
     byte[] ibuf = new byte[BUFFER_SIZE];
 
+    private Builder builder() {
+        return new UnsynchronizedBufferedInputStream.Builder();
+    }
+
     /**
      * Sets up the fixture, for example, open a network connection. This method is called before a test is executed.
      *
@@ -68,10 +72,6 @@ public class UnsynchronizedBufferedInputStreamTest {
 
         isFile = Files.newInputStream(fileName);
         is = builder().setInputStream(isFile).get();
-    }
-
-    private Builder builder() {
-        return new UnsynchronizedBufferedInputStream.Builder();
     }
 
     /**
