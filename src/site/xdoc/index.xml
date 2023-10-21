@@ -118,18 +118,9 @@ limitations under the License.
           The Java platform requirements are:
         </p>
         <ul>
-          <li>Version 2.14.0 requires Java 8.</li>
-          <li>Version 2.13.0 requires Java 8.</li>
-          <li>Version 2.12.0 requires Java 8.</li>
-          <li>Version 2.11.0 requires Java 8.</li>
-          <li>Version 2.10.0 requires Java 8.</li>
-          <li>Version 2.9.0 requires Java 8.</li>
-          <li>Version 2.8.0 requires Java 8.</li>
-          <li>Version 2.7 requires Java 8.</li>
+          <li>Version 2.7 and up requires Java 8.</li>
           <li>Version 2.6 requires Java 7.</li>
-          <li>Version 2.5 requires Java 6.</li>
-          <li>Version 2.4 requires Java 6.</li>
-          <li>Version 2.3 requires Java 6.</li>
+          <li>Version 2.3 through 2.5 requires Java 6.</li>
           <li>Version 2.2 requires Java 5.</li>
         </ul>
       </subsection>
