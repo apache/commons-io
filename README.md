@@ -43,11 +43,11 @@
 Apache Commons IO
 ===================
 
-[![GitHub Actions Status](https://github.com/apache/commons-io/workflows/Java%20CI/badge.svg)](https://github.com/apache/commons-io/actions)
+[![Java CI](https://github.com/apache/commons-io/actions/workflows/maven.yml/badge.svg)](https://github.com/apache/commons-io/actions/workflows/maven.yml)
 [![Coverage Status](https://codecov.io/gh/apache/commons-io/branch/master/graph/badge.svg)](https://app.codecov.io/gh/apache/commons-io)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/commons-io/commons-io/badge.svg?gav=true)](https://maven-badges.herokuapp.com/maven-central/commons-io/commons-io/?gav=true)
 [![Javadocs](https://javadoc.io/badge/commons-io/commons-io/2.15.0.svg)](https://javadoc.io/doc/commons-io/commons-io/2.15.0)
-[![CodeQL](https://github.com/apache/commons-io/workflows/CodeQL/badge.svg)](https://github.com/apache/commons-io/actions/workflows/codeql-analysis.yml?query=workflow%3ACodeQL)
+[![CodeQL](https://github.com/apache/commons-io/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/apache/commons-io/actions/workflows/codeql-analysis.yml)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/apache/commons-io/badge)](https://api.securityscorecards.dev/projects/github.com/apache/commons-io)
 
 The Apache Commons IO library contains utility classes, stream implementations, file filters,
