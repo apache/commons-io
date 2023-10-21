@@ -2857,9 +2857,8 @@ public class FileUtils {
      *          {@code false} otherwise
      * @throws NullPointerException if sourceFile is {@code null}.
      * @throws NullPointerException if targetFile is {@code null}.
-     * @throws IOException if setting the last-modified time failed.
      */
-    private static boolean setTimes(final File sourceFile, final File targetFile) throws IOException {
+    private static boolean setTimes(final File sourceFile, final File targetFile) {
         Objects.requireNonNull(sourceFile, "sourceFile");
         Objects.requireNonNull(targetFile, "targetFile");
         try {
