@@ -412,7 +412,7 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
             if (count - pos >= amount - read) {
                 // (int count - int pos) here is always an int so (amount - read) is also in the int range if the above test is true.
                 // We can safely cast to int and avoid static analysis warnings.
-                pos += ((int) amount) - read;
+                pos += (int) amount - read;
                 return amount;
             }
             // Couldn't get all the bytes, skip what we read
