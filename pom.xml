@@ -316,6 +316,7 @@ file comparators, endian transformation classes, and much more.
     <commons.rc.version>RC1</commons.rc.version>
     <commons.bc.version>2.14.0</commons.bc.version>
     <commons.release.version>2.15.0</commons.release.version>
+    <commons.release.next>2.15.1</commons.release.next>
     <commons.release.desc>(requires Java 8)</commons.release.desc>
     <commons.jira.id>IO</commons.jira.id>
     <commons.jira.pid>12310477</commons.jira.pid>
