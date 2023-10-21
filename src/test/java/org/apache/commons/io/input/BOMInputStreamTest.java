@@ -415,7 +415,7 @@ public class BOMInputStreamTest {
         assertThrows(IllegalArgumentException.class, () -> BOMInputStream.builder()
                 .setInputStream(createUtf8Input(data, true))
                 .setInclude(true)
-                .setByteOrderMarks(new ByteOrderMark[0])
+                .setByteOrderMarks()
                 .get()
                 .close());
     }
