@@ -511,13 +511,14 @@ public class IOStreamTest {
             assertEquals(1, IOStream.of("C", "D").skip(1).peek(e -> compareAndSetRE(ref, null, e)).count());
             assertEquals(1, IOStream.of("C", "D").skip(1).peek(e -> compareAndSetIO(ref, null, e)).count());
             assertNull(ref.get());
-        } else if (AT_LEAST_JAVA_11) {
-            assertThrows(RuntimeException.class, () -> IOStream.of("C", "D").skip(1).peek(e -> compareAndSetRE(ref, null, e)).count());
-            assertThrows(IOException.class, () -> IOStream.of("C", "D").skip(1).peek(e -> compareAndSetIO(ref, null, e)).count());
-            assertEquals("B", ref.get());
         } else {
-            assertThrows(RuntimeException.class, () -> IOStream.of("C", "D").skip(1).peek(e -> compareAndSetRE(ref, null, e)).count());
-            assertThrows(IOException.class, () -> IOStream.of("C", "D").skip(1).peek(e -> compareAndSetIO(ref, null, e)).count());
+            if (AT_LEAST_JAVA_11) {
+                assertThrows(RuntimeException.class, () -> IOStream.of("C", "D").skip(1).peek(e -> compareAndSetRE(ref, null, e)).count());
+                assertThrows(IOException.class, () -> IOStream.of("C", "D").skip(1).peek(e -> compareAndSetIO(ref, null, e)).count());
+            } else {
+                assertThrows(RuntimeException.class, () -> IOStream.of("C", "D").skip(1).peek(e -> compareAndSetRE(ref, null, e)).count());
+                assertThrows(IOException.class, () -> IOStream.of("C", "D").skip(1).peek(e -> compareAndSetIO(ref, null, e)).count());
+            }
             assertEquals("B", ref.get());
         }
     }
