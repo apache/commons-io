@@ -24,7 +24,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
   <artifactId>commons-io</artifactId>
-  <version>2.15.0-SNAPSHOT</version>
+  <version>2.15.0</version>
   <name>Apache Commons IO</name>
 
   <inceptionYear>2002</inceptionYear>
@@ -464,7 +464,7 @@ file comparators, endian transformation classes, and much more.
                <exclude>org.apache.commons.io.StreamIterator</exclude>
              </excludes>
           </parameter>
-      </configuration>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -494,7 +494,15 @@ file comparators, endian transformation classes, and much more.
       <plugin>
         <groupId>com.github.siom79.japicmp</groupId>
         <artifactId>japicmp-maven-plugin</artifactId>
-      </plugin>    
+        <configuration>
+          <parameter>
+			 <excludes>
+               <!-- False positive: https://github.com/siom79/japicmp/issues/365 -->
+               <exclude>org.apache.commons.io.StreamIterator</exclude>
+             </excludes>
+          </parameter>
+        </configuration>
+      </plugin>
     </plugins>
   </reporting>
   <profiles>
