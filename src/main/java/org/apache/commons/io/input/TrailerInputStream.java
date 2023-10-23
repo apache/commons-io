@@ -48,6 +48,16 @@ import org.apache.commons.io.IOUtils;
  */
 public final class TrailerInputStream extends InputStream {
 
+    // Extending FilterInputStream or ProxyInputStream would save overriding
+    // * close, and
+    // * available
+    // but would require to override
+    // * mark,
+    // * reset, and
+    // * markSupported.
+    // So, there is no benefit in extending FilterInputStream or ProxyInputStream over InputStream
+    // as mark/reset is not supported by this implementation.
+
     // The current implementation is incompatible with mark/reset as it doesn't track which bytes are
     // already read and which ones are new. This tracking would be necessary to not overwrite the
     // trailer with earlier bytes in the source stream. Remember that the trailer is not meant to
