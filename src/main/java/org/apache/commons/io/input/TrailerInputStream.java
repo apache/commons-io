@@ -36,8 +36,23 @@ import org.apache.commons.io.IOUtils;
  * streaming the payload the trailer finally contains the expected hash (this example needs
  * extra caution to revert actions when the final checksum match fails).
  * </p>
+ * 
+ * <p>
+ * No mark/reset support.
+ * </p>
+ * 
+ * <p>
+ * Not thread-safe. If accessed by multiple threads concurrently, external synchronization is
+ * necessary.
+ * </p>
  */
 public final class TrailerInputStream extends InputStream {
+
+    // The current implementation is incompatible with mark/reset as it doesn't track which bytes are
+    // already read and which ones are new. This tracking would be necessary to not overwrite the
+    // trailer with earlier bytes in the source stream. Remember that the trailer is not meant to
+    // contain the last read bytes but the last bytes in the stream (which differs when using reset
+    // to jump to an earlier position of the source stream).
 
     private final  InputStream source;
     /**
