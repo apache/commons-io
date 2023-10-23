@@ -16,8 +16,6 @@ package org.apache.commons.io.input;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,8 +26,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.function.IOConsumer;
-import org.apache.commons.io.output.WriterOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -128,15 +124,11 @@ public class TrailerInputStreamTest {
                         .iterator());
     }
 
-    public static String utf8String(
-            final IOConsumer<? super OutputStream> consumer) throws IOException {
-        try (StringWriter sw = new StringWriter();
-                WriterOutputStream wos = WriterOutputStream.builder().setCharset(StandardCharsets.UTF_8).setWriter(sw).get()) {
-            consumer.accept(wos);
-            wos.flush();
-            sw.flush();
-            return sw.toString();
-        }
+    public static String trailerUtf8String(
+            final TrailerInputStream tis)  {
+        final byte[] trailer = tis.copyTrailer();
+        Assertions.assertEquals(trailer.length, tis.getTrailerLength());
+        return new String(trailer, 0, trailer.length, StandardCharsets.UTF_8);
     }
 
     public static void assertDataTrailer(
@@ -157,9 +149,9 @@ public class TrailerInputStreamTest {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(d, data + trailer, "Generation of expectation"),
                 () -> Assertions.assertEquals(trailerLength, trailer.length(), "Trailer length"),
-                () -> Assertions.assertEquals(data, utf8String(os::writeTo), "Data content"),
+                () -> Assertions.assertEquals(data, os.toString(StandardCharsets.UTF_8.name()), "Data content"),
                 () -> Assertions.assertEquals(
-                                trailer, utf8String(tis::copyTrailer), "Trailer content"));
+                                trailer, trailerUtf8String(tis), "Trailer content"));
     }
 
     @ParameterizedTest
@@ -174,7 +166,7 @@ public class TrailerInputStreamTest {
                 TrailerInputStream tis = new TrailerInputStream(is, trailerLength);
                 ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             Assertions.assertEquals(
-                    StringUtils.repeat('a', trailerLength), utf8String(tis::copyTrailer));
+                    StringUtils.repeat('a', trailerLength), trailerUtf8String(tis));
             int read;
             while ((read = tis.read()) != IOUtils.EOF) {
                 os.write(read);
@@ -195,7 +187,7 @@ public class TrailerInputStreamTest {
                 TrailerInputStream tis = new TrailerInputStream(is, trailerLength);
                 ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             Assertions.assertEquals(
-                    StringUtils.repeat('a', trailerLength), utf8String(tis::copyTrailer));
+                    StringUtils.repeat('a', trailerLength), trailerUtf8String(tis));
             final byte[] buffer = new byte[chunkLength];
             int read;
             while ((read = tis.read(buffer)) != IOUtils.EOF) {
@@ -217,7 +209,7 @@ public class TrailerInputStreamTest {
                 TrailerInputStream tis = new TrailerInputStream(is, trailerLength);
                 ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             Assertions.assertEquals(
-                    StringUtils.repeat('a', trailerLength), utf8String(tis::copyTrailer));
+                    StringUtils.repeat('a', trailerLength), trailerUtf8String(tis));
             final byte[] buffer = new byte[chunkLength + 3 * chunks];
             int offset = chunks;
             while (true) {
@@ -245,7 +237,7 @@ public class TrailerInputStreamTest {
                 TrailerInputStream tis = new TrailerInputStream(is, trailerLength);
                 ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             Assertions.assertEquals(
-                    StringUtils.repeat('a', trailerLength), utf8String(tis::copyTrailer));
+                    StringUtils.repeat('a', trailerLength), trailerUtf8String(tis));
             final byte[] buffer = new byte[chunkLength + 3 * chunks];
             int offset = chunks;
             while (true) {

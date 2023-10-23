@@ -15,7 +15,6 @@ package org.apache.commons.io.input;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import org.apache.commons.io.IOUtils;
 
 /**
@@ -166,15 +165,4 @@ public final class TrailerInputStream extends InputStream {
         return this.trailer.clone();
     }
 
-    public void copyTrailer(final byte[] target, final int off, final int len) {
-        System.arraycopy(this.trailer, 0, target, off, Math.min(len, this.trailer.length));
-    }
-
-    public void copyTrailer(final byte[] target) {
-        this.copyTrailer(target, 0, target.length);
-    }
-
-    public void copyTrailer(final OutputStream target) throws IOException {
-        target.write(this.trailer);
-    }
 }
