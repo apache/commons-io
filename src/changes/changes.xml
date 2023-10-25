@@ -47,7 +47,7 @@ The <action> type attribute can be add,update,fix,remove.
   </properties>
 
   <body>
-    <release version="2.15.0" date="202Y-MM-DD" description="Java 8 is required.">
+    <release version="2.15.0" date="2023-10-21" description="Java 8 is required.">
       <!-- FIX -->
       <action dev="sebb" type="fix" issue="IO-810" due-to="Laurence Gonsalves">
         XmlStreamReader encoding match RE is too strict.
