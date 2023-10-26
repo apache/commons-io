@@ -54,13 +54,9 @@ Binary compatible: Yes.
 Source compatible: Yes.
 Semantic compatible: Yes.
 
-Commons IO 2.9.0 requires Java 8.
-Commons IO 2.8.0 requires Java 8.
-Commons IO 2.7 requires Java 8.
+Commons IO 2.7 and up requires Java 8.
 Commons IO 2.6 requires Java 7.
-Commons IO 2.5 requires Java 6.
-Commons IO 2.4 requires Java 6.
-Commons IO 2.3 requires Java 6.
+Commons IO 2.3 through 2.5 requires Java 6.
 Commons IO 2.2 requires Java 5.
 Commons IO 1.4 requires Java 1.3.
 
@@ -133,13 +129,9 @@ Binary compatible: Yes.
 Source compatible: Yes.
 Semantic compatible: Yes.
 
-Commons IO 2.9.0 requires Java 8.
-Commons IO 2.8.0 requires Java 8.
-Commons IO 2.7 requires Java 8.
+Commons IO 2.7 and up requires Java 8.
 Commons IO 2.6 requires Java 7.
-Commons IO 2.5 requires Java 6.
-Commons IO 2.4 requires Java 6.
-Commons IO 2.3 requires Java 6.
+Commons IO 2.3 through 2.5 requires Java 6.
 Commons IO 2.2 requires Java 5.
 Commons IO 1.4 requires Java 1.3.
 
@@ -205,13 +197,9 @@ Binary compatible: Yes.
 Source compatible: Yes.
 Semantic compatible: Yes.
 
-Commons IO 2.9.0 requires Java 8.
-Commons IO 2.8.0 requires Java 8.
-Commons IO 2.7 requires Java 8.
+Commons IO 2.7 and up requires Java 8.
 Commons IO 2.6 requires Java 7.
-Commons IO 2.5 requires Java 6.
-Commons IO 2.4 requires Java 6.
-Commons IO 2.3 requires Java 6.
+Commons IO 2.3 through 2.5 requires Java 6.
 Commons IO 2.2 requires Java 5.
 Commons IO 1.4 requires Java 1.3.
 
@@ -448,13 +436,9 @@ Binary compatible: Yes.
 Source compatible: Yes.
 Semantic compatible: Yes.
 
-Commons IO 2.9.0 requires Java 8.
-Commons IO 2.8.0 requires Java 8.
-Commons IO 2.7 requires Java 8.
+Commons IO 2.7 and up requires Java 8.
 Commons IO 2.6 requires Java 7.
-Commons IO 2.5 requires Java 6.
-Commons IO 2.4 requires Java 6.
-Commons IO 2.3 requires Java 6.
+Commons IO 2.3 through 2.5 requires Java 6.
 Commons IO 2.2 requires Java 5.
 Commons IO 1.4 requires Java 1.3.
 
@@ -524,13 +508,9 @@ Binary compatible: Yes.
 Source compatible: Yes.
 Semantic compatible: Yes.
 
-Commons IO 2.9.0 requires Java 8.
-Commons IO 2.8.0 requires Java 8.
-Commons IO 2.7 requires Java 8.
+Commons IO 2.7 and up requires Java 8.
 Commons IO 2.6 requires Java 7.
-Commons IO 2.5 requires Java 6.
-Commons IO 2.4 requires Java 6.
-Commons IO 2.3 requires Java 6.
+Commons IO 2.3 through 2.5 requires Java 6.
 Commons IO 2.2 requires Java 5.
 Commons IO 1.4 requires Java 1.3.
 
@@ -586,13 +566,9 @@ Binary compatible: Yes.
 Source compatible: Yes.
 Semantic compatible: Yes.
 
-Commons IO 2.9.0 requires Java 8.
-Commons IO 2.8.0 requires Java 8.
-Commons IO 2.7 requires Java 8.
+Commons IO 2.7 and up requires Java 8.
 Commons IO 2.6 requires Java 7.
-Commons IO 2.5 requires Java 6.
-Commons IO 2.4 requires Java 6.
-Commons IO 2.3 requires Java 6.
+Commons IO 2.3 through 2.5 requires Java 6.
 Commons IO 2.2 requires Java 5.
 Commons IO 1.4 requires Java 1.3.
 
@@ -682,11 +658,9 @@ Binary compatible: Yes.
 Source compatible: Yes.
 Semantic compatible: Yes.
 
-Commons IO 2.7 requires Java 8.
+Commons IO 2.7 and up requires Java 8.
 Commons IO 2.6 requires Java 7.
-Commons IO 2.5 requires Java 6.
-Commons IO 2.4 requires Java 6.
-Commons IO 2.3 requires Java 6.
+Commons IO 2.3 through 2.5 requires Java 6.
 Commons IO 2.2 requires Java 5.
 Commons IO 1.4 requires Java 1.3.
 
@@ -794,11 +768,9 @@ Binary compatible: Yes.
 Source compatible: Yes.
 Semantic compatible: Yes.
 
-Commons IO 2.7 requires Java 8.
+Commons IO 2.7 and up requires Java 8.
 Commons IO 2.6 requires Java 7.
-Commons IO 2.5 requires Java 6.
-Commons IO 2.4 requires Java 6.
-Commons IO 2.3 requires Java 6.
+Commons IO 2.3 through 2.5 requires Java 6.
 Commons IO 2.2 requires Java 5.
 Commons IO 1.4 requires Java 1.3.
 
@@ -938,12 +910,11 @@ Source compatible: No, see the rare case in
 Semantic compatible: No, see the rare case in
   https://issues.apache.org/jira/browse/IO-318.
 
-Commons IO 2.6 requires Java 7 or later.
-Commons IO 2.5 requires Java 6 or later.
-Commons IO 2.4 requires Java 6 or later.
-Commons IO 2.3 requires Java 6 or later.
-Commons IO 2.2 requires Java 5 or later.
-Commons IO 1.4 requires Java 1.3 or later.
+Commons IO 2.7 and up requires Java 8.
+Commons IO 2.6 requires Java 7.
+Commons IO 2.3 through 2.5 requires Java 6.
+Commons IO 2.2 requires Java 5.
+Commons IO 1.4 requires Java 1.3.
 
 ==============================================================================
 
@@ -1051,11 +1022,11 @@ Binary compatible: Yes.
 Source compatible: No, see the rare case in https://issues.apache.org/jira/browse/IO-318.
 Semantic compatible: No, see the rare case in https://issues.apache.org/jira/browse/IO-318.
 
-Commons IO 2.5 requires Java 6 or later.
-Commons IO 2.4 requires Java 6 or later.
-Commons IO 2.3 requires Java 6 or later.
-Commons IO 2.2 requires Java 5 or later.
-Commons IO 1.4 requires Java 1.3 or later.
+Commons IO 2.7 and up requires Java 8.
+Commons IO 2.6 requires Java 7.
+Commons IO 2.3 through 2.5 requires Java 6.
+Commons IO 2.2 requires Java 5.
+Commons IO 1.4 requires Java 1.3.
 
 ==============================================================================
 
@@ -1104,10 +1075,11 @@ Binary compatible: Yes.
 Source compatible: No, see the rare case in https://issues.apache.org/jira/browse/IO-318.
 Semantic compatible: No, see the rare case in https://issues.apache.org/jira/browse/IO-318.
 
-Commons IO 2.4 requires Java 6 or later.
-Commons IO 2.3 requires Java 6 or later.
-Commons IO 2.2 requires Java 5 or later.
-Commons IO 1.4 requires Java 1.3 or later.
+Commons IO 2.7 and up requires Java 8.
+Commons IO 2.6 requires Java 7.
+Commons IO 2.3 through 2.5 requires Java 6.
+Commons IO 2.2 requires Java 5.
+Commons IO 1.4 requires Java 1.3.
 
 ==============================================================================
 
@@ -1125,9 +1097,11 @@ Binary compatible: Yes.
 Source compatible: No, see the rare case in https://issues.apache.org/jira/browse/IO-318.
 Semantic compatible: No, see the rare case in https://issues.apache.org/jira/browse/IO-318.
 
-Commons IO 2.3 requires Java 6 or later.
-Commons IO 2.2 requires Java 5 or later.
-Commons IO 1.4 requires Java 1.3 or later.
+Commons IO 2.7 and up requires Java 8.
+Commons IO 2.6 requires Java 7.
+Commons IO 2.3 through 2.5 requires Java 6.
+Commons IO 2.2 requires Java 5.
+Commons IO 1.4 requires Java 1.3.
 
 ==============================================================================
 
@@ -1172,8 +1146,11 @@ Binary compatible: Yes
 Source compatible: Yes
 Semantic compatible: Yes. Check the bug fixes section for semantic bug fixes
 
-Commons IO 2.2 requires a minimum of Java 5. 
-Commons IO 1.4 requires a minimum of Java 1.3. 
+Commons IO 2.7 and up requires Java 8.
+Commons IO 2.6 requires Java 7.
+Commons IO 2.3 through 2.5 requires Java 6.
+Commons IO 2.2 requires Java 5.
+Commons IO 1.4 requires Java 1.3.
 
 ==============================================================================
 

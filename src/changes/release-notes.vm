@@ -145,13 +145,9 @@ Binary compatible: Yes.
 Source compatible: Yes.
 Semantic compatible: Yes.
 
-Commons IO 2.9.0 requires Java 8.
-Commons IO 2.8.0 requires Java 8.
-Commons IO 2.7 requires Java 8.
+Commons IO 2.7 and up requires Java 8.
 Commons IO 2.6 requires Java 7.
-Commons IO 2.5 requires Java 6.
-Commons IO 2.4 requires Java 6.
-Commons IO 2.3 requires Java 6.
+Commons IO 2.3 through 2.5 requires Java 6.
 Commons IO 2.2 requires Java 5.
 Commons IO 1.4 requires Java 1.3.
 
