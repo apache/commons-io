@@ -24,7 +24,7 @@ o           Add org.apache.commons.io.StreamIterator. Thanks to Gary Gregory.
 o           Add MessageDigestInputStream and deprecate MessageDigestCalculatingInputStream. Thanks to Gary Gregory. 
 
 Fixed Bugs:
-o IO-810:  XmlStreamReader encoding match RE is too strict. Thanks to Laurence Gonsalves. 
+o IO-815:  XmlStreamReader encoding match RE is too strict. Thanks to Laurence Gonsalves. 
 o IO-810:  Javadoc in FileUtils does not reflect code for thrown exceptions. Thanks to Gregor Dschung, Gary Gregory. 
 o IO-812:  Javadoc should mention closing Streams based on file resources. Thanks to Adam Rauch, Gary Gregory. 
 o IO-811:  In tests, Files.walk() direct and indirect callers fail to close the returned Stream. Thanks to Adam Rauch, Gary Gregory. 
