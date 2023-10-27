@@ -76,13 +76,13 @@ public class NullInputStream extends InputStream {
     private final long size;
     private long position;
     private long mark = -1;
-    private long readlimit;
+    private long readLimit;
     private boolean eof;
     private final boolean throwEofException;
     private final boolean markSupported;
 
     /**
-     * Create an {@link InputStream} that emulates a size 0 stream
+     * Constructs an {@link InputStream} that emulates a size 0 stream
      * which supports marking and does not throw EOFException.
      *
      * @since 2.7
@@ -92,7 +92,7 @@ public class NullInputStream extends InputStream {
     }
 
     /**
-     * Create an {@link InputStream} that emulates a specified size
+     * Constructs an {@link InputStream} that emulates a specified size
      * which supports marking and does not throw EOFException.
      *
      * @param size The size of the input stream to emulate.
@@ -102,7 +102,7 @@ public class NullInputStream extends InputStream {
     }
 
     /**
-     * Create an {@link InputStream} that emulates a specified
+     * Constructs an {@link InputStream} that emulates a specified
      * size with option settings.
      *
      * @param size The size of the input stream to emulate.
@@ -119,7 +119,7 @@ public class NullInputStream extends InputStream {
     }
 
     /**
-     * Return the number of bytes that can be read.
+     * Returns the number of bytes that can be read.
      *
      * @return The number of bytes that can be read.
      */
@@ -136,7 +136,7 @@ public class NullInputStream extends InputStream {
     }
 
     /**
-     * Close this input stream - resets the internal state to
+     * Closes this input stream - resets the internal state to
      * the initial values.
      *
      * @throws IOException If an error occurs.
@@ -149,7 +149,7 @@ public class NullInputStream extends InputStream {
     }
 
     /**
-     * Handle End of File.
+     * Handles End of File.
      *
      * @return {@code -1} if {@code throwEofException} is
      * set to {@code false}
@@ -165,7 +165,7 @@ public class NullInputStream extends InputStream {
     }
 
     /**
-     * Return the current position.
+     * Gets the current position.
      *
      * @return the current position.
      */
@@ -183,23 +183,23 @@ public class NullInputStream extends InputStream {
     }
 
     /**
-     * Mark the current position.
+     * Marks the current position.
      *
-     * @param readlimit The number of bytes before this marked position
+     * @param readLimit The number of bytes before this marked position
      * is invalid.
      * @throws UnsupportedOperationException if mark is not supported.
      */
     @Override
-    public synchronized void mark(final int readlimit) {
+    public synchronized void mark(final int readLimit) {
         if (!markSupported) {
             throw UnsupportedOperationExceptions.mark();
         }
         mark = position;
-        this.readlimit = readlimit;
+        this.readLimit = readLimit;
     }
 
     /**
-     * Indicates whether <i>mark</i> is supported.
+     * Tests whether <i>mark</i> is supported.
      *
      * @return Whether <i>mark</i> is supported or not.
      */
@@ -209,7 +209,7 @@ public class NullInputStream extends InputStream {
     }
 
     /**
-     * Return a byte value for the  {@code read()} method.
+     * Returns a byte value for the  {@code read()} method.
      * <p>
      * This implementation returns zero.
      *
@@ -221,10 +221,11 @@ public class NullInputStream extends InputStream {
     }
 
     /**
-     * Process the bytes for the {@code read(byte[], offset, length)}
+     * Processes the bytes for the {@code read(byte[], offset, length)}
      * method.
      * <p>
      * This implementation leaves the byte array unchanged.
+     * </p>
      *
      * @param bytes The byte array
      * @param offset The offset to start at.
@@ -235,7 +236,7 @@ public class NullInputStream extends InputStream {
     }
 
     /**
-     * Read a byte.
+     * Reads a byte.
      *
      * @return Either The byte value returned by {@code processByte()}
      * or {@code -1} if the end of file has been reached and
@@ -257,7 +258,7 @@ public class NullInputStream extends InputStream {
     }
 
     /**
-     * Read some bytes into the specified array.
+     * Reads some bytes into the specified array.
      *
      * @param bytes The byte array to read into
      * @return The number of bytes read or {@code -1}
@@ -273,7 +274,7 @@ public class NullInputStream extends InputStream {
     }
 
     /**
-     * Read the specified number bytes into an array.
+     * Reads the specified number bytes into an array.
      *
      * @param bytes The byte array to read into.
      * @param offset The offset to start reading bytes into.
@@ -304,7 +305,7 @@ public class NullInputStream extends InputStream {
     }
 
     /**
-     * Reset the stream to the point when mark was last called.
+     * Resets the stream to the point when mark was last called.
      *
      * @throws UnsupportedOperationException if mark is not supported.
      * @throws IOException If no position has been marked
@@ -319,17 +320,17 @@ public class NullInputStream extends InputStream {
         if (mark < 0) {
             throw new IOException("No position has been marked");
         }
-        if (position > mark + readlimit) {
+        if (position > mark + readLimit) {
             throw new IOException("Marked position [" + mark +
                     "] is no longer valid - passed the read limit [" +
-                    readlimit + "]");
+                    readLimit + "]");
         }
         position = mark;
         eof = false;
     }
 
     /**
-     * Skip a specified number of bytes.
+     * Skips a specified number of bytes.
      *
      * @param numberOfBytes The number of bytes to skip.
      * @return The number of bytes skipped or {@code -1}
