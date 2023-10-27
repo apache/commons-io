@@ -47,9 +47,13 @@ The <action> type attribute can be add,update,fix,remove.
   </properties>
 
   <body>
+    <release version="2.15.1" date="20YY-MM-DD" description="Java 8 is required.">
+      <!-- FIX -->
+      <action dev="sebb" type="fix" due-to="Gregor Dschung">Fix wrong issue id in changelog #503.</action>
+    </release>
     <release version="2.15.0" date="2023-10-21" description="Java 8 is required.">
       <!-- FIX -->
-      <action dev="sebb" type="fix" issue="IO-810" due-to="Laurence Gonsalves">
+      <action dev="sebb" type="fix" issue="IO-815" due-to="Laurence Gonsalves">
         XmlStreamReader encoding match RE is too strict.
       </action>
       <action dev="ggregory" type="fix" issue="IO-810" due-to="Gregor Dschung, Gary Gregory">
