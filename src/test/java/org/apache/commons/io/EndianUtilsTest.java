@@ -193,7 +193,7 @@ public class EndianUtilsTest  {
     // tests #IO-117
     @Test
     public void testUnsignedOverrun() throws Exception {
-        final byte[] target = { 0, 0, 0, (byte)0x80 };
+        final byte[] target = { 0, 0, 0, (byte) 0x80 };
         final long expected = 0x80000000L;
 
         long actual = EndianUtils.readSwappedUnsignedInteger(target, 0);

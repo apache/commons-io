@@ -37,18 +37,21 @@ public class NullReaderTest {
         public TestNullReader(final int size) {
             super(size);
         }
+
         public TestNullReader(final int size, final boolean markSupported, final boolean throwEofException) {
             super(size, markSupported, throwEofException);
         }
+
         @Override
         protected int processChar() {
-            return (int)getPosition() - 1;
+            return (int) getPosition() - 1;
         }
+
         @Override
         protected void processChars(final char[] chars, final int offset, final int length) {
-            final int startPos = (int)getPosition() - length;
+            final int startPos = (int) getPosition() - length;
             for (int i = offset; i < length; i++) {
-                chars[i] = (char)(startPos + i);
+                chars[i] = (char) (startPos + i);
             }
         }
 

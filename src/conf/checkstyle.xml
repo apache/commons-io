@@ -31,6 +31,7 @@ limitations under the License.
     <property name="max" value="160" />
   </module>
   <module name="TreeWalker">
+    <module name="WhitespaceAfter" />
     <module name="AvoidStarImport" />
     <module name="RedundantImport" />
     <module name="UnusedImports" />

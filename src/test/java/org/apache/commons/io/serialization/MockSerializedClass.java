@@ -34,7 +34,7 @@ public class MockSerializedClass implements Serializable {
         if (!(obj instanceof MockSerializedClass)) {
             return false;
         }
-        return str.equals(((MockSerializedClass)obj).str);
+        return str.equals(((MockSerializedClass) obj).str);
     }
 
     @Override

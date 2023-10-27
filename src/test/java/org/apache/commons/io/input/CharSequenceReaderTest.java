@@ -47,7 +47,7 @@ public class CharSequenceReaderTest {
 
     private void checkRead(final Reader reader, final String expected) throws IOException {
         for (int i = 0; i < expected.length(); i++) {
-            assertEquals(expected.charAt(i), (char)reader.read(), "Read[" + i + "] of '" + expected + "'");
+            assertEquals(expected.charAt(i), (char) reader.read(), "Read[" + i + "] of '" + expected + "'");
         }
     }
 

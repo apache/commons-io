@@ -64,7 +64,7 @@ public class MoreComplexObjectTest extends AbstractCloseableListTest {
         assertSerialization(closeAfterEachTest(
                 new ValidatingObjectInputStream(inputStream)
                 .accept(MoreComplexObject.class)
-                .accept("java.*","[Ljava.*")
+                .accept("java.*", "[Ljava.*")
         ));
     }
 
@@ -77,7 +77,7 @@ public class MoreComplexObjectTest extends AbstractCloseableListTest {
         assertSerialization(closeAfterEachTest(
                 new ValidatingObjectInputStream(inputStream)
                 .accept(MoreComplexObject.class, ArrayList.class, Random.class)
-                .accept("java.lang.*","[Ljava.lang.*")
+                .accept("java.lang.*", "[Ljava.lang.*")
         ));
     }
 

@@ -119,7 +119,8 @@ public class FileUtilsCleanSymlinksTest {
         assertTrue(setupSymlink(realParent, symlinkParentDirectory));
 
         // assert contents of the real directory were removed including the symlink
-        FileUtils.cleanDirectory(symlinkParentDirectory);// should clean the contents of this but not recurse into other links
+        // should clean the contents of this but not recurse into other links
+        FileUtils.cleanDirectory(symlinkParentDirectory);
         assertEquals(0, symlinkParentDirectory.list().length);
         assertEquals(0, realParent.list().length);
 

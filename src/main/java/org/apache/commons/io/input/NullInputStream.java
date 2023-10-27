@@ -296,7 +296,7 @@ public class NullInputStream extends InputStream {
         position += length;
         int returnLength = length;
         if (position > size) {
-            returnLength = length - (int)(position - size);
+            returnLength = length - (int) (position - size);
             position = size;
         }
         processBytes(bytes, offset, returnLength);

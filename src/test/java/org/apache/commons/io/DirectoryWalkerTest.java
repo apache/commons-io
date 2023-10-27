@@ -54,15 +54,14 @@ public class DirectoryWalkerTest {
 
         /** find files. */
         protected List<File> find(final File startDirectory) throws IOException {
-           final List<File> results = new ArrayList<>();
-           walk(startDirectory, results);
-           return results;
+            final List<File> results = new ArrayList<>();
+            walk(startDirectory, results);
+            return results;
         }
 
         /** Handles Cancel. */
         @Override
-        protected void handleCancelled(final File startDirectory, final Collection<File> results,
-                       final CancelException cancel) throws IOException {
+        protected void handleCancelled(final File startDirectory, final Collection<File> results, final CancelException cancel) throws IOException {
             if (!suppressCancel) {
                 super.handleCancelled(startDirectory, results, cancel);
             }
@@ -118,13 +117,13 @@ public class DirectoryWalkerTest {
 
         /** find files. */
         protected List<File> find(final File startDirectory) {
-           final List<File> results = new ArrayList<>();
-           try {
-               walk(startDirectory, results);
-           } catch(final IOException ex) {
-               fail(ex.toString());
-           }
-           return results;
+            final List<File> results = new ArrayList<>();
+            try {
+                walk(startDirectory, results);
+            } catch (final IOException ex) {
+                fail(ex.toString());
+            }
+            return results;
         }
 
         /** Handles a directory end by adding the File to the result set. */
@@ -151,13 +150,13 @@ public class DirectoryWalkerTest {
 
         /** find files. */
         protected List<String> find(final File startDirectory) {
-           final List<String> results = new ArrayList<>();
-           try {
-               walk(startDirectory, results);
-           } catch(final IOException ex) {
-               fail(ex.toString());
-           }
-           return results;
+            final List<String> results = new ArrayList<>();
+            try {
+                walk(startDirectory, results);
+            } catch (final IOException ex) {
+                fail(ex.toString());
+            }
+            return results;
         }
 
         /** Handles a file by adding the File to the result set. */
@@ -183,15 +182,14 @@ public class DirectoryWalkerTest {
 
         /** find files. */
         protected List<File> find(final File startDirectory) throws IOException {
-           results = new ArrayList<>();
-           walk(startDirectory, results);
-           return results;
+            results = new ArrayList<>();
+            walk(startDirectory, results);
+            return results;
         }
 
         /** Handles Cancel. */
         @Override
-        protected void handleCancelled(final File startDirectory, final Collection<File> results,
-                       final CancelException cancel) throws IOException {
+        protected void handleCancelled(final File startDirectory, final Collection<File> results, final CancelException cancel) throws IOException {
             if (!suppressCancel) {
                 super.handleCancelled(startDirectory, results, cancel);
             }
@@ -274,13 +272,13 @@ public class DirectoryWalkerTest {
      */
     private void checkContainsFiles(final String prefix, final File[] files, final Collection<File> results) {
         for (int i = 0; i < files.length; i++) {
-            assertTrue(results.contains(files[i]), prefix + "["+i+"] " + files[i]);
+            assertTrue(results.contains(files[i]), prefix + "[" + i + "] " + files[i]);
         }
     }
 
     private void checkContainsString(final String prefix, final File[] files, final Collection<String> results) {
         for (int i = 0; i < files.length; i++) {
-            assertTrue(results.contains(files[i].toString()), prefix + "["+i+"] " + files[i]);
+            assertTrue(results.contains(files[i].toString()), prefix + "[" + i + "] " + files[i]);
         }
     }
 
@@ -325,7 +323,7 @@ public class DirectoryWalkerTest {
         } catch (final DirectoryWalker.CancelException cancel) {
             assertEquals(cancelName, cancel.getFile().getName(), "File:  " + cancelName);
             assertEquals(5, cancel.getDepth(), "Depth: " + cancelName);
-        } catch(final IOException ex) {
+        } catch (final IOException ex) {
             fail("IOException: " + cancelName + " " + ex);
         }
 
@@ -337,7 +335,7 @@ public class DirectoryWalkerTest {
         } catch (final DirectoryWalker.CancelException cancel) {
             assertEquals(cancelName, cancel.getFile().getName(), "File:  " + cancelName);
             assertEquals(3, cancel.getDepth(), "Depth: " + cancelName);
-        } catch(final IOException ex) {
+        } catch (final IOException ex) {
             fail("IOException: " + cancelName + " " + ex);
         }
 
@@ -346,7 +344,7 @@ public class DirectoryWalkerTest {
             final List<File> results = new TestCancelWalker(cancelName, true).find(javaDir);
             final File lastFile = results.get(results.size() - 1);
             assertEquals(cancelName, lastFile.getName(), "Suppress:  " + cancelName);
-        } catch(final IOException ex) {
+        } catch (final IOException ex) {
             fail("Suppress threw " + ex);
         }
 
@@ -529,7 +527,7 @@ public class DirectoryWalkerTest {
             final File last = walker.results.get(walker.results.size() - 1);
             assertEquals(cancelName, last.getName());
             assertEquals(5, cancel.getDepth(), "Depth: " + cancelName);
-        } catch(final IOException ex) {
+        } catch (final IOException ex) {
             fail("IOException: " + cancelName + " " + ex);
         }
 
@@ -542,7 +540,7 @@ public class DirectoryWalkerTest {
         } catch (final DirectoryWalker.CancelException cancel) {
             assertEquals(cancelName, cancel.getFile().getName(), "File:  " + cancelName);
             assertEquals(3, cancel.getDepth(), "Depth: " + cancelName);
-        } catch(final IOException ex) {
+        } catch (final IOException ex) {
             fail("IOException: " + cancelName + " " + ex);
         }
 
@@ -552,7 +550,7 @@ public class DirectoryWalkerTest {
             final List<File> results = walker.find(javaDir);
             final File lastFile = results.get(results.size() - 1);
             assertEquals(cancelName, lastFile.getName(), "Suppress:  " + cancelName);
-        } catch(final IOException ex) {
+        } catch (final IOException ex) {
             fail("Suppress threw " + ex);
         }
 

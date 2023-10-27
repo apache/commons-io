@@ -281,7 +281,7 @@ public class NullReader extends Reader {
         position += length;
         int returnLength = length;
         if (position > size) {
-            returnLength = length - (int)(position - size);
+            returnLength = length - (int) (position - size);
             position = size;
         }
         processChars(chars, offset, returnLength);

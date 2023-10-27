@@ -1269,7 +1269,7 @@ public class IOUtilsTest {
         assertTrue(IOUtils.contentEqualsIgnoreEOL(
                 new CharArrayReader(s1.toCharArray()),
                 new CharArrayReader(s1.toCharArray())
-        ),"failed at :{" + s1 + "," + s1 + "}");
+        ), "failed at :{" + s1 + "," + s1 + "}");
         assertTrue(IOUtils.contentEqualsIgnoreEOL(
                 new CharArrayReader(s2.toCharArray()),
                 new CharArrayReader(s2.toCharArray())

@@ -100,7 +100,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
             assertSerialization(
                     closeAfterEachTest(new ValidatingObjectInputStream(testStream)));
             fail("Expected an InvalidClassException");
-        } catch(final InvalidClassException ice) {
+        } catch (final InvalidClassException ice) {
             final String name = MockSerializedClass.class.getName();
             assertTrue(ice.getMessage().contains(name), "Expecting message to contain " + name);
         }
@@ -124,7 +124,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     public void ourTestClassAcceptedFirstWildcard() throws Exception {
         assertSerialization(
                 closeAfterEachTest(new ValidatingObjectInputStream(testStream))
-                .accept("*MockSerializedClass","*Integer")
+                .accept("*MockSerializedClass", "*Integer")
         );
     }
 
@@ -140,7 +140,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     public void ourTestClassAcceptedSecondWildcard() throws Exception {
         assertSerialization(
                 closeAfterEachTest(new ValidatingObjectInputStream(testStream))
-                .accept("*Integer","*MockSerializedClass")
+                .accept("*Integer", "*MockSerializedClass")
         );
     }
 
