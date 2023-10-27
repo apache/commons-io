@@ -36,18 +36,21 @@ public class NullInputStreamTest {
         public TestNullInputStream(final int size) {
             super(size);
         }
+
         public TestNullInputStream(final int size, final boolean markSupported, final boolean throwEofException) {
             super(size, markSupported, throwEofException);
         }
+
         @Override
         protected int processByte() {
-            return (int)getPosition() - 1;
+            return (int) getPosition() - 1;
         }
+
         @Override
         protected void processBytes(final byte[] bytes, final int offset, final int length) {
-            final int startPos = (int)getPosition() - length;
+            final int startPos = (int) getPosition() - length;
             for (int i = offset; i < length; i++) {
-                bytes[i] = (byte)(startPos + i);
+                bytes[i] = (byte) (startPos + i);
             }
         }
 
