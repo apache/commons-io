@@ -99,7 +99,7 @@ public class IOUtilsCopyTest {
     }
 
     /**
-     * Test Copying file > 2GB  - see issue# IO-84
+     * Test Copying file > 2GB - see issue# IO-84
      */
     @Test
     public void testCopy_inputStreamToOutputStream_IO84() throws Exception {
