@@ -185,16 +185,16 @@ public class NullInputStreamTest {
 
     @Test
     public void testSkip() throws Exception {
-        final InputStream input = new TestNullInputStream(10, true, false);
-        assertEquals(0, input.read(), "Read 1");
-        assertEquals(1, input.read(), "Read 2");
-        assertEquals(5, input.skip(5), "Skip 1");
-        assertEquals(7, input.read(), "Read 3");
-        assertEquals(2, input.skip(5), "Skip 2"); // only 2 left to skip
-        assertEquals(-1, input.skip(5), "Skip 3 (EOF)"); // End of file
+        try (InputStream input = new TestNullInputStream(10, true, false)) {
+            assertEquals(0, input.read(), "Read 1");
+            assertEquals(1, input.read(), "Read 2");
+            assertEquals(5, input.skip(5), "Skip 1");
+            assertEquals(7, input.read(), "Read 3");
+            assertEquals(2, input.skip(5), "Skip 2"); // only 2 left to skip
+            assertEquals(-1, input.skip(5), "Skip 3 (EOF)"); // End of file
 
-        final IOException e = assertThrows(IOException.class, () -> input.skip(5), "Expected IOException for skipping after end of file");
-        assertEquals("Skip after end of file", e.getMessage(), "Skip after EOF IOException message");
-        input.close();
+            final IOException e = assertThrows(IOException.class, () -> input.skip(5), "Expected IOException for skipping after end of file");
+            assertEquals("Skip after end of file", e.getMessage(), "Skip after EOF IOException message");
+        }
     }
 }
