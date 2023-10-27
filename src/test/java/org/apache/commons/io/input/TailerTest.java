@@ -52,6 +52,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.RandomAccessFileMode;
 import org.apache.commons.io.TestResources;
 import org.apache.commons.io.test.TestUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -353,6 +354,33 @@ public class TailerTest {
     }
 
     @Test
+    public void testResetFile() throws Exception {
+        final long delayMillis = 50;
+        final File file = new File(temporaryFolder, "tailer-testdelete.txt");
+        final File file2 = new File(temporaryFolder, "tailer-testdelete2.txt");
+
+        createFile(file, 0);
+        createFile(file2, 0);
+        final TestTailerListener listener = new TestTailerListener(2);
+
+        writeString(file, "1\r\n");
+        writeString(file2, "1\r\n", "2\r\n", "3\r\n", "4\r\n");
+
+        try (Tailer tailer = new Tailer(file, listener, delayMillis, false)) {
+            final Thread thread = new Thread(tailer);
+            thread.start();
+            final long testDelayMillis = delayMillis * 10;
+            TestUtils.sleep(testDelayMillis);
+            Assertions.assertEquals(3,file.length());
+            Assertions.assertEquals(1,listener.latch.getCount());
+            Assertions.assertTrue(file2.renameTo(file));
+            TestUtils.sleep(testDelayMillis);
+            Assertions.assertEquals(12,file.length());
+            Assertions.assertEquals(0,listener.latch.getCount());
+        }
+    }
+
+    @Test
     public void testIO335() throws Exception { // test CR behavior
         // Create & start the Tailer
         final long delayMillis = 50;
@@ -425,7 +453,7 @@ public class TailerTest {
             thread.start();
 
             try (Writer out = new OutputStreamWriter(Files.newOutputStream(file.toPath()), charsetUTF8);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(Files.newInputStream(origin.toPath()), charsetUTF8))) {
+                 BufferedReader reader = new BufferedReader(new InputStreamReader(Files.newInputStream(origin.toPath()), charsetUTF8))) {
                 final List<String> lines = new ArrayList<>();
                 String line;
                 while ((line = reader.readLine()) != null) {
@@ -711,7 +739,9 @@ public class TailerTest {
         assertEquals(listener.getLines(), Arrays.asList("foo"), "lines");
     }
 
-    /** Appends lines to a file */
+    /**
+     * Appends lines to a file
+     */
     private void write(final File file, final String... lines) throws IOException {
         try (Writer writer = Files.newBufferedWriter(file.toPath(), StandardOpenOption.APPEND)) {
             for (final String line : lines) {
@@ -720,7 +750,9 @@ public class TailerTest {
         }
     }
 
-    /** Appends strings to a file */
+    /**
+     * Appends strings to a file
+     */
     private void writeString(final File file, final String... strings) throws IOException {
         try (Writer writer = Files.newBufferedWriter(file.toPath(), StandardOpenOption.APPEND)) {
             for (final String string : strings) {
