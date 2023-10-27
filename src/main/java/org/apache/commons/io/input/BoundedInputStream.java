@@ -134,11 +134,11 @@ public class BoundedInputStream extends FilterInputStream {
     /**
      * Invokes the delegate's {@code mark(int)} method.
      *
-     * @param readlimit read ahead limit
+     * @param readLimit read ahead limit
      */
     @Override
-    public synchronized void mark(final int readlimit) {
-        in.mark(readlimit);
+    public synchronized void mark(final int readLimit) {
+        in.mark(readLimit);
         mark = count;
     }
 

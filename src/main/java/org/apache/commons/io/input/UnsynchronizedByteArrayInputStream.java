@@ -238,7 +238,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
 
     @SuppressWarnings("sync-override")
     @Override
-    public void mark(final int readlimit) {
+    public void mark(final int readLimit) {
         this.markedOffset = this.offset;
     }
 

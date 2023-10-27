@@ -367,14 +367,14 @@ public class BOMInputStream extends ProxyInputStream {
     /**
      * Invokes the delegate's {@code mark(int)} method.
      *
-     * @param readlimit
+     * @param readLimit
      *            read ahead limit
      */
     @Override
-    public synchronized void mark(final int readlimit) {
+    public synchronized void mark(final int readLimit) {
         markFbIndex = fbIndex;
         markedAtStart = firstBytes == null;
-        in.mark(readlimit);
+        in.mark(readLimit);
     }
 
     /**

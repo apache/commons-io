@@ -71,7 +71,7 @@ public class NullInputStreamTest {
     @Test
     public void testMarkAndReset() throws Exception {
         int position = 0;
-        final int readlimit = 10;
+        final int readLimit = 10;
         try (InputStream input = new TestNullInputStream(100, true, false)) {
 
             assertTrue(input.markSupported(), "Mark Should be Supported");
@@ -85,7 +85,7 @@ public class NullInputStreamTest {
             }
 
             // Mark
-            input.mark(readlimit);
+            input.mark(readLimit);
 
             // Read further
             for (int i = 0; i < 3; i++) {
@@ -96,13 +96,13 @@ public class NullInputStreamTest {
             input.reset();
 
             // Read From marked position
-            for (int i = 0; i < readlimit + 1; i++) {
+            for (int i = 0; i < readLimit + 1; i++) {
                 assertEquals(position + i, input.read(), "Read After Reset [" + i + "]");
             }
 
             // Reset after read limit passed
             final IOException resetException = assertThrows(IOException.class, input::reset, "Read limit exceeded, expected IOException");
-            assertEquals("Marked position [" + position + "] is no longer valid - passed the read limit [" + readlimit + "]", resetException.getMessage(),
+            assertEquals("Marked position [" + position + "] is no longer valid - passed the read limit [" + readLimit + "]", resetException.getMessage(),
                     "Read limit IOException message");
         }
     }

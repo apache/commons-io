@@ -30,7 +30,7 @@ public class MarkShieldInputStreamTest {
 
     private static final class MarkTestableInputStream extends ProxyInputStream {
         int markcount;
-        int readlimit;
+        int readLimit;
 
         public MarkTestableInputStream(final InputStream in) {
             super(in);
@@ -38,13 +38,13 @@ public class MarkShieldInputStreamTest {
 
         @SuppressWarnings("sync-override")
         @Override
-        public void mark(final int readlimit) {
+        public void mark(final int readLimit) {
             // record that `mark` was called
             this.markcount++;
-            this.readlimit = readlimit;
+            this.readLimit = readLimit;
 
             // invoke on super
-            super.mark(readlimit);
+            super.mark(readLimit);
         }
     }
 
@@ -56,7 +56,7 @@ public class MarkShieldInputStreamTest {
             msis.mark(1024);
 
             assertEquals(0, in.markcount);
-            assertEquals(0, in.readlimit);
+            assertEquals(0, in.readLimit);
         }
     }
 
@@ -68,7 +68,7 @@ public class MarkShieldInputStreamTest {
             msis.mark(1024);
 
             assertEquals(0, in.markcount);
-            assertEquals(0, in.readlimit);
+            assertEquals(0, in.readLimit);
         }
     }
 
