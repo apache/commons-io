@@ -93,7 +93,7 @@ limitations under the License.
 
       <subsection name="Latest Release (Java 8 and up)">
         <p>
-          Commons IO 2.13.0 requires a minimum of Java 8 -
+          Commons IO requires a minimum of Java 8 -
           <a href="https://commons.apache.org/io/download_io.cgi">Download now</a>
           .
         </p>
