@@ -2849,7 +2849,7 @@ public class FileUtils {
     }
 
     /**
-     * Set file lastModifiedTime, lastAccessTime and creationTime to match source file
+     * Sets file lastModifiedTime, lastAccessTime and creationTime to match source file
      *
      * @param sourceFile The source file to query.
      * @param targetFile The target file or directory to set.
