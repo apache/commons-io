@@ -113,7 +113,7 @@ limitations under the License.
       </p>
     </subsection>
     </section>
-    <section name="Apache Commons IO 2.15.0 (requires Java 8)">
+    <section name="Apache Commons IO 2.15.0 (requires Java 8 or above)">
       <subsection name="Binaries">
         <table>
           <tr>
