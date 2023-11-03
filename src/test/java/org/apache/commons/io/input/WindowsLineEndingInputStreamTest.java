@@ -25,28 +25,28 @@ import org.junit.jupiter.api.Test;
 
 public class WindowsLineEndingInputStreamTest {
     @Test
-    public void inTheMiddleOfTheLine() throws Exception {
+    public void testInTheMiddleOfTheLine() throws Exception {
         assertEquals("a\r\nbc\r\n", roundtrip("a\r\nbc"));
     }
 
     @Test
-    public void linuxLineFeeds() throws Exception {
+    public void testLinuxLineFeeds() throws Exception {
         final String roundtrip = roundtrip("ab\nc", false);
         assertEquals("ab\r\nc", roundtrip);
     }
 
     @Test
-    public void malformed() throws Exception {
+    public void testMalformed() throws Exception {
         assertEquals("a\rbc", roundtrip("a\rbc", false));
     }
 
     @Test
-    public void multipleBlankLines() throws Exception {
+    public void testMultipleBlankLines() throws Exception {
         assertEquals("a\r\n\r\nbc\r\n", roundtrip("a\r\n\r\nbc"));
     }
 
     @Test
-    public void retainLineFeed() throws Exception {
+    public void testRetainLineFeed() throws Exception {
         assertEquals("a\r\n\r\n", roundtrip("a\r\n\r\n", false));
         assertEquals("a", roundtrip("a", false));
     }
@@ -65,7 +65,7 @@ public class WindowsLineEndingInputStreamTest {
     }
 
     @Test
-    public void simpleString() throws Exception {
+    public void testSimpleString() throws Exception {
         assertEquals("abc\r\n", roundtrip("abc"));
     }
 

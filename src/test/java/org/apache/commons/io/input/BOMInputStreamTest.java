@@ -206,7 +206,7 @@ public class BOMInputStreamTest {
     }
 
     @Test
-    public void skipReturnValueWithBom() throws IOException {
+    public void testSkipReturnValueWithBom() throws IOException {
         final byte[] data = { (byte) 0x31, (byte) 0x32, (byte) 0x33 };
         try (BOMInputStream is1 = BOMInputStream.builder().setInputStream(createUtf8Input(data, true)).get()) {
             assertEquals(2, is1.skip(2));
@@ -215,7 +215,7 @@ public class BOMInputStreamTest {
     }
 
     @Test
-    public void skipReturnValueWithoutBom() throws IOException {
+    public void testSkipReturnValueWithoutBom() throws IOException {
         final byte[] data = { (byte) 0x31, (byte) 0x32, (byte) 0x33 };
         try (BOMInputStream is2 = BOMInputStream.builder().setInputStream(createUtf8Input(data, false)).get()) {
             assertEquals(2, is2.skip(2)); // IO-428

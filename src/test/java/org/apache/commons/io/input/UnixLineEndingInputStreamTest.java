@@ -27,32 +27,32 @@ import org.junit.jupiter.api.Test;
 public class UnixLineEndingInputStreamTest {
 
     @Test
-    public void crAtEnd() throws Exception {
+    public void testCrAtEnd() throws Exception {
         assertEquals("a\n", roundtrip("a\r"));
     }
 
     @Test
-    public void crOnlyEnsureAtEof() throws Exception {
+    public void testCrOnlyEnsureAtEof() throws Exception {
         assertEquals("a\nb\n", roundtrip("a\rb"));
     }
 
     @Test
-    public void crOnlyNotAtEof() throws Exception {
+    public void testCrOnlyNotAtEof() throws Exception {
         assertEquals("a\nb", roundtrip("a\rb", false));
     }
 
     @Test
-    public void inTheMiddleOfTheLine() throws Exception {
+    public void testInTheMiddleOfTheLine() throws Exception {
         assertEquals("a\nbc\n", roundtrip("a\r\nbc"));
     }
 
     @Test
-    public void multipleBlankLines() throws Exception {
+    public void testMultipleBlankLines() throws Exception {
         assertEquals("a\n\nbc\n", roundtrip("a\r\n\r\nbc"));
     }
 
     @Test
-    public void retainLineFeed() throws Exception {
+    public void testRetainLineFeed() throws Exception {
         assertEquals("a\n\n", roundtrip("a\r\n\r\n", false));
         assertEquals("a", roundtrip("a", false));
     }
@@ -70,7 +70,7 @@ public class UnixLineEndingInputStreamTest {
     }
 
     @Test
-    public void simpleString() throws Exception {
+    public void testSimpleString() throws Exception {
         assertEquals("abc\n", roundtrip("abc"));
     }
 

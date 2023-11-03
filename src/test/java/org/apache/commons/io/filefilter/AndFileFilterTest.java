@@ -92,7 +92,7 @@ public class AndFileFilterTest extends AbstractConditionalFileFilterTest {
   }
 
   @Test
-  public void setTestFiltersClearsOld() {
+  public void testSetTestFiltersClearsOld() {
     // test that new filters correctly clear old filters
     final List<IOFileFilter> simpleEmptyFileFilter = Collections.singletonList(EmptyFileFilter.EMPTY);
     final AndFileFilter andFileFilter = new AndFileFilter(simpleEmptyFileFilter);

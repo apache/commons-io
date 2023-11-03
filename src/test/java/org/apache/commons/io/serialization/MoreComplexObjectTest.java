@@ -88,7 +88,7 @@ public class MoreComplexObjectTest extends AbstractCloseableListTest {
      *  might be ok in controlled environments.
      */
     @Test
-    public void useBlacklist() throws IOException, ClassNotFoundException {
+    public void testUseBlacklist() throws IOException, ClassNotFoundException {
         final String [] blacklist = {
                 "org.apache.commons.collections.functors.InvokerTransformer",
                 "org.codehaus.groovy.runtime.ConvertedClosure",

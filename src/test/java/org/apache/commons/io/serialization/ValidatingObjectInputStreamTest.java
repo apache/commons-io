@@ -46,7 +46,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     private InputStream testStream;
 
     @Test
-    public void acceptCustomMatcher() throws Exception {
+    public void testAcceptCustomMatcher() throws Exception {
         assertSerialization(
                 closeAfterEachTest(new ValidatingObjectInputStream(testStream))
                 .accept(ALWAYS_TRUE)
@@ -54,7 +54,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     @Test
-    public void acceptPattern() throws Exception {
+    public void testAcceptPattern() throws Exception {
         assertSerialization(
                 closeAfterEachTest(new ValidatingObjectInputStream(testStream))
                 .accept(Pattern.compile(".*MockSerializedClass.*"))
@@ -62,7 +62,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     @Test
-    public void acceptWildcard() throws Exception {
+    public void testAcceptWildcard() throws Exception {
         assertSerialization(
                 closeAfterEachTest(new ValidatingObjectInputStream(testStream))
                 .accept("org.apache.commons.io.*")
@@ -75,7 +75,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     @Test
-    public void customInvalidMethod() {
+    public void testCustomInvalidMethod() {
         class CustomVOIS extends ValidatingObjectInputStream {
             CustomVOIS(final InputStream is) throws IOException {
                 super(is);
@@ -95,7 +95,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     @Test
-    public void exceptionIncludesClassName() throws Exception {
+    public void testExceptionIncludesClassName() throws Exception {
         try {
             assertSerialization(
                     closeAfterEachTest(new ValidatingObjectInputStream(testStream)));
@@ -107,13 +107,13 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     @Test
-    public void noAccept() {
+    public void testNoAccept() {
         assertThrows(InvalidClassException.class, () -> assertSerialization(
                 closeAfterEachTest(new ValidatingObjectInputStream(testStream))));
     }
 
     @Test
-    public void ourTestClassAcceptedFirst() throws Exception {
+    public void testOurTestClassAcceptedFirst() throws Exception {
         assertSerialization(
                 closeAfterEachTest(new ValidatingObjectInputStream(testStream))
                 .accept(MockSerializedClass.class, Integer.class)
@@ -121,7 +121,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     @Test
-    public void ourTestClassAcceptedFirstWildcard() throws Exception {
+    public void testOurTestClassAcceptedFirstWildcard() throws Exception {
         assertSerialization(
                 closeAfterEachTest(new ValidatingObjectInputStream(testStream))
                 .accept("*MockSerializedClass", "*Integer")
@@ -129,7 +129,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     @Test
-    public void ourTestClassAcceptedSecond() throws Exception {
+    public void testOurTestClassAcceptedSecond() throws Exception {
         assertSerialization(
                 closeAfterEachTest(new ValidatingObjectInputStream(testStream))
                 .accept(Integer.class, MockSerializedClass.class)
@@ -137,7 +137,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     @Test
-    public void ourTestClassAcceptedSecondWildcard() throws Exception {
+    public void testOurTestClassAcceptedSecondWildcard() throws Exception {
         assertSerialization(
                 closeAfterEachTest(new ValidatingObjectInputStream(testStream))
                 .accept("*Integer", "*MockSerializedClass")
@@ -145,7 +145,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     @Test
-    public void ourTestClassNotAccepted() {
+    public void testOurTestClassNotAccepted() {
         assertThrows(InvalidClassException.class,
                 () -> assertSerialization(
                 closeAfterEachTest(new ValidatingObjectInputStream(testStream))
@@ -154,7 +154,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     @Test
-    public void ourTestClassOnlyAccepted() throws Exception {
+    public void testOurTestClassOnlyAccepted() throws Exception {
         assertSerialization(
                 closeAfterEachTest(new ValidatingObjectInputStream(testStream))
                 .accept(MockSerializedClass.class)
@@ -162,7 +162,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     @Test
-    public void reject() {
+    public void testReject() {
         assertThrows(InvalidClassException.class,
                 () -> assertSerialization(
                 closeAfterEachTest(new ValidatingObjectInputStream(testStream))
@@ -172,7 +172,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     @Test
-    public void rejectCustomMatcher() {
+    public void testRejectCustomMatcher() {
         assertThrows(InvalidClassException.class,
                 () -> assertSerialization(
                 closeAfterEachTest(new ValidatingObjectInputStream(testStream))
@@ -182,7 +182,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     @Test
-    public void rejectOnly() {
+    public void testRejectOnly() {
         assertThrows(InvalidClassException.class,
                 () -> assertSerialization(
                 closeAfterEachTest(new ValidatingObjectInputStream(testStream))
@@ -191,7 +191,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     @Test
-    public void rejectPattern() {
+    public void testRejectPattern() {
         assertThrows(InvalidClassException.class,
                 () -> assertSerialization(
                 closeAfterEachTest(new ValidatingObjectInputStream(testStream))
@@ -201,7 +201,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     @Test
-    public void rejectPrecedence() {
+    public void testRejectPrecedence() {
         assertThrows(InvalidClassException.class,
                 () -> assertSerialization(
                 closeAfterEachTest(new ValidatingObjectInputStream(testStream))
@@ -211,7 +211,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     @Test
-    public void rejectWildcard() {
+    public void testRejectWildcard() {
         assertThrows(InvalidClassException.class,
                 () -> assertSerialization(
                 closeAfterEachTest(new ValidatingObjectInputStream(testStream))

@@ -55,7 +55,7 @@ public class CopyUtilsTest {
     private final byte[] inData = TestUtils.generateTestData(FILE_SIZE);
 
     @Test
-    public void copy_byteArrayToOutputStream() throws Exception {
+    public void testCopy_byteArrayToOutputStream() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
 
@@ -66,7 +66,7 @@ public class CopyUtilsTest {
     }
 
     @Test
-    public void copy_byteArrayToWriter() throws Exception {
+    public void testCopy_byteArrayToWriter() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
         final Writer writer = new java.io.OutputStreamWriter(out, StandardCharsets.US_ASCII);
@@ -80,7 +80,7 @@ public class CopyUtilsTest {
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
     @Test
-    public void copy_inputStreamToWriter() throws Exception {
+    public void testCopy_inputStreamToWriter() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new ThrowOnCloseInputStream(in);
 
@@ -97,7 +97,7 @@ public class CopyUtilsTest {
     }
 
     @Test
-    public void copy_inputStreamToWriterWithEncoding() throws Exception {
+    public void testCopy_inputStreamToWriterWithEncoding() throws Exception {
         final String inDataStr = "data";
         final String charsetName = StandardCharsets.UTF_8.name();
         final StringWriter writer = new StringWriter();
@@ -107,7 +107,7 @@ public class CopyUtilsTest {
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
     @Test
-    public void copy_readerToWriter() throws Exception {
+    public void testCopy_readerToWriter() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new ThrowOnCloseInputStream(in);
         final Reader reader = new java.io.InputStreamReader(in, StandardCharsets.US_ASCII);
@@ -124,7 +124,7 @@ public class CopyUtilsTest {
     }
 
     @Test
-    public void copy_stringToOutputStream() throws Exception {
+    public void testCopy_stringToOutputStream() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -143,7 +143,7 @@ public class CopyUtilsTest {
     }
 
     @Test
-    public void copy_stringToOutputStreamString() throws Exception {
+    public void testCopy_stringToOutputStreamString() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -162,7 +162,7 @@ public class CopyUtilsTest {
     }
 
     @Test
-    public void copy_stringToWriter() throws Exception {
+    public void testCopy_stringToWriter() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
