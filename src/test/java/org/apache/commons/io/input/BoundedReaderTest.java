@@ -71,6 +71,44 @@ public class BoundedReaderTest {
         assertTrue(closed.get());
     }
 
+    private void testLineNumberReader(final Reader source) throws IOException {
+        try (LineNumberReader reader = new LineNumberReader(new BoundedReader(source, 10_000_000))) {
+            while (reader.readLine() != null) {
+                // noop
+            }
+        }
+    }
+
+    public void testLineNumberReaderAndFileReaderLastLine(final String data) throws IOException {
+        try (TempFile path = TempFile.create(getClass().getSimpleName(), ".txt")) {
+            final File file = path.toFile();
+            FileUtils.write(file, data, StandardCharsets.ISO_8859_1);
+            try (Reader source = Files.newBufferedReader(file.toPath())) {
+                testLineNumberReader(source);
+            }
+        }
+    }
+
+    @Test
+    public void testLineNumberReaderAndFileReaderLastLineEolNo() {
+        assertTimeout(TIMEOUT, () -> testLineNumberReaderAndFileReaderLastLine(STRING_END_NO_EOL));
+    }
+
+    @Test
+    public void testLineNumberReaderAndFileReaderLastLineEolYes() {
+        assertTimeout(TIMEOUT, () -> testLineNumberReaderAndFileReaderLastLine(STRING_END_EOL));
+    }
+
+    @Test
+    public void testLineNumberReaderAndStringReaderLastLineEolNo() {
+        assertTimeout(TIMEOUT, () -> testLineNumberReader(new StringReader(STRING_END_NO_EOL)));
+    }
+
+    @Test
+    public void testLineNumberReaderAndStringReaderLastLineEolYes() {
+        assertTimeout(TIMEOUT, () -> testLineNumberReader(new StringReader(STRING_END_EOL)));
+    }
+
     @Test
     public void testMarkReset() throws IOException {
         try (BoundedReader mr = new BoundedReader(sr, 3)) {
@@ -139,6 +177,17 @@ public class BoundedReaderTest {
     }
 
     @Test
+    public void testReadBytesEOF() {
+        assertTimeout(TIMEOUT, () -> {
+            final BoundedReader mr = new BoundedReader(sr, 3);
+            try (BufferedReader br = new BufferedReader(mr)) {
+                br.readLine();
+                br.readLine();
+            }
+        });
+    }
+
+    @Test
     public void testReadMulti() throws IOException {
         try (BoundedReader mr = new BoundedReader(sr, 3)) {
             final char[] cbuf = new char[4];
@@ -192,54 +241,5 @@ public class BoundedReaderTest {
             mr.read();
             assertEquals(-1, mr.read());
         }
-    }
-
-    private void testLineNumberReader(final Reader source) throws IOException {
-        try (LineNumberReader reader = new LineNumberReader(new BoundedReader(source, 10_000_000))) {
-            while (reader.readLine() != null) {
-                // noop
-            }
-        }
-    }
-
-    public void testLineNumberReaderAndFileReaderLastLine(final String data) throws IOException {
-        try (TempFile path = TempFile.create(getClass().getSimpleName(), ".txt")) {
-            final File file = path.toFile();
-            FileUtils.write(file, data, StandardCharsets.ISO_8859_1);
-            try (Reader source = Files.newBufferedReader(file.toPath())) {
-                testLineNumberReader(source);
-            }
-        }
-    }
-
-    @Test
-    public void testLineNumberReaderAndFileReaderLastLineEolNo() {
-        assertTimeout(TIMEOUT, () -> testLineNumberReaderAndFileReaderLastLine(STRING_END_NO_EOL));
-    }
-
-    @Test
-    public void testLineNumberReaderAndFileReaderLastLineEolYes() {
-        assertTimeout(TIMEOUT, () -> testLineNumberReaderAndFileReaderLastLine(STRING_END_EOL));
-    }
-
-    @Test
-    public void testLineNumberReaderAndStringReaderLastLineEolNo() {
-        assertTimeout(TIMEOUT, () -> testLineNumberReader(new StringReader(STRING_END_NO_EOL)));
-    }
-
-    @Test
-    public void testLineNumberReaderAndStringReaderLastLineEolYes() {
-        assertTimeout(TIMEOUT, () -> testLineNumberReader(new StringReader(STRING_END_EOL)));
-    }
-
-    @Test
-    public void testReadBytesEOF() {
-        assertTimeout(TIMEOUT, () -> {
-            final BoundedReader mr = new BoundedReader(sr, 3);
-            try (BufferedReader br = new BufferedReader(mr)) {
-                br.readLine();
-                br.readLine();
-            }
-        });
     }
 }

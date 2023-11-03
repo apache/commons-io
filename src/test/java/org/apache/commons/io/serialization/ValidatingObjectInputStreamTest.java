@@ -45,6 +45,20 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
 
     private InputStream testStream;
 
+    private void assertSerialization(final ObjectInputStream ois) throws ClassNotFoundException, IOException {
+        final MockSerializedClass result = (MockSerializedClass) ois.readObject();
+        assertEquals(testObject, result);
+    }
+
+    @BeforeEach
+    public void setupMockSerializedClass() throws IOException {
+        testObject = new MockSerializedClass(UUID.randomUUID().toString());
+        final ByteArrayOutputStream bos = closeAfterEachTest(new ByteArrayOutputStream());
+        final ObjectOutputStream oos = closeAfterEachTest(new ObjectOutputStream(bos));
+        oos.writeObject(testObject);
+        testStream = closeAfterEachTest(new ByteArrayInputStream(bos.toByteArray()));
+    }
+
     @Test
     public void testAcceptCustomMatcher() throws Exception {
         assertSerialization(
@@ -67,11 +81,6 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
                 closeAfterEachTest(new ValidatingObjectInputStream(testStream))
                 .accept("org.apache.commons.io.*")
         );
-    }
-
-    private void assertSerialization(final ObjectInputStream ois) throws ClassNotFoundException, IOException {
-        final MockSerializedClass result = (MockSerializedClass) ois.readObject();
-        assertEquals(testObject, result);
     }
 
     @Test
@@ -218,14 +227,5 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
                 .accept(MockSerializedClass.class)
                 .reject("org.*")
         ));
-    }
-
-    @BeforeEach
-    public void setupMockSerializedClass() throws IOException {
-        testObject = new MockSerializedClass(UUID.randomUUID().toString());
-        final ByteArrayOutputStream bos = closeAfterEachTest(new ByteArrayOutputStream());
-        final ObjectOutputStream oos = closeAfterEachTest(new ObjectOutputStream(bos));
-        oos.writeObject(testObject);
-        testStream = closeAfterEachTest(new ByteArrayInputStream(bos.toByteArray()));
     }
 }

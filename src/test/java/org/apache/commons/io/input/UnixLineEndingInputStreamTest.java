@@ -26,6 +26,18 @@ import org.junit.jupiter.api.Test;
 
 public class UnixLineEndingInputStreamTest {
 
+    private String roundtrip(final String msg) throws IOException {
+        return roundtrip(msg, true);
+    }
+
+    private String roundtrip(final String msg, final boolean ensure) throws IOException {
+        try (final ByteArrayInputStream baos = new ByteArrayInputStream(msg.getBytes(StandardCharsets.UTF_8));
+            final UnixLineEndingInputStream lf = new UnixLineEndingInputStream(baos, ensure)) {
+            final byte[] buf = new byte[100];
+            return new String(buf, 0, lf.read(buf), StandardCharsets.UTF_8);
+        }
+    }
+
     @Test
     public void testCrAtEnd() throws Exception {
         assertEquals("a\n", roundtrip("a\r"));
@@ -55,18 +67,6 @@ public class UnixLineEndingInputStreamTest {
     public void testRetainLineFeed() throws Exception {
         assertEquals("a\n\n", roundtrip("a\r\n\r\n", false));
         assertEquals("a", roundtrip("a", false));
-    }
-
-    private String roundtrip(final String msg) throws IOException {
-        return roundtrip(msg, true);
-    }
-
-    private String roundtrip(final String msg, final boolean ensure) throws IOException {
-        try (final ByteArrayInputStream baos = new ByteArrayInputStream(msg.getBytes(StandardCharsets.UTF_8));
-            final UnixLineEndingInputStream lf = new UnixLineEndingInputStream(baos, ensure)) {
-            final byte[] buf = new byte[100];
-            return new String(buf, 0, lf.read(buf), StandardCharsets.UTF_8);
-        }
     }
 
     @Test

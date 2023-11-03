@@ -78,6 +78,32 @@ public class CopyUtilsTest {
         assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
+    @Test
+    public void testCopy_byteArrayToWriterWithEncoding() throws Exception {
+        final String inDataStr = "data";
+        final String charsetName = StandardCharsets.UTF_8.name();
+        final StringWriter writer = new StringWriter();
+        CopyUtils.copy(inDataStr.getBytes(charsetName), writer, charsetName);
+        assertEquals(inDataStr, writer.toString());
+    }
+
+    @SuppressWarnings("resource") // 'in' is deliberately not closed
+    @Test
+    public void testCopy_inputStreamToOutputStream() throws Exception {
+        InputStream in = new ByteArrayInputStream(inData);
+        in = new ThrowOnCloseInputStream(in);
+
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
+
+        final int count = CopyUtils.copy(in, out);
+
+        assertEquals(0, in.available(), "Not all bytes were read");
+        assertEquals(inData.length, baout.size(), "Sizes differ");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
+        assertEquals(inData.length, count);
+    }
+
     @SuppressWarnings("resource") // 'in' is deliberately not closed
     @Test
     public void testCopy_inputStreamToWriter() throws Exception {
@@ -103,6 +129,50 @@ public class CopyUtilsTest {
         final StringWriter writer = new StringWriter();
         CopyUtils.copy(new CharSequenceInputStream.Builder().setCharSequence(inDataStr).setCharset(charsetName).get(), writer, charsetName);
         assertEquals(inDataStr, writer.toString());
+    }
+
+    @SuppressWarnings("resource") // 'in' is deliberately not closed
+    @Test
+    public void testCopy_readerToOutputStream() throws Exception {
+        InputStream in = new ByteArrayInputStream(inData);
+        in = new ThrowOnCloseInputStream(in);
+        final Reader reader = new java.io.InputStreamReader(in, StandardCharsets.US_ASCII);
+
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
+
+        CopyUtils.copy(reader, out);
+        //Note: this method *does* flush. It is equivalent to:
+        //  OutputStreamWriter _out = new OutputStreamWriter(fout);
+        //  IOUtils.copy( fin, _out, 4096 ); // copy( Reader, Writer, int );
+        //  _out.flush();
+        //  out = fout;
+
+        // Note: rely on the method to flush
+        assertEquals(inData.length, baout.size(), "Sizes differ");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
+    }
+
+    @SuppressWarnings("resource") // 'in' is deliberately not closed
+    @Test
+    public void testCopy_readerToOutputStreamString() throws Exception {
+        InputStream in = new ByteArrayInputStream(inData);
+        in = new ThrowOnCloseInputStream(in);
+        final Reader reader = new java.io.InputStreamReader(in, StandardCharsets.US_ASCII);
+
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
+
+        CopyUtils.copy(reader, out, StandardCharsets.US_ASCII.name());
+        //Note: this method *does* flush. It is equivalent to:
+        //  OutputStreamWriter _out = new OutputStreamWriter(fout);
+        //  IOUtils.copy( fin, _out, 4096 ); // copy( Reader, Writer, int );
+        //  _out.flush();
+        //  out = fout;
+
+        // Note: rely on the method to flush
+        assertEquals(inData.length, baout.size(), "Sizes differ");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
@@ -172,76 +242,6 @@ public class CopyUtilsTest {
         CopyUtils.copy(str, writer);
         writer.flush();
 
-        assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
-    }
-
-    @Test
-    public void testCopy_byteArrayToWriterWithEncoding() throws Exception {
-        final String inDataStr = "data";
-        final String charsetName = StandardCharsets.UTF_8.name();
-        final StringWriter writer = new StringWriter();
-        CopyUtils.copy(inDataStr.getBytes(charsetName), writer, charsetName);
-        assertEquals(inDataStr, writer.toString());
-    }
-
-    @SuppressWarnings("resource") // 'in' is deliberately not closed
-    @Test
-    public void testCopy_inputStreamToOutputStream() throws Exception {
-        InputStream in = new ByteArrayInputStream(inData);
-        in = new ThrowOnCloseInputStream(in);
-
-        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
-
-        final int count = CopyUtils.copy(in, out);
-
-        assertEquals(0, in.available(), "Not all bytes were read");
-        assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
-        assertEquals(inData.length, count);
-    }
-
-    @SuppressWarnings("resource") // 'in' is deliberately not closed
-    @Test
-    public void testCopy_readerToOutputStream() throws Exception {
-        InputStream in = new ByteArrayInputStream(inData);
-        in = new ThrowOnCloseInputStream(in);
-        final Reader reader = new java.io.InputStreamReader(in, StandardCharsets.US_ASCII);
-
-        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
-
-        CopyUtils.copy(reader, out);
-        //Note: this method *does* flush. It is equivalent to:
-        //  OutputStreamWriter _out = new OutputStreamWriter(fout);
-        //  IOUtils.copy( fin, _out, 4096 ); // copy( Reader, Writer, int );
-        //  _out.flush();
-        //  out = fout;
-
-        // Note: rely on the method to flush
-        assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
-    }
-
-    @SuppressWarnings("resource") // 'in' is deliberately not closed
-    @Test
-    public void testCopy_readerToOutputStreamString() throws Exception {
-        InputStream in = new ByteArrayInputStream(inData);
-        in = new ThrowOnCloseInputStream(in);
-        final Reader reader = new java.io.InputStreamReader(in, StandardCharsets.US_ASCII);
-
-        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
-
-        CopyUtils.copy(reader, out, StandardCharsets.US_ASCII.name());
-        //Note: this method *does* flush. It is equivalent to:
-        //  OutputStreamWriter _out = new OutputStreamWriter(fout);
-        //  IOUtils.copy( fin, _out, 4096 ); // copy( Reader, Writer, int );
-        //  _out.flush();
-        //  out = fout;
-
-        // Note: rely on the method to flush
         assertEquals(inData.length, baout.size(), "Sizes differ");
         assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }

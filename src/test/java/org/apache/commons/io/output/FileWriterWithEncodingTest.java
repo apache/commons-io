@@ -51,6 +51,32 @@ public class FileWriterWithEncodingTest {
     private String textContent;
     private final char[] anotherTestContent = {'f', 'z', 'x'};
 
+    @BeforeEach
+    public void setUp() throws Exception {
+        final File encodingFinder = new File(temporaryFolder, "finder.txt");
+        try (OutputStreamWriter out = new OutputStreamWriter(Files.newOutputStream(encodingFinder.toPath()))) {
+            defaultEncoding = out.getEncoding();
+        }
+        file1 = new File(temporaryFolder, "testfile1.txt");
+        file2 = new File(temporaryFolder, "testfile2.txt");
+        final char[] arr = new char[1024];
+        final char[] chars = "ABCDEFGHIJKLMNOPQabcdefgihklmnopq".toCharArray();
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = chars[i % chars.length];
+        }
+        textContent = new String(arr);
+    }
+
+    private void successfulRun(final FileWriterWithEncoding fw21) throws Exception {
+        try (FileWriter fw1 = new FileWriter(file1); // default encoding
+            FileWriterWithEncoding fw2 = fw21) {
+            writeTestPayload(fw1, fw2);
+            checkFile(file1, file2);
+        }
+        assertTrue(file1.exists());
+        assertTrue(file2.exists());
+    }
+
     @Test
     public void testConstructor_File_directory() {
         assertThrows(IOException.class, () -> {
@@ -142,6 +168,40 @@ public class FileWriterWithEncodingTest {
         // @formatter:on
 
         assertEquals(10, file1.length());
+    }
+
+    @Test
+    public void testDifferentEncoding() throws Exception {
+        if (Charset.isSupported(StandardCharsets.UTF_16BE.name())) {
+            try (FileWriter fw1 = new FileWriter(file1); // default encoding
+                FileWriterWithEncoding fw2 = new FileWriterWithEncoding(file2, defaultEncoding)) {
+                writeTestPayload(fw1, fw2);
+                try {
+                    checkFile(file1, file2);
+                    fail();
+                } catch (final AssertionError ex) {
+                    // success
+                }
+
+            }
+            assertTrue(file1.exists());
+            assertTrue(file2.exists());
+        }
+        if (Charset.isSupported(StandardCharsets.UTF_16LE.name())) {
+            try (FileWriter fw1 = new FileWriter(file1); // default encoding
+                FileWriterWithEncoding fw2 = new FileWriterWithEncoding(file2, defaultEncoding)) {
+                writeTestPayload(fw1, fw2);
+                try {
+                    checkFile(file1, file2);
+                    fail();
+                } catch (final AssertionError ex) {
+                    // success
+                }
+
+            }
+            assertTrue(file1.exists());
+            assertTrue(file2.exists());
+        }
     }
 
     @Test
@@ -243,66 +303,6 @@ public class FileWriterWithEncodingTest {
             successfulRun(writer);
         }
         // @formatter:on
-    }
-
-    @BeforeEach
-    public void setUp() throws Exception {
-        final File encodingFinder = new File(temporaryFolder, "finder.txt");
-        try (OutputStreamWriter out = new OutputStreamWriter(Files.newOutputStream(encodingFinder.toPath()))) {
-            defaultEncoding = out.getEncoding();
-        }
-        file1 = new File(temporaryFolder, "testfile1.txt");
-        file2 = new File(temporaryFolder, "testfile2.txt");
-        final char[] arr = new char[1024];
-        final char[] chars = "ABCDEFGHIJKLMNOPQabcdefgihklmnopq".toCharArray();
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = chars[i % chars.length];
-        }
-        textContent = new String(arr);
-    }
-
-    private void successfulRun(final FileWriterWithEncoding fw21) throws Exception {
-        try (FileWriter fw1 = new FileWriter(file1); // default encoding
-            FileWriterWithEncoding fw2 = fw21) {
-            writeTestPayload(fw1, fw2);
-            checkFile(file1, file2);
-        }
-        assertTrue(file1.exists());
-        assertTrue(file2.exists());
-    }
-
-    @Test
-    public void testDifferentEncoding() throws Exception {
-        if (Charset.isSupported(StandardCharsets.UTF_16BE.name())) {
-            try (FileWriter fw1 = new FileWriter(file1); // default encoding
-                FileWriterWithEncoding fw2 = new FileWriterWithEncoding(file2, defaultEncoding)) {
-                writeTestPayload(fw1, fw2);
-                try {
-                    checkFile(file1, file2);
-                    fail();
-                } catch (final AssertionError ex) {
-                    // success
-                }
-
-            }
-            assertTrue(file1.exists());
-            assertTrue(file2.exists());
-        }
-        if (Charset.isSupported(StandardCharsets.UTF_16LE.name())) {
-            try (FileWriter fw1 = new FileWriter(file1); // default encoding
-                FileWriterWithEncoding fw2 = new FileWriterWithEncoding(file2, defaultEncoding)) {
-                writeTestPayload(fw1, fw2);
-                try {
-                    checkFile(file1, file2);
-                    fail();
-                } catch (final AssertionError ex) {
-                    // success
-                }
-
-            }
-            assertTrue(file1.exists());
-            assertTrue(file2.exists());
-        }
     }
 
     private void writeTestPayload(final FileWriter fw1, final FileWriterWithEncoding fw2) throws IOException {

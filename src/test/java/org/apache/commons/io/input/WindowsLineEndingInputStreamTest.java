@@ -24,6 +24,19 @@ import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Test;
 
 public class WindowsLineEndingInputStreamTest {
+    private String roundtrip(final String msg) throws IOException {
+        return roundtrip(msg, true);
+    }
+
+    private String roundtrip(final String msg, final boolean ensure) throws IOException {
+        try (WindowsLineEndingInputStream lf = new WindowsLineEndingInputStream(
+                CharSequenceInputStream.builder().setCharSequence(msg).setCharset(StandardCharsets.UTF_8).get(), ensure)) {
+            final byte[] buf = new byte[100];
+            final int read = lf.read(buf);
+            return new String(buf, 0, read, StandardCharsets.UTF_8);
+        }
+    }
+
     @Test
     public void testInTheMiddleOfTheLine() throws Exception {
         assertEquals("a\r\nbc\r\n", roundtrip("a\r\nbc"));
@@ -49,19 +62,6 @@ public class WindowsLineEndingInputStreamTest {
     public void testRetainLineFeed() throws Exception {
         assertEquals("a\r\n\r\n", roundtrip("a\r\n\r\n", false));
         assertEquals("a", roundtrip("a", false));
-    }
-
-    private String roundtrip(final String msg) throws IOException {
-        return roundtrip(msg, true);
-    }
-
-    private String roundtrip(final String msg, final boolean ensure) throws IOException {
-        try (WindowsLineEndingInputStream lf = new WindowsLineEndingInputStream(
-                CharSequenceInputStream.builder().setCharSequence(msg).setCharset(StandardCharsets.UTF_8).get(), ensure)) {
-            final byte[] buf = new byte[100];
-            final int read = lf.read(buf);
-            return new String(buf, 0, read, StandardCharsets.UTF_8);
-        }
     }
 
     @Test

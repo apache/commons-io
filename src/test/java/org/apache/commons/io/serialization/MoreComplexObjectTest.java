@@ -56,6 +56,27 @@ public class MoreComplexObjectTest extends AbstractCloseableListTest {
         inputStream = closeAfterEachTest(new ByteArrayInputStream(bos.toByteArray()));
     }
 
+    /** Here we accept everything but reject specific classes, using a pure
+     *  blacklist mode.
+     *
+     *  That's not as safe as it's hard to get an exhaustive blacklist, but
+     *  might be ok in controlled environments.
+     */
+    @Test
+    public void testUseBlacklist() throws IOException, ClassNotFoundException {
+        final String [] blacklist = {
+                "org.apache.commons.collections.functors.InvokerTransformer",
+                "org.codehaus.groovy.runtime.ConvertedClosure",
+                "org.codehaus.groovy.runtime.MethodClosure",
+                "org.springframework.beans.factory.ObjectFactory"
+        };
+        assertSerialization(closeAfterEachTest(
+                new ValidatingObjectInputStream(inputStream)
+                .accept("*")
+                .reject(blacklist)
+        ));
+    }
+
     /** Trusting java.* is probably reasonable and avoids having to be too
      *  detailed in the accepts.
      */
@@ -78,27 +99,6 @@ public class MoreComplexObjectTest extends AbstractCloseableListTest {
                 new ValidatingObjectInputStream(inputStream)
                 .accept(MoreComplexObject.class, ArrayList.class, Random.class)
                 .accept("java.lang.*", "[Ljava.lang.*")
-        ));
-    }
-
-    /** Here we accept everything but reject specific classes, using a pure
-     *  blacklist mode.
-     *
-     *  That's not as safe as it's hard to get an exhaustive blacklist, but
-     *  might be ok in controlled environments.
-     */
-    @Test
-    public void testUseBlacklist() throws IOException, ClassNotFoundException {
-        final String [] blacklist = {
-                "org.apache.commons.collections.functors.InvokerTransformer",
-                "org.codehaus.groovy.runtime.ConvertedClosure",
-                "org.codehaus.groovy.runtime.MethodClosure",
-                "org.springframework.beans.factory.ObjectFactory"
-        };
-        assertSerialization(closeAfterEachTest(
-                new ValidatingObjectInputStream(inputStream)
-                .accept("*")
-                .reject(blacklist)
         ));
     }
 }
