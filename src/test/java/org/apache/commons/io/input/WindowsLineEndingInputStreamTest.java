@@ -70,7 +70,7 @@ public class WindowsLineEndingInputStreamTest {
     }
 
     @Test
-    public void twoLinesAtEnd() throws Exception {
+    public void testTwoLinesAtEnd() throws Exception {
         assertEquals("a\r\n\r\n", roundtrip("a\r\n\r\n"));
     }
 }

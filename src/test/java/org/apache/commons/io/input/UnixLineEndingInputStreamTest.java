@@ -75,7 +75,7 @@ public class UnixLineEndingInputStreamTest {
     }
 
     @Test
-    public void twoLinesAtEnd() throws Exception {
+    public void testTwoLinesAtEnd() throws Exception {
         assertEquals("a\n\n", roundtrip("a\r\n\r\n"));
     }
 
