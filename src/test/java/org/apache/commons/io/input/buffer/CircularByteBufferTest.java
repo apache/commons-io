@@ -74,7 +74,7 @@ public class CircularByteBufferTest {
         try {
         	cbb.peek(sourceBuffer, offset, length);
         } catch (IllegalArgumentException e) {
-            assertEquals("Illegal length: -1", e.getMessage());
+        	assertEquals("Illegal length: -1", e.getMessage());
         }
     }
 
