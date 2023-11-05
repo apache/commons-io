@@ -66,7 +66,7 @@ public class CircularByteBufferTest {
 
    @Test
     public void testPeekWithNegativeLength() {
-	   	int length = -1;
+       int length = -1;
         int offset = 0;
         byte[] buffer = { 1, 4, 3, 1, 4, 3, 1, 4, 3 };
         byte[] sourceBuffer = { 1, 4, 3 };
