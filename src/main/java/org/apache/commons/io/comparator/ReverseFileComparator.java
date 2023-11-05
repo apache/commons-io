@@ -30,7 +30,7 @@ import java.util.Objects;
  *
  * @since 1.4
  */
-class ReverseFileComparator extends AbstractFileComparator implements Serializable {
+final class ReverseFileComparator extends AbstractFileComparator implements Serializable {
 
     private static final long serialVersionUID = -4808255005272229056L;
     private final Comparator<File> delegate;

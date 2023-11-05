@@ -26,7 +26,7 @@ import java.util.function.Predicate;
 /**
  * Test fixtures for this package.
  */
-class TestConstants {
+final class TestConstants {
 
     static final Path ABS_PATH_A = Paths.get("LICENSE.txt").toAbsolutePath();
 

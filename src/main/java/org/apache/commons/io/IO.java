@@ -19,7 +19,7 @@ package org.apache.commons.io;
 /**
  * Component-wide operations on Apache Commons IO.
  */
-class IO {
+final class IO {
 
     /**
      * Clears any state, throughout Apache Commons IO. Handy for tests.

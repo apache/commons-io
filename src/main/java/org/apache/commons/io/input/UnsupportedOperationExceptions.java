@@ -24,7 +24,7 @@ package org.apache.commons.io.input;
  * TODO Consider making this public and use from LineIterator but this feels like it belongs in LANG rather than IO.
  * </p>
  */
-class UnsupportedOperationExceptions {
+final class UnsupportedOperationExceptions {
 
     private static final String MARK_RESET = "mark/reset";
 

@@ -85,7 +85,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
 
     @Test
     public void testCustomInvalidMethod() {
-        class CustomVOIS extends ValidatingObjectInputStream {
+        final class CustomVOIS extends ValidatingObjectInputStream {
             CustomVOIS(final InputStream is) throws IOException {
                 super(is);
             }

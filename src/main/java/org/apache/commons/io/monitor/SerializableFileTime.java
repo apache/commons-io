@@ -35,7 +35,7 @@ import org.apache.commons.io.file.attribute.FileTimes;
  * <em>Serialization is deprecated and will be removed in 3.0.</em>
  * </p>
  */
-class SerializableFileTime implements Serializable {
+final class SerializableFileTime implements Serializable {
 
     static final SerializableFileTime EPOCH = new SerializableFileTime(FileTimes.EPOCH);
 
