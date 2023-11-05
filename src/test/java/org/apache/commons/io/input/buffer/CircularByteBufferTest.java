@@ -11,7 +11,7 @@ public class CircularByteBufferTest {
     // Tests for add function with 3 arguments of type byte[], int and int
     @Test
     public void testAddValidData() {
-		CircularByteBuffer cbb = new CircularByteBuffer();
+    	CircularByteBuffer cbb = new CircularByteBuffer();
         int length = 3;
         int offset = 0;
         byte[] targetBuffer = new byte[] { 3, 6, 9 };
@@ -98,7 +98,7 @@ public class CircularByteBufferTest {
         try {
         	cbb.peek(sourceBuffer, offset, length);
         } catch (IllegalArgumentException e) {
-            assertEquals("Illegal offset: -1", e.getMessage());
+        	assertEquals("Illegal offset: -1", e.getMessage());
         }
     }
 }
