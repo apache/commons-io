@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 public class CircularByteBufferTest {
 	
     // Tests for add function with 3 arguments of type byte[], int and int
-	@Test
+    @Test
     public void testAddValidData() {
 		CircularByteBuffer cbb = new CircularByteBuffer();
         int length = 3;
@@ -19,7 +19,7 @@ public class CircularByteBufferTest {
         assertEquals(length, cbb.getCurrentNumberOfBytes());
     }
 
-	@Test
+    @Test
     public void testAddNegativeLength() {
     	CircularByteBuffer cbb = new CircularByteBuffer();
         int length = -1;
