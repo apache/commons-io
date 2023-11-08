@@ -54,6 +54,7 @@ public abstract class AbstractTempDirTest {
     }
 
 
+    @SuppressWarnings("resource") // no FileSystem allocation
     protected final boolean isPosixFilePermissionsSupported() {
         return FileSystems.getDefault().supportedFileAttributeViews().contains("posix");
     }
