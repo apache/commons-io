@@ -60,6 +60,8 @@ public final class FileChannels {
         while (true) {
             final int read1 = channel1.read(byteBuffer1);
             final int read2 = channel2.read(byteBuffer2);
+            byteBuffer1.clear();
+            byteBuffer2.clear();
             if (read1 == IOUtils.EOF && read2 == IOUtils.EOF) {
                 return byteBuffer1.equals(byteBuffer2);
             }
@@ -69,8 +71,6 @@ public final class FileChannels {
             if (!byteBuffer1.equals(byteBuffer2)) {
                 return false;
             }
-            byteBuffer1.clear();
-            byteBuffer2.clear();
         }
     }
 
