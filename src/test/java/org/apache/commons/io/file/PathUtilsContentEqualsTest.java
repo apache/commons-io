@@ -198,7 +198,6 @@ public class PathUtilsContentEqualsTest {
 
     @Test
     public void testFileContentEqualsZip() throws Exception {
-        // Non-existent files
         final Path path1 = Paths.get("src/test/resources/org/apache/commons/io/bla.zip");
         final Path path2 = Paths.get("src/test/resources/org/apache/commons/io/bla-copy.zip");
         final Path path3 = Paths.get("src/test/resources/org/apache/commons/io/moby.zip");
