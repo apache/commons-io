@@ -23,6 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -203,6 +205,22 @@ public class PathUtilsContentEqualsTest {
         final Path path3 = Paths.get("src/test/resources/org/apache/commons/io/moby.zip");
         assertTrue(PathUtils.fileContentEquals(path1, path2));
         assertFalse(PathUtils.fileContentEquals(path1, path3));
+    }
+
+    @Test
+    public void testFileContentEqualsZipFileSystem() throws Exception {
+        try (FileSystem fileSystem = FileSystems.newFileSystem(Paths.get("src/test/resources/org/apache/commons/io/test-same-size-diff-contents.zip"),
+                ClassLoader.getSystemClassLoader())) {
+            // Contains one char: A
+            final Path path1 = fileSystem.getPath("/test-same-size-diff-contents/A.txt");
+            // Contains one char: B
+            final Path path2 = fileSystem.getPath("/test-same-size-diff-contents/B.txt");
+            assertTrue(Files.exists(path1));
+            assertTrue(Files.exists(path2));
+            assertTrue(PathUtils.fileContentEquals(path1, path1));
+            assertTrue(PathUtils.fileContentEquals(path2, path2));
+            assertFalse(PathUtils.fileContentEquals(path1, path2));
+        }
     }
 
 }
