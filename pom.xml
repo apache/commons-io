@@ -561,44 +561,6 @@ file comparators, endian transformation classes, and much more.
       </properties>
     </profile>
     <profile>
-      <id>java9-moditect</id>
-      <activation>
-        <!-- 
-        Fails on Java 11 and Windows:
-        Error:  Failed to execute goal org.moditect:moditect-maven-plugin:1.0.0.RC2:add-module-info (add-module-infos) on project commons-io: Execution add-module-infos of goal org.moditect:moditect-maven-plugin:1.0.0.RC2:add-module-info failed: Couldn't add module-info.class to JAR: D:\a\commons-io\commons-io\target\commons-io-2.12.0-SNAPSHOT.jar: The process cannot access the file because it is being used by another process. -> [Help 1]
-        -->
-        <jdk>[9,11)</jdk>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.moditect</groupId>
-            <artifactId>moditect-maven-plugin</artifactId>
-            <version>${commons.moditect.version}</version>
-            <executions>
-              <execution>
-                <id>add-module-infos</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>add-module-info</goal>
-                </goals>
-                <configuration>
-                  <jvmVersion>9</jvmVersion>
-                  <outputDirectory>${project.build.directory}</outputDirectory>
-                  <overwriteExistingFiles>true</overwriteExistingFiles>
-                  <module>
-                    <moduleInfo>
-                      <name>org.apache.commons.io</name>
-                    </moduleInfo>
-                  </module>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
       <id>benchmark</id>
       <properties>
         <skipTests>true</skipTests>
