@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
 public class FileAlterationObserverTest extends AbstractMonitorTest {
 
     /**
-     * Construct a new test case.
+     * Constructs a new instance.
      *
      */
     public FileAlterationObserverTest() {
