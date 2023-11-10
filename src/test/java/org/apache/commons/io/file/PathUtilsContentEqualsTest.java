@@ -167,28 +167,28 @@ public class PathUtilsContentEqualsTest {
         assertTrue(PathUtils.fileContentEquals(path1, path2));
         assertTrue(PathUtils.fileContentEquals(path2, path2));
         assertTrue(PathUtils.fileContentEquals(path2, path1));
-        
+
         // Directories
         assertThrows(IOException.class, () -> PathUtils.fileContentEquals(temporaryFolder.toPath(), temporaryFolder.toPath()));
-        
+
         // Different files
         final Path objFile1 = Paths.get(temporaryFolder.getAbsolutePath(), getName() + ".object");
         PathUtils.copyFile(getClass().getResource("/java/lang/Object.class"), objFile1);
-        
+
         final Path objFile1b = Paths.get(temporaryFolder.getAbsolutePath(), getName() + ".object2");
         PathUtils.copyFile(getClass().getResource("/java/lang/Object.class"), objFile1b);
-        
+
         final Path objFile2 = Paths.get(temporaryFolder.getAbsolutePath(), getName() + ".collection");
         PathUtils.copyFile(getClass().getResource("/java/util/Collection.class"), objFile2);
-        
+
         assertFalse(PathUtils.fileContentEquals(objFile1, objFile2));
         assertFalse(PathUtils.fileContentEquals(objFile1b, objFile2));
         assertTrue(PathUtils.fileContentEquals(objFile1, objFile1b));
-        
+
         assertTrue(PathUtils.fileContentEquals(objFile1, objFile1));
         assertTrue(PathUtils.fileContentEquals(objFile1b, objFile1b));
         assertTrue(PathUtils.fileContentEquals(objFile2, objFile2));
-        
+
         // Equal files
         Files.createFile(path1);
         Files.createFile(path2);
