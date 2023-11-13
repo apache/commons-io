@@ -1380,7 +1380,7 @@ public class FileUtils {
      * Creates all directories for a File object, including any necessary but non-existent parent directories. If the parent directory already exists or is
      * null, nothing happens.
      * <p>
-     * Calls {@link File#mkdirs()} for the parent of @{code file}.
+     * Calls {@link File#mkdirs()} for the parent of {@code file}.
      * </p>
      *
      * @param file file with parents to create, must not be {@code null}.
