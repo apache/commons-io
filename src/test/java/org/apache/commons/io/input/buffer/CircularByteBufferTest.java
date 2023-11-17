@@ -64,7 +64,7 @@ public class CircularByteBufferTest {
         assertFalse(cbb.peek(sourceBuffer, offset, length));
     }
 
-   @Test
+    @Test
     public void testPeekWithNegativeLength() {
         int length = -1;
         int offset = 0;
