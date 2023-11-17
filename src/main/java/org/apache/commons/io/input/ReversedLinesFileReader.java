@@ -95,7 +95,7 @@ public class ReversedLinesFileReader implements Closeable {
 
     }
 
-    private class FilePart {
+    private final class FilePart {
         private final long no;
 
         private final byte[] data;

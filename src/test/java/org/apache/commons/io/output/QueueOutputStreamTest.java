@@ -66,7 +66,7 @@ public class QueueOutputStreamTest {
     }
 
     @Test
-    public void writeInterrupted() throws Exception {
+    public void testWriteInterrupted() throws Exception {
         try (QueueOutputStream outputStream = new QueueOutputStream(new LinkedBlockingQueue<>(1));
                 final QueueInputStream inputStream = outputStream.newQueueInputStream()) {
 
@@ -97,7 +97,7 @@ public class QueueOutputStreamTest {
     }
 
     @Test
-    public void writeString() throws Exception {
+    public void testWriteString() throws Exception {
         try (QueueOutputStream outputStream = new QueueOutputStream();
                 final QueueInputStream inputStream = outputStream.newQueueInputStream()) {
             outputStream.write("ABC".getBytes(UTF_8));
@@ -107,7 +107,7 @@ public class QueueOutputStreamTest {
     }
 
     @Test
-    public void writeStringMultiThread() throws Exception {
+    public void testWriteStringMultiThread() throws Exception {
         try (QueueOutputStream outputStream = callInThrowAwayThread(QueueOutputStream::new);
                 final QueueInputStream inputStream = callInThrowAwayThread(outputStream::newQueueInputStream)) {
             callInThrowAwayThread(() -> {

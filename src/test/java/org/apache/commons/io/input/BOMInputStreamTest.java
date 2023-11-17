@@ -206,24 +206,6 @@ public class BOMInputStreamTest {
     }
 
     @Test
-    public void skipReturnValueWithBom() throws IOException {
-        final byte[] data = { (byte) 0x31, (byte) 0x32, (byte) 0x33 };
-        try (BOMInputStream is1 = BOMInputStream.builder().setInputStream(createUtf8Input(data, true)).get()) {
-            assertEquals(2, is1.skip(2));
-            assertEquals((byte) 0x33, is1.read());
-        }
-    }
-
-    @Test
-    public void skipReturnValueWithoutBom() throws IOException {
-        final byte[] data = { (byte) 0x31, (byte) 0x32, (byte) 0x33 };
-        try (BOMInputStream is2 = BOMInputStream.builder().setInputStream(createUtf8Input(data, false)).get()) {
-            assertEquals(2, is2.skip(2)); // IO-428
-            assertEquals((byte) 0x33, is2.read());
-        }
-    }
-
-    @Test
     public void testAvailableWithBOM() throws Exception {
         final byte[] data = { 'A', 'B', 'C', 'D' };
         try (InputStream in = BOMInputStream.builder().setInputStream(createUtf8Input(data, true)).get()) {
@@ -685,7 +667,6 @@ public class BOMInputStreamTest {
         parseXml(createUtf8Input(data, true));
     }
 
-
     @Test
     public void testReadXmlWithoutBOMUtf32Be() throws Exception {
         assumeTrue(jvmAndSaxBothSupportCharset("UTF_32BE"), "JVM and SAX need to support UTF_32BE for this");
@@ -704,6 +685,25 @@ public class BOMInputStreamTest {
             parseXml(in);
         }
         parseXml(createUtf32BeDataStream(data, false));
+    }
+
+
+    @Test
+    public void testSkipReturnValueWithBom() throws IOException {
+        final byte[] data = { (byte) 0x31, (byte) 0x32, (byte) 0x33 };
+        try (BOMInputStream is1 = BOMInputStream.builder().setInputStream(createUtf8Input(data, true)).get()) {
+            assertEquals(2, is1.skip(2));
+            assertEquals((byte) 0x33, is1.read());
+        }
+    }
+
+    @Test
+    public void testSkipReturnValueWithoutBom() throws IOException {
+        final byte[] data = { (byte) 0x31, (byte) 0x32, (byte) 0x33 };
+        try (BOMInputStream is2 = BOMInputStream.builder().setInputStream(createUtf8Input(data, false)).get()) {
+            assertEquals(2, is2.skip(2)); // IO-428
+            assertEquals((byte) 0x33, is2.read());
+        }
     }
 
     @Test

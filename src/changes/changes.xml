@@ -49,7 +49,11 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <release version="2.15.1" date="20YY-MM-DD" description="Java 8 is required.">
       <!-- FIX -->
-      <action dev="sebb" type="fix" due-to="Gregor Dschung">Fix wrong issue id in changelog #503.</action>
+      <action dev="sebb" type="fix" due-to="Gregor Dschung">Fix wrong issue id in change log #503.</action>
+      <action dev="ggregory" type="fix" due-to="Stephan Markwalder, Gary Gregory">Add test for FileChannels.contentEquals() #509.</action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix FileChannels.contentEquals().</action>
+      <!-- UPDATE -->
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Bump org.codehaus.mojo:exec-maven-plugin from 3.1.0 to 3.1.1 #512.</action>
     </release>
     <release version="2.15.0" date="2023-10-21" description="Java 8 is required.">
       <!-- FIX -->
@@ -111,6 +115,12 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action issue="IO-816" dev="ggregory" type="fix" due-to="Andreas Loth, Gary Gregory">
         UnsynchronizedBufferedInputStream.read(byte[], int, int) does not use buffer.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        Pick up Maven Moditect plugin version from parent POM.
+      </action>
+      <action issue="IO-821" dev="ggregory" type="fix" due-to="Frédéric Hannes, Gary Gregory">
+        2.15.0 breaks backwards compatibility in PathUtils.fileContentEquals for the Zip file system.
       </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">

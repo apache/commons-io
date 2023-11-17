@@ -26,37 +26,6 @@ import org.junit.jupiter.api.Test;
 
 public class UnixLineEndingInputStreamTest {
 
-    @Test
-    public void crAtEnd() throws Exception {
-        assertEquals("a\n", roundtrip("a\r"));
-    }
-
-    @Test
-    public void crOnlyEnsureAtEof() throws Exception {
-        assertEquals("a\nb\n", roundtrip("a\rb"));
-    }
-
-    @Test
-    public void crOnlyNotAtEof() throws Exception {
-        assertEquals("a\nb", roundtrip("a\rb", false));
-    }
-
-    @Test
-    public void inTheMiddleOfTheLine() throws Exception {
-        assertEquals("a\nbc\n", roundtrip("a\r\nbc"));
-    }
-
-    @Test
-    public void multipleBlankLines() throws Exception {
-        assertEquals("a\n\nbc\n", roundtrip("a\r\n\r\nbc"));
-    }
-
-    @Test
-    public void retainLineFeed() throws Exception {
-        assertEquals("a\n\n", roundtrip("a\r\n\r\n", false));
-        assertEquals("a", roundtrip("a", false));
-    }
-
     private String roundtrip(final String msg) throws IOException {
         return roundtrip(msg, true);
     }
@@ -70,12 +39,43 @@ public class UnixLineEndingInputStreamTest {
     }
 
     @Test
-    public void simpleString() throws Exception {
+    public void testCrAtEnd() throws Exception {
+        assertEquals("a\n", roundtrip("a\r"));
+    }
+
+    @Test
+    public void testCrOnlyEnsureAtEof() throws Exception {
+        assertEquals("a\nb\n", roundtrip("a\rb"));
+    }
+
+    @Test
+    public void testCrOnlyNotAtEof() throws Exception {
+        assertEquals("a\nb", roundtrip("a\rb", false));
+    }
+
+    @Test
+    public void testInTheMiddleOfTheLine() throws Exception {
+        assertEquals("a\nbc\n", roundtrip("a\r\nbc"));
+    }
+
+    @Test
+    public void testMultipleBlankLines() throws Exception {
+        assertEquals("a\n\nbc\n", roundtrip("a\r\n\r\nbc"));
+    }
+
+    @Test
+    public void testRetainLineFeed() throws Exception {
+        assertEquals("a\n\n", roundtrip("a\r\n\r\n", false));
+        assertEquals("a", roundtrip("a", false));
+    }
+
+    @Test
+    public void testSimpleString() throws Exception {
         assertEquals("abc\n", roundtrip("abc"));
     }
 
     @Test
-    public void twoLinesAtEnd() throws Exception {
+    public void testTwoLinesAtEnd() throws Exception {
         assertEquals("a\n\n", roundtrip("a\r\n\r\n"));
     }
 

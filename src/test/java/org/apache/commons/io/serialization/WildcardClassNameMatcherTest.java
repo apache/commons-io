@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 public class WildcardClassNameMatcherTest {
 
     @Test
-    public void noPattern() {
+    public void testNoPattern() {
         final ClassNameMatcher ca = new WildcardClassNameMatcher("org.foo");
         assertTrue(ca.matches("org.foo"));
         assertFalse(ca.matches("org.foo.and.more"));
@@ -37,14 +37,14 @@ public class WildcardClassNameMatcherTest {
     }
 
     @Test
-    public void star() {
+    public void testStar() {
         final ClassNameMatcher ca = new WildcardClassNameMatcher("org*");
         assertTrue(ca.matches("org.foo.should.match"));
         assertFalse(ca.matches("bar.should.not.match"));
     }
 
     @Test
-    public void starAndQuestionMark() {
+    public void testStarAndQuestionMark() {
         final ClassNameMatcher ca = new WildcardClassNameMatcher("org?apache?something*");
         assertTrue(ca.matches("org.apache_something.more"));
         assertFalse(ca.matches("org..apache_something.more"));

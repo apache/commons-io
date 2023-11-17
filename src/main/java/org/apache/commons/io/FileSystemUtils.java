@@ -61,7 +61,7 @@ public class FileSystemUtils {
     private static final int WINDOWS = 1;
     /** Operating system state flag for Unix. */
     private static final int UNIX = 2;
-    /** Operating system state flag for Posix flavour Unix. */
+    /** Operating system state flag for Posix flavor Unix. */
     private static final int POSIX_UNIX = 3;
 
     /** The operating system flag. */

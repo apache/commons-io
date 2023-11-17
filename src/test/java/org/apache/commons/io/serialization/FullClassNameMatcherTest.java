@@ -31,13 +31,13 @@ public class FullClassNameMatcherTest {
     private static final String [] NAMES_ARRAY = { Integer.class.getName(), Long.class.getName() };
 
     @Test
-    public void noNames() {
+    public void testNoNames() {
         final FullClassNameMatcher m = new FullClassNameMatcher();
         assertFalse(m.matches(Integer.class.getName()));
     }
 
     @Test
-    public void withNames() {
+    public void testWithNames() {
         final FullClassNameMatcher m = new FullClassNameMatcher(NAMES_ARRAY);
         assertTrue(m.matches(Integer.class.getName()));
         assertFalse(m.matches(String.class.getName()));

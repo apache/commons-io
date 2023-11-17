@@ -91,20 +91,6 @@ public class AndFileFilterTest extends AbstractConditionalFileFilterTest {
     return WORKING_PATH_NAME_PROPERTY_KEY;
   }
 
-  @Test
-  public void setTestFiltersClearsOld() {
-    // test that new filters correctly clear old filters
-    final List<IOFileFilter> simpleEmptyFileFilter = Collections.singletonList(EmptyFileFilter.EMPTY);
-    final AndFileFilter andFileFilter = new AndFileFilter(simpleEmptyFileFilter);
-    // make sure the filters at this point are the same
-    assertEquals(simpleEmptyFileFilter, andFileFilter.getFileFilters());
-
-    final List<IOFileFilter> simpleNonEmptyFilter = Collections.singletonList(EmptyFileFilter.NOT_EMPTY);
-    // when calling the setter the filters should reference the new filters
-    andFileFilter.setFileFilters(simpleNonEmptyFilter);
-    assertEquals(simpleNonEmptyFilter, andFileFilter.getFileFilters());
-  }
-
   @BeforeEach
   public void setUpTestFilters() {
     // filters
@@ -309,5 +295,19 @@ public class AndFileFilterTest extends AbstractConditionalFileFilterTest {
       testFileResults.add(9, Boolean.FALSE);
       testFilenameResults.add(9, Boolean.FALSE);
     }
+  }
+
+  @Test
+  public void testSetTestFiltersClearsOld() {
+    // test that new filters correctly clear old filters
+    final List<IOFileFilter> simpleEmptyFileFilter = Collections.singletonList(EmptyFileFilter.EMPTY);
+    final AndFileFilter andFileFilter = new AndFileFilter(simpleEmptyFileFilter);
+    // make sure the filters at this point are the same
+    assertEquals(simpleEmptyFileFilter, andFileFilter.getFileFilters());
+
+    final List<IOFileFilter> simpleNonEmptyFilter = Collections.singletonList(EmptyFileFilter.NOT_EMPTY);
+    // when calling the setter the filters should reference the new filters
+    andFileFilter.setFileFilters(simpleNonEmptyFilter);
+    assertEquals(simpleNonEmptyFilter, andFileFilter.getFileFilters());
   }
 }

@@ -60,7 +60,7 @@ public class FileUtilsCopyDirectoryToDirectoryTest {
     }
 
     @Test
-    public void copyDirectoryToDirectoryThrowsIllegalArgumentExceptionWithCorrectMessageWhenDstDirIsNotDirectory()
+    public void testCopyDirectoryToDirectoryThrowsIllegalArgumentExceptionWithCorrectMessageWhenDstDirIsNotDirectory()
         throws IOException {
         final File srcDir = new File(temporaryFolder, "sourceDirectory");
         srcDir.mkdir();
@@ -72,7 +72,7 @@ public class FileUtilsCopyDirectoryToDirectoryTest {
     }
 
     @Test
-    public void copyDirectoryToDirectoryThrowsIllegalExceptionWithCorrectMessageWhenSrcDirIsNotDirectory()
+    public void testCopyDirectoryToDirectoryThrowsIllegalExceptionWithCorrectMessageWhenSrcDirIsNotDirectory()
         throws IOException {
         try (TempFile srcDir = TempFile.create("notadirectory", null)) {
             final File destDir = new File(temporaryFolder, "destinationDirectory");
@@ -83,7 +83,7 @@ public class FileUtilsCopyDirectoryToDirectoryTest {
     }
 
     @Test
-    public void copyDirectoryToDirectoryThrowsNullPointerExceptionWithCorrectMessageWhenDstDirIsNull() {
+    public void testCopyDirectoryToDirectoryThrowsNullPointerExceptionWithCorrectMessageWhenDstDirIsNull() {
         final File srcDir = new File(temporaryFolder, "sourceDirectory");
         srcDir.mkdir();
         final File destDir = null;
@@ -91,7 +91,7 @@ public class FileUtilsCopyDirectoryToDirectoryTest {
     }
 
     @Test
-    public void copyDirectoryToDirectoryThrowsNullPointerExceptionWithCorrectMessageWhenSrcDirIsNull() {
+    public void testCopyDirectoryToDirectoryThrowsNullPointerExceptionWithCorrectMessageWhenSrcDirIsNull() {
         final File srcDir = null;
         final File destinationDirectory = new File(temporaryFolder, "destinationDirectory");
         destinationDirectory.mkdir();
@@ -99,7 +99,7 @@ public class FileUtilsCopyDirectoryToDirectoryTest {
     }
 
     @Test
-    public void copyFileAndCheckAcl() throws IOException {
+    public void testCopyFileAndCheckAcl() throws IOException {
         try (TempFile sourcePath = TempFile.create("TempOutput", ".bin")) {
             final Path destPath = Paths.get(temporaryFolder.getAbsolutePath(), "SomeFile.bin");
             // Test copy attributes without replace FIRST.

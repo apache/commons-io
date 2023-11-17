@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 
 public abstract class AbstractIOFileFilterTest {
 
-    class TesterFalseFileFilter extends FalseFileFilter {
+    final class TesterFalseFileFilter extends FalseFileFilter {
 
         private static final long serialVersionUID = -3603047664010401872L;
         private boolean invoked;
@@ -54,7 +54,7 @@ public abstract class AbstractIOFileFilterTest {
         }
     }
 
-    class TesterTrueFileFilter extends TrueFileFilter {
+    final class TesterTrueFileFilter extends TrueFileFilter {
 
         private static final long serialVersionUID = 1828930358172422914L;
         private boolean invoked;

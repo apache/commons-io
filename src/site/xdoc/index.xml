@@ -93,7 +93,7 @@ limitations under the License.
 
       <subsection name="Latest Release (Java 8 and up)">
         <p>
-          Commons IO 2.13.0 requires a minimum of Java 8 -
+          Commons IO requires a minimum of Java 8 -
           <a href="https://commons.apache.org/io/download_io.cgi">Download now</a>
           .
         </p>
@@ -118,10 +118,10 @@ limitations under the License.
           The Java platform requirements are:
         </p>
         <ul>
-          <li>Version 2.7 and up requires Java 8.</li>
-          <li>Version 2.6 requires Java 7.</li>
-          <li>Version 2.3 through 2.5 requires Java 6.</li>
-          <li>Version 2.2 requires Java 5.</li>
+          <li>Version 2.7 and up requires Java 8 or above.</li>
+          <li>Version 2.6 requires Java 7 or above.</li>
+          <li>Version 2.3 through 2.5 requires Java 6 or above.</li>
+          <li>Version 2.2 requires Java 5 or above.</li>
         </ul>
       </subsection>
 

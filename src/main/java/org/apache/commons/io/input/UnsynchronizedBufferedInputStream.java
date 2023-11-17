@@ -196,7 +196,7 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
         } else if (markPos > 0) {
             System.arraycopy(localBuf, markPos, localBuf, 0, localBuf.length - markPos);
         }
-        /* Set the new position and mark position */
+        // Set the new position and mark position
         pos -= markPos;
         count = markPos = 0;
         final int bytesread = localIn.read(localBuf, pos, localBuf.length - pos);
