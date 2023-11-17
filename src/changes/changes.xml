@@ -52,6 +52,8 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="sebb" type="fix" due-to="Gregor Dschung">Fix wrong issue id in change log #503.</action>
       <action dev="ggregory" type="fix" due-to="Stephan Markwalder, Gary Gregory">Add test for FileChannels.contentEquals() #509.</action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix FileChannels.contentEquals().</action>
+      <!-- UPDATE -->
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Bump org.codehaus.mojo:exec-maven-plugin from 3.1.0 to 3.1.1 #512.</action>
     </release>
     <release version="2.15.0" date="2023-10-21" description="Java 8 is required.">
       <!-- FIX -->
