@@ -19,6 +19,7 @@ package org.apache.commons.io.monitor;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -394,7 +395,7 @@ public class FileAlterationObserver implements Serializable {
      * @return The file system listeners
      */
     public Iterable<FileAlterationListener> getListeners() {
-        return listeners;
+        return new ArrayList<>(listeners);
     }
 
     /**
