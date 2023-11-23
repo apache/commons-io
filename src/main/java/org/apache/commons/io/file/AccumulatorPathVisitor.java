@@ -171,21 +171,21 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
     }
 
     /**
-     * Gets the list of visited directories.
+     * Gets a copy of the list of visited directories.
      *
-     * @return the list of visited directories.
+     * @return a copy of the list of visited directories.
      */
     public List<Path> getDirList() {
-        return dirList;
+        return new ArrayList<>(dirList);
     }
 
     /**
-     * Gets the list of visited files.
+     * Gets a copy of the list of visited files.
      *
-     * @return the list of visited files.
+     * @return a copy of the list of visited files.
      */
     public List<Path> getFileList() {
-        return fileList;
+        return new ArrayList<>(fileList);
     }
 
     @Override
