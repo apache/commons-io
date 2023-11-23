@@ -1888,7 +1888,7 @@ public class IOUtils {
      *
      * @param reader the {@link Reader} to read, not null
      * @return an Iterator of the lines in the reader, never null
-     * @throws IllegalArgumentException if the reader is null
+     * @throws NullPointerException if the reader is null
      * @since 1.2
      */
     public static LineIterator lineIterator(final Reader reader) {
