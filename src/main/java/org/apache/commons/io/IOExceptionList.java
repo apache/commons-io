@@ -18,6 +18,7 @@
 package org.apache.commons.io;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -115,7 +116,7 @@ public class IOExceptionList extends IOException implements Iterable<Throwable> 
      * @return The list of causes.
      */
     public <T extends Throwable> List<T> getCauseList() {
-        return (List<T>) causeList;
+        return (List<T>) new ArrayList<>(causeList);
     }
 
     /**
@@ -126,7 +127,7 @@ public class IOExceptionList extends IOException implements Iterable<Throwable> 
      * @return The list of causes.
      */
     public <T extends Throwable> List<T> getCauseList(final Class<T> clazz) {
-        return (List<T>) causeList;
+        return (List<T>) new ArrayList<>(causeList);
     }
 
     @Override
