@@ -166,7 +166,9 @@ public class RegexFileFilterTest {
         final String patternStr = "Foo.*";
         assertFiltering(assertSerializable(new RegexFileFilter(patternStr)), path, true);
         assertFiltering(assertSerializable(new RegexFileFilter(Pattern.compile(patternStr), (Function<Path, String> & Serializable) Path::toString)), path,
-            false);
+                false);
+        assertFiltering(new RegexFileFilter(Pattern.compile(patternStr), (Function<Path, String> & Serializable) null), path, false);
+        assertFiltering(new RegexFileFilter(Pattern.compile(patternStr), (Function<Path, String> & Serializable) p -> null), path, false);
     }
 
 }
