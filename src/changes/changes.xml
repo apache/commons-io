@@ -61,6 +61,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix SpotBugs error: org.apache.commons.io.function.IOStream$1.next() cannot throw NoSuchElementException [org.apache.commons.io.function.IOStream$1] At IOStream.java:[line 98] IT_NO_SUCH_ELEMENT.</action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix SpotBugs error: Class org.apache.commons.io.monitor.FileAlterationObserver defines non-transient non-serializable instance field fileFilter [org.apache.commons.io.monitor.FileAlterationObserver] In FileAlterationObserver.java SE_BAD_FIELD.</action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix SpotBugs error: Class org.apache.commons.io.monitor.FileAlterationObserver defines non-transient non-serializable instance field listeners [org.apache.commons.io.monitor.FileAlterationObserver] In FileAlterationObserver.java SE_BAD_FIELD.</action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix SpotBugs error: org.apache.commons.io.FileCleaningTracker.getDeleteFailures() may expose internal representation by returning FileCleaningTracker.deleteFailures [org.apache.commons.io.FileCleaningTracker] At FileCleaningTracker.java:[line 218] EI_EXPOSE_REP.</action>
       <!-- UPDATE -->
       <action dev="ggregory" type="update" due-to="Gary Gregory">Bump org.codehaus.mojo:exec-maven-plugin from 3.1.0 to 3.1.1 #512.</action>
       <action dev="ggregory" type="update" due-to="Gary Gregory">Bump commons-lang3 from 3.13.0 to 3.14.0.</action>      
