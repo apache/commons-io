@@ -178,13 +178,13 @@ public class ObservableInputStream extends ProxyInputStream {
     }
 
     /**
-     * Gets all currently registered observers.
+     * Gets a copy of currently registered observers.
      *
-     * @return a list of the currently registered observers.
+     * @return a copy of the list of currently registered observers.
      * @since 2.9.0
      */
     public List<Observer> getObservers() {
-        return observers;
+        return new ArrayList<>(observers);
     }
 
     /**
