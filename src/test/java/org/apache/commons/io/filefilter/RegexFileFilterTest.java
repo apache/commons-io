@@ -42,20 +42,16 @@ public class RegexFileFilterTest {
 
     public void assertFiltering(final IOFileFilter filter, final File file, final boolean expected) {
         // Note. This only tests the (File, String) version if the parent of
-        //       the File passed in is not null
-        assertEquals(expected, filter.accept(file),
-                "Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file);
+        // the File passed in is not null
+        assertEquals(expected, filter.accept(file), "Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file);
 
         if (file != null && file.getParentFile() != null) {
             assertEquals(expected, filter.accept(file.getParentFile(), file.getName()),
                     "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for " + file);
-            assertEquals(expected, filter.matches(file.toPath()),
-                    "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for " + file);
+            assertEquals(expected, filter.matches(file.toPath()), "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for " + file);
         } else if (file == null) {
-            assertEquals(expected, filter.accept(file),
-                    "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null");
-            assertEquals(expected, filter.matches(null),
-                    "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null");
+            assertEquals(expected, filter.accept(file), "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null");
+            assertEquals(expected, filter.matches(null), "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null");
         }
         // Just don't blow up
         assertNotNull(filter.toString());
@@ -72,11 +68,10 @@ public class RegexFileFilterTest {
 
         if (path != null && path.getParent() != null) {
             assertEquals(expectedFileVisitResult, filter.accept(path, null),
-                "Filter(Path, Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for "
-                    + path);
+                    "Filter(Path, Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for " + path);
         } else if (path == null) {
             assertEquals(expectedFileVisitResult, filter.accept(path, null),
-                "Filter(Path, Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for null");
+                    "Filter(Path, Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for null");
         }
         // Just don't blow up
         assertNotNull(filter.toString());
@@ -167,8 +162,12 @@ public class RegexFileFilterTest {
         assertFiltering(assertSerializable(new RegexFileFilter(patternStr)), path, true);
         assertFiltering(assertSerializable(new RegexFileFilter(Pattern.compile(patternStr), (Function<Path, String> & Serializable) Path::toString)), path,
                 false);
+        //
         assertFiltering(new RegexFileFilter(Pattern.compile(patternStr), (Function<Path, String> & Serializable) null), path, false);
         assertFiltering(new RegexFileFilter(Pattern.compile(patternStr), (Function<Path, String> & Serializable) p -> null), path, false);
+        //
+        assertFiltering(assertSerializable(new RegexFileFilter(Pattern.compile(patternStr), (Function<Path, String> & Serializable) null)), path, false);
+        assertFiltering(assertSerializable(new RegexFileFilter(Pattern.compile(patternStr), (Function<Path, String> & Serializable) p -> null)), path, false);
     }
 
 }

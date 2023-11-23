@@ -55,6 +55,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix some Javadoc issues in LineIterator and IOUtils.</action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">Avoid NullPointerException in RegexFileFilter.RegexFileFilter(Pattern).</action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">Avoid NullPointerException in RegexFileFilter.accept(Path, BasicFileAttributes).</action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix SpotBugs error: Class org.apache.commons.io.filefilter.RegexFileFilter defines non-transient non-serializable instance field pathToString [org.apache.commons.io.filefilter.RegexFileFilter] In RegexFileFilter.java SE_BAD_FIELD.</action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix SpotBugs error: Class org.apache.commons.io.filefilter.DelegateFileFilter defines non-transient non-serializable instance field fileFilter [org.apache.commons.io.filefilter.DelegateFileFilter] In DelegateFileFilter.java SE_BAD_FIELD.</action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix SpotBugs error: Class org.apache.commons.io.filefilter.DelegateFileFilter defines non-transient non-serializable instance field fileNameFilter [org.apache.commons.io.filefilter.DelegateFileFilter] In DelegateFileFilter.java SE_BAD_FIELD.</action>
       <!-- UPDATE -->
