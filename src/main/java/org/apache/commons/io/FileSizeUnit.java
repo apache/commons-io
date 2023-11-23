@@ -12,140 +12,140 @@ public enum FileSizeUnit {
     /**Byte*/
     BYTE {
         @Override
-        public long toByte(long duration) {
-            return duration;
+        public long toByte(long length) {
+            return length;
         }
 
         @Override
-        public long toKb(long duration) {
-            return duration/(CKB/ CB);
+        public long toKb(long length) {
+            return length/(CKB/ CB);
         }
 
         @Override
-        public long toMb(long duration) {
-            return duration/(CMB/ CB);
+        public long toMb(long length) {
+            return length/(CMB/ CB);
         }
 
         @Override
-        public long toGb(long duration) {
-            return duration/(CGB/ CB);
+        public long toGb(long length) {
+            return length/(CGB/ CB);
         }
 
         @Override
-        public long toTb(long duration) {
-            return duration/(CTB/ CB);
+        public long toTb(long length) {
+            return length/(CTB/ CB);
         }
     },
 
     /**KB*/
     KB {
         @Override
-        public long toByte(long duration) {
-            return x(duration, CKB/ CB, MAX/(CKB/ CB));
+        public long toByte(long length) {
+            return x(length, CKB/ CB, MAX/(CKB/ CB));
         }
 
         @Override
-        public long toKb(long duration) {
-            return duration;
+        public long toKb(long length) {
+            return length;
         }
 
         @Override
-        public long toMb(long duration) {
-            return duration/(CMB/CKB);
+        public long toMb(long length) {
+            return length/(CMB/CKB);
         }
 
         @Override
-        public long toGb(long duration) {
-            return duration/(CGB/CKB);
+        public long toGb(long length) {
+            return length/(CGB/CKB);
         }
 
         @Override
-        public long toTb(long duration) {
-            return duration/(CTB/CKB);
+        public long toTb(long length) {
+            return length/(CTB/CKB);
         }
     },
 
     /**MB*/
     MB {
         @Override
-        public long toByte(long duration) {
-            return x(duration, CMB/ CB, MAX/(CMB/ CB));
+        public long toByte(long length) {
+            return x(length, CMB/ CB, MAX/(CMB/ CB));
         }
 
         @Override
-        public long toKb(long duration) {
-            return x(duration, CMB/CKB, MAX/(CMB/CKB));
+        public long toKb(long length) {
+            return x(length, CMB/CKB, MAX/(CMB/CKB));
         }
 
         @Override
-        public long toMb(long duration) {
-            return duration;
+        public long toMb(long length) {
+            return length;
         }
 
         @Override
-        public long toGb(long duration) {
-            return duration/(CGB/CMB);
+        public long toGb(long length) {
+            return length/(CGB/CMB);
         }
 
         @Override
-        public long toTb(long duration) {
-            return duration/(CTB/CMB);
+        public long toTb(long length) {
+            return length/(CTB/CMB);
         }
     },
 
     /**GB*/
     GB {
         @Override
-        public long toByte(long duration) {
-            return x(duration, CGB/ CB, MAX/(CGB/ CB));
+        public long toByte(long length) {
+            return x(length, CGB/ CB, MAX/(CGB/ CB));
         }
 
         @Override
-        public long toKb(long duration) {
-            return x(duration, CGB/CKB, MAX/(CGB/CKB));
+        public long toKb(long length) {
+            return x(length, CGB/CKB, MAX/(CGB/CKB));
         }
 
         @Override
-        public long toMb(long duration) {
-            return x(duration, CGB/CMB, MAX/(CGB/CMB));
+        public long toMb(long length) {
+            return x(length, CGB/CMB, MAX/(CGB/CMB));
         }
 
         @Override
-        public long toGb(long duration) {
-            return duration;
+        public long toGb(long length) {
+            return length;
         }
 
         @Override
-        public long toTb(long duration) {
-            return duration/(CTB/CGB);
+        public long toTb(long length) {
+            return length/(CTB/CGB);
         }
     },
 
     /**TB*/
     TB {
         @Override
-        public long toByte(long duration) {
-            return x(duration, CTB/ CB, MAX/(CTB/ CB));
+        public long toByte(long length) {
+            return x(length, CTB/ CB, MAX/(CTB/ CB));
         }
 
         @Override
-        public long toKb(long duration) {
-            return x(duration, CTB/CKB, MAX/(CTB/CKB));
+        public long toKb(long length) {
+            return x(length, CTB/CKB, MAX/(CTB/CKB));
         }
 
         @Override
-        public long toMb(long duration) {
-            return x(duration, CTB/CMB, MAX/(CTB/CMB));
+        public long toMb(long length) {
+            return x(length, CTB/CMB, MAX/(CTB/CMB));
         }
 
         @Override
-        public long toGb(long duration) {
-            return x(duration, CTB/CGB, MAX/(CTB/CTB));
+        public long toGb(long length) {
+            return x(length, CTB/CGB, MAX/(CTB/CTB));
         }
 
         @Override
-        public long toTb(long duration) {
-            return duration;
+        public long toTb(long length) {
+            return length;
         }
     }
     ;
@@ -169,11 +169,11 @@ public enum FileSizeUnit {
     }
 
 
-    public long toByte(long duration) { throw new AbstractMethodError(); }
-    public long toKb(long duration) { throw new AbstractMethodError(); }
-    public long toMb(long duration) { throw new AbstractMethodError(); }
-    public long toGb(long duration) { throw new AbstractMethodError(); }
-    public long toTb(long duration) { throw new AbstractMethodError(); }
+    public long toByte(long length) { throw new AbstractMethodError(); }
+    public long toKb(long length) { throw new AbstractMethodError(); }
+    public long toMb(long length) { throw new AbstractMethodError(); }
+    public long toGb(long length) { throw new AbstractMethodError(); }
+    public long toTb(long length) { throw new AbstractMethodError(); }
 
     /**
      * Convert file size to a human-readable string with units, such as 3.1GB, 300.0MB, etc
