@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -296,7 +297,7 @@ public class IOStreamTest {
         final IOStream<Long> stream = IOStream.iterate(1L, TestUtils.throwingIOUnaryOperator());
         final IOIterator<Long> iterator = stream.iterator();
         assertEquals(1L, iterator.next());
-        assertThrows(IOException.class, () -> iterator.next());
+        assertThrows(NoSuchElementException.class, () -> iterator.next());
     }
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
