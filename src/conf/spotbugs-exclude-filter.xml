@@ -20,6 +20,16 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="https://github.com/spotbugs/filter/3.0.0 https://raw.githubusercontent.com/spotbugs/spotbugs/3.1.0/spotbugs/etc/findbugsfilter.xsd">
 
+  <!-- TODO Can any of these be done without breaking binary compatibility? -->
+  <Match>
+    <Class name="~.*" />
+    <Or>
+      <Bug pattern="EI_EXPOSE_REP" />
+      <Bug pattern="EI_EXPOSE_REP2" />
+      <Bug pattern="MS_EXPOSE_REP" />
+    </Or>
+  </Match>
+
   <!--  See discussion on https://issues.apache.org/jira/browse/IO-216 -->
   <Match>
     <Class name="org.apache.commons.io.output.LockableFileWriter" />
@@ -45,6 +55,27 @@
     <Class name="org.apache.commons.io.file.PathUtils" />
     <Field name="NOFOLLOW_LINK_OPTION_ARRAY" />
     <Bug pattern="MS_PKGPROTECT" />
+  </Match>
+
+  <!-- Deprecated -->
+  <Match>
+    <Class name="org.apache.commons.io.monitor.FileAlterationObserver" />
+    <Field name="fileFilter" />
+    <Bug pattern="SE_TRANSIENT_FIELD_NOT_RESTORED" />
+  </Match>
+
+  <!-- Deprecated -->
+  <Match>
+    <Class name="org.apache.commons.io.monitor.FileAlterationObserver" />
+    <Field name="listeners" />
+    <Bug pattern="SE_TRANSIENT_FIELD_NOT_RESTORED" />
+  </Match>
+
+  <!-- This class only throws unchecked exceptions. -->
+  <Match>
+    <Class name="org.apache.commons.io.function.UncheckedIOIterator" />
+    <Method name="next" />
+    <Bug pattern="IT_NO_SUCH_ELEMENT" />
   </Match>
 
 </FindBugsFilter>
