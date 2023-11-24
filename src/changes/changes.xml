@@ -72,7 +72,8 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix SpotBugs error: Exception thrown in class org.apache.commons.io.input.UnsynchronizedByteArrayInputStream at new org.apache.commons.io.input.UnsynchronizedByteArrayInputStream(byte[], int, int) will leave the constructor. The object under construction remains partially initialized and may be vulnerable to Finalizer attacks. [org.apache.commons.io.input.UnsynchronizedByteArrayInputStream, org.apache.commons.io.input.UnsynchronizedByteArrayInputStream] At UnsynchronizedByteArrayInputStream.java:[line 223]At UnsynchronizedByteArrayInputStream.java:[line 223] CT_CONSTRUCTOR_THROW.</action>
       <!-- UPDATE -->
       <action dev="ggregory" type="update" due-to="Gary Gregory">Bump org.codehaus.mojo:exec-maven-plugin from 3.1.0 to 3.1.1 #512.</action>
-      <action dev="ggregory" type="update" due-to="Gary Gregory">Bump commons-lang3 from 3.13.0 to 3.14.0.</action>      
+      <action dev="ggregory" type="update" due-to="Gary Gregory">Bump commons-lang3 from 3.13.0 to 3.14.0.</action>
+      <action dev="ggregory" type="update" due-to="Dependabot">Bump commons.bytebuddy.version from 1.14.9 to 1.14.10 #516.</action>
     </release>
     <release version="2.15.0" date="2023-10-21" description="Java 8 is required.">
       <!-- FIX -->
