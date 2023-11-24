@@ -30,6 +30,7 @@ import java.util.stream.Stream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.comparator.NameFileComparator;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**
  * FileAlterationObserver represents the state of files below a root directory,
@@ -176,7 +177,7 @@ public class FileAlterationObserver implements Serializable {
         Objects.requireNonNull(rootEntry, "rootEntry");
         Objects.requireNonNull(rootEntry.getFile(), "rootEntry.getFile()");
         this.rootEntry = rootEntry;
-        this.fileFilter = fileFilter;
+        this.fileFilter = fileFilter != null ? fileFilter : TrueFileFilter.INSTANCE;
         switch (IOCase.value(ioCase, IOCase.SYSTEM)) {
         case SYSTEM:
             this.comparator = NameFileComparator.NAME_SYSTEM_COMPARATOR;
@@ -419,7 +420,7 @@ public class FileAlterationObserver implements Serializable {
     private File[] listFiles(final File file) {
         File[] children = null;
         if (file.isDirectory()) {
-            children = fileFilter == null ? file.listFiles() : file.listFiles(fileFilter);
+            children = file.listFiles(fileFilter);
         }
         if (children == null) {
             children = FileUtils.EMPTY_FILE_ARRAY;
@@ -453,10 +454,8 @@ public class FileAlterationObserver implements Serializable {
         builder.append("[file='");
         builder.append(getDirectory().getPath());
         builder.append('\'');
-        if (fileFilter != null) {
-            builder.append(", ");
-            builder.append(fileFilter.toString());
-        }
+        builder.append(", ");
+        builder.append(fileFilter.toString());
         builder.append(", listeners=");
         builder.append(listeners.size());
         builder.append("]");
