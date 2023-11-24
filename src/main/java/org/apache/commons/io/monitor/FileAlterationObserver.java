@@ -425,7 +425,7 @@ public class FileAlterationObserver implements Serializable {
         if (children == null) {
             children = FileUtils.EMPTY_FILE_ARRAY;
         }
-        if (comparator != null && children.length > 1) {
+        if (children.length > 1) {
             Arrays.sort(children, comparator);
         }
         return children;
