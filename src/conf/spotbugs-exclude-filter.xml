@@ -30,6 +30,12 @@
     </Or>
   </Match>
 
+  <!-- https://github.com/spotbugs/spotbugs/issues/2710 -->
+  <Match>
+    <Class name="~.*" />
+    <Bug pattern="CT_CONSTRUCTOR_THROW" />
+  </Match>
+
   <!--  See discussion on https://issues.apache.org/jira/browse/IO-216 -->
   <Match>
     <Class name="org.apache.commons.io.output.LockableFileWriter" />
