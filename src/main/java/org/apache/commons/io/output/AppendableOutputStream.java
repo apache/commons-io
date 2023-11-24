@@ -62,7 +62,7 @@ public class AppendableOutputStream <T extends Appendable> extends OutputStream 
      */
     @Override
     public void write(final int b) throws IOException {
-        appendable.append((char)b);
+        appendable.append((char) b);
     }
 
 }

@@ -47,7 +47,7 @@ public class MarkShieldInputStream extends ProxyInputStream {
 
     @SuppressWarnings("sync-override")
     @Override
-    public void mark(final int readlimit) {
+    public void mark(final int readLimit) {
         // no-op
     }
 

@@ -31,7 +31,7 @@ import org.apache.commons.io.function.Uncheck;
  * @see UncheckedIOException
  * @since 2.12.0
  */
-class UncheckedAppendableImpl implements UncheckedAppendable {
+final class UncheckedAppendableImpl implements UncheckedAppendable {
 
     private final Appendable appendable;
 

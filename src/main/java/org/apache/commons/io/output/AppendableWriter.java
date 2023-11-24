@@ -144,7 +144,7 @@ public class AppendableWriter <T extends Appendable> extends Writer {
      */
     @Override
     public void write(final int c) throws IOException {
-        appendable.append((char)c);
+        appendable.append((char) c);
     }
 
     /**

@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@code Erase}.
  */
-class EraseTest {
+final class EraseTest {
 
     private final AtomicInteger intRef = new AtomicInteger();
     private final AtomicBoolean boolRef = new AtomicBoolean();

@@ -82,7 +82,7 @@ public class UnixLineEndingInputStream extends InputStream {
      * {@inheritDoc}
      */
     @Override
-    public synchronized void mark(final int readlimit) {
+    public synchronized void mark(final int readLimit) {
         throw UnsupportedOperationExceptions.mark();
     }
 

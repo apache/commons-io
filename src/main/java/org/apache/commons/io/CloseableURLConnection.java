@@ -30,7 +30,7 @@ import java.util.Objects;
 /**
  * Delegates to a URLConnection while implementing AutoCloseable.
  */
-class CloseableURLConnection extends URLConnection implements AutoCloseable {
+final class CloseableURLConnection extends URLConnection implements AutoCloseable {
 
     static CloseableURLConnection open(final URI uri) throws IOException {
         return open(Objects.requireNonNull(uri, "uri").toURL());

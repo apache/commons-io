@@ -254,10 +254,10 @@ public class CharSequenceInputStream extends InputStream {
 
     /**
      * {@inheritDoc}
-     * @param readlimit max read limit (ignored).
+     * @param readLimit max read limit (ignored).
      */
     @Override
-    public synchronized void mark(final int readlimit) {
+    public synchronized void mark(final int readLimit) {
         this.cBufMark = this.cBuf.position();
         this.bBufMark = this.bBuf.position();
         this.cBuf.mark();

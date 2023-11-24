@@ -76,7 +76,7 @@ public class NullReader extends Reader {
     private final long size;
     private long position;
     private long mark = -1;
-    private long readlimit;
+    private long readLimit;
     private boolean eof;
     private final boolean throwEofException;
     private final boolean markSupported;
@@ -168,17 +168,17 @@ public class NullReader extends Reader {
     /**
      * Marks the current position.
      *
-     * @param readlimit The number of characters before this marked position
+     * @param readLimit The number of characters before this marked position
      * is invalid.
      * @throws UnsupportedOperationException if mark is not supported.
      */
     @Override
-    public synchronized void mark(final int readlimit) {
+    public synchronized void mark(final int readLimit) {
         if (!markSupported) {
             throw UnsupportedOperationExceptions.mark();
         }
         mark = position;
-        this.readlimit = readlimit;
+        this.readLimit = readLimit;
     }
 
     /**
@@ -281,7 +281,7 @@ public class NullReader extends Reader {
         position += length;
         int returnLength = length;
         if (position > size) {
-            returnLength = length - (int)(position - size);
+            returnLength = length - (int) (position - size);
             position = size;
         }
         processChars(chars, offset, returnLength);
@@ -304,10 +304,10 @@ public class NullReader extends Reader {
         if (mark < 0) {
             throw new IOException("No position has been marked");
         }
-        if (position > mark + readlimit) {
+        if (position > mark + readLimit) {
             throw new IOException("Marked position [" + mark +
                     "] is no longer valid - passed the read limit [" +
-                    readlimit + "]");
+                    readLimit + "]");
         }
         position = mark;
         eof = false;

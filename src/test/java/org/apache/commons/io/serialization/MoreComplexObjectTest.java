@@ -60,11 +60,11 @@ public class MoreComplexObjectTest extends AbstractCloseableListTest {
      *  detailed in the accepts.
      */
     @Test
-    public void trustJavaIncludingArrays() throws IOException, ClassNotFoundException {
+    public void testTrustJavaIncludingArrays() throws IOException, ClassNotFoundException {
         assertSerialization(closeAfterEachTest(
                 new ValidatingObjectInputStream(inputStream)
                 .accept(MoreComplexObject.class)
-                .accept("java.*","[Ljava.*")
+                .accept("java.*", "[Ljava.*")
         ));
     }
 
@@ -73,11 +73,11 @@ public class MoreComplexObjectTest extends AbstractCloseableListTest {
      *  might become a bit verbose.
      */
     @Test
-    public void trustJavaLang() throws IOException, ClassNotFoundException {
+    public void testTrustJavaLang() throws IOException, ClassNotFoundException {
         assertSerialization(closeAfterEachTest(
                 new ValidatingObjectInputStream(inputStream)
                 .accept(MoreComplexObject.class, ArrayList.class, Random.class)
-                .accept("java.lang.*","[Ljava.lang.*")
+                .accept("java.lang.*", "[Ljava.lang.*")
         ));
     }
 
@@ -88,7 +88,7 @@ public class MoreComplexObjectTest extends AbstractCloseableListTest {
      *  might be ok in controlled environments.
      */
     @Test
-    public void useBlacklist() throws IOException, ClassNotFoundException {
+    public void testUseBlacklist() throws IOException, ClassNotFoundException {
         final String [] blacklist = {
                 "org.apache.commons.collections.functors.InvokerTransformer",
                 "org.codehaus.groovy.runtime.ConvertedClosure",

@@ -31,6 +31,7 @@ limitations under the License.
     <property name="max" value="160" />
   </module>
   <module name="TreeWalker">
+    <module name="WhitespaceAfter" />
     <module name="AvoidStarImport" />
     <module name="RedundantImport" />
     <module name="UnusedImports" />
@@ -50,5 +51,12 @@ limitations under the License.
       <property name="illegalPattern" value="true" />
       <property name="message" value="Trailing whitespace" />
     </module>
+  </module>
+  <!-- @author tags are deprecated -->
+  <module name="RegexpSingleline">
+    <property name="format" value="^\s+\*\s+@author\s" />
+    <property name="message" value="Deprecated @author tag" />
+    <property name="fileExtensions" value="java" />
+    <property name="severity" value="warning" />
   </module>
 </module>

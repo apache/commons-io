@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Spliterator;
@@ -93,8 +94,14 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
             }
 
             @Override
-            public T next() {
-                return t = t == IOStreams.NONE ? seed : Erase.apply(f, t);
+            public T next() throws NoSuchElementException {
+                try {
+                    return t = t == IOStreams.NONE ? seed : f.apply(t);
+                } catch (IOException e) {
+                    final NoSuchElementException nsee = new NoSuchElementException();
+                    nsee.initCause(e);
+                    throw nsee;
+                }
             }
         };
         return adapt(StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED | Spliterator.IMMUTABLE), false));

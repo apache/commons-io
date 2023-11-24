@@ -237,7 +237,7 @@ public class CharSequenceReader extends Reader implements Serializable {
             if (c == EOF) {
                 return count;
             }
-            array[offset + i] = (char)c;
+            array[offset + i] = (char) c;
             count++;
         }
         return count;

@@ -101,7 +101,7 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
     private final Pattern pattern;
 
     /** How convert a path to a string. */
-    private final Function<Path, String> pathToString;
+    private transient final Function<Path, String> pathToString;
 
     /**
      * Constructs a new regular expression filter for a compiled regular expression
@@ -111,7 +111,7 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      */
     @SuppressWarnings("unchecked")
     public RegexFileFilter(final Pattern pattern) {
-        this(pattern, (Function<Path, String> & Serializable) p -> p.getFileName().toString());
+        this(pattern, (Function<Path, String> & Serializable) p -> Objects.toString(p.getFileName(), null));
     }
 
     /**
@@ -125,7 +125,7 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
     public RegexFileFilter(final Pattern pattern, final Function<Path, String> pathToString) {
         Objects.requireNonNull(pattern, "pattern");
         this.pattern = pattern;
-        this.pathToString = pathToString;
+        this.pathToString = pathToString != null ? pathToString : Objects::toString;
     }
 
     /**
@@ -181,7 +181,8 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      */
     @Override
     public FileVisitResult accept(final Path path, final BasicFileAttributes attributes) {
-        return toFileVisitResult(pattern.matcher(pathToString.apply(path)).matches());
+        final String result = pathToString.apply(path);
+        return toFileVisitResult(result != null && pattern.matcher(result).matches());
     }
 
     /**

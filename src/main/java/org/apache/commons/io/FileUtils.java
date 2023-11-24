@@ -1380,7 +1380,7 @@ public class FileUtils {
      * Creates all directories for a File object, including any necessary but non-existent parent directories. If the parent directory already exists or is
      * null, nothing happens.
      * <p>
-     * Calls {@link File#mkdirs()} for the parent of @{code file}.
+     * Calls {@link File#mkdirs()} for the parent of {@code file}.
      * </p>
      *
      * @param file file with parents to create, must not be {@code null}.
@@ -2849,7 +2849,7 @@ public class FileUtils {
     }
 
     /**
-     * Set file lastModifiedTime, lastAccessTime and creationTime to match source file
+     * Sets file lastModifiedTime, lastAccessTime and creationTime to match source file
      *
      * @param sourceFile The source file to query.
      * @param targetFile The target file or directory to set.

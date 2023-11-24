@@ -78,10 +78,10 @@ public class LineIterator implements Iterator<String>, Closeable {
      * Constructs an iterator of the lines for a {@link Reader}.
      *
      * @param reader the {@link Reader} to read from, not null
-     * @throws IllegalArgumentException if the reader is null
+     * @throws NullPointerException if the reader is null
      */
     @SuppressWarnings("resource") // Caller closes Reader
-    public LineIterator(final Reader reader) throws IllegalArgumentException {
+    public LineIterator(final Reader reader) {
         Objects.requireNonNull(reader, "reader");
         if (reader instanceof BufferedReader) {
             bufferedReader = (BufferedReader) reader;
@@ -134,7 +134,7 @@ public class LineIterator implements Iterator<String>, Closeable {
                     return true;
                 }
             }
-        } catch(final IOException ioe) {
+        } catch (final IOException ioe) {
             IOUtils.closeQuietly(this, ioe::addSuppressed);
             throw new IllegalStateException(ioe);
         }

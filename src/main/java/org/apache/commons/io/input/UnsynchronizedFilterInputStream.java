@@ -131,19 +131,19 @@ public class UnsynchronizedFilterInputStream extends InputStream {
     }
 
     /**
-     * Sets a mark position in this stream. The parameter {@code readlimit} indicates how many bytes can be read before the mark is invalidated. Sending
-     * {@code reset()} will reposition this stream back to the marked position, provided that {@code readlimit} has not been surpassed.
+     * Sets a mark position in this stream. The parameter {@code readLimit} indicates how many bytes can be read before the mark is invalidated. Sending
+     * {@code reset()} will reposition this stream back to the marked position, provided that {@code readLimit} has not been surpassed.
      * <p>
      * This implementation sets a mark in the filtered stream.
      *
-     * @param readlimit the number of bytes that can be read from this stream before the mark is invalidated.
+     * @param readLimit the number of bytes that can be read from this stream before the mark is invalidated.
      * @see #markSupported()
      * @see #reset()
      */
     @SuppressWarnings("sync-override") // by design.
     @Override
-    public void mark(final int readlimit) {
-        inputStream.mark(readlimit);
+    public void mark(final int readLimit) {
+        inputStream.mark(readLimit);
     }
 
     /**
@@ -204,7 +204,7 @@ public class UnsynchronizedFilterInputStream extends InputStream {
     /**
      * Resets this stream to the last marked location. This implementation resets the target stream.
      *
-     * @throws IOException if this stream is already closed, no mark has been set or the mark is no longer valid because more than {@code readlimit} bytes have
+     * @throws IOException if this stream is already closed, no mark has been set or the mark is no longer valid because more than {@code readLimit} bytes have
      *                     been read since setting the mark.
      * @see #mark(int)
      * @see #markSupported()

@@ -71,7 +71,7 @@ public class FileCleaner {
     }
 
     /**
-     * Returns the singleton instance, which is used by the deprecated, static methods.
+     * Gets the singleton instance, which is used by the deprecated, static methods.
      * This is mainly useful for code, which wants to support the new
      * {@link FileCleaningTracker} class while maintain compatibility with the
      * deprecated {@link FileCleaner}.
@@ -83,7 +83,7 @@ public class FileCleaner {
     }
 
     /**
-     * Retrieve the number of files currently being tracked, and therefore
+     * Gets the number of files currently being tracked, and therefore
      * awaiting deletion.
      *
      * @return the number of files being tracked

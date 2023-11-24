@@ -96,7 +96,7 @@ public abstract class ComparatorAbstractTest {
      */
     @Test
     public void testSortArrayNull() {
-        assertNull(comparator.sort((File[])null));
+        assertNull(comparator.sort((File[]) null));
     }
 
     /**
@@ -119,7 +119,7 @@ public abstract class ComparatorAbstractTest {
      */
     @Test
     public void testSortListNull() {
-        assertNull(comparator.sort((List<File>)null));
+        assertNull(comparator.sort((List<File>) null));
     }
 
     /**

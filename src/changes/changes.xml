@@ -47,9 +47,39 @@ The <action> type attribute can be add,update,fix,remove.
   </properties>
 
   <body>
+    <release version="2.15.1" date="2023-11-24" description="Java 8 is required.">
+      <!-- FIX -->
+      <action dev="sebb" type="fix" due-to="Gregor Dschung">Fix wrong issue id in change log #503.</action>
+      <action dev="ggregory" type="fix" due-to="Stephan Markwalder, Gary Gregory">Add test for FileChannels.contentEquals() #509.</action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix FileChannels.contentEquals().</action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix some Javadoc issues in LineIterator and IOUtils.</action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Simplify FileAlterationObserver internal processing.</action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Avoid NullPointerException in RegexFileFilter.RegexFileFilter(Pattern).</action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Avoid NullPointerException in RegexFileFilter.accept(Path, BasicFileAttributes).</action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix SpotBugs error: Class org.apache.commons.io.filefilter.RegexFileFilter defines non-transient non-serializable instance field pathToString [org.apache.commons.io.filefilter.RegexFileFilter] In RegexFileFilter.java SE_BAD_FIELD.</action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix SpotBugs error: Class org.apache.commons.io.filefilter.DelegateFileFilter defines non-transient non-serializable instance field fileFilter [org.apache.commons.io.filefilter.DelegateFileFilter] In DelegateFileFilter.java SE_BAD_FIELD.</action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix SpotBugs error: Class org.apache.commons.io.filefilter.DelegateFileFilter defines non-transient non-serializable instance field fileNameFilter [org.apache.commons.io.filefilter.DelegateFileFilter] In DelegateFileFilter.java SE_BAD_FIELD.</action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix SpotBugs error: org.apache.commons.io.function.IOStream$1.next() cannot throw NoSuchElementException [org.apache.commons.io.function.IOStream$1] At IOStream.java:[line 98] IT_NO_SUCH_ELEMENT.</action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix SpotBugs error: org.apache.commons.io.monitor.FileAlterationMonitor.getObservers() may expose internal representation by returning FileAlterationMonitor.observers [org.apache.commons.io.monitor.FileAlterationMonitor] At FileAlterationMonitor.java:[line 124] EI_EXPOSE_REP.</action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix SpotBugs error: Class org.apache.commons.io.monitor.FileAlterationObserver defines non-transient non-serializable instance field fileFilter [org.apache.commons.io.monitor.FileAlterationObserver] In FileAlterationObserver.java SE_BAD_FIELD.</action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix SpotBugs error: Class org.apache.commons.io.monitor.FileAlterationObserver defines non-transient non-serializable instance field listeners [org.apache.commons.io.monitor.FileAlterationObserver] In FileAlterationObserver.java SE_BAD_FIELD.</action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix SpotBugs error: org.apache.commons.io.FileCleaningTracker.getDeleteFailures() may expose internal representation by returning FileCleaningTracker.deleteFailures [org.apache.commons.io.FileCleaningTracker] At FileCleaningTracker.java:[line 218] EI_EXPOSE_REP.</action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix SpotBugs error: org.apache.commons.io.IOExceptionList.getCauseList() may expose internal representation by returning IOExceptionList.causeList [org.apache.commons.io.IOExceptionList] At IOExceptionList.java:[line 118] EI_EXPOSE_REP.</action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix SpotBugs error: org.apache.commons.io.IOExceptionList.getCauseList(Class) may expose internal representation by returning IOExceptionList.causeList [org.apache.commons.io.IOExceptionList] At IOExceptionList.java:[line 129] EI_EXPOSE_REP.</action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix SpotBugs error: org.apache.commons.io.file.AccumulatorPathVisitor.getDirList() may expose internal representation by returning AccumulatorPathVisitor.dirList [org.apache.commons.io.file.AccumulatorPathVisitor] At AccumulatorPathVisitor.java:[line 179] EI_EXPOSE_REP.</action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix SpotBugs error: org.apache.commons.io.file.AccumulatorPathVisitor.getFileList() may expose internal representation by returning AccumulatorPathVisitor.fileList [org.apache.commons.io.file.AccumulatorPathVisitor] At AccumulatorPathVisitor.java:[line 188] EI_EXPOSE_REP.</action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix SpotBugs error: org.apache.commons.io.input.ObservableInputStream.getObservers() may expose internal representation by returning ObservableInputStream.observers [org.apache.commons.io.input.ObservableInputStream] At ObservableInputStream.java:[line 187] EI_EXPOSE_REP.</action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix SpotBugs error: Exception thrown in class org.apache.commons.io.input.UnsynchronizedByteArrayInputStream at new org.apache.commons.io.input.UnsynchronizedByteArrayInputStream(byte[], int) will leave the constructor. The object under construction remains partially initialized and may be vulnerable to Finalizer attacks. [org.apache.commons.io.input.UnsynchronizedByteArrayInputStream, org.apache.commons.io.input.UnsynchronizedByteArrayInputStream] At UnsynchronizedByteArrayInputStream.java:[line 202]At UnsynchronizedByteArrayInputStream.java:[line 202] CT_CONSTRUCTOR_THROW.</action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">Fix SpotBugs error: Exception thrown in class org.apache.commons.io.input.UnsynchronizedByteArrayInputStream at new org.apache.commons.io.input.UnsynchronizedByteArrayInputStream(byte[], int, int) will leave the constructor. The object under construction remains partially initialized and may be vulnerable to Finalizer attacks. [org.apache.commons.io.input.UnsynchronizedByteArrayInputStream, org.apache.commons.io.input.UnsynchronizedByteArrayInputStream] At UnsynchronizedByteArrayInputStream.java:[line 223]At UnsynchronizedByteArrayInputStream.java:[line 223] CT_CONSTRUCTOR_THROW.</action>
+      <!-- UPDATE -->
+      <action dev="ggregory" type="update" due-to="Gary Gregory">Bump org.codehaus.mojo:exec-maven-plugin from 3.1.0 to 3.1.1 #512.</action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory">Bump commons-lang3 from 3.13.0 to 3.14.0.</action>
+      <action dev="ggregory" type="update" due-to="Dependabot">Bump commons.bytebuddy.version from 1.14.9 to 1.14.10 #516.</action>
+      <action dev="ggregory" type="update" due-to="Dependabot">Bump commons-parent from 64 to 65.</action>
+    </release>
     <release version="2.15.0" date="2023-10-21" description="Java 8 is required.">
       <!-- FIX -->
-      <action dev="sebb" type="fix" issue="IO-810" due-to="Laurence Gonsalves">
+      <action dev="sebb" type="fix" issue="IO-815" due-to="Laurence Gonsalves">
         XmlStreamReader encoding match RE is too strict.
       </action>
       <action dev="ggregory" type="fix" issue="IO-810" due-to="Gregor Dschung, Gary Gregory">
@@ -107,6 +137,12 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action issue="IO-816" dev="ggregory" type="fix" due-to="Andreas Loth, Gary Gregory">
         UnsynchronizedBufferedInputStream.read(byte[], int, int) does not use buffer.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        Pick up Maven Moditect plugin version from parent POM.
+      </action>
+      <action issue="IO-821" dev="ggregory" type="fix" due-to="Frédéric Hannes, Gary Gregory">
+        2.15.0 breaks backwards compatibility in PathUtils.fileContentEquals for the Zip file system.
       </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">

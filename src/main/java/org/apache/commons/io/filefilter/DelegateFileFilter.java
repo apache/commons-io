@@ -36,10 +36,11 @@ import java.util.Objects;
 public class DelegateFileFilter extends AbstractFileFilter implements Serializable {
 
     private static final long serialVersionUID = -8723373124984771318L;
+
     /** The File filter */
-    private final FileFilter fileFilter;
+    private transient final FileFilter fileFilter;
     /** The Filename filter */
-    private final FilenameFilter fileNameFilter;
+    private transient final FilenameFilter fileNameFilter;
 
     /**
      * Constructs a delegate file filter around an existing FileFilter.

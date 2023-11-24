@@ -56,7 +56,7 @@ public class XmlStreamReaderUtilitiesTest {
     protected String calculateHttpEncoding(final String httpContentType, final String bomEnc, final String xmlGuessEnc,
         final String xmlEnc, final boolean lenient, final String defaultEncoding) throws IOException {
         try (MockXmlStreamReader mock = new MockXmlStreamReader(defaultEncoding)) {
-            return mock.calculateHttpEncoding(httpContentType, bomEnc, xmlGuessEnc, xmlEnc, lenient);
+            return mock.calculateHttpEncoding(bomEnc, xmlGuessEnc, xmlEnc, lenient, httpContentType);
         }
     }
 

@@ -36,18 +36,21 @@ public class NullInputStreamTest {
         public TestNullInputStream(final int size) {
             super(size);
         }
+
         public TestNullInputStream(final int size, final boolean markSupported, final boolean throwEofException) {
             super(size, markSupported, throwEofException);
         }
+
         @Override
         protected int processByte() {
-            return (int)getPosition() - 1;
+            return (int) getPosition() - 1;
         }
+
         @Override
         protected void processBytes(final byte[] bytes, final int offset, final int length) {
-            final int startPos = (int)getPosition() - length;
+            final int startPos = (int) getPosition() - length;
             for (int i = offset; i < length; i++) {
-                bytes[i] = (byte)(startPos + i);
+                bytes[i] = (byte) (startPos + i);
             }
         }
 
@@ -68,7 +71,7 @@ public class NullInputStreamTest {
     @Test
     public void testMarkAndReset() throws Exception {
         int position = 0;
-        final int readlimit = 10;
+        final int readLimit = 10;
         try (InputStream input = new TestNullInputStream(100, true, false)) {
 
             assertTrue(input.markSupported(), "Mark Should be Supported");
@@ -82,7 +85,7 @@ public class NullInputStreamTest {
             }
 
             // Mark
-            input.mark(readlimit);
+            input.mark(readLimit);
 
             // Read further
             for (int i = 0; i < 3; i++) {
@@ -93,13 +96,13 @@ public class NullInputStreamTest {
             input.reset();
 
             // Read From marked position
-            for (int i = 0; i < readlimit + 1; i++) {
+            for (int i = 0; i < readLimit + 1; i++) {
                 assertEquals(position + i, input.read(), "Read After Reset [" + i + "]");
             }
 
             // Reset after read limit passed
             final IOException resetException = assertThrows(IOException.class, input::reset, "Read limit exceeded, expected IOException");
-            assertEquals("Marked position [" + position + "] is no longer valid - passed the read limit [" + readlimit + "]", resetException.getMessage(),
+            assertEquals("Marked position [" + position + "] is no longer valid - passed the read limit [" + readLimit + "]", resetException.getMessage(),
                     "Read limit IOException message");
         }
     }
@@ -182,16 +185,16 @@ public class NullInputStreamTest {
 
     @Test
     public void testSkip() throws Exception {
-        final InputStream input = new TestNullInputStream(10, true, false);
-        assertEquals(0, input.read(), "Read 1");
-        assertEquals(1, input.read(), "Read 2");
-        assertEquals(5, input.skip(5), "Skip 1");
-        assertEquals(7, input.read(), "Read 3");
-        assertEquals(2, input.skip(5), "Skip 2"); // only 2 left to skip
-        assertEquals(-1, input.skip(5), "Skip 3 (EOF)"); // End of file
+        try (InputStream input = new TestNullInputStream(10, true, false)) {
+            assertEquals(0, input.read(), "Read 1");
+            assertEquals(1, input.read(), "Read 2");
+            assertEquals(5, input.skip(5), "Skip 1");
+            assertEquals(7, input.read(), "Read 3");
+            assertEquals(2, input.skip(5), "Skip 2"); // only 2 left to skip
+            assertEquals(-1, input.skip(5), "Skip 3 (EOF)"); // End of file
 
-        final IOException e = assertThrows(IOException.class, () -> input.skip(5), "Expected IOException for skipping after end of file");
-        assertEquals("Skip after end of file", e.getMessage(), "Skip after EOF IOException message");
-        input.close();
+            final IOException e = assertThrows(IOException.class, () -> input.skip(5), "Expected IOException for skipping after end of file");
+            assertEquals("Skip after end of file", e.getMessage(), "Skip after EOF IOException message");
+        }
     }
 }

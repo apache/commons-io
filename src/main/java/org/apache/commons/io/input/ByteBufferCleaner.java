@@ -32,7 +32,7 @@ import java.nio.ByteBuffer;
  * See <a href=https://bugs.openjdk.java.net/browse/JDK-4724038>JDK-4724038</a>
  * </p>
  */
-class ByteBufferCleaner {
+final class ByteBufferCleaner {
 
     private interface Cleaner {
         void clean(ByteBuffer buffer) throws ReflectiveOperationException;

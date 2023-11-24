@@ -23,7 +23,7 @@ import java.util.stream.IntStream;
  * Placeholder for future possible development and makes sure we can extend IOBaseStreamAdapter cleanly with proper
  * generics.
  */
-class IOIntStreamAdapter extends IOBaseStreamAdapter<Integer, IOIntStream, IntStream> implements IOIntStream {
+final class IOIntStreamAdapter extends IOBaseStreamAdapter<Integer, IOIntStream, IntStream> implements IOIntStream {
 
     static IOIntStream adapt(final IntStream stream) {
         return new IOIntStreamAdapter(stream);

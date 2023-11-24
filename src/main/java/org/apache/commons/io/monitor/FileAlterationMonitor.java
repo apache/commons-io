@@ -17,6 +17,7 @@
 package org.apache.commons.io.monitor;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -121,7 +122,7 @@ public final class FileAlterationMonitor implements Runnable {
      * @return The set of {@link FileAlterationObserver}
      */
     public Iterable<FileAlterationObserver> getObservers() {
-        return observers;
+        return new ArrayList<>(observers);
     }
 
     /**

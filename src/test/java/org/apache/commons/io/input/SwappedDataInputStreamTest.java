@@ -63,7 +63,7 @@ public class SwappedDataInputStreamTest {
 
     @Test
     public void testReadBoolean() throws IOException {
-        bytes = new byte[] {0x00, 0x01, 0x02,};
+        bytes = new byte[] { 0x00, 0x01, 0x02, };
         try (
             final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
             final SwappedDataInputStream sdis = new SwappedDataInputStream(bais)
@@ -98,8 +98,8 @@ public class SwappedDataInputStreamTest {
     public void testReadFully() throws IOException {
         final byte[] bytesIn = new byte[8];
         this.sdis.readFully(bytesIn);
-        for( int i=0; i<8; i++) {
-            assertEquals( bytes[i], bytesIn[i] );
+        for (int i = 0; i < 8; i++) {
+            assertEquals(bytes[i], bytesIn[i]);
         }
     }
 

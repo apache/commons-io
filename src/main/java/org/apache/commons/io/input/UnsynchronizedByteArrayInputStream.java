@@ -16,8 +16,6 @@
  */
 package org.apache.commons.io.input;
 
-import static java.lang.Math.min;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,33 +44,25 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      * </p>
      *
      * <pre>{@code
-     * UnsynchronizedByteArrayInputStream s = UnsynchronizedByteArrayInputStream.builder()
-     *   .setByteArray(byteArray)
-     *   .setOffset(0)
-     *   .setLength(byteArray.length)
-     *   .get();}
+     * UnsynchronizedByteArrayInputStream s = UnsynchronizedByteArrayInputStream.builder().setByteArray(byteArray).setOffset(0).setLength(byteArray.length)
+     *         .get();
+     * }
      * </pre>
      * <p>
      * Using File IO:
      * </p>
      *
      * <pre>{@code
-     * UnsynchronizedByteArrayInputStream s = UnsynchronizedByteArrayInputStream.builder()
-     *   .setFile(file)
-     *   .setOffset(0)
-     *   .setLength(byteArray.length)
-     *   .get();}
+     * UnsynchronizedByteArrayInputStream s = UnsynchronizedByteArrayInputStream.builder().setFile(file).setOffset(0).setLength(byteArray.length).get();
+     * }
      * </pre>
      * <p>
      * Using NIO Path:
      * </p>
      *
      * <pre>{@code
-     * UnsynchronizedByteArrayInputStream s = UnsynchronizedByteArrayInputStream.builder()
-     *   .setPath(path)
-     *   .setOffset(0)
-     *   .setLength(byteArray.length)
-     *   .get();}
+     * UnsynchronizedByteArrayInputStream s = UnsynchronizedByteArrayInputStream.builder().setPath(path).setOffset(0).setLength(byteArray.length).get();
+     * }
      * </pre>
      */
     public static class Builder extends AbstractStreamBuilder<UnsynchronizedByteArrayInputStream, Builder> {
@@ -92,7 +82,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a byte[].
-         * @throws IllegalStateException if the {@code origin} is {@code null}.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @see AbstractOrigin#getByteArray()
          */
         @Override
@@ -150,6 +140,18 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
         return new Builder();
     }
 
+    private static int minPosLen(final byte[] data, final int defaultValue) {
+        requireNonNegative(defaultValue, "defaultValue");
+        return Math.min(defaultValue, data.length > 0 ? data.length : defaultValue);
+    }
+
+    private static int requireNonNegative(final int value, final String name) {
+        if (value < 0) {
+            throw new IllegalArgumentException(name + " cannot be negative");
+        }
+        return value;
+    }
+
     /**
      * The underlying data buffer.
      */
@@ -180,10 +182,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      */
     @Deprecated
     public UnsynchronizedByteArrayInputStream(final byte[] data) {
-        this.data = Objects.requireNonNull(data, "data");
-        this.offset = 0;
-        this.eod = data.length;
-        this.markedOffset = this.offset;
+        this(data, data.length, 0, 0);
     }
 
     /**
@@ -197,14 +196,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      */
     @Deprecated
     public UnsynchronizedByteArrayInputStream(final byte[] data, final int offset) {
-        Objects.requireNonNull(data, "data");
-        if (offset < 0) {
-            throw new IllegalArgumentException("offset cannot be negative");
-        }
-        this.data = data;
-        this.offset = min(offset, data.length > 0 ? data.length : offset);
-        this.eod = data.length;
-        this.markedOffset = this.offset;
+        this(data, data.length, Math.min(requireNonNegative(offset, "offset"), minPosLen(data, offset)), minPosLen(data, offset));
     }
 
     /**
@@ -219,16 +211,19 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      */
     @Deprecated
     public UnsynchronizedByteArrayInputStream(final byte[] data, final int offset, final int length) {
-        if (offset < 0) {
-            throw new IllegalArgumentException("offset cannot be negative");
-        }
-        if (length < 0) {
-            throw new IllegalArgumentException("length cannot be negative");
-        }
+        requireNonNegative(offset, "offset");
+        requireNonNegative(length, "length");
         this.data = Objects.requireNonNull(data, "data");
-        this.offset = min(offset, data.length > 0 ? data.length : offset);
-        this.eod = min(this.offset + length, data.length);
-        this.markedOffset = this.offset;
+        this.eod = Math.min(minPosLen(data, offset) + length, data.length);
+        this.offset = minPosLen(data, offset);
+        this.markedOffset = minPosLen(data, offset);
+    }
+
+    private UnsynchronizedByteArrayInputStream(byte[] data, int eod, int offset, int markedOffset) {
+        this.data = Objects.requireNonNull(data, "data");
+        this.eod = eod;
+        this.offset = offset;
+        this.markedOffset = markedOffset;
     }
 
     @Override
@@ -238,7 +233,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
 
     @SuppressWarnings("sync-override")
     @Override
-    public void mark(final int readlimit) {
+    public void mark(final int readLimit) {
         this.markedOffset = this.offset;
     }
 

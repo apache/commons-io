@@ -44,13 +44,13 @@ public class ChunkedWriterTest {
     }
 
     @Test
-    public void negative_chunkSize_not_permitted() {
+    public void testNegative_chunkSize_not_permitted() {
         assertThrows(IllegalArgumentException.class,
                () -> new ChunkedWriter(new OutputStreamWriter(new ByteArrayOutputStream()), 0));
     }
 
     @Test
-    public void write_four_chunks() throws Exception {
+    public void testWrite_four_chunks() throws Exception {
         final AtomicInteger numWrites = new AtomicInteger();
         try (OutputStreamWriter osw = getOutputStreamWriter(numWrites)) {
             try (ChunkedWriter chunked = new ChunkedWriter(osw, 10)) {
@@ -62,7 +62,7 @@ public class ChunkedWriterTest {
     }
 
     @Test
-    public void write_two_chunks_default_constructor() throws Exception {
+    public void testWrite_two_chunks_default_constructor() throws Exception {
         final AtomicInteger numWrites = new AtomicInteger();
         try (OutputStreamWriter osw = getOutputStreamWriter(numWrites)) {
             try (ChunkedWriter chunked = new ChunkedWriter(osw)) {

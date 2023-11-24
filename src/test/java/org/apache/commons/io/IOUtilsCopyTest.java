@@ -99,12 +99,12 @@ public class IOUtilsCopyTest {
     }
 
     /**
-     * Test Copying file > 2GB  - see issue# IO-84
+     * Test Copying file > 2GB - see issue# IO-84
      */
     @Test
     public void testCopy_inputStreamToOutputStream_IO84() throws Exception {
-        final long size = (long)Integer.MAX_VALUE + (long)1;
-        final InputStream  in  = new NullInputStream(size);
+        final long size = (long) Integer.MAX_VALUE + (long) 1;
+        final InputStream in = new NullInputStream(size);
         final OutputStream out = NullOutputStream.INSTANCE;
 
         // Test copy() method
@@ -420,7 +420,7 @@ public class IOUtilsCopyTest {
      */
     @Test
     public void testCopy_readerToWriter_IO84() throws Exception {
-        final long size = (long)Integer.MAX_VALUE + (long)1;
+        final long size = (long) Integer.MAX_VALUE + (long) 1;
         final Reader reader = new NullReader(size);
         final Writer writer = new NullWriter();
 

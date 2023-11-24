@@ -164,8 +164,7 @@ public class EndianUtils {
      * @return the value read
      */
     public static short readSwappedShort(final byte[] data, final int offset) {
-        return (short)(((data[offset + 0] & 0xff) << 0) +
-            ((data[offset + 1] & 0xff) << 8));
+        return (short) (((data[offset + 0] & 0xff) << 0) + ((data[offset + 1] & 0xff) << 8));
     }
 
     /**
@@ -221,8 +220,7 @@ public class EndianUtils {
      * @return the value read
      */
     public static int readSwappedUnsignedShort(final byte[] data, final int offset) {
-        return ((data[offset + 0] & 0xff) << 0) +
-            ((data[offset + 1] & 0xff) << 8);
+        return ((data[offset + 0] & 0xff) << 0) + ((data[offset + 1] & 0xff) << 8);
     }
 
     /**
@@ -413,8 +411,8 @@ public class EndianUtils {
      * @param value value to write
      */
     public static void writeSwappedShort(final byte[] data, final int offset, final short value) {
-        data[offset + 0] = (byte)(value >> 0 & 0xff);
-        data[offset + 1] = (byte)(value >> 8 & 0xff);
+        data[offset + 0] = (byte) (value >> 0 & 0xff);
+        data[offset + 1] = (byte) (value >> 8 & 0xff);
     }
 
     /**

@@ -624,7 +624,7 @@ public abstract class DirectoryWalker<T> {
             handleStart(startDirectory, results);
             walk(startDirectory, 0, results);
             handleEnd(results);
-        } catch(final CancelException cancel) {
+        } catch (final CancelException cancel) {
             handleCancelled(startDirectory, results, cancel);
         }
     }

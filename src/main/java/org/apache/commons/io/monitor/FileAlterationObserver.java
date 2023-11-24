@@ -19,6 +19,7 @@ package org.apache.commons.io.monitor;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -29,6 +30,7 @@ import java.util.stream.Stream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.comparator.NameFileComparator;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**
  * FileAlterationObserver represents the state of files below a root directory,
@@ -128,9 +130,9 @@ import org.apache.commons.io.comparator.NameFileComparator;
 public class FileAlterationObserver implements Serializable {
 
     private static final long serialVersionUID = 1185122225658782848L;
-    private final List<FileAlterationListener> listeners = new CopyOnWriteArrayList<>();
+    private transient final List<FileAlterationListener> listeners = new CopyOnWriteArrayList<>();
     private final FileEntry rootEntry;
-    private final FileFilter fileFilter;
+    private transient final FileFilter fileFilter;
     private final Comparator<File> comparator;
 
     /**
@@ -175,7 +177,7 @@ public class FileAlterationObserver implements Serializable {
         Objects.requireNonNull(rootEntry, "rootEntry");
         Objects.requireNonNull(rootEntry.getFile(), "rootEntry.getFile()");
         this.rootEntry = rootEntry;
-        this.fileFilter = fileFilter;
+        this.fileFilter = fileFilter != null ? fileFilter : TrueFileFilter.INSTANCE;
         switch (IOCase.value(ioCase, IOCase.SYSTEM)) {
         case SYSTEM:
             this.comparator = NameFileComparator.NAME_SYSTEM_COMPARATOR;
@@ -394,7 +396,7 @@ public class FileAlterationObserver implements Serializable {
      * @return The file system listeners
      */
     public Iterable<FileAlterationListener> getListeners() {
-        return listeners;
+        return new ArrayList<>(listeners);
     }
 
     /**
@@ -418,12 +420,12 @@ public class FileAlterationObserver implements Serializable {
     private File[] listFiles(final File file) {
         File[] children = null;
         if (file.isDirectory()) {
-            children = fileFilter == null ? file.listFiles() : file.listFiles(fileFilter);
+            children = file.listFiles(fileFilter);
         }
         if (children == null) {
             children = FileUtils.EMPTY_FILE_ARRAY;
         }
-        if (comparator != null && children.length > 1) {
+        if (children.length > 1) {
             Arrays.sort(children, comparator);
         }
         return children;
@@ -452,10 +454,8 @@ public class FileAlterationObserver implements Serializable {
         builder.append("[file='");
         builder.append(getDirectory().getPath());
         builder.append('\'');
-        if (fileFilter != null) {
-            builder.append(", ");
-            builder.append(fileFilter.toString());
-        }
+        builder.append(", ");
+        builder.append(fileFilter.toString());
         builder.append(", listeners=");
         builder.append(listeners.size());
         builder.append("]");

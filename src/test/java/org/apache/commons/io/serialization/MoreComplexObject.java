@@ -25,9 +25,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-/** A test class that uses various java.* member objects,
- *  to show which settings are necessary to deserialize
- *  those.
+/**
+ * A test class that uses various java.* member objects, to show which settings are necessary to deserialize those.
  */
 public class MoreComplexObject implements Serializable {
     private static final long serialVersionUID = -5187124661539240729L;
@@ -37,11 +36,11 @@ public class MoreComplexObject implements Serializable {
     private final Integer integer = random.nextInt();
     private final int pInt = random.nextInt();
     private final long pLong = random.nextLong();
-    private final Integer [] intArray = { random.nextInt(), random.nextInt() };
+    private final Integer[] intArray = { random.nextInt(), random.nextInt() };
     private final List<Boolean> boolList = new ArrayList<>();
 
     MoreComplexObject() {
-        for(int i=0 ; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             boolList.add(random.nextBoolean());
         }
     }
