@@ -471,32 +471,16 @@ public class CharSequenceInputStreamTest {
         testSingleByteRead(TEST_STRING, UTF_8);
     }
 
-    // This is broken for charsets that don't map each char to a byte
-    private void testSkip(final String csName) throws Exception {
-        try (InputStream r = new CharSequenceInputStream("test", csName)) {
-            assertEquals(1, r.skip(1));
-            assertEquals(2, r.skip(2));
-            assertEquals('t', r.read(), csName);
-            r.skip(100);
-            assertEquals(-1, r.read(), csName);
-        }
-    }
 
     @Test
-    @Disabled // test is broken for charsets that generate multiple bytes per char.
     public void testSkip_RequiredCharsets() throws Exception {
         for (final String csName : getRequiredCharsetNames()) {
-            testSkip(csName);
+            try (InputStream r = new CharSequenceInputStream("test", csName)) {
+                assertEquals(1, r.skip(1));
+                assertEquals(2, r.skip(2));
+                r.skip(100);
+                assertEquals(-1, r.read(), csName);
+            }
         }
-    }
-
-    @Test
-    public void testSkip_USASCII() throws Exception {
-        testSkip("US-ASCII");
-    }
-
-    @Test
-    public void testSkip_UTF8() throws Exception {
-        testSkip(UTF_8);
     }
 }
