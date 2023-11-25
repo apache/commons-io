@@ -36,6 +36,10 @@ public class CharsetsTest {
      * For parameterized tests.
      */
     public static final String AVAIL_CHARSETS = "org.apache.commons.io.CharsetsTest#availableCharsetsKeySet";
+    /**
+     * For parameterized tests.
+     */
+    public static final String REQUIRED_CHARSETS = "org.apache.commons.io.CharsetsTest#getRequiredCharsetNames";
 
     /**
      * For parameterized tests.
@@ -44,6 +48,15 @@ public class CharsetsTest {
      */
     public static Set<String> availableCharsetsKeySet() {
         return Charset.availableCharsets().keySet();
+    }
+
+    /**
+     * For parameterized tests.
+     *
+     * @return {@code Charset.requiredCharsets().keySet()}.
+     */
+    public static Set<String> getRequiredCharsetNames() {
+        return Charsets.requiredCharsets().keySet();
     }
 
     @Test
