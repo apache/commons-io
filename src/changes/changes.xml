@@ -47,6 +47,9 @@ The <action> type attribute can be add,update,fix,remove.
   </properties>
 
   <body>
+    <release version="2.15.2" date="202Y-MM-DD" description="Java 8 is required.">
+      <action dev="ggregory" type="fix" due-to="Elliotte Rusty Harold">Fix and reenable testSkip_RequiredCharsets #518.</action>
+    </release>
     <release version="2.15.1" date="2023-11-24" description="Java 8 is required.">
       <!-- FIX -->
       <action dev="sebb" type="fix" due-to="Gregor Dschung">Fix wrong issue id in change log #503.</action>
