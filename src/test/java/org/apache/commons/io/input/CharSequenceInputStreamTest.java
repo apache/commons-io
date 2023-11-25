@@ -29,9 +29,7 @@ import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
-import java.util.Set;
 
-import org.apache.commons.io.Charsets;
 import org.apache.commons.io.CharsetsTest;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Disabled;
