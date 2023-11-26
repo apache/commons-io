@@ -202,5 +202,4 @@ public class FileUtilsListFilesTest {
         assertFalse(fileNames.contains("dummy-file.txt"));
     }
 
-
 }

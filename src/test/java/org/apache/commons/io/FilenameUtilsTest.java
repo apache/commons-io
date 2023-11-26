@@ -407,7 +407,6 @@ public class FilenameUtilsTest {
         assertEquals("a/b/", FilenameUtils.getPath("~user/a/b/c.txt"));
     }
 
-
     @Test
     public void testGetPath_with_null_character() {
         assertThrows(IllegalArgumentException.class, () -> FilenameUtils.getPath("~user/a/\u0000b/c.txt"));

@@ -43,7 +43,6 @@ public class CountingInputStream extends ProxyInputStream {
         super(in);
     }
 
-
     /**
      * Adds the number of read bytes to the count.
      *

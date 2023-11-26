@@ -39,7 +39,6 @@ public class DeletablePath extends AbstractPathWrapper implements Closeable {
         super(path);
     }
 
-
     @Override
     public void close() throws IOException {
         delete();

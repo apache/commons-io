@@ -30,7 +30,6 @@ import org.junit.jupiter.api.Test;
  */
 public class ExtensionFileComparatorTest extends ComparatorAbstractTest {
 
-
     @BeforeEach
     public void setUp() {
         comparator = (AbstractFileComparator) ExtensionFileComparator.EXTENSION_COMPARATOR;

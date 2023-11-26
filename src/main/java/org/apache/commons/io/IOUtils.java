@@ -3584,7 +3584,6 @@ public class IOUtils {
         write(data, output, Charsets.toCharset(charsetName));
     }
 
-
     /**
      * Writes chars from a {@link CharSequence} to a {@link Writer}.
      *

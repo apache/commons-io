@@ -2917,7 +2917,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
         TestUtils.assertEqualContent(text, file);
     }
 
-
     @Test
     public void testWriteLines_3arg_nullSeparator() throws Exception {
         final Object[] data = {

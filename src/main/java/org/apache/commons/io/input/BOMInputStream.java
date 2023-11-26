@@ -190,7 +190,6 @@ public class BOMInputStream extends ProxyInputStream {
      */
     private static final Comparator<ByteOrderMark> ByteOrderMarkLengthComparator = Comparator.comparing(ByteOrderMark::length).reversed();
 
-
     /**
      * Constructs a new {@link Builder}.
      *

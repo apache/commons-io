@@ -62,7 +62,6 @@ public class CountingInputStreamTest {
         }
     }
 
-
     @Test
     public void testEOF1() throws Exception {
         final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);

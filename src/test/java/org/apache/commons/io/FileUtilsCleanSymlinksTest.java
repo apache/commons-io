@@ -52,7 +52,6 @@ public class FileUtilsCleanSymlinksTest {
         return proc.waitFor() == 0;
     }
 
-
     @Test
     public void testCleanDirWithASymlinkDir() throws Exception {
         if (System.getProperty("os.name").startsWith("Win")) {
@@ -161,7 +160,6 @@ public class FileUtilsCleanSymlinksTest {
         assertTrue(randomFile.exists());
         assertFalse(symlinkFile.exists());
     }
-
 
     @Test
     public void testCorrectlyIdentifySymlinkWithParentSymLink() throws Exception {

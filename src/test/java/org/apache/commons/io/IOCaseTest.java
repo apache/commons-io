@@ -119,7 +119,6 @@ public class IOCaseTest {
         assertFalse(IOCase.SENSITIVE.checkEndsWith(null, null));
     }
 
-
     @Test
     public void test_checkEquals_case() {
         assertTrue(IOCase.SENSITIVE.checkEquals("ABC", "ABC"));

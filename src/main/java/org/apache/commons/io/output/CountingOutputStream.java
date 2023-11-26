@@ -40,7 +40,6 @@ public class CountingOutputStream extends ProxyOutputStream {
         super(out);
     }
 
-
     /**
      * Updates the count with the number of bytes that are being written.
      *

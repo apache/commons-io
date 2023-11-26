@@ -120,7 +120,6 @@ public class StringBuilderWriter extends Writer implements Serializable {
         // no-op
     }
 
-
     /**
      * Returns the underlying builder.
      *

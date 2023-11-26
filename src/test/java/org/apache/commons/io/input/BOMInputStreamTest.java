@@ -687,7 +687,6 @@ public class BOMInputStreamTest {
         parseXml(createUtf32BeDataStream(data, false));
     }
 
-
     @Test
     public void testSkipReturnValueWithBom() throws IOException {
         final byte[] data = { (byte) 0x31, (byte) 0x32, (byte) 0x33 };

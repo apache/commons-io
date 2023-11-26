@@ -249,7 +249,6 @@ public class DirectoryWalkerTestCaseJava4 {
 
     private static final IOFileFilter ioFilesFilter = createNameFilter(ioFiles);
 
-
     private static final IOFileFilter outputFilesFilter = createNameFilter(outputFiles);
 
     private static final IOFileFilter ioDirAndFilesFilter = new OrFileFilter(dirsFilter, ioFilesFilter);

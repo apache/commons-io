@@ -30,7 +30,6 @@ import org.junit.jupiter.api.Test;
  */
 public class PathFileComparatorTest extends ComparatorAbstractTest {
 
-
     @BeforeEach
     public void setUp() {
         comparator = (AbstractFileComparator) PathFileComparator.PATH_COMPARATOR;

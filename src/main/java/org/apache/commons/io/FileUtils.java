@@ -2682,7 +2682,6 @@ public class FileUtils {
         return readLines(file, Charsets.toCharset(charsetName));
     }
 
-
     private static void requireAbsent(final File file, final String name) throws FileExistsException {
         if (file.exists()) {
             throw new FileExistsException(String.format("File element in parameter '%s' already exists: '%s'", name, file));

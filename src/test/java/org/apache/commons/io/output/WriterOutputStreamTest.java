@@ -165,7 +165,6 @@ public class WriterOutputStreamTest {
         assertEquals(testString, writer.toString());
     }
 
-
     private void testWithSingleByteWrite(final String testString, final Charset charset) throws IOException {
         final byte[] bytes = testString.getBytes(Charsets.toCharset(charset));
         StringWriter writer = new StringWriter();

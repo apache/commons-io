@@ -243,7 +243,6 @@ public class DirectoryWalkerTest {
     // Filters
     private static final IOFileFilter dirsFilter        = createNameFilter(dirs);
 
-
     private static final IOFileFilter ioFilesFilter = createNameFilter(ioFiles);
 
     private static final IOFileFilter outputFilesFilter = createNameFilter(outputFiles);

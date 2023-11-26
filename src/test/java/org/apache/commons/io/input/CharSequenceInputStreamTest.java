@@ -458,7 +458,6 @@ public class CharSequenceInputStreamTest {
         testSingleByteRead(TEST_STRING, UTF_8);
     }
 
-
     @ParameterizedTest
     @MethodSource(CharsetsTest.REQUIRED_CHARSETS)
     public void testSkip_RequiredCharsets(final String csName) throws Exception {

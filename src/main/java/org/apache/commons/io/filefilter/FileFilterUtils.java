@@ -47,7 +47,6 @@ public class FileFilterUtils {
     private static final IOFileFilter CVS_FILTER = notFileFilter(
             and(directoryFileFilter(), nameFileFilter("CVS")));
 
-
     /* Constructed on demand and then cached */
     private static final IOFileFilter SVN_FILTER = notFileFilter(
             and(directoryFileFilter(), nameFileFilter(".svn")));
