@@ -302,21 +302,21 @@ public class CharSequenceInputStreamTest {
 
     private void testMarkResetMultiByteChars(final String csName) throws IOException {
         // This test quietly skips Charsets that can't handle multibyte characters like ASCII.
-        String sequenceEnglish = "Test Sequence";
-        String sequenceCJK = "\u4e01\u4f23\u5045\u5167\u5289\u53ab"; // Kanji text
-        String[] sequences = {sequenceEnglish, sequenceCJK};
+        final String sequenceEnglish = "Test Sequence";
+        final String sequenceCJK = "\u4e01\u4f23\u5045\u5167\u5289\u53ab"; // Kanji text
+        final String[] sequences = {sequenceEnglish, sequenceCJK};
         for (String testSequence : sequences) {
-            CharsetEncoder charsetEncoder = Charset.forName(csName).newEncoder();
-            ByteBuffer byteBuffer = ByteBuffer.allocate(testSequence.length() * 3);
-            CharBuffer charBuffer = CharBuffer.wrap(testSequence);
-            CoderResult result = charsetEncoder.encode(charBuffer, byteBuffer, true);
+            final CharsetEncoder charsetEncoder = Charset.forName(csName).newEncoder();
+            final ByteBuffer byteBuffer = ByteBuffer.allocate(testSequence.length() * 3);
+            final CharBuffer charBuffer = CharBuffer.wrap(testSequence);
+            final CoderResult result = charsetEncoder.encode(charBuffer, byteBuffer, true);
             if (result.isUnmappable()) {
                 continue; // Skip character sets that can't handle multibyte characters.
             }
-            byte[] expectedBytes = byteBuffer.array();
+            final byte[] expectedBytes = byteBuffer.array();
 
-            int bLength = byteBuffer.position();
-            int skip = bLength - 4;
+            final int bLength = byteBuffer.position();
+            final int skip = bLength - 4;
             try (InputStream r = new CharSequenceInputStream(testSequence, csName)) {
                 assertEquals(skip, r.skip(skip));
                 r.mark(0);
