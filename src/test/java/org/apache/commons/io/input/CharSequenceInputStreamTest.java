@@ -301,6 +301,7 @@ public class CharSequenceInputStreamTest {
     }
 
     private void testMarkResetMultiByteChars(final String csName) throws IOException {
+        // This test quietly skips Charsets that can't handle multibyte characters like ASCII.
         String sequenceEnglish = "Test Sequence";
         String sequenceCJK = "\u4e01\u4f23\u5045\u5167\u5289\u53ab"; // Kanji text
         String[] sequences = {sequenceEnglish, sequenceCJK};
@@ -310,7 +311,7 @@ public class CharSequenceInputStreamTest {
             CharBuffer charBuffer = CharBuffer.wrap(testSequence);
             CoderResult result = charsetEncoder.encode(charBuffer, byteBuffer, true);
             if (result.isUnmappable()) {
-                continue; // Skip character sets that can't handle Kanji characters.
+                continue; // Skip character sets that can't handle multibyte characters.
             }
             byte[] expectedBytes = byteBuffer.array();
 
@@ -340,7 +341,8 @@ public class CharSequenceInputStreamTest {
         }
     }
 
-    // This test is broken for charsets that don't create a single byte for each char
+    // This test doesn't work for charsets that don't create a single byte for each char.
+    // Use testMarkResetMultiByteChars() instead for those cases.
     private void testMarkReset(final String csName) throws Exception {
         try (InputStream r = new CharSequenceInputStream("test", csName)) {
             assertEquals(2, r.skip(2));
