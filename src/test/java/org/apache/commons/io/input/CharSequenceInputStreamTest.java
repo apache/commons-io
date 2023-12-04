@@ -26,13 +26,16 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.CoderResult;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 import org.apache.commons.io.CharsetsTest;
 import org.apache.commons.io.IOUtils;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -297,6 +300,46 @@ public class CharSequenceInputStreamTest {
         testSingleByteRead(LARGE_TEST_STRING, UTF_8);
     }
 
+    private void testMarkResetMultiByteChars(final String csName) throws IOException {
+        String sequenceEnglish = "Test Sequence";
+        String sequenceCJK = "\u4e01\u4f23\u5045\u5167\u5289\u53ab"; // Kanji text
+        String[] sequences = {sequenceEnglish, sequenceCJK};
+        for (String testSequence : sequences) {
+            CharsetEncoder charsetEncoder = Charset.forName(csName).newEncoder();
+            ByteBuffer byteBuffer = ByteBuffer.allocate(testSequence.length() * 3);
+            CharBuffer charBuffer = CharBuffer.wrap(testSequence);
+            CoderResult result = charsetEncoder.encode(charBuffer, byteBuffer, true);
+            if (result.isUnmappable()) {
+                continue; // Skip character sets that can't handle Kanji characters.
+            }
+            byte[] expectedBytes = byteBuffer.array();
+
+            int bLength = byteBuffer.position();
+            int skip = bLength - 4;
+            try (InputStream r = new CharSequenceInputStream(testSequence, csName)) {
+                assertEquals(skip, r.skip(skip));
+                r.mark(0);
+                assertEquals(expectedBytes[bLength - 4], (byte) r.read(), csName);
+                assertEquals(expectedBytes[bLength - 3], (byte) r.read(), csName);
+                assertEquals(expectedBytes[bLength - 2], (byte) r.read(), csName);
+                assertEquals(expectedBytes[bLength - 1], (byte) r.read(), csName);
+                assertEquals(-1, (byte) r.read(), csName);
+                r.reset();
+                assertEquals(expectedBytes[bLength - 4], (byte) r.read(), csName);
+                assertEquals(expectedBytes[bLength - 3], (byte) r.read(), csName);
+                assertEquals(expectedBytes[bLength - 2], (byte) r.read(), csName);
+                assertEquals(expectedBytes[bLength - 1], (byte) r.read(), csName);
+                assertEquals(-1, (byte) r.read(), csName);
+                r.reset();
+                assertEquals(expectedBytes[bLength - 4], (byte) r.read(), csName);
+                assertEquals(expectedBytes[bLength - 3], (byte) r.read(), csName);
+                assertEquals(expectedBytes[bLength - 2], (byte) r.read(), csName);
+                assertEquals(expectedBytes[bLength - 1], (byte) r.read(), csName);
+                assertEquals(-1, (byte) r.read(), csName);
+            }
+        }
+    }
+
     // This test is broken for charsets that don't create a single byte for each char
     private void testMarkReset(final String csName) throws Exception {
         try (InputStream r = new CharSequenceInputStream("test", csName)) {
@@ -316,9 +359,8 @@ public class CharSequenceInputStreamTest {
 
     @ParameterizedTest
     @MethodSource(CharsetsTest.REQUIRED_CHARSETS)
-    @Disabled // Test broken for charsets that create multiple bytes for a single char
     public void testMarkReset_RequiredCharsets(final String csName) throws Exception {
-        testMarkReset(csName);
+        testMarkResetMultiByteChars(csName);
     }
 
     @Test
@@ -407,7 +449,6 @@ public class CharSequenceInputStreamTest {
     }
 
     @Test
-    @Disabled("[IO-795] CharSequenceInputStream.reset() only works once")
     public void testResetBeforeEndSetCharSequence() throws IOException {
         try (final CharSequenceInputStream inputStream = CharSequenceInputStream.builder().setCharSequence("1234").get()) {
             testResetBeforeEnd(inputStream);
