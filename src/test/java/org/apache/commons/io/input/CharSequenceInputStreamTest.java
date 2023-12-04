@@ -300,6 +300,40 @@ public class CharSequenceInputStreamTest {
         testSingleByteRead(LARGE_TEST_STRING, UTF_8);
     }
 
+    // This test doesn't work for charsets that don't create a single byte for each char.
+    // Use testMarkResetMultiByteChars() instead for those cases.
+    private void testMarkReset(final String csName) throws Exception {
+        try (InputStream r = new CharSequenceInputStream("test", csName)) {
+            assertEquals(2, r.skip(2));
+            r.mark(0);
+            assertEquals('s', r.read(), csName);
+            assertEquals('t', r.read(), csName);
+            assertEquals(-1, r.read(), csName);
+            r.reset();
+            assertEquals('s', r.read(), csName);
+            assertEquals('t', r.read(), csName);
+            assertEquals(-1, r.read(), csName);
+            r.reset();
+            r.reset();
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource(CharsetsTest.REQUIRED_CHARSETS)
+    public void testMarkReset_RequiredCharsets(final String csName) throws Exception {
+        testMarkResetMultiByteChars(csName);
+    }
+
+    @Test
+    public void testMarkReset_USASCII() throws Exception {
+        testMarkReset("US-ASCII");
+    }
+
+    @Test
+    public void testMarkReset_UTF8() throws Exception {
+        testMarkReset(UTF_8);
+    }
+
     private void testMarkResetMultiByteChars(final String csName) throws IOException {
         // This test quietly skips Charsets that can't handle multibyte characters like ASCII.
         final String sequenceEnglish = "Test Sequence";
@@ -339,40 +373,6 @@ public class CharSequenceInputStreamTest {
                 assertEquals(-1, (byte) r.read(), csName);
             }
         }
-    }
-
-    // This test doesn't work for charsets that don't create a single byte for each char.
-    // Use testMarkResetMultiByteChars() instead for those cases.
-    private void testMarkReset(final String csName) throws Exception {
-        try (InputStream r = new CharSequenceInputStream("test", csName)) {
-            assertEquals(2, r.skip(2));
-            r.mark(0);
-            assertEquals('s', r.read(), csName);
-            assertEquals('t', r.read(), csName);
-            assertEquals(-1, r.read(), csName);
-            r.reset();
-            assertEquals('s', r.read(), csName);
-            assertEquals('t', r.read(), csName);
-            assertEquals(-1, r.read(), csName);
-            r.reset();
-            r.reset();
-        }
-    }
-
-    @ParameterizedTest
-    @MethodSource(CharsetsTest.REQUIRED_CHARSETS)
-    public void testMarkReset_RequiredCharsets(final String csName) throws Exception {
-        testMarkResetMultiByteChars(csName);
-    }
-
-    @Test
-    public void testMarkReset_USASCII() throws Exception {
-        testMarkReset("US-ASCII");
-    }
-
-    @Test
-    public void testMarkReset_UTF8() throws Exception {
-        testMarkReset(UTF_8);
     }
 
     @Test
