@@ -37,7 +37,7 @@ import org.apache.commons.io.charset.CharsetEncoders;
 import org.apache.commons.io.function.Uncheck;
 
 /**
- * Implements an {@link InputStream} to read bytes from String, StringBuffer, StringBuilder or CharBuffer, 
+ * Implements an {@link InputStream} to read bytes from String, StringBuffer, StringBuilder or CharBuffer,
  * encoded using the specified Charset. The Charset defaults to Charset.defaultCharset().
  * <p>
  * <strong>Note:</strong> Supports {@link #mark(int)} and {@link #reset()}.
@@ -354,7 +354,7 @@ public class CharSequenceInputStream extends InputStream {
             this.cBufMark = NO_MARK;
             this.bBufMark = NO_MARK;
         }
-        mark(0); // Fix to IO-795 CharSequenceInputStream.reset() only works once 
+        mark(0);
     }
 
     @Override
