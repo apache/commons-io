@@ -58,7 +58,7 @@ Documentation
 
 More information can be found on the [Apache Commons IO homepage](https://commons.apache.org/proper/commons-io).
 The [Javadoc](https://commons.apache.org/proper/commons-io/apidocs) can be browsed.
-Questions related to the usage of Apache Commons IO should be posted to the [user mailing list][ml].
+Questions related to the usage of Apache Commons IO should be posted to the [user mailing list](https://commons.apache.org/mail-lists.html).
 
 Getting the latest release
 --------------------------
