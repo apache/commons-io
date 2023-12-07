@@ -308,4 +308,18 @@ public class EndianUtilsTest  {
         assertEquals( 0x01, bytes[1] );
     }
 
+    @Test
+    public void testInvalidOffset() throws IOException {
+        final byte[] bytes = new byte[0];
+
+        assertThrows(IllegalArgumentException.class, () -> EndianUtils.readSwappedInteger(bytes, 0));
+        assertThrows(IllegalArgumentException.class, () -> EndianUtils.readSwappedLong(bytes, 0));
+        assertThrows(IllegalArgumentException.class, () -> EndianUtils.readSwappedShort(bytes, 0));
+        assertThrows(IllegalArgumentException.class, () -> EndianUtils.readSwappedUnsignedInteger(bytes, 0));
+        assertThrows(IllegalArgumentException.class, () -> EndianUtils.readSwappedUnsignedShort(bytes, 0));
+        assertThrows(IllegalArgumentException.class, () -> EndianUtils.writeSwappedInteger(bytes, 0, 0));
+        assertThrows(IllegalArgumentException.class, () -> EndianUtils.writeSwappedLong(bytes, 0, 0l));
+        assertThrows(IllegalArgumentException.class, () -> EndianUtils.writeSwappedShort(bytes, 0, (short) 0));
+    }
+
 }

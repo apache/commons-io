@@ -42,6 +42,19 @@ import java.io.OutputStream;
 public class EndianUtils {
 
     /**
+     * Validates if the provided byte array have enough data.
+     * @param data the input byte array
+     * @param offset the input offset
+     * @param byteNeeded the needed number of bytes
+     * @throws IllegalArgumentException if the byte array does not have enough data
+     */
+    private static void validateByteArrayOffset(final byte[] data, final int offset, final int byteNeeded) {
+        if (data.length < offset + byteNeeded) {
+            throw new IllegalArgumentException("Data only has " + data.length + "bytes, needed " + (offset + byteNeeded) + "bytes.");
+        }
+    }
+
+    /**
      * Reads the next byte from the input stream.
      * @param input  the stream
      * @return the byte
@@ -107,6 +120,7 @@ public class EndianUtils {
      * @return the value read
      */
     public static int readSwappedInteger(final byte[] data, final int offset) {
+        validateByteArrayOffset(data, offset, Integer.SIZE / Byte.SIZE);
         return ((data[offset + 0] & 0xff) << 0) +
             ((data[offset + 1] & 0xff) << 8) +
             ((data[offset + 2] & 0xff) << 16) +
@@ -136,6 +150,7 @@ public class EndianUtils {
      * @return the value read
      */
     public static long readSwappedLong(final byte[] data, final int offset) {
+        validateByteArrayOffset(data, offset, Long.SIZE / Byte.SIZE);
         final long low = readSwappedInteger(data, offset);
         final long high = readSwappedInteger(data, offset + 4);
         return (high << 32) + (0xffffffffL & low);
@@ -164,6 +179,7 @@ public class EndianUtils {
      * @return the value read
      */
     public static short readSwappedShort(final byte[] data, final int offset) {
+        validateByteArrayOffset(data, offset, Short.SIZE / Byte.SIZE);
         return (short) (((data[offset + 0] & 0xff) << 0) + ((data[offset + 1] & 0xff) << 8));
     }
 
@@ -187,6 +203,7 @@ public class EndianUtils {
      * @return the value read
      */
     public static long readSwappedUnsignedInteger(final byte[] data, final int offset) {
+        validateByteArrayOffset(data, offset, Integer.SIZE / Byte.SIZE);
         final long low = ((data[offset + 0] & 0xff) << 0) +
                      ((data[offset + 1] & 0xff) << 8) +
                      ((data[offset + 2] & 0xff) << 16);
@@ -220,6 +237,7 @@ public class EndianUtils {
      * @return the value read
      */
     public static int readSwappedUnsignedShort(final byte[] data, final int offset) {
+        validateByteArrayOffset(data, offset, Short.SIZE / Byte.SIZE);
         return ((data[offset + 0] & 0xff) << 0) + ((data[offset + 1] & 0xff) << 8);
     }
 
@@ -347,6 +365,7 @@ public class EndianUtils {
      * @param value value to write
      */
     public static void writeSwappedInteger(final byte[] data, final int offset, final int value) {
+        validateByteArrayOffset(data, offset, Integer.SIZE / Byte.SIZE);
         data[offset + 0] = (byte) (value >> 0 & 0xff);
         data[offset + 1] = (byte) (value >> 8 & 0xff);
         data[offset + 2] = (byte) (value >> 16 & 0xff);
@@ -375,6 +394,7 @@ public class EndianUtils {
      * @param value value to write
      */
     public static void writeSwappedLong(final byte[] data, final int offset, final long value) {
+        validateByteArrayOffset(data, offset, Long.SIZE / Byte.SIZE);
         data[offset + 0] = (byte) (value >> 0 & 0xff);
         data[offset + 1] = (byte) (value >> 8 & 0xff);
         data[offset + 2] = (byte) (value >> 16 & 0xff);
@@ -411,6 +431,7 @@ public class EndianUtils {
      * @param value value to write
      */
     public static void writeSwappedShort(final byte[] data, final int offset, final short value) {
+        validateByteArrayOffset(data, offset, Short.SIZE / Byte.SIZE);
         data[offset + 0] = (byte) (value >> 0 & 0xff);
         data[offset + 1] = (byte) (value >> 8 & 0xff);
     }
