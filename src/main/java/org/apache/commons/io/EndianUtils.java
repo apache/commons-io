@@ -40,8 +40,9 @@ import java.io.OutputStream;
  * @see org.apache.commons.io.input.SwappedDataInputStream
  */
 public class EndianUtils {
+
     /**
-     * Validate if the provided byte array have enough data.
+     * Validates if the provided byte array have enough data.
      * @param data the input byte array
      * @param offset the input offset
      * @param byteNeeded the needed number of bytes
@@ -49,8 +50,7 @@ public class EndianUtils {
      */
     private static void validateByteArrayOffset(byte[] data, final int offset, final int byteNeeded) {
         if (data.length < offset + byteNeeded) {
-            throw new IllegalArgumentException(
-                "Data only has " + data.length + "bytes, needed " + (offset + byteNeeded) + "bytes.");
+            throw new IllegalArgumentException("Data only has " + data.length + "bytes, needed " + (offset + byteNeeded) + "bytes.");
         }
     }
 
