@@ -48,7 +48,7 @@ public class EndianUtils {
      * @param byteNeeded the needed number of bytes
      * @throws IllegalArgumentException if the byte array does not have enough data
      */
-    private static void validateByteArrayOffset(byte[] data, final int offset, final int byteNeeded) {
+    private static void validateByteArrayOffset(final byte[] data, final int offset, final int byteNeeded) {
         if (data.length < offset + byteNeeded) {
             throw new IllegalArgumentException("Data only has " + data.length + "bytes, needed " + (offset + byteNeeded) + "bytes.");
         }
