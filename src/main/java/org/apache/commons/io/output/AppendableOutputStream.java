@@ -23,8 +23,8 @@ import java.io.OutputStream;
  * OutputStream implementation that writes the data to an {@link Appendable}
  * Object.
  * <p>
- * For example, can be used with any {@link java.io.Writer} or a {@link java.lang.StringBuilder}
- * or {@link java.lang.StringBuffer}.
+ * For example, can be used with any {@link java.io.Writer} or a {@link StringBuilder}
+ * or {@link StringBuffer}.
  * </p>
  *
  * @since 2.5

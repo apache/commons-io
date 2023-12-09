@@ -24,8 +24,8 @@ import java.util.Objects;
  * Writer implementation that writes the data to an {@link Appendable}
  * Object.
  * <p>
- * For example, can be used with a {@link java.lang.StringBuilder}
- * or {@link java.lang.StringBuffer}.
+ * For example, can be used with a {@link StringBuilder}
+ * or {@link StringBuffer}.
  * </p>
  *
  * @since 2.7
