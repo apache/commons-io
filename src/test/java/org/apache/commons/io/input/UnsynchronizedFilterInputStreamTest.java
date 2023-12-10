@@ -130,7 +130,7 @@ public class UnsynchronizedFilterInputStreamTest {
     public void test_read$B() throws IOException {
         final byte[] buf1 = new byte[100];
         is.read(buf1);
-        assertTrue(new String(buf1, 0, buf1.length, "UTF-8").equals(DATA.substring(0, 100)), "Failed to read correct data");
+        assertTrue(new String(buf1, 0, buf1.length, StandardCharsets.UTF_8).equals(DATA.substring(0, 100)), "Failed to read correct data");
     }
 
     /**
@@ -144,7 +144,7 @@ public class UnsynchronizedFilterInputStreamTest {
         is.skip(3000);
         is.mark(1000);
         is.read(buf1, 0, buf1.length);
-        assertTrue(new String(buf1, 0, buf1.length, "UTF-8").equals(DATA.substring(3000, 3100)), "Failed to read correct data");
+        assertTrue(new String(buf1, 0, buf1.length, StandardCharsets.UTF_8).equals(DATA.substring(3000, 3100)), "Failed to read correct data");
     }
 
     /**
@@ -166,6 +166,6 @@ public class UnsynchronizedFilterInputStreamTest {
         final byte[] buf1 = new byte[10];
         is.skip(1000);
         is.read(buf1, 0, buf1.length);
-        assertTrue(new String(buf1, 0, buf1.length, "UTF-8").equals(DATA.substring(1000, 1010)), "Failed to skip to correct position");
+        assertTrue(new String(buf1, 0, buf1.length, StandardCharsets.UTF_8).equals(DATA.substring(1000, 1010)), "Failed to skip to correct position");
     }
 }
