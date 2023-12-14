@@ -52,7 +52,7 @@ public class DirectoryWalkerTest {
             this.suppressCancel = suppressCancel;
         }
 
-        /** find files. */
+        /** Find files. */
         protected List<File> find(final File startDirectory) throws IOException {
             final List<File> results = new ArrayList<>();
             walk(startDirectory, results);
@@ -115,7 +115,7 @@ public class DirectoryWalkerTest {
             super(dirFilter, fileFilter, depthLimit);
         }
 
-        /** find files. */
+        /** Find files. */
         protected List<File> find(final File startDirectory) {
             final List<File> results = new ArrayList<>();
             try {
@@ -148,7 +148,7 @@ public class DirectoryWalkerTest {
             super(filter, depthLimit);
         }
 
-        /** find files. */
+        /** Find files. */
         protected List<String> find(final File startDirectory) {
             final List<String> results = new ArrayList<>();
             try {
@@ -180,7 +180,7 @@ public class DirectoryWalkerTest {
             this.suppressCancel = suppressCancel;
         }
 
-        /** find files. */
+        /** Find files. */
         protected List<File> find(final File startDirectory) throws IOException {
             results = new ArrayList<>();
             walk(startDirectory, results);

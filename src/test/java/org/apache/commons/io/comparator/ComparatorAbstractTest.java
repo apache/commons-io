@@ -38,10 +38,10 @@ public abstract class ComparatorAbstractTest {
     @TempDir
     public File dir;
 
-    /** comparator instance */
+    /** Comparator instance */
     protected AbstractFileComparator comparator;
 
-    /** reverse comparator instance */
+    /** Reverse comparator instance */
     protected Comparator<File> reverse;
 
     /** File which compares equal to  "equalFile2" */
