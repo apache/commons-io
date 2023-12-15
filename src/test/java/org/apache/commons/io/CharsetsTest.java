@@ -98,27 +98,27 @@ public class CharsetsTest {
 
     @Test
     public void testUsAscii() {
-        assertEquals("US-ASCII", Charsets.US_ASCII.name());
+        assertEquals(StandardCharsets.US_ASCII.name(), Charsets.US_ASCII.name());
     }
 
     @Test
     public void testUtf16() {
-        assertEquals("UTF-16", Charsets.UTF_16.name());
+        assertEquals(StandardCharsets.UTF_16.name(), Charsets.UTF_16.name());
     }
 
     @Test
     public void testUtf16Be() {
-        assertEquals("UTF-16BE", Charsets.UTF_16BE.name());
+        assertEquals(StandardCharsets.UTF_16BE.name(), Charsets.UTF_16BE.name());
     }
 
     @Test
     public void testUtf16Le() {
-        assertEquals("UTF-16LE", Charsets.UTF_16LE.name());
+        assertEquals(StandardCharsets.UTF_16LE.name(), Charsets.UTF_16LE.name());
     }
 
     @Test
     public void testUtf8() {
-        assertEquals("UTF-8", Charsets.UTF_8.name());
+        assertEquals(StandardCharsets.UTF_8.name(), Charsets.UTF_8.name());
     }
 
 }
