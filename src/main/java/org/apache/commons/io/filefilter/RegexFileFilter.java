@@ -26,6 +26,7 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOCase;
+import org.apache.commons.io.file.PathUtils;
 
 /**
  * Filters files using supplied regular expression(s).
@@ -111,7 +112,7 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      */
     @SuppressWarnings("unchecked")
     public RegexFileFilter(final Pattern pattern) {
-        this(pattern, (Function<Path, String> & Serializable) p -> Objects.toString(p.getFileName(), null));
+        this(pattern, (Function<Path, String> & Serializable) PathUtils::getFileNameString);
     }
 
     /**

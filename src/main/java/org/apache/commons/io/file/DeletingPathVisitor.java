@@ -107,7 +107,7 @@ public class DeletingPathVisitor extends CountingPathVisitor {
      * @return true to process the given path, false if not.
      */
     private boolean accept(final Path path) {
-        return Arrays.binarySearch(skip, Objects.toString(path.getFileName(), null)) < 0;
+        return Arrays.binarySearch(skip, PathUtils.getFileNameString(path)) < 0;
     }
 
     @Override

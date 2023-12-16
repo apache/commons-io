@@ -26,6 +26,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.IOCase;
+import org.apache.commons.io.file.PathUtils;
 
 /**
  * Filters file names for a certain name.
@@ -179,14 +180,14 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * Checks to see if the file name matches.
-     * @param file  the File to check
+     * @param path  the File to check
      *
      * @return true if the file name matches
      * @since 2.9.0
      */
     @Override
-    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        return toFileVisitResult(acceptBaseName(Objects.toString(file.getFileName(), null)));
+    public FileVisitResult accept(final Path path, final BasicFileAttributes attributes) {
+        return toFileVisitResult(acceptBaseName(PathUtils.getFileNameString(path)));
     }
 
     private boolean acceptBaseName(final String baseName) {

@@ -63,6 +63,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -864,6 +865,33 @@ public final class PathUtils {
      */
     public static DosFileAttributeView getDosFileAttributeView(final Path path, final LinkOption... options) {
         return Files.getFileAttributeView(path, DosFileAttributeView.class, options);
+    }
+
+    /**
+     * Gets the Path's file name and apply the given function if the file name is non-null.
+     *
+     * @param <R> The function's result type.
+     * @param path the path to query.
+     * @param function function to apply to the file name.
+     * @return the Path's file name as a string or null.
+     * @see Path#getFileName()
+     * @since 2.16.0
+     */
+    public static <R> R getFileName(final Path path, Function<Path, R> function) {
+        final Path fileName = path.getFileName();
+        return fileName != null ? function.apply(fileName) : null;
+    }
+
+    /**
+     * Gets the Path's file name as a string.
+     *
+     * @param path the path to query.
+     * @return the Path's file name as a string or null.
+     * @see Path#getFileName()
+     * @since 2.16.0
+     */
+    public static String getFileNameString(final Path path) {
+        return getFileName(path, Path::toString);
     }
 
     /**

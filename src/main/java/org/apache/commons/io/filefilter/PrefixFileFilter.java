@@ -26,6 +26,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.IOCase;
+import org.apache.commons.io.file.PathUtils;
 
 /**
  * Filters file names for a certain prefix.
@@ -191,8 +192,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        final Path fileName = file.getFileName();
-        return toFileVisitResult(accept(fileName == null ? null : fileName.toFile()));
+        return toFileVisitResult(accept(PathUtils.getFileName(file, Path::toFile)));
     }
 
     private boolean accept(final String name) {

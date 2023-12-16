@@ -44,7 +44,7 @@ public class DirectoryStreamFilterTest {
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(PathUtils.current(), streamFilter)) {
             final Iterator<Path> iterator = stream.iterator();
             final Path path = iterator.next();
-            assertEquals(PATH_FIXTURE, path.getFileName().toString());
+            assertEquals(PATH_FIXTURE, PathUtils.getFileNameString(path));
             assertFalse(iterator.hasNext());
         }
     }
@@ -55,7 +55,7 @@ public class DirectoryStreamFilterTest {
         final DirectoryStreamFilter streamFilter = new DirectoryStreamFilter(pathFilter);
         assertEquals(pathFilter, streamFilter.getPathFilter());
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(PathUtils.current(), streamFilter)) {
-            stream.forEach(path -> assertNotEquals(PATH_FIXTURE, path.getFileName().toString()));
+            stream.forEach(path -> assertNotEquals(PATH_FIXTURE, PathUtils.getFileNameString(path)));
         }
     }
 

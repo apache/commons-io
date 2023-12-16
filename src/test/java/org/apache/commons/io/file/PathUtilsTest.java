@@ -154,7 +154,8 @@ public class PathUtilsTest extends AbstractTempDirTest {
     @Test
     public void testCopyDirectoryForDifferentFilesystemsWithRelativePath() throws IOException {
         final Path archivePath = Paths.get(TEST_JAR_PATH);
-        try (FileSystem archive = openArchive(archivePath, false); final FileSystem targetArchive = openArchive(tempDirPath.resolve(TEST_JAR_NAME), true)) {
+        try (FileSystem archive = openArchive(archivePath, false);
+                final FileSystem targetArchive = openArchive(tempDirPath.resolve(TEST_JAR_NAME), true)) {
             final Path targetDir = targetArchive.getPath("targetDir");
             Files.createDirectory(targetDir);
             // relative jar -> relative dir
@@ -246,6 +247,14 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testGetFileNameString() {
+        assertNull(PathUtils.getFileNameString(Paths.get("/")));
+        assertEquals("", PathUtils.getFileNameString(Paths.get("")));
+        assertEquals("a", PathUtils.getFileNameString(Paths.get("a")));
+        assertEquals("a", PathUtils.getFileNameString(Paths.get("p", "a")));
+    }
+
+    @Test
     public void testGetLastModifiedFileTime_File_Present() throws IOException {
         assertNotNull(PathUtils.getLastModifiedFileTime(current().toFile()));
     }
@@ -330,7 +339,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
         try (DirectoryStream<Path> stream = PathUtils.newDirectoryStream(current(), pathFilter)) {
             final Iterator<Path> iterator = stream.iterator();
             final Path path = iterator.next();
-            assertEquals(PATH_FIXTURE, path.getFileName().toString());
+            assertEquals(PATH_FIXTURE, PathUtils.getFileNameString(path));
             assertFalse(iterator.hasNext());
         }
     }
