@@ -180,6 +180,14 @@ public class CharSequenceInputStream extends InputStream {
         this.cBuf = CharBuffer.wrap(cs);
         this.cBufMark = NO_MARK;
         this.bBufMark = NO_MARK;
+        try {
+            fillBuffer();
+        } catch (CharacterCodingException ex) {
+            // Reset everything without filling the buffer
+            // so the same exception can be thrown again later.
+            this.bBuf.clear();
+            this.cBuf.rewind();
+        }
     }
 
     /**
@@ -210,18 +218,14 @@ public class CharSequenceInputStream extends InputStream {
     }
 
     /**
-     * Return an estimate of the number of bytes remaining in the byte stream.
-     * @return the count of bytes that can be read without blocking (or returning EOF).
+     * Return a lower bound on the number of bytes remaining in the byte stream.
      *
+     * @return the count of bytes that can be read without blocking (or returning EOF).
      * @throws IOException if an error occurs (probably not possible).
      */
     @Override
     public int available() throws IOException {
-        // The cached entries are in bBuf; since encoding always creates at least one byte
-        // per character, we can add the two to get a better estimate (e.g. if bBuf is empty)
-        // Note that the implementation in 2.4 could return zero even though there were
-        // encoded bytes still available.
-        return this.bBuf.remaining() + this.cBuf.remaining();
+        return this.bBuf.remaining();
     }
 
     @Override
