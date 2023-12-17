@@ -42,19 +42,6 @@ import java.io.OutputStream;
 public class EndianUtils {
 
     /**
-     * Validates if the provided byte array have enough data.
-     * @param data the input byte array
-     * @param offset the input offset
-     * @param byteNeeded the needed number of bytes
-     * @throws IllegalArgumentException if the byte array does not have enough data
-     */
-    private static void validateByteArrayOffset(final byte[] data, final int offset, final int byteNeeded) {
-        if (data.length < offset + byteNeeded) {
-            throw new IllegalArgumentException("Data only has " + data.length + "bytes, needed " + (offset + byteNeeded) + "bytes.");
-        }
-    }
-
-    /**
      * Reads the next byte from the input stream.
      * @param input  the stream
      * @return the byte
@@ -311,6 +298,19 @@ public class EndianUtils {
     public static short swapShort(final short value) {
         return (short) (((value >> 0 & 0xff) << 8) +
             ((value >> 8 & 0xff) << 0));
+    }
+
+    /**
+     * Validates if the provided byte array have enough data.
+     * @param data the input byte array
+     * @param offset the input offset
+     * @param byteNeeded the needed number of bytes
+     * @throws IllegalArgumentException if the byte array does not have enough data
+     */
+    private static void validateByteArrayOffset(final byte[] data, final int offset, final int byteNeeded) {
+        if (data.length < offset + byteNeeded) {
+            throw new IllegalArgumentException("Data only has " + data.length + "bytes, needed " + (offset + byteNeeded) + "bytes.");
+        }
     }
 
     /**

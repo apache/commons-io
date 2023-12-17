@@ -78,6 +78,17 @@ public class CharSequenceInputStreamTest {
                 "Shift_JIS".equalsIgnoreCase(csName);
     }
 
+    @Test
+    // IO-781 available() returns 2 but only 1 byte is read afterwards
+    public void testAvailable() throws IOException {
+        final Charset charset = Charset.forName("Big5");
+        final CharSequenceInputStream in = new CharSequenceInputStream("\uD800\uDC00", charset);
+        final int available = in.available();
+        final byte[] data = new byte[available];
+        final int bytesRead = in.read(data);
+        assertEquals(available, bytesRead);
+    }
+
     @ParameterizedTest(name = "{0}")
     @MethodSource(CharsetsTest.AVAIL_CHARSETS)
     public void testAvailable(final String csName) throws Exception {
@@ -510,16 +521,5 @@ public class CharSequenceInputStreamTest {
             r.skip(100);
             assertEquals(-1, r.read(), csName);
         }
-    }
-
-    @Test
-    // IO-781 available() returns 2 but only 1 byte is read afterwards
-    public void testAvailable() throws IOException {
-        final Charset charset = Charset.forName("Big5");
-        final CharSequenceInputStream in = new CharSequenceInputStream("\uD800\uDC00", charset);
-        final int available = in.available();
-        final byte[] data = new byte[available];
-        final int bytesRead = in.read(data);
-        assertEquals(available, bytesRead);
     }
 }
