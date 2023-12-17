@@ -511,4 +511,15 @@ public class CharSequenceInputStreamTest {
             assertEquals(-1, r.read(), csName);
         }
     }
+    
+    @Test
+	// IO-781 available() returns 2 but only 1 byte is read afterwards
+    public void testAvailable() throws IOException {
+    	Charset charset = Charset.forName("Big5");
+    	CharSequenceInputStream in = new CharSequenceInputStream("\uD800\uDC00", charset);
+    	int available = in.available();
+    	byte[] data = new byte[available];
+    	int bytesRead = in.read(data);
+    	assertEquals(available, bytesRead);
+    }
 }
