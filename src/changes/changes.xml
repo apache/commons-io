@@ -49,7 +49,7 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <release version="2.16.0" date="202Y-MM-DD" description="Java 8 is required.">
       <!-- Fix -->
-      <action dev="ggregory" type="fix" due-to="Elliotte Rusty Harold">Fix and reenable testSkip_RequiredCharsets #518.</action>
+      <action dev="ggregory" type="fix" due-to="Elliotte Rusty Harold">Fix and re-enable testSkip_RequiredCharsets #518.</action>
       <action dev="ggregory" type="fix" issue="IO-824" due-to="Miguel Munoz, Gary Gregory">SymbolicLineFileFilter documentation fixes.</action>
       <action dev="ggregory" type="fix" issue="IO-795" due-to="Miguel Munoz, Gary Gregory">CharSequenceInputStream.reset() only works once #520.</action>
       <action dev="ggregory" type="fix" issue="IO-825" due-to="Arthur Chan, Gary Gregory">Add byte array size validation for methods in EndianUtils #521.</action>
