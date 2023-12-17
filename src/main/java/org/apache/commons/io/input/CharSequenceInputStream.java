@@ -219,7 +219,7 @@ public class CharSequenceInputStream extends InputStream {
 
     /**
      * Return a lower bound on the number of bytes remaining in the byte stream.
-     * 
+     *
      * @return the count of bytes that can be read without blocking (or returning EOF).
      * @throws IOException if an error occurs (probably not possible).
      */
