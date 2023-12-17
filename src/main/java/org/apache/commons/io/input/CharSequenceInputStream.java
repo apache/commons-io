@@ -183,9 +183,9 @@ public class CharSequenceInputStream extends InputStream {
         try {
         	fillBuffer();
         } catch (CharacterCodingException ex) {
-        	// Reset everything without filling the buffer
-        	// so the same exception can be thrown again later.
-        	this.bBuf.clear();
+            // Reset everything without filling the buffer
+            // so the same exception can be thrown again later.
+            this.bBuf.clear();
             this.cBuf.rewind();
         }
     }
