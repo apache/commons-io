@@ -180,6 +180,14 @@ public class CharSequenceInputStream extends InputStream {
         this.cBuf = CharBuffer.wrap(cs);
         this.cBufMark = NO_MARK;
         this.bBufMark = NO_MARK;
+        try {
+        	fillBuffer();
+        } catch (CharacterCodingException ex) {
+        	// Reset everything without filling the buffer
+        	// so the same exception can be thrown again later.
+        	this.bBuf.clear();
+            this.cBuf.rewind();
+        }
     }
 
     /**
