@@ -111,16 +111,11 @@ public abstract class AbstractIOFileFilterTest {
         assertEquals(expected, filter.accept(file.toPath(), null),
                 "test " + testNumber + " Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file);
 
-        if (file != null && file.getParentFile() != null) {
+        if (file.getParentFile() != null) {
             assertEquals(expected, filter.accept(file.getParentFile(), file.getName()),
                     "test " + testNumber + " Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for " + file);
             assertEquals(expected, filter.matches(file.toPath()),
                     "test " + testNumber + " Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file);
-        } else if (file == null) {
-            assertEquals(expected, filter.accept(file),
-                    "test " + testNumber + " Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null");
-            assertEquals(expected, filter.matches(null),
-                    "test " + testNumber + " Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null");
         }
     }
 
