@@ -18,12 +18,12 @@ package org.apache.commons.io.output;
 
 import static org.apache.commons.io.output.BrokenWriter.brokenWriter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.io.Writer;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -80,20 +80,6 @@ public class BrokenWriterTest {
     }
 
     @Test
-    @Disabled("What should happen here?")
-    public void testIOExceptionEquals() {
-        final IOException exception = new IOException("test exception");
-        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenWriter(exception).equals(null)));
-    }
-
-    @Test
-    @Disabled("What should happen here?")
-    public void testRuntimeExceptionEquals() {
-        final RuntimeException exception = new RuntimeException("test exception");
-        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenWriter(exception).equals(null)));
-    }
-
-    @Test
     public void testIOExceptionFlush() {
         final IOException exception = new IOException("test exception");
         assertEquals(exception, assertThrows(IOException.class, () -> new BrokenWriter(exception).flush()));
@@ -106,31 +92,8 @@ public class BrokenWriterTest {
     }
 
     @Test
-    @Disabled("What should happen here?")
-    public void testIOExceptionHashCode() {
-        final IOException exception = new IOException("test exception");
-        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenWriter(exception).hashCode()));
-    }
-
-    @Test
-    @Disabled("What should happen here?")
-    public void testRuntimeExceptionHashCode() {
-        final RuntimeException exception = new RuntimeException("test exception");
-        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenWriter(exception).hashCode()));
-    }
-
-    @Test
-    @Disabled("What should happen here?")
-    public void testIOExceptionToString() {
-        final IOException exception = new IOException("test exception");
-        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenWriter(exception).toString()));
-    }
-
-    @Test
-    @Disabled("What should happen here?")
-    public void testRuntimeExceptionToString() {
-        final RuntimeException exception = new RuntimeException("test exception");
-        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenWriter(exception).toString()));
+    public void testInstance() {
+        assertNotNull(BrokenWriter.INSTANCE);
     }
 
     @Test

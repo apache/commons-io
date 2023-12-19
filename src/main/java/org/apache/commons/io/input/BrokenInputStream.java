@@ -21,9 +21,9 @@ import java.io.InputStream;
 import java.util.function.Supplier;
 
 /**
- * Always throws an {@link IOException} or a {@link RuntimeException} from all the {@link InputStream} methods where {@link IOException} is declared.
+ * Always throws an {@link IOException} or a {@link RuntimeException} from all {@link InputStream} methods where {@link IOException} is declared.
  * <p>
- * This class is mostly useful for testing error handling.
+ * This class is mostly useful for testing error handling in code that uses an {@link InputStream}.
  * </p>
  *
  * @since 2.0
@@ -31,7 +31,7 @@ import java.util.function.Supplier;
 public class BrokenInputStream extends InputStream {
 
     /**
-     * The singleton instance.
+     * A singleton instance using a default IOException.
      *
      * @since 2.12.0
      */
@@ -105,7 +105,7 @@ public class BrokenInputStream extends InputStream {
     /**
      * Throws the configured exception.
      *
-     * @return nothing
+     * @return nothing.
      * @throws IOException as configured.
      */
     @Override
@@ -127,7 +127,7 @@ public class BrokenInputStream extends InputStream {
     /**
      * Throws the configured exception.
      *
-     * @return nothing
+     * @return nothing.
      * @throws IOException as configured.
      */
     @Override
@@ -149,8 +149,8 @@ public class BrokenInputStream extends InputStream {
     /**
      * Throws the configured exception.
      *
-     * @param n ignored
-     * @return nothing
+     * @param n ignored.
+     * @return nothing.
      * @throws IOException as configured.
      */
     @Override

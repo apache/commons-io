@@ -21,9 +21,9 @@ import java.io.Writer;
 import java.util.function.Supplier;
 
 /**
- * Always throws an {@link IOException} or a {@link RuntimeException} from all {@link Writer} methods.
+ * Always throws an {@link IOException} or a {@link RuntimeException} from all {@link Writer} methods where {@link IOException} is declared.
  * <p>
- * This class is mostly useful for testing error handling in code that uses a writer.
+ * This class is mostly useful for testing error handling in code that uses a {@link Writer}.
  * </p>
  *
  * @since 2.0
@@ -31,7 +31,7 @@ import java.util.function.Supplier;
 public class BrokenWriter extends Writer {
 
     /**
-     * The singleton instance.
+     * A singleton instance using a default IOException.
      *
      * @since 2.12.0
      */
@@ -125,9 +125,9 @@ public class BrokenWriter extends Writer {
     /**
      * Throws the configured exception.
      *
-     * @param cbuf ignored
-     * @param off ignored
-     * @param len ignored
+     * @param cbuf ignored.
+     * @param off  ignored.
+     * @param len  ignored.
      * @throws IOException as configured.
      */
     @Override

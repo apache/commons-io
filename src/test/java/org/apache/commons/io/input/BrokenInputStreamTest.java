@@ -18,6 +18,7 @@ package org.apache.commons.io.input;
 
 import static org.apache.commons.io.input.BrokenInputStream.brokenInputStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
@@ -52,6 +53,11 @@ public class BrokenInputStreamTest {
     public void testRuntimeExceptionClose() {
         final RuntimeException exception = new RuntimeException("test exception");
         assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenInputStream(exception).close()));
+    }
+
+    @Test
+    public void testInstance() {
+        assertNotNull(BrokenInputStream.INSTANCE);
     }
 
     @Test

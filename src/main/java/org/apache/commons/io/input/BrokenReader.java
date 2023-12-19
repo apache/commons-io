@@ -21,9 +21,9 @@ import java.io.Reader;
 import java.util.function.Supplier;
 
 /**
- * Always throws an {@link IOException} or a {@link RuntimeException} from all the {@link Reader} methods where {@link IOException} is declared.
+ * Always throws an {@link IOException} or a {@link RuntimeException} from all {@link Reader} methods where {@link IOException} is declared.
  * <p>
- * This class is mostly useful for testing error handling.
+ * This class is mostly useful for testing error handling in code that uses a {@link Reader}.
  * </p>
  *
  * @since 2.7
@@ -87,7 +87,7 @@ public class BrokenReader extends Reader {
     }
 
     /**
-     * Constructs a new reader that always throws an {@link IOException}
+     * Constructs a new reader that always throws an {@link IOException}.
      *
      * @param exceptionSupplier a supplier for the exception to be thrown.
      * @since 2.12.0
@@ -115,7 +115,7 @@ public class BrokenReader extends Reader {
     /**
      * Throws the configured exception.
      *
-     * @param readAheadLimit ignored
+     * @param readAheadLimit ignored.
      * @throws IOException as configured.
      */
     @Override
@@ -126,10 +126,10 @@ public class BrokenReader extends Reader {
     /**
      * Throws the configured exception.
      *
-     * @param cbuf ignored
-     * @param off  ignored
-     * @param len  ignored
-     * @return nothing
+     * @param cbuf ignored.
+     * @param off  ignored.
+     * @param len  ignored.
+     * @return nothing.
      * @throws IOException as configured.
      */
     @Override
@@ -141,7 +141,7 @@ public class BrokenReader extends Reader {
     /**
      * Throws the configured exception.
      *
-     * @return nothing
+     * @return nothing.
      * @throws IOException as configured.
      */
     @Override
@@ -163,8 +163,8 @@ public class BrokenReader extends Reader {
     /**
      * Throws the configured exception.
      *
-     * @param n ignored
-     * @return nothing
+     * @param n ignored.
+     * @return nothing.
      * @throws IOException as configured.
      */
     @Override
