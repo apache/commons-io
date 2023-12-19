@@ -21,7 +21,7 @@ import java.io.OutputStream;
 import java.util.function.Supplier;
 
 /**
- * Broken output stream. This stream always throws an {@link IOException} from
+ * Broken output stream. This stream always throws an {@link IOException} or a {@link RuntimeException} from
  * all {@link OutputStream} methods.
  * <p>
  * This class is mostly useful for testing error handling in code that uses an
@@ -40,9 +40,26 @@ public class BrokenOutputStream extends OutputStream {
     public static final BrokenOutputStream INSTANCE = new BrokenOutputStream();
 
     /**
-     * A supplier for the exception that is thrown by all methods of this class.
+     * Constructs a new stream that always throws a {@link RuntimeException}.
+     *
+     * @param exceptionSupplier a supplier for the exception to be thrown.
+     * @return a new stream that always throws a {@link RuntimeException}.
      */
-    private final Supplier<IOException> exceptionSupplier;
+    public static BrokenOutputStream brokenOutputStream(final Supplier<RuntimeException> exceptionSupplier) {
+        return new BrokenOutputStream(() -> {
+            throw exceptionSupplier.get();
+        });
+    }
+
+    @FunctionalInterface
+    private interface ExceptionThrower {
+        void doThrow() throws IOException;
+    }
+
+    /**
+     * A function that throws the exception that is thrown by all methods of this class.
+     */
+    private final ExceptionThrower exceptionThrower;
 
     /**
      * Constructs a new stream that always throws an {@link IOException}.
@@ -61,44 +78,61 @@ public class BrokenOutputStream extends OutputStream {
     }
 
     /**
+     * Constructs a new stream that always throws the given exception.
+     *
+     * @param exception the exception to be thrown.
+     */
+    public BrokenOutputStream(final RuntimeException exception) {
+        this(() -> {
+            throw exception;
+        });
+    }
+
+    /**
      * Constructs a new stream that always throws an {@link IOException}.
      *
      * @param exceptionSupplier a supplier for the exception to be thrown.
      * @since 2.12.0
      */
     public BrokenOutputStream(final Supplier<IOException> exceptionSupplier) {
-        this.exceptionSupplier = exceptionSupplier;
+        this((ExceptionThrower) () -> {
+            throw exceptionSupplier.get();
+        });
+    }
+
+    private BrokenOutputStream(final ExceptionThrower exceptionThrower) {
+        this.exceptionThrower = exceptionThrower;
     }
 
     /**
      * Throws the configured exception.
      *
-     * @throws IOException always thrown
+     * @throws IOException as configured.
      */
     @Override
     public void close() throws IOException {
-        throw exceptionSupplier.get();
+        exceptionThrower.doThrow();
     }
 
     /**
      * Throws the configured exception.
      *
-     * @throws IOException always thrown
+     * @throws IOException as configured.
      */
     @Override
     public void flush() throws IOException {
-        throw exceptionSupplier.get();
+        exceptionThrower.doThrow();
     }
 
     /**
      * Throws the configured exception.
      *
      * @param b ignored
-     * @throws IOException always thrown
+     * @throws IOException as configured.
      */
     @Override
     public void write(final int b) throws IOException {
-        throw exceptionSupplier.get();
+        exceptionThrower.doThrow();
     }
 
 }

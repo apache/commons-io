@@ -16,13 +16,13 @@
  */
 package org.apache.commons.io.output;
 
+import static org.apache.commons.io.output.BrokenOutputStream.brokenOutputStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -30,28 +30,32 @@ import org.junit.jupiter.api.Test;
  */
 public class BrokenOutputStreamTest {
 
-    private IOException exception;
-
-    private OutputStream stream;
-
-    @BeforeEach
-    public void setUp() {
-        exception = new IOException("test exception");
-        stream = new BrokenOutputStream(exception);
+    @Test
+    public void testIOExceptionClose() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenOutputStream(exception).close()));
     }
 
     @Test
-    public void testClose() {
-        assertEquals(exception, assertThrows(IOException.class, () -> stream.close()));
+    public void testRuntimeExceptionClose() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenOutputStream(exception).close()));
     }
 
     @Test
-    public void testFlush() {
-        assertEquals(exception, assertThrows(IOException.class, () -> stream.flush()));
+    public void testIOExceptionFlush() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenOutputStream(exception).flush()));
     }
 
     @Test
-    public void testTryWithResources() {
+    public void testRuntimeExceptionFlush() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenOutputStream(exception).flush()));
+    }
+
+    @Test
+    public void testIOExceptionTryWithResources() {
         final IOException thrown = assertThrows(IOException.class, () -> {
             try (OutputStream newStream = new BrokenOutputStream()) {
                 newStream.write(1);
@@ -66,18 +70,54 @@ public class BrokenOutputStreamTest {
     }
 
     @Test
-    public void testWriteByteArray() {
-        assertEquals(exception, assertThrows(IOException.class, () -> stream.write(new byte[1])));
+    public void testRuntimeExceptionTryWithResources() {
+        final RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
+            try (OutputStream newStream = brokenOutputStream(() -> new RuntimeException("test exception"))) {
+                newStream.write(1);
+            }
+        });
+        assertEquals("test exception", thrown.getMessage());
+
+        final Throwable[] suppressed = thrown.getSuppressed();
+        assertEquals(1, suppressed.length);
+        assertEquals(RuntimeException.class, suppressed[0].getClass());
+        assertEquals("test exception", suppressed[0].getMessage());
     }
 
     @Test
-    public void testWriteByteArrayIndexed() {
-        assertEquals(exception, assertThrows(IOException.class, () -> stream.write(new byte[1], 0, 1)));
+    public void testIOExceptionWriteByteArray() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenOutputStream(exception).write(new byte[1])));
     }
 
     @Test
-    public void testWriteInt() {
-        assertEquals(exception, assertThrows(IOException.class, () -> stream.write(1)));
+    public void testRuntimeExceptionWriteByteArray() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenOutputStream(exception).write(new byte[1])));
+    }
+
+    @Test
+    public void testIOExceptionWriteByteArrayIndexed() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenOutputStream(exception).write(new byte[1], 0, 1)));
+    }
+
+    @Test
+    public void testRuntimeExceptionWriteByteArrayIndexed() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenOutputStream(exception).write(new byte[1], 0, 1)));
+    }
+
+    @Test
+    public void testIOExceptionWriteInt() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenOutputStream(exception).write(1)));
+    }
+
+    @Test
+    public void testRuntimeExceptionWriteInt() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenOutputStream(exception).write(1)));
     }
 
 }

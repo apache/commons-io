@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.input.BrokenReader.brokenReader;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -23,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.IOException;
 import java.io.Reader;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -31,19 +31,16 @@ import org.junit.jupiter.api.Test;
  */
 public class BrokenReaderTest {
 
-    private IOException exception;
-
-    private Reader brokenReader;
-
-    @BeforeEach
-    public void setUp() {
-        exception = new IOException("test exception");
-        brokenReader = new BrokenReader(exception);
+    @Test
+    public void testIOExceptionClose() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenReader(exception).close()));
     }
 
     @Test
-    public void testClose() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.close()));
+    public void testRuntimeExceptionClose() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenReader(exception).close()));
     }
 
     @Test
@@ -52,42 +49,91 @@ public class BrokenReaderTest {
     }
 
     @Test
-    public void testMark() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.mark(1)));
+    public void testIOExceptionMark() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenReader(exception).mark(1)));
     }
 
     @Test
-    public void testRead() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.read()));
+    public void testRuntimeExceptionMark() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenReader(exception).mark(1)));
     }
 
     @Test
-    public void testReadCharArray() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.read(new char[1])));
+    public void testIOExceptionRead() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenReader(exception).read()));
     }
 
     @Test
-    public void testReadCharArrayIndexed() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.read(new char[1], 0, 1)));
+    public void testRuntimeExceptionRead() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenReader(exception).read()));
     }
 
     @Test
-    public void testReady() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.ready()));
+    public void testIOExceptionReadCharArray() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenReader(exception).read(new char[1])));
     }
 
     @Test
-    public void testReset() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.reset()));
+    public void testRuntimeExceptionReadCharArray() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenReader(exception).read(new char[1])));
     }
 
     @Test
-    public void testSkip() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.skip(1)));
+    public void testIOExceptionReadCharArrayIndexed() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenReader(exception).read(new char[1], 0, 1)));
     }
 
     @Test
-    public void testTryWithResources() {
+    public void testRuntimeExceptionReadCharArrayIndexed() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenReader(exception).read(new char[1], 0, 1)));
+    }
+
+    @Test
+    public void testIOExceptionReady() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenReader(exception).ready()));
+    }
+
+    @Test
+    public void testRuntimeExceptionReady() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenReader(exception).ready()));
+    }
+
+    @Test
+    public void testIOExceptionReset() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenReader(exception).reset()));
+    }
+
+    @Test
+    public void testRuntimeExceptionReset() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenReader(exception).reset()));
+    }
+
+    @Test
+    public void testIOExceptionSkip() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenReader(exception).skip(1)));
+    }
+
+    @Test
+    public void testRuntimeExceptionSkip() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenReader(exception).skip(1)));
+    }
+
+    @Test
+    public void testIOExceptionTryWithResources() {
         final IOException thrown = assertThrows(IOException.class, () -> {
             try (Reader newReader = new BrokenReader()) {
                 newReader.read();
@@ -99,6 +145,21 @@ public class BrokenReaderTest {
         assertEquals(1, suppressed.length);
         assertEquals(IOException.class, suppressed[0].getClass());
         assertEquals("Broken reader", suppressed[0].getMessage());
+    }
+
+    @Test
+    public void testRuntimeExceptionTryWithResources() {
+        final RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
+            try (Reader newReader = brokenReader(() -> new RuntimeException("test exception"))) {
+                newReader.read();
+            }
+        });
+        assertEquals("test exception", thrown.getMessage());
+
+        final Throwable[] suppressed = thrown.getSuppressed();
+        assertEquals(1, suppressed.length);
+        assertEquals(RuntimeException.class, suppressed[0].getClass());
+        assertEquals("test exception", suppressed[0].getMessage());
     }
 
 }

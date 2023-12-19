@@ -21,7 +21,7 @@ import java.io.Reader;
 import java.util.function.Supplier;
 
 /**
- * Always throws an {@link IOException} from all the {@link Reader} methods where the exception is declared.
+ * Always throws an {@link IOException} or a {@link RuntimeException} from all the {@link Reader} methods where {@link IOException} is declared.
  * <p>
  * This class is mostly useful for testing error handling.
  * </p>
@@ -38,9 +38,26 @@ public class BrokenReader extends Reader {
     public static final BrokenReader INSTANCE = new BrokenReader();
 
     /**
-     * A supplier for the exception that is thrown by all methods of this class.
+     * Constructs a new reader that always throws a {@link RuntimeException}.
+     *
+     * @param exceptionSupplier a supplier for the exception to be thrown.
+     * @return a new reader that always throws a {@link RuntimeException}.
      */
-    private final Supplier<IOException> exceptionSupplier;
+    public static BrokenReader brokenReader(final Supplier<RuntimeException> exceptionSupplier) {
+        return new BrokenReader(() -> {
+            throw exceptionSupplier.get();
+        });
+    }
+
+    @FunctionalInterface
+    private interface ExceptionThrower {
+        void doThrow() throws IOException;
+    }
+
+    /**
+     * A function that throws the exception that is thrown by all methods of this class.
+     */
+    private final ExceptionThrower exceptionThrower;
 
     /**
      * Constructs a new reader that always throws an {@link IOException}.
@@ -59,34 +76,51 @@ public class BrokenReader extends Reader {
     }
 
     /**
+     * Constructs a new reader that always throws the given exception.
+     *
+     * @param exception the exception to be thrown.
+     */
+    public BrokenReader(final RuntimeException exception) {
+        this(() -> {
+            throw exception;
+        });
+    }
+
+    /**
      * Constructs a new reader that always throws an {@link IOException}
      *
      * @param exceptionSupplier a supplier for the exception to be thrown.
      * @since 2.12.0
      */
     public BrokenReader(final Supplier<IOException> exceptionSupplier) {
-        this.exceptionSupplier = exceptionSupplier;
+        this((ExceptionThrower) () -> {
+            throw exceptionSupplier.get();
+        });
+    }
+
+    private BrokenReader(final ExceptionThrower exceptionThrower) {
+        this.exceptionThrower = exceptionThrower;
     }
 
     /**
      * Throws the configured exception.
      *
-     * @throws IOException always thrown
+     * @throws IOException as configured.
      */
     @Override
     public void close() throws IOException {
-        throw exceptionSupplier.get();
+        exceptionThrower.doThrow();
     }
 
     /**
      * Throws the configured exception.
      *
      * @param readAheadLimit ignored
-     * @throws IOException always thrown
+     * @throws IOException as configured.
      */
     @Override
     public void mark(final int readAheadLimit) throws IOException {
-        throw exceptionSupplier.get();
+        exceptionThrower.doThrow();
     }
 
     /**
@@ -96,32 +130,34 @@ public class BrokenReader extends Reader {
      * @param off  ignored
      * @param len  ignored
      * @return nothing
-     * @throws IOException always thrown
+     * @throws IOException as configured.
      */
     @Override
     public int read(final char[] cbuf, final int off, final int len) throws IOException {
-        throw exceptionSupplier.get();
+        exceptionThrower.doThrow();
+        return 0;
     }
 
     /**
      * Throws the configured exception.
      *
      * @return nothing
-     * @throws IOException always thrown
+     * @throws IOException as configured.
      */
     @Override
     public boolean ready() throws IOException {
-        throw exceptionSupplier.get();
+        exceptionThrower.doThrow();
+        return super.ready();
     }
 
     /**
      * Throws the configured exception.
      *
-     * @throws IOException always thrown
+     * @throws IOException as configured.
      */
     @Override
     public synchronized void reset() throws IOException {
-        throw exceptionSupplier.get();
+        exceptionThrower.doThrow();
     }
 
     /**
@@ -129,11 +165,12 @@ public class BrokenReader extends Reader {
      *
      * @param n ignored
      * @return nothing
-     * @throws IOException always thrown
+     * @throws IOException as configured.
      */
     @Override
     public long skip(final long n) throws IOException {
-        throw exceptionSupplier.get();
+        exceptionThrower.doThrow();
+        return super.skip(n);
     }
 
 }

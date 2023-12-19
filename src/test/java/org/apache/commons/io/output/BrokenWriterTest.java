@@ -16,13 +16,13 @@
  */
 package org.apache.commons.io.output;
 
+import static org.apache.commons.io.output.BrokenWriter.brokenWriter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.io.Writer;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -31,61 +31,110 @@ import org.junit.jupiter.api.Test;
  */
 public class BrokenWriterTest {
 
-    private IOException exception;
-
-    private Writer brokenWriter;
-
-    @BeforeEach
-    public void setUp() {
-        exception = new IOException("test exception");
-        brokenWriter = new BrokenWriter(exception);
+    @Test
+    public void testIOExceptionAppendChar() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenWriter(exception).append('1')));
     }
 
     @Test
-    public void testAppendChar() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.append('1')));
+    public void testRuntimeExceptionAppendChar() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenWriter(exception).append('1')));
     }
 
     @Test
-    public void testAppendCharSequence() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.append("01")));
+    public void testIOExceptionAppendCharSequence() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenWriter(exception).append("01")));
     }
 
     @Test
-    public void testAppendCharSequenceIndexed() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.append("01", 0, 1)));
+    public void testRuntimeExceptionAppendCharSequence() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenWriter(exception).append("01")));
     }
 
     @Test
-    public void testClose() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.close()));
+    public void testIOExceptionAppendCharSequenceIndexed() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenWriter(exception).append("01", 0, 1)));
+    }
+
+    @Test
+    public void testRuntimeExceptionAppendCharSequenceIndexed() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenWriter(exception).append("01", 0, 1)));
+    }
+
+    @Test
+    public void testIOExceptionClose() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenWriter(exception).close()));
+    }
+
+    @Test
+    public void testRuntimeExceptionClose() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenWriter(exception).close()));
     }
 
     @Test
     @Disabled("What should happen here?")
-    public void testEquals() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.equals(null)));
-    }
-
-    @Test
-    public void testFlush() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.flush()));
+    public void testIOExceptionEquals() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenWriter(exception).equals(null)));
     }
 
     @Test
     @Disabled("What should happen here?")
-    public void testHashCode() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.hashCode()));
+    public void testRuntimeExceptionEquals() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenWriter(exception).equals(null)));
+    }
+
+    @Test
+    public void testIOExceptionFlush() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenWriter(exception).flush()));
+    }
+
+    @Test
+    public void testRuntimeExceptionFlush() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenWriter(exception).flush()));
     }
 
     @Test
     @Disabled("What should happen here?")
-    public void testToString() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.toString()));
+    public void testIOExceptionHashCode() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenWriter(exception).hashCode()));
     }
 
     @Test
-    public void testTryWithResources() {
+    @Disabled("What should happen here?")
+    public void testRuntimeExceptionHashCode() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenWriter(exception).hashCode()));
+    }
+
+    @Test
+    @Disabled("What should happen here?")
+    public void testIOExceptionToString() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenWriter(exception).toString()));
+    }
+
+    @Test
+    @Disabled("What should happen here?")
+    public void testRuntimeExceptionToString() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenWriter(exception).toString()));
+    }
+
+    @Test
+    public void testIOExceptionTryWithResources() {
         final IOException thrown = assertThrows(IOException.class, () -> {
             try (Writer newWriter = new BrokenWriter()) {
                 newWriter.write(1);
@@ -100,28 +149,78 @@ public class BrokenWriterTest {
     }
 
     @Test
-    public void testWriteCharArray() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.write(new char[1])));
+    public void testRuntimeExceptionTryWithResources() {
+        final RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
+            try (Writer newWriter = brokenWriter(() -> new RuntimeException("test exception"))) {
+                newWriter.write(1);
+            }
+        });
+        assertEquals("test exception", thrown.getMessage());
+
+        final Throwable[] suppressed = thrown.getSuppressed();
+        assertEquals(1, suppressed.length);
+        assertEquals(RuntimeException.class, suppressed[0].getClass());
+        assertEquals("test exception", suppressed[0].getMessage());
     }
 
     @Test
-    public void testWriteCharArrayIndexed() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.write(new char[1], 0, 1)));
+    public void testIOExceptionWriteCharArray() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenWriter(exception).write(new char[1])));
     }
 
     @Test
-    public void testWriteInt() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.write(1)));
+    public void testRuntimeExceptionWriteCharArray() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenWriter(exception).write(new char[1])));
     }
 
     @Test
-    public void testWriteString() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.write("01")));
+    public void testIOExceptionWriteCharArrayIndexed() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenWriter(exception).write(new char[1], 0, 1)));
     }
 
     @Test
-    public void testWriteStringIndexed() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.write("01", 0, 1)));
+    public void testRuntimeExceptionWriteCharArrayIndexed() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenWriter(exception).write(new char[1], 0, 1)));
+    }
+
+    @Test
+    public void testIOExceptionWriteInt() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenWriter(exception).write(1)));
+    }
+
+    @Test
+    public void testRuntimeExceptionWriteInt() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenWriter(exception).write(1)));
+    }
+
+    @Test
+    public void testIOExceptionWriteString() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenWriter(exception).write("01")));
+    }
+
+    @Test
+    public void testRuntimeExceptionWriteString() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenWriter(exception).write("01")));
+    }
+
+    @Test
+    public void testIOExceptionWriteStringIndexed() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenWriter(exception).write("01", 0, 1)));
+    }
+
+    @Test
+    public void testRuntimeExceptionWriteStringIndexed() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenWriter(exception).write("01", 0, 1)));
     }
 
 }

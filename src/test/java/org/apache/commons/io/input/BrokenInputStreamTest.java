@@ -16,13 +16,13 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.input.BrokenInputStream.brokenInputStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -30,45 +30,74 @@ import org.junit.jupiter.api.Test;
  */
 public class BrokenInputStreamTest {
 
-    private IOException exception;
-
-    private InputStream stream;
-
-    @BeforeEach
-    public void setUp() {
-        exception = new IOException("test exception");
-        stream = new BrokenInputStream(exception);
+    @Test
+    public void testIOExceptionAvailable() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenInputStream(exception).available()));
     }
 
     @Test
-    public void testAvailable() {
-        assertEquals(exception, assertThrows(IOException.class, () -> stream.available()));
+    public void testRuntimeExceptionAvailable() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenInputStream(exception).available()));
     }
 
     @Test
-    public void testClose() {
-        assertEquals(exception, assertThrows(IOException.class, () -> stream.close()));
+    public void testIOExceptionClose() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenInputStream(exception).close()));
     }
 
     @Test
-    public void testRead() {
+    public void testRuntimeExceptionClose() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenInputStream(exception).close()));
+    }
+
+    @Test
+    public void testIOExceptionRead() {
+        final IOException exception = new IOException("test exception");
+        final InputStream stream = new BrokenInputStream(exception);
         assertEquals(exception, assertThrows(IOException.class, () -> stream.read()));
         assertEquals(exception, assertThrows(IOException.class, () -> stream.read(new byte[1])));
         assertEquals(exception, assertThrows(IOException.class, () -> stream.read(new byte[1], 0, 1)));
     }
 
     @Test
-    public void testReset() {
-        assertEquals(exception, assertThrows(IOException.class, () -> stream.reset()));
+    public void testRuntimeExceptionRead() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        final InputStream stream = new BrokenInputStream(exception);
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> stream.read()));
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> stream.read(new byte[1])));
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> stream.read(new byte[1], 0, 1)));
     }
 
     @Test
-    public void testSkip() {
-        assertEquals(exception, assertThrows(IOException.class, () -> stream.skip(1)));
+    public void testIOExceptionReset() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenInputStream(exception).reset()));
     }
 
     @Test
-    public void testTryWithResources() {
+    public void testRuntimeExceptionReset() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenInputStream(exception).reset()));
+    }
+
+    @Test
+    public void testIOExceptionSkip() {
+        final IOException exception = new IOException("test exception");
+        assertEquals(exception, assertThrows(IOException.class, () -> new BrokenInputStream(exception).skip(1)));
+    }
+
+    @Test
+    public void testRuntimeExceptionSkip() {
+        final RuntimeException exception = new RuntimeException("test exception");
+        assertEquals(exception, assertThrows(RuntimeException.class, () -> new BrokenInputStream(exception).skip(1)));
+    }
+
+    @Test
+    public void testIOExceptionTryWithResources() {
         final IOException thrown = assertThrows(IOException.class, () -> {
             try (InputStream newStream = new BrokenInputStream()) {
                 newStream.read();
@@ -80,5 +109,20 @@ public class BrokenInputStreamTest {
         assertEquals(1, suppressed.length);
         assertEquals(IOException.class, suppressed[0].getClass());
         assertEquals("Broken input stream", suppressed[0].getMessage());
+    }
+
+    @Test
+    public void testRuntimeExceptionTryWithResources() {
+        final RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
+            try (InputStream newStream = brokenInputStream(() -> new RuntimeException("test exception"))) {
+                newStream.read();
+            }
+        });
+        assertEquals("test exception", thrown.getMessage());
+
+        final Throwable[] suppressed = thrown.getSuppressed();
+        assertEquals(1, suppressed.length);
+        assertEquals(RuntimeException.class, suppressed[0].getClass());
+        assertEquals("test exception", suppressed[0].getMessage());
     }
 }
