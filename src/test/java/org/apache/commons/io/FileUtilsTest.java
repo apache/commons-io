@@ -1914,7 +1914,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
             iterateFilesAndDirs(subDir1, fileFilterAllFiles, fileFilterAllDirs, expectedFilesAndDirs);
             //
             // "*.txt" and "*"
-            final int filesCount;
             expectedFilesAndDirs = Arrays.asList(subDir1, subDir2, someFile, subDir3, subDir4);
             iterateFilesAndDirs(subDir1, fileFilterExtTxt, fileFilterAllDirs, expectedFilesAndDirs);
             //

@@ -2393,9 +2393,17 @@ public class FileUtils {
      * @since 2.9.0
      */
     public static void moveFile(final File srcFile, final File destFile, final CopyOption... copyOptions) throws IOException {
-        validateMoveParameters(srcFile, destFile);
-        requireFile(srcFile, "srcFile");
-        requireAbsent(destFile, "destFile");
+        Objects.requireNonNull(srcFile, "source");
+        Objects.requireNonNull(destFile, "destination");
+        if (!srcFile.isFile()) {
+            if (srcFile.exists()) {
+                throw new IllegalArgumentException("Parameter '" + "srcFile" + "' is not a file: " + srcFile);
+            }
+            throw new FileNotFoundException("Source '" + srcFile + "' does not exist");
+        }
+        if (destFile.exists()) {
+            throw new FileExistsException(String.format("File element in parameter '%s' already exists: '%s'", "destFile", destFile));
+        }
         final boolean rename = srcFile.renameTo(destFile);
         if (!rename) {
             // Don't interfere with file date on move, handled by StandardCopyOption.COPY_ATTRIBUTES
