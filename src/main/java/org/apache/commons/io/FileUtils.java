@@ -292,7 +292,7 @@ public class FileUtils {
      * @return the checksum specified, updated with the content of the file
      * @throws NullPointerException if the given {@link File} is {@code null}.
      * @throws NullPointerException if the given {@link Checksum} is {@code null}.
-     * @throws IllegalArgumentException if the given {@link File} does not exist or is not a file.
+     * @throws IllegalArgumentException if the given {@link File} is not a file.
      * @throws IOException if an IO error occurs reading the file.
      * @since 1.3
      */
