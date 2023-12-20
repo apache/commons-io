@@ -34,7 +34,7 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 public class BrokenInputStreamTest {
 
-    static final class CustomeException extends Exception {
+    static final class CustomException extends Exception {
 
         private static final long serialVersionUID = 1L;
 
@@ -51,12 +51,12 @@ public class BrokenInputStreamTest {
             IllegalStateException.class,
             Error.class,
             ExceptionInInitializerError.class,
-            CustomeException.class
+            CustomException.class
         );
         // @formatter:on
     }
 
-    private BrokenInputStream createBrokenInputStream(final Throwable exception) {
+    private static BrokenInputStream createBrokenInputStream(final Throwable exception) {
         if (exception instanceof IOException) {
             return new BrokenInputStream((IOException) exception);
         }
@@ -69,7 +69,7 @@ public class BrokenInputStreamTest {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenInputStream stream = createBrokenInputStream(exception);
-        assertEquals(exception, assertThrows(exception.getClass(), () -> stream.available()));
+        assertEquals(exception, assertThrows(clazz, () -> stream.available()));
     }
 
     @ParameterizedTest
@@ -78,7 +78,7 @@ public class BrokenInputStreamTest {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenInputStream stream = createBrokenInputStream(exception);
-        assertEquals(exception, assertThrows(exception.getClass(), () -> stream.close()));
+        assertEquals(exception, assertThrows(clazz, () -> stream.close()));
     }
 
     @ParameterizedTest
@@ -87,9 +87,9 @@ public class BrokenInputStreamTest {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenInputStream stream = createBrokenInputStream(exception);
-        assertEquals(exception, assertThrows(exception.getClass(), () -> stream.read()));
-        assertEquals(exception, assertThrows(exception.getClass(), () -> stream.read(new byte[1])));
-        assertEquals(exception, assertThrows(exception.getClass(), () -> stream.read(new byte[1], 0, 1)));
+        assertEquals(exception, assertThrows(clazz, () -> stream.read()));
+        assertEquals(exception, assertThrows(clazz, () -> stream.read(new byte[1])));
+        assertEquals(exception, assertThrows(clazz, () -> stream.read(new byte[1], 0, 1)));
     }
 
     @ParameterizedTest
@@ -98,7 +98,7 @@ public class BrokenInputStreamTest {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenInputStream stream = createBrokenInputStream(exception);
-        assertEquals(exception, assertThrows(exception.getClass(), () -> stream.reset()));
+        assertEquals(exception, assertThrows(clazz, () -> stream.reset()));
     }
 
     @ParameterizedTest
@@ -107,11 +107,11 @@ public class BrokenInputStreamTest {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenInputStream stream = createBrokenInputStream(exception);
-        assertEquals(exception, assertThrows(exception.getClass(), () -> stream.skip(1)));
+        assertEquals(exception, assertThrows(clazz, () -> stream.skip(1)));
     }
 
     @Test
-    public void testTryWithResources() throws Exception {
+    public void testTryWithResources() {
         final IOException thrown = assertThrows(IOException.class, () -> {
             try (InputStream newStream = new BrokenInputStream()) {
                 newStream.read();

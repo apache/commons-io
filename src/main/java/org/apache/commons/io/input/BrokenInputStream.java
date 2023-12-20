@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 import org.apache.commons.io.function.Erase;
 
 /**
- * Always throws an {@link IOException} from all the {@link InputStream} methods where the exception is declared.
+ * Always throws an exception from all {@link InputStream} methods where {@link IOException} is declared.
  * <p>
  * This class is mostly useful for testing error handling.
  * </p>
@@ -73,7 +73,7 @@ public class BrokenInputStream extends InputStream {
     }
 
     /**
-     * Constructs a new stream that always throws an {@link IOException}.
+     * Constructs a new stream that always throws the supplied exception.
      *
      * @param exceptionSupplier a supplier for the IOException or RuntimeException to be thrown.
      * @since 2.12.0
@@ -86,7 +86,7 @@ public class BrokenInputStream extends InputStream {
      * Throws the configured exception.
      *
      * @return nothing
-     * @throws IOException always thrown
+     * @throws IOException as configured.
      */
     @Override
     public int available() throws IOException {
@@ -96,7 +96,7 @@ public class BrokenInputStream extends InputStream {
     /**
      * Throws the configured exception.
      *
-     * @throws IOException always thrown
+     * @throws IOException as configured.
      */
     @Override
     public void close() throws IOException {
@@ -107,7 +107,7 @@ public class BrokenInputStream extends InputStream {
      * Throws the configured exception.
      *
      * @return nothing
-     * @throws IOException always thrown
+     * @throws IOException as configured.
      */
     @Override
     public int read() throws IOException {
@@ -117,7 +117,7 @@ public class BrokenInputStream extends InputStream {
     /**
      * Throws the configured exception.
      *
-     * @throws IOException always thrown
+     * @throws IOException as configured.
      */
     @Override
     public synchronized void reset() throws IOException {
@@ -138,7 +138,7 @@ public class BrokenInputStream extends InputStream {
      *
      * @param n ignored
      * @return nothing
-     * @throws IOException always thrown
+     * @throws IOException as configured.
      */
     @Override
     public long skip(final long n) throws IOException {

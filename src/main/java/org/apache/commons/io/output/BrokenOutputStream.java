@@ -20,9 +20,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.function.Supplier;
 
+import org.apache.commons.io.function.Erase;
+
 /**
- * Broken output stream. This stream always throws an {@link IOException} from
- * all {@link OutputStream} methods.
+ * Always throws an exception from all {@link OutputStream} methods where {@link IOException} is declared.
  * <p>
  * This class is mostly useful for testing error handling in code that uses an
  * output stream.
@@ -42,7 +43,7 @@ public class BrokenOutputStream extends OutputStream {
     /**
      * A supplier for the exception that is thrown by all methods of this class.
      */
-    private final Supplier<IOException> exceptionSupplier;
+    private final Supplier<Throwable> exceptionSupplier;
 
     /**
      * Constructs a new stream that always throws an {@link IOException}.
@@ -55,50 +56,71 @@ public class BrokenOutputStream extends OutputStream {
      * Constructs a new stream that always throws the given exception.
      *
      * @param exception the exception to be thrown.
+     * @deprecated Use {@link #BrokenOutputStream(Throwable)}.
      */
+    @Deprecated
     public BrokenOutputStream(final IOException exception) {
         this(() -> exception);
     }
 
     /**
-     * Constructs a new stream that always throws an {@link IOException}.
+     * Constructs a new stream that always throws the given exception.
      *
-     * @param exceptionSupplier a supplier for the exception to be thrown.
+     * @param exception the exception to be thrown.
+     * @since 2.16.0
+     */
+    public BrokenOutputStream(final Throwable exception) {
+        this(() -> exception);
+    }
+
+    /**
+     * Constructs a new stream that always throws the supplied exception.
+     *
+     * @param exceptionSupplier a supplier for the IOException or RuntimeException to be thrown.
      * @since 2.12.0
      */
-    public BrokenOutputStream(final Supplier<IOException> exceptionSupplier) {
+    public BrokenOutputStream(final Supplier<Throwable> exceptionSupplier) {
         this.exceptionSupplier = exceptionSupplier;
     }
 
     /**
      * Throws the configured exception.
      *
-     * @throws IOException always thrown
+     * @throws IOException as configured.
      */
     @Override
     public void close() throws IOException {
-        throw exceptionSupplier.get();
+        throw rethrow();
     }
 
     /**
      * Throws the configured exception.
      *
-     * @throws IOException always thrown
+     * @throws IOException as configured.
      */
     @Override
     public void flush() throws IOException {
-        throw exceptionSupplier.get();
+        throw rethrow();
+    }
+
+    /**
+     * Throws the configured exception from its supplier.
+     *
+     * @return Throws the configured exception from its supplier.
+     */
+    private RuntimeException rethrow() {
+        return Erase.rethrow(exceptionSupplier.get());
     }
 
     /**
      * Throws the configured exception.
      *
      * @param b ignored
-     * @throws IOException always thrown
+     * @throws IOException as configured.
      */
     @Override
     public void write(final int b) throws IOException {
-        throw exceptionSupplier.get();
+        throw rethrow();
     }
 
 }

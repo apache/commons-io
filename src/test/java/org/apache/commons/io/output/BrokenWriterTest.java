@@ -19,69 +19,124 @@ package org.apache.commons.io.output;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.file.FileSystemNotFoundException;
+import java.util.stream.Stream;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Tests {@link BrokenWriter}.
  */
 public class BrokenWriterTest {
 
-    private IOException exception;
+    static final class CustomException extends Exception {
 
-    private Writer brokenWriter;
+        private static final long serialVersionUID = 1L;
 
-    @BeforeEach
-    public void setUp() {
-        exception = new IOException("test exception");
-        brokenWriter = new BrokenWriter(exception);
     }
 
-    @Test
-    public void testAppendChar() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.append('1')));
+    static Stream<Class<? extends Throwable>> parameters() {
+        // @formatter:off
+        return Stream.of(
+            IOException.class,
+            FileNotFoundException.class,
+            FileSystemNotFoundException.class,
+            RuntimeException.class,
+            IllegalArgumentException.class,
+            IllegalStateException.class,
+            Error.class,
+            ExceptionInInitializerError.class,
+            CustomException.class
+        );
+        // @formatter:on
     }
 
-    @Test
-    public void testAppendCharSequence() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.append("01")));
+    private static BrokenWriter createBrokenWriter(final Throwable exception) {
+        if (exception instanceof IOException) {
+            return new BrokenWriter((IOException) exception);
+        }
+        return new BrokenWriter(exception);
     }
 
-    @Test
-    public void testAppendCharSequenceIndexed() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.append("01", 0, 1)));
+    @ParameterizedTest
+    @MethodSource("parameters")
+    public void testAppendChar(final Class<Exception> clazz) throws Exception {
+        final Throwable exception = clazz.newInstance();
+        @SuppressWarnings("resource")
+        final BrokenWriter brokenWriter = createBrokenWriter(exception);
+        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.append('1')));
     }
 
-    @Test
-    public void testClose() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.close()));
+    @ParameterizedTest
+    @MethodSource("parameters")
+    public void testAppendCharSequence(final Class<Throwable> clazz) throws Exception {
+        final Throwable exception = clazz.newInstance();
+        @SuppressWarnings("resource")
+        final BrokenWriter brokenWriter = createBrokenWriter(exception);
+        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.append("01")));
     }
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("parameters")
+    public void testAppendCharSequenceIndexed(final Class<Throwable> clazz) throws Exception {
+        final Throwable exception = clazz.newInstance();
+        @SuppressWarnings("resource")
+        final BrokenWriter brokenWriter = createBrokenWriter(exception);
+        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.append("01", 0, 1)));
+    }
+
+    @ParameterizedTest
+    @MethodSource("parameters")
+    public void testClose(final Class<Throwable> clazz) throws Exception {
+        final Throwable exception = clazz.newInstance();
+        @SuppressWarnings("resource")
+        final BrokenWriter brokenWriter = createBrokenWriter(exception);
+        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.close()));
+    }
+
+    @ParameterizedTest
+    @MethodSource("parameters")
     @Disabled("What should happen here?")
-    public void testEquals() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.equals(null)));
+    public void testEquals(final Class<Throwable> clazz) throws Exception {
+        final Throwable exception = clazz.newInstance();
+        @SuppressWarnings("resource")
+        final BrokenWriter brokenWriter = createBrokenWriter(exception);
+        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.equals(null)));
     }
 
-    @Test
-    public void testFlush() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.flush()));
+    @ParameterizedTest
+    @MethodSource("parameters")
+    public void testFlush(final Class<Throwable> clazz) throws Exception {
+        final Throwable exception = clazz.newInstance();
+        @SuppressWarnings("resource")
+        final BrokenWriter brokenWriter = createBrokenWriter(exception);
+        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.flush()));
     }
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("parameters")
     @Disabled("What should happen here?")
-    public void testHashCode() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.hashCode()));
+    public void testHashCode(final Class<Throwable> clazz) throws Exception {
+        final Throwable exception = clazz.newInstance();
+        @SuppressWarnings("resource")
+        final BrokenWriter brokenWriter = createBrokenWriter(exception);
+        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.hashCode()));
     }
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("parameters")
     @Disabled("What should happen here?")
-    public void testToString() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.toString()));
+    public void testToString(final Class<Throwable> clazz) throws Exception {
+        final Throwable exception = clazz.newInstance();
+        @SuppressWarnings("resource")
+        final BrokenWriter brokenWriter = createBrokenWriter(exception);
+        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.toString()));
     }
 
     @Test
@@ -99,29 +154,49 @@ public class BrokenWriterTest {
         assertEquals("Broken writer", suppressed[0].getMessage());
     }
 
-    @Test
-    public void testWriteCharArray() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.write(new char[1])));
+    @ParameterizedTest
+    @MethodSource("parameters")
+    public void testWriteCharArray(final Class<Throwable> clazz) throws Exception {
+        final Throwable exception = clazz.newInstance();
+        @SuppressWarnings("resource")
+        final BrokenWriter brokenWriter = createBrokenWriter(exception);
+        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.write(new char[1])));
     }
 
-    @Test
-    public void testWriteCharArrayIndexed() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.write(new char[1], 0, 1)));
+    @ParameterizedTest
+    @MethodSource("parameters")
+    public void testWriteCharArrayIndexed(final Class<Throwable> clazz) throws Exception {
+        final Throwable exception = clazz.newInstance();
+        @SuppressWarnings("resource")
+        final BrokenWriter brokenWriter = createBrokenWriter(exception);
+        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.write(new char[1], 0, 1)));
     }
 
-    @Test
-    public void testWriteInt() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.write(1)));
+    @ParameterizedTest
+    @MethodSource("parameters")
+    public void testWriteInt(final Class<Throwable> clazz) throws Exception {
+        final Throwable exception = clazz.newInstance();
+        @SuppressWarnings("resource")
+        final BrokenWriter brokenWriter = createBrokenWriter(exception);
+        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.write(1)));
     }
 
-    @Test
-    public void testWriteString() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.write("01")));
+    @ParameterizedTest
+    @MethodSource("parameters")
+    public void testWriteString(final Class<Throwable> clazz) throws Exception {
+        final Throwable exception = clazz.newInstance();
+        @SuppressWarnings("resource")
+        final BrokenWriter brokenWriter = createBrokenWriter(exception);
+        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.write("01")));
     }
 
-    @Test
-    public void testWriteStringIndexed() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenWriter.write("01", 0, 1)));
+    @ParameterizedTest
+    @MethodSource("parameters")
+    public void testWriteStringIndexed(final Class<Throwable> clazz) throws Exception {
+        final Throwable exception = clazz.newInstance();
+        @SuppressWarnings("resource")
+        final BrokenWriter brokenWriter = createBrokenWriter(exception);
+        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.write("01", 0, 1)));
     }
 
 }

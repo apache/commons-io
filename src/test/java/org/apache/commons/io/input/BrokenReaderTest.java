@@ -20,30 +20,57 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.file.FileSystemNotFoundException;
+import java.util.stream.Stream;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Tests {@link BrokenReader}.
  */
 public class BrokenReaderTest {
 
-    private IOException exception;
+    static final class CustomException extends Exception {
 
-    private Reader brokenReader;
+        private static final long serialVersionUID = 1L;
 
-    @BeforeEach
-    public void setUp() {
-        exception = new IOException("test exception");
-        brokenReader = new BrokenReader(exception);
     }
 
-    @Test
-    public void testClose() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.close()));
+    static Stream<Class<? extends Throwable>> parameters() {
+        // @formatter:off
+        return Stream.of(
+            IOException.class,
+            FileNotFoundException.class,
+            FileSystemNotFoundException.class,
+            RuntimeException.class,
+            IllegalArgumentException.class,
+            IllegalStateException.class,
+            Error.class,
+            ExceptionInInitializerError.class,
+            CustomException.class
+        );
+        // @formatter:on
+    }
+
+    private static BrokenReader createBrokenReader(final Throwable exception) {
+        if (exception instanceof IOException) {
+            return new BrokenReader((IOException) exception);
+        }
+        return new BrokenReader(exception);
+    }
+
+    @ParameterizedTest
+    @MethodSource("parameters")
+    public void testClose(final Class<Exception> clazz) throws Exception {
+        final Throwable exception = clazz.newInstance();
+        @SuppressWarnings("resource")
+        final BrokenReader brokenReader = createBrokenReader(exception);
+        assertEquals(exception, assertThrows(clazz, () -> brokenReader.close()));
     }
 
     @Test
@@ -51,39 +78,67 @@ public class BrokenReaderTest {
         assertNotNull(BrokenReader.INSTANCE);
     }
 
-    @Test
-    public void testMark() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.mark(1)));
+    @ParameterizedTest
+    @MethodSource("parameters")
+    public void testMark(final Class<Throwable> clazz) throws Exception {
+        final Throwable exception = clazz.newInstance();
+        @SuppressWarnings("resource")
+        final BrokenReader brokenReader = createBrokenReader(exception);
+        assertEquals(exception, assertThrows(clazz, () -> brokenReader.mark(1)));
     }
 
-    @Test
-    public void testRead() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.read()));
+    @ParameterizedTest
+    @MethodSource("parameters")
+    public void testRead(final Class<Throwable> clazz) throws Exception {
+        final Throwable exception = clazz.newInstance();
+        @SuppressWarnings("resource")
+        final BrokenReader brokenReader = createBrokenReader(exception);
+        assertEquals(exception, assertThrows(clazz, () -> brokenReader.read()));
     }
 
-    @Test
-    public void testReadCharArray() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.read(new char[1])));
+    @ParameterizedTest
+    @MethodSource("parameters")
+    public void testReadCharArray(final Class<Throwable> clazz) throws Exception {
+        final Throwable exception = clazz.newInstance();
+        @SuppressWarnings("resource")
+        final BrokenReader brokenReader = createBrokenReader(exception);
+        assertEquals(exception, assertThrows(clazz, () -> brokenReader.read(new char[1])));
     }
 
-    @Test
-    public void testReadCharArrayIndexed() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.read(new char[1], 0, 1)));
+    @ParameterizedTest
+    @MethodSource("parameters")
+    public void testReadCharArrayIndexed(final Class<Throwable> clazz) throws Exception {
+        final Throwable exception = clazz.newInstance();
+        @SuppressWarnings("resource")
+        final BrokenReader brokenReader = createBrokenReader(exception);
+        assertEquals(exception, assertThrows(clazz, () -> brokenReader.read(new char[1], 0, 1)));
     }
 
-    @Test
-    public void testReady() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.ready()));
+    @ParameterizedTest
+    @MethodSource("parameters")
+    public void testReady(final Class<Throwable> clazz) throws Exception {
+        final Throwable exception = clazz.newInstance();
+        @SuppressWarnings("resource")
+        final BrokenReader brokenReader = createBrokenReader(exception);
+        assertEquals(exception, assertThrows(clazz, () -> brokenReader.ready()));
     }
 
-    @Test
-    public void testReset() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.reset()));
+    @ParameterizedTest
+    @MethodSource("parameters")
+    public void testReset(final Class<Throwable> clazz) throws Exception {
+        final Throwable exception = clazz.newInstance();
+        @SuppressWarnings("resource")
+        final BrokenReader brokenReader = createBrokenReader(exception);
+        assertEquals(exception, assertThrows(clazz, () -> brokenReader.reset()));
     }
 
-    @Test
-    public void testSkip() {
-        assertEquals(exception, assertThrows(IOException.class, () -> brokenReader.skip(1)));
+    @ParameterizedTest
+    @MethodSource("parameters")
+    public void testSkip(final Class<Throwable> clazz) throws Exception {
+        final Throwable exception = clazz.newInstance();
+        @SuppressWarnings("resource")
+        final BrokenReader brokenReader = createBrokenReader(exception);
+        assertEquals(exception, assertThrows(clazz, () -> brokenReader.skip(1)));
     }
 
     @Test
