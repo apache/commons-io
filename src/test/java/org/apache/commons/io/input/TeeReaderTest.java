@@ -66,7 +66,7 @@ public class TeeReaderTest  {
         verify(goodR).close();
 
         final TeeReader closingTr = new TeeReader(goodR, badW, true);
-        final IOException e = assertThrows(IOException.class, closingTr::close);
+        assertThrows(IOException.class, closingTr::close);
         verify(goodR, times(2)).close();
     }
 
