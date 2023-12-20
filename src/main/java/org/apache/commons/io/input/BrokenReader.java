@@ -95,7 +95,7 @@ public class BrokenReader extends Reader {
     /**
      * Throws the configured exception.
      *
-     * @param readAheadLimit ignored
+     * @param readAheadLimit ignored.
      * @throws IOException as configured.
      */
     @Override
@@ -106,10 +106,10 @@ public class BrokenReader extends Reader {
     /**
      * Throws the configured exception.
      *
-     * @param cbuf ignored
-     * @param off  ignored
-     * @param len  ignored
-     * @return nothing
+     * @param cbuf ignored.
+     * @param off  ignored.
+     * @param len  ignored.
+     * @return nothing.
      * @throws IOException as configured.
      */
     @Override
@@ -120,7 +120,7 @@ public class BrokenReader extends Reader {
     /**
      * Throws the configured exception.
      *
-     * @return nothing
+     * @return nothing.
      * @throws IOException as configured.
      */
     @Override
@@ -150,8 +150,8 @@ public class BrokenReader extends Reader {
     /**
      * Throws the configured exception.
      *
-     * @param n ignored
-     * @return nothing
+     * @param n ignored.
+     * @return nothing.
      * @throws IOException as configured.
      */
     @Override

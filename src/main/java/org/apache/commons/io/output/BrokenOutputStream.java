@@ -25,8 +25,7 @@ import org.apache.commons.io.function.Erase;
 /**
  * Always throws an exception from all {@link OutputStream} methods where {@link IOException} is declared.
  * <p>
- * This class is mostly useful for testing error handling in code that uses an
- * output stream.
+ * This class is mostly useful for testing error handling.
  * </p>
  *
  * @since 2.0
@@ -34,7 +33,7 @@ import org.apache.commons.io.function.Erase;
 public class BrokenOutputStream extends OutputStream {
 
     /**
-     * A singleton instance.
+     * A singleton instance using a default IOException.
      *
      * @since 2.12.0
      */
@@ -115,7 +114,7 @@ public class BrokenOutputStream extends OutputStream {
     /**
      * Throws the configured exception.
      *
-     * @param b ignored
+     * @param b ignored.
      * @throws IOException as configured.
      */
     @Override

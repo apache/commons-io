@@ -33,7 +33,7 @@ import org.apache.commons.io.function.Erase;
 public class BrokenInputStream extends InputStream {
 
     /**
-     * The singleton instance.
+     * A singleton instance using a default IOException.
      *
      * @since 2.12.0
      */
@@ -85,7 +85,7 @@ public class BrokenInputStream extends InputStream {
     /**
      * Throws the configured exception.
      *
-     * @return nothing
+     * @return nothing.
      * @throws IOException as configured.
      */
     @Override
@@ -106,7 +106,7 @@ public class BrokenInputStream extends InputStream {
     /**
      * Throws the configured exception.
      *
-     * @return nothing
+     * @return nothing.
      * @throws IOException as configured.
      */
     @Override
@@ -136,8 +136,8 @@ public class BrokenInputStream extends InputStream {
     /**
      * Throws the configured exception.
      *
-     * @param n ignored
-     * @return nothing
+     * @param n ignored.
+     * @return nothing.
      * @throws IOException as configured.
      */
     @Override

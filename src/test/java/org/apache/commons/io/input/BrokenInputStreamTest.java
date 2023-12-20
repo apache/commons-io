@@ -17,6 +17,7 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.FileNotFoundException;
@@ -81,6 +82,11 @@ public class BrokenInputStreamTest {
         assertEquals(exception, assertThrows(clazz, () -> stream.close()));
     }
 
+    @Test
+    public void testInstance() {
+        assertNotNull(BrokenInputStream.INSTANCE);
+    }
+
     @ParameterizedTest
     @MethodSource("parameters")
     public void testRead(final Class<Exception> clazz) throws Exception {
@@ -124,4 +130,5 @@ public class BrokenInputStreamTest {
         assertEquals(IOException.class, suppressed[0].getClass());
         assertEquals("Broken input stream", suppressed[0].getMessage());
     }
+
 }

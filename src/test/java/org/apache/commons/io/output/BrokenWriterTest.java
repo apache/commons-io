@@ -17,6 +17,7 @@
 package org.apache.commons.io.output;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.FileNotFoundException;
@@ -25,7 +26,6 @@ import java.io.Writer;
 import java.nio.file.FileSystemNotFoundException;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -102,16 +102,6 @@ public class BrokenWriterTest {
 
     @ParameterizedTest
     @MethodSource("parameters")
-    @Disabled("What should happen here?")
-    public void testEquals(final Class<Throwable> clazz) throws Exception {
-        final Throwable exception = clazz.newInstance();
-        @SuppressWarnings("resource")
-        final BrokenWriter brokenWriter = createBrokenWriter(exception);
-        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.equals(null)));
-    }
-
-    @ParameterizedTest
-    @MethodSource("parameters")
     public void testFlush(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
@@ -119,24 +109,9 @@ public class BrokenWriterTest {
         assertEquals(exception, assertThrows(clazz, () -> brokenWriter.flush()));
     }
 
-    @ParameterizedTest
-    @MethodSource("parameters")
-    @Disabled("What should happen here?")
-    public void testHashCode(final Class<Throwable> clazz) throws Exception {
-        final Throwable exception = clazz.newInstance();
-        @SuppressWarnings("resource")
-        final BrokenWriter brokenWriter = createBrokenWriter(exception);
-        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.hashCode()));
-    }
-
-    @ParameterizedTest
-    @MethodSource("parameters")
-    @Disabled("What should happen here?")
-    public void testToString(final Class<Throwable> clazz) throws Exception {
-        final Throwable exception = clazz.newInstance();
-        @SuppressWarnings("resource")
-        final BrokenWriter brokenWriter = createBrokenWriter(exception);
-        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.toString()));
+    @Test
+    public void testInstance() {
+        assertNotNull(BrokenWriter.INSTANCE);
     }
 
     @Test

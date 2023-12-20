@@ -17,6 +17,7 @@
 package org.apache.commons.io.output;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.FileNotFoundException;
@@ -79,6 +80,11 @@ public class BrokenOutputStreamTest {
         @SuppressWarnings("resource")
         final BrokenOutputStream stream = createBrokenOutputStream(exception);
         assertEquals(exception, assertThrows(clazz, () -> stream.flush()));
+    }
+
+    @Test
+    public void testInstance() {
+        assertNotNull(BrokenOutputStream.INSTANCE);
     }
 
     @Test
