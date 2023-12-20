@@ -120,7 +120,7 @@ public class BrokenInputStream extends InputStream {
      * @throws IOException as configured.
      */
     @Override
-    public synchronized void reset() throws IOException {
+    public void reset() throws IOException {
         throw rethrow();
     }
 
