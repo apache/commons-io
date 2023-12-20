@@ -1786,7 +1786,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(FileUtils.isFileOlder(newFile, localDatePlusDay, offsetTime0), "New File - Older - LocalDate plus one day,OffsetTime");
 
         assertFalse(FileUtils.isFileOlder(invalidFile, refFile), "Illegal - Older - File");
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileOlder(newFile, invalidFile));
+        assertThrows(UncheckedIOException.class, () -> FileUtils.isFileOlder(newFile, invalidFile));
 
         // Null File
         assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(null, now));
@@ -1795,7 +1795,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(oldFile, (File) null));
 
         // Invalid reference File
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileNewer(oldFile, invalidFile));
+        assertThrows(UncheckedIOException.class, () -> FileUtils.isFileNewer(oldFile, invalidFile));
 
         // Null reference Date
         assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(oldFile, (Date) null));
@@ -1811,7 +1811,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertThrows(NullPointerException.class, () -> FileUtils.isFileOlder(oldFile, (Date) null));
 
         // Invalid reference File
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileOlder(oldFile, invalidFile));
+        assertThrows(UncheckedIOException.class, () -> FileUtils.isFileOlder(oldFile, invalidFile));
     }
 
     @Test
@@ -2611,7 +2611,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         // Null argument
         assertThrows(NullPointerException.class, () -> FileUtils.sizeOfDirectoryAsBigInteger(null));
         // Non-existent file
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.sizeOfDirectoryAsBigInteger(file));
+        assertThrows(UncheckedIOException.class, () -> FileUtils.sizeOfDirectoryAsBigInteger(file));
 
         // Creates file
         file.createNewFile();

@@ -2919,6 +2919,11 @@ public class FileUtils {
      * @since 2.4
      */
     public static BigInteger sizeOfDirectoryAsBigInteger(final File directory) {
+        try {
+            requireDirectoryExists(directory, "directory");
+        } catch (FileNotFoundException e) {
+            throw new UncheckedIOException(e);
+        }
         return Uncheck.get(() -> PathUtils.sizeOfDirectoryAsBigInteger(directory.toPath()));
     }
 
