@@ -21,7 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -115,7 +117,7 @@ public class FileUtilsDirectoryContainsTest {
     public void testDirectoryDoesNotExist() {
         final File dir = new File("DOESNOTEXIST");
         assertFalse(dir.exists());
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.directoryContains(dir, file1));
+        assertThrows(FileNotFoundException.class, () -> FileUtils.directoryContains(dir, file1));
     }
 
     @Test
@@ -168,6 +170,6 @@ public class FileUtilsDirectoryContainsTest {
         final File file = new File(dir, "DOESNOTEXIST2");
         assertFalse(dir.exists());
         assertFalse(file.exists());
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.directoryContains(dir, file));
+        assertThrows(FileNotFoundException.class, () -> FileUtils.directoryContains(dir, file));
     }
 }
