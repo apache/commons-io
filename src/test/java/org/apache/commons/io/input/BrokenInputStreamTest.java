@@ -20,11 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.FileSystemNotFoundException;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -35,28 +32,6 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 public class BrokenInputStreamTest {
 
-    static final class CustomException extends Exception {
-
-        private static final long serialVersionUID = 1L;
-
-    }
-
-    static Stream<Class<? extends Throwable>> parameters() {
-        // @formatter:off
-        return Stream.of(
-            IOException.class,
-            FileNotFoundException.class,
-            FileSystemNotFoundException.class,
-            RuntimeException.class,
-            IllegalArgumentException.class,
-            IllegalStateException.class,
-            Error.class,
-            ExceptionInInitializerError.class,
-            CustomException.class
-        );
-        // @formatter:on
-    }
-
     private static BrokenInputStream createBrokenInputStream(final Throwable exception) {
         if (exception instanceof IOException) {
             return new BrokenInputStream((IOException) exception);
@@ -65,7 +40,7 @@ public class BrokenInputStreamTest {
     }
 
     @ParameterizedTest
-    @MethodSource("parameters")
+    @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
     public void testAvailable(final Class<Exception> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
@@ -74,7 +49,7 @@ public class BrokenInputStreamTest {
     }
 
     @ParameterizedTest
-    @MethodSource("parameters")
+    @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
     public void testClose(final Class<Exception> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
@@ -88,7 +63,7 @@ public class BrokenInputStreamTest {
     }
 
     @ParameterizedTest
-    @MethodSource("parameters")
+    @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
     public void testRead(final Class<Exception> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
@@ -99,7 +74,7 @@ public class BrokenInputStreamTest {
     }
 
     @ParameterizedTest
-    @MethodSource("parameters")
+    @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
     public void testReset(final Class<Exception> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
@@ -108,7 +83,7 @@ public class BrokenInputStreamTest {
     }
 
     @ParameterizedTest
-    @MethodSource("parameters")
+    @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
     public void testSkip(final Class<Exception> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
