@@ -86,7 +86,7 @@ public class BrokenInputStream extends InputStream {
      * Throws the configured exception.
      *
      * @return nothing.
-     * @throws IOException as configured.
+     * @throws IOException always throws the exception configured in the constructor.
      */
     @Override
     public int available() throws IOException {
@@ -96,7 +96,7 @@ public class BrokenInputStream extends InputStream {
     /**
      * Throws the configured exception.
      *
-     * @throws IOException as configured.
+     * @throws IOException always throws the exception configured in the constructor.
      */
     @Override
     public void close() throws IOException {
@@ -107,7 +107,7 @@ public class BrokenInputStream extends InputStream {
      * Throws the configured exception.
      *
      * @return nothing.
-     * @throws IOException as configured.
+     * @throws IOException always throws the exception configured in the constructor.
      */
     @Override
     public int read() throws IOException {
@@ -117,7 +117,7 @@ public class BrokenInputStream extends InputStream {
     /**
      * Throws the configured exception.
      *
-     * @throws IOException as configured.
+     * @throws IOException always throws the exception configured in the constructor.
      */
     @Override
     public void reset() throws IOException {
@@ -138,7 +138,7 @@ public class BrokenInputStream extends InputStream {
      *
      * @param n ignored.
      * @return nothing.
-     * @throws IOException as configured.
+     * @throws IOException always throws the exception configured in the constructor.
      */
     @Override
     public long skip(final long n) throws IOException {
