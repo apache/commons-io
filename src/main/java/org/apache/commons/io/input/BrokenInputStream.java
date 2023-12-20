@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.function.Supplier;
 
+import org.apache.commons.io.function.Erase;
+
 /**
  * Always throws an {@link IOException} from all the {@link InputStream} methods where the exception is declared.
  * <p>
@@ -40,7 +42,7 @@ public class BrokenInputStream extends InputStream {
     /**
      * A supplier for the exception that is thrown by all methods of this class.
      */
-    private final Supplier<IOException> exceptionSupplier;
+    private final Supplier<Throwable> exceptionSupplier;
 
     /**
      * Constructs a new stream that always throws an {@link IOException}.
@@ -53,18 +55,30 @@ public class BrokenInputStream extends InputStream {
      * Constructs a new stream that always throws the given exception.
      *
      * @param exception the exception to be thrown.
+     * @deprecated Use {@link #BrokenInputStream(Throwable)}.
      */
+    @Deprecated
     public BrokenInputStream(final IOException exception) {
+        this(() -> exception);
+    }
+
+    /**
+     * Constructs a new stream that always throws the given exception.
+     *
+     * @param exception the exception to be thrown.
+     * @since 2.16.0
+     */
+    public BrokenInputStream(final Throwable exception) {
         this(() -> exception);
     }
 
     /**
      * Constructs a new stream that always throws an {@link IOException}.
      *
-     * @param exceptionSupplier a supplier for the exception to be thrown.
+     * @param exceptionSupplier a supplier for the IOException or RuntimeException to be thrown.
      * @since 2.12.0
      */
-    public BrokenInputStream(final Supplier<IOException> exceptionSupplier) {
+    public BrokenInputStream(final Supplier<Throwable> exceptionSupplier) {
         this.exceptionSupplier = exceptionSupplier;
     }
 
@@ -76,7 +90,7 @@ public class BrokenInputStream extends InputStream {
      */
     @Override
     public int available() throws IOException {
-        throw exceptionSupplier.get();
+        throw rethrow();
     }
 
     /**
@@ -86,7 +100,7 @@ public class BrokenInputStream extends InputStream {
      */
     @Override
     public void close() throws IOException {
-        throw exceptionSupplier.get();
+        throw rethrow();
     }
 
     /**
@@ -97,7 +111,7 @@ public class BrokenInputStream extends InputStream {
      */
     @Override
     public int read() throws IOException {
-        throw exceptionSupplier.get();
+        throw rethrow();
     }
 
     /**
@@ -107,7 +121,16 @@ public class BrokenInputStream extends InputStream {
      */
     @Override
     public synchronized void reset() throws IOException {
-        throw exceptionSupplier.get();
+        throw rethrow();
+    }
+
+    /**
+     * Throws the configured exception from its supplier.
+     *
+     * @return Throws the configured exception from its supplier.
+     */
+    private RuntimeException rethrow() {
+        return Erase.rethrow(exceptionSupplier.get());
     }
 
     /**
@@ -119,7 +142,7 @@ public class BrokenInputStream extends InputStream {
      */
     @Override
     public long skip(final long n) throws IOException {
-        throw exceptionSupplier.get();
+        throw rethrow();
     }
 
 }

@@ -20,8 +20,10 @@ import java.io.IOException;
 
 /**
  * Erases {@link IOException} for the compiler but still throws that exception at runtime.
+ *
+ * @since 2.16.0
  */
-final class Erase {
+public final class Erase {
 
     /**
      * Delegates to the given {@link IOBiConsumer} but erases its {@link IOException} for the compiler, while still throwing
@@ -144,7 +146,7 @@ final class Erase {
      * @throws T Always thrown.
      */
     @SuppressWarnings("unchecked")
-    static <T extends Throwable> RuntimeException rethrow(final Throwable throwable) throws T {
+    public static <T extends Throwable> RuntimeException rethrow(final Throwable throwable) throws T {
         throw (T) throwable;
     }
 
