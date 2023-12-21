@@ -67,7 +67,7 @@ public interface IOConsumer<T> {
     }
 
     /**
-     * Performs an action for each element of the array gathering any exceptions.
+     * Performs an action for each element of the array, gathering any exceptions.
      *
      * @param action The action to apply to each input element.
      * @param array The input to stream.

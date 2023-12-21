@@ -77,7 +77,7 @@ public class FileUtilsCopyDirectoryToDirectoryTest {
         try (TempFile srcDir = TempFile.create("notadirectory", null)) {
             final File destDir = new File(temporaryFolder, "destinationDirectory");
             destDir.mkdirs();
-            final String expectedMessage = String.format("Parameter 'sourceDir' is not a directory: '%s'", srcDir);
+            final String expectedMessage = String.format("Parameter 'srcDir' is not a directory: '%s'", srcDir);
             assertExceptionTypeAndMessage(srcDir.toFile(), destDir, IllegalArgumentException.class, expectedMessage);
         }
     }
