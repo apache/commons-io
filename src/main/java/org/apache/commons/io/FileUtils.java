@@ -379,10 +379,10 @@ public class FileUtils {
         }
 
         if (!file1.isFile()) {
-            throw new IllegalArgumentException("Parameter '" + "file1" + "' is not a file: " + file1);
+            throw new IllegalArgumentException("Parameter 'file1' is not a file: " + file1);
         }
         if (!file2.isFile()) {
-            throw new IllegalArgumentException("Parameter '" + "file2" + "' is not a file: " + file2);
+            throw new IllegalArgumentException("Parameter 'file2' is not a file: " + file2);
         }
 
         if (file1.length() != file2.length()) {
