@@ -134,8 +134,7 @@ public abstract class AbstractInputStreamTest {
     public void testReadPastEOF() throws IOException {
         final InputStream is = inputStreams[0];
         final byte[] buf = new byte[1024];
-        int read;
-        while ((read = is.read(buf, 0, buf.length)) != -1) {
+        while (is.read(buf, 0, buf.length) != -1) {
             // empty
         }
 
