@@ -247,6 +247,17 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testGetFileName() {
+        assertNull(PathUtils.getFileName(null, null));
+        assertNull(PathUtils.getFileName(null, Path::toString));
+        assertNull(PathUtils.getFileName(Paths.get("/"), Path::toString));
+        assertNull(PathUtils.getFileName(Paths.get("/"), Path::toString));
+        assertEquals("", PathUtils.getFileName(Paths.get(""), Path::toString));
+        assertEquals("a", PathUtils.getFileName(Paths.get("a"), Path::toString));
+        assertEquals("a", PathUtils.getFileName(Paths.get("p", "a"), Path::toString));
+    }
+
+    @Test
     public void testGetFileNameString() {
         assertNull(PathUtils.getFileNameString(Paths.get("/")));
         assertEquals("", PathUtils.getFileNameString(Paths.get("")));

@@ -878,7 +878,7 @@ public final class PathUtils {
      * @since 2.16.0
      */
     public static <R> R getFileName(final Path path, Function<Path, R> function) {
-        final Path fileName = path.getFileName();
+        final Path fileName = path != null ? path.getFileName() : null;
         return fileName != null ? function.apply(fileName) : null;
     }
 
