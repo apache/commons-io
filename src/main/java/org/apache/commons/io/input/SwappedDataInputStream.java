@@ -26,7 +26,7 @@ import java.io.InputStream;
 import org.apache.commons.io.EndianUtils;
 
 /**
- * DataInput for systems relying on little endian data formats. When read, values will be changed from little endian to
+ * DataInput for systems relying on little-endian data formats. When read, values will be changed from little-endian to
  * big endian formats for internal usage.
  * <p>
  * Provenance: Avalon Excalibur (IO)

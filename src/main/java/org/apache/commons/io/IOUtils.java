@@ -3828,7 +3828,7 @@ public class IOUtils {
      * encoding and the specified line ending.
      * <p>
      * UTF-16 is written big-endian with no byte order mark.
-     * For little endian, use UTF-16LE. For a BOM, write it to the stream
+     * For little-endian, use UTF-16LE. For a BOM, write it to the stream
      * before calling this method.
      * </p>
      *
