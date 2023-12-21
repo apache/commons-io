@@ -22,7 +22,7 @@ import java.nio.file.FileSystemNotFoundException;
 import java.util.stream.Stream;
 
 /**
- * Factory for parameterized tests of BrokenInputStream / BrokenReader / BrokenOutputStream / BrokenWriter
+ * Factory for parameterized tests of BrokenInputStream, BrokenReader, BrokenOutputStream, and BrokenWriter.
  */
 public class BrokenTestFactories {
 
