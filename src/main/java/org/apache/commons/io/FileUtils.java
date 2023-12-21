@@ -714,7 +714,6 @@ public class FileUtils {
      * @since 1.2
      */
     public static void copyDirectoryToDirectory(final File sourceDir, final File destinationDir) throws IOException {
-        requireDirectoryExists(sourceDir, "sourceDir");
         requireDirectoryIfExists(destinationDir, "destinationDir");
         copyDirectory(sourceDir, new File(destinationDir, sourceDir.getName()), true);
     }
