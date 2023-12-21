@@ -85,7 +85,7 @@ public class BrokenOutputStream extends OutputStream {
     /**
      * Throws the configured exception.
      *
-     * @throws IOException always throws the exception configured in the constructor.
+     * @throws IOException always throws the exception configured in a constructor.
      */
     @Override
     public void close() throws IOException {
@@ -95,7 +95,7 @@ public class BrokenOutputStream extends OutputStream {
     /**
      * Throws the configured exception.
      *
-     * @throws IOException always throws the exception configured in the constructor.
+     * @throws IOException always throws the exception configured in a constructor.
      */
     @Override
     public void flush() throws IOException {
@@ -115,7 +115,7 @@ public class BrokenOutputStream extends OutputStream {
      * Throws the configured exception.
      *
      * @param b ignored.
-     * @throws IOException always throws the exception configured in the constructor.
+     * @throws IOException always throws the exception configured in a constructor.
      */
     @Override
     public void write(final int b) throws IOException {
