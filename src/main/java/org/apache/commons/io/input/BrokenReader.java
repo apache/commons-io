@@ -134,7 +134,7 @@ public class BrokenReader extends Reader {
      * @throws IOException always throws the exception configured in the constructor.
      */
     @Override
-    public synchronized void reset() throws IOException {
+    public void reset() throws IOException {
         throw rethrow();
     }
 
