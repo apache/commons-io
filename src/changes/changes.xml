@@ -56,6 +56,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" issue="IO-825" due-to="dkdal, Gary Gregory">Add missing test case CircularByteBufferTest.</action>
       <action dev="ggregory" type="fix" issue="IO-781" due-to="Elliotte Rusty Harold">Make CharSequenceInputStream.available() more correct in the face of multibyte encodings #525.</action>
       <action dev="ggregory" type="fix" issue="IO-781" due-to="Elliotte Rusty Harold">Remove unreachable code in AbstractIOFileFilterTest #526.</action>
+      <action dev="ggregory" type="fix" issue="IO-808" due-to="Elliotte Rusty Harold">Rationalize and unify checking for existence of files and directories #529.</action>
       <!-- Add -->
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Add and use PathUtils.getFileName(Path, Function&lt;Path, R&gt;).</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Add and use PathUtils.getFileNameString().</action>
