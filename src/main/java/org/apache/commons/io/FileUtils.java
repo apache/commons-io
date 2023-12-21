@@ -280,6 +280,35 @@ public class FileUtils {
     }
 
     /**
+     * Requires that the given {@link File} object
+     * points to an actual file (not a directory) in the file system,
+     * and throws a {@link FileNotFoundException} if it doesn't.
+     * It throws an IllegalArgumentException if the object points to a directory.
+     *
+     * @param file The {@link File} to check.
+     * @param name The parameter name to use in the exception message.
+     * @throws FileNotFoundException if the file does not exist
+     * @throws NullPointerException if the given {@link File} is {@code null}.
+     * @throws IllegalArgumentException if the given {@link File} is not a file.
+     */
+    private static void checkFileExists(final File file, final String name) throws FileNotFoundException {
+        Objects.requireNonNull(file, name);
+        if (!file.isFile()) {
+            if (file.exists()) {
+                throw new IllegalArgumentException("Parameter '" + name + "' is not a file: " + file);
+            }
+            throw new FileNotFoundException("Source '" + file + "' does not exist");
+        }
+    }
+
+    private static File checkIsFile(final File file, final String name) {
+        if (file.isFile()) {
+            return file;
+        }
+        throw new IllegalArgumentException(String.format("Parameter '%s' is not a file: %s", name, file));
+    }
+
+    /**
      * Computes the checksum of a file using the specified checksum object. Multiple files may be checked using one
      * {@link Checksum} instance if desired simply by reusing the same checksum object. For example:
      *
@@ -378,12 +407,8 @@ public class FileUtils {
             return true;
         }
 
-        if (!file1.isFile()) {
-            throw new IllegalArgumentException("Parameter 'file1' is not a file: " + file1);
-        }
-        if (!file2.isFile()) {
-            throw new IllegalArgumentException("Parameter 'file2' is not a file: " + file2);
-        }
+        checkIsFile(file1, "file1");
+        checkIsFile(file2, "file2");
 
         if (file1.length() != file2.length()) {
             // lengths differ, cannot be equal
@@ -2580,9 +2605,7 @@ public class FileUtils {
     public static FileOutputStream openOutputStream(final File file, final boolean append) throws IOException {
         Objects.requireNonNull(file, "file");
         if (file.exists()) {
-            if (!file.isFile()) {
-                throw new IllegalArgumentException("Parameter 'file' is not a file: " + file);
-            }
+            checkIsFile(file, "file");
             requireCanWrite(file, "file");
         } else {
             createParentDirectories(file);
@@ -2774,28 +2797,6 @@ public class FileUtils {
         Objects.requireNonNull(directory, name);
         if (directory.exists() && !directory.isDirectory()) {
             throw new IllegalArgumentException("Parameter '" + name + "' is not a directory: '" + directory + "'");
-        }
-    }
-
-    /**
-     * Requires that the given {@link File} object
-     * points to an actual file (not a directory) in the file system,
-     * and throws a {@link FileNotFoundException} if it doesn't.
-     * It throws an IllegalArgumentException if the object points to a directory.
-     *
-     * @param file The {@link File} to check.
-     * @param name The parameter name to use in the exception message.
-     * @throws FileNotFoundException if the file does not exist
-     * @throws NullPointerException if the given {@link File} is {@code null}.
-     * @throws IllegalArgumentException if the given {@link File} is not a file.
-     */
-    private static void checkFileExists(final File file, final String name) throws FileNotFoundException {
-        Objects.requireNonNull(file, name);
-        if (!file.isFile()) {
-            if (file.exists()) {
-                throw new IllegalArgumentException("Parameter '" + name + "' is not a file: " + file);
-            }
-            throw new FileNotFoundException("Source '" + file + "' does not exist");
         }
     }
 
