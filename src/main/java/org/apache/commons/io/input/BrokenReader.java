@@ -85,7 +85,7 @@ public class BrokenReader extends Reader {
     /**
      * Throws the configured exception.
      *
-     * @throws IOException always throws the exception configured in the constructor.
+     * @throws IOException always throws the exception configured in a constructor.
      */
     @Override
     public void close() throws IOException {
@@ -96,7 +96,7 @@ public class BrokenReader extends Reader {
      * Throws the configured exception.
      *
      * @param readAheadLimit ignored.
-     * @throws IOException always throws the exception configured in the constructor.
+     * @throws IOException always throws the exception configured in a constructor.
      */
     @Override
     public void mark(final int readAheadLimit) throws IOException {
@@ -110,7 +110,7 @@ public class BrokenReader extends Reader {
      * @param off  ignored.
      * @param len  ignored.
      * @return nothing.
-     * @throws IOException always throws the exception configured in the constructor.
+     * @throws IOException always throws the exception configured in a constructor.
      */
     @Override
     public int read(final char[] cbuf, final int off, final int len) throws IOException {
@@ -121,7 +121,7 @@ public class BrokenReader extends Reader {
      * Throws the configured exception.
      *
      * @return nothing.
-     * @throws IOException always throws the exception configured in the constructor.
+     * @throws IOException always throws the exception configured in a constructor.
      */
     @Override
     public boolean ready() throws IOException {
@@ -131,7 +131,7 @@ public class BrokenReader extends Reader {
     /**
      * Throws the configured exception.
      *
-     * @throws IOException always throws the exception configured in the constructor.
+     * @throws IOException always throws the exception configured in a constructor.
      */
     @Override
     public void reset() throws IOException {
@@ -152,7 +152,7 @@ public class BrokenReader extends Reader {
      *
      * @param n ignored.
      * @return nothing.
-     * @throws IOException always throws the exception configured in the constructor.
+     * @throws IOException always throws the exception configured in a constructor.
      */
     @Override
     public long skip(final long n) throws IOException {
