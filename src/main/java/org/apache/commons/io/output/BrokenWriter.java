@@ -33,14 +33,14 @@ import org.apache.commons.io.function.Erase;
 public class BrokenWriter extends Writer {
 
     /**
-     * A singleton instance using a default IOException.
+     * The singleton instance using a default IOException.
      *
      * @since 2.12.0
      */
     public static final BrokenWriter INSTANCE = new BrokenWriter();
 
     /**
-     * A supplier for the exception that is thrown by all methods of this class.
+     * Supplies the exception that is thrown by all methods of this class.
      */
     private final Supplier<Throwable> exceptionSupplier;
 
