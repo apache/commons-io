@@ -26,7 +26,19 @@ import java.util.stream.Stream;
  */
 public class BrokenTestFactories {
 
+    public static final class CustomError extends Error {
+
+        private static final long serialVersionUID = 1L;
+
+    }
+
     public static final class CustomException extends Exception {
+
+        private static final long serialVersionUID = 1L;
+
+    }
+
+    public static final class CustomRuntimeException extends RuntimeException {
 
         private static final long serialVersionUID = 1L;
 
@@ -35,15 +47,19 @@ public class BrokenTestFactories {
     public static Stream<Class<? extends Throwable>> parameters() {
         // @formatter:off
         return Stream.of(
-            IOException.class,
-            FileNotFoundException.class,
-            FileSystemNotFoundException.class,
-            RuntimeException.class,
-            IllegalArgumentException.class,
-            IllegalStateException.class,
-            Error.class,
-            ExceptionInInitializerError.class,
-            CustomException.class
+            Throwable.class,                    // JRE Root class
+            Exception.class,                    // JRE Root Exception class
+            IOException.class,                  // JRE Root IOException class
+            FileNotFoundException.class,        // JRE IOException subclass
+            RuntimeException.class,             // JRE Root RuntimeException
+            FileSystemNotFoundException.class,  // JRE RuntimeException subclass in NIO
+            IllegalArgumentException.class,     // JRE RuntimeException subclass
+            IllegalStateException.class,        // JRE RuntimeException subclass
+            Error.class,                        // JRE Error root class
+            ExceptionInInitializerError.class,  // JRE Error subclass
+            CustomException.class,              // Custom Exception subclass
+            CustomRuntimeException.class,       // Custom RuntimeException subclass
+            CustomError.class                   // Custom Error subclass
         );
         // @formatter:on
     }
