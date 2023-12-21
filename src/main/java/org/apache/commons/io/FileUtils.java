@@ -293,6 +293,7 @@ public class FileUtils {
      * @throws NullPointerException if the given {@link File} is {@code null}.
      * @throws NullPointerException if the given {@link Checksum} is {@code null}.
      * @throws IllegalArgumentException if the given {@link File} is not a file.
+     * @throws FileNotFoundException if the file does not exist
      * @throws IOException if an IO error occurs reading the file.
      * @since 1.3
      */
@@ -377,8 +378,12 @@ public class FileUtils {
             return true;
         }
 
-        checkFileExists(file1, "file1");
-        checkFileExists(file2, "file2");
+        if (!file1.isFile()) {
+            throw new IllegalArgumentException("Parameter '" + "file1" + "' is not a file: " + file1);
+        }
+        if (!file2.isFile()) {
+            throw new IllegalArgumentException("Parameter '" + "file2" + "' is not a file: " + file2);
+        }
 
         if (file1.length() != file2.length()) {
             // lengths differ, cannot be equal
@@ -663,7 +668,7 @@ public class FileUtils {
      */
     public static void copyDirectory(final File srcDir, final File destDir, final FileFilter fileFilter, final boolean preserveFileDate,
         final CopyOption... copyOptions) throws IOException {
-        requireFileCopy(srcDir, destDir);
+        Objects.requireNonNull(destDir, "destination");
         requireDirectoryExists(srcDir, "srcDir");
         requireCanonicalPathsNotEquals(srcDir, destDir);
 
@@ -709,7 +714,7 @@ public class FileUtils {
      * @since 1.2
      */
     public static void copyDirectoryToDirectory(final File sourceDir, final File destinationDir) throws IOException {
-        requireDirectoryIfExists(sourceDir, "sourceDir");
+        requireDirectoryExists(sourceDir, "sourceDir");
         requireDirectoryIfExists(destinationDir, "destinationDir");
         copyDirectory(sourceDir, new File(destinationDir, sourceDir.getName()), true);
     }
@@ -795,11 +800,10 @@ public class FileUtils {
      * @since 2.8.0
      */
     public static void copyFile(final File srcFile, final File destFile, final boolean preserveFileDate, final CopyOption... copyOptions) throws IOException {
-        requireFileCopy(srcFile, destFile);
+        Objects.requireNonNull(destFile, "destination");
         checkFileExists(srcFile, "srcFile");
         requireCanonicalPathsNotEquals(srcFile, destFile);
         createParentDirectories(destFile);
-        Objects.requireNonNull(destFile, "destFile");
         if (destFile.exists()) {
             checkFileExists(destFile, "destFile");
             requireCanWrite(destFile, "destFile");
@@ -1249,7 +1253,7 @@ public class FileUtils {
      *
      * Edge cases:
      * <ul>
-     * <li>A {@code directory} must not be null: if null, throw IllegalArgumentException</li>
+     * <li>A {@code directory} must not be null: if null, throw NullPointerException</li>
      * <li>A {@code directory} must be a directory: if not a directory, throw IllegalArgumentException</li>
      * <li>A directory does not contain itself: return false</li>
      * <li>A null child file is not contained in any parent: return false</li>
@@ -1267,7 +1271,7 @@ public class FileUtils {
     public static boolean directoryContains(final File directory, final File child) throws IOException {
         requireDirectoryExists(directory, "directory");
 
-        if (child == null || !directory.exists() || !child.exists()) {
+        if (child == null || !child.exists()) {
             return false;
         }
 
@@ -1328,13 +1332,9 @@ public class FileUtils {
      */
     public static void forceDelete(final File file) throws IOException {
         Objects.requireNonNull(file, "file");
-        final Counters.PathCounters deleteCounters;
-        try {
-            deleteCounters = PathUtils.delete(file.toPath(), PathUtils.EMPTY_LINK_OPTION_ARRAY,
+        final Counters.PathCounters deleteCounters = PathUtils.delete(
+                file.toPath(), PathUtils.EMPTY_LINK_OPTION_ARRAY,
                 StandardDeleteOption.OVERRIDE_READ_ONLY);
-        } catch (final IOException e) {
-            throw new IOException("Cannot delete file: " + file, e);
-        }
 
         if (deleteCounters.getFileCounter().get() < 1 && deleteCounters.getDirectoryCounter().get() < 1) {
             // didn't find a file to delete.
@@ -2304,7 +2304,7 @@ public class FileUtils {
      * @since 1.4
      */
     public static void moveDirectory(final File srcDir, final File destDir) throws IOException {
-        validateMoveParameters(srcDir, destDir);
+        Objects.requireNonNull(destDir, "destination");
         requireDirectoryExists(srcDir, "srcDir");
         requireAbsent(destDir, "destDir");
         if (!srcDir.renameTo(destDir)) {
@@ -2326,7 +2326,7 @@ public class FileUtils {
      * If {@code createDestDir} is true, creates all destination parent directories, including any necessary but non-existent parent directories.
      * </p>
      *
-     * @param source the file to be moved.
+     * @param source the directory to be moved.
      * @param destDir the destination file.
      * @param createDestDir If {@code true} create the destination directory, otherwise if {@code false} throw an
      *        IOException.
@@ -2391,7 +2391,7 @@ public class FileUtils {
      * @since 2.9.0
      */
     public static void moveFile(final File srcFile, final File destFile, final CopyOption... copyOptions) throws IOException {
-        validateMoveParameters(srcFile, destFile);
+        Objects.requireNonNull(destFile, "destination");
         checkFileExists(srcFile, "srcFile");
         requireAbsent(destFile, "destFile");
         final boolean rename = srcFile.renameTo(destFile);
@@ -2406,15 +2406,15 @@ public class FileUtils {
     }
 
     /**
-     * Moves a file to a directory.
+     * Moves a file into a directory.
      * <p>
      * If {@code createDestDir} is true, creates all destination parent directories, including any necessary but non-existent parent directories.
      * </p>
      *
      * @param srcFile the file to be moved.
-     * @param destDir the destination file.
-     * @param createDestDir If {@code true} create the destination directory, otherwise if {@code false} throw an
-     *        IOException.
+     * @param destDir the directory to move the file into
+     * @param createDestDir if {@code true} create the destination directory. If {@code false} throw an
+     *        IOException if the destination directory does not already exist.
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
      * @throws FileExistsException if the destination file exists.
      * @throws FileNotFoundException if the source file does not exist.
@@ -2434,7 +2434,7 @@ public class FileUtils {
     }
 
     /**
-     * Moves a file or directory to a destination directory.
+     * Moves a file or directory into a destination directory.
      * <p>
      * If {@code createDestDir} is true, creates all destination parent directories, including any necessary but non-existent parent directories.
      * </p>
@@ -2444,7 +2444,8 @@ public class FileUtils {
      *
      * @param src           the file or directory to be moved.
      * @param destDir       the destination directory.
-     * @param createDestDir If {@code true} create the destination directory, otherwise if {@code false} throw an IOException.
+     * @param createDestDir if {@code true} create the destination directory. If {@code false} throw an
+     *        IOException if the destination directory does not already exist.
      * @throws NullPointerException  if any of the given {@link File}s are {@code null}.
      * @throws FileExistsException   if the directory or file exists in the destination directory.
      * @throws FileNotFoundException if the source file does not exist.
@@ -2555,7 +2556,9 @@ public class FileUtils {
     public static FileOutputStream openOutputStream(final File file, final boolean append) throws IOException {
         Objects.requireNonNull(file, "file");
         if (file.exists()) {
-            checkFileExists(file, "file");
+            if (!file.isFile()) {
+                throw new IllegalArgumentException("Parameter 'file' is not a file: " + file);
+            }
             requireCanWrite(file, "file");
         } else {
             createParentDirectories(file);
@@ -2711,7 +2714,6 @@ public class FileUtils {
      * @throws IllegalArgumentException if the file is not writable.
      */
     private static void requireCanWrite(final File file, final String name) {
-        Objects.requireNonNull(file, "file");
         if (!file.canWrite()) {
             throw new IllegalArgumentException("File parameter '" + name + " is not writable: '" + file + "'");
         }
@@ -2741,34 +2743,16 @@ public class FileUtils {
      *
      * @param directory The {@link File} to check.
      * @param name The parameter name to use in the exception message in case of null input.
-     * @throws FileNotFoundException if the given {@link File} does not exist
      * @throws NullPointerException if the given {@link File} is {@code null}.
      * @throws IllegalArgumentException if the given {@link File} exists but is not a directory.
      */
     private static void requireDirectoryIfExists(final File directory, final String name) throws FileNotFoundException {
         Objects.requireNonNull(directory, name);
         if (directory.exists()) {
-            requireDirectoryExists(directory, name);
+            if (!directory.isDirectory()) {
+                throw new IllegalArgumentException("Parameter '" + name + "' is not a directory: '" + directory + "'");
+            }
         }
-    }
-
-    /**
-     * Requires that the given {@link File} object, which may be a file or a directory,
-     * points to an actually existing item in the file system,
-     * and throws a {@link FileNotFoundException} if it doesn't.
-     *
-     * @param file The {@link File} to check.
-     * @param fileParamName The parameter name to use in the exception message in case of {@code null} input.
-     * @return the given file.
-     * @throws NullPointerException if the given {@link File} is {@code null}.
-     * @throws FileNotFoundException if the given {@link File} does not exist.
-     */
-    private static File checkFileObjectExists(final File file, final String fileParamName) throws FileNotFoundException {
-        Objects.requireNonNull(file, fileParamName);
-        if (!file.exists()) {
-            throw new FileNotFoundException("File system element for parameter '" + fileParamName + "' does not exist: '" + file + "'");
-        }
-        return file;
     }
 
     /**
@@ -2779,12 +2763,11 @@ public class FileUtils {
      *
      * @param file The {@link File} to check.
      * @param name The parameter name to use in the exception message.
-     * @return the given file.
      * @throws FileNotFoundException if the file does not exist
      * @throws NullPointerException if the given {@link File} is {@code null}.
      * @throws IllegalArgumentException if the given {@link File} is not a file.
      */
-    private static File checkFileExists(final File file, final String name) throws FileNotFoundException {
+    private static void checkFileExists(final File file, final String name) throws FileNotFoundException {
         Objects.requireNonNull(file, name);
         if (!file.isFile()) {
             if (file.exists()) {
@@ -2792,20 +2775,6 @@ public class FileUtils {
             }
             throw new FileNotFoundException("Source '" + file + "' does not exist");
         }
-        return file;
-    }
-
-    /**
-     * Requires parameter attributes for a file copy operation.
-     *
-     * @param source the source file
-     * @param destination the destination
-     * @throws NullPointerException if any of the given {@link File}s are {@code null}.
-     * @throws FileNotFoundException if the source does not exist.
-     */
-    private static void requireFileCopy(final File source, final File destination) throws FileNotFoundException {
-        checkFileObjectExists(source, "source");
-        Objects.requireNonNull(destination, "destination");
     }
 
     /**
@@ -3520,7 +3489,7 @@ public class FileUtils {
 
     /**
      * Instances should NOT be constructed in standard programming.
-     * @deprecated Will be private in 3.0.
+     * @deprecated Will be private in 4.0.
      */
     @Deprecated
     public FileUtils() { //NOSONAR
