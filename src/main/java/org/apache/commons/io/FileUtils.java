@@ -1538,6 +1538,7 @@ public class FileUtils {
      * @param chronoLocalDate the date reference.
      * @return true if the {@link File} exists and has been modified after the given
      * {@link ChronoLocalDate} at the current time.
+     * @throws UncheckedIOException if an I/O error occurs
      * @throws NullPointerException if the file or local date is {@code null}.
      * @since 2.8.0
      */
@@ -1559,6 +1560,7 @@ public class FileUtils {
      * @param localTime       the time reference.
      * @return true if the {@link File} exists and has been modified after the given
      * {@link ChronoLocalDate} at the given time.
+     * @throws UncheckedIOException if an I/O error occurs
      * @throws NullPointerException if the file, local date or zone ID is {@code null}.
      * @since 2.8.0
      */
@@ -1577,6 +1579,7 @@ public class FileUtils {
      * @param offsetTime the time reference
      * @return true if the {@link File} exists and has been modified after the given {@link ChronoLocalDate} at the given
      *         {@link OffsetTime}.
+     * @throws UncheckedIOException if an I/O error occurs
      * @throws NullPointerException if the file, local date or zone ID is {@code null}
      * @since 2.12.0
      */
@@ -1599,6 +1602,7 @@ public class FileUtils {
      * @param chronoLocalDateTime the date reference.
      * @return true if the {@link File} exists and has been modified after the given
      * {@link ChronoLocalDateTime} at the system-default time zone.
+     * @throws UncheckedIOException if an I/O error occurs
      * @throws NullPointerException if the file or local date time is {@code null}.
      * @since 2.8.0
      */
@@ -1615,6 +1619,7 @@ public class FileUtils {
      * @param zoneId              the time zone.
      * @return true if the {@link File} exists and has been modified after the given
      * {@link ChronoLocalDateTime} at the given {@link ZoneId}.
+     * @throws UncheckedIOException if an I/O error occurs
      * @throws NullPointerException if the file, local date time or zone ID is {@code null}.
      * @since 2.8.0
      */
@@ -1632,6 +1637,7 @@ public class FileUtils {
      * @return true if the {@link File} exists and has been modified after the given
      * {@link ChronoZonedDateTime}.
      * @throws NullPointerException if the file or zoned date time is {@code null}.
+     * @throws UncheckedIOException if an I/O error occurs
      * @since 2.8.0
      */
     public static boolean isFileNewer(final File file, final ChronoZonedDateTime<?> chronoZonedDateTime) {
@@ -1647,6 +1653,7 @@ public class FileUtils {
      * @param date the date reference.
      * @return true if the {@link File} exists and has been modified
      * after the given {@link Date}.
+     * @throws UncheckedIOException if an I/O error occurs
      * @throws NullPointerException if the file or date is {@code null}.
      */
     public static boolean isFileNewer(final File file, final Date date) {
@@ -1690,6 +1697,7 @@ public class FileUtils {
      * @param instant the date reference.
      * @return true if the {@link File} exists and has been modified after the given {@link Instant}.
      * @throws NullPointerException if the file or instant is {@code null}.
+     * @throws UncheckedIOException if an I/O error occurs
      * @since 2.8.0
      */
     public static boolean isFileNewer(final File file, final Instant instant) {
@@ -1704,6 +1712,7 @@ public class FileUtils {
      * @param timeMillis the time reference measured in milliseconds since the
      *                   epoch (00:00:00 GMT, January 1, 1970).
      * @return true if the {@link File} exists and has been modified after the given time reference.
+     * @throws UncheckedIOException if an I/O error occurs
      * @throws NullPointerException if the file is {@code null}.
      */
     public static boolean isFileNewer(final File file, final long timeMillis) {
@@ -1717,6 +1726,7 @@ public class FileUtils {
      * @param file the {@link File} of which the modification date must be compared
      * @param offsetDateTime the date reference
      * @return true if the {@link File} exists and has been modified before the given {@link OffsetDateTime}.
+     * @throws UncheckedIOException if an I/O error occurs
      * @throws NullPointerException if the file or zoned date time is {@code null}
      * @since 2.12.0
      */
@@ -1740,6 +1750,7 @@ public class FileUtils {
      * @return true if the {@link File} exists and has been modified before the given
      * {@link ChronoLocalDate} at the current time.
      * @throws NullPointerException if the file or local date is {@code null}.
+     * @throws UncheckedIOException if an I/O error occurs
      * @see ZoneId#systemDefault()
      * @see LocalTime#now()
      * @since 2.8.0
@@ -1762,6 +1773,7 @@ public class FileUtils {
      * @param localTime       the time reference.
      * @return true if the {@link File} exists and has been modified before the
      * given {@link ChronoLocalDate} at the specified time.
+     * @throws UncheckedIOException if an I/O error occurs
      * @throws NullPointerException if the file, local date or local time is {@code null}.
      * @see ZoneId#systemDefault()
      * @since 2.8.0
@@ -1782,6 +1794,7 @@ public class FileUtils {
      * @return true if the {@link File} exists and has been modified after the given {@link ChronoLocalDate} at the given
      *         {@link OffsetTime}.
      * @throws NullPointerException if the file, local date or zone ID is {@code null}
+     * @throws UncheckedIOException if an I/O error occurs
      * @since 2.12.0
      */
     public static boolean isFileOlder(final File file, final ChronoLocalDate chronoLocalDate, final OffsetTime offsetTime) {
@@ -1804,6 +1817,7 @@ public class FileUtils {
      * @return true if the {@link File} exists and has been modified before the given
      * {@link ChronoLocalDateTime} at the system-default time zone.
      * @throws NullPointerException if the file or local date time is {@code null}.
+     * @throws UncheckedIOException if an I/O error occurs
      * @see ZoneId#systemDefault()
      * @since 2.8.0
      */
@@ -1821,6 +1835,7 @@ public class FileUtils {
      * @return true if the {@link File} exists and has been modified before the given
      * {@link ChronoLocalDateTime} at the given {@link ZoneId}.
      * @throws NullPointerException if the file, local date time or zone ID is {@code null}.
+     * @throws UncheckedIOException if an I/O error occurs
      * @since 2.8.0
      */
     public static boolean isFileOlder(final File file, final ChronoLocalDateTime<?> chronoLocalDateTime, final ZoneId zoneId) {
@@ -1837,6 +1852,7 @@ public class FileUtils {
      * @return true if the {@link File} exists and has been modified before the given
      * {@link ChronoZonedDateTime}.
      * @throws NullPointerException if the file or zoned date time is {@code null}.
+     * @throws UncheckedIOException if an I/O error occurs
      * @since 2.8.0
      */
     public static boolean isFileOlder(final File file, final ChronoZonedDateTime<?> chronoZonedDateTime) {
@@ -1851,6 +1867,7 @@ public class FileUtils {
      * @param date the date reference.
      * @return true if the {@link File} exists and has been modified before the given {@link Date}.
      * @throws NullPointerException if the file or date is {@code null}.
+     * @throws UncheckedIOException if an I/O error occurs
      */
     public static boolean isFileOlder(final File file, final Date date) {
         Objects.requireNonNull(date, "date");
@@ -1864,7 +1881,8 @@ public class FileUtils {
      * @param reference the {@link File} of which the modification date is used.
      * @return true if the {@link File} exists and has been modified before the reference {@link File}.
      * @throws NullPointerException if the file or reference file is {@code null}.
-     * @throws IllegalArgumentException if the reference file doesn't exist.
+     * @throws FileNotFoundException if the reference file doesn't exist.
+     * @throws UncheckedIOException if an I/O error occurs
      */
     public static boolean isFileOlder(final File file, final File reference) throws FileNotFoundException {
         return Uncheck.get(() -> PathUtils.isOlder(file.toPath(), reference.toPath()));
@@ -1907,6 +1925,7 @@ public class FileUtils {
      *                   epoch (00:00:00 GMT, January 1, 1970).
      * @return true if the {@link File} exists and has been modified before the given time reference.
      * @throws NullPointerException if the file is {@code null}.
+     * @throws UncheckedIOException if an I/O error occurs
      */
     public static boolean isFileOlder(final File file, final long timeMillis) {
         Objects.requireNonNull(file, "file");
