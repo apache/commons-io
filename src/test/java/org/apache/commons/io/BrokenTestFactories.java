@@ -21,29 +21,48 @@ import java.io.IOException;
 import java.nio.file.FileSystemNotFoundException;
 import java.util.stream.Stream;
 
+import org.apache.commons.io.input.BrokenInputStream;
+import org.apache.commons.io.input.BrokenReader;
+import org.apache.commons.io.output.BrokenOutputStream;
+import org.apache.commons.io.output.BrokenWriter;
+
 /**
- * Factory for parameterized tests of BrokenInputStream, BrokenReader, BrokenOutputStream, and BrokenWriter.
+ * Factory for parameterized tests of {@link BrokenInputStream}, {@link BrokenReader}, {@link BrokenOutputStream}, and {@link BrokenWriter}.
  */
 public class BrokenTestFactories {
 
+    /**
+     * A custom Error class.
+     */
     public static final class CustomError extends Error {
 
         private static final long serialVersionUID = 1L;
 
     }
 
+    /**
+     * A custom Exception class.
+     */
     public static final class CustomException extends Exception {
 
         private static final long serialVersionUID = 1L;
 
     }
 
+    /**
+     * A custom RuntimeException class.
+     */
     public static final class CustomRuntimeException extends RuntimeException {
 
         private static final long serialVersionUID = 1L;
 
     }
 
+    /**
+     * Creates a stream of all throwable types used in testing broken streams.
+     *
+     * @return a stream of all throwable types used in testing broken streams.
+     */
     public static Stream<Class<? extends Throwable>> parameters() {
         // @formatter:off
         return Stream.of(
