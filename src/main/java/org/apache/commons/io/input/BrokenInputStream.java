@@ -33,7 +33,7 @@ import org.apache.commons.io.function.Erase;
 public class BrokenInputStream extends InputStream {
 
     /**
-     * A singleton instance using a default IOException.
+     * The singleton instance using a default IOException.
      *
      * @since 2.12.0
      */
