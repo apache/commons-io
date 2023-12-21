@@ -1332,10 +1332,15 @@ public class FileUtils {
      */
     public static void forceDelete(final File file) throws IOException {
         Objects.requireNonNull(file, "file");
-        final Counters.PathCounters deleteCounters = PathUtils.delete(
-                file.toPath(), PathUtils.EMPTY_LINK_OPTION_ARRAY,
-                StandardDeleteOption.OVERRIDE_READ_ONLY);
 
+        final Counters.PathCounters deleteCounters;
+        try {
+            deleteCounters = PathUtils.delete(
+                    file.toPath(), PathUtils.EMPTY_LINK_OPTION_ARRAY,
+                    StandardDeleteOption.OVERRIDE_READ_ONLY);
+        } catch (final IOException ex) {
+            throw new IOException("Cannot delete file: " + file, ex);
+        }
         if (deleteCounters.getFileCounter().get() < 1 && deleteCounters.getDirectoryCounter().get() < 1) {
             // didn't find a file to delete.
             throw new FileNotFoundException("File does not exist: " + file);

@@ -88,7 +88,7 @@ public class FileUtilsDeleteDirectoryLinuxTest extends AbstractFileUtilsDeleteDi
         try {
             // deleteDirectory calls forceDelete
             final IOExceptionList ioExceptionList = (IOExceptionList) assertThrows(IOException.class, () -> FileUtils.deleteDirectory(nested));
-            String message = ioExceptionList.getCause(0).getMessage();
+            final String message = ioExceptionList.getCause(0).getMessage();
             assertTrue(message.endsWith("Cannot delete file: " + file.getAbsolutePath()), message);
         } finally {
             chmod(nested, 755, false);
