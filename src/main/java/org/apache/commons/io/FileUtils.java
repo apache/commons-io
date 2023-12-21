@@ -2748,15 +2748,13 @@ public class FileUtils {
      */
     private static void requireDirectoryIfExists(final File directory, final String name) throws FileNotFoundException {
         Objects.requireNonNull(directory, name);
-        if (directory.exists()) {
-            if (!directory.isDirectory()) {
-                throw new IllegalArgumentException("Parameter '" + name + "' is not a directory: '" + directory + "'");
-            }
+        if (directory.exists() && !directory.isDirectory()) {
+            throw new IllegalArgumentException("Parameter '" + name + "' is not a directory: '" + directory + "'");
         }
     }
 
     /**
-     * Requires that the given {@link File} object,
+     * Requires that the given {@link File} object
      * points to an actual file (not a directory) in the file system,
      * and throws a {@link FileNotFoundException} if it doesn't.
      * It throws an IllegalArgumentException if the object points to a directory.
