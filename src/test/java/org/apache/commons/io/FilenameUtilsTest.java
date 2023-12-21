@@ -202,6 +202,7 @@ public class FilenameUtilsTest {
         assertEquals(WINDOWS, FilenameUtils.equalsNormalizedOnSystem("file.txt", "FILE.TXT"));
         assertTrue(FilenameUtils.equalsNormalizedOnSystem("a\\b\\file.txt", "a/b/file.txt"));
         assertFalse(FilenameUtils.equalsNormalizedOnSystem("a/b/", "a/b"));
+        assertFalse(FilenameUtils.equalsNormalizedOnSystem("//a.html", "//ab.html"));
     }
 
     @Test
