@@ -85,7 +85,7 @@ public class BrokenWriter extends Writer {
     /**
      * Throws the configured exception.
      *
-     * @throws IOException always throws the exception configured in the constructor.
+     * @throws IOException always throws the exception configured in a constructor.
      */
     @Override
     public void close() throws IOException {
@@ -95,7 +95,7 @@ public class BrokenWriter extends Writer {
     /**
      * Throws the configured exception.
      *
-     * @throws IOException always throws the exception configured in the constructor.
+     * @throws IOException always throws the exception configured in a constructor.
      */
     @Override
     public void flush() throws IOException {
@@ -117,7 +117,7 @@ public class BrokenWriter extends Writer {
      * @param cbuf ignored.
      * @param off  ignored.
      * @param len  ignored.
-     * @throws IOException always throws the exception configured in the constructor.
+     * @throws IOException always throws the exception configured in a constructor.
      */
     @Override
     public void write(final char[] cbuf, final int off, final int len) throws IOException {
