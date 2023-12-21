@@ -36,6 +36,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UncheckedIOException;
 import java.math.BigInteger;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -76,7 +77,6 @@ import java.util.zip.Checksum;
 
 import org.apache.commons.io.file.AbstractTempDirTest;
 import org.apache.commons.io.file.PathUtils;
-import org.apache.commons.io.file.PathUtilsIsEmptyTest;
 import org.apache.commons.io.file.TempDirectory;
 import org.apache.commons.io.file.TempFile;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -97,6 +97,8 @@ import org.junit.jupiter.params.provider.ValueSource;
  */
 @SuppressWarnings({"deprecation", "ResultOfMethodCallIgnored"}) // unit tests include tests of many deprecated methods
 public class FileUtilsTest extends AbstractTempDirTest {
+
+    private static final Path DIR_SIZE_1 = Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1");
 
     /**
      * DirectoryWalker implementation that recursively lists all files and directories.
@@ -1669,7 +1671,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
             final File tempDirAsFile = tempDir.toFile();
             Assertions.assertTrue(FileUtils.isEmptyDirectory(tempDirAsFile));
         }
-        Assertions.assertFalse(FileUtils.isEmptyDirectory(PathUtilsIsEmptyTest.DIR_SIZE_1.toFile()));
+        Assertions.assertFalse(FileUtils.isEmptyDirectory(DIR_SIZE_1.toFile()));
     }
 
     @ParameterizedTest
@@ -1750,7 +1752,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertFalse(FileUtils.isFileNewer(newFile, localDatePlusDay, localTime0), "New File - Newer - LocalDate plus one day,LocalTime");
         assertFalse(FileUtils.isFileNewer(newFile, localDatePlusDay, offsetTime0), "New File - Newer - LocalDate plus one day,OffsetTime");
         assertFalse(FileUtils.isFileNewer(invalidFile, refFile), "Illegal - Newer - File");
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileNewer(newFile, invalidFile));
+        assertThrows(UncheckedIOException.class, () -> FileUtils.isFileNewer(newFile, invalidFile));
 
         // Test isFileOlder()
         assertTrue(FileUtils.isFileOlder(oldFile, refFile), "Old File - Older - File");
@@ -1784,7 +1786,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(FileUtils.isFileOlder(newFile, localDatePlusDay, offsetTime0), "New File - Older - LocalDate plus one day,OffsetTime");
 
         assertFalse(FileUtils.isFileOlder(invalidFile, refFile), "Illegal - Older - File");
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileOlder(newFile, invalidFile));
+        assertThrows(UncheckedIOException.class, () -> FileUtils.isFileOlder(newFile, invalidFile));
 
         // Null File
         assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(null, now));
@@ -1793,7 +1795,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(oldFile, (File) null));
 
         // Invalid reference File
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileNewer(oldFile, invalidFile));
+        assertThrows(UncheckedIOException.class, () -> FileUtils.isFileNewer(oldFile, invalidFile));
 
         // Null reference Date
         assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(oldFile, (Date) null));
@@ -1809,7 +1811,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertThrows(NullPointerException.class, () -> FileUtils.isFileOlder(oldFile, (Date) null));
 
         // Invalid reference File
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileOlder(oldFile, invalidFile));
+        assertThrows(UncheckedIOException.class, () -> FileUtils.isFileOlder(oldFile, invalidFile));
     }
 
     @Test
@@ -2608,7 +2610,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         // Null argument
         assertThrows(NullPointerException.class, () -> FileUtils.sizeOfDirectoryAsBigInteger(null));
         // Non-existent file
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.sizeOfDirectoryAsBigInteger(file));
+        assertThrows(UncheckedIOException.class, () -> FileUtils.sizeOfDirectoryAsBigInteger(file));
 
         // Creates file
         file.createNewFile();
