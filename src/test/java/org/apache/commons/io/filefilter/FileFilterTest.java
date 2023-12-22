@@ -210,9 +210,9 @@ public class FileFilterTest extends AbstractFilterTest {
             assertFiltering(CanExecuteFileFilter.CAN_EXECUTE, (File) null, false);
             executableFile.setExecutable(false);
             assertFiltering(CanExecuteFileFilter.CANNOT_EXECUTE, executablePath.get(), false);
-            assertFiltering(CanExecuteFileFilter.CANNOT_EXECUTE, (Path) null, false);
+            assertFiltering(CanExecuteFileFilter.CANNOT_EXECUTE, (Path) null, true);
             assertFiltering(CanExecuteFileFilter.CANNOT_EXECUTE, executableFile, false);
-            assertFiltering(CanExecuteFileFilter.CANNOT_EXECUTE, (File) null, false);
+            assertFiltering(CanExecuteFileFilter.CANNOT_EXECUTE, (File) null, true);
         }
     }
 
