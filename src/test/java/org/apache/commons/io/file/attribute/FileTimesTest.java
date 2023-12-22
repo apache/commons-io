@@ -19,6 +19,7 @@ package org.apache.commons.io.file.attribute;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.attribute.FileTime;
 import java.time.Instant;
@@ -76,6 +77,18 @@ public class FileTimesTest {
         // @formatter:on
     }
 
+    public static Stream<Arguments> isUnixFileTimeProvider() {
+        // @formatter:off
+        return Stream.of(
+            Arguments.of("2022-12-27T12:45:22Z", true),
+            Arguments.of("2038-01-19T03:14:07Z", true),
+            Arguments.of("1901-12-13T23:14:08Z", true),
+            Arguments.of("1901-12-13T03:14:08Z", false),
+            Arguments.of("2038-01-19T03:14:08Z", false),
+            Arguments.of("2099-06-30T12:31:42Z", false));
+        // @formatter:on
+    }
+
     @ParameterizedTest
     @MethodSource("dateToNtfsProvider")
     public void testDateToFileTime(final String instant, final long ignored) {
@@ -115,13 +128,33 @@ public class FileTimesTest {
         assertEquals(ntfsTime, FileTimes.toNtfsTime(parsed));
     }
 
-    //
-
     @ParameterizedTest
     @MethodSource("dateToNtfsProvider")
     public void testFromUnixTime(final String instant, final long ntfsTime) {
         final long epochSecond = Instant.parse(instant).getEpochSecond();
         assertEquals(epochSecond, FileTimes.fromUnixTime(epochSecond).to(TimeUnit.SECONDS));
+    }
+
+    @ParameterizedTest
+    @MethodSource("isUnixFileTimeProvider")
+    public void testIsUnixTime(final String instant, final boolean isUnixTime) {
+        assertEquals(isUnixTime, FileTimes.isUnixTime(FileTime.from(Instant.parse(instant))));
+    }
+
+    @ParameterizedTest
+    @MethodSource("isUnixFileTimeProvider")
+    public void testIsUnixTimeLong(final String instant, final boolean isUnixTime) {
+        assertEquals(isUnixTime, FileTimes.isUnixTime(Instant.parse(instant).getEpochSecond()));
+    }
+
+    @ParameterizedTest
+    @MethodSource("isUnixFileTimeProvider")
+    public void testToUnixTime(final String instant, final boolean isUnixTime) {
+        assertEquals(isUnixTime, FileTimes.isUnixTime(FileTimes.toUnixTime(FileTime.from(Instant.parse(instant)))));
+    }
+
+    public void testIsUnixTimeFileTimeNull() {
+        assertTrue(FileTimes.isUnixTime(null));
     }
 
     @Test
