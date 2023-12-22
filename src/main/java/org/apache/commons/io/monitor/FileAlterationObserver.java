@@ -130,9 +130,25 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 public class FileAlterationObserver implements Serializable {
 
     private static final long serialVersionUID = 1185122225658782848L;
+
+    /**
+     * List of listeners.
+     */
     private transient final List<FileAlterationListener> listeners = new CopyOnWriteArrayList<>();
+
+    /**
+     * The root directory to observe.
+     */
     private final FileEntry rootEntry;
+
+    /**
+     * The file filter or null if none.
+     */
     private transient final FileFilter fileFilter;
+
+    /**
+     * Compares file names.
+     */
     private final Comparator<File> comparator;
 
     /**
@@ -158,9 +174,9 @@ public class FileAlterationObserver implements Serializable {
      * Constructs an observer for the specified directory, file filter and
      * file comparator.
      *
-     * @param directory the directory to observe
-     * @param fileFilter The file filter or null if none
-     * @param ioCase  what case sensitivity to use comparing file names, null means system sensitive
+     * @param directory the directory to observe.
+     * @param fileFilter The file filter or null if none.
+     * @param ioCase  what case sensitivity to use comparing file names, null means system sensitive.
      */
     public FileAlterationObserver(final File directory, final FileFilter fileFilter, final IOCase ioCase) {
         this(new FileEntry(directory), fileFilter, ioCase);
@@ -169,9 +185,9 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Constructs an observer for the specified directory, file filter and file comparator.
      *
-     * @param rootEntry the root directory to observe
-     * @param fileFilter The file filter or null if none
-     * @param ioCase what case sensitivity to use comparing file names, null means system sensitive
+     * @param rootEntry the root directory to observe.
+     * @param fileFilter The file filter or null if none.
+     * @param ioCase what case sensitivity to use comparing file names, null means system sensitive.
      */
     protected FileAlterationObserver(final FileEntry rootEntry, final FileFilter fileFilter, final IOCase ioCase) {
         Objects.requireNonNull(rootEntry, "rootEntry");

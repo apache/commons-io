@@ -143,12 +143,16 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
     }
 
     /**
-     * @see java.io.ByteArrayOutputStream#reset()
+     * See {@link ByteArrayOutputStream#reset()}.
+     *
+     * @see ByteArrayOutputStream#reset()
      */
     public abstract void reset();
 
     /**
-     * @see java.io.ByteArrayOutputStream#reset()
+     * Implements a default reset behavior.
+     *
+     * @see ByteArrayOutputStream#reset()
      */
     protected void resetImpl() {
         count = 0;

@@ -38,8 +38,14 @@ import java.util.Objects;
 public class CharSequenceReader extends Reader implements Serializable {
 
     private static final long serialVersionUID = 3724187752191401220L;
+
+    /** Source for reading. */
     private final CharSequence charSequence;
+
+    /** Reading index. */
     private int idx;
+
+    /** Reader mark. */
     private int mark;
 
     /**

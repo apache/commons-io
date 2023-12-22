@@ -63,6 +63,9 @@ public class IOExceptionList extends IOException implements Iterable<Throwable> 
         return String.format("%,d exception(s): %s", size(causeList), causeList);
     }
 
+    /**
+     * List of causes.
+     */
     private final List<? extends Throwable> causeList;
 
     /**
