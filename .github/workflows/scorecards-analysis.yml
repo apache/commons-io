@@ -16,11 +16,13 @@
 name: "Scorecards supply-chain security"
 
 on:
+  workflow_dispatch:
   branch_protection_rule:
-  schedule:
-    - cron: "30 1 * * 6"    # Weekly on Saturdays
   push:
     branches: [ "master" ]
+    paths-ignore:
+      - '**/workflows/*.yml'
+      - '!**/workflows/scorecards-analysis.yml'
 
 permissions: read-all
 
