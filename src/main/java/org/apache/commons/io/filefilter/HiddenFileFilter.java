@@ -101,7 +101,7 @@ public class HiddenFileFilter extends AbstractFileFilter implements Serializable
      */
     @Override
     public boolean accept(final File file) {
-        return file.isHidden();
+        return file == null || file.isHidden();
     }
 
     /**
@@ -114,7 +114,7 @@ public class HiddenFileFilter extends AbstractFileFilter implements Serializable
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        return get(() -> toFileVisitResult(Files.isHidden(file)));
+        return get(() -> toFileVisitResult(file == null || Files.isHidden(file)));
     }
 
 }

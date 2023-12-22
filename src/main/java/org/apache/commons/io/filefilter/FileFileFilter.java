@@ -97,7 +97,7 @@ public class FileFileFilter extends AbstractFileFilter implements Serializable {
      */
     @Override
     public boolean accept(final File file) {
-        return file.isFile();
+        return file != null && file.isFile();
     }
 
     /**
@@ -109,7 +109,7 @@ public class FileFileFilter extends AbstractFileFilter implements Serializable {
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        return toFileVisitResult(Files.isRegularFile(file));
+        return toFileVisitResult(file != null && Files.isRegularFile(file));
     }
 
 }

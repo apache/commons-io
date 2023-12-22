@@ -104,6 +104,9 @@ public class EmptyFileFilter extends AbstractFileFilter implements Serializable 
      */
     @Override
     public boolean accept(final File file) {
+        if (file == null) {
+            return true;
+        }
         if (file.isDirectory()) {
             final File[] files = file.listFiles();
             return IOUtils.length(files) == 0;
@@ -120,6 +123,9 @@ public class EmptyFileFilter extends AbstractFileFilter implements Serializable 
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
+        if (file == null) {
+            return toFileVisitResult(true);
+        }
         return get(() -> {
             if (Files.isDirectory(file)) {
                 try (Stream<Path> stream = Files.list(file)) {

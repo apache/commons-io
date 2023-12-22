@@ -143,9 +143,9 @@ public class IOCaseTest {
         assertFalse(IOCase.SENSITIVE.checkEquals("", "ABC"));
         assertTrue(IOCase.SENSITIVE.checkEquals("", ""));
 
-        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkEquals("ABC", null));
-        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkEquals(null, "ABC"));
-        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkEquals(null, null));
+        assertFalse(IOCase.SENSITIVE.checkEquals("ABC", null));
+        assertFalse(IOCase.SENSITIVE.checkEquals(null, "ABC"));
+        assertTrue(IOCase.SENSITIVE.checkEquals(null, null));
     }
 
     @Test

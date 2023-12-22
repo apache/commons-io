@@ -167,12 +167,9 @@ public enum IOCase {
      * @param str1  the first string to compare, not null
      * @param str2  the second string to compare, not null
      * @return true if equal using the case rules
-     * @throws NullPointerException if either string is null
      */
     public boolean checkEquals(final String str1, final String str2) {
-        Objects.requireNonNull(str1, "str1");
-        Objects.requireNonNull(str2, "str2");
-        return sensitive ? str1.equals(str2) : str1.equalsIgnoreCase(str2);
+        return str1 == str2 || str1 != null && (sensitive ? str1.equals(str2) : str1.equalsIgnoreCase(str2));
     }
 
     /**

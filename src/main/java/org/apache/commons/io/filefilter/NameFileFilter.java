@@ -163,7 +163,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      */
     @Override
     public boolean accept(final File file) {
-        return acceptBaseName(file.getName());
+        return file != null && acceptBaseName(file.getName());
     }
 
     /**

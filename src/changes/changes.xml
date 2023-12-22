@@ -57,6 +57,21 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" issue="IO-781" due-to="Elliotte Rusty Harold">Make CharSequenceInputStream.available() more correct in the face of multibyte encodings #525.</action>
       <action dev="ggregory" type="fix" issue="IO-781" due-to="Elliotte Rusty Harold">Remove unreachable code in AbstractIOFileFilterTest #526.</action>
       <action dev="ggregory" type="fix" issue="IO-808" due-to="Elliotte Rusty Harold">Rationalize and unify checking for existence of files and directories #529.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NullPointerException in IOCase.checkEquals(String, String) on null input.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NullPointerException in CanExecuteFileFilter.accept(File) on null input.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NullPointerException in CanExecuteFileFilter.accept(Path, BasicFileAttributes) on null input.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NullPointerException in CanReadFileFilter.accept(File) on null input.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NullPointerException in CanReadFileFilter.accept(Path, BasicFileAttributes) on null input.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NullPointerException in CanWriteFileFilter.accept(File) on null input.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NullPointerException in CanWriteFileFilter.accept(Path, BasicFileAttributes) on null input.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NullPointerException in DirectoryFileFilter.accept(File) on null input.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NullPointerException in DirectoryFileFilter.accept(Path, BasicFileAttributes) on null input.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NullPointerException in EmptyFileFilter.accept(File) on null input.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NullPointerException in EmptyFileFilter.accept(Path, BasicFileAttributes) on null input.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NullPointerException in FileFileFilter.accept(File) on null input.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NullPointerException in FileFileFilter.accept(Path, BasicFileAttributes) on null input.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NullPointerException in HiddenFileFilter.accept(File) on null input.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NullPointerException in HiddenFileFilter.accept(Path, BasicFileAttributes) on null input.</action>
       <!-- Add -->
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Add and use PathUtils.getFileName(Path, Function&lt;Path, R&gt;).</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Add and use PathUtils.getFileNameString().</action>

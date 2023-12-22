@@ -80,7 +80,7 @@ public class CanWriteFileFilter extends AbstractFileFilter implements Serializab
      */
     @Override
     public boolean accept(final File file) {
-        return file.canWrite();
+        return file != null && file.canWrite();
     }
 
     /**
@@ -92,7 +92,7 @@ public class CanWriteFileFilter extends AbstractFileFilter implements Serializab
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        return toFileVisitResult(Files.isWritable(file));
+        return toFileVisitResult(file != null && Files.isWritable(file));
     }
 
 }

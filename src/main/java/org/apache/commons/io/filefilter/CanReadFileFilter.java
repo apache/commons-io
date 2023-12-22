@@ -92,7 +92,7 @@ public class CanReadFileFilter extends AbstractFileFilter implements Serializabl
      */
     @Override
     public boolean accept(final File file) {
-        return file.canRead();
+        return file != null && file.canRead();
     }
 
     /**
@@ -104,7 +104,7 @@ public class CanReadFileFilter extends AbstractFileFilter implements Serializabl
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        return toFileVisitResult(Files.isReadable(file));
+        return toFileVisitResult(file != null && Files.isReadable(file));
     }
 
 }

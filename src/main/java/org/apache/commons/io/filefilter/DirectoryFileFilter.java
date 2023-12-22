@@ -97,7 +97,7 @@ public class DirectoryFileFilter extends AbstractFileFilter implements Serializa
      */
     @Override
     public boolean accept(final File file) {
-        return file.isDirectory();
+        return file != null && file.isDirectory();
     }
 
     /**
@@ -109,7 +109,7 @@ public class DirectoryFileFilter extends AbstractFileFilter implements Serializa
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        return toFileVisitResult(Files.isDirectory(file));
+        return toFileVisitResult(file != null && Files.isDirectory(file));
     }
 
 }

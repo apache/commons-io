@@ -44,6 +44,7 @@ public class PathMatcherFileFilter extends AbstractFileFilter {
     public boolean accept(final File file) {
         return file != null && matches(file.toPath());
     }
+
     @Override
     public boolean matches(final Path path) {
         return pathMatcher.matches(path);

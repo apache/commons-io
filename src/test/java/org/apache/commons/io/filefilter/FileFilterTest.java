@@ -205,10 +205,14 @@ public class FileFilterTest extends AbstractFilterTest {
             }
             assertTrue(executableFile.setExecutable(true));
             assertFiltering(CanExecuteFileFilter.CAN_EXECUTE, executablePath.get(), true);
+            assertFiltering(CanExecuteFileFilter.CAN_EXECUTE, (Path) null, false);
             assertFiltering(CanExecuteFileFilter.CAN_EXECUTE, executableFile, true);
+            assertFiltering(CanExecuteFileFilter.CAN_EXECUTE, (File) null, false);
             executableFile.setExecutable(false);
             assertFiltering(CanExecuteFileFilter.CANNOT_EXECUTE, executablePath.get(), false);
+            assertFiltering(CanExecuteFileFilter.CANNOT_EXECUTE, (Path) null, false);
             assertFiltering(CanExecuteFileFilter.CANNOT_EXECUTE, executableFile, false);
+            assertFiltering(CanExecuteFileFilter.CANNOT_EXECUTE, (File) null, false);
         }
     }
 
@@ -224,11 +228,17 @@ public class FileFilterTest extends AbstractFilterTest {
         }
         assertTrue(readOnlyFile.setReadOnly());
         assertFiltering(CanReadFileFilter.CAN_READ, readOnlyFile, true);
+        assertFiltering(CanReadFileFilter.CAN_READ, (File) null, false);
         assertFiltering(CanReadFileFilter.CAN_READ, readOnlyPath, true);
+        assertFiltering(CanReadFileFilter.CAN_READ, (Path) null, false);
         assertFiltering(CanReadFileFilter.CANNOT_READ, readOnlyFile, false);
+        assertFiltering(CanReadFileFilter.CANNOT_READ, (File) null, true);
         assertFiltering(CanReadFileFilter.CANNOT_READ, readOnlyPath, false);
+        assertFiltering(CanReadFileFilter.CANNOT_READ, (Path) null, true);
         assertFiltering(CanReadFileFilter.READ_ONLY, readOnlyFile, true);
+        assertFiltering(CanReadFileFilter.READ_ONLY, (File) null, false);
         assertFiltering(CanReadFileFilter.READ_ONLY, readOnlyPath, true);
+        assertFiltering(CanReadFileFilter.READ_ONLY, (Path) null, false);
         readOnlyFile.delete();
     }
 
@@ -244,11 +254,15 @@ public class FileFilterTest extends AbstractFilterTest {
         }
         assertTrue(readOnlyFile.setReadOnly());
         assertFiltering(CanWriteFileFilter.CAN_WRITE, temporaryFolder, true);
-        assertFiltering(CanWriteFileFilter.CANNOT_WRITE, temporaryFolder, false);
         assertFiltering(CanWriteFileFilter.CAN_WRITE, readOnlyFile, false);
+        assertFiltering(CanWriteFileFilter.CAN_WRITE, (File) null, false);
         assertFiltering(CanWriteFileFilter.CAN_WRITE, readOnlyPath, false);
+        assertFiltering(CanWriteFileFilter.CAN_WRITE, (Path) null, false);
+        assertFiltering(CanWriteFileFilter.CANNOT_WRITE, temporaryFolder, false);
         assertFiltering(CanWriteFileFilter.CANNOT_WRITE, readOnlyFile, true);
         assertFiltering(CanWriteFileFilter.CANNOT_WRITE, readOnlyPath, true);
+        assertFiltering(CanWriteFileFilter.CANNOT_WRITE, (File) null, true);
+        assertFiltering(CanWriteFileFilter.CANNOT_WRITE, (Path) null, true);
         readOnlyFile.delete();
     }
 
@@ -376,6 +390,9 @@ public class FileFilterTest extends AbstractFilterTest {
         assertFiltering(filter, new File("LICENSE.txt"), false);
         assertFiltering(filter, new File("LICENSE.txt").toPath(), false);
 
+        assertFiltering(filter, (File) null, false);
+        assertFiltering(filter, (Path) null, false);
+
         assertSame(DirectoryFileFilter.DIRECTORY, DirectoryFileFilter.INSTANCE);
     }
 
@@ -388,8 +405,12 @@ public class FileFilterTest extends AbstractFilterTest {
         emptyDirFile.mkdirs();
         assertFiltering(EmptyFileFilter.EMPTY, emptyDirFile, true);
         assertFiltering(EmptyFileFilter.EMPTY, emptyDirPath, true);
+        assertFiltering(EmptyFileFilter.EMPTY, (File) null, true);
+        assertFiltering(EmptyFileFilter.EMPTY, (Path) null, true);
         assertFiltering(EmptyFileFilter.NOT_EMPTY, emptyDirFile, false);
         assertFiltering(EmptyFileFilter.NOT_EMPTY, emptyDirPath, false);
+        assertFiltering(EmptyFileFilter.NOT_EMPTY, (File) null, false);
+        assertFiltering(EmptyFileFilter.NOT_EMPTY, (Path) null, false);
 
         // Empty File
         final File emptyFile = new File(emptyDirFile, "empty-file.txt");
@@ -479,6 +500,7 @@ public class FileFilterTest extends AbstractFilterTest {
         // XXX: This test presumes the current working dir is the base dir of the source checkout.
         final IOFileFilter filter = FileFileFilter.INSTANCE;
 
+        assertFiltering(filter, (File) null, false);
         assertFiltering(filter, new File("src/"), false);
         assertFiltering(filter, new File("src/").toPath(), false);
         assertFiltering(filter, new File("src/java/"), false);
@@ -713,8 +735,10 @@ public class FileFilterTest extends AbstractFilterTest {
         final Path path = temporaryFolder.toPath();
         assertFiltering(HiddenFileFilter.HIDDEN, temporaryFolder, false);
         assertFiltering(HiddenFileFilter.HIDDEN, path, false);
+        assertFiltering(HiddenFileFilter.HIDDEN, (Path) null, true);
         assertFiltering(HiddenFileFilter.VISIBLE, temporaryFolder, true);
         assertFiltering(HiddenFileFilter.VISIBLE, path, true);
+        assertFiltering(HiddenFileFilter.VISIBLE, (Path) null, false);
     }
 
     @Test
@@ -1037,7 +1061,10 @@ public class FileFilterTest extends AbstractFilterTest {
 
     @Test
     public void testNameFilter() throws IOException {
-        assertFooBarFileFiltering(new NameFileFilter("foo", "bar"));
+        final NameFileFilter filter = new NameFileFilter("foo", "bar");
+        assertFooBarFileFiltering(filter);
+        assertFiltering(filter, (File) null, false);
+        assertFiltering(filter, (Path) null, false);
     }
 
     @Test

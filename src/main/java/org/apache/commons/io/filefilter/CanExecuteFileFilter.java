@@ -82,7 +82,7 @@ public class CanExecuteFileFilter extends AbstractFileFilter implements Serializ
      */
     @Override
     public boolean accept(final File file) {
-        return file.canExecute();
+        return file != null && file.canExecute();
     }
 
     /**
@@ -94,7 +94,7 @@ public class CanExecuteFileFilter extends AbstractFileFilter implements Serializ
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        return toFileVisitResult(Files.isExecutable(file));
+        return toFileVisitResult(file != null && Files.isExecutable(file));
     }
 
 }
