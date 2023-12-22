@@ -15,7 +15,16 @@
 
 name: Java CI
 
-on: [push, pull_request]
+on:
+  workflow_dispatch:
+  push:
+    paths-ignore:
+      - '**/workflows/*.yml'
+      - '!**/workflows/maven.yml'
+  pull_request:
+    paths-ignore:
+      - '**/workflows/*.yml'
+      - '!**/workflows/maven.yml'
 
 permissions:
   contents: read
@@ -30,7 +39,12 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
         java: [ 8, 11, 17, 21 ]
         experimental: [false]
-#        include:
+        include:
+          # Update java 8/ubuntu to add deploy step
+          - java: 8
+            os: ubuntu-latest
+            experimental: false
+            deploy: true
 #          - java: 22-ea
 #            os: ubuntu-latest
 #            experimental: true        
@@ -57,5 +71,18 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: ${{ matrix.java }}
+        # these values cause the plugin to set up the Maven settings.xml file
+        server-id: apache.snapshots.https # Value of the distributionManagement/repository/id field of the pom.xml
+        server-username: NEXUS_USER # env variable for username in deploy
+        server-password: NEXUS_PW # env variable for token in deploy
     - name: Build with Maven
       run: mvn --show-version --batch-mode --no-transfer-progress -DtrimStackTrace=false
+    - name: Deploy SNAPSHOT using minimal build
+      if: matrix.deploy
+      env:
+        NEXUS_USER: ${{ secrets.NEXUS_USER }}
+        NEXUS_PW: ${{ secrets.NEXUS_PW }}
+      run: >
+        echo "Deploy SNAPSHOT" >> $GITHUB_STEP_SUMMARY;
+        mvn --show-version --batch-mode --no-transfer-progress deploy -Dgpg.skip 
+        -DskipTests -Drat.skip -Djacoco.skip -Dcyclonedx.skip -Dspotbugs.skip -Dspdx.skip -Dpmd.skip
