@@ -72,7 +72,7 @@ public class PathUtilsContentEqualsBenchmark {
             Arrays.fill(bytes1, (byte) 1);
             Files.write(bigFile1, bytes1);
             Files.copy(bigFile1, bigFile2, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new UncheckedIOException(e);
         }
     }

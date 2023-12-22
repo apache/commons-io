@@ -219,7 +219,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
         this.markedOffset = minPosLen(data, offset);
     }
 
-    private UnsynchronizedByteArrayInputStream(byte[] data, int eod, int offset, int markedOffset) {
+    private UnsynchronizedByteArrayInputStream(final byte[] data, final int eod, final int offset, final int markedOffset) {
         this.data = Objects.requireNonNull(data, "data");
         this.eod = eod;
         this.offset = offset;

@@ -36,7 +36,7 @@ public class UnsynchronizedByteArrayInputStreamTest {
     private UnsynchronizedByteArrayInputStream newStream(final byte[] buffer) {
         try {
             return UnsynchronizedByteArrayInputStream.builder().setByteArray(buffer).get();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             fail("Should never happen because no conversion is needed.", e);
             return null;
         }
@@ -45,7 +45,7 @@ public class UnsynchronizedByteArrayInputStreamTest {
     private UnsynchronizedByteArrayInputStream newStream(final byte[] buffer, final int offset) {
         try {
             return UnsynchronizedByteArrayInputStream.builder().setByteArray(buffer).setOffset(offset).get();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             fail("Should never happen because no conversion is needed.", e);
             return null;
         }
@@ -54,7 +54,7 @@ public class UnsynchronizedByteArrayInputStreamTest {
     private UnsynchronizedByteArrayInputStream newStream(final byte[] buffer, final int offset, final int length) {
         try {
             return UnsynchronizedByteArrayInputStream.builder().setByteArray(buffer).setOffset(offset).setLength(length).get();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             fail("Should never happen because no conversion is needed.", e);
             return null;
         }

@@ -770,7 +770,7 @@ public final class PathUtils {
         try (RandomAccessFile raf1 = RandomAccessFileMode.READ_ONLY.create(path1.toRealPath(linkOptions));
                 RandomAccessFile raf2 = RandomAccessFileMode.READ_ONLY.create(path2.toRealPath(linkOptions))) {
             return RandomAccessFiles.contentEquals(raf1, raf2);
-        } catch (UnsupportedOperationException e) {
+        } catch (final UnsupportedOperationException e) {
             // Slower:
             // Handle
             // java.lang.UnsupportedOperationException
@@ -877,7 +877,7 @@ public final class PathUtils {
      * @see Path#getFileName()
      * @since 2.16.0
      */
-    public static <R> R getFileName(final Path path, Function<Path, R> function) {
+    public static <R> R getFileName(final Path path, final Function<Path, R> function) {
         final Path fileName = path != null ? path.getFileName() : null;
         return fileName != null ? function.apply(fileName) : null;
     }

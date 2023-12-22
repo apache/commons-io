@@ -2820,7 +2820,7 @@ public class FileUtils {
             // null guards are not needed; BasicFileAttributes.setTimes(...) is null safe
             destAttrView.setTimes(srcAttr.lastModifiedTime(), srcAttr.lastAccessTime(), srcAttr.creationTime());
             return true;
-        } catch (IOException ignored) {
+        } catch (final IOException ignored) {
             // Fallback: Only set modified time to match source file
             return targetFile.setLastModified(sourceFile.lastModified());
         }
@@ -2895,7 +2895,7 @@ public class FileUtils {
     public static long sizeOfDirectory(final File directory) {
         try {
             requireDirectoryExists(directory, "directory");
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             throw new UncheckedIOException(e);
         }
         return Uncheck.get(() -> PathUtils.sizeOfDirectory(directory.toPath()));
@@ -2913,7 +2913,7 @@ public class FileUtils {
     public static BigInteger sizeOfDirectoryAsBigInteger(final File directory) {
         try {
             requireDirectoryExists(directory, "directory");
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             throw new UncheckedIOException(e);
         }
         return Uncheck.get(() -> PathUtils.sizeOfDirectoryAsBigInteger(directory.toPath()));

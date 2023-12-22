@@ -352,7 +352,7 @@ public class CharSequenceInputStreamTest {
         final String sequenceEnglish = "Test Sequence";
         final String sequenceCJK = "\u4e01\u4f23\u5045\u5167\u5289\u53ab"; // Kanji text
         final String[] sequences = {sequenceEnglish, sequenceCJK};
-        for (String testSequence : sequences) {
+        for (final String testSequence : sequences) {
             final CharsetEncoder charsetEncoder = Charset.forName(csName).newEncoder();
             final ByteBuffer byteBuffer = ByteBuffer.allocate(testSequence.length() * 3);
             final CharBuffer charBuffer = CharBuffer.wrap(testSequence);

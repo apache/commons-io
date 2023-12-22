@@ -120,7 +120,7 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
     FileVisitResult get(final IOSupplier<FileVisitResult> supplier) {
         try {
             return supplier.get();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             return handle(e);
         }
     }

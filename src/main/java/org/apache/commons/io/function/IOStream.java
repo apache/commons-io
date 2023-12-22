@@ -97,7 +97,7 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
             public T next() throws NoSuchElementException {
                 try {
                     return t = t == IOStreams.NONE ? seed : f.apply(t);
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     final NoSuchElementException nsee = new NoSuchElementException();
                     nsee.initCause(e);
                     throw nsee;
