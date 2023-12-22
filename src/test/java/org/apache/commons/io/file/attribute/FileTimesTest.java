@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import java.nio.file.attribute.FileTime;
 import java.time.Instant;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -115,6 +116,13 @@ public class FileTimesTest {
     }
 
     //
+
+    @ParameterizedTest
+    @MethodSource("dateToNtfsProvider")
+    public void testFromUnixTime(final String instant, final long ntfsTime) {
+        final long epochSecond = Instant.parse(instant).getEpochSecond();
+        assertEquals(epochSecond, FileTimes.fromUnixTime(epochSecond).to(TimeUnit.SECONDS));
+    }
 
     @Test
     public void testMinusMillis() {

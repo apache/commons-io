@@ -62,6 +62,17 @@ public final class FileTimes {
     static final long HUNDRED_NANOS_PER_MILLISECOND = TimeUnit.MILLISECONDS.toNanos(1) / 100;
 
     /**
+     * Converts standard UNIX time (in seconds, UTC/GMT) to {@link FileTime}.
+     *
+     * @param time UNIX timestamp (seconds).
+     * @return the corresponding FileTime.
+     * @since 2.16.0
+     */
+    public static FileTime fromUnixTime(final long time) {
+        return FileTime.from(time, TimeUnit.SECONDS);
+    }
+
+    /**
      * Subtracts milliseconds from a source FileTime.
      *
      * @param fileTime The source FileTime.
