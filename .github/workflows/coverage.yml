@@ -15,7 +15,16 @@
 
 name: Coverage
 
-on: [push, pull_request]
+on:
+  workflow_dispatch:
+  push:
+    paths-ignore:
+      - '**/workflows/*.yml'
+      - '!**/workflows/coverage.yml'
+  pull_request:
+    paths-ignore:
+      - '**/workflows/*.yml'
+      - '!**/workflows/coverage.yml'
 
 permissions:
   contents: read
