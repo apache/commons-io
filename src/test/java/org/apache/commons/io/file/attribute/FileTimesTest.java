@@ -90,6 +90,7 @@ public class FileTimesTest {
         final long ntfsMillis = Math.floorDiv(ntfsTime, FileTimes.HUNDRED_NANOS_PER_MILLISECOND) * FileTimes.HUNDRED_NANOS_PER_MILLISECOND;
         final Date parsed = Date.from(Instant.parse(instant));
         assertEquals(ntfsMillis, FileTimes.toNtfsTime(parsed));
+        assertEquals(ntfsMillis, FileTimes.toNtfsTime(parsed.getTime()));
     }
 
     @Test

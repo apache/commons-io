@@ -220,6 +220,18 @@ public final class FileTimes {
         return Math.subtractExact(javaHundredNanos, WINDOWS_EPOCH_OFFSET);
     }
 
+    /**
+     * Converts Java time (milliseconds since Epoch) to NTFS time.
+     *
+     * @param javaTime the Java time
+     * @return the NTFS time
+     * @since 2.16.0
+     */
+    public static long toNtfsTime(final long javaTime) {
+        final long javaHundredNanos = javaTime * HUNDRED_NANOS_PER_MILLISECOND;
+        return Math.subtractExact(javaHundredNanos, WINDOWS_EPOCH_OFFSET);
+    }
+
     private FileTimes() {
         // No instances.
     }
