@@ -63,16 +63,6 @@ public class BrokenOutputStream extends OutputStream {
     }
 
     /**
-     * Constructs a new stream that always throws the given exception.
-     *
-     * @param exception the exception to be thrown.
-     * @since 2.16.0
-     */
-    public BrokenOutputStream(final Throwable exception) {
-        this(() -> exception);
-    }
-
-    /**
      * Constructs a new stream that always throws the supplied exception.
      *
      * @param exceptionSupplier a supplier for the IOException or RuntimeException to be thrown.
@@ -80,6 +70,16 @@ public class BrokenOutputStream extends OutputStream {
      */
     public BrokenOutputStream(final Supplier<Throwable> exceptionSupplier) {
         this.exceptionSupplier = exceptionSupplier;
+    }
+
+    /**
+     * Constructs a new stream that always throws the given exception.
+     *
+     * @param exception the exception to be thrown.
+     * @since 2.16.0
+     */
+    public BrokenOutputStream(final Throwable exception) {
+        this(() -> exception);
     }
 
     /**

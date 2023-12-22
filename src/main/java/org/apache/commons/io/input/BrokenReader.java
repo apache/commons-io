@@ -63,16 +63,6 @@ public class BrokenReader extends Reader {
     }
 
     /**
-     * Constructs a new reader that always throws the given exception.
-     *
-     * @param exception the exception to be thrown.
-     * @since 2.16.0
-     */
-    public BrokenReader(final Throwable exception) {
-        this(() -> exception);
-    }
-
-    /**
      * Constructs a new reader that always throws the supplied exception.
      *
      * @param exceptionSupplier a supplier for the IOException or RuntimeException to be thrown.
@@ -80,6 +70,16 @@ public class BrokenReader extends Reader {
      */
     public BrokenReader(final Supplier<Throwable> exceptionSupplier) {
         this.exceptionSupplier = exceptionSupplier;
+    }
+
+    /**
+     * Constructs a new reader that always throws the given exception.
+     *
+     * @param exception the exception to be thrown.
+     * @since 2.16.0
+     */
+    public BrokenReader(final Throwable exception) {
+        this(() -> exception);
     }
 
     /**

@@ -98,8 +98,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 @SuppressWarnings({"deprecation", "ResultOfMethodCallIgnored"}) // unit tests include tests of many deprecated methods
 public class FileUtilsTest extends AbstractTempDirTest {
 
-    private static final Path DIR_SIZE_1 = Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1");
-
     /**
      * DirectoryWalker implementation that recursively lists all files and directories.
      */
@@ -127,6 +125,8 @@ public class FileUtilsTest extends AbstractTempDirTest {
             return files;
         }
     }
+
+    private static final Path DIR_SIZE_1 = Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1");
 
     private static final String UTF_8 = StandardCharsets.UTF_8.name();
 

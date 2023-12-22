@@ -141,20 +141,14 @@ public class FileTimesTest {
         assertEquals(isUnixTime, FileTimes.isUnixTime(FileTime.from(Instant.parse(instant))));
     }
 
+    public void testIsUnixTimeFileTimeNull() {
+        assertTrue(FileTimes.isUnixTime(null));
+    }
+
     @ParameterizedTest
     @MethodSource("isUnixFileTimeProvider")
     public void testIsUnixTimeLong(final String instant, final boolean isUnixTime) {
         assertEquals(isUnixTime, FileTimes.isUnixTime(Instant.parse(instant).getEpochSecond()));
-    }
-
-    @ParameterizedTest
-    @MethodSource("isUnixFileTimeProvider")
-    public void testToUnixTime(final String instant, final boolean isUnixTime) {
-        assertEquals(isUnixTime, FileTimes.isUnixTime(FileTimes.toUnixTime(FileTime.from(Instant.parse(instant)))));
-    }
-
-    public void testIsUnixTimeFileTimeNull() {
-        assertTrue(FileTimes.isUnixTime(null));
     }
 
     @Test
@@ -220,5 +214,11 @@ public class FileTimesTest {
         final int seconds = 2;
         assertEquals(Instant.EPOCH.plusSeconds(seconds), FileTimes.plusSeconds(FileTimes.EPOCH, seconds).toInstant());
         assertEquals(Instant.EPOCH, FileTimes.plusSeconds(FileTimes.EPOCH, 0).toInstant());
+    }
+
+    @ParameterizedTest
+    @MethodSource("isUnixFileTimeProvider")
+    public void testToUnixTime(final String instant, final boolean isUnixTime) {
+        assertEquals(isUnixTime, FileTimes.isUnixTime(FileTimes.toUnixTime(FileTime.from(Instant.parse(instant)))));
     }
 }
