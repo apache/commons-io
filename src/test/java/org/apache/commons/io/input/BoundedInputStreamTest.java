@@ -52,26 +52,49 @@ public class BoundedInputStreamTest {
                 boolRef.set(true);
             }
         };
+        assertEquals(helloWorld.length, bounded.getMaxLength());
+        assertEquals(0, bounded.getCount());
+        assertEquals(bounded.getMaxLength(), bounded.getRemaining());
         assertFalse(boolRef.get());
+        int readCount = 0;
         for (int i = 0; i < helloWorld.length; i++) {
             assertEquals(helloWorld[i], bounded.read(), "limit = length byte[" + i + "]");
+            readCount++;
+            assertEquals(helloWorld.length, bounded.getMaxLength());
+            assertEquals(readCount, bounded.getCount());
+            assertEquals(bounded.getMaxLength() - readCount, bounded.getRemaining());
         }
         assertEquals(-1, bounded.read(), "limit = length end");
+        assertEquals(helloWorld.length, bounded.getMaxLength());
+        assertEquals(readCount, bounded.getCount());
+        assertEquals(bounded.getMaxLength() - readCount, bounded.getRemaining());
         assertTrue(boolRef.get());
 
         // limit > length
         boolRef.set(false);
-        bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length + 1) {
+        final int length2 = helloWorld.length + 1;
+        bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), length2) {
             @Override
             protected void onMaxLength(final long max, final long readCount) {
                 boolRef.set(true);
             }
         };
+        assertEquals(length2, bounded.getMaxLength());
+        assertEquals(0, bounded.getCount());
+        assertEquals(bounded.getMaxLength(), bounded.getRemaining());
         assertFalse(boolRef.get());
+        readCount = 0;
         for (int i = 0; i < helloWorld.length; i++) {
             assertEquals(helloWorld[i], bounded.read(), "limit > length byte[" + i + "]");
+            readCount++;
+            assertEquals(length2, bounded.getMaxLength());
+            assertEquals(readCount, bounded.getCount());
+            assertEquals(bounded.getMaxLength() - readCount, bounded.getRemaining());
         }
         assertEquals(-1, bounded.read(), "limit > length end");
+        assertEquals(length2, bounded.getMaxLength());
+        assertEquals(readCount, bounded.getCount());
+        assertEquals(bounded.getMaxLength() - readCount, bounded.getRemaining());
         assertFalse(boolRef.get());
 
         // limit < length
@@ -82,11 +105,22 @@ public class BoundedInputStreamTest {
                 boolRef.set(true);
             }
         };
+        assertEquals(hello.length, bounded.getMaxLength());
+        assertEquals(0, bounded.getCount());
+        assertEquals(bounded.getMaxLength(), bounded.getRemaining());
         assertFalse(boolRef.get());
+        readCount = 0;
         for (int i = 0; i < hello.length; i++) {
             assertEquals(hello[i], bounded.read(), "limit < length byte[" + i + "]");
+            readCount++;
+            assertEquals(hello.length, bounded.getMaxLength());
+            assertEquals(readCount, bounded.getCount());
+            assertEquals(bounded.getMaxLength() - readCount, bounded.getRemaining());
         }
         assertEquals(-1, bounded.read(), "limit < length end");
+        assertEquals(hello.length, bounded.getMaxLength());
+        assertEquals(readCount, bounded.getCount());
+        assertEquals(bounded.getMaxLength() - readCount, bounded.getRemaining());
         assertTrue(boolRef.get());
     }
 

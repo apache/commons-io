@@ -106,6 +106,16 @@ public class BoundedInputStream extends FilterInputStream {
     }
 
     /**
+     * Gets how many bytes remain to read.
+     *
+     * @return bytes how many bytes remain to read.
+     * @since 2.16.0
+     */
+    public long getRemaining() {
+        return getMaxLength() - getCount();
+    }
+
+    /**
      * Gets the max count of bytes to read.
      *
      * @return The max count of bytes to read.
@@ -160,6 +170,7 @@ public class BoundedInputStream extends FilterInputStream {
      * @throws IOException Subclasses may throw.
      * @since 2.12.0
      */
+    @SuppressWarnings("unused")
     protected void onMaxLength(final long maxLength, final long count) throws IOException {
         // for subclasses
     }
@@ -179,7 +190,9 @@ public class BoundedInputStream extends FilterInputStream {
             return EOF;
         }
         final int result = in.read();
-        count++;
+        if (result != EOF) {
+            count++;
+        }
         return result;
     }
 
