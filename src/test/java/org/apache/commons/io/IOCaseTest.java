@@ -152,6 +152,9 @@ public class IOCaseTest {
     public void test_checkIndexOf_case() {
         assertEquals(1,  IOCase.SENSITIVE.checkIndexOf("ABC", 0, "BC"));
         assertEquals(-1, IOCase.SENSITIVE.checkIndexOf("ABC", 0, "Bc"));
+        assertEquals(-1, IOCase.SENSITIVE.checkIndexOf(null, 0, "Bc"));
+        assertEquals(-1, IOCase.SENSITIVE.checkIndexOf(null, 0, null));
+        assertEquals(-1, IOCase.SENSITIVE.checkIndexOf("ABC", 0, null));
 
         assertEquals(1, IOCase.INSENSITIVE.checkIndexOf("ABC", 0, "BC"));
         assertEquals(1, IOCase.INSENSITIVE.checkIndexOf("ABC", 0, "Bc"));
@@ -199,9 +202,9 @@ public class IOCaseTest {
         // too long
         assertEquals(-1,   IOCase.SENSITIVE.checkIndexOf("DEF", 0, "ABCDEFGHIJ"));
 
-        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkIndexOf("ABC", 0, null));
-        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkIndexOf(null, 0, "ABC"));
-        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkIndexOf(null, 0, null));
+        assertEquals(-1, IOCase.SENSITIVE.checkIndexOf("ABC", 0, null));
+        assertEquals(-1, IOCase.SENSITIVE.checkIndexOf(null, 0, "ABC"));
+        assertEquals(-1, IOCase.SENSITIVE.checkIndexOf(null, 0, null));
     }
 
     @Test

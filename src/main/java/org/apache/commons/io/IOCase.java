@@ -185,15 +185,16 @@ public enum IOCase {
      * @param search  the start to search for, not null
      * @return the first index of the search String,
      *  -1 if no match or {@code null} string input
-     * @throws NullPointerException if either string is null
      * @since 2.0
      */
     public int checkIndexOf(final String str, final int strStartIndex, final String search) {
-        final int endIndex = str.length() - search.length();
-        if (endIndex >= strStartIndex) {
-            for (int i = strStartIndex; i <= endIndex; i++) {
-                if (checkRegionMatches(str, i, search)) {
-                    return i;
+        if (str != null && search != null) {
+            final int endIndex = str.length() - search.length();
+            if (endIndex >= strStartIndex) {
+                for (int i = strStartIndex; i <= endIndex; i++) {
+                    if (checkRegionMatches(str, i, search)) {
+                        return i;
+                    }
                 }
             }
         }

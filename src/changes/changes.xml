@@ -72,6 +72,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NullPointerException in FileFileFilter.accept(Path, BasicFileAttributes) on null input.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NullPointerException in HiddenFileFilter.accept(File) on null input.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NullPointerException in HiddenFileFilter.accept(Path, BasicFileAttributes) on null input.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NullPointerException in IOCase.checkIndexOf(String, int, String) on null input.</action>
       <!-- Add -->
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Add and use PathUtils.getFileName(Path, Function&lt;Path, R&gt;).</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Add and use PathUtils.getFileNameString().</action>
