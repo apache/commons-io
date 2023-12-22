@@ -241,12 +241,12 @@ public class IOCaseTest {
         assertFalse(IOCase.SENSITIVE.checkRegionMatches("", 1, "ABC"));
         assertFalse(IOCase.SENSITIVE.checkRegionMatches("", 1, ""));
 
-        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkRegionMatches("ABC", 0, null));
-        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkRegionMatches(null, 0, "ABC"));
-        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkRegionMatches(null, 0, null));
-        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkRegionMatches("ABC", 1, null));
-        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkRegionMatches(null, 1, "ABC"));
-        assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkRegionMatches(null, 1, null));
+        assertFalse(IOCase.SENSITIVE.checkRegionMatches("ABC", 0, null));
+        assertFalse(IOCase.SENSITIVE.checkRegionMatches(null, 0, "ABC"));
+        assertFalse(IOCase.SENSITIVE.checkRegionMatches(null, 0, null));
+        assertFalse(IOCase.SENSITIVE.checkRegionMatches("ABC", 1, null));
+        assertFalse(IOCase.SENSITIVE.checkRegionMatches(null, 1, "ABC"));
+        assertFalse(IOCase.SENSITIVE.checkRegionMatches(null, 1, null));
     }
 
     @Test

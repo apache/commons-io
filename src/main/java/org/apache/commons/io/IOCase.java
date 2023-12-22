@@ -208,14 +208,13 @@ public enum IOCase {
      * but takes case-sensitivity into account.
      * </p>
      *
-     * @param str  the string to check, not null.
+     * @param str  the string to check.
      * @param strStartIndex  the index to start at in str.
-     * @param search  the start to search for, not null.
+     * @param search  the start to search for,.
      * @return true if equal using the case rules.
-     * @throws NullPointerException if either string is null.
      */
     public boolean checkRegionMatches(final String str, final int strStartIndex, final String search) {
-        return str.regionMatches(!sensitive, strStartIndex, search, 0, search.length());
+        return str != null && search != null && str.regionMatches(!sensitive, strStartIndex, search, 0, search.length());
     }
 
     /**
