@@ -60,6 +60,13 @@ public class DefaultFileComparator extends AbstractFileComparator implements Ser
     public static final Comparator<File> DEFAULT_REVERSE = new ReverseFileComparator(DEFAULT_COMPARATOR);
 
     /**
+     * Constructs a new instance.
+     */
+    public DefaultFileComparator() {
+        // empty
+    }
+
+    /**
      * Compares the two files using the {@link File#compareTo(File)} method.
      *
      * @param file1 The first file to compare

@@ -51,4 +51,13 @@ public final class ThreadUtils {
         } while (!remainingDuration.isNegative());
     }
 
+    /**
+     * Consider private.
+     *
+     * @deprecated Will be private in the next major version.
+     */
+    @Deprecated
+    public ThreadUtils() {
+        // empty
+    }
 }

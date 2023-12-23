@@ -45,6 +45,13 @@ public class TimestampedObserver extends Observer {
     private volatile Instant closeInstant;
     private final Instant openInstant = Instant.now();
 
+    /**
+     * Constructs a new instance.
+     */
+    public TimestampedObserver() {
+        // empty
+    }
+
     @Override
     public void closed() throws IOException {
         closeInstant = Instant.now();
