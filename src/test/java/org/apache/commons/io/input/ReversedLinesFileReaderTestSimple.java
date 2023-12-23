@@ -39,7 +39,7 @@ public class ReversedLinesFileReaderTestSimple {
         final int blockSize = 10;
         final File testFile20Bytes = TestResources.getFile("/test-file-20byteslength.bin");
         try (ReversedLinesFileReader reversedLinesFileReader = new ReversedLinesFileReader(testFile20Bytes, blockSize,
-            "ISO-8859-1")) {
+                StandardCharsets.ISO_8859_1.name())) {
             assertEqualsAndNoLineBreaks("987654321", reversedLinesFileReader.readLine());
             assertEqualsAndNoLineBreaks("123456789", reversedLinesFileReader.readLine());
         }
@@ -50,7 +50,7 @@ public class ReversedLinesFileReaderTestSimple {
         final int blockSize = 10;
         final File testFile20Bytes = TestResources.getFile("/test-file-20byteslength.bin");
         try (ReversedLinesFileReader reversedLinesFileReader = new ReversedLinesFileReader(testFile20Bytes, blockSize,
-            "ISO-8859-1")) {
+                StandardCharsets.ISO_8859_1.name())) {
             assertThrows(IllegalArgumentException.class, () -> reversedLinesFileReader.readLines(-1));
             assertTrue(reversedLinesFileReader.readLines(0).isEmpty());
             final List<String> lines = reversedLinesFileReader.readLines(2);
@@ -66,7 +66,7 @@ public class ReversedLinesFileReaderTestSimple {
         final int blockSize = 10;
         final File testFile20Bytes = TestResources.getFile("/test-file-20byteslength.bin");
         try (ReversedLinesFileReader reversedLinesFileReader = new ReversedLinesFileReader(testFile20Bytes, blockSize,
-            "ISO-8859-1")) {
+                StandardCharsets.ISO_8859_1.name())) {
             assertThrows(IllegalArgumentException.class, () -> reversedLinesFileReader.toString(-1));
             assertTrue(reversedLinesFileReader.readLines(0).isEmpty());
             final String lines = reversedLinesFileReader.toString(2);
