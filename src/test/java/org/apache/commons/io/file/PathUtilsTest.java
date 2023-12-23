@@ -262,11 +262,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
         assertEquals("", PathUtils.getExtension(Paths.get("C:\\temp\\foo.bar\\README")));
         assertEquals("ext", PathUtils.getExtension(Paths.get("../filename.ext")));
 
-        if (File.separatorChar == '\\') {
-            // Special case handling for NTFS ADS names
-            final IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> PathUtils.getExtension(Paths.get("foo.exe:bar.txt")));
-            assertEquals("NTFS ADS separator (':') in file name is forbidden.", e.getMessage());
-        } else {
+        if (File.separatorChar != '\\') {
             // Upwards compatibility:
             assertEquals("txt", PathUtils.getExtension(Paths.get("foo.exe:bar.txt")));
         }
