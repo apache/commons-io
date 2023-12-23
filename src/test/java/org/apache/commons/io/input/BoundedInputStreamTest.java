@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.io.IOUtils;
@@ -38,11 +39,12 @@ public class BoundedInputStreamTest {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testOnMaxLength() throws Exception {
         BoundedInputStream bounded;
-        final byte[] helloWorld = "Hello World".getBytes();
-        final byte[] hello = "Hello".getBytes();
+        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
+        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
         final AtomicBoolean boolRef = new AtomicBoolean();
 
         // limit = length
@@ -127,31 +129,38 @@ public class BoundedInputStreamTest {
     @Test
     public void testReadArray() throws Exception {
 
-        BoundedInputStream bounded;
-        final byte[] helloWorld = "Hello World".getBytes();
-        final byte[] hello = "Hello".getBytes();
+        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
+        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
 
-        bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld));
-        compare("limit = -1", helloWorld, IOUtils.toByteArray(bounded));
+        try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).get()) {
+            compare("limit = -1", helloWorld, IOUtils.toByteArray(bounded));
+        }
 
-        bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), 0);
-        compare("limit = 0", IOUtils.EMPTY_BYTE_ARRAY, IOUtils.toByteArray(bounded));
+        try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).setMaxLength(0).get()) {
+            compare("limit = 0", IOUtils.EMPTY_BYTE_ARRAY, IOUtils.toByteArray(bounded));
+        }
 
-        bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length);
-        compare("limit = length", helloWorld, IOUtils.toByteArray(bounded));
+        try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).setMaxLength(helloWorld.length)
+                .get()) {
+            compare("limit = length", helloWorld, IOUtils.toByteArray(bounded));
+        }
 
-        bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length + 1);
-        compare("limit > length", helloWorld, IOUtils.toByteArray(bounded));
-
-        bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length - 6);
-        compare("limit < length", hello, IOUtils.toByteArray(bounded));
+        try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).setMaxLength(helloWorld.length + 1)
+                .get()) {
+            compare("limit > length", helloWorld, IOUtils.toByteArray(bounded));
+        }
+        try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).setMaxLength(helloWorld.length - 6)
+                .get()) {
+            compare("limit < length", hello, IOUtils.toByteArray(bounded));
+        }
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testReadSingle() throws Exception {
         BoundedInputStream bounded;
-        final byte[] helloWorld = "Hello World".getBytes();
-        final byte[] hello = "Hello".getBytes();
+        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
+        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
 
         // limit = length
         bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length);
