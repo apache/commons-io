@@ -57,13 +57,28 @@ public class FileEntry implements Serializable {
 
     static final FileEntry[] EMPTY_FILE_ENTRY_ARRAY = {};
 
+    /** The parent. */
     private final FileEntry parent;
+
+    /** My children. */
     private FileEntry[] children;
+
+    /** Monitored file. */
     private final File file;
+
+    /** Monitored file name. */
     private String name;
+
+    /** Whether the file exists. */
     private boolean exists;
+
+    /** Whether the file is a directory or not. */
     private boolean directory;
+
+    /** The file's last modified timestamp. */
     private SerializableFileTime lastModified = SerializableFileTime.EPOCH;
+
+    /** The file's length. */
     private long length;
 
     /**
@@ -78,8 +93,8 @@ public class FileEntry implements Serializable {
     /**
      * Constructs a new monitor for a specified {@link File}.
      *
-     * @param parent The parent
-     * @param file The file being monitored
+     * @param parent The parent.
+     * @param file The file being monitored.
      */
     public FileEntry(final FileEntry parent, final File file) {
         this.file = Objects.requireNonNull(file, "file");

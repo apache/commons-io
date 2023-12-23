@@ -357,7 +357,8 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Lists the files
+     * Lists the files in {@code file}.
+     *
      * @param file The file to list files for
      * @param entry the parent entry
      * @return The child files
@@ -429,14 +430,14 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Lists the contents of a directory
      *
-     * @param file The file to list the contents of
+     * @param directory The directory to list.
      * @return the directory contents or a zero length array if
      * the empty or the file is not a directory
      */
-    private File[] listFiles(final File file) {
+    private File[] listFiles(final File directory) {
         File[] children = null;
-        if (file.isDirectory()) {
-            children = file.listFiles(fileFilter);
+        if (directory.isDirectory()) {
+            children = directory.listFiles(fileFilter);
         }
         if (children == null) {
             children = FileUtils.EMPTY_FILE_ARRAY;

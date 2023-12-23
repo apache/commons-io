@@ -37,6 +37,8 @@ import java.io.Writer;
 public class StringBuilderWriter extends Writer implements Serializable {
 
     private static final long serialVersionUID = -146927496096066153L;
+    
+    /** The append target. */
     private final StringBuilder builder;
 
     /**
