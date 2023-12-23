@@ -339,7 +339,7 @@ public class CharSequenceInputStreamTest {
 
     @Test
     public void testMarkReset_USASCII() throws Exception {
-        testMarkReset("US-ASCII");
+        testMarkReset(StandardCharsets.US_ASCII.name());
     }
 
     @Test

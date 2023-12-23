@@ -1680,7 +1680,7 @@ public class IOUtilsTest {
 
     @Test
     public void testToString_URI_CharsetName() throws Exception {
-        testToString_URI("US-ASCII");
+        testToString_URI(StandardCharsets.US_ASCII.name());
     }
 
     @Test
@@ -1705,7 +1705,7 @@ public class IOUtilsTest {
 
     @Test
     public void testToString_URL_CharsetName() throws Exception {
-        testToString_URL("US-ASCII");
+        testToString_URL(StandardCharsets.US_ASCII.name());
     }
 
     @Test

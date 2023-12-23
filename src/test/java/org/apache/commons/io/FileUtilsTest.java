@@ -538,7 +538,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         // create a test file
         final String text = "Imagination is more important than knowledge - Einstein";
         final File file = new File(tempDirFile, "checksum-test.txt");
-        FileUtils.writeStringToFile(file, text, "US-ASCII");
+        FileUtils.writeStringToFile(file, text, StandardCharsets.US_ASCII.name());
 
         // compute the expected checksum
         final Checksum expectedChecksum = new CRC32();
@@ -559,7 +559,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         // create a test file
         final String text = "Imagination is more important than knowledge - Einstein";
         final File file = new File(tempDirFile, "checksum-test.txt");
-        FileUtils.writeStringToFile(file, text, "US-ASCII");
+        FileUtils.writeStringToFile(file, text, StandardCharsets.US_ASCII.name());
 
         // compute the expected checksum
         final Checksum expectedChecksum = new CRC32();
@@ -577,12 +577,12 @@ public class FileUtilsTest extends AbstractTempDirTest {
         // create a test file
         final String text1 = "Imagination is more important than knowledge - Einstein";
         final File file1 = new File(tempDirFile, "checksum-test.txt");
-        FileUtils.writeStringToFile(file1, text1, "US-ASCII");
+        FileUtils.writeStringToFile(file1, text1, StandardCharsets.US_ASCII.name());
 
         // create a second test file
         final String text2 = "To be or not to be - Shakespeare";
         final File file2 = new File(tempDirFile, "checksum-test2.txt");
-        FileUtils.writeStringToFile(file2, text2, "US-ASCII");
+        FileUtils.writeStringToFile(file2, text2, StandardCharsets.US_ASCII.name());
 
         // compute the expected checksum
         final Checksum expectedChecksum = new CRC32();
@@ -609,7 +609,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         // create a test file
         final String text = "Imagination is more important than knowledge - Einstein";
         final File file = new File(tempDirFile, "checksum-test.txt");
-        FileUtils.writeStringToFile(file, text, "US-ASCII");
+        FileUtils.writeStringToFile(file, text, StandardCharsets.US_ASCII.name());
         assertThrows(NullPointerException.class, () -> FileUtils.checksum(file, null));
     }
 
@@ -2925,12 +2925,12 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final List<Object> list = Arrays.asList(data);
 
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeLines(file, "US-ASCII", list);
+        FileUtils.writeLines(file, StandardCharsets.US_ASCII.name(), list);
 
         final String expected = "hello" + System.lineSeparator() + "world" + System.lineSeparator() +
                 System.lineSeparator() + "this is" + System.lineSeparator() +
                 System.lineSeparator() + "some text" + System.lineSeparator();
-        final String actual = FileUtils.readFileToString(file, "US-ASCII");
+        final String actual = FileUtils.readFileToString(file, StandardCharsets.US_ASCII.name());
         assertEquals(expected, actual);
     }
 
@@ -2972,10 +2972,10 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final List<Object> list = Arrays.asList(data);
 
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeLines(file, "US-ASCII", list, "*");
+        FileUtils.writeLines(file, StandardCharsets.US_ASCII.name(), list, "*");
 
         final String expected = "hello*world**this is**some text*";
-        final String actual = FileUtils.readFileToString(file, "US-ASCII");
+        final String actual = FileUtils.readFileToString(file, StandardCharsets.US_ASCII.name());
         assertEquals(expected, actual);
     }
 
@@ -2986,19 +2986,19 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final List<Object> list = Arrays.asList(data);
 
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeLines(file, "US-ASCII", list, null);
+        FileUtils.writeLines(file, StandardCharsets.US_ASCII.name(), list, null);
 
         final String expected = "hello" + System.lineSeparator() + "world" + System.lineSeparator() +
                 System.lineSeparator() + "this is" + System.lineSeparator() +
                 System.lineSeparator() + "some text" + System.lineSeparator();
-        final String actual = FileUtils.readFileToString(file, "US-ASCII");
+        final String actual = FileUtils.readFileToString(file, StandardCharsets.US_ASCII.name());
         assertEquals(expected, actual);
     }
 
     @Test
     public void testWriteLines_4arg_Writer_nullData() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeLines(file, "US-ASCII", null, "*");
+        FileUtils.writeLines(file, StandardCharsets.US_ASCII.name(), null, "*");
 
         assertEquals(0, file.length(), "Sizes differ");
     }

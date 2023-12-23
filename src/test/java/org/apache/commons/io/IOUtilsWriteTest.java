@@ -558,7 +558,7 @@ public class IOUtilsWriteTest {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
 
-        IOUtils.writeLines(null, "*", out, "US-ASCII");
+        IOUtils.writeLines(null, "*", out, StandardCharsets.US_ASCII.name());
         out.off();
         out.flush();
 
@@ -592,7 +592,7 @@ public class IOUtilsWriteTest {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
 
-        IOUtils.writeLines(list, null, out, "US-ASCII");
+        IOUtils.writeLines(list, null, out, StandardCharsets.US_ASCII.name());
         out.off();
         out.flush();
 
@@ -603,9 +603,9 @@ public class IOUtilsWriteTest {
 
     @Test
     public void testWriteLines_OutputStream_Encoding_nullStream() throws Exception {
-        final Object[] data = {"hello", "world"};
+        final Object[] data = { "hello", "world" };
         final List<Object> list = Arrays.asList(data);
-        assertThrows(NullPointerException.class, () -> IOUtils.writeLines(list, "*", null, "US-ASCII"));
+        assertThrows(NullPointerException.class, () -> IOUtils.writeLines(list, "*", null, StandardCharsets.US_ASCII.name()));
     }
 
     @Test
