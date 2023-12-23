@@ -868,6 +868,32 @@ public final class PathUtils {
     }
 
     /**
+     * Gets the extension of a Path.
+     * <p>
+     * This method returns the textual part of the Path after the last dot.
+     * </p>
+     * <pre>
+     * foo.txt      --&gt; "txt"
+     * a/b/c.jpg    --&gt; "jpg"
+     * a/b.txt/c    --&gt; ""
+     * a/b/c        --&gt; ""
+     * </pre>
+     * <p>
+     * The output will be the same irrespective of the machine that the code is running on.
+     * </p>
+     * <p>
+     *
+     * @param path the path to query.
+     * @return the extension of the file or an empty string if none exists or {@code null}
+     * if the fileName is {@code null}.
+     * @since 2.16.0
+     */
+    public static String getExtension(final Path path) {
+        final String fileName = getFileNameString(path);
+        return fileName != null ? FilenameUtils.getExtension(fileName) : null;
+    }
+
+    /**
      * Gets the Path's file name and apply the given function if the file name is non-null.
      *
      * @param <R> The function's result type.

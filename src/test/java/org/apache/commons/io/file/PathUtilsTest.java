@@ -247,6 +247,32 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testGetExtension() {
+        assertNull(PathUtils.getExtension(null));
+        assertEquals("ext", PathUtils.getExtension(Paths.get("file.ext")));
+        assertEquals("", PathUtils.getExtension(Paths.get("README")));
+        assertEquals("com", PathUtils.getExtension(Paths.get("domain.dot.com")));
+        assertEquals("jpeg", PathUtils.getExtension(Paths.get("image.jpeg")));
+        assertEquals("", PathUtils.getExtension(Paths.get("a.b/c")));
+        assertEquals("txt", PathUtils.getExtension(Paths.get("a.b/c.txt")));
+        assertEquals("", PathUtils.getExtension(Paths.get("a/b/c")));
+        assertEquals("", PathUtils.getExtension(Paths.get("a.b\\c")));
+        assertEquals("txt", PathUtils.getExtension(Paths.get("a.b\\c.txt")));
+        assertEquals("", PathUtils.getExtension(Paths.get("a\\b\\c")));
+        assertEquals("", PathUtils.getExtension(Paths.get("C:\\temp\\foo.bar\\README")));
+        assertEquals("ext", PathUtils.getExtension(Paths.get("../filename.ext")));
+
+        if (File.separatorChar == '\\') {
+            // Special case handling for NTFS ADS names
+            final IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> PathUtils.getExtension(Paths.get("foo.exe:bar.txt")));
+            assertEquals("NTFS ADS separator (':') in file name is forbidden.", e.getMessage());
+        } else {
+            // Upwards compatibility:
+            assertEquals("txt", PathUtils.getExtension(Paths.get("foo.exe:bar.txt")));
+        }
+    }
+
+    @Test
     public void testGetFileName() {
         assertNull(PathUtils.getFileName(null, null));
         assertNull(PathUtils.getFileName(null, Path::toString));
