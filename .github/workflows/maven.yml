@@ -78,7 +78,7 @@ jobs:
     - name: Build with Maven
       run: mvn --show-version --batch-mode --no-transfer-progress -DtrimStackTrace=false
     - name: Deploy SNAPSHOT using minimal build
-      if: matrix.deploy
+      if: matrix.deploy && github.repository == 'apache/commons-io' && github.ref_name == 'master' 
       env:
         NEXUS_USER: ${{ secrets.NEXUS_USER }}
         NEXUS_PW: ${{ secrets.NEXUS_PW }}
