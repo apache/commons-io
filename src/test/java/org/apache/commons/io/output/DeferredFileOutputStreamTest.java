@@ -32,6 +32,7 @@ import java.nio.file.Path;
 import java.util.stream.IntStream;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.file.AbstractTempDirTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -40,10 +41,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Tests {@code DeferredFileOutputStream}.
  */
-public class DeferredFileOutputStreamTest {
-
-    @TempDir
-    static Path tempDir;
+public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
 
     public static IntStream data() {
         return IntStream.of(1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096);
@@ -66,7 +64,7 @@ public class DeferredFileOutputStreamTest {
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
     public void testAboveThreshold(final int initialBufferSize) throws IOException {
-        final File testFile = Files.createTempFile(tempDir, "testAboveThreshold", "dat").toFile();
+        final File testFile = Files.createTempFile(tempDirPath, "testAboveThreshold", "dat").toFile();
 
         try (final DeferredFileOutputStream dfos = DeferredFileOutputStream.builder()
                 .setThreshold(testBytes.length - 5)
@@ -91,7 +89,7 @@ public class DeferredFileOutputStreamTest {
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
     public void testAboveThresholdGetInputStream(final int initialBufferSize, final @TempDir Path tempDir) throws IOException {
-        final File testFile = Files.createTempFile(tempDir, "testAboveThreshold", "dat").toFile();
+        final File testFile = Files.createTempFile(tempDirPath, "testAboveThreshold", "dat").toFile();
 
         try (final DeferredFileOutputStream dfos = DeferredFileOutputStream.builder()
                 .setThreshold(testBytes.length - 5)
@@ -195,8 +193,8 @@ public class DeferredFileOutputStreamTest {
                 .setBufferSize(initialBufferSize)
                 .setPrefix(prefix)
                 .setSuffix(suffix)
-                .setDirectory(tempDir)
-                .setDirectory(tempDir.toFile())
+                .setDirectory(tempDirFile)
+                .setDirectory(tempDirPath.toFile())
                 .get();
         // @formatter:on
         assertNull(dfos.getFile(), "Check File is null-A");
@@ -210,7 +208,7 @@ public class DeferredFileOutputStreamTest {
         assertTrue(dfos.getFile().exists(), "Check file exists");
         assertTrue(dfos.getFile().getName().startsWith(prefix), "Check prefix");
         assertTrue(dfos.getFile().getName().endsWith(suffix), "Check suffix");
-        assertEquals(tempDir, dfos.getPath().getParent(), "Check dir");
+        assertEquals(tempDirPath, dfos.getPath().getParent(), "Check dir");
 
         verifyResultFile(dfos.getFile());
     }
@@ -261,7 +259,7 @@ public class DeferredFileOutputStreamTest {
 
         final String prefix = "commons-io-test";
         final String suffix = ".out";
-        final DeferredFileOutputStream dfos = new DeferredFileOutputStream(testBytes.length + 42, initialBufferSize, prefix, suffix, tempDir.toFile());
+        final DeferredFileOutputStream dfos = new DeferredFileOutputStream(testBytes.length + 42, initialBufferSize, prefix, suffix, tempDirFile);
         assertNull(dfos.getFile(), "Check File is null-A");
         assertNull(dfos.getPath(), "Check Path is null-A");
         dfos.write(testBytes, 0, testBytes.length);
@@ -280,7 +278,7 @@ public class DeferredFileOutputStreamTest {
     public void testTempFileError() throws Exception {
         final String prefix = null;
         final String suffix = ".out";
-        assertThrows(NullPointerException.class, () -> new DeferredFileOutputStream(testBytes.length - 5, prefix, suffix, tempDir.toFile()));
+        assertThrows(NullPointerException.class, () -> new DeferredFileOutputStream(testBytes.length - 5, prefix, suffix, tempDirFile));
     }
 
     /**
@@ -291,7 +289,7 @@ public class DeferredFileOutputStreamTest {
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
     public void testThresholdReached(final int initialBufferSize) throws IOException {
-        final File testFile = Files.createTempFile(tempDir, "testThresholdReached", "dat").toFile();
+        final File testFile = Files.createTempFile(tempDirPath, "testThresholdReached", "dat").toFile();
 
         // @formatter:off
         final DeferredFileOutputStream dfos = DeferredFileOutputStream.builder()
@@ -318,7 +316,7 @@ public class DeferredFileOutputStreamTest {
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
     public void testWriteToLarge(final int initialBufferSize) throws IOException {
-        final File testFile = Files.createTempFile(tempDir, "testWriteToFile", "dat").toFile();
+        final File testFile = Files.createTempFile(tempDirPath, "testWriteToFile", "dat").toFile();
         final ByteArrayOutputStream baos = new ByteArrayOutputStream(initialBufferSize);
 
         final DeferredFileOutputStream dfos = DeferredFileOutputStream.builder().setThreshold(testBytes.length / 2).setOutputFile(testFile).get();
@@ -343,7 +341,7 @@ public class DeferredFileOutputStreamTest {
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
     public void testWriteToLargeCtor(final int initialBufferSize) throws IOException {
-        final File testFile = Files.createTempFile(tempDir, "testWriteToFile", "dat").toFile();
+        final File testFile = Files.createTempFile(tempDirPath, "testWriteToFile", "dat").toFile();
         final ByteArrayOutputStream baos = new ByteArrayOutputStream(initialBufferSize);
 
         final DeferredFileOutputStream dfos = new DeferredFileOutputStream(testBytes.length / 2, testFile);
@@ -369,7 +367,7 @@ public class DeferredFileOutputStreamTest {
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
     public void testWriteToSmall(final int initialBufferSize) throws IOException {
-        final File testFile = Files.createTempFile(tempDir, "testWriteToMem", "dat").toFile();
+        final File testFile = Files.createTempFile(tempDirPath, "testWriteToMem", "dat").toFile();
         final ByteArrayOutputStream baos = new ByteArrayOutputStream(initialBufferSize);
 
         final DeferredFileOutputStream dfos = new DeferredFileOutputStream(testBytes.length * 2, initialBufferSize, testFile);
