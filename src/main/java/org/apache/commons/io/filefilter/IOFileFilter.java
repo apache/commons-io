@@ -27,7 +27,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import org.apache.commons.io.file.PathFilter;
 
 /**
- * An interface which brings the FileFilter, FilenameFilter, and PathFilter interfaces together.
+ * An interface which brings the FileFilter, FilenameFilter, PathFilter, and PathMatcher interfaces together.
  *
  * @since 1.0
  */
