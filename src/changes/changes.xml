@@ -93,6 +93,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add FileTimes.toUnixTime(FileTime).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add BrokenInputStream.Builder.</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add PathUtils.getExtension(Path).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add ThrottledInputStream.</action>
       <!--  UPDATE -->
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Bump commons.bytebuddy.version from 1.14.10 to 1.14.11 #534.</action>
     </release>

@@ -29,8 +29,10 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Tests {@link ProxyInputStream}.
+ *
+ * @param <T> The actual type tested.
  */
-public class ProxyInputStreamTest {
+public class ProxyInputStreamTest<T extends ProxyInputStream> {
 
     private static final class ProxyInputStreamFixture extends ProxyInputStream {
 
@@ -40,10 +42,22 @@ public class ProxyInputStreamTest {
 
     }
 
+    @SuppressWarnings({ "resource", "unused" }) // For subclasses
+    protected T createFixture() throws IOException {
+        return (T) new ProxyInputStreamFixture(createProxySource());
+    }
+
+    protected InputStream createProxySource() {
+        return CharSequenceInputStream.builder().setCharSequence("abc").get();
+    }
+
+    protected void testEos(final T inputStream) {
+        // empty
+    }
+
     @Test
     public void testRead() throws IOException {
-        try (CharSequenceInputStream proxy = CharSequenceInputStream.builder().setCharSequence("abc").get();
-                ProxyInputStream inputStream = new ProxyInputStreamFixture(proxy)) {
+        try (T inputStream = createFixture()) {
             int found = inputStream.read();
             assertEquals('a', found);
             found = inputStream.read();
@@ -52,39 +66,39 @@ public class ProxyInputStreamTest {
             assertEquals('c', found);
             found = inputStream.read();
             assertEquals(-1, found);
+            testEos(inputStream);
         }
     }
 
     @Test
     public void testReadArrayAtMiddleFully() throws IOException {
-        try (CharSequenceInputStream proxy = CharSequenceInputStream.builder().setCharSequence("abc").get();
-                ProxyInputStream inputStream = new ProxyInputStreamFixture(proxy)) {
+        try (T inputStream = createFixture()) {
             final byte[] dest = new byte[5];
             int found = inputStream.read(dest, 2, 3);
             assertEquals(3, found);
             assertArrayEquals(new byte[] { 0, 0, 'a', 'b', 'c' }, dest);
             found = inputStream.read(dest, 2, 3);
             assertEquals(-1, found);
+            testEos(inputStream);
         }
     }
 
     @Test
     public void testReadArrayAtStartFully() throws IOException {
-        try (CharSequenceInputStream proxy = CharSequenceInputStream.builder().setCharSequence("abc").get();
-                ProxyInputStream inputStream = new ProxyInputStreamFixture(proxy)) {
+        try (T inputStream = createFixture()) {
             final byte[] dest = new byte[5];
             int found = inputStream.read(dest, 0, 5);
             assertEquals(3, found);
             assertArrayEquals(new byte[] { 'a', 'b', 'c', 0, 0 }, dest);
             found = inputStream.read(dest, 0, 5);
             assertEquals(-1, found);
+            testEos(inputStream);
         }
     }
 
     @Test
     public void testReadArrayAtStartPartial() throws IOException {
-        try (CharSequenceInputStream proxy = CharSequenceInputStream.builder().setCharSequence("abc").get();
-                ProxyInputStream inputStream = new ProxyInputStreamFixture(proxy)) {
+        try (T inputStream = createFixture()) {
             final byte[] dest = new byte[5];
             int found = inputStream.read(dest, 0, 2);
             assertEquals(2, found);
@@ -95,26 +109,26 @@ public class ProxyInputStreamTest {
             assertArrayEquals(new byte[] { 'c', 0, 0, 0, 0 }, dest);
             found = inputStream.read(dest, 0, 2);
             assertEquals(-1, found);
+            testEos(inputStream);
         }
     }
 
     @Test
     public void testReadArrayFully() throws IOException {
-        try (CharSequenceInputStream proxy = CharSequenceInputStream.builder().setCharSequence("abc").get();
-                ProxyInputStream inputStream = new ProxyInputStreamFixture(proxy)) {
+        try (T inputStream = createFixture()) {
             final byte[] dest = new byte[5];
             int found = inputStream.read(dest);
             assertEquals(3, found);
             assertArrayEquals(new byte[] { 'a', 'b', 'c', 0, 0 }, dest);
             found = inputStream.read(dest);
             assertEquals(-1, found);
+            testEos(inputStream);
         }
     }
 
     @Test
     public void testReadArrayPartial() throws IOException {
-        try (CharSequenceInputStream proxy = CharSequenceInputStream.builder().setCharSequence("abc").get();
-                ProxyInputStream inputStream = new ProxyInputStreamFixture(proxy)) {
+        try (T inputStream = createFixture()) {
             final byte[] dest = new byte[2];
             int found = inputStream.read(dest);
             assertEquals(2, found);
@@ -125,6 +139,7 @@ public class ProxyInputStreamTest {
             assertArrayEquals(new byte[] { 'c', 0 }, dest);
             found = inputStream.read(dest);
             assertEquals(-1, found);
+            testEos(inputStream);
         }
     }
 
