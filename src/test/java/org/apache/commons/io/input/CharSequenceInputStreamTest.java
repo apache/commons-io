@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -31,7 +32,9 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
+import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
+import java.nio.charset.UnmappableCharacterException;
 import java.util.Random;
 
 import org.apache.commons.io.CharsetsTest;
@@ -523,5 +526,16 @@ public class CharSequenceInputStreamTest {
             r.skip(100);
             assertEquals(-1, r.read(), csName);
         }
+    }
+
+    @Test
+    public void testCharacterCodingException() throws IOException {
+        final Charset charset = StandardCharsets.US_ASCII;
+        final CharSequenceInputStream in = CharSequenceInputStream.builder()
+            .setCharsetEncoder(charset.newEncoder().onUnmappableCharacter(CodingErrorAction.REPORT))
+            .setCharSequence("\u0080")
+            .get();
+        assertEquals(0, in.available());
+        assertThrows(UnmappableCharacterException.class, in::read);
     }
 }
