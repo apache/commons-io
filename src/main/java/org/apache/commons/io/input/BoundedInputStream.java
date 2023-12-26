@@ -18,7 +18,6 @@ package org.apache.commons.io.input;
 
 import static org.apache.commons.io.IOUtils.EOF;
 
-import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -28,16 +27,16 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
 /**
  * Reads bytes up to a maximum length, if its count goes above that, it stops.
  * <p>
- * This is useful to wrap ServletInputStreams. The ServletInputStream will block if you try to read content from it that isn't there, because it doesn't know
- * whether the content hasn't arrived yet or whether the content has finished. So, one of these, initialized with the Content-length sent in the
- * ServletInputStream's header, will stop it blocking, providing it's been sent with a correct content length.
+ * This is useful to wrap {@code ServletInputStream}s. The {@code ServletInputStream} will block if you try to read content from it that isn't there, because it
+ * doesn't know whether the content hasn't arrived yet or whether the content has finished. So, one of these, initialized with the {@code Content-Length} sent
+ * in the {@code ServletInputStream}'s header, will stop it blocking, providing it's been sent with a correct content length.
  * </p>
  *
  * @since 2.0
  */
-public class BoundedInputStream extends FilterInputStream {
-    
-    // TODO For 3.0, extend CountintInputStream.
+public class BoundedInputStream extends ProxyInputStream {
+
+    // TODO For 3.0, extend CountingInputStream.
 
     /**
      * Builds a new {@link BoundedInputStream} instance.
@@ -164,11 +163,24 @@ public class BoundedInputStream extends FilterInputStream {
      *                       does not.
      */
     private BoundedInputStream(final InputStream inputStream, final long maxLength, final boolean propagateClose) {
-        // Some badly designed methods - e.g. the servlet API - overload length
+        // Some badly designed methods - e.g. the Servlet API - overload length
         // such that "-1" means stream finished
         super(inputStream);
         this.maxCount = maxLength;
         this.propagateClose = propagateClose;
+    }
+
+    /**
+     * Adds the number of read bytes to the count.
+     *
+     * @param n number of bytes read, or -1 if no more bytes are available
+     * @since 2.16.0
+     */
+    @Override
+    protected synchronized void afterRead(final int n) {
+        if (n != EOF) {
+            count += n;
+        }
     }
 
     /**
@@ -184,7 +196,7 @@ public class BoundedInputStream extends FilterInputStream {
     }
 
     /**
-     * Invokes the delegate's {@code close()} method if {@link #isPropagateClose()} is {@code true}.
+     * Invokes the delegate's {@link InputStream#close()} method if {@link #isPropagateClose()} is {@code true}.
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -239,7 +251,7 @@ public class BoundedInputStream extends FilterInputStream {
     }
 
     /**
-     * Invokes the delegate's {@code mark(int)} method.
+     * Invokes the delegate's {@link InputStream#mark(int)} method.
      *
      * @param readLimit read ahead limit
      */
@@ -250,7 +262,7 @@ public class BoundedInputStream extends FilterInputStream {
     }
 
     /**
-     * Invokes the delegate's {@code markSupported()} method.
+     * Invokes the delegate's {@link InputStream#markSupported()} method.
      *
      * @return true if mark is supported, otherwise false
      */
@@ -273,7 +285,7 @@ public class BoundedInputStream extends FilterInputStream {
     }
 
     /**
-     * Invokes the delegate's {@code read()} method if the current position is less than the limit.
+     * Invokes the delegate's {@link InputStream#read()} method if the current position is less than the limit.
      *
      * @return the byte read or -1 if the end of stream or the limit has been reached.
      * @throws IOException if an I/O error occurs.
@@ -284,15 +296,11 @@ public class BoundedInputStream extends FilterInputStream {
             onMaxLength(maxCount, count);
             return EOF;
         }
-        final int result = in.read();
-        if (result != EOF) {
-            count++;
-        }
-        return result;
+        return super.read();
     }
 
     /**
-     * Invokes the delegate's {@code read(byte[])} method.
+     * Invokes the delegate's {@link InputStream#read(byte[])} method.
      *
      * @param b the buffer to read the bytes into
      * @return the number of bytes read or -1 if the end of stream or the limit has been reached.
@@ -300,11 +308,11 @@ public class BoundedInputStream extends FilterInputStream {
      */
     @Override
     public int read(final byte[] b) throws IOException {
-        return this.read(b, 0, b.length);
+        return read(b, 0, b.length);
     }
 
     /**
-     * Invokes the delegate's {@code read(byte[], int, int)} method.
+     * Invokes the delegate's {@link InputStream#read(byte[], int, int)} method.
      *
      * @param b   the buffer to read the bytes into
      * @param off The start offset
@@ -318,19 +326,11 @@ public class BoundedInputStream extends FilterInputStream {
             onMaxLength(maxCount, count);
             return EOF;
         }
-        final long maxRead = maxCount >= 0 ? Math.min(len, maxCount - count) : len;
-        final int bytesRead = in.read(b, off, (int) maxRead);
-
-        if (bytesRead == EOF) {
-            return EOF;
-        }
-
-        count += bytesRead;
-        return bytesRead;
+        return super.read(b, off, (int) toReadLen(len));
     }
 
     /**
-     * Invokes the delegate's {@code reset()} method.
+     * Invokes the delegate's {@link InputStream#reset()} method.
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -353,7 +353,7 @@ public class BoundedInputStream extends FilterInputStream {
     }
 
     /**
-     * Invokes the delegate's {@code skip(long)} method.
+     * Invokes the delegate's {@link InputStream#skip(long)} method.
      *
      * @param n the number of bytes to skip
      * @return the actual number of bytes skipped
@@ -361,16 +361,17 @@ public class BoundedInputStream extends FilterInputStream {
      */
     @Override
     public long skip(final long n) throws IOException {
-        final long toSkip = maxCount >= 0 ? Math.min(n, maxCount - count) : n;
-        final long skippedBytes = in.skip(toSkip);
-        count += skippedBytes;
-        return skippedBytes;
+        return super.skip(toReadLen(n));
+    }
+
+    private long toReadLen(final long len) {
+        return maxCount >= 0 ? Math.min(len, maxCount - count) : len;
     }
 
     /**
-     * Invokes the delegate's {@code toString()} method.
+     * Invokes the delegate's {@link InputStream#toString()} method.
      *
-     * @return the delegate's {@code toString()}
+     * @return the delegate's {@link InputStream#toString()}
      */
     @Override
     public String toString() {
