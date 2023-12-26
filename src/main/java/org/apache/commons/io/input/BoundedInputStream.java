@@ -36,6 +36,8 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * @since 2.0
  */
 public class BoundedInputStream extends FilterInputStream {
+    
+    // TODO For 3.0, extend CountintInputStream.
 
     /**
      * Builds a new {@link BoundedInputStream} instance.
