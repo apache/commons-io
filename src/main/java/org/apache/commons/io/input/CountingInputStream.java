@@ -81,7 +81,9 @@ public class CountingInputStream extends ProxyInputStream {
      *
      * @return the number of bytes accumulated
      * @throws ArithmeticException if the byte count is too large
+     * @deprecated Use {@link #getByteCount()}.
      */
+    @Deprecated
     public int getCount() {
         final long result = getByteCount();
         if (result > Integer.MAX_VALUE) {
