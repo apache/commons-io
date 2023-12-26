@@ -143,30 +143,29 @@ public class BoundedInputStream extends ProxyInputStream {
      * Constructs a new {@link BoundedInputStream} that wraps the given input stream and limits it to a certain size.
      *
      * @param inputStream The wrapped input stream.
-     * @param maxLength   The maximum number of bytes to return.
+     * @param maxCount   The maximum number of bytes to return.
      * @deprecated Use {@link Builder#get()}.
      */
     @Deprecated
-    public BoundedInputStream(final InputStream inputStream, final long maxLength) {
-        // Some badly designed methods - e.g. the servlet API - overload length
+    public BoundedInputStream(final InputStream inputStream, final long maxCount) {
+        // Some badly designed methods - e.g. the Servlet API - overload length
         // such that "-1" means stream finished
-        super(inputStream);
-        this.maxCount = maxLength;
+        this(inputStream, maxCount, true);
     }
 
     /**
      * Constructs a new {@link BoundedInputStream} that wraps the given input stream and limits it to a certain size.
      *
      * @param inputStream    The wrapped input stream.
-     * @param maxLength      The maximum number of bytes to return.
+     * @param maxCount      The maximum number of bytes to return.
      * @param propagateClose {@code true} if calling {@link #close()} propagates to the {@code close()} method of the underlying stream or {@code false} if it
      *                       does not.
      */
-    private BoundedInputStream(final InputStream inputStream, final long maxLength, final boolean propagateClose) {
+    private BoundedInputStream(final InputStream inputStream, final long maxCount, final boolean propagateClose) {
         // Some badly designed methods - e.g. the Servlet API - overload length
         // such that "-1" means stream finished
         super(inputStream);
-        this.maxCount = maxLength;
+        this.maxCount = maxCount;
         this.propagateClose = propagateClose;
     }
 
