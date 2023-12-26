@@ -164,7 +164,7 @@ public final class ThrottledInputStream extends CountingInputStream {
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "ThrottledInputStream[bytesRead=" + getCount() + ", maxBytesPerSec=" + maxBytesPerSecond + ", bytesPerSec=" + getBytesPerSecond()
+        return "ThrottledInputStream[bytesRead=" + getByteCount() + ", maxBytesPerSec=" + maxBytesPerSecond + ", bytesPerSec=" + getBytesPerSecond()
                 + ", totalSleepDuration=" + totalSleepDuration + ']';
     }
 }
