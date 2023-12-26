@@ -186,6 +186,7 @@ public class CharSequenceInputStream extends InputStream {
             // Reset everything without filling the buffer
             // so the same exception can be thrown again later.
             this.bBuf.clear();
+            this.bBuf.flip();
             this.cBuf.rewind();
         }
     }
