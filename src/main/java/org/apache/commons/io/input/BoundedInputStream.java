@@ -44,14 +44,14 @@ public class BoundedInputStream extends ProxyInputStream {
      * <h2>Using NIO</h2>
      *
      * <pre>{@code
-     * BoundedInputStream s = BoundedInputStream.builder().setPath(Paths.get("MyFile.xml")).setMaxLength(1024).setPropagateClose(false).get();
+     * BoundedInputStream s = BoundedInputStream.builder().setPath(Paths.get("MyFile.xml")).setMaxCount(1024).setPropagateClose(false).get();
      * }
      * </pre>
      *
      * <h2>Using IO</h2>
      *
      * <pre>{@code
-     * BoundedInputStream s = BoundedInputStream.builder().setFile(new File("MyFile.xml")).setMaxLength(1024).setPropagateClose(false).get();
+     * BoundedInputStream s = BoundedInputStream.builder().setFile(new File("MyFile.xml")).setMaxCount(1024).setPropagateClose(false).get();
      * }
      * </pre>
      *
@@ -60,7 +60,7 @@ public class BoundedInputStream extends ProxyInputStream {
     public static class Builder extends AbstractStreamBuilder<BoundedInputStream, Builder> {
 
         /** The max count of bytes to read. */
-        private long maxLength = EOF;
+        private long maxCount = EOF;
 
         /** Flag if close should be propagated. */
         private boolean propagateClose = true;
@@ -68,7 +68,7 @@ public class BoundedInputStream extends ProxyInputStream {
         @SuppressWarnings("resource")
         @Override
         public BoundedInputStream get() throws IOException {
-            return new BoundedInputStream(getInputStream(), maxLength, propagateClose);
+            return new BoundedInputStream(getInputStream(), maxCount, propagateClose);
         }
 
         /**
@@ -77,11 +77,11 @@ public class BoundedInputStream extends ProxyInputStream {
          * Default is {@value IOUtils#EOF}.
          * </p>
          *
-         * @param maxLength The maximum number of bytes to return.
+         * @param maxCount The maximum number of bytes to return.
          * @return this.
          */
-        public Builder setMaxLength(final long maxLength) {
-            this.maxLength = maxLength;
+        public Builder setMaxCount(final long maxCount) {
+            this.maxCount = maxCount;
             return this;
         }
 
@@ -173,7 +173,7 @@ public class BoundedInputStream extends ProxyInputStream {
      */
     @Override
     public int available() throws IOException {
-        if (isMaxLength()) {
+        if (isMaxCount()) {
             onMaxLength(maxCount, getCount());
             return 0;
         }
@@ -207,8 +207,20 @@ public class BoundedInputStream extends ProxyInputStream {
      * Gets the max count of bytes to read.
      *
      * @return The max count of bytes to read.
-     * @since 2.12.0
+     * @since 2.16.0
      */
+    public long getMaxCount() {
+        return maxCount;
+    }
+
+    /**
+     * Gets the max count of bytes to read.
+     *
+     * @return The max count of bytes to read.
+     * @since 2.12.0
+     * @deprecated Use {@link #getMaxCount()}.
+     */
+    @Deprecated
     public long getMaxLength() {
         return maxCount;
     }
@@ -220,10 +232,10 @@ public class BoundedInputStream extends ProxyInputStream {
      * @since 2.16.0
      */
     public long getRemaining() {
-        return getMaxLength() - getCount();
+        return getMaxCount() - getCount();
     }
 
-    private boolean isMaxLength() {
+    private boolean isMaxCount() {
         return maxCount >= 0 && getCount() >= maxCount;
     }
 
@@ -277,7 +289,7 @@ public class BoundedInputStream extends ProxyInputStream {
      */
     @Override
     public int read() throws IOException {
-        if (isMaxLength()) {
+        if (isMaxCount()) {
             onMaxLength(maxCount, getCount());
             return EOF;
         }
@@ -307,7 +319,7 @@ public class BoundedInputStream extends ProxyInputStream {
      */
     @Override
     public int read(final byte[] b, final int off, final int len) throws IOException {
-        if (isMaxLength()) {
+        if (isMaxCount()) {
             onMaxLength(maxCount, getCount());
             return EOF;
         }

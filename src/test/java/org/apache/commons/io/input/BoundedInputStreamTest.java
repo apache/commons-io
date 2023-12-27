@@ -54,16 +54,20 @@ public class BoundedInputStreamTest {
                 boolRef.set(true);
             }
         };
+        assertEquals(helloWorld.length, bounded.getMaxCount());
         assertEquals(helloWorld.length, bounded.getMaxLength());
         assertEquals(0, bounded.getCount());
+        assertEquals(bounded.getMaxCount(), bounded.getRemaining());
         assertEquals(bounded.getMaxLength(), bounded.getRemaining());
         assertFalse(boolRef.get());
         int readCount = 0;
         for (int i = 0; i < helloWorld.length; i++) {
             assertEquals(helloWorld[i], bounded.read(), "limit = length byte[" + i + "]");
             readCount++;
+            assertEquals(helloWorld.length, bounded.getMaxCount());
             assertEquals(helloWorld.length, bounded.getMaxLength());
             assertEquals(readCount, bounded.getCount());
+            assertEquals(bounded.getMaxCount() - readCount, bounded.getRemaining());
             assertEquals(bounded.getMaxLength() - readCount, bounded.getRemaining());
         }
         assertEquals(-1, bounded.read(), "limit = length end");
@@ -136,20 +140,20 @@ public class BoundedInputStreamTest {
             compare("limit = -1", helloWorld, IOUtils.toByteArray(bounded));
         }
 
-        try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).setMaxLength(0).get()) {
+        try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).setMaxCount(0).get()) {
             compare("limit = 0", IOUtils.EMPTY_BYTE_ARRAY, IOUtils.toByteArray(bounded));
         }
 
-        try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).setMaxLength(helloWorld.length)
+        try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).setMaxCount(helloWorld.length)
                 .get()) {
             compare("limit = length", helloWorld, IOUtils.toByteArray(bounded));
         }
 
-        try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).setMaxLength(helloWorld.length + 1)
+        try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).setMaxCount(helloWorld.length + 1)
                 .get()) {
             compare("limit > length", helloWorld, IOUtils.toByteArray(bounded));
         }
-        try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).setMaxLength(helloWorld.length - 6)
+        try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).setMaxCount(helloWorld.length - 6)
                 .get()) {
             compare("limit < length", hello, IOUtils.toByteArray(bounded));
         }
