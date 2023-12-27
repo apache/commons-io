@@ -39,6 +39,7 @@ import java.util.Objects;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.RandomAccessFileMode;
 import org.apache.commons.io.RandomAccessFiles;
+import org.apache.commons.io.input.CharSequenceInputStream;
 import org.apache.commons.io.input.ReaderInputStream;
 import org.apache.commons.io.output.WriterOutputStream;
 
@@ -121,10 +122,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public InputStream getInputStream(final OpenOption... options) throws IOException {
-            // TODO Pass in a Charset? Consider if call sites actually need this.
-            return new ByteArrayInputStream(origin.toString().getBytes(Charset.defaultCharset()));
-            // Needs [IO-795] CharSequenceInputStream.reset() only works once.
-            // return CharSequenceInputStream.builder().setCharSequence(getCharSequence(Charset.defaultCharset())).get();
+            return CharSequenceInputStream.builder().setCharSequence(getCharSequence(Charset.defaultCharset())).get();
         }
 
         @Override
