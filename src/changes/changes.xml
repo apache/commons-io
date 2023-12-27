@@ -79,6 +79,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix"                due-to="Elliotte Rusty Harold">Add PathMatcher to IOFileFilter class Javadoc #536.</action>
       <action dev="ggregory" type="fix" issue="IO-781" due-to="Marcono1234">Fix CharSequenceInputStream coding exception handling #537.</action>
       <action dev="ggregory" type="fix" issue="IO-781" due-to="Marcono1234">Deprecate int CountingInputStream#getCount() in favor of long CountingInputStream#getByteCount().</action>
+      <action dev="ggregory" type="fix" issue="IO-828" due-to="Elliotte Rusty Harold, Gary Gregory">Deprecate CountingInputStream.resetCount().</action>
       <!-- Add -->
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add and use PathUtils.getFileName(Path, Function&lt;Path, R&gt;).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add and use PathUtils.getFileNameString().</action>

@@ -119,7 +119,9 @@ public class CountingInputStream extends ProxyInputStream {
      *
      * @return the count previous to resetting
      * @throws ArithmeticException if the byte count is too large
+     * @deprecated Use {@link #resetByteCount()}.
      */
+    @Deprecated
     public int resetCount() {
         final long result = resetByteCount();
         if (result > Integer.MAX_VALUE) {
