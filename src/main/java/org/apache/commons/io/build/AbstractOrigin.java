@@ -122,6 +122,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public InputStream getInputStream(final OpenOption... options) throws IOException {
+            // TODO Pass in a Charset? Consider if call sites actually need this.
             return CharSequenceInputStream.builder().setCharSequence(getCharSequence(Charset.defaultCharset())).get();
         }
 
