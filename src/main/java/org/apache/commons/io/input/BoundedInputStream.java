@@ -36,7 +36,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  */
 public class BoundedInputStream extends ProxyInputStream {
 
-    // TODO For 3.0, extend CountingInputStream.
+    // TODO For 3.0, extend CountingInputStream. Or, add a max feature to CountingInputStream.
 
     /**
      * Builds a new {@link BoundedInputStream} instance.
@@ -115,12 +115,6 @@ public class BoundedInputStream extends ProxyInputStream {
     /** The max count of bytes to read. */
     private final long maxCount;
 
-    /** The count of bytes read. */
-    private long count;
-
-    /** The marked position. */
-    private long mark = EOF;
-
     /**
      * Flag if close should be propagated.
      *
@@ -161,25 +155,17 @@ public class BoundedInputStream extends ProxyInputStream {
      * @param propagateClose {@code true} if calling {@link #close()} propagates to the {@code close()} method of the underlying stream or {@code false} if it
      *                       does not.
      */
+    @SuppressWarnings("resource") // Caller closes.
     private BoundedInputStream(final InputStream inputStream, final long maxCount, final boolean propagateClose) {
         // Some badly designed methods - e.g. the Servlet API - overload length
         // such that "-1" means stream finished
-        super(inputStream);
+        super(new CountingInputStream(inputStream));
         this.maxCount = maxCount;
         this.propagateClose = propagateClose;
     }
 
-    /**
-     * Adds the number of read bytes to the count.
-     *
-     * @param n number of bytes read, or -1 if no more bytes are available
-     * @since 2.16.0
-     */
-    @Override
-    protected synchronized void afterRead(final int n) {
-        if (n != EOF) {
-            count += n;
-        }
+    private CountingInputStream getCountingInputStream() {
+        return (CountingInputStream) in;
     }
 
     /**
@@ -188,7 +174,7 @@ public class BoundedInputStream extends ProxyInputStream {
     @Override
     public int available() throws IOException {
         if (isMaxLength()) {
-            onMaxLength(maxCount, count);
+            onMaxLength(maxCount, getCount());
             return 0;
         }
         return in.available();
@@ -212,8 +198,9 @@ public class BoundedInputStream extends ProxyInputStream {
      * @return The count of bytes read.
      * @since 2.12.0
      */
+    @SuppressWarnings("resource") // no allocation
     public long getCount() {
-        return count;
+        return getCountingInputStream().getByteCount();
     }
 
     /**
@@ -237,7 +224,7 @@ public class BoundedInputStream extends ProxyInputStream {
     }
 
     private boolean isMaxLength() {
-        return maxCount >= 0 && count >= maxCount;
+        return maxCount >= 0 && getCount() >= maxCount;
     }
 
     /**
@@ -257,7 +244,6 @@ public class BoundedInputStream extends ProxyInputStream {
     @Override
     public synchronized void mark(final int readLimit) {
         in.mark(readLimit);
-        mark = count;
     }
 
     /**
@@ -292,7 +278,7 @@ public class BoundedInputStream extends ProxyInputStream {
     @Override
     public int read() throws IOException {
         if (isMaxLength()) {
-            onMaxLength(maxCount, count);
+            onMaxLength(maxCount, getCount());
             return EOF;
         }
         return super.read();
@@ -322,7 +308,7 @@ public class BoundedInputStream extends ProxyInputStream {
     @Override
     public int read(final byte[] b, final int off, final int len) throws IOException {
         if (isMaxLength()) {
-            onMaxLength(maxCount, count);
+            onMaxLength(maxCount, getCount());
             return EOF;
         }
         return super.read(b, off, (int) toReadLen(len));
@@ -336,7 +322,6 @@ public class BoundedInputStream extends ProxyInputStream {
     @Override
     public synchronized void reset() throws IOException {
         in.reset();
-        count = mark;
     }
 
     /**
@@ -364,7 +349,7 @@ public class BoundedInputStream extends ProxyInputStream {
     }
 
     private long toReadLen(final long len) {
-        return maxCount >= 0 ? Math.min(len, maxCount - count) : len;
+        return maxCount >= 0 ? Math.min(len, maxCount - getCount()) : len;
     }
 
     /**
