@@ -2946,10 +2946,9 @@ public class FileUtils {
     /**
      * Converts from a {@link URL} to a {@link File}.
      * <p>
-     * From version 1.1 this method will decode the URL.
      * Syntax such as {@code file:///my%20docs/file.txt} will be
-     * correctly decoded to {@code /my docs/file.txt}. Starting with version
-     * 1.5, this method uses UTF-8 to decode percent-encoded octets to characters.
+     * correctly decoded to {@code /my docs/file.txt}.
+     * UTF-8 is used to decode percent-encoded octets to characters.
      * Additionally, malformed percent-encoded octets are handled leniently by
      * passing them through literally.
      * </p>

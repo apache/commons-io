@@ -74,7 +74,7 @@ public class CountingInputStream extends ProxyInputStream {
     /**
      * Gets number of bytes that have passed through this stream.
      * <p>
-     * NOTE: From v1.3 this method throws an ArithmeticException if the
+     * This method throws an ArithmeticException if the
      * count is greater than can be expressed by an {@code int}.
      * See {@link #getByteCount()} for a method using a {@code long}.
      * </p>
@@ -112,7 +112,7 @@ public class CountingInputStream extends ProxyInputStream {
     /**
      * Resets the byte count back to 0.
      * <p>
-     * NOTE: From v1.3 this method throws an ArithmeticException if the
+     * This method throws an ArithmeticException if the
      * count is greater than can be expressed by an {@code int}.
      * See {@link #resetByteCount()} for a method using a {@code long}.
      * </p>
