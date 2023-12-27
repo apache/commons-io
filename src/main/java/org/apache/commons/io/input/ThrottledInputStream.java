@@ -29,7 +29,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
 /**
  * Provides bandwidth throttling on a specified InputStream. It is implemented as a wrapper on top of another InputStream instance. The throttling works by
  * examining the number of bytes read from the underlying InputStream from the beginning, and sleep()ing for a time interval if the byte-transfer is found
- * exceed the specified tolerable maximum. (Thus, while the read-rate might exceed the maximum for a given short interval, the average tends towards the
+ * exceed the specified tolerable maximum. (Thus, while the read-rate might exceed the maximum for a short interval, the average tends towards the
  * specified maximum, overall.)
  * <p>
  * Inspired by Apache HBase's class of the same name.
@@ -40,23 +40,23 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
 public final class ThrottledInputStream extends CountingInputStream {
 
     /**
-     * Builds a new {@link QueueInputStream} instance.
+     * Builds a new {@link ThrottledInputStream} instance.
      * <h2>Using NIO</h2>
      *
      * <pre>{@code
-     * ThrottledInputStream s = ThrottledInputStream.builder().setPath(Paths.get("MyFile.xml")).setMaxBytesPerSecond(100_000).get();
+     * ThrottledInputStream in = ThrottledInputStream.builder().setPath(Paths.get("MyFile.xml")).setMaxBytesPerSecond(100_000).get();
      * }
      * </pre>
      *
      * <h2>Using IO</h2>
      *
      * <pre>{@code
-     * ThrottledInputStream s = ThrottledInputStream.builder().setFile(new File("MyFile.xml")).setMaxBytesPerSecond(100_000).get();
+     * ThrottledInputStream in = ThrottledInputStream.builder().setFile(new File("MyFile.xml")).setMaxBytesPerSecond(100_000).get();
      * }
      * </pre>
      *
      * <pre>{@code
-     * ThrottledInputStream s = ThrottledInputStream.builder().setInputStream(inputStream).setMaxBytesPerSecond(100_000).get();
+     * ThrottledInputStream in = ThrottledInputStream.builder().setInputStream(inputStream).setMaxBytesPerSecond(100_000).get();
      * }
      * </pre>
      */
@@ -123,7 +123,7 @@ public final class ThrottledInputStream extends CountingInputStream {
      *
      * @return Read rate, in bytes/sec.
      */
-    public long getBytesPerSecond() {
+    private long getBytesPerSecond() {
         final long elapsedSeconds = (System.currentTimeMillis() - startTime) / 1000;
         if (elapsedSeconds == 0) {
             return getByteCount();
@@ -140,7 +140,7 @@ public final class ThrottledInputStream extends CountingInputStream {
      *
      * @return Duration spent in sleep.
      */
-    public Duration getTotalSleepDuration() {
+    Duration getTotalSleepDuration() {
         return totalSleepDuration;
     }
 
