@@ -51,6 +51,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Elliotte Rusty Harold">Fix and re-enable testSkip_RequiredCharsets #518.</action>
       <action dev="ggregory" type="fix" issue="IO-824" due-to="Miguel Munoz, Gary Gregory">SymbolicLineFileFilter documentation fixes.</action>
       <action dev="ggregory" type="fix" issue="IO-795" due-to="Miguel Munoz, Gary Gregory">CharSequenceInputStream.reset() only works once #520.</action>
+      <action dev="ggregory" type="fix" issue="IO-795" due-to="Elliotte Rusty Harold">Finish TODO on CharSequenceInputStream #540.</action>
       <action dev="ggregory" type="fix" issue="IO-825" due-to="Arthur Chan, Gary Gregory">Add byte array size validation for methods in EndianUtils #521.</action>
       <action dev="ggregory" type="fix" issue="IO-825" due-to="dkdal, Gary Gregory">Add missing test case CircularByteBufferTest.</action>
       <action dev="ggregory" type="fix" issue="IO-781" due-to="Elliotte Rusty Harold">Make CharSequenceInputStream.available() more correct in the face of multibyte encodings #525.</action>
