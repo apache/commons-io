@@ -23,27 +23,17 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * A functional, light weight {@link InputStream} that emulates
- * a stream of a specified size.
+ * A functional, light weight {@link InputStream} that emulates a stream of a specified size.
  * <p>
- * This implementation provides a light weight
- * object for testing with an {@link InputStream}
- * where the contents don't matter.
+ * This implementation provides a light weight object for testing with an {@link InputStream} where the contents don't matter.
  * </p>
  * <p>
- * One use case would be for testing the handling of
- * large {@link InputStream} as it can emulate that
- * scenario without the overhead of actually processing
- * large numbers of bytes - significantly speeding up
- * test execution times.
+ * One use case would be for testing the handling of large {@link InputStream} as it can emulate that scenario without the overhead of actually processing large
+ * numbers of bytes - significantly speeding up test execution times.
  * </p>
  * <p>
- * This implementation returns zero from the method that
- * reads a byte and leaves the array unchanged in the read
- * methods that are passed a byte array.
- * If alternative data is required the {@code processByte()} and
- * {@code processBytes()} methods can be implemented to generate
- * data, for example:
+ * This implementation returns zero from the method that reads a byte and leaves the array unchanged in the read methods that are passed a byte array. If
+ * alternative data is required the {@code processByte()} and {@code processBytes()} methods can be implemented to generate data, for example:
  * </p>
  *
  * <pre>
@@ -82,40 +72,34 @@ public class NullInputStream extends InputStream {
     private final boolean markSupported;
 
     /**
-     * Constructs an {@link InputStream} that emulates a size 0 stream
-     * which supports marking and does not throw EOFException.
+     * Constructs an {@link InputStream} that emulates a size 0 stream which supports marking and does not throw EOFException.
      *
      * @since 2.7
      */
     public NullInputStream() {
-       this(0, true, false);
+        this(0, true, false);
     }
 
     /**
-     * Constructs an {@link InputStream} that emulates a specified size
-     * which supports marking and does not throw EOFException.
+     * Constructs an {@link InputStream} that emulates a specified size which supports marking and does not throw EOFException.
      *
      * @param size The size of the input stream to emulate.
      */
     public NullInputStream(final long size) {
-       this(size, true, false);
+        this(size, true, false);
     }
 
     /**
-     * Constructs an {@link InputStream} that emulates a specified
-     * size with option settings.
+     * Constructs an {@link InputStream} that emulates a specified size with option settings.
      *
-     * @param size The size of the input stream to emulate.
-     * @param markSupported Whether this instance will support
-     * the {@code mark()} functionality.
-     * @param throwEofException Whether this implementation
-     * will throw an {@link EOFException} or return -1 when the
-     * end of file is reached.
+     * @param size              The size of the input stream to emulate.
+     * @param markSupported     Whether this instance will support the {@code mark()} functionality.
+     * @param throwEofException Whether this implementation will throw an {@link EOFException} or return -1 when the end of file is reached.
      */
     public NullInputStream(final long size, final boolean markSupported, final boolean throwEofException) {
-       this.size = size;
-       this.markSupported = markSupported;
-       this.throwEofException = throwEofException;
+        this.size = size;
+        this.markSupported = markSupported;
+        this.throwEofException = throwEofException;
     }
 
     /**
@@ -136,8 +120,19 @@ public class NullInputStream extends InputStream {
     }
 
     /**
-     * Closes this input stream - resets the internal state to
-     * the initial values.
+     * Throws {@link EOFException} if {@code throwEofException} is enabled.
+     *
+     * @param message The {@link EOFException} message.
+     * @throws EOFException Thrown if {@code throwEofException} is enabled.
+     */
+    private void checkThrowEof(final String message) throws EOFException {
+        if (throwEofException) {
+            throw new EOFException(message);
+        }
+    }
+
+    /**
+     * Closes this input stream - resets the internal state to the initial values.
      *
      * @throws IOException If an error occurs.
      */
@@ -146,22 +141,6 @@ public class NullInputStream extends InputStream {
         eof = false;
         position = 0;
         mark = -1;
-    }
-
-    /**
-     * Handles End of File.
-     *
-     * @return {@code -1} if {@code throwEofException} is
-     * set to {@code false}
-     * @throws EOFException if {@code throwEofException} is set
-     * to {@code true}.
-     */
-    private int doEndOfFile() throws EOFException {
-        eof = true;
-        if (throwEofException) {
-            throw new EOFException();
-        }
-        return EOF;
     }
 
     /**
@@ -183,10 +162,21 @@ public class NullInputStream extends InputStream {
     }
 
     /**
+     * Handles End of File.
+     *
+     * @return {@code -1} if {@code throwEofException} is set to {@code false}
+     * @throws EOFException if {@code throwEofException} is set to {@code true}.
+     */
+    private int handleEof() throws EOFException {
+        eof = true;
+        checkThrowEof("handleEof()");
+        return EOF;
+    }
+
+    /**
      * Marks the current position.
      *
-     * @param readLimit The number of bytes before this marked position
-     * is invalid.
+     * @param readLimit The number of bytes before this marked position is invalid.
      * @throws UnsupportedOperationException if mark is not supported.
      */
     @Override
@@ -209,7 +199,7 @@ public class NullInputStream extends InputStream {
     }
 
     /**
-     * Returns a byte value for the  {@code read()} method.
+     * Returns a byte value for the {@code read()} method.
      * <p>
      * This implementation returns zero.
      *
@@ -221,13 +211,12 @@ public class NullInputStream extends InputStream {
     }
 
     /**
-     * Processes the bytes for the {@code read(byte[], offset, length)}
-     * method.
+     * Processes the bytes for the {@code read(byte[], offset, length)} method.
      * <p>
      * This implementation leaves the byte array unchanged.
      * </p>
      *
-     * @param bytes The byte array
+     * @param bytes  The byte array
      * @param offset The offset to start at.
      * @param length The number of bytes.
      */
@@ -238,20 +227,19 @@ public class NullInputStream extends InputStream {
     /**
      * Reads a byte.
      *
-     * @return Either The byte value returned by {@code processByte()}
-     * or {@code -1} if the end of file has been reached and
-     * {@code throwEofException} is set to {@code false}.
-     * @throws EOFException if the end of file is reached and
-     * {@code throwEofException} is set to {@code true}.
-     * @throws IOException if trying to read past the end of file.
+     * @return Either The byte value returned by {@code processByte()} or {@code -1} if the end of file has been reached and {@code throwEofException} is set to
+     *         {@code false}.
+     * @throws EOFException if the end of file is reached and {@code throwEofException} is set to {@code true}.
+     * @throws IOException  if trying to read past the end of file.
      */
     @Override
     public int read() throws IOException {
         if (eof) {
-            throw new IOException("Read after end of file");
+            checkThrowEof("read()");
+            return EOF;
         }
         if (position == size) {
-            return doEndOfFile();
+            return handleEof();
         }
         position++;
         return processByte();
@@ -261,12 +249,9 @@ public class NullInputStream extends InputStream {
      * Reads some bytes into the specified array.
      *
      * @param bytes The byte array to read into
-     * @return The number of bytes read or {@code -1}
-     * if the end of file has been reached and
-     * {@code throwEofException} is set to {@code false}.
-     * @throws EOFException if the end of file is reached and
-     * {@code throwEofException} is set to {@code true}.
-     * @throws IOException if trying to read past the end of file.
+     * @return The number of bytes read or {@code -1} if the end of file has been reached and {@code throwEofException} is set to {@code false}.
+     * @throws EOFException if the end of file is reached and {@code throwEofException} is set to {@code true}.
+     * @throws IOException  if trying to read past the end of file.
      */
     @Override
     public int read(final byte[] bytes) throws IOException {
@@ -276,23 +261,21 @@ public class NullInputStream extends InputStream {
     /**
      * Reads the specified number bytes into an array.
      *
-     * @param bytes The byte array to read into.
+     * @param bytes  The byte array to read into.
      * @param offset The offset to start reading bytes into.
      * @param length The number of bytes to read.
-     * @return The number of bytes read or {@code -1}
-     * if the end of file has been reached and
-     * {@code throwEofException} is set to {@code false}.
-     * @throws EOFException if the end of file is reached and
-     * {@code throwEofException} is set to {@code true}.
-     * @throws IOException if trying to read past the end of file.
+     * @return The number of bytes read or {@code -1} if the end of file has been reached and {@code throwEofException} is set to {@code false}.
+     * @throws EOFException if the end of file is reached and {@code throwEofException} is set to {@code true}.
+     * @throws IOException  if trying to read past the end of file.
      */
     @Override
     public int read(final byte[] bytes, final int offset, final int length) throws IOException {
         if (eof) {
-            throw new IOException("Read after end of file");
+            checkThrowEof("read(byte[], int, int)");
+            return EOF;
         }
         if (position == size) {
-            return doEndOfFile();
+            return handleEof();
         }
         position += length;
         int returnLength = length;
@@ -308,9 +291,7 @@ public class NullInputStream extends InputStream {
      * Resets the stream to the point when mark was last called.
      *
      * @throws UnsupportedOperationException if mark is not supported.
-     * @throws IOException If no position has been marked
-     * or the read limit has been exceeded since the last position was
-     * marked.
+     * @throws IOException                   If no position has been marked or the read limit has been exceeded since the last position was marked.
      */
     @Override
     public synchronized void reset() throws IOException {
@@ -321,9 +302,7 @@ public class NullInputStream extends InputStream {
             throw new IOException("No position has been marked");
         }
         if (position > mark + readLimit) {
-            throw new IOException("Marked position [" + mark +
-                    "] is no longer valid - passed the read limit [" +
-                    readLimit + "]");
+            throw new IOException("Marked position [" + mark + "] is no longer valid - passed the read limit [" + readLimit + "]");
         }
         position = mark;
         eof = false;
@@ -333,20 +312,18 @@ public class NullInputStream extends InputStream {
      * Skips a specified number of bytes.
      *
      * @param numberOfBytes The number of bytes to skip.
-     * @return The number of bytes skipped or {@code -1}
-     * if the end of file has been reached and
-     * {@code throwEofException} is set to {@code false}.
-     * @throws EOFException if the end of file is reached and
-     * {@code throwEofException} is set to {@code true}.
-     * @throws IOException if trying to read past the end of file.
+     * @return The number of bytes skipped or {@code -1} if the end of file has been reached and {@code throwEofException} is set to {@code false}.
+     * @throws EOFException if the end of file is reached and {@code throwEofException} is set to {@code true}.
+     * @throws IOException  if trying to read past the end of file.
      */
     @Override
     public long skip(final long numberOfBytes) throws IOException {
         if (eof) {
-            throw new IOException("Skip after end of file");
+            checkThrowEof("skip(long)");
+            return EOF;
         }
         if (position == size) {
-            return doEndOfFile();
+            return handleEof();
         }
         position += numberOfBytes;
         long returnLength = numberOfBytes;
