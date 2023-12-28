@@ -20,6 +20,7 @@ package org.apache.commons.io.function;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -53,6 +54,13 @@ public class IORunnableTest {
         assertThrows(UncheckedIOException.class, () -> Executors.callable(TestConstants.THROWING_IO_RUNNABLE.asRunnable()).call());
         final IORunnable runnable = () -> Files.size(PathUtils.current());
         assertNull(Executors.callable(runnable.asRunnable()).call());
+    }
+
+    @SuppressWarnings("cast")
+    @Test
+    public void testNoop() throws IOException {
+        assertTrue(IORunnable.noop() instanceof IORunnable);
+        IORunnable.noop().run();
     }
 
 }

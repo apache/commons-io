@@ -29,6 +29,16 @@ import java.io.UncheckedIOException;
 public interface IORunnable {
 
     /**
+     * Returns the constant no-op runnable.
+     *
+     * @return a constant no-op runnable.
+     * @since 2.16.0
+     */
+    static IORunnable noop() {
+        return Constants.IO_RUNNABLE;
+    }
+
+    /**
      * Creates a {@link Runnable} for this instance that throws {@link UncheckedIOException} instead of {@link IOException}.
      *
      * @return an UncheckedIOException Predicate.

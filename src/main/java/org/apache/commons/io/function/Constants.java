@@ -31,6 +31,11 @@ final class Constants {
     /**
      * No-op singleton.
      */
+    static final IORunnable IO_RUNNABLE = () -> {/* No-op */};
+
+    /**
+     * No-op singleton.
+     */
     @SuppressWarnings("rawtypes")
     static final IOBiFunction IO_BI_FUNCTION = (t, u) -> null;
 
