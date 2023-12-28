@@ -52,7 +52,7 @@ public class CountingInputStream extends ProxyInputStream {
     @Override
     protected synchronized void afterRead(final int n) {
         if (n != EOF) {
-            this.count += n;
+            count += n;
         }
     }
 
@@ -68,7 +68,7 @@ public class CountingInputStream extends ProxyInputStream {
      * @since 1.3
      */
     public synchronized long getByteCount() {
-        return this.count;
+        return count;
     }
 
     /**
@@ -104,8 +104,8 @@ public class CountingInputStream extends ProxyInputStream {
      * @since 1.3
      */
     public synchronized long resetByteCount() {
-        final long tmp = this.count;
-        this.count = 0;
+        final long tmp = count;
+        count = 0;
         return tmp;
     }
 
@@ -142,7 +142,7 @@ public class CountingInputStream extends ProxyInputStream {
     @Override
     public synchronized long skip(final long length) throws IOException {
         final long skip = super.skip(length);
-        this.count += skip;
+        count += skip;
         return skip;
     }
 
