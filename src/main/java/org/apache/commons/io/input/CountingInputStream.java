@@ -141,9 +141,7 @@ public class CountingInputStream extends ProxyInputStream {
      */
     @Override
     public synchronized long skip(final long length) throws IOException {
-        final long skip = super.skip(length);
-        count += skip;
-        return skip;
+        return count += super.skip(length);
     }
 
 }
