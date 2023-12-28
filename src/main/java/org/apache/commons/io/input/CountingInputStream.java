@@ -47,10 +47,11 @@ public class CountingInputStream extends ProxyInputStream {
      * Adds the number of read bytes to the count.
      *
      * @param n number of bytes read, or -1 if no more bytes are available
+     * @throws IOException Not thrown here but subclasses may throw.
      * @since 2.0
      */
     @Override
-    protected synchronized void afterRead(final int n) {
+    protected synchronized void afterRead(final int n) throws IOException {
         if (n != EOF) {
             count += n;
         }
