@@ -115,6 +115,12 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return origin.toString().getBytes(Charset.defaultCharset());
         }
 
+        /**
+         * {@inheritDoc}
+         * <p>
+         * In this case, the {@code charset} parameter is ignored, since a {@link CharSequence} does not need a {@link Charset} to be read.
+         * </p>
+         */
         @Override
         public CharSequence getCharSequence(final Charset charset) {
             // No conversion
@@ -127,9 +133,15 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return CharSequenceInputStream.builder().setCharSequence(getCharSequence(Charset.defaultCharset())).get();
         }
 
+        /**
+         * {@inheritDoc}
+         * <p>
+         * In this case, the {@code charset} parameter is ignored, since a {@link CharSequence} does not need a {@link Charset} to be read.
+         * </p>
+         */
         @Override
-        public Reader getReader(final Charset charset) throws IOException {
-            return new CharSequenceReader(origin);
+        public Reader getReader(final Charset ignore) throws IOException {
+            return new CharSequenceReader(get());
         }
 
         @Override

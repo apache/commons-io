@@ -16,10 +16,13 @@
  */
 package org.apache.commons.io.build;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.IOUtils;
@@ -36,8 +39,12 @@ public class CharSequenceOriginTest extends AbstractOriginTest<CharSequence, Cha
 
     @BeforeEach
     public void beforeEach() throws FileNotFoundException, IOException {
-        setOriginRo(new CharSequenceOrigin(IOUtils.resourceToString(FILE_RES_RO, StandardCharsets.UTF_8)));
+        setOriginRo(new CharSequenceOrigin(getFixtureStringFromFile()));
         setOriginRw(new CharSequenceOrigin("World"));
+    }
+
+    private String getFixtureStringFromFile() throws IOException {
+        return IOUtils.resourceToString(FILE_RES_RO, StandardCharsets.UTF_8);
     }
 
     @Override
@@ -59,6 +66,15 @@ public class CharSequenceOriginTest extends AbstractOriginTest<CharSequence, Cha
     public void testGetPath() {
         // Cannot convert a CharSequence to a Path.
         assertThrows(UnsupportedOperationException.class, super::testGetPath);
+    }
+
+    @Test
+    public void testGetReaderIgnoreCharset() throws IOException {
+        // The CharSequenceOrigin ignores the given Charset.
+        try (final Reader reader = getOriginRo().getReader(StandardCharsets.UTF_16LE)) {
+            assertNotNull(reader);
+            assertEquals(getFixtureStringFromFile(), IOUtils.toString(reader));
+        }
     }
 
     @Override
