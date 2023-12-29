@@ -72,10 +72,11 @@ public class CharSequenceOriginTest extends AbstractOriginTest<CharSequence, Cha
 
     @Test
     public void testGetReader_UTF16() throws IOException {
-        CharSequenceOrigin origin = new CharSequenceOrigin("This is a test");
-        Reader reader16 = origin.getReader(StandardCharsets.UTF_16);
-        Reader reader8 = origin.getReader(StandardCharsets.UTF_8);
+        // Because CharSequences are defined as characters, they don't depend on byte encoding.
+        final CharSequenceOrigin origin = new CharSequenceOrigin("This is a test");
+        final Reader reader16 = origin.getReader(StandardCharsets.UTF_16);
+        final Reader reader8 = origin.getReader(StandardCharsets.UTF_8);
         assertEquals(reader8.read(), reader16.read());
     }
-    
+
 }
