@@ -47,12 +47,13 @@ public class CountingInputStream extends ProxyInputStream {
      * Adds the number of read bytes to the count.
      *
      * @param n number of bytes read, or -1 if no more bytes are available
+     * @throws IOException Not thrown here but subclasses may throw.
      * @since 2.0
      */
     @Override
-    protected synchronized void afterRead(final int n) {
+    protected synchronized void afterRead(final int n) throws IOException {
         if (n != EOF) {
-            this.count += n;
+            count += n;
         }
     }
 
@@ -68,7 +69,7 @@ public class CountingInputStream extends ProxyInputStream {
      * @since 1.3
      */
     public synchronized long getByteCount() {
-        return this.count;
+        return count;
     }
 
     /**
@@ -104,8 +105,8 @@ public class CountingInputStream extends ProxyInputStream {
      * @since 1.3
      */
     public synchronized long resetByteCount() {
-        final long tmp = this.count;
-        this.count = 0;
+        final long tmp = count;
+        count = 0;
         return tmp;
     }
 
@@ -142,7 +143,7 @@ public class CountingInputStream extends ProxyInputStream {
     @Override
     public synchronized long skip(final long length) throws IOException {
         final long skip = super.skip(length);
-        this.count += skip;
+        count += skip;
         return skip;
     }
 

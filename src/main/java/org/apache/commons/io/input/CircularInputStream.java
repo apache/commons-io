@@ -51,7 +51,7 @@ public class CircularInputStream extends InputStream {
     }
 
     private long byteCount;
-    private int position = -1;
+    private int position = IOUtils.EOF;
     private final byte[] repeatedContent;
     private final long targetByteCount;
 

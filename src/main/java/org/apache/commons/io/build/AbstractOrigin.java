@@ -40,6 +40,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.RandomAccessFileMode;
 import org.apache.commons.io.RandomAccessFiles;
 import org.apache.commons.io.input.CharSequenceInputStream;
+import org.apache.commons.io.input.CharSequenceReader;
 import org.apache.commons.io.input.ReaderInputStream;
 import org.apache.commons.io.output.WriterOutputStream;
 
@@ -77,6 +78,12 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return get();
         }
 
+        /**
+         * {@inheritDoc}
+         * <p>
+         * The {@code options} parameter is ignored since a {@code byte[]} does not need an {@link OpenOption} to be read.
+         * </p>
+         */
         @Override
         public InputStream getInputStream(final OpenOption... options) throws IOException {
             return new ByteArrayInputStream(origin);
@@ -114,21 +121,39 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return origin.toString().getBytes(Charset.defaultCharset());
         }
 
+        /**
+         * {@inheritDoc}
+         * <p>
+         * The {@code charset} parameter is ignored since a {@link CharSequence} does not need a {@link Charset} to be read.
+         * </p>
+         */
         @Override
         public CharSequence getCharSequence(final Charset charset) {
             // No conversion
             return get();
         }
 
+        /**
+         * {@inheritDoc}
+         * <p>
+         * The {@code options} parameter is ignored since a {@link CharSequence} does not need an {@link OpenOption} to be read.
+         * </p>
+         */
         @Override
         public InputStream getInputStream(final OpenOption... options) throws IOException {
             // TODO Pass in a Charset? Consider if call sites actually need this.
             return CharSequenceInputStream.builder().setCharSequence(getCharSequence(Charset.defaultCharset())).get();
         }
 
+        /**
+         * {@inheritDoc}
+         * <p>
+         * The {@code charset} parameter is ignored since a {@link CharSequence} does not need a {@link Charset} to be read.
+         * </p>
+         */
         @Override
         public Reader getReader(final Charset charset) throws IOException {
-            return new InputStreamReader(getInputStream(), charset);
+            return new CharSequenceReader(get());
         }
 
         @Override
@@ -197,6 +222,12 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return IOUtils.toByteArray(origin);
         }
 
+        /**
+         * {@inheritDoc}
+         * <p>
+         * The {@code options} parameter is ignored since a {@link InputStream} does not need an {@link OpenOption} to be read.
+         * </p>
+         */
         @Override
         public InputStream getInputStream(final OpenOption... options) {
             // No conversion
@@ -227,12 +258,24 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             super(origin);
         }
 
+        /**
+         * {@inheritDoc}
+         * <p>
+         * The {@code options} parameter is ignored since a {@link OutputStream} does not need an {@link OpenOption} to be written.
+         * </p>
+         */
         @Override
         public OutputStream getOutputStream(final OpenOption... options) {
             // No conversion
             return get();
         }
 
+        /**
+         * {@inheritDoc}
+         * <p>
+         * The {@code options} parameter is ignored since a {@link OutputStream} does not need an {@link OpenOption} to be written.
+         * </p>
+         */
         @Override
         public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
             return new OutputStreamWriter(origin, charset);
@@ -299,17 +342,35 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return IOUtils.toByteArray(origin, Charset.defaultCharset());
         }
 
+        /**
+         * {@inheritDoc}
+         * <p>
+         * The {@code charset} parameter is ignored since a {@link Reader} does not need a {@link Charset} to be read.
+         * </p>
+         */
         @Override
         public CharSequence getCharSequence(final Charset charset) throws IOException {
             return IOUtils.toString(origin);
         }
 
+        /**
+         * {@inheritDoc}
+         * <p>
+         * The {@code options} parameter is ignored since a {@link Reader} does not need an {@link OpenOption} to be read.
+         * </p>
+         */
         @Override
         public InputStream getInputStream(final OpenOption... options) throws IOException {
             // TODO Pass in a Charset? Consider if call sites actually need this.
             return ReaderInputStream.builder().setReader(origin).setCharset(Charset.defaultCharset()).get();
         }
 
+        /**
+         * {@inheritDoc}
+         * <p>
+         * The {@code charset} parameter is ignored since a {@link Reader} does not need a {@link Charset} to be read.
+         * </p>
+         */
         @Override
         public Reader getReader(final Charset charset) throws IOException {
             // No conversion
@@ -360,12 +421,27 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             super(origin);
         }
 
+        /**
+         * {@inheritDoc}
+         * <p>
+         * The {@code options} parameter is ignored since a {@link Writer} does not need an {@link OpenOption} to be written.
+         * </p>
+         */
         @Override
         public OutputStream getOutputStream(final OpenOption... options) throws IOException {
             // TODO Pass in a Charset? Consider if call sites actually need this.
             return WriterOutputStream.builder().setWriter(origin).setCharset(Charset.defaultCharset()).get();
         }
 
+        /**
+         * {@inheritDoc}
+         * <p>
+         * The {@code charset} parameter is ignored since a {@link Writer} does not need a {@link Charset} to be written.
+         * </p>
+         * <p>
+         * The {@code options} parameter is ignored since a {@link Writer} does not need an {@link OpenOption} to be written.
+         * </p>
+         */
         @Override
         public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
             // No conversion
@@ -449,7 +525,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      */
     public File getFile() {
         throw new UnsupportedOperationException(
-                String.format("%s#getFile() for %s origin %s", getClass().getSimpleName(), origin.getClass().getSimpleName(), origin));
+                String.format("%s#getFile() for %s origin %s", getSimpleName(), origin.getClass().getSimpleName(), origin));
     }
 
     /**
@@ -484,7 +560,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      */
     public Path getPath() {
         throw new UnsupportedOperationException(
-                String.format("%s#getPath() for %s origin %s", getClass().getSimpleName(), origin.getClass().getSimpleName(), origin));
+                String.format("%s#getPath() for %s origin %s", getSimpleName(), origin.getClass().getSimpleName(), origin));
     }
 
     /**
@@ -496,6 +572,10 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      */
     public Reader getReader(final Charset charset) throws IOException {
         return Files.newBufferedReader(getPath(), charset);
+    }
+
+    private String getSimpleName() {
+        return getClass().getSimpleName();
     }
 
     /**
@@ -524,6 +604,6 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[" + origin.toString() + "]";
+        return getSimpleName() + "[" + origin.toString() + "]";
     }
 }
