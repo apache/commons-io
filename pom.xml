@@ -55,198 +55,6 @@ file comparators, endian transformation classes, and much more.
     <tag>rel/commons-io-2.15.1</tag>
   </scm>
 
-  <developers>
-    <developer>
-      <name>Scott Sanders</name>
-      <id>sanders</id>
-      <email>sanders@apache.org</email>
-      <organization />
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <name>dIon Gillard</name>
-      <!-- Note: first name is correctly capitalised above -->
-      <id>dion</id>
-      <email>dion@apache.org</email>
-      <organization />
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <name>Nicola Ken Barozzi</name>
-      <id>nicolaken</id>
-      <email>nicolaken@apache.org</email>
-      <organization />
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <name>Henri Yandell</name>
-      <id>bayard</id>
-      <email>bayard@apache.org</email>
-      <organization />
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <name>Stephen Colebourne</name>
-      <id>scolebourne</id>
-      <organization />
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-      <timezone>0</timezone>
-    </developer>
-    <developer>
-      <name>Jeremias Maerki</name>
-      <id>jeremias</id>
-      <email>jeremias@apache.org</email>
-      <organization />
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-      <timezone>+1</timezone>
-    </developer>
-    <developer>
-      <name>Matthew Hawthorne</name>
-      <id>matth</id>
-      <email>matth@apache.org</email>
-      <organization />
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <name>Martin Cooper</name>
-      <id>martinc</id>
-      <email>martinc@apache.org</email>
-      <organization />
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <name>Rob Oxspring</name>
-      <id>roxspring</id>
-      <email>roxspring@apache.org</email>
-      <organization />
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <name>Jochen Wiedmann</name>
-      <id>jochen</id>
-      <email>jochen.wiedmann@gmail.com</email>
-    </developer>
-    <developer>
-      <name>Niall Pemberton</name>
-      <id>niallp</id>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <name>Jukka Zitting</name>
-      <id>jukka</id>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <id>ggregory</id>
-      <name>Gary Gregory</name>
-      <email>ggregory at apache.org</email>
-      <url>https://www.garygregory.com</url>
-      <organization>The Apache Software Foundation</organization>
-      <organizationUrl>https://www.apache.org/</organizationUrl>      
-      <roles>
-        <role>PMC Member</role>
-      </roles>
-      <timezone>America/New_York</timezone>
-      <properties>
-        <picUrl>https://people.apache.org/~ggregory/img/garydgregory80.png</picUrl>
-      </properties>
-    </developer>
-    <developer>
-      <name>Kristian Rosenvold</name>
-      <id>krosenvold</id>
-      <email>krosenvold@apache.org</email>
-      <timezone>+1</timezone>
-    </developer>
-  </developers>
-
-  <contributors>
-    <contributor>
-      <name>Rahul Akolkar</name>
-    </contributor>
-    <contributor>
-      <name>Jason Anderson</name>
-    </contributor>
-    <contributor>
-      <name>Nathan Beyer</name>
-    </contributor>
-    <contributor>
-      <name>Emmanuel Bourg</name>
-    </contributor>
-    <contributor>
-      <name>Chris Eldredge</name>
-    </contributor>
-    <contributor>
-      <name>Magnus Grimsell</name>
-    </contributor>
-    <contributor>
-      <name>Jim Harrington</name>
-    </contributor>
-    <contributor>
-      <name>Thomas Ledoux</name>
-    </contributor>
-    <contributor>
-      <name>Andy Lehane</name>
-    </contributor>
-    <contributor>
-      <name>Marcelo Liberato</name>
-    </contributor>
-    <contributor>
-      <name>Alban Peignier</name>
-      <email>alban.peignier at free.fr</email>
-    </contributor>
-    <contributor>
-      <name>Adam Retter</name>
-      <organization>Evolved Binary</organization>
-    </contributor>
-    <contributor>
-      <name>Ian Springer</name>
-    </contributor>
-    <contributor>
-      <name>Dominik Stadler</name>
-    </contributor>
-    <contributor>
-      <name>Masato Tezuka</name>
-    </contributor>
-    <contributor>
-      <name>James Urie</name>
-    </contributor>
-    <contributor>
-      <name>Frank W. Zammetti</name>
-    </contributor>
-    <contributor>
-      <name>Martin Grigorov</name>
-      <email>mgrigorov@apache.org</email>
-    </contributor>
-    <contributor>
-      <name>Arturo Bernal</name>
-    </contributor>
-    <contributor>
-      <name>Miguel Muñoz</name>
-    </contributor>
-  </contributors>
-
   <dependencies>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -601,4 +409,197 @@ file comparators, endian transformation classes, and much more.
       </build>
     </profile>
   </profiles>
+
+  <developers>
+    <developer>
+      <name>Scott Sanders</name>
+      <id>sanders</id>
+      <email>sanders@apache.org</email>
+      <organization />
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>dIon Gillard</name>
+      <!-- Note: first name is correctly capitalised above -->
+      <id>dion</id>
+      <email>dion@apache.org</email>
+      <organization />
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Nicola Ken Barozzi</name>
+      <id>nicolaken</id>
+      <email>nicolaken@apache.org</email>
+      <organization />
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Henri Yandell</name>
+      <id>bayard</id>
+      <email>bayard@apache.org</email>
+      <organization />
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Stephen Colebourne</name>
+      <id>scolebourne</id>
+      <organization />
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+      <timezone>0</timezone>
+    </developer>
+    <developer>
+      <name>Jeremias Maerki</name>
+      <id>jeremias</id>
+      <email>jeremias@apache.org</email>
+      <organization />
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>
+    <developer>
+      <name>Matthew Hawthorne</name>
+      <id>matth</id>
+      <email>matth@apache.org</email>
+      <organization />
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Martin Cooper</name>
+      <id>martinc</id>
+      <email>martinc@apache.org</email>
+      <organization />
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Rob Oxspring</name>
+      <id>roxspring</id>
+      <email>roxspring@apache.org</email>
+      <organization />
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Jochen Wiedmann</name>
+      <id>jochen</id>
+      <email>jochen.wiedmann@gmail.com</email>
+    </developer>
+    <developer>
+      <name>Niall Pemberton</name>
+      <id>niallp</id>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Jukka Zitting</name>
+      <id>jukka</id>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>ggregory</id>
+      <name>Gary Gregory</name>
+      <email>ggregory at apache.org</email>
+      <url>https://www.garygregory.com</url>
+      <organization>The Apache Software Foundation</organization>
+      <organizationUrl>https://www.apache.org/</organizationUrl>      
+      <roles>
+        <role>PMC Member</role>
+      </roles>
+      <timezone>America/New_York</timezone>
+      <properties>
+        <picUrl>https://people.apache.org/~ggregory/img/garydgregory80.png</picUrl>
+      </properties>
+    </developer>
+    <developer>
+      <name>Kristian Rosenvold</name>
+      <id>krosenvold</id>
+      <email>krosenvold@apache.org</email>
+      <timezone>+1</timezone>
+    </developer>
+  </developers>
+
+  <contributors>
+    <contributor>
+      <name>Rahul Akolkar</name>
+    </contributor>
+    <contributor>
+      <name>Jason Anderson</name>
+    </contributor>
+    <contributor>
+      <name>Nathan Beyer</name>
+    </contributor>
+    <contributor>
+      <name>Emmanuel Bourg</name>
+    </contributor>
+    <contributor>
+      <name>Chris Eldredge</name>
+    </contributor>
+    <contributor>
+      <name>Magnus Grimsell</name>
+    </contributor>
+    <contributor>
+      <name>Jim Harrington</name>
+    </contributor>
+    <contributor>
+      <name>Thomas Ledoux</name>
+    </contributor>
+    <contributor>
+      <name>Andy Lehane</name>
+    </contributor>
+    <contributor>
+      <name>Marcelo Liberato</name>
+    </contributor>
+    <contributor>
+      <name>Alban Peignier</name>
+      <email>alban.peignier at free.fr</email>
+    </contributor>
+    <contributor>
+      <name>Adam Retter</name>
+      <organization>Evolved Binary</organization>
+    </contributor>
+    <contributor>
+      <name>Ian Springer</name>
+    </contributor>
+    <contributor>
+      <name>Dominik Stadler</name>
+    </contributor>
+    <contributor>
+      <name>Masato Tezuka</name>
+    </contributor>
+    <contributor>
+      <name>James Urie</name>
+    </contributor>
+    <contributor>
+      <name>Frank W. Zammetti</name>
+    </contributor>
+    <contributor>
+      <name>Martin Grigorov</name>
+      <email>mgrigorov@apache.org</email>
+    </contributor>
+    <contributor>
+      <name>Arturo Bernal</name>
+    </contributor>
+    <contributor>
+      <name>Miguel Muñoz</name>
+    </contributor>
+  </contributors>
+
 </project>
