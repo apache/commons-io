@@ -28,7 +28,7 @@ import java.util.Objects;
 public enum StandardLineSeparator {
 
     /**
-     * Carriage return. This is the line ending used on Mac OS 9 and earlier.
+     * Carriage return. This is the line ending used on macOS 9 and earlier.
      */
     CR("\r"),
 
@@ -38,7 +38,7 @@ public enum StandardLineSeparator {
     CRLF("\r\n"),
 
     /**
-     * Line feed. This is the line ending used on Linux and Mac OS X and later.
+     * Line feed. This is the line ending used on Linux and macOS X and later.
      */
     LF("\n");
 
