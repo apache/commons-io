@@ -16,10 +16,12 @@
  */
 package org.apache.commons.io.build;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.IOUtils;
@@ -68,4 +70,12 @@ public class CharSequenceOriginTest extends AbstractOriginTest<CharSequence, Cha
         assertThrows(UnsupportedOperationException.class, super::testGetWriter);
     }
 
+    @Test
+    public void testGetReader_UTF16() throws IOException {
+        CharSequenceOrigin origin = new CharSequenceOrigin("This is a test");
+        Reader reader16 = origin.getReader(StandardCharsets.UTF_16);
+        Reader reader8 = origin.getReader(StandardCharsets.UTF_8);
+        assertEquals(reader8.read(), reader16.read());
+    }
+    
 }
