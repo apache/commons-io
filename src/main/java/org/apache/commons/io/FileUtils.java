@@ -3054,7 +3054,7 @@ public class FileUtils {
     }
 
     /**
-     * Converts each of an array of {@link File} to a {@link URL}.
+     * Converts each element of an array of {@link File} to a {@link URL}.
      * <p>
      * Returns an array of the same size as the input.
      * </p>
