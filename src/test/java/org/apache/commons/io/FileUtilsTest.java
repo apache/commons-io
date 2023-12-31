@@ -211,7 +211,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
             // On Windows, you are fine if you run a terminal with admin karma.
             Files.createSymbolicLink(linkPath, targetPath);
         } catch (final UnsupportedOperationException e) {
-            e.printStackTrace();
             createCircularOsSymLink(linkName, targetName);
         }
         // Sanity check:
