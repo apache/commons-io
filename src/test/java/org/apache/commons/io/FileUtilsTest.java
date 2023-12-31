@@ -792,25 +792,22 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertEquals("file3.txt", files.get(2).getName());
     }
 
-//   @Test public void testToURLs2() throws Exception {
-//        File[] files = new File[] {
-//            new File(temporaryFolder, "file1.txt"),
-//            null,
-//        };
-//        URL[] urls = FileUtils.toURLs(files);
-//
-//        assertEquals(files.length, urls.length);
-//        assertTrue(urls[0].toExternalForm().startsWith("file:"));
-//        assertTrue(urls[0].toExternalForm().indexOf("file1.txt") > 0);
-//        assertEquals(null, urls[1]);
-//    }
-//
-//   @Test public void testToURLs3() throws Exception {
-//        File[] files = null;
-//        URL[] urls = FileUtils.toURLs(files);
-//
-//        assertEquals(0, urls.length);
-//    }
+    @Test
+    public void testToURLs2() {
+        final File[] files = new File[] {
+            new File(tempDirFile, "file1.txt"),
+            null,
+        };
+        assertThrows(NullPointerException.class, () -> FileUtils.toURLs(files),
+                "Can't convert null URL");
+    }
+
+    @Test
+    public void testToURLs3() {
+        final File[] files = null;
+        assertThrows(NullPointerException.class, () -> FileUtils.toURLs(files),
+                "Can't convert null list");
+    }
 
     @Test
     public void testCopyDirectoryPreserveDates() throws Exception {

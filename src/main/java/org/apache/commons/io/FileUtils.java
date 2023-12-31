@@ -3062,7 +3062,7 @@ public class FileUtils {
      * @param files the files to convert, must not be {@code null}
      * @return an array of URLs matching the input
      * @throws IOException          if a file cannot be converted
-     * @throws NullPointerException if the parameter is null
+     * @throws NullPointerException if any argument is null
      */
     public static URL[] toURLs(final File... files) throws IOException {
         Objects.requireNonNull(files, "files");
