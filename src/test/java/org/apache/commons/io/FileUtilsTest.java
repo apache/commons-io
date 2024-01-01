@@ -26,6 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -43,6 +45,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnsupportedCharsetException;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -806,6 +809,38 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final File[] files = null;
         assertThrows(NullPointerException.class, () -> FileUtils.toURLs(files),
                 "Can't convert null list");
+    }
+
+    // IO-807
+    @Test
+    public void testCopyDirectory_brokenSymLink() throws IOException {
+        // Make a file
+        final File sourceDirectory = new File(tempDirFile, "source_directory");
+        sourceDirectory.mkdir();
+        final File targetFile = new File(sourceDirectory, "hello.txt");
+        FileUtils.writeStringToFile(targetFile, "HELLO WORLD", "UTF8");
+
+        // Make a symlink to the file
+        final Path targetPath = targetFile.toPath();
+        final Path linkPath = sourceDirectory.toPath().resolve("linkfile");
+        Files.createSymbolicLink(linkPath, targetPath);
+        assumeTrue(Files.isSymbolicLink(linkPath), () -> "Expected a symlink here: " + linkPath);
+        assumeTrue(Files.exists(linkPath));
+        assumeTrue(Files.exists(linkPath, LinkOption.NOFOLLOW_LINKS));
+
+        // Delete the file file to break the symlink
+        assumeTrue(targetFile.delete());
+        assumeFalse(Files.exists(linkPath));
+        assumeTrue(Files.exists(linkPath, LinkOption.NOFOLLOW_LINKS));
+
+        // Now copy sourceDirectory, including the broken link, to another directory
+        final File destination = new File(tempDirFile, "destination");
+        final FileNotFoundException thrown = assertThrows(
+                FileNotFoundException.class,
+                () -> FileUtils.copyDirectory(sourceDirectory, destination),
+                "ignored broken link"
+        );
+        assertTrue(thrown.getMessage().contains("linkfile' does not exist"));
     }
 
     @Test
