@@ -835,7 +835,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
         // Now copy sourceDirectory, including the broken link, to another directory
         final File destination = new File(tempDirFile, "destination");
-        FileNotFoundException thrown = assertThrows(FileNotFoundException.class, () -> FileUtils.copyDirectory(sourceDirectory, destination), "ignored broken link");
+        final FileNotFoundException thrown = assertThrows(FileNotFoundException.class, () -> FileUtils.copyDirectory(sourceDirectory, destination), "ignored broken link");
         assertTrue(thrown.getMessage().contains("linkfile' does not exist"));
     }
 
