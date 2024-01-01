@@ -881,7 +881,6 @@ public final class PathUtils {
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
      * </p>
-     * <p>
      *
      * @param path the path to query.
      * @return the extension of the file or an empty string if none exists or {@code null}
