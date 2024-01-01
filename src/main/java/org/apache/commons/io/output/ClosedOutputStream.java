@@ -22,8 +22,8 @@ import java.io.OutputStream;
 /**
  * Throws an IOException on all attempts to write to the stream.
  * <p>
- * Typically uses of this class include testing for corner cases in methods that accept an output stream and acting as a
- * sentinel value instead of a {@code null} output stream.
+ * Typically uses of this class include testing for corner cases in methods that accept an output stream and acting as a sentinel value instead of a
+ * {@code null} output stream.
  * </p>
  *
  * @since 1.4
@@ -58,11 +58,24 @@ public class ClosedOutputStream extends OutputStream {
     /**
      * Throws an {@link IOException} to indicate that the stream is closed.
      *
+     * @param b   ignored
+     * @param off ignored
+     * @param len ignored
+     * @throws IOException always thrown
+     */
+    @Override
+    public void write(final byte b[], final int off, final int len) throws IOException {
+        throw new IOException("write(byte[], int, int) failed: stream is closed");
+    }
+
+    /**
+     * Throws an {@link IOException} to indicate that the stream is closed.
+     *
      * @param b ignored
      * @throws IOException always thrown
      */
     @Override
     public void write(final int b) throws IOException {
-        throw new IOException("write(" + b + ") failed: stream is closed");
+        throw new IOException("write(int) failed: stream is closed");
     }
 }

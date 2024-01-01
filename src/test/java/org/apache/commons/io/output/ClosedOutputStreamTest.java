@@ -33,7 +33,18 @@ public class ClosedOutputStreamTest {
     @Test
     public void testFlush() throws IOException {
         try (ClosedOutputStream cos = new ClosedOutputStream()) {
-            assertThrows(IOException.class, () -> cos.flush());
+            assertThrows(IOException.class, cos::flush);
+        }
+    }
+
+    @Test
+    public void testSingleton() throws IOException {
+        try (@SuppressWarnings("deprecation")
+        ClosedOutputStream cos = ClosedOutputStream.CLOSED_OUTPUT_STREAM) {
+            assertThrows(IOException.class, cos::flush);
+        }
+        try (ClosedOutputStream cos = ClosedOutputStream.INSTANCE) {
+            assertThrows(IOException.class, cos::flush);
         }
     }
 
@@ -44,6 +55,22 @@ public class ClosedOutputStreamTest {
     public void testWrite() throws IOException {
         try (ClosedOutputStream cos = new ClosedOutputStream()) {
             assertThrows(IOException.class, () -> cos.write('x'));
+        }
+    }
+
+    @Test
+    public void testWriteArray() throws IOException {
+        try (ClosedOutputStream cos = new ClosedOutputStream()) {
+            assertThrows(IOException.class, () -> cos.write(new byte[0]));
+            assertThrows(IOException.class, () -> cos.write(new byte[10]));
+        }
+    }
+
+    @Test
+    public void testWriteArrayIndex() throws IOException {
+        try (ClosedOutputStream cos = new ClosedOutputStream()) {
+            assertThrows(IOException.class, () -> cos.write(new byte[0], 0, 0));
+            assertThrows(IOException.class, () -> cos.write(new byte[10], 0, 1));
         }
     }
 

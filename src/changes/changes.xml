@@ -87,6 +87,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Gary Gregory">Let subclasses of CountingInputStream.afterRead(int) throw IOException.</action>
       <action dev="ggregory" type="fix" issue="IO-807" due-to="Elliotte Rusty Harold, Gary Gregory">Characterization test for broken symlinks when copying directories #547.</action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">ClosedInputStream.read(byte[], int, int) does not always return -1.</action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">ClosedOutputStream.write(byte[], int, int) does not always throw IOException.</action>
       <!-- Add -->
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add and use PathUtils.getFileName(Path, Function&lt;Path, R&gt;).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add and use PathUtils.getFileNameString().</action>
