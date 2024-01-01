@@ -16,7 +16,12 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.nio.CharBuffer;
 
 import org.junit.jupiter.api.Test;
 
@@ -25,10 +30,61 @@ import org.junit.jupiter.api.Test;
  */
 public class ClosedReaderTest {
 
+    private void assertEof(final Reader reader) throws IOException {
+        assertEquals(EOF, reader.read(), "read()");
+    }
+
     @Test
-    public void testRead() throws Exception {
-        try (ClosedReader cr = new ClosedReader()) {
-            assertEquals(-1, cr.read(new char[10], 0, 10), "read(cbuf, off, len)");
+    public void testRead() throws IOException {
+        try (Reader reader = new ClosedReader()) {
+            assertEof(reader);
+        }
+    }
+
+    @Test
+    public void testReadArray() throws Exception {
+        try (Reader reader = new ClosedReader()) {
+            assertEquals(EOF, reader.read(new char[4096]));
+            assertEquals(EOF, reader.read(new char[1]));
+            assertEquals(EOF, reader.read(new char[0]));
+        }
+    }
+
+    @Test
+    public void testReadArrayIndex() throws Exception {
+        try (Reader reader = new ClosedReader()) {
+            assertEquals(EOF, reader.read(CharBuffer.wrap(new char[4096])));
+            assertEquals(EOF, reader.read(CharBuffer.wrap(new char[1])));
+            assertEquals(EOF, reader.read(CharBuffer.wrap(new char[0])));
+        }
+    }
+
+    @Test
+    public void testReadCharBuffer() throws Exception {
+        try (Reader reader = new ClosedReader()) {
+            assertEquals(EOF, reader.read(new char[4096]));
+            assertEquals(EOF, reader.read(new char[1]));
+            assertEquals(EOF, reader.read(new char[0]));
+        }
+    }
+
+    @Test
+    public void testSingleton() throws Exception {
+        try (@SuppressWarnings("deprecation")
+        Reader reader = ClosedReader.CLOSED_READER) {
+            assertEof(reader);
+        }
+        try (Reader reader = ClosedReader.INSTANCE) {
+            assertEof(reader);
+        }
+    }
+
+    @Test
+    public void testSkip() throws Exception {
+        try (Reader reader = new ClosedReader()) {
+            assertEquals(0, reader.skip(4096));
+            assertEquals(0, reader.skip(1));
+            assertEquals(0, reader.skip(0));
         }
     }
 
