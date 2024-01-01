@@ -85,6 +85,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix"                due-to="Elliotte Rusty Harold">Javadoc shouldn't reference 1.x behavior #539.</action>
       <action dev="ggregory" type="fix" issue="IO-829" due-to="Elliotte Rusty Harold, Gary Gregory">Don't decode and reencode characters in a potentially different charset in AbstractOrigin.CharSequenceOrigin.getReader(Charset).</action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">Let subclasses of CountingInputStream.afterRead(int) throw IOException.</action>
+      <action dev="ggregory" type="fix" issue="IO-807" due-to="Elliotte Rusty Harold, Gary Gregory">Characterization test for broken symlinks when copying directories #547.</action>
       <!-- Add -->
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add and use PathUtils.getFileName(Path, Function&lt;Path, R&gt;).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add and use PathUtils.getFileNameString().</action>
