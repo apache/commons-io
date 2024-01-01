@@ -757,6 +757,40 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(FileUtils.contentEqualsIgnoreEOL(file1, file2, null));
     }
 
+    /**
+     * Tests IO-807.
+     */
+    @Test
+    public void testCopyDirectory_brokenSymLink() throws IOException {
+        // Make a file
+        final File sourceDirectory = new File(tempDirFile, "source_directory");
+        sourceDirectory.mkdir();
+        final File targetFile = new File(sourceDirectory, "hello.txt");
+        FileUtils.writeStringToFile(targetFile, "HELLO WORLD", "UTF8");
+
+        // Make a symlink to the file
+        final Path targetPath = targetFile.toPath();
+        final Path linkPath = sourceDirectory.toPath().resolve("linkfile");
+        Files.createSymbolicLink(linkPath, targetPath);
+        assumeTrue(Files.isSymbolicLink(linkPath), () -> "Expected a symlink here: " + linkPath);
+        assumeTrue(Files.exists(linkPath));
+        assumeTrue(Files.exists(linkPath, LinkOption.NOFOLLOW_LINKS));
+
+        // Delete the file file to break the symlink
+        assumeTrue(targetFile.delete());
+        assumeFalse(Files.exists(linkPath));
+        assumeTrue(Files.exists(linkPath, LinkOption.NOFOLLOW_LINKS));
+
+        // Now copy sourceDirectory, including the broken link, to another directory
+        final File destination = new File(tempDirFile, "destination");
+        final FileNotFoundException thrown = assertThrows(
+                FileNotFoundException.class,
+                () -> FileUtils.copyDirectory(sourceDirectory, destination),
+                "ignored broken link"
+        );
+        assertTrue(thrown.getMessage().contains("linkfile' does not exist"));
+    }
+
     @Test
     public void testCopyDirectoryExceptions() {
         //
@@ -792,55 +826,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertEquals("parent", files.get(0).getName());
         assertEquals("child", files.get(1).getName());
         assertEquals("file3.txt", files.get(2).getName());
-    }
-
-    @Test
-    public void testToURLs2() {
-        final File[] files = new File[] {
-            new File(tempDirFile, "file1.txt"),
-            null,
-        };
-        assertThrows(NullPointerException.class, () -> FileUtils.toURLs(files),
-                "Can't convert null URL");
-    }
-
-    @Test
-    public void testToURLs3() {
-        final File[] files = null;
-        assertThrows(NullPointerException.class, () -> FileUtils.toURLs(files),
-                "Can't convert null list");
-    }
-
-    // IO-807
-    @Test
-    public void testCopyDirectory_brokenSymLink() throws IOException {
-        // Make a file
-        final File sourceDirectory = new File(tempDirFile, "source_directory");
-        sourceDirectory.mkdir();
-        final File targetFile = new File(sourceDirectory, "hello.txt");
-        FileUtils.writeStringToFile(targetFile, "HELLO WORLD", "UTF8");
-
-        // Make a symlink to the file
-        final Path targetPath = targetFile.toPath();
-        final Path linkPath = sourceDirectory.toPath().resolve("linkfile");
-        Files.createSymbolicLink(linkPath, targetPath);
-        assumeTrue(Files.isSymbolicLink(linkPath), () -> "Expected a symlink here: " + linkPath);
-        assumeTrue(Files.exists(linkPath));
-        assumeTrue(Files.exists(linkPath, LinkOption.NOFOLLOW_LINKS));
-
-        // Delete the file file to break the symlink
-        assumeTrue(targetFile.delete());
-        assumeFalse(Files.exists(linkPath));
-        assumeTrue(Files.exists(linkPath, LinkOption.NOFOLLOW_LINKS));
-
-        // Now copy sourceDirectory, including the broken link, to another directory
-        final File destination = new File(tempDirFile, "destination");
-        final FileNotFoundException thrown = assertThrows(
-                FileNotFoundException.class,
-                () -> FileUtils.copyDirectory(sourceDirectory, destination),
-                "ignored broken link"
-        );
-        assertTrue(thrown.getMessage().contains("linkfile' does not exist"));
     }
 
     @Test
@@ -2829,6 +2814,23 @@ public class FileUtilsTest extends AbstractTempDirTest {
         // Test escaped char
         assertTrue(urls[2].toExternalForm().startsWith("file:"));
         assertTrue(urls[2].toExternalForm().contains("test%20file.txt"));
+    }
+
+    @Test
+    public void testToURLs2() {
+        final File[] files = new File[] {
+            new File(tempDirFile, "file1.txt"),
+            null,
+        };
+        assertThrows(NullPointerException.class, () -> FileUtils.toURLs(files),
+                "Can't convert null URL");
+    }
+
+    @Test
+    public void testToURLs3() {
+        final File[] files = null;
+        assertThrows(NullPointerException.class, () -> FileUtils.toURLs(files),
+                "Can't convert null list");
     }
 
     @Test
