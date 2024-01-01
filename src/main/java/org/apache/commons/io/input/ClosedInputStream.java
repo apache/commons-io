@@ -18,6 +18,7 @@ package org.apache.commons.io.input;
 
 import static org.apache.commons.io.IOUtils.EOF;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
@@ -55,6 +56,19 @@ public class ClosedInputStream extends InputStream {
      */
     @Override
     public int read() {
+        return EOF;
+    }
+
+    /**
+     * Returns -1 to indicate that the stream is closed.
+     *
+     * @param b ignored.
+     * @param off ignored.
+     * @param len ignored.
+     * @return always -1
+     */
+    @Override
+    public int read(final byte[] b, final int off, final int len) throws IOException {
         return EOF;
     }
 
