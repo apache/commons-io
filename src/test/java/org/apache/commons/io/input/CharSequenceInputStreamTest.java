@@ -192,6 +192,17 @@ public class CharSequenceInputStreamTest {
         testBufferedRead(TEST_STRING, UTF_8);
     }
 
+    @Test
+    public void testCharacterCodingException() throws IOException {
+        final Charset charset = StandardCharsets.US_ASCII;
+        final CharSequenceInputStream in = CharSequenceInputStream.builder()
+            .setCharsetEncoder(charset.newEncoder().onUnmappableCharacter(CodingErrorAction.REPORT))
+            .setCharSequence("\u0080")
+            .get();
+        assertEquals(0, in.available());
+        assertThrows(UnmappableCharacterException.class, in::read);
+    }
+
     private void testCharsetMismatchInfiniteLoop(final String csName) throws IOException {
         // Input is UTF-8 bytes: 0xE0 0xB2 0xA0
         final char[] inputChars = { (char) 0xE0, (char) 0xB2, (char) 0xA0 };
@@ -526,16 +537,5 @@ public class CharSequenceInputStreamTest {
             r.skip(100);
             assertEquals(-1, r.read(), csName);
         }
-    }
-
-    @Test
-    public void testCharacterCodingException() throws IOException {
-        final Charset charset = StandardCharsets.US_ASCII;
-        final CharSequenceInputStream in = CharSequenceInputStream.builder()
-            .setCharsetEncoder(charset.newEncoder().onUnmappableCharacter(CodingErrorAction.REPORT))
-            .setCharSequence("\u0080")
-            .get();
-        assertEquals(0, in.available());
-        assertThrows(UnmappableCharacterException.class, in::read);
     }
 }

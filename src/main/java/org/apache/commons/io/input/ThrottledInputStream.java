@@ -118,6 +118,11 @@ public final class ThrottledInputStream extends CountingInputStream {
         this.maxBytesPerSecond = maxBytesPerSecond;
     }
 
+    @Override
+    protected void beforeRead(final int n) throws IOException {
+        throttle();
+    }
+
     /**
      * Gets the read-rate from this stream, since creation. Calculated as bytesRead/elapsedTimeSinceStart.
      *
@@ -142,11 +147,6 @@ public final class ThrottledInputStream extends CountingInputStream {
      */
     Duration getTotalSleepDuration() {
         return totalSleepDuration;
-    }
-
-    @Override
-    protected void beforeRead(final int n) throws IOException {
-        throttle();
     }
 
     private void throttle() throws InterruptedIOException {

@@ -164,10 +164,6 @@ public class BoundedInputStream extends ProxyInputStream {
         this.propagateClose = propagateClose;
     }
 
-    private CountingInputStream getCountingInputStream() {
-        return (CountingInputStream) in;
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -201,6 +197,10 @@ public class BoundedInputStream extends ProxyInputStream {
     @SuppressWarnings("resource") // no allocation
     public long getCount() {
         return getCountingInputStream().getByteCount();
+    }
+
+    private CountingInputStream getCountingInputStream() {
+        return (CountingInputStream) in;
     }
 
     /**
