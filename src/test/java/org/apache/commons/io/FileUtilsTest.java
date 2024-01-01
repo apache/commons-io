@@ -810,17 +810,16 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertThrows(NullPointerException.class, () -> FileUtils.toURLs(files),
                 "Can't convert null list");
     }
-    
+
     // IO-807
     @Test
     public void testCopyDirectory_brokenSymLink() throws IOException {
-        
         // Make a file
         final File sourceDirectory = new File(tempDirFile, "source_directory");
         sourceDirectory.mkdir();
         final File targetFile = new File(sourceDirectory, "hello.txt");
         FileUtils.writeStringToFile(targetFile, "HELLO WORLD", "UTF8");
-        
+
         // Make a symlink to the file
         final Path targetPath = targetFile.toPath();
         final Path linkPath = sourceDirectory.toPath().resolve("linkfile");
@@ -828,7 +827,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assumeTrue(Files.isSymbolicLink(linkPath), () -> "Expected a symlink here: " + linkPath);
         assumeTrue(Files.exists(linkPath));
         assumeTrue(Files.exists(linkPath, LinkOption.NOFOLLOW_LINKS));
-        
+
         // Delete the file file to break the symlink
         assumeTrue(targetFile.delete());
         assumeFalse(Files.exists(linkPath));
@@ -842,7 +841,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         } catch (FileNotFoundException ex) {
             assertTrue(ex.getMessage().contains("linkfile' does not exist"));
         }
-      
+
     }
 
     @Test
