@@ -228,7 +228,7 @@ public class XmlStreamReader extends Reader {
     public static final Pattern ENCODING_PATTERN = Pattern.compile(
     // @formatter:off
             "^<\\?xml\\s+"
-            + "version\\s*=\\s*(?:(?:\"1\\.[0-9]+\")|(?:'1.[0-9]+'))\\s+"
+            + "(?:version\\s*=\\s*(?:(?:\"1\\.[0-9]+\")|(?:'1.[0-9]+'))\\s+)??"
             + "encoding\\s*=\\s*"
             + "((?:\"[A-Za-z0-9][A-Za-z0-9._+:-]*\")"  // double-quoted
             +  "|(?:'[A-Za-z0-9][A-Za-z0-9._+:-]*'))", // single-quoted
