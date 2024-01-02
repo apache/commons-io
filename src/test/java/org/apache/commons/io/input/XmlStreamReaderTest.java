@@ -49,6 +49,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junitpioneer.jupiter.DefaultLocale;
 
+/**
+ * Tests {@link XmlStreamReader}.
+ */
 public class XmlStreamReaderTest {
 
     private static final String ISO_8859_1 = StandardCharsets.ISO_8859_1.name();
