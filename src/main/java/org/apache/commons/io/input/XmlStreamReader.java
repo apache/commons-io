@@ -210,9 +210,9 @@ public class XmlStreamReader extends Reader {
     private static final Pattern CHARSET_PATTERN = Pattern.compile("charset=[\"']?([.[^; \"']]*)[\"']?");
 
     /**
-     * Pattern capturing the encoding of the "xml" processing instruction.
+     * Pattern capturing the encoding of the <a href="https://www.w3.org/TR/REC-xml/#sec-pi">{@code 'xml'} processing instruction</a>.
      * <p>
-     * See also the <a href="https://www.w3.org/TR/2008/REC-xml-20081126/#NT-EncName">XML specification</a>.
+     * See also the <a href="https://www.w3.org/TR/2008/REC-xml-20081126/#NT-EncName">NT-EncName</a> XML specification.
      * </p>
      * <p>
      * Note the documented pattern is:
@@ -221,8 +221,8 @@ public class XmlStreamReader extends Reader {
      * EncName   ::=   [A-Za-z] ([A-Za-z0-9._] | '-')*
      * </pre>
      * <p>
-     * However this does not match all the aliases that are supported by Java.
-     * For example, '437', 'ISO_8859-1:1987' and 'ebcdic-de-273+euro'.
+     * However this does not match all the aliases that are supported by Java. For example, {@code '437'}, {@code 'ISO_8859-1:1987'} and
+     * {@code 'ebcdic-de-273+euro'}.
      * </p>
      */
     public static final Pattern ENCODING_PATTERN = Pattern.compile(
@@ -285,11 +285,7 @@ public class XmlStreamReader extends Reader {
         String mime = null;
         if (httpContentType != null) {
             final int i = httpContentType.indexOf(";");
-            if (i >= 0) {
-                mime = httpContentType.substring(0, i);
-            } else {
-                mime = httpContentType;
-            }
+            mime = i >= 0 ? httpContentType.substring(0, i) : httpContentType;
             mime = mime.trim();
         }
         return mime;
