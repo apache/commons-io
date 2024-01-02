@@ -261,7 +261,6 @@ public class BOMInputStream extends ProxyInputStream {
         // Sort the BOMs to match the longest BOM first because some BOMs have the same starting two bytes.
         list.sort(ByteOrderMarkLengthComparator);
         this.boms = list;
-
     }
 
     /**
