@@ -214,6 +214,16 @@ public class XmlStreamReader extends Reader {
      * <p>
      * See also the <a href="https://www.w3.org/TR/2008/REC-xml-20081126/#NT-EncName">XML specification</a>.
      * </p>
+     * <p>
+     * Note the documented pattern is:
+     * </p>
+     * <pre>
+     * EncName   ::=   [A-Za-z] ([A-Za-z0-9._] | '-')*
+     * </pre>
+     * <p>
+     * However this does not match all the aliases that are supported by Java.
+     * For example, '437', 'ISO_8859-1:1987' and 'ebcdic-de-273+euro'.
+     * </p>
      */
     public static final Pattern ENCODING_PATTERN = Pattern.compile(
     // @formatter:off
@@ -223,10 +233,6 @@ public class XmlStreamReader extends Reader {
             + "((?:\"[A-Za-z0-9][A-Za-z0-9._+:-]*\")"  // double-quoted
             +  "|(?:'[A-Za-z0-9][A-Za-z0-9._+:-]*'))", // single-quoted
             Pattern.MULTILINE);
-    // N.B. the documented pattern is
-    // EncName   ::=   [A-Za-z] ([A-Za-z0-9._] | '-')*
-    // However this does not match all the aliases that are supported by Java.
-    // e.g.  '437', 'ISO_8859-1:1987' and 'ebcdic-de-273+euro'
     // @formatter:on
 
     private static final String RAW_EX_1 = "Illegal encoding, BOM [{0}] XML guess [{1}] XML prolog [{2}] encoding mismatch";
@@ -325,7 +331,7 @@ public class XmlStreamReader extends Reader {
                 inputStream.reset();
                 final BufferedReader bReader = new BufferedReader(new StringReader(xmlProlog.substring(0, firstGT + 1)));
                 final StringBuilder prolog = new StringBuilder();
-                IOConsumer.forEach(bReader.lines(), prolog::append);
+                IOConsumer.forEach(bReader.lines(), l -> prolog.append(l).append(' '));
                 final Matcher m = ENCODING_PATTERN.matcher(prolog);
                 if (m.find()) {
                     encoding = m.group(1).toUpperCase(Locale.ROOT);

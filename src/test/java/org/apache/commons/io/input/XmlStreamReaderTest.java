@@ -60,6 +60,8 @@ public class XmlStreamReaderTest {
     private static final String UTF_32LE = "UTF-32LE";
     private static final String UTF_32BE = "UTF-32BE";
     private static final String UTF_8 = StandardCharsets.UTF_8.name();
+
+    private static final String XML6 = "xml-prolog-encoding-new-line";
     private static final String XML5 = "xml-prolog-encoding-spaced-single-quotes";
     private static final String XML4 = "xml-prolog-encoding-single-quotes";
     private static final String XML3 = "xml-prolog-encoding-double-quotes";
@@ -102,6 +104,8 @@ public class XmlStreamReaderTest {
 
     private static final MessageFormat XML_WITH_PROLOG = new MessageFormat(
             "<?xml version=\"1.0\"?>\n<root>{2}</root>");
+    private static final MessageFormat XML_WITH_PROLOG_AND_ENCODING_NEW_LINES = new MessageFormat(
+            "<?xml\nversion\n=\n\"1.0\"\nencoding\n=\n\"{1}\"\n?>\n<root>{2}</root>");
 
     private static final MessageFormat XML_WITH_PROLOG_AND_ENCODING_DOUBLE_QUOTES = new MessageFormat(
             "<?xml version=\"1.0\" encoding=\"{1}\"?>\n<root>{2}</root>");
@@ -123,6 +127,7 @@ public class XmlStreamReaderTest {
         XMLs.put(XML3, XML_WITH_PROLOG_AND_ENCODING_DOUBLE_QUOTES);
         XMLs.put(XML4, XML_WITH_PROLOG_AND_ENCODING_SINGLE_QUOTES);
         XMLs.put(XML5, XML_WITH_PROLOG_AND_ENCODING_SPACED_SINGLE_QUOTES);
+        XMLs.put(XML6, XML_WITH_PROLOG_AND_ENCODING_NEW_LINES);
     }
 
     /**
@@ -621,6 +626,11 @@ public class XmlStreamReaderTest {
         xmlReader.close();
 
         is = getXmlInputStream("no-bom", XML5, encoding, encoding);
+        xmlReader = new XmlStreamReader(is);
+        assertEquals(xmlReader.getEncoding(), encoding);
+        xmlReader.close();
+
+        is = getXmlInputStream("no-bom", XML6, encoding, encoding);
         xmlReader = new XmlStreamReader(is);
         assertEquals(xmlReader.getEncoding(), encoding);
         xmlReader.close();
