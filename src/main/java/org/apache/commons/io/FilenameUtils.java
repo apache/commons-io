@@ -664,7 +664,7 @@ public class FilenameUtils {
      * a.txt        --&gt; ""
      * a/b/c        --&gt; a/b
      * a/b/c/       --&gt; a/b/c
-     * C:           --&gt; C:
+     * C:           --&gt; ""
      * C:\          --&gt; C:\
      * ~            --&gt; ~
      * ~/           --&gt; ~
