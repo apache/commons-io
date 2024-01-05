@@ -129,7 +129,7 @@ public class UnsynchronizedFilterInputStreamTest {
     @Test
     public void test_read$B() throws IOException {
         final byte[] buf1 = new byte[100];
-        is.read(buf1);
+        assertEquals(buf1.length, is.read(buf1));
         assertTrue(new String(buf1, 0, buf1.length, StandardCharsets.UTF_8).equals(DATA.substring(0, 100)), "Failed to read correct data");
     }
 
