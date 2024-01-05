@@ -145,8 +145,7 @@ public class ChecksumInputStreamTest {
                 .get()) {
                 // @formatter:on
             assertEquals(0, checksum.getByteCount());
-            @SuppressWarnings("unused")
-            final int intOne = checksum.read(byteArray);
+            assertEquals(4, checksum.read(byteArray));
             assertEquals(byteArray.length, checksum.getByteCount());
             assertEquals(29, checksum.getRemaining());
             final long skipReturnValue = checksum.skip((byte) 1);
