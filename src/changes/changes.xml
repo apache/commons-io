@@ -90,6 +90,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Gary Gregory">ClosedOutputStream.write(byte[], int, int) does not always throw IOException.</action>
       <action dev="ggregory" type="fix" due-to="Sylwester Lachiewicz, Gary Gregory">XmlStreamReader can't parse an XML document with a multi-line prolog #550.</action>
       <action dev="ggregory" type="fix" due-to="Andreas Hubold, Gary Gregory">XmlStreamReader can't parse XML an document with an external parsed entity prolog.</action>
+      <action dev="ggregory" type="fix" issue="IO-836" due-to="Elliotte Rusty Harold">Update FileNameUtils Javadoc #554.</action>
       <!-- Add -->
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add and use PathUtils.getFileName(Path, Function&lt;Path, R&gt;).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add and use PathUtils.getFileNameString().</action>
