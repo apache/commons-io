@@ -62,7 +62,7 @@ import java.util.stream.Stream;
  * <li>the base name - file</li>
  * <li>the extension - txt</li>
  * </ul>
- *
+ * <p>
  * Given an absolute Unix path such as /dev/project/file.txt they are:
  * </p>
  * <ul>
@@ -74,7 +74,7 @@ import java.util.stream.Stream;
  * <li>the base name - file</li>
  * <li>the extension - txt</li>
  * </ul>
- *
+ * <p>
  * Given a relative Windows path such as dev\project\file.txt they are:
  * </p>
  * <ul>
@@ -86,7 +86,7 @@ import java.util.stream.Stream;
  * <li>the base name - file</li>
  * <li>the extension - txt</li>
  * </ul>
- *
+ * <p>
  * Given an absolute Unix path such as /dev/project/file.txt they are:
  * </p>
  * <ul>
