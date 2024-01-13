@@ -37,6 +37,7 @@ import org.apache.commons.io.input.UnsynchronizedByteArrayInputStream;
 //@NotThreadSafe
 public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArrayOutputStream {
 
+    // @formatter:off
     /**
      * Builds a new {@link UnsynchronizedByteArrayOutputStream} instance.
      * <p>
@@ -56,6 +57,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      *   .get();}
      * </pre>
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<UnsynchronizedByteArrayOutputStream, Builder> {
 
         /**

@@ -41,6 +41,7 @@ import org.apache.commons.io.file.PathUtils;
  */
 public class DeferredFileOutputStream extends ThresholdingOutputStream {
 
+    // @formatter:off
     /**
      * Builds a new {@link DeferredFileOutputStream} instance.
      * <p>
@@ -62,6 +63,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      *
      * @since 2.12.0
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<DeferredFileOutputStream, Builder> {
 
         private int threshold;

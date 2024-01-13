@@ -51,13 +51,14 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  */
 public class FileWriterWithEncoding extends ProxyWriter {
 
+    // @formatter:off
     /**
      * Builds a new {@link FileWriterWithEncoding} instance.
      * <p>
      * Using a CharsetEncoder:
      * </p>
      * <pre>{@code
-     * FileWriterWithEncoding s = FileWriterWithEncoding.builder()
+     * FileWriterWithEncoding w = FileWriterWithEncoding.builder()
      *   .setPath(path)
      *   .setAppend(false)
      *   .setCharsetEncoder(StandardCharsets.UTF_8.newEncoder())
@@ -67,7 +68,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
      * Using a Charset:
      * </p>
      * <pre>{@code
-     * FileWriterWithEncoding s = FileWriterWithEncoding.builder()
+     * FileWriterWithEncoding w = FileWriterWithEncoding.builder()
      *   .setPath(path)
      *   .setAppend(false)
      *   .setCharsetEncoder(StandardCharsets.UTF_8)
@@ -76,6 +77,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
      *
      * @since 2.12.0
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<FileWriterWithEncoding, Builder> {
 
         private boolean append;

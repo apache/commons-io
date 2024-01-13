@@ -46,6 +46,7 @@ import org.apache.commons.io.input.XmlStreamReader;
  */
 public class XmlStreamWriter extends Writer {
 
+    // @formatter:off
     /**
      * Builds a new {@link XmlStreamWriter} instance.
      * <p>
@@ -60,6 +61,7 @@ public class XmlStreamWriter extends Writer {
      *
      * @since 2.12.0
      */
+    // @formatter:off
     public static class Builder extends AbstractStreamBuilder<XmlStreamWriter, Builder> {
 
         /**

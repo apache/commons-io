@@ -78,6 +78,7 @@ import org.apache.commons.io.charset.CharsetDecoders;
  */
 public class WriterOutputStream extends OutputStream {
 
+    // @formatter:off
     /**
      * Builds a new {@link WriterOutputStream} instance.
      * <p>
@@ -94,6 +95,7 @@ public class WriterOutputStream extends OutputStream {
      *
      * @since 2.12.0
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<WriterOutputStream, Builder> {
 
         private CharsetDecoder charsetDecoder;

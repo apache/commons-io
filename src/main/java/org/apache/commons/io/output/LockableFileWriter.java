@@ -50,6 +50,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  */
 public class LockableFileWriter extends Writer {
 
+    // @formatter:off
     /**
      * Builds a new {@link LockableFileWriter} instance.
      * <p>
@@ -65,6 +66,7 @@ public class LockableFileWriter extends Writer {
      *
      * @since 2.12.0
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<LockableFileWriter, Builder> {
 
         private boolean append;

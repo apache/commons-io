@@ -38,6 +38,7 @@ import org.apache.commons.io.function.Uncheck;
  */
 public final class UncheckedFilterOutputStream extends FilterOutputStream {
 
+    // @formatter:off
     /**
      * Builds a new {@link UncheckedFilterOutputStream} instance.
      * <p>
@@ -57,6 +58,7 @@ public final class UncheckedFilterOutputStream extends FilterOutputStream {
      *   .get();}
      * </pre>
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<UncheckedFilterOutputStream, Builder> {
 
         /**

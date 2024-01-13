@@ -38,6 +38,7 @@ import org.apache.commons.io.function.Uncheck;
  */
 public final class UncheckedFilterWriter extends FilterWriter {
 
+    // @formatter:off
     /**
      * Builds a new {@link UncheckedFilterWriter} instance.
      * <p>
@@ -57,6 +58,7 @@ public final class UncheckedFilterWriter extends FilterWriter {
      *   .get();}
      * </pre>
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<UncheckedFilterWriter, Builder> {
 
         /**
