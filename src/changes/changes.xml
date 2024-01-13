@@ -107,6 +107,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add FileTimes.toUnixTime(FileTime).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add BrokenInputStream.Builder.</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add PathUtils.getExtension(Path).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add PathUtils.getBaseName(Path).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add ThrottledInputStream.</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IORunnable.noop().</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add ChecksumInputStream and test #548.</action>

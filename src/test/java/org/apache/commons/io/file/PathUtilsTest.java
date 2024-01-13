@@ -247,6 +247,27 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testGetBaseNamePathBaseCases() {
+        assertEquals("bar", PathUtils.getBaseName(Paths.get("a/b/c/bar.foo")));
+        assertEquals("foo", PathUtils.getBaseName(Paths.get("foo")));
+        assertEquals("", PathUtils.getBaseName(Paths.get("")));
+        assertEquals("", PathUtils.getBaseName(Paths.get(".")));
+        for (final File f : File.listRoots()) {
+            assertNull(PathUtils.getBaseName(f.toPath()));
+        }
+        if (SystemUtils.IS_OS_WINDOWS) {
+            assertNull(PathUtils.getBaseName(Paths.get("C:\\")));
+        }
+    }
+
+    @Test
+    public void testGetBaseNamePathCornerCases() {
+        assertNull(PathUtils.getBaseName((Path) null));
+        assertEquals("foo", PathUtils.getBaseName(Paths.get("foo.")));
+        assertEquals("", PathUtils.getBaseName(Paths.get("bar/.foo")));
+    }
+
+    @Test
     public void testGetExtension() {
         assertNull(PathUtils.getExtension(null));
         assertEquals("ext", PathUtils.getExtension(Paths.get("file.ext")));
