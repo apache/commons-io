@@ -16,13 +16,18 @@
  */
 package org.apache.commons.io.output;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.file.TempFile;
+import org.apache.commons.lang3.ArrayFill;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -40,8 +45,13 @@ public class ChunkedOutputStreamTest {
         };
     }
 
+    /**
+     * Tests the default chunk size with a ByteArrayOutputStream.
+     *
+     * @throws IOException
+     */
     @Test
-    public void testDefaultBuilder() throws IOException {
+    public void testBuildSetByteArrayOutputStream() throws IOException {
         final AtomicInteger numWrites = new AtomicInteger();
         try (ByteArrayOutputStream baos = newByteArrayOutputStream(numWrites);
                 final ChunkedOutputStream chunked = ChunkedOutputStream.builder().setOutputStream(baos).get()) {
@@ -49,6 +59,23 @@ public class ChunkedOutputStreamTest {
             assertEquals(2, numWrites.get());
         }
         assertThrows(IllegalStateException.class, () -> ChunkedOutputStream.builder().get());
+    }
+
+    /**
+     * Tests the default chunk size with a Path.
+     *
+     * @throws IOException
+     */
+    @Test
+    public void testBuildSetPath() throws IOException {
+        try (TempFile tempFile = TempFile.create("test-", ".txt")) {
+            final byte[] fill = ArrayFill.fill(new byte[IOUtils.DEFAULT_BUFFER_SIZE + 1], (byte) 'a');
+            final Path tempPath = tempFile.get();
+            try (ChunkedOutputStream chunked = ChunkedOutputStream.builder().setPath(tempPath).get()) {
+                chunked.write(fill);
+            }
+            assertArrayEquals(fill, Files.readAllBytes(tempPath));
+        }
     }
 
     @Test
