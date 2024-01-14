@@ -783,12 +783,11 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
         // Now copy sourceDirectory, including the broken link, to another directory
         final File destination = new File(tempDirFile, "destination");
-        final FileNotFoundException thrown = assertThrows(
-                FileNotFoundException.class,
-                () -> FileUtils.copyDirectory(sourceDirectory, destination),
-                "ignored broken link"
-        );
-        assertTrue(thrown.getMessage().contains("linkfile' does not exist"));
+        FileUtils.copyDirectory(sourceDirectory, destination);
+        assertTrue(destination.exists());
+        File copiedBrokenSymlink = new File(destination, "linkfile");
+        assertTrue(Files.isSymbolicLink(copiedBrokenSymlink.toPath()));
+        assertFalse(Files.exists(copiedBrokenSymlink.toPath()));
     }
 
     @Test
