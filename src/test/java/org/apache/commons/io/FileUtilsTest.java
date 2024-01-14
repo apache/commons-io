@@ -785,9 +785,14 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final File destination = new File(tempDirFile, "destination");
         FileUtils.copyDirectory(sourceDirectory, destination);
         assertTrue(destination.exists());
-        File copiedBrokenSymlink = new File(destination, "linkfile");
-        assertTrue(Files.isSymbolicLink(copiedBrokenSymlink.toPath()));
-        assertFalse(Files.exists(copiedBrokenSymlink.toPath()));
+        final Path copiedBrokenSymlink = new File(destination, "linkfile").toPath();
+
+        // test for theb existence of the copied symbolic link as a link
+        assertTrue(Files.isSymbolicLink(copiedBrokenSymlink));
+
+        // shouldn't be able to read through to the source of the link.
+        // If we can, then the link points somewhere other than the deleted file
+        assertFalse(Files.exists(copiedBrokenSymlink));
     }
 
     @Test
