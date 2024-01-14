@@ -182,15 +182,15 @@ public abstract class ProxyInputStream extends FilterInputStream {
     /**
      * Invokes the delegate's {@code read(byte[])} method.
      *
-     * @param bts the buffer to read the bytes into
+     * @param b the buffer to read the bytes into
      * @return the number of bytes read or EOF if the end of stream
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public int read(final byte[] bts) throws IOException {
+    public int read(final byte[] b) throws IOException {
         try {
-            beforeRead(IOUtils.length(bts));
-            final int n = in.read(bts);
+            beforeRead(IOUtils.length(b));
+            final int n = in.read(b);
             afterRead(n);
             return n;
         } catch (final IOException e) {
@@ -202,17 +202,17 @@ public abstract class ProxyInputStream extends FilterInputStream {
     /**
      * Invokes the delegate's {@code read(byte[], int, int)} method.
      *
-     * @param bts the buffer to read the bytes into
+     * @param b the buffer to read the bytes into
      * @param off The start offset
      * @param len The number of bytes to read
      * @return the number of bytes read or -1 if the end of stream
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public int read(final byte[] bts, final int off, final int len) throws IOException {
+    public int read(final byte[] b, final int off, final int len) throws IOException {
         try {
             beforeRead(len);
-            final int n = in.read(bts, off, len);
+            final int n = in.read(b, off, len);
             afterRead(n);
             return n;
         } catch (final IOException e) {
