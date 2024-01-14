@@ -787,7 +787,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(destination.exists());
         final Path copiedBrokenSymlink = new File(destination, "linkfile").toPath();
 
-        // test for theb existence of the copied symbolic link as a link
+        // test for the existence of the copied symbolic link as a link
         assertTrue(Files.isSymbolicLink(copiedBrokenSymlink));
 
         // shouldn't be able to read through to the source of the link.
