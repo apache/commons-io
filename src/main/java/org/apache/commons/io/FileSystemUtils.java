@@ -469,9 +469,9 @@ public class FileSystemUtils {
         //
         // This method does what it can to avoid the 'Too many open files' error
         // based on trial and error and these links:
-        // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4784692
-        // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4801027
-        // http://forum.java.sun.com/thread.jspa?threadID=533029&messageID=2572018
+        // https://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4784692
+        // https://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4801027
+        // https://forum.java.sun.com/thread.jspa?threadID=533029&messageID=2572018
         // however, it's still not perfect as the JDK support is so poor
         // (see commons-exec or Ant for a better multithreaded multi-OS solution)
         //
