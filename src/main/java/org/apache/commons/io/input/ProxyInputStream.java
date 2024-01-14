@@ -51,7 +51,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     }
 
     /**
-     * Invoked by the read methods after the proxied call has returned
+     * Invoked by the {@code read} methods after the proxied call has returned
      * successfully. The number of bytes returned to the caller (or -1 if
      * the end of stream was reached) is given as an argument.
      * <p>
@@ -76,6 +76,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
 
     /**
      * Invokes the delegate's {@code available()} method.
+     *
      * @return the number of available bytes
      * @throws IOException if an I/O error occurs.
      */
@@ -90,7 +91,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     }
 
     /**
-     * Invoked by the read methods before the call is proxied. The number
+     * Invoked by the {@code read} methods before the call is proxied. The number
      * of bytes that the caller wanted to read (1 for the {@link #read()}
      * method, buffer length for {@link #read(byte[])}, etc.) is given as
      * an argument.
@@ -125,7 +126,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     }
 
     /**
-     * Handle any IOExceptions thrown; by default, throws the given exception.
+     * Handles any IOExceptions thrown; by default, throws the given exception.
      * <p>
      * This method provides a point to implement custom exception
      * handling. The default behavior is to re-throw the exception.
