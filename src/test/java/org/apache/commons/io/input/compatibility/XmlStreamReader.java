@@ -58,11 +58,11 @@ import org.apache.commons.io.output.XmlStreamWriter;
  * By default the charset encoding detection is lenient, the constructor with
  * the lenient flag can be used for a script (following HTTP MIME and XML
  * specifications). All this is nicely explained by Mark Pilgrim in his blog, <a
- * href="http://diveintomark.org/archives/2004/02/13/xml-media-types">
+ * href="https://diveintomark.org/archives/2004/02/13/xml-media-types">
  * Determining the character encoding of a feed</a>.
  * </p>
  * <p>
- * Originally developed for <a href="http://rome.dev.java.net">ROME</a> under
+ * Originally developed for <a href="https://rome.dev.java.net">ROME</a> under
  * Apache License 2.0.
  * </p>
  *
