@@ -57,6 +57,7 @@ import java.time.chrono.ChronoLocalDate;
 import java.time.chrono.ChronoLocalDateTime;
 import java.time.chrono.ChronoZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -297,7 +298,9 @@ public class FileUtils {
             if (file.exists()) {
                 throw new IllegalArgumentException("Parameter '" + name + "' is not a file: " + file);
             }
-            throw new FileNotFoundException("Source '" + file + "' does not exist");
+            if (!Files.isSymbolicLink(file.toPath())) {
+                throw new FileNotFoundException("Source '" + file + "' does not exist");
+            }
         }
     }
 
@@ -503,6 +506,13 @@ public class FileUtils {
      * modified date/times using {@link BasicFileAttributeView#setTimes(FileTime, FileTime, FileTime)}. However it is
      * not guaranteed that the operation will succeed. If the modification operation fails, it falls back to
      * {@link File#setLastModified(long)}. If that fails, the method throws IOException.
+     * </p>
+     * <p>
+     * Symbolic links in the source directory are copied to new symbolic links in the destination
+     * directory that point to the original target. The target of the link is not copied unless
+     * it is also under the source directory. Even if it is under the source directory, the new symbolic
+     * link in the destination points to the original target in the source directory, not to the
+     * newly created copy of the target.
      * </p>
      *
      * @param srcDir an existing directory to copy, must not be {@code null}.
@@ -816,7 +826,7 @@ public class FileUtils {
      * @param srcFile an existing file to copy, must not be {@code null}.
      * @param destFile the new file, must not be {@code null}.
      * @param preserveFileDate true if the file date of the copy should be the same as the original.
-     * @param copyOptions options specifying how the copy should be done, for example {@link StandardCopyOption}..
+     * @param copyOptions options specifying how the copy should be done, for example {@link StandardCopyOption}.
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
      * @throws FileNotFoundException if the source does not exist.
      * @throws IllegalArgumentException if source is not a file.
@@ -825,7 +835,7 @@ public class FileUtils {
      * @see #copyFileToDirectory(File, File, boolean)
      * @since 2.8.0
      */
-    public static void copyFile(final File srcFile, final File destFile, final boolean preserveFileDate, final CopyOption... copyOptions) throws IOException {
+    public static void copyFile(final File srcFile, final File destFile, final boolean preserveFileDate, CopyOption... copyOptions) throws IOException {
         Objects.requireNonNull(destFile, "destination");
         checkFileExists(srcFile, "srcFile");
         requireCanonicalPathsNotEquals(srcFile, destFile);
@@ -834,10 +844,18 @@ public class FileUtils {
             checkFileExists(destFile, "destFile");
             requireCanWrite(destFile, "destFile");
         }
+
+        final boolean isSymLink = Files.isSymbolicLink(srcFile.toPath());
+        if (isSymLink && !Arrays.asList(copyOptions).contains(LinkOption.NOFOLLOW_LINKS)) {
+            final List<CopyOption> list = new ArrayList<CopyOption>(Arrays.asList(copyOptions));
+            list.add(LinkOption.NOFOLLOW_LINKS);
+            copyOptions = list.toArray(new CopyOption[0]);
+        }
+
         Files.copy(srcFile.toPath(), destFile.toPath(), copyOptions);
 
         // On Windows, the last modified time is copied by default.
-        if (preserveFileDate && !setTimes(srcFile, destFile)) {
+        if (preserveFileDate && !isSymLink && !setTimes(srcFile, destFile)) {
             throw new IOException("Cannot set the file time.");
         }
     }
