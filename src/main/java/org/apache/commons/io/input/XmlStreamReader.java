@@ -58,8 +58,8 @@ import org.apache.commons.io.output.XmlStreamWriter;
  * </p>
  * <p>
  * By default the charset encoding detection is lenient, the constructor with the lenient flag can be used for a script (following HTTP MIME and XML
- * specifications). All this is nicely explained by Mark Pilgrim in his blog, <a href="https://diveintomark.org/archives/2004/02/13/xml-media-types"> Determining
- * the character encoding of a feed</a>.
+ * specifications). All this is nicely explained by Mark Pilgrim in his blog, <a href="https://diveintomark.org/archives/2004/02/13/xml-media-types">
+ * Determining the character encoding of a feed</a>.
  * </p>
  * <p>
  * To build an instance, see {@link Builder}.
