@@ -845,14 +845,15 @@ public class FileUtils {
             requireCanWrite(destFile, "destFile");
         }
 
-        final boolean isSymLink = Files.isSymbolicLink(srcFile.toPath());
+        final Path srcPath = srcFile.toPath();
+        final boolean isSymLink = Files.isSymbolicLink(srcPath);
         if (isSymLink && !Arrays.asList(copyOptions).contains(LinkOption.NOFOLLOW_LINKS)) {
-            final List<CopyOption> list = new ArrayList<CopyOption>(Arrays.asList(copyOptions));
+            final List<CopyOption> list = new ArrayList<>(Arrays.asList(copyOptions));
             list.add(LinkOption.NOFOLLOW_LINKS);
-            copyOptions = list.toArray(new CopyOption[0]);
+            copyOptions = list.toArray(PathUtils.EMPTY_COPY_OPTIONS);
         }
 
-        Files.copy(srcFile.toPath(), destFile.toPath(), copyOptions);
+        Files.copy(srcPath, destFile.toPath(), copyOptions);
 
         // On Windows, the last modified time is copied by default.
         if (preserveFileDate && !isSymLink && !setTimes(srcFile, destFile)) {
