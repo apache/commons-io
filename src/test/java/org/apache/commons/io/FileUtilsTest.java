@@ -757,6 +757,33 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(FileUtils.contentEqualsIgnoreEOL(file1, file2, null));
     }
 
+    @Test
+    public void testCopyDirectory_symLink() throws IOException {
+        // Make a file
+        final File sourceDirectory = new File(tempDirFile, "source_directory");
+        sourceDirectory.mkdir();
+        final File targetFile = new File(sourceDirectory, "hello.txt");
+        FileUtils.writeStringToFile(targetFile, "HELLO WORLD", "UTF8");
+
+        // Make a symlink to the file
+        final Path targetPath = targetFile.toPath();
+        final Path linkPath = sourceDirectory.toPath().resolve("linkfile");
+        Files.createSymbolicLink(linkPath, targetPath);
+        assumeTrue(Files.isSymbolicLink(linkPath), () -> "Expected a symlink here: " + linkPath);
+        assumeTrue(Files.exists(linkPath));
+        assumeTrue(Files.exists(linkPath, LinkOption.NOFOLLOW_LINKS));
+
+        // Now copy sourceDirectory, including the broken link, to another directory
+        final File destination = new File(tempDirFile, "destination");
+        FileUtils.copyDirectory(sourceDirectory, destination);
+        assertTrue(destination.exists());
+        final Path copiedSymlink = new File(destination, "linkfile").toPath();
+
+        // test for the existence of the copied symbolic link as a link
+        assertTrue(Files.isSymbolicLink(copiedSymlink));
+        assertTrue(Files.exists(copiedSymlink));
+    }
+
     /**
      * Tests IO-807.
      */
