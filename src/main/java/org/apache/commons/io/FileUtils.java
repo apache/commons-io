@@ -846,12 +846,10 @@ public class FileUtils {
         }
 
         final boolean isSymLink = Files.isSymbolicLink(srcFile.toPath());
-        if (isSymLink) {
-            if (!Arrays.asList(copyOptions).contains(LinkOption.NOFOLLOW_LINKS)) {
-                final List<CopyOption> list = new ArrayList<CopyOption>(Arrays.asList(copyOptions));
-                list.add(LinkOption.NOFOLLOW_LINKS);
-                copyOptions = list.toArray(new CopyOption[0]);
-            }
+        if (isSymLink && !Arrays.asList(copyOptions).contains(LinkOption.NOFOLLOW_LINKS)) {
+            final List<CopyOption> list = new ArrayList<CopyOption>(Arrays.asList(copyOptions));
+            list.add(LinkOption.NOFOLLOW_LINKS);
+            copyOptions = list.toArray(new CopyOption[0]);
         }
 
         Files.copy(srcFile.toPath(), destFile.toPath(), copyOptions);
