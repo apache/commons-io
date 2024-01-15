@@ -46,7 +46,7 @@ public class MessageDigestInputStreamTest {
 
     @Test
     public void testNormalUse() throws Exception {
-        for (int i = 256; i < 8192; i = i * 2) {
+        for (int i = 256; i < 8192; i *= 2) {
             final byte[] buffer = generateRandomByteStream(i);
             final byte[] expect = DigestUtils.sha512(buffer);
             try (MessageDigestInputStream messageDigestInputStream = MessageDigestInputStream.builder().setMessageDigest(MessageDigestAlgorithms.SHA_512)

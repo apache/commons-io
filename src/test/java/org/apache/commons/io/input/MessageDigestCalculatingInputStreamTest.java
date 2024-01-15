@@ -34,7 +34,7 @@ public class MessageDigestCalculatingInputStreamTest {
 
     @Test
     public void testNormalUse() throws Exception {
-        for (int i = 256; i < 8192; i = i * 2) {
+        for (int i = 256; i < 8192; i *= 2) {
             final byte[] buffer = MessageDigestInputStreamTest.generateRandomByteStream(i);
             final MessageDigest defaultMessageDigest = MessageDigestCalculatingInputStream.getDefaultMessageDigest();
             final byte[] defaultExpect = defaultMessageDigest.digest(buffer);
