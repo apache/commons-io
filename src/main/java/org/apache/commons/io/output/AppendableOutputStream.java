@@ -46,7 +46,7 @@ public class AppendableOutputStream <T extends Appendable> extends OutputStream 
     }
 
     /**
-     * Return the target appendable.
+     * Gets the target appendable.
      *
      * @return the target appendable
      */

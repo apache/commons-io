@@ -122,7 +122,7 @@ public class FileCleaningTracker {
         }
 
         /**
-         * Return the path.
+         * Gets the path.
          *
          * @return the path
          */

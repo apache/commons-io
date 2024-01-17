@@ -58,7 +58,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     }
 
     /**
-     * Return the set of changed directories.
+     * Gets the set of changed directories.
      *
      * @return Directories which have changed
      */
@@ -67,7 +67,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     }
 
     /**
-     * Return the set of changed files.
+     * Gets the set of changed files.
      *
      * @return Files which have changed
      */
@@ -76,7 +76,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     }
 
     /**
-     * Return the set of created directories.
+     * Gets the set of created directories.
      *
      * @return Directories which have been created
      */
@@ -85,7 +85,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     }
 
     /**
-     * Return the set of created files.
+     * Gets the set of created files.
      *
      * @return Files which have been created
      */
@@ -94,7 +94,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     }
 
     /**
-     * Return the set of deleted directories.
+     * Gets the set of deleted directories.
      *
      * @return Directories which been deleted
      */
@@ -103,7 +103,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
     }
 
     /**
-     * Return the set of deleted files.
+     * Gets the set of deleted files.
      *
      * @return Files which been deleted
      */

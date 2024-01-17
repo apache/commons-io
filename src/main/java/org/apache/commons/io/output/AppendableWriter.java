@@ -108,7 +108,7 @@ public class AppendableWriter <T extends Appendable> extends Writer {
     }
 
     /**
-     * Return the target appendable.
+     * Gets the target appendable.
      *
      * @return the target appendable
      */

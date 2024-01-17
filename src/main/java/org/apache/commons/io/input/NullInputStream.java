@@ -153,7 +153,7 @@ public class NullInputStream extends InputStream {
     }
 
     /**
-     * Return the size this {@link InputStream} emulates.
+     * Gets the size this {@link InputStream} emulates.
      *
      * @return The size of the input stream to emulate.
      */
