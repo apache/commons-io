@@ -108,7 +108,6 @@ public class ExtensionFileComparator extends AbstractFileComparator implements S
      * is less than the second, zero if the extensions are the
      * same and a positive value if the first files extension
      * is greater than the second file.
-     *
      */
     @Override
     public int compare(final File file1, final File file2) {

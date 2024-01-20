@@ -103,7 +103,6 @@ public class PathFileComparator extends AbstractFileComparator implements Serial
      * is less than the second, zero if the paths are the
      * same and a positive value if the first files path
      * is greater than the second file.
-     *
      */
     @Override
     public int compare(final File file1, final File file2) {

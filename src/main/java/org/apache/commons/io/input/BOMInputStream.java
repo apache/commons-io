@@ -326,7 +326,6 @@ public class BOMInputStream extends ProxyInputStream {
      * @return The BOM charset Name or null if no BOM found
      * @throws IOException
      *             if an error reading the first bytes of the stream occurs
-     *
      */
     public String getBOMCharsetName() throws IOException {
         getBOM();

@@ -113,7 +113,6 @@ public class SizeFileComparator extends AbstractFileComparator implements Serial
      * is less than the second, zero if the lengths are the
      * same and a positive value if the first files length
      * is greater than the second file.
-     *
      */
     @Override
     public int compare(final File file1, final File file2) {

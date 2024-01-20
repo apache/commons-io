@@ -37,7 +37,6 @@ public class FileAlterationObserverTest extends AbstractMonitorTest {
 
     /**
      * Constructs a new instance.
-     *
      */
     public FileAlterationObserverTest() {
         listener = new CollectionFileListener(true);

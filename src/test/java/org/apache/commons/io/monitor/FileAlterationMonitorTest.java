@@ -42,7 +42,6 @@ public class FileAlterationMonitorTest extends AbstractMonitorTest {
 
     /**
      * Constructs a new test case.
-     *
      */
     public FileAlterationMonitorTest() {
         listener = new CollectionFileListener(false);
