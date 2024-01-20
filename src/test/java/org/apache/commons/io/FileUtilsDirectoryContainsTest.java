@@ -32,7 +32,6 @@ import org.junit.jupiter.api.io.TempDir;
  * This class ensure the correctness of {@link FileUtils#directoryContains(File,File)}.
  *
  * @see FileUtils#directoryContains(File, File)
- * @since 2.2
  */
 public class FileUtilsDirectoryContainsTest {
 
