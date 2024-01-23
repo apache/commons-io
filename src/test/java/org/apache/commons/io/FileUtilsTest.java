@@ -269,9 +269,8 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     private void iterateFilesAndDirs(final File dir, final IOFileFilter fileFilter,
         final IOFileFilter dirFilter, final Collection<File> expectedFilesAndDirs) {
-        final Iterator<File> iterator;
+        final Iterator<File> iterator = FileUtils.iterateFilesAndDirs(dir, fileFilter, dirFilter);
         int filesCount = 0;
-        iterator = FileUtils.iterateFilesAndDirs(dir, fileFilter, dirFilter);
         try {
             final List<File> actualFiles = new ArrayList<>();
             while (iterator.hasNext()) {
@@ -288,7 +287,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         }
     }
 
-    void openOutputStream_noParent(final boolean createFile) throws Exception {
+    private void openOutputStream_noParent(final boolean createFile) throws Exception {
         final File file = new File("test.txt");
         assertNull(file.getParentFile());
         try {
@@ -308,12 +307,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     private boolean setLastModifiedMillis(final File testFile, final long millis) {
         return testFile.setLastModified(millis);
-//        try {
-//            Files.setLastModifiedTime(testFile.toPath(), FileTime.fromMillis(millis));
-//        } catch (IOException e) {
-//            return false;
-//        }
-//        return true;
     }
 
     @BeforeEach
@@ -1188,7 +1181,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final File largeFile = new File(tempDirFile, "large.txt");
         final File destination = new File(tempDirFile, "copylarge.txt");
 
-        System.out.println("START:   " + new java.util.Date());
         if (!largeFile.getParentFile().exists()) {
             fail("Cannot create file " + largeFile
                     + " as the parent directory does not exist");
@@ -1196,9 +1188,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(largeFile.toPath()))) {
             TestUtils.generateTestData(output, FileUtils.ONE_GB);
         }
-        System.out.println("CREATED: " + new java.util.Date());
         FileUtils.copyFile(largeFile, destination);
-        System.out.println("COPIED:  " + new java.util.Date());
 
         assertTrue(destination.exists(), "Check Exist");
         assertEquals(largeFile.length(), destination.length(), "Check Full copy");
@@ -1345,7 +1335,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
              InputStream resStream = getClass().getResourceAsStream(resourceName);) {
             assertTrue(IOUtils.contentEquals(resStream, fis), "Content is not equal.");
         }
-        //TODO Maybe test copy to itself like for copyFile()
     }
 
     /**
@@ -3001,7 +2990,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testWriteLines_3argsWithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
 
         final List<String> linesToAppend = Arrays.asList("my first line", "The second Line");
         FileUtils.writeLines(file, linesToAppend, false);
@@ -3016,7 +3005,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testWriteLines_3argsWithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
 
         final List<String> linesToAppend = Arrays.asList("my first line", "The second Line");
         FileUtils.writeLines(file, linesToAppend, true);
@@ -3263,7 +3252,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testWriteWithEncoding_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
 
         FileUtils.write(file, "this is brand new data", (String) null, false);
 
@@ -3275,7 +3264,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testWriteWithEncoding_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
 
         FileUtils.write(file, "this is brand new data", (String) null, true);
 
