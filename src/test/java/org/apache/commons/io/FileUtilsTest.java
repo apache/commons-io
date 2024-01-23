@@ -3161,6 +3161,14 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testWriteLinesUnsupportedCharset() throws Exception {
+        final File file = TestUtils.newFile(tempDirFile, "lines.txt");
+
+        final List<String> lines = Arrays.asList("my first line", "The second Line");
+        assertThrows(UnsupportedCharsetException.class, () -> FileUtils.writeLines(file, "there_is_no_such_charset", lines));
+    }
+
+    @Test
     public void testWriteStringToFile_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");

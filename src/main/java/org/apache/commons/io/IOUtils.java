@@ -3876,9 +3876,7 @@ public class IOUtils {
      * @param charsetName the name of the requested charset, null means platform default
      * @throws NullPointerException                         if the output is null
      * @throws IOException                                  if an I/O error occurs
-     * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
-     *                                                      .UnsupportedEncodingException} in version 2.2 if the
-     *                                                      encoding is not supported.
+     * @throws java.nio.charset.UnsupportedCharsetException if the encoding is not supported
      * @since 1.1
      */
     public static void writeLines(final Collection<?> lines, final String lineEnding,
