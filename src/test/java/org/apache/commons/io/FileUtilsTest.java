@@ -1115,7 +1115,9 @@ public class FileUtilsTest extends AbstractTempDirTest {
         // Now copy symlink to another directory
         final File destination = new File(tempDirFile, "destination");
         FileUtils.copyFile(linkPath.toFile(), destination);
-        assertTrue(Files.isSymbolicLink(destination.toPath()));
+        assertFalse(Files.isSymbolicLink(destination.toPath()));
+        final String contents = FileUtils.readFileToString(destination, StandardCharsets.UTF_8);
+        assertEquals("HELLO WORLD", contents);
     }
 
 
