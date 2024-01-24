@@ -773,7 +773,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assumeTrue(Files.exists(linkPath));
         assumeTrue(Files.exists(linkPath, LinkOption.NOFOLLOW_LINKS));
 
-        // Now copy sourceDirectory, including the broken link, to another directory
+        // Now copy sourceDirectory to another directory
         final File destination = new File(tempDirFile, "destination");
         FileUtils.copyDirectory(sourceDirectory, destination);
         assertTrue(destination.exists());
@@ -1098,6 +1098,26 @@ public class FileUtilsTest extends AbstractTempDirTest {
         newFilePaths.removeAll(initFilePaths);
         assertEquals(parFiles.size(), newFilePaths.size());
     }
+
+    @Test
+    public void testCopyFile_symLink() throws Exception {
+        // Make a file
+        final File sourceDirectory = new File(tempDirFile, "source_directory");
+        sourceDirectory.mkdir();
+        final File targetFile = new File(sourceDirectory, "hello.txt");
+        FileUtils.writeStringToFile(targetFile, "HELLO WORLD", "UTF8");
+
+        // Make a symlink to the file
+        final Path targetPath = targetFile.toPath();
+        final Path linkPath = sourceDirectory.toPath().resolve("linkfile");
+        Files.createSymbolicLink(linkPath, targetPath);
+
+        // Now copy symlink to another directory
+        final File destination = new File(tempDirFile, "destination");
+        FileUtils.copyFile(linkPath.toFile(), destination);
+        assertTrue(Files.isSymbolicLink(destination.toPath()));
+    }
+
 
     @Test
     public void testCopyFile1() throws Exception {
