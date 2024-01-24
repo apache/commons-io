@@ -854,9 +854,8 @@ public class FileUtils {
 
         Files.copy(srcPath, destFile.toPath(), copyOptions);
 
-        final boolean isSymLink = Files.isSymbolicLink(srcPath);
         // On Windows, the last modified time is copied by default.
-        if (preserveFileDate && !isSymLink && !setTimes(srcFile, destFile)) {
+        if (preserveFileDate && !Files.isSymbolicLink(srcPath) && !setTimes(srcFile, destFile)) {
             throw new IOException("Cannot set the file time.");
         }
     }
