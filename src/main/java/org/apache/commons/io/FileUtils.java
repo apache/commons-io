@@ -57,7 +57,6 @@ import java.time.chrono.ChronoLocalDate;
 import java.time.chrono.ChronoLocalDateTime;
 import java.time.chrono.ChronoZonedDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -652,7 +651,7 @@ public class FileUtils {
      * @since 1.4
      */
     public static void copyDirectory(final File srcDir, final File destDir, final FileFilter filter, final boolean preserveFileDate) throws IOException {
-        copyDirectory(srcDir, destDir, filter, preserveFileDate, StandardCopyOption.REPLACE_EXISTING);
+        copyDirectory(srcDir, destDir, filter, preserveFileDate, StandardCopyOption.REPLACE_EXISTING, LinkOption.NOFOLLOW_LINKS);
     }
 
     /**
@@ -760,13 +759,13 @@ public class FileUtils {
      * <p>
      * This method copies the contents of the specified source file to the specified destination file. The directory
      * holding the destination file is created if it does not exist. If the destination file exists, then this method
-     * will overwrite it.
+     * overwrites it. A symbolic link is resolved before copying so the new file is not a link.
      * </p>
      * <p>
      * <strong>Note:</strong> This method tries to preserve the file's last modified date/times using
      * {@link BasicFileAttributeView#setTimes(FileTime, FileTime, FileTime)}. However, it is not guaranteed that the
-     * operation will succeed. If the modification operation fails it falls back to
-     * {@link File#setLastModified(long)} and if that fails, the method throws IOException.
+     * operation will succeed. If the modification operation fails, it falls back to
+     * {@link File#setLastModified(long)}, and if that fails, the method throws IOException.
      * </p>
      *
      * @param srcFile an existing file to copy, must not be {@code null}.
@@ -787,13 +786,13 @@ public class FileUtils {
      * <p>
      * This method copies the contents of the specified source file to the specified destination file. The directory
      * holding the destination file is created if it does not exist. If the destination file exists, then this method
-     * will overwrite it.
+     * overwrites it. A symbolic link is resolved before copying so the new file is not a link.
      * </p>
      * <p>
      * <strong>Note:</strong> Setting {@code preserveFileDate} to {@code true} tries to preserve the file's last
      * modified date/times using {@link BasicFileAttributeView#setTimes(FileTime, FileTime, FileTime)}. However, it is
-     * not guaranteed that the operation will succeed. If the modification operation fails it falls back to
-     * {@link File#setLastModified(long)} and if that fails, the method throws IOException.
+     * not guaranteed that the operation will succeed. If the modification operation fails, it falls back to
+     * {@link File#setLastModified(long)}, and if that fails, the method throws IOException.
      * </p>
      *
      * @param srcFile an existing file to copy, must not be {@code null}.
@@ -810,17 +809,23 @@ public class FileUtils {
     }
 
     /**
-     * Copies a file to a new location.
+     * Copies the contents of a file to a new location.
      * <p>
      * This method copies the contents of the specified source file to the specified destination file. The directory
      * holding the destination file is created if it does not exist. If the destination file exists, you can overwrite
      * it with {@link StandardCopyOption#REPLACE_EXISTING}.
      * </p>
+     *
+     * <p>
+     * By default, a symbolic link is resolved before copying so the new file is not a link.
+     * To copy symbolic links as links, you can pass {@code LinkOption.NO_FOLLOW_LINKS} as the last argument.
+     * </p>
+     *
      * <p>
      * <strong>Note:</strong> Setting {@code preserveFileDate} to {@code true} tries to preserve the file's last
      * modified date/times using {@link BasicFileAttributeView#setTimes(FileTime, FileTime, FileTime)}. However, it is
-     * not guaranteed that the operation will succeed. If the modification operation fails it falls back to
-     * {@link File#setLastModified(long)} and if that fails, the method throws IOException.
+     * not guaranteed that the operation will succeed. If the modification operation fails, it falls back to
+     * {@link File#setLastModified(long)}, and if that fails, the method throws IOException.
      * </p>
      *
      * @param srcFile an existing file to copy, must not be {@code null}.
@@ -846,17 +851,11 @@ public class FileUtils {
         }
 
         final Path srcPath = srcFile.toPath();
-        final boolean isSymLink = Files.isSymbolicLink(srcPath);
-        if (isSymLink && !Arrays.asList(copyOptions).contains(LinkOption.NOFOLLOW_LINKS)) {
-            final List<CopyOption> list = new ArrayList<>(Arrays.asList(copyOptions));
-            list.add(LinkOption.NOFOLLOW_LINKS);
-            copyOptions = list.toArray(PathUtils.EMPTY_COPY_OPTIONS);
-        }
 
         Files.copy(srcPath, destFile.toPath(), copyOptions);
 
         // On Windows, the last modified time is copied by default.
-        if (preserveFileDate && !isSymLink && !setTimes(srcFile, destFile)) {
+        if (preserveFileDate && !Files.isSymbolicLink(srcPath) && !setTimes(srcFile, destFile)) {
             throw new IOException("Cannot set the file time.");
         }
     }
