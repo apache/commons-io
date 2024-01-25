@@ -450,7 +450,11 @@ public class EndianUtils {
 
     /**
      * Instances should NOT be constructed in standard programming.
+     *
+     * @deprecated TODO Make private in 4.0.
      */
+    @Deprecated
     public EndianUtils() {
+        // empty
     }
 }
