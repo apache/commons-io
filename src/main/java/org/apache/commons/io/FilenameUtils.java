@@ -1719,7 +1719,7 @@ public class FilenameUtils {
     /**
      * Instances should NOT be constructed in standard programming.
      *
-     * @deprecated TODO Make private in 4.0.
+     * @deprecated TODO Make private in 3.0.
      */
     @Deprecated
     public FilenameUtils() {

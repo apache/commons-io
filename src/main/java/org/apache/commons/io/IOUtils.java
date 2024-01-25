@@ -3935,7 +3935,8 @@ public class IOUtils {
 
     /**
      * Instances should NOT be constructed in standard programming.
-     * @deprecated Will be private in 3.0.
+     *
+     * @deprecated TODO Make private in 3.0.
      */
     @Deprecated
     public IOUtils() { //NOSONAR
