@@ -349,7 +349,12 @@ public class CopyUtils {
 
     /**
      * Instances should NOT be constructed in standard programming.
+     *
+     * @deprecated TODO Make private in 4.0.
      */
-    public CopyUtils() { }
+    @Deprecated
+    public CopyUtils() {
+        // empty
+    }
 
 }
