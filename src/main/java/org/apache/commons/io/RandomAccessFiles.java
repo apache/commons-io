@@ -95,4 +95,13 @@ public class RandomAccessFiles {
         return raf;
     }
 
+    /**
+     * Make private in 3.0.
+     *
+     * @deprecated TODO Make private in 3.0.
+     */
+    @Deprecated
+    public RandomAccessFiles() {
+        // empty
+    }
 }
