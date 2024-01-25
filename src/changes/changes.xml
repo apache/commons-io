@@ -95,6 +95,11 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Gary Gregory">Pickup apache-rat-plugin version from parent POM.</action>
       <action dev="ggregory" type="fix"                due-to="Elliotte Rusty Harold">Add test for copying a symlink FileUtilsTest#testCopyFile_symLink() #564.</action>
       <action dev="ggregory" type="fix"                due-to="Elliotte Rusty Harold">Make copyFile copy symbolic links by value rather than reference #565.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate CopyUtils 0-argument constructor.</action>
+      <action dev="ggregory" type="fix" issue="IO-843" due-to="Gary Gregory, Elliotte Rusty Harold">Deprecate EndianUtils 0-argument constructor.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate FileSystemUtils 0-argument constructor.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate FilenameUtils 0-argument constructor.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate RandomAccessFiles 0-argument constructor.</action>
       <!-- Add -->
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add and use PathUtils.getFileName(Path, Function&lt;Path, R&gt;).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add and use PathUtils.getFileNameString().</action>
