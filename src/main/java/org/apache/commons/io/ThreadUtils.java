@@ -52,9 +52,9 @@ public final class ThreadUtils {
     }
 
     /**
-     * Consider private.
+     * Make private in 3.0.
      *
-     * @deprecated Will be private in the next major version.
+     * @deprecated TODO Make private in 3.0.
      */
     @Deprecated
     public ThreadUtils() {
