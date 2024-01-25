@@ -3940,6 +3940,7 @@ public class IOUtils {
      */
     @Deprecated
     public IOUtils() { //NOSONAR
+        // empty
     }
 
 }
