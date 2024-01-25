@@ -131,7 +131,7 @@ public class CopyUtils {
      * @param input the byte array to read from
      * @param output the {@link Writer} to write to
      * @throws IOException In case of an I/O problem
-     * @deprecated 2.5 use {@link #copy(byte[], Writer, String)} instead
+     * @deprecated Use {@link #copy(byte[], Writer, String)} instead
      */
     @Deprecated
     public static void copy(final byte[] input, final Writer output) throws IOException {
@@ -183,7 +183,7 @@ public class CopyUtils {
      * @param input the {@link InputStream} to read from
      * @param output the {@link Writer} to write to
      * @throws IOException In case of an I/O problem
-     * @deprecated 2.5 use {@link #copy(InputStream, Writer, String)} instead
+     * @deprecated Use {@link #copy(InputStream, Writer, String)} instead
      */
     @Deprecated
     public static void copy(
@@ -223,7 +223,7 @@ public class CopyUtils {
      * @param input the {@link Reader} to read from
      * @param output the {@link OutputStream} to write to
      * @throws IOException In case of an I/O problem
-     * @deprecated 2.5 use {@link #copy(Reader, OutputStream, String)} instead
+     * @deprecated Use {@link #copy(Reader, OutputStream, String)} instead
      */
     @Deprecated
     public static void copy(
@@ -293,7 +293,7 @@ public class CopyUtils {
      * @param input the {@link String} to read from
      * @param output the {@link OutputStream} to write to
      * @throws IOException In case of an I/O problem
-     * @deprecated 2.5 use {@link #copy(String, OutputStream, String)} instead
+     * @deprecated Use {@link #copy(String, OutputStream, String)} instead
      */
     @Deprecated
     public static void copy(

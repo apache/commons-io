@@ -263,7 +263,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
      * using the platform default charset.
      * @return the contents of the byte array as a String
      * @see java.io.ByteArrayOutputStream#toString()
-     * @deprecated 2.5 use {@link #toString(String)} instead
+     * @deprecated Use {@link #toString(String)} instead
      */
     @Override
     @Deprecated
