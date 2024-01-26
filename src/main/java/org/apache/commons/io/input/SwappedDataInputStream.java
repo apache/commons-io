@@ -68,9 +68,9 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
     }
 
     /**
-     * Reads a character delegating to {@link #readShort()}.
+     * Reads a 2 byte, unsigned, little endian UTF-16 code point.
      *
-     * @return the byte read or -1 if the end of stream
+     * @return the UTF-16 code point read or -1 if the end of stream
      * @throws IOException if an I/O error occurs.
      * @throws EOFException if an end of file is reached unexpectedly
      */
@@ -80,7 +80,7 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
     }
 
     /**
-     * Delegates to {@link EndianUtils#readSwappedDouble(InputStream)}.
+     * Reads an 8 byte, two's complement, little-endian long.
      *
      * @return the read long
      * @throws IOException if an I/O error occurs.
@@ -92,9 +92,9 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
     }
 
     /**
-     * Delegates to {@link EndianUtils#readSwappedFloat(InputStream)}.
+     * Reads a 4 byte, IEEE 754, little-endian float.
      *
-     * @return the read long
+     * @return the read float
      * @throws IOException if an I/O error occurs.
      * @throws EOFException if an end of file is reached unexpectedly
      */
@@ -141,9 +141,9 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
     }
 
     /**
-     * Delegates to {@link EndianUtils#readSwappedInteger(InputStream)}.
+     * Reads a 4 byte, two's complement little-endian integer.
      *
-     * @return the read long
+     * @return the read int
      * @throws EOFException if an end of file is reached unexpectedly
      * @throws IOException if an I/O error occurs.
      */
@@ -157,7 +157,8 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
      *
      * @return the line read
      * @throws EOFException if an end of file is reached unexpectedly
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException if an I/O error occurs
+     * @throws UnsupportedOperationException always
      */
     @Override
     public String readLine() throws IOException, EOFException {
@@ -165,7 +166,7 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
     }
 
     /**
-     * Delegates to {@link EndianUtils#readSwappedLong(InputStream)}.
+     * Reads an 8 byte, two's complement little-endian integer.
      *
      * @return the read long
      * @throws EOFException if an end of file is reached unexpectedly
@@ -177,9 +178,9 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
     }
 
     /**
-     * Delegates to {@link EndianUtils#readSwappedShort(InputStream)}.
+     * Reads a 2 byte, two's complement, little-endian integer.
      *
-     * @return the read long
+     * @return the read short
      * @throws EOFException if an end of file is reached unexpectedly
      * @throws IOException if an I/O error occurs.
      */
@@ -201,9 +202,9 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
     }
 
     /**
-     * Delegates to {@link EndianUtils#readSwappedUnsignedShort(InputStream)}.
+     * Reads a 2 byte, unsigned, little-endian integer.
      *
-     * @return the read long
+     * @return the read short
      * @throws EOFException if an end of file is reached unexpectedly
      * @throws IOException if an I/O error occurs.
      */
@@ -215,9 +216,10 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
     /**
      * Not currently supported - throws {@link UnsupportedOperationException}.
      *
-     * @return UTF String read
+     * @return never
      * @throws EOFException if an end of file is reached unexpectedly
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException if an I/O error occurs
+     * @throws UnsupportedOperationException always
      */
     @Override
     public String readUTF() throws IOException, EOFException {
@@ -228,12 +230,11 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
      * Invokes the delegate's {@code skip(int)} method.
      *
      * @param count the number of bytes to skip
-     * @return the number of bytes to skipped or -1 if the end of stream
-     * @throws EOFException if an end of file is reached unexpectedly
-     * @throws IOException if an I/O error occurs.
+     * @return the number of bytes skipped or -1 if the end of stream
+     * @throws IOException if an I/O error occurs
      */
     @Override
-    public int skipBytes(final int count) throws IOException, EOFException {
+    public int skipBytes(final int count) throws IOException {
         return (int) in.skip(count);
     }
 
