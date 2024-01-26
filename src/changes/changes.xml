@@ -100,6 +100,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate FileSystemUtils 0-argument constructor.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate FilenameUtils 0-argument constructor.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate RandomAccessFiles 0-argument constructor.</action>
+      <action dev="ggregory" type="fix"                due-to="Elliotte Rusty Harold, Gary Gregory">Clarify and correct EndianUtils and SwappedDataInputStream API doc #566.</action>
       <!-- Add -->
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add and use PathUtils.getFileName(Path, Function&lt;Path, R&gt;).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add and use PathUtils.getFileNameString().</action>
