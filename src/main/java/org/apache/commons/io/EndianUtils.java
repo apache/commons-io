@@ -27,9 +27,9 @@ import java.io.OutputStream;
  * Helps with different endian systems.
  * <p>
  * Different computer architectures adopt different conventions for
- * byte ordering. In so-called "Little Endian" architectures (e.g. X86),
+ * byte ordering. In "Little Endian" architectures (e.g. X86),
  * the low-order byte is stored in memory at the lowest address, and
- * subsequent bytes at higher addresses. For "Big Endian" architectures
+ * subsequent bytes at higher addresses. In "Big Endian" architectures
  * (e.g. Motorola 680X0), the situation is reversed.
  * Most methods and classes throughout Java &mdash; e.g. DataInputStream and
  * Double.longBitsToDouble() &mdash; assume data is laid out
@@ -61,7 +61,7 @@ public class EndianUtils {
     }
 
     /**
-     * Reads a little endian "double" value from a byte array at a given offset.
+     * Reads a little endian {@code double} value from a byte array at a given offset.
      *
      * @param data source byte array
      * @param offset starting offset in the byte array
@@ -73,7 +73,7 @@ public class EndianUtils {
     }
 
     /**
-     * Reads a little endian "double" value from an InputStream.
+     * Reads a little endian {@code double} value from an InputStream.
      *
      * @param input source InputStream
      * @return the value just read
@@ -84,7 +84,7 @@ public class EndianUtils {
     }
 
     /**
-     * Reads a little endian "float" value from a byte array at a given offset.
+     * Reads a little endian {@code float} value from a byte array at a given offset.
      *
      * @param data source byte array
      * @param offset starting offset in the byte array
@@ -96,7 +96,7 @@ public class EndianUtils {
     }
 
     /**
-     * Reads a little endian "float" value from an InputStream.
+     * Reads a little endian {@code float} value from an InputStream.
      *
      * @param input source InputStream
      * @return the value just read
@@ -107,7 +107,7 @@ public class EndianUtils {
     }
 
     /**
-     * Reads a little endian "int" value from a byte array at a given offset.
+     * Reads a little endian {@code int} value from a byte array at a given offset.
      *
      * @param data source byte array
      * @param offset starting offset in the byte array
@@ -123,7 +123,7 @@ public class EndianUtils {
     }
 
     /**
-     * Reads a little endian "int" value from an InputStream.
+     * Reads a little endian {@code int} value from an InputStream.
      *
      * @param input source InputStream
      * @return the value just read
@@ -138,7 +138,7 @@ public class EndianUtils {
     }
 
     /**
-     * Reads a little endian "long" value from a byte array at a given offset.
+     * Reads a little endian {@code long} value from a byte array at a given offset.
      *
      * @param data source byte array
      * @param offset starting offset in the byte array
@@ -153,7 +153,7 @@ public class EndianUtils {
     }
 
     /**
-     * Reads a little endian "long" value from an InputStream.
+     * Reads a little endian {@code long} value from an InputStream.
      *
      * @param input source InputStream
      * @return the value just read
@@ -168,7 +168,7 @@ public class EndianUtils {
     }
 
     /**
-     * Reads a little endian "short" value from a byte array at a given offset.
+     * Reads a little endian {@code short} value from a byte array at a given offset.
      *
      * @param data source byte array
      * @param offset starting offset in the byte array
@@ -181,7 +181,7 @@ public class EndianUtils {
     }
 
     /**
-     * Reads a little endian "short" value from an InputStream.
+     * Reads a little endian {@code short} value from an InputStream.
      *
      * @param input source InputStream
      * @return the value just read
@@ -255,7 +255,7 @@ public class EndianUtils {
     }
 
     /**
-     * Converts a "double" value between endian systems.
+     * Converts a {@code double} value between endian systems.
      *
      * @param value value to convert
      * @return the converted value
@@ -265,7 +265,7 @@ public class EndianUtils {
     }
 
     /**
-     * Converts a "float" value between endian systems.
+     * Converts a {@code float} value between endian systems.
      *
      * @param value value to convert
      * @return the converted value
@@ -275,7 +275,7 @@ public class EndianUtils {
     }
 
     /**
-     * Converts an "int" value between endian systems.
+     * Converts an {@code int} value between endian systems.
      *
      * @param value value to convert
      * @return the converted value
@@ -289,7 +289,7 @@ public class EndianUtils {
     }
 
     /**
-     * Converts a "long" value between endian systems.
+     * Converts a {@code long} value between endian systems.
      *
      * @param value value to convert
      * @return the converted value
@@ -307,7 +307,7 @@ public class EndianUtils {
     }
 
     /**
-     * Converts a "short" value between endian systems.
+     * Converts a {@code short} value between endian systems.
      *
      * @param value value to convert
      * @return the converted value
@@ -332,7 +332,7 @@ public class EndianUtils {
     }
 
     /**
-     * Writes a double to a byte array at a given offset in little endian order.
+     * Writes a {@code double} to a byte array at a given offset in little endian order.
      *
      * @param data target byte array
      * @param offset starting offset in the byte array
@@ -344,7 +344,7 @@ public class EndianUtils {
     }
 
     /**
-     * Writes a double to an output stream in little endian order.
+     * Writes a {@code double} to an output stream in little endian order.
      *
      * @param output target OutputStream
      * @param value value to write
@@ -355,7 +355,7 @@ public class EndianUtils {
     }
 
     /**
-     * Writes a float to a byte array at a given offset in little endian order.
+     * Writes a {@code float} to a byte array at a given offset in little endian order.
      *
      * @param data target byte array
      * @param offset starting offset in the byte array
@@ -367,7 +367,7 @@ public class EndianUtils {
     }
 
     /**
-     * Writes a float to an output stream in little endian order.
+     * Writes a {@code float} to an output stream in little endian order.
      *
      * @param output target OutputStream
      * @param value value to write
@@ -378,7 +378,7 @@ public class EndianUtils {
     }
 
     /**
-     * Writes an int to a byte array at a given offset in little endian order.
+     * Writes an {@code int} to a byte array at a given offset in little endian order.
      *
      * @param data target byte array
      * @param offset starting offset in the byte array
@@ -408,7 +408,7 @@ public class EndianUtils {
     }
 
     /**
-     * Writes a long to a byte array at a given offset in little endian order.
+     * Writes a {@code long} to a byte array at a given offset in little endian order.
      *
      * @param data target byte array
      * @param offset starting offset in the byte array
@@ -428,7 +428,7 @@ public class EndianUtils {
     }
 
     /**
-     * Writes a long to an output stream in little endian order.
+     * Writes a {@code long} to an output stream in little endian order.
      *
      * @param output target OutputStream
      * @param value value to write
@@ -446,7 +446,7 @@ public class EndianUtils {
     }
 
     /**
-     * Writes a short to a byte array at a given offset in little endian order.
+     * Writes a {@code short} to a byte array at a given offset in little endian order.
      *
      * @param data target byte array
      * @param offset starting offset in the byte array
@@ -460,7 +460,7 @@ public class EndianUtils {
     }
 
     /**
-     * Writes a short to an output stream using little endian encoding.
+     * Writes a {@code short} to an output stream using little endian encoding.
      *
      * @param output target OutputStream
      * @param value value to write
