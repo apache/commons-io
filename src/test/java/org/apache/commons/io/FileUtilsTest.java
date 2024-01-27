@@ -1113,6 +1113,40 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertEquals("HELLO WORLD", contents);
     }
 
+    /**
+     * See what happens when copyDirectory copies a directory that is a symlink
+     * to another directory containing non-symlinked files.
+     * This is a characterization test to explore current behavior, and arguably
+     * represents a bug. This behavior, and the test, is likely to change
+     * and should not be relied on.
+     */
+    @Test
+    public void testCopyDir_symLink() throws Exception {
+        // Make a directory
+        final File realDirectory = new File(tempDirFile, "real_directory");
+        realDirectory.mkdir();
+        final File content = new File(realDirectory, "hello.txt");
+        FileUtils.writeStringToFile(content, "HELLO WORLD", "UTF8");
+
+        // Make a symlink to the directory
+        final Path linkPath = realDirectory.toPath().resolve("link_to_directory");
+        Files.createSymbolicLink(linkPath, realDirectory.toPath());
+
+        // Now copy symlink to another directory
+        final File destination = new File(tempDirFile, "destination");
+
+        // Is the copy a symlink or an actual directory?
+        FileUtils.copyDirectory(linkPath.toFile(), destination);
+
+        // delete the original file so that if we can read the bytes from the
+        // copied directory it's definitely been copied, not linked.
+        assumeTrue(content.delete());
+
+        assertFalse(Files.isSymbolicLink(destination.toPath()));
+        final File copied_content = new File(destination, "hello.txt");
+        String actual = FileUtils.readFileToString(copied_content, "UTF8");
+        assertEquals("HELLO WORLD", actual);
+    }
 
     @Test
     public void testCopyFile1() throws Exception {
