@@ -222,6 +222,12 @@ public class BOMInputStreamTest {
     }
 
     @Test
+    public void testBuilderGet() {
+        // java.lang.IllegalStateException: origin == null
+        assertThrows(IllegalStateException.class, () -> BOMInputStream.builder().get());
+    }
+
+    @Test
     // this is here for coverage
     public void testClose() throws Exception {
         try (ExpectCloseInputStream del = new ExpectCloseInputStream()) {
