@@ -750,31 +750,70 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(FileUtils.contentEqualsIgnoreEOL(file1, file2, null));
     }
 
+    /**
+     * See what happens when copyDirectory copies a directory that is a symlink
+     * to another directory containing non-symlinked files.
+     * This is a characterization test to explore current behavior, and arguably
+     * represents a bug. This behavior, and the test, is likely to change
+     * and should not be relied on.
+     */
     @Test
-    public void testCopyDirectory_symLink() throws IOException {
-        // Make a file
-        final File sourceDirectory = new File(tempDirFile, "source_directory");
-        sourceDirectory.mkdir();
-        final File targetFile = new File(sourceDirectory, "hello.txt");
-        FileUtils.writeStringToFile(targetFile, "HELLO WORLD", "UTF8");
+    public void testCopyDir_symLink() throws Exception {
+        // Make a directory
+        final File realDirectory = new File(tempDirFile, "real_directory");
+        realDirectory.mkdir();
+        final File content = new File(realDirectory, "hello.txt");
+        FileUtils.writeStringToFile(content, "HELLO WORLD", "UTF8");
 
-        // Make a symlink to the file
-        final Path targetPath = targetFile.toPath();
-        final Path linkPath = sourceDirectory.toPath().resolve("linkfile");
-        Files.createSymbolicLink(linkPath, targetPath);
-        assumeTrue(Files.isSymbolicLink(linkPath), () -> "Expected a symlink here: " + linkPath);
-        assumeTrue(Files.exists(linkPath));
-        assumeTrue(Files.exists(linkPath, LinkOption.NOFOLLOW_LINKS));
+        // Make a symlink to the directory
+        final Path linkPath = tempDirFile.toPath().resolve("link_to_directory");
+        Files.createSymbolicLink(linkPath, realDirectory.toPath());
 
-        // Now copy sourceDirectory to another directory
+        // Now copy symlink
         final File destination = new File(tempDirFile, "destination");
-        FileUtils.copyDirectory(sourceDirectory, destination);
-        assertTrue(destination.exists());
-        final Path copiedSymlink = new File(destination, "linkfile").toPath();
 
-        // test for the existence of the copied symbolic link as a link
-        assertTrue(Files.isSymbolicLink(copiedSymlink));
-        assertTrue(Files.exists(copiedSymlink));
+        // Is the copy a symlink or an actual directory?
+        FileUtils.copyDirectory(linkPath.toFile(), destination);
+
+        // delete the original file so that if we can read the bytes from the
+        // copied directory it's definitely been copied, not linked.
+        assumeTrue(content.delete());
+
+        assertFalse(Files.isSymbolicLink(destination.toPath()));
+        final File copied_content = new File(destination, "hello.txt");
+        final String actual = FileUtils.readFileToString(copied_content, "UTF8");
+        assertEquals("HELLO WORLD", actual);
+    }
+
+    @Test
+    public void testCopyDir_symLinkCycle() throws Exception {
+        // Make a directory
+        final File topDirectory = new File(tempDirFile, "topDirectory");
+        topDirectory.mkdir();
+        final File content = new File(topDirectory, "hello.txt");
+        FileUtils.writeStringToFile(content, "HELLO WORLD", "UTF8");
+        final File childDirectory = new File(topDirectory, "child_directory");
+        childDirectory.mkdir();
+
+        // Make a symlink to the top directory
+        final Path linkPath = childDirectory.toPath().resolve("link_to_top");
+        Files.createSymbolicLink(linkPath, topDirectory.toPath());
+
+        // Now copy symlink
+        final File destination = new File(tempDirFile, "destination");
+        FileUtils.copyDirectory(linkPath.toFile(), destination);
+
+        // delete the original file so that if we can read the bytes from the
+        // copied directory it's definitely been copied, not linked.
+        assumeTrue(content.delete());
+
+        assertFalse(Files.isSymbolicLink(destination.toPath()));
+        final File copied_content = new File(destination, "hello.txt");
+        final String actual = FileUtils.readFileToString(copied_content, "UTF8");
+        assertEquals("HELLO WORLD", actual);
+
+        final File[] copied = destination.listFiles();
+        assertEquals(2, copied.length);
     }
 
     /**
@@ -813,6 +852,33 @@ public class FileUtilsTest extends AbstractTempDirTest {
         // shouldn't be able to read through to the source of the link.
         // If we can, then the link points somewhere other than the deleted file
         assertFalse(Files.exists(copiedBrokenSymlink));
+    }
+
+    @Test
+    public void testCopyDirectory_symLink() throws IOException {
+        // Make a file
+        final File sourceDirectory = new File(tempDirFile, "source_directory");
+        sourceDirectory.mkdir();
+        final File targetFile = new File(sourceDirectory, "hello.txt");
+        FileUtils.writeStringToFile(targetFile, "HELLO WORLD", "UTF8");
+
+        // Make a symlink to the file
+        final Path targetPath = targetFile.toPath();
+        final Path linkPath = sourceDirectory.toPath().resolve("linkfile");
+        Files.createSymbolicLink(linkPath, targetPath);
+        assumeTrue(Files.isSymbolicLink(linkPath), () -> "Expected a symlink here: " + linkPath);
+        assumeTrue(Files.exists(linkPath));
+        assumeTrue(Files.exists(linkPath, LinkOption.NOFOLLOW_LINKS));
+
+        // Now copy sourceDirectory to another directory
+        final File destination = new File(tempDirFile, "destination");
+        FileUtils.copyDirectory(sourceDirectory, destination);
+        assertTrue(destination.exists());
+        final Path copiedSymlink = new File(destination, "linkfile").toPath();
+
+        // test for the existence of the copied symbolic link as a link
+        assertTrue(Files.isSymbolicLink(copiedSymlink));
+        assertTrue(Files.exists(copiedSymlink));
     }
 
     @Test
@@ -1111,72 +1177,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertFalse(Files.isSymbolicLink(destination.toPath()));
         final String contents = FileUtils.readFileToString(destination, StandardCharsets.UTF_8);
         assertEquals("HELLO WORLD", contents);
-    }
-
-    /**
-     * See what happens when copyDirectory copies a directory that is a symlink
-     * to another directory containing non-symlinked files.
-     * This is a characterization test to explore current behavior, and arguably
-     * represents a bug. This behavior, and the test, is likely to change
-     * and should not be relied on.
-     */
-    @Test
-    public void testCopyDir_symLink() throws Exception {
-        // Make a directory
-        final File realDirectory = new File(tempDirFile, "real_directory");
-        realDirectory.mkdir();
-        final File content = new File(realDirectory, "hello.txt");
-        FileUtils.writeStringToFile(content, "HELLO WORLD", "UTF8");
-
-        // Make a symlink to the directory
-        final Path linkPath = tempDirFile.toPath().resolve("link_to_directory");
-        Files.createSymbolicLink(linkPath, realDirectory.toPath());
-
-        // Now copy symlink
-        final File destination = new File(tempDirFile, "destination");
-
-        // Is the copy a symlink or an actual directory?
-        FileUtils.copyDirectory(linkPath.toFile(), destination);
-
-        // delete the original file so that if we can read the bytes from the
-        // copied directory it's definitely been copied, not linked.
-        assumeTrue(content.delete());
-
-        assertFalse(Files.isSymbolicLink(destination.toPath()));
-        final File copied_content = new File(destination, "hello.txt");
-        final String actual = FileUtils.readFileToString(copied_content, "UTF8");
-        assertEquals("HELLO WORLD", actual);
-    }
-
-    @Test
-    public void testCopyDir_symLinkCycle() throws Exception {
-        // Make a directory
-        final File topDirectory = new File(tempDirFile, "topDirectory");
-        topDirectory.mkdir();
-        final File content = new File(topDirectory, "hello.txt");
-        FileUtils.writeStringToFile(content, "HELLO WORLD", "UTF8");
-        final File childDirectory = new File(topDirectory, "child_directory");
-        childDirectory.mkdir();
-
-        // Make a symlink to the top directory
-        final Path linkPath = childDirectory.toPath().resolve("link_to_top");
-        Files.createSymbolicLink(linkPath, topDirectory.toPath());
-
-        // Now copy symlink
-        final File destination = new File(tempDirFile, "destination");
-        FileUtils.copyDirectory(linkPath.toFile(), destination);
-
-        // delete the original file so that if we can read the bytes from the
-        // copied directory it's definitely been copied, not linked.
-        assumeTrue(content.delete());
-
-        assertFalse(Files.isSymbolicLink(destination.toPath()));
-        final File copied_content = new File(destination, "hello.txt");
-        final String actual = FileUtils.readFileToString(copied_content, "UTF8");
-        assertEquals("HELLO WORLD", actual);
-
-        final File[] copied = destination.listFiles();
-        assertEquals(2, copied.length);
     }
 
     @Test

@@ -856,6 +856,24 @@ public final class PathUtils {
     }
 
     /**
+     * Gets the base name (the part up to and not including the last ".") of the last path segment of a file name.
+     * <p>
+     * Will return the file name itself if it doesn't contain any dots. All leading directories of the {@code file name} parameter are skipped.
+     * </p>
+     *
+     * @return the base name of file name
+     * @param path the path of the file to obtain the base name of.
+     * @since 2.16.0
+     */
+    public static String getBaseName(final Path path) {
+        if (path == null) {
+            return null;
+        }
+        final Path fileName = path.getFileName();
+        return fileName != null ? FilenameUtils.removeExtension(fileName.toString()) : null;
+    }
+
+    /**
      * Shorthand for {@code Files.getFileAttributeView(path, DosFileAttributeView.class)}.
      *
      * @param path    the path to the file.
@@ -1853,24 +1871,6 @@ public final class PathUtils {
         Objects.requireNonNull(charSequence, "charSequence");
         Files.write(path, String.valueOf(charSequence).getBytes(Charsets.toCharset(charset)), openOptions);
         return path;
-    }
-
-    /**
-     * Gets the base name (the part up to and not including the last ".") of the last path segment of a file name.
-     * <p>
-     * Will return the file name itself if it doesn't contain any dots. All leading directories of the {@code file name} parameter are skipped.
-     * </p>
-     *
-     * @return the base name of file name
-     * @param path the path of the file to obtain the base name of.
-     * @since 2.16.0
-     */
-    public static String getBaseName(final Path path) {
-        if (path == null) {
-            return null;
-        }
-        final Path fileName = path.getFileName();
-        return fileName != null ? FilenameUtils.removeExtension(fileName.toString()) : null;
     }
 
     /**
