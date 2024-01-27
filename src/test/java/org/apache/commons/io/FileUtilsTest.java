@@ -1129,10 +1129,10 @@ public class FileUtilsTest extends AbstractTempDirTest {
         FileUtils.writeStringToFile(content, "HELLO WORLD", "UTF8");
 
         // Make a symlink to the directory
-        final Path linkPath = realDirectory.toPath().resolve("link_to_directory");
+        final Path linkPath = tempDirFile.toPath().resolve("link_to_directory");
         Files.createSymbolicLink(linkPath, realDirectory.toPath());
 
-        // Now copy symlink to another directory
+        // Now copy symlink
         final File destination = new File(tempDirFile, "destination");
 
         // Is the copy a symlink or an actual directory?
