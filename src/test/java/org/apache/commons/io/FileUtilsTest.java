@@ -1149,6 +1149,37 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testCopyDir_symLinkCycle() throws Exception {
+        // Make a directory
+        final File topDirectory = new File(tempDirFile, "topDirectory");
+        topDirectory.mkdir();
+        final File content = new File(topDirectory, "hello.txt");
+        FileUtils.writeStringToFile(content, "HELLO WORLD", "UTF8");
+        final File childDirectory = new File(topDirectory, "child_directory");
+        childDirectory.mkdir();
+
+        // Make a symlink to the top directory
+        final Path linkPath = childDirectory.toPath().resolve("link_to_top");
+        Files.createSymbolicLink(linkPath, topDirectory.toPath());
+
+        // Now copy symlink
+        final File destination = new File(tempDirFile, "destination");
+        FileUtils.copyDirectory(linkPath.toFile(), destination);
+
+        // delete the original file so that if we can read the bytes from the
+        // copied directory it's definitely been copied, not linked.
+        assumeTrue(content.delete());
+
+        assertFalse(Files.isSymbolicLink(destination.toPath()));
+        final File copied_content = new File(destination, "hello.txt");
+        final String actual = FileUtils.readFileToString(copied_content, "UTF8");
+        assertEquals("HELLO WORLD", actual);
+
+        final File[] copied = destination.listFiles();
+        assertEquals(2, copied.length);
+    }
+
+    @Test
     public void testCopyFile1() throws Exception {
         final File destination = new File(tempDirFile, "copy1.txt");
 
