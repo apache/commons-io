@@ -112,9 +112,9 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * Gets a CharSequence from the origin with a Charset.
      *
      * @return An input stream
-     * @throws IOException                   if an I/O error occurs.
-     * @throws UnsupportedOperationException if the origin cannot be converted to a CharSequence.
      * @throws IllegalStateException         if the {@code origin} is {@code null}.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a CharSequence.
+     * @throws IOException                   if an I/O error occurs.
      * @see AbstractOrigin#getCharSequence(Charset)
      * @since 2.13.0
      */
@@ -144,10 +144,10 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * Gets an input stream from the origin with open options.
      *
      * @return An input stream
+     * @throws IllegalStateException         if the {@code origin} is {@code null}.
+     * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
      * @throws IOException                   if an I/O error occurs.
-     * @throws UnsupportedOperationException if the origin cannot be converted to an InputStream.
      * @see AbstractOrigin#getInputStream(OpenOption...)
-     * @throws IllegalStateException if the {@code origin} is {@code null}.
      * @since 2.13.0
      */
     protected InputStream getInputStream() throws IOException {
@@ -167,9 +167,9 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * Gets an OutputStream from the origin with open options.
      *
      * @return An OutputStream
-     * @throws IOException                   if an I/O error occurs.
-     * @throws UnsupportedOperationException if the origin cannot be converted to an OutputStream.
      * @throws IllegalStateException         if the {@code origin} is {@code null}.
+     * @throws UnsupportedOperationException if the origin cannot be converted to an {@link OutputStream}.
+     * @throws IOException                   if an I/O error occurs.
      * @see AbstractOrigin#getOutputStream(OpenOption...)
      * @since 2.13.0
      */
@@ -181,8 +181,8 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * Gets a Path from the origin.
      *
      * @return A Path
-     * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
      * @throws IllegalStateException         if the {@code origin} is {@code null}.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a {@link Path}.
      * @see AbstractOrigin#getPath()
      * @since 2.13.0
      */
@@ -194,9 +194,9 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * Gets an writer from the origin with open options.
      *
      * @return An writer.
-     * @throws IOException                   if an I/O error occurs.
-     * @throws UnsupportedOperationException if the origin cannot be converted to a Writer.
      * @throws IllegalStateException         if the {@code origin} is {@code null}.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a {@link Writer}.
+     * @throws IOException                   if an I/O error occurs.
      * @see AbstractOrigin#getOutputStream(OpenOption...)
      * @since 2.13.0
      */

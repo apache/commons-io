@@ -25,7 +25,6 @@ import java.nio.file.StandardOpenOption;
 import java.util.Objects;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
@@ -73,16 +72,16 @@ public final class BufferedFileChannelInputStream extends InputStream {
         /**
          * Constructs a new instance.
          * <p>
-         * This builder use the aspects Path and buffer size.
-         * </p>
-         * <p>
-         * You must provide an origin that can be converted to a Path by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
+         * You must provide an origin that supports calling {@link #getPath()} and {@link #getBufferSize()} on this builder, otherwise, this method throws an
+         * exception.
          * </p>
          *
          * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide a Path.
-         * @see AbstractOrigin#getPath()
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws UnsupportedOperationException if the origin cannot be converted to a {@link Path}.
+         * @throws IOException If an I/O error occurs
+         * @see #getPath()
+         * @see #getBufferSize()
          */
         @Override
         public BufferedFileChannelInputStream get() throws IOException {

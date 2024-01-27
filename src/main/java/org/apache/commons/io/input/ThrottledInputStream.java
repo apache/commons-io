@@ -67,6 +67,18 @@ public final class ThrottledInputStream extends CountingInputStream {
          */
         private long maxBytesPerSecond = Long.MAX_VALUE;
 
+        /**
+         * Constructs a new instance.
+         * <p>
+         * You must provide an origin that supports calling {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
+         * </p>
+         *
+         * @return a new instance.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
+         * @throws IOException                   if an I/O error occurs.
+         * @see #getInputStream()
+         */
         @SuppressWarnings("resource")
         @Override
         public ThrottledInputStream get() throws IOException {

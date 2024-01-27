@@ -17,6 +17,7 @@
 
 package org.apache.commons.io.input;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
@@ -66,8 +67,9 @@ public class RandomAccessFileInputStream extends InputStream {
          * </p>
          *
          * @return a new instance.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @throws IllegalStateException if both RandomAccessFile and origin are set.
-         * @throws UnsupportedOperationException if the origin cannot provide a File.
+         * @throws UnsupportedOperationException if the origin cannot be converted to a {@link File}.
          * @see AbstractOrigin#getFile()
          */
         @SuppressWarnings("resource") // Caller closes depending on settings

@@ -65,12 +65,17 @@ public class AutoCloseInputStream extends ProxyInputStream {
         /**
          * Constructs a new instance.
          * <p>
-         * This builder use the aspect InputStream.
+         * You must provide an origin that supports calling {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
+         * </p>
+         * <p>
+         * This builder use the aspects InputStream, OpenOption[], include, and ByteOrderMark[].
          * </p>
          *
          * @return a new instance.
-         * @throws IOException              if an I/O error occurs.
-         * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
+         * @throws IOException                   if an I/O error occurs.
+         * @see #getInputStream()
          */
         @SuppressWarnings("resource") // Caller closes
         @Override

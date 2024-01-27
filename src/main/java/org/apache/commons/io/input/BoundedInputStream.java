@@ -65,6 +65,18 @@ public class BoundedInputStream extends ProxyInputStream {
         /** Flag if close should be propagated. */
         private boolean propagateClose = true;
 
+        /**
+         * Constructs a new instance.
+         * <p>
+         * You must provide an origin that supports calling {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
+         * </p>
+         *
+         * @return a new instance.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
+         * @throws IOException                   if an I/O error occurs.
+         * @see #getInputStream()
+         */
         @SuppressWarnings("resource")
         @Override
         public BoundedInputStream get() throws IOException {

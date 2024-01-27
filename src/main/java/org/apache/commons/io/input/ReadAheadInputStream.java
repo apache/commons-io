@@ -69,16 +69,18 @@ public class ReadAheadInputStream extends FilterInputStream {
         /**
          * Constructs a new instance.
          * <p>
-         * This builder use the aspects InputStream, OpenOption[], buffer size, ExecutorService.
+         * You must provide an origin that supports calling {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * You must provide an origin that can be converted to an InputStream by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
+         * This builder use the aspects InputStream, OpenOption[], buffer size, ExecutorService.
          * </p>
          *
          * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide an InputStream.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
+         * @throws IOException                   if an I/O error occurs.
          * @see #getInputStream()
+         * @see #getBufferSize()
          */
         @SuppressWarnings("resource")
         @Override

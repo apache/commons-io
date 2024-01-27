@@ -119,17 +119,17 @@ public class XmlStreamReader extends Reader {
         /**
          * Constructs a new instance.
          * <p>
-         * This builder use the aspect InputStream, OpenOption[], httpContentType, lenient, and defaultEncoding.
+         * You must provide an origin that supports calling {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * You must provide an origin that can be converted to an InputStream by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
+         * This builder use the aspect InputStream, OpenOption[], httpContentType, lenient, and defaultEncoding.
          * </p>
          *
          * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide an InputStream.
-         * @throws IOException                   thrown if there is a problem reading the stream.
-         * @throws XmlStreamReaderException      thrown if the charset encoding could not be determined according to the specification.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
+         * @throws IOException                   if an I/O error occurs.
+         * @throws XmlStreamReaderException thrown if the Charset encoding could not be determined according to the specification.
          * @see #getInputStream()
          */
         @SuppressWarnings("resource")
