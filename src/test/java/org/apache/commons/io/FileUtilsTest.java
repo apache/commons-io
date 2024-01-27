@@ -1144,7 +1144,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
         assertFalse(Files.isSymbolicLink(destination.toPath()));
         final File copied_content = new File(destination, "hello.txt");
-        String actual = FileUtils.readFileToString(copied_content, "UTF8");
+        final String actual = FileUtils.readFileToString(copied_content, "UTF8");
         assertEquals("HELLO WORLD", actual);
     }
 
