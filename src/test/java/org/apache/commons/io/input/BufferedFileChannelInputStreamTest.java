@@ -16,11 +16,14 @@
  */
 package org.apache.commons.io.input;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.StandardOpenOption;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests functionality of {@link BufferedFileChannelInputStream}.
@@ -46,4 +49,11 @@ public class BufferedFileChannelInputStreamTest extends AbstractInputStreamTest 
         };
         //@formatter:on
     }
+
+    @Test
+    public void testBuilderGet() {
+        // java.lang.IllegalStateException: origin == null
+        assertThrows(IllegalStateException.class, () -> BufferedFileChannelInputStream.builder().get());
+    }
+
 }
