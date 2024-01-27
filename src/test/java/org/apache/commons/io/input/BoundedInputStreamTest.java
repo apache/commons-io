@@ -18,6 +18,7 @@ package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
@@ -39,16 +40,21 @@ public class BoundedInputStreamTest {
         }
     }
 
+    @Test
+    public void testBuilderGet() {
+        // java.lang.IllegalStateException: origin == null
+        assertThrows(IllegalStateException.class, () -> BoundedInputStream.builder().get());
+    }
+
     @SuppressWarnings("deprecation")
     @Test
     public void testOnMaxLength() throws Exception {
-        BoundedInputStream bounded;
         final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
         final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
         final AtomicBoolean boolRef = new AtomicBoolean();
 
         // limit = length
-        bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length) {
+        BoundedInputStream bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length) {
             @Override
             protected void onMaxLength(final long max, final long readCount) {
                 boolRef.set(true);
