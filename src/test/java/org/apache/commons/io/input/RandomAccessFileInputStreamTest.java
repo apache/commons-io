@@ -74,6 +74,12 @@ public class RandomAccessFileInputStreamTest {
         }
     }
 
+    @Test
+    public void testBuilderGet() {
+        // java.lang.IllegalStateException: origin == null
+        assertThrows(IllegalStateException.class, () -> RandomAccessFileInputStream.builder().get());
+    }
+
     @SuppressWarnings("resource") // instance variable access
     @Test
     public void testBuilderPath() throws IOException {

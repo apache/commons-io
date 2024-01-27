@@ -79,7 +79,7 @@ public class RandomAccessFileInputStream extends InputStream {
                 }
                 return new RandomAccessFileInputStream(randomAccessFile, closeOnClose);
             }
-            return new RandomAccessFileInputStream(RandomAccessFileMode.READ_ONLY.create(getOrigin().getFile()), closeOnClose);
+            return new RandomAccessFileInputStream(RandomAccessFileMode.READ_ONLY.create(checkOrigin().getFile()), closeOnClose);
         }
 
         /**
