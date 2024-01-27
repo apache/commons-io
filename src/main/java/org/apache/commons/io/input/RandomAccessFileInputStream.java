@@ -73,12 +73,17 @@ public class RandomAccessFileInputStream extends InputStream {
         @SuppressWarnings("resource") // Caller closes depending on settings
         @Override
         public RandomAccessFileInputStream get() throws IOException {
+            if (randomAccessFile == null && getOrigin() == null) {
+                throw new UnsupportedOperationException("Neither RandomAccessFile nor origin is set.");
+            }
+            if (randomAccessFile != null && getOrigin() != null) {
+                throw new IllegalStateException(String.format("Only set one of RandomAccessFile (%s) or origin (%s)", randomAccessFile, getOrigin()));
+            }
+
             if (randomAccessFile != null) {
-                if (getOrigin() != null) {
-                    throw new IllegalStateException(String.format("Only set one of RandomAccessFile (%s) or origin (%s)", randomAccessFile, getOrigin()));
-                }
                 return new RandomAccessFileInputStream(randomAccessFile, closeOnClose);
             }
+
             return new RandomAccessFileInputStream(RandomAccessFileMode.READ_ONLY.create(getOrigin().getFile()), closeOnClose);
         }
 

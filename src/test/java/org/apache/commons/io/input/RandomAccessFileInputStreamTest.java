@@ -113,6 +113,14 @@ public class RandomAccessFileInputStreamTest {
 
     @SuppressWarnings("resource") // instance variable access
     @Test
+    public void testBuilderNoFileNoOrigin() throws IOException {
+        assertThrows(UnsupportedOperationException.class, () -> {
+            RandomAccessFileInputStream.builder().get();
+        });
+    }
+
+    @SuppressWarnings("resource") // instance variable access
+    @Test
     public void testConstructorCloseOnCloseFalse() throws IOException {
         try (RandomAccessFile file = createRandomAccessFile()) {
             try (RandomAccessFileInputStream inputStream = new RandomAccessFileInputStream(file, false)) {
