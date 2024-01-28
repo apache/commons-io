@@ -50,7 +50,7 @@ import org.apache.commons.io.charset.CharsetEncoders;
  * would return the same byte sequence as reading from {@code in} (provided that the initial byte sequence is legal with respect to the charset encoding):
  * </p>
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  * <pre>
  * InputStream inputStream = ...
@@ -79,13 +79,16 @@ import org.apache.commons.io.charset.CharsetEncoders;
  * Instances of {@link ReaderInputStream} are not thread safe.
  * </p>
  *
+ * @see Builder
  * @see org.apache.commons.io.output.WriterOutputStream
  * @since 2.0
  */
 public class ReaderInputStream extends InputStream {
 
+    // @formatter:off
     /**
-     * Builds a new {@link ReaderInputStream} instance.
+     * Builds a new {@link ReaderInputStream}.
+     *
      * <p>
      * For example:
      * </p>
@@ -96,26 +99,36 @@ public class ReaderInputStream extends InputStream {
      *   .get();}
      * </pre>
      *
+     * @see #get()
      * @since 2.12.0
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<ReaderInputStream, Builder> {
 
         private CharsetEncoder charsetEncoder = newEncoder(getCharset());
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link ReaderInputStream}.
+         *
          * <p>
-         * This builder use the aspects Reader, Charset, CharsetEncoder, buffer size.
+         * You must set input that supports {@link Reader}, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * You must provide an origin that can be converted to a Reader by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
+         * This builder use the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link Reader}</li>
+         * <li>{@link #getBufferSize()}</li>
+         * <li>{@link #getCharset()}</li>
+         * <li>{@link CharsetEncoder}</li>
+         * </ul>
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a Reader.
          * @throws IllegalStateException if the {@code origin} is {@code null}.
          * @see AbstractOrigin#getReader(Charset)
+         * @see CharsetEncoder
+         * @see #getBufferSize()
          */
         @SuppressWarnings("resource")
         @Override

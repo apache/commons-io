@@ -30,14 +30,18 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
 /**
  * Streams data from a {@link RandomAccessFile} starting at its current position.
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
+ *
+ * @see Builder
  * @since 2.8.0
  */
 public class RandomAccessFileInputStream extends InputStream {
 
+    // @formatter:off
     /**
-     * Builds a new {@link RandomAccessFileInputStream} instance.
+     * Builds a new {@link RandomAccessFileInputStream}.
+     *
      * <p>
      * For example:
      * </p>
@@ -48,27 +52,33 @@ public class RandomAccessFileInputStream extends InputStream {
      *   .get();}
      * </pre>
      *
+     * @see #get()
      * @since 2.12.0
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<RandomAccessFileInputStream, Builder> {
 
         private RandomAccessFile randomAccessFile;
         private boolean closeOnClose;
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link RandomAccessFileInputStream}.
          * <p>
-         * This builder use the aspects RandomAccessFile or File, and closeOnClose. Only set one of RandomAccessFile or an origin that can be converted to a
-         * File.
+         * You must set input that supports {@link RandomAccessFile} or {@link File}, otherwise, this method throws an exception. Only set one of
+         * RandomAccessFile or an origin that can be converted to a File.
          * </p>
          * <p>
-         * If RandomAccessFile is not set, then you must provide an origin that can be converted to a File by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
+         * This builder use the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link RandomAccessFile}</li>
+         * <li>{@link File}</li>
+         * <li>closeOnClose</li>
+         * </ul>
          *
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
-         * @throws IllegalStateException if both RandomAccessFile and origin are set.
+         * @throws IllegalStateException         if both RandomAccessFile and origin are set.
          * @throws UnsupportedOperationException if the origin cannot be converted to a {@link File}.
          * @see AbstractOrigin#getFile()
          */

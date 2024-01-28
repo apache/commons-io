@@ -28,7 +28,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * This class is an example for using an {@link ObservableInputStream}. It creates its own {@link org.apache.commons.io.input.ObservableInputStream.Observer},
  * which calculates a checksum using a {@link MessageDigest}, for example, a SHA-512 sum.
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  * <p>
  * See the MessageDigest section in the <a href= "https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#MessageDigest"> Java
@@ -41,12 +41,15 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * <em>Note</em>: Neither {@link ObservableInputStream}, nor {@link MessageDigest}, are thread safe, so is {@link MessageDigestInputStream}.
  * </p>
  *
+ * @see Builder
  * @since 2.15.0
  */
 public final class MessageDigestInputStream extends ObservableInputStream {
 
+    // @formatter:off
     /**
-     * Builds new {@link MessageDigestInputStream} instances.
+     * Builds new {@link MessageDigestInputStream}.
+     *
      * <p>
      * For example:
      * </p>
@@ -59,23 +62,33 @@ public final class MessageDigestInputStream extends ObservableInputStream {
      * <p>
      * You must specify a message digest algorithm name or instance.
      * </p>
+     *
+     * @see #get()
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<MessageDigestInputStream, Builder> {
 
         private MessageDigest messageDigest;
 
         /**
-         * Constructs a new Builder.
+         * Constructs a new {@link Builder}.
          */
         public Builder() {
             // empty
         }
 
         /**
-         * Constructs a new instance.
+         * Builds new {@link MessageDigestInputStream}.
          * <p>
-         * You must provide an origin that supports calling {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
+         * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.
          * </p>
+         * <p>
+         * This builder use the following aspects:
+         * </p>
+         * <ul>
+         * <li>{@link #getPath()}</li>
+         * <li>{@link MessageDigest}</li>
+         * </ul>
          *
          * @return a new instance.
          * @throws NullPointerException if messageDigest is null.

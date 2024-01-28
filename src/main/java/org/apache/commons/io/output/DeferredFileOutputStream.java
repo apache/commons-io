@@ -32,18 +32,21 @@ import org.apache.commons.io.file.PathUtils;
  * An output stream which will retain data in memory until a specified threshold is reached, and only then commit it to disk. If the stream is closed before the
  * threshold is reached, the data will not be written to disk at all.
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  * <p>
  * This class originated in FileUpload processing. In this use case, you do not know in advance the size of the file being uploaded. If the file is small you
  * want to store it in memory (for speed), but if the file is large you want to store it to file (to avoid memory issues).
  * </p>
+ *
+ * @see Builder
  */
 public class DeferredFileOutputStream extends ThresholdingOutputStream {
 
     // @formatter:off
     /**
-     * Builds a new {@link DeferredFileOutputStream} instance.
+     * Builds a new {@link DeferredFileOutputStream}.
+     *
      * <p>
      * For example:
      * </p>
@@ -61,6 +64,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      * The only super's aspect used us buffer size.
      * </p>
      *
+     * @see #get()
      * @since 2.12.0
      */
     // @formatter:on
@@ -81,10 +85,18 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
         }
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link DeferredFileOutputStream}.
          * <p>
-         * This builder use the aspects threshold, outputFile, prefix, suffix, directory, buffer size.
+         * This builder use the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link #getBufferSize()}</li>
+         * <li>threshold</li>
+         * <li>outputFile</li>
+         * <li>prefix</li>
+         * <li>suffix</li>
+         * <li>directory</li>
+         * </ul>
          *
          * @return a new instance.
          */

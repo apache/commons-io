@@ -29,9 +29,10 @@ import org.apache.commons.io.input.UnsynchronizedByteArrayInputStream;
 /**
  * Implements a version of {@link AbstractByteArrayOutputStream} <b>without</b> any concurrent thread safety.
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  *
+ * @see Builder
  * @since 2.7
  */
 //@NotThreadSafe
@@ -39,7 +40,8 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
 
     // @formatter:off
     /**
-     * Builds a new {@link UnsynchronizedByteArrayOutputStream} instance.
+     * Builds a new {@link UnsynchronizedByteArrayOutputStream}.
+     *
      * <p>
      * Using File IO:
      * </p>
@@ -56,15 +58,21 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      *   .setBufferSize(8192)
      *   .get();}
      * </pre>
+     *
+     * @see #get()
      */
     // @formatter:on
     public static class Builder extends AbstractStreamBuilder<UnsynchronizedByteArrayOutputStream, Builder> {
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link UnsynchronizedByteArrayOutputStream}.
+         *
          * <p>
-         * This builder use the aspect buffer size.
+         * This builder use the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link #getBufferSize()}</li>
+         * </ul>
          *
          * @return a new instance.
          * @see AbstractOrigin#getByteArray()

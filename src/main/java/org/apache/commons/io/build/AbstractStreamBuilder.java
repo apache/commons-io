@@ -141,13 +141,14 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     }
 
     /**
-     * Gets an input stream from the origin with open options.
+     * Gets an InputStream from the origin with OpenOption[].
      *
      * @return An input stream
      * @throws IllegalStateException         if the {@code origin} is {@code null}.
      * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
      * @throws IOException                   if an I/O error occurs.
      * @see AbstractOrigin#getInputStream(OpenOption...)
+     * @see #getOpenOptions()
      * @since 2.13.0
      */
     protected InputStream getInputStream() throws IOException {
@@ -155,22 +156,23 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     }
 
     /**
-     * Gets the OpenOption.
+     * Gets the OpenOption array.
      *
-     * @return the OpenOption.
+     * @return the OpenOption array.
      */
     protected OpenOption[] getOpenOptions() {
         return openOptions;
     }
 
     /**
-     * Gets an OutputStream from the origin with open options.
+     * Gets an OutputStream from the origin with OpenOption[].
      *
      * @return An OutputStream
      * @throws IllegalStateException         if the {@code origin} is {@code null}.
      * @throws UnsupportedOperationException if the origin cannot be converted to an {@link OutputStream}.
      * @throws IOException                   if an I/O error occurs.
      * @see AbstractOrigin#getOutputStream(OpenOption...)
+     * @see #getOpenOptions()
      * @since 2.13.0
      */
     protected OutputStream getOutputStream() throws IOException {
@@ -191,13 +193,14 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     }
 
     /**
-     * Gets an writer from the origin with open options.
+     * Gets a Writer from the origin with OpenOption[].
      *
      * @return An writer.
      * @throws IllegalStateException         if the {@code origin} is {@code null}.
      * @throws UnsupportedOperationException if the origin cannot be converted to a {@link Writer}.
      * @throws IOException                   if an I/O error occurs.
      * @see AbstractOrigin#getOutputStream(OpenOption...)
+     * @see #getOpenOptions()
      * @since 2.13.0
      */
     protected Writer getWriter() throws IOException {

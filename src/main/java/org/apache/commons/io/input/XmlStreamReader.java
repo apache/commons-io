@@ -62,19 +62,21 @@ import org.apache.commons.io.output.XmlStreamWriter;
  * Determining the character encoding of a feed</a>.
  * </p>
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  * <p>
  * Originally developed for <a href="https://rome.dev.java.net">ROME</a> under Apache License 2.0.
  * </p>
  *
+ * @see Builder
  * @see org.apache.commons.io.output.XmlStreamWriter
  * @since 2.0
  */
 public class XmlStreamReader extends Reader {
 
+    // @formatter:off
     /**
-     * Builds a new {@link XmlStreamWriter} instance.
+     * Builds a new {@link XmlStreamWriter}.
      *
      * Constructs a Reader using an InputStream and the associated content-type header. This constructor is lenient regarding the encoding detection.
      * <p>
@@ -104,12 +106,17 @@ public class XmlStreamReader extends Reader {
      * </p>
      *
      * <pre>{@code
-     * XmlStreamReader r = XmlStreamReader.builder().setPath(path).setCharset(StandardCharsets.UTF_8).get();
+     * XmlStreamReader r = XmlStreamReader.builder()
+     *   .setPath(path)
+     *   .setCharset(StandardCharsets.UTF_8)
+     *   .get();
      * }
      * </pre>
      *
+     * @see #get()
      * @since 2.12.0
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<XmlStreamReader, Builder> {
 
         private boolean nullCharset = true;
@@ -117,13 +124,19 @@ public class XmlStreamReader extends Reader {
         private String httpContentType;
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link XmlStreamWriter}.
          * <p>
-         * You must provide an origin that supports calling {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
+         * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the aspect InputStream, OpenOption[], httpContentType, lenient, and defaultEncoding.
+         * This builder use the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link #getInputStream()}</li>
+         * <li>{@link #getCharset()}</li>
+         * <li>lenient</li>
+         * <li>httpContentType</li>
+         * </ul>
          *
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.

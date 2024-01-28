@@ -31,32 +31,44 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * doesn't know whether the content hasn't arrived yet or whether the content has finished. So, one of these, initialized with the {@code Content-Length} sent
  * in the {@code ServletInputStream}'s header, will stop it blocking, providing it's been sent with a correct content length.
  * </p>
+ * <p>
+ * To build an instance, use {@link Builder}.
+ * </p>
  *
+ * @see Builder
  * @since 2.0
  */
 public class BoundedInputStream extends ProxyInputStream {
 
     // TODO For 3.0, extend CountingInputStream. Or, add a max feature to CountingInputStream.
 
+    //@formatter:off
     /**
-     * Builds a new {@link BoundedInputStream} instance.
+     * Builds a new {@link BoundedInputStream}.
      *
      * <h2>Using NIO</h2>
-     *
      * <pre>{@code
-     * BoundedInputStream s = BoundedInputStream.builder().setPath(Paths.get("MyFile.xml")).setMaxCount(1024).setPropagateClose(false).get();
+     * BoundedInputStream s = BoundedInputStream.builder()
+     *   .setPath(Paths.get("MyFile.xml"))
+     *   .setMaxCount(1024)
+     *   .setPropagateClose(false)
+     *   .get();
      * }
      * </pre>
-     *
      * <h2>Using IO</h2>
-     *
      * <pre>{@code
-     * BoundedInputStream s = BoundedInputStream.builder().setFile(new File("MyFile.xml")).setMaxCount(1024).setPropagateClose(false).get();
+     * BoundedInputStream s = BoundedInputStream.builder()
+     *   .setFile(new File("MyFile.xml"))
+     *   .setMaxCount(1024)
+     *   .setPropagateClose(false)
+     *   .get();
      * }
      * </pre>
      *
+     * @see #get()
      * @since 2.16.0
      */
+    //@formatter:on
     public static class Builder extends AbstractStreamBuilder<BoundedInputStream, Builder> {
 
         /** The max count of bytes to read. */
@@ -66,10 +78,18 @@ public class BoundedInputStream extends ProxyInputStream {
         private boolean propagateClose = true;
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link BoundedInputStream}.
          * <p>
-         * You must provide an origin that supports calling {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
+         * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.
          * </p>
+         * <p>
+         * This builder use the following aspects:
+         * </p>
+         * <ul>
+         * <li>{@link #getInputStream()}</li>
+         * <li>maxCount</li>
+         * <li>propagateClose</li>
+         * </ul>
          *
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.

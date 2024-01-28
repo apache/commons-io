@@ -31,20 +31,23 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * and provide some additional functionality on top of it usually inherit from this class.
  * </p>
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  * <p>
  * Provenance: Apache Harmony and modified.
  * </p>
  *
+ * @see Builder
  * @see FilterInputStream
  * @since 2.12.0
  */
 //@NotThreadSafe
 public class UnsynchronizedFilterInputStream extends InputStream {
 
+    // @formatter:off
     /**
-     * Builds a new {@link UnsynchronizedFilterInputStream} instance.
+     * Builds a new {@link UnsynchronizedFilterInputStream}.
+     *
      * <p>
      * Using File IO:
      * </p>
@@ -61,17 +64,23 @@ public class UnsynchronizedFilterInputStream extends InputStream {
      *   .setPath(path)
      *   .get();}
      * </pre>
+     *
+     * @see #get()
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<UnsynchronizedFilterInputStream, Builder> {
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link UnsynchronizedFilterInputStream}.
          * <p>
-         * You must provide an origin that supports calling {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
+         * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the aspects InputStream, OpenOption[] and buffer size.
+         * This builder use the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link #getInputStream()}</li>
+         * </ul>
          *
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.

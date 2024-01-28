@@ -44,16 +44,18 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * required then use the {@link java.io.FileWriter} directly, rather than this implementation.
  * </p>
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  *
+ * @see Builder
  * @since 1.4
  */
 public class FileWriterWithEncoding extends ProxyWriter {
 
     // @formatter:off
     /**
-     * Builds a new {@link FileWriterWithEncoding} instance.
+     * Builds a new {@link FileWriterWithEncoding}.
+     *
      * <p>
      * Using a CharsetEncoder:
      * </p>
@@ -75,6 +77,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
      *   .get();}
      * </pre>
      *
+     * @see #get()
      * @since 2.12.0
      */
     // @formatter:on
@@ -85,14 +88,18 @@ public class FileWriterWithEncoding extends ProxyWriter {
         private CharsetEncoder charsetEncoder = super.getCharset().newEncoder();
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link FileWriterWithEncoding}.
          * <p>
-         * This builder use the aspects File, CharsetEncoder, and append.
+         * You must set input that supports {@link File} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * You must provide an origin that can be converted to a File by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
+         * This builder use the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link File}</li>
+         * <li>{@link CharsetEncoder}</li>
+         * <li>append</li>
+         * </ul>
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a File.

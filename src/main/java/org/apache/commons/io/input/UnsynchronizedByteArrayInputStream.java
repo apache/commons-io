@@ -28,57 +28,75 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * This is an alternative to {@link java.io.ByteArrayInputStream} which removes the synchronization overhead for non-concurrent access; as such this class is
  * not thread-safe.
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  *
+ * @see Builder
  * @see ByteArrayInputStream
  * @since 2.7
  */
 //@NotThreadSafe
 public class UnsynchronizedByteArrayInputStream extends InputStream {
 
+    // @formatter:off
     /**
-     * Builds a new {@link UnsynchronizedByteArrayInputStream} instance.
+     * Builds a new {@link UnsynchronizedByteArrayInputStream}.
+     *
      * <p>
      * Using a Byte Array:
      * </p>
-     *
      * <pre>{@code
-     * UnsynchronizedByteArrayInputStream s = UnsynchronizedByteArrayInputStream.builder().setByteArray(byteArray).setOffset(0).setLength(byteArray.length)
-     *         .get();
+     * UnsynchronizedByteArrayInputStream s = UnsynchronizedByteArrayInputStream.builder()
+     *   .setByteArray(byteArray)
+     *   .setOffset(0)
+     *   .setLength(byteArray.length)
+     *   .get();
      * }
      * </pre>
      * <p>
      * Using File IO:
      * </p>
-     *
      * <pre>{@code
-     * UnsynchronizedByteArrayInputStream s = UnsynchronizedByteArrayInputStream.builder().setFile(file).setOffset(0).setLength(byteArray.length).get();
+     * UnsynchronizedByteArrayInputStream s = UnsynchronizedByteArrayInputStream.builder()
+     *   .setFile(file)
+     *   .setOffset(0)
+     *   .setLength(byteArray.length)
+     *   .get();
      * }
      * </pre>
      * <p>
      * Using NIO Path:
      * </p>
-     *
      * <pre>{@code
-     * UnsynchronizedByteArrayInputStream s = UnsynchronizedByteArrayInputStream.builder().setPath(path).setOffset(0).setLength(byteArray.length).get();
+     * UnsynchronizedByteArrayInputStream s = UnsynchronizedByteArrayInputStream.builder()
+     *   .setPath(path)
+     *   .setOffset(0)
+     *   .setLength(byteArray.length)
+     *   .get();
      * }
      * </pre>
+     *
+     * @see #get()
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<UnsynchronizedByteArrayInputStream, Builder> {
 
         private int offset;
         private int length;
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link UnsynchronizedByteArrayInputStream}.
          * <p>
-         * This builder use the aspects byte[], offset and length.
+         * You must set input that supports {@code byte[]} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * You must provide an origin that can be converted to a byte[] by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
+         * This builder use the following aspects:
          * </p>
+         * <ul>
+         * <li>{@code byte[]}</li>
+         * <li>offset</li>
+         * <li>length</li>
+         * </ul>
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a byte[].

@@ -45,14 +45,17 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * {@code java.io.tmpdir}. The encoding may also be specified, and defaults to the platform default.
  * </p>
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
+ *
+ * @see Builder
  */
 public class LockableFileWriter extends Writer {
 
     // @formatter:off
     /**
-     * Builds a new {@link LockableFileWriter} instance.
+     * Builds a new {@link LockableFileWriter}.
+     *
      * <p>
      * Using a CharsetEncoder:
      * </p>
@@ -64,6 +67,7 @@ public class LockableFileWriter extends Writer {
      *   .get();}
      * </pre>
      *
+     * @see #get()
      * @since 2.12.0
      */
     // @formatter:on
@@ -73,7 +77,7 @@ public class LockableFileWriter extends Writer {
         private AbstractOrigin<?, ?> lockDirectory = AbstractOriginSupplier.newFileOrigin(FileUtils.getTempDirectoryPath());
 
         /**
-         * Constructs a new Builder.
+         * Builds a new {@link LockableFileWriter}.
          */
         public Builder() {
             setBufferSizeDefault(AbstractByteArrayOutputStream.DEFAULT_SIZE);
@@ -83,12 +87,17 @@ public class LockableFileWriter extends Writer {
         /**
          * Constructs a new instance.
          * <p>
-         * This builder use the aspects File, Charset, append, and lockDirectory.
+         * You must set input that supports {@link File} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * You must provide an origin that can be converted to a File by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
+         * This builder use the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link File}</li>
+         * <li>{@link #getCharset()}</li>
+         * <li>append</li>
+         * <li>lockDirectory</li>
+         * </ul>
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a File.

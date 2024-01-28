@@ -32,34 +32,48 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * exceed the specified tolerable maximum. (Thus, while the read-rate might exceed the maximum for a short interval, the average tends towards the
  * specified maximum, overall.)
  * <p>
+ * To build an instance, see {@link Builder}
+ * </p>
+ * <p>
  * Inspired by Apache HBase's class of the same name.
  * </p>
  *
+ * @see Builder
  * @since 2.16.0
  */
 public final class ThrottledInputStream extends CountingInputStream {
 
+    // @formatter:off
     /**
-     * Builds a new {@link ThrottledInputStream} instance.
+     * Builds a new {@link ThrottledInputStream}.
+     *
      * <h2>Using NIO</h2>
-     *
      * <pre>{@code
-     * ThrottledInputStream in = ThrottledInputStream.builder().setPath(Paths.get("MyFile.xml")).setMaxBytesPerSecond(100_000).get();
+     * ThrottledInputStream in = ThrottledInputStream.builder()
+     *   .setPath(Paths.get("MyFile.xml"))
+     *   .setMaxBytesPerSecond(100_000)
+     *   .get();
      * }
      * </pre>
-     *
      * <h2>Using IO</h2>
-     *
      * <pre>{@code
-     * ThrottledInputStream in = ThrottledInputStream.builder().setFile(new File("MyFile.xml")).setMaxBytesPerSecond(100_000).get();
+     * ThrottledInputStream in = ThrottledInputStream.builder()
+     *   .setFile(new File("MyFile.xml"))
+     *   .setMaxBytesPerSecond(100_000)
+     *   .get();
+     * }
+     * </pre>
+     * <pre>{@code
+     * ThrottledInputStream in = ThrottledInputStream.builder()
+     *   .setInputStream(inputStream)
+     *   .setMaxBytesPerSecond(100_000)
+     *   .get();
      * }
      * </pre>
      *
-     * <pre>{@code
-     * ThrottledInputStream in = ThrottledInputStream.builder().setInputStream(inputStream).setMaxBytesPerSecond(100_000).get();
-     * }
-     * </pre>
+     * @see #get()
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<ThrottledInputStream, Builder> {
 
         /**
@@ -68,10 +82,17 @@ public final class ThrottledInputStream extends CountingInputStream {
         private long maxBytesPerSecond = Long.MAX_VALUE;
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link ThrottledInputStream}.
          * <p>
-         * You must provide an origin that supports calling {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
+         * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.
          * </p>
+         * <p>
+         * This builder use the following aspects:
+         * </p>
+         * <ul>
+         * <li>{@link #getInputStream()}</li>
+         * <li>maxBytesPerSecond</li>
+         * </ul>
          *
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.

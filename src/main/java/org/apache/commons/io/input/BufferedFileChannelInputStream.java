@@ -32,22 +32,24 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * using {@link java.io.BufferedInputStream}. Unfortunately, this is not something already available in JDK, {@code sun.nio.ch.ChannelInputStream} supports
  * reading a file using NIO, but does not support buffering.
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  * <p>
  * This class was ported and adapted from Apache Spark commit 933dc6cb7b3de1d8ccaf73d124d6eb95b947ed19 where it was called {@code NioBufferedFileInputStream}.
  * </p>
  *
+ * @see Builder
  * @since 2.9.0
  */
 public final class BufferedFileChannelInputStream extends InputStream {
 
+    // @formatter:off
     /**
-     * Builds a new {@link BufferedFileChannelInputStream} instance.
+     * Builds a new {@link BufferedFileChannelInputStream}.
+     *
      * <p>
      * Using File IO:
      * </p>
-     *
      * <pre>{@code
      * BufferedFileChannelInputStream s = BufferedFileChannelInputStream.builder()
      *   .setFile(file)
@@ -57,7 +59,6 @@ public final class BufferedFileChannelInputStream extends InputStream {
      * <p>
      * Using NIO Path:
      * </p>
-     *
      * <pre>{@code
      * BufferedFileChannelInputStream s = BufferedFileChannelInputStream.builder()
      *   .setPath(path)
@@ -65,16 +66,24 @@ public final class BufferedFileChannelInputStream extends InputStream {
      *   .get();}
      * </pre>
      *
+     * @see #get()
      * @since 2.12.0
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<BufferedFileChannelInputStream, Builder> {
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link BufferedFileChannelInputStream}.
          * <p>
-         * You must provide an origin that supports calling {@link #getPath()} and {@link #getBufferSize()} on this builder, otherwise, this method throws an
-         * exception.
+         * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.
          * </p>
+         * <p>
+         * This builder use the following aspects:
+         * </p>
+         * <ul>
+         * <li>{@link #getInputStream()}</li>
+         * <li>{@link #getBufferSize()}</li>
+         * </ul>
          *
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.

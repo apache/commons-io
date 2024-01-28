@@ -34,12 +34,11 @@ import org.apache.commons.io.output.QueueOutputStream;
 /**
  * Simple alternative to JDK {@link java.io.PipedInputStream}; queue input stream provides what's written in queue output stream.
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  * <p>
  * Example usage:
  * </p>
- *
  * <pre>
  * QueueInputStream inputStream = new QueueInputStream();
  * QueueOutputStream outputStream = inputStream.newQueueOutputStream();
@@ -56,17 +55,19 @@ import org.apache.commons.io.output.QueueOutputStream;
  * {@link IOException}.
  * </p>
  *
+ * @see Builder
  * @see QueueOutputStream
  * @since 2.9.0
  */
 public class QueueInputStream extends InputStream {
 
+    // @formatter:off
     /**
-     * Builds a new {@link QueueInputStream} instance.
+     * Builds a new {@link QueueInputStream}.
+     *
      * <p>
      * For example:
      * </p>
-     *
      * <pre>{@code
      * QueueInputStream s = QueueInputStream.builder()
      *   .setBlockingQueue(new LinkedBlockingQueue<>())
@@ -74,18 +75,24 @@ public class QueueInputStream extends InputStream {
      *   .get();}
      * </pre>
      *
+     * @see #get()
      * @since 2.12.0
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<QueueInputStream, Builder> {
 
         private BlockingQueue<Integer> blockingQueue = new LinkedBlockingQueue<>();
         private Duration timeout = Duration.ZERO;
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link QueueInputStream}.
          * <p>
-         * This builder use the aspects BlockingQueue and timeout.
+         * This builder use the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link #setBlockingQueue(BlockingQueue)}</li>
+         * <li>timeout</li>
+         * </ul>
          *
          * @return a new instance.
          */

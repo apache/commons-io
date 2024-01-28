@@ -41,15 +41,18 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
 /**
  * Reads lines in a file reversely (similar to a BufferedReader, but starting at the last line). Useful for e.g. searching in log files.
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  *
+ * @see Builder
  * @since 2.2
  */
 public class ReversedLinesFileReader implements Closeable {
 
+    // @formatter:off
     /**
-     * Builds a new {@link ReversedLinesFileReader} instance.
+     * Builds a new {@link ReversedLinesFileReader}.
+     *
      * <p>
      * For example:
      * </p>
@@ -61,12 +64,14 @@ public class ReversedLinesFileReader implements Closeable {
      *   .get();}
      * </pre>
      *
+     * @see #get()
      * @since 2.12.0
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<ReversedLinesFileReader, Builder> {
 
         /**
-         * Constructs a new Builder.
+         * Constructs a new {@link Builder}.
          */
         public Builder() {
             setBufferSizeDefault(DEFAULT_BLOCK_SIZE);
@@ -74,11 +79,18 @@ public class ReversedLinesFileReader implements Closeable {
         }
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link ReversedLinesFileReader}.
          * <p>
-         * You must provide an origin that supports calling {@link #getInputStream()}, {@link #getBufferSize()}, and {@link #getCharset()} on this builder,
-         * otherwise, this method throws an exception.
+         * You must set input that supports {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
          * </p>
+         * <p>
+         * This builder use the following aspects:
+         * </p>
+         * <ul>
+         * <li>{@link #getInputStream()}</li>
+         * <li>{@link #getBufferSize()}</li>
+         * <li>{@link #getCharset()}</li>
+         * </ul>
          *
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.

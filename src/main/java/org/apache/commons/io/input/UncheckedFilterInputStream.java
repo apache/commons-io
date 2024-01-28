@@ -29,9 +29,10 @@ import org.apache.commons.io.function.Uncheck;
 /**
  * A {@link BufferedReader} that throws {@link UncheckedIOException} instead of {@link IOException}.
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  *
+ * @see Builder
  * @see BufferedReader
  * @see IOException
  * @see UncheckedIOException
@@ -39,8 +40,10 @@ import org.apache.commons.io.function.Uncheck;
  */
 public final class UncheckedFilterInputStream extends FilterInputStream {
 
+    // @formatter:off
     /**
-     * Builds a new {@link UncheckedFilterInputStream} instance.
+     * Builds a new {@link UncheckedFilterInputStream}.
+     *
      * <p>
      * Using File IO:
      * </p>
@@ -57,18 +60,23 @@ public final class UncheckedFilterInputStream extends FilterInputStream {
      *   .setPath(path)
      *   .get();}
      * </pre>
+     *
+     * @see #get()
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<UncheckedFilterInputStream, Builder> {
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link UncheckedFilterInputStream}.
          * <p>
-         * This builder use the aspect InputStream and OpenOption[].
+         * You must set input that supports {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * You must provide an origin that can be converted to an InputStream by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
+         * This builder use the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link #getInputStream()}</li>
+         * </ul>
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide an InputStream.

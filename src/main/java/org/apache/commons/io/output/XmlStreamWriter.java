@@ -38,9 +38,10 @@ import org.apache.commons.io.input.XmlStreamReader;
 /**
  * Character stream that handles all the necessary work to figure out the charset encoding of the XML document written to the stream.
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  *
+ * @see Builder
  * @see XmlStreamReader
  * @since 2.0
  */
@@ -48,7 +49,8 @@ public class XmlStreamWriter extends Writer {
 
     // @formatter:off
     /**
-     * Builds a new {@link XmlStreamWriter} instance.
+     * Builds a new {@link XmlStreamWriter}.
+     *
      * <p>
      * For example:
      * </p>
@@ -59,13 +61,14 @@ public class XmlStreamWriter extends Writer {
      *   .get();}
      * </pre>
      *
+     * @see #get()
      * @since 2.12.0
      */
     // @formatter:off
     public static class Builder extends AbstractStreamBuilder<XmlStreamWriter, Builder> {
 
         /**
-         * Constructs a new Builder.
+         * Constructs a new {@link Builder}.
          */
         public Builder() {
             setCharsetDefault(StandardCharsets.UTF_8);
@@ -73,17 +76,21 @@ public class XmlStreamWriter extends Writer {
         }
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link XmlStreamWriter}.
          * <p>
-         * This builder use the aspect OutputStream, OpenOption[], and Charset.
+         * You must set input that supports {@link #getOutputStream()} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * You must provide an origin that can be converted to an OutputStream by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
+         * This builder use the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link #getOutputStream()}</li>
+         * <li>{@link #getCharset()}</li>
+         * </ul>
          *
          * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide an OutputStream.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws UnsupportedOperationException if the origin cannot be converted to an {@link OutputStream}.
          * @throws IOException                   if an I/O error occurs.
          * @see #getOutputStream()
          */

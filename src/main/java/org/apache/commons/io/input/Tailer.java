@@ -47,18 +47,16 @@ import org.apache.commons.io.file.attribute.FileTimes;
 /**
  * Simple implementation of the UNIX "tail -f" functionality.
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  * <h2>1. Create a TailerListener implementation</h2>
  * <p>
  * First you need to create a {@link TailerListener} implementation; ({@link TailerListenerAdapter} is provided for
  * convenience so that you don't have to implement every method).
  * </p>
- *
  * <p>
  * For example:
  * </p>
- *
  * <pre>
  * public class MyTailerListener extends TailerListenerAdapter {
  *     public void handle(String line) {
@@ -66,9 +64,7 @@ import org.apache.commons.io.file.attribute.FileTimes;
  *     }
  * }
  * </pre>
- *
  * <h2>2. Using a Tailer</h2>
- *
  * <p>
  * You can create and use a Tailer in one of three ways:
  * </p>
@@ -77,13 +73,10 @@ import org.apache.commons.io.file.attribute.FileTimes;
  * <li>Using an {@link java.util.concurrent.Executor}</li>
  * <li>Using a {@link Thread}</li>
  * </ul>
- *
  * <p>
  * An example of each is shown below.
  * </p>
- *
  * <h3>2.1 Using a Builder</h3>
- *
  * <pre>
  * TailerListener listener = new MyTailerListener();
  * Tailer tailer = Tailer.builder()
@@ -92,9 +85,7 @@ import org.apache.commons.io.file.attribute.FileTimes;
  *   .setDelayDuration(delay)
  *   .get();
  * </pre>
- *
  * <h3>2.2 Using an Executor</h3>
- *
  * <pre>
  * TailerListener listener = new MyTailerListener();
  * Tailer tailer = new Tailer(file, listener, delay);
@@ -108,10 +99,7 @@ import org.apache.commons.io.file.attribute.FileTimes;
  *
  * executor.execute(tailer);
  * </pre>
- *
- *
  * <h3>2.3 Using a Thread</h3>
- *
  * <pre>
  * TailerListener listener = new MyTailerListener();
  * Tailer tailer = new Tailer(file, listener, delay);
@@ -119,21 +107,17 @@ import org.apache.commons.io.file.attribute.FileTimes;
  * thread.setDaemon(true); // optional
  * thread.start();
  * </pre>
- *
  * <h2>3. Stopping a Tailer</h2>
  * <p>
  * Remember to stop the tailer when you have done with it:
  * </p>
- *
  * <pre>
  * tailer.stop();
  * </pre>
- *
  * <h2>4. Interrupting a Tailer</h2>
  * <p>
  * You can interrupt the thread a tailer is running on by calling {@link Thread#interrupt()}.
  * </p>
- *
  * <pre>
  * thread.interrupt();
  * </pre>
@@ -144,6 +128,7 @@ import org.apache.commons.io.file.attribute.FileTimes;
  * The file is read using the default Charset; this can be overridden if necessary.
  * </p>
  *
+ * @see Builder
  * @see TailerListener
  * @see TailerListenerAdapter
  * @since 2.0
@@ -154,8 +139,10 @@ import org.apache.commons.io.file.attribute.FileTimes;
  */
 public class Tailer implements Runnable, AutoCloseable {
 
+    // @formatter:off
     /**
-     * Builds a {@link Tailer} with default values.
+     * Builds a new {@link Tailer}.
+     *
      * <p>
      * For example:
      * </p>
@@ -173,8 +160,10 @@ public class Tailer implements Runnable, AutoCloseable {
      *   .get();}
      * </pre>
      *
+     * @see #get()
      * @since 2.12.0
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<Tailer, Builder> {
 
         private static final Duration DEFAULT_DELAY_DURATION = Duration.ofMillis(DEFAULT_DELAY_MILLIS);
@@ -194,22 +183,32 @@ public class Tailer implements Runnable, AutoCloseable {
         private Tailable tailable;
         private TailerListener tailerListener;
         private Duration delayDuration = DEFAULT_DELAY_DURATION;
-        private boolean end;
+        private boolean tailFromEnd;
         private boolean reOpen;
         private boolean startThread = true;
         private ExecutorService executorService = Executors.newSingleThreadExecutor(Builder::newDaemonThread);
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link Tailer}.
+         *
          * <p>
-         * This builder use the aspects tailable, Charset, TailerListener, delayDuration, end, reOpen, buffer size.
+         * This builder use the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link #getBufferSize()}</li>
+         * <li>{@link #getCharset()}</li>
+         * <li>{@link Tailable}</li>
+         * <li>{@link TailerListener}</li>
+         * <li>delayDuration</li>
+         * <li>tailFromEnd</li>
+         * <li>reOpen</li>
+         * </ul>
          *
          * @return a new instance.
          */
         @Override
         public Tailer get() {
-            final Tailer tailer = new Tailer(tailable, getCharset(), tailerListener, delayDuration, end, reOpen, getBufferSize());
+            final Tailer tailer = new Tailer(tailable, getCharset(), tailerListener, delayDuration, tailFromEnd, reOpen, getBufferSize());
             if (startThread) {
                 executorService.submit(tailer);
             }
@@ -300,7 +299,7 @@ public class Tailer implements Runnable, AutoCloseable {
          * @return this
          */
         public Builder setTailFromEnd(final boolean end) {
-            this.end = end;
+            this.tailFromEnd = end;
             return this;
         }
     }

@@ -40,7 +40,7 @@ import org.apache.commons.io.file.PathUtils;
  * command lines. The check is case-sensitive by default. See {@link FilenameUtils#wildcardMatchOnSystem(String,String)} for more information.
  * </p>
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  * <p>
  * For example:

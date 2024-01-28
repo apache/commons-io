@@ -24,52 +24,57 @@ import java.io.InputStream;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
- * Proxy stream that closes and discards the underlying stream as soon as the
- * end of input has been reached or when the stream is explicitly closed.
- * Not even a reference to the underlying stream is kept after it has been
- * closed, so any allocated in-memory buffers can be freed even if the
- * client application still keeps a reference to the proxy stream.
+ * Proxy stream that closes and discards the underlying stream as soon as the end of input has been reached or when the stream is explicitly closed. Not even a
+ * reference to the underlying stream is kept after it has been closed, so any allocated in-memory buffers can be freed even if the client application still
+ * keeps a reference to the proxy stream.
  * <p>
- * This class is typically used to release any resources related to an open
- * stream as soon as possible even if the client application (by not explicitly
- * closing the stream when no longer needed) or the underlying stream (by not
- * releasing resources once the last byte has been read) do not do that.
+ * This class is typically used to release any resources related to an open stream as soon as possible even if the client application (by not explicitly closing
+ * the stream when no longer needed) or the underlying stream (by not releasing resources once the last byte has been read) do not do that.
+ * </p>
+ * <p>
+ * To build an instance, use {@link Builder}.
  * </p>
  *
  * @since 1.4
+ * @see Builder
  */
 public class AutoCloseInputStream extends ProxyInputStream {
 
+    // @formatter:off
     /**
      * Builds a new {@link AutoCloseInputStream} instance.
+     *
      * <p>
      * For example:
      * </p>
-     *
      * <pre>{@code
      * AutoCloseInputStream s = AutoCloseInputStream.builder()
      *   .setPath(path)
      *   .get();}
      * </pre>
-     *
      * <pre>{@code
      * AutoCloseInputStream s = AutoCloseInputStream.builder()
      *   .setInputStream(inputStream)
      *   .get();}
      * </pre>
      *
+     * @see #get()
      * @since 2.13.0
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<AutoCloseInputStream, Builder> {
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link AutoCloseInputStream}.
          * <p>
-         * You must provide an origin that supports calling {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
+         * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the aspects InputStream, OpenOption[], include, and ByteOrderMark[].
+         * This builder use the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link #getInputStream()}</li>
+         * </ul>
          *
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
@@ -121,15 +126,14 @@ public class AutoCloseInputStream extends ProxyInputStream {
     }
 
     /**
-     * Closes the underlying input stream and replaces the reference to it
-     * with a {@link ClosedInputStream} instance.
+     * Closes the underlying input stream and replaces the reference to it with a {@link ClosedInputStream} instance.
      * <p>
-     * This method is automatically called by the read methods when the end
-     * of input has been reached.
+     * This method is automatically called by the read methods when the end of input has been reached.
+     * </p>
      * <p>
-     * Note that it is safe to call this method any number of times. The original
-     * underlying input stream is closed and discarded only once when this
-     * method is first called.
+     * Note that it is safe to call this method any number of times. The original underlying input stream is closed and discarded only once when this method is
+     * first called.
+     * </p>
      *
      * @throws IOException if the underlying input stream can not be closed
      */
@@ -140,9 +144,9 @@ public class AutoCloseInputStream extends ProxyInputStream {
     }
 
     /**
-     * Ensures that the stream is closed before it gets garbage-collected.
-     * As mentioned in {@link #close()}, this is a no-op if the stream has
-     * already been closed.
+     * Ensures that the stream is closed before it gets garbage-collected. As mentioned in {@link #close()}, this is a no-op if the stream has already been
+     * closed.
+     *
      * @throws Throwable if an error occurs
      */
     @Override

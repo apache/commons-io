@@ -28,11 +28,11 @@ import org.apache.commons.io.function.Uncheck;
 /**
  * A {@link FilterOutputStream} that throws {@link UncheckedIOException} instead of {@link UncheckedIOException}.
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  *
+ * @see Builder
  * @see FilterOutputStream
- * @see UncheckedIOException
  * @see UncheckedIOException
  * @since 2.12.0
  */
@@ -40,7 +40,8 @@ public final class UncheckedFilterOutputStream extends FilterOutputStream {
 
     // @formatter:off
     /**
-     * Builds a new {@link UncheckedFilterOutputStream} instance.
+     * Builds a new {@link UncheckedFilterOutputStream}.
+     *
      * <p>
      * Using File IO:
      * </p>
@@ -57,22 +58,28 @@ public final class UncheckedFilterOutputStream extends FilterOutputStream {
      *   .setPath(path)
      *   .get();}
      * </pre>
+     *
+     * @see #get()
      */
     // @formatter:on
     public static class Builder extends AbstractStreamBuilder<UncheckedFilterOutputStream, Builder> {
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link UncheckedFilterOutputStream}.
          * <p>
-         * This builder use the aspect OutputStream and OpenOption[].
+         * You must set input that supports {@link #getOutputStream()} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * You must provide an origin that can be converted to an OutputStream by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
+         * This builder use the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link #getOutputStream()}</li>
+         * </ul>
          *
          * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide an OutputStream.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws UnsupportedOperationException if the origin cannot be converted to an {@link OutputStream}.
+         * @throws IOException                   if an I/O error occurs.
          * @see #getOutputStream()
          */
         @SuppressWarnings("resource")

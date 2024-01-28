@@ -28,9 +28,10 @@ import org.apache.commons.io.function.Uncheck;
 /**
  * A {@link FilterWriter} that throws {@link UncheckedIOException} instead of {@link IOException}.
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  *
+ * @see Builder
  * @see FilterWriter
  * @see IOException
  * @see UncheckedIOException
@@ -40,7 +41,8 @@ public final class UncheckedFilterWriter extends FilterWriter {
 
     // @formatter:off
     /**
-     * Builds a new {@link UncheckedFilterWriter} instance.
+     * Builds a new {@link UncheckedFilterWriter}.
+     *
      * <p>
      * Using File IO:
      * </p>
@@ -57,19 +59,23 @@ public final class UncheckedFilterWriter extends FilterWriter {
      *   .setPath(path)
      *   .get();}
      * </pre>
+     *
+     * @see #get()
      */
     // @formatter:on
     public static class Builder extends AbstractStreamBuilder<UncheckedFilterWriter, Builder> {
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link UncheckedFilterWriter}.
          * <p>
-         * This builder use the aspects Writer, OpenOption[], and Charset.
+         * You must set input that supports {@link #getWriter()} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * You must provide an origin that can be converted to a Writer by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
+         * This builder use the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link #getWriter()}</li>
+         * </ul>
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a Writer.

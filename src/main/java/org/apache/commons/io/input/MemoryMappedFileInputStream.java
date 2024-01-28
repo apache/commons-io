@@ -43,7 +43,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * use case, the use of buffering may still further improve performance. For example:
  * </p>
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  * <pre>{@code
  * BufferedInputStream s = new BufferedInputStream(new GzipInputStream(
@@ -66,12 +66,15 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  *     .get());}
  * </pre>
  *
+ * @see Builder
  * @since 2.12.0
  */
 public final class MemoryMappedFileInputStream extends InputStream {
 
+    // @formatter:off
     /**
-     * Builds a new {@link MemoryMappedFileInputStream} instance.
+     * Builds a new {@link MemoryMappedFileInputStream}.
+     *
      * <p>
      * For example:
      * </p>
@@ -82,12 +85,14 @@ public final class MemoryMappedFileInputStream extends InputStream {
      *   .get();}
      * </pre>
      *
+     * @see #get()
      * @since 2.12.0
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<MemoryMappedFileInputStream, Builder> {
 
         /**
-         * Constructs a new Builder.
+         * Constructs a new {@link Builder}.
          */
         public Builder() {
             setBufferSizeDefault(DEFAULT_BUFFER_SIZE);
@@ -95,11 +100,17 @@ public final class MemoryMappedFileInputStream extends InputStream {
         }
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link MemoryMappedFileInputStream}.
          * <p>
-         * You must provide an origin that supports calling {@link #getPath()} and {@link #getBufferSize()} this builder, otherwise, this method throws an
-         * exception.
+         * You must set input that supports {@link #getPath()}, otherwise, this method throws an exception.
          * </p>
+         * <p>
+         * This builder use the following aspects:
+         * </p>
+         * <ul>
+         * <li>{@link #getPath()}</li>
+         * <li>{@link #getBufferSize()}</li>
+         * </ul>
          *
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.

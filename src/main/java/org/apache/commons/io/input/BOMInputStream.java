@@ -46,7 +46,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * <li>UTF-32LE - {@link ByteOrderMark#UTF_32BE}</li>
  * </ul>
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  * <h2>Example 1 - Detecting and excluding a UTF-8 BOM</h2>
  *
@@ -89,15 +89,20 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  *     // has a UTF-32BE BOM
  * }
  * </pre>
+ * <p>
+ * To build an instance, use {@link Builder}.
+ * </p>
  *
+ * @see Builder
  * @see org.apache.commons.io.ByteOrderMark
  * @see <a href="https://en.wikipedia.org/wiki/Byte_order_mark">Wikipedia - Byte Order Mark</a>
  * @since 2.0
  */
 public class BOMInputStream extends ProxyInputStream {
 
+    // @formatter:off
     /**
-     * Builds a new {@link BOMInputStream} instance.
+     * Builds a new {@link BOMInputStream}.
      *
      * <h2>Using NIO</h2>
      * <pre>{@code
@@ -116,8 +121,10 @@ public class BOMInputStream extends ProxyInputStream {
      *   .get();}
      * </pre>
      *
+     * @see #get()
      * @since 2.12.0
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<BOMInputStream, Builder> {
 
         private static final ByteOrderMark[] DEFAULT = { ByteOrderMark.UTF_8 };
@@ -136,13 +143,21 @@ public class BOMInputStream extends ProxyInputStream {
         private boolean include;
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link BOMInputStream}.
          * <p>
-         * You must provide an origin that supports calling {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
+         * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the aspects InputStream, OpenOption[], include, and ByteOrderMark[].
+         * This builder use the following aspects: InputStream, OpenOption[], include, and ByteOrderMark[].
          * </p>
+         * <p>
+         * This builder use the following aspects:
+         * </p>
+         * <ul>
+         * <li>{@link #getInputStream()}</li>
+         * <li>include}</li>
+         * <li>byteOrderMarks</li>
+         * </ul>
          *
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.

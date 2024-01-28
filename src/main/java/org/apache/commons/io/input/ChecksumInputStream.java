@@ -34,19 +34,23 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * <p>
  * If you do not need the verification or threshold feature, then use a plain {@link CheckedInputStream}.
  * </p>
+ * <p>
+ * To build an instance, use {@link Builder}.
+ * </p>
  *
+ * @see Builder
  * @since 2.16.0
  */
 public final class ChecksumInputStream extends CountingInputStream {
 
     // @formatter:off
     /**
-     * Builds a new {@link ChecksumInputStream} instance.
+     * Builds a new {@link ChecksumInputStream}.
+     *
      * <p>
      * There is no default {@link Checksum}; you MUST provide one.
      * </p>
      * <h2>Using NIO</h2>
-     *
      * <pre>{@code
      * ChecksumInputStream s = ChecksumInputStream.builder()
      *   .setPath(Paths.get("MyFile.xml"))
@@ -54,9 +58,7 @@ public final class ChecksumInputStream extends CountingInputStream {
      *   .setExpectedChecksumValue(12345)
      *   .get();
      * }</pre>
-     *
      * <h2>Using IO</h2>
-     *
      * <pre>{@code
      * ChecksumInputStream s = ChecksumInputStream.builder()
      *   .setFile(new File("MyFile.xml"))
@@ -64,7 +66,6 @@ public final class ChecksumInputStream extends CountingInputStream {
      *   .setExpectedChecksumValue(12345)
      *   .get();
      * }</pre>
-     *
      * <h2>Validating only part of an InputStream</h2>
      * <p>
      * The following validates the first 100 bytes of the given input.
@@ -91,6 +92,8 @@ public final class ChecksumInputStream extends CountingInputStream {
      *   .setCountThreshold(100)
      *   .get();
      * }</pre>
+     *
+     * @see #get()
      */
     // @formatter:on
     public static class Builder extends AbstractStreamBuilder<ChecksumInputStream, Builder> {
@@ -116,10 +119,19 @@ public final class ChecksumInputStream extends CountingInputStream {
         private long expectedChecksumValue;
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link ChecksumInputStream}.
          * <p>
-         * You must provide an origin that supports calling {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
+         * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.
          * </p>
+         * <p>
+         * This builder use the following aspects:
+         * </p>
+         * <ul>
+         * <li>{@link #getInputStream()}</li>
+         * <li>{@link Checksum}</li>
+         * <li>expectedChecksumValue</li>
+         * <li>countThreshold</li>
+         * </ul>
          *
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.

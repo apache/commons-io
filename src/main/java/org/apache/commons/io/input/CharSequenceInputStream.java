@@ -42,13 +42,19 @@ import org.apache.commons.io.function.Uncheck;
  * <p>
  * <strong>Note:</strong> Supports {@link #mark(int)} and {@link #reset()}.
  * </p>
+ * <p>
+ * To build an instance, use {@link Builder}.
+ * </p>
  *
+ * @see Builder
  * @since 2.2
  */
 public class CharSequenceInputStream extends InputStream {
 
+    //@formatter:off
     /**
-     * Builds a new {@link CharSequenceInputStream} instance.
+     * Builds a new {@link CharSequenceInputStream}.
+     *
      * <p>
      * For example:
      * </p>
@@ -71,17 +77,27 @@ public class CharSequenceInputStream extends InputStream {
      *   .get();}
      * </pre>
      *
+     * @see #get()
      * @since 2.13.0
      */
+    //@formatter:on
     public static class Builder extends AbstractStreamBuilder<CharSequenceInputStream, Builder> {
 
         private CharsetEncoder charsetEncoder = newEncoder(getCharset());
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link CharSequenceInputStream}.
          * <p>
-         * This builder use the aspects the CharSequence, buffer size, and Charset.
+         * You must set input that supports {@link #getCharSequence()}, otherwise, this method throws an exception.
          * </p>
+         * <p>
+         * This builder use the following aspects:
+         * </p>
+         * <ul>
+         * <li>{@link #getCharSequence()}</li>
+         * <li>{@link #getBufferSize()}</li>
+         * <li>{@link CharsetEncoder}</li>
+         * </ul>
          *
          * @return a new instance.
          * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character.

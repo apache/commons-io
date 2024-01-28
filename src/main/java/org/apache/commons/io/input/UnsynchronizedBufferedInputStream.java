@@ -32,7 +32,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * takes place when filling that buffer, but this is usually outweighed by the performance benefits.
  * </p>
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  * <p>
  * A typical application pattern for the class looks like this:
@@ -48,14 +48,17 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * Provenance: Apache Harmony and modified.
  * </p>
  *
+ * @see Builder
  * @see BufferedInputStream
  * @since 2.12.0
  */
 //@NotThreadSafe
 public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilterInputStream {
 
+    // @formatter:off
     /**
-     * Builds a new {@link UnsynchronizedBufferedInputStream} instance.
+     * Builds a new {@link UnsynchronizedBufferedInputStream}.
+     *
      * <p>
      * Using File IO:
      * </p>
@@ -74,18 +77,24 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
      *   .setBufferSize(8192)
      *   .get();}
      * </pre>
+     *
+     * @see #get()
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<UnsynchronizedBufferedInputStream, Builder> {
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link UnsynchronizedBufferedInputStream}.
          * <p>
-         * You must provide an origin that supports calling {@link #getInputStream()} and {@link #getBufferSize()} on this builder, otherwise, this method
-         * throws an exception.
+         * You must set input that supports {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the aspects InputStream, OpenOption[] and buffer size.
+         * This builder use the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link #getInputStream()}</li>
+         * <li>{@link #getBufferSize()}</li>
+         * </ul>
          *
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
