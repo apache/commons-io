@@ -22,9 +22,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.nio.CharBuffer;
-import java.nio.charset.Charset;
 
-import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.function.Uncheck;
 
@@ -76,27 +74,26 @@ public final class UncheckedBufferedReader extends BufferedReader {
          * Builds a new {@link UncheckedBufferedReader}.
          *
          * <p>
+         * You must set input that supports {@link #getReader()} on this builder, otherwise, this method throws an exception.
+         * </p>
+         * <p>
          * This builder use the following aspects:
          * </p>
          * <ul>
-         * <li>{@link Reader}</li>
+         * <li>{@link #getReader()}</li>
          * <li>{@link #getBufferSize()}</li>
          * </ul>
-         * <p>
-         * You must provide an origin that can be converted to a Reader by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
-         * </p>
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a Reader.
          * @throws IllegalStateException if the {@code origin} is {@code null}.
-         * @see AbstractOrigin#getReader(Charset)
+         * @see #getReader()
          * @see #getBufferSize()
          */
         @Override
         public UncheckedBufferedReader get() {
             // This an unchecked class, so this method is as well.
-            return Uncheck.get(() -> new UncheckedBufferedReader(checkOrigin().getReader(getCharset()), getBufferSize()));
+            return Uncheck.get(() -> new UncheckedBufferedReader(getReader(), getBufferSize()));
         }
 
     }

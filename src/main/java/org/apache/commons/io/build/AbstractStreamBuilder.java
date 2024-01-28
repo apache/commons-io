@@ -20,6 +20,7 @@ package org.apache.commons.io.build;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.file.OpenOption;
@@ -193,7 +194,22 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     }
 
     /**
-     * Gets a Writer from the origin with OpenOption[].
+     * Gets a Reader from the origin with a Charset.
+     *
+     * @return A Reader
+     * @throws IllegalStateException         if the {@code origin} is {@code null}.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a {@link Reader}.
+     * @throws IOException                   if an I/O error occurs.
+     * @see AbstractOrigin#getReader(Charset)
+     * @see #getCharset()
+     * @since 2.16.0
+     */
+    protected Reader getReader() throws IOException {
+        return checkOrigin().getReader(getCharset());
+    }
+
+    /**
+     * Gets a Writer from the origin with an OpenOption[].
      *
      * @return An writer.
      * @throws IllegalStateException         if the {@code origin} is {@code null}.

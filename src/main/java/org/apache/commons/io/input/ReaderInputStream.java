@@ -31,7 +31,6 @@ import java.util.Objects;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.charset.CharsetEncoders;
 
@@ -111,13 +110,13 @@ public class ReaderInputStream extends InputStream {
          * Builds a new {@link ReaderInputStream}.
          *
          * <p>
-         * You must set input that supports {@link Reader}, otherwise, this method throws an exception.
+         * You must set input that supports {@link #getReader()}, otherwise, this method throws an exception.
          * </p>
          * <p>
          * This builder use the following aspects:
          * </p>
          * <ul>
-         * <li>{@link Reader}</li>
+         * <li>{@link #getReader()}</li>
          * <li>{@link #getBufferSize()}</li>
          * <li>{@link #getCharset()}</li>
          * <li>{@link CharsetEncoder}</li>
@@ -126,14 +125,14 @@ public class ReaderInputStream extends InputStream {
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a Reader.
          * @throws IllegalStateException if the {@code origin} is {@code null}.
-         * @see AbstractOrigin#getReader(Charset)
+         * @see #getReader()
          * @see CharsetEncoder
          * @see #getBufferSize()
          */
         @SuppressWarnings("resource")
         @Override
         public ReaderInputStream get() throws IOException {
-            return new ReaderInputStream(checkOrigin().getReader(getCharset()), charsetEncoder, getBufferSize());
+            return new ReaderInputStream(getReader(), charsetEncoder, getBufferSize());
         }
 
         CharsetEncoder getCharsetEncoder() {

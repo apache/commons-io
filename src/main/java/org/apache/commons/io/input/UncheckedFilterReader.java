@@ -22,9 +22,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.nio.CharBuffer;
-import java.nio.charset.Charset;
 
-import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.function.Uncheck;
 
@@ -71,25 +69,24 @@ public final class UncheckedFilterReader extends FilterReader {
         /**
          * Builds a new {@link UncheckedFilterReader}.
          * <p>
-         * You must set input that supports {@link Reader} on this builder, otherwise, this method throws an exception.
+         * You must set input that supports {@link #getReader()} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
          * This builder use the following aspects:
          * </p>
          * <ul>
-         * <li>{@link Reader}</li>
-         * <li>{@link #getCharset()}</li>
+         * <li>{@link #getReader()}</li>
          * </ul>
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a Reader.
          * @throws IllegalStateException if the {@code origin} is {@code null}.
-         * @see AbstractOrigin#getReader(Charset)
+         * @see #getReader()
          */
         @Override
         public UncheckedFilterReader get() {
             // This an unchecked class, so this method is as well.
-            return Uncheck.get(() -> new UncheckedFilterReader(checkOrigin().getReader(getCharset())));
+            return Uncheck.get(() -> new UncheckedFilterReader(getReader()));
         }
 
     }
