@@ -131,6 +131,17 @@ public class FileAlterationObserver implements Serializable {
 
     private static final long serialVersionUID = 1185122225658782848L;
 
+    private static Comparator<File> toComparator(final IOCase ioCase) {
+        switch (IOCase.value(ioCase, IOCase.SYSTEM)) {
+        case SYSTEM:
+            return NameFileComparator.NAME_SYSTEM_COMPARATOR;
+        case INSENSITIVE:
+            return NameFileComparator.NAME_INSENSITIVE_COMPARATOR;
+        default:
+            return NameFileComparator.NAME_COMPARATOR;
+        }
+    }
+
     /**
      * List of listeners.
      */
@@ -187,23 +198,25 @@ public class FileAlterationObserver implements Serializable {
      *
      * @param rootEntry the root directory to observe.
      * @param fileFilter The file filter or null if none.
-     * @param ioCase what case sensitivity to use comparing file names, null means system sensitive.
+     * @param comparator how to compare files.
      */
-    protected FileAlterationObserver(final FileEntry rootEntry, final FileFilter fileFilter, final IOCase ioCase) {
+    private FileAlterationObserver(final FileEntry rootEntry, final FileFilter fileFilter, final Comparator<File> comparator) {
         Objects.requireNonNull(rootEntry, "rootEntry");
         Objects.requireNonNull(rootEntry.getFile(), "rootEntry.getFile()");
         this.rootEntry = rootEntry;
         this.fileFilter = fileFilter != null ? fileFilter : TrueFileFilter.INSTANCE;
-        switch (IOCase.value(ioCase, IOCase.SYSTEM)) {
-        case SYSTEM:
-            this.comparator = NameFileComparator.NAME_SYSTEM_COMPARATOR;
-            break;
-        case INSENSITIVE:
-            this.comparator = NameFileComparator.NAME_INSENSITIVE_COMPARATOR;
-            break;
-        default:
-            this.comparator = NameFileComparator.NAME_COMPARATOR;
-        }
+        this.comparator = Objects.requireNonNull(comparator, "comparator");
+    }
+
+    /**
+     * Constructs an observer for the specified directory, file filter and file comparator.
+     *
+     * @param rootEntry the root directory to observe.
+     * @param fileFilter The file filter or null if none.
+     * @param ioCase what case sensitivity to use comparing file names, null means system sensitive.
+     */
+    protected FileAlterationObserver(final FileEntry rootEntry, final FileFilter fileFilter, final IOCase ioCase) {
+        this(rootEntry, fileFilter, toComparator(ioCase));
     }
 
     /**
