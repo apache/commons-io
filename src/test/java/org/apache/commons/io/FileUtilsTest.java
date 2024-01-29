@@ -778,7 +778,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final String actual = FileUtils.readFileToString(copiedLink, "UTF8");
         assertEquals("HELLO WORLD", actual);
 
-        Path source = Files.readSymbolicLink(copiedLink.toPath());
+        final Path source = Files.readSymbolicLink(copiedLink.toPath());
         assertEquals(content.toPath(), source);
     }
 
