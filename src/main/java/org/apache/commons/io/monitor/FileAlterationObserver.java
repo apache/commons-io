@@ -18,7 +18,6 @@ package org.apache.commons.io.monitor;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,8 +29,6 @@ import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
-import org.apache.commons.io.build.AbstractSupplier;
-import org.apache.commons.io.comparator.DefaultFileComparator;
 import org.apache.commons.io.comparator.NameFileComparator;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
@@ -317,7 +314,7 @@ public class FileAlterationObserver implements Serializable {
     private FileEntry createFileEntry(final FileEntry parent, final File file) {
         final FileEntry entry = parent.newChildInstance(file);
         entry.refresh(file);
-        entry.setChildren(doListFiles(file, entry));
+        entry.setChildren(listFileEntries(file, entry));
         return entry;
     }
 
@@ -360,20 +357,6 @@ public class FileAlterationObserver implements Serializable {
                 listener.onFileDelete(entry.getFile());
             }
         });
-    }
-
-    /**
-     * Lists the files in {@code file}.
-     *
-     * @param file  The file to list files for
-     * @param entry the parent entry
-     * @return The child files
-     */
-    private FileEntry[] doListFiles(final File file, final FileEntry entry) {
-        final File[] files = listFiles(file);
-        final FileEntry[] children = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_FILE_ENTRY_ARRAY;
-        Arrays.setAll(children, i -> createFileEntry(entry, files[i]));
-        return children;
     }
 
     /**
@@ -430,7 +413,21 @@ public class FileAlterationObserver implements Serializable {
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
     public void initialize() throws Exception {
         rootEntry.refresh(rootEntry.getFile());
-        rootEntry.setChildren(doListFiles(rootEntry.getFile(), rootEntry));
+        rootEntry.setChildren(listFileEntries(rootEntry.getFile(), rootEntry));
+    }
+
+    /**
+     * Lists the file entries in {@code file}.
+     *
+     * @param file  The file to list files for
+     * @param entry the parent entry
+     * @return The child files
+     */
+    private FileEntry[] listFileEntries(final File file, final FileEntry entry) {
+        final File[] files = listFiles(file);
+        final FileEntry[] children = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_FILE_ENTRY_ARRAY;
+        Arrays.setAll(children, i -> createFileEntry(entry, files[i]));
+        return children;
     }
 
     /**
