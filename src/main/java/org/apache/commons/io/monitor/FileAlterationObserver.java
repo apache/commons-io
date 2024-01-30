@@ -250,6 +250,39 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
+     * Compares two file lists for files which have been created, modified or deleted.
+     *
+     * @param parent   The parent entry.
+     * @param previous The original list of files.
+     * @param files    The current list of files.
+     */
+    private void checkAndFire(final FileEntry parent, final FileEntry[] previous, final File[] files) {
+        int c = 0;
+        final FileEntry[] current = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_FILE_ENTRY_ARRAY;
+        for (final FileEntry entry : previous) {
+            while (c < files.length && comparator.compare(entry.getFile(), files[c]) > 0) {
+                current[c] = createFileEntry(parent, files[c]);
+                fireOnCreate(current[c]);
+                c++;
+            }
+            if (c < files.length && comparator.compare(entry.getFile(), files[c]) == 0) {
+                fireOnChange(entry, files[c]);
+                checkAndFire(entry, entry.getChildren(), listFiles(files[c]));
+                current[c] = entry;
+                c++;
+            } else {
+                checkAndFire(entry, entry.getChildren(), FileUtils.EMPTY_FILE_ARRAY);
+                fireOnDelete(entry);
+            }
+        }
+        for (; c < files.length; c++) {
+            current[c] = createFileEntry(parent, files[c]);
+            fireOnCreate(current[c]);
+        }
+        parent.setChildren(current);
+    }
+
+    /**
      * Checks whether the file and its children have been created, modified or deleted.
      */
     public void checkAndNotify() {
@@ -260,47 +293,14 @@ public class FileAlterationObserver implements Serializable {
         // fire directory/file events
         final File rootFile = rootEntry.getFile();
         if (rootFile.exists()) {
-            checkAndNotify(rootEntry, rootEntry.getChildren(), listFiles(rootFile));
+            checkAndFire(rootEntry, rootEntry.getChildren(), listFiles(rootFile));
         } else if (rootEntry.isExists()) {
-            checkAndNotify(rootEntry, rootEntry.getChildren(), FileUtils.EMPTY_FILE_ARRAY);
+            checkAndFire(rootEntry, rootEntry.getChildren(), FileUtils.EMPTY_FILE_ARRAY);
         }
         // Else: Didn't exist and still doesn't
 
         // fire onStop()
         listeners.forEach(listener -> listener.onStop(this));
-    }
-
-    /**
-     * Compares two file lists for files which have been created, modified or deleted.
-     *
-     * @param parent   The parent entry.
-     * @param previous The original list of files.
-     * @param files    The current list of files.
-     */
-    private void checkAndNotify(final FileEntry parent, final FileEntry[] previous, final File[] files) {
-        int c = 0;
-        final FileEntry[] current = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_FILE_ENTRY_ARRAY;
-        for (final FileEntry entry : previous) {
-            while (c < files.length && comparator.compare(entry.getFile(), files[c]) > 0) {
-                current[c] = createFileEntry(parent, files[c]);
-                doCreate(current[c]);
-                c++;
-            }
-            if (c < files.length && comparator.compare(entry.getFile(), files[c]) == 0) {
-                doMatch(entry, files[c]);
-                checkAndNotify(entry, entry.getChildren(), listFiles(files[c]));
-                current[c] = entry;
-                c++;
-            } else {
-                checkAndNotify(entry, entry.getChildren(), FileUtils.EMPTY_FILE_ARRAY);
-                doDelete(entry);
-            }
-        }
-        for (; c < files.length; c++) {
-            current[c] = createFileEntry(parent, files[c]);
-            doCreate(current[c]);
-        }
-        parent.setChildren(current);
     }
 
     /**
@@ -328,43 +328,12 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Fires directory/file created events to the registered listeners.
-     *
-     * @param entry The file entry.
-     */
-    private void doCreate(final FileEntry entry) {
-        listeners.forEach(listener -> {
-            if (entry.isDirectory()) {
-                listener.onDirectoryCreate(entry.getFile());
-            } else {
-                listener.onFileCreate(entry.getFile());
-            }
-        });
-        Stream.of(entry.getChildren()).forEach(this::doCreate);
-    }
-
-    /**
-     * Fires directory/file delete events to the registered listeners.
-     *
-     * @param entry The file entry.
-     */
-    private void doDelete(final FileEntry entry) {
-        listeners.forEach(listener -> {
-            if (entry.isDirectory()) {
-                listener.onDirectoryDelete(entry.getFile());
-            } else {
-                listener.onFileDelete(entry.getFile());
-            }
-        });
-    }
-
-    /**
      * Fires directory/file change events to the registered listeners.
      *
      * @param entry The previous file system entry.
      * @param file  The current file.
      */
-    private void doMatch(final FileEntry entry, final File file) {
+    private void fireOnChange(final FileEntry entry, final File file) {
         if (entry.refresh(file)) {
             listeners.forEach(listener -> {
                 if (entry.isDirectory()) {
@@ -374,6 +343,37 @@ public class FileAlterationObserver implements Serializable {
                 }
             });
         }
+    }
+
+    /**
+     * Fires directory/file created events to the registered listeners.
+     *
+     * @param entry The file entry.
+     */
+    private void fireOnCreate(final FileEntry entry) {
+        listeners.forEach(listener -> {
+            if (entry.isDirectory()) {
+                listener.onDirectoryCreate(entry.getFile());
+            } else {
+                listener.onFileCreate(entry.getFile());
+            }
+        });
+        Stream.of(entry.getChildren()).forEach(this::fireOnCreate);
+    }
+
+    /**
+     * Fires directory/file delete events to the registered listeners.
+     *
+     * @param entry The file entry.
+     */
+    private void fireOnDelete(final FileEntry entry) {
+        listeners.forEach(listener -> {
+            if (entry.isDirectory()) {
+                listener.onDirectoryDelete(entry.getFile());
+            } else {
+                listener.onFileDelete(entry.getFile());
+            }
+        });
     }
 
     /**
