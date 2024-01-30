@@ -258,17 +258,17 @@ public class FileAlterationObserver implements Serializable {
      */
     private void checkAndFire(final FileEntry parentEntry, final FileEntry[] previousEntries, final File[] currentEntries) {
         int c = 0;
-        final FileEntry[] actualEntry = currentEntries.length > 0 ? new FileEntry[currentEntries.length] : FileEntry.EMPTY_FILE_ENTRY_ARRAY;
+        final FileEntry[] actualEntries = currentEntries.length > 0 ? new FileEntry[currentEntries.length] : FileEntry.EMPTY_FILE_ENTRY_ARRAY;
         for (final FileEntry previousEntry : previousEntries) {
             while (c < currentEntries.length && comparator.compare(previousEntry.getFile(), currentEntries[c]) > 0) {
-                actualEntry[c] = createFileEntry(parentEntry, currentEntries[c]);
-                fireOnCreate(actualEntry[c]);
+                actualEntries[c] = createFileEntry(parentEntry, currentEntries[c]);
+                fireOnCreate(actualEntries[c]);
                 c++;
             }
             if (c < currentEntries.length && comparator.compare(previousEntry.getFile(), currentEntries[c]) == 0) {
                 fireOnChange(previousEntry, currentEntries[c]);
                 checkAndFire(previousEntry, previousEntry.getChildren(), listFiles(currentEntries[c]));
-                actualEntry[c] = previousEntry;
+                actualEntries[c] = previousEntry;
                 c++;
             } else {
                 checkAndFire(previousEntry, previousEntry.getChildren(), FileUtils.EMPTY_FILE_ARRAY);
@@ -276,10 +276,10 @@ public class FileAlterationObserver implements Serializable {
             }
         }
         for (; c < currentEntries.length; c++) {
-            actualEntry[c] = createFileEntry(parentEntry, currentEntries[c]);
-            fireOnCreate(actualEntry[c]);
+            actualEntries[c] = createFileEntry(parentEntry, currentEntries[c]);
+            fireOnCreate(actualEntries[c]);
         }
-        parentEntry.setChildren(actualEntry);
+        parentEntry.setChildren(actualEntries);
     }
 
     /**
