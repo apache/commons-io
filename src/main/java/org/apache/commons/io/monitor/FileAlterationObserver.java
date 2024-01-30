@@ -115,7 +115,6 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *
  * @see FileAlterationListener
  * @see FileAlterationMonitor
- *
  * @since 2.0
  */
 public class FileAlterationObserver implements Serializable {
@@ -156,7 +155,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Constructs an observer for the specified directory.
      *
-     * @param directory the directory to observe
+     * @param directory the directory to observe.
      */
     public FileAlterationObserver(final File directory) {
         this(directory, null);
@@ -165,8 +164,8 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Constructs an observer for the specified directory and file filter.
      *
-     * @param directory  the directory to observe
-     * @param fileFilter The file filter or null if none
+     * @param directory  the directory to observe.
+     * @param fileFilter The file filter or null if none.
      */
     public FileAlterationObserver(final File directory, final FileFilter fileFilter) {
         this(directory, fileFilter, null);
@@ -212,7 +211,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Constructs an observer for the specified directory.
      *
-     * @param directoryName the name of the directory to observe
+     * @param directoryName the name of the directory to observe.
      */
     public FileAlterationObserver(final String directoryName) {
         this(new File(directoryName));
@@ -221,8 +220,8 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Constructs an observer for the specified directory and file filter.
      *
-     * @param directoryName the name of the directory to observe
-     * @param fileFilter    The file filter or null if none
+     * @param directoryName the name of the directory to observe.
+     * @param fileFilter    The file filter or null if none.
      */
     public FileAlterationObserver(final String directoryName, final FileFilter fileFilter) {
         this(new File(directoryName), fileFilter);
@@ -231,9 +230,9 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Constructs an observer for the specified directory, file filter and file comparator.
      *
-     * @param directoryName the name of the directory to observe
-     * @param fileFilter    The file filter or null if none
-     * @param ioCase        what case sensitivity to use comparing file names, null means system sensitive
+     * @param directoryName the name of the directory to observe.
+     * @param fileFilter    The file filter or null if none.
+     * @param ioCase        what case sensitivity to use comparing file names, null means system sensitive.
      */
     public FileAlterationObserver(final String directoryName, final FileFilter fileFilter, final IOCase ioCase) {
         this(new File(directoryName), fileFilter, ioCase);
@@ -242,7 +241,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Adds a file system listener.
      *
-     * @param listener The file system listener
+     * @param listener The file system listener.
      */
     public void addListener(final FileAlterationListener listener) {
         if (listener != null) {
@@ -274,9 +273,9 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Compares two file lists for files which have been created, modified or deleted.
      *
-     * @param parent   The parent entry
-     * @param previous The original list of files
-     * @param files    The current list of files
+     * @param parent   The parent entry.
+     * @param previous The original list of files.
+     * @param files    The current list of files.
      */
     private void checkAndNotify(final FileEntry parent, final FileEntry[] previous, final File[] files) {
         int c = 0;
@@ -307,9 +306,9 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Creates a new file entry for the specified file.
      *
-     * @param parent The parent file entry
-     * @param file   The file to create an entry for
-     * @return A new file entry
+     * @param parent The parent file entry.
+     * @param file   The file to wrap.
+     * @return A new file entry.
      */
     private FileEntry createFileEntry(final FileEntry parent, final File file) {
         final FileEntry entry = parent.newChildInstance(file);
@@ -321,7 +320,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Final processing.
      *
-     * @throws Exception if an error occurs
+     * @throws Exception if an error occurs.
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
     public void destroy() throws Exception {
@@ -331,7 +330,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Fires directory/file created events to the registered listeners.
      *
-     * @param entry The file entry
+     * @param entry The file entry.
      */
     private void doCreate(final FileEntry entry) {
         listeners.forEach(listener -> {
@@ -347,7 +346,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Fires directory/file delete events to the registered listeners.
      *
-     * @param entry The file entry
+     * @param entry The file entry.
      */
     private void doDelete(final FileEntry entry) {
         listeners.forEach(listener -> {
@@ -362,8 +361,8 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Fires directory/file change events to the registered listeners.
      *
-     * @param entry The previous file system entry
-     * @param file  The current file
+     * @param entry The previous file system entry.
+     * @param file  The current file.
      */
     private void doMatch(final FileEntry entry, final File file) {
         if (entry.refresh(file)) {
@@ -380,7 +379,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Returns the directory being observed.
      *
-     * @return the directory being observed
+     * @return the directory being observed.
      */
     public File getDirectory() {
         return rootEntry.getFile();
@@ -389,7 +388,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Returns the fileFilter.
      *
-     * @return the fileFilter
+     * @return the fileFilter.
      * @since 2.1
      */
     public FileFilter getFileFilter() {
@@ -408,7 +407,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Initializes the observer.
      *
-     * @throws Exception if an error occurs
+     * @throws Exception if an error occurs.
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
     public void initialize() throws Exception {
@@ -419,9 +418,9 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Lists the file entries in {@code file}.
      *
-     * @param file  The file to list files for
-     * @param entry the parent entry
-     * @return The child files
+     * @param file  The directory to list.
+     * @param entry the parent entry.
+     * @return The child file entries.
      */
     private FileEntry[] listFileEntries(final File file, final FileEntry entry) {
         final File[] files = listFiles(file);
@@ -431,7 +430,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Lists the contents of a directory
+     * Lists the contents of a directory.
      *
      * @param directory The directory to list.
      * @return the directory contents or a zero length array if the empty or the file is not a directory
@@ -453,7 +452,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Removes a file system listener.
      *
-     * @param listener The file system listener
+     * @param listener The file system listener.
      */
     public void removeListener(final FileAlterationListener listener) {
         if (listener != null) {
@@ -464,7 +463,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Returns a String representation of this observer.
      *
-     * @return a String representation of this observer
+     * @return a String representation of this observer.
      */
     @Override
     public String toString() {
