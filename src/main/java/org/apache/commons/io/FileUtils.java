@@ -1348,6 +1348,20 @@ public class FileUtils {
             if (exclusionList == null || !exclusionList.contains(srcFile.getCanonicalPath())) {
                 if (srcFile.isDirectory()) {
                     doCopyDirectory(srcFile, dstFile, fileFilter, exclusionList, preserveDirDate, copyOptions);
+                } else if (Files.isSymbolicLink(srcFile.toPath())) {
+                    final Path linkTarget = Files.readSymbolicLink(srcFile.toPath());
+                    // TODO handle ancestors/grandchildren
+                    if (directoryContains(srcDir, linkTarget.toFile())) {
+                        // make a new link that points to the copy of the target
+                        final String srcFileName = srcFile.getName();
+                        final String linkTargetName = linkTarget.toFile().getName();
+                        final Path newLink = destDir.toPath().resolve(srcFileName);
+                        final Path newTarget = destDir.toPath().resolve(linkTargetName);
+                        Files.createSymbolicLink(newLink, newTarget);
+                    } else {
+                        copyFile(srcFile, dstFile, preserveDirDate, copyOptions);
+                    }
+
                 } else {
                     copyFile(srcFile, dstFile, preserveDirDate, copyOptions);
                 }

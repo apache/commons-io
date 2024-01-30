@@ -783,6 +783,43 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     /**
+     * Test what happens when copyDirectory copies a directory that contains a symlink
+     * to a file inside the copied directory.
+     */
+    @Test
+    public void testCopyDirectory_symLinkInternalFile() throws Exception {
+        // Make a directory
+        final File realDirectory = new File(tempDirFile, "real_directory");
+        realDirectory.mkdir();
+
+        // make a file
+        final File content = new File(realDirectory, "hello.txt");
+        FileUtils.writeStringToFile(content, "HELLO WORLD", "UTF8");
+
+        // Make a symlink to the file
+        final Path linkPath = realDirectory.toPath().resolve("link_to_file");
+        Files.createSymbolicLink(linkPath, content.toPath());
+
+        // Now copy the directory
+        final File destination = new File(tempDirFile, "destination");
+        FileUtils.copyDirectory(realDirectory, destination);
+
+        // delete the original
+        assumeTrue(content.delete());
+
+        // test that the copied directory contains a link to the copied file
+        final File copiedLink = new File(destination, "link_to_file");
+        assertTrue(Files.isSymbolicLink(copiedLink.toPath()));
+        final String actual = FileUtils.readFileToString(copiedLink, "UTF8");
+        assertEquals("HELLO WORLD", actual);
+
+        final Path source = Files.readSymbolicLink(copiedLink.toPath());
+        assertNotEquals(content.toPath(), source);
+        final File copiedContent = new File(destination, "hello.txt");
+        assertEquals(copiedContent.toPath(), source);
+    }
+
+    /**
      * See what happens when copyDirectory copies a directory that is a symlink
      * to another directory containing non-symlinked files.
      * This is a characterization test to explore current behavior, and arguably
@@ -790,7 +827,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
      * and should not be relied on.
      */
     @Test
-    public void testCopyDir_symLink() throws Exception {
+    public void testCopyDirectory_symLink() throws Exception {
         // Make a directory
         final File realDirectory = new File(tempDirFile, "real_directory");
         realDirectory.mkdir();
@@ -818,7 +855,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyDir_symLinkCycle() throws Exception {
+    public void testCopyDirectory_symLinkCycle() throws Exception {
         // Make a directory
         final File topDirectory = new File(tempDirFile, "topDirectory");
         topDirectory.mkdir();
@@ -909,8 +946,8 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final Path copiedSymlink = new File(destination, "linkfile").toPath();
 
         // test for the existence of the copied symbolic link as a link
-        assertTrue(Files.isSymbolicLink(copiedSymlink));
         assertTrue(Files.exists(copiedSymlink));
+        assertTrue(Files.isSymbolicLink(copiedSymlink));
     }
 
     @Test
