@@ -254,32 +254,32 @@ public class FileAlterationObserver implements Serializable {
      *
      * @param parent   The parent entry.
      * @param previous The original list of files.
-     * @param files    The current list of files.
+     * @param current    The current list of files.
      */
-    private void checkAndFire(final FileEntry parent, final FileEntry[] previous, final File[] files) {
+    private void checkAndFire(final FileEntry parent, final FileEntry[] previous, final File[] current) {
         int c = 0;
-        final FileEntry[] current = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_FILE_ENTRY_ARRAY;
+        final FileEntry[] actual = current.length > 0 ? new FileEntry[current.length] : FileEntry.EMPTY_FILE_ENTRY_ARRAY;
         for (final FileEntry entry : previous) {
-            while (c < files.length && comparator.compare(entry.getFile(), files[c]) > 0) {
-                current[c] = createFileEntry(parent, files[c]);
-                fireOnCreate(current[c]);
+            while (c < current.length && comparator.compare(entry.getFile(), current[c]) > 0) {
+                actual[c] = createFileEntry(parent, current[c]);
+                fireOnCreate(actual[c]);
                 c++;
             }
-            if (c < files.length && comparator.compare(entry.getFile(), files[c]) == 0) {
-                fireOnChange(entry, files[c]);
-                checkAndFire(entry, entry.getChildren(), listFiles(files[c]));
-                current[c] = entry;
+            if (c < current.length && comparator.compare(entry.getFile(), current[c]) == 0) {
+                fireOnChange(entry, current[c]);
+                checkAndFire(entry, entry.getChildren(), listFiles(current[c]));
+                actual[c] = entry;
                 c++;
             } else {
                 checkAndFire(entry, entry.getChildren(), FileUtils.EMPTY_FILE_ARRAY);
                 fireOnDelete(entry);
             }
         }
-        for (; c < files.length; c++) {
-            current[c] = createFileEntry(parent, files[c]);
-            fireOnCreate(current[c]);
+        for (; c < current.length; c++) {
+            actual[c] = createFileEntry(parent, current[c]);
+            fireOnCreate(actual[c]);
         }
-        parent.setChildren(current);
+        parent.setChildren(actual);
     }
 
     /**
@@ -436,17 +436,7 @@ public class FileAlterationObserver implements Serializable {
      * @return the directory contents or a zero length array if the empty or the file is not a directory
      */
     private File[] listFiles(final File directory) {
-        File[] children = null;
-        if (directory.isDirectory()) {
-            children = directory.listFiles(fileFilter);
-        }
-        if (children == null) {
-            children = FileUtils.EMPTY_FILE_ARRAY;
-        }
-        if (children.length > 1) {
-            Arrays.sort(children, comparator);
-        }
-        return children;
+        return directory.isDirectory() ? sort(directory.listFiles(fileFilter)) : FileUtils.EMPTY_FILE_ARRAY;
     }
 
     /**
@@ -458,6 +448,16 @@ public class FileAlterationObserver implements Serializable {
         if (listener != null) {
             listeners.removeIf(listener::equals);
         }
+    }
+
+    private File[] sort(final File[] files) {
+        if (files == null) {
+            return FileUtils.EMPTY_FILE_ARRAY;
+        }
+        if (files.length > 1) {
+            Arrays.sort(files, comparator);
+        }
+        return files;
     }
 
     /**
