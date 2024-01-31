@@ -1184,7 +1184,7 @@ public class FileUtils {
                             i += 3;
                         } while (i < n && url.charAt(i) == '%');
                         continue;
-                    } catch (final RuntimeException ignored) {
+                    } catch (final IndexOutOfBoundsException | NumberFormatException ignored) {
                         // malformed percent-encoded octet, fall through and
                         // append characters literally
                     } finally {
