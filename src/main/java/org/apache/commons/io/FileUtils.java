@@ -3056,11 +3056,8 @@ public class FileUtils {
 
     /**
      * Implements behavior similar to the Unix "touch" utility. Creates a new file with size 0, or, if the file exists, just
-     * updates the file's modified time.
-     * <p>
-     * NOTE: As from v1.3, this method throws an IOException if the last modified date of the file cannot be set. Also, as
-     * from v1.3 this method creates parent directories if they do not exist.
-     * </p>
+     * updates the file's modified time. This method throws an IOException if the last modified date
+     * of the file cannot be set. It creates parent directories if they do not exist.
      *
      * @param file the File to touch.
      * @throws NullPointerException if the parameter is {@code null}.
@@ -3220,10 +3217,7 @@ public class FileUtils {
 
     /**
      * Writes a byte array to a file creating the file if it does not exist.
-     * <p>
-     * NOTE: As from v1.3, the parent directories of the file will be created
-     * if they do not exist.
-     * </p>
+     * The parent directories of the file will be created if they do not exist.
      *
      * @param file the file to write to
      * @param data the content to write to the file
@@ -3350,10 +3344,7 @@ public class FileUtils {
      * Writes the {@code toString()} value of each item in a collection to
      * the specified {@link File} line by line.
      * The specified character encoding and the default line ending will be used.
-     * <p>
-     * NOTE: As from v1.3, the parent directories of the file will be created
-     * if they do not exist.
-     * </p>
+     * The parent directories of the file will be created if they do not exist.
      *
      * @param file     the file to write to
      * @param charsetName the name of the requested charset, {@code null} means platform default
@@ -3388,10 +3379,7 @@ public class FileUtils {
      * Writes the {@code toString()} value of each item in a collection to
      * the specified {@link File} line by line.
      * The specified character encoding and the line ending will be used.
-     * <p>
-     * NOTE: As from v1.3, the parent directories of the file will be created
-     * if they do not exist.
-     * </p>
+     * The parent directories of the file will be created if they do not exist.
      *
      * @param file       the file to write to
      * @param charsetName   the name of the requested charset, {@code null} means platform default
@@ -3458,10 +3446,7 @@ public class FileUtils {
 
     /**
      * Writes a String to a file creating the file if it does not exist.
-     * <p>
-     * NOTE: As from v1.3, the parent directories of the file will be created
-     * if they do not exist.
-     * </p>
+     * The parent directories of the file will be created if they do not exist.
      *
      * @param file     the file to write
      * @param data     the content to write to the file
@@ -3495,7 +3480,6 @@ public class FileUtils {
     /**
      * Writes a String to a file, creating the file if it does not exist.
      * The parent directories of the file are created if they do not exist.
-     * </p>
      *
      * @param file     the file to write
      * @param data     the content to write to the file
