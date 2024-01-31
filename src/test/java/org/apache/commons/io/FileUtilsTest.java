@@ -827,10 +827,9 @@ public class FileUtilsTest extends AbstractTempDirTest {
      * and should not be relied on.
      */
     @Test
-    public void testCopyDirectory_symLink() throws Exception {
+    public void testCopyDirectory_symLink2() throws Exception {
         // Make a directory
         final File realDirectory = new File(tempDirFile, "real_directory");
-        realDirectory.mkdir();
         final File content = new File(realDirectory, "hello.txt");
         FileUtils.writeStringToFile(content, "HELLO WORLD", "UTF8");
 
@@ -927,7 +926,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
     public void testCopyDirectory_symLink() throws IOException {
         // Make a file
         final File sourceDirectory = new File(tempDirFile, "source_directory");
-        sourceDirectory.mkdir();
         final File targetFile = new File(sourceDirectory, "hello.txt");
         FileUtils.writeStringToFile(targetFile, "HELLO WORLD", "UTF8");
 
@@ -935,9 +933,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final Path targetPath = targetFile.toPath();
         final Path linkPath = sourceDirectory.toPath().resolve("linkfile");
         Files.createSymbolicLink(linkPath, targetPath);
-        assumeTrue(Files.isSymbolicLink(linkPath), () -> "Expected a symlink here: " + linkPath);
-        assumeTrue(Files.exists(linkPath));
-        assumeTrue(Files.exists(linkPath, LinkOption.NOFOLLOW_LINKS));
 
         // Now copy sourceDirectory to another directory
         final File destination = new File(tempDirFile, "destination");
