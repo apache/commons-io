@@ -343,11 +343,7 @@ public class ReversedLinesFileReader implements Closeable {
      *                  system).
      * @param charsetName  the encoding of the file, null uses the default Charset.
      * @throws IOException                                  if an I/O error occurs
-     * @throws java.nio.charset.UnsupportedCharsetException thrown instead of
-     *                                                      {@link UnsupportedEncodingException}
-     *                                                      in version 2.2 if the
-     *                                                      encoding is not
-     *                                                      supported.
+     * @throws java.nio.charset.UnsupportedCharsetException if the encoding is not supported
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
@@ -448,11 +444,7 @@ public class ReversedLinesFileReader implements Closeable {
      *                    system).
      * @param charsetName the encoding of the file, null uses the default Charset.
      * @throws IOException                                  if an I/O error occurs
-     * @throws java.nio.charset.UnsupportedCharsetException thrown instead of
-     *                                                      {@link UnsupportedEncodingException}
-     *                                                      in version 2.2 if the
-     *                                                      encoding is not
-     *                                                      supported.
+     * @throws java.nio.charset.UnsupportedCharsetException if the encoding is not supported
      * @since 2.7
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
