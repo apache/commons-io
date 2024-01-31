@@ -186,11 +186,11 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *
  * <p>
  * This example provides a public {@code cancel()} method that can be called by another thread to stop the
- * processing. A typical example use-case would be a cancel button on a GUI. Calling this method sets a
- * <a href="https://java.sun.com/docs/books/jls/second_edition/html/classes.doc.html#36930"> volatile</a> flag to ensure
- * it will work properly in a multi-threaded environment. The flag is returned by the {@code handleIsCancelled()}
- * method, which will cause the walk to stop immediately. The {@code handleCancelled()} method will be the next,
- * and last, callback method received once cancellation has occurred.
+ * processing. A typical example use-case is a cancel button on a GUI. Calling this method sets a
+ * <a href='https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#d5e12277'>(@code volatile}</a>
+ * flag to ensure it works properly in a multi-threaded environment.
+ * The flag is returned by the {@code handleIsCancelled()} method, which causes the walk to stop
+ * immediately. The {@code handleCancelled()} method will be the next, and last, callback method received once cancellation has occurred.
  * </p>
  *
  * <pre>
