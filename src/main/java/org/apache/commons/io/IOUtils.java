@@ -1164,7 +1164,7 @@ public class IOUtils {
      * </p>
      * <p>
      * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * <a href="https://www.iana.org/assignments/character-sets">IANA</a>.
      * </p>
      * <p>
      * This method uses {@link InputStreamReader}.
