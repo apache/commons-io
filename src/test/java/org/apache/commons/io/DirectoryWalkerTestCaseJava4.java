@@ -373,8 +373,6 @@ public class DirectoryWalkerTestCaseJava4 {
         assertTrue(results.contains(orgDir), "[B] Org Dir");
     }
 
-    // ------------ Convenience Test Methods ------------------------------------
-
     /**
      * Test Filtering and limit to depth 3
      */

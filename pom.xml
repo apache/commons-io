@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>65</version>
+    <version>66</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
@@ -128,6 +128,7 @@ file comparators, endian transformation classes, and much more.
     <commons.bc.version>2.15.1</commons.bc.version>
     <commons.release.version>2.16.0</commons.release.version>
     <commons.release.next>2.16.1</commons.release.next>
+    <project.build.outputTimestamp>2024-02-01T03:27:02Z</project.build.outputTimestamp>
     <commons.release.desc>(requires Java 8)</commons.release.desc>
     <commons.jira.id>IO</commons.jira.id>
     <commons.jira.pid>12310477</commons.jira.pid>

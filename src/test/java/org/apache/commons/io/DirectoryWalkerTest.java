@@ -362,8 +362,6 @@ public class DirectoryWalkerTest {
         checkContainsFiles("Output File", outputFiles, results);
     }
 
-    // ------------ Convenience Test Methods ------------------------------------
-
     /**
      * Test Filtering and limit to depth 0
      */
@@ -458,8 +456,6 @@ public class DirectoryWalkerTest {
         checkContainsFiles("[DirAndFile4] File", ioFiles, resultFiles);
     }
 
-    // ------------ Test DirectoryWalker implementation --------------------------
-
     /**
      * Test Filtering
      */
@@ -471,8 +467,6 @@ public class DirectoryWalkerTest {
         checkContainsString("Output File", outputFiles, results);
     }
 
-    // ------------ Test DirectoryWalker implementation --------------------------
-
     /**
      * test an invalid start directory
      */
@@ -483,8 +477,6 @@ public class DirectoryWalkerTest {
         assertEquals(0, results.size(), "Result Size");
 
     }
-
-    // ------------ Test DirectoryWalker implementation --------------------------
 
     /**
      * Test Limiting to current directory

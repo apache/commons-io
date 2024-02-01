@@ -1987,7 +1987,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         // Null reference Date
         assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(oldFile, (Date) null));
 
-        // ----- Test isFileOlder() exceptions -----
+        // Test isFileOlder() exceptions
         // Null File
         assertThrows(NullPointerException.class, () -> FileUtils.isFileOlder(null, now));
 

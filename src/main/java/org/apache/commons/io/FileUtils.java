@@ -1184,7 +1184,7 @@ public class FileUtils {
                             i += 3;
                         } while (i < n && url.charAt(i) == '%');
                         continue;
-                    } catch (final RuntimeException ignored) {
+                    } catch (final IndexOutOfBoundsException | NumberFormatException ignored) {
                         // malformed percent-encoded octet, fall through and
                         // append characters literally
                     } finally {
@@ -2704,8 +2704,7 @@ public class FileUtils {
      * @throws NullPointerException if file is {@code null}.
      * @throws IOException if an I/O error occurs, including when the file does not exist, is a directory rather than a
      *         regular file, or for some other reason why the file cannot be opened for reading.
-     * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
-     * .UnsupportedEncodingException} in version 2.2 if the named charset is unavailable.
+     * @throws java.nio.charset.UnsupportedCharsetException if the named charset is unavailable.
      * @since 2.3
      */
     public static String readFileToString(final File file, final String charsetName) throws IOException {
@@ -2754,8 +2753,7 @@ public class FileUtils {
      * @throws NullPointerException if file is {@code null}.
      * @throws IOException if an I/O error occurs, including when the file does not exist, is a directory rather than a
      *         regular file, or for some other reason why the file cannot be opened for reading.
-     * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
-     * .UnsupportedEncodingException} in version 2.2 if the named charset is unavailable.
+     * @throws java.nio.charset.UnsupportedCharsetException if the named charset is unavailable.
      * @since 1.1
      */
     public static List<String> readLines(final File file, final String charsetName) throws IOException {
@@ -3072,11 +3070,8 @@ public class FileUtils {
 
     /**
      * Implements behavior similar to the Unix "touch" utility. Creates a new file with size 0, or, if the file exists, just
-     * updates the file's modified time.
-     * <p>
-     * NOTE: As from v1.3, this method throws an IOException if the last modified date of the file cannot be set. Also, as
-     * from v1.3 this method creates parent directories if they do not exist.
-     * </p>
+     * updates the file's modified time. This method throws an IOException if the last modified date
+     * of the file cannot be set. It creates parent directories if they do not exist.
      *
      * @param file the File to touch.
      * @throws NullPointerException if the parameter is {@code null}.
@@ -3225,8 +3220,7 @@ public class FileUtils {
      * @param append   if {@code true}, then the data will be added to the
      *                 end of the file rather than overwriting
      * @throws IOException                 in case of an I/O error
-     * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
-     * .UnsupportedEncodingException} in version 2.2 if the encoding is not supported by the VM
+     * @throws java.nio.charset.UnsupportedCharsetException if the encoding is not supported by the VM
      * @since 2.1
      */
     public static void write(final File file, final CharSequence data, final String charsetName, final boolean append) throws IOException {
@@ -3237,10 +3231,7 @@ public class FileUtils {
 
     /**
      * Writes a byte array to a file creating the file if it does not exist.
-     * <p>
-     * NOTE: As from v1.3, the parent directories of the file will be created
-     * if they do not exist.
-     * </p>
+     * The parent directories of the file will be created if they do not exist.
      *
      * @param file the file to write to
      * @param data the content to write to the file
@@ -3367,10 +3358,7 @@ public class FileUtils {
      * Writes the {@code toString()} value of each item in a collection to
      * the specified {@link File} line by line.
      * The specified character encoding and the default line ending will be used.
-     * <p>
-     * NOTE: As from v1.3, the parent directories of the file will be created
-     * if they do not exist.
-     * </p>
+     * The parent directories of the file will be created if they do not exist.
      *
      * @param file     the file to write to
      * @param charsetName the name of the requested charset, {@code null} means platform default
@@ -3405,10 +3393,7 @@ public class FileUtils {
      * Writes the {@code toString()} value of each item in a collection to
      * the specified {@link File} line by line.
      * The specified character encoding and the line ending will be used.
-     * <p>
-     * NOTE: As from v1.3, the parent directories of the file will be created
-     * if they do not exist.
-     * </p>
+     * The parent directories of the file will be created if they do not exist.
      *
      * @param file       the file to write to
      * @param charsetName   the name of the requested charset, {@code null} means platform default
@@ -3475,10 +3460,7 @@ public class FileUtils {
 
     /**
      * Writes a String to a file creating the file if it does not exist.
-     * <p>
-     * NOTE: As from v1.3, the parent directories of the file will be created
-     * if they do not exist.
-     * </p>
+     * The parent directories of the file will be created if they do not exist.
      *
      * @param file     the file to write
      * @param data     the content to write to the file
@@ -3492,7 +3474,8 @@ public class FileUtils {
     }
 
     /**
-     * Writes a String to a file creating the file if it does not exist.
+     * Writes a String to a file, creating the file if it does not exist.
+     * The parent directories of the file are created if they do not exist.
      *
      * @param file     the file to write
      * @param data     the content to write to the file
@@ -3509,11 +3492,8 @@ public class FileUtils {
     }
 
     /**
-     * Writes a String to a file creating the file if it does not exist.
-     * <p>
-     * NOTE: As from v1.3, the parent directories of the file will be created
-     * if they do not exist.
-     * </p>
+     * Writes a String to a file, creating the file if it does not exist.
+     * The parent directories of the file are created if they do not exist.
      *
      * @param file     the file to write
      * @param data     the content to write to the file
@@ -3526,7 +3506,8 @@ public class FileUtils {
     }
 
     /**
-     * Writes a String to a file creating the file if it does not exist.
+     * Writes a String to a file, creating the file if it does not exist.
+     * The parent directories of the file are created if they do not exist.
      *
      * @param file     the file to write
      * @param data     the content to write to the file
@@ -3534,8 +3515,7 @@ public class FileUtils {
      * @param append   if {@code true}, then the String will be added to the
      *                 end of the file rather than overwriting
      * @throws IOException                 in case of an I/O error
-     * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
-     * .UnsupportedEncodingException} in version 2.2 if the encoding is not supported by the VM
+     * @throws java.nio.charset.UnsupportedCharsetException if the encoding is not supported by the VM
      * @since 2.1
      */
     public static void writeStringToFile(final File file, final String data, final String charsetName, final boolean append) throws IOException {

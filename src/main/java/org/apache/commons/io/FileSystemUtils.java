@@ -473,11 +473,10 @@ public class FileSystemUtils {
         //
         // This method does what it can to avoid the 'Too many open files' error
         // based on trial and error and these links:
-        // https://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4784692
-        // https://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4801027
-        // https://forum.java.sun.com/thread.jspa?threadID=533029&messageID=2572018
-        // however, it's still not perfect as the JDK support is so poor
-        // (see commons-exec or Ant for a better multithreaded multi-OS solution)
+        // https://bugs.java.com/bugdatabase/view_bug.do?bug_id=4784692
+        // https://bugs.java.com/bugdatabase/view_bug.do?bug_id=4801027
+        // However, it's still not perfect as the JDK support is so poor.
+        // (See commons-exec or Ant for a better multithreaded multi-OS solution.)
         //
         final Process proc = openProcess(cmdAttribs);
         final Thread monitor = ThreadMonitor.start(timeout);
