@@ -978,7 +978,6 @@ public class FileFilterTest extends AbstractFilterTest {
         fileB.delete();
     }
 
-    // -----------------------------------------------------------------------
     @Test
     public void testMakeFileOnly() throws Exception {
         assertSame(FileFileFilter.INSTANCE, FileFilterUtils.makeFileOnly(null));
