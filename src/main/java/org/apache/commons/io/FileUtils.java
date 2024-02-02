@@ -720,7 +720,8 @@ public class FileUtils {
                 }
             }
         }
-        doCopyDirectory(srcDir, destDir, fileFilter, exclusionList, preserveFileDate, copyOptions);
+        // TODO add a new doCopyDirectory or copyFromRoot method that sets the src and dest roots and calls this to avoid doubling up on args
+        doCopyDirectory(srcDir, destDir, fileFilter, exclusionList, preserveFileDate, srcDir, destDir, copyOptions);
     }
 
     /**
@@ -1332,12 +1333,14 @@ public class FileUtils {
      * @param fileFilter the filter to apply, null means copy all directories and files.
      * @param exclusionList List of files and directories to exclude from the copy, may be null.
      * @param preserveDirDate preserve the directories last modified dates.
+     * @param srcRoot the top directory being copied from, preserved during recursion
+     * @param destRoot the top directory being copied to, preserved during recursion
      * @param copyOptions options specifying how the copy should be done, see {@link StandardCopyOption}.
      * @throws IOException if the directory was not created along with all its parent directories.
      * @throws SecurityException See {@link File#mkdirs()}.
      */
     private static void doCopyDirectory(final File srcDir, final File destDir, final FileFilter fileFilter, final List<String> exclusionList,
-        final boolean preserveDirDate, final CopyOption... copyOptions) throws IOException {
+        final boolean preserveDirDate, final File srcRoot, final File destRoot, final CopyOption... copyOptions) throws IOException {
         // recurse dirs, copy files.
         final File[] srcFiles = listFiles(srcDir, fileFilter);
         requireDirectoryIfExists(destDir, "destDir");
@@ -1347,16 +1350,15 @@ public class FileUtils {
             final File dstFile = new File(destDir, srcFile.getName());
             if (exclusionList == null || !exclusionList.contains(srcFile.getCanonicalPath())) {
                 if (srcFile.isDirectory()) {
-                    doCopyDirectory(srcFile, dstFile, fileFilter, exclusionList, preserveDirDate, copyOptions);
+                    doCopyDirectory(srcFile, dstFile, fileFilter, exclusionList, preserveDirDate, srcRoot, destRoot, copyOptions);
                 } else if (Files.isSymbolicLink(srcFile.toPath())) {
                     final Path linkTarget = Files.readSymbolicLink(srcFile.toPath());
-                    // TODO handle ancestors/grandchildren
-                    if (directoryContains(srcDir, linkTarget.toFile())) {
+                    if (directoryContains(srcRoot, linkTarget.toFile())) {
                         // make a new link that points to the copy of the target
-                        final String srcFileName = srcFile.getName();
-                        final String linkTargetName = linkTarget.toFile().getName();
-                        final Path newLink = destDir.toPath().resolve(srcFileName);
-                        final Path newTarget = destDir.toPath().resolve(linkTargetName);
+                        final Path srcFileRelativePath = srcRoot.toPath().relativize(srcFile.toPath());
+                        final Path linkTargetRelativePath = srcRoot.toPath().relativize(linkTarget);
+                        final Path newLink = destRoot.toPath().resolve(srcFileRelativePath);
+                        final Path newTarget = destRoot.toPath().resolve(linkTargetRelativePath);
                         Files.createSymbolicLink(newLink, newTarget);
                     } else {
                         copyFile(srcFile, dstFile, preserveDirDate, copyOptions);
