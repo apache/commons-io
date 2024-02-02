@@ -240,7 +240,7 @@ public class NullInputStreamTest {
 
         // Test reading after the end of file
         final IOException e2 = assertThrows(EOFException.class, input::read);
-        assertTrue(StringUtils.isNotBlank(e1.getMessage()));
+        assertTrue(StringUtils.isNotBlank(e2.getMessage()));
 
         // Close - should reset
         input.close();
@@ -272,8 +272,8 @@ public class NullInputStreamTest {
             final IOException e1 = assertThrows(EOFException.class, () -> input.skip(5), "Skip 3 (EOF)");
             assertTrue(StringUtils.isNotBlank(e1.getMessage()));
 
-            final IOException e = assertThrows(IOException.class, () -> input.skip(5), "Expected IOException for skipping after end of file");
-            assertTrue(StringUtils.isNotBlank(e1.getMessage()));
+            final IOException e2 = assertThrows(IOException.class, () -> input.skip(5), "Expected IOException for skipping after end of file");
+            assertTrue(StringUtils.isNotBlank(e2.getMessage()));
         }
     }
 }
