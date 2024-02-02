@@ -720,8 +720,7 @@ public class FileUtils {
                 }
             }
         }
-        // TODO add a new doCopyDirectory or copyFromRoot method that sets the src and dest roots and calls this to avoid doubling up on args
-        doCopyDirectory(srcDir, destDir, fileFilter, exclusionList, preserveFileDate, srcDir, destDir, copyOptions);
+        doCopyDirectoryFromRoot(srcDir, destDir, fileFilter, exclusionList, preserveFileDate, copyOptions);
     }
 
     /**
@@ -1322,6 +1321,13 @@ public class FileUtils {
 
         // Canonicalize paths (normalizes relative paths)
         return FilenameUtils.directoryContains(directory.getCanonicalPath(), child.getCanonicalPath());
+    }
+
+    // Splits src and dest directories into two variables each: one that is modified as we descend
+    // through the directory tree and one that isn't
+    private static void doCopyDirectoryFromRoot(final File srcDir, final File destDir, final FileFilter fileFilter, final List<String> exclusionList,
+        final boolean preserveDirDate, final CopyOption... copyOptions) throws IOException {
+        doCopyDirectory(srcDir, destDir, fileFilter, exclusionList, preserveDirDate, srcDir, destDir, copyOptions);
     }
 
     /**
