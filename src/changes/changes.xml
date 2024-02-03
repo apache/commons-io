@@ -105,6 +105,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">RandomAccessFileInputStream.builder().get() now throws ISE instead of NPE.</action>
       <action dev="ggregory" type="fix" issue="IO-845" due-to="Elliotte Rusty Harold">Test links to targets outside the source directory #571.</action>
       <action dev="ggregory" type="fix"                due-to="Elliotte Rusty Harold">Focus Javadoc on current version rather than past versions #573, #574.</action>
+      <action dev="ggregory" type="fix" issue="IO-469" due-to="Grigory Fadeev, Kristian Rosenvold, Elliotte Rusty Harold">"Self-suppression not permitted" while using BrokenOutput and BrokenInput streams with try-with-resources.</action>
       <!-- Add -->
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add and use PathUtils.getFileName(Path, Function&lt;Path, R&gt;).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add and use PathUtils.getFileNameString().</action>
