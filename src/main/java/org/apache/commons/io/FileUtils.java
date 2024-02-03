@@ -840,7 +840,7 @@ public class FileUtils {
      * @see #copyFileToDirectory(File, File, boolean)
      * @since 2.8.0
      */
-    public static void copyFile(final File srcFile, final File destFile, final boolean preserveFileDate, CopyOption... copyOptions) throws IOException {
+    public static void copyFile(final File srcFile, final File destFile, final boolean preserveFileDate, final CopyOption... copyOptions) throws IOException {
         Objects.requireNonNull(destFile, "destination");
         checkFileExists(srcFile, "srcFile");
         requireCanonicalPathsNotEquals(srcFile, destFile);

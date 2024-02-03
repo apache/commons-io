@@ -2957,7 +2957,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     @Test
     public void testToURLs2() {
-        final File[] files = new File[] {
+        final File[] files = {
             new File(tempDirFile, "file1.txt"),
             null,
         };
