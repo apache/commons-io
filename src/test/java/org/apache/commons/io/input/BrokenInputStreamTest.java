@@ -106,4 +106,32 @@ public class BrokenInputStreamTest {
         assertEquals("Broken input stream", suppressed[0].getMessage());
     }
 
+    @Test
+    public void testIO469() throws Throwable {
+        // The exception handling and nested blocks here look ugly.
+        // Do NOT try to rationalize them by combining them, using try-with-resources or assertThrows,
+        // or any similar improvements one would make in normal code. This tests
+        // a very specific bug that comes up in unusual exception structures like this.
+        // If this is improved, that bug will no longer be tested.
+        final InputStream in = new BrokenInputStream();
+        Throwable localThrowable2 = null;
+        try {
+            try {
+                in.read();
+            } catch (Throwable localThrowable1) {
+                localThrowable2 = localThrowable1;
+                throw localThrowable1;
+            } finally {
+                try {
+                    in.close();
+                } catch (Throwable x2) {
+                    localThrowable2.addSuppressed(x2);
+                }
+            }
+        } catch (IOException expected) {
+            final Throwable[] suppressed = expected.getSuppressed();
+            assertEquals(1, suppressed.length);
+        }
+    }
+
 }
