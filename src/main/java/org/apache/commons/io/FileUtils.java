@@ -507,11 +507,12 @@ public class FileUtils {
      * {@link File#setLastModified(long)}. If that fails, the method throws IOException.
      * </p>
      * <p>
-     * Symbolic links in the source directory are copied to new symbolic links in the destination
-     * directory that point to the original target. The target of the link is not copied unless
-     * it is also under the source directory. Even if it is under the source directory, the new symbolic
-     * link in the destination points to the original target in the source directory, not to the
-     * newly created copy of the target.
+     * Treatment of symbolic links inside {@code srcDir} depends on the target of the link.
+     * If the link points to a target outside of {@code srcDir} (and therefore is not copied),
+     * then {@code destDir} will contain link to the original, uncopied file.
+     * However, if the symbolic links point to a file inside {@code srcDir},
+     * the new link inside {@code destDir} will point to the copy of the target inside
+     * {@code destDir}.
      * </p>
      *
      * @param srcDir an existing directory to copy, must not be {@code null}.
@@ -534,6 +535,14 @@ public class FileUtils {
      * <p>
      * The destination directory is created if it does not exist. If the destination directory does exist, then this
      * method merges the source with the destination, with the source taking precedence.
+     * </p>
+     * <p>
+     * Treatment of symbolic links inside {@code srcDir} depends on the target of the link.
+     * If the link points to a target outside of {@code srcDir} (and therefore is not copied),
+     * then {@code destDir} will contain link to the original, uncopied file.
+     * However, if the symbolic links point to a file inside {@code srcDir},
+     * the new link inside {@code destDir} will point to the copy of the target inside
+     * {@code destDir}.
      * </p>
      * <p>
      * <strong>Note:</strong> Setting {@code preserveFileDate} to {@code true} tries to preserve the files' last
@@ -563,6 +572,14 @@ public class FileUtils {
      * <p>
      * The destination directory is created if it does not exist. If the destination directory does exist, then this
      * method merges the source with the destination, with the source taking precedence.
+     * </p>
+     * <p>
+     * Treatment of symbolic links inside {@code srcDir} depends on the target of the link.
+     * If the link points to a target outside of {@code srcDir} (and therefore is not copied),
+     * then {@code destDir} will contain link to the original, uncopied file.
+     * However, if the symbolic links point to a file inside {@code srcDir},
+     * the new link inside {@code destDir} will point to the copy of the target inside
+     * {@code destDir}.
      * </p>
      * <p>
      * <strong>Note:</strong> This method tries to preserve the files' last modified date/times using
@@ -614,6 +631,14 @@ public class FileUtils {
      * method merges the source with the destination, with the source taking precedence.
      * </p>
      * <p>
+     * Treatment of symbolic links inside {@code srcDir} depends on the target of the link.
+     * If the link points to a target outside of {@code srcDir} (and therefore is not copied),
+     * then {@code destDir} will contain link to the original, uncopied file.
+     * However, if the symbolic links point to a file inside {@code srcDir},
+     * the new link inside {@code destDir} will point to the copy of the target inside
+     * {@code destDir}.
+     * </p>
+     * <p>
      * <strong>Note:</strong> Setting {@code preserveFileDate} to {@code true} tries to preserve the file's last
      * modified date/times using {@link BasicFileAttributeView#setTimes(FileTime, FileTime, FileTime)}. However, it is
      * not guaranteed that the operation will succeed. If the modification operation fails it falls back to
@@ -662,6 +687,14 @@ public class FileUtils {
      * <p>
      * The destination directory is created if it does not exist. If the destination directory does exist, then this
      * method merges the source with the destination, with the source taking precedence.
+     * </p>
+     * <p>
+     * Treatment of symbolic links inside {@code srcDir} depends on the target of the link.
+     * If the link points to a target outside of {@code srcDir} (and therefore is not copied),
+     * then {@code destDir} will contain link to the original, uncopied file.
+     * However, if the symbolic links point to a file inside {@code srcDir},
+     * the new link inside {@code destDir} will point to the copy of the target inside
+     * {@code destDir}.
      * </p>
      * <p>
      * <strong>Note:</strong> Setting {@code preserveFileDate} to {@code true} tries to preserve the file's last
@@ -720,7 +753,7 @@ public class FileUtils {
                 }
             }
         }
-        doCopyDirectory(srcDir, destDir, fileFilter, exclusionList, preserveFileDate, copyOptions);
+        doCopyDirectoryFromRoot(srcDir, destDir, fileFilter, exclusionList, preserveFileDate, copyOptions);
     }
 
     /**
@@ -732,6 +765,14 @@ public class FileUtils {
      * <p>
      * The destination directory is created if it does not exist. If the destination directory does exist, then this
      * method merges the source with the destination, with the source taking precedence.
+     * </p>
+     * <p>
+     * Treatment of symbolic links inside {@code srcDir} depends on the target of the link.
+     * If the link points to a target outside of {@code srcDir} (and therefore is not copied),
+     * then {@code destDir} will contain link to the original, uncopied file.
+     * However, if the symbolic links point to a file inside {@code srcDir},
+     * the new link inside {@code destDir} will point to the copy of the target inside
+     * {@code destDir}.
      * </p>
      * <p>
      * <strong>Note:</strong> Setting {@code preserveFileDate} to {@code true} tries to preserve the file's last
@@ -1323,6 +1364,13 @@ public class FileUtils {
         return FilenameUtils.directoryContains(directory.getCanonicalPath(), child.getCanonicalPath());
     }
 
+    // Splits src and dest directories into two variables each: one that is modified as we descend
+    // through the directory tree and one that isn't
+    private static void doCopyDirectoryFromRoot(final File srcDir, final File destDir, final FileFilter fileFilter, final List<String> exclusionList,
+        final boolean preserveDirDate, final CopyOption... copyOptions) throws IOException {
+        doCopyDirectory(srcDir, destDir, fileFilter, exclusionList, preserveDirDate, srcDir, destDir, copyOptions);
+    }
+
     /**
      * Internal copy directory method. Creates all destination parent directories,
      * including any necessary but non-existent parent directories.
@@ -1332,12 +1380,14 @@ public class FileUtils {
      * @param fileFilter the filter to apply, null means copy all directories and files.
      * @param exclusionList List of files and directories to exclude from the copy, may be null.
      * @param preserveDirDate preserve the directories last modified dates.
+     * @param srcRoot the top directory being copied from, preserved during recursion
+     * @param destRoot the top directory being copied to, preserved during recursion
      * @param copyOptions options specifying how the copy should be done, see {@link StandardCopyOption}.
      * @throws IOException if the directory was not created along with all its parent directories.
      * @throws SecurityException See {@link File#mkdirs()}.
      */
     private static void doCopyDirectory(final File srcDir, final File destDir, final FileFilter fileFilter, final List<String> exclusionList,
-        final boolean preserveDirDate, final CopyOption... copyOptions) throws IOException {
+        final boolean preserveDirDate, final File srcRoot, final File destRoot, final CopyOption... copyOptions) throws IOException {
         // recurse dirs, copy files.
         final File[] srcFiles = listFiles(srcDir, fileFilter);
         requireDirectoryIfExists(destDir, "destDir");
@@ -1347,7 +1397,20 @@ public class FileUtils {
             final File dstFile = new File(destDir, srcFile.getName());
             if (exclusionList == null || !exclusionList.contains(srcFile.getCanonicalPath())) {
                 if (srcFile.isDirectory()) {
-                    doCopyDirectory(srcFile, dstFile, fileFilter, exclusionList, preserveDirDate, copyOptions);
+                    doCopyDirectory(srcFile, dstFile, fileFilter, exclusionList, preserveDirDate, srcRoot, destRoot, copyOptions);
+                } else if (Files.isSymbolicLink(srcFile.toPath())) {
+                    final Path linkTarget = Files.readSymbolicLink(srcFile.toPath());
+                    if (directoryContains(srcRoot, linkTarget.toFile())) {
+                        // make a new link that points to the copy of the target
+                        final Path srcFileRelativePath = srcRoot.toPath().relativize(srcFile.toPath());
+                        final Path linkTargetRelativePath = srcRoot.toPath().relativize(linkTarget);
+                        final Path newLink = destRoot.toPath().resolve(srcFileRelativePath);
+                        final Path newTarget = destRoot.toPath().resolve(linkTargetRelativePath);
+                        Files.createSymbolicLink(newLink, newTarget);
+                    } else {
+                        copyFile(srcFile, dstFile, preserveDirDate, copyOptions);
+                    }
+
                 } else {
                     copyFile(srcFile, dstFile, preserveDirDate, copyOptions);
                 }
