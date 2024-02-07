@@ -517,7 +517,7 @@ public class FileUtils {
      * @param srcDir an existing directory to copy, must not be {@code null}.
      * @param destDir the new directory, must not be {@code null}.
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
-     * @throws IllegalArgumentException if {@link srcDir} exists but is not a directory,
+     * @throws IllegalArgumentException if {@code srcDir} exists but is not a directory,
      *     the source and the destination directory are the same, or the destination is not writable
      * @throws FileNotFoundException if the source does not exist.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
@@ -545,7 +545,7 @@ public class FileUtils {
      * @param srcDir an existing directory to copy, must not be {@code null}.
      * @param destDir the new directory, must not be {@code null}.
      * @param preserveFileDate true if the file date of the copy should be the same as the original.
-     * @throws IllegalArgumentException if {@link srcDir} exists but is not a directory,
+     * @throws IllegalArgumentException if {@code srcDir} exists but is not a directory,
      *     the source and the destination directory are the same, or the destination is not writable
      * @throws FileNotFoundException if the source does not exist.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
@@ -595,7 +595,7 @@ public class FileUtils {
      * @param destDir the new directory, must not be {@code null}.
      * @param filter the filter to apply, null means copy all directories and files should be the same as the original.
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
-     * @throws IllegalArgumentException if {@link srcDir} exists but is not a directory,
+     * @throws IllegalArgumentException if {@code srcDir} exists but is not a directory,
      *     the source and the destination directory are the same, or the destination is not writable
      * @throws FileNotFoundException if the source does not exist.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
@@ -647,8 +647,8 @@ public class FileUtils {
      * @param filter the filter to apply, null means copy all directories and files.
      * @param preserveFileDate true if the file date of the copy should be the same as the original.
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
-     * @throws IllegalArgumentException if {@link srcDir} exists but is not a directory,
-     *     the source and the destination driectory are the same, or the destination is not writable
+     * @throws IllegalArgumentException if {@code srcDir} exists but is not a directory,
+     *     the source and the destination directory are the same, or the destination is not writable
      * @throws FileNotFoundException if the source does not exist.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
      * @since 1.4
@@ -699,7 +699,7 @@ public class FileUtils {
      * @param preserveFileDate true if the file date of the copy should be the same as the original
      * @param copyOptions options specifying how the copy should be done, for example {@link StandardCopyOption}.
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
-     * @throws IllegalArgumentException if {@link srcDir} exists but is not a directory,
+     * @throws IllegalArgumentException if {@code srcDir} exists but is not a directory,
      *     the source and the destination directory are the same, or the destination is not writable
      * @throws FileNotFoundException if the source does not exist.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
@@ -2371,7 +2371,7 @@ public class FileUtils {
      * @param srcDir the directory to be moved.
      * @param destDir the destination directory.
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
-     * @throws IllegalArgumentException if {@link srcDir} exists but is not a directory
+     * @throws IllegalArgumentException if {@code srcDir} exists but is not a directory
      * @throws FileNotFoundException if the source does not exist.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
      * @since 1.4
@@ -2439,7 +2439,7 @@ public class FileUtils {
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
      * @throws FileExistsException if the destination file exists.
      * @throws FileNotFoundException if the source file does not exist.
-     * @throws IllegalArgumentException if {@link srcFile} is a directory
+     * @throws IllegalArgumentException if {@code srcFile} is a directory
      * @throws IOException if an error occurs.
      * @since 1.4
      */
@@ -2459,7 +2459,7 @@ public class FileUtils {
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
      * @throws FileExistsException if the destination file exists.
      * @throws FileNotFoundException if the source file does not exist.
-     * @throws IllegalArgumentException if {@link srcFile} is a directory
+     * @throws IllegalArgumentException if {@code srcFile} is a directory
      * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
      * @since 2.9.0
      */
@@ -2495,7 +2495,7 @@ public class FileUtils {
      * @throws IOException if the directory was not created along with all its parent directories, if enabled.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
      * @throws SecurityException See {@link File#mkdirs()}.
-     * @throws IllegalArgumentException if {@link destDir} exists but is not a directory
+     * @throws IllegalArgumentException if {@code destDir} exists but is not a directory
      * @since 1.4
      */
     public static void moveFileToDirectory(final File srcFile, final File destDir, final boolean createDestDir) throws IOException {
