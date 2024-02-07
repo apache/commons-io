@@ -517,7 +517,7 @@ public class FileUtils {
      * @param srcDir an existing directory to copy, must not be {@code null}.
      * @param destDir the new directory, must not be {@code null}.
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
-     * @throws IllegalArgumentException if the source or destination is invalid.
+     * @throws IllegalArgumentException if {@link srcDir} exists but is not a directory, or the source and the destination driectory are the same
      * @throws FileNotFoundException if the source does not exist.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
      * @since 1.1
@@ -544,7 +544,7 @@ public class FileUtils {
      * @param srcDir an existing directory to copy, must not be {@code null}.
      * @param destDir the new directory, must not be {@code null}.
      * @param preserveFileDate true if the file date of the copy should be the same as the original.
-     * @throws NullPointerException if any of the given {@link File}s are {@code null}.
+     * @throws IllegalArgumentException if {@link srcDir} exists but is not a directory, or the source and the destination driectory are the same
      * @throws IllegalArgumentException if the source or destination is invalid.
      * @throws FileNotFoundException if the source does not exist.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
@@ -594,7 +594,7 @@ public class FileUtils {
      * @param destDir the new directory, must not be {@code null}.
      * @param filter the filter to apply, null means copy all directories and files should be the same as the original.
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
-     * @throws IllegalArgumentException if the source or destination is invalid.
+     * @throws IllegalArgumentException if {@link srcDir} exists but is not a directory, or the source and the destination driectory are the same
      * @throws FileNotFoundException if the source does not exist.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
      * @since 1.4
@@ -645,7 +645,7 @@ public class FileUtils {
      * @param filter the filter to apply, null means copy all directories and files.
      * @param preserveFileDate true if the file date of the copy should be the same as the original.
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
-     * @throws IllegalArgumentException if the source or destination is invalid.
+     * @throws IllegalArgumentException if {@link srcDir} exists but is not a directory, or the source and the destination driectory are the same
      * @throws FileNotFoundException if the source does not exist.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
      * @since 1.4
