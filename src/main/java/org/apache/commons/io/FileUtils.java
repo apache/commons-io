@@ -696,7 +696,7 @@ public class FileUtils {
      * @param preserveFileDate true if the file date of the copy should be the same as the original
      * @param copyOptions options specifying how the copy should be done, for example {@link StandardCopyOption}.
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
-     * @throws IllegalArgumentException if the source or destination is invalid.
+     * @throws IllegalArgumentException if {@link srcDir} exists but is not a directory, or the source and the destination driectory are the same
      * @throws FileNotFoundException if the source does not exist.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
      * @since 2.8.0
@@ -2790,7 +2790,7 @@ public class FileUtils {
      * @param name The parameter name to use in the exception message in case of null input or if the file is not a directory.
      * @throws NullPointerException if the given {@link File} is {@code null}.
      * @throws FileNotFoundException if the given {@link File} does not exist
-     * @throws IllegalArgumentException if the given {@link File} is not a directory
+     * @throws IllegalArgumentException if the given {@link File} exists but is not a directory.
      */
     private static void requireDirectoryExists(final File directory, final String name) throws FileNotFoundException {
         Objects.requireNonNull(directory, name);
