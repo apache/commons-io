@@ -852,7 +852,6 @@ public class FileUtils {
         createParentDirectories(destFile);
         if (destFile.exists()) {
             checkFileExists(destFile, "destFile");
-            requireCanWrite(destFile, "destFile");
         }
 
         final Path srcPath = srcFile.toPath();
@@ -1348,7 +1347,6 @@ public class FileUtils {
         final File[] srcFiles = listFiles(srcDir, fileFilter);
         requireDirectoryIfExists(destDir, "destDir");
         mkdirs(destDir);
-        requireCanWrite(destDir, "destDir");
         for (final File srcFile : srcFiles) {
             final File dstFile = new File(destDir, srcFile.getName());
             if (exclusionList == null || !exclusionList.contains(srcFile.getCanonicalPath())) {
@@ -2631,7 +2629,6 @@ public class FileUtils {
         Objects.requireNonNull(file, "file");
         if (file.exists()) {
             checkIsFile(file, "file");
-            requireCanWrite(file, "file");
         } else {
             createParentDirectories(file);
         }
@@ -2771,21 +2768,6 @@ public class FileUtils {
         if (canonicalPath.equals(file2.getCanonicalPath())) {
             throw new IllegalArgumentException(String
                 .format("File canonical paths are equal: '%s' (file1='%s', file2='%s')", canonicalPath, file1, file2));
-        }
-    }
-
-    /**
-     * Throws an {@link IOException} if the file is not writable. This provides a more precise exception
-     * message than a plain access denied.
-     *
-     * @param file The file to test.
-     * @param name The parameter name to use in the exception message.
-     * @throws NullPointerException if the given {@link File} is {@code null}.
-     * @throws IOException if the file is not writable
-     */
-    private static void requireCanWrite(final File file, final String name) throws IOException {
-        if (!file.canWrite()) {
-            throw new IOException("File parameter '" + name + " is not writable: '" + file + "'");
         }
     }
 
