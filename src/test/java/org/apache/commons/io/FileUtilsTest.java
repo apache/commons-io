@@ -1243,6 +1243,18 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testCopyFileToReadOnlyDirectory() throws Exception {
+        final File directory = new File(tempDirFile, "readonly");
+        if (!directory.exists()) {
+            assumeTrue(directory.mkdirs());
+        }
+        assumeTrue(directory.setWritable(false));
+
+        assertThrows(IOException.class, () -> FileUtils.copyFileToDirectory(testFile1, directory),
+            "Should not be able to copy a file into a readonly directory");
+    }
+
+    @Test
     public void testCopyFile2() throws Exception {
         final File destination = new File(tempDirFile, "copy2.txt");
 

@@ -518,9 +518,9 @@ public class FileUtils {
      * @param destDir the new directory, must not be {@code null}.
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
      * @throws IllegalArgumentException if {@code srcDir} exists but is not a directory,
-     *     the source and the destination directory are the same, or the destination is not writable
+     *     the source and the destination directory are the same
      * @throws FileNotFoundException if the source does not exist.
-     * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
+     * @throws IOException if an error occurs, the destination is not writable, or setting the last-modified time didn't succeed
      * @since 1.1
      */
     public static void copyDirectory(final File srcDir, final File destDir) throws IOException {
@@ -545,10 +545,10 @@ public class FileUtils {
      * @param srcDir an existing directory to copy, must not be {@code null}.
      * @param destDir the new directory, must not be {@code null}.
      * @param preserveFileDate true if the file date of the copy should be the same as the original.
-     * @throws IllegalArgumentException if {@code srcDir} exists but is not a directory,
-     *     the source and the destination directory are the same, or the destination is not writable
+     * @throws IllegalArgumentException if {@code srcDir} exists but is not a directory, or
+     *     the source and the destination directory are the same
      * @throws FileNotFoundException if the source does not exist.
-     * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
+     * @throws IOException if an error occurs, the destination is not writable, or setting the last-modified time didn't succeed
      * @since 1.1
      */
     public static void copyDirectory(final File srcDir, final File destDir, final boolean preserveFileDate)
@@ -595,10 +595,10 @@ public class FileUtils {
      * @param destDir the new directory, must not be {@code null}.
      * @param filter the filter to apply, null means copy all directories and files should be the same as the original.
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
-     * @throws IllegalArgumentException if {@code srcDir} exists but is not a directory,
-     *     the source and the destination directory are the same, or the destination is not writable
+     * @throws IllegalArgumentException if {@code srcDir} exists but is not a directory, or
+     *     the source and the destination directory are the same
      * @throws FileNotFoundException if the source does not exist.
-     * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
+     * @throws IOException if an error occurs, the destination is not writable, or setting the last-modified time didn't succeed
      * @since 1.4
      */
     public static void copyDirectory(final File srcDir, final File destDir, final FileFilter filter)
@@ -699,10 +699,10 @@ public class FileUtils {
      * @param preserveFileDate true if the file date of the copy should be the same as the original
      * @param copyOptions options specifying how the copy should be done, for example {@link StandardCopyOption}.
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
-     * @throws IllegalArgumentException if {@code srcDir} exists but is not a directory,
-     *     the source and the destination directory are the same, or the destination is not writable
+     * @throws IllegalArgumentException if {@code srcDir} exists but is not a directory, or
+     *     the source and the destination directory are the same
      * @throws FileNotFoundException if the source does not exist.
-     * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
+     * @throws IOException if an error occurs, the destination is not writable, or setting the last-modified time didn't succeed
      * @since 2.8.0
      */
     public static void copyDirectory(final File srcDir, final File destDir, final FileFilter fileFilter, final boolean preserveFileDate,
@@ -749,7 +749,7 @@ public class FileUtils {
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
      * @throws IllegalArgumentException if the source or destination is invalid.
      * @throws FileNotFoundException if the source does not exist.
-     * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
+     * @throws IOException if an error occurs, the destination is not writable, or setting the last-modified time didn't succeed
      * @since 1.2
      */
     public static void copyDirectoryToDirectory(final File sourceDir, final File destinationDir) throws IOException {
@@ -838,9 +838,10 @@ public class FileUtils {
      * @param copyOptions options specifying how the copy should be done, for example {@link StandardCopyOption}.
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
      * @throws FileNotFoundException if the source does not exist.
-     * @throws IllegalArgumentException if {@code srcFile} or {@code destFile} is not a file, or {@code destFile} is not writable
+     * @throws IllegalArgumentException if {@code srcFile} or {@code destFile} is not a file
      * @throws IOException if the output file length is not the same as the input file length after the copy completes.
-     * @throws IOException if an I/O error occurs, or setting the last-modified time didn't succeed.
+     * @throws IOException if an I/O error occurs, setting the last-modified time didn't succeed,
+     *     or the destination is not writable
      * @see #copyFileToDirectory(File, File, boolean)
      * @since 2.8.0
      */
@@ -2623,8 +2624,7 @@ public class FileUtils {
      * @return a new {@link FileOutputStream} for the specified file
      * @throws NullPointerException if the file object is {@code null}.
      * @throws IllegalArgumentException if the file object is a directory
-     * @throws IllegalArgumentException if the file is not writable.
-     * @throws IOException if the directories could not be created.
+     * @throws IOException if the directories could not be created, or the file is not writable
      * @since 2.1
      */
     public static FileOutputStream openOutputStream(final File file, final boolean append) throws IOException {
@@ -2775,17 +2775,17 @@ public class FileUtils {
     }
 
     /**
-     * Throws an {@link IllegalArgumentException} if the file is not writable. This provides a more precise exception
+     * Throws an {@link IOException} if the file is not writable. This provides a more precise exception
      * message than a plain access denied.
      *
      * @param file The file to test.
      * @param name The parameter name to use in the exception message.
      * @throws NullPointerException if the given {@link File} is {@code null}.
-     * @throws IllegalArgumentException if the file is not writable.
+     * @throws IOException if the file is not writable
      */
-    private static void requireCanWrite(final File file, final String name) {
+    private static void requireCanWrite(final File file, final String name) throws IOException {
         if (!file.canWrite()) {
-            throw new IllegalArgumentException("File parameter '" + name + " is not writable: '" + file + "'");
+            throw new IOException("File parameter '" + name + " is not writable: '" + file + "'");
         }
     }
 
