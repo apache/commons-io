@@ -92,9 +92,7 @@ public class ThresholdingOutputStream extends OutputStream {
         this.threshold = threshold;
         this.thresholdConsumer = thresholdConsumer == null ? IOConsumer.noop() : thresholdConsumer;
         this.outputStreamGetter = outputStreamGetter == null ? NOOP_OS_GETTER : outputStreamGetter;
-        if (threshold < 0) {
-            thresholdExceeded = true;
-        }
+        this.thresholdExceeded = threshold < 0;
     }
 
     /**
