@@ -289,13 +289,13 @@ public class FileUtils {
      * @param name The parameter name to use in the exception message.
      * @throws FileNotFoundException if the file does not exist
      * @throws NullPointerException if the given {@link File} is {@code null}.
-     * @throws IllegalArgumentException if the given {@link File} is not a file.
+     * @throws IOException if the given {@link File} is not a file.
      */
-    private static void checkFileExists(final File file, final String name) throws FileNotFoundException {
+    private static void checkFileExists(final File file, final String name) throws IOException {
         Objects.requireNonNull(file, name);
         if (!file.isFile()) {
             if (file.exists()) {
-                throw new IllegalArgumentException("Parameter '" + name + "' is not a file: " + file);
+                throw new IOException("Parameter '" + name + "' is not a file: " + file);
             }
             if (!Files.isSymbolicLink(file.toPath())) {
                 throw new FileNotFoundException("Source '" + file + "' does not exist");
@@ -303,11 +303,11 @@ public class FileUtils {
         }
     }
 
-    private static File checkIsFile(final File file, final String name) {
+    private static File checkIsFile(final File file, final String name) throws IOException {
         if (file.isFile()) {
             return file;
         }
-        throw new IllegalArgumentException(String.format("Parameter '%s' is not a file: %s", name, file));
+        throw new IOException(String.format("Parameter '%s' is not a file: %s", name, file));
     }
 
     /**
@@ -323,7 +323,6 @@ public class FileUtils {
      * @return the checksum specified, updated with the content of the file
      * @throws NullPointerException if the given {@link File} is {@code null}.
      * @throws NullPointerException if the given {@link Checksum} is {@code null}.
-     * @throws IllegalArgumentException if the given {@link File} is not a file.
      * @throws FileNotFoundException if the file does not exist
      * @throws IOException if an IO error occurs reading the file.
      * @since 1.3
@@ -344,7 +343,6 @@ public class FileUtils {
      * @param file the file to checksum, must not be {@code null}
      * @return the checksum value
      * @throws NullPointerException if the given {@link File} is {@code null}.
-     * @throws IllegalArgumentException if the given {@link File} does not exist or is not a file.
      * @throws IOException              if an IO error occurs reading the file.
      * @since 1.3
      */
@@ -357,7 +355,6 @@ public class FileUtils {
      *
      * @param directory directory to clean
      * @throws NullPointerException if the given {@link File} is {@code null}.
-     * @throws IllegalArgumentException if directory does not exist or is not a directory.
      * @throws IOException if an I/O error occurs.
      * @see #forceDelete(File)
      */
@@ -370,7 +367,6 @@ public class FileUtils {
      *
      * @param directory directory to clean, must not be {@code null}
      * @throws NullPointerException if the given {@link File} is {@code null}.
-     * @throws IllegalArgumentException if directory does not exist or is not a directory.
      * @throws IOException if an I/O error occurs.
      * @see #forceDeleteOnExit(File)
      */
@@ -388,8 +384,7 @@ public class FileUtils {
      * @param file1 the first file
      * @param file2 the second file
      * @return true if the content of the files are equal or they both don't exist, false otherwise
-     * @throws IllegalArgumentException when an input is not a file.
-     * @throws IOException If an I/O error occurs.
+     * @throws IOException when an input is not a file or an I/O error occurs
      * @see PathUtils#fileContentEquals(Path,Path)
      */
     public static boolean contentEquals(final File file1, final File file2) throws IOException {
@@ -438,8 +433,7 @@ public class FileUtils {
      *                    May be null, in which case the platform default is used
      * @return true if the content of the files are equal or neither exists,
      * false otherwise
-     * @throws IllegalArgumentException when an input is not a file.
-     * @throws IOException in case of an I/O error.
+     * @throws IOException when an input is not a file, or in case of an I/O error
      * @throws UnsupportedCharsetException If the named charset is unavailable (unchecked exception).
      * @see IOUtils#contentEqualsIgnoreEOL(Reader, Reader)
      * @since 2.2
@@ -517,10 +511,10 @@ public class FileUtils {
      * @param srcDir an existing directory to copy, must not be {@code null}.
      * @param destDir the new directory, must not be {@code null}.
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
-     * @throws IllegalArgumentException if {@code srcDir} exists but is not a directory,
-     *     the source and the destination directory are the same
+     * @throws IllegalArgumentException if  the source and the destination directory are the same
      * @throws FileNotFoundException if the source does not exist.
-     * @throws IOException if an error occurs, the destination is not writable, or setting the last-modified time didn't succeed
+     * @throws IOException if an error occurs, the destination is not writable,
+     *     {@code srcDir} exists but is not a directory, or setting the last-modified time didn't succeed
      * @since 1.1
      */
     public static void copyDirectory(final File srcDir, final File destDir) throws IOException {
@@ -545,10 +539,10 @@ public class FileUtils {
      * @param srcDir an existing directory to copy, must not be {@code null}.
      * @param destDir the new directory, must not be {@code null}.
      * @param preserveFileDate true if the file date of the copy should be the same as the original.
-     * @throws IllegalArgumentException if {@code srcDir} exists but is not a directory, or
-     *     the source and the destination directory are the same
+     * @throws IllegalArgumentException if the source and the destination directory are the same
      * @throws FileNotFoundException if the source does not exist.
-     * @throws IOException if an error occurs, the destination is not writable, or setting the last-modified time didn't succeed
+     * @throws IOException if an error occurs, {@code srcDir} exists but is not a directory, or
+     *    the destination is not writable, or setting the last-modified time didn't succeed
      * @since 1.1
      */
     public static void copyDirectory(final File srcDir, final File destDir, final boolean preserveFileDate)
@@ -595,10 +589,10 @@ public class FileUtils {
      * @param destDir the new directory, must not be {@code null}.
      * @param filter the filter to apply, null means copy all directories and files should be the same as the original.
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
-     * @throws IllegalArgumentException if {@code srcDir} exists but is not a directory, or
-     *     the source and the destination directory are the same
+     * @throws IllegalArgumentException if the source and the destination directory are the same
      * @throws FileNotFoundException if the source does not exist.
-     * @throws IOException if an error occurs, the destination is not writable, or setting the last-modified time didn't succeed
+     * @throws IOException if an error occurs, {@code srcDir} exists but is not a directory, or
+     *    the destination is not writable, or setting the last-modified time didn't succeed
      * @since 1.4
      */
     public static void copyDirectory(final File srcDir, final File destDir, final FileFilter filter)
@@ -647,10 +641,10 @@ public class FileUtils {
      * @param filter the filter to apply, null means copy all directories and files.
      * @param preserveFileDate true if the file date of the copy should be the same as the original.
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
-     * @throws IllegalArgumentException if {@code srcDir} exists but is not a directory,
-     *     the source and the destination directory are the same, or the destination is not writable
+     * @throws IllegalArgumentException if the source and the destination directory are the same
      * @throws FileNotFoundException if the source does not exist.
-     * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
+     * @throws IOException if an error occurs, {@code srcDir} exists but is not a directory, or
+     *    the destination is not writable, or setting the last-modified time didn't succeed
      * @since 1.4
      */
     public static void copyDirectory(final File srcDir, final File destDir, final FileFilter filter, final boolean preserveFileDate) throws IOException {
@@ -699,10 +693,10 @@ public class FileUtils {
      * @param preserveFileDate true if the file date of the copy should be the same as the original
      * @param copyOptions options specifying how the copy should be done, for example {@link StandardCopyOption}.
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
-     * @throws IllegalArgumentException if {@code srcDir} exists but is not a directory, or
-     *     the source and the destination directory are the same
+     * @throws IllegalArgumentException if the source and the destination directory are the same
      * @throws FileNotFoundException if the source does not exist.
-     * @throws IOException if an error occurs, the destination is not writable, or setting the last-modified time didn't succeed
+     * @throws IOException if an error occurs, {@code srcDir} exists but is not a directory, or
+     *    the destination is not writable, or setting the last-modified time didn't succeed
      * @since 2.8.0
      */
     public static void copyDirectory(final File srcDir, final File destDir, final FileFilter fileFilter, final boolean preserveFileDate,
@@ -838,7 +832,7 @@ public class FileUtils {
      * @param copyOptions options specifying how the copy should be done, for example {@link StandardCopyOption}.
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
      * @throws FileNotFoundException if the source does not exist.
-     * @throws IllegalArgumentException if {@code srcFile} or {@code destFile} is not a file
+     * @throws IOException if {@code srcFile} or {@code destFile} is not a file
      * @throws IOException if the output file length is not the same as the input file length after the copy completes.
      * @throws IOException if an I/O error occurs, setting the last-modified time didn't succeed,
      *     or the destination is not writable
@@ -877,8 +871,7 @@ public class FileUtils {
      * @param copyOptions options specifying how the copy should be done, for example {@link StandardCopyOption}..
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
      * @throws FileNotFoundException if the source does not exist.
-     * @throws IllegalArgumentException if source is not a file.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException if source is not a file, or an I/O error occurs.
      * @see StandardCopyOption
      * @since 2.9.0
      */
@@ -1007,7 +1000,6 @@ public class FileUtils {
      * @param sourceFile an existing file or directory to copy, must not be {@code null}.
      * @param destinationDir the directory to place the copy in, must not be {@code null}.
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
-     * @throws IllegalArgumentException if the source or destination is invalid.
      * @throws FileNotFoundException if the source does not exist.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
      * @see #copyDirectoryToDirectory(File, File)
@@ -1067,10 +1059,8 @@ public class FileUtils {
      *        {@code null}
      * @throws NullPointerException if the InputStream is {@code null}.
      * @throws NullPointerException if the File is {@code null}.
-     * @throws IllegalArgumentException if the file object is a directory.
-     * @throws IllegalArgumentException if the file is not writable.
      * @throws IOException if the directories could not be created.
-     * @throws IOException if an IO error occurs during copying.
+     * @throws IOException if an I/O error occurs during copying.
      * @since 2.5
      */
     public static void copyToFile(final InputStream inputStream, final File file) throws IOException {
@@ -1229,7 +1219,6 @@ public class FileUtils {
      * @param directory directory to delete
      * @throws IOException              in case deletion is unsuccessful
      * @throws NullPointerException     if the parameter is {@code null}
-     * @throws IllegalArgumentException if {@code directory} is not a directory
      */
     public static void deleteDirectory(final File directory) throws IOException {
         Objects.requireNonNull(directory, "directory");
@@ -1309,10 +1298,9 @@ public class FileUtils {
      *
      * @param directory the file to consider as the parent.
      * @param child     the file to consider as the child.
-     * @return true is the candidate leaf is under by the specified composite. False otherwise.
+     * @return true if the candidate leaf is under the specified composite. False otherwise.
      * @throws IOException              if an IO error occurs while checking the files.
      * @throws NullPointerException if the parent is {@code null}.
-     * @throws IllegalArgumentException if the parent is not a directory.
      * @see FilenameUtils#directoryContains(String, String)
      * @since 2.2
      */
@@ -1338,7 +1326,6 @@ public class FileUtils {
      * @param preserveDirDate preserve the directories last modified dates.
      * @param copyOptions options specifying how the copy should be done, see {@link StandardCopyOption}.
      * @throws IOException if the directory was not created along with all its parent directories.
-     * @throws IllegalArgumentException if {@code destDir} is not writable
      * @throws SecurityException See {@link File#mkdirs()}.
      */
     private static void doCopyDirectory(final File srcDir, final File destDir, final FileFilter fileFilter, final List<String> exclusionList,
@@ -2249,7 +2236,6 @@ public class FileUtils {
      * @param fileFilter Optional file filter, may be null.
      * @return The files in the directory, never {@code null}.
      * @throws NullPointerException if directory is {@code null}.
-     * @throws IllegalArgumentException if {@link directory} exists but is not a directory
      * @throws IOException if an I/O error occurs.
      */
     private static File[] listFiles(final File directory, final FileFilter fileFilter) throws IOException {
@@ -2370,7 +2356,6 @@ public class FileUtils {
      * @param srcDir the directory to be moved.
      * @param destDir the destination directory.
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
-     * @throws IllegalArgumentException if {@code srcDir} exists but is not a directory
      * @throws FileNotFoundException if the source does not exist.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
      * @since 1.4
@@ -2438,8 +2423,7 @@ public class FileUtils {
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
      * @throws FileExistsException if the destination file exists.
      * @throws FileNotFoundException if the source file does not exist.
-     * @throws IllegalArgumentException if {@code srcFile} is a directory
-     * @throws IOException if an error occurs.
+     * @throws IOException if {@code srcFile} is a directory or an error occurs.
      * @since 1.4
      */
     public static void moveFile(final File srcFile, final File destFile) throws IOException {
@@ -2458,8 +2442,7 @@ public class FileUtils {
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
      * @throws FileExistsException if the destination file exists.
      * @throws FileNotFoundException if the source file does not exist.
-     * @throws IllegalArgumentException if {@code srcFile} is a directory
-     * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
+     * @throws IOException if an error occurs, {@code srcFile} is a directory, or setting the last-modified time didn't succeed.
      * @since 2.9.0
      */
     public static void moveFile(final File srcFile, final File destFile, final CopyOption... copyOptions) throws IOException {
@@ -2493,8 +2476,8 @@ public class FileUtils {
      * @throws IOException if source or destination is invalid.
      * @throws IOException if the directory was not created along with all its parent directories, if enabled.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
+     * @throws IOException if {@code destDir} exists but is not a directory
      * @throws SecurityException See {@link File#mkdirs()}.
-     * @throws IllegalArgumentException if {@code destDir} exists but is not a directory
      * @since 1.4
      */
     public static void moveFileToDirectory(final File srcFile, final File destDir, final boolean createDestDir) throws IOException {
@@ -2566,7 +2549,8 @@ public class FileUtils {
      * @throws NullPointerException if file is {@code null}.
      * @throws FileNotFoundException if the file does not exist, is a directory rather than a regular file, or for some
      *         other reason cannot be opened for reading.
-     * @throws IOException See FileNotFoundException above, FileNotFoundException is a subclass of IOException.
+     * @throws IOException if the file is a directory rather than a regular file, or for some
+     *         other reason cannot be opened for reading.
      * @since 1.3
      */
     public static FileInputStream openInputStream(final File file) throws IOException {
@@ -2592,8 +2576,6 @@ public class FileUtils {
      * @param file the file to open for output, must not be {@code null}
      * @return a new {@link FileOutputStream} for the specified file
      * @throws NullPointerException if the file object is {@code null}.
-     * @throws IllegalArgumentException if the file object is a directory
-     * @throws IllegalArgumentException if the file is not writable.
      * @throws IOException if the directories could not be created.
      * @since 1.3
      */
@@ -2621,7 +2603,6 @@ public class FileUtils {
      *               end of the file rather than overwriting
      * @return a new {@link FileOutputStream} for the specified file
      * @throws NullPointerException if the file object is {@code null}.
-     * @throws IllegalArgumentException if the file object is a directory
      * @throws IOException if the directories could not be created, or the file is not writable
      * @since 2.1
      */
@@ -2778,13 +2759,13 @@ public class FileUtils {
      * @param name The parameter name to use in the exception message in case of null input or if the file is not a directory.
      * @throws NullPointerException if the given {@link File} is {@code null}.
      * @throws FileNotFoundException if the given {@link File} does not exist
-     * @throws IllegalArgumentException if the given {@link File} exists but is not a directory.
+     * @throws IOException if the given {@link File} exists but is not a directory.
      */
-    private static void requireDirectoryExists(final File directory, final String name) throws FileNotFoundException {
+    private static void requireDirectoryExists(final File directory, final String name) throws IOException {
         Objects.requireNonNull(directory, name);
         if (!directory.isDirectory()) {
             if (directory.exists()) {
-                throw new IllegalArgumentException("Parameter '" + name + "' is not a directory: '" + directory + "'");
+                throw new IOException("Parameter '" + name + "' is not a directory: '" + directory + "'");
             }
             throw new FileNotFoundException("Directory '" + directory + "' does not exist.");
         }
@@ -2796,12 +2777,12 @@ public class FileUtils {
      * @param directory The {@link File} to check.
      * @param name The parameter name to use in the exception message in case of null input.
      * @throws NullPointerException if the given {@link File} is {@code null}.
-     * @throws IllegalArgumentException if the given {@link File} exists but is not a directory.
+     * @throws IOException if the given {@link File} exists but is not a directory.
      */
-    private static void requireDirectoryIfExists(final File directory, final String name) throws FileNotFoundException {
+    private static void requireDirectoryIfExists(final File directory, final String name) throws IOException {
         Objects.requireNonNull(directory, name);
         if (directory.exists() && !directory.isDirectory()) {
-            throw new IllegalArgumentException("Parameter '" + name + "' is not a directory: '" + directory + "'");
+            throw new IOException("Parameter '" + name + "' is not a directory: '" + directory + "'");
         }
     }
 
@@ -2853,8 +2834,7 @@ public class FileUtils {
      * provided (in bytes).
      *
      * @throws NullPointerException     if the file is {@code null}.
-     * @throws IllegalArgumentException if the file does not exist.
-     * @throws UncheckedIOException if an IO error occurs.
+     * @throws UncheckedIOException if an I/O error occurs or the file does not exist
      * @since 2.0
      */
     public static long sizeOf(final File file) {
@@ -2875,8 +2855,7 @@ public class FileUtils {
      * provided (in bytes).
      *
      * @throws NullPointerException     if the file is {@code null}.
-     * @throws IllegalArgumentException if the file does not exist.
-     * @throws UncheckedIOException if an IO error occurs.
+     * @throws UncheckedIOException if an I/O error occurs or the file does not exist
      * @since 2.4
      */
     public static BigInteger sizeOfAsBigInteger(final File file) {
@@ -2894,14 +2873,13 @@ public class FileUtils {
      * @param directory directory to inspect, must not be {@code null}.
      * @return size of directory in bytes, 0 if directory is security restricted, a negative number when the real total
      * is greater than {@link Long#MAX_VALUE}.
-     * @throws IllegalArgumentException if the given {@link File} exists but is not a directory
      * @throws NullPointerException if the directory is {@code null}.
      * @throws UncheckedIOException if an IO error occurs.
      */
     public static long sizeOfDirectory(final File directory) {
         try {
             requireDirectoryExists(directory, "directory");
-        } catch (final FileNotFoundException e) {
+        } catch (final IOException e) {
             throw new UncheckedIOException(e);
         }
         return Uncheck.get(() -> PathUtils.sizeOfDirectory(directory.toPath()));
@@ -2912,15 +2890,14 @@ public class FileUtils {
      *
      * @param directory directory to inspect, must not be {@code null}.
      * @return size of directory in bytes, 0 if directory is security restricted.
-     * @throws IllegalArgumentException if the given {@link File} exists but is not a directory
      * @throws NullPointerException if the directory is {@code null}.
-     * @throws UncheckedIOException if an IO error occurs.
+     * @throws UncheckedIOException if an I/O error occurs.
      * @since 2.4
      */
     public static BigInteger sizeOfDirectoryAsBigInteger(final File directory) {
         try {
             requireDirectoryExists(directory, "directory");
-        } catch (final FileNotFoundException e) {
+        } catch (final IOException e) {
             throw new UncheckedIOException(e);
         }
         return Uncheck.get(() -> PathUtils.sizeOfDirectoryAsBigInteger(directory.toPath()));

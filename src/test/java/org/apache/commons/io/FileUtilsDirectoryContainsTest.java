@@ -159,7 +159,7 @@ public class FileUtilsDirectoryContainsTest {
 
     @Test
     public void testSameFile() {
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.directoryContains(file1, file1));
+        assertThrows(IOException.class, () -> FileUtils.directoryContains(file1, file1));
     }
 
     @Test
