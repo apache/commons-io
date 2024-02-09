@@ -41,7 +41,7 @@ public class ThresholdingOutputStreamTest {
 
     @Test
     public void testThresholdZero() throws IOException {
-        final AtomicBoolean reached = new AtomicBoolean(false);
+        final AtomicBoolean reached = new AtomicBoolean();
         try (final ThresholdingOutputStream out = new ThresholdingOutputStream(0) {
             @Override
             protected void thresholdReached() throws IOException {

@@ -181,7 +181,7 @@ public class ReadAheadInputStream extends FilterInputStream {
     private boolean isReading;
 
     // Whether there is a reader waiting for data.
-    private final AtomicBoolean isWaiting = new AtomicBoolean(false);
+    private final AtomicBoolean isWaiting = new AtomicBoolean();
 
     private final ExecutorService executorService;
 

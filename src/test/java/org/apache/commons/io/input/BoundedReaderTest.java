@@ -55,7 +55,7 @@ public class BoundedReaderTest {
 
     @Test
     public void testCloseTest() throws IOException {
-        final AtomicBoolean closed = new AtomicBoolean(false);
+        final AtomicBoolean closed = new AtomicBoolean();
         try (Reader sr = new BufferedReader(new StringReader("01234567890")) {
             @Override
             public void close() throws IOException {
