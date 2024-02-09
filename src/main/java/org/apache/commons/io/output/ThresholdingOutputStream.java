@@ -23,9 +23,12 @@ import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.function.IOFunction;
 
 /**
- * An output stream which triggers an event when a specified number of bytes of data have been written to it. The event
- * can be used, for example, to throw an exception if a maximum has been reached, or to switch the underlying stream
- * type when the threshold is exceeded.
+ * An output stream which triggers an event on the first write that causes
+ * the total number of bytes written to the stream to exceed a configured threshold,
+ * and every subsequent write. The event
+ * can be used, for example, to throw an exception if a maximum has been reached,
+ * or to switch the underlying stream when the threshold is exceeded.
+ *
  * <p>
  * This class overrides all {@link OutputStream} methods. However, these overrides ultimately call the corresponding
  * methods in the underlying output stream implementation.
@@ -89,6 +92,9 @@ public class ThresholdingOutputStream extends OutputStream {
         this.threshold = threshold;
         this.thresholdConsumer = thresholdConsumer == null ? IOConsumer.noop() : thresholdConsumer;
         this.outputStreamGetter = outputStreamGetter == null ? NOOP_OS_GETTER : outputStreamGetter;
+        if (threshold < 0) {
+            thresholdExceeded = true;
+        }
     }
 
     /**
@@ -244,6 +250,8 @@ public class ThresholdingOutputStream extends OutputStream {
     @SuppressWarnings("resource") // the underlying stream is managed by a subclass.
     @Override
     public void write(final byte[] b, final int off, final int len) throws IOException {
+        // TODO we could write the sub-array up the threshold, fire the event,
+        // and then write the rest so the event is always fired at the precise point.
         checkThreshold(len);
         // TODO for 4.0: Replace with getOutputStream()
         getStream().write(b, off, len);
