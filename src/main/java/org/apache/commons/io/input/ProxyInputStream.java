@@ -252,4 +252,15 @@ public abstract class ProxyInputStream extends FilterInputStream {
         }
     }
 
+    /**
+     * Unwraps this instance by returning the underlying InputStream.
+     * <p>
+     * Use with caution; useful to query the underlying InputStream.
+     * </p>
+     * @return the underlying InputStream.
+     * @since 2.16.0
+     */
+    public InputStream unwrap() {
+        return in;
+    }
 }

@@ -19,6 +19,7 @@ package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -147,6 +148,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
     public void testReadEof() throws Exception {
         final ByteArrayInputStream proxy = new ByteArrayInputStream(new byte[2]);
         try (ProxyInputStream inputStream = new ProxyInputStreamFixture(proxy)) {
+            assertSame(proxy, inputStream.unwrap());
             int found = inputStream.read();
             assertEquals(0, found);
             found = inputStream.read();
