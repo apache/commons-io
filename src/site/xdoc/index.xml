@@ -27,63 +27,63 @@ limitations under the License.
         Apache Commons IO is a library of utilities to assist with developing IO functionality.
       </p>
       <p>
-        There are six main areas included:
+        Main areas include:
       </p>
       <ul>
         <li>
-          <a href="apidocs/index.html?org/apache/commons/io/package-summary.html">io</a>
+          <a href="apidocs/org/apache/commons/io/package-summary.html">io</a>
           - This package defines utility classes for working with streams, readers, writers and files.
         </li>
         <li>
-          <a href="apidocs/index.html?org/apache/commons/io/build/package-summary.html">build</a>
+          <a href="apidocs/org/apache/commons/io/build/package-summary.html">build</a>
           - This package provides classes to implement IO builders.
         </li>
         <li>
-          <a href="apidocs/index.html?org/apache/commons/io/charset/package-summary.html">charset</a>
+          <a href="apidocs/org/apache/commons/io/charset/package-summary.html">charset</a>
           - This package provides classes to work with code from <code>java.nio.charset</code>.
         </li>
         <li>
-          <a href="apidocs/index.html?org/apache/commons/io/comparator/package-summary.html">comparator</a>
+          <a href="apidocs/org/apache/commons/io/comparator/package-summary.html">comparator</a>
           - This package provides various Comparator implementations for Files and Paths.
         </li>
         <li>
-          <a href="apidocs/index.html?org/apache/commons/io/file/package-summary.html">file</a>
+          <a href="apidocs/org/apache/commons/io/file/package-summary.html">file</a>
           - This package provides extensions in the realm of java.nio.file.
         </li>
         <li>
-          <a href="apidocs/index.html?org/apache/commons/io/file/attribute/package-summary.html">file.attribute</a>
+          <a href="apidocs/org/apache/commons/io/file/attribute/package-summary.html">file.attribute</a>
           - This package provides help using <code>java.nio.file.attribute</code> types.
         </li>
         <li>
-          <a href="apidocs/index.html?org/apache/commons/io/file/spi/package-summary.html">file SPI</a>
+          <a href="apidocs/org/apache/commons/io/file/spi/package-summary.html">file SPI</a>
           - This package provides extensions in the realm of <code>java.nio.file.spi</code>.
         </li>
         <li>
-          <a href="apidocs/index.html?org/apache/commons/io/filefilter/package-summary.html">filefilter</a>
+          <a href="apidocs/org/apache/commons/io/filefilter/package-summary.html">filefilter</a>
           - This package defines an interface (IOFileFilter) that combines both FileFilter and FilenameFilter.
         </li>
         <li>
-          <a href="apidocs/index.html?org/apache/commons/io/function/package-summary.html">function</a>
+          <a href="apidocs/org/apache/commons/io/function/package-summary.html">function</a>
           - This package defines IO-only related functional interfaces for lambda expressions and method references.
         </li>
         <li>
-          <a href="apidocs/index.html?org/apache/commons/io/input/package-summary.html">input</a>
+          <a href="apidocs/org/apache/commons/io/input/package-summary.html">input</a>
           - This package provides implementations of input classes, such as InputStream and Reader.
         </li>
         <li>
-          <a href="apidocs/index.html?org/apache/commons/io/input/buffer/package-summary.html">input.buffer</a>
+          <a href="apidocs/org/apache/commons/io/input/buffer/package-summary.html">input.buffer</a>
           - This package provides implementations of buffered input classes, such as CircularBufferInputStream and PeekableInputStream.
         </li>
         <li>
-          <a href="apidocs/index.html?org/apache/commons/io/monitor/package-summary.html">monitor</a>
+          <a href="apidocs/org/apache/commons/io/monitor/package-summary.html">monitor</a>
           - This package provides a component for monitoring file system events (directory and file create, update and delete events).
         </li>
         <li>
-          <a href="apidocs/index.html?org/apache/commons/io/output/package-summary.html">output</a>
+          <a href="apidocs/org/apache/commons/io/output/package-summary.html">output</a>
           - This package provides implementations of output classes, such as OutputStream and Writer.
         </li>
         <li>
-          <a href="apidocs/index.html?org/apache/commons/io/serialization/package-summary.html">serialization</a>
+          <a href="apidocs/org/apache/commons/io/serialization/package-summary.html">serialization</a>
           - This package provides a framework for controlling the deserialization of classes.
         </li>
       </ul>
