@@ -1505,7 +1505,7 @@ public class IOUtils {
      * @param output the {@link OutputStream} to write to
      * @param inputOffset : number of bytes to skip from input before copying
      * -ve values are ignored
-     * @param length : number of bytes to copy. -ve means all
+     * @param length number of bytes to copy. -ve means all
      * @return the number of bytes copied
      * @throws NullPointerException if the input or output is null
      * @throws IOException          if an I/O error occurs
@@ -1531,9 +1531,9 @@ public class IOUtils {
      *
      * @param input the {@link InputStream} to read
      * @param output the {@link OutputStream} to write to
-     * @param inputOffset : number of bytes to skip from input before copying
+     * @param inputOffset number of bytes to skip from input before copying
      * -ve values are ignored
-     * @param length : number of bytes to copy. -ve means all
+     * @param length number of bytes to copy. -ve means all
      * @param buffer the buffer to use for the copy
      * @return the number of bytes copied
      * @throws NullPointerException if the input or output is null
@@ -1625,9 +1625,9 @@ public class IOUtils {
      *
      * @param reader the {@link Reader} to read
      * @param writer the {@link Writer} to write to
-     * @param inputOffset : number of chars to skip from input before copying
+     * @param inputOffset number of chars to skip from input before copying
      * -ve values are ignored
-     * @param length : number of chars to copy. -ve means all
+     * @param length number of chars to copy. -ve means all
      * @return the number of chars copied
      * @throws NullPointerException if the input or output is null
      * @throws IOException          if an I/O error occurs
@@ -1648,9 +1648,9 @@ public class IOUtils {
      *
      * @param reader the {@link Reader} to read
      * @param writer the {@link Writer} to write to
-     * @param inputOffset : number of chars to skip from input before copying
+     * @param inputOffset number of chars to skip from input before copying
      * -ve values are ignored
-     * @param length : number of chars to copy. -ve means all
+     * @param length number of chars to copy. -ve means all
      * @param buffer the buffer to be used for the copy
      * @return the number of chars copied
      * @throws NullPointerException if the input or output is null
