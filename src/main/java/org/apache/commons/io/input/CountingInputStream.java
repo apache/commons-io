@@ -28,7 +28,9 @@ import java.io.InputStream;
  * A typical use case would be during debugging, to ensure that data is being
  * read as expected.
  * </p>
+ * @deprecated Use {@link BoundedInputStream} (unbounded by default).
  */
+@Deprecated
 public class CountingInputStream extends ProxyInputStream {
 
     /** The count of bytes that have passed. */
