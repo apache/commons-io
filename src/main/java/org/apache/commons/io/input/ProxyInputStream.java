@@ -25,18 +25,20 @@ import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 
 /**
- * A Proxy stream which acts as expected, that is it passes the method
- * calls on to the proxied stream and doesn't change which methods are
- * being called.
+ * A proxy stream which acts as a {@link FilterInputStream}, by passing all method calls on to the proxied stream, not changing which methods are called.
  * <p>
- * It is an alternative base class to FilterInputStream
- * to increase reusability, because FilterInputStream changes the
- * methods being called, such as read(byte[]) to read(byte[], int, int).
+ * It is an alternative base class to {@link FilterInputStream} to increase reusability, because {@link FilterInputStream} changes the methods being called,
+ * such as read(byte[]) to read(byte[], int, int).
  * </p>
  * <p>
- * See the protected methods for ways in which a subclass can easily decorate
- * a stream with custom pre-, post- or error processing functionality.
+ * In addition, this class allows you to:
  * </p>
+ * <ul>
+ * <li>notify a subclass that <em>n</em> bytes are about to be read through {@link #beforeRead(int)}</li>
+ * <li>notify a subclass that <em>n</em> bytes were read through {@link #afterRead(int)}</li>
+ * <li>notify a subclass that an exception was caught through {@link #handleIOException(IOException)}</li>
+ * <li>{@link #unwrap()} itself</li>
+ * </ul>
  */
 public abstract class ProxyInputStream extends FilterInputStream {
 
@@ -71,7 +73,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void afterRead(final int n) throws IOException {
-        // no-op
+        // no-op default
     }
 
     /**
@@ -112,7 +114,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void beforeRead(final int n) throws IOException {
-        // no-op
+        // no-op default
     }
 
     /**
