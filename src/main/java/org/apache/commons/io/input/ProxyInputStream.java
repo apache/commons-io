@@ -39,6 +39,9 @@ import org.apache.commons.io.IOUtils;
  * <li>notify a subclass that an exception was caught through {@link #handleIOException(IOException)}</li>
  * <li>{@link #unwrap()} itself</li>
  * </ul>
+ * <p>
+ * This class does not add any state (no additional instance variables).
+ * </p>
  */
 public abstract class ProxyInputStream extends FilterInputStream {
 
