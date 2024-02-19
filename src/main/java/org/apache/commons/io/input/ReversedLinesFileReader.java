@@ -110,7 +110,7 @@ public class ReversedLinesFileReader implements Closeable {
     }
 
     private final class FilePart {
-        private final long no;
+        private final long partNumber;
 
         private final byte[] data;
 
@@ -121,20 +121,20 @@ public class ReversedLinesFileReader implements Closeable {
         /**
          * Constructs a new instance.
          *
-         * @param no                     the part number
+         * @param partNumber             the part number
          * @param length                 its length
          * @param leftOverOfLastFilePart remainder
          * @throws IOException if there is a problem reading the file
          */
-        private FilePart(final long no, final int length, final byte[] leftOverOfLastFilePart) throws IOException {
-            this.no = no;
+        private FilePart(final long partNumber, final int length, final byte[] leftOverOfLastFilePart) throws IOException {
+            this.partNumber = partNumber;
             final int dataLength = length + (leftOverOfLastFilePart != null ? leftOverOfLastFilePart.length : 0);
             this.data = new byte[dataLength];
-            final long off = (no - 1) * blockSize;
+            final long offset = (partNumber - 1) * blockSize;
 
             // read data
-            if (no > 0 /* file not empty */) {
-                channel.position(off);
+            if (partNumber > 0 /* file not empty */) {
+                channel.position(offset);
                 final int countRead = channel.read(ByteBuffer.wrap(data, 0, length));
                 if (countRead != length) {
                     throw new IllegalStateException("Count of requested bytes and actually read bytes don't match");
@@ -193,7 +193,7 @@ public class ReversedLinesFileReader implements Closeable {
             String line = null;
             int newLineMatchByteCount;
 
-            final boolean isLastFilePart = no == 1;
+            final boolean isLastFilePart = partNumber == 1;
 
             int i = currentLastBytePos;
             while (i > -1) {
@@ -254,8 +254,8 @@ public class ReversedLinesFileReader implements Closeable {
                         + "last readLine() should have returned something! currentLastCharPos=" + currentLastBytePos);
             }
 
-            if (no > 1) {
-                return new FilePart(no - 1, blockSize, leftOver);
+            if (partNumber > 1) {
+                return new FilePart(partNumber - 1, blockSize, leftOver);
             }
             // NO 1 was the last FilePart, we're finished
             if (leftOver != null) {
