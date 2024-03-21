@@ -3277,7 +3277,9 @@ public class FileUtils {
      * @param lines the lines to write, {@code null} entries produce blank lines
      * @throws IOException in case of an I/O error
      * @since 1.3
+     * @deprecated use {@link #writeLines(File, String, Collection)} instead (and specify the appropriate encoding)
      */
+    @Deprecated
     public static void writeLines(final File file, final Collection<?> lines) throws IOException {
         writeLines(file, null, lines, null, false);
     }
@@ -3293,7 +3295,9 @@ public class FileUtils {
      *               end of the file rather than overwriting
      * @throws IOException in case of an I/O error
      * @since 2.1
+     * @deprecated use {@link #writeLines(File, String, Collection, boolean)} instead (and specify the appropriate encoding)
      */
+    @Deprecated
     public static void writeLines(final File file, final Collection<?> lines, final boolean append) throws IOException {
         writeLines(file, null, lines, null, append);
     }
@@ -3308,7 +3312,9 @@ public class FileUtils {
      * @param lineEnding the line separator to use, {@code null} is system default
      * @throws IOException in case of an I/O error
      * @since 1.3
+     * @deprecated use {@link #writeLines(File, String, Collection, String)} instead (and specify the appropriate encoding)
      */
+    @Deprecated
     public static void writeLines(final File file, final Collection<?> lines, final String lineEnding) throws IOException {
         writeLines(file, null, lines, lineEnding, false);
     }
@@ -3325,7 +3331,9 @@ public class FileUtils {
      *                   end of the file rather than overwriting
      * @throws IOException in case of an I/O error
      * @since 2.1
+     * @deprecated use {@link #writeLines(File, String, Collection, boolean)} instead and specify the appropriate encoding
      */
+    @Deprecated
     public static void writeLines(final File file, final Collection<?> lines, final String lineEnding, final boolean append) throws IOException {
         writeLines(file, null, lines, lineEnding, append);
     }
@@ -3340,7 +3348,7 @@ public class FileUtils {
      * @param charsetName the name of the requested charset, {@code null} means platform default
      * @param lines    the lines to write, {@code null} entries produce blank lines
      * @throws IOException                          in case of an I/O error
-     * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
+     * @throws java.nio.charset.UnsupportedCharsetException if the encoding is not supported by the VM
      * @since 1.1
      */
     public static void writeLines(final File file, final String charsetName, final Collection<?> lines) throws IOException {
@@ -3358,7 +3366,7 @@ public class FileUtils {
      * @param append   if {@code true}, then the lines will be added to the
      *                 end of the file rather than overwriting
      * @throws IOException                          in case of an I/O error
-     * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
+     * @throws java.nio.charset.UnsupportedCharsetException if the encoding is not supported by the VM
      * @since 2.1
      */
     public static void writeLines(final File file, final String charsetName, final Collection<?> lines, final boolean append) throws IOException {
@@ -3376,7 +3384,7 @@ public class FileUtils {
      * @param lines      the lines to write, {@code null} entries produce blank lines
      * @param lineEnding the line separator to use, {@code null} is system default
      * @throws IOException                          in case of an I/O error
-     * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
+     * @throws java.nio.charset.UnsupportedCharsetException if the encoding is not supported by the VM
      * @since 1.1
      */
     public static void writeLines(final File file, final String charsetName, final Collection<?> lines, final String lineEnding) throws IOException {
@@ -3395,7 +3403,7 @@ public class FileUtils {
      * @param append     if {@code true}, then the lines will be added to the
      *                   end of the file rather than overwriting
      * @throws IOException                          in case of an I/O error
-     * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
+     * @throws java.nio.charset.UnsupportedCharsetException if the encoding is not supported by the VM
      * @since 2.1
      */
     public static void writeLines(final File file, final String charsetName, final Collection<?> lines, final String lineEnding, final boolean append)
