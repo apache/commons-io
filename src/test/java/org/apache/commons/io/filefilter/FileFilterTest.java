@@ -54,7 +54,7 @@ import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Test;
 
 /**
- * Used to test FileFilterUtils.
+ * Tests {@link FileFilterUtils}.
  */
 public class FileFilterTest extends AbstractFilterTest {
 

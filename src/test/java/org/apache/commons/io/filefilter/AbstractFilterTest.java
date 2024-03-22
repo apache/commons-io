@@ -30,7 +30,7 @@ import org.apache.commons.io.IOCase;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Used to test FileFilterUtils.
+ * Tests {@link FileFilterUtils} and friends.
  */
 public class AbstractFilterTest {
 
