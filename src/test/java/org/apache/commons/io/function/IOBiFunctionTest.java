@@ -17,7 +17,7 @@
 
 package org.apache.commons.io.function;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -53,7 +53,7 @@ public class IOBiFunctionTest {
         final IOFunction<Boolean, Boolean> not = this::not;
         assertTrue( isDirectory.apply(PathUtils.current(), PathUtils.EMPTY_LINK_OPTION_ARRAY));
         final IOBiFunction<Path, LinkOption[], Boolean> andThen = isDirectory.andThen(not);
-        assertEquals(false, andThen.apply(PathUtils.current(), PathUtils.EMPTY_LINK_OPTION_ARRAY));
+        assertFalse(andThen.apply(PathUtils.current(), PathUtils.EMPTY_LINK_OPTION_ARRAY));
     }
 
     /**
