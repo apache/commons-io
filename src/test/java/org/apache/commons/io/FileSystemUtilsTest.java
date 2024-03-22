@@ -31,6 +31,8 @@ import java.time.Duration;
 import java.util.Locale;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -63,6 +65,7 @@ public class FileSystemUtilsTest {
             return new Process() {
                 @Override
                 public void destroy() {
+                    // nnop
                 }
 
                 @Override
@@ -338,12 +341,14 @@ public class FileSystemUtilsTest {
         assertEquals(189416L, fsu.freeSpaceUnix("/", false, false, NEG_1_TIMEOUT));
     }
 
+    @EnabledOnOs(value = OS.WINDOWS)
     @ParameterizedTest
     @MethodSource("getIllegalFileNameChars")
     public void testGetFreeSpaceWindows_IllegalFileName(final char illegalFileNameChar) throws Exception {
         assertThrows(IllegalArgumentException.class, () -> new FileSystemUtils().freeSpaceWindows("\\ \"" + illegalFileNameChar, NEG_1_TIMEOUT));
     }
 
+    @EnabledOnOs(value = OS.WINDOWS)
     @Test
     public void testGetFreeSpaceWindows_IllegalFileNames() throws Exception {
         assertThrows(IllegalArgumentException.class, () -> new FileSystemUtils().freeSpaceWindows("\\ \"", NEG_1_TIMEOUT));
