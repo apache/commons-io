@@ -114,7 +114,7 @@ public class IOSpliteratorTest {
 
     @Test
     public void testHasCharacteristics() {
-        assertEquals(true, spliterator.hasCharacteristics(spliterator.characteristics()));
+        assertTrue( spliterator.hasCharacteristics(spliterator.characteristics()));
         assertEquals(spliterator.unwrap().hasCharacteristics(spliterator.unwrap().characteristics()),
             spliterator.hasCharacteristics(spliterator.characteristics()));
         assertEquals(spliterator.unwrap().hasCharacteristics(spliterator.unwrap().characteristics()),

@@ -18,6 +18,7 @@
 package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -87,10 +88,10 @@ public class CharsetsTest {
 
     @Test
     public void testToCharset_String_Charset() {
-        assertEquals(null, Charsets.toCharset((String) null, null));
+        assertNull(Charsets.toCharset((String) null, null));
         assertEquals(Charset.defaultCharset(), Charsets.toCharset((String) null, Charset.defaultCharset()));
         assertEquals(Charset.defaultCharset(), Charsets.toCharset((Charset) null, Charset.defaultCharset()));
-        assertEquals(null, Charsets.toCharset((Charset) null, null));
+        assertNull(Charsets.toCharset((Charset) null, null));
         assertEquals(Charset.defaultCharset(), Charsets.toCharset(Charset.defaultCharset(), Charset.defaultCharset()));
         assertEquals(StandardCharsets.UTF_8, Charsets.toCharset(StandardCharsets.UTF_8, Charset.defaultCharset()));
         assertEquals(StandardCharsets.UTF_8, Charsets.toCharset(StandardCharsets.UTF_8, null));
