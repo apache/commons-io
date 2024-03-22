@@ -20,6 +20,7 @@ package org.apache.commons.io.function;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -50,7 +51,7 @@ public class IOBiFunctionTest {
     public void testAndThenIOFunction() throws IOException {
         final IOBiFunction<Path, LinkOption[], Boolean> isDirectory = Files::isDirectory;
         final IOFunction<Boolean, Boolean> not = this::not;
-        assertEquals(true, isDirectory.apply(PathUtils.current(), PathUtils.EMPTY_LINK_OPTION_ARRAY));
+        assertTrue( isDirectory.apply(PathUtils.current(), PathUtils.EMPTY_LINK_OPTION_ARRAY));
         final IOBiFunction<Path, LinkOption[], Boolean> andThen = isDirectory.andThen(not);
         assertEquals(false, andThen.apply(PathUtils.current(), PathUtils.EMPTY_LINK_OPTION_ARRAY));
     }
@@ -63,7 +64,7 @@ public class IOBiFunctionTest {
     @Test
     public void testApply() throws IOException {
         final IOBiFunction<Path, LinkOption[], Boolean> isDirectory = Files::isDirectory;
-        assertEquals(true, isDirectory.apply(PathUtils.current(), PathUtils.EMPTY_LINK_OPTION_ARRAY));
+        assertTrue( isDirectory.apply(PathUtils.current(), PathUtils.EMPTY_LINK_OPTION_ARRAY));
     }
 
     /**
