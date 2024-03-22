@@ -462,7 +462,7 @@ public class IOStreamTest {
         if (AT_LEAST_JAVA_11) {
             assertEquals(1, IOStream.of("B").peek(e -> compareAndSetRE(ref, null, e)).count());
             assertEquals(1, IOStream.of("B").peek(e -> compareAndSetIO(ref, null, e)).count());
-            assertEquals(null, ref.get());
+            assertNull(ref.get());
         } else {
             // Java 8
             assertThrows(RuntimeException.class, () -> IOStream.of("B").peek(e -> compareAndSetRE(ref, null, e)).count());

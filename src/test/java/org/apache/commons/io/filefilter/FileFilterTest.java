@@ -52,6 +52,7 @@ import org.apache.commons.io.file.TempFile;
 import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Used to test FileFilterUtils.
@@ -650,7 +651,7 @@ public class FileFilterTest extends AbstractFilterTest {
         final IOFileFilter filter = FileFilterUtils.trueFileFilter();
         List<File> filteredList = FileFilterUtils.filterList(filter, Collections.singletonList(null));
         assertEquals(1, filteredList.size());
-        assertEquals(null, filteredList.get(0));
+        assertNull(filteredList.get(0));
 
         filteredList = FileFilterUtils.filterList(filter, (List<File>) null);
         assertEquals(0, filteredList.size());
