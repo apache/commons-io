@@ -35,6 +35,14 @@ import org.apache.commons.io.file.PathUtils;
  * To build an instance, use {@link Builder}.
  * </p>
  * <p>
+ * The caller is responsible for deleting the output file ({@link #getFile()}, {@link #getPath()}) created by a DeferredFileOutputStream when the caller only
+ * configured a prefix.
+ * </p>
+ * <p>
+ * The caller is responsible for deleting the output file passed to a constructor or builder through {@link Builder#setOutputFile(File)} or
+ * {@link Builder#setOutputFile(Path)}.
+ * </p>
+ * <p>
  * This class originated in FileUpload processing. In this use case, you do not know in advance the size of the file being uploaded. If the file is small you
  * want to store it in memory (for speed), but if the file is large you want to store it to file (to avoid memory issues).
  * </p>
