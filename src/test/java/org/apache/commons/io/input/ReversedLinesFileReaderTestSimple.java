@@ -34,11 +34,12 @@ import org.junit.jupiter.api.Test;
 
 public class ReversedLinesFileReaderTestSimple {
 
+    private final int BLOCK_SIZE = 10;
+
     @Test
     public void testFileSizeIsExactMultipleOfBlockSize() throws URISyntaxException, IOException {
-        final int blockSize = 10;
         final File testFile20Bytes = TestResources.getFile("/test-file-20byteslength.bin");
-        try (ReversedLinesFileReader reversedLinesFileReader = new ReversedLinesFileReader(testFile20Bytes, blockSize,
+        try (ReversedLinesFileReader reversedLinesFileReader = new ReversedLinesFileReader(testFile20Bytes, BLOCK_SIZE,
                 StandardCharsets.ISO_8859_1.name())) {
             assertEqualsAndNoLineBreaks("987654321", reversedLinesFileReader.readLine());
             assertEqualsAndNoLineBreaks("123456789", reversedLinesFileReader.readLine());
@@ -47,9 +48,8 @@ public class ReversedLinesFileReaderTestSimple {
 
     @Test
     public void testLineCount() throws URISyntaxException, IOException {
-        final int blockSize = 10;
         final File testFile20Bytes = TestResources.getFile("/test-file-20byteslength.bin");
-        try (ReversedLinesFileReader reversedLinesFileReader = new ReversedLinesFileReader(testFile20Bytes, blockSize,
+        try (ReversedLinesFileReader reversedLinesFileReader = new ReversedLinesFileReader(testFile20Bytes, BLOCK_SIZE,
                 StandardCharsets.ISO_8859_1.name())) {
             assertThrows(IllegalArgumentException.class, () -> reversedLinesFileReader.readLines(-1));
             assertTrue(reversedLinesFileReader.readLines(0).isEmpty());
@@ -63,9 +63,8 @@ public class ReversedLinesFileReaderTestSimple {
 
     @Test
     public void testToString() throws URISyntaxException, IOException {
-        final int blockSize = 10;
         final File testFile20Bytes = TestResources.getFile("/test-file-20byteslength.bin");
-        try (ReversedLinesFileReader reversedLinesFileReader = new ReversedLinesFileReader(testFile20Bytes, blockSize,
+        try (ReversedLinesFileReader reversedLinesFileReader = new ReversedLinesFileReader(testFile20Bytes, BLOCK_SIZE,
                 StandardCharsets.ISO_8859_1.name())) {
             assertThrows(IllegalArgumentException.class, () -> reversedLinesFileReader.toString(-1));
             assertTrue(reversedLinesFileReader.readLines(0).isEmpty());
@@ -88,6 +87,19 @@ public class ReversedLinesFileReaderTestSimple {
         final File testFileEmpty = TestResources.getFile("/test-file-empty.bin");
         assertThrows(UnsupportedEncodingException.class,
             () -> new ReversedLinesFileReader(testFileEmpty, IOUtils.DEFAULT_BUFFER_SIZE, StandardCharsets.UTF_16.name()).close());
+    }
+
+    @Test
+    // IO-639
+    public void testEmptyFirstLine() throws IOException, URISyntaxException {
+        final File testFileEmptyFirstLine = TestResources.getFile("/empty_first_line.bin");
+        try (ReversedLinesFileReader reversedLinesFileReader = new ReversedLinesFileReader(testFileEmptyFirstLine, BLOCK_SIZE,
+                StandardCharsets.US_ASCII.name())) {
+            assertEqualsAndNoLineBreaks("test2", reversedLinesFileReader.readLine());
+            assertEqualsAndNoLineBreaks("", reversedLinesFileReader.readLine());
+            assertEqualsAndNoLineBreaks("test1", reversedLinesFileReader.readLine());
+            assertEqualsAndNoLineBreaks("", reversedLinesFileReader.readLine());
+        }
     }
 
 }
