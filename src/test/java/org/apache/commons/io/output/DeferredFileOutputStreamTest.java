@@ -65,7 +65,6 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
     @MethodSource("data")
     public void testAboveThreshold(final int initialBufferSize) throws IOException {
         final File testFile = Files.createTempFile(tempDirPath, "testAboveThreshold", "dat").toFile();
-
         try (final DeferredFileOutputStream dfos = DeferredFileOutputStream.builder()
                 .setThreshold(testBytes.length - 5)
                 .setBufferSize(initialBufferSize)
@@ -76,7 +75,6 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
             assertFalse(dfos.isInMemory());
             assertNull(dfos.getData());
             assertEquals(testFile.length(), dfos.getByteCount());
-
             verifyResultFile(testFile);
         }
     }
@@ -90,7 +88,6 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
     @MethodSource("data")
     public void testAboveThresholdGetInputStream(final int initialBufferSize, final @TempDir Path tempDir) throws IOException {
         final File testFile = Files.createTempFile(tempDirPath, "testAboveThreshold", "dat").toFile();
-
         try (final DeferredFileOutputStream dfos = DeferredFileOutputStream.builder()
                 .setThreshold(testBytes.length - 5)
                 .setBufferSize(initialBufferSize)
@@ -100,11 +97,9 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
             dfos.close();
             assertFalse(dfos.isInMemory());
             assertEquals(testFile.length(), dfos.getByteCount());
-
             try (InputStream is = dfos.toInputStream()) {
                 assertArrayEquals(testBytes, IOUtils.toByteArray(is));
             }
-
             verifyResultFile(testFile);
         }
     }
@@ -126,7 +121,6 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
         dfos.close();
         assertTrue(dfos.isInMemory());
         assertEquals(testBytes.length, dfos.getByteCount());
-
         final byte[] resultBytes = dfos.getData();
         assertEquals(testBytes.length, resultBytes.length);
         assertArrayEquals(resultBytes, testBytes);
@@ -149,7 +143,6 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
         dfos.close();
         assertTrue(dfos.isInMemory());
         assertEquals(testBytes.length, dfos.getByteCount());
-
         final byte[] resultBytes = dfos.getData();
         assertEquals(testBytes.length, resultBytes.length);
         assertArrayEquals(resultBytes, testBytes);
@@ -172,7 +165,6 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
         dfos.close();
         assertTrue(dfos.isInMemory());
         assertEquals(testBytes.length, dfos.getByteCount());
-
         try (InputStream is = dfos.toInputStream()) {
             assertArrayEquals(testBytes, IOUtils.toByteArray(is));
         }
@@ -184,7 +176,6 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
     public void testTempFileAboveThreshold(final int initialBufferSize) throws IOException {
-
         final String prefix = "commons-io-test";
         final String suffix = ".out";
         // @formatter:off
@@ -220,7 +211,6 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
     public void testTempFileAboveThresholdPrefixOnly(final int initialBufferSize) throws IOException {
-
         final String prefix = "commons-io-test";
         final String suffix = null;
         final DeferredFileOutputStream dfos = DeferredFileOutputStream.builder()
@@ -256,7 +246,6 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
     public void testTempFileBelowThreshold(final int initialBufferSize) throws IOException {
-
         final String prefix = "commons-io-test";
         final String suffix = ".out";
         final DeferredFileOutputStream dfos = new DeferredFileOutputStream(testBytes.length + 42, initialBufferSize, prefix, suffix, tempDirFile);
