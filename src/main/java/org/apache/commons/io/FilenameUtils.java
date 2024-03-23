@@ -33,7 +33,7 @@ import java.util.stream.Stream;
  * ever accesses the file system, or depends on whether a path points to a file that exists.
  * <p>
  * When dealing with file names, you can hit problems when moving from a Windows
- * based development machine to a Unix based production machine.
+ * based development machine to a UNIX based production machine.
  * This class aims to help avoid those problems.
  * </p>
  * <p>
@@ -42,7 +42,7 @@ import java.util.stream.Stream;
  * {@link java.io.File#File(java.io.File, String) File(File,String)}.
  * </p>
  * <p>
- * Most methods in this class are designed to work the same on both Unix and Windows.
+ * Most methods in this class are designed to work the same on both UNIX and Windows.
  * Those that don't include 'System', 'Unix', or 'Windows' in their name.
  * </p>
  * <p>
@@ -63,7 +63,7 @@ import java.util.stream.Stream;
  * <li>the extension - txt</li>
  * </ul>
  * <p>
- * Given an absolute Unix path such as /dev/project/file.txt they are:
+ * Given an absolute UNIX path such as /dev/project/file.txt they are:
  * </p>
  * <ul>
  * <li>the full file name, or just file name - /dev/project/file.txt</li>
@@ -87,7 +87,7 @@ import java.util.stream.Stream;
  * <li>the extension - txt</li>
  * </ul>
  * <p>
- * Given an absolute Unix path such as /dev/project/file.txt they are:
+ * Given an absolute UNIX path such as /dev/project/file.txt they are:
  * </p>
  * <ul>
  * <li>the full path, full file name, or just file name - /dev/project/file.txt</li>
@@ -107,7 +107,7 @@ import java.util.stream.Stream;
  * that do not end with a separator as files, not directories.
  * </p>
  * <p>
- * This class only supports Unix and Windows style names.
+ * This class only supports UNIX and Windows style names.
  * Prefixes are matched as follows:
  * </p>
  * <pre>
@@ -154,7 +154,7 @@ public class FilenameUtils {
     public static final String EXTENSION_SEPARATOR_STR = Character.toString(EXTENSION_SEPARATOR);
 
     /**
-     * The Unix separator character.
+     * The UNIX separator character.
      */
     private static final char UNIX_NAME_SEPARATOR = '/';
 
@@ -205,7 +205,7 @@ public class FilenameUtils {
      * Otherwise, the paths will be joined, normalized and returned.
      * </p>
      * <p>
-     * The output will be the same on both Unix and Windows except
+     * The output will be the same on both UNIX and Windows except
      * for the separator character.
      * </p>
      * <pre>
@@ -524,7 +524,7 @@ public class FilenameUtils {
      * after both have been normalized.
      * <p>
      * Both file names are first passed to {@link #normalize(String)}.
-     * The check is then performed case-sensitively on Unix and
+     * The check is then performed case-sensitively on UNIX and
      * case-insensitively on Windows.
      * </p>
      *
@@ -541,7 +541,7 @@ public class FilenameUtils {
      * Checks whether two file names are equal using the case rules of the system.
      * <p>
      * No processing is performed on the file names other than comparison.
-     * The check is case-sensitive on Unix and case-insensitive on Windows.
+     * The check is case-sensitive on UNIX and case-insensitive on Windows.
      * </p>
      *
      * @param fileName1  the first file name, may be null
@@ -594,7 +594,7 @@ public class FilenameUtils {
     /**
      * Gets the base name, minus the full path and extension, from a full file name.
      * <p>
-     * This method will handle a path in either Unix or Windows format.
+     * This method will handle a path in either UNIX or Windows format.
      * The text after the last forward or backslash and before the last dot is returned.
      * </p>
      * <pre>
@@ -661,7 +661,7 @@ public class FilenameUtils {
     /**
      * Gets the full path (prefix + path) from a full file name.
      * <p>
-     * This method will handle a file in either Unix or Windows format.
+     * This method will handle a file in either UNIX or Windows format.
      * The method is entirely text based, and returns the text before and
      * including the last forward or backslash.
      * </p>
@@ -694,7 +694,7 @@ public class FilenameUtils {
      * Gets the full path (prefix + path) from a full file name,
      * excluding the final directory separator.
      * <p>
-     * This method will handle a file in either Unix or Windows format.
+     * This method will handle a file in either UNIX or Windows format.
      * The method is entirely text based, and returns the text before the
      * last forward or backslash.
      * </p>
@@ -726,7 +726,7 @@ public class FilenameUtils {
     /**
      * Gets the name minus the path from a full file name.
      * <p>
-     * This method will handle a file in either Unix or Windows format.
+     * This method will handle a file in either UNIX or Windows format.
      * The text after the last forward or backslash is returned.
      * </p>
      * <pre>
@@ -754,7 +754,7 @@ public class FilenameUtils {
     /**
      * Gets the path from a full file name, which excludes the prefix and the name.
      * <p>
-     * This method will handle a file in either Unix or Windows format.
+     * This method will handle a file in either UNIX or Windows format.
      * The method is entirely text based, and returns the text before and
      * including the last forward or backslash.
      * </p>
@@ -785,7 +785,7 @@ public class FilenameUtils {
      * Gets the path (which excludes the prefix) from a full file name, and
      * also excluding the final directory separator.
      * <p>
-     * This method will handle a file in either Unix or Windows format.
+     * This method will handle a file in either UNIX or Windows format.
      * The method is entirely text based, and returns the text before the
      * last forward or backslash.
      * </p>
@@ -815,7 +815,7 @@ public class FilenameUtils {
     /**
      * Gets the prefix such as {@code C:/} or {@code ~/} from a full file name,
      * <p>
-     * This method will handle a file in either Unix or Windows format.
+     * This method will handle a file in either UNIX or Windows format.
      * The prefix includes the first slash in the full file name where applicable.
      * </p>
      * <pre>
@@ -836,7 +836,7 @@ public class FilenameUtils {
      * </pre>
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
-     * ie. both Unix and Windows prefixes are matched regardless.
+     * ie. both UNIX and Windows prefixes are matched regardless.
      * </p>
      *
      * @param fileName  the file name, null returns null
@@ -861,7 +861,7 @@ public class FilenameUtils {
     /**
      * Returns the length of the file name prefix, such as {@code C:/} or {@code ~/}.
      * <p>
-     * This method will handle a file in either Unix or Windows format.
+     * This method will handle a file in either UNIX or Windows format.
      * </p>
      * <p>
      * The prefix length includes the first slash in the full file name
@@ -890,7 +890,7 @@ public class FilenameUtils {
      * </pre>
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
-     * ie. both Unix and Windows prefixes are matched regardless.
+     * ie. both UNIX and Windows prefixes are matched regardless.
      * </p>
      * <p>
      * Note that a leading // (or \\) is used to indicate a UNC name on Windows.
@@ -966,7 +966,7 @@ public class FilenameUtils {
      * Returns the index of the last extension separator character, which is a dot.
      * <p>
      * This method also checks that there is no directory separator after the last dot. To do this it uses
-     * {@link #indexOfLastSeparator(String)} which will handle a file in either Unix or Windows format.
+     * {@link #indexOfLastSeparator(String)} which will handle a file in either UNIX or Windows format.
      * </p>
      * <p>
      * The output will be the same irrespective of the machine that the code is running on, with the
@@ -1003,7 +1003,7 @@ public class FilenameUtils {
     /**
      * Returns the index of the last directory separator character.
      * <p>
-     * This method will handle a file in either Unix or Windows format.
+     * This method will handle a file in either UNIX or Windows format.
      * The position of the last forward or backslash is returned.
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
@@ -1256,7 +1256,7 @@ public class FilenameUtils {
      * Normalizes a path, removing double and single dot path steps.
      * <p>
      * This method normalizes a path to a standard format.
-     * The input may contain separators in either Unix or Windows format.
+     * The input may contain separators in either UNIX or Windows format.
      * The output will contain separators in the format of the system.
      * <p>
      * A trailing slash will be retained.
@@ -1265,7 +1265,7 @@ public class FilenameUtils {
      * A double dot will cause that path segment and the one before to be removed.
      * If the double dot has no parent path segment, {@code null} is returned.
      * <p>
-     * The output will be the same on both Unix and Windows except
+     * The output will be the same on both UNIX and Windows except
      * for the separator character.
      * <pre>
      * /foo//               --&gt;   /foo/
@@ -1300,7 +1300,7 @@ public class FilenameUtils {
      * Normalizes a path, removing double and single dot path steps.
      * <p>
      * This method normalizes a path to a standard format.
-     * The input may contain separators in either Unix or Windows format.
+     * The input may contain separators in either UNIX or Windows format.
      * The output will contain separators in the format specified.
      * <p>
      * A trailing slash will be retained.
@@ -1310,7 +1310,7 @@ public class FilenameUtils {
      * If the double dot has no parent path segment to work with, {@code null}
      * is returned.
      * <p>
-     * The output will be the same on both Unix and Windows except
+     * The output will be the same on both UNIX and Windows except
      * for the separator character.
      * <pre>
      * /foo//               --&gt;   /foo/
@@ -1331,11 +1331,11 @@ public class FilenameUtils {
      * ~/foo/../bar/        --&gt;   ~/bar/
      * ~/../bar             --&gt;   null
      * </pre>
-     * The output will be the same on both Unix and Windows including
+     * The output will be the same on both UNIX and Windows including
      * the separator character.
      *
      * @param fileName  the file name to normalize, null returns null
-     * @param unixSeparator {@code true} if a Unix separator should
+     * @param unixSeparator {@code true} if a UNIX separator should
      * be used or {@code false} if a Windows separator should be used.
      * @return the normalized fileName, or null if invalid
      * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000})
@@ -1350,7 +1350,7 @@ public class FilenameUtils {
      * and removing any final directory separator.
      * <p>
      * This method normalizes a path to a standard format.
-     * The input may contain separators in either Unix or Windows format.
+     * The input may contain separators in either UNIX or Windows format.
      * The output will contain separators in the format of the system.
      * <p>
      * A trailing slash will be removed.
@@ -1360,7 +1360,7 @@ public class FilenameUtils {
      * If the double dot has no parent path segment to work with, {@code null}
      * is returned.
      * <p>
-     * The output will be the same on both Unix and Windows except
+     * The output will be the same on both UNIX and Windows except
      * for the separator character.
      * <pre>
      * /foo//               --&gt;   /foo
@@ -1396,7 +1396,7 @@ public class FilenameUtils {
      * and removing any final directory separator.
      * <p>
      * This method normalizes a path to a standard format.
-     * The input may contain separators in either Unix or Windows format.
+     * The input may contain separators in either UNIX or Windows format.
      * The output will contain separators in the format specified.
      * <p>
      * A trailing slash will be removed.
@@ -1406,7 +1406,7 @@ public class FilenameUtils {
      * If the double dot has no parent path segment to work with, {@code null}
      * is returned.
      * <p>
-     * The output will be the same on both Unix and Windows including
+     * The output will be the same on both UNIX and Windows including
      * the separator character.
      * <pre>
      * /foo//               --&gt;   /foo
@@ -1429,7 +1429,7 @@ public class FilenameUtils {
      * </pre>
      *
      * @param fileName  the file name to normalize, null returns null
-     * @param unixSeparator {@code true} if a Unix separator should
+     * @param unixSeparator {@code true} if a UNIX separator should
      * be used or {@code false} if a Windows separator should be used.
      * @return the normalized fileName, or null if invalid
      * @throws IllegalArgumentException if the file name contains the null character ({@code U+0000})
@@ -1500,7 +1500,7 @@ public class FilenameUtils {
     }
 
     /**
-     * Converts all separators to the Unix separator of forward slash.
+     * Converts all separators to the UNIX separator of forward slash.
      *
      * @param path the path to be changed, null ignored.
      * @return the new path.
@@ -1697,7 +1697,7 @@ public class FilenameUtils {
      * The wildcard matcher uses the characters '?' and '*' to represent a
      * single or multiple (zero or more) wildcard characters.
      * This is the same as often found on DOS/Unix command lines.
-     * The check is case-sensitive on Unix and case-insensitive on Windows.
+     * The check is case-sensitive on UNIX and case-insensitive on Windows.
      * <pre>
      * wildcardMatch("c.txt", "*.txt")      --&gt; true
      * wildcardMatch("c.txt", "*.jpg")      --&gt; false

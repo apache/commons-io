@@ -40,12 +40,12 @@ public final class FileTimes {
     public static final FileTime EPOCH = FileTime.from(Instant.EPOCH);
 
     /**
-     * The offset of Windows time 0 to Unix epoch in 100-nanosecond intervals.
+     * The offset of Windows time 0 to UNIX epoch in 100-nanosecond intervals.
      *
      * <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms724290%28v=vs.85%29.aspx">Windows File Times</a>
      * <p>
      * A file time is a 64-bit value that represents the number of 100-nanosecond intervals that have elapsed since 12:00
-     * A.M. January 1, 1601 Coordinated Universal Time (UTC). This is the offset of Windows time 0 to Unix epoch in
+     * A.M. January 1, 1601 Coordinated Universal Time (UTC). This is the offset of Windows time 0 to UNIX epoch in
      * 100-nanosecond intervals.
      * </p>
      */

@@ -106,7 +106,7 @@ public class FileSystemUtilsTest {
     public void testGetFreeSpace_String() throws Exception {
         // test coverage, as we can't check value
         if (File.separatorChar == '/') {
-            // have to figure out Unix block size
+            // have to figure out UNIX block size
             final String[] cmd;
             String osName = System.getProperty("os.name");
             osName = osName.toLowerCase(Locale.ENGLISH);

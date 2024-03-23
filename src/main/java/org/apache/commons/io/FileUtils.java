@@ -3045,7 +3045,7 @@ public class FileUtils {
     }
 
     /**
-     * Implements behavior similar to the Unix "touch" utility. Creates a new file with size 0, or, if the file exists, just
+     * Implements behavior similar to the UNIX "touch" utility. Creates a new file with size 0, or, if the file exists, just
      * updates the file's modified time. This method throws an IOException if the last modified date
      * of the file cannot be set. It creates parent directories if they do not exist.
      *

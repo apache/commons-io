@@ -145,7 +145,7 @@ public class IOUtils {
     public static final char DIR_SEPARATOR = File.separatorChar;
 
     /**
-     * The Unix directory separator character.
+     * The UNIX directory separator character.
      */
     public static final char DIR_SEPARATOR_UNIX = '/';
 
@@ -183,7 +183,7 @@ public class IOUtils {
     public static final String LINE_SEPARATOR = System.lineSeparator();
 
     /**
-     * The Unix line separator string.
+     * The UNIX line separator string.
      *
      * @see StandardLineSeparator#LF
      */
