@@ -46,7 +46,6 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     // @formatter:off
     /**
      * Builds a new {@link DeferredFileOutputStream}.
-     *
      * <p>
      * For example:
      * </p>
@@ -374,9 +373,11 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      * Gets either the output File specified in the constructor or the temporary File created or null.
      * <p>
      * If the constructor specifying the File is used then it returns that same output File, even when threshold has not been reached.
+     * </p>
      * <p>
      * If constructor specifying a temporary File prefix/suffix is used then the temporary File created once the threshold is reached is returned if the
      * threshold was not reached then {@code null} is returned.
+     * </p>
      *
      * @return The File for this output stream, or {@code null} if no such File exists.
      */
@@ -388,9 +389,11 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      * Gets either the output Path specified in the constructor or the temporary Path created or null.
      * <p>
      * If the constructor specifying the file is used then it returns that same output Path, even when threshold has not been reached.
+     * </p>
      * <p>
      * If constructor specifying a temporary Path prefix/suffix is used then the temporary Path created once the threshold is reached is returned if the
      * threshold was not reached then {@code null} is returned.
+     * </p>
      *
      * @return The Path for this output stream, or {@code null} if no such Path exists.
      * @since 2.14.0
@@ -403,7 +406,6 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      * Gets the current output stream. This may be memory based or disk based, depending on the current state with respect to the threshold.
      *
      * @return The underlying output stream.
-     *
      * @throws IOException if an error occurs.
      */
     @Override
@@ -461,7 +463,6 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
         if (!closed) {
             throw new IOException("Stream not closed");
         }
-
         if (isInMemory()) {
             return memoryOutputStream.toInputStream();
         }
@@ -482,7 +483,6 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
         if (!closed) {
             throw new IOException("Stream not closed");
         }
-
         if (isInMemory()) {
             memoryOutputStream.writeTo(outputStream);
         } else {
