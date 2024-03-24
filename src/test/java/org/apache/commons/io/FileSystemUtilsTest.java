@@ -58,11 +58,12 @@ public class FileSystemUtilsTest {
         }
 
         @Override
-        Process openProcess(final String[] params) {
+        Process openProcess(final String[] cmdArray) {
             if (cmd != null) {
-                assertEquals(cmd, params[params.length - 1]);
+                assertEquals(cmd, cmdArray[cmdArray.length - 1]);
             }
             return new Process() {
+
                 @Override
                 public void destroy() {
                     // nnop
