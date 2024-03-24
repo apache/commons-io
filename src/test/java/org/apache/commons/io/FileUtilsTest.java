@@ -79,6 +79,7 @@ import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
 import org.apache.commons.io.file.AbstractTempDirTest;
+import org.apache.commons.io.file.Counters.PathCounters;
 import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.io.file.TempDirectory;
 import org.apache.commons.io.file.TempFile;
@@ -1660,6 +1661,36 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(testDirectory.exists(), "TestDirectory must exist");
         FileUtils.forceDelete(testDirectory);
         assertFalse(testDirectory.exists(), "TestDirectory must not exist");
+    }
+
+    @Test
+    public void testForceDeleteReadOnlyDirectory() throws Exception {
+        try (TempDirectory destDir = TempDirectory.create("dir-");
+                TempFile destination = TempFile.create(destDir, "test-", ".txt")) {
+            final File file = destination.toFile();
+            assertTrue(file.setReadOnly());
+            assertTrue(file.canRead());
+            assertFalse(file.canWrite());
+            // sanity check that File.delete() deletes a read-only directory.
+            final PathCounters delete = destDir.delete();
+            assertEquals(1, delete.getDirectoryCounter().get());
+            assertEquals(1, delete.getFileCounter().get());
+            assertFalse(file.exists());
+            assertFalse(destDir.exists());
+        }
+        try (TempDirectory destDir = TempDirectory.create("dir-");
+                TempFile destination = TempFile.create(destDir, "test-", ".txt")) {
+            final File dir = destDir.toFile();
+            // real test
+            assertTrue(dir.setReadOnly());
+            assertTrue(dir.canRead());
+            assertFalse(dir.canWrite());
+            assertTrue(dir.exists(), "File doesn't exist to delete");
+            FileUtils.forceDelete(dir);
+            assertFalse(destination.exists(), "Check deletion");
+            assertFalse(dir.exists(), "Check deletion");
+            assertFalse(destDir.exists(), "Check deletion");
+        }
     }
 
     @Test
