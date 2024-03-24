@@ -108,6 +108,11 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" issue="IO-469" due-to="Grigory Fadeev, Kristian Rosenvold, Elliotte Rusty Harold">"Self-suppression not permitted" while using BrokenOutput and BrokenInput streams with try-with-resources.</action>
       <action dev="ggregory" type="fix" issue="IO-405" due-to="Elliotte Rusty Harold">Handle zero and negative thresholds #587.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate CountingInputStream in favor of BoundedInputStream.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">PathUtils.setPosixPermissions(...) only sets permissions if needed.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">PathUtils.setReadOnly(...) only sets permissions if needed.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">PathUtils.deleteFile(..., DeleteOption...) only sets permissions if needed.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">CleaningPathVisitor only sets permissions if needed.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">DeletingPathVisitor only sets permissions if needed.</action>
       <!-- Add -->
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add and use PathUtils.getFileName(Path, Function&lt;Path, R&gt;).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add and use PathUtils.getFileNameString().</action>

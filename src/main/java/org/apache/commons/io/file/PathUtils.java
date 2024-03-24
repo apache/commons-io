@@ -60,6 +60,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -1518,6 +1519,9 @@ public final class PathUtils {
 
     /**
      * Low-level POSIX permission operation to set permissions.
+     * <p>
+     * If the permissions to update are already set, then make no additional calls.
+     * </p>
      *
      * @param path              Set this path's permissions.
      * @param addPermissions    true to add, false to remove.
@@ -1530,12 +1534,15 @@ public final class PathUtils {
             final LinkOption... linkOptions) throws IOException {
         if (path != null) {
             final Set<PosixFilePermission> permissions = Files.getPosixFilePermissions(path, linkOptions);
+            final Set<PosixFilePermission> newPermissions = new HashSet<>(permissions);
             if (addPermissions) {
-                permissions.addAll(updatePermissions);
+                newPermissions.addAll(updatePermissions);
             } else {
-                permissions.removeAll(updatePermissions);
+                newPermissions.removeAll(updatePermissions);
             }
-            Files.setPosixFilePermissions(path, permissions);
+            if (!newPermissions.equals(permissions)) {
+                Files.setPosixFilePermissions(path, newPermissions);
+            }
             return true;
         }
         return false;
