@@ -1731,28 +1731,18 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testForceDeleteUnwritableDirectory() throws Exception {
-        try (TempDirectory destDir = TempDirectory.create("dir-");
-                TempFile destination = TempFile.create(destDir, "test-", ".txt")) {
-            // sanity check structure
-            assertTrue(Files.isDirectory(destDir.get()));
-            assertEquals(destDir.get(), destination.get().getParent());
-            // sanity check attributes
-            final File file = destDir.toFile();
+    public void testForceDeleteUnwritableFile() throws Exception {
+        try (TempFile destination = TempFile.create("test-", ".txt")) {
+            final File file = destination.toFile();
             assertTrue(file.canWrite());
             assertTrue(file.setWritable(false));
             assertFalse(file.canWrite());
             assertTrue(file.canRead());
-            // sanity check that File.delete() cannot delete non-empty directories.
-            assertFalse(file.delete());
+            // sanity check that File.delete() deletes unwritable files.
+            assertTrue(file.delete());
         }
-        try (TempDirectory destDir = TempDirectory.create("dir-");
-                TempFile destination = TempFile.create(destDir, "test-", ".txt")) {
-            // sanity check structure
-            assertTrue(Files.isDirectory(destDir.get()));
-            assertEquals(destDir.get(), destination.get().getParent());
-            // sanity check attributes
-            final File file = destDir.toFile();
+        try (TempFile destination = TempFile.create("test-", ".txt")) {
+            final File file = destination.toFile();
             // real test
             assertTrue(file.canWrite());
             assertTrue(file.setWritable(false));
