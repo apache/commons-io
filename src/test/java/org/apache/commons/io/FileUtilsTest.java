@@ -1730,6 +1730,53 @@ public class FileUtilsTest extends AbstractTempDirTest {
         }
     }
 
+    /**
+     * TODO Passes on macOS, fails on Linux and Windows with AccessDeniedException.
+     */
+    @Test
+    @EnabledOnOs(value = OS.MAC)
+    public void testForceDeleteUnwritableDirectory() throws Exception {
+        try (TempDirectory destDir = TempDirectory.create("dir-");
+                TempFile file = TempFile.create(destDir, "test-", ".txt")) {
+            // sanity check structure
+            assertTrue(Files.isDirectory(destDir.get()));
+            assertEquals(destDir.get(), file.get().getParent());
+            // sanity check attributes
+            final File dir = destDir.toFile();
+            assertTrue(dir.canWrite());
+            // Windows: setWritable(false) returns false.
+            assertTrue(dir.setWritable(false), () -> "setWritable(false) on " + dir);
+            assertFalse(dir.canWrite());
+            assertTrue(dir.canRead());
+            // sanity check that File.delete() cannot delete non-empty directories.
+            assertFalse(dir.delete());
+            // delete underlying file.
+            assertFalse(file.toFile().delete());
+            // reset attribute so we can delete file and auto-close/delete dir.
+            assertTrue(dir.setWritable(true));
+            assertTrue(file.toFile().delete());
+        }
+        try (TempDirectory destDir = TempDirectory.create("dir-");
+                TempFile file = TempFile.create(destDir, "test-", ".txt")) {
+            // sanity check structure
+            assertTrue(Files.isDirectory(destDir.get()));
+            assertEquals(destDir.get(), file.get().getParent());
+            // sanity check attributes
+            final File dir = destDir.toFile();
+            assertTrue(dir.canWrite());
+            assertTrue(dir.setWritable(false));
+            assertFalse(dir.canWrite());
+            assertTrue(dir.canRead());
+            // sanity check that File.delete() cannot delete non-empty directories.
+            assertFalse(dir.delete());
+            // test
+            // Linux: Fails with AccessDeniedException.
+            FileUtils.forceDelete(dir);
+            assertFalse(file.exists());
+            assertFalse(dir.exists());
+        }
+    }
+
     @Test
     public void testForceDeleteUnwritableFile() throws Exception {
         try (TempFile destination = TempFile.create("test-", ".txt")) {
