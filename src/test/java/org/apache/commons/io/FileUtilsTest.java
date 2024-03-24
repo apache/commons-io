@@ -1243,18 +1243,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyFileToReadOnlyDirectory() throws Exception {
-        final File directory = new File(tempDirFile, "readonly");
-        if (!directory.exists()) {
-            assumeTrue(directory.mkdirs());
-        }
-        assumeTrue(directory.setWritable(false));
-
-        assertThrows(IOException.class, () -> FileUtils.copyFileToDirectory(testFile1, directory),
-            "Should not be able to copy a file into a readonly directory");
-    }
-
-    @Test
     public void testCopyFile2() throws Exception {
         final File destination = new File(tempDirFile, "copy2.txt");
 
@@ -1332,6 +1320,18 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertEquals(testFile1Size, destination.size(), "Check Full copy size");
         final byte[] expected = FileUtils.readFileToByteArray(testFile1);
         assertArrayEquals(expected, destination.toByteArray(), "Check Full copy");
+    }
+
+    @Test
+    public void testCopyFileToReadOnlyDirectory() throws Exception {
+        final File directory = new File(tempDirFile, "readonly");
+        if (!directory.exists()) {
+            assumeTrue(directory.mkdirs());
+        }
+        assumeTrue(directory.setWritable(false));
+
+        assertThrows(IOException.class, () -> FileUtils.copyFileToDirectory(testFile1, directory),
+            "Should not be able to copy a file into a readonly directory");
     }
 
     @Test
@@ -1678,6 +1678,30 @@ public class FileUtilsTest extends AbstractTempDirTest {
             assertTrue(file.setReadOnly());
             assertTrue(file.canRead());
             assertFalse(file.canWrite());
+            assertTrue(file.exists(), "File doesn't exist to delete");
+            FileUtils.forceDelete(file);
+            assertFalse(file.exists(), "Check deletion");
+        }
+    }
+
+    @Test
+    public void testForceDeleteUnwritableFile() throws Exception {
+        try (TempFile destination = TempFile.create("test-", ".txt")) {
+            final File file = destination.toFile();
+            assertTrue(file.canWrite());
+            assertTrue(file.setWritable(false));
+            assertFalse(file.canWrite());
+            assertTrue(file.canRead());
+            // sanity check that File.delete() deletes read-only files.
+            assertTrue(file.delete());
+        }
+        try (TempFile destination = TempFile.create("test-", ".txt")) {
+            final File file = destination.toFile();
+            // real test
+            assertTrue(file.canWrite());
+            assertTrue(file.setWritable(false));
+            assertFalse(file.canWrite());
+            assertTrue(file.canRead());
             assertTrue(file.exists(), "File doesn't exist to delete");
             FileUtils.forceDelete(file);
             assertFalse(file.exists(), "Check deletion");
