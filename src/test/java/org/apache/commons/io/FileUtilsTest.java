@@ -167,9 +167,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     private File testFile1;
     private File testFile2;
-
     private long testFile1Size;
-
     private long testFile2Size;
 
     private void assertContentMatchesAfterCopyURLToFileFor(final String resourceName, final File destination) throws IOException {
