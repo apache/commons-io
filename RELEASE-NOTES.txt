@@ -1,4 +1,144 @@
 
+Apache Commons IO 2.16.0 Release Notes
+
+Introduction
+------------
+
+Commons IO is a package of Java utility classes like java.io.  
+Classes in this package are considered to be so standard and of such high 
+reuse as to justify existence in java.io.
+
+The Apache Commons IO library contains utility classes, stream implementations, file filters,
+file comparators, endian transformation classes, and much more.
+
+Java 8 is required.
+
+New features
+------------
+
+o          Add and use PathUtils.getFileName(Path, Function<Path, R>). Thanks to Gary Gregory. 
+o          Add and use PathUtils.getFileNameString(). Thanks to Gary Gregory. 
+o          Make public Erase.rethrow(Throwable). Thanks to Gary Gregory. 
+o IO-826:  Add BrokenInputStream.BrokenInputStream(Throwable). Thanks to markslater, Gary Gregory. 
+o IO-826:  Add BrokenReader.BrokenReader(Throwable). Thanks to markslater, Gary Gregory. 
+o IO-826:  Add BrokenOutputStream.BrokenOutputStream(Throwable). Thanks to markslater, Gary Gregory. 
+o IO-826:  Add BrokenWriter.BrokenWriter(Throwable). Thanks to markslater, Gary Gregory. 
+o          Add BoundedInputStream.getRemaining(). Thanks to Gary Gregory. 
+o          Add FileTimes.toNtfsTime(long). Thanks to Gary Gregory. 
+o          Add FileTimes.fromUnixTime(long). Thanks to Gary Gregory. 
+o          Add FileTimes.isUnixTime(FileTime). Thanks to Gary Gregory. 
+o          Add FileTimes.isUnixTime(long). Thanks to Gary Gregory. 
+o          Add FileTimes.toUnixTime(FileTime). Thanks to Gary Gregory. 
+o          Add BrokenInputStream.Builder. Thanks to Gary Gregory. 
+o          Add PathUtils.getExtension(Path). Thanks to Gary Gregory. 
+o          Add PathUtils.getBaseName(Path). Thanks to Gary Gregory. 
+o          Add ThrottledInputStream. Thanks to Gary Gregory. 
+o          Add IORunnable.noop(). Thanks to Gary Gregory. 
+o          Add ChecksumInputStream and test #548. Thanks to Gary Gregory. 
+o          Add AbstractStreamBuilder.getReader(). Thanks to Gary Gregory. 
+o          Add Maven property project.build.outputTimestamp for build reproducibility. Thanks to Gary Gregory. 
+o          Add ProxyInputStream.unwrap(). Thanks to Gary Gregory. 
+o          Add a running count and builder to BoundedInputStream. Thanks to Gary Gregory. 
+
+Fixed Bugs
+----------
+
+o          Fix and re-enable testSkip_RequiredCharsets #518. Thanks to Elliotte Rusty Harold. 
+o IO-824:  SymbolicLineFileFilter documentation fixes. Thanks to Miguel Munoz, Gary Gregory. 
+o IO-795:  CharSequenceInputStream.reset() only works once #520. Thanks to Miguel Munoz, Gary Gregory. 
+o IO-795:  Finish TODO on CharSequenceInputStream #540. Thanks to Elliotte Rusty Harold. 
+o IO-825:  Add byte array size validation for methods in EndianUtils #521. Thanks to Arthur Chan, Gary Gregory. 
+o IO-825:  Add missing test case CircularByteBufferTest. Thanks to dkdal, Gary Gregory. 
+o IO-781:  Make CharSequenceInputStream.available() more correct in the face of multibyte encodings #525. Thanks to Elliotte Rusty Harold. 
+o IO-781:  Remove unreachable code in AbstractIOFileFilterTest #526. Thanks to Elliotte Rusty Harold. 
+o IO-808:  Rationalize and unify checking for existence of files and directories #529. Thanks to Elliotte Rusty Harold. 
+o          Avoid NullPointerException in IOCase.checkEquals(String, String) on null input. Thanks to Gary Gregory. 
+o          Avoid NullPointerException in CanExecuteFileFilter.accept(File) on null input. Thanks to Gary Gregory. 
+o          Avoid NullPointerException in CanExecuteFileFilter.accept(Path, BasicFileAttributes) on null input. Thanks to Gary Gregory. 
+o          Avoid NullPointerException in CanReadFileFilter.accept(File) on null input. Thanks to Gary Gregory. 
+o          Avoid NullPointerException in CanReadFileFilter.accept(Path, BasicFileAttributes) on null input. Thanks to Gary Gregory. 
+o          Avoid NullPointerException in CanWriteFileFilter.accept(File) on null input. Thanks to Gary Gregory. 
+o          Avoid NullPointerException in CanWriteFileFilter.accept(Path, BasicFileAttributes) on null input. Thanks to Gary Gregory. 
+o          Avoid NullPointerException in DirectoryFileFilter.accept(File) on null input. Thanks to Gary Gregory. 
+o          Avoid NullPointerException in DirectoryFileFilter.accept(Path, BasicFileAttributes) on null input. Thanks to Gary Gregory. 
+o          Avoid NullPointerException in EmptyFileFilter.accept(File) on null input. Thanks to Gary Gregory. 
+o          Avoid NullPointerException in EmptyFileFilter.accept(Path, BasicFileAttributes) on null input. Thanks to Gary Gregory. 
+o          Avoid NullPointerException in FileFileFilter.accept(File) on null input. Thanks to Gary Gregory. 
+o          Avoid NullPointerException in FileFileFilter.accept(Path, BasicFileAttributes) on null input. Thanks to Gary Gregory. 
+o          Avoid NullPointerException in HiddenFileFilter.accept(File) on null input. Thanks to Gary Gregory. 
+o          Avoid NullPointerException in HiddenFileFilter.accept(Path, BasicFileAttributes) on null input. Thanks to Gary Gregory. 
+o          Avoid NullPointerException in IOCase.checkIndexOf(String, int, String) on null input. Thanks to Gary Gregory. 
+o          Avoid NullPointerException in IOCase.checkRegionMatches(String, int, String) on null input. Thanks to Gary Gregory. 
+o          BoundedInputStream.getCount() should not count EOF. Thanks to Gary Gregory. 
+o          Modernize temporary file creation and deletion in DeferredFileOutputStreamTest #535. Thanks to Elliotte Rusty Harold, Gary Gregory. 
+o          Add PathMatcher to IOFileFilter class Javadoc #536. Thanks to Elliotte Rusty Harold. 
+o IO-781:  Fix CharSequenceInputStream coding exception handling #537. Thanks to Marcono1234. 
+o IO-781:  Deprecate int CountingInputStream#getCount() in favor of long CountingInputStream#getByteCount(). Thanks to Marcono1234. 
+o IO-828:  Deprecate CountingInputStream.resetCount() in favor of resetByteCount(). Thanks to Elliotte Rusty Harold, Gary Gregory. 
+o IO-828:  Deprecate CountingInputStream.getMaxLength() in favor of getMaxCount()). Thanks to Gary Gregory. 
+o IO-818:  NullInputStream breaks InputStream's read method contract. Thanks to Gary Gregory. 
+o          Javadoc shouldn't reference 1.x behavior #539. Thanks to Elliotte Rusty Harold. 
+o IO-829:  Don't decode and reencode characters in a potentially different charset in AbstractOrigin.CharSequenceOrigin.getReader(Charset). Thanks to Elliotte Rusty Harold, Gary Gregory. 
+o          Let subclasses of CountingInputStream.afterRead(int) throw IOException. Thanks to Gary Gregory. 
+o IO-807:  Characterization test for broken symlinks when copying directories #547. Thanks to Elliotte Rusty Harold, Gary Gregory. 
+o          ClosedInputStream.read(byte[], int, int) does not always return -1. Thanks to Gary Gregory. 
+o          ClosedOutputStream.write(byte[], int, int) does not always throw IOException. Thanks to Gary Gregory. 
+o          XmlStreamReader can't parse an XML document with a multi-line prolog #550. Thanks to Sylwester Lachiewicz, Gary Gregory. 
+o          XmlStreamReader can't parse XML an document with an external parsed entity prolog. Thanks to Andreas Hubold, Gary Gregory. 
+o IO-836:  Update FileNameUtils Javadoc #554. Thanks to Elliotte Rusty Harold. 
+o IO-807:  Copy symlinks, not the files the symlinks point to #558. Thanks to Jordi Sola, Elliotte Rusty Harold. 
+o          Pickup apache-rat-plugin version from parent POM. Thanks to Gary Gregory. 
+o          Add test for copying a symlink FileUtilsTest#testCopyFile_symLink() #564. Thanks to Elliotte Rusty Harold. 
+o          Make copyFile copy symbolic links by value rather than reference #565. Thanks to Elliotte Rusty Harold. 
+o          Deprecate CopyUtils 0-argument constructor. Thanks to Gary Gregory. 
+o IO-843:  Deprecate EndianUtils 0-argument constructor. Thanks to Gary Gregory, Elliotte Rusty Harold. 
+o          Deprecate FileSystemUtils 0-argument constructor. Thanks to Gary Gregory. 
+o          Deprecate FilenameUtils 0-argument constructor. Thanks to Gary Gregory. 
+o          Deprecate RandomAccessFiles 0-argument constructor. Thanks to Gary Gregory. 
+o          Clarify and correct EndianUtils and SwappedDataInputStream API doc #566. Thanks to Elliotte Rusty Harold, Gary Gregory. 
+o          Add characterization test for copying a symlinked directory #570. Thanks to Elliotte Rusty Harold. 
+o          RandomAccessFileInputStream.builder().get() now throws ISE instead of NPE. Thanks to Gary Gregory. 
+o IO-845:  Test links to targets outside the source directory #571. Thanks to Elliotte Rusty Harold. 
+o          Focus Javadoc on current version rather than past versions #573, #574. Thanks to Elliotte Rusty Harold. 
+o IO-469:  "Self-suppression not permitted" while using BrokenOutput and BrokenInput streams with try-with-resources. Thanks to Grigory Fadeev, Kristian Rosenvold, Elliotte Rusty Harold. 
+o IO-405:  Handle zero and negative thresholds #587. Thanks to Elliotte Rusty Harold. 
+o          Deprecate CountingInputStream in favor of BoundedInputStream. Thanks to Gary Gregory. 
+o          PathUtils.setPosixPermissions(...) only sets permissions if needed. Thanks to Gary Gregory. 
+o          PathUtils.setReadOnly(...) only sets permissions if needed. Thanks to Gary Gregory. 
+o          PathUtils.deleteFile(..., DeleteOption...) only sets permissions if needed. Thanks to Gary Gregory. 
+o          CleaningPathVisitor only sets permissions if needed. Thanks to Gary Gregory. 
+o          DeletingPathVisitor only sets permissions if needed. Thanks to Gary Gregory. 
+
+Changes
+-------
+
+o          Bump commons.bytebuddy.version from 1.14.10 to 1.14.12 #534, #592. Thanks to Gary Gregory. 
+o          Bump org.apache.commons:commons-parent from 65 to 67. Thanks to Gary Gregory. 
+o          Bump commons-codec:commons-codec from 1.16.0 to 1.16.1 #583. Thanks to Dependabot. 
+o          Bump org.codehaus.mojo:exec-maven-plugin from 3.1.1 to 3.2.0 #593. Thanks to Dependabot. 
+
+
+Commons IO 2.7 and up requires Java 8 or above.
+Commons IO 2.6 requires Java 7 or above.
+Commons IO 2.3 through 2.5 requires Java 6 or above.
+Commons IO 2.2 requires Java 5 or above.
+Commons IO 1.4 requires Java 1.3 or above.
+
+Historical list of changes: https://commons.apache.org/proper/commons-io/changes-report.html
+
+For complete information on Apache Commons IO, including instructions on how to submit bug reports,
+patches, or suggestions for improvement, see the Apache Commons IO website:
+
+https://commons.apache.org/proper/commons-io/
+
+Download page: https://commons.apache.org/proper/commons-io/download_io.cgi
+
+Have fun!
+-Apache Commons Team
+
+------------------------------------------------------------------------------
+
+
 Apache Commons IO 
 Version 2.15.1
 Release Notes
