@@ -389,7 +389,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     public void test_openOutputStream_existsButIsDirectory() {
         final File directory = new File(tempDirFile, "subdir");
         directory.mkdirs();
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.openOutputStream(directory));
+        assertThrows(IOException.class, () -> FileUtils.openOutputStream(directory));
     }
 
     /**
@@ -597,11 +597,11 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     @Test
     public void testChecksumOnDirectory() {
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.checksum(FileUtils.current(), new CRC32()));
+        assertThrows(IOException.class, () -> FileUtils.checksum(FileUtils.current(), new CRC32()));
     }
 
     @Test
-    public void testChecksumOnNullChecksum() throws Exception {
+    public void testChecksumOnNullChecksum() throws IOException {
         // create a test file
         final String text = "Imagination is more important than knowledge - Einstein";
         final File file = new File(tempDirFile, "checksum-test.txt");
@@ -640,7 +640,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(FileUtils.contentEquals(file2, file));
 
         // Directories
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.contentEquals(tempDirFile, tempDirFile));
+        assertThrows(IOException.class, () -> FileUtils.contentEquals(tempDirFile, tempDirFile));
 
         // Different files
         final File objFile1 =
@@ -691,8 +691,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(FileUtils.contentEqualsIgnoreEOL(file2, file1, null));
 
         // Directories
-        assertThrows(IllegalArgumentException.class,
-            () -> FileUtils.contentEqualsIgnoreEOL(tempDirFile, tempDirFile, null));
+        assertThrows(IOException.class, () -> FileUtils.contentEqualsIgnoreEOL(tempDirFile, tempDirFile, null));
 
         // Different files
         final File tfile1 = new File(tempDirFile, getName() + ".txt1");
@@ -916,21 +915,20 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     @Test
     public void testCopyDirectoryExceptions() {
-        //
         // NullPointerException
         assertThrows(NullPointerException.class, () -> FileUtils.copyDirectory(null, null));
         assertThrows(NullPointerException.class, () -> FileUtils.copyDirectory(null, testFile1));
         assertThrows(NullPointerException.class, () -> FileUtils.copyDirectory(testFile1, null));
         assertThrows(NullPointerException.class, () -> FileUtils.copyDirectory(null, new File("a")));
-        //
-        // IllegalArgumentException
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.copyDirectory(testFile1, new File("a")));
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.copyDirectory(testFile1, new File("a")));
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.copyDirectory(tempDirFile, tempDirFile));
-        //
+
         // IOException
-        assertThrows(IOException.class, () -> FileUtils.copyDirectory(new File("doesnt-exist"), new File("a")));
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.copyDirectory(tempDirFile, testFile1));
+        assertThrows(IOException.class, () -> FileUtils.copyDirectory(testFile1, new File("a")));
+        assertThrows(IOException.class, () -> FileUtils.copyDirectory(testFile1, new File("a")));
+        assertThrows(FileNotFoundException.class, () -> FileUtils.copyDirectory(new File("doesnt-exist"), new File("a")));
+        assertThrows(IOException.class, () -> FileUtils.copyDirectory(tempDirFile, testFile1));
+
+        // IllegalArgumentException
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.copyDirectory(tempDirFile, tempDirFile));
     }
 
     @Test
@@ -1548,7 +1546,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     @Test
     public void testDeleteDirectoryWithNonDirectory() {
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.deleteDirectory(testFile1));
+        assertThrows(IOException.class, () -> FileUtils.deleteDirectory(testFile1));
     }
 
     @Test
@@ -2378,7 +2376,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
             TestUtils.generateTestData(output, 0);
         }
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.moveDirectory(testFile, new File("foo")));
+        assertThrows(IOException.class, () -> FileUtils.moveDirectory(testFile, new File("foo")));
         final File testSrcFile = new File(tempDirFile, "testMoveDirectorySource");
         final File testDestFile = new File(tempDirFile, "testMoveDirectoryDest");
         testSrcFile.mkdir();
@@ -2585,7 +2583,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertThrows(NullPointerException.class, () -> FileUtils.moveFile(null, new File("foo")));
         assertThrows(NullPointerException.class, () -> FileUtils.moveFile(new File("foo"), null));
         assertThrows(FileNotFoundException.class, () -> FileUtils.moveFile(new File("non-existent"), new File("foo")));
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.moveFile(tempDirFile, new File("foo")));
+        assertThrows(IOException.class, () -> FileUtils.moveFile(tempDirFile, new File("foo")));
         final File testSourceFile = new File(tempDirFile, "testMoveFileSource");
         final File testDestFile = new File(tempDirFile, "testMoveFileSource");
         if (!testSourceFile.getParentFile().exists()) {
@@ -2650,7 +2648,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         } finally {
             IOUtils.closeQuietly(output);
         }
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.moveFileToDirectory(testFile1, testFile2, true));
+        assertThrows(IOException.class, () -> FileUtils.moveFileToDirectory(testFile1, testFile2, true));
 
         final File nonExistent = new File(tempDirFile, "testMoveFileNonExistent");
         assertThrows(IOException.class, () -> FileUtils.moveFileToDirectory(testFile1, nonExistent, false));
@@ -2867,7 +2865,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         file.createNewFile();
 
         // Existing file
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.sizeOfDirectory(file));
+        assertThrows(UncheckedIOException.class, () -> FileUtils.sizeOfDirectory(file));
 
         // Existing directory
         file.delete();
@@ -2899,7 +2897,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         file.createNewFile();
 
         // Existing file
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.sizeOfDirectoryAsBigInteger(file));
+        assertThrows(UncheckedIOException.class, () -> FileUtils.sizeOfDirectoryAsBigInteger(file));
 
         // Existing directory
         file.delete();
