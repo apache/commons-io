@@ -47,10 +47,13 @@ The <action> type attribute can be add,update,fix,remove.
   </properties>
   <body>
     <release version="2.16.1" date="YYYY-MM-DD" description="Java 8 is required.">
+      <!-- FIX -->
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Reimplement FileSystemUtils using NIO.</action>
+      <!-- UPDATE -->
+      <action dev="ggregory" type="update"             due-to="Gary Gregory">Bump commons.bytebuddy.version from 1.14.12 to 1.14.13 #605.</action>
     </release>
     <release version="2.16.0" date="2024-03-25" description="Java 8 is required.">
-      <!-- Fix -->
+      <!-- FIX -->
       <action dev="ggregory" type="fix" due-to="Elliotte Rusty Harold">Fix and re-enable testSkip_RequiredCharsets #518.</action>
       <action dev="ggregory" type="fix" issue="IO-824" due-to="Miguel Munoz, Gary Gregory">SymbolicLineFileFilter documentation fixes.</action>
       <action dev="ggregory" type="fix" issue="IO-795" due-to="Miguel Munoz, Gary Gregory">CharSequenceInputStream.reset() only works once #520.</action>
