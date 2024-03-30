@@ -49,6 +49,7 @@ The <action> type attribute can be add,update,fix,remove.
     <release version="2.16.1" date="YYYY-MM-DD" description="Java 8 is required.">
       <!-- FIX -->
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Reimplement FileSystemUtils using NIO.</action>
+      <action dev="ggregory" type="fix" issue="IO-851" due-to="Sebb, Gary Gregory">FileSystemUtils no longer throws IllegalStateException.</action>      
       <!-- UPDATE -->
       <action dev="ggregory" type="update"             due-to="Gary Gregory">Bump commons.bytebuddy.version from 1.14.12 to 1.14.13 #605.</action>
     </release>
