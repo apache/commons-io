@@ -55,8 +55,7 @@ public class FileSystemUtils {
      * @param path the path to get free space for, not null, not empty on UNIX
      * @return the amount of free drive space on the drive or volume
      * @throws IOException              if an I/O error occurs.
-     * @throws IllegalArgumentException if the path is invalid
-     * @throws IllegalStateException    if an error occurred in initialization
+     * @throws IllegalArgumentException if the path is invalid.
      * @since 1.1, enhanced OS support in 1.2 and 1.3
      * @deprecated Use freeSpaceKb(String) Deprecated from 1.3, may be removed in 2.0
      */
@@ -76,8 +75,8 @@ public class FileSystemUtils {
      * </pre>
      *
      * @return the amount of free drive space on the drive or volume in kilobytes
-     * @throws IOException           if an I/O error occurs.
-     * @throws IllegalStateException if an error occurred in initialization
+     * @throws IOException              if an I/O error occurs.
+     * @throws IllegalArgumentException if the path is invalid.
      * @since 2.0
      * @deprecated As of 2.6 deprecated without replacement. Please use {@link java.nio.file.FileStore#getUsableSpace()}.
      */
@@ -98,8 +97,8 @@ public class FileSystemUtils {
      *
      * @param timeout ignored.
      * @return the amount of free drive space on the drive or volume in kilobytes
-     * @throws IOException           if an I/O error occurs.
-     * @throws IllegalStateException if an error occurred in initialization
+     * @throws IOException              if an I/O error occurs.
+     * @throws IllegalArgumentException if the path is invalid.
      * @since 2.0
      * @deprecated As of 2.6 deprecated without replacement. Please use {@link java.nio.file.FileStore#getUsableSpace()}.
      */
@@ -119,8 +118,7 @@ public class FileSystemUtils {
      * @param path the path to get free space for, not null, not empty on UNIX
      * @return the amount of free drive space on the drive or volume in kilobytes
      * @throws IOException              if an I/O error occurs.
-     * @throws IllegalArgumentException if the path is invalid
-     * @throws IllegalStateException    if an error occurred in initialization
+     * @throws IllegalArgumentException if the path is invalid.
      * @since 1.2, enhanced OS support in 1.3
      * @deprecated As of 2.6 deprecated without replacement. Please use {@link java.nio.file.FileStore#getUsableSpace()}.
      */
@@ -141,8 +139,7 @@ public class FileSystemUtils {
      * @param timeout ignored.
      * @return the amount of free drive space on the drive or volume in kilobytes
      * @throws IOException              if an I/O error occurs.
-     * @throws IllegalArgumentException if the path is invalid
-     * @throws IllegalStateException    if an error occurred in initialization
+     * @throws IllegalArgumentException if the path is invalid.
      * @since 2.0
      * @deprecated As of 2.6 deprecated without replacement. Please use {@link java.nio.file.FileStore#getUsableSpace()}.
      */
@@ -162,8 +159,7 @@ public class FileSystemUtils {
      * @param pathStr the path to get free space for, not null, not empty on UNIX
      * @return the amount of free drive space on the drive or volume
      * @throws IOException              if an I/O error occurs.
-     * @throws IllegalArgumentException if the path is invalid
-     * @throws IllegalStateException    if an error occurred in initialization
+     * @throws IllegalArgumentException if the path is invalid.
      */
     static long getFreeSpace(final String pathStr) throws IOException {
         final Path path = Paths.get(Objects.requireNonNull(pathStr, "pathStr"));
