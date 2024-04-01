@@ -2230,14 +2230,16 @@ public class FileUtils {
     }
 
     private static AccumulatorPathVisitor listAccumulate(final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter,
-        final FileVisitOption... options) throws IOException {
+            final FileVisitOption... options) throws IOException {
         final boolean isDirFilterSet = dirFilter != null;
         final FileEqualsFileFilter rootDirFilter = new FileEqualsFileFilter(directory);
         final PathFilter dirPathFilter = isDirFilterSet ? rootDirFilter.or(dirFilter) : rootDirFilter;
         final AccumulatorPathVisitor visitor = new AccumulatorPathVisitor(Counters.noopPathCounters(), fileFilter, dirPathFilter,
-            (p, e) -> FileVisitResult.CONTINUE);
+                (p, e) -> FileVisitResult.CONTINUE);
         final Set<FileVisitOption> optionSet = new HashSet<>();
-        Collections.addAll(optionSet, options);
+        if (options != null) {
+            Collections.addAll(optionSet, options);
+        }
         Files.walkFileTree(directory.toPath(), optionSet, toMaxDepth(isDirFilterSet), visitor);
         return visitor;
     }
