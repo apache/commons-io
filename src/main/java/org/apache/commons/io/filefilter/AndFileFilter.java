@@ -179,8 +179,8 @@ public class AndFileFilter extends AbstractFileFilter implements ConditionalFile
      */
     @Override
     public void setFileFilters(final List<IOFileFilter> fileFilters) {
-        fileFilters.clear();
-        fileFilters.addAll(fileFilters);
+        this.fileFilters.clear();
+        this.fileFilters.addAll(fileFilters);
     }
 
     /**
