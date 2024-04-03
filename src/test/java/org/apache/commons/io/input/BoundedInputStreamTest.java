@@ -86,6 +86,8 @@ public class BoundedInputStreamTest {
             assertEquals(readCount + actualStart, bounded.getCount());
             assertEquals(0, bounded.getRemaining());
             assertEquals(0, bounded.available());
+            // should be invariant
+            assertTrue(bounded.markSupported());
         }
         // limit > length
         final int maxCountP1 = helloWorld.length + 1;
@@ -115,6 +117,8 @@ public class BoundedInputStreamTest {
             assertEquals(maxCountP1, bounded.getMaxLength());
             assertEquals(readCount + actualStart, bounded.getCount());
             assertEquals(Math.max(0, maxCountP1 - bounded.getCount()), bounded.getRemaining());
+            // should be invariant
+            assertTrue(bounded.markSupported());
         }
         // limit < length
         try (BoundedInputStream bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), hello.length)) {
@@ -135,6 +139,8 @@ public class BoundedInputStreamTest {
             assertEquals(hello.length, bounded.getMaxLength());
             assertEquals(readCount, bounded.getCount());
             assertEquals(bounded.getMaxLength() - readCount, bounded.getRemaining());
+            // should be invariant
+            assertTrue(bounded.markSupported());
         }
     }
 
@@ -175,6 +181,8 @@ public class BoundedInputStreamTest {
             assertEquals(readCount, bounded.getCount());
             assertEquals(bounded.getMaxLength() - readCount, bounded.getRemaining());
             assertTrue(boolRef.get());
+            // should be invariant
+            assertTrue(bounded.markSupported());
         }
         // limit > length
         boolRef.set(false);
@@ -204,6 +212,8 @@ public class BoundedInputStreamTest {
             assertEquals(readCount, bounded.getCount());
             assertEquals(bounded.getMaxLength() - readCount, bounded.getRemaining());
             assertFalse(boolRef.get());
+            // should be invariant
+            assertTrue(bounded.markSupported());
         }
         // limit < length
         boolRef.set(false);
@@ -231,6 +241,8 @@ public class BoundedInputStreamTest {
             assertEquals(readCount, bounded.getCount());
             assertEquals(bounded.getMaxLength() - readCount, bounded.getRemaining());
             assertTrue(boolRef.get());
+            // should be invariant
+            assertTrue(bounded.markSupported());
         }
     }
 
@@ -239,22 +251,76 @@ public class BoundedInputStreamTest {
         final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
         final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
         try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).get()) {
+            assertTrue(bounded.markSupported());
             compare("limit = -1", helloWorld, IOUtils.toByteArray(bounded));
+            // should be invariant
+            assertTrue(bounded.markSupported());
         }
         try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).setMaxCount(0).get()) {
+            assertTrue(bounded.markSupported());
             compare("limit = 0", IOUtils.EMPTY_BYTE_ARRAY, IOUtils.toByteArray(bounded));
+            // should be invariant
+            assertTrue(bounded.markSupported());
         }
         try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld))
                 .setMaxCount(helloWorld.length).get()) {
+            assertTrue(bounded.markSupported());
             compare("limit = length", helloWorld, IOUtils.toByteArray(bounded));
+            // should be invariant
+            assertTrue(bounded.markSupported());
         }
         try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld))
                 .setMaxCount(helloWorld.length + 1).get()) {
+            assertTrue(bounded.markSupported());
             compare("limit > length", helloWorld, IOUtils.toByteArray(bounded));
+            // should be invariant
+            assertTrue(bounded.markSupported());
         }
         try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld))
                 .setMaxCount(helloWorld.length - 6).get()) {
+            assertTrue(bounded.markSupported());
             compare("limit < length", hello, IOUtils.toByteArray(bounded));
+            // should be invariant
+            assertTrue(bounded.markSupported());
+        }
+    }
+
+    @Test
+    public void testReset() throws Exception {
+        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
+        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
+        try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).get()) {
+            assertTrue(bounded.markSupported());
+            compare("limit = -1", helloWorld, IOUtils.toByteArray(bounded));
+            // should be invariant
+            assertTrue(bounded.markSupported());
+        }
+        try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).setMaxCount(0).get()) {
+            assertTrue(bounded.markSupported());
+            compare("limit = 0", IOUtils.EMPTY_BYTE_ARRAY, IOUtils.toByteArray(bounded));
+            // should be invariant
+            assertTrue(bounded.markSupported());
+        }
+        try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld))
+                .setMaxCount(helloWorld.length).get()) {
+            assertTrue(bounded.markSupported());
+            compare("limit = length", helloWorld, IOUtils.toByteArray(bounded));
+            // should be invariant
+            assertTrue(bounded.markSupported());
+        }
+        try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld))
+                .setMaxCount(helloWorld.length + 1).get()) {
+            assertTrue(bounded.markSupported());
+            compare("limit > length", helloWorld, IOUtils.toByteArray(bounded));
+            // should be invariant
+            assertTrue(bounded.markSupported());
+        }
+        try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld))
+                .setMaxCount(helloWorld.length - 6).get()) {
+            assertTrue(bounded.markSupported());
+            compare("limit < length", hello, IOUtils.toByteArray(bounded));
+            // should be invariant
+            assertTrue(bounded.markSupported());
         }
     }
 
@@ -270,6 +336,8 @@ public class BoundedInputStreamTest {
                 assertEquals(helloWorld[i], bounded.read(), "limit = length byte[" + i + "]");
             }
             assertEquals(-1, bounded.read(), "limit = length end");
+            // should be invariant
+            assertTrue(bounded.markSupported());
         }
         // limit > length
         try (BoundedInputStream bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length + 1)) {
@@ -278,6 +346,8 @@ public class BoundedInputStreamTest {
                 assertEquals(helloWorld[i], bounded.read(), "limit > length byte[" + i + "]");
             }
             assertEquals(-1, bounded.read(), "limit > length end");
+            // should be invariant
+            assertTrue(bounded.markSupported());
         }
         // limit < length
         try (BoundedInputStream bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), hello.length)) {
@@ -286,6 +356,8 @@ public class BoundedInputStreamTest {
                 assertEquals(hello[i], bounded.read(), "limit < length byte[" + i + "]");
             }
             assertEquals(-1, bounded.read(), "limit < length end");
+            // should be invariant
+            assertTrue(bounded.markSupported());
         }
     }
 }
