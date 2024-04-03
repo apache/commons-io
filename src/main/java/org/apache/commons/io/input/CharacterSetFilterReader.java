@@ -37,8 +37,7 @@ public class CharacterSetFilterReader extends AbstractCharacterFilterReader {
         if (skip == null) {
             return SKIP_NONE;
         }
-        final Set<Integer> unmodifiableSet = Collections.unmodifiableSet(skip);
-        return c -> unmodifiableSet.contains(Integer.valueOf(c));
+        return c -> Collections.unmodifiableSet(skip).contains(Integer.valueOf(c));
     }
 
     /**
