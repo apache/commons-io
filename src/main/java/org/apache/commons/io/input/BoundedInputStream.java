@@ -249,6 +249,9 @@ public class BoundedInputStream extends ProxyInputStream {
     /** The current count of bytes counted. */
     private long count;
 
+    /** The current mark. */
+    private long mark;
+
     /** The max count of bytes to read. */
     private final long maxCount;
 
@@ -347,7 +350,7 @@ public class BoundedInputStream extends ProxyInputStream {
      * @return The count of bytes read.
      * @since 2.12.0
      */
-    public long getCount() {
+    public synchronized long getCount() {
         return count;
     }
 
@@ -404,6 +407,7 @@ public class BoundedInputStream extends ProxyInputStream {
     @Override
     public synchronized void mark(final int readLimit) {
         in.mark(readLimit);
+        mark = count;
     }
 
     /**
@@ -482,6 +486,7 @@ public class BoundedInputStream extends ProxyInputStream {
     @Override
     public synchronized void reset() throws IOException {
         in.reset();
+        count = mark;
     }
 
     /**
@@ -504,7 +509,7 @@ public class BoundedInputStream extends ProxyInputStream {
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public long skip(final long n) throws IOException {
+    public synchronized long skip(final long n) throws IOException {
         final long skip = super.skip(toReadLen(n));
         count += skip;
         return skip;

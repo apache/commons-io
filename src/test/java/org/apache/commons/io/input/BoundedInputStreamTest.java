@@ -27,6 +27,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -36,10 +37,12 @@ import org.junit.jupiter.params.provider.ValueSource;
  */
 public class BoundedInputStreamTest {
 
-    private void compare(final String msg, final byte[] expected, final byte[] actual) {
-        assertEquals(expected.length, actual.length, msg + " length");
+    private void compare(final String message, final byte[] expected, final byte[] actual) {
+        assertEquals(expected.length, actual.length, () -> message + " (array length equals check)");
+        final MutableInt mi = new MutableInt();
         for (int i = 0; i < expected.length; i++) {
-            assertEquals(expected[i], actual[i], msg + " byte[" + i + "]");
+            mi.setValue(i);
+            assertEquals(expected[i], actual[i], () -> message + " byte[" + mi + "]");
         }
     }
 
@@ -139,6 +142,107 @@ public class BoundedInputStreamTest {
             assertEquals(hello.length, bounded.getMaxLength());
             assertEquals(readCount, bounded.getCount());
             assertEquals(bounded.getMaxLength() - readCount, bounded.getRemaining());
+            // should be invariant
+            assertTrue(bounded.markSupported());
+        }
+    }
+
+    @Test
+    public void testMarkReset() throws Exception {
+        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
+        final int helloWorldLen = helloWorld.length;
+        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
+        final byte[] world = " World".getBytes(StandardCharsets.UTF_8);
+        final int helloLen = hello.length;
+        // limit = -1
+        try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).get()) {
+            assertTrue(bounded.markSupported());
+            bounded.mark(0);
+            compare("limit = -1", helloWorld, IOUtils.toByteArray(bounded));
+            // should be invariant
+            assertTrue(bounded.markSupported());
+            // again
+            bounded.reset();
+            compare("limit = -1", hello, IOUtils.toByteArray(bounded, helloLen));
+            bounded.mark(helloWorldLen);
+            compare("limit = -1", world, IOUtils.toByteArray(bounded));
+            bounded.reset();
+            compare("limit = -1", world, IOUtils.toByteArray(bounded));
+            // should be invariant
+            assertTrue(bounded.markSupported());
+        }
+        // limit = 0
+        try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).setMaxCount(0).get()) {
+            assertTrue(bounded.markSupported());
+            bounded.mark(0);
+            compare("limit = 0", IOUtils.EMPTY_BYTE_ARRAY, IOUtils.toByteArray(bounded));
+            // should be invariant
+            assertTrue(bounded.markSupported());
+            // again
+            bounded.reset();
+            compare("limit = 0", IOUtils.EMPTY_BYTE_ARRAY, IOUtils.toByteArray(bounded));
+            bounded.mark(helloWorldLen);
+            compare("limit = 0", IOUtils.EMPTY_BYTE_ARRAY, IOUtils.toByteArray(bounded));
+            // should be invariant
+            assertTrue(bounded.markSupported());
+        }
+        // limit = length
+        try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld))
+                .setMaxCount(helloWorld.length).get()) {
+            assertTrue(bounded.markSupported());
+            bounded.mark(0);
+            compare("limit = length", helloWorld, IOUtils.toByteArray(bounded));
+            // should be invariant
+            assertTrue(bounded.markSupported());
+            // again
+            bounded.reset();
+            compare("limit = length", hello, IOUtils.toByteArray(bounded, helloLen));
+            bounded.mark(helloWorldLen);
+            compare("limit = length", world, IOUtils.toByteArray(bounded));
+            bounded.reset();
+            compare("limit = length", world, IOUtils.toByteArray(bounded));
+            // should be invariant
+            assertTrue(bounded.markSupported());
+        }
+        // limit > length
+        try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld))
+                .setMaxCount(helloWorld.length + 1).get()) {
+            assertTrue(bounded.markSupported());
+            bounded.mark(0);
+            compare("limit > length", helloWorld, IOUtils.toByteArray(bounded));
+            // should be invariant
+            assertTrue(bounded.markSupported());
+            // again
+            bounded.reset();
+            compare("limit > length", helloWorld, IOUtils.toByteArray(bounded));
+            bounded.reset();
+            compare("limit > length", hello, IOUtils.toByteArray(bounded, helloLen));
+            bounded.mark(helloWorldLen);
+            compare("limit > length", world, IOUtils.toByteArray(bounded));
+            bounded.reset();
+            compare("limit > length", world, IOUtils.toByteArray(bounded));
+            // should be invariant
+            assertTrue(bounded.markSupported());
+        }
+        // limit < length
+        try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld))
+                .setMaxCount(helloWorld.length - (hello.length + 1)).get()) {
+            assertTrue(bounded.markSupported());
+            bounded.mark(0);
+            compare("limit < length", hello, IOUtils.toByteArray(bounded));
+            // should be invariant
+            assertTrue(bounded.markSupported());
+            // again
+            bounded.reset();
+            compare("limit < length", hello, IOUtils.toByteArray(bounded));
+            //
+            bounded.reset();
+            compare("limit < length", hello, IOUtils.toByteArray(bounded, helloLen));
+            bounded.mark(helloWorldLen);
+            compare("limit < length", IOUtils.EMPTY_BYTE_ARRAY, IOUtils.toByteArray(bounded));
+            bounded.reset();
+            compare("limit < length", IOUtils.EMPTY_BYTE_ARRAY, IOUtils.toByteArray(bounded));
+
             // should be invariant
             assertTrue(bounded.markSupported());
         }
@@ -326,35 +430,70 @@ public class BoundedInputStreamTest {
     public void testReset() throws Exception {
         final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
         final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
+        // limit = -1
         try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).get()) {
             assertTrue(bounded.markSupported());
+            bounded.reset();
+            compare("limit = -1", helloWorld, IOUtils.toByteArray(bounded));
+            // should be invariant
+            assertTrue(bounded.markSupported());
+            // again
+            bounded.reset();
             compare("limit = -1", helloWorld, IOUtils.toByteArray(bounded));
             // should be invariant
             assertTrue(bounded.markSupported());
         }
+        // limit = 0
         try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).setMaxCount(0).get()) {
             assertTrue(bounded.markSupported());
+            bounded.reset();
+            compare("limit = 0", IOUtils.EMPTY_BYTE_ARRAY, IOUtils.toByteArray(bounded));
+            // should be invariant
+            assertTrue(bounded.markSupported());
+            // again
+            bounded.reset();
             compare("limit = 0", IOUtils.EMPTY_BYTE_ARRAY, IOUtils.toByteArray(bounded));
             // should be invariant
             assertTrue(bounded.markSupported());
         }
+        // limit = length
         try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld))
                 .setMaxCount(helloWorld.length).get()) {
             assertTrue(bounded.markSupported());
+            bounded.reset();
+            compare("limit = length", helloWorld, IOUtils.toByteArray(bounded));
+            // should be invariant
+            assertTrue(bounded.markSupported());
+            // again
+            bounded.reset();
             compare("limit = length", helloWorld, IOUtils.toByteArray(bounded));
             // should be invariant
             assertTrue(bounded.markSupported());
         }
+        // limit > length
         try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld))
                 .setMaxCount(helloWorld.length + 1).get()) {
             assertTrue(bounded.markSupported());
+            bounded.reset();
+            compare("limit > length", helloWorld, IOUtils.toByteArray(bounded));
+            // should be invariant
+            assertTrue(bounded.markSupported());
+            // again
+            bounded.reset();
             compare("limit > length", helloWorld, IOUtils.toByteArray(bounded));
             // should be invariant
             assertTrue(bounded.markSupported());
         }
+        // limit < length
         try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld))
                 .setMaxCount(helloWorld.length - 6).get()) {
             assertTrue(bounded.markSupported());
+            bounded.reset();
+            compare("limit < length", hello, IOUtils.toByteArray(bounded));
+            // should be invariant
+            assertTrue(bounded.markSupported());
+            // again
+            bounded.reset();
             compare("limit < length", hello, IOUtils.toByteArray(bounded));
             // should be invariant
             assertTrue(bounded.markSupported());
