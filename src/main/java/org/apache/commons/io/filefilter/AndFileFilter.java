@@ -41,9 +41,7 @@ import java.util.stream.Stream;
  * @since 1.0
  * @see FileFilterUtils#and(IOFileFilter...)
  */
-public class AndFileFilter
-        extends AbstractFileFilter
-        implements ConditionalFileFilter, Serializable {
+public class AndFileFilter extends AbstractFileFilter implements ConditionalFileFilter, Serializable {
 
     private static final long serialVersionUID = 7215974688563965257L;
 
@@ -79,8 +77,8 @@ public class AndFileFilter
 
     /**
      * Constructs a new instance for the give filters.
-     * @param fileFilters filters to OR.
      *
+     * @param fileFilters filters to OR.
      * @since 2.9.0
      */
     public AndFileFilter(final IOFileFilter... fileFilters) {
@@ -143,7 +141,7 @@ public class AndFileFilter
      */
     @Override
     public void addFileFilter(final IOFileFilter fileFilter) {
-        this.fileFilters.add(Objects.requireNonNull(fileFilter, "fileFilter"));
+        fileFilters.add(Objects.requireNonNull(fileFilter, "fileFilter"));
     }
 
     /**
@@ -161,11 +159,11 @@ public class AndFileFilter
      */
     @Override
     public List<IOFileFilter> getFileFilters() {
-        return Collections.unmodifiableList(this.fileFilters);
+        return Collections.unmodifiableList(fileFilters);
     }
 
     private boolean isEmpty() {
-        return this.fileFilters.isEmpty();
+        return fileFilters.isEmpty();
     }
 
     /**
@@ -173,7 +171,7 @@ public class AndFileFilter
      */
     @Override
     public boolean removeFileFilter(final IOFileFilter ioFileFilter) {
-        return this.fileFilters.remove(ioFileFilter);
+        return fileFilters.remove(ioFileFilter);
     }
 
     /**
@@ -181,12 +179,12 @@ public class AndFileFilter
      */
     @Override
     public void setFileFilters(final List<IOFileFilter> fileFilters) {
-        this.fileFilters.clear();
-        this.fileFilters.addAll(fileFilters);
+        fileFilters.clear();
+        fileFilters.addAll(fileFilters);
     }
 
     /**
-     * Provide a String representation of this file filter.
+     * Builds a String representation of this file filter.
      *
      * @return a String representation
      */
