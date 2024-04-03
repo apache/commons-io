@@ -235,14 +235,12 @@ public class BoundedInputStreamTest {
             // again
             bounded.reset();
             compare("limit < length", hello, IOUtils.toByteArray(bounded));
-            //
             bounded.reset();
             compare("limit < length", hello, IOUtils.toByteArray(bounded, helloLen));
             bounded.mark(helloWorldLen);
             compare("limit < length", IOUtils.EMPTY_BYTE_ARRAY, IOUtils.toByteArray(bounded));
             bounded.reset();
             compare("limit < length", IOUtils.EMPTY_BYTE_ARRAY, IOUtils.toByteArray(bounded));
-
             // should be invariant
             assertTrue(bounded.markSupported());
         }
@@ -254,7 +252,6 @@ public class BoundedInputStreamTest {
         final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
         final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
         final AtomicBoolean boolRef = new AtomicBoolean();
-
         // limit = length
         try (BoundedInputStream bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length) {
             @Override
