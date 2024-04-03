@@ -1686,7 +1686,7 @@ public class IOUtils {
     /**
      * Fills the given array with 0s.
      *
-     * @param arr The array to fill.
+     * @param arr The non-null array to fill.
      * @return The given array.
      */
     private static byte[] fill0(final byte[] arr) {
@@ -1697,7 +1697,7 @@ public class IOUtils {
     /**
      * Fills the given array with 0s.
      *
-     * @param arr The array to fill.
+     * @param arr The non-null array to fill.
      * @return The given array.
      */
     private static char[] fill0(final char[] arr) {
