@@ -1414,9 +1414,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     @Test
     public void testCopyToDirectoryWithIterableSourceDoesNotExist() {
-        assertThrows(IOException.class,
-                () -> FileUtils.copyToDirectory(Collections.singleton(new File(tempDirFile, "doesNotExists")),
-                        tempDirFile));
+        assertThrows(IOException.class, () -> FileUtils.copyToDirectory(Collections.singleton(new File(tempDirFile, "doesNotExists")), tempDirFile));
     }
 
     @Test
