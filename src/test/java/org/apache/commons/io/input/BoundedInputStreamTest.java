@@ -285,6 +285,43 @@ public class BoundedInputStreamTest {
         }
     }
 
+    @SuppressWarnings("deprecation")
+    @Test
+    public void testReadSingle() throws Exception {
+        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
+        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
+        // limit = length
+        try (BoundedInputStream bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length)) {
+            assertTrue(bounded.markSupported());
+            for (int i = 0; i < helloWorld.length; i++) {
+                assertEquals(helloWorld[i], bounded.read(), "limit = length byte[" + i + "]");
+            }
+            assertEquals(-1, bounded.read(), "limit = length end");
+            // should be invariant
+            assertTrue(bounded.markSupported());
+        }
+        // limit > length
+        try (BoundedInputStream bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length + 1)) {
+            assertTrue(bounded.markSupported());
+            for (int i = 0; i < helloWorld.length; i++) {
+                assertEquals(helloWorld[i], bounded.read(), "limit > length byte[" + i + "]");
+            }
+            assertEquals(-1, bounded.read(), "limit > length end");
+            // should be invariant
+            assertTrue(bounded.markSupported());
+        }
+        // limit < length
+        try (BoundedInputStream bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), hello.length)) {
+            assertTrue(bounded.markSupported());
+            for (int i = 0; i < hello.length; i++) {
+                assertEquals(hello[i], bounded.read(), "limit < length byte[" + i + "]");
+            }
+            assertEquals(-1, bounded.read(), "limit < length end");
+            // should be invariant
+            assertTrue(bounded.markSupported());
+        }
+    }
+
     @Test
     public void testReset() throws Exception {
         final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
@@ -319,43 +356,6 @@ public class BoundedInputStreamTest {
                 .setMaxCount(helloWorld.length - 6).get()) {
             assertTrue(bounded.markSupported());
             compare("limit < length", hello, IOUtils.toByteArray(bounded));
-            // should be invariant
-            assertTrue(bounded.markSupported());
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    @Test
-    public void testReadSingle() throws Exception {
-        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
-        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
-        // limit = length
-        try (BoundedInputStream bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length)) {
-            assertTrue(bounded.markSupported());
-            for (int i = 0; i < helloWorld.length; i++) {
-                assertEquals(helloWorld[i], bounded.read(), "limit = length byte[" + i + "]");
-            }
-            assertEquals(-1, bounded.read(), "limit = length end");
-            // should be invariant
-            assertTrue(bounded.markSupported());
-        }
-        // limit > length
-        try (BoundedInputStream bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length + 1)) {
-            assertTrue(bounded.markSupported());
-            for (int i = 0; i < helloWorld.length; i++) {
-                assertEquals(helloWorld[i], bounded.read(), "limit > length byte[" + i + "]");
-            }
-            assertEquals(-1, bounded.read(), "limit > length end");
-            // should be invariant
-            assertTrue(bounded.markSupported());
-        }
-        // limit < length
-        try (BoundedInputStream bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), hello.length)) {
-            assertTrue(bounded.markSupported());
-            for (int i = 0; i < hello.length; i++) {
-                assertEquals(hello[i], bounded.read(), "limit < length byte[" + i + "]");
-            }
-            assertEquals(-1, bounded.read(), "limit < length end");
             // should be invariant
             assertTrue(bounded.markSupported());
         }
