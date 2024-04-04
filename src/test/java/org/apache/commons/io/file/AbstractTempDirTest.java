@@ -32,6 +32,24 @@ import org.junit.jupiter.api.io.TempDir;
 public abstract class AbstractTempDirTest {
 
     /**
+     * Creates directory test fixtures.
+     * <ol>
+     * <li>tempDirPath/subdir</li>
+     * <li>tempDirPath/symlinked-dir -> tempDirPath/subdir</li>
+     * </ol>
+     * @param rootDir Root for directory entries.
+     * @return Path to tempDirPath/subdir.
+     * @throws IOException if an I/O error occurs or the parent directory does not exist.
+     */
+    protected static Path createTempSymlinkedRelativeDir(final Path rootDir) throws IOException {
+        final Path targetDir = rootDir.resolve("subdir");
+        final Path symlinkDir = rootDir.resolve("symlinked-dir");
+        Files.createDirectory(targetDir);
+        Files.createSymbolicLink(symlinkDir, targetDir);
+        return symlinkDir;
+    }
+
+    /**
      * A temporary directory managed by JUnit.
      */
     @TempDir

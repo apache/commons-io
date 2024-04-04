@@ -73,24 +73,6 @@ public class PathUtilsTest extends AbstractTempDirTest {
 
     private static final String PATH_FIXTURE = "NOTICE.txt";
 
-    /**
-     * Creates directory test fixtures.
-     * <ol>
-     * <li>tempDirPath/subdir</li>
-     * <li>tempDirPath/symlinked-dir -> tempDirPath/subdir</li>
-     * </ol>
-     *
-     * @return Path to tempDirPath/subdir
-     * @throws IOException if an I/O error occurs or the parent directory does not exist.
-     */
-    private Path createTempSymlinkedRelativeDir() throws IOException {
-        final Path targetDir = tempDirPath.resolve("subdir");
-        final Path symlinkDir = tempDirPath.resolve("symlinked-dir");
-        Files.createDirectory(targetDir);
-        Files.createSymbolicLink(symlinkDir, targetDir);
-        return symlinkDir;
-    }
-
     private Path current() {
         return PathUtils.current();
     }
@@ -234,7 +216,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
 
     @Test
     public void testCreateDirectoriesSymlink() throws IOException {
-        final Path symlinkedDir = createTempSymlinkedRelativeDir();
+        final Path symlinkedDir = createTempSymlinkedRelativeDir(tempDirPath);
         final String leafDirName = "child";
         final Path newDirFollowed = PathUtils.createParentDirectories(symlinkedDir.resolve(leafDirName), PathUtils.NULL_LINK_OPTION);
         assertEquals(Files.readSymbolicLink(symlinkedDir), newDirFollowed);
@@ -242,7 +224,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
 
     @Test
     public void testCreateDirectoriesSymlinkClashing() throws IOException {
-        final Path symlinkedDir = createTempSymlinkedRelativeDir();
+        final Path symlinkedDir = createTempSymlinkedRelativeDir(tempDirPath);
         assertEquals(symlinkedDir, PathUtils.createParentDirectories(symlinkedDir.resolve("child")));
     }
 
@@ -428,7 +410,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
 
     @Test
     public void testNewOutputStreamNewFileInsideExistingSymlinkedDir() throws IOException {
-        final Path symlinkDir = createTempSymlinkedRelativeDir();
+        final Path symlinkDir = createTempSymlinkedRelativeDir(tempDirPath);
         final Path file = symlinkDir.resolve("test.txt");
         try (OutputStream outputStream = PathUtils.newOutputStream(file, new LinkOption[] {})) {
             // empty
