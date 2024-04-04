@@ -1841,6 +1841,7 @@ public final class PathUtils {
      * @throws IOException if an I/O error is thrown when accessing the starting file.
      * @since 2.9.0
      */
+    @SuppressWarnings("resource") // Caller closes
     public static Stream<Path> walk(final Path start, final PathFilter pathFilter, final int maxDepth, final boolean readAttributes,
             final FileVisitOption... options) throws IOException {
         return Files.walk(start, maxDepth, options)
