@@ -31,22 +31,24 @@ import org.junit.jupiter.api.io.TempDir;
  */
 public abstract class AbstractTempDirTest {
 
+    protected static final String SUB_DIR = "subdir";
+    protected static final String SYMLINKED_DIR = "symlinked-dir";
+
     /**
-     * Creates directory test fixtures.
+     * Creates directory test fixtures in the given directory {@code rootDir}.
      * <ol>
-     * <li>tempDirPath/subdir</li>
-     * <li>tempDirPath/symlinked-dir -> tempDirPath/subdir</li>
+     * <li>{@code rootDir/subdir}</li>
+     * <li>{@code rootDir/symlinked-dir} -> {@code rootDir/subdir}</li>
      * </ol>
      * @param rootDir Root for directory entries.
-     * @return Path to tempDirPath/subdir.
+     * @return Path for {@code tempDirPath/subdir}.
      * @throws IOException if an I/O error occurs or the parent directory does not exist.
      */
     protected static Path createTempSymlinkedRelativeDir(final Path rootDir) throws IOException {
-        final Path targetDir = rootDir.resolve("subdir");
-        final Path symlinkDir = rootDir.resolve("symlinked-dir");
+        final Path targetDir = rootDir.resolve(SUB_DIR);
+        final Path symlinkDir = rootDir.resolve(SYMLINKED_DIR);
         Files.createDirectory(targetDir);
-        Files.createSymbolicLink(symlinkDir, targetDir);
-        return symlinkDir;
+        return Files.createSymbolicLink(symlinkDir, targetDir);
     }
 
     /**
@@ -56,14 +58,14 @@ public abstract class AbstractTempDirTest {
     public Path managedTempDirPath;
 
     /**
-     * A temporary directory managed by each test so we can optionally fiddle with its permissions independently.
-     */
-    public Path tempDirPath;
-
-    /**
      * A File version of this test's Path object.
      */
     public File tempDirFile;
+
+    /**
+     * A temporary directory managed by each test so we can optionally fiddle with its permissions independently.
+     */
+    public Path tempDirPath;
 
     @BeforeEach
     public void beforeEachCreateTempDirs() throws IOException {

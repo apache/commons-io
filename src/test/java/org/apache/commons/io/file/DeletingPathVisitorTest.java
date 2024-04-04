@@ -18,14 +18,18 @@
 package org.apache.commons.io.file;
 
 import static org.apache.commons.io.file.CounterAssertions.assertCounts;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.apache.commons.io.file.Counters.PathCounters;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -112,5 +116,43 @@ public class DeletingPathVisitorTest extends AbstractTempDirTest {
         assertCounts(3, 2, 2, PathUtils.visitFileTree(visitor, tempDirPath));
         // This will throw if not empty.
         Files.deleteIfExists(tempDirPath);
+    }
+
+    /**
+     * Tests https://issues.apache.org/jira/browse/IO-850
+     */
+    @Test
+    public void testIO850DirectoriesOnly() throws IOException {
+        final Path rootDir = Files.createDirectory(managedTempDirPath.resolve("IO850"));
+        createTempSymlinkedRelativeDir(rootDir);
+        final Path targetDir = rootDir.resolve(SUB_DIR);
+        final Path symlinkDir = rootDir.resolve(SYMLINKED_DIR);
+        final DeletingPathVisitor visitor = DeletingPathVisitor.withLongCounters();
+        Files.walkFileTree(rootDir, visitor);
+        assertFalse(Files.exists(targetDir));
+        assertFalse(Files.exists(symlinkDir));
+        assertFalse(Files.exists(rootDir));
+        assertTrue(visitor.getPathCounters().getDirectoryCounter().get() > 0);
+    }
+
+    /**
+     * Tests https://issues.apache.org/jira/browse/IO-850
+     */
+    @Test
+    public void testIO850DirectoriesAndFiles() throws IOException {
+        final Path rootDir = Files.createDirectory(managedTempDirPath.resolve("IO850"));
+        createTempSymlinkedRelativeDir(rootDir);
+        final Path targetDir = rootDir.resolve(SUB_DIR);
+        final Path symlinkDir = rootDir.resolve(SYMLINKED_DIR);
+        Files.write(targetDir.resolve("file0.txt"), "Hello".getBytes(StandardCharsets.UTF_8));
+        final Path subDir0 = Files.createDirectory(targetDir.resolve("subDir0"));
+        Files.write(subDir0.resolve("file1.txt"), "Hello".getBytes(StandardCharsets.UTF_8));
+        final DeletingPathVisitor visitor = DeletingPathVisitor.withLongCounters();
+        Files.walkFileTree(rootDir, visitor);
+        assertFalse(Files.exists(targetDir));
+        assertFalse(Files.exists(symlinkDir));
+        assertFalse(Files.exists(rootDir));
+        assertTrue(visitor.getPathCounters().getDirectoryCounter().get() > 0);
+        assertTrue(visitor.getPathCounters().getFileCounter().get() > 0);
     }
 }
