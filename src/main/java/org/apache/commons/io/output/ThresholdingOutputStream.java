@@ -81,6 +81,7 @@ public class ThresholdingOutputStream extends OutputStream {
 
     /**
      * Constructs an instance of this class which will trigger an event at the specified threshold.
+     * A negative threshold has no meaning and will be treated as 0
      *
      * @param threshold The number of bytes at which to trigger an event.
      * @param thresholdConsumer Accepts reaching the threshold.
@@ -89,10 +90,9 @@ public class ThresholdingOutputStream extends OutputStream {
      */
     public ThresholdingOutputStream(final int threshold, final IOConsumer<ThresholdingOutputStream> thresholdConsumer,
         final IOFunction<ThresholdingOutputStream, OutputStream> outputStreamGetter) {
-        this.threshold = threshold;
+        this.threshold = threshold < 0 ? 0 : threshold;
         this.thresholdConsumer = thresholdConsumer == null ? IOConsumer.noop() : thresholdConsumer;
         this.outputStreamGetter = outputStreamGetter == null ? NOOP_OS_GETTER : outputStreamGetter;
-        this.thresholdExceeded = threshold < 0;
     }
 
     /**
