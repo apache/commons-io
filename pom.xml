@@ -124,7 +124,7 @@ file comparators, endian transformation classes, and much more.
     <maven.compiler.target>1.8</maven.compiler.target>
     <commons.componentid>io</commons.componentid>
     <commons.module.name>org.apache.commons.io</commons.module.name>
-    <commons.rc.version>RC1</commons.rc.version>
+    <commons.rc.version>RC2</commons.rc.version>
     <commons.bc.version>2.16.0</commons.bc.version>
     <commons.release.version>2.16.1</commons.release.version>
     <commons.release.next>2.16.2</commons.release.next>

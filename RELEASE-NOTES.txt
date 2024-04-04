@@ -21,6 +21,58 @@ o          Reimplement FileSystemUtils using NIO. Thanks to Gary Gregory.
 o IO-851:  FileSystemUtils no longer throws IllegalStateException. Thanks to Sebb, Gary Gregory. 
 o          Avoid possible NullPointerException in FileUtils.listAccumulate(File, IOFileFilter, IOFileFilter, FileVisitOption...). Thanks to Gary Gregory. 
 o IO-853:  BoundedInputStream.reset() not updating count. Thanks to Mike Drob, Gary Gregory. 
+o          ThresholdingOutputStream: a negative threshold should behave like a zero threshold and trigger the event on the first write #609. Thanks to rproserpio, Gary Gregory. 
+
+Changes
+-------
+
+o          Bump commons.bytebuddy.version from 1.14.12 to 1.14.13 #605. Thanks to Gary Gregory. 
+o          Bump org.apache.commons:commons-parent from 67 to 69 #608. Thanks to Gary Gregory, Dependabot. 
+
+
+Commons IO 2.7 and up requires Java 8 or above.
+Commons IO 2.6 requires Java 7 or above.
+Commons IO 2.3 through 2.5 requires Java 6 or above.
+Commons IO 2.2 requires Java 5 or above.
+Commons IO 1.4 requires Java 1.3 or above.
+
+Historical list of changes: https://commons.apache.org/proper/commons-io/changes-report.html
+
+For complete information on Apache Commons IO, including instructions on how to submit bug reports,
+patches, or suggestions for improvement, see the Apache Commons IO website:
+
+https://commons.apache.org/proper/commons-io/
+
+Download page: https://commons.apache.org/proper/commons-io/download_io.cgi
+
+Have fun!
+-Apache Commons Team
+
+------------------------------------------------------------------------------
+
+
+Apache Commons IO 2.16.1 Release Notes
+
+Introduction
+------------
+
+Commons IO is a package of Java utility classes like java.io.  
+Classes in this package are considered to be so standard and of such high 
+reuse as to justify existence in java.io.
+
+The Apache Commons IO library contains utility classes, stream implementations, file filters,
+file comparators, endian transformation classes, and much more.
+
+Java 8 is required.
+
+
+Fixed Bugs
+----------
+
+o          Reimplement FileSystemUtils using NIO. Thanks to Gary Gregory. 
+o IO-851:  FileSystemUtils no longer throws IllegalStateException. Thanks to Sebb, Gary Gregory. 
+o          Avoid possible NullPointerException in FileUtils.listAccumulate(File, IOFileFilter, IOFileFilter, FileVisitOption...). Thanks to Gary Gregory. 
+o IO-853:  BoundedInputStream.reset() not updating count. Thanks to Mike Drob, Gary Gregory. 
 
 Changes
 -------
