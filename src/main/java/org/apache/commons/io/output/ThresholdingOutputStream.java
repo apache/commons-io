@@ -81,6 +81,7 @@ public class ThresholdingOutputStream extends OutputStream {
 
     /**
      * Constructs an instance of this class which will trigger an event at the specified threshold.
+     * A negative threshold has no meaning and will be treated as 0
      *
      * @param threshold The number of bytes at which to trigger an event.
      * @param thresholdConsumer Accepts reaching the threshold.
@@ -89,7 +90,7 @@ public class ThresholdingOutputStream extends OutputStream {
      */
     public ThresholdingOutputStream(final int threshold, final IOConsumer<ThresholdingOutputStream> thresholdConsumer,
         final IOFunction<ThresholdingOutputStream, OutputStream> outputStreamGetter) {
-        this.threshold = threshold;
+        this.threshold = threshold < 0 ? 0 : threshold;
         this.thresholdConsumer = thresholdConsumer == null ? IOConsumer.noop() : thresholdConsumer;
         this.outputStreamGetter = outputStreamGetter == null ? NOOP_OS_GETTER : outputStreamGetter;
     }
@@ -104,9 +105,7 @@ public class ThresholdingOutputStream extends OutputStream {
      * @throws IOException if an error occurs.
      */
     protected void checkThreshold(final int count) throws IOException {
-        // thresholdReached is not called if no bytes are to be actually written
-        // this check handles the case of a negative threshold
-        if (!thresholdExceeded && count > 0 && written + count > threshold) {
+        if (!thresholdExceeded && written + count > threshold) {
             thresholdExceeded = true;
             thresholdReached();
         }
@@ -189,7 +188,7 @@ public class ThresholdingOutputStream extends OutputStream {
      * @return {@code true} if the threshold has been reached; {@code false} otherwise.
      */
     public boolean isThresholdExceeded() {
-        return thresholdExceeded;
+        return written > threshold;
     }
 
     /**

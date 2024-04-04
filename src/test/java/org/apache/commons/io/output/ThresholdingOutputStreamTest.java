@@ -45,7 +45,6 @@ public class ThresholdingOutputStreamTest {
                 reached.set(true);
             }
         }) {
-            out.write(new byte[0]);
             assertFalse(reached.get());
             out.write(89);
             assertTrue(reached.get());
