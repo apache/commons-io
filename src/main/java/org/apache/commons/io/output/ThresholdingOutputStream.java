@@ -92,19 +92,21 @@ public class ThresholdingOutputStream extends OutputStream {
         this.threshold = threshold;
         this.thresholdConsumer = thresholdConsumer == null ? IOConsumer.noop() : thresholdConsumer;
         this.outputStreamGetter = outputStreamGetter == null ? NOOP_OS_GETTER : outputStreamGetter;
-        this.thresholdExceeded = threshold < 0;
     }
 
     /**
      * Checks to see if writing the specified number of bytes would cause the configured threshold to be exceeded. If
      * so, triggers an event to allow a concrete implementation to take action on this.
+     * If the count is not positive, the check is skipped.
      *
      * @param count The number of bytes about to be written to the underlying output stream.
      *
      * @throws IOException if an error occurs.
      */
     protected void checkThreshold(final int count) throws IOException {
-        if (!thresholdExceeded && written + count > threshold) {
+        // thresholdReached is no bytes are to be actually written
+        // this check handles the case of a negative threshold
+        if (!thresholdExceeded && count > 0 && written + count > threshold) {
             thresholdExceeded = true;
             thresholdReached();
         }

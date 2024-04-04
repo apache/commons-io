@@ -32,10 +32,43 @@ import org.junit.jupiter.api.Test;
  */
 public class ThresholdingOutputStreamTest {
 
+    /**
+     * Tests the case where the threshold is negative.
+     * The threshold is not reached until something is written to the stream.
+     */
     @Test
     public void testThresholdLessThanZero() throws IOException {
-        try (final ThresholdingOutputStream out = new ThresholdingOutputStream(-1)) {
+        final AtomicBoolean reached = new AtomicBoolean();
+        try (final ThresholdingOutputStream out = new ThresholdingOutputStream(-1) {
+            @Override
+            protected void thresholdReached() throws IOException {
+                reached.set(true);
+            }
+        }) {
+            out.write(new byte[0]);
+            assertFalse(reached.get());
+            out.write(89);
+            assertTrue(reached.get());
             assertTrue(out.isThresholdExceeded());
+        }
+    }
+
+    /**
+     * Tests the case where no bytes are written.
+     * The threshold is not reached until something is written to the stream.
+     */
+    @Test
+    public void testThresholdZeroWrite() throws IOException {
+        final AtomicBoolean reached = new AtomicBoolean();
+        try (final ThresholdingOutputStream out = new ThresholdingOutputStream(7) {
+            @Override
+            protected void thresholdReached() throws IOException {
+                reached.set(true);
+            }
+        }) {
+            assertFalse(reached.get());
+            out.write(new byte[0]);
+            assertFalse(reached.get());
         }
     }
 
