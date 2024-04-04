@@ -98,7 +98,6 @@ public class ThresholdingOutputStream extends OutputStream {
     /**
      * Checks to see if writing the specified number of bytes would cause the configured threshold to be exceeded. If
      * so, triggers an event to allow a concrete implementation to take action on this.
-     * If the count is not positive, the check is skipped.
      *
      * @param count The number of bytes about to be written to the underlying output stream.
      *
