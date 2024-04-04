@@ -18,7 +18,9 @@
 package org.apache.commons.io.file;
 
 import static org.apache.commons.io.file.CounterAssertions.assertCounts;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -118,23 +120,25 @@ public class DeletingPathVisitorTest extends AbstractTempDirTest {
         Files.deleteIfExists(tempDirPath);
     }
 
-    /**
-     * Tests https://issues.apache.org/jira/browse/IO-850
-     */
     @Test
-    public void testIO850DirectoriesOnly() throws IOException {
-        final Path rootDir = Files.createDirectory(managedTempDirPath.resolve("IO850"));
-        createTempSymlinkedRelativeDir(rootDir);
-        final Path targetDir = rootDir.resolve(SUB_DIR);
-        final Path symlinkDir = rootDir.resolve(SYMLINKED_DIR);
-        final DeletingPathVisitor visitor = DeletingPathVisitor.withLongCounters();
-        Files.walkFileTree(rootDir, visitor);
-        assertFalse(Files.exists(targetDir));
-        assertFalse(Files.exists(symlinkDir));
-        assertFalse(Files.exists(rootDir));
-        assertTrue(visitor.getPathCounters().getDirectoryCounter().get() > 0);
+    public void testEqualsHashCode() {
+        final DeletingPathVisitor visitor0 = DeletingPathVisitor.withLongCounters();
+        final DeletingPathVisitor visitor1 = DeletingPathVisitor.withLongCounters();
+        assertEquals(visitor0, visitor0);
+        assertEquals(visitor0, visitor1);
+        assertEquals(visitor1, visitor0);
+        assertEquals(visitor0.hashCode(), visitor0.hashCode());
+        assertEquals(visitor0.hashCode(), visitor1.hashCode());
+        assertEquals(visitor1.hashCode(), visitor0.hashCode());
+        visitor0.getPathCounters().getByteCounter().increment();
+        assertEquals(visitor0, visitor0);
+        assertNotEquals(visitor0, visitor1);
+        assertNotEquals(visitor1, visitor0);
+        assertEquals(visitor0.hashCode(), visitor0.hashCode());
+        assertNotEquals(visitor0.hashCode(), visitor1.hashCode());
+        assertNotEquals(visitor1.hashCode(), visitor0.hashCode());        
     }
-
+    
     /**
      * Tests https://issues.apache.org/jira/browse/IO-850
      */
@@ -154,5 +158,22 @@ public class DeletingPathVisitorTest extends AbstractTempDirTest {
         assertFalse(Files.exists(rootDir));
         assertTrue(visitor.getPathCounters().getDirectoryCounter().get() > 0);
         assertTrue(visitor.getPathCounters().getFileCounter().get() > 0);
+    }
+
+    /**
+     * Tests https://issues.apache.org/jira/browse/IO-850
+     */
+    @Test
+    public void testIO850DirectoriesOnly() throws IOException {
+        final Path rootDir = Files.createDirectory(managedTempDirPath.resolve("IO850"));
+        createTempSymlinkedRelativeDir(rootDir);
+        final Path targetDir = rootDir.resolve(SUB_DIR);
+        final Path symlinkDir = rootDir.resolve(SYMLINKED_DIR);
+        final DeletingPathVisitor visitor = DeletingPathVisitor.withLongCounters();
+        Files.walkFileTree(rootDir, visitor);
+        assertFalse(Files.exists(targetDir));
+        assertFalse(Files.exists(symlinkDir));
+        assertFalse(Files.exists(rootDir));
+        assertTrue(visitor.getPathCounters().getDirectoryCounter().get() > 0);
     }
 }
