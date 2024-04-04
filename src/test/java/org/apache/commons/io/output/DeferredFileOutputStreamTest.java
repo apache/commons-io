@@ -105,28 +105,6 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
     }
 
     /**
-     * Tests the case where the threshold is negative, and therefore the data is always written to disk. The actual data
-     * written to disk is verified, as is the file itself.
-     */
-    @ParameterizedTest(name = "initialBufferSize = {0}")
-    @MethodSource("data")
-    public void testThresholdNegative(final int initialBufferSize) throws IOException {
-        final File testFile = Files.createTempFile(tempDirPath, "testThresholdNegative", "dat").toFile();
-        try (DeferredFileOutputStream dfos = DeferredFileOutputStream.builder()
-                .setThreshold(-1)
-                .setBufferSize(initialBufferSize)
-                .setOutputFile(testFile)
-                .get()) {
-            dfos.write(testBytes, 0, testBytes.length);
-            dfos.close();
-            assertFalse(dfos.isInMemory());
-            assertNull(dfos.getData());
-            assertEquals(testFile.length(), dfos.getByteCount());
-            verifyResultFile(testFile);
-        }
-    }
-
-    /**
      * Tests the case where the amount of data is exactly the same as the threshold. The behavior should be the same as
      * that for the amount of data being below (i.e. not exceeding) the threshold.
      */
@@ -297,6 +275,28 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
         final String prefix = null;
         final String suffix = ".out";
         assertThrows(NullPointerException.class, () -> new DeferredFileOutputStream(testBytes.length - 5, prefix, suffix, tempDirFile));
+    }
+
+    /**
+     * Tests the case where the threshold is negative, and therefore the data is always written to disk. The actual data
+     * written to disk is verified, as is the file itself.
+     */
+    @ParameterizedTest(name = "initialBufferSize = {0}")
+    @MethodSource("data")
+    public void testThresholdNegative(final int initialBufferSize) throws IOException {
+        final File testFile = Files.createTempFile(tempDirPath, "testThresholdNegative", "dat").toFile();
+        try (DeferredFileOutputStream dfos = DeferredFileOutputStream.builder()
+                .setThreshold(-1)
+                .setBufferSize(initialBufferSize)
+                .setOutputFile(testFile)
+                .get()) {
+            dfos.write(testBytes, 0, testBytes.length);
+            dfos.close();
+            assertFalse(dfos.isInMemory());
+            assertNull(dfos.getData());
+            assertEquals(testFile.length(), dfos.getByteCount());
+            verifyResultFile(testFile);
+        }
     }
 
     /**

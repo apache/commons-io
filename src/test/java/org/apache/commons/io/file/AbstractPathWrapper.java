@@ -81,11 +81,6 @@ public abstract class AbstractPathWrapper implements Path {
         return Objects.equals(path, other.path);
     }
 
-    @Override
-    public void forEach(final Consumer<? super Path> action) {
-        path.forEach(action);
-    }
-
     /**
      * Delegates to {@link Files#exists(Path, LinkOption...)}.
      *
@@ -94,6 +89,11 @@ public abstract class AbstractPathWrapper implements Path {
      */
     public boolean exists(final LinkOption... options) {
         return Files.exists(path, options);
+    }
+
+    @Override
+    public void forEach(final Consumer<? super Path> action) {
+        path.forEach(action);
     }
 
     /**
