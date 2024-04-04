@@ -136,9 +136,9 @@ public class DeletingPathVisitorTest extends AbstractTempDirTest {
         assertNotEquals(visitor1, visitor0);
         assertEquals(visitor0.hashCode(), visitor0.hashCode());
         assertNotEquals(visitor0.hashCode(), visitor1.hashCode());
-        assertNotEquals(visitor1.hashCode(), visitor0.hashCode());        
+        assertNotEquals(visitor1.hashCode(), visitor0.hashCode());
     }
-    
+
     /**
      * Tests https://issues.apache.org/jira/browse/IO-850
      */

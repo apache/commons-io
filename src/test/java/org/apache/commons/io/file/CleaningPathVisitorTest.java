@@ -29,6 +29,7 @@ import java.nio.file.Paths;
 
 import org.apache.commons.io.file.Counters.PathCounters;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -135,5 +136,24 @@ public class CleaningPathVisitorTest extends TestArguments {
         assertNotEquals(visitFileTree.hashCode(), CleaningPathVisitor.withLongCounters().hashCode());
         assertEquals(visitFileTree, visitFileTree);
         assertEquals(visitFileTree.hashCode(), visitFileTree.hashCode());
+    }
+
+    @Test
+    public void testEqualsHashCode() {
+        final CountingPathVisitor visitor0 = CleaningPathVisitor.withLongCounters();
+        final CountingPathVisitor visitor1 = CleaningPathVisitor.withLongCounters();
+        assertEquals(visitor0, visitor0);
+        assertEquals(visitor0, visitor1);
+        assertEquals(visitor1, visitor0);
+        assertEquals(visitor0.hashCode(), visitor0.hashCode());
+        assertEquals(visitor0.hashCode(), visitor1.hashCode());
+        assertEquals(visitor1.hashCode(), visitor0.hashCode());
+        visitor0.getPathCounters().getByteCounter().increment();
+        assertEquals(visitor0, visitor0);
+        assertNotEquals(visitor0, visitor1);
+        assertNotEquals(visitor1, visitor0);
+        assertEquals(visitor0.hashCode(), visitor0.hashCode());
+        assertNotEquals(visitor0.hashCode(), visitor1.hashCode());
+        assertNotEquals(visitor1.hashCode(), visitor0.hashCode());
     }
 }
