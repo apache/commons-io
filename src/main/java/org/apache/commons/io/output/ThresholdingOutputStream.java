@@ -104,7 +104,7 @@ public class ThresholdingOutputStream extends OutputStream {
      * @throws IOException if an error occurs.
      */
     protected void checkThreshold(final int count) throws IOException {
-        // thresholdReached is no bytes are to be actually written
+        // thresholdReached is not called if no bytes are to be actually written
         // this check handles the case of a negative threshold
         if (!thresholdExceeded && count > 0 && written + count > threshold) {
             thresholdExceeded = true;
