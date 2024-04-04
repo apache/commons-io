@@ -66,8 +66,10 @@ public class ThresholdingOutputStreamTest {
                 reached.set(true);
             }
         }) {
+            assertFalse(out.isThresholdExceeded());
             assertFalse(reached.get());
             out.write(new byte[0]);
+            assertFalse(out.isThresholdExceeded());
             assertFalse(reached.get());
         }
     }

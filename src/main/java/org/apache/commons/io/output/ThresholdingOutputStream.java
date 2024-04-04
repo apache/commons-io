@@ -189,7 +189,7 @@ public class ThresholdingOutputStream extends OutputStream {
      * @return {@code true} if the threshold has been reached; {@code false} otherwise.
      */
     public boolean isThresholdExceeded() {
-        return written > threshold;
+        return thresholdExceeded;
     }
 
     /**
