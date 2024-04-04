@@ -19,6 +19,7 @@ package org.apache.commons.io.file;
 
 import static org.apache.commons.io.file.CounterAssertions.assertCounts;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -109,6 +110,25 @@ public class AccumulatorPathVisitorTest {
         assertTrue(accPathVisitor.getFileList().isEmpty());
         assertEquals(accPathVisitor, accPathVisitor);
         assertEquals(accPathVisitor.hashCode(), accPathVisitor.hashCode());
+    }
+
+    @Test
+    public void testEqualsHashCode() {
+        final AccumulatorPathVisitor visitor0 = AccumulatorPathVisitor.withLongCounters();
+        final AccumulatorPathVisitor visitor1 = AccumulatorPathVisitor.withLongCounters();
+        assertEquals(visitor0, visitor0);
+        assertEquals(visitor0, visitor1);
+        assertEquals(visitor1, visitor0);
+        assertEquals(visitor0.hashCode(), visitor0.hashCode());
+        assertEquals(visitor0.hashCode(), visitor1.hashCode());
+        assertEquals(visitor1.hashCode(), visitor0.hashCode());
+        visitor0.getPathCounters().getByteCounter().increment();
+        assertEquals(visitor0, visitor0);
+        assertNotEquals(visitor0, visitor1);
+        assertNotEquals(visitor1, visitor0);
+        assertEquals(visitor0.hashCode(), visitor0.hashCode());
+        assertNotEquals(visitor0.hashCode(), visitor1.hashCode());
+        assertNotEquals(visitor1.hashCode(), visitor0.hashCode());
     }
 
     /**
