@@ -46,7 +46,7 @@ The <action> type attribute can be add,update,fix,remove.
     <title>Apache Commons IO Release Notes</title>
   </properties>
   <body>
-    <release version="2.16.1" date="YYYY-MM-DD" description="Java 8 is required.">
+    <release version="2.16.1" date="2024-04-04" description="Java 8 is required.">
       <!-- FIX -->
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Reimplement FileSystemUtils using NIO.</action>
       <action dev="ggregory" type="fix" issue="IO-851" due-to="Sebb, Gary Gregory">FileSystemUtils no longer throws IllegalStateException.</action>
