@@ -20,10 +20,6 @@ Apache Commons IO ${version} Release Notes
 Introduction
 ------------
 
-Commons IO is a package of Java utility classes like java.io.  
-Classes in this package are considered to be so standard and of such high 
-reuse as to justify existence in java.io.
-
 $introduction.replaceAll("(?<!\015)\012", "
 ")
 
