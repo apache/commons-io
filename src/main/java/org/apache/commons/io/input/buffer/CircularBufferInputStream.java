@@ -28,6 +28,8 @@ import org.apache.commons.io.IOUtils;
 /**
  * Implements a buffered input stream, which is internally based on a {@link CircularByteBuffer}. Unlike the
  * {@link java.io.BufferedInputStream}, this one doesn't need to reallocate byte arrays internally.
+ *
+ * @since 2.7
  */
 public class CircularBufferInputStream extends FilterInputStream {
 

@@ -26,6 +26,8 @@ import org.apache.commons.io.IOUtils;
  * from the buffer takes place at the same time than writing to. Such is the
  * case, for example, when using the buffer within a filtering input stream,
  * like the {@link CircularBufferInputStream}.
+ *
+ * @since 2.7
  */
 public class CircularByteBuffer {
     private final byte[] buffer;

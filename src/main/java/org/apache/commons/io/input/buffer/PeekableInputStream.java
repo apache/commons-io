@@ -25,6 +25,8 @@ import org.apache.commons.io.IOUtils;
 /**
  * Implements a buffered input stream, which allows to peek into the buffers first bytes. This comes in handy when
  * manually implementing scanners, lexers, parsers, and the like.
+ *
+ * @since 2.7
  */
 public class PeekableInputStream extends CircularBufferInputStream {
 
