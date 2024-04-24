@@ -49,6 +49,7 @@ The <action> type attribute can be add,update,fix,remove.
     <release version="2.16.2" date="YYYY-MM-DD" description="Java 8 is required.">
       <!-- FIX -->
       <!-- UPDATE -->
+      <action dev="ggregory" type="update"             due-to="Dependabot">Bump commons.bytebuddy.version from 1.14.13 to 1.14.14 #615.</action>
     </release>
     <release version="2.16.1" date="2024-04-04" description="Java 8 is required.">
       <!-- FIX -->
