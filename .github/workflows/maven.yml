@@ -40,8 +40,8 @@ jobs:
         java: [ 11, 17, 21 ]
         experimental: [false]
         include:
-          # Update java 8/ubuntu to add deploy step
-          - java: 8
+          # Update java 21/ubuntu to add deploy step
+          - java: 21
             os: ubuntu-latest
             experimental: false
             deploy: true
