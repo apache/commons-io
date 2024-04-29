@@ -17,11 +17,14 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class WindowsLineEndingInputStreamTest {
     private String roundtrip(final String msg) throws IOException {
@@ -51,6 +54,12 @@ public class WindowsLineEndingInputStreamTest {
     @Test
     public void testMalformed() throws Exception {
         assertEquals("a\rbc", roundtrip("a\rbc", false));
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    public void testMark(final boolean ensureLineFeedAtEndOfFile) {
+        assertThrows(UnsupportedOperationException.class, () -> new WindowsLineEndingInputStream(NullInputStream.INSTANCE, true).mark(1));
     }
 
     @Test
