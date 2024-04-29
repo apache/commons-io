@@ -48,6 +48,7 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <release version="2.16.2" date="YYYY-MM-DD" description="Java 8 is required.">
       <!-- FIX -->
+      <action dev="ggregory" type="fix"                due-to="Dependabot">Add missing unit tests.</action>
       <!-- UPDATE -->
       <action dev="ggregory" type="update"             due-to="Dependabot">Bump tests commons.bytebuddy.version from 1.14.13 to 1.14.14 #615.</action>
       <action dev="ggregory" type="update"             due-to="Dependabot">Bump tests commons-codec:commons-codec from 1.16.1 to 1.17.0.</action>
