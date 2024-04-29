@@ -28,11 +28,34 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 public class WindowsLineEndingInputStreamTest {
-    private String roundtrip(final String msg) throws IOException {
-        return roundtrip(msg, true);
+
+    private String roundtripReadByte(final String msg) throws IOException {
+        return roundtripReadByte(msg, true);
     }
 
-    private String roundtrip(final String msg, final boolean ensure) throws IOException {
+    private String roundtripReadByte(final String msg, final boolean ensure) throws IOException {
+        // read(byte[])
+        try (WindowsLineEndingInputStream lf = new WindowsLineEndingInputStream(
+                CharSequenceInputStream.builder().setCharSequence(msg).setCharset(StandardCharsets.UTF_8).get(), ensure)) {
+            final byte[] buf = new byte[100];
+            int i = 0;
+            while (i < buf.length) {
+                final int read = lf.read();
+                if (read < 0) {
+                    break;
+                }
+                buf[i++] = (byte) read;
+            }
+            return new String(buf, 0, i, StandardCharsets.UTF_8);
+        }
+    }
+
+    private String roundtripReadByteArray(final String msg) throws IOException {
+        return roundtripReadByteArray(msg, true);
+    }
+
+    private String roundtripReadByteArray(final String msg, final boolean ensure) throws IOException {
+        // read(byte[])
         try (WindowsLineEndingInputStream lf = new WindowsLineEndingInputStream(
                 CharSequenceInputStream.builder().setCharSequence(msg).setCharset(StandardCharsets.UTF_8).get(), ensure)) {
             final byte[] buf = new byte[100];
@@ -42,52 +65,87 @@ public class WindowsLineEndingInputStreamTest {
     }
 
     @Test
-    public void testInTheMiddleOfTheLine() throws Exception {
-        assertEquals("a\r\nbc\r\n", roundtrip("a\r\nbc"));
+    public void testInTheMiddleOfTheLine_Byte() throws Exception {
+        assertEquals("a\r\nbc\r\n", roundtripReadByte("a\r\nbc"));
     }
 
     @Test
-    public void testLinuxLineFeeds() throws Exception {
-        final String roundtrip = roundtrip("ab\nc", false);
-        assertEquals("ab\r\nc", roundtrip);
+    public void testInTheMiddleOfTheLine_ByteArray() throws Exception {
+        assertEquals("a\r\nbc\r\n", roundtripReadByteArray("a\r\nbc"));
     }
 
     @Test
-    public void testMalformed() throws Exception {
-        assertEquals("a\rbc", roundtrip("a\rbc", false));
+    public void testLinuxLineFeeds_Byte() throws Exception {
+        assertEquals("ab\r\nc", roundtripReadByte("ab\nc", false));
+    }
+
+    @Test
+    public void testLinuxLineFeeds_ByteArray() throws Exception {
+        assertEquals("ab\r\nc", roundtripReadByteArray("ab\nc", false));
+    }
+
+    @Test
+    public void testMalformed_Byte() throws Exception {
+        assertEquals("a\rbc", roundtripReadByte("a\rbc", false));
+    }
+
+    @Test
+    public void testMalformed_ByteArray() throws Exception {
+        assertEquals("a\rbc", roundtripReadByteArray("a\rbc", false));
     }
 
     @ParameterizedTest
-    @ValueSource(booleans = {false, true})
+    @ValueSource(booleans = { false, true })
     public void testMark(final boolean ensureLineFeedAtEndOfFile) {
         assertThrows(UnsupportedOperationException.class, () -> new WindowsLineEndingInputStream(NullInputStream.INSTANCE, true).mark(1));
     }
 
     @SuppressWarnings("resource")
     @ParameterizedTest
-    @ValueSource(booleans = {false, true})
+    @ValueSource(booleans = { false, true })
     public void testMarkSupported(final boolean ensureLineFeedAtEndOfFile) {
         assertFalse(new WindowsLineEndingInputStream(NullInputStream.INSTANCE, true).markSupported());
     }
 
     @Test
-    public void testMultipleBlankLines() throws Exception {
-        assertEquals("a\r\n\r\nbc\r\n", roundtrip("a\r\n\r\nbc"));
+    public void testMultipleBlankLines_Byte() throws Exception {
+        assertEquals("a\r\n\r\nbc\r\n", roundtripReadByte("a\r\n\r\nbc"));
     }
 
     @Test
-    public void testRetainLineFeed() throws Exception {
-        assertEquals("a\r\n\r\n", roundtrip("a\r\n\r\n", false));
-        assertEquals("a", roundtrip("a", false));
+    public void testMultipleBlankLines_ByteArray() throws Exception {
+        assertEquals("a\r\n\r\nbc\r\n", roundtripReadByteArray("a\r\n\r\nbc"));
     }
 
     @Test
-    public void testSimpleString() throws Exception {
-        assertEquals("abc\r\n", roundtrip("abc"));
+    public void testRetainLineFeed_Byte() throws Exception {
+        assertEquals("a\r\n\r\n", roundtripReadByte("a\r\n\r\n", false));
+        assertEquals("a", roundtripReadByte("a", false));
     }
 
     @Test
-    public void testTwoLinesAtEnd() throws Exception {
-        assertEquals("a\r\n\r\n", roundtrip("a\r\n\r\n"));
+    public void testRetainLineFeed_ByteArray() throws Exception {
+        assertEquals("a\r\n\r\n", roundtripReadByteArray("a\r\n\r\n", false));
+        assertEquals("a", roundtripReadByteArray("a", false));
+    }
+
+    @Test
+    public void testSimpleString_Byte() throws Exception {
+        assertEquals("abc\r\n", roundtripReadByte("abc"));
+    }
+
+    @Test
+    public void testSimpleString_ByteArray() throws Exception {
+        assertEquals("abc\r\n", roundtripReadByteArray("abc"));
+    }
+
+    @Test
+    public void testTwoLinesAtEnd_Byte() throws Exception {
+        assertEquals("a\r\n\r\n", roundtripReadByte("a\r\n\r\n"));
+    }
+
+    @Test
+    public void testTwoLinesAtEnd_ByteArray() throws Exception {
+        assertEquals("a\r\n\r\n", roundtripReadByteArray("a\r\n\r\n"));
     }
 }
