@@ -17,6 +17,7 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
@@ -60,6 +61,13 @@ public class WindowsLineEndingInputStreamTest {
     @ValueSource(booleans = {false, true})
     public void testMark(final boolean ensureLineFeedAtEndOfFile) {
         assertThrows(UnsupportedOperationException.class, () -> new WindowsLineEndingInputStream(NullInputStream.INSTANCE, true).mark(1));
+    }
+
+    @SuppressWarnings("resource")
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    public void testMarkSupported(final boolean ensureLineFeedAtEndOfFile) {
+        assertFalse(new WindowsLineEndingInputStream(NullInputStream.INSTANCE, true).markSupported());
     }
 
     @Test
