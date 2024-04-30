@@ -28,7 +28,7 @@ import java.io.InputStream;
  *
  * @since 2.5
  */
-public class WindowsLineEndingInputStream  extends InputStream {
+public class WindowsLineEndingInputStream extends InputStream {
 
     private boolean atEos;
 
@@ -119,17 +119,17 @@ public class WindowsLineEndingInputStream  extends InputStream {
 
     /**
      * Reads the next item from the target, updating internal flags in the process
+     *
      * @return the next int read from the target stream
      * @throws IOException upon error
      */
     private int readWithUpdate() throws IOException {
-        final int target = this.in.read();
+        final int target = in.read();
         atEos = target == EOF;
-        if (atEos) {
-            return target;
+        if (!atEos) {
+            atSlashCr = target == CR;
+            atSlashLf = target == LF;
         }
-        atSlashCr = target == CR;
-        atSlashLf = target == LF;
         return target;
     }
 }
