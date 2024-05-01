@@ -55,6 +55,7 @@ import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemProperties;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Test;
 
@@ -323,7 +324,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
 
     @Test
     public void testGetTempDirectory() {
-        final Path tempDirectory = Paths.get(System.getProperty("java.io.tmpdir"));
+        final Path tempDirectory = Paths.get(SystemProperties.getJavaIoTmpdir());
         assertEquals(tempDirectory, PathUtils.getTempDirectory());
     }
 
