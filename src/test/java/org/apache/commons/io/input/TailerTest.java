@@ -52,6 +52,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.RandomAccessFileMode;
 import org.apache.commons.io.TestResources;
 import org.apache.commons.io.test.TestUtils;
+import org.apache.commons.lang3.SystemProperties;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -416,7 +417,7 @@ public class TailerTest {
         final File file = new File(temporaryFolder, "testMultiByteBreak.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener();
-        final String osname = System.getProperty("os.name");
+        final String osname = SystemProperties.getOsName();
         final boolean isWindows = osname.startsWith("Windows");
         // Need to use UTF-8 to read & write the file otherwise it can be corrupted (depending on the default charset)
         final Charset charsetUTF8 = StandardCharsets.UTF_8;
@@ -583,7 +584,7 @@ public class TailerTest {
         final File file = new File(temporaryFolder, "tailer1-test.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener();
-        final String osname = System.getProperty("os.name");
+        final String osname = SystemProperties.getOsName();
         final boolean isWindows = osname.startsWith("Windows");
         try (Tailer tailer = new Tailer(file, listener, delayMillis, false, isWindows)) {
             final Thread thread = new Thread(tailer);
@@ -651,7 +652,7 @@ public class TailerTest {
         final File file = new File(temporaryFolder, "tailer-eof-test.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener();
-        final String osname = System.getProperty("os.name");
+        final String osname = SystemProperties.getOsName();
         final boolean isWindows = osname.startsWith("Windows");
         try (Tailer tailer = new Tailer(file, listener, delayMillis, false, isWindows)) {
             final Thread thread = new Thread(tailer);

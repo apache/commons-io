@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.SystemProperties;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -54,7 +55,7 @@ public class FileUtilsCleanSymlinksTest {
 
     @Test
     public void testCleanDirWithASymlinkDir() throws Exception {
-        if (System.getProperty("os.name").startsWith("Win")) {
+        if (SystemProperties.getOsName().startsWith("Win")) {
             // Can't use "ln" for symlinks on the command line in Windows.
             return;
         }
@@ -89,7 +90,7 @@ public class FileUtilsCleanSymlinksTest {
 
     @Test
     public void testCleanDirWithParentSymlinks() throws Exception {
-        if (System.getProperty("os.name").startsWith("Win")) {
+        if (SystemProperties.getOsName().startsWith("Win")) {
             // Can't use "ln" for symlinks on the command line in Windows.
             return;
         }
@@ -129,7 +130,7 @@ public class FileUtilsCleanSymlinksTest {
 
     @Test
     public void testCleanDirWithSymlinkFile() throws Exception {
-        if (System.getProperty("os.name").startsWith("Win")) {
+        if (SystemProperties.getOsName().startsWith("Win")) {
             // Can't use "ln" for symlinks on the command line in Windows.
             return;
         }
@@ -163,7 +164,7 @@ public class FileUtilsCleanSymlinksTest {
 
     @Test
     public void testCorrectlyIdentifySymlinkWithParentSymLink() throws Exception {
-        if (System.getProperty("os.name").startsWith("Win")) {
+        if (SystemProperties.getOsName().startsWith("Win")) {
             // Can't use "ln" for symlinks on the command line in Windows.
             return;
         }
@@ -186,7 +187,7 @@ public class FileUtilsCleanSymlinksTest {
 
     @Test
     public void testIdentifiesBrokenSymlinkFile() throws Exception {
-        if (System.getProperty("os.name").startsWith("Win")) {
+        if (SystemProperties.getOsName().startsWith("Win")) {
             // Can't use "ln" for symlinks on the command line in Windows.
             return;
         }
@@ -206,7 +207,7 @@ public class FileUtilsCleanSymlinksTest {
 
     @Test
     public void testIdentifiesSymlinkDir() throws Exception {
-        if (System.getProperty("os.name").startsWith("Win")) {
+        if (SystemProperties.getOsName().startsWith("Win")) {
             // Can't use "ln" for symlinks on the command line in Windows.
             return;
         }
@@ -223,7 +224,7 @@ public class FileUtilsCleanSymlinksTest {
 
     @Test
     public void testIdentifiesSymlinkFile() throws Exception {
-        if (System.getProperty("os.name").startsWith("Win")) {
+        if (SystemProperties.getOsName().startsWith("Win")) {
             // Can't use "ln" for symlinks on the command line in Windows.
             return;
         }
@@ -240,7 +241,7 @@ public class FileUtilsCleanSymlinksTest {
 
     @Test
     public void testStillClearsIfGivenDirectoryIsASymlink() throws Exception {
-        if (System.getProperty("os.name").startsWith("Win")) {
+        if (SystemProperties.getOsName().startsWith("Win")) {
             // Can't use "ln" for symlinks on the command line in Windows.
             return;
         }
