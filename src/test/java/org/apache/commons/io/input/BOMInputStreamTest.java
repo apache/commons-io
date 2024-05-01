@@ -37,6 +37,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.ByteOrderMark;
+import org.apache.commons.lang3.SystemProperties;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -594,7 +595,7 @@ public class BOMInputStreamTest {
 
     @Test
     public void testReadXmlWithBOMUcs2() throws Exception {
-        assumeFalse(System.getProperty("java.vendor").contains("IBM"), "This test does not pass on some IBM VMs xml parsers");
+        assumeFalse(SystemProperties.getJavaVendor().contains("IBM"), "This test does not pass on some IBM VMs xml parsers");
 
         // UCS-2 is BE.
         assumeTrue(Charset.isSupported("ISO-10646-UCS-2"));
