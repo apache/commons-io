@@ -126,7 +126,7 @@ public class AppendableWriter <T extends Appendable> extends Writer {
      */
     @Override
     public void write(final char[] cbuf, final int off, final int len) throws IOException {
-        Objects.requireNonNull(cbuf, "Character array is missing");
+        Objects.requireNonNull(cbuf, "cbuf");
         if (len < 0 || off + len > cbuf.length) {
             throw new IndexOutOfBoundsException("Array Size=" + cbuf.length +
                     ", offset=" + off + ", length=" + len);
@@ -158,7 +158,7 @@ public class AppendableWriter <T extends Appendable> extends Writer {
     @Override
     public void write(final String str, final int off, final int len) throws IOException {
         // appendable.append will add "null" for a null String; add an explicit null check
-        Objects.requireNonNull(str, "String is missing");
+        Objects.requireNonNull(str, "str");
         appendable.append(str, off, off + len);
     }
 
