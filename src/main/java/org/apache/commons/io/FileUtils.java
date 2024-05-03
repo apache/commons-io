@@ -2138,7 +2138,7 @@ public class FileUtils {
         // https://bugs.openjdk.java.net/browse/JDK-8177809
         // File.lastModified() is losing milliseconds (always ends in 000)
         // This bug is in OpenJDK 8 and 9, and fixed in 10.
-        return Files.getLastModifiedTime(Objects.requireNonNull(file.toPath(), "file"));
+        return Files.getLastModifiedTime(Objects.requireNonNull(file, "file").toPath());
     }
 
     /**
