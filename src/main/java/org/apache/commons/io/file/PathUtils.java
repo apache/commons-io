@@ -605,7 +605,7 @@ public final class PathUtils {
      * @since 3.13.0
      */
     public static void deleteOnExit(final Path path) {
-        Objects.requireNonNull(path.toFile()).deleteOnExit();
+        Objects.requireNonNull(path).toFile().deleteOnExit();
     }
 
     /**
