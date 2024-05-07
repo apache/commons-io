@@ -1421,13 +1421,14 @@ public final class PathUtils {
     }
 
     /**
-     * Reads the given path as a String.
+     * Reads the file contents at the given path as a String using the Charset.
      *
      * @param path    The source path.
      * @param charset How to convert bytes to a String, null uses the default Charset.
-     * @return a new String.
+     * @return the file contents as a new String.
      * @throws IOException if an I/O error occurs reading from the stream.
      * @see Files#readAllBytes(Path)
+     * @see Charsets#toCharset(Charset)
      * @since 2.12.0
      */
     public static String readString(final Path path, final Charset charset) throws IOException {
