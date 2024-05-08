@@ -157,7 +157,7 @@ file comparators, endian transformation classes, and much more.
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
     <commons.javadoc.java.link>${commons.javadoc8.java.link}</commons.javadoc.java.link>
     <jmh.version>1.37</jmh.version>
-    <commons.bytebuddy.version>1.14.14</commons.bytebuddy.version>
+    <commons.bytebuddy.version>1.14.15</commons.bytebuddy.version>
     <japicmp.skip>false</japicmp.skip>
     <jacoco.skip>${env.JACOCO_SKIP}</jacoco.skip>
     <commons.release.isDistModule>true</commons.release.isDistModule>
