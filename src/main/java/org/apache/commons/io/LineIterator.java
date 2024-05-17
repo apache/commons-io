@@ -166,7 +166,9 @@ public class LineIterator implements Iterator<String>, Closeable {
      *
      * @return the next line from the input
      * @throws NoSuchElementException if there is no line to return
+     * @deprecated Use {@link #next()}.
      */
+    @Deprecated
     public String nextLine() {
         if (!hasNext()) {
             throw new NoSuchElementException("No more lines");
