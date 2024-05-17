@@ -33,6 +33,18 @@ import java.util.function.Consumer;
 public interface IOIterator<E> {
 
     /**
+     * Adapts the given Iterable as an IOIterator.
+     *
+     * @param <E> the type of the stream elements.
+     * @param iterable The iterable to adapt
+     * @return A new IOIterator
+     * @since 2.17.0
+     */
+    static <E> IOIterator<E> adapt(final Iterable<E> iterable) {
+        return IOIteratorAdapter.adapt(iterable.iterator());
+    }
+
+    /**
      * Adapts the given Iterator as an IOIterator.
      *
      * @param <E> the type of the stream elements.
