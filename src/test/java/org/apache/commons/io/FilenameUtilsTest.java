@@ -247,15 +247,7 @@ public class FilenameUtilsTest {
         assertEquals("", FilenameUtils.getExtension("a\\b\\c"));
         assertEquals("", FilenameUtils.getExtension("C:\\temp\\foo.bar\\README"));
         assertEquals("ext", FilenameUtils.getExtension("../filename.ext"));
-
-        if (FilenameUtils.isSystemWindows()) {
-            // Special case handling for NTFS ADS names
-            final IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> FilenameUtils.getExtension("foo.exe:bar.txt"));
-            assertEquals("NTFS ADS separator (':') in file name is forbidden.", e.getMessage());
-        } else {
-            // Upwards compatibility:
-            assertEquals("txt", FilenameUtils.getExtension("foo.exe:bar.txt"));
-        }
+        assertEquals("txt", FilenameUtils.getExtension("foo.exe:bar.txt"));
     }
 
     @Test
