@@ -114,6 +114,8 @@ import org.apache.commons.io.function.Uncheck;
  */
 public class FileUtils {
 
+    private static final String PROTOCOL_FILE = "file";
+
     /**
      * The number of bytes in a kilobyte.
      */
@@ -329,7 +331,7 @@ public class FileUtils {
      * @since 1.3
      */
     public static Checksum checksum(final File file, final Checksum checksum) throws IOException {
-        checkFileExists(file, "file");
+        checkFileExists(file, PROTOCOL_FILE);
         Objects.requireNonNull(checksum, "checksum");
         try (InputStream inputStream = new CheckedInputStream(Files.newInputStream(file.toPath()), checksum)) {
             IOUtils.consume(inputStream);
@@ -1218,7 +1220,7 @@ public class FileUtils {
      * @since 2.9.0
      */
     public static File delete(final File file) throws IOException {
-        Objects.requireNonNull(file, "file");
+        Objects.requireNonNull(file, PROTOCOL_FILE);
         Files.delete(file.toPath());
         return file;
     }
@@ -1379,7 +1381,7 @@ public class FileUtils {
      * @throws IOException           in case deletion is unsuccessful.
      */
     public static void forceDelete(final File file) throws IOException {
-        Objects.requireNonNull(file, "file");
+        Objects.requireNonNull(file, PROTOCOL_FILE);
 
         final Counters.PathCounters deleteCounters;
         try {
@@ -1404,7 +1406,7 @@ public class FileUtils {
      * @throws IOException          in case deletion is unsuccessful.
      */
     public static void forceDeleteOnExit(final File file) throws IOException {
-        Objects.requireNonNull(file, "file");
+        Objects.requireNonNull(file, PROTOCOL_FILE);
         if (file.isDirectory()) {
             deleteDirectoryOnExit(file);
         } else {
@@ -1444,7 +1446,7 @@ public class FileUtils {
      * @since 2.5
      */
     public static void forceMkdirParent(final File file) throws IOException {
-        forceMkdir(getParentFile(Objects.requireNonNull(file, "file")));
+        forceMkdir(getParentFile(Objects.requireNonNull(file, PROTOCOL_FILE)));
     }
 
     /**
@@ -1689,7 +1691,7 @@ public class FileUtils {
      * @since 2.8.0
      */
     public static boolean isFileNewer(final File file, final ChronoZonedDateTime<?> chronoZonedDateTime) {
-        Objects.requireNonNull(file, "file");
+        Objects.requireNonNull(file, PROTOCOL_FILE);
         Objects.requireNonNull(chronoZonedDateTime, "chronoZonedDateTime");
         return Uncheck.get(() -> PathUtils.isNewer(file.toPath(), chronoZonedDateTime));
     }
@@ -1734,7 +1736,7 @@ public class FileUtils {
      * @since 2.12.0
      */
     public static boolean isFileNewer(final File file, final FileTime fileTime) throws IOException {
-        Objects.requireNonNull(file, "file");
+        Objects.requireNonNull(file, PROTOCOL_FILE);
         return PathUtils.isNewer(file.toPath(), fileTime);
     }
 
@@ -1764,7 +1766,7 @@ public class FileUtils {
      * @throws NullPointerException if the file is {@code null}.
      */
     public static boolean isFileNewer(final File file, final long timeMillis) {
-        Objects.requireNonNull(file, "file");
+        Objects.requireNonNull(file, PROTOCOL_FILE);
         return Uncheck.get(() -> PathUtils.isNewer(file.toPath(), timeMillis));
     }
 
@@ -1947,7 +1949,7 @@ public class FileUtils {
      * @since 2.12.0
      */
     public static boolean isFileOlder(final File file, final FileTime fileTime) throws IOException {
-        Objects.requireNonNull(file, "file");
+        Objects.requireNonNull(file, PROTOCOL_FILE);
         return PathUtils.isOlder(file.toPath(), fileTime);
     }
 
@@ -1976,7 +1978,7 @@ public class FileUtils {
      * @throws UncheckedIOException if an I/O error occurs
      */
     public static boolean isFileOlder(final File file, final long timeMillis) {
-        Objects.requireNonNull(file, "file");
+        Objects.requireNonNull(file, PROTOCOL_FILE);
         return Uncheck.get(() -> PathUtils.isOlder(file.toPath(), timeMillis));
     }
 
@@ -1992,6 +1994,16 @@ public class FileUtils {
     public static boolean isFileOlder(final File file, final OffsetDateTime offsetDateTime) {
         Objects.requireNonNull(offsetDateTime, "offsetDateTime");
         return isFileOlder(file, offsetDateTime.toInstant());
+    }
+
+    /**
+     * Tests whether the given URL is a file URL.
+     *
+     * @param url The URL to test.
+     * @return Whether the given URL is a file URL.
+     */
+    private static boolean isFileProtocol(final URL url) {
+        return PROTOCOL_FILE.equalsIgnoreCase(url.getProtocol());
     }
 
     /**
@@ -2138,7 +2150,7 @@ public class FileUtils {
         // https://bugs.openjdk.java.net/browse/JDK-8177809
         // File.lastModified() is losing milliseconds (always ends in 000)
         // This bug is in OpenJDK 8 and 9, and fixed in 10.
-        return Files.getLastModifiedTime(Objects.requireNonNull(file, "file").toPath());
+        return Files.getLastModifiedTime(Objects.requireNonNull(file, PROTOCOL_FILE).toPath());
     }
 
     /**
@@ -2549,7 +2561,7 @@ public class FileUtils {
      * @since 2.12.0
      */
     public static OutputStream newOutputStream(final File file, final boolean append) throws IOException {
-        return PathUtils.newOutputStream(Objects.requireNonNull(file, "file").toPath(), append);
+        return PathUtils.newOutputStream(Objects.requireNonNull(file, PROTOCOL_FILE).toPath(), append);
     }
 
     /**
@@ -2572,7 +2584,7 @@ public class FileUtils {
      * @since 1.3
      */
     public static FileInputStream openInputStream(final File file) throws IOException {
-        Objects.requireNonNull(file, "file");
+        Objects.requireNonNull(file, PROTOCOL_FILE);
         return new FileInputStream(file);
     }
 
@@ -2628,9 +2640,9 @@ public class FileUtils {
      * @since 2.1
      */
     public static FileOutputStream openOutputStream(final File file, final boolean append) throws IOException {
-        Objects.requireNonNull(file, "file");
+        Objects.requireNonNull(file, PROTOCOL_FILE);
         if (file.exists()) {
-            checkIsFile(file, "file");
+            checkIsFile(file, PROTOCOL_FILE);
         } else {
             createParentDirectories(file);
         }
@@ -2649,7 +2661,7 @@ public class FileUtils {
      * @since 1.1
      */
     public static byte[] readFileToByteArray(final File file) throws IOException {
-        Objects.requireNonNull(file, "file");
+        Objects.requireNonNull(file, PROTOCOL_FILE);
         return Files.readAllBytes(file.toPath());
     }
 
@@ -2967,7 +2979,7 @@ public class FileUtils {
      * if the URL's protocol is not {@code file}
      */
     public static File toFile(final URL url) {
-        if (url == null || !"file".equalsIgnoreCase(url.getProtocol())) {
+        if (url == null || !isFileProtocol(url)) {
             return null;
         }
         final String fileName = url.getFile().replace('/', File.separatorChar);
@@ -3003,7 +3015,7 @@ public class FileUtils {
         for (int i = 0; i < urls.length; i++) {
             final URL url = urls[i];
             if (url != null) {
-                if (!"file".equalsIgnoreCase(url.getProtocol())) {
+                if (!isFileProtocol(url)) {
                     throw new IllegalArgumentException("Can only convert file URL to a File: " + url);
                 }
                 files[i] = toFile(url);
@@ -3056,7 +3068,7 @@ public class FileUtils {
      * @throws IOException if setting the last-modified time failed or an I/O problem occurs.
      */
     public static void touch(final File file) throws IOException {
-        PathUtils.touch(Objects.requireNonNull(file, "file").toPath());
+        PathUtils.touch(Objects.requireNonNull(file, PROTOCOL_FILE).toPath());
     }
 
     /**
@@ -3113,7 +3125,7 @@ public class FileUtils {
      * @throws NullPointerException if the file is {@code null}
      */
     public static boolean waitFor(final File file, final int seconds) {
-        Objects.requireNonNull(file, "file");
+        Objects.requireNonNull(file, PROTOCOL_FILE);
         return PathUtils.waitFor(file.toPath(), Duration.ofSeconds(seconds), PathUtils.EMPTY_LINK_OPTION_ARRAY);
     }
 
