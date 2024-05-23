@@ -33,6 +33,7 @@ import java.util.Objects;
  */
 public class FileSystemProviders { // NOPMD Class will be final in 3.0.
 
+    private static final String SCHEME_FILE = "file";
     private static final FileSystemProviders INSTALLED = new FileSystemProviders(FileSystemProvider.installedProviders());
 
     /**
@@ -75,7 +76,7 @@ public class FileSystemProviders { // NOPMD Class will be final in 3.0.
     public FileSystemProvider getFileSystemProvider(final String scheme) {
         Objects.requireNonNull(scheme, "scheme");
         // Check default provider first to avoid loading of installed providers.
-        if (scheme.equalsIgnoreCase("file")) {
+        if (scheme.equalsIgnoreCase(SCHEME_FILE)) {
             return FileSystems.getDefault().provider();
         }
         // Find provider.
