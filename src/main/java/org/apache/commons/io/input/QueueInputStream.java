@@ -116,7 +116,7 @@ public class QueueInputStream extends InputStream {
          * Sets the polling timeout.
          *
          * @param timeout the polling timeout.
-         * @return this.
+         * @return {@code this} instance.
          */
         public Builder setTimeout(final Duration timeout) {
             if (timeout != null && timeout.toNanos() < 0) {

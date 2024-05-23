@@ -117,7 +117,7 @@ public class BoundedInputStream extends ProxyInputStream {
          * </p>
          *
          * @param count The current number of bytes counted.
-         * @return this.
+         * @return {@code this} instance.
          */
         public T setCount(final long count) {
             this.count = Math.max(0, count);
@@ -131,7 +131,7 @@ public class BoundedInputStream extends ProxyInputStream {
          * </p>
          *
          * @param maxCount The maximum number of bytes to return.
-         * @return this.
+         * @return {@code this} instance.
          */
         public T setMaxCount(final long maxCount) {
             this.maxCount = Math.max(EOF, maxCount);
@@ -146,7 +146,7 @@ public class BoundedInputStream extends ProxyInputStream {
          *
          * @param propagateClose {@code true} if calling {@link #close()} propagates to the {@code close()} method of the underlying stream or {@code false} if
          *                       it does not.
-         * @return this.
+         * @return {@code this} instance.
          */
         public T setPropagateClose(final boolean propagateClose) {
             this.propagateClose = propagateClose;

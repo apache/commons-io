@@ -230,7 +230,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * </p>
      *
      * @param bufferSize the buffer size.
-     * @return this.
+     * @return {@code this} instance.
      */
     public B setBufferSize(final int bufferSize) {
         this.bufferSize = checkBufferSize(bufferSize > 0 ? bufferSize : bufferSizeDefault);
@@ -244,7 +244,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * </p>
      *
      * @param bufferSize the buffer size, null resets to the default.
-     * @return this.
+     * @return {@code this} instance.
      */
     public B setBufferSize(final Integer bufferSize) {
         setBufferSize(bufferSize != null ? bufferSize : bufferSizeDefault);
@@ -270,7 +270,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * </p>
      *
      * @param bufferSizeDefault the buffer size, null resets to the default.
-     * @return this.
+     * @return {@code this} instance.
      */
     protected B setBufferSizeDefault(final int bufferSizeDefault) {
         this.bufferSizeDefault = bufferSizeDefault;
@@ -282,7 +282,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * exceeded, this methods throws an {@link IllegalArgumentException}.
      *
      * @param bufferSizeMax maximum buffer size checked by the buffer size checker.
-     * @return this.
+     * @return {@code this} instance.
      * @since 2.14.0
      */
     public B setBufferSizeMax(final int bufferSizeMax) {
@@ -297,7 +297,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * </p>
      *
      * @param charset the Charset, null resets to the default.
-     * @return this.
+     * @return {@code this} instance.
      */
     public B setCharset(final Charset charset) {
         this.charset = Charsets.toCharset(charset, charsetDefault);
@@ -311,7 +311,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * </p>
      *
      * @param charset the Charset name, null resets to the default.
-     * @return this.
+     * @return {@code this} instance.
      */
     public B setCharset(final String charset) {
         return setCharset(Charsets.toCharset(charset, charsetDefault));
@@ -324,7 +324,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * </p>
      *
      * @param defaultCharset the Charset name, null resets to the default.
-     * @return this.
+     * @return {@code this} instance.
      */
     protected B setCharsetDefault(final Charset defaultCharset) {
         this.charsetDefault = defaultCharset;
@@ -341,7 +341,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * </p>
      *
      * @param openOptions the OpenOption[] name, null resets to the default.
-     * @return this.
+     * @return {@code this} instance.
      * @since 2.13.0
      * @see #setInputStream(InputStream)
      * @see #setOutputStream(OutputStream)

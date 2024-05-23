@@ -274,7 +274,7 @@ public class Tailer implements Runnable, AutoCloseable {
          * Sets the tailable.
          *
          * @param tailable the tailable.
-         * @return this.
+         * @return {@code this} instance.
          */
         public Builder setTailable(final Tailable tailable) {
             this.tailable = Objects.requireNonNull(tailable, "tailable");

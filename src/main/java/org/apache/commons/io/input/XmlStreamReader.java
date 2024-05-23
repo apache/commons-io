@@ -172,7 +172,7 @@ public class XmlStreamReader extends Reader {
          * Sets the HTTP content type.
          *
          * @param httpContentType the HTTP content type.
-         * @return this.
+         * @return {@code this} instance.
          */
         public Builder setHttpContentType(final String httpContentType) {
             this.httpContentType = httpContentType;
@@ -183,7 +183,7 @@ public class XmlStreamReader extends Reader {
          * Sets the lenient toggle.
          *
          * @param lenient the lenient toggle.
-         * @return this.
+         * @return {@code this} instance.
          */
         public Builder setLenient(final boolean lenient) {
             this.lenient = lenient;

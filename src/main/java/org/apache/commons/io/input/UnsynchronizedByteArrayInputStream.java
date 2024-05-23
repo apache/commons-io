@@ -118,7 +118,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
          * Sets the length.
          *
          * @param length Must be greater or equal to 0.
-         * @return this.
+         * @return {@code this} instance.
          */
         public Builder setLength(final int length) {
             if (length < 0) {
@@ -132,7 +132,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
          * Sets the offset.
          *
          * @param offset Must be greater or equal to 0.
-         * @return this.
+         * @return {@code this} instance.
          */
         public Builder setOffset(final int offset) {
             if (offset < 0) {

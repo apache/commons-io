@@ -149,7 +149,7 @@ public final class ChecksumInputStream extends CountingInputStream {
          * Sets the Checksum.
          *
          * @param checksum the Checksum.
-         * @return this.
+         * @return {@code this} instance.
          */
         public Builder setChecksum(final Checksum checksum) {
             this.checksum = checksum;
@@ -164,7 +164,7 @@ public final class ChecksumInputStream extends CountingInputStream {
          * </p>
          *
          * @param countThreshold the count threshold. A negative number means the threshold is unbound.
-         * @return this.
+         * @return {@code this} instance.
          */
         public Builder setCountThreshold(final long countThreshold) {
             this.countThreshold = countThreshold;
@@ -175,7 +175,7 @@ public final class ChecksumInputStream extends CountingInputStream {
          * The expected {@link Checksum} value once the stream is exhausted or the count threshold is reached.
          *
          * @param expectedChecksumValue The expected Checksum value.
-         * @return this.
+         * @return {@code this} instance.
          */
         public Builder setExpectedChecksumValue(final long expectedChecksumValue) {
             this.expectedChecksumValue = expectedChecksumValue;
