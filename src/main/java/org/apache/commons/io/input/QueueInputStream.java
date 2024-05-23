@@ -105,7 +105,7 @@ public class QueueInputStream extends InputStream {
          * Sets backing queue for the stream.
          *
          * @param blockingQueue backing queue for the stream.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setBlockingQueue(final BlockingQueue<Integer> blockingQueue) {
             this.blockingQueue = blockingQueue != null ? blockingQueue : new LinkedBlockingQueue<>();

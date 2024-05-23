@@ -122,7 +122,7 @@ public class CharSequenceInputStream extends InputStream {
          * Sets the charset encoder. Assumes that the caller has configured the encoder.
          *
          * @param newEncoder the charset encoder.
-         * @return this
+         * @return {@code this} instance.
          * @since 2.13.0
          */
         public Builder setCharsetEncoder(final CharsetEncoder newEncoder) {

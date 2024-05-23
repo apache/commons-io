@@ -150,7 +150,7 @@ public class ReaderInputStream extends InputStream {
          * Sets the charset encoder. Assumes that the caller has configured the encoder.
          *
          * @param newEncoder the charset encoder, null resets to a default encoder.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setCharsetEncoder(final CharsetEncoder newEncoder) {
             charsetEncoder = CharsetEncoders.toCharsetEncoder(newEncoder, () -> newEncoder(getCharsetDefault()));

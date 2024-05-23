@@ -178,7 +178,7 @@ public class BOMInputStream extends ProxyInputStream {
          * </p>
          *
          * @param byteOrderMarks the ByteOrderMarks to detect and optionally exclude.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setByteOrderMarks(final ByteOrderMark... byteOrderMarks) {
             this.byteOrderMarks = byteOrderMarks != null ? byteOrderMarks.clone() : DEFAULT;
@@ -192,7 +192,7 @@ public class BOMInputStream extends ProxyInputStream {
          * </p>
          *
          * @param include true to include the UTF-8 BOM or false to exclude it. return this;
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setInclude(final boolean include) {
             this.include = include;

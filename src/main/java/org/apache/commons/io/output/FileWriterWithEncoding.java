@@ -120,7 +120,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
          * Sets whether or not to append.
          *
          * @param append Whether or not to append.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setAppend(final boolean append) {
             this.append = append;
@@ -131,7 +131,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
          * Sets charsetEncoder to use for encoding.
          *
          * @param charsetEncoder The charsetEncoder to use for encoding.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setCharsetEncoder(final CharsetEncoder charsetEncoder) {
             this.charsetEncoder = charsetEncoder;

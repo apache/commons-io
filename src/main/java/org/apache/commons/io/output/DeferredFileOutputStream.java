@@ -116,7 +116,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
          * Sets the temporary file directory.
          *
          * @param directory Temporary file directory.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setDirectory(final File directory) {
             this.directory = toPath(directory, null);
@@ -127,7 +127,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
          * Sets the temporary file directory.
          *
          * @param directory Temporary file directory.
-         * @return this
+         * @return {@code this} instance.
          * @since 2.14.0
          */
         public Builder setDirectory(final Path directory) {
@@ -139,7 +139,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
          * Sets the file to which data is saved beyond the threshold.
          *
          * @param outputFile The file to which data is saved beyond the threshold.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setOutputFile(final File outputFile) {
             this.outputFile = toPath(outputFile, null);
@@ -150,7 +150,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
          * Sets the file to which data is saved beyond the threshold.
          *
          * @param outputFile The file to which data is saved beyond the threshold.
-         * @return this
+         * @return {@code this} instance.
          * @since 2.14.0
          */
         public Builder setOutputFile(final Path outputFile) {
@@ -162,7 +162,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
          * Sets the prefix to use for the temporary file.
          *
          * @param prefix Prefix to use for the temporary file.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setPrefix(final String prefix) {
             this.prefix = prefix;
@@ -173,7 +173,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
          * Sets the suffix to use for the temporary file.
          *
          * @param suffix Suffix to use for the temporary file.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setSuffix(final String suffix) {
             this.suffix = suffix;
@@ -184,7 +184,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
          * Sets the number of bytes at which to trigger an event.
          *
          * @param threshold The number of bytes at which to trigger an event.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setThreshold(final int threshold) {
             this.threshold = threshold;

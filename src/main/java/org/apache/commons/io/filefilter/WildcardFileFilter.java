@@ -107,7 +107,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
          * Sets how to handle case sensitivity, null means case-sensitive.
          *
          * @param ioCase how to handle case sensitivity, null means case-sensitive.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setIoCase(final IOCase ioCase) {
             this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
@@ -118,7 +118,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
          * Sets the list of wildcards to match, not null.
          *
          * @param wildcards the list of wildcards to match, not null.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setWildcards(final List<String> wildcards) {
             setWildcards(requireWildcards(wildcards).toArray(EMPTY_STRING_ARRAY));
@@ -129,7 +129,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
          * Sets the wildcards to match, not null.
          *
          * @param wildcards the wildcards to match, not null.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setWildcards(final String... wildcards) {
             this.wildcards = requireWildcards(wildcards);

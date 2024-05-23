@@ -103,7 +103,7 @@ public class ReadAheadInputStream extends FilterInputStream {
          * Sets the executor service for the read-ahead thread.
          *
          * @param executorService the executor service for the read-ahead thread.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setExecutorService(final ExecutorService executorService) {
             this.executorService = executorService;

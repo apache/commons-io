@@ -154,7 +154,7 @@ public class WriterOutputStream extends OutputStream {
          * Sets the charset decoder.
          *
          * @param charsetDecoder the charset decoder.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setCharsetDecoder(final CharsetDecoder charsetDecoder) {
             this.charsetDecoder = charsetDecoder != null ? charsetDecoder : getCharsetDefault().newDecoder();
@@ -170,7 +170,7 @@ public class WriterOutputStream extends OutputStream {
          * @param writeImmediately If {@code true} the output buffer will be flushed after each write operation, i.e. all available data will be written to the
          *                         underlying {@link Writer} immediately. If {@code false}, the output buffer will only be flushed when it overflows or when
          *                         {@link #flush()} or {@link #close()} is called.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setWriteImmediately(final boolean writeImmediately) {
             this.writeImmediately = writeImmediately;

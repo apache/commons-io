@@ -255,7 +255,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * Sets the buffer size checker function. Throws a {@link IllegalArgumentException} by default.
      *
      * @param bufferSizeChecker the buffer size checker function. null resets to the default behavior.
-     * @return this
+     * @return {@code this} instance.
      * @since 2.14.0
      */
     public B setBufferSizeChecker(final IntUnaryOperator bufferSizeChecker) {

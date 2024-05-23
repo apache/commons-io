@@ -98,7 +98,7 @@ public class RandomAccessFileInputStream extends InputStream {
          * Sets whether to close the underlying file when this stream is closed.
          *
          * @param closeOnClose Whether to close the underlying file when this stream is closed.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setCloseOnClose(final boolean closeOnClose) {
             this.closeOnClose = closeOnClose;
@@ -109,7 +109,7 @@ public class RandomAccessFileInputStream extends InputStream {
          * Sets the RandomAccessFile to stream.
          *
          * @param randomAccessFile the RandomAccessFile to stream.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setRandomAccessFile(final RandomAccessFile randomAccessFile) {
             this.randomAccessFile = randomAccessFile;

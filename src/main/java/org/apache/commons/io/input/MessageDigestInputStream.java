@@ -110,7 +110,7 @@ public final class MessageDigestInputStream extends ObservableInputStream {
          * </p>
          *
          * @param messageDigest the message digest.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setMessageDigest(final MessageDigest messageDigest) {
             this.messageDigest = messageDigest;
@@ -126,7 +126,7 @@ public final class MessageDigestInputStream extends ObservableInputStream {
          * @param algorithm the name of the algorithm. See the MessageDigest section in the
          *                  <a href= "https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#MessageDigest"> Java Cryptography
          *                  Architecture Standard Algorithm Name Documentation</a> for information about standard algorithm names.
-         * @return this
+         * @return {@code this} instance.
          * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation for the specified algorithm.
          */
         public Builder setMessageDigest(final String algorithm) throws NoSuchAlgorithmException {

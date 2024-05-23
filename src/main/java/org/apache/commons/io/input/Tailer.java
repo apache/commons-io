@@ -219,7 +219,7 @@ public class Tailer implements Runnable, AutoCloseable {
          * Sets the delay duration. null resets to the default delay of one second.
          *
          * @param delayDuration the delay between checks of the file for new content.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setDelayDuration(final Duration delayDuration) {
             this.delayDuration = delayDuration != null ? delayDuration : DEFAULT_DELAY_DURATION;
@@ -230,7 +230,7 @@ public class Tailer implements Runnable, AutoCloseable {
          * Sets the executor service to use when startThread is true.
          *
          * @param executorService the executor service to use when startThread is true.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setExecutorService(final ExecutorService executorService) {
             this.executorService = Objects.requireNonNull(executorService, "executorService");
@@ -252,7 +252,7 @@ public class Tailer implements Runnable, AutoCloseable {
          * Sets the re-open behavior.
          *
          * @param reOpen whether to close/reopen the file between chunks
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setReOpen(final boolean reOpen) {
             this.reOpen = reOpen;
@@ -263,7 +263,7 @@ public class Tailer implements Runnable, AutoCloseable {
          * Sets the daemon thread startup behavior.
          *
          * @param startThread whether to create a daemon thread automatically.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setStartThread(final boolean startThread) {
             this.startThread = startThread;
@@ -285,7 +285,7 @@ public class Tailer implements Runnable, AutoCloseable {
          * Sets the listener.
          *
          * @param tailerListener the listener.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setTailerListener(final TailerListener tailerListener) {
             this.tailerListener = Objects.requireNonNull(tailerListener, "tailerListener");
@@ -296,7 +296,7 @@ public class Tailer implements Runnable, AutoCloseable {
          * Sets the tail start behavior.
          *
          * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setTailFromEnd(final boolean end) {
             this.tailFromEnd = end;

@@ -113,7 +113,7 @@ public class LockableFileWriter extends Writer {
          * Sets whether to append (true) or overwrite (false).
          *
          * @param append whether to append (true) or overwrite (false).
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setAppend(final boolean append) {
             this.append = append;
@@ -124,7 +124,7 @@ public class LockableFileWriter extends Writer {
          * Sets the directory in which the lock file should be held.
          *
          * @param lockDirectory the directory in which the lock file should be held.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setLockDirectory(final File lockDirectory) {
             this.lockDirectory = AbstractOriginSupplier.newFileOrigin(lockDirectory != null ? lockDirectory : FileUtils.getTempDirectory());
@@ -135,7 +135,7 @@ public class LockableFileWriter extends Writer {
          * Sets the directory in which the lock file should be held.
          *
          * @param lockDirectory the directory in which the lock file should be held.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setLockDirectory(final String lockDirectory) {
             this.lockDirectory = AbstractOriginSupplier.newFileOrigin(lockDirectory != null ? lockDirectory : FileUtils.getTempDirectoryPath());
