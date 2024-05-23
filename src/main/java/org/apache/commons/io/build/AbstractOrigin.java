@@ -402,6 +402,13 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return Paths.get(get());
         }
 
+        @Override
+        public InputStream getInputStream(final OpenOption... options) throws IOException {
+            if ("http".equalsIgnoreCase(get().getScheme()) || "https".equalsIgnoreCase(get().getScheme())) {
+                return get().toURL().openStream();
+            }
+            return Files.newInputStream(getPath(), options);
+        }
     }
 
     /**
