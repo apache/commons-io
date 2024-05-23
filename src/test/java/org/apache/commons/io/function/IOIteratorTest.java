@@ -51,13 +51,13 @@ public class IOIteratorTest {
     }
 
     @Test
-    public void testAdaptIterator() throws IOException {
-        assertEquals(TestConstants.ABS_PATH_A, iterator.next());
+    public void testAdaptIterable() throws IOException {
+        assertEquals(TestConstants.ABS_PATH_A, IOIterator.adapt(newPathList()).next());
     }
 
     @Test
-    public void testAdaptIterable() throws IOException {
-        assertEquals(TestConstants.ABS_PATH_A, IOIterator.adapt(newPathList()).next());
+    public void testAdaptIterator() throws IOException {
+        assertEquals(TestConstants.ABS_PATH_A, iterator.next());
     }
 
     @Test
