@@ -1104,7 +1104,7 @@ public class IOUtils {
      */
     public static long copy(final InputStream inputStream, final OutputStream outputStream, final int bufferSize)
             throws IOException {
-        return copyLarge(inputStream, outputStream, IOUtils.byteArray(bufferSize));
+        return copyLarge(inputStream, outputStream, byteArray(bufferSize));
     }
 
     /**

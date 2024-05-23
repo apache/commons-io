@@ -173,7 +173,7 @@ public class Counters {
          * Constructs a new initialized instance.
          */
         protected BigIntegerPathCounters() {
-            super(Counters.bigIntegerCounter(), Counters.bigIntegerCounter(), Counters.bigIntegerCounter());
+            super(bigIntegerCounter(), bigIntegerCounter(), bigIntegerCounter());
         }
 
     }
@@ -295,7 +295,7 @@ public class Counters {
          * Constructs a new initialized instance.
          */
         protected LongPathCounters() {
-            super(Counters.longCounter(), Counters.longCounter(), Counters.longCounter());
+            super(longCounter(), longCounter(), longCounter());
         }
 
     }
@@ -356,7 +356,7 @@ public class Counters {
          * Constructs a new initialized instance.
          */
         private NoopPathCounters() {
-            super(Counters.noopCounter(), Counters.noopCounter(), Counters.noopCounter());
+            super(noopCounter(), noopCounter(), noopCounter());
         }
 
     }

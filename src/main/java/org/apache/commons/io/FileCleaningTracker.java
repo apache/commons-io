@@ -54,7 +54,7 @@ public class FileCleaningTracker {
         /** Constructs a new Reaper */
         Reaper() {
             super("File Reaper");
-            setPriority(Thread.MAX_PRIORITY);
+            setPriority(MAX_PRIORITY);
             setDaemon(true);
         }
 

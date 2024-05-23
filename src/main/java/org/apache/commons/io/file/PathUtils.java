@@ -498,7 +498,7 @@ public final class PathUtils {
      * @since 2.8.0
      */
     public static PathCounters deleteDirectory(final Path directory, final DeleteOption... deleteOptions) throws IOException {
-        final LinkOption[] linkOptions = PathUtils.noFollowLinkOptionArray();
+        final LinkOption[] linkOptions = noFollowLinkOptionArray();
         // POSIX ops will noop on non-POSIX.
         return withPosixFileAttributes(getParent(directory), linkOptions, overrideReadOnly(deleteOptions),
                 pfa -> visitFileTree(new DeletingPathVisitor(Counters.longPathCounters(), linkOptions, deleteOptions), directory).getPathCounters());

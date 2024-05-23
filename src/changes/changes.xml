@@ -55,6 +55,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">FileUtils.lastModifiedFileTime(File) calls Objects.requireNonNull() on the wrong object.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">PathUtils.deleteOnExit(Path) calls Objects.requireNonNull() on the wrong object.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate LineIterator.nextLine() in favor of next().</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Fix PMD UnnecessaryFullyQualifiedName.</action>
       <!-- UPDATE -->
       <action dev="ggregory" type="update"             due-to="Dependabot">Bump tests commons.bytebuddy.version from 1.14.13 to 1.14.15 #615, #621.</action>
       <action dev="ggregory" type="update"             due-to="Dependabot">Bump tests commons-codec:commons-codec from 1.16.1 to 1.17.0.</action>

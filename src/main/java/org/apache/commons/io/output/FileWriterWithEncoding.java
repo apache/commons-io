@@ -113,7 +113,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
                 throw new IllegalStateException(String.format("Mismatched Charset(%s) and CharsetEncoder(%s)", getCharset(), charsetEncoder.charset()));
             }
             final Object encoder = charsetEncoder != null ? charsetEncoder : getCharset();
-            return new FileWriterWithEncoding(FileWriterWithEncoding.initWriter(checkOrigin().getFile(), encoder, append));
+            return new FileWriterWithEncoding(initWriter(checkOrigin().getFile(), encoder, append));
         }
 
         /**

@@ -2485,7 +2485,7 @@ public class FileUtils {
             // Don't interfere with file date on move, handled by StandardCopyOption.COPY_ATTRIBUTES
             copyFile(srcFile, destFile, false, copyOptions);
             if (!srcFile.delete()) {
-                FileUtils.deleteQuietly(destFile);
+                deleteQuietly(destFile);
                 throw new IOException("Failed to delete original file '" + srcFile + "' after copy to '" + destFile + "'");
             }
         }

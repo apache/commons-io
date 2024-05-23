@@ -28,7 +28,6 @@ import java.util.Objects;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.build.AbstractOrigin;
-import org.apache.commons.io.build.AbstractOriginSupplier;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
@@ -74,7 +73,7 @@ public class LockableFileWriter extends Writer {
     public static class Builder extends AbstractStreamBuilder<LockableFileWriter, Builder> {
 
         private boolean append;
-        private AbstractOrigin<?, ?> lockDirectory = AbstractOriginSupplier.newFileOrigin(FileUtils.getTempDirectoryPath());
+        private AbstractOrigin<?, ?> lockDirectory = newFileOrigin(FileUtils.getTempDirectoryPath());
 
         /**
          * Builds a new {@link LockableFileWriter}.
@@ -127,7 +126,7 @@ public class LockableFileWriter extends Writer {
          * @return {@code this} instance.
          */
         public Builder setLockDirectory(final File lockDirectory) {
-            this.lockDirectory = AbstractOriginSupplier.newFileOrigin(lockDirectory != null ? lockDirectory : FileUtils.getTempDirectory());
+            this.lockDirectory = newFileOrigin(lockDirectory != null ? lockDirectory : FileUtils.getTempDirectory());
             return this;
         }
 
@@ -138,7 +137,7 @@ public class LockableFileWriter extends Writer {
          * @return {@code this} instance.
          */
         public Builder setLockDirectory(final String lockDirectory) {
-            this.lockDirectory = AbstractOriginSupplier.newFileOrigin(lockDirectory != null ? lockDirectory : FileUtils.getTempDirectoryPath());
+            this.lockDirectory = newFileOrigin(lockDirectory != null ? lockDirectory : FileUtils.getTempDirectoryPath());
             return this;
         }
 

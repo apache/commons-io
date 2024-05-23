@@ -76,7 +76,7 @@ public enum IOCase {
      * @throws IllegalArgumentException if the name is invalid
      */
     public static IOCase forName(final String name) {
-        return Stream.of(IOCase.values()).filter(ioCase -> ioCase.getName().equals(name)).findFirst()
+        return Stream.of(values()).filter(ioCase -> ioCase.getName().equals(name)).findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Illegal IOCase name: " + name));
     }
 

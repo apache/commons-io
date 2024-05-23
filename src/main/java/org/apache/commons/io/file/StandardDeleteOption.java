@@ -45,7 +45,7 @@ public enum StandardDeleteOption implements DeleteOption {
         if (IOUtils.length(options) == 0) {
             return false;
         }
-        return Stream.of(options).anyMatch(e -> StandardDeleteOption.OVERRIDE_READ_ONLY == e);
+        return Stream.of(options).anyMatch(e -> OVERRIDE_READ_ONLY == e);
     }
 
 }
