@@ -205,7 +205,7 @@ public class LineIteratorTest {
         final List<String> lines = createLinesFile(testFile, encoding, 9);
 
         final Reader reader = new BufferedReader(Files.newBufferedReader(testFile.toPath()));
-        this.testFiltering(lines, reader);
+        testFiltering(lines, reader);
     }
 
     @Test
@@ -217,7 +217,7 @@ public class LineIteratorTest {
         final List<String> lines = createLinesFile(testFile, encoding, 9);
 
         final Reader reader = Files.newBufferedReader(testFile.toPath());
-        this.testFiltering(lines, reader);
+        testFiltering(lines, reader);
     }
 
     @Test

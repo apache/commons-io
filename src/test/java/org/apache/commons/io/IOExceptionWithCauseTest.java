@@ -36,7 +36,7 @@ public class IOExceptionWithCauseTest {
     public void testIOExceptionStringThrowable() {
         final Throwable cause = new IllegalArgumentException("cause");
         final IOException exception = new IOException("message", cause);
-        this.validate(exception, cause, "message");
+        validate(exception, cause, "message");
     }
 
     /**
@@ -47,7 +47,7 @@ public class IOExceptionWithCauseTest {
     public void testIOExceptionThrowable() {
         final Throwable cause = new IllegalArgumentException("cause");
         final IOException exception = new IOException(cause);
-        this.validate(exception, cause, "java.lang.IllegalArgumentException: cause");
+        validate(exception, cause, "java.lang.IllegalArgumentException: cause");
     }
 
     void validate(final Throwable throwable, final Throwable expectedCause, final String expectedMessage) {

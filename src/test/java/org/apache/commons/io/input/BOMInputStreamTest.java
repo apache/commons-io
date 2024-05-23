@@ -190,9 +190,9 @@ public class BOMInputStreamTest {
             try (BOMInputStream bomInputStream = BOMInputStream.builder().setInputStream(inputStream).get()) {
                 bomInputStream.mark(1_000_000);
 
-                this.readFile(bomInputStream);
+                readFile(bomInputStream);
                 bomInputStream.reset();
-                this.readFile(bomInputStream);
+                readFile(bomInputStream);
                 inputStream.close();
             }
         }
@@ -435,12 +435,12 @@ public class BOMInputStreamTest {
 
     @Test
     public void testReadTwiceWithBOM() throws Exception {
-        this.readBOMInputStreamTwice("/org/apache/commons/io/testfileBOM.xml");
+        readBOMInputStreamTwice("/org/apache/commons/io/testfileBOM.xml");
     }
 
     @Test
     public void testReadTwiceWithoutBOM() throws Exception {
-        this.readBOMInputStreamTwice("/org/apache/commons/io/testfileNoBOM.xml");
+        readBOMInputStreamTwice("/org/apache/commons/io/testfileNoBOM.xml");
     }
 
     @Test

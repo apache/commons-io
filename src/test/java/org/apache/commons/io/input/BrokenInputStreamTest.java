@@ -74,17 +74,17 @@ public class BrokenInputStreamTest {
         try {
             try {
                 in.read();
-            } catch (Throwable localThrowable1) {
+            } catch (final Throwable localThrowable1) {
                 localThrowable2 = localThrowable1;
                 throw localThrowable1;
             } finally {
                 try {
                     in.close();
-                } catch (Throwable x2) {
+                } catch (final Throwable x2) {
                     localThrowable2.addSuppressed(x2);
                 }
             }
-        } catch (IOException expected) {
+        } catch (final IOException expected) {
             final Throwable[] suppressed = expected.getSuppressed();
             assertEquals(1, suppressed.length);
         }

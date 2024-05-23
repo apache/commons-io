@@ -2873,7 +2873,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         file.mkdir();
 
         // Create a cyclic symlink
-        this.createCircularSymLink(file);
+        createCircularSymLink(file);
 
         assertEquals(TEST_DIRECTORY_SIZE, FileUtils.sizeOfDirectory(file), "Unexpected directory size");
     }

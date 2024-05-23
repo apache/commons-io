@@ -60,7 +60,7 @@ public class CircularByteBufferTest {
 
     @Test
     public void testClear() {
-       final byte[] data = new byte[] { 1, 2, 3 };
+       final byte[] data = { 1, 2, 3 };
        final CircularByteBuffer buffer = new CircularByteBuffer(10);
        assertEquals(0, buffer.getCurrentNumberOfBytes());
        assertFalse(buffer.hasBytes());
