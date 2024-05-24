@@ -59,7 +59,6 @@ public class DemuxInputStream extends InputStream {
      * @return the byte read from stream
      * @throws IOException if an error occurs
      */
-    @SuppressWarnings("resource")
     @Override
     public int read() throws IOException {
         final InputStream inputStream = inputStreamLocal.get();
