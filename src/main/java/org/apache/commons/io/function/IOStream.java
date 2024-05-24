@@ -263,7 +263,7 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
      * @return Like {@link Stream#flatMap(java.util.function.Function)}.
      * @throws IOException if an I/O error occurs.
      */
-    @SuppressWarnings("unused") // thrown by Erase.
+    @SuppressWarnings({ "unused", "resource" }) // thrown by Erase; resourcce closed by caller.
     default <R> IOStream<R> flatMap(final IOFunction<? super T, ? extends IOStream<? extends R>> mapper) throws IOException {
         return adapt(unwrap().flatMap(t -> Erase.apply(mapper, t).unwrap()));
     }
