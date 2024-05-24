@@ -28,7 +28,6 @@ import java.util.stream.Stream;
  */
 final class IOStreamAdapter<T> extends IOBaseStreamAdapter<T, IOStream<T>, Stream<T>> implements IOStream<T> {
 
-    @SuppressWarnings("resource")
     static <T> IOStream<T> adapt(final Stream<T> delegate) {
         return delegate != null ? new IOStreamAdapter<>(delegate) : IOStream.empty();
     }
