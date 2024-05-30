@@ -48,14 +48,14 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <release version="2.17.0" date="YYYY-MM-DD" description="Java 8 is required.">
       <!-- ADD --> 
-      <action dev="ggregory" type="fix"                due-to="sullis">Add test for CircularByteBuffer clear() #620.</action>
-      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Add IOIterator.adapt(Iterable).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IOIterator.adapt(Iterable).</action>
       <!-- FIX -->
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Add missing unit tests.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">FileUtils.lastModifiedFileTime(File) calls Objects.requireNonNull() on the wrong object.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">PathUtils.deleteOnExit(Path) calls Objects.requireNonNull() on the wrong object.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate LineIterator.nextLine() in favor of next().</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Fix PMD UnnecessaryFullyQualifiedName.</action>
+      <action dev="ggregory" type="fix"                due-to="sullis">Add test for CircularByteBuffer clear() #620.</action>
       <!-- UPDATE -->
       <action dev="ggregory" type="update"             due-to="Dependabot">Bump tests commons.bytebuddy.version from 1.14.13 to 1.14.16 #615, #621, #631.</action>
       <action dev="ggregory" type="update"             due-to="Dependabot">Bump tests commons-codec:commons-codec from 1.16.1 to 1.17.0.</action>
