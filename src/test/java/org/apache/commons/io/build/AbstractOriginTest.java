@@ -130,5 +130,4 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
     public void testSize() throws IOException {
         assertEquals(Files.size(Paths.get(FILE_NAME_RO)), getOriginRo().getByteArray().length);
     }
-
 }
