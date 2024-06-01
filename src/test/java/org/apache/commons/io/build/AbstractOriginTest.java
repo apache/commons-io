@@ -18,7 +18,6 @@ package org.apache.commons.io.build;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.IOException;
@@ -26,7 +25,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
-import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -45,7 +43,6 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
     protected static final String FILE_RES_RO = "/org/apache/commons/io/test-file-20byteslength.bin";
     protected static final String FILE_NAME_RO = "src/test/resources" + FILE_RES_RO;
     protected static final String FILE_NAME_RW = "target/" + AbstractOriginTest.class.getSimpleName() + ".txt";
-    protected static final String URI_HTTPS = "https://commons.apache.org/proper/commons-io";
 
     protected AbstractOrigin<T, B> originRo;
     protected AbstractOrigin<T, B> originRw;
@@ -134,11 +131,4 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
         assertEquals(Files.size(Paths.get(FILE_NAME_RO)), getOriginRo().getByteArray().length);
     }
 
-    @Test
-    public void testURI() throws Exception {
-        final AbstractOrigin.URIOrigin origin = new AbstractOrigin.URIOrigin(new URI(URI_HTTPS));
-        try (final InputStream in = origin.getInputStream()) {
-            assertNotEquals(-1, in.read());
-        }
-    }
 }

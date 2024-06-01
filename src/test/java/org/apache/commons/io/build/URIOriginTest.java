@@ -16,11 +16,15 @@
  */
 package org.apache.commons.io.build;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
+import java.io.InputStream;
 import java.net.URI;
 import java.nio.file.Paths;
 
 import org.apache.commons.io.build.AbstractOrigin.URIOrigin;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests {@link URIOrigin}.
@@ -35,4 +39,21 @@ public class URIOriginTest extends AbstractOriginTest<URI, URIOrigin> {
         setOriginRw(new URIOrigin(Paths.get(FILE_NAME_RW).toUri()));
     }
 
+    @Test
+    void testGetInputStreamHttpURI() throws Exception {
+        final String uri = "https://example.com";
+        final AbstractOrigin.URIOrigin origin = new AbstractOrigin.URIOrigin(new URI(uri));
+        try (final InputStream in = origin.getInputStream()) {
+            assertNotEquals(-1, in.read());
+        }
+    }
+
+    @Test
+    void testGetInputStreamHttps() throws Exception {
+        final String uri = "https://example.com";
+        final AbstractOrigin.URIOrigin origin = new AbstractOrigin.URIOrigin(new URI(uri));
+        try (final InputStream in = origin.getInputStream()) {
+            assertNotEquals(-1, in.read());
+        }
+    }
 }
