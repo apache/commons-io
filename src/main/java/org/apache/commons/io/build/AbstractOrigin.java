@@ -413,7 +413,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
                 return Files.newInputStream(fileSystemProvider.getPath(uri), options);
             }
             if ("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme)) {
-                return get().toURL().openStream();
+                return uri.toURL().openStream();
             }
             return Files.newInputStream(getPath(), options);
         }
