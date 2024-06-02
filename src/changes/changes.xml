@@ -49,6 +49,7 @@ The <action> type attribute can be add,update,fix,remove.
     <release version="2.17.0" date="YYYY-MM-DD" description="Java 8 is required.">
       <!-- ADD --> 
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IOIterator.adapt(Iterable).</action>
+      <action dev="ggregory" type="add" issue="IO-831" due-to="Elliotte Rusty Harold, Thach Le, Gary Gregory">Add getInputStream() for 'https' & 'http' in URIOrigin #630.</action>
       <!-- FIX -->
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Add missing unit tests.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">FileUtils.lastModifiedFileTime(File) calls Objects.requireNonNull() on the wrong object.</action>
