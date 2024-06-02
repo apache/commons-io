@@ -385,6 +385,9 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      */
     public static class URIOrigin extends AbstractOrigin<URI, URIOrigin> {
 
+        private static final String SCHEME_HTTPS = "https";
+        private static final String SCHEME_HTTP = "http";
+
         /**
          * Constructs a new instance for the given origin.
          *
@@ -407,7 +410,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             if (fileSystemProvider != null) {
                 return Files.newInputStream(fileSystemProvider.getPath(uri), options);
             }
-            if ("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme)) {
+            if (SCHEME_HTTP.equalsIgnoreCase(scheme) || SCHEME_HTTPS.equalsIgnoreCase(scheme)) {
                 return uri.toURL().openStream();
             }
             return Files.newInputStream(getPath(), options);
