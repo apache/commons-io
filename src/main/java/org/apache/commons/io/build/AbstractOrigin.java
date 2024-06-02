@@ -400,11 +400,6 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         }
 
         @Override
-        public Path getPath() {
-            return Paths.get(get());
-        }
-
-        @Override
         public InputStream getInputStream(final OpenOption... options) throws IOException {
             final URI uri = get();
             final String scheme = uri.getScheme();
@@ -416,6 +411,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
                 return uri.toURL().openStream();
             }
             return Files.newInputStream(getPath(), options);
+        }
+
+        @Override
+        public Path getPath() {
+            return Paths.get(get());
         }
     }
 
