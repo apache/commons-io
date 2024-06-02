@@ -33,12 +33,14 @@ import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.spi.FileSystemProvider;
 import java.util.Arrays;
 import java.util.Objects;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.RandomAccessFileMode;
 import org.apache.commons.io.RandomAccessFiles;
+import org.apache.commons.io.file.spi.FileSystemProviders;
 import org.apache.commons.io.input.CharSequenceInputStream;
 import org.apache.commons.io.input.CharSequenceReader;
 import org.apache.commons.io.input.ReaderInputStream;
@@ -402,6 +404,19 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return Paths.get(get());
         }
 
+        @Override
+        public InputStream getInputStream(final OpenOption... options) throws IOException {
+            final URI uri = get();
+            final String scheme = uri.getScheme();
+            final FileSystemProvider fileSystemProvider = FileSystemProviders.installed().getFileSystemProvider(scheme);
+            if (fileSystemProvider != null) {
+                return Files.newInputStream(fileSystemProvider.getPath(uri), options);
+            }
+            if ("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme)) {
+                return uri.toURL().openStream();
+            }
+            return Files.newInputStream(getPath(), options);
+        }
     }
 
     /**
