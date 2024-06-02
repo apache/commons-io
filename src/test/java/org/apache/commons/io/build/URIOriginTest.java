@@ -25,6 +25,8 @@ import java.nio.file.Paths;
 import org.apache.commons.io.build.AbstractOrigin.URIOrigin;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Tests {@link URIOrigin}.
@@ -39,9 +41,12 @@ public class URIOriginTest extends AbstractOriginTest<URI, URIOrigin> {
         setOriginRw(new URIOrigin(Paths.get(FILE_NAME_RW).toUri()));
     }
 
-    @Test
-    void testGetInputStreamHttpURI() throws Exception {
-        final String uri = "https://example.com";
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "http://example.com",
+            "https://example.com"
+    })
+    void testGetInputStream(String uri) throws Exception {
         final AbstractOrigin.URIOrigin origin = new AbstractOrigin.URIOrigin(new URI(uri));
         try (final InputStream in = origin.getInputStream()) {
             assertNotEquals(-1, in.read());
@@ -49,9 +54,8 @@ public class URIOriginTest extends AbstractOriginTest<URI, URIOrigin> {
     }
 
     @Test
-    void testGetInputStreamHttps() throws Exception {
-        final String uri = "https://example.com";
-        final AbstractOrigin.URIOrigin origin = new AbstractOrigin.URIOrigin(new URI(uri));
+    void testGetInputStreamFileURI() throws Exception {
+        final AbstractOrigin.URIOrigin origin = getOriginRo().asThis();
         try (final InputStream in = origin.getInputStream()) {
             assertNotEquals(-1, in.read());
         }
