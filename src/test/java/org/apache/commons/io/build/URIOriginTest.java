@@ -46,7 +46,7 @@ public class URIOriginTest extends AbstractOriginTest<URI, URIOrigin> {
             "http://example.com",
             "https://example.com"
     })
-    void testGetInputStream(String uri) throws Exception {
+    void testGetInputStream(final String uri) throws Exception {
         final AbstractOrigin.URIOrigin origin = new AbstractOrigin.URIOrigin(new URI(uri));
         try (final InputStream in = origin.getInputStream()) {
             assertNotEquals(-1, in.read());
