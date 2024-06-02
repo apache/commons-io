@@ -409,15 +409,12 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             final URI uri = get();
             final String scheme = uri.getScheme();
             final FileSystemProvider fileSystemProvider = FileSystemProviders.installed().getFileSystemProvider(scheme);
-
             if (fileSystemProvider != null) {
                 return Files.newInputStream(fileSystemProvider.getPath(uri), options);
             }
-
             if ("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme)) {
                 return get().toURL().openStream();
             }
-            
             return Files.newInputStream(getPath(), options);
         }
     }
