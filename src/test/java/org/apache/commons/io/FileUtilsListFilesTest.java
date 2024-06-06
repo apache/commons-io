@@ -22,13 +22,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.function.Uncheck;
 import org.apache.commons.lang3.function.Consumers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -200,6 +204,22 @@ public class FileUtilsListFilesTest {
         assertTrue(fileNames.contains("dummy-build.xml"));
         assertTrue(fileNames.contains("README"));
         assertFalse(fileNames.contains("dummy-file.txt"));
+    }
+
+    @Test
+    public void testListFilesWithDeletion() throws IOException {
+        final String[] extensions = {"xml", "txt"};
+        final List<File> list;
+        final File xFile = new File(temporaryFolder, "x.xml");
+        xFile.createNewFile();
+        final Collection<File> files = FileUtils.listFiles(temporaryFolder, extensions, true);
+        assertEquals(5, files.size());
+        try (Stream<File> stream = Uncheck.get(() -> FileUtils.streamFiles(temporaryFolder, true, extensions))) {
+            assertTrue(xFile.delete());
+            list = stream.collect(Collectors.toList());
+            assertFalse(list.contains(xFile), list::toString);
+        }
+        assertEquals(4, list.size());
     }
 
 }
