@@ -253,7 +253,12 @@ public class PathUtilsTest extends AbstractTempDirTest {
     @Test
     public void testGetDosFileAttributeView() {
         // dir
-        assertNotNull(PathUtils.getDosFileAttributeView(current()));
+        final DosFileAttributeView dosFileAttributeView = PathUtils.getDosFileAttributeView(current());
+        if (SystemUtils.IS_OS_MAC) {
+            assertNull(dosFileAttributeView);
+        } else {
+            assertNotNull(dosFileAttributeView);
+        }
         // missing file
         final Path path = Paths.get("this-file-does-not-exist-at.all");
         assertFalse(Files.exists(path));
