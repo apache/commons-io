@@ -2812,7 +2812,7 @@ public class FileUtils {
      * @throws NullPointerException if the given {@link File} is {@code null}.
      * @throws IllegalArgumentException if the given {@link File} exists but is not a directory.
      */
-    private static void requireDirectoryIfExists(final File directory, final String name) throws FileNotFoundException {
+    private static void requireDirectoryIfExists(final File directory, final String name) {
         Objects.requireNonNull(directory, name);
         if (directory.exists() && !directory.isDirectory()) {
             throw new IllegalArgumentException("Parameter '" + name + "' is not a directory: '" + directory + "'");
