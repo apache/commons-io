@@ -1599,7 +1599,7 @@ public final class PathUtils {
         }
         final Path parent = getParent(path);
         if (!isPosix(parent, linkOptions)) { // Test parent because we may not the permissions to test the file.
-            throw new IOException(String.format("DOS or POSIX file operations not available for '%s' %s", path, Arrays.toString(linkOptions)));
+            throw new IOException(String.format("DOS or POSIX file operations not available for '%s', linkOptions %s", path, Arrays.toString(linkOptions)));
         }
         // POSIX
         if (readOnly) {
