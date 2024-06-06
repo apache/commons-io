@@ -251,6 +251,11 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testGetDosFileAttributeView() {
+        assertNotNull(PathUtils.getDosFileAttributeView(current()));
+    }
+
+    @Test
     public void testGetExtension() {
         assertNull(PathUtils.getExtension(null));
         assertEquals("ext", PathUtils.getExtension(Paths.get("file.ext")));
@@ -453,7 +458,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
         assertEquals(expected, PathUtils.readString(path, StandardCharsets.UTF_8));
         assertEquals(expected, PathUtils.readString(path, null));
     }
-
+    
     @Test
     public void testSetReadOnlyFile() throws IOException {
         final Path resolved = tempDirPath.resolve("testSetReadOnlyFile.txt");
