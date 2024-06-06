@@ -541,6 +541,11 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testSetReadOnlyFileAbsent() {
+        assertThrows(IOException.class, () -> PathUtils.setReadOnly(Paths.get("does-not-exist-at-all-ever-never"), true));
+    }
+
+    @Test
     public void testTouch() throws IOException {
         assertThrows(NullPointerException.class, () -> FileUtils.touch(null));
 
