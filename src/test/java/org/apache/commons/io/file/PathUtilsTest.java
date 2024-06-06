@@ -375,6 +375,12 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testIsPosixAbsentFile() {
+        assertFalse(PathUtils.isPosix(Paths.get("ImNotHereAtAllEver.never")));
+        assertFalse(PathUtils.isPosix(null));
+    }
+
+    @Test
     public void testIsRegularFile() throws IOException {
         assertFalse(PathUtils.isRegularFile(null));
 

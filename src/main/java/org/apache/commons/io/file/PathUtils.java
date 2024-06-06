@@ -696,8 +696,7 @@ public final class PathUtils {
     }
 
     private static boolean exists(final Path path, final LinkOption... options) {
-        Objects.requireNonNull(path, "path");
-        return options != null ? Files.exists(path, options) : Files.exists(path);
+        return path != null && (options != null ? Files.exists(path, options) : Files.exists(path));
     }
 
     /**
