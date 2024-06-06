@@ -875,7 +875,7 @@ public final class PathUtils {
     }
 
     /**
-     * Shorthand for {@code Files.getFileAttributeView(path, DosFileAttributeView.class)}.
+     * Shorthand for {@code Files.getFileAttributeView(path, DosFileAttributeView.class, options)}.
      *
      * @param path    the path to the file.
      * @param options how to handle symbolic links.
