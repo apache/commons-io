@@ -48,7 +48,8 @@ public final class ChecksumInputStream extends CountingInputStream {
      * Builds a new {@link ChecksumInputStream}.
      *
      * <p>
-     * There is no default {@link Checksum}; you MUST provide one.
+     * There is no default {@link Checksum}; you MUST provide one. This avoids any issue with a default {@link Checksum} being proven deficient or insecure
+     * in the future.
      * </p>
      * <h2>Using NIO</h2>
      * <pre>{@code
@@ -99,8 +100,8 @@ public final class ChecksumInputStream extends CountingInputStream {
     public static class Builder extends AbstractStreamBuilder<ChecksumInputStream, Builder> {
 
         /**
-         * There is no default checksum, you MUST provide one. This avoids any issue with a default {@link Checksum}
-         * being proven deficient or insecure in the future.
+         * There is no default {@link Checksum}, you MUST provide one. This avoids any issue with a default {@link Checksum} being proven deficient or insecure
+         * in the future.
          */
         private Checksum checksum;
 
@@ -146,7 +147,8 @@ public final class ChecksumInputStream extends CountingInputStream {
         }
 
         /**
-         * Sets the Checksum.
+         * Sets the Checksum. There is no default {@link Checksum}, you MUST provide one. This avoids any issue with a default {@link Checksum} being proven
+         * deficient or insecure in the future.
          *
          * @param checksum the Checksum.
          * @return {@code this} instance.
