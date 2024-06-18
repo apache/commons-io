@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,7 +26,7 @@ import java.util.Objects;
 /**
  * General File System utilities.
  * <p>
- * This class provides static utility methods for general file system functions not provided before Java 6's {@link java.io.File File} class.
+ * This class provides static utility methods for general file system functions not provided before Java 6's {@link File File} class.
  * </p>
  * <p>
  * The current functions provided are:

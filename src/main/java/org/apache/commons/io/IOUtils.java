@@ -30,6 +30,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.io.Writer;
@@ -1184,9 +1186,9 @@ public class IOUtils {
     }
 
     /**
-     * Copies bytes from a {@link java.io.ByteArrayOutputStream} to a {@link QueueInputStream}.
+     * Copies bytes from a {@link ByteArrayOutputStream} to a {@link QueueInputStream}.
      * <p>
-     * Unlike using JDK {@link java.io.PipedInputStream} and {@link java.io.PipedOutputStream} for this, this
+     * Unlike using JDK {@link PipedInputStream} and {@link PipedOutputStream} for this, this
      * solution works safely in a single thread environment.
      * </p>
      * <p>
@@ -1200,9 +1202,9 @@ public class IOUtils {
      * InputStream inputStream = IOUtils.copy(outputStream);
      * </pre>
      *
-     * @param outputStream the {@link java.io.ByteArrayOutputStream} to read.
+     * @param outputStream the {@link ByteArrayOutputStream} to read.
      * @return the {@link QueueInputStream} filled with the content of the outputStream.
-     * @throws NullPointerException if the {@link java.io.ByteArrayOutputStream} is {@code null}.
+     * @throws NullPointerException if the {@link ByteArrayOutputStream} is {@code null}.
      * @throws IOException if an I/O error occurs.
      * @since 2.12
      */

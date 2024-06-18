@@ -38,8 +38,8 @@ import java.util.stream.Stream;
  * </p>
  * <p>
  * <b>NOTE</b>: You may be able to avoid using this class entirely simply by
- * using JDK {@link java.io.File File} objects and the two argument constructor
- * {@link java.io.File#File(java.io.File, String) File(File,String)}.
+ * using JDK {@link File File} objects and the two argument constructor
+ * {@link File#File(java.io.File, String) File(File,String)}.
  * </p>
  * <p>
  * Most methods in this class are designed to work the same on both UNIX and Windows.

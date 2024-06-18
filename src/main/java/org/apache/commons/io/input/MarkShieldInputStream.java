@@ -16,11 +16,12 @@
  */
 package org.apache.commons.io.input;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * This is an alternative to {@link java.io.ByteArrayInputStream}
+ * This is an alternative to {@link ByteArrayInputStream}
  * which removes the synchronization overhead for non-concurrent
  * access; as such this class is not thread-safe.
  *

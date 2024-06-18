@@ -1513,7 +1513,7 @@ public class FileUtils {
      * WARNING: this method relies on the Java system property 'java.io.tmpdir'
      * which may or may not have a trailing file separator.
      * This can affect code that uses String processing to manipulate pathnames rather
-     * than the standard libary methods in classes such as {@link java.io.File}
+     * than the standard libary methods in classes such as {@link File}
      *
      * @return the path to the system temporary directory as a String
      * @since 2.0

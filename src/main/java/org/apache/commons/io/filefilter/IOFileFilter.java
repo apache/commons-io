@@ -41,7 +41,7 @@ public interface IOFileFilter extends FileFilter, FilenameFilter, PathFilter, Pa
     /**
      * Tests if a File should be accepted by this filter.
      * <p>
-     * Defined in {@link java.io.FileFilter}.
+     * Defined in {@link FileFilter}.
      * </p>
      *
      * @param file the File to check.
@@ -53,7 +53,7 @@ public interface IOFileFilter extends FileFilter, FilenameFilter, PathFilter, Pa
     /**
      * Tests if a File should be accepted by this filter.
      * <p>
-     * Defined in {@link java.io.FilenameFilter}.
+     * Defined in {@link FilenameFilter}.
      * </p>
      *
      * @param dir  the directory File to check.

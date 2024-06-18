@@ -18,12 +18,13 @@ package org.apache.commons.io.output;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
 
 /**
  * OutputStream implementation that writes the data to an {@link Appendable}
  * Object.
  * <p>
- * For example, can be used with any {@link java.io.Writer} or a {@link StringBuilder}
+ * For example, can be used with any {@link Writer} or a {@link StringBuilder}
  * or {@link StringBuffer}.
  * </p>
  *

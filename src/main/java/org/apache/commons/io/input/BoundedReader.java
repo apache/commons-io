@@ -28,7 +28,7 @@ import java.io.Reader;
  * when this limit is reached, regardless of state of underlying reader.
  *
  * <p>
- * One use case is to avoid overrunning the readAheadLimit supplied to {@link java.io.Reader#mark(int)}, since reading
+ * One use case is to avoid overrunning the readAheadLimit supplied to {@link Reader#mark(int)}, since reading
  * too many characters removes the ability to do a successful reset.
  * </p>
  *

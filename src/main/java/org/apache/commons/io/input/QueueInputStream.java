@@ -32,7 +32,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.output.QueueOutputStream;
 
 /**
- * Simple alternative to JDK {@link java.io.PipedInputStream}; queue input stream provides what's written in queue output stream.
+ * Simple alternative to JDK {@link PipedInputStream}; queue input stream provides what's written in queue output stream.
  * <p>
  * To build an instance, use {@link Builder}.
  * </p>

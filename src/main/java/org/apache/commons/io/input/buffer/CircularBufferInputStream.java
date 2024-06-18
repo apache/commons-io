@@ -18,6 +18,7 @@ package org.apache.commons.io.input.buffer;
 
 import static org.apache.commons.io.IOUtils.EOF;
 
+import java.io.BufferedInputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,7 +28,7 @@ import org.apache.commons.io.IOUtils;
 
 /**
  * Implements a buffered input stream, which is internally based on a {@link CircularByteBuffer}. Unlike the
- * {@link java.io.BufferedInputStream}, this one doesn't need to reallocate byte arrays internally.
+ * {@link BufferedInputStream}, this one doesn't need to reallocate byte arrays internally.
  *
  * @since 2.7
  */

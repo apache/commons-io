@@ -68,7 +68,7 @@ import java.nio.charset.Charset;
  * Imagine that an InputStream's read() is a very expensive operation, which
  * would usually suggest wrapping in a BufferedInputStream. The
  * BufferedInputStream works by issuing infrequent
- * {@link java.io.InputStream#read(byte[] b, int off, int len)} requests on the
+ * {@link InputStream#read(byte[] b, int off, int len)} requests on the
  * underlying InputStream, to fill an internal buffer, from which further
  * {@code read} requests can inexpensively get their data (until the buffer
  * runs out).

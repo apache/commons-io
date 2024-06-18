@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.Objects;
@@ -265,7 +266,7 @@ public class LockableFileWriter extends Writer {
      * @param charsetName the name of the requested charset, null means platform default
      * @throws NullPointerException                         if the file is null
      * @throws IOException                                  in case of an I/O error
-     * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io.UnsupportedEncodingException} in version 2.2 if the encoding is not
+     * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
      *                                                      supported.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
@@ -283,7 +284,7 @@ public class LockableFileWriter extends Writer {
      * @param lockDir     the directory in which the lock file should be held
      * @throws NullPointerException                         if the file is null
      * @throws IOException                                  in case of an I/O error
-     * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io.UnsupportedEncodingException} in version 2.2 if the encoding is not
+     * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
      *                                                      supported.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */

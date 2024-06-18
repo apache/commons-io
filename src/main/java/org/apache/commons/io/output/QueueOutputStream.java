@@ -28,7 +28,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.apache.commons.io.input.QueueInputStream;
 
 /**
- * Simple alternative to JDK {@link java.io.PipedOutputStream}; queue input stream provides what's written in queue
+ * Simple alternative to JDK {@link PipedOutputStream}; queue input stream provides what's written in queue
  * output stream.
  * <p>
  * Example usage:

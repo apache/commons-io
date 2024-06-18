@@ -18,8 +18,11 @@ package org.apache.commons.io.input;
 
 import static org.apache.commons.io.IOUtils.EOF;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -42,10 +45,10 @@ import org.apache.commons.io.charset.CharsetEncoders;
  * Since in general it is not possible to predict the number of characters to be read from the {@link Reader} to satisfy a read request on the
  * {@link ReaderInputStream}, all reads from the {@link Reader} are buffered. There is therefore no well defined correlation between the current position of the
  * {@link Reader} and that of the {@link ReaderInputStream}. This also implies that in general there is no need to wrap the underlying {@link Reader} in a
- * {@link java.io.BufferedReader}.
+ * {@link BufferedReader}.
  * </p>
  * <p>
- * {@link ReaderInputStream} implements the inverse transformation of {@link java.io.InputStreamReader}; in the following example, reading from {@code in2}
+ * {@link ReaderInputStream} implements the inverse transformation of {@link InputStreamReader}; in the following example, reading from {@code in2}
  * would return the same byte sequence as reading from {@code in} (provided that the initial byte sequence is legal with respect to the charset encoding):
  * </p>
  * <p>
@@ -61,8 +64,8 @@ import org.apache.commons.io.charset.CharsetEncoders;
  *   .get();
  * </pre>
  * <p>
- * {@link ReaderInputStream} implements the same transformation as {@link java.io.OutputStreamWriter}, except that the control flow is reversed: both classes
- * transform a character stream into a byte stream, but {@link java.io.OutputStreamWriter} pushes data to the underlying stream, while {@link ReaderInputStream}
+ * {@link ReaderInputStream} implements the same transformation as {@link OutputStreamWriter}, except that the control flow is reversed: both classes
+ * transform a character stream into a byte stream, but {@link OutputStreamWriter} pushes data to the underlying stream, while {@link ReaderInputStream}
  * pulls it from the underlying stream.
  * </p>
  * <p>
