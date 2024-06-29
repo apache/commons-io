@@ -44,7 +44,6 @@ Apache Commons IO
 ===================
 
 [![Java CI](https://github.com/apache/commons-io/actions/workflows/maven.yml/badge.svg)](https://github.com/apache/commons-io/actions/workflows/maven.yml)
-[![Coverage Status](https://codecov.io/gh/apache/commons-io/branch/master/graph/badge.svg)](https://app.codecov.io/gh/apache/commons-io)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/commons-io/commons-io/badge.svg?gav=true)](https://maven-badges.herokuapp.com/maven-central/commons-io/commons-io/?gav=true)
 [![Javadocs](https://javadoc.io/badge/commons-io/commons-io/2.16.1.svg)](https://javadoc.io/doc/commons-io/commons-io/2.16.1)
 [![CodeQL](https://github.com/apache/commons-io/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/apache/commons-io/actions/workflows/codeql-analysis.yml)
