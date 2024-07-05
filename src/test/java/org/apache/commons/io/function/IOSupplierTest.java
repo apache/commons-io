@@ -39,8 +39,12 @@ public class IOSupplierTest {
         return supplier.get();
     }
 
-    private String getThrowsNone(final IOSupplier<String> supplier) {
+    private String getThrowsNoneAsSupplier(final IOSupplier<String> supplier) {
         return supplier.asSupplier().get();
+    }
+
+    private String getThrowsNoneGetUnchecked(final IOSupplier<String> supplier) {
+        return supplier.getUnchecked();
     }
 
     @BeforeEach
@@ -51,8 +55,12 @@ public class IOSupplierTest {
     @Test
     public void testAsSupplier() {
         assertThrows(UncheckedIOException.class, () -> TestConstants.THROWING_IO_SUPPLIER.asSupplier().get());
-        assertEquals("new1", getThrowsNone(() -> TestUtils.compareAndSetThrowsIO(ref1, "new1")));
-        assertEquals("new1", ref1.get());
+        final String s1 = "string1";
+        final String s2 = "string2";
+        assertEquals(s1, getThrowsNoneAsSupplier(() -> TestUtils.compareAndSetThrowsIO(ref1, null, s1)));
+        assertEquals(s1, ref1.get());
+        assertEquals(s2, getThrowsNoneAsSupplier(() -> TestUtils.compareAndSetThrowsIO(ref1, s1, s2)));
+        assertEquals(s2, ref1.get());
         assertNotEquals(TestConstants.THROWING_IO_SUPPLIER.asSupplier(), TestConstants.THROWING_IO_SUPPLIER.asSupplier());
     }
 
@@ -64,6 +72,18 @@ public class IOSupplierTest {
         });
         assertEquals("new1", getThrowsIO(() -> TestUtils.compareAndSetThrowsIO(ref1, "new1")));
         assertEquals("new1", ref1.get());
+    }
+
+    @Test
+    public void testGetUnchecked() {
+        assertThrows(UncheckedIOException.class, () -> TestConstants.THROWING_IO_SUPPLIER.asSupplier().get());
+        final String s1 = "string1";
+        final String s2 = "string2";
+        assertEquals(s1, getThrowsNoneGetUnchecked(() -> TestUtils.compareAndSetThrowsIO(ref1, null, s1)));
+        assertEquals(s1, ref1.get());
+        assertEquals(s2, getThrowsNoneGetUnchecked(() -> TestUtils.compareAndSetThrowsIO(ref1, s1, s2)));
+        assertEquals(s2, ref1.get());
+        assertNotEquals(TestConstants.THROWING_IO_SUPPLIER.asSupplier(), TestConstants.THROWING_IO_SUPPLIER.asSupplier());
     }
 
 }

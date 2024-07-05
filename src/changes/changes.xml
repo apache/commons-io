@@ -50,6 +50,7 @@ The <action> type attribute can be add,update,fix,remove.
       <!-- ADD --> 
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IOIterator.adapt(Iterable).</action>
       <action dev="ggregory" type="add" issue="IO-831" due-to="Elliotte Rusty Harold, Thach Le, Gary Gregory">Add getInputStream() for 'https' and 'http' in URIOrigin #630.</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IOSupplier.getUnchecked().</action>
       <!-- FIX -->
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Add missing unit tests.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">FileUtils.lastModifiedFileTime(File) calls Objects.requireNonNull() on the wrong object.</action>
