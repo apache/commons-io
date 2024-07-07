@@ -72,7 +72,8 @@ public class CircularInputStream extends InputStream {
 
     @Override
     public int available() throws IOException {
-        return closed ? 0 : targetByteCount <= Integer.MAX_VALUE ? (int) targetByteCount : Integer.MAX_VALUE;
+        // A negative targetByteCount means an infinite target count.
+        return closed ? 0 : targetByteCount <= Integer.MAX_VALUE ? Math.max(Integer.MAX_VALUE, (int) targetByteCount) : Integer.MAX_VALUE;
     }
 
     @Override
@@ -83,7 +84,7 @@ public class CircularInputStream extends InputStream {
 
     @Override
     public int read() {
-        if (targetByteCount >= 0) {
+        if (targetByteCount >= 0 || closed) {
             if (byteCount == targetByteCount) {
                 return IOUtils.EOF;
             }
