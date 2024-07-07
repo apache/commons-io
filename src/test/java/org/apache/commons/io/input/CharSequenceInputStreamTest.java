@@ -81,19 +81,6 @@ public class CharSequenceInputStreamTest {
                 "Shift_JIS".equalsIgnoreCase(csName);
     }
 
-    /**
-     * IO-781 available() returns 2 but only 1 byte is read afterwards.
-     */
-    @Test
-    public void testAvailable() throws IOException {
-        final Charset charset = Charset.forName("Big5");
-        final CharSequenceInputStream in = new CharSequenceInputStream("\uD800\uDC00", charset);
-        final int available = in.available();
-        final byte[] data = new byte[available];
-        final int bytesRead = in.read(data);
-        assertEquals(available, bytesRead);
-    }
-
     @ParameterizedTest(name = "{0}")
     @MethodSource(CharsetsTest.AVAIL_CHARSETS)
     public void testAvailable(final String csName) throws Exception {
@@ -126,6 +113,20 @@ public class CharSequenceInputStreamTest {
             shadow = in;
         }
         assertEquals(0, shadow.available());
+    }
+
+    /**
+     * IO-781 available() returns 2 but only 1 byte is read afterwards.
+     */
+    @Test
+    public void testAvailableAfterOpen() throws IOException {
+        final Charset charset = Charset.forName("Big5");
+        try (CharSequenceInputStream in = new CharSequenceInputStream("\uD800\uDC00", charset)) {
+            final int available = in.available();
+            final byte[] data = new byte[available];
+            final int bytesRead = in.read(data);
+            assertEquals(available, bytesRead);
+        }
     }
 
     private void testAvailableRead(final String csName) throws Exception {
@@ -445,6 +446,16 @@ public class CharSequenceInputStreamTest {
             IOUtils.toByteArray(in);
             assertEquals(Charset.defaultCharset(), in.getCharsetEncoder().charset());
         }
+    }
+
+    @Test
+    public void testReadAfterClose() throws Exception {
+        final InputStream shadow;
+        try (InputStream in = CharSequenceInputStream.builder().setCharSequence("Hi").get()) {
+            assertTrue(in.available() > 0);
+            shadow = in;
+        }
+        assertEquals(IOUtils.EOF, shadow.read());
     }
 
     private void testReadZero(final String csName) throws Exception {
