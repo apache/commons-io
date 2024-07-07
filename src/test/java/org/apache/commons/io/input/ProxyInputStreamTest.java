@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -37,10 +38,13 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
 
     private static final class ProxyInputStreamFixture extends ProxyInputStream {
 
-        public ProxyInputStreamFixture(final InputStream proxy) {
+        ProxyInputStreamFixture(final InputStream proxy) {
             super(proxy);
         }
 
+        void setIn(final InputStream proxy) {
+            in = proxy;
+        }
     }
 
     @SuppressWarnings({ "resource", "unused" }) // For subclasses
@@ -54,6 +58,28 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
 
     protected void testEos(final T inputStream) {
         // empty
+    }
+
+    @Test
+    public void testAvailableAll() throws IOException {
+        try (T inputStream = createFixture()) {
+            assertEquals(3, inputStream.available());
+            IOUtils.toByteArray(inputStream);
+            assertEquals(0, inputStream.available());
+        }
+    }
+
+    @Test
+    public void testAvailableNull() throws IOException {
+        try (ProxyInputStreamFixture inputStream = new ProxyInputStreamFixture(null)) {
+            assertEquals(0, inputStream.available());
+            inputStream.setIn(createFixture());
+            assertEquals(3, inputStream.available());
+            IOUtils.toByteArray(inputStream);
+            assertEquals(0, inputStream.available());
+            inputStream.setIn(null);
+            assertEquals(0, inputStream.available());
+        }
     }
 
     @Test

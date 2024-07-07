@@ -87,12 +87,14 @@ public abstract class ProxyInputStream extends FilterInputStream {
      */
     @Override
     public int available() throws IOException {
-        try {
-            return super.available();
-        } catch (final IOException e) {
-            handleIOException(e);
-            return 0;
+        if (in != null) {
+            try {
+                return in.available();
+            } catch (final IOException e) {
+                handleIOException(e);
+            }
         }
+        return 0;
     }
 
     /**
