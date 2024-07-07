@@ -243,6 +243,9 @@ public final class BufferedFileChannelInputStream extends InputStream {
      * @throws IOException if an I/O error occurs.
      */
     private boolean refill() throws IOException {
+        if (!fileChannel.isOpen()) {
+            return false;
+        }
         if (!byteBuffer.hasRemaining()) {
             byteBuffer.clear();
             int nRead = 0;

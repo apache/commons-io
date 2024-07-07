@@ -83,5 +83,13 @@ public class BufferedFileChannelInputStreamTest extends AbstractInputStreamTest 
         assertThrows(IllegalStateException.class, () -> BufferedFileChannelInputStream.builder().get());
     }
 
+    @Test
+    public void testReadAfterClose() throws Exception {
+        for (final InputStream inputStream : inputStreams) {
+            inputStream.close();
+            assertEquals(IOUtils.EOF, inputStream.read());
+        }
+    }
+
 
 }
