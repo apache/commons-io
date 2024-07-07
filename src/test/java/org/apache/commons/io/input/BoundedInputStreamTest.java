@@ -49,13 +49,20 @@ public class BoundedInputStreamTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testAvailable() throws Exception {
+    public void testAvailableAfterClose() throws Exception {
         final InputStream shadow;
         try (InputStream in = BoundedInputStream.builder().setCharSequence("Hi").get()) {
             assertTrue(in.available() > 0);
             shadow = in;
         }
         assertEquals(0, shadow.available());
+    }
+
+    @Test
+    public void testAvailableAfterOpen() throws Exception {
+        try (InputStream in = BoundedInputStream.builder().setCharSequence("Hi").get()) {
+            assertTrue(in.available() > 0);
+        }
     }
 
     @Test
@@ -357,6 +364,17 @@ public class BoundedInputStreamTest {
             // should be invariant
             assertTrue(bounded.markSupported());
         }
+    }
+
+    @SuppressWarnings("resource")
+    @Test
+    public void testReadAfterClose() throws Exception {
+        final InputStream shadow;
+        try (InputStream in = BoundedInputStream.builder().setCharSequence("Hi").get()) {
+            assertTrue(in.available() > 0);
+            shadow = in;
+        }
+        assertEquals(IOUtils.EOF, shadow.read());
     }
 
     @Test
