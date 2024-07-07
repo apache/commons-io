@@ -20,6 +20,7 @@ import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.zip.CheckedInputStream;
 import java.util.zip.Checksum;
 
@@ -218,7 +219,7 @@ public final class ChecksumInputStream extends CountingInputStream {
      */
     private ChecksumInputStream(final InputStream in, final Checksum checksum, final long expectedChecksumValue,
             final long countThreshold) {
-        super(new CheckedInputStream(in, checksum));
+        super(new CheckedInputStream(in, Objects.requireNonNull(checksum, "checksum")));
         this.countThreshold = countThreshold;
         this.expectedChecksumValue = expectedChecksumValue;
     }

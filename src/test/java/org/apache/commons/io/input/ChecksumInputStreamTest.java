@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.util.zip.Adler32;
 import java.util.zip.CRC32;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -34,15 +35,28 @@ import org.junit.jupiter.api.Test;
  */
 public class ChecksumInputStreamTest {
 
+    private ChecksumInputStream createInputStream() throws IOException {
+        return ChecksumInputStream.builder().setCharSequence("Hi").setChecksum(new CRC32()).get();
+    }
+
     @SuppressWarnings("resource")
     @Test
-    public void testAvailable() throws Exception {
+    public void testAvailableAfterClose() throws Exception {
         final InputStream shadow;
-        try (InputStream in = ChecksumInputStream.builder().setCharSequence("Hi").get()) {
+        try (InputStream in = createInputStream()) {
             assertTrue(in.available() > 0);
             shadow = in;
         }
         assertEquals(0, shadow.available());
+    }
+
+    @Test
+    public void testAvailableAfterOpen() throws Exception {
+        try (InputStream in = createInputStream()) {
+            assertTrue(in.available() > 0);
+            assertEquals('H', in.read());
+            assertTrue(in.available() > 0);
+        }
     }
 
     @Test
@@ -92,6 +106,17 @@ public class ChecksumInputStreamTest {
             assertEquals(byteArray.length, checksum.getByteCount());
             assertEquals(-4, checksum.getRemaining());
         }
+    }
+
+    @SuppressWarnings("resource")
+    @Test
+    public void testReadAfterClose() throws Exception {
+        final InputStream shadow;
+        try (InputStream in = createInputStream()) {
+            assertTrue(in.available() > 0);
+            shadow = in;
+        }
+        assertEquals(IOUtils.EOF, shadow.read());
     }
 
     @Test

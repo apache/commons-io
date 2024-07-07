@@ -49,17 +49,6 @@ public class CircularInputStreamTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testAvailable() throws Exception {
-        final InputStream shadow;
-        try (InputStream in = createInputStream(new byte[] { 1, 2 }, 1)) {
-            assertTrue(in.available() > 0);
-            shadow = in;
-        }
-        assertEquals(0, shadow.available());
-    }
-
-    @SuppressWarnings("resource")
-    @Test
     public void testAvailableAfterClose() throws Exception {
         final InputStream shadow;
         try (InputStream in = createInputStream(new byte[] { 1, 2 }, 4)) {
@@ -70,7 +59,15 @@ public class CircularInputStreamTest {
             shadow = in;
         }
         assertEquals(0, shadow.available());
-        assertEquals(IOUtils.EOF, shadow.read());
+    }
+
+    @Test
+    public void testAvailableAfterOpen() throws Exception {
+        try (InputStream in = createInputStream(new byte[] { 1, 2 }, 1)) {
+            assertTrue(in.available() > 0);
+            assertEquals(1, in.read());
+            assertTrue(in.available() > 0);
+        }
     }
 
     @Test
@@ -115,6 +112,20 @@ public class CircularInputStreamTest {
     @Test
     public void testNullInputSize0() {
         assertThrows(NullPointerException.class, () -> createInputStream(null, 0));
+    }
+
+    @SuppressWarnings("resource")
+    @Test
+    public void testReaderAfterClose() throws Exception {
+        final InputStream shadow;
+        try (InputStream in = createInputStream(new byte[] { 1, 2 }, 4)) {
+            assertTrue(in.available() > 0);
+            assertEquals(1, in.read());
+            assertEquals(2, in.read());
+            assertEquals(1, in.read());
+            shadow = in;
+        }
+        assertEquals(IOUtils.EOF, shadow.read());
     }
 
     @Test
