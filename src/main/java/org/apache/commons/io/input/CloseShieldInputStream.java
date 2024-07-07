@@ -31,10 +31,10 @@ import java.io.InputStream;
 public class CloseShieldInputStream extends ProxyInputStream {
 
     /**
-     * Constructs a proxy that only shields {@code System.in} from being closed.
+     * Constructs a proxy that only shields {@link System#in} from closing.
      *
-     * @param inputStream the input stream to wrap
-     * @return the created proxy
+     * @param inputStream the candidate input stream.
+     * @return the given stream or a proxy on {@link System#in}. 
      * @since 2.17.0
      */
     public static InputStream systemIn(final InputStream inputStream) {
