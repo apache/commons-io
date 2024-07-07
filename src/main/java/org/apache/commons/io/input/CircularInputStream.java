@@ -54,6 +54,7 @@ public class CircularInputStream extends InputStream {
     private int position = IOUtils.EOF;
     private final byte[] repeatedContent;
     private final long targetByteCount;
+    private boolean closed;
 
     /**
      * Constructs an instance from the specified array of bytes.
@@ -67,6 +68,17 @@ public class CircularInputStream extends InputStream {
             throw new IllegalArgumentException("repeatContent is empty.");
         }
         this.targetByteCount = targetByteCount;
+    }
+
+    @Override
+    public int available() throws IOException {
+        return closed ? 0 : targetByteCount <= Integer.MAX_VALUE ? (int) targetByteCount : Integer.MAX_VALUE;
+    }
+
+    @Override
+    public void close() throws IOException {
+        closed = true;
+        byteCount = targetByteCount;
     }
 
     @Override

@@ -19,6 +19,7 @@ package org.apache.commons.io.input;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,12 +33,37 @@ import org.junit.jupiter.api.Test;
  */
 public class CircularInputStreamTest {
 
+    @SuppressWarnings("resource")
+    @Test
+    public void testAvailable() throws Exception {
+        final InputStream shadow;
+        try (InputStream in = createInputStream(new byte[] { 1, 2 }, 1)) {
+            assertTrue(in.available() > 0);
+            shadow = in;
+        }
+        assertEquals(0, shadow.available());
+    }
+
+    @SuppressWarnings("resource")
+    @Test
+    public void testReadAfterClose() throws Exception {
+        final InputStream shadow;
+        try (InputStream in = createInputStream(new byte[] { 1, 2 }, 4)) {
+            assertTrue(in.available() > 0);
+            assertEquals(1, in.read());
+            assertEquals(2, in.read());
+            assertEquals(1, in.read());
+            shadow = in;
+        }
+        assertEquals(0, shadow.available());
+        assertEquals(IOUtils.EOF, shadow.read());
+    }
+
     private void assertStreamOutput(final byte[] toCycle, final byte[] expected) throws IOException {
         final byte[] actual = new byte[expected.length];
 
         try (InputStream infStream = createInputStream(toCycle, -1)) {
             final int actualReadBytes = infStream.read(actual);
-
             assertArrayEquals(expected, actual);
             assertEquals(expected.length, actualReadBytes);
         }
@@ -83,7 +109,6 @@ public class CircularInputStreamTest {
     public void testCycleBytes() throws IOException {
         final byte[] input = { 1, 2 };
         final byte[] expected = { 1, 2, 1, 2, 1 };
-
         assertStreamOutput(input, expected);
     }
 
@@ -101,9 +126,7 @@ public class CircularInputStreamTest {
             contentToCycle[i] = value == IOUtils.EOF ? 0 : value;
             value++;
         }
-
         final byte[] expectedOutput = Arrays.copyOf(contentToCycle, size);
-
         assertStreamOutput(contentToCycle, expectedOutput);
     }
 

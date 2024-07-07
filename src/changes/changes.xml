@@ -66,6 +66,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add"                due-to="Gary Gregory">BufferedFileChannelInputStream.available() should return 0 when the stream is closed instead of throwing an exception.</action>      
       <action dev="ggregory" type="add"                due-to="Gary Gregory">CharSequenceInputStream.available() should return 0 after the stream is closed.</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">BoundedInputStream.available() should return 0 when the stream is closed.</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">CircularInputStream.available() should return 0 when the stream is closed.</action>
       <!-- UPDATE -->
       <action dev="ggregory" type="update"             due-to="Dependabot">Bump tests commons.bytebuddy.version from 1.14.13 to 1.14.17 #615, #621, #631, #635.</action>
       <action dev="ggregory" type="update"             due-to="Dependabot">Bump tests commons-codec:commons-codec from 1.16.1 to 1.17.0.</action>
