@@ -19,6 +19,7 @@ package org.apache.commons.io.input;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -32,6 +33,17 @@ import org.junit.jupiter.api.Test;
  * Tests {@link ChecksumInputStream}.
  */
 public class ChecksumInputStreamTest {
+
+    @SuppressWarnings("resource")
+    @Test
+    public void testAvailable() throws Exception {
+        final InputStream shadow;
+        try (InputStream in = ChecksumInputStream.builder().setCharSequence("Hi").get()) {
+            assertTrue(in.available() > 0);
+            shadow = in;
+        }
+        assertEquals(0, shadow.available());
+    }
 
     @Test
     public void testDefaultThresholdFailure() throws IOException {
