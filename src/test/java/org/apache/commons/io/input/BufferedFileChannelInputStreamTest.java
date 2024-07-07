@@ -16,12 +16,15 @@
  */
 package org.apache.commons.io.input;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.StandardOpenOption;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -51,9 +54,25 @@ public class BufferedFileChannelInputStreamTest extends AbstractInputStreamTest 
     }
 
     @Test
+    public void testAvailableAfterRead() throws Exception {
+        for (final InputStream inputStream : inputStreams) {
+            assertNotEquals(IOUtils.EOF, inputStream.read());
+            assertTrue(inputStream.available() > 0);
+        }
+    }
+
+    @Test
+    public void testAvailableFirst() throws Exception {
+        for (final InputStream inputStream : inputStreams) {
+            assertTrue(inputStream.available() > 0);
+        }
+    }
+
+    @Test
     public void testBuilderGet() {
         // java.lang.IllegalStateException: origin == null
         assertThrows(IllegalStateException.class, () -> BufferedFileChannelInputStream.builder().get());
     }
+
 
 }

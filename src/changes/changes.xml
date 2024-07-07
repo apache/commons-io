@@ -62,6 +62,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">PathUtils.isPosix(Path, LinkOption...) should return false on null input.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">AutoCloseInputStream(InputStream) uses ClosedInputStream.INSTANCE when its input is null.</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Avoid NullPointerException in ProxyInputStream.available() when the underlying input stream is null.</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">BufferedFileChannelInputStream.available() returns 0 before any reads.</action>
       <!-- UPDATE -->
       <action dev="ggregory" type="update"             due-to="Dependabot">Bump tests commons.bytebuddy.version from 1.14.13 to 1.14.17 #615, #621, #631, #635.</action>
       <action dev="ggregory" type="update"             due-to="Dependabot">Bump tests commons-codec:commons-codec from 1.16.1 to 1.17.0.</action>
