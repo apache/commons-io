@@ -23,7 +23,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -48,6 +50,23 @@ public class AutoCloseInputStreamTest {
             }
         });
         closed = false;
+    }
+
+    @Test
+    public void testAvailableAll() throws IOException {
+        try (InputStream inputStream = new AutoCloseInputStream(new ByteArrayInputStream(data))) {
+            assertEquals(3, inputStream.available());
+            IOUtils.toByteArray(inputStream);
+            assertEquals(0, inputStream.available());
+        }
+    }
+
+    @Test
+    public void testAvailableNull() throws IOException {
+        try (InputStream inputStream = new AutoCloseInputStream(null)) {
+            assertEquals(0, inputStream.available());
+            assertEquals(0, inputStream.available());
+        }
     }
 
     @Test

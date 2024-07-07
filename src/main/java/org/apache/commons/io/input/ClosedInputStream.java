@@ -24,7 +24,7 @@ import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 
 /**
- * Always returns {@link IOUtils#EOF} to all attempts to read something from the stream.
+ * Always returns {@link IOUtils#EOF} to all attempts to read something from an input stream.
  * <p>
  * Typically uses of this class include testing for corner cases in methods that accept input streams and acting as a
  * sentinel value instead of a {@code null} input stream.
@@ -48,6 +48,16 @@ public class ClosedInputStream extends InputStream {
      */
     @Deprecated
     public static final ClosedInputStream CLOSED_INPUT_STREAM = INSTANCE;
+
+    /**
+     * Returns {@link #INSTANCE} if the given InputStream is null, otherwise returns the given input stream.
+     * 
+     * @param in the InputStream to test.
+     * @return {@link #INSTANCE} if the given InputStream is null, otherwise returns the given input stream.
+     */
+    static InputStream ifNull(final InputStream in) {
+        return in != null ? in : INSTANCE;
+    }
 
     /**
      * Returns -1 to indicate that the stream is closed.

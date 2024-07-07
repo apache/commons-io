@@ -106,9 +106,10 @@ public class AutoCloseInputStream extends ProxyInputStream {
      * @param in underlying input stream
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
+    @SuppressWarnings("resource") // ClosedInputStream.nonNull() doesn't allocate
     @Deprecated
     public AutoCloseInputStream(final InputStream in) {
-        super(in);
+        super(ClosedInputStream.ifNull(in));
     }
 
     /**

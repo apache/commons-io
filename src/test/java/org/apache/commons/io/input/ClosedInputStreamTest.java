@@ -18,6 +18,7 @@ package org.apache.commons.io.input;
 
 import static org.apache.commons.io.IOUtils.EOF;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import org.junit.jupiter.api.Test;
 
@@ -28,6 +29,14 @@ public class ClosedInputStreamTest {
 
     private void assertEof(final ClosedInputStream cis) {
         assertEquals(EOF, cis.read(), "read()");
+    }
+
+    @SuppressWarnings("resource")
+    @Test
+    public void testNonNull() throws Exception {
+        assertSame(ClosedInputStream.INSTANCE, ClosedInputStream.ifNull(null));
+        assertSame(ClosedInputStream.INSTANCE, ClosedInputStream.ifNull(ClosedInputStream.INSTANCE));
+        assertSame(System.in, ClosedInputStream.ifNull(System.in));
     }
 
     @Test
