@@ -33,6 +33,20 @@ import org.junit.jupiter.api.Test;
  */
 public class CircularInputStreamTest {
 
+    private void assertStreamOutput(final byte[] toCycle, final byte[] expected) throws IOException {
+        final byte[] actual = new byte[expected.length];
+
+        try (InputStream infStream = createInputStream(toCycle, -1)) {
+            final int actualReadBytes = infStream.read(actual);
+            assertArrayEquals(expected, actual);
+            assertEquals(expected.length, actualReadBytes);
+        }
+    }
+
+    private InputStream createInputStream(final byte[] repeatContent, final long targetByteCount) {
+        return new CircularInputStream(repeatContent, targetByteCount);
+    }
+
     @SuppressWarnings("resource")
     @Test
     public void testAvailable() throws Exception {
@@ -46,7 +60,7 @@ public class CircularInputStreamTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testReadAfterClose() throws Exception {
+    public void testAvailableAfterClose() throws Exception {
         final InputStream shadow;
         try (InputStream in = createInputStream(new byte[] { 1, 2 }, 4)) {
             assertTrue(in.available() > 0);
@@ -57,20 +71,6 @@ public class CircularInputStreamTest {
         }
         assertEquals(0, shadow.available());
         assertEquals(IOUtils.EOF, shadow.read());
-    }
-
-    private void assertStreamOutput(final byte[] toCycle, final byte[] expected) throws IOException {
-        final byte[] actual = new byte[expected.length];
-
-        try (InputStream infStream = createInputStream(toCycle, -1)) {
-            final int actualReadBytes = infStream.read(actual);
-            assertArrayEquals(expected, actual);
-            assertEquals(expected.length, actualReadBytes);
-        }
-    }
-
-    private InputStream createInputStream(final byte[] repeatContent, final long targetByteCount) {
-        return new CircularInputStream(repeatContent, targetByteCount);
     }
 
     @Test
