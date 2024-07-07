@@ -247,7 +247,7 @@ public class CharSequenceInputStream extends InputStream {
 
     @Override
     public void close() throws IOException {
-        // noop
+        bBuf.position(bBuf.limit());
     }
 
     /**

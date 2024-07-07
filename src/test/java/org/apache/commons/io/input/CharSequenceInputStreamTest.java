@@ -118,6 +118,16 @@ public class CharSequenceInputStreamTest {
         }
     }
 
+    @Test
+    public void testAvailableAfterClose() throws Exception {
+        final InputStream shadow;
+        try (InputStream in = CharSequenceInputStream.builder().setCharSequence("Hi").get()) {
+            assertTrue(in.available() > 0);
+            shadow = in;
+        }
+        assertEquals(0, shadow.available());
+    }
+
     private void testAvailableRead(final String csName) throws Exception {
         final String input = "test";
         try (InputStream r = new CharSequenceInputStream(input, csName)) {

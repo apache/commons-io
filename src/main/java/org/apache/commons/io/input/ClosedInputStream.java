@@ -51,7 +51,7 @@ public class ClosedInputStream extends InputStream {
 
     /**
      * Returns {@link #INSTANCE} if the given InputStream is null, otherwise returns the given input stream.
-     * 
+     *
      * @param in the InputStream to test.
      * @return {@link #INSTANCE} if the given InputStream is null, otherwise returns the given input stream.
      */
