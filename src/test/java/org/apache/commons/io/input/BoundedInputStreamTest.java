@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -44,6 +45,17 @@ public class BoundedInputStreamTest {
             mi.setValue(i);
             assertEquals(expected[i], actual[i], () -> message + " byte[" + mi + "]");
         }
+    }
+
+    @SuppressWarnings("resource")
+    @Test
+    public void testAvailable() throws Exception {
+        final InputStream shadow;
+        try (InputStream in = BoundedInputStream.builder().setCharSequence("Hi").get()) {
+            assertTrue(in.available() > 0);
+            shadow = in;
+        }
+        assertEquals(0, shadow.available());
     }
 
     @Test
