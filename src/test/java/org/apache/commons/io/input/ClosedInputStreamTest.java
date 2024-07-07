@@ -31,6 +31,15 @@ public class ClosedInputStreamTest {
         assertEquals(EOF, cis.read(), "read()");
     }
 
+    @Test
+    public void testAvailable() throws Exception {
+        assertEquals(0, ClosedInputStream.INSTANCE.available());
+        assertEquals(0, ClosedInputStream.INSTANCE.available());
+        try (ClosedInputStream cis = new ClosedInputStream()) {
+            assertEquals(0, cis.available());
+        }
+    }
+
     @SuppressWarnings("resource")
     @Test
     public void testNonNull() throws Exception {
