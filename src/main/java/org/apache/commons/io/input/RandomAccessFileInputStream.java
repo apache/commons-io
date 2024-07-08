@@ -128,6 +128,7 @@ public class RandomAccessFileInputStream extends InputStream {
         return new Builder();
     }
 
+    private boolean closed;
     private final boolean propagateClose;
     private final RandomAccessFile randomAccessFile;
 
@@ -179,7 +180,7 @@ public class RandomAccessFileInputStream extends InputStream {
      * @throws IOException If an I/O error occurs.
      */
     public long availableLong() throws IOException {
-        return randomAccessFile.length() - randomAccessFile.getFilePointer();
+        return closed ? 0 : randomAccessFile.length() - randomAccessFile.getFilePointer();
     }
 
     @Override
@@ -188,6 +189,7 @@ public class RandomAccessFileInputStream extends InputStream {
         if (propagateClose) {
             randomAccessFile.close();
         }
+        closed = true;
     }
 
     /**
