@@ -21,14 +21,39 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
- * Tests the CountingInputStream.
+ * Tests {@link CountingInputStream}.
  */
 public class CountingInputStreamTest {
+
+    @SuppressWarnings("resource")
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 4, 8, 16, 32, 64, 128 })
+    public void testAvailableAfterClose(final int len) throws Exception {
+        final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[len]);
+        InputStream shadow;
+        try (InputStream in = CloseShieldInputStream.wrap(bais)) {
+            assertEquals(len, in.available());
+            shadow = in;
+        }
+        assertEquals(0, shadow.available());
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 4, 8, 16, 32, 64, 128 })
+    public void testAvailableAfterOpen(final int len) throws Exception {
+        final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[len]);
+        try (InputStream in = CloseShieldInputStream.wrap(bais)) {
+            assertEquals(len, in.available());
+        }
+    }
 
     @Test
     public void testCounting() throws Exception {
@@ -125,6 +150,19 @@ public class CountingInputStreamTest {
         IOUtils.consume(cis);
         assertEquals(size, cis.getByteCount(), "getByteCount()");
         assertEquals(size, cis.resetByteCount(), "resetByteCount()");
+    }
+
+    @SuppressWarnings("resource")
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 4, 8, 16, 32, 64, 128 })
+    public void testReadAfterClose(final int len) throws Exception {
+        final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[len]);
+        InputStream shadow;
+        try (InputStream in = CloseShieldInputStream.wrap(bais)) {
+            assertEquals(len, in.available());
+            shadow = in;
+        }
+        assertEquals(IOUtils.EOF, shadow.read());
     }
 
     @Test
