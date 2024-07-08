@@ -63,16 +63,16 @@ public class BufferedFileChannelInputStreamTest extends AbstractInputStreamTest 
     }
 
     @Test
-    public void testAvailableAfterRead() throws Exception {
+    public void testAvailableAfterOpen() throws Exception {
         for (final InputStream inputStream : inputStreams) {
-            assertNotEquals(IOUtils.EOF, inputStream.read());
             assertTrue(inputStream.available() > 0);
         }
     }
 
     @Test
-    public void testAvailableFirst() throws Exception {
+    public void testAvailableAfterRead() throws Exception {
         for (final InputStream inputStream : inputStreams) {
+            assertNotEquals(IOUtils.EOF, inputStream.read());
             assertTrue(inputStream.available() > 0);
         }
     }
