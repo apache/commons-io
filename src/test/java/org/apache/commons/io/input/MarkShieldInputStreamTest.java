@@ -45,7 +45,6 @@ public class MarkShieldInputStreamTest {
             // record that `mark` was called
             this.markcount++;
             this.readLimit = readLimit;
-
             // invoke on super
             super.mark(readLimit);
         }
@@ -54,10 +53,8 @@ public class MarkShieldInputStreamTest {
     @Test
     public void testMarkIsNoOpWhenUnderlyingDoesNotSupport() throws IOException {
         try (MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(64, false, false));
-             final MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
-
+                final MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
             msis.mark(1024);
-
             assertEquals(0, in.markcount);
             assertEquals(0, in.readLimit);
         }
@@ -66,10 +63,8 @@ public class MarkShieldInputStreamTest {
     @Test
     public void testMarkIsNoOpWhenUnderlyingSupports() throws IOException {
         try (MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(64, true, false));
-             final MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
-
+                final MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
             msis.mark(1024);
-
             assertEquals(0, in.markcount);
             assertEquals(0, in.readLimit);
         }
@@ -80,7 +75,6 @@ public class MarkShieldInputStreamTest {
         // test wrapping an underlying stream which does NOT support marking
         try (InputStream is = new NullInputStream(64, false, false)) {
             assertFalse(is.markSupported());
-
             try (MarkShieldInputStream msis = new MarkShieldInputStream(is)) {
                 assertFalse(msis.markSupported());
             }
@@ -92,7 +86,6 @@ public class MarkShieldInputStreamTest {
         // test wrapping an underlying stream which supports marking
         try (InputStream is = new NullInputStream(64, true, false)) {
             assertTrue(is.markSupported());
-
             try (MarkShieldInputStream msis = new MarkShieldInputStream(is)) {
                 assertFalse(msis.markSupported());
             }
@@ -102,8 +95,7 @@ public class MarkShieldInputStreamTest {
     @Test
     public void testResetThrowsExceptionWhenUnderlyingDoesNotSupport() throws IOException {
         // test wrapping an underlying stream which does NOT support marking
-        try (MarkShieldInputStream msis = new MarkShieldInputStream(
-                new NullInputStream(64, false, false))) {
+        try (MarkShieldInputStream msis = new MarkShieldInputStream(new NullInputStream(64, false, false))) {
             assertThrows(UnsupportedOperationException.class, msis::reset);
         }
     }
@@ -111,8 +103,7 @@ public class MarkShieldInputStreamTest {
     @Test
     public void testResetThrowsExceptionWhenUnderlyingSupports() throws IOException {
         // test wrapping an underlying stream which supports marking
-        try (MarkShieldInputStream msis = new MarkShieldInputStream(
-                new NullInputStream(64, true, false))) {
+        try (MarkShieldInputStream msis = new MarkShieldInputStream(new NullInputStream(64, true, false))) {
             assertThrows(UnsupportedOperationException.class, msis::reset);
         }
     }
