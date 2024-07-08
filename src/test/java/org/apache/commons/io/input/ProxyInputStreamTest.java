@@ -56,8 +56,14 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
         return CharSequenceInputStream.builder().setCharSequence("abc").get();
     }
 
-    protected void testEos(final T inputStream) {
-        // empty
+    @SuppressWarnings("resource")
+    @Test
+    public void testAvailableAfterClose() throws IOException {
+        final T shadow;
+        try (T inputStream = createFixture()) {
+            shadow = inputStream;
+        }
+        assertEquals(0, shadow.available());
     }
 
     @Test
@@ -82,6 +88,10 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
         }
     }
 
+    protected void testEos(final T inputStream) {
+        // empty
+    }
+
     @Test
     public void testRead() throws IOException {
         try (T inputStream = createFixture()) {
@@ -95,6 +105,16 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
             assertEquals(-1, found);
             testEos(inputStream);
         }
+    }
+
+    @SuppressWarnings("resource")
+    @Test
+    public void testReadAfterClose() throws IOException {
+        final T shadow;
+        try (T inputStream = createFixture()) {
+            shadow = inputStream;
+        }
+        assertEquals(IOUtils.EOF, shadow.read());
     }
 
     @Test

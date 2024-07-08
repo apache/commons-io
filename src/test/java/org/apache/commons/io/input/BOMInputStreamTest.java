@@ -37,6 +37,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.ByteOrderMark;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.SystemProperties;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
@@ -207,11 +208,33 @@ public class BOMInputStreamTest {
     }
 
     @Test
-    public void testAvailableWithBOM() throws Exception {
+    public void testAvailableWithBOMAfterOpen() throws Exception {
         final byte[] data = { 'A', 'B', 'C', 'D' };
         try (InputStream in = BOMInputStream.builder().setInputStream(createUtf8Input(data, true)).get()) {
             assertEquals(7, in.available());
         }
+    }
+
+    @Test
+    public void testAvailableWithBOMAfterClose() throws Exception {
+        final byte[] data = { 'A', 'B', 'C', 'D' };
+        final InputStream shadow;
+        try (InputStream in = BOMInputStream.builder().setInputStream(createUtf8Input(data, true)).get()) {
+            assertEquals(7, in.available());
+            shadow = in;
+        }
+        assertEquals(0, shadow.available());
+    }
+
+    @Test
+    public void testReadAfterClose() throws Exception {
+        final byte[] data = { 'A', 'B', 'C', 'D' };
+        final InputStream shadow;
+        try (InputStream in = BOMInputStream.builder().setInputStream(createUtf8Input(data, true)).get()) {
+            assertEquals(7, in.available());
+            shadow = in;
+        }
+        assertEquals(IOUtils.EOF, shadow.read());
     }
 
     @Test

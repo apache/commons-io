@@ -39,11 +39,13 @@ import org.apache.commons.io.IOUtils;
  * <li>notify a subclass that an exception was caught through {@link #handleIOException(IOException)}</li>
  * <li>{@link #unwrap()} itself</li>
  * </ul>
- * <p>
- * This class does not add any state (no additional instance variables).
- * </p>
  */
 public abstract class ProxyInputStream extends FilterInputStream {
+
+    /**
+     * Tracks whether {@link #close()} has been called or not.
+     */
+    private boolean closed;
 
     /**
      * Constructs a new ProxyInputStream.
@@ -51,8 +53,8 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * @param proxy  the InputStream to delegate to
      */
     public ProxyInputStream(final InputStream proxy) {
-        super(proxy);
         // the proxy is stored in a protected superclass variable named 'in'
+        super(proxy);
     }
 
     /**
@@ -87,7 +89,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      */
     @Override
     public int available() throws IOException {
-        if (in != null) {
+        if (in != null && !isClosed()) {
             try {
                 return in.available();
             } catch (final IOException e) {
@@ -130,6 +132,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     @Override
     public void close() throws IOException {
         IOUtils.close(in, this::handleIOException);
+        closed = true;
     }
 
     /**
@@ -145,6 +148,15 @@ public abstract class ProxyInputStream extends FilterInputStream {
      */
     protected void handleIOException(final IOException e) throws IOException {
         throw e;
+    }
+
+    /**
+     * Tests whether this instance is closed.
+     *
+     * @return whether this instance is closed.
+     */
+    boolean isClosed() {
+        return closed;
     }
 
     /**
