@@ -132,7 +132,7 @@ public class NullInputStream extends InputStream {
     }
 
     /**
-     * Closes this input stream - resets the internal state to the initial values.
+     * Closes this input stream and resets the internal state to the initial values.
      *
      * @throws IOException If an error occurs.
      */
