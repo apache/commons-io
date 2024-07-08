@@ -170,6 +170,12 @@ public final class MemoryMappedFileInputStream extends InputStream {
         return buffer.remaining();
     }
 
+    private void checkOpen() throws IOException {
+        if (closed) {
+            throw new IOException("Stream closed");
+        }
+    }
+
     private void cleanBuffer() {
         if (ByteBufferCleaner.isSupported() && buffer.isDirect()) {
             ByteBufferCleaner.clean(buffer);
@@ -183,12 +189,6 @@ public final class MemoryMappedFileInputStream extends InputStream {
             buffer = null;
             channel.close();
             closed = true;
-        }
-    }
-
-    private void ensureOpen() throws IOException {
-        if (closed) {
-            throw new IOException("Stream closed");
         }
     }
 
@@ -210,7 +210,7 @@ public final class MemoryMappedFileInputStream extends InputStream {
 
     @Override
     public int read() throws IOException {
-        ensureOpen();
+        checkOpen();
         if (!buffer.hasRemaining()) {
             nextBuffer();
             if (!buffer.hasRemaining()) {
@@ -222,7 +222,7 @@ public final class MemoryMappedFileInputStream extends InputStream {
 
     @Override
     public int read(final byte[] b, final int off, final int len) throws IOException {
-        ensureOpen();
+        checkOpen();
         if (!buffer.hasRemaining()) {
             nextBuffer();
             if (!buffer.hasRemaining()) {
@@ -236,7 +236,7 @@ public final class MemoryMappedFileInputStream extends InputStream {
 
     @Override
     public long skip(final long n) throws IOException {
-        ensureOpen();
+        checkOpen();
         if (n <= 0) {
             return 0;
         }
