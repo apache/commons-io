@@ -59,7 +59,7 @@ public class RandomAccessFileInputStream extends InputStream {
     public static class Builder extends AbstractStreamBuilder<RandomAccessFileInputStream, Builder> {
 
         private RandomAccessFile randomAccessFile;
-        private boolean closeOnClose;
+        private boolean propagateClose;
 
         /**
          * Builds a new {@link RandomAccessFileInputStream}.
@@ -89,19 +89,19 @@ public class RandomAccessFileInputStream extends InputStream {
                 if (getOrigin() != null) {
                     throw new IllegalStateException(String.format("Only set one of RandomAccessFile (%s) or origin (%s)", randomAccessFile, getOrigin()));
                 }
-                return new RandomAccessFileInputStream(randomAccessFile, closeOnClose);
+                return new RandomAccessFileInputStream(randomAccessFile, propagateClose);
             }
-            return new RandomAccessFileInputStream(RandomAccessFileMode.READ_ONLY.create(checkOrigin().getFile()), closeOnClose);
+            return new RandomAccessFileInputStream(RandomAccessFileMode.READ_ONLY.create(checkOrigin().getFile()), propagateClose);
         }
 
         /**
          * Sets whether to close the underlying file when this stream is closed.
          *
-         * @param closeOnClose Whether to close the underlying file when this stream is closed.
+         * @param propagateClose Whether to close the underlying file when this stream is closed.
          * @return {@code this} instance.
          */
-        public Builder setCloseOnClose(final boolean closeOnClose) {
-            this.closeOnClose = closeOnClose;
+        public Builder setCloseOnClose(final boolean propagateClose) {
+            this.propagateClose = propagateClose;
             return this;
         }
 
