@@ -16,11 +16,14 @@
  */
 package org.apache.commons.io.input;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.StandardOpenOption;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests {@link ReadAheadInputStream}.
@@ -58,4 +61,12 @@ public class ReadAheadInputStreamTest extends AbstractInputStreamTest {
                 ReadAheadInputStream.builder().setInputStream(new BufferedFileChannelInputStream(inputFile, 123)).setBufferSize(321).get(),
                 ReadAheadInputStream.builder().setPath(inputFile).setOpenOptions(StandardOpenOption.READ).get() };
     }
+
+    @Test
+    public void testAvailableAfterOpen() throws Exception {
+        for (final InputStream inputStream : inputStreams) {
+            assertEquals(0, inputStream.available());
+        }
+    }
+
 }
