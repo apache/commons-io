@@ -17,12 +17,18 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.MessageDigest;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.codec.digest.MessageDigestAlgorithms;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.MessageDigestCalculatingInputStream.Builder;
 import org.junit.jupiter.api.Test;
 
@@ -31,6 +37,31 @@ import org.junit.jupiter.api.Test;
  */
 @SuppressWarnings("deprecation")
 public class MessageDigestCalculatingInputStreamTest {
+
+    private InputStream createInputStream() throws IOException {
+        return MessageDigestCalculatingInputStream.builder()
+                .setInputStream(new ByteArrayInputStream(MessageDigestInputStreamTest.generateRandomByteStream(256))).get();
+    }
+
+    @SuppressWarnings("resource")
+    @Test
+    public void testAvailableAfterClose() throws Exception {
+        final InputStream shadow;
+        try (InputStream in = createInputStream()) {
+            assertTrue(in.available() > 0);
+            shadow = in;
+        }
+        assertEquals(0, shadow.available());
+    }
+
+    @Test
+    public void testAvailableAfterOpen() throws Exception {
+        try (InputStream in = createInputStream()) {
+            assertTrue(in.available() > 0);
+            assertNotEquals(IOUtils.EOF, in.read());
+            assertTrue(in.available() > 0);
+        }
+    }
 
     @Test
     public void testNormalUse() throws Exception {
@@ -73,6 +104,17 @@ public class MessageDigestCalculatingInputStreamTest {
                 }
             }
         }
+    }
+
+    @SuppressWarnings("resource")
+    @Test
+    public void testReadAfterClose() throws Exception {
+        final InputStream shadow;
+        try (InputStream in = createInputStream()) {
+            assertTrue(in.available() > 0);
+            shadow = in;
+        }
+        assertEquals(IOUtils.EOF, shadow.read());
     }
 
 }
