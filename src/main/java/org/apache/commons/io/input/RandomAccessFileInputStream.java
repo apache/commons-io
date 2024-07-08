@@ -128,7 +128,7 @@ public class RandomAccessFileInputStream extends InputStream {
         return new Builder();
     }
 
-    private final boolean closeOnClose;
+    private final boolean propagateClose;
     private final RandomAccessFile randomAccessFile;
 
     /**
@@ -146,13 +146,13 @@ public class RandomAccessFileInputStream extends InputStream {
      * Constructs a new instance.
      *
      * @param file         The file to stream.
-     * @param closeOnClose Whether to close the underlying file when this stream is closed.
+     * @param propagateClose Whether to close the underlying file when this stream is closed.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
     @Deprecated
-    public RandomAccessFileInputStream(final RandomAccessFile file, final boolean closeOnClose) {
+    public RandomAccessFileInputStream(final RandomAccessFile file, final boolean propagateClose) {
         this.randomAccessFile = Objects.requireNonNull(file, "file");
-        this.closeOnClose = closeOnClose;
+        this.propagateClose = propagateClose;
     }
 
     /**
@@ -185,7 +185,7 @@ public class RandomAccessFileInputStream extends InputStream {
     @Override
     public void close() throws IOException {
         super.close();
-        if (closeOnClose) {
+        if (propagateClose) {
             randomAccessFile.close();
         }
     }
@@ -205,7 +205,7 @@ public class RandomAccessFileInputStream extends InputStream {
      * @return Whether to close the underlying file when this stream is closed.
      */
     public boolean isCloseOnClose() {
-        return closeOnClose;
+        return propagateClose;
     }
 
     @Override
