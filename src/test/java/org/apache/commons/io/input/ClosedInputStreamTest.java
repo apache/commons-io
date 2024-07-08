@@ -37,7 +37,7 @@ public class ClosedInputStreamTest {
     public void testAvailableAfterClose() throws Exception {
         assertEquals(0, ClosedInputStream.INSTANCE.available());
         assertEquals(0, ClosedInputStream.INSTANCE.available());
-        InputStream shadow;
+        final InputStream shadow;
         try (InputStream in = new ClosedInputStream()) {
             assertEquals(0, in.available());
             shadow = in;
@@ -73,7 +73,7 @@ public class ClosedInputStreamTest {
     public void testReadAfterCose() throws Exception {
         assertEquals(0, ClosedInputStream.INSTANCE.available());
         assertEquals(0, ClosedInputStream.INSTANCE.available());
-        InputStream shadow;
+        final InputStream shadow;
         try (InputStream in = new ClosedInputStream()) {
             assertEquals(0, in.available());
             shadow = in;

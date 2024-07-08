@@ -126,14 +126,14 @@ public class WindowsLineEndingInputStreamTest {
     @ParameterizedTest
     @ValueSource(booleans = { false, true })
     public void testMark(final boolean ensureLineFeedAtEndOfFile) {
-        assertThrows(UnsupportedOperationException.class, () -> new WindowsLineEndingInputStream(NullInputStream.INSTANCE, true).mark(1));
+        assertThrows(UnsupportedOperationException.class, () -> new WindowsLineEndingInputStream(new NullInputStream(), true).mark(1));
     }
 
     @SuppressWarnings("resource")
     @ParameterizedTest
     @ValueSource(booleans = { false, true })
     public void testMarkSupported(final boolean ensureLineFeedAtEndOfFile) {
-        assertFalse(new WindowsLineEndingInputStream(NullInputStream.INSTANCE, true).markSupported());
+        assertFalse(new WindowsLineEndingInputStream(new NullInputStream(), true).markSupported());
     }
 
     @Test

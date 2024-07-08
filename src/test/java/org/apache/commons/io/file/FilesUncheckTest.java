@@ -96,7 +96,7 @@ public class FilesUncheckTest {
 
     @Test
     public void testCopyInputStreamPathCopyOptionArray() {
-        assertEquals(0, FilesUncheck.copy(NullInputStream.INSTANCE, NEW_FILE_PATH, PathUtils.EMPTY_COPY_OPTIONS));
+        assertEquals(0, FilesUncheck.copy(new NullInputStream(), NEW_FILE_PATH, PathUtils.EMPTY_COPY_OPTIONS));
     }
 
     @Test

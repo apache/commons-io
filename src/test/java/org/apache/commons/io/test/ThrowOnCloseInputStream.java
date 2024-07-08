@@ -31,7 +31,7 @@ public class ThrowOnCloseInputStream extends ProxyInputStream {
      * Constructs a new instance.
      */
     public ThrowOnCloseInputStream() {
-        super(NullInputStream.INSTANCE);
+        super(new NullInputStream());
     }
 
     /**

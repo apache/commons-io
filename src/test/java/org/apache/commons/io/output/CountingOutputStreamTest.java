@@ -89,7 +89,7 @@ public class CountingOutputStreamTest {
         assertThrows(ArithmeticException.class, () -> cos.getCount());
         assertThrows(ArithmeticException.class, () -> cos.resetCount());
 
-        mock.close();
+        mock.init();
 
         // Test long methods
         IOUtils.copyLarge(mock, cos);

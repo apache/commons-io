@@ -481,14 +481,14 @@ public class IOUtilsTest {
     @Test
     public void testConsumeInputStream() throws Exception {
         final long size = (long) Integer.MAX_VALUE + (long) 1;
-        final InputStream in = new NullInputStream(size);
+        final NullInputStream in = new NullInputStream(size);
         final OutputStream out = NullOutputStream.INSTANCE;
 
         // Test copy() method
         assertEquals(-1, IOUtils.copy(in, out));
 
         // reset the input
-        in.close();
+        in.init();
 
         // Test consume() method
         assertEquals(size, IOUtils.consume(in), "consume()");
