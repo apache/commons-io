@@ -95,6 +95,30 @@ public class QueueInputStreamTest {
         return byteArrayOutputStream.toString(StandardCharsets.UTF_8.name());
     }
 
+    @SuppressWarnings("resource")
+    @ParameterizedTest(name = "inputData={0}")
+    @MethodSource("inputData")
+    public void testAvailableAfterClose(final String inputData) throws IOException {
+        final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
+        final InputStream shadow;
+        try (InputStream inputStream = new QueueInputStream(queue)) {
+            shadow = inputStream;
+        }
+        assertEquals(0, shadow.available());
+    }
+
+    @ParameterizedTest(name = "inputData={0}")
+    @MethodSource("inputData")
+    public void testAvailableAfterOpen(final String inputData) throws IOException {
+        final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
+        try (InputStream inputStream = new QueueInputStream(queue)) {
+            // Always 0 because read() blocks.
+            assertEquals(0, inputStream.available());
+            IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+            assertEquals(0, inputStream.available());
+        }
+    }
+
     @ParameterizedTest(name = "inputData={0}")
     @MethodSource("inputData")
     public void testBufferedReads(final String inputData) throws IOException {
@@ -137,6 +161,18 @@ public class QueueInputStreamTest {
     public void testInvalidArguments() {
         assertThrows(NullPointerException.class, () -> new QueueInputStream(null), "queue is required");
         assertThrows(IllegalArgumentException.class, () -> QueueInputStream.builder().setTimeout(Duration.ofMillis(-1)).get(), "waitTime must not be negative");
+    }
+
+    @SuppressWarnings("resource")
+    @ParameterizedTest(name = "inputData={0}")
+    @MethodSource("inputData")
+    public void testReadAfterClose(final String inputData) throws IOException {
+        final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
+        final InputStream shadow;
+        try (InputStream inputStream = new QueueInputStream(queue)) {
+            shadow = inputStream;
+        }
+        assertEquals(IOUtils.EOF, shadow.read());
     }
 
     @Test
