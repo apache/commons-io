@@ -40,6 +40,7 @@ public class AutoCloseInputStreamTest {
 
     private boolean closed;
 
+    @SuppressWarnings("deprecation")
     @BeforeEach
     public void setUp() {
         data = new byte[] { 'x', 'y', 'z' };
@@ -50,6 +51,16 @@ public class AutoCloseInputStreamTest {
             }
         });
         closed = false;
+    }
+
+    @Test
+    public void testAvailableAfterClose() throws IOException {
+        final InputStream shadow;
+        try (InputStream inputStream = new AutoCloseInputStream(new ByteArrayInputStream(data))) {
+            assertEquals(3, inputStream.available());
+            shadow = inputStream;
+        }
+        assertEquals(0, shadow.available());
     }
 
     @Test
@@ -176,6 +187,16 @@ public class AutoCloseInputStreamTest {
         try (final AutoCloseInputStream inputStream = AutoCloseInputStream.builder().setInputStream(new ByteArrayInputStream("1234".getBytes())).get()) {
             testResetBeforeEnd(inputStream);
         }
+    }
+
+    @Test
+    public void testrReadAfterClose() throws IOException {
+        final InputStream shadow;
+        try (InputStream inputStream = new AutoCloseInputStream(new ByteArrayInputStream(data))) {
+            assertEquals(3, inputStream.available());
+            shadow = inputStream;
+        }
+        assertEquals(IOUtils.EOF, shadow.read());
     }
 
 }
