@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.ObservableInputStream.Observer;
@@ -127,23 +128,52 @@ public class ObservableInputStreamTest {
 
     }
 
+    private ObservableInputStream brokenObservableInputStream() {
+        return new ObservableInputStream(BrokenInputStream.INSTANCE);
+    }
+
+    private InputStream createInputStream() {
+        final byte[] buffer = MessageDigestInputStreamTest.generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
+        return new ObservableInputStream(new ByteArrayInputStream(buffer));
+    }
+
+    @SuppressWarnings("resource")
+    @Test
+    public void testAvailableAfterClose() throws Exception {
+        final InputStream shadow;
+        try (InputStream in = createInputStream()) {
+            assertTrue(in.available() > 0);
+            shadow = in;
+        }
+        assertEquals(0, shadow.available());
+    }
+
+    @Test
+    public void testAvailableAfterOpen() throws Exception {
+        try (InputStream in = createInputStream()) {
+            assertTrue(in.available() > 0);
+            assertNotEquals(IOUtils.EOF, in.read());
+            assertTrue(in.available() > 0);
+        }
+    }
+
     @Test
     public void testBrokenInputStreamRead() throws IOException {
-        try (ObservableInputStream ois = new ObservableInputStream(BrokenInputStream.INSTANCE)) {
+        try (ObservableInputStream ois = brokenObservableInputStream()) {
             assertThrows(IOException.class, ois::read);
         }
     }
 
     @Test
     public void testBrokenInputStreamReadBuffer() throws IOException {
-        try (ObservableInputStream ois = new ObservableInputStream(BrokenInputStream.INSTANCE)) {
+        try (ObservableInputStream ois = brokenObservableInputStream()) {
             assertThrows(IOException.class, () -> ois.read(new byte[1]));
         }
     }
 
     @Test
     public void testBrokenInputStreamReadSubBuffer() throws IOException {
-        try (ObservableInputStream ois = new ObservableInputStream(BrokenInputStream.INSTANCE)) {
+        try (ObservableInputStream ois = brokenObservableInputStream()) {
             assertThrows(IOException.class, () -> ois.read(new byte[2], 0, 1));
         }
     }
@@ -277,10 +307,8 @@ public class ObservableInputStreamTest {
         final byte[] buffer = IOUtils.byteArray();
         final LengthObserver lengthObserver = new LengthObserver();
         final MethodCountObserver methodCountObserver = new MethodCountObserver();
-        try (ObservableInputStream ois = new ObservableInputStream(new ByteArrayInputStream(buffer),
-            lengthObserver, methodCountObserver)) {
-            assertEquals(IOUtils.DEFAULT_BUFFER_SIZE,
-                IOUtils.copy(ois, NullOutputStream.INSTANCE, bufferSize));
+        try (ObservableInputStream ois = new ObservableInputStream(new ByteArrayInputStream(buffer), lengthObserver, methodCountObserver)) {
+            assertEquals(IOUtils.DEFAULT_BUFFER_SIZE, IOUtils.copy(ois, NullOutputStream.INSTANCE, bufferSize));
         }
         assertEquals(IOUtils.DEFAULT_BUFFER_SIZE, lengthObserver.getTotal());
         assertEquals(1, methodCountObserver.getClosedCount());
