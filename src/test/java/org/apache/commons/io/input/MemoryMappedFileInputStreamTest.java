@@ -44,7 +44,7 @@ public class MemoryMappedFileInputStreamTest {
     Path tempDir;
 
     @AfterEach
-    void afterEach() {
+    public void afterEach() {
         // Ask to run the garbage collector to clean up memory mapped buffers,
         // otherwise the temporary files won't be able to be removed when running on
         // Windows. Calling gc() is just a hint to the VM.
@@ -71,7 +71,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    void testAlternateBufferSize() throws IOException {
+    public void testAlternateBufferSize() throws IOException {
         // setup
         final Path file = createTestFile(1024 * 1024);
         final byte[] expectedData = Files.readAllBytes(file);
@@ -84,7 +84,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    void testEmptyFile() throws IOException {
+    public void testEmptyFile() throws IOException {
         // setup
         final Path file = createTestFile(0);
         // test
@@ -95,7 +95,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    void testLargerFile() throws IOException {
+    public void testLargerFile() throws IOException {
         // setup
         final Path file = createTestFile(1024 * 1024);
         final byte[] expectedData = Files.readAllBytes(file);
@@ -108,7 +108,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    void testReadAfterClose() throws IOException {
+    public void testReadAfterClose() throws IOException {
         // setup
         final Path file = createTestFile(1 * 1024 * 1024);
 
@@ -121,7 +121,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    void testReadSingleByte() throws IOException {
+    public void testReadSingleByte() throws IOException {
         // setup
         final Path file = createTestFile(2);
         final byte[] expectedData = Files.readAllBytes(file);
@@ -136,7 +136,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    void testSkipAtStart() throws IOException {
+    public void testSkipAtStart() throws IOException {
         // setup
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);
@@ -151,7 +151,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    void testSkipEmpty() throws IOException {
+    public void testSkipEmpty() throws IOException {
         // setup
         final Path file = createTestFile(0);
         // test
@@ -163,7 +163,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    void testSkipInCurrentBuffer() throws IOException {
+    public void testSkipInCurrentBuffer() throws IOException {
         // setup
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);
@@ -180,7 +180,7 @@ public class MemoryMappedFileInputStreamTest {
 
     @ParameterizedTest
     @ValueSource(ints = {-5, -1, 0})
-    void testSkipNoop(final int amountToSkip) throws IOException {
+    public void testSkipNoop(final int amountToSkip) throws IOException {
         // setup
         final Path file = createTestFile(10);
         final byte[] expectedData = Files.readAllBytes(file);
@@ -193,7 +193,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    void testSkipOutOfCurrentBuffer() throws IOException {
+    public void testSkipOutOfCurrentBuffer() throws IOException {
         // setup
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);
@@ -209,7 +209,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    void testSkipPastEof() throws IOException {
+    public void testSkipPastEof() throws IOException {
         // setup
         final Path file = createTestFile(100);
 
@@ -223,7 +223,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    void testSkipToEndOfCurrentBuffer() throws IOException {
+    public void testSkipToEndOfCurrentBuffer() throws IOException {
         // setup
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);
@@ -239,7 +239,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    void testSkipToEndOfCurrentBufferBuilder() throws IOException {
+    public void testSkipToEndOfCurrentBufferBuilder() throws IOException {
         // setup
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);
@@ -256,7 +256,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    void testSmallFileBuilder() throws IOException {
+    public void testSmallFileBuilder() throws IOException {
         // setup
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);
@@ -269,7 +269,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    void testSmallPath() throws IOException {
+    public void testSmallPath() throws IOException {
         // setup
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);
@@ -282,7 +282,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    void testSmallPathBuilder() throws IOException {
+    public void testSmallPathBuilder() throws IOException {
         // setup
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);
