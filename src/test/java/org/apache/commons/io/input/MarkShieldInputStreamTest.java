@@ -26,6 +26,9 @@ import java.io.InputStream;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests {@link MarkTestableInputStream}.
+ */
 public class MarkShieldInputStreamTest {
 
     private static final class MarkTestableInputStream extends ProxyInputStream {
