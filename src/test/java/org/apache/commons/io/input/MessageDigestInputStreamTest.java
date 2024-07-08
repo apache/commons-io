@@ -17,13 +17,21 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.codec.digest.MessageDigestAlgorithms;
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -36,6 +44,34 @@ public class MessageDigestInputStreamTest {
         final Random rnd = new Random();
         rnd.nextBytes(buffer);
         return buffer;
+    }
+
+    private InputStream createInputStream() throws IOException, NoSuchAlgorithmException {
+        // @formatter:off
+        return MessageDigestInputStream.builder()
+                .setMessageDigest(MessageDigest.getInstance(MessageDigestAlgorithms.SHA_512))
+                .setInputStream(new ByteArrayInputStream(MessageDigestInputStreamTest.generateRandomByteStream(256))).get();
+        // @formatter:on
+    }
+
+    @SuppressWarnings("resource")
+    @Test
+    public void testAvailableAfterClose() throws Exception {
+        final InputStream shadow;
+        try (InputStream in = createInputStream()) {
+            assertTrue(in.available() > 0);
+            shadow = in;
+        }
+        assertEquals(0, shadow.available());
+    }
+
+    @Test
+    public void testAvailableAfterOpen() throws Exception {
+        try (InputStream in = createInputStream()) {
+            assertTrue(in.available() > 0);
+            assertNotEquals(IOUtils.EOF, in.read());
+            assertTrue(in.available() > 0);
+        }
     }
 
     @Test
@@ -60,6 +96,17 @@ public class MessageDigestInputStreamTest {
                 assertArrayEquals(expect, messageDigestInputStream.getMessageDigest().digest());
             }
         }
+    }
+
+    @SuppressWarnings("resource")
+    @Test
+    public void testReadAfterClose() throws Exception {
+        final InputStream shadow;
+        try (InputStream in = createInputStream()) {
+            assertTrue(in.available() > 0);
+            shadow = in;
+        }
+        assertEquals(IOUtils.EOF, shadow.read());
     }
 
 }
