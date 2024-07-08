@@ -24,10 +24,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
- * Tests {@link MarkTestableInputStream}.
+ * Tests {@link MarkShieldInputStream}.
  */
 public class MarkShieldInputStreamTest {
 
@@ -47,6 +50,41 @@ public class MarkShieldInputStreamTest {
             this.readLimit = readLimit;
             // invoke on super
             super.mark(readLimit);
+        }
+    }
+
+    @SuppressWarnings("resource")
+    @ParameterizedTest
+    @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
+    public void testAvailableAfterClose(final int len) throws Exception {
+        final InputStream shadow;
+        try (MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(len, false, false));
+                final MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
+            assertEquals(len, in.available());
+            shadow = in;
+        }
+        assertEquals(0, shadow.available());
+    }
+
+    @SuppressWarnings("resource")
+    @ParameterizedTest
+    @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
+    public void testReadAfterClose(final int len) throws Exception {
+        final InputStream shadow;
+        try (MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(len, false, false));
+                final MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
+            assertEquals(len, in.available());
+            shadow = in;
+        }
+        assertEquals(IOUtils.EOF, shadow.read());
+    }
+
+    @ParameterizedTest
+    @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
+    public void testAvailableAfterOpen(final int len) throws Exception {
+        try (MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(len, false, false));
+                final MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
+            assertEquals(len, in.available());
         }
     }
 
