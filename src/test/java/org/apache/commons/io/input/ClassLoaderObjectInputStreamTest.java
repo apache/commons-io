@@ -34,16 +34,15 @@ import org.apache.commons.lang3.SerializationUtils;
  */
 public class ClassLoaderObjectInputStreamTest {
 
-    /*
+    /**
      * Note: This test case tests the simplest functionality of ObjectInputStream. IF we really wanted to test
      * ClassLoaderObjectInputStream we would probably need to create a transient Class Loader. -TO
      */
-
     private enum E {
         A, B, C
     }
 
-    private static final class Test implements Serializable {
+    private static final class TestFixture implements Serializable {
         private static final long serialVersionUID = 1L;
         private final int i;
 
@@ -51,7 +50,7 @@ public class ClassLoaderObjectInputStreamTest {
 
         private final E e;
 
-        Test(final int i, final Object o) {
+        TestFixture(final int i, final Object o) {
             this.i = i;
             this.e = E.A;
             this.o = o;
@@ -66,8 +65,8 @@ public class ClassLoaderObjectInputStreamTest {
 
         @Override
         public boolean equals(final Object other) {
-            if (other instanceof Test) {
-                final Test tOther = (Test) other;
+            if (other instanceof TestFixture) {
+                final TestFixture tOther = (TestFixture) other;
                 return this.i == tOther.i & this.e == tOther.e & equalObject(tOther.o);
             }
             return false;
@@ -101,7 +100,7 @@ public class ClassLoaderObjectInputStreamTest {
 
     @org.junit.jupiter.api.Test
     public void testObject1() throws Exception {
-        final Test input = new Test(123, null);
+        final TestFixture input = new TestFixture(123, null);
         final InputStream bais = new ByteArrayInputStream(SerializationUtils.serialize(input));
         try (ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais)) {
             final Object result = clois.readObject();
@@ -111,7 +110,7 @@ public class ClassLoaderObjectInputStreamTest {
 
     @org.junit.jupiter.api.Test
     public void testObject2() throws Exception {
-        final Test input = new Test(123, 0);
+        final TestFixture input = new TestFixture(123, 0);
         final InputStream bais = new ByteArrayInputStream(SerializationUtils.serialize(input));
         try (ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais)) {
             final Object result = clois.readObject();
