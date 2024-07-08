@@ -167,6 +167,7 @@ public final class MemoryMappedFileInputStream extends InputStream {
 
     @Override
     public int available() throws IOException {
+        //return buffer != null ? buffer.remaining(): 0;
         return buffer.remaining();
     }
 
@@ -186,7 +187,7 @@ public final class MemoryMappedFileInputStream extends InputStream {
     public void close() throws IOException {
         if (!closed) {
             cleanBuffer();
-            buffer = null;
+            buffer = EMPTY_BUFFER;
             channel.close();
             closed = true;
         }
@@ -210,7 +211,9 @@ public final class MemoryMappedFileInputStream extends InputStream {
 
     @Override
     public int read() throws IOException {
-        checkOpen();
+        if (closed) {
+            return EOF;
+        }
         if (!buffer.hasRemaining()) {
             nextBuffer();
             if (!buffer.hasRemaining()) {

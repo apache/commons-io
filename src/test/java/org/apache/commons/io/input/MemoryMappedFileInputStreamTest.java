@@ -33,6 +33,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 /**
@@ -62,11 +63,11 @@ public class MemoryMappedFileInputStreamTest {
         return Files.write(Files.createTempFile(tempDir, null, null), RandomUtils.nextBytes(size));
     }
 
-    private MemoryMappedFileInputStream newStream(final Path file) throws IOException {
+    private MemoryMappedFileInputStream newInputStream(final Path file) throws IOException {
         return MemoryMappedFileInputStream.builder().setPath(file).get();
     }
 
-    private MemoryMappedFileInputStream newStream(final Path file, final int bufferSize) throws IOException {
+    private MemoryMappedFileInputStream newInputStream(final Path file, final int bufferSize) throws IOException {
         return MemoryMappedFileInputStream.builder().setPath(file).setBufferSize(bufferSize).get();
     }
 
@@ -75,11 +76,38 @@ public class MemoryMappedFileInputStreamTest {
         // setup
         final Path file = createTestFile(1024 * 1024);
         final byte[] expectedData = Files.readAllBytes(file);
-
         // test
-        try (InputStream inputStream = newStream(file, 1024)) {
+        try (InputStream inputStream = newInputStream(file, 1024)) {
             // verify
             assertArrayEquals(expectedData, IOUtils.toByteArray(inputStream));
+        }
+    }
+
+    @SuppressWarnings("resource")
+    @ParameterizedTest
+    @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
+    public void testAvailableAfterClose(final int len) throws Exception {
+        final Path file = createTestFile(len);
+        final InputStream shadow;
+        try (InputStream inputStream = newInputStream(file, 1024)) {
+            // verify
+            assertEquals(0, inputStream.available());
+            shadow = inputStream;
+        }
+        assertEquals(0, shadow.available());
+    }
+
+    @ParameterizedTest
+    @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
+    public void testAvailableAfterOpen(final int len) throws Exception {
+        final Path file = createTestFile(len);
+        try (InputStream inputStream = newInputStream(file, 1024)) {
+            // verify
+            assertEquals(0, inputStream.available());
+            inputStream.read();
+            assertEquals(Math.max(len - 1, 0), inputStream.available());
+            IOUtils.toByteArray(inputStream);
+            assertEquals(0, inputStream.available());
         }
     }
 
@@ -88,7 +116,7 @@ public class MemoryMappedFileInputStreamTest {
         // setup
         final Path file = createTestFile(0);
         // test
-        try (InputStream inputStream = newStream(file)) {
+        try (InputStream inputStream = newInputStream(file)) {
             // verify
             assertArrayEquals(EMPTY_BYTE_ARRAY, IOUtils.toByteArray(inputStream));
         }
@@ -99,9 +127,8 @@ public class MemoryMappedFileInputStreamTest {
         // setup
         final Path file = createTestFile(1024 * 1024);
         final byte[] expectedData = Files.readAllBytes(file);
-
         // test
-        try (InputStream inputStream = newStream(file)) {
+        try (InputStream inputStream = newInputStream(file)) {
             // verify
             assertArrayEquals(expectedData, IOUtils.toByteArray(inputStream));
         }
@@ -111,13 +138,24 @@ public class MemoryMappedFileInputStreamTest {
     public void testReadAfterClose() throws IOException {
         // setup
         final Path file = createTestFile(1 * 1024 * 1024);
-
         // test
-        try (InputStream inputStream = newStream(file, 1024)) {
+        try (InputStream inputStream = newInputStream(file, 1024)) {
             inputStream.close();
             // verify
             Assertions.assertThrows(IOException.class, () -> IOUtils.toByteArray(inputStream));
         }
+    }
+
+    @SuppressWarnings("resource")
+    @ParameterizedTest
+    @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
+    public void testReadAfterClose(final int len) throws Exception {
+        final Path file = createTestFile(len);
+        final InputStream shadow;
+        try (InputStream inputStream = newInputStream(file, 1024)) {
+            shadow = inputStream;
+        }
+        assertEquals(IOUtils.EOF, shadow.read());
     }
 
     @Test
@@ -126,7 +164,7 @@ public class MemoryMappedFileInputStreamTest {
         final Path file = createTestFile(2);
         final byte[] expectedData = Files.readAllBytes(file);
         // test
-        try (InputStream inputStream = newStream(file, 1024)) {
+        try (InputStream inputStream = newInputStream(file, 1024)) {
             final int b1 = inputStream.read();
             final int b2 = inputStream.read();
             assertEquals(-1, inputStream.read());
@@ -140,9 +178,8 @@ public class MemoryMappedFileInputStreamTest {
         // setup
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);
-
         // test
-        try (InputStream inputStream = newStream(file, 10)) {
+        try (InputStream inputStream = newInputStream(file, 10)) {
             assertEquals(1, inputStream.skip(1));
             final byte[] data = IOUtils.toByteArray(inputStream);
             // verify
@@ -155,7 +192,7 @@ public class MemoryMappedFileInputStreamTest {
         // setup
         final Path file = createTestFile(0);
         // test
-        try (InputStream inputStream = newStream(file)) {
+        try (InputStream inputStream = newInputStream(file)) {
             assertEquals(0, inputStream.skip(5));
             // verify
             assertArrayEquals(EMPTY_BYTE_ARRAY, IOUtils.toByteArray(inputStream));
@@ -167,9 +204,8 @@ public class MemoryMappedFileInputStreamTest {
         // setup
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);
-
         // test
-        try (InputStream inputStream = newStream(file, 10)) {
+        try (InputStream inputStream = newInputStream(file, 10)) {
             IOUtils.toByteArray(inputStream, 5);
             assertEquals(3, inputStream.skip(3));
             final byte[] data = IOUtils.toByteArray(inputStream);
@@ -185,7 +221,7 @@ public class MemoryMappedFileInputStreamTest {
         final Path file = createTestFile(10);
         final byte[] expectedData = Files.readAllBytes(file);
         // test
-        try (InputStream inputStream = newStream(file)) {
+        try (InputStream inputStream = newInputStream(file)) {
             assertEquals(0, inputStream.skip(amountToSkip));
             // verify
             assertArrayEquals(expectedData, IOUtils.toByteArray(inputStream));
@@ -197,9 +233,8 @@ public class MemoryMappedFileInputStreamTest {
         // setup
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);
-
         // test
-        try (InputStream inputStream = newStream(file, 10)) {
+        try (InputStream inputStream = newInputStream(file, 10)) {
             IOUtils.toByteArray(inputStream, 5);
             assertEquals(6, inputStream.skip(6));
             final byte[] data = IOUtils.toByteArray(inputStream);
@@ -212,9 +247,8 @@ public class MemoryMappedFileInputStreamTest {
     public void testSkipPastEof() throws IOException {
         // setup
         final Path file = createTestFile(100);
-
         // test
-        try (InputStream inputStream = newStream(file, 10)) {
+        try (InputStream inputStream = newInputStream(file, 10)) {
             IOUtils.toByteArray(inputStream, 5);
             assertEquals(95, inputStream.skip(96));
             // verify
@@ -229,7 +263,7 @@ public class MemoryMappedFileInputStreamTest {
         final byte[] expectedData = Files.readAllBytes(file);
 
         // test
-        try (InputStream inputStream = newStream(file, 10)) {
+        try (InputStream inputStream = newInputStream(file, 10)) {
             IOUtils.toByteArray(inputStream, 5);
             assertEquals(5, inputStream.skip(5));
             final byte[] data = IOUtils.toByteArray(inputStream);
@@ -243,7 +277,6 @@ public class MemoryMappedFileInputStreamTest {
         // setup
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);
-
         // test
         try (MemoryMappedFileInputStream inputStream = MemoryMappedFileInputStream.builder().setPath(file).setBufferSize(10).get()) {
             assertEquals(10, inputStream.getBufferSize());
@@ -260,7 +293,6 @@ public class MemoryMappedFileInputStreamTest {
         // setup
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);
-
         // test
         try (InputStream inputStream = MemoryMappedFileInputStream.builder().setFile(file.toFile()).get()) {
             // verify
@@ -275,7 +307,7 @@ public class MemoryMappedFileInputStreamTest {
         final byte[] expectedData = Files.readAllBytes(file);
 
         // test
-        try (InputStream inputStream = newStream(file)) {
+        try (InputStream inputStream = newInputStream(file)) {
             // verify
             assertArrayEquals(expectedData, IOUtils.toByteArray(inputStream));
         }
@@ -286,7 +318,6 @@ public class MemoryMappedFileInputStreamTest {
         // setup
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);
-
         // test
         try (InputStream inputStream = MemoryMappedFileInputStream.builder().setPath(file).get()) {
             // verify
