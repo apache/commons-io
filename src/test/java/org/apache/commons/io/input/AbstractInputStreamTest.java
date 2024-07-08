@@ -46,6 +46,10 @@ public abstract class AbstractInputStreamTest {
 
     protected InputStream[] inputStreams;
 
+    static final String ARRAY_LENGTHS_NAME = "org.apache.commons.io.input.AbstractInputStreamTest#getArrayLengths";
+
+    static final int[] ARRAY_LENGTHS = { 0, 1, 2, 4, 8, 16, 32, 64, 128 };
+
     @BeforeEach
     public void setUp() throws IOException {
         // Create a byte array of size 2 MB with random bytes
@@ -176,5 +180,9 @@ public abstract class AbstractInputStreamTest {
                 assertEquals(randomBytes[i], (byte) inputStream.read());
             }
         }
+    }
+
+    static int[] getArrayLengths() {
+        return ARRAY_LENGTHS;
     }
 }

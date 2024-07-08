@@ -26,7 +26,7 @@ import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Tests {@link CountingInputStream}.
@@ -35,10 +35,10 @@ public class CountingInputStreamTest {
 
     @SuppressWarnings("resource")
     @ParameterizedTest
-    @ValueSource(ints = { 0, 1, 2, 4, 8, 16, 32, 64, 128 })
+    @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
     public void testAvailableAfterClose(final int len) throws Exception {
         final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[len]);
-        InputStream shadow;
+        final InputStream shadow;
         try (InputStream in = CloseShieldInputStream.wrap(bais)) {
             assertEquals(len, in.available());
             shadow = in;
@@ -47,7 +47,7 @@ public class CountingInputStreamTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = { 0, 1, 2, 4, 8, 16, 32, 64, 128 })
+    @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
     public void testAvailableAfterOpen(final int len) throws Exception {
         final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[len]);
         try (InputStream in = CloseShieldInputStream.wrap(bais)) {
@@ -144,7 +144,7 @@ public class CountingInputStreamTest {
         assertThrows(ArithmeticException.class, () -> cis.getCount());
         assertThrows(ArithmeticException.class, () -> cis.resetCount());
 
-        mock.close();
+        mock.init();
 
         // Test long methods
         IOUtils.consume(cis);
@@ -154,10 +154,10 @@ public class CountingInputStreamTest {
 
     @SuppressWarnings("resource")
     @ParameterizedTest
-    @ValueSource(ints = { 0, 1, 2, 4, 8, 16, 32, 64, 128 })
+    @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
     public void testReadAfterClose(final int len) throws Exception {
         final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[len]);
-        InputStream shadow;
+        final InputStream shadow;
         try (InputStream in = CloseShieldInputStream.wrap(bais)) {
             assertEquals(len, in.available());
             shadow = in;
