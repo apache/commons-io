@@ -34,7 +34,7 @@ public class ClosedInputStreamTest {
     }
 
     @Test
-    public void testAvailableAfterCose() throws Exception {
+    public void testAvailableAfterClose() throws Exception {
         assertEquals(0, ClosedInputStream.INSTANCE.available());
         assertEquals(0, ClosedInputStream.INSTANCE.available());
         InputStream shadow;
