@@ -332,4 +332,16 @@ public class ObservableInputStreamTest {
     public void testNotificationCallbacksBufferSizeDefault() throws Exception {
         testNotificationCallbacks(IOUtils.DEFAULT_BUFFER_SIZE);
     }
+
+    @SuppressWarnings("resource")
+    @Test
+    public void testReadAfterClose() throws Exception {
+        final InputStream shadow;
+        try (InputStream in = createInputStream()) {
+            assertTrue(in.available() > 0);
+            shadow = in;
+        }
+        assertEquals(IOUtils.EOF, shadow.read());
+    }
+
 }
