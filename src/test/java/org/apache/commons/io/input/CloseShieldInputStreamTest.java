@@ -54,7 +54,7 @@ public class CloseShieldInputStreamTest {
     }
 
     @Test
-    public void testAvailableAfterCose() throws Exception {
+    public void testAvailableAfterClose() throws Exception {
         InputStream shadow;
         try (InputStream in = CloseShieldInputStream.wrap(byteArrayInputStream)) {
             assertEquals(3, in.available());
