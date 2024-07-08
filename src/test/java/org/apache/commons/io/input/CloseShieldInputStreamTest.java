@@ -24,6 +24,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -53,12 +54,40 @@ public class CloseShieldInputStreamTest {
     }
 
     @Test
+    public void testAvailableAfterCose() throws Exception {
+        InputStream shadow;
+        try (InputStream in = CloseShieldInputStream.wrap(byteArrayInputStream)) {
+            assertEquals(3, in.available());
+            shadow = in;
+        }
+        assertEquals(0, shadow.available());
+    }
+
+    @Test
+    public void testAvailableAfterOpen() throws Exception {
+        try (InputStream in = CloseShieldInputStream.wrap(byteArrayInputStream)) {
+            assertEquals(3, in.available());
+        }
+    }
+
+    @Test
     public void testClose() throws IOException {
         shielded = CloseShieldInputStream.wrap(byteArrayInputStream);
         shielded.close();
         assertFalse(closed, "closed");
         assertEquals(-1, shielded.read(), "read()");
         assertEquals(data[0], byteArrayInputStream.read(), "read()");
+    }
+
+
+    @Test
+    public void testReadAfterCose() throws Exception {
+        InputStream shadow;
+        try (InputStream in = CloseShieldInputStream.wrap(byteArrayInputStream)) {
+            assertEquals(3, in.available());
+            shadow = in;
+        }
+        assertEquals(IOUtils.EOF, shadow.read());
     }
 
     @Test
