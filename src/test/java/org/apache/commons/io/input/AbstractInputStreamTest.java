@@ -17,6 +17,8 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,6 +58,22 @@ public abstract class AbstractInputStreamTest {
     public void tearDown() throws IOException {
         Files.delete(inputFile);
         IOUtils.close(inputStreams);
+    }
+
+    @Test
+    public void testAvailableAfterClose() throws Exception {
+        for (final InputStream inputStream : inputStreams) {
+            inputStream.close();
+            assertEquals(0, inputStream.available());
+        }
+    }
+
+    @Test
+    public void testAvailableAfterRead() throws Exception {
+        for (final InputStream inputStream : inputStreams) {
+            assertNotEquals(IOUtils.EOF, inputStream.read());
+            assertTrue(inputStream.available() > 0);
+        }
     }
 
     @Test

@@ -17,7 +17,6 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -55,24 +54,8 @@ public class BufferedFileChannelInputStreamTest extends AbstractInputStreamTest 
     }
 
     @Test
-    public void testAvailableAfterClose() throws Exception {
-        for (final InputStream inputStream : inputStreams) {
-            inputStream.close();
-            assertEquals(0, inputStream.available());
-        }
-    }
-
-    @Test
     public void testAvailableAfterOpen() throws Exception {
         for (final InputStream inputStream : inputStreams) {
-            assertTrue(inputStream.available() > 0);
-        }
-    }
-
-    @Test
-    public void testAvailableAfterRead() throws Exception {
-        for (final InputStream inputStream : inputStreams) {
-            assertNotEquals(IOUtils.EOF, inputStream.read());
             assertTrue(inputStream.available() > 0);
         }
     }
