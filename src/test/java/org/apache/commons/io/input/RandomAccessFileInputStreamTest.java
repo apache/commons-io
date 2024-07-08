@@ -47,19 +47,19 @@ public class RandomAccessFileInputStreamTest {
     }
 
     @Test
-    public void testAvailableAfterOpen() throws IOException {
-        try (RandomAccessFileInputStream inputStream = new RandomAccessFileInputStream(createRandomAccessFile(),
-            true)) {
-            assertEquals(DATA_FILE_LEN, inputStream.available());
-        }
-    }
-
-    @Test
     public void testAvailableAfterClose() throws IOException {
         try (RandomAccessFileInputStream inputStream = new RandomAccessFileInputStream(createRandomAccessFile(),
             true)) {
             inputStream.close();
             assertEquals(0, inputStream.available());
+        }
+    }
+
+    @Test
+    public void testAvailableAfterOpen() throws IOException {
+        try (RandomAccessFileInputStream inputStream = new RandomAccessFileInputStream(createRandomAccessFile(),
+            true)) {
+            assertEquals(DATA_FILE_LEN, inputStream.available());
         }
     }
 
