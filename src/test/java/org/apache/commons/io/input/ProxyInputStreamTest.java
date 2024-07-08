@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import org.apache.commons.io.IOUtils;
@@ -64,6 +65,13 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
             shadow = inputStream;
         }
         assertEquals(0, shadow.available());
+    }
+
+    @Test
+    public void testAvailableAfterOpen() throws IOException {
+        try (T inputStream = createFixture()) {
+            assertEquals(3, inputStream.available());
+        }
     }
 
     @Test
@@ -110,8 +118,12 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
     @SuppressWarnings("resource")
     @Test
     public void testReadAfterClose() throws IOException {
-        final T shadow;
-        try (T inputStream = createFixture()) {
+        InputStream shadow;
+        try (InputStream inputStream = createFixture()) {
+            shadow = inputStream;
+        }
+        assertEquals(IOUtils.EOF, shadow.read());
+        try (InputStream inputStream = new ProxyInputStreamFixture(new ByteArrayInputStream("abc".getBytes(StandardCharsets.UTF_8)))) {
             shadow = inputStream;
         }
         assertEquals(IOUtils.EOF, shadow.read());

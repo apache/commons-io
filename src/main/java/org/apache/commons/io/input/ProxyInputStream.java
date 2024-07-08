@@ -180,13 +180,16 @@ public abstract class ProxyInputStream extends FilterInputStream {
     }
 
     /**
-     * Invokes the delegate's {@code read()} method.
+     * Invokes the delegate's {@code read()} method unless the stream is closed.
      *
      * @return the byte read or -1 if the end of stream
      * @throws IOException if an I/O error occurs.
      */
     @Override
     public int read() throws IOException {
+        if (isClosed()) {
+            return EOF;
+        }
         try {
             beforeRead(1);
             final int b = in.read();

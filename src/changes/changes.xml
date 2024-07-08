@@ -77,6 +77,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">NullInputStream.read() should return -1 after the stream is closed.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">MemoryMappedFileInputStream.available() should return 0 after the stream is closed.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">MemoryMappedFileInputStream.read() should return -1 after the stream is closed.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">ProxyInputStream.read() should return -1 after the stream is closed.</action>
       <!-- UPDATE -->
       <action dev="ggregory" type="update"             due-to="Dependabot">Bump tests commons.bytebuddy.version from 1.14.13 to 1.14.17 #615, #621, #631, #635.</action>
       <action dev="ggregory" type="update"             due-to="Dependabot">Bump tests commons-codec:commons-codec from 1.16.1 to 1.17.0.</action>
