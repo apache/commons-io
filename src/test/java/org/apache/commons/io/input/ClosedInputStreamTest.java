@@ -20,6 +20,8 @@ import static org.apache.commons.io.IOUtils.EOF;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
+import java.io.InputStream;
+
 import org.junit.jupiter.api.Test;
 
 /**
@@ -32,7 +34,19 @@ public class ClosedInputStreamTest {
     }
 
     @Test
-    public void testAvailable() throws Exception {
+    public void testAvailableAfterCose() throws Exception {
+        assertEquals(0, ClosedInputStream.INSTANCE.available());
+        assertEquals(0, ClosedInputStream.INSTANCE.available());
+        InputStream shadow;
+        try (InputStream in = new ClosedInputStream()) {
+            assertEquals(0, in.available());
+            shadow = in;
+        }
+        assertEquals(0, shadow.available());
+    }
+
+    @Test
+    public void testAvailableAfterOpen() throws Exception {
         assertEquals(0, ClosedInputStream.INSTANCE.available());
         assertEquals(0, ClosedInputStream.INSTANCE.available());
         try (ClosedInputStream cis = new ClosedInputStream()) {
@@ -53,6 +67,18 @@ public class ClosedInputStreamTest {
         try (ClosedInputStream cis = new ClosedInputStream()) {
             assertEof(cis);
         }
+    }
+
+    @Test
+    public void testReadAfterCose() throws Exception {
+        assertEquals(0, ClosedInputStream.INSTANCE.available());
+        assertEquals(0, ClosedInputStream.INSTANCE.available());
+        InputStream shadow;
+        try (InputStream in = new ClosedInputStream()) {
+            assertEquals(0, in.available());
+            shadow = in;
+        }
+        assertEquals(EOF, shadow.read());
     }
 
     @Test
