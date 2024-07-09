@@ -85,7 +85,7 @@ import org.apache.commons.io.charset.CharsetEncoders;
  * @see org.apache.commons.io.output.WriterOutputStream
  * @since 2.0
  */
-public class ReaderInputStream extends InputStream {
+public class ReaderInputStream extends AbstractInputStream {
 
     // @formatter:off
     /**
@@ -338,6 +338,14 @@ public class ReaderInputStream extends InputStream {
         this(reader, Charsets.toCharset(charsetName), bufferSize);
     }
 
+    @Override
+    public int available() throws IOException {
+        if (encoderOut.hasRemaining()) {
+            return encoderOut.remaining();
+        }
+        return 0;
+    }
+
     /**
      * Closes the stream. This method will cause the underlying {@link Reader} to be closed.
      *
@@ -346,6 +354,7 @@ public class ReaderInputStream extends InputStream {
     @Override
     public void close() throws IOException {
         reader.close();
+        super.close();
     }
 
     /**
@@ -399,6 +408,9 @@ public class ReaderInputStream extends InputStream {
      */
     @Override
     public int read() throws IOException {
+        if (isClosed()) {
+            return IOUtils.EOF;
+        }
         for (;;) {
             if (encoderOut.hasRemaining()) {
                 return encoderOut.get() & 0xFF;

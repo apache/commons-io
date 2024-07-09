@@ -73,6 +73,37 @@ public class ReaderInputStreamTest {
 
     private final Random random = new Random();
 
+    private ReaderInputStream createInputStream() throws IOException {
+        return ReaderInputStream.builder().setReader(new StringReader(TEST_STRING)).get();
+    }
+
+    @Test
+    public void testAvailableAfterClose() throws IOException {
+        try (InputStream inputStream = createInputStream()) {
+            inputStream.close();
+            assertEquals(0, inputStream.available());
+        }
+    }
+
+    @Test
+    public void testReasdAfterClose() throws IOException {
+        try (InputStream inputStream = createInputStream()) {
+            inputStream.close();
+            assertEquals(IOUtils.EOF, inputStream.read());
+        }
+    }
+
+    @Test
+    public void testAvailableAfterOpen() throws IOException {
+        try (InputStream inputStream = createInputStream()) {
+            // Nothing read, may block
+            assertEquals(0, inputStream.available());
+            // Read/block
+            inputStream.read();
+            assertEquals(TEST_STRING.length() - 1, inputStream.available());
+        }
+    }
+
     @Test
     @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
     public void testBufferSmallest() throws IOException {
