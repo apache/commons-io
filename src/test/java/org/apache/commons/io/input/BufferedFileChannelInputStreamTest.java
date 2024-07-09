@@ -53,6 +53,7 @@ public class BufferedFileChannelInputStreamTest extends AbstractInputStreamTest 
         //@formatter:on
     }
 
+    @Override
     @Test
     public void testAvailableAfterOpen() throws Exception {
         for (final InputStream inputStream : inputStreams) {
