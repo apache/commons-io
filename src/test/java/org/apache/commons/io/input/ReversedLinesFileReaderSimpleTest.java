@@ -16,7 +16,7 @@
  */
 package org.apache.commons.io.input;
 
-import static org.apache.commons.io.input.ReversedLinesFileReaderTestParamBlockSize.assertEqualsAndNoLineBreaks;
+import static org.apache.commons.io.input.ReversedLinesFileReaderParamBlockSizeTest.assertEqualsAndNoLineBreaks;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -32,7 +32,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.TestResources;
 import org.junit.jupiter.api.Test;
 
-public class ReversedLinesFileReaderTestSimple {
+public class ReversedLinesFileReaderSimpleTest {
 
     @Test
     public void testFileSizeIsExactMultipleOfBlockSize() throws URISyntaxException, IOException {
