@@ -40,15 +40,19 @@ import org.junit.jupiter.api.Test;
  */
 public abstract class AbstractInputStreamTest {
 
+    static final String ARRAY_LENGTHS_NAME = "org.apache.commons.io.input.AbstractInputStreamTest#getArrayLengths";
+
+    static final int[] ARRAY_LENGTHS = { 0, 1, 2, 4, 8, 16, 32, 64, 128 };
+
+    static int[] getArrayLengths() {
+        return ARRAY_LENGTHS;
+    }
+
     private byte[] randomBytes;
 
     protected Path inputFile;
 
     protected InputStream[] inputStreams;
-
-    static final String ARRAY_LENGTHS_NAME = "org.apache.commons.io.input.AbstractInputStreamTest#getArrayLengths";
-
-    static final int[] ARRAY_LENGTHS = { 0, 1, 2, 4, 8, 16, 32, 64, 128 };
 
     @BeforeEach
     public void setUp() throws IOException {
@@ -68,6 +72,13 @@ public abstract class AbstractInputStreamTest {
     public void testAvailableAfterClose() throws Exception {
         for (final InputStream inputStream : inputStreams) {
             inputStream.close();
+            assertEquals(0, inputStream.available());
+        }
+    }
+
+    @Test
+    public void testAvailableAfterOpen() throws Exception {
+        for (final InputStream inputStream : inputStreams) {
             assertEquals(0, inputStream.available());
         }
     }
@@ -180,9 +191,5 @@ public abstract class AbstractInputStreamTest {
                 assertEquals(randomBytes[i], (byte) inputStream.read());
             }
         }
-    }
-
-    static int[] getArrayLengths() {
-        return ARRAY_LENGTHS;
     }
 }
