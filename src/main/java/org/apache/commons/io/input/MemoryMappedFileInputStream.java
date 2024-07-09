@@ -69,7 +69,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * @see Builder
  * @since 2.12.0
  */
-public final class MemoryMappedFileInputStream extends InputStream {
+public final class MemoryMappedFileInputStream extends AbstractInputStream {
 
     // @formatter:off
     /**
@@ -146,7 +146,6 @@ public final class MemoryMappedFileInputStream extends InputStream {
     private final int bufferSize;
     private final FileChannel channel;
     private ByteBuffer buffer = EMPTY_BUFFER;
-    private boolean closed;
 
     /**
      * The starting position (within the file) of the next sliding buffer.
@@ -172,7 +171,7 @@ public final class MemoryMappedFileInputStream extends InputStream {
     }
 
     private void checkOpen() throws IOException {
-        if (closed) {
+        if (isClosed()) {
             throw new IOException("Stream closed");
         }
     }
@@ -185,11 +184,11 @@ public final class MemoryMappedFileInputStream extends InputStream {
 
     @Override
     public void close() throws IOException {
-        if (!closed) {
+        if (!isClosed()) {
             cleanBuffer();
             buffer = EMPTY_BUFFER;
             channel.close();
-            closed = true;
+            super.close();
         }
     }
 
@@ -211,7 +210,7 @@ public final class MemoryMappedFileInputStream extends InputStream {
 
     @Override
     public int read() throws IOException {
-        if (closed) {
+        if (isClosed()) {
             return EOF;
         }
         if (!buffer.hasRemaining()) {

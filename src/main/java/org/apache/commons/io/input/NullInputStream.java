@@ -54,7 +54,7 @@ import java.io.InputStream;
  *
  * @since 1.3
  */
-public class NullInputStream extends InputStream {
+public class NullInputStream extends AbstractInputStream {
 
     /**
      * The singleton instance.
@@ -73,7 +73,6 @@ public class NullInputStream extends InputStream {
     private long position;
     private long mark = -1;
     private long readLimit;
-    private boolean closed;
     private final boolean throwEofException;
     private final boolean markSupported;
 
@@ -110,7 +109,7 @@ public class NullInputStream extends InputStream {
 
     @Override
     public int available() {
-        if (closed) {
+        if (isClosed()) {
             return 0;
         }
         final long avail = size - position;
@@ -142,7 +141,7 @@ public class NullInputStream extends InputStream {
      */
     @Override
     public void close() throws IOException {
-        closed = true;
+        super.close();
         mark = -1;
     }
 
@@ -168,10 +167,10 @@ public class NullInputStream extends InputStream {
      * Handles End of File.
      *
      * @return {@code -1} if {@code throwEofException} is set to {@code false}
-     * @throws EOFException if {@code throwEofException} is set to {@code true}.
+     * @throws IOException if {@code throwEofException} is set to {@code true}.
      */
-    private int handleEof() throws EOFException {
-        closed = true;
+    private int handleEof() throws IOException {
+        super.close();
         checkThrowEof("handleEof()");
         return EOF;
     }
@@ -183,7 +182,7 @@ public class NullInputStream extends InputStream {
      * @since 2.17.0
      */
     public NullInputStream init() {
-        closed = false;
+        setClosed(false);
         position = 0;
         mark = -1;
         readLimit = 0;
@@ -251,7 +250,7 @@ public class NullInputStream extends InputStream {
      */
     @Override
     public int read() throws IOException {
-        if (closed) {
+        if (isClosed()) {
             checkThrowEof("read()");
             return EOF;
         }
@@ -287,7 +286,7 @@ public class NullInputStream extends InputStream {
      */
     @Override
     public int read(final byte[] bytes, final int offset, final int length) throws IOException {
-        if (closed) {
+        if (isClosed()) {
             checkThrowEof("read(byte[], int, int)");
             return EOF;
         }
@@ -322,7 +321,7 @@ public class NullInputStream extends InputStream {
             throw new IOException("Marked position [" + mark + "] is no longer valid - passed the read limit [" + readLimit + "]");
         }
         position = mark;
-        closed = false;
+        setClosed(false);
     }
 
     /**
@@ -335,7 +334,7 @@ public class NullInputStream extends InputStream {
      */
     @Override
     public long skip(final long numberOfBytes) throws IOException {
-        if (closed) {
+        if (isClosed()) {
             checkThrowEof("skip(long)");
             return EOF;
         }

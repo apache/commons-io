@@ -32,7 +32,7 @@ import org.apache.commons.io.IOUtils;
  * @see InfiniteCircularInputStream
  * @since 2.8.0
  */
-public class CircularInputStream extends InputStream {
+public class CircularInputStream extends AbstractInputStream {
 
     /**
      * Throws an {@link IllegalArgumentException} if the input contains -1.
@@ -54,7 +54,6 @@ public class CircularInputStream extends InputStream {
     private int position = IOUtils.EOF;
     private final byte[] repeatedContent;
     private final long targetByteCount;
-    private boolean closed;
 
     /**
      * Constructs an instance from the specified array of bytes.
@@ -73,18 +72,18 @@ public class CircularInputStream extends InputStream {
     @Override
     public int available() throws IOException {
         // A negative targetByteCount means an infinite target count.
-        return closed ? 0 : targetByteCount <= Integer.MAX_VALUE ? Math.max(Integer.MAX_VALUE, (int) targetByteCount) : Integer.MAX_VALUE;
+        return isClosed() ? 0 : targetByteCount <= Integer.MAX_VALUE ? Math.max(Integer.MAX_VALUE, (int) targetByteCount) : Integer.MAX_VALUE;
     }
 
     @Override
     public void close() throws IOException {
-        closed = true;
+        super.close();
         byteCount = targetByteCount;
     }
 
     @Override
     public int read() {
-        if (targetByteCount >= 0 || closed) {
+        if (targetByteCount >= 0 || isClosed()) {
             if (byteCount == targetByteCount) {
                 return IOUtils.EOF;
             }

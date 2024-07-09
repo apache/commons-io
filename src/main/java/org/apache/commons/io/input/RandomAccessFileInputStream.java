@@ -19,7 +19,6 @@ package org.apache.commons.io.input;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.util.Objects;
 
@@ -37,7 +36,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * @see Builder
  * @since 2.8.0
  */
-public class RandomAccessFileInputStream extends InputStream {
+public class RandomAccessFileInputStream extends AbstractInputStream {
 
     // @formatter:off
     /**
@@ -129,7 +128,6 @@ public class RandomAccessFileInputStream extends InputStream {
         return new Builder();
     }
 
-    private boolean closed;
     private final boolean propagateClose;
     private final RandomAccessFile randomAccessFile;
 
@@ -181,7 +179,7 @@ public class RandomAccessFileInputStream extends InputStream {
      * @throws IOException If an I/O error occurs.
      */
     public long availableLong() throws IOException {
-        return closed ? 0 : randomAccessFile.length() - randomAccessFile.getFilePointer();
+        return isClosed() ? 0 : randomAccessFile.length() - randomAccessFile.getFilePointer();
     }
 
     @Override
@@ -190,7 +188,6 @@ public class RandomAccessFileInputStream extends InputStream {
         if (propagateClose) {
             randomAccessFile.close();
         }
-        closed = true;
     }
 
     /**
@@ -213,7 +210,7 @@ public class RandomAccessFileInputStream extends InputStream {
 
     @Override
     public int read() throws IOException {
-        return closed ? IOUtils.EOF : randomAccessFile.read();
+        return isClosed() ? IOUtils.EOF : randomAccessFile.read();
     }
 
     @Override
