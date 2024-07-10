@@ -74,7 +74,12 @@ public class ReaderInputStreamTest {
     private final Random random = new Random();
 
     private ReaderInputStream createInputStream() throws IOException {
-        return ReaderInputStream.builder().setReader(new StringReader(TEST_STRING)).get();
+        // @formatter:off
+        return ReaderInputStream.builder()
+                .setReader(new StringReader(TEST_STRING))
+                .setCharset(StandardCharsets.ISO_8859_1)
+                .get();
+        // @formatter:on
     }
 
     @Test
