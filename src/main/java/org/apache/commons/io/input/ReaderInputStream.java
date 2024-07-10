@@ -409,7 +409,7 @@ public class ReaderInputStream extends AbstractInputStream {
     @Override
     public int read() throws IOException {
         if (isClosed()) {
-            return IOUtils.EOF;
+            return EOF;
         }
         for (;;) {
             if (encoderOut.hasRemaining()) {
