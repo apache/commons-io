@@ -64,6 +64,11 @@ public class MessageDigestCalculatingInputStreamTest {
     }
 
     @Test
+    public void testCloseHandleIOException() throws IOException {
+        ProxyInputStreamTest.testCloseHandleIOException(MessageDigestCalculatingInputStream.builder());
+    }
+
+    @Test
     public void testNormalUse() throws Exception {
         for (int i = 256; i < 8192; i *= 2) {
             final byte[] buffer = MessageDigestInputStreamTest.generateRandomByteStream(i);
