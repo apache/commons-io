@@ -40,19 +40,11 @@ public class AutoCloseInputStreamTest {
 
     private AutoCloseInputStream stream;
 
-    private boolean closed;
-
     @SuppressWarnings("deprecation")
     @BeforeEach
     public void setUp() {
         data = new byte[] { 'x', 'y', 'z' };
-        stream = new AutoCloseInputStream(new ByteArrayInputStream(data) {
-            @Override
-            public void close() throws IOException {
-                closed = true;
-            }
-        });
-        closed = false;
+        stream = new AutoCloseInputStream(new ByteArrayInputStream(data));
     }
 
     @Test
@@ -91,7 +83,6 @@ public class AutoCloseInputStreamTest {
     @Test
     public void testClose() throws IOException {
         stream.close();
-        assertTrue(closed, "closed");
         assertTrue(stream.isClosed(), "closed");
         assertEquals(-1, stream.read(), "read()");
         assertTrue(stream.isClosed(), "closed");
@@ -113,7 +104,7 @@ public class AutoCloseInputStreamTest {
     @Test
     public void testFinalize() throws Throwable {
         stream.finalize();
-        assertTrue(closed, "closed");
+        assertTrue(stream.isClosed(), "closed");
         assertEquals(-1, stream.read(), "read()");
     }
 
@@ -121,10 +112,10 @@ public class AutoCloseInputStreamTest {
     public void testRead() throws IOException {
         for (final byte element : data) {
             assertEquals(element, stream.read(), "read()");
-            assertFalse(closed, "closed");
+            assertFalse(stream.isClosed(), "closed");
         }
         assertEquals(-1, stream.read(), "read()");
-        assertTrue(closed, "closed");
+        assertTrue(stream.isClosed(), "closed");
     }
 
     @Test
@@ -132,14 +123,14 @@ public class AutoCloseInputStreamTest {
         final byte[] b = new byte[data.length * 2];
         int total = 0;
         for (int n = 0; n != -1; n = stream.read(b)) {
-            assertFalse(closed, "closed");
+            assertFalse(stream.isClosed(), "closed");
             for (int i = 0; i < n; i++) {
                 assertEquals(data[total + i], b[i], "read(b)");
             }
             total += n;
         }
         assertEquals(data.length, total, "read(b)");
-        assertTrue(closed, "closed");
+        assertTrue(stream.isClosed(), "closed");
         assertEquals(-1, stream.read(b), "read(b)");
     }
 
@@ -148,14 +139,14 @@ public class AutoCloseInputStreamTest {
         final byte[] b = new byte[data.length * 2];
         int total = 0;
         for (int n = 0; n != -1; n = stream.read(b, total, b.length - total)) {
-            assertFalse(closed, "closed");
+            assertFalse(stream.isClosed(), "closed");
             total += n;
         }
         assertEquals(data.length, total, "read(b, off, len)");
         for (int i = 0; i < data.length; i++) {
             assertEquals(data[i], b[i], "read(b, off, len)");
         }
-        assertTrue(closed, "closed");
+        assertTrue(stream.isClosed(), "closed");
         assertEquals(-1, stream.read(b, 0, b.length), "read(b, off, len)");
     }
 
