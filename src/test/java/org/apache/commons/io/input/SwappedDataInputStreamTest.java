@@ -51,7 +51,7 @@ public class SwappedDataInputStreamTest {
             0x08
         };
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        this.sdis = new SwappedDataInputStream( bais );
+        this.sdis = new SwappedDataInputStream(bais);
     }
 
     @AfterEach
@@ -134,8 +134,7 @@ public class SwappedDataInputStreamTest {
 
     @Test
     public void testReadUTF() {
-        assertThrows(UnsupportedOperationException.class, () ->  this.sdis.readUTF(),
-                "readUTF should be unsupported. ");
+        assertThrows(UnsupportedOperationException.class, () -> this.sdis.readUTF(), "readUTF should be unsupported. ");
     }
 
     @Test
