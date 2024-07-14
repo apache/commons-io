@@ -66,19 +66,6 @@ public class MarkShieldInputStreamTest {
         assertEquals(0, shadow.available());
     }
 
-    @SuppressWarnings("resource")
-    @ParameterizedTest
-    @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
-    public void testReadAfterClose(final int len) throws Exception {
-        final InputStream shadow;
-        try (MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(len, false, false));
-                final MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
-            assertEquals(len, in.available());
-            shadow = in;
-        }
-        assertEquals(IOUtils.EOF, shadow.read());
-    }
-
     @ParameterizedTest
     @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
     public void testAvailableAfterOpen(final int len) throws Exception {
@@ -86,6 +73,12 @@ public class MarkShieldInputStreamTest {
                 final MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
             assertEquals(len, in.available());
         }
+    }
+
+    @SuppressWarnings("resource")
+    @Test
+    public void testCloseHandleIOException() throws IOException {
+        ProxyInputStreamTest.testCloseHandleIOException(new MarkShieldInputStream(new BrokenInputStream((Throwable) new IOException())));
     }
 
     @Test
@@ -128,6 +121,19 @@ public class MarkShieldInputStreamTest {
                 assertFalse(msis.markSupported());
             }
         }
+    }
+
+    @SuppressWarnings("resource")
+    @ParameterizedTest
+    @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
+    public void testReadAfterClose(final int len) throws Exception {
+        final InputStream shadow;
+        try (MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(len, false, false));
+                final MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
+            assertEquals(len, in.available());
+            shadow = in;
+        }
+        assertEquals(IOUtils.EOF, shadow.read());
     }
 
     @Test
