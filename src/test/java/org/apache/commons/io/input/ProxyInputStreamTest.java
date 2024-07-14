@@ -56,12 +56,16 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
     @SuppressWarnings("resource")
     static <T, B extends AbstractStreamBuilder<T, B>> void testCloseHandleIOException(final AbstractStreamBuilder<T, B> builder) throws IOException {
         final IOException exception = new IOException();
-        @SuppressWarnings({ "deprecation" })
-        final ProxyInputStream inputStream = (ProxyInputStream) builder.setInputStream(new BrokenInputStream(exception)).get();
+        testCloseHandleIOException((ProxyInputStream) builder.setInputStream(new BrokenInputStream(() -> exception)).get());
+    }
+
+    @SuppressWarnings("resource")
+    static void testCloseHandleIOException(final ProxyInputStream inputStream) throws IOException {
         assertFalse(inputStream.isClosed(), "closed");
         final ProxyInputStream spy = spy(inputStream);
         assertThrows(IOException.class, spy::close);
-        verify(spy).handleIOException(exception);
+        final BrokenInputStream unwrap = (BrokenInputStream) inputStream.unwrap();
+        verify(spy).handleIOException((IOException) unwrap.getThrowable());
         assertFalse(spy.isClosed(), "closed");
     }
 

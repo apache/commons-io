@@ -104,6 +104,15 @@ public class BrokenInputStream extends InputStream {
     }
 
     /**
+     * Gets the Throwable to throw. Package-private for testing.
+     *
+     * @return  the Throwable to throw.
+     */
+    Throwable getThrowable() {
+        return exceptionSupplier.get();
+    }
+
+    /**
      * Throws the configured exception.
      *
      * @return nothing.
@@ -130,7 +139,7 @@ public class BrokenInputStream extends InputStream {
      * @return Throws the configured exception from its supplier.
      */
     private RuntimeException rethrow() {
-        return Erase.rethrow(exceptionSupplier.get());
+        return Erase.rethrow(getThrowable());
     }
 
     /**

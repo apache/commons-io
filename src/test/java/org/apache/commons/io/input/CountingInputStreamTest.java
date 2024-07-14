@@ -56,6 +56,12 @@ public class CountingInputStreamTest {
     }
 
     @Test
+    public void testCloseHandleIOException() throws IOException {
+        final IOException exception = new IOException();
+        ProxyInputStreamTest.testCloseHandleIOException(new CountingInputStream(new BrokenInputStream(exception)));
+    }
+
+    @Test
     public void testCounting() throws Exception {
         final String text = "A piece of text";
         try (CountingInputStream cis = new CountingInputStream(CharSequenceInputStream.builder().setCharSequence(text).get())) {
