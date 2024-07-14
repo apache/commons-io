@@ -27,15 +27,40 @@ import org.junit.jupiter.api.Test;
 public class UnixLineEndingInputStreamTest {
 
     private String roundtrip(final String msg) throws IOException {
-        return roundtrip(msg, true);
+        return roundtrip(msg, true, 0);
     }
 
-    private String roundtrip(final String msg, final boolean ensure) throws IOException {
+    private String roundtrip(final String msg, final boolean ensureLineFeedAtEndOfFile, final int minBufferLen) throws IOException {
+        final String string;
+        // read(byte[])
         try (final ByteArrayInputStream baos = new ByteArrayInputStream(msg.getBytes(StandardCharsets.UTF_8));
-            final UnixLineEndingInputStream lf = new UnixLineEndingInputStream(baos, ensure)) {
-            final byte[] buf = new byte[100];
-            return new String(buf, 0, lf.read(buf), StandardCharsets.UTF_8);
+                final UnixLineEndingInputStream in = new UnixLineEndingInputStream(baos, ensureLineFeedAtEndOfFile)) {
+            // read into a buffer larger than the fixture.
+            final byte[] buf = new byte[minBufferLen + msg.length() * 10];
+            string = new String(buf, 0, in.read(buf), StandardCharsets.UTF_8);
         }
+        // read(byte[], int, int)
+        try (final ByteArrayInputStream baos = new ByteArrayInputStream(msg.getBytes(StandardCharsets.UTF_8));
+                final UnixLineEndingInputStream in = new UnixLineEndingInputStream(baos, ensureLineFeedAtEndOfFile)) {
+            // read into a buffer larger than the fixture.
+            final byte[] buf = new byte[minBufferLen + msg.length() * 10];
+            assertEquals(string, new String(buf, 0, in.read(buf, 0, buf.length), StandardCharsets.UTF_8));
+        }
+        // read
+        try (final ByteArrayInputStream baos = new ByteArrayInputStream(msg.getBytes(StandardCharsets.UTF_8));
+                final UnixLineEndingInputStream in = new UnixLineEndingInputStream(baos, ensureLineFeedAtEndOfFile)) {
+            // read into a buffer larger than the fixture.
+            final int[] buf = new int[minBufferLen + msg.length() * 10];
+            if (buf.length > 0) {
+                int b;
+                int i = 0;
+                while ((b = in.read()) != -1) {
+                    buf[i++] = b;
+                }
+                assertEquals(string, new String(buf, 0, i));
+            }
+        }
+        return string;
     }
 
     @Test
@@ -50,7 +75,12 @@ public class UnixLineEndingInputStreamTest {
 
     @Test
     public void testCrOnlyNotAtEof() throws Exception {
-        assertEquals("a\nb", roundtrip("a\rb", false));
+        assertEquals("a\nb", roundtrip("a\rb", false, 0));
+    }
+
+    @Test
+    public void testEmpty() throws Exception {
+        assertEquals("", roundtrip(""));
     }
 
     @Test
@@ -65,8 +95,8 @@ public class UnixLineEndingInputStreamTest {
 
     @Test
     public void testRetainLineFeed() throws Exception {
-        assertEquals("a\n\n", roundtrip("a\r\n\r\n", false));
-        assertEquals("a", roundtrip("a", false));
+        assertEquals("a\n\n", roundtrip("a\r\n\r\n", false, 0));
+        assertEquals("a", roundtrip("a", false, 0));
     }
 
     @Test
