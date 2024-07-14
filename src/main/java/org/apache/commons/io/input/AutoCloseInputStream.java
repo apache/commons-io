@@ -140,7 +140,7 @@ public class AutoCloseInputStream extends ProxyInputStream {
      */
     @Override
     public void close() throws IOException {
-        in.close();
+        super.close();
         in = ClosedInputStream.INSTANCE;
     }
 

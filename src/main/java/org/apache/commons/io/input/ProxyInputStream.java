@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.function.IOConsumer;
 
 /**
  * A proxy stream which acts as a {@link FilterInputStream}, by passing all method calls on to the proxied stream, not changing which methods are called.
@@ -48,13 +49,32 @@ public abstract class ProxyInputStream extends FilterInputStream {
     private boolean closed;
 
     /**
+     * Handles exceptions.
+     */
+    private final IOConsumer<IOException> exceptionHandler;
+
+    /**
      * Constructs a new ProxyInputStream.
      *
-     * @param proxy  the InputStream to delegate to
+     * @param proxy  the InputStream to proxy.
      */
     public ProxyInputStream(final InputStream proxy) {
         // the proxy is stored in a protected superclass variable named 'in'
+        this(proxy, e -> {
+            throw e;
+        });
+    }
+
+    /**
+     * Constructs a new ProxyInputStream for testing.
+     *
+     * @param proxy  the InputStream to proxy.
+     * @param exceptionHandler the exception handler.
+     */
+    ProxyInputStream(final InputStream proxy, final IOConsumer<IOException> exceptionHandler) {
+        // the proxy is stored in a protected superclass variable named 'in'
         super(proxy);
+        this.exceptionHandler = exceptionHandler;
     }
 
     /**
@@ -147,7 +167,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * @since 2.0
      */
     protected void handleIOException(final IOException e) throws IOException {
-        throw e;
+        exceptionHandler.accept(e);
     }
 
     /**

@@ -20,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -46,7 +48,7 @@ public class AutoCloseInputStreamTest {
         data = new byte[] { 'x', 'y', 'z' };
         stream = new AutoCloseInputStream(new ByteArrayInputStream(data) {
             @Override
-            public void close() {
+            public void close() throws IOException {
                 closed = true;
             }
         });
@@ -90,7 +92,22 @@ public class AutoCloseInputStreamTest {
     public void testClose() throws IOException {
         stream.close();
         assertTrue(closed, "closed");
+        assertTrue(stream.isClosed(), "closed");
         assertEquals(-1, stream.read(), "read()");
+        assertTrue(stream.isClosed(), "closed");
+    }
+
+    @SuppressWarnings("resource")
+    @Test
+    public void testCloseHandleIOException() throws IOException {
+        final IOException exception = new IOException();
+        @SuppressWarnings({ "deprecation" })
+        final ProxyInputStream inputStream = AutoCloseInputStream.builder().setInputStream(new BrokenInputStream(exception)).get();
+        assertFalse(inputStream.isClosed(), "closed");
+        final ProxyInputStream spy = spy(inputStream);
+        assertThrows(IOException.class, spy::close);
+        verify(spy).handleIOException(exception);
+        assertFalse(spy.isClosed(), "closed");
     }
 
     @Test
