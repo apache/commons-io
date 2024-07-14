@@ -30,6 +30,7 @@ import org.apache.commons.io.IOUtils;
  * @since 2.7
  */
 public class CircularByteBuffer {
+
     private final byte[] buffer;
     private int startOffset;
     private int endOffset;
@@ -116,7 +117,7 @@ public class CircularByteBuffer {
     }
 
     /**
-     * Returns the number of bytes, that are currently present in the buffer.
+     * Gets the number of bytes, that are currently present in the buffer.
      *
      * @return the number of bytes
      */
@@ -125,7 +126,7 @@ public class CircularByteBuffer {
     }
 
     /**
-     * Returns the number of bytes, that can currently be added to the buffer.
+     * Gets the number of bytes, that can currently be added to the buffer.
      *
      * @return the number of bytes that can be added
      */
@@ -134,19 +135,19 @@ public class CircularByteBuffer {
     }
 
     /**
-     * Returns, whether the buffer is currently holding, at least, a single byte.
+     * Tests whether the buffer is currently holding at least a single byte.
      *
-     * @return true if the buffer is not empty
+     * @return true whether the buffer is currently holding at least a single byte.
      */
     public boolean hasBytes() {
         return currentNumberOfBytes > 0;
     }
 
     /**
-     * Returns, whether there is currently room for a single byte in the buffer.
+     * Tests whether there is currently room for a single byte in the buffer.
      * Same as {@link #hasSpace(int) hasSpace(1)}.
      *
-     * @return true if there is space for a byte
+     * @return true whether there is currently room for a single byte in the buffer.
      * @see #hasSpace(int)
      * @see #getSpace()
      */
@@ -155,10 +156,10 @@ public class CircularByteBuffer {
     }
 
     /**
-     * Returns, whether there is currently room for the given number of bytes in the buffer.
+     * Tests whether there is currently room for the given number of bytes in the buffer.
      *
      * @param count the byte count
-     * @return true if there is space for the given number of bytes
+     * @return true whether there is currently room for the given number of bytes in the buffer.
      * @see #hasSpace()
      * @see #getSpace()
      */
