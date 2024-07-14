@@ -71,6 +71,15 @@ public class TeeInputStreamTest  {
         verify(goodIs, times(2)).close();
     }
 
+    @SuppressWarnings({ "resource" })
+    @Test
+    public void testCloseHandleIOException() throws IOException {
+        ProxyInputStreamTest
+                .testCloseHandleIOException(new TeeInputStream(new BrokenInputStream((Throwable) new IOException()), new ByteArrayOutputStream(), false));
+        ProxyInputStreamTest
+                .testCloseHandleIOException(new TeeInputStream(new BrokenInputStream((Throwable) new IOException()), new ByteArrayOutputStream(), true));
+    }
+
     /**
      * Tests that the branch {@code OutputStream} is closed when closing the main {@code InputStream} throws an
      * exception on {@link TeeInputStream#close()}, if specified to do so.
