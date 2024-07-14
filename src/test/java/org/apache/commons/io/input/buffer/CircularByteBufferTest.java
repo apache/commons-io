@@ -29,6 +29,15 @@ import org.junit.jupiter.api.Test;
 public class CircularByteBufferTest {
 
     @Test
+    public void testAddByteSmallestBuffer() {
+        final CircularByteBuffer cbb = new CircularByteBuffer(1);
+        cbb.add((byte) 1);
+        assertEquals(1, cbb.read());
+        cbb.add((byte) 2);
+        assertEquals(2, cbb.read());
+    }
+
+    @Test
     public void testAddInvalidOffset() {
         final CircularByteBuffer cbb = new CircularByteBuffer();
         assertThrows(IllegalArgumentException.class, () -> cbb.add(new byte[] { 1, 2, 3 }, -1, 3));
