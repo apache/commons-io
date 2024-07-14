@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -69,6 +70,11 @@ public class BoundedInputStreamTest {
     public void testBuilderGet() {
         // java.lang.IllegalStateException: origin == null
         assertThrows(IllegalStateException.class, () -> BoundedInputStream.builder().get());
+    }
+
+    @Test
+    public void testCloseHandleIOException() throws IOException {
+        ProxyInputStreamTest.testCloseHandleIOException(BoundedInputStream.builder());
     }
 
     @SuppressWarnings("deprecation")

@@ -340,7 +340,7 @@ public class BoundedInputStream extends ProxyInputStream {
     @Override
     public void close() throws IOException {
         if (propagateClose) {
-            in.close();
+            super.close();
         }
     }
 
