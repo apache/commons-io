@@ -17,7 +17,9 @@
 package org.apache.commons.io.input.buffer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -34,6 +36,10 @@ public class CircularBufferInputStreamTest {
      * System.currentTimeMillis(), when this test was written. Always using the same seed should ensure a reproducible test.
      */
     private final Random random = new Random(1530960934483L);
+
+    void asssertNotEof(int offset, final int res) {
+        assertNotEquals(-1, res, () -> "Unexpected EOF at offset " + offset);
+    }
 
     /**
      * Create a large, but random input buffer.
@@ -71,33 +77,24 @@ public class CircularBufferInputStreamTest {
             switch (random.nextInt(2)) {
             case 0: {
                 final int res = cbis.read();
-                if (res == -1) {
-                    throw new IllegalStateException("Unexpected EOF at offset " + offset);
-                }
-                if (inputBuffer[offset] != (byte) res) { // compare as bytes
-                    throw new IllegalStateException("Expected " + inputBuffer[offset] + " at offset " + offset + ", got " + res);
-                }
+                asssertNotEof(offset, res);
+                // MUST compare bytes
+                assertEquals(inputBuffer[offset], (byte) res, "Expected " + inputBuffer[offset] + " at offset " + offset + ", got " + res);
                 ++offset;
                 break;
             }
             case 1: {
                 final int res = cbis.read(readBuffer, 0, random.nextInt(readBuffer.length + 1));
-                if (res == -1) {
-                    throw new IllegalStateException("Unexpected EOF at offset " + offset);
-                }
-                if (res == 0) {
-                    throw new IllegalStateException("Unexpected zero-byte-result at offset " + offset);
-                }
+                asssertNotEof(offset, res);
+                assertNotEquals(0, res, "Unexpected zero-byte-result at offset " + offset);
                 for (int i = 0; i < res; i++) {
-                    if (inputBuffer[offset] != readBuffer[i]) {
-                        throw new IllegalStateException("Expected " + inputBuffer[offset] + " at offset " + offset + ", got " + readBuffer[i]);
-                    }
+                    assertEquals(inputBuffer[offset], readBuffer[i], "Expected " + inputBuffer[offset] + " at offset " + offset + ", got " + readBuffer[i]);
                     ++offset;
                 }
                 break;
             }
             default:
-                throw new IllegalStateException("Unexpected random choice value");
+                fail("Unexpected random choice value");
             }
         }
         assertTrue(true, "Test finished OK");
