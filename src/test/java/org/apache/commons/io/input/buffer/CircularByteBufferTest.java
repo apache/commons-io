@@ -88,6 +88,20 @@ public class CircularByteBufferTest {
     }
 
     @Test
+    public void testHasSpace() {
+        final CircularByteBuffer cbb = new CircularByteBuffer(1);
+        assertTrue(cbb.hasSpace());
+        cbb.add((byte) 1);
+        assertFalse(cbb.hasSpace());
+        assertEquals(1, cbb.read());
+        assertTrue(cbb.hasSpace());
+        cbb.add((byte) 2);
+        assertFalse(cbb.hasSpace());
+        assertEquals(2, cbb.read());
+        assertTrue(cbb.hasSpace());
+    }
+
+    @Test
     public void testPeekWithExcessiveLength() {
         assertFalse(new CircularByteBuffer().peek(new byte[] { 1, 3, 5, 7, 9 }, 0, 6));
     }
