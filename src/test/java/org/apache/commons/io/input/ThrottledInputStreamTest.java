@@ -55,6 +55,11 @@ public class ThrottledInputStreamTest extends ProxyInputStreamTest<ThrottledInpu
         assertEquals(0, ThrottledInputStream.toSleepMillis(1, 2, 1_000));
     }
 
+    @Test
+    public void testCloseHandleIOException() throws IOException {
+        ProxyInputStreamTest.testCloseHandleIOException(ThrottledInputStream.builder());
+    }
+
     @Override
     protected void testEos(final ThrottledInputStream inputStream) {
         assertEquals(3, inputStream.getByteCount());
