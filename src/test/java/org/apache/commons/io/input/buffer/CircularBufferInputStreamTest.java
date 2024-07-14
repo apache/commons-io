@@ -33,14 +33,14 @@ public class CircularBufferInputStreamTest {
     /**
      * System.currentTimeMillis(), when this test was written. Always using the same seed should ensure a reproducible test.
      */
-    private final Random rnd = new Random(1530960934483L);
+    private final Random random = new Random(1530960934483L);
 
     /**
      * Create a large, but random input buffer.
      */
     private byte[] newInputBuffer() {
-        final byte[] buffer = new byte[16 * 512 + rnd.nextInt(512)];
-        rnd.nextBytes(buffer);
+        final byte[] buffer = new byte[16 * 512 + random.nextInt(512)];
+        random.nextBytes(buffer);
         return buffer;
     }
 
@@ -68,7 +68,7 @@ public class CircularBufferInputStreamTest {
         int offset = 0;
         final byte[] readBuffer = new byte[256];
         while (offset < bufferCopy.length) {
-            switch (rnd.nextInt(2)) {
+            switch (random.nextInt(2)) {
             case 0: {
                 final int res = cbis.read();
                 if (res == -1) {
@@ -81,7 +81,7 @@ public class CircularBufferInputStreamTest {
                 break;
             }
             case 1: {
-                final int res = cbis.read(readBuffer, 0, rnd.nextInt(readBuffer.length + 1));
+                final int res = cbis.read(readBuffer, 0, random.nextInt(readBuffer.length + 1));
                 if (res == -1) {
                     throw new IllegalStateException("Unexpected EOF at offset " + offset);
                 }
