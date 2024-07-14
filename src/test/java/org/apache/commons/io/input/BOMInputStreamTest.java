@@ -55,15 +55,15 @@ public class BOMInputStreamTest {
      *  A mock InputStream that expects {@code close()} to be called.
      */
     private static final class ExpectCloseInputStream extends InputStream {
-        private boolean _closeCalled;
+        private boolean closed;
 
         public void assertCloseCalled() {
-            assertTrue(_closeCalled);
+            assertTrue(closed);
         }
 
         @Override
         public void close() throws IOException {
-            _closeCalled = true;
+            closed = true;
         }
 
         @Override
