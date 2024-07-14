@@ -21,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.nio.charset.StandardCharsets;
+
 import org.junit.jupiter.api.Test;
 
 /**
@@ -102,6 +104,20 @@ public class CircularByteBufferTest {
     }
 
     @Test
+    public void testHasSpaceInt() {
+        final CircularByteBuffer cbb = new CircularByteBuffer(1);
+        assertTrue(cbb.hasSpace(1));
+        cbb.add((byte) 1);
+        assertFalse(cbb.hasSpace(1));
+        assertEquals(1, cbb.read());
+        assertTrue(cbb.hasSpace(1));
+        cbb.add((byte) 2);
+        assertFalse(cbb.hasSpace(1));
+        assertEquals(2, cbb.read());
+        assertTrue(cbb.hasSpace(1));
+    }
+
+    @Test
     public void testPeekWithExcessiveLength() {
         assertFalse(new CircularByteBuffer().peek(new byte[] { 1, 3, 5, 7, 9 }, 0, 6));
     }
@@ -124,5 +140,26 @@ public class CircularByteBufferTest {
     @Test
     public void testPeekWithValidArguments() {
         assertFalse(new CircularByteBuffer().peek(new byte[] { 5, 10, 15, 20, 25 }, 0, 5));
+    }
+
+    @Test
+    public void testReadByteArray() {
+        final CircularByteBuffer cbb = new CircularByteBuffer();
+        final String string = "0123456789";
+        final byte[] bytesIn = string.getBytes(StandardCharsets.UTF_8);
+        cbb.add(bytesIn, 0, 10);
+        final byte[] bytesOut = new byte[10];
+        cbb.read(bytesOut, 0, 10);
+        assertEquals(string, new String(bytesOut, StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void testReadByteArrayIllegalArgumentException() {
+        final CircularByteBuffer cbb = new CircularByteBuffer();
+        final byte[] bytesOut = new byte[10];
+        // targetOffset < 0
+        assertThrows(IllegalArgumentException.class, () -> cbb.read(bytesOut, -1, 10));
+        // targetOffset >= targetBuffer.length
+        assertThrows(IllegalArgumentException.class, () -> cbb.read(bytesOut, 0, bytesOut.length + 1));
     }
 }
