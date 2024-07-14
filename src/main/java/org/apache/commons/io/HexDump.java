@@ -199,30 +199,29 @@ public class HexDump {
     /**
      * Dumps a byte value into a StringBuilder.
      *
-     * @param _cbuffer the StringBuilder to dump the value in
+     * @param builder the StringBuilder to dump the value in
      * @param value  the byte value to be dumped
      * @return StringBuilder containing the dumped value.
      */
-    private static StringBuilder dump(final StringBuilder _cbuffer, final byte value) {
+    private static StringBuilder dump(final StringBuilder builder, final byte value) {
         for (int j = 0; j < 2; j++) {
-            _cbuffer.append(HEX_CODES[value >> SHIFTS[j + 6] & 15]);
+            builder.append(HEX_CODES[value >> SHIFTS[j + 6] & 15]);
         }
-        return _cbuffer;
+        return builder;
     }
 
     /**
      * Dumps a long value into a StringBuilder.
      *
-     * @param _lbuffer the StringBuilder to dump the value in
+     * @param builder the StringBuilder to dump the value in
      * @param value  the long value to be dumped
      * @return StringBuilder containing the dumped value.
      */
-    private static StringBuilder dump(final StringBuilder _lbuffer, final long value) {
+    private static StringBuilder dump(final StringBuilder builder, final long value) {
         for (int j = 0; j < 8; j++) {
-            _lbuffer
-                    .append(HEX_CODES[(int) (value >> SHIFTS[j]) & 15]);
+            builder.append(HEX_CODES[(int) (value >> SHIFTS[j]) & 15]);
         }
-        return _lbuffer;
+        return builder;
     }
 
     /**
