@@ -55,10 +55,10 @@ public class CountingInputStreamTest {
         }
     }
 
+    @SuppressWarnings({ "resource", "deprecation" })
     @Test
     public void testCloseHandleIOException() throws IOException {
-        final IOException exception = new IOException();
-        ProxyInputStreamTest.testCloseHandleIOException(new CountingInputStream(new BrokenInputStream(exception)));
+        ProxyInputStreamTest.testCloseHandleIOException(new CountingInputStream(new BrokenInputStream((Throwable) new IOException())));
     }
 
     @Test
