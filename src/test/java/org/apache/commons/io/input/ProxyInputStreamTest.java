@@ -19,7 +19,11 @@ package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -28,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -46,6 +51,18 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
         void setIn(final InputStream proxy) {
             in = proxy;
         }
+    }
+
+    @SuppressWarnings("resource")
+    static <T, B extends AbstractStreamBuilder<T, B>> void testCloseHandleIOException(final AbstractStreamBuilder<T, B> builder) throws IOException {
+        final IOException exception = new IOException();
+        @SuppressWarnings({ "deprecation" })
+        final ProxyInputStream inputStream = (ProxyInputStream) builder.setInputStream(new BrokenInputStream(exception)).get();
+        assertFalse(inputStream.isClosed(), "closed");
+        final ProxyInputStream spy = spy(inputStream);
+        assertThrows(IOException.class, spy::close);
+        verify(spy).handleIOException(exception);
+        assertFalse(spy.isClosed(), "closed");
     }
 
     @SuppressWarnings({ "resource", "unused" }) // For subclasses

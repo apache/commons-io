@@ -263,6 +263,11 @@ public class BOMInputStreamTest {
     }
 
     @Test
+    public void testCloseHandleIOException() throws IOException {
+        ProxyInputStreamTest.testCloseHandleIOException(BOMInputStream.builder());
+    }
+
+    @Test
     public void testEmptyBufferWithBOM() throws Exception {
         final byte[] data = {};
         try (InputStream in = BOMInputStream.builder().setInputStream(createUtf8Input(data, true)).get()) {
