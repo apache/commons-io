@@ -37,7 +37,7 @@ public class CircularBufferInputStreamTest {
      */
     private final Random random = new Random(1530960934483L);
 
-    void asssertNotEof(int offset, final int res) {
+    void asssertNotEof(final int offset, final int res) {
         assertNotEquals(-1, res, () -> "Unexpected EOF at offset " + offset);
     }
 
