@@ -91,14 +91,6 @@ public class ReaderInputStreamTest {
     }
 
     @Test
-    public void testReasdAfterClose() throws IOException {
-        try (InputStream inputStream = createInputStream()) {
-            inputStream.close();
-            assertEquals(IOUtils.EOF, inputStream.read());
-        }
-    }
-
-    @Test
     public void testAvailableAfterOpen() throws IOException {
         try (InputStream inputStream = createInputStream()) {
             // Nothing read, may block
@@ -306,6 +298,14 @@ public class ReaderInputStreamTest {
             assertEquals(-1, inputStream.read(bytes, 0, 1));
             assertEquals(0, inputStream.read(bytes, 0, 0));
             assertEquals(-1, inputStream.read(bytes, 0, 1));
+        }
+    }
+
+    @Test
+    public void testReasdAfterClose() throws IOException {
+        try (InputStream inputStream = createInputStream()) {
+            inputStream.close();
+            assertEquals(IOUtils.EOF, inputStream.read());
         }
     }
 
