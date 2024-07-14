@@ -59,6 +59,12 @@ public class SwappedDataInputStreamTest {
         this.sdis = null;
     }
 
+    @SuppressWarnings({ "resource" })
+    @Test
+    public void testCloseHandleIOException() throws IOException {
+        ProxyInputStreamTest.testCloseHandleIOException(new SwappedDataInputStream(new BrokenInputStream((Throwable) new IOException())));
+    }
+
     @Test
     public void testReadBoolean() throws IOException {
         bytes = new byte[] { 0x00, 0x01, 0x02, };
