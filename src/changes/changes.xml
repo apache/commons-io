@@ -90,6 +90,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="update"             due-to="Dependabot">Bump tests commons-codec:commons-codec from 1.16.1 to 1.17.1 #644.</action>
       <action dev="ggregory" type="update"             due-to="Dependabot">Bump org.codehaus.mojo:exec-maven-plugin from 3.2.0 to 3.3.0 #632.</action>
       <action dev="ggregory" type="update"             due-to="Dependabot">Bump org.apache.commons:commons-parent from 69 to 71 #628, #637.</action>
+      <action dev="ggregory" type="update"             due-to="Dependabot">Bump org.apache.commons:commons-lang3 from 3.14.0 to 3.15.0 #645.</action>     
     </release>
     <release version="2.16.1" date="2024-04-04" description="Java 8 is required.">
       <!-- FIX -->
