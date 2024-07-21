@@ -32,7 +32,7 @@ import org.apache.commons.io.IOCase;
  * and the reverse of those options.
  * </p>
  * <p>
- * Example of a <i>case-sensitive</i> file name sort using the
+ * Example of a <em>case-sensitive</em> file name sort using the
  * {@link #NAME_COMPARATOR} singleton instance:
  * </p>
  * <pre>
@@ -40,7 +40,7 @@ import org.apache.commons.io.IOCase;
  *       ((AbstractFileComparator) NameFileComparator.NAME_COMPARATOR).sort(list);
  * </pre>
  * <p>
- * Example of a <i>reverse case-insensitive</i> file name sort using the
+ * Example of a <em>reverse case-insensitive</em> file name sort using the
  * {@link #NAME_INSENSITIVE_REVERSE} singleton instance:
  * </p>
  * <pre>

@@ -27,7 +27,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * This filter accepts {@link File}s that can be executed.
  * <p>
  * Example, showing how to print out a list of the
- * current directory's <i>executable</i> files:
+ * current directory's <em>executable</em> files:
  * </p>
  * <h2>Using Classic IO</h2>
  * <pre>
@@ -40,7 +40,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  *
  * <p>
  * Example, showing how to print out a list of the
- * current directory's <i>non-executable</i> files:
+ * current directory's <em>non-executable</em> files:
  * </p>
  *
  * <pre>
@@ -59,10 +59,10 @@ import java.nio.file.attribute.BasicFileAttributes;
  */
 public class CanExecuteFileFilter extends AbstractFileFilter implements Serializable {
 
-    /** Singleton instance of <i>executable</i> filter */
+    /** Singleton instance of <em>executable</em> filter */
     public static final IOFileFilter CAN_EXECUTE = new CanExecuteFileFilter();
 
-    /** Singleton instance of not <i>executable</i> filter */
+    /** Singleton instance of not <em>executable</em> filter */
     public static final IOFileFilter CANNOT_EXECUTE = CAN_EXECUTE.negate();
 
     private static final long serialVersionUID = 3179904805251622989L;

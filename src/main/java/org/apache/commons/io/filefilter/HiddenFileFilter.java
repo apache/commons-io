@@ -27,7 +27,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * This filter accepts {@link File}s that are hidden.
  * <p>
  * Example, showing how to print out a list of the
- * current directory's <i>hidden</i> files:
+ * current directory's <em>hidden</em> files:
  * </p>
  * <h2>Using Classic IO</h2>
  * <pre>
@@ -40,7 +40,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  *
  * <p>
  * Example, showing how to print out a list of the
- * current directory's <i>visible</i> (i.e. not hidden) files:
+ * current directory's <em>visible</em> (i.e. not hidden) files:
  * </p>
  *
  * <pre>
@@ -78,12 +78,12 @@ import java.nio.file.attribute.BasicFileAttributes;
  */
 public class HiddenFileFilter extends AbstractFileFilter implements Serializable {
 
-    /** Singleton instance of <i>hidden</i> filter */
+    /** Singleton instance of <em>hidden</em> filter */
     public static final IOFileFilter HIDDEN  = new HiddenFileFilter();
 
     private static final long serialVersionUID = 8930842316112759062L;
 
-    /** Singleton instance of <i>visible</i> filter */
+    /** Singleton instance of <em>visible</em> filter */
     public static final IOFileFilter VISIBLE = HIDDEN.negate();
 
     /**
@@ -97,7 +97,7 @@ public class HiddenFileFilter extends AbstractFileFilter implements Serializable
      *
      * @param file  the File to check
      * @return {@code true} if the file is
-     *  <i>hidden</i>, otherwise {@code false}.
+     *  <em>hidden</em>, otherwise {@code false}.
      */
     @Override
     public boolean accept(final File file) {
@@ -109,7 +109,7 @@ public class HiddenFileFilter extends AbstractFileFilter implements Serializable
      * @param file  the File to check
      *
      * @return {@code true} if the file is
-     *  <i>hidden</i>, otherwise {@code false}.
+     *  <em>hidden</em>, otherwise {@code false}.
      * @since 2.9.0
      */
     @Override

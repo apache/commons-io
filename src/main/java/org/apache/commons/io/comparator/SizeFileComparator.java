@@ -38,7 +38,7 @@ import org.apache.commons.io.FileUtils;
  *       ((AbstractFileComparator) SizeFileComparator.SIZE_COMPARATOR).sort(list);
  * </pre>
  * <p>
- * Example of doing a <i>reverse</i> sort of an array of files using the
+ * Example of doing a <em>reverse</em> sort of an array of files using the
  * {@link #SIZE_REVERSE} singleton instance:
  * </p>
  * <pre>

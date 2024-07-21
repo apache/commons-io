@@ -26,7 +26,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 /**
  * This filter accepts {@link File}s that can be read.
  * <p>
- * Example, showing how to print out a list of the current directory's <i>readable</i> files:
+ * Example, showing how to print out a list of the current directory's <em>readable</em> files:
  * </p>
  * <h2>Using Classic IO</h2>
  * <pre>
@@ -38,7 +38,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * </pre>
  *
  * <p>
- * Example, showing how to print out a list of the current directory's <i>un-readable</i> files:
+ * Example, showing how to print out a list of the current directory's <em>un-readable</em> files:
  *
  * <pre>
  * File dir = FileUtils.current();
@@ -49,7 +49,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * </pre>
  *
  * <p>
- * Example, showing how to print out a list of the current directory's <i>read-only</i> files:
+ * Example, showing how to print out a list of the current directory's <em>read-only</em> files:
  *
  * <pre>
  * File dir = FileUtils.current();
@@ -67,13 +67,13 @@ import java.nio.file.attribute.BasicFileAttributes;
  */
 public class CanReadFileFilter extends AbstractFileFilter implements Serializable {
 
-    /** Singleton instance of <i>readable</i> filter */
+    /** Singleton instance of <em>readable</em> filter */
     public static final IOFileFilter CAN_READ = new CanReadFileFilter();
 
-    /** Singleton instance of not <i>readable</i> filter */
+    /** Singleton instance of not <em>readable</em> filter */
     public static final IOFileFilter CANNOT_READ = CAN_READ.negate();
 
-    /** Singleton instance of <i>read-only</i> filter */
+    /** Singleton instance of <em>read-only</em> filter */
     public static final IOFileFilter READ_ONLY = CAN_READ.and(CanWriteFileFilter.CANNOT_WRITE);
 
     private static final long serialVersionUID = 3179904805251622989L;

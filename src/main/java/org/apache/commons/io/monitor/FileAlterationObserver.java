@@ -77,7 +77,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *      monitor.stop();
  * </pre>
  * <h2>File Filters</h2> This implementation can monitor portions of the file system by using {@link FileFilter}s to observe only the files and/or directories
- * that are of interest. This makes it more efficient and reduces the noise from <i>unwanted</i> file system events.
+ * that are of interest. This makes it more efficient and reduces the noise from <em>unwanted</em> file system events.
  * <p>
  * <a href="https://commons.apache.org/io/">Commons IO</a> has a good range of useful, ready-made <a href="../filefilter/package-summary.html">File Filter</a>
  * implementations for this purpose.

@@ -26,7 +26,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 /**
  * This filter accepts {@link File}s that can be written to.
  * <p>
- * Example, showing how to print out a list of the current directory's <i>writable</i> files:
+ * Example, showing how to print out a list of the current directory's <em>writable</em> files:
  * </p>
  * <h2>Using Classic IO</h2>
  * <pre>
@@ -37,7 +37,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * }
  * </pre>
  * <p>
- * Example, showing how to print out a list of the current directory's <i>un-writable</i> files:
+ * Example, showing how to print out a list of the current directory's <em>un-writable</em> files:
  * </p>
  * <pre>
  * File dir = FileUtils.current();
@@ -58,10 +58,10 @@ import java.nio.file.attribute.BasicFileAttributes;
  */
 public class CanWriteFileFilter extends AbstractFileFilter implements Serializable {
 
-    /** Singleton instance of <i>writable</i> filter */
+    /** Singleton instance of <em>writable</em> filter */
     public static final IOFileFilter CAN_WRITE = new CanWriteFileFilter();
 
-    /** Singleton instance of not <i>writable</i> filter */
+    /** Singleton instance of not <em>writable</em> filter */
     public static final IOFileFilter CANNOT_WRITE = CAN_WRITE.negate();
 
     private static final long serialVersionUID = 5132005214688990379L;

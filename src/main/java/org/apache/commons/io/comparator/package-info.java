@@ -20,7 +20,7 @@
  * for {@link java.io.File}s and {@link java.nio.file.Path}.
  * <h2>Sorting</h2>
  * <p>
- * All the comparators include <i>convenience</i> utility <code>sort(File...)</code> and
+ * All the comparators include <em>convenience</em> utility <code>sort(File...)</code> and
  * <code>sort(List)</code> methods.
  * </p>
  * <p>
@@ -55,8 +55,8 @@
  * </pre>
  * <h2>Singleton Instances (thread-safe)</h2>
  * <p>
- * The {@link java.util.Comparator} implementations have some <i>convenience</i>
- * singleton(<i>thread-safe</i>) instances ready to use:
+ * The {@link java.util.Comparator} implementations have some <em>convenience</em>
+ * singleton(<em>thread-safe</em>) instances ready to use:
  * </p>
  * <ul>
  * <li><a href="DefaultFileComparator.html">DefaultFileComparator</a> - default file compare:

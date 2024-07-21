@@ -182,9 +182,9 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Indicates whether <i>mark</i> is supported.
+     * Indicates whether <em>mark</em> is supported.
      *
-     * @return Whether <i>mark</i> is supported or not.
+     * @return Whether <em>mark</em> is supported or not.
      */
     @Override
     public boolean markSupported() {

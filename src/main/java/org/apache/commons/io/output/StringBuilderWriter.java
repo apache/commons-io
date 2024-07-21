@@ -24,7 +24,7 @@ import java.io.Writer;
  * {@link Writer} implementation that outputs to a {@link StringBuilder}.
  * <p>
  * <strong>NOTE:</strong> This implementation, as an alternative to
- * {@link StringWriter}, provides an <i>un-synchronized</i>
+ * {@link StringWriter}, provides an <em>un-synchronized</em>
  * (i.e. for use in a single thread) implementation for better performance.
  * For safe usage with multiple {@link Thread}s then
  * {@link StringWriter} should be used.

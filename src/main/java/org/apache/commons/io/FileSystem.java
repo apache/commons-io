@@ -204,15 +204,15 @@ public enum FileSystem {
      * object at an index no smaller than {@code start}, then
      * the index of the first such occurrence is returned. For values
      * of {@code searchChar} in the range from 0 to 0xFFFF (inclusive),
-     * this is the smallest value <i>k</i> such that:
+     * this is the smallest value <em>k</em> such that:
      * </p>
      * <blockquote><pre>
-     * (this.charAt(<i>k</i>) == searchChar) &amp;&amp; (<i>k</i> &gt;= start)
+     * (this.charAt(<em>k</em>) == searchChar) &amp;&amp; (<em>k</em> &gt;= start)
      * </pre></blockquote>
      * is true. For other values of {@code searchChar}, it is the
-     * smallest value <i>k</i> such that:
+     * smallest value <em>k</em> such that:
      * <blockquote><pre>
-     * (this.codePointAt(<i>k</i>) == searchChar) &amp;&amp; (<i>k</i> &gt;= start)
+     * (this.codePointAt(<em>k</em>) == searchChar) &amp;&amp; (<em>k</em> &gt;= start)
      * </pre></blockquote>
      * <p>
      * is true. In either case, if no such character occurs in {@code cs}

@@ -205,9 +205,9 @@ public class NullInputStream extends AbstractInputStream {
     }
 
     /**
-     * Tests whether <i>mark</i> is supported.
+     * Tests whether <em>mark</em> is supported.
      *
-     * @return Whether <i>mark</i> is supported or not.
+     * @return Whether <em>mark</em> is supported or not.
      */
     @Override
     public boolean markSupported() {

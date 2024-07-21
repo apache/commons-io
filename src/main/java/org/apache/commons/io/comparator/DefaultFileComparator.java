@@ -35,7 +35,7 @@ import java.util.Comparator;
  *       ((AbstractFileComparator) DefaultFileComparator.DEFAULT_COMPARATOR).sort(list);
  * </pre>
  * <p>
- * Example of doing a <i>reverse</i> sort of an array of files using the
+ * Example of doing a <em>reverse</em> sort of an array of files using the
  * {@link #DEFAULT_REVERSE} singleton instance:
  * </p>
  * <pre>

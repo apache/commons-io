@@ -157,7 +157,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * What {@link DirectoryWalker} does provide for cancellation is:
  * </p>
  * <ul>
- * <li>{@link CancelException} which can be thrown in any of the <i>lifecycle</i> methods to stop processing.</li>
+ * <li>{@link CancelException} which can be thrown in any of the <em>lifecycle</em> methods to stop processing.</li>
  * <li>The {@code walk()} method traps thrown {@link CancelException} and calls the {@code handleCancelled()}
  * method, providing a place for custom cancel processing.</li>
  * </ul>
@@ -216,7 +216,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *
  * <p>
  * This shows an example of how internal cancellation processing could be implemented. <b>Note</b> the decision logic
- * and throwing a {@link CancelException} could be implemented in any of the <i>lifecycle</i> methods.
+ * and throwing a {@link CancelException} could be implemented in any of the <em>lifecycle</em> methods.
  * </p>
  *
  * <pre>
@@ -323,14 +323,14 @@ public abstract class DirectoryWalker<T> {
     private final int depthLimit;
 
     /**
-     * Constructs an instance with no filtering and unlimited <i>depth</i>.
+     * Constructs an instance with no filtering and unlimited <em>depth</em>.
      */
     protected DirectoryWalker() {
         this(null, -1);
     }
 
     /**
-     * Constructs an instance with a filter and limit the <i>depth</i> navigated to.
+     * Constructs an instance with a filter and limit the <em>depth</em> navigated to.
      * <p>
      * The filter controls which files and directories will be navigated to as
      * part of the walk. The {@link FileFilterUtils} class is useful for combining
@@ -339,7 +339,7 @@ public abstract class DirectoryWalker<T> {
      * </p>
      *
      * @param filter  the filter to apply, null means visit all files
-     * @param depthLimit  controls how <i>deep</i> the hierarchy is
+     * @param depthLimit  controls how <em>deep</em> the hierarchy is
      *  navigated to (less than 0 means unlimited)
      */
     protected DirectoryWalker(final FileFilter filter, final int depthLimit) {
@@ -349,7 +349,7 @@ public abstract class DirectoryWalker<T> {
 
     /**
      * Constructs an instance with a directory and a file filter and an optional
-     * limit on the <i>depth</i> navigated to.
+     * limit on the <em>depth</em> navigated to.
      * <p>
      * The filters control which files and directories will be navigated to as part
      * of the walk. This constructor uses {@link FileFilterUtils#makeDirectoryOnly(IOFileFilter)}
@@ -359,7 +359,7 @@ public abstract class DirectoryWalker<T> {
      *
      * @param directoryFilter  the filter to apply to directories, null means visit all directories
      * @param fileFilter  the filter to apply to files, null means visit all files
-     * @param depthLimit  controls how <i>deep</i> the hierarchy is
+     * @param depthLimit  controls how <em>deep</em> the hierarchy is
      *  navigated to (less than 0 means unlimited)
      */
     protected DirectoryWalker(IOFileFilter directoryFilter, IOFileFilter fileFilter, final int depthLimit) {

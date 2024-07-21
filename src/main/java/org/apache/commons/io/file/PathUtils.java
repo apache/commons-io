@@ -1066,7 +1066,7 @@ public final class PathUtils {
      *
      * @param directory the directory to query.
      * @return whether the directory is empty.
-     * @throws NotDirectoryException if the file could not otherwise be opened because it is not a directory <i>(optional specific exception)</i>.
+     * @throws NotDirectoryException if the file could not otherwise be opened because it is not a directory <em>(optional specific exception)</em>.
      * @throws IOException           if an I/O error occurs.
      * @throws SecurityException     In the case of the default provider, and a security manager is installed, the {@link SecurityManager#checkRead(String)
      *                               checkRead} method is invoked to check read access to the directory.

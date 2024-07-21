@@ -22,7 +22,7 @@ import java.time.Duration;
  * Monitors a thread, interrupting it if it reaches the specified timeout.
  * <p>
  * This works by sleeping until the specified timeout amount and then interrupting the thread being monitored. If the
- * thread being monitored completes its work before being interrupted, it should {@code interrupt()} the <i>monitor</i>
+ * thread being monitored completes its work before being interrupted, it should {@code interrupt()} the <em>monitor</em>
  * thread.
  * </p>
  *

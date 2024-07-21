@@ -1567,7 +1567,7 @@ public class FileUtils {
      * @return whether the directory is empty.
      * @throws IOException if an I/O error occurs.
      * @throws NotDirectoryException if the file could not otherwise be opened because it is not a directory
-     *                               <i>(optional specific exception)</i>.
+     *                               <em>(optional specific exception)</em>.
      * @since 2.9.0
      */
     public static boolean isEmptyDirectory(final File directory) throws IOException {
