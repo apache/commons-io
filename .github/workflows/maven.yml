@@ -45,15 +45,26 @@ jobs:
             os: ubuntu-latest
             experimental: false
             deploy: true
-#          - java: 23-ea
-#            os: ubuntu-latest
-#            experimental: true        
-#          - java: 23-ea
-#            os: windows-latest
-#            experimental: true        
-#          - java: 23-ea
-#            os: macos-latest
-#            experimental: true        
+          # Experimental builds: Java 23-ea
+          - java: 23-ea
+            os: ubuntu-latest
+            experimental: true
+          - java: 23-ea
+            os: windows-latest
+            experimental: true
+          - java: 23-ea
+            os: macos-latest
+            experimental: true
+          # Experimental builds: Java 24-ea
+          - java: 24-ea
+            os: ubuntu-latest
+            experimental: true
+          - java: 24-ea
+            os: windows-latest
+            experimental: true
+          - java: 24-ea
+            os: macos-latest
+            experimental: true
       fail-fast: false
         
     steps:
