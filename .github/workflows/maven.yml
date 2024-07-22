@@ -37,10 +37,10 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-13]
-        java: [ 8, 11, 17, 21 ]
+        java: [ 8, 11, 17, 21, 22 ]
         experimental: [false]
         include:
-          # Update java 21/ubuntu to add deploy step
+          # Use Java 21 and Ubuntu to add deploy step
           - java: 21
             os: ubuntu-latest
             experimental: false
