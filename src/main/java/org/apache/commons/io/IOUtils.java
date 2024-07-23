@@ -1153,8 +1153,7 @@ public class IOUtils {
      */
     public static void copy(final InputStream input, final Writer writer, final Charset inputCharset)
             throws IOException {
-        final InputStreamReader reader = new InputStreamReader(input, Charsets.toCharset(inputCharset));
-        copy(reader, writer);
+        copy(new InputStreamReader(input, Charsets.toCharset(inputCharset)), writer);
     }
 
     /**
