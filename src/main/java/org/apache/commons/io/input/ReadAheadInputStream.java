@@ -485,7 +485,9 @@ public class ReadAheadInputStream extends FilterInputStream {
      * @throws IOException if an I/O error occurs.
      */
     private long skipInternal(final long n) throws IOException {
-        assert stateChangeLock.isLocked();
+        if (!stateChangeLock.isLocked()) {
+            throw new IllegalStateException("Expected stateChangeLock to be locked");
+        }
         waitForAsyncReadComplete();
         if (isEndOfStream()) {
             return 0;
@@ -495,7 +497,9 @@ public class ReadAheadInputStream extends FilterInputStream {
             int toSkip = (int) n;
             // We need to skip from both active buffer and read ahead buffer
             toSkip -= activeBuffer.remaining();
-            assert toSkip > 0; // skipping from activeBuffer already handled.
+            if (toSkip <= 0) { // skipping from activeBuffer already handled.
+                throw new IllegalStateException("Expected toSkip > 0, actual: " + toSkip);
+            }
             activeBuffer.position(0);
             activeBuffer.flip();
             readAheadBuffer.position(toSkip + readAheadBuffer.position());
