@@ -88,7 +88,12 @@ jobs:
         server-username: NEXUS_USER # env variable for username in deploy
         server-password: NEXUS_PW # env variable for token in deploy
     - name: Build with Maven
+      if: ${{ !matrix.experimental }}
       run: mvn --errors --show-version --batch-mode --no-transfer-progress -DtrimStackTrace=false
+    - name: Test only with Maven
+      if: ${{ matrix.experimental }}
+      # Skip PMD etc when using experimental Java
+      run: mvn --errors --show-version --batch-mode --no-transfer-progress -DtrimStackTrace=false clean test
     - name: Deploy SNAPSHOT using minimal build
       if: matrix.deploy && github.repository == 'apache/commons-io' && github.ref_name == 'master' 
       env:
