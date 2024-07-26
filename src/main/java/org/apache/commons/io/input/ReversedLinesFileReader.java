@@ -203,7 +203,7 @@ public class ReversedLinesFileReader implements Closeable {
                     break; // skip last few bytes and leave it to the next file part
                 }
 
-                // --- check for newline ---
+                // check for newline
                 if ((newLineMatchByteCount = getNewLineMatchByteCount(data, i)) > 0 /* found newline */) {
                     final int lineStart = i + 1;
                     final int lineLengthBytes = currentLastBytePos - lineStart + 1;
@@ -219,17 +219,17 @@ public class ReversedLinesFileReader implements Closeable {
                     break; // found line
                 }
 
-                // --- move cursor ---
+                // move cursor
                 i -= byteDecrement;
 
-                // --- end of file part handling ---
+                // end of file part handling
                 if (i < 0) {
                     createLeftOver();
                     break; // end of file part
                 }
             }
 
-            // --- last file part handling ---
+            // last file part handling
             if (isLastFilePart && leftOver != null) {
                 // there will be no line break anymore, this is the first line of the file
                 line = new String(leftOver, charset);
