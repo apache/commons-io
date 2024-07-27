@@ -16,12 +16,15 @@
  */
 package org.apache.commons.io;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.concurrent.CountDownLatch;
+import java.io.File;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 /**
  * Tests FileUtils.waitFor().
@@ -33,36 +36,71 @@ import org.junit.jupiter.api.Test;
  */
 public class FileUtilsWaitForTest {
 
+    // Assume that this file does not exist
+    private final File NOSUCHFILE = new File("a.b.c.d."+System.currentTimeMillis());
+
     @Test
+    @Timeout(value = 30, unit = TimeUnit.MILLISECONDS) // Should complete quickly as the path is present
     public void testWaitFor0() {
-        FileUtils.waitFor(FileUtils.current(), 0);
+        assertTrue(FileUtils.waitFor(FileUtils.current(), 0));
     }
 
-    /**
-     * TODO Fails randomly.
-     */
     @Test
-    public void testWaitForInterrupted() throws InterruptedException {
+    @Timeout(value = 30, unit = TimeUnit.MILLISECONDS) // Should complete quickly even though the path is missing
+    public void testWaitFor0Absent() {
+        assertFalse(FileUtils.waitFor(NOSUCHFILE, 0));
+    }
+
+    @Test
+    @Timeout(value = 30, unit = TimeUnit.MILLISECONDS) // Should complete quickly as the path is present
+    public void testWaitFor10() {
+        assertTrue(FileUtils.waitFor(FileUtils.current(), 10));
+    }
+
+    @Test
+    @Timeout(value = 3, unit = TimeUnit.SECONDS) // Allow for timeout waiting for non-existent file
+    public void testWaitFor5Absent() {
+        final long start = System.currentTimeMillis();
+        assertFalse(FileUtils.waitFor(NOSUCHFILE, 2));
+        final long elapsed = System.currentTimeMillis() - start;
+        assertTrue(elapsed > 2000, "Must reach timeout - expected 2000, actual: " + elapsed);
+    }
+
+    @Test
+    @Timeout(value = 30, unit = TimeUnit.MILLISECONDS) // Should complete quickly as the path is present
+    public void testWaitFor100() {
+        assertTrue(FileUtils.waitFor(FileUtils.current(), 100));
+    }
+
+    @Test
+    public void testIO_488() throws InterruptedException {
+        final long start = System.currentTimeMillis();
         final AtomicBoolean wasInterrupted = new AtomicBoolean();
-        final CountDownLatch started = new CountDownLatch(2);
-        final int seconds = 10;
+        final int seconds = 3   ;
         final Thread thread1 = new Thread(() -> {
-            started.countDown();
-            assertTrue(FileUtils.waitFor(FileUtils.current(), seconds));
+            // This will wait (assuming the file is not found)
+            assertFalse(FileUtils.waitFor(NOSUCHFILE, seconds), "Should not find file");
             wasInterrupted.set(Thread.currentThread().isInterrupted());
         });
         thread1.start();
-        // Make sure the thread does not finish before we interrupt it:
-        started.countDown();
-        thread1.interrupt();
-        started.await();
+        Thread.sleep(500); // This should be enough to ensure the waitFor loop has been entered
+        thread1.interrupt(); // Try to interrupt waitFor
         thread1.join();
-        assertTrue(wasInterrupted.get());
+        assertTrue(wasInterrupted.get(), "Should have been interrupted");
+        final long elapsed = System.currentTimeMillis() - start;
+        assertTrue(elapsed > seconds*1000, "Should wait for n seconds, actual: " + elapsed);
     }
 
     @Test
+    @Timeout(value = 30, unit = TimeUnit.MILLISECONDS) // Should complete quickly as the path is present
     public void testWaitForNegativeDuration() {
-        FileUtils.waitFor(FileUtils.current(), -1);
+        assertTrue(FileUtils.waitFor(FileUtils.current(), -1));
+    }
+
+    @Test
+    @Timeout(value = 30, unit = TimeUnit.MILLISECONDS) // Should complete quickly even though the path is missing
+    public void testWaitForNegativeDurationAbsent() {
+        assertFalse(FileUtils.waitFor(NOSUCHFILE, -1));
     }
 
 }
