@@ -63,7 +63,7 @@ public class FileUtilsWaitForTest {
         final long start = System.currentTimeMillis();
         assertFalse(FileUtils.waitFor(NOSUCHFILE, 2));
         final long elapsed = System.currentTimeMillis() - start;
-        assertTrue(elapsed > 2000, "Must reach timeout - expected 2000, actual: " + elapsed);
+        assertTrue(elapsed >= 2000, "Must reach timeout - expected 2000, actual: " + elapsed);
     }
 
     @Test
@@ -88,7 +88,7 @@ public class FileUtilsWaitForTest {
         thread1.join();
         assertTrue(wasInterrupted.get(), "Should have been interrupted");
         final long elapsed = System.currentTimeMillis() - start;
-        assertTrue(elapsed > seconds*1000, "Should wait for n seconds, actual: " + elapsed);
+        assertTrue(elapsed >= seconds*1000, "Should wait for n seconds, actual: " + elapsed);
     }
 
     @Test
