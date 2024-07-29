@@ -55,6 +55,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add NullInputStream.init().</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add AbstractInputStream and refactor duplicate code.</action>
       <!-- FIX -->
+      <action dev="sebb" type="fix" issue="IO-858">FileUtilsWaitForTest does not test anything useful.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Add missing unit tests.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">FileUtils.lastModifiedFileTime(File) calls Objects.requireNonNull() on the wrong object.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">PathUtils.deleteOnExit(Path) calls Objects.requireNonNull() on the wrong object.</action>
