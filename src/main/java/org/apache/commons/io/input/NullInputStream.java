@@ -38,12 +38,15 @@ import java.io.InputStream;
  *
  * <pre>
  *  public class TestInputStream extends NullInputStream {
+ *
  *      public TestInputStream(int size) {
  *          super(size);
  *      }
+ *
  *      protected int processByte() {
  *          return ... // return required value here
  *      }
+ *
  *      protected void processBytes(byte[] bytes, int offset, int length) {
  *          for (int i = offset; i &lt; length; i++) {
  *              bytes[i] = ... // set array value here
