@@ -230,12 +230,12 @@ public abstract class ProxyInputStream extends FilterInputStream {
      *
      * @param b the buffer to read the bytes into
      * @return the number of bytes read or {@link IOUtils#EOF EOF} if the end of stream
-     * @exception IOException
-     *                        <ul>
-     *                        <li>If the first byte cannot be read for any reason other than the end of the file,
-     *                        <li>if the input stream has been closed, or</li>
-     *                        <li>if some other I/O error occurs.</li>
-     *                        </ul>
+     * @throws IOException
+     *                     <ul>
+     *                     <li>If the first byte cannot be read for any reason other than the end of the file,
+     *                     <li>if the input stream has been closed, or</li>
+     *                     <li>if some other I/O error occurs.</li>
+     *                     </ul>
      */
     @Override
     public int read(final byte[] b) throws IOException {
@@ -253,11 +253,16 @@ public abstract class ProxyInputStream extends FilterInputStream {
     /**
      * Invokes the delegate's {@link InputStream#read(byte[], int, int)} method.
      *
-     * @param b the buffer to read the bytes into
+     * @param b   the buffer to read the bytes into
      * @param off The start offset
      * @param len The number of bytes to read
      * @return the number of bytes read or {@link IOUtils#EOF EOF} if the end of stream
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException
+     *                     <ul>
+     *                     <li>If the first byte cannot be read for any reason other than the end of the file,
+     *                     <li>if the input stream has been closed, or</li>
+     *                     <li>if some other I/O error occurs.</li>
+     *                     </ul>
      */
     @Override
     public int read(final byte[] b, final int off, final int len) throws IOException {
