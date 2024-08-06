@@ -30,9 +30,9 @@ import org.junit.jupiter.api.Test;
 public class ThrottledInputStreamTest extends ProxyInputStreamTest<ThrottledInputStream> {
 
     @Override
-    @SuppressWarnings("resource")
+    @SuppressWarnings({ "resource" })
     protected ThrottledInputStream createFixture() throws IOException {
-        return ThrottledInputStream.builder().setInputStream(createProxySource()).get();
+        return ThrottledInputStream.builder().setInputStream(createOriginInputStream()).get();
     }
 
     @Test
