@@ -230,7 +230,12 @@ public abstract class ProxyInputStream extends FilterInputStream {
      *
      * @param b the buffer to read the bytes into
      * @return the number of bytes read or EOF if the end of stream
-     * @throws IOException if an I/O error occurs.
+     * @exception IOException
+     *                        <ul>
+     *                        <li>If the first byte cannot be read for any reason other than the end of the file,
+     *                        <li>if the input stream has been closed, or</li>
+     *                        <li>if some other I/O error occurs.</li>
+     *                        </ul>
      */
     @Override
     public int read(final byte[] b) throws IOException {
