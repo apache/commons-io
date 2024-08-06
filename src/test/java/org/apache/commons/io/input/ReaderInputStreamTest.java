@@ -302,7 +302,7 @@ public class ReaderInputStreamTest {
     }
 
     @Test
-    public void testReasdAfterClose() throws IOException {
+    public void testReadAfterClose() throws IOException {
         try (InputStream inputStream = createInputStream()) {
             inputStream.close();
             assertEquals(IOUtils.EOF, inputStream.read());
