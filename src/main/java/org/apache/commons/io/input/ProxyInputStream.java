@@ -194,7 +194,9 @@ public abstract class ProxyInputStream extends FilterInputStream {
     /**
      * Invokes the delegate's {@link InputStream#markSupported()} method.
      *
-     * @return true if mark is supported, otherwise false
+     * @return {@code true} if this stream instance supports the mark and reset methods; {@code false} otherwise.
+     * @see #mark(int)
+     * @see #reset()
      */
     @Override
     public boolean markSupported() {
