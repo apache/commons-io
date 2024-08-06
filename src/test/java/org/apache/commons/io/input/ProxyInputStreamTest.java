@@ -134,6 +134,19 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
         // empty
     }
 
+    //@Test
+    public void testMarkOnNull() throws IOException {
+        try (T inputStream = createFixture(null)) {
+            inputStream.mark(1);
+            inputStream.setIn(createFixture());
+            inputStream.mark(1);
+            IOUtils.toByteArray(inputStream);
+            inputStream.mark(1);
+            inputStream.setIn(null);
+            inputStream.mark(1);
+        }
+    }
+
     @Test
     public void testMarkSupported() throws IOException {
         try (T inputStream = createFixture()) {

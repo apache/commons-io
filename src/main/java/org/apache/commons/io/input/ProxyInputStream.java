@@ -186,7 +186,9 @@ public abstract class ProxyInputStream extends FilterInputStream {
      */
     @Override
     public synchronized void mark(final int readLimit) {
-        in.mark(readLimit);
+        if (in != null) {
+            in.mark(readLimit);
+        }
     }
 
     /**
