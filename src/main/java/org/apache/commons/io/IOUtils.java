@@ -1746,7 +1746,7 @@ public class IOUtils {
      * Returns the length of the given array in a null-safe manner.
      *
      * @param array an array or null
-     * @return the array length -- or 0 if the given array is null.
+     * @return the array length, or 0 if the given array is null.
      * @since 2.7
      */
     public static int length(final byte[] array) {
@@ -1757,7 +1757,7 @@ public class IOUtils {
      * Returns the length of the given array in a null-safe manner.
      *
      * @param array an array or null
-     * @return the array length -- or 0 if the given array is null.
+     * @return the array length, or 0 if the given array is null.
      * @since 2.7
      */
     public static int length(final char[] array) {
@@ -1768,7 +1768,7 @@ public class IOUtils {
      * Returns the length of the given CharSequence in a null-safe manner.
      *
      * @param csq a CharSequence or null
-     * @return the CharSequence length -- or 0 if the given CharSequence is null.
+     * @return the CharSequence length, or 0 if the given CharSequence is null.
      * @since 2.7
      */
     public static int length(final CharSequence csq) {
@@ -1779,7 +1779,7 @@ public class IOUtils {
      * Returns the length of the given array in a null-safe manner.
      *
      * @param array an array or null
-     * @return the array length -- or 0 if the given array is null.
+     * @return the array length, or 0 if the given array is null.
      * @since 2.7
      */
     public static int length(final Object[] array) {
