@@ -82,6 +82,11 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
         return (T) new ProxyInputStreamFixture(createOriginInputStream());
     }
 
+    @SuppressWarnings("unchecked")
+    protected T createFixture(final InputStream proxy) {
+        return (T) new ProxyInputStreamFixture(proxy);
+    }
+
     protected InputStream createOriginInputStream() {
         return CharSequenceInputStream.builder().setCharSequence("abc").get();
     }
@@ -114,7 +119,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
 
     @Test
     public void testAvailableNull() throws IOException {
-        try (ProxyInputStreamFixture inputStream = new ProxyInputStreamFixture(null)) {
+        try (T inputStream = createFixture(null)) {
             assertEquals(0, inputStream.available());
             inputStream.setIn(createFixture());
             assertEquals(3, inputStream.available());
