@@ -130,7 +130,7 @@ public class IOUtils {
     // or return one of them.
 
     /**
-     * CR char.
+     * CR char '{@value}'.
      *
      * @since 2.9.0
      */
@@ -147,12 +147,12 @@ public class IOUtils {
     public static final char DIR_SEPARATOR = File.separatorChar;
 
     /**
-     * The UNIX directory separator character.
+     * The UNIX directory separator character '{@value}'.
      */
     public static final char DIR_SEPARATOR_UNIX = '/';
 
     /**
-     * The Windows directory separator character.
+     * The Windows directory separator character '{@value}'.
      */
     public static final char DIR_SEPARATOR_WINDOWS = '\\';
 
@@ -164,13 +164,13 @@ public class IOUtils {
     public static final byte[] EMPTY_BYTE_ARRAY = {};
 
     /**
-     * Represents the end-of-file (or stream).
+     * Represents the end-of-file (or stream) value {@value}.
      * @since 2.5 (made public)
      */
     public static final int EOF = -1;
 
     /**
-     * LF char.
+     * LF char '{@value}'.
      *
      * @since 2.9.0
      */
