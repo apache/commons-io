@@ -206,7 +206,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     /**
      * Invokes the delegate's {@link InputStream#read()} method unless the stream is closed.
      *
-     * @return the byte read or -1 if the end of stream
+     * @return the byte read or {@link IOUtils#EOF EOF} if the end of stream
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -229,7 +229,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * Invokes the delegate's {@link InputStream#read(byte[])} method.
      *
      * @param b the buffer to read the bytes into
-     * @return the number of bytes read or EOF if the end of stream
+     * @return the number of bytes read or {@link IOUtils#EOF EOF} if the end of stream
      * @exception IOException
      *                        <ul>
      *                        <li>If the first byte cannot be read for any reason other than the end of the file,
@@ -256,7 +256,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * @param b the buffer to read the bytes into
      * @param off The start offset
      * @param len The number of bytes to read
-     * @return the number of bytes read or -1 if the end of stream
+     * @return the number of bytes read or {@link IOUtils#EOF EOF} if the end of stream
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -313,11 +313,12 @@ public abstract class ProxyInputStream extends FilterInputStream {
     }
 
     /**
-     * Unwraps this instance by returning the underlying InputStream.
+     * Unwraps this instance by returning the underlying {@link InputStream}.
      * <p>
-     * Use with caution; useful to query the underlying InputStream.
+     * Use with caution; useful to query the underlying {@link InputStream}.
      * </p>
-     * @return the underlying InputStream.
+     *
+     * @return the underlying {@link InputStream}.
      * @since 2.16.0
      */
     public InputStream unwrap() {
