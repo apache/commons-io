@@ -72,7 +72,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * @param exceptionHandler the exception handler.
      */
     ProxyInputStream(final InputStream proxy, final IOConsumer<IOException> exceptionHandler) {
-        // the proxy is stored in a protected superclass variable named 'in'
+        // the proxy is stored in a protected superclass instance variable named 'in'.
         super(proxy);
         this.exceptionHandler = exceptionHandler;
     }
