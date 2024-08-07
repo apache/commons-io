@@ -32,7 +32,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests functionality of {@link BufferedFileChannelInputStream}.
+ * Tests {@link InputStream} subclasses.
  * <p>
  * This class was ported and adapted from Apache Spark commit 933dc6cb7b3de1d8ccaf73d124d6eb95b947ed19 where it was
  * called {@code GenericFileInputStreamSuite}.
