@@ -40,6 +40,25 @@ public class FileUtilsWaitForTest {
     private final File NOSUCHFILE = new File("a.b.c.d."+System.currentTimeMillis());
 
     @Test
+    public void testIO_488() throws InterruptedException {
+        final long start = System.currentTimeMillis();
+        final AtomicBoolean wasInterrupted = new AtomicBoolean();
+        final int seconds = 3   ;
+        final Thread thread1 = new Thread(() -> {
+            // This will wait (assuming the file is not found)
+            assertFalse(FileUtils.waitFor(NOSUCHFILE, seconds), "Should not find file");
+            wasInterrupted.set(Thread.currentThread().isInterrupted());
+        });
+        thread1.start();
+        Thread.sleep(500); // This should be enough to ensure the waitFor loop has been entered
+        thread1.interrupt(); // Try to interrupt waitFor
+        thread1.join();
+        assertTrue(wasInterrupted.get(), "Should have been interrupted");
+        final long elapsed = System.currentTimeMillis() - start;
+        assertTrue(elapsed >= seconds*1000, "Should wait for n seconds, actual: " + elapsed);
+    }
+
+    @Test
     @Timeout(value = 30, unit = TimeUnit.MILLISECONDS) // Should complete quickly as the path is present
     public void testWaitFor0() {
         assertTrue(FileUtils.waitFor(FileUtils.current(), 0));
@@ -58,37 +77,18 @@ public class FileUtilsWaitForTest {
     }
 
     @Test
-    @Timeout(value = 3, unit = TimeUnit.SECONDS) // Allow for timeout waiting for non-existent file
-    public void testWaitFor5Absent() {
-        final long start = System.currentTimeMillis();
-        assertFalse(FileUtils.waitFor(NOSUCHFILE, 2));
-        final long elapsed = System.currentTimeMillis() - start;
-        assertTrue(elapsed >= 2000, "Must reach timeout - expected 2000, actual: " + elapsed);
-    }
-
-    @Test
     @Timeout(value = 30, unit = TimeUnit.MILLISECONDS) // Should complete quickly as the path is present
     public void testWaitFor100() {
         assertTrue(FileUtils.waitFor(FileUtils.current(), 100));
     }
 
     @Test
-    public void testIO_488() throws InterruptedException {
+    @Timeout(value = 3, unit = TimeUnit.SECONDS) // Allow for timeout waiting for non-existent file
+    public void testWaitFor5Absent() {
         final long start = System.currentTimeMillis();
-        final AtomicBoolean wasInterrupted = new AtomicBoolean();
-        final int seconds = 3   ;
-        final Thread thread1 = new Thread(() -> {
-            // This will wait (assuming the file is not found)
-            assertFalse(FileUtils.waitFor(NOSUCHFILE, seconds), "Should not find file");
-            wasInterrupted.set(Thread.currentThread().isInterrupted());
-        });
-        thread1.start();
-        Thread.sleep(500); // This should be enough to ensure the waitFor loop has been entered
-        thread1.interrupt(); // Try to interrupt waitFor
-        thread1.join();
-        assertTrue(wasInterrupted.get(), "Should have been interrupted");
+        assertFalse(FileUtils.waitFor(NOSUCHFILE, 2));
         final long elapsed = System.currentTimeMillis() - start;
-        assertTrue(elapsed >= seconds*1000, "Should wait for n seconds, actual: " + elapsed);
+        assertTrue(elapsed >= 2000, "Must reach timeout - expected 2000, actual: " + elapsed);
     }
 
     @Test
