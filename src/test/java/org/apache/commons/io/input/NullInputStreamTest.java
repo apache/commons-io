@@ -245,7 +245,7 @@ public class NullInputStreamTest {
     }
 
     @Test
-    public void testReadByteArrayIndexAfterClose() throws Exception {
+    public void testReadByteArrayIntIntAfterClose() throws Exception {
         try (InputStream in = new NullInputStream()) {
             assertEquals(0, in.available());
             in.close();

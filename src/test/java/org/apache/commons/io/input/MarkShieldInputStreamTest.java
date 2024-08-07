@@ -133,6 +133,31 @@ public class MarkShieldInputStreamTest {
         }
     }
 
+    @ParameterizedTest
+    @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
+    public void testReadByteArrayAfterClose(final int len) throws Exception {
+        try (MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(len, false, false));
+                final MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
+            assertEquals(len, in.available());
+            in.close();
+            assertEquals(0, in.read(new byte[0]));
+            assertThrows(IOException.class, () -> in.read(new byte[2]));
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
+    public void testReadByteArrayIntIntAfterClose(final int len) throws Exception {
+        try (MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(len, false, false));
+                final MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
+            assertEquals(len, in.available());
+            in.close();
+            assertEquals(0, in.read(new byte[0], 0, 1));
+            assertEquals(0, in.read(new byte[1], 0, 0));
+            assertThrows(IOException.class, () -> in.read(new byte[2], 0, 1));
+        }
+    }
+
     @Test
     public void testResetThrowsExceptionWhenUnderlyingDoesNotSupport() throws IOException {
         // test wrapping an underlying stream which does NOT support marking
