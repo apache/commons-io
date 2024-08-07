@@ -36,8 +36,8 @@ public class CircularInputStreamTest {
     private void assertStreamOutput(final byte[] toCycle, final byte[] expected) throws IOException {
         final byte[] actual = new byte[expected.length];
 
-        try (InputStream infStream = createInputStream(toCycle, -1)) {
-            final int actualReadBytes = infStream.read(actual);
+        try (InputStream inputStream = createInputStream(toCycle, -1)) {
+            final int actualReadBytes = inputStream.read(actual);
             assertArrayEquals(expected, actual);
             assertEquals(expected.length, actualReadBytes);
         }
