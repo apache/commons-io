@@ -376,7 +376,7 @@ file comparators, endian transformation classes, and much more.
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
-            <version>3.3.0</version>
+            <version>3.4.0</version>
             <executions>
               <execution>
                 <id>benchmark</id>
