@@ -20,6 +20,7 @@ package org.apache.commons.io.input;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -30,6 +31,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 import org.apache.commons.io.IOUtils;
@@ -188,18 +191,32 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
         }
     }
 
-    @SuppressWarnings("resource")
     @Test
-    public void testReadAfterClose() throws IOException {
-        InputStream shadow;
-        try (InputStream inputStream = createFixture()) {
-            shadow = inputStream;
-        }
-        assertEquals(IOUtils.EOF, shadow.read());
+    public void testReadAfterClose_ByteArrayInputStream() throws IOException {
         try (InputStream inputStream = new ProxyInputStreamFixture(new ByteArrayInputStream("abc".getBytes(StandardCharsets.UTF_8)))) {
-            shadow = inputStream;
+            inputStream.close();
+            // ByteArrayInputStream does not throw on a closed stream.
+            assertNotEquals(IOUtils.EOF, inputStream.read());
         }
-        assertEquals(IOUtils.EOF, shadow.read());
+    }
+
+    @Test
+    public void testReadAfterClose_ChannelInputStream() throws IOException {
+        try (InputStream inputStream = new ProxyInputStreamFixture(
+                Files.newInputStream(Paths.get("src/test/resources/org/apache/commons/io/abitmorethan16k.txt")))) {
+            inputStream.close();
+            // ChannelInputStream throws when closed
+            assertThrows(IOException.class, inputStream::read);
+        }
+    }
+
+    @Test
+    public void testReadAfterClose_CharSequenceInputStream() throws IOException {
+        try (InputStream inputStream = createFixture()) {
+            inputStream.close();
+            // CharSequenceInputStream (like ByteArrayInputStream) does not throw on a closed stream.
+            assertEquals(IOUtils.EOF, inputStream.read());
+        }
     }
 
     @Test

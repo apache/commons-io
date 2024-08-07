@@ -37,7 +37,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.ByteOrderMark;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.SystemProperties;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
@@ -429,12 +428,11 @@ public class BOMInputStreamTest {
     @Test
     public void testReadAfterClose() throws Exception {
         final byte[] data = { 'A', 'B', 'C', 'D' };
-        final InputStream shadow;
         try (InputStream in = BOMInputStream.builder().setInputStream(createUtf8Input(data, true)).get()) {
             assertEquals(7, in.available());
-            shadow = in;
+            in.close();
+            assertThrows(IOException.class, in::read);
         }
-        assertEquals(IOUtils.EOF, shadow.read());
     }
 
     @Test

@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Objects;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.RandomAccessFileMode;
 import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
@@ -210,7 +209,7 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
 
     @Override
     public int read() throws IOException {
-        return isClosed() ? IOUtils.EOF : randomAccessFile.read();
+        return randomAccessFile.read();
     }
 
     @Override

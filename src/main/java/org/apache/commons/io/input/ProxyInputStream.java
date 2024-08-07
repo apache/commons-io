@@ -144,6 +144,15 @@ public abstract class ProxyInputStream extends FilterInputStream {
     }
 
     /**
+     * Checks if this instance is closed and throws an IOException if so.
+     *
+     * @throws IOException if this instance is closed.
+     */
+    void checkOpen() throws IOException {
+        AbstractInputStream.checkOpen(!isClosed());
+    }
+
+    /**
      * Invokes the delegate's {@link InputStream#close()} method.
      *
      * @throws IOException if an I/O error occurs.
@@ -210,9 +219,6 @@ public abstract class ProxyInputStream extends FilterInputStream {
      */
     @Override
     public int read() throws IOException {
-        if (isClosed()) {
-            return EOF;
-        }
         try {
             beforeRead(1);
             final int b = in.read();
@@ -328,4 +334,5 @@ public abstract class ProxyInputStream extends FilterInputStream {
     public InputStream unwrap() {
         return in;
     }
+
 }

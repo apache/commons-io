@@ -408,9 +408,7 @@ public class ReaderInputStream extends AbstractInputStream {
      */
     @Override
     public int read() throws IOException {
-        if (isClosed()) {
-            return EOF;
-        }
+        checkOpen();
         for (;;) {
             if (encoderOut.hasRemaining()) {
                 return encoderOut.get() & 0xFF;

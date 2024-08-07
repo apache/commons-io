@@ -25,6 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.ObservableInputStream.Observer;
@@ -134,7 +136,11 @@ public class ObservableInputStreamTest {
 
     private InputStream createInputStream() {
         final byte[] buffer = MessageDigestInputStreamTest.generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
-        return new ObservableInputStream(new ByteArrayInputStream(buffer));
+        return createInputStream(new ByteArrayInputStream(buffer));
+    }
+
+    private ObservableInputStream createInputStream(final InputStream origin) {
+        return new ObservableInputStream(origin);
     }
 
     @SuppressWarnings("resource")
@@ -246,7 +252,7 @@ public class ObservableInputStreamTest {
     public void testDataBytesCalled() throws Exception {
         final byte[] buffer = MessageDigestInputStreamTest.generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
         try (ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
-                final ObservableInputStream ois = new ObservableInputStream(bais)) {
+                final ObservableInputStream ois = createInputStream(bais)) {
             final DataViewObserver observer = new DataViewObserver();
             final byte[] readBuffer = new byte[23];
             assertNull(observer.buffer);
@@ -333,15 +339,22 @@ public class ObservableInputStreamTest {
         testNotificationCallbacks(IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
+    @Test
+    public void testReadAfterClose_ByteArrayInputStream() throws Exception {
+        try (InputStream in = createInputStream()) {
+            in.close();
+            assertNotEquals(IOUtils.EOF, in.read());
+        }
+    }
+
     @SuppressWarnings("resource")
     @Test
-    public void testReadAfterClose() throws Exception {
-        final InputStream shadow;
-        try (InputStream in = createInputStream()) {
-            assertTrue(in.available() > 0);
-            shadow = in;
+    public void testReadAfterClose_ChannelInputStream() throws Exception {
+        try (InputStream in = createInputStream(Files.newInputStream(Paths.get("src/test/resources/org/apache/commons/io/abitmorethan16k.txt")))) {
+            in.close();
+            // ChannelInputStream throws when closed
+            assertThrows(IOException.class, in::read);
         }
-        assertEquals(IOUtils.EOF, shadow.read());
     }
 
 }

@@ -16,7 +16,6 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -24,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.StandardOpenOption;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -71,7 +69,7 @@ public class BufferedFileChannelInputStreamTest extends AbstractInputStreamTest 
     public void testReadAfterClose() throws Exception {
         for (final InputStream inputStream : inputStreams) {
             inputStream.close();
-            assertEquals(IOUtils.EOF, inputStream.read());
+            assertThrows(IOException.class, inputStream::read);
         }
     }
 

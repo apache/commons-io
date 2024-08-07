@@ -419,9 +419,7 @@ public class BOMInputStream extends ProxyInputStream {
      */
     @Override
     public int read() throws IOException {
-        if (isClosed()) {
-            return EOF;
-        }
+        checkOpen();
         final int b = readFirstBytes();
         return b >= 0 ? b : in.read();
     }

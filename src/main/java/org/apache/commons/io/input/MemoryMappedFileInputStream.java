@@ -170,12 +170,6 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
         return buffer.remaining();
     }
 
-    private void checkOpen() throws IOException {
-        if (isClosed()) {
-            throw new IOException("Stream closed");
-        }
-    }
-
     private void cleanBuffer() {
         if (ByteBufferCleaner.isSupported() && buffer.isDirect()) {
             ByteBufferCleaner.clean(buffer);
@@ -210,9 +204,7 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
 
     @Override
     public int read() throws IOException {
-        if (isClosed()) {
-            return EOF;
-        }
+        checkOpen();
         if (!buffer.hasRemaining()) {
             nextBuffer();
             if (!buffer.hasRemaining()) {

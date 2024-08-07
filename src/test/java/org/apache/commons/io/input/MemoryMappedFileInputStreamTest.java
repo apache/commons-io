@@ -19,6 +19,7 @@ package org.apache.commons.io.input;
 import static org.apache.commons.lang3.ArrayUtils.EMPTY_BYTE_ARRAY;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -146,16 +147,14 @@ public class MemoryMappedFileInputStreamTest {
         }
     }
 
-    @SuppressWarnings("resource")
     @ParameterizedTest
     @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
     public void testReadAfterClose(final int len) throws Exception {
         final Path file = createTestFile(len);
-        final InputStream shadow;
         try (InputStream inputStream = newInputStream(file, 1024)) {
-            shadow = inputStream;
+            inputStream.close();
+            assertThrows(IOException.class, inputStream::read);
         }
-        assertEquals(IOUtils.EOF, shadow.read());
     }
 
     @Test

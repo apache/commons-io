@@ -25,6 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
@@ -47,10 +49,15 @@ public class MessageDigestInputStreamTest {
     }
 
     private InputStream createInputStream() throws IOException, NoSuchAlgorithmException {
+        return createInputStream(new ByteArrayInputStream(MessageDigestInputStreamTest.generateRandomByteStream(256)));
+    }
+
+    private InputStream createInputStream(final InputStream origin) throws IOException, NoSuchAlgorithmException {
         // @formatter:off
         return MessageDigestInputStream.builder()
                 .setMessageDigest(MessageDigest.getInstance(MessageDigestAlgorithms.SHA_512))
-                .setInputStream(new ByteArrayInputStream(MessageDigestInputStreamTest.generateRandomByteStream(256))).get();
+                .setInputStream(origin)
+                .get();
         // @formatter:on
     }
 
@@ -98,15 +105,22 @@ public class MessageDigestInputStreamTest {
         }
     }
 
+    @Test
+    public void testReadAfterClose_ByteArrayInputStream() throws Exception {
+        try (InputStream in = createInputStream()) {
+            in.close();
+            assertNotEquals(IOUtils.EOF, in.read());
+        }
+    }
+
     @SuppressWarnings("resource")
     @Test
-    public void testReadAfterClose() throws Exception {
-        final InputStream shadow;
-        try (InputStream in = createInputStream()) {
-            assertTrue(in.available() > 0);
-            shadow = in;
+    public void testReadAfterClose_ChannelInputStream() throws Exception {
+        try (InputStream in = createInputStream(Files.newInputStream(Paths.get("src/test/resources/org/apache/commons/io/abitmorethan16k.txt")))) {
+            in.close();
+            // ChannelInputStream throws when closed
+            assertThrows(IOException.class, in::read);
         }
-        assertEquals(IOUtils.EOF, shadow.read());
     }
 
 }

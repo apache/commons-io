@@ -33,7 +33,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.RandomAccessFileMode;
 import org.junit.jupiter.api.Test;
 
@@ -205,7 +204,7 @@ public class RandomAccessFileInputStreamTest {
         try (RandomAccessFileInputStream inputStream = new RandomAccessFileInputStream(createRandomAccessFile(),
             true)) {
             inputStream.close();
-            assertEquals(IOUtils.EOF, inputStream.read());
+            assertThrows(IOException.class, inputStream::read);
         }
     }
 

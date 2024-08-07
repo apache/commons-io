@@ -258,6 +258,14 @@ public class ReaderInputStreamTest {
     }
 
     @Test
+    public void testReadAfterClose() throws IOException {
+        try (InputStream inputStream = createInputStream()) {
+            inputStream.close();
+            assertThrows(IOException.class, inputStream::read);
+        }
+    }
+
+    @Test
     public void testReadEofTwice() throws IOException {
         try (ReaderInputStream reader = ReaderInputStream.builder().setCharset(StandardCharsets.UTF_8).setReader(new StringReader("123")).get()) {
             assertEquals('1', reader.read());
@@ -298,14 +306,6 @@ public class ReaderInputStreamTest {
             assertEquals(-1, inputStream.read(bytes, 0, 1));
             assertEquals(0, inputStream.read(bytes, 0, 0));
             assertEquals(-1, inputStream.read(bytes, 0, 1));
-        }
-    }
-
-    @Test
-    public void testReadAfterClose() throws IOException {
-        try (InputStream inputStream = createInputStream()) {
-            inputStream.close();
-            assertEquals(IOUtils.EOF, inputStream.read());
         }
     }
 
