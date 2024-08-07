@@ -84,6 +84,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">NullInputStream.read(*) should throw IOException when it is closed.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">NullInputStream.read(byte[]) should return 0 when the input byte array in length 0.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">NullInputStream.read(byte[], int, int) should return 0 when the input byte array in length 0 or requested length is 0.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">MarkShieldInputStream.read(*) should throw IOException when it is closed.</action>
       <!-- UPDATE -->
       <action dev="ggregory" type="update"             due-to="Dependabot">Bump tests commons.bytebuddy.version from 1.14.13 to 1.14.18 #615, #621, #631, #635, #642.</action>
       <action dev="ggregory" type="update"             due-to="Dependabot">Bump tests commons-codec:commons-codec from 1.16.1 to 1.17.1 #644.</action>

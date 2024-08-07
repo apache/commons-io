@@ -24,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -123,17 +122,15 @@ public class MarkShieldInputStreamTest {
         }
     }
 
-    @SuppressWarnings("resource")
     @ParameterizedTest
     @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
     public void testReadAfterClose(final int len) throws Exception {
-        final InputStream shadow;
         try (MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(len, false, false));
                 final MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
             assertEquals(len, in.available());
-            shadow = in;
+            in.close();
+            assertThrows(IOException.class, in::read);
         }
-        assertEquals(IOUtils.EOF, shadow.read());
     }
 
     @Test
