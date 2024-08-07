@@ -26,7 +26,6 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -175,16 +174,23 @@ public class NullInputStreamTest {
         }
     }
 
-    @SuppressWarnings("resource")
+    @Test
+    public void testReadAfterClose() throws Exception {
+        try (InputStream in = new NullInputStream()) {
+            assertEquals(0, in.available());
+            in.close();
+            assertThrows(IOException.class, in::read);
+        }
+    }
+
     @ParameterizedTest
     @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
     public void testReadAfterClose(final int len) throws Exception {
-        final InputStream shadow;
         try (InputStream in = new TestNullInputStream(len, false, false)) {
             assertEquals(len, in.available());
-            shadow = in;
+            in.close();
+            assertThrows(IOException.class, in::read);
         }
-        assertEquals(IOUtils.EOF, shadow.read());
     }
 
     @Test
@@ -225,6 +231,27 @@ public class NullInputStreamTest {
             for (int i = offset; i < len; i++) {
                 assertEquals(i, bytes[i], "Check Bytes 2");
             }
+        }
+    }
+
+    @Test
+    public void testReadByteArrayAfterClose() throws Exception {
+        try (InputStream in = new NullInputStream()) {
+            assertEquals(0, in.available());
+            in.close();
+            assertEquals(0, in.read(new byte[0]));
+            assertThrows(IOException.class, () -> in.read(new byte[2]));
+        }
+    }
+
+    @Test
+    public void testReadByteArrayIndexAfterClose() throws Exception {
+        try (InputStream in = new NullInputStream()) {
+            assertEquals(0, in.available());
+            in.close();
+            assertEquals(0, in.read(new byte[0], 0, 1));
+            assertEquals(0, in.read(new byte[1], 0, 0));
+            assertThrows(IOException.class, () -> in.read(new byte[2], 0, 1));
         }
     }
 
