@@ -584,7 +584,7 @@ public class FileUtils {
      * <pre>
      * // Create a filter for ".txt" files
      * IOFileFilter txtSuffixFilter = FileFilterUtils.suffixFileFilter(".txt");
-     * IOFileFilter txtFiles = FileFilterUtils.andFileFilter(FileFileFilter.FILE, txtSuffixFilter);
+     * IOFileFilter txtFiles = FileFilterUtils.andFileFilter(FileFileFilter.INSTANCE, txtSuffixFilter);
      *
      * // Create a filter for either directories or ".txt" files
      * FileFilter filter = FileFilterUtils.orFileFilter(DirectoryFileFilter.DIRECTORY, txtFiles);
@@ -635,7 +635,7 @@ public class FileUtils {
      * <pre>
      * // Create a filter for ".txt" files
      * IOFileFilter txtSuffixFilter = FileFilterUtils.suffixFileFilter(".txt");
-     * IOFileFilter txtFiles = FileFilterUtils.andFileFilter(FileFileFilter.FILE, txtSuffixFilter);
+     * IOFileFilter txtFiles = FileFilterUtils.andFileFilter(FileFileFilter.INSTANCE, txtSuffixFilter);
      *
      * // Create a filter for either directories or ".txt" files
      * FileFilter filter = FileFilterUtils.orFileFilter(DirectoryFileFilter.DIRECTORY, txtFiles);
@@ -686,7 +686,7 @@ public class FileUtils {
      * <pre>
      * // Create a filter for ".txt" files
      * IOFileFilter txtSuffixFilter = FileFilterUtils.suffixFileFilter(".txt");
-     * IOFileFilter txtFiles = FileFilterUtils.andFileFilter(FileFileFilter.FILE, txtSuffixFilter);
+     * IOFileFilter txtFiles = FileFilterUtils.andFileFilter(FileFileFilter.INSTANCE, txtSuffixFilter);
      *
      * // Create a filter for either directories or ".txt" files
      * FileFilter filter = FileFilterUtils.orFileFilter(DirectoryFileFilter.DIRECTORY, txtFiles);
