@@ -3113,7 +3113,7 @@ public class FileUtils {
     }
 
     /**
-     * Waits for the file system to propagate a file creation, with a timeout.
+     * Waits for the file system to detect a file's presence, with a timeout.
      * <p>
      * This method repeatedly tests {@link Files#exists(Path, LinkOption...)} until it returns
      * true up to the maximum time specified in seconds.
