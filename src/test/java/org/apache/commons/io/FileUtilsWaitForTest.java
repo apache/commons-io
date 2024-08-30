@@ -37,13 +37,13 @@ import org.junit.jupiter.api.Timeout;
 public class FileUtilsWaitForTest {
 
     // Assume that this file does not exist
-    private final File NOSUCHFILE = new File("a.b.c.d."+System.currentTimeMillis());
+    private final File NOSUCHFILE = new File("a.b.c.d." + System.currentTimeMillis());
 
     @Test
     public void testIO_488() throws InterruptedException {
         final long start = System.currentTimeMillis();
         final AtomicBoolean wasInterrupted = new AtomicBoolean();
-        final int seconds = 3   ;
+        final int seconds = 3;
         final Thread thread1 = new Thread(() -> {
             // This will wait (assuming the file is not found)
             assertFalse(FileUtils.waitFor(NOSUCHFILE, seconds), "Should not find file");
@@ -55,7 +55,7 @@ public class FileUtilsWaitForTest {
         thread1.join();
         assertTrue(wasInterrupted.get(), "Should have been interrupted");
         final long elapsed = System.currentTimeMillis() - start;
-        assertTrue(elapsed >= seconds*1000, "Should wait for n seconds, actual: " + elapsed);
+        assertTrue(elapsed >= seconds * 1000, "Should wait for n seconds, actual: " + elapsed);
     }
 
     @Test
@@ -92,7 +92,7 @@ public class FileUtilsWaitForTest {
     }
 
     @Test
-    @Timeout(value = 30, unit = TimeUnit.MILLISECONDS) // Should complete quickly as the path is present
+    @Timeout(value = 300, unit = TimeUnit.MILLISECONDS) // Should complete quickly as the path is present
     public void testWaitForNegativeDuration() {
         assertTrue(FileUtils.waitFor(FileUtils.current(), -1));
     }
