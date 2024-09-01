@@ -18,6 +18,7 @@ package org.apache.commons.io.output;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -299,7 +300,7 @@ public class ByteArrayOutputStreamTest {
             // Get data before more writes
             final InputStream in = baout.toInputStream()) {
             assertEquals(0, in.available());
-            assertTrue(in instanceof ClosedInputStream);
+            assertInstanceOf(ClosedInputStream.class, in);
         }
     }
 
