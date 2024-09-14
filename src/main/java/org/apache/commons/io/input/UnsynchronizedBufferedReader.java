@@ -91,8 +91,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      * @param in the Reader that is buffered.
      */
     public UnsynchronizedBufferedReader(final Reader in) {
-        this.in = in;
-        buf = new char[IOUtils.DEFAULT_BUFFER_SIZE];
+        this(in, IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -108,12 +107,6 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
         }
         this.in = in;
         buf = new char[size];
-    }
-
-    private void checkClosed() throws IOException {
-        if (isClosed()) {
-            throw new IOException("Closed");
-        }
     }
 
     /**
@@ -136,6 +129,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
         if (!isClosed()) {
             in.close();
             buf = null;
+            super.close();
         }
     }
 
@@ -184,15 +178,6 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
     }
 
     /**
-     * Tests whether or not this reader is closed.
-     *
-     * @return {@code true} if this reader is closed, {@code false} otherwise.
-     */
-    private boolean isClosed() {
-        return buf == null;
-    }
-
-    /**
      * Sets a mark position in this reader. The parameter {@code markLimit} indicates how many characters can be read before the mark is invalidated. Calling
      * {@link #reset()} will reposition the reader back to the marked position if {@code markLimit} has not been surpassed.
      *
@@ -207,7 +192,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
         if (markLimit < 0) {
             throw new IllegalArgumentException();
         }
-        checkClosed();
+        checkOpen();
         this.markLimit = markLimit;
         mark = pos;
     }
@@ -234,7 +219,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      */
     @Override
     public int read() throws IOException {
-        checkClosed();
+        checkOpen();
         /* Are there buffered characters available? */
         if (pos < end || fillBuf() != EOF) {
             return buf[pos++];
@@ -257,7 +242,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      */
     @Override
     public int read(final char[] buffer, int offset, final int length) throws IOException {
-        checkClosed();
+        checkOpen();
         if (offset < 0 || offset > buffer.length - length || length < 0) {
             throw new IndexOutOfBoundsException();
         }
@@ -317,7 +302,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      * @throws IOException if this reader is closed or some other I/O error occurs.
      */
     public String readLine() throws IOException {
-        checkClosed();
+        checkOpen();
         /* has the underlying stream been exhausted? */
         if (pos == end && fillBuf() == EOF) {
             return null;
@@ -331,7 +316,8 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
                 final String res = new String(buf, pos, charPos - pos);
                 pos = charPos + 1;
                 return res;
-            } else if (ch == CR) {
+            }
+            if (ch == CR) {
                 final String res = new String(buf, pos, charPos - pos);
                 pos = charPos + 1;
                 if ((pos < end || fillBuf() != EOF) && buf[pos] == LF) {
@@ -360,11 +346,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
             }
             for (int charPos = pos; charPos < end; charPos++) {
                 final char c = buf[charPos];
-                if (eol == NUL) {
-                    if (c == LF || c == CR) {
-                        eol = c;
-                    }
-                } else {
+                if (eol != NUL) {
                     if (eol == CR && c == LF) {
                         if (charPos > pos) {
                             result.append(buf, pos, charPos - pos - 1);
@@ -377,6 +359,9 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
                         pos = charPos;
                     }
                     return result.toString();
+                }
+                if (c == LF || c == CR) {
+                    eol = c;
                 }
             }
             if (eol == NUL) {
@@ -398,7 +383,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      */
     @Override
     public boolean ready() throws IOException {
-        checkClosed();
+        checkOpen();
         return end - pos > 0 || in.ready();
     }
 
@@ -411,7 +396,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      */
     @Override
     public void reset() throws IOException {
-        checkClosed();
+        checkOpen();
         if (mark == -1) {
             throw new IOException("mark == -1");
         }
@@ -435,7 +420,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
         if (amount < 0) {
             throw new IllegalArgumentException();
         }
-        checkClosed();
+        checkOpen();
         if (amount < 1) {
             return 0;
         }

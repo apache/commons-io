@@ -28,18 +28,6 @@ import java.io.InputStream;
 public abstract class AbstractInputStream extends InputStream {
 
     /**
-     * Throws an IOException on false input.
-     *
-     * @param isOpen whether the stream is open or not.
-     * @throws IOException if this instance is closed.
-     */
-    static void checkOpen(final boolean isOpen) throws IOException {
-        if (!isOpen) {
-            throw new IOException("The stream is closed.");
-        }
-    }
-
-    /**
      * Whether {@link #close()} completed successfully.
      */
     private boolean closed;
@@ -50,7 +38,7 @@ public abstract class AbstractInputStream extends InputStream {
      * @throws IOException if this instance is closed.
      */
     void checkOpen() throws IOException {
-        checkOpen(!isClosed());
+        Input.checkOpen(!isClosed());
     }
 
     @Override

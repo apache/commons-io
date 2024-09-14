@@ -149,7 +149,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * @throws IOException if this instance is closed.
      */
     void checkOpen() throws IOException {
-        AbstractInputStream.checkOpen(!isClosed());
+        Input.checkOpen(!isClosed());
     }
 
     /**

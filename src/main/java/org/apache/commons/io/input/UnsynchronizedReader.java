@@ -37,9 +37,46 @@ public abstract class UnsynchronizedReader extends Reader {
     private static final int MAX_SKIP_BUFFER_SIZE = IOUtils.DEFAULT_BUFFER_SIZE;
 
     /**
+     * Whether {@link #close()} completed successfully.
+     */
+    private boolean closed;
+
+    /**
      * The skip buffer, defaults to null until allocated in {@link UnsynchronizedReader#skip(long)}.
      */
     private char skipBuffer[];
+
+    /**
+     * Checks if this instance is closed and throws an IOException if so.
+     *
+     * @throws IOException if this instance is closed.
+     */
+    void checkOpen() throws IOException {
+        Input.checkOpen(!isClosed());
+    }
+
+    @Override
+    public void close() throws IOException {
+        closed = true;
+    }
+
+    /**
+     * Tests whether this instance is closed; if {@link #close()} completed successfully.
+     *
+     * @return whether this instance is closed.
+     */
+    public boolean isClosed() {
+        return closed;
+    }
+
+    /**
+     * Sets whether this instance is closed.
+     *
+     * @param closed whether this instance is closed.
+     */
+    public void setClosed(final boolean closed) {
+        this.closed = closed;
+    }
 
     /**
      * Skips characters by reading from this instance.
