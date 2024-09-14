@@ -17,8 +17,8 @@
 
 package org.apache.commons.io.input;
 
-import static org.apache.commons.io.IOUtils.EOF;
 import static org.apache.commons.io.IOUtils.CR;
+import static org.apache.commons.io.IOUtils.EOF;
 import static org.apache.commons.io.IOUtils.LF;
 
 import java.io.BufferedReader;
