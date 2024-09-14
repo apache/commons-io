@@ -54,6 +54,8 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add CloseShieldInputStream.systemIn(InputStream).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add NullInputStream.init().</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add AbstractInputStream and refactor duplicate code.</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add UnsynchronizedReader.</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add UnsynchronizedBufferedReader.</action>
       <!-- FIX -->
       <action dev="sebb" type="fix" issue="IO-858">FileUtilsWaitForTest does not test anything useful.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Add missing unit tests.</action>
