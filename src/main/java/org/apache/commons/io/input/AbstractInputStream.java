@@ -60,7 +60,7 @@ public abstract class AbstractInputStream extends InputStream {
     }
 
     /**
-     * Tests whether this instance is closed.
+     * Tests whether this instance is closed; if {@link #close()} completed successfully.
      *
      * @return whether this instance is closed.
      */
