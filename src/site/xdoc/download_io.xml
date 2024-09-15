@@ -113,32 +113,32 @@ limitations under the License.
       </p>
     </subsection>
     </section>
-    <section name="Apache Commons IO 2.16.1 (requires Java 8)">
+    <section name="Apache Commons IO 2.17.0 (requires Java 8)">
       <subsection name="Binaries">
         <table>
           <tr>
-              <td><a href="[preferred]/commons/io/binaries/commons-io-2.16.1-bin.tar.gz">commons-io-2.16.1-bin.tar.gz</a></td>
-              <td><a href="https://downloads.apache.org/commons/io/binaries/commons-io-2.16.1-bin.tar.gz.sha512">sha512</a></td>
-              <td><a href="https://downloads.apache.org/commons/io/binaries/commons-io-2.16.1-bin.tar.gz.asc">pgp</a></td>
+              <td><a href="[preferred]/commons/io/binaries/commons-io-2.17.0-bin.tar.gz">commons-io-2.17.0-bin.tar.gz</a></td>
+              <td><a href="https://downloads.apache.org/commons/io/binaries/commons-io-2.17.0-bin.tar.gz.sha512">sha512</a></td>
+              <td><a href="https://downloads.apache.org/commons/io/binaries/commons-io-2.17.0-bin.tar.gz.asc">pgp</a></td>
           </tr>
           <tr>
-              <td><a href="[preferred]/commons/io/binaries/commons-io-2.16.1-bin.zip">commons-io-2.16.1-bin.zip</a></td>
-              <td><a href="https://downloads.apache.org/commons/io/binaries/commons-io-2.16.1-bin.zip.sha512">sha512</a></td>
-              <td><a href="https://downloads.apache.org/commons/io/binaries/commons-io-2.16.1-bin.zip.asc">pgp</a></td>
+              <td><a href="[preferred]/commons/io/binaries/commons-io-2.17.0-bin.zip">commons-io-2.17.0-bin.zip</a></td>
+              <td><a href="https://downloads.apache.org/commons/io/binaries/commons-io-2.17.0-bin.zip.sha512">sha512</a></td>
+              <td><a href="https://downloads.apache.org/commons/io/binaries/commons-io-2.17.0-bin.zip.asc">pgp</a></td>
           </tr>
         </table>
       </subsection>
       <subsection name="Source">
         <table>
           <tr>
-              <td><a href="[preferred]/commons/io/source/commons-io-2.16.1-src.tar.gz">commons-io-2.16.1-src.tar.gz</a></td>
-              <td><a href="https://downloads.apache.org/commons/io/source/commons-io-2.16.1-src.tar.gz.sha512">sha512</a></td>
-              <td><a href="https://downloads.apache.org/commons/io/source/commons-io-2.16.1-src.tar.gz.asc">pgp</a></td>
+              <td><a href="[preferred]/commons/io/source/commons-io-2.17.0-src.tar.gz">commons-io-2.17.0-src.tar.gz</a></td>
+              <td><a href="https://downloads.apache.org/commons/io/source/commons-io-2.17.0-src.tar.gz.sha512">sha512</a></td>
+              <td><a href="https://downloads.apache.org/commons/io/source/commons-io-2.17.0-src.tar.gz.asc">pgp</a></td>
           </tr>
           <tr>
-              <td><a href="[preferred]/commons/io/source/commons-io-2.16.1-src.zip">commons-io-2.16.1-src.zip</a></td>
-              <td><a href="https://downloads.apache.org/commons/io/source/commons-io-2.16.1-src.zip.sha512">sha512</a></td>
-              <td><a href="https://downloads.apache.org/commons/io/source/commons-io-2.16.1-src.zip.asc">pgp</a></td>
+              <td><a href="[preferred]/commons/io/source/commons-io-2.17.0-src.zip">commons-io-2.17.0-src.zip</a></td>
+              <td><a href="https://downloads.apache.org/commons/io/source/commons-io-2.17.0-src.zip.sha512">sha512</a></td>
+              <td><a href="https://downloads.apache.org/commons/io/source/commons-io-2.17.0-src.zip.asc">pgp</a></td>
           </tr>
         </table>
       </subsection>

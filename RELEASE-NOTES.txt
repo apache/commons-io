@@ -1,4 +1,94 @@
 
+Apache Commons IO 2.17.0 Release Notes
+
+Introduction
+------------
+
+The Apache Commons IO library contains utility classes, stream implementations, file filters,
+file comparators, endian transformation classes, and much more.
+
+Java 8 is required.
+
+New features
+------------
+
+o          Add IOIterator.adapt(Iterable). Thanks to Gary Gregory. 
+o IO-831:  Add getInputStream() for 'https' and 'http' in URIOrigin #630. Thanks to Elliotte Rusty Harold, Thach Le, Gary Gregory. 
+o          Add IOSupplier.getUnchecked(). Thanks to Gary Gregory. 
+o          Add CloseShieldInputStream.systemIn(InputStream). Thanks to Gary Gregory. 
+o          Add NullInputStream.init(). Thanks to Gary Gregory. 
+o          Add AbstractInputStream and refactor duplicate code. Thanks to Gary Gregory. 
+o          Add UnsynchronizedReader. Thanks to Gary Gregory. 
+o          Add UnsynchronizedBufferedReader. Thanks to Gary Gregory. 
+
+Fixed Bugs
+----------
+
+o IO-858:  FileUtilsWaitForTest does not test anything useful. 
+o          Add missing unit tests. Thanks to Gary Gregory. 
+o          FileUtils.lastModifiedFileTime(File) calls Objects.requireNonNull() on the wrong object. Thanks to Gary Gregory. 
+o          PathUtils.deleteOnExit(Path) calls Objects.requireNonNull() on the wrong object. Thanks to Gary Gregory. 
+o          Deprecate LineIterator.nextLine() in favor of next(). Thanks to Gary Gregory. 
+o          Fix PMD UnnecessaryFullyQualifiedName. Thanks to Gary Gregory. 
+o          Add test for CircularByteBuffer clear() #620. Thanks to sullis. 
+o          PathUtils.isPosix(Path, LinkOption...) should return false on null input. Thanks to Gary Gregory. 
+o          AutoCloseInputStream(InputStream) uses ClosedInputStream.INSTANCE when its input is null. Thanks to Gary Gregory. 
+o          Avoid NullPointerException in ProxyInputStream.available() when the underlying input stream is null. Thanks to Gary Gregory. 
+o          Avoid NullPointerException in ProxyInputStream.markSupported() when the underlying input stream is null. Thanks to Gary Gregory. 
+o          Avoid NullPointerException in ProxyInputStream.mark(int) when the underlying input stream is null. Thanks to Gary Gregory. 
+o          BufferedFileChannelInputStream.available() returns 0 before any reads. Thanks to Gary Gregory. 
+o          BufferedFileChannelInputStream.available() should return 0 instead of -1 at the end of the stream. Thanks to Gary Gregory. 
+o          BufferedFileChannelInputStream.available() should return 0 when the stream is closed instead of throwing an exception. Thanks to Gary Gregory. 
+o          CharSequenceInputStream.available() should return 0 after the stream is closed. Thanks to Gary Gregory. 
+o          BoundedInputStream.available() should return 0 when the stream is closed. Thanks to Gary Gregory. 
+o          CircularInputStream.available() should return 0 when the stream is closed. Thanks to Gary Gregory. 
+o          InfiniteCircularInputStream.available() should return 0 when the stream is closed. Thanks to Gary Gregory. 
+o          ChecksumInputStream(InputStream, Checksum, long, long) should fail-fast on null Checksum input. Thanks to Gary Gregory. 
+o          Deprecate NullInputStream.INSTANCE in favor of constructors. Thanks to Gary Gregory. 
+o          NullInputStream.available() should return 0 after the stream is closed. Thanks to Gary Gregory. 
+o          MemoryMappedFileInputStream.available() should return 0 after the stream is closed. Thanks to Gary Gregory. 
+o          RandomAccessFileInputStream.available() should return 0 after the stream is closed. Thanks to Gary Gregory. 
+o          ReaderInputStream.available() should return 0 after the stream is closed. Thanks to Gary Gregory. 
+o          AutoCloseInputStream does not call handleIOException() on close() when the proxied stream throws an IOException. Thanks to Gary Gregory. 
+o          BoundedInputStream does not call handleIOException() on close() when the proxied stream throws an IOException. Thanks to Gary Gregory. 
+o          NullInputStream.read(*) should throw IOException when it is closed. Thanks to Gary Gregory. 
+o          NullInputStream.read(byte[]) should return 0 when the input byte array in length 0. Thanks to Gary Gregory. 
+o          NullInputStream.read(byte[], int, int) should return 0 when the input byte array in length 0 or requested length is 0. Thanks to Gary Gregory. 
+o          MarkShieldInputStream.read(*) should throw IOException when it is closed. Thanks to Gary Gregory. 
+o          Replace deprecated constant FileFileFilter.FILE in Javadoc #657. Thanks to aelaort. 
+o          Pick up exec-maven-plugin version from parent POM. Thanks to Gary Gregory. 
+
+Changes
+-------
+
+o          Bump tests commons.bytebuddy.version from 1.14.13 to 1.15.1 #615, #621, #631, #635, #642, #658, #663, #665. Thanks to Dependabot. 
+o          Bump tests commons-codec:commons-codec from 1.16.1 to 1.17.1 #644. Thanks to Dependabot. 
+o          Bump org.codehaus.mojo:exec-maven-plugin from 3.2.0 to 3.4.1 #632, #652, #659. Thanks to Dependabot. 
+o          Bump org.apache.commons:commons-parent from 69 to 74 #628, #637, #649, #661, #664. Thanks to Dependabot. 
+o          Bump org.apache.commons:commons-lang3 from 3.14.0 to 3.17.0 #645, #653, #666. Thanks to Dependabot. 
+
+
+Commons IO 2.7 and up requires Java 8 or above.
+Commons IO 2.6 requires Java 7 or above.
+Commons IO 2.3 through 2.5 requires Java 6 or above.
+Commons IO 2.2 requires Java 5 or above.
+Commons IO 1.4 requires Java 1.3 or above.
+
+Historical list of changes: https://commons.apache.org/proper/commons-io/changes-report.html
+
+For complete information on Apache Commons IO, including instructions on how to submit bug reports,
+patches, or suggestions for improvement, see the Apache Commons IO website:
+
+https://commons.apache.org/proper/commons-io/
+
+Download page: https://commons.apache.org/proper/commons-io/download_io.cgi
+
+Have fun!
+-Apache Commons Team
+
+------------------------------------------------------------------------------
+
+
 Apache Commons IO 2.16.1 Release Notes
 
 Introduction
