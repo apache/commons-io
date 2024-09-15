@@ -92,6 +92,14 @@ public abstract class AbstractInputStreamTest {
     }
 
     @Test
+    public void testAvailableAtEnd() throws Exception {
+        for (final InputStream inputStream : inputStreams) {
+            IOUtils.consume(inputStream);
+            assertEquals(0, inputStream.available());
+        }
+    }
+
+    @Test
     public void testBytesSkipped() throws IOException {
         for (final InputStream inputStream : inputStreams) {
             assertEquals(1024, inputStream.skip(1024));

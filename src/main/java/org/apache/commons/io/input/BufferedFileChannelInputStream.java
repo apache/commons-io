@@ -173,7 +173,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
             return 0;
         }
         if (!refill()) {
-            return EOF;
+            return 0;
         }
         return byteBuffer.remaining();
     }

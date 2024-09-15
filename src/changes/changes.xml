@@ -70,6 +70,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NullPointerException in ProxyInputStream.markSupported() when the underlying input stream is null.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NullPointerException in ProxyInputStream.mark(int) when the underlying input stream is null.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">BufferedFileChannelInputStream.available() returns 0 before any reads.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">BufferedFileChannelInputStream.available() should return 0 instead of -1 at the end of the stream.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">BufferedFileChannelInputStream.available() should return 0 when the stream is closed instead of throwing an exception.</action>      
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">CharSequenceInputStream.available() should return 0 after the stream is closed.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">BoundedInputStream.available() should return 0 when the stream is closed.</action>
