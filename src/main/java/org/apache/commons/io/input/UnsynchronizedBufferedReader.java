@@ -210,6 +210,35 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
     }
 
     /**
+     * Returns the next character in the current reader without consuming it. So the next call to {@link #read()} will still return this value.
+     *
+     * @return the next character
+     * @throws IOException If an I/O error occurs
+     */
+    public int peek() throws IOException {
+        mark(1);
+        final int c = read();
+        reset();
+        return c;
+    }
+
+    /**
+     * Populates the buffer with the next {@code buf.length} characters in the current reader without consuming them. The next call to {@link #read()} will
+     * still return the next value.
+     *
+     * @param buf the buffer to fill for the look ahead.
+     * @return the buffer itself
+     * @throws IOException If an I/O error occurs
+     */
+    public int peek(final char[] buf) throws IOException {
+        final int n = buf.length;
+        mark(n);
+        final int c = read(buf, 0, n);
+        reset();
+        return c;
+    }
+
+    /**
      * Reads a single character from this reader and returns it with the two higher-order bytes set to 0. If possible, BufferedReader returns a character from
      * the buffer. If there are no characters available in the buffer, it fills the buffer and then returns a character. It returns -1 if there are no more
      * characters in the source reader.
@@ -445,4 +474,5 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
         }
         return amount;
     }
+
 }
