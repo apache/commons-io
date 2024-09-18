@@ -46,7 +46,12 @@ The <action> type attribute can be add,update,fix,remove.
     <title>Apache Commons IO Release Notes</title>
   </properties>
   <body>
-    <release version="2.17.0" date="2024-09-15" description="Java 8 is required.">
+    <release version="2.17.1" date="YYYY-MM-DD" description="Version 2.17.1: Java 8 is required.">
+      <!-- FIX -->
+      <!-- ADD -->
+      <!-- UPDATE -->
+    </release>
+    <release version="2.17.0" date="2024-09-15" description="Version 2.17.0: Java 8 is required.">
       <!-- ADD --> 
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IOIterator.adapt(Iterable).</action>
       <action dev="ggregory" type="add" issue="IO-831" due-to="Elliotte Rusty Harold, Thach Le, Gary Gregory">Add getInputStream() for 'https' and 'http' in URIOrigin #630.</action>
