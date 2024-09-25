@@ -68,6 +68,9 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
 
         /**
          * Constructs a new {@link Builder}.
+         * <p>
+         * The default for compatibility is the MD5 cryptographic algorithm which is weak and should not be used.
+         * </p>
          */
         public Builder() {
             try {
@@ -161,7 +164,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
     }
 
     /**
-     * The default message digest algorithm.
+     * The default message digest algorithm {@code "MD5"}.
      * <p>
      * The MD5 cryptographic algorithm is weak and should not be used.
      * </p>
@@ -179,7 +182,10 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
     }
 
     /**
-     * Gets a MessageDigest object that implements the default digest algorithm.
+     * Gets a MessageDigest object that implements the default digest algorithm {@code "MD5"}.
+     * <p>
+     * The MD5 cryptographic algorithm is weak and should not be used.
+     * </p>
      *
      * @return a Message Digest object that implements the default algorithm.
      * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation.
