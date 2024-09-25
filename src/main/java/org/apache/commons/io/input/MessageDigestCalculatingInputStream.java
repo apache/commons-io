@@ -26,8 +26,7 @@ import java.util.Objects;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
- * This class is an example for using an {@link ObservableInputStream}. It creates its own {@link org.apache.commons.io.input.ObservableInputStream.Observer},
- * which calculates a checksum using a {@link MessageDigest}, for example, a SHA-512 sum.
+ * Calculates a checksum using a {@link MessageDigest}, for example, a SHA-512 sum.
  * <p>
  * To build an instance, use {@link Builder}.
  * </p>
