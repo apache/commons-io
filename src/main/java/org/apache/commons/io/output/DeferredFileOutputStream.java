@@ -68,7 +68,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      *   .get();}
      * </pre>
      * <p>
-     * The only super's aspect used us buffer size.
+     * The only super's aspect used is buffer size.
      * </p>
      *
      * @see #get()
