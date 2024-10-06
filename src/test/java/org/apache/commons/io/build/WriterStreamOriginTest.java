@@ -29,6 +29,8 @@ import org.junit.jupiter.api.Test;
  * Tests {@link WriterOrigin}.
  *
  * A WriterOrigin can convert into some of the other aspects.
+ *
+ * @see Writer
  */
 public class WriterStreamOriginTest extends AbstractOriginTest<Writer, WriterOrigin> {
 

@@ -34,6 +34,8 @@ import org.junit.jupiter.api.Test;
  * Tests {@link CharSequenceOrigin}.
  *
  * A CharSequenceOrigin can convert into some of the other aspects.
+ *
+ * @see CharSequence
  */
 public class CharSequenceOriginTest extends AbstractOriginTest<CharSequence, CharSequenceOrigin> {
 

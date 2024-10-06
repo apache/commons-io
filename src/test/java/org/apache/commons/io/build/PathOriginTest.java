@@ -26,6 +26,8 @@ import org.junit.jupiter.api.BeforeEach;
  * Tests {@link PathOrigin}.
  *
  * A PathOrigin can convert into all other aspects.
+ *
+ * @see Path
  */
 public class PathOriginTest extends AbstractOriginTest<Path, PathOrigin> {
 

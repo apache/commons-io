@@ -31,6 +31,8 @@ import org.junit.jupiter.api.Test;
  * Tests {@link ReaderOrigin}.
  *
  * A ReaderOrigin can convert into some of the other aspects.
+ *
+ * @see Reader
  */
 public class ReaderOriginTest extends AbstractOriginTest<Reader, ReaderOrigin> {
 

@@ -32,6 +32,8 @@ import org.junit.jupiter.params.provider.ValueSource;
  * Tests {@link URIOrigin}.
  *
  * A URIOrigin can convert into all other aspects.
+ *
+ * @see URI
  */
 public class URIOriginTest extends AbstractOriginTest<URI, URIOrigin> {
 

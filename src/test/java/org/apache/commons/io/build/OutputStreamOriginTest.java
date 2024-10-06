@@ -29,6 +29,8 @@ import org.junit.jupiter.api.Test;
  * Tests {@link OutputStreamOrigin}.
  *
  * A OutputStreamOrigin can convert into some of the other aspects.
+ *
+ * @see OutputStream
  */
 public class OutputStreamOriginTest extends AbstractOriginTest<OutputStream, OutputStreamOrigin> {
 

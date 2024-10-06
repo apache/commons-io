@@ -25,6 +25,8 @@ import org.junit.jupiter.api.BeforeEach;
  * Tests {@link FileOrigin}.
  *
  * A FileOrigin can convert into all other aspects.
+ *
+ * @see File
  */
 public class FileOriginTest extends AbstractOriginTest<File, FileOrigin> {
 
