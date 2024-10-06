@@ -21,6 +21,7 @@ package org.apache.commons.io.serialization;
 /**
  * An object that matches a Class name to a condition.
  */
+@FunctionalInterface
 public interface ClassNameMatcher {
 
     /**
