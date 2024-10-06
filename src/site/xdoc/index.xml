@@ -21,7 +21,6 @@ limitations under the License.
     <author email="dev@commons.apache.org">Commons Documentation Team</author>
   </properties>
   <body>
-    <!-- ================================================== -->
     <section name="Apache Commons IO">
       <p>
         Apache Commons IO is a library of utilities to assist with developing IO functionality.
@@ -88,9 +87,7 @@ limitations under the License.
         </li>
       </ul>
     </section>
-    <!-- ================================================== -->
     <section name="Releases">
-
       <subsection name="Latest Release (Java 8 and up)">
         <p>
           Commons IO requires a minimum of Java 8 -
@@ -105,7 +102,6 @@ limitations under the License.
           .
         </p>
       </subsection>
-
       <subsection name="Previous Releases">
         <p>
           See the
@@ -124,9 +120,7 @@ limitations under the License.
           <li>Version 2.2 requires Java 5 or above.</li>
         </ul>
       </subsection>
-
     </section>
-    <!-- ================================================== -->
     <section name="Support">
       <p>
         The
@@ -144,6 +138,5 @@ limitations under the License.
         Please read the instructions carefully to submit a useful bug report or enhancement request.
       </p>
     </section>
-    <!-- ================================================== -->
   </body>
 </document>
