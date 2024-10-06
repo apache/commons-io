@@ -2362,7 +2362,7 @@ public class IOUtils {
      * </p>
      *
      * @param input byte stream to skip
-     * @param toSkip number of bytes to skip.
+     * @param skip number of bytes to skip.
      * @return number of bytes actually skipped.
      * @throws IOException              if there is a problem reading the file
      * @throws IllegalArgumentException if toSkip is negative
@@ -2370,8 +2370,8 @@ public class IOUtils {
      * @see <a href="https://issues.apache.org/jira/browse/IO-203">IO-203 - Add skipFully() method for InputStreams</a>
      * @since 2.0
      */
-    public static long skip(final InputStream input, final long toSkip) throws IOException {
-        return skip(input, toSkip, IOUtils::getScratchByteArrayWriteOnly);
+    public static long skip(final InputStream input, final long skip) throws IOException {
+        return skip(input, skip, IOUtils::getScratchByteArrayWriteOnly);
     }
 
     /**
@@ -2391,7 +2391,7 @@ public class IOUtils {
      * </p>
      *
      * @param input              byte stream to skip
-     * @param toSkip             number of bytes to skip.
+     * @param skip             number of bytes to skip.
      * @param skipBufferSupplier Supplies the buffer to use for reading.
      * @return number of bytes actually skipped.
      * @throws IOException              if there is a problem reading the file
@@ -2400,16 +2400,16 @@ public class IOUtils {
      * @see <a href="https://issues.apache.org/jira/browse/IO-203">IO-203 - Add skipFully() method for InputStreams</a>
      * @since 2.14.0
      */
-    public static long skip(final InputStream input, final long toSkip, final Supplier<byte[]> skipBufferSupplier) throws IOException {
-        if (toSkip < 0) {
-            throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
+    public static long skip(final InputStream input, final long skip, final Supplier<byte[]> skipBufferSupplier) throws IOException {
+        if (skip < 0) {
+            throw new IllegalArgumentException("Skip count must be non-negative, actual: " + skip);
         }
         //
         // No need to synchronize access to SCRATCH_BYTE_BUFFER_WO: We don't care if the buffer is written multiple
         // times or in parallel since the data is ignored. We reuse the same buffer, if the buffer size were variable or read-write,
         // we would need to synch or use a thread local to ensure some other thread safety.
         //
-        long remain = toSkip;
+        long remain = skip;
         while (remain > 0) {
             final byte[] skipBuffer = skipBufferSupplier.get();
             // See https://issues.apache.org/jira/browse/IO-203 for why we use read() rather than delegating to skip()
@@ -2419,7 +2419,7 @@ public class IOUtils {
             }
             remain -= n;
         }
-        return toSkip - remain;
+        return skip - remain;
     }
 
     /**
