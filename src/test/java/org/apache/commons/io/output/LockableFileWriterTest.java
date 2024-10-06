@@ -89,10 +89,10 @@ public class LockableFileWriterTest {
 
         // try to open a second writer
         try (LockableFileWriter lfw2 = new LockableFileWriter(file, StandardCharsets.UTF_8, true, altLockDir.getAbsolutePath())) {
-            fail("Somehow able to open a locked file. ");
+            fail("Somehow able to open a locked file.");
         } catch (final IOException ioe) {
             final String msg = ioe.getMessage();
-            assertTrue(msg.startsWith("Can't write file, lock "), "Exception message does not start correctly. ");
+            assertTrue(msg.startsWith("Can't write file, lock "), "Exception message does not start correctly.");
             assertTrue(file.exists());
             assertTrue(altLockFile.exists());
         }
@@ -163,20 +163,20 @@ public class LockableFileWriterTest {
 
             // try to open a second writer
             try (LockableFileWriter lfw2 = new LockableFileWriter(file)) {
-                fail("Somehow able to open a locked file. ");
+                fail("Somehow able to open a locked file.");
             } catch (final IOException ioe) {
                 final String msg = ioe.getMessage();
-                assertTrue(msg.startsWith("Can't write file, lock "), "Exception message does not start correctly. ");
+                assertTrue(msg.startsWith("Can't write file, lock "), "Exception message does not start correctly.");
                 assertTrue(file.exists());
                 assertTrue(lockFile.exists());
             }
 
             // try to open a third writer
             try (LockableFileWriter lfw3 = new LockableFileWriter(file)) {
-                fail("Somehow able to open a locked file. ");
+                fail("Somehow able to open a locked file.");
             } catch (final IOException ioe) {
                 final String msg = ioe.getMessage();
-                assertTrue(msg.startsWith("Can't write file, lock "), "Exception message does not start correctly. ");
+                assertTrue(msg.startsWith("Can't write file, lock "), "Exception message does not start correctly.");
                 assertTrue(file.exists());
                 assertTrue(lockFile.exists());
             }

@@ -114,8 +114,7 @@ public class SwappedDataInputStreamTest {
 
     @Test
     public void testReadLine() {
-        assertThrows(UnsupportedOperationException.class, () ->  this.sdis.readLine(),
-                "readLine should be unsupported. ");
+        assertThrows(UnsupportedOperationException.class, () -> this.sdis.readLine(), "readLine should be unsupported.");
     }
 
     @Test
@@ -140,7 +139,7 @@ public class SwappedDataInputStreamTest {
 
     @Test
     public void testReadUTF() {
-        assertThrows(UnsupportedOperationException.class, () -> this.sdis.readUTF(), "readUTF should be unsupported. ");
+        assertThrows(UnsupportedOperationException.class, () -> this.sdis.readUTF(), "readUTF should be unsupported.");
     }
 
     @Test
