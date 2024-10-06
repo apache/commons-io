@@ -322,7 +322,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     }
 
     /**
-     * An {@link Reader} origin.
+     * A {@link Reader} origin.
      * <p>
      * This origin cannot provide other aspects.
      * </p>
@@ -423,7 +423,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     }
 
     /**
-     * An {@link Writer} origin.
+     * A {@link Writer} origin.
      * <p>
      * This origin cannot provide other aspects.
      * </p>
