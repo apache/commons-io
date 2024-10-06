@@ -50,10 +50,10 @@ public class MoreComplexObjectTest extends AbstractCloseableListTest {
     @BeforeEach
     public void setupMoreComplexObject() throws IOException {
         original = new MoreComplexObject();
-        final ByteArrayOutputStream bos = closeAfterEachTest(new ByteArrayOutputStream());
-        final ObjectOutputStream oos = closeAfterEachTest(new ObjectOutputStream(bos));
+        final ByteArrayOutputStream bos = addCloseable(new ByteArrayOutputStream());
+        final ObjectOutputStream oos = addCloseable(new ObjectOutputStream(bos));
         oos.writeObject(original);
-        inputStream = closeAfterEachTest(new ByteArrayInputStream(bos.toByteArray()));
+        inputStream = addCloseable(new ByteArrayInputStream(bos.toByteArray()));
     }
 
     /** Trusting java.* is probably reasonable and avoids having to be too
@@ -61,7 +61,7 @@ public class MoreComplexObjectTest extends AbstractCloseableListTest {
      */
     @Test
     public void testTrustJavaIncludingArrays() throws IOException, ClassNotFoundException {
-        assertSerialization(closeAfterEachTest(
+        assertSerialization(addCloseable(
                 new ValidatingObjectInputStream(inputStream)
                 .accept(MoreComplexObject.class)
                 .accept("java.*", "[Ljava.*")
@@ -74,7 +74,7 @@ public class MoreComplexObjectTest extends AbstractCloseableListTest {
      */
     @Test
     public void testTrustJavaLang() throws IOException, ClassNotFoundException {
-        assertSerialization(closeAfterEachTest(
+        assertSerialization(addCloseable(
                 new ValidatingObjectInputStream(inputStream)
                 .accept(MoreComplexObject.class, ArrayList.class, Random.class)
                 .accept("java.lang.*", "[Ljava.lang.*")
@@ -95,7 +95,7 @@ public class MoreComplexObjectTest extends AbstractCloseableListTest {
                 "org.codehaus.groovy.runtime.MethodClosure",
                 "org.springframework.beans.factory.ObjectFactory"
         };
-        assertSerialization(closeAfterEachTest(
+        assertSerialization(addCloseable(
                 new ValidatingObjectInputStream(inputStream)
                 .accept("*")
                 .reject(blacklist)
