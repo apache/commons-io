@@ -25,29 +25,43 @@ import java.util.Objects;
 /**
  * Access modes and factory methods for {@link RandomAccessFile}.
  *
+ * @see RandomAccessFile#RandomAccessFile(File, String)
+ * @see RandomAccessFile#RandomAccessFile(String, String)
  * @since 2.12.0
  */
 public enum RandomAccessFileMode {
 
     /**
      * Mode {@code "r"} opens for reading only.
+     *
+     * @see RandomAccessFile#RandomAccessFile(File, String)
+     * @see RandomAccessFile#RandomAccessFile(String, String)
      */
     READ_ONLY("r"),
 
     /**
      * Mode {@code "rw"} opens for reading and writing.
+     *
+     * @see RandomAccessFile#RandomAccessFile(File, String)
+     * @see RandomAccessFile#RandomAccessFile(String, String)
      */
     READ_WRITE("rw"),
 
     /**
      * Mode {@code "rws"} opens for reading and writing, as with {@code "rw"}, and also require that every update to the file's content or metadata be written
      * synchronously to the underlying storage device.
+     *
+     * @see RandomAccessFile#RandomAccessFile(File, String)
+     * @see RandomAccessFile#RandomAccessFile(String, String)
      */
     READ_WRITE_SYNC_ALL("rws"),
 
     /**
      * Mode {@code "rwd"} open for reading and writing, as with {@code "rw"}, and also require that every update to the file's content be written synchronously
      * to the underlying storage device.
+     *
+     * @see RandomAccessFile#RandomAccessFile(File, String)
+     * @see RandomAccessFile#RandomAccessFile(String, String)
      */
     READ_WRITE_SYNC_CONTENT("rwd");
 
