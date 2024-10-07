@@ -14,11 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.io;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Objects;
@@ -28,55 +30,124 @@ import java.util.Objects;
  *
  * @see RandomAccessFile#RandomAccessFile(File, String)
  * @see RandomAccessFile#RandomAccessFile(String, String)
+ * @see Enum
  * @since 2.12.0
  */
 public enum RandomAccessFileMode {
 
     /**
-     * Defines mode {@code "r"} to open a {@link RandomAccessFile} for reading only.
+     * Defines mode {@value #R} to open a {@link RandomAccessFile} for reading only.
      *
      * @see RandomAccessFile#RandomAccessFile(File, String)
      * @see RandomAccessFile#RandomAccessFile(String, String)
      */
-    READ_ONLY("r"),
+    READ_ONLY(RandomAccessFileMode.R, 1), // NOPMD bug https://github.com/pmd/pmd/issues/5263
 
     /**
-     * Defines mode {@code "rw"} to open a {@link RandomAccessFile} for reading and writing.
+     * Defines mode {@value #RW} to open a {@link RandomAccessFile} for reading and writing.
      *
      * @see RandomAccessFile#RandomAccessFile(File, String)
      * @see RandomAccessFile#RandomAccessFile(String, String)
      */
-    READ_WRITE("rw"),
+    READ_WRITE(RandomAccessFileMode.RW, 2), // NOPMD bug https://github.com/pmd/pmd/issues/5263
 
     /**
-     * Defines mode {@code "rws"} to open a {@link RandomAccessFile} for reading and writing, as with {@code "rw"}, and also require that every update to the
+     * Defines mode {@value #RWS} to open a {@link RandomAccessFile} for reading and writing, as with {@value #RW}, and also require that every update to the
      * file's content or metadata be written synchronously to the underlying storage device.
      *
      * @see RandomAccessFile#RandomAccessFile(File, String)
      * @see RandomAccessFile#RandomAccessFile(String, String)
      * @see StandardOpenOption#SYNC
      */
-    READ_WRITE_SYNC_ALL("rws"),
+    READ_WRITE_SYNC_ALL(RandomAccessFileMode.RWS, 4), // NOPMD bug https://github.com/pmd/pmd/issues/5263
 
     /**
-     * Defines mode {@code "rwd"} to open a {@link RandomAccessFile} for reading and writing, as with {@code "rw"}, and also require that every update to the
+     * Defines mode {@value #RWD} to open a {@link RandomAccessFile} for reading and writing, as with {@value #RW}, and also require that every update to the
      * file's content be written synchronously to the underlying storage device.
      *
      * @see RandomAccessFile#RandomAccessFile(File, String)
      * @see RandomAccessFile#RandomAccessFile(String, String)
      * @see StandardOpenOption#DSYNC
      */
-    READ_WRITE_SYNC_CONTENT("rwd");
+    READ_WRITE_SYNC_CONTENT(RandomAccessFileMode.RWD, 3); // NOPMD bug https://github.com/pmd/pmd/issues/5263
 
-    private final String mode;
+    private static final String R = "r";
+    private static final String RW = "rw";
+    private static final String RWD = "rwd";
+    private static final String RWS = "rws";
 
-    RandomAccessFileMode(final String mode) {
-        this.mode = mode;
+    /**
+     * Gets the enum value that best fits the given {@link OpenOption}s.
+     * <p>
+     * The input must be a legal and working combination for NIO.
+     * </p>
+     *
+     * @param openOption options like {@link StandardOpenOption}.
+     * @return best fit, by default {@link #READ_ONLY}.
+     * @see StandardOpenOption
+     * @since 2.18.0
+     */
+    public static RandomAccessFileMode valueOf(final OpenOption... openOption) {
+        RandomAccessFileMode bestFit = READ_ONLY;
+        for (final OpenOption option : openOption) {
+            if (option instanceof StandardOpenOption) {
+                switch ((StandardOpenOption) option) {
+                case WRITE:
+                    if (!bestFit.implies(READ_WRITE)) {
+                        bestFit = READ_WRITE;
+                    }
+                    break;
+                case DSYNC:
+                    if (!bestFit.implies(READ_WRITE_SYNC_CONTENT)) {
+                        bestFit = READ_WRITE_SYNC_CONTENT;
+                    }
+                    break;
+                case SYNC:
+                    if (!bestFit.implies(READ_WRITE_SYNC_ALL)) {
+                        bestFit = READ_WRITE_SYNC_ALL;
+                    }
+                    break;
+                default:
+                    // skip
+                }
+            }
+        }
+        return bestFit;
     }
 
     /**
-     * Constructs a random access file stream to read from, and optionally to write to, the file specified by the {@link File}
-     * argument.
+     * Gets the enum value for the given mode, one of one of {@value #R}, {@value #RW}, {@value #RWD}, or {@value #RWS}.
+     *
+     * @param mode one of {@value #R}, {@value #RW}, {@value #RWD}, or {@value #RWS}.
+     * @return A RandomAccessFileMode.
+     * @throws IllegalArgumentException Thrown when mode is not one of {@value #R}, {@value #RW}, {@value #RWD}, or {@value #RWS}.
+     * @since 2.18.0
+     */
+    public static RandomAccessFileMode valueOfMode(final String mode) {
+        switch (mode) {
+        case R:
+            return READ_ONLY;
+        case RW:
+            return READ_WRITE;
+        case RWD:
+            return READ_WRITE_SYNC_CONTENT;
+        case RWS:
+            return READ_WRITE_SYNC_ALL;
+        }
+        throw new IllegalArgumentException(mode);
+    }
+
+    private final int level;
+
+    private final String mode;
+
+    RandomAccessFileMode(final String mode, final int level) {
+        this.mode = mode;
+        this.level = level;
+    }
+
+    /**
+     * Constructs a random access file stream to read from, and optionally to write to, the file specified by the {@link File} argument.
      *
      * @param file the file object
      * @return a random access file stream
@@ -87,8 +158,7 @@ public enum RandomAccessFileMode {
     }
 
     /**
-     * Constructs a random access file stream to read from, and optionally to write to, the file specified by the {@link File}
-     * argument.
+     * Constructs a random access file stream to read from, and optionally to write to, the file specified by the {@link File} argument.
      *
      * @param file the file object
      * @return a random access file stream
@@ -99,8 +169,7 @@ public enum RandomAccessFileMode {
     }
 
     /**
-     * Constructs a random access file stream to read from, and optionally to write to, the file specified by the {@link File}
-     * argument.
+     * Constructs a random access file stream to read from, and optionally to write to, the file specified by the {@link File} argument.
      *
      * @param file the file object
      * @return a random access file stream
@@ -110,9 +179,55 @@ public enum RandomAccessFileMode {
         return new RandomAccessFile(file, mode);
     }
 
-    @Override
-    public String toString() {
+    /**
+     * A level for relative comparison of access mode rights, the larger, the more access.
+     * <p>
+     * The relative order from lowest to highest access rights is:
+     * </p>
+     * <ol>
+     * <li>{@link #READ_ONLY}</li>
+     * <li>{@link #READ_WRITE}</li>
+     * <li>{@link #READ_WRITE_SYNC_CONTENT}</li>
+     * <li>{@link #READ_WRITE_SYNC_ALL}</li>
+     * </ol>
+     * <p>
+     * This is unrelated to {@link #ordinal()}.
+     * </p>
+     *
+     * @return A level for relative comparison.
+     */
+    private int getLevel() {
+        return level;
+    }
+
+    /**
+     * Gets the access mode, one of {@value #R}, {@value #RW}, {@value #RWD}, or {@value #RWS}.
+     *
+     * @return one of {@value #R}, {@value #RW}, {@value #RWD}, or {@value #RWS}.
+     * @since 2.18.0
+     */
+    public String getMode() {
         return mode;
+    }
+
+    /**
+     * Tests whether this mode implies the given {@code other} mode.
+     * <p>
+     * For example:
+     * </p>
+     * <ol>
+     * <li>{@link RandomAccessFileMode#READ_WRITE_SYNC_ALL} implies {{@link RandomAccessFileMode#READ_WRITE_SYNC_CONTENT}}.</li>
+     * <li>{@link RandomAccessFileMode#READ_WRITE_SYNC_CONTENT} implies {{@link RandomAccessFileMode#READ_WRITE}}.</li>
+     * <li>{@link RandomAccessFileMode#READ_WRITE} implies {{@link RandomAccessFileMode#READ_ONLY}}.</li>
+     * </ol>
+     *
+     * @param other the non-null mode to test against.
+     * @return whether this mode implies the given {@code other} mode.
+     * @since 2.18.0
+     */
+    public boolean implies(final RandomAccessFileMode other) {
+        // Note: The method name "implies" is inspired by java.security.Permission.implies(Permission)
+        return getLevel() >= other.getLevel();
     }
 
 }
