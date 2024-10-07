@@ -23,7 +23,7 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 /**
- * Access modes and factory methods for {@link RandomAccessFile}.
+ * Enumerates access modes for {@link RandomAccessFile} with factory methods.
  *
  * @see RandomAccessFile#RandomAccessFile(File, String)
  * @see RandomAccessFile#RandomAccessFile(String, String)
@@ -32,7 +32,7 @@ import java.util.Objects;
 public enum RandomAccessFileMode {
 
     /**
-     * Mode {@code "r"} opens for reading only.
+     * Defines mode {@code "r"} to open a {@link RandomAccessFile} for reading only.
      *
      * @see RandomAccessFile#RandomAccessFile(File, String)
      * @see RandomAccessFile#RandomAccessFile(String, String)
@@ -40,7 +40,7 @@ public enum RandomAccessFileMode {
     READ_ONLY("r"),
 
     /**
-     * Mode {@code "rw"} opens for reading and writing.
+     * Defines mode {@code "rw"} to open a {@link RandomAccessFile} for reading and writing.
      *
      * @see RandomAccessFile#RandomAccessFile(File, String)
      * @see RandomAccessFile#RandomAccessFile(String, String)
@@ -48,8 +48,8 @@ public enum RandomAccessFileMode {
     READ_WRITE("rw"),
 
     /**
-     * Mode {@code "rws"} opens for reading and writing, as with {@code "rw"}, and also require that every update to the file's content or metadata be written
-     * synchronously to the underlying storage device.
+     * Defines mode {@code "rws"} to open a {@link RandomAccessFile} for reading and writing, as with {@code "rw"}, and also require that every update to the
+     * file's content or metadata be written synchronously to the underlying storage device.
      *
      * @see RandomAccessFile#RandomAccessFile(File, String)
      * @see RandomAccessFile#RandomAccessFile(String, String)
@@ -57,8 +57,8 @@ public enum RandomAccessFileMode {
     READ_WRITE_SYNC_ALL("rws"),
 
     /**
-     * Mode {@code "rwd"} open for reading and writing, as with {@code "rw"}, and also require that every update to the file's content be written synchronously
-     * to the underlying storage device.
+     * Defines mode {@code "rwd"} to open a {@link RandomAccessFile} for reading and writing, as with {@code "rw"}, and also require that every update to the
+     * file's content be written synchronously to the underlying storage device.
      *
      * @see RandomAccessFile#RandomAccessFile(File, String)
      * @see RandomAccessFile#RandomAccessFile(String, String)
