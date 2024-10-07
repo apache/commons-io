@@ -454,7 +454,7 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
             return 0;
         }
         if (end - pos >= amount) {
-            pos += amount;
+            pos += Math.toIntExact(amount);
             return amount;
         }
 
