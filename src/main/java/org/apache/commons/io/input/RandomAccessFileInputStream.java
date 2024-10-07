@@ -90,6 +90,7 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
                 }
                 return new RandomAccessFileInputStream(randomAccessFile, propagateClose);
             }
+            // No need to parameterize the RandomAccessFileMode since we are only reading.
             return new RandomAccessFileInputStream(RandomAccessFileMode.READ_ONLY.create(checkOrigin().getFile()), propagateClose);
         }
 
