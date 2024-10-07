@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.Objects;
 
 /**
@@ -53,6 +54,7 @@ public enum RandomAccessFileMode {
      *
      * @see RandomAccessFile#RandomAccessFile(File, String)
      * @see RandomAccessFile#RandomAccessFile(String, String)
+     * @see StandardOpenOption#SYNC
      */
     READ_WRITE_SYNC_ALL("rws"),
 
@@ -62,6 +64,7 @@ public enum RandomAccessFileMode {
      *
      * @see RandomAccessFile#RandomAccessFile(File, String)
      * @see RandomAccessFile#RandomAccessFile(String, String)
+     * @see StandardOpenOption#DSYNC
      */
     READ_WRITE_SYNC_CONTENT("rwd");
 
