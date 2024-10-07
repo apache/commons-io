@@ -156,7 +156,7 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
     }
 
     /**
-     * Returns an estimate of the number of bytes that can be read (or skipped over) from this input stream.
+     * Gets an estimate of the number of bytes that can be read (or skipped over) from this input stream.
      *
      * If there are more than {@link Integer#MAX_VALUE} bytes available, return {@link Integer#MAX_VALUE}.
      *
@@ -173,7 +173,7 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
     }
 
     /**
-     * Returns the number of bytes that can be read (or skipped over) from this input stream.
+     * Gets the number of bytes that can be read (or skipped over) from this input stream.
      *
      * @return The number of bytes that can be read.
      * @throws IOException If an I/O error occurs.
@@ -200,7 +200,7 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
     }
 
     /**
-     * Returns whether to close the underlying file when this stream is closed.
+     * Tests whether to close the underlying file when this stream is closed.
      *
      * @return Whether to close the underlying file when this stream is closed.
      */
