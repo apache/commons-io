@@ -77,7 +77,6 @@ public class ProxyCollectionWriter extends FilterCollectionWriter {
      * @throws IOException if an I/O error occurs.
      * @since 2.0
      */
-    @SuppressWarnings("resource") // Fluent API.
     @Override
     public Writer append(final char c) throws IOException {
         try {
@@ -97,7 +96,6 @@ public class ProxyCollectionWriter extends FilterCollectionWriter {
      * @return this writer
      * @throws IOException if an I/O error occurs.
      */
-    @SuppressWarnings("resource") // Fluent API.
     @Override
     public Writer append(final CharSequence csq) throws IOException {
         try {
@@ -120,7 +118,6 @@ public class ProxyCollectionWriter extends FilterCollectionWriter {
      * @return this writer
      * @throws IOException if an I/O error occurs.
      */
-    @SuppressWarnings("resource") // Fluent API.
     @Override
     public Writer append(final CharSequence csq, final int start, final int end) throws IOException {
         try {
