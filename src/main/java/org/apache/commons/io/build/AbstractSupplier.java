@@ -20,7 +20,10 @@ package org.apache.commons.io.build;
 import org.apache.commons.io.function.IOSupplier;
 
 /**
- * Abstracts supplying an instance of {@code T}. Use to implement the builder pattern.
+ * Abstracts supplying an instance of {@code T}.
+ * <p>
+ * Extend this class to implement the builder pattern.
+ * </p>
  * <p>
  * For example, here is a builder, a domain class, and a test.
  * </p>
@@ -28,18 +31,18 @@ import org.apache.commons.io.function.IOSupplier;
  * The builder:
  * </p>
  * <pre>
-    &#8725;**
+    &#47;**
      &ast; Builds Foo instances.
-     &ast;&#8725;
+     &ast;&#47;
     public static class Builder extends AbstractSupplier&#60;Foo, Builder&#62; {
 
         private String bar1;
         private String bar2;
         private String bar3;
 
-        &#8725;**
+        &#47;**
          &ast; Builds a new Foo.
-         &ast;&#8725;
+         &ast;&#47;
         &#64;Override
         public Foo get() {
             return new Foo(bar1, bar2, bar3);
@@ -65,9 +68,9 @@ import org.apache.commons.io.function.IOSupplier;
  * The domain class:
  * </p>
  * <pre>
-    &#8725;**
+    &#47;**
      &ast; Domain class.
-     &ast;&#8725;
+     &ast;&#47;
     public class Foo {
 
         public static Builder builder() {
