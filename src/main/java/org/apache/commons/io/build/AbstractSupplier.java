@@ -32,8 +32,8 @@ import org.apache.commons.io.function.IOSupplier;
  * </p>
  * <pre>
     &#47;**
-     &ast; Builds Foo instances.
-     &ast;&#47;
+     &#42; Builds Foo instances.
+     &#42;&#47;
     public static class Builder extends AbstractSupplier&#60;Foo, Builder&#62; {
 
         private String bar1;
@@ -41,8 +41,8 @@ import org.apache.commons.io.function.IOSupplier;
         private String bar3;
 
         &#47;**
-         &ast; Builds a new Foo.
-         &ast;&#47;
+         &#42; Builds a new Foo.
+         &#42;&#47;
         &#64;Override
         public Foo get() {
             return new Foo(bar1, bar2, bar3);
@@ -69,8 +69,8 @@ import org.apache.commons.io.function.IOSupplier;
  * </p>
  * <pre>
     &#47;**
-     &ast; Domain class.
-     &ast;&#47;
+     &#42; Domain class.
+     &#42;&#47;
     public class Foo {
 
         public static Builder builder() {
