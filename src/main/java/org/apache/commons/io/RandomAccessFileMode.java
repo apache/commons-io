@@ -147,21 +147,21 @@ public enum RandomAccessFileMode {
     }
 
     /**
-     * Constructs a random access file stream to read from, and optionally to write to, the file specified by the {@link File} argument.
+     * Constructs a random access file to read from, and optionally to write to, the file specified by the {@link File} argument.
      *
      * @param file the file object
-     * @return a random access file stream
+     * @return a random access file
      * @throws FileNotFoundException See {@link RandomAccessFile#RandomAccessFile(File, String)}.
      */
     public RandomAccessFile create(final File file) throws FileNotFoundException {
-        return new RandomAccessFile(file, mode);
+        return new RandomAccessFileAccessor(file, mode);
     }
 
     /**
-     * Constructs a random access file stream to read from, and optionally to write to, the file specified by the {@link File} argument.
+     * Constructs a random access file to read from, and optionally to write to, the file specified by the {@link File} argument.
      *
      * @param file the file object
-     * @return a random access file stream
+     * @return a random access file
      * @throws FileNotFoundException See {@link RandomAccessFile#RandomAccessFile(File, String)}.
      */
     public RandomAccessFile create(final Path file) throws FileNotFoundException {
@@ -169,14 +169,14 @@ public enum RandomAccessFileMode {
     }
 
     /**
-     * Constructs a random access file stream to read from, and optionally to write to, the file specified by the {@link File} argument.
+     * Constructs a random access file to read from, and optionally to write to, the file specified by the {@link File} argument.
      *
      * @param file the file object
-     * @return a random access file stream
+     * @return a random access file
      * @throws FileNotFoundException See {@link RandomAccessFile#RandomAccessFile(File, String)}.
      */
     public RandomAccessFile create(final String file) throws FileNotFoundException {
-        return new RandomAccessFile(file, mode);
+        return new RandomAccessFileAccessor(file, mode);
     }
 
     /**
