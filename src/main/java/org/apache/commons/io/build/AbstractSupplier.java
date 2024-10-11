@@ -125,7 +125,7 @@ import org.apache.commons.io.function.IOSupplier;
 public abstract class AbstractSupplier<T, B extends AbstractSupplier<T, B>> implements IOSupplier<T> {
 
     /**
-     * Returns this instance typed as the subclass type {@link B}.
+     * Returns this instance typed as the subclass type {@code B}.
      * <p>
      * This is the same as the expression:
      * </p>
@@ -133,7 +133,7 @@ public abstract class AbstractSupplier<T, B extends AbstractSupplier<T, B>> impl
      * (B) this
      * </pre>
      *
-     * @return this instance typed as the subclass type {@link B}.
+     * @return this instance typed as the subclass type {@code B}.
      */
     @SuppressWarnings("unchecked")
     protected B asThis() {
