@@ -34,10 +34,16 @@ public class IORandomAccessFileTest {
 
     protected static final String FILE_NAME_RW = "target/" + AbstractOriginTest.class.getSimpleName() + ".txt";
 
+    private File newFileFixture() throws IOException {
+        final File file = new File(FILE_NAME_RW);
+        FileUtils.touch(file);
+        return file;
+    }
+
     @ParameterizedTest
     @EnumSource(RandomAccessFileMode.class)
     public void testFile(final RandomAccessFileMode mode) throws IOException {
-        final File file = new File(FILE_NAME_RW);
+        final File file = newFileFixture();
         final String modeStr = mode.getMode();
         try (IORandomAccessFile raf = new IORandomAccessFile(file, modeStr)) {
             assertEquals(file, raf.getFile());
@@ -48,7 +54,7 @@ public class IORandomAccessFileTest {
     @ParameterizedTest
     @EnumSource(RandomAccessFileMode.class)
     public void testString(final RandomAccessFileMode mode) throws IOException {
-        final File file = new File(FILE_NAME_RW);
+        final File file = newFileFixture();
         final String modeStr = mode.getMode();
         try (IORandomAccessFile raf = new IORandomAccessFile(FILE_NAME_RW, modeStr)) {
             assertEquals(file, raf.getFile());
@@ -58,7 +64,7 @@ public class IORandomAccessFileTest {
 
     @Test
     public void testToString() throws IOException {
-        final File file = new File(FILE_NAME_RW);
+        final File file = newFileFixture();
         try (IORandomAccessFile raf = new IORandomAccessFile(FILE_NAME_RW, "r")) {
             assertEquals(file.toString(), raf.toString());
         }
