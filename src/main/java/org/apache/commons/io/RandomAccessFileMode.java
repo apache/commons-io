@@ -151,10 +151,10 @@ public enum RandomAccessFileMode {
      *
      * @param file the file object
      * @return a random access file
-     * @throws FileNotFoundException See {@link RandomAccessFile#RandomAccessFile(File, String)}.
+     * @throws FileNotFoundException See {@link IORandomAccessFile#IORandomAccessFile(File, String)}.
      */
     public RandomAccessFile create(final File file) throws FileNotFoundException {
-        return new RandomAccessFileAccessor(file, mode);
+        return new IORandomAccessFile(file, mode);
     }
 
     /**
@@ -162,7 +162,7 @@ public enum RandomAccessFileMode {
      *
      * @param file the file object
      * @return a random access file
-     * @throws FileNotFoundException See {@link RandomAccessFile#RandomAccessFile(File, String)}.
+     * @throws FileNotFoundException See {@link IORandomAccessFile#IORandomAccessFile(File, String)}.
      */
     public RandomAccessFile create(final Path file) throws FileNotFoundException {
         return create(Objects.requireNonNull(file.toFile(), "file"));
@@ -171,12 +171,12 @@ public enum RandomAccessFileMode {
     /**
      * Constructs a random access file to read from, and optionally to write to, the file specified by the {@link File} argument.
      *
-     * @param file the file object
+     * @param name the file object
      * @return a random access file
-     * @throws FileNotFoundException See {@link RandomAccessFile#RandomAccessFile(File, String)}.
+     * @throws FileNotFoundException See {@link IORandomAccessFile#IORandomAccessFile(File, String)}.
      */
-    public RandomAccessFile create(final String file) throws FileNotFoundException {
-        return new RandomAccessFileAccessor(file, mode);
+    public RandomAccessFile create(final String name) throws FileNotFoundException {
+        return new IORandomAccessFile(name, mode);
     }
 
     /**
@@ -228,6 +228,18 @@ public enum RandomAccessFileMode {
     public boolean implies(final RandomAccessFileMode other) {
         // Note: The method name "implies" is inspired by java.security.Permission.implies(Permission)
         return getLevel() >= other.getLevel();
+    }
+
+    /**
+     * Constructs a random access file to read from, and optionally to write to, the file specified by the {@link File} argument.
+     *
+     * @param name the file object
+     * @return a random access file
+     * @throws FileNotFoundException See {@link IORandomAccessFile#IORandomAccessFile(File, String)}.
+     * @since 2.18.0
+     */
+    public IORandomAccessFile io(final String name) throws FileNotFoundException {
+        return new IORandomAccessFile(name, mode);
     }
 
 }

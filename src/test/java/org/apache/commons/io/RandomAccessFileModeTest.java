@@ -40,6 +40,10 @@ import org.junit.jupiter.params.provider.EnumSource;
  */
 public class RandomAccessFileModeTest {
 
+    private static final byte[] BYTES_FIXTURE = "Foo".getBytes(StandardCharsets.US_ASCII);
+
+    private static final String FIXTURE = "test.txt";
+
     /**
      * Temporary directory.
      */
@@ -53,8 +57,8 @@ public class RandomAccessFileModeTest {
     @ParameterizedTest
     @EnumSource(RandomAccessFileMode.class)
     public void testCreateFile(final RandomAccessFileMode randomAccessFileMode) throws IOException {
-        final byte[] expected = "Foo".getBytes(StandardCharsets.US_ASCII);
-        final Path fixture = Files.write(tempDir.resolve("test.txt"), expected);
+        final byte[] expected = BYTES_FIXTURE;
+        final Path fixture = writeFixture(expected);
         try (RandomAccessFile randomAccessFile = randomAccessFileMode.create(fixture.toFile())) {
             assertArrayEquals(expected, read(randomAccessFile));
         }
@@ -63,8 +67,8 @@ public class RandomAccessFileModeTest {
     @ParameterizedTest
     @EnumSource(RandomAccessFileMode.class)
     public void testCreatePath(final RandomAccessFileMode randomAccessFileMode) throws IOException {
-        final byte[] expected = "Foo".getBytes(StandardCharsets.US_ASCII);
-        final Path fixture = Files.write(tempDir.resolve("test.txt"), expected);
+        final byte[] expected = BYTES_FIXTURE;
+        final Path fixture = writeFixture(expected);
         try (RandomAccessFile randomAccessFile = randomAccessFileMode.create(fixture)) {
             assertArrayEquals(expected, read(randomAccessFile));
         }
@@ -73,8 +77,8 @@ public class RandomAccessFileModeTest {
     @ParameterizedTest
     @EnumSource(RandomAccessFileMode.class)
     public void testCreateString(final RandomAccessFileMode randomAccessFileMode) throws IOException {
-        final byte[] expected = "Foo".getBytes(StandardCharsets.US_ASCII);
-        final Path fixture = Files.write(tempDir.resolve("test.txt"), expected);
+        final byte[] expected = BYTES_FIXTURE;
+        final Path fixture = writeFixture(expected);
         try (RandomAccessFile randomAccessFile = randomAccessFileMode.create(fixture.toString())) {
             assertArrayEquals(expected, read(randomAccessFile));
         }
@@ -94,6 +98,16 @@ public class RandomAccessFileModeTest {
         assertTrue(RandomAccessFileMode.READ_WRITE_SYNC_CONTENT.implies(RandomAccessFileMode.READ_WRITE));
         assertTrue(RandomAccessFileMode.READ_WRITE.implies(RandomAccessFileMode.READ_ONLY));
         assertFalse(RandomAccessFileMode.READ_ONLY.implies(RandomAccessFileMode.READ_WRITE_SYNC_ALL));
+    }
+
+    @ParameterizedTest
+    @EnumSource(RandomAccessFileMode.class)
+    public void testIoString(final RandomAccessFileMode randomAccessFileMode) throws IOException {
+        final byte[] expected = BYTES_FIXTURE;
+        final Path fixture = writeFixture(expected);
+        try (IORandomAccessFile randomAccessFile = randomAccessFileMode.io(fixture.toString())) {
+            assertArrayEquals(expected, read(randomAccessFile));
+        }
     }
 
     /**
@@ -144,5 +158,9 @@ public class RandomAccessFileModeTest {
         assertEquals(RandomAccessFileMode.READ_WRITE_SYNC_ALL, RandomAccessFileMode.valueOf(StandardOpenOption.READ, StandardOpenOption.SYNC));
         assertEquals(RandomAccessFileMode.READ_WRITE_SYNC_ALL,
                 RandomAccessFileMode.valueOf(StandardOpenOption.READ, StandardOpenOption.WRITE, StandardOpenOption.SYNC));
+    }
+
+    private Path writeFixture(final byte[] bytes) throws IOException {
+        return Files.write(tempDir.resolve(FIXTURE), bytes, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
     }
 }
