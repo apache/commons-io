@@ -19,11 +19,14 @@ package org.apache.commons.io.build;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.OutputStream;
+import java.nio.file.OpenOption;
+import java.nio.file.StandardOpenOption;
 
 import org.apache.commons.io.build.AbstractOrigin.OutputStreamOrigin;
 import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 /**
  * Tests {@link OutputStreamOrigin}.
@@ -34,11 +37,14 @@ import org.junit.jupiter.api.Test;
  */
 public class OutputStreamOriginTest extends AbstractOriginTest<OutputStream, OutputStreamOrigin> {
 
-    @SuppressWarnings("resource")
-    @BeforeEach
-    public void beforeEach() {
-        setOriginRo(new OutputStreamOrigin(new ByteArrayOutputStream()));
-        setOriginRw(new OutputStreamOrigin(new ByteArrayOutputStream()));
+    @Override
+    protected OutputStreamOrigin newOriginRo() {
+        return new OutputStreamOrigin(new ByteArrayOutputStream());
+    }
+
+    @Override
+    protected OutputStreamOrigin newOriginRw() {
+        return new OutputStreamOrigin(new ByteArrayOutputStream());
     }
 
     @Override
@@ -95,6 +101,21 @@ public class OutputStreamOriginTest extends AbstractOriginTest<OutputStream, Out
     public void testGetPath() {
         // Cannot convert a OutputStream to a Path.
         assertThrows(UnsupportedOperationException.class, super::testGetPath);
+    }
+
+    @Override
+    @Test
+    public void testGetRandomAccessFile() {
+        // Cannot convert a RandomAccessFile to a File.
+        assertThrows(UnsupportedOperationException.class, super::testGetRandomAccessFile);
+    }
+
+    @Override
+    @ParameterizedTest
+    @EnumSource(StandardOpenOption.class)
+    public void testGetRandomAccessFile(final OpenOption openOption) {
+        // Cannot convert a RandomAccessFile to a File.
+        assertThrows(UnsupportedOperationException.class, () -> super.testGetRandomAccessFile(openOption));
     }
 
     @Override

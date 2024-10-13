@@ -20,15 +20,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.OpenOption;
+import java.nio.file.StandardOpenOption;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractOrigin.CharSequenceOrigin;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 /**
  * Tests {@link CharSequenceOrigin}.
@@ -39,14 +41,18 @@ import org.junit.jupiter.api.Test;
  */
 public class CharSequenceOriginTest extends AbstractOriginTest<CharSequence, CharSequenceOrigin> {
 
-    @BeforeEach
-    public void beforeEach() throws FileNotFoundException, IOException {
-        setOriginRo(new CharSequenceOrigin(getFixtureStringFromFile()));
-        setOriginRw(new CharSequenceOrigin("World"));
-    }
-
     private String getFixtureStringFromFile() throws IOException {
         return IOUtils.resourceToString(FILE_RES_RO, StandardCharsets.UTF_8);
+    }
+
+    @Override
+    protected CharSequenceOrigin newOriginRo() throws IOException {
+        return new CharSequenceOrigin(getFixtureStringFromFile());
+    }
+
+    @Override
+    protected CharSequenceOrigin newOriginRw() {
+        return new CharSequenceOrigin("World");
     }
 
     @Override
@@ -68,6 +74,21 @@ public class CharSequenceOriginTest extends AbstractOriginTest<CharSequence, Cha
     public void testGetPath() {
         // Cannot convert a CharSequence to a Path.
         assertThrows(UnsupportedOperationException.class, super::testGetPath);
+    }
+
+    @Override
+    @Test
+    public void testGetRandomAccessFile() {
+        // Cannot convert a RandomAccessFile to a File.
+        assertThrows(UnsupportedOperationException.class, super::testGetRandomAccessFile);
+    }
+
+    @Override
+    @ParameterizedTest
+    @EnumSource(StandardOpenOption.class)
+    public void testGetRandomAccessFile(final OpenOption openOption) {
+        // Cannot convert a RandomAccessFile to a File.
+        assertThrows(UnsupportedOperationException.class, () -> super.testGetRandomAccessFile(openOption));
     }
 
     @Test

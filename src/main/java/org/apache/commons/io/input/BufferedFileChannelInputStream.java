@@ -73,6 +73,8 @@ public final class BufferedFileChannelInputStream extends InputStream {
     // @formatter:on
     public static class Builder extends AbstractStreamBuilder<BufferedFileChannelInputStream, Builder> {
 
+        private FileChannel fileChannel;
+
         /**
          * Builds a new {@link BufferedFileChannelInputStream}.
          * <p>
@@ -95,7 +97,23 @@ public final class BufferedFileChannelInputStream extends InputStream {
          */
         @Override
         public BufferedFileChannelInputStream get() throws IOException {
-            return new BufferedFileChannelInputStream(getPath(), getBufferSize());
+            return fileChannel != null ? new BufferedFileChannelInputStream(fileChannel, getBufferSize())
+                    : new BufferedFileChannelInputStream(getPath(), getBufferSize());
+        }
+
+        /**
+         * Sets the file channel.
+         * <p>
+         * This setting takes precedence over all others.
+         * </p>
+         *
+         * @param fileChannel the file channel.
+         * @return this instance.
+         * @since 2.18.0
+         */
+        public Builder setFileChannel(final FileChannel fileChannel) {
+            this.fileChannel = fileChannel;
+            return this;
         }
 
     }
@@ -159,10 +177,14 @@ public final class BufferedFileChannelInputStream extends InputStream {
      * @throws IOException If an I/O error occurs
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
+    @SuppressWarnings("resource")
     @Deprecated
     public BufferedFileChannelInputStream(final Path path, final int bufferSize) throws IOException {
-        Objects.requireNonNull(path, "path");
-        fileChannel = FileChannel.open(path, StandardOpenOption.READ);
+        this(FileChannel.open(path, StandardOpenOption.READ), bufferSize);
+    }
+
+    private BufferedFileChannelInputStream(final FileChannel fileChannel, final int bufferSize) {
+        this.fileChannel = Objects.requireNonNull(fileChannel, "path");
         byteBuffer = ByteBuffer.allocateDirect(bufferSize);
         byteBuffer.flip();
     }

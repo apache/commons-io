@@ -23,7 +23,6 @@ import java.net.URI;
 import java.nio.file.Paths;
 
 import org.apache.commons.io.build.AbstractOrigin.URIOrigin;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -37,10 +36,14 @@ import org.junit.jupiter.params.provider.ValueSource;
  */
 public class URIOriginTest extends AbstractOriginTest<URI, URIOrigin> {
 
-    @BeforeEach
-    public void beforeEach() {
-        setOriginRo(new URIOrigin(Paths.get(FILE_NAME_RO).toUri()));
-        setOriginRw(new URIOrigin(Paths.get(FILE_NAME_RW).toUri()));
+    @Override
+    protected URIOrigin newOriginRo() {
+        return new URIOrigin(Paths.get(FILE_NAME_RO).toUri());
+    }
+
+    @Override
+    protected URIOrigin newOriginRw() {
+        return new URIOrigin(Paths.get(FILE_NAME_RW).toUri());
     }
 
     @ParameterizedTest

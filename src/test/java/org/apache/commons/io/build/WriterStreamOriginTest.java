@@ -20,10 +20,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.file.OpenOption;
+import java.nio.file.StandardOpenOption;
 
 import org.apache.commons.io.build.AbstractOrigin.WriterOrigin;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 /**
  * Tests {@link WriterOrigin}.
@@ -34,10 +37,14 @@ import org.junit.jupiter.api.Test;
  */
 public class WriterStreamOriginTest extends AbstractOriginTest<Writer, WriterOrigin> {
 
-    @BeforeEach
-    public void beforeEach() {
-        setOriginRo(new WriterOrigin(new StringWriter()));
-        setOriginRw(new WriterOrigin(new StringWriter()));
+    @Override
+    protected WriterOrigin newOriginRo() {
+        return newOriginRw();
+    }
+
+    @Override
+    protected WriterOrigin newOriginRw() {
+        return new WriterOrigin(new StringWriter());
     }
 
     @Override
@@ -94,6 +101,21 @@ public class WriterStreamOriginTest extends AbstractOriginTest<Writer, WriterOri
     public void testGetPath() {
         // Cannot convert a Writer to a Path.
         assertThrows(UnsupportedOperationException.class, super::testGetPath);
+    }
+
+    @Override
+    @Test
+    public void testGetRandomAccessFile() {
+        // Cannot convert a RandomAccessFile to a File.
+        assertThrows(UnsupportedOperationException.class, super::testGetRandomAccessFile);
+    }
+
+    @Override
+    @ParameterizedTest
+    @EnumSource(StandardOpenOption.class)
+    public void testGetRandomAccessFile(final OpenOption openOption) {
+        // Cannot convert a RandomAccessFile to a File.
+        assertThrows(UnsupportedOperationException.class, () -> super.testGetRandomAccessFile(openOption));
     }
 
     @Override

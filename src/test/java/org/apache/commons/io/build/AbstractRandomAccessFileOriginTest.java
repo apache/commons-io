@@ -14,30 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.io.build;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.RandomAccessFile;
 
-import org.apache.commons.io.build.AbstractOrigin.PathOrigin;
+import org.apache.commons.io.IORandomAccessFile;
+import org.apache.commons.io.build.AbstractOrigin.AbstractRandomAccessFileOrigin;
+import org.apache.commons.io.build.AbstractOrigin.IORandomAccessFileOrigin;
+import org.apache.commons.io.build.AbstractOrigin.RandomAccessFileOrigin;
 
 /**
- * Tests {@link PathOrigin}.
+ * Tests {@link RandomAccessFileOrigin} and {@link IORandomAccessFileOrigin}.
  *
- * A PathOrigin can convert into all other aspects.
- *
- * @see Path
+ * @param <T> the type of instances to build.
+ * @param <B> the type of builder subclass.
+ * @see RandomAccessFile
+ * @see IORandomAccessFile
  */
-public class PathOriginTest extends AbstractOriginTest<Path, PathOrigin> {
-
-    @Override
-    protected PathOrigin newOriginRo() {
-        return new PathOrigin(Paths.get(FILE_NAME_RO));
-    }
-
-    @Override
-    protected PathOrigin newOriginRw() {
-        return new PathOrigin(Paths.get(FILE_NAME_RW));
-    }
+public abstract class AbstractRandomAccessFileOriginTest<T extends RandomAccessFile, B extends AbstractRandomAccessFileOrigin<T, B>>
+        extends AbstractOriginTest<T, B> {
 
 }

@@ -20,18 +20,22 @@ package org.apache.commons.io.build;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.apache.commons.io.IORandomAccessFile;
 import org.apache.commons.io.build.AbstractOrigin.ByteArrayOrigin;
 import org.apache.commons.io.build.AbstractOrigin.CharSequenceOrigin;
 import org.apache.commons.io.build.AbstractOrigin.FileOrigin;
+import org.apache.commons.io.build.AbstractOrigin.IORandomAccessFileOrigin;
 import org.apache.commons.io.build.AbstractOrigin.InputStreamOrigin;
 import org.apache.commons.io.build.AbstractOrigin.OutputStreamOrigin;
 import org.apache.commons.io.build.AbstractOrigin.PathOrigin;
+import org.apache.commons.io.build.AbstractOrigin.RandomAccessFileOrigin;
 import org.apache.commons.io.build.AbstractOrigin.ReaderOrigin;
 import org.apache.commons.io.build.AbstractOrigin.URIOrigin;
 import org.apache.commons.io.build.AbstractOrigin.WriterOrigin;
@@ -124,6 +128,28 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
      */
     protected static PathOrigin newPathOrigin(final String origin) {
         return new PathOrigin(Paths.get(origin));
+    }
+
+    /**
+     * Constructs a new RandomAccessFile origin for a RandomAccessFile.
+     *
+     * @param origin the reader.
+     * @return a new reader origin.
+     * @since 2.18.0
+     */
+    protected static IORandomAccessFileOrigin newRandomAccessFileOrigin(final IORandomAccessFile origin) {
+        return new IORandomAccessFileOrigin(origin);
+    }
+
+    /**
+     * Constructs a new RandomAccessFile origin for a RandomAccessFile.
+     *
+     * @param origin the reader.
+     * @return a new reader origin.
+     * @since 2.18.0
+     */
+    protected static RandomAccessFileOrigin newRandomAccessFileOrigin(final RandomAccessFile origin) {
+        return new RandomAccessFileOrigin(origin);
     }
 
     /**
@@ -282,6 +308,28 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
      */
     public B setPath(final String origin) {
         return setOrigin(newPathOrigin(origin));
+    }
+
+    /**
+     * Sets a new origin.
+     *
+     * @param origin the new origin.
+     * @return {@code this} instance.
+     * @since 2.18.0
+     */
+    public B setRandomAccessFile(final IORandomAccessFile origin) {
+        return setOrigin(newRandomAccessFileOrigin(origin));
+    }
+
+    /**
+     * Sets a new origin.
+     *
+     * @param origin the new origin.
+     * @return {@code this} instance.
+     * @since 2.18.0
+     */
+    public B setRandomAccessFile(final RandomAccessFile origin) {
+        return setOrigin(newRandomAccessFileOrigin(origin));
     }
 
     /**

@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.channels.FileChannel;
 import java.nio.file.StandardOpenOption;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -47,6 +48,7 @@ public class BufferedFileChannelInputStreamTest extends AbstractInputStreamTest 
             BufferedFileChannelInputStream.builder().setPath(inputFile).setBufferSize(123).get(), // small, unaligned buffer size
             BufferedFileChannelInputStream.builder().setURI(inputFile.toUri()).setBufferSize(1024).get(), // URI and buffer size
             BufferedFileChannelInputStream.builder().setPath(inputFile).setOpenOptions(StandardOpenOption.READ).get(), // open options
+            BufferedFileChannelInputStream.builder().setFileChannel(FileChannel.open(inputFile)).get(), // FileChannel
         };
         //@formatter:on
     }

@@ -21,11 +21,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.nio.file.OpenOption;
+import java.nio.file.StandardOpenOption;
 
 import org.apache.commons.io.build.AbstractOrigin.InputStreamOrigin;
 import org.apache.commons.io.input.CharSequenceInputStream;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 /**
  * Tests {@link InputStreamOrigin}.
@@ -37,10 +40,15 @@ import org.junit.jupiter.api.Test;
 public class InputStreamOriginTest extends AbstractOriginTest<InputStream, InputStreamOrigin> {
 
     @SuppressWarnings("resource")
-    @BeforeEach
-    public void beforeEach() throws FileNotFoundException {
-        setOriginRo(new InputStreamOrigin(new FileInputStream(FILE_NAME_RO)));
-        setOriginRw(new InputStreamOrigin(CharSequenceInputStream.builder().setCharSequence("World").get()));
+    @Override
+    protected InputStreamOrigin newOriginRo() throws FileNotFoundException {
+        return new InputStreamOrigin(new FileInputStream(FILE_NAME_RO));
+    }
+
+    @SuppressWarnings("resource")
+    @Override
+    protected InputStreamOrigin newOriginRw() {
+        return new InputStreamOrigin(CharSequenceInputStream.builder().setCharSequence("World").get());
     }
 
     @Override
@@ -62,6 +70,21 @@ public class InputStreamOriginTest extends AbstractOriginTest<InputStream, Input
     public void testGetPath() {
         // Cannot convert a InputStream to a Path.
         assertThrows(UnsupportedOperationException.class, super::testGetPath);
+    }
+
+    @Override
+    @Test
+    public void testGetRandomAccessFile() {
+        // Cannot convert a RandomAccessFile to a File.
+        assertThrows(UnsupportedOperationException.class, super::testGetRandomAccessFile);
+    }
+
+    @Override
+    @ParameterizedTest
+    @EnumSource(StandardOpenOption.class)
+    public void testGetRandomAccessFile(final OpenOption openOption) {
+        // Cannot convert a RandomAccessFile to a File.
+        assertThrows(UnsupportedOperationException.class, () -> super.testGetRandomAccessFile(openOption));
     }
 
     @Override

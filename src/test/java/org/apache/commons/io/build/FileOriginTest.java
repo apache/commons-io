@@ -19,7 +19,6 @@ package org.apache.commons.io.build;
 import java.io.File;
 
 import org.apache.commons.io.build.AbstractOrigin.FileOrigin;
-import org.junit.jupiter.api.BeforeEach;
 
 /**
  * Tests {@link FileOrigin}.
@@ -30,10 +29,14 @@ import org.junit.jupiter.api.BeforeEach;
  */
 public class FileOriginTest extends AbstractOriginTest<File, FileOrigin> {
 
-    @BeforeEach
-    public void beforeEach() {
-        setOriginRo(new FileOrigin(new File(FILE_NAME_RO)));
-        setOriginRw(new FileOrigin(new File(FILE_NAME_RW)));
+    @Override
+    protected FileOrigin newOriginRo() {
+        return new FileOrigin(new File(FILE_NAME_RO));
+    }
+
+    @Override
+    protected FileOrigin newOriginRw() {
+        return new FileOrigin(new File(FILE_NAME_RW));
     }
 
 }

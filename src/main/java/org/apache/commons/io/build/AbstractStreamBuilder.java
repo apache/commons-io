@@ -17,9 +17,11 @@
 
 package org.apache.commons.io.build;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
@@ -142,6 +144,19 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     }
 
     /**
+     * Gets a File from the origin.
+     *
+     * @return A File
+     * @throws IllegalStateException         if the {@code origin} is {@code null}.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a {@link File}.
+     * @see AbstractOrigin#getPath()
+     * @since 2.18.0
+     */
+    protected File getFile() {
+        return checkOrigin().getFile();
+    }
+
+    /**
      * Gets an InputStream from the origin with OpenOption[].
      *
      * @return An input stream
@@ -191,6 +206,19 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      */
     protected Path getPath() {
         return checkOrigin().getPath();
+    }
+
+    /**
+     * Gets a RandomAccessFile from the origin.
+     *
+     * @return A RandomAccessFile
+     * @throws IllegalStateException         if the {@code origin} is {@code null}.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a {@link RandomAccessFile}.
+     * @throws IOException                   if an I/O error occurs.
+     * @since 2.18.0
+     */
+    protected RandomAccessFile getRandomAccessFile() throws IOException {
+        return checkOrigin().getRandomAccessFile(getOpenOptions());
     }
 
     /**

@@ -21,11 +21,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
+import java.nio.file.OpenOption;
+import java.nio.file.StandardOpenOption;
 
 import org.apache.commons.io.build.AbstractOrigin.ReaderOrigin;
 import org.apache.commons.io.input.CharSequenceReader;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 /**
  * Tests {@link ReaderOrigin}.
@@ -36,11 +39,14 @@ import org.junit.jupiter.api.Test;
  */
 public class ReaderOriginTest extends AbstractOriginTest<Reader, ReaderOrigin> {
 
-    @SuppressWarnings("resource")
-    @BeforeEach
-    public void beforeEach() throws FileNotFoundException {
-        setOriginRo(new ReaderOrigin(new FileReader(FILE_NAME_RO)));
-        setOriginRw(new ReaderOrigin(new CharSequenceReader("World")));
+    @Override
+    protected ReaderOrigin newOriginRo() throws FileNotFoundException {
+        return new ReaderOrigin(new FileReader(FILE_NAME_RO));
+    }
+
+    @Override
+    protected ReaderOrigin newOriginRw() {
+        return new ReaderOrigin(new CharSequenceReader("World"));
     }
 
     @Override
@@ -62,6 +68,21 @@ public class ReaderOriginTest extends AbstractOriginTest<Reader, ReaderOrigin> {
     public void testGetPath() {
         // Cannot convert a Reader to a Path.
         assertThrows(UnsupportedOperationException.class, super::testGetPath);
+    }
+
+    @Override
+    @Test
+    public void testGetRandomAccessFile() {
+        // Cannot convert a RandomAccessFile to a File.
+        assertThrows(UnsupportedOperationException.class, super::testGetRandomAccessFile);
+    }
+
+    @Override
+    @ParameterizedTest
+    @EnumSource(StandardOpenOption.class)
+    public void testGetRandomAccessFile(final OpenOption openOption) {
+        // Cannot convert a RandomAccessFile to a File.
+        assertThrows(UnsupportedOperationException.class, () -> super.testGetRandomAccessFile(openOption));
     }
 
     @Override

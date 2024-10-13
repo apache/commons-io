@@ -20,11 +20,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import org.apache.commons.io.build.AbstractOrigin.ByteArrayOrigin;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 /**
  * Tests {@link ByteArrayOrigin}.
@@ -33,10 +36,14 @@ import org.junit.jupiter.api.Test;
  */
 public class ByteArrayOriginTest extends AbstractOriginTest<byte[], ByteArrayOrigin> {
 
-    @BeforeEach
-    public void beforeEach() throws IOException {
-        setOriginRo(new ByteArrayOrigin(Files.readAllBytes(Paths.get(FILE_NAME_RO))));
-        setOriginRw(new ByteArrayOrigin(new byte[] { 1 }));
+    @Override
+    protected ByteArrayOrigin newOriginRo() throws IOException {
+        return new ByteArrayOrigin(Files.readAllBytes(Paths.get(FILE_NAME_RO)));
+    }
+
+    @Override
+    protected ByteArrayOrigin newOriginRw() {
+        return new ByteArrayOrigin(new byte[] { 1 });
     }
 
     @Override
@@ -58,6 +65,21 @@ public class ByteArrayOriginTest extends AbstractOriginTest<byte[], ByteArrayOri
     public void testGetPath() {
         // Cannot convert a byte[] to a Path.
         assertThrows(UnsupportedOperationException.class, super::testGetPath);
+    }
+
+    @Override
+    @Test
+    public void testGetRandomAccessFile() {
+        // Cannot convert a RandomAccessFile to a File.
+        assertThrows(UnsupportedOperationException.class, super::testGetRandomAccessFile);
+    }
+
+    @Override
+    @ParameterizedTest
+    @EnumSource(StandardOpenOption.class)
+    public void testGetRandomAccessFile(final OpenOption openOption) {
+        // Cannot convert a RandomAccessFile to a File.
+        assertThrows(UnsupportedOperationException.class, () -> super.testGetRandomAccessFile(openOption));
     }
 
     @Override

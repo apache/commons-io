@@ -16,28 +16,30 @@
  */
 package org.apache.commons.io.build;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.FileNotFoundException;
+import java.io.RandomAccessFile;
 
-import org.apache.commons.io.build.AbstractOrigin.PathOrigin;
+import org.apache.commons.io.IORandomAccessFile;
+import org.apache.commons.io.RandomAccessFileMode;
+import org.apache.commons.io.build.AbstractOrigin.IORandomAccessFileOrigin;
 
 /**
- * Tests {@link PathOrigin}.
+ * Tests {@link IORandomAccessFileOrigin}.
  *
- * A PathOrigin can convert into all other aspects.
- *
- * @see Path
+ * @see RandomAccessFile
  */
-public class PathOriginTest extends AbstractOriginTest<Path, PathOrigin> {
+public class IORandomAccessFileOriginTest extends AbstractOriginTest<IORandomAccessFile, IORandomAccessFileOrigin> {
 
+    @SuppressWarnings("resource")
     @Override
-    protected PathOrigin newOriginRo() {
-        return new PathOrigin(Paths.get(FILE_NAME_RO));
+    protected IORandomAccessFileOrigin newOriginRo() throws FileNotFoundException {
+        return new IORandomAccessFileOrigin(RandomAccessFileMode.READ_ONLY.io(FILE_NAME_RO));
     }
 
+    @SuppressWarnings("resource")
     @Override
-    protected PathOrigin newOriginRw() {
-        return new PathOrigin(Paths.get(FILE_NAME_RW));
+    protected IORandomAccessFileOrigin newOriginRw() throws FileNotFoundException {
+        return new IORandomAccessFileOrigin(RandomAccessFileMode.READ_WRITE.io(FILE_NAME_RW));
     }
 
 }

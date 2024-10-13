@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Objects;
 
-import org.apache.commons.io.RandomAccessFileMode;
 import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
@@ -57,7 +56,7 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
     // @formatter:on
     public static class Builder extends AbstractStreamBuilder<RandomAccessFileInputStream, Builder> {
 
-        private RandomAccessFile randomAccessFile;
+        // private RandomAccessFile randomAccessFile;
         private boolean propagateClose;
 
         /**
@@ -84,14 +83,7 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
         @SuppressWarnings("resource") // Caller closes depending on settings
         @Override
         public RandomAccessFileInputStream get() throws IOException {
-            if (randomAccessFile != null) {
-                if (getOrigin() != null) {
-                    throw new IllegalStateException(String.format("Only set one of RandomAccessFile (%s) or origin (%s)", randomAccessFile, getOrigin()));
-                }
-                return new RandomAccessFileInputStream(randomAccessFile, propagateClose);
-            }
-            // No need to parameterize the RandomAccessFileMode since we are only reading.
-            return new RandomAccessFileInputStream(RandomAccessFileMode.READ_ONLY.create(checkOrigin().getFile()), propagateClose);
+            return new RandomAccessFileInputStream(getRandomAccessFile(), propagateClose);
         }
 
         /**
@@ -111,9 +103,9 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
          * @param randomAccessFile the RandomAccessFile to stream.
          * @return {@code this} instance.
          */
-        public Builder setRandomAccessFile(final RandomAccessFile randomAccessFile) {
-            this.randomAccessFile = randomAccessFile;
-            return this;
+        @Override // MUST keep this method for binary compatibility since the super version of this method uses a generic which compiles to Object.
+        public Builder setRandomAccessFile(final RandomAccessFile randomAccessFile) { // NOPMD see above.
+            return super.setRandomAccessFile(randomAccessFile);
         }
 
     }
