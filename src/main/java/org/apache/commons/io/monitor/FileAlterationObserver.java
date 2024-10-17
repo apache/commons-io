@@ -18,6 +18,7 @@ package org.apache.commons.io.monitor;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +30,7 @@ import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
+import org.apache.commons.io.build.AbstractOriginSupplier;
 import org.apache.commons.io.comparator.NameFileComparator;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
@@ -44,6 +46,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * <li>Either register the observer(s) with a {@link FileAlterationMonitor} or run manually.</li>
  * </ul>
  * <h2>Basic Usage</h2> Create a {@link FileAlterationObserver} for the directory and register the listeners:
+ *
  * <pre>
  *      File directory = new File(FileUtils.current(), "src");
  *      FileAlterationObserver observer = new FileAlterationObserver(directory);
@@ -53,6 +56,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * <p>
  * To manually observe a directory, initialize the observer and invoked the {@link #checkAndNotify()} method as required:
  * </p>
+ *
  * <pre>
  *      // initialize
  *      observer.init();
@@ -68,6 +72,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * <p>
  * Alternatively, register the observer(s) with a {@link FileAlterationMonitor}, which creates a new thread, invoking the observer at the specified interval:
  * </p>
+ *
  * <pre>
  *      long interval = ...
  *      FileAlterationMonitor monitor = new FileAlterationMonitor(interval);
@@ -76,6 +81,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *      ...
  *      monitor.stop();
  * </pre>
+ *
  * <h2>File Filters</h2> This implementation can monitor portions of the file system by using {@link FileFilter}s to observe only the files and/or directories
  * that are of interest. This makes it more efficient and reduces the noise from <em>unwanted</em> file system events.
  * <p>
@@ -86,6 +92,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * For example, to only observe 1) visible directories and 2) files with a ".java" suffix in a root directory called "src" you could set up a
  * {@link FileAlterationObserver} in the following way:
  * </p>
+ *
  * <pre>
  *      // Create a FileFilter
  *      IOFileFilter directories = FileFilterUtils.and(
@@ -101,12 +108,12 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *      observer.addListener(...);
  *      observer.addListener(...);
  * </pre>
+ *
  * <h2>FileEntry</h2>
  * <p>
- * {@link FileEntry} represents the state of a file or directory, capturing {@link File} attributes at a point in time. Custom
- * implementations of {@link FileEntry} can be used to capture additional properties that the basic implementation does not support. The
- * {@link FileEntry#refresh(File)} method is used to determine if a file or directory has changed since the last check and stores the current state of the
- * {@link File}'s properties.
+ * {@link FileEntry} represents the state of a file or directory, capturing {@link File} attributes at a point in time. Custom implementations of
+ * {@link FileEntry} can be used to capture additional properties that the basic implementation does not support. The {@link FileEntry#refresh(File)} method is
+ * used to determine if a file or directory has changed since the last check and stores the current state of the {@link File}'s properties.
  * </p>
  * <h2>Deprecating Serialization</h2>
  * <p>
@@ -119,7 +126,75 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  */
 public class FileAlterationObserver implements Serializable {
 
+    /**
+     * Builds instances of {@link FileAlterationObserver}.
+     *
+     * @since 2.18.0
+     */
+    public static final class Builder extends AbstractOriginSupplier<FileAlterationObserver, Builder> {
+
+        private FileEntry rootEntry;
+        private FileFilter fileFilter;
+        private IOCase ioCase;
+
+        private Builder() {
+            // empty
+        }
+
+        /**
+         * Gets a new {@link FileAlterationObserver} instance.
+         */
+        @Override
+        public FileAlterationObserver get() throws IOException {
+            return new FileAlterationObserver(rootEntry != null ? rootEntry : new FileEntry(checkOrigin().getFile()), fileFilter, toComparator(ioCase));
+        }
+
+        /**
+         * Sets the file filter or null if none.
+         *
+         * @param fileFilter file filter or null if none.
+         * @return This instance.
+         */
+        public Builder setFileFilter(final FileFilter fileFilter) {
+            this.fileFilter = fileFilter;
+            return asThis();
+        }
+
+        /**
+         * Sets what case sensitivity to use comparing file names, null means system sensitive.
+         *
+         * @param ioCase what case sensitivity to use comparing file names, null means system sensitive.
+         * @return This instance.
+         */
+        public Builder setIOCase(final IOCase ioCase) {
+            this.ioCase = ioCase;
+            return asThis();
+        }
+
+        /**
+         * Sets the root directory to observe.
+         *
+         * @param rootEntry the root directory to observe.
+         * @return This instance.
+         */
+        public Builder setRootEntry(final FileEntry rootEntry) {
+            this.rootEntry = rootEntry;
+            return asThis();
+        }
+
+    }
+
     private static final long serialVersionUID = 1185122225658782848L;
+
+    /**
+     * Creates a new builder.
+     *
+     * @return a new builder.
+     * @since 2.18.0
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
 
     private static Comparator<File> toComparator(final IOCase ioCase) {
         switch (IOCase.value(ioCase, IOCase.SYSTEM)) {
@@ -156,7 +231,9 @@ public class FileAlterationObserver implements Serializable {
      * Constructs an observer for the specified directory.
      *
      * @param directory the directory to observe.
+     * @deprecated Use {@link #builder()}.
      */
+    @Deprecated
     public FileAlterationObserver(final File directory) {
         this(directory, null);
     }
@@ -164,9 +241,11 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Constructs an observer for the specified directory and file filter.
      *
-     * @param directory  the directory to observe.
+     * @param directory  The directory to observe.
      * @param fileFilter The file filter or null if none.
+     * @deprecated Use {@link #builder()}.
      */
+    @Deprecated
     public FileAlterationObserver(final File directory, final FileFilter fileFilter) {
         this(directory, fileFilter, null);
     }
@@ -174,10 +253,12 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Constructs an observer for the specified directory, file filter and file comparator.
      *
-     * @param directory  the directory to observe.
+     * @param directory  The directory to observe.
      * @param fileFilter The file filter or null if none.
-     * @param ioCase     what case sensitivity to use comparing file names, null means system sensitive.
+     * @param ioCase     What case sensitivity to use comparing file names, null means system sensitive.
+     * @deprecated Use {@link #builder()}.
      */
+    @Deprecated
     public FileAlterationObserver(final File directory, final FileFilter fileFilter, final IOCase ioCase) {
         this(new FileEntry(directory), fileFilter, ioCase);
     }
@@ -185,9 +266,9 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Constructs an observer for the specified directory, file filter and file comparator.
      *
-     * @param rootEntry  the root directory to observe.
+     * @param rootEntry  The root directory to observe.
      * @param fileFilter The file filter or null if none.
-     * @param comparator how to compare files.
+     * @param comparator How to compare files.
      */
     private FileAlterationObserver(final FileEntry rootEntry, final FileFilter fileFilter, final Comparator<File> comparator) {
         Objects.requireNonNull(rootEntry, "rootEntry");
@@ -200,9 +281,9 @@ public class FileAlterationObserver implements Serializable {
     /**
      * Constructs an observer for the specified directory, file filter and file comparator.
      *
-     * @param rootEntry  the root directory to observe.
+     * @param rootEntry  The root directory to observe.
      * @param fileFilter The file filter or null if none.
-     * @param ioCase     what case sensitivity to use comparing file names, null means system sensitive.
+     * @param ioCase     What case sensitivity to use comparing file names, null means system sensitive.
      */
     protected FileAlterationObserver(final FileEntry rootEntry, final FileFilter fileFilter, final IOCase ioCase) {
         this(rootEntry, fileFilter, toComparator(ioCase));
@@ -212,7 +293,9 @@ public class FileAlterationObserver implements Serializable {
      * Constructs an observer for the specified directory.
      *
      * @param directoryName the name of the directory to observe.
+     * @deprecated Use {@link #builder()}.
      */
+    @Deprecated
     public FileAlterationObserver(final String directoryName) {
         this(new File(directoryName));
     }
@@ -222,7 +305,9 @@ public class FileAlterationObserver implements Serializable {
      *
      * @param directoryName the name of the directory to observe.
      * @param fileFilter    The file filter or null if none.
+     * @deprecated Use {@link #builder()}.
      */
+    @Deprecated
     public FileAlterationObserver(final String directoryName, final FileFilter fileFilter) {
         this(new File(directoryName), fileFilter);
     }
@@ -233,7 +318,9 @@ public class FileAlterationObserver implements Serializable {
      * @param directoryName the name of the directory to observe.
      * @param fileFilter    The file filter or null if none.
      * @param ioCase        what case sensitivity to use comparing file names, null means system sensitive.
+     * @deprecated Use {@link #builder()}.
      */
+    @Deprecated
     public FileAlterationObserver(final String directoryName, final FileFilter fileFilter, final IOCase ioCase) {
         this(new File(directoryName), fileFilter, ioCase);
     }
@@ -374,6 +461,10 @@ public class FileAlterationObserver implements Serializable {
                 listener.onFileDelete(entry.getFile());
             }
         });
+    }
+
+    Comparator<File> getComparator() {
+        return comparator;
     }
 
     /**

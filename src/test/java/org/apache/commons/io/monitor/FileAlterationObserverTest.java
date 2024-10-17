@@ -26,14 +26,20 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOCase;
+import org.apache.commons.io.comparator.NameFileComparator;
 import org.apache.commons.io.filefilter.CanReadFileFilter;
 import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.monitor.FileAlterationObserver.Builder;
 import org.junit.jupiter.api.Test;
 
 /**
  * {@link FileAlterationObserver} Test Case.
  */
 public class FileAlterationObserverTest extends AbstractMonitorTest {
+
+    private static final String PATH_STRING_FIXTURE = "/foo";
 
     /**
      * Constructs a new instance.
@@ -49,12 +55,16 @@ public class FileAlterationObserverTest extends AbstractMonitorTest {
         observer.checkAndNotify();
     }
 
+    private String directoryToUnixString(final FileAlterationObserver observer) {
+        return FilenameUtils.separatorsToUnix(observer.getDirectory().toString());
+    }
+
     /**
      * Test add/remove listeners.
      */
     @Test
     public void testAddRemoveListeners() {
-        final FileAlterationObserver observer = new FileAlterationObserver("/foo");
+        final FileAlterationObserver observer = FileAlterationObserver.builder().setFile(PATH_STRING_FIXTURE).getUnchecked();
         // Null Listener
         observer.addListener(null);
         assertFalse(observer.getListeners().iterator().hasNext(), "Listeners[1]");
@@ -74,10 +84,134 @@ public class FileAlterationObserverTest extends AbstractMonitorTest {
         assertFalse(observer.getListeners().iterator().hasNext(), "Listeners[5]");
     }
 
+    @Test
+    public void testBuilder_File() {
+        final File file = new File(PATH_STRING_FIXTURE);
+        final FileAlterationObserver observer = FileAlterationObserver.builder().setFile(file).getUnchecked();
+        assertEquals(file, observer.getDirectory());
+    }
+
+    @Test
+    public void testBuilder_File_FileFilter() {
+        final File file = new File(PATH_STRING_FIXTURE);
+        // @formatter:off
+        final FileAlterationObserver observer = FileAlterationObserver.builder()
+                .setFile(file)
+                .setFileFilter(CanReadFileFilter.CAN_READ)
+                .getUnchecked();
+        // @formatter:on
+        assertEquals(file, observer.getDirectory());
+        assertEquals(CanReadFileFilter.CAN_READ, observer.getFileFilter());
+    }
+
+    @Test
+    public void testBuilder_File_FileFilter_IOCase() {
+        final File file = new File(PATH_STRING_FIXTURE);
+        // @formatter:off
+        final FileAlterationObserver observer = FileAlterationObserver.builder()
+                .setFile(file)
+                .setFileFilter(CanReadFileFilter.CAN_READ)
+                .setIOCase(IOCase.INSENSITIVE)
+                .getUnchecked();
+        // @formatter:on
+        assertEquals(file, observer.getDirectory());
+        assertEquals(CanReadFileFilter.CAN_READ, observer.getFileFilter());
+        assertEquals(NameFileComparator.NAME_INSENSITIVE_COMPARATOR, observer.getComparator());
+    }
+
+    @Test
+    public void testBuilder_String() {
+        final String file = PATH_STRING_FIXTURE;
+        final FileAlterationObserver observer = FileAlterationObserver.builder().setFile(file).getUnchecked();
+        assertEquals(file, directoryToUnixString(observer));
+    }
+
+    @Test
+    public void testBuilder_String_FileFilter() {
+        final String file = PATH_STRING_FIXTURE;
+        // @formatter:off
+        final FileAlterationObserver observer = FileAlterationObserver.builder()
+                .setFile(file)
+                .setFileFilter(CanReadFileFilter.CAN_READ)
+                .getUnchecked();
+        // @formatter:on
+        assertEquals(file, directoryToUnixString(observer));
+        assertEquals(CanReadFileFilter.CAN_READ, observer.getFileFilter());
+    }
+
+    @Test
+    public void testBuilder_String_FileFilter_IOCase() {
+        final String file = PATH_STRING_FIXTURE;
+        // @formatter:off
+        final FileAlterationObserver observer = FileAlterationObserver.builder()
+                .setFile(file)
+                .setFileFilter(CanReadFileFilter.CAN_READ)
+                .setIOCase(IOCase.INSENSITIVE)
+                .getUnchecked();
+        // @formatter:on
+        assertEquals(file, directoryToUnixString(observer));
+        assertEquals(CanReadFileFilter.CAN_READ, observer.getFileFilter());
+        assertEquals(NameFileComparator.NAME_INSENSITIVE_COMPARATOR, observer.getComparator());
+    }
+
+    @Test
+    public void testConstructor_File() {
+        final File file = new File(PATH_STRING_FIXTURE);
+        @SuppressWarnings("deprecation")
+        final FileAlterationObserver observer = new FileAlterationObserver(file);
+        assertEquals(file, observer.getDirectory());
+    }
+
+    @Test
+    public void testConstructor_File_FileFilter() {
+        final File file = new File(PATH_STRING_FIXTURE);
+        @SuppressWarnings("deprecation")
+        final FileAlterationObserver observer = new FileAlterationObserver(file, CanReadFileFilter.CAN_READ);
+        assertEquals(file, observer.getDirectory());
+        assertEquals(CanReadFileFilter.CAN_READ, observer.getFileFilter());
+    }
+
+    @Test
+    public void testConstructor_File_FileFilter_IOCase() {
+        final File file = new File(PATH_STRING_FIXTURE);
+        @SuppressWarnings("deprecation")
+        final FileAlterationObserver observer = new FileAlterationObserver(file, CanReadFileFilter.CAN_READ, IOCase.INSENSITIVE);
+        assertEquals(file, observer.getDirectory());
+        assertEquals(CanReadFileFilter.CAN_READ, observer.getFileFilter());
+        assertEquals(NameFileComparator.NAME_INSENSITIVE_COMPARATOR, observer.getComparator());
+    }
+
+    @Test
+    public void testConstructor_String() {
+        final String file = PATH_STRING_FIXTURE;
+        @SuppressWarnings("deprecation")
+        final FileAlterationObserver observer = new FileAlterationObserver(file);
+        assertEquals(file, directoryToUnixString(observer));
+    }
+
+    @Test
+    public void testConstructor_String_FileFilter() {
+        final String file = PATH_STRING_FIXTURE;
+        @SuppressWarnings("deprecation")
+        final FileAlterationObserver observer = new FileAlterationObserver(file, CanReadFileFilter.CAN_READ);
+        assertEquals(file, directoryToUnixString(observer));
+        assertEquals(CanReadFileFilter.CAN_READ, observer.getFileFilter());
+    }
+
+    @Test
+    public void testConstructor_String_FileFilter_IOCase() {
+        final String file = PATH_STRING_FIXTURE;
+        @SuppressWarnings("deprecation")
+        final FileAlterationObserver observer = new FileAlterationObserver(file, CanReadFileFilter.CAN_READ, IOCase.INSENSITIVE);
+        assertEquals(file, directoryToUnixString(observer));
+        assertEquals(CanReadFileFilter.CAN_READ, observer.getFileFilter());
+        assertEquals(NameFileComparator.NAME_INSENSITIVE_COMPARATOR, observer.getComparator());
+    }
+
     /**
-     * Test checkAndNotify() method
+     * Tests checkAndNotify() method
      *
-     * @throws Exception
+     * @throws Exception Thrown on test failure.
      */
     @Test
     public void testDirectory() throws Exception {
@@ -373,14 +507,12 @@ public class FileAlterationObserverTest extends AbstractMonitorTest {
      */
     @Test
     public void testToString() {
-        final File file = new File("/foo");
-
-        FileAlterationObserver observer = new FileAlterationObserver(file);
+        final File file = new File(PATH_STRING_FIXTURE);
+        final Builder builder = FileAlterationObserver.builder();
+        FileAlterationObserver observer = builder.setFile(file).getUnchecked();
         assertEquals("FileAlterationObserver[file='" + file.getPath() + "', true, listeners=0]", observer.toString());
-
-        observer = new FileAlterationObserver(file, CanReadFileFilter.CAN_READ);
+        observer = builder.setFileFilter(CanReadFileFilter.CAN_READ).getUnchecked();
         assertEquals("FileAlterationObserver[file='" + file.getPath() + "', CanReadFileFilter, listeners=0]", observer.toString());
-
         assertEquals(file, observer.getDirectory());
     }
 }

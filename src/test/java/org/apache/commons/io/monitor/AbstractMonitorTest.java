@@ -98,7 +98,7 @@ public abstract class AbstractMonitorTest {
      * @param fileFilter The file filter to apply
      */
     protected void createObserver(final File file, final FileFilter fileFilter) {
-        observer = new FileAlterationObserver(file, fileFilter);
+        observer = FileAlterationObserver.builder().setFile(file).setFileFilter(fileFilter).getUnchecked();
         observer.addListener(listener);
         observer.addListener(new FileAlterationListenerAdaptor());
         try {
