@@ -64,6 +64,7 @@ import java.util.zip.InflaterInputStream;
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.function.IOSupplier;
 import org.apache.commons.io.function.IOTriFunction;
+import org.apache.commons.io.input.CharSequenceReader;
 import org.apache.commons.io.input.QueueInputStream;
 import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -2241,6 +2242,20 @@ public class IOUtils {
     @SuppressWarnings("resource") // reader wraps input and is the responsibility of the caller.
     public static List<String> readLines(final Reader reader) throws UncheckedIOException {
         return toBufferedReader(reader).lines().collect(Collectors.toList());
+    }
+
+    /**
+     * Gets the contents of a {@link CharSequence} as a list of Strings, one entry per line.
+     *
+     * @param csq the {@link CharSequence} to read, not null
+     * @return the list of Strings, never null
+     * @throws UncheckedIOException if an I/O error occurs
+     * @since 2.18.0
+     */
+    public static List<String> readLines(final CharSequence csq) throws UncheckedIOException {
+        try (CharSequenceReader reader = new CharSequenceReader(csq)) {
+            return readLines(reader);
+        }
     }
 
     /**

@@ -1016,6 +1016,36 @@ public class IOUtilsTest {
     }
 
     @Test
+    public void testReadLines_CharSequence() throws IOException {
+        final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
+        CharSequence csq = null;
+        try {
+            final String[] data = {"hello", "/u1234", "", "this is", "some text"};
+            TestUtils.createLineBasedFile(file, data);
+            csq = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
+            final List<String> lines = IOUtils.readLines(csq);
+            assertEquals(Arrays.asList(data), lines);
+        } finally {
+            TestUtils.deleteFile(file);
+        }
+    }
+
+    @Test
+    public void testReadLines_CharSequenceAsStringBuilder() throws IOException {
+        final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
+        StringBuilder csq = null;
+        try {
+            final String[] data = {"hello", "/u1234", "", "this is", "some text"};
+            TestUtils.createLineBasedFile(file, data);
+            csq = new StringBuilder(new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8));
+            final List<String> lines = IOUtils.readLines(csq);
+            assertEquals(Arrays.asList(data), lines);
+        } finally {
+            TestUtils.deleteFile(file);
+        }
+    }
+
+    @Test
     public void testReadLines_InputStream() throws Exception {
         final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         InputStream in = null;
@@ -1058,7 +1088,6 @@ public class IOUtilsTest {
         try {
             final String[] data = {"hello", "/u1234", "", "this is", "some text"};
             TestUtils.createLineBasedFile(file, data);
-
             in = new InputStreamReader(Files.newInputStream(file.toPath()));
             final List<String> lines = IOUtils.readLines(in);
             assertEquals(Arrays.asList(data), lines);
