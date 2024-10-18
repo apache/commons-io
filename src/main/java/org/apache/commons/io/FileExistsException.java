@@ -32,7 +32,7 @@ public class FileExistsException extends IOException {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Default Constructor.
+     * Constructs a new instance.
      */
     public FileExistsException() {
     }
