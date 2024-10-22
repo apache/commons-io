@@ -37,10 +37,6 @@ import org.apache.commons.io.input.BOMInputStream;
  * <p>
  * Various accept/reject methods allow for specifying which classes can be deserialized.
  * </p>
- * // *
- * <p>
- * // * <b>Reading safely</b> // *
- * </p>
  * <h2>Reading safely</h2>
  * <p>
  * Here is the only way to safely read a HashMap of String keys and Integer values:
