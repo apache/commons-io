@@ -58,7 +58,7 @@ public class FileSystemTest {
             assertTrue(fs.isLegalFileName("0"), fs.name()); // Assume simple name always legal
             for (final String candidate : fs.getReservedFileNames()) {
                 // Reserved file names are not legal
-                assertFalse(fs.isLegalFileName(candidate));
+                assertFalse(fs.isLegalFileName(candidate), candidate);
             }
         }
     }

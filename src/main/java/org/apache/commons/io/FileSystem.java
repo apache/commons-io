@@ -76,20 +76,27 @@ public enum FileSystem {
      * @see <a href="https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea#consoles">
      *      CreateFileA function - Consoles (microsoft.com)</a>
      */
+    // @formatter:off
     WINDOWS(4096, false, true,
             255, 32000, // KEEP THIS ARRAY SORTED!
             new int[] {
                     // KEEP THIS ARRAY SORTED!
-                    // @formatter:off
                     // ASCII NUL
                     0,
                     // 1-31 may be allowed in file streams
                     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
                     29, 30, 31,
                     '"', '*', '/', ':', '<', '>', '?', '\\', '|'
-                    // @formatter:on
-            }, new String[] { "AUX", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "CON", "CONIN$", "CONOUT$",
-                            "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9", "NUL", "PRN" }, true, true, '\\');
+            }, new String[] {
+                    "AUX",
+                    "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
+                    "COM²", "COM³", "COM¹", // Yes, that's the order in Unicode
+                    "CON", "CONIN$", "CONOUT$",
+                    "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9",
+                    "LPT²", "LPT³", "LPT¹", // Yes, that's the order in Unicode
+                    "NUL", "PRN"
+            }, true, true, '\\');
+    // @formatter:on
 
     /**
      * <p>
@@ -331,6 +338,7 @@ public enum FileSystem {
         this.maxPathLength = maxPathLength;
         this.illegalFileNameChars = Objects.requireNonNull(illegalFileNameChars, "illegalFileNameChars");
         this.reservedFileNames = Objects.requireNonNull(reservedFileNames, "reservedFileNames");
+        //Arrays.sort(this.reservedFileNames);
         this.reservedFileNamesExtensions = reservedFileNamesExtensions;
         this.caseSensitive = caseSensitive;
         this.casePreserving = casePreserving;
