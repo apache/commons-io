@@ -108,7 +108,8 @@ public enum RandomAccessFileMode {
                     }
                     break;
                 default:
-                    // skip
+                    // explicit case skip (spotbugs)
+                    continue;
                 }
             }
         }
@@ -116,7 +117,7 @@ public enum RandomAccessFileMode {
     }
 
     /**
-     * Gets the enum value for the given mode, one of one of {@value #R}, {@value #RW}, {@value #RWD}, or {@value #RWS}.
+     * Gets the {@link RandomAccessFileMode} value for the given mode, one of {@value #R}, {@value #RW}, {@value #RWD}, or {@value #RWS}.
      *
      * @param mode one of {@value #R}, {@value #RW}, {@value #RWD}, or {@value #RWS}.
      * @return A RandomAccessFileMode.
