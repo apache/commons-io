@@ -194,7 +194,7 @@ limitations under the License.
         <p>
             See the
             <a href="apidocs/index.html?org/apache/commons/io/filefilter/package-summary.html">filefilter</a>
-            package javadoc for more details.
+            package Javadoc for more details.
         </p>
     </section>
     <section name="File comparators">
@@ -208,7 +208,7 @@ limitations under the License.
         <p>
             See the
             <a href="apidocs/index.html?org/apache/commons/io/comparator/package-summary.html">comparator</a>
-            package javadoc for more details.
+            package Javadoc for more details.
         </p>
     </section>
     <section name="Safe Deserialization">
@@ -220,7 +220,7 @@ limitations under the License.
       </p>
       <source>
         ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
-          .setPath(Paths.get("MyFile.obj"))
+          .setPath(Paths.get("MyFile.ser"))
           .get();
         vois.accept(HashMap.class, Number.class, Integer.class);
         HashMap&lt;String, Integer&gt; map2 = (HashMap&lt;String, Integer&gt;) vois.readObject();
@@ -269,7 +269,7 @@ limitations under the License.
             See the
             <a href="apidocs/index.html?org/apache/commons/io/input/package-summary.html">input</a> or
             <a href="apidocs/index.html?org/apache/commons/io/output/package-summary.html">output</a>
-            package javadoc for more details.
+            package Javadoc for more details.
         </p>
     </section>
   </body>
