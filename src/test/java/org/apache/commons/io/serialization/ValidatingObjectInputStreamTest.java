@@ -34,7 +34,6 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.serialization.ValidatingObjectInputStream.Builder;
-import org.apache.commons.io.serialization.ValidatingObjectInputStream.ObjectStreamClassPredicate;
 import org.apache.commons.lang3.SerializationUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
