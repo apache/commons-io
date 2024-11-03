@@ -61,11 +61,15 @@ public class MoreComplexObjectTest extends AbstractCloseableListTest {
      */
     @Test
     public void testTrustJavaIncludingArrays() throws IOException, ClassNotFoundException {
+        // @formatter:off
         assertSerialization(addCloseable(
-                new ValidatingObjectInputStream(inputStream)
+                ValidatingObjectInputStream.builder()
+                .setInputStream(inputStream)
                 .accept(MoreComplexObject.class)
                 .accept("java.*", "[Ljava.*")
+                .get()
         ));
+        // @formatter:on
     }
 
     /**
@@ -74,11 +78,15 @@ public class MoreComplexObjectTest extends AbstractCloseableListTest {
      */
     @Test
     public void testTrustJavaLang() throws IOException, ClassNotFoundException {
+        // @formatter:off
         assertSerialization(addCloseable(
-                new ValidatingObjectInputStream(inputStream)
+                ValidatingObjectInputStream.builder()
+                .setInputStream(inputStream)
                 .accept(MoreComplexObject.class, ArrayList.class, Random.class)
                 .accept("java.lang.*", "[Ljava.lang.*")
+                .get()
         ));
+        // @formatter:on
     }
 
     /**
@@ -94,10 +102,14 @@ public class MoreComplexObjectTest extends AbstractCloseableListTest {
                 "org.codehaus.groovy.runtime.MethodClosure",
                 "org.springframework.beans.factory.ObjectFactory"
         };
+        // @formatter:off
         assertSerialization(addCloseable(
-                new ValidatingObjectInputStream(inputStream)
+                ValidatingObjectInputStream.builder()
+                .setInputStream(inputStream)
                 .accept("*")
                 .reject(blacklist)
+                .get()
         ));
+        // @formatter:on
     }
 }
