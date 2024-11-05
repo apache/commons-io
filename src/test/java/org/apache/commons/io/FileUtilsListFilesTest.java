@@ -16,20 +16,6 @@
  */
 package org.apache.commons.io;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.function.Uncheck;
@@ -37,6 +23,19 @@ import org.apache.commons.lang3.function.Consumers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests FileUtils.listFiles() methods.
@@ -220,6 +219,49 @@ public class FileUtilsListFilesTest {
             assertFalse(list.contains(xFile), list::toString);
         }
         assertEquals(4, list.size());
+    }
+
+    @Test
+    public void testListFilesWithDeletionThreaded() throws java.util.concurrent.ExecutionException, InterruptedException {
+        // test for IO-856
+        // create random directory in tmp, create the directory if it does not exist
+        final File dir = FileUtils.getTempDirectory();
+        if (!dir.exists()) {
+            if (!dir.mkdirs()) {
+                throw new RuntimeException("could not create image file path: " + dir.getAbsolutePath());
+            }
+        }
+        final int waitTime = 10000;
+        final CompletableFuture<Void> c1 = java.util.concurrent.CompletableFuture.runAsync(() -> {
+            long endTime = System.currentTimeMillis() + waitTime;
+            while (System.currentTimeMillis() < endTime) {
+                final File file = new File(dir.getAbsolutePath(), java.util.UUID.randomUUID() + ".deletetester");
+                file.deleteOnExit();
+                try {
+                    new BufferedOutputStream(java.nio.file.Files.newOutputStream(file.toPath())).write("TEST".getBytes(java.nio.charset.StandardCharsets.UTF_8));
+                } catch (Exception e) {
+                    fail("could not create test file: " + file.getAbsolutePath(), e);
+                }
+                if (!file.delete()) {
+                    fail("could not delete test file: " + file.getAbsolutePath());
+                }
+            }
+        });
+
+        final CompletableFuture<Void> c2 = java.util.concurrent.CompletableFuture.runAsync(() -> {
+            long endTime = System.currentTimeMillis() + waitTime;
+            try {
+                while (System.currentTimeMillis() < endTime) {
+                    FileUtils.listFiles(dir, new String[]{"\\.deletetester"}, false);
+                }
+            } catch (Exception e) {
+                fail("this should not happen", e);
+            }
+        });
+
+        // wait for the threads to finish
+        c1.get();
+        c2.get();
     }
 
 }
