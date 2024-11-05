@@ -20,7 +20,7 @@ import java.io.IOException;
 
 /**
  * The XmlStreamReaderException is thrown by the XmlStreamReader constructors if
- * the charset encoding can not be determined according to the XML 1.0
+ * the charset encoding cannot be determined according to the XML 1.0
  * specification and RFC 3023.
  * <p>
  * The exception returns the unconsumed InputStream to allow the application to

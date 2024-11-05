@@ -136,7 +136,7 @@ public class AutoCloseInputStream extends ProxyInputStream {
      * first called.
      * </p>
      *
-     * @throws IOException if the underlying input stream can not be closed
+     * @throws IOException if the underlying input stream cannot be closed
      */
     @Override
     public void close() throws IOException {

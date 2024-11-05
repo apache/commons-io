@@ -212,7 +212,7 @@ public class XmlStreamReaderTest {
     private void testAlternateDefaultEncoding(final String streamEnc, final String alternateEnc, final XmlStreamReader xmlReader) {
         assertEquals(xmlReader.getDefaultEncoding(), alternateEnc);
         if (!streamEnc.equals(UTF_16)) {
-            // we can not assert things here because UTF-8, US-ASCII and
+            // we cannot assert things here because UTF-8, US-ASCII and
             // ISO-8859-1 look alike for the chars used for detection
             // (niallp 2010-10-06 - I re-instated the check below - the tests(6) passed)
             final String enc = alternateEnc != null ? alternateEnc : streamEnc;
@@ -449,7 +449,7 @@ public class XmlStreamReaderTest {
         try (InputStream is = getXmlInputStream(bomEnc, prologEnc == null ? XML1 : XML3, streamEnc, prologEnc);
             XmlStreamReader xmlReader = new XmlStreamReader(is, cT, false)) {
             if (!streamEnc.equals(UTF_16)) {
-                // we can not assert things here because UTF-8, US-ASCII and
+                // we cannot assert things here because UTF-8, US-ASCII and
                 // ISO-8859-1 look alike for the chars used for detection
                 // (niallp 2010-10-06 - I re-instated the check below and removed the 2 tests that failed)
                 assertEquals(xmlReader.getEncoding(), streamEnc);
