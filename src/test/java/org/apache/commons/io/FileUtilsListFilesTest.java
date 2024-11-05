@@ -35,7 +35,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Tests FileUtils.listFiles() methods.
@@ -210,7 +214,8 @@ public class FileUtilsListFilesTest {
         final String[] extensions = {"xml", "txt"};
         final List<File> list;
         final File xFile = new File(temporaryFolder, "x.xml");
-        xFile.createNewFile();
+        if(!xFile.createNewFile())
+            fail("could not create test file: " + xFile);
         final Collection<File> files = FileUtils.listFiles(temporaryFolder, extensions, true);
         assertEquals(5, files.size());
         try (Stream<File> stream = Uncheck.get(() -> FileUtils.streamFiles(temporaryFolder, true, extensions))) {
@@ -228,7 +233,7 @@ public class FileUtilsListFilesTest {
         final File dir = FileUtils.getTempDirectory();
         if (!dir.exists()) {
             if (!dir.mkdirs()) {
-                throw new RuntimeException("could not create image file path: " + dir.getAbsolutePath());
+                fail("could not create image file path: " + dir.getAbsolutePath());
             }
         }
         final int waitTime = 10000;
