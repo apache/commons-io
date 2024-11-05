@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -227,7 +228,7 @@ public class FileUtilsListFilesTest {
     }
 
     @Test
-    public void testListFilesWithDeletionThreaded() throws java.util.concurrent.ExecutionException, InterruptedException {
+    public void testListFilesWithDeletionThreaded() throws ExecutionException, InterruptedException {
         // test for IO-856
         // create random directory in tmp, create the directory if it does not exist
         final File dir = FileUtils.getTempDirectory();
@@ -237,7 +238,7 @@ public class FileUtilsListFilesTest {
             }
         }
         final int waitTime = 10000;
-        final CompletableFuture<Void> c1 = java.util.concurrent.CompletableFuture.runAsync(() -> {
+        final CompletableFuture<Void> c1 = CompletableFuture.runAsync(() -> {
             long endTime = System.currentTimeMillis() + waitTime;
             while (System.currentTimeMillis() < endTime) {
                 final File file = new File(dir.getAbsolutePath(), java.util.UUID.randomUUID() + ".deletetester");
@@ -253,7 +254,7 @@ public class FileUtilsListFilesTest {
             }
         });
 
-        final CompletableFuture<Void> c2 = java.util.concurrent.CompletableFuture.runAsync(() -> {
+        final CompletableFuture<Void> c2 = CompletableFuture.runAsync(() -> {
             long endTime = System.currentTimeMillis() + waitTime;
             try {
                 while (System.currentTimeMillis() < endTime) {
