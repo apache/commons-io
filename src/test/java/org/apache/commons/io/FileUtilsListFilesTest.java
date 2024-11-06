@@ -217,8 +217,9 @@ public class FileUtilsListFilesTest {
         final String[] extensions = {"xml", "txt"};
         final List<File> list;
         final File xFile = new File(temporaryFolder, "x.xml");
-        if(!xFile.createNewFile())
+        if(!xFile.createNewFile()) {
             fail("could not create test file: " + xFile);
+        }
         final Collection<File> files = FileUtils.listFiles(temporaryFolder, extensions, true);
         assertEquals(5, files.size());
         try (Stream<File> stream = Uncheck.get(() -> FileUtils.streamFiles(temporaryFolder, true, extensions))) {
