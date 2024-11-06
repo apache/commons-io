@@ -413,9 +413,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public byte[] getByteArray(final long position, final int length) throws IOException {
-            try (RandomAccessFile raf = RandomAccessFileMode.READ_ONLY.create(origin)) {
-                return RandomAccessFiles.read(raf, position, length);
-            }
+            return RandomAccessFileMode.READ_ONLY.apply(origin, raf -> RandomAccessFiles.read(raf, position, length));
         }
 
         @Override
