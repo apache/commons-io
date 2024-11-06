@@ -27,6 +27,7 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -244,7 +245,7 @@ public class FileUtilsListFilesTest {
                 final File file = new File(dir.getAbsolutePath(), java.util.UUID.randomUUID() + ".deletetester");
                 file.deleteOnExit();
                 try {
-                    new BufferedOutputStream(java.nio.file.Files.newOutputStream(file.toPath())).write("TEST".getBytes(java.nio.charset.StandardCharsets.UTF_8));
+                    new BufferedOutputStream(java.nio.file.Files.newOutputStream(file.toPath())).write("TEST".getBytes(StandardCharsets.UTF_8));
                 } catch (Exception e) {
                     fail("could not create test file: " + file.getAbsolutePath(), e);
                 }
