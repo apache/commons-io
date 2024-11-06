@@ -16,13 +16,11 @@
  */
 package org.apache.commons.io;
 
-import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.apache.commons.io.filefilter.IOFileFilter;
-import org.apache.commons.io.function.Uncheck;
-import org.apache.commons.lang3.function.Consumers;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -38,11 +36,13 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.function.Uncheck;
+import org.apache.commons.lang3.function.Consumers;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Tests FileUtils.listFiles() methods.
@@ -217,7 +217,7 @@ public class FileUtilsListFilesTest {
         final String[] extensions = {"xml", "txt"};
         final List<File> list;
         final File xFile = new File(temporaryFolder, "x.xml");
-        if(!xFile.createNewFile()) {
+        if (!xFile.createNewFile()) {
             fail("could not create test file: " + xFile);
         }
         final Collection<File> files = FileUtils.listFiles(temporaryFolder, extensions, true);
@@ -242,7 +242,7 @@ public class FileUtilsListFilesTest {
         }
         final int waitTime = 10000;
         final CompletableFuture<Void> c1 = CompletableFuture.runAsync(() -> {
-            long endTime = System.currentTimeMillis() + waitTime;
+            final long endTime = System.currentTimeMillis() + waitTime;
             while (System.currentTimeMillis() < endTime) {
                 final File file = new File(dir.getAbsolutePath(), java.util.UUID.randomUUID() + ".deletetester");
                 file.deleteOnExit();
@@ -258,7 +258,7 @@ public class FileUtilsListFilesTest {
         });
 
         final CompletableFuture<Void> c2 = CompletableFuture.runAsync(() -> {
-            long endTime = System.currentTimeMillis() + waitTime;
+            final long endTime = System.currentTimeMillis() + waitTime;
             try {
                 while (System.currentTimeMillis() < endTime) {
                     FileUtils.listFiles(dir, new String[]{"\\.deletetester"}, false);
