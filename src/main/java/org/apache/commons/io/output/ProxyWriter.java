@@ -33,11 +33,11 @@ public class ProxyWriter extends FilterWriter {
     /**
      * Constructs a new ProxyWriter.
      *
-     * @param proxy  the Writer to delegate to
+     * @param delegate  the Writer to delegate to
      */
-    public ProxyWriter(final Writer proxy) {
-        super(proxy);
-        // the proxy is stored in a protected superclass variable named 'out'
+    public ProxyWriter(final Writer delegate) {
+        // the delegate is stored in a protected superclass variable named 'out'
+        super(delegate);
     }
 
     /**
