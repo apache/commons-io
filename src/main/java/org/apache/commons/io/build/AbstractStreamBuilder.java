@@ -98,7 +98,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      *
      * @return the buffer size, defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
      */
-    protected int getBufferSize() {
+    public int getBufferSize() {
         return bufferSize;
     }
 
@@ -107,7 +107,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      *
      * @return the buffer size default, defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
      */
-    protected int getBufferSizeDefault() {
+    public int getBufferSizeDefault() {
         return bufferSizeDefault;
     }
 
@@ -121,7 +121,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @see AbstractOrigin#getCharSequence(Charset)
      * @since 2.13.0
      */
-    protected CharSequence getCharSequence() throws IOException {
+    public CharSequence getCharSequence() throws IOException {
         return checkOrigin().getCharSequence(getCharset());
     }
 
@@ -139,7 +139,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      *
      * @return the Charset default, defaults to {@link Charset#defaultCharset()}.
      */
-    protected Charset getCharsetDefault() {
+    public Charset getCharsetDefault() {
         return charsetDefault;
     }
 
@@ -152,7 +152,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @see AbstractOrigin#getPath()
      * @since 2.18.0
      */
-    protected File getFile() {
+    public File getFile() {
         return checkOrigin().getFile();
     }
 
@@ -167,7 +167,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @see #getOpenOptions()
      * @since 2.13.0
      */
-    protected InputStream getInputStream() throws IOException {
+    public InputStream getInputStream() throws IOException {
         return checkOrigin().getInputStream(getOpenOptions());
     }
 
@@ -176,7 +176,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      *
      * @return the OpenOption array.
      */
-    protected OpenOption[] getOpenOptions() {
+    public OpenOption[] getOpenOptions() {
         return openOptions;
     }
 
@@ -191,7 +191,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @see #getOpenOptions()
      * @since 2.13.0
      */
-    protected OutputStream getOutputStream() throws IOException {
+    public OutputStream getOutputStream() throws IOException {
         return checkOrigin().getOutputStream(getOpenOptions());
     }
 
@@ -204,7 +204,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @see AbstractOrigin#getPath()
      * @since 2.13.0
      */
-    protected Path getPath() {
+    public Path getPath() {
         return checkOrigin().getPath();
     }
 
@@ -217,7 +217,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @throws IOException                   if an I/O error occurs.
      * @since 2.18.0
      */
-    protected RandomAccessFile getRandomAccessFile() throws IOException {
+    public RandomAccessFile getRandomAccessFile() throws IOException {
         return checkOrigin().getRandomAccessFile(getOpenOptions());
     }
 
@@ -232,7 +232,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @see #getCharset()
      * @since 2.16.0
      */
-    protected Reader getReader() throws IOException {
+    public Reader getReader() throws IOException {
         return checkOrigin().getReader(getCharset());
     }
 
@@ -247,7 +247,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @see #getOpenOptions()
      * @since 2.13.0
      */
-    protected Writer getWriter() throws IOException {
+    public Writer getWriter() throws IOException {
         return checkOrigin().getWriter(getCharset(), getOpenOptions());
     }
 
