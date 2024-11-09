@@ -20,9 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Objects;
-
-import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
  * This class is an example for using an {@link ObservableInputStream}. It creates its own {@link org.apache.commons.io.input.ObservableInputStream.Observer},
@@ -62,12 +61,18 @@ public final class MessageDigestInputStream extends ObservableInputStream {
      * <p>
      * You must specify a message digest algorithm name or instance.
      * </p>
+     * <p>
+     * <em>The MD5 cryptographic algorithm is weak and should not be used.</em>
+     * </p>
      *
      * @see #get()
      */
     // @formatter:on
-    public static class Builder extends AbstractStreamBuilder<MessageDigestInputStream, Builder> {
+    public static class Builder extends AbstractBuilder<Builder> {
 
+        /**
+         * No default by design, call MUST set one.
+         */
         private MessageDigest messageDigest;
 
         /**
@@ -97,16 +102,16 @@ public final class MessageDigestInputStream extends ObservableInputStream {
          * @throws IOException                   if an I/O error occurs.
          * @see #getInputStream()
          */
-        @SuppressWarnings("resource")
         @Override
         public MessageDigestInputStream get() throws IOException {
-            return new MessageDigestInputStream(getInputStream(), messageDigest);
+            setObservers(Arrays.asList(new MessageDigestMaintainingObserver(messageDigest)));
+            return new MessageDigestInputStream(this);
         }
 
         /**
          * Sets the message digest.
          * <p>
-         * The MD5 cryptographic algorithm is weak and should not be used.
+         * <em>The MD5 cryptographic algorithm is weak and should not be used.</em>
          * </p>
          *
          * @param messageDigest the message digest.
@@ -120,7 +125,7 @@ public final class MessageDigestInputStream extends ObservableInputStream {
         /**
          * Sets the name of the name of the message digest algorithm.
          * <p>
-         * The MD5 cryptographic algorithm is weak and should not be used.
+         * <em>The MD5 cryptographic algorithm is weak and should not be used.</em>
          * </p>
          *
          * @param algorithm the name of the algorithm. See the MessageDigest section in the
@@ -173,6 +178,9 @@ public final class MessageDigestInputStream extends ObservableInputStream {
         return new Builder();
     }
 
+    /**
+     * A non-null MessageDigest.
+     */
     private final MessageDigest messageDigest;
 
     /**
@@ -181,23 +189,22 @@ public final class MessageDigestInputStream extends ObservableInputStream {
      * The MD5 cryptographic algorithm is weak and should not be used.
      * </p>
      *
-     * @param inputStream   the stream to calculate the message digest for
-     * @param messageDigest the message digest to use
+     * @param builder A builder use to get the stream to calculate the message digest and the message digest to use
      * @throws NullPointerException if messageDigest is null.
      */
-    private MessageDigestInputStream(final InputStream inputStream, final MessageDigest messageDigest) {
-        super(inputStream, new MessageDigestMaintainingObserver(messageDigest));
-        this.messageDigest = messageDigest;
+    private MessageDigestInputStream(final Builder builder) throws IOException {
+        super(builder);
+        this.messageDigest = Objects.requireNonNull(builder.messageDigest, "builder.messageDigest");
     }
 
     /**
-     * Gets the {@link MessageDigest}, which is being used for generating the checksum.
+     * Gets the {@link MessageDigest}, which is being used for generating the checksum, never null.
      * <p>
      * <em>Note</em>: The checksum will only reflect the data, which has been read so far. This is probably not, what you expect. Make sure, that the complete
      * data has been read, if that is what you want. The easiest way to do so is by invoking {@link #consume()}.
      * </p>
      *
-     * @return the message digest used
+     * @return the message digest used, never null.
      */
     public MessageDigest getMessageDigest() {
         return messageDigest;

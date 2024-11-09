@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
@@ -30,10 +31,13 @@ import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.codec.digest.MessageDigestAlgorithms;
+import org.apache.commons.io.IOExceptionList;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.test.CustomIOException;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -61,6 +65,34 @@ public class MessageDigestInputStreamTest {
         // @formatter:on
     }
 
+    @Test
+    public void testAfterReadConsumer() throws Exception {
+        final AtomicBoolean boolRef = new AtomicBoolean();
+        // @formatter:off
+        try (InputStream bounded = MessageDigestInputStream.builder()
+                .setMessageDigest(MessageDigest.getInstance(MessageDigestAlgorithms.SHA_512))
+                .setCharSequence("Hi")
+                .setAfterRead(i -> boolRef.set(true))
+                .get()) {
+            IOUtils.consume(bounded);
+        }
+        // @formatter:on
+        assertTrue(boolRef.get());
+        // Throwing
+        final String message = "test exception message";
+        // @formatter:off
+        try (InputStream bounded = MessageDigestInputStream.builder()
+                .setMessageDigest(MessageDigest.getInstance(MessageDigestAlgorithms.SHA_512))
+                .setCharSequence("Hi")
+                .setAfterRead(i -> {
+                    throw new CustomIOException(message);
+                })
+                .get()) {
+            assertTrue(assertThrowsExactly(IOExceptionList.class, () -> IOUtils.consume(bounded)).getMessage().contains(message));
+        }
+        // @formatter:on
+    }
+
     @SuppressWarnings("resource")
     @Test
     public void testAvailableAfterClose() throws Exception {
@@ -83,7 +115,9 @@ public class MessageDigestInputStreamTest {
 
     @Test
     public void testNoDefault() throws Exception {
-        assertThrows(IllegalStateException.class, () -> MessageDigestInputStream.builder().get());
+        // No default by design, call MUST set a message digest
+        // Fail-fast, no need to try to process any input origin
+        assertThrows(NullPointerException.class, () -> MessageDigestInputStream.builder().get());
         assertThrows(NullPointerException.class, () -> MessageDigestInputStream.builder().setInputStream(new ByteArrayInputStream(new byte[] { 1 })).get());
     }
 
