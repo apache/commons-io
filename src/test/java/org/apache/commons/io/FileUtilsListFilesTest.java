@@ -246,8 +246,8 @@ public class FileUtilsListFilesTest {
             while (System.currentTimeMillis() < endTime) {
                 final File file = new File(dir.getAbsolutePath(), java.util.UUID.randomUUID() + ".deletetester");
                 file.deleteOnExit();
-                try {
-                    new BufferedOutputStream(Files.newOutputStream(file.toPath())).write("TEST".getBytes(StandardCharsets.UTF_8));
+                try (OutputStream outputStream = Files.newOutputStream(file.toPath())) {
+                    new BufferedOutputStream(outputStream).write("TEST".getBytes(StandardCharsets.UTF_8));
                 } catch (Exception e) {
                     fail("could not create test file: " + file.getAbsolutePath(), e);
                 }
