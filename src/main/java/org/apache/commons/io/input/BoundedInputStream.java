@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.build.AbstractStreamBuilder;
+import org.apache.commons.io.function.IOBiConsumer;
 
 //@formatter:off
 /**
@@ -73,6 +73,15 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  *   .get();
  * }
  * </pre>
+ * <h2>Listening for the max count reached</h2>
+ * <pre>{@code
+ * BoundedInputStream s = BoundedInputStream.builder()
+ *   .setPath(Paths.get("MyFile.xml"))
+ *   .setMaxCount(1024)
+ *   .setOnMaxCount((max, count) -> System.out.printf("Max count %,d reached with a last read count of %,d%n", max, count))
+ *   .get();
+ * }
+ * </pre>
  * @see Builder
  * @since 2.0
  */
@@ -84,13 +93,15 @@ public class BoundedInputStream extends ProxyInputStream {
      *
      * @param <T> The subclass.
      */
-    static abstract class AbstractBuilder<T extends AbstractBuilder<T>> extends AbstractStreamBuilder<BoundedInputStream, T> {
+    static abstract class AbstractBuilder<T extends AbstractBuilder<T>> extends ProxyInputStream.AbstractBuilder<BoundedInputStream, T> {
 
         /** The current count of bytes counted. */
         private long count;
 
         /** The max count of bytes to read. */
         private long maxCount = EOF;
+
+        private IOBiConsumer<Long, Long> onMaxCount = IOBiConsumer.noop();
 
         /** Flag if {@link #close()} should be propagated, {@code true} by default. */
         private boolean propagateClose = true;
@@ -101,6 +112,10 @@ public class BoundedInputStream extends ProxyInputStream {
 
         long getMaxCount() {
             return maxCount;
+        }
+
+        IOBiConsumer<Long, Long> getOnMaxCount() {
+            return onMaxCount;
         }
 
         boolean isPropagateClose() {
@@ -135,6 +150,25 @@ public class BoundedInputStream extends ProxyInputStream {
          */
         public T setMaxCount(final long maxCount) {
             this.maxCount = Math.max(EOF, maxCount);
+            return asThis();
+        }
+
+        /**
+         * Sets the default {@link BoundedInputStream#onMaxLength(long, long)} behavior, {@code null} resets to a NOOP.
+         * <p>
+         * The first Long is the max count of bytes to read. The second Long is the count of bytes read.
+         * </p>
+         * <p>
+         * This does <em>not</em> override a {@code BoundedInputStream} subclass' implementation of the {@link BoundedInputStream#onMaxLength(long, long)}
+         * method.
+         * </p>
+         *
+         * @param onMaxCount the {@link ProxyInputStream#afterRead(int)} behavior.
+         * @return this instance.
+         * @since 2.18.0
+         */
+        public T setOnMaxCount(final IOBiConsumer<Long, Long> onMaxCount) {
+            this.onMaxCount = onMaxCount != null ? onMaxCount : IOBiConsumer.noop();
             return asThis();
         }
 
@@ -218,8 +252,11 @@ public class BoundedInputStream extends ProxyInputStream {
          * </p>
          * <ul>
          * <li>{@link #getInputStream()}</li>
-         * <li>maxCount</li>
-         * <li>propagateClose</li>
+         * <li>{@link #getAfterRead()}</li>
+         * <li>{@link #getCount()}</li>
+         * <li>{@link #getMaxCount()}</li>
+         * <li>{@link #isPropagateClose()}</li>
+         * <li>{@link #getOnMaxCount()}</li>
          * </ul>
          *
          * @return a new instance.
@@ -228,10 +265,9 @@ public class BoundedInputStream extends ProxyInputStream {
          * @throws IOException                   if an I/O error occurs.
          * @see #getInputStream()
          */
-        @SuppressWarnings("resource")
         @Override
         public BoundedInputStream get() throws IOException {
-            return new BoundedInputStream(getInputStream(), getCount(), getMaxCount(), isPropagateClose());
+            return new BoundedInputStream(this);
         }
 
     }
@@ -255,12 +291,22 @@ public class BoundedInputStream extends ProxyInputStream {
     /** The max count of bytes to read. */
     private final long maxCount;
 
+    private final IOBiConsumer<Long, Long> onMaxCount;
+
     /**
      * Flag if close should be propagated.
      *
      * TODO Make final in 3.0.
      */
     private boolean propagateClose = true;
+
+    BoundedInputStream(final Builder builder) throws IOException {
+        super(builder);
+        this.count = builder.getCount();
+        this.maxCount = builder.getMaxCount();
+        this.propagateClose = builder.isPropagateClose();
+        this.onMaxCount = builder.getOnMaxCount();
+    }
 
     /**
      * Constructs a new {@link BoundedInputStream} that wraps the given input stream and is unlimited.
@@ -271,6 +317,14 @@ public class BoundedInputStream extends ProxyInputStream {
     @Deprecated
     public BoundedInputStream(final InputStream in) {
         this(in, EOF);
+    }
+
+    BoundedInputStream(final InputStream inputStream, final Builder builder) {
+        super(inputStream, builder);
+        this.count = builder.getCount();
+        this.maxCount = builder.getMaxCount();
+        this.propagateClose = builder.isPropagateClose();
+        this.onMaxCount = builder.getOnMaxCount();
     }
 
     /**
@@ -284,26 +338,7 @@ public class BoundedInputStream extends ProxyInputStream {
     public BoundedInputStream(final InputStream inputStream, final long maxCount) {
         // Some badly designed methods - e.g. the Servlet API - overload length
         // such that "-1" means stream finished
-        this(inputStream, 0, maxCount, true);
-    }
-
-    /**
-     * Constructs a new {@link BoundedInputStream} that wraps the given input stream and limits it to a certain size.
-     *
-     * @param inputStream    The wrapped input stream.
-     * @param count          The current number of bytes read.
-     * @param maxCount       The maximum number of bytes to return.
-     * @param propagateClose {@code true} if calling {@link #close()} propagates to the {@code close()} method of the underlying stream or {@code false} if it
-     *                       does not.
-     */
-    BoundedInputStream(final InputStream inputStream, final long count, final long maxCount, final boolean propagateClose) {
-        // Some badly designed methods - e.g. the Servlet API - overload length
-        // such that "-1" means stream finished
-        // Can't throw because we start from an InputStream.
-        super(inputStream);
-        this.count = count;
-        this.maxCount = maxCount;
-        this.propagateClose = propagateClose;
+        this(inputStream, builder().setMaxCount(maxCount));
     }
 
     /**
@@ -318,6 +353,7 @@ public class BoundedInputStream extends ProxyInputStream {
         if (n != EOF) {
             count += n;
         }
+        super.afterRead(n);
     }
 
     /**
@@ -422,15 +458,19 @@ public class BoundedInputStream extends ProxyInputStream {
 
     /**
      * A caller has caused a request that would cross the {@code maxLength} boundary.
+     * <p>
+     * Delegates to the consumer set in {@link Builder#setOnMaxCount(IOBiConsumer)}.
+     * </p>
      *
-     * @param maxLength The max count of bytes to read.
+     * @param max The max count of bytes to read.
      * @param count     The count of bytes read.
      * @throws IOException Subclasses may throw.
      * @since 2.12.0
      */
     @SuppressWarnings("unused")
-    protected void onMaxLength(final long maxLength, final long count) throws IOException {
-        // for subclasses
+    // TODO Rename to onMaxCount for 3.0
+    protected void onMaxLength(final long max, final long count) throws IOException {
+        onMaxCount.accept(max, count);
     }
 
     /**
