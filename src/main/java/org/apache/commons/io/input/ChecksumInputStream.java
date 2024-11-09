@@ -24,8 +24,6 @@ import java.util.Objects;
 import java.util.zip.CheckedInputStream;
 import java.util.zip.Checksum;
 
-import org.apache.commons.io.build.AbstractStreamBuilder;
-
 /**
  * Automatically verifies a {@link Checksum} value once the stream is exhausted or the count threshold is reached.
  * <p>
@@ -98,7 +96,7 @@ public final class ChecksumInputStream extends CountingInputStream {
      * @see #get()
      */
     // @formatter:on
-    public static class Builder extends AbstractStreamBuilder<ChecksumInputStream, Builder> {
+    public static class Builder extends AbstractBuilder<ChecksumInputStream, Builder> {
 
         /**
          * There is no default {@link Checksum}, you MUST provide one. This avoids any issue with a default {@link Checksum} being proven deficient or insecure
@@ -141,10 +139,9 @@ public final class ChecksumInputStream extends CountingInputStream {
          * @throws IOException                   if an I/O error occurs.
          * @see #getInputStream()
          */
-        @SuppressWarnings("resource")
         @Override
         public ChecksumInputStream get() throws IOException {
-            return new ChecksumInputStream(getInputStream(), checksum, expectedChecksumValue, countThreshold);
+            return new ChecksumInputStream(this);
         }
 
         /**
@@ -211,17 +208,13 @@ public final class ChecksumInputStream extends CountingInputStream {
     /**
      * Constructs a new instance.
      *
-     * @param in                    the stream to wrap.
-     * @param checksum              a Checksum implementation.
-     * @param expectedChecksumValue the expected checksum.
-     * @param countThreshold        the count threshold to limit how much input is consumed, a negative number means the
-     *                              threshold is unbound.
+     * @param builder build parameters.
      */
-    private ChecksumInputStream(final InputStream in, final Checksum checksum, final long expectedChecksumValue,
-            final long countThreshold) {
-        super(new CheckedInputStream(in, Objects.requireNonNull(checksum, "checksum")));
-        this.countThreshold = countThreshold;
-        this.expectedChecksumValue = expectedChecksumValue;
+    @SuppressWarnings("resource")
+    private ChecksumInputStream(final Builder builder) throws IOException {
+        super(new CheckedInputStream(builder.getInputStream(), Objects.requireNonNull(builder.checksum, "builder.checksum")), builder);
+        this.countThreshold = builder.countThreshold;
+        this.expectedChecksumValue = builder.expectedChecksumValue;
     }
 
     @Override
