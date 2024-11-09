@@ -21,8 +21,6 @@ import static org.apache.commons.io.IOUtils.EOF;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.io.build.AbstractStreamBuilder;
-
 /**
  * Proxy stream that closes and discards the underlying stream as soon as the end of input has been reached or when the stream is explicitly closed. Not even a
  * reference to the underlying stream is kept after it has been closed, so any allocated in-memory buffers can be freed even if the client application still
@@ -62,7 +60,7 @@ public class AutoCloseInputStream extends ProxyInputStream {
      * @since 2.13.0
      */
     // @formatter:on
-    public static class Builder extends AbstractStreamBuilder<AutoCloseInputStream, Builder> {
+    public static class Builder extends AbstractBuilder<AutoCloseInputStream, Builder> {
 
         /**
          * Builds a new {@link AutoCloseInputStream}.
@@ -82,10 +80,9 @@ public class AutoCloseInputStream extends ProxyInputStream {
          * @throws IOException                   if an I/O error occurs.
          * @see #getInputStream()
          */
-        @SuppressWarnings("resource") // Caller closes
         @Override
         public AutoCloseInputStream get() throws IOException {
-            return new AutoCloseInputStream(getInputStream());
+            return new AutoCloseInputStream(this);
         }
 
     }
@@ -112,6 +109,10 @@ public class AutoCloseInputStream extends ProxyInputStream {
         super(ClosedInputStream.ifNull(in));
     }
 
+    private AutoCloseInputStream(final Builder builder) throws IOException {
+        super(builder);
+    }
+
     /**
      * Automatically closes the stream if the end of stream was reached.
      *
@@ -124,6 +125,7 @@ public class AutoCloseInputStream extends ProxyInputStream {
         if (n == EOF) {
             close();
         }
+        super.afterRead(n);
     }
 
     /**
