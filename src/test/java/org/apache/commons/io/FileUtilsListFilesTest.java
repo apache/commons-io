@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -235,10 +236,8 @@ public class FileUtilsListFilesTest {
         // test for IO-856
         // create random directory in tmp, create the directory if it does not exist
         final File dir = FileUtils.getTempDirectory();
-        if (!dir.exists()) {
-            if (!dir.mkdirs()) {
-                fail("could not create image file path: " + dir.getAbsolutePath());
-            }
+        if (!dir.exists() && !dir.mkdirs()) {
+            fail("could not create image file path: " + dir.getAbsolutePath());
         }
         final int waitTime = 10000;
         final CompletableFuture<Void> c1 = CompletableFuture.runAsync(() -> {
@@ -248,7 +247,7 @@ public class FileUtilsListFilesTest {
                 file.deleteOnExit();
                 try (OutputStream outputStream = Files.newOutputStream(file.toPath())) {
                     new BufferedOutputStream(outputStream).write("TEST".getBytes(StandardCharsets.UTF_8));
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     fail("could not create test file: " + file.getAbsolutePath(), e);
                 }
                 if (!file.delete()) {
@@ -261,9 +260,9 @@ public class FileUtilsListFilesTest {
             final long endTime = System.currentTimeMillis() + waitTime;
             try {
                 while (System.currentTimeMillis() < endTime) {
-                    FileUtils.listFiles(dir, new String[]{"\\.deletetester"}, false);
+                    FileUtils.listFiles(dir, new String[] { "\\.deletetester" }, false);
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 fail("this should not happen", e);
             }
         });
