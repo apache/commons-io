@@ -21,9 +21,8 @@ import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Provider;
+import java.util.Arrays;
 import java.util.Objects;
-
-import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
  * Calculates a checksum using a {@link MessageDigest}, for example, a SHA-512 sum.
@@ -57,12 +56,15 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
      *   .setMessageDigest("SHA-512")
      *   .get();}
      * </pre>
+     * <p>
+     * <em>The MD5 cryptographic algorithm is weak and should not be used.</em>
+     * </p>
      *
      * @see #get()
      * @since 2.12.0
      */
     // @formatter:on
-    public static class Builder extends AbstractStreamBuilder<MessageDigestCalculatingInputStream, Builder> {
+    public static class Builder extends AbstractBuilder<Builder> {
 
         private MessageDigest messageDigest;
 
@@ -101,16 +103,16 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
          * @throws IOException                   if an I/O error occurs.
          * @see #getInputStream()
          */
-        @SuppressWarnings("resource")
         @Override
         public MessageDigestCalculatingInputStream get() throws IOException {
-            return new MessageDigestCalculatingInputStream(getInputStream(), messageDigest);
+            setObservers(Arrays.asList(new MessageDigestMaintainingObserver(messageDigest)));
+            return new MessageDigestCalculatingInputStream(this);
         }
 
         /**
          * Sets the message digest.
          * <p>
-         * The MD5 cryptographic algorithm is weak and should not be used.
+         * <em>The MD5 cryptographic algorithm is weak and should not be used.</em>
          * </p>
          *
          * @param messageDigest the message digest.
@@ -122,7 +124,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
         /**
          * Sets the name of the name of the message digest algorithm.
          * <p>
-         * The MD5 cryptographic algorithm is weak and should not be used.
+         * <em>The MD5 cryptographic algorithm is weak and should not be used.</em>
          * </p>
          *
          * @param algorithm the name of the algorithm. See the MessageDigest section in the
@@ -196,6 +198,11 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
     }
 
     private final MessageDigest messageDigest;
+
+    private MessageDigestCalculatingInputStream(final Builder builder) throws IOException {
+        super(builder);
+        this.messageDigest = builder.messageDigest;
+    }
 
     /**
      * Constructs a new instance, which calculates a signature on the given stream, using a {@link MessageDigest} with the "MD5" algorithm.
