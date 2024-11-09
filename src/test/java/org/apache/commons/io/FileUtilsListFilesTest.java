@@ -28,15 +28,18 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.function.Uncheck;
@@ -235,23 +238,25 @@ public class FileUtilsListFilesTest {
     public void testListFilesWithDeletionThreaded() throws ExecutionException, InterruptedException {
         // test for IO-856
         // create random directory in tmp, create the directory if it does not exist
-        final File dir = FileUtils.getTempDirectory();
-        if (!dir.exists() && !dir.mkdirs()) {
-            fail("could not create image file path: " + dir.getAbsolutePath());
+        final Path tempPath = PathUtils.getTempDirectory().resolve("IO-856");
+        final File tempDir = tempPath.toFile();
+        if (!tempDir.exists() && !tempDir.mkdirs()) {
+            fail("Could not create file path: " + tempDir.getAbsolutePath());
         }
-        final int waitTime = 10000;
+        final int waitTime = 10_000;
+        final byte[] bytes = "TEST".getBytes(StandardCharsets.UTF_8);
         final CompletableFuture<Void> c1 = CompletableFuture.runAsync(() -> {
             final long endTime = System.currentTimeMillis() + waitTime;
             while (System.currentTimeMillis() < endTime) {
-                final File file = new File(dir.getAbsolutePath(), java.util.UUID.randomUUID() + ".deletetester");
+                final File file = new File(tempDir.getAbsolutePath(), UUID.randomUUID() + ".deletetester");
                 file.deleteOnExit();
-                try (OutputStream outputStream = Files.newOutputStream(file.toPath())) {
-                    new BufferedOutputStream(outputStream).write("TEST".getBytes(StandardCharsets.UTF_8));
+                try {
+                    Files.write(file.toPath(), bytes);
                 } catch (final Exception e) {
-                    fail("could not create test file: " + file.getAbsolutePath(), e);
+                    fail("Could not create test file: " + file.getAbsolutePath(), e);
                 }
                 if (!file.delete()) {
-                    fail("could not delete test file: " + file.getAbsolutePath());
+                    fail("Could not delete test file: " + file.getAbsolutePath());
                 }
             }
         });
@@ -260,10 +265,10 @@ public class FileUtilsListFilesTest {
             final long endTime = System.currentTimeMillis() + waitTime;
             try {
                 while (System.currentTimeMillis() < endTime) {
-                    FileUtils.listFiles(dir, new String[] { "\\.deletetester" }, false);
+                    FileUtils.listFiles(tempDir, new String[] { "\\.deletetester" }, false);
                 }
             } catch (final Exception e) {
-                fail("this should not happen", e);
+                fail("Should not happen", e);
             }
         });
 
