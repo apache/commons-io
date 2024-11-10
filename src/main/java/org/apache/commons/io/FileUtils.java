@@ -285,17 +285,19 @@ public class FileUtils {
     }
 
     /**
-     * Requires that the given {@link File} object
-     * points to an actual file (not a directory) in the file system,
-     * and throws a {@link FileNotFoundException} if it doesn't.
-     * It throws an IllegalArgumentException if the object points to a directory.
+     * Requires that the given {@link File} exists, and throws a {@link FileNotFoundException} if it doesn't.
      *
      * @param file The {@link File} to check.
-     * @param name The parameter name to use in the exception message.
      * @throws FileNotFoundException if the file does not exist
-     * @throws NullPointerException if the given {@link File} is {@code null}.
-     * @throws IllegalArgumentException if the given {@link File} is not a file.
+     * @throws NullPointerException  if the given {@link File} is {@code null}.
      */
+    private static void checkExists(final File file) throws FileNotFoundException {
+        Objects.requireNonNull(file, "file");
+        if (!file.exists()) {
+            throw new FileNotFoundException(file.toString());
+        }
+    }
+
     private static void checkFileExists(final File file, final String name) throws FileNotFoundException {
         Objects.requireNonNull(file, name);
         if (!file.isFile()) {
@@ -1385,7 +1387,7 @@ public class FileUtils {
      */
     public static void forceDelete(final File file) throws IOException {
         Objects.requireNonNull(file, PROTOCOL_FILE);
-        checkFileExists(file, file.getName()); // fail-fast
+        checkExists(file); // fail-fast
         final Counters.PathCounters deleteCounters;
         try {
             deleteCounters = PathUtils.delete(file.toPath(), PathUtils.EMPTY_LINK_OPTION_ARRAY, StandardDeleteOption.OVERRIDE_READ_ONLY);
