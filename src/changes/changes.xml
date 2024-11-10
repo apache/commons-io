@@ -53,7 +53,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">RandomAccessFileMode.toString() is more helpful for debugging when it inherits from Enum.</action>      
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Fix implicit narrowing conversion in compound assignment in UnsynchronizedBufferedReader.skip(long).</action>
       <action dev="ggregory" type="fix" issue="IO-860" due-to="Stefan Feenstra, Gary Gregory">Missing reserved file names in FileSystem.WINDOWS (superscript digits for COM and LPT).</action>
-      <action dev="ggregory" type="add" issue="IO-856" due-to="Thomas Hartwig, Gary Gregory">FileUtils.listFiles(final File, String[], boolean) can throw NoSuchFileException #697, #699.</action>
+      <action dev="ggregory" type="fix" issue="IO-856" due-to="Thomas Hartwig, Gary Gregory">FileUtils.listFiles(final File, String[], boolean) can throw NoSuchFileException #697, #699.</action>
       <!-- ADD -->
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add @FunctionalInterface to ClassNameMatcher.</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add ValidatingObjectInputStream.Builder and ValidatingObjectInputStream.builder().</action>
