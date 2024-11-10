@@ -42,6 +42,7 @@ import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -1384,12 +1385,13 @@ public class FileUtils {
      */
     public static void forceDelete(final File file) throws IOException {
         Objects.requireNonNull(file, PROTOCOL_FILE);
-
+        checkFileExists(file, file.getName()); // fail-fast
         final Counters.PathCounters deleteCounters;
         try {
-            deleteCounters = PathUtils.delete(
-                    file.toPath(), PathUtils.EMPTY_LINK_OPTION_ARRAY,
-                    StandardDeleteOption.OVERRIDE_READ_ONLY);
+            deleteCounters = PathUtils.delete(file.toPath(), PathUtils.EMPTY_LINK_OPTION_ARRAY, StandardDeleteOption.OVERRIDE_READ_ONLY);
+        } catch (final NoSuchFileException ex) {
+            // Map NIO to IO exception
+            throw new FileNotFoundException("Cannot delete file: " + file);
         } catch (final IOException ex) {
             throw new IOException("Cannot delete file: " + file, ex);
         }

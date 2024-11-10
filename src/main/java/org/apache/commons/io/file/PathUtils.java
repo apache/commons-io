@@ -559,9 +559,9 @@ public final class PathUtils {
     public static PathCounters deleteFile(final Path file, final LinkOption[] linkOptions, final DeleteOption... deleteOptions)
             throws NoSuchFileException, IOException {
         //
-        // TODO Needs clean up
+        // TODO Needs clean up?
         //
-        if (Files.isDirectory(file, linkOptions)) {
+        if (!Files.exists(file, linkOptions) || Files.isDirectory(file, linkOptions)) {
             throw new NoSuchFileException(file.toString());
         }
         final PathCounters pathCounts = Counters.longPathCounters();
