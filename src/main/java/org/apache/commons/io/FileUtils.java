@@ -23,6 +23,7 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -57,6 +58,7 @@ import java.time.chrono.ChronoLocalDate;
 import java.time.chrono.ChronoLocalDateTime;
 import java.time.chrono.ChronoZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -2311,6 +2313,22 @@ public class FileUtils {
         return toList(visitor.getFileList().stream().map(Path::toFile));
     }
 
+    @SuppressWarnings("null")
+    private static void listFiles(final File directory, final List<File> files, final boolean recursive, final FilenameFilter filter) {
+        // Only allocate if you must.
+        final List<File> dirs = recursive ? new ArrayList<>() : null;
+        Arrays.stream(directory.listFiles()).forEach(f -> {
+            if (recursive && f.isDirectory()) {
+                dirs.add(f);
+            } else if (f.isFile() && filter.accept(directory, f.getName())) {
+                files.add(f);
+            }
+        });
+        if (recursive) {
+            dirs.forEach(d -> listFiles(d, files, true, filter));
+        }
+    }
+
     /**
      * Lists files within a given directory (and optionally its subdirectories)
      * which match an array of extensions.
@@ -2322,9 +2340,11 @@ public class FileUtils {
      * @return a collection of {@link File} with the matching files
      */
     public static Collection<File> listFiles(final File directory, final String[] extensions, final boolean recursive) {
-        try (Stream<File> fileStream = Uncheck.get(() -> streamFiles(directory, recursive, extensions))) {
-            return toList(fileStream);
-        }
+        // IO-856: Don't use NIO to path walk, allocate as little as possible while traversing.
+        final List<File> files = new ArrayList<>();
+        final FilenameFilter filter = extensions != null ? new SuffixFileFilter(extensions) : TrueFileFilter.INSTANCE;
+        listFiles(directory, files, recursive, filter);
+        return files;
     }
 
     /**
