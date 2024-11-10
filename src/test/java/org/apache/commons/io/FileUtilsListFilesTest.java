@@ -257,10 +257,10 @@ public class FileUtilsListFilesTest {
                 try {
                     Files.write(file.toPath(), bytes);
                 } catch (final Exception e) {
-                    fail("Could not create test file: " + file.getAbsolutePath(), e);
+                    fail("Could not create test file: '" + file.getAbsolutePath() + "': " + e, e);
                 }
                 if (!file.delete()) {
-                    fail("Could not delete test file: " + file.getAbsolutePath());
+                    fail("Could not delete test file: '" + file.getAbsolutePath() + "'");
                 }
             }
         });
@@ -271,7 +271,9 @@ public class FileUtilsListFilesTest {
                     FileUtils.listFiles(tempDir, new String[] { "\\.deletetester" }, false);
                 }
             } catch (final Exception e) {
-                fail("Should not happen", e);
+                fail("IO-856 test failure: " + e, e);
+                // The exception can be hidden.
+                e.printStackTrace();
             }
         });
         // wait for the threads to finish
