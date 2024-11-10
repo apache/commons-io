@@ -524,7 +524,7 @@ public final class PathUtils {
      * @param file The file to delete.
      * @return A visitor with path counts set to 1 file, 0 directories, and the size of the deleted file.
      * @throws IOException         if an I/O error occurs.
-     * @throws NoSuchFileException if the file is a directory.
+     * @throws NoSuchFileException if the file is a directory
      */
     public static PathCounters deleteFile(final Path file) throws IOException {
         return deleteFile(file, EMPTY_DELETE_OPTION_ARRAY);
@@ -561,7 +561,7 @@ public final class PathUtils {
         //
         // TODO Needs clean up?
         //
-        if (!Files.exists(file, linkOptions) || Files.isDirectory(file, linkOptions)) {
+        if (Files.isDirectory(file, linkOptions)) {
             throw new NoSuchFileException(file.toString());
         }
         final PathCounters pathCounts = Counters.longPathCounters();
