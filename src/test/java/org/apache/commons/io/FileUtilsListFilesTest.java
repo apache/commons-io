@@ -238,7 +238,7 @@ public class FileUtilsListFilesTest {
      * Tests <a href="https://issues.apache.org/jira/browse/IO-856">IO-856</a> ListFiles should not fail on vanishing files.
      */
     @Test
-    @EnabledOnOs(value = OS.WINDOWS)
+    // @EnabledOnOs(value = OS.WINDOWS)
     public void testListFilesWithDeletionThreaded() throws ExecutionException, InterruptedException {
         // test for IO-856
         // create random directory in tmp, create the directory if it does not exist
