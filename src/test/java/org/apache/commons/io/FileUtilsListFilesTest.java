@@ -18,6 +18,7 @@ package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -44,8 +45,6 @@ import org.apache.commons.io.function.Uncheck;
 import org.apache.commons.lang3.function.Consumers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledOnOs;
-import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
@@ -204,12 +203,12 @@ public class FileUtilsListFilesTest {
 
         files = FileUtils.listFiles(temporaryFolder, extensions, true);
         fileNames = filesToFilenames(files);
-        assertEquals(4, fileNames.size());
+        assertEquals(4, fileNames.size(), fileNames::toString);
         assertTrue(fileNames.contains("dummy-file.txt"));
         assertFalse(fileNames.contains("dummy-index.html"));
 
         files = FileUtils.listFiles(temporaryFolder, null, false);
-        assertEquals(2, files.size());
+        assertEquals(2, files.size(), files::toString);
         fileNames = filesToFilenames(files);
         assertTrue(fileNames.contains("dummy-build.xml"));
         assertTrue(fileNames.contains("README"));
@@ -238,7 +237,6 @@ public class FileUtilsListFilesTest {
      * Tests <a href="https://issues.apache.org/jira/browse/IO-856">IO-856</a> ListFiles should not fail on vanishing files.
      */
     @Test
-    @EnabledOnOs(value = OS.WINDOWS)
     public void testListFilesWithDeletionThreaded() throws ExecutionException, InterruptedException {
         // test for IO-856
         // create random directory in tmp, create the directory if it does not exist
@@ -248,14 +246,17 @@ public class FileUtilsListFilesTest {
             fail("Could not create file path: " + tempDir.getAbsolutePath());
         }
         final int waitTime = 10_000;
+        final int maxFiles = 500;
         final byte[] bytes = "TEST".getBytes(StandardCharsets.UTF_8);
         final CompletableFuture<Void> c1 = CompletableFuture.runAsync(() -> {
             final long endTime = System.currentTimeMillis() + waitTime;
-            while (System.currentTimeMillis() < endTime) {
+            int count = 0;
+            while (System.currentTimeMillis() < endTime && count < maxFiles) {
                 final File file = new File(tempDir.getAbsolutePath(), UUID.randomUUID() + ".deletetester");
                 file.deleteOnExit();
                 try {
                     Files.write(file.toPath(), bytes);
+                    count++;
                 } catch (final Exception e) {
                     fail("Could not create test file: '" + file.getAbsolutePath() + "': " + e, e);
                 }
@@ -263,18 +264,24 @@ public class FileUtilsListFilesTest {
                     fail("Could not delete test file: '" + file.getAbsolutePath() + "'");
                 }
             }
+            // System.out.printf("Created %,d%n", count);
         });
         final CompletableFuture<Void> c2 = CompletableFuture.runAsync(() -> {
             final long endTime = System.currentTimeMillis() + waitTime;
+            int max = 0;
             try {
                 while (System.currentTimeMillis() < endTime) {
-                    FileUtils.listFiles(tempDir, new String[] { "\\.deletetester" }, false);
+                    final Collection<File> files = FileUtils.listFiles(tempDir, new String[] { "\\.deletetester" }, false);
+                    assertNotNull(files);
+                    max = Math.max(max, files.size());
                 }
             } catch (final Exception e) {
+                System.out.printf("List size max %,d%n", max);
                 fail("IO-856 test failure: " + e, e);
                 // The exception can be hidden.
                 e.printStackTrace();
             }
+            // System.out.printf("List size max %,d%n", max);
         });
         // wait for the threads to finish
         c1.get();
