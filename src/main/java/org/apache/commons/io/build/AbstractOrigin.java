@@ -34,6 +34,7 @@ import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.nio.file.spi.FileSystemProvider;
 import java.util.Arrays;
 import java.util.Objects;
@@ -715,8 +716,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     /**
      * Gets this origin as a RandomAccessFile, if possible.
      *
-     * @param openOption TODO
-     *
+     * @param openOption options like {@link StandardOpenOption}.
      * @return this origin as a RandomAccessFile, if possible.
      * @throws FileNotFoundException         See {@link RandomAccessFile#RandomAccessFile(File, String)}.
      * @throws UnsupportedOperationException if this method is not implemented in a concrete subclass.
