@@ -40,11 +40,11 @@ public abstract class ProxyReader extends FilterReader {
     /**
      * Constructs a new ProxyReader.
      *
-     * @param proxy  the Reader to delegate to
+     * @param delegate  the Reader to delegate to
      */
-    public ProxyReader(final Reader proxy) {
-        super(proxy);
-        // the proxy is stored in a protected superclass variable named 'in'
+    public ProxyReader(final Reader delegate) {
+        // the delegate is stored in a protected superclass variable named 'in'
+        super(delegate);
     }
 
     /**

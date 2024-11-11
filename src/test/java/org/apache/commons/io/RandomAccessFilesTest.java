@@ -27,49 +27,54 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 /**
  * Tests {@link RandomAccessFiles}.
  */
 public class RandomAccessFilesTest {
 
-    private static final String FILE_NAME_RO_20 = "src/test/resources/org/apache/commons/io/test-file-20byteslength.bin";
-    private static final String FILE_NAME_RO_0 = "src/test/resources/org/apache/commons/io/test-file-empty.bin";
-    private static final String FILE_NAME_RO_0_BIS = "src/test/resources/org/apache/commons/io/test-file-empty2.bin";
+    private static final Path PATH_RO_20 = Paths.get("src/test/resources/org/apache/commons/io/test-file-20byteslength.bin");
+    private static final Path PATH_RO_0 = Paths.get("src/test/resources/org/apache/commons/io/test-file-empty.bin");
+    private static final Path PATH_RO_0_BIS = Paths.get("src/test/resources/org/apache/commons/io/test-file-empty2.bin");
 
-    @Test
-    public void testContentEquals() throws IOException {
-        try (RandomAccessFile raf1 = RandomAccessFileMode.READ_ONLY.create(FILE_NAME_RO_20)) {
-            assertEquals(raf1, raf1);
-            assertTrue(RandomAccessFiles.contentEquals(raf1, raf1));
-        }
+    @ParameterizedTest()
+    @EnumSource(value = RandomAccessFileMode.class)
+    public void testContentEquals(final RandomAccessFileMode mode) throws IOException {
+        mode.accept(PATH_RO_20, raf -> {
+            assertEquals(raf, raf);
+            assertTrue(RandomAccessFiles.contentEquals(raf, raf));
+        });
         // as above, to make sure resources are OK
-        try (RandomAccessFile raf1 = RandomAccessFileMode.READ_ONLY.create(FILE_NAME_RO_20)) {
-            assertEquals(raf1, raf1);
-            assertTrue(RandomAccessFiles.contentEquals(raf1, raf1));
-        }
-        // same 20 bytes
-        try (RandomAccessFile raf1 = RandomAccessFileMode.READ_ONLY.create(FILE_NAME_RO_20);
-                RandomAccessFile raf2 = RandomAccessFileMode.READ_ONLY.create(FILE_NAME_RO_20)) {
+        mode.accept(PATH_RO_20, raf -> {
+            assertEquals(raf, raf);
+            assertTrue(RandomAccessFiles.contentEquals(raf, raf));
+        });
+        // same 20 bytes, 2 RAFs
+        try (RandomAccessFile raf1 = mode.create(PATH_RO_20);
+                RandomAccessFile raf2 = mode.create(PATH_RO_20)) {
             assertTrue(RandomAccessFiles.contentEquals(raf1, raf2));
         }
+        // as above, nested
+        mode.accept(PATH_RO_20, raf1 -> mode.accept(PATH_RO_20, raf2 -> assertTrue(RandomAccessFiles.contentEquals(raf1, raf2))));
         // same empty file
-        try (RandomAccessFile raf1 = RandomAccessFileMode.READ_ONLY.create(FILE_NAME_RO_0);
-                RandomAccessFile raf2 = RandomAccessFileMode.READ_ONLY.create(FILE_NAME_RO_0)) {
+        try (RandomAccessFile raf1 = mode.create(PATH_RO_0);
+                RandomAccessFile raf2 = mode.create(PATH_RO_0)) {
             assertTrue(RandomAccessFiles.contentEquals(raf1, raf2));
             assertTrue(RandomAccessFiles.contentEquals(RandomAccessFiles.reset(raf2), RandomAccessFiles.reset(raf1)));
         }
         // diff empty file
-        try (RandomAccessFile raf1 = RandomAccessFileMode.READ_ONLY.create(FILE_NAME_RO_0);
-                RandomAccessFile raf2 = RandomAccessFileMode.READ_ONLY.create(FILE_NAME_RO_0_BIS)) {
+        try (RandomAccessFile raf1 = mode.create(PATH_RO_0);
+                RandomAccessFile raf2 = mode.create(PATH_RO_0_BIS)) {
             assertTrue(RandomAccessFiles.contentEquals(raf1, raf2));
             assertTrue(RandomAccessFiles.contentEquals(RandomAccessFiles.reset(raf2), RandomAccessFiles.reset(raf1)));
         }
-        try (RandomAccessFile raf1 = RandomAccessFileMode.READ_ONLY.create(FILE_NAME_RO_0);
-                RandomAccessFile raf2 = RandomAccessFileMode.READ_ONLY.create(FILE_NAME_RO_20)) {
+        try (RandomAccessFile raf1 = mode.create(PATH_RO_0);
+                RandomAccessFile raf2 = mode.create(PATH_RO_20)) {
             assertFalse(RandomAccessFiles.contentEquals(raf1, raf2));
             assertFalse(RandomAccessFiles.contentEquals(RandomAccessFiles.reset(raf2), RandomAccessFiles.reset(raf1)));
         }
@@ -85,8 +90,8 @@ public class RandomAccessFilesTest {
             Arrays.fill(bytes2, (byte) 2);
             Files.write(bigFile1, bytes1);
             Files.write(bigFile2, bytes2);
-            try (RandomAccessFile raf1 = RandomAccessFileMode.READ_ONLY.create(bigFile1);
-                    RandomAccessFile raf2 = RandomAccessFileMode.READ_ONLY.create(bigFile2)) {
+            try (RandomAccessFile raf1 = mode.create(bigFile1);
+                    RandomAccessFile raf2 = mode.create(bigFile2)) {
                 assertFalse(RandomAccessFiles.contentEquals(raf1, raf2));
                 assertFalse(RandomAccessFiles.contentEquals(RandomAccessFiles.reset(raf2), RandomAccessFiles.reset(raf1)));
                 assertTrue(RandomAccessFiles.contentEquals(RandomAccessFiles.reset(raf1), RandomAccessFiles.reset(raf1)));
@@ -95,8 +100,8 @@ public class RandomAccessFilesTest {
             final byte[] bytes3 = bytes1.clone();
             bytes3[bytes3.length - 1] = 9;
             Files.write(bigFile3, bytes3);
-            try (RandomAccessFile raf1 = RandomAccessFileMode.READ_ONLY.create(bigFile1);
-                    RandomAccessFile raf3 = RandomAccessFileMode.READ_ONLY.create(bigFile3)) {
+            try (RandomAccessFile raf1 = mode.create(bigFile1);
+                    RandomAccessFile raf3 = mode.create(bigFile3)) {
                 assertFalse(RandomAccessFiles.contentEquals(raf1, raf3));
                 assertFalse(RandomAccessFiles.contentEquals(RandomAccessFiles.reset(raf3), RandomAccessFiles.reset(raf1)));
             }
@@ -108,30 +113,14 @@ public class RandomAccessFilesTest {
         }
     }
 
-    @Test
-    public void testRead() throws IOException {
-        try (final RandomAccessFile raf = RandomAccessFileMode.READ_ONLY.create(FILE_NAME_RO_20)) {
-            final byte[] buffer = RandomAccessFiles.read(raf, 0, 0);
-            assertArrayEquals(new byte[] {}, buffer);
-        }
-        try (final RandomAccessFile raf = RandomAccessFileMode.READ_ONLY.create(FILE_NAME_RO_20)) {
-            final byte[] buffer = RandomAccessFiles.read(raf, 1, 0);
-            assertArrayEquals(new byte[] {}, buffer);
-        }
-        try (final RandomAccessFile raf = RandomAccessFileMode.READ_ONLY.create(FILE_NAME_RO_20)) {
-            final byte[] buffer = RandomAccessFiles.read(raf, 0, 1);
-            assertArrayEquals(new byte[] { '1' }, buffer);
-        }
-        try (final RandomAccessFile raf = RandomAccessFileMode.READ_ONLY.create(FILE_NAME_RO_20)) {
-            final byte[] buffer = RandomAccessFiles.read(raf, 1, 1);
-            assertArrayEquals(new byte[] { '2' }, buffer);
-        }
-        try (final RandomAccessFile raf = RandomAccessFileMode.READ_ONLY.create(FILE_NAME_RO_20)) {
-            final byte[] buffer = RandomAccessFiles.read(raf, 0, 20);
-            assertEquals(20, buffer.length);
-        }
-        try (final RandomAccessFile raf = RandomAccessFileMode.READ_ONLY.create(FILE_NAME_RO_20)) {
-            assertThrows(IOException.class, () -> RandomAccessFiles.read(raf, 0, 21));
-        }
+    @ParameterizedTest()
+    @EnumSource(value = RandomAccessFileMode.class)
+    public void testRead(final RandomAccessFileMode mode) throws IOException {
+        mode.accept(PATH_RO_20, raf -> assertArrayEquals(new byte[] {}, RandomAccessFiles.read(raf, 0, 0)));
+        mode.accept(PATH_RO_20, raf -> assertArrayEquals(new byte[] {}, RandomAccessFiles.read(raf, 1, 0)));
+        mode.accept(PATH_RO_20, raf -> assertArrayEquals(new byte[] { '1' }, RandomAccessFiles.read(raf, 0, 1)));
+        mode.accept(PATH_RO_20, raf -> assertArrayEquals(new byte[] { '2' }, RandomAccessFiles.read(raf, 1, 1)));
+        mode.accept(PATH_RO_20, raf -> assertEquals(20, RandomAccessFiles.read(raf, 0, 20).length));
+        mode.accept(PATH_RO_20, raf -> assertThrows(IOException.class, () -> RandomAccessFiles.read(raf, 0, 21)));
     }
 }

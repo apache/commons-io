@@ -37,11 +37,11 @@ public class ProxyOutputStream extends FilterOutputStream {
     /**
      * Constructs a new ProxyOutputStream.
      *
-     * @param proxy  the OutputStream to delegate to
+     * @param delegate  the OutputStream to delegate to
      */
-    public ProxyOutputStream(final OutputStream proxy) {
-        super(proxy);
-        // the proxy is stored in a protected superclass variable named 'out'
+    public ProxyOutputStream(final OutputStream delegate) {
+        // the delegate is stored in a protected superclass variable named 'out'
+        super(delegate);
     }
 
     /**

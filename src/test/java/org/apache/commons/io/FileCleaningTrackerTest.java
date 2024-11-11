@@ -48,7 +48,7 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
     private File testFile;
     private Path testPath;
 
-    private FileCleaningTracker theInstance;
+    private FileCleaningTracker fileCleaningTracker;
 
     RandomAccessFile createRandomAccessFile() throws FileNotFoundException {
         return RandomAccessFileMode.READ_WRITE.create(testFile);
@@ -78,14 +78,14 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
     public void setUp() {
         testFile = new File(tempDirFile, "file-test.txt");
         testPath = testFile.toPath();
-        theInstance = newInstance();
+        fileCleaningTracker = newInstance();
     }
 
     private String showFailures() {
-        if (theInstance.deleteFailures.size() == 1) {
-            return "[Delete Failed: " + theInstance.deleteFailures.get(0) + "]";
+        if (fileCleaningTracker.deleteFailures.size() == 1) {
+            return "[Delete Failed: " + fileCleaningTracker.deleteFailures.get(0) + "]";
         }
-        return "[Delete Failures: " + theInstance.deleteFailures.size() + "]";
+        return "[Delete Failures: " + fileCleaningTracker.deleteFailures.size() + "]";
     }
 
     @AfterEach
@@ -99,16 +99,16 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
          * not.
          */
         {
-            if (theInstance != null) {
-                theInstance.q = new ReferenceQueue<>();
-                theInstance.trackers.clear();
-                theInstance.deleteFailures.clear();
-                theInstance.exitWhenFinished = false;
-                theInstance.reaper = null;
+            if (fileCleaningTracker != null) {
+                fileCleaningTracker.q = new ReferenceQueue<>();
+                fileCleaningTracker.trackers.clear();
+                fileCleaningTracker.deleteFailures.clear();
+                fileCleaningTracker.exitWhenFinished = false;
+                fileCleaningTracker.reaper = null;
             }
         }
 
-        theInstance = null;
+        fileCleaningTracker = null;
     }
 
     @Test
@@ -125,16 +125,16 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
         assertTrue(tempDirFile.exists());
 
         Object obj = new Object();
-        assertEquals(0, theInstance.getTrackCount());
-        theInstance.track(tempDirFile, obj, FileDeleteStrategy.FORCE);
-        assertEquals(1, theInstance.getTrackCount());
+        assertEquals(0, fileCleaningTracker.getTrackCount());
+        fileCleaningTracker.track(tempDirFile, obj, FileDeleteStrategy.FORCE);
+        assertEquals(1, fileCleaningTracker.getTrackCount());
 
         obj = null;
 
         waitUntilTrackCount();
         pauseForDeleteToComplete(testFile.getParentFile());
 
-        assertEquals(0, theInstance.getTrackCount());
+        assertEquals(0, fileCleaningTracker.getTrackCount());
         assertFalse(new File(testFile.getPath()).exists(), showFailures());
         assertFalse(testFile.getParentFile().exists(), showFailures());
     }
@@ -153,16 +153,16 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
         assertTrue(Files.exists(tempDirPath));
 
         Object obj = new Object();
-        assertEquals(0, theInstance.getTrackCount());
-        theInstance.track(tempDirPath, obj, FileDeleteStrategy.FORCE);
-        assertEquals(1, theInstance.getTrackCount());
+        assertEquals(0, fileCleaningTracker.getTrackCount());
+        fileCleaningTracker.track(tempDirPath, obj, FileDeleteStrategy.FORCE);
+        assertEquals(1, fileCleaningTracker.getTrackCount());
 
         obj = null;
 
         waitUntilTrackCount();
         pauseForDeleteToComplete(testPath.getParent());
 
-        assertEquals(0, theInstance.getTrackCount());
+        assertEquals(0, fileCleaningTracker.getTrackCount());
         assertFalse(Files.exists(testPath), showFailures());
         assertFalse(Files.exists(testPath.getParent()), showFailures());
     }
@@ -174,15 +174,15 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
         assertTrue(tempDirFile.exists());
 
         Object obj = new Object();
-        assertEquals(0, theInstance.getTrackCount());
-        theInstance.track(tempDirFile, obj, null);
-        assertEquals(1, theInstance.getTrackCount());
+        assertEquals(0, fileCleaningTracker.getTrackCount());
+        fileCleaningTracker.track(tempDirFile, obj, null);
+        assertEquals(1, fileCleaningTracker.getTrackCount());
 
         obj = null;
 
         waitUntilTrackCount();
 
-        assertEquals(0, theInstance.getTrackCount());
+        assertEquals(0, fileCleaningTracker.getTrackCount());
         assertTrue(testFile.exists());  // not deleted, as dir not empty
         assertTrue(testFile.getParentFile().exists());  // not deleted, as dir not empty
     }
@@ -194,15 +194,15 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
         assertTrue(tempDirFile.exists());
 
         Object obj = new Object();
-        assertEquals(0, theInstance.getTrackCount());
-        theInstance.track(tempDirFile, obj);
-        assertEquals(1, theInstance.getTrackCount());
+        assertEquals(0, fileCleaningTracker.getTrackCount());
+        fileCleaningTracker.track(tempDirFile, obj);
+        assertEquals(1, fileCleaningTracker.getTrackCount());
 
         obj = null;
 
         waitUntilTrackCount();
 
-        assertEquals(0, theInstance.getTrackCount());
+        assertEquals(0, fileCleaningTracker.getTrackCount());
         assertTrue(testFile.exists());  // not deleted, as dir not empty
         assertTrue(testFile.getParentFile().exists());  // not deleted, as dir not empty
     }
@@ -214,32 +214,32 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
         assertTrue(Files.exists(tempDirPath));
 
         Object obj = new Object();
-        assertEquals(0, theInstance.getTrackCount());
-        theInstance.track(tempDirPath, obj);
-        assertEquals(1, theInstance.getTrackCount());
+        assertEquals(0, fileCleaningTracker.getTrackCount());
+        fileCleaningTracker.track(tempDirPath, obj);
+        assertEquals(1, fileCleaningTracker.getTrackCount());
 
         obj = null;
 
         waitUntilTrackCount();
 
-        assertEquals(0, theInstance.getTrackCount());
+        assertEquals(0, fileCleaningTracker.getTrackCount());
         assertTrue(Files.exists(testPath));  // not deleted, as dir not empty
         assertTrue(Files.exists(testPath.getParent()));  // not deleted, as dir not empty
     }
 
     @Test
     public void testFileCleanerExitWhenFinished_NoTrackAfter() {
-        assertFalse(theInstance.exitWhenFinished);
-        theInstance.exitWhenFinished();
-        assertTrue(theInstance.exitWhenFinished);
-        assertNull(theInstance.reaper);
+        assertFalse(fileCleaningTracker.exitWhenFinished);
+        fileCleaningTracker.exitWhenFinished();
+        assertTrue(fileCleaningTracker.exitWhenFinished);
+        assertNull(fileCleaningTracker.reaper);
 
         final String path = testFile.getPath();
         final Object marker = new Object();
 
-        assertThrows(IllegalStateException.class, () -> theInstance.track(path, marker));
-        assertTrue(theInstance.exitWhenFinished);
-        assertNull(theInstance.reaper);
+        assertThrows(IllegalStateException.class, () -> fileCleaningTracker.track(path, marker));
+        assertTrue(fileCleaningTracker.exitWhenFinished);
+        assertNull(fileCleaningTracker.reaper);
     }
 
     @Test
@@ -252,16 +252,16 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
         RandomAccessFile raf = createRandomAccessFile();
         assertTrue(testFile.exists(), "2-testFile exists");
 
-        assertEquals(0, theInstance.getTrackCount(), "3-Track Count");
-        theInstance.track(path, raf);
-        assertEquals(1, theInstance.getTrackCount(), "4-Track Count");
-        assertFalse(theInstance.exitWhenFinished, "5-exitWhenFinished");
-        assertTrue(theInstance.reaper.isAlive(), "6-reaper.isAlive");
+        assertEquals(0, fileCleaningTracker.getTrackCount(), "3-Track Count");
+        fileCleaningTracker.track(path, raf);
+        assertEquals(1, fileCleaningTracker.getTrackCount(), "4-Track Count");
+        assertFalse(fileCleaningTracker.exitWhenFinished, "5-exitWhenFinished");
+        assertTrue(fileCleaningTracker.reaper.isAlive(), "6-reaper.isAlive");
 
-        assertFalse(theInstance.exitWhenFinished, "7-exitWhenFinished");
-        theInstance.exitWhenFinished();
-        assertTrue(theInstance.exitWhenFinished, "8-exitWhenFinished");
-        assertTrue(theInstance.reaper.isAlive(), "9-reaper.isAlive");
+        assertFalse(fileCleaningTracker.exitWhenFinished, "7-exitWhenFinished");
+        fileCleaningTracker.exitWhenFinished();
+        assertTrue(fileCleaningTracker.exitWhenFinished, "8-exitWhenFinished");
+        assertTrue(fileCleaningTracker.reaper.isAlive(), "9-reaper.isAlive");
 
         raf.close();
         testFile = null;
@@ -270,10 +270,10 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
         waitUntilTrackCount();
         pauseForDeleteToComplete(new File(path));
 
-        assertEquals(0, theInstance.getTrackCount(), "10-Track Count");
+        assertEquals(0, fileCleaningTracker.getTrackCount(), "10-Track Count");
         assertFalse(new File(path).exists(), "11-testFile exists " + showFailures());
-        assertTrue(theInstance.exitWhenFinished, "12-exitWhenFinished");
-        assertFalse(theInstance.reaper.isAlive(), "13-reaper.isAlive");
+        assertTrue(fileCleaningTracker.exitWhenFinished, "12-exitWhenFinished");
+        assertFalse(fileCleaningTracker.reaper.isAlive(), "13-reaper.isAlive");
     }
 
     @Test
@@ -284,11 +284,11 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
         RandomAccessFile r = createRandomAccessFile();
         assertTrue(testFile.exists());
 
-        assertEquals(0, theInstance.getTrackCount());
-        theInstance.track(path, r);
-        assertEquals(1, theInstance.getTrackCount());
-        assertFalse(theInstance.exitWhenFinished);
-        assertTrue(theInstance.reaper.isAlive());
+        assertEquals(0, fileCleaningTracker.getTrackCount());
+        fileCleaningTracker.track(path, r);
+        assertEquals(1, fileCleaningTracker.getTrackCount());
+        assertFalse(fileCleaningTracker.exitWhenFinished);
+        assertTrue(fileCleaningTracker.reaper.isAlive());
 
         r.close();
         testFile = null;
@@ -297,32 +297,32 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
         waitUntilTrackCount();
         pauseForDeleteToComplete(new File(path));
 
-        assertEquals(0, theInstance.getTrackCount());
+        assertEquals(0, fileCleaningTracker.getTrackCount());
         assertFalse(new File(path).exists(), showFailures());
-        assertFalse(theInstance.exitWhenFinished);
-        assertTrue(theInstance.reaper.isAlive());
+        assertFalse(fileCleaningTracker.exitWhenFinished);
+        assertTrue(fileCleaningTracker.reaper.isAlive());
 
-        assertFalse(theInstance.exitWhenFinished);
-        theInstance.exitWhenFinished();
-        for (int i = 0; i < 20 && theInstance.reaper.isAlive(); i++) {
+        assertFalse(fileCleaningTracker.exitWhenFinished);
+        fileCleaningTracker.exitWhenFinished();
+        for (int i = 0; i < 20 && fileCleaningTracker.reaper.isAlive(); i++) {
             TestUtils.sleep(500L);  // allow reaper thread to die
         }
-        assertTrue(theInstance.exitWhenFinished);
-        assertFalse(theInstance.reaper.isAlive());
+        assertTrue(fileCleaningTracker.exitWhenFinished);
+        assertFalse(fileCleaningTracker.reaper.isAlive());
     }
 
     @Test
     public void testFileCleanerExitWhenFinishedFirst() throws Exception {
-        assertFalse(theInstance.exitWhenFinished);
-        theInstance.exitWhenFinished();
-        assertTrue(theInstance.exitWhenFinished);
-        assertNull(theInstance.reaper);
+        assertFalse(fileCleaningTracker.exitWhenFinished);
+        fileCleaningTracker.exitWhenFinished();
+        assertTrue(fileCleaningTracker.exitWhenFinished);
+        assertNull(fileCleaningTracker.reaper);
 
         waitUntilTrackCount();
 
-        assertEquals(0, theInstance.getTrackCount());
-        assertTrue(theInstance.exitWhenFinished);
-        assertNull(theInstance.reaper);
+        assertEquals(0, fileCleaningTracker.getTrackCount());
+        assertTrue(fileCleaningTracker.exitWhenFinished);
+        assertNull(fileCleaningTracker.reaper);
     }
 
     @Test
@@ -330,40 +330,40 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
         final String path = testFile.getPath();
 
         assertFalse(testFile.exists());
-        RandomAccessFile r = createRandomAccessFile();
+        RandomAccessFile raf = createRandomAccessFile();
         assertTrue(testFile.exists());
 
-        assertEquals(0, theInstance.getTrackCount());
-        theInstance.track(path, r);
-        assertEquals(1, theInstance.getTrackCount());
+        assertEquals(0, fileCleaningTracker.getTrackCount());
+        fileCleaningTracker.track(path, raf);
+        assertEquals(1, fileCleaningTracker.getTrackCount());
 
-        r.close();
+        raf.close();
         testFile = null;
-        r = null;
+        raf = null;
 
         waitUntilTrackCount();
         pauseForDeleteToComplete(new File(path));
 
-        assertEquals(0, theInstance.getTrackCount());
+        assertEquals(0, fileCleaningTracker.getTrackCount());
         assertFalse(new File(path).exists(), showFailures());
     }
     @Test
     public void testFileCleanerNull() {
-        assertThrows(NullPointerException.class, () -> theInstance.track((File) null, new Object()));
-        assertThrows(NullPointerException.class, () -> theInstance.track((File) null, new Object(), FileDeleteStrategy.NORMAL));
-        assertThrows(NullPointerException.class, () -> theInstance.track((String) null, new Object()));
-        assertThrows(NullPointerException.class, () -> theInstance.track((String) null, new Object(), FileDeleteStrategy.NORMAL));
+        assertThrows(NullPointerException.class, () -> fileCleaningTracker.track((File) null, new Object()));
+        assertThrows(NullPointerException.class, () -> fileCleaningTracker.track((File) null, new Object(), FileDeleteStrategy.NORMAL));
+        assertThrows(NullPointerException.class, () -> fileCleaningTracker.track((String) null, new Object()));
+        assertThrows(NullPointerException.class, () -> fileCleaningTracker.track((String) null, new Object(), FileDeleteStrategy.NORMAL));
     }
 
     private void waitUntilTrackCount() throws Exception {
         System.gc();
         TestUtils.sleep(500);
         int count = 0;
-        while (theInstance.getTrackCount() != 0 && count++ < 5) {
+        while (fileCleaningTracker.getTrackCount() != 0 && count++ < 5) {
             List<String> list = new ArrayList<>();
             try {
                 long i = 0;
-                while (theInstance.getTrackCount() != 0) {
+                while (fileCleaningTracker.getTrackCount() != 0) {
                     list.add(
                         "A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String "
                             + i++);
@@ -374,7 +374,7 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
             System.gc();
             TestUtils.sleep(1000);
         }
-        if (theInstance.getTrackCount() != 0) {
+        if (fileCleaningTracker.getTrackCount() != 0) {
             throw new IllegalStateException("Your JVM is not releasing References, try running the test with less memory (-Xmx)");
         }
 

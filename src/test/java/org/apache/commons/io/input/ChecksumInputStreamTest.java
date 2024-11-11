@@ -19,15 +19,18 @@ package org.apache.commons.io.input;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.zip.Adler32;
 import java.util.zip.CRC32;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.test.CustomIOException;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -37,6 +40,36 @@ public class ChecksumInputStreamTest {
 
     private ChecksumInputStream createInputStream() throws IOException {
         return ChecksumInputStream.builder().setCharSequence("Hi").setChecksum(new CRC32()).get();
+    }
+
+    @Test
+    public void testAfterReadConsumer() throws Exception {
+        final AtomicBoolean boolRef = new AtomicBoolean();
+        // @formatter:off
+        try (InputStream bounded = ChecksumInputStream.builder()
+                .setCharSequence("Hi")
+                .setChecksum(new CRC32())
+                .setExpectedChecksumValue(1293356558)
+                .setAfterRead(i -> boolRef.set(true))
+                .get()) {
+            IOUtils.consume(bounded);
+        }
+        // @formatter:on
+        assertTrue(boolRef.get());
+        // Throwing
+        final String message = "test exception message";
+        // @formatter:off
+        try (InputStream bounded = ChecksumInputStream.builder()
+                .setCharSequence("Hi")
+                .setChecksum(new CRC32())
+                .setExpectedChecksumValue(1293356558)
+                .setAfterRead(i -> {
+                    throw new CustomIOException(message);
+                })
+                .get()) {
+            assertEquals(message, assertThrowsExactly(CustomIOException.class, () -> IOUtils.consume(bounded)).getMessage());
+        }
+        // @formatter:on
     }
 
     @SuppressWarnings("resource")

@@ -36,6 +36,9 @@ import java.nio.file.StandardOpenOption;
 import org.apache.commons.io.RandomAccessFileMode;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests {@link RandomAccessFileInputStream}.
+ */
 public class RandomAccessFileInputStreamTest {
 
     private static final String DATA_FILE_NAME = "src/test/resources/org/apache/commons/io/test-file-iso8859-1.bin";

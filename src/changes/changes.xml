@@ -53,6 +53,8 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">RandomAccessFileMode.toString() is more helpful for debugging when it inherits from Enum.</action>      
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Fix implicit narrowing conversion in compound assignment in UnsynchronizedBufferedReader.skip(long).</action>
       <action dev="ggregory" type="fix" issue="IO-860" due-to="Stefan Feenstra, Gary Gregory">Missing reserved file names in FileSystem.WINDOWS (superscript digits for COM and LPT).</action>
+      <action dev="ggregory" type="fix" issue="IO-856" due-to="Thomas Hartwig, Gary Gregory">FileUtils.listFiles(final File, String[], boolean) can throw NoSuchFileException #697, #699.</action>
+      <action dev="ggregory" type="fix" issue="IO-859" due-to="JD Dean, Gary Gregory">FileUtils.forceDelete on non-existent file on Windows throws IOException rather than FileNotFoundException.</action>
       <!-- ADD -->
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add @FunctionalInterface to ClassNameMatcher.</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add ValidatingObjectInputStream.Builder and ValidatingObjectInputStream.builder().</action>
@@ -62,9 +64,23 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add FileAlterationObserver.Builder() and deprecate most constructors.</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IOUtils.readLines(CharSequence).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add ValidatingObjectInputStream.ObjectStreamClassPredicate to allow configuration reuse.</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add RandomAccessFileMode.accept(Path, IOConsumer&lt;RandomAccessFile&gt;).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add RandomAccessFileMode.apply(Path, IOFunction&lt;RandomAccessFile&gt;, T).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IOIntConsumer.</action>
+      <action dev="ggregory" type="add" issue="IO-861" due-to="Gary Gregory">Add ProxyInputStream.AbstractBuilder. Supports setting a consumer for ProxyInputStream.afterRead(int).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add support to AutoCloseInputStream for setting a consumer for ProxyInputStream.afterRead(int).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add support to BOMInputStream for setting a consumer for ProxyInputStream.afterRead(int).</action>
+      <action dev="ggregory" type="add" issue="IO-861" due-to="Gary Gregory">Add support to BoundedInputStream for setting a consumer for ProxyInputStream.afterRead(int).</action>
+      <action dev="ggregory" type="add" issue="IO-861" due-to="Gary Gregory">Add support to BoundedInputStream for setting a consumer for BoundedInputStream.onMaxLength(long, long).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add support to ChecksumInputStream for setting a consumer for ProxyInputStream.afterRead(int).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add support to ThrottledInputStream for setting a consumer for ProxyInputStream.afterRead(int).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add support to ObservableInputStream for setting a consumer for ProxyInputStream.afterRead(int).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add support to MessageDigestCalculatingInputStream for setting a consumer for ProxyInputStream.afterRead(int).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add support to MessageDigestInputStream for setting a consumer for ProxyInputStream.afterRead(int).</action>
       <!-- UPDATE -->
       <action dev="ggregory" type="update"             due-to="Gary Gregory">Bump org.apache.commons:commons-parent from 74 to 78 #670, #676, #679, #688.</action>
-      <action dev="ggregory" type="update"             due-to="Gary Gregory">Bump commons.bytebuddy.version from 1.15.1 to 1.15.8 #672, #673, #685, #686, #694, #696.</action>
+      <action dev="ggregory" type="update"             due-to="Gary Gregory">Bump commons.bytebuddy.version from 1.15.1 to 1.15.10 #672, #673, #685, #686, #694, #696, #698.</action>
+      <action dev="ggregory" type="update"             due-to="Gary Gregory">Update AbstractStreamBuilder getters from protected to public.</action>
     </release>
     <release version="2.17.0" date="2024-09-15" description="Version 2.17.0: Java 8 is required.">
       <!-- ADD --> 

@@ -44,6 +44,42 @@ import org.apache.commons.io.function.IOConsumer;
 public class ObservableInputStream extends ProxyInputStream {
 
     /**
+     * For subclassing builders from {@link BoundedInputStream} subclassses.
+     *
+     * @param <T> The subclass.
+     * @since 2.18.0
+     */
+    public static abstract class AbstractBuilder<T extends AbstractBuilder<T>> extends ProxyInputStream.AbstractBuilder<ObservableInputStream, T> {
+
+        private List<Observer> observers;
+
+        /**
+         * Sets the list of observer callbacks.
+         *
+         * @param observers The list of observer callbacks.
+         */
+        public void setObservers(final List<Observer> observers) {
+            this.observers = observers;
+        }
+
+    }
+
+
+    /**
+     * Builds instances of {@link ObservableInputStream}.
+     *
+     * @since 2.18.0
+     */
+    public static class Builder extends AbstractBuilder<Builder> {
+
+        @Override
+        public ObservableInputStream get() throws IOException {
+            return new ObservableInputStream(this);
+        }
+
+    }
+
+    /**
      * Abstracts observer callback for {@link ObservableInputStream}s.
      */
     public static abstract class Observer {
@@ -108,6 +144,11 @@ public class ObservableInputStream extends ProxyInputStream {
     }
 
     private final List<Observer> observers;
+
+    ObservableInputStream(final AbstractBuilder builder) throws IOException {
+        super(builder);
+        this.observers = builder.observers;
+    }
 
     /**
      * Constructs a new ObservableInputStream for the given InputStream.

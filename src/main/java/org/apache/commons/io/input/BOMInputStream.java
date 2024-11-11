@@ -27,7 +27,6 @@ import java.util.Objects;
 
 import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
  * This class is used to wrap a stream that includes an encoded {@link ByteOrderMark} as its first bytes.
@@ -125,7 +124,7 @@ public class BOMInputStream extends ProxyInputStream {
      * @since 2.12.0
      */
     // @formatter:on
-    public static class Builder extends AbstractStreamBuilder<BOMInputStream, Builder> {
+    public static class Builder extends AbstractBuilder<BOMInputStream, Builder> {
 
         private static final ByteOrderMark[] DEFAULT = { ByteOrderMark.UTF_8 };
 
@@ -165,10 +164,9 @@ public class BOMInputStream extends ProxyInputStream {
          * @throws IOException                   if an I/O error occurs.
          * @see #getInputStream()
          */
-        @SuppressWarnings("resource")
         @Override
         public BOMInputStream get() throws IOException {
-            return new BOMInputStream(getInputStream(), include, byteOrderMarks);
+            return new BOMInputStream(this);
         }
 
         /**
@@ -228,6 +226,18 @@ public class BOMInputStream extends ProxyInputStream {
     private final boolean include;
     private boolean markedAtStart;
     private int markFbIndex;
+
+    private BOMInputStream(final Builder builder) throws IOException {
+        super(builder);
+        if (IOUtils.length(builder.byteOrderMarks) == 0) {
+            throw new IllegalArgumentException("No BOMs specified");
+        }
+        this.include = builder.include;
+        final List<ByteOrderMark> list = Arrays.asList(builder.byteOrderMarks);
+        // Sort the BOMs to match the longest BOM first because some BOMs have the same starting two bytes.
+        list.sort(ByteOrderMarkLengthComparator);
+        this.boms = list;
+    }
 
     /**
      * Constructs a new BOM InputStream that excludes a {@link ByteOrderMark#UTF_8} BOM.
@@ -318,6 +328,7 @@ public class BOMInputStream extends ProxyInputStream {
             // Read first maxBomSize bytes
             for (int i = 0; i < firstBytes.length; i++) {
                 firstBytes[i] = in.read();
+                afterRead(firstBytes[i]);
                 fbLength++;
                 if (firstBytes[i] < 0) {
                     break;
@@ -464,6 +475,7 @@ public class BOMInputStream extends ProxyInputStream {
             }
         }
         final int secondCount = in.read(buf, off, len);
+        afterRead(secondCount);
         return secondCount < 0 ? firstCount > 0 ? firstCount : EOF : firstCount + secondCount;
     }
 
@@ -493,7 +505,6 @@ public class BOMInputStream extends ProxyInputStream {
         if (markedAtStart) {
             firstBytes = null;
         }
-
         in.reset();
     }
 

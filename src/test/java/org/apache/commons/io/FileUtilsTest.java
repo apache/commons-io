@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
@@ -1647,10 +1648,10 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testForceDeleteAFile3() {
+    public void testForceDeleteAFileDoesNotExist() {
         final File destination = new File(tempDirFile, "no_such_file");
         assertFalse(destination.exists(), "Check No Exist");
-        assertThrows(IOException.class, () -> FileUtils.forceDelete(destination));
+        assertThrowsExactly(FileNotFoundException.class, () -> FileUtils.forceDelete(destination));
 
     }
 

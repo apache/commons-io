@@ -19,13 +19,17 @@ package org.apache.commons.io.input;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.test.CustomIOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -43,6 +47,33 @@ public class AutoCloseInputStreamTest {
     public void setUp() {
         data = new byte[] { 'x', 'y', 'z' };
         stream = new AutoCloseInputStream(new ByteArrayInputStream(data));
+    }
+
+    @Test
+    public void testAfterReadConsumer() throws Exception {
+        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
+        final AtomicBoolean boolRef = new AtomicBoolean();
+        // @formatter:off
+        try (InputStream bounded = AutoCloseInputStream.builder()
+                .setInputStream(new ByteArrayInputStream(hello))
+                .setAfterRead(i -> boolRef.set(true))
+                .get()) {
+            IOUtils.consume(bounded);
+        }
+        // @formatter:on
+        assertTrue(boolRef.get());
+        // Throwing
+        final String message = "test exception message";
+        // @formatter:off
+        try (InputStream bounded = AutoCloseInputStream.builder()
+                .setInputStream(new ByteArrayInputStream(hello))
+                .setAfterRead(i -> {
+                    throw new CustomIOException(message);
+                })
+                .get()) {
+            assertEquals(message, assertThrowsExactly(CustomIOException.class, () -> IOUtils.consume(bounded)).getMessage());
+        }
+        // @formatter:on
     }
 
     @Test

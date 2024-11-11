@@ -18,7 +18,6 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
@@ -262,8 +261,9 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements Seriali
     @Override
     public boolean accept(final File file) {
         if (file != null && file.isFile() && file.canRead()) {
-            try (RandomAccessFile randomAccessFile = RandomAccessFileMode.READ_ONLY.create(file)) {
-                return Arrays.equals(magicNumbers, RandomAccessFiles.read(randomAccessFile, byteOffset, magicNumbers.length));
+            try {
+                return RandomAccessFileMode.READ_ONLY.apply(file.toPath(),
+                        raf -> Arrays.equals(magicNumbers, RandomAccessFiles.read(raf, byteOffset, magicNumbers.length)));
             } catch (final IOException ignored) {
                 // Do nothing, fall through and do not accept file
             }

@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
@@ -28,11 +29,14 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.codec.digest.MessageDigestAlgorithms;
+import org.apache.commons.io.IOExceptionList;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.MessageDigestCalculatingInputStream.Builder;
+import org.apache.commons.io.test.CustomIOException;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -48,6 +52,32 @@ public class MessageDigestCalculatingInputStreamTest {
 
     private MessageDigestCalculatingInputStream createInputStream(final InputStream origin) throws IOException {
         return MessageDigestCalculatingInputStream.builder().setInputStream(origin).get();
+    }
+
+    @Test
+    public void testAfterReadConsumer() throws Exception {
+        final AtomicBoolean boolRef = new AtomicBoolean();
+        // @formatter:off
+        try (InputStream bounded = MessageDigestCalculatingInputStream.builder()
+                .setCharSequence("Hi")
+                .setAfterRead(i -> boolRef.set(true))
+                .get()) {
+            IOUtils.consume(bounded);
+        }
+        // @formatter:on
+        assertTrue(boolRef.get());
+        // Throwing
+        final String message = "test exception message";
+        // @formatter:off
+        try (InputStream bounded = MessageDigestCalculatingInputStream.builder()
+                .setCharSequence("Hi")
+                .setAfterRead(i -> {
+                    throw new CustomIOException(message);
+                })
+                .get()) {
+            assertTrue(assertThrowsExactly(IOExceptionList.class, () -> IOUtils.consume(bounded)).getMessage().contains(message));
+        }
+        // @formatter:on
     }
 
     @SuppressWarnings("resource")

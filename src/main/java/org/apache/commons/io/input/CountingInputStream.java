@@ -33,7 +33,7 @@ import java.io.InputStream;
 @Deprecated
 public class CountingInputStream extends ProxyInputStream {
 
-    /** The count of bytes that have passed. */
+    /** The count of bytes read. */
     private long count;
 
     /**
@@ -43,6 +43,14 @@ public class CountingInputStream extends ProxyInputStream {
      */
     public CountingInputStream(final InputStream in) {
         super(in);
+    }
+
+    CountingInputStream(final InputStream in, final ProxyInputStream.AbstractBuilder<?, ?> builder) {
+        super(in, builder);
+    }
+
+    CountingInputStream(final ProxyInputStream.AbstractBuilder<?, ?> builder) throws IOException {
+        super(builder);
     }
 
     /**
@@ -57,6 +65,7 @@ public class CountingInputStream extends ProxyInputStream {
         if (n != EOF) {
             count += n;
         }
+        super.afterRead(n);
     }
 
     /**

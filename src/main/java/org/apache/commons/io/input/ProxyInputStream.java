@@ -23,8 +23,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.function.Erase;
 import org.apache.commons.io.function.IOConsumer;
+import org.apache.commons.io.function.IOIntConsumer;
 
 /**
  * A proxy stream which acts as a {@link FilterInputStream}, by passing all method calls on to the proxied stream, not changing which methods are called.
@@ -45,6 +47,50 @@ import org.apache.commons.io.function.IOConsumer;
 public abstract class ProxyInputStream extends FilterInputStream {
 
     /**
+     * Abstracts builder properties for subclasses.
+     *
+     * @param <T> The InputStream type.
+     * @param <B> The builder type.
+     * @since 2.18.0
+     */
+    protected static abstract class AbstractBuilder<T, B extends AbstractStreamBuilder<T, B>> extends AbstractStreamBuilder<T, B> {
+
+        private IOIntConsumer afterRead;
+
+        /**
+         * Gets the {@link ProxyInputStream#afterRead(int)} consumer.
+         *
+         * @return the {@link ProxyInputStream#afterRead(int)} consumer.
+         */
+        public IOIntConsumer getAfterRead() {
+            return afterRead;
+        }
+
+        /**
+         * Sets the {@link ProxyInputStream#afterRead(int)} behavior, null resets to a NOOP.
+         * <p>
+         * Setting this value causes the {@link ProxyInputStream#afterRead(int) afterRead} method to delegate to the given consumer.
+         * </p>
+         * <p>
+         * If a subclass overrides {@link ProxyInputStream#afterRead(int) afterRead} and does not call {@code super.afterRead(int)}, then the given consumer is
+         * not called.
+         * </p>
+         * <p>
+         * This does <em>not</em> override a {@code ProxyInputStream} subclass' implementation of the {@link ProxyInputStream#afterRead(int)} method, it can
+         * supplement it.
+         * </p>
+         *
+         * @param afterRead the {@link ProxyInputStream#afterRead(int)} behavior.
+         * @return this instance.
+         */
+        public B setAfterRead(final IOIntConsumer afterRead) {
+            this.afterRead = afterRead;
+            return asThis();
+        }
+
+    }
+
+    /**
      * Tracks whether {@link #close()} has been called or not.
      */
     private boolean closed;
@@ -54,50 +100,67 @@ public abstract class ProxyInputStream extends FilterInputStream {
      */
     private final IOConsumer<IOException> exceptionHandler;
 
+    private final IOIntConsumer afterRead;
+
     /**
      * Constructs a new ProxyInputStream.
      *
      * @param proxy  the InputStream to proxy.
      */
     public ProxyInputStream(final InputStream proxy) {
-        // the proxy is stored in a protected superclass variable named 'in'.
-        this(proxy, Erase::rethrow);
+        // the delegate is stored in a protected superclass variable named 'in'.
+        super(proxy);
+        this.exceptionHandler = Erase::rethrow;
+        this.afterRead = IOIntConsumer.NOOP;
     }
 
     /**
-     * Constructs a new ProxyInputStream for testing.
+     * Constructs a new ProxyInputStream.
+     *
+     * @param builder  How to build an instance.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.18.0
+     */
+    @SuppressWarnings("resource")
+    protected ProxyInputStream(final AbstractBuilder<?, ?> builder) throws IOException {
+        // the delegate is stored in a protected superclass instance variable named 'in'.
+        this(builder.getInputStream(), builder);
+    }
+
+    /**
+     * Constructs a new ProxyInputStream.
      *
      * @param proxy  the InputStream to proxy.
-     * @param exceptionHandler the exception handler.
+     * @param builder  How to build an instance.
+     * @since 2.18.0
      */
-    ProxyInputStream(final InputStream proxy, final IOConsumer<IOException> exceptionHandler) {
-        // the proxy is stored in a protected superclass instance variable named 'in'.
+    protected ProxyInputStream(final InputStream proxy, final AbstractBuilder<?, ?> builder) {
+        // the delegate is stored in a protected superclass instance variable named 'in'.
         super(proxy);
-        this.exceptionHandler = exceptionHandler;
+        this.exceptionHandler = Erase::rethrow;
+        this.afterRead = builder.getAfterRead() != null ? builder.getAfterRead() : IOIntConsumer.NOOP;
     }
 
     /**
-     * Invoked by the {@code read} methods after the proxied call has returned
-     * successfully. The number of bytes returned to the caller (or {@link IOUtils#EOF EOF} if
-     * the end of stream was reached) is given as an argument.
+     * Called by the {@code read} methods after the proxied call has returned successfully. The argument is the number of bytes returned to the caller or
+     * {@link IOUtils#EOF EOF} if the end of stream was reached.
      * <p>
-     * Subclasses can override this method to add common post-processing
-     * functionality without having to override all the read methods.
-     * The default implementation does nothing.
+     * The default delegates to the consumer given to {@link AbstractBuilder#setAfterRead(IOIntConsumer)}.
      * </p>
      * <p>
-     * Note this method is <em>not</em> called from {@link #skip(long)} or
-     * {@link #reset()}. You need to explicitly override those methods if
-     * you want to add post-processing steps also to them.
+     * Alternatively, a subclasses can override this method to add post-processing functionality without having to override all the read methods.
+     * </p>
+     * <p>
+     * Note this method is <em>not</em> called from {@link #skip(long)} or {@link #reset()}. You need to explicitly override those methods if you want to add
+     * post-processing steps also to them.
      * </p>
      *
-     * @since 2.0
      * @param n number of bytes read, or {@link IOUtils#EOF EOF} if the end of stream was reached.
-     * @throws IOException if the post-processing fails in a subclass.
+     * @throws IOException Thrown by a subclass or the consumer given to {@link AbstractBuilder#setAfterRead(IOIntConsumer)}.
+     * @since 2.0
      */
-    @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void afterRead(final int n) throws IOException {
-        // no-op default
+        afterRead.accept(n);
     }
 
     /**

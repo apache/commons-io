@@ -18,10 +18,16 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.Duration;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.test.CustomIOException;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -33,6 +39,32 @@ public class ThrottledInputStreamTest extends ProxyInputStreamTest<ThrottledInpu
     @SuppressWarnings({ "resource" })
     protected ThrottledInputStream createFixture() throws IOException {
         return ThrottledInputStream.builder().setInputStream(createOriginInputStream()).get();
+    }
+
+    @Test
+    public void testAfterReadConsumer() throws Exception {
+        final AtomicBoolean boolRef = new AtomicBoolean();
+        // @formatter:off
+        try (InputStream bounded = ThrottledInputStream.builder()
+                .setCharSequence("Hi")
+                .setAfterRead(i -> boolRef.set(true))
+                .get()) {
+            IOUtils.consume(bounded);
+        }
+        // @formatter:on
+        assertTrue(boolRef.get());
+        // Throwing
+        final String message = "test exception message";
+        // @formatter:off
+        try (InputStream bounded = ThrottledInputStream.builder()
+                .setCharSequence("Hi")
+                .setAfterRead(i -> {
+                    throw new CustomIOException(message);
+                })
+                .get()) {
+            assertEquals(message, assertThrowsExactly(CustomIOException.class, () -> IOUtils.consume(bounded)).getMessage());
+        }
+        // @formatter:on
     }
 
     @Test

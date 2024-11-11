@@ -69,9 +69,7 @@ public class RandomAccessFileModeTest {
     public void testCreatePath(final RandomAccessFileMode randomAccessFileMode) throws IOException {
         final byte[] expected = BYTES_FIXTURE;
         final Path fixture = writeFixture(expected);
-        try (RandomAccessFile randomAccessFile = randomAccessFileMode.create(fixture)) {
-            assertArrayEquals(expected, read(randomAccessFile));
-        }
+        randomAccessFileMode.accept(fixture, raf -> assertArrayEquals(expected, read(raf)));
     }
 
     @ParameterizedTest

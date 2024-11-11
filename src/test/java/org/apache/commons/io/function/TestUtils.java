@@ -94,6 +94,10 @@ final class TestUtils {
         return (IOFunction<T, U>) TestConstants.THROWING_IO_FUNCTION;
     }
 
+    static IOIntConsumer throwingIOIntConsumer() {
+        return TestConstants.THROWING_IO_INT_CONSUMER;
+    }
+
     @SuppressWarnings("unchecked")
     static <T> IOPredicate<T> throwingIOPredicate() {
         return (IOPredicate<T>) TestConstants.THROWING_IO_PREDICATE;

@@ -24,6 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
@@ -34,9 +36,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractStreamBuilder;
+import org.apache.commons.io.test.CustomIOException;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -47,6 +51,23 @@ import org.junit.jupiter.api.Test;
 public class ProxyInputStreamTest<T extends ProxyInputStream> {
 
     private static final class ProxyInputStreamFixture extends ProxyInputStream {
+
+        static class Builder extends ProxyInputStream.AbstractBuilder<ProxyInputStreamFixture, Builder> {
+
+            @Override
+            public ProxyInputStreamFixture get() throws IOException {
+                return new ProxyInputStreamFixture(this);
+            }
+
+        }
+
+        static Builder builder() {
+            return new Builder();
+        }
+
+        ProxyInputStreamFixture(final Builder builder) throws IOException {
+            super(builder);
+        }
 
         ProxyInputStreamFixture(final InputStream proxy) {
             super(proxy);
@@ -187,7 +208,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
             assertEquals('c', found);
             found = inputStream.read();
             assertEquals(-1, found);
-            testEos((T) inputStream);
+            testEos(inputStream);
         }
     }
 
@@ -228,7 +249,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
             assertArrayEquals(new byte[] { 0, 0, 'a', 'b', 'c' }, dest);
             found = inputStream.read(dest, 2, 3);
             assertEquals(-1, found);
-            testEos((T) inputStream);
+            testEos(inputStream);
         }
     }
 
@@ -241,7 +262,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
             assertArrayEquals(new byte[] { 'a', 'b', 'c', 0, 0 }, dest);
             found = inputStream.read(dest, 0, 5);
             assertEquals(-1, found);
-            testEos((T) inputStream);
+            testEos(inputStream);
         }
     }
 
@@ -258,7 +279,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
             assertArrayEquals(new byte[] { 'c', 0, 0, 0, 0 }, dest);
             found = inputStream.read(dest, 0, 2);
             assertEquals(-1, found);
-            testEos((T) inputStream);
+            testEos(inputStream);
         }
     }
 
@@ -271,7 +292,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
             assertArrayEquals(new byte[] { 'a', 'b', 'c', 0, 0 }, dest);
             found = inputStream.read(dest);
             assertEquals(-1, found);
-            testEos((T) inputStream);
+            testEos(inputStream);
         }
     }
 
@@ -288,7 +309,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
             assertArrayEquals(new byte[] { 'c', 0 }, dest);
             found = inputStream.read(dest);
             assertEquals(-1, found);
-            testEos((T) inputStream);
+            testEos(inputStream);
         }
     }
 
@@ -304,6 +325,34 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
             found = inputStream.read();
             assertEquals(-1, found);
         }
+    }
+
+    @Test
+    public void testSubclassAfterReadConsumer() throws Exception {
+        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
+        final AtomicBoolean boolRef = new AtomicBoolean();
+        // @formatter:off
+        try (ProxyInputStreamFixture bounded = ProxyInputStreamFixture.builder()
+                .setInputStream(new ByteArrayInputStream(hello))
+                .setAfterRead(null) // should not blow up
+                .setAfterRead(i -> boolRef.set(true))
+                .get()) {
+            IOUtils.consume(bounded);
+        }
+        // @formatter:on
+        assertTrue(boolRef.get());
+        // Throwing
+        final String message = "test exception message";
+        // @formatter:off
+        try (ProxyInputStreamFixture bounded = ProxyInputStreamFixture.builder()
+                .setInputStream(new ByteArrayInputStream(hello))
+                .setAfterRead(i -> {
+                    throw new CustomIOException(message);
+                })
+                .get()) {
+            assertEquals(message, assertThrowsExactly(CustomIOException.class, () -> IOUtils.consume(bounded)).getMessage());
+        }
+        // @formatter:on
     }
 
 }

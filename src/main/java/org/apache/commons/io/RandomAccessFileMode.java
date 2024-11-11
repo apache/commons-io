@@ -19,11 +19,15 @@ package org.apache.commons.io;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Objects;
+
+import org.apache.commons.io.function.IOConsumer;
+import org.apache.commons.io.function.IOFunction;
 
 /**
  * Enumerates access modes for {@link RandomAccessFile} with factory methods.
@@ -148,7 +152,48 @@ public enum RandomAccessFileMode {
     }
 
     /**
+     * Performs an operation on the {@link RandomAccessFile} specified at the given {@link Path}.
+     * <p>
+     * This method allocates and releases the {@link RandomAccessFile} given to the consumer.
+     * </p>
+     *
+     * @param file the file specifying the {@link RandomAccessFile} to open.
+     * @param consumer the function to apply.
+     * @throws FileNotFoundException See {@link IORandomAccessFile#IORandomAccessFile(File, String)}.
+     * @throws IOException Thrown by the given function.
+     * @since 2.18.0
+     */
+    public void accept(final Path file, final IOConsumer<RandomAccessFile> consumer) throws IOException {
+        try (RandomAccessFile raf = create(file)) {
+            consumer.accept(raf);
+        }
+    }
+
+    /**
+     * Applies the given function for a {@link RandomAccessFile} specified at the given {@link Path}.
+     * <p>
+     * This method allocates and releases the {@link RandomAccessFile} given to the function.
+     * </p>
+     *
+     * @param <T> the return type of the function.
+     * @param file the file specifying the {@link RandomAccessFile} to open.
+     * @param function the function to apply.
+     * @return the function's result value.
+     * @throws FileNotFoundException See {@link IORandomAccessFile#IORandomAccessFile(File, String)}.
+     * @throws IOException Thrown by the given function.
+     * @since 2.18.0
+     */
+    public <T> T apply(final Path file, final IOFunction<RandomAccessFile, T> function) throws IOException {
+        try (RandomAccessFile raf = create(file)) {
+            return function.apply(raf);
+        }
+    }
+
+    /**
      * Constructs a random access file to read from, and optionally to write to, the file specified by the {@link File} argument.
+     * <p>
+     * Prefer {@link #create(Path)} over this.
+     * </p>
      *
      * @param file the file object
      * @return a random access file
@@ -171,6 +216,9 @@ public enum RandomAccessFileMode {
 
     /**
      * Constructs a random access file to read from, and optionally to write to, the file specified by the {@link File} argument.
+     * <p>
+     * Prefer {@link #create(Path)} over this.
+     * </p>
      *
      * @param name the file object
      * @return a random access file
