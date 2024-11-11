@@ -82,8 +82,9 @@ public class TrueFileFilter implements IOFileFilter, Serializable {
 
     /**
      * Returns true.
-     * @param file the file to check (ignored)
      *
+     * @param file the file to check (ignored)
+     * @param attributes the path's basic attributes (may be null).
      * @return true
      * @since 2.9.0
      */

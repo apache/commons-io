@@ -84,7 +84,7 @@ public class FalseFileFilter implements IOFileFilter, Serializable {
      * Returns false.
      *
      * @param file the file to check (ignored)
-     *
+     * @param attributes the path's basic attributes (may be null).
      * @return false
      * @since 2.9.0
      */

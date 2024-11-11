@@ -120,6 +120,7 @@ public class SymbolicLinkFileFilter extends AbstractFileFilter implements Serial
      * Checks to see if the file is a symbolic link.
      *
      * @param path the File Path to check
+     * @param attributes the path's basic attributes (may be null).
      * @return {@code onAccept} from {@link #SymbolicLinkFileFilter(FileVisitResult, FileVisitResult)} if the file exists and is a symbolic link to either
      *         another file or a directory; returns {@code onReject} otherwise.
      */

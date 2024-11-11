@@ -186,8 +186,9 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
 
     /**
      * Checks to see if the file name ends with the suffix.
-     * @param path  the File to check
      *
+     * @param path       the File to check
+     * @param attributes the path's basic attributes (may be null).
      * @return true if the file name ends with one of our suffixes
      * @since 2.9.0
      */

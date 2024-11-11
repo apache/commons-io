@@ -85,8 +85,9 @@ public class CanWriteFileFilter extends AbstractFileFilter implements Serializab
 
     /**
      * Checks to see if the file can be written to.
-     * @param file the File to check
      *
+     * @param file the File to check
+     * @param attributes the path's basic attributes (may be null).
      * @return {@code true} if the file can be written to, otherwise {@code false}.
      * @since 2.9.0
      */

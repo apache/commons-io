@@ -177,7 +177,7 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      * Checks to see if the file name matches one of the regular expressions.
      *
      * @param path the path
-     * @param attributes the path attributes
+     * @param attributes the path's basic attributes (may be null).
      * @return true if the file name matches one of the regular expressions
      */
     @Override

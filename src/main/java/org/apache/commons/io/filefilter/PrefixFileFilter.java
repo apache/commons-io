@@ -185,8 +185,9 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
 
     /**
      * Checks to see if the file name starts with the prefix.
-     * @param file  the File to check
      *
+     * @param file  the File to check
+     * @param attributes the path's basic attributes (may be null).
      * @return true if the file name starts with one of our prefixes
      * @since 2.9.0
      */

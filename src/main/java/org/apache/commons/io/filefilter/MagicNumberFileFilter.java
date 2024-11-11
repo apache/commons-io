@@ -276,13 +276,13 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements Seriali
      * Accepts the provided file if the file contains the file filter's magic
      * number at the specified offset.
      * </p>
-     *
      * <p>
      * If any {@link IOException}s occur while reading the file, the file will
      * be rejected.
+     *
      * </p>
      * @param file the file to accept or reject.
-     *
+     * @param attributes the path's basic attributes (may be null).
      * @return {@code true} if the file contains the filter's magic number
      *         at the specified offset, {@code false} otherwise.
      * @since 2.9.0

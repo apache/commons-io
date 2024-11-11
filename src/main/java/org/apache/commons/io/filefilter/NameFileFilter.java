@@ -180,8 +180,9 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * Checks to see if the file name matches.
-     * @param path  the File to check
      *
+     * @param path  the File to check
+     * @param attributes the path's basic attributes (may be null).
      * @return true if the file name matches
      * @since 2.9.0
      */

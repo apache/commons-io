@@ -155,8 +155,9 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * Checks to see if the file name matches one of the wildcards.
-     * @param path the file to check
      *
+     * @param path the file to check
+     * @param attributes the path's basic attributes (may be null).
      * @return true if the file name matches one of the wildcards
      * @since 2.9.0
      */

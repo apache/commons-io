@@ -67,6 +67,7 @@ public interface IOFileFilter extends FileFilter, FilenameFilter, PathFilter, Pa
      * Checks to see if a Path should be accepted by this filter.
      *
      * @param path the Path to check.
+     * @param attributes the path's basic attributes (may be null).
      * @return true if this path matches the test.
      * @since 2.9.0
      */

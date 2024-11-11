@@ -130,13 +130,12 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
     /**
      * Checks to see if the size of the file is favorable.
      * <p>
-     * If size equals threshold and smaller files are required,
-     * file <b>IS NOT</b> selected.
-     * If size equals threshold and larger files are required,
-     * file <b>IS</b> selected.
+     * If size equals threshold and smaller files are required, file <b>IS NOT</b> selected. If size equals threshold and larger files are required, file
+     * <b>IS</b> selected.
      * </p>
-     * @param file  the File to check
      *
+     * @param file       the File to check
+     * @param attributes the path's basic attributes (may be null).
      * @return true if the file name matches
      */
     @Override
