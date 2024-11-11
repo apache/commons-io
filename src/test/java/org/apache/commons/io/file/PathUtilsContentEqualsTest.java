@@ -202,6 +202,7 @@ public class PathUtilsContentEqualsTest {
     public void testFileContentEqualsZip() throws Exception {
         final Path path1 = Paths.get("src/test/resources/org/apache/commons/io/bla.zip");
         final Path path2 = Paths.get("src/test/resources/org/apache/commons/io/bla-copy.zip");
+        // moby.zip is from https://issues.apache.org/jira/browse/COMPRESS-93
         final Path path3 = Paths.get("src/test/resources/org/apache/commons/io/moby.zip");
         assertTrue(PathUtils.fileContentEquals(path1, path2));
         assertFalse(PathUtils.fileContentEquals(path1, path3));
