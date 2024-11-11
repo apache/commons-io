@@ -90,10 +90,10 @@ public enum FileSystem {
             }, new String[] {
                     "AUX",
                     "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
-                    "COM²", "COM³", "COM¹", // Yes, that's the order in Unicode
+                    "COM\u00b2", "COM\u00b3", "COM\u00b9", // Superscript 2 3 1 in that order
                     "CON", "CONIN$", "CONOUT$",
                     "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9",
-                    "LPT²", "LPT³", "LPT¹", // Yes, that's the order in Unicode
+                    "LPT\u00b2", "LPT\u00b3", "LPT\u00b9", // Superscript 2 3 1 in that order
                     "NUL", "PRN"
             }, true, true, '\\');
     // @formatter:on
