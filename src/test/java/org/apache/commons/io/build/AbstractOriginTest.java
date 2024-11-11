@@ -181,7 +181,7 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
         // Write, first access
         try (final RandomAccessFile raf = getOriginRw().getRandomAccessFile(StandardOpenOption.WRITE)) {
             assertNotNull(raf);
-            if (isRafOriginRw || (getOriginRw().getFile() != null)) {
+            if (isRafOriginRw || getOriginRw().getFile() != null) {
                 assertTrue(isValid(raf), () -> getOriginRw().toString());
             } else {
                 // Can't get there from here.
