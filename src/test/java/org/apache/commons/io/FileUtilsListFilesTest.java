@@ -271,7 +271,7 @@ public class FileUtilsListFilesTest {
             int max = 0;
             try {
                 while (System.currentTimeMillis() < endTime) {
-                    final Collection<File> files = FileUtils.listFiles(tempDir, new String[] { "\\.deletetester" }, false);
+                    final Collection<File> files = FileUtils.listFiles(tempDir, new String[] { ".deletetester" }, false);
                     assertNotNull(files);
                     max = Math.max(max, files.size());
                 }
