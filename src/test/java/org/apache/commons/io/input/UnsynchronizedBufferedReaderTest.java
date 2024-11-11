@@ -233,38 +233,6 @@ public class UnsynchronizedBufferedReaderTest {
     }
 
     /**
-     * Tests {@link UnsynchronizedBufferedReader#read()}.
-     *
-     * @throws IOException test failure.
-     */
-    @Test
-    public void testRead() throws IOException {
-        // Test for method int UnsynchronizedBufferedReader.read()
-        br = new UnsynchronizedBufferedReader(new StringReader(testString));
-        final int r = br.read();
-        assertEquals(testString.charAt(0), r);
-        br = new UnsynchronizedBufferedReader(new StringReader(new String(new char[] { '\u8765' })));
-        assertEquals(br.read(), '\u8765');
-        //
-        final char[] chars = new char[256];
-        for (int i = 0; i < 256; i++) {
-            chars[i] = (char) i;
-        }
-        try (Reader in = new UnsynchronizedBufferedReader(new StringReader(new String(chars)), 12)) {
-            assertEquals(0, in.read()); // Fill the buffer
-            final char[] buf = new char[14];
-            in.read(buf, 0, 14); // Read greater than the buffer
-            assertTrue(new String(buf).equals(new String(chars, 1, 14)));
-            assertEquals(15, in.read()); // Check next byte
-        }
-        //
-        // regression test for HARMONY-841
-        try (Reader reader = new UnsynchronizedBufferedReader(new CharArrayReader(new char[5], 1, 0), 2)) {
-            assertEquals(reader.read(), -1);
-        }
-    }
-
-    /**
      * Tests {@link UnsynchronizedBufferedReader#peek()}.
      *
      * @throws IOException test failure.
@@ -343,6 +311,38 @@ public class UnsynchronizedBufferedReaderTest {
         // regression test for HARMONY-841
         try (UnsynchronizedBufferedReader reader = new UnsynchronizedBufferedReader(new CharArrayReader(new char[5], 1, 0), 2)) {
             assertEquals(reader.peek(), -1);
+            assertEquals(reader.read(), -1);
+        }
+    }
+
+    /**
+     * Tests {@link UnsynchronizedBufferedReader#read()}.
+     *
+     * @throws IOException test failure.
+     */
+    @Test
+    public void testRead() throws IOException {
+        // Test for method int UnsynchronizedBufferedReader.read()
+        br = new UnsynchronizedBufferedReader(new StringReader(testString));
+        final int r = br.read();
+        assertEquals(testString.charAt(0), r);
+        br = new UnsynchronizedBufferedReader(new StringReader(new String(new char[] { '\u8765' })));
+        assertEquals(br.read(), '\u8765');
+        //
+        final char[] chars = new char[256];
+        for (int i = 0; i < 256; i++) {
+            chars[i] = (char) i;
+        }
+        try (Reader in = new UnsynchronizedBufferedReader(new StringReader(new String(chars)), 12)) {
+            assertEquals(0, in.read()); // Fill the buffer
+            final char[] buf = new char[14];
+            in.read(buf, 0, 14); // Read greater than the buffer
+            assertTrue(new String(buf).equals(new String(chars, 1, 14)));
+            assertEquals(15, in.read()); // Check next byte
+        }
+        //
+        // regression test for HARMONY-841
+        try (Reader reader = new UnsynchronizedBufferedReader(new CharArrayReader(new char[5], 1, 0), 2)) {
             assertEquals(reader.read(), -1);
         }
     }

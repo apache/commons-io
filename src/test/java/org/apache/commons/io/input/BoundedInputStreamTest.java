@@ -51,6 +51,35 @@ public class BoundedInputStreamTest {
         }
     }
 
+    @Test
+    public void testAfterReadConsumer() throws Exception {
+        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
+        final AtomicBoolean boolRef = new AtomicBoolean();
+        // @formatter:off
+        try (InputStream bounded = BoundedInputStream.builder()
+                .setInputStream(new ByteArrayInputStream(hello))
+                .setMaxCount(hello.length)
+                .setAfterRead(i -> boolRef.set(true))
+                .get()) {
+            IOUtils.consume(bounded);
+        }
+        // @formatter:on
+        assertTrue(boolRef.get());
+        // Throwing
+        final String message = "test exception message";
+        // @formatter:off
+        try (InputStream bounded = BoundedInputStream.builder()
+                .setInputStream(new ByteArrayInputStream(hello))
+                .setMaxCount(hello.length)
+                .setAfterRead(i -> {
+                    throw new CustomIOException(message);
+                })
+                .get()) {
+            assertEquals(message, assertThrowsExactly(CustomIOException.class, () -> IOUtils.consume(bounded)).getMessage());
+        }
+        // @formatter:on
+    }
+
     @SuppressWarnings("resource")
     @Test
     public void testAvailableAfterClose() throws Exception {
@@ -78,22 +107,6 @@ public class BoundedInputStreamTest {
     @Test
     public void testCloseHandleIOException() throws IOException {
         ProxyInputStreamTest.testCloseHandleIOException(BoundedInputStream.builder());
-    }
-
-    @SuppressWarnings("deprecation")
-    @Test
-    public void testPublicConstructors() throws IOException {
-        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
-        try (ByteArrayInputStream baos = new ByteArrayInputStream(helloWorld);
-                BoundedInputStream inputStream = new BoundedInputStream(baos)) {
-            assertSame(baos, inputStream.unwrap());
-        }
-        final long maxCount = 2;
-        try (ByteArrayInputStream baos = new ByteArrayInputStream(helloWorld);
-                BoundedInputStream inputStream = new BoundedInputStream(baos, maxCount)) {
-            assertSame(baos, inputStream.unwrap());
-            assertSame(maxCount, inputStream.getMaxCount());
-        }
     }
 
     @ParameterizedTest
@@ -288,35 +301,6 @@ public class BoundedInputStreamTest {
     }
 
     @Test
-    public void testAfterReadConsumer() throws Exception {
-        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
-        final AtomicBoolean boolRef = new AtomicBoolean();
-        // @formatter:off
-        try (InputStream bounded = BoundedInputStream.builder()
-                .setInputStream(new ByteArrayInputStream(hello))
-                .setMaxCount(hello.length)
-                .setAfterRead(i -> boolRef.set(true))
-                .get()) {
-            IOUtils.consume(bounded);
-        }
-        // @formatter:on
-        assertTrue(boolRef.get());
-        // Throwing
-        final String message = "test exception message";
-        // @formatter:off
-        try (InputStream bounded = BoundedInputStream.builder()
-                .setInputStream(new ByteArrayInputStream(hello))
-                .setMaxCount(hello.length)
-                .setAfterRead(i -> {
-                    throw new CustomIOException(message);
-                })
-                .get()) {
-            assertEquals(message, assertThrowsExactly(CustomIOException.class, () -> IOUtils.consume(bounded)).getMessage());
-        }
-        // @formatter:on
-    }
-
-    @Test
     public void testOnMaxCountConsumer() throws Exception {
         final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
         final AtomicBoolean boolRef = new AtomicBoolean();
@@ -441,6 +425,22 @@ public class BoundedInputStreamTest {
             assertTrue(boolRef.get());
             // should be invariant
             assertTrue(bounded.markSupported());
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    @Test
+    public void testPublicConstructors() throws IOException {
+        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
+        try (ByteArrayInputStream baos = new ByteArrayInputStream(helloWorld);
+                BoundedInputStream inputStream = new BoundedInputStream(baos)) {
+            assertSame(baos, inputStream.unwrap());
+        }
+        final long maxCount = 2;
+        try (ByteArrayInputStream baos = new ByteArrayInputStream(helloWorld);
+                BoundedInputStream inputStream = new BoundedInputStream(baos, maxCount)) {
+            assertSame(baos, inputStream.unwrap());
+            assertSame(maxCount, inputStream.getMaxCount());
         }
     }
 

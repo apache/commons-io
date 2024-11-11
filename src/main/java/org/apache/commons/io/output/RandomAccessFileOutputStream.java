@@ -84,8 +84,9 @@ public final class RandomAccessFileOutputStream extends OutputStream {
     }
 
     @Override
-    public void write(final int b) throws IOException {
-        randomAccessFile.write(b);
+    public void close() throws IOException {
+        this.randomAccessFile.close();
+        super.close();
     }
 
     @SuppressWarnings("resource")
@@ -96,9 +97,8 @@ public final class RandomAccessFileOutputStream extends OutputStream {
     }
 
     @Override
-    public void close() throws IOException {
-        this.randomAccessFile.close();
-        super.close();
+    public void write(final int b) throws IOException {
+        randomAccessFile.write(b);
     }
 
 }

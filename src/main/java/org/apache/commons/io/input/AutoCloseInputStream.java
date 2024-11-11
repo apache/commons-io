@@ -97,6 +97,10 @@ public class AutoCloseInputStream extends ProxyInputStream {
         return new Builder();
     }
 
+    private AutoCloseInputStream(final Builder builder) throws IOException {
+        super(builder);
+    }
+
     /**
      * Constructs an automatically closing proxy for the given input stream.
      *
@@ -107,10 +111,6 @@ public class AutoCloseInputStream extends ProxyInputStream {
     @Deprecated
     public AutoCloseInputStream(final InputStream in) {
         super(ClosedInputStream.ifNull(in));
-    }
-
-    private AutoCloseInputStream(final Builder builder) throws IOException {
-        super(builder);
     }
 
     /**

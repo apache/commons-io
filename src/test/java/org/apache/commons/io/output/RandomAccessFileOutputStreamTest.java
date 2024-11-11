@@ -127,6 +127,15 @@ public class RandomAccessFileOutputStreamTest {
         // @formatter:on
     }
 
+    @Test
+    public void testWriteGetDefault() throws IOException {
+        assertThrows(IllegalStateException.class, () -> {
+            try (RandomAccessFileOutputStream os = RandomAccessFileOutputStream.builder().get()) {
+                // doNothing
+            }
+        });
+    }
+
     /**
      * Tests that the default OpenOption is WRITE.
      *
@@ -142,15 +151,6 @@ public class RandomAccessFileOutputStreamTest {
             // doNothing
         }
         // @formatter:on
-    }
-
-    @Test
-    public void testWriteGetDefault() throws IOException {
-        assertThrows(IllegalStateException.class, () -> {
-            try (RandomAccessFileOutputStream os = RandomAccessFileOutputStream.builder().get()) {
-                // doNothing
-            }
-        });
     }
 
     @Test

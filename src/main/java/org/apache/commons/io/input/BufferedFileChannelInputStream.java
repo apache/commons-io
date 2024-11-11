@@ -157,6 +157,12 @@ public final class BufferedFileChannelInputStream extends InputStream {
         this(file.toPath(), bufferSize);
     }
 
+    private BufferedFileChannelInputStream(final FileChannel fileChannel, final int bufferSize) {
+        this.fileChannel = Objects.requireNonNull(fileChannel, "path");
+        byteBuffer = ByteBuffer.allocateDirect(bufferSize);
+        byteBuffer.flip();
+    }
+
     /**
      * Constructs a new instance for the given Path.
      *
@@ -181,12 +187,6 @@ public final class BufferedFileChannelInputStream extends InputStream {
     @Deprecated
     public BufferedFileChannelInputStream(final Path path, final int bufferSize) throws IOException {
         this(FileChannel.open(path, StandardOpenOption.READ), bufferSize);
-    }
-
-    private BufferedFileChannelInputStream(final FileChannel fileChannel, final int bufferSize) {
-        this.fileChannel = Objects.requireNonNull(fileChannel, "path");
-        byteBuffer = ByteBuffer.allocateDirect(bufferSize);
-        byteBuffer.flip();
     }
 
     @Override

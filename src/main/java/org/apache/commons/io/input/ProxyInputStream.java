@@ -105,18 +105,6 @@ public abstract class ProxyInputStream extends FilterInputStream {
     /**
      * Constructs a new ProxyInputStream.
      *
-     * @param proxy  the InputStream to proxy.
-     */
-    public ProxyInputStream(final InputStream proxy) {
-        // the delegate is stored in a protected superclass variable named 'in'.
-        super(proxy);
-        this.exceptionHandler = Erase::rethrow;
-        this.afterRead = IOIntConsumer.NOOP;
-    }
-
-    /**
-     * Constructs a new ProxyInputStream.
-     *
      * @param builder  How to build an instance.
      * @throws IOException if an I/O error occurs.
      * @since 2.18.0
@@ -125,6 +113,18 @@ public abstract class ProxyInputStream extends FilterInputStream {
     protected ProxyInputStream(final AbstractBuilder<?, ?> builder) throws IOException {
         // the delegate is stored in a protected superclass instance variable named 'in'.
         this(builder.getInputStream(), builder);
+    }
+
+    /**
+     * Constructs a new ProxyInputStream.
+     *
+     * @param proxy  the InputStream to proxy.
+     */
+    public ProxyInputStream(final InputStream proxy) {
+        // the delegate is stored in a protected superclass variable named 'in'.
+        super(proxy);
+        this.exceptionHandler = Erase::rethrow;
+        this.afterRead = IOIntConsumer.NOOP;
     }
 
     /**
