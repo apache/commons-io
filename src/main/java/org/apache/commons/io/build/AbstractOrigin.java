@@ -455,7 +455,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     /**
      * A {@link Reader} origin.
      * <p>
-     * This origin cannot provide other aspects.
+     * This origin cannot provide conversions to other aspects.
      * </p>
      */
     public static class ReaderOrigin extends AbstractOrigin<Reader, ReaderOrigin> {
@@ -556,7 +556,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     /**
      * A {@link Writer} origin.
      * <p>
-     * This origin cannot provide other aspects.
+     * This origin cannot provide conversions to other aspects.
      * </p>
      */
     public static class WriterOrigin extends AbstractOrigin<Writer, WriterOrigin> {
