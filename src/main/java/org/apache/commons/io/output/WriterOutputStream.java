@@ -166,12 +166,12 @@ public class WriterOutputStream extends OutputStream {
         }
 
         /**
-         * Sets whether the output buffer will be flushed after each write operation ({@code true}), i.e. all available data will be written to the underlying
-         * {@link Writer} immediately. If {@code false}, the output buffer will only be flushed when it overflows or when {@link #flush()} or {@link #close()}
-         * is called.
+         * Sets whether the output buffer will be flushed after each write operation ({@code true}), meaning all available data will be written to the
+         * underlying {@link Writer} immediately. If {@code false}, the output buffer will only be flushed when it overflows or when {@link #flush()} or
+         * {@link #close()} is called.
          *
-         * @param writeImmediately If {@code true} the output buffer will be flushed after each write operation, i.e. all available data will be written to the
-         *                         underlying {@link Writer} immediately. If {@code false}, the output buffer will only be flushed when it overflows or when
+         * @param writeImmediately If {@code true} the output buffer will be flushed after each write operation, meaning all available data will be written to
+         *                         the underlying {@link Writer} immediately. If {@code false}, the output buffer will only be flushed when it overflows or when
          *                         {@link #flush()} or {@link #close()} is called.
          * @return {@code this} instance.
          */
@@ -275,7 +275,7 @@ public class WriterOutputStream extends OutputStream {
      * @param writer           the target {@link Writer}
      * @param charset          the charset encoding
      * @param bufferSize       the size of the output buffer in number of characters
-     * @param writeImmediately If {@code true} the output buffer will be flushed after each write operation, i.e. all available data will be written to the
+     * @param writeImmediately If {@code true} the output buffer will be flushed after each write operation, meaning all available data will be written to the
      *                         underlying {@link Writer} immediately. If {@code false}, the output buffer will only be flushed when it overflows or when
      *                         {@link #flush()} or {@link #close()} is called.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
@@ -313,7 +313,7 @@ public class WriterOutputStream extends OutputStream {
      * @param writer           the target {@link Writer}
      * @param decoder          the charset decoder
      * @param bufferSize       the size of the output buffer in number of characters
-     * @param writeImmediately If {@code true} the output buffer will be flushed after each write operation, i.e. all available data will be written to the
+     * @param writeImmediately If {@code true} the output buffer will be flushed after each write operation, meaning all available data will be written to the
      *                         underlying {@link Writer} immediately. If {@code false}, the output buffer will only be flushed when it overflows or when
      *                         {@link #flush()} or {@link #close()} is called.
      * @since 2.1
@@ -347,7 +347,7 @@ public class WriterOutputStream extends OutputStream {
      * @param writer           the target {@link Writer}
      * @param charsetName      the name of the charset encoding
      * @param bufferSize       the size of the output buffer in number of characters
-     * @param writeImmediately If {@code true} the output buffer will be flushed after each write operation, i.e. all available data will be written to the
+     * @param writeImmediately If {@code true} the output buffer will be flushed after each write operation, meaning all available data will be written to the
      *                         underlying {@link Writer} immediately. If {@code false}, the output buffer will only be flushed when it overflows or when
      *                         {@link #flush()} or {@link #close()} is called.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}

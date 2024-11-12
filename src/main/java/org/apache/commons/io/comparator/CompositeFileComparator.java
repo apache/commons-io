@@ -28,7 +28,7 @@ import java.util.stream.StreamSupport;
  * <p>
  * This comparator can be used to sort lists or arrays of files by combining a number of other comparators.
  * <p>
- * Example of sorting a list of files by type (i.e. directory or file) and then by name:
+ * Example of sorting a list of files by type (directory or file) and then by name:
  *
  * <pre>
  *       CompositeFileComparator comparator = new CompositeFileComparator(

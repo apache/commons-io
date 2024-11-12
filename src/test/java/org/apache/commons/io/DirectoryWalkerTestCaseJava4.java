@@ -36,7 +36,7 @@ import org.apache.commons.io.filefilter.OrFileFilter;
 import org.junit.jupiter.api.Test;
 
 /**
- * This is used to test DirectoryWalker for correctness when using Java4 (i.e. no generics).
+ * This is used to test DirectoryWalker for correctness when using Java4 (no generics).
  *
  * @see DirectoryWalker
  */

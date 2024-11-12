@@ -32,7 +32,7 @@ import org.apache.commons.io.IOUtils;
 public class ChunkedWriter extends FilterWriter {
 
     /**
-     * The default chunk size to use, i.e. {@value} bytes.
+     * The default chunk size to use: {@value} bytes.
      */
     private static final int DEFAULT_CHUNK_SIZE = IOUtils.DEFAULT_BUFFER_SIZE;
 

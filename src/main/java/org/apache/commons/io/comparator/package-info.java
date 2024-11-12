@@ -42,7 +42,7 @@
  * to compare (and sort lists or arrays of files) by combining a number of other comparators.
  * </p>
  * <p>
- * For example, to sort an array of files by type (i.e. directory or file)
+ * For example, to sort an array of files by type (directory or file)
  * and then by name:
  * </p>
  * <pre>

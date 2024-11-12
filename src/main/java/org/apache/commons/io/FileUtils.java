@@ -209,7 +209,7 @@ public class FileUtils {
     /**
      * Returns a human-readable version of the file size, where the input represents a specific number of bytes.
      * <p>
-     * If the size is over 1GB, the size is returned as the number of whole GB, i.e. the size is rounded down to the
+     * If the size is over 1GB, the size is returned as the number of whole GB, the size is rounded down to the
      * nearest GB boundary.
      * </p>
      * <p>
@@ -248,7 +248,7 @@ public class FileUtils {
     /**
      * Returns a human-readable version of the file size, where the input represents a specific number of bytes.
      * <p>
-     * If the size is over 1GB, the size is returned as the number of whole GB, i.e. the size is rounded down to the
+     * If the size is over 1GB, the size is returned as the number of whole GB, the size is rounded down to the
      * nearest GB boundary.
      * </p>
      * <p>
@@ -267,7 +267,7 @@ public class FileUtils {
     /**
      * Returns a human-readable version of the file size, where the input represents a specific number of bytes.
      * <p>
-     * If the size is over 1GB, the size is returned as the number of whole GB, i.e. the size is rounded down to the
+     * If the size is over 1GB, the size is returned as the number of whole GB, the size is rounded down to the
      * nearest GB boundary.
      * </p>
      * <p>
@@ -1167,7 +1167,7 @@ public class FileUtils {
     }
 
     /**
-     * Decodes the specified URL as per RFC 3986, i.e. transforms
+     * Decodes the specified URL as per RFC 3986, transforming
      * percent-encoded octets to characters by decoding with the UTF-8 character
      * set. This function is primarily intended for usage with
      * {@link java.net.URL} which unfortunately does not enforce proper URLs. As

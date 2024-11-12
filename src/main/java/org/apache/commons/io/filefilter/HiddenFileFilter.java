@@ -40,7 +40,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  *
  * <p>
  * Example, showing how to print out a list of the
- * current directory's <em>visible</em> (i.e. not hidden) files:
+ * current directory's <em>visible</em> (not hidden) files:
  * </p>
  *
  * <pre>

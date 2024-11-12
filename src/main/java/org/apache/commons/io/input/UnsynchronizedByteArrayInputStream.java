@@ -178,7 +178,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
     /**
      * End Of Data.
      *
-     * Similar to data.length, i.e. the last readable offset + 1.
+     * Similar to data.length, which is the last readable offset + 1.
      */
     private final int eod;
 

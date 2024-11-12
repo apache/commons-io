@@ -106,7 +106,7 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
 
     /**
      * Tests the case where the amount of data is exactly the same as the threshold. The behavior should be the same as
-     * that for the amount of data being below (i.e. not exceeding) the threshold.
+     * that for the amount of data being below (not exceeding) the threshold.
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
