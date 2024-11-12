@@ -66,14 +66,14 @@ public class AgeFileFilterTest {
         final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new AgeFileFilter(cutoffMillis),
             TrueFileFilter.INSTANCE);
         //
-        // Walk one dir
+        // Walk one directory
         Files.walkFileTree(dir, Collections.emptySet(), 1, visitor);
         // System.out.println(visitor.getPathCounters());
         // System.out.println(visitor.getFileList());
         //
         visitor.getPathCounters().reset();
         //
-        // Walk dir tree
+        // Walk directory tree
         Files.walkFileTree(dir, visitor);
         // System.out.println(visitor.getPathCounters());
         // System.out.println(visitor.getDirList());

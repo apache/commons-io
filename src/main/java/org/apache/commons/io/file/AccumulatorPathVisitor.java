@@ -42,14 +42,14 @@ import org.apache.commons.io.function.IOBiFunction;
  * Instant cutoff = Instant.now().minus(Duration.ofDays(1));
  * AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new AgeFileFilter(cutoff));
  * //
- * // Walk one dir
+ * // Walk one directory
  * Files.walkFileTree(dir, Collections.emptySet(), 1, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getFileList());
  * //
  * visitor.getPathCounters().reset();
  * //
- * // Walk dir tree
+ * // Walk directory tree
  * Files.walkFileTree(dir, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getDirList());

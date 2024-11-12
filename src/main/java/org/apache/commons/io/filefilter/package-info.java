@@ -155,14 +155,14 @@
  * final long cutoff = System.currentTimeMillis() - (24 * 60 * 60 * 1000);
  * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new AgeFileFilter(cutoff));
  * //
- * // Walk one dir
+ * // Walk one directory
  * Files.<b>walkFileTree</b>(dir, Collections.emptySet(), 1, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getFileList());
  * //
  * visitor.getPathCounters().reset();
  * //
- * // Walk dir tree
+ * // Walk directory tree
  * Files.<b>walkFileTree</b>(dir, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getDirList());

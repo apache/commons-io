@@ -64,7 +64,7 @@ public class NameFileFilterTest {
         final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new NameFileFilter("NOTICE.txt"),
             TrueFileFilter.INSTANCE);
         //
-        // Walk one dir
+        // Walk one directory
         Files.walkFileTree(dir, Collections.emptySet(), 1, visitor);
         // System.out.println(visitor.getPathCounters());
         // System.out.println(visitor.getFileList());
@@ -78,7 +78,7 @@ public class NameFileFilterTest {
         //
         visitor.getPathCounters().reset();
         //
-        // Walk dir tree
+        // Walk directory tree
         Files.walkFileTree(dir, visitor);
         // System.out.println(visitor.getPathCounters());
         // System.out.println(visitor.getDirList());

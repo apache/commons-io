@@ -50,7 +50,7 @@ import org.apache.commons.io.file.PathUtils;
  * Instant cutoff = Instant.now().minus(Duration.ofDays(1));
  * AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new AgeFileFilter(cutoff));
  * //
- * // Walk one directory
+ * // Walk one directoryectory
  * Files.<b>walkFileTree</b>(dir, Collections.emptySet(), 1, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getFileList());

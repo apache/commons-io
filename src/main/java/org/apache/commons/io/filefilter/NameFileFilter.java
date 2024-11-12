@@ -48,14 +48,14 @@ import org.apache.commons.io.file.PathUtils;
  * final Path dir = PathUtils.current();
  * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new NameFileFilter("Test"));
  * //
- * // Walk one dir
+ * // Walk one directory
  * Files.<b>walkFileTree</b>(dir, Collections.emptySet(), 1, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getFileList());
  * //
  * visitor.getPathCounters().reset();
  * //
- * // Walk dir tree
+ * // Walk directory tree
  * Files.<b>walkFileTree</b>(dir, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getDirList());
