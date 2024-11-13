@@ -41,7 +41,7 @@ import org.junit.jupiter.api.Test;
 public class PathUtilsDeleteFileTest extends AbstractTempDirTest {
 
     @Test
-    public void testDeleteBrokenLink() throws IOException {
+    public void testDeleteBrokenSymbolicLink() throws IOException {
         assumeFalse(SystemUtils.IS_OS_WINDOWS);
         final Path missingFile = tempDirPath.resolve("missing.txt");
         final Path brokenLink = tempDirPath.resolve("broken.txt");

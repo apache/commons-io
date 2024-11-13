@@ -44,7 +44,7 @@ public abstract class AbstractTempDirTest {
      * @return Path for {@code tempDirPath/subdir}.
      * @throws IOException if an I/O error occurs or the parent directory does not exist.
      */
-    protected static Path createTempSymlinkedRelativeDir(final Path rootDir) throws IOException {
+    protected static Path createTempSymbolicLinkedRelativeDir(final Path rootDir) throws IOException {
         final Path targetDir = rootDir.resolve(SUB_DIR);
         final Path symlinkDir = rootDir.resolve(SYMLINKED_DIR);
         Files.createDirectory(targetDir);

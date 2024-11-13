@@ -145,7 +145,7 @@ public class DeletingPathVisitorTest extends AbstractTempDirTest {
     @Test
     public void testIO850DirectoriesAndFiles() throws IOException {
         final Path rootDir = Files.createDirectory(managedTempDirPath.resolve("IO850"));
-        createTempSymlinkedRelativeDir(rootDir);
+        createTempSymbolicLinkedRelativeDir(rootDir);
         final Path targetDir = rootDir.resolve(SUB_DIR);
         final Path symlinkDir = rootDir.resolve(SYMLINKED_DIR);
         Files.write(targetDir.resolve("file0.txt"), "Hello".getBytes(StandardCharsets.UTF_8));
@@ -166,7 +166,7 @@ public class DeletingPathVisitorTest extends AbstractTempDirTest {
     @Test
     public void testIO850DirectoriesOnly() throws IOException {
         final Path rootDir = Files.createDirectory(managedTempDirPath.resolve("IO850"));
-        createTempSymlinkedRelativeDir(rootDir);
+        createTempSymbolicLinkedRelativeDir(rootDir);
         final Path targetDir = rootDir.resolve(SUB_DIR);
         final Path symlinkDir = rootDir.resolve(SYMLINKED_DIR);
         final DeletingPathVisitor visitor = DeletingPathVisitor.withLongCounters();

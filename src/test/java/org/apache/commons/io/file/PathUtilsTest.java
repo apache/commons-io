@@ -217,7 +217,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
 
     @Test
     public void testCreateDirectoriesSymlink() throws IOException {
-        final Path symlinkedDir = createTempSymlinkedRelativeDir(tempDirPath);
+        final Path symlinkedDir = createTempSymbolicLinkedRelativeDir(tempDirPath);
         final String leafDirName = "child";
         final Path newDirFollowed = PathUtils.createParentDirectories(symlinkedDir.resolve(leafDirName), PathUtils.NULL_LINK_OPTION);
         assertEquals(Files.readSymbolicLink(symlinkedDir), newDirFollowed);
@@ -225,7 +225,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
 
     @Test
     public void testCreateDirectoriesSymlinkClashing() throws IOException {
-        final Path symlinkedDir = createTempSymlinkedRelativeDir(tempDirPath);
+        final Path symlinkedDir = createTempSymbolicLinkedRelativeDir(tempDirPath);
         assertEquals(symlinkedDir, PathUtils.createParentDirectories(symlinkedDir.resolve("child")));
     }
 
@@ -436,7 +436,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
 
     @Test
     public void testNewOutputStreamNewFileInsideExistingSymlinkedDir() throws IOException {
-        final Path symlinkDir = createTempSymlinkedRelativeDir(tempDirPath);
+        final Path symlinkDir = createTempSymbolicLinkedRelativeDir(tempDirPath);
         final Path file = symlinkDir.resolve("test.txt");
         try (OutputStream outputStream = PathUtils.newOutputStream(file, new LinkOption[] {})) {
             // empty

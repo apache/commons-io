@@ -196,7 +196,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         }
     }
 
-    private Path createCircularOsSymLink(final String linkName, final String targetName) throws IOException {
+    private Path createCircularOsSymbolicLink(final String linkName, final String targetName) throws IOException {
         return Files.createSymbolicLink(Paths.get(linkName), Paths.get(targetName));
     }
 
@@ -204,7 +204,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
      * May throw java.nio.file.FileSystemException: C:\Users\...\FileUtilsTestCase\cycle: A required privilege is not held
      * by the client. On Windows, you are fine if you run a terminal with admin karma.
      */
-    private void createCircularSymLink(final File file) throws IOException {
+    private void createCircularSymbolicLink(final File file) throws IOException {
         assertTrue(file.exists());
         final String linkName = file + "/cycle";
         final String targetName = file + "/..";
@@ -218,7 +218,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
             // On Windows, you are fine if you run a terminal with admin karma.
             Files.createSymbolicLink(linkPath, targetPath);
         } catch (final UnsupportedOperationException e) {
-            createCircularOsSymLink(linkName, targetName);
+            createCircularOsSymbolicLink(linkName, targetName);
         }
         // Sanity check:
         assertTrue(Files.isSymbolicLink(linkPath), () -> "Expected a sym link here: " + linkName);
@@ -245,7 +245,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         FileUtils.writeStringToFile(file6, "File 6 in grandChild2", "UTF8");
     }
 
-    private Path createTempSymlinkedRelativeDir() throws IOException {
+    private Path createTempSymbolicLinkedRelativeDir() throws IOException {
         final Path targetDir = tempDirPath.resolve("subdir");
         final Path symlinkDir = tempDirPath.resolve("symlinked-dir");
         Files.createDirectory(targetDir);
@@ -404,7 +404,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
      */
     @Test
     public void test_openOutputStream_intoExistingSymlinkedDir() throws Exception {
-        final Path symlinkedDir = createTempSymlinkedRelativeDir();
+        final Path symlinkedDir = createTempSymbolicLinkedRelativeDir();
 
         final File file = symlinkedDir.resolve("test.txt").toFile();
         try (FileOutputStream out = FileUtils.openOutputStream(file)) {
@@ -762,7 +762,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
      * and should not be relied on.
      */
     @Test
-    public void testCopyDir_symLink() throws Exception {
+    public void testCopyDir_SymbolicLink() throws Exception {
         // Make a directory
         final File realDirectory = new File(tempDirFile, "real_directory");
         realDirectory.mkdir();
@@ -790,7 +790,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyDir_symLinkCycle() throws Exception {
+    public void testCopyDir_SymbolicLinkCycle() throws Exception {
         // Make a directory
         final File topDirectory = new File(tempDirFile, "topDirectory");
         topDirectory.mkdir();
@@ -824,7 +824,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
      * Tests IO-807.
      */
     @Test
-    public void testCopyDirectory_brokenSymLink() throws IOException {
+    public void testCopyDirectory_brokenSymbolicLink() throws IOException {
         // Make a file
         final File sourceDirectory = new File(tempDirFile, "source_directory");
         sourceDirectory.mkdir();
@@ -859,7 +859,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyDirectory_symLink() throws IOException {
+    public void testCopyDirectory_SymbolicLink() throws IOException {
         // Make a file
         final File sourceDirectory = new File(tempDirFile, "source_directory");
         sourceDirectory.mkdir();
@@ -890,7 +890,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
      * to a file outside the copied directory.
      */
     @Test
-    public void testCopyDirectory_symLinkExternalFile() throws Exception {
+    public void testCopyDirectory_SymbolicLinkExternalFile() throws Exception {
         // make a file
         final File content = new File(tempDirFile, "hello.txt");
         FileUtils.writeStringToFile(content, "HELLO WORLD", "UTF8");
@@ -1195,7 +1195,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyFile_symLink() throws Exception {
+    public void testCopyFile_SymbolicLink() throws Exception {
         // Make a file
         final File sourceDirectory = new File(tempDirFile, "source_directory");
         sourceDirectory.mkdir();
@@ -1554,16 +1554,16 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testDeleteDirectoryNoopIfAbsent() {
-        // Noop on non-existent entry
-        assertDoesNotThrow(() -> FileUtils.deleteDirectory(new File("does not exist.nope")));
+    public void testDeleteDirectoryIsSymLink() throws IOException {
+        final Path symlinkedDir = createTempSymbolicLinkedRelativeDir();
+        FileUtils.deleteDirectory(symlinkedDir.toFile());
+        assertFalse(Files.exists(symlinkedDir));
     }
 
     @Test
-    public void testDeleteDirectoryIsSymLink() throws IOException {
-        final Path symlinkedDir = createTempSymlinkedRelativeDir();
-        FileUtils.deleteDirectory(symlinkedDir.toFile());
-        assertFalse(Files.exists(symlinkedDir));
+    public void testDeleteDirectoryNoopIfAbsent() {
+        // Noop on non-existent entry
+        assertDoesNotThrow(() -> FileUtils.deleteDirectory(new File("does not exist.nope")));
     }
 
     @Test
@@ -2889,7 +2889,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         file.mkdir();
 
         // Create a cyclic symlink
-        createCircularSymLink(file);
+        createCircularSymbolicLink(file);
 
         assertEquals(TEST_DIRECTORY_SIZE, FileUtils.sizeOfDirectory(file), "Unexpected directory size");
     }
@@ -2920,7 +2920,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         file.delete();
         file.mkdir();
 
-        createCircularSymLink(file);
+        createCircularSymbolicLink(file);
 
         assertEquals(TEST_DIRECTORY_SIZE_BI, FileUtils.sizeOfDirectoryAsBigInteger(file), "Unexpected directory size");
 
@@ -3453,7 +3453,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
      */
     @Test
     public void testWriteStringToFileIntoSymlinkedDir() throws Exception {
-        final Path symlinkDir = createTempSymlinkedRelativeDir();
+        final Path symlinkDir = createTempSymbolicLinkedRelativeDir();
 
         final File file = symlinkDir.resolve("file").toFile();
         FileUtils.writeStringToFile(file, "Hello /u1234", StandardCharsets.UTF_8);
