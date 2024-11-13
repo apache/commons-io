@@ -85,7 +85,7 @@ public class FileUtilsCleanSymlinksTest {
         assertEquals(0, realOuter.list().length);
 
         // ensure that the contents of the symlink were NOT removed.
-        assertEquals(1, randomDirectory.list().length, "Contents of sym link should not have been removed");
+        assertEquals(1, randomDirectory.list().length, "Contents of symbolic link should not have been removed");
     }
 
     @Test
@@ -125,7 +125,7 @@ public class FileUtilsCleanSymlinksTest {
         assertEquals(0, realParent.list().length);
 
         // ensure that the contents of the symlink were NOT removed.
-        assertEquals(1, randomDirectory.list().length, "Contents of sym link should not have been removed");
+        assertEquals(1, randomDirectory.list().length, "Contents of symbolic link should not have been removed");
     }
 
     @Test

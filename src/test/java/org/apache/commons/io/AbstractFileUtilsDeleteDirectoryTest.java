@@ -69,7 +69,7 @@ public abstract class AbstractFileUtilsDeleteDirectoryTest {
         assertEquals(1, top.list().length);
 
         // ensure that the contents of the symlink were NOT removed.
-        assertEquals(1, randomDirectory.list().length, "Contents of sym link should not have been removed");
+        assertEquals(1, randomDirectory.list().length, "Contents of symbolic link should not have been removed");
     }
 
     @Test
@@ -100,7 +100,7 @@ public abstract class AbstractFileUtilsDeleteDirectoryTest {
         assertEquals(1, top.list().length);
 
         // ensure that the contents of the symlink were NOT removed.
-        assertEquals(1, randomDirectory.list().length, "Contents of sym link should not have been removed");
+        assertEquals(1, randomDirectory.list().length, "Contents of symbolic link should not have been removed");
     }
 
     @Test
@@ -187,7 +187,7 @@ public abstract class AbstractFileUtilsDeleteDirectoryTest {
         assertEquals(2, top.list().length);
 
         // ensure that the contents of the symlink were NOT removed.
-        assertEquals(1, randomDirectory.list().length, "Contents of sym link should not have been removed");
+        assertEquals(1, randomDirectory.list().length, "Contents of symbolic link should not have been removed");
     }
 
     @Test
@@ -220,7 +220,7 @@ public abstract class AbstractFileUtilsDeleteDirectoryTest {
         assertEquals(2, top.list().length);
 
         // ensure that the contents of the symlink were NOT removed.
-        assertEquals(1, randomDirectory.list().length, "Contents of sym link should not have been removed");
+        assertEquals(1, randomDirectory.list().length, "Contents of symbolic link should not have been removed");
     }
 
     @Test

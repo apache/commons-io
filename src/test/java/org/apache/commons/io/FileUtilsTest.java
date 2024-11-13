@@ -221,7 +221,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
             createCircularOsSymbolicLink(linkName, targetName);
         }
         // Sanity check:
-        assertTrue(Files.isSymbolicLink(linkPath), () -> "Expected a sym link here: " + linkName);
+        assertTrue(Files.isSymbolicLink(linkPath), () -> "Expected a symbolic link here: " + linkName);
     }
 
     private void createFilesForTestCopyDirectory(final File grandParentDir, final File parentDir, final File childDir) throws IOException {
