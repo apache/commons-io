@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -1547,8 +1548,22 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testDeleteDirectoryWithNonDirectory() {
+    public void testDeleteDirectoryFailsOnFile() {
+        // Fail request for a File
         assertThrows(IllegalArgumentException.class, () -> FileUtils.deleteDirectory(testFile1));
+    }
+
+    @Test
+    public void testDeleteDirectoryNoopIfAbsent() {
+        // Noop on non-existent entry
+        assertDoesNotThrow(() -> FileUtils.deleteDirectory(new File("does not exist.nope")));
+    }
+
+    @Test
+    public void testDeleteDirectoryIsSymLink() throws IOException {
+        final Path symlinkedDir = createTempSymlinkedRelativeDir();
+        FileUtils.deleteDirectory(symlinkedDir.toFile());
+        assertFalse(Files.exists(symlinkedDir));
     }
 
     @Test
