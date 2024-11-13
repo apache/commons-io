@@ -123,6 +123,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      * <p>
      * The array is not cloned, so could be changed after constructing the
      * instance. This would be inadvisable however.
+     * </p>
      *
      * @param suffixes  the suffixes to allow, must not be null
      * @throws NullPointerException if the suffix array is null

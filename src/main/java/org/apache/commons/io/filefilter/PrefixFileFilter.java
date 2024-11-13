@@ -122,6 +122,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * <p>
      * The array is not cloned, so could be changed after constructing the
      * instance. This would be inadvisable however.
+     * </p>
      *
      * @param prefixes  the prefixes to allow, must not be null
      * @throws IllegalArgumentException if the prefix array is null
