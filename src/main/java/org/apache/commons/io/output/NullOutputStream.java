@@ -22,7 +22,7 @@ import java.io.OutputStream;
 /**
  * Never writes data. Calls never go beyond this class.
  * <p>
- * This output stream has no destination (file/socket etc.) and all bytes written to it are ignored and lost.
+ * This output stream has no destination (file/socket etc.) and all bytes written to it are ignored.
  * </p>
  */
 public class NullOutputStream extends OutputStream {
@@ -44,46 +44,48 @@ public class NullOutputStream extends OutputStream {
 
     /**
      * Deprecated in favor of {@link #INSTANCE}.
-     *
+     * <p>
      * TODO: Will be private in 3.0.
+     * </p>
      *
      * @deprecated Use {@link #INSTANCE}.
      */
     @Deprecated
     public NullOutputStream() {
+        // empty
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
+     * Does nothing.
      *
-     * @param b The bytes to write
-     * @throws IOException never
+     * @param b The This method ignored this parameter.
+     * @throws IOException This method never throws any exceptions.
      */
     @Override
     public void write(final byte[] b) throws IOException {
-        // To /dev/null
+        // noop
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
+     * Does nothing.
      *
-     * @param b The bytes to write
-     * @param off The start offset
-     * @param len The number of bytes to write
+     * @param b This method ignored this parameter.
+     * @param off This method ignored this parameter.
+     * @param len This method ignored this parameter.
      */
     @Override
     public void write(final byte[] b, final int off, final int len) {
-        // To /dev/null
+        // noop
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
+     * Does nothing.
      *
-     * @param b The byte to write
+     * @param b This method ignored this parameter.
      */
     @Override
     public void write(final int b) {
-        // To /dev/null
+        // noop
     }
 
 }
