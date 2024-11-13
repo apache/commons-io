@@ -17,13 +17,13 @@
 package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -91,6 +91,7 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.lang3.SystemProperties;
 import org.apache.commons.lang3.SystemUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -245,12 +246,12 @@ public class FileUtilsTest extends AbstractTempDirTest {
         FileUtils.writeStringToFile(file6, "File 6 in grandChild2", "UTF8");
     }
 
-    private Path createTempSymbolicLinkedRelativeDir() throws IOException {
+    private ImmutablePair<Path, Path> createTempSymbolicLinkedRelativeDir() throws IOException {
         final Path targetDir = tempDirPath.resolve("subdir");
         final Path symlinkDir = tempDirPath.resolve("symlinked-dir");
         Files.createDirectory(targetDir);
         Files.createSymbolicLink(symlinkDir, targetDir);
-        return symlinkDir;
+        return ImmutablePair.of(symlinkDir, targetDir);
     }
 
     private Set<String> getFilePathSet(final List<File> files) {
@@ -404,8 +405,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
      */
     @Test
     public void test_openOutputStream_intoExistingSymlinkedDir() throws Exception {
-        final Path symlinkedDir = createTempSymbolicLinkedRelativeDir();
-
+        final Path symlinkedDir = createTempSymbolicLinkedRelativeDir().getLeft();
         final File file = symlinkedDir.resolve("test.txt").toFile();
         try (FileOutputStream out = FileUtils.openOutputStream(file)) {
             out.write(0);
@@ -1549,21 +1549,49 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     @Test
     public void testDeleteDirectoryFailsOnFile() {
-        // Fail request for a File
+        // Fail request to delete a directory for a file
         assertThrows(IllegalArgumentException.class, () -> FileUtils.deleteDirectory(testFile1));
-    }
-
-    @Test
-    public void testDeleteDirectoryIsSymLink() throws IOException {
-        final Path symlinkedDir = createTempSymbolicLinkedRelativeDir();
-        FileUtils.deleteDirectory(symlinkedDir.toFile());
-        assertFalse(Files.exists(symlinkedDir));
     }
 
     @Test
     public void testDeleteDirectoryNoopIfAbsent() {
         // Noop on non-existent entry
         assertDoesNotThrow(() -> FileUtils.deleteDirectory(new File("does not exist.nope")));
+    }
+
+    @Test
+    public void testDeleteDirectorySymbolicLink() throws IOException {
+        final Path symlinkedDir = createTempSymbolicLinkedRelativeDir().getLeft();
+        FileUtils.deleteDirectory(symlinkedDir.toFile());
+        assertFalse(Files.exists(symlinkedDir));
+    }
+
+    @Test
+    public void testDeleteDirectorySymbolicLinkAbsent() throws IOException {
+        final ImmutablePair<Path, Path> pair = createTempSymbolicLinkedRelativeDir();
+        final Path symlinkedDir = pair.getLeft();
+        final Path targetDir = pair.getRight();
+        assertTrue(Files.exists(symlinkedDir), symlinkedDir::toString);
+        Files.delete(symlinkedDir);
+        assertTrue(Files.exists(targetDir), targetDir::toString);
+        assertFalse(Files.exists(symlinkedDir), symlinkedDir::toString);
+        // actual test
+        FileUtils.deleteDirectory(symlinkedDir.toFile());
+        assertFalse(Files.exists(symlinkedDir), symlinkedDir::toString);
+    }
+
+    @Test
+    public void testDeleteDirectorySymbolicLinkAbsentTarget() throws IOException {
+        final ImmutablePair<Path, Path> pair = createTempSymbolicLinkedRelativeDir();
+        final Path symlinkedDir = pair.getLeft();
+        final Path targetDir = pair.getRight();
+        assertTrue(Files.exists(symlinkedDir), symlinkedDir::toString);
+        Files.delete(targetDir);
+        assertFalse(Files.exists(targetDir), targetDir::toString);
+        assertFalse(Files.exists(symlinkedDir), symlinkedDir::toString);
+        // actual test
+        FileUtils.deleteDirectory(symlinkedDir.toFile());
+        assertFalse(Files.exists(symlinkedDir), symlinkedDir::toString);
     }
 
     @Test
@@ -3453,11 +3481,9 @@ public class FileUtilsTest extends AbstractTempDirTest {
      */
     @Test
     public void testWriteStringToFileIntoSymlinkedDir() throws Exception {
-        final Path symlinkDir = createTempSymbolicLinkedRelativeDir();
-
+        final Path symlinkDir = createTempSymbolicLinkedRelativeDir().getLeft();
         final File file = symlinkDir.resolve("file").toFile();
         FileUtils.writeStringToFile(file, "Hello /u1234", StandardCharsets.UTF_8);
-
         final byte[] text = "Hello /u1234".getBytes();
         TestUtils.assertEqualContent(text, file);
     }
