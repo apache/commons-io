@@ -22,7 +22,7 @@ import java.io.OutputStream;
 /**
  * Never writes data. Calls never go beyond this class.
  * <p>
- * This output stream has no destination (file/socket etc.) and all bytes written to it are ignored.
+ * This output stream has no destination and all bytes written to it are ignored.
  * </p>
  */
 public class NullOutputStream extends OutputStream {
@@ -58,7 +58,7 @@ public class NullOutputStream extends OutputStream {
     /**
      * Does nothing.
      *
-     * @param b The This method ignored this parameter.
+     * @param b The This method ignores this parameter.
      * @throws IOException This method never throws any exceptions.
      */
     @Override
@@ -69,9 +69,9 @@ public class NullOutputStream extends OutputStream {
     /**
      * Does nothing.
      *
-     * @param b This method ignored this parameter.
-     * @param off This method ignored this parameter.
-     * @param len This method ignored this parameter.
+     * @param b This method ignores this parameter.
+     * @param off This method ignores this parameter.
+     * @param len This method ignores this parameter.
      */
     @Override
     public void write(final byte[] b, final int off, final int len) {
@@ -81,7 +81,7 @@ public class NullOutputStream extends OutputStream {
     /**
      * Does nothing.
      *
-     * @param b This method ignored this parameter.
+     * @param b This method ignores this parameter.
      */
     @Override
     public void write(final int b) {
