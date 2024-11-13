@@ -2319,17 +2319,20 @@ public class FileUtils {
 
     @SuppressWarnings("null")
     private static void listFiles(final File directory, final List<File> files, final boolean recursive, final FilenameFilter filter) {
-        // Only allocate if you must.
-        final List<File> dirs = recursive ? new ArrayList<>() : null;
-        Arrays.stream(directory.listFiles()).forEach(f -> {
-            if (recursive && f.isDirectory()) {
-                dirs.add(f);
-            } else if (f.isFile() && filter.accept(directory, f.getName())) {
-                files.add(f);
+        final File[] listFiles = directory.listFiles();
+        if (listFiles != null) {
+            // Only allocate if you must.
+            final List<File> dirs = recursive ? new ArrayList<>() : null;
+            Arrays.stream(listFiles).forEach(f -> {
+                if (recursive && f.isDirectory()) {
+                    dirs.add(f);
+                } else if (f.isFile() && filter.accept(directory, f.getName())) {
+                    files.add(f);
+                }
+            });
+            if (recursive) {
+                dirs.forEach(d -> listFiles(d, files, true, filter));
             }
-        });
-        if (recursive) {
-            dirs.forEach(d -> listFiles(d, files, true, filter));
         }
     }
 
@@ -2346,7 +2349,7 @@ public class FileUtils {
     public static Collection<File> listFiles(final File directory, final String[] extensions, final boolean recursive) {
         // IO-856: Don't use NIO to path walk, allocate as little as possible while traversing.
         final List<File> files = new ArrayList<>();
-        final FilenameFilter filter = extensions != null ? new SuffixFileFilter(extensions) : TrueFileFilter.INSTANCE;
+        final FilenameFilter filter = extensions != null ? toSuffixFileFilter(extensions) : TrueFileFilter.INSTANCE;
         listFiles(directory, files, recursive, filter);
         return files;
     }
@@ -2983,7 +2986,7 @@ public class FileUtils {
         // @formatter:off
         final IOFileFilter filter = extensions == null
             ? FileFileFilter.INSTANCE
-            : FileFileFilter.INSTANCE.and(new SuffixFileFilter(toSuffixes(extensions)));
+            : FileFileFilter.INSTANCE.and(toSuffixFileFilter(extensions));
         // @formatter:on
         return PathUtils.walk(directory.toPath(), filter, toMaxDepth(recursive), false, FileVisitOption.FOLLOW_LINKS).map(Path::toFile);
     }
@@ -3079,7 +3082,11 @@ public class FileUtils {
      * @throws NullPointerException if the parameter is null
      */
     private static String[] toSuffixes(final String... extensions) {
-        return Stream.of(Objects.requireNonNull(extensions, "extensions")).map(e -> "." + e).toArray(String[]::new);
+        return Stream.of(Objects.requireNonNull(extensions, "extensions")).map(s -> s.charAt(0) == '.' ? s : "." + s).toArray(String[]::new);
+    }
+
+    private static SuffixFileFilter toSuffixFileFilter(final String... extensions) {
+        return new SuffixFileFilter(toSuffixes(extensions));
     }
 
     /**

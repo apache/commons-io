@@ -55,7 +55,8 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" issue="IO-860" due-to="Stefan Feenstra, Gary Gregory">Missing reserved file names in FileSystem.WINDOWS (superscript digits for COM and LPT).</action>
       <action dev="ggregory" type="fix" issue="IO-856" due-to="Thomas Hartwig, Gary Gregory">FileUtils.listFiles(final File, String[], boolean) can throw NoSuchFileException #697, #699.</action>
       <action dev="ggregory" type="fix" issue="IO-859" due-to="JD Dean, Gary Gregory">FileUtils.forceDelete on non-existent file on Windows throws IOException rather than FileNotFoundException.</action>
-      <action dev="ggregory" type="fix"                due-to="Éamonn McManus">Use Unicode escapes for superscript characters. #701.</action> 
+      <action dev="ggregory" type="fix"                due-to="Éamonn McManus">Use Unicode escapes for superscript characters. #701.</action>
+      <action dev="ggregory" type="fix" issue="IO-863" due-to="Éamonn McManus, Gary Gregory">Recent incompatible change to FileUtils.listFiles re extensions, see IO-856.</action>
       <!-- ADD -->
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add @FunctionalInterface to ClassNameMatcher.</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add ValidatingObjectInputStream.Builder and ValidatingObjectInputStream.builder().</action>
