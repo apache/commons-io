@@ -285,19 +285,28 @@ public class FileUtils {
     }
 
     /**
-     * Requires that the given {@link File} exists, and throws a {@link FileNotFoundException} if it doesn't.
+     * Requires that the given {@link File} is non-null and exists (if strict is true).
      *
      * @param file The {@link File} to check.
-     * @throws FileNotFoundException if the file does not exist
+     * @param strict whether to check that the {@code file} exists.
+     * @throws FileNotFoundException if the file does not exist.
      * @throws NullPointerException  if the given {@link File} is {@code null}.
      */
-    private static void checkExists(final File file) throws FileNotFoundException {
-        Objects.requireNonNull(file, "file");
-        if (!file.exists()) {
+    private static void checkExists(final File file, final boolean strict) throws FileNotFoundException {
+        Objects.requireNonNull(file, PROTOCOL_FILE);
+        if (strict && !file.exists()) {
             throw new FileNotFoundException(file.toString());
         }
     }
 
+    /**
+     * Requires that the given {@link File} exists, and throws a {@link FileNotFoundException} if it doesn't.
+     *
+     * @param file The {@link File} to check.
+     * @param name The NullPointerException message.
+     * @throws FileNotFoundException if the file does not exist.
+     * @throws NullPointerException  if the given {@link File} is {@code null}.
+     */
     private static void checkFileExists(final File file, final String name) throws FileNotFoundException {
         Objects.requireNonNull(file, name);
         if (!file.isFile()) {
@@ -350,8 +359,8 @@ public class FileUtils {
      *
      * @param file the file to checksum, must not be {@code null}
      * @return the checksum value
-     * @throws NullPointerException if the given {@link File} is {@code null}.
-     * @throws IllegalArgumentException if the given {@link File} does not exist or is not a file.
+     * @throws NullPointerException if the {@code file} is {@code null}.
+     * @throws IllegalArgumentException if the {@code file} does not exist or is not a file.
      * @throws IOException              if an IO error occurs reading the file.
      * @since 1.3
      */
@@ -364,12 +373,12 @@ public class FileUtils {
      *
      * @param directory directory to clean
      * @throws NullPointerException if the given {@link File} is {@code null}.
-     * @throws IllegalArgumentException if directory does not exist or is not a directory.
+     * @throws IllegalArgumentException if the {@code directory} does not exist or is not a directory.
      * @throws IOException if an I/O error occurs.
      * @see #forceDelete(File)
      */
     public static void cleanDirectory(final File directory) throws IOException {
-        IOConsumer.forAll(FileUtils::forceDelete, listFiles(directory, null));
+        IOConsumer.forAll(f -> forceDelete(f, false), listFiles(directory, null));
     }
 
     /**
@@ -377,7 +386,7 @@ public class FileUtils {
      *
      * @param directory directory to clean, must not be {@code null}
      * @throws NullPointerException if the given {@link File} is {@code null}.
-     * @throws IllegalArgumentException if directory does not exist or is not a directory.
+     * @throws IllegalArgumentException if the {@code directory} does not exist or is not a directory.
      * @throws IOException if an I/O error occurs.
      * @see #forceDeleteOnExit(File)
      */
@@ -1386,8 +1395,28 @@ public class FileUtils {
      * @throws IOException           in case deletion is unsuccessful.
      */
     public static void forceDelete(final File file) throws IOException {
+        forceDelete(file, true);
+    }
+
+    /**
+     * Deletes a file or directory. For a directory, delete it and all subdirectories.
+     * <p>
+     * The difference between File.delete() and this method are:
+     * </p>
+     * <ul>
+     * <li>The directory does not have to be empty.</li>
+     * <li>You get an exception when a file or directory cannot be deleted.</li>
+     * </ul>
+     *
+     * @param file file or directory to delete, must not be {@code null}.
+     * @param strict whether to throw a FileNotFoundException.
+     * @throws NullPointerException  if the file is {@code null}.
+     * @throws FileNotFoundException if the file was not found.
+     * @throws IOException           in case deletion is unsuccessful.
+     */
+    private static void forceDelete(final File file, final boolean strict) throws IOException {
         Objects.requireNonNull(file, PROTOCOL_FILE);
-        checkExists(file); // fail-fast
+        checkExists(file, strict); // fail-fast
         final Counters.PathCounters deleteCounters;
         try {
             deleteCounters = PathUtils.delete(file.toPath(), PathUtils.EMPTY_LINK_OPTION_ARRAY, StandardDeleteOption.OVERRIDE_READ_ONLY);
@@ -2265,11 +2294,11 @@ public class FileUtils {
     /**
      * Lists files in a directory, asserting that the supplied directory exists and is a directory.
      *
-     * @param directory The directory to list
+     * @param directory The directory to list.
      * @param fileFilter Optional file filter, may be null.
      * @return The files in the directory, never {@code null}.
      * @throws NullPointerException if directory is {@code null}.
-     * @throws IllegalArgumentException if {@link directory} exists but is not a directory
+     * @throws IllegalArgumentException if {@link directory} exists but is not a directory.
      * @throws IOException if an I/O error occurs.
      */
     private static File[] listFiles(final File directory, final FileFilter fileFilter) throws IOException {

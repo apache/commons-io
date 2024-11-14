@@ -248,10 +248,10 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     private ImmutablePair<Path, Path> createTempSymbolicLinkedRelativeDir() throws IOException {
         final Path targetDir = tempDirPath.resolve("subdir");
-        final Path symlinkDir = tempDirPath.resolve("symlinked-dir");
+        final Path symLinkedDir = tempDirPath.resolve("symlinked-dir");
         Files.createDirectory(targetDir);
-        Files.createSymbolicLink(symlinkDir, targetDir);
-        return ImmutablePair.of(symlinkDir, targetDir);
+        Files.createSymbolicLink(symLinkedDir, targetDir);
+        return ImmutablePair.of(symLinkedDir, targetDir);
     }
 
     private Set<String> getFilePathSet(final List<File> files) {
@@ -318,7 +318,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
     public void setUp() throws Exception {
         testFile1 = new File(tempDirFile, "file1-test.txt");
         testFile2 = new File(tempDirFile, "file1a-test.txt");
-
         testFile1Size = testFile1.length();
         testFile2Size = testFile2.length();
         if (!testFile1.getParentFile().exists()) {
@@ -1586,12 +1585,33 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final Path symlinkedDir = pair.getLeft();
         final Path targetDir = pair.getRight();
         assertTrue(Files.exists(symlinkedDir), symlinkedDir::toString);
+        // remove target directory, keeping symbolic link
         Files.delete(targetDir);
         assertFalse(Files.exists(targetDir), targetDir::toString);
         assertFalse(Files.exists(symlinkedDir), symlinkedDir::toString);
         // actual test
         FileUtils.deleteDirectory(symlinkedDir.toFile());
         assertFalse(Files.exists(symlinkedDir), symlinkedDir::toString);
+    }
+
+    @Test
+    public void testDeleteDirectorySymbolicLinkAbsentDeepTarget() throws IOException {
+        final ImmutablePair<Path, Path> pair = createTempSymbolicLinkedRelativeDir();
+        final Path symLinkedDir = pair.getLeft();
+        final Path targetDir = pair.getRight();
+        // more setup
+        final Path targetDir2 = targetDir.resolve("subdir2");
+        final Path symLinkedDir2 = targetDir.resolve("symlinked-dir2");
+        Files.createDirectory(targetDir2);
+        Files.createSymbolicLink(symLinkedDir2, targetDir2);
+        assertTrue(Files.exists(symLinkedDir2), symLinkedDir2::toString);
+        // remove target directory, keeping symbolic link
+        Files.delete(targetDir2);
+        assertFalse(Files.exists(targetDir2), targetDir2::toString);
+        assertFalse(Files.exists(symLinkedDir2), symLinkedDir2::toString);
+        // actual test
+        FileUtils.deleteDirectory(targetDir.toFile());
+        assertFalse(Files.exists(targetDir), targetDir::toString);
     }
 
     @Test
