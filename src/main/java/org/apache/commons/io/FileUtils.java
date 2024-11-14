@@ -1415,7 +1415,6 @@ public class FileUtils {
      * @throws IOException           in case deletion is unsuccessful.
      */
     private static void forceDelete(final File file, final boolean strict) throws IOException {
-        Objects.requireNonNull(file, PROTOCOL_FILE);
         checkExists(file, strict); // fail-fast
         final Counters.PathCounters deleteCounters;
         try {
