@@ -2295,12 +2295,14 @@ public class FileUtils {
     /**
      * Lists files in a directory, asserting that the supplied directory exists and is a directory.
      *
-     * @param directory The directory to list.
+     * @param directory  The directory to list.
      * @param fileFilter Optional file filter, may be null.
      * @return The files in the directory, never {@code null}.
-     * @throws NullPointerException if directory is {@code null}.
-     * @throws IllegalArgumentException if {@link directory} exists but is not a directory.
-     * @throws IOException if an I/O error occurs.
+     * @throws NullPointerException     if the {@code directory} is {@code null}.
+     * @throws IllegalArgumentException if the {@code directory} exists but is not a directory.
+     * @throws IOException              if an I/O error occurs per {@link File#listFiles()} and {@link File#listFiles(FileFilter)}.
+     * @throws SecurityException        If a security manager exists and its {@link SecurityManager#checkRead(String)} method denies read access to the
+     *                                  directory.
      */
     private static File[] listFiles(final File directory, final FileFilter fileFilter) throws IOException {
         requireDirectoryExists(directory, "directory");
