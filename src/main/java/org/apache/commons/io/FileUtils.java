@@ -1420,11 +1420,13 @@ public class FileUtils {
         final Counters.PathCounters deleteCounters;
         try {
             deleteCounters = PathUtils.delete(file.toPath(), PathUtils.EMPTY_LINK_OPTION_ARRAY, StandardDeleteOption.OVERRIDE_READ_ONLY);
-        } catch (final NoSuchFileException ex) {
+        } catch (final NoSuchFileException e) {
             // Map NIO to IO exception
-            throw new FileNotFoundException("Cannot delete file: " + file);
-        } catch (final IOException ex) {
-            throw new IOException("Cannot delete file: " + file, ex);
+            final FileNotFoundException nioEx = new FileNotFoundException("Cannot delete file: " + file);
+            nioEx.initCause(e);
+            throw nioEx;
+        } catch (final IOException e) {
+            throw new IOException("Cannot delete file: " + file, e);
         }
         if (deleteCounters.getFileCounter().get() < 1 && deleteCounters.getDirectoryCounter().get() < 1) {
             // didn't find a file to delete.
