@@ -644,7 +644,7 @@ public abstract class DirectoryWalker<T> {
             final int childDepth = depth + 1;
             if (depthLimit < 0 || childDepth <= depthLimit) {
                 checkIfCancelled(directory, depth, results);
-                File[] childFiles = filter == null ? directory.listFiles() : directory.listFiles(filter);
+                File[] childFiles = directory.listFiles(filter);
                 childFiles = filterDirectoryContents(directory, depth, childFiles);
                 if (childFiles == null) {
                     handleRestricted(directory, childDepth, results);

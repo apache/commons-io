@@ -2306,7 +2306,7 @@ public class FileUtils {
      */
     private static File[] listFiles(final File directory, final FileFilter fileFilter) throws IOException {
         requireDirectoryExists(directory, "directory");
-        final File[] files = fileFilter == null ? directory.listFiles() : directory.listFiles(fileFilter);
+        final File[] files = directory.listFiles(fileFilter);
         if (files == null) {
             // null if the directory does not denote a directory, or if an I/O error occurs.
             throw new IOException("Unknown I/O error listing contents of directory: " + directory);
