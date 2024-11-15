@@ -586,14 +586,14 @@ public class FileUtils {
      * {@link File#setLastModified(long)}. However it is not guaranteed that those operations will succeed. If the
      * modification operation fails, the method throws IOException.
      * </p>
-     * <b>Example: Copy directories only</b>
+     * <strong>Example: Copy directories only</strong>
      *
      * <pre>
      * // only copy the directory structure
      * FileUtils.copyDirectory(srcDir, destDir, DirectoryFileFilter.DIRECTORY);
      * </pre>
      *
-     * <b>Example: Copy directories and txt files</b>
+     * <strong>Example: Copy directories and txt files</strong>
      *
      * <pre>
      * // Create a filter for ".txt" files
@@ -637,14 +637,14 @@ public class FileUtils {
      * not guaranteed that the operation will succeed. If the modification operation fails it falls back to
      * {@link File#setLastModified(long)}. If that fails, the method throws IOException.
      * </p>
-     * <b>Example: Copy directories only</b>
+     * <strong>Example: Copy directories only</strong>
      *
      * <pre>
      * // only copy the directory structure
      * FileUtils.copyDirectory(srcDir, destDir, DirectoryFileFilter.DIRECTORY, false);
      * </pre>
      *
-     * <b>Example: Copy directories and txt files</b>
+     * <strong>Example: Copy directories and txt files</strong>
      *
      * <pre>
      * // Create a filter for ".txt" files
@@ -688,14 +688,14 @@ public class FileUtils {
      * not guaranteed that the operation will succeed. If the modification operation fails it falls back to
      * {@link File#setLastModified(long)}. If that fails, the method throws IOException.
      * </p>
-     * <b>Example: Copy directories only</b>
+     * <strong>Example: Copy directories only</strong>
      *
      * <pre>
      * // only copy the directory structure
      * FileUtils.copyDirectory(srcDir, destDir, DirectoryFileFilter.DIRECTORY, false);
      * </pre>
      *
-     * <b>Example: Copy directories and txt files</b>
+     * <strong>Example: Copy directories and txt files</strong>
      *
      * <pre>
      * // Create a filter for ".txt" files

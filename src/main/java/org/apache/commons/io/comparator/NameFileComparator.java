@@ -23,7 +23,7 @@ import java.util.Comparator;
 import org.apache.commons.io.IOCase;
 
 /**
- * Compare the <b>names</b> of two files for order (see {@link File#getName()}).
+ * Compare the <strong>names</strong> of two files for order (see {@link File#getName()}).
  * <p>
  * This comparator can be used to sort lists or arrays of files
  * by their name either in a case-sensitive, case-insensitive or

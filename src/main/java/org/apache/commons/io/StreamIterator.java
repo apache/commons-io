@@ -37,7 +37,7 @@ public final class StreamIterator<E> implements Iterator<E>, AutoCloseable {
     /**
      * Wraps and presents a stream as a closable resource that automatically closes itself when reaching the end of stream.
      * <p>
-     * <b>Warning</b>
+     * <strong>Warning</strong>
      * </p>
      * <p>
      * In order to close the stream, the call site MUST either close the stream it allocated OR call this iterator until the end.

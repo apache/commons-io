@@ -46,14 +46,14 @@ import java.nio.file.attribute.BasicFileAttributes;
  * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new SizeFileFilter(1024 * 1024));
  * //
  * // Walk one directory
- * Files.<b>walkFileTree</b>(dir, Collections.emptySet(), 1, visitor);
+ * Files.<strong>walkFileTree</strong>(dir, Collections.emptySet(), 1, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getFileList());
  * //
  * visitor.getPathCounters().reset();
  * //
  * // Walk directory tree
- * Files.<b>walkFileTree</b>(dir, visitor);
+ * Files.<strong>walkFileTree</strong>(dir, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getDirList());
  * System.out.println(visitor.getFileList());
@@ -110,9 +110,9 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
      * Checks to see if the size of the file is favorable.
      * <p>
      * If size equals threshold and smaller files are required,
-     * file <b>IS NOT</b> selected.
+     * file <strong>IS NOT</strong> selected.
      * If size equals threshold and larger files are required,
-     * file <b>IS</b> selected.
+     * file <strong>IS</strong> selected.
      * </p>
      *
      * @param file  the File to check
@@ -130,8 +130,8 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
     /**
      * Checks to see if the size of the file is favorable.
      * <p>
-     * If size equals threshold and smaller files are required, file <b>IS NOT</b> selected. If size equals threshold and larger files are required, file
-     * <b>IS</b> selected.
+     * If size equals threshold and smaller files are required, file <strong>IS NOT</strong> selected. If size equals threshold and larger files are required,
+     * file <strong>IS</strong> selected.
      * </p>
      *
      * @param file       the File to check

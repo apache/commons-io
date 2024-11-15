@@ -51,14 +51,14 @@ import org.apache.commons.io.file.PathUtils;
  * AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new AgeFileFilter(cutoff));
  * //
  * // Walk one directoryectory
- * Files.<b>walkFileTree</b>(dir, Collections.emptySet(), 1, visitor);
+ * Files.<strong>walkFileTree</strong>(dir, Collections.emptySet(), 1, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getFileList());
  * //
  * visitor.getPathCounters().reset();
  * //
  * // Walk directory tree
- * Files.<b>walkFileTree</b>(dir, visitor);
+ * Files.<strong>walkFileTree</strong>(dir, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getDirList());
  * System.out.println(visitor.getFileList());
@@ -175,8 +175,8 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
     /**
      * Checks to see if the last modification of the file matches cutoff favorably.
      * <p>
-     * If last modification time equals cutoff and newer files are required, file <b>IS NOT</b> selected. If last
-     * modification time equals cutoff and older files are required, file <b>IS</b> selected.
+     * If last modification time equals cutoff and newer files are required, file <strong>IS NOT</strong> selected. If last
+     * modification time equals cutoff and older files are required, file <strong>IS</strong> selected.
      * </p>
      *
      * @param file the File to check
@@ -190,8 +190,8 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
     /**
      * Checks to see if the last modification of the file matches cutoff favorably.
      * <p>
-     * If last modification time equals cutoff and newer files are required, file <b>IS NOT</b> selected. If last
-     * modification time equals cutoff and older files are required, file <b>IS</b> selected.
+     * If last modification time equals cutoff and newer files are required, file <strong>IS NOT</strong> selected. If last
+     * modification time equals cutoff and older files are required, file <strong>IS</strong> selected.
      * </p>
      *
      * @param file the File to check

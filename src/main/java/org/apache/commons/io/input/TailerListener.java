@@ -26,7 +26,7 @@ public interface TailerListener {
     /**
      * This method is called if the tailed file is not found.
      * <p>
-     * <b>Note:</b> this is called from the tailer thread.
+     * <strong>Note:</strong> this is called from the tailer thread.
      * </p>
      */
     void fileNotFound();
@@ -37,7 +37,7 @@ public interface TailerListener {
      * This method is called before the file is reopened, and fileNotFound may
      * be called if the new file has not yet been created.
      * <p>
-     * <b>Note:</b> this is called from the tailer thread.
+     * <strong>Note:</strong> this is called from the tailer thread.
      * </p>
      */
     void fileRotated();
@@ -45,7 +45,7 @@ public interface TailerListener {
     /**
      * Handles an Exception.
      * <p>
-     * <b>Note:</b> this is called from the tailer thread.
+     * <strong>Note:</strong> this is called from the tailer thread.
      * </p>
      * @param ex the exception.
      */
@@ -54,7 +54,7 @@ public interface TailerListener {
     /**
      * Handles a line from a Tailer.
      * <p>
-     * <b>Note:</b> this is called from the tailer thread.
+     * <strong>Note:</strong> this is called from the tailer thread.
      * </p>
      * @param line the line.
      */

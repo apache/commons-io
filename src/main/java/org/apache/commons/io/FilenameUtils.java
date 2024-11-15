@@ -37,7 +37,7 @@ import java.util.stream.Stream;
  * This class aims to help avoid those problems.
  * </p>
  * <p>
- * <b>NOTE</b>: You may be able to avoid using this class entirely simply by
+ * <strong>NOTE</strong>: You may be able to avoid using this class entirely simply by
  * using JDK {@link File File} objects and the two argument constructor
  * {@link File#File(java.io.File, String) File(File,String)}.
  * </p>
@@ -634,7 +634,7 @@ public class FilenameUtils {
      * exception of a possible {@link IllegalArgumentException} on Windows (see below).
      * </p>
      * <p>
-     * <b>Note:</b> This method used to have a hidden problem for names like "foo.exe:bar.txt".
+     * <strong>Note:</strong> This method used to have a hidden problem for names like "foo.exe:bar.txt".
      * In this case, the name wouldn't be the name of a file, but the identifier of an
      * alternate data stream (bar.txt) on the file foo.exe. The method used to return
      * ".txt" here, which would be misleading. Commons IO 2.7 and later throw
@@ -644,7 +644,7 @@ public class FilenameUtils {
      * @param fileName the file name to retrieve the extension of.
      * @return the extension of the file or an empty string if none exists or {@code null}
      * if the file name is {@code null}.
-     * @throws IllegalArgumentException <b>Windows only:</b> the file name parameter is, in fact,
+     * @throws IllegalArgumentException <strong>Windows only:</strong> the file name parameter is, in fact,
      * the identifier of an Alternate Data Stream, for example "foo.exe:bar.txt".
      */
     public static String getExtension(final String fileName) throws IllegalArgumentException {
@@ -972,7 +972,7 @@ public class FilenameUtils {
      * The output will be the same irrespective of the machine that the code is running on, with the
      * exception of a possible {@link IllegalArgumentException} on Windows (see below).
      * </p>
-     * <b>Note:</b> This method used to have a hidden problem for names like "foo.exe:bar.txt".
+     * <strong>Note:</strong> This method used to have a hidden problem for names like "foo.exe:bar.txt".
      * In this case, the name wouldn't be the name of a file, but the identifier of an
      * alternate data stream (bar.txt) on the file foo.exe. The method used to return
      * ".txt" here, which would be misleading. Commons IO 2.7, and later versions, are throwing
@@ -981,7 +981,7 @@ public class FilenameUtils {
      * @param fileName
      *            the file name to find the last extension separator in, null returns -1
      * @return the index of the last extension separator character, or -1 if there is no such character
-     * @throws IllegalArgumentException <b>Windows only:</b> the file name parameter is, in fact,
+     * @throws IllegalArgumentException <strong>Windows only:</strong> the file name parameter is, in fact,
      * the identifier of an Alternate Data Stream, for example "foo.exe:bar.txt".
      */
     public static int indexOfExtension(final String fileName) throws IllegalArgumentException {

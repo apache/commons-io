@@ -24,7 +24,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
 
 /**
- * Compare the file name <b>extensions</b> for order
+ * Compare the file name <strong>extensions</strong> for order
  * (see {@link FilenameUtils#getExtension(String)}).
  * <p>
  * This comparator can be used to sort lists or arrays of files

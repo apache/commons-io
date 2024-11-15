@@ -27,7 +27,7 @@ import org.apache.commons.io.function.Uncheck;
 import org.apache.commons.io.input.UnsynchronizedByteArrayInputStream;
 
 /**
- * Implements a version of {@link AbstractByteArrayOutputStream} <b>without</b> any concurrent thread safety.
+ * Implements a version of {@link AbstractByteArrayOutputStream} <strong>without</strong> any concurrent thread safety.
  * <p>
  * To build an instance, use {@link Builder}.
  * </p>

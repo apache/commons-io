@@ -23,7 +23,7 @@ import java.util.Comparator;
 import org.apache.commons.io.FileUtils;
 
 /**
- * Compare the <b>last modified date/time</b> of two files for order
+ * Compare the <strong>last modified date/time</strong> of two files for order
  * (see {@link FileUtils#lastModifiedUnchecked(File)}).
  * <p>
  * This comparator can be used to sort lists or arrays of files

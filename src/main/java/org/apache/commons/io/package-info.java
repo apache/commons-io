@@ -18,20 +18,21 @@
 /**
  * Provides classes for working with streams, readers, writers and files. The most commonly used classes are described here:
  * <p>
- * <b>IOUtils</b> is the most frequently used class. It provides operations to read, write, copy and close streams.
+ * <strong>IOUtils</strong> is the most frequently used class. It provides operations to read, write, copy and close streams.
  * </p>
  * <p>
- * <b>FileUtils</b> provides operations based around the JDK File class. These include reading, writing, copying, comparing and deleting.
+ * <strong>FileUtils</strong> provides operations based around the JDK File class. These include reading, writing, copying, comparing and deleting.
  * </p>
  * <p>
- * <b>FilenameUtils</b> provides utilities based on filenames. This utility class manipulates file names without using File objects. It aims to simplify the
- * transition between Windows and Unix. Before using this class however, you should consider whether you should be using File objects.
+ * <strong>FilenameUtils</strong> provides utilities based on filenames. This utility class manipulates file names without using File objects. It aims to
+ * simplify the transition between Windows and Unix. Before using this class however, you should consider whether you should be using File objects.
  * </p>
  * <p>
- * <b>FileSystemUtils</b> allows access to the filing system in ways the JDK does not support. At present this allows you to get the free space on a drive.
+ * <strong>FileSystemUtils</strong> allows access to the filing system in ways the JDK does not support. At present this allows you to get the free space on a
+ * drive.
  * </p>
  * <p>
- * <b>EndianUtils</b> swaps data between Big-Endian and Little-Endian formats.
+ * <strong>EndianUtils</strong> swaps data between Big-Endian and Little-Endian formats.
  * </p>
  */
 package org.apache.commons.io;

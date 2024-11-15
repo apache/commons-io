@@ -25,7 +25,7 @@ import java.nio.ByteBuffer;
  * garbage collection. However, this should not be relied upon since it may not occur in a timely fashion -
  * especially since off heap ByeBuffers don't put pressure on the garbage collector.
  * <p>
- * <b>Warning:</b> Do not attempt to use a direct {@link ByteBuffer} that has been cleaned or bad things will happen.
+ * <strong>Warning:</strong> Do not attempt to use a direct {@link ByteBuffer} that has been cleaned or bad things will happen.
  * Don't use this class unless you can ensure that the cleaned buffer will not be accessed anymore.
  * </p>
  * <p>

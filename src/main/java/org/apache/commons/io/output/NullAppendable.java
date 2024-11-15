@@ -20,7 +20,7 @@ package org.apache.commons.io.output;
 import java.io.IOException;
 
 /**
- * Appends all data to the famous <b>/dev/null</b>.
+ * Appends all data to the famous <strong>/dev/null</strong>.
  * <p>
  * This Appendable has no destination (file/socket etc.) and all characters written to it are ignored and lost.
  * </p>

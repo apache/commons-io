@@ -47,7 +47,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * }
  * </pre>
  * <p>
- * <b>N.B.</b> For read-only files, use {@code CanReadFileFilter.READ_ONLY}.
+ * <strong>N.B.</strong> For read-only files, use {@code CanReadFileFilter.READ_ONLY}.
  * </p>
  * <h2>Deprecating Serialization</h2>
  * <p>

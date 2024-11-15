@@ -61,14 +61,14 @@ import org.apache.commons.io.IOUtils;
  * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(EmptyFileFilter.EMPTY);
  * //
  * // Walk one directory
- * Files.<b>walkFileTree</b>(dir, Collections.emptySet(), 1, visitor);
+ * Files.<strong>walkFileTree</strong>(dir, Collections.emptySet(), 1, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getFileList());
  * //
  * visitor.getPathCounters().reset();
  * //
  * // Walk directory tree
- * Files.<b>walkFileTree</b>(dir, visitor);
+ * Files.<strong>walkFileTree</strong>(dir, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getDirList());
  * System.out.println(visitor.getFileList());

@@ -215,7 +215,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * <h3 id="internal">3.2 Internal</h3>
  *
  * <p>
- * This shows an example of how internal cancellation processing could be implemented. <b>Note</b> the decision logic
+ * This shows an example of how internal cancellation processing could be implemented. <strong>Note</strong> the decision logic
  * and throwing a {@link CancelException} could be implemented in any of the <em>lifecycle</em> methods.
  * </p>
  *

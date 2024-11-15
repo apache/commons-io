@@ -545,7 +545,7 @@ public class IOUtils {
      * } catch (Exception e) {
      *     // error handling
      * } finally {
-     *     <b>IOUtils.closeQuietly(closeable); // In case normal close was skipped due to Exception</b>
+     *     <strong>IOUtils.closeQuietly(closeable); // In case normal close was skipped due to Exception</strong>
      * }
      * </pre>
      * <p>
@@ -2743,7 +2743,7 @@ public class IOUtils {
      * Gets contents of an {@link InputStream} as a {@code byte[]}.
      * Use this method instead of {@link #toByteArray(InputStream)}
      * when {@link InputStream} size is known.
-     * <b>NOTE:</b> the method checks that the length can safely be cast to an int without truncation
+     * <strong>NOTE:</strong> the method checks that the length can safely be cast to an int without truncation
      * before using {@link IOUtils#toByteArray(InputStream, int)} to read into the byte array.
      * (Arrays can have no more than Integer.MAX_VALUE entries anyway)
      *

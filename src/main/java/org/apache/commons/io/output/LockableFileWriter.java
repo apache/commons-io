@@ -37,8 +37,8 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * This class provides a simple alternative to {@link FileWriter} that will use a lock file to prevent duplicate writes.
  * </p>
  * <p>
- * <b>Note:</b> The lock file is deleted when {@link #close()} is called - or if the main file cannot be opened initially. In the (unlikely) event that the lock
- * file cannot be deleted, an exception is thrown.
+ * <strong>Note:</strong> The lock file is deleted when {@link #close()} is called - or if the main file cannot be opened initially. In the (unlikely) event
+ * that the lock file cannot be deleted, an exception is thrown.
  * </p>
  * <p>
  * By default, the file will be overwritten, but this may be changed to append. The lock directory may be specified, but defaults to the system property

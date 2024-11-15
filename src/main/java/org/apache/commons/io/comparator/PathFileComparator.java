@@ -23,7 +23,7 @@ import java.util.Comparator;
 import org.apache.commons.io.IOCase;
 
 /**
- * Compare the <b>path</b> of two files for order (see {@link File#getPath()}).
+ * Compare the <strong>path</strong> of two files for order (see {@link File#getPath()}).
  * <p>
  * This comparator can be used to sort lists or arrays of files
  * by their path either in a case-sensitive, case-insensitive or

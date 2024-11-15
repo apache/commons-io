@@ -148,7 +148,7 @@
  * }
  * </pre>
  * <h2>Using NIO</h2>
- * <p>You can combine Java <b>file tree walking</b> by using <code>java.nio.file.Files.walk()</code> APIs with filters:</p>
+ * <p>You can combine Java <strong>file tree walking</strong> by using <code>java.nio.file.Files.walk()</code> APIs with filters:</p>
  * <pre>
  * final Path dir = Paths.get("");
  * // We are interested in files older than one day
@@ -156,14 +156,14 @@
  * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new AgeFileFilter(cutoff));
  * //
  * // Walk one directory
- * Files.<b>walkFileTree</b>(dir, Collections.emptySet(), 1, visitor);
+ * Files.<strong>walkFileTree</strong>(dir, Collections.emptySet(), 1, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getFileList());
  * //
  * visitor.getPathCounters().reset();
  * //
  * // Walk directory tree
- * Files.<b>walkFileTree</b>(dir, visitor);
+ * Files.<strong>walkFileTree</strong>(dir, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getDirList());
  * System.out.println(visitor.getFileList());
