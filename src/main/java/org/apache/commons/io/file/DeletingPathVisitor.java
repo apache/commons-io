@@ -59,7 +59,7 @@ public class DeletingPathVisitor extends CountingPathVisitor {
     private final LinkOption[] linkOptions;
 
     /**
-     * Constructs a new visitor that deletes files except for the files and directories explicitly given.
+     * Constructs a instance that deletes files except for the files and directories explicitly given.
      *
      * @param pathCounter How to count visits.
      * @param deleteOption How deletion is handled.
@@ -71,7 +71,7 @@ public class DeletingPathVisitor extends CountingPathVisitor {
     }
 
     /**
-     * Constructs a new visitor that deletes files except for the files and directories explicitly given.
+     * Constructs a instance that deletes files except for the files and directories explicitly given.
      *
      * @param pathCounter How to count visits.
      * @param linkOptions How symbolic links are handled.
@@ -90,7 +90,7 @@ public class DeletingPathVisitor extends CountingPathVisitor {
     }
 
     /**
-     * Constructs a new visitor that deletes files except for the files and directories explicitly given.
+     * Constructs a instance that deletes files except for the files and directories explicitly given.
      *
      * @param pathCounter How to count visits.
      *

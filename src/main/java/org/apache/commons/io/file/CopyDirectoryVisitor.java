@@ -45,7 +45,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
     private final Path targetDirectory;
 
     /**
-     * Constructs a new visitor that deletes files except for the files and directories explicitly given.
+     * Constructs a instance that deletes files except for the files and directories explicitly given.
      *
      * @param pathCounter How to count visits.
      * @param sourceDirectory The source directory
@@ -60,7 +60,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
     }
 
     /**
-     * Constructs a new visitor that deletes files except for the files and directories explicitly given.
+     * Constructs a instance that deletes files except for the files and directories explicitly given.
      *
      * @param pathCounter How to count visits.
      * @param fileFilter How to filter file paths.

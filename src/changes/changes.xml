@@ -57,7 +57,8 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" issue="IO-859" due-to="JD Dean, Gary Gregory">FileUtils.forceDelete on non-existent file on Windows throws IOException rather than FileNotFoundException.</action>
       <action dev="ggregory" type="fix"                due-to="Éamonn McManus">Use Unicode escapes for superscript characters. #701.</action>
       <action dev="ggregory" type="fix" issue="IO-863" due-to="Éamonn McManus, Gary Gregory">Recent incompatible change to FileUtils.listFiles re extensions, see IO-856.</action>
-      <action dev="ggregory" type="fix" issue="IO-862" due-to="Éamonn McManus, Gary Gregory">FileUtils.deleteDirectory fails for a directory containing a broken symbolic link.</action>
+      <action dev="ggregory" type="fix" issue="IO-857" due-to="Dmitry, Gary Gregory">Javadoc: Update details for PathUtils "clean" behavior.</action>
+      
       <!-- ADD -->
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add @FunctionalInterface to ClassNameMatcher.</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add ValidatingObjectInputStream.Builder and ValidatingObjectInputStream.builder().</action>
