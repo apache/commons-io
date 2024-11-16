@@ -1580,21 +1580,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testDeleteDirectorySymbolicLinkAbsentTarget() throws IOException {
-        final ImmutablePair<Path, Path> pair = createTempSymbolicLinkedRelativeDir();
-        final Path symlinkedDir = pair.getLeft();
-        final Path targetDir = pair.getRight();
-        assertTrue(Files.exists(symlinkedDir), symlinkedDir::toString);
-        // remove target directory, keeping symbolic link
-        Files.delete(targetDir);
-        assertFalse(Files.exists(targetDir), targetDir::toString);
-        assertFalse(Files.exists(symlinkedDir), symlinkedDir::toString);
-        // actual test
-        FileUtils.deleteDirectory(symlinkedDir.toFile());
-        assertFalse(Files.exists(symlinkedDir), symlinkedDir::toString);
-    }
-
-    @Test
     public void testDeleteDirectorySymbolicLinkAbsentDeepTarget() throws IOException {
         final ImmutablePair<Path, Path> pair = createTempSymbolicLinkedRelativeDir();
         final Path symLinkedDir = pair.getLeft();
@@ -1612,6 +1597,21 @@ public class FileUtilsTest extends AbstractTempDirTest {
         // actual test
         FileUtils.deleteDirectory(targetDir.toFile());
         assertFalse(Files.exists(targetDir), targetDir::toString);
+    }
+
+    @Test
+    public void testDeleteDirectorySymbolicLinkAbsentTarget() throws IOException {
+        final ImmutablePair<Path, Path> pair = createTempSymbolicLinkedRelativeDir();
+        final Path symlinkedDir = pair.getLeft();
+        final Path targetDir = pair.getRight();
+        assertTrue(Files.exists(symlinkedDir), symlinkedDir::toString);
+        // remove target directory, keeping symbolic link
+        Files.delete(targetDir);
+        assertFalse(Files.exists(targetDir), targetDir::toString);
+        assertFalse(Files.exists(symlinkedDir), symlinkedDir::toString);
+        // actual test
+        FileUtils.deleteDirectory(symlinkedDir.toFile());
+        assertFalse(Files.exists(symlinkedDir), symlinkedDir::toString);
     }
 
     @Test
