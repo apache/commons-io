@@ -1,4 +1,82 @@
 
+Apache Commons IO 2.18.0 Release Notes
+
+Introduction
+------------
+
+The Apache Commons IO library contains utility classes, stream implementations, file filters,
+file comparators, endian transformation classes, and much more.
+
+Version 2.18.0: Java 8 is required.
+
+New features
+------------
+
+o          Add @FunctionalInterface to ClassNameMatcher. Thanks to Gary Gregory. 
+o          Add ValidatingObjectInputStream.Builder and ValidatingObjectInputStream.builder(). Thanks to Gary Gregory. 
+o          Add a "Safe Deserialization" section to the User Guide for the site. Thanks to Gary Gregory. 
+o          Add IORandomAccessFile. Thanks to Gary Gregory. 
+o          Add RandomAccessFileMode.io(String). Thanks to Gary Gregory. 
+o          Add FileAlterationObserver.Builder() and deprecate most constructors. Thanks to Gary Gregory. 
+o          Add IOUtils.readLines(CharSequence). Thanks to Gary Gregory. 
+o          Add ValidatingObjectInputStream.ObjectStreamClassPredicate to allow configuration reuse. Thanks to Gary Gregory. 
+o          Add RandomAccessFileMode.accept(Path, IOConsumer<RandomAccessFile>). Thanks to Gary Gregory. 
+o          Add RandomAccessFileMode.apply(Path, IOFunction<RandomAccessFile>, T). Thanks to Gary Gregory. 
+o          Add IOIntConsumer. Thanks to Gary Gregory. 
+o IO-861:  Add ProxyInputStream.AbstractBuilder. Supports setting a consumer for ProxyInputStream.afterRead(int). Thanks to Gary Gregory. 
+o          Add support to AutoCloseInputStream for setting a consumer for ProxyInputStream.afterRead(int). Thanks to Gary Gregory. 
+o          Add support to BOMInputStream for setting a consumer for ProxyInputStream.afterRead(int). Thanks to Gary Gregory. 
+o IO-861:  Add support to BoundedInputStream for setting a consumer for ProxyInputStream.afterRead(int). Thanks to Gary Gregory. 
+o IO-861:  Add support to BoundedInputStream for setting a consumer for BoundedInputStream.onMaxLength(long, long). Thanks to Gary Gregory. 
+o          Add support to ChecksumInputStream for setting a consumer for ProxyInputStream.afterRead(int). Thanks to Gary Gregory. 
+o          Add support to ThrottledInputStream for setting a consumer for ProxyInputStream.afterRead(int). Thanks to Gary Gregory. 
+o          Add support to ObservableInputStream for setting a consumer for ProxyInputStream.afterRead(int). Thanks to Gary Gregory. 
+o          Add support to MessageDigestCalculatingInputStream for setting a consumer for ProxyInputStream.afterRead(int). Thanks to Gary Gregory. 
+o          Add support to MessageDigestInputStream for setting a consumer for ProxyInputStream.afterRead(int). Thanks to Gary Gregory. 
+
+Fixed Bugs
+----------
+
+o          Clean ups in unit tests. Thanks to Gary Gregory. 
+o          Fix some Javadoc issues. Thanks to Gary Gregory. 
+o          RandomAccessFileMode.toString() is more helpful for debugging when it inherits from Enum. Thanks to Gary Gregory. 
+o          Fix implicit narrowing conversion in compound assignment in UnsynchronizedBufferedReader.skip(long). Thanks to Gary Gregory. 
+o IO-860:  Missing reserved file names in FileSystem.WINDOWS (superscript digits for COM and LPT). Thanks to Stefan Feenstra, Gary Gregory. 
+o IO-856:  FileUtils.listFiles(final File, String[], boolean) can throw NoSuchFileException #697, #699. Thanks to Thomas Hartwig, Gary Gregory. 
+o IO-859:  FileUtils.forceDelete on non-existent file on Windows throws IOException rather than FileNotFoundException. Thanks to JD Dean, Gary Gregory. 
+o          Use Unicode escapes for superscript characters. #701. Thanks to Éamonn McManus. 
+o IO-863:  Recent incompatible change to FileUtils.listFiles re extensions, see also IO-856. Thanks to Éamonn McManus, Gary Gregory. 
+o IO-857:  Javadoc: Update details for PathUtils "clean" behavior. Thanks to Dmitry, Gary Gregory. 
+
+Changes
+-------
+
+o          Bump org.apache.commons:commons-parent from 74 to 78 #670, #676, #679, #688. Thanks to Gary Gregory. 
+o          Bump commons.bytebuddy.version from 1.15.1 to 1.15.10 #672, #673, #685, #686, #694, #696, #698. Thanks to Gary Gregory. 
+o          Update AbstractStreamBuilder getters from protected to public. Thanks to Gary Gregory. 
+
+
+Commons IO 2.7 and up requires Java 8 or above.
+Commons IO 2.6 requires Java 7 or above.
+Commons IO 2.3 through 2.5 requires Java 6 or above.
+Commons IO 2.2 requires Java 5 or above.
+Commons IO 1.4 requires Java 1.3 or above.
+
+Historical list of changes: https://commons.apache.org/proper/commons-io/changes-report.html
+
+For complete information on Apache Commons IO, including instructions on how to submit bug reports,
+patches, or suggestions for improvement, see the Apache Commons IO website:
+
+https://commons.apache.org/proper/commons-io/
+
+Download page: https://commons.apache.org/proper/commons-io/download_io.cgi
+
+Have fun!
+-Apache Commons Team
+
+------------------------------------------------------------------------------
+
+
 Apache Commons IO 2.17.0 Release Notes
 
 Introduction
