@@ -46,6 +46,11 @@ The <action> type attribute can be add,update,fix,remove.
     <title>Apache Commons IO Release Notes</title>
   </properties>
   <body>
+    <release version="2.18.1" date="YYYY-MM-DD" description="Version 2.18.1: Java 8 is required.">
+      <!-- FIX -->
+      <!-- ADD -->
+      <!-- UPDATE -->
+    </release>
     <release version="2.18.0" date="2024-11-16" description="Version 2.18.0: Java 8 is required.">
       <!-- FIX -->
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Clean ups in unit tests.</action>
