@@ -46,7 +46,7 @@ The <action> type attribute can be add,update,fix,remove.
     <title>Apache Commons IO Release Notes</title>
   </properties>
   <body>
-    <release version="2.18.1" date="YYYY-MM-DD" description="Version 2.18.1: Java 8 is required.">
+    <release version="2.19.0" date="YYYY-MM-DD" description="Version 2.18.1: Java 8 is required.">
       <!-- FIX -->
       <!-- ADD -->
       <action dev="ggregory" type="add" issue="IO-860" due-to="Nico Strecker, Gary Gregory">Add ThrottledInputStream.Builder.setMaxBytes(int, ChronoUnit).</action>

@@ -24,22 +24,18 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
   <artifactId>commons-io</artifactId>
-  <version>2.18.1-SNAPSHOT</version>
+  <version>2.19.0-SNAPSHOT</version>
   <name>Apache Commons IO</name>
-
   <inceptionYear>2002</inceptionYear>
   <description>
 The Apache Commons IO library contains utility classes, stream implementations, file filters,
 file comparators, endian transformation classes, and much more.
   </description>
-
   <url>https://commons.apache.org/proper/commons-io/</url>
-
   <issueManagement>
     <system>jira</system>
     <url>https://issues.apache.org/jira/browse/IO</url>
   </issueManagement>
-
   <distributionManagement>
     <site>
       <id>apache.website</id>
@@ -47,14 +43,12 @@ file comparators, endian transformation classes, and much more.
       <url>scm:svn:https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-io/</url>
     </site>
   </distributionManagement>
-
   <scm>
     <connection>scm:git:https://gitbox.apache.org/repos/asf/commons-io.git</connection>
     <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/commons-io.git</developerConnection>
     <url>https://gitbox.apache.org/repos/asf?p=commons-io.git</url>
-    <tag>rel/commons-io-2.17.0</tag>
+    <tag>rel/commons-io-2.19.0</tag>
   </scm>
-
   <dependencies>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -118,16 +112,15 @@ file comparators, endian transformation classes, and much more.
       <scope>test</scope>
     </dependency>
   </dependencies>
-
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <commons.componentid>io</commons.componentid>
     <commons.module.name>org.apache.commons.io</commons.module.name>
     <commons.rc.version>RC1</commons.rc.version>
-    <commons.bc.version>2.17.0</commons.bc.version>
-    <commons.release.version>2.18.0</commons.release.version>
-    <commons.release.next>2.18.1</commons.release.next>
+    <commons.bc.version>2.18.0</commons.bc.version>
+    <commons.release.version>2.19.0</commons.release.version>
+    <commons.release.next>2.19.1</commons.release.next>
     <project.build.outputTimestamp>2024-11-19T20:55:01Z</project.build.outputTimestamp>
     <commons.release.desc>(requires Java 8)</commons.release.desc>
     <commons.jira.id>IO</commons.jira.id>
