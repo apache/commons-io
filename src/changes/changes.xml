@@ -49,6 +49,7 @@ The <action> type attribute can be add,update,fix,remove.
     <release version="2.18.1" date="YYYY-MM-DD" description="Version 2.18.1: Java 8 is required.">
       <!-- FIX -->
       <!-- ADD -->
+      <action dev="ggregory" type="add" issue="IO-860" due-to="Nico Strecker, Gary Gregory">Add ThrottledInputStream.Builder.setMaxBytes(int, ChronoUnit).</action>
       <!-- UPDATE -->
     </release>
     <release version="2.18.0" date="2024-11-16" description="Version 2.18.0: Java 8 is required.">
@@ -63,7 +64,6 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix"                due-to="Éamonn McManus">Use Unicode escapes for superscript characters. #701.</action>
       <action dev="ggregory" type="fix" issue="IO-863" due-to="Éamonn McManus, Gary Gregory">Recent incompatible change to FileUtils.listFiles re extensions, see also IO-856.</action>
       <action dev="ggregory" type="fix" issue="IO-857" due-to="Dmitry, Gary Gregory">Javadoc: Update details for PathUtils "clean" behavior.</action>
-      
       <!-- ADD -->
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add @FunctionalInterface to ClassNameMatcher.</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add ValidatingObjectInputStream.Builder and ValidatingObjectInputStream.builder().</action>
