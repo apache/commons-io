@@ -49,7 +49,7 @@ The <action> type attribute can be add,update,fix,remove.
     <release version="2.19.0" date="YYYY-MM-DD" description="Version 2.18.1: Java 8 is required.">
       <!-- FIX -->
       <!-- ADD -->
-      <action dev="ggregory" type="add" issue="IO-860" due-to="Nico Strecker, Gary Gregory">Add ThrottledInputStream.Builder.setMaxBytes(int, ChronoUnit).</action>
+      <action dev="ggregory" type="add" issue="IO-860" due-to="Nico Strecker, Gary Gregory">Add ThrottledInputStream.Builder.setMaxBytes(long, ChronoUnit).</action>
       <!-- UPDATE -->
     </release>
     <release version="2.18.0" date="2024-11-16" description="Version 2.18.0: Java 8 is required.">

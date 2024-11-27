@@ -126,7 +126,7 @@ public final class ThrottledInputStream extends CountingInputStream {
          * @throws IllegalArgumentException Thrown if maxBytesPerSecond &lt;= 0.
          * @since 2.19.0
          */
-        public Builder setMaxBytes(final int value, final ChronoUnit chronoUnit) {
+        public Builder setMaxBytes(final long value, final ChronoUnit chronoUnit) {
             setMaxBytes(value, chronoUnit.getDuration());
             return asThis();
         }
@@ -149,7 +149,7 @@ public final class ThrottledInputStream extends CountingInputStream {
          * @throws IllegalArgumentException Thrown if maxBytesPerSecond &lt;= 0.
          */
         // Consider making public in the future
-        Builder setMaxBytes(final int value, final Duration duration) {
+        Builder setMaxBytes(final long value, final Duration duration) {
             setMaxBytesPerSecond((double) Objects.requireNonNull(duration, "duration").toMillis() / 1_000 * value);
             return asThis();
         }
