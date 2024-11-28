@@ -157,7 +157,6 @@ public final class FileTimes {
      *
      * @param ntfsTime the NTFS time in 100-nanosecond units
      * @return the FileTime
-     *
      * @see #toNtfsTime(FileTime)
      */
     public static FileTime ntfsTimeToFileTime(final long ntfsTime) {

@@ -350,7 +350,6 @@ public enum FileSystem {
     /**
      * Gets the file allocation block size in bytes.
      * @return the file allocation block size in bytes.
-     *
      * @since 2.12.0
      */
     public int getBlockSize() {
@@ -402,7 +401,6 @@ public enum FileSystem {
      * Gets the name separator, '\\' on Windows, '/' on Linux.
      *
      * @return '\\' on Windows, '/' on Linux.
-     *
      * @since 2.12.0
      */
     public char getNameSeparator() {

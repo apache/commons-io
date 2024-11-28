@@ -65,7 +65,6 @@ public class LineIteratorTest {
      *
      * @param file target file
      * @param lineCount number of lines to create
-     *
      * @throws IOException If an I/O error occurs
      */
     private List<String> createLinesFile(final File file, final int lineCount) throws IOException {
@@ -80,7 +79,6 @@ public class LineIteratorTest {
      * @param file target file
      * @param encoding the encoding to use while writing the lines
      * @param lineCount number of lines to create
-     *
      * @throws IOException If an I/O error occurs
      */
     private List<String> createLinesFile(final File file, final String encoding, final int lineCount) throws IOException {
@@ -107,7 +105,6 @@ public class LineIteratorTest {
      * Utility method to create and test a file with a specified number of lines.
      *
      * @param lineCount the lines to create in the test file
-     *
      * @throws IOException If an I/O error occurs while creating the file
      */
     private void doTestFileWithSpecifiedLines(final int lineCount) throws IOException {

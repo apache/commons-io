@@ -30,7 +30,6 @@ import java.io.Writer;
  *
  * @since 2.5
  * @see Appendable
- *
  * @param <T> The type of the {@link Appendable} wrapped by this AppendableOutputStream.
  */
 public class AppendableOutputStream <T extends Appendable> extends OutputStream {

@@ -461,7 +461,6 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      * @return the current contents of this output stream.
      * @throws IOException if this stream is not yet closed or an error occurs.
      * @see org.apache.commons.io.output.ByteArrayOutputStream#toInputStream()
-     *
      * @since 2.9.0
      */
     public InputStream toInputStream() throws IOException {

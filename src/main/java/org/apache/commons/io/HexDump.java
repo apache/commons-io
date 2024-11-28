@@ -64,11 +64,9 @@ public class HexDump {
      *
      * @param data  the byte array to be dumped
      * @param appendable  the Appendable to which the data is to be written
-     *
      * @throws IOException is thrown if anything goes wrong writing
      *         the data to appendable
      * @throws NullPointerException if the output appendable is null
-     *
      * @since 2.12.0
      */
     public static void dump(final byte[] data, final Appendable appendable)
@@ -96,13 +94,11 @@ public class HexDump {
      * @param appendable  the Appendable to which the data is to be written
      * @param index initial index into the byte array
      * @param length number of bytes to dump from the array
-     *
      * @throws IOException is thrown if anything goes wrong writing
      *         the data to appendable
      * @throws ArrayIndexOutOfBoundsException if the index or length is
      *         outside the data array's bounds
      * @throws NullPointerException if the output appendable is null
-     *
      * @since 2.12.0
      */
     public static void dump(final byte[] data, final long offset,
@@ -178,7 +174,6 @@ public class HexDump {
      * @param stream  the OutputStream to which the data is to be
      *               written
      * @param index initial index into the byte array
-     *
      * @throws IOException is thrown if anything goes wrong writing
      *         the data to stream
      * @throws ArrayIndexOutOfBoundsException if the index is

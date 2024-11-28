@@ -513,7 +513,6 @@ public class IOUtils {
      *
      * @param closeable the objects to close, may be null or already closed
      * @since 2.0
-     *
      * @see Throwable#addSuppressed(Throwable)
      */
     public static void closeQuietly(final Closeable closeable) {
@@ -2043,7 +2042,6 @@ public class IOUtils {
      *
      * @param input where to read input from
      * @param buffer destination
-     *
      * @throws IOException              if there is a problem reading the file
      * @throws IllegalArgumentException if length is negative
      * @throws EOFException             if the number of bytes read was incorrect
@@ -2064,7 +2062,6 @@ public class IOUtils {
      * @param buffer destination
      * @param offset initial offset into buffer
      * @param length length to read, must be &gt;= 0
-     *
      * @throws IOException              if there is a problem reading the file
      * @throws IllegalArgumentException if length is negative
      * @throws EOFException             if the number of bytes read was incorrect

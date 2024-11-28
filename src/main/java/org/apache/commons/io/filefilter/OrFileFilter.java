@@ -77,7 +77,6 @@ public class OrFileFilter extends AbstractFileFilter implements ConditionalFileF
     /**
      * Constructs a new instance for the give filters.
      * @param fileFilters filters to OR.
-     *
      * @since 2.9.0
      */
     public OrFileFilter(final IOFileFilter... fileFilters) {

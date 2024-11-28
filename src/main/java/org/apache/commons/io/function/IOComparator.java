@@ -25,7 +25,6 @@ import java.util.Comparator;
  * Like {@link Comparator} but throws {@link IOException}.
  *
  * @param <T> the type of objects that may be compared by this comparator
- *
  * @see Comparator
  * @since 2.12.0
  */

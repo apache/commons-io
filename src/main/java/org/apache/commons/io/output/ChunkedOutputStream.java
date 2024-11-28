@@ -141,7 +141,6 @@ public class ChunkedOutputStream extends FilterOutputStream {
      * @param data      the data to write
      * @param srcOffset the offset
      * @param length    the length of data to write
-     *
      * @throws IOException if an I/O error occurs.
      */
     @Override

@@ -49,7 +49,6 @@ final class UncheckedIOExceptions {
      * </p>
      * @param e cause the {@link IOException}.
      * @param message the detail message.
-     *
      * @return a new {@link UncheckedIOException}.
      */
     public static UncheckedIOException wrap(final IOException e, final Object message) {

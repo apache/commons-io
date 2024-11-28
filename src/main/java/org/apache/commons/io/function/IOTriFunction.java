@@ -33,7 +33,6 @@ import java.util.function.Function;
  * @param <U> the type of the second argument to the function
  * @param <V> the type of the third argument to the function
  * @param <R> the type of the result of the function
- *
  * @see Function
  * @since 2.12.0
  */

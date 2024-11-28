@@ -25,7 +25,6 @@ import java.util.function.UnaryOperator;
  * Like {@link UnaryOperator} but throws {@link IOException}.
  *
  * @param <T> the type of the operand and result of the operator.
- *
  * @see UnaryOperator
  * @see IOFunction
  * @since 2.12.0

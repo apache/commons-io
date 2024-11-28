@@ -70,7 +70,6 @@ public class ChunkedWriter extends FilterWriter {
      * @param data The data
      * @param srcOffset the offset
      * @param length the number of bytes to write
-     *
      * @throws IOException upon error
      */
     @Override

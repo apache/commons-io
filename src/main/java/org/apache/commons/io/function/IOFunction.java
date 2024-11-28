@@ -53,7 +53,6 @@ public interface IOFunction<T, R> {
      * @param after the consumer to apply after this function is applied
      * @return a composed function that first applies this function and then applies the {@code after} consumer
      * @throws NullPointerException if after is null
-     *
      * @see #compose(IOFunction)
      */
     default IOConsumer<T> andThen(final Consumer<? super R> after) {
@@ -70,7 +69,6 @@ public interface IOFunction<T, R> {
      * @param after the function to apply after this function is applied
      * @return a composed function that first applies this function and then applies the {@code after} function
      * @throws NullPointerException if after is null
-     *
      * @see #compose(IOFunction)
      */
     default <V> IOFunction<T, V> andThen(final Function<? super R, ? extends V> after) {
@@ -86,7 +84,6 @@ public interface IOFunction<T, R> {
      * @param after the consumer to apply after this function is applied
      * @return a composed function that first applies this function and then applies the {@code after} consumer
      * @throws NullPointerException if after is null
-     *
      * @see #compose(IOFunction)
      */
     default IOConsumer<T> andThen(final IOConsumer<? super R> after) {
@@ -103,7 +100,6 @@ public interface IOFunction<T, R> {
      * @param after the function to apply after this function is applied
      * @return a composed function that first applies this function and then applies the {@code after} function
      * @throws NullPointerException if after is null
-     *
      * @see #compose(IOFunction)
      */
     default <V> IOFunction<T, V> andThen(final IOFunction<? super R, ? extends V> after) {
@@ -139,7 +135,6 @@ public interface IOFunction<T, R> {
      * @param before the function to apply before this function is applied
      * @return a composed function that first applies the {@code before} function and then applies this function
      * @throws NullPointerException if before is null
-     *
      * @see #andThen(IOFunction)
      */
     default <V> IOFunction<V, R> compose(final Function<? super V, ? extends T> before) {
@@ -156,7 +151,6 @@ public interface IOFunction<T, R> {
      * @param before the function to apply before this function is applied
      * @return a composed function that first applies the {@code before} function and then applies this function
      * @throws NullPointerException if before is null
-     *
      * @see #andThen(IOFunction)
      */
     default <V> IOFunction<V, R> compose(final IOFunction<? super V, ? extends T> before) {
@@ -172,7 +166,6 @@ public interface IOFunction<T, R> {
      * @param before the supplier which feeds the application of this function
      * @return a composed function that first applies the {@code before} function and then applies this function
      * @throws NullPointerException if before is null
-     *
      * @see #andThen(IOFunction)
      */
     default IOSupplier<R> compose(final IOSupplier<? extends T> before) {
@@ -188,7 +181,6 @@ public interface IOFunction<T, R> {
      * @param before the supplier which feeds the application of this function
      * @return a composed function that first applies the {@code before} function and then applies this function
      * @throws NullPointerException if before is null
-     *
      * @see #andThen(IOFunction)
      */
     default IOSupplier<R> compose(final Supplier<? extends T> before) {

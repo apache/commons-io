@@ -93,7 +93,6 @@ public class DeletingPathVisitor extends CountingPathVisitor {
      * Constructs a instance that deletes files except for the files and directories explicitly given.
      *
      * @param pathCounter How to count visits.
-     *
      * @param skip The files to skip deleting.
      */
     public DeletingPathVisitor(final PathCounters pathCounter, final String... skip) {

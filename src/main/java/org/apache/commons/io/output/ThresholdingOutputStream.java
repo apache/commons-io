@@ -100,7 +100,6 @@ public class ThresholdingOutputStream extends OutputStream {
      * so, triggers an event to allow a concrete implementation to take action on this.
      *
      * @param count The number of bytes about to be written to the underlying output stream.
-     *
      * @throws IOException if an error occurs.
      */
     protected void checkThreshold(final int count) throws IOException {
@@ -203,7 +202,6 @@ public class ThresholdingOutputStream extends OutputStream {
      * Sets the byteCount to count. Useful for re-opening an output stream that has previously been written to.
      *
      * @param count The number of bytes that have already been written to the output stream
-     *
      * @since 2.5
      */
     protected void setByteCount(final long count) {
@@ -224,7 +222,6 @@ public class ThresholdingOutputStream extends OutputStream {
      * Writes {@code b.length} bytes from the specified byte array to this output stream.
      *
      * @param b The array of bytes to be written.
-     *
      * @throws IOException if an error occurs.
      */
     @SuppressWarnings("resource") // the underlying stream is managed by a subclass.
@@ -242,7 +239,6 @@ public class ThresholdingOutputStream extends OutputStream {
      * @param b The byte array from which the data will be written.
      * @param off The start offset in the byte array.
      * @param len The number of bytes to write.
-     *
      * @throws IOException if an error occurs.
      */
     @SuppressWarnings("resource") // the underlying stream is managed by a subclass.
@@ -260,7 +256,6 @@ public class ThresholdingOutputStream extends OutputStream {
      * Writes the specified byte to this output stream.
      *
      * @param b The byte to be written.
-     *
      * @throws IOException if an error occurs.
      */
     @SuppressWarnings("resource") // the underlying stream is managed by a subclass.

@@ -208,7 +208,6 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      *
      * @param data   the buffer
      * @param offset the offset into the buffer
-     *
      * @throws IllegalArgumentException if the offset is less than zero
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
@@ -223,7 +222,6 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      * @param data   the buffer
      * @param offset the offset into the buffer
      * @param length the length of the buffer
-     *
      * @throws IllegalArgumentException if the offset or length less than zero
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */

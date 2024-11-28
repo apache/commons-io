@@ -30,7 +30,6 @@ import java.util.Objects;
  *
  * @since 2.7
  * @see Appendable
- *
  * @param <T> The type of the {@link Appendable} wrapped by this AppendableWriter.
  */
 public class AppendableWriter <T extends Appendable> extends Writer {

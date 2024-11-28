@@ -694,7 +694,6 @@ public class XmlStreamReader extends Reader {
      * @param xmlEnc          XML encoding
      * @param lenient         indicates if the charset encoding detection should be relaxed.
      * @param httpContentType The HTTP content type
-     *
      * @return the HTTP encoding
      * @throws IOException thrown if there is a problem reading the stream.
      */

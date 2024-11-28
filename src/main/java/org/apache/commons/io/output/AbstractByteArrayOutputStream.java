@@ -73,7 +73,6 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
          * @param buffer the buffer
          * @param offset the offset into the buffer
          * @param length the length of the buffer
-         *
          * @return the InputStream subclass.
          */
         T construct(final byte[] buffer, final int offset, final int length);

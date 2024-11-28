@@ -112,7 +112,6 @@ public final class UncheckedBufferedReader extends BufferedReader {
      *
      * @param reader     A Reader
      * @param bufferSize Input-buffer size
-     *
      * @throws IllegalArgumentException If {@code bufferSize <= 0}
      */
     private UncheckedBufferedReader(final Reader reader, final int bufferSize) {

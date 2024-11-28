@@ -26,7 +26,6 @@ import java.util.function.BinaryOperator;
  * Like {@link BinaryOperator} but throws {@link IOException}.
  *
  * @param <T> the type of the operands and result of the operator.
- *
  * @see IOBiFunction
  * @see BinaryOperator
  * @since 2.12.0

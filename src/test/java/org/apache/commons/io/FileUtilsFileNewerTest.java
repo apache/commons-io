@@ -69,7 +69,6 @@ public class FileUtilsFileNewerTest {
      * Tests the {@code isFileNewer(File, *)} methods which a "normal" file.
      *
      * @throws IOException
-     *
      * @see FileUtils#isFileNewer(File, long)
      * @see FileUtils#isFileNewer(File, Date)
      * @see FileUtils#isFileNewer(File, File)
@@ -121,7 +120,6 @@ public class FileUtilsFileNewerTest {
      * Tests the {@code isFileNewer(File, *)} methods which a not existing file.
      *
      * @throws IOException if an I/O error occurs.
-     *
      * @see FileUtils#isFileNewer(File, long)
      * @see FileUtils#isFileNewer(File, Date)
      * @see FileUtils#isFileNewer(File, File)

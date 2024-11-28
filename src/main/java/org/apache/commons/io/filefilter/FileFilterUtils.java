@@ -136,7 +136,6 @@ public class FileFilterUtils {
      *
      * @param filters the IOFileFilters that will be ANDed together.
      * @return a filter that ANDs the specified filters
-     *
      * @throws IllegalArgumentException if the filters are null or contain a
      *         null value.
      * @see AndFileFilter
@@ -229,7 +228,6 @@ public class FileFilterUtils {
      * </pre>
      * @param filter the filter to apply to the set of files.
      * @param files the array of files to apply the filter to.
-     *
      * @return a subset of {@code files} that is accepted by the
      *         file filter.
      * @throws NullPointerException if the filter is {@code null}
@@ -263,7 +261,6 @@ public class FileFilterUtils {
      * </pre>
      * @param filter the filter to apply to the set of files.
      * @param files the array of files to apply the filter to.
-     *
      * @return a subset of {@code files} that is accepted by the
      *         file filter.
      * @throws IllegalArgumentException if the filter is {@code null}
@@ -283,7 +280,6 @@ public class FileFilterUtils {
      * @param filter the filter to apply to the stream of files.
      * @param stream the stream of files on which to apply the filter.
      * @param collector how to collect the end result.
-     *
      * @param <R> the return type.
      * @param <A> the mutable accumulation type of the reduction operation (often hidden as an implementation detail)
      * @return a subset of files from the stream that is accepted by the filter.
@@ -317,7 +313,6 @@ public class FileFilterUtils {
      * </pre>
      * @param filter the filter to apply to each files in the list.
      * @param files the collection of files to apply the filter to.
-     *
      * @return a subset of {@code files} that is accepted by the
      *         file filter.
      * @throws IllegalArgumentException if the filter is {@code null}
@@ -346,7 +341,6 @@ public class FileFilterUtils {
      * </pre>
      * @param filter the filter to apply to each files in the list.
      * @param files the collection of files to apply the filter to.
-     *
      * @return a subset of {@code files} that is accepted by the
      *         file filter.
      * @throws IllegalArgumentException if the filter is {@code null}
@@ -377,7 +371,6 @@ public class FileFilterUtils {
      * </pre>
      * @param filter the filter to apply to the set of files.
      * @param files the collection of files to apply the filter to.
-     *
      * @return a subset of {@code files} that is accepted by the
      *         file filter.
      * @throws IllegalArgumentException if the filter is {@code null}
@@ -407,11 +400,9 @@ public class FileFilterUtils {
      * </pre>
      * @param filter the filter to apply to the set of files.
      * @param files the collection of files to apply the filter to.
-     *
      * @return a subset of {@code files} that is accepted by the
      *         file filter.
      * @throws IllegalArgumentException if the filter is {@code null}
-     *
      * @since 2.0
      */
     public static Set<File> filterSet(final IOFileFilter filter, final Iterable<File> files) {
@@ -447,7 +438,6 @@ public class FileFilterUtils {
      * @param magicNumber the magic number (byte sequence) to match at the
      *        provided offset in each file.
      * @param offset the offset within the files to look for the magic number.
-     *
      * @return an IOFileFilter that accepts files containing the magic number
      *         at the specified offset.
      *
@@ -487,7 +477,6 @@ public class FileFilterUtils {
      * @param magicNumber the magic number (byte sequence) to match at the
      *        provided offset in each file.
      * @param offset the offset within the files to look for the magic number.
-     *
      * @return an IOFileFilter that accepts files containing the magic number
      *         at the specified offset.
      *
@@ -597,7 +586,6 @@ public class FileFilterUtils {
      *
      * @param filters the IOFileFilters that will be ORed together.
      * @return a filter that ORs the specified filters
-     *
      * @throws IllegalArgumentException if the filters are null or contain a
      *         null value.
      * @see OrFileFilter
