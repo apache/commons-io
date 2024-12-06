@@ -24,7 +24,7 @@ import java.util.stream.Stream;
  * Enumeration of IO case sensitivity.
  * <p>
  * Different filing systems have different rules for case-sensitivity.
- * Windows is case-insensitive, UNIX is case-sensitive.
+ * Windows is case-insensitive, Unix is case-sensitive.
  * </p>
  * <p>
  * This class captures that difference, providing an enumeration to
@@ -52,11 +52,11 @@ public enum IOCase {
 
     /**
      * The constant for case sensitivity determined by the current operating system.
-     * Windows is case-insensitive when comparing file names, UNIX is case-sensitive.
+     * Windows is case-insensitive when comparing file names, Unix is case-sensitive.
      * <p>
      * <strong>Note:</strong> This only caters for Windows and Unix. Other operating
      * systems (e.g. OSX and OpenVMS) are treated as case-sensitive if they use the
-     * UNIX file separator and case-insensitive if they use the Windows file separator
+     * Unix file separator and case-insensitive if they use the Windows file separator
      * (see {@link File#separatorChar}).
      * </p>
      * <p>

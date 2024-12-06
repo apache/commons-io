@@ -1689,7 +1689,7 @@ public final class PathUtils {
     }
 
     /**
-     * Implements behavior similar to the UNIX "touch" utility. Creates a new file with size 0, or, if the file exists, just updates the file's modified time.
+     * Implements behavior similar to the Unix "touch" utility. Creates a new file with size 0, or, if the file exists, just updates the file's modified time.
      * this method creates parent directories if they do not exist.
      *
      * @param file the file to touch.

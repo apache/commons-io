@@ -21,7 +21,7 @@ import java.io.Writer;
 import java.util.Collection;
 
 /**
- * Classic splitter of {@link Writer}. Named after the UNIX 'tee' command. It allows a stream to be branched off so
+ * Classic splitter of {@link Writer}. Named after the Unix 'tee' command. It allows a stream to be branched off so
  * there are now two streams.
  * <p>
  * This currently a only convenience class with the proper name "TeeWriter".

@@ -45,7 +45,7 @@ import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.io.file.attribute.FileTimes;
 
 /**
- * Simple implementation of the UNIX "tail -f" functionality.
+ * Simple implementation of the Unix "tail -f" functionality.
  * <p>
  * To build an instance, use {@link Builder}.
  * </p>

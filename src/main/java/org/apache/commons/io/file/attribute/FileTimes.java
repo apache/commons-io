@@ -40,12 +40,12 @@ public final class FileTimes {
     public static final FileTime EPOCH = FileTime.from(Instant.EPOCH);
 
     /**
-     * The offset of Windows time 0 to UNIX epoch in 100-nanosecond intervals.
+     * The offset of Windows time 0 to Unix epoch in 100-nanosecond intervals.
      *
      * <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms724290%28v=vs.85%29.aspx">Windows File Times</a>
      * <p>
      * A file time is a 64-bit value that represents the number of 100-nanosecond intervals that have elapsed since 12:00
-     * A.M. January 1, 1601 Coordinated Universal Time (UTC). This is the offset of Windows time 0 to UNIX epoch in
+     * A.M. January 1, 1601 Coordinated Universal Time (UTC). This is the offset of Windows time 0 to Unix epoch in
      * 100-nanosecond intervals.
      * </p>
      */
@@ -62,9 +62,9 @@ public final class FileTimes {
     static final long HUNDRED_NANOS_PER_MILLISECOND = TimeUnit.MILLISECONDS.toNanos(1) / 100;
 
     /**
-     * Converts standard UNIX time (in seconds, UTC/GMT) to {@link FileTime}.
+     * Converts standard Unix time (in seconds, UTC/GMT) to {@link FileTime}.
      *
-     * @param time UNIX timestamp (seconds).
+     * @param time Unix timestamp (seconds).
      * @return the corresponding FileTime.
      * @since 2.16.0
      */
@@ -73,13 +73,13 @@ public final class FileTimes {
     }
 
     /**
-     * Tests whether a FileTime can be safely represented in the standard UNIX time.
+     * Tests whether a FileTime can be safely represented in the standard Unix time.
      * <p>
      * If the FileTime is null, this method returns true.
      * </p>
      *
      * @param time the FileTime to evaluate, can be null.
-     * @return true if the time exceeds the minimum or maximum UNIX time, false otherwise.
+     * @return true if the time exceeds the minimum or maximum Unix time, false otherwise.
      * @since 2.16.0
      */
     public static boolean isUnixTime(final FileTime time) {
@@ -87,10 +87,10 @@ public final class FileTimes {
     }
 
     /**
-     * Tests whether a given number of seconds (since Epoch) can be safely represented in the standard UNIX time.
+     * Tests whether a given number of seconds (since Epoch) can be safely represented in the standard Unix time.
      *
      * @param seconds the number of seconds (since Epoch) to evaluate.
-     * @return true if the time can be represented in the standard UNIX time, false otherwise.
+     * @return true if the time can be represented in the standard Unix time, false otherwise.
      * @since 2.16.0
      */
     public static boolean isUnixTime(final long seconds) {
@@ -269,13 +269,13 @@ public final class FileTimes {
     }
 
     /**
-     * Converts {@link FileTime} to standard UNIX time in seconds.
+     * Converts {@link FileTime} to standard Unix time in seconds.
      * <p>
-     * The returned seconds value may lie out of bounds of UNIX time. Check with {@link FileTimes#isUnixTime(long)}.
+     * The returned seconds value may lie out of bounds of Unix time. Check with {@link FileTimes#isUnixTime(long)}.
      * </p>
      *
      * @param fileTime the original FileTime.
-     * @return the UNIX timestamp or 0 if the input is null.
+     * @return the Unix timestamp or 0 if the input is null.
      * @see #isUnixTime(long)
      * @since 2.16.0
      */
