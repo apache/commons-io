@@ -116,7 +116,7 @@ public abstract class TestUtils {
      */
     private static void assertEqualContent(final File f0, final File f1)
             throws IOException {
-        /* This doesn't work because the filesize isn't updated until the file
+        /* This doesn't work because the file size isn't updated until the file
          * is closed.
         assertTrue( "The files " + f0 + " and " + f1 +
                     " have differing file sizes (" + f0.length() +
