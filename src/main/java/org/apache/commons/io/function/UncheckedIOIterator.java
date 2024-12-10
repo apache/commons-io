@@ -23,9 +23,10 @@ import java.util.Iterator;
 import java.util.Objects;
 
 /**
- * An {@link Iterator} for a {@link IOIterator} that throws {@link UncheckedIOException} instead of {@link IOException}.
- *
+ * An {@link Iterator} for an {@link IOIterator} that throws {@link UncheckedIOException} instead of {@link IOException}.
+ * <p>
  * Keep package-private for now.
+ * </p>
  *
  * @param <E> the type of elements returned by this iterator.
  */
