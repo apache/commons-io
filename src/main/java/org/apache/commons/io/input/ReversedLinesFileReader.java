@@ -49,7 +49,6 @@ import org.apache.commons.io.function.IOIterator;
  * <p>
  * For example:
  * </p>
- *
  * <pre>
  * <code>
  * try (ReversedLinesFileReader reader = ReversedLinesFileReader.builder()
@@ -57,7 +56,7 @@ import org.apache.commons.io.function.IOIterator;
  *   .setBufferSize(4096)
  *   .setCharset(StandardCharsets.UTF_8)
  *   .get()) {
- *      reader.forEach(line -> System.out.println(line));
+ *      reader.forEach(line -&gt; System.out.println(line));
  * }
  * </code>
  * </pre>
