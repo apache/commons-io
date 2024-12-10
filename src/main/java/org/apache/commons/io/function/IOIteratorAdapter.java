@@ -34,7 +34,7 @@ final class IOIteratorAdapter<E> implements IOIterator<E> {
 
     private final Iterator<E> delegate;
 
-    IOIteratorAdapter(final Iterator<E> delegate) {
+    private IOIteratorAdapter(final Iterator<E> delegate) {
         this.delegate = Objects.requireNonNull(delegate, "delegate");
     }
 
