@@ -51,6 +51,7 @@ The <action> type attribute can be add,update,fix,remove.
       <!-- ADD -->
       <action dev="ggregory" type="add" issue="IO-860" due-to="Nico Strecker, Gary Gregory">Add ThrottledInputStream.Builder.setMaxBytes(long, ChronoUnit).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IOIterable.</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">ReversedLinesFileReader implements IOIterable&lt;String&gt;.</action>
       <!-- UPDATE -->
     </release>
     <release version="2.18.0" date="2024-11-16" description="Version 2.18.0: Java 8 is required.">

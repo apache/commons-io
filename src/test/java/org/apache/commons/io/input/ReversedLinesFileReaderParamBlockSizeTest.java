@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
 import org.apache.commons.io.TestResources;
@@ -69,15 +71,15 @@ public class ReversedLinesFileReaderParamBlockSizeTest {
     private static final String TEST_LINE_X_WINDOWS_950_2 = "\u7E41\u9AD4\u4E2D\u6587";
 
     static void assertEqualsAndNoLineBreaks(final String expected, final String actual) {
-        assertEqualsAndNoLineBreaks(null, expected, actual);
+        assertEqualsAndNoLineBreaks(expected, actual, null);
     }
 
-    static void assertEqualsAndNoLineBreaks(final String msg, final String expected, final String actual) {
+    static void assertEqualsAndNoLineBreaks(final String expected, final String actual, final Supplier<String> messageSupplier) {
         if (actual != null) {
             assertFalse(actual.contains(LF.getString()), "Line contains \\n: line=" + actual);
             assertFalse(actual.contains(CR.getString()), "Line contains \\r: line=" + actual);
         }
-        assertEquals(expected, actual, msg);
+        assertEquals(expected, actual, messageSupplier);
     }
 
     // small and uneven block sizes are not used in reality but are good to show that the algorithm is solid
@@ -88,12 +90,9 @@ public class ReversedLinesFileReaderParamBlockSizeTest {
     private ReversedLinesFileReader reversedLinesFileReader;
 
     private void assertFileWithShrinkingTestLines(final ReversedLinesFileReader reversedLinesFileReader) throws IOException {
-        String line = null;
-        int lineCount = 0;
-        while ((line = reversedLinesFileReader.readLine()) != null) {
-            lineCount++;
-            assertEqualsAndNoLineBreaks("Line " + lineCount + " is not matching", TEST_LINE.substring(0, lineCount), line);
-        }
+        final AtomicInteger count = new AtomicInteger();
+        reversedLinesFileReader.forEach(
+                line -> assertEqualsAndNoLineBreaks(TEST_LINE.substring(0, count.incrementAndGet()), line, () -> "Line " + count + " is not matching"));
     }
 
     @AfterEach

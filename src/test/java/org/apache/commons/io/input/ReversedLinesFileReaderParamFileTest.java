@@ -88,25 +88,17 @@ public class ReversedLinesFileReaderParamFileTest {
     private void testDataIntegrityWithBufferedReader(final Path filePath, final FileSystem fileSystem, final Charset charset,
             final ReversedLinesFileReader reversedLinesFileReader) throws IOException {
         final Stack<String> lineStack = new Stack<>();
-        String line;
-
         try (BufferedReader bufferedReader = Files.newBufferedReader(filePath, Charsets.toCharset(charset))) {
             // read all lines in normal order
+            String line;
             while ((line = bufferedReader.readLine()) != null) {
                 lineStack.push(line);
             }
         }
-
         // read in reverse order and compare with lines from stack
-        while ((line = reversedLinesFileReader.readLine()) != null) {
-            final String lineFromBufferedReader = lineStack.pop();
-            assertEquals(lineFromBufferedReader, line);
-        }
+        reversedLinesFileReader.forEach(line -> assertEquals(lineStack.pop(), line));
         assertEquals(0, lineStack.size(), "Stack should be empty");
-
-        if (fileSystem != null) {
-            fileSystem.close();
-        }
+        IOUtils.close(fileSystem);
     }
 
     @ParameterizedTest(name = "{0}, encoding={1}, blockSize={2}, useNonDefaultFileSystem={3}, isResource={4}")
