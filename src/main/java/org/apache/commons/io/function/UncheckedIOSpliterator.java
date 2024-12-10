@@ -27,8 +27,9 @@ import java.util.function.Consumer;
 /**
  * A {@link Spliterator} for an {@link IOSpliterator} that throws {@link UncheckedIOException} instead of
  * {@link IOException}.
- *
+ * <p>
  * Keep package-private for now.
+ * </p>
  *
  * @param <T> the type of elements returned by this iterator.
  */
