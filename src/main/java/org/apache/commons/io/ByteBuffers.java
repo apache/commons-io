@@ -43,6 +43,12 @@ public class ByteBuffers {
         return littleEndian(ByteBuffer.wrap(array));
     }
 
+    /**
+     * Sets the give buffer to little-endian.
+     *
+     * @param allocate The buffer to set to little-endian.
+     * @return the given buffer.
+     */
     public static ByteBuffer littleEndian(final ByteBuffer allocate) {
         return allocate.order(ByteOrder.LITTLE_ENDIAN);
     }
@@ -60,6 +66,10 @@ public class ByteBuffers {
      */
     public static ByteBuffer littleEndian(final int capacity) {
         return littleEndian(ByteBuffer.allocate(capacity));
+    }
+
+    private ByteBuffers() {
+        // empty, no instance.
     }
 
 }
