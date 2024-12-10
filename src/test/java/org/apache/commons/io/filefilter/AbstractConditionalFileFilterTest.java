@@ -85,9 +85,7 @@ public abstract class AbstractConditionalFileFilterTest extends AbstractIOFileFi
             fileFilter.addFileFilter(filters.get(i));
             assertEquals(i + 1, fileFilter.getFileFilters().size(), "file filters count: ");
         }
-        fileFilter.getFileFilters().forEach(filter -> {
-            assertTrue(filters.contains(filter), "found file filter");
-        });
+        fileFilter.getFileFilters().forEach(filter -> assertTrue(filters.contains(filter), "found file filter"));
         assertEquals(filters.size(), fileFilter.getFileFilters().size(), "file filters count");
     }
 
