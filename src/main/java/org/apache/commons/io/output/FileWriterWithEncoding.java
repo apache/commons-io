@@ -88,6 +88,13 @@ public class FileWriterWithEncoding extends ProxyWriter {
         private CharsetEncoder charsetEncoder = super.getCharset().newEncoder();
 
         /**
+         * Constructs a new builder of {@link FileWriterWithEncoding}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link FileWriterWithEncoding}.
          * <p>
          * You must set input that supports {@link File} on this builder, otherwise, this method throws an exception.

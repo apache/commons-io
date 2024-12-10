@@ -65,6 +65,13 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
     public static class Builder extends AbstractStreamBuilder<UnsynchronizedByteArrayOutputStream, Builder> {
 
         /**
+         * Constructs a new builder of {@link UnsynchronizedByteArrayOutputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link UnsynchronizedByteArrayOutputStream}.
          *
          * <p>

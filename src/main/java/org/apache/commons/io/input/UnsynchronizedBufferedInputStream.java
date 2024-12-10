@@ -84,6 +84,13 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
     public static class Builder extends AbstractStreamBuilder<UnsynchronizedBufferedInputStream, Builder> {
 
         /**
+         * Constructs a builder of {@link UnsynchronizedBufferedInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link UnsynchronizedBufferedInputStream}.
          * <p>
          * You must set input that supports {@link #getInputStream()} on this builder, otherwise, this method throws an exception.

@@ -124,6 +124,13 @@ public class XmlStreamReader extends Reader {
         private String httpContentType;
 
         /**
+         * Constructs a new builder of {@link XmlStreamReader}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link XmlStreamWriter}.
          * <p>
          * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.

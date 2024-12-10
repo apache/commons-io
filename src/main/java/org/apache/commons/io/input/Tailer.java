@@ -189,6 +189,13 @@ public class Tailer implements Runnable, AutoCloseable {
         private ExecutorService executorService = Executors.newSingleThreadExecutor(Builder::newDaemonThread);
 
         /**
+         * Constructs a new builder of {@link Tailer}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link Tailer}.
          *
          * <p>

@@ -142,6 +142,13 @@ public class BOMInputStream extends ProxyInputStream {
         private boolean include;
 
         /**
+         * Constructs a new builder of {@link BOMInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link BOMInputStream}.
          * <p>
          * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.

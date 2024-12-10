@@ -86,6 +86,13 @@ public class CharSequenceInputStream extends InputStream {
         private CharsetEncoder charsetEncoder = newEncoder(getCharset());
 
         /**
+         * Constructs a new builder of {@link CharSequenceInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link CharSequenceInputStream}.
          * <p>
          * You must set input that supports {@link #getCharSequence()}, otherwise, this method throws an exception.

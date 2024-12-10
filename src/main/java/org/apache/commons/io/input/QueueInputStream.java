@@ -85,6 +85,13 @@ public class QueueInputStream extends InputStream {
         private Duration timeout = Duration.ZERO;
 
         /**
+         * Constructs a new builder of {@link QueueInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link QueueInputStream}.
          * <p>
          * This builder use the following aspects:

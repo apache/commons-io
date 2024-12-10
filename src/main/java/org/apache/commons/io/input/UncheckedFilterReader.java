@@ -67,6 +67,13 @@ public final class UncheckedFilterReader extends FilterReader {
     public static class Builder extends AbstractStreamBuilder<UncheckedFilterReader, Builder> {
 
         /**
+         * Constructs a new builder of {@link UncheckedFilterReader}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link UncheckedFilterReader}.
          * <p>
          * You must set input that supports {@link #getReader()} on this builder, otherwise, this method throws an exception.

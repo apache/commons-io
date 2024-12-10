@@ -76,7 +76,7 @@ public final class MessageDigestInputStream extends ObservableInputStream {
         private MessageDigest messageDigest;
 
         /**
-         * Constructs a new {@link Builder}.
+         * Constructs a new builder of {@link MessageDigestInputStream}.
          */
         public Builder() {
             // empty

@@ -243,6 +243,13 @@ public class BoundedInputStream extends ProxyInputStream {
     public static class Builder extends AbstractBuilder<Builder> {
 
         /**
+         * Constructs a new builder of {@link BoundedInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link BoundedInputStream}.
          * <p>
          * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.

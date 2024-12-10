@@ -110,6 +110,13 @@ public class ReaderInputStream extends AbstractInputStream {
         private CharsetEncoder charsetEncoder = newEncoder(getCharset());
 
         /**
+         * Constructs a new builder of {@link ReaderInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link ReaderInputStream}.
          *
          * <p>

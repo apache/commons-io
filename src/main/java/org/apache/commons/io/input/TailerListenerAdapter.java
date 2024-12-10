@@ -24,6 +24,13 @@ package org.apache.commons.io.input;
 public class TailerListenerAdapter implements TailerListener {
 
     /**
+     * Constructs a new instance.
+     */
+    public TailerListenerAdapter() {
+        // empty
+    }
+
+    /**
      * Called each time the Tailer reaches the end of the file.
      *
      * <strong>Note:</strong> this is called from the tailer thread.

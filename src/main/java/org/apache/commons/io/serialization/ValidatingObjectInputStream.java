@@ -107,7 +107,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
         private ObjectStreamClassPredicate predicate = new ObjectStreamClassPredicate();
 
         /**
-         * Constructs a new instance.
+         * Constructs a new builder of {@link ValidatingObjectInputStream}.
          *
          * @deprecated Use {@link #builder()}.
          */

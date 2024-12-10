@@ -76,6 +76,13 @@ public final class BufferedFileChannelInputStream extends InputStream {
         private FileChannel fileChannel;
 
         /**
+         * Constructs a new builder of {@link BufferedFileChannelInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link BufferedFileChannelInputStream}.
          * <p>
          * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.

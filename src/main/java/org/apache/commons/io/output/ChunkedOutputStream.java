@@ -65,6 +65,13 @@ public class ChunkedOutputStream extends FilterOutputStream {
     public static class Builder extends AbstractStreamBuilder<ChunkedOutputStream, Builder> {
 
         /**
+         * Constructs a new builder of {@link ChunkedOutputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link UnsynchronizedByteArrayOutputStream}.
          * <p>
          * This builder use the following aspects:

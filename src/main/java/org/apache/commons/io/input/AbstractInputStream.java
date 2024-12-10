@@ -33,6 +33,13 @@ public abstract class AbstractInputStream extends InputStream {
     private boolean closed;
 
     /**
+     * Constructs a new instance for subclasses.
+     */
+    public AbstractInputStream() {
+        // empty
+    }
+
+    /**
      * Checks if this instance is closed and throws an IOException if so.
      *
      * @throws IOException if this instance is closed.

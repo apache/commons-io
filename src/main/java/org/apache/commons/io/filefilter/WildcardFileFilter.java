@@ -98,6 +98,13 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
         /** Whether the comparison is case-sensitive. */
         private IOCase ioCase = IOCase.SENSITIVE;
 
+        /**
+         * Constructs a new builder of {@link WildcardFileFilter}.
+         */
+        public Builder() {
+            // empty
+        }
+
         @Override
         public WildcardFileFilter get() {
             return new WildcardFileFilter(ioCase, wildcards);

@@ -88,7 +88,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
     public static class Builder extends AbstractStreamBuilder<ReversedLinesFileReader, Builder> {
 
         /**
-         * Constructs a new {@link Builder}.
+         * Constructs a new builder of {@link ReversedLinesFileReader}.
          */
         public Builder() {
             setBufferSizeDefault(DEFAULT_BLOCK_SIZE);
@@ -480,6 +480,38 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
         channel.close();
     }
 
+    @Override
+    public IOIterator<String> iterator() {
+        return new IOIterator<String>() {
+
+            private String next;
+
+            @Override
+            public boolean hasNext() throws IOException {
+                if (next == null) {
+                    next = readLine();
+                }
+                return next != null;
+            }
+
+            @Override
+            public String next() throws IOException {
+                if (next == null) {
+                    next = readLine();
+                }
+                final String tmp = next;
+                next = null;
+                return tmp;
+            }
+
+            @Override
+            public Iterator<String> unwrap() {
+                return null;
+            }
+
+        };
+    }
+
     /**
      * Returns the lines of the file from bottom to top.
      *
@@ -550,38 +582,6 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
         final List<String> lines = readLines(lineCount);
         Collections.reverse(lines);
         return lines.isEmpty() ? EMPTY_STRING : String.join(System.lineSeparator(), lines) + System.lineSeparator();
-    }
-
-    @Override
-    public IOIterator<String> iterator() {
-        return new IOIterator<String>() {
-
-            private String next;
-
-            @Override
-            public boolean hasNext() throws IOException {
-                if (next == null) {
-                    next = readLine();
-                }
-                return next != null;
-            }
-
-            @Override
-            public String next() throws IOException {
-                if (next == null) {
-                    next = readLine();
-                }
-                final String tmp = next;
-                next = null;
-                return tmp;
-            }
-
-            @Override
-            public Iterator<String> unwrap() {
-                return null;
-            }
-
-        };
     }
 
 }

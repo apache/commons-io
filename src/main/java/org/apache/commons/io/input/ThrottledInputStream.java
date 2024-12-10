@@ -80,6 +80,13 @@ public final class ThrottledInputStream extends CountingInputStream {
         private double maxBytesPerSecond = Double.MAX_VALUE;
 
         /**
+         * Constructs a new builder of {@link ThrottledInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link ThrottledInputStream}.
          * <p>
          * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.

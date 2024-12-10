@@ -47,6 +47,13 @@ public abstract class UnsynchronizedReader extends Reader {
     private char skipBuffer[];
 
     /**
+     * Constructs a new instance.
+     */
+    public UnsynchronizedReader() {
+        // empty
+    }
+
+    /**
      * Checks if this instance is closed and throws an IOException if so.
      *
      * @throws IOException if this instance is closed.

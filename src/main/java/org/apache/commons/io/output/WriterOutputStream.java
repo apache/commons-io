@@ -108,7 +108,7 @@ public class WriterOutputStream extends OutputStream {
         private boolean writeImmediately;
 
         /**
-         * Constructs a new Builder.
+         * Constructs a new builder of {@link WriterOutputStream}.
          */
         public Builder() {
             this.charsetDecoder = getCharset().newDecoder();

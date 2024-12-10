@@ -72,6 +72,13 @@ public class ReadAheadInputStream extends FilterInputStream {
         private ExecutorService executorService;
 
         /**
+         * Constructs a new builder of {@link ReadAheadInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link ReadAheadInputStream}.
          * <p>
          * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.

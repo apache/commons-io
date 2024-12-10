@@ -58,6 +58,13 @@ public abstract class ProxyInputStream extends FilterInputStream {
         private IOIntConsumer afterRead;
 
         /**
+         * Constructs a builder of {@code T}.
+         */
+        protected AbstractBuilder() {
+            // empty
+        }
+
+        /**
          * Gets the {@link ProxyInputStream#afterRead(int)} consumer.
          *
          * @return the {@link ProxyInputStream#afterRead(int)} consumer.

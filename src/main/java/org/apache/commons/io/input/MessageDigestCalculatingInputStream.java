@@ -69,7 +69,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
         private MessageDigest messageDigest;
 
         /**
-         * Constructs a new {@link Builder}.
+         * Constructs a new builder of {@link MessageDigestCalculatingInputStream}.
          * <p>
          * The default for compatibility is the MD5 cryptographic algorithm which is weak and should not be used.
          * </p>

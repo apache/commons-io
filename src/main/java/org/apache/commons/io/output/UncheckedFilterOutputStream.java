@@ -65,6 +65,13 @@ public final class UncheckedFilterOutputStream extends FilterOutputStream {
     public static class Builder extends AbstractStreamBuilder<UncheckedFilterOutputStream, Builder> {
 
         /**
+         * Constructs a new builder of {@link UncheckedFilterOutputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link UncheckedFilterOutputStream}.
          * <p>
          * You must set input that supports {@link #getOutputStream()} on this builder, otherwise, this method throws an exception.

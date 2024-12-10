@@ -71,6 +71,13 @@ public final class UncheckedBufferedReader extends BufferedReader {
     public static class Builder extends AbstractStreamBuilder<UncheckedBufferedReader, Builder> {
 
         /**
+         * Constructs a new builder of {@link UncheckedBufferedReader}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link UncheckedBufferedReader}.
          *
          * <p>

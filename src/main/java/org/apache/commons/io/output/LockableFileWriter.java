@@ -77,7 +77,7 @@ public class LockableFileWriter extends Writer {
         private AbstractOrigin<?, ?> lockDirectory = newFileOrigin(FileUtils.getTempDirectoryPath());
 
         /**
-         * Builds a new {@link LockableFileWriter}.
+         * Constructs a new builder of {@link LockableFileWriter}.
          */
         public Builder() {
             setBufferSizeDefault(AbstractByteArrayOutputStream.DEFAULT_SIZE);

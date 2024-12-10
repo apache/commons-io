@@ -119,6 +119,13 @@ public final class ChecksumInputStream extends CountingInputStream {
         private long expectedChecksumValue;
 
         /**
+         * Constructs a new builder of {@link ChecksumInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link ChecksumInputStream}.
          * <p>
          * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.

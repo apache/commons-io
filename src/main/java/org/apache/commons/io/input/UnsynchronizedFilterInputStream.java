@@ -71,6 +71,13 @@ public class UnsynchronizedFilterInputStream extends InputStream {
     public static class Builder extends AbstractStreamBuilder<UnsynchronizedFilterInputStream, Builder> {
 
         /**
+         * Constructs a new builder of {@link UnsynchronizedFilterInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link UnsynchronizedFilterInputStream}.
          * <p>
          * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.

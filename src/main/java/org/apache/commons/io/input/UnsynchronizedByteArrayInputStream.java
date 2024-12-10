@@ -85,6 +85,13 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
         private int length;
 
         /**
+         * Constructs a builder of {@link UnsynchronizedByteArrayInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link UnsynchronizedByteArrayInputStream}.
          * <p>
          * You must set input that supports {@code byte[]} on this builder, otherwise, this method throws an exception.

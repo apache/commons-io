@@ -63,6 +63,13 @@ public class AutoCloseInputStream extends ProxyInputStream {
     public static class Builder extends AbstractBuilder<AutoCloseInputStream, Builder> {
 
         /**
+         * Constructs a new builder of {@link AutoCloseInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link AutoCloseInputStream}.
          * <p>
          * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.

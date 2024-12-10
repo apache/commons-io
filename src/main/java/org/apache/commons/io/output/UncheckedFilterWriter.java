@@ -66,6 +66,13 @@ public final class UncheckedFilterWriter extends FilterWriter {
     public static class Builder extends AbstractStreamBuilder<UncheckedFilterWriter, Builder> {
 
         /**
+         * Constructs a builder of {@link UncheckedFilterWriter}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link UncheckedFilterWriter}.
          * <p>
          * You must set input that supports {@link #getWriter()} on this builder, otherwise, this method throws an exception.

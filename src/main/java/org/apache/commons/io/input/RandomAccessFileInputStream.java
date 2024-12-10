@@ -60,6 +60,13 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
         private boolean propagateClose;
 
         /**
+         * Constructs a new builder of {@link RandomAccessFileInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link RandomAccessFileInputStream}.
          * <p>
          * You must set input that supports {@link RandomAccessFile} or {@link File}, otherwise, this method throws an exception. Only set one of

@@ -72,6 +72,13 @@ public class ObservableInputStream extends ProxyInputStream {
      */
     public static class Builder extends AbstractBuilder<Builder> {
 
+        /**
+         * Constructs a new builder of {@link ObservableInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
         @Override
         public ObservableInputStream get() throws IOException {
             return new ObservableInputStream(this);
