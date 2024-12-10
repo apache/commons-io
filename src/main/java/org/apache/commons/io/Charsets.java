@@ -218,4 +218,14 @@ public class Charsets {
     public static Charset toCharset(final String charsetName, final Charset defaultCharset) throws UnsupportedCharsetException {
         return charsetName == null ? defaultCharset : Charset.forName(charsetName);
     }
+
+    /**
+     * Construct a new instance.
+     *
+     * @deprecated Will be private in 4.0
+     */
+    @Deprecated
+    public Charsets() {
+        // empty
+    }
 }
