@@ -99,6 +99,13 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
     private boolean reuseBuffers = true;
 
     /**
+     * Constructs a new instance for subclasses.
+     */
+    public AbstractByteArrayOutputStream() {
+        // empty
+    }
+
+    /**
      * Does nothing.
      *
      * The methods in this class can be called after the stream has been closed without generating an {@link IOException}.
