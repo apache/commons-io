@@ -27,7 +27,7 @@ import java.nio.ByteOrder;
  *
  * @since 2.19.0
  */
-public class ByteBuffers {
+public final class ByteBuffers {
 
     /**
      * Allocates a new byte buffer with little-endian byte order. The bytes of a multibyte value are ordered from least significant to most significant.
