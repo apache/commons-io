@@ -31,6 +31,13 @@ public class DemuxInputStream extends InputStream {
     private final InheritableThreadLocal<InputStream> inputStreamLocal = new InheritableThreadLocal<>();
 
     /**
+     * Construct a new instance.
+     */
+    public DemuxInputStream() {
+        // empty
+    }
+
+    /**
      * Binds the specified stream to the current thread.
      *
      * @param input the stream to bind

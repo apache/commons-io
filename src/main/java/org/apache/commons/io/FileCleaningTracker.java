@@ -157,6 +157,13 @@ public class FileCleaningTracker {
     Thread reaper;
 
     /**
+     * Construct a new instance.
+     */
+    public FileCleaningTracker() {
+        // empty
+    }
+
+    /**
      * Adds a tracker to the list of trackers.
      *
      * @param path  the full path to the file to be tracked, not null

@@ -63,6 +63,13 @@ public class LastModifiedFileComparator extends AbstractFileComparator implement
     public static final Comparator<File> LASTMODIFIED_REVERSE = new ReverseFileComparator(LASTMODIFIED_COMPARATOR);
 
     /**
+     * Construct a new instance.
+     */
+    public LastModifiedFileComparator() {
+        // empty
+    }
+
+    /**
      * Compares the last modified date/time of two files.
      *
      * @param file1 The first file to compare.

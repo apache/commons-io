@@ -125,6 +125,13 @@ import org.apache.commons.io.function.IOSupplier;
 public abstract class AbstractSupplier<T, B extends AbstractSupplier<T, B>> implements IOSupplier<T> {
 
     /**
+     * Constructs a new instance for subclasses.
+     */
+    public AbstractSupplier() {
+        // empty
+    }
+
+    /**
      * Returns this instance typed as the subclass type {@code B}.
      * <p>
      * This is the same as the expression:

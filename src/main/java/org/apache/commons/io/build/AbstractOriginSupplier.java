@@ -188,6 +188,13 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
     private AbstractOrigin<?, ?> origin;
 
     /**
+     * Constructs a new instance for subclasses.
+     */
+    public AbstractOriginSupplier() {
+        // empty
+    }
+
+    /**
      * Checks whether the origin is null.
      *
      * @return the origin.

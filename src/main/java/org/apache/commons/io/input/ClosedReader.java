@@ -49,6 +49,13 @@ public class ClosedReader extends Reader {
     @Deprecated
     public static final ClosedReader CLOSED_READER = INSTANCE;
 
+    /**
+     * Construct a new instance.
+     */
+    public ClosedReader() {
+        // empty
+    }
+
     @Override
     public void close() throws IOException {
         // noop

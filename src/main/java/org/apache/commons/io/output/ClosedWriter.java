@@ -45,6 +45,13 @@ public class ClosedWriter extends Writer {
     @Deprecated
     public static final ClosedWriter CLOSED_WRITER = INSTANCE;
 
+    /**
+     * Construct a new instance.
+     */
+    public ClosedWriter() {
+        // empty
+    }
+
     @Override
     public void close() throws IOException {
         // noop

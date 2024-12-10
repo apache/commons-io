@@ -46,6 +46,13 @@ public class ClosedOutputStream extends OutputStream {
     public static final ClosedOutputStream CLOSED_OUTPUT_STREAM = INSTANCE;
 
     /**
+     * Construct a new instance.
+     */
+    public ClosedOutputStream() {
+        // empty
+    }
+
+    /**
      * Throws an {@link IOException} to indicate that the stream is closed.
      *
      * @throws IOException always thrown

@@ -60,6 +60,13 @@ public class ClosedInputStream extends InputStream {
     }
 
     /**
+     * Construct a new instance.
+     */
+    public ClosedInputStream() {
+        // empty
+    }
+
+    /**
      * Returns -1 to indicate that the stream is closed.
      *
      * @return always -1

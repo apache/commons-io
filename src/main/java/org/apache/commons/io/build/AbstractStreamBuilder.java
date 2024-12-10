@@ -84,6 +84,13 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     private IntUnaryOperator bufferSizeChecker = defaultSizeChecker;
 
     /**
+     * Constructs a new instance for subclasses.
+     */
+    public AbstractStreamBuilder() {
+        // empty
+    }
+
+    /**
      * Applies the buffer size request.
      *
      * @param size the size request.

@@ -155,4 +155,11 @@ public class FileCleaner {
     public static void track(final String path, final Object marker, final FileDeleteStrategy deleteStrategy) {
         INSTANCE.track(path, marker, deleteStrategy);
     }
+
+    /**
+     * Construct a new instance.
+     */
+    public FileCleaner() {
+        // empty
+    }
 }

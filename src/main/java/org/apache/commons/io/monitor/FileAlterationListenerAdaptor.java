@@ -27,6 +27,13 @@ import java.io.File;
 public class FileAlterationListenerAdaptor implements FileAlterationListener {
 
     /**
+     * Construct a new instance.
+     */
+    public FileAlterationListenerAdaptor() {
+        // empty
+    }
+
+    /**
      * Directory changed Event.
      *
      * @param directory The directory changed (ignored)

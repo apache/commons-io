@@ -605,7 +605,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     final T origin;
 
     /**
-     * Constructs a new instance for a subclass.
+     * Constructs a new instance for subclasses.
      *
      * @param origin The origin.
      */
