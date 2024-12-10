@@ -451,4 +451,14 @@ public class Counters {
     public static PathCounters noopPathCounters() {
         return NoopPathCounters.INSTANCE;
     }
+
+    /**
+     * Construct a new instance.
+     *
+     * @deprecated Will be private in 4.0
+     */
+    @Deprecated
+    public Counters() {
+        // empty
+    }
 }
