@@ -42,7 +42,7 @@ public class TeeWriterTest {
     public void testArrayIOExceptionOnAppendChar1() {
         final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
-        final ProxyCollectionWriter tw = new ProxyCollectionWriter(badW, goodW, null);
+        final TeeWriter tw = new TeeWriter(badW, goodW, null);
         final char data = 'A';
 
         final IOExceptionList e = assertThrows(IOExceptionList.class, () -> tw.append(data));
@@ -55,7 +55,7 @@ public class TeeWriterTest {
     public void testArrayIOExceptionOnAppendChar2() {
         final Writer badW = BrokenWriter.INSTANCE;
         final StringWriter goodW = mock(StringWriter.class);
-        final ProxyCollectionWriter tw = new ProxyCollectionWriter(goodW, badW, null);
+        final TeeWriter tw = new TeeWriter(goodW, badW, null);
         final char data = 'A';
 
         final IOExceptionList e = assertThrows(IOExceptionList.class, () -> tw.append(data));
