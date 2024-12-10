@@ -36,6 +36,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+/**
+ * Tests {@link ReversedLinesFileReader}.
+ */
 public class ReversedLinesFileReaderParamBlockSizeTest {
 
     private static final String UTF_8 = StandardCharsets.UTF_8.name();
