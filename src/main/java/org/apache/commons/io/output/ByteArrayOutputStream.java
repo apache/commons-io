@@ -25,7 +25,7 @@ import java.io.OutputStream;
  * Implements a ThreadSafe version of {@link AbstractByteArrayOutputStream} using instance synchronization.
  */
 //@ThreadSafe
-public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
+public class ByteArrayOutputStream extends AbstractByteArrayOutputStream<ByteArrayOutputStream> {
 
     /**
      * Fetches entire contents of an {@link InputStream} and represent

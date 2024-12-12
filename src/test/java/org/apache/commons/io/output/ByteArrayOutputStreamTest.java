@@ -27,6 +27,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.IOUtils;
@@ -41,7 +43,8 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 public class ByteArrayOutputStreamTest {
 
-    private interface BAOSFactory<T extends AbstractByteArrayOutputStream> {
+    private interface BAOSFactory<T extends AbstractByteArrayOutputStream<T>> {
+
         T newInstance();
 
         T newInstance(final int size);
@@ -71,18 +74,18 @@ public class ByteArrayOutputStreamTest {
         }
     }
 
-    private static final byte[] DATA;
+    private static final byte[] ASCII_DATA;
 
     static {
-        DATA = new byte[64];
-        for (byte i = 0; i < 64; i++) {
-            DATA[i] = i;
+        ASCII_DATA = new byte[64];
+        for (byte i = 0; i < ASCII_DATA.length; i++) {
+            ASCII_DATA[i] = (byte) (char) ('0' + i);
         }
     }
 
     private static Stream<Arguments> baosFactories() {
         return Stream.of(Arguments.of(ByteArrayOutputStream.class.getSimpleName(), new ByteArrayOutputStreamFactory()),
-            Arguments.of(UnsynchronizedByteArrayOutputStream.class.getSimpleName(), new UnsynchronizedByteArrayOutputStreamFactory()));
+                Arguments.of(UnsynchronizedByteArrayOutputStream.class.getSimpleName(), new UnsynchronizedByteArrayOutputStreamFactory()));
     }
 
     private static boolean byteCmp(final byte[] src, final byte[] cmp) {
@@ -99,12 +102,12 @@ public class ByteArrayOutputStreamTest {
         final IOFunction<InputStream, InputStream> syncBaosToBufferedInputStreamWithSize = is -> ByteArrayOutputStream.toBufferedInputStream(is, 1024);
         final IOFunction<InputStream, InputStream> unSyncBaosToBufferedInputStream = UnsynchronizedByteArrayOutputStream::toBufferedInputStream;
         final IOFunction<InputStream, InputStream> unSyncBaosToBufferedInputStreamWithSize = is -> UnsynchronizedByteArrayOutputStream.toBufferedInputStream(is,
-            1024);
+                1024);
 
         return Stream.of(Arguments.of("ByteArrayOutputStream.toBufferedInputStream(InputStream)", syncBaosToBufferedInputStream),
-            Arguments.of("ByteArrayOutputStream.toBufferedInputStream(InputStream, int)", syncBaosToBufferedInputStreamWithSize),
-            Arguments.of("UnsynchronizedByteArrayOutputStream.toBufferedInputStream(InputStream)", unSyncBaosToBufferedInputStream),
-            Arguments.of("UnsynchronizedByteArrayOutputStream.toBufferedInputStream(InputStream, int)", unSyncBaosToBufferedInputStreamWithSize));
+                Arguments.of("ByteArrayOutputStream.toBufferedInputStream(InputStream, int)", syncBaosToBufferedInputStreamWithSize),
+                Arguments.of("UnsynchronizedByteArrayOutputStream.toBufferedInputStream(InputStream)", unSyncBaosToBufferedInputStream),
+                Arguments.of("UnsynchronizedByteArrayOutputStream.toBufferedInputStream(InputStream, int)", unSyncBaosToBufferedInputStreamWithSize));
     }
 
     private void checkByteArrays(final byte[] expected, final byte[] actual) {
@@ -116,7 +119,7 @@ public class ByteArrayOutputStreamTest {
         }
     }
 
-    private void checkStreams(final AbstractByteArrayOutputStream actual, final java.io.ByteArrayOutputStream expected) {
+    private void checkStreams(final AbstractByteArrayOutputStream<?> actual, final java.io.ByteArrayOutputStream expected) {
         assertEquals(expected.size(), actual.size(), "Sizes are not equal");
         final byte[] buf = actual.toByteArray();
         final byte[] refbuf = expected.toByteArray();
@@ -132,7 +135,7 @@ public class ByteArrayOutputStreamTest {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
     public void testInvalidWriteLenUnder(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
-        try (AbstractByteArrayOutputStream baout = baosFactory.newInstance()) {
+        try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance()) {
             assertThrows(IndexOutOfBoundsException.class, () -> baout.write(new byte[1], 0, -1));
         }
     }
@@ -140,7 +143,7 @@ public class ByteArrayOutputStreamTest {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
     public void testInvalidWriteOffsetAndLenOver(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
-        try (AbstractByteArrayOutputStream baout = baosFactory.newInstance()) {
+        try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance()) {
             assertThrows(IndexOutOfBoundsException.class, () -> baout.write(new byte[1], 0, 2));
         }
     }
@@ -148,7 +151,7 @@ public class ByteArrayOutputStreamTest {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
     public void testInvalidWriteOffsetAndLenUnder(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
-        try (AbstractByteArrayOutputStream baout = baosFactory.newInstance()) {
+        try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance()) {
             assertThrows(IndexOutOfBoundsException.class, () -> baout.write(new byte[1], 1, -2));
         }
     }
@@ -156,7 +159,7 @@ public class ByteArrayOutputStreamTest {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
     public void testInvalidWriteOffsetOver(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
-        try (AbstractByteArrayOutputStream baout = baosFactory.newInstance()) {
+        try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance()) {
             assertThrows(IndexOutOfBoundsException.class, () -> baout.write(IOUtils.EMPTY_BYTE_ARRAY, 1, 0));
         }
     }
@@ -164,73 +167,15 @@ public class ByteArrayOutputStreamTest {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
     public void testInvalidWriteOffsetUnder(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
-        try (AbstractByteArrayOutputStream baout = baosFactory.newInstance()) {
+        try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance()) {
             assertThrows(IndexOutOfBoundsException.class, () -> baout.write(null, -1, 0));
-        }
-    }
-
-    @ParameterizedTest(name = "[{index}] {0}")
-    @MethodSource("baosFactories")
-    public void testStream(final String baosName, final BAOSFactory<?> baosFactory) throws Exception {
-        int written;
-
-        // The ByteArrayOutputStream is initialized with 32 bytes to match
-        // the original more closely for this test.
-        try (AbstractByteArrayOutputStream baout = baosFactory.newInstance(32);
-            final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream()) {
-
-            // First three writes
-            written = writeData(baout, ref, new int[] {4, 10, 22});
-            assertEquals(36, written);
-            checkStreams(baout, ref);
-
-            // Another two writes to see if there are any bad effects after toByteArray()
-            written = writeData(baout, ref, new int[] {20, 12});
-            assertEquals(32, written);
-            checkStreams(baout, ref);
-
-            // Now reset the streams
-            baout.reset();
-            ref.reset();
-
-            // Test again to see if reset() had any bad effects
-            written = writeData(baout, ref, new int[] {5, 47, 33, 60, 1, 0, 8});
-            assertEquals(155, written);
-            checkStreams(baout, ref);
-
-            // Test the readFrom(InputStream) method
-            baout.reset();
-            written = baout.write(new ByteArrayInputStream(ref.toByteArray()));
-            assertEquals(155, written);
-            checkStreams(baout, ref);
-
-            // Write the commons Byte[]OutputStream to a java.io.Byte[]OutputStream
-            // and vice-versa to test the writeTo() method.
-            try (AbstractByteArrayOutputStream baout1 = baosFactory.newInstance(32)) {
-                ref.writeTo(baout1);
-                final java.io.ByteArrayOutputStream ref1 = new java.io.ByteArrayOutputStream();
-                baout.writeTo(ref1);
-                checkStreams(baout1, ref1);
-
-                // Testing toString(String)
-                final String baoutString = baout.toString("ASCII");
-                final String refString = ref.toString("ASCII");
-                assertEquals(refString, baoutString, "ASCII decoded String must be equal");
-
-                // Make sure that empty ByteArrayOutputStreams really don't create garbage
-                // on toByteArray()
-                try (AbstractByteArrayOutputStream baos1 = baosFactory.newInstance();
-                    final AbstractByteArrayOutputStream baos2 = baosFactory.newInstance()) {
-                    assertSame(baos1.toByteArray(), baos2.toByteArray());
-                }
-            }
         }
     }
 
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("toBufferedInputStreamFunctionFactories")
     public void testToBufferedInputStream(final String baosName, final IOFunction<InputStream, InputStream> toBufferedInputStreamFunction) throws IOException {
-        final byte[] data = {(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE};
+        final byte[] data = { (byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE };
 
         try (ByteArrayInputStream bain = new ByteArrayInputStream(data)) {
             assertEquals(data.length, bain.available());
@@ -247,7 +192,7 @@ public class ByteArrayOutputStreamTest {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("toBufferedInputStreamFunctionFactories")
     public void testToBufferedInputStreamEmpty(final String baosName, final IOFunction<InputStream, InputStream> toBufferedInputStreamFunction)
-        throws IOException {
+            throws IOException {
         try (ByteArrayInputStream bain = new ByteArrayInputStream(IOUtils.EMPTY_BYTE_ARRAY)) {
             assertEquals(0, bain.available());
 
@@ -261,13 +206,13 @@ public class ByteArrayOutputStreamTest {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
     public void testToInputStream(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
-        try (AbstractByteArrayOutputStream baout = baosFactory.newInstance();
-            final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream()) {
+        try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance();
+                final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream()) {
 
             // Write 8224 bytes
-            writeData(baout, ref, 32);
+            writeByteArrayIndex(baout, ref, 32);
             for (int i = 0; i < 128; i++) {
-                writeData(baout, ref, 64);
+                writeByteArrayIndex(baout, ref, 64);
             }
 
             // Get data before more writes
@@ -275,7 +220,7 @@ public class ByteArrayOutputStreamTest {
                 byte[] refData = ref.toByteArray();
 
                 // Write some more data
-                writeData(baout, ref, new int[] {2, 4, 8, 16});
+                writeByteArrayIndex(baout, ref, new int[] { 2, 4, 8, 16 });
 
                 // Check original data
                 byte[] baoutData = IOUtils.toByteArray(in);
@@ -296,9 +241,9 @@ public class ByteArrayOutputStreamTest {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
     public void testToInputStreamEmpty(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
-        try (AbstractByteArrayOutputStream baout = baosFactory.newInstance();
-            // Get data before more writes
-            final InputStream in = baout.toInputStream()) {
+        try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance();
+                // Get data before more writes
+                final InputStream in = baout.toInputStream()) {
             assertEquals(0, in.available());
             assertInstanceOf(ClosedInputStream.class, in);
         }
@@ -308,13 +253,13 @@ public class ByteArrayOutputStreamTest {
     @MethodSource("baosFactories")
     public void testToInputStreamWithReset(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
         // Make sure reset() do not destroy InputStream returned from toInputStream()
-        try (AbstractByteArrayOutputStream baout = baosFactory.newInstance();
-            final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream()) {
+        try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance();
+                final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream()) {
 
             // Write 8224 bytes
-            writeData(baout, ref, 32);
+            writeByteArrayIndex(baout, ref, 32);
             for (int i = 0; i < 128; i++) {
-                writeData(baout, ref, 64);
+                writeByteArrayIndex(baout, ref, 64);
             }
 
             // Get data before reset
@@ -324,7 +269,7 @@ public class ByteArrayOutputStreamTest {
                 // Reset and write some new data
                 baout.reset();
                 ref.reset();
-                writeData(baout, ref, new int[] {2, 4, 8, 16});
+                writeByteArrayIndex(baout, ref, new int[] { 2, 4, 8, 16 });
 
                 // Check original data
                 byte[] baoutData = IOUtils.toByteArray(in);
@@ -344,15 +289,249 @@ public class ByteArrayOutputStreamTest {
 
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
+    public void testWriteByte(final String baosName, final BAOSFactory<?> baosFactory) throws Exception {
+        int written;
+
+        // The ByteArrayOutputStream is initialized with 32 bytes to match
+        // the original more closely for this test.
+        try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance(32);
+                final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream()) {
+
+            // First three writes
+            written = writeByte(baout, ref, new int[] { 4, 10, 22 });
+            assertEquals(36, written);
+            checkStreams(baout, ref);
+
+            // Another two writes to see if there are any bad effects after toByteArray()
+            written = writeByte(baout, ref, new int[] { 20, 12 });
+            assertEquals(32, written);
+            checkStreams(baout, ref);
+
+            // Now reset the streams
+            baout.reset();
+            ref.reset();
+
+            // Test again to see if reset() had any bad effects
+            written = writeByte(baout, ref, new int[] { 5, 47, 33, 60, 1, 0, 8 });
+            assertEquals(155, written);
+            checkStreams(baout, ref);
+
+            // Test the readFrom(InputStream) method
+            baout.reset();
+            written = baout.write(new ByteArrayInputStream(ref.toByteArray()));
+            assertEquals(155, written);
+            checkStreams(baout, ref);
+
+            // Write the commons Byte[]OutputStream to a java.io.Byte[]OutputStream
+            // and vice-versa to test the writeTo() method.
+            try (AbstractByteArrayOutputStream<?> baout1 = baosFactory.newInstance(32)) {
+                ref.writeTo(baout1);
+                final java.io.ByteArrayOutputStream ref1 = new java.io.ByteArrayOutputStream();
+                baout.writeTo(ref1);
+                checkStreams(baout1, ref1);
+
+                // Testing toString(String)
+                final String baoutString = baout.toString("ASCII");
+                final String refString = ref.toString("ASCII");
+                assertEquals(refString, baoutString, "ASCII decoded String must be equal");
+
+                // Make sure that empty ByteArrayOutputStreams really don't create garbage
+                // on toByteArray()
+                try (AbstractByteArrayOutputStream<?> baos1 = baosFactory.newInstance();
+                        final AbstractByteArrayOutputStream<?> baos2 = baosFactory.newInstance()) {
+                    assertSame(baos1.toByteArray(), baos2.toByteArray());
+                }
+            }
+        }
+    }
+
+    // writeStringCharset
+
+    @ParameterizedTest(name = "[{index}] {0}")
+    @MethodSource("baosFactories")
+    public void testWriteByteArray(final String baosName, final BAOSFactory<?> baosFactory) throws Exception {
+        int written;
+
+        // The ByteArrayOutputStream is initialized with 32 bytes to match
+        // the original more closely for this test.
+        try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance(32);
+                final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream()) {
+
+            // First three writes
+            written = writeByteArray(baout, ref, new int[] { 4, 10, 22 });
+            assertEquals(36, written);
+            checkStreams(baout, ref);
+
+            // Another two writes to see if there are any bad effects after toByteArray()
+            written = writeByteArray(baout, ref, new int[] { 20, 12 });
+            assertEquals(32, written);
+            checkStreams(baout, ref);
+
+            // Now reset the streams
+            baout.reset();
+            ref.reset();
+
+            // Test again to see if reset() had any bad effects
+            written = writeByteArray(baout, ref, new int[] { 5, 47, 33, 60, 1, 0, 8 });
+            assertEquals(155, written);
+            checkStreams(baout, ref);
+
+            // Test the readFrom(InputStream) method
+            baout.reset();
+            written = baout.write(new ByteArrayInputStream(ref.toByteArray()));
+            assertEquals(155, written);
+            checkStreams(baout, ref);
+
+            // Write the commons Byte[]OutputStream to a java.io.Byte[]OutputStream
+            // and vice-versa to test the writeTo() method.
+            try (AbstractByteArrayOutputStream<?> baout1 = baosFactory.newInstance(32)) {
+                ref.writeTo(baout1);
+                final java.io.ByteArrayOutputStream ref1 = new java.io.ByteArrayOutputStream();
+                baout.writeTo(ref1);
+                checkStreams(baout1, ref1);
+
+                // Testing toString(String)
+                final String baoutString = baout.toString("ASCII");
+                final String refString = ref.toString("ASCII");
+                assertEquals(refString, baoutString, "ASCII decoded String must be equal");
+
+                // Make sure that empty ByteArrayOutputStreams really don't create garbage
+                // on toByteArray()
+                try (AbstractByteArrayOutputStream<?> baos1 = baosFactory.newInstance();
+                        final AbstractByteArrayOutputStream<?> baos2 = baosFactory.newInstance()) {
+                    assertSame(baos1.toByteArray(), baos2.toByteArray());
+                }
+            }
+        }
+    }
+
+    @ParameterizedTest(name = "[{index}] {0}")
+    @MethodSource("baosFactories")
+    public void testWriteByteArrayIndex(final String baosName, final BAOSFactory<?> baosFactory) throws Exception {
+        int written;
+
+        // The ByteArrayOutputStream is initialized with 32 bytes to match
+        // the original more closely for this test.
+        try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance(32);
+                final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream()) {
+
+            // First three writes
+            written = writeByteArrayIndex(baout, ref, new int[] { 4, 10, 22 });
+            assertEquals(36, written);
+            checkStreams(baout, ref);
+
+            // Another two writes to see if there are any bad effects after toByteArray()
+            written = writeByteArrayIndex(baout, ref, new int[] { 20, 12 });
+            assertEquals(32, written);
+            checkStreams(baout, ref);
+
+            // Now reset the streams
+            baout.reset();
+            ref.reset();
+
+            // Test again to see if reset() had any bad effects
+            written = writeByteArrayIndex(baout, ref, new int[] { 5, 47, 33, 60, 1, 0, 8 });
+            assertEquals(155, written);
+            checkStreams(baout, ref);
+
+            // Test the readFrom(InputStream) method
+            baout.reset();
+            written = baout.write(new ByteArrayInputStream(ref.toByteArray()));
+            assertEquals(155, written);
+            checkStreams(baout, ref);
+
+            // Write the commons Byte[]OutputStream to a java.io.Byte[]OutputStream
+            // and vice-versa to test the writeTo() method.
+            try (AbstractByteArrayOutputStream<?> baout1 = baosFactory.newInstance(32)) {
+                ref.writeTo(baout1);
+                final java.io.ByteArrayOutputStream ref1 = new java.io.ByteArrayOutputStream();
+                baout.writeTo(ref1);
+                checkStreams(baout1, ref1);
+
+                // Testing toString(String)
+                final String baoutString = baout.toString("ASCII");
+                final String refString = ref.toString("ASCII");
+                assertEquals(refString, baoutString, "ASCII decoded String must be equal");
+
+                // Make sure that empty ByteArrayOutputStreams really don't create garbage
+                // on toByteArray()
+                try (AbstractByteArrayOutputStream<?> baos1 = baosFactory.newInstance();
+                        final AbstractByteArrayOutputStream<?> baos2 = baosFactory.newInstance()) {
+                    assertSame(baos1.toByteArray(), baos2.toByteArray());
+                }
+            }
+        }
+    }
+
+    @ParameterizedTest(name = "[{index}] {0}")
+    @MethodSource("baosFactories")
+    public void testWriteStringCharset(final String baosName, final BAOSFactory<?> baosFactory) throws Exception {
+        int written;
+
+        // The ByteArrayOutputStream is initialized with 32 bytes to match
+        // the original more closely for this test.
+        try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance(32);
+                final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream()) {
+
+            // First three writes
+            written = writeStringCharset(baout, ref, new int[] { 4, 10, 22 });
+            assertEquals(36, written);
+            checkStreams(baout, ref);
+
+            // Another two writes to see if there are any bad effects after toByteArray()
+            written = writeStringCharset(baout, ref, new int[] { 20, 12 });
+            assertEquals(32, written);
+            checkStreams(baout, ref);
+
+            // Now reset the streams
+            baout.reset();
+            ref.reset();
+
+            // Test again to see if reset() had any bad effects
+            written = writeStringCharset(baout, ref, new int[] { 5, 47, 33, 60, 1, 0, 8 });
+            assertEquals(155, written);
+            checkStreams(baout, ref);
+
+            // Test the readFrom(InputStream) method
+            baout.reset();
+            written = baout.write(new ByteArrayInputStream(ref.toByteArray()));
+            assertEquals(155, written);
+            checkStreams(baout, ref);
+
+            // Write the commons Byte[]OutputStream to a java.io.Byte[]OutputStream
+            // and vice-versa to test the writeTo() method.
+            try (AbstractByteArrayOutputStream<?> baout1 = baosFactory.newInstance(32)) {
+                ref.writeTo(baout1);
+                final java.io.ByteArrayOutputStream ref1 = new java.io.ByteArrayOutputStream();
+                baout.writeTo(ref1);
+                checkStreams(baout1, ref1);
+
+                // Testing toString(String)
+                final String baoutString = baout.toString("ASCII");
+                final String refString = ref.toString("ASCII");
+                assertEquals(refString, baoutString, "ASCII decoded String must be equal");
+
+                // Make sure that empty ByteArrayOutputStreams really don't create garbage
+                // on toByteArray()
+                try (AbstractByteArrayOutputStream<?> baos1 = baosFactory.newInstance();
+                        final AbstractByteArrayOutputStream<?> baos2 = baosFactory.newInstance()) {
+                    assertSame(baos1.toByteArray(), baos2.toByteArray());
+                }
+            }
+        }
+    }
+
+    @ParameterizedTest(name = "[{index}] {0}")
+    @MethodSource("baosFactories")
     public void testWriteZero(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
-        try (AbstractByteArrayOutputStream baout = baosFactory.newInstance()) {
+        try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance()) {
             baout.write(IOUtils.EMPTY_BYTE_ARRAY, 0, 0);
             assertTrue(true, "Dummy");
         }
     }
 
-    private int writeData(final AbstractByteArrayOutputStream baout, final java.io.ByteArrayOutputStream ref, final int count) {
-        if (count > DATA.length) {
+    private int writeByte(final AbstractByteArrayOutputStream<?> baout, final java.io.ByteArrayOutputStream ref, final int count) {
+        if (count > ASCII_DATA.length) {
             throw new IllegalArgumentException("Requesting too many bytes");
         }
         if (count == 0) {
@@ -360,15 +539,94 @@ public class ByteArrayOutputStreamTest {
             ref.write(100);
             return 1;
         }
-        baout.write(DATA, 0, count);
-        ref.write(DATA, 0, count);
+        for (int i = 0; i < count; i++) {
+            baout.write(ASCII_DATA[i]);
+            ref.write(ASCII_DATA[i]);
+        }
         return count;
     }
 
-    private int writeData(final AbstractByteArrayOutputStream baout, final java.io.ByteArrayOutputStream ref, final int[] instructions) {
+    private int writeByte(final AbstractByteArrayOutputStream<?> baout, final java.io.ByteArrayOutputStream ref, final int[] instructions) throws IOException {
         int written = 0;
         for (final int instruction : instructions) {
-            written += writeData(baout, ref, instruction);
+            written += writeByte(baout, ref, instruction);
+        }
+        return written;
+    }
+
+    private int writeByteArray(final AbstractByteArrayOutputStream<?> baout, final java.io.ByteArrayOutputStream ref, final int count) throws IOException {
+        if (count > ASCII_DATA.length) {
+            throw new IllegalArgumentException("Requesting too many bytes");
+        }
+        if (count == 0) {
+            // length 1 data
+            baout.write(new byte[] { 100 });
+            ref.write(new byte[] { 100 });
+            return 1;
+        }
+        baout.write(Arrays.copyOf(ASCII_DATA, count));
+        ref.write(Arrays.copyOf(ASCII_DATA, count));
+        return count;
+    }
+
+    private int writeByteArray(final AbstractByteArrayOutputStream<?> baout, final java.io.ByteArrayOutputStream ref, final int[] instructions)
+            throws IOException {
+        int written = 0;
+        for (final int instruction : instructions) {
+            written += writeByteArray(baout, ref, instruction);
+        }
+        return written;
+    }
+
+    private int writeByteArrayIndex(final AbstractByteArrayOutputStream<?> baout, final java.io.ByteArrayOutputStream ref, final int count) {
+        if (count > ASCII_DATA.length) {
+            throw new IllegalArgumentException("Requesting too many bytes");
+        }
+        if (count == 0) {
+            // length 1 data
+            baout.write(100);
+            ref.write(100);
+            return 1;
+        }
+        baout.write(ASCII_DATA, 0, count);
+        ref.write(ASCII_DATA, 0, count);
+        return count;
+    }
+
+    private int writeByteArrayIndex(final AbstractByteArrayOutputStream<?> baout, final java.io.ByteArrayOutputStream ref, final int[] instructions) {
+        int written = 0;
+        for (final int instruction : instructions) {
+            written += writeByteArrayIndex(baout, ref, instruction);
+        }
+        return written;
+    }
+
+    private int writeStringCharset(final AbstractByteArrayOutputStream<?> baout, final java.io.ByteArrayOutputStream ref, final int count) throws IOException {
+        if (count > ASCII_DATA.length) {
+            throw new IllegalArgumentException("Requesting too many bytes");
+        }
+        if (count == 0) {
+            // length 1 data
+            final String data = "a";
+            baout.write(data, StandardCharsets.UTF_8);
+            ref.write(data.getBytes(StandardCharsets.UTF_8));
+            return 1;
+        }
+        final String data = new String(ASCII_DATA, StandardCharsets.UTF_8).substring(0, count);
+        assertEquals(count, data.length(), () -> String.format("[%,d]:'%s'", count, data));
+        baout.write(data, StandardCharsets.UTF_8);
+        final byte[] bytes = data.getBytes(StandardCharsets.UTF_8);
+        // For now, test assumes 1-1 size mapping from chars to bytes.
+        assertEquals(count, bytes.length, () -> String.format("[%,d]:'%s'", count, data));
+        ref.write(bytes);
+        return count;
+    }
+
+    private int writeStringCharset(final AbstractByteArrayOutputStream<?> baout, final java.io.ByteArrayOutputStream ref, final int[] instructions)
+            throws IOException {
+        int written = 0;
+        for (final int instruction : instructions) {
+            written += writeStringCharset(baout, ref, instruction);
         }
         return written;
     }

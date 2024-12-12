@@ -36,7 +36,7 @@ import org.apache.commons.io.input.UnsynchronizedByteArrayInputStream;
  * @since 2.7
  */
 //@NotThreadSafe
-public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArrayOutputStream {
+public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArrayOutputStream<UnsynchronizedByteArrayOutputStream> {
 
     // @formatter:off
     /**

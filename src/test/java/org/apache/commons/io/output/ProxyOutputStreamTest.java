@@ -17,9 +17,12 @@
 package org.apache.commons.io.output;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.io.OutputStream;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,18 +32,26 @@ import org.junit.jupiter.api.Test;
  */
 public class ProxyOutputStreamTest {
 
+    private final AtomicBoolean hit = new AtomicBoolean();
+
     private ByteArrayOutputStream original;
 
     private OutputStream proxied;
 
     @BeforeEach
     public void setUp() {
-        original = new ByteArrayOutputStream(){
+        original = new ByteArrayOutputStream() {
+
             @Override
-            public void write(final byte[] ba) throws IOException {
-                if (ba != null){
-                    super.write(ba);
-                }
+            public void write(final byte[] ba) {
+                hit.set(true);
+                super.write(ba);
+            }
+
+            @Override
+            public synchronized void write(final int ba) {
+                hit.set(true);
+                super.write(ba);
             }
         };
         proxied = new ProxyOutputStream(original);
@@ -48,15 +59,20 @@ public class ProxyOutputStreamTest {
 
     @Test
     public void testWrite() throws Exception {
+        assertFalse(hit.get());
         proxied.write('y');
+        assertTrue(hit.get());
         assertEquals(1, original.size());
         assertEquals('y', original.toByteArray()[0]);
     }
 
     @Test
-    public void testWriteNullBaSucceeds() throws Exception {
+    public void testWriteNullArrayProxiesToUnderlying() throws Exception {
+        assertFalse(hit.get());
         final byte[] ba = null;
-        original.write(ba);
-        proxied.write(ba);
+        assertThrows(NullPointerException.class, () -> original.write(ba));
+        assertTrue(hit.get());
+        assertThrows(NullPointerException.class, () -> proxied.write(ba));
+        assertTrue(hit.get());
     }
 }

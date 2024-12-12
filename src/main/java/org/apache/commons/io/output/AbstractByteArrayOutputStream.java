@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.ClosedInputStream;
 
@@ -55,9 +56,10 @@ import org.apache.commons.io.input.ClosedInputStream;
  * ignored.
  * </p>
  *
+ * @param <T> The AbstractByteArrayOutputStream subclass
  * @since 2.7
  */
-public abstract class AbstractByteArrayOutputStream extends OutputStream {
+public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayOutputStream<T>> extends OutputStream {
 
     /**
      * Constructor for an InputStream subclass.
@@ -83,17 +85,17 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
     /** The list of buffers, which grows and never reduces. */
     private final List<byte[]> buffers = new ArrayList<>();
 
+    /** The total count of bytes written. */
+    protected int count;
+
+    /** The current buffer. */
+    private byte[] currentBuffer;
+
     /** The index of the current buffer. */
     private int currentBufferIndex;
 
     /** The total count of bytes in all the filled buffers. */
     private int filledBufferSum;
-
-    /** The current buffer. */
-    private byte[] currentBuffer;
-
-    /** The total count of bytes written. */
-    protected int count;
 
     /** Flag to indicate if the buffers can be reused after reset */
     private boolean reuseBuffers = true;
@@ -103,6 +105,16 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
      */
     public AbstractByteArrayOutputStream() {
         // empty
+    }
+
+    /*
+     * Returns this instance typed to {@code T}.
+     *
+     * @return this instance
+     */
+    @SuppressWarnings("unchecked")
+    protected T asThis() {
+        return (T) this;
     }
 
     /**
@@ -304,8 +316,33 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
         return new String(toByteArray(), enc);
     }
 
+    /**
+     * Writes {@code b.length} bytes from the given byte array to this output stream. This has same effect as {@code write(b, 0, b.length)}.
+     *
+     * @param b the data.
+     * @see #write(byte[], int, int)
+     * @since 2.19.0
+     */
+    @Override
+    public void write(final byte b[]) {
+        write(b, 0, b.length);
+    }
+
     @Override
     public abstract void write(final byte[] b, final int off, final int len);
+
+    /**
+     * Writes the bytes for given CharSequence encoded using a Charset.
+     *
+     * @param data    The String to convert to bytes. not null.
+     * @param charset The {@link Charset} o encode the {@code String}, null means the default encoding.
+     * @return this instance.
+     * @since 2.19.0
+     */
+    public T write(final CharSequence data, final Charset charset) {
+        write(data.toString().getBytes(Charsets.toCharset(charset)));
+        return asThis();
+    }
 
     /**
      * Writes the entire contents of the specified input stream to this
