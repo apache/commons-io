@@ -107,7 +107,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
         // empty
     }
 
-    /*
+    /**
      * Returns this instance typed to {@code T}.
      *
      * @return this instance
