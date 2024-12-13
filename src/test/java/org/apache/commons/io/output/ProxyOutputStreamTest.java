@@ -32,24 +32,24 @@ import org.junit.jupiter.api.Test;
  */
 public class ProxyOutputStreamTest {
 
-    private final AtomicBoolean hit = new AtomicBoolean();
-
     private ByteArrayOutputStream original;
 
     private OutputStream proxied;
+
+    private final AtomicBoolean hit = new AtomicBoolean();
 
     @BeforeEach
     public void setUp() {
         original = new ByteArrayOutputStream() {
 
             @Override
-            public void write(final byte[] ba) {
+            public synchronized void write(final int ba) {
                 hit.set(true);
                 super.write(ba);
             }
 
             @Override
-            public synchronized void write(final int ba) {
+            public void write(final byte[] ba) {
                 hit.set(true);
                 super.write(ba);
             }
