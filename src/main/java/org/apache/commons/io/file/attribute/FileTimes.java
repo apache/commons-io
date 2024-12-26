@@ -97,7 +97,6 @@ public final class FileTimes {
         return Integer.MIN_VALUE <= seconds && seconds <= Integer.MAX_VALUE;
     }
 
-
     /**
      * Subtracts milliseconds from a source FileTime.
      *

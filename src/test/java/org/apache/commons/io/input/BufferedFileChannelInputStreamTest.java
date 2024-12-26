@@ -75,5 +75,4 @@ public class BufferedFileChannelInputStreamTest extends AbstractInputStreamTest 
         }
     }
 
-
 }

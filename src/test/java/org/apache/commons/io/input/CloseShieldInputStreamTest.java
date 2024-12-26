@@ -79,7 +79,6 @@ public class CloseShieldInputStreamTest {
         assertEquals(data[0], byteArrayInputStream.read(), "read()");
     }
 
-
     @Test
     public void testReadAfterCose() throws Exception {
         final InputStream shadow;

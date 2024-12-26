@@ -71,7 +71,6 @@ public class ObservableInputStream extends ProxyInputStream {
 
     }
 
-
     /**
      * Builds instances of {@link ObservableInputStream}.
      *
