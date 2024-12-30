@@ -2350,10 +2350,10 @@ public class FileUtils {
     }
 
     /**
-     * Lists files in the given {@code directory}, adding each file to the given list.
+     * Lists Files in the given {@code directory}, adding each file to the given list.
      *
      * @param directory A File for an assumed directory, not null.
-     * @param files The list to add found files, not null.
+     * @param files The list to add found Files, not null.
      * @param recursive Whether or not to recurse into subdirectories.
      * @param filter How to filter files, not null.
      */
