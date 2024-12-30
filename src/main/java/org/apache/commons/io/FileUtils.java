@@ -2349,6 +2349,14 @@ public class FileUtils {
         return toList(visitor.getFileList().stream().map(Path::toFile));
     }
 
+    /**
+     * Lists files in the given {@code directory}, adding each file to the given list.
+     *
+     * @param directory A File for an assumed directory, not null.
+     * @param files The list to add found files, not null.
+     * @param recursive Whether or not to recurse into subdirectories.
+     * @param filter How to filter files, not null.
+     */
     @SuppressWarnings("null")
     private static void listFiles(final File directory, final List<File> files, final boolean recursive, final FilenameFilter filter) {
         final File[] listFiles = directory.listFiles();
