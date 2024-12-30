@@ -213,6 +213,11 @@ public class FileUtilsListFilesTest {
     }
 
     @Test
+    public void testListFilesMissing() {
+        assertTrue(FileUtils.listFiles(new File(temporaryFolder, "dir/does/not/exist/at/all"), null, false).isEmpty());
+    }
+
+    @Test
     public void testListFilesWithDeletion() throws IOException {
         final String[] extensions = {"xml", "txt"};
         final List<File> list;
