@@ -18,9 +18,11 @@
 package org.apache.commons.io.output;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -56,6 +58,7 @@ public class RandomAccessFileOutputStreamTest {
         assertEquals(EXPECTED, new String(Files.readAllBytes(fixturePath), charset));
         // @formatter:on
         try (RandomAccessFileOutputStream os = RandomAccessFileOutputStream.builder().setPath(fixturePath).get()) {
+            validateState(os);
         }
     }
 
@@ -77,6 +80,7 @@ public class RandomAccessFileOutputStreamTest {
         assertEquals(EXPECTED, new String(Files.readAllBytes(fixturePath), charset));
         // @formatter:on
         try (RandomAccessFileOutputStream os = RandomAccessFileOutputStream.builder().setPath(fixturePath).get()) {
+            validateState(os);
         }
     }
 
@@ -94,6 +98,7 @@ public class RandomAccessFileOutputStreamTest {
         assertEquals(EXPECTED, new String(Files.readAllBytes(fixturePath), charset));
         // @formatter:on
         try (RandomAccessFileOutputStream os = RandomAccessFileOutputStream.builder().setPath(fixturePath).get()) {
+            validateState(os);
         }
     }
 
@@ -111,6 +116,7 @@ public class RandomAccessFileOutputStreamTest {
         assertEquals(EXPECTED.subSequence(1, EXPECTED.length() - 1), new String(Files.readAllBytes(fixturePath), charset));
         // @formatter:on
         try (RandomAccessFileOutputStream os = RandomAccessFileOutputStream.builder().setPath(fixturePath).get()) {
+            validateState(os);
         }
     }
 
@@ -122,7 +128,7 @@ public class RandomAccessFileOutputStreamTest {
                 .setPath(fixturePath)
                 .setOpenOptions(StandardOpenOption.WRITE)
                 .get()) {
-            // doNothing
+            validateState(os);
         }
         // @formatter:on
     }
@@ -131,7 +137,7 @@ public class RandomAccessFileOutputStreamTest {
     public void testWriteGetDefault() throws IOException {
         assertThrows(IllegalStateException.class, () -> {
             try (RandomAccessFileOutputStream os = RandomAccessFileOutputStream.builder().get()) {
-                // doNothing
+                validateState(os);
             }
         });
     }
@@ -148,7 +154,7 @@ public class RandomAccessFileOutputStreamTest {
         try (RandomAccessFileOutputStream os = RandomAccessFileOutputStream.builder()
                 .setPath(fixturePath)
                 .get()) {
-            // doNothing
+            validateState(os);
         }
         // @formatter:on
     }
@@ -162,6 +168,7 @@ public class RandomAccessFileOutputStreamTest {
                 .setPath(fixturePath)
                 .setOpenOptions(StandardOpenOption.WRITE)
                 .get()) {
+            validateState(os);
             final byte[] bytes = EXPECTED.getBytes(charset);
             for (final byte element : bytes) {
                 os.write(element);
@@ -170,7 +177,15 @@ public class RandomAccessFileOutputStreamTest {
         assertEquals(EXPECTED, new String(Files.readAllBytes(fixturePath), charset));
         // @formatter:on
         try (RandomAccessFileOutputStream os = RandomAccessFileOutputStream.builder().setPath(fixturePath).get()) {
+            validateState(os);
         }
+    }
+
+    @SuppressWarnings("resource")
+    private void validateState(final RandomAccessFileOutputStream os) throws IOException {
+        final RandomAccessFile randomAccessFile = os.getRandomAccessFile();
+        assertNotNull(randomAccessFile);
+        assertNotNull(randomAccessFile.getFD());
     }
 
 }

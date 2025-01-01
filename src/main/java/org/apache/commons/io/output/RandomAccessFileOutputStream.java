@@ -96,6 +96,16 @@ public final class RandomAccessFileOutputStream extends OutputStream {
         super.flush();
     }
 
+    /**
+     * Gets the underlying random access file.
+     *
+     * @return the underlying random access file.
+     * @since 2.19.0
+     */
+    public RandomAccessFile getRandomAccessFile() {
+        return randomAccessFile;
+    }
+
     @Override
     public void write(final int b) throws IOException {
         randomAccessFile.write(b);
