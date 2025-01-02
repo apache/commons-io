@@ -34,6 +34,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 import org.apache.commons.io.RandomAccessFileMode;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -147,6 +148,37 @@ public class RandomAccessFileInputStreamTest {
                 assertNotEquals(-1, inputStream.getRandomAccessFile().read());
             }
             file.read();
+        }
+    }
+
+    @Test
+    public void testCopy() throws IOException {
+        // @formatter:off
+        try (RandomAccessFileInputStream inputStream = RandomAccessFileInputStream.builder()
+                .setRandomAccessFile(createRandomAccessFile())
+                .setCloseOnClose(true)
+                .get()) {
+            // @formatter:on
+            // A Test Line.
+            try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                // 0 and 12
+                assertEquals(12, inputStream.copy(0, 12, baos));
+                assertArrayEquals("A Test Line.".getBytes(StandardCharsets.ISO_8859_1), baos.toByteArray());
+                // 0 and 1
+                baos.reset();
+                assertEquals(1, inputStream.copy(0, 1, baos));
+                assertArrayEquals("A".getBytes(StandardCharsets.ISO_8859_1), baos.toByteArray());
+                // 11 and 1
+                baos.reset();
+                assertEquals(1, inputStream.copy(11, 1, baos));
+                assertArrayEquals(".".getBytes(StandardCharsets.ISO_8859_1), baos.toByteArray());
+                // 1 and 10
+                baos.reset();
+                assertEquals(10, inputStream.copy(1, 10, baos));
+                assertArrayEquals(" Test Line".getBytes(StandardCharsets.ISO_8859_1), baos.toByteArray());
+                // next
+                assertEquals('.', inputStream.read());
+            }
         }
     }
 

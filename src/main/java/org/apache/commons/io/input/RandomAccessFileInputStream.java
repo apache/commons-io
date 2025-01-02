@@ -19,9 +19,11 @@ package org.apache.commons.io.input;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.util.Objects;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
@@ -186,6 +188,21 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
         if (propagateClose) {
             randomAccessFile.close();
         }
+    }
+
+    /**
+     * Copies our bytes from the given starting position for a size to the output stream.
+     *
+     * @param pos  Where to start copying. The offset position, measured in bytes from the beginning of the file, at which to set the file pointer.
+     * @param size The number of bytes to copy.
+     * @param os   Where to copy.
+     * @return The number of bytes copied..
+     * @throws IOException if {@code pos} is less than {@code 0} or if an I/O error occurs.
+     * @since 2.19.0
+     */
+    public long copy(final long pos, final long size, final OutputStream os) throws IOException {
+        randomAccessFile.seek(pos);
+        return IOUtils.copyLarge(this, os, 0, size);
     }
 
     /**

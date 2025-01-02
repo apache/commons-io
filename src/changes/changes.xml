@@ -60,6 +60,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add RandomAccessFileOutputStream.getRandomAccessFile().</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add ProxyInputStream.setReference(InputStream), was package-private setIn(InputStream).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add ProxyOutputStream.setReference(OutputStream).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add RandomAccessFileInputStream.copy(long, long, OutputStream).</action>
       <!-- UPDATE -->
       <action dev="ggregory" type="update"             due-to="Dependabot, Gary Gregory">Bump commons.bytebuddy.version from 1.15.10 to 1.15.11 #710.</action>
     </release>
