@@ -93,7 +93,7 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
         }
 
         /**
-         * Sets whether to close the underlying file when this stream is closed.
+         * Sets whether to close the underlying file when this stream is closed, defaults to false for compatibility.
          *
          * @param propagateClose Whether to close the underlying file when this stream is closed.
          * @return {@code this} instance.
@@ -198,7 +198,7 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
     }
 
     /**
-     * Tests whether to close the underlying file when this stream is closed.
+     * Tests whether to close the underlying file when this stream is closed, defaults to false for compatibility.
      *
      * @return Whether to close the underlying file when this stream is closed.
      */
