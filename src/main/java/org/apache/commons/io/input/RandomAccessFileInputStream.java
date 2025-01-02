@@ -56,7 +56,6 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
     // @formatter:on
     public static class Builder extends AbstractStreamBuilder<RandomAccessFileInputStream, Builder> {
 
-        // private RandomAccessFile randomAccessFile;
         private boolean propagateClose;
 
         /**
