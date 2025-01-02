@@ -117,6 +117,18 @@ public class ProxyOutputStream extends FilterOutputStream {
     }
 
     /**
+     * Sets the underlying output stream.
+     *
+     * @param out the underlying output stream.
+     * @return this instance.
+     * @since 2.19.0
+     */
+    public ProxyOutputStream setReference(final OutputStream out) {
+        this.out = out;
+        return this;
+    }
+
+    /**
      * Invokes the delegate's {@code write(byte[])} method.
      * @param bts the bytes to write
      * @throws IOException if an I/O error occurs.

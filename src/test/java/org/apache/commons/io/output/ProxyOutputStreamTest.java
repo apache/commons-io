@@ -16,14 +16,15 @@
  */
 package org.apache.commons.io.output;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -34,7 +35,7 @@ public class ProxyOutputStreamTest {
 
     private ByteArrayOutputStream original;
 
-    private OutputStream proxied;
+    private ProxyOutputStream proxied;
 
     private final AtomicBoolean hit = new AtomicBoolean();
 
@@ -43,18 +44,29 @@ public class ProxyOutputStreamTest {
         original = new ByteArrayOutputStream() {
 
             @Override
-            public synchronized void write(final int ba) {
+            public void write(final byte[] ba) {
                 hit.set(true);
                 super.write(ba);
             }
 
             @Override
-            public void write(final byte[] ba) {
+            public synchronized void write(final int ba) {
                 hit.set(true);
                 super.write(ba);
             }
         };
         proxied = new ProxyOutputStream(original);
+    }
+
+    @SuppressWarnings("resource")
+    @Test
+    public void testSetReference() throws Exception {
+        assertFalse(hit.get());
+        proxied.setReference(new ByteArrayOutputStream());
+        proxied.write('y');
+        assertFalse(hit.get());
+        assertEquals(0, original.size());
+        assertArrayEquals(ArrayUtils.EMPTY_BYTE_ARRAY, original.toByteArray());
     }
 
     @Test
