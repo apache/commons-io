@@ -145,11 +145,11 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
     public void testAvailableNull() throws IOException {
         try (T inputStream = createFixture(null)) {
             assertEquals(0, inputStream.available());
-            inputStream.setIn(createFixture());
+            inputStream.setReference(createFixture());
             assertEquals(3, inputStream.available());
             IOUtils.toByteArray(inputStream);
             assertEquals(0, inputStream.available());
-            inputStream.setIn(null);
+            inputStream.setReference(null);
             assertEquals(0, inputStream.available());
         }
     }
@@ -162,11 +162,11 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
     public void testMarkOnNull() throws IOException {
         try (T inputStream = createFixture(null)) {
             inputStream.mark(1);
-            inputStream.setIn(createFixture());
+            inputStream.setReference(createFixture());
             inputStream.mark(1);
             IOUtils.toByteArray(inputStream);
             inputStream.mark(1);
-            inputStream.setIn(null);
+            inputStream.setReference(null);
             inputStream.mark(1);
         }
     }
@@ -192,7 +192,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
     public void testMarkSupportedOnNull() throws IOException {
         try (ProxyInputStream fixture = createFixture()) {
             assertMarkSupportedEquals(fixture);
-            fixture.setIn(null);
+            fixture.setReference(null);
             assertFalse(fixture.markSupported());
         }
     }

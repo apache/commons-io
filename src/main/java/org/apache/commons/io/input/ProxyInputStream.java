@@ -367,12 +367,15 @@ public abstract class ProxyInputStream extends FilterInputStream {
     }
 
     /**
-     * Package-private for testing.
+     * Sets the underlying input stream.
      *
      * @param in The input stream to set in {@link java.io.FilterInputStream#in}.
+     * @return this instance.
+     * @since 2.19.0
      */
-    void setIn(final InputStream in) {
+    public ProxyInputStream setReference(final InputStream in) {
         this.in = in;
+        return this;
     }
 
     /**
