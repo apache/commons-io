@@ -1503,14 +1503,13 @@ public class IOUtils {
      * </p>
      * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
      *
-     * @param input the {@link InputStream} to read
-     * @param output the {@link OutputStream} to write to
-     * @param inputOffset : number of bytes to skip from input before copying
-     * -ve values are ignored
-     * @param length number of bytes to copy. -ve means all
-     * @return the number of bytes copied
-     * @throws NullPointerException if the input or output is null
-     * @throws IOException          if an I/O error occurs
+     * @param input the {@link InputStream} to read.
+     * @param output the {@link OutputStream} to write.
+     * @param inputOffset number of bytes to skip from input before copying, these bytes are ignored.
+     * @param length number of bytes to copy.
+     * @return the number of bytes copied.
+     * @throws NullPointerException if the input or output is null.
+     * @throws IOException          if an I/O error occurs.
      * @since 2.2
      */
     public static long copyLarge(final InputStream input, final OutputStream output, final long inputOffset,
@@ -1531,15 +1530,14 @@ public class IOUtils {
      * this is done to guarantee that the correct number of characters are skipped.
      * </p>
      *
-     * @param input the {@link InputStream} to read
-     * @param output the {@link OutputStream} to write to
-     * @param inputOffset number of bytes to skip from input before copying
-     * -ve values are ignored
-     * @param length number of bytes to copy. -ve means all
-     * @param buffer the buffer to use for the copy
-     * @return the number of bytes copied
-     * @throws NullPointerException if the input or output is null
-     * @throws IOException          if an I/O error occurs
+     * @param input the {@link InputStream} to read.
+     * @param output the {@link OutputStream} to write.
+     * @param inputOffset number of bytes to skip from input before copying, these bytes are ignored.
+     * @param length number of bytes to copy.
+     * @param buffer the buffer to use for the copy.
+     * @return the number of bytes copied.
+     * @throws NullPointerException if the input or output is null.
+     * @throws IOException          if an I/O error occurs.
      * @since 2.2
      */
     public static long copyLarge(final InputStream input, final OutputStream output,
