@@ -38,10 +38,9 @@ then tweak the source formatting if necessary and regenerate, then commit
 
 The <action> type attribute can be add,update,fix,remove.
 -->
-
-<document xmlns="http://maven.apache.org/changes/1.0.0"
+<document xmlns="http://maven.apache.org/changes/2.0.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
+          xsi:schemaLocation="http://maven.apache.org/changes/2.0.0 http://maven.apache.org/xsd/changes-2.0.0.xsd">
   <properties>
     <title>Apache Commons IO Release Notes</title>
   </properties>
@@ -64,6 +63,7 @@ The <action> type attribute can be add,update,fix,remove.
       <!-- UPDATE -->
       <action dev="ggregory" type="update"             due-to="Dependabot, Gary Gregory">Bump commons.bytebuddy.version from 1.15.10 to 1.15.11 #710.</action>
       <action dev="ggregory" type="update"             due-to="Gary Gregory">Bump commons-codec:commons-codec from 1.17.1 to 1.17.2.</action>
+      <action dev="ggregory" type="update"             due-to="Gary Gregory">Bump org.apache.commons:commons-parent from 78 to 79.</action>
     </release>
     <release version="2.18.0" date="2024-11-16" description="Version 2.18.0: Java 8 is required.">
       <!-- FIX -->
