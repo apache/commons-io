@@ -121,6 +121,7 @@ file comparators, endian transformation classes, and much more.
     <commons.bc.version>2.18.0</commons.bc.version>
     <commons.release.version>2.19.0</commons.release.version>
     <commons.release.next>2.19.1</commons.release.next>
+    <!-- project.build.outputTimestamp is managed by Maven plugins, see https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
     <project.build.outputTimestamp>2024-11-19T20:55:01Z</project.build.outputTimestamp>
     <commons.release.desc>(requires Java 8)</commons.release.desc>
     <commons.jira.id>IO</commons.jira.id>
