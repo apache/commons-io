@@ -148,7 +148,7 @@ Commons IO 2.3 through 2.5 requires Java 6 or above.
 Commons IO 2.2 requires Java 5 or above.
 Commons IO 1.4 requires Java 1.3 or above.
 
-Historical list of changes: ${project.url}changes-report.html
+Historical list of changes: ${project.url}changes.html
 
 For complete information on ${project.name}, including instructions on how to submit bug reports,
 patches, or suggestions for improvement, see the ${project.name} website:
