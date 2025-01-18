@@ -50,6 +50,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate constructor Counters.Counters() to be private in 4.0.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate constructor Charsets.Charsets() to be private in 4.0.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Pick up maven-antrun-plugin version from parent POM org.apache:apache.</action> 
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Javadoc is missing its Overview page.</action>
       <!-- ADD -->
       <action dev="ggregory" type="add" issue="IO-860" due-to="Nico Strecker, Gary Gregory">Add ThrottledInputStream.Builder.setMaxBytes(long, ChronoUnit).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IOIterable.</action>
