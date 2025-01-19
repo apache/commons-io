@@ -77,7 +77,7 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-inline</artifactId>
-      <version>4.11.0</version>
+      <version>${commons.mockito.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
