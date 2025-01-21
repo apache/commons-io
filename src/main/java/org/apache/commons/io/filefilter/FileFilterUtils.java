@@ -669,7 +669,7 @@ public class FileFilterUtils {
      * @see SizeFileFilter
      * @since 1.3
      */
-    public static IOFileFilter sizeRangeFileFilter(final long minSizeInclusive, final long maxSizeInclusive ) {
+    public static IOFileFilter sizeRangeFileFilter(final long minSizeInclusive, final long maxSizeInclusive) {
         final IOFileFilter minimumFilter = new SizeFileFilter(minSizeInclusive, true);
         final IOFileFilter maximumFilter = new SizeFileFilter(maxSizeInclusive + 1L, false);
         return minimumFilter.and(maximumFilter);

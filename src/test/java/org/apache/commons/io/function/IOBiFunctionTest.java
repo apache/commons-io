@@ -51,7 +51,7 @@ public class IOBiFunctionTest {
     public void testAndThenIOFunction() throws IOException {
         final IOBiFunction<Path, LinkOption[], Boolean> isDirectory = Files::isDirectory;
         final IOFunction<Boolean, Boolean> not = this::not;
-        assertTrue( isDirectory.apply(PathUtils.current(), PathUtils.EMPTY_LINK_OPTION_ARRAY));
+        assertTrue(isDirectory.apply(PathUtils.current(), PathUtils.EMPTY_LINK_OPTION_ARRAY));
         final IOBiFunction<Path, LinkOption[], Boolean> andThen = isDirectory.andThen(not);
         assertFalse(andThen.apply(PathUtils.current(), PathUtils.EMPTY_LINK_OPTION_ARRAY));
     }
@@ -64,7 +64,7 @@ public class IOBiFunctionTest {
     @Test
     public void testApply() throws IOException {
         final IOBiFunction<Path, LinkOption[], Boolean> isDirectory = Files::isDirectory;
-        assertTrue( isDirectory.apply(PathUtils.current(), PathUtils.EMPTY_LINK_OPTION_ARRAY));
+        assertTrue(isDirectory.apply(PathUtils.current(), PathUtils.EMPTY_LINK_OPTION_ARRAY));
     }
 
     /**
