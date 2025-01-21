@@ -51,6 +51,7 @@ limitations under the License.
       <property name="illegalPattern" value="true" />
       <property name="message" value="Trailing whitespace" />
     </module>
+    <module name="TypecastParenPad" />
   </module>
   <!-- @author tags are deprecated -->
   <module name="RegexpSingleline">
