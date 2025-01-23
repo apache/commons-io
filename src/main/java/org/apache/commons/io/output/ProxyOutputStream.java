@@ -39,7 +39,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * Builds instances of {@link ProxyOutputStream}.
      * <p>
      * This class does not provide a convenience static {@code builder()} method so that subclasses can.
-     * </p> 
+     * </p>
      *
      * @since 2.19.0
      */
