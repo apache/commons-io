@@ -24,7 +24,7 @@ limitations under the License.
  </properties>
 <body>
 
-<section name="Upgrade">
+<section name="Upgrade from 1.1 to 1.2">
 <p>
 These are the release notes and advice for upgrading Commons-IO from
 version 1.1 to version 1.2.

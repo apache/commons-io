@@ -24,7 +24,7 @@ limitations under the License.
     </properties>
     <body>
 
-        <section name="Upgrade">
+        <section name="Upgrade from 2.5 to 2.6">
             <p>
                 These are the release notes and advice for upgrading Apache Commons IO from
                 version 2.5 to version 2.6
