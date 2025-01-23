@@ -15,7 +15,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<document>
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
  <properties>
   <title>User guide</title>
   <author email="dev@commons.apache.org">Commons Documentation Team</author>
@@ -268,15 +270,15 @@ limitations under the License.
             <code>org.apache.commons.io.output</code> packages
             contain various useful implementations of streams.
             These include:
-            <ul>
-            <li>Null output stream - that silently absorbs all data sent to it</li>
-            <li>Tee output stream - that sends output data to two streams instead of one</li>
-            <li>Byte array output stream - that is a faster version of the JDK class</li>
-            <li>Counting streams - that count the number of bytes passed</li>
-            <li>Proxy streams - that delegate to the correct method in the proxy</li>
-            <li>Lockable writer - that provides synchronization of writes using a lock file</li>
-            </ul>
         </p>
+        <ul>
+          <li>Null output stream - that silently absorbs all data sent to it</li>
+          <li>Tee output stream - that sends output data to two streams instead of one</li>
+          <li>Byte array output stream - that is a faster version of the JDK class</li>
+          <li>Counting streams - that count the number of bytes passed</li>
+          <li>Proxy streams - that delegate to the correct method in the proxy</li>
+          <li>Lockable writer - that provides synchronization of writes using a lock file</li>
+          </ul>
         <p>
             See the
             <a href="apidocs/index.html?org/apache/commons/io/input/package-summary.html">input</a> or

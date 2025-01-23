@@ -15,32 +15,35 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<project name="Commons IO">
-    <bannerRight>
-        <name>Commons IO</name>
-        <src>/images/io-logo-white.png</src>
-        <href>/index.html</href>
-    </bannerRight>
-
-    <body>
-        <menu name="Commons IO">
-            <item name="Overview"             href="/index.html"/>
-            <item name="Download"             href="https://commons.apache.org/io/download_io.cgi"/>
-            <item name="User guide"           href="/description.html"/>
-            <item name="Best practices"       href="/bestpractices.html"/>
-            <item name="Javadoc"              href="/apidocs/index.html"/>
-            <item name="Javadoc Archive"      href="https://javadoc.io/doc/commons-io/commons-io/latest/index.html"/>
-        </menu>
-
-        <menu name="Development">
-            <item name="Building"             href="/building.html"/>
-            <item name="Mailing lists"        href="/mail-lists.html"/>
-            <item name="Issue Tracking"       href="/issue-tracking.html"/>
-            <item name="Team"                 href="/team.html"/>
-            <item name="Proposal"             href="/proposal.html"/>
-            <item name="Source repository"    href="/scm.html"/>
-        </menu>
-
-    </body>
-
-</project>
+<site xmlns="http://maven.apache.org/SITE/2.0.0" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/SITE/2.0.0 http://maven.apache.org/xsd/site-2.0.0.xsd"
+  name="Apache Commons IO">
+  <bannerRight name="Commons IO" href="/index.html">
+    <image src="/images/logo.png"/>
+  </bannerRight>
+  <body>
+    <menu name="Commons IO">
+      <!-- Start: For all components. -->
+      <item name="About" href="/index.html" />
+      <item name="Asking Questions" href="/mail-lists.html" />
+      <item name="Release History" href="/changes.html" />
+      <item name="Issue Tracking" href="/issue-management.html" />
+      <item name="Dependency Management" href="/dependency-info.html" />
+      <item name="Sources" href="/scm.html" />
+      <item name="Security" href="/security.html" />
+      <item name="License" href="https://www.apache.org/licenses/LICENSE-2.0" />
+      <item name="Code of Conduct" href="https://www.apache.org/foundation/policies/conduct.html" />
+      <item name="Download" href="/download_io.cgi" />
+      <item name="Javadoc">
+        <item name="Javadoc Current" href="/apidocs/index.html" />
+        <item name="Javadoc Archive" href="https://javadoc.io/doc/commons-io/commons-io" />
+      </item>
+      <!-- End: For all components. -->
+      <item name="Users guide" href="/description.html"/>
+      <item name="Best practices" href="/bestpractices.html"/>
+      <item name="Building" href="/building.html"/>
+      <item name="Proposal" href="/proposal.html"/>
+    </menu>
+  </body>
+</site>
