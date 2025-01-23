@@ -247,7 +247,7 @@ limitations under the License.
                 ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder().setInputStream(bais).get()) {
             // String.class is automatically accepted
             vois.accept(HashMap.class, Number.class, Integer.class);
-            final HashMap&lt;String, Integer&lt; map2 = (HashMap&lt;String, Integer&gt;) vois.readObject();
+            final HashMap&lt;String, Integer&gt; map2 = (HashMap&lt;String, Integer&gt;) vois.readObject();
             assertEquals(map1, map2);
         }
         // Reusing a configuration
@@ -259,7 +259,7 @@ limitations under the License.
                         .setInputStream(bais)
                         .get()) {
             // String.class is automatically accepted
-            final HashMap&lt;String, Integer&lt; map2 = (HashMap&lt;String, Integer&lt;) vois.readObject();
+            final HashMap&lt;String, Integer&gt; map2 = (HashMap&lt;String, Integer&gt;) vois.readObject();
             assertEquals(map1, map2);
         }
       </source>
