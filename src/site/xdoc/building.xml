@@ -48,10 +48,11 @@ limitations under the License.
     The following <a href="http://maven.apache.org">Maven</a> commands can be used to build io:
   </p>
   <ul>
-    <li><code>mvn clean</code> - clean up</li>
-    <li><code>mvn test</code> - compile and run the unit tests</li>
-    <li><code>mvn site</code> - create io documentation</li>
-    <li><code>mvn package</code> - build the jar</li>
+    <li><code>mvn</code> - runs the default Maven goal which performs all build checks</li>
+    <li><code>mvn clean</code> - cleans up</li>
+    <li><code>mvn test</code> - compiles and runs the unit tests</li>
+    <li><code>mvn site</code> - creates the site and documentation</li>
+    <li><code>mvn package</code> - creates the jar</li>
   </ul>
 </section>
 </body>
