@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
  * A Proxy stream which acts as expected, that is it passes the method
@@ -33,6 +34,46 @@ import org.apache.commons.io.IOUtils;
  * </p>
  */
 public class ProxyOutputStream extends FilterOutputStream {
+
+    /**
+     * Builds instances of {@link ProxyOutputStream}.
+     * <p>
+     * This class does not provide a convenience static {@code builder()} method so that subclasses can.
+     * </p> 
+     *
+     * @since 2.19.0
+     */
+    public static class Builder extends AbstractStreamBuilder<ProxyOutputStream, Builder> {
+
+        /**
+         * Constructs a new builder of {@link ProxyOutputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
+         * Builds a new {@link ProxyOutputStream}.
+         * <p>
+         * This builder use the following aspects:
+         * </p>
+         * <ul>
+         * <li>{@link #getOutputStream()}</li>
+         * </ul>
+         *
+         * @return a new instance.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws UnsupportedOperationException if the origin cannot be converted to an {@link OutputStream}.
+         * @throws IOException                   if an I/O error occurs.
+         * @see #getOutputStream()
+         */
+        @SuppressWarnings("resource") // Caller closes.
+        @Override
+        public ProxyOutputStream get() throws IOException {
+            return new ProxyOutputStream(getOutputStream());
+        }
+
+    }
 
     /**
      * Constructs a new ProxyOutputStream.
@@ -126,6 +167,18 @@ public class ProxyOutputStream extends FilterOutputStream {
     public ProxyOutputStream setReference(final OutputStream out) {
         this.out = out;
         return this;
+    }
+
+    /**
+     * Unwraps this instance by returning the underlying {@link OutputStream}.
+     * <p>
+     * Use with caution; useful to query the underlying {@link OutputStream}.
+     * </p>
+     *
+     * @return the underlying {@link OutputStream}.
+     */
+    OutputStream unwrap() {
+        return out;
     }
 
     /**

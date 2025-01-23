@@ -19,6 +19,7 @@ package org.apache.commons.io.output;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -56,6 +57,11 @@ public class ProxyOutputStreamTest {
             }
         };
         proxied = new ProxyOutputStream(original);
+    }
+
+    @Test
+    public void testBuilder() throws Exception {
+        assertSame(original, new ProxyOutputStream.Builder().setOutputStream(original).get().unwrap());
     }
 
     @SuppressWarnings("resource")
