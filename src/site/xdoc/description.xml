@@ -51,13 +51,13 @@ limitations under the License.
             </p>
 
             <source>
- InputStream in = new URL( "https://commons.apache.org" ).openStream();
+ InputStream in = new URL("https://commons.apache.org").openStream();
  try {
-   InputStreamReader inR = new InputStreamReader( in );
-   BufferedReader buf = new BufferedReader( inR );
+   InputStreamReader inR = new InputStreamReader(in);
+   BufferedReader buf = new BufferedReader(inR);
    String line;
-   while ( ( line = buf.readLine() ) != null ) {
-     System.out.println( line );
+   while ((line = buf.readLine()) != null) {
+     System.out.println(line);
    }
  } finally {
    in.close();
@@ -66,9 +66,9 @@ limitations under the License.
                 With the IOUtils class, that could be done with:
             </p>
             <source>
- InputStream in = new URL( "https://commons.apache.org" ).openStream();
+ InputStream in = new URL("https://commons.apache.org").openStream();
  try {
-   System.out.println( IOUtils.toString( in ) );
+   System.out.println(IOUtils.toString(in));
  } finally {
    IOUtils.closeQuietly(in);
  }</source>
