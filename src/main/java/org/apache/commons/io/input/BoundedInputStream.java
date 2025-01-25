@@ -316,7 +316,7 @@ public class BoundedInputStream extends ProxyInputStream {
     }
 
     /**
-     * Constructs a new {@link BoundedInputStream} that wraps the given input stream and is unlimited.
+     * Constructs a new {@link BoundedInputStream} that wraps the given input stream and is <em>unbounded</em>.
      *
      * @param in The wrapped input stream.
      * @deprecated Use {@link AbstractBuilder#get()}.
