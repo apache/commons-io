@@ -618,7 +618,7 @@ public class FilenameUtils {
     }
 
     /**
-     * Gets the extension of a fileName.
+     * Gets the extension of a file name.
      * <p>
      * This method returns the textual part of the file name after the last dot.
      * There must be no directory separator after the dot.
