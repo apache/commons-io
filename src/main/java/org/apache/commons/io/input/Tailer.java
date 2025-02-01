@@ -475,7 +475,9 @@ public class Tailer implements Runnable, AutoCloseable {
 
     private static final String RAF_READ_ONLY_MODE = "r";
 
-    // The default charset used for reading files
+    /**
+     * The the virtual machine's {@link Charset#defaultCharset() default charset} used for reading files.
+     */
     private static final Charset DEFAULT_CHARSET = Charset.defaultCharset();
 
     /**

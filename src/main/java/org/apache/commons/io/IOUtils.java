@@ -1112,7 +1112,7 @@ public class IOUtils {
 
     /**
      * Copies bytes from an {@link InputStream} to chars on a
-     * {@link Writer} using the default character encoding of the platform.
+     * {@link Writer} using the virtual machine's {@link Charset#defaultCharset() default charset}.
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@link BufferedInputStream}.
@@ -1268,8 +1268,8 @@ public class IOUtils {
 
     /**
      * Copies chars from a {@link Reader} to bytes on an
-     * {@link OutputStream} using the default character encoding of the
-     * platform, and calling flush.
+     * {@link OutputStream} using the the virtual machine's {@link Charset#defaultCharset() default charset},
+     * and calling flush.
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@link BufferedReader}.
@@ -2173,7 +2173,7 @@ public class IOUtils {
 
     /**
      * Gets the contents of an {@link InputStream} as a list of Strings,
-     * one entry per line, using the default character encoding of the platform.
+     * one entry per line, using the virtual machine's {@link Charset#defaultCharset() default charset}.
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@link BufferedInputStream}.
@@ -2793,7 +2793,7 @@ public class IOUtils {
 
     /**
      * Gets the contents of a {@link Reader} as a {@code byte[]}
-     * using the default character encoding of the platform.
+     * using the virtual machine's {@link Charset#defaultCharset() default charset}.
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@link BufferedReader}.
@@ -2858,7 +2858,7 @@ public class IOUtils {
 
     /**
      * Gets the contents of a {@link String} as a {@code byte[]}
-     * using the default character encoding of the platform.
+     * using the virtual machine's {@link Charset#defaultCharset() default charset}.
      * <p>
      * This is the same as {@link String#getBytes()}.
      * </p>
@@ -2919,7 +2919,7 @@ public class IOUtils {
 
     /**
      * Gets the contents of an {@link InputStream} as a character array
-     * using the default character encoding of the platform.
+     * using the virtual machine's {@link Charset#defaultCharset() default charset}.
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@link BufferedInputStream}.
@@ -3004,7 +3004,7 @@ public class IOUtils {
 
     /**
      * Converts the specified CharSequence to an input stream, encoded as bytes
-     * using the default character encoding of the platform.
+     * using the virtual machine's {@link Charset#defaultCharset() default charset}.
      *
      * @param input the CharSequence to convert
      * @return an input stream
@@ -3049,7 +3049,7 @@ public class IOUtils {
 
     /**
      * Converts the specified string to an input stream, encoded as bytes
-     * using the default character encoding of the platform.
+     * using the virtual machine's {@link Charset#defaultCharset() default charset}.
      *
      * @param input the string to convert
      * @return an input stream
@@ -3094,7 +3094,7 @@ public class IOUtils {
 
     /**
      * Gets the contents of a {@code byte[]} as a String
-     * using the default character encoding of the platform.
+     * using the virtual machine's {@link Charset#defaultCharset() default charset}.
      *
      * @param input the byte array to read
      * @return the requested String
@@ -3126,7 +3126,7 @@ public class IOUtils {
 
     /**
      * Gets the contents of an {@link InputStream} as a String
-     * using the default character encoding of the platform.
+     * using the virtual machine's {@link Charset#defaultCharset() default charset}.
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@link BufferedInputStream}.
@@ -3255,7 +3255,7 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents at the given URI.
+     * Gets the contents at the given URI using the virtual machine's {@link Charset#defaultCharset() default charset}.
      *
      * @param uri The URI source.
      * @return The contents of the URL as a String.
@@ -3296,7 +3296,7 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents at the given URL.
+     * Gets the contents at the given URL using the virtual machine's {@link Charset#defaultCharset() default charset}.
      *
      * @param url The URL source.
      * @return The contents of the URL as a String.
@@ -3355,7 +3355,7 @@ public class IOUtils {
 
     /**
      * Writes bytes from a {@code byte[]} to chars on a {@link Writer}
-     * using the default character encoding of the platform.
+     * using the virtual machine's {@link Charset#defaultCharset() default charset}.
      * <p>
      * This method uses {@link String#String(byte[])}.
      * </p>
@@ -3422,8 +3422,7 @@ public class IOUtils {
      * Writes chars from a {@code char[]} to bytes on an
      * {@link OutputStream}.
      * <p>
-     * This method uses {@link String#String(char[])} and
-     * {@link String#getBytes()}.
+     * This method uses the virtual machine's {@link Charset#defaultCharset() default charset}.
      * </p>
      *
      * @param data the char array to write, do not modify during output,
@@ -3506,8 +3505,7 @@ public class IOUtils {
 
     /**
      * Writes chars from a {@link CharSequence} to bytes on an
-     * {@link OutputStream} using the default character encoding of the
-     * platform.
+     * {@link OutputStream} using the virtual machine's {@link Charset#defaultCharset() default charset}.
      * <p>
      * This method uses {@link String#getBytes()}.
      * </p>
@@ -3587,8 +3585,7 @@ public class IOUtils {
 
     /**
      * Writes chars from a {@link String} to bytes on an
-     * {@link OutputStream} using the default character encoding of the
-     * platform.
+     * {@link OutputStream} using the virtual machine's {@link Charset#defaultCharset() default charset}.
      * <p>
      * This method uses {@link String#getBytes()}.
      * </p>
@@ -3789,8 +3786,8 @@ public class IOUtils {
 
     /**
      * Writes the {@link #toString()} value of each item in a collection to
-     * an {@link OutputStream} line by line, using the default character
-     * encoding of the platform and the specified line ending.
+     * an {@link OutputStream} line by line, using the virtual machine's {@link Charset#defaultCharset() default charset}
+     * and the specified line ending.
      *
      * @param lines the lines to write, null entries produce blank lines
      * @param lineEnding the line separator to use, null is system default

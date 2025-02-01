@@ -307,8 +307,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
     private boolean trailingNewlineOfFileSkipped;
 
     /**
-     * Constructs a ReversedLinesFileReader with default block size of 4KB and the
-     * platform's default encoding.
+     * Constructs a ReversedLinesFileReader with default block size of 4KB and the virtual machine's {@link Charset#defaultCharset() default charset}.
      *
      * @param file the file to be read
      * @throws IOException if an I/O error occurs.

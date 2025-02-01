@@ -220,8 +220,8 @@ public class ReaderInputStream extends AbstractInputStream {
     private boolean endOfInput;
 
     /**
-     * Constructs a new {@link ReaderInputStream} that uses the default character encoding with a default input buffer size of
-     * {@value IOUtils#DEFAULT_BUFFER_SIZE} characters.
+     * Constructs a new {@link ReaderInputStream} that uses the virtual machine's {@link Charset#defaultCharset() default charset} with a default input buffer
+     * size of {@value IOUtils#DEFAULT_BUFFER_SIZE} characters.
      *
      * @param reader the target {@link Reader}
      * @deprecated Use {@link ReaderInputStream#builder()} instead

@@ -168,6 +168,9 @@ public class HexDump {
      * All bytes between the given index (inclusive) and the end of the
      * data array are dumped.
      * </p>
+     * <p>
+     * This method uses the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * </p>
      *
      * @param data  the byte array to be dumped
      * @param offset  offset of the byte array within a larger entity

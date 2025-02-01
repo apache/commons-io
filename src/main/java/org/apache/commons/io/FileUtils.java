@@ -2733,14 +2733,14 @@ public class FileUtils {
     }
 
     /**
-     * Reads the contents of a file into a String using the default encoding for the VM.
-     * The file is always closed.
+     * Reads the contents of a file into a String using the virtual machine's {@link Charset#defaultCharset() default charset}. The
+     * file is always closed.
      *
      * @param file the file to read, must not be {@code null}
      * @return the file contents, never {@code null}
      * @throws NullPointerException if file is {@code null}.
-     * @throws IOException if an I/O error occurs, including when the file does not exist, is a directory rather than a
-     *         regular file, or for some other reason why the file cannot be opened for reading.
+     * @throws IOException          if an I/O error occurs, including when the file does not exist, is a directory rather than a regular file, or for some other
+     *                              reason why the file cannot be opened for reading.
      * @since 1.3.1
      * @deprecated Use {@link #readFileToString(File, Charset)} instead (and specify the appropriate encoding)
      */
@@ -2782,14 +2782,14 @@ public class FileUtils {
     }
 
     /**
-     * Reads the contents of a file line by line to a List of Strings using the default encoding for the VM.
+     * Reads the contents of a file line by line to a List of Strings using the virtual machine's {@link Charset#defaultCharset() default charset}.
      * The file is always closed.
      *
      * @param file the file to read, must not be {@code null}
      * @return the list of Strings representing each line in the file, never {@code null}
      * @throws NullPointerException if file is {@code null}.
-     * @throws IOException if an I/O error occurs, including when the file does not exist, is a directory rather than a
-     *         regular file, or for some other reason why the file cannot be opened for reading.
+     * @throws IOException          if an I/O error occurs, including when the file does not exist, is a directory rather than a regular file, or for some other
+     *                              reason why the file cannot be opened for reading.
      * @since 1.3
      * @deprecated Use {@link #readLines(File, Charset)} instead (and specify the appropriate encoding)
      */
@@ -3201,7 +3201,7 @@ public class FileUtils {
     }
 
     /**
-     * Writes a CharSequence to a file creating the file if it does not exist using the default encoding for the VM.
+     * Writes a CharSequence to a file creating the file if it does not exist using the virtual machine's {@link Charset#defaultCharset() default charset}.
      *
      * @param file the file to write
      * @param data the content to write to the file
@@ -3215,12 +3215,11 @@ public class FileUtils {
     }
 
     /**
-     * Writes a CharSequence to a file creating the file if it does not exist using the default encoding for the VM.
+     * Writes a CharSequence to a file creating the file if it does not exist using the virtual machine's {@link Charset#defaultCharset() default charset}.
      *
      * @param file   the file to write
      * @param data   the content to write to the file
-     * @param append if {@code true}, then the data will be added to the
-     *               end of the file rather than overwriting
+     * @param append if {@code true}, then the data will be added to the end of the file rather than overwriting
      * @throws IOException in case of an I/O error
      * @since 2.1
      * @deprecated Use {@link #write(File, CharSequence, Charset, boolean)} instead (and specify the appropriate encoding)
@@ -3491,7 +3490,7 @@ public class FileUtils {
     }
 
     /**
-     * Writes a String to a file creating the file if it does not exist using the default encoding for the VM.
+     * Writes a String to a file creating the file if it does not exist using the virtual machine's {@link Charset#defaultCharset() default charset}.
      *
      * @param file the file to write
      * @param data the content to write to the file
@@ -3504,12 +3503,11 @@ public class FileUtils {
     }
 
     /**
-     * Writes a String to a file creating the file if it does not exist using the default encoding for the VM.
+     * Writes a String to a file creating the file if it does not exist using the virtual machine's {@link Charset#defaultCharset() default charset}.
      *
      * @param file   the file to write
      * @param data   the content to write to the file
-     * @param append if {@code true}, then the String will be added to the
-     *               end of the file rather than overwriting
+     * @param append if {@code true}, then the String will be added to the end of the file rather than overwriting
      * @throws IOException in case of an I/O error
      * @since 2.1
      * @deprecated Use {@link #writeStringToFile(File, String, Charset, boolean)} instead (and specify the appropriate encoding)

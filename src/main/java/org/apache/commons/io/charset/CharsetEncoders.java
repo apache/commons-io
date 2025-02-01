@@ -30,6 +30,9 @@ public final class CharsetEncoders {
 
     /**
      * Returns the given non-null CharsetEncoder or a new default CharsetEncoder.
+     * <p>
+     * Null input maps to the virtual machine's {@link Charset#defaultCharset() default charset} decoder.
+     * </p>
      *
      * @param charsetEncoder The CharsetEncoder to test.
      * @return the given non-null CharsetEncoder or a new default CharsetEncoder.
