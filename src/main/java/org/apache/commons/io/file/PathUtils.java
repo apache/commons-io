@@ -855,7 +855,7 @@ public final class PathUtils {
     /**
      * Gets the base name (the part up to and not including the last ".") of the last path segment of a file name.
      * <p>
-     * Will return the file name itself if it doesn't contain any dots. All leading directories of the {@code file name} parameter are skipped.
+     * Will return the file name itself if it doesn't contain any periods. All leading directories of the {@code file name} parameter are skipped.
      * </p>
      *
      * @return the base name of file name
@@ -885,7 +885,7 @@ public final class PathUtils {
     /**
      * Gets the extension of a Path.
      * <p>
-     * This method returns the textual part of the Path after the last dot.
+     * This method returns the textual part of the Path after the last period.
      * </p>
      * <pre>
      * foo.txt      --&gt; "txt"

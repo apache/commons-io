@@ -405,7 +405,7 @@ public class FilenameUtils {
             }
         }
 
-        // dot slash
+        // period slash
         for (int i = prefix + 1; i < size; i++) {
             if (array[i] == separator && array[i - 1] == '.' &&
                     (i == prefix + 1 || array[i - 2] == separator)) {
@@ -418,7 +418,7 @@ public class FilenameUtils {
             }
         }
 
-        // double dot slash
+        // double period slash
         outer:
         for (int i = prefix + 2; i < size; i++) {
             if (array[i] == separator && array[i - 1] == '.' && array[i - 2] == '.' &&
@@ -595,7 +595,7 @@ public class FilenameUtils {
      * Gets the base name, minus the full path and extension, from a full file name.
      * <p>
      * This method will handle a path in either Unix or Windows format.
-     * The text after the last forward or backslash and before the last dot is returned.
+     * The text after the last forward or backslash and before the last period is returned.
      * </p>
      * <pre>
      * a/b/c.txt --&gt; c
@@ -620,8 +620,8 @@ public class FilenameUtils {
     /**
      * Gets the extension of a file name.
      * <p>
-     * This method returns the textual part of the file name after the last dot.
-     * There must be no directory separator after the dot.
+     * This method returns the textual part of the file name after the last period.
+     * There must be no directory separator after the period.
      * </p>
      * <pre>
      * foo.txt      --&gt; "txt"
@@ -963,9 +963,9 @@ public class FilenameUtils {
     }
 
     /**
-     * Returns the index of the last extension separator character, which is a dot.
+     * Returns the index of the last extension separator character, which is a period.
      * <p>
-     * This method also checks that there is no directory separator after the last dot. To do this it uses
+     * This method also checks that there is no directory separator after the last period. To do this it uses
      * {@link #indexOfLastSeparator(String)} which will handle a file in either Unix or Windows format.
      * </p>
      * <p>
@@ -1029,7 +1029,7 @@ public class FilenameUtils {
      * Checks whether the extension of the file name is one of those specified.
      * <p>
      * This method obtains the extension as the textual part of the file name
-     * after the last dot. There must be no directory separator after the dot.
+     * after the last period. There must be no directory separator after the period.
      * The extension check is case-sensitive on all platforms.
      *
      * @param fileName  the file name, null returns false
@@ -1053,7 +1053,7 @@ public class FilenameUtils {
      * Checks whether the extension of the file name is that specified.
      * <p>
      * This method obtains the extension as the textual part of the file name
-     * after the last dot. There must be no directory separator after the dot.
+     * after the last period. There must be no directory separator after the period.
      * The extension check is case-sensitive on all platforms.
      *
      * @param fileName  the file name, null returns false
@@ -1077,7 +1077,7 @@ public class FilenameUtils {
      * Checks whether the extension of the file name is one of those specified.
      * <p>
      * This method obtains the extension as the textual part of the file name
-     * after the last dot. There must be no directory separator after the dot.
+     * after the last period. There must be no directory separator after the period.
      * The extension check is case-sensitive on all platforms.
      *
      * @param fileName  the file name, null returns false
@@ -1207,7 +1207,7 @@ public class FilenameUtils {
         final String[] parts = name.split("\\.", -1);
         for (int i = 0; i < parts.length; i++) {
             if (parts[i].isEmpty()) {
-                // trailing dot is legal, otherwise we've hit a .. sequence
+                // trailing period is legal, otherwise we've hit a .. sequence
                 return i == parts.length - 1;
             }
             if (!REG_NAME_PART_PATTERN.matcher(parts[i]).matches()) {
@@ -1253,7 +1253,7 @@ public class FilenameUtils {
     }
 
     /**
-     * Normalizes a path, removing double and single dot path steps.
+     * Normalizes a path, removing double and single period path steps.
      * <p>
      * This method normalizes a path to a standard format.
      * The input may contain separators in either Unix or Windows format.
@@ -1261,9 +1261,9 @@ public class FilenameUtils {
      * <p>
      * A trailing slash will be retained.
      * A double slash will be merged to a single slash (but UNC names are handled).
-     * A single dot path segment will be removed.
-     * A double dot will cause that path segment and the one before to be removed.
-     * If the double dot has no parent path segment, {@code null} is returned.
+     * A single period path segment will be removed.
+     * A double period will cause that path segment and the one before to be removed.
+     * If the double period has no parent path segment, {@code null} is returned.
      * <p>
      * The output will be the same on both Unix and Windows except
      * for the separator character.
@@ -1297,7 +1297,7 @@ public class FilenameUtils {
     }
 
     /**
-     * Normalizes a path, removing double and single dot path steps.
+     * Normalizes a path, removing double and single period path steps.
      * <p>
      * This method normalizes a path to a standard format.
      * The input may contain separators in either Unix or Windows format.
@@ -1305,9 +1305,9 @@ public class FilenameUtils {
      * <p>
      * A trailing slash will be retained.
      * A double slash will be merged to a single slash (but UNC names are handled).
-     * A single dot path segment will be removed.
-     * A double dot will cause that path segment and the one before to be removed.
-     * If the double dot has no parent path segment to work with, {@code null}
+     * A single period path segment will be removed.
+     * A double period will cause that path segment and the one before to be removed.
+     * If the double period has no parent path segment to work with, {@code null}
      * is returned.
      * <p>
      * The output will be the same on both Unix and Windows except
@@ -1346,7 +1346,7 @@ public class FilenameUtils {
     }
 
     /**
-     * Normalizes a path, removing double and single dot path steps,
+     * Normalizes a path, removing double and single period path steps,
      * and removing any final directory separator.
      * <p>
      * This method normalizes a path to a standard format.
@@ -1355,9 +1355,9 @@ public class FilenameUtils {
      * <p>
      * A trailing slash will be removed.
      * A double slash will be merged to a single slash (but UNC names are handled).
-     * A single dot path segment will be removed.
-     * A double dot will cause that path segment and the one before to be removed.
-     * If the double dot has no parent path segment to work with, {@code null}
+     * A single period path segment will be removed.
+     * A double period will cause that path segment and the one before to be removed.
+     * If the double period has no parent path segment to work with, {@code null}
      * is returned.
      * <p>
      * The output will be the same on both Unix and Windows except
@@ -1392,7 +1392,7 @@ public class FilenameUtils {
     }
 
     /**
-     * Normalizes a path, removing double and single dot path steps,
+     * Normalizes a path, removing double and single period path steps,
      * and removing any final directory separator.
      * <p>
      * This method normalizes a path to a standard format.
@@ -1401,9 +1401,9 @@ public class FilenameUtils {
      * <p>
      * A trailing slash will be removed.
      * A double slash will be merged to a single slash (but UNC names are handled).
-     * A single dot path segment will be removed.
-     * A double dot will cause that path segment and the one before to be removed.
-     * If the double dot has no parent path segment to work with, {@code null}
+     * A single period path segment will be removed.
+     * A double period will cause that path segment and the one before to be removed.
+     * If the double period has no parent path segment to work with, {@code null}
      * is returned.
      * <p>
      * The output will be the same on both Unix and Windows including
@@ -1442,8 +1442,8 @@ public class FilenameUtils {
     /**
      * Removes the extension from a fileName.
      * <p>
-     * This method returns the textual part of the file name before the last dot.
-     * There must be no directory separator after the dot.
+     * This method returns the textual part of the file name before the last period.
+     * There must be no directory separator after the period.
      * <pre>
      * foo.txt    --&gt; foo
      * .txt       --&gt; "" (empty string)
