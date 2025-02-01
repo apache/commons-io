@@ -29,7 +29,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests {@link ThresholdingOutputStream}.
+ * Tests {@link ThresholdingOutputStream}. See also the subclass {@link DeferredFileOutputStream}.
+ *
+ * @see DeferredFileOutputStream
  */
 public class ThresholdingOutputStreamTest {
 

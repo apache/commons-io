@@ -37,6 +37,11 @@ import org.apache.commons.io.function.IOFunction;
  * NOTE: This implementation may trigger the event <em>before</em> the threshold is actually reached, since it triggers
  * when a pending write operation would cause the threshold to be exceeded.
  * </p>
+ * <p>
+ * See also the subclass {@link DeferredFileOutputStream}.
+ * </p>
+ *
+ * @see DeferredFileOutputStream
  */
 public class ThresholdingOutputStream extends OutputStream {
 
