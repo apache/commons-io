@@ -17,6 +17,7 @@
 
 package org.apache.commons.io.output;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -32,12 +33,27 @@ import org.junit.jupiter.api.Test;
  */
 public class ThresholdingOutputStreamTest {
 
+    /**
+     * Asserts initial state without changing it.
+     *
+     * @param out the stream to test.
+     * @param expectedThreshold the expected threshold.
+     * @param expectedByeCount the expected byte count.
+     */
+    private static void assertInitialState(final ThresholdingOutputStream out, final int expectedThreshold, final int expectedByeCount) {
+        assertFalse(out.isThresholdExceeded());
+        assertEquals(expectedThreshold, out.getThreshold());
+        assertEquals(expectedByeCount, out.getByteCount());
+    }
+
     @Test
     public void testSetByteCountOutputStream() throws Exception {
         final AtomicBoolean reached = new AtomicBoolean();
-        try (ThresholdingOutputStream tos = new ThresholdingOutputStream(3) {
+        final int initCount = 2;
+        final int threshold = 3;
+        try (ThresholdingOutputStream out = new ThresholdingOutputStream(threshold) {
             {
-                setByteCount(2);
+                setByteCount(initCount);
             }
 
             @Override
@@ -50,9 +66,10 @@ public class ThresholdingOutputStreamTest {
                 reached.set(true);
             }
         }) {
-            tos.write('a');
+            assertInitialState(out, threshold, initCount);
+            out.write('a');
             assertFalse(reached.get());
-            tos.write('a');
+            out.write('a');
             assertTrue(reached.get());
         }
     }
@@ -60,9 +77,11 @@ public class ThresholdingOutputStreamTest {
     @Test
     public void testSetByteCountStream() throws Exception {
         final AtomicBoolean reached = new AtomicBoolean();
-        try (ThresholdingOutputStream tos = new ThresholdingOutputStream(3) {
+        final int initCount = 2;
+        final int threshold = 3;
+        try (ThresholdingOutputStream out = new ThresholdingOutputStream(threshold) {
             {
-                setByteCount(2);
+                setByteCount(initCount);
             }
 
             @Override
@@ -75,9 +94,10 @@ public class ThresholdingOutputStreamTest {
                 reached.set(true);
             }
         }) {
-            tos.write('a');
+            assertInitialState(out, threshold, initCount);
+            out.write('a');
             assertFalse(reached.get());
-            tos.write('a');
+            out.write('a');
             assertTrue(reached.get());
         }
     }
@@ -87,49 +107,57 @@ public class ThresholdingOutputStreamTest {
         final AtomicBoolean reached = new AtomicBoolean();
         // Null threshold consumer
         reached.set(false);
-        try (ThresholdingOutputStream tos = new ThresholdingOutputStream(1, null,
+        final int threshold = 1;
+        try (ThresholdingOutputStream out = new ThresholdingOutputStream(threshold, null,
             os -> new ByteArrayOutputStream(4))) {
-            tos.write('a');
+            assertInitialState(out, threshold, 0);
+            out.write('a');
             assertFalse(reached.get());
-            tos.write('a');
+            out.write('a');
             assertFalse(reached.get());
         }
         // Null output stream function
         reached.set(false);
-        try (ThresholdingOutputStream tos = new ThresholdingOutputStream(1, os -> reached.set(true), null)) {
-            tos.write('a');
+        try (ThresholdingOutputStream out = new ThresholdingOutputStream(threshold, os -> reached.set(true), null)) {
+            assertInitialState(out, threshold, 0);
+            out.write('a');
             assertFalse(reached.get());
-            tos.write('a');
+            out.write('a');
             assertTrue(reached.get());
         }
         // non-null inputs.
         reached.set(false);
-        try (ThresholdingOutputStream tos = new ThresholdingOutputStream(1, os -> reached.set(true),
+        try (ThresholdingOutputStream out = new ThresholdingOutputStream(threshold, os -> reached.set(true),
             os -> new ByteArrayOutputStream(4))) {
-            tos.write('a');
+            assertInitialState(out, threshold, 0);
+            out.write('a');
             assertFalse(reached.get());
-            tos.write('a');
+            out.write('a');
             assertTrue(reached.get());
         }
     }
 
     @Test
     public void testThresholdIOConsumerIOException() throws Exception {
-        try (ThresholdingOutputStream tos = new ThresholdingOutputStream(1, os -> {
+        final int threshold = 1;
+        try (ThresholdingOutputStream out = new ThresholdingOutputStream(threshold, os -> {
             throw new IOException("Threshold reached.");
         }, os -> new ByteArrayOutputStream(4))) {
-            tos.write('a');
-            assertThrows(IOException.class, () -> tos.write('a'));
+            assertInitialState(out, threshold, 0);
+            out.write('a');
+            assertThrows(IOException.class, () -> out.write('a'));
         }
     }
 
     @Test
     public void testThresholdIOConsumerUncheckedException() throws Exception {
-        try (ThresholdingOutputStream tos = new ThresholdingOutputStream(1, os -> {
+        final int threshold = 1;
+        try (ThresholdingOutputStream out = new ThresholdingOutputStream(threshold, os -> {
             throw new IllegalStateException("Threshold reached.");
         }, os -> new ByteArrayOutputStream(4))) {
-            tos.write('a');
-            assertThrows(IllegalStateException.class, () -> tos.write('a'));
+            assertInitialState(out, threshold, 0);
+            out.write('a');
+            assertThrows(IllegalStateException.class, () -> out.write('a'));
         }
     }
 
@@ -146,6 +174,7 @@ public class ThresholdingOutputStreamTest {
                 reached.set(true);
             }
         }) {
+            assertInitialState(out, 0, 0);
             assertFalse(reached.get());
             out.write(89);
             assertTrue(reached.get());
@@ -156,13 +185,14 @@ public class ThresholdingOutputStreamTest {
     @Test
     public void testThresholdZero() throws IOException {
         final AtomicBoolean reached = new AtomicBoolean();
-        try (final ThresholdingOutputStream out = new ThresholdingOutputStream(0) {
+        final int threshold = 0;
+        try (final ThresholdingOutputStream out = new ThresholdingOutputStream(threshold) {
             @Override
             protected void thresholdReached() throws IOException {
                 reached.set(true);
             }
         }) {
-            assertFalse(out.isThresholdExceeded());
+            assertInitialState(out, threshold, 0);
             out.write(89);
             assertTrue(reached.get());
             assertTrue(out.isThresholdExceeded());
@@ -176,13 +206,14 @@ public class ThresholdingOutputStreamTest {
     @Test
     public void testThresholdZeroWrite() throws IOException {
         final AtomicBoolean reached = new AtomicBoolean();
-        try (final ThresholdingOutputStream out = new ThresholdingOutputStream(7) {
+        final int threshold = 7;
+        try (final ThresholdingOutputStream out = new ThresholdingOutputStream(threshold) {
             @Override
             protected void thresholdReached() throws IOException {
                 reached.set(true);
             }
         }) {
-            assertFalse(out.isThresholdExceeded());
+            assertInitialState(out, threshold, 0);
             assertFalse(reached.get());
             out.write(new byte[0]);
             assertFalse(out.isThresholdExceeded());
