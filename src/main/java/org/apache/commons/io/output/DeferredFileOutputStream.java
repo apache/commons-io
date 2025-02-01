@@ -415,7 +415,9 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      *
      * @return The underlying output stream.
      * @throws IOException if an error occurs.
+     * @deprecated Use {@link #getOutputStream()}.
      */
+    @Deprecated
     @Override
     protected OutputStream getStream() throws IOException {
         return currentOutputStream;
