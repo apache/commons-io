@@ -281,6 +281,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      * using the platform default charset.
      * @return the contents of the byte array as a String
      * @see java.io.ByteArrayOutputStream#toString()
+     * @see Charset#defaultCharset()
      * @deprecated Use {@link #toString(String)} instead
      */
     @Override
