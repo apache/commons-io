@@ -39,7 +39,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 /**
- * Tests {@code DeferredFileOutputStream}.
+ * Tests {@code DeferredFileOutputStream}. See also the superclass {@link ThresholdingOutputStream}.
+ *
+ * @see ThresholdingOutputStream
  */
 public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
 
