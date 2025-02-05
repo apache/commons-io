@@ -19,6 +19,7 @@ package org.apache.commons.io.output;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -71,8 +72,10 @@ public class ThresholdingOutputStreamTest {
             assertThresholdingInitialState(out, threshold, initCount);
             out.write('a');
             assertFalse(reached.get());
+            assertFalse(out.isThresholdExceeded());
             out.write('a');
             assertTrue(reached.get());
+            assertTrue(out.isThresholdExceeded());
         }
     }
 
@@ -99,33 +102,36 @@ public class ThresholdingOutputStreamTest {
             assertThresholdingInitialState(out, threshold, initCount);
             out.write('a');
             assertFalse(reached.get());
+            assertFalse(out.isThresholdExceeded());
             out.write('a');
             assertTrue(reached.get());
+            assertTrue(out.isThresholdExceeded());
         }
     }
 
     @Test
     public void testThresholdIOConsumer() throws Exception {
-        final AtomicBoolean reached = new AtomicBoolean();
-        // Null threshold consumer
-        reached.set(false);
         final int threshold = 1;
+        // Null threshold consumer
         try (ThresholdingOutputStream out = new ThresholdingOutputStream(threshold, null,
             os -> new ByteArrayOutputStream(4))) {
             assertThresholdingInitialState(out, threshold, 0);
             out.write('a');
-            assertFalse(reached.get());
+            assertFalse(out.isThresholdExceeded());
             out.write('a');
-            assertFalse(reached.get());
+            assertTrue(out.isThresholdExceeded());
         }
         // Null output stream function
+        final AtomicBoolean reached = new AtomicBoolean();
         reached.set(false);
         try (ThresholdingOutputStream out = new ThresholdingOutputStream(threshold, os -> reached.set(true), null)) {
             assertThresholdingInitialState(out, threshold, 0);
             out.write('a');
             assertFalse(reached.get());
+            assertFalse(out.isThresholdExceeded());
             out.write('a');
             assertTrue(reached.get());
+            assertTrue(out.isThresholdExceeded());
         }
         // non-null inputs.
         reached.set(false);
@@ -134,8 +140,10 @@ public class ThresholdingOutputStreamTest {
             assertThresholdingInitialState(out, threshold, 0);
             out.write('a');
             assertFalse(reached.get());
+            assertFalse(out.isThresholdExceeded());
             out.write('a');
             assertTrue(reached.get());
+            assertTrue(out.isThresholdExceeded());
         }
     }
 
@@ -147,7 +155,9 @@ public class ThresholdingOutputStreamTest {
         }, os -> new ByteArrayOutputStream(4))) {
             assertThresholdingInitialState(out, threshold, 0);
             out.write('a');
+            assertFalse(out.isThresholdExceeded());
             assertThrows(IOException.class, () -> out.write('a'));
+            assertFalse(out.isThresholdExceeded());
         }
     }
 
@@ -159,7 +169,11 @@ public class ThresholdingOutputStreamTest {
         }, os -> new ByteArrayOutputStream(4))) {
             assertThresholdingInitialState(out, threshold, 0);
             out.write('a');
+            assertFalse(out.isThresholdExceeded());
             assertThrows(IllegalStateException.class, () -> out.write('a'));
+            assertFalse(out.isThresholdExceeded());
+            assertInstanceOf(ByteArrayOutputStream.class, out.getOutputStream());
+            assertFalse(out.isThresholdExceeded());
         }
     }
 
@@ -181,6 +195,8 @@ public class ThresholdingOutputStreamTest {
             out.write(89);
             assertTrue(reached.get());
             assertTrue(out.isThresholdExceeded());
+            assertInstanceOf(NullOutputStream.class, out.getOutputStream());
+            assertTrue(out.isThresholdExceeded());
         }
     }
 
@@ -198,6 +214,8 @@ public class ThresholdingOutputStreamTest {
             out.write(89);
             assertTrue(reached.get());
             assertTrue(out.isThresholdExceeded());
+            assertInstanceOf(NullOutputStream.class, out.getOutputStream());
+            assertTrue(out.isThresholdExceeded());
         }
     }
 
@@ -212,6 +230,7 @@ public class ThresholdingOutputStreamTest {
         try (final ThresholdingOutputStream out = new ThresholdingOutputStream(threshold) {
             @Override
             protected void thresholdReached() throws IOException {
+                super.thresholdReached();
                 reached.set(true);
             }
         }) {
@@ -220,6 +239,8 @@ public class ThresholdingOutputStreamTest {
             out.write(new byte[0]);
             assertFalse(out.isThresholdExceeded());
             assertFalse(reached.get());
+            assertInstanceOf(NullOutputStream.class, out.getOutputStream());
+            assertFalse(out.isThresholdExceeded());
         }
     }
 }
