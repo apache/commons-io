@@ -311,9 +311,9 @@ public class BOMInputStream extends ProxyInputStream {
     }
 
     /**
-     * Find a BOM with the configured bytes in {@code bomList}.
+     * Finds a BOM with the configured bytes in {@code bomList}.
      *
-     * @return The matched BOM or null if none matched
+     * @return The matched BOM or null if none matched.
      */
     private ByteOrderMark find() {
         return bomList.stream().filter(this::matches).findFirst().orElse(null);
@@ -322,34 +322,13 @@ public class BOMInputStream extends ProxyInputStream {
     /**
      * Gets the BOM (Byte Order Mark).
      *
-     * @return The BOM or null if none
+     * @return The BOM or null if none matched.
      * @throws IOException
-     *             if an error reading the first bytes of the stream occurs
+     *             if an error reading the first bytes of the stream occurs.
      */
     public ByteOrderMark getBOM() throws IOException {
         if (firstBytes == null) {
-            fbLength = 0;
-            // BOMs are sorted from longest to shortest
-            final int maxBomSize = bomList.get(0).length();
-            firstBytes = new int[maxBomSize];
-            // Read first maxBomSize bytes
-            for (int i = 0; i < firstBytes.length; i++) {
-                firstBytes[i] = in.read();
-                afterRead(firstBytes[i]);
-                fbLength++;
-                if (firstBytes[i] < 0) {
-                    break;
-                }
-            }
-            // match BOM in firstBytes
-            byteOrderMark = find();
-            if (byteOrderMark != null && !include) {
-                if (byteOrderMark.length() < firstBytes.length) {
-                    fbIndex = byteOrderMark.length();
-                } else {
-                    fbLength = 0;
-                }
-            }
+            byteOrderMark = readBom();
         }
         return byteOrderMark;
     }
@@ -416,16 +395,7 @@ public class BOMInputStream extends ProxyInputStream {
      * @return true if the bytes match the bom, otherwise false
      */
     private boolean matches(final ByteOrderMark bom) {
-        // if (bom.length() != fbLength) {
-        // return false;
-        // }
-        // firstBytes may be bigger than the BOM bytes
-        for (int i = 0; i < bom.length(); i++) {
-            if (bom.get(i) != firstBytes[i]) {
-                return false;
-            }
-        }
-        return true;
+        return bom.matches(firstBytes);
     }
 
     /**
@@ -484,6 +454,32 @@ public class BOMInputStream extends ProxyInputStream {
         final int secondCount = in.read(buf, off, len);
         afterRead(secondCount);
         return secondCount < 0 ? firstCount > 0 ? firstCount : EOF : firstCount + secondCount;
+    }
+
+    private ByteOrderMark readBom() throws IOException {
+        fbLength = 0;
+        // BOMs are sorted from longest to shortest
+        final int maxBomSize = bomList.get(0).length();
+        firstBytes = new int[maxBomSize];
+        // Read first maxBomSize bytes
+        for (int i = 0; i < firstBytes.length; i++) {
+            firstBytes[i] = in.read();
+            afterRead(firstBytes[i]);
+            fbLength++;
+            if (firstBytes[i] < 0) {
+                break;
+            }
+        }
+        // match BOM in firstBytes
+        final ByteOrderMark bom = find();
+        if (bom != null && !include) {
+            if (bom.length() < firstBytes.length) {
+                fbIndex = bom.length();
+            } else {
+                fbLength = 0;
+            }
+        }
+        return bom;
     }
 
     /**
