@@ -27,6 +27,12 @@ limitations under the License.
   <module name="LineLength">
     <property name="max" value="160" />
   </module>
+  <module name="RegexpSingleline">
+    <property name="format" value="^\s+\*\s+@author\s" />
+    <property name="message" value="Deprecated @author tag" />
+    <property name="fileExtensions" value="java" />
+    <property name="severity" value="warning" />
+  </module>
   <module name="TreeWalker">
     <module name="WhitespaceAfter" />
     <module name="AvoidStarImport" />
