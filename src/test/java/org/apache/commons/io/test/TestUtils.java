@@ -64,7 +64,8 @@ public abstract class TestUtils {
      * @throws IOException If an I/O error occurs while reading the file contents
      */
     public static void assertEqualContent(final byte[] b0, final Path file) throws IOException {
-        int count = 0, numRead = 0;
+        int count = 0;
+        int numRead = 0;
         final byte[] b1 = new byte[b0.length];
         try (InputStream is = Files.newInputStream(file)) {
             while (count < b0.length && numRead >= 0) {
@@ -97,7 +98,8 @@ public abstract class TestUtils {
      * @throws IOException If an I/O error occurs while reading the file contents
      */
     public static void assertEqualContent(final char[] c0, final Path file) throws IOException {
-        int count = 0, numRead = 0;
+        int count = 0;
+        int numRead = 0;
         final char[] c1 = new char[c0.length];
         try (Reader ir = Files.newBufferedReader(file)) {
             while (count < c0.length && numRead >= 0) {

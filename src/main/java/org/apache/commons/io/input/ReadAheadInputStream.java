@@ -414,7 +414,8 @@ public class ReadAheadInputStream extends FilterInputStream {
             //
             // So there is no race condition in both the situations.
             int read = 0;
-            int off = 0, len = arr.length;
+            int off = 0;
+            int len = arr.length;
             Throwable exception = null;
             try {
                 // try to fill the read ahead buffer.

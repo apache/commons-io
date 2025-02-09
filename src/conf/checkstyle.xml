@@ -57,6 +57,7 @@ limitations under the License.
     <module name="LeftCurly" />
     <module name="MissingOverride" />
     <module name="ModifierOrder" />
+    <module name="MultipleVariableDeclarations" />
     <module name="NeedBraces" />
     <module name="ParenPad" />
     <module name="RedundantImport" />
