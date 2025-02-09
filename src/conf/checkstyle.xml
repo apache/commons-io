@@ -36,6 +36,7 @@ limitations under the License.
   </module>
   <module name="TreeWalker">
     <module name="AvoidStarImport" />
+    <module name="CovariantEquals" />
     <module name="FinalLocalVariable" />
     <module name="ImportOrder">
       <property name="option" value="top"/>
