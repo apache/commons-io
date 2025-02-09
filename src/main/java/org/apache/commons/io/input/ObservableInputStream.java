@@ -49,7 +49,7 @@ public class ObservableInputStream extends ProxyInputStream {
      * @param <T> The subclass.
      * @since 2.18.0
      */
-    public static abstract class AbstractBuilder<T extends AbstractBuilder<T>> extends ProxyInputStream.AbstractBuilder<ObservableInputStream, T> {
+    public abstract static class AbstractBuilder<T extends AbstractBuilder<T>> extends ProxyInputStream.AbstractBuilder<ObservableInputStream, T> {
 
         private List<Observer> observers;
 
@@ -95,7 +95,7 @@ public class ObservableInputStream extends ProxyInputStream {
     /**
      * Abstracts observer callback for {@link ObservableInputStream}s.
      */
-    public static abstract class Observer {
+    public abstract static class Observer {
 
         /**
          * Constructs a new instance for subclasses.

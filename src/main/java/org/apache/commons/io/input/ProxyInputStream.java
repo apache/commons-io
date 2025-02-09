@@ -53,7 +53,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * @param <B> The builder type.
      * @since 2.18.0
      */
-    protected static abstract class AbstractBuilder<T, B extends AbstractStreamBuilder<T, B>> extends AbstractStreamBuilder<T, B> {
+    protected abstract static class AbstractBuilder<T, B extends AbstractStreamBuilder<T, B>> extends AbstractStreamBuilder<T, B> {
 
         private IOIntConsumer afterRead;
 

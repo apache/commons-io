@@ -75,7 +75,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * @param <T> the type of instances to build.
      * @param <B> the type of builder subclass.
      */
-    public static abstract class AbstractRandomAccessFileOrigin<T extends RandomAccessFile, B extends AbstractRandomAccessFileOrigin<T, B>>
+    public abstract static class AbstractRandomAccessFileOrigin<T extends RandomAccessFile, B extends AbstractRandomAccessFileOrigin<T, B>>
             extends AbstractOrigin<T, B> {
 
         /**

@@ -93,7 +93,7 @@ public class BoundedInputStream extends ProxyInputStream {
      *
      * @param <T> The subclass.
      */
-    static abstract class AbstractBuilder<T extends AbstractBuilder<T>> extends ProxyInputStream.AbstractBuilder<BoundedInputStream, T> {
+    abstract static class AbstractBuilder<T extends AbstractBuilder<T>> extends ProxyInputStream.AbstractBuilder<BoundedInputStream, T> {
 
         /** The current count of bytes counted. */
         private long count;

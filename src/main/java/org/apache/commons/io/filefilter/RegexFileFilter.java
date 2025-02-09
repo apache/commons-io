@@ -102,7 +102,7 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
     private final Pattern pattern;
 
     /** How convert a path to a string. */
-    private transient final Function<Path, String> pathToString;
+    private final transient Function<Path, String> pathToString;
 
     /**
      * Constructs a new regular expression filter for a compiled regular expression

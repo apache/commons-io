@@ -51,7 +51,7 @@ public final class RandomAccessFileOutputStream extends OutputStream {
      * @see #get()
      */
     // @formatter:on
-    public final static class Builder extends AbstractStreamBuilder<RandomAccessFileOutputStream, Builder> {
+    public static final class Builder extends AbstractStreamBuilder<RandomAccessFileOutputStream, Builder> {
 
         /**
          * Use {@link RandomAccessFileOutputStream#builder()}.

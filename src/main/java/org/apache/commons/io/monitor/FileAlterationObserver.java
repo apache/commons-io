@@ -210,7 +210,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * List of listeners.
      */
-    private transient final List<FileAlterationListener> listeners = new CopyOnWriteArrayList<>();
+    private final transient List<FileAlterationListener> listeners = new CopyOnWriteArrayList<>();
 
     /**
      * The root directory to observe.
@@ -220,7 +220,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * The file filter or null if none.
      */
-    private transient final FileFilter fileFilter;
+    private final transient FileFilter fileFilter;
 
     /**
      * Compares file names.
