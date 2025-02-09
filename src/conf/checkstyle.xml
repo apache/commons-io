@@ -23,10 +23,7 @@ limitations under the License.
   <module name="FileTabCharacter">
     <property name="fileExtensions" value="java,xml" />
   </module>
-  <module name="JavadocPackage">
-    <!-- setting allowLegacy means it will check for package.html instead of just package-info.java -->
-    <property name="allowLegacy" value="true" />
-  </module>
+  <module name="JavadocPackage" />
   <module name="LineLength">
     <property name="max" value="160" />
   </module>
