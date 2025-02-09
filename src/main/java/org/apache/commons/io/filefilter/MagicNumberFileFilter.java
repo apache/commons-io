@@ -298,8 +298,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements Seriali
                     }
                     return toFileVisitResult(Arrays.equals(this.magicNumbers, byteBuffer.array()));
                 }
-            }
-            catch (final IOException ignored) {
+            } catch (final IOException ignored) {
                 // Do nothing, fall through and do not accept file
             }
         }

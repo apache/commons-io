@@ -62,6 +62,7 @@ limitations under the License.
     <module name="ParenPad" />
     <module name="RedundantImport" />
     <module name="RedundantModifier" />
+    <module name="RightCurly" />
     <!-- No Trailing whitespace -->
     <module name="Regexp">
       <property name="format" value="[ \t]+$" />
