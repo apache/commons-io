@@ -38,6 +38,9 @@ limitations under the License.
     <module name="AvoidStarImport" />
     <module name="CovariantEquals" />
     <module name="DefaultComesLast" />
+    <module name="EmptyBlock">
+      <property name="option" value="text" />
+    </module>
     <module name="FinalLocalVariable" />
     <module name="ImportOrder">
       <property name="option" value="top"/>
