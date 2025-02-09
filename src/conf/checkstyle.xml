@@ -55,6 +55,7 @@ limitations under the License.
     </module>
     <module name="JavadocMethod" />
     <module name="LeftCurly" />
+    <module name="MissingOverride" />
     <module name="NeedBraces" />
     <module name="ParenPad" />
     <module name="RedundantImport" />
