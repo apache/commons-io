@@ -50,6 +50,11 @@ public class IOPredicateTest {
         public boolean equals(final Object obj) {
             throw Erase.rethrow(new IOException("Expected"));
         }
+        @Override
+        public int hashCode() {
+            // Pair implementation with equals() even though not strictly necessary.
+            return super.hashCode();
+        }
     };
 
     private static final Predicate<Object> THROWING_UNCHECKED_PREDICATE = TestConstants.THROWING_IO_PREDICATE.asPredicate();
