@@ -383,7 +383,8 @@ public class UnsynchronizedBufferedReaderTest {
         assertTrue(new String(buf, 50, 500).equals(testString.substring(0, 500)));
 
         try (UnsynchronizedBufferedReader bufin = new UnsynchronizedBufferedReader(new Reader() {
-            int size = 2, pos = 0;
+            int size = 2;
+            int pos;
 
             char[] contents = new char[size];
 

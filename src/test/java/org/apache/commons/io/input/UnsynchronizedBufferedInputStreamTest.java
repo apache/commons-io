@@ -297,7 +297,8 @@ public class UnsynchronizedBufferedInputStreamTest {
         assertTrue(new String(buf1, 0, buf1.length).equals(DATA.substring(3000, 3100)), "Failed to read correct data");
 
         try (UnsynchronizedBufferedInputStream bufin = builder().setInputStream(new InputStream() {
-            int size = 2, pos = 0;
+            int size = 2;
+            int pos;
 
             byte[] contents = new byte[size];
 
