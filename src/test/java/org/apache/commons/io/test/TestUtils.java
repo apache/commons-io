@@ -259,7 +259,7 @@ public abstract class TestUtils {
     public static void sleepQuietly(final long millis) {
         try {
             sleep(millis);
-        } catch (final InterruptedException ignored){
+        } catch (final InterruptedException ignored) {
             // ignore InterruptedException.
         }
     }

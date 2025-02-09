@@ -26,12 +26,16 @@ final class Constants {
      * No-op singleton.
      */
     @SuppressWarnings("rawtypes")
-    static final IOBiConsumer IO_BI_CONSUMER = (t, u) -> {/* No-op */};
+    static final IOBiConsumer IO_BI_CONSUMER = (t, u) -> {
+        // noop
+    };
 
     /**
      * No-op singleton.
      */
-    static final IORunnable IO_RUNNABLE = () -> {/* No-op */};
+    static final IORunnable IO_RUNNABLE = () -> {
+        // noop
+    };
 
     /**
      * No-op singleton.
@@ -59,7 +63,9 @@ final class Constants {
      * No-op singleton.
      */
     @SuppressWarnings("rawtypes")
-    static final IOTriConsumer IO_TRI_CONSUMER = (t, u, v) -> {/* No-op */};
+    static final IOTriConsumer IO_TRI_CONSUMER = (t, u, v) -> {
+        // noop
+    };
 
     private Constants() {
         // We don't want instances

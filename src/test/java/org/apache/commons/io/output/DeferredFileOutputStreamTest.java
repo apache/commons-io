@@ -344,7 +344,7 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
     @MethodSource("data")
     public void testThresholdReached(final int initialBufferSize) throws IOException {
         final File testFile = Files.createTempFile(tempDirPath, "testThresholdReached", "dat").toFile();
-        final int threshold = testBytes.length /2;
+        final int threshold = testBytes.length / 2;
         try (DeferredFileOutputStream out = DeferredFileOutputStream.builder()
             // @formatter:off
                 .setThreshold(threshold)

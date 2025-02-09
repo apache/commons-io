@@ -41,7 +41,7 @@ public class CharSequenceReaderTest {
 
     private void checkArray(final char[] expected, final char[] actual) {
         for (int i = 0; i < expected.length; i++) {
-            assertEquals(expected[i], actual[i], "Compare[" +i + "]");
+            assertEquals(expected[i], actual[i], "Compare[" + i + "]");
         }
     }
 

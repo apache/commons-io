@@ -193,7 +193,9 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     private void consumeRemaining(final Iterator<File> iterator) {
         if (iterator != null) {
-            iterator.forEachRemaining(e -> {});
+            iterator.forEachRemaining(e -> {
+                // noop
+            });
         }
     }
 

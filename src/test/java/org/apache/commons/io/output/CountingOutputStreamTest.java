@@ -33,7 +33,7 @@ public class CountingOutputStreamTest {
 
     private void assertByteArrayEquals(final String msg, final byte[] array, final int start, final int end) {
         for (int i = start; i < end; i++) {
-            assertEquals(array[i], i-start, msg+": array[" + i + "] mismatch");
+            assertEquals(array[i], i - start, msg + ": array[" + i + "] mismatch");
         }
     }
 

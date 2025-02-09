@@ -38,7 +38,9 @@ public interface IOConsumer<T> {
     /**
      * Consider private.
      */
-    IOConsumer<?> NOOP_IO_CONSUMER = t -> {/* noop */};
+    IOConsumer<?> NOOP_IO_CONSUMER = t -> {
+        // noop
+    };
 
     /**
      * Performs an action for each element of the collection gathering any exceptions.

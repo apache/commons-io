@@ -413,7 +413,7 @@ public class FilenameUtils {
                     lastIsDirectory = true;
                 }
                 System.arraycopy(array, i + 1, array, i - 1, size - i);
-                size -=2;
+                size -= 2;
                 i--;
             }
         }
@@ -1547,7 +1547,7 @@ public class FilenameUtils {
                 }
                 if (ch == '?') {
                     list.add("?");
-                } else if (prevChar != '*') {// ch == '*' here; check if previous char was '*'
+                } else if (prevChar != '*') { // ch == '*' here; check if previous char was '*'
                     list.add("*");
                 }
             } else {

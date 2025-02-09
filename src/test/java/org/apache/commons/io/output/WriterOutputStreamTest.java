@@ -46,7 +46,7 @@ public class WriterOutputStreamTest {
 
     static {
         final StringBuilder buffer = new StringBuilder();
-        for (int i=0; i<100; i++) {
+        for (int i = 0; i < 100; i++) {
             buffer.append(TEST_STRING);
         }
         LARGE_TEST_STRING = buffer.toString();
@@ -135,8 +135,8 @@ public class WriterOutputStreamTest {
     public void testUTF16WithSingleByteWrite() throws IOException {
         try {
             testWithSingleByteWrite(TEST_STRING, UTF_16);
-        } catch (final UnsupportedOperationException e){
-            if (!SystemProperties.getJavaVendor().contains("IBM")){
+        } catch (final UnsupportedOperationException e) {
+            if (!SystemProperties.getJavaVendor().contains("IBM")) {
                 fail("This test should only throw UOE on IBM JDKs with broken UTF-16");
             }
         }
