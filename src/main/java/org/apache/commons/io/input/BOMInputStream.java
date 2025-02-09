@@ -224,7 +224,7 @@ public class BOMInputStream extends ProxyInputStream {
     /**
      * BOMs are sorted from longest to shortest.
      */
-    private final List<ByteOrderMark> boms;
+    private final List<ByteOrderMark> bomList;
 
     private ByteOrderMark byteOrderMark;
     private int fbIndex;
@@ -243,7 +243,7 @@ public class BOMInputStream extends ProxyInputStream {
         final List<ByteOrderMark> list = Arrays.asList(builder.byteOrderMarks);
         // Sort the BOMs to match the longest BOM first because some BOMs have the same starting two bytes.
         list.sort(ByteOrderMarkLengthComparator);
-        this.boms = list;
+        this.bomList = list;
     }
 
     /**
@@ -293,7 +293,7 @@ public class BOMInputStream extends ProxyInputStream {
         final List<ByteOrderMark> list = Arrays.asList(boms);
         // Sort the BOMs to match the longest BOM first because some BOMs have the same starting two bytes.
         list.sort(ByteOrderMarkLengthComparator);
-        this.boms = list;
+        this.bomList = list;
     }
 
     /**
@@ -311,12 +311,12 @@ public class BOMInputStream extends ProxyInputStream {
     }
 
     /**
-     * Find a BOM with the specified bytes.
+     * Find a BOM with the configured bytes in {@code bomList}.
      *
      * @return The matched BOM or null if none matched
      */
     private ByteOrderMark find() {
-        return boms.stream().filter(this::matches).findFirst().orElse(null);
+        return bomList.stream().filter(this::matches).findFirst().orElse(null);
     }
 
     /**
@@ -330,7 +330,7 @@ public class BOMInputStream extends ProxyInputStream {
         if (firstBytes == null) {
             fbLength = 0;
             // BOMs are sorted from longest to shortest
-            final int maxBomSize = boms.get(0).length();
+            final int maxBomSize = bomList.get(0).length();
             firstBytes = new int[maxBomSize];
             // Read first maxBomSize bytes
             for (int i = 0; i < firstBytes.length; i++) {
@@ -389,7 +389,7 @@ public class BOMInputStream extends ProxyInputStream {
      *             if an error reading the first bytes of the stream occurs
      */
     public boolean hasBOM(final ByteOrderMark bom) throws IOException {
-        if (!boms.contains(bom)) {
+        if (!bomList.contains(bom)) {
             throw new IllegalArgumentException("Stream not configured to detect " + bom);
         }
         return Objects.equals(getBOM(), bom);
