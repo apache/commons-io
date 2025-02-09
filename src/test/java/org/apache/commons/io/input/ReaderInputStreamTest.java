@@ -161,13 +161,13 @@ public class ReaderInputStreamTest {
     public void testCodingError() throws IOException {
         // Encoder which throws on malformed or unmappable input
         CharsetEncoder encoder = StandardCharsets.UTF_8.newEncoder();
-        try (final ReaderInputStream in = new ReaderInputStream(new StringReader("\uD800"), encoder)) {
+        try (ReaderInputStream in = new ReaderInputStream(new StringReader("\uD800"), encoder)) {
             // Does not throws an exception because the input is an underflow and not an error
             assertDoesNotThrow(() -> in.read());
             // assertThrows(IllegalStateException.class, () -> in.read());
         }
         encoder = StandardCharsets.UTF_8.newEncoder();
-        try (final ReaderInputStream in = ReaderInputStream.builder().setReader(new StringReader("\uD800")).setCharsetEncoder(encoder).get()) {
+        try (ReaderInputStream in = ReaderInputStream.builder().setReader(new StringReader("\uD800")).setCharsetEncoder(encoder).get()) {
             // TODO WIP
             assertDoesNotThrow(() -> in.read());
             // assertThrows(IllegalStateException.class, () -> in.read());
@@ -234,7 +234,7 @@ public class ReaderInputStreamTest {
     @Test
     public void testIo803SAXException() throws IOException {
         final StringReader reader = new StringReader("");
-        try (final ReaderInputStream inputStream = ReaderInputStream.builder().setCharset(StandardCharsets.UTF_8).setReader(reader).get()) {
+        try (ReaderInputStream inputStream = ReaderInputStream.builder().setCharset(StandardCharsets.UTF_8).setReader(reader).get()) {
             final InputSource inputSource = new InputSource(inputStream);
             assertThrows(SAXException.class, () -> DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputSource));
         }

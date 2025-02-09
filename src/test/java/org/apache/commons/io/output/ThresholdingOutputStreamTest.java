@@ -184,7 +184,7 @@ public class ThresholdingOutputStreamTest {
     @Test
     public void testThresholdLessThanZero() throws IOException {
         final AtomicBoolean reached = new AtomicBoolean();
-        try (final ThresholdingOutputStream out = new ThresholdingOutputStream(-1) {
+        try (ThresholdingOutputStream out = new ThresholdingOutputStream(-1) {
             @Override
             protected void thresholdReached() throws IOException {
                 reached.set(true);
@@ -204,7 +204,7 @@ public class ThresholdingOutputStreamTest {
     public void testThresholdZero() throws IOException {
         final AtomicBoolean reached = new AtomicBoolean();
         final int threshold = 0;
-        try (final ThresholdingOutputStream out = new ThresholdingOutputStream(threshold) {
+        try (ThresholdingOutputStream out = new ThresholdingOutputStream(threshold) {
             @Override
             protected void thresholdReached() throws IOException {
                 reached.set(true);
@@ -227,7 +227,7 @@ public class ThresholdingOutputStreamTest {
     public void testThresholdZeroWrite() throws IOException {
         final AtomicBoolean reached = new AtomicBoolean();
         final int threshold = 7;
-        try (final ThresholdingOutputStream out = new ThresholdingOutputStream(threshold) {
+        try (ThresholdingOutputStream out = new ThresholdingOutputStream(threshold) {
             @Override
             protected void thresholdReached() throws IOException {
                 super.thresholdReached();

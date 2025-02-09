@@ -54,7 +54,7 @@ public class PeekableInputStreamTest {
     @Test
     public void testIO683() throws IOException {
         final byte[] buffer = {0, 1, -2, -2, -1, 4};
-        try (ByteArrayInputStream bais = new ByteArrayInputStream(buffer); final PeekableInputStream cbis = new PeekableInputStream(bais)) {
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(buffer); PeekableInputStream cbis = new PeekableInputStream(bais)) {
             int b;
             int i = 0;
             while ((b = cbis.read()) != -1) {

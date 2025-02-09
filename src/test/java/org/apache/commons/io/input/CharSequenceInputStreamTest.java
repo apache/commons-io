@@ -500,7 +500,7 @@ public class CharSequenceInputStreamTest {
 
     @Test
     public void testResetBeforeEndSetCharSequence() throws IOException {
-        try (final CharSequenceInputStream inputStream = CharSequenceInputStream.builder().setCharSequence("1234").get()) {
+        try (CharSequenceInputStream inputStream = CharSequenceInputStream.builder().setCharSequence("1234").get()) {
             testResetBeforeEnd(inputStream);
         }
     }

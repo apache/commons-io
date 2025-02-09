@@ -53,7 +53,7 @@ public class CircularBufferInputStreamTest {
     @Test
     public void testIO683() throws IOException {
         final byte[] buffer = {0, 1, -2, -2, -1, 4};
-        try (ByteArrayInputStream bais = new ByteArrayInputStream(buffer); final CircularBufferInputStream cbis = new CircularBufferInputStream(bais)) {
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(buffer); CircularBufferInputStream cbis = new CircularBufferInputStream(bais)) {
             int b;
             int i = 0;
             while ((b = cbis.read()) != -1) {

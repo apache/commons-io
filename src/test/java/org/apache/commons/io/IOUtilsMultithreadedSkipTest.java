@@ -84,14 +84,14 @@ public class IOUtilsMultithreadedSkipTest {
         // thisSeed = -727624427837034313l;
         final Random random = new Random(thisSeed);
         final byte[] bytes;
-        try (final InputStream inputStream = getClass().getResourceAsStream(FIXTURE)) {
+        try (InputStream inputStream = getClass().getResourceAsStream(FIXTURE)) {
             bytes = IOUtils.toByteArray(inputStream);
         }
         final int numSkips = random.nextInt(bytes.length) / 100 + 1;
 
         final int[] skips = generateSkips(bytes, numSkips, random);
         final int[] expected;
-        try (final InputStream inflate = inflate(bytes)) {
+        try (InputStream inflate = inflate(bytes)) {
             expected = generateExpected(inflate, skips);
         }
 

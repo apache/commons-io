@@ -300,7 +300,7 @@ public class FilesUncheckTest {
     @Test
     public void testNewDirectoryStreamPath() {
         Uncheck.run(() -> {
-            try (final DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(TARGET_PATH)) {
+            try (DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(TARGET_PATH)) {
                 directoryStream.forEach(e -> assertEquals(TARGET_PATH, e.getParent()));
             }
         });
@@ -309,7 +309,7 @@ public class FilesUncheckTest {
     @Test
     public void testNewDirectoryStreamPathFilterOfQsuperPath() {
         Uncheck.run(() -> {
-            try (final DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(TARGET_PATH, e -> true)) {
+            try (DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(TARGET_PATH, e -> true)) {
                 directoryStream.forEach(e -> assertEquals(TARGET_PATH, e.getParent()));
             }
         });
@@ -318,7 +318,7 @@ public class FilesUncheckTest {
     @Test
     public void testNewDirectoryStreamPathString() {
         Uncheck.run(() -> {
-            try (final DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(TARGET_PATH, "*.xml")) {
+            try (DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(TARGET_PATH, "*.xml")) {
                 directoryStream.forEach(e -> assertEquals(TARGET_PATH, e.getParent()));
             }
         });

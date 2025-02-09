@@ -123,7 +123,7 @@ public class ClassLoaderObjectInputStreamTest {
     public void testPrimitiveLong() throws Exception {
         final long input = 12345L;
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try (final ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(baos)) {
             oos.writeLong(input);
         }
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());

@@ -143,7 +143,7 @@ public class UnsynchronizedBufferedReaderTest {
 
     @Test
     public void testEmptyInput() throws Exception {
-        try (final UnsynchronizedBufferedReader br = new UnsynchronizedBufferedReader(new StringReader(""))) {
+        try (UnsynchronizedBufferedReader br = new UnsynchronizedBufferedReader(new StringReader(""))) {
             assertEquals(EOF, br.read());
             assertEquals(EOF, br.peek());
             assertNull(br.readLine());

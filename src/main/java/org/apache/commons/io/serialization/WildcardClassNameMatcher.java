@@ -36,7 +36,7 @@ final class WildcardClassNameMatcher implements ClassNameMatcher {
      *
      * @param pattern a {@link FilenameUtils#wildcardMatch} pattern.
      */
-    public WildcardClassNameMatcher(final String pattern) {
+    WildcardClassNameMatcher(final String pattern) {
         this.pattern = pattern;
     }
 

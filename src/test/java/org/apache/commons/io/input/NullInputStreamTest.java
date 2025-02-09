@@ -38,11 +38,11 @@ public class NullInputStreamTest {
 
     private static final class TestNullInputStream extends NullInputStream {
 
-        public TestNullInputStream(final int size) {
+        TestNullInputStream(final int size) {
             super(size);
         }
 
-        public TestNullInputStream(final int size, final boolean markSupported, final boolean throwEofException) {
+        TestNullInputStream(final int size, final boolean markSupported, final boolean throwEofException) {
             super(size, markSupported, throwEofException);
         }
 

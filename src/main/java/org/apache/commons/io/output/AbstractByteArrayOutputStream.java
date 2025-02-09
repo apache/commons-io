@@ -77,7 +77,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
          * @param length the length of the buffer
          * @return the InputStream subclass.
          */
-        T construct(final byte[] buffer, final int offset, final int length);
+        T construct(byte[] buffer, int offset, int length);
     }
 
     static final int DEFAULT_SIZE = 1024;
@@ -330,7 +330,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
     }
 
     @Override
-    public abstract void write(final byte[] b, final int off, final int len);
+    public abstract void write(byte[] b, int off, int len);
 
     /**
      * Writes the bytes for given CharSequence encoded using a Charset.
@@ -356,10 +356,10 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      * @throws IOException if an I/O error occurs while reading the input stream
      * @since 1.4
      */
-    public abstract int write(final InputStream in) throws IOException;
+    public abstract int write(InputStream in) throws IOException;
 
     @Override
-    public abstract void write(final int b);
+    public abstract void write(int b);
 
     /**
      * Writes the bytes to the byte array.
@@ -433,7 +433,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      * @throws IOException if an I/O error occurs, such as if the stream is closed
      * @see java.io.ByteArrayOutputStream#writeTo(OutputStream)
      */
-    public abstract void writeTo(final OutputStream out) throws IOException;
+    public abstract void writeTo(OutputStream out) throws IOException;
 
     /**
      * Writes the entire contents of this byte stream to the

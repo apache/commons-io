@@ -53,7 +53,7 @@ public class URIOriginTest extends AbstractOriginTest<URI, URIOrigin> {
     })
     void testGetInputStream(final String uri) throws Exception {
         final AbstractOrigin.URIOrigin origin = new AbstractOrigin.URIOrigin(new URI(uri));
-        try (final InputStream in = origin.getInputStream()) {
+        try (InputStream in = origin.getInputStream()) {
             assertNotEquals(-1, in.read());
         }
     }
@@ -61,7 +61,7 @@ public class URIOriginTest extends AbstractOriginTest<URI, URIOrigin> {
     @Test
     void testGetInputStreamFileURI() throws Exception {
         final AbstractOrigin.URIOrigin origin = getOriginRo().asThis();
-        try (final InputStream in = origin.getInputStream()) {
+        try (InputStream in = origin.getInputStream()) {
             assertNotEquals(-1, in.read());
         }
     }

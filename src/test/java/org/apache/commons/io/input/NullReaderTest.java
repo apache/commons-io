@@ -34,11 +34,11 @@ import org.junit.jupiter.api.Test;
 public class NullReaderTest {
 
     private static final class TestNullReader extends NullReader {
-        public TestNullReader(final int size) {
+        TestNullReader(final int size) {
             super(size);
         }
 
-        public TestNullReader(final int size, final boolean markSupported, final boolean throwEofException) {
+        TestNullReader(final int size, final boolean markSupported, final boolean throwEofException) {
             super(size, markSupported, throwEofException);
         }
 

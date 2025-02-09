@@ -84,7 +84,7 @@ public class IOBaseStreamTest {
 
         private static final long serialVersionUID = 1L;
 
-        public MyRuntimeException(final String message) {
+        MyRuntimeException(final String message) {
             super(message);
         }
 
@@ -217,16 +217,16 @@ public class IOBaseStreamTest {
     @SuppressWarnings("resource") // @AfterEach
     @Test
     public void testParallelParallel() {
-        try (final IOBaseStream<?, ?, ?> stream = createIOBaseStream()) {
+        try (IOBaseStream<?, ?, ?> stream = createIOBaseStream()) {
             testParallelParallel(stream);
         }
-        try (final IOBaseStream<?, ?, ?> stream = createIOBaseStreamPath()) {
+        try (IOBaseStream<?, ?, ?> stream = createIOBaseStreamPath()) {
             testParallelParallel(stream);
         }
-        try (final IOBaseStream<?, ?, ?> stream = createIOBaseStream()) {
+        try (IOBaseStream<?, ?, ?> stream = createIOBaseStream()) {
             testParallelParallel(stream);
         }
-        try (final IOBaseStreamFixture<Path, ?, Stream<Path>> stream = createIOBaseStream()) {
+        try (IOBaseStreamFixture<Path, ?, Stream<Path>> stream = createIOBaseStream()) {
             testParallelParallel(stream.asBaseStream());
         }
     }
@@ -268,13 +268,13 @@ public class IOBaseStreamTest {
     @SuppressWarnings("resource") // @AfterEach
     @Test
     public void testSequentialSequential() {
-        try (final IOBaseStream<?, ?, ?> stream = createIOBaseStream()) {
+        try (IOBaseStream<?, ?, ?> stream = createIOBaseStream()) {
             testSequentialSequential(stream);
         }
-        try (final IOBaseStream<?, ?, ?> stream = createIOBaseStreamPath()) {
+        try (IOBaseStream<?, ?, ?> stream = createIOBaseStreamPath()) {
             testSequentialSequential(stream);
         }
-        try (final IOBaseStream<?, ?, ?> stream = createIOBaseStream()) {
+        try (IOBaseStream<?, ?, ?> stream = createIOBaseStream()) {
             testSequentialSequential(stream.asBaseStream());
         }
     }

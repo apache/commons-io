@@ -37,7 +37,7 @@ public class MarkShieldInputStreamTest {
         int markcount;
         int readLimit;
 
-        public MarkTestableInputStream(final InputStream in) {
+        MarkTestableInputStream(final InputStream in) {
             super(in);
         }
 
@@ -58,7 +58,7 @@ public class MarkShieldInputStreamTest {
     public void testAvailableAfterClose(final int len) throws Exception {
         final InputStream shadow;
         try (MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(len, false, false));
-                final MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
+                MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
             assertEquals(len, in.available());
             shadow = in;
         }
@@ -69,7 +69,7 @@ public class MarkShieldInputStreamTest {
     @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
     public void testAvailableAfterOpen(final int len) throws Exception {
         try (MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(len, false, false));
-                final MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
+                MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
             assertEquals(len, in.available());
         }
     }
@@ -83,7 +83,7 @@ public class MarkShieldInputStreamTest {
     @Test
     public void testMarkIsNoOpWhenUnderlyingDoesNotSupport() throws IOException {
         try (MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(64, false, false));
-                final MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
+                MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
             msis.mark(1024);
             assertEquals(0, in.markcount);
             assertEquals(0, in.readLimit);
@@ -93,7 +93,7 @@ public class MarkShieldInputStreamTest {
     @Test
     public void testMarkIsNoOpWhenUnderlyingSupports() throws IOException {
         try (MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(64, true, false));
-                final MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
+                MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
             msis.mark(1024);
             assertEquals(0, in.markcount);
             assertEquals(0, in.readLimit);
@@ -126,7 +126,7 @@ public class MarkShieldInputStreamTest {
     @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
     public void testReadAfterClose(final int len) throws Exception {
         try (MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(len, false, false));
-                final MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
+                MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
             assertEquals(len, in.available());
             in.close();
             assertThrows(IOException.class, in::read);
@@ -137,7 +137,7 @@ public class MarkShieldInputStreamTest {
     @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
     public void testReadByteArrayAfterClose(final int len) throws Exception {
         try (MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(len, false, false));
-                final MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
+                MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
             assertEquals(len, in.available());
             in.close();
             assertEquals(0, in.read(new byte[0]));
@@ -149,7 +149,7 @@ public class MarkShieldInputStreamTest {
     @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
     public void testReadByteArrayIntIntAfterClose(final int len) throws Exception {
         try (MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(len, false, false));
-                final MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
+                MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
             assertEquals(len, in.available());
             in.close();
             assertEquals(0, in.read(new byte[0], 0, 1));

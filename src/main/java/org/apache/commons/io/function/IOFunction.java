@@ -114,7 +114,7 @@ public interface IOFunction<T, R> {
      * @return the function result
      * @throws IOException if an I/O error occurs.
      */
-    R apply(final T t) throws IOException;
+    R apply(T t) throws IOException;
 
     /**
      * Creates a {@link Function} for this instance that throws {@link UncheckedIOException} instead of {@link IOException}.

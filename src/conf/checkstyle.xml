@@ -61,6 +61,7 @@ limitations under the License.
     <module name="NeedBraces" />
     <module name="ParenPad" />
     <module name="RedundantImport" />
+    <module name="RedundantModifier" />
     <!-- No Trailing whitespace -->
     <module name="Regexp">
       <property name="format" value="[ \t]+$" />

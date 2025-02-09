@@ -52,7 +52,7 @@ public class IOCaseTest {
 
     private IOCase serialize(final IOCase value) throws Exception {
         final ByteArrayOutputStream buf = new ByteArrayOutputStream();
-        try (final ObjectOutputStream out = new ObjectOutputStream(buf)) {
+        try (ObjectOutputStream out = new ObjectOutputStream(buf)) {
             out.writeObject(value);
             out.flush();
         }

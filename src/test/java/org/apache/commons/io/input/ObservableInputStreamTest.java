@@ -281,7 +281,7 @@ public class ObservableInputStreamTest {
     public void testDataBytesCalled() throws Exception {
         final byte[] buffer = MessageDigestInputStreamTest.generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
         try (ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
-                final ObservableInputStream ois = createInputStream(bais)) {
+                ObservableInputStream ois = createInputStream(bais)) {
             final DataViewObserver observer = new DataViewObserver();
             final byte[] readBuffer = new byte[23];
             assertNull(observer.buffer);

@@ -370,7 +370,7 @@ public class Tailer implements Runnable, AutoCloseable {
          * @throws IOException If the first byte cannot be read for any reason other than end of tailable, or if the random
          *         access tailable has been closed, or if some other I/O error occurs.
          */
-        int read(final byte[] b) throws IOException;
+        int read(byte[] b) throws IOException;
 
         /**
          * Sets the file-pointer offset, measured from the beginning of this tailable, at which the next read or write occurs.
@@ -382,7 +382,7 @@ public class Tailer implements Runnable, AutoCloseable {
          *        pointer.
          * @throws IOException if {@code pos} is less than {@code 0} or if an I/O error occurs.
          */
-        void seek(final long pos) throws IOException;
+        void seek(long pos) throws IOException;
     }
 
     /**
@@ -399,7 +399,7 @@ public class Tailer implements Runnable, AutoCloseable {
          * @return a random access file stream to read.
          * @throws FileNotFoundException if the tailable object does not exist.
          */
-        RandomAccessResourceBridge getRandomAccess(final String mode) throws FileNotFoundException;
+        RandomAccessResourceBridge getRandomAccess(String mode) throws FileNotFoundException;
 
         /**
          * Tests if this tailable is newer than the specified {@link FileTime}.
@@ -408,7 +408,7 @@ public class Tailer implements Runnable, AutoCloseable {
          * @return true if the {@link File} exists and has been modified after the given {@link FileTime}.
          * @throws IOException if an I/O error occurs.
          */
-        boolean isNewer(final FileTime fileTime) throws IOException;
+        boolean isNewer(FileTime fileTime) throws IOException;
 
         /**
          * Gets the last modification {@link FileTime}.

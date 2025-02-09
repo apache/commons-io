@@ -138,7 +138,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
     public void testCopyDirectoryForDifferentFilesystemsWithRelativePath() throws IOException {
         final Path archivePath = Paths.get(TEST_JAR_PATH);
         try (FileSystem archive = openArchive(archivePath, false);
-                final FileSystem targetArchive = openArchive(tempDirPath.resolve(TEST_JAR_NAME), true)) {
+                FileSystem targetArchive = openArchive(tempDirPath.resolve(TEST_JAR_NAME), true)) {
             final Path targetDir = targetArchive.getPath("targetDir");
             Files.createDirectory(targetDir);
             // relative jar -> relative dir

@@ -47,7 +47,7 @@ public class ByteArrayOutputStreamTest {
 
         T newInstance();
 
-        T newInstance(final int size);
+        T newInstance(int size);
     }
 
     private static final class ByteArrayOutputStreamFactory implements BAOSFactory<ByteArrayOutputStream> {
@@ -207,7 +207,7 @@ public class ByteArrayOutputStreamTest {
     @MethodSource("baosFactories")
     public void testToInputStream(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
         try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance();
-                final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream()) {
+                java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream()) {
 
             // Write 8224 bytes
             writeByteArrayIndex(baout, ref, 32);
@@ -243,7 +243,7 @@ public class ByteArrayOutputStreamTest {
     public void testToInputStreamEmpty(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
         try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance();
                 // Get data before more writes
-                final InputStream in = baout.toInputStream()) {
+                InputStream in = baout.toInputStream()) {
             assertEquals(0, in.available());
             assertInstanceOf(ClosedInputStream.class, in);
         }
@@ -254,7 +254,7 @@ public class ByteArrayOutputStreamTest {
     public void testToInputStreamWithReset(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
         // Make sure reset() do not destroy InputStream returned from toInputStream()
         try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance();
-                final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream()) {
+                java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream()) {
 
             // Write 8224 bytes
             writeByteArrayIndex(baout, ref, 32);
@@ -295,7 +295,7 @@ public class ByteArrayOutputStreamTest {
         // The ByteArrayOutputStream is initialized with 32 bytes to match
         // the original more closely for this test.
         try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance(32);
-                final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream()) {
+                java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream()) {
 
             // First three writes
             written = writeByte(baout, ref, new int[] { 4, 10, 22 });
@@ -338,7 +338,7 @@ public class ByteArrayOutputStreamTest {
                 // Make sure that empty ByteArrayOutputStreams really don't create garbage
                 // on toByteArray()
                 try (AbstractByteArrayOutputStream<?> baos1 = baosFactory.newInstance();
-                        final AbstractByteArrayOutputStream<?> baos2 = baosFactory.newInstance()) {
+                        AbstractByteArrayOutputStream<?> baos2 = baosFactory.newInstance()) {
                     assertSame(baos1.toByteArray(), baos2.toByteArray());
                 }
             }
@@ -355,7 +355,7 @@ public class ByteArrayOutputStreamTest {
         // The ByteArrayOutputStream is initialized with 32 bytes to match
         // the original more closely for this test.
         try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance(32);
-                final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream()) {
+                java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream()) {
 
             // First three writes
             written = writeByteArray(baout, ref, new int[] { 4, 10, 22 });
@@ -398,7 +398,7 @@ public class ByteArrayOutputStreamTest {
                 // Make sure that empty ByteArrayOutputStreams really don't create garbage
                 // on toByteArray()
                 try (AbstractByteArrayOutputStream<?> baos1 = baosFactory.newInstance();
-                        final AbstractByteArrayOutputStream<?> baos2 = baosFactory.newInstance()) {
+                        AbstractByteArrayOutputStream<?> baos2 = baosFactory.newInstance()) {
                     assertSame(baos1.toByteArray(), baos2.toByteArray());
                 }
             }
@@ -413,7 +413,7 @@ public class ByteArrayOutputStreamTest {
         // The ByteArrayOutputStream is initialized with 32 bytes to match
         // the original more closely for this test.
         try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance(32);
-                final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream()) {
+                java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream()) {
 
             // First three writes
             written = writeByteArrayIndex(baout, ref, new int[] { 4, 10, 22 });
@@ -456,7 +456,7 @@ public class ByteArrayOutputStreamTest {
                 // Make sure that empty ByteArrayOutputStreams really don't create garbage
                 // on toByteArray()
                 try (AbstractByteArrayOutputStream<?> baos1 = baosFactory.newInstance();
-                        final AbstractByteArrayOutputStream<?> baos2 = baosFactory.newInstance()) {
+                        AbstractByteArrayOutputStream<?> baos2 = baosFactory.newInstance()) {
                     assertSame(baos1.toByteArray(), baos2.toByteArray());
                 }
             }
@@ -471,7 +471,7 @@ public class ByteArrayOutputStreamTest {
         // The ByteArrayOutputStream is initialized with 32 bytes to match
         // the original more closely for this test.
         try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance(32);
-                final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream()) {
+                java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream()) {
 
             // First three writes
             written = writeStringCharset(baout, ref, new int[] { 4, 10, 22 });
@@ -514,7 +514,7 @@ public class ByteArrayOutputStreamTest {
                 // Make sure that empty ByteArrayOutputStreams really don't create garbage
                 // on toByteArray()
                 try (AbstractByteArrayOutputStream<?> baos1 = baosFactory.newInstance();
-                        final AbstractByteArrayOutputStream<?> baos2 = baosFactory.newInstance()) {
+                        AbstractByteArrayOutputStream<?> baos2 = baosFactory.newInstance()) {
                     assertSame(baos1.toByteArray(), baos2.toByteArray());
                 }
             }

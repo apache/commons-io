@@ -34,7 +34,7 @@ public abstract class AbstractFileUtilsDeleteDirectoryTest {
     @TempDir
     public File top;
 
-    protected abstract boolean setupSymlink(final File res, final File link) throws Exception;
+    protected abstract boolean setupSymlink(File res, File link) throws Exception;
 
     @Test
     public void testDeleteDirectoryNullArgument() {

@@ -183,8 +183,8 @@ public class XmlStreamReaderTest {
     }
 
     private void parseCharset(final String hdr, final String enc, final IOFunction<InputStream, XmlStreamReader> factory) throws Exception {
-        try (final InputStream stream = new ByteArrayInputStream(hdr.getBytes(StandardCharsets.UTF_8))) {
-            try (final XmlStreamReader xml = factory.apply(stream)) {
+        try (InputStream stream = new ByteArrayInputStream(hdr.getBytes(StandardCharsets.UTF_8))) {
+            try (XmlStreamReader xml = factory.apply(stream)) {
                 assertEquals(enc.toUpperCase(Locale.ROOT), xml.getEncoding(), enc);
             }
         }
@@ -571,7 +571,7 @@ public class XmlStreamReaderTest {
     }
 
     protected void testRawNoBomInvalid(final String encoding) throws Exception {
-        try (final InputStream is = getXmlInputStream("no-bom", XML3, encoding, encoding)) {
+        try (InputStream is = getXmlInputStream("no-bom", XML3, encoding, encoding)) {
             final XmlStreamReader xmlStreamReader = new XmlStreamReader(is, false);
             final IOException ex = assertThrows(IOException.class, xmlStreamReader::close);
             assertTrue(ex.getMessage().contains("Invalid encoding,"));

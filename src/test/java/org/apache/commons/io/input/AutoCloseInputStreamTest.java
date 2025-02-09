@@ -192,28 +192,28 @@ public class AutoCloseInputStreamTest {
 
     @Test
     public void testResetBeforeEndCtor() throws IOException {
-        try (final AutoCloseInputStream inputStream = new AutoCloseInputStream(new ByteArrayInputStream("1234".getBytes()))) {
+        try (AutoCloseInputStream inputStream = new AutoCloseInputStream(new ByteArrayInputStream("1234".getBytes()))) {
             testResetBeforeEnd(inputStream);
         }
     }
 
     @Test
     public void testResetBeforeEndSetByteArray() throws IOException {
-        try (final AutoCloseInputStream inputStream = AutoCloseInputStream.builder().setByteArray("1234".getBytes()).get()) {
+        try (AutoCloseInputStream inputStream = AutoCloseInputStream.builder().setByteArray("1234".getBytes()).get()) {
             testResetBeforeEnd(inputStream);
         }
     }
 
     @Test
     public void testResetBeforeEndSetCharSequence() throws IOException {
-        try (final AutoCloseInputStream inputStream = AutoCloseInputStream.builder().setCharSequence("1234").get()) {
+        try (AutoCloseInputStream inputStream = AutoCloseInputStream.builder().setCharSequence("1234").get()) {
             testResetBeforeEnd(inputStream);
         }
     }
 
     @Test
     public void testResetBeforeEndSetInputStream() throws IOException {
-        try (final AutoCloseInputStream inputStream = AutoCloseInputStream.builder().setInputStream(new ByteArrayInputStream("1234".getBytes())).get()) {
+        try (AutoCloseInputStream inputStream = AutoCloseInputStream.builder().setInputStream(new ByteArrayInputStream("1234".getBytes())).get()) {
             testResetBeforeEnd(inputStream);
         }
     }

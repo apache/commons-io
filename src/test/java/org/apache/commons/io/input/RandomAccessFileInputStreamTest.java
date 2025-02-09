@@ -319,7 +319,7 @@ public class RandomAccessFileInputStreamTest {
     public void testSkip() throws IOException {
 
         try (RandomAccessFile file = createRandomAccessFile();
-            final RandomAccessFileInputStream inputStream = RandomAccessFileInputStream.builder()
+             RandomAccessFileInputStream inputStream = RandomAccessFileInputStream.builder()
                     .setRandomAccessFile(file)
                     .get()) {
             assertEquals(0, inputStream.skip(-1));

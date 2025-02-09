@@ -38,7 +38,7 @@ final class FullClassNameMatcher implements ClassNameMatcher {
      *
      * @param classes a list of class names
      */
-    public FullClassNameMatcher(final String... classes) {
+    FullClassNameMatcher(final String... classes) {
         classesSet = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(classes)));
     }
 

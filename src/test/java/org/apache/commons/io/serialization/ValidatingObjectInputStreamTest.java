@@ -164,7 +164,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
         // Writing serialized fixture
         final byte[] byteArray;
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                final ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+                ObjectOutputStream oos = new ObjectOutputStream(baos)) {
             oos.writeObject(map1);
             oos.flush();
             byteArray = baos.toByteArray();
@@ -294,7 +294,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
         // Writing serialized fixture
         final byte[] byteArray;
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                final ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+                ObjectOutputStream oos = new ObjectOutputStream(baos)) {
             oos.writeObject(map1);
             oos.flush();
             byteArray = baos.toByteArray();

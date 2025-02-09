@@ -33,7 +33,7 @@ public class FileUtilsCopyToFileTest {
     private final class CheckingInputStream extends ByteArrayInputStream {
         private boolean closed;
 
-        public CheckingInputStream(final byte[] data) {
+        CheckingInputStream(final byte[] data) {
             super(data);
             closed = false;
         }

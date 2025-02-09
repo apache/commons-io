@@ -43,7 +43,7 @@ final class SerializableFileTime implements Serializable {
 
     private FileTime fileTime;
 
-    public SerializableFileTime(final FileTime fileTime) {
+    SerializableFileTime(final FileTime fileTime) {
         this.fileTime = Objects.requireNonNull(fileTime);
     }
 

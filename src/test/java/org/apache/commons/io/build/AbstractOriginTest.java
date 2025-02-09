@@ -133,14 +133,14 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
 
     @Test
     public void testGetInputStream() throws IOException {
-        try (final InputStream inputStream = getOriginRo().getInputStream()) {
+        try (InputStream inputStream = getOriginRo().getInputStream()) {
             assertNotNull(inputStream);
         }
     }
 
     @Test
     public void testGetOutputStream() throws IOException {
-        try (final OutputStream output = getOriginRw().getOutputStream()) {
+        try (OutputStream output = getOriginRw().getOutputStream()) {
             assertNotNull(output);
         }
     }
@@ -162,24 +162,24 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
     @Test
     public void testGetRandomAccessFile() throws IOException {
         // Default
-        try (final RandomAccessFile raf = getOriginRo().getRandomAccessFile()) {
+        try (RandomAccessFile raf = getOriginRo().getRandomAccessFile()) {
             assertNotNull(raf);
             assertTrue(isValid(raf));
         }
         final boolean isRafOriginRo = getOriginRo() instanceof RandomAccessFileOrigin;
         final boolean isRafOriginRw = getOriginRw() instanceof RandomAccessFileOrigin;
         // Same as above, but underlying resource is now closed.
-        try (final RandomAccessFile raf = getOriginRo().getRandomAccessFile()) {
+        try (RandomAccessFile raf = getOriginRo().getRandomAccessFile()) {
             assertNotNull(raf);
             assertFalse(isRafOriginRo && isValid(raf));
         }
         // Read
-        try (final RandomAccessFile raf = getOriginRo().getRandomAccessFile(StandardOpenOption.READ)) {
+        try (RandomAccessFile raf = getOriginRo().getRandomAccessFile(StandardOpenOption.READ)) {
             assertNotNull(raf);
             assertFalse(isRafOriginRo && isValid(raf));
         }
         // Write, first access
-        try (final RandomAccessFile raf = getOriginRw().getRandomAccessFile(StandardOpenOption.WRITE)) {
+        try (RandomAccessFile raf = getOriginRw().getRandomAccessFile(StandardOpenOption.WRITE)) {
             assertNotNull(raf);
             if (isRafOriginRw || getOriginRw().getFile() != null) {
                 assertTrue(isValid(raf), () -> getOriginRw().toString());
@@ -189,7 +189,7 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
             }
         }
         // Read, Write, underlying resource is now closed.
-        try (final RandomAccessFile raf = getOriginRw().getRandomAccessFile(StandardOpenOption.READ, StandardOpenOption.WRITE)) {
+        try (RandomAccessFile raf = getOriginRw().getRandomAccessFile(StandardOpenOption.READ, StandardOpenOption.WRITE)) {
             assertNotNull(raf);
             assertFalse(isRafOriginRw && isValid(raf));
         }
@@ -199,21 +199,21 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
     @EnumSource(StandardOpenOption.class)
     public void testGetRandomAccessFile(final OpenOption openOption) throws IOException {
         // Default
-        try (final RandomAccessFile raf = getOriginRw().getRandomAccessFile()) {
+        try (RandomAccessFile raf = getOriginRw().getRandomAccessFile()) {
             assertNotNull(raf);
             assertTrue(isValid(raf));
         }
         // Same as above, but underlying resource is now closed.
         final boolean isRafOrigin = getOriginRw() instanceof RandomAccessFileOrigin;
-        try (final RandomAccessFile raf = getOriginRw().getRandomAccessFile()) {
+        try (RandomAccessFile raf = getOriginRw().getRandomAccessFile()) {
             assertNotNull(raf);
             assertFalse(isRafOrigin && isValid(raf));
         }
-        try (final RandomAccessFile raf = getOriginRw().getRandomAccessFile(openOption)) {
+        try (RandomAccessFile raf = getOriginRw().getRandomAccessFile(openOption)) {
             assertNotNull(raf);
             assertFalse(isRafOrigin && isValid(raf));
         }
-        try (final RandomAccessFile raf = getOriginRw().getRandomAccessFile(openOption)) {
+        try (RandomAccessFile raf = getOriginRw().getRandomAccessFile(openOption)) {
             assertNotNull(raf);
             assertFalse(isRafOrigin && isValid(raf));
         }
@@ -221,14 +221,14 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
 
     @Test
     public void testGetReader() throws IOException {
-        try (final Reader reader = getOriginRo().getReader(Charset.defaultCharset())) {
+        try (Reader reader = getOriginRo().getReader(Charset.defaultCharset())) {
             assertNotNull(reader);
         }
     }
 
     @Test
     public void testGetWriter() throws IOException {
-        try (final Writer writer = getOriginRw().getWriter(Charset.defaultCharset())) {
+        try (Writer writer = getOriginRw().getWriter(Charset.defaultCharset())) {
             assertNotNull(writer);
         }
     }

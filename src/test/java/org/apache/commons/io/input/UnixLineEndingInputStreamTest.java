@@ -33,22 +33,22 @@ public class UnixLineEndingInputStreamTest {
     private String roundtrip(final String msg, final boolean ensureLineFeedAtEndOfFile, final int minBufferLen) throws IOException {
         final String string;
         // read(byte[])
-        try (final ByteArrayInputStream baos = new ByteArrayInputStream(msg.getBytes(StandardCharsets.UTF_8));
-                final UnixLineEndingInputStream in = new UnixLineEndingInputStream(baos, ensureLineFeedAtEndOfFile)) {
+        try (ByteArrayInputStream baos = new ByteArrayInputStream(msg.getBytes(StandardCharsets.UTF_8));
+                UnixLineEndingInputStream in = new UnixLineEndingInputStream(baos, ensureLineFeedAtEndOfFile)) {
             // read into a buffer larger than the fixture.
             final byte[] buf = new byte[minBufferLen + msg.length() * 10];
             string = new String(buf, 0, in.read(buf), StandardCharsets.UTF_8);
         }
         // read(byte[], int, int)
-        try (final ByteArrayInputStream baos = new ByteArrayInputStream(msg.getBytes(StandardCharsets.UTF_8));
-                final UnixLineEndingInputStream in = new UnixLineEndingInputStream(baos, ensureLineFeedAtEndOfFile)) {
+        try (ByteArrayInputStream baos = new ByteArrayInputStream(msg.getBytes(StandardCharsets.UTF_8));
+                UnixLineEndingInputStream in = new UnixLineEndingInputStream(baos, ensureLineFeedAtEndOfFile)) {
             // read into a buffer larger than the fixture.
             final byte[] buf = new byte[minBufferLen + msg.length() * 10];
             assertEquals(string, new String(buf, 0, in.read(buf, 0, buf.length), StandardCharsets.UTF_8));
         }
         // read
-        try (final ByteArrayInputStream baos = new ByteArrayInputStream(msg.getBytes(StandardCharsets.UTF_8));
-                final UnixLineEndingInputStream in = new UnixLineEndingInputStream(baos, ensureLineFeedAtEndOfFile)) {
+        try (ByteArrayInputStream baos = new ByteArrayInputStream(msg.getBytes(StandardCharsets.UTF_8));
+                UnixLineEndingInputStream in = new UnixLineEndingInputStream(baos, ensureLineFeedAtEndOfFile)) {
             // read into a buffer larger than the fixture.
             final int[] buf = new int[minBufferLen + msg.length() * 10];
             if (buf.length > 0) {

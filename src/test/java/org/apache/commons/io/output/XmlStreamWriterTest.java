@@ -54,7 +54,7 @@ public class XmlStreamWriterTest {
             throws IOException {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         final XmlStreamWriter writerCheck;
-        try (final XmlStreamWriter writer = XmlStreamWriter.builder().setOutputStream(out).setCharset(defaultEncodingName).get()) {
+        try (XmlStreamWriter writer = XmlStreamWriter.builder().setOutputStream(out).setCharset(defaultEncodingName).get()) {
             writerCheck = writer;
             writer.write(xml);
         }
@@ -105,7 +105,7 @@ public class XmlStreamWriterTest {
 
     @Test
     public void testEmpty() throws IOException {
-        try (final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream();
                 XmlStreamWriter writer = new XmlStreamWriter(out)) {
             writer.flush();
             writer.write("");
@@ -113,7 +113,7 @@ public class XmlStreamWriterTest {
             writer.write(".");
             writer.flush();
         }
-        try (final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream();
                 XmlStreamWriter writer = XmlStreamWriter.builder().setOutputStream(out).get()) {
             writer.flush();
             writer.write("");

@@ -40,7 +40,7 @@ final class ReverseFileComparator extends AbstractFileComparator implements Seri
      *
      * @param delegate The comparator to delegate to.
      */
-    public ReverseFileComparator(final Comparator<File> delegate) {
+    ReverseFileComparator(final Comparator<File> delegate) {
         this.delegate = Objects.requireNonNull(delegate, "delegate");
     }
 

@@ -65,7 +65,7 @@ public class TailerTest {
 
         private final File file;
 
-        public NonStandardTailable(final File file) {
+        NonStandardTailable(final File file) {
             this.file = file;
         }
 
@@ -133,11 +133,11 @@ public class TailerTest {
 
         volatile int reachedEndOfFile;
 
-        public TestTailerListener() {
+        TestTailerListener() {
             latch = new CountDownLatch(1);
         }
 
-        public TestTailerListener(final int expectedLines) {
+        TestTailerListener(final int expectedLines) {
             latch = new CountDownLatch(expectedLines);
         }
 

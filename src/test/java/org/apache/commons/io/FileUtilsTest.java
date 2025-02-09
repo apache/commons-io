@@ -1043,14 +1043,14 @@ public class FileUtilsTest extends AbstractTempDirTest {
             fail("Cannot create file " + testFile1
                     + " as the parent directory does not exist");
         }
-        try (final OutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
+        try (OutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
             TestUtils.generateTestData(output1, 1234);
         }
         if (!testFile2.getParentFile().exists()) {
             fail("Cannot create file " + testFile2
                     + " as the parent directory does not exist");
         }
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()))) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()))) {
             TestUtils.generateTestData(output, 4321);
         }
         final File srcDir = tempDirFile;
@@ -1079,14 +1079,14 @@ public class FileUtilsTest extends AbstractTempDirTest {
             fail("Cannot create file " + testFile1
                     + " as the parent directory does not exist");
         }
-        try (final OutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
+        try (OutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
             TestUtils.generateTestData(output1, 1234);
         }
         if (!testFile2.getParentFile().exists()) {
             fail("Cannot create file " + testFile2
                     + " as the parent directory does not exist");
         }
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()))) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()))) {
             TestUtils.generateTestData(output, 4321);
         }
         final File srcDir = tempDirFile;
@@ -1137,14 +1137,14 @@ public class FileUtilsTest extends AbstractTempDirTest {
             fail("Cannot create file " + testFile1
                     + " as the parent directory does not exist");
         }
-        try (final OutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
+        try (OutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
             TestUtils.generateTestData(output1, 1234);
         }
         if (!testFile2.getParentFile().exists()) {
             fail("Cannot create file " + testFile2
                     + " as the parent directory does not exist");
         }
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()));) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()));) {
             TestUtils.generateTestData(output, 4321);
         }
         final File srcDir = tempDirFile;
@@ -1307,7 +1307,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
             fail("Cannot create file " + largeFile
                     + " as the parent directory does not exist");
         }
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(largeFile.toPath()))) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(largeFile.toPath()))) {
             TestUtils.generateTestData(output, FileUtils.ONE_GB);
         }
         FileUtils.copyFile(largeFile, destination);
@@ -1623,7 +1623,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
             fail("Cannot create file " + testFile
                     + " as the parent directory does not exist");
         }
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
             TestUtils.generateTestData(output, 0);
         }
 
@@ -1641,7 +1641,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
             fail("Cannot create file " + testFile
                     + " as the parent directory does not exist");
         }
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
             TestUtils.generateTestData(output, 0);
         }
 
@@ -2041,12 +2041,12 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final FileTime newFileTime = FileTime.from(actualMillis * 4, TimeUnit.MILLISECONDS);
 
         // Create fixtures
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(oldPath))) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(oldPath))) {
             TestUtils.generateTestData(output, 0);
         }
         Files.setLastModifiedTime(oldPath, oldFileTime);
 
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(refPath))) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(refPath))) {
             TestUtils.generateTestData(output, 0);
         }
         Files.setLastModifiedTime(refPath, refFileTime);
@@ -2062,7 +2062,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final LocalTime localTime0 = LocalTime.MIDNIGHT;
         final OffsetTime offsetTime0 = OffsetTime.of(localTime0, ZoneOffset.UTC);
 
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(newPath))) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(newPath))) {
             TestUtils.generateTestData(output, 0);
         }
         Files.setLastModifiedTime(newPath, newFileTime);
@@ -2308,7 +2308,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
                 if (!theFile.getParentFile().exists()) {
                     fail("Cannot create file " + theFile + " as the parent directory does not exist");
                 }
-                try (final BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(theFile.toPath()))) {
+                try (BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(theFile.toPath()))) {
                     TestUtils.generateTestData(output, fileSizes[i]);
                 }
             }
@@ -2367,7 +2367,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
             if (!someFile.getParentFile().exists()) {
                 fail("Cannot create file " + someFile + " as the parent directory does not exist");
             }
-            try (final BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(someFile.toPath()))) {
+            try (BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(someFile.toPath()))) {
                 TestUtils.generateTestData(output, 100);
             }
 
@@ -2410,7 +2410,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
             fail("Cannot create file " + testFile
                     + " as the parent directory does not exist");
         }
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
             TestUtils.generateTestData(output, 0);
         }
         final File destination = new File(dir, "testMoveDirectory1Dest");
@@ -2438,7 +2438,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         if (!testFile.getParentFile().exists()) {
             fail("Cannot create file " + testFile + " as the parent directory does not exist");
         }
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
             TestUtils.generateTestData(output, 0);
         }
         assertThrows(IllegalArgumentException.class, () -> FileUtils.moveDirectory(testFile, new File("foo")));
@@ -2462,7 +2462,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
             fail("Cannot create file " + testFile
                     + " as the parent directory does not exist");
         }
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
             TestUtils.generateTestData(output, 0);
         }
         final File destination = new File(dir, "testMoveDirectory1Dest");
@@ -2491,7 +2491,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
             fail("Cannot create file " + testFile
                     + " as the parent directory does not exist");
         }
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
             TestUtils.generateTestData(output, 0);
         }
         final File destDir = new File(dir, "testMoveDirectory1Dest");
@@ -2521,13 +2521,13 @@ public class FileUtilsTest extends AbstractTempDirTest {
         if (!testFile1.getParentFile().exists()) {
             fail("Cannot create file " + testFile1 + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
+        try (BufferedOutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
             TestUtils.generateTestData(output1, 0);
         }
         if (!testFile2.getParentFile().exists()) {
             fail("Cannot create file " + testFile2 + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()))) {
+        try (BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()))) {
             TestUtils.generateTestData(output, 0);
         }
         assertThrows(IOException.class, () -> FileUtils.moveDirectoryToDirectory(testFile1, testFile2, true));
@@ -2701,7 +2701,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         if (!testFile1.getParentFile().exists()) {
             fail("Cannot create file " + testFile1 + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
+        try (BufferedOutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
             TestUtils.generateTestData(output1, 0);
         }
         if (!testFile2.getParentFile().exists()) {

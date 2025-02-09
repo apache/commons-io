@@ -54,7 +54,7 @@ public class ChunkedOutputStreamTest {
     public void testBuildSetByteArrayOutputStream() throws IOException {
         final AtomicInteger numWrites = new AtomicInteger();
         try (ByteArrayOutputStream baos = newByteArrayOutputStream(numWrites);
-                final ChunkedOutputStream chunked = ChunkedOutputStream.builder().setOutputStream(baos).get()) {
+                ChunkedOutputStream chunked = ChunkedOutputStream.builder().setOutputStream(baos).get()) {
             chunked.write(new byte[IOUtils.DEFAULT_BUFFER_SIZE + 1]);
             assertEquals(2, numWrites.get());
         }
@@ -82,7 +82,7 @@ public class ChunkedOutputStreamTest {
     public void testDefaultConstructor() throws IOException {
         final AtomicInteger numWrites = new AtomicInteger();
         try (ByteArrayOutputStream baos = newByteArrayOutputStream(numWrites);
-                final ChunkedOutputStream chunked = new ChunkedOutputStream(baos)) {
+                ChunkedOutputStream chunked = new ChunkedOutputStream(baos)) {
             chunked.write(new byte[IOUtils.DEFAULT_BUFFER_SIZE + 1]);
             assertEquals(2, numWrites.get());
         }
@@ -101,7 +101,7 @@ public class ChunkedOutputStreamTest {
     public void testWriteFourChunks() throws Exception {
         final AtomicInteger numWrites = new AtomicInteger();
         try (ByteArrayOutputStream baos = newByteArrayOutputStream(numWrites);
-                final ChunkedOutputStream chunked = new ChunkedOutputStream(baos, 10)) {
+                ChunkedOutputStream chunked = new ChunkedOutputStream(baos, 10)) {
             chunked.write("0123456789012345678901234567891".getBytes());
             assertEquals(4, numWrites.get());
         }
