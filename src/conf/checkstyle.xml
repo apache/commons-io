@@ -27,6 +27,7 @@ limitations under the License.
   <module name="LineLength">
     <property name="max" value="160" />
   </module>
+  <!-- @author tags are deprecated -->
   <module name="RegexpSingleline">
     <property name="format" value="^\s+\*\s+@author\s" />
     <property name="message" value="Deprecated @author tag" />
@@ -34,21 +35,19 @@ limitations under the License.
     <property name="severity" value="warning" />
   </module>
   <module name="TreeWalker">
-    <module name="WhitespaceAfter" />
     <module name="AvoidStarImport" />
-    <module name="RedundantImport" />
-    <module name="UnusedImports" />
+    <module name="FinalLocalVariable" />
     <module name="ImportOrder">
       <property name="option" value="top"/>
       <property name="groups" value="java,javax,org"/>
       <property name="ordered" value="true"/>
       <property name="separated" value="true"/>
     </module>
+    <module name="JavadocMethod" />
+    <module name="LeftCurly" />
     <module name="NeedBraces" />
     <module name="ParenPad" />
-    <module name="LeftCurly" />
-    <module name="JavadocMethod" />
-    <module name="FinalLocalVariable" />
+    <module name="RedundantImport" />
     <!-- No Trailing whitespace -->
     <module name="Regexp">
       <property name="format" value="[ \t]+$" />
@@ -56,12 +55,7 @@ limitations under the License.
       <property name="message" value="Trailing whitespace" />
     </module>
     <module name="TypecastParenPad" />
-  </module>
-  <!-- @author tags are deprecated -->
-  <module name="RegexpSingleline">
-    <property name="format" value="^\s+\*\s+@author\s" />
-    <property name="message" value="Deprecated @author tag" />
-    <property name="fileExtensions" value="java" />
-    <property name="severity" value="warning" />
+    <module name="UnusedImports" />
+    <module name="WhitespaceAfter" />
   </module>
 </module>
