@@ -265,8 +265,8 @@ public class BoundedInputStream extends ProxyInputStream {
          * <li>{@link #getAfterRead()}</li>
          * <li>{@link #getCount()}</li>
          * <li>{@link #getMaxCount()}</li>
-         * <li>{@link #isPropagateClose()}</li>
          * <li>{@link #getOnMaxCount()}</li>
+         * <li>{@link #isPropagateClose()}</li>
          * </ul>
          *
          * @return a new instance.
