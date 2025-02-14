@@ -91,7 +91,7 @@ public final class MessageDigestInputStream extends ObservableInputStream {
          * This builder uses the following aspects:
          * </p>
          * <ul>
-         * <li>{@link #getPath()}</li>
+         * <li>{@link #getInputStream()} gets the target aspect.</li>
          * <li>{@link MessageDigest}</li>
          * </ul>
          *
@@ -99,7 +99,7 @@ public final class MessageDigestInputStream extends ObservableInputStream {
          * @throws NullPointerException if messageDigest is null.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
-         * @throws IOException                   if an I/O error occurs.
+         * @throws IOException                   if an I/O error occurs converting to an {@link InputStream} using {@link #getInputStream()}.
          * @see #getInputStream()
          * @see #getUnchecked()
          */

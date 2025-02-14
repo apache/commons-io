@@ -95,14 +95,14 @@ public final class ThrottledInputStream extends CountingInputStream {
          * This builder uses the following aspects:
          * </p>
          * <ul>
-         * <li>{@link #getInputStream()}</li>
+         * <li>{@link #getInputStream()} gets the target aspect.</li>
          * <li>maxBytesPerSecond</li>
          * </ul>
          *
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
-         * @throws IOException                   if an I/O error occurs.
+         * @throws IOException                   if an I/O error occurs converting to an {@link InputStream} using {@link #getInputStream()}.
          * @see #getInputStream()
          * @see #getUnchecked()
          */

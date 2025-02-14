@@ -101,7 +101,7 @@ public class CharSequenceInputStream extends InputStream {
          * This builder uses the following aspects:
          * </p>
          * <ul>
-         * <li>{@link #getCharSequence()}</li>
+         * <li>{@link #getCharSequence()} gets the target aspect.</li>
          * <li>{@link #getBufferSize()}</li>
          * <li>{@link CharsetEncoder}</li>
          * </ul>

@@ -261,7 +261,7 @@ public class BoundedInputStream extends ProxyInputStream {
          * This builder uses the following aspects:
          * </p>
          * <ul>
-         * <li>{@link #getInputStream()} (the target aspect)</li>
+         * <li>{@link #getInputStream()} gets the target aspect.</li>
          * <li>{@link #getAfterRead()}</li>
          * <li>{@link #getCount()}</li>
          * <li>{@link #getMaxCount()}</li>

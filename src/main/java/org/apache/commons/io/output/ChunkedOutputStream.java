@@ -77,14 +77,14 @@ public class ChunkedOutputStream extends FilterOutputStream {
          * This builder use the following aspects:
          * </p>
          * <ul>
-         * <li>{@link #getInputStream()}</li>
-         * <li>{@link #getBufferSize()} (chunk size)</li>
+         * <li>{@link #getOutputStream()} is the target aspect.</li>
+         * <li>{@link #getBufferSize()} is used for the chunk size.</li>
          * </ul>
          *
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @throws UnsupportedOperationException if the origin cannot be converted to an {@link OutputStream}.
-         * @throws IOException                   if an I/O error occurs.
+         * @throws IOException                   if an I/O error occurs converting to an {@link OutputStream} using {@link #getOutputStream()}.
          * @see #getOutputStream()
          * @see #getBufferSize()
          * @see #getUnchecked()

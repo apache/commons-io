@@ -193,10 +193,6 @@ public class ByteOrderMark implements Serializable {
         return copy;
     }
 
-    int[] getRawBytes() {
-        return bytes;
-    }
-
     /**
      * Gets the name of the {@link java.nio.charset.Charset} the BOM represents.
      *
@@ -204,6 +200,10 @@ public class ByteOrderMark implements Serializable {
      */
     public String getCharsetName() {
         return charsetName;
+    }
+
+    int[] getRawBytes() {
+        return bytes;
     }
 
     /**

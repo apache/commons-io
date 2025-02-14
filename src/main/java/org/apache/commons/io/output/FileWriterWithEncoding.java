@@ -103,14 +103,15 @@ public class FileWriterWithEncoding extends ProxyWriter {
          * This builder use the following aspects:
          * </p>
          * <ul>
-         * <li>{@link File}</li>
+         * <li>{@link File} is the target aspect.</li>
          * <li>{@link CharsetEncoder}</li>
          * <li>append</li>
          * </ul>
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a File.
-         * @throws IllegalStateException if the {@code origin} is {@code null}.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws IOException                   if an I/O error occurs converting to an {@link File} using {@link #getFile()}.
          * @see AbstractOrigin#getFile()
          * @see #getUnchecked()
          */
@@ -160,11 +161,11 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Initializes the wrapped file writer. Ensure that a cleanup occurs if the writer creation fails.
      *
-     * @param file     the file to be accessed
+     * @param file     the file to be accessed.
      * @param encoding the encoding to use - may be Charset, CharsetEncoder or String, null uses the default Charset.
-     * @param append   true to append
-     * @return a new initialized OutputStreamWriter
-     * @throws IOException if an error occurs
+     * @param append   true to append.
+     * @return a new initialized OutputStreamWriter.
+     * @throws IOException if an I/O error occurs.
      */
     private static OutputStreamWriter initWriter(final File file, final Object encoding, final boolean append) throws IOException {
         Objects.requireNonNull(file, "file");
