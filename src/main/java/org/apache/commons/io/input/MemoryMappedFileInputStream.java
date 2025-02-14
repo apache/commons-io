@@ -108,14 +108,14 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
          * This builder uses the following aspects:
          * </p>
          * <ul>
-         * <li>{@link #getPath()}</li>
+         * <li>{@link #getPath()} gets the target aspect.</li>
          * <li>{@link #getBufferSize()}</li>
          * </ul>
          *
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @throws UnsupportedOperationException if the origin cannot be converted to a {@link Path}.
-         * @throws IOException                   if an I/O error occurs.
+         * @throws IOException                   if an I/O error occurs converting to an {@link Path} using {@link #getPath()}.
          * @see #getPath()
          * @see #getBufferSize()
          * @see #getUnchecked()

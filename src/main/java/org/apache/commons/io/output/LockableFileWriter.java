@@ -90,10 +90,10 @@ public class LockableFileWriter extends Writer {
          * You must set an aspect that supports {@link File} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
-         * <li>{@link File}</li>
+         * <li>{@link File} is the target aspect.</li>
          * <li>{@link #getCharset()}</li>
          * <li>append</li>
          * <li>lockDirectory</li>
@@ -101,7 +101,8 @@ public class LockableFileWriter extends Writer {
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a File.
-         * @throws IllegalStateException if the {@code origin} is {@code null}.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws IOException                   if an I/O error occurs converting to an {@link File} using {@link #getFile()}.
          * @see AbstractOrigin#getFile()
          * @see #getUnchecked()
          */

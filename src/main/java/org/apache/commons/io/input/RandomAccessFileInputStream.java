@@ -77,7 +77,7 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
          * This builder uses the following aspects:
          * </p>
          * <ul>
-         * <li>{@link RandomAccessFile}</li>
+         * <li>{@link RandomAccessFile} gets the target aspect.</li>
          * <li>{@link File}</li>
          * <li>closeOnClose</li>
          * </ul>
@@ -85,7 +85,8 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @throws IllegalStateException         if both RandomAccessFile and origin are set.
-         * @throws UnsupportedOperationException if the origin cannot be converted to a {@link File}.
+         * @throws UnsupportedOperationException if the origin cannot be converted to a {@link RandomAccessFile}.
+         * @throws IOException                   if an I/O error occurs converting to an {@link RandomAccessFile} using {@link #getRandomAccessFile()}.
          * @see AbstractOrigin#getFile()
          * @see #getUnchecked()
          */

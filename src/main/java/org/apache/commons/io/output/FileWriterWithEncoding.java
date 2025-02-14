@@ -100,7 +100,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
          * You must set an aspect that supports {@link File} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
          * <li>{@link File} is the target aspect.</li>

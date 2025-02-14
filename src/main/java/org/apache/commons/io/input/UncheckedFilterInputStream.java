@@ -82,14 +82,15 @@ public final class UncheckedFilterInputStream extends FilterInputStream {
          * This builder uses the following aspects:
          * </p>
          * <ul>
-         * <li>{@link #getInputStream()}</li>
+         * <li>{@link #getInputStream()} gets the target aspect.</li>
          * </ul>
          *
          * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide an InputStream.
+         * @throws UnsupportedOperationException if the origin cannot provide an {@link #getInputStream()}.
          * @see #getInputStream()
          * @see #getUnchecked()
          */
+        @SuppressWarnings("resource")
         @Override
         public UncheckedFilterInputStream get() {
             // This an unchecked class, so this method is as well.

@@ -87,17 +87,18 @@ public final class UncheckedBufferedReader extends BufferedReader {
          * This builder uses the following aspects:
          * </p>
          * <ul>
-         * <li>{@link #getReader()}</li>
+         * <li>{@link #getReader()} gets the target aspect.</li>
          * <li>{@link #getBufferSize()}</li>
          * </ul>
          *
          * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide a Reader.
+         * @throws UnsupportedOperationException if the origin cannot provide a {@link Reader}.
          * @throws IllegalStateException if the {@code origin} is {@code null}.
          * @see #getReader()
          * @see #getBufferSize()
          * @see #getUnchecked()
          */
+        @SuppressWarnings("resource")
         @Override
         public UncheckedBufferedReader get() {
             // This an unchecked class, so this method is as well.

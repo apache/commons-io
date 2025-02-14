@@ -81,7 +81,7 @@ public class XmlStreamWriter extends Writer {
          * You must set an aspect that supports {@link #getOutputStream()} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
          * <li>{@link #getOutputStream()}</li>
@@ -91,7 +91,7 @@ public class XmlStreamWriter extends Writer {
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @throws UnsupportedOperationException if the origin cannot be converted to an {@link OutputStream}.
-         * @throws IOException                   if an I/O error occurs.
+         * @throws IOException                   if an I/O error occurs converting to an {@link OutputStream} using {@link #getOutputStream()}.
          * @see #getOutputStream()
          * @see #getUnchecked()
          */

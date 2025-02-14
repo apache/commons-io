@@ -94,7 +94,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
         /**
          * Builds a new {@link DeferredFileOutputStream}.
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
          * <li>{@link #getBufferSize()}</li>

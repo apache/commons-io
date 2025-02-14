@@ -165,6 +165,27 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
             return this;
         }
 
+        /**
+         * Builds a new {@link ValidatingObjectInputStream}.
+         * <p>
+         * You must set an aspect that supports {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
+         * </p>
+         * <p>
+         * This builder uses the following aspects:
+         * </p>
+         * <ul>
+         * <li>{@link #getInputStream()} gets the target aspect.</li>
+         * <li>predicate</li>
+         * <li>charsetDecoder</li>
+         * <li>writeImmediately</li>
+         * </ul>
+         *
+         * @return a new instance.
+         * @throws UnsupportedOperationException if the origin cannot provide a {@link InputStream}.
+         * @throws IOException                   if an I/O error occurs converting to an {@link InputStream} using {@link #getInputStream()}.
+         * @see #getWriter()
+         * @see #getUnchecked()
+         */
         @Override
         public ValidatingObjectInputStream get() throws IOException {
             return new ValidatingObjectInputStream(getInputStream(), predicate);

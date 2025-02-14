@@ -86,11 +86,12 @@ public final class UncheckedFilterReader extends FilterReader {
          * </ul>
          *
          * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide a Reader.
+         * @throws UnsupportedOperationException if the origin cannot provide a {@link Reader}.
          * @throws IllegalStateException if the {@code origin} is {@code null}.
          * @see #getReader()
          * @see #getUnchecked()
          */
+        @SuppressWarnings("resource")
         @Override
         public UncheckedFilterReader get() {
             // This an unchecked class, so this method is as well.

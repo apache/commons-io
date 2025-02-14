@@ -17,12 +17,14 @@
 
 package org.apache.commons.io.output;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.file.StandardOpenOption;
 import java.util.Objects;
 
+import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
@@ -60,6 +62,29 @@ public final class RandomAccessFileOutputStream extends OutputStream {
             setOpenOptions(StandardOpenOption.WRITE);
         }
 
+        /**
+         * Builds a new {@link RandomAccessFileOutputStream}.
+         * <p>
+         * You must set an aspect that supports {@link RandomAccessFile} or {@link File}, otherwise, this method throws an exception. Only set one of
+         * RandomAccessFile or an origin that can be converted to a File.
+         * </p>
+         * <p>
+         * This builder uses the following aspects:
+         * </p>
+         * <ul>
+         * <li>{@link RandomAccessFile} is the target aspect.</li>
+         * <li>{@link File}</li>
+         * <li>closeOnClose</li>
+         * </ul>
+         *
+         * @return a new instance.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws IllegalStateException         if both RandomAccessFile and origin are set.
+         * @throws UnsupportedOperationException if the origin cannot be converted to a {@link RandomAccessFile}.
+         * @throws IOException                   if an I/O error occurs converting to an {@link RandomAccessFile} using {@link #getRandomAccessFile()}.
+         * @see AbstractOrigin#getFile()
+         * @see #getUnchecked()
+         */
         @Override
         public RandomAccessFileOutputStream get() throws IOException {
             return new RandomAccessFileOutputStream(getRandomAccessFile());

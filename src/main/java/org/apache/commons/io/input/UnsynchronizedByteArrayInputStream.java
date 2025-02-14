@@ -106,8 +106,9 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
          * </ul>
          *
          * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide a byte[].
+         * @throws UnsupportedOperationException if the origin cannot provide a {@code byte[]}.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws IOException                   if an I/O error occurs converting to an {@code byte[]} using {@link AbstractOrigin#getByteArray()}.
          * @see AbstractOrigin#getByteArray()
          * @see #getUnchecked()
          */

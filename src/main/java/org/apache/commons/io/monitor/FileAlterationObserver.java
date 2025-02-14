@@ -30,6 +30,7 @@ import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
+import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractOriginSupplier;
 import org.apache.commons.io.comparator.NameFileComparator;
 import org.apache.commons.io.filefilter.TrueFileFilter;
@@ -144,6 +145,7 @@ public class FileAlterationObserver implements Serializable {
         /**
          * Gets a new {@link FileAlterationObserver} instance.
          *
+         * @throws IOException                   if an I/O error occurs converting to an {@link File} using {@link AbstractOrigin#getFile()}.
          * @see #getUnchecked()
          */
         @Override

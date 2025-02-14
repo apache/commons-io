@@ -120,7 +120,7 @@ public class WriterOutputStream extends OutputStream {
          * You must set an aspect that supports {@link #getWriter()} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
          * <li>{@link #getWriter()}</li>
@@ -130,7 +130,8 @@ public class WriterOutputStream extends OutputStream {
          * </ul>
          *
          * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide a Writer.
+         * @throws UnsupportedOperationException if the origin cannot provide a {@link Writer}.
+         * @throws IOException                   if an I/O error occurs converting to an {@link Writer} using {@link #getWriter()}.
          * @see #getWriter()
          * @see #getUnchecked()
          */

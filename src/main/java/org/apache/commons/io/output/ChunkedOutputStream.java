@@ -74,7 +74,7 @@ public class ChunkedOutputStream extends FilterOutputStream {
         /**
          * Builds a new {@link UnsynchronizedByteArrayOutputStream}.
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
          * <li>{@link #getOutputStream()} is the target aspect.</li>

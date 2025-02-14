@@ -126,15 +126,16 @@ public class ReaderInputStream extends AbstractInputStream {
          * This builder uses the following aspects:
          * </p>
          * <ul>
-         * <li>{@link #getReader()}</li>
+         * <li>{@link #getReader()} gets the target aspect.</li>
          * <li>{@link #getBufferSize()}</li>
          * <li>{@link #getCharset()}</li>
          * <li>{@link CharsetEncoder}</li>
          * </ul>
          *
          * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide a Reader.
-         * @throws IllegalStateException if the {@code origin} is {@code null}.
+         * @throws UnsupportedOperationException if the origin cannot provide a {@link Reader}.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws IOException                   if an I/O error occurs converting to a {@link Reader} using {@link #getReader()}.
          * @see #getReader()
          * @see CharsetEncoder
          * @see #getBufferSize()

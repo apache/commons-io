@@ -87,7 +87,7 @@ public class ReadAheadInputStream extends FilterInputStream {
          * This builder uses the following aspects:
          * </p>
          * <ul>
-         * <li>{@link #getInputStream()}</li>
+         * <li>{@link #getInputStream()} gets the target aspect.</li>
          * <li>{@link #getBufferSize()}</li>
          * <li>{@link ExecutorService}</li>
          * </ul>
@@ -95,7 +95,7 @@ public class ReadAheadInputStream extends FilterInputStream {
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
-         * @throws IOException                   if an I/O error occurs.
+         * @throws IOException                   if an I/O error occurs converting to an {@link InputStream} using {@link #getInputStream()}.
          * @see #getInputStream()
          * @see #getBufferSize()
          * @see #getUnchecked()

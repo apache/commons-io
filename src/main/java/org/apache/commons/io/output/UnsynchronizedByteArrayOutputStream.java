@@ -75,7 +75,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
          * Builds a new {@link UnsynchronizedByteArrayOutputStream}.
          *
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
          * <li>{@link #getBufferSize()}</li>
