@@ -97,7 +97,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
         /**
          * Builds a new {@link FileWriterWithEncoding}.
          * <p>
-         * You must set input that supports {@link File} on this builder, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link File} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
          * This builder use the following aspects:
@@ -112,8 +112,8 @@ public class FileWriterWithEncoding extends ProxyWriter {
          * @throws UnsupportedOperationException if the origin cannot provide a File.
          * @throws IllegalStateException if the {@code origin} is {@code null}.
          * @see AbstractOrigin#getFile()
+         * @see #getUnchecked()
          */
-        @SuppressWarnings("resource")
         @Override
         public FileWriterWithEncoding get() throws IOException {
             if (charsetEncoder != null && getCharset() != null && !charsetEncoder.charset().equals(getCharset())) {

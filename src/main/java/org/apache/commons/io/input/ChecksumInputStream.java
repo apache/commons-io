@@ -128,10 +128,10 @@ public final class ChecksumInputStream extends CountingInputStream {
         /**
          * Builds a new {@link ChecksumInputStream}.
          * <p>
-         * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link #getInputStream()}, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
          * <li>{@link #getInputStream()}</li>
@@ -145,6 +145,7 @@ public final class ChecksumInputStream extends CountingInputStream {
          * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
          * @throws IOException                   if an I/O error occurs.
          * @see #getInputStream()
+         * @see #getUnchecked()
          */
         @Override
         public ChecksumInputStream get() throws IOException {

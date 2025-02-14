@@ -143,6 +143,8 @@ public class FileAlterationObserver implements Serializable {
 
         /**
          * Gets a new {@link FileAlterationObserver} instance.
+         *
+         * @see #getUnchecked()
          */
         @Override
         public FileAlterationObserver get() throws IOException {

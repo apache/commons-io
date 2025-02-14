@@ -87,6 +87,7 @@ public class ChunkedOutputStream extends FilterOutputStream {
          * @throws IOException                   if an I/O error occurs.
          * @see #getOutputStream()
          * @see #getBufferSize()
+         * @see #getUnchecked()
          */
         @Override
         public ChunkedOutputStream get() throws IOException {

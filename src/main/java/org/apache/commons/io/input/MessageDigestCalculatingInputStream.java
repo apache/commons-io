@@ -86,10 +86,10 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
         /**
          * Builds a new {@link MessageDigestCalculatingInputStream}.
          * <p>
-         * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link #getInputStream()}, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
          * <li>{@link #getPath()}</li>
@@ -102,6 +102,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
          * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
          * @throws IOException                   if an I/O error occurs.
          * @see #getInputStream()
+         * @see #getUnchecked()
          */
         @Override
         public MessageDigestCalculatingInputStream get() throws IOException {

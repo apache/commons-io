@@ -76,10 +76,10 @@ public final class UncheckedFilterReader extends FilterReader {
         /**
          * Builds a new {@link UncheckedFilterReader}.
          * <p>
-         * You must set input that supports {@link #getReader()} on this builder, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link #getReader()} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
          * <li>{@link #getReader()}</li>
@@ -89,6 +89,7 @@ public final class UncheckedFilterReader extends FilterReader {
          * @throws UnsupportedOperationException if the origin cannot provide a Reader.
          * @throws IllegalStateException if the {@code origin} is {@code null}.
          * @see #getReader()
+         * @see #getUnchecked()
          */
         @Override
         public UncheckedFilterReader get() {

@@ -120,10 +120,10 @@ public class ReaderInputStream extends AbstractInputStream {
          * Builds a new {@link ReaderInputStream}.
          *
          * <p>
-         * You must set input that supports {@link #getReader()}, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link #getReader()}, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
          * <li>{@link #getReader()}</li>
@@ -138,8 +138,8 @@ public class ReaderInputStream extends AbstractInputStream {
          * @see #getReader()
          * @see CharsetEncoder
          * @see #getBufferSize()
+         * @see #getUnchecked()
          */
-        @SuppressWarnings("resource")
         @Override
         public ReaderInputStream get() throws IOException {
             return new ReaderInputStream(getReader(), charsetEncoder, getBufferSize());

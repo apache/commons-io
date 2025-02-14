@@ -75,7 +75,7 @@ public final class UncheckedFilterWriter extends FilterWriter {
         /**
          * Builds a new {@link UncheckedFilterWriter}.
          * <p>
-         * You must set input that supports {@link #getWriter()} on this builder, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link #getWriter()} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
          * This builder use the following aspects:
@@ -87,8 +87,8 @@ public final class UncheckedFilterWriter extends FilterWriter {
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a Writer.
          * @see #getWriter()
+         * @see #getUnchecked()
          */
-        @SuppressWarnings("resource")
         @Override
         public UncheckedFilterWriter get() throws IOException {
             return new UncheckedFilterWriter(getWriter());

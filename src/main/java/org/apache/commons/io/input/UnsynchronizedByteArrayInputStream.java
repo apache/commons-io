@@ -94,10 +94,10 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
         /**
          * Builds a new {@link UnsynchronizedByteArrayInputStream}.
          * <p>
-         * You must set input that supports {@code byte[]} on this builder, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@code byte[]} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
          * <li>{@code byte[]}</li>
@@ -109,6 +109,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
          * @throws UnsupportedOperationException if the origin cannot provide a byte[].
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @see AbstractOrigin#getByteArray()
+         * @see #getUnchecked()
          */
         @Override
         public UnsynchronizedByteArrayInputStream get() throws IOException {

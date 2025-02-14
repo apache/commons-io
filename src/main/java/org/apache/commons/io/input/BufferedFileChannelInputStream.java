@@ -85,10 +85,10 @@ public final class BufferedFileChannelInputStream extends InputStream {
         /**
          * Builds a new {@link BufferedFileChannelInputStream}.
          * <p>
-         * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link #getInputStream()}, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
          * <li>{@link #getInputStream()}</li>
@@ -101,6 +101,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
          * @throws IOException If an I/O error occurs
          * @see #getPath()
          * @see #getBufferSize()
+         * @see #getUnchecked()
          */
         @Override
         public BufferedFileChannelInputStream get() throws IOException {

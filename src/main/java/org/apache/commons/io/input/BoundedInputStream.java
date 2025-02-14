@@ -252,13 +252,16 @@ public class BoundedInputStream extends ProxyInputStream {
         /**
          * Builds a new {@link BoundedInputStream}.
          * <p>
-         * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link #getInputStream()}, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * If you start from an input stream, an exception can't be thrown, and you can call {@link #getUnchecked()} instead.
+         * </p>
+         * <p>
+         * This builder uses the following aspects:
          * </p>
          * <ul>
-         * <li>{@link #getInputStream()}</li>
+         * <li>{@link #getInputStream()} (the target aspect)</li>
          * <li>{@link #getAfterRead()}</li>
          * <li>{@link #getCount()}</li>
          * <li>{@link #getMaxCount()}</li>
@@ -269,8 +272,9 @@ public class BoundedInputStream extends ProxyInputStream {
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
-         * @throws IOException                   if an I/O error occurs.
+         * @throws IOException                   if an I/O error occurs converting to an {@link InputStream} using {@link #getInputStream()}.
          * @see #getInputStream()
+         * @see #getUnchecked()
          */
         @Override
         public BoundedInputStream get() throws IOException {

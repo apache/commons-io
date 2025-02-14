@@ -117,7 +117,7 @@ public class WriterOutputStream extends OutputStream {
         /**
          * Builds a new {@link WriterOutputStream}.
          * <p>
-         * You must set input that supports {@link #getWriter()} on this builder, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link #getWriter()} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
          * This builder use the following aspects:
@@ -132,8 +132,8 @@ public class WriterOutputStream extends OutputStream {
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a Writer.
          * @see #getWriter()
+         * @see #getUnchecked()
          */
-        @SuppressWarnings("resource")
         @Override
         public WriterOutputStream get() throws IOException {
             return new WriterOutputStream(getWriter(), charsetDecoder, getBufferSize(), writeImmediately);

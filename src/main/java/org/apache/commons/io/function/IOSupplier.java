@@ -48,6 +48,7 @@ public interface IOSupplier<T> {
      *
      * @return a result.
      * @throws IOException if an I/O error occurs.
+     * @see #getUnchecked()
      */
     T get() throws IOException;
 
@@ -56,6 +57,7 @@ public interface IOSupplier<T> {
      *
      * @return a result.
      * @throws UncheckedIOException if an I/O error occurs.
+     * @see #get()
      * @since 2.17.0
      */
     default T getUnchecked() throws UncheckedIOException {

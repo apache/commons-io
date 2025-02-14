@@ -199,7 +199,7 @@ public class Tailer implements Runnable, AutoCloseable {
          * Builds a new {@link Tailer}.
          *
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
          * <li>{@link #getBufferSize()}</li>
@@ -212,6 +212,7 @@ public class Tailer implements Runnable, AutoCloseable {
          * </ul>
          *
          * @return a new instance.
+         * @see #getUnchecked()
          */
         @Override
         public Tailer get() {

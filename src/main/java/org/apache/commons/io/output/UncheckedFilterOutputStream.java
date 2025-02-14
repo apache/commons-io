@@ -74,7 +74,7 @@ public final class UncheckedFilterOutputStream extends FilterOutputStream {
         /**
          * Builds a new {@link UncheckedFilterOutputStream}.
          * <p>
-         * You must set input that supports {@link #getOutputStream()} on this builder, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link #getOutputStream()} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
          * This builder use the following aspects:
@@ -88,8 +88,8 @@ public final class UncheckedFilterOutputStream extends FilterOutputStream {
          * @throws UnsupportedOperationException if the origin cannot be converted to an {@link OutputStream}.
          * @throws IOException                   if an I/O error occurs.
          * @see #getOutputStream()
+         * @see #getUnchecked()
          */
-        @SuppressWarnings("resource")
         @Override
         public UncheckedFilterOutputStream get() throws IOException {
             return new UncheckedFilterOutputStream(getOutputStream());

@@ -60,7 +60,6 @@ public final class RandomAccessFileOutputStream extends OutputStream {
             setOpenOptions(StandardOpenOption.WRITE);
         }
 
-        @SuppressWarnings("resource")
         @Override
         public RandomAccessFileOutputStream get() throws IOException {
             return new RandomAccessFileOutputStream(getRandomAccessFile());

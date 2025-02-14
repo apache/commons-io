@@ -94,7 +94,7 @@ public class QueueInputStream extends InputStream {
         /**
          * Builds a new {@link QueueInputStream}.
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
          * <li>{@link #setBlockingQueue(BlockingQueue)}</li>
@@ -102,6 +102,7 @@ public class QueueInputStream extends InputStream {
          * </ul>
          *
          * @return a new instance.
+         * @see #getUnchecked()
          */
         @Override
         public QueueInputStream get() {

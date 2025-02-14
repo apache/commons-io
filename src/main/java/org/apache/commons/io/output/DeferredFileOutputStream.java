@@ -106,6 +106,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
          * </ul>
          *
          * @return a new instance.
+         * @see #getUnchecked()
          */
         @Override
         public DeferredFileOutputStream get() {

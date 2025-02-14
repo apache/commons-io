@@ -102,10 +102,10 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
         /**
          * Builds a new {@link MemoryMappedFileInputStream}.
          * <p>
-         * You must set input that supports {@link #getPath()}, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link #getPath()}, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
          * <li>{@link #getPath()}</li>
@@ -118,6 +118,7 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
          * @throws IOException                   if an I/O error occurs.
          * @see #getPath()
          * @see #getBufferSize()
+         * @see #getUnchecked()
          */
         @Override
         public MemoryMappedFileInputStream get() throws IOException {

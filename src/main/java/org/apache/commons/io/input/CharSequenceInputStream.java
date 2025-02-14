@@ -95,10 +95,10 @@ public class CharSequenceInputStream extends InputStream {
         /**
          * Builds a new {@link CharSequenceInputStream}.
          * <p>
-         * You must set input that supports {@link #getCharSequence()}, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link #getCharSequence()}, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
          * <li>{@link #getCharSequence()}</li>
@@ -108,6 +108,7 @@ public class CharSequenceInputStream extends InputStream {
          *
          * @return a new instance.
          * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character.
+         * @see #getUnchecked()
          */
         @Override
         public CharSequenceInputStream get() {

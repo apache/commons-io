@@ -66,8 +66,8 @@ public class ProxyOutputStream extends FilterOutputStream {
          * @throws UnsupportedOperationException if the origin cannot be converted to an {@link OutputStream}.
          * @throws IOException                   if an I/O error occurs.
          * @see #getOutputStream()
+         * @see #getUnchecked()
          */
-        @SuppressWarnings("resource") // Caller closes.
         @Override
         public ProxyOutputStream get() throws IOException {
             return new ProxyOutputStream(getOutputStream());

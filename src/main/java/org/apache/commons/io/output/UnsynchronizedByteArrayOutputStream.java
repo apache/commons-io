@@ -83,6 +83,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
          *
          * @return a new instance.
          * @see AbstractOrigin#getByteArray()
+         * @see #getUnchecked()
          */
         @Override
         public UnsynchronizedByteArrayOutputStream get() {

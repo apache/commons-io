@@ -78,7 +78,7 @@ public class XmlStreamWriter extends Writer {
         /**
          * Builds a new {@link XmlStreamWriter}.
          * <p>
-         * You must set input that supports {@link #getOutputStream()} on this builder, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link #getOutputStream()} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
          * This builder use the following aspects:
@@ -93,8 +93,8 @@ public class XmlStreamWriter extends Writer {
          * @throws UnsupportedOperationException if the origin cannot be converted to an {@link OutputStream}.
          * @throws IOException                   if an I/O error occurs.
          * @see #getOutputStream()
+         * @see #getUnchecked()
          */
-        @SuppressWarnings("resource")
         @Override
         public XmlStreamWriter get() throws IOException {
             return new XmlStreamWriter(getOutputStream(), getCharset());

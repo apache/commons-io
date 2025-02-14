@@ -81,10 +81,10 @@ public class ReadAheadInputStream extends FilterInputStream {
         /**
          * Builds a new {@link ReadAheadInputStream}.
          * <p>
-         * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link #getInputStream()}, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
          * <li>{@link #getInputStream()}</li>
@@ -98,8 +98,8 @@ public class ReadAheadInputStream extends FilterInputStream {
          * @throws IOException                   if an I/O error occurs.
          * @see #getInputStream()
          * @see #getBufferSize()
+         * @see #getUnchecked()
          */
-        @SuppressWarnings("resource")
         @Override
         public ReadAheadInputStream get() throws IOException {
             return new ReadAheadInputStream(getInputStream(), getBufferSize(), executorService != null ? executorService : newExecutorService(),

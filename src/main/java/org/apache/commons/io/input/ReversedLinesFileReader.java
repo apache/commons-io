@@ -98,10 +98,10 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
         /**
          * Builds a new {@link ReversedLinesFileReader}.
          * <p>
-         * You must set input that supports {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
          * <li>{@link #getInputStream()}</li>
@@ -116,6 +116,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
          * @see #getPath()
          * @see #getBufferSize()
          * @see #getCharset()
+         * @see #getUnchecked()
          */
         @Override
         public ReversedLinesFileReader get() throws IOException {

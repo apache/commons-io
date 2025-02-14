@@ -133,10 +133,10 @@ public class XmlStreamReader extends Reader {
         /**
          * Builds a new {@link XmlStreamWriter}.
          * <p>
-         * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link #getInputStream()}, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
          * <li>{@link #getInputStream()}</li>
@@ -151,8 +151,8 @@ public class XmlStreamReader extends Reader {
          * @throws IOException                   if an I/O error occurs.
          * @throws XmlStreamReaderException thrown if the Charset encoding could not be determined according to the specification.
          * @see #getInputStream()
+         * @see #getUnchecked()
          */
-        @SuppressWarnings("resource")
         @Override
         public XmlStreamReader get() throws IOException {
             final String defaultEncoding = nullCharset ? null : getCharset().name();
