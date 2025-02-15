@@ -188,7 +188,7 @@ public class Charsets {
      *
      * @param charset The charset to test, may be null.
      * @param defaultCharset The charset to return if charset is null, may be null.
-     * @return a Charset .
+     * @return a Charset.
      * @since 2.12.0
      */
     public static Charset toCharset(final Charset charset, final Charset defaultCharset) {

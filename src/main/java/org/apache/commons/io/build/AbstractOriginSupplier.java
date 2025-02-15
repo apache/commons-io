@@ -176,7 +176,7 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
      * Constructs a new writer origin for a file.
      *
      * @param origin the writer.
-     * @return a new writer .
+     * @return a new writer.
      */
     protected static WriterOrigin newWriterOrigin(final Writer origin) {
         return new WriterOrigin(origin);
