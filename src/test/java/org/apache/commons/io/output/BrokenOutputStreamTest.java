@@ -31,7 +31,6 @@ import org.junit.jupiter.params.provider.MethodSource;
  * Tests {@link BrokenOutputStream}.
  */
 public class BrokenOutputStreamTest {
-
     private static BrokenOutputStream createBrokenOutputStream(final Throwable exception) {
         if (exception instanceof IOException) {
             return new BrokenOutputStream((IOException) exception);
@@ -69,12 +68,11 @@ public class BrokenOutputStreamTest {
                 newStream.write(1);
             }
         });
-        assertEquals("Broken output stream", thrown.getMessage());
-
+        assertEquals("Broken output stream: write(int)", thrown.getMessage());
         final Throwable[] suppressed = thrown.getSuppressed();
         assertEquals(1, suppressed.length);
         assertEquals(IOException.class, suppressed[0].getClass());
-        assertEquals("Broken output stream", suppressed[0].getMessage());
+        assertEquals("Broken output stream: close()", suppressed[0].getMessage());
     }
 
     @ParameterizedTest
@@ -103,5 +101,4 @@ public class BrokenOutputStreamTest {
         final BrokenOutputStream stream = createBrokenOutputStream(exception);
         assertEquals(exception, assertThrows(clazz, () -> stream.write(1)));
     }
-
 }
