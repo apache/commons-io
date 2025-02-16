@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.jupiter.api.Test;
 
@@ -47,6 +48,27 @@ public class ThresholdingOutputStreamTest {
         assertFalse(out.isThresholdExceeded());
         assertEquals(expectedThreshold, out.getThreshold());
         assertEquals(expectedByeCount, out.getByteCount());
+    }
+
+    @Test
+    public void testResetByteCount() throws Exception {
+        final int threshold = 1;
+        final AtomicInteger counter = new AtomicInteger();
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream(); ThresholdingOutputStream out = new ThresholdingOutputStream(threshold, tos -> {
+            counter.incrementAndGet();
+            tos.resetByteCount();
+        }, o -> os)) {
+            assertThresholdingInitialState(out, threshold, 0);
+            assertEquals(0, counter.get());
+            out.write('a');
+            assertFalse(out.isThresholdExceeded());
+            out.write('a');
+            assertEquals(1, counter.get());
+            assertFalse(out.isThresholdExceeded());
+            out.write('a');
+            out.write('a');
+            assertEquals(3, counter.get());
+        }
     }
 
     @Test
