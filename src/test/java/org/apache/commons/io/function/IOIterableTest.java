@@ -18,6 +18,7 @@
 package org.apache.commons.io.function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
@@ -42,6 +43,11 @@ public class IOIterableTest {
         @Override
         public IOIterator<Path> iterator() {
             return IOIterator.adapt(list);
+        }
+
+        @Override
+        public Iterable<Path> unwrap() {
+            return list;
         }
 
     }
@@ -75,5 +81,11 @@ public class IOIterableTest {
         final AtomicInteger ref = new AtomicInteger();
         iterable.spliterator().forEachRemaining(e -> ref.incrementAndGet());
         assertEquals(2, ref.get());
+    }
+
+    @Test
+    public void testUnrwap() throws IOException {
+        assertSame(fixture.list, iterable.unwrap());
+        assertSame(fixture.unwrap(), iterable.unwrap());
     }
 }

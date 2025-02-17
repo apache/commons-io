@@ -584,4 +584,9 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
         return lines.isEmpty() ? EMPTY_STRING : String.join(System.lineSeparator(), lines) + System.lineSeparator();
     }
 
+    @Override
+    public Iterable<String> unwrap() {
+        return null;
+    }
+
 }

@@ -37,8 +37,7 @@ public interface IOIterable<T> {
      * @see Iterable#iterator()
      */
     default void forEach(final IOConsumer<? super T> action) throws IOException {
-        Objects.requireNonNull(action);
-        iterator().forEachRemaining(action);
+        iterator().forEachRemaining(Objects.requireNonNull(action));
     }
 
     /**
@@ -58,5 +57,14 @@ public interface IOIterable<T> {
     default IOSpliterator<T> spliterator() {
         return IOSpliteratorAdapter.adapt(new UncheckedIOIterable<>(this).spliterator());
     }
+
+    /**
+     * Unwraps this instance and returns the underlying {@link Iterable}.
+     * <p>
+     * Implementations may not have anything to unwrap and that behavior is undefined for now.
+     * </p>
+     * @return the underlying Iterable.
+     */
+    Iterable<T> unwrap();
 
 }
