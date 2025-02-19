@@ -299,7 +299,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertNull(file.getParentFile());
         try {
             if (createFile) {
-                TestUtils.createLineBasedFile(file, new String[]{"Hello"});
+                TestUtils.createLineFileUtf8(file, new String[]{"Hello"});
             }
             try (FileOutputStream out = FileUtils.openOutputStream(file)) {
                 out.write(0);
@@ -361,7 +361,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void test_openInputStream_exists() throws Exception {
         final File file = new File(tempDirFile, "test.txt");
-        TestUtils.createLineBasedFile(file, new String[]{"Hello"});
+        TestUtils.createLineFileUtf8(file, new String[]{"Hello"});
         try (FileInputStream in = FileUtils.openInputStream(file)) {
             assertEquals('H', in.read());
         }
@@ -383,7 +383,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void test_openOutputStream_exists() throws Exception {
         final File file = new File(tempDirFile, "test.txt");
-        TestUtils.createLineBasedFile(file, new String[]{"Hello"});
+        TestUtils.createLineFileUtf8(file, new String[]{"Hello"});
         try (FileOutputStream out = FileUtils.openOutputStream(file)) {
             out.write(0);
         }
@@ -2836,7 +2836,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
         try {
             final String[] data = {"hello", "/u1234", "", "this is", "some text"};
-            TestUtils.createLineBasedFile(file, data);
+            TestUtils.createLineFileUtf8(file, data);
 
             final List<String> lines = FileUtils.readLines(file, UTF_8);
             assertEquals(Arrays.asList(data), lines);

@@ -184,7 +184,7 @@ public abstract class TestUtils {
         }
     }
 
-    public static void createLineBasedFile(final File file, final String[] data) throws IOException {
+    public static void createLineFileUtf8(final File file, final String[] data) throws IOException {
         if (file.getParentFile() != null && !file.getParentFile().exists()) {
             throw new IOException("Cannot create file " + file + " as the parent directory does not exist");
         }
