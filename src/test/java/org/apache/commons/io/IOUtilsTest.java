@@ -1020,7 +1020,7 @@ public class IOUtilsTest {
         final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         CharSequence csq = null;
         try {
-            final String[] data = {"hello", "/u1234", "", "this is", "some text"};
+            final String[] data = {"hello", "\u1234", "", "this is", "some text"};
             TestUtils.createLineFileUtf8(file, data);
             csq = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
             final List<String> lines = IOUtils.readLines(csq);
@@ -1035,7 +1035,7 @@ public class IOUtilsTest {
         final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         StringBuilder csq = null;
         try {
-            final String[] data = {"hello", "/u1234", "", "this is", "some text"};
+            final String[] data = {"hello", "\u1234", "", "this is", "some text"};
             TestUtils.createLineFileUtf8(file, data);
             csq = new StringBuilder(new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8));
             final List<String> lines = IOUtils.readLines(csq);
@@ -1068,9 +1068,8 @@ public class IOUtilsTest {
         final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         InputStream in = null;
         try {
-            final String[] data = {"hello", "/u1234", "", "this is", "some text"};
+            final String[] data = { "\u4f60\u597d", "hello", "\u1234", "", "this is", "some text" };
             TestUtils.createLineFileUtf8(file, data);
-
             in = Files.newInputStream(file.toPath());
             final List<String> lines = IOUtils.readLines(in, UTF_8);
             assertEquals(Arrays.asList(data), lines);
@@ -1086,7 +1085,7 @@ public class IOUtilsTest {
         final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         Reader in = null;
         try {
-            final String[] data = {"hello", "/u1234", "", "this is", "some text"};
+            final String[] data = {"hello", "\u1234", "", "this is", "some text"};
             TestUtils.createLineFileUtf8(file, data);
             in = new InputStreamReader(Files.newInputStream(file.toPath()));
             final List<String> lines = IOUtils.readLines(in);
