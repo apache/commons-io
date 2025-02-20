@@ -2815,7 +2815,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testReadFileToStringWithDefaultEncoding() throws Exception {
         final File file = new File(tempDirFile, "read.obj");
-        final String fixture = "Hello /u1234";
+        final String fixture = "Hello \u1234";
         Files.write(file.toPath(), fixture.getBytes());
 
         assertEquals(fixture, FileUtils.readFileToString(file));
@@ -2824,18 +2824,18 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testReadFileToStringWithEncoding() throws Exception {
         final File file = new File(tempDirFile, "read.obj");
-        final byte[] text = "Hello /u1234".getBytes(StandardCharsets.UTF_8);
+        final byte[] text = "Hello \u1234".getBytes(StandardCharsets.UTF_8);
         Files.write(file.toPath(), text);
 
         final String data = FileUtils.readFileToString(file, "UTF8");
-        assertEquals("Hello /u1234", data);
+        assertEquals("Hello \u1234", data);
     }
 
     @Test
     public void testReadLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
         try {
-            final String[] data = {"hello", "/u1234", "", "this is", "some text"};
+            final String[] data = {"hello", "\u1234", "", "this is", "some text"};
             TestUtils.createLineFileUtf8(file, data);
 
             final List<String> lines = FileUtils.readLines(file, UTF_8);
@@ -3270,16 +3270,16 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testWriteCharSequence1() throws Exception {
         final File file = new File(tempDirFile, "write.txt");
-        FileUtils.write(file, "Hello /u1234", "UTF8");
-        final byte[] text = "Hello /u1234".getBytes(StandardCharsets.UTF_8);
+        FileUtils.write(file, "Hello \u1234", "UTF8");
+        final byte[] text = "Hello \u1234".getBytes(StandardCharsets.UTF_8);
         TestUtils.assertEqualContent(text, file);
     }
 
     @Test
     public void testWriteCharSequence2() throws Exception {
         final File file = new File(tempDirFile, "write.txt");
-        FileUtils.write(file, "Hello /u1234", (String) null);
-        final byte[] text = "Hello /u1234".getBytes();
+        FileUtils.write(file, "Hello \u1234", (String) null);
+        final byte[] text = "Hello \u1234".getBytes();
         TestUtils.assertEqualContent(text, file);
     }
 
@@ -3489,8 +3489,8 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testWriteStringToFileIntoNonExistentSubdir() throws Exception {
         final File file = new File(tempDirFile, "subdir/write.txt");
-        FileUtils.writeStringToFile(file, "Hello /u1234", (Charset) null);
-        final byte[] text = "Hello /u1234".getBytes();
+        FileUtils.writeStringToFile(file, "Hello \u1234", (Charset) null);
+        final byte[] text = "Hello \u1234".getBytes();
         TestUtils.assertEqualContent(text, file);
     }
 
@@ -3505,16 +3505,16 @@ public class FileUtilsTest extends AbstractTempDirTest {
     public void testWriteStringToFileIntoSymlinkedDir() throws Exception {
         final Path symlinkDir = createTempSymbolicLinkedRelativeDir().getLeft();
         final File file = symlinkDir.resolve("file").toFile();
-        FileUtils.writeStringToFile(file, "Hello /u1234", StandardCharsets.UTF_8);
-        final byte[] text = "Hello /u1234".getBytes();
+        FileUtils.writeStringToFile(file, "Hello \u1234", StandardCharsets.UTF_8);
+        final byte[] text = "Hello \u1234".getBytes();
         TestUtils.assertEqualContent(text, file);
     }
 
     @Test
     public void testWriteStringToFileWithCharset() throws Exception {
         final File file = new File(tempDirFile, "write.txt");
-        FileUtils.writeStringToFile(file, "Hello /u1234", "UTF8");
-        final byte[] text = "Hello /u1234".getBytes(StandardCharsets.UTF_8);
+        FileUtils.writeStringToFile(file, "Hello \u1234", "UTF8");
+        final byte[] text = "Hello \u1234".getBytes(StandardCharsets.UTF_8);
         TestUtils.assertEqualContent(text, file);
     }
 
@@ -3546,16 +3546,16 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testWriteStringToFileWithNullCharset() throws Exception {
         final File file = new File(tempDirFile, "write.txt");
-        FileUtils.writeStringToFile(file, "Hello /u1234", (Charset) null);
-        final byte[] text = "Hello /u1234".getBytes();
+        FileUtils.writeStringToFile(file, "Hello \u1234", (Charset) null);
+        final byte[] text = "Hello \u1234".getBytes();
         TestUtils.assertEqualContent(text, file);
     }
 
     @Test
     public void testWriteStringToFileWithNullStringCharset() throws Exception {
         final File file = new File(tempDirFile, "write.txt");
-        FileUtils.writeStringToFile(file, "Hello /u1234", (String) null);
-        final byte[] text = "Hello /u1234".getBytes();
+        FileUtils.writeStringToFile(file, "Hello \u1234", (String) null);
+        final byte[] text = "Hello \u1234".getBytes();
         TestUtils.assertEqualContent(text, file);
     }
 
