@@ -574,8 +574,8 @@ public class PathUtilsTest extends AbstractTempDirTest {
     @Test
     public void testWriteStringToFile1() throws Exception {
         final Path file = tempDirPath.resolve("write.txt");
-        PathUtils.writeString(file, "Hello /u1234", StandardCharsets.UTF_8);
-        final byte[] text = "Hello /u1234".getBytes(StandardCharsets.UTF_8);
+        PathUtils.writeString(file, "Hello \u1234", StandardCharsets.UTF_8);
+        final byte[] text = "Hello \u1234".getBytes(StandardCharsets.UTF_8);
         TestUtils.assertEqualContent(text, file);
     }
 
