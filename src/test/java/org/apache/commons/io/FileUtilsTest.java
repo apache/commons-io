@@ -358,95 +358,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
         }
     }
 
-    @Test
-    public void test_openInputStream_exists() throws Exception {
-        final File file = new File(tempDirFile, "test.txt");
-        TestUtils.createLineFileUtf8(file, new String[]{"Hello"});
-        try (FileInputStream in = FileUtils.openInputStream(file)) {
-            assertEquals('H', in.read());
-        }
-    }
-
-    @Test
-    public void test_openInputStream_existsButIsDirectory() {
-        final File directory = new File(tempDirFile, "subdir");
-        directory.mkdirs();
-        assertThrows(IOException.class, () -> FileUtils.openInputStream(directory));
-    }
-
-    @Test
-    public void test_openInputStream_notExists() {
-        final File directory = new File(tempDirFile, "test.txt");
-        assertThrows(IOException.class, () -> FileUtils.openInputStream(directory));
-    }
-
-    @Test
-    public void test_openOutputStream_exists() throws Exception {
-        final File file = new File(tempDirFile, "test.txt");
-        TestUtils.createLineFileUtf8(file, new String[]{"Hello"});
-        try (FileOutputStream out = FileUtils.openOutputStream(file)) {
-            out.write(0);
-        }
-        assertTrue(file.exists());
-    }
-
-    @Test
-    public void test_openOutputStream_existsButIsDirectory() {
-        final File directory = new File(tempDirFile, "subdir");
-        directory.mkdirs();
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.openOutputStream(directory));
-    }
-
-    /**
-     * Requires admin privileges on Windows.
-     *
-     * @throws Exception For example java.nio.file.FileSystemException:
-     *                   C:\Users\you\AppData\Local\Temp\junit2324629522183300191\FileUtilsTest8613879743106252609\symlinked-dir: A required privilege is
-     *                   not held by the client.
-     */
-    @Test
-    public void test_openOutputStream_intoExistingSymlinkedDir() throws Exception {
-        final Path symlinkedDir = createTempSymbolicLinkedRelativeDir().getLeft();
-        final File file = symlinkedDir.resolve("test.txt").toFile();
-        try (FileOutputStream out = FileUtils.openOutputStream(file)) {
-            out.write(0);
-        }
-        assertTrue(file.exists());
-    }
-
-    @Test
-    public void test_openOutputStream_noParentCreateFile() throws Exception {
-        openOutputStream_noParent(true);
-    }
-
-    @Test
-    public void test_openOutputStream_noParentNoFile() throws Exception {
-        openOutputStream_noParent(false);
-    }
-
-    @Test
-    public void test_openOutputStream_notExists() throws Exception {
-        final File file = new File(tempDirFile, "a/test.txt");
-        try (FileOutputStream out = FileUtils.openOutputStream(file)) {
-            out.write(0);
-        }
-        assertTrue(file.exists());
-    }
-
-    @Test
-    public void test_openOutputStream_notExistsCannotCreate() {
-        // according to Wikipedia, most filing systems have a 256 limit on filename
-        final String longStr =
-                "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
-                        "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
-                        "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
-                        "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
-                        "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
-                        "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz";  // 300 chars
-        final File file = new File(tempDirFile, "a/" + longStr + "/test.txt");
-        assertThrows(IOException.class, () -> FileUtils.openOutputStream(file));
-    }
-
     // byteCountToDisplaySize
     @Test
     public void testByteCountToDisplaySizeBigInteger() {
@@ -2763,6 +2674,95 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final File destDir = new File(tempDirFile, "MoveToDirectoryDestDir");
         assertThrows(IOException.class, () -> FileUtils.moveToDirectory(nonExistent, destDir, true), "Expected IOException when source does not exist");
 
+    }
+
+    @Test
+    public void testOpenInputStream_exists() throws Exception {
+        final File file = new File(tempDirFile, "test.txt");
+        TestUtils.createLineFileUtf8(file, new String[]{"Hello"});
+        try (FileInputStream in = FileUtils.openInputStream(file)) {
+            assertEquals('H', in.read());
+        }
+    }
+
+    @Test
+    public void testOpenInputStream_existsButIsDirectory() {
+        final File directory = new File(tempDirFile, "subdir");
+        directory.mkdirs();
+        assertThrows(IOException.class, () -> FileUtils.openInputStream(directory));
+    }
+
+    @Test
+    public void testOpenInputStream_notExists() {
+        final File directory = new File(tempDirFile, "test.txt");
+        assertThrows(IOException.class, () -> FileUtils.openInputStream(directory));
+    }
+
+    @Test
+    public void testOpenOutputStream_exists() throws Exception {
+        final File file = new File(tempDirFile, "test.txt");
+        TestUtils.createLineFileUtf8(file, new String[]{"Hello"});
+        try (FileOutputStream out = FileUtils.openOutputStream(file)) {
+            out.write(0);
+        }
+        assertTrue(file.exists());
+    }
+
+    @Test
+    public void testOpenOutputStream_existsButIsDirectory() {
+        final File directory = new File(tempDirFile, "subdir");
+        directory.mkdirs();
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.openOutputStream(directory));
+    }
+
+    /**
+     * Requires admin privileges on Windows.
+     *
+     * @throws Exception For example java.nio.file.FileSystemException:
+     *                   C:\Users\you\AppData\Local\Temp\junit2324629522183300191\FileUtilsTest8613879743106252609\symlinked-dir: A required privilege is
+     *                   not held by the client.
+     */
+    @Test
+    public void testOpenOutputStream_intoExistingSymlinkedDir() throws Exception {
+        final Path symlinkedDir = createTempSymbolicLinkedRelativeDir().getLeft();
+        final File file = symlinkedDir.resolve("test.txt").toFile();
+        try (FileOutputStream out = FileUtils.openOutputStream(file)) {
+            out.write(0);
+        }
+        assertTrue(file.exists());
+    }
+
+    @Test
+    public void testOpenOutputStream_noParentCreateFile() throws Exception {
+        openOutputStream_noParent(true);
+    }
+
+    @Test
+    public void testOpenOutputStream_noParentNoFile() throws Exception {
+        openOutputStream_noParent(false);
+    }
+
+    @Test
+    public void testOpenOutputStream_notExists() throws Exception {
+        final File file = new File(tempDirFile, "a/test.txt");
+        try (FileOutputStream out = FileUtils.openOutputStream(file)) {
+            out.write(0);
+        }
+        assertTrue(file.exists());
+    }
+
+    @Test
+    public void testOpenOutputStream_notExistsCannotCreate() {
+        // according to Wikipedia, most filing systems have a 256 limit on filename
+        final String longStr =
+                "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
+                        "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
+                        "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
+                        "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
+                        "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
+                        "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz";  // 300 chars
+        final File file = new File(tempDirFile, "a/" + longStr + "/test.txt");
+        assertThrows(IOException.class, () -> FileUtils.openOutputStream(file));
     }
 
     @Test
