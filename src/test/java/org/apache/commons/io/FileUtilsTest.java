@@ -2815,9 +2815,9 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testReadFileToStringWithDefaultEncoding() throws Exception {
         final File file = new File(tempDirFile, "read.obj");
-        final String fixture = "Hello \u1234";
+        // Don't use non-ASCII in this test fixture because this test uses the default platform encoding.
+        final String fixture = "Hello 1234";
         Files.write(file.toPath(), fixture.getBytes());
-
         assertEquals(fixture, FileUtils.readFileToString(file));
     }
 
@@ -3506,7 +3506,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final Path symlinkDir = createTempSymbolicLinkedRelativeDir().getLeft();
         final File file = symlinkDir.resolve("file").toFile();
         FileUtils.writeStringToFile(file, "Hello \u1234", StandardCharsets.UTF_8);
-        final byte[] text = "Hello \u1234".getBytes();
+        final byte[] text = "Hello \u1234".getBytes(StandardCharsets.UTF_8);
         TestUtils.assertEqualContent(text, file);
     }
 

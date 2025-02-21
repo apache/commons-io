@@ -1085,7 +1085,8 @@ public class IOUtilsTest {
         final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         Reader in = null;
         try {
-            final String[] data = {"hello", "\u1234", "", "this is", "some text"};
+            // Don't use non-ASCII in this test fixture because this test uses the default platform encoding.
+            final String[] data = {"hello", "1234", "", "this is", "some text"};
             TestUtils.createLineFileUtf8(file, data);
             in = new InputStreamReader(Files.newInputStream(file.toPath()));
             final List<String> lines = IOUtils.readLines(in);
