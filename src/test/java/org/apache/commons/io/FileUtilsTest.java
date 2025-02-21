@@ -548,42 +548,28 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(FileUtils.contentEquals(null, null));
         assertFalse(FileUtils.contentEquals(null, file));
         assertFalse(FileUtils.contentEquals(file, null));
-        // both don't  exist
+        // both don't exist
         assertTrue(FileUtils.contentEquals(file, file));
         assertTrue(FileUtils.contentEquals(file, file2));
         assertTrue(FileUtils.contentEquals(file2, file2));
         assertTrue(FileUtils.contentEquals(file2, file));
-
         // Directories
         assertThrows(IllegalArgumentException.class, () -> FileUtils.contentEquals(tempDirFile, tempDirFile));
-
         // Different files
-        final File objFile1 =
-                new File(tempDirFile, getName() + ".object");
-        FileUtils.copyURLToFile(
-                getClass().getResource("/java/lang/Object.class"),
-                objFile1);
-
-        final File objFile1b =
-                new File(tempDirFile, getName() + ".object2");
-        FileUtils.copyURLToFile(
-                getClass().getResource("/java/lang/Object.class"),
-                objFile1b);
-
-        final File objFile2 =
-                new File(tempDirFile, getName() + ".collection");
-        FileUtils.copyURLToFile(
-                getClass().getResource("/java/util/Collection.class"),
-                objFile2);
-
+        final File objFile1 = new File(tempDirFile, getName() + ".object");
+        FileUtils.copyURLToFile(getClass().getResource("/java/lang/Object.class"), objFile1);
+        final File objFile1b = new File(tempDirFile, getName() + ".object2");
+        FileUtils.copyURLToFile(getClass().getResource("/java/lang/Object.class"), objFile1b);
+        final File objFile2 = new File(tempDirFile, getName() + ".collection");
+        FileUtils.copyURLToFile(getClass().getResource("/java/util/Collection.class"), objFile2);
+        // equals to other
         assertFalse(FileUtils.contentEquals(objFile1, objFile2));
         assertFalse(FileUtils.contentEquals(objFile1b, objFile2));
         assertTrue(FileUtils.contentEquals(objFile1, objFile1b));
-
+        // equals to self
         assertTrue(FileUtils.contentEquals(objFile1, objFile1));
         assertTrue(FileUtils.contentEquals(objFile1b, objFile1b));
         assertTrue(FileUtils.contentEquals(objFile2, objFile2));
-
         // Equal files
         file.createNewFile();
         file2.createNewFile();
