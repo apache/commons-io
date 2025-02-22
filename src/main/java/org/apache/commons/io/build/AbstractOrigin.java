@@ -84,7 +84,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          * Starting from this origin, you can everything except a Path and a File.
          * </p>
          *
-         * @param origin The origin.
+         * @param origin The origin, not null.
          */
         public AbstractRandomAccessFileOrigin(final T origin) {
             super(origin);
@@ -150,7 +150,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         /**
          * Constructs a new instance for the given origin.
          *
-         * @param origin The origin.
+         * @param origin The origin, not null.
          */
         public ByteArrayOrigin(final byte[] origin) {
             super(origin);
@@ -193,7 +193,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         /**
          * Constructs a new instance for the given origin.
          *
-         * @param origin The origin.
+         * @param origin The origin, not null.
          */
         public CharSequenceOrigin(final CharSequence origin) {
             super(origin);
@@ -258,7 +258,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         /**
          * Constructs a new instance for the given origin.
          *
-         * @param origin The origin.
+         * @param origin The origin, not null.
          */
         public FileOrigin(final File origin) {
             super(origin);
@@ -295,7 +295,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         /**
          * Constructs a new instance for the given origin.
          *
-         * @param origin The origin.
+         * @param origin The origin, not null.
          */
         public InputStreamOrigin(final InputStream origin) {
             super(origin);
@@ -335,7 +335,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         /**
          * A {@link RandomAccessFile} origin.
          *
-         * @param origin The origin.
+         * @param origin The origin, not null.
          */
         public IORandomAccessFileOrigin(final IORandomAccessFile origin) {
             super(origin);
@@ -365,7 +365,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         /**
          * Constructs a new instance for the given origin.
          *
-         * @param origin The origin.
+         * @param origin The origin, not null.
          */
         public OutputStreamOrigin(final OutputStream origin) {
             super(origin);
@@ -406,7 +406,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         /**
          * Constructs a new instance for the given origin.
          *
-         * @param origin The origin.
+         * @param origin The origin, not null.
          */
         public PathOrigin(final Path origin) {
             super(origin);
@@ -445,7 +445,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          * Starting from this origin, you can everything except a Path and a File.
          * </p>
          *
-         * @param origin The origin.
+         * @param origin The origin, not null.
          */
         public RandomAccessFileOrigin(final RandomAccessFile origin) {
             super(origin);
@@ -464,7 +464,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         /**
          * Constructs a new instance for the given origin.
          *
-         * @param origin The origin.
+         * @param origin The origin, not null.
          */
         public ReaderOrigin(final Reader origin) {
             super(origin);
@@ -523,7 +523,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         /**
          * Constructs a new instance for the given origin.
          *
-         * @param origin The origin.
+         * @param origin The origin, not null.
          */
         public URIOrigin(final URI origin) {
             super(origin);
@@ -565,7 +565,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         /**
          * Constructs a new instance for the given origin.
          *
-         * @param origin The origin.
+         * @param origin The origin, not null.
          */
         public WriterOrigin(final Writer origin) {
             super(origin);
@@ -607,7 +607,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     /**
      * Constructs a new instance for subclasses.
      *
-     * @param origin The origin.
+     * @param origin The origin, not null.
      */
     protected AbstractOrigin(final T origin) {
         this.origin = Objects.requireNonNull(origin, "origin");
