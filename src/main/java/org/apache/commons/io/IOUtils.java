@@ -450,6 +450,10 @@ public class IOUtils {
                 if (consumer != null) {
                     consumer.accept(e);
                 }
+            } catch (final Exception e) {
+                if (consumer != null) {
+                    consumer.accept(new IOException(e));
+                }
             }
         }
     }

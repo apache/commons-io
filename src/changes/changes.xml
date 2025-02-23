@@ -56,6 +56,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" issue="IO-868" due-to="Julian Reschke, Gary Gregory">Improve Javadoc for a BoundedInputStream builder() throwing IOException.</action>
       <action dev="ggregory" type="fix" issue="IO-868" due-to="Julian Reschke, Gary Gregory">Improve Javadoc for all implementations of AbstractOriginSupplier#get().</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">The Consumer to IOUtils.closeQuietly(Closeable, Consumer) now accepts Exception, not just IOException.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">The Consumer to IOUtils.close(Closeable, IOConsumer) now accepts wrapped Exception, not just IOException.</action>
       <!-- ADD -->
       <action dev="ggregory" type="add" issue="IO-860" due-to="Nico Strecker, Gary Gregory">Add ThrottledInputStream.Builder.setMaxBytes(long, ChronoUnit).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IOIterable.</action>

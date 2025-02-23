@@ -81,6 +81,7 @@ import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.io.test.ThrowOnCloseReader;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -321,28 +322,43 @@ public class IOUtilsTest {
 
     @Test
     public void testCloseConsumer() {
+        // null consumer
         final Closeable nullCloseable = null;
-        assertDoesNotThrow(() -> IOUtils.close(nullCloseable, null)); // null consumer
-        assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), null)); // null consumer
-        assertDoesNotThrow(() -> IOUtils.close(new ThrowOnCloseReader(new StringReader("s")), null)); // null consumer
-
-        final IOConsumer<IOException> nullConsumer = null; // null consumer doesn't throw
+        assertDoesNotThrow(() -> IOUtils.close(nullCloseable, null));
+        assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), null));
+        assertDoesNotThrow(() -> IOUtils.close(new ThrowOnCloseReader(new StringReader("s")), null));
+        // null consumer doesn't throw
+        final IOConsumer<IOException> nullConsumer = null;
         assertDoesNotThrow(() -> IOUtils.close(nullCloseable, nullConsumer));
         assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), nullConsumer));
         assertDoesNotThrow(() -> IOUtils.close(new ThrowOnCloseReader(new StringReader("s")), nullConsumer));
-
-        final IOConsumer<IOException> silentConsumer = IOConsumer.noop(); // noop consumer doesn't throw
+        // noop consumer doesn't throw
+        final IOConsumer<IOException> silentConsumer = IOConsumer.noop();
         assertDoesNotThrow(() -> IOUtils.close(nullCloseable, silentConsumer));
         assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), silentConsumer));
         assertDoesNotThrow(() -> IOUtils.close(new ThrowOnCloseReader(new StringReader("s")), silentConsumer));
-
-        final IOConsumer<IOException> noisyConsumer = i -> {
-            throw i;
-        }; // consumer passes on the throw
-        assertDoesNotThrow(() -> IOUtils.close(nullCloseable, noisyConsumer)); // no throw
-        assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), noisyConsumer)); // no throw
-        assertThrows(IOException.class,
-            () -> IOUtils.close(new ThrowOnCloseReader(new StringReader("s")), noisyConsumer)); // closeable throws
+        // consumer passes on the throw
+        final IOConsumer<IOException> noisyConsumer = ExceptionUtils::rethrow;
+        // no throw
+        assertDoesNotThrow(() -> IOUtils.close(nullCloseable, noisyConsumer));
+        // no throw
+        assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), noisyConsumer));
+        // closeable throws
+        assertThrows(IOException.class, () -> IOUtils.close(new ThrowOnCloseReader(new StringReader("s")), noisyConsumer));
+        // consumes other than IOException
+        final AtomicBoolean b = new AtomicBoolean();
+        final IOConsumer<IOException> consumer = e -> b.set(true);
+        // IOException subclass
+        assertDoesNotThrow(() -> IOUtils.close(new BrokenOutputStream((Throwable) new EOFException()), consumer));
+        assertTrue(b.get());
+        b.set(false);
+        // RuntimeException
+        assertDoesNotThrow(() -> IOUtils.close(new BrokenOutputStream(new RuntimeException()), consumer));
+        assertTrue(b.get());
+        b.set(false);
+        // RuntimeException subclass
+        assertDoesNotThrow(() -> IOUtils.close(new BrokenOutputStream(new UnsupportedOperationException()), consumer));
+        assertTrue(b.get());
     }
 
     @Test
