@@ -365,12 +365,8 @@ public class IOUtilsTest {
 
     @Test
     public void testCloseQuietly_CloseableIOException() {
-        assertDoesNotThrow(() -> {
-            IOUtils.closeQuietly(BrokenInputStream.INSTANCE);
-        });
-        assertDoesNotThrow(() -> {
-            IOUtils.closeQuietly(BrokenOutputStream.INSTANCE);
-        });
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(BrokenInputStream.INSTANCE));
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(BrokenOutputStream.INSTANCE));
     }
 
     @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
