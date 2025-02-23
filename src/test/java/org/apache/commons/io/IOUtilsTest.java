@@ -61,6 +61,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -364,9 +366,40 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testCloseQuietly_CloseableIOException() {
+    public void testCloseQuietly_CloseableException() {
+        // IOException
         assertDoesNotThrow(() -> IOUtils.closeQuietly(BrokenInputStream.INSTANCE));
         assertDoesNotThrow(() -> IOUtils.closeQuietly(BrokenOutputStream.INSTANCE));
+        // IOException subclass
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(new BrokenOutputStream((Throwable) new EOFException())));
+        // RuntimeException
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(new BrokenOutputStream(new RuntimeException())));
+        // RuntimeException subclass
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(new BrokenOutputStream(new UnsupportedOperationException())));
+    }
+
+    @Test
+    public void testCloseQuietly_CloseableExceptionConsumer() {
+        final AtomicBoolean b = new AtomicBoolean();
+        final Consumer<Exception> consumer = e -> b.set(true);
+        // IOException
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(BrokenInputStream.INSTANCE, consumer));
+        assertTrue(b.get());
+        b.set(false);
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(BrokenOutputStream.INSTANCE, consumer));
+        assertTrue(b.get());
+        b.set(false);
+        // IOException subclass
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(new BrokenOutputStream((Throwable) new EOFException()), consumer));
+        assertTrue(b.get());
+        b.set(false);
+        // RuntimeException
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(new BrokenOutputStream(new RuntimeException()), consumer));
+        assertTrue(b.get());
+        b.set(false);
+        // RuntimeException subclass
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(new BrokenOutputStream(new UnsupportedOperationException()), consumer));
+        assertTrue(b.get());
     }
 
     @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"

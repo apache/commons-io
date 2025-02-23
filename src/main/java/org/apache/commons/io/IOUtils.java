@@ -575,14 +575,14 @@ public class IOUtils {
      * Closes the given {@link Closeable} as a null-safe operation while consuming IOException by the given {@code consumer}.
      *
      * @param closeable The resource to close, may be null.
-     * @param consumer Consumes the IOException thrown by {@link Closeable#close()}.
+     * @param consumer Consumes the Exception thrown by {@link Closeable#close()}.
      * @since 2.7
      */
-    public static void closeQuietly(final Closeable closeable, final Consumer<IOException> consumer) {
+    public static void closeQuietly(final Closeable closeable, final Consumer<Exception> consumer) {
         if (closeable != null) {
             try {
                 closeable.close();
-            } catch (final IOException e) {
+            } catch (final Exception e) {
                 if (consumer != null) {
                     consumer.accept(e);
                 }
