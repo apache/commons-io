@@ -279,7 +279,7 @@ public class FilesUncheckTest {
 
     @Test
     public void testNewByteChannelPathOpenOptionArray() {
-        assertEquals(0, Uncheck.get(() -> {
+        assertEquals(0, Uncheck.getAsLong(() -> {
             try (SeekableByteChannel c = FilesUncheck.newByteChannel(FILE_PATH_EMPTY, StandardOpenOption.READ)) {
                 return c.size();
             }
@@ -290,7 +290,7 @@ public class FilesUncheckTest {
     public void testNewByteChannelPathSetOfQextendsOpenOptionFileAttributeOfQArray() {
         final Set<OpenOption> options = new HashSet<>();
         options.add(StandardOpenOption.READ);
-        assertEquals(0, Uncheck.get(() -> {
+        assertEquals(0, Uncheck.getAsLong(() -> {
             try (SeekableByteChannel c = FilesUncheck.newByteChannel(FILE_PATH_EMPTY, options, EMPTY_FILE_ATTRIBUTES_ARRAY)) {
                 return c.size();
             }
@@ -326,7 +326,7 @@ public class FilesUncheckTest {
 
     @Test
     public void testNewInputStream() {
-        assertEquals(0, Uncheck.get(() -> {
+        assertEquals(0, Uncheck.getAsInt(() -> {
             try (InputStream in = FilesUncheck.newInputStream(FILE_PATH_EMPTY, StandardOpenOption.READ)) {
                 return in.available();
             }

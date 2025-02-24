@@ -123,7 +123,7 @@ public final class UncheckedFilterInputStream extends FilterInputStream {
      */
     @Override
     public int available() throws UncheckedIOException {
-        return Uncheck.get(super::available);
+        return Uncheck.getAsInt(super::available);
     }
 
     /**
@@ -139,7 +139,7 @@ public final class UncheckedFilterInputStream extends FilterInputStream {
      */
     @Override
     public int read() throws UncheckedIOException {
-        return Uncheck.get(super::read);
+        return Uncheck.getAsInt(super::read);
     }
 
     /**

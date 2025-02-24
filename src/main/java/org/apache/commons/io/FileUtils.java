@@ -2939,7 +2939,7 @@ public class FileUtils {
      * @since 2.0
      */
     public static long sizeOf(final File file) {
-        return Uncheck.get(() -> PathUtils.sizeOf(file.toPath()));
+        return Uncheck.getAsLong(() -> PathUtils.sizeOf(file.toPath()));
     }
 
     /**
@@ -2985,7 +2985,7 @@ public class FileUtils {
         } catch (final FileNotFoundException e) {
             throw new UncheckedIOException(e);
         }
-        return Uncheck.get(() -> PathUtils.sizeOfDirectory(directory.toPath()));
+        return Uncheck.getAsLong(() -> PathUtils.sizeOfDirectory(directory.toPath()));
     }
 
     /**

@@ -140,7 +140,7 @@ public final class UncheckedFilterReader extends FilterReader {
      */
     @Override
     public int read() throws UncheckedIOException {
-        return Uncheck.get(super::read);
+        return Uncheck.getAsInt(super::read);
     }
 
     /**
