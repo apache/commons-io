@@ -68,6 +68,7 @@ public class ProxyOutputStream extends FilterOutputStream {
          * @see #getOutputStream()
          * @see #getUnchecked()
          */
+        @SuppressWarnings("resource") // caller closes
         @Override
         public ProxyOutputStream get() throws IOException {
             return new ProxyOutputStream(getOutputStream());

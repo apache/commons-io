@@ -85,6 +85,7 @@ public final class RandomAccessFileOutputStream extends OutputStream {
          * @see AbstractOrigin#getFile()
          * @see #getUnchecked()
          */
+        @SuppressWarnings("resource") // caller closes
         @Override
         public RandomAccessFileOutputStream get() throws IOException {
             return new RandomAccessFileOutputStream(getRandomAccessFile());

@@ -239,7 +239,7 @@ public final class Uncheck {
      * @param supplier Supplies the return value.
      * @return result from the supplier.
      * @throws UncheckedIOException if an I/O error occurs.
-     * @since 2.18.0
+     * @since 2.19.0
      */
     public static boolean getAsBoolean(final IOBooleanSupplier supplier) {
         try {

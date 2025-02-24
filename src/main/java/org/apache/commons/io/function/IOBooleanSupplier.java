@@ -25,7 +25,7 @@ import java.util.function.Supplier;
 /**
  * Like {@link BooleanSupplier} but throws {@link IOException}.
  *
- * @since 2.18.0
+ * @since 2.19.0
  */
 @FunctionalInterface
 public interface IOBooleanSupplier {

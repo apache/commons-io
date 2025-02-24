@@ -120,8 +120,8 @@ public class BrokenOutputStream extends OutputStream {
 
     /**
      * Throws the configured exception from its supplier.
-     * @param method TODO
      *
+     * @param method The exception function argument.
      * @return Throws the configured exception from its supplier.
      */
     private RuntimeException rethrow(final String method) {
