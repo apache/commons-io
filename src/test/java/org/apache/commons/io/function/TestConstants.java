@@ -38,13 +38,15 @@ final class TestConstants {
 
     static IOBinaryOperator<?> THROWING_IO_BINARY_OPERATOR = (t, u) -> throwIOException();
 
+    static IOBooleanSupplier THROWING_IO_BOOLEAN_SUPPLIER = TestConstants::throwIOException;
+
     static IOComparator<Object> THROWING_IO_COMPARATOR = (t, u) -> throwIOException();
 
     static IOConsumer<Object> THROWING_IO_CONSUMER = t -> throwIOException();
 
-    static IOIntConsumer THROWING_IO_INT_CONSUMER = t -> throwIOException();
-
     static IOFunction<Object, Object> THROWING_IO_FUNCTION = t -> throwIOException();
+
+    static IOIntConsumer THROWING_IO_INT_CONSUMER = t -> throwIOException();
 
     static IOIntSupplier THROWING_IO_INT_SUPPLIER = TestConstants::throwIOException;
 

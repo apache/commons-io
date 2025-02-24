@@ -19,42 +19,31 @@ package org.apache.commons.io.function;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 /**
- * An {@link Iterator} for an {@link IOIterator} that throws {@link UncheckedIOException} instead of {@link IOException}.
- * <p>
- * Keep package-private for now.
- * </p>
+ * Like {@link BooleanSupplier} but throws {@link IOException}.
  *
- * @param <E> the type of elements returned by this iterator.
+ * @since 2.18.0
  */
-final class UncheckedIOIterator<E> implements Iterator<E> {
-
-    private final IOIterator<E> delegate;
+@FunctionalInterface
+public interface IOBooleanSupplier {
 
     /**
-     * Constructs a new instance.
+     * Creates a {@link Supplier} for this instance that throws {@link UncheckedIOException} instead of {@link IOException}.
      *
-     * @param delegate The delegate
+     * @return an UncheckedIOException Supplier.
      */
-    UncheckedIOIterator(final IOIterator<E> delegate) {
-        this.delegate = Objects.requireNonNull(delegate, "delegate");
+    default BooleanSupplier asBooleanSupplier() {
+        return () -> Uncheck.getAsBoolean(this);
     }
 
-    @Override
-    public boolean hasNext() {
-        return Uncheck.getAsBoolean(delegate::hasNext);
-    }
-
-    @Override
-    public E next() {
-        return Uncheck.get(delegate::next);
-    }
-
-    @Override
-    public void remove() {
-        Uncheck.run(delegate::remove);
-    }
+    /**
+     * Gets a result.
+     *
+     * @return a result
+     * @throws IOException if an I/O error occurs.
+     */
+    boolean getAsBoolean() throws IOException;
 }

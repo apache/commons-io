@@ -1729,7 +1729,7 @@ public class FileUtils {
     public static boolean isFileNewer(final File file, final ChronoZonedDateTime<?> chronoZonedDateTime) {
         Objects.requireNonNull(file, PROTOCOL_FILE);
         Objects.requireNonNull(chronoZonedDateTime, "chronoZonedDateTime");
-        return Uncheck.get(() -> PathUtils.isNewer(file.toPath(), chronoZonedDateTime));
+        return Uncheck.getAsBoolean(() -> PathUtils.isNewer(file.toPath(), chronoZonedDateTime));
     }
 
     /**
@@ -1758,7 +1758,7 @@ public class FileUtils {
      * @throws UncheckedIOException if the reference file doesn't exist.
      */
     public static boolean isFileNewer(final File file, final File reference) {
-        return Uncheck.get(() -> PathUtils.isNewer(file.toPath(), reference.toPath()));
+        return Uncheck.getAsBoolean(() -> PathUtils.isNewer(file.toPath(), reference.toPath()));
     }
 
     /**
@@ -1788,7 +1788,7 @@ public class FileUtils {
      */
     public static boolean isFileNewer(final File file, final Instant instant) {
         Objects.requireNonNull(instant, "instant");
-        return Uncheck.get(() -> PathUtils.isNewer(file.toPath(), instant));
+        return Uncheck.getAsBoolean(() -> PathUtils.isNewer(file.toPath(), instant));
     }
 
     /**
@@ -1803,7 +1803,7 @@ public class FileUtils {
      */
     public static boolean isFileNewer(final File file, final long timeMillis) {
         Objects.requireNonNull(file, PROTOCOL_FILE);
-        return Uncheck.get(() -> PathUtils.isNewer(file.toPath(), timeMillis));
+        return Uncheck.getAsBoolean(() -> PathUtils.isNewer(file.toPath(), timeMillis));
     }
 
     /**
@@ -1971,7 +1971,7 @@ public class FileUtils {
      * @throws UncheckedIOException if an I/O error occurs
      */
     public static boolean isFileOlder(final File file, final File reference) throws FileNotFoundException {
-        return Uncheck.get(() -> PathUtils.isOlder(file.toPath(), reference.toPath()));
+        return Uncheck.getAsBoolean(() -> PathUtils.isOlder(file.toPath(), reference.toPath()));
     }
 
     /**
@@ -2000,7 +2000,7 @@ public class FileUtils {
      */
     public static boolean isFileOlder(final File file, final Instant instant) {
         Objects.requireNonNull(instant, "instant");
-        return Uncheck.get(() -> PathUtils.isOlder(file.toPath(), instant));
+        return Uncheck.getAsBoolean(() -> PathUtils.isOlder(file.toPath(), instant));
     }
 
     /**
@@ -2015,7 +2015,7 @@ public class FileUtils {
      */
     public static boolean isFileOlder(final File file, final long timeMillis) {
         Objects.requireNonNull(file, PROTOCOL_FILE);
-        return Uncheck.get(() -> PathUtils.isOlder(file.toPath(), timeMillis));
+        return Uncheck.getAsBoolean(() -> PathUtils.isOlder(file.toPath(), timeMillis));
     }
 
     /**

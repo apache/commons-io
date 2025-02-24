@@ -188,7 +188,7 @@ public final class UncheckedBufferedReader extends BufferedReader {
      */
     @Override
     public boolean ready() throws UncheckedIOException {
-        return Uncheck.get(super::ready);
+        return Uncheck.getAsBoolean(super::ready);
     }
 
     /**

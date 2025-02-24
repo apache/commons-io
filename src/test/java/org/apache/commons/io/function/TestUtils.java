@@ -18,11 +18,23 @@
 package org.apache.commons.io.function;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 final class TestUtils {
+
+    static boolean compareAndSetThrowsIO(final AtomicBoolean ref, final boolean update) throws IOException {
+        return compareAndSetThrowsIO(ref, false, update);
+    }
+
+    static boolean compareAndSetThrowsIO(final AtomicBoolean ref, final boolean expected, final boolean update) throws IOException {
+        if (!ref.compareAndSet(expected, update)) {
+            throw new IOException("Unexpected");
+        }
+        return ref.get(); // same as update
+    }
 
     static int compareAndSetThrowsIO(final AtomicInteger ref, final int update) throws IOException {
         return compareAndSetThrowsIO(ref, 0, update);

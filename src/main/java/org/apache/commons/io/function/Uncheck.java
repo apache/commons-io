@@ -234,6 +234,22 @@ public final class Uncheck {
     }
 
     /**
+     * Gets the result from an IO boolean supplier.
+     *
+     * @param supplier Supplies the return value.
+     * @return result from the supplier.
+     * @throws UncheckedIOException if an I/O error occurs.
+     * @since 2.18.0
+     */
+    public static boolean getAsBoolean(final IOBooleanSupplier supplier) {
+        try {
+            return supplier.getAsBoolean();
+        } catch (final IOException e) {
+            throw wrap(e);
+        }
+    }
+
+    /**
      * Gets the result from an IO int supplier.
      *
      * @param supplier Supplies the return value.

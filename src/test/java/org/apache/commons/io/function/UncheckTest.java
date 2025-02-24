@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
@@ -45,6 +46,7 @@ public class UncheckTest {
 
     private AtomicInteger atomicInt;
     private AtomicLong atomicLong;
+    private AtomicBoolean atomicBoolean;
     private AtomicReference<String> ref1;
     private AtomicReference<String> ref2;
     private AtomicReference<String> ref3;
@@ -58,13 +60,14 @@ public class UncheckTest {
     }
 
     @BeforeEach
-    public void initEach() {
+    public void beforeEach() {
         ref1 = new AtomicReference<>();
         ref2 = new AtomicReference<>();
         ref3 = new AtomicReference<>();
         ref4 = new AtomicReference<>();
         atomicInt = new AtomicInteger();
         atomicLong = new AtomicLong();
+        atomicBoolean = new AtomicBoolean();
     }
 
     private ByteArrayInputStream newInputStream() {
@@ -226,6 +229,16 @@ public class UncheckTest {
         assertThrows(UncheckedIOException.class, () -> Uncheck.get(TestConstants.THROWING_IO_SUPPLIER));
         assertEquals("new1", Uncheck.get(() -> TestUtils.compareAndSetThrowsIO(ref1, "new1")));
         assertEquals("new1", ref1.get());
+    }
+
+    @Test
+    public void testGetAsBoolean() {
+        assertThrows(UncheckedIOException.class, () -> Uncheck.getAsBoolean(() -> {
+            throw new IOException();
+        }));
+        assertThrows(UncheckedIOException.class, () -> Uncheck.getAsBoolean(TestConstants.THROWING_IO_BOOLEAN_SUPPLIER));
+        assertTrue(Uncheck.getAsBoolean(() -> TestUtils.compareAndSetThrowsIO(atomicBoolean, true)));
+        assertTrue(atomicBoolean.get());
     }
 
     @Test

@@ -172,7 +172,7 @@ public final class UncheckedFilterReader extends FilterReader {
      */
     @Override
     public boolean ready() throws UncheckedIOException {
-        return Uncheck.get(super::ready);
+        return Uncheck.getAsBoolean(super::ready);
     }
 
     /**
