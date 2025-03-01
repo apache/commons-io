@@ -20,7 +20,7 @@ import java.io.OutputStream;
 
 /**
  * A decorating output stream that counts the number of bytes that have passed
- * through the stream so far.
+ * through.
  * <p>
  * A typical use case would be during debugging, to ensure that data is being
  * written as expected.
