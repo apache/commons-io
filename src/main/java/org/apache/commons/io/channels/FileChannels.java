@@ -32,7 +32,7 @@ import org.apache.commons.io.IOUtils;
 public final class FileChannels {
 
     /**
-     * Tests if two RandomAccessFiles contents are equal.
+     * Tests if two FileChannel contents are equal starting at their respective current positions.
      *
      * @param channel1       A FileChannel.
      * @param channel2       Another FileChannel.
