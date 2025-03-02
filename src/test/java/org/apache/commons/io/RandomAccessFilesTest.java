@@ -28,8 +28,8 @@ import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
@@ -41,6 +41,10 @@ public class RandomAccessFilesTest {
     private static final Path PATH_RO_20 = Paths.get("src/test/resources/org/apache/commons/io/test-file-20byteslength.bin");
     private static final Path PATH_RO_0 = Paths.get("src/test/resources/org/apache/commons/io/test-file-empty.bin");
     private static final Path PATH_RO_0_BIS = Paths.get("src/test/resources/org/apache/commons/io/test-file-empty2.bin");
+
+    private static byte reverse(final byte b) {
+        return (byte) (~b & 0xff);
+    }
 
     @ParameterizedTest()
     @EnumSource(value = RandomAccessFileMode.class)
@@ -83,11 +87,15 @@ public class RandomAccessFilesTest {
         final Path bigFile2 = Files.createTempFile(getClass().getSimpleName(), "-2.bin");
         final Path bigFile3 = Files.createTempFile(getClass().getSimpleName(), "-3.bin");
         try {
-            final int newLength = 1_000_000;
+            // This length must match any restriction from the Surefire configuration.
+            final int newLength = 5_000_000;
             final byte[] bytes1 = new byte[newLength];
             final byte[] bytes2 = new byte[newLength];
-            Arrays.fill(bytes1, (byte) 1);
-            Arrays.fill(bytes2, (byte) 2);
+            // Make sure bytes1 and bytes2 are different despite the shuffle
+            ArrayUtils.shuffle(bytes1);
+            bytes1[0] = 1;
+            ArrayUtils.shuffle(bytes2);
+            bytes2[0] = 2;
             Files.write(bigFile1, bytes1);
             Files.write(bigFile2, bytes2);
             try (RandomAccessFile raf1 = mode.create(bigFile1);
@@ -96,9 +104,20 @@ public class RandomAccessFilesTest {
                 assertFalse(RandomAccessFiles.contentEquals(RandomAccessFiles.reset(raf2), RandomAccessFiles.reset(raf1)));
                 assertTrue(RandomAccessFiles.contentEquals(RandomAccessFiles.reset(raf1), RandomAccessFiles.reset(raf1)));
             }
-            // Make the last byte different
-            final byte[] bytes3 = bytes1.clone();
-            bytes3[bytes3.length - 1] = 9;
+            // Make the LAST byte different.
+            byte[] bytes3 = bytes1.clone();
+            final int last = bytes3.length - 1;
+            bytes3[last] = reverse(bytes3[last]);
+            Files.write(bigFile3, bytes3);
+            try (RandomAccessFile raf1 = mode.create(bigFile1);
+                    RandomAccessFile raf3 = mode.create(bigFile3)) {
+                assertFalse(RandomAccessFiles.contentEquals(raf1, raf3));
+                assertFalse(RandomAccessFiles.contentEquals(RandomAccessFiles.reset(raf3), RandomAccessFiles.reset(raf1)));
+            }
+            // Make a byte in the middle different
+            bytes3 = bytes1.clone();
+            final int middle = bytes3.length / 2;
+            bytes3[middle] = reverse(bytes3[middle]);
             Files.write(bigFile3, bytes3);
             try (RandomAccessFile raf1 = mode.create(bigFile1);
                     RandomAccessFile raf3 = mode.create(bigFile3)) {
