@@ -93,6 +93,19 @@ public class FileChannelsTest extends AbstractTempDirTest {
             try (FileChannel fc1 = FileChannel.open(bigFile1); FileChannel fc3 = FileChannel.open(bigFile3)) {
                 assertFalse(FileChannels.contentEquals(fc1, fc3, bufferSize));
                 assertFalse(FileChannels.contentEquals(reset(fc3), reset(fc1), bufferSize));
+                // Test just the last byte
+                fc1.position(last);
+                fc3.position(last);
+                assertFalse(FileChannels.contentEquals(fc1, fc3, bufferSize));
+            }
+            // Make the LAST byte equal.
+            bytes3 = bytes1.clone();
+            Files.write(bigFile3, bytes3);
+            try (FileChannel fc1 = FileChannel.open(bigFile1); FileChannel fc3 = FileChannel.open(bigFile3)) {
+                // Test just the last byte
+                fc1.position(last);
+                fc3.position(last);
+                assertTrue(FileChannels.contentEquals(fc1, fc3, bufferSize));
             }
             // Make a byte in the middle different
             bytes3 = bytes1.clone();
@@ -121,16 +134,16 @@ public class FileChannelsTest extends AbstractTempDirTest {
         FileUtils.writeStringToFile(file2, content2, US_ASCII);
         // File checksums are different
         assertNotEquals(FileUtils.checksumCRC32(file1), FileUtils.checksumCRC32(file2));
-        try (FileInputStream stream1 = new FileInputStream(file1);
-                FileInputStream stream2 = new FileInputStream(file2);
-                FileChannel channel1 = stream1.getChannel();
-                FileChannel channel2 = stream2.getChannel()) {
+        try (FileInputStream in1 = new FileInputStream(file1);
+                FileInputStream in2 = new FileInputStream(file2);
+                FileChannel channel1 = in1.getChannel();
+                FileChannel channel2 = in2.getChannel()) {
             assertFalse(FileChannels.contentEquals(channel1, channel2, bufferSize));
         }
-        try (FileInputStream stream1 = new FileInputStream(file1);
-                FileInputStream stream2 = new FileInputStream(file2);
-                FileChannel channel1 = stream1.getChannel();
-                FileChannel channel2 = stream2.getChannel()) {
+        try (FileInputStream in1 = new FileInputStream(file1);
+                FileInputStream in2 = new FileInputStream(file2);
+                FileChannel channel1 = in1.getChannel();
+                FileChannel channel2 = in2.getChannel()) {
             assertTrue(FileChannels.contentEquals(channel1, channel1, bufferSize));
             assertTrue(FileChannels.contentEquals(channel2, channel2, bufferSize));
         }
@@ -161,10 +174,10 @@ public class FileChannelsTest extends AbstractTempDirTest {
         assertFalse(isEmpty(notEmpty));
         // File checksums are different
         assertNotEquals(FileUtils.checksumCRC32(empty), FileUtils.checksumCRC32(notEmpty));
-        try (FileInputStream streamEmpty = new FileInputStream(empty);
-                FileInputStream streamNotEmpty = new FileInputStream(notEmpty);
-                FileChannel channelEmpty = streamEmpty.getChannel();
-                FileChannel channelNotEmpty = streamNotEmpty.getChannel()) {
+        try (FileInputStream inEmpty = new FileInputStream(empty);
+                FileInputStream inNotEmpty = new FileInputStream(notEmpty);
+                FileChannel channelEmpty = inEmpty.getChannel();
+                FileChannel channelNotEmpty = inNotEmpty.getChannel()) {
             assertFalse(FileChannels.contentEquals(channelEmpty, channelNotEmpty, bufferSize));
             assertFalse(FileChannels.contentEquals(null, channelNotEmpty, bufferSize));
             assertFalse(FileChannels.contentEquals(channelNotEmpty, null, bufferSize));
