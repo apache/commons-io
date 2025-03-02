@@ -19,7 +19,6 @@ package org.apache.commons.io;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.channels.FileChannel;
 import java.util.Objects;
 
 import org.apache.commons.io.channels.FileChannels;
@@ -56,11 +55,9 @@ public class RandomAccessFiles {
             return true;
         }
         // Dig in and to the work
-        // We do not close FileChannels because that closes the owning RandomAccessFile.
+        // We do not close FileChannels because that would close the owning RandomAccessFile.
         // Instead, the caller is assumed to manage the given RandomAccessFile objects.
-        final FileChannel channel1 = raf1.getChannel();
-        final FileChannel channel2 = raf2.getChannel();
-        return FileChannels.contentEquals(channel1, channel2, IOUtils.DEFAULT_BUFFER_SIZE);
+        return FileChannels.contentEquals(raf1.getChannel(), raf2.getChannel(), IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
     private static long length(final RandomAccessFile raf) throws IOException {
