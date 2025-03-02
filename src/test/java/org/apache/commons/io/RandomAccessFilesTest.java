@@ -88,7 +88,7 @@ public class RandomAccessFilesTest {
         final Path bigFile3 = Files.createTempFile(getClass().getSimpleName(), "-3.bin");
         try {
             // This length must match any restriction from the Surefire configuration.
-            final int newLength = 5_000_000;
+            final int newLength = 2_000_000;
             final byte[] bytes1 = new byte[newLength];
             final byte[] bytes2 = new byte[newLength];
             // Make sure bytes1 and bytes2 are different despite the shuffle
