@@ -21,7 +21,6 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,8 +35,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.file.AbstractTempDirTest;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.junitpioneer.jupiter.cartesian.CartesianTest;
 import org.junitpioneer.jupiter.cartesian.CartesianTest.Values;
 
@@ -53,41 +50,43 @@ public class FileChannelsTest extends AbstractTempDirTest {
     private static final int SMALL_BUFFER_SIZE = 1024;
     private static final String CONTENT = StringUtils.repeat("x", SMALL_BUFFER_SIZE);
 
-    public static int[] getBufferSizes() {
-        // 1 and 2 are unusual and slow edge cases, but edge cases nonetheless.
-        return new int[] { 1, 2, IOUtils.DEFAULT_BUFFER_SIZE / 10, IOUtils.DEFAULT_BUFFER_SIZE, IOUtils.DEFAULT_BUFFER_SIZE * 10 };
+    @SuppressWarnings("resource") // Caller closes
+    private static FileChannel getChannel(final FileInputStream inNotEmpty, final FileChannelType fileChannelType) throws IOException {
+        return wrap(inNotEmpty.getChannel(), fileChannelType);
     }
 
+    private static boolean isEmpty(final File empty) {
+        return empty.length() == 0;
+    }
+
+    @SuppressWarnings("resource") // Caller closes
     private static FileChannel open(final Path path, final FileChannelType fileChannelType) throws IOException {
-        final FileChannel fc = FileChannel.open(path);
-        if (fileChannelType != null) {
-            switch (fileChannelType) {
-            case NON_BLOCKING:
-                return new NonBlockingFileChannelProxy(fc);
-            case STOCK:
-                return fc;
-            case PROXY:
-                return new FileChannelProxy(fc);
-            default:
-                fail("Unexpected FileChannelType " + fileChannelType);
-            }
-        }
-        return FileChannel.open(path);
+        return wrap(FileChannel.open(path), fileChannelType);
+    }
+
+    private static FileChannel reset(final FileChannel fc) throws IOException {
+        return fc.position(0);
     }
 
     private static byte reverse(final byte b) {
         return (byte) (~b & 0xff);
     }
 
-    private boolean isEmpty(final File empty) {
-        return empty.length() == 0;
+    private static FileChannel wrap(final FileChannel fc, final FileChannelType fileChannelType) throws IOException {
+        switch (fileChannelType) {
+        case NON_BLOCKING:
+            return new NonBlockingFileChannelProxy(fc);
+        case STOCK:
+            return fc;
+        case PROXY:
+            return new FileChannelProxy(fc);
+        default:
+            throw new UnsupportedOperationException("Unexpected FileChannelType " + fileChannelType);
+        }
     }
 
-    private FileChannel reset(final FileChannel fc) throws IOException {
-        return fc.position(0);
-    }
-
-    private void testContentEquals(final String content1, final String content2, final int bufferSize) throws IOException {
+    private void testContentEquals(final String content1, final String content2, final int bufferSize, final FileChannelType fileChannelType)
+            throws IOException {
         assertTrue(FileChannels.contentEquals(null, null, bufferSize));
         // Prepare test files with same size but different content
         // (first 3 bytes are different, followed by a large amount of equal content)
@@ -99,34 +98,37 @@ public class FileChannelsTest extends AbstractTempDirTest {
         assertNotEquals(FileUtils.checksumCRC32(file1), FileUtils.checksumCRC32(file2));
         try (FileInputStream in1 = new FileInputStream(file1);
                 FileInputStream in2 = new FileInputStream(file2);
-                FileChannel channel1 = in1.getChannel();
-                FileChannel channel2 = in2.getChannel()) {
+                FileChannel channel1 = getChannel(in1, fileChannelType);
+                FileChannel channel2 = getChannel(in2, fileChannelType)) {
             assertFalse(FileChannels.contentEquals(channel1, channel2, bufferSize));
         }
         try (FileInputStream in1 = new FileInputStream(file1);
                 FileInputStream in2 = new FileInputStream(file2);
-                FileChannel channel1 = in1.getChannel();
-                FileChannel channel2 = in2.getChannel()) {
+                FileChannel channel1 = getChannel(in1, fileChannelType);
+                FileChannel channel2 = getChannel(in2, fileChannelType)) {
             assertTrue(FileChannels.contentEquals(channel1, channel1, bufferSize));
             assertTrue(FileChannels.contentEquals(channel2, channel2, bufferSize));
         }
     }
 
-    @ParameterizedTest()
-    @MethodSource("getBufferSizes")
-    public void testContentEqualsDifferentPostfix(final int bufferSize) throws IOException {
-        testContentEquals(CONTENT + "ABC", CONTENT + "XYZ", bufferSize);
+    @CartesianTest()
+    public void testContentEqualsDifferentPostfix(
+            @Values(ints = { 1, 2, IOUtils.DEFAULT_BUFFER_SIZE / 10, IOUtils.DEFAULT_BUFFER_SIZE, IOUtils.DEFAULT_BUFFER_SIZE * 10 }) final int bufferSize,
+            @CartesianTest.Enum final FileChannelType fileChannelType) throws IOException {
+        testContentEquals(CONTENT + "ABC", CONTENT + "XYZ", bufferSize, fileChannelType);
     }
 
-    @ParameterizedTest()
-    @MethodSource("getBufferSizes")
-    public void testContentEqualsDifferentPrefix(final int bufferSize) throws IOException {
-        testContentEquals("ABC" + CONTENT, "XYZ" + CONTENT, bufferSize);
+    @CartesianTest()
+    public void testContentEqualsDifferentPrefix(
+            @Values(ints = { 1, 2, IOUtils.DEFAULT_BUFFER_SIZE / 10, IOUtils.DEFAULT_BUFFER_SIZE, IOUtils.DEFAULT_BUFFER_SIZE * 10 }) final int bufferSize,
+            @CartesianTest.Enum final FileChannelType fileChannelType) throws IOException {
+        testContentEquals("ABC" + CONTENT, "XYZ" + CONTENT, bufferSize, fileChannelType);
     }
 
-    @ParameterizedTest()
-    @MethodSource("getBufferSizes")
-    public void testContentEqualsEmpty(final int bufferSize) throws IOException {
+    @CartesianTest()
+    public void testContentEqualsEmpty(
+            @Values(ints = { 1, 2, IOUtils.DEFAULT_BUFFER_SIZE / 10, IOUtils.DEFAULT_BUFFER_SIZE, IOUtils.DEFAULT_BUFFER_SIZE * 10 }) final int bufferSize,
+            @CartesianTest.Enum final FileChannelType fileChannelType) throws IOException {
         assertTrue(FileChannels.contentEquals(null, null, bufferSize));
         // setup fixtures
         final File empty = new File(tempDirFile, "empty.txt");
@@ -139,8 +141,8 @@ public class FileChannelsTest extends AbstractTempDirTest {
         assertNotEquals(FileUtils.checksumCRC32(empty), FileUtils.checksumCRC32(notEmpty));
         try (FileInputStream inEmpty = new FileInputStream(empty);
                 FileInputStream inNotEmpty = new FileInputStream(notEmpty);
-                FileChannel channelEmpty = inEmpty.getChannel();
-                FileChannel channelNotEmpty = inNotEmpty.getChannel()) {
+                FileChannel channelEmpty = getChannel(inEmpty, fileChannelType);
+                FileChannel channelNotEmpty = getChannel(inNotEmpty, fileChannelType)) {
             assertFalse(FileChannels.contentEquals(channelEmpty, channelNotEmpty, bufferSize));
             assertFalse(FileChannels.contentEquals(null, channelNotEmpty, bufferSize));
             assertFalse(FileChannels.contentEquals(channelNotEmpty, null, bufferSize));
@@ -155,6 +157,7 @@ public class FileChannelsTest extends AbstractTempDirTest {
     public void testContentEqualsFileChannel(
             @Values(ints = { 1, 2, IOUtils.DEFAULT_BUFFER_SIZE / 10, IOUtils.DEFAULT_BUFFER_SIZE, IOUtils.DEFAULT_BUFFER_SIZE * 10 }) final int bufferSize)
             throws IOException {
+        final FileChannelType fileChannelType = FileChannelType.STOCK;
         final Path bigFile1 = Files.createTempFile(getClass().getSimpleName(), "-1.bin");
         final Path bigFile2 = Files.createTempFile(getClass().getSimpleName(), "-2.bin");
         final Path bigFile3 = Files.createTempFile(getClass().getSimpleName(), "-3.bin");
@@ -170,7 +173,7 @@ public class FileChannelsTest extends AbstractTempDirTest {
             bytes2[0] = 2;
             Files.write(bigFile1, bytes1);
             Files.write(bigFile2, bytes2);
-            try (FileChannel fc1 = open(bigFile1, null); FileChannel fc2 = open(bigFile2, null)) {
+            try (FileChannel fc1 = open(bigFile1, fileChannelType); FileChannel fc2 = open(bigFile2, fileChannelType)) {
                 assertFalse(FileChannels.contentEquals(fc1, fc2, bufferSize));
                 assertFalse(FileChannels.contentEquals(reset(fc2), reset(fc1), bufferSize));
                 assertTrue(FileChannels.contentEquals(reset(fc1), reset(fc1), bufferSize));
@@ -180,7 +183,7 @@ public class FileChannelsTest extends AbstractTempDirTest {
             final int last = bytes3.length - 1;
             bytes3[last] = reverse(bytes3[last]);
             Files.write(bigFile3, bytes3);
-            try (FileChannel fc1 = open(bigFile1, null); FileChannel fc3 = open(bigFile3, null)) {
+            try (FileChannel fc1 = open(bigFile1, fileChannelType); FileChannel fc3 = open(bigFile3, fileChannelType)) {
                 assertFalse(FileChannels.contentEquals(fc1, fc3, bufferSize));
                 assertFalse(FileChannels.contentEquals(reset(fc3), reset(fc1), bufferSize));
                 // Test just the last byte
@@ -191,7 +194,7 @@ public class FileChannelsTest extends AbstractTempDirTest {
             // Make the LAST byte equal.
             bytes3 = bytes1.clone();
             Files.write(bigFile3, bytes3);
-            try (FileChannel fc1 = open(bigFile1, null); FileChannel fc3 = open(bigFile3, null)) {
+            try (FileChannel fc1 = open(bigFile1, fileChannelType); FileChannel fc3 = open(bigFile3, fileChannelType)) {
                 // Test just the last byte
                 fc1.position(last);
                 fc3.position(last);
@@ -202,7 +205,7 @@ public class FileChannelsTest extends AbstractTempDirTest {
             final int middle = bytes3.length / 2;
             bytes3[middle] = reverse(bytes3[middle]);
             Files.write(bigFile3, bytes3);
-            try (FileChannel fc1 = open(bigFile1, null); FileChannel fc3 = open(bigFile3, null)) {
+            try (FileChannel fc1 = open(bigFile1, fileChannelType); FileChannel fc3 = open(bigFile3, fileChannelType)) {
                 assertFalse(FileChannels.contentEquals(fc1, fc3, bufferSize));
                 assertFalse(FileChannels.contentEquals(reset(fc3), reset(fc1), bufferSize));
             }
