@@ -62,6 +62,8 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid unnecessary boxing and unboxing of int values in UncheckedBufferedReader.read().</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid unnecessary boxing and unboxing of int values in UncheckedFilterInputStream.available() and read().</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid unnecessary boxing and unboxing of int values in UncheckedFilterReader.read().</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">FileChannels.contentEquals(FileChannel, FileChannel, int) can return false when comparing a non-blocking channel.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate FileChannels.contentEquals(FileChannel, FileChannel, int) in favor of FileChannels.contentEquals(SeekableByteChannel, SeekableByteChannel, int).</action>
       <!-- ADD -->
       <action dev="ggregory" type="add" issue="IO-860" due-to="Nico Strecker, Gary Gregory">Add ThrottledInputStream.Builder.setMaxBytes(long, ChronoUnit).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IOIterable.</action>
@@ -77,6 +79,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add BrokenOutputStream.BrokenOutputStream(Function&lt;String&gt;, Throwable>) and deprecate Supplier&lt;String&gt; constructor.</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IOBooleanSupplier.</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add Uncheck.getAsBoolean(IOBooleanSupplier).</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Add FileChannels.contentEquals(SeekableByteChannel, SeekableByteChannel, int).</action>
       <!-- UPDATE -->
       <action dev="ggregory" type="update"             due-to="Dependabot, Gary Gregory">Bump commons.bytebuddy.version from 1.15.10 to 1.17.1 #710, #715, #720.</action>
       <action dev="ggregory" type="update"             due-to="Gary Gregory">Bump commons-codec:commons-codec from 1.17.1 to 1.18.0. #717.</action>

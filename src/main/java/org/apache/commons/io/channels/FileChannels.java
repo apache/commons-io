@@ -20,6 +20,7 @@ package org.apache.commons.io.channels;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.channels.SeekableByteChannel;
 import java.util.Objects;
 
 import org.apache.commons.io.IOUtils;
@@ -39,8 +40,27 @@ public final class FileChannels {
      * @param byteBufferSize The two internal buffer capacities, in bytes.
      * @return true if the contents of both RandomAccessFiles are equal, false otherwise.
      * @throws IOException if an I/O error occurs.
+     * @deprecated Use {@link #contentEquals(SeekableByteChannel, SeekableByteChannel, int)}.
      */
+    @Deprecated
     public static boolean contentEquals(final FileChannel channel1, final FileChannel channel2, final int byteBufferSize) throws IOException {
+        return contentEquals((SeekableByteChannel) channel1, channel2, byteBufferSize);
+    }
+
+    /**
+     * Tests if two readable byte channel contents are equal starting at their respective current positions.
+     * <p>
+     * If a file channel is a non-blocking file channel, it may return 0 bytes read for any given call. In order to avoid waiting forever when trying again, a
+     * timeout Duration can be specified, which when met, throws an IOException.
+     * </p>
+     *
+     * @param channel1       A readable byte channel.
+     * @param channel2       Another readable byte channel.
+     * @param byteBufferSize The two internal buffer capacities, in bytes.
+     * @return true if the contents of both RandomAccessFiles are equal, false otherwise.
+     * @throws IOException if an I/O error occurs or the timeout is met.
+     */
+    public static boolean contentEquals(final SeekableByteChannel channel1, final SeekableByteChannel channel2, final int byteBufferSize) throws IOException {
         // Short-circuit test
         if (Objects.equals(channel1, channel2)) {
             return true;
@@ -57,15 +77,30 @@ public final class FileChannels {
         // Dig in and do the work
         final ByteBuffer byteBuffer1 = ByteBuffer.allocateDirect(byteBufferSize);
         final ByteBuffer byteBuffer2 = ByteBuffer.allocateDirect(byteBufferSize);
+        int numRead1 = 0;
+        int numRead2 = 0;
+        boolean read0On1 = false;
+        boolean read0On2 = false;
         while (true) {
-            final int read1 = channel1.read(byteBuffer1);
-            final int read2 = channel2.read(byteBuffer2);
-            byteBuffer1.clear();
-            byteBuffer2.clear();
-            if (read1 == IOUtils.EOF && read2 == IOUtils.EOF) {
+            if (!read0On2) {
+                numRead1 = channel1.read(byteBuffer1);
+                byteBuffer1.clear();
+                read0On1 = numRead1 == 0;
+            }
+            if (!read0On1) {
+                numRead2 = channel2.read(byteBuffer2);
+                byteBuffer2.clear();
+                read0On2 = numRead2 == 0;
+            }
+            if (numRead1 == IOUtils.EOF && numRead2 == IOUtils.EOF) {
                 return byteBuffer1.equals(byteBuffer2);
             }
-            if (read1 != read2) {
+            if (numRead1 == 0 || numRead2 == 0) {
+                // 0 may be returned from a non-blocking channel.
+                Thread.yield();
+                continue;
+            }
+            if (numRead1 != numRead2) {
                 return false;
             }
             if (!byteBuffer1.equals(byteBuffer2)) {
@@ -74,7 +109,7 @@ public final class FileChannels {
         }
     }
 
-    private static long size(final FileChannel channel) throws IOException {
+    private static long size(final SeekableByteChannel channel) throws IOException {
         return channel != null ? channel.size() : 0;
     }
 
