@@ -59,6 +59,7 @@ public final class FileChannels {
      * @param bufferCapacity The two internal buffer capacities, in bytes.
      * @return true if the contents of both RandomAccessFiles are equal, false otherwise.
      * @throws IOException if an I/O error occurs or the timeout is met.
+     * @since 2.19.0
      */
     public static boolean contentEquals(final SeekableByteChannel channel1, final SeekableByteChannel channel2, final int bufferCapacity) throws IOException {
         // Short-circuit test
