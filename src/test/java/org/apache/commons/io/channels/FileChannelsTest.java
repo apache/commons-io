@@ -30,7 +30,6 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Duration;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -57,12 +56,6 @@ public class FileChannelsTest extends AbstractTempDirTest {
     public static int[] getBufferSizes() {
         // 1 and 2 are unusual and slow edge cases, but edge cases nonetheless.
         return new int[] { 1, 2, IOUtils.DEFAULT_BUFFER_SIZE / 10, IOUtils.DEFAULT_BUFFER_SIZE, IOUtils.DEFAULT_BUFFER_SIZE * 10 };
-    }
-
-    public static Object[][] getBufferSizesAndTimeouts() {
-        // 1 and 2 are unusual and slow edge cases, but edge cases nonetheless.
-        return new Object[][] { { 1, Duration.ZERO }, { 2, Duration.ZERO }, { IOUtils.DEFAULT_BUFFER_SIZE / 10, Duration.ZERO },
-                { IOUtils.DEFAULT_BUFFER_SIZE, Duration.ZERO }, { IOUtils.DEFAULT_BUFFER_SIZE * 10, Duration.ZERO } };
     }
 
     private static FileChannel open(final Path path, final FileChannelType fileChannelType) throws IOException {
