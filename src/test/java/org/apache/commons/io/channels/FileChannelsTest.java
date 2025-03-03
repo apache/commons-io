@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.nio.channels.SeekableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -64,81 +65,6 @@ public class FileChannelsTest extends AbstractTempDirTest {
                 { IOUtils.DEFAULT_BUFFER_SIZE, Duration.ZERO }, { IOUtils.DEFAULT_BUFFER_SIZE * 10, Duration.ZERO } };
     }
 
-    private static byte reverse(final byte b) {
-        return (byte) (~b & 0xff);
-    }
-
-    private boolean isEmpty(final File empty) {
-        return empty.length() == 0;
-    }
-
-    private FileChannel reset(final FileChannel fc) throws IOException {
-        return fc.position(0);
-    }
-
-    @CartesianTest()
-    public void testContentEquals(
-            @Values(ints = { 1, 2, IOUtils.DEFAULT_BUFFER_SIZE / 10, IOUtils.DEFAULT_BUFFER_SIZE, IOUtils.DEFAULT_BUFFER_SIZE * 10 }) final int bufferSize,
-            @CartesianTest.Enum final FileChannelType fileChannelType1, @CartesianTest.Enum final FileChannelType fileChannelType2) throws IOException {
-        final Path bigFile1 = Files.createTempFile(getClass().getSimpleName(), "-1.bin");
-        final Path bigFile2 = Files.createTempFile(getClass().getSimpleName(), "-2.bin");
-        final Path bigFile3 = Files.createTempFile(getClass().getSimpleName(), "-3.bin");
-        try {
-            // This length must match any restriction from the Surefire configuration.
-            final int newLength = 1_000_000;
-            final byte[] bytes1 = new byte[newLength];
-            final byte[] bytes2 = new byte[newLength];
-            // Make sure bytes1 and bytes2 are different despite the shuffle
-            ArrayUtils.shuffle(bytes1);
-            bytes1[0] = 1;
-            ArrayUtils.shuffle(bytes2);
-            bytes2[0] = 2;
-            Files.write(bigFile1, bytes1);
-            Files.write(bigFile2, bytes2);
-            try (FileChannel fc1 = open(bigFile1, fileChannelType1); FileChannel fc2 = open(bigFile2, fileChannelType2)) {
-                assertFalse(FileChannels.contentEquals(fc1, fc2, bufferSize));
-                assertFalse(FileChannels.contentEquals(reset(fc2), reset(fc1), bufferSize));
-                assertTrue(FileChannels.contentEquals(reset(fc1), reset(fc1), bufferSize));
-            }
-            // Make the LAST byte different.
-            byte[] bytes3 = bytes1.clone();
-            final int last = bytes3.length - 1;
-            bytes3[last] = reverse(bytes3[last]);
-            Files.write(bigFile3, bytes3);
-            try (FileChannel fc1 = open(bigFile1, fileChannelType1); FileChannel fc3 = open(bigFile3, fileChannelType2)) {
-                assertFalse(FileChannels.contentEquals(fc1, fc3, bufferSize));
-                assertFalse(FileChannels.contentEquals(reset(fc3), reset(fc1), bufferSize));
-                // Test just the last byte
-                fc1.position(last);
-                fc3.position(last);
-                assertFalse(FileChannels.contentEquals(fc1, fc3, bufferSize));
-            }
-            // Make the LAST byte equal.
-            bytes3 = bytes1.clone();
-            Files.write(bigFile3, bytes3);
-            try (FileChannel fc1 = open(bigFile1, fileChannelType1); FileChannel fc3 = open(bigFile3, fileChannelType2)) {
-                // Test just the last byte
-                fc1.position(last);
-                fc3.position(last);
-                assertTrue(FileChannels.contentEquals(fc1, fc3, bufferSize));
-            }
-            // Make a byte in the middle different
-            bytes3 = bytes1.clone();
-            final int middle = bytes3.length / 2;
-            bytes3[middle] = reverse(bytes3[middle]);
-            Files.write(bigFile3, bytes3);
-            try (FileChannel fc1 = open(bigFile1, fileChannelType1); FileChannel fc3 = open(bigFile3, fileChannelType2)) {
-                assertFalse(FileChannels.contentEquals(fc1, fc3, bufferSize));
-                assertFalse(FileChannels.contentEquals(reset(fc3), reset(fc1), bufferSize));
-            }
-        } finally {
-            // Delete ASAP
-            Files.deleteIfExists(bigFile1);
-            Files.deleteIfExists(bigFile2);
-            Files.deleteIfExists(bigFile3);
-        }
-    }
-
     private static FileChannel open(final Path path, final FileChannelType fileChannelType) throws IOException {
         final FileChannel fc = FileChannel.open(path);
         if (fileChannelType != null) {
@@ -154,6 +80,18 @@ public class FileChannelsTest extends AbstractTempDirTest {
             }
         }
         return FileChannel.open(path);
+    }
+
+    private static byte reverse(final byte b) {
+        return (byte) (~b & 0xff);
+    }
+
+    private boolean isEmpty(final File empty) {
+        return empty.length() == 0;
+    }
+
+    private FileChannel reset(final FileChannel fc) throws IOException {
+        return fc.position(0);
     }
 
     private void testContentEquals(final String content1, final String content2, final int bufferSize) throws IOException {
@@ -221,10 +159,9 @@ public class FileChannelsTest extends AbstractTempDirTest {
     }
 
     @CartesianTest
-    public void testContentEqualsTimeout(
-            @Values(ints = { 1, 2, IOUtils.DEFAULT_BUFFER_SIZE / 10, IOUtils.DEFAULT_BUFFER_SIZE, IOUtils.DEFAULT_BUFFER_SIZE * 10 }) final int bufferSize,
-            @Values(ints = { 0, 1 }) final int timeoutMillis) throws IOException {
-        final Duration timeout = Duration.ofMillis(timeoutMillis);
+    public void testContentEqualsFileChannel(
+            @Values(ints = { 1, 2, IOUtils.DEFAULT_BUFFER_SIZE / 10, IOUtils.DEFAULT_BUFFER_SIZE, IOUtils.DEFAULT_BUFFER_SIZE * 10 }) final int bufferSize)
+            throws IOException {
         final Path bigFile1 = Files.createTempFile(getClass().getSimpleName(), "-1.bin");
         final Path bigFile2 = Files.createTempFile(getClass().getSimpleName(), "-2.bin");
         final Path bigFile3 = Files.createTempFile(getClass().getSimpleName(), "-3.bin");
@@ -275,6 +212,69 @@ public class FileChannelsTest extends AbstractTempDirTest {
             try (FileChannel fc1 = open(bigFile1, null); FileChannel fc3 = open(bigFile3, null)) {
                 assertFalse(FileChannels.contentEquals(fc1, fc3, bufferSize));
                 assertFalse(FileChannels.contentEquals(reset(fc3), reset(fc1), bufferSize));
+            }
+        } finally {
+            // Delete ASAP
+            Files.deleteIfExists(bigFile1);
+            Files.deleteIfExists(bigFile2);
+            Files.deleteIfExists(bigFile3);
+        }
+    }
+
+    @CartesianTest()
+    public void testContentEqualsSeekableByteChannel(
+            @Values(ints = { 1, 2, IOUtils.DEFAULT_BUFFER_SIZE / 10, IOUtils.DEFAULT_BUFFER_SIZE, IOUtils.DEFAULT_BUFFER_SIZE * 10 }) final int bufferSize,
+            @CartesianTest.Enum final FileChannelType fileChannelType1, @CartesianTest.Enum final FileChannelType fileChannelType2) throws IOException {
+        final Path bigFile1 = Files.createTempFile(getClass().getSimpleName(), "-1.bin");
+        final Path bigFile2 = Files.createTempFile(getClass().getSimpleName(), "-2.bin");
+        final Path bigFile3 = Files.createTempFile(getClass().getSimpleName(), "-3.bin");
+        try {
+            // This length must match any restriction from the Surefire configuration.
+            final int newLength = 1_000_000;
+            final byte[] bytes1 = new byte[newLength];
+            final byte[] bytes2 = new byte[newLength];
+            // Make sure bytes1 and bytes2 are different despite the shuffle
+            ArrayUtils.shuffle(bytes1);
+            bytes1[0] = 1;
+            ArrayUtils.shuffle(bytes2);
+            bytes2[0] = 2;
+            Files.write(bigFile1, bytes1);
+            Files.write(bigFile2, bytes2);
+            try (FileChannel fc1 = open(bigFile1, fileChannelType1); FileChannel fc2 = open(bigFile2, fileChannelType2)) {
+                assertFalse(FileChannels.contentEquals((SeekableByteChannel) fc1, fc2, bufferSize));
+                assertFalse(FileChannels.contentEquals((SeekableByteChannel) reset(fc2), reset(fc1), bufferSize));
+                assertTrue(FileChannels.contentEquals((SeekableByteChannel) reset(fc1), reset(fc1), bufferSize));
+            }
+            // Make the LAST byte different.
+            byte[] bytes3 = bytes1.clone();
+            final int last = bytes3.length - 1;
+            bytes3[last] = reverse(bytes3[last]);
+            Files.write(bigFile3, bytes3);
+            try (FileChannel fc1 = open(bigFile1, fileChannelType1); FileChannel fc3 = open(bigFile3, fileChannelType2)) {
+                assertFalse(FileChannels.contentEquals((SeekableByteChannel) fc1, fc3, bufferSize));
+                assertFalse(FileChannels.contentEquals((SeekableByteChannel) reset(fc3), reset(fc1), bufferSize));
+                // Test just the last byte
+                fc1.position(last);
+                fc3.position(last);
+                assertFalse(FileChannels.contentEquals((SeekableByteChannel) fc1, fc3, bufferSize));
+            }
+            // Make the LAST byte equal.
+            bytes3 = bytes1.clone();
+            Files.write(bigFile3, bytes3);
+            try (FileChannel fc1 = open(bigFile1, fileChannelType1); FileChannel fc3 = open(bigFile3, fileChannelType2)) {
+                // Test just the last byte
+                fc1.position(last);
+                fc3.position(last);
+                assertTrue(FileChannels.contentEquals((SeekableByteChannel) fc1, fc3, bufferSize));
+            }
+            // Make a byte in the middle different
+            bytes3 = bytes1.clone();
+            final int middle = bytes3.length / 2;
+            bytes3[middle] = reverse(bytes3[middle]);
+            Files.write(bigFile3, bytes3);
+            try (FileChannel fc1 = open(bigFile1, fileChannelType1); FileChannel fc3 = open(bigFile3, fileChannelType2)) {
+                assertFalse(FileChannels.contentEquals((SeekableByteChannel) fc1, fc3, bufferSize));
+                assertFalse(FileChannels.contentEquals((SeekableByteChannel) reset(fc3), reset(fc1), bufferSize));
             }
         } finally {
             // Delete ASAP
