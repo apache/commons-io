@@ -50,7 +50,6 @@ public class NonBlockingFileChannelProxy extends FileChannelProxy {
 
     @Override
     public long read(final ByteBuffer[] dsts, final int offset, final int length) throws IOException {
-        flipState();
         return flipState() ? 0 : super.read(dsts, offset, length);
     }
 }
