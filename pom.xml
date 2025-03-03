@@ -278,7 +278,6 @@ file comparators, endian transformation classes, and much more.
       </plugin>
     </plugins>
   </build>
-
   <reporting>
     <plugins>
       <plugin>
@@ -396,7 +395,6 @@ file comparators, endian transformation classes, and much more.
       </build>
     </profile>
   </profiles>
-
   <developers>
     <developer>
       <name>Scott Sanders</name>
@@ -522,7 +520,6 @@ file comparators, endian transformation classes, and much more.
       <timezone>+1</timezone>
     </developer>
   </developers>
-
   <contributors>
     <contributor>
       <name>Rahul Akolkar</name>
@@ -588,5 +585,4 @@ file comparators, endian transformation classes, and much more.
       <name>Miguel Muñoz</name>
     </contributor>
   </contributors>
-
 </project>
