@@ -37,14 +37,14 @@ public final class FileChannels {
      *
      * @param channel1       A FileChannel.
      * @param channel2       Another FileChannel.
-     * @param byteBufferSize The two internal buffer capacities, in bytes.
+     * @param bufferCapacity The two internal buffer capacities, in bytes.
      * @return true if the contents of both RandomAccessFiles are equal, false otherwise.
      * @throws IOException if an I/O error occurs.
      * @deprecated Use {@link #contentEquals(SeekableByteChannel, SeekableByteChannel, int)}.
      */
     @Deprecated
-    public static boolean contentEquals(final FileChannel channel1, final FileChannel channel2, final int byteBufferSize) throws IOException {
-        return contentEquals((SeekableByteChannel) channel1, channel2, byteBufferSize);
+    public static boolean contentEquals(final FileChannel channel1, final FileChannel channel2, final int bufferCapacity) throws IOException {
+        return contentEquals((SeekableByteChannel) channel1, channel2, bufferCapacity);
     }
 
     /**
@@ -56,11 +56,11 @@ public final class FileChannels {
      *
      * @param channel1       A readable byte channel.
      * @param channel2       Another readable byte channel.
-     * @param byteBufferSize The two internal buffer capacities, in bytes.
+     * @param bufferCapacity The two internal buffer capacities, in bytes.
      * @return true if the contents of both RandomAccessFiles are equal, false otherwise.
      * @throws IOException if an I/O error occurs or the timeout is met.
      */
-    public static boolean contentEquals(final SeekableByteChannel channel1, final SeekableByteChannel channel2, final int byteBufferSize) throws IOException {
+    public static boolean contentEquals(final SeekableByteChannel channel1, final SeekableByteChannel channel2, final int bufferCapacity) throws IOException {
         // Short-circuit test
         if (Objects.equals(channel1, channel2)) {
             return true;
@@ -75,8 +75,8 @@ public final class FileChannels {
             return true;
         }
         // Dig in and do the work
-        final ByteBuffer byteBuffer1 = ByteBuffer.allocateDirect(byteBufferSize);
-        final ByteBuffer byteBuffer2 = ByteBuffer.allocateDirect(byteBufferSize);
+        final ByteBuffer byteBuffer1 = ByteBuffer.allocateDirect(bufferCapacity);
+        final ByteBuffer byteBuffer2 = ByteBuffer.allocateDirect(bufferCapacity);
         int numRead1 = 0;
         int numRead2 = 0;
         boolean read0On1 = false;
