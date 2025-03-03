@@ -105,7 +105,7 @@ public class FileChannelsTest extends AbstractTempDirTest {
             final int last = bytes3.length - 1;
             bytes3[last] = reverse(bytes3[last]);
             Files.write(bigFile3, bytes3);
-            try (FileChannel fc1 = open(bigFile1, null); FileChannel fc3 = open(bigFile3, fileChannelType2)) {
+            try (FileChannel fc1 = open(bigFile1, fileChannelType1); FileChannel fc3 = open(bigFile3, fileChannelType2)) {
                 assertFalse(FileChannels.contentEquals(fc1, fc3, bufferSize));
                 assertFalse(FileChannels.contentEquals(reset(fc3), reset(fc1), bufferSize));
                 // Test just the last byte
