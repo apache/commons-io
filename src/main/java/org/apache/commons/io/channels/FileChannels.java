@@ -20,6 +20,7 @@ package org.apache.commons.io.channels;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.SeekableByteChannel;
 import java.util.Objects;
 
@@ -33,10 +34,10 @@ import org.apache.commons.io.IOUtils;
 public final class FileChannels {
 
     /**
-     * Tests if two FileChannel contents are equal starting at their respective current positions.
+     * Tests if two file channel contents are equal starting at their respective current positions.
      *
-     * @param channel1       A FileChannel.
-     * @param channel2       Another FileChannel.
+     * @param channel1       A file channel.
+     * @param channel2       Another file channel.
      * @param bufferCapacity The two internal buffer capacities, in bytes.
      * @return true if the contents of both RandomAccessFiles are equal, false otherwise.
      * @throws IOException if an I/O error occurs.
@@ -49,10 +50,6 @@ public final class FileChannels {
 
     /**
      * Tests if two readable byte channel contents are equal starting at their respective current positions.
-     * <p>
-     * If a file channel is a non-blocking file channel, it may return 0 bytes read for any given call. In order to avoid waiting forever when trying again, a
-     * timeout Duration can be specified, which when met, throws an IOException.
-     * </p>
      *
      * @param channel1       A readable byte channel.
      * @param channel2       Another readable byte channel.
@@ -61,18 +58,10 @@ public final class FileChannels {
      * @throws IOException if an I/O error occurs or the timeout is met.
      * @since 2.19.0
      */
-    public static boolean contentEquals(final SeekableByteChannel channel1, final SeekableByteChannel channel2, final int bufferCapacity) throws IOException {
+    public static boolean contentEquals(final ReadableByteChannel channel1, final ReadableByteChannel channel2, final int bufferCapacity) throws IOException {
+        // Before making any changes, please test with org.apache.commons.io.jmh.IOUtilsContentEqualsInputStreamsBenchmark
         // Short-circuit test
         if (Objects.equals(channel1, channel2)) {
-            return true;
-        }
-        // Short-circuit test
-        final long size1 = size(channel1);
-        final long size2 = size(channel2);
-        if (size1 != size2) {
-            return false;
-        }
-        if (size1 == 0 && size2 == 0) {
             return true;
         }
         // Dig in and do the work
@@ -82,6 +71,7 @@ public final class FileChannels {
         int numRead2 = 0;
         boolean read0On1 = false;
         boolean read0On2 = false;
+        // If a channel is a non-blocking channel, it may return 0 bytes read for any given call.
         while (true) {
             if (!read0On2) {
                 numRead1 = channel1.read(byteBuffer1);
@@ -108,6 +98,33 @@ public final class FileChannels {
                 return false;
             }
         }
+    }
+
+    /**
+     * Tests if two seekable byte channel contents are equal starting at their respective current positions.
+     * <p>
+     * If the two channels have different sizes, no content comparison takes place, and this method returns false.
+     * </p>
+     *
+     * @param channel1       A seekable byte channel.
+     * @param channel2       Another seekable byte channel.
+     * @param bufferCapacity The two internal buffer capacities, in bytes.
+     * @return true if the contents of both RandomAccessFiles are equal, false otherwise.
+     * @throws IOException if an I/O error occurs or the timeout is met.
+     * @since 2.19.0
+     */
+    public static boolean contentEquals(final SeekableByteChannel channel1, final SeekableByteChannel channel2, final int bufferCapacity) throws IOException {
+        // Short-circuit test
+        if (Objects.equals(channel1, channel2)) {
+            return true;
+        }
+        // Short-circuit test
+        final long size1 = size(channel1);
+        final long size2 = size(channel2);
+        if (size1 != size2) {
+            return false;
+        }
+        return size1 == 0 && size2 == 0 || contentEquals((ReadableByteChannel) channel1, channel2, bufferCapacity);
     }
 
     private static long size(final SeekableByteChannel channel) throws IOException {

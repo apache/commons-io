@@ -101,13 +101,7 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.openjdk.jmh</groupId>
       <artifactId>jmh-core</artifactId>
-      <version>${jmh.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.openjdk.jmh</groupId>
-      <artifactId>jmh-generator-annprocess</artifactId>
-      <version>${jmh.version}</version>
+      <version>${commons.jmh.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -148,7 +142,6 @@ file comparators, endian transformation classes, and much more.
     </commons.osgi.import>
     <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-io/</commons.scmPubUrl>
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
-    <jmh.version>1.37</jmh.version>
     <commons.bytebuddy.version>1.17.2</commons.bytebuddy.version>
     <japicmp.skip>false</japicmp.skip>
     <commons.release.isDistModule>true</commons.release.isDistModule>
@@ -357,13 +350,31 @@ file comparators, endian transformation classes, and much more.
       </properties>
     </profile>
     <profile>
+      <!-- Profile to build and run the benchmarks. Use 'mvn test -Pbenchmark', and add '-Dbenchmark=foo' to run only the foo benchmark -->
       <id>benchmark</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.openjdk.jmh</groupId>
+          <artifactId>jmh-generator-annprocess</artifactId>
+          <version>${commons.jmh.version}</version>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
       <properties>
         <skipTests>true</skipTests>
         <benchmark>org.apache</benchmark>
       </properties>
       <build>
         <plugins>
+          <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>${commons.compiler.version}</version>
+            <configuration combine.self="override">
+              <testIncludes>
+                <testInclude>**/*</testInclude>
+              </testIncludes>
+            </configuration>
+          </plugin>
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>

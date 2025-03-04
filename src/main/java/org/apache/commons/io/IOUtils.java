@@ -61,6 +61,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.InflaterInputStream;
 
+import org.apache.commons.io.channels.FileChannels;
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.function.IOSupplier;
 import org.apache.commons.io.function.IOTriFunction;
@@ -903,51 +904,17 @@ public class IOUtils {
      * exist, false otherwise
      * @throws IOException          if an I/O error occurs
      */
+    @SuppressWarnings("resource") // Caller closes input streams
     public static boolean contentEquals(final InputStream input1, final InputStream input2) throws IOException {
-        // Before making any changes, please test with
-        // org.apache.commons.io.jmh.IOUtilsContentEqualsInputStreamsBenchmark
+        // Before making any changes, please test with org.apache.commons.io.jmh.IOUtilsContentEqualsInputStreamsBenchmark
         if (input1 == input2) {
             return true;
         }
         if (input1 == null || input2 == null) {
             return false;
         }
-
-        // reuse one
-        final byte[] array1 = getScratchByteArray();
-        // allocate another
-        final byte[] array2 = byteArray();
-        int pos1;
-        int pos2;
-        int count1;
-        int count2;
-        while (true) {
-            pos1 = 0;
-            pos2 = 0;
-            for (int index = 0; index < DEFAULT_BUFFER_SIZE; index++) {
-                if (pos1 == index) {
-                    do {
-                        count1 = input1.read(array1, pos1, DEFAULT_BUFFER_SIZE - pos1);
-                    } while (count1 == 0);
-                    if (count1 == EOF) {
-                        return pos2 == index && input2.read() == EOF;
-                    }
-                    pos1 += count1;
-                }
-                if (pos2 == index) {
-                    do {
-                        count2 = input2.read(array2, pos2, DEFAULT_BUFFER_SIZE - pos2);
-                    } while (count2 == 0);
-                    if (count2 == EOF) {
-                        return pos1 == index && input1.read() == EOF;
-                    }
-                    pos2 += count2;
-                }
-                if (array1[index] != array2[index]) {
-                    return false;
-                }
-            }
-        }
+        // We do not close FileChannels because that closes the owning InputStream.
+        return FileChannels.contentEquals(Channels.newChannel(input1), Channels.newChannel(input2), DEFAULT_BUFFER_SIZE);
     }
 
     // TODO Consider making public
