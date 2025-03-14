@@ -1942,7 +1942,7 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action issue="IO-239" dev="sebb" type="update">
          Convert IOCase to a Java 1.5+ Enumeration
-         [N.B. this is binary compatible]
+         [this is binary compatible]
       </action>
       <action issue="IO-233" dev="sebb" type="add">
          Add Methods for Buffering Streams/Writers To IOUtils

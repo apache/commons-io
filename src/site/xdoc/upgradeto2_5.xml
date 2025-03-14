@@ -123,7 +123,7 @@ limitations under the License.
                     o IO-462:  IOExceptionWithCause no longer needed
                     o IO-422:  Deprecate Charsets Charset constants in favor of Java 7's java.nio.charset.StandardCharsets
                     o IO-239:  Convert IOCase to a Java 1.5+ Enumeration
-                             [N.B. this is binary compatible]
+                             [this is binary compatible]
                     o IO-328:  getPrefixLength returns null if filename has leading slashes
                             Javadoc: add examples to show correct behavior; add unit tests
                     o IO-299:  FileUtils.listFilesAndDirs includes original dir in results even when it doesn't match filter

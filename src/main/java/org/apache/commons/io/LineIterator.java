@@ -50,7 +50,7 @@ import java.util.Objects;
  */
 public class LineIterator implements Iterator<String>, Closeable {
 
-    // N.B. This class deliberately does not implement Iterable, see https://issues.apache.org/jira/browse/IO-181
+    // This class deliberately does not implement Iterable, see https://issues.apache.org/jira/browse/IO-181
 
     /**
      * Closes a {@link LineIterator} quietly.

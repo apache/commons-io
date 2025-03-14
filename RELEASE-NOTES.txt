@@ -44,8 +44,8 @@ o          Fix implicit narrowing conversion in compound assignment in Unsynchro
 o IO-860:  Missing reserved file names in FileSystem.WINDOWS (superscript digits for COM and LPT). Thanks to Stefan Feenstra, Gary Gregory. 
 o IO-856:  FileUtils.listFiles(final File, String[], boolean) can throw NoSuchFileException #697, #699. Thanks to Thomas Hartwig, Gary Gregory. 
 o IO-859:  FileUtils.forceDelete on non-existent file on Windows throws IOException rather than FileNotFoundException. Thanks to JD Dean, Gary Gregory. 
-o          Use Unicode escapes for superscript characters. #701. Thanks to Éamonn McManus. 
-o IO-863:  Recent incompatible change to FileUtils.listFiles re extensions, see also IO-856. Thanks to Éamonn McManus, Gary Gregory. 
+o          Use Unicode escapes for superscript characters. #701. Thanks to ï¿½amonn McManus. 
+o IO-863:  Recent incompatible change to FileUtils.listFiles re extensions, see also IO-856. Thanks to ï¿½amonn McManus, Gary Gregory. 
 o IO-857:  Javadoc: Update details for PathUtils "clean" behavior. Thanks to Dmitry, Gary Gregory. 
 
 Changes
@@ -853,7 +853,7 @@ Fixed Bugs
 * IO-749:  FileUtils.listFiles() does not list matching files if File parameter is a symbolic link. Thanks to haihuiyang, Gary Gregory. 
 *           Fix typo in Javadocs for FileUtils#convertFileCollectionToFileArray() #276. Thanks to niranjanghule, Gary Gregory. 
 *           Avoid Code Duplication: Reuse Sleep from ThreadMonitor #66. Thanks to DaGeRe, Gary Gregory. 
-* IO-750:  FileUtils.iterateFiles also lists directories. Thanks to Sita Geßner, Sebastian Peters, Gary Gregory. 
+* IO-750:  FileUtils.iterateFiles also lists directories. Thanks to Sita Geï¿½ner, Sebastian Peters, Gary Gregory. 
 * IO-721:  Wrong exception message in FileUtils.setLastModified(File, File). Thanks to Dirk Heinrichs, Gary Gregory. 
 * IO-717:  Infinite loop in ReaderInputStream instead of throwing exception for CodingErrorAction.REPORT. Thanks to Marcono1234, Gary Gregory. 
 * IO-716:  ReaderInputStream enter infinite loop for too small buffer sizes. Thanks to Marcono1234, Gary Gregory. 
@@ -896,7 +896,7 @@ Fixed Bugs
 * IO-611:  FilenameUtils.normalize javadoc and tests #383. Thanks to Fedor Urvanov. 
 * IO-611:  Better docs in IOUtils and IOUtils.byteArray(int size) #374. Thanks to ArdenL-Liu, Bruno P. Kinoshita, Gary Gregory. 
 * IO-782:  SequenceReader should close readers when its close method is called #391. Thanks to Matteo Di Giovinazzo, Gary Gregory. 
-* IO-790:  Fix symbolic link file filter #450. Thanks to Miguel Muñoz, Gary Gregory. 
+* IO-790:  Fix symbolic link file filter #450. Thanks to Miguel Muï¿½oz, Gary Gregory. 
 * IO-790:  Apply nanoseconds precision for QueueInputStream timeout duration. #453. Thanks to maxxedev, Gary Gregory, Bruno P. Kinoshita. 
 *           Fix overflow for FileUtilsTest constants #456. Thanks to Marcono1234. 
 *           Serialization is deprecated and will be removed in 3.0. Thanks to Gary Gregory. 
@@ -1274,7 +1274,7 @@ Changes
 * IO-628:  Migration to JUnit Jupiter #97. Thanks to Allon Mureinik. 
 * IO-630:  Deprecate org.apache.commons.io.output.NullOutputStream.NullOutputStream() in favor of org.apache.commons.io.output.NullOutputStream.NULL_OUTPUT_STREAM. Thanks to Gary Gregory. 
 * IO-629:  FileUtils#forceDelete should use Files#delete rather than File#delete so exception messages includes reason for failure. Thanks to Ian Springer, Ian Springer, Gary Gregory. 
-* IO-634:  Make getCause synchronized and use a Deque instead of a Stack #64. Thanks to Václav Haisman, Bruno P. Kinoshita, Gary Gregory. 
+* IO-634:  Make getCause synchronized and use a Deque instead of a Stack #64. Thanks to Vï¿½clav Haisman, Bruno P. Kinoshita, Gary Gregory. 
 *            Update tests from Apache Commons Lang 3.9 to 3.10. Thanks to Gary Gregory. 
 *            Update tests org.junit-pioneer:junit-pioneer 0.3.0 -> 0.6.0. Thanks to Gary Gregory. 
 *            Update tests org.junit.jupiter:junit-jupiter 5.5.2 -> 5.6.2. Thanks to Gary Gregory. 
@@ -1488,14 +1488,14 @@ Fixed Bugs
 * IO-484:  FilenameUtils should handle embedded null bytes Thanks to Philippe Arteau. 
 * IO-481:  Changed/Corrected algorithm for waitFor 
 * IO-428:  BOMInputStream.skip returns wrong count if stream contains no BOM Thanks to Stefan Gmeiner. 
-* IO-488:  FileUtils.waitFor(...) swallows thread interrupted status Thanks to Björn Buchner. 
+* IO-488:  FileUtils.waitFor(...) swallows thread interrupted status Thanks to Bjï¿½rn Buchner. 
 * IO-452:  Support for symlinks with missing target. Added support for JDK7 symlink features when present Thanks to David Standish. 
 * IO-453:  Regression in FileUtils.readFileToString from 2.0.1 Thanks to Steven Christou. 
 * IO-451:  ant test fails - resources missing from test classpath Thanks to David Standish. 
 * IO-435:  Document that FileUtils.deleteDirectory, directoryContains and cleanDirectory
          may throw an IllegalArgumentException in case the passed directory does not
          exist or is not a directory. Thanks to Dominik Stadler. 
-* IO-424:  Javadoc fixes, mostly to appease 1.8.0 Thanks to Ville Skyttä. 
+* IO-424:  Javadoc fixes, mostly to appease 1.8.0 Thanks to Ville Skyttï¿½. 
 * IO-389:  FileUtils.sizeOfDirectory can throw IllegalArgumentException Thanks to Austin Doupnik. 
 * IO-390:  FileUtils.sizeOfDirectoryAsBigInteger can overflow.
          Ensure that recursive calls all use BigInteger 
@@ -1530,7 +1530,7 @@ Changes
 * IO-462:  IOExceptionWithCause no longer needed 
 * IO-422:  Deprecate Charsets Charset constants in favor of Java 7's java.nio.charset.StandardCharsets 
 * IO-239:  Convert IOCase to a Java 1.5+ Enumeration
-         [N.B. this is binary compatible] 
+         [this is binary compatible] 
 * IO-328:  getPrefixLength returns null if filename has leading slashes
         Javadoc: add examples to show correct behavior; add unit tests 
 * IO-299:  FileUtils.listFilesAndDirs includes original dir in results even when it doesn't match filter
@@ -1641,7 +1641,7 @@ New features
 * Allow applications to provide buffer (or size) for copyLarge methods.  Issue: IO-308. Thanks to Manoj Mokashi. 
 * New copyLarge() method in IOUtils that takes additional offset, length arguments  Issue: IO-305. Thanks to Manoj Mokashi. 
 * Use terabyte (TB), petabyte (PB) and exabyte (EB) in FileUtils.byteCountToDisplaySize(long size)  Issue: IO-287. Thanks to Ron Kuris, Gary Gregory. 
-* FileUtils.listFiles() doesn't return directories  Issue: IO-173. Thanks to Marcos Vinícius da Silva. 
+* FileUtils.listFiles() doesn't return directories  Issue: IO-173. Thanks to Marcos Vinï¿½cius da Silva. 
 * CharSequenceInputStream to efficiently stream content of a CharSequence  Issue: IO-297. Thanks to Oleg Kalnichevski. 
 * The second constructor of Tailer class does not pass 'delay' to the third one  Issue: IO-304. Thanks to liangly. 
 * TeeOutputStream does not call branch.close() when main.close() throws an exception  Issue: IO-303. Thanks to fabian.barney. 
