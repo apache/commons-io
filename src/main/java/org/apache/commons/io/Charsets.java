@@ -173,11 +173,12 @@ public class Charsets {
     }
 
     /**
-     * Returns the given Charset or the default Charset if the given Charset is null.
+     * Returns the given Charset or the {@link Charset#defaultCharset() default Charset} if the given Charset is null.
      *
      * @param charset
      *            A charset or null.
      * @return the given Charset or the default Charset if the given Charset is null
+     * @see Charset#defaultCharset()
      */
     public static Charset toCharset(final Charset charset) {
         return charset == null ? Charset.defaultCharset() : charset;
@@ -196,11 +197,12 @@ public class Charsets {
     }
 
     /**
-     * Returns a Charset for the named charset. If the name is null, return the default Charset.
+     * Returns a Charset for the named charset. If the name is null, return the {@link Charset#defaultCharset() default Charset}.
      *
      * @param charsetName The name of the requested charset, may be null.
      * @return a Charset for the named charset.
      * @throws UnsupportedCharsetException If the named charset is unavailable (unchecked exception).
+     * @see Charset#defaultCharset()
      */
     public static Charset toCharset(final String charsetName) throws UnsupportedCharsetException {
         return toCharset(charsetName, Charset.defaultCharset());
