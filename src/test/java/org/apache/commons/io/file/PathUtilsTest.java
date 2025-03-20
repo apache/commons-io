@@ -179,6 +179,16 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testCopyFileTwoFileSystem() throws IOException {
+        try (FileSystem archive = openArchive(Paths.get(TEST_JAR_PATH), false)) {
+            final Path sourceFile = archive.getPath("next/dir/test.log");
+            final Path targetFile = PathUtils.copyFileToDirectory(sourceFile, tempDirPath);
+            assertTrue(Files.exists(targetFile));
+            assertEquals(Files.size(sourceFile), Files.size(targetFile));
+        }
+    }
+
+    @Test
     public void testCopyURL() throws IOException {
         final Path sourceFile = Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/file-size-1.bin");
         final URL url = new URL("file:///" + FilenameUtils.getPath(sourceFile.toAbsolutePath().toString()) + sourceFile.getFileName());
