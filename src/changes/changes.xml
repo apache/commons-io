@@ -65,6 +65,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">FileChannels.contentEquals(FileChannel, FileChannel, int) can return false when comparing a non-blocking channel.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate FileChannels.contentEquals(FileChannel, FileChannel, int) in favor of FileChannels.contentEquals(SeekableByteChannel, SeekableByteChannel, int).</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Improve performance of IOUtils.contentEquals(InputStream, InputStream) by about 13%.</action>
+      <action dev="ggregory" type="fix" issue="IO-870" due-to="Gary Gregory">PathUtils.copyFileToDirectory() across file systems #728.</action>
       <!-- ADD -->
       <action dev="ggregory" type="add" issue="IO-860" due-to="Nico Strecker, Gary Gregory">Add ThrottledInputStream.Builder.setMaxBytes(long, ChronoUnit).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IOIterable.</action>
