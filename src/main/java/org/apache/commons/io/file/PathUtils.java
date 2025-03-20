@@ -322,8 +322,8 @@ public final class PathUtils {
      */
     public static Path copyFileToDirectory(final Path sourceFile, final Path targetDirectory, final CopyOption... copyOptions) throws IOException {
         // Path.resolve() naturally won't work across FileSystem unless we convert to a String
-        Path sourceFileName = sourceFile.getFileName();
-        Path targetFile;
+        final Path sourceFileName = sourceFile.getFileName();
+        final Path targetFile;
         if (sourceFileName.getFileSystem() == targetDirectory.getFileSystem()) {
             targetFile = targetDirectory.resolve(sourceFileName);
         } else {
