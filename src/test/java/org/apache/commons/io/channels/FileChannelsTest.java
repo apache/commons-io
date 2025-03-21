@@ -22,9 +22,13 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.SequenceInputStream;
+import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.file.Files;
@@ -35,6 +39,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.file.AbstractTempDirTest;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.junitpioneer.jupiter.cartesian.CartesianTest;
 import org.junitpioneer.jupiter.cartesian.CartesianTest.Values;
 
@@ -47,7 +53,7 @@ public class FileChannelsTest extends AbstractTempDirTest {
         STOCK, PROXY, NON_BLOCKING, FIXED_READ_SIZE
     }
 
-    private static final int LARGE_FILE_SIZE = Integer.getInteger(FileChannelsTest.class.getSimpleName(), 100000);
+    private static final int LARGE_FILE_SIZE = Integer.getInteger(FileChannelsTest.class.getSimpleName(), 100_000);
 
     private static final int SMALL_BUFFER_SIZE = 1024;
     private static final String CONTENT = StringUtils.repeat("x", SMALL_BUFFER_SIZE);
@@ -91,6 +97,10 @@ public class FileChannelsTest extends AbstractTempDirTest {
         default:
             throw new UnsupportedOperationException("Unexpected FileChannelType " + fileChannelType);
         }
+    }
+
+    private boolean contentEquals(final InputStream in1, final InputStream in2, final int bufferCapacity) throws IOException {
+        return FileChannels.contentEquals(Channels.newChannel(in1), Channels.newChannel(in2), bufferCapacity);
     }
 
     private void testContentEquals(final String content1, final String content2, final int bufferSize, final FileChannelType fileChannelType)
@@ -286,5 +296,64 @@ public class FileChannelsTest extends AbstractTempDirTest {
             Files.deleteIfExists(bigFile2);
             Files.deleteIfExists(bigFile3);
         }
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 1, 2, 4, 8, 16, 1024, 4096, 8192 })
+    public void testContentEqualsSequenceInputStream(final int bufferCapacity) throws Exception {
+        // not equals
+        // @formatter:off
+        assertFalse(contentEquals(
+                new ByteArrayInputStream("ab".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("a".getBytes()),
+                    new ByteArrayInputStream("b-".getBytes())), bufferCapacity));
+        assertFalse(contentEquals(
+                new ByteArrayInputStream("ab".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("a-".getBytes()),
+                    new ByteArrayInputStream("b".getBytes())), bufferCapacity));
+        assertFalse(contentEquals(
+                new ByteArrayInputStream("ab-".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("a".getBytes()),
+                    new ByteArrayInputStream("b".getBytes())), bufferCapacity));
+        assertFalse(contentEquals(
+                new ByteArrayInputStream("".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("a".getBytes()),
+                    new ByteArrayInputStream("b".getBytes())), bufferCapacity));
+        assertFalse(contentEquals(
+                new ByteArrayInputStream("".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("".getBytes()),
+                    new ByteArrayInputStream("b".getBytes())), bufferCapacity));
+        assertFalse(contentEquals(
+                new ByteArrayInputStream("ab".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("".getBytes()),
+                    new ByteArrayInputStream("".getBytes())), bufferCapacity));
+        // equals
+        assertTrue(contentEquals(
+                new ByteArrayInputStream("".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("".getBytes()),
+                    new ByteArrayInputStream("".getBytes())), bufferCapacity));
+        assertTrue(contentEquals(
+                new ByteArrayInputStream("ab".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("a".getBytes()),
+                    new ByteArrayInputStream("b".getBytes())), bufferCapacity));
+        assertTrue(contentEquals(
+                new ByteArrayInputStream("ab".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("ab".getBytes()),
+                    new ByteArrayInputStream("".getBytes())), bufferCapacity));
+        assertTrue(contentEquals(
+                new ByteArrayInputStream("ab".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("".getBytes()),
+                    new ByteArrayInputStream("ab".getBytes())), bufferCapacity));
+        // @formatter:on
     }
 }

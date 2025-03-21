@@ -45,6 +45,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.SequenceInputStream;
 import java.io.StringReader;
 import java.io.Writer;
 import java.net.ServerSocket;
@@ -687,6 +688,64 @@ public class IOUtilsTest {
         testSingleEOL("321\r\n", "321\r\n\r", false);
         testSingleEOL("123", "1234", false);
         testSingleEOL("1235", "1234", false);
+    }
+
+    @Test
+    public void testContentEqualsSequenceInputStream() throws Exception {
+        // not equals
+        // @formatter:off
+        assertFalse(IOUtils.contentEquals(
+                new ByteArrayInputStream("ab".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("a".getBytes()),
+                    new ByteArrayInputStream("b-".getBytes()))));
+        assertFalse(IOUtils.contentEquals(
+                new ByteArrayInputStream("ab".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("a-".getBytes()),
+                    new ByteArrayInputStream("b".getBytes()))));
+        assertFalse(IOUtils.contentEquals(
+                new ByteArrayInputStream("ab-".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("a".getBytes()),
+                    new ByteArrayInputStream("b".getBytes()))));
+        assertFalse(IOUtils.contentEquals(
+                new ByteArrayInputStream("".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("a".getBytes()),
+                    new ByteArrayInputStream("b".getBytes()))));
+        assertFalse(IOUtils.contentEquals(
+                new ByteArrayInputStream("".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("".getBytes()),
+                    new ByteArrayInputStream("b".getBytes()))));
+        assertFalse(IOUtils.contentEquals(
+                new ByteArrayInputStream("ab".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("".getBytes()),
+                    new ByteArrayInputStream("".getBytes()))));
+        // equals
+        assertTrue(IOUtils.contentEquals(
+                new ByteArrayInputStream("".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("".getBytes()),
+                    new ByteArrayInputStream("".getBytes()))));
+        assertTrue(IOUtils.contentEquals(
+                new ByteArrayInputStream("ab".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("a".getBytes()),
+                    new ByteArrayInputStream("b".getBytes()))));
+        assertTrue(IOUtils.contentEquals(
+                new ByteArrayInputStream("ab".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("ab".getBytes()),
+                    new ByteArrayInputStream("".getBytes()))));
+        assertTrue(IOUtils.contentEquals(
+                new ByteArrayInputStream("ab".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("".getBytes()),
+                    new ByteArrayInputStream("ab".getBytes()))));
+        // @formatter:on
     }
 
     @Test

@@ -60,43 +60,78 @@ public final class FileChannels {
      */
     public static boolean contentEquals(final ReadableByteChannel channel1, final ReadableByteChannel channel2, final int bufferCapacity) throws IOException {
         // Before making any changes, please test with org.apache.commons.io.jmh.IOUtilsContentEqualsInputStreamsBenchmark
+        if (bufferCapacity <= 0) {
+            throw new IllegalArgumentException();
+        }
         // Short-circuit test
         if (Objects.equals(channel1, channel2)) {
             return true;
         }
         // Dig in and do the work
-        final ByteBuffer byteBuffer1 = ByteBuffer.allocateDirect(bufferCapacity);
-        final ByteBuffer byteBuffer2 = ByteBuffer.allocateDirect(bufferCapacity);
-        int numRead1 = 0;
-        int numRead2 = 0;
-        boolean read0On1 = false;
-        boolean read0On2 = false;
+        final ByteBuffer c1Buffer = ByteBuffer.allocateDirect(bufferCapacity);
+        final ByteBuffer c2Buffer = ByteBuffer.allocateDirect(bufferCapacity);
+        int c1ReadNum = -1;
+        int c2ReadNum = -1;
+        boolean c1Read = true;
+        boolean c2Read = true;
+        boolean equals = false;
         // If a channel is a non-blocking channel, it may return 0 bytes read for any given call.
         while (true) {
-            if (!read0On2) {
-                numRead1 = channel1.read(byteBuffer1);
-                byteBuffer1.clear();
-                read0On1 = numRead1 == 0;
+            // don't call compact() in this method to avoid copying
+            if (c1Read) {
+                c1ReadNum = channel1.read(c1Buffer);
+                c1Buffer.position(0);
+                c1Read = c1ReadNum >= 0;
             }
-            if (!read0On1) {
-                numRead2 = channel2.read(byteBuffer2);
-                byteBuffer2.clear();
-                read0On2 = numRead2 == 0;
+            if (c2Read) {
+                c2ReadNum = channel2.read(c2Buffer);
+                c2Buffer.position(0);
+                c2Read = c2ReadNum >= 0;
             }
-            if (numRead1 == IOUtils.EOF && numRead2 == IOUtils.EOF) {
-                return byteBuffer1.equals(byteBuffer2);
+            if (c1ReadNum == IOUtils.EOF && c2ReadNum == IOUtils.EOF) {
+                return equals || c1Buffer.equals(c2Buffer);
             }
-            if (numRead1 == 0 || numRead2 == 0) {
-                // 0 may be returned from a non-blocking channel.
+            if (c1ReadNum == 0 || c2ReadNum == 0) {
                 Thread.yield();
+            }
+            if (c1ReadNum == 0 && c2ReadNum == IOUtils.EOF || c2ReadNum == 0 && c1ReadNum == IOUtils.EOF) {
                 continue;
             }
-            if (numRead1 != numRead2) {
+            if (c1ReadNum != c2ReadNum) {
+                final int limit = Math.min(c1ReadNum, c2ReadNum);
+                if (limit == IOUtils.EOF) {
+                    return false;
+                }
+                c1Buffer.limit(limit);
+                c2Buffer.limit(limit);
+                if (!c1Buffer.equals(c2Buffer)) {
+                    return false;
+                }
+                equals = true;
+                c1Buffer.limit(bufferCapacity);
+                c2Buffer.limit(bufferCapacity);
+                c1Read = c2ReadNum > c1ReadNum;
+                c2Read = c1ReadNum > c2ReadNum;
+                if (c1Read) {
+                    c1Buffer.position(0);
+                } else {
+                    c1Buffer.position(limit);
+                    c2Buffer.limit(c1Buffer.remaining());
+                    c1ReadNum -= c2ReadNum;
+                }
+                if (c2Read) {
+                    c2Buffer.position(0);
+                } else {
+                    c2Buffer.position(limit);
+                    c1Buffer.limit(c2Buffer.remaining());
+                    c2ReadNum -= c1ReadNum;
+                }
+                continue;
+            }
+            if (!c1Buffer.equals(c2Buffer)) {
                 return false;
             }
-            if (!byteBuffer1.equals(byteBuffer2)) {
-                return false;
-            }
+            equals = c1Read = c2Read = true;
         }
     }
 
