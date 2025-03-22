@@ -96,9 +96,9 @@ public class ProxyOutputStream extends FilterOutputStream {
      * functionality without having to override all the write methods.
      * The default implementation does nothing.
      *
-     * @since 2.0
      * @param n number of bytes written
      * @throws IOException if the post-processing fails
+     * @since 2.0
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void afterWrite(final int n) throws IOException {
@@ -114,9 +114,9 @@ public class ProxyOutputStream extends FilterOutputStream {
      * functionality without having to override all the write methods.
      * The default implementation does nothing.
      *
-     * @since 2.0
      * @param n number of bytes to be written
      * @throws IOException if the pre-processing fails
+     * @since 2.0
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void beforeWrite(final int n) throws IOException {

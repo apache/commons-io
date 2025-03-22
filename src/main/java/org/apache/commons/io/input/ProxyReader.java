@@ -60,9 +60,9 @@ public abstract class ProxyReader extends FilterReader {
      * {@link #reset()}. You need to explicitly override those methods if
      * you want to add post-processing steps also to them.
      *
-     * @since 2.0
      * @param n number of chars read, or -1 if the end of stream was reached
      * @throws IOException if the post-processing fails
+     * @since 2.0
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void afterRead(final int n) throws IOException {
@@ -83,9 +83,9 @@ public abstract class ProxyReader extends FilterReader {
      * {@link #reset()}. You need to explicitly override those methods if
      * you want to add pre-processing steps also to them.
      *
-     * @since 2.0
      * @param n number of chars that the caller asked to be read
      * @throws IOException if the pre-processing fails
+     * @since 2.0
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void beforeRead(final int n) throws IOException {

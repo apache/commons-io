@@ -204,9 +204,9 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * you want to add pre-processing steps also to them.
      * </p>
      *
-     * @since 2.0
      * @param n number of bytes that the caller asked to be read.
      * @throws IOException if the pre-processing fails in a subclass.
+     * @since 2.0
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void beforeRead(final int n) throws IOException {
