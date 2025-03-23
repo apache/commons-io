@@ -61,6 +61,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
@@ -692,6 +693,7 @@ public class IOUtilsTest {
 
     @Test
     public void testContentEqualsSequenceInputStream() throws Exception {
+        // https://issues.apache.org/jira/browse/IO-866
         // not equals
         // @formatter:off
         assertFalse(IOUtils.contentEquals(
@@ -745,6 +747,24 @@ public class IOUtilsTest {
                 new SequenceInputStream(
                     new ByteArrayInputStream("".getBytes()),
                     new ByteArrayInputStream("ab".getBytes()))));
+        // @formatter:on
+        final byte[] prefixLen32 = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2 };
+        final byte[] suffixLen2 = { 1, 2 };
+        final byte[] fileContents = "someTexts".getBytes(StandardCharsets.UTF_8);
+        Files.write(testFile.toPath(), fileContents);
+        final byte[] expected = new byte[prefixLen32.length + fileContents.length + suffixLen2.length];
+        System.arraycopy(prefixLen32, 0, expected, 0, prefixLen32.length);
+        System.arraycopy(fileContents, 0, expected, prefixLen32.length, fileContents.length);
+        System.arraycopy(suffixLen2, 0, expected, prefixLen32.length + fileContents.length, suffixLen2.length);
+        // @formatter:off
+        assertTrue(IOUtils.contentEquals(
+                new ByteArrayInputStream(expected),
+                new SequenceInputStream(
+                    Collections.enumeration(
+                        Arrays.asList(
+                            new ByteArrayInputStream(prefixLen32),
+                            new FileInputStream(testFile),
+                            new ByteArrayInputStream(suffixLen2))))));
         // @formatter:on
     }
 

@@ -114,12 +114,14 @@ public class FileChannelsTest extends AbstractTempDirTest {
         FileUtils.writeStringToFile(file2, content2, US_ASCII);
         // File checksums are different
         assertNotEquals(FileUtils.checksumCRC32(file1), FileUtils.checksumCRC32(file2));
+        // content not equals
         try (FileInputStream in1 = new FileInputStream(file1);
                 FileInputStream in2 = new FileInputStream(file2);
                 FileChannel channel1 = getChannel(in1, fileChannelType, bufferSize);
                 FileChannel channel2 = getChannel(in2, fileChannelType, half(bufferSize))) {
             assertFalse(FileChannels.contentEquals(channel1, channel2, bufferSize));
         }
+        // content not equals
         try (FileInputStream in1 = new FileInputStream(file1);
                 FileInputStream in2 = new FileInputStream(file2);
                 FileChannel channel1 = getChannel(in1, fileChannelType, bufferSize);

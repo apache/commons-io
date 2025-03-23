@@ -22,7 +22,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
 /**
- * Always reads the same amount of bytes on each call or less.
+ * Always reads the same amount of bytes on each call (or less).
  */
 class FixedReadSizeFileChannelProxy extends FileChannelProxy {
 
@@ -38,26 +38,32 @@ class FixedReadSizeFileChannelProxy extends FileChannelProxy {
 
     @Override
     public int read(final ByteBuffer dst) throws IOException {
-        final int limit = dst.limit();
-        dst.limit(Math.min(readSize, dst.limit()));
-        final int read = super.read(dst);
-        if (read > readSize) {
+        final int saveLimit = dst.limit();
+        dst.limit(Math.min(dst.position() + readSize, dst.capacity()));
+        if (!dst.hasRemaining()) {
             throw new IllegalStateException("Programming error.");
         }
-        dst.limit(limit);
-        return read;
+        final int numRead = super.read(dst);
+        if (numRead > readSize) {
+            throw new IllegalStateException(String.format("numRead %,d > readSize %,d", numRead, readSize));
+        }
+        dst.limit(saveLimit);
+        return numRead;
     }
 
     @Override
     public int read(final ByteBuffer dst, final long position) throws IOException {
-        final int limit = dst.limit();
-        dst.limit(Math.min(readSize, dst.limit()));
-        final int read = super.read(dst, position);
-        if (read > readSize) {
+        final int saveLimit = dst.limit();
+        dst.limit(Math.min(dst.position() + readSize, dst.capacity()));
+        if (!dst.hasRemaining()) {
             throw new IllegalStateException("Programming error.");
         }
-        dst.limit(limit);
-        return read;
+        final int numRead = super.read(dst, position);
+        if (numRead > readSize) {
+            throw new IllegalStateException(String.format("numRead %,d > readSize %,d", numRead, readSize));
+        }
+        dst.limit(saveLimit);
+        return numRead;
     }
 
     @Override
