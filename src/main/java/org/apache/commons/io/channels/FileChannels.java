@@ -135,7 +135,7 @@ public final class FileChannels {
      *
      * @param channel The source channel.
      * @param dst     The buffer into which bytes are to be transferred.
-     * @return The number of bytes read, possibly zero, or {@code-1} if the channel has reached end-of-stream
+     * @return The number of bytes read, <em>never</em> zero, or {@code -1} if the channel has reached end-of-stream
      * @throws IOException              If some other I/O error occurs.
      * @throws IllegalArgumentException If there is room in the given buffer.
      */
@@ -143,18 +143,20 @@ public final class FileChannels {
         if (!dst.hasRemaining()) {
             throw new IllegalArgumentException();
         }
-        int numRead = 0;
         int totalRead = 0;
         while (dst.hasRemaining()) {
-            if ((totalRead += numRead = channel.read(dst)) == IOUtils.EOF) {
+            final int numRead;
+            if ((numRead = channel.read(dst)) == IOUtils.EOF) {
                 break;
             }
             if (numRead == 0) {
                 // 0 may be returned from a non-blocking channel.
                 Thread.yield();
+            } else {
+                totalRead += numRead;
             }
         }
-        return totalRead;
+        return totalRead != 0 ? totalRead : IOUtils.EOF;
     }
 
     private static long size(final SeekableByteChannel channel) throws IOException {
