@@ -18,16 +18,21 @@
 package org.apache.commons.io.file;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -97,6 +102,39 @@ public class PathUtilsContentEqualsTest {
             final Path dir2 = Paths.get("src/test/resources/dir-equals-tests/dir-equals-dirs-then-files");
             assertFalse(PathUtils.directoryAndFileContentEquals(dir1, dir2));
             assertFalse(PathUtils.directoryAndFileContentEquals(dir2, dir1));
+        }
+    }
+
+    @Test
+    public void testDirectoryAndFileContentEqualsDiffFileSystems() throws Exception {
+        // Trees of directories containing other directories and files.
+        final Path dir1 = Paths.get("src/test/resources/dir-equals-tests/dir-equals-dirs-and-files/dirs-and-files1");
+
+        // create a Zip from dir1
+        final Path zipFile = temporaryFolder.toPath().resolve("z.zip");
+        zipDirToFile(dir1, zipFile);
+
+        // create FileSystem view into the zip
+        try (FileSystem zipFs = FileSystems.newFileSystem(zipFile, ClassLoader.getSystemClassLoader())) {
+            final Path dir2 = zipFs.getPath("");
+            assertNotEquals(dir1.getFileSystem(), dir2.getFileSystem());
+            assertTrue(PathUtils.directoryAndFileContentEquals(dir1, dir2));
+        }
+    }
+
+    private static void zipDirToFile(Path source, Path zipFile) throws IOException {
+        try (OutputStream out = Files.newOutputStream(zipFile);
+             ZipOutputStream zos = new ZipOutputStream(out);
+             Stream<Path> walkStream = Files.walk(source)) {
+            walkStream.filter(path -> !Files.isDirectory(path)) // Skip directories
+                    .forEach(path -> {
+                        try {
+                            zos.putNextEntry(new ZipEntry(source.relativize(path).toString()));
+                            Files.copy(path, zos);
+                        } catch (IOException e) {
+                            throw new RuntimeException("Failed to add file to ZIP: " + path, e);
+                        }
+                    });
         }
     }
 

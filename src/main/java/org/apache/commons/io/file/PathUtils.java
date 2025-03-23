@@ -57,10 +57,10 @@ import java.time.chrono.ChronoZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -133,12 +133,12 @@ public final class PathUtils {
                     } else {
                         tmpRelativeDirList1 = visitor1.relativizeDirectories(dir1, true, null);
                         tmpRelativeDirList2 = visitor2.relativizeDirectories(dir2, true, null);
-                        if (!tmpRelativeDirList1.equals(tmpRelativeDirList2)) {
+                        if (!equals(tmpRelativeDirList1, tmpRelativeDirList2)) {
                             equals = false;
                         } else {
                             tmpRelativeFileList1 = visitor1.relativizeFiles(dir1, true, null);
                             tmpRelativeFileList2 = visitor2.relativizeFiles(dir2, true, null);
-                            equals = tmpRelativeFileList1.equals(tmpRelativeFileList2);
+                            equals = equals(tmpRelativeFileList1, tmpRelativeFileList2);
                         }
                     }
                 }
@@ -147,6 +147,35 @@ public final class PathUtils {
             // relativeDirList2 = tmpRelativeDirList2;
             relativeFileList1 = tmpRelativeFileList1;
             relativeFileList2 = tmpRelativeFileList2;
+        }
+
+        /**
+         * Compare Path lists in a FileSystem agnostic way
+         * @param a first list
+         * @param b second list
+         * @return true if the lists are equal
+         */
+        private boolean equals(List<Path> a, List<Path> b) {
+            if (a.size() != b.size()) {
+                return false;
+            }
+            // compare both lists using iterators
+            final Iterator<Path> i1 = a.iterator();
+            final Iterator<Path> i2 = b.iterator();
+            while (i1.hasNext() && i2.hasNext()) {
+                final Path p1 = i1.next();
+                final Path p2 = i2.next();
+                if (p1.getFileSystem() == p2.getFileSystem()) {
+                    if (!p1.equals(p2)) {
+                        return false;
+                    }
+                } else {
+                    if (!p1.toString().equals(p2.toString())) {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
     }
 
@@ -659,17 +688,16 @@ public final class PathUtils {
             return false;
         }
         // Both visitors contain the same normalized paths, we can compare file contents.
-        final List<Path> fileList1 = relativeSortedPaths.relativeFileList1;
-        final List<Path> fileList2 = relativeSortedPaths.relativeFileList2;
-        for (final Path path : fileList1) {
-            final int binarySearch = Collections.binarySearch(fileList2, path);
-            if (binarySearch <= -1) {
-                throw new IllegalStateException("Unexpected mismatch.");
-            }
-            if (!fileContentEquals(path1.resolve(path), path2.resolve(path), linkOptions, openOptions)) {
+        final Iterator<Path> i1 = relativeSortedPaths.relativeFileList1.iterator();
+        final Iterator<Path> i2 = relativeSortedPaths.relativeFileList2.iterator();
+        while (i1.hasNext()) {
+            final Path relativeP1 = i1.next();
+            final Path relativeP2 = i2.next();
+            if (!fileContentEquals(path1.resolve(relativeP1), path2.resolve(relativeP2), linkOptions, openOptions)) {
                 return false;
             }
         }
+        assert !i2.hasNext();
         return true;
     }
 
