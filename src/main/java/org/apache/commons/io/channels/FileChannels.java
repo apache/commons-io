@@ -64,7 +64,7 @@ public final class FileChannels {
         if (Objects.equals(channel1, channel2)) {
             return true;
         }
-        // Dig in and do the work
+        // Don't use ByteBuffer#compact() to avoid extra copying.
         final ByteBuffer c1Buffer = ByteBuffer.allocateDirect(bufferCapacity);
         final ByteBuffer c2Buffer = ByteBuffer.allocateDirect(bufferCapacity);
         int c1NumRead = 0;
