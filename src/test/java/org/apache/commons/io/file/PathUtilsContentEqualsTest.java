@@ -116,7 +116,7 @@ public class PathUtilsContentEqualsTest {
 
         // create FileSystem view into the zip
         try (FileSystem zipFs = FileSystems.newFileSystem(zipFile, ClassLoader.getSystemClassLoader())) {
-            final Path dir2 = zipFs.getPath("");
+            final Path dir2 = zipFs.getPath("/");
             assertNotEquals(dir1.getFileSystem(), dir2.getFileSystem());
             assertTrue(PathUtils.directoryAndFileContentEquals(dir1, dir2));
         }
