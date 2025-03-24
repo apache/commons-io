@@ -151,6 +151,7 @@ public final class PathUtils {
 
         /**
          * Compare Path lists in a FileSystem agnostic way
+         *
          * @param a first list
          * @param b second list
          * @return true if the lists are equal
@@ -160,19 +161,34 @@ public final class PathUtils {
                 return false;
             }
             // compare both lists using iterators
-            final Iterator<Path> i1 = a.iterator();
-            final Iterator<Path> i2 = b.iterator();
-            while (i1.hasNext() && i2.hasNext()) {
-                final Path p1 = i1.next();
-                final Path p2 = i2.next();
-                if (p1.getFileSystem() == p2.getFileSystem()) {
-                    if (!p1.equals(p2)) {
+            final Iterator<Path> listAIter = a.iterator();
+            final Iterator<Path> listBIter = b.iterator();
+            while (listAIter.hasNext() && listBIter.hasNext()) {
+                final Path pathA = listAIter.next();
+                final Path pathB = listBIter.next();
+                if (pathA.getFileSystem() == pathB.getFileSystem()) {
+                    if (!pathA.equals(pathB)) {
+                        return false;
+                    }
+                } else if (pathA.getFileSystem().getSeparator().equals(pathB.getFileSystem().getSeparator())) {
+                    // Separators are the same, so we can use toString comparison
+                    if (!pathA.toString().equals(pathB.toString())) {
                         return false;
                     }
                 } else {
-                    if (!p1.toString().equals(p2.toString())) {
-                        return false;
+                    // Compare paths from different file systems component by component.
+                    // Cant use toString() string comparison which may fail due to different path separators.
+                    final Iterator<Path> pathAIter = pathA.iterator();
+                    final Iterator<Path> pathBIter = pathB.iterator();
+                    while (pathAIter.hasNext() && pathBIter.hasNext()) {
+                        final String componentA = pathAIter.next().toString();
+                        final String componentB = pathBIter.next().toString();
+                        if (!componentA.equals(componentB)) {
+                            return false;
+                        }
                     }
+                    // Check that both iterators are exhausted (paths have same number of components)
+                    return !pathAIter.hasNext() && !pathBIter.hasNext();
                 }
             }
             return true;
@@ -248,8 +264,8 @@ public final class PathUtils {
      * @param directory        The directory to accumulate information.
      * @param maxDepth         See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
      * @param fileVisitOptions See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
-     * @throws IOException if an I/O error is thrown by a visitor method.
      * @return file tree information.
+     * @throws IOException if an I/O error is thrown by a visitor method.
      */
     private static AccumulatorPathVisitor accumulate(final Path directory, final int maxDepth, final FileVisitOption[] fileVisitOptions) throws IOException {
         return visitFileTree(AccumulatorPathVisitor.withLongCounters(), directory, toFileVisitOptionSet(fileVisitOptions), maxDepth);
@@ -895,8 +911,8 @@ public final class PathUtils {
      * Will return the file name itself if it doesn't contain any periods. All leading directories of the {@code file name} parameter are skipped.
      * </p>
      *
-     * @return the base name of file name
      * @param path the path of the file to obtain the base name of.
+     * @return the base name of file name
      * @since 2.16.0
      */
     public static String getBaseName(final Path path) {
@@ -946,8 +962,8 @@ public final class PathUtils {
     /**
      * Gets the Path's file name and apply the given function if the file name is non-null.
      *
-     * @param <R> The function's result type.
-     * @param path the path to query.
+     * @param <R>      The function's result type.
+     * @param path     the path to query.
      * @param function function to apply to the file name.
      * @return the Path's file name as a string or null.
      * @see Path#getFileName()
@@ -1075,7 +1091,7 @@ public final class PathUtils {
      * @param path    the path to the file.
      * @param options options indicating how to handle symbolic links
      * @return {@code true} if the file is a directory; {@code false} if the path is null, the file does not exist, is not a directory, or it cannot be
-     *         determined if the file is a directory or not.
+     * determined if the file is a directory or not.
      * @throws SecurityException In the case of the default provider, and a security manager is installed, the {@link SecurityManager#checkRead(String)
      *                           checkRead} method is invoked to check read access to the directory.
      * @since 2.9.0
@@ -1281,7 +1297,7 @@ public final class PathUtils {
      * @param path    the path to the file.
      * @param options options indicating how to handle symbolic links.
      * @return {@code true} if the file is a regular file; {@code false} if the path is null, the file does not exist, is not a directory, or it cannot be
-     *         determined if the file is a regular file or not.
+     * determined if the file is a regular file or not.
      * @throws SecurityException In the case of the default provider, and a security manager is installed, the {@link SecurityManager#checkRead(String)
      *                           checkRead} method is invoked to check read access to the directory.
      * @since 2.9.0
