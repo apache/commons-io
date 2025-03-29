@@ -141,9 +141,13 @@ public final class FileTimes {
 
     /**
      * Converts NTFS time (100 nanosecond units since 1 January 1601) to Java time.
+     * <p>
+     * An NTFS file time is a 64-bit value for the number of 100-nanosecond intervals since 12:00 A.M. January 1, 1601 Coordinated Universal Time (UTC).
+     * </p>
      *
-     * @param ntfsTime the NTFS time in 100 nanosecond units
-     * @return the Date
+     * @param ntfsTime the NTFS time, 100-nanosecond units since 1 January 1601.
+     * @return the Date input.
+     * @see <a href="https://learn.microsoft.com/en-us/windows/win32/sysinfo/file-times">NTFS File Times</a>
      */
     public static Date ntfsTimeToDate(final long ntfsTime) {
         final long javaHundredNanos = Math.addExact(ntfsTime, WINDOWS_EPOCH_OFFSET);
@@ -153,10 +157,14 @@ public final class FileTimes {
 
     /**
      * Converts NTFS time (100-nanosecond units since 1 January 1601) to a FileTime.
+     * <p>
+     * An NTFS file time is a 64-bit value for the number of 100-nanosecond intervals since 12:00 A.M. January 1, 1601 Coordinated Universal Time (UTC).
+     * </p>
      *
-     * @param ntfsTime the NTFS time in 100-nanosecond units
-     * @return the FileTime
+     * @param ntfsTime the NTFS time, 100-nanosecond units since 1 January 1601.
+     * @return the FileTime input.
      * @see #toNtfsTime(FileTime)
+     * @see <a href="https://learn.microsoft.com/en-us/windows/win32/sysinfo/file-times">NTFS File Times</a>
      */
     public static FileTime ntfsTimeToFileTime(final long ntfsTime) {
         final long javaHundredsNanos = Math.addExact(ntfsTime, WINDOWS_EPOCH_OFFSET);
@@ -234,9 +242,12 @@ public final class FileTimes {
 
     /**
      * Converts a {@link Date} to NTFS time.
+     * <p>
+     * An NTFS file time is a 64-bit value for the number of 100-nanosecond intervals since 12:00 A.M. January 1, 1601 Coordinated Universal Time (UTC).
+     * </p>
      *
-     * @param date the Date
-     * @return the NTFS time
+     * @param date the Date input.
+     * @return the NTFS time, 100-nanosecond units since 1 January 1601.
      */
     public static long toNtfsTime(final Date date) {
         final long javaHundredNanos = date.getTime() * HUNDRED_NANOS_PER_MILLISECOND;
@@ -245,9 +256,12 @@ public final class FileTimes {
 
     /**
      * Converts a {@link FileTime} to NTFS time (100-nanosecond units since 1 January 1601).
+     * <p>
+     * An NTFS file time is a 64-bit value for the number of 100-nanosecond intervals since 12:00 A.M. January 1, 1601 Coordinated Universal Time (UTC).
+     * </p>
      *
-     * @param fileTime the FileTime
-     * @return the NTFS time in 100-nanosecond units
+     * @param fileTime the FileTime input.
+     * @return the NTFS time, 100-nanosecond units since 1 January 1601.
      */
     public static long toNtfsTime(final FileTime fileTime) {
         final Instant instant = fileTime.toInstant();
@@ -257,9 +271,12 @@ public final class FileTimes {
 
     /**
      * Converts Java time (milliseconds since Epoch) to NTFS time.
+     * <p>
+     * An NTFS file time is a 64-bit value for the number of 100-nanosecond intervals since 12:00 A.M. January 1, 1601 Coordinated Universal Time (UTC).
+     * </p>
      *
      * @param javaTime the Java time
-     * @return the NTFS time
+     * @return the NTFS time, 100-nanosecond units since 1 January 1601.
      * @since 2.16.0
      */
     public static long toNtfsTime(final long javaTime) {
