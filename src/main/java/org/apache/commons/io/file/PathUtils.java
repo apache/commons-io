@@ -57,10 +57,10 @@ import java.time.chrono.ChronoZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -133,12 +133,12 @@ public final class PathUtils {
                     } else {
                         tmpRelativeDirList1 = visitor1.relativizeDirectories(dir1, true, null);
                         tmpRelativeDirList2 = visitor2.relativizeDirectories(dir2, true, null);
-                        if (!tmpRelativeDirList1.equals(tmpRelativeDirList2)) {
+                        if (!equals(tmpRelativeDirList1, tmpRelativeDirList2)) {
                             equals = false;
                         } else {
                             tmpRelativeFileList1 = visitor1.relativizeFiles(dir1, true, null);
                             tmpRelativeFileList2 = visitor2.relativizeFiles(dir2, true, null);
-                            equals = tmpRelativeFileList1.equals(tmpRelativeFileList2);
+                            equals = equals(tmpRelativeFileList1, tmpRelativeFileList2);
                         }
                     }
                 }
@@ -147,6 +147,51 @@ public final class PathUtils {
             // relativeDirList2 = tmpRelativeDirList2;
             relativeFileList1 = tmpRelativeFileList1;
             relativeFileList2 = tmpRelativeFileList2;
+        }
+
+        /**
+         * Compare Path lists in a FileSystem agnostic way
+         *
+         * @param a first list
+         * @param b second list
+         * @return true if the lists are equal
+         */
+        private boolean equals(List<Path> a, List<Path> b) {
+            if (a.size() != b.size()) {
+                return false;
+            }
+            // compare both lists using iterators
+            final Iterator<Path> listAIter = a.iterator();
+            final Iterator<Path> listBIter = b.iterator();
+            while (listAIter.hasNext() && listBIter.hasNext()) {
+                final Path pathA = listAIter.next();
+                final Path pathB = listBIter.next();
+                if (pathA.getFileSystem() == pathB.getFileSystem()) {
+                    if (!pathA.equals(pathB)) {
+                        return false;
+                    }
+                } else if (pathA.getFileSystem().getSeparator().equals(pathB.getFileSystem().getSeparator())) {
+                    // Separators are the same, so we can use toString comparison
+                    if (!pathA.toString().equals(pathB.toString())) {
+                        return false;
+                    }
+                } else {
+                    // Compare paths from different file systems component by component.
+                    // Cant use toString() string comparison which may fail due to different path separators.
+                    final Iterator<Path> pathAIter = pathA.iterator();
+                    final Iterator<Path> pathBIter = pathB.iterator();
+                    while (pathAIter.hasNext() && pathBIter.hasNext()) {
+                        final String componentA = pathAIter.next().toString();
+                        final String componentB = pathBIter.next().toString();
+                        if (!componentA.equals(componentB)) {
+                            return false;
+                        }
+                    }
+                    // Check that both iterators are exhausted (paths have same number of components)
+                    return !pathAIter.hasNext() && !pathBIter.hasNext();
+                }
+            }
+            return true;
         }
     }
 
@@ -219,8 +264,8 @@ public final class PathUtils {
      * @param directory        The directory to accumulate information.
      * @param maxDepth         See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
      * @param fileVisitOptions See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
-     * @throws IOException if an I/O error is thrown by a visitor method.
      * @return file tree information.
+     * @throws IOException if an I/O error is thrown by a visitor method.
      */
     private static AccumulatorPathVisitor accumulate(final Path directory, final int maxDepth, final FileVisitOption[] fileVisitOptions) throws IOException {
         return visitFileTree(AccumulatorPathVisitor.withLongCounters(), directory, toFileVisitOptionSet(fileVisitOptions), maxDepth);
@@ -659,17 +704,16 @@ public final class PathUtils {
             return false;
         }
         // Both visitors contain the same normalized paths, we can compare file contents.
-        final List<Path> fileList1 = relativeSortedPaths.relativeFileList1;
-        final List<Path> fileList2 = relativeSortedPaths.relativeFileList2;
-        for (final Path path : fileList1) {
-            final int binarySearch = Collections.binarySearch(fileList2, path);
-            if (binarySearch <= -1) {
-                throw new IllegalStateException("Unexpected mismatch.");
-            }
-            if (!fileContentEquals(path1.resolve(path), path2.resolve(path), linkOptions, openOptions)) {
+        final Iterator<Path> i1 = relativeSortedPaths.relativeFileList1.iterator();
+        final Iterator<Path> i2 = relativeSortedPaths.relativeFileList2.iterator();
+        while (i1.hasNext()) {
+            final Path relativeP1 = i1.next();
+            final Path relativeP2 = i2.next();
+            if (!fileContentEquals(path1.resolve(relativeP1), path2.resolve(relativeP2), linkOptions, openOptions)) {
                 return false;
             }
         }
+        assert !i2.hasNext();
         return true;
     }
 
@@ -867,8 +911,8 @@ public final class PathUtils {
      * Will return the file name itself if it doesn't contain any periods. All leading directories of the {@code file name} parameter are skipped.
      * </p>
      *
-     * @return the base name of file name
      * @param path the path of the file to obtain the base name of.
+     * @return the base name of file name
      * @since 2.16.0
      */
     public static String getBaseName(final Path path) {
@@ -918,8 +962,8 @@ public final class PathUtils {
     /**
      * Gets the Path's file name and apply the given function if the file name is non-null.
      *
-     * @param <R> The function's result type.
-     * @param path the path to query.
+     * @param <R>      The function's result type.
+     * @param path     the path to query.
      * @param function function to apply to the file name.
      * @return the Path's file name as a string or null.
      * @see Path#getFileName()
@@ -1047,7 +1091,7 @@ public final class PathUtils {
      * @param path    the path to the file.
      * @param options options indicating how to handle symbolic links
      * @return {@code true} if the file is a directory; {@code false} if the path is null, the file does not exist, is not a directory, or it cannot be
-     *         determined if the file is a directory or not.
+     * determined if the file is a directory or not.
      * @throws SecurityException In the case of the default provider, and a security manager is installed, the {@link SecurityManager#checkRead(String)
      *                           checkRead} method is invoked to check read access to the directory.
      * @since 2.9.0
@@ -1253,7 +1297,7 @@ public final class PathUtils {
      * @param path    the path to the file.
      * @param options options indicating how to handle symbolic links.
      * @return {@code true} if the file is a regular file; {@code false} if the path is null, the file does not exist, is not a directory, or it cannot be
-     *         determined if the file is a regular file or not.
+     * determined if the file is a regular file or not.
      * @throws SecurityException In the case of the default provider, and a security manager is installed, the {@link SecurityManager#checkRead(String)
      *                           checkRead} method is invoked to check read access to the directory.
      * @since 2.9.0
