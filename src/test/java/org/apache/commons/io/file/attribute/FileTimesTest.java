@@ -37,28 +37,6 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 public class FileTimesTest {
 
-    public static Stream<Arguments> dateToNtfsProvider() {
-        // @formatter:off
-        return Stream.of(
-            Arguments.of("1601-01-01T00:00:00.000Z", 0),
-            Arguments.of("1601-01-01T00:00:00.000Z", 1),
-            Arguments.of("1600-12-31T23:59:59.999Z", -1),
-            Arguments.of("+30828-09-14T02:48:05.477580700Z", Long.MAX_VALUE),
-            Arguments.of("-27627-04-19T21:11:54.522419200Z", Long.MIN_VALUE),
-            Arguments.of("1601-01-01T00:00:00.001Z", FileTimes.HUNDRED_NANOS_PER_MILLISECOND),
-            Arguments.of("1601-01-01T00:00:00.001Z", FileTimes.HUNDRED_NANOS_PER_MILLISECOND + 1),
-            Arguments.of("1601-01-01T00:00:00.000Z", FileTimes.HUNDRED_NANOS_PER_MILLISECOND - 1),
-            Arguments.of("1600-12-31T23:59:59.999Z", -FileTimes.HUNDRED_NANOS_PER_MILLISECOND),
-            Arguments.of("1600-12-31T23:59:59.999Z", -FileTimes.HUNDRED_NANOS_PER_MILLISECOND + 1),
-            Arguments.of("1600-12-31T23:59:59.998Z", -FileTimes.HUNDRED_NANOS_PER_MILLISECOND - 1),
-            Arguments.of("1970-01-01T00:00:00.000Z", -FileTimes.UNIX_TO_NTFS_OFFSET),
-            Arguments.of("1970-01-01T00:00:00.000Z", -FileTimes.UNIX_TO_NTFS_OFFSET + 1),
-            Arguments.of("1970-01-01T00:00:00.001Z", -FileTimes.UNIX_TO_NTFS_OFFSET + FileTimes.HUNDRED_NANOS_PER_MILLISECOND),
-            Arguments.of("1969-12-31T23:59:59.999Z", -FileTimes.UNIX_TO_NTFS_OFFSET - 1),
-            Arguments.of("1969-12-31T23:59:59.999Z", -FileTimes.UNIX_TO_NTFS_OFFSET - FileTimes.HUNDRED_NANOS_PER_MILLISECOND));
-        // @formatter:on
-    }
-
     public static Stream<Arguments> fileTimeNanoUnitsToNtfsProvider() {
         // @formatter:off
         return Stream.of(
@@ -103,7 +81,7 @@ public class FileTimesTest {
     }
 
     @ParameterizedTest
-    @MethodSource("dateToNtfsProvider")
+    @MethodSource("fileTimeNanoUnitsToNtfsProvider")
     public void testDateToFileTime(final String instant, final long ignored) {
         final Instant parsedInstant = Instant.parse(instant);
         final FileTime parsedFileTime = FileTime.from(parsedInstant);
@@ -112,7 +90,7 @@ public class FileTimesTest {
     }
 
     @ParameterizedTest
-    @MethodSource("dateToNtfsProvider")
+    @MethodSource("fileTimeNanoUnitsToNtfsProvider")
     public void testDateToNtfsTime(final String instant, final long ntfsTime) {
         final long ntfsMillis = Math.floorDiv(ntfsTime, FileTimes.HUNDRED_NANOS_PER_MILLISECOND) * FileTimes.HUNDRED_NANOS_PER_MILLISECOND;
         final Date parsed = Date.from(Instant.parse(instant));
@@ -152,7 +130,7 @@ public class FileTimesTest {
     }
 
     @ParameterizedTest
-    @MethodSource("dateToNtfsProvider")
+    @MethodSource("fileTimeNanoUnitsToNtfsProvider")
     public void testFromUnixTime(final String instant, final long ntfsTime) {
         final long epochSecond = Instant.parse(instant).getEpochSecond();
         assertEquals(epochSecond, FileTimes.fromUnixTime(epochSecond).to(TimeUnit.SECONDS));
