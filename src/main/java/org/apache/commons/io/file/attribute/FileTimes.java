@@ -151,6 +151,10 @@ public final class FileTimes {
         return FileTime.from(Instant.now());
     }
 
+    static Date ntfsTimeToDate(final BigDecimal ntfsTime) {
+        return new Date(ntfsTimeToInstant(ntfsTime).toEpochMilli());
+    }
+
     /**
      * Converts NTFS time (100 nanosecond units since 1 January 1601) to Java time.
      * <p>
@@ -162,9 +166,7 @@ public final class FileTimes {
      * @see <a href="https://learn.microsoft.com/en-us/windows/win32/sysinfo/file-times">NTFS File Times</a>
      */
     public static Date ntfsTimeToDate(final long ntfsTime) {
-        final long javaHundredNanos = Math.addExact(ntfsTime, UNIX_TO_NTFS_OFFSET);
-        final long javaMillis = Math.floorDiv(javaHundredNanos, HUNDRED_NANOS_PER_MILLISECOND);
-        return new Date(javaMillis);
+        return ntfsTimeToDate(BigDecimal.valueOf(ntfsTime));
     }
 
     /**

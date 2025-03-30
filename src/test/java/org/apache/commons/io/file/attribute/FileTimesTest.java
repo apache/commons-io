@@ -194,9 +194,9 @@ public class FileTimesTest {
     }
 
     @ParameterizedTest
-    @MethodSource("dateToNtfsProvider")
+    @MethodSource("fileTimeNanoUnitsToNtfsProvider")
     public void testNtfsTimeToDate(final String instant, final long ntfsTime) {
-        assertEquals(Instant.parse(instant), FileTimes.ntfsTimeToDate(ntfsTime).toInstant());
+        assertEquals(Instant.parse(instant).toEpochMilli(), FileTimes.ntfsTimeToDate(ntfsTime).toInstant().toEpochMilli());
     }
 
     @ParameterizedTest
