@@ -49,31 +49,42 @@ public class FileTimesTest {
             Arguments.of("1600-12-31T23:59:59.999Z", -FileTimes.HUNDRED_NANOS_PER_MILLISECOND),
             Arguments.of("1600-12-31T23:59:59.999Z", -FileTimes.HUNDRED_NANOS_PER_MILLISECOND + 1),
             Arguments.of("1600-12-31T23:59:59.998Z", -FileTimes.HUNDRED_NANOS_PER_MILLISECOND - 1),
-            Arguments.of("1970-01-01T00:00:00.000Z", -FileTimes.WINDOWS_EPOCH_OFFSET),
-            Arguments.of("1970-01-01T00:00:00.000Z", -FileTimes.WINDOWS_EPOCH_OFFSET + 1),
-            Arguments.of("1970-01-01T00:00:00.001Z", -FileTimes.WINDOWS_EPOCH_OFFSET + FileTimes.HUNDRED_NANOS_PER_MILLISECOND),
-            Arguments.of("1969-12-31T23:59:59.999Z", -FileTimes.WINDOWS_EPOCH_OFFSET - 1),
-            Arguments.of("1969-12-31T23:59:59.999Z", -FileTimes.WINDOWS_EPOCH_OFFSET - FileTimes.HUNDRED_NANOS_PER_MILLISECOND));
+            Arguments.of("1970-01-01T00:00:00.000Z", -FileTimes.UNIX_TO_NTFS_OFFSET),
+            Arguments.of("1970-01-01T00:00:00.000Z", -FileTimes.UNIX_TO_NTFS_OFFSET + 1),
+            Arguments.of("1970-01-01T00:00:00.001Z", -FileTimes.UNIX_TO_NTFS_OFFSET + FileTimes.HUNDRED_NANOS_PER_MILLISECOND),
+            Arguments.of("1969-12-31T23:59:59.999Z", -FileTimes.UNIX_TO_NTFS_OFFSET - 1),
+            Arguments.of("1969-12-31T23:59:59.999Z", -FileTimes.UNIX_TO_NTFS_OFFSET - FileTimes.HUNDRED_NANOS_PER_MILLISECOND));
         // @formatter:on
     }
 
-    public static Stream<Arguments> fileTimeToNtfsProvider() {
+    public static Stream<Arguments> fileTimeNanoUnitsToNtfsProvider() {
         // @formatter:off
         return Stream.of(
             Arguments.of("1601-01-01T00:00:00.0000000Z", 0),
             Arguments.of("1601-01-01T00:00:00.0000001Z", 1),
             Arguments.of("1600-12-31T23:59:59.9999999Z", -1),
+            Arguments.of("+30828-09-14T02:48:05.477580700Z", Long.MAX_VALUE),
+            Arguments.of("-27627-04-19T21:11:54.522419200Z", Long.MIN_VALUE),
             Arguments.of("1601-01-01T00:00:00.0010000Z", FileTimes.HUNDRED_NANOS_PER_MILLISECOND),
             Arguments.of("1601-01-01T00:00:00.0010001Z", FileTimes.HUNDRED_NANOS_PER_MILLISECOND + 1),
             Arguments.of("1601-01-01T00:00:00.0009999Z", FileTimes.HUNDRED_NANOS_PER_MILLISECOND - 1),
             Arguments.of("1600-12-31T23:59:59.9990000Z", -FileTimes.HUNDRED_NANOS_PER_MILLISECOND),
             Arguments.of("1600-12-31T23:59:59.9990001Z", -FileTimes.HUNDRED_NANOS_PER_MILLISECOND + 1),
             Arguments.of("1600-12-31T23:59:59.9989999Z", -FileTimes.HUNDRED_NANOS_PER_MILLISECOND - 1),
-            Arguments.of("1970-01-01T00:00:00.0000000Z", -FileTimes.WINDOWS_EPOCH_OFFSET),
-            Arguments.of("1970-01-01T00:00:00.0000001Z", -FileTimes.WINDOWS_EPOCH_OFFSET + 1),
-            Arguments.of("1970-01-01T00:00:00.0010000Z", -FileTimes.WINDOWS_EPOCH_OFFSET + FileTimes.HUNDRED_NANOS_PER_MILLISECOND),
-            Arguments.of("1969-12-31T23:59:59.9999999Z", -FileTimes.WINDOWS_EPOCH_OFFSET - 1),
-            Arguments.of("1969-12-31T23:59:59.9990000Z", -FileTimes.WINDOWS_EPOCH_OFFSET - FileTimes.HUNDRED_NANOS_PER_MILLISECOND));
+            Arguments.of("1970-01-01T00:00:00.0000000Z", -FileTimes.UNIX_TO_NTFS_OFFSET),
+            Arguments.of("1970-01-01T00:00:00.0000001Z", -FileTimes.UNIX_TO_NTFS_OFFSET + 1),
+            Arguments.of("1970-01-01T00:00:00.0010000Z", -FileTimes.UNIX_TO_NTFS_OFFSET + FileTimes.HUNDRED_NANOS_PER_MILLISECOND),
+            Arguments.of("1969-12-31T23:59:59.9999999Z", -FileTimes.UNIX_TO_NTFS_OFFSET - 1),
+            Arguments.of("1969-12-31T23:59:59.9990000Z", -FileTimes.UNIX_TO_NTFS_OFFSET - FileTimes.HUNDRED_NANOS_PER_MILLISECOND));
+        // @formatter:on
+    }
+
+    public static Stream<Arguments> fileTimeToNtfsProvider() {
+        // @formatter:off
+        return Stream.of(
+            Arguments.of("1970-01-01T00:00:00Z", FileTime.from(Instant.EPOCH)),
+            Arguments.of("1969-12-31T23:59:00Z", FileTime.from(Instant.EPOCH.minusSeconds(60))),
+            Arguments.of("1970-01-01T00:01:00Z", FileTime.from(Instant.EPOCH.plusSeconds(60))));
         // @formatter:on
     }
 
@@ -113,7 +124,7 @@ public class FileTimesTest {
     }
 
     @ParameterizedTest
-    @MethodSource("fileTimeToNtfsProvider")
+    @MethodSource("fileTimeNanoUnitsToNtfsProvider")
     public void testFileTimeToDate(final String instant, final long ignored) {
         final Instant parsedInstant = Instant.parse(instant);
         final FileTime parsedFileTime = FileTime.from(parsedInstant);
@@ -121,8 +132,18 @@ public class FileTimesTest {
         assertEquals(parsedDate, FileTimes.toDate(parsedFileTime));
     }
 
+    //@Disabled
     @ParameterizedTest
     @MethodSource("fileTimeToNtfsProvider")
+    public void testFileTimeToNtfsTime(final String instantStr, final FileTime fileTime) {
+        final Instant instant = Instant.parse(instantStr);
+        final FileTime parsed = FileTime.from(instant);
+        assertEquals(instant, parsed.toInstant());
+        assertEquals(fileTime, FileTimes.ntfsTimeToFileTime(FileTimes.toNtfsTime(parsed)));
+    }
+
+    @ParameterizedTest
+    @MethodSource("fileTimeNanoUnitsToNtfsProvider")
     public void testFileTimeToNtfsTime(final String instant, final long ntfsTime) {
         final FileTime parsed = FileTime.from(Instant.parse(instant));
         assertEquals(ntfsTime, FileTimes.toNtfsTime(parsed));
@@ -179,10 +200,13 @@ public class FileTimesTest {
     }
 
     @ParameterizedTest
-    @MethodSource("fileTimeToNtfsProvider")
-    public void testNtfsTimeToFileTime(final String instant, final long ntfsTime) {
-        final FileTime parsed = FileTime.from(Instant.parse(instant));
-        assertEquals(parsed, FileTimes.ntfsTimeToFileTime(ntfsTime));
+    @MethodSource("fileTimeNanoUnitsToNtfsProvider")
+    public void testNtfsTimeToFileTime(final String instantStr, final long ntfsTime) {
+        final Instant instant = Instant.parse(instantStr);
+        final FileTime fileTime = FileTime.from(instant);
+        assertEquals(instant, fileTime.toInstant()); // sanity check
+        assertEquals(instant, FileTimes.ntfsTimeToInstant(ntfsTime));
+        assertEquals(fileTime, FileTimes.ntfsTimeToFileTime(ntfsTime));
     }
 
     @Test
