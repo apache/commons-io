@@ -43,6 +43,8 @@ public class FileTimesTest {
             Arguments.of("1601-01-01T00:00:00.000Z", 0),
             Arguments.of("1601-01-01T00:00:00.000Z", 1),
             Arguments.of("1600-12-31T23:59:59.999Z", -1),
+            Arguments.of("+30828-09-14T02:48:05.477580700Z", Long.MAX_VALUE),
+            Arguments.of("-27627-04-19T21:11:54.522419200Z", Long.MIN_VALUE),
             Arguments.of("1601-01-01T00:00:00.001Z", FileTimes.HUNDRED_NANOS_PER_MILLISECOND),
             Arguments.of("1601-01-01T00:00:00.001Z", FileTimes.HUNDRED_NANOS_PER_MILLISECOND + 1),
             Arguments.of("1601-01-01T00:00:00.000Z", FileTimes.HUNDRED_NANOS_PER_MILLISECOND - 1),
@@ -106,7 +108,7 @@ public class FileTimesTest {
         final Instant parsedInstant = Instant.parse(instant);
         final FileTime parsedFileTime = FileTime.from(parsedInstant);
         final Date parsedDate = Date.from(parsedInstant);
-        assertEquals(parsedFileTime, FileTimes.toFileTime(parsedDate));
+        assertEquals(parsedFileTime.toMillis(), FileTimes.toFileTime(parsedDate).toMillis());
     }
 
     @ParameterizedTest
