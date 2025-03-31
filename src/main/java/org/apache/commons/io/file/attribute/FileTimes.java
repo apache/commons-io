@@ -30,8 +30,13 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Helps use {@link FileTime} and interoperate Date and NTFS times.
+ * <p>
+ * An NTFS file time is a 64-bit value that represents the number of 100-nanosecond intervals that have elapsed since 12:00 A.M. January 1, 1601 Coordinated
+ * Universal Time (UTC). This is the offset of Windows time 0 to Unix epoch in 100-nanosecond intervals.
+ * </p>
  *
  * @since 2.12.0
+ * @see <a href="https://learn.microsoft.com/en-us/windows/win32/sysinfo/file-times">NTFS File Times</a>
  */
 public final class FileTimes {
 
@@ -156,7 +161,7 @@ public final class FileTimes {
     }
 
     /**
-     * Converts NTFS time (100 nanosecond units since 1 January 1601) to Java time.
+     * Converts an NTFS time (100 nanosecond units since 1 January 1601) to a {@link Date}.
      * <p>
      * An NTFS file time is a 64-bit value for the number of 100-nanosecond intervals since 12:00 A.M. January 1, 1601 Coordinated Universal Time (UTC).
      * </p>
@@ -170,7 +175,7 @@ public final class FileTimes {
     }
 
     /**
-     * Converts NTFS time (100-nanosecond units since 1 January 1601) to a FileTime.
+     * Converts an NTFS time (100-nanosecond units since 1 January 1601) to a {@link FileTime}.
      * <p>
      * An NTFS file time is a 64-bit value for the number of 100-nanosecond intervals since 12:00 A.M. January 1, 1601 Coordinated Universal Time (UTC).
      * </p>
@@ -195,7 +200,7 @@ public final class FileTimes {
     }
 
     /**
-     * Adds milliseconds to a source FileTime.
+     * Adds milliseconds to a {@link FileTime}.
      *
      * @param fileTime    The source FileTime.
      * @param millisToAdd The milliseconds to add.
@@ -206,7 +211,7 @@ public final class FileTimes {
     }
 
     /**
-     * Adds nanoseconds from a source FileTime.
+     * Adds nanoseconds to a {@link FileTime}.
      *
      * @param fileTime        The source FileTime.
      * @param nanosToSubtract The nanoseconds to subtract.
@@ -217,7 +222,7 @@ public final class FileTimes {
     }
 
     /**
-     * Adds seconds to a source FileTime.
+     * Adds seconds to a {@link FileTime}.
      *
      * @param fileTime     The source FileTime.
      * @param secondsToAdd The seconds to add.
@@ -238,7 +243,7 @@ public final class FileTimes {
     }
 
     /**
-     * Converts {@link FileTime} to a {@link Date}. If the provided FileTime is {@code null}, the returned Date is also {@code null}.
+     * Converts a {@link FileTime} to a {@link Date}. If the provided FileTime is {@code null}, the returned Date is also {@code null}.
      *
      * @param fileTime the file time to be converted.
      * @return a {@link Date} which corresponds to the supplied time, or {@code null} if the time is {@code null}.
@@ -249,7 +254,7 @@ public final class FileTimes {
     }
 
     /**
-     * Converts {@link Date} to a {@link FileTime}. If the provided Date is {@code null}, the returned FileTime is also {@code null}.
+     * Converts a {@link Date} to a {@link FileTime}. If the provided Date is {@code null}, the returned FileTime is also {@code null}.
      *
      * @param date the date to be converted.
      * @return a {@link FileTime} which corresponds to the supplied date, or {@code null} if the date is {@code null}.
@@ -293,7 +298,7 @@ public final class FileTimes {
     }
 
     /**
-     * Converts Java time (milliseconds since Epoch) to NTFS time.
+     * Converts a Java time (milliseconds since Epoch) to NTFS time.
      * <p>
      * An NTFS file time is a 64-bit value for the number of 100-nanosecond intervals since 12:00 A.M. January 1, 1601 Coordinated Universal Time (UTC).
      * </p>
@@ -308,7 +313,7 @@ public final class FileTimes {
     }
 
     /**
-     * Converts {@link FileTime} to standard Unix time in seconds.
+     * Converts a {@link FileTime} to standard Unix time in seconds.
      * <p>
      * The returned seconds value may lie out of bounds of Unix time. Check with {@link FileTimes#isUnixTime(long)}.
      * </p>
