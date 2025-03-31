@@ -102,11 +102,19 @@ public class FileTimesTest {
 
     @ParameterizedTest
     @MethodSource("fileTimeNanoUnitsToNtfsProvider")
-    public void testDateToNtfsTime(final String instant, final long ntfsTime) {
+    public void testDateToNtfsTime(final String instantStr, final long ntfsTime) {
         final long ntfsMillis = Math.floorDiv(ntfsTime, FileTimes.HUNDRED_NANOS_PER_MILLISECOND) * FileTimes.HUNDRED_NANOS_PER_MILLISECOND;
-        final Date parsed = Date.from(Instant.parse(instant));
-        assertEquals(ntfsMillis, FileTimes.toNtfsTime(parsed));
-        assertEquals(ntfsMillis, FileTimes.toNtfsTime(parsed.getTime()));
+        final Instant instant = Instant.parse(instantStr);
+        final Date parsed = Date.from(instant);
+        final long ntfsTime2 = FileTimes.toNtfsTime(parsed);
+        if (ntfsTime2 == Long.MIN_VALUE || ntfsTime2 == Long.MAX_VALUE) {
+            // toNtfsTime returns max long instead of overflowing
+        } else {
+            assertEquals(ntfsMillis, ntfsTime2);
+            assertEquals(ntfsMillis, FileTimes.toNtfsTime(parsed.getTime()));
+            assertEquals(ntfsMillis, FileTimes.toNtfsTime(FileTimes.ntfsTimeToInstant(ntfsTime).toEpochMilli()));
+        }
+        assertEquals(ntfsTime, FileTimes.toNtfsTime(FileTimes.ntfsTimeToInstant(ntfsTime)));
     }
 
     @Test
@@ -161,6 +169,35 @@ public class FileTimesTest {
     @MethodSource("isUnixFileTimeProvider")
     public void testIsUnixTimeLong(final String instant, final boolean isUnixTime) {
         assertEquals(isUnixTime, FileTimes.isUnixTime(Instant.parse(instant).getEpochSecond()));
+    }
+
+    @Test
+    public void testMaxJavaTime() {
+        final long javaTime = Long.MAX_VALUE;
+        final Instant instant = Instant.ofEpochMilli(javaTime);
+        assertEquals(javaTime, instant.toEpochMilli()); // sanity check
+        final long ntfsTime = FileTimes.toNtfsTime(javaTime);
+        final Instant instant2 = FileTimes.ntfsTimeToInstant(ntfsTime);
+        if (ntfsTime == Long.MAX_VALUE) {
+            // toNtfsTime returns max long instead of overflowing
+        } else {
+            assertEquals(javaTime, instant2.toEpochMilli());
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("fileTimeNanoUnitsToNtfsProvider")
+    public void testMaxJavaTimeParam(final String instantStr, final long javaTime) {
+        // final long javaTime = Long.MAX_VALUE;
+        final Instant instant = Instant.ofEpochMilli(javaTime);
+        assertEquals(javaTime, instant.toEpochMilli()); // sanity check
+        final long ntfsTime = FileTimes.toNtfsTime(javaTime);
+        final Instant instant2 = FileTimes.ntfsTimeToInstant(ntfsTime);
+        if (ntfsTime == Long.MIN_VALUE || ntfsTime == Long.MAX_VALUE) {
+            // toNtfsTime returns min or max long instead of overflowing
+        } else {
+            assertEquals(javaTime, instant2.toEpochMilli());
+        }
     }
 
     @Test

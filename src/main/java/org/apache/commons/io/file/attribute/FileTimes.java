@@ -40,6 +40,10 @@ import java.util.concurrent.TimeUnit;
  */
 public final class FileTimes {
 
+    private static final BigDecimal LONG_MIN_VALUE_BD = BigDecimal.valueOf(Long.MIN_VALUE);
+
+    private static final BigDecimal LONG_MAX_VALUE_BD = BigDecimal.valueOf(Long.MAX_VALUE);
+
     private static final MathContext MATH_CONTEXT = new MathContext(0, RoundingMode.FLOOR);
 
     /**
@@ -73,6 +77,8 @@ public final class FileTimes {
      * The amount of 100-nanosecond intervals in one millisecond.
      */
     static final long HUNDRED_NANOS_PER_MILLISECOND = TimeUnit.MILLISECONDS.toNanos(1) / 100;
+
+    static final BigDecimal HUNDRED_NANOS_PER_MILLISECOND_BD = BigDecimal.valueOf(HUNDRED_NANOS_PER_MILLISECOND);
 
     private static final long HUNDRED = 100L;
 
@@ -274,8 +280,7 @@ public final class FileTimes {
      * @return the NTFS time, 100-nanosecond units since 1 January 1601.
      */
     public static long toNtfsTime(final Date date) {
-        final long javaHundredNanos = date.getTime() * HUNDRED_NANOS_PER_MILLISECOND;
-        return Math.subtractExact(javaHundredNanos, UNIX_TO_NTFS_OFFSET);
+        return toNtfsTime(date.getTime());
     }
 
     /**
@@ -308,8 +313,15 @@ public final class FileTimes {
      * @since 2.16.0
      */
     public static long toNtfsTime(final long javaTime) {
-        final long javaHundredNanos = javaTime * HUNDRED_NANOS_PER_MILLISECOND;
-        return Math.subtractExact(javaHundredNanos, UNIX_TO_NTFS_OFFSET);
+        final BigDecimal javaHundredNanos = BigDecimal.valueOf(javaTime).multiply(HUNDRED_NANOS_PER_MILLISECOND_BD);
+        final BigDecimal ntfsTime = javaHundredNanos.subtract(UNIX_TO_NTFS_OFFSET_BD);
+        if (ntfsTime.compareTo(LONG_MAX_VALUE_BD) >= 0) {
+            return Long.MAX_VALUE;
+        }
+        if (ntfsTime.compareTo(LONG_MIN_VALUE_BD) <= 0) {
+            return Long.MIN_VALUE;
+        }
+        return ntfsTime.longValue();
     }
 
     /**
