@@ -106,13 +106,13 @@ public class QueueInputStream extends InputStream {
          */
         @Override
         public QueueInputStream get() {
-            return new QueueInputStream(blockingQueue, timeout);
+            return new QueueInputStream(this);
         }
 
         /**
          * Sets backing queue for the stream.
          *
-         * @param blockingQueue backing queue for the stream.
+         * @param blockingQueue backing queue for the stream, null resets to a new blocking queue instance.
          * @return {@code this} instance.
          */
         public Builder setBlockingQueue(final BlockingQueue<Integer> blockingQueue) {
@@ -160,23 +160,22 @@ public class QueueInputStream extends InputStream {
     /**
      * Constructs a new instance with given queue and zero timeout.
      *
-     * @param blockingQueue backing queue for the stream.
+     * @param blockingQueue backing queue for the stream, null maps to a new blocking queue instance.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public QueueInputStream(final BlockingQueue<Integer> blockingQueue) {
-        this(blockingQueue, Duration.ZERO);
+        this(builder().setBlockingQueue(blockingQueue));
     }
 
     /**
-     * Constructs a new instance with given queue and timeout.
+     * Constructs a new instance.
      *
-     * @param blockingQueue backing queue for the stream.
-     * @param timeout       how long to wait before giving up when polling the queue.
+     * @param builder The builder.
      */
-    private QueueInputStream(final BlockingQueue<Integer> blockingQueue, final Duration timeout) {
-        this.blockingQueue = Objects.requireNonNull(blockingQueue, "blockingQueue");
-        this.timeoutNanos = Objects.requireNonNull(timeout, "timeout").toNanos();
+    private QueueInputStream(final Builder builder) {
+        this.blockingQueue = Objects.requireNonNull(builder.blockingQueue, "blockingQueue");
+        this.timeoutNanos = Objects.requireNonNull(builder.timeout, "timeout").toNanos();
     }
 
     /**

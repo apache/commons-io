@@ -72,6 +72,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">FileTimes.toNtfsTime(*) methods can overflow result values.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Fix Javadoc for ChunkedOutputStream.Builder.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">General Javadoc improvements.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Calling QueueInputStream.QueueInputStream(null) maps to the same kind of default blocking queue as QueueInputStream.Builder.setBlockingQueue(null).</action>
       <!-- ADD -->
       <action dev="ggregory" type="add" issue="IO-860" due-to="Nico Strecker, Gary Gregory">Add ThrottledInputStream.Builder.setMaxBytes(long, ChronoUnit).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IOIterable.</action>

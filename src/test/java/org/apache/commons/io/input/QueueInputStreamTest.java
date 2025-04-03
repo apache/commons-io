@@ -159,7 +159,6 @@ public class QueueInputStreamTest {
 
     @Test
     public void testInvalidArguments() {
-        assertThrows(NullPointerException.class, () -> new QueueInputStream(null), "queue is required");
         assertThrows(IllegalArgumentException.class, () -> QueueInputStream.builder().setTimeout(Duration.ofMillis(-1)).get(), "waitTime must not be negative");
     }
 
