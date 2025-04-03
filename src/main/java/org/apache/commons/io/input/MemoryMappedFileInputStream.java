@@ -122,7 +122,7 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
          */
         @Override
         public MemoryMappedFileInputStream get() throws IOException {
-            return new MemoryMappedFileInputStream(getPath(), getBufferSize());
+            return new MemoryMappedFileInputStream(this);
         }
     }
 
@@ -156,13 +156,12 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
     /**
      * Constructs a new instance.
      *
-     * @param file The path of the file to open.
-     * @param bufferSize Size of the sliding buffer.
+     * @param builder The builder.
      * @throws IOException If an I/O error occurs.
      */
-    private MemoryMappedFileInputStream(final Path file, final int bufferSize) throws IOException {
-        this.bufferSize = bufferSize;
-        this.channel = FileChannel.open(file, StandardOpenOption.READ);
+    private MemoryMappedFileInputStream(final Builder builder) throws IOException {
+        this.bufferSize = builder.getBufferSize();
+        this.channel = FileChannel.open(builder.getPath(), StandardOpenOption.READ);
     }
 
     @Override
