@@ -92,7 +92,7 @@ public final class UncheckedFilterOutputStream extends FilterOutputStream {
          */
         @Override
         public UncheckedFilterOutputStream get() throws IOException {
-            return new UncheckedFilterOutputStream(getOutputStream());
+            return new UncheckedFilterOutputStream(this);
         }
 
     }
@@ -109,11 +109,12 @@ public final class UncheckedFilterOutputStream extends FilterOutputStream {
     /**
      * Constructs an output stream filter built on top of the specified underlying output stream.
      *
-     * @param outputStream the underlying output stream, or {@code null} if this instance is to be created without an
-     *        underlying stream.
+     * @param builder the buider.
+     * @throws IOException if an I/O error occurs converting to an {@link OutputStream} using {@link #getOutputStream()}.
      */
-    private UncheckedFilterOutputStream(final OutputStream outputStream) {
-        super(outputStream);
+    @SuppressWarnings("resource") // Caller closes.
+    private UncheckedFilterOutputStream(final Builder builder) throws IOException {
+        super(builder.getOutputStream());
     }
 
     /**
