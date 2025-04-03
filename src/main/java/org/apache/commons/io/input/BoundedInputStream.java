@@ -28,7 +28,7 @@ import org.apache.commons.io.function.IOBiConsumer;
 /**
  * Reads bytes up to a maximum count and stops once reached.
  * <p>
- * To build an instance, see {@link AbstractBuilder}.
+ * To build an instance: Use the {@link #builder()} to access all features.
  * </p>
  * <p>
  * By default, a {@link BoundedInputStream} is <em>unbound</em>; so make sure to call {@link AbstractBuilder#setMaxCount(long)}.
@@ -145,7 +145,7 @@ public class BoundedInputStream extends ProxyInputStream {
          * Default is {@value IOUtils#EOF}, negative means unbound.
          * </p>
          *
-         * @param maxCount The maximum number of bytes to return.
+         * @param maxCount The maximum number of bytes to return, negative means unbound.
          * @return {@code this} instance.
          */
         public T setMaxCount(final long maxCount) {
@@ -321,6 +321,9 @@ public class BoundedInputStream extends ProxyInputStream {
 
     /**
      * Constructs a new {@link BoundedInputStream} that wraps the given input stream and is <em>unbounded</em>.
+     * <p>
+     * To build an instance: Use the {@link #builder()} to access all features.
+     * </p>
      *
      * @param in The wrapped input stream.
      * @deprecated Use {@link AbstractBuilder#get()}.
@@ -342,7 +345,7 @@ public class BoundedInputStream extends ProxyInputStream {
      * Constructs a new {@link BoundedInputStream} that wraps the given input stream and limits it to a certain size.
      *
      * @param inputStream The wrapped input stream.
-     * @param maxCount    The maximum number of bytes to return.
+     * @param maxCount    The maximum number of bytes to return, negative means unbound.
      * @deprecated Use {@link AbstractBuilder#get()}.
      */
     @Deprecated
