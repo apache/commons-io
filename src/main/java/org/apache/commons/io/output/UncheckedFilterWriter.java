@@ -92,7 +92,7 @@ public final class UncheckedFilterWriter extends FilterWriter {
          */
         @Override
         public UncheckedFilterWriter get() throws IOException {
-            return new UncheckedFilterWriter(getWriter());
+            return new UncheckedFilterWriter(this);
         }
 
     }
@@ -109,11 +109,14 @@ public final class UncheckedFilterWriter extends FilterWriter {
     /**
      * Constructs a new filtered writer.
      *
-     * @param writer a Writer object providing the underlying stream.
-     * @throws NullPointerException if {@code writer} is {@code null}.
+     * @param builder a Writer object providing the underlying stream.
+     * @throws IOException
+     * @throws NullPointerException if {@code builder} the its {@code Writer} is {@code null}.
+     * @throws IOException          if an I/O error occurs converting to an {@link Writer} using {@link #getWriter()}.
      */
-    private UncheckedFilterWriter(final Writer writer) {
-        super(writer);
+    @SuppressWarnings("resource") // Caller closes.
+    private UncheckedFilterWriter(final Builder builder) throws IOException {
+        super(builder.getWriter());
     }
 
     /**
