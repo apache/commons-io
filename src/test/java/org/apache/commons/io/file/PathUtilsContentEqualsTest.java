@@ -29,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -99,6 +100,23 @@ public class PathUtilsContentEqualsTest {
             assertFalse(PathUtils.directoryAndFileContentEquals(dir2, dir1));
         }
     }
+
+    /**
+     * Tests IO-872 PathUtils.directoryAndFileContentEquals doesn't work across FileSystems.
+     *
+     * @throws Exception on test failure.
+     */
+    @Disabled
+    @Test
+    public void testDirectoryAndFileContentEqualsDifferentFileSystems() throws Exception {
+        final Path dir1 = Paths.get("src/test/resources/dir-equals-tests");
+        try (FileSystem fileSystem = FileSystems.newFileSystem(dir1.resolveSibling(dir1.getFileName() + ".zip"), null)) {
+            final Path dir2 = fileSystem.getPath("/dir-equals-tests");
+            // WindowsPath and ZipPath equals() methods always return false if the argument is not of the same instance as itself.
+            assertTrue(PathUtils.directoryAndFileContentEquals(dir1, dir2));
+        }
+    }
+
 
     @Test
     public void testDirectoryContentEquals() throws Exception {
