@@ -43,7 +43,8 @@ public class ChunkedOutputStream extends FilterOutputStream {
      * Using File IO:
      * </p>
      * <pre>{@code
-     * UnsynchronizedByteArrayOutputStream s = UnsynchronizedByteArrayOutputStream.builder()
+     * ChunkedOutputStream s = ChunkedOutputStream.builder()
+     *   .setPath("over/there.out")
      *   .setBufferSize(8192)
      *   .get();
      * }
@@ -52,7 +53,8 @@ public class ChunkedOutputStream extends FilterOutputStream {
      * Using NIO Path:
      * </p>
      * <pre>{@code
-     * UnsynchronizedByteArrayOutputStream s = UnsynchronizedByteArrayOutputStream.builder()
+     * ChunkedOutputStream s = ChunkedOutputStream.builder()
+     *   .setPath("over/there.out")
      *   .setBufferSize(8192)
      *   .get();
      * }
@@ -72,7 +74,7 @@ public class ChunkedOutputStream extends FilterOutputStream {
         }
 
         /**
-         * Builds a new {@link UnsynchronizedByteArrayOutputStream}.
+         * Builds a new {@link ChunkedOutputStream}.
          * <p>
          * This builder uses the following aspects:
          * </p>
