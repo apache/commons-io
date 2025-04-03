@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.file.StandardOpenOption;
-import java.util.Objects;
 
 import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
@@ -85,10 +84,9 @@ public final class RandomAccessFileOutputStream extends OutputStream {
          * @see AbstractOrigin#getFile()
          * @see #getUnchecked()
          */
-        @SuppressWarnings("resource") // caller closes
         @Override
         public RandomAccessFileOutputStream get() throws IOException {
-            return new RandomAccessFileOutputStream(getRandomAccessFile());
+            return new RandomAccessFileOutputStream(this);
         }
 
     }
@@ -104,8 +102,8 @@ public final class RandomAccessFileOutputStream extends OutputStream {
 
     private final RandomAccessFile randomAccessFile;
 
-    private RandomAccessFileOutputStream(final RandomAccessFile randomAccessFile) {
-        this.randomAccessFile = Objects.requireNonNull(randomAccessFile);
+    private RandomAccessFileOutputStream(final Builder builder) throws IOException {
+        this.randomAccessFile = builder.getRandomAccessFile();
     }
 
     @Override
