@@ -1736,10 +1736,10 @@ public final class PathUtils {
         return countDirectoryAsBigInteger(directory).getByteCounter().getBigInteger();
     }
 
-    private static Path stripTrailingSeparator(final Path cdir) {
-        final Path dir = cdir.normalize();
+    private static Path stripTrailingSeparator(final Path path) {
+        final Path dir = path.normalize();
         final String separator = dir.getFileSystem().getSeparator();
-        final String fileName = Objects.toString(dir.getFileName(), null);
+        final String fileName = getFileNameString(dir);
         return fileName != null && fileName.endsWith(separator) ? dir.resolveSibling(fileName.substring(0, fileName.length() - 1)) : dir;
     }
 

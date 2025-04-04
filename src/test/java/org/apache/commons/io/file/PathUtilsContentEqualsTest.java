@@ -163,8 +163,8 @@ public class PathUtilsContentEqualsTest {
         Files.copy(emptyZip, zipCopy, StandardCopyOption.REPLACE_EXISTING);
         try (FileSystem fileSystem1 = FileSystems.newFileSystem(emptyZip, null);
                 FileSystem fileSystem2 = FileSystems.newFileSystem(zipCopy, null)) {
-            final Path dir1 = fileSystem1.getPath("");
-            final Path dir2 = fileSystem2.getPath("");
+            final Path dir1 = fileSystem1.getPath("/");
+            final Path dir2 = fileSystem2.getPath("/");
             // WindowsPath, UnixPath, and ZipPath equals() methods always return false if the argument is not of the same instance as itself.
             assertTrue(PathUtils.directoryAndFileContentEquals(dir1, dir2));
         }
