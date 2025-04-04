@@ -44,6 +44,13 @@ public abstract class SimplePathVisitor extends SimpleFileVisitor<Path> implemen
 
         private IOBiFunction<Path, IOException, FileVisitResult> visitFileFailedFunction;
 
+        /**
+         * Constructs a new builder for subclasses.
+         */
+        public AbstractBuilder() {
+            // empty.
+        }
+
         IOBiFunction<Path, IOException, FileVisitResult> getVisitFileFailedFunction() {
             return visitFileFailedFunction;
         }

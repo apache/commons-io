@@ -66,6 +66,14 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
      * @since 2.18.0
      */
     public static class Builder extends AbstractBuilder<AccumulatorPathVisitor, Builder> {
+
+        /**
+         * Constructs a new builder.
+         */
+        public Builder() {
+            // empty.
+        }
+
         @Override
         public AccumulatorPathVisitor get() {
             return new AccumulatorPathVisitor(this);

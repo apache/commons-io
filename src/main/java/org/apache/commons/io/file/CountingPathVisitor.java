@@ -53,6 +53,13 @@ public class CountingPathVisitor extends SimplePathVisitor {
         private PathFilter directoryFilter = defaultDirectoryFilter();
         private UnaryOperator<Path> directoryPostTransformer = defaultDirectoryTransformer();
 
+        /**
+         * Constructs a new builder for subclasses.
+         */
+        public AbstractBuilder() {
+            // empty.
+        }
+
         PathFilter getDirectoryFilter() {
             return directoryFilter;
         }
@@ -120,6 +127,13 @@ public class CountingPathVisitor extends SimplePathVisitor {
      * @since 2.18.0
      */
     public static class Builder extends AbstractBuilder<CountingPathVisitor, Builder> {
+
+        /**
+         * Constructs a new builder.
+         */
+        public Builder() {
+            // empty.
+        }
 
         @Override
         public CountingPathVisitor get() {
