@@ -238,7 +238,7 @@ public class BOMInputStream extends ProxyInputStream {
     private BOMInputStream(final Builder builder) throws IOException {
         super(builder);
         if (IOUtils.length(builder.byteOrderMarks) == 0) {
-            throw new IllegalArgumentException("No BOMs specified");
+            throw new IllegalArgumentException("No ByteOrderMark specified.");
         }
         this.include = builder.include;
         final List<ByteOrderMark> list = Arrays.asList(builder.byteOrderMarks);
