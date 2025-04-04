@@ -358,7 +358,6 @@ public final class PathUtils {
      * @throws IOException if an I/O error occurs.
      * @see Files#copy(Path, Path, CopyOption...)
      */
-    @SuppressWarnings("resource") // getFileSystem() is a getter
     public static Path copyFileToDirectory(final Path sourceFile, final Path targetDirectory, final CopyOption... copyOptions) throws IOException {
         // Path.resolve() naturally won't work across FileSystem unless we convert to a String
         final Path sourceFileName = Objects.requireNonNull(sourceFile.getFileName(), "source file name");
