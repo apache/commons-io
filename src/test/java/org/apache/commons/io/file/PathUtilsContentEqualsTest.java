@@ -28,6 +28,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -106,7 +107,7 @@ public class PathUtilsContentEqualsTest {
      * @throws Exception on test failure.
      */
     @Test
-    public void testDirectoryAndFileContentEqualsDifferentFileSystems() throws Exception {
+    public void testDirectoryAndFileContentEqualsDifferentFileSystemsFileVsZip() throws Exception {
         final Path dir1 = Paths.get("src/test/resources/dir-equals-tests");
         try (FileSystem fileSystem = FileSystems.newFileSystem(dir1.resolveSibling(dir1.getFileName() + ".zip"), null)) {
             final Path dir2 = fileSystem.getPath("/dir-equals-tests");
@@ -115,6 +116,59 @@ public class PathUtilsContentEqualsTest {
         }
     }
 
+    /**
+     * Tests IO-872 PathUtils.directoryAndFileContentEquals doesn't work across FileSystems.
+     *
+     * @throws Exception on test failure.
+     */
+    @Test
+    public void testDirectoryAndFileContentEqualsDifferentFileSystemsZipVsZip() throws Exception {
+        final Path zipPath = Paths.get("src/test/resources/dir-equals-tests.zip");
+        final Path zipCopy = temporaryFolder.toPath().resolve("copy.zip");
+        Files.copy(zipPath, zipCopy, StandardCopyOption.REPLACE_EXISTING);
+        try (FileSystem fileSystem1 = FileSystems.newFileSystem(zipPath, null);
+                FileSystem fileSystem2 = FileSystems.newFileSystem(zipCopy, null)) {
+            final Path dir1 = fileSystem1.getPath("/dir-equals-tests");
+            final Path dir2 = fileSystem2.getPath("/dir-equals-tests");
+            // WindowsPath, UnixPath, and ZipPath equals() methods always return false if the argument is not of the same instance as itself.
+            assertTrue(PathUtils.directoryAndFileContentEquals(dir1, dir2));
+        }
+    }
+
+    /**
+     * Tests IO-872 PathUtils.directoryAndFileContentEquals doesn't work across FileSystems.
+     *
+     * @throws Exception on test failure.
+     */
+    @Test
+    public void testDirectoryAndFileContentEqualsDifferentFileSystemsZipVsZipEmpty() throws Exception {
+        final Path zipPath = Paths.get("src/test/resources/dir-equals-tests.zip");
+        final Path emptyZip = Paths.get("src/test/resources/org/apache/commons/io/empty.zip");
+        Files.copy(zipPath, emptyZip, StandardCopyOption.REPLACE_EXISTING);
+        try (FileSystem fileSystem1 = FileSystems.newFileSystem(zipPath, null);
+                FileSystem fileSystem2 = FileSystems.newFileSystem(emptyZip, null)) {
+            final Path dir1 = fileSystem1.getPath("/dir-equals-tests");
+            final Path dir2 = fileSystem2.getPath("/");
+            // WindowsPath, UnixPath, and ZipPath equals() methods always return false if the argument is not of the same instance as itself.
+            assertFalse(PathUtils.directoryAndFileContentEquals(dir1, dir2));
+        }
+        try (FileSystem fileSystem1 = FileSystems.newFileSystem(zipPath, null);
+                FileSystem fileSystem2 = FileSystems.newFileSystem(emptyZip, null)) {
+            final Path dir1 = fileSystem1.getPath("/dir-equals-tests");
+            final Path dir2 = fileSystem2.getRootDirectories().iterator().next();
+            // WindowsPath, UnixPath, and ZipPath equals() methods always return false if the argument is not of the same instance as itself.
+            assertFalse(PathUtils.directoryAndFileContentEquals(dir1, dir2));
+        }
+        final Path zipCopy = temporaryFolder.toPath().resolve("copy.zip");
+        Files.copy(emptyZip, zipCopy, StandardCopyOption.REPLACE_EXISTING);
+        try (FileSystem fileSystem1 = FileSystems.newFileSystem(emptyZip, null);
+                FileSystem fileSystem2 = FileSystems.newFileSystem(zipCopy, null)) {
+            final Path dir1 = fileSystem1.getPath("");
+            final Path dir2 = fileSystem2.getPath("");
+            // WindowsPath, UnixPath, and ZipPath equals() methods always return false if the argument is not of the same instance as itself.
+            assertTrue(PathUtils.directoryAndFileContentEquals(dir1, dir2));
+        }
+    }
 
     @Test
     public void testDirectoryContentEquals() throws Exception {

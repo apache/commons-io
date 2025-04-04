@@ -1739,8 +1739,8 @@ public final class PathUtils {
     private static Path stripTrailingSeparator(final Path cdir) {
         final Path dir = cdir.normalize();
         final String separator = dir.getFileSystem().getSeparator();
-        final String fileName = dir.getFileName().toString();
-        return fileName.endsWith(separator) ? dir.resolveSibling(fileName.substring(0, fileName.length() - 1)) : dir;
+        final String fileName = Objects.toString(dir.getFileName(), null);
+        return fileName != null && fileName.endsWith(separator) ? dir.resolveSibling(fileName.substring(0, fileName.length() - 1)) : dir;
     }
 
     /**
