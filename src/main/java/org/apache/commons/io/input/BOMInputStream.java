@@ -312,7 +312,7 @@ public class BOMInputStream extends ProxyInputStream {
     }
 
     /**
-     * Finds a BOM with the configured bytes in {@code bomList}.
+     * Finds a ByteOrderMark with the configured bytes in {@code bomList}.
      *
      * @return The matched BOM or null if none matched.
      */
@@ -321,7 +321,7 @@ public class BOMInputStream extends ProxyInputStream {
     }
 
     /**
-     * Gets the BOM (Byte Order Mark).
+     * Gets the ByteOrderMark (Byte Order Mark).
      *
      * @return The BOM or null if none matched.
      * @throws IOException
