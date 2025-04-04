@@ -103,7 +103,7 @@ public final class PathUtils {
          * @param list2 the second list.
          * @return whether the lists are equal.
          */
-        private static boolean equals(final List<Path> list1, final List<Path> list2) {
+        private static boolean equalsIgnoreFileSystem(final List<Path> list1, final List<Path> list2) {
             if (list1.size() != list2.size()) {
                 return false;
             }
@@ -111,34 +111,35 @@ public final class PathUtils {
             final Iterator<Path> iterator1 = list1.iterator();
             final Iterator<Path> iterator2 = list2.iterator();
             while (iterator1.hasNext() && iterator2.hasNext()) {
-                final Path path1 = iterator1.next();
-                final Path path2 = iterator2.next();
-                final FileSystem fileSystem1 = path1.getFileSystem();
-                final FileSystem fileSystem2 = path2.getFileSystem();
-                if (fileSystem1 == fileSystem2) {
-                    if (!path1.equals(path2)) {
-                        return false;
-                    }
-                } else if (fileSystem1.getSeparator().equals(fileSystem2.getSeparator())) {
-                    // Separators are the same, so we can use toString comparison
-                    if (!path1.toString().equals(path2.toString())) {
-                        return false;
-                    }
-                } else {
-                    // Compare paths from different file systems component by component.
-                    // Cant use toString() string comparison which may fail due to different path separators.
-                    final Iterator<Path> path1Iterator = path1.iterator();
-                    final Iterator<Path> path2Iterator = path2.iterator();
-                    while (path1Iterator.hasNext() && path2Iterator.hasNext()) {
-                        if (!path1Iterator.next().toString().equals(path2Iterator.next().toString())) {
-                            return false;
-                        }
-                    }
-                    // Check that both iterators are exhausted (paths have same number of components)
-                    return !path1Iterator.hasNext() && !path2Iterator.hasNext();
+                if (!equalsIgnoreFileSystem(iterator1.next(), iterator2.next())) {
+                    return false;
                 }
             }
             return true;
+        }
+
+        private static boolean equalsIgnoreFileSystem(final Path path1, final Path path2) {
+            final FileSystem fileSystem1 = path1.getFileSystem();
+            final FileSystem fileSystem2 = path2.getFileSystem();
+            if (fileSystem1 == fileSystem2) {
+                return path1.equals(path2);
+            }
+            final String separator1 = fileSystem1.getSeparator();
+            final String separator2 = fileSystem2.getSeparator();
+            final String string1 = path1.toString();
+            final String string2 = path2.toString();
+            if (separator1.equals(separator2)) {
+                // Separators are the same, so we can use toString comparison
+                return string1.equals(string2);
+            }
+            // Compare paths from different file systems component by component.
+            return extractKey(separator1, string1).equals(extractKey(separator2, string2));
+            //return Arrays.equals(string1.split("\\" + separator1), string2.split("\\" + separator2));
+        }
+
+        static String extractKey(final String separator, final String string) {
+            // Replace the file separator in a path string with a string that is not legal in a path on Windows, Linux, and macOS.
+            return string.replaceAll("\\" + separator, ">");
         }
 
         final boolean equals;
@@ -180,12 +181,12 @@ public final class PathUtils {
                     } else {
                         tmpRelativeDirList1 = visitor1.relativizeDirectories(dir1, true, null);
                         tmpRelativeDirList2 = visitor2.relativizeDirectories(dir2, true, null);
-                        if (!equals(tmpRelativeDirList1, tmpRelativeDirList2)) {
+                        if (!equalsIgnoreFileSystem(tmpRelativeDirList1, tmpRelativeDirList2)) {
                             equals = false;
                         } else {
                             tmpRelativeFileList1 = visitor1.relativizeFiles(dir1, true, null);
                             tmpRelativeFileList2 = visitor2.relativizeFiles(dir2, true, null);
-                            equals = equals(tmpRelativeFileList1, tmpRelativeFileList2);
+                            equals = equalsIgnoreFileSystem(tmpRelativeFileList1, tmpRelativeFileList2);
                         }
                     }
                 }
@@ -198,40 +199,33 @@ public final class PathUtils {
     }
 
     private static final OpenOption[] OPEN_OPTIONS_TRUNCATE = { StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING };
-
     private static final OpenOption[] OPEN_OPTIONS_APPEND = { StandardOpenOption.CREATE, StandardOpenOption.APPEND };
-
     /**
      * Empty {@link CopyOption} array.
      *
      * @since 2.8.0
      */
     public static final CopyOption[] EMPTY_COPY_OPTIONS = {};
-
     /**
      * Empty {@link DeleteOption} array.
      *
      * @since 2.8.0
      */
     public static final DeleteOption[] EMPTY_DELETE_OPTION_ARRAY = {};
-
     /**
      * Empty {@link FileAttribute} array.
      *
      * @since 2.13.0
      */
     public static final FileAttribute<?>[] EMPTY_FILE_ATTRIBUTE_ARRAY = {};
-
     /**
      * Empty {@link FileVisitOption} array.
      */
     public static final FileVisitOption[] EMPTY_FILE_VISIT_OPTION_ARRAY = {};
-
     /**
      * Empty {@link LinkOption} array.
      */
     public static final LinkOption[] EMPTY_LINK_OPTION_ARRAY = {};
-
     /**
      * {@link LinkOption} array for {@link LinkOption#NOFOLLOW_LINKS}.
      *
@@ -240,19 +234,16 @@ public final class PathUtils {
      */
     @Deprecated
     public static final LinkOption[] NOFOLLOW_LINK_OPTION_ARRAY = { LinkOption.NOFOLLOW_LINKS };
-
     /**
      * A LinkOption used to follow link in this class, the inverse of {@link LinkOption#NOFOLLOW_LINKS}.
      *
      * @since 2.12.0
      */
     static final LinkOption NULL_LINK_OPTION = null;
-
     /**
      * Empty {@link OpenOption} array.
      */
     public static final OpenOption[] EMPTY_OPEN_OPTION_ARRAY = {};
-
     /**
      * Empty {@link Path} array.
      *
@@ -712,8 +703,9 @@ public final class PathUtils {
         final boolean sameFileSystem = isSameFileSystem(path1, path2);
         for (final Path path : fileList1) {
             final int binarySearch = sameFileSystem ? Collections.binarySearch(fileList2, path)
-                    : Collections.binarySearch(fileList2, path, Comparator.comparing(Path::toString));
-            if (binarySearch <= -1) {
+                    : Collections.binarySearch(fileList2, path,
+                            Comparator.comparing(p -> RelativeSortedPaths.extractKey(p.getFileSystem().getSeparator(), p.toString())));
+            if (binarySearch < 0) {
                 throw new IllegalStateException("Unexpected mismatch.");
             }
             if (sameFileSystem && !fileContentEquals(path1.resolve(path), path2.resolve(path), linkOptions, openOptions)) {
@@ -949,6 +941,7 @@ public final class PathUtils {
      * <p>
      * This method returns the textual part of the Path after the last period.
      * </p>
+     *
      * <pre>
      * foo.txt      --&gt; "txt"
      * a/b/c.jpg    --&gt; "jpg"
@@ -971,8 +964,8 @@ public final class PathUtils {
     /**
      * Gets the Path's file name and apply the given function if the file name is non-null.
      *
-     * @param <R> The function's result type.
-     * @param path the path to query.
+     * @param <R>      The function's result type.
+     * @param path     the path to query.
      * @param function function to apply to the file name.
      * @return the Path's file name as a string or null.
      * @see Path#getFileName()
@@ -1744,7 +1737,8 @@ public final class PathUtils {
         return countDirectoryAsBigInteger(directory).getByteCounter().getBigInteger();
     }
 
-    private static Path stripTrailingSeparator(final Path dir) {
+    private static Path stripTrailingSeparator(final Path cdir) {
+        final Path dir = cdir.normalize();
         final String separator = dir.getFileSystem().getSeparator();
         final String fileName = dir.getFileName().toString();
         return fileName.endsWith(separator) ? dir.resolveSibling(fileName.substring(0, fileName.length() - 1)) : dir;
@@ -1952,5 +1946,4 @@ public final class PathUtils {
     private PathUtils() {
         // do not instantiate.
     }
-
 }
