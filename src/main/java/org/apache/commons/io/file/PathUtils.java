@@ -1736,8 +1736,7 @@ public final class PathUtils {
         return countDirectoryAsBigInteger(directory).getByteCounter().getBigInteger();
     }
 
-    private static Path stripTrailingSeparator(final Path path) {
-        final Path dir = path.normalize();
+    private static Path stripTrailingSeparator(final Path dir) {
         final String separator = dir.getFileSystem().getSeparator();
         final String fileName = getFileNameString(dir);
         return fileName != null && fileName.endsWith(separator) ? dir.resolveSibling(fileName.substring(0, fileName.length() - 1)) : dir;
