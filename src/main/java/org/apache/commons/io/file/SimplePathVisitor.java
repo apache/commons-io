@@ -23,6 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.util.Objects;
 
+import org.apache.commons.io.build.AbstractSupplier;
 import org.apache.commons.io.function.IOBiFunction;
 
 /**
@@ -31,6 +32,37 @@ import org.apache.commons.io.function.IOBiFunction;
  * @since 2.7
  */
 public abstract class SimplePathVisitor extends SimpleFileVisitor<Path> implements PathVisitor {
+
+    /**
+     * Abstracts builder for subclasses.
+     *
+     * @param <T> The SimplePathVisitor type.
+     * @param <B> The builder type.
+     * @since 2.18.0
+     */
+    protected abstract static class AbstractBuilder<T, B extends AbstractSupplier<T, B>> extends AbstractSupplier<T, B> {
+
+        private IOBiFunction<Path, IOException, FileVisitResult> visitFileFailedFunction;
+
+        IOBiFunction<Path, IOException, FileVisitResult> getVisitFileFailedFunction() {
+            return visitFileFailedFunction;
+        }
+
+        /**
+         * Sets the function to call on {@link #visitFileFailed(Path, IOException)}.
+         * <p>
+         * Defaults to {@link SimpleFileVisitor#visitFileFailed(Object, IOException)} on construction.
+         * </p>
+         *
+         * @param visitFileFailedFunction the function to call on {@link #visitFileFailed(Path, IOException)}.
+         * @return this instance.
+         */
+        public B setVisitFileFailedFunction(final IOBiFunction<Path, IOException, FileVisitResult> visitFileFailedFunction) {
+            this.visitFileFailedFunction = visitFileFailedFunction;
+            return asThis();
+        }
+
+    }
 
     private final IOBiFunction<Path, IOException, FileVisitResult> visitFileFailedFunction;
 
@@ -44,10 +76,19 @@ public abstract class SimplePathVisitor extends SimpleFileVisitor<Path> implemen
     /**
      * Constructs a new instance.
      *
-     * @param visitFileFailed Called on {@link #visitFileFailed(Path, IOException)}.
+     * @param builder The builder provided by a subclass.
      */
-    protected SimplePathVisitor(final IOBiFunction<Path, IOException, FileVisitResult> visitFileFailed) {
-        this.visitFileFailedFunction = Objects.requireNonNull(visitFileFailed, "visitFileFailed");
+    SimplePathVisitor(final AbstractBuilder<?, ?> builder) {
+        this.visitFileFailedFunction = builder.visitFileFailedFunction != null ? builder.visitFileFailedFunction : super::visitFileFailed;
+    }
+
+    /**
+     * Constructs a new instance.
+     *
+     * @param visitFileFailedFunction Called on {@link #visitFileFailed(Path, IOException)}.
+     */
+    protected SimplePathVisitor(final IOBiFunction<Path, IOException, FileVisitResult> visitFileFailedFunction) {
+        this.visitFileFailedFunction = Objects.requireNonNull(visitFileFailedFunction, "visitFileFailedFunction");
     }
 
     @Override

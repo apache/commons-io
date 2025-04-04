@@ -61,12 +61,37 @@ import org.apache.commons.io.function.IOBiFunction;
 public class AccumulatorPathVisitor extends CountingPathVisitor {
 
     /**
+     * Builds instances of {@link AccumulatorPathVisitor}.
+     *
+     * @since 2.18.0
+     */
+    public static class Builder extends AbstractBuilder<AccumulatorPathVisitor, Builder> {
+        @Override
+        public AccumulatorPathVisitor get() {
+            return new AccumulatorPathVisitor(this);
+        }
+
+    }
+
+    /**
+     * Builds instances of {@link AccumulatorPathVisitor}.
+     *
+     * @return a new builder.
+     * @since 2.18.0
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    /**
      * Constructs a new instance configured with a BigInteger {@link PathCounters}.
      *
      * @return a new instance configured with a BigInteger {@link PathCounters}.
+     * @see #builder()
+     * @see Builder
      */
     public static AccumulatorPathVisitor withBigIntegerCounters() {
-        return new AccumulatorPathVisitor(Counters.bigIntegerPathCounters());
+        return builder().setPathCounters(Counters.bigIntegerPathCounters()).get();
     }
 
     /**
@@ -75,20 +100,23 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
      * @param fileFilter Filters files to accumulate and count.
      * @param dirFilter Filters directories to accumulate and count.
      * @return a new instance configured with a long {@link PathCounters}.
+     * @see #builder()
+     * @see Builder
      * @since 2.9.0
      */
-    public static AccumulatorPathVisitor withBigIntegerCounters(final PathFilter fileFilter,
-        final PathFilter dirFilter) {
-        return new AccumulatorPathVisitor(Counters.bigIntegerPathCounters(), fileFilter, dirFilter);
+    public static AccumulatorPathVisitor withBigIntegerCounters(final PathFilter fileFilter, final PathFilter dirFilter) {
+        return builder().setPathCounters(Counters.bigIntegerPathCounters()).setFileFilter(fileFilter).setDirectoryFilter(dirFilter).get();
     }
 
     /**
      * Constructs a new instance configured with a long {@link PathCounters}.
      *
      * @return a new instance configured with a long {@link PathCounters}.
+     * @see #builder()
+     * @see Builder
      */
     public static AccumulatorPathVisitor withLongCounters() {
-        return new AccumulatorPathVisitor(Counters.longPathCounters());
+        return builder().setPathCounters(Counters.longPathCounters()).get();
     }
 
     /**
@@ -97,10 +125,12 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
      * @param fileFilter Filters files to accumulate and count.
      * @param dirFilter Filters directories to accumulate and count.
      * @return a new instance configured with a long {@link PathCounters}.
+     * @see #builder()
+     * @see Builder
      * @since 2.9.0
      */
     public static AccumulatorPathVisitor withLongCounters(final PathFilter fileFilter, final PathFilter dirFilter) {
-        return new AccumulatorPathVisitor(Counters.longPathCounters(), fileFilter, dirFilter);
+        return builder().setPathCounters(Counters.longPathCounters()).setFileFilter(fileFilter).setDirectoryFilter(dirFilter).get();
     }
 
     private final List<Path> dirList = new ArrayList<>();
@@ -108,19 +138,27 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
     private final List<Path> fileList = new ArrayList<>();
 
     /**
-     * Constructs a new instance.
+     * Constructs a new instance with a noop path counter.
      *
      * @since 2.9.0
+     * @deprecated Use {@link #builder()}.
      */
+    @Deprecated
     public AccumulatorPathVisitor() {
         super(Counters.noopPathCounters());
+    }
+
+    private AccumulatorPathVisitor(final Builder builder) {
+        super(builder);
     }
 
     /**
      * Constructs a new instance that counts file system elements.
      *
      * @param pathCounter How to count path visits.
+     * @deprecated Use {@link #builder()}.
      */
+    @Deprecated
     public AccumulatorPathVisitor(final PathCounters pathCounter) {
         super(pathCounter);
     }
@@ -132,7 +170,9 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
      * @param fileFilter Filters which files to count.
      * @param dirFilter Filters which directories to count.
      * @since 2.9.0
+     * @deprecated Use {@link #builder()}.
      */
+    @Deprecated
     public AccumulatorPathVisitor(final PathCounters pathCounter, final PathFilter fileFilter, final PathFilter dirFilter) {
         super(pathCounter, fileFilter, dirFilter);
     }
@@ -145,7 +185,9 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
      * @param dirFilter Filters which directories to count.
      * @param visitFileFailed Called on {@link #visitFileFailed(Path, IOException)}.
      * @since 2.12.0
+     * @deprecated Use {@link #builder()}.
      */
+    @Deprecated
     public AccumulatorPathVisitor(final PathCounters pathCounter, final PathFilter fileFilter, final PathFilter dirFilter,
         final IOBiFunction<Path, IOException, FileVisitResult> visitFileFailed) {
         super(pathCounter, fileFilter, dirFilter, visitFileFailed);

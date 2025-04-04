@@ -2282,8 +2282,14 @@ public class FileUtils {
         final boolean isDirFilterSet = dirFilter != null;
         final FileEqualsFileFilter rootDirFilter = new FileEqualsFileFilter(directory);
         final PathFilter dirPathFilter = isDirFilterSet ? rootDirFilter.or(dirFilter) : rootDirFilter;
-        final AccumulatorPathVisitor visitor = new AccumulatorPathVisitor(Counters.noopPathCounters(), fileFilter, dirPathFilter,
-                (p, e) -> FileVisitResult.CONTINUE);
+        // @formatter:off
+        final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.builder()
+                .setPathCounters(Counters.noopPathCounters())
+                .setFileFilter(fileFilter)
+                .setDirectoryFilter(dirPathFilter)
+                .setVisitFileFailedFunction((p, e) -> FileVisitResult.CONTINUE)
+                .get();
+        // @formatter:on
         final Set<FileVisitOption> optionSet = new HashSet<>();
         if (options != null) {
             Collections.addAll(optionSet, options);

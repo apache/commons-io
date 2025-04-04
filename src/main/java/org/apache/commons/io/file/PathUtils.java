@@ -30,6 +30,7 @@ import java.nio.charset.Charset;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.CopyOption;
 import java.nio.file.DirectoryStream;
+import java.nio.file.FileSystem;
 import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
@@ -61,6 +62,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -93,6 +95,51 @@ public final class PathUtils {
      * Private worker/holder that computes and tracks relative path names and their equality. We reuse the sorted relative lists when comparing directories.
      */
     private static final class RelativeSortedPaths {
+
+        /**
+         * Compares lists of paths regardless of their file systems.
+         *
+         * @param list1 the first list.
+         * @param list2 the second list.
+         * @return whether the lists are equal.
+         */
+        private static boolean equals(final List<Path> list1, final List<Path> list2) {
+            if (list1.size() != list2.size()) {
+                return false;
+            }
+            // compare both lists using iterators
+            final Iterator<Path> iterator1 = list1.iterator();
+            final Iterator<Path> iterator2 = list2.iterator();
+            while (iterator1.hasNext() && iterator2.hasNext()) {
+                final Path path1 = iterator1.next();
+                final Path path2 = iterator2.next();
+                final FileSystem fileSystem1 = path1.getFileSystem();
+                final FileSystem fileSystem2 = path2.getFileSystem();
+                if (fileSystem1 == fileSystem2) {
+                    if (!path1.equals(path2)) {
+                        return false;
+                    }
+                } else if (fileSystem1.getSeparator().equals(fileSystem2.getSeparator())) {
+                    // Separators are the same, so we can use toString comparison
+                    if (!path1.toString().equals(path2.toString())) {
+                        return false;
+                    }
+                } else {
+                    // Compare paths from different file systems component by component.
+                    // Cant use toString() string comparison which may fail due to different path separators.
+                    final Iterator<Path> path1Iterator = path1.iterator();
+                    final Iterator<Path> path2Iterator = path2.iterator();
+                    while (path1Iterator.hasNext() && path2Iterator.hasNext()) {
+                        if (!path1Iterator.next().toString().equals(path2Iterator.next().toString())) {
+                            return false;
+                        }
+                    }
+                    // Check that both iterators are exhausted (paths have same number of components)
+                    return !path1Iterator.hasNext() && !path2Iterator.hasNext();
+                }
+            }
+            return true;
+        }
 
         final boolean equals;
         // final List<Path> relativeDirList1; // might need later?
@@ -133,12 +180,12 @@ public final class PathUtils {
                     } else {
                         tmpRelativeDirList1 = visitor1.relativizeDirectories(dir1, true, null);
                         tmpRelativeDirList2 = visitor2.relativizeDirectories(dir2, true, null);
-                        if (!tmpRelativeDirList1.equals(tmpRelativeDirList2)) {
+                        if (!equals(tmpRelativeDirList1, tmpRelativeDirList2)) {
                             equals = false;
                         } else {
                             tmpRelativeFileList1 = visitor1.relativizeFiles(dir1, true, null);
                             tmpRelativeFileList2 = visitor2.relativizeFiles(dir2, true, null);
-                            equals = tmpRelativeFileList1.equals(tmpRelativeFileList2);
+                            equals = equals(tmpRelativeFileList1, tmpRelativeFileList2);
                         }
                     }
                 }
@@ -223,7 +270,8 @@ public final class PathUtils {
      * @return file tree information.
      */
     private static AccumulatorPathVisitor accumulate(final Path directory, final int maxDepth, final FileVisitOption[] fileVisitOptions) throws IOException {
-        return visitFileTree(AccumulatorPathVisitor.withLongCounters(), directory, toFileVisitOptionSet(fileVisitOptions), maxDepth);
+        return visitFileTree(AccumulatorPathVisitor.builder().setDirectoryPostTransformer(PathUtils::stripTrailingSeparator).get(), directory,
+                toFileVisitOptionSet(fileVisitOptions), maxDepth);
     }
 
     /**
@@ -325,7 +373,7 @@ public final class PathUtils {
         // Path.resolve() naturally won't work across FileSystem unless we convert to a String
         final Path sourceFileName = Objects.requireNonNull(sourceFile.getFileName(), "source file name");
         final Path targetFile;
-        if (sourceFileName.getFileSystem() == targetDirectory.getFileSystem()) {
+        if (isSameFileSystem(sourceFileName, targetDirectory)) {
             targetFile = targetDirectory.resolve(sourceFileName);
         } else {
             targetFile = targetDirectory.resolve(sourceFileName.toString());
@@ -661,12 +709,17 @@ public final class PathUtils {
         // Both visitors contain the same normalized paths, we can compare file contents.
         final List<Path> fileList1 = relativeSortedPaths.relativeFileList1;
         final List<Path> fileList2 = relativeSortedPaths.relativeFileList2;
+        final boolean sameFileSystem = isSameFileSystem(path1, path2);
         for (final Path path : fileList1) {
-            final int binarySearch = Collections.binarySearch(fileList2, path);
+            final int binarySearch = sameFileSystem ? Collections.binarySearch(fileList2, path)
+                    : Collections.binarySearch(fileList2, path, Comparator.comparing(Path::toString));
             if (binarySearch <= -1) {
                 throw new IllegalStateException("Unexpected mismatch.");
             }
-            if (!fileContentEquals(path1.resolve(path), path2.resolve(path), linkOptions, openOptions)) {
+            if (sameFileSystem && !fileContentEquals(path1.resolve(path), path2.resolve(path), linkOptions, openOptions)) {
+                return false;
+            }
+            if (!fileContentEquals(path1.resolve(path.toString()), path2.resolve(path.toString()), linkOptions, openOptions)) {
                 return false;
             }
         }
@@ -1262,6 +1315,10 @@ public final class PathUtils {
         return path != null && Files.isRegularFile(path, options);
     }
 
+    static boolean isSameFileSystem(final Path path1, final Path path2) {
+        return path1.getFileSystem() == path2.getFileSystem();
+    }
+
     /**
      * Creates a new DirectoryStream for Paths rooted at the given directory.
      * <p>
@@ -1685,6 +1742,12 @@ public final class PathUtils {
      */
     public static BigInteger sizeOfDirectoryAsBigInteger(final Path directory) throws IOException {
         return countDirectoryAsBigInteger(directory).getByteCounter().getBigInteger();
+    }
+
+    private static Path stripTrailingSeparator(final Path dir) {
+        final String separator = dir.getFileSystem().getSeparator();
+        final String fileName = dir.getFileName().toString();
+        return fileName.endsWith(separator) ? dir.resolveSibling(fileName.substring(0, fileName.length() - 1)) : dir;
     }
 
     /**

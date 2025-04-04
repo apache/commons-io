@@ -73,7 +73,7 @@ public class AccumulatorPathVisitorTest {
         return Stream.of(
             Arguments.of((Supplier<AccumulatorPathVisitor>) () -> new AccumulatorPathVisitor(
                 Counters.bigIntegerPathCounters(),
-                CountingPathVisitor.defaultDirFilter(),
+                CountingPathVisitor.defaultDirectoryFilter(),
                 CountingPathVisitor.defaultFileFilter())));
         // @formatter:on
     }

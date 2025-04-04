@@ -24,6 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Objects;
+import java.util.function.UnaryOperator;
 
 import org.apache.commons.io.file.Counters.PathCounters;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -38,14 +39,110 @@ import org.apache.commons.io.function.IOBiFunction;
  */
 public class CountingPathVisitor extends SimplePathVisitor {
 
+    /**
+     * Builds instances of {@link CountingPathVisitor}.
+     *
+     * @param <T> The CountingPathVisitor type.
+     * @param <B> The AbstractBuilder type.
+     * @since 2.18.0
+     */
+    public abstract static class AbstractBuilder<T, B extends AbstractBuilder<T, B>> extends SimplePathVisitor.AbstractBuilder<T, B> {
+
+        private PathCounters pathCounters = defaultPathCounters();
+        private PathFilter fileFilter = defaultFileFilter();
+        private PathFilter directoryFilter = defaultDirectoryFilter();
+        private UnaryOperator<Path> directoryPostTransformer = defaultDirectoryTransformer();
+
+        PathFilter getDirectoryFilter() {
+            return directoryFilter;
+        }
+
+        UnaryOperator<Path> getDirectoryPostTransformer() {
+            return directoryPostTransformer;
+        }
+
+        PathFilter getFileFilter() {
+            return fileFilter;
+        }
+
+        PathCounters getPathCounters() {
+            return pathCounters;
+        }
+
+        /**
+         * Sets how to filter directories.
+         *
+         * @param directoryFilter how to filter files.
+         * @return this instance.
+         */
+        public B setDirectoryFilter(final PathFilter directoryFilter) {
+            this.directoryFilter = directoryFilter != null ? directoryFilter : defaultDirectoryFilter();
+            return asThis();
+        }
+
+        /**
+         * Sets how to transform directories, defaults to {@link UnaryOperator#identity()}.
+         *
+         * @param directoryTransformer how to filter files.
+         * @return this instance.
+         */
+        public B setDirectoryPostTransformer(final UnaryOperator<Path> directoryTransformer) {
+            this.directoryPostTransformer = directoryTransformer != null ? directoryTransformer : defaultDirectoryTransformer();
+            return asThis();
+        }
+
+        /**
+         * Sets how to filter files.
+         *
+         * @param fileFilter how to filter files.
+         * @return this instance.
+         */
+        public B setFileFilter(final PathFilter fileFilter) {
+            this.fileFilter = fileFilter != null ? fileFilter : defaultFileFilter();
+            return asThis();
+        }
+
+        /**
+         * Sets how to count path visits.
+         *
+         * @param pathCounters How to count path visits.
+         * @return this instance.
+         */
+        public B setPathCounters(final PathCounters pathCounters) {
+            this.pathCounters = pathCounters != null ? pathCounters : defaultPathCounters();
+            return asThis();
+        }
+    }
+
+    /**
+     * Builds instances of {@link CountingPathVisitor}.
+     *
+     * @since 2.18.0
+     */
+    public static class Builder extends AbstractBuilder<CountingPathVisitor, Builder> {
+
+        @Override
+        public CountingPathVisitor get() {
+            return new CountingPathVisitor(this);
+        }
+    }
+
     static final String[] EMPTY_STRING_ARRAY = {};
 
-    static IOFileFilter defaultDirFilter() {
+    static IOFileFilter defaultDirectoryFilter() {
         return TrueFileFilter.INSTANCE;
+    }
+
+    static UnaryOperator<Path> defaultDirectoryTransformer() {
+        return UnaryOperator.identity();
     }
 
     static IOFileFilter defaultFileFilter() {
         return new SymbolicLinkFileFilter(FileVisitResult.TERMINATE, FileVisitResult.CONTINUE);
+    }
+
+    static PathCounters defaultPathCounters() {
+        return Counters.longPathCounters();
     }
 
     /**
@@ -54,7 +151,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
      * @return a new instance configured with a {@link BigInteger} {@link PathCounters}.
      */
     public static CountingPathVisitor withBigIntegerCounters() {
-        return new CountingPathVisitor(Counters.bigIntegerPathCounters());
+        return new Builder().setPathCounters(Counters.bigIntegerPathCounters()).get();
     }
 
     /**
@@ -63,51 +160,66 @@ public class CountingPathVisitor extends SimplePathVisitor {
      * @return a new instance configured with a {@code long} {@link PathCounters}.
      */
     public static CountingPathVisitor withLongCounters() {
-        return new CountingPathVisitor(Counters.longPathCounters());
+        return new Builder().setPathCounters(Counters.longPathCounters()).get();
     }
 
     private final PathCounters pathCounters;
     private final PathFilter fileFilter;
-    private final PathFilter dirFilter;
+    private final PathFilter directoryFilter;
+    private final UnaryOperator<Path> directoryPostTransformer;
 
-    /**
-     * Constructs a new instance.
-     *
-     * @param pathCounter How to count path visits.
-     */
-    public CountingPathVisitor(final PathCounters pathCounter) {
-        this(pathCounter, defaultFileFilter(), defaultDirFilter());
+    CountingPathVisitor(final AbstractBuilder<?, ?> builder) {
+        super(builder);
+        this.pathCounters = builder.getPathCounters();
+        this.fileFilter = builder.getFileFilter();
+        this.directoryFilter = builder.getDirectoryFilter();
+        this.directoryPostTransformer = builder.getDirectoryPostTransformer();
     }
 
     /**
      * Constructs a new instance.
      *
-     * @param pathCounter How to count path visits.
-     * @param fileFilter Filters which files to count.
-     * @param dirFilter Filters which directories to count.
+     * @param pathCounters How to count path visits.
+     * @see Builder
+     */
+    public CountingPathVisitor(final PathCounters pathCounters) {
+        this(new Builder().setPathCounters(pathCounters));
+    }
+
+    /**
+     * Constructs a new instance.
+     *
+     * @param pathCounters    How to count path visits.
+     * @param fileFilter      Filters which files to count.
+     * @param directoryFilter Filters which directories to count.
+     * @see Builder
      * @since 2.9.0
      */
-    public CountingPathVisitor(final PathCounters pathCounter, final PathFilter fileFilter, final PathFilter dirFilter) {
-        this.pathCounters = Objects.requireNonNull(pathCounter, "pathCounter");
+    public CountingPathVisitor(final PathCounters pathCounters, final PathFilter fileFilter, final PathFilter directoryFilter) {
+        this.pathCounters = Objects.requireNonNull(pathCounters, "pathCounters");
         this.fileFilter = Objects.requireNonNull(fileFilter, "fileFilter");
-        this.dirFilter = Objects.requireNonNull(dirFilter, "dirFilter");
+        this.directoryFilter = Objects.requireNonNull(directoryFilter, "directoryFilter");
+        this.directoryPostTransformer = UnaryOperator.identity();
     }
 
     /**
      * Constructs a new instance.
      *
-     * @param pathCounter How to count path visits.
-     * @param fileFilter Filters which files to count.
-     * @param dirFilter Filters which directories to count.
+     * @param pathCounters    How to count path visits.
+     * @param fileFilter      Filters which files to count.
+     * @param directoryFilter Filters which directories to count.
      * @param visitFileFailed Called on {@link #visitFileFailed(Path, IOException)}.
      * @since 2.12.0
+     * @deprecated Use {@link Builder}.
      */
-    public CountingPathVisitor(final PathCounters pathCounter, final PathFilter fileFilter, final PathFilter dirFilter,
-        final IOBiFunction<Path, IOException, FileVisitResult> visitFileFailed) {
+    @Deprecated
+    public CountingPathVisitor(final PathCounters pathCounters, final PathFilter fileFilter, final PathFilter directoryFilter,
+            final IOBiFunction<Path, IOException, FileVisitResult> visitFileFailed) {
         super(visitFileFailed);
-        this.pathCounters = Objects.requireNonNull(pathCounter, "pathCounter");
+        this.pathCounters = Objects.requireNonNull(pathCounters, "pathCounters");
         this.fileFilter = Objects.requireNonNull(fileFilter, "fileFilter");
-        this.dirFilter = Objects.requireNonNull(dirFilter, "dirFilter");
+        this.directoryFilter = Objects.requireNonNull(directoryFilter, "directoryFilter");
+        this.directoryPostTransformer = UnaryOperator.identity();
     }
 
     @Override
@@ -138,13 +250,13 @@ public class CountingPathVisitor extends SimplePathVisitor {
 
     @Override
     public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
-        updateDirCounter(dir, exc);
+        updateDirCounter(directoryPostTransformer.apply(dir), exc);
         return FileVisitResult.CONTINUE;
     }
 
     @Override
     public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attributes) throws IOException {
-        final FileVisitResult accept = dirFilter.accept(dir, attributes);
+        final FileVisitResult accept = directoryFilter.accept(dir, attributes);
         return accept != FileVisitResult.CONTINUE ? FileVisitResult.SKIP_SUBTREE : FileVisitResult.CONTINUE;
     }
 
@@ -167,7 +279,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
     /**
      * Updates the counters for visiting the given file.
      *
-     * @param file the visited file.
+     * @param file       the visited file.
      * @param attributes the visited file attributes.
      */
     protected void updateFileCounters(final Path file, final BasicFileAttributes attributes) {
@@ -183,5 +295,4 @@ public class CountingPathVisitor extends SimplePathVisitor {
         }
         return FileVisitResult.CONTINUE;
     }
-
 }
