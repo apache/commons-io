@@ -38,7 +38,7 @@ public abstract class SimplePathVisitor extends SimpleFileVisitor<Path> implemen
      *
      * @param <T> The SimplePathVisitor type.
      * @param <B> The builder type.
-     * @since 2.18.0
+     * @since 2.19.0
      */
     protected abstract static class AbstractBuilder<T, B extends AbstractSupplier<T, B>> extends AbstractSupplier<T, B> {
 

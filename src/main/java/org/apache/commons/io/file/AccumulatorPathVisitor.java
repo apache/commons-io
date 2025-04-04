@@ -63,7 +63,7 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
     /**
      * Builds instances of {@link AccumulatorPathVisitor}.
      *
-     * @since 2.18.0
+     * @since 2.19.0
      */
     public static class Builder extends AbstractBuilder<AccumulatorPathVisitor, Builder> {
 
@@ -85,7 +85,7 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
      * Builds instances of {@link AccumulatorPathVisitor}.
      *
      * @return a new builder.
-     * @since 2.18.0
+     * @since 2.19.0
      */
     public static Builder builder() {
         return new Builder();
