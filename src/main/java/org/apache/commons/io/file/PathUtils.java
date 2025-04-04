@@ -134,7 +134,6 @@ public final class PathUtils {
             }
             // Compare paths from different file systems component by component.
             return extractKey(separator1, string1).equals(extractKey(separator2, string2));
-            //return Arrays.equals(string1.split("\\" + separator1), string2.split("\\" + separator2));
         }
 
         static String extractKey(final String separator, final String string) {
