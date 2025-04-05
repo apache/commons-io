@@ -44,7 +44,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
      *
      * @param <T> The CountingPathVisitor type.
      * @param <B> The AbstractBuilder type.
-     * @since 2.18.0
+     * @since 2.19.0
      */
     public abstract static class AbstractBuilder<T, B extends AbstractBuilder<T, B>> extends SimplePathVisitor.AbstractBuilder<T, B> {
 
