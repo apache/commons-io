@@ -19,7 +19,6 @@ package org.apache.commons.io.file;
 
 import java.io.IOException;
 import java.nio.file.CopyOption;
-import java.nio.file.FileSystem;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -155,18 +154,6 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
         return super.preVisitDirectory(directory, attributes);
     }
 
-    private Path resolve(final Path otherPath) {
-        final FileSystem fileSystemTarget = targetDirectory.getFileSystem();
-        final FileSystem fileSystemSource = sourceDirectory.getFileSystem();
-        if (fileSystemTarget == fileSystemSource) {
-            return targetDirectory.resolve(otherPath);
-        }
-        final String separatorSource = fileSystemSource.getSeparator();
-        final String separatorTarget = fileSystemTarget.getSeparator();
-        final String otherString = otherPath.toString();
-        return targetDirectory.resolve(Objects.equals(separatorSource, separatorTarget) ? otherString : otherString.replace(separatorSource, separatorTarget));
-    }
-
     /**
      * Relativizes against {@code sourceDirectory}, then resolves against {@code targetDirectory}.
      * <p>
@@ -178,7 +165,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
      * @return a new path, relativized against sourceDirectory, then resolved against targetDirectory.
      */
     private Path resolveRelativeAsString(final Path directory) {
-        return resolve(sourceDirectory.relativize(directory));
+        return PathUtils.resolve(targetDirectory, sourceDirectory.relativize(directory));
     }
 
     @Override

@@ -304,6 +304,44 @@ public final class PathUtils {
     }
 
     /**
+     * Compares the files of two FileSystems to determine if they are equal or not while considering file contents. The comparison includes all files in all
+     * subdirectories.
+     * <p>
+     * For example, to compare two ZIP files:
+     * </p>
+     *
+     * <pre>
+     * final Path zipPath1 = Paths.get("file1.zip");
+     * final Path zipPath2 = Paths.get("file2.zip");
+     * try (FileSystem fileSystem1 = FileSystems.newFileSystem(zipPath1, null); FileSystem fileSystem2 = FileSystems.newFileSystem(zipPath2, null)) {
+     *     assertTrue(PathUtils.directoryAndFileContentEquals(dir1, dir2));
+     * }
+     * </pre>
+     *
+     * @param fileSystem1 The first FileSystem.
+     * @param fileSystem2 The second FileSystem.
+     * @return Whether the two FileSystem contain the same files while considering file contents.
+     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @since 2.19.0
+     */
+    public static boolean contentEquals(final FileSystem fileSystem1, final FileSystem fileSystem2) throws IOException {
+        if (Objects.equals(fileSystem1, fileSystem2)) {
+            return true;
+        }
+        final List<Path> sortedList1 = toSortedList(fileSystem1.getRootDirectories());
+        final List<Path> sortedList2 = toSortedList(fileSystem2.getRootDirectories());
+        if (sortedList1.size() != sortedList2.size()) {
+            return false;
+        }
+        for (int i = 0; i < sortedList1.size(); i++) {
+            if (!directoryAndFileContentEquals(sortedList1.get(i), sortedList2.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Copies the InputStream from the supplier with {@link Files#copy(InputStream, Path, CopyOption...)}.
      *
      * @param in          Supplies the InputStream.
@@ -362,12 +400,7 @@ public final class PathUtils {
     public static Path copyFileToDirectory(final Path sourceFile, final Path targetDirectory, final CopyOption... copyOptions) throws IOException {
         // Path.resolve() naturally won't work across FileSystem unless we convert to a String
         final Path sourceFileName = Objects.requireNonNull(sourceFile.getFileName(), "source file name");
-        final Path targetFile;
-        if (isSameFileSystem(sourceFileName, targetDirectory)) {
-            targetFile = targetDirectory.resolve(sourceFileName);
-        } else {
-            targetFile = targetDirectory.resolve(sourceFileName.toString());
-        }
+        final Path targetFile = resolve(targetDirectory, sourceFileName);
         return Files.copy(sourceFile, targetFile, copyOptions);
     }
 
@@ -665,54 +698,6 @@ public final class PathUtils {
      */
     public static boolean directoryAndFileContentEquals(final Path path1, final Path path2) throws IOException {
         return directoryAndFileContentEquals(path1, path2, EMPTY_LINK_OPTION_ARRAY, EMPTY_OPEN_OPTION_ARRAY, EMPTY_FILE_VISIT_OPTION_ARRAY);
-    }
-
-    /**
-     * Compares the files of two FileSystems to determine if they are equal or not while considering file contents. The comparison includes all files in all
-     * subdirectories.
-     * <p>
-     * For example, to compare two ZIP files:
-     * </p>
-     *
-     * <pre>
-     * final Path zipPath1 = Paths.get("file1.zip");
-     * final Path zipPath2 = Paths.get("file2.zip");
-     * try (FileSystem fileSystem1 = FileSystems.newFileSystem(zipPath1, null); FileSystem fileSystem2 = FileSystems.newFileSystem(zipPath2, null)) {
-     *     assertTrue(PathUtils.directoryAndFileContentEquals(dir1, dir2));
-     * }
-     * </pre>
-     *
-     * @param fileSystem1 The first FileSystem.
-     * @param fileSystem2 The second FileSystem.
-     * @return Whether the two FileSystem contain the same files while considering file contents.
-     * @throws IOException if an I/O error is thrown by a visitor method.
-     * @since 2.19.0
-     */
-    public static boolean contentEquals(final FileSystem fileSystem1, final FileSystem fileSystem2) throws IOException {
-        if (Objects.equals(fileSystem1, fileSystem2)) {
-            return true;
-        }
-        final List<Path> sortedList1 = toSortedList(fileSystem1.getRootDirectories());
-        final List<Path> sortedList2 = toSortedList(fileSystem2.getRootDirectories());
-        if (sortedList1.size() != sortedList2.size()) {
-            return false;
-        }
-        for (int i = 0; i < sortedList1.size(); i++) {
-            if (!directoryAndFileContentEquals(sortedList1.get(i), sortedList2.get(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private static List<Path> toSortedList(final Iterable<Path> rootDirectories) {
-        final List<Path> list = toList(rootDirectories);
-        list.sort(Comparator.comparing(Function.identity()));
-        return list;
-    }
-
-    private static <T> List<T> toList(final Iterable<T> iterable) {
-        return StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList());
     }
 
     /**
@@ -1572,6 +1557,18 @@ public final class PathUtils {
         return file;
     }
 
+    static Path resolve(final Path targetDirectory, final Path otherPath) {
+        final FileSystem fileSystemTarget = targetDirectory.getFileSystem();
+        final FileSystem fileSystemSource = otherPath.getFileSystem();
+        if (fileSystemTarget == fileSystemSource) {
+            return targetDirectory.resolve(otherPath);
+        }
+        final String separatorSource = fileSystemSource.getSeparator();
+        final String separatorTarget = fileSystemTarget.getSeparator();
+        final String otherString = otherPath.toString();
+        return targetDirectory.resolve(Objects.equals(separatorSource, separatorTarget) ? otherString : otherString.replace(separatorSource, separatorTarget));
+    }
+
     private static boolean setDosReadOnly(final Path path, final boolean readOnly, final LinkOption... linkOptions) throws IOException {
         final DosFileAttributeView dosFileAttributeView = getDosFileAttributeView(path, linkOptions);
         if (dosFileAttributeView != null) {
@@ -1798,6 +1795,16 @@ public final class PathUtils {
      */
     static Set<FileVisitOption> toFileVisitOptionSet(final FileVisitOption... fileVisitOptions) {
         return fileVisitOptions == null ? EnumSet.noneOf(FileVisitOption.class) : Stream.of(fileVisitOptions).collect(Collectors.toSet());
+    }
+
+    private static <T> List<T> toList(final Iterable<T> iterable) {
+        return StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList());
+    }
+
+    private static List<Path> toSortedList(final Iterable<Path> rootDirectories) {
+        final List<Path> list = toList(rootDirectories);
+        Collections.sort(list);
+        return list;
     }
 
     /**
