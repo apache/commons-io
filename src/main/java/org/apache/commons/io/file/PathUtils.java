@@ -129,9 +129,9 @@ public final class PathUtils {
             final String separator2 = fileSystem2.getSeparator();
             final String string1 = path1.toString();
             final String string2 = path2.toString();
-            if (separator1.equals(separator2)) {
+            if (Objects.equals(separator1, separator2)) {
                 // Separators are the same, so we can use toString comparison
-                return string1.equals(string2);
+                return Objects.equals(string1, string2);
             }
             // Compare paths from different file systems component by component.
             return extractKey(separator1, string1).equals(extractKey(separator2, string2));

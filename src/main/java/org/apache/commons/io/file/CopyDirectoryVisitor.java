@@ -19,6 +19,7 @@ package org.apache.commons.io.file;
 
 import java.io.IOException;
 import java.nio.file.CopyOption;
+import java.nio.file.FileSystem;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -141,8 +142,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + Arrays.hashCode(copyOptions);
-        result = prime * result + Objects.hash(sourceDirectory, targetDirectory);
-        return result;
+        return prime * result + Objects.hash(sourceDirectory, targetDirectory);
     }
 
     @Override
@@ -155,17 +155,30 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
         return super.preVisitDirectory(directory, attributes);
     }
 
+    private Path resolve(final Path otherPath) {
+        final FileSystem fileSystemTarget = targetDirectory.getFileSystem();
+        final FileSystem fileSystemSource = sourceDirectory.getFileSystem();
+        if (fileSystemTarget == fileSystemSource) {
+            return targetDirectory.resolve(otherPath);
+        }
+        final String separatorSource = fileSystemSource.getSeparator();
+        final String separatorTarget = fileSystemTarget.getSeparator();
+        final String otherString = otherPath.toString();
+        return targetDirectory.resolve(Objects.equals(separatorSource, separatorTarget) ? otherString : otherString.replace(separatorSource, separatorTarget));
+    }
+
     /**
      * Relativizes against {@code sourceDirectory}, then resolves against {@code targetDirectory}.
-     *
-     * We have to call {@link Path#toString()} relative value because we cannot use paths belonging to different
-     * FileSystems in the Path methods, usually this leads to {@link ProviderMismatchException}.
+     * <p>
+     * We call {@link Path#toString()} on the relativized value because we cannot use paths from different FileSystems which throws
+     * {@link ProviderMismatchException}. Special care is taken to handle differences in file system separators.
+     * </p>
      *
      * @param directory the directory to relativize.
      * @return a new path, relativized against sourceDirectory, then resolved against targetDirectory.
      */
     private Path resolveRelativeAsString(final Path directory) {
-        return targetDirectory.resolve(sourceDirectory.relativize(directory).toString());
+        return resolve(sourceDirectory.relativize(directory));
     }
 
     @Override

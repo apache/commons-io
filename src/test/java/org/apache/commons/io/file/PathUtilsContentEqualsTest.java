@@ -44,7 +44,7 @@ import com.google.common.jimfs.Jimfs;
  */
 public class PathUtilsContentEqualsTest {
 
-    static Configuration[] testContentEqualsFileSystemsMemVsZip() {
+    static Configuration[] testConfigurations() {
         // @formatter:off
         return new Configuration[] {
                 Configuration.osX().toBuilder().setWorkingDirectory("/").build(),
@@ -104,13 +104,27 @@ public class PathUtilsContentEqualsTest {
     }
 
     @ParameterizedTest
-    @MethodSource
-    public void testContentEqualsFileSystemsMemVsZip(final Configuration configuration) throws Exception {
-        final Path dir1 = Paths.get("src/test/resources/dir-equals-tests");
+    @MethodSource("testConfigurations")
+    public void testContentEqualsFileSystemsMemVsMem(final Configuration configuration) throws Exception {
+        final Path refDir = Paths.get("src/test/resources/dir-equals-tests");
         try (FileSystem fileSystem1 = Jimfs.newFileSystem(configuration);
-                FileSystem fileSystem2 = FileSystems.newFileSystem(dir1.resolveSibling(dir1.getFileName() + ".zip"), null)) {
-            final Path dir2 = fileSystem1.getPath(dir1.getFileName().toString());
-            final PathCounters copyDirectory = PathUtils.copyDirectory(dir1, dir2);
+                FileSystem fileSystem2 = Jimfs.newFileSystem(configuration)) {
+            final Path fsDir1 = fileSystem1.getPath(refDir.getFileName().toString());
+            final Path fsDir2 = fileSystem2.getPath(refDir.getFileName().toString());
+            assertTrue(PathUtils.copyDirectory(refDir, fsDir1).getByteCounter().get() > 0);
+            assertTrue(PathUtils.copyDirectory(refDir, fsDir2).getByteCounter().get() > 0);
+            assertContentEquals(fileSystem1, fileSystem2);
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("testConfigurations")
+    public void testContentEqualsFileSystemsMemVsZip(final Configuration configuration) throws Exception {
+        final Path refDir = Paths.get("src/test/resources/dir-equals-tests");
+        try (FileSystem fileSystem1 = Jimfs.newFileSystem(configuration);
+                FileSystem fileSystem2 = FileSystems.newFileSystem(refDir.resolveSibling(refDir.getFileName() + ".zip"), null)) {
+            final Path fsDir1 = fileSystem1.getPath(refDir.getFileName().toString());
+            final PathCounters copyDirectory = PathUtils.copyDirectory(refDir, fsDir1);
             assertTrue(copyDirectory.getByteCounter().get() > 0);
             assertContentEquals(fileSystem1, fileSystem2);
         }

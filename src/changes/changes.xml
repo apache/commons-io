@@ -73,6 +73,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Fix Javadoc for ChunkedOutputStream.Builder.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">General Javadoc improvements.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Calling QueueInputStream.QueueInputStream(null) maps to the same kind of default blocking queue as QueueInputStream.Builder.setBlockingQueue(null).</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">CopyDirectoryVisitor creates incorrect file names when copying between different file systems that use different file system separators ("/" versus "\"); fixes PathUtils.copyDirectory(Path, Path, CopyOption...).</action>
       <!-- ADD -->
       <action dev="ggregory" type="add" issue="IO-860" due-to="Nico Strecker, Gary Gregory">Add ThrottledInputStream.Builder.setMaxBytes(long, ChronoUnit).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IOIterable.</action>
