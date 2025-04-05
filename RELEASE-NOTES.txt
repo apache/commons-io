@@ -72,7 +72,7 @@ https://commons.apache.org/proper/commons-io/
 Download page: https://commons.apache.org/proper/commons-io/download_io.cgi
 
 Have fun!
--Apache Commons Team
+Apache Commons Team
 
 ------------------------------------------------------------------------------
 
