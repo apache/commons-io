@@ -70,6 +70,7 @@ import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
@@ -654,7 +655,7 @@ public final class PathUtils {
     }
 
     /**
-     * Compares the file sets of two Paths to determine if they are equal or not while considering file contents. The comparison includes all files in all
+     * Compares the files of two Paths to determine if they are equal or not while considering file contents. The comparison includes all files in all
      * subdirectories.
      *
      * @param path1 The first directory.
@@ -664,6 +665,54 @@ public final class PathUtils {
      */
     public static boolean directoryAndFileContentEquals(final Path path1, final Path path2) throws IOException {
         return directoryAndFileContentEquals(path1, path2, EMPTY_LINK_OPTION_ARRAY, EMPTY_OPEN_OPTION_ARRAY, EMPTY_FILE_VISIT_OPTION_ARRAY);
+    }
+
+    /**
+     * Compares the files of two FileSystems to determine if they are equal or not while considering file contents. The comparison includes all files in all
+     * subdirectories.
+     * <p>
+     * For example, to compare two ZIP files:
+     * </p>
+     *
+     * <pre>
+     * final Path zipPath1 = Paths.get("file1.zip");
+     * final Path zipPath2 = Paths.get("file2.zip");
+     * try (FileSystem fileSystem1 = FileSystems.newFileSystem(zipPath1, null); FileSystem fileSystem2 = FileSystems.newFileSystem(zipPath2, null)) {
+     *     assertTrue(PathUtils.directoryAndFileContentEquals(dir1, dir2));
+     * }
+     * </pre>
+     *
+     * @param fileSystem1 The first FileSystem.
+     * @param fileSystem2 The second FileSystem.
+     * @return Whether the two FileSystem contain the same files while considering file contents.
+     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @since 2.19.0
+     */
+    public static boolean contentEquals(final FileSystem fileSystem1, final FileSystem fileSystem2) throws IOException {
+        if (Objects.equals(fileSystem1, fileSystem2)) {
+            return true;
+        }
+        final List<Path> sortedList1 = toSortedList(fileSystem1.getRootDirectories());
+        final List<Path> sortedList2 = toSortedList(fileSystem2.getRootDirectories());
+        if (sortedList1.size() != sortedList2.size()) {
+            return false;
+        }
+        for (int i = 0; i < sortedList1.size(); i++) {
+            if (!directoryAndFileContentEquals(sortedList1.get(i), sortedList2.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static List<Path> toSortedList(final Iterable<Path> rootDirectories) {
+        final List<Path> list = toList(rootDirectories);
+        list.sort(Comparator.comparing(Function.identity()));
+        return list;
+    }
+
+    private static <T> List<T> toList(final Iterable<T> iterable) {
+        return StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList());
     }
 
     /**
@@ -756,8 +805,8 @@ public final class PathUtils {
      * File content is accessed through {@link Files#newInputStream(Path,OpenOption...)}.
      * </p>
      *
-     * @param path1 the first stream.
-     * @param path2 the second stream.
+     * @param path1 the first file path.
+     * @param path2 the second file path.
      * @return true if the content of the streams are equal or they both don't exist, false otherwise.
      * @throws NullPointerException if either input is null.
      * @throws IOException          if an I/O error occurs.
@@ -773,8 +822,8 @@ public final class PathUtils {
      * File content is accessed through {@link RandomAccessFileMode#create(Path)}.
      * </p>
      *
-     * @param path1       the first stream.
-     * @param path2       the second stream.
+     * @param path1       the first file path.
+     * @param path2       the second file path.
      * @param linkOptions options specifying how files are followed.
      * @param openOptions ignored.
      * @return true if the content of the streams are equal or they both don't exist, false otherwise.
@@ -813,7 +862,7 @@ public final class PathUtils {
             // lengths differ, cannot be equal
             return false;
         }
-        if (path1.equals(path2)) {
+        if (isSameFileSystem(path1, path2) && path1.equals(path2)) {
             // same file
             return true;
         }

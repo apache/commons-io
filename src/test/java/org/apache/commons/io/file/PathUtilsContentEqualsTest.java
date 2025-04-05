@@ -30,19 +30,110 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+import org.apache.commons.io.file.Counters.PathCounters;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import com.google.common.jimfs.Configuration;
+import com.google.common.jimfs.Jimfs;
 
 /**
  * Tests {@link PathUtils}.
  */
 public class PathUtilsContentEqualsTest {
 
+    static Configuration[] testContentEqualsFileSystemsMemVsZip() {
+        // @formatter:off
+        return new Configuration[] {
+                Configuration.osX().toBuilder().setWorkingDirectory("/").build(),
+                Configuration.unix().toBuilder().setWorkingDirectory("/").build(),
+                Configuration.windows().toBuilder().setWorkingDirectory("C:\\").build()
+        };
+        // @formatter:on
+    }
+
     @TempDir
     public File temporaryFolder;
 
+    private void assertContentEquals(final FileSystem fileSystem1, final FileSystem fileSystem2) throws IOException {
+        assertTrue(PathUtils.contentEquals(fileSystem1, fileSystem2));
+        assertTrue(PathUtils.contentEquals(fileSystem2, fileSystem1));
+        assertTrue(PathUtils.contentEquals(fileSystem1, fileSystem1));
+        assertTrue(PathUtils.contentEquals(fileSystem2, fileSystem2));
+    }
+
+    private void assertContentNotEquals(final FileSystem fileSystem1, final FileSystem fileSystem2) throws IOException {
+        assertFalse(PathUtils.contentEquals(fileSystem1, fileSystem2));
+        assertFalse(PathUtils.contentEquals(fileSystem2, fileSystem1));
+        assertTrue(PathUtils.contentEquals(fileSystem1, fileSystem1));
+        assertTrue(PathUtils.contentEquals(fileSystem2, fileSystem2));
+    }
+
+    private void assertDirectoryAndFileContentEquals(final Path dir1, final Path dir2) throws IOException {
+        assertTrue(PathUtils.directoryAndFileContentEquals(dir1, dir2));
+        assertTrue(PathUtils.directoryAndFileContentEquals(dir2, dir2));
+        assertTrue(PathUtils.directoryAndFileContentEquals(dir1, dir1));
+        assertTrue(PathUtils.directoryAndFileContentEquals(dir2, dir2));
+    }
+
+    private void assertDirectoryAndFileContentNotEquals(final Path dir1, final Path dir2) throws IOException {
+        assertFalse(PathUtils.directoryAndFileContentEquals(dir1, dir2));
+        assertFalse(PathUtils.directoryAndFileContentEquals(dir2, dir1));
+        assertTrue(PathUtils.directoryAndFileContentEquals(dir1, dir1));
+        assertTrue(PathUtils.directoryAndFileContentEquals(dir2, dir2));
+    }
+
+    private void assertFileContentEquals(final Path path1, final Path path2) throws IOException {
+        assertTrue(PathUtils.fileContentEquals(path1, path1));
+        assertTrue(PathUtils.fileContentEquals(path1, path2));
+        assertTrue(PathUtils.fileContentEquals(path2, path2));
+        assertTrue(PathUtils.fileContentEquals(path2, path1));
+    }
+
+    private void assertFileContentNotEquals(final Path path1, final Path path2) throws IOException {
+        assertFalse(PathUtils.fileContentEquals(path1, path2));
+        assertFalse(PathUtils.fileContentEquals(path2, path1));
+        assertTrue(PathUtils.fileContentEquals(path1, path1));
+        assertTrue(PathUtils.fileContentEquals(path2, path2));
+    }
+
     private String getName() {
         return this.getClass().getSimpleName();
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    public void testContentEqualsFileSystemsMemVsZip(final Configuration configuration) throws Exception {
+        final Path dir1 = Paths.get("src/test/resources/dir-equals-tests");
+        try (FileSystem fileSystem1 = Jimfs.newFileSystem(configuration);
+                FileSystem fileSystem2 = FileSystems.newFileSystem(dir1.resolveSibling(dir1.getFileName() + ".zip"), null)) {
+            final Path dir2 = fileSystem1.getPath(dir1.getFileName().toString());
+            final PathCounters copyDirectory = PathUtils.copyDirectory(dir1, dir2);
+            assertTrue(copyDirectory.getByteCounter().get() > 0);
+            assertContentEquals(fileSystem1, fileSystem2);
+        }
+    }
+
+    @Test
+    public void testContentEqualsFileSystemsZipVsZip() throws Exception {
+        final Path zipPath = Paths.get("src/test/resources/dir-equals-tests.zip");
+        final Path zipCopy = temporaryFolder.toPath().resolve("copy2.zip");
+        Files.copy(zipPath, zipCopy, StandardCopyOption.REPLACE_EXISTING);
+        try (FileSystem fileSystem1 = FileSystems.newFileSystem(zipPath, null); FileSystem fileSystem2 = FileSystems.newFileSystem(zipCopy, null)) {
+            assertContentEquals(fileSystem1, fileSystem2);
+        }
+        final Path emptyZip = Paths.get("src/test/resources/org/apache/commons/io/empty.zip");
+        try (FileSystem fileSystem1 = FileSystems.newFileSystem(emptyZip, null); FileSystem fileSystem2 = FileSystems.newFileSystem(emptyZip, null)) {
+            assertContentEquals(fileSystem1, fileSystem2);
+        }
+        try (FileSystem fileSystem1 = FileSystems.newFileSystem(zipCopy, null); FileSystem fileSystem2 = FileSystems.newFileSystem(emptyZip, null)) {
+            assertContentNotEquals(fileSystem1, fileSystem2);
+        }
+        try (FileSystem fileSystem1 = FileSystems.newFileSystem(zipPath, null); FileSystem fileSystem2 = FileSystems.newFileSystem(emptyZip, null)) {
+            assertContentNotEquals(fileSystem1, fileSystem2);
+        }
     }
 
     @Test
@@ -50,54 +141,39 @@ public class PathUtilsContentEqualsTest {
         // Non-existent files
         final Path path1 = new File(temporaryFolder, getName()).toPath();
         final Path path2 = new File(temporaryFolder, getName() + "2").toPath();
-        assertTrue(PathUtils.directoryAndFileContentEquals(null, null));
-        assertFalse(PathUtils.directoryAndFileContentEquals(null, path1));
-        assertFalse(PathUtils.directoryAndFileContentEquals(path1, null));
+        assertDirectoryAndFileContentEquals(null, null);
+        assertDirectoryAndFileContentNotEquals(path1, null);
         // both don't exist
-        assertTrue(PathUtils.directoryAndFileContentEquals(path1, path1));
-        assertTrue(PathUtils.directoryAndFileContentEquals(path1, path2));
-        assertTrue(PathUtils.directoryAndFileContentEquals(path2, path2));
-        assertTrue(PathUtils.directoryAndFileContentEquals(path2, path1));
+        assertDirectoryAndFileContentEquals(path1, path2);
         // Tree equals true tests
         {
             // Trees of files only that contain the same files.
             final Path dir1 = Paths.get("src/test/resources/dir-equals-tests/dir-equals-files-only/directory-files-only1");
             final Path dir2 = Paths.get("src/test/resources/dir-equals-tests/dir-equals-files-only/directory-files-only2");
-            assertTrue(PathUtils.directoryAndFileContentEquals(dir1, dir2));
-            assertTrue(PathUtils.directoryAndFileContentEquals(dir2, dir2));
-            assertTrue(PathUtils.directoryAndFileContentEquals(dir1, dir1));
-            assertTrue(PathUtils.directoryAndFileContentEquals(dir2, dir2));
+            assertDirectoryAndFileContentEquals(dir1, dir2);
         }
         {
             // Trees of directories containing other directories.
             final Path dir1 = Paths.get("src/test/resources/dir-equals-tests/dir-equals-dirs-then-files/dir1");
             final Path dir2 = Paths.get("src/test/resources/dir-equals-tests/dir-equals-dirs-then-files/dir2");
-            assertTrue(PathUtils.directoryAndFileContentEquals(dir1, dir2));
-            assertTrue(PathUtils.directoryAndFileContentEquals(dir2, dir2));
-            assertTrue(PathUtils.directoryAndFileContentEquals(dir1, dir1));
-            assertTrue(PathUtils.directoryAndFileContentEquals(dir2, dir2));
+            assertDirectoryAndFileContentEquals(dir1, dir2);
         }
         {
             // Trees of directories containing other directories and files.
             final Path dir1 = Paths.get("src/test/resources/dir-equals-tests/dir-equals-dirs-and-files/dirs-and-files1");
             final Path dir2 = Paths.get("src/test/resources/dir-equals-tests/dir-equals-dirs-and-files/dirs-and-files1");
-            assertTrue(PathUtils.directoryAndFileContentEquals(dir1, dir2));
-            assertTrue(PathUtils.directoryAndFileContentEquals(dir2, dir2));
-            assertTrue(PathUtils.directoryAndFileContentEquals(dir1, dir1));
-            assertTrue(PathUtils.directoryAndFileContentEquals(dir2, dir2));
+            assertDirectoryAndFileContentEquals(dir1, dir2);
         }
         // Tree equals false tests
         {
             final Path dir1 = Paths.get("src/test/resources/dir-equals-tests/dir-equals-dirs-and-files/dirs-and-files1/directory-files-only1");
             final Path dir2 = Paths.get("src/test/resources/dir-equals-tests/dir-equals-dirs-and-files/dirs-and-files1/");
-            assertFalse(PathUtils.directoryAndFileContentEquals(dir1, dir2));
-            assertFalse(PathUtils.directoryAndFileContentEquals(dir2, dir1));
+            assertDirectoryAndFileContentNotEquals(dir1, dir2);
         }
         {
             final Path dir1 = Paths.get("src/test/resources/dir-equals-tests/dir-equals-dirs-and-files");
             final Path dir2 = Paths.get("src/test/resources/dir-equals-tests/dir-equals-dirs-then-files");
-            assertFalse(PathUtils.directoryAndFileContentEquals(dir1, dir2));
-            assertFalse(PathUtils.directoryAndFileContentEquals(dir2, dir1));
+            assertDirectoryAndFileContentNotEquals(dir1, dir2);
         }
     }
 
@@ -112,7 +188,7 @@ public class PathUtilsContentEqualsTest {
         try (FileSystem fileSystem = FileSystems.newFileSystem(dir1.resolveSibling(dir1.getFileName() + ".zip"), null)) {
             final Path dir2 = fileSystem.getPath("/dir-equals-tests");
             // WindowsPath, UnixPath, and ZipPath equals() methods always return false if the argument is not of the same instance as itself.
-            assertTrue(PathUtils.directoryAndFileContentEquals(dir1, dir2));
+            assertDirectoryAndFileContentEquals(dir1, dir2);
         }
     }
 
@@ -124,14 +200,14 @@ public class PathUtilsContentEqualsTest {
     @Test
     public void testDirectoryAndFileContentEqualsDifferentFileSystemsZipVsZip() throws Exception {
         final Path zipPath = Paths.get("src/test/resources/dir-equals-tests.zip");
-        final Path zipCopy = temporaryFolder.toPath().resolve("copy.zip");
+        final Path zipCopy = temporaryFolder.toPath().resolve("copy1.zip");
         Files.copy(zipPath, zipCopy, StandardCopyOption.REPLACE_EXISTING);
         try (FileSystem fileSystem1 = FileSystems.newFileSystem(zipPath, null);
                 FileSystem fileSystem2 = FileSystems.newFileSystem(zipCopy, null)) {
             final Path dir1 = fileSystem1.getPath("/dir-equals-tests");
             final Path dir2 = fileSystem2.getPath("/dir-equals-tests");
             // WindowsPath, UnixPath, and ZipPath equals() methods always return false if the argument is not of the same instance as itself.
-            assertTrue(PathUtils.directoryAndFileContentEquals(dir1, dir2));
+            assertDirectoryAndFileContentEquals(dir1, dir2);
         }
     }
 
@@ -143,30 +219,30 @@ public class PathUtilsContentEqualsTest {
     @Test
     public void testDirectoryAndFileContentEqualsDifferentFileSystemsZipVsZipEmpty() throws Exception {
         final Path zipPath = Paths.get("src/test/resources/dir-equals-tests.zip");
+        final Path zipCopy = temporaryFolder.toPath().resolve("copy1.zip");
         final Path emptyZip = Paths.get("src/test/resources/org/apache/commons/io/empty.zip");
-        Files.copy(zipPath, emptyZip, StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(zipPath, zipCopy, StandardCopyOption.REPLACE_EXISTING);
         try (FileSystem fileSystem1 = FileSystems.newFileSystem(zipPath, null);
                 FileSystem fileSystem2 = FileSystems.newFileSystem(emptyZip, null)) {
             final Path dir1 = fileSystem1.getPath("/dir-equals-tests");
             final Path dir2 = fileSystem2.getPath("/");
             // WindowsPath, UnixPath, and ZipPath equals() methods always return false if the argument is not of the same instance as itself.
-            assertFalse(PathUtils.directoryAndFileContentEquals(dir1, dir2));
+            assertDirectoryAndFileContentNotEquals(dir1, dir2);
         }
         try (FileSystem fileSystem1 = FileSystems.newFileSystem(zipPath, null);
                 FileSystem fileSystem2 = FileSystems.newFileSystem(emptyZip, null)) {
             final Path dir1 = fileSystem1.getPath("/dir-equals-tests");
             final Path dir2 = fileSystem2.getRootDirectories().iterator().next();
             // WindowsPath, UnixPath, and ZipPath equals() methods always return false if the argument is not of the same instance as itself.
-            assertFalse(PathUtils.directoryAndFileContentEquals(dir1, dir2));
+            assertDirectoryAndFileContentNotEquals(dir1, dir2);
         }
-        final Path zipCopy = temporaryFolder.toPath().resolve("copy.zip");
         Files.copy(emptyZip, zipCopy, StandardCopyOption.REPLACE_EXISTING);
         try (FileSystem fileSystem1 = FileSystems.newFileSystem(emptyZip, null);
                 FileSystem fileSystem2 = FileSystems.newFileSystem(zipCopy, null)) {
             final Path dir1 = fileSystem1.getPath("/");
             final Path dir2 = fileSystem2.getPath("/");
             // WindowsPath, UnixPath, and ZipPath equals() methods always return false if the argument is not of the same instance as itself.
-            assertTrue(PathUtils.directoryAndFileContentEquals(dir1, dir2));
+            assertDirectoryAndFileContentEquals(dir1, dir2);
         }
     }
 
@@ -232,40 +308,28 @@ public class PathUtilsContentEqualsTest {
         final Path path1 = new File(temporaryFolder, getName()).toPath();
         final Path path2 = new File(temporaryFolder, getName() + "2").toPath();
         assertTrue(PathUtils.fileContentEquals(null, null));
-        assertFalse(PathUtils.fileContentEquals(null, path1));
-        assertFalse(PathUtils.fileContentEquals(path1, null));
+        assertFileContentNotEquals(path1, null);
         // both don't exist
-        assertTrue(PathUtils.fileContentEquals(path1, path1));
-        assertTrue(PathUtils.fileContentEquals(path1, path2));
-        assertTrue(PathUtils.fileContentEquals(path2, path2));
-        assertTrue(PathUtils.fileContentEquals(path2, path1));
-
+        assertFileContentEquals(path1, path2);
         // Directories
         assertThrows(IOException.class, () -> PathUtils.fileContentEquals(temporaryFolder.toPath(), temporaryFolder.toPath()));
-
         // Different files
         final Path objFile1 = Paths.get(temporaryFolder.getAbsolutePath(), getName() + ".object");
         PathUtils.copyFile(getClass().getResource("/java/lang/Object.class"), objFile1);
-
         final Path objFile1b = Paths.get(temporaryFolder.getAbsolutePath(), getName() + ".object2");
         PathUtils.copyFile(getClass().getResource("/java/lang/Object.class"), objFile1b);
-
         final Path objFile2 = Paths.get(temporaryFolder.getAbsolutePath(), getName() + ".collection");
         PathUtils.copyFile(getClass().getResource("/java/util/Collection.class"), objFile2);
-
         assertFalse(PathUtils.fileContentEquals(objFile1, objFile2));
         assertFalse(PathUtils.fileContentEquals(objFile1b, objFile2));
         assertTrue(PathUtils.fileContentEquals(objFile1, objFile1b));
-
         assertTrue(PathUtils.fileContentEquals(objFile1, objFile1));
         assertTrue(PathUtils.fileContentEquals(objFile1b, objFile1b));
         assertTrue(PathUtils.fileContentEquals(objFile2, objFile2));
-
         // Equal files
         Files.createFile(path1);
         Files.createFile(path2);
-        assertTrue(PathUtils.fileContentEquals(path1, path1));
-        assertTrue(PathUtils.fileContentEquals(path1, path2));
+        assertFileContentEquals(path1, path2);
     }
 
     @Test
@@ -274,8 +338,8 @@ public class PathUtilsContentEqualsTest {
         final Path path2 = Paths.get("src/test/resources/org/apache/commons/io/bla-copy.zip");
         // moby.zip is from https://issues.apache.org/jira/browse/COMPRESS-93
         final Path path3 = Paths.get("src/test/resources/org/apache/commons/io/moby.zip");
-        assertTrue(PathUtils.fileContentEquals(path1, path2));
-        assertFalse(PathUtils.fileContentEquals(path1, path3));
+        assertFileContentEquals(path1, path2);
+        assertFileContentNotEquals(path1, path3);
     }
 
     @Test
@@ -288,9 +352,7 @@ public class PathUtilsContentEqualsTest {
             final Path path2 = fileSystem.getPath("/test-same-size-diff-contents/B.txt");
             assertTrue(Files.exists(path1));
             assertTrue(Files.exists(path2));
-            assertTrue(PathUtils.fileContentEquals(path1, path1));
-            assertTrue(PathUtils.fileContentEquals(path2, path2));
-            assertFalse(PathUtils.fileContentEquals(path1, path2));
+            assertFileContentNotEquals(path1, path2);
         }
     }
 
