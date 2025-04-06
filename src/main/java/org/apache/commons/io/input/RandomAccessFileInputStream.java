@@ -166,11 +166,7 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
      */
     @Override
     public int available() throws IOException {
-        final long avail = availableLong();
-        if (avail > Integer.MAX_VALUE) {
-            return Integer.MAX_VALUE;
-        }
-        return (int) avail;
+        return Math.toIntExact(Math.min(availableLong(), Integer.MAX_VALUE));
     }
 
     /**
