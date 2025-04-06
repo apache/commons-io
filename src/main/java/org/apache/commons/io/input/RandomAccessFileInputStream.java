@@ -158,8 +158,9 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
 
     /**
      * Gets an estimate of the number of bytes that can be read (or skipped over) from this input stream.
-     *
+     * <p>
      * If there are more than {@link Integer#MAX_VALUE} bytes available, return {@link Integer#MAX_VALUE}.
+     * </p>
      *
      * @return An estimate of the number of bytes that can be read.
      * @throws IOException If an I/O error occurs.
