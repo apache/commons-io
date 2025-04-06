@@ -61,7 +61,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     private Path createTestFile(final int size) throws IOException {
-        return Files.write(Files.createTempFile(tempDir, null, null), RandomUtils.insecure().nextBytes(size));
+        return Files.write(Files.createTempFile(tempDir, null, null), RandomUtils.insecure().randomBytes(size));
     }
 
     private MemoryMappedFileInputStream newInputStream(final Path file) throws IOException {
