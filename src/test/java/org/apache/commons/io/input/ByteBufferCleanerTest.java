@@ -39,7 +39,7 @@ public class ByteBufferCleanerTest {
     @Test
     void testCleanFull() {
         final ByteBuffer buffer = ByteBuffer.allocateDirect(10);
-        buffer.put(RandomUtils.nextBytes(10), 0, 10);
+        buffer.put(RandomUtils.insecure().nextBytes(10), 0, 10);
         // There is no way verify that the buffer has been cleaned up, we are just verifying that
         // clean() doesn't blow up
         ByteBufferCleaner.clean(buffer);
