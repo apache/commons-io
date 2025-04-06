@@ -86,7 +86,7 @@ public class ReversedLinesFileReaderParamBlockSizeTest {
      * Small and uneven block sizes are not used in reality but are good to show that the algorithm is solid.
      */
     public static IntStream blockSizes() {
-        return IntStream.of(1, 3, 8, 256, 4096);
+        return IntStream.of(1, 3, 8, 10, 256, 4096, 8192);
     }
 
     private ReversedLinesFileReader reversedLinesFileReader;

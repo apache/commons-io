@@ -126,7 +126,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
     }
 
     private final class FilePart {
-        private final long no;
+        private final long partNumber;
 
         private final byte[] data;
 
@@ -137,19 +137,19 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
         /**
          * Constructs a new instance.
          *
-         * @param no                     the part number
+         * @param partNumber             the part number
          * @param length                 its length
          * @param leftOverOfLastFilePart remainder
          * @throws IOException if there is a problem reading the file
          */
-        private FilePart(final long no, final int length, final byte[] leftOverOfLastFilePart) throws IOException {
-            this.no = no;
+        private FilePart(final long partNumber, final int length, final byte[] leftOverOfLastFilePart) throws IOException {
+            this.partNumber = partNumber;
             final int dataLength = length + (leftOverOfLastFilePart != null ? leftOverOfLastFilePart.length : 0);
             this.data = new byte[dataLength];
-            final long off = (no - 1) * blockSize;
+            final long off = (partNumber - 1) * blockSize;
 
             // read data
-            if (no > 0 /* file not empty */) {
+            if (partNumber > 0 /* file not empty */) {
                 channel.position(off);
                 final int countRead = channel.read(ByteBuffer.wrap(data, 0, length));
                 if (countRead != length) {
@@ -209,7 +209,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
             String line = null;
             int newLineMatchByteCount;
 
-            final boolean isLastFilePart = no == 1;
+            final boolean isLastFilePart = partNumber == 1;
 
             int i = currentLastBytePos;
             while (i > -1) {
@@ -249,7 +249,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
 
             // last file part handling
             if (isLastFilePart && leftOver != null) {
-                // there will be no line break anymore, this is the first line of the file
+                // there will be partNumber line break anymore, this is the first line of the file
                 line = new String(leftOver, charset);
                 leftOver = null;
             }
@@ -270,8 +270,8 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
                         + "last readLine() should have returned something! currentLastCharPos=" + currentLastBytePos);
             }
 
-            if (no > 1) {
-                return new FilePart(no - 1, blockSize, leftOver);
+            if (partNumber > 1) {
+                return new FilePart(partNumber - 1, blockSize, leftOver);
             }
             // NO 1 was the last FilePart, we're finished
             if (leftOver != null) {
@@ -404,7 +404,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
         final CharsetEncoder charsetEncoder = this.charset.newEncoder();
         final float maxBytesPerChar = charsetEncoder.maxBytesPerChar();
         if (maxBytesPerChar == 1f || this.charset == StandardCharsets.UTF_8) {
-            // all one byte encodings are no problem
+            // all one byte encodings are partNumber problem
             byteDecrement = 1;
         } else if (this.charset == Charset.forName("Shift_JIS") || // Same as for UTF-8
         // http://www.herongyang.com/Unicode/JIS-Shift-JIS-Encoding.html
@@ -523,7 +523,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
         while (line == null) {
             currentFilePart = currentFilePart.rollOver();
             if (currentFilePart == null) {
-                // no more FileParts: we're done, leave line set to null
+                // partNumber more FileParts: we're done, leave line set to null
                 break;
             }
             line = currentFilePart.readLine();
