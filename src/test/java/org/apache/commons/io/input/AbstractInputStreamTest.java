@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -56,7 +58,7 @@ public abstract class AbstractInputStreamTest {
     @BeforeEach
     public void setUp() throws IOException {
         // Create a byte array of size 2 MB with random bytes
-        actualRandomBytes = RandomUtils.insecure().nextBytes(2 * 1024 * 1024);
+        actualRandomBytes = RandomUtils.insecure().randomBytes(2 * 1024 * 1024);
         expectedRandomBytes = actualRandomBytes;
         inputFile = Files.createTempFile("temp-file", ".tmp");
         Files.write(inputFile, actualRandomBytes);
@@ -166,6 +168,27 @@ public abstract class AbstractInputStreamTest {
     public void testReadOneByOne() throws IOException {
         for (final InputStream inputStream : inputStreams) {
             for (final byte randomByte : expectedRandomBytes) {
+                assertEquals(randomByte, (byte) inputStream.read());
+            }
+        }
+    }
+
+    @Test
+    public void testReadOneByOneCheckAvailable() throws IOException {
+        final AtomicInteger refII = new AtomicInteger();
+        for (int idxInputs = 0; idxInputs < inputStreams.length; idxInputs++) {
+            refII.set(idxInputs);
+            final AtomicInteger refIB = new AtomicInteger();
+            @SuppressWarnings("resource")
+            final InputStream inputStream = inputStreams[idxInputs];
+            for (int idxBytes = 0; idxBytes < expectedRandomBytes.length; idxBytes++) {
+                refIB.set(idxBytes);
+                final byte randomByte = expectedRandomBytes[idxBytes];
+                // Check that available() doesn't have a side effect on read()
+                final int available = inputStream.available();
+                final Supplier<String> messageSupplier = () -> String.format("idxInputs = %,d, idxBytes = %,d, available = %,d", refII.get(), refIB.get(),
+                        available);
+                assertTrue(available >= 0, messageSupplier);
                 assertEquals(randomByte, (byte) inputStream.read());
             }
         }
