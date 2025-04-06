@@ -163,7 +163,7 @@ public abstract class AbstractInputStreamTest {
     }
 
     @Test
-    public void testReadOneByte() throws IOException {
+    public void testReadOneByOne() throws IOException {
         for (final InputStream inputStream : inputStreams) {
             for (final byte randomByte : expectedRandomBytes) {
                 assertEquals(randomByte, (byte) inputStream.read());
