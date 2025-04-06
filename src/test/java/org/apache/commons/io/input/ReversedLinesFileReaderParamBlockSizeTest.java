@@ -82,7 +82,9 @@ public class ReversedLinesFileReaderParamBlockSizeTest {
         assertEquals(expected, actual, messageSupplier);
     }
 
-    // small and uneven block sizes are not used in reality but are good to show that the algorithm is solid
+    /**
+     * Small and uneven block sizes are not used in reality but are good to show that the algorithm is solid.
+     */
     public static IntStream blockSizes() {
         return IntStream.of(1, 3, 8, 256, 4096);
     }
