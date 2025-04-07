@@ -36,19 +36,17 @@ import org.junit.jupiter.api.Test;
 public class BufferedFileChannelInputStreamTest extends AbstractInputStreamTest {
 
     @SuppressWarnings("resource")
-    @Override
     @BeforeEach
-    public void setUp() throws IOException {
-        super.setUp();
+    public void setUpInputStreams() throws IOException {
         // @formatter:off
         inputStreams = new InputStream[] {
-            new BufferedFileChannelInputStream(inputFile), // default
-            new BufferedFileChannelInputStream(inputFile, 123), // small, unaligned buffer size
-            BufferedFileChannelInputStream.builder().setPath(inputFile).get(), // default
-            BufferedFileChannelInputStream.builder().setPath(inputFile).setBufferSize(123).get(), // small, unaligned buffer size
-            BufferedFileChannelInputStream.builder().setURI(inputFile.toUri()).setBufferSize(1024).get(), // URI and buffer size
-            BufferedFileChannelInputStream.builder().setPath(inputFile).setOpenOptions(StandardOpenOption.READ).get(), // open options
-            BufferedFileChannelInputStream.builder().setFileChannel(FileChannel.open(inputFile)).get(), // FileChannel
+            new BufferedFileChannelInputStream(InputPath), // default
+            new BufferedFileChannelInputStream(InputPath, 123), // small, unaligned buffer size
+            BufferedFileChannelInputStream.builder().setPath(InputPath).get(), // default
+            BufferedFileChannelInputStream.builder().setPath(InputPath).setBufferSize(123).get(), // small, unaligned buffer size
+            BufferedFileChannelInputStream.builder().setURI(InputPath.toUri()).setBufferSize(1024).get(), // URI and buffer size
+            BufferedFileChannelInputStream.builder().setPath(InputPath).setOpenOptions(StandardOpenOption.READ).get(), // open options
+            BufferedFileChannelInputStream.builder().setFileChannel(FileChannel.open(InputPath)).get(), // FileChannel
         };
         //@formatter:on
     }

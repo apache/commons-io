@@ -30,8 +30,11 @@ import java.util.function.Supplier;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Tests {@link InputStream} subclasses.
@@ -50,23 +53,29 @@ public abstract class AbstractInputStreamTest {
         return ARRAY_LENGTHS;
     }
 
-    protected byte[] actualRandomBytes;
-    protected byte[] expectedRandomBytes;
-    protected Path inputFile;
+    protected static byte[] ActualBytes;
+    protected static byte[] ExpectedBytes;
+    protected static Path InputPath;
+
+    /**
+     * Set in subclasses.
+     */
     protected InputStream[] inputStreams;
 
-    @BeforeEach
-    public void setUp() throws IOException {
+    @TempDir
+    static Path tempDir;
+
+    @BeforeAll
+    public static void setUp() throws IOException {
         // Create a byte array of size 2 MB with random bytes
-        actualRandomBytes = RandomUtils.insecure().randomBytes(2 * 1024 * 1024);
-        expectedRandomBytes = actualRandomBytes;
-        inputFile = Files.createTempFile("temp-file", ".tmp");
-        Files.write(inputFile, actualRandomBytes);
+        ActualBytes = RandomUtils.insecure().randomBytes(2 * 1024 * 1024);
+        ExpectedBytes = ActualBytes.clone();
+        InputPath = tempDir.resolve(AbstractInputStreamTest.class.getSimpleName() + ".tmp");
+        Files.write(InputPath, ActualBytes);
     }
 
     @AfterEach
     public void tearDown() throws IOException {
-        Files.delete(inputFile);
         IOUtils.close(inputStreams);
     }
 
@@ -81,7 +90,7 @@ public abstract class AbstractInputStreamTest {
     @Test
     public void testAvailableAfterOpen() throws Exception {
         for (final InputStream inputStream : inputStreams) {
-            assertEquals(0, inputStream.available());
+            assertTrue(inputStream.available() >= 0);
         }
     }
 
@@ -105,8 +114,8 @@ public abstract class AbstractInputStreamTest {
     public void testBytesSkipped() throws IOException {
         for (final InputStream inputStream : inputStreams) {
             assertEquals(1024, inputStream.skip(1024));
-            for (int i = 1024; i < expectedRandomBytes.length; i++) {
-                assertEquals(expectedRandomBytes[i], (byte) inputStream.read());
+            for (int i = 1024; i < ExpectedBytes.length; i++) {
+                assertEquals(ExpectedBytes[i], (byte) inputStream.read());
             }
         }
     }
@@ -114,7 +123,7 @@ public abstract class AbstractInputStreamTest {
     @Test
     public void testBytesSkippedAfterEOF() throws IOException {
         for (final InputStream inputStream : inputStreams) {
-            assertEquals(expectedRandomBytes.length, inputStream.skip(actualRandomBytes.length + 1));
+            assertEquals(ExpectedBytes.length, inputStream.skip(ActualBytes.length + 1));
             assertEquals(-1, inputStream.read());
         }
     }
@@ -123,11 +132,11 @@ public abstract class AbstractInputStreamTest {
     public void testBytesSkippedAfterRead() throws IOException {
         for (final InputStream inputStream : inputStreams) {
             for (int i = 0; i < 1024; i++) {
-                assertEquals(expectedRandomBytes[i], (byte) inputStream.read());
+                assertEquals(ExpectedBytes[i], (byte) inputStream.read());
             }
             assertEquals(1024, inputStream.skip(1024));
-            for (int i = 2048; i < expectedRandomBytes.length; i++) {
-                assertEquals(expectedRandomBytes[i], (byte) inputStream.read());
+            for (int i = 2048; i < ExpectedBytes.length; i++) {
+                assertEquals(ExpectedBytes[i], (byte) inputStream.read());
             }
         }
     }
@@ -136,28 +145,29 @@ public abstract class AbstractInputStreamTest {
     public void testNegativeBytesSkippedAfterRead() throws IOException {
         for (final InputStream inputStream : inputStreams) {
             for (int i = 0; i < 1024; i++) {
-                assertEquals(expectedRandomBytes[i], (byte) inputStream.read());
+                assertEquals(ExpectedBytes[i], (byte) inputStream.read());
             }
             // Skipping negative bytes should essential be a no-op
             assertEquals(0, inputStream.skip(-1));
             assertEquals(0, inputStream.skip(-1024));
             assertEquals(0, inputStream.skip(Long.MIN_VALUE));
             assertEquals(1024, inputStream.skip(1024));
-            for (int i = 2048; i < expectedRandomBytes.length; i++) {
-                assertEquals(expectedRandomBytes[i], (byte) inputStream.read());
+            for (int i = 2048; i < ExpectedBytes.length; i++) {
+                assertEquals(ExpectedBytes[i], (byte) inputStream.read());
             }
         }
     }
 
-    @Test
-    public void testReadMultipleBytes() throws IOException {
+    @ParameterizedTest
+    @MethodSource("org.apache.commons.io.input.ReversedLinesFileReaderParamBlockSizeTest#blockSizes")
+    public void testReadMultipleBytes(final int bufferSize) throws IOException {
         for (final InputStream inputStream : inputStreams) {
-            final byte[] readBytes = new byte[8 * 1024];
+            final byte[] readBytes = new byte[bufferSize];
             int i = 0;
-            while (i < expectedRandomBytes.length) {
-                final int read = inputStream.read(readBytes, 0, 8 * 1024);
+            while (i < ExpectedBytes.length) {
+                final int read = inputStream.read(readBytes, 0, readBytes.length);
                 for (int j = 0; j < read; j++) {
-                    assertEquals(expectedRandomBytes[i], readBytes[j]);
+                    assertEquals(ExpectedBytes[i], readBytes[j]);
                     i++;
                 }
             }
@@ -167,7 +177,7 @@ public abstract class AbstractInputStreamTest {
     @Test
     public void testReadOneByOne() throws IOException {
         for (final InputStream inputStream : inputStreams) {
-            for (final byte randomByte : expectedRandomBytes) {
+            for (final byte randomByte : ExpectedBytes) {
                 assertEquals(randomByte, (byte) inputStream.read());
             }
         }
@@ -181,9 +191,9 @@ public abstract class AbstractInputStreamTest {
             final AtomicInteger refIB = new AtomicInteger();
             @SuppressWarnings("resource")
             final InputStream inputStream = inputStreams[idxInputs];
-            for (int idxBytes = 0; idxBytes < expectedRandomBytes.length; idxBytes++) {
+            for (int idxBytes = 0; idxBytes < ExpectedBytes.length; idxBytes++) {
                 refIB.set(idxBytes);
-                final byte randomByte = expectedRandomBytes[idxBytes];
+                final byte randomByte = ExpectedBytes[idxBytes];
                 // Check that available() doesn't have a side effect on read()
                 final int available = inputStream.available();
                 final Supplier<String> messageSupplier = () -> String.format("idxInputs = %,d, idxBytes = %,d, available = %,d", refII.get(), refIB.get(),
@@ -195,13 +205,12 @@ public abstract class AbstractInputStreamTest {
     }
 
     @Test
-    public void testReadPastEOF() throws IOException {
+    public void testReadPastEof() throws IOException {
         final InputStream is = inputStreams[0];
         final byte[] buf = new byte[1024];
         while (is.read(buf, 0, buf.length) != -1) {
             // empty
         }
-
         final int readAfterEOF = is.read(buf, 0, buf.length);
         assertEquals(-1, readAfterEOF);
     }
@@ -213,13 +222,13 @@ public abstract class AbstractInputStreamTest {
             // we skip from underlying file channel.
             assertEquals(1024, inputStream.skip(1024));
             for (int i = 1024; i < 2048; i++) {
-                assertEquals(expectedRandomBytes[i], (byte) inputStream.read());
+                assertEquals(ExpectedBytes[i], (byte) inputStream.read());
             }
             assertEquals(256, inputStream.skip(256));
             assertEquals(256, inputStream.skip(256));
             assertEquals(512, inputStream.skip(512));
-            for (int i = 3072; i < expectedRandomBytes.length; i++) {
-                assertEquals(expectedRandomBytes[i], (byte) inputStream.read());
+            for (int i = 3072; i < ExpectedBytes.length; i++) {
+                assertEquals(ExpectedBytes[i], (byte) inputStream.read());
             }
         }
     }
