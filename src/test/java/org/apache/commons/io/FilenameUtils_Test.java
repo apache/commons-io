@@ -22,7 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class FilenameUtils_TestPk {
+public class FilenameUtils_Test {
+   // Test Cases for getBaseName()
 
      String fileName ;
      // run before each test
@@ -97,5 +98,17 @@ public class FilenameUtils_TestPk {
         fileName = "Document.pdf";
         String baseName = FilenameUtils.getBaseName(fileName);
         assertEquals("Document", baseName, " Base name work perfectly with different formats.");
+    }
+
+    //White Box test for getExtension()
+     // test filename is null
+    @Test
+    void testFileNameIsNull(){
+        
+    }
+    // test for no index found in file name
+    @Test
+    void testFileNameIndexNotFound(){
+        
     }
 }

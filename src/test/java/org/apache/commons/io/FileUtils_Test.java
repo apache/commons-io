@@ -16,17 +16,19 @@
  */
 package org.apache.commons.io;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
 
 
 
-public class FileUtils_TestPK {
+public class FileUtils_Test {
     //test with null input 
     @Test
     void testDeleteQuietlyWithNull(){
@@ -66,6 +68,55 @@ public class FileUtils_TestPK {
         assertTrue(result); //expecting true since dir is empty
 
     } 
+    // Test written to check byteCountToDisplaySize() using boundary value analysis
+
+    //just before 1 kB
+    @Test
+    public void testByteCountToDisplaySizeBelow1KB(){
+        assertEquals("1023 bytes",
+        FileUtils.byteCountToDisplaySize(BigInteger.valueOf(1023)));
+    }
+
+    //Exactly at 1 kB
+    @Test
+    public void testByteCountToDisplaySizeExactlyAt1KB(){
+        assertEquals("1 KB",
+        FileUtils.byteCountToDisplaySize(BigInteger.valueOf(1024)));
+    }
+
+    //Just after 1 kB
+    @Test
+    public void testByteCountToDisplaySizeJustAfter1KB(){
+        assertEquals("1 KB",
+        FileUtils.byteCountToDisplaySize(BigInteger.valueOf(1025)));
+    }
+
+    //Just before 1 MB
+    @Test
+    public void testByteCountToDisplaySizeJustBefore1MB(){
+        assertEquals("1023 KB",
+        FileUtils.byteCountToDisplaySize(BigInteger.valueOf(1023L * 1024)));
+    }
+
+    //Exactly at 1 MB
+    @Test
+    public void testByteCountToDisplaySizeExactlyAt1MB(){
+        assertEquals("1 MB",
+        FileUtils.byteCountToDisplaySize(BigInteger.valueOf(1024L * 1024)));
+    }
+    //Just before at 1 GB
+    @Test
+    public void testByteCountToDisplaySizeJustBeforeAt1GB(){
+        assertEquals("1023 MB",
+        FileUtils.byteCountToDisplaySize(BigInteger.valueOf(1023L * 1024 * 1024)));
+    }
+    //Exactly at 1 GB
+    @Test
+    public void testByteCountToDisplaySizeExactlyAt1GB(){
+        assertEquals("1 GB",
+        FileUtils.byteCountToDisplaySize(BigInteger.valueOf(1024L * 1024 * 1024)));
+    }
+
    
     
 }
