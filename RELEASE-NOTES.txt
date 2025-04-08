@@ -1,4 +1,99 @@
 
+Apache Commons IO 2.19.0 Release Notes
+
+Introduction
+------------
+
+The Apache Commons IO library contains utility classes, stream implementations, file filters,
+file comparators, endian transformation classes, and much more.
+
+Version 2.19.0: Java 8 is required.
+
+New features
+------------
+
+o IO-860:  Add ThrottledInputStream.Builder.setMaxBytes(long, ChronoUnit). Thanks to Nico Strecker, Gary Gregory. 
+o          Add IOIterable. Thanks to Gary Gregory. 
+o          ReversedLinesFileReader implements IOIterable<String>. Thanks to Gary Gregory. 
+o          Add AbstractByteArrayOutputStream.write(CharSequence, Charset). Thanks to Gary Gregory. 
+o          Add AbstractByteArrayOutputStream.write(byte[]). Thanks to Gary Gregory. 
+o          Add RandomAccessFileOutputStream.getRandomAccessFile(). Thanks to Gary Gregory. 
+o          Add ProxyInputStream.setReference(InputStream), was package-private setIn(InputStream). Thanks to Gary Gregory. 
+o          Add ProxyOutputStream.setReference(OutputStream). Thanks to Gary Gregory. 
+o          Add RandomAccessFileInputStream.copy(long, long, OutputStream). Thanks to Gary Gregory. 
+o          Add ProxyOutputStream.Builder. Thanks to Gary Gregory. 
+o          Add ByteOrderMark.matches(int[]). Thanks to Gary Gregory. 
+o          Add BrokenOutputStream.BrokenOutputStream(Function<String>, Throwable>) and deprecate Supplier<String> constructor. Thanks to Gary Gregory. 
+o          Add IOBooleanSupplier. Thanks to Gary Gregory. 
+o          Add Uncheck.getAsBoolean(IOBooleanSupplier). Thanks to Gary Gregory. 
+o          Add FileChannels.contentEquals(SeekableByteChannel, SeekableByteChannel, int). Thanks to Gary Gregory. 
+o          Add FileChannels.contentEquals(ReadableByteChannel, ReadableByteChannel, int). Thanks to Gary Gregory. 
+o IO-872:  Add SimplePathVisitor.AbstractBuilder. Thanks to Gary Gregory. 
+o IO-872:  Add CountingPathVisitor.AbstractBuilder and CountingPathVisitor.Builder. Thanks to Gary Gregory. 
+o IO-872:  Add AccumulatorPathVisitor.Builder and builder(). Thanks to Gary Gregory. 
+o          Add PathUtils.contentEquals(FileSystem, FileSystem). Thanks to Gary Gregory. 
+
+Fixed Bugs
+----------
+
+o          Deprecate constructor Counters.Counters() to be private in 4.0. Thanks to Gary Gregory. 
+o          Deprecate constructor Charsets.Charsets() to be private in 4.0. Thanks to Gary Gregory. 
+o          Pick up maven-antrun-plugin version from parent POM org.apache:apache. Thanks to Gary Gregory. 
+o          Javadoc is missing its Overview page. Thanks to Gary Gregory. 
+o          Remove -nouses directive from maven-bundle-plugin. OSGi package imports now state 'uses' definitions for package imports, this doesn't affect JPMS (from org.apache.commons:commons-parent:80). Thanks to Gary Gregory. 
+o          Deprecate DeferredFileOutputStream.getStream() in favor of getOutputStream(). Thanks to Gary Gregory. 
+o IO-868:  Improve Javadoc for a BoundedInputStream builder() throwing IOException. Thanks to Julian Reschke, Gary Gregory. 
+o IO-868:  Improve Javadoc for all implementations of AbstractOriginSupplier#get(). Thanks to Julian Reschke, Gary Gregory. 
+o          The Consumer to IOUtils.closeQuietly(Closeable, Consumer) now accepts Exception, not just IOException. Thanks to Gary Gregory. 
+o          The Consumer to IOUtils.close(Closeable, IOConsumer) now accepts wrapped Exception, not just IOException. Thanks to Gary Gregory. 
+o          Use Uncheck.getAsBoolean(IOBooleanSupplier) to avoid boxing and unboxing of boolean values. Thanks to Gary Gregory. 
+o          Avoid unnecessary boxing and unboxing of long values in FileUtils.sizeOf(File). Thanks to Gary Gregory. 
+o          Avoid unnecessary boxing and unboxing of int values in UncheckedBufferedReader.read(). Thanks to Gary Gregory. 
+o          Avoid unnecessary boxing and unboxing of int values in UncheckedFilterInputStream.available() and read(). Thanks to Gary Gregory. 
+o          Avoid unnecessary boxing and unboxing of int values in UncheckedFilterReader.read(). Thanks to Gary Gregory. 
+o          FileChannels.contentEquals(FileChannel, FileChannel, int) can return false when comparing a non-blocking channel. Thanks to Gary Gregory. 
+o          Deprecate FileChannels.contentEquals(FileChannel, FileChannel, int) in favor of FileChannels.contentEquals(SeekableByteChannel, SeekableByteChannel, int). Thanks to Gary Gregory. 
+o          Improve performance of IOUtils.contentEquals(InputStream, InputStream) by about 13%. Thanks to Gary Gregory. 
+o IO-870:  PathUtils.copyFileToDirectory() across file systems #728. Thanks to Gary Gregory. 
+o IO-871:  IOUtils.contentEquals is incorrect when InputStream.available under-reports. Thanks to Éamonn McManus, Gary Gregory. 
+o IO-873:  java.lang.ArithmeticException: long overflow java.lang.Math.addExact(Math.java:932) at org.apache.commons.io.file.attribute.FileTimes.ntfsTimeToFileTime(FileTimes.java:164). See also https://issues.apache.org/jira/browse/MDEP-978. Thanks to Gary Gregory. 
+o IO-873:  java.lang.ArithmeticException: long overflow java.lang.Math.addExact(Math.java:932) at org.apache.commons.io.file.attribute.FileTimes.ntfsTimeToDate(long). Thanks to Gary Gregory. 
+o          FileTimes.toNtfsTime(*) methods can overflow result values. Thanks to Gary Gregory. 
+o          Fix Javadoc for ChunkedOutputStream.Builder. Thanks to Gary Gregory. 
+o          General Javadoc improvements. Thanks to Gary Gregory. 
+o          Calling QueueInputStream.QueueInputStream(null) maps to the same kind of default blocking queue as QueueInputStream.Builder.setBlockingQueue(null). Thanks to Gary Gregory. 
+o          CopyDirectoryVisitor creates incorrect file names when copying between different file systems that use different file system separators ("/" versus "\"); fixes PathUtils.copyDirectory(Path, Path, CopyOption...). Thanks to Gary Gregory. 
+o          ThreadUtils.sleep(Duration) should handle the underlying OS time changing. Thanks to zhouchongwen, Gary Gregory. 
+
+Changes
+-------
+
+o          Bump commons.bytebuddy.version from 1.15.10 to 1.17.5 #710, #715, #720, #734, #735. Thanks to Dependabot, Gary Gregory. 
+o          Bump commons-codec:commons-codec from 1.17.1 to 1.18.0. #717. Thanks to Gary Gregory. 
+o          Bump org.apache.commons:commons-parent from 78 to 81. Thanks to Gary Gregory. 
+
+
+Commons IO 2.7 and up requires Java 8 or above.
+Commons IO 2.6 requires Java 7 or above.
+Commons IO 2.3 through 2.5 requires Java 6 or above.
+Commons IO 2.2 requires Java 5 or above.
+Commons IO 1.4 requires Java 1.3 or above.
+
+Historical list of changes: https://commons.apache.org/proper/commons-io/changes.html
+
+For complete information on Apache Commons IO, including instructions on how to submit bug reports,
+patches, or suggestions for improvement, see the Apache Commons IO website:
+
+https://commons.apache.org/proper/commons-io/
+
+Download page: https://commons.apache.org/proper/commons-io/download_io.cgi
+
+Have fun!
+-Apache Commons Team
+
+------------------------------------------------------------------------------
+
+
 Apache Commons IO 2.18.0 Release Notes
 
 Introduction
