@@ -18,7 +18,6 @@ package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
@@ -29,6 +28,7 @@ import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Stack;
 import java.util.stream.Stream;
 
@@ -87,14 +87,9 @@ public class ReversedLinesFileReaderParamFileTest {
 
     private void testDataIntegrityWithBufferedReader(final Path filePath, final FileSystem fileSystem, final Charset charset,
             final ReversedLinesFileReader reversedLinesFileReader) throws IOException {
+        final List<String> allLines = Files.readAllLines(filePath, Charsets.toCharset(charset));
         final Stack<String> lineStack = new Stack<>();
-        try (BufferedReader bufferedReader = Files.newBufferedReader(filePath, Charsets.toCharset(charset))) {
-            // read all lines in normal order
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                lineStack.push(line);
-            }
-        }
+        lineStack.addAll(allLines);
         // read in reverse order and compare with lines from stack
         reversedLinesFileReader.forEach(line -> assertEquals(lineStack.pop(), line));
         assertEquals(0, lineStack.size(), "Stack should be empty");
