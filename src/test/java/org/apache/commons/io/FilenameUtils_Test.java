@@ -100,15 +100,14 @@ public class FilenameUtils_Test {
         assertEquals("Document", baseName, " Base name work perfectly with different formats.");
     }
 
-    //White Box test for getExtension()
-     // test filename is null
-    @Test
-    void testFileNameIsNull(){
-        
-    }
-    // test for no index found in file name
-    @Test
-    void testFileNameIndexNotFound(){
-        
+ 
+    // Test for getExtension() starts here
+
+    //Test to get extension of a valid filename
+    @Test 
+    void testGetExtensionForValidFileName(){
+     fileName="file.txt";
+   
+    assertEquals("txt", FilenameUtils.getExtension(fileName));
     }
 }
