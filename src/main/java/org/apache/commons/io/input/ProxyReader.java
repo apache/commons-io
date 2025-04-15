@@ -120,13 +120,13 @@ public abstract class ProxyReader extends FilterReader {
 
     /**
      * Invokes the delegate's {@code mark(int)} method.
-     * @param idx read ahead limit
+     * @param readAheadLimit read ahead limit
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public synchronized void mark(final int idx) throws IOException {
+    public synchronized void mark(final int readAheadLimit) throws IOException {
         try {
-            in.mark(idx);
+            in.mark(readAheadLimit);
         } catch (final IOException e) {
             handleIOException(e);
         }
