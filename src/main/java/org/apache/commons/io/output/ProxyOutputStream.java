@@ -219,14 +219,14 @@ public class ProxyOutputStream extends FilterOutputStream {
 
     /**
      * Invokes the delegate's {@code write(int)} method.
-     * @param idx the byte to write
+     * @param b the byte to write
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void write(final int idx) throws IOException {
+    public void write(final int b) throws IOException {
         try {
             beforeWrite(1);
-            out.write(idx);
+            out.write(b);
             afterWrite(1);
         } catch (final IOException e) {
             handleIOException(e);
