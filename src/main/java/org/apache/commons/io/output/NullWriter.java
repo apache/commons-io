@@ -122,10 +122,10 @@ public class NullWriter extends Writer {
 
     /**
      * Does nothing - output to {@code /dev/null}.
-     * @param idx The character to write
+     * @param b The character to write.
      */
     @Override
-    public void write(final int idx) {
+    public void write(final int b) {
         //to /dev/null
     }
 
