@@ -371,7 +371,7 @@ public class ReadAheadInputStream extends FilterInputStream {
     }
 
     /**
-     * Read data from underlyingInputStream to readAheadBuffer asynchronously.
+     * Reads data from underlyingInputStream to readAheadBuffer asynchronously.
      *
      * @throws IOException if an I/O error occurs.
      */

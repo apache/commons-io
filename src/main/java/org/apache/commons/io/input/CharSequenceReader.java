@@ -185,7 +185,7 @@ public class CharSequenceReader extends Reader implements Serializable {
     }
 
     /**
-     * Read a single character.
+     * Reads a single character.
      *
      * @return the next character from the character sequence
      * or -1 if the end has been reached.
@@ -199,7 +199,7 @@ public class CharSequenceReader extends Reader implements Serializable {
     }
 
     /**
-     * Read the specified number of characters into the array.
+     * Reads the specified number of characters into the array.
      *
      * @param array The array to store the characters in
      * @param offset The starting position in the array to store
