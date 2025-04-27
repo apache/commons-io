@@ -412,7 +412,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
     }
 
     /**
-     * Write a byte to byte array.
+     * Writes a byte to byte array.
      * @param b the byte to write
      */
     protected void writeImpl(final int b) {

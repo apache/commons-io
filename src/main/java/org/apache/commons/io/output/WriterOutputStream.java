@@ -423,7 +423,7 @@ public class WriterOutputStream extends OutputStream {
     }
 
     /**
-     * Write bytes from the specified byte array to the stream.
+     * Writes bytes from the specified byte array to the stream.
      *
      * @param b the byte array containing the bytes to write
      * @throws IOException if an I/O error occurs.
@@ -434,7 +434,7 @@ public class WriterOutputStream extends OutputStream {
     }
 
     /**
-     * Write bytes from the specified byte array to the stream.
+     * Writes bytes from the specified byte array to the stream.
      *
      * @param b   the byte array containing the bytes to write
      * @param off the start offset in the byte array
@@ -456,7 +456,7 @@ public class WriterOutputStream extends OutputStream {
     }
 
     /**
-     * Write a single byte to the stream.
+     * Writes a single byte to the stream.
      *
      * @param b the byte to write
      * @throws IOException if an I/O error occurs.
