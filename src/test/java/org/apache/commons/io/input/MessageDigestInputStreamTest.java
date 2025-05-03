@@ -45,8 +45,8 @@ import org.junit.jupiter.api.Test;
  */
 public class MessageDigestInputStreamTest {
 
-    static byte[] generateRandomByteStream(final int pSize) {
-        final byte[] buffer = new byte[pSize];
+    static byte[] generateRandomByteStream(final int size) {
+        final byte[] buffer = new byte[size];
         final Random rnd = new Random();
         rnd.nextBytes(buffer);
         return buffer;

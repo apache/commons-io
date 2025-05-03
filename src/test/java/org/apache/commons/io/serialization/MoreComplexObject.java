@@ -34,8 +34,8 @@ public class MoreComplexObject implements Serializable {
     private final Random random = new Random(System.currentTimeMillis());
     private final String string = UUID.randomUUID().toString();
     private final Integer integer = random.nextInt();
-    private final int pInt = random.nextInt();
-    private final long pLong = random.nextLong();
+    private final int nextInt = random.nextInt();
+    private final long nextLong = random.nextLong();
     private final Integer[] intArray = { random.nextInt(), random.nextInt() };
     private final List<Boolean> boolList = new ArrayList<>();
 
@@ -47,6 +47,6 @@ public class MoreComplexObject implements Serializable {
 
     @Override
     public String toString() {
-        return string + integer + pInt + pLong + Arrays.asList(intArray) + boolList;
+        return string + integer + nextInt + nextLong + Arrays.asList(intArray) + boolList;
     }
 }
