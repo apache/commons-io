@@ -85,7 +85,7 @@ public class CircularByteBuffer {
      * @throws IllegalStateException    The buffer doesn't have sufficient space. Use
      *                                  {@link #getSpace()} to prevent this exception.
      * @throws IllegalArgumentException Either of {@code offset}, or {@code length} is negative.
-     * @throws NullPointerException     The byte array {@code pBuffer} is null.
+     * @throws NullPointerException     The byte array {@code targetBuffer} is null.
      */
     public void add(final byte[] targetBuffer, final int offset, final int length) {
         Objects.requireNonNull(targetBuffer, "Buffer");
@@ -177,10 +177,10 @@ public class CircularByteBuffer {
      * @param offset start offset
      * @param length length to compare
      * @return True, if the next invocations of {@link #read()} will return the
-     * bytes at offsets {@code pOffset}+0, {@code pOffset}+1, ...,
-     * {@code pOffset}+{@code length}-1 of byte array {@code pBuffer}.
-     * @throws IllegalArgumentException Either of {@code pOffset}, or {@code length} is negative.
-     * @throws NullPointerException     The byte array {@code pBuffer} is null.
+     * bytes at offsets {@code sourceBuffer}+0, {@code offset}+1, ...,
+     * {@code offset}+{@code length}-1 of byte array {@code sourceBuffer}.
+     * @throws IllegalArgumentException Either of {@code sourceBuffer}, or {@code length} is negative.
+     * @throws NullPointerException     The byte array {@code sourceBuffer} is null.
      */
     public boolean peek(final byte[] sourceBuffer, final int offset, final int length) {
         Objects.requireNonNull(sourceBuffer, "Buffer");
@@ -232,8 +232,8 @@ public class CircularByteBuffer {
      * @param targetBuffer The byte array, where to add bytes.
      * @param targetOffset The offset, where to store bytes in the byte array.
      * @param length The number of bytes to return.
-     * @throws NullPointerException     The byte array {@code pBuffer} is null.
-     * @throws IllegalArgumentException Either of {@code pOffset}, or {@code length} is negative,
+     * @throws NullPointerException     The byte array {@code targetBuffer} is null.
+     * @throws IllegalArgumentException Either of {@code targetOffset}, or {@code length} is negative,
      *                                  or the length of the byte array {@code targetBuffer} is too small.
      * @throws IllegalStateException    The buffer doesn't hold the given number
      *                                  of bytes. Use {@link #getCurrentNumberOfBytes()} to prevent this
