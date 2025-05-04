@@ -652,7 +652,7 @@ public class BOMInputStreamTest {
 
     @Test
     public void testReadXmlWithBOMUcs2() throws Exception {
-        assumeFalse(SystemProperties.getJavaVendor().contains("IBM"), "This test does not pass on some IBM VMs xml parsers");
+        assumeFalse(SystemProperties.getJavaVendor().contains("IBM"), "This test does not pass on some IBM VMs XML parsers");
 
         // UCS-2 is BE.
         assumeTrue(Charset.isSupported("ISO-10646-UCS-2"));
