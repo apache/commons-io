@@ -291,6 +291,18 @@ public class CountingPathVisitor extends SimplePathVisitor {
     }
 
     /**
+     * Returns true to copy the given file, false if not.
+     *
+     * @param file       the visited file.
+     * @param attributes the visited file attributes.
+     * @return true to copy the given file, false if not.
+     */
+    protected boolean accept(final Path file, final BasicFileAttributes attributes) {
+        // Note: A file can be a symbolic link to a directory.
+        return Files.exists(file) && fileFilter.accept(file, attributes) == FileVisitResult.CONTINUE;
+    }
+
+    /**
      * Updates the counters for visiting the given file.
      *
      * @param file       the visited file.
@@ -303,10 +315,10 @@ public class CountingPathVisitor extends SimplePathVisitor {
 
     @Override
     public FileVisitResult visitFile(final Path file, final BasicFileAttributes attributes) throws IOException {
-        // Note: A file can be a symbolic link to a directory.
-        if (Files.exists(file) && fileFilter.accept(file, attributes) == FileVisitResult.CONTINUE) {
+        if (accept(file, attributes)) {
             updateFileCounters(file, attributes);
         }
         return FileVisitResult.CONTINUE;
     }
+
 }
