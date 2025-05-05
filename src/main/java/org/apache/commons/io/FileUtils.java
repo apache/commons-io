@@ -2817,7 +2817,7 @@ public class FileUtils {
      * @since 2.3
      */
     public static List<String> readLines(final File file, final Charset charset) throws IOException {
-        return Files.readAllLines(file.toPath(), charset);
+        return Files.readAllLines(file.toPath(), Charsets.toCharset(charset));
     }
 
     /**

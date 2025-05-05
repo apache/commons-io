@@ -2840,6 +2840,25 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testReadLines_Defaults() throws Exception {
+        final File file = TestUtils.newFile(tempDirFile, "lines.txt");
+        try {
+            final String[] data = {"hello", "this is", "some text"};
+            TestUtils.createLineFileUtf8(file, data);
+
+            final List<String> lines1 = FileUtils.readLines(file);
+            final List<String> lines2 = FileUtils.readLines(file, (Charset) null);
+            final List<String> lines3 = FileUtils.readLines(file, Charset.defaultCharset());
+
+            assertEquals(lines1, Arrays.asList(data));
+            assertEquals(lines1, lines2);
+            assertEquals(lines1, lines3);
+        } finally {
+            TestUtils.deleteFile(file);
+        }
+    }
+
+    @Test
     @EnabledIf("isPosixFilePermissionsSupported")
     public void testReadLines_IOExceptionOnPosixFileSystem() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "cant-read.txt");
