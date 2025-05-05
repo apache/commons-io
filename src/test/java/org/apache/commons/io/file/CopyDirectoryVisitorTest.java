@@ -118,7 +118,6 @@ public class CopyDirectoryVisitorTest extends TestArguments {
         assertFalse(Files.exists(targetDir.resolve("dirs-a-file-size-2")));
     }
 
-
     /**
      * Tests a directory with one file of size 0.
      */

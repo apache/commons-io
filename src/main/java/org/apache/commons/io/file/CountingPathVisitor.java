@@ -236,6 +236,19 @@ public class CountingPathVisitor extends SimplePathVisitor {
         this.directoryPostTransformer = UnaryOperator.identity();
     }
 
+    /**
+     * Tests whether the given file is accepted by the file filter.
+     *
+     * @param file       the visited file.
+     * @param attributes the visited file attributes.
+     * @return true to copy the given file, false if not.
+     * @since 2.20.0
+     */
+    protected boolean accept(final Path file, final BasicFileAttributes attributes) {
+        // Note: A file can be a symbolic link to a directory.
+        return Files.exists(file) && fileFilter.accept(file, attributes) == FileVisitResult.CONTINUE;
+    }
+
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) {
@@ -288,18 +301,6 @@ public class CountingPathVisitor extends SimplePathVisitor {
      */
     protected void updateDirCounter(final Path dir, final IOException exc) {
         pathCounters.getDirectoryCounter().increment();
-    }
-
-    /**
-     * Returns true to copy the given file, false if not.
-     *
-     * @param file       the visited file.
-     * @param attributes the visited file attributes.
-     * @return true to copy the given file, false if not.
-     */
-    protected boolean accept(final Path file, final BasicFileAttributes attributes) {
-        // Note: A file can be a symbolic link to a directory.
-        return Files.exists(file) && fileFilter.accept(file, attributes) == FileVisitResult.CONTINUE;
     }
 
     /**
