@@ -53,17 +53,6 @@ public class BrokenOutputStream extends OutputStream {
     }
 
     /**
-     * Constructs a new stream that always throws the given exception.
-     *
-     * @param exception the exception to be thrown.
-     * @deprecated Use {@link #BrokenOutputStream(Throwable)}.
-     */
-    @Deprecated
-    public BrokenOutputStream(final IOException exception) {
-        this(m -> exception);
-    }
-
-    /**
      * Constructs a new stream that always throws the supplied exception.
      * <p>
      * This class uses the invoked method name as the function input.
@@ -74,6 +63,17 @@ public class BrokenOutputStream extends OutputStream {
      */
     public BrokenOutputStream(final Function<String, Throwable> exceptionFunction) {
         this.exceptionFunction = exceptionFunction;
+    }
+
+    /**
+     * Constructs a new stream that always throws the given exception.
+     *
+     * @param exception the exception to be thrown.
+     * @deprecated Use {@link #BrokenOutputStream(Throwable)}.
+     */
+    @Deprecated
+    public BrokenOutputStream(final IOException exception) {
+        this(m -> exception);
     }
 
     /**

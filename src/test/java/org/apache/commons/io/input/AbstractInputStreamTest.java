@@ -49,21 +49,16 @@ public abstract class AbstractInputStreamTest {
 
     static final int[] ARRAY_LENGTHS = { 0, 1, 2, 4, 8, 16, 32, 64, 128 };
 
+    protected static byte[] ActualBytes;
+
+    protected static byte[] ExpectedBytes;
+    protected static Path InputPath;
+    @TempDir
+    static Path tempDir;
+
     static int[] getArrayLengths() {
         return ARRAY_LENGTHS;
     }
-
-    protected static byte[] ActualBytes;
-    protected static byte[] ExpectedBytes;
-    protected static Path InputPath;
-
-    /**
-     * Set in subclasses.
-     */
-    protected InputStream[] inputStreams;
-
-    @TempDir
-    static Path tempDir;
 
     @BeforeAll
     public static void setUp() throws IOException {
@@ -73,6 +68,11 @@ public abstract class AbstractInputStreamTest {
         InputPath = tempDir.resolve(AbstractInputStreamTest.class.getSimpleName() + ".tmp");
         Files.write(InputPath, ActualBytes);
     }
+
+    /**
+     * Set in subclasses.
+     */
+    protected InputStream[] inputStreams;
 
     @AfterEach
     public void tearDown() throws IOException {
