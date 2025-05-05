@@ -20,23 +20,27 @@ package org.apache.commons.io.file;
 import static org.apache.commons.io.file.CounterAssertions.assertCounts;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.CopyOption;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.function.Supplier;
 
 import org.apache.commons.io.file.Counters.PathCounters;
+import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 /**
- * Tests {@link CountingPathVisitor}.
+ * Tests {@link CopyDirectoryVisitor}.
  */
 public class CopyDirectoryVisitorTest extends TestArguments {
 
@@ -59,19 +63,22 @@ public class CopyDirectoryVisitorTest extends TestArguments {
             assertEquals(sourceDir.get(), ((AbstractPathWrapper) visitFileTree.getSourceDirectory()).get());
             assertEquals(sourceDir, visitFileTree.getSourceDirectory());
             assertEquals(targetDir, visitFileTree.getTargetDirectory());
-            assertEquals(targetDir, visitFileTree.getTargetDirectory());
-            //
+            // Tests equals and hashCode
             assertEquals(visitFileTree, supplier.get());
             assertEquals(visitFileTree.hashCode(), supplier.get().hashCode());
             assertEquals(visitFileTree, visitFileTree);
             assertEquals(visitFileTree.hashCode(), visitFileTree.hashCode());
             assertNotEquals(visitFileTree, "not");
+            assertNotEquals(visitFileTree, new DeletingPathVisitor(pathCounters));
+            assertNotEquals(visitFileTree, new CopyDirectoryVisitor(pathCounters, sourceDir, targetDir));
+            assertNotEquals(visitFileTree, new CopyDirectoryVisitor(pathCounters, sourceDir, sourceDir, EXPECTED_COPY_OPTIONS));
+            assertNotEquals(visitFileTree, new CopyDirectoryVisitor(pathCounters, targetDir, sourceDir, EXPECTED_COPY_OPTIONS));
             assertNotEquals(visitFileTree, CountingPathVisitor.withLongCounters());
         }
     }
 
     /**
-     * Tests an empty folder.
+     * Tests an empty folder with filters.
      */
     @ParameterizedTest
     @MethodSource("pathCounters")
@@ -84,13 +91,33 @@ public class CopyDirectoryVisitorTest extends TestArguments {
             assertArrayEquals(EXPECTED_COPY_OPTIONS, visitFileTree.getCopyOptions());
             assertEquals(sourceDir, visitFileTree.getSourceDirectory());
             assertEquals(targetDir, visitFileTree.getTargetDirectory());
-            //
+            // Tests equals and hashCode
             assertEquals(visitFileTree, supplier.get());
             assertEquals(visitFileTree.hashCode(), supplier.get().hashCode());
             assertEquals(visitFileTree, visitFileTree);
             assertEquals(visitFileTree.hashCode(), visitFileTree.hashCode());
         }
     }
+
+    /**
+     * Tests filters.
+     */
+    @ParameterizedTest
+    @MethodSource("pathCounters")
+    public void testCopyDirectoryFilters(final PathCounters pathCounters) throws IOException {
+        final Path sourceDir = Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-4");
+        final CopyDirectoryVisitor visitFileTree = PathUtils.visitFileTree(new CopyDirectoryVisitor(pathCounters, new NameFileFilter("file-size-1.bin"),
+            new NameFileFilter("dirs-2-file-size-4", "dirs-a-file-size-1"), sourceDir, targetDir, null),
+            sourceDir);
+        assertCounts(2, 1, 2, visitFileTree);
+        assertArrayEquals(PathUtils.EMPTY_COPY_OPTIONS, visitFileTree.getCopyOptions());
+        assertEquals(sourceDir, visitFileTree.getSourceDirectory());
+        assertEquals(targetDir, visitFileTree.getTargetDirectory());
+        assertTrue(Files.exists(targetDir.resolve("dirs-a-file-size-1/file-size-1.bin")));
+        assertFalse(Files.exists(targetDir.resolve("dirs-a-file-size-1/file-size-2.bin")));
+        assertFalse(Files.exists(targetDir.resolve("dirs-a-file-size-2")));
+    }
+
 
     /**
      * Tests a directory with one file of size 0.
@@ -105,10 +132,10 @@ public class CopyDirectoryVisitorTest extends TestArguments {
         assertArrayEquals(EXPECTED_COPY_OPTIONS, visitFileTree.getCopyOptions());
         assertEquals(sourceDir, visitFileTree.getSourceDirectory());
         assertEquals(targetDir, visitFileTree.getTargetDirectory());
-        //
+        assertTrue(Files.exists(targetDir.resolve("file-size-0.bin")));
+        // Tests equals and hashCode
         assertEquals(visitFileTree, supplier.get());
         assertEquals(visitFileTree.hashCode(), supplier.get().hashCode());
-        assertEquals(visitFileTree, visitFileTree);
         assertEquals(visitFileTree.hashCode(), visitFileTree.hashCode());
     }
 
@@ -125,6 +152,7 @@ public class CopyDirectoryVisitorTest extends TestArguments {
         assertArrayEquals(EXPECTED_COPY_OPTIONS, visitFileTree.getCopyOptions());
         assertEquals(sourceDir, visitFileTree.getSourceDirectory());
         assertEquals(targetDir, visitFileTree.getTargetDirectory());
+        assertTrue(Files.exists(targetDir.resolve("file-size-1.bin")));
     }
 
     /**
@@ -140,6 +168,8 @@ public class CopyDirectoryVisitorTest extends TestArguments {
         assertArrayEquals(EXPECTED_COPY_OPTIONS, visitFileTree.getCopyOptions());
         assertEquals(sourceDir, visitFileTree.getSourceDirectory());
         assertEquals(targetDir, visitFileTree.getTargetDirectory());
+        assertTrue(Files.exists(targetDir.resolve("dirs-a-file-size-1/file-size-1.bin")));
+        assertTrue(Files.exists(targetDir.resolve("dirs-b-file-size-1/file-size-1.bin")));
     }
 
 }

@@ -45,7 +45,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
     private final Path targetDirectory;
 
     /**
-     * Constructs a instance that deletes files except for the files and directories explicitly given.
+     * Constructs an instance that copies all files.
      *
      * @param pathCounter How to count visits.
      * @param sourceDirectory The source directory
@@ -60,7 +60,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
     }
 
     /**
-     * Constructs a instance that deletes files except for the files and directories explicitly given.
+     * Constructs an instance that copies files matching the given file and directory filters.
      *
      * @param pathCounter How to count visits.
      * @param fileFilter How to filter file paths.
@@ -171,8 +171,11 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
     @Override
     public FileVisitResult visitFile(final Path sourceFile, final BasicFileAttributes attributes) throws IOException {
         final Path targetFile = resolveRelativeAsString(sourceFile);
-        copy(sourceFile, targetFile);
-        return super.visitFile(targetFile, attributes);
+        if (accept(sourceFile, attributes)) {
+            copy(sourceFile, targetFile);
+            updateFileCounters(targetFile, attributes);
+        }
+        return FileVisitResult.CONTINUE;
     }
 
 }
