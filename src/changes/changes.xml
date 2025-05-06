@@ -56,6 +56,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">org.apache.commons.io.build.AbstractOrigin.getWriter(Charset) now maps a null Charset to the default Charset.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">org.apache.commons.io.build.AbstractOrigin.AbstractRandomAccessFileOrigin.getWriter(Charset) now maps a null Charset to the default Charset.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">org.apache.commons.io.build.AbstractOrigin.OutputStreamOrigin.getWriter(Charset) now maps a null Charset to the default Charset.</action>
+      <action dev="ggregory" type="fix"                due-to="Ryan Kurtz, Gary Gregory">FileUtils.readLines(File, Charset) now maps a null Charset to the default Charset #744.</action>
       <!-- ADD -->
       <action dev="ggregory" type="add" issue="IO-875" due-to="Pierre Baumard, Gary Gregory">Add and use org.apache.commons.io.file.CountingPathVisitor.accept(Path, BasicFileAttributes) #743.</action> 
       <!-- UPDATE -->

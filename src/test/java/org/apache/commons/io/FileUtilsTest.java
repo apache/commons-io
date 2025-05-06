@@ -2821,11 +2821,29 @@ public class FileUtilsTest extends AbstractTempDirTest {
     public void testReadLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
         try {
-            final String[] data = {"hello", "\u1234", "", "this is", "some text"};
+            final String[] data = { "hello", "\u1234", "", "this is", "some text" };
             TestUtils.createLineFileUtf8(file, data);
-
-            final List<String> lines = FileUtils.readLines(file, UTF_8);
+            List<String> lines = FileUtils.readLines(file, UTF_8);
             assertEquals(Arrays.asList(data), lines);
+            lines = FileUtils.readLines(file, (Charset) null);
+            assertEquals(Arrays.asList(data), lines);
+        } finally {
+            TestUtils.deleteFile(file);
+        }
+    }
+
+    @Test
+    public void testReadLinesDefaults() throws Exception {
+        final File file = TestUtils.newFile(tempDirFile, "lines.txt");
+        try {
+            final String[] data = { "hello", "this is", "some text" };
+            TestUtils.createLineFileUtf8(file, data);
+            final List<String> lines1 = FileUtils.readLines(file);
+            final List<String> lines2 = FileUtils.readLines(file, (Charset) null);
+            final List<String> lines3 = FileUtils.readLines(file, Charset.defaultCharset());
+            assertEquals(lines1, Arrays.asList(data));
+            assertEquals(lines1, lines2);
+            assertEquals(lines1, lines3);
         } finally {
             TestUtils.deleteFile(file);
         }
@@ -2837,25 +2855,6 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertThrows(IOException.class, () -> FileUtils.readLines(new File("non-exsistent")));
         assertThrows(IOException.class, () -> FileUtils.readLines(tempDirFile));
         assertThrows(UnsupportedCharsetException.class, () -> FileUtils.readLines(tempDirFile, "unsupported-charset"));
-    }
-
-    @Test
-    public void testReadLines_Defaults() throws Exception {
-        final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        try {
-            final String[] data = {"hello", "this is", "some text"};
-            TestUtils.createLineFileUtf8(file, data);
-
-            final List<String> lines1 = FileUtils.readLines(file);
-            final List<String> lines2 = FileUtils.readLines(file, (Charset) null);
-            final List<String> lines3 = FileUtils.readLines(file, Charset.defaultCharset());
-
-            assertEquals(lines1, Arrays.asList(data));
-            assertEquals(lines1, lines2);
-            assertEquals(lines1, lines3);
-        } finally {
-            TestUtils.deleteFile(file);
-        }
     }
 
     @Test
