@@ -2148,36 +2148,28 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(subDir3.mkdir());
         assertTrue(subDir4.mkdir());
         final File someFile = new File(subDir2, "a.txt");
-        final WildcardFileFilter fileFilterAllFiles =  WildcardFileFilter.builder().setWildcards("*.*").get();
+        final WildcardFileFilter fileFilterAllFiles = WildcardFileFilter.builder().setWildcards("*.*").get();
         final WildcardFileFilter fileFilterAllDirs = WildcardFileFilter.builder().setWildcards("*").get();
         final WildcardFileFilter fileFilterExtTxt = WildcardFileFilter.builder().setWildcards("*.txt").get();
-        try {
-            try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(someFile.toPath()))) {
-                TestUtils.generateTestData(output, 100);
-            }
-            //
-            // "*.*" and "*"
-            Collection<File> expectedFilesAndDirs = Arrays.asList(subDir1, subDir2, someFile, subDir3, subDir4);
-            iterateFilesAndDirs(subDir1, fileFilterAllFiles, fileFilterAllDirs, expectedFilesAndDirs);
-            //
-            // "*.txt" and "*"
-            expectedFilesAndDirs = Arrays.asList(subDir1, subDir2, someFile, subDir3, subDir4);
-            iterateFilesAndDirs(subDir1, fileFilterExtTxt, fileFilterAllDirs, expectedFilesAndDirs);
-            //
-            // "*.*" and "subdir2"
-            expectedFilesAndDirs = Arrays.asList(subDir1, subDir2, someFile);
-            iterateFilesAndDirs(subDir1, fileFilterAllFiles, new NameFileFilter("subdir2"), expectedFilesAndDirs);
-            //
-            // "*.txt" and "subdir2"
-            expectedFilesAndDirs = Arrays.asList(subDir1, subDir2, someFile);
-            iterateFilesAndDirs(subDir1, fileFilterExtTxt, new NameFileFilter("subdir2"), expectedFilesAndDirs);
-        } finally {
-            someFile.delete();
-            subDir4.delete();
-            subDir3.delete();
-            subDir2.delete();
-            subDir1.delete();
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(someFile.toPath()))) {
+            TestUtils.generateTestData(output, 100);
         }
+        //
+        // "*.*" and "*"
+        Collection<File> expectedFilesAndDirs = Arrays.asList(subDir1, subDir2, someFile, subDir3, subDir4);
+        iterateFilesAndDirs(subDir1, fileFilterAllFiles, fileFilterAllDirs, expectedFilesAndDirs);
+        //
+        // "*.txt" and "*"
+        expectedFilesAndDirs = Arrays.asList(subDir1, subDir2, someFile, subDir3, subDir4);
+        iterateFilesAndDirs(subDir1, fileFilterExtTxt, fileFilterAllDirs, expectedFilesAndDirs);
+        //
+        // "*.*" and "subdir2"
+        expectedFilesAndDirs = Arrays.asList(subDir1, subDir2, someFile);
+        iterateFilesAndDirs(subDir1, fileFilterAllFiles, new NameFileFilter("subdir2"), expectedFilesAndDirs);
+        //
+        // "*.txt" and "subdir2"
+        expectedFilesAndDirs = Arrays.asList(subDir1, subDir2, someFile);
+        iterateFilesAndDirs(subDir1, fileFilterExtTxt, new NameFileFilter("subdir2"), expectedFilesAndDirs);
     }
 
     @Test
@@ -2197,48 +2189,36 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final File subDir2 = new File(subDir, "subdir");
         subDir.mkdir();
         subDir2.mkdir();
-        try {
-
-            final String[] expectedFileNames = { "a.txt", "b.txt", "c.txt", "d.txt", "e.txt", "f.txt" };
-            final int[] fileSizes = { 123, 234, 345, 456, 678, 789 };
-
-            for (int i = 0; i < expectedFileNames.length; ++i) {
-                final File theFile = new File(subDir, expectedFileNames[i]);
-                if (!theFile.getParentFile().exists()) {
-                    fail("Cannot create file " + theFile + " as the parent directory does not exist");
-                }
-                try (BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(theFile.toPath()))) {
-                    TestUtils.generateTestData(output, fileSizes[i]);
-                }
+        final String[] expectedFileNames = { "a.txt", "b.txt", "c.txt", "d.txt", "e.txt", "f.txt" };
+        final int[] fileSizes = { 123, 234, 345, 456, 678, 789 };
+        for (int i = 0; i < expectedFileNames.length; ++i) {
+            final File theFile = new File(subDir, expectedFileNames[i]);
+            if (!theFile.getParentFile().exists()) {
+                fail("Cannot create file " + theFile + " as the parent directory does not exist");
             }
-
-            // @formatter:off
+            try (BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(theFile.toPath()))) {
+                TestUtils.generateTestData(output, fileSizes[i]);
+            }
+        }
+        // @formatter:off
             final Collection<File> actualFiles = FileUtils.listFiles(subDir,
                     WildcardFileFilter.builder().setWildcards("*.*").get(),
                     WildcardFileFilter.builder().setWildcards("*").get());
             // @formatter:on
-
-            final int count = actualFiles.size();
-            final Object[] fileObjs = actualFiles.toArray();
-
-            assertEquals(expectedFileNames.length, actualFiles.size(), actualFiles::toString);
-
-            final Map<String, String> foundFileNames = new HashMap<>();
-
-            for (int i = 0; i < count; ++i) {
-                boolean found = false;
-                for (int j = 0; !found && j < expectedFileNames.length; ++j) {
-                    if (expectedFileNames[j].equals(((File) fileObjs[i]).getName())) {
-                        foundFileNames.put(expectedFileNames[j], expectedFileNames[j]);
-                        found = true;
-                    }
+        final int count = actualFiles.size();
+        final Object[] fileObjs = actualFiles.toArray();
+        assertEquals(expectedFileNames.length, actualFiles.size(), actualFiles::toString);
+        final Map<String, String> foundFileNames = new HashMap<>();
+        for (int i = 0; i < count; ++i) {
+            boolean found = false;
+            for (int j = 0; !found && j < expectedFileNames.length; ++j) {
+                if (expectedFileNames[j].equals(((File) fileObjs[i]).getName())) {
+                    foundFileNames.put(expectedFileNames[j], expectedFileNames[j]);
+                    found = true;
                 }
             }
-
-            assertEquals(foundFileNames.size(), expectedFileNames.length, foundFileNames::toString);
-        } finally {
-            subDir.delete();
         }
+        assertEquals(foundFileNames.size(), expectedFileNames.length, foundFileNames::toString);
     }
 
     @Test
@@ -2256,37 +2236,29 @@ public class FileUtilsTest extends AbstractTempDirTest {
     @Test
     public void testListFilesWithDirs() throws IOException {
         final File srcDir = tempDirFile;
-
         final File subDir1 = new File(srcDir, "subdir");
         final File subDir2 = new File(subDir1, "subdir2");
         subDir1.mkdir();
         subDir2.mkdir();
-        try {
-            final File someFile = new File(subDir2, "a.txt");
-            if (!someFile.getParentFile().exists()) {
-                fail("Cannot create file " + someFile + " as the parent directory does not exist");
-            }
-            try (BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(someFile.toPath()))) {
-                TestUtils.generateTestData(output, 100);
-            }
-
-            final File subDir3 = new File(subDir2, "subdir3");
-            subDir3.mkdir();
-
-            // @formatter:off
+        final File someFile = new File(subDir2, "a.txt");
+        if (!someFile.getParentFile().exists()) {
+            fail("Cannot create file " + someFile + " as the parent directory does not exist");
+        }
+        try (BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(someFile.toPath()))) {
+            TestUtils.generateTestData(output, 100);
+        }
+        final File subDir3 = new File(subDir2, "subdir3");
+        subDir3.mkdir();
+        // @formatter:off
             final Collection<File> files = FileUtils.listFilesAndDirs(subDir1,
                     WildcardFileFilter.builder().setWildcards("*.*").get(),
                     WildcardFileFilter.builder().setWildcards("*").get());
             // @formatter:on
-
-            assertEquals(4, files.size());
-            assertTrue(files.contains(subDir1), "Should contain the directory.");
-            assertTrue(files.contains(subDir2), "Should contain the directory.");
-            assertTrue(files.contains(someFile), "Should contain the file.");
-            assertTrue(files.contains(subDir3), "Should contain the directory.");
-        } finally {
-            subDir1.delete();
-        }
+        assertEquals(4, files.size());
+        assertTrue(files.contains(subDir1), "Should contain the directory.");
+        assertTrue(files.contains(subDir2), "Should contain the directory.");
+        assertTrue(files.contains(someFile), "Should contain the file.");
+        assertTrue(files.contains(subDir3), "Should contain the directory.");
     }
 
     @Test
@@ -2351,7 +2323,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testMoveDirectory_Rename() throws Exception {
+    public void testMoveDirectoryRename() throws Exception {
         final File dir = tempDirFile;
         final File src = new File(dir, "testMoveDirectory1Source");
         final File testDir = new File(src, "foo");
@@ -2412,7 +2384,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testMoveDirectoryToDirectory_Errors() throws Exception {
+    public void testMoveDirectoryToDirectoryErrors() throws Exception {
         assertThrows(NullPointerException.class, () -> FileUtils.moveDirectoryToDirectory(null, new File("foo"), true));
         assertThrows(NullPointerException.class, () -> FileUtils.moveDirectoryToDirectory(new File("foo"), null, true));
         final File testFile1 = new File(tempDirFile, "testMoveFileFile1");
@@ -2592,7 +2564,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testMoveFileToDirectory_Errors() throws Exception {
+    public void testMoveFileToDirectoryErrors() throws Exception {
         assertThrows(NullPointerException.class, () -> FileUtils.moveFileToDirectory(null, new File("foo"), true));
         assertThrows(NullPointerException.class, () -> FileUtils.moveFileToDirectory(new File("foo"), null, true));
         final File testFile1 = new File(tempDirFile, "testMoveFileFile1");
@@ -2818,39 +2790,29 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testReadLines() throws Exception {
+    public void testReadLinesUTF8() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        try {
-            final String[] data = { "hello", "\u1234", "", "this is", "some text" };
-            TestUtils.createLineFileUtf8(file, data);
-            List<String> lines = FileUtils.readLines(file, UTF_8);
-            assertEquals(Arrays.asList(data), lines);
-            lines = FileUtils.readLines(file, (Charset) null);
-            assertEquals(Arrays.asList(data), lines);
-        } finally {
-            TestUtils.deleteFile(file);
-        }
+        final String[] data = { "hello", "\u1234", "", "this is", "some text" };
+        TestUtils.createLineFileUtf8(file, data);
+        final List<String> lines = FileUtils.readLines(file, UTF_8);
+        assertEquals(Arrays.asList(data), lines);
     }
 
     @Test
     public void testReadLinesDefaults() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        try {
-            final String[] data = { "hello", "this is", "some text" };
-            TestUtils.createLineFileUtf8(file, data);
-            final List<String> lines1 = FileUtils.readLines(file);
-            final List<String> lines2 = FileUtils.readLines(file, (Charset) null);
-            final List<String> lines3 = FileUtils.readLines(file, Charset.defaultCharset());
-            assertEquals(lines1, Arrays.asList(data));
-            assertEquals(lines1, lines2);
-            assertEquals(lines1, lines3);
-        } finally {
-            TestUtils.deleteFile(file);
-        }
+        final String[] data = { "hello", "this is", "some text" };
+        TestUtils.createLineFileUtf8(file, data);
+        final List<String> lines1 = FileUtils.readLines(file);
+        final List<String> lines2 = FileUtils.readLines(file, (Charset) null);
+        final List<String> lines3 = FileUtils.readLines(file, Charset.defaultCharset());
+        assertEquals(lines1, Arrays.asList(data));
+        assertEquals(lines1, lines2);
+        assertEquals(lines1, lines3);
     }
 
     @Test
-    public void testReadLines_Errors() {
+    public void testReadLinesErrors() {
         assertThrows(NullPointerException.class, () -> FileUtils.readLines(null));
         assertThrows(IOException.class, () -> FileUtils.readLines(new File("non-exsistent")));
         assertThrows(IOException.class, () -> FileUtils.readLines(tempDirFile));
