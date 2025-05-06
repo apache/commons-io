@@ -224,6 +224,9 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
         try (Reader reader = getOriginRo().getReader(Charset.defaultCharset())) {
             assertNotNull(reader);
         }
+        try (Reader reader = getOriginRo().getReader(null)) {
+            assertNotNull(reader);
+        }
     }
 
     @Test

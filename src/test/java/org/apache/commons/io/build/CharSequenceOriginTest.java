@@ -100,6 +100,15 @@ public class CharSequenceOriginTest extends AbstractOriginTest<CharSequence, Cha
         }
     }
 
+    @Test
+    public void testGetReaderIgnoreCharsetNull() throws IOException {
+        // The CharSequenceOrigin ignores the given Charset.
+        try (Reader reader = getOriginRo().getReader(null)) {
+            assertNotNull(reader);
+            assertEquals(getFixtureStringFromFile(), IOUtils.toString(reader));
+        }
+    }
+
     @Override
     @Test
     public void testGetWriter() {

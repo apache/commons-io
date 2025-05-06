@@ -39,6 +39,7 @@ import java.nio.file.spi.FileSystemProvider;
 import java.util.Arrays;
 import java.util.Objects;
 
+import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IORandomAccessFile;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.RandomAccessFileMode;
@@ -128,7 +129,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public Reader getReader(final Charset charset) throws IOException {
-            return new InputStreamReader(getInputStream(), charset);
+            return new InputStreamReader(getInputStream(), Charsets.toCharset(charset));
         }
 
         @Override
@@ -175,7 +176,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public Reader getReader(final Charset charset) throws IOException {
-            return new InputStreamReader(getInputStream(), charset);
+            return new InputStreamReader(getInputStream(), Charsets.toCharset(charset));
         }
 
         @Override
@@ -320,7 +321,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public Reader getReader(final Charset charset) throws IOException {
-            return new InputStreamReader(getInputStream(), charset);
+            return new InputStreamReader(getInputStream(), Charsets.toCharset(charset));
         }
 
     }
@@ -729,12 +730,12 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     /**
      * Gets a new Reader on the origin, buffered by default.
      *
-     * @param charset the charset to use for decoding
+     * @param charset the charset to use for decoding, null maps to the default Charset.
      * @return a new Reader on the origin.
      * @throws IOException if an I/O error occurs opening the file.
      */
     public Reader getReader(final Charset charset) throws IOException {
-        return Files.newBufferedReader(getPath(), charset);
+        return Files.newBufferedReader(getPath(), Charsets.toCharset(charset));
     }
 
     private String getSimpleClassName() {
