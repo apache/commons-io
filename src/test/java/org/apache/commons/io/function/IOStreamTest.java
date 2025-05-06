@@ -322,7 +322,7 @@ public class IOStreamTest {
         assertEquals("ABC", sb.toString());
         sb.setLength(0);
         IOStream.adapt(Stream.of("A", "B", "C", "D").parallel()).forEachOrdered(sb::append);
-        assertEquals("ABCB", sb.toString());
+        assertEquals("ABCD", sb.toString());
     }
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
