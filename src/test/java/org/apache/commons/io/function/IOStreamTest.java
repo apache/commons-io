@@ -74,6 +74,14 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
+    public void testAdaptAsParallel() {
+        assertEquals(0, IOStream.adapt((Stream<?>) null).parallel().count());
+        assertEquals(0, IOStream.adapt(Stream.empty()).parallel().count());
+        assertEquals(1, IOStream.adapt(Stream.of("A")).parallel().count());
+    }
+
+    @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
+    @Test
     public void testAllMatch() throws IOException {
         assertThrows(IOException.class, () -> IOStream.of("A", "B").allMatch(TestConstants.THROWING_IO_PREDICATE));
         assertTrue(IOStream.of("A", "B").allMatch(IOPredicate.alwaysTrue()));
