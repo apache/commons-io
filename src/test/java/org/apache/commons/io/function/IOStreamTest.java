@@ -306,6 +306,21 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
+    public void testForEachOrderedAdaptParallel() throws IOException {
+        // compile vs type
+        assertThrows(IOException.class, () -> IOStream.adapt(Stream.of("A").parallel()).forEach(TestUtils.throwingIOConsumer()));
+        // compile vs inline
+        assertThrows(IOException.class, () -> IOStream.adapt(Stream.of("A").parallel()).forEach(e -> {
+            throw new IOException("Failure");
+        }));
+        assertThrows(IOException.class, () -> IOStream.adapt(Stream.of("A", "B").parallel()).forEach(TestUtils.throwingIOConsumer()));
+        final StringBuilder sb = new StringBuilder();
+        IOStream.adapt(Stream.of("A", "B").parallel()).forEachOrdered(sb::append);
+        assertEquals("AB", sb.toString());
+    }
+
+    @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
+    @Test
     public void testForEachOrderedAsParallel() throws IOException {
         // compile vs type
         assertThrows(IOException.class, () -> IOStream.of("A").parallel().forEach(TestUtils.throwingIOConsumer()));
