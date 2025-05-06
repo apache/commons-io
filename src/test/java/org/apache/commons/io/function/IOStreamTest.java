@@ -304,6 +304,7 @@ public class IOStreamTest {
     @Test
     public void testIsParallel() {
         assertFalse(IOStream.of("A", "B").isParallel());
+        assertTrue(IOStream.of("A", "B").parallel().isParallel());
     }
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
