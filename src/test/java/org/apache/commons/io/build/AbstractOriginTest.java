@@ -234,6 +234,10 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
         try (Writer writer = getOriginRw().getWriter(Charset.defaultCharset())) {
             assertNotNull(writer);
         }
+        setOriginRw(newOriginRw());
+        try (Writer writer = getOriginRw().getWriter(null)) {
+            assertNotNull(writer);
+        }
     }
 
     @Test

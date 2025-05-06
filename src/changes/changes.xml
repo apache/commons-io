@@ -53,6 +53,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">org.apache.commons.io.build.AbstractOrigin.AbstractRandomAccessFileOrigin.getReader(Charset) now maps a null Charset to the default Charset.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">org.apache.commons.io.build.AbstractOrigin.ByeArrayOrigin.getReader(Charset) now maps a null Charset to the default Charset.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">org.apache.commons.io.build.AbstractOrigin.InputStreamOrigin.getReader(Charset) now maps a null Charset to the default Charset.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">org.apache.commons.io.build.AbstractOrigin.getWriter(Charset) now maps a null Charset to the default Charset.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">org.apache.commons.io.build.AbstractOrigin.AbstractRandomAccessFileOrigin.getWriter(Charset) now maps a null Charset to the default Charset.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">org.apache.commons.io.build.AbstractOrigin.OutputStreamOrigin.getWriter(Charset) now maps a null Charset to the default Charset.</action>
       <!-- ADD -->
       <action dev="ggregory" type="add" issue="IO-875" due-to="Pierre Baumard, Gary Gregory">Add and use org.apache.commons.io.file.CountingPathVisitor.accept(Path, BasicFileAttributes) #743.</action> 
       <!-- UPDATE -->

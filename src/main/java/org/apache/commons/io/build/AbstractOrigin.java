@@ -134,7 +134,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
-            return new OutputStreamWriter(getOutputStream(options), charset);
+            return new OutputStreamWriter(getOutputStream(options), Charsets.toCharset(charset));
         }
 
         @Override
@@ -392,7 +392,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          */
         @Override
         public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
-            return new OutputStreamWriter(origin, charset);
+            return new OutputStreamWriter(origin, Charsets.toCharset(charset));
         }
     }
 
@@ -752,7 +752,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
      */
     public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
-        return Files.newBufferedWriter(getPath(), charset, options);
+        return Files.newBufferedWriter(getPath(), Charsets.toCharset(charset), options);
     }
 
     /**
