@@ -60,16 +60,16 @@ public class ClosedInputStream extends InputStream {
     }
 
     /**
-     * Construct a new instance.
+     * Constructs a new instance.
      */
     public ClosedInputStream() {
         // empty
     }
 
     /**
-     * Returns -1 to indicate that the stream is closed.
+     * Returns {@code -1} to indicate that the stream is closed.
      *
-     * @return always -1
+     * @return always {@code -1}.
      */
     @Override
     public int read() {
@@ -77,12 +77,12 @@ public class ClosedInputStream extends InputStream {
     }
 
     /**
-     * Returns -1 to indicate that the stream is closed.
+     * Returns {@code -1} to indicate that the stream is closed.
      *
      * @param b ignored.
      * @param off ignored.
      * @param len ignored.
-     * @return always -1
+     * @return always -1.
      */
     @Override
     public int read(final byte[] b, final int off, final int len) throws IOException {
