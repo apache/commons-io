@@ -307,6 +307,52 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
     private FilePart currentFilePart;
     private boolean trailingNewlineOfFileSkipped;
 
+    private ReversedLinesFileReader(final Builder builder) throws IOException {
+        this.blockSize = builder.getBufferSize();
+        this.charset = Charsets.toCharset(builder.getCharset());
+        // check & prepare encoding
+        final CharsetEncoder charsetEncoder = this.charset.newEncoder();
+        final float maxBytesPerChar = charsetEncoder.maxBytesPerChar();
+        if (maxBytesPerChar == 1f || this.charset == StandardCharsets.UTF_8) {
+            // all one byte encodings are partNumber problem
+            byteDecrement = 1;
+        } else if (this.charset == Charset.forName("Shift_JIS") || // Same as for UTF-8
+                // http://www.herongyang.com/Unicode/JIS-Shift-JIS-Encoding.html
+                this.charset == Charset.forName("windows-31j") || // Windows code page 932 (Japanese)
+                this.charset == Charset.forName("x-windows-949") || // Windows code page 949 (Korean)
+                this.charset == Charset.forName("gbk") || // Windows code page 936 (Simplified Chinese)
+                this.charset == Charset.forName("x-windows-950")) { // Windows code page 950 (Traditional Chinese)
+            byteDecrement = 1;
+        } else if (this.charset == StandardCharsets.UTF_16BE || this.charset == StandardCharsets.UTF_16LE) {
+            // UTF-16 new line sequences are not allowed as second tuple of four byte
+            // sequences,
+            // however byte order has to be specified
+            byteDecrement = 2;
+        } else if (this.charset == StandardCharsets.UTF_16) {
+            throw new UnsupportedEncodingException("For UTF-16, you need to specify the byte order (use UTF-16BE or " + "UTF-16LE)");
+        } else {
+            throw new UnsupportedEncodingException("Encoding " + charset + " is not supported yet (feel free to " + "submit a patch)");
+        }
+        // NOTE: The new line sequences are matched in the order given, so it is
+        // important that \r\n is BEFORE \n
+        this.newLineSequences = new byte[][] { StandardLineSeparator.CRLF.getBytes(this.charset), StandardLineSeparator.LF.getBytes(this.charset),
+                StandardLineSeparator.CR.getBytes(this.charset) };
+        this.avoidNewlineSplitBufferSize = newLineSequences[0].length;
+        // Open file
+        this.channel = Files.newByteChannel(builder.getPath(), StandardOpenOption.READ);
+        this.totalByteLength = channel.size();
+        int lastBlockLength = (int) (this.totalByteLength % blockSize);
+        if (lastBlockLength > 0) {
+            this.totalBlockCount = this.totalByteLength / blockSize + 1;
+        } else {
+            this.totalBlockCount = this.totalByteLength / blockSize;
+            if (this.totalByteLength > 0) {
+                lastBlockLength = blockSize;
+            }
+        }
+        this.currentFilePart = new FilePart(totalBlockCount, lastBlockLength, null);
+    }
+
     /**
      * Constructs a ReversedLinesFileReader with default block size of 4KB and the virtual machine's {@link Charset#defaultCharset() default charset}.
      *
@@ -397,59 +443,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
      */
     @Deprecated
     public ReversedLinesFileReader(final Path file, final int blockSize, final Charset charset) throws IOException {
-        this.blockSize = blockSize;
-        this.charset = Charsets.toCharset(charset);
-
-        // --- check & prepare encoding ---
-        final CharsetEncoder charsetEncoder = this.charset.newEncoder();
-        final float maxBytesPerChar = charsetEncoder.maxBytesPerChar();
-        if (maxBytesPerChar == 1f || this.charset == StandardCharsets.UTF_8) {
-            // all one byte encodings are partNumber problem
-            byteDecrement = 1;
-        } else if (this.charset == Charset.forName("Shift_JIS") || // Same as for UTF-8
-        // http://www.herongyang.com/Unicode/JIS-Shift-JIS-Encoding.html
-                this.charset == Charset.forName("windows-31j") || // Windows code page 932 (Japanese)
-                this.charset == Charset.forName("x-windows-949") || // Windows code page 949 (Korean)
-                this.charset == Charset.forName("gbk") || // Windows code page 936 (Simplified Chinese)
-                this.charset == Charset.forName("x-windows-950")) { // Windows code page 950 (Traditional Chinese)
-            byteDecrement = 1;
-        } else if (this.charset == StandardCharsets.UTF_16BE || this.charset == StandardCharsets.UTF_16LE) {
-            // UTF-16 new line sequences are not allowed as second tuple of four byte
-            // sequences,
-            // however byte order has to be specified
-            byteDecrement = 2;
-        } else if (this.charset == StandardCharsets.UTF_16) {
-            throw new UnsupportedEncodingException(
-                    "For UTF-16, you need to specify the byte order (use UTF-16BE or " + "UTF-16LE)");
-        } else {
-            throw new UnsupportedEncodingException(
-                    "Encoding " + charset + " is not supported yet (feel free to " + "submit a patch)");
-        }
-
-        // NOTE: The new line sequences are matched in the order given, so it is
-        // important that \r\n is BEFORE \n
-        this.newLineSequences = new byte[][] {
-            StandardLineSeparator.CRLF.getBytes(this.charset),
-            StandardLineSeparator.LF.getBytes(this.charset),
-            StandardLineSeparator.CR.getBytes(this.charset)
-        };
-
-        this.avoidNewlineSplitBufferSize = newLineSequences[0].length;
-
-        // Open file
-        this.channel = Files.newByteChannel(file, StandardOpenOption.READ);
-        this.totalByteLength = channel.size();
-        int lastBlockLength = (int) (this.totalByteLength % blockSize);
-        if (lastBlockLength > 0) {
-            this.totalBlockCount = this.totalByteLength / blockSize + 1;
-        } else {
-            this.totalBlockCount = this.totalByteLength / blockSize;
-            if (this.totalByteLength > 0) {
-                lastBlockLength = blockSize;
-            }
-        }
-        this.currentFilePart = new FilePart(totalBlockCount, lastBlockLength, null);
-
+        this(builder().setPath(file).setBufferSize(blockSize).setCharset(charset));
     }
 
     /**
