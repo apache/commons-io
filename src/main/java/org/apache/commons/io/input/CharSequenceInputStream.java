@@ -112,7 +112,7 @@ public class CharSequenceInputStream extends InputStream {
          */
         @Override
         public CharSequenceInputStream get() {
-            return Uncheck.get(() -> new CharSequenceInputStream(getCharSequence(), getBufferSize(), charsetEncoder));
+            return Uncheck.get(() -> new CharSequenceInputStream(this));
         }
 
         CharsetEncoder getCharsetEncoder() {
@@ -191,17 +191,15 @@ public class CharSequenceInputStream extends InputStream {
      */
     @Deprecated
     public CharSequenceInputStream(final CharSequence cs, final Charset charset, final int bufferSize) {
-        // @formatter:off
-        this(cs, bufferSize, newEncoder(charset));
-        // @formatter:on
+        this(builder().setCharSequence(cs).setCharset(charset).setBufferSize(bufferSize));
     }
 
-    private CharSequenceInputStream(final CharSequence cs, final int bufferSize, final CharsetEncoder charsetEncoder) {
-        this.charsetEncoder = charsetEncoder;
+    private CharSequenceInputStream(final Builder builder) {
+        this.charsetEncoder = builder.charsetEncoder;
         // Ensure that buffer is long enough to hold a complete character
-        this.bBuf = ByteBuffer.allocate(ReaderInputStream.checkMinBufferSize(charsetEncoder, bufferSize));
+        this.bBuf = ByteBuffer.allocate(ReaderInputStream.checkMinBufferSize(builder.charsetEncoder, builder.getBufferSize()));
         this.bBuf.flip();
-        this.cBuf = CharBuffer.wrap(cs);
+        this.cBuf = CharBuffer.wrap(Uncheck.get(() -> builder.getCharSequence()));
         this.cBufMark = NO_MARK;
         this.bBufMark = NO_MARK;
         try {
