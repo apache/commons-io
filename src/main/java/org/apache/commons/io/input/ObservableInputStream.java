@@ -165,7 +165,7 @@ public class ObservableInputStream extends ProxyInputStream {
 
     private final List<Observer> observers;
 
-    ObservableInputStream(final AbstractBuilder builder) throws IOException {
+    ObservableInputStream(final AbstractBuilder<?> builder) throws IOException {
         super(builder);
         this.observers = builder.observers;
     }
