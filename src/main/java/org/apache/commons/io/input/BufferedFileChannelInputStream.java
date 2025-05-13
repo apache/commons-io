@@ -23,7 +23,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.Objects;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractStreamBuilder;
@@ -106,8 +105,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
          */
         @Override
         public BufferedFileChannelInputStream get() throws IOException {
-            return fileChannel != null ? new BufferedFileChannelInputStream(fileChannel, getBufferSize())
-                    : new BufferedFileChannelInputStream(getPath(), getBufferSize());
+            return new BufferedFileChannelInputStream(this);
         }
 
         /**
@@ -141,6 +139,13 @@ public final class BufferedFileChannelInputStream extends InputStream {
 
     private final FileChannel fileChannel;
 
+    @SuppressWarnings("resource")
+    private BufferedFileChannelInputStream(final Builder builder) throws IOException {
+        this.fileChannel = builder.fileChannel != null ? builder.fileChannel : FileChannel.open(builder.getPath(), StandardOpenOption.READ);
+        this.byteBuffer = ByteBuffer.allocateDirect(builder.getBufferSize());
+        this.byteBuffer.flip();
+    }
+
     /**
      * Constructs a new instance for the given File.
      *
@@ -166,12 +171,6 @@ public final class BufferedFileChannelInputStream extends InputStream {
         this(file.toPath(), bufferSize);
     }
 
-    private BufferedFileChannelInputStream(final FileChannel fileChannel, final int bufferSize) {
-        this.fileChannel = Objects.requireNonNull(fileChannel, "path");
-        byteBuffer = ByteBuffer.allocateDirect(bufferSize);
-        byteBuffer.flip();
-    }
-
     /**
      * Constructs a new instance for the given Path.
      *
@@ -192,10 +191,9 @@ public final class BufferedFileChannelInputStream extends InputStream {
      * @throws IOException If an I/O error occurs
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
      */
-    @SuppressWarnings("resource")
     @Deprecated
     public BufferedFileChannelInputStream(final Path path, final int bufferSize) throws IOException {
-        this(FileChannel.open(path, StandardOpenOption.READ), bufferSize);
+        this(builder().setPath(path).setBufferSize(bufferSize));
     }
 
     @Override
