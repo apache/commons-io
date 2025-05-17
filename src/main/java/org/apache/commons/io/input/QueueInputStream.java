@@ -249,24 +249,28 @@ public class QueueInputStream extends InputStream {
             throw new IndexOutOfBoundsException("Length out of bounds: " + length);
         }
 
-        // read the first value, honoring the timeout
-        final int firstValue = read();
-        if (firstValue == EOF) {
-            return EOF;
-        }
-
         int i = 0;
-        b[offset + i] = (byte) (0xFF & firstValue);
-        i++;
-
-        // read the rest, ignoring the timeout
-        final List<Integer> drain = new ArrayList<>(length * 2);
-        blockingQueue.drainTo(drain, length - 1);
-
-        for (; i < length && (i - 1) < drain.size(); i++) {
-            final Integer value = drain.get(i - 1);
-            b[offset + i] = (byte) (0xFF & value);
+        if (length > 0) {
+            // read the first value, honoring the timeout
+            final int firstValue = read();
+            if (firstValue == EOF) {
+                return EOF;
+            }
+            b[offset + i] = (byte) (0xFF & firstValue);
+            i++;
         }
+
+        if (length > 1) {
+            // read the rest, ignoring the timeout
+            final List<Integer> drain = new ArrayList<>(length * 2);
+            blockingQueue.drainTo(drain, length - 1);
+
+            for (; i < length && (i - 1) < drain.size(); i++) {
+                final Integer value = drain.get(i - 1);
+                b[offset + i] = (byte) (0xFF & value);
+            }
+        }
+
         return i;
     }
 
