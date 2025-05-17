@@ -129,7 +129,8 @@ public class QueueInputStreamTest {
     @MethodSource("inputData")
     public void testBufferedReads(final String inputData) throws IOException {
         final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
-        try (BufferedInputStream inputStream = new BufferedInputStream(new QueueInputStream(queue)); QueueOutputStream outputStream = new QueueOutputStream(queue)) {
+        try (BufferedInputStream inputStream = new BufferedInputStream(new QueueInputStream(queue));
+             QueueOutputStream outputStream = new QueueOutputStream(queue)) {
             outputStream.write(inputData.getBytes(StandardCharsets.UTF_8));
             final String actualData = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
             assertEquals(inputData, actualData);
@@ -141,10 +142,11 @@ public class QueueInputStreamTest {
     public void testReadLineByLineQueue(final String inputData) throws IOException {
         final String[] lines = inputData.split("\n");
         final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
-        try (InputStream inputStream = QueueInputStream.builder().setBlockingQueue(queue)
-                                                       .setTimeout(Duration.ofHours(1))
-                                                       .get();
-             QueueOutputStream outputStream = new QueueOutputStream(queue)) {
+        try (QueueInputStream inputStream = QueueInputStream.builder()
+                .setBlockingQueue(queue)
+                .setTimeout(Duration.ofHours(1))
+                .get();
+             QueueOutputStream outputStream = inputStream.newQueueOutputStream()) {
 
             doTestReadLineByLine(inputData, inputStream, outputStream);
         }
@@ -170,7 +172,7 @@ public class QueueInputStreamTest {
                 outputStream.write(line.getBytes(UTF_8));
                 outputStream.write('\n');
 
-                String actualLine = reader.readLine();
+                final String actualLine = reader.readLine();
                 assertEquals(line, actualLine);
             }
         }

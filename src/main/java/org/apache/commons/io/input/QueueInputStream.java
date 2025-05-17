@@ -23,6 +23,8 @@ import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -230,21 +232,21 @@ public class QueueInputStream extends InputStream {
      * the timeout. The number of bytes actually read is returned as an integer.
      *
      * @param b     the buffer into which the data is read.
-     * @param offset   the start offset in array {@code b}
-     *                   at which the data is written.
+     * @param offset   the start offset in array {@code b} at which the data is written.
      * @param length   the maximum number of bytes to read.
-     * @return     the total number of bytes read into the buffer, or
-     *             {@code -1} if there is no more data because the end of
-     *             the stream has been reached.
+     * @return     the total number of bytes read into the buffer, or {@code -1} if there is no more data because the
+     *              end of the stream has been reached.
      * @throws IllegalStateException if thread is interrupted while waiting for the first byte.
+     * @throws IndexOutOfBoundsException if {@code offset} is negative, {@code length} is negative, or {@code length} is
+     *             greater than {@code b.length - offset}.
      */
     @Override
     public int read(byte[] b, int offset, int length) {
         if (offset > b.length || offset < 0) {
-            throw new ArrayIndexOutOfBoundsException("Offset out of bounds: " + offset);
+            throw new IndexOutOfBoundsException("Offset out of bounds: " + offset);
         }
         if (length < 0 || length > b.length - offset) {
-            throw new ArrayIndexOutOfBoundsException("Length out of bounds: " + length);
+            throw new IndexOutOfBoundsException("Length out of bounds: " + length);
         }
 
         // read the first value, honoring the timeout
@@ -257,13 +259,12 @@ public class QueueInputStream extends InputStream {
         b[offset + i] = (byte) (0xFF & firstValue);
         i++;
 
-        for (; i < length; i++) {
-            // read the rest, ignoring the timeout
-            Integer value = blockingQueue.poll();
-            value = value == null ? EOF : 0xFF & value;
-            if (value == EOF) {
-                return i;
-            }
+        // read the rest, ignoring the timeout
+        final List<Integer> drain = new ArrayList<>(length * 2);
+        blockingQueue.drainTo(drain, length - 1);
+
+        for (; i < length && (i - 1) < drain.size(); i++) {
+            final Integer value = drain.get(i - 1);
             b[offset + i] = (byte) (0xFF & value);
         }
         return i;
