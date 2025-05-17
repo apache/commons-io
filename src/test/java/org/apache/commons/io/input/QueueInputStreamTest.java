@@ -17,10 +17,13 @@
 package org.apache.commons.io.input;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.commons.lang3.ArrayUtils.EMPTY_BYTE_ARRAY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -35,6 +38,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -46,7 +50,9 @@ import org.apache.commons.io.output.QueueOutputStream;
 import org.apache.commons.io.output.QueueOutputStreamTest;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -175,6 +181,76 @@ public class QueueInputStreamTest {
                 final String actualLine = reader.readLine();
                 assertEquals(line, actualLine);
             }
+        }
+    }
+
+    @TestFactory
+    public DynamicTest[] bulkReadErrorHandlingTests() {
+        final QueueInputStream queueInputStream = new QueueInputStream();
+        return new DynamicTest[] {
+                dynamicTest("Offset too big", () ->
+                        assertThrows(IndexOutOfBoundsException.class, () ->
+                                queueInputStream.read(EMPTY_BYTE_ARRAY, 1, 0))),
+
+                dynamicTest("Offset negative", () ->
+                        assertThrows(IndexOutOfBoundsException.class, () ->
+                                queueInputStream.read(EMPTY_BYTE_ARRAY, -1, 0))),
+
+                dynamicTest("Length too big", () ->
+                        assertThrows(IndexOutOfBoundsException.class, () ->
+                                queueInputStream.read(EMPTY_BYTE_ARRAY, 0, 1))),
+
+                dynamicTest("Length negative", () ->
+                        assertThrows(IndexOutOfBoundsException.class, () ->
+                                queueInputStream.read(EMPTY_BYTE_ARRAY, 0, -1))),
+        };
+    }
+
+    @Test
+    public void testBulkReadZeroLength() {
+        final QueueInputStream queueInputStream = new QueueInputStream();
+        final int read = queueInputStream.read(EMPTY_BYTE_ARRAY, 0, 0);
+        assertEquals(0, read);
+    }
+
+    @ParameterizedTest(name = "inputData={0}")
+    @MethodSource("inputData")
+    public void testBulkReadWaiting(final String inputData) throws IOException {
+        assumeTrue(!inputData.isEmpty());
+
+        final CountDownLatch onPollLatch = new CountDownLatch(1);
+        final CountDownLatch afterWriteLatch = new CountDownLatch(1);
+        final LinkedBlockingQueue<Integer> queue = new LinkedBlockingQueue<Integer>() {
+            @Override
+            public Integer poll(final long timeout, final TimeUnit unit) throws InterruptedException {
+                onPollLatch.countDown();
+                afterWriteLatch.await();
+                return super.poll(timeout, unit);
+            }
+        };
+
+        // Simulate scenario where there is not data immediately available when bulk reading and QueueInputStream has to
+        // wait.
+        try (QueueInputStream queueInputStream = QueueInputStream.builder()
+                .setBlockingQueue(queue)
+                .setTimeout(Duration.ofHours(1))
+                .get()) {
+            final QueueOutputStream queueOutputStream = queueInputStream.newQueueOutputStream();
+            CompletableFuture.runAsync(() -> {
+                try {
+                    onPollLatch.await();
+                    queueOutputStream.write(inputData.getBytes(StandardCharsets.UTF_8));
+                    afterWriteLatch.countDown();
+                } catch (final Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+            final byte[] data = new byte[inputData.length()];
+            final int read = queueInputStream.read(data, 0, data.length);
+            assertEquals(inputData.length(), read);
+            final String outputData = new String(data, 0, read, StandardCharsets.UTF_8);
+            assertEquals(inputData, outputData);
         }
     }
 
