@@ -224,4 +224,49 @@ public class QueueInputStream extends InputStream {
         }
     }
 
+    /**
+     * Reads up to {@code length} bytes of data from the input stream into
+     * an array of bytes.  The first byte is read while honoring the timeout; the rest are read while <i>not</i> honoring
+     * the timeout. The number of bytes actually read is returned as an integer.
+     *
+     * @param b     the buffer into which the data is read.
+     * @param offset   the start offset in array {@code b}
+     *                   at which the data is written.
+     * @param length   the maximum number of bytes to read.
+     * @return     the total number of bytes read into the buffer, or
+     *             {@code -1} if there is no more data because the end of
+     *             the stream has been reached.
+     * @throws IllegalStateException if thread is interrupted while waiting for the first byte.
+     */
+    @Override
+    public int read(byte[] b, int offset, int length) {
+        if (offset > b.length || offset < 0) {
+            throw new ArrayIndexOutOfBoundsException("Offset out of bounds: " + offset);
+        }
+        if (length < 0 || length > b.length - offset) {
+            throw new ArrayIndexOutOfBoundsException("Length out of bounds: " + length);
+        }
+
+        // read the first value, honoring the timeout
+        final int firstValue = read();
+        if (firstValue == EOF) {
+            return EOF;
+        }
+
+        int i = 0;
+        b[offset + i] = (byte) (0xFF & firstValue);
+        i++;
+
+        for (; i < length; i++) {
+            // read the rest, ignoring the timeout
+            Integer value = blockingQueue.poll();
+            value = value == null ? EOF : 0xFF & value;
+            if (value == EOF) {
+                return i;
+            }
+            b[offset + i] = (byte) (0xFF & value);
+        }
+        return i;
+    }
+
 }

@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io.input;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
@@ -23,10 +24,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
@@ -123,11 +129,50 @@ public class QueueInputStreamTest {
     @MethodSource("inputData")
     public void testBufferedReads(final String inputData) throws IOException {
         final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
-        try (BufferedInputStream inputStream = new BufferedInputStream(new QueueInputStream(queue));
-                QueueOutputStream outputStream = new QueueOutputStream(queue)) {
+        try (BufferedInputStream inputStream = new BufferedInputStream(new QueueInputStream(queue)); QueueOutputStream outputStream = new QueueOutputStream(queue)) {
             outputStream.write(inputData.getBytes(StandardCharsets.UTF_8));
             final String actualData = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
             assertEquals(inputData, actualData);
+        }
+    }
+
+    @ParameterizedTest(name = "inputData={0}")
+    @MethodSource("inputData")
+    public void testReadLineByLineQueue(final String inputData) throws IOException {
+        final String[] lines = inputData.split("\n");
+        final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
+        try (InputStream inputStream = QueueInputStream.builder().setBlockingQueue(queue)
+                                                       .setTimeout(Duration.ofHours(1))
+                                                       .get();
+             QueueOutputStream outputStream = new QueueOutputStream(queue)) {
+
+            doTestReadLineByLine(inputData, inputStream, outputStream);
+        }
+    }
+
+    @ParameterizedTest(name = "inputData={0}")
+    @MethodSource("inputData")
+    public void testReadLineByLineFile(final String inputData) throws IOException {
+        final Path tempFile = Files.createTempFile(getClass().getSimpleName(), ".txt");
+        try (InputStream inputStream = Files.newInputStream(tempFile);
+             OutputStream outputStream = Files.newOutputStream(tempFile)) {
+
+            doTestReadLineByLine(inputData, inputStream, outputStream);
+        } finally {
+            Files.delete(tempFile);
+        }
+    }
+
+    private void doTestReadLineByLine(final String inputData, final InputStream inputStream, final OutputStream outputStream) throws IOException {
+        final String[] lines = inputData.split("\n");
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, UTF_8))) {
+            for (String line : lines) {
+                outputStream.write(line.getBytes(UTF_8));
+                outputStream.write('\n');
+
+                String actualLine = reader.readLine();
+                assertEquals(line, actualLine);
+            }
         }
     }
 
