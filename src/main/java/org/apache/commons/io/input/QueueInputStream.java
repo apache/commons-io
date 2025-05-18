@@ -242,21 +242,18 @@ public class QueueInputStream extends InputStream {
      * @since 2.20.0
      */
     @Override
-    public int read(byte[] b, int offset, int length) {
+    public int read(final byte[] b, final int offset, final int length) {
         if (offset > b.length || offset < 0) {
             throw new IndexOutOfBoundsException("Offset out of bounds: " + offset);
         }
         if (length < 0 || length > b.length - offset) {
             throw new IndexOutOfBoundsException("Length out of bounds: " + length);
         }
-
         if (length == 0) {
             return 0;
         }
-
         final List<Integer> drain = new ArrayList<>(length);
         blockingQueue.drainTo(drain, length);
-
         if (drain.isEmpty()) {
             // no data immediately available. wait for first byte
             final int value = read();
@@ -266,13 +263,11 @@ public class QueueInputStream extends InputStream {
             drain.add(value);
             blockingQueue.drainTo(drain, length - 1);
         }
-
         int i = 0;
         for (final Integer value : drain) {
             b[offset + i] = (byte) (0xFF & value);
             i++;
         }
-
         return i;
     }
 
