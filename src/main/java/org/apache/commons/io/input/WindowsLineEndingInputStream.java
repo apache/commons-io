@@ -97,7 +97,7 @@ public class WindowsLineEndingInputStream extends InputStream {
      * {@inheritDoc}
      */
     @Override
-    public int read() throws IOException {
+    public synchronized int read() throws IOException {
         if (atEos) {
             return handleEos();
         }
