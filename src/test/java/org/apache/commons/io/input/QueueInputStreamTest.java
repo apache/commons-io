@@ -22,7 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import java.io.BufferedInputStream;
@@ -216,7 +217,7 @@ public class QueueInputStreamTest {
     @ParameterizedTest(name = "inputData={0}")
     @MethodSource("inputData")
     public void testBulkReadWaiting(final String inputData) throws IOException {
-        assumeTrue(!inputData.isEmpty());
+        assumeFalse(inputData.isEmpty());
 
         final CountDownLatch onPollLatch = new CountDownLatch(1);
         final CountDownLatch afterWriteLatch = new CountDownLatch(1);
@@ -242,7 +243,7 @@ public class QueueInputStreamTest {
                     queueOutputStream.write(inputData.getBytes(StandardCharsets.UTF_8));
                     afterWriteLatch.countDown();
                 } catch (final Exception e) {
-                    throw new RuntimeException(e);
+                    fail("Unexpected exception", e);
                 }
             });
 
