@@ -18,11 +18,11 @@ package org.apache.commons.io.input;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang3.ArrayUtils.EMPTY_BYTE_ARRAY;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
@@ -225,7 +225,7 @@ public class QueueInputStreamTest {
             @Override
             public Integer poll(final long timeout, final TimeUnit unit) throws InterruptedException {
                 onPollLatch.countDown();
-                afterWriteLatch.await();
+                afterWriteLatch.await(1, TimeUnit.HOURS);
                 return super.poll(timeout, unit);
             }
         };
@@ -237,13 +237,13 @@ public class QueueInputStreamTest {
                 .setTimeout(Duration.ofHours(1))
                 .get()) {
             final QueueOutputStream queueOutputStream = queueInputStream.newQueueOutputStream();
-            CompletableFuture.runAsync(() -> {
+            final CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
                 try {
-                    onPollLatch.await();
-                    queueOutputStream.write(inputData.getBytes(StandardCharsets.UTF_8));
+                    onPollLatch.await(1, TimeUnit.HOURS);
+                    queueOutputStream.write(inputData.getBytes(UTF_8));
                     afterWriteLatch.countDown();
                 } catch (final Exception e) {
-                    fail("Unexpected exception", e);
+                    throw new RuntimeException(e);
                 }
             });
 
@@ -252,6 +252,7 @@ public class QueueInputStreamTest {
             assertEquals(inputData.length(), read);
             final String outputData = new String(data, 0, read, StandardCharsets.UTF_8);
             assertEquals(inputData, outputData);
+            assertDoesNotThrow(() -> future.get());
         }
     }
 
