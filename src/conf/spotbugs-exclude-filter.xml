@@ -50,9 +50,14 @@
     <Bug pattern="EI_EXPOSE_REP2" />
   </Match>
   <Match>
-    <!-- UnsynchronizedBufferedInputStream is not thread-safe by design. -->
-    <Class name="org.apache.commons.io.input.UnsynchronizedBufferedInputStream" />
+    <Class name="org.apache.commons.io.input.UnsynchronizedByteArrayInputStream" />
+    <!-- Unsynchronized* classes are not thread-safe by design. -->
     <Bug pattern="AT_STALE_THREAD_WRITE_OF_PRIMITIVE" />
+  </Match>
+  <Match>
+    <!-- Unsynchronized* classes are not thread-safe by design. -->
+    <Class name="org.apache.commons.io.input.UnsynchronizedBufferedInputStream" />
+    <Bug pattern="AT_STALE_THREAD_WRITE_OF_PRIMITIVE, AT_NONATOMIC_OPERATIONS_ON_SHARED_VARIABLE" />
   </Match>
   <!-- The encoding is irrelevant as output is binned -->
   <Match>
