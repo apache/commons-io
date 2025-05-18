@@ -90,7 +90,7 @@ public class UnixLineEndingInputStream extends InputStream {
      * {@inheritDoc}
      */
     @Override
-    public int read() throws IOException {
+    public synchronized int read() throws IOException {
         final boolean previousWasSlashR = atSlashCr;
         if (atEos) {
             return handleEos(previousWasSlashR);
