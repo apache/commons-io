@@ -239,6 +239,7 @@ public class QueueInputStream extends InputStream {
      * @throws IllegalStateException if thread is interrupted while waiting for the first byte.
      * @throws IndexOutOfBoundsException if {@code offset} is negative, {@code length} is negative, or {@code length} is
      *             greater than {@code b.length - offset}.
+     * @since 2.20.0
      */
     @Override
     public int read(byte[] b, int offset, int length) {
