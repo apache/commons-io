@@ -100,7 +100,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     /**
      * Tracks whether {@link #close()} has been called or not.
      */
-    private boolean closed;
+    private volatile boolean closed;
 
     /**
      * Handles exceptions.
