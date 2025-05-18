@@ -236,6 +236,7 @@ public class QueueInputStream extends InputStream {
      * @param length   the maximum number of bytes to read.
      * @return     the total number of bytes read into the buffer, or {@code -1} if there is no more data because the
      *              end of the stream has been reached.
+     * @throws NullPointerException If {@code b} is {@code null}.
      * @throws IllegalStateException if thread is interrupted while waiting for the first byte.
      * @throws IndexOutOfBoundsException if {@code offset} is negative, {@code length} is negative, or {@code length} is
      *             greater than {@code b.length - offset}.
@@ -243,13 +244,11 @@ public class QueueInputStream extends InputStream {
      */
     @Override
     public int read(final byte[] b, final int offset, final int length) {
-        if (offset > b.length || offset < 0) {
-            throw new IndexOutOfBoundsException("Offset out of bounds: " + offset);
-        }
-        if (length < 0 || length > b.length - offset) {
-            throw new IndexOutOfBoundsException("Length out of bounds: " + length);
-        }
-        if (length == 0) {
+        if (b == null) {
+            throw new NullPointerException();
+        } else if (offset < 0 || length < 0 || length > b.length - offset) {
+            throw new IndexOutOfBoundsException();
+        } else if (length == 0) {
             return 0;
         }
         final List<Integer> drain = new ArrayList<>(length);
