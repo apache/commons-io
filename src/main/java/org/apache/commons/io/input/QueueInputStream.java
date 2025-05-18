@@ -252,7 +252,7 @@ public class QueueInputStream extends InputStream {
         } else if (length == 0) {
             return 0;
         }
-        final List<Integer> drain = new ArrayList<>(length);
+        final List<Integer> drain = new ArrayList<>(Math.min(length, blockingQueue.size()));
         blockingQueue.drainTo(drain, length);
         if (drain.isEmpty()) {
             // no data immediately available. wait for first byte
