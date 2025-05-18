@@ -49,7 +49,11 @@
     <Method name="&lt;init&gt;" />
     <Bug pattern="EI_EXPOSE_REP2" />
   </Match>
-
+  <Match>
+    <!-- UnsynchronizedBufferedInputStream is not thread-safe by design. -->
+    <Class name="org.apache.commons.io.input.UnsynchronizedBufferedInputStream" />
+    <Bug pattern="AT_STALE_THREAD_WRITE_OF_PRIMITIVE" />
+  </Match>
   <!-- The encoding is irrelevant as output is binned -->
   <Match>
     <Class name="org.apache.commons.io.output.NullPrintStream" />
