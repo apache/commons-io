@@ -551,7 +551,7 @@ public class BoundedInputStream extends ProxyInputStream {
      * @deprecated Use {@link AbstractBuilder#setPropagateClose(boolean)}.
      */
     @Deprecated
-    public void setPropagateClose(final boolean propagateClose) {
+    public synchronized void setPropagateClose(final boolean propagateClose) {
         this.propagateClose = propagateClose;
     }
 
