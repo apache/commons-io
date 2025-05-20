@@ -120,7 +120,7 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Closes this Reader - resets the internal state to
+     * Closes this Reader. Resets the internal state to
      * the initial values.
      *
      * @throws IOException If an error occurs.
@@ -149,7 +149,7 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Returns the current position.
+     * Gets the current position.
      *
      * @return the current position.
      */
@@ -158,7 +158,7 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Returns the size this {@link Reader} emulates.
+     * Gets the size this {@link Reader} emulates.
      *
      * @return The size of the reader to emulate.
      */
@@ -183,7 +183,7 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Indicates whether <em>mark</em> is supported.
+     * Tests whether <em>mark</em> is supported.
      *
      * @return Whether <em>mark</em> is supported or not.
      */
