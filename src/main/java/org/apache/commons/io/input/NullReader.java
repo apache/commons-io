@@ -74,12 +74,13 @@ public class NullReader extends Reader {
     public static final NullReader INSTANCE = new NullReader();
 
     private final long size;
+    private final boolean throwEofException;
+    private final boolean markSupported;
+
     private long position;
     private long mark = -1;
     private long readLimit;
     private boolean eof;
-    private final boolean throwEofException;
-    private final boolean markSupported;
 
     /**
      * Constructs a {@link Reader} that emulates a size 0 reader
