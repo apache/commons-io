@@ -133,9 +133,9 @@ public class CharsetsTest {
 
     @Test
     public void testToCharsetDefault() {
-        assertEquals(StandardCharsets.UTF_8, Charsets.toCharsetDefault((String) null, null));
-        assertEquals(StandardCharsets.UTF_8, Charsets.toCharsetDefault(StringUtils.EMPTY, null));
-        assertEquals(StandardCharsets.UTF_8, Charsets.toCharsetDefault(".", null));
+        assertEquals(Charset.defaultCharset(), Charsets.toCharsetDefault((String) null, null));
+        assertEquals(Charset.defaultCharset(), Charsets.toCharsetDefault(StringUtils.EMPTY, null));
+        assertEquals(Charset.defaultCharset(), Charsets.toCharsetDefault(".", null));
         assertEquals(Charset.defaultCharset(), Charsets.toCharsetDefault(null, Charset.defaultCharset()));
         assertEquals(Charset.defaultCharset(), Charsets.toCharsetDefault(Charset.defaultCharset().name(), Charset.defaultCharset()));
         assertEquals(StandardCharsets.UTF_8, Charsets.toCharsetDefault(StandardCharsets.UTF_8.name(), Charset.defaultCharset()));
