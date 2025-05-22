@@ -23,6 +23,8 @@ import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -222,6 +224,51 @@ public class QueueInputStream extends InputStream {
             // this read method, which does not declare IOException
             throw new IllegalStateException(e);
         }
+    }
+
+    /**
+     * Reads up to {@code length} bytes of data from the input stream into
+     * an array of bytes.  The first byte is read while honoring the timeout; the rest are read while <i>not</i> honoring
+     * the timeout. The number of bytes actually read is returned as an integer.
+     *
+     * @param b     the buffer into which the data is read.
+     * @param offset   the start offset in array {@code b} at which the data is written.
+     * @param length   the maximum number of bytes to read.
+     * @return     the total number of bytes read into the buffer, or {@code -1} if there is no more data because the
+     *              end of the stream has been reached.
+     * @throws NullPointerException If {@code b} is {@code null}.
+     * @throws IllegalStateException if thread is interrupted while waiting for the first byte.
+     * @throws IndexOutOfBoundsException if {@code offset} is negative, {@code length} is negative, or {@code length} is
+     *             greater than {@code b.length - offset}.
+     * @since 2.20.0
+     */
+    @Override
+    public int read(final byte[] b, final int offset, final int length) {
+        if (b == null) {
+            throw new NullPointerException();
+        } else if (offset < 0 || length < 0 || length > b.length - offset) {
+            throw new IndexOutOfBoundsException(
+                    String.format("Range [%d, %<d + %d) out of bounds for length %d", offset, length, b.length));
+        } else if (length == 0) {
+            return 0;
+        }
+        final List<Integer> drain = new ArrayList<>(Math.min(length, blockingQueue.size()));
+        blockingQueue.drainTo(drain, length);
+        if (drain.isEmpty()) {
+            // no data immediately available. wait for first byte
+            final int value = read();
+            if (value == EOF) {
+                return EOF;
+            }
+            drain.add(value);
+            blockingQueue.drainTo(drain, length - 1);
+        }
+        int i = 0;
+        for (final Integer value : drain) {
+            b[offset + i] = (byte) (0xFF & value);
+            i++;
+        }
+        return i;
     }
 
 }
