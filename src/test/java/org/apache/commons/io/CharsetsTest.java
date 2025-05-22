@@ -18,14 +18,23 @@
 package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.Set;
 import java.util.SortedMap;
+import java.util.stream.Stream;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Tests {@link Charsets}.
@@ -54,15 +63,51 @@ public class CharsetsTest {
     /**
      * For parameterized tests.
      *
+     * @return {@code Charset.availableCharsets().values()}.
+     */
+    public static Collection<Charset> availableCharsetsValues() {
+        return Charset.availableCharsets().values();
+    }
+
+    static Stream<Arguments> charsetAliasProvider() {
+        return Charset.availableCharsets().entrySet().stream()
+                .flatMap(entry -> entry.getValue().aliases().stream().map(a -> Arguments.of(entry.getValue(), a)));
+    }
+
+    /**
+     * For parameterized tests.
+     *
      * @return {@code Charset.requiredCharsets().keySet()}.
      */
     public static Set<String> getRequiredCharsetNames() {
         return Charsets.requiredCharsets().keySet();
     }
 
+    @ParameterizedTest
+    @MethodSource("charsetAliasProvider")
+    public void testIsAlias(final Charset charset, final String charsetAlias) {
+        assertTrue(Charsets.isAlias(charset, charsetAlias));
+        assertTrue(Charsets.isAlias(charset, charsetAlias.toLowerCase()));
+        assertTrue(Charsets.isAlias(charset, charsetAlias.toUpperCase()));
+        assertTrue(Charsets.isAlias(charset, charset.name()));
+        assertFalse(Charsets.isAlias(charset, null));
+    }
+
     @Test
     public void testIso8859_1() {
         assertEquals("ISO-8859-1", Charsets.ISO_8859_1.name());
+    }
+
+    @ParameterizedTest
+    @MethodSource("availableCharsetsValues")
+    public void testIsUTF8Charset(final Charset charset) {
+        assumeFalse(StandardCharsets.UTF_8.equals(charset));
+        charset.aliases().forEach(n -> assertFalse(Charsets.isUTF8(Charset.forName(n))));
+    }
+
+    public void testIsUTF8CharsetUTF8() {
+        assertTrue(Charsets.isUTF8(StandardCharsets.UTF_8));
+        StandardCharsets.UTF_8.aliases().forEach(n -> assertTrue(Charsets.isUTF8(Charset.forName(n))));
     }
 
     @Test
@@ -87,7 +132,18 @@ public class CharsetsTest {
     }
 
     @Test
-    public void testToCharset_String_Charset() {
+    public void testToCharsetDefault() {
+        assertEquals(StandardCharsets.UTF_8, Charsets.toCharsetDefault((String) null, null));
+        assertEquals(StandardCharsets.UTF_8, Charsets.toCharsetDefault(StringUtils.EMPTY, null));
+        assertEquals(StandardCharsets.UTF_8, Charsets.toCharsetDefault(".", null));
+        assertEquals(Charset.defaultCharset(), Charsets.toCharsetDefault(null, Charset.defaultCharset()));
+        assertEquals(Charset.defaultCharset(), Charsets.toCharsetDefault(Charset.defaultCharset().name(), Charset.defaultCharset()));
+        assertEquals(StandardCharsets.UTF_8, Charsets.toCharsetDefault(StandardCharsets.UTF_8.name(), Charset.defaultCharset()));
+        assertEquals(StandardCharsets.UTF_8, Charsets.toCharsetDefault(StandardCharsets.UTF_8.name(), null));
+    }
+
+    @Test
+    public void testToCharsetWithStringCharset() {
         assertNull(Charsets.toCharset((String) null, null));
         assertEquals(Charset.defaultCharset(), Charsets.toCharset((String) null, Charset.defaultCharset()));
         assertEquals(Charset.defaultCharset(), Charsets.toCharset((Charset) null, Charset.defaultCharset()));
