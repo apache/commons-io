@@ -61,7 +61,7 @@ public class NullReaderTest {
     private static final String MARK_RESET_NOT_SUPPORTED = "mark/reset not supported";
 
     @Test
-    public void testEOFException() throws Exception {
+    void testEOFException() throws Exception {
         try (Reader reader = new TestNullReader(2, false, true)) {
             assertEquals(0, reader.read(), "Read 1");
             assertEquals(1, reader.read(), "Read 2");
@@ -70,7 +70,7 @@ public class NullReaderTest {
     }
 
     @Test
-    public void testMarkAndReset() throws Exception {
+    void testMarkAndReset() throws Exception {
         int position = 0;
         final int readLimit = 10;
         try (Reader reader = new TestNullReader(100, true, false)) {
@@ -109,7 +109,7 @@ public class NullReaderTest {
     }
 
     @Test
-    public void testMarkNotSupported() throws Exception {
+    void testMarkNotSupported() throws Exception {
         final Reader reader = new TestNullReader(100, false, true);
         assertFalse(reader.markSupported(), "Mark Should NOT be Supported");
 
@@ -130,7 +130,7 @@ public class NullReaderTest {
     }
 
     @Test
-    public void testRead() throws Exception {
+    void testRead() throws Exception {
         final int size = 5;
         final TestNullReader reader = new TestNullReader(size);
         for (int i = 0; i < size; i++) {
@@ -154,7 +154,7 @@ public class NullReaderTest {
     }
 
     @Test
-    public void testReadCharArray() throws Exception {
+    void testReadCharArray() throws Exception {
         final char[] chars = new char[10];
         final Reader reader = new TestNullReader(15);
 
@@ -198,7 +198,7 @@ public class NullReaderTest {
     }
 
     @Test
-    public void testSkip() throws Exception {
+    void testSkip() throws Exception {
         try (Reader reader = new TestNullReader(10, true, false)) {
             assertEquals(0, reader.read(), "Read 1");
             assertEquals(1, reader.read(), "Read 2");

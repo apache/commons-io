@@ -73,7 +73,7 @@ public abstract class AbstractConditionalFileFilterTest extends AbstractIOFileFi
     }
 
     @Test
-    public void testAdd() {
+    void testAdd() {
         final List<TesterTrueFileFilter> filters = new ArrayList<>();
         final ConditionalFileFilter fileFilter = getConditionalFileFilter();
         filters.add(new TesterTrueFileFilter());
@@ -90,7 +90,7 @@ public abstract class AbstractConditionalFileFilterTest extends AbstractIOFileFi
     }
 
     @Test
-    public void testFilterBuiltUsingAdd() {
+    void testFilterBuiltUsingAdd() {
         final List<List<IOFileFilter>> testFilters = getTestFilters();
         final List<boolean[]> testTrueResults = getTrueResults();
         final List<boolean[]> testFalseResults = getFalseResults();
@@ -124,7 +124,7 @@ public abstract class AbstractConditionalFileFilterTest extends AbstractIOFileFi
     }
 
     @Test
-    public void testFilterBuiltUsingConstructor() {
+    void testFilterBuiltUsingConstructor() {
         final List<List<IOFileFilter>> testFilters = getTestFilters();
         final List<boolean[]> testTrueResults = getTrueResults();
         final List<boolean[]> testFalseResults = getFalseResults();
@@ -158,7 +158,7 @@ public abstract class AbstractConditionalFileFilterTest extends AbstractIOFileFi
     }
 
     @Test
-    public void testNoFilters() {
+    void testNoFilters() {
         final ConditionalFileFilter fileFilter = getConditionalFileFilter();
         final File file = new File(this.workingPath, TEST_FILE_NAME_PREFIX + 1 + TEST_FILE_TYPE);
         assertFileFiltering(1, (IOFileFilter) fileFilter, file, false);
@@ -166,7 +166,7 @@ public abstract class AbstractConditionalFileFilterTest extends AbstractIOFileFi
     }
 
     @Test
-    public void testRemove() {
+    void testRemove() {
         final List<TesterTrueFileFilter> filters = new ArrayList<>();
         final ConditionalFileFilter fileFilter = getConditionalFileFilter();
         filters.add(new TesterTrueFileFilter());

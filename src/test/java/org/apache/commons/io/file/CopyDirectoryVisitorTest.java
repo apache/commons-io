@@ -54,7 +54,7 @@ public class CopyDirectoryVisitorTest extends TestArguments {
      */
     @ParameterizedTest
     @MethodSource("pathCounters")
-    public void testCopyDirectoryEmptyFolder(final PathCounters pathCounters) throws IOException {
+    void testCopyDirectoryEmptyFolder(final PathCounters pathCounters) throws IOException {
         try (TempDirectory sourceDir = TempDirectory.create(getClass().getSimpleName())) {
             final Supplier<CopyDirectoryVisitor> supplier = () -> new CopyDirectoryVisitor(pathCounters, sourceDir, targetDir, EXPECTED_COPY_OPTIONS);
             final CopyDirectoryVisitor visitFileTree = PathUtils.visitFileTree(supplier.get(), sourceDir.get());
@@ -82,7 +82,7 @@ public class CopyDirectoryVisitorTest extends TestArguments {
      */
     @ParameterizedTest
     @MethodSource("pathCounters")
-    public void testCopyDirectoryEmptyFolderFilters(final PathCounters pathCounters) throws IOException {
+    void testCopyDirectoryEmptyFolderFilters(final PathCounters pathCounters) throws IOException {
         try (TempDirectory sourceDir = TempDirectory.create(getClass().getSimpleName())) {
             final Supplier<CopyDirectoryVisitor> supplier = () -> new CopyDirectoryVisitor(pathCounters, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE,
                 sourceDir, targetDir, EXPECTED_COPY_OPTIONS);
@@ -104,7 +104,7 @@ public class CopyDirectoryVisitorTest extends TestArguments {
      */
     @ParameterizedTest
     @MethodSource("pathCounters")
-    public void testCopyDirectoryFilters(final PathCounters pathCounters) throws IOException {
+    void testCopyDirectoryFilters(final PathCounters pathCounters) throws IOException {
         final Path sourceDir = Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-4");
         final CopyDirectoryVisitor visitFileTree = PathUtils.visitFileTree(new CopyDirectoryVisitor(pathCounters, new NameFileFilter("file-size-1.bin"),
             new NameFileFilter("dirs-2-file-size-4", "dirs-a-file-size-1"), sourceDir, targetDir, null),
@@ -123,7 +123,7 @@ public class CopyDirectoryVisitorTest extends TestArguments {
      */
     @ParameterizedTest
     @MethodSource("pathCounters")
-    public void testCopyDirectoryFolders1FileSize0(final PathCounters pathCounters) throws IOException {
+    void testCopyDirectoryFolders1FileSize0(final PathCounters pathCounters) throws IOException {
         final Path sourceDir = Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0");
         final Supplier<CopyDirectoryVisitor> supplier = () -> new CopyDirectoryVisitor(pathCounters, sourceDir, targetDir, EXPECTED_COPY_OPTIONS);
         final CopyDirectoryVisitor visitFileTree = PathUtils.visitFileTree(supplier.get(), sourceDir);
@@ -143,7 +143,7 @@ public class CopyDirectoryVisitorTest extends TestArguments {
      */
     @ParameterizedTest
     @MethodSource("pathCounters")
-    public void testCopyDirectoryFolders1FileSize1(final PathCounters pathCounters) throws IOException {
+    void testCopyDirectoryFolders1FileSize1(final PathCounters pathCounters) throws IOException {
         final Path sourceDir = Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1");
         final CopyDirectoryVisitor visitFileTree = PathUtils.visitFileTree(new CopyDirectoryVisitor(pathCounters, sourceDir, targetDir, EXPECTED_COPY_OPTIONS),
             sourceDir);
@@ -159,7 +159,7 @@ public class CopyDirectoryVisitorTest extends TestArguments {
      */
     @ParameterizedTest
     @MethodSource("pathCounters")
-    public void testCopyDirectoryFolders2FileSize2(final PathCounters pathCounters) throws IOException {
+    void testCopyDirectoryFolders2FileSize2(final PathCounters pathCounters) throws IOException {
         final Path sourceDir = Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2");
         final CopyDirectoryVisitor visitFileTree = PathUtils.visitFileTree(new CopyDirectoryVisitor(pathCounters, sourceDir, targetDir, EXPECTED_COPY_OPTIONS),
             sourceDir);

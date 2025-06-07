@@ -34,7 +34,7 @@ public class FileSystemProvidersTest {
     private static final String FILE_PATH = "file:///foo.txt";
 
     @Test
-    public void testGetFileSystemProvider_all() throws URISyntaxException {
+    void testGetFileSystemProvider_all() throws URISyntaxException {
         for (final FileSystemProvider fileSystemProvider : FileSystemProvider.installedProviders()) {
             final String scheme = fileSystemProvider.getScheme();
             final URI uri = new URI(scheme, "ssp", "fragment");
@@ -43,22 +43,22 @@ public class FileSystemProvidersTest {
     }
 
     @Test
-    public void testGetFileSystemProvider_filePath() {
+    void testGetFileSystemProvider_filePath() {
         assertNotNull(FileSystemProviders.getFileSystemProvider(Paths.get(URI.create(FILE_PATH))));
     }
 
     @Test
-    public void testGetFileSystemProvider_fileScheme() {
+    void testGetFileSystemProvider_fileScheme() {
         assertNotNull(FileSystemProviders.installed().getFileSystemProvider("file"));
     }
 
     @Test
-    public void testGetFileSystemProvider_fileURI() {
+    void testGetFileSystemProvider_fileURI() {
         assertNotNull(FileSystemProviders.installed().getFileSystemProvider(URI.create(FILE_PATH)));
     }
 
     @Test
-    public void testGetFileSystemProvider_fileURL() throws MalformedURLException {
+    void testGetFileSystemProvider_fileURL() throws MalformedURLException {
         assertNotNull(FileSystemProviders.installed().getFileSystemProvider(new URL(FILE_PATH)));
     }
 

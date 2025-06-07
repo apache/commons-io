@@ -89,7 +89,7 @@ public class RegexFileFilterTest {
     }
 
     @Test
-    public void testRegex() throws IOException {
+    void testRegex() throws IOException {
         RegexFileFilter filter = new RegexFileFilter("^.*[tT]est(-\\d+)?\\.java$");
         assertSerializable(filter);
         assertFiltering(filter, new File("Test.java"), true);
@@ -142,7 +142,7 @@ public class RegexFileFilterTest {
     }
 
     @Test
-    public void testRegexEdgeCases() {
+    void testRegexEdgeCases() {
         assertThrows(NullPointerException.class, () -> assertSerializable(new RegexFileFilter((String) null)));
         assertThrows(NullPointerException.class, () -> assertSerializable(new RegexFileFilter(null, Pattern.CASE_INSENSITIVE)));
         assertThrows(NullPointerException.class, () -> assertSerializable(new RegexFileFilter(null, IOCase.INSENSITIVE)));
@@ -156,7 +156,7 @@ public class RegexFileFilterTest {
      */
     @SuppressWarnings("unchecked")
     @Test
-    public void testRegexFileNameOnly() throws IOException {
+    void testRegexFileNameOnly() throws IOException {
         final Path path = Paths.get("folder", "Foo.java");
         final String patternStr = "Foo.*";
         assertFiltering(assertSerializable(new RegexFileFilter(patternStr)), path, true);

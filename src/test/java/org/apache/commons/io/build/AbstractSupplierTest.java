@@ -96,7 +96,7 @@ public class AbstractSupplierTest {
     }
 
     @Test
-    public void test() {
+    void test() {
         // @formatter:off
         final Foo foo = Foo.builder()
             .setBar1("value1")

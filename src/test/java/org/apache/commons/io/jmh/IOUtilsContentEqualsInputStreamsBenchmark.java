@@ -234,7 +234,7 @@ public class IOUtilsContentEqualsInputStreamsBenchmark {
     }
 
     @Benchmark
-    public void testStringCurrent(final Blackhole blackhole) throws IOException {
+    void testStringCurrent(final Blackhole blackhole) throws IOException {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 try (InputStream inputReader1 = IOUtils.toInputStream(STRINGS[i], DEFAULT_CHARSET);
@@ -246,7 +246,7 @@ public class IOUtilsContentEqualsInputStreamsBenchmark {
     }
 
     @Benchmark
-    public void testStringFileChannels(final Blackhole blackhole) throws IOException {
+    void testStringFileChannels(final Blackhole blackhole) throws IOException {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 try (InputStream input1 = IOUtils.toInputStream(STRINGS[i], DEFAULT_CHARSET);
@@ -258,7 +258,7 @@ public class IOUtilsContentEqualsInputStreamsBenchmark {
     }
 
     @Benchmark
-    public void testStringPr118(final Blackhole blackhole) throws IOException {
+    void testStringPr118(final Blackhole blackhole) throws IOException {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 try (InputStream input1 = IOUtils.toInputStream(STRINGS[i], DEFAULT_CHARSET);
@@ -270,7 +270,7 @@ public class IOUtilsContentEqualsInputStreamsBenchmark {
     }
 
     @Benchmark
-    public void testStringRelease_2_8_0(final Blackhole blackhole) throws IOException {
+    void testStringRelease_2_8_0(final Blackhole blackhole) throws IOException {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 try (InputStream input1 = IOUtils.toInputStream(STRINGS[i], DEFAULT_CHARSET);

@@ -38,7 +38,7 @@ public class FileDeleteStrategyTest {
     public File temporaryFolder;
 
     @Test
-    public void testDeleteForce() throws Exception {
+    void testDeleteForce() throws Exception {
         final File baseDir = temporaryFolder;
         final File subDir = new File(baseDir, "test");
         assertTrue(subDir.mkdir());
@@ -64,7 +64,7 @@ public class FileDeleteStrategyTest {
     }
 
     @Test
-    public void testDeleteNormal() throws Exception {
+    void testDeleteNormal() throws Exception {
         final File baseDir = temporaryFolder;
         final File subDir = new File(baseDir, "test");
         assertTrue(subDir.mkdir());
@@ -97,13 +97,13 @@ public class FileDeleteStrategyTest {
     }
 
     @Test
-    public void testDeleteNull() throws Exception {
+    void testDeleteNull() throws Exception {
         assertThrows(NullPointerException.class, () -> FileDeleteStrategy.NORMAL.delete(null));
         assertTrue(FileDeleteStrategy.NORMAL.deleteQuietly(null));
     }
 
     @Test
-    public void testDeleteQuietlyNormal() throws Exception {
+    void testDeleteQuietlyNormal() throws Exception {
         final File baseDir = temporaryFolder;
         final File subDir = new File(baseDir, "test");
         assertTrue(subDir.mkdir());
@@ -136,7 +136,7 @@ public class FileDeleteStrategyTest {
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         assertEquals("FileDeleteStrategy[Normal]", FileDeleteStrategy.NORMAL.toString());
         assertEquals("FileDeleteStrategy[Force]", FileDeleteStrategy.FORCE.toString());
     }

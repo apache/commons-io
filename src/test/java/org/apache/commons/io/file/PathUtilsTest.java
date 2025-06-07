@@ -102,7 +102,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyDirectoryForDifferentFilesystemsWithAbsolutePath() throws IOException {
+    void testCopyDirectoryForDifferentFilesystemsWithAbsolutePath() throws IOException {
         final Path archivePath = Paths.get(TEST_JAR_PATH);
         try (FileSystem archive = openArchive(archivePath, false)) {
             // relative jar -> absolute dir
@@ -118,7 +118,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyDirectoryForDifferentFilesystemsWithAbsolutePathReverse() throws IOException {
+    void testCopyDirectoryForDifferentFilesystemsWithAbsolutePathReverse() throws IOException {
         try (FileSystem archive = openArchive(tempDirPath.resolve(TEST_JAR_NAME), true)) {
             // absolute dir -> relative jar
             Path targetDir = archive.getPath("target");
@@ -135,7 +135,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyDirectoryForDifferentFilesystemsWithRelativePath() throws IOException {
+    void testCopyDirectoryForDifferentFilesystemsWithRelativePath() throws IOException {
         final Path archivePath = Paths.get(TEST_JAR_PATH);
         try (FileSystem archive = openArchive(archivePath, false);
                 FileSystem targetArchive = openArchive(tempDirPath.resolve(TEST_JAR_NAME), true)) {
@@ -154,7 +154,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyDirectoryForDifferentFilesystemsWithRelativePathReverse() throws IOException {
+    void testCopyDirectoryForDifferentFilesystemsWithRelativePathReverse() throws IOException {
         try (FileSystem archive = openArchive(tempDirPath.resolve(TEST_JAR_NAME), true)) {
             // relative dir -> relative jar
             Path targetDir = archive.getPath("target");
@@ -171,7 +171,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyFile() throws IOException {
+    void testCopyFile() throws IOException {
         final Path sourceFile = Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/file-size-1.bin");
         final Path targetFile = PathUtils.copyFileToDirectory(sourceFile, tempDirPath);
         assertTrue(Files.exists(targetFile));
@@ -179,7 +179,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyFileTwoFileSystem() throws IOException {
+    void testCopyFileTwoFileSystem() throws IOException {
         try (FileSystem archive = openArchive(Paths.get(TEST_JAR_PATH), false)) {
             final Path sourceFile = archive.getPath("next/dir/test.log");
             final Path targetFile = PathUtils.copyFileToDirectory(sourceFile, tempDirPath);
@@ -189,7 +189,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyURL() throws IOException {
+    void testCopyURL() throws IOException {
         final Path sourceFile = Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/file-size-1.bin");
         final URL url = new URL("file:///" + FilenameUtils.getPath(sourceFile.toAbsolutePath().toString()) + sourceFile.getFileName());
         final Path targetFile = PathUtils.copyFileToDirectory(url, tempDirPath);
@@ -198,13 +198,13 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCreateDirectoriesAlreadyExists() throws IOException {
+    void testCreateDirectoriesAlreadyExists() throws IOException {
         assertEquals(tempDirPath.getParent(), PathUtils.createParentDirectories(tempDirPath));
     }
 
     @SuppressWarnings("resource") // FileSystems.getDefault() is a singleton
     @Test
-    public void testCreateDirectoriesForRoots() throws IOException {
+    void testCreateDirectoriesForRoots() throws IOException {
         for (final Path path : FileSystems.getDefault().getRootDirectories()) {
             final Path parent = path.getParent();
             assertNull(parent);
@@ -213,7 +213,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCreateDirectoriesForRootsLinkOptionNull() throws IOException {
+    void testCreateDirectoriesForRootsLinkOptionNull() throws IOException {
         for (final File f : File.listRoots()) {
             final Path path = f.toPath();
             assertEquals(path.getParent(), PathUtils.createParentDirectories(path, (LinkOption) null));
@@ -221,12 +221,12 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCreateDirectoriesNew() throws IOException {
+    void testCreateDirectoriesNew() throws IOException {
         assertEquals(tempDirPath, PathUtils.createParentDirectories(tempDirPath.resolve("child")));
     }
 
     @Test
-    public void testCreateDirectoriesSymlink() throws IOException {
+    void testCreateDirectoriesSymlink() throws IOException {
         final Path symlinkedDir = createTempSymbolicLinkedRelativeDir(tempDirPath);
         final String leafDirName = "child";
         final Path newDirFollowed = PathUtils.createParentDirectories(symlinkedDir.resolve(leafDirName), PathUtils.NULL_LINK_OPTION);
@@ -234,13 +234,13 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCreateDirectoriesSymlinkClashing() throws IOException {
+    void testCreateDirectoriesSymlinkClashing() throws IOException {
         final Path symlinkedDir = createTempSymbolicLinkedRelativeDir(tempDirPath);
         assertEquals(symlinkedDir, PathUtils.createParentDirectories(symlinkedDir.resolve("child")));
     }
 
     @Test
-    public void testGetBaseNamePathBaseCases() {
+    void testGetBaseNamePathBaseCases() {
         assertEquals("bar", PathUtils.getBaseName(Paths.get("a/b/c/bar.foo")));
         assertEquals("foo", PathUtils.getBaseName(Paths.get("foo")));
         assertEquals("", PathUtils.getBaseName(Paths.get("")));
@@ -254,14 +254,14 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testGetBaseNamePathCornerCases() {
+    void testGetBaseNamePathCornerCases() {
         assertNull(PathUtils.getBaseName((Path) null));
         assertEquals("foo", PathUtils.getBaseName(Paths.get("foo.")));
         assertEquals("", PathUtils.getBaseName(Paths.get("bar/.foo")));
     }
 
     @Test
-    public void testGetDosFileAttributeView() {
+    void testGetDosFileAttributeView() {
         // dir
         final DosFileAttributeView dosFileAttributeView = PathUtils.getDosFileAttributeView(current());
         final Path path = Paths.get("this-file-does-not-exist-at.all");
@@ -280,7 +280,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testGetExtension() {
+    void testGetExtension() {
         assertNull(PathUtils.getExtension(null));
         assertEquals("ext", PathUtils.getExtension(Paths.get("file.ext")));
         assertEquals("", PathUtils.getExtension(Paths.get("README")));
@@ -302,7 +302,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testGetFileName() {
+    void testGetFileName() {
         assertNull(PathUtils.getFileName(null, null));
         assertNull(PathUtils.getFileName(null, Path::toString));
         assertNull(PathUtils.getFileName(Paths.get("/"), Path::toString));
@@ -313,7 +313,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testGetFileNameString() {
+    void testGetFileNameString() {
         assertNull(PathUtils.getFileNameString(Paths.get("/")));
         assertEquals("", PathUtils.getFileNameString(Paths.get("")));
         assertEquals("a", PathUtils.getFileNameString(Paths.get("a")));
@@ -321,44 +321,44 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testGetLastModifiedFileTime_File_Present() throws IOException {
+    void testGetLastModifiedFileTime_File_Present() throws IOException {
         assertNotNull(PathUtils.getLastModifiedFileTime(current().toFile()));
     }
 
     @Test
-    public void testGetLastModifiedFileTime_Path_Absent() throws IOException {
+    void testGetLastModifiedFileTime_Path_Absent() throws IOException {
         assertNull(PathUtils.getLastModifiedFileTime(getNonExistentPath()));
     }
 
     @Test
-    public void testGetLastModifiedFileTime_Path_FileTime_Absent() throws IOException {
+    void testGetLastModifiedFileTime_Path_FileTime_Absent() throws IOException {
         final FileTime fromMillis = FileTime.fromMillis(0);
         assertEquals(fromMillis, PathUtils.getLastModifiedFileTime(getNonExistentPath(), fromMillis));
     }
 
     @Test
-    public void testGetLastModifiedFileTime_Path_Present() throws IOException {
+    void testGetLastModifiedFileTime_Path_Present() throws IOException {
         assertNotNull(PathUtils.getLastModifiedFileTime(current()));
     }
 
     @Test
-    public void testGetLastModifiedFileTime_URI_Present() throws IOException {
+    void testGetLastModifiedFileTime_URI_Present() throws IOException {
         assertNotNull(PathUtils.getLastModifiedFileTime(current().toUri()));
     }
 
     @Test
-    public void testGetLastModifiedFileTime_URL_Present() throws IOException, URISyntaxException {
+    void testGetLastModifiedFileTime_URL_Present() throws IOException, URISyntaxException {
         assertNotNull(PathUtils.getLastModifiedFileTime(current().toUri().toURL()));
     }
 
     @Test
-    public void testGetTempDirectory() {
+    void testGetTempDirectory() {
         final Path tempDirectory = Paths.get(SystemProperties.getJavaIoTmpdir());
         assertEquals(tempDirectory, PathUtils.getTempDirectory());
     }
 
     @Test
-    public void testIsDirectory() throws IOException {
+    void testIsDirectory() throws IOException {
         assertFalse(PathUtils.isDirectory(null));
 
         assertTrue(PathUtils.isDirectory(tempDirPath));
@@ -375,7 +375,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testIsPosix() throws IOException {
+    void testIsPosix() throws IOException {
         boolean isPosix;
         try {
             Files.getPosixFilePermissions(current());
@@ -387,13 +387,13 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testIsPosixAbsentFile() {
+    void testIsPosixAbsentFile() {
         assertFalse(PathUtils.isPosix(Paths.get("ImNotHereAtAllEver.never")));
         assertFalse(PathUtils.isPosix(null));
     }
 
     @Test
-    public void testIsRegularFile() throws IOException {
+    void testIsRegularFile() throws IOException {
         assertFalse(PathUtils.isRegularFile(null));
 
         assertFalse(PathUtils.isRegularFile(tempDirPath));
@@ -406,7 +406,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testNewDirectoryStream() throws Exception {
+    void testNewDirectoryStream() throws Exception {
         final PathFilter pathFilter = new NameFileFilter(PATH_FIXTURE);
         try (DirectoryStream<Path> stream = PathUtils.newDirectoryStream(current(), pathFilter)) {
             final Iterator<Path> iterator = stream.iterator();
@@ -417,35 +417,35 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testNewOutputStreamExistingFileAppendFalse() throws IOException {
+    void testNewOutputStreamExistingFileAppendFalse() throws IOException {
         testNewOutputStreamNewFile(false);
         testNewOutputStreamNewFile(false);
     }
 
     @Test
-    public void testNewOutputStreamExistingFileAppendTrue() throws IOException {
+    void testNewOutputStreamExistingFileAppendTrue() throws IOException {
         testNewOutputStreamNewFile(true);
         final Path file = writeToNewOutputStream(true);
         assertArrayEquals(ArrayUtils.addAll(BYTE_ARRAY_FIXTURE, BYTE_ARRAY_FIXTURE), Files.readAllBytes(file));
     }
 
-    public void testNewOutputStreamNewFile(final boolean append) throws IOException {
+    void testNewOutputStreamNewFile(final boolean append) throws IOException {
         final Path file = writeToNewOutputStream(append);
         assertArrayEquals(BYTE_ARRAY_FIXTURE, Files.readAllBytes(file));
     }
 
     @Test
-    public void testNewOutputStreamNewFileAppendFalse() throws IOException {
+    void testNewOutputStreamNewFileAppendFalse() throws IOException {
         testNewOutputStreamNewFile(false);
     }
 
     @Test
-    public void testNewOutputStreamNewFileAppendTrue() throws IOException {
+    void testNewOutputStreamNewFileAppendTrue() throws IOException {
         testNewOutputStreamNewFile(true);
     }
 
     @Test
-    public void testNewOutputStreamNewFileInsideExistingSymlinkedDir() throws IOException {
+    void testNewOutputStreamNewFileInsideExistingSymlinkedDir() throws IOException {
         final Path symlinkDir = createTempSymbolicLinkedRelativeDir(tempDirPath);
         final Path file = symlinkDir.resolve("test.txt");
         try (OutputStream outputStream = PathUtils.newOutputStream(file, new LinkOption[] {})) {
@@ -463,7 +463,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testReadAttributesPosix() throws IOException {
+    void testReadAttributesPosix() throws IOException {
         boolean isPosix;
         try {
             Files.getPosixFilePermissions(current());
@@ -475,14 +475,14 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testReadStringEmptyFile() throws IOException {
+    void testReadStringEmptyFile() throws IOException {
         final Path path = Paths.get("src/test/resources/org/apache/commons/io/test-file-empty.bin");
         assertEquals(StringUtils.EMPTY, PathUtils.readString(path, StandardCharsets.UTF_8));
         assertEquals(StringUtils.EMPTY, PathUtils.readString(path, null));
     }
 
     @Test
-    public void testReadStringSimpleUtf8() throws IOException {
+    void testReadStringSimpleUtf8() throws IOException {
         final Path path = Paths.get("src/test/resources/org/apache/commons/io/test-file-simple-utf8.bin");
         final String expected = "ABC\r\n";
         assertEquals(expected, PathUtils.readString(path, StandardCharsets.UTF_8));
@@ -490,7 +490,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testSetReadOnlyFile() throws IOException {
+    void testSetReadOnlyFile() throws IOException {
         final Path resolved = tempDirPath.resolve("testSetReadOnlyFile.txt");
         // Ask now, as we are allowed before editing parent permissions.
         final boolean isPosix = PathUtils.isPosix(tempDirPath);
@@ -551,12 +551,12 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testSetReadOnlyFileAbsent() {
+    void testSetReadOnlyFileAbsent() {
         assertThrows(IOException.class, () -> PathUtils.setReadOnly(Paths.get("does-not-exist-at-all-ever-never"), true));
     }
 
     @Test
-    public void testTouch() throws IOException {
+    void testTouch() throws IOException {
         assertThrows(NullPointerException.class, () -> FileUtils.touch(null));
 
         final Path file = managedTempDirPath.resolve("touch.txt");
@@ -582,7 +582,7 @@ public class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testWriteStringToFile1() throws Exception {
+    void testWriteStringToFile1() throws Exception {
         final Path file = tempDirPath.resolve("write.txt");
         PathUtils.writeString(file, "Hello \u1234", StandardCharsets.UTF_8);
         final byte[] text = "Hello \u1234".getBytes(StandardCharsets.UTF_8);

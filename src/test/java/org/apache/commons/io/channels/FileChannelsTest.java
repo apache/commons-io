@@ -132,21 +132,21 @@ public class FileChannelsTest extends AbstractTempDirTest {
     }
 
     @CartesianTest()
-    public void testContentEqualsDifferentPostfix(
+    void testContentEqualsDifferentPostfix(
             @Values(ints = { 1, 2, IOUtils.DEFAULT_BUFFER_SIZE / 10, IOUtils.DEFAULT_BUFFER_SIZE, IOUtils.DEFAULT_BUFFER_SIZE * 10 }) final int bufferSize,
             @CartesianTest.Enum final FileChannelType fileChannelType) throws IOException {
         testContentEquals(CONTENT + "ABC", CONTENT + "XYZ", bufferSize, fileChannelType);
     }
 
     @CartesianTest()
-    public void testContentEqualsDifferentPrefix(
+    void testContentEqualsDifferentPrefix(
             @Values(ints = { 1, 2, IOUtils.DEFAULT_BUFFER_SIZE / 10, IOUtils.DEFAULT_BUFFER_SIZE, IOUtils.DEFAULT_BUFFER_SIZE * 10 }) final int bufferSize,
             @CartesianTest.Enum final FileChannelType fileChannelType) throws IOException {
         testContentEquals("ABC" + CONTENT, "XYZ" + CONTENT, bufferSize, fileChannelType);
     }
 
     @CartesianTest()
-    public void testContentEqualsEmpty(
+    void testContentEqualsEmpty(
             @Values(ints = { 1, 2, IOUtils.DEFAULT_BUFFER_SIZE / 10, IOUtils.DEFAULT_BUFFER_SIZE, IOUtils.DEFAULT_BUFFER_SIZE * 10 }) final int bufferSize,
             @CartesianTest.Enum final FileChannelType fileChannelType) throws IOException {
         assertTrue(FileChannels.contentEquals(null, null, bufferSize));
@@ -174,7 +174,7 @@ public class FileChannelsTest extends AbstractTempDirTest {
     }
 
     @CartesianTest
-    public void testContentEqualsFileChannel(
+    void testContentEqualsFileChannel(
             @Values(ints = { 1, 2, IOUtils.DEFAULT_BUFFER_SIZE / 10, IOUtils.DEFAULT_BUFFER_SIZE, IOUtils.DEFAULT_BUFFER_SIZE * 10 }) final int bufferSize)
             throws IOException {
         final FileChannelType fileChannelType = FileChannelType.STOCK;
@@ -238,7 +238,7 @@ public class FileChannelsTest extends AbstractTempDirTest {
     }
 
     @CartesianTest()
-    public void testContentEqualsSeekableByteChannel(
+    void testContentEqualsSeekableByteChannel(
             @Values(ints = { 1, 2, IOUtils.DEFAULT_BUFFER_SIZE / 10, IOUtils.DEFAULT_BUFFER_SIZE, IOUtils.DEFAULT_BUFFER_SIZE * 10 }) final int bufferSize,
             @CartesianTest.Enum final FileChannelType fileChannelType1, @CartesianTest.Enum final FileChannelType fileChannelType2) throws IOException {
         final Path bigFile1 = Files.createTempFile(getClass().getSimpleName(), "-1.bin");
@@ -302,7 +302,7 @@ public class FileChannelsTest extends AbstractTempDirTest {
 
     @ParameterizedTest
     @ValueSource(ints = { 1, 2, 4, 8, 16, 1024, 4096, 8192 })
-    public void testContentEqualsSequenceInputStream(final int bufferCapacity) throws Exception {
+    void testContentEqualsSequenceInputStream(final int bufferCapacity) throws Exception {
         // not equals
         // @formatter:off
         assertFalse(contentEquals(

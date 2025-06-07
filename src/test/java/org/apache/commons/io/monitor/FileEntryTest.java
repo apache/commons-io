@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 public class FileEntryTest {
 
     @Test
-    public void testSerializable() {
+    void testSerializable() {
         final FileEntry fe = new FileEntry(FileUtils.current());
         assertEquals(fe.getChildren(), SerializationUtils.roundtrip(fe).getChildren());
         assertEquals(fe.getClass(), SerializationUtils.roundtrip(fe).getClass());

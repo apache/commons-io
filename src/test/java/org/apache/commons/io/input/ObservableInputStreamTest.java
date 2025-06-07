@@ -147,7 +147,7 @@ public class ObservableInputStreamTest {
     }
 
     @Test
-    public void testAfterReadConsumer() throws Exception {
+    void testAfterReadConsumer() throws Exception {
         final AtomicBoolean boolRef = new AtomicBoolean();
         // @formatter:off
         try (InputStream bounded = new ObservableInputStream.Builder()
@@ -174,7 +174,7 @@ public class ObservableInputStreamTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testAvailableAfterClose() throws Exception {
+    void testAvailableAfterClose() throws Exception {
         final InputStream shadow;
         try (InputStream in = createInputStream()) {
             assertTrue(in.available() > 0);
@@ -184,7 +184,7 @@ public class ObservableInputStreamTest {
     }
 
     @Test
-    public void testAvailableAfterOpen() throws Exception {
+    void testAvailableAfterOpen() throws Exception {
         try (InputStream in = createInputStream()) {
             assertTrue(in.available() > 0);
             assertNotEquals(IOUtils.EOF, in.read());
@@ -193,21 +193,21 @@ public class ObservableInputStreamTest {
     }
 
     @Test
-    public void testBrokenInputStreamRead() throws IOException {
+    void testBrokenInputStreamRead() throws IOException {
         try (ObservableInputStream ois = brokenObservableInputStream()) {
             assertThrows(IOException.class, ois::read);
         }
     }
 
     @Test
-    public void testBrokenInputStreamReadBuffer() throws IOException {
+    void testBrokenInputStreamReadBuffer() throws IOException {
         try (ObservableInputStream ois = brokenObservableInputStream()) {
             assertThrows(IOException.class, () -> ois.read(new byte[1]));
         }
     }
 
     @Test
-    public void testBrokenInputStreamReadSubBuffer() throws IOException {
+    void testBrokenInputStreamReadSubBuffer() throws IOException {
         try (ObservableInputStream ois = brokenObservableInputStream()) {
             assertThrows(IOException.class, () -> ois.read(new byte[2], 0, 1));
         }
@@ -217,7 +217,7 @@ public class ObservableInputStreamTest {
      * Tests that {@link Observer#data(int)} is called.
      */
     @Test
-    public void testDataByteCalled_add() throws Exception {
+    void testDataByteCalled_add() throws Exception {
         final byte[] buffer = MessageDigestInputStreamTest.generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
         final DataViewObserver lko = new DataViewObserver();
         try (ObservableInputStream ois = new ObservableInputStream(new ByteArrayInputStream(buffer))) {
@@ -248,7 +248,7 @@ public class ObservableInputStreamTest {
      * Tests that {@link Observer#data(int)} is called.
      */
     @Test
-    public void testDataByteCalled_ctor() throws Exception {
+    void testDataByteCalled_ctor() throws Exception {
         final byte[] buffer = MessageDigestInputStreamTest.generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
         final DataViewObserver lko = new DataViewObserver();
         try (ObservableInputStream ois = new ObservableInputStream(new ByteArrayInputStream(buffer), lko)) {
@@ -278,7 +278,7 @@ public class ObservableInputStreamTest {
      * Tests that {@link Observer#data(byte[],int,int)} is called.
      */
     @Test
-    public void testDataBytesCalled() throws Exception {
+    void testDataBytesCalled() throws Exception {
         final byte[] buffer = MessageDigestInputStreamTest.generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
         try (ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
                 ObservableInputStream ois = createInputStream(bais)) {
@@ -314,14 +314,14 @@ public class ObservableInputStreamTest {
     }
 
     @Test
-    public void testGetObservers0() throws IOException {
+    void testGetObservers0() throws IOException {
         try (ObservableInputStream ois = new ObservableInputStream(new NullInputStream())) {
             assertTrue(ois.getObservers().isEmpty());
         }
     }
 
     @Test
-    public void testGetObservers1() throws IOException {
+    void testGetObservers1() throws IOException {
         final DataViewObserver observer0 = new DataViewObserver();
         try (ObservableInputStream ois = new ObservableInputStream(new NullInputStream(), observer0)) {
             assertEquals(observer0, ois.getObservers().get(0));
@@ -329,7 +329,7 @@ public class ObservableInputStreamTest {
     }
 
     @Test
-    public void testGetObserversOrder() throws IOException {
+    void testGetObserversOrder() throws IOException {
         final DataViewObserver observer0 = new DataViewObserver();
         final DataViewObserver observer1 = new DataViewObserver();
         try (ObservableInputStream ois = new ObservableInputStream(new NullInputStream(), observer0, observer1)) {
@@ -354,22 +354,22 @@ public class ObservableInputStreamTest {
     }
 
     @Test
-    public void testNotificationCallbacksBufferSize1() throws Exception {
+    void testNotificationCallbacksBufferSize1() throws Exception {
         testNotificationCallbacks(1);
     }
 
     @Test
-    public void testNotificationCallbacksBufferSize2() throws Exception {
+    void testNotificationCallbacksBufferSize2() throws Exception {
         testNotificationCallbacks(2);
     }
 
     @Test
-    public void testNotificationCallbacksBufferSizeDefault() throws Exception {
+    void testNotificationCallbacksBufferSizeDefault() throws Exception {
         testNotificationCallbacks(IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
     @Test
-    public void testReadAfterClose_ByteArrayInputStream() throws Exception {
+    void testReadAfterClose_ByteArrayInputStream() throws Exception {
         try (InputStream in = createInputStream()) {
             in.close();
             assertNotEquals(IOUtils.EOF, in.read());
@@ -378,7 +378,7 @@ public class ObservableInputStreamTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testReadAfterClose_ChannelInputStream() throws Exception {
+    void testReadAfterClose_ChannelInputStream() throws Exception {
         try (InputStream in = createInputStream(Files.newInputStream(Paths.get("src/test/resources/org/apache/commons/io/abitmorethan16k.txt")))) {
             in.close();
             // ChannelInputStream throws when closed

@@ -149,7 +149,7 @@ public class XmlStreamReaderUtilitiesTest {
     }
 
     @Test
-    public void testAppXml() {
+    void testAppXml() {
         checkAppXml(false, null);
         checkAppXml(false, "");
         checkAppXml(true,  "application/xml");
@@ -165,7 +165,7 @@ public class XmlStreamReaderUtilitiesTest {
     }
 
     @Test
-    public void testCalculateHttpEncoding() throws IOException {
+    void testCalculateHttpEncoding() throws IOException {
         // No BOM        Expected     Lenient cType           BOM         Guess       XML         Default
         checkHttpError(HTTPMGS3,      true,   null,           null,       null,       null,       null);
         checkHttpError(HTTPMGS3,      false,  null,           null,       null,       "UTF-8",    null);
@@ -190,7 +190,7 @@ public class XmlStreamReaderUtilitiesTest {
     }
 
     @Test
-    public void testCalculateHttpEncodingUtf32() throws IOException {
+    void testCalculateHttpEncodingUtf32() throws IOException {
         // No BOM        Expected     Lenient cType           BOM         Guess       XML         Default
         checkHttpEncoding("UTF-32LE", true,   null,           null,       null,       "UTF-32LE", null);
         checkHttpEncoding("UTF-32BE", false,  TXTXML,         null,       null,       null,       "UTF-32BE");
@@ -207,7 +207,7 @@ public class XmlStreamReaderUtilitiesTest {
     }
 
     @Test
-    public void testCalculateRawEncodingAdditionalUTF16() throws IOException {
+    void testCalculateRawEncodingAdditionalUTF16() throws IOException {
         //                           BOM         Guess       XML         Default
         checkRawError(RAWMGS1,       "UTF-16BE", "UTF-16",   null,       null);
         checkRawEncoding("UTF-16BE", "UTF-16BE", null,       "UTF-16",   null);
@@ -222,7 +222,7 @@ public class XmlStreamReaderUtilitiesTest {
     }
 
     @Test
-    public void testCalculateRawEncodingAdditionalUTF32() throws IOException {
+    void testCalculateRawEncodingAdditionalUTF32() throws IOException {
         //                           BOM         Guess       XML         Default
         checkRawError(RAWMGS1,       "UTF-32BE", "UTF-32",   null,       null);
         checkRawEncoding("UTF-32BE", "UTF-32BE", null,       "UTF-32",   null);
@@ -237,7 +237,7 @@ public class XmlStreamReaderUtilitiesTest {
     }
 
     @Test
-    public void testCalculateRawEncodingNoBOM() throws IOException {
+    void testCalculateRawEncodingNoBOM() throws IOException {
         // No BOM        Expected    BOM         Guess       XML         Default
         checkRawError(RAWMGS2,       "UTF-32",   null,       null,       null);
         //
@@ -255,7 +255,7 @@ public class XmlStreamReaderUtilitiesTest {
     }
 
     @Test
-    public void testCalculateRawEncodingStandard() throws IOException {
+    void testCalculateRawEncodingStandard() throws IOException {
         // Standard BOM Checks           BOM         Other       Default
         testCalculateRawEncodingStandard("UTF-8",    "UTF-16BE", "UTF-16LE");
         testCalculateRawEncodingStandard("UTF-16BE", "UTF-8",    "UTF-16LE");
@@ -276,7 +276,7 @@ public class XmlStreamReaderUtilitiesTest {
     }
 
     @Test
-    public void testCalculateRawEncodingStandardUtf32() throws IOException {
+    void testCalculateRawEncodingStandardUtf32() throws IOException {
         // Standard BOM Checks           BOM         Other       Default
         testCalculateRawEncodingStandard("UTF-8",    "UTF-32BE", "UTF-32LE");
         testCalculateRawEncodingStandard("UTF-32BE", "UTF-8",    "UTF-32LE");
@@ -284,7 +284,7 @@ public class XmlStreamReaderUtilitiesTest {
 }
 
     @Test
-    public void testContentTypeEncoding() {
+    void testContentTypeEncoding() {
         checkContentTypeEncoding(null, null);
         checkContentTypeEncoding(null, "");
         checkContentTypeEncoding(null, "application/xml");
@@ -303,7 +303,7 @@ public class XmlStreamReaderUtilitiesTest {
     }
 
     @Test
-    public void testContentTypeMime() {
+    void testContentTypeMime() {
         checkContentTypeMime(null, null);
         checkContentTypeMime("", "");
         checkContentTypeMime("application/xml", "application/xml");
@@ -313,7 +313,7 @@ public class XmlStreamReaderUtilitiesTest {
     }
 
     @Test
-    public void testTextXml() {
+    void testTextXml() {
         checkTextXml(false, null);
         checkTextXml(false, "");
         checkTextXml(true,  "text/xml");

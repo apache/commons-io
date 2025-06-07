@@ -45,7 +45,7 @@ public class IOUtilsWriteTest {
     private final byte[] inData = TestUtils.generateTestData(FILE_SIZE);
 
     @Test
-    public void testWrite_byteArrayToOutputStream() throws Exception {
+    void testWrite_byteArrayToOutputStream() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
 
@@ -58,7 +58,7 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_byteArrayToOutputStream_nullData() throws Exception {
+    void testWrite_byteArrayToOutputStream_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
 
@@ -70,12 +70,12 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_byteArrayToOutputStream_nullStream() throws Exception {
+    void testWrite_byteArrayToOutputStream_nullStream() throws Exception {
         assertThrows(NullPointerException.class, () -> IOUtils.write(inData, (OutputStream) null));
     }
 
     @Test
-    public void testWrite_byteArrayToWriter() throws Exception {
+    void testWrite_byteArrayToWriter() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
@@ -90,7 +90,7 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_byteArrayToWriter_Encoding() throws Exception {
+    void testWrite_byteArrayToWriter_Encoding() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
@@ -106,7 +106,7 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_byteArrayToWriter_Encoding_nullData() throws Exception {
+    void testWrite_byteArrayToWriter_Encoding_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
@@ -120,7 +120,7 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_byteArrayToWriter_Encoding_nullEncoding() throws Exception {
+    void testWrite_byteArrayToWriter_Encoding_nullEncoding() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
@@ -135,12 +135,12 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_byteArrayToWriter_Encoding_nullWriter() throws Exception {
+    void testWrite_byteArrayToWriter_Encoding_nullWriter() throws Exception {
         assertThrows(NullPointerException.class, () -> IOUtils.write(inData, null, "UTF8"));
     }
 
     @Test
-    public void testWrite_byteArrayToWriter_nullData() throws Exception {
+    void testWrite_byteArrayToWriter_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
@@ -154,12 +154,12 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_byteArrayToWriter_nullWriter() throws Exception {
+    void testWrite_byteArrayToWriter_nullWriter() throws Exception {
         assertThrows(NullPointerException.class, () -> IOUtils.write(inData, (Writer) null));
     }
 
     @Test
-    public void testWrite_charArrayToOutputStream() throws Exception {
+    void testWrite_charArrayToOutputStream() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -174,7 +174,7 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_charArrayToOutputStream_Encoding() throws Exception {
+    void testWrite_charArrayToOutputStream_Encoding() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -190,7 +190,7 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_charArrayToOutputStream_Encoding_nullData() throws Exception {
+    void testWrite_charArrayToOutputStream_Encoding_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
 
@@ -202,13 +202,13 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_charArrayToOutputStream_Encoding_nullStream() throws Exception {
+    void testWrite_charArrayToOutputStream_Encoding_nullStream() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
         assertThrows(NullPointerException.class, () -> IOUtils.write(str.toCharArray(), (OutputStream) null));
     }
 
     @Test
-    public void testWrite_charArrayToOutputStream_nullData() throws Exception {
+    void testWrite_charArrayToOutputStream_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
 
@@ -220,7 +220,7 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_charArrayToOutputStream_nullEncoding() throws Exception {
+    void testWrite_charArrayToOutputStream_nullEncoding() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -235,13 +235,13 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_charArrayToOutputStream_nullStream() throws Exception {
+    void testWrite_charArrayToOutputStream_nullStream() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
         assertThrows(NullPointerException.class, () -> IOUtils.write(str.toCharArray(), (OutputStream) null));
     }
 
     @Test
-    public void testWrite_charArrayToWriter() throws Exception {
+    void testWrite_charArrayToWriter() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -258,7 +258,7 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_charArrayToWriter_Encoding_nullData() throws Exception {
+    void testWrite_charArrayToWriter_Encoding_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
@@ -272,13 +272,13 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_charArrayToWriter_Encoding_nullStream() throws Exception {
+    void testWrite_charArrayToWriter_Encoding_nullStream() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
         assertThrows(NullPointerException.class, () -> IOUtils.write(str.toCharArray(), (Writer) null));
     }
 
     @Test
-    public void testWrite_charSequenceToOutputStream() throws Exception {
+    void testWrite_charSequenceToOutputStream() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, StandardCharsets.US_ASCII));
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -293,7 +293,7 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_charSequenceToOutputStream_Encoding() throws Exception {
+    void testWrite_charSequenceToOutputStream_Encoding() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, StandardCharsets.US_ASCII));
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -309,7 +309,7 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_charSequenceToOutputStream_Encoding_nullData() throws Exception {
+    void testWrite_charSequenceToOutputStream_Encoding_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
 
@@ -321,13 +321,13 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_charSequenceToOutputStream_Encoding_nullStream() throws Exception {
+    void testWrite_charSequenceToOutputStream_Encoding_nullStream() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, StandardCharsets.US_ASCII));
         assertThrows(NullPointerException.class, () -> IOUtils.write(csq, (OutputStream) null));
     }
 
     @Test
-    public void testWrite_charSequenceToOutputStream_nullData() throws Exception {
+    void testWrite_charSequenceToOutputStream_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
 
@@ -339,7 +339,7 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_charSequenceToOutputStream_nullEncoding() throws Exception {
+    void testWrite_charSequenceToOutputStream_nullEncoding() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, StandardCharsets.US_ASCII));
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -354,13 +354,13 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_charSequenceToOutputStream_nullStream() throws Exception {
+    void testWrite_charSequenceToOutputStream_nullStream() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, StandardCharsets.US_ASCII));
         assertThrows(NullPointerException.class, () -> IOUtils.write(csq, (OutputStream) null));
     }
 
     @Test
-    public void testWrite_charSequenceToWriter() throws Exception {
+    void testWrite_charSequenceToWriter() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, StandardCharsets.US_ASCII));
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -377,7 +377,7 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_charSequenceToWriter_Encoding_nullData() throws Exception {
+    void testWrite_charSequenceToWriter_Encoding_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
@@ -391,13 +391,13 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_charSequenceToWriter_Encoding_nullStream() throws Exception {
+    void testWrite_charSequenceToWriter_Encoding_nullStream() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, StandardCharsets.US_ASCII));
         assertThrows(NullPointerException.class, () -> IOUtils.write(csq, (Writer) null));
     }
 
     @Test
-    public void testWrite_stringToOutputStream() throws Exception {
+    void testWrite_stringToOutputStream() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -412,7 +412,7 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_stringToOutputStream_Encoding() throws Exception {
+    void testWrite_stringToOutputStream_Encoding() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -428,7 +428,7 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_stringToOutputStream_Encoding_nullData() throws Exception {
+    void testWrite_stringToOutputStream_Encoding_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
 
@@ -440,13 +440,13 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_stringToOutputStream_Encoding_nullStream() throws Exception {
+    void testWrite_stringToOutputStream_Encoding_nullStream() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
         assertThrows(NullPointerException.class, () -> IOUtils.write(str, (OutputStream) null));
     }
 
     @Test
-    public void testWrite_stringToOutputStream_nullData() throws Exception {
+    void testWrite_stringToOutputStream_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
 
@@ -458,7 +458,7 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_stringToOutputStream_nullEncoding() throws Exception {
+    void testWrite_stringToOutputStream_nullEncoding() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -473,13 +473,13 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_stringToOutputStream_nullStream() throws Exception {
+    void testWrite_stringToOutputStream_nullStream() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
         assertThrows(NullPointerException.class, () -> IOUtils.write(str, (OutputStream) null));
     }
 
     @Test
-    public void testWrite_stringToWriter() throws Exception {
+    void testWrite_stringToWriter() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -496,7 +496,7 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_stringToWriter_Encoding_nullData() throws Exception {
+    void testWrite_stringToWriter_Encoding_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
@@ -510,13 +510,13 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWrite_stringToWriter_Encoding_nullStream() throws Exception {
+    void testWrite_stringToWriter_Encoding_nullStream() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
         assertThrows(NullPointerException.class, () -> IOUtils.write(str, (Writer) null));
     }
 
     @Test
-    public void testWriteLines_OutputStream() throws Exception {
+    void testWriteLines_OutputStream() throws Exception {
         final Object[] data = {
                 "hello", new StringBuffer("world"), "", "this is", null, "some text"};
         final List<Object> list = Arrays.asList(data);
@@ -535,7 +535,7 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWriteLines_OutputStream_Encoding() throws Exception {
+    void testWriteLines_OutputStream_Encoding() throws Exception {
         final Object[] data = {
                 "hello\u8364", new StringBuffer("world"), "", "this is", null, "some text"};
         final List<Object> list = Arrays.asList(data);
@@ -554,7 +554,7 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWriteLines_OutputStream_Encoding_nullData() throws Exception {
+    void testWriteLines_OutputStream_Encoding_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
 
@@ -566,7 +566,7 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWriteLines_OutputStream_Encoding_nullEncoding() throws Exception {
+    void testWriteLines_OutputStream_Encoding_nullEncoding() throws Exception {
         final Object[] data = {
                 "hello", new StringBuffer("world"), "", "this is", null, "some text"};
         final List<Object> list = Arrays.asList(data);
@@ -585,7 +585,7 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWriteLines_OutputStream_Encoding_nullSeparator() throws Exception {
+    void testWriteLines_OutputStream_Encoding_nullSeparator() throws Exception {
         final Object[] data = {"hello", "world"};
         final List<Object> list = Arrays.asList(data);
 
@@ -602,14 +602,14 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWriteLines_OutputStream_Encoding_nullStream() throws Exception {
+    void testWriteLines_OutputStream_Encoding_nullStream() throws Exception {
         final Object[] data = { "hello", "world" };
         final List<Object> list = Arrays.asList(data);
         assertThrows(NullPointerException.class, () -> IOUtils.writeLines(list, "*", null, StandardCharsets.US_ASCII.name()));
     }
 
     @Test
-    public void testWriteLines_OutputStream_nullData() throws Exception {
+    void testWriteLines_OutputStream_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
 
@@ -621,7 +621,7 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWriteLines_OutputStream_nullSeparator() throws Exception {
+    void testWriteLines_OutputStream_nullSeparator() throws Exception {
         final Object[] data = {"hello", "world"};
         final List<Object> list = Arrays.asList(data);
 
@@ -638,14 +638,14 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWriteLines_OutputStream_nullStream() throws Exception {
+    void testWriteLines_OutputStream_nullStream() throws Exception {
         final Object[] data = {"hello", "world"};
         final List<Object> list = Arrays.asList(data);
         assertThrows(NullPointerException.class, () -> IOUtils.writeLines(list, "*", (OutputStream) null));
     }
 
     @Test
-    public void testWriteLines_Writer() throws Exception {
+    void testWriteLines_Writer() throws Exception {
         final Object[] data = {
                 "hello", new StringBuffer("world"), "", "this is", null, "some text"};
         final List<Object> list = Arrays.asList(data);
@@ -666,7 +666,7 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWriteLines_Writer_nullData() throws Exception {
+    void testWriteLines_Writer_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
@@ -680,7 +680,7 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWriteLines_Writer_nullSeparator() throws Exception {
+    void testWriteLines_Writer_nullSeparator() throws Exception {
         final Object[] data = {"hello", "world"};
         final List<Object> list = Arrays.asList(data);
 
@@ -699,7 +699,7 @@ public class IOUtilsWriteTest {
     }
 
     @Test
-    public void testWriteLines_Writer_nullStream() throws Exception {
+    void testWriteLines_Writer_nullStream() throws Exception {
         final Object[] data = {"hello", "world"};
         final List<Object> list = Arrays.asList(data);
         assertThrows(NullPointerException.class, () -> IOUtils.writeLines(list, "*", (Writer) null));

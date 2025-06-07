@@ -52,7 +52,7 @@ public class RandomAccessFileInputStreamTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testAvailableAfterClose() throws IOException {
+    void testAvailableAfterClose() throws IOException {
         try (RandomAccessFileInputStream inputStream = RandomAccessFileInputStream.builder()
                 .setRandomAccessFile(createRandomAccessFile())
                 .setCloseOnClose(true)
@@ -63,7 +63,7 @@ public class RandomAccessFileInputStreamTest {
     }
 
     @Test
-    public void testAvailableAfterOpen() throws IOException {
+    void testAvailableAfterOpen() throws IOException {
         try (RandomAccessFileInputStream inputStream = RandomAccessFileInputStream.builder()
                 .setRandomAccessFile(createRandomAccessFile())
                 .setCloseOnClose(true)
@@ -73,7 +73,7 @@ public class RandomAccessFileInputStreamTest {
     }
 
     @Test
-    public void testAvailableLong() throws IOException {
+    void testAvailableLong() throws IOException {
         try (RandomAccessFileInputStream inputStream = RandomAccessFileInputStream.builder()
                 .setRandomAccessFile(createRandomAccessFile())
                 .setCloseOnClose(true)
@@ -84,7 +84,7 @@ public class RandomAccessFileInputStreamTest {
 
     @SuppressWarnings("resource") // instance variable access
     @Test
-    public void testBuilderFile() throws IOException {
+    void testBuilderFile() throws IOException {
         try (RandomAccessFile file = createRandomAccessFile()) {
             try (RandomAccessFileInputStream inputStream = RandomAccessFileInputStream.builder().setFile(new File(DATA_FILE_NAME)).get()) {
                 assertFalse(inputStream.isCloseOnClose());
@@ -95,14 +95,14 @@ public class RandomAccessFileInputStreamTest {
     }
 
     @Test
-    public void testBuilderGet() {
+    void testBuilderGet() {
         // java.lang.IllegalStateException: origin == null
         assertThrows(IllegalStateException.class, () -> RandomAccessFileInputStream.builder().get());
     }
 
     @SuppressWarnings("resource") // instance variable access
     @Test
-    public void testBuilderPath() throws IOException {
+    void testBuilderPath() throws IOException {
         try (RandomAccessFile file = createRandomAccessFile()) {
             try (RandomAccessFileInputStream inputStream = RandomAccessFileInputStream.builder().setPath(DATA_PATH).get()) {
                 assertFalse(inputStream.isCloseOnClose());
@@ -114,7 +114,7 @@ public class RandomAccessFileInputStreamTest {
 
     @SuppressWarnings("resource") // instance variable access
     @Test
-    public void testBuilderPathOpenOptions() throws IOException {
+    void testBuilderPathOpenOptions() throws IOException {
         try (RandomAccessFile file = createRandomAccessFile()) {
             try (RandomAccessFileInputStream inputStream = RandomAccessFileInputStream.builder().setPath(DATA_PATH).setOpenOptions(StandardOpenOption.READ)
                     .get()) {
@@ -127,7 +127,7 @@ public class RandomAccessFileInputStreamTest {
 
     @SuppressWarnings("resource") // instance variable access
     @Test
-    public void testBuilderRandomAccessFile() throws IOException {
+    void testBuilderRandomAccessFile() throws IOException {
         try (RandomAccessFile file = createRandomAccessFile()) {
             try (RandomAccessFileInputStream inputStream = RandomAccessFileInputStream.builder().setRandomAccessFile(file).get()) {
                 assertFalse(inputStream.isCloseOnClose());
@@ -139,7 +139,7 @@ public class RandomAccessFileInputStreamTest {
 
     @SuppressWarnings("resource") // instance variable access
     @Test
-    public void testConstructorCloseOnCloseFalse() throws IOException {
+    void testConstructorCloseOnCloseFalse() throws IOException {
         try (RandomAccessFile file = createRandomAccessFile()) {
             try (RandomAccessFileInputStream inputStream = RandomAccessFileInputStream.builder()
                     .setRandomAccessFile(createRandomAccessFile())
@@ -152,7 +152,7 @@ public class RandomAccessFileInputStreamTest {
     }
 
     @Test
-    public void testCopy() throws IOException {
+    void testCopy() throws IOException {
         // @formatter:off
         try (RandomAccessFileInputStream inputStream = RandomAccessFileInputStream.builder()
                 .setRandomAccessFile(createRandomAccessFile())
@@ -184,7 +184,7 @@ public class RandomAccessFileInputStreamTest {
 
     @SuppressWarnings("resource") // instance variable access
     @Test
-    public void testDeprecatedConstructorCloseOnCloseTrue() throws IOException {
+    void testDeprecatedConstructorCloseOnCloseTrue() throws IOException {
         try (RandomAccessFile file = createRandomAccessFile()) {
             try (RandomAccessFileInputStream inputStream = new RandomAccessFileInputStream(file, true)) {
                 assertTrue(inputStream.isCloseOnClose());
@@ -196,7 +196,7 @@ public class RandomAccessFileInputStreamTest {
 
     @SuppressWarnings("resource") // instance variable access
     @Test
-    public void testDeprecatedConstructorRandomAccessFile() throws IOException {
+    void testDeprecatedConstructorRandomAccessFile() throws IOException {
         try (RandomAccessFile file = createRandomAccessFile()) {
             try (RandomAccessFileInputStream inputStream = new RandomAccessFileInputStream(file)) {
                 assertFalse(inputStream.isCloseOnClose());
@@ -208,7 +208,7 @@ public class RandomAccessFileInputStreamTest {
 
     @SuppressWarnings("deprecation")
     @Test
-    public void testDeprecatedConstructors() throws IOException {
+    void testDeprecatedConstructors() throws IOException {
         try (RandomAccessFile randomAccessFile = createRandomAccessFile()) {
             try (RandomAccessFileInputStream inputStream = new RandomAccessFileInputStream(randomAccessFile)) {
                 assertFalse(inputStream.isCloseOnClose());
@@ -227,14 +227,14 @@ public class RandomAccessFileInputStreamTest {
 
     @SuppressWarnings("deprecation")
     @Test
-    public void testDeprecatedConstructorsNull() {
+    void testDeprecatedConstructorsNull() {
         assertThrows(NullPointerException.class, () -> new RandomAccessFileInputStream(null));
         assertThrows(NullPointerException.class, () -> new RandomAccessFileInputStream(null, true));
         assertThrows(NullPointerException.class, () -> new RandomAccessFileInputStream(null, false));
     }
 
     @Test
-    public void testGetters() throws IOException {
+    void testGetters() throws IOException {
         try (RandomAccessFile file = createRandomAccessFile()) {
             try (RandomAccessFileInputStream inputStream = RandomAccessFileInputStream.builder()
                     .setRandomAccessFile(file)
@@ -247,7 +247,7 @@ public class RandomAccessFileInputStreamTest {
     }
 
     @Test
-    public void testRead() throws IOException {
+    void testRead() throws IOException {
         try (RandomAccessFileInputStream inputStream = RandomAccessFileInputStream.builder()
                 .setRandomAccessFile(createRandomAccessFile())
                 .setCloseOnClose(true)
@@ -271,7 +271,7 @@ public class RandomAccessFileInputStreamTest {
     }
 
     @Test
-    public void testReadAfterClose() throws IOException {
+    void testReadAfterClose() throws IOException {
         try (RandomAccessFileInputStream inputStream = RandomAccessFileInputStream.builder()
                 .setRandomAccessFile(createRandomAccessFile())
                 .setCloseOnClose(true)
@@ -282,7 +282,7 @@ public class RandomAccessFileInputStreamTest {
     }
 
     @Test
-    public void testReadByteArray() throws IOException {
+    void testReadByteArray() throws IOException {
         try (RandomAccessFileInputStream inputStream = RandomAccessFileInputStream.builder()
                 .setRandomAccessFile(createRandomAccessFile())
                 .setCloseOnClose(true)
@@ -299,7 +299,7 @@ public class RandomAccessFileInputStreamTest {
     }
 
     @Test
-    public void testReadByteArrayBounds() throws IOException {
+    void testReadByteArrayBounds() throws IOException {
         try (RandomAccessFileInputStream inputStream = RandomAccessFileInputStream.builder()
                 .setRandomAccessFile(createRandomAccessFile())
                 .setCloseOnClose(true)
@@ -316,7 +316,7 @@ public class RandomAccessFileInputStreamTest {
     }
 
     @Test
-    public void testSkip() throws IOException {
+    void testSkip() throws IOException {
 
         try (RandomAccessFile file = createRandomAccessFile();
              RandomAccessFileInputStream inputStream = RandomAccessFileInputStream.builder()

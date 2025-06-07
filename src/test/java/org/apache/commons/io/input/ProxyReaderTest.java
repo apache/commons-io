@@ -52,7 +52,7 @@ public class ProxyReaderTest {
     }
 
     @Test
-    public void testNullCharArray() throws Exception {
+    void testNullCharArray() throws Exception {
         try (ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0))) {
             proxy.read((char[]) null);
             proxy.read(null, 0, 0);
@@ -60,7 +60,7 @@ public class ProxyReaderTest {
     }
 
     @Test
-    public void testNullCharBuffer() throws Exception {
+    void testNullCharBuffer() throws Exception {
         try (ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0))) {
             proxy.read((CharBuffer) null);
         }

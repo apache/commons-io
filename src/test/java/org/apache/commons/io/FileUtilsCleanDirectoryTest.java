@@ -65,7 +65,7 @@ public class FileUtilsCleanDirectoryTest extends AbstractTempDirTest {
 
     @DisabledOnOs(OS.WINDOWS)
     @Test
-    public void testCleanDirectoryToForceDelete() throws Exception {
+    void testCleanDirectoryToForceDelete() throws Exception {
         final File file = new File(tempDirFile, "restricted");
         FileUtils.touch(file);
 
@@ -79,7 +79,7 @@ public class FileUtilsCleanDirectoryTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCleanEmpty() throws Exception {
+    void testCleanEmpty() throws Exception {
         assertEquals(0, tempDirFile.list().length);
 
         FileUtils.cleanDirectory(tempDirFile);
@@ -88,7 +88,7 @@ public class FileUtilsCleanDirectoryTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testDeletesNested() throws Exception {
+    void testDeletesNested() throws Exception {
         final File nested = new File(tempDirFile, "nested");
 
         assertTrue(nested.mkdirs());
@@ -103,7 +103,7 @@ public class FileUtilsCleanDirectoryTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testDeletesRegular() throws Exception {
+    void testDeletesRegular() throws Exception {
         FileUtils.touch(new File(tempDirFile, "regular"));
         FileUtils.touch(new File(tempDirFile, ".hidden"));
 
@@ -116,7 +116,7 @@ public class FileUtilsCleanDirectoryTest extends AbstractTempDirTest {
 
     @DisabledOnOs(OS.WINDOWS)
     @Test
-    public void testThrowsOnNullList() throws Exception {
+    void testThrowsOnNullList() throws Exception {
         // test won't work if we can't restrict permissions on the
         // directory, so skip it.
         assumeTrue(chmod(tempDirFile, 0, false));

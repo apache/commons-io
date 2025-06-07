@@ -38,7 +38,7 @@ public class PathUtilsCleanDirectoryTest {
      * Tests a directory with one file of size 0.
      */
     @Test
-    public void testCleanDirectory1FileSize0() throws IOException {
+    void testCleanDirectory1FileSize0() throws IOException {
         PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0"), tempDir);
         assertCounts(1, 1, 0, PathUtils.cleanDirectory(tempDir));
     }
@@ -47,7 +47,7 @@ public class PathUtilsCleanDirectoryTest {
      * Tests a directory with one file of size 1.
      */
     @Test
-    public void testCleanDirectory1FileSize1() throws IOException {
+    void testCleanDirectory1FileSize1() throws IOException {
         PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1"), tempDir);
         assertCounts(1, 1, 1, PathUtils.cleanDirectory(tempDir));
     }
@@ -56,7 +56,7 @@ public class PathUtilsCleanDirectoryTest {
      * Tests a directory with two subdirectories, each containing one file of size 1.
      */
     @Test
-    public void testCleanDirectory2FileSize2() throws IOException {
+    void testCleanDirectory2FileSize2() throws IOException {
         PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2"), tempDir);
         assertCounts(3, 2, 2, PathUtils.cleanDirectory(tempDir));
     }
@@ -65,7 +65,7 @@ public class PathUtilsCleanDirectoryTest {
      * Tests an empty folder.
      */
     @Test
-    public void testCleanEmptyDirectory() throws IOException {
+    void testCleanEmptyDirectory() throws IOException {
         assertCounts(1, 0, 0, PathUtils.cleanDirectory(tempDir));
     }
 }

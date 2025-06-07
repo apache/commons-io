@@ -73,7 +73,7 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
-    public void testAboveThreshold(final int initialBufferSize) throws IOException {
+    void testAboveThreshold(final int initialBufferSize) throws IOException {
         final File testFile = Files.createTempFile(tempDirPath, "testAboveThreshold", "dat").toFile();
         final int threshold = testBytes.length - 5;
         try (DeferredFileOutputStream out = DeferredFileOutputStream.builder()
@@ -99,7 +99,7 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
-    public void testAboveThresholdGetInputStream(final int initialBufferSize, final @TempDir Path tempDir) throws IOException {
+    void testAboveThresholdGetInputStream(final int initialBufferSize, final @TempDir Path tempDir) throws IOException {
         final File testFile = Files.createTempFile(tempDirPath, "testAboveThreshold", "dat").toFile();
         final int threshold = testBytes.length - 5;
         try (DeferredFileOutputStream out = DeferredFileOutputStream.builder()
@@ -126,7 +126,7 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
-    public void testAtThreshold(final int initialBufferSize) throws IOException {
+    void testAtThreshold(final int initialBufferSize) throws IOException {
         final int threshold = testBytes.length;
         try (DeferredFileOutputStream out = DeferredFileOutputStream.builder()
             // @formatter:off
@@ -152,7 +152,7 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
-    public void testBelowThreshold(final int initialBufferSize) throws IOException {
+    void testBelowThreshold(final int initialBufferSize) throws IOException {
         final int threshold = testBytes.length + 42;
         try (DeferredFileOutputStream out = DeferredFileOutputStream.builder()
             // @formatter:off
@@ -178,7 +178,7 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
-    public void testBelowThresholdGetInputStream(final int initialBufferSize) throws IOException {
+    void testBelowThresholdGetInputStream(final int initialBufferSize) throws IOException {
         // @formatter:off
         final int threshold = testBytes.length + 42;
         try (DeferredFileOutputStream out = DeferredFileOutputStream.builder()
@@ -203,7 +203,7 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
-    public void testTempFileAboveThreshold(final int initialBufferSize) throws IOException {
+    void testTempFileAboveThreshold(final int initialBufferSize) throws IOException {
         final String prefix = "commons-io-test";
         final String suffix = ".out";
         // @formatter:off
@@ -241,7 +241,7 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
-    public void testTempFileAboveThresholdPrefixOnly(final int initialBufferSize) throws IOException {
+    void testTempFileAboveThresholdPrefixOnly(final int initialBufferSize) throws IOException {
         final String prefix = "commons-io-test";
         final String suffix = null;
         final int threshold = testBytes.length - 5;
@@ -282,7 +282,7 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
-    public void testTempFileBelowThreshold(final int initialBufferSize) throws IOException {
+    void testTempFileBelowThreshold(final int initialBufferSize) throws IOException {
         final String prefix = "commons-io-test";
         final String suffix = ".out";
         final int threshold = testBytes.length + 42;
@@ -305,7 +305,7 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
      * @throws Exception
      */
     @Test
-    public void testTempFileError() throws Exception {
+    void testTempFileError() throws Exception {
         final String prefix = null;
         final String suffix = ".out";
         assertThrows(NullPointerException.class, () -> new DeferredFileOutputStream(testBytes.length - 5, prefix, suffix, tempDirFile));
@@ -317,7 +317,7 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
-    public void testThresholdNegative(final int initialBufferSize) throws IOException {
+    void testThresholdNegative(final int initialBufferSize) throws IOException {
         final File testFile = Files.createTempFile(tempDirPath, "testThresholdNegative", "dat").toFile();
         try (DeferredFileOutputStream out = DeferredFileOutputStream.builder()
                 .setThreshold(-1)
@@ -342,7 +342,7 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
-    public void testThresholdReached(final int initialBufferSize) throws IOException {
+    void testThresholdReached(final int initialBufferSize) throws IOException {
         final File testFile = Files.createTempFile(tempDirPath, "testThresholdReached", "dat").toFile();
         final int threshold = testBytes.length / 2;
         try (DeferredFileOutputStream out = DeferredFileOutputStream.builder()
@@ -371,7 +371,7 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
-    public void testWriteToLarge(final int initialBufferSize) throws IOException {
+    void testWriteToLarge(final int initialBufferSize) throws IOException {
         final File testFile = Files.createTempFile(tempDirPath, "testWriteToFile", "dat").toFile();
         final int threshold = testBytes.length / 2;
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream(initialBufferSize);
@@ -396,7 +396,7 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
-    public void testWriteToLargeCtor(final int initialBufferSize) throws IOException {
+    void testWriteToLargeCtor(final int initialBufferSize) throws IOException {
         final File testFile = Files.createTempFile(tempDirPath, "testWriteToFile", "dat").toFile();
         final int threshold = testBytes.length / 2;
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream(initialBufferSize);
@@ -422,7 +422,7 @@ public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
-    public void testWriteToSmall(final int initialBufferSize) throws IOException {
+    void testWriteToSmall(final int initialBufferSize) throws IOException {
         final File testFile = Files.createTempFile(tempDirPath, "testWriteToMem", "dat").toFile();
         final int threshold = testBytes.length * 2;
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream(initialBufferSize);

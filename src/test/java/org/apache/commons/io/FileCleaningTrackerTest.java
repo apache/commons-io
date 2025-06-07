@@ -112,7 +112,7 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testFileCleanerDirectory_ForceStrategy_FileSource() throws Exception {
+    void testFileCleanerDirectory_ForceStrategy_FileSource() throws Exception {
         if (!testFile.getParentFile().exists()) {
             throw new IOException("Cannot create file " + testFile
                     + " as the parent directory does not exist");
@@ -140,7 +140,7 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testFileCleanerDirectory_ForceStrategy_PathSource() throws Exception {
+    void testFileCleanerDirectory_ForceStrategy_PathSource() throws Exception {
         if (!Files.exists(testPath.getParent())) {
             throw new IOException("Cannot create file " + testPath
                     + " as the parent directory does not exist");
@@ -168,7 +168,7 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testFileCleanerDirectory_NullStrategy() throws Exception {
+    void testFileCleanerDirectory_NullStrategy() throws Exception {
         TestUtils.createFile(testFile, 100);
         assertTrue(testFile.exists());
         assertTrue(tempDirFile.exists());
@@ -188,7 +188,7 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testFileCleanerDirectoryFileSource() throws Exception {
+    void testFileCleanerDirectoryFileSource() throws Exception {
         TestUtils.createFile(testFile, 100);
         assertTrue(testFile.exists());
         assertTrue(tempDirFile.exists());
@@ -208,7 +208,7 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testFileCleanerDirectoryPathSource() throws Exception {
+    void testFileCleanerDirectoryPathSource() throws Exception {
         TestUtils.createFile(testPath, 100);
         assertTrue(Files.exists(testPath));
         assertTrue(Files.exists(tempDirPath));
@@ -228,7 +228,7 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testFileCleanerExitWhenFinished_NoTrackAfter() {
+    void testFileCleanerExitWhenFinished_NoTrackAfter() {
         assertFalse(fileCleaningTracker.exitWhenFinished);
         fileCleaningTracker.exitWhenFinished();
         assertTrue(fileCleaningTracker.exitWhenFinished);
@@ -243,7 +243,7 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testFileCleanerExitWhenFinished1() throws Exception {
+    void testFileCleanerExitWhenFinished1() throws Exception {
         final String path = testFile.getPath();
 
         assertFalse(testFile.exists(), "1-testFile exists: " + testFile);
@@ -277,7 +277,7 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testFileCleanerExitWhenFinished2() throws Exception {
+    void testFileCleanerExitWhenFinished2() throws Exception {
         final String path = testFile.getPath();
 
         assertFalse(testFile.exists());
@@ -312,7 +312,7 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testFileCleanerExitWhenFinishedFirst() throws Exception {
+    void testFileCleanerExitWhenFinishedFirst() throws Exception {
         assertFalse(fileCleaningTracker.exitWhenFinished);
         fileCleaningTracker.exitWhenFinished();
         assertTrue(fileCleaningTracker.exitWhenFinished);
@@ -326,7 +326,7 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testFileCleanerFile() throws Exception {
+    void testFileCleanerFile() throws Exception {
         final String path = testFile.getPath();
 
         assertFalse(testFile.exists());
@@ -348,7 +348,7 @@ public class FileCleaningTrackerTest extends AbstractTempDirTest {
         assertFalse(new File(path).exists(), showFailures());
     }
     @Test
-    public void testFileCleanerNull() {
+    void testFileCleanerNull() {
         assertThrows(NullPointerException.class, () -> fileCleaningTracker.track((File) null, new Object()));
         assertThrows(NullPointerException.class, () -> fileCleaningTracker.track((File) null, new Object(), FileDeleteStrategy.NORMAL));
         assertThrows(NullPointerException.class, () -> fileCleaningTracker.track((String) null, new Object()));

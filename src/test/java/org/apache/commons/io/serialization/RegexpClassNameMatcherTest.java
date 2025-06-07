@@ -32,17 +32,17 @@ import org.junit.jupiter.api.Test;
 public class RegexpClassNameMatcherTest {
 
     @Test
-    public void testNullPatternPattern() {
+    void testNullPatternPattern() {
         assertThrows(NullPointerException.class, () -> new RegexpClassNameMatcher((Pattern) null));
     }
 
     @Test
-    public void testNullStringPattern() {
+    void testNullStringPattern() {
         assertThrows(NullPointerException.class, () -> new RegexpClassNameMatcher((String) null));
     }
 
     @Test
-    public void testOrPattern() {
+    void testOrPattern() {
         final ClassNameMatcher ca = new RegexpClassNameMatcher("foo.*|bar.*");
         assertTrue(ca.matches("foo.should.match"));
         assertTrue(ca.matches("bar.should.match"));
@@ -50,14 +50,14 @@ public class RegexpClassNameMatcherTest {
     }
 
     @Test
-    public void testSimplePatternFromPattern() {
+    void testSimplePatternFromPattern() {
         final ClassNameMatcher ca = new RegexpClassNameMatcher(Pattern.compile("foo.*"));
         assertTrue(ca.matches("foo.should.match"));
         assertFalse(ca.matches("bar.should.not.match"));
     }
 
     @Test
-    public void testSimplePatternFromString() {
+    void testSimplePatternFromString() {
         final ClassNameMatcher ca = new RegexpClassNameMatcher("foo.*");
         assertTrue(ca.matches("foo.should.match"));
         assertFalse(ca.matches("bar.should.not.match"));

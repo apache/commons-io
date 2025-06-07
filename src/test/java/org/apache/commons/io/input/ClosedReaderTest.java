@@ -35,14 +35,14 @@ public class ClosedReaderTest {
     }
 
     @Test
-    public void testRead() throws IOException {
+    void testRead() throws IOException {
         try (Reader reader = new ClosedReader()) {
             assertEof(reader);
         }
     }
 
     @Test
-    public void testReadArray() throws Exception {
+    void testReadArray() throws Exception {
         try (Reader reader = new ClosedReader()) {
             assertEquals(EOF, reader.read(new char[4096]));
             assertEquals(EOF, reader.read(new char[1]));
@@ -51,7 +51,7 @@ public class ClosedReaderTest {
     }
 
     @Test
-    public void testReadArrayIndex() throws Exception {
+    void testReadArrayIndex() throws Exception {
         try (Reader reader = new ClosedReader()) {
             assertEquals(EOF, reader.read(CharBuffer.wrap(new char[4096])));
             assertEquals(EOF, reader.read(CharBuffer.wrap(new char[1])));
@@ -60,7 +60,7 @@ public class ClosedReaderTest {
     }
 
     @Test
-    public void testReadCharBuffer() throws Exception {
+    void testReadCharBuffer() throws Exception {
         try (Reader reader = new ClosedReader()) {
             assertEquals(EOF, reader.read(new char[4096]));
             assertEquals(EOF, reader.read(new char[1]));
@@ -69,7 +69,7 @@ public class ClosedReaderTest {
     }
 
     @Test
-    public void testSingleton() throws Exception {
+    void testSingleton() throws Exception {
         try (@SuppressWarnings("deprecation")
         Reader reader = ClosedReader.CLOSED_READER) {
             assertEof(reader);
@@ -80,7 +80,7 @@ public class ClosedReaderTest {
     }
 
     @Test
-    public void testSkip() throws Exception {
+    void testSkip() throws Exception {
         try (Reader reader = new ClosedReader()) {
             assertEquals(0, reader.skip(4096));
             assertEquals(0, reader.skip(1));

@@ -45,7 +45,7 @@ public class TeeOutputStreamTest {
      * exception on {@link TeeOutputStream#close()}.
      */
     @Test
-    public void testIOExceptionOnClose() throws IOException {
+    void testIOExceptionOnClose() throws IOException {
         final OutputStream badOs = new ThrowOnCloseOutputStream();
         final ByteArrayOutputStream goodOs = mock(ByteArrayOutputStream.class);
         final TeeOutputStream tos = new TeeOutputStream(badOs, goodOs);
@@ -59,7 +59,7 @@ public class TeeOutputStreamTest {
      * exception on {@link TeeOutputStream#close()}.
      */
     @Test
-    public void testIOExceptionOnCloseBranch() throws IOException {
+    void testIOExceptionOnCloseBranch() throws IOException {
         final OutputStream badOs = new ThrowOnCloseOutputStream();
         final ByteArrayOutputStream goodOs = mock(ByteArrayOutputStream.class);
         final TeeOutputStream tos = new TeeOutputStream(goodOs, badOs);
@@ -69,7 +69,7 @@ public class TeeOutputStreamTest {
     }
 
     @Test
-    public void testTee() throws IOException {
+    void testTee() throws IOException {
         final ByteArrayOutputStream baos1 = new ByteArrayOutputStream();
         final ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
         final ByteArrayOutputStream expected = new ByteArrayOutputStream();

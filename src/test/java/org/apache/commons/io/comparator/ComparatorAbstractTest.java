@@ -60,7 +60,7 @@ public abstract class ComparatorAbstractTest {
      * Test the comparator.
      */
     @Test
-    public void testComparator() {
+    void testComparator() {
         assertEquals(0, comparator.compare(equalFile1, equalFile2), "equal");
         assertTrue(comparator.compare(lessFile, moreFile) < 0, "less");
         assertTrue(comparator.compare(moreFile, lessFile) > 0, "more");
@@ -70,7 +70,7 @@ public abstract class ComparatorAbstractTest {
      * Test the comparator reversed.
      */
     @Test
-    public void testReverseComparator() {
+    void testReverseComparator() {
         assertEquals(0, reverse.compare(equalFile1, equalFile2), "equal");
         assertTrue(reverse.compare(moreFile, lessFile) < 0, "less");
         assertTrue(reverse.compare(lessFile, moreFile) > 0, "more");
@@ -80,7 +80,7 @@ public abstract class ComparatorAbstractTest {
      * Test the comparator array sort.
      */
     @Test
-    public void testSortArray() {
+    void testSortArray() {
         final File[] files = new File[3];
         files[0] = equalFile1;
         files[1] = moreFile;
@@ -95,7 +95,7 @@ public abstract class ComparatorAbstractTest {
      * Test comparator array sort is null safe.
      */
     @Test
-    public void testSortArrayNull() {
+    void testSortArrayNull() {
         assertNull(comparator.sort((File[]) null));
     }
 
@@ -103,7 +103,7 @@ public abstract class ComparatorAbstractTest {
      * Test the comparator array sort.
      */
     @Test
-    public void testSortList() {
+    void testSortList() {
         final List<File> files = new ArrayList<>();
         files.add(equalFile1);
         files.add(moreFile);
@@ -118,7 +118,7 @@ public abstract class ComparatorAbstractTest {
      * Test comparator list sort is null safe.
      */
     @Test
-    public void testSortListNull() {
+    void testSortListNull() {
         assertNull(comparator.sort((List<File>) null));
     }
 
@@ -126,7 +126,7 @@ public abstract class ComparatorAbstractTest {
      * Test comparator toString.
      */
     @Test
-    public void testToString() {
+    void testToString() {
         assertNotNull(comparator.toString(), "comparator");
         assertTrue(reverse.toString().startsWith("ReverseFileComparator["), "reverse");
     }

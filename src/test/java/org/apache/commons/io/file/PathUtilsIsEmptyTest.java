@@ -38,7 +38,7 @@ public class PathUtilsIsEmptyTest {
             .get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/file-size-1.bin");
 
     @Test
-    public void testIsEmpty() throws IOException {
+    void testIsEmpty() throws IOException {
         Assertions.assertTrue(PathUtils.isEmpty(FILE_SIZE_0));
         Assertions.assertFalse(PathUtils.isEmpty(FILE_SIZE_1));
         try (TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
@@ -48,7 +48,7 @@ public class PathUtilsIsEmptyTest {
     }
 
     @Test
-    public void testIsEmptyDirectory() throws IOException {
+    void testIsEmptyDirectory() throws IOException {
         try (TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
             Assertions.assertTrue(PathUtils.isEmptyDirectory(tempDir.get()));
         }
@@ -56,7 +56,7 @@ public class PathUtilsIsEmptyTest {
     }
 
     @Test
-    public void testisEmptyFile() throws IOException {
+    void testisEmptyFile() throws IOException {
         Assertions.assertTrue(PathUtils.isEmptyFile(FILE_SIZE_0));
         Assertions.assertFalse(PathUtils.isEmptyFile(FILE_SIZE_1));
     }

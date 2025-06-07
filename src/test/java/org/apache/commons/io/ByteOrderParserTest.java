@@ -33,17 +33,17 @@ public class ByteOrderParserTest {
     }
 
     @Test
-    public void testParseBig() {
+    void testParseBig() {
         assertEquals(ByteOrder.BIG_ENDIAN, parseByteOrder("BIG_ENDIAN"));
     }
 
     @Test
-    public void testParseLittle() {
+    void testParseLittle() {
         assertEquals(ByteOrder.LITTLE_ENDIAN, parseByteOrder("LITTLE_ENDIAN"));
     }
 
     @Test
-    public void testThrowsException() {
+    void testThrowsException() {
         assertThrows(IllegalArgumentException.class, () -> parseByteOrder("some value"));
     }
 }

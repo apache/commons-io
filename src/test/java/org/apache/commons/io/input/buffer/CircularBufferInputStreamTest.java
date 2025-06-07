@@ -51,7 +51,7 @@ public class CircularBufferInputStreamTest {
     }
 
     @Test
-    public void testIO683() throws IOException {
+    void testIO683() throws IOException {
         final byte[] buffer = {0, 1, -2, -2, -1, 4};
         try (ByteArrayInputStream bais = new ByteArrayInputStream(buffer); CircularBufferInputStream cbis = new CircularBufferInputStream(bais)) {
             int b;
@@ -65,7 +65,7 @@ public class CircularBufferInputStreamTest {
     }
 
     @Test
-    public void testRandomRead() throws Exception {
+    void testRandomRead() throws Exception {
         final byte[] inputBuffer = newInputBuffer();
         final byte[] bufferCopy = new byte[inputBuffer.length];
         final ByteArrayInputStream bais = new ByteArrayInputStream(inputBuffer);

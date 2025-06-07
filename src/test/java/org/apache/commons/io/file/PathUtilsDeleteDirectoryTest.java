@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 public class PathUtilsDeleteDirectoryTest extends AbstractTempDirTest {
 
     @Test
-    public void testDeleteAbsentDirectory() throws IOException {
+    void testDeleteAbsentDirectory() throws IOException {
         final Path absent = tempDirPath.resolve("ThisDirectoryDoesNotExist");
         assertFalse(Files.exists(absent));
         final Class<NoSuchFileException> expectedType = NoSuchFileException.class;
@@ -50,7 +50,7 @@ public class PathUtilsDeleteDirectoryTest extends AbstractTempDirTest {
      * Tests a directory with one file of size 0.
      */
     @Test
-    public void testDeleteDirectory1FileSize0() throws IOException {
+    void testDeleteDirectory1FileSize0() throws IOException {
         PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0"), tempDirPath);
         assertCounts(1, 1, 0, PathUtils.deleteDirectory(tempDirPath));
         // This will throw if not empty.
@@ -69,12 +69,12 @@ public class PathUtilsDeleteDirectoryTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testDeleteDirectory1FileSize0NoOptions() throws IOException {
+    void testDeleteDirectory1FileSize0NoOptions() throws IOException {
         testDeleteDirectory1FileSize0(PathUtils.EMPTY_DELETE_OPTION_ARRAY);
     }
 
     @Test
-    public void testDeleteDirectory1FileSize0OverrideReadOnly() throws IOException {
+    void testDeleteDirectory1FileSize0OverrideReadOnly() throws IOException {
         testDeleteDirectory1FileSize0(StandardDeleteOption.OVERRIDE_READ_ONLY);
     }
 
@@ -82,7 +82,7 @@ public class PathUtilsDeleteDirectoryTest extends AbstractTempDirTest {
      * Tests a directory with one file of size 1.
      */
     @Test
-    public void testDeleteDirectory1FileSize1() throws IOException {
+    void testDeleteDirectory1FileSize1() throws IOException {
         PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1"), tempDirPath);
         assertCounts(1, 1, 1, PathUtils.deleteDirectory(tempDirPath));
         // This will throw if not empty.
@@ -93,7 +93,7 @@ public class PathUtilsDeleteDirectoryTest extends AbstractTempDirTest {
      * Tests a directory with two subdirectories, each containing one file of size 1.
      */
     @Test
-    public void testDeleteDirectory2FileSize2() throws IOException {
+    void testDeleteDirectory2FileSize2() throws IOException {
         PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2"), tempDirPath);
         assertCounts(3, 2, 2, PathUtils.deleteDirectory(tempDirPath));
         // This will throw if not empty.
@@ -104,7 +104,7 @@ public class PathUtilsDeleteDirectoryTest extends AbstractTempDirTest {
      * Tests an empty folder.
      */
     @Test
-    public void testDeleteEmptyDirectory() throws IOException {
+    void testDeleteEmptyDirectory() throws IOException {
         assertCounts(1, 0, 0, PathUtils.deleteDirectory(tempDirPath));
         // This will throw if not empty.
         Files.deleteIfExists(tempDirPath);

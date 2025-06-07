@@ -34,7 +34,7 @@ public class CharacterFilterReaderTest {
     private static final String STRING_FIXTURE = "ababcabcd";
 
     @Test
-    public void testInputSize0FilterSize1() throws IOException {
+    void testInputSize0FilterSize1() throws IOException {
         final StringReader input = new StringReader("");
         final HashSet<Integer> codePoints = new HashSet<>();
         codePoints.add(Integer.valueOf('a'));
@@ -44,7 +44,7 @@ public class CharacterFilterReaderTest {
     }
 
     @Test
-    public void testInputSize1FilterSize1() throws IOException {
+    void testInputSize1FilterSize1() throws IOException {
         try (StringReader input = new StringReader("a");
             CharacterFilterReader reader = new CharacterFilterReader(input, 'a')) {
             assertEquals(-1, reader.read());
@@ -52,7 +52,7 @@ public class CharacterFilterReaderTest {
     }
 
     @Test
-    public void testInputSize2FilterSize1FilterAll() throws IOException {
+    void testInputSize2FilterSize1FilterAll() throws IOException {
         final StringReader input = new StringReader("aa");
         try (CharacterFilterReader reader = new CharacterFilterReader(input, 'a')) {
             assertEquals(-1, reader.read());
@@ -60,7 +60,7 @@ public class CharacterFilterReaderTest {
     }
 
     @Test
-    public void testInputSize2FilterSize1FilterFirst() throws IOException {
+    void testInputSize2FilterSize1FilterFirst() throws IOException {
         final StringReader input = new StringReader("ab");
         try (CharacterFilterReader reader = new CharacterFilterReader(input, 'a')) {
             assertEquals('b', reader.read());
@@ -69,7 +69,7 @@ public class CharacterFilterReaderTest {
     }
 
     @Test
-    public void testInputSize2FilterSize1FilterLast() throws IOException {
+    void testInputSize2FilterSize1FilterLast() throws IOException {
         final StringReader input = new StringReader("ab");
         try (CharacterFilterReader reader = new CharacterFilterReader(input, 'b')) {
             assertEquals('a', reader.read());
@@ -78,7 +78,7 @@ public class CharacterFilterReaderTest {
     }
 
     @Test
-    public void testReadFilteringEOF() {
+    void testReadFilteringEOF() {
         final StringReader input = new StringReader(STRING_FIXTURE);
         assertTimeoutPreemptively(Duration.ofMillis(500), () -> {
             try (StringBuilderWriter output = new StringBuilderWriter();
@@ -93,7 +93,7 @@ public class CharacterFilterReaderTest {
     }
 
     @Test
-    public void testReadIntoBuffer() throws IOException {
+    void testReadIntoBuffer() throws IOException {
         final StringReader input = new StringReader(STRING_FIXTURE);
         try (CharacterFilterReader reader = new CharacterFilterReader(input, 'b')) {
             final char[] buff = new char[9];
@@ -104,7 +104,7 @@ public class CharacterFilterReaderTest {
     }
 
     @Test
-    public void testReadUsingReader() throws IOException {
+    void testReadUsingReader() throws IOException {
         final StringReader input = new StringReader(STRING_FIXTURE);
         try (StringBuilderWriter output = new StringBuilderWriter();
             CharacterFilterReader reader = new CharacterFilterReader(input, 'b')) {

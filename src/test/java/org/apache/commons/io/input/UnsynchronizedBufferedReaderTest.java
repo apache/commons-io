@@ -134,7 +134,7 @@ public class UnsynchronizedBufferedReaderTest {
      * @throws IOException test failure.
      */
     @Test
-    public void testClose() throws IOException {
+    void testClose() throws IOException {
         // Test for method void UnsynchronizedBufferedReader.close()
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
         br.close();
@@ -142,7 +142,7 @@ public class UnsynchronizedBufferedReaderTest {
     }
 
     @Test
-    public void testEmptyInput() throws Exception {
+    void testEmptyInput() throws Exception {
         try (UnsynchronizedBufferedReader br = new UnsynchronizedBufferedReader(new StringReader(""))) {
             assertEquals(EOF, br.read());
             assertEquals(EOF, br.peek());
@@ -157,7 +157,7 @@ public class UnsynchronizedBufferedReaderTest {
      * @throws IOException test failure.
      */
     @Test
-    public void testMark() throws IOException {
+    void testMark() throws IOException {
         // Test for method void UnsynchronizedBufferedReader.mark(int)
         char[] buf = null;
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
@@ -226,7 +226,7 @@ public class UnsynchronizedBufferedReaderTest {
      * Tests {@link UnsynchronizedBufferedReader#markSupported()}.
      */
     @Test
-    public void testMarkSupported() {
+    void testMarkSupported() {
         // Test for method boolean UnsynchronizedBufferedReader.markSupported()
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
         assertTrue(br.markSupported());
@@ -238,7 +238,7 @@ public class UnsynchronizedBufferedReaderTest {
      * @throws IOException test failure.
      */
     @Test
-    public void testPeek() throws IOException {
+    void testPeek() throws IOException {
         // Test for method int UnsynchronizedBufferedReader.read()
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
         final int p = br.peek();
@@ -276,7 +276,7 @@ public class UnsynchronizedBufferedReaderTest {
      * @throws IOException test failure.
      */
     @Test
-    public void testPeekArray() throws IOException {
+    void testPeekArray() throws IOException {
         // Test for method int UnsynchronizedBufferedReader.read()
         final char[] peekBuf1 = new char[1];
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
@@ -321,7 +321,7 @@ public class UnsynchronizedBufferedReaderTest {
      * @throws IOException test failure.
      */
     @Test
-    public void testRead() throws IOException {
+    void testRead() throws IOException {
         // Test for method int UnsynchronizedBufferedReader.read()
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
         final int r = br.read();
@@ -353,7 +353,7 @@ public class UnsynchronizedBufferedReaderTest {
      * @throws IOException test failure.
      */
     @Test
-    public void testReadArray() throws IOException {
+    void testReadArray() throws IOException {
         final char[] ca = new char[2];
         try (UnsynchronizedBufferedReader toRet = new UnsynchronizedBufferedReader(new InputStreamReader(new ByteArrayInputStream(new byte[0])))) {
             /* Null buffer should throw NPE even when len == 0 */
@@ -452,7 +452,7 @@ public class UnsynchronizedBufferedReaderTest {
      * @throws IOException test failure.
      */
     @Test
-    public void testReadArrayException() throws IOException {
+    void testReadArrayException() throws IOException {
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
         final char[] nullCharArray = null;
         final char[] charArray = testString.toCharArray();
@@ -484,7 +484,7 @@ public class UnsynchronizedBufferedReaderTest {
      * @throws IOException test failure.
      */
     @Test
-    public void testReadLine() throws IOException {
+    void testReadLine() throws IOException {
         // Test for method java.lang.String UnsynchronizedBufferedReader.readLine()
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
         final String r = br.readLine();
@@ -498,12 +498,12 @@ public class UnsynchronizedBufferedReaderTest {
      * @throws IOException test failure.
      */
     @Test
-    public void testReadLineIgnoresEbcdic85Characters() throws IOException {
+    void testReadLineIgnoresEbcdic85Characters() throws IOException {
         assertLines("A\u0085B", "A\u0085B");
     }
 
     @Test
-    public void testReadLineSeparators() throws IOException {
+    void testReadLineSeparators() throws IOException {
         assertLines("A\nB\nC", "A", "B", "C");
         assertLines("A\rB\rC", "A", "B", "C");
         assertLines("A\r\nB\r\nC", "A", "B", "C");
@@ -523,7 +523,7 @@ public class UnsynchronizedBufferedReaderTest {
      * @throws IOException test failure.
      */
     @Test
-    public void testReady() throws IOException {
+    void testReady() throws IOException {
         // Test for method boolean UnsynchronizedBufferedReader.ready()
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
         assertTrue(br.ready());
@@ -535,7 +535,7 @@ public class UnsynchronizedBufferedReaderTest {
      * @throws IOException test failure.
      */
     @Test
-    public void testReset() throws IOException {
+    void testReset() throws IOException {
         // Test for method void UnsynchronizedBufferedReader.reset()
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
         br.skip(500);
@@ -551,7 +551,7 @@ public class UnsynchronizedBufferedReaderTest {
     }
 
     @Test
-    public void testReset_IOException() throws Exception {
+    void testReset_IOException() throws Exception {
         final int[] expected = { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', -1 };
         br = new UnsynchronizedBufferedReader(new StringReader("1234567890"), 9);
         br.mark(9);
@@ -580,7 +580,7 @@ public class UnsynchronizedBufferedReaderTest {
      * @throws IOException test failure.
      */
     @Test
-    public void testSkip() throws IOException {
+    void testSkip() throws IOException {
         // Test for method long UnsynchronizedBufferedReader.skip(long)
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
         br.skip(500);

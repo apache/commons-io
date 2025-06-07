@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Test;
 public class IOExceptionListTest {
 
     @Test
-    public void testCause() {
+    void testCause() {
         final EOFException cause = new EOFException();
         final List<EOFException> list = Collections.singletonList(cause);
         final IOExceptionList sqlExceptionList = new IOExceptionList(list);
@@ -53,7 +53,7 @@ public class IOExceptionListTest {
     }
 
     @Test
-    public void testCheckEmpty() throws IOExceptionList {
+    void testCheckEmpty() throws IOExceptionList {
         IOExceptionList.checkEmpty(null, "");
         IOExceptionList.checkEmpty(null, null);
         IOExceptionList.checkEmpty(Collections.emptyList(), "");
@@ -63,13 +63,13 @@ public class IOExceptionListTest {
     }
 
     @Test
-    public void testEmptyList() {
+    void testEmptyList() {
         new IOExceptionList(Collections.emptyList());
         new IOExceptionList("foo", Collections.emptyList());
     }
 
     @Test
-    public void testIterable() {
+    void testIterable() {
         final EOFException cause = new EOFException();
         final List<EOFException> list = Collections.singletonList(cause);
         final IOExceptionList sqlExceptionList = new IOExceptionList("Hello", list);
@@ -85,7 +85,7 @@ public class IOExceptionListTest {
     }
 
     @Test
-    public void testMessageCause() {
+    void testMessageCause() {
         final EOFException cause = new EOFException();
         final List<EOFException> list = Collections.singletonList(cause);
         final IOExceptionList sqlExceptionList = new IOExceptionList("Hello", list);
@@ -102,14 +102,14 @@ public class IOExceptionListTest {
     }
 
     @Test
-    public void testNullCause() {
+    void testNullCause() {
         final IOExceptionList sqlExceptionList = new IOExceptionList(null);
         assertNull(sqlExceptionList.getCause());
         assertTrue(sqlExceptionList.getCauseList().isEmpty());
     }
 
     @Test
-    public void testNullMessageArg() {
+    void testNullMessageArg() {
         assertNotNull(new IOExceptionList(null, Collections.emptyList()).getMessage());
         assertNotNull(new IOExceptionList(null, null).getMessage());
         assertEquals("A", new IOExceptionList("A", Collections.emptyList()).getMessage());
@@ -117,7 +117,7 @@ public class IOExceptionListTest {
     }
 
     @Test
-    public void testPrintStackTrace() {
+    void testPrintStackTrace() {
         final EOFException cause = new EOFException();
         final List<EOFException> list = Collections.singletonList(cause);
         final IOExceptionList sqlExceptionList = new IOExceptionList(list);

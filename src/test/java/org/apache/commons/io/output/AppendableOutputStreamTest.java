@@ -34,14 +34,14 @@ public class AppendableOutputStreamTest {
     }
 
     @Test
-    public void testWriteInt() throws Exception {
+    void testWriteInt() throws Exception {
         out.write('F');
 
         assertEquals("F", out.getAppendable().toString());
     }
 
     @Test
-    public void testWriteStringBuilder() throws Exception {
+    void testWriteStringBuilder() throws Exception {
         final String testData = "ABCD";
 
         out.write(testData.getBytes());

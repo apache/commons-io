@@ -49,7 +49,7 @@ public class IOIntSupplierTest {
     }
 
     @Test
-    public void testAsSupplier() {
+    void testAsSupplier() {
         assertThrows(UncheckedIOException.class, () -> TestConstants.THROWING_IO_INT_SUPPLIER.asIntSupplier().getAsInt());
         assertEquals(1, getThrowsNone(() -> TestUtils.compareAndSetThrowsIO(atomicInt, 1)));
         assertEquals(1, atomicInt.get());
@@ -57,7 +57,7 @@ public class IOIntSupplierTest {
     }
 
     @Test
-    public void testGet() throws IOException {
+    void testGet() throws IOException {
         assertThrows(IOException.class, () -> TestConstants.THROWING_IO_INT_SUPPLIER.getAsInt());
         assertThrows(IOException.class, () -> {
             throw new IOException();

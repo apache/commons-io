@@ -32,19 +32,19 @@ import org.junit.jupiter.api.Test;
 public class EndianUtilsTest {
 
     @Test
-    public void testCtor() {
+    void testCtor() {
         new EndianUtils();
         // Constructor does not blow up.
     }
 
     @Test
-    public void testEOFException() {
+    void testEOFException() {
         final ByteArrayInputStream input = new ByteArrayInputStream(new byte[] {});
         assertThrows(EOFException.class, () -> EndianUtils.readSwappedDouble(input));
     }
 
     @Test
-    public void testInvalidOffset() throws IOException {
+    void testInvalidOffset() throws IOException {
         final byte[] bytes = {};
 
         assertThrows(IllegalArgumentException.class, () -> EndianUtils.readSwappedInteger(bytes, 0));
@@ -58,7 +58,7 @@ public class EndianUtilsTest {
     }
 
     @Test
-    public void testReadSwappedDouble() throws IOException {
+    void testReadSwappedDouble() throws IOException {
         final byte[] bytes = { 0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01 };
         final double d1 = Double.longBitsToDouble(0x0102030405060708L);
         final double d2 = EndianUtils.readSwappedDouble(bytes, 0);
@@ -69,7 +69,7 @@ public class EndianUtilsTest {
     }
 
     @Test
-    public void testReadSwappedFloat() throws IOException {
+    void testReadSwappedFloat() throws IOException {
         final byte[] bytes = { 0x04, 0x03, 0x02, 0x01 };
         final float f1 = Float.intBitsToFloat(0x01020304);
         final float f2 = EndianUtils.readSwappedFloat(bytes, 0);
@@ -80,7 +80,7 @@ public class EndianUtilsTest {
     }
 
     @Test
-    public void testReadSwappedInteger() throws IOException {
+    void testReadSwappedInteger() throws IOException {
         final byte[] bytes = { 0x04, 0x03, 0x02, 0x01 };
         assertEquals(0x01020304, EndianUtils.readSwappedInteger(bytes, 0));
 
@@ -89,7 +89,7 @@ public class EndianUtilsTest {
     }
 
     @Test
-    public void testReadSwappedLong() throws IOException {
+    void testReadSwappedLong() throws IOException {
         final byte[] bytes = { 0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01 };
         assertEquals(0x0102030405060708L, EndianUtils.readSwappedLong(bytes, 0));
 
@@ -98,7 +98,7 @@ public class EndianUtilsTest {
     }
 
     @Test
-    public void testReadSwappedShort() throws IOException {
+    void testReadSwappedShort() throws IOException {
         final byte[] bytes = { 0x02, 0x01 };
         assertEquals(0x0102, EndianUtils.readSwappedShort(bytes, 0));
 
@@ -107,7 +107,7 @@ public class EndianUtilsTest {
     }
 
     @Test
-    public void testReadSwappedUnsignedInteger() throws IOException {
+    void testReadSwappedUnsignedInteger() throws IOException {
         final byte[] bytes = { 0x04, 0x03, 0x02, 0x01 };
         assertEquals(0x0000000001020304L, EndianUtils.readSwappedUnsignedInteger(bytes, 0));
 
@@ -116,7 +116,7 @@ public class EndianUtilsTest {
     }
 
     @Test
-    public void testReadSwappedUnsignedShort() throws IOException {
+    void testReadSwappedUnsignedShort() throws IOException {
         final byte[] bytes = { 0x02, 0x01 };
         assertEquals(0x00000102, EndianUtils.readSwappedUnsignedShort(bytes, 0));
 
@@ -125,7 +125,7 @@ public class EndianUtilsTest {
     }
 
     @Test
-    public void testSwapDouble() {
+    void testSwapDouble() {
         assertEquals(0.0, EndianUtils.swapDouble(0.0), 0.0);
         final double d1 = Double.longBitsToDouble(0x0102030405060708L);
         final double d2 = Double.longBitsToDouble(0x0807060504030201L);
@@ -133,7 +133,7 @@ public class EndianUtilsTest {
     }
 
     @Test
-    public void testSwapFloat() {
+    void testSwapFloat() {
         assertEquals(0.0f, EndianUtils.swapFloat(0.0f), 0.0);
         final float f1 = Float.intBitsToFloat(0x01020304);
         final float f2 = Float.intBitsToFloat(0x04030201);
@@ -141,7 +141,7 @@ public class EndianUtilsTest {
     }
 
     @Test
-    public void testSwapInteger() {
+    void testSwapInteger() {
         assertEquals(0, EndianUtils.swapInteger(0));
         assertEquals(0x04030201, EndianUtils.swapInteger(0x01020304));
         assertEquals(0x01000000, EndianUtils.swapInteger(0x00000001));
@@ -152,7 +152,7 @@ public class EndianUtilsTest {
     }
 
     @Test
-    public void testSwapLong() {
+    void testSwapLong() {
         assertEquals(0, EndianUtils.swapLong(0));
         assertEquals(0x0807060504030201L, EndianUtils.swapLong(0x0102030405060708L));
         assertEquals(0xffffffffffffffffL, EndianUtils.swapLong(0xffffffffffffffffL));
@@ -160,7 +160,7 @@ public class EndianUtilsTest {
     }
 
     @Test
-    public void testSwapShort() {
+    void testSwapShort() {
         assertEquals((short) 0, EndianUtils.swapShort((short) 0));
         assertEquals((short) 0x0201, EndianUtils.swapShort((short) 0x0102));
         assertEquals((short) 0xffff, EndianUtils.swapShort((short) 0xffff));
@@ -171,7 +171,7 @@ public class EndianUtilsTest {
      * Tests all swapXxxx methods for symmetry when going from one endian to another and back again.
      */
     @Test
-    public void testSymmetry() {
+    void testSymmetry() {
         assertEquals((short) 0x0102, EndianUtils.swapShort(EndianUtils.swapShort((short) 0x0102)));
         assertEquals(0x01020304, EndianUtils.swapInteger(EndianUtils.swapInteger(0x01020304)));
         assertEquals(0x0102030405060708L, EndianUtils.swapLong(EndianUtils.swapLong(0x0102030405060708L)));
@@ -183,7 +183,7 @@ public class EndianUtilsTest {
 
     // tests #IO-101
     @Test
-    public void testSymmetryOfLong() {
+    void testSymmetryOfLong() {
 
         final double[] tests = { 34.345, -345.5645, 545.12, 10.043, 7.123456789123 };
         for (final double test : tests) {
@@ -205,7 +205,7 @@ public class EndianUtilsTest {
 
     // tests #IO-117
     @Test
-    public void testUnsignedOverrun() throws Exception {
+    void testUnsignedOverrun() throws Exception {
         final byte[] target = { 0, 0, 0, (byte) 0x80 };
         final long expected = 0x80000000L;
 
@@ -218,7 +218,7 @@ public class EndianUtilsTest {
     }
 
     @Test
-    public void testWriteSwappedDouble() throws IOException {
+    void testWriteSwappedDouble() throws IOException {
         byte[] bytes = new byte[8];
         final double d1 = Double.longBitsToDouble(0x0102030405060708L);
         EndianUtils.writeSwappedDouble(bytes, 0, d1);
@@ -245,7 +245,7 @@ public class EndianUtilsTest {
     }
 
     @Test
-    public void testWriteSwappedFloat() throws IOException {
+    void testWriteSwappedFloat() throws IOException {
         byte[] bytes = new byte[4];
         final float f1 = Float.intBitsToFloat(0x01020304);
         EndianUtils.writeSwappedFloat(bytes, 0, f1);
@@ -264,7 +264,7 @@ public class EndianUtilsTest {
     }
 
     @Test
-    public void testWriteSwappedInteger() throws IOException {
+    void testWriteSwappedInteger() throws IOException {
         byte[] bytes = new byte[4];
         EndianUtils.writeSwappedInteger(bytes, 0, 0x01020304);
         assertEquals(0x04, bytes[0]);
@@ -282,7 +282,7 @@ public class EndianUtilsTest {
     }
 
     @Test
-    public void testWriteSwappedLong() throws IOException {
+    void testWriteSwappedLong() throws IOException {
         byte[] bytes = new byte[8];
         EndianUtils.writeSwappedLong(bytes, 0, 0x0102030405060708L);
         assertEquals(0x08, bytes[0]);
@@ -308,7 +308,7 @@ public class EndianUtilsTest {
     }
 
     @Test
-    public void testWriteSwappedShort() throws IOException {
+    void testWriteSwappedShort() throws IOException {
         byte[] bytes = new byte[2];
         EndianUtils.writeSwappedShort(bytes, 0, (short) 0x0102);
         assertEquals(0x02, bytes[0]);

@@ -45,43 +45,43 @@ public class UncheckedAppendableTest {
     }
 
     @Test
-    public void testAppendChar() {
+    void testAppendChar() {
         appendableString.append('a').append('b');
         assertEquals("ab", appendableString.toString());
     }
 
     @Test
-    public void testAppendCharSequence() {
+    void testAppendCharSequence() {
         appendableString.append("a").append("b");
         assertEquals("ab", appendableString.toString());
     }
 
     @Test
-    public void testAppendCharSequenceIndexed() {
+    void testAppendCharSequenceIndexed() {
         appendableString.append("a", 0, 1).append("b", 0, 1);
         assertEquals("ab", appendableString.toString());
     }
 
     @Test
-    public void testAppendCharSequenceIndexedThrows() {
+    void testAppendCharSequenceIndexedThrows() {
         final UncheckedIOException e = assertThrows(UncheckedIOException.class, () -> appendableBroken.append("a", 0, 1));
         assertEquals(exception, e.getCause());
     }
 
     @Test
-    public void testAppendCharSequenceThrows() {
+    void testAppendCharSequenceThrows() {
         final UncheckedIOException e = assertThrows(UncheckedIOException.class, () -> appendableBroken.append("a"));
         assertEquals(exception, e.getCause());
     }
 
     @Test
-    public void testAppendCharThrows() {
+    void testAppendCharThrows() {
         final UncheckedIOException e2 = assertThrows(UncheckedIOException.class, () -> appendableBroken.append('a'));
         assertEquals(exception, e2.getCause());
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         assertEquals("ab", UncheckedAppendable.on(new StringWriter(2).append("ab")).toString());
     }
 

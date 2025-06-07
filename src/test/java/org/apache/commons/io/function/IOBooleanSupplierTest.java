@@ -49,7 +49,7 @@ public class IOBooleanSupplierTest {
     }
 
     @Test
-    public void testAsSupplier() {
+    void testAsSupplier() {
         assertThrows(UncheckedIOException.class, () -> TestConstants.THROWING_IO_BOOLEAN_SUPPLIER.asBooleanSupplier().getAsBoolean());
         assertEquals(true, getThrowsNone(() -> TestUtils.compareAndSetThrowsIO(atomicBoolean, true)));
         assertEquals(true, atomicBoolean.get());
@@ -57,7 +57,7 @@ public class IOBooleanSupplierTest {
     }
 
     @Test
-    public void testGet() throws IOException {
+    void testGet() throws IOException {
         assertThrows(IOException.class, () -> TestConstants.THROWING_IO_BOOLEAN_SUPPLIER.getAsBoolean());
         assertThrows(IOException.class, () -> {
             throw new IOException();

@@ -62,7 +62,7 @@ public class IOUtilsCopyTest {
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
     @Test
-    public void testCopy_byteArrayOutputStreamToInputStream() throws Exception {
+    void testCopy_byteArrayOutputStreamToInputStream() throws Exception {
         final java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream();
         out.write(inData);
 
@@ -77,13 +77,13 @@ public class IOUtilsCopyTest {
     }
 
     @Test
-    public void testCopy_byteArrayOutputStreamToInputStream_nullOutputStream() {
+    void testCopy_byteArrayOutputStreamToInputStream_nullOutputStream() {
         assertThrows(NullPointerException.class, () -> IOUtils.copy(null));
     }
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
     @Test
-    public void testCopy_inputStreamToOutputStream() throws Exception {
+    void testCopy_inputStreamToOutputStream() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new ThrowOnCloseInputStream(in);
 
@@ -102,7 +102,7 @@ public class IOUtilsCopyTest {
      * Test Copying file > 2GB - see issue# IO-84
      */
     @Test
-    public void testCopy_inputStreamToOutputStream_IO84() throws Exception {
+    void testCopy_inputStreamToOutputStream_IO84() throws Exception {
         final long size = (long) Integer.MAX_VALUE + (long) 1;
         final NullInputStream in = new NullInputStream(size);
         final OutputStream out = NullOutputStream.INSTANCE;
@@ -118,19 +118,19 @@ public class IOUtilsCopyTest {
     }
 
     @Test
-    public void testCopy_inputStreamToOutputStream_nullIn() {
+    void testCopy_inputStreamToOutputStream_nullIn() {
         final OutputStream out = new ByteArrayOutputStream();
         assertThrows(NullPointerException.class, () -> IOUtils.copy((InputStream) null, out));
     }
 
     @Test
-    public void testCopy_inputStreamToOutputStream_nullOut() {
+    void testCopy_inputStreamToOutputStream_nullOut() {
         final InputStream in = new ByteArrayInputStream(inData);
         assertThrows(NullPointerException.class, () -> IOUtils.copy(in, (OutputStream) null));
     }
 
     @Test
-    public void testCopy_inputStreamToOutputStreamWithBufferSize() throws Exception {
+    void testCopy_inputStreamToOutputStreamWithBufferSize() throws Exception {
         testCopy_inputStreamToOutputStreamWithBufferSize(1);
         testCopy_inputStreamToOutputStreamWithBufferSize(2);
         testCopy_inputStreamToOutputStreamWithBufferSize(4);
@@ -166,7 +166,7 @@ public class IOUtilsCopyTest {
 
     @SuppressWarnings({ "resource", "deprecation" }) // 'in' is deliberately not closed
     @Test
-    public void testCopy_inputStreamToWriter() throws Exception {
+    void testCopy_inputStreamToWriter() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new ThrowOnCloseInputStream(in);
 
@@ -185,7 +185,7 @@ public class IOUtilsCopyTest {
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
     @Test
-    public void testCopy_inputStreamToWriter_Encoding() throws Exception {
+    void testCopy_inputStreamToWriter_Encoding() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new ThrowOnCloseInputStream(in);
 
@@ -205,7 +205,7 @@ public class IOUtilsCopyTest {
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
     @Test
-    public void testCopy_inputStreamToWriter_Encoding_nullEncoding() throws Exception {
+    void testCopy_inputStreamToWriter_Encoding_nullEncoding() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new ThrowOnCloseInputStream(in);
 
@@ -223,7 +223,7 @@ public class IOUtilsCopyTest {
     }
 
     @Test
-    public void testCopy_inputStreamToWriter_Encoding_nullIn() {
+    void testCopy_inputStreamToWriter_Encoding_nullIn() {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(out, StandardCharsets.US_ASCII);
@@ -231,14 +231,14 @@ public class IOUtilsCopyTest {
     }
 
     @Test
-    public void testCopy_inputStreamToWriter_Encoding_nullOut() {
+    void testCopy_inputStreamToWriter_Encoding_nullOut() {
         final InputStream in = new ByteArrayInputStream(inData);
         assertThrows(NullPointerException.class, () -> IOUtils.copy(in, null, "UTF8"));
     }
 
     @SuppressWarnings("deprecation") // deliberately testing deprecated method
     @Test
-    public void testCopy_inputStreamToWriter_nullIn() {
+    void testCopy_inputStreamToWriter_nullIn() {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(out, StandardCharsets.US_ASCII);
@@ -247,14 +247,14 @@ public class IOUtilsCopyTest {
 
     @SuppressWarnings("deprecation") // deliberately testing deprecated method
     @Test
-    public void testCopy_inputStreamToWriter_nullOut() {
+    void testCopy_inputStreamToWriter_nullOut() {
         final InputStream in = new ByteArrayInputStream(inData);
         assertThrows(NullPointerException.class, () -> IOUtils.copy(in, (Writer) null)); // deliberately testing deprecated method
     }
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
     @Test
-    public void testCopy_readerToAppendable() throws Exception {
+    void testCopy_readerToAppendable() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new ThrowOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, StandardCharsets.US_ASCII);
@@ -272,7 +272,7 @@ public class IOUtilsCopyTest {
     }
 
     @Test
-    public void testCopy_readerToAppendable_IO84() throws Exception {
+    void testCopy_readerToAppendable_IO84() throws Exception {
         final long size = (long) Integer.MAX_VALUE + (long) 1;
         final Reader reader = new NullReader(size);
         final NullWriter writer = new NullWriter();
@@ -288,7 +288,7 @@ public class IOUtilsCopyTest {
     }
 
     @Test
-    public void testCopy_readerToAppendable_nullIn() {
+    void testCopy_readerToAppendable_nullIn() {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
         final Appendable writer = new OutputStreamWriter(out, StandardCharsets.US_ASCII);
@@ -297,7 +297,7 @@ public class IOUtilsCopyTest {
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
     @Test
-    public void testCopy_readerToAppendable_nullOut() {
+    void testCopy_readerToAppendable_nullOut() {
         InputStream in = new ByteArrayInputStream(inData);
         in = new ThrowOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, StandardCharsets.US_ASCII);
@@ -306,7 +306,7 @@ public class IOUtilsCopyTest {
 
     @SuppressWarnings({ "resource", "deprecation" }) // 'in' is deliberately not closed
     @Test
-    public void testCopy_readerToOutputStream() throws Exception {
+    void testCopy_readerToOutputStream() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new ThrowOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, StandardCharsets.US_ASCII);
@@ -328,7 +328,7 @@ public class IOUtilsCopyTest {
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
     @Test
-    public void testCopy_readerToOutputStream_Encoding() throws Exception {
+    void testCopy_readerToOutputStream_Encoding() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new ThrowOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, StandardCharsets.US_ASCII);
@@ -347,7 +347,7 @@ public class IOUtilsCopyTest {
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
     @Test
-    public void testCopy_readerToOutputStream_Encoding_nullEncoding() throws Exception {
+    void testCopy_readerToOutputStream_Encoding_nullEncoding() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new ThrowOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, StandardCharsets.US_ASCII);
@@ -364,7 +364,7 @@ public class IOUtilsCopyTest {
     }
 
     @Test
-    public void testCopy_readerToOutputStream_Encoding_nullIn() {
+    void testCopy_readerToOutputStream_Encoding_nullIn() {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
         assertThrows(NullPointerException.class, () -> IOUtils.copy(null, out, "UTF16"));
@@ -372,7 +372,7 @@ public class IOUtilsCopyTest {
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
     @Test
-    public void testCopy_readerToOutputStream_Encoding_nullOut() {
+    void testCopy_readerToOutputStream_Encoding_nullOut() {
         InputStream in = new ByteArrayInputStream(inData);
         in = new ThrowOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, StandardCharsets.US_ASCII);
@@ -381,7 +381,7 @@ public class IOUtilsCopyTest {
 
     @SuppressWarnings("deprecation")
     @Test
-    public void testCopy_readerToOutputStream_nullIn() { // deliberately testing deprecated method
+    void testCopy_readerToOutputStream_nullIn() { // deliberately testing deprecated method
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
         assertThrows(NullPointerException.class, () -> IOUtils.copy((Reader) null, out));
@@ -389,7 +389,7 @@ public class IOUtilsCopyTest {
 
     @SuppressWarnings({ "resource", "deprecation" }) // 'in' is deliberately not closed
     @Test
-    public void testCopy_readerToOutputStream_nullOut() {
+    void testCopy_readerToOutputStream_nullOut() {
         InputStream in = new ByteArrayInputStream(inData);
         in = new ThrowOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, StandardCharsets.US_ASCII);
@@ -398,7 +398,7 @@ public class IOUtilsCopyTest {
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
     @Test
-    public void testCopy_readerToWriter() throws Exception {
+    void testCopy_readerToWriter() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new ThrowOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, StandardCharsets.US_ASCII);
@@ -419,7 +419,7 @@ public class IOUtilsCopyTest {
      * Tests Copying file > 2GB  - see issue# IO-84
      */
     @Test
-    public void testCopy_readerToWriter_IO84() throws Exception {
+    void testCopy_readerToWriter_IO84() throws Exception {
         final long size = (long) Integer.MAX_VALUE + (long) 1;
         final Reader reader = new NullReader(size);
         final Writer writer = new NullWriter();
@@ -435,7 +435,7 @@ public class IOUtilsCopyTest {
     }
 
     @Test
-    public void testCopy_readerToWriter_nullIn() {
+    void testCopy_readerToWriter_nullIn() {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(out, StandardCharsets.US_ASCII);
@@ -444,7 +444,7 @@ public class IOUtilsCopyTest {
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
     @Test
-    public void testCopy_readerToWriter_nullOut() {
+    void testCopy_readerToWriter_nullOut() {
         InputStream in = new ByteArrayInputStream(inData);
         in = new ThrowOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, StandardCharsets.US_ASCII);
@@ -452,7 +452,7 @@ public class IOUtilsCopyTest {
     }
 
     @Test
-    public void testCopy_URLToFile() throws Exception {
+    void testCopy_URLToFile() throws Exception {
         final String name = "/org/apache/commons/io/abitmorethan16k.txt";
         final URL in = getClass().getResource(name);
         assertNotNull(in, name);
@@ -464,7 +464,7 @@ public class IOUtilsCopyTest {
     }
 
     @Test
-    public void testCopy_URLToOutputStream() throws Exception {
+    void testCopy_URLToOutputStream() throws Exception {
         final String name = "/org/apache/commons/io/abitmorethan16k.txt";
         final URL in = getClass().getResource(name);
         assertNotNull(in, name);

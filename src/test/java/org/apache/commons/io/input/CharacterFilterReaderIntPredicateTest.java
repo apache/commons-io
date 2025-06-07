@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 public class CharacterFilterReaderIntPredicateTest {
 
     @Test
-    public void testInputSize0FilterAll() throws IOException {
+    void testInputSize0FilterAll() throws IOException {
         final StringReader input = new StringReader(StringUtils.EMPTY);
         try (CharacterFilterReader reader = new CharacterFilterReader(input, ch -> true)) {
             assertEquals(-1, reader.read());
@@ -41,7 +41,7 @@ public class CharacterFilterReaderIntPredicateTest {
     }
 
     @Test
-    public void testInputSize1FilterAll() throws IOException {
+    void testInputSize1FilterAll() throws IOException {
         try (StringReader input = new StringReader("a");
                 CharacterFilterReader reader = new CharacterFilterReader(input, ch -> true)) {
             assertEquals(-1, reader.read());
@@ -49,7 +49,7 @@ public class CharacterFilterReaderIntPredicateTest {
     }
 
     @Test
-    public void testInputSize2FilterAll() throws IOException {
+    void testInputSize2FilterAll() throws IOException {
         final StringReader input = new StringReader("aa");
         try (CharacterFilterReader reader = new CharacterFilterReader(input, ch -> true)) {
             assertEquals(-1, reader.read());
@@ -57,7 +57,7 @@ public class CharacterFilterReaderIntPredicateTest {
     }
 
     @Test
-    public void testInputSize2FilterFirst() throws IOException {
+    void testInputSize2FilterFirst() throws IOException {
         final StringReader input = new StringReader("ab");
         try (CharacterFilterReader reader = new CharacterFilterReader(input, ch -> ch == 'a')) {
             assertEquals('b', reader.read());
@@ -66,7 +66,7 @@ public class CharacterFilterReaderIntPredicateTest {
     }
 
     @Test
-    public void testInputSize2FilterLast() throws IOException {
+    void testInputSize2FilterLast() throws IOException {
         final StringReader input = new StringReader("ab");
         try (CharacterFilterReader reader = new CharacterFilterReader(input, ch -> ch == 'b')) {
             assertEquals('a', reader.read());
@@ -75,7 +75,7 @@ public class CharacterFilterReaderIntPredicateTest {
     }
 
     @Test
-    public void testInputSize5FilterWhitespace() throws IOException {
+    void testInputSize5FilterWhitespace() throws IOException {
         final StringReader input = new StringReader(" a b ");
         try (CharacterFilterReader reader = new CharacterFilterReader(input, Character::isWhitespace)) {
             assertEquals('a', reader.read());
@@ -85,7 +85,7 @@ public class CharacterFilterReaderIntPredicateTest {
     }
 
     @Test
-    public void testReadIntoBuffer() throws IOException {
+    void testReadIntoBuffer() throws IOException {
         final StringReader input = new StringReader("ababcabcd");
         try (CharacterFilterReader reader = new CharacterFilterReader(input, ch -> ch == 'b')) {
             final char[] buff = new char[9];
@@ -96,7 +96,7 @@ public class CharacterFilterReaderIntPredicateTest {
     }
 
     @Test
-    public void testReadIntoBufferFilterWhitespace() throws IOException {
+    void testReadIntoBufferFilterWhitespace() throws IOException {
         final StringReader input = new StringReader(" a b a b c a b c d ");
         try (CharacterFilterReader reader = new CharacterFilterReader(input, Character::isWhitespace)) {
             final char[] buff = new char[19];
@@ -107,7 +107,7 @@ public class CharacterFilterReaderIntPredicateTest {
     }
 
     @Test
-    public void testReadUsingReader() throws IOException {
+    void testReadUsingReader() throws IOException {
         final StringReader input = new StringReader("ababcabcd");
         try (StringBuilderWriter output = new StringBuilderWriter();
                 CharacterFilterReader reader = new CharacterFilterReader(input, ch -> ch == 'b')) {
@@ -117,7 +117,7 @@ public class CharacterFilterReaderIntPredicateTest {
     }
 
     @Test
-    public void testReadUsingReaderFilterWhitespace() throws IOException {
+    void testReadUsingReaderFilterWhitespace() throws IOException {
         final StringReader input = new StringReader(" a b a b c a b c d ");
         try (StringBuilderWriter output = new StringBuilderWriter();
                 CharacterFilterReader reader = new CharacterFilterReader(input, Character::isWhitespace)) {

@@ -75,7 +75,7 @@ public class FileUtilsCopyToFileTest {
      * @see FileUtils#copyToFile(InputStream, File)
      */
     @Test
-    public void testCopyInputStreamToFile() throws IOException {
+    void testCopyInputStreamToFile() throws IOException {
         try (CheckingInputStream inputStream = new CheckingInputStream(testData)) {
             FileUtils.copyInputStreamToFile(inputStream, testFile);
             assertTrue(inputStream.isClosed(), "inputStream should be closed");
@@ -90,7 +90,7 @@ public class FileUtilsCopyToFileTest {
      * @see FileUtils#copyInputStreamToFile(InputStream, File)
      */
     @Test
-    public void testCopyToFile() throws IOException {
+    void testCopyToFile() throws IOException {
         try (CheckingInputStream inputStream = new CheckingInputStream(testData)) {
             FileUtils.copyToFile(inputStream, testFile);
             assertFalse(inputStream.isClosed(), "inputStream should NOT be closed");

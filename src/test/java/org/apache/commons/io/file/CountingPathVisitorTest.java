@@ -40,7 +40,7 @@ public class CountingPathVisitorTest extends TestArguments {
      */
     @ParameterizedTest
     @MethodSource("countingPathVisitors")
-    public void testCountEmptyFolder(final CountingPathVisitor visitor) throws IOException {
+    void testCountEmptyFolder(final CountingPathVisitor visitor) throws IOException {
         checkZeroCounts(visitor);
         try (TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
             assertCounts(1, 0, 0, PathUtils.visitFileTree(visitor, tempDir.get()));
@@ -52,7 +52,7 @@ public class CountingPathVisitorTest extends TestArguments {
      */
     @ParameterizedTest
     @MethodSource("countingPathVisitors")
-    public void testCountFolders1FileSize0(final CountingPathVisitor visitor) throws IOException {
+    void testCountFolders1FileSize0(final CountingPathVisitor visitor) throws IOException {
         checkZeroCounts(visitor);
         assertCounts(1, 1, 0, PathUtils.visitFileTree(visitor,
                 "src/test/resources/org/apache/commons/io/dirs-1-file-size-0"));
@@ -63,7 +63,7 @@ public class CountingPathVisitorTest extends TestArguments {
      */
     @ParameterizedTest
     @MethodSource("countingPathVisitors")
-    public void testCountFolders1FileSize1(final CountingPathVisitor visitor) throws IOException {
+    void testCountFolders1FileSize1(final CountingPathVisitor visitor) throws IOException {
         checkZeroCounts(visitor);
         assertCounts(1, 1, 1, PathUtils.visitFileTree(visitor,
                 "src/test/resources/org/apache/commons/io/dirs-1-file-size-1"));
@@ -74,7 +74,7 @@ public class CountingPathVisitorTest extends TestArguments {
      */
     @ParameterizedTest
     @MethodSource("countingPathVisitors")
-    public void testCountFolders2FileSize2(final CountingPathVisitor visitor) throws IOException {
+    void testCountFolders2FileSize2(final CountingPathVisitor visitor) throws IOException {
         checkZeroCounts(visitor);
         assertCounts(3, 2, 2, PathUtils.visitFileTree(visitor,
                 "src/test/resources/org/apache/commons/io/dirs-2-file-size-2"));

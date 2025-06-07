@@ -135,12 +135,12 @@ public class IOUtilsMultithreadedSkipTest {
     }
 
     @Test
-    public void testSkipFullyOnInflaterInputStream_New_bytes() throws Exception {
+    void testSkipFullyOnInflaterInputStream_New_bytes() throws Exception {
         testSkipFullyOnInflaterInputStream(() -> new byte[4096]);
     }
 
     @Test
-    public void testSkipFullyOnInflaterInputStream_ThreadLocal() throws Exception {
+    void testSkipFullyOnInflaterInputStream_ThreadLocal() throws Exception {
         testSkipFullyOnInflaterInputStream(threadLocal::get);
     }
 

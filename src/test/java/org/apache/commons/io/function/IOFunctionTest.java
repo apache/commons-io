@@ -43,7 +43,7 @@ public class IOFunctionTest {
     }
 
     @Test
-    public void testAndThenConsumer() throws IOException {
+    void testAndThenConsumer() throws IOException {
         final Holder<Integer> holder = new Holder<>();
         final IOFunction<InputStream, Integer> readByte = InputStream::read;
         final Consumer<Integer> sinkInteger = i -> {
@@ -59,7 +59,7 @@ public class IOFunctionTest {
     }
 
     @Test
-    public void testAndThenFunction() throws IOException {
+    void testAndThenFunction() throws IOException {
         final IOFunction<InputStream, Integer> readByte = InputStream::read;
         final Function<Integer, Integer> squareInteger = i -> i * i;
         final IOFunction<InputStream, Integer> productFunction = readByte.andThen(squareInteger);
@@ -70,7 +70,7 @@ public class IOFunctionTest {
     }
 
     @Test
-    public void testAndThenIOConsumer() throws IOException {
+    void testAndThenIOConsumer() throws IOException {
         final Holder<Integer> holder = new Holder<>();
         final IOFunction<InputStream, Integer> readByte = InputStream::read;
         final IOConsumer<Integer> sinkInteger = i -> {
@@ -86,7 +86,7 @@ public class IOFunctionTest {
     }
 
     @Test
-    public void testAndThenIOFunction() throws IOException {
+    void testAndThenIOFunction() throws IOException {
         final IOFunction<InputStream, Integer> readByte = InputStream::read;
         final IOFunction<Integer, Integer> squareInteger = i -> i * i;
         final IOFunction<InputStream, Integer> productFunction = readByte.andThen(squareInteger);
@@ -97,7 +97,7 @@ public class IOFunctionTest {
     }
 
     @Test
-    public void testApply() throws IOException {
+    void testApply() throws IOException {
         final IOFunction<InputStream, Integer> readByte = InputStream::read;
         final InputStream is = new ByteArrayInputStream(new byte[] {(byte) 0xa, (byte) 0xb, (byte) 0xc});
         assertEquals(0xa, readByte.apply(is));
@@ -107,7 +107,7 @@ public class IOFunctionTest {
     }
 
     @Test
-    public void testApplyThrowsException() {
+    void testApplyThrowsException() {
         final IOFunction<InputStream, Integer> throwException = function -> {
             throw new IOException("Boom!");
         };
@@ -115,13 +115,13 @@ public class IOFunctionTest {
     }
 
     @Test
-    public void testAsFunction() {
+    void testAsFunction() {
         assertThrows(UncheckedIOException.class, () -> Optional.of("a").map(TestConstants.THROWING_IO_FUNCTION.asFunction()).get());
         assertEquals("a", Optional.of("a").map(IOFunction.identity().asFunction()).get());
     }
 
     @Test
-    public void testComposeFunction() throws IOException {
+    void testComposeFunction() throws IOException {
         final Function<InputStream, Integer> alwaysSeven = is -> 7;
         final IOFunction<Integer, Integer> squareInteger = i -> i * i;
         final IOFunction<InputStream, Integer> productFunction = squareInteger.compose(alwaysSeven);
@@ -132,7 +132,7 @@ public class IOFunctionTest {
     }
 
     @Test
-    public void testComposeIOFunction() throws IOException {
+    void testComposeIOFunction() throws IOException {
         final IOFunction<InputStream, Integer> readByte = InputStream::read;
         final IOFunction<Integer, Integer> squareInteger = i -> i * i;
         final IOFunction<InputStream, Integer> productFunction = squareInteger.compose(readByte);
@@ -143,7 +143,7 @@ public class IOFunctionTest {
     }
 
     @Test
-    public void testComposeIOSupplier() throws IOException {
+    void testComposeIOSupplier() throws IOException {
         final InputStream is = new ByteArrayInputStream(new byte[] {2, 3});
 
         final IOSupplier<Integer> readByte = is::read;
@@ -155,7 +155,7 @@ public class IOFunctionTest {
     }
 
     @Test
-    public void testComposeSupplier() throws IOException {
+    void testComposeSupplier() throws IOException {
         final Supplier<Integer> alwaysNine = () -> 9;
         final IOFunction<Integer, Integer> squareInteger = i -> i * i;
         final IOSupplier<Integer> productFunction = squareInteger.compose(alwaysNine);
@@ -165,7 +165,7 @@ public class IOFunctionTest {
     }
 
     @Test
-    public void testIdentity() throws IOException {
+    void testIdentity() throws IOException {
         assertEquals(IOFunction.identity(), IOFunction.identity());
         final IOFunction<byte[], byte[]> identityFunction = IOFunction.identity();
         final byte[] buf = {(byte) 0xa, (byte) 0xb, (byte) 0xc};

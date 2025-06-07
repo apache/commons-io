@@ -39,7 +39,7 @@ public class ByteOrderMarkTest {
 
     /** Tests that {@link ByteOrderMark#getCharsetName()} can be loaded as a {@link java.nio.charset.Charset} as advertised. */
     @Test
-    public void testConstantCharsetNames() {
+    void testConstantCharsetNames() {
         assertNotNull(Charset.forName(ByteOrderMark.UTF_8.getCharsetName()));
         assertNotNull(Charset.forName(ByteOrderMark.UTF_16BE.getCharsetName()));
         assertNotNull(Charset.forName(ByteOrderMark.UTF_16LE.getCharsetName()));
@@ -49,7 +49,7 @@ public class ByteOrderMarkTest {
 
     /** Tests Exceptions */
     @Test
-    public void testConstructorExceptions() {
+    void testConstructorExceptions() {
         assertThrows(NullPointerException.class, () -> new ByteOrderMark(null, 1, 2, 3));
         assertThrows(IllegalArgumentException.class, () -> new ByteOrderMark("", 1, 2, 3));
         assertThrows(NullPointerException.class, () -> new ByteOrderMark("a", (int[]) null));
@@ -59,7 +59,7 @@ public class ByteOrderMarkTest {
     /** Tests {@link ByteOrderMark#equals(Object)} */
     @SuppressWarnings("EqualsWithItself")
     @Test
-    public void testEquals() {
+    void testEquals() {
         assertEquals(ByteOrderMark.UTF_16BE, ByteOrderMark.UTF_16BE);
         assertEquals(ByteOrderMark.UTF_16LE, ByteOrderMark.UTF_16LE);
         assertEquals(ByteOrderMark.UTF_32BE, ByteOrderMark.UTF_32BE);
@@ -84,7 +84,7 @@ public class ByteOrderMarkTest {
 
     /** Tests {@link ByteOrderMark#getBytes()} */
     @Test
-    public void testGetBytes() {
+    void testGetBytes() {
         assertArrayEquals(TEST_BOM_1.getBytes(), new byte[] { (byte) 1 }, "test1 bytes");
         TEST_BOM_1.getBytes()[0] = 2;
         assertArrayEquals(TEST_BOM_1.getBytes(), new byte[] { (byte) 1 }, "test1 bytes");
@@ -94,7 +94,7 @@ public class ByteOrderMarkTest {
 
     /** Tests {@link ByteOrderMark#getCharsetName()} */
     @Test
-    public void testGetCharsetName() {
+    void testGetCharsetName() {
         assertEquals("test1", TEST_BOM_1.getCharsetName(), "test1 name");
         assertEquals("test2", TEST_BOM_2.getCharsetName(), "test2 name");
         assertEquals("test3", TEST_BOM_3.getCharsetName(), "test3 name");
@@ -102,7 +102,7 @@ public class ByteOrderMarkTest {
 
     /** Tests {@link ByteOrderMark#get(int)} */
     @Test
-    public void testGetInt() {
+    void testGetInt() {
         assertEquals(1, TEST_BOM_1.get(0), "test1 get(0)");
         assertEquals(1, TEST_BOM_2.get(0), "test2 get(0)");
         assertEquals(2, TEST_BOM_2.get(1), "test2 get(1)");
@@ -113,7 +113,7 @@ public class ByteOrderMarkTest {
 
     /** Tests {@link ByteOrderMark#hashCode()} */
     @Test
-    public void testHashCode() {
+    void testHashCode() {
         final int bomClassHash = ByteOrderMark.class.hashCode();
         assertEquals(bomClassHash + 1, TEST_BOM_1.hashCode(), "hash test1 ");
         assertEquals(bomClassHash + 3, TEST_BOM_2.hashCode(), "hash test2 ");
@@ -122,14 +122,14 @@ public class ByteOrderMarkTest {
 
     /** Tests {@link ByteOrderMark#length()} */
     @Test
-    public void testLength() {
+    void testLength() {
         assertEquals(1, TEST_BOM_1.length(), "test1 length");
         assertEquals(2, TEST_BOM_2.length(), "test2 length");
         assertEquals(3, TEST_BOM_3.length(), "test3 length");
     }
 
     @Test
-    public void testMatches() {
+    void testMatches() {
         assertTrue(ByteOrderMark.UTF_16BE.matches(ByteOrderMark.UTF_16BE.getRawBytes()));
         assertTrue(ByteOrderMark.UTF_16LE.matches(ByteOrderMark.UTF_16LE.getRawBytes()));
         assertTrue(ByteOrderMark.UTF_32BE.matches(ByteOrderMark.UTF_32BE.getRawBytes()));
@@ -148,7 +148,7 @@ public class ByteOrderMarkTest {
 
     /** Tests {@link ByteOrderMark#toString()} */
     @Test
-    public void testToString() {
+    void testToString() {
         assertEquals("ByteOrderMark[test1: 0x1]", TEST_BOM_1.toString(), "test1 ");
         assertEquals("ByteOrderMark[test2: 0x1,0x2]", TEST_BOM_2.toString(), "test2 ");
         assertEquals("ByteOrderMark[test3: 0x1,0x2,0x3]", TEST_BOM_3.toString(), "test3 ");

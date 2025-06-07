@@ -76,7 +76,7 @@ public class FileUtilsDeleteDirectoryLinuxTest extends AbstractFileUtilsDeleteDi
     }
 
     @Test
-    public void testThrowsOnCannotDeleteFile() throws Exception {
+    void testThrowsOnCannotDeleteFile() throws Exception {
         final File nested = new File(top, "nested");
         assertTrue(nested.mkdirs());
 
@@ -98,7 +98,7 @@ public class FileUtilsDeleteDirectoryLinuxTest extends AbstractFileUtilsDeleteDi
     }
 
     @Test
-    public void testThrowsOnNullList() throws Exception {
+    void testThrowsOnNullList() throws Exception {
         final File nested = new File(top, "nested");
         assertTrue(nested.mkdirs());
 

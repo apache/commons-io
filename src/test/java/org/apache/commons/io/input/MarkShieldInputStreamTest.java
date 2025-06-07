@@ -55,7 +55,7 @@ public class MarkShieldInputStreamTest {
     @SuppressWarnings("resource")
     @ParameterizedTest
     @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
-    public void testAvailableAfterClose(final int len) throws Exception {
+    void testAvailableAfterClose(final int len) throws Exception {
         final InputStream shadow;
         try (MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(len, false, false));
                 MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
@@ -67,7 +67,7 @@ public class MarkShieldInputStreamTest {
 
     @ParameterizedTest
     @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
-    public void testAvailableAfterOpen(final int len) throws Exception {
+    void testAvailableAfterOpen(final int len) throws Exception {
         try (MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(len, false, false));
                 MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
             assertEquals(len, in.available());
@@ -76,12 +76,12 @@ public class MarkShieldInputStreamTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testCloseHandleIOException() throws IOException {
+    void testCloseHandleIOException() throws IOException {
         ProxyInputStreamTest.testCloseHandleIOException(new MarkShieldInputStream(new BrokenInputStream((Throwable) new IOException())));
     }
 
     @Test
-    public void testMarkIsNoOpWhenUnderlyingDoesNotSupport() throws IOException {
+    void testMarkIsNoOpWhenUnderlyingDoesNotSupport() throws IOException {
         try (MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(64, false, false));
                 MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
             msis.mark(1024);
@@ -91,7 +91,7 @@ public class MarkShieldInputStreamTest {
     }
 
     @Test
-    public void testMarkIsNoOpWhenUnderlyingSupports() throws IOException {
+    void testMarkIsNoOpWhenUnderlyingSupports() throws IOException {
         try (MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(64, true, false));
                 MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
             msis.mark(1024);
@@ -101,7 +101,7 @@ public class MarkShieldInputStreamTest {
     }
 
     @Test
-    public void testMarkSupportedIsFalseWhenUnderlyingFalse() throws IOException {
+    void testMarkSupportedIsFalseWhenUnderlyingFalse() throws IOException {
         // test wrapping an underlying stream which does NOT support marking
         try (InputStream is = new NullInputStream(64, false, false)) {
             assertFalse(is.markSupported());
@@ -112,7 +112,7 @@ public class MarkShieldInputStreamTest {
     }
 
     @Test
-    public void testMarkSupportedIsFalseWhenUnderlyingTrue() throws IOException {
+    void testMarkSupportedIsFalseWhenUnderlyingTrue() throws IOException {
         // test wrapping an underlying stream which supports marking
         try (InputStream is = new NullInputStream(64, true, false)) {
             assertTrue(is.markSupported());
@@ -124,7 +124,7 @@ public class MarkShieldInputStreamTest {
 
     @ParameterizedTest
     @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
-    public void testReadAfterClose(final int len) throws Exception {
+    void testReadAfterClose(final int len) throws Exception {
         try (MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(len, false, false));
                 MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
             assertEquals(len, in.available());
@@ -135,7 +135,7 @@ public class MarkShieldInputStreamTest {
 
     @ParameterizedTest
     @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
-    public void testReadByteArrayAfterClose(final int len) throws Exception {
+    void testReadByteArrayAfterClose(final int len) throws Exception {
         try (MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(len, false, false));
                 MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
             assertEquals(len, in.available());
@@ -147,7 +147,7 @@ public class MarkShieldInputStreamTest {
 
     @ParameterizedTest
     @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
-    public void testReadByteArrayIntIntAfterClose(final int len) throws Exception {
+    void testReadByteArrayIntIntAfterClose(final int len) throws Exception {
         try (MarkTestableInputStream in = new MarkTestableInputStream(new NullInputStream(len, false, false));
                 MarkShieldInputStream msis = new MarkShieldInputStream(in)) {
             assertEquals(len, in.available());
@@ -159,7 +159,7 @@ public class MarkShieldInputStreamTest {
     }
 
     @Test
-    public void testResetThrowsExceptionWhenUnderlyingDoesNotSupport() throws IOException {
+    void testResetThrowsExceptionWhenUnderlyingDoesNotSupport() throws IOException {
         // test wrapping an underlying stream which does NOT support marking
         try (MarkShieldInputStream msis = new MarkShieldInputStream(new NullInputStream(64, false, false))) {
             assertThrows(UnsupportedOperationException.class, msis::reset);
@@ -167,7 +167,7 @@ public class MarkShieldInputStreamTest {
     }
 
     @Test
-    public void testResetThrowsExceptionWhenUnderlyingSupports() throws IOException {
+    void testResetThrowsExceptionWhenUnderlyingSupports() throws IOException {
         // test wrapping an underlying stream which supports marking
         try (MarkShieldInputStream msis = new MarkShieldInputStream(new NullInputStream(64, true, false))) {
             assertThrows(UnsupportedOperationException.class, msis::reset);

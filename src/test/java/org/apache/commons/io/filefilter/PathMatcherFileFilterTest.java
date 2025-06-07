@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 public class PathMatcherFileFilterTest extends AbstractFilterTest {
 
     @Test
-    public void testGlob() throws IOException {
+    void testGlob() throws IOException {
         @SuppressWarnings("resource")
         final IOFileFilter filter = new PathMatcherFileFilter(FileSystems.getDefault().getPathMatcher("glob:*.txt"));
         final File file1 = new File("log.txt");

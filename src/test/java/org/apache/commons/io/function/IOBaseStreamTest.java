@@ -128,7 +128,7 @@ public class IOBaseStreamTest {
 
     @Test
     @AfterEach
-    public void testClose() {
+    void testClose() {
         baseStream.close();
         ioBaseStream.close();
         ioBaseStreamPath.close();
@@ -138,7 +138,7 @@ public class IOBaseStreamTest {
 
     @SuppressWarnings("resource") // @AfterEach
     @Test
-    public void testIsParallel() {
+    void testIsParallel() {
         assertFalse(baseStream.isParallel());
         assertFalse(ioBaseStream.isParallel());
         assertFalse(ioBaseStream.asBaseStream().isParallel());
@@ -148,7 +148,7 @@ public class IOBaseStreamTest {
 
     @SuppressWarnings("resource") // @AfterEach
     @Test
-    public void testIteratorPathIO() throws IOException {
+    void testIteratorPathIO() throws IOException {
         final AtomicReference<Path> ref = new AtomicReference<>();
         ioBaseStream.iterator().forEachRemaining(e -> ref.set(e.toRealPath()));
         assertEquals(TestConstants.ABS_PATH_B.toRealPath(), ref.get());
@@ -159,7 +159,7 @@ public class IOBaseStreamTest {
 
     @SuppressWarnings("resource") // @AfterEach
     @Test
-    public void testIteratorSimple() throws IOException {
+    void testIteratorSimple() throws IOException {
         final AtomicInteger ref = new AtomicInteger();
         baseStream.iterator().forEachRemaining(e -> ref.incrementAndGet());
         assertEquals(2, ref.get());
@@ -171,7 +171,7 @@ public class IOBaseStreamTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testOnClose() {
+    void testOnClose() {
         // Stream
         testOnClose(baseStream);
         testOnClose(ioBaseStream.asBaseStream());
@@ -202,7 +202,7 @@ public class IOBaseStreamTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testParallel() throws IOException {
+    void testParallel() throws IOException {
         final AtomicInteger ref = new AtomicInteger();
         baseStream.parallel().iterator().forEachRemaining(e -> ref.incrementAndGet());
         assertEquals(2, ref.get());
@@ -216,7 +216,7 @@ public class IOBaseStreamTest {
 
     @SuppressWarnings("resource") // @AfterEach
     @Test
-    public void testParallelParallel() {
+    void testParallelParallel() {
         try (IOBaseStream<?, ?, ?> stream = createIOBaseStream()) {
             testParallelParallel(stream);
         }
@@ -255,7 +255,7 @@ public class IOBaseStreamTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testSequential() throws IOException {
+    void testSequential() throws IOException {
         final AtomicInteger ref = new AtomicInteger();
         baseStream.sequential().iterator().forEachRemaining(e -> ref.incrementAndGet());
         assertEquals(2, ref.get());
@@ -267,7 +267,7 @@ public class IOBaseStreamTest {
 
     @SuppressWarnings("resource") // @AfterEach
     @Test
-    public void testSequentialSequential() {
+    void testSequentialSequential() {
         try (IOBaseStream<?, ?, ?> stream = createIOBaseStream()) {
             testSequentialSequential(stream);
         }
@@ -303,7 +303,7 @@ public class IOBaseStreamTest {
 
     @SuppressWarnings("resource") // @AfterEach
     @Test
-    public void testSpliterator() {
+    void testSpliterator() {
         final AtomicInteger ref = new AtomicInteger();
         baseStream.spliterator().forEachRemaining(e -> ref.incrementAndGet());
         assertEquals(2, ref.get());
@@ -315,7 +315,7 @@ public class IOBaseStreamTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testUnordered() throws IOException {
+    void testUnordered() throws IOException {
         final AtomicInteger ref = new AtomicInteger();
         baseStream.unordered().iterator().forEachRemaining(e -> ref.incrementAndGet());
         assertEquals(2, ref.get());
@@ -327,7 +327,7 @@ public class IOBaseStreamTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testUnwrap() {
+    void testUnwrap() {
         final AtomicInteger ref = new AtomicInteger();
         baseStream.iterator().forEachRemaining(e -> ref.incrementAndGet());
         assertEquals(2, ref.get());
@@ -338,7 +338,7 @@ public class IOBaseStreamTest {
     }
 
     @Test
-    public void testWrap() {
+    void testWrap() {
         final Stream<Path> stream = createStreamOfPaths();
         @SuppressWarnings("resource")
         final IOStream<Path> wrap = ioBaseStreamAdapter.wrap(stream);

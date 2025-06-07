@@ -41,7 +41,7 @@ public class BrokenReaderTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testClose(final Class<Exception> clazz) throws Exception {
+    void testClose(final Class<Exception> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenReader brokenReader = createBrokenReader(exception);
@@ -49,13 +49,13 @@ public class BrokenReaderTest {
     }
 
     @Test
-    public void testInstance() {
+    void testInstance() {
         assertNotNull(BrokenReader.INSTANCE);
     }
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testMark(final Class<Throwable> clazz) throws Exception {
+    void testMark(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenReader brokenReader = createBrokenReader(exception);
@@ -64,7 +64,7 @@ public class BrokenReaderTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testRead(final Class<Throwable> clazz) throws Exception {
+    void testRead(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenReader brokenReader = createBrokenReader(exception);
@@ -73,7 +73,7 @@ public class BrokenReaderTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testReadCharArray(final Class<Throwable> clazz) throws Exception {
+    void testReadCharArray(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenReader brokenReader = createBrokenReader(exception);
@@ -82,7 +82,7 @@ public class BrokenReaderTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testReadCharArrayIndexed(final Class<Throwable> clazz) throws Exception {
+    void testReadCharArrayIndexed(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenReader brokenReader = createBrokenReader(exception);
@@ -91,7 +91,7 @@ public class BrokenReaderTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testReady(final Class<Throwable> clazz) throws Exception {
+    void testReady(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenReader brokenReader = createBrokenReader(exception);
@@ -100,7 +100,7 @@ public class BrokenReaderTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testReset(final Class<Throwable> clazz) throws Exception {
+    void testReset(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenReader brokenReader = createBrokenReader(exception);
@@ -109,7 +109,7 @@ public class BrokenReaderTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testSkip(final Class<Throwable> clazz) throws Exception {
+    void testSkip(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenReader brokenReader = createBrokenReader(exception);
@@ -117,7 +117,7 @@ public class BrokenReaderTest {
     }
 
     @Test
-    public void testTryWithResources() {
+    void testTryWithResources() {
         final IOException thrown = assertThrows(IOException.class, () -> {
             try (Reader newReader = new BrokenReader()) {
                 newReader.read();

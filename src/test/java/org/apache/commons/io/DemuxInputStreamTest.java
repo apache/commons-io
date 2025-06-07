@@ -153,7 +153,7 @@ public class DemuxInputStreamTest {
     }
 
     @Test
-    public void testInputStream() throws Exception {
+    void testInputStream() throws Exception {
         try (DemuxInputStream input = new DemuxInputStream()) {
             startReader(T1, DATA1, input);
             startReader(T2, DATA2, input);
@@ -171,7 +171,7 @@ public class DemuxInputStreamTest {
     }
 
     @Test
-    public void testOutputStream() throws Exception {
+    void testOutputStream() throws Exception {
         try (DemuxOutputStream output = new DemuxOutputStream()) {
             startWriter(T1, DATA1, output);
             startWriter(T2, DATA2, output);
@@ -189,7 +189,7 @@ public class DemuxInputStreamTest {
     }
 
     @Test
-    public void testReadEOF() throws Exception {
+    void testReadEOF() throws Exception {
         try (DemuxInputStream input = new DemuxInputStream()) {
             assertEquals(IOUtils.EOF, input.read());
         }

@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 public class IOIndexedExceptionTest {
 
     @Test
-    public void testEdge() {
+    void testEdge() {
         final IOIndexedException exception = new IOIndexedException(-1, null);
         assertEquals(-1, exception.getIndex());
         assertNull(exception.getCause());
@@ -39,7 +39,7 @@ public class IOIndexedExceptionTest {
     }
 
     @Test
-    public void testPlain() {
+    void testPlain() {
         final EOFException e = new EOFException("end");
         final IOIndexedException exception = new IOIndexedException(0, e);
         assertEquals(0, exception.getIndex());

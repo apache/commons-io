@@ -45,7 +45,7 @@ public class NameFileFilterTest {
      * System.out calls are commented out here but not in the Javadoc.
      */
     @Test
-    public void testJavadocExampleUsingIo() {
+    void testJavadocExampleUsingIo() {
         final File dir = FileUtils.current();
         final String[] files = dir.list(new NameFileFilter("NOTICE.txt"));
         // End of Javadoc example
@@ -58,7 +58,7 @@ public class NameFileFilterTest {
      * System.out calls are commented out here but not in the Javadoc.
      */
     @Test
-    public void testJavadocExampleUsingNio() throws IOException {
+    void testJavadocExampleUsingNio() throws IOException {
         final Path dir = Paths.get("");
         // We are interested in files older than one day
         final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new NameFileFilter("NOTICE.txt"),
@@ -98,7 +98,7 @@ public class NameFileFilterTest {
     }
 
     @Test
-    public void testNoCounting() throws IOException {
+    void testNoCounting() throws IOException {
         final Path dir = Paths.get("");
         final AccumulatorPathVisitor visitor = new AccumulatorPathVisitor(Counters.noopPathCounters(),
             new NameFileFilter("NOTICE.txt"), TrueFileFilter.INSTANCE);

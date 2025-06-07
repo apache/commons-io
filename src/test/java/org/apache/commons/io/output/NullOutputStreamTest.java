@@ -37,14 +37,14 @@ public class NullOutputStreamTest {
     }
 
     @Test
-    public void testNewInstance() throws IOException {
+    void testNewInstance() throws IOException {
         try (NullOutputStream nos = NullOutputStream.INSTANCE) {
             process(nos);
         }
     }
 
     @Test
-    public void testSingleton() throws IOException {
+    void testSingleton() throws IOException {
         try (NullOutputStream nos = NullOutputStream.INSTANCE) {
             process(nos);
         }

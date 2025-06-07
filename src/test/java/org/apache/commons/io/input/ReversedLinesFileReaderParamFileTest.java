@@ -98,7 +98,7 @@ public class ReversedLinesFileReaderParamFileTest {
 
     @ParameterizedTest(name = "{0}, encoding={1}, blockSize={2}, useNonDefaultFileSystem={3}, isResource={4}")
     @MethodSource
-    public void testDataIntegrityWithBufferedReader(final String fileName, final String charsetName, final Integer blockSize,
+    void testDataIntegrityWithBufferedReader(final String fileName, final String charsetName, final Integer blockSize,
             final boolean useNonDefaultFileSystem, final boolean isResource) throws IOException, URISyntaxException {
 
         Path filePath = isResource ? TestResources.getPath(fileName) : Paths.get(fileName);

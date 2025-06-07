@@ -45,7 +45,7 @@ public class CloseShieldWriterTest {
     }
 
     @Test
-    public void testClose() throws IOException {
+    void testClose() throws IOException {
         shielded.close();
         verify(original, never()).close();
         assertThrows(IOException.class, () -> shielded.write('x'), "write(c)");

@@ -53,7 +53,7 @@ public class IOSupplierTest {
     }
 
     @Test
-    public void testAsSupplier() {
+    void testAsSupplier() {
         assertThrows(UncheckedIOException.class, () -> TestConstants.THROWING_IO_SUPPLIER.asSupplier().get());
         final String s1 = "string1";
         final String s2 = "string2";
@@ -65,7 +65,7 @@ public class IOSupplierTest {
     }
 
     @Test
-    public void testGet() throws IOException {
+    void testGet() throws IOException {
         assertThrows(IOException.class, () -> TestConstants.THROWING_IO_SUPPLIER.get());
         assertThrows(IOException.class, () -> {
             throw new IOException();
@@ -75,7 +75,7 @@ public class IOSupplierTest {
     }
 
     @Test
-    public void testGetUnchecked() {
+    void testGetUnchecked() {
         assertThrows(UncheckedIOException.class, () -> TestConstants.THROWING_IO_SUPPLIER.asSupplier().get());
         final String s1 = "string1";
         final String s2 = "string2";

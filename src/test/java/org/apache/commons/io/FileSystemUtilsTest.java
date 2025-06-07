@@ -35,17 +35,17 @@ public class FileSystemUtilsTest {
 
     @ParameterizedTest
     @MethodSource("getIllegalFileNameChars")
-    public void testGetFreeSpace_IllegalFileName(final char illegalFileNameChar) throws Exception {
+    void testGetFreeSpace_IllegalFileName(final char illegalFileNameChar) throws Exception {
         assertThrows(IllegalArgumentException.class, () -> FileSystemUtils.freeSpace("\\ \"" + illegalFileNameChar));
     }
 
     @Test
-    public void testGetFreeSpace_IllegalFileNames() throws Exception {
+    void testGetFreeSpace_IllegalFileNames() throws Exception {
         assertThrows(IllegalArgumentException.class, () -> FileSystemUtils.freeSpace("\\ \""));
     }
 
     @Test
-    public void testGetFreeSpace_String() throws Exception {
+    void testGetFreeSpace_String() throws Exception {
         assertThrows(NullPointerException.class, () -> FileSystemUtils.freeSpace(null));
         assertThrows(IllegalArgumentException.class, () -> FileSystemUtils.freeSpace("this directory does not exist, at all."));
         // "" means current dir.
@@ -56,17 +56,17 @@ public class FileSystemUtilsTest {
     }
 
     @Test
-    public void testGetFreeSpaceKb() throws Exception {
+    void testGetFreeSpaceKb() throws Exception {
         assertTrue(FileSystemUtils.freeSpaceKb() > 0);
     }
 
     @Test
-    public void testGetFreeSpaceKb_long() throws Exception {
+    void testGetFreeSpaceKb_long() throws Exception {
         assertTrue(FileSystemUtils.freeSpaceKb(0) > 0);
     }
 
     @Test
-    public void testGetFreeSpaceKb_String() throws Exception {
+    void testGetFreeSpaceKb_String() throws Exception {
         assertThrows(NullPointerException.class, () -> FileSystemUtils.freeSpaceKb(null));
         assertThrows(IllegalArgumentException.class, () -> FileSystemUtils.freeSpaceKb("this directory does not exist, at all."));
         // "" means current dir.
@@ -77,7 +77,7 @@ public class FileSystemUtilsTest {
     }
 
     @Test
-    public void testGetFreeSpaceKb_String_long() throws Exception {
+    void testGetFreeSpaceKb_String_long() throws Exception {
         assertThrows(NullPointerException.class, () -> FileSystemUtils.freeSpaceKb(null, 0));
         assertThrows(IllegalArgumentException.class, () -> FileSystemUtils.freeSpaceKb("this directory does not exist, at all.", 0));
         // "" means current dir.

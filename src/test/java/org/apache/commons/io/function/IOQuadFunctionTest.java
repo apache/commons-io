@@ -36,7 +36,7 @@ public class IOQuadFunctionTest {
      * @throws IOException thrown on test failure
      */
     @Test
-    public void testAccept() throws IOException {
+    void testAccept() throws IOException {
         final AtomicReference<Byte> ref1 = new AtomicReference<>();
         final AtomicReference<Short> ref2 = new AtomicReference<>();
         final AtomicReference<String> ref3 = new AtomicReference<>();
@@ -61,7 +61,7 @@ public class IOQuadFunctionTest {
      * @throws IOException thrown on test failure
      */
     @Test
-    public void testAndThenIOFunction() throws IOException {
+    void testAndThenIOFunction() throws IOException {
         final AtomicReference<Byte> ref1 = new AtomicReference<>();
         final AtomicReference<Short> ref2 = new AtomicReference<>();
         final AtomicReference<String> ref3 = new AtomicReference<>();

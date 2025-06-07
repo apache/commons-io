@@ -51,17 +51,17 @@ public class IOIteratorTest {
     }
 
     @Test
-    public void testAdaptIterable() throws IOException {
+    void testAdaptIterable() throws IOException {
         assertEquals(TestConstants.ABS_PATH_A, IOIterator.adapt(newPathList()).next());
     }
 
     @Test
-    public void testAdaptIterator() throws IOException {
+    void testAdaptIterator() throws IOException {
         assertEquals(TestConstants.ABS_PATH_A, iterator.next());
     }
 
     @Test
-    public void testAsIterator() {
+    void testAsIterator() {
         final Iterator<Path> asIterator = iterator.asIterator();
         assertTrue(asIterator.hasNext());
         assertEquals(TestConstants.ABS_PATH_A, asIterator.next());
@@ -69,7 +69,7 @@ public class IOIteratorTest {
     }
 
     @Test
-    public void testForEachRemaining() throws IOException {
+    void testForEachRemaining() throws IOException {
         final List<Path> list = new ArrayList<>();
         iterator.forEachRemaining(p -> list.add(p.toRealPath()));
         assertFalse(iterator.hasNext());
@@ -77,19 +77,19 @@ public class IOIteratorTest {
     }
 
     @Test
-    public void testHasNext() throws IOException {
+    void testHasNext() throws IOException {
         assertTrue(iterator.hasNext());
         iterator.forEachRemaining(Path::toRealPath);
         assertFalse(iterator.hasNext());
     }
 
     @Test
-    public void testNext() throws IOException {
+    void testNext() throws IOException {
         assertEquals(TestConstants.ABS_PATH_A, iterator.next());
     }
 
     @Test
-    public void testRemove() throws IOException {
+    void testRemove() throws IOException {
         final Class<? extends Exception> exClass = SystemUtils.isJavaVersionAtMost(JavaVersion.JAVA_1_8) ? IllegalStateException.class
             : UnsupportedOperationException.class;
         assertThrows(exClass, iterator::remove);

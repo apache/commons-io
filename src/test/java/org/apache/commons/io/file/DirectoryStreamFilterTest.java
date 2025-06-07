@@ -37,7 +37,7 @@ public class DirectoryStreamFilterTest {
     private static final String PATH_FIXTURE = "NOTICE.txt";
 
     @Test
-    public void testFilterByName() throws Exception {
+    void testFilterByName() throws Exception {
         final PathFilter pathFilter = new NameFileFilter(PATH_FIXTURE);
         final DirectoryStreamFilter streamFilter = new DirectoryStreamFilter(pathFilter);
         assertEquals(pathFilter, streamFilter.getPathFilter());
@@ -50,7 +50,7 @@ public class DirectoryStreamFilterTest {
     }
 
     @Test
-    public void testFilterByNameNot() throws Exception {
+    void testFilterByNameNot() throws Exception {
         final PathFilter pathFilter = new NameFileFilter(PATH_FIXTURE).negate();
         final DirectoryStreamFilter streamFilter = new DirectoryStreamFilter(pathFilter);
         assertEquals(pathFilter, streamFilter.getPathFilter());

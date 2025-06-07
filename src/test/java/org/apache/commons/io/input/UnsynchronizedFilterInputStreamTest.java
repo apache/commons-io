@@ -79,7 +79,7 @@ public class UnsynchronizedFilterInputStreamTest {
      * @throws IOException Thrown on test failure.
      */
     @Test
-    public void test_available() throws IOException {
+    void test_available() throws IOException {
         assertEquals(DATA.length(), is.available(), "Returned incorrect number of available bytes");
     }
 
@@ -89,7 +89,7 @@ public class UnsynchronizedFilterInputStreamTest {
      * @throws IOException Thrown on test failure.
      */
     @Test
-    public void test_close() throws IOException {
+    void test_close() throws IOException {
         is.close();
         assertThrows(IOException.class, () -> is.read(), "Able to read from closed stream");
     }
@@ -98,7 +98,7 @@ public class UnsynchronizedFilterInputStreamTest {
      * Tests java.io.FilterInputStream#mark(int)
      */
     @Test
-    public void test_markI() {
+    void test_markI() {
         assertTrue(true, "Mark not supported by parent InputStream");
     }
 
@@ -106,7 +106,7 @@ public class UnsynchronizedFilterInputStreamTest {
      * Tests java.io.FilterInputStream#markSupported()
      */
     @Test
-    public void test_markSupported() {
+    void test_markSupported() {
         assertTrue(!is.markSupported(), "markSupported returned true");
     }
 
@@ -116,7 +116,7 @@ public class UnsynchronizedFilterInputStreamTest {
      * @throws IOException Thrown on test failure.
      */
     @Test
-    public void test_read() throws IOException {
+    void test_read() throws IOException {
         final int c = is.read();
         assertEquals(DATA.charAt(0), c, "read returned incorrect char");
     }
@@ -127,7 +127,7 @@ public class UnsynchronizedFilterInputStreamTest {
      * @throws IOException Thrown on test failure.
      */
     @Test
-    public void test_read$B() throws IOException {
+    void test_read$B() throws IOException {
         final byte[] buf1 = new byte[100];
         assertEquals(buf1.length, is.read(buf1));
         assertTrue(new String(buf1, 0, buf1.length, StandardCharsets.UTF_8).equals(DATA.substring(0, 100)), "Failed to read correct data");
@@ -139,7 +139,7 @@ public class UnsynchronizedFilterInputStreamTest {
      * @throws IOException Thrown on test failure.
      */
     @Test
-    public void test_read$BII() throws IOException {
+    void test_read$BII() throws IOException {
         final byte[] buf1 = new byte[100];
         is.skip(3000);
         is.mark(1000);
@@ -151,7 +151,7 @@ public class UnsynchronizedFilterInputStreamTest {
      * Tests java.io.FilterInputStream#reset()
      */
     @Test
-    public void test_reset() {
+    void test_reset() {
         assertThrows(IOException.class, () -> is.reset(), "should throw IOException");
 
     }
@@ -162,7 +162,7 @@ public class UnsynchronizedFilterInputStreamTest {
      * @throws IOException Thrown on test failure.
      */
     @Test
-    public void test_skipJ() throws IOException {
+    void test_skipJ() throws IOException {
         final byte[] buf1 = new byte[10];
         is.skip(1000);
         is.read(buf1, 0, buf1.length);

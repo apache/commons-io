@@ -51,7 +51,7 @@ public class ThresholdingOutputStreamTest {
     }
 
     @Test
-    public void testResetByteCount() throws IOException {
+    void testResetByteCount() throws IOException {
         final int threshold = 1;
         final AtomicInteger counter = new AtomicInteger();
         try (ByteArrayOutputStream os = new ByteArrayOutputStream(); ThresholdingOutputStream out = new ThresholdingOutputStream(threshold, tos -> {
@@ -72,7 +72,7 @@ public class ThresholdingOutputStreamTest {
     }
 
     @Test
-    public void testResetByteCountBrokenOutputStream() throws IOException {
+    void testResetByteCountBrokenOutputStream() throws IOException {
         final int threshold = 1;
         final AtomicInteger counter = new AtomicInteger();
         final IOException e = assertThrows(IOException.class, () -> {
@@ -97,7 +97,7 @@ public class ThresholdingOutputStreamTest {
     }
 
     @Test
-    public void testSetByteCountOutputStream() throws IOException {
+    void testSetByteCountOutputStream() throws IOException {
         final AtomicBoolean reached = new AtomicBoolean();
         final int initCount = 2;
         final int threshold = 3;
@@ -127,7 +127,7 @@ public class ThresholdingOutputStreamTest {
     }
 
     @Test
-    public void testSetByteCountStream() throws IOException {
+    void testSetByteCountStream() throws IOException {
         final AtomicBoolean reached = new AtomicBoolean();
         final int initCount = 2;
         final int threshold = 3;
@@ -157,7 +157,7 @@ public class ThresholdingOutputStreamTest {
     }
 
     @Test
-    public void testThresholdIOConsumer() throws IOException {
+    void testThresholdIOConsumer() throws IOException {
         final int threshold = 1;
         // Null threshold consumer
         try (ThresholdingOutputStream out = new ThresholdingOutputStream(threshold, null,
@@ -195,7 +195,7 @@ public class ThresholdingOutputStreamTest {
     }
 
     @Test
-    public void testThresholdIOConsumerIOException() throws IOException {
+    void testThresholdIOConsumerIOException() throws IOException {
         final int threshold = 1;
         try (ThresholdingOutputStream out = new ThresholdingOutputStream(threshold, os -> {
             throw new IOException("Threshold reached.");
@@ -209,7 +209,7 @@ public class ThresholdingOutputStreamTest {
     }
 
     @Test
-    public void testThresholdIOConsumerUncheckedException() throws IOException {
+    void testThresholdIOConsumerUncheckedException() throws IOException {
         final int threshold = 1;
         try (ThresholdingOutputStream out = new ThresholdingOutputStream(threshold, os -> {
             throw new IllegalStateException("Threshold reached.");
@@ -229,7 +229,7 @@ public class ThresholdingOutputStreamTest {
      * The threshold is not reached until something is written to the stream.
      */
     @Test
-    public void testThresholdLessThanZero() throws IOException {
+    void testThresholdLessThanZero() throws IOException {
         final AtomicBoolean reached = new AtomicBoolean();
         try (ThresholdingOutputStream out = new ThresholdingOutputStream(-1) {
             @Override
@@ -248,7 +248,7 @@ public class ThresholdingOutputStreamTest {
     }
 
     @Test
-    public void testThresholdZero() throws IOException {
+    void testThresholdZero() throws IOException {
         final AtomicBoolean reached = new AtomicBoolean();
         final int threshold = 0;
         try (ThresholdingOutputStream out = new ThresholdingOutputStream(threshold) {
@@ -271,7 +271,7 @@ public class ThresholdingOutputStreamTest {
      * The threshold is not reached until something is written to the stream.
      */
     @Test
-    public void testThresholdZeroWrite() throws IOException {
+    void testThresholdZeroWrite() throws IOException {
         final AtomicBoolean reached = new AtomicBoolean();
         final int threshold = 7;
         try (ThresholdingOutputStream out = new ThresholdingOutputStream(threshold) {

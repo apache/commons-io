@@ -54,7 +54,7 @@ public class AbstractStreamBuilderTest {
     }
 
     @Test
-    public void testBufferSizeChecker() {
+    void testBufferSizeChecker() {
         // sanity
         final Builder builder = builder();
         assertResult(builder.get(), builder.getBufferSize());

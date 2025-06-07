@@ -93,32 +93,32 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
     }
 
     @Test
-    public void testGetByteArray() throws IOException {
+    void testGetByteArray() throws IOException {
         assertArrayEquals(Files.readAllBytes(Paths.get(FILE_NAME_RO)), getOriginRo().getByteArray());
     }
 
     @Test
-    public void testGetByteArrayAt_0_0() throws IOException {
+    void testGetByteArrayAt_0_0() throws IOException {
         assertArrayEquals(new byte[] {}, getOriginRo().getByteArray(0, 0));
     }
 
     @Test
-    public void testGetByteArrayAt_0_1() throws IOException {
+    void testGetByteArrayAt_0_1() throws IOException {
         assertArrayEquals(new byte[] { '1' }, getOriginRo().getByteArray(0, 1));
     }
 
     @Test
-    public void testGetByteArrayAt_1_1() throws IOException {
+    void testGetByteArrayAt_1_1() throws IOException {
         assertArrayEquals(new byte[] { '2' }, getOriginRo().getByteArray(1, 1));
     }
 
     @Test
-    public void testGetCharSequence() throws IOException {
+    void testGetCharSequence() throws IOException {
         assertNotNull(getOriginRo().getCharSequence(Charset.defaultCharset()));
     }
 
     @Test
-    public void testGetFile() throws IOException {
+    void testGetFile() throws IOException {
         testGetFile(getOriginRo().getFile(), RO_LENGTH);
         FileUtils.touch(getOriginRw().getFile());
         testGetFile(getOriginRw().getFile(), 0);
@@ -132,21 +132,21 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
     }
 
     @Test
-    public void testGetInputStream() throws IOException {
+    void testGetInputStream() throws IOException {
         try (InputStream inputStream = getOriginRo().getInputStream()) {
             assertNotNull(inputStream);
         }
     }
 
     @Test
-    public void testGetOutputStream() throws IOException {
+    void testGetOutputStream() throws IOException {
         try (OutputStream output = getOriginRw().getOutputStream()) {
             assertNotNull(output);
         }
     }
 
     @Test
-    public void testGetPath() throws IOException {
+    void testGetPath() throws IOException {
         testGetPath(getOriginRo().getPath(), RO_LENGTH);
         FileUtils.touch(getOriginRw().getPath().toFile());
         testGetPath(getOriginRw().getPath(), 0);
@@ -160,7 +160,7 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
     }
 
     @Test
-    public void testGetRandomAccessFile() throws IOException {
+    void testGetRandomAccessFile() throws IOException {
         // Default
         try (RandomAccessFile raf = getOriginRo().getRandomAccessFile()) {
             assertNotNull(raf);
@@ -197,7 +197,7 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
 
     @ParameterizedTest
     @EnumSource(StandardOpenOption.class)
-    public void testGetRandomAccessFile(final OpenOption openOption) throws IOException {
+    void testGetRandomAccessFile(final OpenOption openOption) throws IOException {
         // Default
         try (RandomAccessFile raf = getOriginRw().getRandomAccessFile()) {
             assertNotNull(raf);
@@ -220,7 +220,7 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
     }
 
     @Test
-    public void testGetReader() throws IOException {
+    void testGetReader() throws IOException {
         try (Reader reader = getOriginRo().getReader(Charset.defaultCharset())) {
             assertNotNull(reader);
         }
@@ -230,7 +230,7 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
     }
 
     @Test
-    public void testGetWriter() throws IOException {
+    void testGetWriter() throws IOException {
         try (Writer writer = getOriginRw().getWriter(Charset.defaultCharset())) {
             assertNotNull(writer);
         }
@@ -241,7 +241,7 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
     }
 
     @Test
-    public void testSize() throws IOException {
+    void testSize() throws IOException {
         assertEquals(Files.size(Paths.get(FILE_NAME_RO)), getOriginRo().getByteArray().length);
     }
 }

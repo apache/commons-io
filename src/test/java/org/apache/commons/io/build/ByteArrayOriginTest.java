@@ -48,28 +48,28 @@ public class ByteArrayOriginTest extends AbstractOriginTest<byte[], ByteArrayOri
 
     @Override
     @Test
-    public void testGetFile() {
+    void testGetFile() {
         // Cannot convert a byte[] to a File.
         assertThrows(UnsupportedOperationException.class, super::testGetFile);
     }
 
     @Override
     @Test
-    public void testGetOutputStream() {
+    void testGetOutputStream() {
         // Cannot convert a byte[] to an OutputStream.
         assertThrows(UnsupportedOperationException.class, super::testGetOutputStream);
     }
 
     @Override
     @Test
-    public void testGetPath() {
+    void testGetPath() {
         // Cannot convert a byte[] to a Path.
         assertThrows(UnsupportedOperationException.class, super::testGetPath);
     }
 
     @Override
     @Test
-    public void testGetRandomAccessFile() {
+    void testGetRandomAccessFile() {
         // Cannot convert a RandomAccessFile to a File.
         assertThrows(UnsupportedOperationException.class, super::testGetRandomAccessFile);
     }
@@ -77,14 +77,14 @@ public class ByteArrayOriginTest extends AbstractOriginTest<byte[], ByteArrayOri
     @Override
     @ParameterizedTest
     @EnumSource(StandardOpenOption.class)
-    public void testGetRandomAccessFile(final OpenOption openOption) {
+    void testGetRandomAccessFile(final OpenOption openOption) {
         // Cannot convert a RandomAccessFile to a File.
         assertThrows(UnsupportedOperationException.class, () -> super.testGetRandomAccessFile(openOption));
     }
 
     @Override
     @Test
-    public void testGetWriter() {
+    void testGetWriter() {
         // Cannot convert a byte[] to a Writer.
         assertThrows(UnsupportedOperationException.class, super::testGetWriter);
     }

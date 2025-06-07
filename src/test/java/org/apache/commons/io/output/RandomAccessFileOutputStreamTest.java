@@ -44,7 +44,7 @@ public class RandomAccessFileOutputStreamTest {
     public Path temporaryFolder;
 
     @Test
-    public void testClose() throws IOException {
+    void testClose() throws IOException {
         final Path fixturePath = temporaryFolder.resolve("testWriteInt.txt");
         final Charset charset = StandardCharsets.US_ASCII;
         // @formatter:off
@@ -63,7 +63,7 @@ public class RandomAccessFileOutputStreamTest {
     }
 
     @Test
-    public void testFlush() throws IOException {
+    void testFlush() throws IOException {
         final Path fixturePath = temporaryFolder.resolve("testWriteInt.txt");
         final Charset charset = StandardCharsets.US_ASCII;
         // @formatter:off
@@ -85,7 +85,7 @@ public class RandomAccessFileOutputStreamTest {
     }
 
     @Test
-    public void testWriteByteArray() throws IOException {
+    void testWriteByteArray() throws IOException {
         final Path fixturePath = temporaryFolder.resolve("testWriteInt.txt");
         final Charset charset = StandardCharsets.US_ASCII;
         // @formatter:off
@@ -103,7 +103,7 @@ public class RandomAccessFileOutputStreamTest {
     }
 
     @Test
-    public void testWriteByteArrayAt() throws IOException {
+    void testWriteByteArrayAt() throws IOException {
         final Path fixturePath = temporaryFolder.resolve("testWriteInt.txt");
         final Charset charset = StandardCharsets.US_ASCII;
         // @formatter:off
@@ -121,7 +121,7 @@ public class RandomAccessFileOutputStreamTest {
     }
 
     @Test
-    public void testWriteGet() throws IOException {
+    void testWriteGet() throws IOException {
         final Path fixturePath = temporaryFolder.resolve("testWriteGet.txt");
         // @formatter:off
         try (RandomAccessFileOutputStream os = RandomAccessFileOutputStream.builder()
@@ -134,7 +134,7 @@ public class RandomAccessFileOutputStreamTest {
     }
 
     @Test
-    public void testWriteGetDefault() throws IOException {
+    void testWriteGetDefault() throws IOException {
         assertThrows(IllegalStateException.class, () -> {
             try (RandomAccessFileOutputStream os = RandomAccessFileOutputStream.builder().get()) {
                 validateState(os);
@@ -148,7 +148,7 @@ public class RandomAccessFileOutputStreamTest {
      * @throws IOException Thrown when the test fails.
      */
     @Test
-    public void testWriteGetPathOnly() throws IOException {
+    void testWriteGetPathOnly() throws IOException {
         final Path fixturePath = temporaryFolder.resolve("testWriteGet.txt");
         // @formatter:off
         try (RandomAccessFileOutputStream os = RandomAccessFileOutputStream.builder()
@@ -160,7 +160,7 @@ public class RandomAccessFileOutputStreamTest {
     }
 
     @Test
-    public void testWriteInt() throws IOException {
+    void testWriteInt() throws IOException {
         final Path fixturePath = temporaryFolder.resolve("testWriteInt.txt");
         final Charset charset = StandardCharsets.US_ASCII;
         // @formatter:off

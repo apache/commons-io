@@ -78,14 +78,14 @@ public class UncheckTest {
      * Tests {@link Uncheck#accept(IOConsumer, Object)}.
      */
     @Test
-    public void testAccept() {
+    void testAccept() {
         final ByteArrayInputStream stream = newInputStream();
         Uncheck.accept(n -> stream.skip(n), 1);
         assertEquals('b', Uncheck.get(stream::read).intValue());
     }
 
     @Test
-    public void testAcceptIOBiConsumerOfTUTU() {
+    void testAcceptIOBiConsumerOfTUTU() {
         assertThrows(UncheckedIOException.class, () -> Uncheck.accept((t, u) -> {
             throw new IOException();
         }, null, null));
@@ -99,7 +99,7 @@ public class UncheckTest {
     }
 
     @Test
-    public void testAcceptIOConsumerOfTT() {
+    void testAcceptIOConsumerOfTT() {
         assertThrows(UncheckedIOException.class, () -> Uncheck.accept(t -> {
             throw new IOException();
         }, null));
@@ -109,7 +109,7 @@ public class UncheckTest {
     }
 
     @Test
-    public void testAcceptIOTriConsumerOfTUVTUV() {
+    void testAcceptIOTriConsumerOfTUVTUV() {
         assertThrows(UncheckedIOException.class, () -> Uncheck.accept((t, u, v) -> {
             throw new IOException();
         }, null, null, null));
@@ -128,7 +128,7 @@ public class UncheckTest {
      * Tests {@link Uncheck#apply(IOFunction, Object)}.
      */
     @Test
-    public void testApply1() {
+    void testApply1() {
         final ByteArrayInputStream stream = newInputStream();
         assertEquals(1, Uncheck.apply(n -> stream.skip(n), 1).intValue());
         assertEquals('b', Uncheck.get(stream::read).intValue());
@@ -138,7 +138,7 @@ public class UncheckTest {
      * Tests {@link Uncheck#apply(IOBiFunction, Object, Object)}.
      */
     @Test
-    public void testApply2() {
+    void testApply2() {
         final ByteArrayInputStream stream = newInputStream();
         final byte[] buf = new byte[BYTES.length];
         assertEquals(1, Uncheck.apply((o, l) -> stream.read(buf, o, l), 0, 1).intValue());
@@ -149,7 +149,7 @@ public class UncheckTest {
      * Tests {@link Uncheck#apply(IOTriFunction, Object, Object, Object)}.
      */
     @Test
-    public void testApply3() {
+    void testApply3() {
         final ByteArrayInputStream stream = newInputStream();
         final byte[] buf = new byte[BYTES.length];
         assertEquals(1, Uncheck.apply((b, o, l) -> stream.read(b, o, l), buf, 0, 1).intValue());
@@ -157,7 +157,7 @@ public class UncheckTest {
     }
 
     @Test
-    public void testApplyIOBiFunctionOfTURTU() {
+    void testApplyIOBiFunctionOfTURTU() {
         assertThrows(UncheckedIOException.class, () -> Uncheck.apply((t, u) -> {
             throw new IOException();
         }, null, null));
@@ -172,7 +172,7 @@ public class UncheckTest {
     }
 
     @Test
-    public void testApplyIOFunctionOfTRT() {
+    void testApplyIOFunctionOfTRT() {
         assertThrows(UncheckedIOException.class, () -> Uncheck.apply(t -> {
             throw new IOException();
         }, null));
@@ -182,7 +182,7 @@ public class UncheckTest {
     }
 
     @Test
-    public void testApplyIOQuadFunctionOfTUVWRTUVW() {
+    void testApplyIOQuadFunctionOfTUVWRTUVW() {
         assertThrows(UncheckedIOException.class, () -> Uncheck.apply((t, u, v, w) -> {
             throw new IOException();
         }, null, null, null, null));
@@ -201,7 +201,7 @@ public class UncheckTest {
     }
 
     @Test
-    public void testApplyIOTriFunctionOfTUVRTUV() {
+    void testApplyIOTriFunctionOfTUVRTUV() {
         assertThrows(UncheckedIOException.class, () -> Uncheck.apply((t, u, v) -> {
             throw new IOException();
         }, null, null, null));
@@ -221,7 +221,7 @@ public class UncheckTest {
      * Tests {@link Uncheck#get(IOSupplier)}.
      */
     @Test
-    public void testGet() {
+    void testGet() {
         assertEquals('a', Uncheck.get(() -> newInputStream().read()).intValue());
         assertThrows(UncheckedIOException.class, () -> Uncheck.get(() -> {
             throw new IOException();
@@ -232,7 +232,7 @@ public class UncheckTest {
     }
 
     @Test
-    public void testGetAsBoolean() {
+    void testGetAsBoolean() {
         assertThrows(UncheckedIOException.class, () -> Uncheck.getAsBoolean(() -> {
             throw new IOException();
         }));
@@ -242,7 +242,7 @@ public class UncheckTest {
     }
 
     @Test
-    public void testGetAsInt() {
+    void testGetAsInt() {
         assertThrows(UncheckedIOException.class, () -> Uncheck.getAsInt(() -> {
             throw new IOException();
         }));
@@ -252,7 +252,7 @@ public class UncheckTest {
     }
 
     @Test
-    public void testGetAsIntMessage() {
+    void testGetAsIntMessage() {
         // No exception
         assertThrows(UncheckedIOException.class, () -> Uncheck.getAsInt(() -> {
             throw new IOException();
@@ -271,7 +271,7 @@ public class UncheckTest {
     }
 
     @Test
-    public void testGetAsLong() {
+    void testGetAsLong() {
         assertThrows(UncheckedIOException.class, () -> Uncheck.getAsLong(() -> {
             throw new IOException();
         }));
@@ -281,7 +281,7 @@ public class UncheckTest {
     }
 
     @Test
-    public void testGetAsLongMessage() {
+    void testGetAsLongMessage() {
         // No exception
         assertThrows(UncheckedIOException.class, () -> Uncheck.getAsLong(() -> {
             throw new IOException();
@@ -303,7 +303,7 @@ public class UncheckTest {
      * Tests {@link Uncheck#get(IOSupplier, Supplier)}.
      */
     @Test
-    public void testGetMessage() {
+    void testGetMessage() {
         // No exception
         assertEquals('a', Uncheck.get(() -> newInputStream().read()).intValue(), () -> CUSTOM_MESSAGE);
         // Exception
@@ -320,7 +320,7 @@ public class UncheckTest {
      * Tests {@link Uncheck#run(IORunnable)}.
      */
     @Test
-    public void testRun() {
+    void testRun() {
         final ByteArrayInputStream stream = newInputStream();
         Uncheck.run(() -> stream.skip(1));
         assertEquals('b', Uncheck.get(stream::read).intValue());
@@ -339,7 +339,7 @@ public class UncheckTest {
      * @throws IOException
      */
     @Test
-    public void testRunMessage() throws IOException {
+    void testRunMessage() throws IOException {
         // No exception
         final ByteArrayInputStream stream = newInputStream();
         Uncheck.run(() -> stream.skip(1), () -> CUSTOM_MESSAGE);
@@ -355,7 +355,7 @@ public class UncheckTest {
     }
 
     @Test
-    public void testTest() {
+    void testTest() {
         assertThrows(UncheckedIOException.class, () -> Uncheck.test(t -> {
             throw new IOException();
         }, null));

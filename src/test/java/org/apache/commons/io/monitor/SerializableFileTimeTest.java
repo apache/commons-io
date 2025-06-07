@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 public class SerializableFileTimeTest {
 
     @Test
-    public void testSerializable() throws IOException {
+    void testSerializable() throws IOException {
         final SerializableFileTime expected = new SerializableFileTime(Files.getLastModifiedTime(PathUtils.current()));
         final SerializableFileTime actual = SerializationUtils.roundtrip(expected);
         assertEquals(expected, actual);

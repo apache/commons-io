@@ -41,7 +41,7 @@ import org.junit.jupiter.api.Test;
 public class PathUtilsDeleteFileTest extends AbstractTempDirTest {
 
     @Test
-    public void testDeleteBrokenSymbolicLink() throws IOException {
+    void testDeleteBrokenSymbolicLink() throws IOException {
         assumeFalse(SystemUtils.IS_OS_WINDOWS);
         final Path missingFile = tempDirPath.resolve("missing.txt");
         final Path brokenLink = tempDirPath.resolve("broken.txt");
@@ -56,7 +56,7 @@ public class PathUtilsDeleteFileTest extends AbstractTempDirTest {
      * Tests a directory with one file of size 0.
      */
     @Test
-    public void testDeleteFileDirectory1FileSize0() throws IOException {
+    void testDeleteFileDirectory1FileSize0() throws IOException {
         final String fileName = "file-size-0.bin";
         PathUtils.copyFileToDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0/" + fileName), tempDirPath);
         assertCounts(0, 1, 0, PathUtils.deleteFile(tempDirPath.resolve(fileName)));
@@ -68,7 +68,7 @@ public class PathUtilsDeleteFileTest extends AbstractTempDirTest {
      * Tests a directory with one file of size 1.
      */
     @Test
-    public void testDeleteFileDirectory1FileSize1() throws IOException {
+    void testDeleteFileDirectory1FileSize1() throws IOException {
         final String fileName = "file-size-1.bin";
         PathUtils.copyFileToDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/" + fileName), tempDirPath);
         assertCounts(0, 1, 1, PathUtils.deleteFile(tempDirPath.resolve(fileName)));
@@ -80,7 +80,7 @@ public class PathUtilsDeleteFileTest extends AbstractTempDirTest {
      * Tests a file that does not exist.
      */
     @Test
-    public void testDeleteFileDoesNotExist() throws IOException {
+    void testDeleteFileDoesNotExist() throws IOException {
         testDeleteFileEmpty(PathUtils.deleteFile(tempDirPath.resolve("file-does-not-exist.bin")));
         // This will throw if not empty.
         Files.deleteIfExists(tempDirPath);
@@ -94,7 +94,7 @@ public class PathUtilsDeleteFileTest extends AbstractTempDirTest {
      * Tests an empty folder.
      */
     @Test
-    public void testDeleteFileEmptyDirectory() throws IOException {
+    void testDeleteFileEmptyDirectory() throws IOException {
         Assertions.assertThrows(NoSuchFileException.class, () -> testDeleteFileEmpty(PathUtils.deleteFile(tempDirPath)));
         // This will throw if not empty.
         Files.deleteIfExists(tempDirPath);
@@ -104,7 +104,7 @@ public class PathUtilsDeleteFileTest extends AbstractTempDirTest {
      * Tests a directory with one file of size 1.
      */
     @Test
-    public void testDeleteReadOnlyFileDirectory1FileSize1() throws IOException {
+    void testDeleteReadOnlyFileDirectory1FileSize1() throws IOException {
         final String fileName = "file-size-1.bin";
         PathUtils.copyFileToDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/" + fileName), tempDirPath);
         final Path resolved = tempDirPath.resolve(fileName);
@@ -123,7 +123,7 @@ public class PathUtilsDeleteFileTest extends AbstractTempDirTest {
      * Tests a directory with one file of size 1.
      */
     @Test
-    public void testSetReadOnlyFileDirectory1FileSize1() throws IOException {
+    void testSetReadOnlyFileDirectory1FileSize1() throws IOException {
         final String fileName = "file-size-1.bin";
         PathUtils.copyFileToDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/" + fileName), tempDirPath);
         final Path resolved = tempDirPath.resolve(fileName);

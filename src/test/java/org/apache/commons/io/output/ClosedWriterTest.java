@@ -31,7 +31,7 @@ public class ClosedWriterTest {
      * Test the {@code flush()} method.
      */
     @Test
-    public void testFlush() throws IOException {
+    void testFlush() throws IOException {
         try (ClosedWriter cw = new ClosedWriter()) {
             assertThrows(IOException.class, () -> cw.flush());
         }
@@ -41,7 +41,7 @@ public class ClosedWriterTest {
      * Test the {@code write(cbuf, off, len)} method.
      */
     @Test
-    public void testWrite() throws IOException {
+    void testWrite() throws IOException {
         try (ClosedWriter cw = new ClosedWriter()) {
             assertThrows(IOException.class, () -> cw.write(new char[0], 0, 0));
         }

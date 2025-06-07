@@ -33,32 +33,32 @@ import org.junit.jupiter.api.Test;
 public class StandardLineSeparatorTest {
 
     @Test
-    public void testCR() {
+    void testCR() {
         assertEquals("\r", CR.getString());
     }
 
     @Test
-    public void testCR_getBytes() {
+    void testCR_getBytes() {
         assertArrayEquals("\r".getBytes(StandardCharsets.ISO_8859_1), CR.getBytes(StandardCharsets.ISO_8859_1));
     }
 
     @Test
-    public void testCRLF() {
+    void testCRLF() {
         assertEquals("\r\n", CRLF.getString());
     }
 
     @Test
-    public void testCRLF_getBytes() {
+    void testCRLF_getBytes() {
         assertArrayEquals("\r\n".getBytes(StandardCharsets.ISO_8859_1), CRLF.getBytes(StandardCharsets.ISO_8859_1));
     }
 
     @Test
-    public void testLF() {
+    void testLF() {
         assertEquals("\n", LF.getString());
     }
 
     @Test
-    public void testLF_getBytes() {
+    void testLF_getBytes() {
         assertArrayEquals("\n".getBytes(StandardCharsets.ISO_8859_1), LF.getBytes(StandardCharsets.ISO_8859_1));
     }
 

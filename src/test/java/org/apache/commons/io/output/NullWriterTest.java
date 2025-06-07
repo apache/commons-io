@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 public class NullWriterTest {
 
     @Test
-    public void testNull() {
+    void testNull() {
         final char[] chars = { 'A', 'B', 'C' };
         try (NullWriter writer = NullWriter.INSTANCE) {
             writer.write(1);

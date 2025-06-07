@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 public class NullAppendableTest {
 
     @Test
-    public void testNull() throws IOException {
+    void testNull() throws IOException {
         final Appendable appendable = NullAppendable.INSTANCE;
         appendable.append('a');
         appendable.append("A");

@@ -85,7 +85,7 @@ public class AccumulatorPathVisitorTest {
      * Tests the 0-argument constructor.
      */
     @Test
-    public void test0ArgConstructor() throws IOException {
+    void test0ArgConstructor() throws IOException {
         final AccumulatorPathVisitor accPathVisitor = new AccumulatorPathVisitor();
         final PathVisitorFileFilter countingFileFilter = new PathVisitorFileFilter(accPathVisitor);
         Files.walkFileTree(tempDirPath, new AndFileFilter(countingFileFilter, DirectoryFileFilter.INSTANCE, EmptyFileFilter.EMPTY));
@@ -101,7 +101,7 @@ public class AccumulatorPathVisitorTest {
      */
     @ParameterizedTest
     @MethodSource("testParameters")
-    public void testEmptyFolder(final Supplier<AccumulatorPathVisitor> supplier) throws IOException {
+    void testEmptyFolder(final Supplier<AccumulatorPathVisitor> supplier) throws IOException {
         final AccumulatorPathVisitor accPathVisitor = supplier.get();
         final PathVisitorFileFilter countingFileFilter = new PathVisitorFileFilter(accPathVisitor);
         Files.walkFileTree(tempDirPath, new AndFileFilter(countingFileFilter, DirectoryFileFilter.INSTANCE, EmptyFileFilter.EMPTY));
@@ -113,7 +113,7 @@ public class AccumulatorPathVisitorTest {
     }
 
     @Test
-    public void testEqualsHashCode() {
+    void testEqualsHashCode() {
         final AccumulatorPathVisitor visitor0 = AccumulatorPathVisitor.withLongCounters();
         final AccumulatorPathVisitor visitor1 = AccumulatorPathVisitor.withLongCounters();
         assertEquals(visitor0, visitor0);
@@ -136,7 +136,7 @@ public class AccumulatorPathVisitorTest {
      */
     @ParameterizedTest
     @MethodSource("testParameters")
-    public void testFolders1FileSize0(final Supplier<AccumulatorPathVisitor> supplier) throws IOException {
+    void testFolders1FileSize0(final Supplier<AccumulatorPathVisitor> supplier) throws IOException {
         final AccumulatorPathVisitor accPathVisitor = supplier.get();
         final PathVisitorFileFilter countingFileFilter = new PathVisitorFileFilter(accPathVisitor);
         Files.walkFileTree(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0"), countingFileFilter);
@@ -152,7 +152,7 @@ public class AccumulatorPathVisitorTest {
      */
     @ParameterizedTest
     @MethodSource("testParameters")
-    public void testFolders1FileSize1(final Supplier<AccumulatorPathVisitor> supplier) throws IOException {
+    void testFolders1FileSize1(final Supplier<AccumulatorPathVisitor> supplier) throws IOException {
         final AccumulatorPathVisitor accPathVisitor = supplier.get();
         final PathVisitorFileFilter countingFileFilter = new PathVisitorFileFilter(accPathVisitor);
         Files.walkFileTree(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1"), countingFileFilter);
@@ -168,7 +168,7 @@ public class AccumulatorPathVisitorTest {
      */
     @ParameterizedTest
     @MethodSource("testParameters")
-    public void testFolders2FileSize2(final Supplier<AccumulatorPathVisitor> supplier) throws IOException {
+    void testFolders2FileSize2(final Supplier<AccumulatorPathVisitor> supplier) throws IOException {
         final AccumulatorPathVisitor accPathVisitor = supplier.get();
         final PathVisitorFileFilter countingFileFilter = new PathVisitorFileFilter(accPathVisitor);
         Files.walkFileTree(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2"), countingFileFilter);
@@ -190,7 +190,7 @@ public class AccumulatorPathVisitorTest {
      */
     @ParameterizedTest
     @MethodSource("testParametersIgnoreFailures")
-    public void testFolderWhileDeletingAsync(final Supplier<AccumulatorPathVisitor> supplier) throws IOException, InterruptedException {
+    void testFolderWhileDeletingAsync(final Supplier<AccumulatorPathVisitor> supplier) throws IOException, InterruptedException {
         final int count = 10_000;
         final List<Path> files = new ArrayList<>(count);
         // Create "count" file fixtures
@@ -245,7 +245,7 @@ public class AccumulatorPathVisitorTest {
      */
     @ParameterizedTest
     @MethodSource("testParametersIgnoreFailures")
-    public void testFolderWhileDeletingSync(final Supplier<AccumulatorPathVisitor> supplier) throws IOException {
+    void testFolderWhileDeletingSync(final Supplier<AccumulatorPathVisitor> supplier) throws IOException {
         final int count = 100;
         final int marker = count / 2;
         final Set<Path> files = new LinkedHashSet<>(count);

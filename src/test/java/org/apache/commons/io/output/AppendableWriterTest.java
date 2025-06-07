@@ -35,7 +35,7 @@ public class AppendableWriterTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testAppendChar() throws Exception {
+    void testAppendChar() throws Exception {
         out.append('F');
 
         assertEquals("F", out.getAppendable().toString());
@@ -43,7 +43,7 @@ public class AppendableWriterTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testAppendCharSequence() throws Exception {
+    void testAppendCharSequence() throws Exception {
         final String testData = "ABCD";
 
         out.append(testData);
@@ -54,7 +54,7 @@ public class AppendableWriterTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testAppendSubSequence() throws Exception {
+    void testAppendSubSequence() throws Exception {
         final String testData = "ABCD";
 
         out.append(testData, 1, 3);
@@ -64,7 +64,7 @@ public class AppendableWriterTest {
     }
 
     @Test
-    public void testWriteChars() throws Exception {
+    void testWriteChars() throws Exception {
         final String testData = "ABCD";
 
         out.write(testData.toCharArray());
@@ -73,14 +73,14 @@ public class AppendableWriterTest {
     }
 
     @Test
-    public void testWriteInt() throws Exception {
+    void testWriteInt() throws Exception {
         out.write('F');
 
         assertEquals("F", out.getAppendable().toString());
     }
 
     @Test
-    public void testWriteString() throws Exception {
+    void testWriteString() throws Exception {
         final String testData = "ABCD";
 
         out.write(testData);

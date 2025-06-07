@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 public class WildcardFileFilterTest extends AbstractFilterTest {
 
     @Test
-    public void testWildcard() throws IOException {
+    void testWildcard() throws IOException {
         IOFileFilter filter = new WildcardFileFilter("*.txt");
         assertFiltering(filter, new File("log.txt"), true);
         assertFiltering(filter, new File("log.TXT"), false);
