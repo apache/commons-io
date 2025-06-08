@@ -39,7 +39,7 @@ import org.junit.jupiter.api.condition.OS;
  * TODO Redo this test using
  * {@link Files#createSymbolicLink(java.nio.file.Path, java.nio.file.Path, java.nio.file.attribute.FileAttribute...)}.
  */
-public class FileUtilsCleanDirectoryTest extends AbstractTempDirTest {
+class FileUtilsCleanDirectoryTest extends AbstractTempDirTest {
 
     /** Only runs on Linux. */
     private boolean chmod(final File file, final int mode, final boolean recurse) throws InterruptedException {

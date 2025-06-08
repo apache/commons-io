@@ -52,7 +52,7 @@ import org.xml.sax.SAXParseException;
  * Test case for {@link BOMInputStream}.
  */
 @SuppressWarnings("ResultOfMethodCallIgnored")
-public class BOMInputStreamTest {
+class BOMInputStreamTest {
 
     /**
      *  A mock InputStream that expects {@code close()} to be called.

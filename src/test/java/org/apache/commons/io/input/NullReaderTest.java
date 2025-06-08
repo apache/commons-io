@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link NullReader}.
  */
-public class NullReaderTest {
+class NullReaderTest {
 
     private static final class TestNullReader extends NullReader {
         TestNullReader(final int size) {

@@ -45,7 +45,7 @@ import com.google.common.jimfs.Jimfs;
 /**
  * Test checks symmetric behavior with BufferedReader.
  */
-public class ReversedLinesFileReaderParamFileTest {
+class ReversedLinesFileReaderParamFileTest {
 
     private static final String UTF_16BE = StandardCharsets.ISO_8859_1.name();
     private static final String UTF_16LE = StandardCharsets.UTF_16LE.name();

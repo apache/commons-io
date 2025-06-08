@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link UncheckedFilterReader}.
  */
-public class UncheckedBufferedReaderTest {
+class UncheckedBufferedReaderTest {
 
     private UncheckedBufferedReader ucStringReader;
     private UncheckedBufferedReader ucBrokenReader;

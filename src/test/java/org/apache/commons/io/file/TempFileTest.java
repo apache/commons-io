@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link TempFile}.
  */
-public class TempFileTest {
+class TempFileTest {
 
     @SuppressWarnings("resource")
     @Test

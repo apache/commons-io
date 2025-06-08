@@ -43,7 +43,7 @@ import org.junit.jupiter.api.Test;
  * Provenance: Apache Harmony {@code BufferedReaderTest}, copied, and modified.
  * </p>
  */
-public class UnsynchronizedBufferedReaderTest {
+class UnsynchronizedBufferedReaderTest {
 
     private UnsynchronizedBufferedReader br;
 

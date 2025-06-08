@@ -29,7 +29,7 @@ import org.junit.jupiter.api.io.TempDir;
 /**
  * Tests {@link DeletingPathVisitor}.
  */
-public class PathUtilsCleanDirectoryTest {
+class PathUtilsCleanDirectoryTest {
 
     @TempDir
     private Path tempDir;

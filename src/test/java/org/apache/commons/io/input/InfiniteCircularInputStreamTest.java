@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link InfiniteCircularInputStream}.
  */
-public class InfiniteCircularInputStreamTest {
+class InfiniteCircularInputStreamTest {
 
     private void assertStreamOutput(final byte[] toCycle, final byte[] expected) throws IOException {
         final byte[] actual = new byte[expected.length];

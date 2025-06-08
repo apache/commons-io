@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link TimestampedObserver}.
  */
-public class TimestampedObserverTest {
+class TimestampedObserverTest {
 
     @Test
     void test() throws IOException, InterruptedException {

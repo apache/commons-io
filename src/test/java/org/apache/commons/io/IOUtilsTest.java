@@ -103,7 +103,7 @@ import org.junit.jupiter.api.io.TempDir;
  * Due to interdependencies in IOUtils and IOUtilsTest, one bug may cause multiple tests to fail.
  */
 @SuppressWarnings("deprecation") // deliberately testing deprecated code
-public class IOUtilsTest {
+class IOUtilsTest {
 
     private static final String UTF_8 = StandardCharsets.UTF_8.name();
 

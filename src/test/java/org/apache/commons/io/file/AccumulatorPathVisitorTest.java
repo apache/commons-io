@@ -56,7 +56,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Tests both {@link AccumulatorPathVisitor} and {@link PathVisitorFileFilter}.
  */
-public class AccumulatorPathVisitorTest {
+class AccumulatorPathVisitorTest {
 
     static Stream<Arguments> testParameters() {
         // @formatter:off

@@ -59,7 +59,7 @@ import org.junit.jupiter.api.io.TempDir;
 /**
  * Test for {@link Tailer}.
  */
-public class TailerTest {
+class TailerTest {
 
     private static final class NonStandardTailable implements Tailer.Tailable {
 

@@ -38,7 +38,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Tests {@link DeletingPathVisitor}.
  */
-public class DeletingPathVisitorTest extends AbstractTempDirTest {
+class DeletingPathVisitorTest extends AbstractTempDirTest {
 
     private static final String ARGS = "org.apache.commons.io.file.TestArguments#";
 

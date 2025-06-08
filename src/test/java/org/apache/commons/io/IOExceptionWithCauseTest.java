@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOExceptionWithCause}.
  */
-public class IOExceptionWithCauseTest {
+class IOExceptionWithCauseTest {
 
     /**
      * Tests the {@link IOExceptionWithCause#IOExceptionWithCause(String,Throwable)} constructor.

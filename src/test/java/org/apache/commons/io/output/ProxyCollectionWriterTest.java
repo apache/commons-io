@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link ProxyCollectionWriter}.
  */
-public class ProxyCollectionWriterTest {
+class ProxyCollectionWriterTest {
 
     @Test
     void testArrayIOExceptionOnAppendChar1() throws IOException {

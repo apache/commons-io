@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link PathMatcherFileFilter}.
  */
-public class PathMatcherFileFilterTest extends AbstractFilterTest {
+class PathMatcherFileFilterTest extends AbstractFilterTest {
 
     @Test
     void testGlob() throws IOException {

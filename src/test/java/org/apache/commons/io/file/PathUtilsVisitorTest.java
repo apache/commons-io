@@ -39,7 +39,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Tests {@link PathUtils}.
  */
-public class PathUtilsVisitorTest {
+class PathUtilsVisitorTest {
 
     static Stream<Arguments> testParameters() {
         return AccumulatorPathVisitorTest.testParameters();

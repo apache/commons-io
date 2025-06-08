@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOIterator}.
  */
-public class IOIteratorTest {
+class IOIteratorTest {
 
     private IOIterator<Path> iterator;
 

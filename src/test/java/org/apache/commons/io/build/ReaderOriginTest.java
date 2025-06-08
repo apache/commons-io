@@ -37,7 +37,7 @@ import org.junit.jupiter.params.provider.EnumSource;
  *
  * @see Reader
  */
-public class ReaderOriginTest extends AbstractOriginTest<Reader, ReaderOrigin> {
+class ReaderOriginTest extends AbstractOriginTest<Reader, ReaderOrigin> {
 
     @Override
     protected ReaderOrigin newOriginRo() throws FileNotFoundException {

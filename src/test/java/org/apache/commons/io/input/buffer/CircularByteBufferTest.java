@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link CircularByteBuffer}.
  */
-public class CircularByteBufferTest {
+class CircularByteBufferTest {
 
     @Test
     void testAddByteSmallestBuffer() {

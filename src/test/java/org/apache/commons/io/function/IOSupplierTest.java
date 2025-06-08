@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOSupplier}.
  */
-public class IOSupplierTest {
+class IOSupplierTest {
 
     private AtomicReference<String> ref1;
 

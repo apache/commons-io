@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link UncheckedAppendable}.
  */
-public class UncheckedAppendableTest {
+class UncheckedAppendableTest {
 
     private IOException exception;
 

@@ -44,7 +44,7 @@ import org.junit.jupiter.params.provider.MethodSource;
  *
  * @see ThresholdingOutputStream
  */
-public class DeferredFileOutputStreamTest extends AbstractTempDirTest {
+class DeferredFileOutputStreamTest extends AbstractTempDirTest {
 
     private static void assertDeferredInitialState(final DeferredFileOutputStream out) {
         assertTrue(out.isInMemory());

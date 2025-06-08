@@ -43,7 +43,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-public class CharSequenceInputStreamTest {
+class CharSequenceInputStreamTest {
 
     private static final String UTF_16 = StandardCharsets.UTF_16.name();
     private static final String UTF_8 = StandardCharsets.UTF_8.name();

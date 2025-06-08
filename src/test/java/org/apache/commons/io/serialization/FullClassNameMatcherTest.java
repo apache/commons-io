@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link FullClassNameMatcher}.
  */
-public class FullClassNameMatcherTest {
+class FullClassNameMatcherTest {
 
     private static final String [] NAMES_ARRAY = { Integer.class.getName(), Long.class.getName() };
 

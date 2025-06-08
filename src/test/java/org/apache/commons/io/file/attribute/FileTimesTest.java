@@ -35,7 +35,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Tests {@link FileTimes}.
  */
-public class FileTimesTest {
+class FileTimesTest {
 
     public static Stream<Arguments> fileTimeNanoUnitsToNtfsProvider() {
         // @formatter:off

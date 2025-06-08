@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Test for {@link ByteOrderParser}.
  */
-public class ByteOrderParserTest {
+class ByteOrderParserTest {
 
     private ByteOrder parseByteOrder(final String value) {
         return ByteOrderParser.parseByteOrder(value);

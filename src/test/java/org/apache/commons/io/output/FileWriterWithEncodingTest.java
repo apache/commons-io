@@ -40,7 +40,7 @@ import org.junit.jupiter.api.io.TempDir;
 /**
  * Tests {@link FileWriterWithEncoding}.
  */
-public class FileWriterWithEncodingTest {
+class FileWriterWithEncodingTest {
 
     @TempDir
     public File temporaryFolder;

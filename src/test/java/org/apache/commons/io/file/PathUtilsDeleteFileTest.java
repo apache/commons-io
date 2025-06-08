@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link DeletingPathVisitor}.
  */
-public class PathUtilsDeleteFileTest extends AbstractTempDirTest {
+class PathUtilsDeleteFileTest extends AbstractTempDirTest {
 
     @Test
     void testDeleteBrokenSymbolicLink() throws IOException {

@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link NullAppendable}.
  */
-public class NullAppendableTest {
+class NullAppendableTest {
 
     @Test
     void testNull() throws IOException {

@@ -39,7 +39,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link TeeReader}.
  */
-public class TeeReaderTest  {
+class TeeReaderTest  {
 
     private StringBuilderWriter output;
 

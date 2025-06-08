@@ -37,7 +37,7 @@ import org.junit.jupiter.params.provider.EnumSource;
  *
  * @see InputStream
  */
-public class InputStreamOriginTest extends AbstractOriginTest<InputStream, InputStreamOrigin> {
+class InputStreamOriginTest extends AbstractOriginTest<InputStream, InputStreamOrigin> {
 
     @SuppressWarnings("resource")
     @Override

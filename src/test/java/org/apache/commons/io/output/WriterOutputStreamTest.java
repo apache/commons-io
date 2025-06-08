@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link WriterOutputStream}.
  */
-public class WriterOutputStreamTest {
+class WriterOutputStreamTest {
 
     private static final String UTF_16LE = StandardCharsets.UTF_16LE.name();
     private static final String UTF_16BE = StandardCharsets.UTF_16BE.name();

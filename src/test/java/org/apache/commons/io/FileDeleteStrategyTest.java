@@ -32,7 +32,7 @@ import org.junit.jupiter.api.io.TempDir;
 /**
  * Tests {@link FileDeleteStrategy}.
  */
-public class FileDeleteStrategyTest {
+class FileDeleteStrategyTest {
 
     @TempDir
     public File temporaryFolder;

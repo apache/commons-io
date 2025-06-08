@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link AutoCloseInputStream}.
  */
-public class AutoCloseInputStreamTest {
+class AutoCloseInputStreamTest {
 
     private byte[] data;
 

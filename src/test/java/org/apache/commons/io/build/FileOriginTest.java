@@ -27,7 +27,7 @@ import org.apache.commons.io.build.AbstractOrigin.FileOrigin;
  *
  * @see File
  */
-public class FileOriginTest extends AbstractOriginTest<File, FileOrigin> {
+class FileOriginTest extends AbstractOriginTest<File, FileOrigin> {
 
     @Override
     protected FileOrigin newOriginRo() {

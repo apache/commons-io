@@ -34,7 +34,7 @@ import org.junit.platform.commons.util.StringUtils;
 /**
  * Tests {@link NullInputStream}.
  */
-public class NullInputStreamTest {
+class NullInputStreamTest {
 
     private static final class TestNullInputStream extends NullInputStream {
 

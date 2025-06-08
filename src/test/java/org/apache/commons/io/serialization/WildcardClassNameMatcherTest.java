@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link WildcardClassNameMatcher}.
  */
-public class WildcardClassNameMatcherTest {
+class WildcardClassNameMatcherTest {
 
     @Test
     void testNoPattern() {

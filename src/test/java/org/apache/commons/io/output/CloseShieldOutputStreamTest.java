@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link CloseShieldOutputStream}.
  */
-public class CloseShieldOutputStreamTest {
+class CloseShieldOutputStreamTest {
 
     private ByteArrayOutputStream original;
 

@@ -29,7 +29,7 @@ import java.util.Set;
 import org.apache.commons.io.output.StringBuilderWriter;
 import org.junit.jupiter.api.Test;
 
-public class CharacterSetFilterReaderTest {
+class CharacterSetFilterReaderTest {
 
     private static final String STRING_FIXTURE = "ab";
 

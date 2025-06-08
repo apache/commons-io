@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Test;
  * @see IOUtils
  */
 @SuppressWarnings("deprecation") // includes tests for deprecated methods
-public class IOUtilsWriteTest {
+class IOUtilsWriteTest {
 
     private static final int FILE_SIZE = 1024 * 4 + 1;
 

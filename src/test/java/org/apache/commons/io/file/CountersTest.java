@@ -29,7 +29,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Tests {@link Counter} and implementations.
  */
-public class CountersTest extends TestArguments {
+class CountersTest extends TestArguments {
 
     @ParameterizedTest
     @MethodSource("numberCounters")

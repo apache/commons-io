@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link BrokenWriter}.
  */
-public class UncheckedFilterWriterTest {
+class UncheckedFilterWriterTest {
 
     private IOException exception;
 

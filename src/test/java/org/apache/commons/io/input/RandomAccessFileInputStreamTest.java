@@ -40,7 +40,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link RandomAccessFileInputStream}.
  */
-public class RandomAccessFileInputStreamTest {
+class RandomAccessFileInputStreamTest {
 
     private static final String DATA_FILE_NAME = "src/test/resources/org/apache/commons/io/test-file-iso8859-1.bin";
     private static final Path DATA_PATH = Paths.get(DATA_FILE_NAME);

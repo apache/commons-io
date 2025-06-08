@@ -32,7 +32,7 @@ import java.util.List;
 import org.apache.commons.io.IOCase;
 import org.junit.jupiter.api.Test;
 
-public class WildcardFileFilterTest extends AbstractFilterTest {
+class WildcardFileFilterTest extends AbstractFilterTest {
 
     @Test
     void testWildcard() throws IOException {

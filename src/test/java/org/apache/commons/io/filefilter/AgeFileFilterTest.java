@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link AgeFileFilter}.
  */
-public class AgeFileFilterTest {
+class AgeFileFilterTest {
 
     /**
      * Javadoc example.

@@ -62,7 +62,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link PathUtils}.
  */
-public class PathUtilsTest extends AbstractTempDirTest {
+class PathUtilsTest extends AbstractTempDirTest {
 
     private static final String STRING_FIXTURE = "Hello World";
 

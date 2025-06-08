@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link UncheckedFilterInputStream}.
  */
-public class UncheckedFilterInputStreamTest {
+class UncheckedFilterInputStreamTest {
 
     private UncheckedFilterInputStream stringInputStream;
     private UncheckedFilterInputStream brokenInputStream;

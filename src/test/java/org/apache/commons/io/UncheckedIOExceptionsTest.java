@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link UncheckedIOExceptions}.
  */
-public class UncheckedIOExceptionsTest {
+class UncheckedIOExceptionsTest {
 
     /**
      * Tests {@link UncheckedIOExceptions#create(Object)}.

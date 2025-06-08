@@ -33,7 +33,7 @@ import org.junit.jupiter.api.io.TempDir;
  * Test cases for FileUtils.cleanDirectory() method that involve symlinks.
  * &amp; FileUtils.isSymlink(File file)
  */
-public class FileUtilsCleanSymlinksTest {
+class FileUtilsCleanSymlinksTest {
 
     @TempDir
     public File top;

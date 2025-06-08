@@ -40,7 +40,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOConsumer}.
  */
-public class IOConsumerTest {
+class IOConsumerTest {
 
     @Test
     void testAccept() throws IOException {

@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link DeletingPathVisitor}.
  */
-public class PathUtilsDeleteDirectoryTest extends AbstractTempDirTest {
+class PathUtilsDeleteDirectoryTest extends AbstractTempDirTest {
 
     @Test
     void testDeleteAbsentDirectory() throws IOException {

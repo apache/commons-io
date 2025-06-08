@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link CharacterFilterReader} with an {@link IntPredicate}.
  */
-public class CharacterFilterReaderIntPredicateTest {
+class CharacterFilterReaderIntPredicateTest {
 
     @Test
     void testInputSize0FilterAll() throws IOException {

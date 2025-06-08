@@ -40,7 +40,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 /**
  * Tests for {@link BoundedInputStream}.
  */
-public class BoundedInputStreamTest {
+class BoundedInputStreamTest {
 
     private void compare(final String message, final byte[] expected, final byte[] actual) {
         assertEquals(expected.length, actual.length, () -> message + " (array length equals check)");

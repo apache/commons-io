@@ -39,7 +39,7 @@ import org.junit.jupiter.api.Test;
  * Provenance: Apache Harmony and modified.
  * </p>
  */
-public class UnsynchronizedFilterInputStreamTest {
+class UnsynchronizedFilterInputStreamTest {
 
     public static final String DATA = StringUtils.repeat("This is a test.", 500);
 

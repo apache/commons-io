@@ -43,7 +43,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link FileCleaningTracker}.
  */
-public class FileCleaningTrackerTest extends AbstractTempDirTest {
+class FileCleaningTrackerTest extends AbstractTempDirTest {
 
     private File testFile;
     private Path testPath;

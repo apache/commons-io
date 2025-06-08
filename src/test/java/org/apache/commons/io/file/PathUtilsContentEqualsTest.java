@@ -42,7 +42,7 @@ import com.google.common.jimfs.Jimfs;
 /**
  * Tests {@link PathUtils}.
  */
-public class PathUtilsContentEqualsTest {
+class PathUtilsContentEqualsTest {
 
     static Configuration[] testConfigurations() {
         // @formatter:off

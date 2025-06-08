@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Test case for {@link StringBuilderWriter}.
  */
-public class StringBuilderWriterTest {
+class StringBuilderWriterTest {
     private static final char[] FOOBAR_CHARS = {'F', 'o', 'o', 'B', 'a', 'r'};
 
     @Test

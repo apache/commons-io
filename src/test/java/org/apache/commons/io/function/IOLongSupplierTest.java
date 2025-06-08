@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOLongSupplier}.
  */
-public class IOLongSupplierTest {
+class IOLongSupplierTest {
 
     private AtomicLong atomicLong;
 

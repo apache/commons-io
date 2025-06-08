@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link FileEntry}.
  */
-public class FileEntryTest {
+class FileEntryTest {
 
     @Test
     void testSerializable() {

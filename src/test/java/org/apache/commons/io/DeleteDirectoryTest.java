@@ -44,7 +44,7 @@ import org.junit.jupiter.api.condition.OS;
  * </p>
  */
 @DisabledOnOs(OS.WINDOWS)
-public class DeleteDirectoryTest extends AbstractTempDirTest {
+class DeleteDirectoryTest extends AbstractTempDirTest {
 
     private void testDeleteDirectory(final IOConsumer<Path> deleter) throws IOException {
         // Create a test file

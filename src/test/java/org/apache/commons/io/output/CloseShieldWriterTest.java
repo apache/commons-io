@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link CloseShieldWriter}.
  */
-public class CloseShieldWriterTest {
+class CloseShieldWriterTest {
 
     private StringBuilderWriter original;
 

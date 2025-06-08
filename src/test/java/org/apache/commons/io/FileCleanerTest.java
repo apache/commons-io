@@ -20,7 +20,7 @@ package org.apache.commons.io;
  * Tests {@link FileCleaner}.
  */
 @SuppressWarnings("deprecation") // testing deprecated class
-public class FileCleanerTest extends FileCleaningTrackerTest {
+class FileCleanerTest extends FileCleaningTrackerTest {
 
     @Override
     protected FileCleaningTracker newInstance() {

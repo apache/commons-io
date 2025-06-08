@@ -30,7 +30,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Tests {@link BrokenInputStream}.
  */
-public class BrokenInputStreamTest {
+class BrokenInputStreamTest {
 
     private static BrokenInputStream createBrokenInputStream(final Throwable exception) {
         if (exception instanceof IOException) {

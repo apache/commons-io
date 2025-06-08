@@ -45,7 +45,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOStream}.
  */
-public class IOStreamTest {
+class IOStreamTest {
 
     private static final boolean AT_LEAST_JAVA_11 = SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_11);
     private static final boolean AT_LEAST_JAVA_17 = SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_17);

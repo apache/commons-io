@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link CircularBufferInputStream}.
  */
-public class CircularBufferInputStreamTest {
+class CircularBufferInputStreamTest {
 
     /**
      * System.currentTimeMillis(), when this test was written. Always using the same seed should ensure a reproducible test.

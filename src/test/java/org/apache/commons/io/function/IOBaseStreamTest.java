@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOBaseStream}.
  */
-public class IOBaseStreamTest {
+class IOBaseStreamTest {
 
     /**
      * Implements IOBaseStream with generics.

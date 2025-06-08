@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link TaggedWriter}.
  */
-public class TaggedWriterTest  {
+class TaggedWriterTest  {
 
     @Test
     void testBrokenWriter() {

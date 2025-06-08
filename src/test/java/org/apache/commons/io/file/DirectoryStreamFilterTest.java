@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link DirectoryStreamFilter}.
  */
-public class DirectoryStreamFilterTest {
+class DirectoryStreamFilterTest {
 
     private static final String PATH_FIXTURE = "NOTICE.txt";
 

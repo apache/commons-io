@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOTriConsumer}.
  */
-public class IOTriConsumerTest {
+class IOTriConsumerTest {
 
     @Test
     void testAccept() throws IOException {

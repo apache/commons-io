@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link CountingOutputStream}.
  */
-public class CountingOutputStreamTest {
+class CountingOutputStreamTest {
 
     private void assertByteArrayEquals(final String msg, final byte[] array, final int start, final int end) {
         for (int i = start; i < end; i++) {

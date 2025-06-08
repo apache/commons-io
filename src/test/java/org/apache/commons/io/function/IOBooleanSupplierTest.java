@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOBooleanSupplier}.
  */
-public class IOBooleanSupplierTest {
+class IOBooleanSupplierTest {
 
     private AtomicBoolean atomicBoolean;
 

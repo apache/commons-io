@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-public class WindowsLineEndingInputStreamTest {
+class WindowsLineEndingInputStreamTest {
 
     private String roundtripReadByte(final String msg) throws IOException {
         return roundtripReadByte(msg, true);

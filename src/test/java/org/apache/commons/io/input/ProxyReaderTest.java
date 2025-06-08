@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link ProxyReader}.
  */
-public class ProxyReaderTest {
+class ProxyReaderTest {
 
     /** Custom NullReader implementation. */
     private static final class CustomNullReader extends NullReader {

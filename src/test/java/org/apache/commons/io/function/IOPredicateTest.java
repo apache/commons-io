@@ -38,7 +38,7 @@ import org.junit.jupiter.api.function.Executable;
 /**
  * Tests {@link IOPredicate}.
  */
-public class IOPredicateTest {
+class IOPredicateTest {
 
     /** Files::isHidden throws IOException. */
     private static final IOPredicate<Path> IS_HIDDEN = Files::isHidden;

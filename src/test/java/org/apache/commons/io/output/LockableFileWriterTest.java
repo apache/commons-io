@@ -38,7 +38,7 @@ import org.junit.jupiter.api.io.TempDir;
  * Tests that files really lock, although no writing is done as the locking is tested only on construction.
  * </p>
  */
-public class LockableFileWriterTest {
+class LockableFileWriterTest {
 
     @TempDir
     public File temporaryFolder;

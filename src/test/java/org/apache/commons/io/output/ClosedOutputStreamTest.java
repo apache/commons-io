@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link ClosedOutputStream}.
  */
-public class ClosedOutputStreamTest {
+class ClosedOutputStreamTest {
 
     /**
      * Test the {@code flush()} method.

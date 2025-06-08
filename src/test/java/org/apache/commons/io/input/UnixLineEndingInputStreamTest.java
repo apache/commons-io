@@ -24,7 +24,7 @@ import java.nio.charset.StandardCharsets;
 
 import org.junit.jupiter.api.Test;
 
-public class UnixLineEndingInputStreamTest {
+class UnixLineEndingInputStreamTest {
 
     private String roundtrip(final String msg) throws IOException {
         return roundtrip(msg, true, 0);

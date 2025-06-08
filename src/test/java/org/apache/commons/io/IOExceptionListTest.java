@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOExceptionList}.
  */
-public class IOExceptionListTest {
+class IOExceptionListTest {
 
     @Test
     void testCause() {

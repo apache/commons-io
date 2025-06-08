@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link AppendableWriter}.
  */
-public class AppendableWriterTest {
+class AppendableWriterTest {
 
     private AppendableWriter<StringBuilder> out;
 

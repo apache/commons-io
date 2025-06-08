@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link PathUtils}.
  */
-public class PathUtilsCountingTest {
+class PathUtilsCountingTest {
 
     /**
      * Tests an empty folder.

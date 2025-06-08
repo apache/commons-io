@@ -28,7 +28,7 @@ import org.junit.jupiter.api.io.TempDir;
 /**
  * Tests {@link FileUtils}.
  */
-public class FileUtilsCopyToFileTest {
+class FileUtilsCopyToFileTest {
 
     private final class CheckingInputStream extends ByteArrayInputStream {
         private boolean closed;

@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
  * This class was ported and adapted from Apache Spark commit 933dc6cb7b3de1d8ccaf73d124d6eb95b947ed19 where it was called
  * {@code BufferedFileChannelInputStreamSuite}.
  */
-public class BufferedFileChannelInputStreamTest extends AbstractInputStreamTest {
+class BufferedFileChannelInputStreamTest extends AbstractInputStreamTest {
 
     @SuppressWarnings("resource")
     @BeforeEach

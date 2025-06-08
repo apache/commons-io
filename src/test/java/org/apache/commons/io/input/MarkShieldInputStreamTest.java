@@ -31,7 +31,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Tests {@link MarkShieldInputStream}.
  */
-public class MarkShieldInputStreamTest {
+class MarkShieldInputStreamTest {
 
     private static final class MarkTestableInputStream extends ProxyInputStream {
         int markcount;

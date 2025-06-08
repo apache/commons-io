@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link CloseShieldInputStream}.
  */
-public class CloseShieldInputStreamTest {
+class CloseShieldInputStreamTest {
 
     private byte[] data;
 

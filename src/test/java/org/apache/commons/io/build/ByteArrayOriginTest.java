@@ -34,7 +34,7 @@ import org.junit.jupiter.params.provider.EnumSource;
  *
  * A ByteArrayOrigin can convert into some of the other aspects.
  */
-public class ByteArrayOriginTest extends AbstractOriginTest<byte[], ByteArrayOrigin> {
+class ByteArrayOriginTest extends AbstractOriginTest<byte[], ByteArrayOrigin> {
 
     @Override
     protected ByteArrayOrigin newOriginRo() throws IOException {

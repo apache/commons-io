@@ -106,7 +106,7 @@ import org.junit.jupiter.params.provider.ValueSource;
  * Tests {@link FileUtils}.
  */
 @SuppressWarnings({"deprecation", "ResultOfMethodCallIgnored"}) // unit tests include tests of many deprecated methods
-public class FileUtilsTest extends AbstractTempDirTest {
+class FileUtilsTest extends AbstractTempDirTest {
 
     /**
      * DirectoryWalker implementation that recursively lists all files and directories.

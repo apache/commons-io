@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Timeout;
  *
  * @see FileUtils
  */
-public class FileUtilsWaitForTest {
+class FileUtilsWaitForTest {
 
     // Assume that this file does not exist
     private final File NOSUCHFILE = new File("a.b.c.d." + System.currentTimeMillis());

@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link DirectoryWalker}.
  */
-public class DirectoryWalkerTest {
+class DirectoryWalkerTest {
 
     /**
      * Test DirectoryWalker implementation that finds files in a directory hierarchy

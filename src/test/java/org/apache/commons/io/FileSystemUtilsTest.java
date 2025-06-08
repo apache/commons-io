@@ -27,7 +27,7 @@ import org.junit.jupiter.params.provider.MethodSource;
  * Tests {@link FileSystemUtils}.
  */
 @SuppressWarnings("deprecation") // testing deprecated class
-public class FileSystemUtilsTest {
+class FileSystemUtilsTest {
 
     static char[] getIllegalFileNameChars() {
         return FileSystem.getCurrent().getIllegalFileNameChars();

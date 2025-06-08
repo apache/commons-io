@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link ClosedInputStream}.
  */
-public class ClosedInputStreamTest {
+class ClosedInputStreamTest {
 
     private void assertEof(final ClosedInputStream cis) {
         assertEquals(EOF, cis.read(), "read()");

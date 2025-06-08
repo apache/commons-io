@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 /**On
  * Tests {@link TeeOutputStream}.
  */
-public class TeeOutputStreamTest {
+class TeeOutputStreamTest {
 
     private void assertByteArrayEquals(final String msg, final byte[] array1, final byte[] array2) {
         assertEquals(array1.length, array2.length, msg + ": array size mismatch");

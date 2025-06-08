@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link TempDirectory}.
  */
-public class TempDirectoryTest {
+class TempDirectoryTest {
 
     @SuppressWarnings("resource")
     @Test

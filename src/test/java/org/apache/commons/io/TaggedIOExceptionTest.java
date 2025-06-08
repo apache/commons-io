@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link TaggedIOException}.
  */
-public class TaggedIOExceptionTest {
+class TaggedIOExceptionTest {
 
     @Test
     void testTaggedIOException() {

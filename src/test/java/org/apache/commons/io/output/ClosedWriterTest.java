@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link ClosedWriter}.
  */
-public class ClosedWriterTest {
+class ClosedWriterTest {
 
     /**
      * Test the {@code flush()} method.

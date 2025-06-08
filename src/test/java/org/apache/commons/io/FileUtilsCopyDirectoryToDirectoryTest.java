@@ -36,7 +36,7 @@ import org.junit.jupiter.api.io.TempDir;
  *
  * @see FileUtils#copyDirectoryToDirectory(File, File)
  */
-public class FileUtilsCopyDirectoryToDirectoryTest {
+class FileUtilsCopyDirectoryToDirectoryTest {
 
     private static void assertExceptionTypeAndMessage(final File srcDir, final File destDir,
         final Class<? extends Exception> expectedExceptionType, final String expectedMessage) {

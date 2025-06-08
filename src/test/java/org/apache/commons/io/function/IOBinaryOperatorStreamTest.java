@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOBinaryOperator}.
  */
-public class IOBinaryOperatorStreamTest {
+class IOBinaryOperatorStreamTest {
 
     private static final IOBinaryOperator<Path> MIN_BY_IO_BO = IOBinaryOperator.minBy(IOComparatorTest.REAL_PATH_COMP);
     private static final BinaryOperator<Path> MIN_BY_BO = MIN_BY_IO_BO.asBinaryOperator();

@@ -29,7 +29,7 @@ import org.junit.jupiter.api.condition.OS;
 /**
  * Tests {@link FileSystem}.
  */
-public class FileSystemTest {
+class FileSystemTest {
 
     @Test
     void testGetBlockSize() {

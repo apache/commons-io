@@ -31,7 +31,7 @@ import org.junitpioneer.jupiter.DefaultLocale;
 /**
  * Tests {@link XmlStreamWriter}.
  */
-public class XmlStreamWriterTest {
+class XmlStreamWriterTest {
 
     /** French */
     private static final String TEXT_LATIN1 = "eacute: \u00E9";

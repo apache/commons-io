@@ -66,7 +66,7 @@ import org.junit.jupiter.api.Test;
  *
  * These tests are simple and just makes sure we do can make the call without catching IOException.
  */
-public class FilesUncheckTest {
+class FilesUncheckTest {
 
     private static final FileAttribute<?>[] EMPTY_FILE_ATTRIBUTES_ARRAY = {};
 

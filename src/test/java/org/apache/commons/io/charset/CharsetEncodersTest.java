@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link CharsetEncoders}.
  */
-public class CharsetEncodersTest {
+class CharsetEncodersTest {
 
     @Test
     void testToCharsetEncoders_default() {

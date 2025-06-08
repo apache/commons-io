@@ -47,7 +47,7 @@ import org.junitpioneer.jupiter.cartesian.CartesianTest.Values;
 /**
  * Tests {@link FileChannels}.
  */
-public class FileChannelsTest extends AbstractTempDirTest {
+class FileChannelsTest extends AbstractTempDirTest {
 
     enum FileChannelType {
         STOCK, PROXY, NON_BLOCKING, FIXED_READ_SIZE

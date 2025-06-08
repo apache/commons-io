@@ -28,7 +28,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Tests {@link CountingPathVisitor}.
  */
-public class CountingPathVisitorTest extends TestArguments {
+class CountingPathVisitorTest extends TestArguments {
 
     private void checkZeroCounts(final CountingPathVisitor visitor) {
         Assertions.assertEquals(CountingPathVisitor.withLongCounters(), visitor);

@@ -31,7 +31,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Tests {@link CountingInputStream}.
  */
-public class CountingInputStreamTest {
+class CountingInputStreamTest {
 
     @SuppressWarnings("resource")
     @ParameterizedTest

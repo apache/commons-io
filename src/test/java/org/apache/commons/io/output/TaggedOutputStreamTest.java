@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link TaggedOutputStream}.
  */
-public class TaggedOutputStreamTest  {
+class TaggedOutputStreamTest  {
 
     @Test
     void testBrokenStream() {

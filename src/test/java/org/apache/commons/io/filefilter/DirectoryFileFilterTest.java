@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link DirectoryFileFilter}.
  */
-public class DirectoryFileFilterTest {
+class DirectoryFileFilterTest {
 
     /**
      * Javadoc example.

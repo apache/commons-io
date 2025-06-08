@@ -30,7 +30,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Tests {@link BrokenReader}.
  */
-public class BrokenReaderTest {
+class BrokenReaderTest {
 
     private static BrokenReader createBrokenReader(final Throwable exception) {
         if (exception instanceof IOException) {

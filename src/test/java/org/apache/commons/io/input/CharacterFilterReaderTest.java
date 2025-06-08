@@ -29,7 +29,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.StringBuilderWriter;
 import org.junit.jupiter.api.Test;
 
-public class CharacterFilterReaderTest {
+class CharacterFilterReaderTest {
 
     private static final String STRING_FIXTURE = "ababcabcd";
 

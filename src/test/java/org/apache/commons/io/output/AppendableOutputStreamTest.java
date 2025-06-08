@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link AppendableOutputStream}.
  */
-public class AppendableOutputStreamTest {
+class AppendableOutputStreamTest {
 
     private AppendableOutputStream<StringBuilder> out;
 

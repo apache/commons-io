@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
  * This code is used in Javadoc.
  * </p>
  */
-public class AbstractSupplierTest {
+class AbstractSupplierTest {
 
     /**
      * Builds {@link Foo} instances.

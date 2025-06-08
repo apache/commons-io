@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
  * Really not a lot to do here, but checking that no
  * Exceptions are thrown.
  */
-public class NullWriterTest {
+class NullWriterTest {
 
     @Test
     void testNull() {

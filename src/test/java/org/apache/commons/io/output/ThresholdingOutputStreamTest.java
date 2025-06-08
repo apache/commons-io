@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
  *
  * @see DeferredFileOutputStream
  */
-public class ThresholdingOutputStreamTest {
+class ThresholdingOutputStreamTest {
 
     /**
      * Asserts initial state without changing it.

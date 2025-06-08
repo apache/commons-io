@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link StandardLineSeparator}.
  */
-public class StandardLineSeparatorTest {
+class StandardLineSeparatorTest {
 
     @Test
     void testCR() {

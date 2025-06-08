@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link AbstractStreamBuilder}.
  */
-public class AbstractStreamBuilderTest {
+class AbstractStreamBuilderTest {
 
     public static class Builder extends AbstractStreamBuilder<char[], Builder> {
 

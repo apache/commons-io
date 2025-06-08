@@ -47,7 +47,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-public class ReaderInputStreamTest {
+class ReaderInputStreamTest {
 
     private static final String UTF_16 = StandardCharsets.UTF_16.name();
     private static final String UTF_8 = StandardCharsets.UTF_8.name();

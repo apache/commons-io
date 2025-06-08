@@ -41,7 +41,7 @@ import org.junit.jupiter.api.io.TempDir;
 /**
  * Tests {@link LineIterator}.
  */
-public class LineIteratorTest {
+class LineIteratorTest {
 
     private static final String UTF_8 = StandardCharsets.UTF_8.name();
 

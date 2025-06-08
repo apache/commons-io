@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link StreamIterator}.
  */
-public class StreamIteratorTest {
+class StreamIteratorTest {
 
     @Test
     void testForEachRemaining() {

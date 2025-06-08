@@ -30,7 +30,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 /**
  * Tests {@link IORandomAccessFile}.
  */
-public class IORandomAccessFileTest {
+class IORandomAccessFileTest {
 
     protected static final String FILE_NAME_RW = "target/" + AbstractOriginTest.class.getSimpleName() + ".txt";
 

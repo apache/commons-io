@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link PathUtils}.
  */
-public class PathUtilsIsEmptyTest {
+class PathUtilsIsEmptyTest {
 
     public static final Path DIR_SIZE_1 = Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1");
 

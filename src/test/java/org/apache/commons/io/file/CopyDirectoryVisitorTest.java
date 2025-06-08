@@ -42,7 +42,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Tests {@link CopyDirectoryVisitor}.
  */
-public class CopyDirectoryVisitorTest extends TestArguments {
+class CopyDirectoryVisitorTest extends TestArguments {
 
     private static final CopyOption[] EXPECTED_COPY_OPTIONS = {StandardCopyOption.REPLACE_EXISTING};
 

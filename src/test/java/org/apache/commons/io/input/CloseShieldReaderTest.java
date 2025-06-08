@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link CloseShieldReader}.
  */
-public class CloseShieldReaderTest {
+class CloseShieldReaderTest {
 
     private String data;
 

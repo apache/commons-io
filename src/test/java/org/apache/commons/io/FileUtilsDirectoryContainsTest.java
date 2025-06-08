@@ -33,7 +33,7 @@ import org.junit.jupiter.api.io.TempDir;
  *
  * @see FileUtils#directoryContains(File, File)
  */
-public class FileUtilsDirectoryContainsTest {
+class FileUtilsDirectoryContainsTest {
 
     private File directory1;
     private File directory2;

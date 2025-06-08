@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Basic unit tests for the alternative ByteArrayInputStream implementation.
  */
-public class UnsynchronizedByteArrayInputStreamTest {
+class UnsynchronizedByteArrayInputStreamTest {
 
     private UnsynchronizedByteArrayInputStream newStream(final byte[] buffer) {
         try {

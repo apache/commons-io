@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link ChunkedWriter}.
  */
-public class ChunkedWriterTest {
+class ChunkedWriterTest {
 
     @SuppressWarnings("resource") // closed by caller.
     private OutputStreamWriter getOutputStreamWriter(final AtomicInteger numWrites) {

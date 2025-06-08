@@ -22,7 +22,7 @@ import org.apache.commons.io.file.Counters.PathCounters;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class CountersEqualsAndHashCodeTest {
+class CountersEqualsAndHashCodeTest {
 
     @Test
     void testBigIntegerCounterEquals() {

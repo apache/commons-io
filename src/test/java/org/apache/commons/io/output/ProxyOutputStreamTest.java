@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link CloseShieldOutputStream}.
  */
-public class ProxyOutputStreamTest {
+class ProxyOutputStreamTest {
 
     private ByteArrayOutputStream original;
 

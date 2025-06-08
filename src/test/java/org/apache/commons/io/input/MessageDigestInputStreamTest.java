@@ -43,7 +43,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link MessageDigestInputStream}.
  */
-public class MessageDigestInputStreamTest {
+class MessageDigestInputStreamTest {
 
     static byte[] generateRandomByteStream(final int size) {
         final byte[] buffer = new byte[size];

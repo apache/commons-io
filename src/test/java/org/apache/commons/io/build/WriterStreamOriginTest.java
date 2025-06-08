@@ -35,7 +35,7 @@ import org.junit.jupiter.params.provider.EnumSource;
  *
  * @see Writer
  */
-public class WriterStreamOriginTest extends AbstractOriginTest<Writer, WriterOrigin> {
+class WriterStreamOriginTest extends AbstractOriginTest<Writer, WriterOrigin> {
 
     @Override
     protected WriterOrigin newOriginRo() {

@@ -35,7 +35,7 @@ import org.junit.jupiter.api.io.TempDir;
 /**
  * Tests {@link RandomAccessFileOutputStream}.
  */
-public class RandomAccessFileOutputStreamTest {
+class RandomAccessFileOutputStreamTest {
 
     private static final String EXPECTED = "Put the message in the box";
 

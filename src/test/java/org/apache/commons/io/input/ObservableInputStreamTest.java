@@ -39,7 +39,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link ObservableInputStream}.
  */
-public class ObservableInputStreamTest {
+class ObservableInputStreamTest {
 
     private static final class DataViewObserver extends MethodCountObserver {
         private byte[] buffer;

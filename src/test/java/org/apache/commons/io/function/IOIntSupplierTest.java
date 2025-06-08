@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOIntSupplier}.
  */
-public class IOIntSupplierTest {
+class IOIntSupplierTest {
 
     private AtomicInteger atomicInt;
 

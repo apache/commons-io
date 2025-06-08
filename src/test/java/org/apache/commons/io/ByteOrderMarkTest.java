@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Test for {@link ByteOrderMark}.
  */
-public class ByteOrderMarkTest {
+class ByteOrderMarkTest {
 
     private static final ByteOrderMark TEST_BOM_1 = new ByteOrderMark("test1", 1);
     private static final ByteOrderMark TEST_BOM_2 = new ByteOrderMark("test2", 1, 2);

@@ -40,7 +40,7 @@ import org.junit.jupiter.api.Test;
 /**
  * See Jira ticket IO-802.
  */
-public class IOUtilsMultithreadedSkipTest {
+class IOUtilsMultithreadedSkipTest {
 
     private static final String FIXTURE = "TIKA-4065.bin";
     long seed = 1;

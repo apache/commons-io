@@ -38,7 +38,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 /**
  * Tests {@link RandomAccessFileMode}.
  */
-public class RandomAccessFileModeTest {
+class RandomAccessFileModeTest {
 
     private static final byte[] BYTES_FIXTURE = "Foo".getBytes(StandardCharsets.US_ASCII);
 

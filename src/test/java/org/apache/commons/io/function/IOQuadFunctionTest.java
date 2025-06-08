@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOQuadFunction}.
  */
-public class IOQuadFunctionTest {
+class IOQuadFunctionTest {
 
     /**
      * Tests {@link IOQuadFunction#apply(Object, Object, Object, Object)}.

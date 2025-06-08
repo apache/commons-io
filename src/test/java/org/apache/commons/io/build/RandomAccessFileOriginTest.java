@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
  *
  * @see RandomAccessFile
  */
-public class RandomAccessFileOriginTest extends AbstractRandomAccessFileOriginTest<RandomAccessFile, RandomAccessFileOrigin> {
+class RandomAccessFileOriginTest extends AbstractRandomAccessFileOriginTest<RandomAccessFile, RandomAccessFileOrigin> {
 
     @SuppressWarnings("resource")
     @Override

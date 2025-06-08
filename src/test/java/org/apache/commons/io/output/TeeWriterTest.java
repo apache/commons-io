@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
  * Tests {@link TeeWriter}.
  */
 @SuppressWarnings("resource") // not necessary to close these resources
-public class TeeWriterTest {
+class TeeWriterTest {
 
     @Test
     void testArrayIOExceptionOnAppendChar1() {

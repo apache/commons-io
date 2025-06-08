@@ -40,7 +40,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 /**
  * Tests {@link MemoryMappedFileInputStream}.
  */
-public class MemoryMappedFileInputStreamTest {
+class MemoryMappedFileInputStreamTest {
 
     @TempDir
     Path tempDir;

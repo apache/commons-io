@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link Uncheck}.
  */
-public class UncheckTest {
+class UncheckTest {
 
     private static final byte[] BYTES = { 'a', 'b' };
     private static final String CAUSE_MESSAGE = "CauseMessage";

@@ -37,14 +37,14 @@ import org.junit.jupiter.api.Test;
 /**
  * {@link FileAlterationObserver} Test Case.
  */
-public class FileAlterationObserverTest extends AbstractMonitorTest {
+class FileAlterationObserverTest extends AbstractMonitorTest {
 
     private static final String PATH_STRING_FIXTURE = "/foo";
 
     /**
      * Constructs a new instance.
      */
-    public FileAlterationObserverTest() {
+    FileAlterationObserverTest() {
         listener = new CollectionFileListener(true);
     }
 

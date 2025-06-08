@@ -52,7 +52,7 @@ import org.junitpioneer.jupiter.DefaultLocale;
 /**
  * Tests {@link XmlStreamReader}.
  */
-public class XmlStreamReaderTest {
+class XmlStreamReaderTest {
 
     private static final String ISO_8859_1 = StandardCharsets.ISO_8859_1.name();
     private static final String US_ASCII = StandardCharsets.US_ASCII.name();

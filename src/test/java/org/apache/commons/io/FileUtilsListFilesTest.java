@@ -50,7 +50,7 @@ import org.junit.jupiter.api.io.TempDir;
 /**
  * Tests FileUtils.listFiles() methods.
  */
-public class FileUtilsListFilesTest {
+class FileUtilsListFilesTest {
 
     @TempDir
     public File temporaryFolder;

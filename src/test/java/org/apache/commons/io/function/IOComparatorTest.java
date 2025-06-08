@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOComparator}.
  */
-public class IOComparatorTest {
+class IOComparatorTest {
 
     /** {@link Files#size(Path)} throws IOException */
     static final IOComparator<Path> PATH_SIZE_COMP = (final Path t, final Path u) -> Long.compare(Files.size(t), Files.size(u));

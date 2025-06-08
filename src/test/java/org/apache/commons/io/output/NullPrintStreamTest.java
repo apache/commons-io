@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link NullPrintStream}.
  */
-public class NullPrintStreamTest {
+class NullPrintStreamTest {
 
     private void process(final NullPrintStream nos) throws IOException {
         nos.write("string".getBytes());

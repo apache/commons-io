@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Test case for {@link SequenceReader}.
  */
-public class SequenceReaderTest {
+class SequenceReaderTest {
 
     private static class CustomReader extends Reader {
 

@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOIterable}.
  */
-public class IOIterableTest {
+class IOIterableTest {
 
     private static class Fixture implements IOIterable<Path> {
 

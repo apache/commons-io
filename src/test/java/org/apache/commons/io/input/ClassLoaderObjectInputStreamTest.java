@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link ClassLoaderObjectInputStream}.
  */
-public class ClassLoaderObjectInputStreamTest {
+class ClassLoaderObjectInputStreamTest {
 
     /**
      * Note: This test case tests the simplest functionality of ObjectInputStream. IF we really wanted to test

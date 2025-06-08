@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link SerializableFileTime}.
  */
-public class SerializableFileTimeTest {
+class SerializableFileTimeTest {
 
     @Test
     void testSerializable() throws IOException {

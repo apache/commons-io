@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link EndianUtils}.
  */
-public class EndianUtilsTest {
+class EndianUtilsTest {
 
     @Test
     void testCtor() {

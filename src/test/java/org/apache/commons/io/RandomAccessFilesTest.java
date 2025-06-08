@@ -36,7 +36,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 /**
  * Tests {@link RandomAccessFiles}.
  */
-public class RandomAccessFilesTest {
+class RandomAccessFilesTest {
 
     private static final Path PATH_RO_20 = Paths.get("src/test/resources/org/apache/commons/io/test-file-20byteslength.bin");
     private static final Path PATH_RO_0 = Paths.get("src/test/resources/org/apache/commons/io/test-file-empty.bin");

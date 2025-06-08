@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link TeeInputStream}.
  */
-public class TeeInputStreamTest  {
+class TeeInputStreamTest  {
 
     private final String ASCII = StandardCharsets.US_ASCII.name();
 

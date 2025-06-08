@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link HexDump}.
  */
-public class HexDumpTest {
+class HexDumpTest {
 
     @Test
     void testDumpAppendable() throws IOException {

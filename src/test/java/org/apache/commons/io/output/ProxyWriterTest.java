@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Test {@link ProxyWriter}.
  */
-public class ProxyWriterTest {
+class ProxyWriterTest {
 
     @Test
     void testAppendChar() throws Exception {

@@ -34,7 +34,7 @@ import org.junit.jupiter.params.provider.ValueSource;
  *
  * @see URI
  */
-public class URIOriginTest extends AbstractOriginTest<URI, URIOrigin> {
+class URIOriginTest extends AbstractOriginTest<URI, URIOrigin> {
 
     @Override
     protected URIOrigin newOriginRo() {

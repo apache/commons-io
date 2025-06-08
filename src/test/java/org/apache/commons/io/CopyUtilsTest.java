@@ -41,7 +41,7 @@ import org.junit.jupiter.api.Test;
  *
  * @see CopyUtils
  */
-public class CopyUtilsTest {
+class CopyUtilsTest {
 
     /*
      * NOTE this is not particularly beautiful code. A better way to check for

@@ -29,7 +29,7 @@ import java.nio.file.spi.FileSystemProvider;
 
 import org.junit.jupiter.api.Test;
 
-public class FileSystemProvidersTest {
+class FileSystemProvidersTest {
 
     private static final String FILE_PATH = "file:///foo.txt";
 

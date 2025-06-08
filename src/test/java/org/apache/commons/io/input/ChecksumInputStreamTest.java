@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link ChecksumInputStream}.
  */
-public class ChecksumInputStreamTest {
+class ChecksumInputStreamTest {
 
     private ChecksumInputStream createInputStream() throws IOException {
         return ChecksumInputStream.builder().setCharSequence("Hi").setChecksum(new CRC32()).get();

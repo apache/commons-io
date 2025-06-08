@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOSpliterator}.
  */
-public class IOSpliteratorTest {
+class IOSpliteratorTest {
 
     private IOSpliterator<Path> spliterator;
 

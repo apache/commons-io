@@ -39,7 +39,7 @@ import org.junit.jupiter.params.provider.EnumSource;
  *
  * @see CharSequence
  */
-public class CharSequenceOriginTest extends AbstractOriginTest<CharSequence, CharSequenceOrigin> {
+class CharSequenceOriginTest extends AbstractOriginTest<CharSequence, CharSequenceOrigin> {
 
     private String getFixtureStringFromFile() throws IOException {
         return IOUtils.resourceToString(FILE_RES_RO, StandardCharsets.UTF_8);

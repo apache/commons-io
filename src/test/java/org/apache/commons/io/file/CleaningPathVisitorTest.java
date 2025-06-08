@@ -37,7 +37,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Tests {@link DeletingPathVisitor}.
  */
-public class CleaningPathVisitorTest extends TestArguments {
+class CleaningPathVisitorTest extends TestArguments {
 
     @TempDir
     private Path tempDir;

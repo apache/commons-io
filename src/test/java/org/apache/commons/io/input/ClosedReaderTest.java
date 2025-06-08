@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link ClosedReader}.
  */
-public class ClosedReaderTest {
+class ClosedReaderTest {
 
     private void assertEof(final Reader reader) throws IOException {
         assertEquals(EOF, reader.read(), "read()");

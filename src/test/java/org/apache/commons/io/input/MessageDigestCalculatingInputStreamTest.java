@@ -43,7 +43,7 @@ import org.junit.jupiter.api.Test;
  * Tests {@link MessageDigestCalculatingInputStream}.
  */
 @SuppressWarnings("deprecation")
-public class MessageDigestCalculatingInputStreamTest {
+class MessageDigestCalculatingInputStreamTest {
 
     private InputStream createInputStream() throws IOException {
         final ByteArrayInputStream origin = new ByteArrayInputStream(MessageDigestInputStreamTest.generateRandomByteStream(256));

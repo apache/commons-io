@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link SymbolicLinkFileFilter}.
  */
-public class SymbolicLinkFileFilterTest {
+class SymbolicLinkFileFilterTest {
 
     public static final String TARGET_SHORT_NAME = "SLFF_Target";
     public static final String TARGET_EXT = ".txt";

@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOBiFunction}.
  */
-public class IOBiFunctionTest {
+class IOBiFunctionTest {
 
     @SuppressWarnings("unused")
     private boolean not(final boolean value) throws IOException {

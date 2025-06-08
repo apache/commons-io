@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
  * to verify which settings it requires, as the object uses a number of primitive
  * and java.* member objects.
  */
-public class MoreComplexObjectTest extends AbstractCloseableListTest {
+class MoreComplexObjectTest extends AbstractCloseableListTest {
 
     private InputStream inputStream;
     private MoreComplexObject original;

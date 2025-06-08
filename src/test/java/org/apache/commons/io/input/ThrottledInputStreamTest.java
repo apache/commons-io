@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link ThrottledInputStream}.
  */
-public class ThrottledInputStreamTest extends ProxyInputStreamTest<ThrottledInputStream> {
+class ThrottledInputStreamTest extends ProxyInputStreamTest<ThrottledInputStream> {
 
     @Override
     @SuppressWarnings({ "resource" })

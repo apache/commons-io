@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link ChunkedOutputStream}.
  */
-public class ChunkedOutputStreamTest {
+class ChunkedOutputStreamTest {
 
     private ByteArrayOutputStream newByteArrayOutputStream(final AtomicInteger numWrites) {
         return new ByteArrayOutputStream() {

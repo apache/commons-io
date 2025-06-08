@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link DemuxInputStream}.
  */
-public class DemuxInputStreamTest {
+class DemuxInputStreamTest {
 
     private static final class ReaderThread extends Thread {
         private final DemuxInputStream demuxInputStream;

@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link DirectoryFileComparator}.
  */
-public class DirectoryFileComparatorTest extends ComparatorAbstractTest {
+class DirectoryFileComparatorTest extends ComparatorAbstractTest {
 
     @BeforeEach
     public void setUp() {

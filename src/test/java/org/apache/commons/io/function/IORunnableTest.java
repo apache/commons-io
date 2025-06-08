@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IORunnable}.
  */
-public class IORunnableTest {
+class IORunnableTest {
 
     /**
      * Tests {@link IORunnable#run()}.

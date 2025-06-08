@@ -41,7 +41,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link BoundedReader}.
  */
-public class BoundedReaderTest {
+class BoundedReaderTest {
 
     private static final Duration TIMEOUT = Duration.ofSeconds(10);
 

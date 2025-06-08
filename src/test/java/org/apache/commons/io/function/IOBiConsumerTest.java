@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOBiConsumer}.
  */
-public class IOBiConsumerTest {
+class IOBiConsumerTest {
 
     @Test
     void testAccept() throws IOException {

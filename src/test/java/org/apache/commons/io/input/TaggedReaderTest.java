@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link TaggedReader}.
  */
-public class TaggedReaderTest {
+class TaggedReaderTest {
 
     @Test
     void testBrokenReader() {

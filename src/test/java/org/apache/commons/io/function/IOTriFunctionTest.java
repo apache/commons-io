@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOTriFunction}.
  */
-public class IOTriFunctionTest {
+class IOTriFunctionTest {
 
     /**
      * Tests {@link IOTriFunction#apply(Object, Object, Object)}.

@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOUnaryOperator}.
  */
-public class IOUnaryOperatorTest {
+class IOUnaryOperatorTest {
 
     @Test
     void testAsUnaryOperator() {

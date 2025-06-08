@@ -38,12 +38,12 @@ import org.junit.jupiter.api.Test;
 /**
  * {@link FileAlterationMonitor} Test Case.
  */
-public class FileAlterationMonitorTest extends AbstractMonitorTest {
+class FileAlterationMonitorTest extends AbstractMonitorTest {
 
     /**
      * Constructs a new test case.
      */
-    public FileAlterationMonitorTest() {
+    FileAlterationMonitorTest() {
         listener = new CollectionFileListener(false);
     }
 

@@ -47,7 +47,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOUtils} copy methods.
  */
-public class IOUtilsCopyTest {
+class IOUtilsCopyTest {
 
     /*
      * NOTE this is not particularly beautiful code. A better way to check for

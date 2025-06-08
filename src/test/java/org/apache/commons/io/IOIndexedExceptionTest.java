@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOIndexedException}.
  */
-public class IOIndexedExceptionTest {
+class IOIndexedExceptionTest {
 
     @Test
     void testEdge() {

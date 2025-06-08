@@ -42,7 +42,7 @@ import org.junit.jupiter.api.Test;
  * Provenance: Apache Harmony and modified.
  * </p>
  */
-public class UnsynchronizedBufferedInputStreamTest {
+class UnsynchronizedBufferedInputStreamTest {
 
     private static final int BUFFER_SIZE = 4096;
 
