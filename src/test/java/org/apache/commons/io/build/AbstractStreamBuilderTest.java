@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link AbstractStreamBuilder}.
  */
-public class AbstractStreamBuilderTest {
+class AbstractStreamBuilderTest {
 
     public static class Builder extends AbstractStreamBuilder<char[], Builder> {
 
@@ -54,7 +54,7 @@ public class AbstractStreamBuilderTest {
     }
 
     @Test
-    public void testBufferSizeChecker() {
+    void testBufferSizeChecker() {
         // sanity
         final Builder builder = builder();
         assertResult(builder.get(), builder.getBufferSize());

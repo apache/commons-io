@@ -36,7 +36,7 @@ import org.junit.jupiter.api.io.TempDir;
  *
  * @see FileUtils#copyDirectoryToDirectory(File, File)
  */
-public class FileUtilsCopyDirectoryToDirectoryTest {
+class FileUtilsCopyDirectoryToDirectoryTest {
 
     private static void assertExceptionTypeAndMessage(final File srcDir, final File destDir,
         final Class<? extends Exception> expectedExceptionType, final String expectedMessage) {
@@ -60,7 +60,7 @@ public class FileUtilsCopyDirectoryToDirectoryTest {
     }
 
     @Test
-    public void testCopyDirectoryToDirectoryThrowsIllegalArgumentExceptionWithCorrectMessageWhenDstDirIsNotDirectory()
+    void testCopyDirectoryToDirectoryThrowsIllegalArgumentExceptionWithCorrectMessageWhenDstDirIsNotDirectory()
         throws IOException {
         final File srcDir = new File(temporaryFolder, "sourceDirectory");
         srcDir.mkdir();
@@ -72,7 +72,7 @@ public class FileUtilsCopyDirectoryToDirectoryTest {
     }
 
     @Test
-    public void testCopyDirectoryToDirectoryThrowsIllegalExceptionWithCorrectMessageWhenSrcDirIsNotDirectory()
+    void testCopyDirectoryToDirectoryThrowsIllegalExceptionWithCorrectMessageWhenSrcDirIsNotDirectory()
         throws IOException {
         try (TempFile srcDir = TempFile.create("notadirectory", null)) {
             final File destDir = new File(temporaryFolder, "destinationDirectory");
@@ -83,7 +83,7 @@ public class FileUtilsCopyDirectoryToDirectoryTest {
     }
 
     @Test
-    public void testCopyDirectoryToDirectoryThrowsNullPointerExceptionWithCorrectMessageWhenDstDirIsNull() {
+    void testCopyDirectoryToDirectoryThrowsNullPointerExceptionWithCorrectMessageWhenDstDirIsNull() {
         final File srcDir = new File(temporaryFolder, "sourceDirectory");
         srcDir.mkdir();
         final File destDir = null;
@@ -91,7 +91,7 @@ public class FileUtilsCopyDirectoryToDirectoryTest {
     }
 
     @Test
-    public void testCopyDirectoryToDirectoryThrowsNullPointerExceptionWithCorrectMessageWhenSrcDirIsNull() {
+    void testCopyDirectoryToDirectoryThrowsNullPointerExceptionWithCorrectMessageWhenSrcDirIsNull() {
         final File srcDir = null;
         final File destinationDirectory = new File(temporaryFolder, "destinationDirectory");
         destinationDirectory.mkdir();
@@ -99,7 +99,7 @@ public class FileUtilsCopyDirectoryToDirectoryTest {
     }
 
     @Test
-    public void testCopyFileAndCheckAcl() throws IOException {
+    void testCopyFileAndCheckAcl() throws IOException {
         try (TempFile sourcePath = TempFile.create("TempOutput", ".bin")) {
             final Path destPath = Paths.get(temporaryFolder.getAbsolutePath(), "SomeFile.bin");
             // Test copy attributes without replace FIRST.

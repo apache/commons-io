@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link WriterOutputStream}.
  */
-public class WriterOutputStreamTest {
+class WriterOutputStreamTest {
 
     private static final String UTF_16LE = StandardCharsets.UTF_16LE.name();
     private static final String UTF_16BE = StandardCharsets.UTF_16BE.name();
@@ -55,7 +55,7 @@ public class WriterOutputStreamTest {
     private final Random random = new Random();
 
     @Test
-    public void testFlush() throws IOException {
+    void testFlush() throws IOException {
         final StringWriter writer = new StringWriter();
         try (WriterOutputStream out = new WriterOutputStream(writer, "us-ascii", 1024, false)) {
             out.write("abc".getBytes(StandardCharsets.US_ASCII));
@@ -66,62 +66,62 @@ public class WriterOutputStreamTest {
     }
 
     @Test
-    public void testLargeUTF8CharsetWithBufferedWrite() throws IOException {
+    void testLargeUTF8CharsetWithBufferedWrite() throws IOException {
         testWithBufferedWrite(LARGE_TEST_STRING, UTF_8);
     }
 
     @Test
-    public void testLargeUTF8CharsetWithSingleByteWrite() throws IOException {
+    void testLargeUTF8CharsetWithSingleByteWrite() throws IOException {
         testWithSingleByteWrite(LARGE_TEST_STRING, StandardCharsets.UTF_8);
     }
 
     @Test
-    public void testLargeUTF8WithBufferedWrite() throws IOException {
+    void testLargeUTF8WithBufferedWrite() throws IOException {
         testWithBufferedWrite(LARGE_TEST_STRING, UTF_8);
     }
 
     @Test
-    public void testLargeUTF8WithSingleByteWrite() throws IOException {
+    void testLargeUTF8WithSingleByteWrite() throws IOException {
         testWithSingleByteWrite(LARGE_TEST_STRING, UTF_8);
     }
 
     @Test
-    public void testNullCharsetDecoderWithSingleByteWrite() throws IOException {
+    void testNullCharsetDecoderWithSingleByteWrite() throws IOException {
         testWithSingleByteWrite(TEST_STRING, (CharsetDecoder) null);
     }
 
     @Test
-    public void testNullCharsetNameWithSingleByteWrite() throws IOException {
+    void testNullCharsetNameWithSingleByteWrite() throws IOException {
         testWithSingleByteWrite(TEST_STRING, (String) null);
     }
 
     @Test
-    public void testNullCharsetWithSingleByteWrite() throws IOException {
+    void testNullCharsetWithSingleByteWrite() throws IOException {
         testWithSingleByteWrite(TEST_STRING, (Charset) null);
     }
 
     @Test
-    public void testUTF16BEWithBufferedWrite() throws IOException {
+    void testUTF16BEWithBufferedWrite() throws IOException {
         testWithBufferedWrite(TEST_STRING, UTF_16BE);
     }
 
     @Test
-    public void testUTF16BEWithSingleByteWrite() throws IOException {
+    void testUTF16BEWithSingleByteWrite() throws IOException {
         testWithSingleByteWrite(TEST_STRING, UTF_16BE);
     }
 
     @Test
-    public void testUTF16LEWithBufferedWrite() throws IOException {
+    void testUTF16LEWithBufferedWrite() throws IOException {
         testWithBufferedWrite(TEST_STRING, UTF_16LE);
     }
 
     @Test
-    public void testUTF16LEWithSingleByteWrite() throws IOException {
+    void testUTF16LEWithSingleByteWrite() throws IOException {
         testWithSingleByteWrite(TEST_STRING, UTF_16LE);
     }
 
     @Test
-    public void testUTF16WithBufferedWrite() throws IOException {
+    void testUTF16WithBufferedWrite() throws IOException {
         try {
             testWithBufferedWrite(TEST_STRING, UTF_16);
         } catch (final UnsupportedOperationException e) {
@@ -132,7 +132,7 @@ public class WriterOutputStreamTest {
     }
 
     @Test
-    public void testUTF16WithSingleByteWrite() throws IOException {
+    void testUTF16WithSingleByteWrite() throws IOException {
         try {
             testWithSingleByteWrite(TEST_STRING, UTF_16);
         } catch (final UnsupportedOperationException e) {
@@ -143,12 +143,12 @@ public class WriterOutputStreamTest {
     }
 
     @Test
-    public void testUTF8WithBufferedWrite() throws IOException {
+    void testUTF8WithBufferedWrite() throws IOException {
         testWithBufferedWrite(TEST_STRING, UTF_8);
     }
 
     @Test
-    public void testUTF8WithSingleByteWrite() throws IOException {
+    void testUTF8WithSingleByteWrite() throws IOException {
         testWithSingleByteWrite(TEST_STRING, UTF_8);
     }
 
@@ -212,7 +212,7 @@ public class WriterOutputStreamTest {
     }
 
     @Test
-    public void testWriteImmediately() throws IOException {
+    void testWriteImmediately() throws IOException {
         final StringWriter writer = new StringWriter();
         try (WriterOutputStream out = new WriterOutputStream(writer, "us-ascii", 1024, true)) {
             out.write("abc".getBytes(StandardCharsets.US_ASCII));

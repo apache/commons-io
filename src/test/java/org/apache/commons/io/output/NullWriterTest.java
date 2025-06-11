@@ -22,10 +22,10 @@ import org.junit.jupiter.api.Test;
  * Really not a lot to do here, but checking that no
  * Exceptions are thrown.
  */
-public class NullWriterTest {
+class NullWriterTest {
 
     @Test
-    public void testNull() {
+    void testNull() {
         final char[] chars = { 'A', 'B', 'C' };
         try (NullWriter writer = NullWriter.INSTANCE) {
             writer.write(1);

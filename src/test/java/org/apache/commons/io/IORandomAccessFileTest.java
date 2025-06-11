@@ -30,7 +30,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 /**
  * Tests {@link IORandomAccessFile}.
  */
-public class IORandomAccessFileTest {
+class IORandomAccessFileTest {
 
     protected static final String FILE_NAME_RW = "target/" + AbstractOriginTest.class.getSimpleName() + ".txt";
 
@@ -42,7 +42,7 @@ public class IORandomAccessFileTest {
 
     @ParameterizedTest
     @EnumSource(RandomAccessFileMode.class)
-    public void testFile(final RandomAccessFileMode mode) throws IOException {
+    void testFile(final RandomAccessFileMode mode) throws IOException {
         final File file = newFileFixture();
         final String modeStr = mode.getMode();
         try (IORandomAccessFile raf = new IORandomAccessFile(file, modeStr)) {
@@ -53,7 +53,7 @@ public class IORandomAccessFileTest {
 
     @ParameterizedTest
     @EnumSource(RandomAccessFileMode.class)
-    public void testString(final RandomAccessFileMode mode) throws IOException {
+    void testString(final RandomAccessFileMode mode) throws IOException {
         final File file = newFileFixture();
         final String modeStr = mode.getMode();
         try (IORandomAccessFile raf = new IORandomAccessFile(FILE_NAME_RW, modeStr)) {
@@ -63,7 +63,7 @@ public class IORandomAccessFileTest {
     }
 
     @Test
-    public void testToString() throws IOException {
+    void testToString() throws IOException {
         final File file = newFileFixture();
         try (IORandomAccessFile raf = new IORandomAccessFile(FILE_NAME_RW, "r")) {
             assertEquals(file.toString(), raf.toString());

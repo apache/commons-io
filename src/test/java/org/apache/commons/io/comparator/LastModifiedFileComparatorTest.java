@@ -28,7 +28,7 @@ import org.junit.jupiter.api.BeforeEach;
 /**
  * Tests {@link LastModifiedFileComparator}.
  */
-public class LastModifiedFileComparatorTest extends ComparatorAbstractTest {
+class LastModifiedFileComparatorTest extends ComparatorAbstractTest {
 
     @BeforeEach
     public void setUp() throws Exception {

@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link InfiniteCircularInputStream}.
  */
-public class InfiniteCircularInputStreamTest {
+class InfiniteCircularInputStreamTest {
 
     private void assertStreamOutput(final byte[] toCycle, final byte[] expected) throws IOException {
         final byte[] actual = new byte[expected.length];
@@ -48,7 +48,7 @@ public class InfiniteCircularInputStreamTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testAvailableAfterClose() throws Exception {
+    void testAvailableAfterClose() throws Exception {
         final InputStream shadow;
         try (InputStream in = createInputStream(new byte[] { 1, 2 })) {
             assertTrue(in.available() > 0);
@@ -61,7 +61,7 @@ public class InfiniteCircularInputStreamTest {
     }
 
     @Test
-    public void testAvailableAfterOpen() throws Exception {
+    void testAvailableAfterOpen() throws Exception {
         try (InputStream in = createInputStream(new byte[] { 1, 2 })) {
             assertTrue(in.available() > 0);
             assertEquals(1, in.read());
@@ -74,24 +74,24 @@ public class InfiniteCircularInputStreamTest {
     }
 
     @Test
-    public void testContainsEofInputSize0() {
+    void testContainsEofInputSize0() {
         assertThrows(IllegalArgumentException.class, () -> createInputStream(new byte[] { -1 }));
     }
 
     @Test
-    public void testCount0InputSize0() {
+    void testCount0InputSize0() {
         assertThrows(IllegalArgumentException.class, () -> createInputStream(new byte[] {}));
     }
 
     @Test
-    public void testCount0InputSize1() throws IOException {
+    void testCount0InputSize1() throws IOException {
         try (InputStream in = createInputStream(new byte[] { 1 })) {
             // empty
         }
     }
 
     @Test
-    public void testCount1InputSize1() throws IOException {
+    void testCount1InputSize1() throws IOException {
         try (InputStream in = createInputStream(new byte[] { 1 })) {
             assertEquals(1, in.read());
             assertEquals(1, in.read());
@@ -99,7 +99,7 @@ public class InfiniteCircularInputStreamTest {
     }
 
     @Test
-    public void testCycleBytes() throws IOException {
+    void testCycleBytes() throws IOException {
         final byte[] input = { 1, 2 };
         final byte[] expected = { 1, 2, 1, 2, 1 };
 
@@ -107,13 +107,13 @@ public class InfiniteCircularInputStreamTest {
     }
 
     @Test
-    public void testNullInputSize0() {
+    void testNullInputSize0() {
         assertThrows(NullPointerException.class, () -> createInputStream(null));
     }
 
     @SuppressWarnings("resource")
     @Test
-    public void testReadAfterClose() throws Exception {
+    void testReadAfterClose() throws Exception {
         final InputStream shadow;
         try (InputStream in = createInputStream(new byte[] { 1, 2 })) {
             assertTrue(in.available() > 0);
@@ -126,7 +126,7 @@ public class InfiniteCircularInputStreamTest {
     }
 
     @Test
-    public void testWholeRangeOfBytes() throws IOException {
+    void testWholeRangeOfBytes() throws IOException {
         final int size = Byte.MAX_VALUE - Byte.MIN_VALUE + 1;
         final byte[] contentToCycle = new byte[size];
         byte value = Byte.MIN_VALUE;

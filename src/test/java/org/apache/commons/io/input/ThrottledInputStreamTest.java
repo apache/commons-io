@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link ThrottledInputStream}.
  */
-public class ThrottledInputStreamTest extends ProxyInputStreamTest<ThrottledInputStream> {
+class ThrottledInputStreamTest extends ProxyInputStreamTest<ThrottledInputStream> {
 
     @Override
     @SuppressWarnings({ "resource" })
@@ -45,7 +45,7 @@ public class ThrottledInputStreamTest extends ProxyInputStreamTest<ThrottledInpu
     }
 
     @Test
-    public void testAfterReadConsumer() throws Exception {
+    void testAfterReadConsumer() throws Exception {
         final AtomicBoolean boolRef = new AtomicBoolean();
         // @formatter:off
         try (InputStream bounded = ThrottledInputStream.builder()
@@ -71,7 +71,7 @@ public class ThrottledInputStreamTest extends ProxyInputStreamTest<ThrottledInpu
     }
 
     @Test
-    public void testBuilder() throws IOException {
+    void testBuilder() throws IOException {
         final Builder builder = ThrottledInputStream.builder();
         assertThrows(IllegalArgumentException.class, () -> builder.setMaxBytesPerSecond(-1));
         assertThrows(IllegalArgumentException.class, () -> builder.setMaxBytesPerSecond(0));
@@ -148,7 +148,7 @@ public class ThrottledInputStreamTest extends ProxyInputStreamTest<ThrottledInpu
     }
 
     @Test
-    public void testCalSleepTimeMs() {
+    void testCalSleepTimeMs() {
         // case 0: initial - no read, no sleep
         assertEquals(0, ThrottledInputStream.toSleepMillis(0, 1_000, 10_000));
         // case 1: no threshold
@@ -171,7 +171,7 @@ public class ThrottledInputStreamTest extends ProxyInputStreamTest<ThrottledInpu
     }
 
     @Test
-    public void testCloseHandleIOException() throws IOException {
+    void testCloseHandleIOException() throws IOException {
         ProxyInputStreamTest.testCloseHandleIOException(ThrottledInputStream.builder());
     }
 
@@ -181,7 +181,7 @@ public class ThrottledInputStreamTest extends ProxyInputStreamTest<ThrottledInpu
     }
 
     @Test
-    public void testGet() throws IOException {
+    void testGet() throws IOException {
         try (ThrottledInputStream inputStream = createFixture()) {
             inputStream.read();
             assertEquals(Duration.ZERO, inputStream.getTotalSleepDuration());

@@ -61,12 +61,12 @@ public class QueueOutputStreamTest {
     }
 
     @Test
-    public void testNullArgument() {
+    void testNullArgument() {
         assertThrows(NullPointerException.class, () -> new QueueOutputStream(null), "queue is required");
     }
 
     @Test
-    public void testWriteInterrupted() throws Exception {
+    void testWriteInterrupted() throws Exception {
         try (QueueOutputStream outputStream = new QueueOutputStream(new LinkedBlockingQueue<>(1));
                 QueueInputStream inputStream = outputStream.newQueueInputStream()) {
 
@@ -97,7 +97,7 @@ public class QueueOutputStreamTest {
     }
 
     @Test
-    public void testWriteString() throws Exception {
+    void testWriteString() throws Exception {
         try (QueueOutputStream outputStream = new QueueOutputStream();
                 QueueInputStream inputStream = outputStream.newQueueInputStream()) {
             outputStream.write("ABC".getBytes(UTF_8));
@@ -107,7 +107,7 @@ public class QueueOutputStreamTest {
     }
 
     @Test
-    public void testWriteStringMultiThread() throws Exception {
+    void testWriteStringMultiThread() throws Exception {
         try (QueueOutputStream outputStream = callInThrowAwayThread(QueueOutputStream::new);
                 QueueInputStream inputStream = callInThrowAwayThread(outputStream::newQueueInputStream)) {
             callInThrowAwayThread(() -> {

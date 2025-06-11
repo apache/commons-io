@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link NullPrintStream}.
  */
-public class NullPrintStreamTest {
+class NullPrintStreamTest {
 
     private void process(final NullPrintStream nos) throws IOException {
         nos.write("string".getBytes());
@@ -37,14 +37,14 @@ public class NullPrintStreamTest {
     }
 
     @Test
-    public void testNullNewInstance() throws IOException {
+    void testNullNewInstance() throws IOException {
         try (NullPrintStream nos = new NullPrintStream()) {
             process(nos);
         }
     }
 
     @Test
-    public void testNullSingleton() throws IOException {
+    void testNullSingleton() throws IOException {
         try (NullPrintStream nos = NullPrintStream.INSTANCE) {
             process(nos);
         }

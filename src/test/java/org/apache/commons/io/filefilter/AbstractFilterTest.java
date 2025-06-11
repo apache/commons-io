@@ -32,7 +32,7 @@ import org.junit.jupiter.api.io.TempDir;
 /**
  * Tests {@link FileFilterUtils} and friends.
  */
-public class AbstractFilterTest {
+class AbstractFilterTest {
 
     /**
      * The subversion directory name.

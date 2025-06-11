@@ -40,7 +40,7 @@ import org.junit.jupiter.api.io.TempDir;
 /**
  * Tests {@link FileWriterWithEncoding}.
  */
-public class FileWriterWithEncodingTest {
+class FileWriterWithEncodingTest {
 
     @TempDir
     public File temporaryFolder;
@@ -78,7 +78,7 @@ public class FileWriterWithEncodingTest {
     }
 
     @Test
-    public void testConstructor_File_directory() {
+    void testConstructor_File_directory() {
         assertThrows(IOException.class, () -> {
             try (Writer writer = new FileWriterWithEncoding(temporaryFolder, defaultEncoding)) {
                 // empty
@@ -94,7 +94,7 @@ public class FileWriterWithEncodingTest {
     }
 
     @Test
-    public void testConstructor_File_encoding_badEncoding() {
+    void testConstructor_File_encoding_badEncoding() {
         assertThrows(IOException.class, () -> {
             try (Writer writer = new FileWriterWithEncoding(file1, "BAD-ENCODE")) {
                 // empty
@@ -104,7 +104,7 @@ public class FileWriterWithEncodingTest {
     }
 
     @Test
-    public void testConstructor_File_existingFile_withContent() throws Exception {
+    void testConstructor_File_existingFile_withContent() throws Exception {
         try (FileWriter fw1 = new FileWriter(file1);) {
             fw1.write(textContent);
             fw1.write(65);
@@ -125,7 +125,7 @@ public class FileWriterWithEncodingTest {
     }
 
     @Test
-    public void testConstructor_File_nullFile() {
+    void testConstructor_File_nullFile() {
         assertThrows(NullPointerException.class, () -> {
             try (Writer writer = new FileWriterWithEncoding((File) null, defaultEncoding)) {
                 // empty
@@ -135,7 +135,7 @@ public class FileWriterWithEncodingTest {
     }
 
     @Test
-    public void testConstructor_fileName_nullFile() {
+    void testConstructor_fileName_nullFile() {
         assertThrows(NullPointerException.class, () -> {
             try (Writer writer = new FileWriterWithEncoding((String) null, defaultEncoding)) {
                 // empty
@@ -145,7 +145,7 @@ public class FileWriterWithEncodingTest {
     }
 
     @Test
-    public void testConstructorAppend_File_existingFile_withContent() throws Exception {
+    void testConstructorAppend_File_existingFile_withContent() throws Exception {
         try (FileWriter fw1 = new FileWriter(file1)) {
             fw1.write("ABcd");
         }
@@ -171,7 +171,7 @@ public class FileWriterWithEncodingTest {
     }
 
     @Test
-    public void testDifferentEncoding() throws Exception {
+    void testDifferentEncoding() throws Exception {
         if (Charset.isSupported(StandardCharsets.UTF_16BE.name())) {
             try (FileWriter fw1 = new FileWriter(file1); // default encoding
                 FileWriterWithEncoding fw2 = new FileWriterWithEncoding(file2, defaultEncoding)) {
@@ -205,7 +205,7 @@ public class FileWriterWithEncodingTest {
     }
 
     @Test
-    public void testSameEncoding_Charset_constructor() throws Exception {
+    void testSameEncoding_Charset_constructor() throws Exception {
         try (FileWriterWithEncoding writer = new FileWriterWithEncoding(file2, Charset.defaultCharset())) {
             successfulRun(writer);
         }
@@ -220,7 +220,7 @@ public class FileWriterWithEncodingTest {
     }
 
     @Test
-    public void testSameEncoding_CharsetEncoder_constructor() throws Exception {
+    void testSameEncoding_CharsetEncoder_constructor() throws Exception {
         try (FileWriterWithEncoding writer = new FileWriterWithEncoding(file2, Charset.defaultCharset().newEncoder())) {
             successfulRun(writer);
         }
@@ -235,14 +235,14 @@ public class FileWriterWithEncodingTest {
     }
 
     @Test
-    public void testSameEncoding_null_Charset_constructor() throws Exception {
+    void testSameEncoding_null_Charset_constructor() throws Exception {
         try (FileWriterWithEncoding writer = new FileWriterWithEncoding(file2, (Charset) null)) {
             successfulRun(writer);
         }
     }
 
     @Test
-    public void testSameEncoding_null_CharsetEncoder_constructor() throws Exception {
+    void testSameEncoding_null_CharsetEncoder_constructor() throws Exception {
         try (FileWriterWithEncoding writer = new FileWriterWithEncoding(file2.getPath(), (CharsetEncoder) null)) {
             successfulRun(writer);
         }
@@ -255,14 +255,14 @@ public class FileWriterWithEncodingTest {
     }
 
     @Test
-    public void testSameEncoding_null_CharsetName_constructor() throws Exception {
+    void testSameEncoding_null_CharsetName_constructor() throws Exception {
         try (FileWriterWithEncoding writer = new FileWriterWithEncoding(file2.getPath(), (String) null)) {
             successfulRun(writer);
         }
     }
 
     @Test
-    public void testSameEncoding_string_Charset_constructor() throws Exception {
+    void testSameEncoding_string_Charset_constructor() throws Exception {
         try (FileWriterWithEncoding writer = new FileWriterWithEncoding(file2.getPath(), Charset.defaultCharset())) {
             successfulRun(writer);
         }
@@ -277,21 +277,21 @@ public class FileWriterWithEncodingTest {
     }
 
     @Test
-    public void testSameEncoding_string_CharsetEncoder_constructor() throws Exception {
+    void testSameEncoding_string_CharsetEncoder_constructor() throws Exception {
         try (FileWriterWithEncoding writer = new FileWriterWithEncoding(file2.getPath(), Charset.defaultCharset().newEncoder())) {
             successfulRun(writer);
         }
     }
 
     @Test
-    public void testSameEncoding_string_constructor() throws Exception {
+    void testSameEncoding_string_constructor() throws Exception {
         try (FileWriterWithEncoding writer = new FileWriterWithEncoding(file2, defaultEncoding)) {
             successfulRun(writer);
         }
     }
 
     @Test
-    public void testSameEncoding_string_string_constructor() throws Exception {
+    void testSameEncoding_string_string_constructor() throws Exception {
         try (FileWriterWithEncoding writer = new FileWriterWithEncoding(file2.getPath(), defaultEncoding)) {
             successfulRun(writer);
         }

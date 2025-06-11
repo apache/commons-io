@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link DirectoryWalker}.
  */
-public class DirectoryWalkerTest {
+class DirectoryWalkerTest {
 
     /**
      * Test DirectoryWalker implementation that finds files in a directory hierarchy
@@ -311,7 +311,7 @@ public class DirectoryWalkerTest {
      * Test Cancel
      */
     @Test
-    public void testCancel() {
+    void testCancel() {
         String cancelName = null;
 
         // Cancel on a file
@@ -353,7 +353,7 @@ public class DirectoryWalkerTest {
      * Test Filtering
      */
     @Test
-    public void testFilter() {
+    void testFilter() {
         final List<File> results = new TestFileFinder(dirsAndFilesFilter, -1).find(javaDir);
         assertEquals(1 + dirs.length + ioFiles.length + outputFiles.length, results.size(), "Result Size");
         assertTrue(results.contains(javaDir), "Start Dir");
@@ -366,7 +366,7 @@ public class DirectoryWalkerTest {
      * Test Filtering and limit to depth 0
      */
     @Test
-    public void testFilterAndLimitA() {
+    void testFilterAndLimitA() {
         final List<File> results = new TestFileFinder(NOT_SVN, 0).find(javaDir);
         assertEquals(1, results.size(), "[A] Result Size");
         assertTrue(results.contains(javaDir), "[A] Start Dir");
@@ -376,7 +376,7 @@ public class DirectoryWalkerTest {
      * Test Filtering and limit to depth 1
      */
     @Test
-    public void testFilterAndLimitB() {
+    void testFilterAndLimitB() {
         final List<File> results = new TestFileFinder(NOT_SVN, 1).find(javaDir);
         assertEquals(2, results.size(), "[B] Result Size");
         assertTrue(results.contains(javaDir), "[B] Start Dir");
@@ -387,7 +387,7 @@ public class DirectoryWalkerTest {
      * Test Filtering and limit to depth 3
      */
     @Test
-    public void testFilterAndLimitC() {
+    void testFilterAndLimitC() {
         final List<File> results = new TestFileFinder(NOT_SVN, 3).find(javaDir);
         assertEquals(4, results.size(), "[C] Result Size");
         assertTrue(results.contains(javaDir), "[C] Start Dir");
@@ -400,7 +400,7 @@ public class DirectoryWalkerTest {
      * Test Filtering and limit to depth 5
      */
     @Test
-    public void testFilterAndLimitD() {
+    void testFilterAndLimitD() {
         final List<File> results = new TestFileFinder(dirsAndFilesFilter, 5).find(javaDir);
         assertEquals(1 + dirs.length + ioFiles.length, results.size(), "[D] Result Size");
         assertTrue(results.contains(javaDir), "[D] Start Dir");
@@ -412,7 +412,7 @@ public class DirectoryWalkerTest {
      * Test separate dir and file filters
      */
     @Test
-    public void testFilterDirAndFile1() {
+    void testFilterDirAndFile1() {
         final List<File> results = new TestFileFinder(dirsFilter, ioFilesFilter, -1).find(javaDir);
         assertEquals(1 + dirs.length + ioFiles.length, results.size(), "[DirAndFile1] Result Size");
         assertTrue(results.contains(javaDir), "[DirAndFile1] Start Dir");
@@ -424,7 +424,7 @@ public class DirectoryWalkerTest {
      * Test separate dir and file filters
      */
     @Test
-    public void testFilterDirAndFile2() {
+    void testFilterDirAndFile2() {
         final List<File> results = new TestFileFinder(null, null, -1).find(javaDir);
         assertTrue(results.size() > 1 + dirs.length + ioFiles.length, "[DirAndFile2] Result Size");
         assertTrue(results.contains(javaDir), "[DirAndFile2] Start Dir");
@@ -436,7 +436,7 @@ public class DirectoryWalkerTest {
      * Test separate dir and file filters
      */
     @Test
-    public void testFilterDirAndFile3() {
+    void testFilterDirAndFile3() {
         final List<File> results = new TestFileFinder(dirsFilter, null, -1).find(javaDir);
         final List<File> resultDirs = directoriesOnly(results);
         assertEquals(1 + dirs.length, resultDirs.size(), "[DirAndFile3] Result Size");
@@ -448,7 +448,7 @@ public class DirectoryWalkerTest {
      * Test separate dir and file filters
      */
     @Test
-    public void testFilterDirAndFile4() {
+    void testFilterDirAndFile4() {
         final List<File> results = new TestFileFinder(null, ioFilesFilter, -1).find(javaDir);
         final List<File> resultFiles = filesOnly(results);
         assertEquals(ioFiles.length, resultFiles.size(), "[DirAndFile4] Result Size");
@@ -460,7 +460,7 @@ public class DirectoryWalkerTest {
      * Test Filtering
      */
     @Test
-    public void testFilterString() {
+    void testFilterString() {
         final List<String> results = new TestFileFinderString(dirsAndFilesFilter, -1).find(javaDir);
         assertEquals(results.size(), outputFiles.length + ioFiles.length, "Result Size");
         checkContainsString("IO File", ioFiles, results);
@@ -471,7 +471,7 @@ public class DirectoryWalkerTest {
      * test an invalid start directory
      */
     @Test
-    public void testHandleStartDirectoryFalse() {
+    void testHandleStartDirectoryFalse() {
 
         final List<File> results = new TestFalseFileFinder(null, -1).find(current);
         assertEquals(0, results.size(), "Result Size");
@@ -482,7 +482,7 @@ public class DirectoryWalkerTest {
      * Test Limiting to current directory
      */
     @Test
-    public void testLimitToCurrent() {
+    void testLimitToCurrent() {
         final List<File> results = new TestFileFinder(null, 0).find(current);
         assertEquals(1, results.size(), "Result Size");
         assertTrue(results.contains(FileUtils.current()), "Current Dir");
@@ -492,7 +492,7 @@ public class DirectoryWalkerTest {
      * test an invalid start directory
      */
     @Test
-    public void testMissingStartDirectory() {
+    void testMissingStartDirectory() {
 
         // TODO is this what we want with invalid directory?
         final File invalidDir = new File("invalid-dir");
@@ -507,7 +507,7 @@ public class DirectoryWalkerTest {
      * Test Cancel
      */
     @Test
-    public void testMultiThreadCancel() {
+    void testMultiThreadCancel() {
         String cancelName = "DirectoryWalker.java";
         TestMultiThreadCancelWalker walker = new TestMultiThreadCancelWalker(cancelName, false);
         // Cancel on a file

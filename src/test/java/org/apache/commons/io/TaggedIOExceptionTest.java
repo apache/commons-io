@@ -29,10 +29,10 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link TaggedIOException}.
  */
-public class TaggedIOExceptionTest {
+class TaggedIOExceptionTest {
 
     @Test
-    public void testTaggedIOException() {
+    void testTaggedIOException() {
         final Serializable tag = UUID.randomUUID();
         final IOException exception = new IOException("Test exception");
         final TaggedIOException tagged = new TaggedIOException(exception, tag);

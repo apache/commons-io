@@ -36,14 +36,14 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link ChecksumInputStream}.
  */
-public class ChecksumInputStreamTest {
+class ChecksumInputStreamTest {
 
     private ChecksumInputStream createInputStream() throws IOException {
         return ChecksumInputStream.builder().setCharSequence("Hi").setChecksum(new CRC32()).get();
     }
 
     @Test
-    public void testAfterReadConsumer() throws Exception {
+    void testAfterReadConsumer() throws Exception {
         final AtomicBoolean boolRef = new AtomicBoolean();
         // @formatter:off
         try (InputStream bounded = ChecksumInputStream.builder()
@@ -74,7 +74,7 @@ public class ChecksumInputStreamTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testAvailableAfterClose() throws Exception {
+    void testAvailableAfterClose() throws Exception {
         final InputStream shadow;
         try (InputStream in = createInputStream()) {
             assertTrue(in.available() > 0);
@@ -84,7 +84,7 @@ public class ChecksumInputStreamTest {
     }
 
     @Test
-    public void testAvailableAfterOpen() throws Exception {
+    void testAvailableAfterOpen() throws Exception {
         try (InputStream in = createInputStream()) {
             assertTrue(in.available() > 0);
             assertEquals('H', in.read());
@@ -93,7 +93,7 @@ public class ChecksumInputStreamTest {
     }
 
     @Test
-    public void testDefaultThresholdFailure() throws IOException {
+    void testDefaultThresholdFailure() throws IOException {
         final byte[] byteArray = new byte[3];
         final Adler32 adler32 = new Adler32();
         try (ChecksumInputStream checksum = ChecksumInputStream.builder()
@@ -115,7 +115,7 @@ public class ChecksumInputStreamTest {
     }
 
     @Test
-    public void testDefaultThresholdSuccess() throws IOException {
+    void testDefaultThresholdSuccess() throws IOException {
         // sanity-check
         final Adler32 sanityCheck = new Adler32();
         final byte[] byteArray = new byte[3];
@@ -143,7 +143,7 @@ public class ChecksumInputStreamTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testReadAfterClose() throws Exception {
+    void testReadAfterClose() throws Exception {
         final InputStream shadow;
         try (InputStream in = createInputStream()) {
             assertTrue(in.available() > 0);
@@ -153,7 +153,7 @@ public class ChecksumInputStreamTest {
     }
 
     @Test
-    public void testReadTakingByteArrayThrowsException() throws IOException {
+    void testReadTakingByteArrayThrowsException() throws IOException {
         final Adler32 adler32 = new Adler32();
         final byte[] byteArray = new byte[3];
         final long sizeThreshold = -1859L;
@@ -177,7 +177,7 @@ public class ChecksumInputStreamTest {
     }
 
     @Test
-    public void testReadTakingNoArgumentsThrowsException() throws IOException {
+    void testReadTakingNoArgumentsThrowsException() throws IOException {
         final CRC32 crc32 = new CRC32();
         final byte[] byteArray = new byte[9];
         try (ChecksumInputStream checksum = ChecksumInputStream.builder()
@@ -197,7 +197,7 @@ public class ChecksumInputStreamTest {
     }
 
     @Test
-    public void testSkip() throws IOException {
+    void testSkip() throws IOException {
         // sanity-check
         final CRC32 sanityCheck = new CRC32();
         final byte[] byteArray = new byte[4];

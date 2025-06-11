@@ -23,7 +23,7 @@ import org.junit.jupiter.api.BeforeEach;
 /**
  * Tests {@link DefaultFileComparator}.
  */
-public class DefaultFileComparatorTest extends ComparatorAbstractTest {
+class DefaultFileComparatorTest extends ComparatorAbstractTest {
 
     @BeforeEach
     public void setUp() {

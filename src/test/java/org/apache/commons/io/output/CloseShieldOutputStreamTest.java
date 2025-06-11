@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link CloseShieldOutputStream}.
  */
-public class CloseShieldOutputStreamTest {
+class CloseShieldOutputStreamTest {
 
     private ByteArrayOutputStream original;
 
@@ -50,7 +50,7 @@ public class CloseShieldOutputStreamTest {
     }
 
     @Test
-    public void testClose() throws IOException {
+    void testClose() throws IOException {
         shielded.close();
         assertFalse(closed, "closed");
         assertThrows(IOException.class, () -> shielded.write('x'), "write(b)");

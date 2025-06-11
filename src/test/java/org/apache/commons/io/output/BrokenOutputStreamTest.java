@@ -30,7 +30,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Tests {@link BrokenOutputStream}.
  */
-public class BrokenOutputStreamTest {
+class BrokenOutputStreamTest {
     private static BrokenOutputStream createBrokenOutputStream(final Throwable exception) {
         if (exception instanceof IOException) {
             return new BrokenOutputStream((IOException) exception);
@@ -40,7 +40,7 @@ public class BrokenOutputStreamTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testClose(final Class<Throwable> clazz) throws Exception {
+    void testClose(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenOutputStream stream = createBrokenOutputStream(exception);
@@ -49,7 +49,7 @@ public class BrokenOutputStreamTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testFlush(final Class<Throwable> clazz) throws Exception {
+    void testFlush(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenOutputStream stream = createBrokenOutputStream(exception);
@@ -57,12 +57,12 @@ public class BrokenOutputStreamTest {
     }
 
     @Test
-    public void testInstance() {
+    void testInstance() {
         assertNotNull(BrokenOutputStream.INSTANCE);
     }
 
     @Test
-    public void testTryWithResources() {
+    void testTryWithResources() {
         final IOException thrown = assertThrows(IOException.class, () -> {
             try (OutputStream newStream = new BrokenOutputStream()) {
                 newStream.write(1);
@@ -77,7 +77,7 @@ public class BrokenOutputStreamTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testWriteByteArray(final Class<Throwable> clazz) throws Exception {
+    void testWriteByteArray(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenOutputStream stream = createBrokenOutputStream(exception);
@@ -86,7 +86,7 @@ public class BrokenOutputStreamTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testWriteByteArrayIndexed(final Class<Throwable> clazz) throws Exception {
+    void testWriteByteArrayIndexed(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenOutputStream stream = createBrokenOutputStream(exception);
@@ -95,7 +95,7 @@ public class BrokenOutputStreamTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testWriteInt(final Class<Throwable> clazz) throws Exception {
+    void testWriteInt(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenOutputStream stream = createBrokenOutputStream(exception);

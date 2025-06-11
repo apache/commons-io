@@ -28,7 +28,7 @@ import org.apache.commons.io.build.AbstractOrigin.IORandomAccessFileOrigin;
  *
  * @see RandomAccessFile
  */
-public class IORandomAccessFileOriginTest extends AbstractOriginTest<IORandomAccessFile, IORandomAccessFileOrigin> {
+class IORandomAccessFileOriginTest extends AbstractOriginTest<IORandomAccessFile, IORandomAccessFileOrigin> {
 
     @SuppressWarnings("resource")
     @Override

@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link UncheckedFilterReader}.
  */
-public class UncheckedBufferedReaderTest {
+class UncheckedBufferedReaderTest {
 
     private UncheckedBufferedReader ucStringReader;
     private UncheckedBufferedReader ucBrokenReader;
@@ -48,25 +48,25 @@ public class UncheckedBufferedReaderTest {
     }
 
     @Test
-    public void testBufferSize() {
+    void testBufferSize() {
         try (UncheckedBufferedReader uncheckedReader = UncheckedBufferedReader.builder().setReader(new StringReader("0123456789")).setBufferSize(2).get()) {
             assertEquals('0', uncheckedReader.read());
         }
     }
 
     @Test
-    public void testClose() {
+    void testClose() {
         ucStringReader.close();
         assertThrows(UncheckedIOException.class, () -> ucBrokenReader.read());
     }
 
     @Test
-    public void testCloseThrows() {
+    void testCloseThrows() {
         assertEquals(exception, assertThrows(UncheckedIOException.class, () -> ucBrokenReader.close()).getCause());
     }
 
     @Test
-    public void testMarkReset() {
+    void testMarkReset() {
         ucStringReader.mark(10);
         final int c = ucStringReader.read();
         ucStringReader.reset();
@@ -74,7 +74,7 @@ public class UncheckedBufferedReaderTest {
     }
 
     @Test
-    public void testMarkThrows() {
+    void testMarkThrows() {
         try (UncheckedBufferedReader closedReader = UncheckedBufferedReader.builder().setReader(ClosedReader.INSTANCE).get()) {
             closedReader.close();
             assertThrows(UncheckedIOException.class, () -> closedReader.mark(1));
@@ -82,7 +82,7 @@ public class UncheckedBufferedReaderTest {
     }
 
     @Test
-    public void testRead() {
+    void testRead() {
         final Reader reader = ucStringReader;
         try (UncheckedBufferedReader uncheckedReader = UncheckedBufferedReader.builder().setReader(reader).get()) {
             assertEquals('0', uncheckedReader.read());
@@ -93,7 +93,7 @@ public class UncheckedBufferedReaderTest {
     }
 
     @Test
-    public void testReadCharArray() {
+    void testReadCharArray() {
         final Reader reader = ucStringReader;
         try (UncheckedBufferedReader uncheckedReader = UncheckedBufferedReader.builder().setReader(reader).get()) {
             final char[] array = new char[1];
@@ -111,7 +111,7 @@ public class UncheckedBufferedReaderTest {
     }
 
     @Test
-    public void testReadCharArrayIndexed() {
+    void testReadCharArrayIndexed() {
         final Reader reader = ucStringReader;
         try (UncheckedBufferedReader uncheckedReader = UncheckedBufferedReader.builder().setReader(reader).get()) {
             final char[] array = new char[1];
@@ -129,17 +129,17 @@ public class UncheckedBufferedReaderTest {
     }
 
     @Test
-    public void testReadCharArrayIndexedThrows() {
+    void testReadCharArrayIndexedThrows() {
         assertEquals(exception, assertThrows(UncheckedIOException.class, () -> ucBrokenReader.read(new char[1], 0, 1)).getCause());
     }
 
     @Test
-    public void testReadCharArrayThrows() {
+    void testReadCharArrayThrows() {
         assertEquals(exception, assertThrows(UncheckedIOException.class, () -> ucBrokenReader.read(new char[1])).getCause());
     }
 
     @Test
-    public void testReadCharBuffer() {
+    void testReadCharBuffer() {
         final Reader reader = ucStringReader;
         try (UncheckedBufferedReader uncheckedReader = UncheckedBufferedReader.builder().setReader(reader).get()) {
             final CharBuffer buffer = CharBuffer.wrap(new char[1]);
@@ -161,12 +161,12 @@ public class UncheckedBufferedReaderTest {
     }
 
     @Test
-    public void testReadCharBufferThrows() {
+    void testReadCharBufferThrows() {
         assertEquals(exception, assertThrows(UncheckedIOException.class, () -> ucBrokenReader.read(CharBuffer.wrap(new char[1]))).getCause());
     }
 
     @Test
-    public void testReadLine() {
+    void testReadLine() {
         final Reader reader = ucStringReader;
         try (UncheckedBufferedReader uncheckedReader = UncheckedBufferedReader.builder().setReader(reader).get()) {
             assertEquals("01", uncheckedReader.readLine());
@@ -176,27 +176,27 @@ public class UncheckedBufferedReaderTest {
     }
 
     @Test
-    public void testReadLineThrows() {
+    void testReadLineThrows() {
         assertEquals(exception, assertThrows(UncheckedIOException.class, () -> ucBrokenReader.readLine()).getCause());
     }
 
     @Test
-    public void testReadThrows() {
+    void testReadThrows() {
         assertEquals(exception, assertThrows(UncheckedIOException.class, () -> ucBrokenReader.read()).getCause());
     }
 
     @Test
-    public void testReady() {
+    void testReady() {
         assertTrue(ucStringReader.ready());
     }
 
     @Test
-    public void testReadyThrows() {
+    void testReadyThrows() {
         assertEquals(exception, assertThrows(UncheckedIOException.class, () -> ucBrokenReader.ready()).getCause());
     }
 
     @Test
-    public void testResetThrows() {
+    void testResetThrows() {
         try (UncheckedBufferedReader closedReader = UncheckedBufferedReader.builder().setReader(ClosedReader.INSTANCE).get()) {
             closedReader.close();
             assertThrows(UncheckedIOException.class, () -> ucBrokenReader.reset());
@@ -204,12 +204,12 @@ public class UncheckedBufferedReaderTest {
     }
 
     @Test
-    public void testSkip() {
+    void testSkip() {
         assertEquals(1, ucStringReader.skip(1));
     }
 
     @Test
-    public void testSkipThrows() {
+    void testSkipThrows() {
         assertEquals(exception, assertThrows(UncheckedIOException.class, () -> ucBrokenReader.skip(1)).getCause());
     }
 

@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Test case for {@link CharSequenceReader}.
  */
-public class CharSequenceReaderTest {
+class CharSequenceReaderTest {
     private static final char NONE = (new char[1])[0];
 
     private void checkArray(final char[] expected, final char[] actual) {
@@ -52,7 +52,7 @@ public class CharSequenceReaderTest {
     }
 
     @Test
-    public void testClose() throws IOException {
+    void testClose() throws IOException {
         final Reader reader = new CharSequenceReader("FooBar");
         checkRead(reader, "Foo");
         reader.close();
@@ -65,7 +65,7 @@ public class CharSequenceReaderTest {
     }
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         assertThrows(IllegalArgumentException.class, () -> new CharSequenceReader("FooBar", -1, 6),
                 "Expected exception not thrown for negative start.");
         assertThrows(IllegalArgumentException.class, () -> new CharSequenceReader("FooBar", 1, 0),
@@ -73,7 +73,7 @@ public class CharSequenceReaderTest {
     }
 
     @Test
-    public void testMark() throws IOException {
+    void testMark() throws IOException {
         try (Reader reader = new CharSequenceReader("FooBar")) {
             checkRead(reader, "Foo");
             reader.mark(0);
@@ -99,14 +99,14 @@ public class CharSequenceReaderTest {
     }
 
     @Test
-    public void testMarkSupported() throws Exception {
+    void testMarkSupported() throws Exception {
         try (Reader reader = new CharSequenceReader("FooBar")) {
             assertTrue(reader.markSupported());
         }
     }
 
     @Test
-    public void testRead() throws IOException {
+    void testRead() throws IOException {
         final String value = "Foo";
         testRead(value);
         testRead(new StringBuilder(value));
@@ -131,7 +131,7 @@ public class CharSequenceReaderTest {
     }
 
     @Test
-    public void testReadCharArray() throws IOException {
+    void testReadCharArray() throws IOException {
         final String value = "FooBar";
         testReadCharArray(value);
         testReadCharArray(new StringBuilder(value));
@@ -167,7 +167,7 @@ public class CharSequenceReaderTest {
     }
 
     @Test
-    public void testReadCharArrayPortion() throws IOException {
+    void testReadCharArrayPortion() throws IOException {
         final String value = "FooBar";
         testReadCharArrayPortion(value);
         testReadCharArrayPortion(new StringBuilder(value));
@@ -195,7 +195,7 @@ public class CharSequenceReaderTest {
     }
 
     @Test
-    public void testReady() throws IOException {
+    void testReady() throws IOException {
         final Reader reader = new CharSequenceReader("FooBar");
         assertTrue(reader.ready());
         reader.skip(3);
@@ -232,7 +232,7 @@ public class CharSequenceReaderTest {
     }
 
     @Test
-    public void testSerialization() throws IOException, ClassNotFoundException {
+    void testSerialization() throws IOException, ClassNotFoundException {
         /*
          * File CharSequenceReader.bin contains a CharSequenceReader that was serialized before
          * the start and end fields were added. Its CharSequence is "FooBar".
@@ -279,7 +279,7 @@ public class CharSequenceReaderTest {
     }
 
     @Test
-    public void testSkip() throws IOException {
+    void testSkip() throws IOException {
         final Reader reader = new CharSequenceReader("FooBar");
         assertEquals(3, reader.skip(3));
         checkRead(reader, "Bar");
@@ -307,7 +307,7 @@ public class CharSequenceReaderTest {
 
     @Test
     @SuppressWarnings("resource") // don't really need to close CharSequenceReader here
-    public void testToString() {
+    void testToString() {
         assertEquals("FooBar", new CharSequenceReader("FooBar").toString());
         assertEquals("FooBar", new CharSequenceReader("xFooBarx", 1, 7).toString());
     }

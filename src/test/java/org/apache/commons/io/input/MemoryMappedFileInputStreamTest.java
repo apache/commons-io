@@ -40,7 +40,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 /**
  * Tests {@link MemoryMappedFileInputStream}.
  */
-public class MemoryMappedFileInputStreamTest {
+class MemoryMappedFileInputStreamTest {
 
     @TempDir
     Path tempDir;
@@ -73,7 +73,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    public void testAlternateBufferSize() throws IOException {
+    void testAlternateBufferSize() throws IOException {
         // setup
         final Path file = createTestFile(1024 * 1024);
         final byte[] expectedData = Files.readAllBytes(file);
@@ -87,7 +87,7 @@ public class MemoryMappedFileInputStreamTest {
     @SuppressWarnings("resource")
     @ParameterizedTest
     @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
-    public void testAvailableAfterClose(final int len) throws Exception {
+    void testAvailableAfterClose(final int len) throws Exception {
         final Path file = createTestFile(len);
         final InputStream shadow;
         try (InputStream inputStream = newInputStream(file, 1024)) {
@@ -100,7 +100,7 @@ public class MemoryMappedFileInputStreamTest {
 
     @ParameterizedTest
     @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
-    public void testAvailableAfterOpen(final int len) throws Exception {
+    void testAvailableAfterOpen(final int len) throws Exception {
         final Path file = createTestFile(len);
         try (InputStream inputStream = newInputStream(file, 1024)) {
             // verify
@@ -113,7 +113,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    public void testEmptyFile() throws IOException {
+    void testEmptyFile() throws IOException {
         // setup
         final Path file = createTestFile(0);
         // test
@@ -124,7 +124,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    public void testLargerFile() throws IOException {
+    void testLargerFile() throws IOException {
         // setup
         final Path file = createTestFile(1024 * 1024);
         final byte[] expectedData = Files.readAllBytes(file);
@@ -136,7 +136,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    public void testReadAfterClose() throws IOException {
+    void testReadAfterClose() throws IOException {
         // setup
         final Path file = createTestFile(1 * 1024 * 1024);
         // test
@@ -149,7 +149,7 @@ public class MemoryMappedFileInputStreamTest {
 
     @ParameterizedTest
     @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
-    public void testReadAfterClose(final int len) throws Exception {
+    void testReadAfterClose(final int len) throws Exception {
         final Path file = createTestFile(len);
         try (InputStream inputStream = newInputStream(file, 1024)) {
             inputStream.close();
@@ -158,7 +158,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    public void testReadSingleByte() throws IOException {
+    void testReadSingleByte() throws IOException {
         // setup
         final Path file = createTestFile(2);
         final byte[] expectedData = Files.readAllBytes(file);
@@ -173,7 +173,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    public void testSkipAtStart() throws IOException {
+    void testSkipAtStart() throws IOException {
         // setup
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);
@@ -187,7 +187,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    public void testSkipEmpty() throws IOException {
+    void testSkipEmpty() throws IOException {
         // setup
         final Path file = createTestFile(0);
         // test
@@ -199,7 +199,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    public void testSkipInCurrentBuffer() throws IOException {
+    void testSkipInCurrentBuffer() throws IOException {
         // setup
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);
@@ -215,7 +215,7 @@ public class MemoryMappedFileInputStreamTest {
 
     @ParameterizedTest
     @ValueSource(ints = {-5, -1, 0})
-    public void testSkipNoop(final int amountToSkip) throws IOException {
+    void testSkipNoop(final int amountToSkip) throws IOException {
         // setup
         final Path file = createTestFile(10);
         final byte[] expectedData = Files.readAllBytes(file);
@@ -228,7 +228,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    public void testSkipOutOfCurrentBuffer() throws IOException {
+    void testSkipOutOfCurrentBuffer() throws IOException {
         // setup
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);
@@ -243,7 +243,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    public void testSkipPastEof() throws IOException {
+    void testSkipPastEof() throws IOException {
         // setup
         final Path file = createTestFile(100);
         // test
@@ -256,7 +256,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    public void testSkipToEndOfCurrentBuffer() throws IOException {
+    void testSkipToEndOfCurrentBuffer() throws IOException {
         // setup
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);
@@ -272,7 +272,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    public void testSkipToEndOfCurrentBufferBuilder() throws IOException {
+    void testSkipToEndOfCurrentBufferBuilder() throws IOException {
         // setup
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);
@@ -288,7 +288,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    public void testSmallFileBuilder() throws IOException {
+    void testSmallFileBuilder() throws IOException {
         // setup
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);
@@ -300,7 +300,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    public void testSmallPath() throws IOException {
+    void testSmallPath() throws IOException {
         // setup
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);
@@ -313,7 +313,7 @@ public class MemoryMappedFileInputStreamTest {
     }
 
     @Test
-    public void testSmallPathBuilder() throws IOException {
+    void testSmallPathBuilder() throws IOException {
         // setup
         final Path file = createTestFile(100);
         final byte[] expectedData = Files.readAllBytes(file);

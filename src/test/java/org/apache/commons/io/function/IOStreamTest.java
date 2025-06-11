@@ -45,7 +45,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOStream}.
  */
-public class IOStreamTest {
+class IOStreamTest {
 
     private static final boolean AT_LEAST_JAVA_11 = SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_11);
     private static final boolean AT_LEAST_JAVA_17 = SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_17);
@@ -66,7 +66,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testAdapt() {
+    void testAdapt() {
         assertEquals(0, IOStream.adapt((Stream<?>) null).count());
         assertEquals(0, IOStream.adapt(Stream.empty()).count());
         assertEquals(1, IOStream.adapt(Stream.of("A")).count());
@@ -74,7 +74,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testAdaptAsParallel() {
+    void testAdaptAsParallel() {
         assertEquals(0, IOStream.adapt((Stream<?>) null).parallel().count());
         assertEquals(0, IOStream.adapt(Stream.empty()).parallel().count());
         assertEquals(1, IOStream.adapt(Stream.of("A")).parallel().count());
@@ -82,7 +82,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testAdaptParallelAndCount() {
+    void testAdaptParallelAndCount() {
         final IOStream<Object> adaptedObj = IOStream.adapt(Stream.empty().parallel());
         assertTrue(adaptedObj.isParallel());
         assertEquals(0, adaptedObj.count());
@@ -93,7 +93,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testAllMatch() throws IOException {
+    void testAllMatch() throws IOException {
         assertThrows(IOException.class, () -> IOStream.of("A", "B").allMatch(TestConstants.THROWING_IO_PREDICATE));
         assertTrue(IOStream.of("A", "B").allMatch(IOPredicate.alwaysTrue()));
         assertFalse(IOStream.of("A", "B").allMatch(IOPredicate.alwaysFalse()));
@@ -101,27 +101,27 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testAnyMatch() throws IOException {
+    void testAnyMatch() throws IOException {
         assertThrows(IOException.class, () -> IOStream.of("A", "B").anyMatch(TestConstants.THROWING_IO_PREDICATE));
         assertTrue(IOStream.of("A", "B").anyMatch(IOPredicate.alwaysTrue()));
         assertFalse(IOStream.of("A", "B").anyMatch(IOPredicate.alwaysFalse()));
     }
 
     @Test
-    public void testClose() {
+    void testClose() {
         IOStream.of("A", "B").close();
     }
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testCollectCollectorOfQsuperTAR() {
+    void testCollectCollectorOfQsuperTAR() {
         // TODO IOCollector?
         IOStream.of("A", "B").collect(Collectors.toList());
     }
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testCollectSupplierOfRBiConsumerOfRQsuperTBiConsumerOfRR() throws IOException {
+    void testCollectSupplierOfRBiConsumerOfRQsuperTBiConsumerOfRR() throws IOException {
         // TODO Need an IOCollector?
         IOStream.of("A", "B").collect(() -> "A", (t, u) -> {
         }, (t, u) -> {
@@ -138,7 +138,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testCount() {
+    void testCount() {
         assertEquals(0, IOStream.of().count());
         assertEquals(1, IOStream.of("A").count());
         assertEquals(2, IOStream.of("A", "B").count());
@@ -148,7 +148,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testDistinct() {
+    void testDistinct() {
         assertEquals(0, IOStream.of().distinct().count());
         assertEquals(1, IOStream.of("A").distinct().count());
         assertEquals(2, IOStream.of("A", "B").distinct().count());
@@ -158,7 +158,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testEmpty() throws IOException {
+    void testEmpty() throws IOException {
         assertEquals(0, Stream.empty().count());
         assertEquals(0, IOStream.empty().count());
         IOStream.empty().forEach(TestUtils.throwingIOConsumer());
@@ -166,7 +166,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testFilter() throws IOException {
+    void testFilter() throws IOException {
         IOStream.of("A").filter(TestConstants.THROWING_IO_PREDICATE);
         // compile vs type
         assertThrows(IOException.class, () -> IOStream.of("A").filter(TestConstants.THROWING_IO_PREDICATE).count());
@@ -178,7 +178,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testFindAny() throws IOException {
+    void testFindAny() throws IOException {
         // compile vs type
         assertThrows(IOException.class, () -> IOStream.of("A").filter(TestConstants.THROWING_IO_PREDICATE).findAny());
         // compile vs inline lambda
@@ -192,7 +192,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testFindFirst() throws IOException {
+    void testFindFirst() throws IOException {
         // compile vs type
         assertThrows(IOException.class, () -> IOStream.of("A").filter(TestConstants.THROWING_IO_PREDICATE).findFirst());
         // compile vs inline lambda
@@ -206,32 +206,32 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testFlatMap() throws IOException {
+    void testFlatMap() throws IOException {
         assertEquals(Arrays.asList("A", "B", "C", "D"),
                 IOStream.of(IOStream.of("A", "B"), IOStream.of("C", "D")).flatMap(IOFunction.identity()).collect(Collectors.toList()));
     }
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testFlatMapToDouble() throws IOException {
+    void testFlatMapToDouble() throws IOException {
         assertEquals('A' + 'B', IOStream.of("A", "B").flatMapToDouble(e -> DoubleStream.of(e.charAt(0))).sum());
     }
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testFlatMapToInt() throws IOException {
+    void testFlatMapToInt() throws IOException {
         assertEquals('A' + 'B', IOStream.of("A", "B").flatMapToInt(e -> IntStream.of(e.charAt(0))).sum());
     }
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testFlatMapToLong() throws IOException {
+    void testFlatMapToLong() throws IOException {
         assertEquals('A' + 'B', IOStream.of("A", "B").flatMapToLong(e -> LongStream.of(e.charAt(0))).sum());
     }
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testForaAllIOConsumer() throws IOException {
+    void testForaAllIOConsumer() throws IOException {
         // compile vs type
         assertThrows(IOException.class, () -> IOStream.of("A").forAll(TestUtils.throwingIOConsumer()));
         // compile vs inline
@@ -246,7 +246,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testForaAllIOConsumerBiFunction() throws IOException {
+    void testForaAllIOConsumerBiFunction() throws IOException {
         // compile vs type
         assertThrows(IOException.class, () -> IOStream.of("A").forAll(TestUtils.throwingIOConsumer(), (i, e) -> e));
         // compile vs inline
@@ -261,7 +261,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testForaAllIOConsumerBiFunctionNull() throws IOException {
+    void testForaAllIOConsumerBiFunctionNull() throws IOException {
         // compile vs type
         assertDoesNotThrow(() -> IOStream.of("A").forAll(TestUtils.throwingIOConsumer(), null));
         // compile vs inline
@@ -276,7 +276,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testForEachIOConsumerOfQsuperT() throws IOException {
+    void testForEachIOConsumerOfQsuperT() throws IOException {
         // compile vs type
         assertThrows(IOException.class, () -> IOStream.of("A").forEach(TestUtils.throwingIOConsumer()));
         // compile vs inline
@@ -291,7 +291,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testForEachOrdered() throws IOException {
+    void testForEachOrdered() throws IOException {
         // compile vs type
         assertThrows(IOException.class, () -> IOStream.of("A").forEach(TestUtils.throwingIOConsumer()));
         // compile vs inline
@@ -306,7 +306,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testForEachOrderedAdaptParallel() throws IOException {
+    void testForEachOrderedAdaptParallel() throws IOException {
         // compile vs type
         assertThrows(IOException.class, () -> IOStream.adapt(Stream.of("A").parallel()).forEach(TestUtils.throwingIOConsumer()));
         // compile vs inline
@@ -327,7 +327,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testForEachOrderedAsParallel() throws IOException {
+    void testForEachOrderedAsParallel() throws IOException {
         // compile vs type
         assertThrows(IOException.class, () -> IOStream.of("A").parallel().forEach(TestUtils.throwingIOConsumer()));
         // compile vs inline
@@ -342,14 +342,14 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testIsParallel() {
+    void testIsParallel() {
         assertFalse(IOStream.of("A", "B").isParallel());
         assertTrue(IOStream.of("A", "B").parallel().isParallel());
     }
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testIterateException() throws IOException {
+    void testIterateException() throws IOException {
         final IOStream<Long> stream = IOStream.iterate(1L, TestUtils.throwingIOUnaryOperator());
         final IOIterator<Long> iterator = stream.iterator();
         assertEquals(1L, iterator.next());
@@ -358,7 +358,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testIterateLong() throws IOException {
+    void testIterateLong() throws IOException {
         final IOStream<Long> stream = IOStream.iterate(1L, i -> i + 1);
         final IOIterator<Long> iterator = stream.iterator();
         assertEquals(1L, iterator.next());
@@ -367,7 +367,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testIterator() throws IOException {
+    void testIterator() throws IOException {
         final AtomicInteger ref = new AtomicInteger();
         IOStream.of("A", "B").iterator().forEachRemaining(e -> ref.incrementAndGet());
         assertEquals(2, ref.get());
@@ -375,49 +375,49 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testLimit() {
+    void testLimit() {
         assertEquals(1, IOStream.of("A", "B").limit(1).count());
     }
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testMap() throws IOException {
+    void testMap() throws IOException {
         assertEquals(Arrays.asList("AC", "BC"), IOStream.of("A", "B").map(e -> e + "C").collect(Collectors.toList()));
     }
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testMapToDouble() {
+    void testMapToDouble() {
         assertArrayEquals(new double[] { Double.parseDouble("1"), Double.parseDouble("2") }, IOStream.of("1", "2").mapToDouble(Double::parseDouble).toArray());
     }
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testMapToInt() {
+    void testMapToInt() {
         assertArrayEquals(new int[] { 1, 2 }, IOStream.of("1", "2").mapToInt(Integer::parseInt).toArray());
     }
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testMapToLong() {
+    void testMapToLong() {
         assertArrayEquals(new long[] { 1L, 2L }, IOStream.of("1", "2").mapToLong(Long::parseLong).toArray());
     }
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testMax() throws IOException {
+    void testMax() throws IOException {
         assertEquals("B", IOStream.of("A", "B").max(String::compareTo).get());
     }
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testMin() throws IOException {
+    void testMin() throws IOException {
         assertEquals("A", IOStream.of("A", "B").min(String::compareTo).get());
     }
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testNoneMatch() throws IOException {
+    void testNoneMatch() throws IOException {
         assertThrows(IOException.class, () -> IOStream.of("A", "B").noneMatch(TestConstants.THROWING_IO_PREDICATE));
         assertFalse(IOStream.of("A", "B").noneMatch(IOPredicate.alwaysTrue()));
         assertTrue(IOStream.of("A", "B").noneMatch(IOPredicate.alwaysFalse()));
@@ -425,7 +425,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testOfArray() {
+    void testOfArray() {
         assertEquals(0, IOStream.of((String[]) null).count());
         assertEquals(0, IOStream.of().count());
         assertEquals(2, IOStream.of("A", "B").count());
@@ -433,7 +433,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testOfIterable() {
+    void testOfIterable() {
         assertEquals(0, IOStream.of((Iterable<?>) null).count());
         assertEquals(0, IOStream.of(Collections.emptyList()).count());
         assertEquals(0, IOStream.of(Collections.emptySet()).count());
@@ -444,13 +444,13 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testOfOne() {
+    void testOfOne() {
         assertEquals(1, IOStream.of("A").count());
     }
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testOnClose() throws IOException {
+    void testOnClose() throws IOException {
         assertThrows(IOException.class, () -> IOStream.of("A").onClose(TestConstants.THROWING_IO_RUNNABLE).close());
         final AtomicReference<String> ref = new AtomicReference<>();
         IOStream.of("A").onClose(() -> compareAndSetIO(ref, null, "new1")).close();
@@ -459,7 +459,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testOnCloseMultipleHandlers() {
+    void testOnCloseMultipleHandlers() {
         //
         final AtomicReference<String> ref = new AtomicReference<>();
         // Sanity check
@@ -503,13 +503,13 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testParallel() {
+    void testParallel() {
         assertEquals(2, IOStream.of("A", "B").parallel().count());
     }
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testPeek() throws IOException {
+    void testPeek() throws IOException {
         final AtomicReference<String> ref = new AtomicReference<>();
         // Stream sanity check
         assertEquals(1, Stream.of("A").peek(e -> compareAndSetRE(ref, null, e)).count());
@@ -529,7 +529,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testReduceBinaryOperatorOfT() throws IOException {
+    void testReduceBinaryOperatorOfT() throws IOException {
         assertEquals("AB", IOStream.of("A", "B").reduce((t, u) -> t + u).get());
         assertEquals(TestConstants.ABS_PATH_A.toRealPath(),
                 IOStream.of(TestConstants.ABS_PATH_A, TestConstants.ABS_PATH_B).reduce((t, u) -> t.toRealPath()).get());
@@ -537,7 +537,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testReduceTBinaryOperatorOfT() throws IOException {
+    void testReduceTBinaryOperatorOfT() throws IOException {
         assertEquals("_AB", IOStream.of("A", "B").reduce("_", (t, u) -> t + u));
         assertEquals(TestConstants.ABS_PATH_A.toRealPath(),
                 IOStream.of(TestConstants.ABS_PATH_A, TestConstants.ABS_PATH_B).reduce(TestConstants.ABS_PATH_A, (t, u) -> t.toRealPath()));
@@ -545,7 +545,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testReduceUBiFunctionOfUQsuperTUBinaryOperatorOfU() throws IOException {
+    void testReduceUBiFunctionOfUQsuperTUBinaryOperatorOfU() throws IOException {
         assertEquals("_AB", IOStream.of("A", "B").reduce("_", (t, u) -> t + u, (t, u) -> t + u));
         assertEquals(TestConstants.ABS_PATH_A.toRealPath(), IOStream.of(TestConstants.ABS_PATH_A, TestConstants.ABS_PATH_B).reduce(TestConstants.ABS_PATH_A,
                 (t, u) -> t.toRealPath(), (t, u) -> u.toRealPath()));
@@ -553,13 +553,13 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testSequential() {
+    void testSequential() {
         assertEquals(2, IOStream.of("A", "B").sequential().count());
     }
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testSkip() throws IOException {
+    void testSkip() throws IOException {
         final AtomicReference<String> ref = new AtomicReference<>();
         assertEquals(1, Stream.of("A", "B").skip(1).peek(e -> compareAndSetRE(ref, null, e)).count());
         // TODO Resolve, abstract or document these differences?
@@ -582,14 +582,14 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testSorted() throws IOException {
+    void testSorted() throws IOException {
         assertEquals(Arrays.asList("A", "B", "C", "D"), IOStream.of("D", "A", "B", "C").sorted().collect(Collectors.toList()));
         assertEquals(Arrays.asList("A", "B", "C", "D"), IOStream.of("D", "A", "B", "C").sorted().peek(this::ioExceptionOnNull).collect(Collectors.toList()));
     }
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testSortedComparatorOfQsuperT() throws IOException {
+    void testSortedComparatorOfQsuperT() throws IOException {
         assertEquals(Arrays.asList("A", "B", "C", "D"), IOStream.of("D", "A", "B", "C").sorted(String::compareTo).collect(Collectors.toList()));
         assertEquals(Arrays.asList("A", "B", "C", "D"),
                 IOStream.of("D", "A", "B", "C").sorted(String::compareTo).peek(this::ioExceptionOnNull).collect(Collectors.toList()));
@@ -597,7 +597,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testSpliterator() {
+    void testSpliterator() {
         final AtomicInteger ref = new AtomicInteger();
         IOStream.of("A", "B").spliterator().forEachRemaining(e -> ref.incrementAndGet());
         assertEquals(2, ref.get());
@@ -605,19 +605,19 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testToArray() {
+    void testToArray() {
         assertArrayEquals(new String[] { "A", "B" }, IOStream.of("A", "B").toArray());
     }
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testToArrayIntFunctionOfA() {
+    void testToArrayIntFunctionOfA() {
         assertArrayEquals(new String[] { "A", "B" }, IOStream.of("A", "B").toArray(String[]::new));
     }
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testUnordered() {
+    void testUnordered() {
         // Sanity check
         assertArrayEquals(new String[] { "A", "B" }, Stream.of("A", "B").unordered().toArray());
         // Test
@@ -626,7 +626,7 @@ public class IOStreamTest {
 
     @SuppressWarnings("resource") // custom stream not recognized by compiler warning machinery
     @Test
-    public void testUnwrap() {
+    void testUnwrap() {
         final Stream<String> unwrap = IOStream.of("A", "B").unwrap();
         assertNotNull(unwrap);
         assertEquals(2, unwrap.count());

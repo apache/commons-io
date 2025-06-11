@@ -35,7 +35,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Tests {@link FileTimes}.
  */
-public class FileTimesTest {
+class FileTimesTest {
 
     public static Stream<Arguments> fileTimeNanoUnitsToNtfsProvider() {
         // @formatter:off
@@ -93,7 +93,7 @@ public class FileTimesTest {
 
     @ParameterizedTest
     @MethodSource("fileTimeNanoUnitsToNtfsProvider")
-    public void testDateToFileTime(final String instant, final long ignored) {
+    void testDateToFileTime(final String instant, final long ignored) {
         final Instant parsedInstant = Instant.parse(instant);
         final FileTime parsedFileTime = FileTime.from(parsedInstant);
         final Date parsedDate = Date.from(parsedInstant);
@@ -102,7 +102,7 @@ public class FileTimesTest {
 
     @ParameterizedTest
     @MethodSource("fileTimeNanoUnitsToNtfsProvider")
-    public void testDateToNtfsTime(final String instantStr, final long ntfsTime) {
+    void testDateToNtfsTime(final String instantStr, final long ntfsTime) {
         final long ntfsMillis = Math.floorDiv(ntfsTime, FileTimes.HUNDRED_NANOS_PER_MILLISECOND) * FileTimes.HUNDRED_NANOS_PER_MILLISECOND;
         final Instant instant = Instant.parse(instantStr);
         final Date parsed = Date.from(instant);
@@ -118,13 +118,13 @@ public class FileTimesTest {
     }
 
     @Test
-    public void testEpoch() {
+    void testEpoch() {
         assertEquals(0, FileTimes.EPOCH.toMillis());
     }
 
     @ParameterizedTest
     @MethodSource("fileTimeNanoUnitsToNtfsProvider")
-    public void testFileTimeToDate(final String instant, final long ignored) {
+    void testFileTimeToDate(final String instant, final long ignored) {
         final Instant parsedInstant = Instant.parse(instant);
         final FileTime parsedFileTime = FileTime.from(parsedInstant);
         final Date parsedDate = Date.from(parsedInstant);
@@ -134,7 +134,7 @@ public class FileTimesTest {
     //@Disabled
     @ParameterizedTest
     @MethodSource("fileTimeToNtfsProvider")
-    public void testFileTimeToNtfsTime(final String instantStr, final FileTime fileTime) {
+    void testFileTimeToNtfsTime(final String instantStr, final FileTime fileTime) {
         final Instant instant = Instant.parse(instantStr);
         final FileTime parsed = FileTime.from(instant);
         assertEquals(instant, parsed.toInstant());
@@ -143,36 +143,36 @@ public class FileTimesTest {
 
     @ParameterizedTest
     @MethodSource("fileTimeNanoUnitsToNtfsProvider")
-    public void testFileTimeToNtfsTime(final String instant, final long ntfsTime) {
+    void testFileTimeToNtfsTime(final String instant, final long ntfsTime) {
         final FileTime parsed = FileTime.from(Instant.parse(instant));
         assertEquals(ntfsTime, FileTimes.toNtfsTime(parsed));
     }
 
     @ParameterizedTest
     @MethodSource("fileTimeNanoUnitsToNtfsProvider")
-    public void testFromUnixTime(final String instant, final long ntfsTime) {
+    void testFromUnixTime(final String instant, final long ntfsTime) {
         final long epochSecond = Instant.parse(instant).getEpochSecond();
         assertEquals(epochSecond, FileTimes.fromUnixTime(epochSecond).to(TimeUnit.SECONDS));
     }
 
     @ParameterizedTest
     @MethodSource("isUnixFileTimeProvider")
-    public void testIsUnixTime(final String instant, final boolean isUnixTime) {
+    void testIsUnixTime(final String instant, final boolean isUnixTime) {
         assertEquals(isUnixTime, FileTimes.isUnixTime(FileTime.from(Instant.parse(instant))));
     }
 
-    public void testIsUnixTimeFileTimeNull() {
+    void testIsUnixTimeFileTimeNull() {
         assertTrue(FileTimes.isUnixTime(null));
     }
 
     @ParameterizedTest
     @MethodSource("isUnixFileTimeProvider")
-    public void testIsUnixTimeLong(final String instant, final boolean isUnixTime) {
+    void testIsUnixTimeLong(final String instant, final boolean isUnixTime) {
         assertEquals(isUnixTime, FileTimes.isUnixTime(Instant.parse(instant).getEpochSecond()));
     }
 
     @Test
-    public void testMaxJavaTime() {
+    void testMaxJavaTime() {
         final long javaTime = Long.MAX_VALUE;
         final Instant instant = Instant.ofEpochMilli(javaTime);
         assertEquals(javaTime, instant.toEpochMilli()); // sanity check
@@ -187,7 +187,7 @@ public class FileTimesTest {
 
     @ParameterizedTest
     @MethodSource("fileTimeNanoUnitsToNtfsProvider")
-    public void testMaxJavaTimeParam(final String instantStr, final long javaTime) {
+    void testMaxJavaTimeParam(final String instantStr, final long javaTime) {
         // final long javaTime = Long.MAX_VALUE;
         final Instant instant = Instant.ofEpochMilli(javaTime);
         assertEquals(javaTime, instant.toEpochMilli()); // sanity check
@@ -201,21 +201,21 @@ public class FileTimesTest {
     }
 
     @Test
-    public void testMinusMillis() {
+    void testMinusMillis() {
         final int millis = 2;
         assertEquals(Instant.EPOCH.minusMillis(millis), FileTimes.minusMillis(FileTimes.EPOCH, millis).toInstant());
         assertEquals(Instant.EPOCH, FileTimes.minusMillis(FileTimes.EPOCH, 0).toInstant());
     }
 
     @Test
-    public void testMinusNanos() {
+    void testMinusNanos() {
         final int millis = 2;
         assertEquals(Instant.EPOCH.minusNanos(millis), FileTimes.minusNanos(FileTimes.EPOCH, millis).toInstant());
         assertEquals(Instant.EPOCH, FileTimes.minusNanos(FileTimes.EPOCH, 0).toInstant());
     }
 
     @Test
-    public void testMinusSeconds() {
+    void testMinusSeconds() {
         final int seconds = 2;
         assertEquals(Instant.EPOCH.minusSeconds(seconds), FileTimes.minusSeconds(FileTimes.EPOCH, seconds).toInstant());
         assertEquals(Instant.EPOCH, FileTimes.minusSeconds(FileTimes.EPOCH, 0).toInstant());
@@ -223,13 +223,13 @@ public class FileTimesTest {
 
     @ParameterizedTest
     @MethodSource("fileTimeNanoUnitsToNtfsProvider")
-    public void testNtfsTimeToDate(final String instant, final long ntfsTime) {
+    void testNtfsTimeToDate(final String instant, final long ntfsTime) {
         assertEquals(Instant.parse(instant).toEpochMilli(), FileTimes.ntfsTimeToDate(ntfsTime).toInstant().toEpochMilli());
     }
 
     @ParameterizedTest
     @MethodSource("fileTimeNanoUnitsToNtfsProvider")
-    public void testNtfsTimeToFileTime(final String instantStr, final long ntfsTime) {
+    void testNtfsTimeToFileTime(final String instantStr, final long ntfsTime) {
         final Instant instant = Instant.parse(instantStr);
         final FileTime fileTime = FileTime.from(instant);
         assertEquals(instant, fileTime.toInstant()); // sanity check
@@ -238,31 +238,31 @@ public class FileTimesTest {
     }
 
     @Test
-    public void testNullDateToNullFileTime() {
+    void testNullDateToNullFileTime() {
         assertNull(FileTimes.toFileTime(null));
     }
 
     @Test
-    public void testNullFileTimeToNullDate() {
+    void testNullFileTimeToNullDate() {
         assertNull(FileTimes.toDate(null));
     }
 
     @Test
-    public void testPlusMinusMillis() {
+    void testPlusMinusMillis() {
         final int millis = 2;
         assertEquals(Instant.EPOCH.plusMillis(millis), FileTimes.plusMillis(FileTimes.EPOCH, millis).toInstant());
         assertEquals(Instant.EPOCH, FileTimes.plusMillis(FileTimes.EPOCH, 0).toInstant());
     }
 
     @Test
-    public void testPlusNanos() {
+    void testPlusNanos() {
         final int millis = 2;
         assertEquals(Instant.EPOCH.plusNanos(millis), FileTimes.plusNanos(FileTimes.EPOCH, millis).toInstant());
         assertEquals(Instant.EPOCH, FileTimes.plusNanos(FileTimes.EPOCH, 0).toInstant());
     }
 
     @Test
-    public void testPlusSeconds() {
+    void testPlusSeconds() {
         final int seconds = 2;
         assertEquals(Instant.EPOCH.plusSeconds(seconds), FileTimes.plusSeconds(FileTimes.EPOCH, seconds).toInstant());
         assertEquals(Instant.EPOCH, FileTimes.plusSeconds(FileTimes.EPOCH, 0).toInstant());
@@ -270,7 +270,7 @@ public class FileTimesTest {
 
     @ParameterizedTest
     @MethodSource("isUnixFileTimeProvider")
-    public void testToUnixTime(final String instant, final boolean isUnixTime) {
+    void testToUnixTime(final String instant, final boolean isUnixTime) {
         assertEquals(isUnixTime, FileTimes.isUnixTime(FileTimes.toUnixTime(FileTime.from(Instant.parse(instant)))));
     }
 }

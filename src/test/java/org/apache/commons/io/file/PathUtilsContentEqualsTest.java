@@ -42,7 +42,7 @@ import com.google.common.jimfs.Jimfs;
 /**
  * Tests {@link PathUtils}.
  */
-public class PathUtilsContentEqualsTest {
+class PathUtilsContentEqualsTest {
 
     static Configuration[] testConfigurations() {
         // @formatter:off
@@ -105,7 +105,7 @@ public class PathUtilsContentEqualsTest {
 
     @ParameterizedTest
     @MethodSource("testConfigurations")
-    public void testContentEqualsFileSystemsMemVsMem(final Configuration configuration) throws Exception {
+    void testContentEqualsFileSystemsMemVsMem(final Configuration configuration) throws Exception {
         final Path refDir = Paths.get("src/test/resources/dir-equals-tests");
         try (FileSystem fileSystem1 = Jimfs.newFileSystem(configuration);
                 FileSystem fileSystem2 = Jimfs.newFileSystem(configuration)) {
@@ -119,7 +119,7 @@ public class PathUtilsContentEqualsTest {
 
     @ParameterizedTest
     @MethodSource("testConfigurations")
-    public void testContentEqualsFileSystemsMemVsZip(final Configuration configuration) throws Exception {
+    void testContentEqualsFileSystemsMemVsZip(final Configuration configuration) throws Exception {
         final Path refDir = Paths.get("src/test/resources/dir-equals-tests");
         try (FileSystem fileSystem1 = Jimfs.newFileSystem(configuration);
                 FileSystem fileSystem2 = FileSystems.newFileSystem(refDir.resolveSibling(refDir.getFileName() + ".zip"), null)) {
@@ -131,7 +131,7 @@ public class PathUtilsContentEqualsTest {
     }
 
     @Test
-    public void testContentEqualsFileSystemsZipVsZip() throws Exception {
+    void testContentEqualsFileSystemsZipVsZip() throws Exception {
         final Path zipPath = Paths.get("src/test/resources/dir-equals-tests.zip");
         final Path zipCopy = temporaryFolder.toPath().resolve("copy2.zip");
         Files.copy(zipPath, zipCopy, StandardCopyOption.REPLACE_EXISTING);
@@ -151,7 +151,7 @@ public class PathUtilsContentEqualsTest {
     }
 
     @Test
-    public void testDirectoryAndFileContentEquals() throws Exception {
+    void testDirectoryAndFileContentEquals() throws Exception {
         // Non-existent files
         final Path path1 = new File(temporaryFolder, getName()).toPath();
         final Path path2 = new File(temporaryFolder, getName() + "2").toPath();
@@ -197,7 +197,7 @@ public class PathUtilsContentEqualsTest {
      * @throws Exception on test failure.
      */
     @Test
-    public void testDirectoryAndFileContentEqualsDifferentFileSystemsFileVsZip() throws Exception {
+    void testDirectoryAndFileContentEqualsDifferentFileSystemsFileVsZip() throws Exception {
         final Path dir1 = Paths.get("src/test/resources/dir-equals-tests");
         try (FileSystem fileSystem = FileSystems.newFileSystem(dir1.resolveSibling(dir1.getFileName() + ".zip"), null)) {
             final Path dir2 = fileSystem.getPath("/dir-equals-tests");
@@ -212,7 +212,7 @@ public class PathUtilsContentEqualsTest {
      * @throws Exception on test failure.
      */
     @Test
-    public void testDirectoryAndFileContentEqualsDifferentFileSystemsZipVsZip() throws Exception {
+    void testDirectoryAndFileContentEqualsDifferentFileSystemsZipVsZip() throws Exception {
         final Path zipPath = Paths.get("src/test/resources/dir-equals-tests.zip");
         final Path zipCopy = temporaryFolder.toPath().resolve("copy1.zip");
         Files.copy(zipPath, zipCopy, StandardCopyOption.REPLACE_EXISTING);
@@ -231,7 +231,7 @@ public class PathUtilsContentEqualsTest {
      * @throws Exception on test failure.
      */
     @Test
-    public void testDirectoryAndFileContentEqualsDifferentFileSystemsZipVsZipEmpty() throws Exception {
+    void testDirectoryAndFileContentEqualsDifferentFileSystemsZipVsZipEmpty() throws Exception {
         final Path zipPath = Paths.get("src/test/resources/dir-equals-tests.zip");
         final Path zipCopy = temporaryFolder.toPath().resolve("copy1.zip");
         final Path emptyZip = Paths.get("src/test/resources/org/apache/commons/io/empty.zip");
@@ -261,7 +261,7 @@ public class PathUtilsContentEqualsTest {
     }
 
     @Test
-    public void testDirectoryContentEquals() throws Exception {
+    void testDirectoryContentEquals() throws Exception {
         // Non-existent files
         final Path path1 = new File(temporaryFolder, getName()).toPath();
         final Path path2 = new File(temporaryFolder, getName() + "2").toPath();
@@ -317,7 +317,7 @@ public class PathUtilsContentEqualsTest {
     }
 
     @Test
-    public void testFileContentEquals() throws Exception {
+    void testFileContentEquals() throws Exception {
         // Non-existent files
         final Path path1 = new File(temporaryFolder, getName()).toPath();
         final Path path2 = new File(temporaryFolder, getName() + "2").toPath();
@@ -347,7 +347,7 @@ public class PathUtilsContentEqualsTest {
     }
 
     @Test
-    public void testFileContentEqualsZip() throws Exception {
+    void testFileContentEqualsZip() throws Exception {
         final Path path1 = Paths.get("src/test/resources/org/apache/commons/io/bla.zip");
         final Path path2 = Paths.get("src/test/resources/org/apache/commons/io/bla-copy.zip");
         // moby.zip is from https://issues.apache.org/jira/browse/COMPRESS-93
@@ -357,7 +357,7 @@ public class PathUtilsContentEqualsTest {
     }
 
     @Test
-    public void testFileContentEqualsZipFileSystem() throws Exception {
+    void testFileContentEqualsZipFileSystem() throws Exception {
         try (FileSystem fileSystem = FileSystems.newFileSystem(Paths.get("src/test/resources/org/apache/commons/io/test-same-size-diff-contents.zip"),
                 ClassLoader.getSystemClassLoader())) {
             // Contains one char: A

@@ -52,7 +52,7 @@ import org.junitpioneer.jupiter.DefaultLocale;
 /**
  * Tests {@link XmlStreamReader}.
  */
-public class XmlStreamReaderTest {
+class XmlStreamReaderTest {
 
     private static final String ISO_8859_1 = StandardCharsets.ISO_8859_1.name();
     private static final String US_ASCII = StandardCharsets.US_ASCII.name();
@@ -190,7 +190,7 @@ public class XmlStreamReaderTest {
         }
     }
 
-    public void testAlternateDefaultEncoding(final String contentType, final String bomEnc, final String streamEnc, final String prologEnc,
+    void testAlternateDefaultEncoding(final String contentType, final String bomEnc, final String streamEnc, final String prologEnc,
             final String alternateEnc) throws Exception {
         try (InputStream is = getXmlInputStream(bomEnc, prologEnc == null ? XML1 : XML3, streamEnc, prologEnc);
                 XmlStreamReader xmlReader = new XmlStreamReader(is, contentType, false, alternateEnc)) {
@@ -307,7 +307,7 @@ public class XmlStreamReaderTest {
     // XML Stream generator
 
     @Test
-    public void testEncodingAttributeXML() throws Exception {
+    void testEncodingAttributeXML() throws Exception {
         try (InputStream is = new ByteArrayInputStream(ENCODING_ATTRIBUTE_XML.getBytes(StandardCharsets.UTF_8));
                 XmlStreamReader xmlReader = new XmlStreamReader(is, "", true)) {
             assertEquals(xmlReader.getEncoding(), UTF_8);
@@ -325,7 +325,7 @@ public class XmlStreamReaderTest {
     }
 
     @Test
-    public void testHttp() throws Exception {
+    void testHttp() throws Exception {
         // niallp 2010-10-06 - remove following 2 tests - I reinstated
         // checks for non-UTF-16 encodings (18 tests) and these failed
         // _testHttpValid("application/xml", "no-bom", "US-ASCII", null);
@@ -415,7 +415,7 @@ public class XmlStreamReaderTest {
     }
 
     @Test
-    public void testHttpContent() throws Exception {
+    void testHttpContent() throws Exception {
         final String encoding = UTF_8;
         final String xml = getXML("no-bom", XML3, encoding, encoding);
         try (XmlStreamReader xmlReader = new XmlStreamReader(CharSequenceInputStream.builder().setCharSequence(xml).setCharset(encoding).get())) {
@@ -444,7 +444,7 @@ public class XmlStreamReaderTest {
         }
     }
 
-    public void testHttpValid(final String cT, final String bomEnc, final String streamEnc,
+    void testHttpValid(final String cT, final String bomEnc, final String streamEnc,
         final String prologEnc) throws Exception {
         try (InputStream is = getXmlInputStream(bomEnc, prologEnc == null ? XML1 : XML3, streamEnc, prologEnc);
             XmlStreamReader xmlReader = new XmlStreamReader(is, cT, false)) {
@@ -461,7 +461,7 @@ public class XmlStreamReaderTest {
 
     @ParameterizedTest(name = "{0}")
     @MethodSource(CharsetsTest.AVAIL_CHARSETS)
-    public void testIO_815(final String charsetName) throws Exception {
+    void testIO_815(final String charsetName) throws Exception {
         final MessageFormat messageFormat = new MessageFormat("<?xml version=\"1.0\" encoding=''{0}''?>\n<root>text</root>");
         final IOFunction<InputStream, XmlStreamReader> factoryCtor = XmlStreamReader::new;
         final IOFunction<InputStream, XmlStreamReader> factoryBuilder = stream -> XmlStreamReader.builder().setInputStream(stream).get();
@@ -476,7 +476,7 @@ public class XmlStreamReaderTest {
     // Turkish language has specific rules to convert dotted and dotless i character.
     @Test
     @DefaultLocale(language = "tr")
-    public void testLowerCaseEncodingWithTurkishLocale_IO_557() throws Exception {
+    void testLowerCaseEncodingWithTurkishLocale_IO_557() throws Exception {
         final String[] encodings = { "iso8859-1", "us-ascii", "utf-8" }; // lower-case
         for (final String encoding : encodings) {
             final String xml = getXML("no-bom", XML3, encoding, encoding);
@@ -507,7 +507,7 @@ public class XmlStreamReaderTest {
     }
 
     @Test
-    public void testRawBomUtf16() throws Exception {
+    void testRawBomUtf16() throws Exception {
         testRawBomValid(UTF_16BE);
         testRawBomValid(UTF_16LE);
         testRawBomValid(UTF_16);
@@ -518,7 +518,7 @@ public class XmlStreamReaderTest {
     }
 
     @Test
-    public void testRawBomUtf32() throws Exception {
+    void testRawBomUtf32() throws Exception {
         testRawBomValid(UTF_32BE);
         testRawBomValid(UTF_32LE);
         testRawBomValid(UTF_32);
@@ -529,7 +529,7 @@ public class XmlStreamReaderTest {
     }
 
     @Test
-    public void testRawBomUtf8() throws Exception {
+    void testRawBomUtf8() throws Exception {
         testRawBomValid(UTF_8);
         testRawBomInvalid("UTF-8-bom", US_ASCII, US_ASCII);
         testRawBomInvalid("UTF-8-bom", ISO_8859_1, ISO_8859_1);
@@ -556,7 +556,7 @@ public class XmlStreamReaderTest {
     }
 
     @Test
-    public void testRawContent() throws Exception {
+    void testRawContent() throws Exception {
         final String encoding = UTF_8;
         final String xml = getXML("no-bom", XML3, encoding, encoding);
         try (XmlStreamReader xmlReader = new XmlStreamReader(CharSequenceInputStream.builder().setCharSequence(xml).setCharset(encoding).get())) {
@@ -566,7 +566,7 @@ public class XmlStreamReaderTest {
     }
 
     @Test
-    public void testRawNoBomCp1047() throws Exception {
+    void testRawNoBomCp1047() throws Exception {
         testRawNoBomValid("CP1047");
     }
 
@@ -579,37 +579,37 @@ public class XmlStreamReaderTest {
     }
 
     @Test
-    public void testRawNoBomIso8859_1() throws Exception {
+    void testRawNoBomIso8859_1() throws Exception {
         testRawNoBomValid(ISO_8859_1);
     }
 
     @Test
-    public void testRawNoBomUsAscii() throws Exception {
+    void testRawNoBomUsAscii() throws Exception {
         testRawNoBomValid(US_ASCII);
     }
 
     @Test
-    public void testRawNoBomUtf16BE() throws Exception {
+    void testRawNoBomUtf16BE() throws Exception {
         testRawNoBomValid(UTF_16BE);
     }
 
     @Test
-    public void testRawNoBomUtf16LE() throws Exception {
+    void testRawNoBomUtf16LE() throws Exception {
         testRawNoBomValid(UTF_16LE);
     }
 
     @Test
-    public void testRawNoBomUtf32BE() throws Exception {
+    void testRawNoBomUtf32BE() throws Exception {
         testRawNoBomValid(UTF_32BE);
     }
 
     @Test
-    public void testRawNoBomUtf32LE() throws Exception {
+    void testRawNoBomUtf32LE() throws Exception {
         testRawNoBomValid(UTF_32LE);
     }
 
     @Test
-    public void testRawNoBomUtf8() throws Exception {
+    void testRawNoBomUtf8() throws Exception {
         testRawNoBomValid(UTF_8);
     }
 

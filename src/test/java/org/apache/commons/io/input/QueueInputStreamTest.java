@@ -111,7 +111,7 @@ public class QueueInputStreamTest {
     @SuppressWarnings("resource")
     @ParameterizedTest(name = "inputData={0}")
     @MethodSource("inputData")
-    public void testAvailableAfterClose(final String inputData) throws IOException {
+    void testAvailableAfterClose(final String inputData) throws IOException {
         final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
         final InputStream shadow;
         try (InputStream inputStream = new QueueInputStream(queue)) {
@@ -122,7 +122,7 @@ public class QueueInputStreamTest {
 
     @ParameterizedTest(name = "inputData={0}")
     @MethodSource("inputData")
-    public void testAvailableAfterOpen(final String inputData) throws IOException {
+    void testAvailableAfterOpen(final String inputData) throws IOException {
         final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
         try (InputStream inputStream = new QueueInputStream(queue)) {
             // Always 0 because read() blocks.
@@ -134,7 +134,7 @@ public class QueueInputStreamTest {
 
     @ParameterizedTest(name = "inputData={0}")
     @MethodSource("inputData")
-    public void testBufferedReads(final String inputData) throws IOException {
+    void testBufferedReads(final String inputData) throws IOException {
         final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
         try (BufferedInputStream inputStream = new BufferedInputStream(new QueueInputStream(queue));
              QueueOutputStream outputStream = new QueueOutputStream(queue)) {
@@ -146,7 +146,7 @@ public class QueueInputStreamTest {
 
     @ParameterizedTest(name = "inputData={0}")
     @MethodSource("inputData")
-    public void testReadLineByLineQueue(final String inputData) throws IOException {
+    void testReadLineByLineQueue(final String inputData) throws IOException {
         final String[] lines = inputData.split("\n");
         final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
         try (QueueInputStream inputStream = QueueInputStream.builder()
@@ -161,7 +161,7 @@ public class QueueInputStreamTest {
 
     @ParameterizedTest(name = "inputData={0}")
     @MethodSource("inputData")
-    public void testReadLineByLineFile(final String inputData) throws IOException {
+    void testReadLineByLineFile(final String inputData) throws IOException {
         final Path tempFile = Files.createTempFile(getClass().getSimpleName(), ".txt");
         try (InputStream inputStream = Files.newInputStream(tempFile);
              OutputStream outputStream = Files.newOutputStream(tempFile)) {
@@ -208,7 +208,7 @@ public class QueueInputStreamTest {
     }
 
     @Test
-    public void testBulkReadZeroLength() {
+    void testBulkReadZeroLength() {
         final QueueInputStream queueInputStream = new QueueInputStream();
         final int read = queueInputStream.read(EMPTY_BYTE_ARRAY, 0, 0);
         assertEquals(0, read);
@@ -216,7 +216,7 @@ public class QueueInputStreamTest {
 
     @ParameterizedTest(name = "inputData={0}")
     @MethodSource("inputData")
-    public void testBulkReadWaiting(final String inputData) throws IOException {
+    void testBulkReadWaiting(final String inputData) throws IOException {
         assumeFalse(inputData.isEmpty());
 
         final CountDownLatch onPollLatch = new CountDownLatch(1);
@@ -258,7 +258,7 @@ public class QueueInputStreamTest {
 
     @ParameterizedTest(name = "inputData={0}")
     @MethodSource("inputData")
-    public void testBufferedReadWrite(final String inputData) throws IOException {
+    void testBufferedReadWrite(final String inputData) throws IOException {
         final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
         try (BufferedInputStream inputStream = new BufferedInputStream(new QueueInputStream(queue));
                 BufferedOutputStream outputStream = new BufferedOutputStream(new QueueOutputStream(queue), defaultBufferSize())) {
@@ -271,7 +271,7 @@ public class QueueInputStreamTest {
 
     @ParameterizedTest(name = "inputData={0}")
     @MethodSource("inputData")
-    public void testBufferedWrites(final String inputData) throws IOException {
+    void testBufferedWrites(final String inputData) throws IOException {
         final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
         try (QueueInputStream inputStream = new QueueInputStream(queue);
                 BufferedOutputStream outputStream = new BufferedOutputStream(new QueueOutputStream(queue), defaultBufferSize())) {
@@ -283,14 +283,14 @@ public class QueueInputStreamTest {
     }
 
     @Test
-    public void testInvalidArguments() {
+    void testInvalidArguments() {
         assertThrows(IllegalArgumentException.class, () -> QueueInputStream.builder().setTimeout(Duration.ofMillis(-1)).get(), "waitTime must not be negative");
     }
 
     @SuppressWarnings("resource")
     @ParameterizedTest(name = "inputData={0}")
     @MethodSource("inputData")
-    public void testReadAfterClose(final String inputData) throws IOException {
+    void testReadAfterClose(final String inputData) throws IOException {
         final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
         final InputStream shadow;
         try (InputStream inputStream = new QueueInputStream(queue)) {
@@ -300,7 +300,7 @@ public class QueueInputStreamTest {
     }
 
     @Test
-    public void testResetArguments() throws IOException {
+    void testResetArguments() throws IOException {
         try (QueueInputStream queueInputStream = QueueInputStream.builder().setTimeout(null).get()) {
             assertEquals(Duration.ZERO, queueInputStream.getTimeout());
             assertEquals(0, queueInputStream.getBlockingQueue().size());
@@ -313,7 +313,7 @@ public class QueueInputStreamTest {
 
     @Test
     @DisplayName("If read is interrupted while waiting, then exception is thrown")
-    public void testTimeoutInterrupted() throws Exception {
+    void testTimeoutInterrupted() throws Exception {
         try (QueueInputStream inputStream = QueueInputStream.builder().setTimeout(Duration.ofMinutes(2)).get();
                 QueueOutputStream outputStream = inputStream.newQueueOutputStream()) {
 
@@ -339,7 +339,7 @@ public class QueueInputStreamTest {
 
     @Test
     @DisplayName("If data is not available in queue, then read will wait until wait time elapses")
-    public void testTimeoutUnavailableData() throws IOException {
+    void testTimeoutUnavailableData() throws IOException {
         try (QueueInputStream inputStream = QueueInputStream.builder().setTimeout(Duration.ofMillis(500)).get();
                 QueueOutputStream outputStream = inputStream.newQueueOutputStream()) {
             final Stopwatch stopwatch = Stopwatch.createStarted();
@@ -353,7 +353,7 @@ public class QueueInputStreamTest {
 
     @ParameterizedTest(name = "inputData={0}")
     @MethodSource("inputData")
-    public void testUnbufferedReadWrite(final String inputData) throws IOException {
+    void testUnbufferedReadWrite(final String inputData) throws IOException {
         try (QueueInputStream inputStream = new QueueInputStream();
                 QueueOutputStream outputStream = inputStream.newQueueOutputStream()) {
             writeUnbuffered(outputStream, inputData);
@@ -364,7 +364,7 @@ public class QueueInputStreamTest {
 
     @ParameterizedTest(name = "inputData={0}")
     @MethodSource("inputData")
-    public void testUnbufferedReadWriteWithTimeout(final String inputData) throws IOException {
+    void testUnbufferedReadWriteWithTimeout(final String inputData) throws IOException {
         final Duration timeout = Duration.ofMinutes(2);
         try (QueueInputStream inputStream = QueueInputStream.builder().setTimeout(timeout).get();
                 QueueOutputStream outputStream = inputStream.newQueueOutputStream()) {

@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link UncheckedFilterInputStream}.
  */
-public class UncheckedFilterInputStreamTest {
+class UncheckedFilterInputStreamTest {
 
     private UncheckedFilterInputStream stringInputStream;
     private UncheckedFilterInputStream brokenInputStream;
@@ -48,18 +48,18 @@ public class UncheckedFilterInputStreamTest {
     }
 
     @Test
-    public void testClose() {
+    void testClose() {
         stringInputStream.close();
         assertThrows(UncheckedIOException.class, () -> brokenInputStream.read());
     }
 
     @Test
-    public void testCloseThrows() {
+    void testCloseThrows() {
         assertEquals(exception, assertThrows(UncheckedIOException.class, () -> brokenInputStream.close()).getCause());
     }
 
     @Test
-    public void testMarkReset() {
+    void testMarkReset() {
         stringInputStream.mark(10);
         final int c = stringInputStream.read();
         stringInputStream.reset();
@@ -67,7 +67,7 @@ public class UncheckedFilterInputStreamTest {
     }
 
     @Test
-    public void testRead() {
+    void testRead() {
         final InputStream inputStream = stringInputStream;
         try (UncheckedFilterInputStream uncheckedReader = UncheckedFilterInputStream.builder().setInputStream(inputStream).get()) {
             assertEquals('0', uncheckedReader.read());
@@ -78,7 +78,7 @@ public class UncheckedFilterInputStreamTest {
     }
 
     @Test
-    public void testReadByteArray() {
+    void testReadByteArray() {
         final InputStream inputStream = stringInputStream;
         try (UncheckedFilterInputStream uncheckedReader = UncheckedFilterInputStream.builder().setInputStream(inputStream).get()) {
             final byte[] array = new byte[1];
@@ -96,7 +96,7 @@ public class UncheckedFilterInputStreamTest {
     }
 
     @Test
-    public void testReadByteArrayIndexed() {
+    void testReadByteArrayIndexed() {
         final InputStream inputStream = stringInputStream;
         try (UncheckedFilterInputStream uncheckedReader = UncheckedFilterInputStream.builder().setInputStream(inputStream).get()) {
             final byte[] array = new byte[1];
@@ -114,22 +114,22 @@ public class UncheckedFilterInputStreamTest {
     }
 
     @Test
-    public void testReadByteArrayIndexedThrows() {
+    void testReadByteArrayIndexedThrows() {
         assertEquals(exception, assertThrows(UncheckedIOException.class, () -> brokenInputStream.read(new byte[1], 0, 1)).getCause());
     }
 
     @Test
-    public void testReadByteArrayThrows() {
+    void testReadByteArrayThrows() {
         assertEquals(exception, assertThrows(UncheckedIOException.class, () -> brokenInputStream.read(new byte[1])).getCause());
     }
 
     @Test
-    public void testReadThrows() {
+    void testReadThrows() {
         assertEquals(exception, assertThrows(UncheckedIOException.class, () -> brokenInputStream.read()).getCause());
     }
 
     @Test
-    public void testResetThrows() {
+    void testResetThrows() {
         try (UncheckedFilterInputStream closedReader = UncheckedFilterInputStream.builder().setInputStream(ClosedInputStream.INSTANCE).get()) {
             closedReader.close();
             assertThrows(UncheckedIOException.class, () -> brokenInputStream.reset());
@@ -137,12 +137,12 @@ public class UncheckedFilterInputStreamTest {
     }
 
     @Test
-    public void testSkip() {
+    void testSkip() {
         assertEquals(1, stringInputStream.skip(1));
     }
 
     @Test
-    public void testSkipThrows() {
+    void testSkipThrows() {
         assertEquals(exception, assertThrows(UncheckedIOException.class, () -> brokenInputStream.skip(1)).getCause());
     }
 

@@ -24,7 +24,7 @@ import org.apache.commons.io.input.XmlStreamReaderUtilitiesTest;
 /**
  * Test compatibility of the original XmlStreamReader (before all the refactoring).
  */
-public class XmlStreamReaderUtilitiesCompatibilityTest extends XmlStreamReaderUtilitiesTest {
+class XmlStreamReaderUtilitiesCompatibilityTest extends XmlStreamReaderUtilitiesTest {
 
     /** Mock {@link XmlStreamReader} implementation */
     private static final class MockXmlStreamReader extends XmlStreamReader {

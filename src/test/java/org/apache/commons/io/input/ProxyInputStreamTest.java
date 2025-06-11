@@ -117,7 +117,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
 
     @SuppressWarnings("resource")
     @Test
-    public void testAvailableAfterClose() throws IOException {
+    void testAvailableAfterClose() throws IOException {
         final T shadow;
         try (T inputStream = createFixture()) {
             shadow = inputStream;
@@ -126,14 +126,14 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
     }
 
     @Test
-    public void testAvailableAfterOpen() throws IOException {
+    void testAvailableAfterOpen() throws IOException {
         try (T inputStream = createFixture()) {
             assertEquals(3, inputStream.available());
         }
     }
 
     @Test
-    public void testAvailableAll() throws IOException {
+    void testAvailableAll() throws IOException {
         try (T inputStream = createFixture()) {
             assertEquals(3, inputStream.available());
             IOUtils.toByteArray(inputStream);
@@ -142,7 +142,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
     }
 
     @Test
-    public void testAvailableNull() throws IOException {
+    void testAvailableNull() throws IOException {
         try (T inputStream = createFixture(null)) {
             assertEquals(0, inputStream.available());
             inputStream.setReference(createFixture());
@@ -159,7 +159,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
     }
 
     //@Test
-    public void testMarkOnNull() throws IOException {
+    void testMarkOnNull() throws IOException {
         try (T inputStream = createFixture(null)) {
             inputStream.mark(1);
             inputStream.setReference(createFixture());
@@ -172,7 +172,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
     }
 
     @Test
-    public void testMarkSupported() throws IOException {
+    void testMarkSupported() throws IOException {
         try (T inputStream = createFixture()) {
             assertMarkSupportedEquals(inputStream);
         }
@@ -180,7 +180,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
 
     @SuppressWarnings("resource")
     @Test
-    public void testMarkSupportedAfterClose() throws IOException {
+    void testMarkSupportedAfterClose() throws IOException {
         final T shadow;
         try (T inputStream = createFixture()) {
             shadow = inputStream;
@@ -189,7 +189,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
     }
 
     @Test
-    public void testMarkSupportedOnNull() throws IOException {
+    void testMarkSupportedOnNull() throws IOException {
         try (ProxyInputStream fixture = createFixture()) {
             assertMarkSupportedEquals(fixture);
             fixture.setReference(null);
@@ -198,7 +198,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
     }
 
     @Test
-    public void testRead() throws IOException {
+    void testRead() throws IOException {
         try (T inputStream = createFixture()) {
             int found = inputStream.read();
             assertEquals('a', found);
@@ -213,7 +213,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
     }
 
     @Test
-    public void testReadAfterClose_ByteArrayInputStream() throws IOException {
+    void testReadAfterClose_ByteArrayInputStream() throws IOException {
         try (InputStream inputStream = new ProxyInputStreamFixture(new ByteArrayInputStream("abc".getBytes(StandardCharsets.UTF_8)))) {
             inputStream.close();
             // ByteArrayInputStream does not throw on a closed stream.
@@ -222,7 +222,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
     }
 
     @Test
-    public void testReadAfterClose_ChannelInputStream() throws IOException {
+    void testReadAfterClose_ChannelInputStream() throws IOException {
         try (InputStream inputStream = new ProxyInputStreamFixture(
                 Files.newInputStream(Paths.get("src/test/resources/org/apache/commons/io/abitmorethan16k.txt")))) {
             inputStream.close();
@@ -232,7 +232,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
     }
 
     @Test
-    public void testReadAfterClose_CharSequenceInputStream() throws IOException {
+    void testReadAfterClose_CharSequenceInputStream() throws IOException {
         try (InputStream inputStream = createFixture()) {
             inputStream.close();
             // CharSequenceInputStream (like ByteArrayInputStream) does not throw on a closed stream.
@@ -241,7 +241,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
     }
 
     @Test
-    public void testReadArrayAtMiddleFully() throws IOException {
+    void testReadArrayAtMiddleFully() throws IOException {
         try (T inputStream = createFixture()) {
             final byte[] dest = new byte[5];
             int found = inputStream.read(dest, 2, 3);
@@ -254,7 +254,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
     }
 
     @Test
-    public void testReadArrayAtStartFully() throws IOException {
+    void testReadArrayAtStartFully() throws IOException {
         try (T inputStream = createFixture()) {
             final byte[] dest = new byte[5];
             int found = inputStream.read(dest, 0, 5);
@@ -267,7 +267,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
     }
 
     @Test
-    public void testReadArrayAtStartPartial() throws IOException {
+    void testReadArrayAtStartPartial() throws IOException {
         try (T inputStream = createFixture()) {
             final byte[] dest = new byte[5];
             int found = inputStream.read(dest, 0, 2);
@@ -284,7 +284,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
     }
 
     @Test
-    public void testReadArrayFully() throws IOException {
+    void testReadArrayFully() throws IOException {
         try (T inputStream = createFixture()) {
             final byte[] dest = new byte[5];
             int found = inputStream.read(dest);
@@ -297,7 +297,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
     }
 
     @Test
-    public void testReadArrayPartial() throws IOException {
+    void testReadArrayPartial() throws IOException {
         try (T inputStream = createFixture()) {
             final byte[] dest = new byte[2];
             int found = inputStream.read(dest);
@@ -314,7 +314,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
     }
 
     @Test
-    public void testReadEof() throws Exception {
+    void testReadEof() throws Exception {
         final ByteArrayInputStream proxy = new ByteArrayInputStream(new byte[2]);
         try (ProxyInputStream inputStream = new ProxyInputStreamFixture(proxy)) {
             assertSame(proxy, inputStream.unwrap());
@@ -328,7 +328,7 @@ public class ProxyInputStreamTest<T extends ProxyInputStream> {
     }
 
     @Test
-    public void testSubclassAfterReadConsumer() throws Exception {
+    void testSubclassAfterReadConsumer() throws Exception {
         final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
         final AtomicBoolean boolRef = new AtomicBoolean();
         // @formatter:off

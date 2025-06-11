@@ -45,7 +45,7 @@ import com.google.common.jimfs.Jimfs;
 /**
  * Test checks symmetric behavior with BufferedReader.
  */
-public class ReversedLinesFileReaderParamFileTest {
+class ReversedLinesFileReaderParamFileTest {
 
     private static final String UTF_16BE = StandardCharsets.ISO_8859_1.name();
     private static final String UTF_16LE = StandardCharsets.UTF_16LE.name();
@@ -98,7 +98,7 @@ public class ReversedLinesFileReaderParamFileTest {
 
     @ParameterizedTest(name = "{0}, encoding={1}, blockSize={2}, useNonDefaultFileSystem={3}, isResource={4}")
     @MethodSource
-    public void testDataIntegrityWithBufferedReader(final String fileName, final String charsetName, final Integer blockSize,
+    void testDataIntegrityWithBufferedReader(final String fileName, final String charsetName, final Integer blockSize,
             final boolean useNonDefaultFileSystem, final boolean isResource) throws IOException, URISyntaxException {
 
         Path filePath = isResource ? TestResources.getPath(fileName) : Paths.get(fileName);

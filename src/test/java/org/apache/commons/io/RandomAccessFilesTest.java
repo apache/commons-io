@@ -36,7 +36,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 /**
  * Tests {@link RandomAccessFiles}.
  */
-public class RandomAccessFilesTest {
+class RandomAccessFilesTest {
 
     private static final Path PATH_RO_20 = Paths.get("src/test/resources/org/apache/commons/io/test-file-20byteslength.bin");
     private static final Path PATH_RO_0 = Paths.get("src/test/resources/org/apache/commons/io/test-file-empty.bin");
@@ -48,7 +48,7 @@ public class RandomAccessFilesTest {
 
     @ParameterizedTest()
     @EnumSource(value = RandomAccessFileMode.class)
-    public void testContentEquals(final RandomAccessFileMode mode) throws IOException {
+    void testContentEquals(final RandomAccessFileMode mode) throws IOException {
         mode.accept(PATH_RO_20, raf -> {
             assertEquals(raf, raf);
             assertTrue(RandomAccessFiles.contentEquals(raf, raf));
@@ -134,7 +134,7 @@ public class RandomAccessFilesTest {
 
     @ParameterizedTest()
     @EnumSource(value = RandomAccessFileMode.class)
-    public void testRead(final RandomAccessFileMode mode) throws IOException {
+    void testRead(final RandomAccessFileMode mode) throws IOException {
         mode.accept(PATH_RO_20, raf -> assertArrayEquals(new byte[] {}, RandomAccessFiles.read(raf, 0, 0)));
         mode.accept(PATH_RO_20, raf -> assertArrayEquals(new byte[] {}, RandomAccessFiles.read(raf, 1, 0)));
         mode.accept(PATH_RO_20, raf -> assertArrayEquals(new byte[] { '1' }, RandomAccessFiles.read(raf, 0, 1)));

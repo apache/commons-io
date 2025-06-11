@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
  * Test for the SwappedDataInputStream. This also
  * effectively tests the underlying EndianUtils Stream methods.
  */
-public class SwappedDataInputStreamTest {
+class SwappedDataInputStreamTest {
 
     private SwappedDataInputStream sdis;
     private byte[] bytes;
@@ -60,12 +60,12 @@ public class SwappedDataInputStreamTest {
 
     @SuppressWarnings({ "resource" })
     @Test
-    public void testCloseHandleIOException() throws IOException {
+    void testCloseHandleIOException() throws IOException {
         ProxyInputStreamTest.testCloseHandleIOException(new SwappedDataInputStream(new BrokenInputStream((Throwable) new IOException())));
     }
 
     @Test
-    public void testReadBoolean() throws IOException {
+    void testReadBoolean() throws IOException {
         bytes = new byte[] { 0x00, 0x01, 0x02, };
         try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
                 SwappedDataInputStream sdis = new SwappedDataInputStream(bais)) {
@@ -76,27 +76,27 @@ public class SwappedDataInputStreamTest {
     }
 
     @Test
-    public void testReadByte() throws IOException {
+    void testReadByte() throws IOException {
         assertEquals(0x01, this.sdis.readByte());
     }
 
     @Test
-    public void testReadChar() throws IOException {
+    void testReadChar() throws IOException {
         assertEquals((char) 0x0201, this.sdis.readChar());
     }
 
     @Test
-    public void testReadDouble() throws IOException {
+    void testReadDouble() throws IOException {
         assertEquals(Double.longBitsToDouble(0x0807060504030201L), this.sdis.readDouble(), 0);
     }
 
     @Test
-    public void testReadFloat() throws IOException {
+    void testReadFloat() throws IOException {
         assertEquals(Float.intBitsToFloat(0x04030201), this.sdis.readFloat(), 0);
     }
 
     @Test
-    public void testReadFully() throws IOException {
+    void testReadFully() throws IOException {
         final byte[] bytesIn = new byte[8];
         this.sdis.readFully(bytesIn);
         for (int i = 0; i < 8; i++) {
@@ -105,42 +105,42 @@ public class SwappedDataInputStreamTest {
     }
 
     @Test
-    public void testReadInt() throws IOException {
+    void testReadInt() throws IOException {
         assertEquals(0x04030201, this.sdis.readInt());
     }
 
     @Test
-    public void testReadLine() {
+    void testReadLine() {
         assertThrows(UnsupportedOperationException.class, () -> this.sdis.readLine(), "readLine should be unsupported.");
     }
 
     @Test
-    public void testReadLong() throws IOException {
+    void testReadLong() throws IOException {
         assertEquals(0x0807060504030201L, this.sdis.readLong());
     }
 
     @Test
-    public void testReadShort() throws IOException {
+    void testReadShort() throws IOException {
         assertEquals((short) 0x0201, this.sdis.readShort());
     }
 
     @Test
-    public void testReadUnsignedByte() throws IOException {
+    void testReadUnsignedByte() throws IOException {
         assertEquals(0x01, this.sdis.readUnsignedByte());
     }
 
     @Test
-    public void testReadUnsignedShort() throws IOException {
+    void testReadUnsignedShort() throws IOException {
         assertEquals((short) 0x0201, this.sdis.readUnsignedShort());
     }
 
     @Test
-    public void testReadUTF() {
+    void testReadUTF() {
         assertThrows(UnsupportedOperationException.class, () -> this.sdis.readUTF(), "readUTF should be unsupported.");
     }
 
     @Test
-    public void testSkipBytes() throws IOException {
+    void testSkipBytes() throws IOException {
         this.sdis.skipBytes(4);
         assertEquals(0x08070605, this.sdis.readInt());
     }

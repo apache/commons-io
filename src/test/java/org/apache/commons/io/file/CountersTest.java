@@ -29,24 +29,24 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Tests {@link Counter} and implementations.
  */
-public class CountersTest extends TestArguments {
+class CountersTest extends TestArguments {
 
     @ParameterizedTest
     @MethodSource("numberCounters")
-    public void testInitialValue(final Counter counter) {
+    void testInitialValue(final Counter counter) {
         assertCounter(0, counter, "");
     }
 
     @ParameterizedTest
     @MethodSource("pathCounters")
-    public void testInitialValues(final PathCounters pathCounter) {
+    void testInitialValues(final PathCounters pathCounter) {
         // Does not blow up
         assertCounts(0, 0, 0, pathCounter);
     }
 
     @ParameterizedTest
     @MethodSource("pathCounters")
-    public void testResetCounter(final PathCounters pathCounter) {
+    void testResetCounter(final PathCounters pathCounter) {
         final Counter byteCounter = pathCounter.getByteCounter();
         final long old = byteCounter.get();
         byteCounter.add(1);
@@ -57,7 +57,7 @@ public class CountersTest extends TestArguments {
 
     @ParameterizedTest
     @MethodSource("pathCounters")
-    public void testResetPathCounter(final PathCounters pathCounter) {
+    void testResetPathCounter(final PathCounters pathCounter) {
         final Counter byteCounter = pathCounter.getByteCounter();
         final long old = byteCounter.get();
         byteCounter.add(1);
@@ -68,14 +68,14 @@ public class CountersTest extends TestArguments {
 
     @ParameterizedTest
     @MethodSource("numberCounters")
-    public void testToString(final Counter counter) {
+    void testToString(final Counter counter) {
         // Does not blow up
         counter.toString();
     }
 
     @ParameterizedTest
     @MethodSource("pathCounters")
-    public void testToString(final PathCounters pathCounter) {
+    void testToString(final PathCounters pathCounter) {
         // Does not blow up
         pathCounter.toString();
     }

@@ -37,7 +37,7 @@ import org.junit.jupiter.params.provider.EnumSource;
  *
  * @see InputStream
  */
-public class InputStreamOriginTest extends AbstractOriginTest<InputStream, InputStreamOrigin> {
+class InputStreamOriginTest extends AbstractOriginTest<InputStream, InputStreamOrigin> {
 
     @SuppressWarnings("resource")
     @Override
@@ -53,28 +53,28 @@ public class InputStreamOriginTest extends AbstractOriginTest<InputStream, Input
 
     @Override
     @Test
-    public void testGetFile() {
+    void testGetFile() {
         // Cannot convert a InputStream to a File.
         assertThrows(UnsupportedOperationException.class, super::testGetFile);
     }
 
     @Override
     @Test
-    public void testGetOutputStream() {
+    void testGetOutputStream() {
         // Cannot convert a InputStream to an OutputStream.
         assertThrows(UnsupportedOperationException.class, super::testGetOutputStream);
     }
 
     @Override
     @Test
-    public void testGetPath() {
+    void testGetPath() {
         // Cannot convert a InputStream to a Path.
         assertThrows(UnsupportedOperationException.class, super::testGetPath);
     }
 
     @Override
     @Test
-    public void testGetRandomAccessFile() {
+    void testGetRandomAccessFile() {
         // Cannot convert a RandomAccessFile to a File.
         assertThrows(UnsupportedOperationException.class, super::testGetRandomAccessFile);
     }
@@ -82,14 +82,14 @@ public class InputStreamOriginTest extends AbstractOriginTest<InputStream, Input
     @Override
     @ParameterizedTest
     @EnumSource(StandardOpenOption.class)
-    public void testGetRandomAccessFile(final OpenOption openOption) {
+    void testGetRandomAccessFile(final OpenOption openOption) {
         // Cannot convert a RandomAccessFile to a File.
         assertThrows(UnsupportedOperationException.class, () -> super.testGetRandomAccessFile(openOption));
     }
 
     @Override
     @Test
-    public void testGetWriter() {
+    void testGetWriter() {
         // Cannot convert a InputStream to a Writer.
         assertThrows(UnsupportedOperationException.class, super::testGetWriter);
     }

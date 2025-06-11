@@ -28,13 +28,13 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests for {@link ThreadMonitor}.
  */
-public class ThreadMonitorTest {
+class ThreadMonitorTest {
 
     /**
      * Test task completed before timeout.
      */
     @Test
-    public void testCompletedWithoutTimeout() {
+    void testCompletedWithoutTimeout() {
         try {
             final Thread monitor = ThreadMonitor.start(Duration.ofMillis(400));
             TestUtils.sleep(1);
@@ -48,7 +48,7 @@ public class ThreadMonitorTest {
      * Test No timeout.
      */
     @Test
-    public void testNoTimeoutMinus1() {
+    void testNoTimeoutMinus1() {
         // timeout = -1
         try {
             final Thread monitor = ThreadMonitor.start(Duration.ofMillis(-1));
@@ -64,7 +64,7 @@ public class ThreadMonitorTest {
      * Test No timeout.
      */
     @Test
-    public void testNoTimeoutZero() {
+    void testNoTimeoutZero() {
         // timeout = 0
         try {
             final Thread monitor = ThreadMonitor.start(Duration.ZERO);
@@ -80,7 +80,7 @@ public class ThreadMonitorTest {
      * Test timeout.
      */
     @Test
-    public void testTimeout() {
+    void testTimeout() {
         assertThrows(InterruptedException.class, () -> {
             final Thread monitor = ThreadMonitor.start(Duration.ofMillis(100));
             TestUtils.sleep(400);

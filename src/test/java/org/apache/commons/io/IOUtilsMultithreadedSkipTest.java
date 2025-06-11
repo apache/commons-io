@@ -40,7 +40,7 @@ import org.junit.jupiter.api.Test;
 /**
  * See Jira ticket IO-802.
  */
-public class IOUtilsMultithreadedSkipTest {
+class IOUtilsMultithreadedSkipTest {
 
     private static final String FIXTURE = "TIKA-4065.bin";
     long seed = 1;
@@ -135,12 +135,12 @@ public class IOUtilsMultithreadedSkipTest {
     }
 
     @Test
-    public void testSkipFullyOnInflaterInputStream_New_bytes() throws Exception {
+    void testSkipFullyOnInflaterInputStream_New_bytes() throws Exception {
         testSkipFullyOnInflaterInputStream(() -> new byte[4096]);
     }
 
     @Test
-    public void testSkipFullyOnInflaterInputStream_ThreadLocal() throws Exception {
+    void testSkipFullyOnInflaterInputStream_ThreadLocal() throws Exception {
         testSkipFullyOnInflaterInputStream(threadLocal::get);
     }
 

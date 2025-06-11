@@ -28,13 +28,13 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link PathUtils}.
  */
-public class PathUtilsCountingTest {
+class PathUtilsCountingTest {
 
     /**
      * Tests an empty folder.
      */
     @Test
-    public void testCountEmptyFolder() throws IOException {
+    void testCountEmptyFolder() throws IOException {
         try (TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
             final PathCounters pathCounts = PathUtils.countDirectory(tempDir.get());
             assertCounts(1, 0, 0, pathCounts);
@@ -45,7 +45,7 @@ public class PathUtilsCountingTest {
      * Tests a directory with one file of size 0.
      */
     @Test
-    public void testCountFolders1FileSize0() throws IOException {
+    void testCountFolders1FileSize0() throws IOException {
         final PathCounters pathCounts = PathUtils
                 .countDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0"));
         assertCounts(1, 1, 0, pathCounts);
@@ -55,7 +55,7 @@ public class PathUtilsCountingTest {
      * Tests a directory with one file of size 1.
      */
     @Test
-    public void testCountFolders1FileSize1() throws IOException {
+    void testCountFolders1FileSize1() throws IOException {
         final PathCounters visitor = PathUtils
                 .countDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1"));
         assertCounts(1, 1, 1, visitor);
@@ -65,7 +65,7 @@ public class PathUtilsCountingTest {
      * Tests a directory with two subdirectories, each containing one file of size 1.
      */
     @Test
-    public void testCountFolders2FileSize2() throws IOException {
+    void testCountFolders2FileSize2() throws IOException {
         final PathCounters pathCounts = PathUtils
                 .countDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2"));
         assertCounts(3, 2, 2, pathCounts);
@@ -75,7 +75,7 @@ public class PathUtilsCountingTest {
      * Tests a directory with two subdirectories, each containing one file of size 2.
      */
     @Test
-    public void testCountFolders2FileSize4() throws IOException {
+    void testCountFolders2FileSize4() throws IOException {
         final PathCounters pathCounts = PathUtils
                 .countDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-4"));
         assertCounts(3, 4, 8, pathCounts);

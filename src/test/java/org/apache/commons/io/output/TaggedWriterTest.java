@@ -31,10 +31,10 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link TaggedWriter}.
  */
-public class TaggedWriterTest  {
+class TaggedWriterTest  {
 
     @Test
-    public void testBrokenWriter() {
+    void testBrokenWriter() {
         final IOException exception = new IOException("test exception");
         final TaggedWriter writer = new TaggedWriter(new BrokenWriter(exception));
 
@@ -82,7 +82,7 @@ public class TaggedWriterTest  {
     }
 
     @Test
-    public void testNormalWriter() throws IOException {
+    void testNormalWriter() throws IOException {
         try (StringBuilderWriter buffer = new StringBuilderWriter()) {
             try (Writer writer = new TaggedWriter(buffer)) {
                 writer.write('a');
@@ -98,7 +98,7 @@ public class TaggedWriterTest  {
     }
 
     @Test
-    public void testOtherException() throws Exception {
+    void testOtherException() throws Exception {
         final IOException exception = new IOException("test exception");
         try (TaggedWriter writer = new TaggedWriter(ClosedWriter.INSTANCE)) {
             assertFalse(writer.isCauseOf(exception));

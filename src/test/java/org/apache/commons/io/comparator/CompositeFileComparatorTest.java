@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link CompositeFileComparator}.
  */
-public class CompositeFileComparatorTest extends ComparatorAbstractTest {
+class CompositeFileComparatorTest extends ComparatorAbstractTest {
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -83,7 +83,7 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTest {
      * Test Constructor with null array
      */
     @Test
-    public void testConstructorArray_Null() {
+    void testConstructorArray_Null() {
         final Comparator<File> c = new CompositeFileComparator((Comparator<File>[]) null);
         assertEquals(0, c.compare(lessFile, moreFile), "less,more");
         assertEquals(0, c.compare(moreFile, lessFile), "more,less");
@@ -94,7 +94,7 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTest {
      * Test Constructor with null Iterable
      */
     @Test
-    public void testConstructorIterable_Null() {
+    void testConstructorIterable_Null() {
         final Comparator<File> c = new CompositeFileComparator((Iterable<Comparator<File>>) null);
         assertEquals(0, c.compare(lessFile, moreFile), "less,more");
         assertEquals(0, c.compare(moreFile, lessFile), "more,less");
@@ -105,7 +105,7 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTest {
      * Test Constructor with null Iterable
      */
     @Test
-    public void testConstructorIterable_order() {
+    void testConstructorIterable_order() {
         final List<Comparator<File>> list = new ArrayList<>();
         list.add(SizeFileComparator.SIZE_COMPARATOR);
         list.add(ExtensionFileComparator.EXTENSION_COMPARATOR);

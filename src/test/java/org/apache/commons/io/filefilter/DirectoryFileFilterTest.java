@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link DirectoryFileFilter}.
  */
-public class DirectoryFileFilterTest {
+class DirectoryFileFilterTest {
 
     /**
      * Javadoc example.
@@ -45,7 +45,7 @@ public class DirectoryFileFilterTest {
      * System.out calls are commented out here but not in the Javadoc.
      */
     @Test
-    public void testJavadocExampleUsingIo() {
+    void testJavadocExampleUsingIo() {
         final File dir = FileUtils.current();
         final String[] files = dir.list(DirectoryFileFilter.INSTANCE);
         // End of Javadoc example
@@ -58,7 +58,7 @@ public class DirectoryFileFilterTest {
      * System.out calls are commented out here but not in the Javadoc.
      */
     @Test
-    public void testJavadocExampleUsingNio() throws IOException {
+    void testJavadocExampleUsingNio() throws IOException {
         final Path dir = Paths.get("");
         final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(DirectoryFileFilter.INSTANCE,
             TrueFileFilter.INSTANCE);

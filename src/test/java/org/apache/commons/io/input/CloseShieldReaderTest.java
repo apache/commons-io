@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link CloseShieldReader}.
  */
-public class CloseShieldReaderTest {
+class CloseShieldReaderTest {
 
     private String data;
 
@@ -46,7 +46,7 @@ public class CloseShieldReaderTest {
     }
 
     @Test
-    public void testClose() throws IOException {
+    void testClose() throws IOException {
         shielded.close();
         verify(original, never()).close();
         final char[] cbuf = new char[10];

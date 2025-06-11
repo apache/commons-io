@@ -30,11 +30,11 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link TempDirectory}.
  */
-public class TempDirectoryTest {
+class TempDirectoryTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testCreatePath() throws IOException {
+    void testCreatePath() throws IOException {
         final TempDirectory ref;
         try (TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
             ref = tempDir;
@@ -49,7 +49,7 @@ public class TempDirectoryTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testCreateString() throws IOException {
+    void testCreateString() throws IOException {
         final TempDirectory ref;
         try (TempDirectory tempDir = TempDirectory.create(Paths.get("target"), getClass().getCanonicalName())) {
             ref = tempDir;

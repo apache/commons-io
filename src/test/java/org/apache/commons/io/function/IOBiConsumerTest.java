@@ -31,10 +31,10 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOBiConsumer}.
  */
-public class IOBiConsumerTest {
+class IOBiConsumerTest {
 
     @Test
-    public void testAccept() throws IOException {
+    void testAccept() throws IOException {
         final AtomicReference<String> ref = new AtomicReference<>();
         final IOBiConsumer<String, Integer> biConsumer = (s, i) -> ref.set(s + i);
         biConsumer.accept("A", 1);
@@ -42,7 +42,7 @@ public class IOBiConsumerTest {
     }
 
     @Test
-    public void testAndThen() throws IOException {
+    void testAndThen() throws IOException {
         final AtomicReference<String> ref = new AtomicReference<>();
         final IOBiConsumer<String, Integer> biConsumer1 = (s, i) -> ref.set(s + i);
         final IOBiConsumer<String, Integer> biConsumer2 = (s, i) -> ref.set(ref.get() + i + s);
@@ -51,7 +51,7 @@ public class IOBiConsumerTest {
     }
 
     @Test
-    public void testAsBiConsumer() {
+    void testAsBiConsumer() {
         final Map<String, Integer> map = new HashMap<>();
         map.put("a", 1);
         assertThrows(UncheckedIOException.class, () -> map.forEach(TestConstants.THROWING_IO_BI_CONSUMER.asBiConsumer()));
@@ -62,7 +62,7 @@ public class IOBiConsumerTest {
     }
 
     @Test
-    public void testNoopIOConsumer() throws IOException {
+    void testNoopIOConsumer() throws IOException {
         IOBiConsumer.noop().accept(null, null);
     }
 

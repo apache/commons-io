@@ -27,14 +27,14 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link ClosedInputStream}.
  */
-public class ClosedInputStreamTest {
+class ClosedInputStreamTest {
 
     private void assertEof(final ClosedInputStream cis) {
         assertEquals(EOF, cis.read(), "read()");
     }
 
     @Test
-    public void testAvailableAfterClose() throws Exception {
+    void testAvailableAfterClose() throws Exception {
         assertEquals(0, ClosedInputStream.INSTANCE.available());
         assertEquals(0, ClosedInputStream.INSTANCE.available());
         final InputStream shadow;
@@ -46,7 +46,7 @@ public class ClosedInputStreamTest {
     }
 
     @Test
-    public void testAvailableAfterOpen() throws Exception {
+    void testAvailableAfterOpen() throws Exception {
         assertEquals(0, ClosedInputStream.INSTANCE.available());
         assertEquals(0, ClosedInputStream.INSTANCE.available());
         try (ClosedInputStream cis = new ClosedInputStream()) {
@@ -56,21 +56,21 @@ public class ClosedInputStreamTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testNonNull() throws Exception {
+    void testNonNull() throws Exception {
         assertSame(ClosedInputStream.INSTANCE, ClosedInputStream.ifNull(null));
         assertSame(ClosedInputStream.INSTANCE, ClosedInputStream.ifNull(ClosedInputStream.INSTANCE));
         assertSame(System.in, ClosedInputStream.ifNull(System.in));
     }
 
     @Test
-    public void testRead() throws Exception {
+    void testRead() throws Exception {
         try (ClosedInputStream cis = new ClosedInputStream()) {
             assertEof(cis);
         }
     }
 
     @Test
-    public void testReadAfterCose() throws Exception {
+    void testReadAfterCose() throws Exception {
         assertEquals(0, ClosedInputStream.INSTANCE.available());
         assertEquals(0, ClosedInputStream.INSTANCE.available());
         final InputStream shadow;
@@ -82,7 +82,7 @@ public class ClosedInputStreamTest {
     }
 
     @Test
-    public void testReadArray() throws Exception {
+    void testReadArray() throws Exception {
         try (ClosedInputStream cis = new ClosedInputStream()) {
             assertEquals(EOF, cis.read(new byte[4096]));
             assertEquals(EOF, cis.read(new byte[1]));
@@ -91,7 +91,7 @@ public class ClosedInputStreamTest {
     }
 
     @Test
-    public void testReadArrayIndex() throws Exception {
+    void testReadArrayIndex() throws Exception {
         try (ClosedInputStream cis = new ClosedInputStream()) {
             assertEquals(EOF, cis.read(new byte[4096], 0, 1));
             assertEquals(EOF, cis.read(new byte[1], 0, 1));
@@ -100,7 +100,7 @@ public class ClosedInputStreamTest {
     }
 
     @Test
-    public void testSingleton() throws Exception {
+    void testSingleton() throws Exception {
         try (@SuppressWarnings("deprecation")
         ClosedInputStream cis = ClosedInputStream.CLOSED_INPUT_STREAM) {
             assertEof(cis);

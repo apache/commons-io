@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link CloseShieldOutputStream}.
  */
-public class ProxyOutputStreamTest {
+class ProxyOutputStreamTest {
 
     private ByteArrayOutputStream original;
 
@@ -60,13 +60,13 @@ public class ProxyOutputStreamTest {
     }
 
     @Test
-    public void testBuilder() throws Exception {
+    void testBuilder() throws Exception {
         assertSame(original, new ProxyOutputStream.Builder().setOutputStream(original).get().unwrap());
     }
 
     @SuppressWarnings("resource")
     @Test
-    public void testSetReference() throws Exception {
+    void testSetReference() throws Exception {
         assertFalse(hit.get());
         proxied.setReference(new ByteArrayOutputStream());
         proxied.write('y');
@@ -76,7 +76,7 @@ public class ProxyOutputStreamTest {
     }
 
     @Test
-    public void testWrite() throws Exception {
+    void testWrite() throws Exception {
         assertFalse(hit.get());
         proxied.write('y');
         assertTrue(hit.get());
@@ -85,7 +85,7 @@ public class ProxyOutputStreamTest {
     }
 
     @Test
-    public void testWriteNullArrayProxiesToUnderlying() throws Exception {
+    void testWriteNullArrayProxiesToUnderlying() throws Exception {
         assertFalse(hit.get());
         final byte[] ba = null;
         assertThrows(NullPointerException.class, () -> original.write(ba));

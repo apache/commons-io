@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link CloseShieldInputStream}.
  */
-public class CloseShieldInputStreamTest {
+class CloseShieldInputStreamTest {
 
     private byte[] data;
 
@@ -54,7 +54,7 @@ public class CloseShieldInputStreamTest {
     }
 
     @Test
-    public void testAvailableAfterClose() throws Exception {
+    void testAvailableAfterClose() throws Exception {
         final InputStream shadow;
         try (InputStream in = CloseShieldInputStream.wrap(byteArrayInputStream)) {
             assertEquals(3, in.available());
@@ -64,14 +64,14 @@ public class CloseShieldInputStreamTest {
     }
 
     @Test
-    public void testAvailableAfterOpen() throws Exception {
+    void testAvailableAfterOpen() throws Exception {
         try (InputStream in = CloseShieldInputStream.wrap(byteArrayInputStream)) {
             assertEquals(3, in.available());
         }
     }
 
     @Test
-    public void testClose() throws IOException {
+    void testClose() throws IOException {
         shielded = CloseShieldInputStream.wrap(byteArrayInputStream);
         shielded.close();
         assertFalse(closed, "closed");
@@ -80,7 +80,7 @@ public class CloseShieldInputStreamTest {
     }
 
     @Test
-    public void testReadAfterCose() throws Exception {
+    void testReadAfterCose() throws Exception {
         final InputStream shadow;
         try (InputStream in = CloseShieldInputStream.wrap(byteArrayInputStream)) {
             assertEquals(3, in.available());
@@ -90,7 +90,7 @@ public class CloseShieldInputStreamTest {
     }
 
     @Test
-    public void testSystemInOnSystemInNo() throws IOException {
+    void testSystemInOnSystemInNo() throws IOException {
         shielded = CloseShieldInputStream.systemIn(byteArrayInputStream);
         shielded.close();
         assertTrue(closed, "closed");
@@ -99,7 +99,7 @@ public class CloseShieldInputStreamTest {
     }
 
     @Test
-    public void testSystemInOnSystemInYes() throws IOException {
+    void testSystemInOnSystemInYes() throws IOException {
         shielded = CloseShieldInputStream.systemIn(System.in);
         shielded.close();
         assertFalse(closed, "closed");

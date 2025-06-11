@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@code ByteBufferCleaner}.
  */
-public class ByteBufferCleanerTest {
+class ByteBufferCleanerTest {
 
     @Test
     void testCleanEmpty() {

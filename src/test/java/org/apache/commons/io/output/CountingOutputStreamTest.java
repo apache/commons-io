@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link CountingOutputStream}.
  */
-public class CountingOutputStreamTest {
+class CountingOutputStreamTest {
 
     private void assertByteArrayEquals(final String msg, final byte[] array, final int start, final int end) {
         for (int i = start; i < end; i++) {
@@ -38,7 +38,7 @@ public class CountingOutputStreamTest {
     }
 
     @Test
-    public void testCounting() throws IOException {
+    void testCounting() throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try (CountingOutputStream cos = new CountingOutputStream(baos)) {
 
@@ -78,7 +78,7 @@ public class CountingOutputStreamTest {
      * Test for files > 2GB in size - see issue IO-84
      */
     @Test
-    public void testLargeFiles_IO84() throws Exception {
+    void testLargeFiles_IO84() throws Exception {
         final long size = (long) Integer.MAX_VALUE + (long) 1;
 
         final NullInputStream mock = new NullInputStream(size);

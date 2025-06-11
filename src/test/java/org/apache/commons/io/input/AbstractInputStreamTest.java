@@ -80,7 +80,7 @@ public abstract class AbstractInputStreamTest {
     }
 
     @Test
-    public void testAvailableAfterClose() throws Exception {
+    void testAvailableAfterClose() throws Exception {
         for (final InputStream inputStream : inputStreams) {
             inputStream.close();
             assertEquals(0, inputStream.available());
@@ -88,14 +88,14 @@ public abstract class AbstractInputStreamTest {
     }
 
     @Test
-    public void testAvailableAfterOpen() throws Exception {
+    void testAvailableAfterOpen() throws Exception {
         for (final InputStream inputStream : inputStreams) {
             assertTrue(inputStream.available() >= 0);
         }
     }
 
     @Test
-    public void testAvailableAfterRead() throws Exception {
+    void testAvailableAfterRead() throws Exception {
         for (final InputStream inputStream : inputStreams) {
             assertNotEquals(IOUtils.EOF, inputStream.read());
             assertTrue(inputStream.available() > 0);
@@ -103,7 +103,7 @@ public abstract class AbstractInputStreamTest {
     }
 
     @Test
-    public void testAvailableAtEnd() throws Exception {
+    void testAvailableAtEnd() throws Exception {
         for (final InputStream inputStream : inputStreams) {
             IOUtils.consume(inputStream);
             assertEquals(0, inputStream.available());
@@ -111,7 +111,7 @@ public abstract class AbstractInputStreamTest {
     }
 
     @Test
-    public void testBytesSkipped() throws IOException {
+    void testBytesSkipped() throws IOException {
         for (final InputStream inputStream : inputStreams) {
             assertEquals(1024, inputStream.skip(1024));
             for (int i = 1024; i < ExpectedBytes.length; i++) {
@@ -121,7 +121,7 @@ public abstract class AbstractInputStreamTest {
     }
 
     @Test
-    public void testBytesSkippedAfterEOF() throws IOException {
+    void testBytesSkippedAfterEOF() throws IOException {
         for (final InputStream inputStream : inputStreams) {
             assertEquals(ExpectedBytes.length, inputStream.skip(ActualBytes.length + 1));
             assertEquals(-1, inputStream.read());
@@ -129,7 +129,7 @@ public abstract class AbstractInputStreamTest {
     }
 
     @Test
-    public void testBytesSkippedAfterRead() throws IOException {
+    void testBytesSkippedAfterRead() throws IOException {
         for (final InputStream inputStream : inputStreams) {
             for (int i = 0; i < 1024; i++) {
                 assertEquals(ExpectedBytes[i], (byte) inputStream.read());
@@ -142,7 +142,7 @@ public abstract class AbstractInputStreamTest {
     }
 
     @Test
-    public void testNegativeBytesSkippedAfterRead() throws IOException {
+    void testNegativeBytesSkippedAfterRead() throws IOException {
         for (final InputStream inputStream : inputStreams) {
             for (int i = 0; i < 1024; i++) {
                 assertEquals(ExpectedBytes[i], (byte) inputStream.read());
@@ -160,7 +160,7 @@ public abstract class AbstractInputStreamTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.input.ReversedLinesFileReaderParamBlockSizeTest#blockSizes")
-    public void testReadMultipleBytes(final int bufferSize) throws IOException {
+    void testReadMultipleBytes(final int bufferSize) throws IOException {
         for (final InputStream inputStream : inputStreams) {
             final byte[] readBytes = new byte[bufferSize];
             int i = 0;
@@ -175,7 +175,7 @@ public abstract class AbstractInputStreamTest {
     }
 
     @Test
-    public void testReadOneByOne() throws IOException {
+    void testReadOneByOne() throws IOException {
         for (final InputStream inputStream : inputStreams) {
             for (final byte randomByte : ExpectedBytes) {
                 assertEquals(randomByte, (byte) inputStream.read());
@@ -184,7 +184,7 @@ public abstract class AbstractInputStreamTest {
     }
 
     @Test
-    public void testReadOneByOneCheckAvailable() throws IOException {
+    void testReadOneByOneCheckAvailable() throws IOException {
         final AtomicInteger refII = new AtomicInteger();
         for (int idxInputs = 0; idxInputs < inputStreams.length; idxInputs++) {
             refII.set(idxInputs);
@@ -205,7 +205,7 @@ public abstract class AbstractInputStreamTest {
     }
 
     @Test
-    public void testReadPastEof() throws IOException {
+    void testReadPastEof() throws IOException {
         final InputStream is = inputStreams[0];
         final byte[] buf = new byte[1024];
         while (is.read(buf, 0, buf.length) != -1) {
@@ -216,7 +216,7 @@ public abstract class AbstractInputStreamTest {
     }
 
     @Test
-    public void testSkipFromFileChannel() throws IOException {
+    void testSkipFromFileChannel() throws IOException {
         for (final InputStream inputStream : inputStreams) {
             // Since the buffer is smaller than the skipped bytes, this will guarantee
             // we skip from underlying file channel.

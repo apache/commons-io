@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOIterable}.
  */
-public class IOIterableTest {
+class IOIterableTest {
 
     private static class Fixture implements IOIterable<Path> {
 
@@ -62,7 +62,7 @@ public class IOIterableTest {
     }
 
     @Test
-    public void testForEach() throws IOException {
+    void testForEach() throws IOException {
         final AtomicInteger ref = new AtomicInteger();
         assertThrows(NullPointerException.class, () -> iterable.forEach(null));
         iterable.forEach(e -> ref.incrementAndGet());
@@ -70,21 +70,21 @@ public class IOIterableTest {
     }
 
     @Test
-    public void testIterator() throws IOException {
+    void testIterator() throws IOException {
         final AtomicInteger ref = new AtomicInteger();
         iterable.iterator().forEachRemaining(e -> ref.incrementAndGet());
         assertEquals(2, ref.get());
     }
 
     @Test
-    public void testSpliterator() throws IOException {
+    void testSpliterator() throws IOException {
         final AtomicInteger ref = new AtomicInteger();
         iterable.spliterator().forEachRemaining(e -> ref.incrementAndGet());
         assertEquals(2, ref.get());
     }
 
     @Test
-    public void testUnrwap() throws IOException {
+    void testUnrwap() throws IOException {
         assertSame(fixture.list, iterable.unwrap());
         assertSame(fixture.unwrap(), iterable.unwrap());
     }

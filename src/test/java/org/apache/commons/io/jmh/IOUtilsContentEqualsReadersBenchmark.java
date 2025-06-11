@@ -203,7 +203,7 @@ public class IOUtilsContentEqualsReadersBenchmark {
     }
 
     @Benchmark
-    public void testStringCurrent(final Blackhole blackhole) throws IOException {
+    void testStringCurrent(final Blackhole blackhole) throws IOException {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 try (StringReader input1 = new StringReader(STRINGS[i]);
@@ -215,7 +215,7 @@ public class IOUtilsContentEqualsReadersBenchmark {
     }
 
     @Benchmark
-    public void testStringPr118(final Blackhole blackhole) throws IOException {
+    void testStringPr118(final Blackhole blackhole) throws IOException {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 try (StringReader input1 = new StringReader(STRINGS[i]);
@@ -227,7 +227,7 @@ public class IOUtilsContentEqualsReadersBenchmark {
     }
 
     @Benchmark
-    public void testStringRelease_2_8_0(final Blackhole blackhole) throws IOException {
+    void testStringRelease_2_8_0(final Blackhole blackhole) throws IOException {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 try (StringReader input1 = new StringReader(STRINGS[i]);

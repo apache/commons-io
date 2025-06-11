@@ -28,7 +28,7 @@ import org.apache.commons.io.build.AbstractOrigin.PathOrigin;
  *
  * @see Path
  */
-public class PathOriginTest extends AbstractOriginTest<Path, PathOrigin> {
+class PathOriginTest extends AbstractOriginTest<Path, PathOrigin> {
 
     @Override
     protected PathOrigin newOriginRo() {

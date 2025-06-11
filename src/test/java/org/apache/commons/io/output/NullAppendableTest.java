@@ -23,10 +23,10 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link NullAppendable}.
  */
-public class NullAppendableTest {
+class NullAppendableTest {
 
     @Test
-    public void testNull() throws IOException {
+    void testNull() throws IOException {
         final Appendable appendable = NullAppendable.INSTANCE;
         appendable.append('a');
         appendable.append("A");

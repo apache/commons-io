@@ -29,24 +29,24 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link CharsetEncoders}.
  */
-public class CharsetEncodersTest {
+class CharsetEncodersTest {
 
     @Test
-    public void testToCharsetEncoders_default() {
+    void testToCharsetEncoders_default() {
         final CharsetEncoder charsetEncoder = CharsetEncoders.toCharsetEncoder(Charset.defaultCharset().newEncoder());
         assertNotNull(charsetEncoder);
         assertEquals(Charset.defaultCharset(), charsetEncoder.charset());
     }
 
     @Test
-    public void testToCharsetEncoders_ISO_8859_1() {
+    void testToCharsetEncoders_ISO_8859_1() {
         final CharsetEncoder charsetEncoder = CharsetEncoders.toCharsetEncoder(StandardCharsets.ISO_8859_1.newEncoder());
         assertNotNull(charsetEncoder);
         assertEquals(StandardCharsets.ISO_8859_1, charsetEncoder.charset());
     }
 
     @Test
-    public void testToCharsetEncoders_null() {
+    void testToCharsetEncoders_null() {
         final CharsetEncoder charsetEncoder = CharsetEncoders.toCharsetEncoder(null);
         assertNotNull(charsetEncoder);
         assertEquals(Charset.defaultCharset(), charsetEncoder.charset());

@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
  * This class was ported and adapted from Apache Spark commit 933dc6cb7b3de1d8ccaf73d124d6eb95b947ed19 where it was called
  * {@code BufferedFileChannelInputStreamSuite}.
  */
-public class BufferedFileChannelInputStreamTest extends AbstractInputStreamTest {
+class BufferedFileChannelInputStreamTest extends AbstractInputStreamTest {
 
     @SuppressWarnings("resource")
     @BeforeEach
@@ -53,20 +53,20 @@ public class BufferedFileChannelInputStreamTest extends AbstractInputStreamTest 
 
     @Override
     @Test
-    public void testAvailableAfterOpen() throws Exception {
+    void testAvailableAfterOpen() throws Exception {
         for (final InputStream inputStream : inputStreams) {
             assertTrue(inputStream.available() > 0);
         }
     }
 
     @Test
-    public void testBuilderGet() {
+    void testBuilderGet() {
         // java.lang.IllegalStateException: origin == null
         assertThrows(IllegalStateException.class, () -> BufferedFileChannelInputStream.builder().get());
     }
 
     @Test
-    public void testReadAfterClose() throws Exception {
+    void testReadAfterClose() throws Exception {
         for (final InputStream inputStream : inputStreams) {
             inputStream.close();
             assertThrows(IOException.class, inputStream::read);

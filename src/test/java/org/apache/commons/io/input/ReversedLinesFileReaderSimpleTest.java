@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-public class ReversedLinesFileReaderSimpleTest {
+class ReversedLinesFileReaderSimpleTest {
 
     /*
      * Tests IO-639.
@@ -43,7 +43,7 @@ public class ReversedLinesFileReaderSimpleTest {
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.input.ReversedLinesFileReaderParamBlockSizeTest#blockSizes")
     @Disabled
-    public void testEmptyFirstLine(final int blockSize) throws Exception {
+    void testEmptyFirstLine(final int blockSize) throws Exception {
         final File testFileEmptyFirstLine = TestResources.getFile("/empty-first-line.bin");
         try (ReversedLinesFileReader reversedLinesFileReader = new ReversedLinesFileReader(testFileEmptyFirstLine, 10, StandardCharsets.US_ASCII.name())) {
             assertEqualsAndNoLineBreaks("test2", reversedLinesFileReader.readLine());
@@ -55,7 +55,7 @@ public class ReversedLinesFileReaderSimpleTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.input.ReversedLinesFileReaderParamBlockSizeTest#blockSizes")
-    public void testFileSizeIsExactMultipleOfBlockSize(final int blockSize) throws URISyntaxException, IOException {
+    void testFileSizeIsExactMultipleOfBlockSize(final int blockSize) throws URISyntaxException, IOException {
         final File testFile20Bytes = TestResources.getFile("/test-file-20byteslength.bin");
         try (ReversedLinesFileReader reversedLinesFileReader = new ReversedLinesFileReader(testFile20Bytes, blockSize,
                 StandardCharsets.ISO_8859_1.name())) {
@@ -66,7 +66,7 @@ public class ReversedLinesFileReaderSimpleTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.input.ReversedLinesFileReaderParamBlockSizeTest#blockSizes")
-    public void testLineCount(final int blockSize) throws URISyntaxException, IOException {
+    void testLineCount(final int blockSize) throws URISyntaxException, IOException {
         final File testFile20Bytes = TestResources.getFile("/test-file-20byteslength.bin");
         try (ReversedLinesFileReader reversedLinesFileReader = new ReversedLinesFileReader(testFile20Bytes, blockSize,
                 StandardCharsets.ISO_8859_1.name())) {
@@ -82,7 +82,7 @@ public class ReversedLinesFileReaderSimpleTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.input.ReversedLinesFileReaderParamBlockSizeTest#blockSizes")
-    public void testToString(final int blockSize) throws URISyntaxException, IOException {
+    void testToString(final int blockSize) throws URISyntaxException, IOException {
         final File testFile20Bytes = TestResources.getFile("/test-file-20byteslength.bin");
         try (ReversedLinesFileReader reversedLinesFileReader = new ReversedLinesFileReader(testFile20Bytes, blockSize,
                 StandardCharsets.ISO_8859_1.name())) {
@@ -96,14 +96,14 @@ public class ReversedLinesFileReaderSimpleTest {
     }
 
     @Test
-    public void testUnsupportedEncodingBig5() throws URISyntaxException {
+    void testUnsupportedEncodingBig5() throws URISyntaxException {
         final File testFileEncodingBig5 = TestResources.getFile("/test-file-empty.bin");
         assertThrows(UnsupportedEncodingException.class,
             () -> new ReversedLinesFileReader(testFileEncodingBig5, IOUtils.DEFAULT_BUFFER_SIZE, "Big5").close());
     }
 
     @Test
-    public void testUnsupportedEncodingUTF16() throws URISyntaxException {
+    void testUnsupportedEncodingUTF16() throws URISyntaxException {
         final File testFileEmpty = TestResources.getFile("/test-file-empty.bin");
         assertThrows(UnsupportedEncodingException.class,
             () -> new ReversedLinesFileReader(testFileEmpty, IOUtils.DEFAULT_BUFFER_SIZE, StandardCharsets.UTF_16.name()).close());

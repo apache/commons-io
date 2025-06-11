@@ -29,11 +29,11 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link TempFile}.
  */
-public class TempFileTest {
+class TempFileTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testCreatePath() throws IOException {
+    void testCreatePath() throws IOException {
         final TempFile ref;
         try (TempFile tempDir = TempFile.create(Paths.get("target"), "prefix", ".suffix")) {
             ref = tempDir;
@@ -48,7 +48,7 @@ public class TempFileTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testCreateString() throws IOException {
+    void testCreateString() throws IOException {
         final TempFile ref;
         try (TempFile tempDir = TempFile.create(getClass().getCanonicalName(), ".suffix")) {
             ref = tempDir;

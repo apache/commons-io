@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Test case for {@link SequenceReader}.
  */
-public class SequenceReaderTest {
+class SequenceReaderTest {
 
     private static class CustomReader extends Reader {
 
@@ -85,7 +85,7 @@ public class SequenceReaderTest {
     }
 
     @Test
-    public void testAutoClose() throws IOException {
+    void testAutoClose() throws IOException {
         try (Reader reader = new SequenceReader(new CharSequenceReader("FooBar"))) {
             checkRead(reader, "Foo");
             reader.close();
@@ -94,7 +94,7 @@ public class SequenceReaderTest {
     }
 
     @Test
-    public void testClose() throws IOException {
+    void testClose() throws IOException {
         final Reader reader = new SequenceReader(new CharSequenceReader("FooBar"));
         checkRead(reader, "Foo");
         reader.close();
@@ -102,7 +102,7 @@ public class SequenceReaderTest {
     }
 
     @Test
-    public void testCloseReaders() throws IOException {
+    void testCloseReaders() throws IOException {
         final CustomReader reader0 = new CustomReader();
         final CustomReader reader1 = new CustomReader() {
 
@@ -147,14 +147,14 @@ public class SequenceReaderTest {
     }
 
     @Test
-    public void testMarkSupported() throws Exception {
+    void testMarkSupported() throws Exception {
         try (Reader reader = new SequenceReader()) {
             assertFalse(reader.markSupported());
         }
     }
 
     @Test
-    public void testRead() throws IOException {
+    void testRead() throws IOException {
         try (Reader reader = new SequenceReader(new StringReader("Foo"), new StringReader("Bar"))) {
             assertEquals('F', reader.read());
             assertEquals('o', reader.read());
@@ -167,7 +167,7 @@ public class SequenceReaderTest {
     }
 
     @Test
-    public void testReadCharArray() throws IOException {
+    void testReadCharArray() throws IOException {
         try (Reader reader = new SequenceReader(new StringReader("Foo"), new StringReader("Bar"))) {
             char[] chars = new char[2];
             assertEquals(2, reader.read(chars));
@@ -183,7 +183,7 @@ public class SequenceReaderTest {
     }
 
     @Test
-    public void testReadCharArrayPortion() throws IOException {
+    void testReadCharArrayPortion() throws IOException {
         final char[] chars = new char[10];
         try (Reader reader = new SequenceReader(new StringReader("Foo"), new StringReader("Bar"))) {
             assertEquals(3, reader.read(chars, 3, 3));
@@ -197,7 +197,7 @@ public class SequenceReaderTest {
     }
 
     @Test
-    public void testReadClosedReader() throws IOException {
+    void testReadClosedReader() throws IOException {
         @SuppressWarnings("resource")
         final Reader reader = new SequenceReader(new CharSequenceReader("FooBar"));
         reader.close();
@@ -205,7 +205,7 @@ public class SequenceReaderTest {
     }
 
     @Test
-    public void testReadCollection() throws IOException {
+    void testReadCollection() throws IOException {
         final Collection<Reader> readers = new ArrayList<>();
         readers.add(new StringReader("F"));
         readers.add(new StringReader("B"));
@@ -217,7 +217,7 @@ public class SequenceReaderTest {
     }
 
     @Test
-    public void testReadIterable() throws IOException {
+    void testReadIterable() throws IOException {
         final Collection<Reader> readers = new ArrayList<>();
         readers.add(new StringReader("F"));
         readers.add(new StringReader("B"));
@@ -230,7 +230,7 @@ public class SequenceReaderTest {
     }
 
     @Test
-    public void testReadLength0Readers() throws IOException {
+    void testReadLength0Readers() throws IOException {
         try (Reader reader = new SequenceReader(new StringReader(StringUtils.EMPTY),
             new StringReader(StringUtils.EMPTY), new StringReader(StringUtils.EMPTY))) {
             checkReadEof(reader);
@@ -238,7 +238,7 @@ public class SequenceReaderTest {
     }
 
     @Test
-    public void testReadLength1Readers() throws IOException {
+    void testReadLength1Readers() throws IOException {
         try (Reader reader = new SequenceReader(
         // @formatter:off
             new StringReader("0"),
@@ -254,7 +254,7 @@ public class SequenceReaderTest {
     }
 
     @Test
-    public void testReadList() throws IOException {
+    void testReadList() throws IOException {
         final List<Reader> readers = new ArrayList<>();
         readers.add(new StringReader("F"));
         readers.add(new StringReader("B"));
@@ -266,7 +266,7 @@ public class SequenceReaderTest {
     }
 
     @Test
-    public void testSkip() throws IOException {
+    void testSkip() throws IOException {
         try (Reader reader = new SequenceReader(new StringReader("Foo"), new StringReader("Bar"))) {
             assertEquals(3, reader.skip(3));
             checkRead(reader, "Bar");

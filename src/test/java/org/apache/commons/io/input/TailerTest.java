@@ -59,7 +59,7 @@ import org.junit.jupiter.api.io.TempDir;
 /**
  * Test for {@link Tailer}.
  */
-public class TailerTest {
+class TailerTest {
 
     private static final class NonStandardTailable implements Tailer.Tailable {
 
@@ -220,7 +220,7 @@ public class TailerTest {
 
     @Test
     @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
-    public void testBufferBreak() throws Exception {
+    void testBufferBreak() throws Exception {
         final long delay = 50;
 
         final File file = new File(temporaryFolder, "testBufferBreak.txt");
@@ -242,7 +242,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testBuilderWithNonStandardTailable() throws Exception {
+    void testBuilderWithNonStandardTailable() throws Exception {
         final File file = new File(temporaryFolder, "tailer-create-with-delay-and-from-start-with-reopen-and-buffersize-and-charset.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
@@ -257,7 +257,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testCreate() throws Exception {
+    void testCreate() throws Exception {
         final File file = new File(temporaryFolder, "tailer-create.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
@@ -267,7 +267,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testCreateWithDelay() throws Exception {
+    void testCreateWithDelay() throws Exception {
         final File file = new File(temporaryFolder, "tailer-create-with-delay.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
@@ -277,7 +277,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testCreateWithDelayAndFromStart() throws Exception {
+    void testCreateWithDelayAndFromStart() throws Exception {
         final File file = new File(temporaryFolder, "tailer-create-with-delay-and-from-start.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
@@ -287,7 +287,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testCreateWithDelayAndFromStartWithBufferSize() throws Exception {
+    void testCreateWithDelayAndFromStartWithBufferSize() throws Exception {
         final File file = new File(temporaryFolder, "tailer-create-with-delay-and-from-start-with-buffersize.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
@@ -297,7 +297,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testCreateWithDelayAndFromStartWithReopenAndBufferSize() throws Exception {
+    void testCreateWithDelayAndFromStartWithReopenAndBufferSize() throws Exception {
         final File file = new File(temporaryFolder, "tailer-create-with-delay-and-from-start-with-reopen-and-buffersize.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
@@ -307,7 +307,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testCreateWithDelayAndFromStartWithReopenAndBufferSizeAndCharset() throws Exception {
+    void testCreateWithDelayAndFromStartWithReopenAndBufferSizeAndCharset() throws Exception {
         final File file = new File(temporaryFolder, "tailer-create-with-delay-and-from-start-with-reopen-and-buffersize-and-charset.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
@@ -317,7 +317,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testCreatorWithDelayAndFromStartWithReopen() throws Exception {
+    void testCreatorWithDelayAndFromStartWithReopen() throws Exception {
         final File file = new File(temporaryFolder, "tailer-create-with-delay-and-from-start-with-reopen.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
@@ -330,7 +330,7 @@ public class TailerTest {
      * Tests [IO-357][Tailer] InterruptedException while the thread is sleeping is silently ignored.
      */
     @Test
-    public void testInterrupt() throws Exception {
+    void testInterrupt() throws Exception {
         final File file = new File(temporaryFolder, "nosuchfile");
         assertFalse(file.exists(), "nosuchfile should not exist");
         final TestTailerListener listener = new TestTailerListener();
@@ -354,7 +354,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testIO335() throws Exception { // test CR behavior
+    void testIO335() throws Exception { // test CR behavior
         // Create & start the Tailer
         final long delayMillis = 50;
         final File file = new File(temporaryFolder, "tailer-testio334.txt");
@@ -379,7 +379,7 @@ public class TailerTest {
 
     @Test
     @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
-    public void testLongFile() throws Exception {
+    void testLongFile() throws Exception {
         final long delay = 50;
 
         final File file = new File(temporaryFolder, "testLongFile.txt");
@@ -410,7 +410,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testMultiByteBreak() throws Exception {
+    void testMultiByteBreak() throws Exception {
         // System.out.println("testMultiByteBreak() Default charset: " + Charset.defaultCharset().displayName());
         final long delay = 50;
         final File origin = TestResources.getFile("test-file-utf8.bin");
@@ -452,7 +452,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testSimpleConstructor() throws Exception {
+    void testSimpleConstructor() throws Exception {
         final File file = new File(temporaryFolder, "tailer-simple-constructor.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
@@ -464,7 +464,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testSimpleConstructorWithDelay() throws Exception {
+    void testSimpleConstructorWithDelay() throws Exception {
         final File file = new File(temporaryFolder, "tailer-simple-constructor-with-delay.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
@@ -476,7 +476,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testSimpleConstructorWithDelayAndFromStart() throws Exception {
+    void testSimpleConstructorWithDelayAndFromStart() throws Exception {
         final File file = new File(temporaryFolder, "tailer-simple-constructor-with-delay-and-from-start.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
@@ -488,7 +488,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testSimpleConstructorWithDelayAndFromStartWithBufferSize() throws Exception {
+    void testSimpleConstructorWithDelayAndFromStartWithBufferSize() throws Exception {
         final File file = new File(temporaryFolder, "tailer-simple-constructor-with-delay-and-from-start-with-buffersize.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
@@ -500,7 +500,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testSimpleConstructorWithDelayAndFromStartWithReopen() throws Exception {
+    void testSimpleConstructorWithDelayAndFromStartWithReopen() throws Exception {
         final File file = new File(temporaryFolder, "tailer-simple-constructor-with-delay-and-from-start-with-reopen.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
@@ -512,7 +512,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testSimpleConstructorWithDelayAndFromStartWithReopenAndBufferSize() throws Exception {
+    void testSimpleConstructorWithDelayAndFromStartWithReopenAndBufferSize() throws Exception {
         final File file = new File(temporaryFolder, "tailer-simple-constructor-with-delay-and-from-start-with-reopen-and-buffersize.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
@@ -524,7 +524,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testSimpleConstructorWithDelayAndFromStartWithReopenAndBufferSizeAndCharset() throws Exception {
+    void testSimpleConstructorWithDelayAndFromStartWithReopenAndBufferSizeAndCharset() throws Exception {
         final File file = new File(temporaryFolder, "tailer-simple-constructor-with-delay-and-from-start-with-reopen-and-buffersize-and-charset.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener(1);
@@ -536,7 +536,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testStopWithNoFile() throws Exception {
+    void testStopWithNoFile() throws Exception {
         final File file = new File(temporaryFolder, "nosuchfile");
         assertFalse(file.exists(), "nosuchfile should not exist");
         final TestTailerListener listener = new TestTailerListener();
@@ -557,7 +557,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testStopWithNoFileUsingExecutor() throws Exception {
+    void testStopWithNoFileUsingExecutor() throws Exception {
         final File file = new File(temporaryFolder, "nosuchfile");
         assertFalse(file.exists(), "nosuchfile should not exist");
         final TestTailerListener listener = new TestTailerListener();
@@ -577,7 +577,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testTailer() throws Exception {
+    void testTailer() throws Exception {
 
         // Create & start the Tailer
         final long delayMillis = 50;
@@ -645,7 +645,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testTailerEndOfFileReached() throws Exception {
+    void testTailerEndOfFileReached() throws Exception {
         // Create & start the Tailer
         final long delayMillis = 50;
         final long testDelayMillis = delayMillis * 10;
@@ -676,7 +676,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testTailerEof() throws Exception {
+    void testTailerEof() throws Exception {
         // Create & start the Tailer
         final long delayMillis = 100;
         final File file = new File(temporaryFolder, "tailer2-test.txt");

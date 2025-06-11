@@ -25,20 +25,20 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link ClosedOutputStream}.
  */
-public class ClosedOutputStreamTest {
+class ClosedOutputStreamTest {
 
     /**
      * Test the {@code flush()} method.
      */
     @Test
-    public void testFlush() throws IOException {
+    void testFlush() throws IOException {
         try (ClosedOutputStream cos = new ClosedOutputStream()) {
             assertThrows(IOException.class, cos::flush);
         }
     }
 
     @Test
-    public void testSingleton() throws IOException {
+    void testSingleton() throws IOException {
         try (@SuppressWarnings("deprecation")
         ClosedOutputStream cos = ClosedOutputStream.CLOSED_OUTPUT_STREAM) {
             assertThrows(IOException.class, cos::flush);
@@ -52,14 +52,14 @@ public class ClosedOutputStreamTest {
      * Test the {@code write(b)} method.
      */
     @Test
-    public void testWrite() throws IOException {
+    void testWrite() throws IOException {
         try (ClosedOutputStream cos = new ClosedOutputStream()) {
             assertThrows(IOException.class, () -> cos.write('x'));
         }
     }
 
     @Test
-    public void testWriteArray() throws IOException {
+    void testWriteArray() throws IOException {
         try (ClosedOutputStream cos = new ClosedOutputStream()) {
             assertThrows(IOException.class, () -> cos.write(new byte[0]));
             assertThrows(IOException.class, () -> cos.write(new byte[10]));
@@ -67,7 +67,7 @@ public class ClosedOutputStreamTest {
     }
 
     @Test
-    public void testWriteArrayIndex() throws IOException {
+    void testWriteArrayIndex() throws IOException {
         try (ClosedOutputStream cos = new ClosedOutputStream()) {
             assertThrows(IOException.class, () -> cos.write(new byte[0], 0, 0));
             assertThrows(IOException.class, () -> cos.write(new byte[10], 0, 1));

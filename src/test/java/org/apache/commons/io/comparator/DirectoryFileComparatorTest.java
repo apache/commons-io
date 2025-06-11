@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link DirectoryFileComparator}.
  */
-public class DirectoryFileComparatorTest extends ComparatorAbstractTest {
+class DirectoryFileComparatorTest extends ComparatorAbstractTest {
 
     @BeforeEach
     public void setUp() {
@@ -43,7 +43,7 @@ public class DirectoryFileComparatorTest extends ComparatorAbstractTest {
      */
     @Override
     @Test
-    public void testSortArray() {
+    void testSortArray() {
         // skip sort test
     }
 
@@ -51,7 +51,7 @@ public class DirectoryFileComparatorTest extends ComparatorAbstractTest {
      * Test the comparator array sort.
      */
     @Override
-    public void testSortList() {
+    void testSortList() {
         // skip sort test
     }
 }

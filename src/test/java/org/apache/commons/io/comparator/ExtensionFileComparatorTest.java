@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link ExtensionFileComparator}.
  */
-public class ExtensionFileComparatorTest extends ComparatorAbstractTest {
+class ExtensionFileComparatorTest extends ComparatorAbstractTest {
 
     @BeforeEach
     public void setUp() {
@@ -42,7 +42,7 @@ public class ExtensionFileComparatorTest extends ComparatorAbstractTest {
 
     /** Test case sensitivity */
     @Test
-    public void testCaseSensitivity() {
+    void testCaseSensitivity() {
         final File file3 = new File("abc.FOO");
         final Comparator<File> sensitive = new ExtensionFileComparator(null); /* test null as well */
         assertEquals(0, sensitive.compare(equalFile1, equalFile2), "sensitive file1 & file2 = 0");

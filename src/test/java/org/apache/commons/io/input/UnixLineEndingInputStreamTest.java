@@ -24,7 +24,7 @@ import java.nio.charset.StandardCharsets;
 
 import org.junit.jupiter.api.Test;
 
-public class UnixLineEndingInputStreamTest {
+class UnixLineEndingInputStreamTest {
 
     private String roundtrip(final String msg) throws IOException {
         return roundtrip(msg, true, 0);
@@ -64,48 +64,48 @@ public class UnixLineEndingInputStreamTest {
     }
 
     @Test
-    public void testCrAtEnd() throws Exception {
+    void testCrAtEnd() throws Exception {
         assertEquals("a\n", roundtrip("a\r"));
     }
 
     @Test
-    public void testCrOnlyEnsureAtEof() throws Exception {
+    void testCrOnlyEnsureAtEof() throws Exception {
         assertEquals("a\nb\n", roundtrip("a\rb"));
     }
 
     @Test
-    public void testCrOnlyNotAtEof() throws Exception {
+    void testCrOnlyNotAtEof() throws Exception {
         assertEquals("a\nb", roundtrip("a\rb", false, 0));
     }
 
     @Test
-    public void testEmpty() throws Exception {
+    void testEmpty() throws Exception {
         assertEquals("", roundtrip(""));
     }
 
     @Test
-    public void testInTheMiddleOfTheLine() throws Exception {
+    void testInTheMiddleOfTheLine() throws Exception {
         assertEquals("a\nbc\n", roundtrip("a\r\nbc"));
     }
 
     @Test
-    public void testMultipleBlankLines() throws Exception {
+    void testMultipleBlankLines() throws Exception {
         assertEquals("a\n\nbc\n", roundtrip("a\r\n\r\nbc"));
     }
 
     @Test
-    public void testRetainLineFeed() throws Exception {
+    void testRetainLineFeed() throws Exception {
         assertEquals("a\n\n", roundtrip("a\r\n\r\n", false, 0));
         assertEquals("a", roundtrip("a", false, 0));
     }
 
     @Test
-    public void testSimpleString() throws Exception {
+    void testSimpleString() throws Exception {
         assertEquals("abc\n", roundtrip("abc"));
     }
 
     @Test
-    public void testTwoLinesAtEnd() throws Exception {
+    void testTwoLinesAtEnd() throws Exception {
         assertEquals("a\n\n", roundtrip("a\r\n\r\n"));
     }
 

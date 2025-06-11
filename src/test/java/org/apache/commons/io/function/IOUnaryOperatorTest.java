@@ -33,10 +33,10 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOUnaryOperator}.
  */
-public class IOUnaryOperatorTest {
+class IOUnaryOperatorTest {
 
     @Test
-    public void testAsUnaryOperator() {
+    void testAsUnaryOperator() {
         final List<Path> list = Arrays.asList(TestConstants.ABS_PATH_A, TestConstants.ABS_PATH_A);
         final IOUnaryOperator<Path> throwingIOUnaryOperator = TestUtils.throwingIOUnaryOperator();
         assertThrows(UncheckedIOException.class, () -> list.replaceAll(throwingIOUnaryOperator.asUnaryOperator()));
@@ -45,7 +45,7 @@ public class IOUnaryOperatorTest {
     }
 
     @Test
-    public void testIdentity() throws IOException {
+    void testIdentity() throws IOException {
         assertEquals(IOUnaryOperator.identity(), IOUnaryOperator.identity());
         final IOUnaryOperator<byte[]> identityFunction = IOUnaryOperator.identity();
         final byte[] buf = {(byte) 0xa, (byte) 0xb, (byte) 0xc};

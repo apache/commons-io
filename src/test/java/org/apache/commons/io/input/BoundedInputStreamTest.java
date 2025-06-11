@@ -40,7 +40,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 /**
  * Tests for {@link BoundedInputStream}.
  */
-public class BoundedInputStreamTest {
+class BoundedInputStreamTest {
 
     private void compare(final String message, final byte[] expected, final byte[] actual) {
         assertEquals(expected.length, actual.length, () -> message + " (array length equals check)");
@@ -52,7 +52,7 @@ public class BoundedInputStreamTest {
     }
 
     @Test
-    public void testAfterReadConsumer() throws Exception {
+    void testAfterReadConsumer() throws Exception {
         final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
         final AtomicBoolean boolRef = new AtomicBoolean();
         // @formatter:off
@@ -82,7 +82,7 @@ public class BoundedInputStreamTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testAvailableAfterClose() throws Exception {
+    void testAvailableAfterClose() throws Exception {
         final InputStream shadow;
         try (InputStream in = BoundedInputStream.builder().setCharSequence("Hi").get()) {
             assertTrue(in.available() > 0);
@@ -92,26 +92,26 @@ public class BoundedInputStreamTest {
     }
 
     @Test
-    public void testAvailableAfterOpen() throws Exception {
+    void testAvailableAfterOpen() throws Exception {
         try (InputStream in = BoundedInputStream.builder().setCharSequence("Hi").get()) {
             assertTrue(in.available() > 0);
         }
     }
 
     @Test
-    public void testBuilderGet() {
+    void testBuilderGet() {
         // java.lang.IllegalStateException: origin == null
         assertThrows(IllegalStateException.class, () -> BoundedInputStream.builder().get());
     }
 
     @Test
-    public void testCloseHandleIOException() throws IOException {
+    void testCloseHandleIOException() throws IOException {
         ProxyInputStreamTest.testCloseHandleIOException(BoundedInputStream.builder());
     }
 
     @ParameterizedTest
     @ValueSource(longs = { -100, -1, 0, 1, 2, 4, 8, 16, 32, 64 })
-    public void testCounts(final long startCount) throws Exception {
+    void testCounts(final long startCount) throws Exception {
         final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
         final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
         final long actualStart = startCount < 0 ? 0 : startCount;
@@ -202,7 +202,7 @@ public class BoundedInputStreamTest {
     }
 
     @Test
-    public void testMarkReset() throws Exception {
+    void testMarkReset() throws Exception {
         final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
         final int helloWorldLen = helloWorld.length;
         final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
@@ -301,7 +301,7 @@ public class BoundedInputStreamTest {
     }
 
     @Test
-    public void testOnMaxCountConsumer() throws Exception {
+    void testOnMaxCountConsumer() throws Exception {
         final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
         final AtomicBoolean boolRef = new AtomicBoolean();
         // @formatter:off
@@ -332,7 +332,7 @@ public class BoundedInputStreamTest {
 
     @SuppressWarnings("deprecation")
     @Test
-    public void testOnMaxLength() throws Exception {
+    void testOnMaxLength() throws Exception {
         final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
         final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
         final AtomicBoolean boolRef = new AtomicBoolean();
@@ -430,7 +430,7 @@ public class BoundedInputStreamTest {
 
     @SuppressWarnings("deprecation")
     @Test
-    public void testPublicConstructors() throws IOException {
+    void testPublicConstructors() throws IOException {
         final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
         try (ByteArrayInputStream baos = new ByteArrayInputStream(helloWorld);
                 BoundedInputStream inputStream = new BoundedInputStream(baos)) {
@@ -446,7 +446,7 @@ public class BoundedInputStreamTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testReadAfterClose() throws Exception {
+    void testReadAfterClose() throws Exception {
         final InputStream shadow;
         try (InputStream in = BoundedInputStream.builder().setCharSequence("Hi").get()) {
             assertTrue(in.available() > 0);
@@ -456,7 +456,7 @@ public class BoundedInputStreamTest {
     }
 
     @Test
-    public void testReadArray() throws Exception {
+    void testReadArray() throws Exception {
         final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
         final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
         try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).get()) {
@@ -496,7 +496,7 @@ public class BoundedInputStreamTest {
 
     @SuppressWarnings("deprecation")
     @Test
-    public void testReadSingle() throws Exception {
+    void testReadSingle() throws Exception {
         final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
         final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
         // limit = length
@@ -534,7 +534,7 @@ public class BoundedInputStreamTest {
     }
 
     @Test
-    public void testReset() throws Exception {
+    void testReset() throws Exception {
         final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
         final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
         // limit = -1
