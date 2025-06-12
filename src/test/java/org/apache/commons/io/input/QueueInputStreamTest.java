@@ -175,7 +175,7 @@ public class QueueInputStreamTest {
     private void doTestReadLineByLine(final String inputData, final InputStream inputStream, final OutputStream outputStream) throws IOException {
         final String[] lines = inputData.split("\n");
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, UTF_8))) {
-            for (String line : lines) {
+            for (final String line : lines) {
                 outputStream.write(line.getBytes(UTF_8));
                 outputStream.write('\n');
 
