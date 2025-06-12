@@ -65,7 +65,7 @@ public class QueueStreamBenchmark {
 
     @Benchmark
     @Group("streams")
-    public void input(Blackhole bh) throws Exception {
+    public void input(final Blackhole bh) throws Exception {
         int received = 0;
         while (received < CAPACITY) {
             final int len = inputStream.read(output, 0, BUFFER_SIZE);
