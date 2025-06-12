@@ -494,7 +494,6 @@ class BoundedInputStreamTest {
         }
     }
 
-    @SuppressWarnings("deprecation")
     @Test
     void testReadSingle() throws Exception {
         final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
