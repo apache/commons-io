@@ -250,7 +250,8 @@ public class QueueInputStream extends InputStream {
         if (offset < 0 || length < 0 || length > b.length - offset) {
             throw new IndexOutOfBoundsException(
                     String.format("Range [%d, %<d + %d) out of bounds for length %d", offset, length, b.length));
-        } else if (length == 0) {
+        }
+        if (length == 0) {
             return 0;
         }
         final List<Integer> drain = new ArrayList<>(Math.min(length, blockingQueue.size()));
