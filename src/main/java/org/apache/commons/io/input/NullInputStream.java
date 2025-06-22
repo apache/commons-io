@@ -223,6 +223,7 @@ public class NullInputStream extends AbstractInputStream {
      * Returns a byte value for the {@code read()} method.
      * <p>
      * This implementation returns zero.
+     * </p>
      *
      * @return This implementation always returns zero.
      */
