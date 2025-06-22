@@ -69,7 +69,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Fix SpotBugs [ERROR] Medium: Shared primitive variable "propagateClose" in one thread may not yield the value of the most recent write from another thread [org.apache.commons.io.input.BoundedInputStream] At BoundedInputStream.java:[line 555] AT_STALE_THREAD_WRITE_OF_PRIMITIVE.</action>
       <action dev="ggregory" type="fix"                due-to="maxxedev, Piotr P. Karwasz, Gary Gregory">QueueInputStream reads all but the first byte without waiting. #748.</action> 
       <!-- ADD -->
-      <action dev="ggregory" type="add" issue="IO-875" due-to="Pierre Baumard, Gary Gregory">Add and use org.apache.commons.io.file.CountingPathVisitor.accept(Path, BasicFileAttributes) #743.</action>
+      <action dev="ggregory" type="add" issue="IO-875" due-to="Pierre Baumard, Gary Gregory">Add org.apache.commons.io.file.CountingPathVisitor.accept(Path, BasicFileAttributes) #743.</action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">Add org.apache.commons.io.Charsets.isAlias(Charset, String).</action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">Add org.apache.commons.io.Charsets.isUTF8(Charset).</action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">Add org.apache.commons.io.Charsets.toCharsetDefault(String, Charset).</action>
