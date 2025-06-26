@@ -87,7 +87,7 @@ class CompositeFileComparatorTest extends ComparatorAbstractTest {
         final Comparator<File> c = new CompositeFileComparator((Comparator<File>[]) null);
         assertEquals(0, c.compare(lessFile, moreFile), "less,more");
         assertEquals(0, c.compare(moreFile, lessFile), "more,less");
-        assertEquals("CompositeFileComparator{}", c.toString(), "toString");
+        assertEquals("CompositeFileComparator[]", c.toString(), "toString");
     }
 
     /**
@@ -98,7 +98,7 @@ class CompositeFileComparatorTest extends ComparatorAbstractTest {
         final Comparator<File> c = new CompositeFileComparator((Iterable<Comparator<File>>) null);
         assertEquals(0, c.compare(lessFile, moreFile), "less,more");
         assertEquals(0, c.compare(moreFile, lessFile), "more,less");
-        assertEquals("CompositeFileComparator{}", c.toString(), "toString");
+        assertEquals("CompositeFileComparator[]", c.toString(), "toString");
     }
 
     /**
