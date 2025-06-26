@@ -29,6 +29,7 @@ import java.util.Random;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.charset.CharsetDecoders;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemProperties;
 import org.junit.jupiter.api.Test;
 
@@ -42,15 +43,7 @@ class WriterOutputStreamTest {
     private static final String UTF_16 = StandardCharsets.UTF_16.name();
     private static final String UTF_8 = StandardCharsets.UTF_8.name();
     private static final String TEST_STRING = "\u00e0 peine arriv\u00e9s nous entr\u00e2mes dans sa chambre";
-    private static final String LARGE_TEST_STRING;
-
-    static {
-        final StringBuilder buffer = new StringBuilder();
-        for (int i = 0; i < 100; i++) {
-            buffer.append(TEST_STRING);
-        }
-        LARGE_TEST_STRING = buffer.toString();
-    }
+    private static final String LARGE_TEST_STRING = StringUtils.repeat(TEST_STRING, 100);
 
     private final Random random = new Random();
 

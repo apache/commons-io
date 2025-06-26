@@ -39,6 +39,7 @@ import java.util.stream.Stream;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -52,15 +53,7 @@ class ReaderInputStreamTest {
     private static final String UTF_16 = StandardCharsets.UTF_16.name();
     private static final String UTF_8 = StandardCharsets.UTF_8.name();
     private static final String TEST_STRING = "\u00e0 peine arriv\u00e9s nous entr\u00e2mes dans sa chambre";
-    private static final String LARGE_TEST_STRING;
-
-    static {
-        final StringBuilder buffer = new StringBuilder();
-        for (int i = 0; i < 100; i++) {
-            buffer.append(TEST_STRING);
-        }
-        LARGE_TEST_STRING = buffer.toString();
-    }
+    private static final String LARGE_TEST_STRING = StringUtils.repeat(TEST_STRING, 100);
 
     static Stream<Arguments> charsetData() {
         // @formatter:off
