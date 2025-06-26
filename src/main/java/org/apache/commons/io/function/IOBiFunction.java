@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
  * Like {@link BiFunction} but throws {@link IOException}.
@@ -34,7 +33,7 @@ import java.util.function.Function;
  * @param <T> the type of the first argument to the function
  * @param <U> the type of the second argument to the function
  * @param <R> the type of the result of the function
- * @see Function
+ * @see BiFunction
  * @since 2.12.0
  */
 @FunctionalInterface
