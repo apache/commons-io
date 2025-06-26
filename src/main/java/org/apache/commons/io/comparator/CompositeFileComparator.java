@@ -18,6 +18,7 @@ package org.apache.commons.io.comparator;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
@@ -97,16 +98,8 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
      */
     @Override
     public String toString() {
-        final StringBuilder builder = new StringBuilder();
-        builder.append(super.toString());
-        builder.append('{');
-        for (int i = 0; i < delegates.length; i++) {
-            if (i > 0) {
-                builder.append(',');
-            }
-            builder.append(delegates[i]);
-        }
-        builder.append('}');
+        final StringBuilder builder = new StringBuilder(super.toString());
+        builder.append(Arrays.toString(delegates));
         return builder.toString();
     }
 }

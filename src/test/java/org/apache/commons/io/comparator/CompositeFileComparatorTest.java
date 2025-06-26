@@ -115,4 +115,15 @@ class CompositeFileComparatorTest extends ComparatorAbstractTest {
         assertTrue(c.compare(lessFile, moreFile) < 0, "less");
         assertTrue(c.compare(moreFile, lessFile) > 0, "more");
     }
+
+    @Test
+    void testToString() {
+        final List<Comparator<File>> list = new ArrayList<>();
+        list.add(SizeFileComparator.SIZE_COMPARATOR);
+        list.add(ExtensionFileComparator.EXTENSION_COMPARATOR);
+        final Comparator<File> c = new CompositeFileComparator(list);
+        final String string = c.toString();
+        assertTrue(string.contains("SizeFileComparator"));
+        assertTrue(string.contains("ExtensionFileComparator"));
+    }
 }
