@@ -19,6 +19,7 @@ package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.commons.lang3.SystemUtils;
@@ -47,6 +48,12 @@ class FileSystemTest {
         if (SystemUtils.IS_OS_MAC_OSX) {
             assertEquals(FileSystem.MAC_OSX, FileSystem.getCurrent());
         }
+    }
+
+    @Test
+    void testGetIllegalFileNameChars() {
+        final FileSystem current = FileSystem.getCurrent();
+        assertNotSame(current.getIllegalFileNameChars(), current.getIllegalFileNameChars());
     }
 
     @Test
