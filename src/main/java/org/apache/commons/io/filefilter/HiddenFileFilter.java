@@ -93,7 +93,7 @@ public class HiddenFileFilter extends AbstractFileFilter implements Serializable
     }
 
     /**
-     * Checks to see if the file is hidden.
+     * Tests to see if the file is hidden.
      *
      * @param file  the File to check
      * @return {@code true} if the file is
@@ -105,7 +105,7 @@ public class HiddenFileFilter extends AbstractFileFilter implements Serializable
     }
 
     /**
-     * Checks to see if the file is hidden.
+     * Tests to see if the file is hidden.
      *
      * @param file       the File to check
      * @param attributes the path's basic attributes (may be null).

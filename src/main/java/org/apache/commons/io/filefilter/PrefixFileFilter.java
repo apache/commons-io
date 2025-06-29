@@ -162,7 +162,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
     }
 
     /**
-     * Checks to see if the file name starts with the prefix.
+     * Tests to see if the file name starts with the prefix.
      *
      * @param file  the File to check
      * @return true if the file name starts with one of our prefixes
@@ -173,7 +173,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
     }
 
     /**
-     * Checks to see if the file name starts with the prefix.
+     * Tests to see if the file name starts with the prefix.
      *
      * @param file  the File directory
      * @param name  the file name
@@ -185,7 +185,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
     }
 
     /**
-     * Checks to see if the file name starts with the prefix.
+     * Tests to see if the file name starts with the prefix.
      *
      * @param file  the File to check
      * @param attributes the path's basic attributes (may be null).
@@ -202,7 +202,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
     }
 
     /**
-     * Provide a String representation of this file filter.
+     * Provides a String representation of this file filter.
      *
      * @return a String representation
      */

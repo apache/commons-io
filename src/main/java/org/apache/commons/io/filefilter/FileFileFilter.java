@@ -90,7 +90,7 @@ public class FileFileFilter extends AbstractFileFilter implements Serializable {
     }
 
     /**
-     * Checks to see if the file is a file.
+     * Tests to see if the file is a file.
      *
      * @param file  the File to check
      * @return true if the file is a file
@@ -101,7 +101,7 @@ public class FileFileFilter extends AbstractFileFilter implements Serializable {
     }
 
     /**
-     * Checks to see if the file is a file.
+     * Tests to see if the file is a file.
      *
      * @param file  the File to check
      * @param attributes the path's basic attributes (may be null).

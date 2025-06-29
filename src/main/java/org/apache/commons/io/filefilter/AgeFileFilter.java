@@ -173,7 +173,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
     }
 
     /**
-     * Checks to see if the last modification of the file matches cutoff favorably.
+     * Tests to see if the last modification of the file matches cutoff favorably.
      * <p>
      * If last modification time equals cutoff and newer files are required, file <strong>IS NOT</strong> selected. If last
      * modification time equals cutoff and older files are required, file <strong>IS</strong> selected.
@@ -188,7 +188,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
     }
 
     /**
-     * Checks to see if the last modification of the file matches cutoff favorably.
+     * Tests to see if the last modification of the file matches cutoff favorably.
      * <p>
      * If last modification time equals cutoff and newer files are required, file <strong>IS NOT</strong> selected. If last
      * modification time equals cutoff and older files are required, file <strong>IS</strong> selected.

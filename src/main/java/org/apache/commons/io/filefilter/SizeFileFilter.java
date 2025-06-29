@@ -107,7 +107,7 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
     }
 
     /**
-     * Checks to see if the size of the file is favorable.
+     * Tests to see if the size of the file is favorable.
      * <p>
      * If size equals threshold and smaller files are required,
      * file <strong>IS NOT</strong> selected.
@@ -128,7 +128,7 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
     }
 
     /**
-     * Checks to see if the size of the file is favorable.
+     * Tests to see if the size of the file is favorable.
      * <p>
      * If size equals threshold and smaller files are required, file <strong>IS NOT</strong> selected. If size equals threshold and larger files are required,
      * file <strong>IS</strong> selected.

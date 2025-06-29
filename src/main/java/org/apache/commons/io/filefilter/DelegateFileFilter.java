@@ -65,7 +65,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
     }
 
     /**
-     * Checks the filter.
+     * Tests the filter.
      *
      * @param file  the file to check
      * @return true if the filter matches
@@ -79,7 +79,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
     }
 
     /**
-     * Checks the filter.
+     * Tests the filter.
      *
      * @param dir  the directory
      * @param name  the file name in the directory

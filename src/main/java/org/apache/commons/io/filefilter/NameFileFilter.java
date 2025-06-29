@@ -156,7 +156,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
     }
 
     /**
-     * Checks to see if the file name matches.
+     * Tests to see if the file name matches.
      *
      * @param file  the File to check
      * @return true if the file name matches
@@ -167,7 +167,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
     }
 
     /**
-     * Checks to see if the file name matches.
+     * Tests to see if the file name matches.
      *
      * @param dir  the File directory (ignored)
      * @param name  the file name
