@@ -1773,10 +1773,11 @@ class FileUtilsTest extends AbstractTempDirTest {
 
         FileUtils.forceDelete(symlinkedDir.toFile());
 
+        // check targeted symlink is gone
         assertFalse(Files.exists(symlinkedDir));
         assertFalse(Files.isSymbolicLink(symlinkedDir));
     }
-    
+
     @Test
     public void testForceDeleteSymlink() throws Exception {
         final ImmutablePair<Path, Path> pair = createTempSymbolicLinkedRelativeDir();
@@ -1789,8 +1790,10 @@ class FileUtilsTest extends AbstractTempDirTest {
 
         FileUtils.forceDelete(symlinkedDir.toFile());
 
+        // check targeted symlink is gone
         assertFalse(Files.exists(symlinkedDir));
         assertFalse(Files.isSymbolicLink(symlinkedDir));
+        // dir targeted by symlink is not deleted
         assertTrue(Files.exists(targetDir));
     }
 
