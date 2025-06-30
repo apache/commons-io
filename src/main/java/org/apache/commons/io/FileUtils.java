@@ -294,7 +294,7 @@ public class FileUtils {
      */
     private static void checkExists(final File file, final boolean strict) throws FileNotFoundException {
         Objects.requireNonNull(file, PROTOCOL_FILE);
-        if (strict && !file.exists()) {
+        if (strict && !file.exists() && !isSymlink(file)) {
             throw new FileNotFoundException(file.toString());
         }
     }

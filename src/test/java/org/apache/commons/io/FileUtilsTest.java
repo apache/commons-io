@@ -1762,6 +1762,39 @@ class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testForceDeleteBrokenSymlink() throws Exception {
+        final ImmutablePair<Path, Path> pair = createTempSymbolicLinkedRelativeDir();
+        final Path symlinkedDir = pair.getLeft();
+        final Path targetDir = pair.getRight();
+
+        Files.delete(targetDir);
+        assertFalse(Files.exists(symlinkedDir));
+        assertTrue(Files.isSymbolicLink(symlinkedDir));
+
+        FileUtils.forceDelete(symlinkedDir.toFile());
+
+        assertFalse(Files.exists(symlinkedDir));
+        assertFalse(Files.isSymbolicLink(symlinkedDir));
+    }
+    
+    @Test
+    public void testForceDeleteSymlink() throws Exception {
+        final ImmutablePair<Path, Path> pair = createTempSymbolicLinkedRelativeDir();
+        final Path symlinkedDir = pair.getLeft();
+        final Path targetDir = pair.getRight();
+
+        assertTrue(Files.exists(symlinkedDir));
+        assertTrue(Files.isSymbolicLink(symlinkedDir));
+        assertTrue(Files.exists(targetDir));
+
+        FileUtils.forceDelete(symlinkedDir.toFile());
+
+        assertFalse(Files.exists(symlinkedDir));
+        assertFalse(Files.isSymbolicLink(symlinkedDir));
+        assertTrue(Files.exists(targetDir));
+    }
+
+    @Test
     void testForceMkdir() throws Exception {
         // Tests with existing directory
         FileUtils.forceMkdir(tempDirFile);
