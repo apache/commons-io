@@ -2066,7 +2066,7 @@ public class FileUtils {
      * This method delegates to {@link Files#isSymbolicLink(Path path)}
      * </p>
      *
-     * @param file the file to test.
+     * @param file the file to test, may be null.
      * @return true if the file is a symbolic link, see {@link Files#isSymbolicLink(Path path)}.
      * @since 2.0
      * @see Files#isSymbolicLink(Path)
