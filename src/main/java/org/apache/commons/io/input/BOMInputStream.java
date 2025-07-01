@@ -484,13 +484,11 @@ public class BOMInputStream extends ProxyInputStream {
     }
 
     /**
-     * This method reads and either preserves or skips the first bytes in the stream. It behaves like the single-byte
-     * {@code read()} method, either returning a valid byte or -1 to indicate that the initial bytes have been
-     * processed already.
+     * Reads and either preserves or skips the first bytes in the stream. This method behaves like the single-byte {@code read()} method, either returning a
+     * valid byte or -1 to indicate that the initial bytes have been processed already.
      *
-     * @return the byte read (excluding BOM) or -1 if the end of stream
-     * @throws IOException
-     *             if an I/O error occurs
+     * @return the byte read (excluding BOM) or -1 if at the end of first bytes.
+     * @throws IOException if an I/O error occurs
      */
     private int readFirstBytes() throws IOException {
         getBOM();
