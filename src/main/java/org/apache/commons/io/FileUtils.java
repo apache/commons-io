@@ -419,25 +419,20 @@ public class FileUtils {
         if (file1Exists != file2.exists()) {
             return false;
         }
-
         if (!file1Exists) {
             // two not existing files are equal
             return true;
         }
-
         checkIsFile(file1, "file1");
         checkIsFile(file2, "file2");
-
         if (file1.length() != file2.length()) {
             // lengths differ, cannot be equal
             return false;
         }
-
         if (file1.getCanonicalFile().equals(file2.getCanonicalFile())) {
             // same file
             return true;
         }
-
         return PathUtils.fileContentEquals(file1.toPath(), file2.toPath());
     }
 
@@ -460,8 +455,7 @@ public class FileUtils {
      * @see IOUtils#contentEqualsIgnoreEOL(Reader, Reader)
      * @since 2.2
      */
-    public static boolean contentEqualsIgnoreEOL(final File file1, final File file2, final String charsetName)
-            throws IOException {
+    public static boolean contentEqualsIgnoreEOL(final File file1, final File file2, final String charsetName) throws IOException {
         if (file1 == null && file2 == null) {
             return true;
         }
@@ -472,23 +466,19 @@ public class FileUtils {
         if (file1Exists != file2.exists()) {
             return false;
         }
-
         if (!file1Exists) {
             // two not existing files are equal
             return true;
         }
-
         checkFileExists(file1, "file1");
         checkFileExists(file2, "file2");
-
         if (file1.getCanonicalFile().equals(file2.getCanonicalFile())) {
             // same file
             return true;
         }
-
         final Charset charset = Charsets.toCharset(charsetName);
         try (Reader input1 = new InputStreamReader(Files.newInputStream(file1.toPath()), charset);
-             Reader input2 = new InputStreamReader(Files.newInputStream(file2.toPath()), charset)) {
+                Reader input2 = new InputStreamReader(Files.newInputStream(file2.toPath()), charset)) {
             return IOUtils.contentEqualsIgnoreEOL(input1, input2);
         }
     }
@@ -722,11 +712,10 @@ public class FileUtils {
      * @since 2.8.0
      */
     public static void copyDirectory(final File srcDir, final File destDir, final FileFilter fileFilter, final boolean preserveFileDate,
-        final CopyOption... copyOptions) throws IOException {
+            final CopyOption... copyOptions) throws IOException {
         Objects.requireNonNull(destDir, "destination");
         requireDirectoryExists(srcDir, "srcDir");
         requireCanonicalPathsNotEquals(srcDir, destDir);
-
         // Cater for destination being directory within the source directory (see IO-141)
         List<String> exclusionList = null;
         final String srcDirCanonicalPath = srcDir.getCanonicalPath();
@@ -869,11 +858,8 @@ public class FileUtils {
         if (destFile.exists()) {
             checkFileExists(destFile, "destFile");
         }
-
         final Path srcPath = srcFile.toPath();
-
         Files.copy(srcPath, destFile.toPath(), copyOptions);
-
         // On Windows, the last modified time is copied by default.
         if (preserveFileDate && !Files.isSymbolicLink(srcPath) && !setTimes(srcFile, destFile)) {
             throw new IOException("Cannot set the file time.");
@@ -1259,7 +1245,7 @@ public class FileUtils {
     }
 
     /**
-     * Schedules a directory recursively for deletion on JVM exit.
+     * Requests a directory for deletion recursively when the virtual machine terminates.
      *
      * @param directory directory to delete, must not be {@code null}
      * @throws NullPointerException if the directory is {@code null}
@@ -1301,7 +1287,6 @@ public class FileUtils {
         } catch (final Exception ignored) {
             // ignore
         }
-
         try {
             return file.delete();
         } catch (final Exception ignored) {
@@ -1310,7 +1295,7 @@ public class FileUtils {
     }
 
     /**
-     * Determines whether the {@code parent} directory contains the {@code child} element (a file or directory).
+     * Tests whether the {@code parent} directory contains the {@code child} element (a file or directory).
      * <p>
      * Files are normalized before comparison.
      * </p>
@@ -1434,7 +1419,7 @@ public class FileUtils {
     }
 
     /**
-     * Schedules a file to be deleted when JVM exits.
+     * Requests a file to be deleted when the virtual machine terminates.
      * If file is directory delete it and all subdirectories.
      *
      * @param file file or directory to delete, must not be {@code null}.
@@ -1534,7 +1519,7 @@ public class FileUtils {
     }
 
     /**
-     * Returns a {@link File} representing the system temporary directory.
+     * Gets a {@link File} representing the system temporary directory.
      *
      * @return the system temporary directory as a File
      * @since 2.0
@@ -1544,7 +1529,7 @@ public class FileUtils {
     }
 
     /**
-     * Returns the path to the system temporary directory.
+     * Getsv the path to the system temporary directory.
      *
      * WARNING: this method relies on the Java system property 'java.io.tmpdir'
      * which may or may not have a trailing file separator.
@@ -1559,7 +1544,7 @@ public class FileUtils {
     }
 
     /**
-     * Returns a {@link File} representing the user's home directory.
+     * Gets a {@link File} representing the user's home directory.
      *
      * @return the user's home directory.
      * @since 2.0
@@ -1569,7 +1554,7 @@ public class FileUtils {
     }
 
     /**
-     * Returns the path to the user's home directory.
+     * Gets the path to the user's home directory.
      *
      * @return the path to the user's home directory.
      * @since 2.0
@@ -1614,11 +1599,13 @@ public class FileUtils {
      * Tests if the specified {@link File} is newer than the specified {@link ChronoLocalDate}
      * at the end of day.
      *
-     * <p>Note: The input date is assumed to be in the system default time-zone with the time
+     * <p>
+     * Note: The input date is assumed to be in the system default time-zone with the time
      * part set to the current time. To use a non-default time-zone use the method
      * {@link #isFileNewer(File, ChronoLocalDateTime, ZoneId)
      * isFileNewer(file, chronoLocalDate.atTime(LocalTime.now(zoneId)), zoneId)} where
      * {@code zoneId} is a valid {@link ZoneId}.
+     * </p>
      *
      * @param file            the {@link File} of which the modification date must be compared.
      * @param chronoLocalDate the date reference.
@@ -1636,10 +1623,12 @@ public class FileUtils {
      * Tests if the specified {@link File} is newer than the specified {@link ChronoLocalDate}
      * at the specified time.
      *
-     * <p>Note: The input date and time are assumed to be in the system default time-zone. To use a
+     * <p>
+     * Note: The input date and time are assumed to be in the system default time-zone. To use a
      * non-default time-zone use the method {@link #isFileNewer(File, ChronoLocalDateTime, ZoneId)
      * isFileNewer(file, chronoLocalDate.atTime(localTime), zoneId)} where {@code zoneId} is a valid
      * {@link ZoneId}.
+     * </p>
      *
      * @param file            the {@link File} of which the modification date must be compared.
      * @param chronoLocalDate the date reference.
@@ -1679,10 +1668,12 @@ public class FileUtils {
      * Tests if the specified {@link File} is newer than the specified {@link ChronoLocalDateTime}
      * at the system-default time zone.
      *
-     * <p>Note: The input date and time is assumed to be in the system default time-zone. To use a
+     * <p>
+     * Note: The input date and time is assumed to be in the system default time-zone. To use a
      * non-default time-zone use the method {@link #isFileNewer(File, ChronoLocalDateTime, ZoneId)
      * isFileNewer(file, chronoLocalDateTime, zoneId)} where {@code zoneId} is a valid
      * {@link ZoneId}.
+     * </p>
      *
      * @param file                the {@link File} of which the modification date must be compared.
      * @param chronoLocalDateTime the date reference.
@@ -1825,11 +1816,13 @@ public class FileUtils {
      * Tests if the specified {@link File} is older than the specified {@link ChronoLocalDate}
      * at the end of day.
      *
-     * <p>Note: The input date is assumed to be in the system default time-zone with the time
+     * <p>
+     * Note: The input date is assumed to be in the system default time-zone with the time
      * part set to the current time. To use a non-default time-zone use the method
      * {@link #isFileOlder(File, ChronoLocalDateTime, ZoneId)
      * isFileOlder(file, chronoLocalDate.atTime(LocalTime.now(zoneId)), zoneId)} where
      * {@code zoneId} is a valid {@link ZoneId}.
+     * </p>
      *
      * @param file            the {@link File} of which the modification date must be compared.
      * @param chronoLocalDate the date reference.
@@ -1849,10 +1842,12 @@ public class FileUtils {
      * Tests if the specified {@link File} is older than the specified {@link ChronoLocalDate}
      * at the specified {@link LocalTime}.
      *
-     * <p>Note: The input date and time are assumed to be in the system default time-zone. To use a
+     * <p>
+     * Note: The input date and time are assumed to be in the system default time-zone. To use a
      * non-default time-zone use the method {@link #isFileOlder(File, ChronoLocalDateTime, ZoneId)
      * isFileOlder(file, chronoLocalDate.atTime(localTime), zoneId)} where {@code zoneId} is a valid
      * {@link ZoneId}.
+     * </p>
      *
      * @param file            the {@link File} of which the modification date must be compared.
      * @param chronoLocalDate the date reference.
@@ -1893,10 +1888,12 @@ public class FileUtils {
      * Tests if the specified {@link File} is older than the specified {@link ChronoLocalDateTime}
      * at the system-default time zone.
      *
-     * <p>Note: The input date and time is assumed to be in the system default time-zone. To use a
+     * <p>
+     * Note: The input date and time is assumed to be in the system default time-zone. To use a
      * non-default time-zone use the method {@link #isFileOlder(File, ChronoLocalDateTime, ZoneId)
      * isFileOlder(file, chronoLocalDateTime, zoneId)} where {@code zoneId} is a valid
      * {@link ZoneId}.
+     * </p>
      *
      * @param file                the {@link File} of which the modification date must be compared.
      * @param chronoLocalDateTime the date reference.
@@ -2916,9 +2913,8 @@ public class FileUtils {
             // Fallback: Only set modified time to match source file
             return targetFile.setLastModified(sourceFile.lastModified());
         }
-
         // TODO: (Help!) Determine historically why setLastModified(File, File) needed PathUtils.setLastModifiedTime() if
-        //  sourceFile.isFile() was true, but needed setLastModifiedTime(File, long) if sourceFile.isFile() was false
+        // sourceFile.isFile() was true, but needed setLastModifiedTime(File, long) if sourceFile.isFile() was false
     }
 
     /**
