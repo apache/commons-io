@@ -23,9 +23,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * A light weight {@link InputStream} that emulates a stream of a specified size.
+ * A lightweight {@link InputStream} that emulates a stream of a specified size.
  * <p>
- * This implementation provides a light weight object for testing with an {@link InputStream} where the contents don't matter.
+ * This implementation provides a lightweight object for testing with an {@link InputStream} where the contents don't matter.
  * </p>
  * <p>
  * One use case would be for testing the handling of large {@link InputStream} as it can emulate that scenario without the overhead of actually processing large

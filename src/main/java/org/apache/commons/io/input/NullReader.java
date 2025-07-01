@@ -23,10 +23,10 @@ import java.io.IOException;
 import java.io.Reader;
 
 /**
- * A functional, light weight {@link Reader} that emulates
+ * A functional, lightweight {@link Reader} that emulates
  * a reader of a specified size.
  * <p>
- * This implementation provides a light weight
+ * This implementation provides a lightweight
  * object for testing with an {@link Reader}
  * where the contents don't matter.
  * </p>
