@@ -2547,7 +2547,7 @@ public class FileUtils {
      * @since 2.9.0
      */
     public static void moveFile(final File srcFile, final File destFile, final CopyOption... copyOptions) throws IOException {
-        Objects.requireNonNull(destFile, "destination");
+        Objects.requireNonNull(destFile, "destFile");
         checkFileExists(srcFile, "srcFile");
         requireAbsent(destFile, "destFile");
         final boolean rename = srcFile.renameTo(destFile);
