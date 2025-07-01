@@ -84,8 +84,43 @@ public class QueueInputStreamTest {
         // @formatter:on
     }
 
+    @TestFactory
+    public DynamicTest[] bulkReadErrorHandlingTests() {
+        final QueueInputStream queueInputStream = new QueueInputStream();
+        return new DynamicTest[] {
+                dynamicTest("Offset too big", () ->
+                        assertThrows(IndexOutOfBoundsException.class, () ->
+                                queueInputStream.read(EMPTY_BYTE_ARRAY, 1, 0))),
+
+                dynamicTest("Offset negative", () ->
+                        assertThrows(IndexOutOfBoundsException.class, () ->
+                                queueInputStream.read(EMPTY_BYTE_ARRAY, -1, 0))),
+
+                dynamicTest("Length too big", () ->
+                        assertThrows(IndexOutOfBoundsException.class, () ->
+                                queueInputStream.read(EMPTY_BYTE_ARRAY, 0, 1))),
+
+                dynamicTest("Length negative", () ->
+                        assertThrows(IndexOutOfBoundsException.class, () ->
+                                queueInputStream.read(EMPTY_BYTE_ARRAY, 0, -1))),
+        };
+    }
+
     private int defaultBufferSize() {
         return 8192;
+    }
+
+    private void doTestReadLineByLine(final String inputData, final InputStream inputStream, final OutputStream outputStream) throws IOException {
+        final String[] lines = inputData.split("\n");
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, UTF_8))) {
+            for (final String line : lines) {
+                outputStream.write(line.getBytes(UTF_8));
+                outputStream.write('\n');
+
+                final String actualLine = reader.readLine();
+                assertEquals(line, actualLine);
+            }
+        }
     }
 
     private String readUnbuffered(final InputStream inputStream) throws IOException {
@@ -146,72 +181,28 @@ public class QueueInputStreamTest {
 
     @ParameterizedTest(name = "inputData={0}")
     @MethodSource("inputData")
-    void testReadLineByLineQueue(final String inputData) throws IOException {
-        final String[] lines = inputData.split("\n");
+    void testBufferedReadWrite(final String inputData) throws IOException {
         final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
-        try (QueueInputStream inputStream = QueueInputStream.builder()
-                .setBlockingQueue(queue)
-                .setTimeout(Duration.ofHours(1))
-                .get();
-             QueueOutputStream outputStream = inputStream.newQueueOutputStream()) {
-
-            doTestReadLineByLine(inputData, inputStream, outputStream);
+        try (BufferedInputStream inputStream = new BufferedInputStream(new QueueInputStream(queue));
+                BufferedOutputStream outputStream = new BufferedOutputStream(new QueueOutputStream(queue), defaultBufferSize())) {
+            outputStream.write(inputData.getBytes(StandardCharsets.UTF_8));
+            outputStream.flush();
+            final String dataCopy = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+            assertEquals(inputData, dataCopy);
         }
     }
 
     @ParameterizedTest(name = "inputData={0}")
     @MethodSource("inputData")
-    void testReadLineByLineFile(final String inputData) throws IOException {
-        final Path tempFile = Files.createTempFile(getClass().getSimpleName(), ".txt");
-        try (InputStream inputStream = Files.newInputStream(tempFile);
-             OutputStream outputStream = Files.newOutputStream(tempFile)) {
-
-            doTestReadLineByLine(inputData, inputStream, outputStream);
-        } finally {
-            Files.delete(tempFile);
+    void testBufferedWrites(final String inputData) throws IOException {
+        final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
+        try (QueueInputStream inputStream = new QueueInputStream(queue);
+                BufferedOutputStream outputStream = new BufferedOutputStream(new QueueOutputStream(queue), defaultBufferSize())) {
+            outputStream.write(inputData.getBytes(StandardCharsets.UTF_8));
+            outputStream.flush();
+            final String actualData = readUnbuffered(inputStream);
+            assertEquals(inputData, actualData);
         }
-    }
-
-    private void doTestReadLineByLine(final String inputData, final InputStream inputStream, final OutputStream outputStream) throws IOException {
-        final String[] lines = inputData.split("\n");
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, UTF_8))) {
-            for (final String line : lines) {
-                outputStream.write(line.getBytes(UTF_8));
-                outputStream.write('\n');
-
-                final String actualLine = reader.readLine();
-                assertEquals(line, actualLine);
-            }
-        }
-    }
-
-    @TestFactory
-    public DynamicTest[] bulkReadErrorHandlingTests() {
-        final QueueInputStream queueInputStream = new QueueInputStream();
-        return new DynamicTest[] {
-                dynamicTest("Offset too big", () ->
-                        assertThrows(IndexOutOfBoundsException.class, () ->
-                                queueInputStream.read(EMPTY_BYTE_ARRAY, 1, 0))),
-
-                dynamicTest("Offset negative", () ->
-                        assertThrows(IndexOutOfBoundsException.class, () ->
-                                queueInputStream.read(EMPTY_BYTE_ARRAY, -1, 0))),
-
-                dynamicTest("Length too big", () ->
-                        assertThrows(IndexOutOfBoundsException.class, () ->
-                                queueInputStream.read(EMPTY_BYTE_ARRAY, 0, 1))),
-
-                dynamicTest("Length negative", () ->
-                        assertThrows(IndexOutOfBoundsException.class, () ->
-                                queueInputStream.read(EMPTY_BYTE_ARRAY, 0, -1))),
-        };
-    }
-
-    @Test
-    void testBulkReadZeroLength() {
-        final QueueInputStream queueInputStream = new QueueInputStream();
-        final int read = queueInputStream.read(EMPTY_BYTE_ARRAY, 0, 0);
-        assertEquals(0, read);
     }
 
     @ParameterizedTest(name = "inputData={0}")
@@ -256,30 +247,11 @@ public class QueueInputStreamTest {
         }
     }
 
-    @ParameterizedTest(name = "inputData={0}")
-    @MethodSource("inputData")
-    void testBufferedReadWrite(final String inputData) throws IOException {
-        final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
-        try (BufferedInputStream inputStream = new BufferedInputStream(new QueueInputStream(queue));
-                BufferedOutputStream outputStream = new BufferedOutputStream(new QueueOutputStream(queue), defaultBufferSize())) {
-            outputStream.write(inputData.getBytes(StandardCharsets.UTF_8));
-            outputStream.flush();
-            final String dataCopy = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
-            assertEquals(inputData, dataCopy);
-        }
-    }
-
-    @ParameterizedTest(name = "inputData={0}")
-    @MethodSource("inputData")
-    void testBufferedWrites(final String inputData) throws IOException {
-        final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
-        try (QueueInputStream inputStream = new QueueInputStream(queue);
-                BufferedOutputStream outputStream = new BufferedOutputStream(new QueueOutputStream(queue), defaultBufferSize())) {
-            outputStream.write(inputData.getBytes(StandardCharsets.UTF_8));
-            outputStream.flush();
-            final String actualData = readUnbuffered(inputStream);
-            assertEquals(inputData, actualData);
-        }
+    @Test
+    void testBulkReadZeroLength() {
+        final QueueInputStream queueInputStream = new QueueInputStream();
+        final int read = queueInputStream.read(EMPTY_BYTE_ARRAY, 0, 0);
+        assertEquals(0, read);
     }
 
     @Test
@@ -297,6 +269,34 @@ public class QueueInputStreamTest {
             shadow = inputStream;
         }
         assertEquals(IOUtils.EOF, shadow.read());
+    }
+
+    @ParameterizedTest(name = "inputData={0}")
+    @MethodSource("inputData")
+    void testReadLineByLineFile(final String inputData) throws IOException {
+        final Path tempFile = Files.createTempFile(getClass().getSimpleName(), ".txt");
+        try (InputStream inputStream = Files.newInputStream(tempFile);
+             OutputStream outputStream = Files.newOutputStream(tempFile)) {
+
+            doTestReadLineByLine(inputData, inputStream, outputStream);
+        } finally {
+            Files.delete(tempFile);
+        }
+    }
+
+    @ParameterizedTest(name = "inputData={0}")
+    @MethodSource("inputData")
+    void testReadLineByLineQueue(final String inputData) throws IOException {
+        final String[] lines = inputData.split("\n");
+        final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
+        try (QueueInputStream inputStream = QueueInputStream.builder()
+                .setBlockingQueue(queue)
+                .setTimeout(Duration.ofHours(1))
+                .get();
+             QueueOutputStream outputStream = inputStream.newQueueOutputStream()) {
+
+            doTestReadLineByLine(inputData, inputStream, outputStream);
+        }
     }
 
     @Test

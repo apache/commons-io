@@ -167,6 +167,25 @@ public class CharSequenceInputStream extends InputStream {
     private int cBufMark; // position in cBuf
     private final CharsetEncoder charsetEncoder;
 
+    private CharSequenceInputStream(final Builder builder) {
+        this.charsetEncoder = builder.charsetEncoder;
+        // Ensure that buffer is long enough to hold a complete character
+        this.bBuf = ByteBuffer.allocate(ReaderInputStream.checkMinBufferSize(builder.charsetEncoder, builder.getBufferSize()));
+        this.bBuf.flip();
+        this.cBuf = CharBuffer.wrap(Uncheck.get(() -> builder.getCharSequence()));
+        this.cBufMark = NO_MARK;
+        this.bBufMark = NO_MARK;
+        try {
+            fillBuffer();
+        } catch (final CharacterCodingException ex) {
+            // Reset everything without filling the buffer
+            // so the same exception can be thrown again later.
+            this.bBuf.clear();
+            this.bBuf.flip();
+            this.cBuf.rewind();
+        }
+    }
+
     /**
      * Constructs a new instance with a buffer size of {@link IOUtils#DEFAULT_BUFFER_SIZE}.
      *
@@ -192,25 +211,6 @@ public class CharSequenceInputStream extends InputStream {
     @Deprecated
     public CharSequenceInputStream(final CharSequence cs, final Charset charset, final int bufferSize) {
         this(builder().setCharSequence(cs).setCharset(charset).setBufferSize(bufferSize));
-    }
-
-    private CharSequenceInputStream(final Builder builder) {
-        this.charsetEncoder = builder.charsetEncoder;
-        // Ensure that buffer is long enough to hold a complete character
-        this.bBuf = ByteBuffer.allocate(ReaderInputStream.checkMinBufferSize(builder.charsetEncoder, builder.getBufferSize()));
-        this.bBuf.flip();
-        this.cBuf = CharBuffer.wrap(Uncheck.get(() -> builder.getCharSequence()));
-        this.cBufMark = NO_MARK;
-        this.bBufMark = NO_MARK;
-        try {
-            fillBuffer();
-        } catch (final CharacterCodingException ex) {
-            // Reset everything without filling the buffer
-            // so the same exception can be thrown again later.
-            this.bBuf.clear();
-            this.bBuf.flip();
-            this.cBuf.rewind();
-        }
     }
 
     /**

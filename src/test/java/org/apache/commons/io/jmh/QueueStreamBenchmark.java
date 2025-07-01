@@ -54,23 +54,23 @@ public class QueueStreamBenchmark {
 
     @Benchmark
     @Group("streams")
-    public void output() throws Exception {
-        int sent = 0;
-        while (sent < CAPACITY) {
-            final int len = Math.min(CAPACITY - sent, BUFFER_SIZE);
-            outputStream.write(input, sent, len);
-            sent += len;
-        }
-    }
-
-    @Benchmark
-    @Group("streams")
     public void input(final Blackhole bh) throws Exception {
         int received = 0;
         while (received < CAPACITY) {
             final int len = inputStream.read(output, 0, BUFFER_SIZE);
             bh.consume(output);
             received += len;
+        }
+    }
+
+    @Benchmark
+    @Group("streams")
+    public void output() throws Exception {
+        int sent = 0;
+        while (sent < CAPACITY) {
+            final int len = Math.min(CAPACITY - sent, BUFFER_SIZE);
+            outputStream.write(input, sent, len);
+            sent += len;
         }
     }
 }

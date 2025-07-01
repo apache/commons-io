@@ -1618,6 +1618,23 @@ class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    public void testForceDeleteBrokenSymlink() throws Exception {
+        final ImmutablePair<Path, Path> pair = createTempSymbolicLinkedRelativeDir();
+        final Path symlinkedDir = pair.getLeft();
+        final Path targetDir = pair.getRight();
+
+        Files.delete(targetDir);
+        assertFalse(Files.exists(symlinkedDir));
+        assertTrue(Files.isSymbolicLink(symlinkedDir));
+
+        FileUtils.forceDelete(symlinkedDir.toFile());
+
+        // check targeted symlink is gone
+        assertFalse(Files.exists(symlinkedDir));
+        assertFalse(Files.isSymbolicLink(symlinkedDir));
+    }
+
+    @Test
     void testForceDeleteDir() throws Exception {
         final File testDirectory = tempDirFile;
         assertTrue(testDirectory.exists(), "TestDirectory must exist");
@@ -1690,6 +1707,25 @@ class FileUtilsTest extends AbstractTempDirTest {
         }
     }
 
+    @Test
+    public void testForceDeleteSymlink() throws Exception {
+        final ImmutablePair<Path, Path> pair = createTempSymbolicLinkedRelativeDir();
+        final Path symlinkedDir = pair.getLeft();
+        final Path targetDir = pair.getRight();
+
+        assertTrue(Files.exists(symlinkedDir));
+        assertTrue(Files.isSymbolicLink(symlinkedDir));
+        assertTrue(Files.exists(targetDir));
+
+        FileUtils.forceDelete(symlinkedDir.toFile());
+
+        // check targeted symlink is gone
+        assertFalse(Files.exists(symlinkedDir));
+        assertFalse(Files.isSymbolicLink(symlinkedDir));
+        // dir targeted by symlink is not deleted
+        assertTrue(Files.exists(targetDir));
+    }
+
     /**
      * TODO Passes on macOS, fails on Linux and Windows with AccessDeniedException.
      */
@@ -1759,42 +1795,6 @@ class FileUtilsTest extends AbstractTempDirTest {
             FileUtils.forceDelete(file);
             assertFalse(file.exists(), "Check deletion");
         }
-    }
-
-    @Test
-    public void testForceDeleteBrokenSymlink() throws Exception {
-        final ImmutablePair<Path, Path> pair = createTempSymbolicLinkedRelativeDir();
-        final Path symlinkedDir = pair.getLeft();
-        final Path targetDir = pair.getRight();
-
-        Files.delete(targetDir);
-        assertFalse(Files.exists(symlinkedDir));
-        assertTrue(Files.isSymbolicLink(symlinkedDir));
-
-        FileUtils.forceDelete(symlinkedDir.toFile());
-
-        // check targeted symlink is gone
-        assertFalse(Files.exists(symlinkedDir));
-        assertFalse(Files.isSymbolicLink(symlinkedDir));
-    }
-
-    @Test
-    public void testForceDeleteSymlink() throws Exception {
-        final ImmutablePair<Path, Path> pair = createTempSymbolicLinkedRelativeDir();
-        final Path symlinkedDir = pair.getLeft();
-        final Path targetDir = pair.getRight();
-
-        assertTrue(Files.exists(symlinkedDir));
-        assertTrue(Files.isSymbolicLink(symlinkedDir));
-        assertTrue(Files.exists(targetDir));
-
-        FileUtils.forceDelete(symlinkedDir.toFile());
-
-        // check targeted symlink is gone
-        assertFalse(Files.exists(symlinkedDir));
-        assertFalse(Files.isSymbolicLink(symlinkedDir));
-        // dir targeted by symlink is not deleted
-        assertTrue(Files.exists(targetDir));
     }
 
     @Test
@@ -2826,12 +2826,12 @@ class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    void testReadLinesUTF8() throws Exception {
-        final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        final String[] data = { "hello", "\u1234", "", "this is", "some text" };
-        TestUtils.createLineFileUtf8(file, data);
-        final List<String> lines = FileUtils.readLines(file, UTF_8);
-        assertEquals(Arrays.asList(data), lines);
+    @EnabledIf("isPosixFilePermissionsSupported")
+    void testReadLines_IOExceptionOnPosixFileSystem() throws Exception {
+        final File file = TestUtils.newFile(tempDirFile, "cant-read.txt");
+        TestUtils.createFile(file, 100);
+        Files.setPosixFilePermissions(file.toPath(), PosixFilePermissions.fromString("---------"));
+        assertThrows(IOException.class, () -> FileUtils.readLines(file));
     }
 
     @Test
@@ -2856,12 +2856,12 @@ class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    @EnabledIf("isPosixFilePermissionsSupported")
-    void testReadLines_IOExceptionOnPosixFileSystem() throws Exception {
-        final File file = TestUtils.newFile(tempDirFile, "cant-read.txt");
-        TestUtils.createFile(file, 100);
-        Files.setPosixFilePermissions(file.toPath(), PosixFilePermissions.fromString("---------"));
-        assertThrows(IOException.class, () -> FileUtils.readLines(file));
+    void testReadLinesUTF8() throws Exception {
+        final File file = TestUtils.newFile(tempDirFile, "lines.txt");
+        final String[] data = { "hello", "\u1234", "", "this is", "some text" };
+        TestUtils.createLineFileUtf8(file, data);
+        final List<String> lines = FileUtils.readLines(file, UTF_8);
+        assertEquals(Arrays.asList(data), lines);
     }
 
     @Test
