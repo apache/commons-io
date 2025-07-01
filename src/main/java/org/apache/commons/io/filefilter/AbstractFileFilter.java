@@ -136,6 +136,14 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
         return FileVisitResult.TERMINATE;
     }
 
+    boolean isDirectory(final File file) {
+        return file != null && file.isDirectory();
+    }
+
+    boolean isFile(final File file) {
+        return file != null && file.isFile();
+    }
+
     @Override
     public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
         return FileVisitResult.CONTINUE;

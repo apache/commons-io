@@ -97,7 +97,7 @@ public class FileFileFilter extends AbstractFileFilter implements Serializable {
      */
     @Override
     public boolean accept(final File file) {
-        return file != null && file.isFile();
+        return isFile(file);
     }
 
     /**

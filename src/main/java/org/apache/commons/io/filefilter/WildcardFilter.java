@@ -132,7 +132,7 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
      */
     @Override
     public boolean accept(final File file) {
-        if (file.isDirectory()) {
+        if (isDirectory(file)) {
             return false;
         }
         return Stream.of(wildcards).anyMatch(wildcard -> FilenameUtils.wildcardMatch(file.getName(), wildcard));

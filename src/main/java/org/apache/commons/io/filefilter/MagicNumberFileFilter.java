@@ -258,7 +258,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements Seriali
      */
     @Override
     public boolean accept(final File file) {
-        if (file != null && file.isFile() && file.canRead()) {
+        if (isFile(file) && file.canRead()) {
             try {
                 return RandomAccessFileMode.READ_ONLY.apply(file.toPath(),
                         raf -> Arrays.equals(magicNumbers, RandomAccessFiles.read(raf, byteOffset, magicNumbers.length)));
