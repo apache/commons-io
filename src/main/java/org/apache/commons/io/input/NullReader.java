@@ -61,6 +61,9 @@ import java.io.Reader;
  *      }
  *  }
  * </pre>
+ * <p>
+ * This class is not thread-safe.
+ * </p>
  *
  * @since 1.3
  */

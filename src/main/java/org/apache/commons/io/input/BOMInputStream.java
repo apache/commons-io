@@ -91,6 +91,9 @@ import org.apache.commons.io.IOUtils;
  * <p>
  * To build an instance, use {@link Builder}.
  * </p>
+ * <p>
+ * This class is not thread-safe.
+ * </p>
  *
  * @see Builder
  * @see org.apache.commons.io.ByteOrderMark

@@ -54,6 +54,9 @@ import java.io.InputStream;
  *      }
  *  }
  * </pre>
+ * <p>
+ * This class is not thread-safe.
+ * </p>
  *
  * @since 1.3
  */

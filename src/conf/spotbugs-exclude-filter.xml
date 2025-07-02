@@ -84,4 +84,31 @@
     <Method name="next" />
     <Bug pattern="IT_NO_SUCH_ELEMENT" />
   </Match>
+  <!-- OK by me and can't break BC anyway. -->
+  <Match>
+    <Class name="org.apache.commons.io.file.CleaningPathVisitor" />
+    <Method name="withBigIntegerCounters" />
+    <Bug pattern="HSM_HIDING_METHOD" />
+  </Match>
+  <!-- OK by me and can't break BC anyway. -->
+  <Match>
+    <Class name="org.apache.commons.io.file.CleaningPathVisitor" />
+    <Method name="withLongCounters" />
+    <Bug pattern="HSM_HIDING_METHOD" />
+  </Match>
+  <!-- This class is not thread-safe. Should this be a TO-DO?. -->
+  <Match>
+    <Class name="org.apache.commons.io.input.NullInputStream" />
+    <Bug pattern="AT_NONATOMIC_64BIT_PRIMITIVE, AT_NONATOMIC_OPERATIONS_ON_SHARED_VARIABLE" />
+  </Match>
+  <!-- This class is not thread-safe. Should this be a TO-DO?. -->
+  <Match>
+    <Class name="org.apache.commons.io.input.NullReader" />
+    <Bug pattern="AT_NONATOMIC_64BIT_PRIMITIVE, AT_NONATOMIC_OPERATIONS_ON_SHARED_VARIABLE, AT_STALE_THREAD_WRITE_OF_PRIMITIVE" />
+  </Match>
+  <!-- This class is not thread-safe. Should this be a TO-DO?. -->
+  <Match>
+    <Class name="org.apache.commons.io.input.BOMInputStream" />
+    <Bug pattern="AT_STALE_THREAD_WRITE_OF_PRIMITIVE" />
+  </Match>
 </FindBugsFilter>
