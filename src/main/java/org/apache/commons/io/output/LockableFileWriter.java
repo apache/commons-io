@@ -149,9 +149,6 @@ public class LockableFileWriter extends Writer {
     /** The extension for the lock file. */
     private static final String LCK = ".lck";
 
-    // Cannot extend ProxyWriter, as requires writer to be
-    // known when super() is called
-
     /**
      * Constructs a new {@link Builder}.
      *
@@ -250,16 +247,13 @@ public class LockableFileWriter extends Writer {
         if (absFile.isDirectory()) {
             throw new IOException("File specified is a directory");
         }
-
         // init lock file
         final File lockDirFile = new File(lockDir != null ? lockDir : FileUtils.getTempDirectoryPath());
         FileUtils.forceMkdir(lockDirFile);
         testLockDir(lockDirFile);
         lockFile = new File(lockDirFile, absFile.getName() + LCK);
-
         // check if locked
         createLock();
-
         // init wrapped writer
         out = initWriter(absFile, charset, append);
     }
@@ -391,7 +385,6 @@ public class LockableFileWriter extends Writer {
         final boolean fileExistedAlready = file.exists();
         try {
             return new OutputStreamWriter(new FileOutputStream(file.getAbsolutePath(), append), Charsets.toCharset(charset));
-
         } catch (final IOException | RuntimeException ex) {
             FileUtils.deleteQuietly(lockFile);
             if (!fileExistedAlready) {

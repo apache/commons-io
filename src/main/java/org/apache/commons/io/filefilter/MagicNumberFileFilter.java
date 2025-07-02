@@ -229,16 +229,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements Seriali
      *         a negative number.
      */
     public MagicNumberFileFilter(final String magicNumber, final long offset) {
-        Objects.requireNonNull(magicNumber, "magicNumber");
-        if (magicNumber.isEmpty()) {
-            throw new IllegalArgumentException("The magic number must contain at least one byte");
-        }
-        if (offset < 0) {
-            throw new IllegalArgumentException("The offset cannot be negative");
-        }
-
-        this.magicNumbers = magicNumber.getBytes(Charset.defaultCharset()); // explicitly uses the platform default charset
-        this.byteOffset = offset;
+        this(magicNumber.getBytes(Charset.defaultCharset()), offset);
     }
 
     /**
