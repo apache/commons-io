@@ -28,12 +28,15 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.function.IOFunction;
 import org.apache.commons.io.input.ClosedInputStream;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -100,14 +103,19 @@ class ByteArrayOutputStreamTest {
     private static Stream<Arguments> toBufferedInputStreamFunctionFactories() {
         final IOFunction<InputStream, InputStream> syncBaosToBufferedInputStream = ByteArrayOutputStream::toBufferedInputStream;
         final IOFunction<InputStream, InputStream> syncBaosToBufferedInputStreamWithSize = is -> ByteArrayOutputStream.toBufferedInputStream(is, 1024);
+        final IOFunction<InputStream, InputStream> syncBaosToBufferedInputStreamWith0Size = is -> ByteArrayOutputStream.toBufferedInputStream(is, 0);
         final IOFunction<InputStream, InputStream> unSyncBaosToBufferedInputStream = UnsynchronizedByteArrayOutputStream::toBufferedInputStream;
-        final IOFunction<InputStream, InputStream> unSyncBaosToBufferedInputStreamWithSize = is -> UnsynchronizedByteArrayOutputStream.toBufferedInputStream(is,
-                1024);
+        final IOFunction<InputStream, InputStream> unSyncBaosToBufferedInputStreamWithSize = is -> UnsynchronizedByteArrayOutputStream.toBufferedInputStream(
+                is, 1024);
+        final IOFunction<InputStream, InputStream> unSyncBaosToBufferedInputStreamWith0Size = is -> UnsynchronizedByteArrayOutputStream.toBufferedInputStream(
+                is, 0);
 
         return Stream.of(Arguments.of("ByteArrayOutputStream.toBufferedInputStream(InputStream)", syncBaosToBufferedInputStream),
                 Arguments.of("ByteArrayOutputStream.toBufferedInputStream(InputStream, int)", syncBaosToBufferedInputStreamWithSize),
+                Arguments.of("ByteArrayOutputStream.toBufferedInputStream(InputStream, 0)", syncBaosToBufferedInputStreamWith0Size),
                 Arguments.of("UnsynchronizedByteArrayOutputStream.toBufferedInputStream(InputStream)", unSyncBaosToBufferedInputStream),
-                Arguments.of("UnsynchronizedByteArrayOutputStream.toBufferedInputStream(InputStream, int)", unSyncBaosToBufferedInputStreamWithSize));
+                Arguments.of("UnsynchronizedByteArrayOutputStream.toBufferedInputStream(InputStream, int)", unSyncBaosToBufferedInputStreamWithSize),
+                Arguments.of("UnsynchronizedByteArrayOutputStream.toBufferedInputStream(InputStream, 0)", unSyncBaosToBufferedInputStreamWith0Size));
     }
 
     private void checkByteArrays(final byte[] expected, final byte[] actual) {
@@ -184,7 +192,6 @@ class ByteArrayOutputStreamTest {
                 assertEquals(data.length, buffered.available());
 
                 assertArrayEquals(data, IOUtils.toByteArray(buffered));
-
             }
         }
     }
@@ -198,7 +205,23 @@ class ByteArrayOutputStreamTest {
 
             try (InputStream buffered = toBufferedInputStreamFunction.apply(bain)) {
                 assertEquals(0, buffered.available());
+            }
+        }
+    }
 
+    @ParameterizedTest(name = "[{index}] {0}")
+    @MethodSource("toBufferedInputStreamFunctionFactories")
+    void testToBufferedInputStreamEmptyFile(final String baosName, final IOFunction<InputStream, InputStream> toBufferedInputStreamFunction,
+                                            final @TempDir Path temporaryFolder) throws IOException {
+        final Path emptyFile = Files.createTempFile(temporaryFolder, getClass().getSimpleName(), "-empty.txt");
+
+        try (InputStream is = Files.newInputStream(emptyFile)) {
+            assertEquals(0, is.available());
+
+            try (InputStream buffered = toBufferedInputStreamFunction.apply(is)) {
+                assertEquals(0, buffered.available());
+
+                assertArrayEquals(IOUtils.EMPTY_BYTE_ARRAY, IOUtils.toByteArray(buffered));
             }
         }
     }
