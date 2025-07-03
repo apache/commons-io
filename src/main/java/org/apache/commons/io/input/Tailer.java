@@ -714,7 +714,7 @@ public class Tailer implements Runnable, AutoCloseable {
     private volatile boolean run = true;
 
     private boolean ignoreTouch = DEFAULT_IGNORE_TOUCH;
-    
+
     /**
      * Creates a Tailer for the given file, with a specified buffer size.
      *
@@ -827,6 +827,7 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param delayDuration the delay between checks of the file for new content in milliseconds.
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @param reOpen if true, close and reopen the file between reading chunks
+     * @param ignoreTouch if true, file timestamp changes without content change get ignored
      * @param bufferSize Buffer size
      */
     private Tailer(final Tailable tailable, final Charset charset, final TailerListener listener, final Duration delayDuration, final boolean end,
@@ -1019,7 +1020,7 @@ public class Tailer implements Runnable, AutoCloseable {
                     /*
                      * This can happen if the file
                      * - is overwritten with the exact same length of information
-                     * - gets "touched" 
+                     * - gets "touched"
                      * - Files.getLastModifiedTime returns a new timestamp but newer data is not yet there (
                      *   was reported to happen on busy systems or samba network shares, see IO-279)
                      * The default behaviour is to replay the whole file. If this is unsdesired in your usecase,
@@ -1028,7 +1029,7 @@ public class Tailer implements Runnable, AutoCloseable {
                     if (!ignoreTouch) {
                         position = 0;
                         reader.seek(position); // cannot be null here
-                        
+
                         // Now we can read new lines
                         position = readLines(reader);
                     }
