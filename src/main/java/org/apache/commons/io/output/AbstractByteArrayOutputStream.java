@@ -140,7 +140,6 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
         if (currentBufferIndex < buffers.size() - 1) {
             // Recycling old buffer
             filledBufferSum += currentBuffer.length;
-
             currentBufferIndex++;
             currentBuffer = buffers.get(currentBufferIndex);
         } else {
@@ -154,7 +153,6 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
                 newBufferSize = Math.max(currentBuffer.length << 1, newCount - filledBufferSum);
                 filledBufferSum += currentBuffer.length;
             }
-
             currentBufferIndex++;
             currentBuffer = IOUtils.byteArray(newBufferSize);
             buffers.add(currentBuffer);
