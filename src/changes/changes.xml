@@ -70,6 +70,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Javadoc fixes and improvements.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NPE in org.apache.commons.io.filefilter.WildcardFilter.accept(File).</action>
       <action dev="ggregory" type="fix" issue="IO-874" due-to="Andy Russell, Joerg Budischewski">FileUtils.forceDelete can delete a broken symlink again #756.</action>
+      <action dev="ggregory" type="fix"                due-to="Alex Benusovich">Fix infinite loop in AbstractByteArrayOutputStream. #758.</action>
       <!-- ADD -->
       <action dev="ggregory" type="add" issue="IO-875" due-to="Pierre Baumard, Gary Gregory">Add org.apache.commons.io.file.CountingPathVisitor.accept(Path, BasicFileAttributes) #743.</action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">Add org.apache.commons.io.Charsets.isAlias(Charset, String).</action>
