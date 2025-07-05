@@ -84,6 +84,10 @@ public class LockableFileWriter extends Writer {
             setBufferSize(AbstractByteArrayOutputStream.DEFAULT_SIZE);
         }
 
+        private File checkOriginFile() {
+            return checkOrigin().getFile();
+        }
+
         /**
          * Constructs a new instance.
          * <p>
@@ -108,7 +112,7 @@ public class LockableFileWriter extends Writer {
          */
         @Override
         public LockableFileWriter get() throws IOException {
-            return new LockableFileWriter(checkOrigin().getFile(), getCharset(), append, lockDirectory.getFile().toString());
+            return new LockableFileWriter(this);
         }
 
         /**
@@ -164,6 +168,11 @@ public class LockableFileWriter extends Writer {
 
     /** The lock file. */
     private final File lockFile;
+
+    private LockableFileWriter(final Builder builder) throws IOException {
+        this(builder.checkOriginFile(), builder.getCharset(), builder.append, builder.lockDirectory.getFile().toString());
+    }
+
 
     /**
      * Constructs a LockableFileWriter. If the file exists, it is overwritten.
