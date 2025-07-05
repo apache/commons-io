@@ -102,8 +102,7 @@ public class ReadAheadInputStream extends FilterInputStream {
          */
         @Override
         public ReadAheadInputStream get() throws IOException {
-            return new ReadAheadInputStream(getInputStream(), getBufferSize(), executorService != null ? executorService : newExecutorService(),
-                    executorService == null);
+            return new ReadAheadInputStream(this);
         }
 
         /**
@@ -195,6 +194,12 @@ public class ReadAheadInputStream extends FilterInputStream {
     private final boolean shutdownExecutorService;
 
     private final Condition asyncReadComplete = stateChangeLock.newCondition();
+
+    @SuppressWarnings("resource")
+    private ReadAheadInputStream(final Builder builder) throws IOException {
+        this(builder.getInputStream(), builder.getBufferSize(), builder.executorService != null ? builder.executorService : newExecutorService(),
+                builder.executorService == null);
+    }
 
     /**
      * Constructs an instance with the specified buffer size and read-ahead threshold
