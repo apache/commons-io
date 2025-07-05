@@ -91,6 +91,10 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
             // empty
         }
 
+        private byte[] checkOriginByteArray() throws IOException {
+            return checkOrigin().getByteArray();
+        }
+
         /**
          * Builds a new {@link UnsynchronizedByteArrayInputStream}.
          * <p>
@@ -114,7 +118,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
          */
         @Override
         public UnsynchronizedByteArrayInputStream get() throws IOException {
-            return new UnsynchronizedByteArrayInputStream(checkOrigin().getByteArray(), offset, length);
+            return new UnsynchronizedByteArrayInputStream(this);
         }
 
         @Override
@@ -200,6 +204,10 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      * The current mark (if any).
      */
     private int markedOffset;
+
+    private UnsynchronizedByteArrayInputStream(final Builder builder) throws IOException {
+        this(builder.checkOriginByteArray(), builder.offset, builder.length);
+    }
 
     /**
      * Constructs a new byte array input stream.
