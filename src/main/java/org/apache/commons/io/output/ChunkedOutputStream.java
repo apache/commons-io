@@ -93,7 +93,7 @@ public class ChunkedOutputStream extends FilterOutputStream {
          */
         @Override
         public ChunkedOutputStream get() throws IOException {
-            return new ChunkedOutputStream(getOutputStream(), getBufferSize());
+            return new ChunkedOutputStream(this);
         }
 
     }
@@ -112,6 +112,22 @@ public class ChunkedOutputStream extends FilterOutputStream {
      * The maximum chunk size to us when writing data arrays
      */
     private final int chunkSize;
+
+    /**
+     * Constructs a new stream that uses the specified chunk size.
+     *
+     * @param builder holds contruction data.
+     * @throws IOException if an I/O error occurs.
+     */
+    @SuppressWarnings("resource") // caller closes.
+    private ChunkedOutputStream(final Builder builder) throws IOException {
+        super(builder.getOutputStream());
+        final int bufferSize = builder.getBufferSize();
+        if (bufferSize <= 0) {
+            throw new IllegalArgumentException("chunkSize <= 0");
+        }
+        this.chunkSize = bufferSize;
+    }
 
     /**
      * Constructs a new stream that uses a chunk size of {@link IOUtils#DEFAULT_BUFFER_SIZE}.
@@ -141,6 +157,7 @@ public class ChunkedOutputStream extends FilterOutputStream {
         this.chunkSize = chunkSize;
     }
 
+    /* Package-private for testing. */
     int getChunkSize() {
         return chunkSize;
     }
