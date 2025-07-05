@@ -226,7 +226,7 @@ class TailerTest {
 
         final File file = new File(temporaryFolder, "testBufferBreak.txt");
         createFile(file, 0);
-        writeString(file, "SBTOURIST\n");
+        writeStrings(file, "SBTOURIST\n");
 
         final TestTailerListener listener = new TestTailerListener();
         try (Tailer tailer = new Tailer(file, listener, delay, false, 1)) {
@@ -366,7 +366,7 @@ class TailerTest {
             thread.start();
 
             // Write some lines to the file
-            writeString(file, "CRLF\r\n", "LF\n", "CR\r", "CRCR\r\r", "trail");
+            writeStrings(file, "CRLF\r\n", "LF\n", "CR\r", "CRCR\r\r", "trail");
             final long testDelayMillis = delayMillis * 10;
             TestUtils.sleep(testDelayMillis);
             final List<String> lines = listener.getLines();
@@ -592,7 +592,7 @@ class TailerTest {
             thread.start();
 
             // Write some lines to the file
-            write(file, "Line one", "Line two");
+            writeLines(file, "Line one", "Line two");
             final long testDelayMillis = delayMillis * 10;
             TestUtils.sleep(testDelayMillis);
             List<String> lines = listener.getLines();
@@ -602,7 +602,7 @@ class TailerTest {
             listener.clear();
 
             // Write another line to the file
-            write(file, "Line three");
+            writeLines(file, "Line three");
             TestUtils.sleep(testDelayMillis);
             lines = listener.getLines();
             assertEquals(1, lines.size(), "2 line count");
@@ -624,7 +624,7 @@ class TailerTest {
             TestUtils.sleep(testDelayMillis);
 
             // Write another line
-            write(file, "Line four");
+            writeLines(file, "Line four");
             TestUtils.sleep(testDelayMillis);
             lines = listener.getLines();
             assertEquals(1, lines.size(), "4 line count");
@@ -634,7 +634,7 @@ class TailerTest {
             // Stop
             thread.interrupt();
             TestUtils.sleep(testDelayMillis * 4);
-            write(file, "Line five");
+            writeLines(file, "Line five");
             assertEquals(0, listener.getLines().size(), "4 line count");
             assertNotNull(listener.exception, "Missing InterruptedException");
             assertTrue(listener.exception instanceof InterruptedException, "Unexpected Exception: " + listener.exception);
@@ -660,15 +660,15 @@ class TailerTest {
             thread.start();
 
             // write a few lines
-            write(file, "line1", "line2", "line3");
+            writeLines(file, "line1", "line2", "line3");
             TestUtils.sleep(testDelayMillis);
 
             // write a few lines
-            write(file, "line4", "line5", "line6");
+            writeLines(file, "line4", "line5", "line6");
             TestUtils.sleep(testDelayMillis);
 
             // write a few lines
-            write(file, "line7", "line8", "line9");
+            writeLines(file, "line7", "line8", "line9");
             TestUtils.sleep(testDelayMillis);
 
             // May be > 3 times due to underlying OS behavior wrt streams
@@ -688,13 +688,13 @@ class TailerTest {
             thread.start();
 
             // Write some lines to the file
-            writeString(file, "Line");
+            writeStrings(file, "Line");
 
             TestUtils.sleep(delayMillis * 2);
             List<String> lines = listener.getLines();
             assertEquals(0, lines.size(), "1 line count");
 
-            writeString(file, " one\n");
+            writeStrings(file, " one\n");
             TestUtils.sleep(delayMillis * 4);
             lines = listener.getLines();
 
@@ -723,7 +723,7 @@ class TailerTest {
             thread.start();
 
             // Write some lines to the file
-            write(file, "Line one");
+            writeLines(file, "Line one");
             final long testDelayMillis = delayMillis * 10;
             TestUtils.sleep(testDelayMillis);
             List<String> lines = listener.getLines();
@@ -757,7 +757,7 @@ class TailerTest {
             thread.start();
 
             // Write some lines to the file
-            write(file, "Line one");
+            writeLines(file, "Line one");
             final long testDelayMillis = delayMillis * 10;
             TestUtils.sleep(testDelayMillis);
             List<String> lines = listener.getLines();
@@ -776,7 +776,7 @@ class TailerTest {
     }
 
     private void validateTailer(final TestTailerListener listener, final File file) throws IOException, InterruptedException {
-        write(file, "foo");
+        writeLines(file, "foo");
         final int timeout = 30;
         final TimeUnit timeoutUnit = TimeUnit.SECONDS;
         assertTrue(listener.awaitExpectedLines(timeout, timeoutUnit), () -> String.format("await timed out after %s %s", timeout, timeoutUnit));
@@ -784,7 +784,7 @@ class TailerTest {
     }
 
     /** Appends lines to a file */
-    private void write(final File file, final String... lines) throws IOException {
+    private void writeLines(final File file, final String... lines) throws IOException {
         try (Writer writer = Files.newBufferedWriter(file.toPath(), StandardOpenOption.APPEND)) {
             for (final String line : lines) {
                 writer.write(line + "\n");
@@ -793,7 +793,7 @@ class TailerTest {
     }
 
     /** Appends strings to a file */
-    private void writeString(final File file, final String... strings) throws IOException {
+    private void writeStrings(final File file, final String... strings) throws IOException {
         try (Writer writer = Files.newBufferedWriter(file.toPath(), StandardOpenOption.APPEND)) {
             for (final String string : strings) {
                 writer.write(string);
