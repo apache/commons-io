@@ -714,7 +714,10 @@ public class Tailer implements Runnable, AutoCloseable {
      */
     private volatile boolean run = true;
 
-    private boolean ignoreTouch = DEFAULT_IGNORE_TOUCH;
+    /**
+     * Whether to ignore a touch on the file, a change in timestamp when the contents stay the same.
+     */
+    private final boolean ignoreTouch;
 
     /**
      * Creates a Tailer for the given file, with a specified buffer size.
