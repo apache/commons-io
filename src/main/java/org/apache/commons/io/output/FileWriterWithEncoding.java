@@ -94,6 +94,10 @@ public class FileWriterWithEncoding extends ProxyWriter {
             // empty
         }
 
+        private File checkOriginFile() {
+            return checkOrigin().getFile();
+        }
+
         /**
          * Builds a new {@link FileWriterWithEncoding}.
          * <p>
@@ -117,11 +121,15 @@ public class FileWriterWithEncoding extends ProxyWriter {
          */
         @Override
         public FileWriterWithEncoding get() throws IOException {
+            return new FileWriterWithEncoding(this);
+        }
+
+        private Object getEncoder() {
             if (charsetEncoder != null && getCharset() != null && !charsetEncoder.charset().equals(getCharset())) {
                 throw new IllegalStateException(String.format("Mismatched Charset(%s) and CharsetEncoder(%s)", getCharset(), charsetEncoder.charset()));
             }
             final Object encoder = charsetEncoder != null ? charsetEncoder : getCharset();
-            return new FileWriterWithEncoding(initWriter(checkOrigin().getFile(), encoder, append));
+            return encoder;
         }
 
         /**
@@ -191,6 +199,11 @@ public class FileWriterWithEncoding extends ProxyWriter {
             }
             throw ex;
         }
+    }
+
+    @SuppressWarnings("resource") // caller closes
+    private FileWriterWithEncoding(final Builder builder) throws IOException {
+        super(initWriter(builder.checkOriginFile(), builder.getEncoder(), builder.append));
     }
 
     /**
