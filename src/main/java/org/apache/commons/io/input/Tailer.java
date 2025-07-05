@@ -323,6 +323,7 @@ public class Tailer implements Runnable, AutoCloseable {
          *        ignoreTouch=true does nothing in that case.
          *
          * @return {@code this} instance.
+         * @since 2.20.0
          */
         public Builder setIgnoreTouch(final boolean ignoreTouch) {
             this.ignoreTouch = ignoreTouch;
