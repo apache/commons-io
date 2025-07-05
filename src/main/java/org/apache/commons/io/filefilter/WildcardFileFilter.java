@@ -107,7 +107,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
 
         @Override
         public WildcardFileFilter get() {
-            return new WildcardFileFilter(ioCase, wildcards);
+            return new WildcardFileFilter(this);
         }
 
         /**
@@ -166,6 +166,10 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
 
     /** Whether the comparison is case-sensitive. */
     private final IOCase ioCase;
+
+    private WildcardFileFilter(final Builder builder) {
+        this(builder.ioCase, builder.wildcards);
+    }
 
     /**
      * Constructs a new wildcard filter for an array of wildcards specifying case-sensitivity.
