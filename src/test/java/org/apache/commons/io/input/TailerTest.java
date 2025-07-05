@@ -578,76 +578,6 @@ class TailerTest {
     }
 
     @Test
-    void testTailerIgnoreTouch() throws Exception {
-        // Create & start the Tailer
-        final long delayMillis = 50;
-        final File file = new File(temporaryFolder, "tailer1-testIgnoreTouch.txt");
-        createFile(file, 0);
-        final TestTailerListener listener = new TestTailerListener();
-        try (Tailer tailer = Tailer.builder()
-                .setFile(file)
-                .setTailerListener(listener)
-                .setDelayDuration(Duration.ofMillis(delayMillis))
-                .setStartThread(false)
-                .setIgnoreTouch(true)
-                .get()) {
-            final Thread thread = new Thread(tailer);
-            thread.start();
-
-            // Write some lines to the file
-            write(file, "Line one");
-            final long testDelayMillis = delayMillis * 10;
-            TestUtils.sleep(testDelayMillis);
-            List<String> lines = listener.getLines();
-            assertEquals(1, lines.size(), "1 line count");
-            assertEquals("Line one", lines.get(0), "1 line 1");
-            listener.clear();
-
-            // touch the file
-            file.setLastModified(System.currentTimeMillis());
-            TestUtils.sleep(testDelayMillis);
-            lines = listener.getLines();
-            assertEquals(0, lines.size(), "nothing should have changed by touching");
-        }
-    }
-
-    @Test
-    void testTailerReissueOnTouch() throws Exception {
-        // Create & start the Tailer
-        final long delayMillis = 50;
-        final File file = new File(temporaryFolder, "tailer1-testReissueOnTouch.txt");
-        createFile(file, 0);
-        final TestTailerListener listener = new TestTailerListener();
-        try (Tailer tailer = Tailer.builder()
-                .setFile(file)
-                .setTailerListener(listener)
-                .setDelayDuration(Duration.ofMillis(delayMillis))
-                .setStartThread(false)
-                .setIgnoreTouch(false)
-                .get()) {
-            final Thread thread = new Thread(tailer);
-            thread.start();
-
-            // Write some lines to the file
-            write(file, "Line one");
-            final long testDelayMillis = delayMillis * 10;
-            TestUtils.sleep(testDelayMillis);
-            List<String> lines = listener.getLines();
-            assertEquals(1, lines.size(), "1 line count");
-            assertEquals("Line one", lines.get(0), "1 line 1");
-            listener.clear();
-
-            // touch the file
-            file.setLastModified(System.currentTimeMillis());
-            TestUtils.sleep(testDelayMillis);
-            lines = listener.getLines();
-            assertEquals(1, lines.size(), "1 line count");
-            assertEquals("Line one", lines.get(0), "1 line 1");
-            listener.clear();
-        }
-    }
-
-    @Test
     void testTailer() throws Exception {
 
         // Create & start the Tailer
@@ -771,6 +701,76 @@ class TailerTest {
             assertEquals(1, lines.size(), "1 line count");
             assertEquals("Line one", lines.get(0), "1 line 1");
 
+            listener.clear();
+        }
+    }
+
+    @Test
+    void testTailerIgnoreTouch() throws Exception {
+        // Create & start the Tailer
+        final long delayMillis = 50;
+        final File file = new File(temporaryFolder, "tailer1-testIgnoreTouch.txt");
+        createFile(file, 0);
+        final TestTailerListener listener = new TestTailerListener();
+        try (Tailer tailer = Tailer.builder()
+                .setFile(file)
+                .setTailerListener(listener)
+                .setDelayDuration(Duration.ofMillis(delayMillis))
+                .setStartThread(false)
+                .setIgnoreTouch(true)
+                .get()) {
+            final Thread thread = new Thread(tailer);
+            thread.start();
+
+            // Write some lines to the file
+            write(file, "Line one");
+            final long testDelayMillis = delayMillis * 10;
+            TestUtils.sleep(testDelayMillis);
+            List<String> lines = listener.getLines();
+            assertEquals(1, lines.size(), "1 line count");
+            assertEquals("Line one", lines.get(0), "1 line 1");
+            listener.clear();
+
+            // touch the file
+            file.setLastModified(System.currentTimeMillis());
+            TestUtils.sleep(testDelayMillis);
+            lines = listener.getLines();
+            assertEquals(0, lines.size(), "nothing should have changed by touching");
+        }
+    }
+
+    @Test
+    void testTailerReissueOnTouch() throws Exception {
+        // Create & start the Tailer
+        final long delayMillis = 50;
+        final File file = new File(temporaryFolder, "tailer1-testReissueOnTouch.txt");
+        createFile(file, 0);
+        final TestTailerListener listener = new TestTailerListener();
+        try (Tailer tailer = Tailer.builder()
+                .setFile(file)
+                .setTailerListener(listener)
+                .setDelayDuration(Duration.ofMillis(delayMillis))
+                .setStartThread(false)
+                .setIgnoreTouch(false)
+                .get()) {
+            final Thread thread = new Thread(tailer);
+            thread.start();
+
+            // Write some lines to the file
+            write(file, "Line one");
+            final long testDelayMillis = delayMillis * 10;
+            TestUtils.sleep(testDelayMillis);
+            List<String> lines = listener.getLines();
+            assertEquals(1, lines.size(), "1 line count");
+            assertEquals("Line one", lines.get(0), "1 line 1");
+            listener.clear();
+
+            // touch the file
+            file.setLastModified(System.currentTimeMillis());
+            TestUtils.sleep(testDelayMillis);
+            lines = listener.getLines();
+            assertEquals(1, lines.size(), "1 line count");
+            assertEquals("Line one", lines.get(0), "1 line 1");
             listener.clear();
         }
     }

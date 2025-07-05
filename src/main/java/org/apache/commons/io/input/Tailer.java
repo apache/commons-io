@@ -138,8 +138,6 @@ import org.apache.commons.io.file.attribute.FileTimes;
  *        VFS</a>.
  */
 public class Tailer implements Runnable, AutoCloseable {
-    private static final boolean DEFAULT_IGNORE_TOUCH = false;
-
     // @formatter:off
     /**
      * Builds a new {@link Tailer}.
@@ -248,6 +246,23 @@ public class Tailer implements Runnable, AutoCloseable {
         }
 
         /**
+         * Sets ignoreTouch behaviour
+         *
+         * @param ignoreTouch This can be useful when your watched file gets touched (meaning it gets more recent timestamps
+         *        without changing the file) for some reason or when you are working on file systems where timestamp
+         *        is updated before content.
+         *        The default behaviour (ignoreTouch=false) would then reissue the whole current file, while
+         *        ignoreTouch=true does nothing in that case.
+         *
+         * @return {@code this} instance.
+         * @since 2.20.0
+         */
+        public Builder setIgnoreTouch(final boolean ignoreTouch) {
+            this.ignoreTouch = ignoreTouch;
+            return this;
+        }
+
+        /**
          * Sets the origin.
          *
          * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
@@ -310,23 +325,6 @@ public class Tailer implements Runnable, AutoCloseable {
          */
         public Builder setTailFromEnd(final boolean end) {
             this.tailFromEnd = end;
-            return this;
-        }
-
-        /**
-         * Sets ignoreTouch behaviour
-         *
-         * @param ignoreTouch This can be useful when your watched file gets touched (meaning it gets more recent timestamps
-         *        without changing the file) for some reason or when you are working on file systems where timestamp
-         *        is updated before content.
-         *        The default behaviour (ignoreTouch=false) would then reissue the whole current file, while
-         *        ignoreTouch=true does nothing in that case.
-         *
-         * @return {@code this} instance.
-         * @since 2.20.0
-         */
-        public Builder setIgnoreTouch(final boolean ignoreTouch) {
-            this.ignoreTouch = ignoreTouch;
             return this;
         }
     }
@@ -490,6 +488,8 @@ public class Tailer implements Runnable, AutoCloseable {
             return "TailablePath [file=" + path + ", linkOptions=" + Arrays.toString(linkOptions) + "]";
         }
     }
+
+    private static final boolean DEFAULT_IGNORE_TOUCH = false;
 
     private static final int DEFAULT_DELAY_MILLIS = 1000;
 
