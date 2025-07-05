@@ -97,7 +97,7 @@ public class XmlStreamWriter extends Writer {
          */
         @Override
         public XmlStreamWriter get() throws IOException {
-            return new XmlStreamWriter(getOutputStream(), getCharset());
+            return new XmlStreamWriter(this);
         }
 
     }
@@ -123,6 +123,11 @@ public class XmlStreamWriter extends Writer {
     private Writer writer;
 
     private Charset charset;
+
+    @SuppressWarnings("resource") // caller closes.
+    private XmlStreamWriter(final Builder builder) throws IOException {
+        this(builder.getOutputStream(), builder.getCharset());
+    }
 
     /**
      * Constructs a new XML stream writer for the specified file
