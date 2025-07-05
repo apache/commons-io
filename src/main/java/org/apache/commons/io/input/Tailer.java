@@ -138,6 +138,7 @@ import org.apache.commons.io.file.attribute.FileTimes;
  *        VFS</a>.
  */
 public class Tailer implements Runnable, AutoCloseable {
+    private static final boolean DEFAULT_IGNORE_TOUCH = false;
 
     // @formatter:off
     /**
@@ -186,6 +187,7 @@ public class Tailer implements Runnable, AutoCloseable {
         private boolean tailFromEnd;
         private boolean reOpen;
         private boolean startThread = true;
+        private boolean ignoreTouch = DEFAULT_IGNORE_TOUCH;
         private ExecutorService executorService = Executors.newSingleThreadExecutor(Builder::newDaemonThread);
 
         /**
@@ -216,7 +218,7 @@ public class Tailer implements Runnable, AutoCloseable {
          */
         @Override
         public Tailer get() {
-            final Tailer tailer = new Tailer(tailable, getCharset(), tailerListener, delayDuration, tailFromEnd, reOpen, getBufferSize());
+            final Tailer tailer = new Tailer(tailable, getCharset(), tailerListener, delayDuration, tailFromEnd, reOpen, getBufferSize(), ignoreTouch);
             if (startThread) {
                 executorService.submit(tailer);
             }
@@ -308,6 +310,23 @@ public class Tailer implements Runnable, AutoCloseable {
          */
         public Builder setTailFromEnd(final boolean end) {
             this.tailFromEnd = end;
+            return this;
+        }
+
+        /**
+         * Sets ignoreTouch behaviour
+         *
+         * @param ignoreTouch This can be useful when your watched file gets touched (meaning it gets more recent timestamps
+         *        without changing the file) for some reason or when you are working on file systems where timestamp
+         *        is updated before content.
+         *        The default behaviour (ignoreTouch=false) would then reissue the whole current file, while
+         *        ignoreTouch=true does nothing in that case.
+         *
+         * @return {@code this} instance.
+         * @since 2.20.0
+         */
+        public Builder setIgnoreTouch(final boolean ignoreTouch) {
+            this.ignoreTouch = ignoreTouch;
             return this;
         }
     }
@@ -695,6 +714,8 @@ public class Tailer implements Runnable, AutoCloseable {
      */
     private volatile boolean run = true;
 
+    private boolean ignoreTouch = DEFAULT_IGNORE_TOUCH;
+
     /**
      * Creates a Tailer for the given file, with a specified buffer size.
      *
@@ -710,7 +731,7 @@ public class Tailer implements Runnable, AutoCloseable {
     @Deprecated
     public Tailer(final File file, final Charset charset, final TailerListener listener, final long delayMillis, final boolean end, final boolean reOpen,
         final int bufSize) {
-        this(new TailablePath(file.toPath()), charset, listener, Duration.ofMillis(delayMillis), end, reOpen, bufSize);
+        this(new TailablePath(file.toPath()), charset, listener, Duration.ofMillis(delayMillis), end, reOpen, bufSize, DEFAULT_IGNORE_TOUCH);
     }
 
     /**
@@ -807,10 +828,11 @@ public class Tailer implements Runnable, AutoCloseable {
      * @param delayDuration the delay between checks of the file for new content in milliseconds.
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @param reOpen if true, close and reopen the file between reading chunks
+     * @param ignoreTouch if true, file timestamp changes without content change get ignored
      * @param bufferSize Buffer size
      */
     private Tailer(final Tailable tailable, final Charset charset, final TailerListener listener, final Duration delayDuration, final boolean end,
-        final boolean reOpen, final int bufferSize) {
+        final boolean reOpen, final int bufferSize, final boolean ignoreTouch) {
         this.tailable = Objects.requireNonNull(tailable, "tailable");
         this.listener = Objects.requireNonNull(listener, "listener");
         this.delayDuration = delayDuration;
@@ -821,6 +843,7 @@ public class Tailer implements Runnable, AutoCloseable {
         listener.init(this);
         this.reOpen = reOpen;
         this.charset = charset;
+        this.ignoreTouch = ignoreTouch;
     }
 
     /**
@@ -996,14 +1019,22 @@ public class Tailer implements Runnable, AutoCloseable {
                     last = tailable.lastModifiedFileTime();
                 } else if (newer) {
                     /*
-                     * This can happen if the file is truncated or overwritten with the exact same length of information. In cases like
-                     * this, the file position needs to be reset
+                     * This can happen if the file
+                     * - is overwritten with the exact same length of information
+                     * - gets "touched"
+                     * - Files.getLastModifiedTime returns a new timestamp but newer data is not yet there (
+                     *   was reported to happen on busy systems or samba network shares, see IO-279)
+                     * The default behaviour is to replay the whole file. If this is unsdesired in your usecase,
+                     * use the ignoreTouch builder flag
                      */
-                    position = 0;
-                    reader.seek(position); // cannot be null here
+                    if (!ignoreTouch) {
+                        position = 0;
+                        reader.seek(position); // cannot be null here
 
-                    // Now we can read new lines
-                    position = readLines(reader);
+                        // Now we can read new lines
+                        position = readLines(reader);
+                    }
+                    // we eitherway continue with the new timestamp
                     last = tailable.lastModifiedFileTime();
                 }
                 if (reOpen && reader != null) {
