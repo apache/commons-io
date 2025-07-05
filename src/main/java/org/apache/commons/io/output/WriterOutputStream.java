@@ -137,7 +137,7 @@ public class WriterOutputStream extends OutputStream {
          */
         @Override
         public WriterOutputStream get() throws IOException {
-            return new WriterOutputStream(getWriter(), charsetDecoder, getBufferSize(), writeImmediately);
+            return new WriterOutputStream(this);
         }
 
         @Override
@@ -244,6 +244,11 @@ public class WriterOutputStream extends OutputStream {
      * CharBuffer used as output for the decoder. It should be somewhat larger as we write from this buffer to the underlying Writer.
      */
     private final CharBuffer decoderOut;
+
+    @SuppressWarnings("resource") // caller closes.
+    private WriterOutputStream(final Builder builder) throws IOException {
+        this(builder.getWriter(), builder.charsetDecoder, builder.getBufferSize(), builder.writeImmediately);
+    }
 
     /**
      * Constructs a new {@link WriterOutputStream} that uses the virtual machine's {@link Charset#defaultCharset() default charset} and with a default output
