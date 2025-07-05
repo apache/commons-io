@@ -113,7 +113,7 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
          */
         @Override
         public UnsynchronizedBufferedInputStream get() throws IOException {
-            return new UnsynchronizedBufferedInputStream(getInputStream(), getBufferSize());
+            return new UnsynchronizedBufferedInputStream(this);
         }
 
     }
@@ -147,16 +147,18 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
      * Constructs a new {@code BufferedInputStream} on the {@link InputStream} {@code in}. The buffer size is specified by the parameter {@code size} and all
      * reads are now filtered through this stream.
      *
-     * @param in   the input stream the buffer reads from.
-     * @param size the size of buffer to allocate.
+     * @param builder   A builder providing the input stream and buffer size.
+     * @throws IOException if an I/O error occurs.
      * @throws IllegalArgumentException if {@code size < 0}.
      */
-    private UnsynchronizedBufferedInputStream(final InputStream in, final int size) {
-        super(in);
-        if (size <= 0) {
+    @SuppressWarnings("resource")
+    private UnsynchronizedBufferedInputStream(final Builder builder) throws IOException {
+        super(builder.getInputStream());
+        final int bufferSize = builder.getBufferSize();
+        if (bufferSize <= 0) {
             throw new IllegalArgumentException("Size must be > 0");
         }
-        buffer = new byte[size];
+        buffer = new byte[bufferSize];
     }
 
     /**
