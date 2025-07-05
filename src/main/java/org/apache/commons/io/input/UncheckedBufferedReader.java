@@ -98,11 +98,10 @@ public final class UncheckedBufferedReader extends BufferedReader {
          * @see #getBufferSize()
          * @see #getUnchecked()
          */
-        @SuppressWarnings("resource")
         @Override
         public UncheckedBufferedReader get() {
             // This an unchecked class, so this method is as well.
-            return Uncheck.get(() -> new UncheckedBufferedReader(getReader(), getBufferSize()));
+            return Uncheck.get(() -> new UncheckedBufferedReader(this));
         }
 
     }
@@ -119,12 +118,13 @@ public final class UncheckedBufferedReader extends BufferedReader {
     /**
      * Constructs a buffering character-input stream that uses an input buffer of the specified size.
      *
-     * @param reader     A Reader
-     * @param bufferSize Input-buffer size
-     * @throws IllegalArgumentException If {@code bufferSize <= 0}
+     * @param builder A Builder providing the underlying reader and buffer size.
+     * @throws IOException              if an I/O error occurs.
+     * @throws IllegalArgumentException If {@code bufferSize <= 0}.
      */
-    private UncheckedBufferedReader(final Reader reader, final int bufferSize) {
-        super(reader, bufferSize);
+    @SuppressWarnings("resource")
+    private UncheckedBufferedReader(final Builder builder) throws IOException {
+        super(builder.getReader(), builder.getBufferSize());
     }
 
     /**
