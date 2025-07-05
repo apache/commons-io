@@ -87,7 +87,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
          */
         @Override
         public UnsynchronizedByteArrayOutputStream get() {
-            return new UnsynchronizedByteArrayOutputStream(getBufferSize());
+            return new UnsynchronizedByteArrayOutputStream(this);
         }
 
     }
@@ -157,6 +157,10 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
     @Deprecated
     public UnsynchronizedByteArrayOutputStream() {
         this(DEFAULT_SIZE);
+    }
+
+    private UnsynchronizedByteArrayOutputStream(final Builder builder) {
+        this(builder.getBufferSize());
     }
 
     /**
