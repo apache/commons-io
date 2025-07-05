@@ -246,14 +246,13 @@ public class Tailer implements Runnable, AutoCloseable {
         }
 
         /**
-         * Sets ignoreTouch behaviour
+         * Sets whether a change in timestamp causes the file to be re-read.
+         * <p>
+         * Useful when your watched file gets touched (the timestamps is more recent without changing the file) or when a file system updates a timestamp before
+         * a file's content. The default (false) re-reads the current file, while true does nothing.
+         * </p>
          *
-         * @param ignoreTouch This can be useful when your watched file gets touched (meaning it gets more recent timestamps
-         *        without changing the file) for some reason or when you are working on file systems where timestamp
-         *        is updated before content.
-         *        The default behaviour (ignoreTouch=false) would then reissue the whole current file, while
-         *        ignoreTouch=true does nothing in that case.
-         *
+         * @param ignoreTouch Whether a change in timestamp causes the file to be re-read.
          * @return {@code this} instance.
          * @since 2.20.0
          */
