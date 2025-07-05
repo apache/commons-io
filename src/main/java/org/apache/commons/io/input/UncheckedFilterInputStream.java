@@ -20,7 +20,6 @@ package org.apache.commons.io.input;
 import java.io.BufferedReader;
 import java.io.FilterInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UncheckedIOException;
 
 import org.apache.commons.io.build.AbstractStreamBuilder;
@@ -90,11 +89,10 @@ public final class UncheckedFilterInputStream extends FilterInputStream {
          * @see #getInputStream()
          * @see #getUnchecked()
          */
-        @SuppressWarnings("resource")
         @Override
         public UncheckedFilterInputStream get() {
             // This an unchecked class, so this method is as well.
-            return Uncheck.get(() -> new UncheckedFilterInputStream(getInputStream()));
+            return Uncheck.get(() -> new UncheckedFilterInputStream(this));
         }
 
     }
@@ -111,11 +109,12 @@ public final class UncheckedFilterInputStream extends FilterInputStream {
     /**
      * Constructs a {@link UncheckedFilterInputStream}.
      *
-     * @param inputStream the underlying input stream, or {@code null} if this instance is to be created without an
-     *        underlying stream.
+     * @param builder A builder providing the underlying input stream.
+     * @throws IOException
      */
-    private UncheckedFilterInputStream(final InputStream inputStream) {
-        super(inputStream);
+    @SuppressWarnings("resource") // caller closes
+    private UncheckedFilterInputStream(final Builder builder) throws IOException {
+        super(builder.getInputStream());
     }
 
     /**
