@@ -90,10 +90,9 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
          * @see AbstractOrigin#getFile()
          * @see #getUnchecked()
          */
-        @SuppressWarnings("resource") // caller closes
         @Override
         public RandomAccessFileInputStream get() throws IOException {
-            return new RandomAccessFileInputStream(getRandomAccessFile(), propagateClose);
+            return new RandomAccessFileInputStream(this);
         }
 
         /**
@@ -132,6 +131,11 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
 
     private final boolean propagateClose;
     private final RandomAccessFile randomAccessFile;
+
+    @SuppressWarnings("resource") // caller closes.
+    private RandomAccessFileInputStream(final Builder builder) throws IOException {
+        this(builder.getRandomAccessFile(), builder.propagateClose);
+    }
 
     /**
      * Constructs a new instance configured to leave the underlying file open when this stream is closed.
