@@ -68,12 +68,17 @@ public class ProxyOutputStream extends FilterOutputStream {
          * @see #getOutputStream()
          * @see #getUnchecked()
          */
-        @SuppressWarnings("resource") // caller closes
         @Override
         public ProxyOutputStream get() throws IOException {
-            return new ProxyOutputStream(getOutputStream());
+            return new ProxyOutputStream(this);
         }
 
+    }
+
+    @SuppressWarnings("resource") // caller closes
+    ProxyOutputStream(final Builder builder) throws IOException {
+        // the delegate is stored in a protected superclass variable named 'out'
+        super(builder.getOutputStream());
     }
 
     /**
