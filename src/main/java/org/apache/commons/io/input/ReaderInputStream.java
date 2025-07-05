@@ -143,7 +143,7 @@ public class ReaderInputStream extends AbstractInputStream {
          */
         @Override
         public ReaderInputStream get() throws IOException {
-            return new ReaderInputStream(getReader(), charsetEncoder, getBufferSize());
+            return new ReaderInputStream(this);
         }
 
         CharsetEncoder getCharsetEncoder() {
@@ -219,6 +219,11 @@ public class ReaderInputStream extends AbstractInputStream {
     private CoderResult lastCoderResult;
 
     private boolean endOfInput;
+
+    @SuppressWarnings("resource") // caller closes.
+    private ReaderInputStream(final Builder builder) throws IOException {
+        this(builder.getReader(), builder.charsetEncoder, builder.getBufferSize());
+    }
 
     /**
      * Constructs a new {@link ReaderInputStream} that uses the virtual machine's {@link Charset#defaultCharset() default charset} with a default input buffer
