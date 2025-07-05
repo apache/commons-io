@@ -98,7 +98,7 @@ public class UnsynchronizedFilterInputStream extends InputStream {
          */
         @Override
         public UnsynchronizedFilterInputStream get() throws IOException {
-            return new UnsynchronizedFilterInputStream(getInputStream());
+            return new UnsynchronizedFilterInputStream(this);
         }
 
     }
@@ -116,6 +116,10 @@ public class UnsynchronizedFilterInputStream extends InputStream {
      * The source input stream that is filtered.
      */
     protected volatile InputStream inputStream;
+
+    UnsynchronizedFilterInputStream(final Builder builder) throws IOException {
+        this.inputStream = builder.getInputStream();
+    }
 
     /**
      * Constructs a new {@code FilterInputStream} with the specified input stream as source.
