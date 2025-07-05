@@ -142,6 +142,10 @@ public class FileAlterationObserver implements Serializable {
             // empty
         }
 
+        private File checkOriginFile() {
+            return checkOrigin().getFile();
+        }
+
         /**
          * Gets a new {@link FileAlterationObserver} instance.
          *
@@ -150,7 +154,7 @@ public class FileAlterationObserver implements Serializable {
          */
         @Override
         public FileAlterationObserver get() throws IOException {
-            return new FileAlterationObserver(rootEntry != null ? rootEntry : new FileEntry(checkOrigin().getFile()), fileFilter, toComparator(ioCase));
+            return new FileAlterationObserver(this);
         }
 
         /**
@@ -230,6 +234,10 @@ public class FileAlterationObserver implements Serializable {
      * Compares file names.
      */
     private final Comparator<File> comparator;
+
+    private FileAlterationObserver(final Builder builder) {
+        this(builder.rootEntry != null ? builder.rootEntry : new FileEntry(builder.checkOriginFile()), builder.fileFilter, toComparator(builder.ioCase));
+    }
 
     /**
      * Constructs an observer for the specified directory.
