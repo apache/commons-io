@@ -188,7 +188,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          */
         @Override
         public ValidatingObjectInputStream get() throws IOException {
-            return new ValidatingObjectInputStream(getInputStream(), predicate);
+            return new ValidatingObjectInputStream(this);
         }
 
         /**
@@ -275,6 +275,11 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
     }
 
     private final ObjectStreamClassPredicate predicate;
+
+    @SuppressWarnings("resource") // caller closes/
+    private ValidatingObjectInputStream(final Builder builder) throws IOException {
+        this(builder.getInputStream(), builder.predicate);
+    }
 
     /**
      * Constructs an instance to deserialize the specified input stream. At least one accept method needs to be called to specify which classes can be
