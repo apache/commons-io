@@ -120,7 +120,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
          */
         @Override
         public ReversedLinesFileReader get() throws IOException {
-            return new ReversedLinesFileReader(getPath(), getBufferSize(), getCharset());
+            return new ReversedLinesFileReader(this);
         }
 
     }
@@ -329,9 +329,9 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
             // however byte order has to be specified
             byteDecrement = 2;
         } else if (this.charset == StandardCharsets.UTF_16) {
-            throw new UnsupportedEncodingException("For UTF-16, you need to specify the byte order (use UTF-16BE or " + "UTF-16LE)");
+            throw new UnsupportedEncodingException("For UTF-16, you need to specify the byte order (use UTF-16BE or UTF-16LE)");
         } else {
-            throw new UnsupportedEncodingException("Encoding " + charset + " is not supported yet (feel free to " + "submit a patch)");
+            throw new UnsupportedEncodingException("Encoding " + charset + " is not supported yet (feel free to submit a patch)");
         }
         // NOTE: The new line sequences are matched in the order given, so it is
         // important that \r\n is BEFORE \n
