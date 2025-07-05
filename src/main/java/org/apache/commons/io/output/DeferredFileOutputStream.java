@@ -110,7 +110,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
          */
         @Override
         public DeferredFileOutputStream get() {
-            return new DeferredFileOutputStream(threshold, outputFile, prefix, suffix, directory, getBufferSize());
+            return new DeferredFileOutputStream(this);
         }
 
         /**
@@ -322,22 +322,15 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     /**
      * Constructs an instance of this class which will trigger an event at the specified threshold, and save data either to a file beyond that point.
      *
-     * @param threshold         The number of bytes at which to trigger an event.
-     * @param outputFile        The file to which data is saved beyond the threshold.
-     * @param prefix            Prefix to use for the temporary file.
-     * @param suffix            Suffix to use for the temporary file.
-     * @param directory         Temporary file directory.
-     * @param initialBufferSize The initial size of the in memory buffer.
-     * @throws IllegalArgumentException if initialBufferSize &lt; 0.
+     * @param builder         The construction data source.
      */
-    private DeferredFileOutputStream(final int threshold, final Path outputFile, final String prefix, final String suffix, final Path directory,
-            final int initialBufferSize) {
-        super(threshold);
-        this.outputPath = toPath(outputFile, null);
-        this.prefix = prefix;
-        this.suffix = suffix;
-        this.directory = toPath(directory, PathUtils::getTempDirectory);
-        this.memoryOutputStream = new ByteArrayOutputStream(checkBufferSize(initialBufferSize));
+    private DeferredFileOutputStream(final Builder builder) {
+        super(builder.threshold);
+        this.outputPath = toPath(builder.outputFile, null);
+        this.prefix = builder.prefix;
+        this.suffix = builder.suffix;
+        this.directory = toPath(builder.directory, PathUtils::getTempDirectory);
+        this.memoryOutputStream = new ByteArrayOutputStream(checkBufferSize(builder.getBufferSize()));
         this.currentOutputStream = memoryOutputStream;
     }
 
