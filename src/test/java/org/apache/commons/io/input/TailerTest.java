@@ -724,19 +724,29 @@ class TailerTest {
 
             // Write some lines to the file
             writeLines(file, "Line one");
-            final long testDelayMillis = delayMillis * 10;
-            TestUtils.sleep(testDelayMillis);
-            List<String> lines = listener.getLines();
+            List<String> lines = expectLinesWithLongTimeout(listener, delayMillis, 20);
             assertEquals(1, lines.size(), "1 line count");
             assertEquals("Line one", lines.get(0), "1 line 1");
             listener.clear();
 
             // touch the file
+            TestUtils.sleepTillNextFullSecond();  // ensure to be within the next second because of posix fs limitation
             file.setLastModified(System.currentTimeMillis());
-            TestUtils.sleep(testDelayMillis);
+            TestUtils.sleep(delayMillis * 10);
             lines = listener.getLines();
             assertEquals(0, lines.size(), "nothing should have changed by touching");
         }
+    }
+
+    private List<String> expectLinesWithLongTimeout(final TestTailerListener listener, final long minDelay, int count) throws Exception {
+        for (int i = 0; i < count ; i++) {
+            TestUtils.sleep(minDelay);
+            final List<String> lines = listener.getLines();
+            if (lines.size() > 0) {
+                return lines;
+            }
+        }
+        throw new RuntimeException("waiting for TestTailerListener.getLines() timed out after " + (count * minDelay) + " ms");
     }
 
     @Test
@@ -758,17 +768,15 @@ class TailerTest {
 
             // Write some lines to the file
             writeLines(file, "Line one");
-            final long testDelayMillis = delayMillis * 10;
-            TestUtils.sleep(testDelayMillis);
-            List<String> lines = listener.getLines();
+            List<String> lines = expectLinesWithLongTimeout(listener, delayMillis, 50);
             assertEquals(1, lines.size(), "1 line count");
             assertEquals("Line one", lines.get(0), "1 line 1");
             listener.clear();
 
             // touch the file
+            TestUtils.sleepTillNextFullSecond(); // ensure to be within the next second because of posix fs limitation
             file.setLastModified(System.currentTimeMillis());
-            TestUtils.sleep(testDelayMillis);
-            lines = listener.getLines();
+            lines = expectLinesWithLongTimeout(listener, delayMillis, 20);
             assertEquals(1, lines.size(), "1 line count");
             assertEquals("Line one", lines.get(0), "1 line 1");
             listener.clear();
