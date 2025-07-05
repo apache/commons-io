@@ -91,11 +91,10 @@ public final class UncheckedFilterReader extends FilterReader {
          * @see #getReader()
          * @see #getUnchecked()
          */
-        @SuppressWarnings("resource")
         @Override
         public UncheckedFilterReader get() {
             // This an unchecked class, so this method is as well.
-            return Uncheck.get(() -> new UncheckedFilterReader(getReader()));
+            return Uncheck.get(() -> new UncheckedFilterReader(this));
         }
 
     }
@@ -112,11 +111,13 @@ public final class UncheckedFilterReader extends FilterReader {
     /**
      * Constructs a new filtered reader.
      *
-     * @param reader a Reader object providing the underlying stream.
+     * @param builder a Builder object providing the underlying stream.
+     * @throws IOException          if an I/O error occurs.
      * @throws NullPointerException if {@code reader} is {@code null}.
      */
-    private UncheckedFilterReader(final Reader reader) {
-        super(reader);
+    @SuppressWarnings("resource")
+    private UncheckedFilterReader(final Builder builder) throws IOException {
+        super(builder.getReader());
     }
 
     /**
