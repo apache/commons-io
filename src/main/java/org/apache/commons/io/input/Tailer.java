@@ -721,6 +721,24 @@ public class Tailer implements Runnable, AutoCloseable {
     /**
      * Creates a Tailer for the given file, with a specified buffer size.
      *
+     * @param builder holds construction data.
+     */
+    private Tailer(final Builder builder) {
+        this.tailable = Objects.requireNonNull(builder.tailable, "tailable");
+        this.listener = Objects.requireNonNull(builder.tailerListener, "listener");
+        this.delayDuration = builder.delayDuration;
+        this.tailFromEnd = builder.tailFromEnd;
+        this.inbuf = IOUtils.byteArray(builder.getBufferSize());
+        // Save and prepare the listener
+        listener.init(this);
+        this.reOpen = builder.reOpen;
+        this.charset = builder.getCharset();
+        this.ignoreTouch = builder.ignoreTouch;
+    }
+
+    /**
+     * Creates a Tailer for the given file, with a specified buffer size.
+     *
      * @param file the file to follow.
      * @param charset the Charset to be used for reading the file
      * @param tailerListener the TailerListener to use.
@@ -845,24 +863,6 @@ public class Tailer implements Runnable, AutoCloseable {
         this.reOpen = reOpen;
         this.charset = charset;
         this.ignoreTouch = ignoreTouch;
-    }
-
-    /**
-     * Creates a Tailer for the given file, with a specified buffer size.
-     *
-     * @param builder holds construction data.
-     */
-    private Tailer(final Builder builder) {
-        this.tailable = Objects.requireNonNull(builder.tailable, "tailable");
-        this.listener = Objects.requireNonNull(builder.tailerListener, "listener");
-        this.delayDuration = builder.delayDuration;
-        this.tailFromEnd = builder.tailFromEnd;
-        this.inbuf = IOUtils.byteArray(builder.getBufferSize());
-        // Save and prepare the listener
-        listener.init(this);
-        this.reOpen = builder.reOpen;
-        this.charset = builder.getCharset();
-        this.ignoreTouch = builder.ignoreTouch;
     }
 
     /**

@@ -255,6 +255,21 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     private boolean closed;
 
     /**
+     * Constructs an instance of this class which will trigger an event at the specified threshold, and save data either to a file beyond that point.
+     *
+     * @param builder         The construction data source.
+     */
+    private DeferredFileOutputStream(final Builder builder) {
+        super(builder.threshold);
+        this.outputPath = toPath(builder.outputFile, null);
+        this.prefix = builder.prefix;
+        this.suffix = builder.suffix;
+        this.directory = toPath(builder.directory, PathUtils::getTempDirectory);
+        this.memoryOutputStream = new ByteArrayOutputStream(checkBufferSize(builder.getBufferSize()));
+        this.currentOutputStream = memoryOutputStream;
+    }
+
+    /**
      * Constructs an instance of this class which will trigger an event at the specified threshold, and save data to a file beyond that point. The initial
      * buffer size will default to {@value AbstractByteArrayOutputStream#DEFAULT_SIZE} bytes which is ByteArrayOutputStream's default buffer size.
      *
@@ -317,21 +332,6 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     @Deprecated
     public DeferredFileOutputStream(final int threshold, final int initialBufferSize, final String prefix, final String suffix, final File directory) {
         this(threshold, null, Objects.requireNonNull(prefix, "prefix"), suffix, directory, initialBufferSize);
-    }
-
-    /**
-     * Constructs an instance of this class which will trigger an event at the specified threshold, and save data either to a file beyond that point.
-     *
-     * @param builder         The construction data source.
-     */
-    private DeferredFileOutputStream(final Builder builder) {
-        super(builder.threshold);
-        this.outputPath = toPath(builder.outputFile, null);
-        this.prefix = builder.prefix;
-        this.suffix = builder.suffix;
-        this.directory = toPath(builder.directory, PathUtils::getTempDirectory);
-        this.memoryOutputStream = new ByteArrayOutputStream(checkBufferSize(builder.getBufferSize()));
-        this.currentOutputStream = memoryOutputStream;
     }
 
     /**

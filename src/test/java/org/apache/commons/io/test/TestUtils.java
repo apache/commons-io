@@ -252,19 +252,6 @@ public abstract class TestUtils {
     }
 
     /**
-     * Sleeps till the next full second.
-     *
-     * This method is useful when you want to set a guaranteed newer file system timestamp.
-     * Posix file systems only guarantee one second resolution, and e.g.
-     * some mac os x filesystems only offer that.
-     *
-     * @throws InterruptedException if interrupted.
-     */
-    public static void sleepTillNextFullSecond() throws InterruptedException {
-        sleep(1001 - (System.currentTimeMillis() % 1000));
-    }
-
-    /**
      * Sleeps and swallows InterruptedException.
      *
      * @param millis the number of milliseconds to sleep.
@@ -275,6 +262,19 @@ public abstract class TestUtils {
         } catch (final InterruptedException ignored) {
             // ignore InterruptedException.
         }
+    }
+
+    /**
+     * Sleeps till the next full second.
+     *
+     * This method is useful when you want to set a guaranteed newer file system timestamp.
+     * Posix file systems only guarantee one second resolution, and e.g.
+     * some mac os x filesystems only offer that.
+     *
+     * @throws InterruptedException if interrupted.
+     */
+    public static void sleepTillNextFullSecond() throws InterruptedException {
+        sleep(1001 - (System.currentTimeMillis() % 1000));
     }
 
     private TestUtils() {

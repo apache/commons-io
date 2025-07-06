@@ -219,6 +219,17 @@ class TailerTest {
         assertEquals(size, file.length());
     }
 
+    private List<String> expectLinesWithLongTimeout(final TestTailerListener listener, final long minDelay, int count) throws Exception {
+        for (int i = 0; i < count ; i++) {
+            TestUtils.sleep(minDelay);
+            final List<String> lines = listener.getLines();
+            if (lines.size() > 0) {
+                return lines;
+            }
+        }
+        throw new RuntimeException("waiting for TestTailerListener.getLines() timed out after " + (count * minDelay) + " ms");
+    }
+
     @Test
     @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     void testBufferBreak() throws Exception {
@@ -736,17 +747,6 @@ class TailerTest {
             lines = listener.getLines();
             assertEquals(0, lines.size(), "nothing should have changed by touching");
         }
-    }
-
-    private List<String> expectLinesWithLongTimeout(final TestTailerListener listener, final long minDelay, int count) throws Exception {
-        for (int i = 0; i < count ; i++) {
-            TestUtils.sleep(minDelay);
-            final List<String> lines = listener.getLines();
-            if (lines.size() > 0) {
-                return lines;
-            }
-        }
-        throw new RuntimeException("waiting for TestTailerListener.getLines() timed out after " + (count * minDelay) + " ms");
     }
 
     @Test
