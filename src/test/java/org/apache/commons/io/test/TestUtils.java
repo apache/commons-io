@@ -241,11 +241,11 @@ public abstract class TestUtils {
     /**
      * Sleeps for a guaranteed number of milliseconds unless interrupted.
      *
-     * This method exists because Thread.sleep(100) can sleep for 0, 70, 100 or 200ms or anything else
-     * it deems appropriate. Read the docs on Thread.sleep for further details.
+     * This method exists because Thread.sleep(100) can sleep for 0, 70, 100 or 200ms or anything else it deems appropriate. Read the docs on Thread.sleep for
+     * further details.
      *
      * @param millis the number of milliseconds to sleep.
-     * @throws InterruptedException if interrupted.
+     * @throws InterruptedException if {@code interrupt()} was called for this Thread while it was sleeping.
      */
     public static void sleep(final long millis) throws InterruptedException {
         ThreadUtils.sleep(Duration.ofMillis(millis));
@@ -265,16 +265,16 @@ public abstract class TestUtils {
     }
 
     /**
-     * Sleeps till the next full second.
+     * Sleeps to the next full second boundary.
+     * <p>
+     * Use this method when to set a guaranteed newer file system timestamp. POSIX file systems only guarantee one second resolution, for example some macOS
+     * file systems.
+     * </p>
      *
-     * This method is useful when you want to set a guaranteed newer file system timestamp.
-     * Posix file systems only guarantee one second resolution, and e.g.
-     * some mac os x filesystems only offer that.
-     *
-     * @throws InterruptedException if interrupted.
+     * @throws InterruptedException if {@code interrupt()} was called for this Thread while it was sleeping.
      */
-    public static void sleepTillNextFullSecond() throws InterruptedException {
-        sleep(1001 - (System.currentTimeMillis() % 1000));
+    public static void sleepToNextSecond() throws InterruptedException {
+        sleep(1001 - System.currentTimeMillis() % 1000);
     }
 
     private TestUtils() {

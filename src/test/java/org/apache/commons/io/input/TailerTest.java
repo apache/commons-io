@@ -198,7 +198,6 @@ class TailerTest {
         try (BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(file.toPath()))) {
             TestUtils.generateTestData(output, size);
         }
-
         // try to make sure file is found
         // (to stop continuum occasionally failing)
         RandomAccessFile reader = null;
@@ -219,36 +218,33 @@ class TailerTest {
         assertEquals(size, file.length());
     }
 
-    private List<String> expectLinesWithLongTimeout(final TestTailerListener listener, final long minDelay, int count) throws Exception {
-        for (int i = 0; i < count ; i++) {
+    private List<String> expectLinesWithLongTimeout(final TestTailerListener listener, final long minDelay, final int count) throws Exception {
+        for (int i = 0; i < count; i++) {
             TestUtils.sleep(minDelay);
             final List<String> lines = listener.getLines();
             if (lines.size() > 0) {
                 return lines;
             }
         }
-        throw new RuntimeException("waiting for TestTailerListener.getLines() timed out after " + (count * minDelay) + " ms");
+        fail("Waiting for TestTailerListener.getLines() timed out after " + count * minDelay + " ms");
+        return null;
     }
 
     @Test
     @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     void testBufferBreak() throws Exception {
         final long delay = 50;
-
         final File file = new File(temporaryFolder, "testBufferBreak.txt");
         createFile(file, 0);
         writeStrings(file, "SBTOURIST\n");
-
         final TestTailerListener listener = new TestTailerListener();
         try (Tailer tailer = new Tailer(file, listener, delay, false, 1)) {
             final Thread thread = new Thread(tailer);
             thread.start();
-
             List<String> lines = listener.getLines();
             while (lines.isEmpty() || !lines.get(lines.size() - 1).equals("SBTOURIST")) {
                 lines = listener.getLines();
             }
-
             listener.clear();
         }
     }
@@ -393,7 +389,6 @@ class TailerTest {
     @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     void testLongFile() throws Exception {
         final long delay = 50;
-
         final File file = new File(temporaryFolder, "testLongFile.txt");
         createFile(file, 0);
         try (Writer writer = Files.newBufferedWriter(file.toPath(), StandardOpenOption.APPEND)) {
@@ -402,21 +397,16 @@ class TailerTest {
             }
             writer.write("SBTOURIST\n");
         }
-
         final TestTailerListener listener = new TestTailerListener();
         try (Tailer tailer = new Tailer(file, listener, delay, false)) {
-
             // final long start = System.currentTimeMillis();
-
             final Thread thread = new Thread(tailer);
             thread.start();
-
             List<String> lines = listener.getLines();
             while (lines.isEmpty() || !lines.get(lines.size() - 1).equals("SBTOURIST")) {
                 lines = listener.getLines();
             }
             // System.out.println("Elapsed: " + (System.currentTimeMillis() - start));
-
             listener.clear();
         }
     }
@@ -436,9 +426,8 @@ class TailerTest {
         try (Tailer tailer = new Tailer(file, charsetUTF8, listener, delay, false, isWindows, IOUtils.DEFAULT_BUFFER_SIZE)) {
             final Thread thread = new Thread(tailer);
             thread.start();
-
             try (Writer out = new OutputStreamWriter(Files.newOutputStream(file.toPath()), charsetUTF8);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(Files.newInputStream(origin.toPath()), charsetUTF8))) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(Files.newInputStream(origin.toPath()), charsetUTF8))) {
                 final List<String> lines = new ArrayList<>();
                 String line;
                 while ((line = reader.readLine()) != null) {
@@ -447,7 +436,6 @@ class TailerTest {
                     lines.add(line);
                 }
                 out.close(); // ensure data is written
-
                 final long testDelayMillis = delay * 10;
                 TestUtils.sleep(testDelayMillis);
                 final List<String> tailerlines = listener.getLines();
@@ -590,7 +578,6 @@ class TailerTest {
 
     @Test
     void testTailer() throws Exception {
-
         // Create & start the Tailer
         final long delayMillis = 50;
         final File file = new File(temporaryFolder, "tailer1-test.txt");
@@ -601,7 +588,6 @@ class TailerTest {
         try (Tailer tailer = new Tailer(file, listener, delayMillis, false, isWindows)) {
             final Thread thread = new Thread(tailer);
             thread.start();
-
             // Write some lines to the file
             writeLines(file, "Line one", "Line two");
             final long testDelayMillis = delayMillis * 10;
@@ -611,7 +597,6 @@ class TailerTest {
             assertEquals("Line one", lines.get(0), "1 line 1");
             assertEquals("Line two", lines.get(1), "1 line 2");
             listener.clear();
-
             // Write another line to the file
             writeLines(file, "Line three");
             TestUtils.sleep(testDelayMillis);
@@ -619,21 +604,18 @@ class TailerTest {
             assertEquals(1, lines.size(), "2 line count");
             assertEquals("Line three", lines.get(0), "2 line 3");
             listener.clear();
-
             // Check file does actually have all the lines
             lines = FileUtils.readLines(file, StandardCharsets.UTF_8);
             assertEquals(3, lines.size(), "3 line count");
             assertEquals("Line one", lines.get(0), "3 line 1");
             assertEquals("Line two", lines.get(1), "3 line 2");
             assertEquals("Line three", lines.get(2), "3 line 3");
-
             // Delete & re-create
             file.delete();
             assertFalse(file.exists(), "File should not exist");
             createFile(file, 0);
             assertTrue(file.exists(), "File should now exist");
             TestUtils.sleep(testDelayMillis);
-
             // Write another line
             writeLines(file, "Line four");
             TestUtils.sleep(testDelayMillis);
@@ -641,7 +623,6 @@ class TailerTest {
             assertEquals(1, lines.size(), "4 line count");
             assertEquals("Line four", lines.get(0), "4 line 3");
             listener.clear();
-
             // Stop
             thread.interrupt();
             TestUtils.sleep(testDelayMillis * 4);
@@ -669,19 +650,15 @@ class TailerTest {
         try (Tailer tailer = new Tailer(file, listener, delayMillis, false, isWindows)) {
             final Thread thread = new Thread(tailer);
             thread.start();
-
             // write a few lines
             writeLines(file, "line1", "line2", "line3");
             TestUtils.sleep(testDelayMillis);
-
             // write a few lines
             writeLines(file, "line4", "line5", "line6");
             TestUtils.sleep(testDelayMillis);
-
             // write a few lines
             writeLines(file, "line7", "line8", "line9");
             TestUtils.sleep(testDelayMillis);
-
             // May be > 3 times due to underlying OS behavior wrt streams
             assertTrue(listener.reachedEndOfFile >= 3, "end of file reached at least 3 times");
         }
@@ -697,21 +674,16 @@ class TailerTest {
         try (Tailer tailer = new Tailer(file, listener, delayMillis, false)) {
             final Thread thread = new Thread(tailer);
             thread.start();
-
             // Write some lines to the file
             writeStrings(file, "Line");
-
             TestUtils.sleep(delayMillis * 2);
             List<String> lines = listener.getLines();
             assertEquals(0, lines.size(), "1 line count");
-
             writeStrings(file, " one\n");
             TestUtils.sleep(delayMillis * 4);
             lines = listener.getLines();
-
             assertEquals(1, lines.size(), "1 line count");
             assertEquals("Line one", lines.get(0), "1 line 1");
-
             listener.clear();
         }
     }
@@ -723,25 +695,18 @@ class TailerTest {
         final File file = new File(temporaryFolder, "tailer1-testIgnoreTouch.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener();
-        try (Tailer tailer = Tailer.builder()
-                .setFile(file)
-                .setTailerListener(listener)
-                .setDelayDuration(Duration.ofMillis(delayMillis))
-                .setStartThread(false)
-                .setIgnoreTouch(true)
-                .get()) {
+        try (Tailer tailer = Tailer.builder().setFile(file).setTailerListener(listener).setDelayDuration(Duration.ofMillis(delayMillis)).setStartThread(false)
+                .setIgnoreTouch(true).get()) {
             final Thread thread = new Thread(tailer);
             thread.start();
-
             // Write some lines to the file
             writeLines(file, "Line one");
             List<String> lines = expectLinesWithLongTimeout(listener, delayMillis, 20);
             assertEquals(1, lines.size(), "1 line count");
             assertEquals("Line one", lines.get(0), "1 line 1");
             listener.clear();
-
             // touch the file
-            TestUtils.sleepTillNextFullSecond();  // ensure to be within the next second because of posix fs limitation
+            TestUtils.sleepToNextSecond(); // ensure to be within the next second because of posix fs limitation
             file.setLastModified(System.currentTimeMillis());
             TestUtils.sleep(delayMillis * 10);
             lines = listener.getLines();
@@ -756,25 +721,18 @@ class TailerTest {
         final File file = new File(temporaryFolder, "tailer1-testReissueOnTouch.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener();
-        try (Tailer tailer = Tailer.builder()
-                .setFile(file)
-                .setTailerListener(listener)
-                .setDelayDuration(Duration.ofMillis(delayMillis))
-                .setStartThread(false)
-                .setIgnoreTouch(false)
-                .get()) {
+        try (Tailer tailer = Tailer.builder().setFile(file).setTailerListener(listener).setDelayDuration(Duration.ofMillis(delayMillis)).setStartThread(false)
+                .setIgnoreTouch(false).get()) {
             final Thread thread = new Thread(tailer);
             thread.start();
-
             // Write some lines to the file
             writeLines(file, "Line one");
             List<String> lines = expectLinesWithLongTimeout(listener, delayMillis, 50);
             assertEquals(1, lines.size(), "1 line count");
             assertEquals("Line one", lines.get(0), "1 line 1");
             listener.clear();
-
             // touch the file
-            TestUtils.sleepTillNextFullSecond(); // ensure to be within the next second because of posix fs limitation
+            TestUtils.sleepToNextSecond(); // ensure to be within the next second because of posix fs limitation
             file.setLastModified(System.currentTimeMillis());
             lines = expectLinesWithLongTimeout(listener, delayMillis, 20);
             assertEquals(1, lines.size(), "1 line count");
