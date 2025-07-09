@@ -79,7 +79,8 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add" issue="IO-279" due-to="Joerg Budischewski, Gary Gregory">Add Tailer ignoreTouch option #757.</action>
       <!-- UPDATE -->
       <action dev="ggregory" type="update" due-to="Dependabot, Gary Gregory">Bump commons.bytebuddy.version from 1.17.5 to 1.17.6 #754.</action>
-      <action dev="ggregory" type="update"             due-to="Gary Gregory">Bump org.apache.commons:commons-parent from 81 to 85.</action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory">Bump org.apache.commons:commons-parent from 81 to 85.</action>
+      <action dev="ggregory" type="update" due-to="Dependabot, Gary Gregory">Bump org.apache.commons:commons-lang3 from 3.17.0 to 3.18.0 #761.</action>
     </release>
     <release version="2.19.0" date="2025-04-08" description="Version 2.19.0: Java 8 or later is required.">
       <!-- FIX -->
