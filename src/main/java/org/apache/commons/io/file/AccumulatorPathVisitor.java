@@ -195,6 +195,7 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
      * @since 2.12.0
      * @deprecated Use {@link #builder()}.
      */
+    @SuppressWarnings("deprecation")
     @Deprecated
     public AccumulatorPathVisitor(final PathCounters pathCounter, final PathFilter fileFilter, final PathFilter dirFilter,
         final IOBiFunction<Path, IOException, FileVisitResult> visitFileFailed) {
