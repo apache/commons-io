@@ -1,4 +1,82 @@
 
+Apache Commons IO 2.20.0 Release Notes
+
+The Apache Commons IO team is pleased to announce the release of Apache Commons IO 2.20.0.
+
+Introduction
+------------
+
+The Apache Commons IO library contains utility classes, stream implementations, file filters,
+file comparators, endian transformation classes, and much more.
+
+Version 2.19.1: Java 8 or later is required.
+
+New features
+------------
+
+o IO-875:  Add org.apache.commons.io.file.CountingPathVisitor.accept(Path, BasicFileAttributes) #743. Thanks to Pierre Baumard, Gary Gregory. 
+o          Add org.apache.commons.io.Charsets.isAlias(Charset, String). Thanks to Gary Gregory. 
+o          Add org.apache.commons.io.Charsets.isUTF8(Charset). Thanks to Gary Gregory. 
+o          Add org.apache.commons.io.Charsets.toCharsetDefault(String, Charset). Thanks to Gary Gregory. 
+o IO-279:  Add Tailer ignoreTouch option #757. Thanks to Joerg Budischewski, Gary Gregory. 
+
+Fixed Bugs
+----------
+
+o          [javadoc] Rename parameter of ProxyOutputStream.write(int) #740. Thanks to Jesse Glick. 
+o IO-875:  CopyDirectoryVisitor ignores fileFilter #743. Thanks to Pierre Baumard, Gary Gregory. 
+o          org.apache.commons.io.build.AbstractOrigin.getReader(Charset) now maps a null Charset to the default Charset. Thanks to Gary Gregory. 
+o          org.apache.commons.io.build.AbstractOrigin.AbstractRandomAccessFileOrigin.getReader(Charset) now maps a null Charset to the default Charset. Thanks to Gary Gregory. 
+o          org.apache.commons.io.build.AbstractOrigin.ByeArrayOrigin.getReader(Charset) now maps a null Charset to the default Charset. Thanks to Gary Gregory. 
+o          org.apache.commons.io.build.AbstractOrigin.InputStreamOrigin.getReader(Charset) now maps a null Charset to the default Charset. Thanks to Gary Gregory. 
+o          org.apache.commons.io.build.AbstractOrigin.getWriter(Charset) now maps a null Charset to the default Charset. Thanks to Gary Gregory. 
+o          org.apache.commons.io.build.AbstractOrigin.AbstractRandomAccessFileOrigin.getWriter(Charset) now maps a null Charset to the default Charset. Thanks to Gary Gregory. 
+o          org.apache.commons.io.build.AbstractOrigin.OutputStreamOrigin.getWriter(Charset) now maps a null Charset to the default Charset. Thanks to Gary Gregory. 
+o          FileUtils.readLines(File, Charset) now maps a null Charset to the default Charset #744. Thanks to Ryan Kurtz, Gary Gregory. 
+o          Fix SpotBugs [ERROR] Medium: Shared primitive variable "atSlashCr" in one thread may not yield the value of the most recent write from another thread [org.apache.commons.io.input.WindowsLineEndingInputStream, org.apache.commons.io.input.WindowsLineEndingInputStream] At WindowsLineEndingInputStream.java:[line 77]Another occurrence at WindowsLineEndingInputStream.java:[line 81] AT_STALE_THREAD_WRITE_OF_PRIMITIVE. Thanks to Gary Gregory. 
+o          Fix SpotBugs [ERROR] Medium: Shared primitive variable "atSlashCr" in one thread may not yield the value of the most recent write from another thread [org.apache.commons.io.input.WindowsLineEndingInputStream] At WindowsLineEndingInputStream.java:[line 112] AT_STALE_THREAD_WRITE_OF_PRIMITIVE. Thanks to Gary Gregory. 
+o          Fix SpotBugs [ERROR] Medium: Shared primitive variable "atSlashLf" in one thread may not yield the value of the most recent write from another thread [org.apache.commons.io.input.WindowsLineEndingInputStream] At WindowsLineEndingInputStream.java:[line 113] AT_STALE_THREAD_WRITE_OF_PRIMITIVE. Thanks to Gary Gregory. 
+o          Fix SpotBugs [ERROR] Medium: Shared primitive variable "atSlashLf" in one thread may not yield the value of the most recent write from another thread [org.apache.commons.io.input.UnixLineEndingInputStream] At UnixLineEndingInputStream.java:[line 75] AT_STALE_THREAD_WRITE_OF_PRIMITIVE. Thanks to Gary Gregory. 
+o          Fix SpotBugs [ERROR] Medium: Shared primitive variable "atEos" in one thread may not yield the value of the most recent write from another thread [org.apache.commons.io.input.UnixLineEndingInputStream] At UnixLineEndingInputStream.java:[line 120] AT_STALE_THREAD_WRITE_OF_PRIMITIVE. Thanks to Gary Gregory. 
+o          Fix SpotBugs [ERROR] Medium: Shared primitive variable "atSlashCr" in one thread may not yield the value of the most recent write from another thread [org.apache.commons.io.input.UnixLineEndingInputStream] At UnixLineEndingInputStream.java:[line 124] AT_STALE_THREAD_WRITE_OF_PRIMITIVE. Thanks to Gary Gregory. 
+o          Fix SpotBugs [ERROR] Medium: Shared primitive variable "atSlashLf" in one thread may not yield the value of the most recent write from another thread [org.apache.commons.io.input.UnixLineEndingInputStream] At UnixLineEndingInputStream.java:[line 125] AT_STALE_THREAD_WRITE_OF_PRIMITIVE. Thanks to Gary Gregory. 
+o          Fix SpotBugs [ERROR] Medium: Shared primitive variable "closed" in one thread may not yield the value of the most recent write from another thread [org.apache.commons.io.input.ProxyInputStream] At ProxyInputStream.java:[line 233] AT_STALE_THREAD_WRITE_OF_PRIMITIVE. Thanks to Gary Gregory. 
+o          Fix SpotBugs [ERROR] Medium: Shared primitive variable "propagateClose" in one thread may not yield the value of the most recent write from another thread [org.apache.commons.io.input.BoundedInputStream] At BoundedInputStream.java:[line 555] AT_STALE_THREAD_WRITE_OF_PRIMITIVE. Thanks to Gary Gregory. 
+o          QueueInputStream reads all but the first byte without waiting. #748. Thanks to maxxedev, Piotr P. Karwasz, Gary Gregory. 
+o          Javadoc fixes and improvements. Thanks to Gary Gregory. 
+o          Avoid NPE in org.apache.commons.io.filefilter.WildcardFilter.accept(File). Thanks to Gary Gregory. 
+o IO-874:  FileUtils.forceDelete can delete a broken symlink again #756. Thanks to Andy Russell, Joerg Budischewski. 
+o          Fix infinite loop in AbstractByteArrayOutputStream. #758. Thanks to Alex Benusovich. 
+
+Changes
+-------
+
+o          Bump commons.bytebuddy.version from 1.17.5 to 1.17.6 #754. Thanks to Dependabot, Gary Gregory. 
+o          Bump org.apache.commons:commons-parent from 81 to 85. Thanks to Gary Gregory. 
+o          Bump org.apache.commons:commons-lang3 from 3.17.0 to 3.18.0 #761. Thanks to Dependabot, Gary Gregory. 
+
+
+Commons IO 2.7 and up requires Java 8 or above.
+Commons IO 2.6 requires Java 7 or above.
+Commons IO 2.3 through 2.5 requires Java 6 or above.
+Commons IO 2.2 requires Java 5 or above.
+Commons IO 1.4 requires Java 1.3 or above.
+
+Historical list of changes: https://commons.apache.org/proper/commons-io/changes.html
+
+For complete information on Apache Commons IO, including instructions on how to submit bug reports,
+patches, or suggestions for improvement, see the Apache Commons IO website:
+
+https://commons.apache.org/proper/commons-io/
+
+Download page: https://commons.apache.org/proper/commons-io/download_io.cgi
+
+Have fun!
+-Apache Commons Team
+
+------------------------------------------------------------------------------
+
+
 Apache Commons IO 2.19.0 Release Notes
 
 Introduction
