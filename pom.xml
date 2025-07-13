@@ -291,14 +291,6 @@ file comparators, endian transformation classes, and much more.
       <plugin>
         <groupId>com.github.siom79.japicmp</groupId>
         <artifactId>japicmp-maven-plugin</artifactId>
-        <configuration>
-          <parameter>
-			 <excludes>
-               <!-- False positive: https://github.com/siom79/japicmp/issues/365 -->
-               <exclude>org.apache.commons.io.StreamIterator</exclude>
-             </excludes>
-          </parameter>
-        </configuration>
       </plugin>
     </plugins>
   </reporting>
