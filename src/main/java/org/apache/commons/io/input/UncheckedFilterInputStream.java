@@ -6,7 +6,7 @@
  *  (the "License"); you may not use this file except in compliance with
  *  the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,7 +20,6 @@ package org.apache.commons.io.input;
 import java.io.BufferedReader;
 import java.io.FilterInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UncheckedIOException;
 
 import org.apache.commons.io.build.AbstractStreamBuilder;
@@ -29,9 +28,10 @@ import org.apache.commons.io.function.Uncheck;
 /**
  * A {@link BufferedReader} that throws {@link UncheckedIOException} instead of {@link IOException}.
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  *
+ * @see Builder
  * @see BufferedReader
  * @see IOException
  * @see UncheckedIOException
@@ -39,8 +39,10 @@ import org.apache.commons.io.function.Uncheck;
  */
 public final class UncheckedFilterInputStream extends FilterInputStream {
 
+    // @formatter:off
     /**
-     * Builds a new {@link UncheckedFilterInputStream} instance.
+     * Builds a new {@link UncheckedFilterInputStream}.
+     *
      * <p>
      * Using File IO:
      * </p>
@@ -57,27 +59,40 @@ public final class UncheckedFilterInputStream extends FilterInputStream {
      *   .setPath(path)
      *   .get();}
      * </pre>
+     *
+     * @see #get()
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<UncheckedFilterInputStream, Builder> {
 
         /**
-         * Constructs a new instance.
+         * Constructs a new builder of {@link UncheckedFilterInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
+         * Builds a new {@link UncheckedFilterInputStream}.
          * <p>
-         * This builder use the aspect InputStream and OpenOption[].
+         * You must set an aspect that supports {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * You must provide an origin that can be converted to an InputStream by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
+         * This builder uses the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link #getInputStream()} gets the target aspect.</li>
+         * </ul>
          *
          * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide an InputStream.
+         * @throws UnsupportedOperationException if the origin cannot provide an {@link #getInputStream()}.
          * @see #getInputStream()
+         * @see #getUnchecked()
          */
         @Override
         public UncheckedFilterInputStream get() {
             // This an unchecked class, so this method is as well.
-            return Uncheck.get(() -> new UncheckedFilterInputStream(getInputStream()));
+            return Uncheck.get(() -> new UncheckedFilterInputStream(this));
         }
 
     }
@@ -94,11 +109,12 @@ public final class UncheckedFilterInputStream extends FilterInputStream {
     /**
      * Constructs a {@link UncheckedFilterInputStream}.
      *
-     * @param inputStream the underlying input stream, or {@code null} if this instance is to be created without an
-     *        underlying stream.
+     * @param builder A builder providing the underlying input stream.
+     * @throws IOException
      */
-    private UncheckedFilterInputStream(final InputStream inputStream) {
-        super(inputStream);
+    @SuppressWarnings("resource") // caller closes
+    private UncheckedFilterInputStream(final Builder builder) throws IOException {
+        super(builder.getInputStream());
     }
 
     /**
@@ -106,7 +122,7 @@ public final class UncheckedFilterInputStream extends FilterInputStream {
      */
     @Override
     public int available() throws UncheckedIOException {
-        return Uncheck.get(super::available);
+        return Uncheck.getAsInt(super::available);
     }
 
     /**
@@ -122,7 +138,7 @@ public final class UncheckedFilterInputStream extends FilterInputStream {
      */
     @Override
     public int read() throws UncheckedIOException {
-        return Uncheck.get(super::read);
+        return Uncheck.getAsInt(super::read);
     }
 
     /**

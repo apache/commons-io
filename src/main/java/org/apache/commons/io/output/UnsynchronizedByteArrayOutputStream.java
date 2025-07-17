@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,19 +27,21 @@ import org.apache.commons.io.function.Uncheck;
 import org.apache.commons.io.input.UnsynchronizedByteArrayInputStream;
 
 /**
- * Implements a version of {@link AbstractByteArrayOutputStream} <b>without</b> any concurrent thread safety.
+ * Implements a version of {@link AbstractByteArrayOutputStream} <strong>without</strong> any concurrent thread safety.
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  *
+ * @see Builder
  * @since 2.7
  */
 //@NotThreadSafe
-public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArrayOutputStream {
+public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArrayOutputStream<UnsynchronizedByteArrayOutputStream> {
 
     // @formatter:off
     /**
-     * Builds a new {@link UnsynchronizedByteArrayOutputStream} instance.
+     * Builds a new {@link UnsynchronizedByteArrayOutputStream}.
+     *
      * <p>
      * Using File IO:
      * </p>
@@ -56,22 +58,36 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      *   .setBufferSize(8192)
      *   .get();}
      * </pre>
+     *
+     * @see #get()
      */
     // @formatter:on
     public static class Builder extends AbstractStreamBuilder<UnsynchronizedByteArrayOutputStream, Builder> {
 
         /**
-         * Constructs a new instance.
+         * Constructs a new builder of {@link UnsynchronizedByteArrayOutputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
+         * Builds a new {@link UnsynchronizedByteArrayOutputStream}.
+         *
          * <p>
-         * This builder use the aspect buffer size.
+         * This builder uses the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link #getBufferSize()}</li>
+         * </ul>
          *
          * @return a new instance.
          * @see AbstractOrigin#getByteArray()
+         * @see #getUnchecked()
          */
         @Override
         public UnsynchronizedByteArrayOutputStream get() {
-            return new UnsynchronizedByteArrayOutputStream(getBufferSize());
+            return new UnsynchronizedByteArrayOutputStream(this);
         }
 
     }
@@ -141,6 +157,10 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
     @Deprecated
     public UnsynchronizedByteArrayOutputStream() {
         this(DEFAULT_SIZE);
+    }
+
+    private UnsynchronizedByteArrayOutputStream(final Builder builder) {
+        this(builder.getBufferSize());
     }
 
     /**

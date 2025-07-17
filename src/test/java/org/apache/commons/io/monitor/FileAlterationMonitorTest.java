@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -38,12 +38,12 @@ import org.junit.jupiter.api.Test;
 /**
  * {@link FileAlterationMonitor} Test Case.
  */
-public class FileAlterationMonitorTest extends AbstractMonitorTest {
+class FileAlterationMonitorTest extends AbstractMonitorTest {
 
     /**
      * Constructs a new test case.
      */
-    public FileAlterationMonitorTest() {
+    FileAlterationMonitorTest() {
         listener = new CollectionFileListener(false);
     }
 
@@ -64,7 +64,7 @@ public class FileAlterationMonitorTest extends AbstractMonitorTest {
      * Test add/remove observers.
      */
     @Test
-    public void testAddRemoveObservers() {
+    void testAddRemoveObservers() {
         FileAlterationObserver[] observers = null;
 
         // Null Observers
@@ -96,7 +96,7 @@ public class FileAlterationMonitorTest extends AbstractMonitorTest {
     }
 
     @Test
-    public void testCollectionConstructor() {
+    void testCollectionConstructor() {
         observer = new FileAlterationObserver("foo");
         final Collection<FileAlterationObserver> observers = Arrays.asList(observer);
         final FileAlterationMonitor monitor = new FileAlterationMonitor(0, observers);
@@ -105,14 +105,14 @@ public class FileAlterationMonitorTest extends AbstractMonitorTest {
     }
 
     @Test
-    public void testCollectionConstructorShouldDoNothingWithNullCollection() {
+    void testCollectionConstructorShouldDoNothingWithNullCollection() {
         final Collection<FileAlterationObserver> observers = null;
         final FileAlterationMonitor monitor = new FileAlterationMonitor(0, observers);
         assertFalse(monitor.getObservers().iterator().hasNext());
     }
 
     @Test
-    public void testCollectionConstructorShouldDoNothingWithNullObservers() {
+    void testCollectionConstructorShouldDoNothingWithNullObservers() {
         final Collection<FileAlterationObserver> observers = new ArrayList<>(5);
         final FileAlterationMonitor monitor = new FileAlterationMonitor(0, observers);
         assertFalse(monitor.getObservers().iterator().hasNext());
@@ -122,7 +122,7 @@ public class FileAlterationMonitorTest extends AbstractMonitorTest {
      * Test default constructor.
      */
     @Test
-    public void testDefaultConstructor() {
+    void testDefaultConstructor() {
         final FileAlterationMonitor monitor = new FileAlterationMonitor();
         assertEquals(10000, monitor.getInterval(), "Interval");
     }
@@ -132,7 +132,7 @@ public class FileAlterationMonitorTest extends AbstractMonitorTest {
      * @throws Exception
      */
     @Test
-    public void testMonitor() throws Exception {
+    void testMonitor() throws Exception {
         final long interval = 100;
         listener.clear();
         final FileAlterationMonitor monitor = new FileAlterationMonitor(interval, observer);
@@ -173,7 +173,7 @@ public class FileAlterationMonitorTest extends AbstractMonitorTest {
      * Verify that {@link FileAlterationMonitor#stop()} stops the created thread
      */
     @Test
-    public void testStopWhileWaitingForNextInterval() throws Exception {
+    void testStopWhileWaitingForNextInterval() throws Exception {
         final Collection<Thread> createdThreads = new ArrayList<>(1);
         final ThreadFactory threadFactory = new ThreadFactory() {
             private final ThreadFactory delegate = Executors.defaultThreadFactory();
@@ -204,7 +204,7 @@ public class FileAlterationMonitorTest extends AbstractMonitorTest {
      * @throws Exception
      */
     @Test
-    public void testThreadFactory() throws Exception {
+    void testThreadFactory() throws Exception {
         final long interval = 100;
         listener.clear();
         final FileAlterationMonitor monitor = new FileAlterationMonitor(interval, observer);

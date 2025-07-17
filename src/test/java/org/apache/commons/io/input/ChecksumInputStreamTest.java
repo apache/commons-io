@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,22 +19,81 @@ package org.apache.commons.io.input;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.zip.Adler32;
 import java.util.zip.CRC32;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.test.CustomIOException;
 import org.junit.jupiter.api.Test;
 
 /**
  * Tests {@link ChecksumInputStream}.
  */
-public class ChecksumInputStreamTest {
+class ChecksumInputStreamTest {
+
+    private ChecksumInputStream createInputStream() throws IOException {
+        return ChecksumInputStream.builder().setCharSequence("Hi").setChecksum(new CRC32()).get();
+    }
 
     @Test
-    public void testDefaultThresholdFailure() throws IOException {
+    void testAfterReadConsumer() throws Exception {
+        final AtomicBoolean boolRef = new AtomicBoolean();
+        // @formatter:off
+        try (InputStream bounded = ChecksumInputStream.builder()
+                .setCharSequence("Hi")
+                .setChecksum(new CRC32())
+                .setExpectedChecksumValue(1293356558)
+                .setAfterRead(i -> boolRef.set(true))
+                .get()) {
+            IOUtils.consume(bounded);
+        }
+        // @formatter:on
+        assertTrue(boolRef.get());
+        // Throwing
+        final String message = "test exception message";
+        // @formatter:off
+        try (InputStream bounded = ChecksumInputStream.builder()
+                .setCharSequence("Hi")
+                .setChecksum(new CRC32())
+                .setExpectedChecksumValue(1293356558)
+                .setAfterRead(i -> {
+                    throw new CustomIOException(message);
+                })
+                .get()) {
+            assertEquals(message, assertThrowsExactly(CustomIOException.class, () -> IOUtils.consume(bounded)).getMessage());
+        }
+        // @formatter:on
+    }
+
+    @SuppressWarnings("resource")
+    @Test
+    void testAvailableAfterClose() throws Exception {
+        final InputStream shadow;
+        try (InputStream in = createInputStream()) {
+            assertTrue(in.available() > 0);
+            shadow = in;
+        }
+        assertEquals(0, shadow.available());
+    }
+
+    @Test
+    void testAvailableAfterOpen() throws Exception {
+        try (InputStream in = createInputStream()) {
+            assertTrue(in.available() > 0);
+            assertEquals('H', in.read());
+            assertTrue(in.available() > 0);
+        }
+    }
+
+    @Test
+    void testDefaultThresholdFailure() throws IOException {
         final byte[] byteArray = new byte[3];
         final Adler32 adler32 = new Adler32();
         try (ChecksumInputStream checksum = ChecksumInputStream.builder()
@@ -56,7 +115,7 @@ public class ChecksumInputStreamTest {
     }
 
     @Test
-    public void testDefaultThresholdSuccess() throws IOException {
+    void testDefaultThresholdSuccess() throws IOException {
         // sanity-check
         final Adler32 sanityCheck = new Adler32();
         final byte[] byteArray = new byte[3];
@@ -82,8 +141,19 @@ public class ChecksumInputStreamTest {
         }
     }
 
+    @SuppressWarnings("resource")
     @Test
-    public void testReadTakingByteArrayThrowsException() throws IOException {
+    void testReadAfterClose() throws Exception {
+        final InputStream shadow;
+        try (InputStream in = createInputStream()) {
+            assertTrue(in.available() > 0);
+            shadow = in;
+        }
+        assertEquals(IOUtils.EOF, shadow.read());
+    }
+
+    @Test
+    void testReadTakingByteArrayThrowsException() throws IOException {
         final Adler32 adler32 = new Adler32();
         final byte[] byteArray = new byte[3];
         final long sizeThreshold = -1859L;
@@ -107,7 +177,7 @@ public class ChecksumInputStreamTest {
     }
 
     @Test
-    public void testReadTakingNoArgumentsThrowsException() throws IOException {
+    void testReadTakingNoArgumentsThrowsException() throws IOException {
         final CRC32 crc32 = new CRC32();
         final byte[] byteArray = new byte[9];
         try (ChecksumInputStream checksum = ChecksumInputStream.builder()
@@ -127,7 +197,7 @@ public class ChecksumInputStreamTest {
     }
 
     @Test
-    public void testSkip() throws IOException {
+    void testSkip() throws IOException {
         // sanity-check
         final CRC32 sanityCheck = new CRC32();
         final byte[] byteArray = new byte[4];

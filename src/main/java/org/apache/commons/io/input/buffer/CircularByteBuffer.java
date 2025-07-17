@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,8 +26,11 @@ import org.apache.commons.io.IOUtils;
  * from the buffer takes place at the same time than writing to. Such is the
  * case, for example, when using the buffer within a filtering input stream,
  * like the {@link CircularBufferInputStream}.
+ *
+ * @since 2.7
  */
 public class CircularByteBuffer {
+
     private final byte[] buffer;
     private int startOffset;
     private int endOffset;
@@ -82,7 +85,7 @@ public class CircularByteBuffer {
      * @throws IllegalStateException    The buffer doesn't have sufficient space. Use
      *                                  {@link #getSpace()} to prevent this exception.
      * @throws IllegalArgumentException Either of {@code offset}, or {@code length} is negative.
-     * @throws NullPointerException     The byte array {@code pBuffer} is null.
+     * @throws NullPointerException     The byte array {@code targetBuffer} is null.
      */
     public void add(final byte[] targetBuffer, final int offset, final int length) {
         Objects.requireNonNull(targetBuffer, "Buffer");
@@ -114,7 +117,7 @@ public class CircularByteBuffer {
     }
 
     /**
-     * Returns the number of bytes, that are currently present in the buffer.
+     * Gets the number of bytes, that are currently present in the buffer.
      *
      * @return the number of bytes
      */
@@ -123,7 +126,7 @@ public class CircularByteBuffer {
     }
 
     /**
-     * Returns the number of bytes, that can currently be added to the buffer.
+     * Gets the number of bytes, that can currently be added to the buffer.
      *
      * @return the number of bytes that can be added
      */
@@ -132,19 +135,19 @@ public class CircularByteBuffer {
     }
 
     /**
-     * Returns, whether the buffer is currently holding, at least, a single byte.
+     * Tests whether the buffer is currently holding at least a single byte.
      *
-     * @return true if the buffer is not empty
+     * @return true whether the buffer is currently holding at least a single byte.
      */
     public boolean hasBytes() {
         return currentNumberOfBytes > 0;
     }
 
     /**
-     * Returns, whether there is currently room for a single byte in the buffer.
+     * Tests whether there is currently room for a single byte in the buffer.
      * Same as {@link #hasSpace(int) hasSpace(1)}.
      *
-     * @return true if there is space for a byte
+     * @return true whether there is currently room for a single byte in the buffer.
      * @see #hasSpace(int)
      * @see #getSpace()
      */
@@ -153,10 +156,10 @@ public class CircularByteBuffer {
     }
 
     /**
-     * Returns, whether there is currently room for the given number of bytes in the buffer.
+     * Tests whether there is currently room for the given number of bytes in the buffer.
      *
      * @param count the byte count
-     * @return true if there is space for the given number of bytes
+     * @return true whether there is currently room for the given number of bytes in the buffer.
      * @see #hasSpace()
      * @see #getSpace()
      */
@@ -174,10 +177,10 @@ public class CircularByteBuffer {
      * @param offset start offset
      * @param length length to compare
      * @return True, if the next invocations of {@link #read()} will return the
-     * bytes at offsets {@code pOffset}+0, {@code pOffset}+1, ...,
-     * {@code pOffset}+{@code length}-1 of byte array {@code pBuffer}.
-     * @throws IllegalArgumentException Either of {@code pOffset}, or {@code length} is negative.
-     * @throws NullPointerException     The byte array {@code pBuffer} is null.
+     * bytes at offsets {@code sourceBuffer}+0, {@code offset}+1, ...,
+     * {@code offset}+{@code length}-1 of byte array {@code sourceBuffer}.
+     * @throws IllegalArgumentException Either of {@code sourceBuffer}, or {@code length} is negative.
+     * @throws NullPointerException     The byte array {@code sourceBuffer} is null.
      */
     public boolean peek(final byte[] sourceBuffer, final int offset, final int length) {
         Objects.requireNonNull(sourceBuffer, "Buffer");
@@ -229,8 +232,8 @@ public class CircularByteBuffer {
      * @param targetBuffer The byte array, where to add bytes.
      * @param targetOffset The offset, where to store bytes in the byte array.
      * @param length The number of bytes to return.
-     * @throws NullPointerException     The byte array {@code pBuffer} is null.
-     * @throws IllegalArgumentException Either of {@code pOffset}, or {@code length} is negative,
+     * @throws NullPointerException     The byte array {@code targetBuffer} is null.
+     * @throws IllegalArgumentException Either of {@code targetOffset}, or {@code length} is negative,
      *                                  or the length of the byte array {@code targetBuffer} is too small.
      * @throws IllegalStateException    The buffer doesn't hold the given number
      *                                  of bytes. Use {@link #getCurrentNumberOfBytes()} to prevent this

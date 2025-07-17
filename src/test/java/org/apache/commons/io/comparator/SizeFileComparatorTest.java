@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link SizeFileComparator}.
  */
-public class SizeFileComparatorTest extends ComparatorAbstractTest {
+class SizeFileComparatorTest extends ComparatorAbstractTest {
 
     private File smallerDir;
     private File largerDir;
@@ -85,7 +85,7 @@ public class SizeFileComparatorTest extends ComparatorAbstractTest {
      * Test a file which doesn't exist.
      */
     @Test
-    public void testCompareDirectorySizes() {
+    void testCompareDirectorySizes() {
         assertEquals(0, comparator.compare(smallerDir, largerDir), "sumDirectoryContents=false");
         assertEquals(-1, SizeFileComparator.SIZE_SUMDIR_COMPARATOR.compare(smallerDir, largerDir), "less");
         assertEquals(1, SizeFileComparator.SIZE_SUMDIR_REVERSE.compare(smallerDir, largerDir), "less");
@@ -95,7 +95,7 @@ public class SizeFileComparatorTest extends ComparatorAbstractTest {
      * Test a file which doesn't exist.
      */
     @Test
-    public void testNonExistentFile() {
+    void testNonExistentFile() {
         final File nonExistentFile = new File(FileUtils.current(), "non-existent.txt");
         assertFalse(nonExistentFile.exists());
         assertTrue(comparator.compare(nonExistentFile, moreFile) < 0, "less");

@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -60,15 +60,15 @@ import org.apache.commons.io.IOUtils;
  * final Path dir = PathUtils.current();
  * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(EmptyFileFilter.EMPTY);
  * //
- * // Walk one dir
- * Files.<b>walkFileTree</b>(dir, Collections.emptySet(), 1, visitor);
+ * // Walk one directory
+ * Files.<strong>walkFileTree</strong>(dir, Collections.emptySet(), 1, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getFileList());
  * //
  * visitor.getPathCounters().reset();
  * //
- * // Walk dir tree
- * Files.<b>walkFileTree</b>(dir, visitor);
+ * // Walk directory tree
+ * Files.<strong>walkFileTree</strong>(dir, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getDirList());
  * System.out.println(visitor.getFileList());
@@ -82,10 +82,10 @@ import org.apache.commons.io.IOUtils;
  */
 public class EmptyFileFilter extends AbstractFileFilter implements Serializable {
 
-    /** Singleton instance of <i>empty</i> filter */
+    /** Singleton instance of <em>empty</em> filter */
     public static final IOFileFilter EMPTY = new EmptyFileFilter();
 
-    /** Singleton instance of <i>not-empty</i> filter */
+    /** Singleton instance of <em>not-empty</em> filter */
     public static final IOFileFilter NOT_EMPTY = EMPTY.negate();
 
     private static final long serialVersionUID = 3631422087512832211L;
@@ -97,10 +97,10 @@ public class EmptyFileFilter extends AbstractFileFilter implements Serializable 
     }
 
     /**
-     * Checks to see if the file is empty.
+     * Tests to see if the file is empty.
      *
      * @param file the file or directory to check
-     * @return {@code true} if the file or directory is <i>empty</i>, otherwise {@code false}.
+     * @return {@code true} if the file or directory is <em>empty</em>, otherwise {@code false}.
      */
     @Override
     public boolean accept(final File file) {
@@ -115,10 +115,11 @@ public class EmptyFileFilter extends AbstractFileFilter implements Serializable 
     }
 
     /**
-     * Checks to see if the file is empty.
-     * @param file the file or directory to check
+     * Tests to see if the file is empty.
      *
-     * @return {@code true} if the file or directory is <i>empty</i>, otherwise {@code false}.
+     * @param file the file or directory to check
+     * @param attributes the path's basic attributes (may be null).
+     * @return {@code true} if the file or directory is <em>empty</em>, otherwise {@code false}.
      * @since 2.9.0
      */
     @Override

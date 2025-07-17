@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,17 +21,48 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
- * Tests the CountingInputStream.
+ * Tests {@link CountingInputStream}.
  */
-public class CountingInputStreamTest {
+class CountingInputStreamTest {
+
+    @SuppressWarnings("resource")
+    @ParameterizedTest
+    @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
+    void testAvailableAfterClose(final int len) throws Exception {
+        final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[len]);
+        final InputStream shadow;
+        try (InputStream in = CloseShieldInputStream.wrap(bais)) {
+            assertEquals(len, in.available());
+            shadow = in;
+        }
+        assertEquals(0, shadow.available());
+    }
+
+    @ParameterizedTest
+    @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
+    void testAvailableAfterOpen(final int len) throws Exception {
+        final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[len]);
+        try (InputStream in = CloseShieldInputStream.wrap(bais)) {
+            assertEquals(len, in.available());
+        }
+    }
+
+    @SuppressWarnings({ "resource", "deprecation" })
+    @Test
+    void testCloseHandleIOException() throws IOException {
+        ProxyInputStreamTest.testCloseHandleIOException(new CountingInputStream(new BrokenInputStream((Throwable) new IOException())));
+    }
 
     @Test
-    public void testCounting() throws Exception {
+    void testCounting() throws Exception {
         final String text = "A piece of text";
         try (CountingInputStream cis = new CountingInputStream(CharSequenceInputStream.builder().setCharSequence(text).get())) {
 
@@ -63,7 +94,7 @@ public class CountingInputStreamTest {
     }
 
     @Test
-    public void testEOF1() throws Exception {
+    void testEOF1() throws Exception {
         final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);
         try (CountingInputStream cis = new CountingInputStream(bais)) {
 
@@ -80,7 +111,7 @@ public class CountingInputStreamTest {
     }
 
     @Test
-    public void testEOF2() throws Exception {
+    void testEOF2() throws Exception {
         final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);
         try (CountingInputStream cis = new CountingInputStream(bais)) {
 
@@ -93,7 +124,7 @@ public class CountingInputStreamTest {
     }
 
     @Test
-    public void testEOF3() throws Exception {
+    void testEOF3() throws Exception {
         final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);
         try (CountingInputStream cis = new CountingInputStream(bais)) {
 
@@ -109,7 +140,7 @@ public class CountingInputStreamTest {
      * Test for files > 2GB in size - see issue IO-84
      */
     @Test
-    public void testLargeFiles_IO84() throws Exception {
+    void testLargeFiles_IO84() throws Exception {
         final long size = (long) Integer.MAX_VALUE + (long) 1;
         final NullInputStream mock = new NullInputStream(size);
         final CountingInputStream cis = new CountingInputStream(mock);
@@ -119,7 +150,7 @@ public class CountingInputStreamTest {
         assertThrows(ArithmeticException.class, () -> cis.getCount());
         assertThrows(ArithmeticException.class, () -> cis.resetCount());
 
-        mock.close();
+        mock.init();
 
         // Test long methods
         IOUtils.consume(cis);
@@ -127,8 +158,21 @@ public class CountingInputStreamTest {
         assertEquals(size, cis.resetByteCount(), "resetByteCount()");
     }
 
+    @SuppressWarnings("resource")
+    @ParameterizedTest
+    @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
+    void testReadAfterClose(final int len) throws Exception {
+        final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[len]);
+        final InputStream shadow;
+        try (InputStream in = CloseShieldInputStream.wrap(bais)) {
+            assertEquals(len, in.available());
+            shadow = in;
+        }
+        assertEquals(IOUtils.EOF, shadow.read());
+    }
+
     @Test
-    public void testResetting() throws Exception {
+    void testResetting() throws Exception {
         final String text = "A piece of text";
         final byte[] bytes = text.getBytes();
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
@@ -146,7 +190,7 @@ public class CountingInputStreamTest {
     }
 
     @Test
-    public void testSkipping() throws IOException {
+    void testSkipping() throws IOException {
         final String text = "Hello World!";
         try (CountingInputStream cis = new CountingInputStream(CharSequenceInputStream.builder().setCharSequence(text).get())) {
 
@@ -161,7 +205,7 @@ public class CountingInputStreamTest {
     }
 
     @Test
-    public void testZeroLength1() throws Exception {
+    void testZeroLength1() throws Exception {
         final ByteArrayInputStream bais = new ByteArrayInputStream(IOUtils.EMPTY_BYTE_ARRAY);
         try (CountingInputStream cis = new CountingInputStream(bais)) {
 
@@ -172,7 +216,7 @@ public class CountingInputStreamTest {
     }
 
     @Test
-    public void testZeroLength2() throws Exception {
+    void testZeroLength2() throws Exception {
         final ByteArrayInputStream bais = new ByteArrayInputStream(IOUtils.EMPTY_BYTE_ARRAY);
         try (CountingInputStream cis = new CountingInputStream(bais)) {
 
@@ -185,7 +229,7 @@ public class CountingInputStreamTest {
     }
 
     @Test
-    public void testZeroLength3() throws Exception {
+    void testZeroLength3() throws Exception {
         final ByteArrayInputStream bais = new ByteArrayInputStream(IOUtils.EMPTY_BYTE_ARRAY);
         try (CountingInputStream cis = new CountingInputStream(bais)) {
 

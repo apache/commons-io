@@ -6,7 +6,7 @@
  *  (the "License"); you may not use this file except in compliance with
  *  the License.  You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,7 +32,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * takes place when filling that buffer, but this is usually outweighed by the performance benefits.
  * </p>
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  * <p>
  * A typical application pattern for the class looks like this:
@@ -48,14 +48,17 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * Provenance: Apache Harmony and modified.
  * </p>
  *
+ * @see Builder
  * @see BufferedInputStream
  * @since 2.12.0
  */
 //@NotThreadSafe
 public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilterInputStream {
 
+    // @formatter:off
     /**
-     * Builds a new {@link UnsynchronizedBufferedInputStream} instance.
+     * Builds a new {@link UnsynchronizedBufferedInputStream}.
+     *
      * <p>
      * Using File IO:
      * </p>
@@ -74,27 +77,43 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
      *   .setBufferSize(8192)
      *   .get();}
      * </pre>
+     *
+     * @see #get()
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<UnsynchronizedBufferedInputStream, Builder> {
 
         /**
-         * Constructs a new instance.
+         * Constructs a builder of {@link UnsynchronizedBufferedInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
+         * Builds a new {@link UnsynchronizedBufferedInputStream}.
          * <p>
-         * This builder use the aspects InputStream, OpenOption[] and buffer size.
+         * You must set an aspect that supports {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * You must provide an origin that can be converted to an InputStream by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
+         * This builder uses the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link #getInputStream()}</li>
+         * <li>{@link #getBufferSize()}</li>
+         * </ul>
          *
          * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide an InputStream.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
+         * @throws IOException                   if an I/O error occurs converting to an {@link InputStream} using {@link #getInputStream()}.
          * @see #getInputStream()
+         * @see #getBufferSize()
+         * @see #getUnchecked()
          */
-        @SuppressWarnings("resource") // Caller closes.
         @Override
         public UnsynchronizedBufferedInputStream get() throws IOException {
-            return new UnsynchronizedBufferedInputStream(getInputStream(), getBufferSize());
+            return new UnsynchronizedBufferedInputStream(this);
         }
 
     }
@@ -128,16 +147,18 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
      * Constructs a new {@code BufferedInputStream} on the {@link InputStream} {@code in}. The buffer size is specified by the parameter {@code size} and all
      * reads are now filtered through this stream.
      *
-     * @param in   the input stream the buffer reads from.
-     * @param size the size of buffer to allocate.
+     * @param builder   A builder providing the input stream and buffer size.
+     * @throws IOException if an I/O error occurs.
      * @throws IllegalArgumentException if {@code size < 0}.
      */
-    private UnsynchronizedBufferedInputStream(final InputStream in, final int size) {
-        super(in);
-        if (size <= 0) {
+    @SuppressWarnings("resource")
+    private UnsynchronizedBufferedInputStream(final Builder builder) throws IOException {
+        super(builder.getInputStream());
+        final int bufferSize = builder.getBufferSize();
+        if (bufferSize <= 0) {
             throw new IllegalArgumentException("Size must be > 0");
         }
-        buffer = new byte[size];
+        buffer = new byte[bufferSize];
     }
 
     /**

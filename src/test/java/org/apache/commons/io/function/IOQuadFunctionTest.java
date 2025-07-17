@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOQuadFunction}.
  */
-public class IOQuadFunctionTest {
+class IOQuadFunctionTest {
 
     /**
      * Tests {@link IOQuadFunction#apply(Object, Object, Object, Object)}.
@@ -36,7 +36,7 @@ public class IOQuadFunctionTest {
      * @throws IOException thrown on test failure
      */
     @Test
-    public void testAccept() throws IOException {
+    void testAccept() throws IOException {
         final AtomicReference<Byte> ref1 = new AtomicReference<>();
         final AtomicReference<Short> ref2 = new AtomicReference<>();
         final AtomicReference<String> ref3 = new AtomicReference<>();
@@ -61,7 +61,7 @@ public class IOQuadFunctionTest {
      * @throws IOException thrown on test failure
      */
     @Test
-    public void testAndThenIOFunction() throws IOException {
+    void testAndThenIOFunction() throws IOException {
         final AtomicReference<Byte> ref1 = new AtomicReference<>();
         final AtomicReference<Short> ref2 = new AtomicReference<>();
         final AtomicReference<String> ref3 = new AtomicReference<>();

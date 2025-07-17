@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,6 +18,7 @@ package org.apache.commons.io.comparator;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
@@ -28,7 +29,7 @@ import java.util.stream.StreamSupport;
  * <p>
  * This comparator can be used to sort lists or arrays of files by combining a number of other comparators.
  * <p>
- * Example of sorting a list of files by type (i.e. directory or file) and then by name:
+ * Example of sorting a list of files by type (directory or file) and then by name:
  *
  * <pre>
  *       CompositeFileComparator comparator = new CompositeFileComparator(
@@ -97,16 +98,8 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
      */
     @Override
     public String toString() {
-        final StringBuilder builder = new StringBuilder();
-        builder.append(super.toString());
-        builder.append('{');
-        for (int i = 0; i < delegates.length; i++) {
-            if (i > 0) {
-                builder.append(',');
-            }
-            builder.append(delegates[i]);
-        }
-        builder.append('}');
+        final StringBuilder builder = new StringBuilder(super.toString());
+        builder.append(Arrays.toString(delegates));
         return builder.toString();
     }
 }

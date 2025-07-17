@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,7 +22,7 @@ import java.time.Duration;
  * Monitors a thread, interrupting it if it reaches the specified timeout.
  * <p>
  * This works by sleeping until the specified timeout amount and then interrupting the thread being monitored. If the
- * thread being monitored completes its work before being interrupted, it should {@code interrupt()} the <i>monitor</i>
+ * thread being monitored completes its work before being interrupted, it should {@code interrupt()} the <em>monitor</em>
  * thread.
  * </p>
  *
@@ -102,7 +102,7 @@ final class ThreadMonitor implements Runnable {
         try {
             ThreadUtils.sleep(timeout);
             thread.interrupt();
-        } catch (final InterruptedException e) {
+        } catch (final InterruptedException ignored) {
             // timeout not reached
         }
     }

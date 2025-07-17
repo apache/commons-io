@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -43,7 +43,7 @@ final class SerializableFileTime implements Serializable {
 
     private FileTime fileTime;
 
-    public SerializableFileTime(final FileTime fileTime) {
+    SerializableFileTime(final FileTime fileTime) {
         this.fileTime = Objects.requireNonNull(fileTime);
     }
 
@@ -68,8 +68,15 @@ final class SerializableFileTime implements Serializable {
         return fileTime.hashCode();
     }
 
-    private void readObject(final ObjectInputStream ois) throws ClassNotFoundException, IOException {
-        this.fileTime = FileTime.from((Instant) ois.readObject());
+    /**
+     * Deserializes an instance from an ObjectInputStream.
+     *
+     * @param in The source ObjectInputStream.
+     * @throws IOException            Any of the usual Input/Output related exceptions.
+     * @throws ClassNotFoundException A class of a serialized object cannot be found.
+     */
+    private void readObject(final ObjectInputStream in) throws ClassNotFoundException, IOException {
+        this.fileTime = FileTime.from((Instant) in.readObject());
     }
 
     long to(final TimeUnit unit) {

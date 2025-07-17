@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -50,7 +50,7 @@ import java.util.Objects;
  */
 public class LineIterator implements Iterator<String>, Closeable {
 
-    // N.B. This class deliberately does not implement Iterable, see https://issues.apache.org/jira/browse/IO-181
+    // This class deliberately does not implement Iterable, see https://issues.apache.org/jira/browse/IO-181
 
     /**
      * Closes a {@link LineIterator} quietly.
@@ -166,7 +166,9 @@ public class LineIterator implements Iterator<String>, Closeable {
      *
      * @return the next line from the input
      * @throws NoSuchElementException if there is no line to return
+     * @deprecated Use {@link #next()}.
      */
+    @Deprecated
     public String nextLine() {
         if (!hasNext()) {
             throw new NoSuchElementException("No more lines");

@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -41,19 +41,21 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * </p>
  * <p>
  * The encoding must be specified using either the name of the {@link Charset}, the {@link Charset}, or a {@link CharsetEncoder}. If the default encoding is
- * required then use the {@link java.io.FileWriter} directly, rather than this implementation.
+ * required then use the {@link FileWriter} directly, rather than this implementation.
  * </p>
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  *
+ * @see Builder
  * @since 1.4
  */
 public class FileWriterWithEncoding extends ProxyWriter {
 
     // @formatter:off
     /**
-     * Builds a new {@link FileWriterWithEncoding} instance.
+     * Builds a new {@link FileWriterWithEncoding}.
+     *
      * <p>
      * Using a CharsetEncoder:
      * </p>
@@ -75,6 +77,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
      *   .get();}
      * </pre>
      *
+     * @see #get()
      * @since 2.12.0
      */
     // @formatter:on
@@ -85,35 +88,55 @@ public class FileWriterWithEncoding extends ProxyWriter {
         private CharsetEncoder charsetEncoder = super.getCharset().newEncoder();
 
         /**
-         * Constructs a new instance.
+         * Constructs a new builder of {@link FileWriterWithEncoding}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        private File checkOriginFile() {
+            return checkOrigin().getFile();
+        }
+
+        /**
+         * Builds a new {@link FileWriterWithEncoding}.
          * <p>
-         * This builder use the aspects File, CharsetEncoder, and append.
+         * You must set an aspect that supports {@link File} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * You must provide an origin that can be converted to a File by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
+         * This builder uses the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link File} is the target aspect.</li>
+         * <li>{@link CharsetEncoder}</li>
+         * <li>append</li>
+         * </ul>
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a File.
-         * @throws IllegalStateException if the {@code origin} is {@code null}.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws IOException                   if an I/O error occurs converting to an {@link File} using {@link #getFile()}.
          * @see AbstractOrigin#getFile()
+         * @see #getUnchecked()
          */
-        @SuppressWarnings("resource")
         @Override
         public FileWriterWithEncoding get() throws IOException {
+            return new FileWriterWithEncoding(this);
+        }
+
+        private Object getEncoder() {
             if (charsetEncoder != null && getCharset() != null && !charsetEncoder.charset().equals(getCharset())) {
                 throw new IllegalStateException(String.format("Mismatched Charset(%s) and CharsetEncoder(%s)", getCharset(), charsetEncoder.charset()));
             }
             final Object encoder = charsetEncoder != null ? charsetEncoder : getCharset();
-            return new FileWriterWithEncoding(FileWriterWithEncoding.initWriter(checkOrigin().getFile(), encoder, append));
+            return encoder;
         }
 
         /**
          * Sets whether or not to append.
          *
          * @param append Whether or not to append.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setAppend(final boolean append) {
             this.append = append;
@@ -124,7 +147,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
          * Sets charsetEncoder to use for encoding.
          *
          * @param charsetEncoder The charsetEncoder to use for encoding.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setCharsetEncoder(final CharsetEncoder charsetEncoder) {
             this.charsetEncoder = charsetEncoder;
@@ -146,11 +169,11 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Initializes the wrapped file writer. Ensure that a cleanup occurs if the writer creation fails.
      *
-     * @param file     the file to be accessed
+     * @param file     the file to be accessed.
      * @param encoding the encoding to use - may be Charset, CharsetEncoder or String, null uses the default Charset.
-     * @param append   true to append
-     * @return a new initialized OutputStreamWriter
-     * @throws IOException if an error occurs
+     * @param append   true to append.
+     * @return a new initialized OutputStreamWriter.
+     * @throws IOException if an I/O error occurs.
      */
     private static OutputStreamWriter initWriter(final File file, final Object encoding, final boolean append) throws IOException {
         Objects.requireNonNull(file, "file");
@@ -176,6 +199,11 @@ public class FileWriterWithEncoding extends ProxyWriter {
             }
             throw ex;
         }
+    }
+
+    @SuppressWarnings("resource") // caller closes
+    private FileWriterWithEncoding(final Builder builder) throws IOException {
+        super(initWriter(builder.checkOriginFile(), builder.getEncoder(), builder.append));
     }
 
     /**

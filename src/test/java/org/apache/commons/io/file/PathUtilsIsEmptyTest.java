@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link PathUtils}.
  */
-public class PathUtilsIsEmptyTest {
+class PathUtilsIsEmptyTest {
 
     public static final Path DIR_SIZE_1 = Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1");
 
@@ -38,7 +38,7 @@ public class PathUtilsIsEmptyTest {
             .get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/file-size-1.bin");
 
     @Test
-    public void testIsEmpty() throws IOException {
+    void testIsEmpty() throws IOException {
         Assertions.assertTrue(PathUtils.isEmpty(FILE_SIZE_0));
         Assertions.assertFalse(PathUtils.isEmpty(FILE_SIZE_1));
         try (TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
@@ -48,7 +48,7 @@ public class PathUtilsIsEmptyTest {
     }
 
     @Test
-    public void testIsEmptyDirectory() throws IOException {
+    void testIsEmptyDirectory() throws IOException {
         try (TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
             Assertions.assertTrue(PathUtils.isEmptyDirectory(tempDir.get()));
         }
@@ -56,7 +56,7 @@ public class PathUtilsIsEmptyTest {
     }
 
     @Test
-    public void testisEmptyFile() throws IOException {
+    void testisEmptyFile() throws IOException {
         Assertions.assertTrue(PathUtils.isEmptyFile(FILE_SIZE_0));
         Assertions.assertFalse(PathUtils.isEmptyFile(FILE_SIZE_1));
     }

@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,18 +32,28 @@ import org.apache.commons.io.file.PathUtils;
  * An output stream which will retain data in memory until a specified threshold is reached, and only then commit it to disk. If the stream is closed before the
  * threshold is reached, the data will not be written to disk at all.
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
+ * </p>
+ * <p>
+ * The caller is responsible for deleting the output file ({@link #getFile()}, {@link #getPath()}) created by a DeferredFileOutputStream when the caller only
+ * configured a prefix.
+ * </p>
+ * <p>
+ * The caller is responsible for deleting the output file passed to a constructor or builder through {@link Builder#setOutputFile(File)} or
+ * {@link Builder#setOutputFile(Path)}.
  * </p>
  * <p>
  * This class originated in FileUpload processing. In this use case, you do not know in advance the size of the file being uploaded. If the file is small you
  * want to store it in memory (for speed), but if the file is large you want to store it to file (to avoid memory issues).
  * </p>
+ *
+ * @see Builder
  */
 public class DeferredFileOutputStream extends ThresholdingOutputStream {
 
     // @formatter:off
     /**
-     * Builds a new {@link DeferredFileOutputStream} instance.
+     * Builds a new {@link DeferredFileOutputStream}.
      * <p>
      * For example:
      * </p>
@@ -58,9 +68,10 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      *   .get();}
      * </pre>
      * <p>
-     * The only super's aspect used us buffer size.
+     * The only super's aspect used is buffer size.
      * </p>
      *
+     * @see #get()
      * @since 2.12.0
      */
     // @formatter:on
@@ -73,7 +84,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
         private Path directory;
 
         /**
-         * Constructs a new builder.
+         * Constructs a new builder of {@link DeferredFileOutputStream}.
          */
         public Builder() {
             setBufferSizeDefault(AbstractByteArrayOutputStream.DEFAULT_SIZE);
@@ -81,23 +92,32 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
         }
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link DeferredFileOutputStream}.
          * <p>
-         * This builder use the aspects threshold, outputFile, prefix, suffix, directory, buffer size.
+         * This builder uses the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link #getBufferSize()}</li>
+         * <li>threshold</li>
+         * <li>outputFile</li>
+         * <li>prefix</li>
+         * <li>suffix</li>
+         * <li>directory</li>
+         * </ul>
          *
          * @return a new instance.
+         * @see #getUnchecked()
          */
         @Override
         public DeferredFileOutputStream get() {
-            return new DeferredFileOutputStream(threshold, outputFile, prefix, suffix, directory, getBufferSize());
+            return new DeferredFileOutputStream(this);
         }
 
         /**
          * Sets the temporary file directory.
          *
          * @param directory Temporary file directory.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setDirectory(final File directory) {
             this.directory = toPath(directory, null);
@@ -108,7 +128,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
          * Sets the temporary file directory.
          *
          * @param directory Temporary file directory.
-         * @return this
+         * @return {@code this} instance.
          * @since 2.14.0
          */
         public Builder setDirectory(final Path directory) {
@@ -120,7 +140,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
          * Sets the file to which data is saved beyond the threshold.
          *
          * @param outputFile The file to which data is saved beyond the threshold.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setOutputFile(final File outputFile) {
             this.outputFile = toPath(outputFile, null);
@@ -131,7 +151,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
          * Sets the file to which data is saved beyond the threshold.
          *
          * @param outputFile The file to which data is saved beyond the threshold.
-         * @return this
+         * @return {@code this} instance.
          * @since 2.14.0
          */
         public Builder setOutputFile(final Path outputFile) {
@@ -143,7 +163,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
          * Sets the prefix to use for the temporary file.
          *
          * @param prefix Prefix to use for the temporary file.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setPrefix(final String prefix) {
             this.prefix = prefix;
@@ -154,7 +174,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
          * Sets the suffix to use for the temporary file.
          *
          * @param suffix Suffix to use for the temporary file.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setSuffix(final String suffix) {
             this.suffix = suffix;
@@ -165,7 +185,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
          * Sets the number of bytes at which to trigger an event.
          *
          * @param threshold The number of bytes at which to trigger an event.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setThreshold(final int threshold) {
             this.threshold = threshold;
@@ -235,6 +255,21 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     private boolean closed;
 
     /**
+     * Constructs an instance of this class which will trigger an event at the specified threshold, and save data either to a file beyond that point.
+     *
+     * @param builder         The construction data source.
+     */
+    private DeferredFileOutputStream(final Builder builder) {
+        super(builder.threshold);
+        this.outputPath = toPath(builder.outputFile, null);
+        this.prefix = builder.prefix;
+        this.suffix = builder.suffix;
+        this.directory = toPath(builder.directory, PathUtils::getTempDirectory);
+        this.memoryOutputStream = new ByteArrayOutputStream(checkBufferSize(builder.getBufferSize()));
+        this.currentOutputStream = memoryOutputStream;
+    }
+
+    /**
      * Constructs an instance of this class which will trigger an event at the specified threshold, and save data to a file beyond that point. The initial
      * buffer size will default to {@value AbstractByteArrayOutputStream#DEFAULT_SIZE} bytes which is ByteArrayOutputStream's default buffer size.
      *
@@ -300,28 +335,6 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     }
 
     /**
-     * Constructs an instance of this class which will trigger an event at the specified threshold, and save data either to a file beyond that point.
-     *
-     * @param threshold         The number of bytes at which to trigger an event.
-     * @param outputFile        The file to which data is saved beyond the threshold.
-     * @param prefix            Prefix to use for the temporary file.
-     * @param suffix            Suffix to use for the temporary file.
-     * @param directory         Temporary file directory.
-     * @param initialBufferSize The initial size of the in memory buffer.
-     * @throws IllegalArgumentException if initialBufferSize &lt; 0.
-     */
-    private DeferredFileOutputStream(final int threshold, final Path outputFile, final String prefix, final String suffix, final Path directory,
-            final int initialBufferSize) {
-        super(threshold);
-        this.outputPath = toPath(outputFile, null);
-        this.prefix = prefix;
-        this.suffix = suffix;
-        this.directory = toPath(directory, PathUtils::getTempDirectory);
-        this.memoryOutputStream = new ByteArrayOutputStream(checkBufferSize(initialBufferSize));
-        this.currentOutputStream = memoryOutputStream;
-    }
-
-    /**
      * Constructs an instance of this class which will trigger an event at the specified threshold, and save data to a temporary file beyond that point. The
      * initial buffer size will default to 32 bytes which is ByteArrayOutputStream's default buffer size.
      *
@@ -362,9 +375,11 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      * Gets either the output File specified in the constructor or the temporary File created or null.
      * <p>
      * If the constructor specifying the File is used then it returns that same output File, even when threshold has not been reached.
+     * </p>
      * <p>
      * If constructor specifying a temporary File prefix/suffix is used then the temporary File created once the threshold is reached is returned if the
      * threshold was not reached then {@code null} is returned.
+     * </p>
      *
      * @return The File for this output stream, or {@code null} if no such File exists.
      */
@@ -376,9 +391,11 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      * Gets either the output Path specified in the constructor or the temporary Path created or null.
      * <p>
      * If the constructor specifying the file is used then it returns that same output Path, even when threshold has not been reached.
+     * </p>
      * <p>
      * If constructor specifying a temporary Path prefix/suffix is used then the temporary Path created once the threshold is reached is returned if the
      * threshold was not reached then {@code null} is returned.
+     * </p>
      *
      * @return The Path for this output stream, or {@code null} if no such Path exists.
      * @since 2.14.0
@@ -391,9 +408,10 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      * Gets the current output stream. This may be memory based or disk based, depending on the current state with respect to the threshold.
      *
      * @return The underlying output stream.
-     *
      * @throws IOException if an error occurs.
+     * @deprecated Use {@link #getOutputStream()}.
      */
+    @Deprecated
     @Override
     protected OutputStream getStream() throws IOException {
         return currentOutputStream;
@@ -439,7 +457,6 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      * @return the current contents of this output stream.
      * @throws IOException if this stream is not yet closed or an error occurs.
      * @see org.apache.commons.io.output.ByteArrayOutputStream#toInputStream()
-     *
      * @since 2.9.0
      */
     public InputStream toInputStream() throws IOException {
@@ -449,7 +466,6 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
         if (!closed) {
             throw new IOException("Stream not closed");
         }
-
         if (isInMemory()) {
             return memoryOutputStream.toInputStream();
         }
@@ -470,7 +486,6 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
         if (!closed) {
             throw new IOException("Stream not closed");
         }
-
         if (isInMemory()) {
             memoryOutputStream.writeTo(outputStream);
         } else {

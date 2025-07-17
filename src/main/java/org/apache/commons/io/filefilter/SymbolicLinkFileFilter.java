@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -43,15 +43,15 @@ import java.nio.file.attribute.BasicFileAttributes;
  * final Path dir = PathUtils.current();
  * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(SymbolicLinkFileFilter.INSTANCE);
  * //
- * // Walk one dir
- * Files.<b>walkFileTree</b>(dir, Collections.emptySet(), 1, visitor);
+ * // Walk one directory
+ * Files.<strong>walkFileTree</strong>(dir, Collections.emptySet(), 1, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getFileList());
  * //
  * visitor.getPathCounters().reset();
  * //
- * // Walk dir tree
- * Files.<b>walkFileTree</b>(dir, visitor);
+ * // Walk directory tree
+ * Files.<strong>walkFileTree</strong>(dir, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getDirList());
  * System.out.println(visitor.getFileList());
@@ -105,7 +105,7 @@ public class SymbolicLinkFileFilter extends AbstractFileFilter implements Serial
     }
 
     /**
-     * Checks to see if the file is a symbolic link.
+     * Tests to see if the file is a symbolic link.
      *
      * @param file  the File to check
      * @return true if the file exists and is a symbolic link to either another file or a directory,
@@ -117,9 +117,10 @@ public class SymbolicLinkFileFilter extends AbstractFileFilter implements Serial
     }
 
     /**
-     * Checks to see if the file is a symbolic link.
+     * Tests to see if the file is a symbolic link.
      *
      * @param path the File Path to check
+     * @param attributes the path's basic attributes (may be null).
      * @return {@code onAccept} from {@link #SymbolicLinkFileFilter(FileVisitResult, FileVisitResult)} if the file exists and is a symbolic link to either
      *         another file or a directory; returns {@code onReject} otherwise.
      */

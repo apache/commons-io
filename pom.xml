@@ -7,7 +7,7 @@
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+       https://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,31 +15,27 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>65</version>
+    <version>85</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
   <artifactId>commons-io</artifactId>
-  <version>2.16.0-SNAPSHOT</version>
+  <version>2.20.0-SNAPSHOT</version>
   <name>Apache Commons IO</name>
-
   <inceptionYear>2002</inceptionYear>
   <description>
 The Apache Commons IO library contains utility classes, stream implementations, file filters,
 file comparators, endian transformation classes, and much more.
   </description>
-
   <url>https://commons.apache.org/proper/commons-io/</url>
-
   <issueManagement>
     <system>jira</system>
     <url>https://issues.apache.org/jira/browse/IO</url>
   </issueManagement>
-
   <distributionManagement>
     <site>
       <id>apache.website</id>
@@ -47,14 +43,16 @@ file comparators, endian transformation classes, and much more.
       <url>scm:svn:https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-io/</url>
     </site>
   </distributionManagement>
-
   <scm>
     <connection>scm:git:https://gitbox.apache.org/repos/asf/commons-io.git</connection>
     <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/commons-io.git</developerConnection>
     <url>https://gitbox.apache.org/repos/asf?p=commons-io.git</url>
-    <tag>rel/commons-io-2.15.1</tag>
+    <tag>rel/commons-io-2.20.0</tag>
   </scm>
-
+  <ciManagement>
+    <system>GitHub</system>
+    <url>https://github.com/apache/commons-io/actions</url>
+  </ciManagement>
   <dependencies>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -64,7 +62,6 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.junit-pioneer</groupId>
       <artifactId>junit-pioneer</artifactId>
-      <version>1.9.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -84,7 +81,7 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-inline</artifactId>
-      <version>4.11.0</version>
+      <version>${commons.mockito.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -96,38 +93,33 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.14.0</version>
+      <version>3.18.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
-      <version>1.16.0</version>
+      <version>1.18.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.openjdk.jmh</groupId>
       <artifactId>jmh-core</artifactId>
-      <version>${jmh.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.openjdk.jmh</groupId>
-      <artifactId>jmh-generator-annprocess</artifactId>
-      <version>${jmh.version}</version>
+      <version>${commons.jmh.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
-
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <commons.componentid>io</commons.componentid>
     <commons.module.name>org.apache.commons.io</commons.module.name>
     <commons.rc.version>RC1</commons.rc.version>
-    <commons.bc.version>2.15.1</commons.bc.version>
-    <commons.release.version>2.16.0</commons.release.version>
-    <commons.release.next>2.16.1</commons.release.next>
+    <commons.bc.version>2.19.0</commons.bc.version>
+    <commons.release.version>2.20.0</commons.release.version>
+    <commons.release.next>2.20.1</commons.release.next>
+    <!-- project.build.outputTimestamp is managed by Maven plugins, see https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
+    <project.build.outputTimestamp>2025-04-12T00:20:38Z</project.build.outputTimestamp>
     <commons.release.desc>(requires Java 8)</commons.release.desc>
     <commons.jira.id>IO</commons.jira.id>
     <commons.jira.pid>12310477</commons.jira.pid>
@@ -154,14 +146,19 @@ file comparators, endian transformation classes, and much more.
     </commons.osgi.import>
     <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-io/</commons.scmPubUrl>
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
-    <commons.javadoc.java.link>${commons.javadoc8.java.link}</commons.javadoc.java.link>
-    <jmh.version>1.37</jmh.version>
-    <commons.bytebuddy.version>1.14.11</commons.bytebuddy.version>
+    <commons.bytebuddy.version>1.17.6</commons.bytebuddy.version>
     <japicmp.skip>false</japicmp.skip>
-    <jacoco.skip>${env.JACOCO_SKIP}</jacoco.skip>
     <commons.release.isDistModule>true</commons.release.isDistModule>
+    <!-- JaCoCo: Don't make code coverage worse than: -->
+    <jacoco.skip>${env.JACOCO_SKIP}</jacoco.skip>
+    <commons.jacoco.haltOnFailure>true</commons.jacoco.haltOnFailure>
+    <commons.jacoco.classRatio>0.98</commons.jacoco.classRatio>
+    <commons.jacoco.instructionRatio>0.90</commons.jacoco.instructionRatio>
+    <commons.jacoco.methodRatio>0.90</commons.jacoco.methodRatio>
+    <commons.jacoco.branchRatio>0.85</commons.jacoco.branchRatio>
+    <commons.jacoco.lineRatio>0.90</commons.jacoco.lineRatio>
+    <commons.jacoco.complexityRatio>0.85</commons.jacoco.complexityRatio>
   </properties>
-
   <build>
     <!-- japicmp:cmp needs package to work from a jar -->
     <defaultGoal>clean verify apache-rat:check japicmp:cmp checkstyle:check spotbugs:check pmd:check javadoc:javadoc</defaultGoal>
@@ -266,14 +263,6 @@ file comparators, endian transformation classes, and much more.
       <plugin>
         <groupId>com.github.siom79.japicmp</groupId>
         <artifactId>japicmp-maven-plugin</artifactId>
-        <configuration>
-          <parameter>
-			 <excludes>
-               <!-- False positive: https://github.com/siom79/japicmp/issues/365 -->
-               <exclude>org.apache.commons.io.StreamIterator</exclude>
-             </excludes>
-          </parameter>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -286,7 +275,6 @@ file comparators, endian transformation classes, and much more.
       </plugin>
     </plugins>
   </build>
-
   <reporting>
     <plugins>
       <plugin>
@@ -303,14 +291,6 @@ file comparators, endian transformation classes, and much more.
       <plugin>
         <groupId>com.github.siom79.japicmp</groupId>
         <artifactId>japicmp-maven-plugin</artifactId>
-        <configuration>
-          <parameter>
-			 <excludes>
-               <!-- False positive: https://github.com/siom79/japicmp/issues/365 -->
-               <exclude>org.apache.commons.io.StreamIterator</exclude>
-             </excludes>
-          </parameter>
-        </configuration>
       </plugin>
     </plugins>
   </reporting>
@@ -327,7 +307,6 @@ file comparators, endian transformation classes, and much more.
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-antrun-plugin</artifactId>
-            <version>3.1.0</version>
             <executions>
               <execution>
                 <id>prepare-checkout</id>
@@ -340,11 +319,9 @@ file comparators, endian transformation classes, and much more.
                     <exec executable="svn">
                       <arg line="checkout --depth immediates ${commons.scmPubUrl} ${commons.scmPubCheckoutDirectory}" />
                     </exec>
-
                     <exec executable="svn">
                       <arg line="update --set-depth exclude ${commons.scmPubCheckoutDirectory}/javadocs" />
                     </exec>
-
                     <pathconvert pathsep=" " property="dirs">
                       <dirset dir="${commons.scmPubCheckoutDirectory}" includes="*" />
                     </pathconvert>
@@ -369,7 +346,16 @@ file comparators, endian transformation classes, and much more.
       </properties>
     </profile>
     <profile>
+      <!-- Profile to build and run the benchmarks. Use 'mvn test -Pbenchmark', and add '-Dbenchmark=foo' to run only the foo benchmark -->
       <id>benchmark</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.openjdk.jmh</groupId>
+          <artifactId>jmh-generator-annprocess</artifactId>
+          <version>${commons.jmh.version}</version>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
       <properties>
         <skipTests>true</skipTests>
         <benchmark>org.apache</benchmark>
@@ -377,9 +363,17 @@ file comparators, endian transformation classes, and much more.
       <build>
         <plugins>
           <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>${commons.compiler.version}</version>
+            <configuration combine.self="override">
+              <testIncludes>
+                <testInclude>**/*</testInclude>
+              </testIncludes>
+            </configuration>
+          </plugin>
+          <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
-            <version>3.1.1</version>
             <executions>
               <execution>
                 <id>benchmark</id>
@@ -408,7 +402,6 @@ file comparators, endian transformation classes, and much more.
       </build>
     </profile>
   </profiles>
-
   <developers>
     <developer>
       <name>Scott Sanders</name>
@@ -518,7 +511,7 @@ file comparators, endian transformation classes, and much more.
       <email>ggregory at apache.org</email>
       <url>https://www.garygregory.com</url>
       <organization>The Apache Software Foundation</organization>
-      <organizationUrl>https://www.apache.org/</organizationUrl>      
+      <organizationUrl>https://www.apache.org/</organizationUrl>
       <roles>
         <role>PMC Member</role>
       </roles>
@@ -534,7 +527,6 @@ file comparators, endian transformation classes, and much more.
       <timezone>+1</timezone>
     </developer>
   </developers>
-
   <contributors>
     <contributor>
       <name>Rahul Akolkar</name>
@@ -600,5 +592,4 @@ file comparators, endian transformation classes, and much more.
       <name>Miguel Muñoz</name>
     </contributor>
   </contributors>
-
 </project>

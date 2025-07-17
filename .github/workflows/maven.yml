@@ -5,7 +5,7 @@
 # (the "License"); you may not use this file except in compliance with
 # the License.  You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#      https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -36,38 +36,50 @@ jobs:
     continue-on-error: ${{ matrix.experimental }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest, macos-13]
         java: [ 8, 11, 17, 21 ]
         experimental: [false]
+        # Keep the same parameter order as the matrix above
         include:
-          # Update java 8/ubuntu to add deploy step
-          - java: 8
-            os: ubuntu-latest
+          # Use Java 21 and Ubuntu to add deploy step
+          - os: ubuntu-latest
+            java: 21
             experimental: false
             deploy: true
-#          - java: 22-ea
-#            os: ubuntu-latest
-#            experimental: true        
-#          - java: 22-ea
-#            os: windows-latest
-#            experimental: true        
-#          - java: 22-ea
-#            os: macos-latest
-#            experimental: true        
+          # Experimental builds: Java 24-ea
+          - os: ubuntu-latest
+            java: 24
+            experimental: true
+          - os: windows-latest
+            java: 24
+            experimental: true
+          - os: macos-latest
+            java: 24
+            experimental: true
+          # Experimental builds: Java 24-ea
+          - os: ubuntu-latest
+            java: 25-ea
+            experimental: true
+          - os: windows-latest
+            java: 25-ea
+            experimental: true
+          - os: macos-latest
+            java: 25-ea
+            experimental: true
       fail-fast: false
         
     steps:
-    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       with:
         persist-credentials: false
-    - uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # v4.0.0
+    - uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
       with:
         path: ~/.m2/repository
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
     - name: Set up JDK ${{ matrix.java }}
-      uses: actions/setup-java@387ac29b308b003ca37ba93a6cab5eb57c8f5f93 # v4.0.0
+      uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
       with:
         distribution: 'temurin'
         java-version: ${{ matrix.java }}
@@ -76,7 +88,12 @@ jobs:
         server-username: NEXUS_USER # env variable for username in deploy
         server-password: NEXUS_PW # env variable for token in deploy
     - name: Build with Maven
-      run: mvn --show-version --batch-mode --no-transfer-progress -DtrimStackTrace=false
+      if: ${{ !matrix.experimental }}
+      run: mvn --errors --show-version --batch-mode --no-transfer-progress -DtrimStackTrace=false
+    - name: Test only with Maven
+      if: ${{ matrix.experimental }}
+      # Skip PMD etc when using experimental Java
+      run: mvn --errors --show-version --batch-mode --no-transfer-progress -DtrimStackTrace=false clean test
     - name: Deploy SNAPSHOT using minimal build
       if: matrix.deploy && github.repository == 'apache/commons-io' && github.ref_name == 'master' 
       env:

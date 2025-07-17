@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,10 +33,10 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOUnaryOperator}.
  */
-public class IOUnaryOperatorTest {
+class IOUnaryOperatorTest {
 
     @Test
-    public void testAsUnaryOperator() {
+    void testAsUnaryOperator() {
         final List<Path> list = Arrays.asList(TestConstants.ABS_PATH_A, TestConstants.ABS_PATH_A);
         final IOUnaryOperator<Path> throwingIOUnaryOperator = TestUtils.throwingIOUnaryOperator();
         assertThrows(UncheckedIOException.class, () -> list.replaceAll(throwingIOUnaryOperator.asUnaryOperator()));
@@ -45,7 +45,7 @@ public class IOUnaryOperatorTest {
     }
 
     @Test
-    public void testIdentity() throws IOException {
+    void testIdentity() throws IOException {
         assertEquals(IOUnaryOperator.identity(), IOUnaryOperator.identity());
         final IOUnaryOperator<byte[]> identityFunction = IOUnaryOperator.identity();
         final byte[] buf = {(byte) 0xa, (byte) 0xb, (byte) 0xc};

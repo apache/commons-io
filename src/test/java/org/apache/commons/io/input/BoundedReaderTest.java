@@ -7,7 +7,7 @@
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ *    https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -41,7 +41,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link BoundedReader}.
  */
-public class BoundedReaderTest {
+class BoundedReaderTest {
 
     private static final Duration TIMEOUT = Duration.ofSeconds(10);
 
@@ -54,8 +54,8 @@ public class BoundedReaderTest {
     private final Reader shortReader = new BufferedReader(new StringReader("01"));
 
     @Test
-    public void testCloseTest() throws IOException {
-        final AtomicBoolean closed = new AtomicBoolean(false);
+    void testCloseTest() throws IOException {
+        final AtomicBoolean closed = new AtomicBoolean();
         try (Reader sr = new BufferedReader(new StringReader("01234567890")) {
             @Override
             public void close() throws IOException {
@@ -79,7 +79,7 @@ public class BoundedReaderTest {
         }
     }
 
-    public void testLineNumberReaderAndFileReaderLastLine(final String data) throws IOException {
+    void testLineNumberReaderAndFileReaderLastLine(final String data) throws IOException {
         try (TempFile path = TempFile.create(getClass().getSimpleName(), ".txt")) {
             final File file = path.toFile();
             FileUtils.write(file, data, StandardCharsets.ISO_8859_1);
@@ -90,27 +90,27 @@ public class BoundedReaderTest {
     }
 
     @Test
-    public void testLineNumberReaderAndFileReaderLastLineEolNo() {
+    void testLineNumberReaderAndFileReaderLastLineEolNo() {
         assertTimeout(TIMEOUT, () -> testLineNumberReaderAndFileReaderLastLine(STRING_END_NO_EOL));
     }
 
     @Test
-    public void testLineNumberReaderAndFileReaderLastLineEolYes() {
+    void testLineNumberReaderAndFileReaderLastLineEolYes() {
         assertTimeout(TIMEOUT, () -> testLineNumberReaderAndFileReaderLastLine(STRING_END_EOL));
     }
 
     @Test
-    public void testLineNumberReaderAndStringReaderLastLineEolNo() {
+    void testLineNumberReaderAndStringReaderLastLineEolNo() {
         assertTimeout(TIMEOUT, () -> testLineNumberReader(new StringReader(STRING_END_NO_EOL)));
     }
 
     @Test
-    public void testLineNumberReaderAndStringReaderLastLineEolYes() {
+    void testLineNumberReaderAndStringReaderLastLineEolYes() {
         assertTimeout(TIMEOUT, () -> testLineNumberReader(new StringReader(STRING_END_EOL)));
     }
 
     @Test
-    public void testMarkReset() throws IOException {
+    void testMarkReset() throws IOException {
         try (BoundedReader mr = new BoundedReader(sr, 3)) {
             mr.mark(3);
             mr.read();
@@ -125,7 +125,7 @@ public class BoundedReaderTest {
     }
 
     @Test
-    public void testMarkResetFromOffset1() throws IOException {
+    void testMarkResetFromOffset1() throws IOException {
         try (BoundedReader mr = new BoundedReader(sr, 3)) {
             mr.mark(3);
             mr.read();
@@ -140,7 +140,7 @@ public class BoundedReaderTest {
     }
 
     @Test
-    public void testMarkResetMarkMore() throws IOException {
+    void testMarkResetMarkMore() throws IOException {
         try (BoundedReader mr = new BoundedReader(sr, 3)) {
             mr.mark(4);
             mr.read();
@@ -155,7 +155,7 @@ public class BoundedReaderTest {
     }
 
     @Test
-    public void testMarkResetWithMarkOutsideBoundedReaderMax() throws IOException {
+    void testMarkResetWithMarkOutsideBoundedReaderMax() throws IOException {
         try (BoundedReader mr = new BoundedReader(sr, 3)) {
             mr.mark(4);
             mr.read();
@@ -166,7 +166,7 @@ public class BoundedReaderTest {
     }
 
     @Test
-    public void testMarkResetWithMarkOutsideBoundedReaderMaxAndInitialOffset() throws IOException {
+    void testMarkResetWithMarkOutsideBoundedReaderMaxAndInitialOffset() throws IOException {
         try (BoundedReader mr = new BoundedReader(sr, 3)) {
             mr.read();
             mr.mark(3);
@@ -177,7 +177,7 @@ public class BoundedReaderTest {
     }
 
     @Test
-    public void testReadBytesEOF() {
+    void testReadBytesEOF() {
         assertTimeout(TIMEOUT, () -> {
             final BoundedReader mr = new BoundedReader(sr, 3);
             try (BufferedReader br = new BufferedReader(mr)) {
@@ -188,7 +188,7 @@ public class BoundedReaderTest {
     }
 
     @Test
-    public void testReadMulti() throws IOException {
+    void testReadMulti() throws IOException {
         try (BoundedReader mr = new BoundedReader(sr, 3)) {
             final char[] cbuf = new char[4];
             Arrays.fill(cbuf, 'X');
@@ -202,7 +202,7 @@ public class BoundedReaderTest {
     }
 
     @Test
-    public void testReadMultiWithOffset() throws IOException {
+    void testReadMultiWithOffset() throws IOException {
         try (BoundedReader mr = new BoundedReader(sr, 3)) {
             final char[] cbuf = new char[4];
             Arrays.fill(cbuf, 'X');
@@ -216,7 +216,7 @@ public class BoundedReaderTest {
     }
 
     @Test
-    public void testReadTillEnd() throws IOException {
+    void testReadTillEnd() throws IOException {
         try (BoundedReader mr = new BoundedReader(sr, 3)) {
             mr.read();
             mr.read();
@@ -226,7 +226,7 @@ public class BoundedReaderTest {
     }
 
     @Test
-    public void testShortReader() throws IOException {
+    void testShortReader() throws IOException {
         try (BoundedReader mr = new BoundedReader(shortReader, 3)) {
             mr.read();
             mr.read();
@@ -235,7 +235,7 @@ public class BoundedReaderTest {
     }
 
     @Test
-    public void testSkipTest() throws IOException {
+    void testSkipTest() throws IOException {
         try (BoundedReader mr = new BoundedReader(sr, 3)) {
             mr.skip(2);
             mr.read();

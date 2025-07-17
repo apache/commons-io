@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,11 +28,11 @@ import org.apache.commons.io.function.Uncheck;
 /**
  * A {@link FilterOutputStream} that throws {@link UncheckedIOException} instead of {@link UncheckedIOException}.
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  *
+ * @see Builder
  * @see FilterOutputStream
- * @see UncheckedIOException
  * @see UncheckedIOException
  * @since 2.12.0
  */
@@ -40,7 +40,8 @@ public final class UncheckedFilterOutputStream extends FilterOutputStream {
 
     // @formatter:off
     /**
-     * Builds a new {@link UncheckedFilterOutputStream} instance.
+     * Builds a new {@link UncheckedFilterOutputStream}.
+     *
      * <p>
      * Using File IO:
      * </p>
@@ -57,28 +58,41 @@ public final class UncheckedFilterOutputStream extends FilterOutputStream {
      *   .setPath(path)
      *   .get();}
      * </pre>
+     *
+     * @see #get()
      */
     // @formatter:on
     public static class Builder extends AbstractStreamBuilder<UncheckedFilterOutputStream, Builder> {
 
         /**
-         * Constructs a new instance.
+         * Constructs a new builder of {@link UncheckedFilterOutputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
+         * Builds a new {@link UncheckedFilterOutputStream}.
          * <p>
-         * This builder use the aspect OutputStream and OpenOption[].
+         * You must set an aspect that supports {@link #getOutputStream()} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * You must provide an origin that can be converted to an OutputStream by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
+         * This builder uses the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link #getOutputStream()}</li>
+         * </ul>
          *
          * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide an OutputStream.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws UnsupportedOperationException if the origin cannot be converted to an {@link OutputStream}.
+         * @throws IOException                   if an I/O error occurs converting to an {@link OutputStream} using {@link #getOutputStream()}.
          * @see #getOutputStream()
+         * @see #getUnchecked()
          */
-        @SuppressWarnings("resource")
         @Override
         public UncheckedFilterOutputStream get() throws IOException {
-            return new UncheckedFilterOutputStream(getOutputStream());
+            return new UncheckedFilterOutputStream(this);
         }
 
     }
@@ -95,11 +109,12 @@ public final class UncheckedFilterOutputStream extends FilterOutputStream {
     /**
      * Constructs an output stream filter built on top of the specified underlying output stream.
      *
-     * @param outputStream the underlying output stream, or {@code null} if this instance is to be created without an
-     *        underlying stream.
+     * @param builder the buider.
+     * @throws IOException if an I/O error occurs converting to an {@link OutputStream} using {@link #getOutputStream()}.
      */
-    private UncheckedFilterOutputStream(final OutputStream outputStream) {
-        super(outputStream);
+    @SuppressWarnings("resource") // Caller closes.
+    private UncheckedFilterOutputStream(final Builder builder) throws IOException {
+        super(builder.getOutputStream());
     }
 
     /**

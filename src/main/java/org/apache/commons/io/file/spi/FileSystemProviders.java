@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,6 +33,7 @@ import java.util.Objects;
  */
 public class FileSystemProviders { // NOPMD Class will be final in 3.0.
 
+    private static final String SCHEME_FILE = "file";
     private static final FileSystemProviders INSTALLED = new FileSystemProviders(FileSystemProvider.installedProviders());
 
     /**
@@ -75,7 +76,7 @@ public class FileSystemProviders { // NOPMD Class will be final in 3.0.
     public FileSystemProvider getFileSystemProvider(final String scheme) {
         Objects.requireNonNull(scheme, "scheme");
         // Check default provider first to avoid loading of installed providers.
-        if (scheme.equalsIgnoreCase("file")) {
+        if (scheme.equalsIgnoreCase(SCHEME_FILE)) {
             return FileSystems.getDefault().provider();
         }
         // Find provider.

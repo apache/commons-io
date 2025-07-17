@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -76,20 +76,27 @@ public enum FileSystem {
      * @see <a href="https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea#consoles">
      *      CreateFileA function - Consoles (microsoft.com)</a>
      */
+    // @formatter:off
     WINDOWS(4096, false, true,
             255, 32000, // KEEP THIS ARRAY SORTED!
             new int[] {
                     // KEEP THIS ARRAY SORTED!
-                    // @formatter:off
                     // ASCII NUL
                     0,
                     // 1-31 may be allowed in file streams
                     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
                     29, 30, 31,
                     '"', '*', '/', ':', '<', '>', '?', '\\', '|'
-                    // @formatter:on
-            }, new String[] { "AUX", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "CON", "CONIN$", "CONOUT$",
-                            "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9", "NUL", "PRN" }, true, true, '\\');
+            }, new String[] {
+                    "AUX",
+                    "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
+                    "COM\u00b2", "COM\u00b3", "COM\u00b9", // Superscript 2 3 1 in that order
+                    "CON", "CONIN$", "CONOUT$",
+                    "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9",
+                    "LPT\u00b2", "LPT\u00b3", "LPT\u00b9", // Superscript 2 3 1 in that order
+                    "NUL", "PRN"
+            }, true, true, '\\');
+    // @formatter:on
 
     /**
      * <p>
@@ -204,15 +211,15 @@ public enum FileSystem {
      * object at an index no smaller than {@code start}, then
      * the index of the first such occurrence is returned. For values
      * of {@code searchChar} in the range from 0 to 0xFFFF (inclusive),
-     * this is the smallest value <i>k</i> such that:
+     * this is the smallest value <em>k</em> such that:
      * </p>
      * <blockquote><pre>
-     * (this.charAt(<i>k</i>) == searchChar) &amp;&amp; (<i>k</i> &gt;= start)
+     * (this.charAt(<em>k</em>) == searchChar) &amp;&amp; (<em>k</em> &gt;= start)
      * </pre></blockquote>
      * is true. For other values of {@code searchChar}, it is the
-     * smallest value <i>k</i> such that:
+     * smallest value <em>k</em> such that:
      * <blockquote><pre>
-     * (this.codePointAt(<i>k</i>) == searchChar) &amp;&amp; (<i>k</i> &gt;= start)
+     * (this.codePointAt(<em>k</em>) == searchChar) &amp;&amp; (<em>k</em> &gt;= start)
      * </pre></blockquote>
      * <p>
      * is true. In either case, if no such character occurs in {@code cs}
@@ -331,6 +338,7 @@ public enum FileSystem {
         this.maxPathLength = maxPathLength;
         this.illegalFileNameChars = Objects.requireNonNull(illegalFileNameChars, "illegalFileNameChars");
         this.reservedFileNames = Objects.requireNonNull(reservedFileNames, "reservedFileNames");
+        //Arrays.sort(this.reservedFileNames);
         this.reservedFileNamesExtensions = reservedFileNamesExtensions;
         this.caseSensitive = caseSensitive;
         this.casePreserving = casePreserving;
@@ -342,7 +350,6 @@ public enum FileSystem {
     /**
      * Gets the file allocation block size in bytes.
      * @return the file allocation block size in bytes.
-     *
      * @since 2.12.0
      */
     public int getBlockSize() {
@@ -394,7 +401,6 @@ public enum FileSystem {
      * Gets the name separator, '\\' on Windows, '/' on Linux.
      *
      * @return '\\' on Windows, '/' on Linux.
-     *
      * @since 2.12.0
      */
     public char getNameSeparator() {

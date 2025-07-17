@@ -7,7 +7,7 @@
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *   https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -26,18 +26,18 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link FullClassNameMatcher}.
  */
-public class FullClassNameMatcherTest {
+class FullClassNameMatcherTest {
 
     private static final String [] NAMES_ARRAY = { Integer.class.getName(), Long.class.getName() };
 
     @Test
-    public void testNoNames() {
+    void testNoNames() {
         final FullClassNameMatcher m = new FullClassNameMatcher();
         assertFalse(m.matches(Integer.class.getName()));
     }
 
     @Test
-    public void testWithNames() {
+    void testWithNames() {
         final FullClassNameMatcher m = new FullClassNameMatcher(NAMES_ARRAY);
         assertTrue(m.matches(Integer.class.getName()));
         assertFalse(m.matches(String.class.getName()));

@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link SymbolicLinkFileFilter}.
  */
-public class SymbolicLinkFileFilterTest {
+class SymbolicLinkFileFilterTest {
 
     public static final String TARGET_SHORT_NAME = "SLFF_Target";
     public static final String TARGET_EXT = ".txt";
@@ -133,88 +133,88 @@ public class SymbolicLinkFileFilterTest {
     }
 
     @Test
-    public void testFileFilter_HardDirectory() {
+    void testFileFilter_HardDirectory() {
         assertFalse(filter.accept(targetDirFile));
     }
 
     @Test
-    public void testFileFilter_HardFile() {
+    void testFileFilter_HardFile() {
         assertFalse(filter.accept(testTargetFile));
     }
 
     @Test
-    public void testFileFilter_Link() {
+    void testFileFilter_Link() {
         assertTrue(filter.accept(testLinkFile));
     }
 
     @Test
-    public void testFileFilter_missingFile() {
+    void testFileFilter_missingFile() {
         assertFalse(filter.accept(missingFileFile));
     }
 
     @Test
-    public void testFileFilter_PathLink() {
+    void testFileFilter_PathLink() {
         assertTrue(filter.accept(testLinkDirFile));
     }
 
     @Test
-    public void testFileNameFilter_HardDirectory() {
+    void testFileNameFilter_HardDirectory() {
         assertFalse(filter.accept(parentDirectoryFile, DIRECTORY_NAME));
     }
 
     @Test
-    public void testFileNameFilter_HardFile() {
+    void testFileNameFilter_HardFile() {
         assertFalse(filter.accept(parentDirectoryFile, TARGET_NAME));
     }
 
     @Test
-    public void testFileNameFilter_Link() {
+    void testFileNameFilter_Link() {
         assertTrue(filter.accept(parentDirectoryFile, linkName));
     }
 
     @Test
-    public void testFileNameFilter_missingFile() {
+    void testFileNameFilter_missingFile() {
         assertFalse(filter.accept(parentDirectoryFile, MISSING));
     }
 
     @Test
-    public void testFileNameFilter_PathLink() {
+    void testFileNameFilter_PathLink() {
         assertTrue(filter.accept(parentDirectoryFile, DIRECTORY_LINK_NAME));
     }
 
     @Test
-    public void testPathFilter_HardDirectory() {
+    void testPathFilter_HardDirectory() {
         assertEquals(FileVisitResult.TERMINATE, filter.accept(targetDirPath, null));
         assertFalse(filter.matches(targetDirPath));
     }
 
     @Test
-    public void testPathFilter_HardFile() {
+    void testPathFilter_HardFile() {
         assertEquals(FileVisitResult.TERMINATE, filter.accept(testTargetPath, null));
         assertFalse(filter.matches(testTargetPath));
     }
 
     @Test
-    public void testPathFilter_Link() {
+    void testPathFilter_Link() {
         assertEquals(FileVisitResult.CONTINUE, filter.accept(testLinkPath, null));
         assertTrue(filter.matches(testLinkPath));
 
     }
 
     @Test
-    public void testPathFilter_missingFile() {
+    void testPathFilter_missingFile() {
         assertEquals(FileVisitResult.TERMINATE, filter.accept(missingFilePath, null));
         assertFalse(filter.matches(missingFilePath));
     }
 
     @Test
-    public void testPathFilter_PathLink() {
+    void testPathFilter_PathLink() {
         assertEquals(FileVisitResult.CONTINUE, filter.accept(testLinkDirPath, null));
         assertTrue(filter.matches(testLinkDirPath));
     }
 
     @Test
-    public void testSymbolicLinkFileFilter() {
+    void testSymbolicLinkFileFilter() {
         assertEquals(FileVisitResult.TERMINATE, SymbolicLinkFileFilter.INSTANCE.accept(PathUtils.current(), null));
         assertFalse(filter.matches(PathUtils.current()));
     }

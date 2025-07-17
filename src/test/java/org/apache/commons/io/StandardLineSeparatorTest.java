@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,35 +30,35 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link StandardLineSeparator}.
  */
-public class StandardLineSeparatorTest {
+class StandardLineSeparatorTest {
 
     @Test
-    public void testCR() {
+    void testCR() {
         assertEquals("\r", CR.getString());
     }
 
     @Test
-    public void testCR_getBytes() {
+    void testCR_getBytes() {
         assertArrayEquals("\r".getBytes(StandardCharsets.ISO_8859_1), CR.getBytes(StandardCharsets.ISO_8859_1));
     }
 
     @Test
-    public void testCRLF() {
+    void testCRLF() {
         assertEquals("\r\n", CRLF.getString());
     }
 
     @Test
-    public void testCRLF_getBytes() {
+    void testCRLF_getBytes() {
         assertArrayEquals("\r\n".getBytes(StandardCharsets.ISO_8859_1), CRLF.getBytes(StandardCharsets.ISO_8859_1));
     }
 
     @Test
-    public void testLF() {
+    void testLF() {
         assertEquals("\n", LF.getString());
     }
 
     @Test
-    public void testLF_getBytes() {
+    void testLF_getBytes() {
         assertArrayEquals("\n".getBytes(StandardCharsets.ISO_8859_1), LF.getBytes(StandardCharsets.ISO_8859_1));
     }
 

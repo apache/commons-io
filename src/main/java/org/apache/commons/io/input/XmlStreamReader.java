@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -62,19 +62,21 @@ import org.apache.commons.io.output.XmlStreamWriter;
  * Determining the character encoding of a feed</a>.
  * </p>
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  * <p>
  * Originally developed for <a href="https://rome.dev.java.net">ROME</a> under Apache License 2.0.
  * </p>
  *
+ * @see Builder
  * @see org.apache.commons.io.output.XmlStreamWriter
  * @since 2.0
  */
 public class XmlStreamReader extends Reader {
 
+    // @formatter:off
     /**
-     * Builds a new {@link XmlStreamWriter} instance.
+     * Builds a new {@link XmlStreamWriter}.
      *
      * Constructs a Reader using an InputStream and the associated content-type header. This constructor is lenient regarding the encoding detection.
      * <p>
@@ -104,12 +106,17 @@ public class XmlStreamReader extends Reader {
      * </p>
      *
      * <pre>{@code
-     * XmlStreamReader r = XmlStreamReader.builder().setPath(path).setCharset(StandardCharsets.UTF_8).get();
+     * XmlStreamReader r = XmlStreamReader.builder()
+     *   .setPath(path)
+     *   .setCharset(StandardCharsets.UTF_8)
+     *   .get();
      * }
      * </pre>
      *
+     * @see #get()
      * @since 2.12.0
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<XmlStreamReader, Builder> {
 
         private boolean nullCharset = true;
@@ -117,22 +124,35 @@ public class XmlStreamReader extends Reader {
         private String httpContentType;
 
         /**
-         * Constructs a new instance.
+         * Constructs a new builder of {@link XmlStreamReader}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
+         * Builds a new {@link XmlStreamWriter}.
          * <p>
-         * This builder use the aspect InputStream, OpenOption[], httpContentType, lenient, and defaultEncoding.
+         * You must set an aspect that supports {@link #getInputStream()}, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * You must provide an origin that can be converted to an InputStream by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
+         * This builder uses the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link #getInputStream()}</li>
+         * <li>{@link #getCharset()}</li>
+         * <li>lenient</li>
+         * <li>httpContentType</li>
+         * </ul>
          *
          * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide an InputStream.
-         * @throws IOException                   thrown if there is a problem reading the stream.
-         * @throws XmlStreamReaderException      thrown if the charset encoding could not be determined according to the specification.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
+         * @throws IOException                   if an I/O error occurs converting to an {@link InputStream} using {@link #getInputStream()}.
+         * @throws XmlStreamReaderException thrown if the Charset encoding could not be determined according to the specification.
          * @see #getInputStream()
+         * @see #getUnchecked()
          */
-        @SuppressWarnings("resource")
         @Override
         public XmlStreamReader get() throws IOException {
             final String defaultEncoding = nullCharset ? null : getCharset().name();
@@ -159,7 +179,7 @@ public class XmlStreamReader extends Reader {
          * Sets the HTTP content type.
          *
          * @param httpContentType the HTTP content type.
-         * @return this.
+         * @return {@code this} instance.
          */
         public Builder setHttpContentType(final String httpContentType) {
             this.httpContentType = httpContentType;
@@ -170,7 +190,7 @@ public class XmlStreamReader extends Reader {
          * Sets the lenient toggle.
          *
          * @param lenient the lenient toggle.
-         * @return this.
+         * @return {@code this} instance.
          */
         public Builder setLenient(final boolean lenient) {
             this.lenient = lenient;
@@ -681,7 +701,6 @@ public class XmlStreamReader extends Reader {
      * @param xmlEnc          XML encoding
      * @param lenient         indicates if the charset encoding detection should be relaxed.
      * @param httpContentType The HTTP content type
-     *
      * @return the HTTP encoding
      * @throws IOException thrown if there is a problem reading the stream.
      */

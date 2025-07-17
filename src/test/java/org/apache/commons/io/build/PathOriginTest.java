@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,19 +20,24 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.apache.commons.io.build.AbstractOrigin.PathOrigin;
-import org.junit.jupiter.api.BeforeEach;
 
 /**
  * Tests {@link PathOrigin}.
  *
  * A PathOrigin can convert into all other aspects.
+ *
+ * @see Path
  */
-public class PathOriginTest extends AbstractOriginTest<Path, PathOrigin> {
+class PathOriginTest extends AbstractOriginTest<Path, PathOrigin> {
 
-    @BeforeEach
-    public void beforeEach() {
-        setOriginRo(new PathOrigin(Paths.get(FILE_NAME_RO)));
-        setOriginRw(new PathOrigin(Paths.get(FILE_NAME_RW)));
+    @Override
+    protected PathOrigin newOriginRo() {
+        return new PathOrigin(Paths.get(FILE_NAME_RO));
+    }
+
+    @Override
+    protected PathOrigin newOriginRw() {
+        return new PathOrigin(Paths.get(FILE_NAME_RW));
     }
 
 }

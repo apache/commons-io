@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -39,26 +39,18 @@ import java.util.Random;
 
 import org.apache.commons.io.CharsetsTest;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-public class CharSequenceInputStreamTest {
+class CharSequenceInputStreamTest {
 
     private static final String UTF_16 = StandardCharsets.UTF_16.name();
     private static final String UTF_8 = StandardCharsets.UTF_8.name();
     private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    private static final String LARGE_TEST_STRING;
-
     private static final String TEST_STRING = "\u00e0 peine arriv\u00e9s nous entr\u00e2mes dans sa chambre";
-
-    static {
-        final StringBuilder buffer = new StringBuilder();
-        for (int i = 0; i < 100; i++) {
-            buffer.append(TEST_STRING);
-        }
-        LARGE_TEST_STRING = buffer.toString();
-    }
+    private static final String LARGE_TEST_STRING = StringUtils.repeat(TEST_STRING, 100);
 
     private final Random random = new Random();
 
@@ -81,22 +73,9 @@ public class CharSequenceInputStreamTest {
                 "Shift_JIS".equalsIgnoreCase(csName);
     }
 
-    /**
-     * IO-781 available() returns 2 but only 1 byte is read afterwards.
-     */
-    @Test
-    public void testAvailable() throws IOException {
-        final Charset charset = Charset.forName("Big5");
-        final CharSequenceInputStream in = new CharSequenceInputStream("\uD800\uDC00", charset);
-        final int available = in.available();
-        final byte[] data = new byte[available];
-        final int bytesRead = in.read(data);
-        assertEquals(available, bytesRead);
-    }
-
     @ParameterizedTest(name = "{0}")
     @MethodSource(CharsetsTest.AVAIL_CHARSETS)
-    public void testAvailable(final String csName) throws Exception {
+    void testAvailable(final String csName) throws Exception {
         // prevent java.lang.UnsupportedOperationException at sun.nio.cs.ext.ISO2022_CN.newEncoder.
         // also try and avoid the following exception
 //            java.lang.UnsupportedOperationException: null
@@ -115,6 +94,30 @@ public class CharSequenceInputStreamTest {
             }
         } catch (final UnsupportedOperationException e) {
             fail("Operation not supported for " + csName);
+        }
+    }
+
+    @Test
+    void testAvailableAfterClose() throws Exception {
+        final InputStream shadow;
+        try (InputStream in = CharSequenceInputStream.builder().setCharSequence("Hi").get()) {
+            assertTrue(in.available() > 0);
+            shadow = in;
+        }
+        assertEquals(0, shadow.available());
+    }
+
+    /**
+     * IO-781 available() returns 2 but only 1 byte is read afterwards.
+     */
+    @Test
+    void testAvailableAfterOpen() throws IOException {
+        final Charset charset = Charset.forName("Big5");
+        try (CharSequenceInputStream in = new CharSequenceInputStream("\uD800\uDC00", charset)) {
+            final int available = in.available();
+            final byte[] data = new byte[available];
+            final int bytesRead = in.read(data);
+            assertEquals(available, bytesRead);
         }
     }
 
@@ -174,7 +177,7 @@ public class CharSequenceInputStreamTest {
 //        at org.apache.commons.io.input.CharSequenceInputStream.fillBuffer(CharSequenceInputStream.java:111)
     @ParameterizedTest(name = "{0}")
     @MethodSource(CharsetsTest.AVAIL_CHARSETS)
-    public void testBufferedRead_AvailableCharset(final String csName) throws IOException {
+    void testBufferedRead_AvailableCharset(final String csName) throws IOException {
         // prevent java.lang.UnsupportedOperationException at sun.nio.cs.ext.ISO2022_CN.newEncoder.
         if (isAvailabilityTestableForCharset(csName)) {
             testBufferedRead(TEST_STRING, csName);
@@ -183,17 +186,17 @@ public class CharSequenceInputStreamTest {
 
     @ParameterizedTest
     @MethodSource(CharsetsTest.REQUIRED_CHARSETS)
-    public void testBufferedRead_RequiredCharset(final String csName) throws IOException {
+    void testBufferedRead_RequiredCharset(final String csName) throws IOException {
         testBufferedRead(TEST_STRING, csName);
     }
 
     @Test
-    public void testBufferedRead_UTF8() throws IOException {
+    void testBufferedRead_UTF8() throws IOException {
         testBufferedRead(TEST_STRING, UTF_8);
     }
 
     @Test
-    public void testCharacterCodingException() throws IOException {
+    void testCharacterCodingException() throws IOException {
         final Charset charset = StandardCharsets.US_ASCII;
         final CharSequenceInputStream in = CharSequenceInputStream.builder()
             .setCharsetEncoder(charset.newEncoder().onUnmappableCharacter(CodingErrorAction.REPORT))
@@ -217,7 +220,7 @@ public class CharSequenceInputStreamTest {
 
     @ParameterizedTest
     @MethodSource(CharsetsTest.REQUIRED_CHARSETS)
-    public void testCharsetMismatchInfiniteLoop_RequiredCharsets(final String csName) throws IOException {
+    void testCharsetMismatchInfiniteLoop_RequiredCharsets(final String csName) throws IOException {
         testCharsetMismatchInfiniteLoop(csName);
     }
 
@@ -251,37 +254,37 @@ public class CharSequenceInputStreamTest {
     }
 
     @Test
-    public void testIO_356_B10_D10_S0_UTF16() throws Exception {
+    void testIO_356_B10_D10_S0_UTF16() throws Exception {
         testIO_356(10, 10, 0, UTF_16);
     }
 
     @Test
-    public void testIO_356_B10_D10_S0_UTF8() throws Exception {
+    void testIO_356_B10_D10_S0_UTF8() throws Exception {
         testIO_356(10, 10, 0, UTF_8);
     }
 
     @Test
-    public void testIO_356_B10_D10_S1_UTF8() throws Exception {
+    void testIO_356_B10_D10_S1_UTF8() throws Exception {
         testIO_356(10, 10, 1, UTF_8);
     }
 
     @Test
-    public void testIO_356_B10_D10_S2_UTF8() throws Exception {
+    void testIO_356_B10_D10_S2_UTF8() throws Exception {
         testIO_356(10, 10, 2, UTF_8);
     }
 
     @Test
-    public void testIO_356_B10_D13_S0_UTF8() throws Exception {
+    void testIO_356_B10_D13_S0_UTF8() throws Exception {
         testIO_356(10, 13, 0, UTF_8);
     }
 
     @Test
-    public void testIO_356_B10_D13_S1_UTF8() throws Exception {
+    void testIO_356_B10_D13_S1_UTF8() throws Exception {
         testIO_356(10, 13, 1, UTF_8);
     }
 
     @Test
-    public void testIO_356_B10_D20_S0_UTF8() throws Exception {
+    void testIO_356_B10_D20_S0_UTF8() throws Exception {
         testIO_356(10, 20, 0, UTF_8);
     }
 
@@ -294,36 +297,36 @@ public class CharSequenceInputStreamTest {
     }
 
     @Test
-    public void testIO_356_Loop_UTF16() throws Exception {
+    void testIO_356_Loop_UTF16() throws Exception {
         final Charset charset = StandardCharsets.UTF_16;
         testIO_356_Loop(charset.displayName(), (int) ReaderInputStream.minBufferSize(charset.newEncoder()));
     }
 
     @Test
-    public void testIO_356_Loop_UTF8() throws Exception {
+    void testIO_356_Loop_UTF8() throws Exception {
         final Charset charset = StandardCharsets.UTF_8;
         testIO_356_Loop(charset.displayName(), (int) ReaderInputStream.minBufferSize(charset.newEncoder()));
     }
 
     @ParameterizedTest
     @MethodSource(CharsetsTest.REQUIRED_CHARSETS)
-    public void testLargeBufferedRead_RequiredCharsets(final String csName) throws IOException {
+    void testLargeBufferedRead_RequiredCharsets(final String csName) throws IOException {
         testBufferedRead(LARGE_TEST_STRING, csName);
     }
 
     @Test
-    public void testLargeBufferedRead_UTF8() throws IOException {
+    void testLargeBufferedRead_UTF8() throws IOException {
         testBufferedRead(LARGE_TEST_STRING, UTF_8);
     }
 
     @ParameterizedTest
     @MethodSource(CharsetsTest.REQUIRED_CHARSETS)
-    public void testLargeSingleByteRead_RequiredCharsets(final String csName) throws IOException {
+    void testLargeSingleByteRead_RequiredCharsets(final String csName) throws IOException {
         testSingleByteRead(LARGE_TEST_STRING, csName);
     }
 
     @Test
-    public void testLargeSingleByteRead_UTF8() throws IOException {
+    void testLargeSingleByteRead_UTF8() throws IOException {
         testSingleByteRead(LARGE_TEST_STRING, UTF_8);
     }
 
@@ -347,17 +350,17 @@ public class CharSequenceInputStreamTest {
 
     @ParameterizedTest
     @MethodSource(CharsetsTest.REQUIRED_CHARSETS)
-    public void testMarkReset_RequiredCharsets(final String csName) throws Exception {
+    void testMarkReset_RequiredCharsets(final String csName) throws Exception {
         testMarkResetMultiByteChars(csName);
     }
 
     @Test
-    public void testMarkReset_USASCII() throws Exception {
+    void testMarkReset_USASCII() throws Exception {
         testMarkReset(StandardCharsets.US_ASCII.name());
     }
 
     @Test
-    public void testMarkReset_UTF8() throws Exception {
+    void testMarkReset_UTF8() throws Exception {
         testMarkReset(UTF_8);
     }
 
@@ -403,7 +406,7 @@ public class CharSequenceInputStreamTest {
     }
 
     @Test
-    public void testMarkSupported() throws Exception {
+    void testMarkSupported() throws Exception {
         try (@SuppressWarnings("deprecation")
         InputStream r = new CharSequenceInputStream("test", UTF_8)) {
             assertTrue(r.markSupported());
@@ -414,7 +417,7 @@ public class CharSequenceInputStreamTest {
     }
 
     @Test
-    public void testNullCharset() throws IOException {
+    void testNullCharset() throws IOException {
         try (CharSequenceInputStream in = new CharSequenceInputStream("A", (Charset) null)) {
             IOUtils.toByteArray(in);
             assertEquals(Charset.defaultCharset(), in.getCharsetEncoder().charset());
@@ -426,7 +429,7 @@ public class CharSequenceInputStreamTest {
     }
 
     @Test
-    public void testNullCharsetName() throws IOException {
+    void testNullCharsetName() throws IOException {
         try (CharSequenceInputStream in = new CharSequenceInputStream("A", (String) null)) {
             IOUtils.toByteArray(in);
             assertEquals(Charset.defaultCharset(), in.getCharsetEncoder().charset());
@@ -437,6 +440,16 @@ public class CharSequenceInputStreamTest {
         }
     }
 
+    @Test
+    void testReadAfterClose() throws Exception {
+        final InputStream shadow;
+        try (InputStream in = CharSequenceInputStream.builder().setCharSequence("Hi").get()) {
+            assertTrue(in.available() > 0);
+            shadow = in;
+        }
+        assertEquals(IOUtils.EOF, shadow.read());
+    }
+
     private void testReadZero(final String csName) throws Exception {
         try (InputStream r = new CharSequenceInputStream("test", csName)) {
             final byte[] bytes = new byte[30];
@@ -445,7 +458,7 @@ public class CharSequenceInputStreamTest {
     }
 
     @Test
-    public void testReadZero_EmptyString() throws Exception {
+    void testReadZero_EmptyString() throws Exception {
         try (InputStream r = new CharSequenceInputStream("", UTF_8)) {
             final byte[] bytes = new byte[30];
             assertEquals(0, r.read(bytes, 0, 0));
@@ -454,7 +467,7 @@ public class CharSequenceInputStreamTest {
 
     @ParameterizedTest
     @MethodSource(CharsetsTest.REQUIRED_CHARSETS)
-    public void testReadZero_RequiredCharsets(final String csName) throws Exception {
+    void testReadZero_RequiredCharsets(final String csName) throws Exception {
         testReadZero(csName);
     }
 
@@ -478,24 +491,24 @@ public class CharSequenceInputStreamTest {
     }
 
     @Test
-    public void testResetBeforeEndSetCharSequence() throws IOException {
-        try (final CharSequenceInputStream inputStream = CharSequenceInputStream.builder().setCharSequence("1234").get()) {
+    void testResetBeforeEndSetCharSequence() throws IOException {
+        try (CharSequenceInputStream inputStream = CharSequenceInputStream.builder().setCharSequence("1234").get()) {
             testResetBeforeEnd(inputStream);
         }
     }
 
     @Test
-    public void testResetCharset() {
+    void testResetCharset() {
         assertNotNull(CharSequenceInputStream.builder().setReader(new StringReader("\uD800")).setCharset((Charset) null).getCharset());
     }
 
     @Test
-    public void testResetCharsetEncoder() {
+    void testResetCharsetEncoder() {
         assertNotNull(CharSequenceInputStream.builder().setReader(new StringReader("\uD800")).setCharsetEncoder(null).getCharsetEncoder());
     }
 
     @Test
-    public void testResetCharsetName() {
+    void testResetCharsetName() {
         assertNotNull(CharSequenceInputStream.builder().setReader(new StringReader("\uD800")).setCharset((String) null).getCharset());
     }
 
@@ -514,23 +527,23 @@ public class CharSequenceInputStreamTest {
 
     @ParameterizedTest
     @MethodSource(CharsetsTest.REQUIRED_CHARSETS)
-    public void testSingleByteRead_RequiredCharsets(final String csName) throws IOException {
+    void testSingleByteRead_RequiredCharsets(final String csName) throws IOException {
         testSingleByteRead(TEST_STRING, csName);
     }
 
     @Test
-    public void testSingleByteRead_UTF16() throws IOException {
+    void testSingleByteRead_UTF16() throws IOException {
         testSingleByteRead(TEST_STRING, UTF_16);
     }
 
     @Test
-    public void testSingleByteRead_UTF8() throws IOException {
+    void testSingleByteRead_UTF8() throws IOException {
         testSingleByteRead(TEST_STRING, UTF_8);
     }
 
     @ParameterizedTest
     @MethodSource(CharsetsTest.REQUIRED_CHARSETS)
-    public void testSkip_RequiredCharsets(final String csName) throws Exception {
+    void testSkip_RequiredCharsets(final String csName) throws Exception {
         try (InputStream r = new CharSequenceInputStream("test", csName)) {
             assertEquals(1, r.skip(1));
             assertEquals(2, r.skip(2));

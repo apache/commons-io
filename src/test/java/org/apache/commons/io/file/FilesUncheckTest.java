@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -66,7 +66,7 @@ import org.junit.jupiter.api.Test;
  *
  * These tests are simple and just makes sure we do can make the call without catching IOException.
  */
-public class FilesUncheckTest {
+class FilesUncheckTest {
 
     private static final FileAttribute<?>[] EMPTY_FILE_ATTRIBUTES_ARRAY = {};
 
@@ -95,142 +95,142 @@ public class FilesUncheckTest {
     }
 
     @Test
-    public void testCopyInputStreamPathCopyOptionArray() {
-        assertEquals(0, FilesUncheck.copy(NullInputStream.INSTANCE, NEW_FILE_PATH, PathUtils.EMPTY_COPY_OPTIONS));
+    void testCopyInputStreamPathCopyOptionArray() {
+        assertEquals(0, FilesUncheck.copy(new NullInputStream(), NEW_FILE_PATH, PathUtils.EMPTY_COPY_OPTIONS));
     }
 
     @Test
-    public void testCopyPathOutputStream() {
+    void testCopyPathOutputStream() {
         assertEquals(0, FilesUncheck.copy(FILE_PATH_EMPTY, NullOutputStream.INSTANCE));
     }
 
     @Test
-    public void testCopyPathPathCopyOptionArray() {
+    void testCopyPathPathCopyOptionArray() {
         assertEquals(NEW_FILE_PATH, FilesUncheck.copy(FILE_PATH_EMPTY, NEW_FILE_PATH, PathUtils.EMPTY_COPY_OPTIONS));
     }
 
     @Test
-    public void testCreateDirectories() {
+    void testCreateDirectories() {
         assertEquals(TARGET_PATH, FilesUncheck.createDirectories(TARGET_PATH, EMPTY_FILE_ATTRIBUTES_ARRAY));
     }
 
     @Test
-    public void testCreateDirectory() {
+    void testCreateDirectory() {
         assertEquals(NEW_DIR_PATH, FilesUncheck.createDirectory(NEW_DIR_PATH, EMPTY_FILE_ATTRIBUTES_ARRAY));
     }
 
     @Test
-    public void testCreateFile() {
+    void testCreateFile() {
         assertEquals(NEW_FILE_PATH, FilesUncheck.createFile(NEW_FILE_PATH, EMPTY_FILE_ATTRIBUTES_ARRAY));
     }
 
     @Test
-    public void testCreateLink() {
+    void testCreateLink() {
         assertEquals(NEW_FILE_PATH_LINK, FilesUncheck.createLink(NEW_FILE_PATH_LINK, FILE_PATH_EMPTY));
     }
 
     @Test
-    public void testCreateSymbolicLink() {
+    void testCreateSymbolicLink() {
         // May cause: Caused by: java.nio.file.FileSystemException: A required privilege is not held by the client.
         assertEquals(NEW_FILE_PATH_LINK, FilesUncheck.createSymbolicLink(NEW_FILE_PATH_LINK, FILE_PATH_EMPTY));
     }
 
     @Test
-    public void testCreateTempDirectoryPathStringFileAttributeOfQArray() {
+    void testCreateTempDirectoryPathStringFileAttributeOfQArray() {
         assertEquals(TARGET_PATH, FilesUncheck.createTempDirectory(TARGET_PATH, PREFIX, EMPTY_FILE_ATTRIBUTES_ARRAY).getParent());
     }
 
     @Test
-    public void testCreateTempDirectoryStringFileAttributeOfQArray() {
+    void testCreateTempDirectoryStringFileAttributeOfQArray() {
         assertEquals(PathUtils.getTempDirectory(), FilesUncheck.createTempDirectory(PREFIX, EMPTY_FILE_ATTRIBUTES_ARRAY).getParent());
     }
 
     @Test
-    public void testCreateTempFilePathStringStringFileAttributeOfQArray() {
+    void testCreateTempFilePathStringStringFileAttributeOfQArray() {
         assertEquals(TARGET_PATH, FilesUncheck.createTempFile(TARGET_PATH, PREFIX, SUFFIX, EMPTY_FILE_ATTRIBUTES_ARRAY).getParent());
     }
 
     @Test
-    public void testCreateTempFileStringStringFileAttributeOfQArray() {
+    void testCreateTempFileStringStringFileAttributeOfQArray() {
         assertEquals(PathUtils.getTempDirectory(), FilesUncheck.createTempFile(PREFIX, SUFFIX, EMPTY_FILE_ATTRIBUTES_ARRAY).getParent());
     }
 
     @Test
-    public void testDelete() {
+    void testDelete() {
         assertThrows(UncheckedIOException.class, () -> FilesUncheck.delete(NEW_FILE_PATH));
     }
 
     @Test
-    public void testDeleteIfExists() {
+    void testDeleteIfExists() {
         assertFalse(FilesUncheck.deleteIfExists(NEW_FILE_PATH));
     }
 
     @Test
-    public void testFind() {
+    void testFind() {
         try (Stream<Path> find = FilesUncheck.find(FILE_PATH_EMPTY, 0, (t, u) -> false)) {
             assertNotNull(find);
         }
     }
 
     @Test
-    public void testGetAttribute() {
+    void testGetAttribute() {
         assertEquals(0L, FilesUncheck.getAttribute(FILE_PATH_EMPTY, "basic:size", LinkOption.NOFOLLOW_LINKS));
     }
 
     @Test
-    public void testGetFileStore() {
+    void testGetFileStore() {
         assertNotNull(FilesUncheck.getFileStore(FILE_PATH_EMPTY));
     }
 
     @Test
-    public void testGetLastModifiedTime() {
+    void testGetLastModifiedTime() {
         assertTrue(0 < FilesUncheck.getLastModifiedTime(FILE_PATH_EMPTY, LinkOption.NOFOLLOW_LINKS).toMillis());
     }
 
     @Test
-    public void testGetOwner() {
+    void testGetOwner() {
         assertNotNull(FilesUncheck.getOwner(FILE_PATH_EMPTY, LinkOption.NOFOLLOW_LINKS));
     }
 
     @Test
-    public void testGetPosixFilePermissions() {
+    void testGetPosixFilePermissions() {
         assumeTrue(PathUtils.isPosix(FILE_PATH_EMPTY, LinkOption.NOFOLLOW_LINKS));
         assertNotNull(FilesUncheck.getPosixFilePermissions(FILE_PATH_EMPTY, LinkOption.NOFOLLOW_LINKS));
     }
 
     @Test
-    public void testIsHidden() {
+    void testIsHidden() {
         assertFalse(FilesUncheck.isHidden(FILE_PATH_EMPTY));
     }
 
     @Test
-    public void testIsSameFile() {
+    void testIsSameFile() {
         assertTrue(FilesUncheck.isSameFile(FILE_PATH_EMPTY, FILE_PATH_EMPTY));
     }
 
     @Test
-    public void testLinesPath() {
+    void testLinesPath() {
         try (Stream<String> stream = FilesUncheck.lines(FILE_PATH_EMPTY)) {
             assertEquals(0, stream.count());
         }
     }
 
     @Test
-    public void testLinesPathCharset() {
+    void testLinesPathCharset() {
         try (Stream<String> stream = FilesUncheck.lines(FILE_PATH_EMPTY, StandardCharsets.UTF_8)) {
             assertEquals(0, stream.count());
         }
     }
 
     @Test
-    public void testList() {
+    void testList() {
         try (Stream<Path> stream = FilesUncheck.list(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0"))) {
             assertEquals(1, stream.count());
         }
     }
 
     @Test
-    public void testMove() {
+    void testMove() {
         final Path tempFile1 = FilesUncheck.createTempFile(PREFIX, SUFFIX);
         final Path tempFile2 = FilesUncheck.createTempFile(PREFIX, SUFFIX);
         assertEquals(tempFile2, FilesUncheck.move(tempFile1, tempFile2, StandardCopyOption.REPLACE_EXISTING));
@@ -238,7 +238,7 @@ public class FilesUncheckTest {
     }
 
     @Test
-    public void testNewBufferedReaderPath() {
+    void testNewBufferedReaderPath() {
         Uncheck.run(() -> {
             try (BufferedReader reader = FilesUncheck.newBufferedReader(FILE_PATH_EMPTY)) {
                 IOUtils.consume(reader);
@@ -247,7 +247,7 @@ public class FilesUncheckTest {
     }
 
     @Test
-    public void testNewBufferedReaderPathCharset() {
+    void testNewBufferedReaderPathCharset() {
         Uncheck.run(() -> {
             try (BufferedReader reader = FilesUncheck.newBufferedReader(FILE_PATH_EMPTY, StandardCharsets.UTF_8)) {
                 IOUtils.consume(reader);
@@ -256,7 +256,7 @@ public class FilesUncheckTest {
     }
 
     @Test
-    public void testNewBufferedWriterPathCharsetOpenOptionArray() {
+    void testNewBufferedWriterPathCharsetOpenOptionArray() {
         final Path tempPath = FilesUncheck.createTempFile(PREFIX, SUFFIX);
         Uncheck.run(() -> {
             try (BufferedWriter writer = FilesUncheck.newBufferedWriter(tempPath, StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING)) {
@@ -267,7 +267,7 @@ public class FilesUncheckTest {
     }
 
     @Test
-    public void testNewBufferedWriterPathOpenOptionArray() {
+    void testNewBufferedWriterPathOpenOptionArray() {
         final Path tempPath = FilesUncheck.createTempFile(PREFIX, SUFFIX);
         Uncheck.run(() -> {
             try (BufferedWriter writer = FilesUncheck.newBufferedWriter(tempPath, StandardOpenOption.TRUNCATE_EXISTING)) {
@@ -278,8 +278,8 @@ public class FilesUncheckTest {
     }
 
     @Test
-    public void testNewByteChannelPathOpenOptionArray() {
-        assertEquals(0, Uncheck.get(() -> {
+    void testNewByteChannelPathOpenOptionArray() {
+        assertEquals(0, Uncheck.getAsLong(() -> {
             try (SeekableByteChannel c = FilesUncheck.newByteChannel(FILE_PATH_EMPTY, StandardOpenOption.READ)) {
                 return c.size();
             }
@@ -287,10 +287,10 @@ public class FilesUncheckTest {
     }
 
     @Test
-    public void testNewByteChannelPathSetOfQextendsOpenOptionFileAttributeOfQArray() {
+    void testNewByteChannelPathSetOfQextendsOpenOptionFileAttributeOfQArray() {
         final Set<OpenOption> options = new HashSet<>();
         options.add(StandardOpenOption.READ);
-        assertEquals(0, Uncheck.get(() -> {
+        assertEquals(0, Uncheck.getAsLong(() -> {
             try (SeekableByteChannel c = FilesUncheck.newByteChannel(FILE_PATH_EMPTY, options, EMPTY_FILE_ATTRIBUTES_ARRAY)) {
                 return c.size();
             }
@@ -298,35 +298,35 @@ public class FilesUncheckTest {
     }
 
     @Test
-    public void testNewDirectoryStreamPath() {
+    void testNewDirectoryStreamPath() {
         Uncheck.run(() -> {
-            try (final DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(TARGET_PATH)) {
+            try (DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(TARGET_PATH)) {
                 directoryStream.forEach(e -> assertEquals(TARGET_PATH, e.getParent()));
             }
         });
     }
 
     @Test
-    public void testNewDirectoryStreamPathFilterOfQsuperPath() {
+    void testNewDirectoryStreamPathFilterOfQsuperPath() {
         Uncheck.run(() -> {
-            try (final DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(TARGET_PATH, e -> true)) {
+            try (DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(TARGET_PATH, e -> true)) {
                 directoryStream.forEach(e -> assertEquals(TARGET_PATH, e.getParent()));
             }
         });
     }
 
     @Test
-    public void testNewDirectoryStreamPathString() {
+    void testNewDirectoryStreamPathString() {
         Uncheck.run(() -> {
-            try (final DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(TARGET_PATH, "*.xml")) {
+            try (DirectoryStream<Path> directoryStream = FilesUncheck.newDirectoryStream(TARGET_PATH, "*.xml")) {
                 directoryStream.forEach(e -> assertEquals(TARGET_PATH, e.getParent()));
             }
         });
     }
 
     @Test
-    public void testNewInputStream() {
-        assertEquals(0, Uncheck.get(() -> {
+    void testNewInputStream() {
+        assertEquals(0, Uncheck.getAsInt(() -> {
             try (InputStream in = FilesUncheck.newInputStream(FILE_PATH_EMPTY, StandardOpenOption.READ)) {
                 return in.available();
             }
@@ -334,7 +334,7 @@ public class FilesUncheckTest {
     }
 
     @Test
-    public void testNewOutputStream() {
+    void testNewOutputStream() {
         final Path tempPath = FilesUncheck.createTempFile(PREFIX, SUFFIX);
         Uncheck.run(() -> {
             try (OutputStream stream = FilesUncheck.newOutputStream(tempPath, StandardOpenOption.TRUNCATE_EXISTING)) {
@@ -345,7 +345,7 @@ public class FilesUncheckTest {
     }
 
     @Test
-    public void testProbeContentType() {
+    void testProbeContentType() {
         // Empty file:
         String probeContentType = FilesUncheck.probeContentType(FILE_PATH_EMPTY);
         // Empirical: probeContentType is null on Windows
@@ -360,109 +360,109 @@ public class FilesUncheckTest {
     }
 
     @Test
-    public void testReadAllBytes() {
+    void testReadAllBytes() {
         assertArrayEquals(ArrayUtils.EMPTY_BYTE_ARRAY, FilesUncheck.readAllBytes(FILE_PATH_EMPTY));
         assertArrayEquals(new byte[] {'a'}, FilesUncheck.readAllBytes(FILE_PATH_A));
     }
 
     @Test
-    public void testReadAllLinesPath() {
+    void testReadAllLinesPath() {
         assertEquals(Collections.emptyList(), FilesUncheck.readAllLines(FILE_PATH_EMPTY));
         assertEquals(Arrays.asList("a"), FilesUncheck.readAllLines(FILE_PATH_A));
     }
 
     @Test
-    public void testReadAllLinesPathCharset() {
+    void testReadAllLinesPathCharset() {
         assertEquals(Collections.emptyList(), FilesUncheck.readAllLines(FILE_PATH_EMPTY, StandardCharsets.UTF_8));
         assertEquals(Arrays.asList("a"), FilesUncheck.readAllLines(FILE_PATH_A, StandardCharsets.UTF_8));
     }
 
     @Test
-    public void testReadAttributesPathClassOfALinkOptionArray() {
+    void testReadAttributesPathClassOfALinkOptionArray() {
         assertNotNull(FilesUncheck.readAttributes(FILE_PATH_EMPTY, BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS));
     }
 
     @Test
-    public void testReadAttributesPathStringLinkOptionArray() {
+    void testReadAttributesPathStringLinkOptionArray() {
         assertNotNull(FilesUncheck.readAttributes(FILE_PATH_EMPTY, "basic:lastModifiedTime", LinkOption.NOFOLLOW_LINKS));
     }
 
     @Test
-    public void testReadSymbolicLink() {
+    void testReadSymbolicLink() {
         assertThrows(UncheckedIOException.class, () -> FilesUncheck.readSymbolicLink(NEW_FILE_PATH_LINK));
     }
 
     @Test
-    public void testSetAttribute() {
+    void testSetAttribute() {
         final FileTime ft = FilesUncheck.getLastModifiedTime(FILE_PATH_EMPTY);
         assertEquals(FILE_PATH_EMPTY, FilesUncheck.setAttribute(FILE_PATH_EMPTY, "basic:lastModifiedTime", ft, LinkOption.NOFOLLOW_LINKS));
     }
 
     @Test
-    public void testSetLastModifiedTime() {
+    void testSetLastModifiedTime() {
         final FileTime ft = FilesUncheck.getLastModifiedTime(FILE_PATH_EMPTY);
         assertEquals(FILE_PATH_EMPTY, FilesUncheck.setLastModifiedTime(FILE_PATH_EMPTY, ft));
     }
 
     @Test
-    public void testSetOwner() {
+    void testSetOwner() {
         final UserPrincipal owner = FilesUncheck.getOwner(FILE_PATH_EMPTY, LinkOption.NOFOLLOW_LINKS);
         assertEquals(FILE_PATH_EMPTY, FilesUncheck.setOwner(FILE_PATH_EMPTY, owner));
     }
 
     @Test
-    public void testSetPosixFilePermissions() {
+    void testSetPosixFilePermissions() {
         assumeTrue(PathUtils.isPosix(FILE_PATH_EMPTY, LinkOption.NOFOLLOW_LINKS));
         final Set<PosixFilePermission> posixFilePermissions = FilesUncheck.getPosixFilePermissions(FILE_PATH_EMPTY, LinkOption.NOFOLLOW_LINKS);
         assertEquals(FILE_PATH_EMPTY, FilesUncheck.setPosixFilePermissions(FILE_PATH_EMPTY, posixFilePermissions));
     }
 
     @Test
-    public void testSize() {
+    void testSize() {
         assertEquals(0, FilesUncheck.size(FILE_PATH_EMPTY));
         assertEquals(1, FilesUncheck.size(FILE_PATH_A));
     }
 
     @Test
-    public void testWalkFileTreePathFileVisitorOfQsuperPath() {
+    void testWalkFileTreePathFileVisitorOfQsuperPath() {
         assertEquals(TARGET_PATH, FilesUncheck.walkFileTree(TARGET_PATH, NoopPathVisitor.INSTANCE));
     }
 
     @Test
-    public void testWalkFileTreePathSetOfFileVisitOptionIntFileVisitorOfQsuperPath() {
+    void testWalkFileTreePathSetOfFileVisitOptionIntFileVisitorOfQsuperPath() {
         assertEquals(TARGET_PATH, FilesUncheck.walkFileTree(TARGET_PATH, new HashSet<>(), 1, NoopPathVisitor.INSTANCE));
     }
 
     @Test
-    public void testWalkPathFileVisitOptionArray() {
+    void testWalkPathFileVisitOptionArray() {
         try (Stream<Path> stream = FilesUncheck.walk(TARGET_PATH, FileVisitOption.FOLLOW_LINKS)) {
             assertTrue(0 < stream.count());
         }
     }
 
     @Test
-    public void testWalkPathIntFileVisitOptionArray() {
+    void testWalkPathIntFileVisitOptionArray() {
         try (Stream<Path> stream = FilesUncheck.walk(TARGET_PATH, 0, FileVisitOption.FOLLOW_LINKS)) {
             assertEquals(1, stream.count());
         }
     }
 
     @Test
-    public void testWritePathByteArrayOpenOptionArray() {
+    void testWritePathByteArrayOpenOptionArray() {
         final Path tempFile = FilesUncheck.createTempFile(PREFIX, SUFFIX);
         assertEquals(tempFile, FilesUncheck.write(tempFile, "test".getBytes(), StandardOpenOption.TRUNCATE_EXISTING));
         FilesUncheck.delete(tempFile);
     }
 
     @Test
-    public void testWritePathIterableOfQextendsCharSequenceCharsetOpenOptionArray() {
+    void testWritePathIterableOfQextendsCharSequenceCharsetOpenOptionArray() {
         final Path tempFile = FilesUncheck.createTempFile(PREFIX, SUFFIX);
         assertEquals(tempFile, FilesUncheck.write(tempFile, Arrays.asList("test"), StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING));
         FilesUncheck.delete(tempFile);
     }
 
     @Test
-    public void testWritePathIterableOfQextendsCharSequenceOpenOptionArray() {
+    void testWritePathIterableOfQextendsCharSequenceOpenOptionArray() {
         final Path tempFile = FilesUncheck.createTempFile(PREFIX, SUFFIX);
         assertEquals(tempFile, FilesUncheck.write(tempFile, Arrays.asList("test"), StandardOpenOption.TRUNCATE_EXISTING));
         FilesUncheck.delete(tempFile);

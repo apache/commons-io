@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,11 +16,12 @@
  */
 package org.apache.commons.io.input;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * This is an alternative to {@link java.io.ByteArrayInputStream}
+ * This is an alternative to {@link ByteArrayInputStream}
  * which removes the synchronization overhead for non-concurrent
  * access; as such this class is not thread-safe.
  *

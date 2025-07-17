@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -37,9 +37,9 @@ import java.util.stream.Stream;
  * This class aims to help avoid those problems.
  * </p>
  * <p>
- * <b>NOTE</b>: You may be able to avoid using this class entirely simply by
- * using JDK {@link java.io.File File} objects and the two argument constructor
- * {@link java.io.File#File(java.io.File, String) File(File,String)}.
+ * <strong>NOTE</strong>: You may be able to avoid using this class entirely simply by
+ * using JDK {@link File File} objects and the two argument constructor
+ * {@link File#File(java.io.File, String) File(File,String)}.
  * </p>
  * <p>
  * Most methods in this class are designed to work the same on both Unix and Windows.
@@ -405,7 +405,7 @@ public class FilenameUtils {
             }
         }
 
-        // dot slash
+        // period slash
         for (int i = prefix + 1; i < size; i++) {
             if (array[i] == separator && array[i - 1] == '.' &&
                     (i == prefix + 1 || array[i - 2] == separator)) {
@@ -413,12 +413,12 @@ public class FilenameUtils {
                     lastIsDirectory = true;
                 }
                 System.arraycopy(array, i + 1, array, i - 1, size - i);
-                size -=2;
+                size -= 2;
                 i--;
             }
         }
 
-        // double dot slash
+        // double period slash
         outer:
         for (int i = prefix + 2; i < size; i++) {
             if (array[i] == separator && array[i - 1] == '.' && array[i - 2] == '.' &&
@@ -595,7 +595,7 @@ public class FilenameUtils {
      * Gets the base name, minus the full path and extension, from a full file name.
      * <p>
      * This method will handle a path in either Unix or Windows format.
-     * The text after the last forward or backslash and before the last dot is returned.
+     * The text after the last forward or backslash and before the last period is returned.
      * </p>
      * <pre>
      * a/b/c.txt --&gt; c
@@ -618,10 +618,10 @@ public class FilenameUtils {
     }
 
     /**
-     * Gets the extension of a fileName.
+     * Gets the extension of a file name.
      * <p>
-     * This method returns the textual part of the file name after the last dot.
-     * There must be no directory separator after the dot.
+     * This method returns the textual part of the file name after the last period.
+     * There must be no directory separator after the period.
      * </p>
      * <pre>
      * foo.txt      --&gt; "txt"
@@ -634,7 +634,7 @@ public class FilenameUtils {
      * exception of a possible {@link IllegalArgumentException} on Windows (see below).
      * </p>
      * <p>
-     * <b>Note:</b> This method used to have a hidden problem for names like "foo.exe:bar.txt".
+     * <strong>Note:</strong> This method used to have a hidden problem for names like "foo.exe:bar.txt".
      * In this case, the name wouldn't be the name of a file, but the identifier of an
      * alternate data stream (bar.txt) on the file foo.exe. The method used to return
      * ".txt" here, which would be misleading. Commons IO 2.7 and later throw
@@ -644,7 +644,7 @@ public class FilenameUtils {
      * @param fileName the file name to retrieve the extension of.
      * @return the extension of the file or an empty string if none exists or {@code null}
      * if the file name is {@code null}.
-     * @throws IllegalArgumentException <b>Windows only:</b> the file name parameter is, in fact,
+     * @throws IllegalArgumentException <strong>Windows only:</strong> the file name parameter is, in fact,
      * the identifier of an Alternate Data Stream, for example "foo.exe:bar.txt".
      */
     public static String getExtension(final String fileName) throws IllegalArgumentException {
@@ -963,16 +963,16 @@ public class FilenameUtils {
     }
 
     /**
-     * Returns the index of the last extension separator character, which is a dot.
+     * Returns the index of the last extension separator character, which is a period.
      * <p>
-     * This method also checks that there is no directory separator after the last dot. To do this it uses
+     * This method also checks that there is no directory separator after the last period. To do this it uses
      * {@link #indexOfLastSeparator(String)} which will handle a file in either Unix or Windows format.
      * </p>
      * <p>
      * The output will be the same irrespective of the machine that the code is running on, with the
      * exception of a possible {@link IllegalArgumentException} on Windows (see below).
      * </p>
-     * <b>Note:</b> This method used to have a hidden problem for names like "foo.exe:bar.txt".
+     * <strong>Note:</strong> This method used to have a hidden problem for names like "foo.exe:bar.txt".
      * In this case, the name wouldn't be the name of a file, but the identifier of an
      * alternate data stream (bar.txt) on the file foo.exe. The method used to return
      * ".txt" here, which would be misleading. Commons IO 2.7, and later versions, are throwing
@@ -981,7 +981,7 @@ public class FilenameUtils {
      * @param fileName
      *            the file name to find the last extension separator in, null returns -1
      * @return the index of the last extension separator character, or -1 if there is no such character
-     * @throws IllegalArgumentException <b>Windows only:</b> the file name parameter is, in fact,
+     * @throws IllegalArgumentException <strong>Windows only:</strong> the file name parameter is, in fact,
      * the identifier of an Alternate Data Stream, for example "foo.exe:bar.txt".
      */
     public static int indexOfExtension(final String fileName) throws IllegalArgumentException {
@@ -1029,7 +1029,7 @@ public class FilenameUtils {
      * Checks whether the extension of the file name is one of those specified.
      * <p>
      * This method obtains the extension as the textual part of the file name
-     * after the last dot. There must be no directory separator after the dot.
+     * after the last period. There must be no directory separator after the period.
      * The extension check is case-sensitive on all platforms.
      *
      * @param fileName  the file name, null returns false
@@ -1053,7 +1053,7 @@ public class FilenameUtils {
      * Checks whether the extension of the file name is that specified.
      * <p>
      * This method obtains the extension as the textual part of the file name
-     * after the last dot. There must be no directory separator after the dot.
+     * after the last period. There must be no directory separator after the period.
      * The extension check is case-sensitive on all platforms.
      *
      * @param fileName  the file name, null returns false
@@ -1077,7 +1077,7 @@ public class FilenameUtils {
      * Checks whether the extension of the file name is one of those specified.
      * <p>
      * This method obtains the extension as the textual part of the file name
-     * after the last dot. There must be no directory separator after the dot.
+     * after the last period. There must be no directory separator after the period.
      * The extension check is case-sensitive on all platforms.
      *
      * @param fileName  the file name, null returns false
@@ -1207,7 +1207,7 @@ public class FilenameUtils {
         final String[] parts = name.split("\\.", -1);
         for (int i = 0; i < parts.length; i++) {
             if (parts[i].isEmpty()) {
-                // trailing dot is legal, otherwise we've hit a .. sequence
+                // trailing period is legal, otherwise we've hit a .. sequence
                 return i == parts.length - 1;
             }
             if (!REG_NAME_PART_PATTERN.matcher(parts[i]).matches()) {
@@ -1253,7 +1253,7 @@ public class FilenameUtils {
     }
 
     /**
-     * Normalizes a path, removing double and single dot path steps.
+     * Normalizes a path, removing double and single period path steps.
      * <p>
      * This method normalizes a path to a standard format.
      * The input may contain separators in either Unix or Windows format.
@@ -1261,9 +1261,9 @@ public class FilenameUtils {
      * <p>
      * A trailing slash will be retained.
      * A double slash will be merged to a single slash (but UNC names are handled).
-     * A single dot path segment will be removed.
-     * A double dot will cause that path segment and the one before to be removed.
-     * If the double dot has no parent path segment, {@code null} is returned.
+     * A single period path segment will be removed.
+     * A double period will cause that path segment and the one before to be removed.
+     * If the double period has no parent path segment, {@code null} is returned.
      * <p>
      * The output will be the same on both Unix and Windows except
      * for the separator character.
@@ -1297,7 +1297,7 @@ public class FilenameUtils {
     }
 
     /**
-     * Normalizes a path, removing double and single dot path steps.
+     * Normalizes a path, removing double and single period path steps.
      * <p>
      * This method normalizes a path to a standard format.
      * The input may contain separators in either Unix or Windows format.
@@ -1305,9 +1305,9 @@ public class FilenameUtils {
      * <p>
      * A trailing slash will be retained.
      * A double slash will be merged to a single slash (but UNC names are handled).
-     * A single dot path segment will be removed.
-     * A double dot will cause that path segment and the one before to be removed.
-     * If the double dot has no parent path segment to work with, {@code null}
+     * A single period path segment will be removed.
+     * A double period will cause that path segment and the one before to be removed.
+     * If the double period has no parent path segment to work with, {@code null}
      * is returned.
      * <p>
      * The output will be the same on both Unix and Windows except
@@ -1346,7 +1346,7 @@ public class FilenameUtils {
     }
 
     /**
-     * Normalizes a path, removing double and single dot path steps,
+     * Normalizes a path, removing double and single period path steps,
      * and removing any final directory separator.
      * <p>
      * This method normalizes a path to a standard format.
@@ -1355,9 +1355,9 @@ public class FilenameUtils {
      * <p>
      * A trailing slash will be removed.
      * A double slash will be merged to a single slash (but UNC names are handled).
-     * A single dot path segment will be removed.
-     * A double dot will cause that path segment and the one before to be removed.
-     * If the double dot has no parent path segment to work with, {@code null}
+     * A single period path segment will be removed.
+     * A double period will cause that path segment and the one before to be removed.
+     * If the double period has no parent path segment to work with, {@code null}
      * is returned.
      * <p>
      * The output will be the same on both Unix and Windows except
@@ -1392,7 +1392,7 @@ public class FilenameUtils {
     }
 
     /**
-     * Normalizes a path, removing double and single dot path steps,
+     * Normalizes a path, removing double and single period path steps,
      * and removing any final directory separator.
      * <p>
      * This method normalizes a path to a standard format.
@@ -1401,9 +1401,9 @@ public class FilenameUtils {
      * <p>
      * A trailing slash will be removed.
      * A double slash will be merged to a single slash (but UNC names are handled).
-     * A single dot path segment will be removed.
-     * A double dot will cause that path segment and the one before to be removed.
-     * If the double dot has no parent path segment to work with, {@code null}
+     * A single period path segment will be removed.
+     * A double period will cause that path segment and the one before to be removed.
+     * If the double period has no parent path segment to work with, {@code null}
      * is returned.
      * <p>
      * The output will be the same on both Unix and Windows including
@@ -1442,8 +1442,8 @@ public class FilenameUtils {
     /**
      * Removes the extension from a fileName.
      * <p>
-     * This method returns the textual part of the file name before the last dot.
-     * There must be no directory separator after the dot.
+     * This method returns the textual part of the file name before the last period.
+     * There must be no directory separator after the period.
      * <pre>
      * foo.txt    --&gt; foo
      * .txt       --&gt; "" (empty string)
@@ -1547,7 +1547,7 @@ public class FilenameUtils {
                 }
                 if (ch == '?') {
                     list.add("?");
-                } else if (prevChar != '*') {// ch == '*' here; check if previous char was '*'
+                } else if (prevChar != '*') { // ch == '*' here; check if previous char was '*'
                     list.add("*");
                 }
             } else {
@@ -1587,7 +1587,7 @@ public class FilenameUtils {
      * wildcardMatch("c.txt", "*.???")      --&gt; true
      * wildcardMatch("c.txt", "*.????")     --&gt; false
      * </pre>
-     * N.B. the sequence "*?" does not work properly at present in match strings.
+     * The sequence "*?" does not work properly at present in match strings.
      *
      * @param fileName  the file name to match on
      * @param wildcardMatcher  the wildcard string to match against
@@ -1604,7 +1604,7 @@ public class FilenameUtils {
      * <p>
      * The wildcard matcher uses the characters '?' and '*' to represent a
      * single or multiple (zero or more) wildcard characters.
-     * N.B. the sequence "*?" does not work properly at present in match strings.
+     * The sequence "*?" does not work properly at present in match strings.
      *
      * @param fileName  the file name to match on
      * @param wildcardMatcher  the wildcard string to match against
@@ -1705,7 +1705,7 @@ public class FilenameUtils {
      * wildcardMatch("c.txt", "*.???")      --&gt; true
      * wildcardMatch("c.txt", "*.????")     --&gt; false
      * </pre>
-     * N.B. the sequence "*?" does not work properly at present in match strings.
+     * The sequence "*?" does not work properly at present in match strings.
      *
      * @param fileName  the file name to match on
      * @param wildcardMatcher  the wildcard string to match against
@@ -1718,7 +1718,11 @@ public class FilenameUtils {
 
     /**
      * Instances should NOT be constructed in standard programming.
+     *
+     * @deprecated TODO Make private in 3.0.
      */
+    @Deprecated
     public FilenameUtils() {
+        // empty
     }
 }

@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -57,6 +57,22 @@ public final class Uncheck {
     public static <T> void accept(final IOConsumer<T> consumer, final T t) {
         try {
             consumer.accept(t);
+        } catch (final IOException e) {
+            throw wrap(e);
+        }
+    }
+
+    /**
+     * Accepts an IO consumer with the given argument.
+     *
+     * @param i the input argument.
+     * @param consumer Consumes the value.
+     * @throws UncheckedIOException if an I/O error occurs.
+     * @since 2.18.0
+     */
+    public static void accept(final IOIntConsumer consumer, final int i) {
+        try {
+            consumer.accept(i);
         } catch (final IOException e) {
             throw wrap(e);
         }
@@ -218,6 +234,22 @@ public final class Uncheck {
     }
 
     /**
+     * Gets the result from an IO boolean supplier.
+     *
+     * @param supplier Supplies the return value.
+     * @return result from the supplier.
+     * @throws UncheckedIOException if an I/O error occurs.
+     * @since 2.19.0
+     */
+    public static boolean getAsBoolean(final IOBooleanSupplier supplier) {
+        try {
+            return supplier.getAsBoolean();
+        } catch (final IOException e) {
+            throw wrap(e);
+        }
+    }
+
+    /**
      * Gets the result from an IO int supplier.
      *
      * @param supplier Supplies the return value.
@@ -330,7 +362,7 @@ public final class Uncheck {
     }
 
     /**
-     * Constructs a new UncheckedIOException for the given exception.
+     * Constructs a new {@link UncheckedIOException} for the given exception.
      *
      * @param e The exception to wrap.
      * @return a new {@link UncheckedIOException}.
@@ -340,7 +372,7 @@ public final class Uncheck {
     }
 
     /**
-     * Constructs a new UncheckedIOException for the given exception and detail message.
+     * Constructs a new {@link UncheckedIOException} for the given exception and detail message.
      *
      * @param e The exception to wrap.
      * @param message The UncheckedIOException message if an I/O error occurs.

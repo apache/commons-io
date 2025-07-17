@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -37,7 +37,7 @@ public final class StreamIterator<E> implements Iterator<E>, AutoCloseable {
     /**
      * Wraps and presents a stream as a closable resource that automatically closes itself when reaching the end of stream.
      * <p>
-     * <b>Warning</b>
+     * <strong>Warning</strong>
      * </p>
      * <p>
      * In order to close the stream, the call site MUST either close the stream it allocated OR call this iterator until the end.

@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,19 +19,24 @@ package org.apache.commons.io.build;
 import java.io.File;
 
 import org.apache.commons.io.build.AbstractOrigin.FileOrigin;
-import org.junit.jupiter.api.BeforeEach;
 
 /**
  * Tests {@link FileOrigin}.
  *
  * A FileOrigin can convert into all other aspects.
+ *
+ * @see File
  */
-public class FileOriginTest extends AbstractOriginTest<File, FileOrigin> {
+class FileOriginTest extends AbstractOriginTest<File, FileOrigin> {
 
-    @BeforeEach
-    public void beforeEach() {
-        setOriginRo(new FileOrigin(new File(FILE_NAME_RO)));
-        setOriginRw(new FileOrigin(new File(FILE_NAME_RW)));
+    @Override
+    protected FileOrigin newOriginRo() {
+        return new FileOrigin(new File(FILE_NAME_RO));
+    }
+
+    @Override
+    protected FileOrigin newOriginRw() {
+        return new FileOrigin(new File(FILE_NAME_RW));
     }
 
 }

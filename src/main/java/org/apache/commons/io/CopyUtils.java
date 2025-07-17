@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -68,7 +68,7 @@ import java.nio.charset.Charset;
  * Imagine that an InputStream's read() is a very expensive operation, which
  * would usually suggest wrapping in a BufferedInputStream. The
  * BufferedInputStream works by issuing infrequent
- * {@link java.io.InputStream#read(byte[] b, int off, int len)} requests on the
+ * {@link InputStream#read(byte[] b, int off, int len)} requests on the
  * underlying InputStream, to fill an internal buffer, from which further
  * {@code read} requests can inexpensively get their data (until the buffer
  * runs out).
@@ -131,7 +131,7 @@ public class CopyUtils {
      * @param input the byte array to read from
      * @param output the {@link Writer} to write to
      * @throws IOException In case of an I/O problem
-     * @deprecated 2.5 use {@link #copy(byte[], Writer, String)} instead
+     * @deprecated Use {@link #copy(byte[], Writer, String)} instead
      */
     @Deprecated
     public static void copy(final byte[] input, final Writer output) throws IOException {
@@ -178,12 +178,14 @@ public class CopyUtils {
     /**
      * Copies and convert bytes from an {@link InputStream} to chars on a
      * {@link Writer}.
-     * The platform's default encoding is used for the byte-to-char conversion.
+     * <p>
+     * This method uses the virtual machine's {@link Charset#defaultCharset() default charset} for byte-to-char conversion.
+     * </p>
      *
      * @param input the {@link InputStream} to read from
      * @param output the {@link Writer} to write to
      * @throws IOException In case of an I/O problem
-     * @deprecated 2.5 use {@link #copy(InputStream, Writer, String)} instead
+     * @deprecated Use {@link #copy(InputStream, Writer, String)} instead
      */
     @Deprecated
     public static void copy(
@@ -218,12 +220,14 @@ public class CopyUtils {
     /**
      * Serialize chars from a {@link Reader} to bytes on an
      * {@link OutputStream}, and flush the {@link OutputStream}.
-     * Uses the default platform encoding.
+     * <p>
+     * This method uses the virtual machine's {@link Charset#defaultCharset() default charset} for byte-to-char conversion.
+     * </p>
      *
      * @param input the {@link Reader} to read from
      * @param output the {@link OutputStream} to write to
      * @throws IOException In case of an I/O problem
-     * @deprecated 2.5 use {@link #copy(Reader, OutputStream, String)} instead
+     * @deprecated Use {@link #copy(Reader, OutputStream, String)} instead
      */
     @Deprecated
     public static void copy(
@@ -288,12 +292,14 @@ public class CopyUtils {
      * Serialize chars from a {@link String} to bytes on an
      * {@link OutputStream}, and
      * flush the {@link OutputStream}.
-     * Uses the platform default encoding.
+     * <p>
+     * This method uses the virtual machine's {@link Charset#defaultCharset() default charset} for byte-to-char conversion.
+     * </p>
      *
      * @param input the {@link String} to read from
      * @param output the {@link OutputStream} to write to
      * @throws IOException In case of an I/O problem
-     * @deprecated 2.5 use {@link #copy(String, OutputStream, String)} instead
+     * @deprecated Use {@link #copy(String, OutputStream, String)} instead
      */
     @Deprecated
     public static void copy(
@@ -349,7 +355,12 @@ public class CopyUtils {
 
     /**
      * Instances should NOT be constructed in standard programming.
+     *
+     * @deprecated TODO Make private in 3.0.
      */
-    public CopyUtils() { }
+    @Deprecated
+    public CopyUtils() {
+        // empty
+    }
 
 }

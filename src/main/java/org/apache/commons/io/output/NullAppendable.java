@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,7 +20,7 @@ package org.apache.commons.io.output;
 import java.io.IOException;
 
 /**
- * Appends all data to the famous <b>/dev/null</b>.
+ * Appends all data to the famous <strong>/dev/null</strong>.
  * <p>
  * This Appendable has no destination (file/socket etc.) and all characters written to it are ignored and lost.
  * </p>

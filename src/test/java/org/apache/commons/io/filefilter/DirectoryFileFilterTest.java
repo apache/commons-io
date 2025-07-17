@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link DirectoryFileFilter}.
  */
-public class DirectoryFileFilterTest {
+class DirectoryFileFilterTest {
 
     /**
      * Javadoc example.
@@ -45,7 +45,7 @@ public class DirectoryFileFilterTest {
      * System.out calls are commented out here but not in the Javadoc.
      */
     @Test
-    public void testJavadocExampleUsingIo() {
+    void testJavadocExampleUsingIo() {
         final File dir = FileUtils.current();
         final String[] files = dir.list(DirectoryFileFilter.INSTANCE);
         // End of Javadoc example
@@ -58,19 +58,19 @@ public class DirectoryFileFilterTest {
      * System.out calls are commented out here but not in the Javadoc.
      */
     @Test
-    public void testJavadocExampleUsingNio() throws IOException {
+    void testJavadocExampleUsingNio() throws IOException {
         final Path dir = Paths.get("");
         final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(DirectoryFileFilter.INSTANCE,
             TrueFileFilter.INSTANCE);
         //
-        // Walk one dir
+        // Walk one directory
         Files.walkFileTree(dir, Collections.emptySet(), 1, visitor);
         // System.out.println(visitor.getPathCounters());
         // System.out.println(visitor.getFileList());
         //
         visitor.getPathCounters().reset();
         //
-        // Walk dir tree
+        // Walk directory tree
         Files.walkFileTree(dir, visitor);
         // System.out.println(visitor.getPathCounters());
         // System.out.println(visitor.getDirList());

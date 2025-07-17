@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,7 +23,7 @@ import java.util.Comparator;
 import org.apache.commons.io.FileUtils;
 
 /**
- * Compare the <b>length/size</b> of two files for order (see
+ * Compare the <strong>length/size</strong> of two files for order (see
  * {@link File#length()} and {@link FileUtils#sizeOfDirectory(File)}).
  * <p>
  * This comparator can be used to sort lists or arrays of files
@@ -38,7 +38,7 @@ import org.apache.commons.io.FileUtils;
  *       ((AbstractFileComparator) SizeFileComparator.SIZE_COMPARATOR).sort(list);
  * </pre>
  * <p>
- * Example of doing a <i>reverse</i> sort of an array of files using the
+ * Example of doing a <em>reverse</em> sort of an array of files using the
  * {@link #SIZE_REVERSE} singleton instance:
  * </p>
  * <pre>
@@ -46,7 +46,7 @@ import org.apache.commons.io.FileUtils;
  *       ((AbstractFileComparator) SizeFileComparator.SIZE_REVERSE).sort(array);
  * </pre>
  * <p>
- * <strong>N.B.</strong> Directories are treated as <b>zero size</b> unless
+ * <strong>N.B.</strong> Directories are treated as <strong>zero size</strong> unless
  * {@code sumDirectoryContents} is {@code true}.
  * </p>
  * <h2>Deprecating Serialization</h2>

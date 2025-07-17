@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOSpliterator}.
  */
-public class IOSpliteratorTest {
+class IOSpliteratorTest {
 
     private IOSpliterator<Path> spliterator;
 
@@ -51,32 +51,32 @@ public class IOSpliteratorTest {
     }
 
     @Test
-    public void testAdapt() {
+    void testAdapt() {
         spliterator = IOSpliterator.adapt(newPathList().spliterator());
         assertEquals(2, spliterator.estimateSize());
     }
 
     @Test
-    public void testAsSpliterator() {
+    void testAsSpliterator() {
         assertEquals(2, spliterator.estimateSize());
         assertEquals(2, spliterator.asSpliterator().estimateSize());
     }
 
     @Test
-    public void testCharacteristics() {
+    void testCharacteristics() {
         assertEquals(spliterator.unwrap().characteristics(), spliterator.characteristics());
         assertEquals(spliterator.unwrap().characteristics(), spliterator.asSpliterator().characteristics());
     }
 
     @Test
-    public void testEstimateSize() {
+    void testEstimateSize() {
         assertEquals(2, spliterator.estimateSize());
         assertEquals(spliterator.unwrap().estimateSize(), spliterator.estimateSize());
         assertEquals(spliterator.unwrap().estimateSize(), spliterator.asSpliterator().estimateSize());
     }
 
     @Test
-    public void testForEachRemaining() {
+    void testForEachRemaining() {
         final List<Path> list = new ArrayList<>();
         spliterator.forEachRemaining(list::add);
         assertEquals(2, list.size());
@@ -84,7 +84,7 @@ public class IOSpliteratorTest {
     }
 
     @Test
-    public void testForEachRemainingAsSpliterator() {
+    void testForEachRemainingAsSpliterator() {
         final List<Path> list = new ArrayList<>();
         spliterator.asSpliterator().forEachRemaining(list::add);
         assertEquals(2, list.size());
@@ -92,7 +92,7 @@ public class IOSpliteratorTest {
     }
 
     @Test
-    public void testGetComparator() {
+    void testGetComparator() {
         if (spliterator.hasCharacteristics(Spliterator.SORTED)) {
             assertEquals(spliterator.unwrap().getComparator(), spliterator.getComparator());
             assertEquals(spliterator.unwrap().getComparator(), spliterator.asSpliterator().getComparator());
@@ -106,37 +106,37 @@ public class IOSpliteratorTest {
     }
 
     @Test
-    public void testGetExactSizeIfKnown() {
+    void testGetExactSizeIfKnown() {
         assertEquals(2, spliterator.getExactSizeIfKnown());
         assertEquals(spliterator.unwrap().getExactSizeIfKnown(), spliterator.getExactSizeIfKnown());
         assertEquals(spliterator.unwrap().getExactSizeIfKnown(), spliterator.asSpliterator().getExactSizeIfKnown());
     }
 
     @Test
-    public void testHasCharacteristics() {
-        assertEquals(true, spliterator.hasCharacteristics(spliterator.characteristics()));
+    void testHasCharacteristics() {
+        assertTrue(spliterator.hasCharacteristics(spliterator.characteristics()));
         assertEquals(spliterator.unwrap().hasCharacteristics(spliterator.unwrap().characteristics()),
-            spliterator.hasCharacteristics(spliterator.characteristics()));
+                spliterator.hasCharacteristics(spliterator.characteristics()));
         assertEquals(spliterator.unwrap().hasCharacteristics(spliterator.unwrap().characteristics()),
-            spliterator.asSpliterator().hasCharacteristics(spliterator.asSpliterator().characteristics()));
+                spliterator.asSpliterator().hasCharacteristics(spliterator.asSpliterator().characteristics()));
     }
 
     @Test
-    public void testTryAdvance() {
+    void testTryAdvance() {
         final AtomicReference<Path> ref = new AtomicReference<>();
         assertTrue(spliterator.tryAdvance(ref::set));
         assertEquals(TestConstants.ABS_PATH_A, ref.get());
     }
 
     @Test
-    public void testTrySplit() {
+    void testTrySplit() {
         final IOSpliterator<Path> trySplit = spliterator.trySplit();
         assertNotNull(trySplit);
         assertTrue(spliterator.getExactSizeIfKnown() > 0);
     }
 
     @Test
-    public void testUnwrap() {
+    void testUnwrap() {
         assertNotNull(spliterator.unwrap());
     }
 

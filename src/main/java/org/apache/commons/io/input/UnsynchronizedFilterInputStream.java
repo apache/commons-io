@@ -6,7 +6,7 @@
  *  (the "License"); you may not use this file except in compliance with
  *  the License.  You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -31,20 +31,23 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * and provide some additional functionality on top of it usually inherit from this class.
  * </p>
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  * <p>
  * Provenance: Apache Harmony and modified.
  * </p>
  *
+ * @see Builder
  * @see FilterInputStream
  * @since 2.12.0
  */
 //@NotThreadSafe
 public class UnsynchronizedFilterInputStream extends InputStream {
 
+    // @formatter:off
     /**
-     * Builds a new {@link UnsynchronizedFilterInputStream} instance.
+     * Builds a new {@link UnsynchronizedFilterInputStream}.
+     *
      * <p>
      * Using File IO:
      * </p>
@@ -61,27 +64,41 @@ public class UnsynchronizedFilterInputStream extends InputStream {
      *   .setPath(path)
      *   .get();}
      * </pre>
+     *
+     * @see #get()
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<UnsynchronizedFilterInputStream, Builder> {
 
         /**
-         * Constructs a new instance.
+         * Constructs a new builder of {@link UnsynchronizedFilterInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
+         * Builds a new {@link UnsynchronizedFilterInputStream}.
          * <p>
-         * This builder use the aspect InputStream and OpenOption[].
+         * You must set an aspect that supports {@link #getInputStream()}, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * You must provide an origin that can be converted to an InputStream by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
+         * This builder uses the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link #getInputStream()}</li>
+         * </ul>
          *
          * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide an InputStream.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
+         * @throws IOException                   if an I/O error occurs converting to an {@link InputStream} using {@link #getInputStream()}.
          * @see #getInputStream()
+         * @see #getUnchecked()
          */
-        @SuppressWarnings("resource") // Caller closes.
         @Override
         public UnsynchronizedFilterInputStream get() throws IOException {
-            return new UnsynchronizedFilterInputStream(getInputStream());
+            return new UnsynchronizedFilterInputStream(this);
         }
 
     }
@@ -99,6 +116,10 @@ public class UnsynchronizedFilterInputStream extends InputStream {
      * The source input stream that is filtered.
      */
     protected volatile InputStream inputStream;
+
+    UnsynchronizedFilterInputStream(final Builder builder) throws IOException {
+        this.inputStream = builder.getInputStream();
+    }
 
     /**
      * Constructs a new {@code FilterInputStream} with the specified input stream as source.

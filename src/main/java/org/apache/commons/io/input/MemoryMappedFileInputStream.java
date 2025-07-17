@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,7 +27,6 @@ import java.nio.channels.FileChannel.MapMode;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
-import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
@@ -44,7 +43,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * use case, the use of buffering may still further improve performance. For example:
  * </p>
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  * <pre>{@code
  * BufferedInputStream s = new BufferedInputStream(new GzipInputStream(
@@ -67,12 +66,15 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  *     .get());}
  * </pre>
  *
+ * @see Builder
  * @since 2.12.0
  */
-public final class MemoryMappedFileInputStream extends InputStream {
+public final class MemoryMappedFileInputStream extends AbstractInputStream {
 
+    // @formatter:off
     /**
-     * Builds a new {@link MemoryMappedFileInputStream} instance.
+     * Builds a new {@link MemoryMappedFileInputStream}.
+     *
      * <p>
      * For example:
      * </p>
@@ -83,12 +85,14 @@ public final class MemoryMappedFileInputStream extends InputStream {
      *   .get();}
      * </pre>
      *
+     * @see #get()
      * @since 2.12.0
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<MemoryMappedFileInputStream, Builder> {
 
         /**
-         * Constructs a new Builder.
+         * Constructs a new builder of {@link MemoryMappedFileInputStream}.
          */
         public Builder() {
             setBufferSizeDefault(DEFAULT_BUFFER_SIZE);
@@ -96,22 +100,29 @@ public final class MemoryMappedFileInputStream extends InputStream {
         }
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link MemoryMappedFileInputStream}.
          * <p>
-         * This builder use the aspects Path and buffer size.
+         * You must set an aspect that supports {@link #getPath()}, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * You must provide an origin that can be converted to a Path by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
+         * This builder uses the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link #getPath()} gets the target aspect.</li>
+         * <li>{@link #getBufferSize()}</li>
+         * </ul>
          *
          * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide a Path.
-         * @see AbstractOrigin#getPath()
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws UnsupportedOperationException if the origin cannot be converted to a {@link Path}.
+         * @throws IOException                   if an I/O error occurs converting to an {@link Path} using {@link #getPath()}.
+         * @see #getPath()
+         * @see #getBufferSize()
+         * @see #getUnchecked()
          */
         @Override
         public MemoryMappedFileInputStream get() throws IOException {
-            return new MemoryMappedFileInputStream(getPath(), getBufferSize());
+            return new MemoryMappedFileInputStream(this);
         }
     }
 
@@ -136,7 +147,6 @@ public final class MemoryMappedFileInputStream extends InputStream {
     private final int bufferSize;
     private final FileChannel channel;
     private ByteBuffer buffer = EMPTY_BUFFER;
-    private boolean closed;
 
     /**
      * The starting position (within the file) of the next sliding buffer.
@@ -146,17 +156,17 @@ public final class MemoryMappedFileInputStream extends InputStream {
     /**
      * Constructs a new instance.
      *
-     * @param file The path of the file to open.
-     * @param bufferSize Size of the sliding buffer.
+     * @param builder The builder.
      * @throws IOException If an I/O error occurs.
      */
-    private MemoryMappedFileInputStream(final Path file, final int bufferSize) throws IOException {
-        this.bufferSize = bufferSize;
-        this.channel = FileChannel.open(file, StandardOpenOption.READ);
+    private MemoryMappedFileInputStream(final Builder builder) throws IOException {
+        this.bufferSize = builder.getBufferSize();
+        this.channel = FileChannel.open(builder.getPath(), StandardOpenOption.READ);
     }
 
     @Override
     public int available() throws IOException {
+        //return buffer != null ? buffer.remaining(): 0;
         return buffer.remaining();
     }
 
@@ -168,17 +178,11 @@ public final class MemoryMappedFileInputStream extends InputStream {
 
     @Override
     public void close() throws IOException {
-        if (!closed) {
+        if (!isClosed()) {
             cleanBuffer();
-            buffer = null;
+            buffer = EMPTY_BUFFER;
             channel.close();
-            closed = true;
-        }
-    }
-
-    private void ensureOpen() throws IOException {
-        if (closed) {
-            throw new IOException("Stream closed");
+            super.close();
         }
     }
 
@@ -200,7 +204,7 @@ public final class MemoryMappedFileInputStream extends InputStream {
 
     @Override
     public int read() throws IOException {
-        ensureOpen();
+        checkOpen();
         if (!buffer.hasRemaining()) {
             nextBuffer();
             if (!buffer.hasRemaining()) {
@@ -212,7 +216,7 @@ public final class MemoryMappedFileInputStream extends InputStream {
 
     @Override
     public int read(final byte[] b, final int off, final int len) throws IOException {
-        ensureOpen();
+        checkOpen();
         if (!buffer.hasRemaining()) {
             nextBuffer();
             if (!buffer.hasRemaining()) {
@@ -226,7 +230,7 @@ public final class MemoryMappedFileInputStream extends InputStream {
 
     @Override
     public long skip(final long n) throws IOException {
-        ensureOpen();
+        checkOpen();
         if (n <= 0) {
             return 0;
         }

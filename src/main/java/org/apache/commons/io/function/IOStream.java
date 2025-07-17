@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -116,7 +116,6 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
      * @param values the elements of the new stream, may be {@code null}.
      * @return the new stream on {@code values} or {@link Stream#empty()}.
      */
-    @SuppressWarnings("resource") // call to #empty()
     static <T> IOStream<T> of(final Iterable<T> values) {
         return values == null ? empty() : adapt(StreamSupport.stream(values.spliterator(), false));
     }
@@ -128,7 +127,6 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
      * @param values the elements of the new stream, may be {@code null}.
      * @return the new stream on {@code values} or {@link Stream#empty()}.
      */
-    @SuppressWarnings("resource")
     @SafeVarargs // Creating a stream from an array is safe
     static <T> IOStream<T> of(final T... values) {
         return values == null || values.length == 0 ? empty() : adapt(Arrays.stream(values));
@@ -265,7 +263,7 @@ public interface IOStream<T> extends IOBaseStream<T, IOStream<T>, Stream<T>> {
      * @return Like {@link Stream#flatMap(java.util.function.Function)}.
      * @throws IOException if an I/O error occurs.
      */
-    @SuppressWarnings("unused") // thrown by Erase.
+    @SuppressWarnings({ "unused", "resource" }) // thrown by Erase; resource closed by caller.
     default <R> IOStream<R> flatMap(final IOFunction<? super T, ? extends IOStream<? extends R>> mapper) throws IOException {
         return adapt(unwrap().flatMap(t -> Erase.apply(mapper, t).unwrap()));
     }

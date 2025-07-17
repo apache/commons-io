@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link FilenameUtils} {@code wildcardMatch()} methods.
  */
-public class FilenameUtilsWildcardTest {
+class FilenameUtilsWildcardTest {
 
     private static final boolean WINDOWS = File.separatorChar == '\\';
 
@@ -44,7 +44,7 @@ public class FilenameUtilsWildcardTest {
      * See https://issues.apache.org/jira/browse/IO-246
      */
     @Test
-    public void test_IO_246() {
+    void test_IO_246() {
 
         // Tests for "*?"
         assertMatch("aaa", "aa*?", true);
@@ -69,7 +69,7 @@ public class FilenameUtilsWildcardTest {
     }
 
     @Test
-    public void testLocaleIndependence() {
+    void testLocaleIndependence() {
         final Locale orig = Locale.getDefault();
 
         final Locale[] locales = Locale.getAvailableLocales();
@@ -99,7 +99,7 @@ public class FilenameUtilsWildcardTest {
     }
 
     @Test
-    public void testMatch() {
+    void testMatch() {
         assertFalse(FilenameUtils.wildcardMatch(null, "Foo"));
         assertFalse(FilenameUtils.wildcardMatch("Foo", null));
         assertTrue(FilenameUtils.wildcardMatch(null, null));
@@ -126,7 +126,7 @@ public class FilenameUtilsWildcardTest {
 
     // A separate set of tests, added to this batch
     @Test
-    public void testMatch2() {
+    void testMatch2() {
         assertMatch("log.txt", "log.txt", true);
         assertMatch("log.txt1", "log.txt", false);
 
@@ -173,7 +173,7 @@ public class FilenameUtilsWildcardTest {
     }
 
     @Test
-    public void testMatchCaseSpecified() {
+    void testMatchCaseSpecified() {
         assertFalse(FilenameUtils.wildcardMatch(null, "Foo", IOCase.SENSITIVE));
         assertFalse(FilenameUtils.wildcardMatch("Foo", null, IOCase.SENSITIVE));
         assertTrue(FilenameUtils.wildcardMatch(null, null, IOCase.SENSITIVE));
@@ -208,7 +208,7 @@ public class FilenameUtilsWildcardTest {
     }
 
     @Test
-    public void testMatchOnSystem() {
+    void testMatchOnSystem() {
         assertFalse(FilenameUtils.wildcardMatchOnSystem(null, "Foo"));
         assertFalse(FilenameUtils.wildcardMatchOnSystem("Foo", null));
         assertTrue(FilenameUtils.wildcardMatchOnSystem(null, null));
@@ -232,7 +232,7 @@ public class FilenameUtilsWildcardTest {
     }
 
     @Test
-    public void testSplitOnTokens() {
+    void testSplitOnTokens() {
         assertArrayEquals(new String[] { "Ad", "*", "er" }, FilenameUtils.splitOnTokens("Ad*er"));
         assertArrayEquals(new String[] { "Ad", "?", "er" }, FilenameUtils.splitOnTokens("Ad?er"));
         assertArrayEquals(new String[] { "Test", "*", "?", "One" }, FilenameUtils.splitOnTokens("Test*?One"));

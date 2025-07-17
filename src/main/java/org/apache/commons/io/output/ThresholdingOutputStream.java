@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,9 +23,12 @@ import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.function.IOFunction;
 
 /**
- * An output stream which triggers an event when a specified number of bytes of data have been written to it. The event
- * can be used, for example, to throw an exception if a maximum has been reached, or to switch the underlying stream
- * type when the threshold is exceeded.
+ * An output stream which triggers an event on the first write that causes
+ * the total number of bytes written to the stream to exceed a configured threshold,
+ * and every subsequent write. The event
+ * can be used, for example, to throw an exception if a maximum has been reached,
+ * or to switch the underlying stream when the threshold is exceeded.
+ *
  * <p>
  * This class overrides all {@link OutputStream} methods. However, these overrides ultimately call the corresponding
  * methods in the underlying output stream implementation.
@@ -34,6 +37,11 @@ import org.apache.commons.io.function.IOFunction;
  * NOTE: This implementation may trigger the event <em>before</em> the threshold is actually reached, since it triggers
  * when a pending write operation would cause the threshold to be exceeded.
  * </p>
+ * <p>
+ * See also the subclass {@link DeferredFileOutputStream}.
+ * </p>
+ *
+ * @see DeferredFileOutputStream
  */
 public class ThresholdingOutputStream extends OutputStream {
 
@@ -78,6 +86,7 @@ public class ThresholdingOutputStream extends OutputStream {
 
     /**
      * Constructs an instance of this class which will trigger an event at the specified threshold.
+     * A negative threshold has no meaning and will be treated as 0
      *
      * @param threshold The number of bytes at which to trigger an event.
      * @param thresholdConsumer Accepts reaching the threshold.
@@ -86,7 +95,7 @@ public class ThresholdingOutputStream extends OutputStream {
      */
     public ThresholdingOutputStream(final int threshold, final IOConsumer<ThresholdingOutputStream> thresholdConsumer,
         final IOFunction<ThresholdingOutputStream, OutputStream> outputStreamGetter) {
-        this.threshold = threshold;
+        this.threshold = threshold < 0 ? 0 : threshold;
         this.thresholdConsumer = thresholdConsumer == null ? IOConsumer.noop() : thresholdConsumer;
         this.outputStreamGetter = outputStreamGetter == null ? NOOP_OS_GETTER : outputStreamGetter;
     }
@@ -96,7 +105,6 @@ public class ThresholdingOutputStream extends OutputStream {
      * so, triggers an event to allow a concrete implementation to take action on this.
      *
      * @param count The number of bytes about to be written to the underlying output stream.
-     *
      * @throws IOException if an error occurs.
      */
     protected void checkThreshold(final int count) throws IOException {
@@ -199,7 +207,6 @@ public class ThresholdingOutputStream extends OutputStream {
      * Sets the byteCount to count. Useful for re-opening an output stream that has previously been written to.
      *
      * @param count The number of bytes that have already been written to the output stream
-     *
      * @since 2.5
      */
     protected void setByteCount(final long count) {
@@ -220,7 +227,6 @@ public class ThresholdingOutputStream extends OutputStream {
      * Writes {@code b.length} bytes from the specified byte array to this output stream.
      *
      * @param b The array of bytes to be written.
-     *
      * @throws IOException if an error occurs.
      */
     @SuppressWarnings("resource") // the underlying stream is managed by a subclass.
@@ -238,12 +244,13 @@ public class ThresholdingOutputStream extends OutputStream {
      * @param b The byte array from which the data will be written.
      * @param off The start offset in the byte array.
      * @param len The number of bytes to write.
-     *
      * @throws IOException if an error occurs.
      */
     @SuppressWarnings("resource") // the underlying stream is managed by a subclass.
     @Override
     public void write(final byte[] b, final int off, final int len) throws IOException {
+        // TODO we could write the sub-array up the threshold, fire the event,
+        // and then write the rest so the event is always fired at the precise point.
         checkThreshold(len);
         // TODO for 4.0: Replace with getOutputStream()
         getStream().write(b, off, len);
@@ -254,7 +261,6 @@ public class ThresholdingOutputStream extends OutputStream {
      * Writes the specified byte to this output stream.
      *
      * @param b The byte to be written.
-     *
      * @throws IOException if an error occurs.
      */
     @SuppressWarnings("resource") // the underlying stream is managed by a subclass.

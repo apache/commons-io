@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,49 +20,71 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import org.apache.commons.io.build.AbstractOrigin.ByteArrayOrigin;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 /**
  * Tests {@link ByteArrayOrigin}.
  *
  * A ByteArrayOrigin can convert into some of the other aspects.
  */
-public class ByteArrayOriginTest extends AbstractOriginTest<byte[], ByteArrayOrigin> {
+class ByteArrayOriginTest extends AbstractOriginTest<byte[], ByteArrayOrigin> {
 
-    @BeforeEach
-    public void beforeEach() throws IOException {
-        setOriginRo(new ByteArrayOrigin(Files.readAllBytes(Paths.get(FILE_NAME_RO))));
-        setOriginRw(new ByteArrayOrigin(new byte[] { 1 }));
+    @Override
+    protected ByteArrayOrigin newOriginRo() throws IOException {
+        return new ByteArrayOrigin(Files.readAllBytes(Paths.get(FILE_NAME_RO)));
+    }
+
+    @Override
+    protected ByteArrayOrigin newOriginRw() {
+        return new ByteArrayOrigin(new byte[] { 1 });
     }
 
     @Override
     @Test
-    public void testGetFile() {
+    void testGetFile() {
         // Cannot convert a byte[] to a File.
         assertThrows(UnsupportedOperationException.class, super::testGetFile);
     }
 
     @Override
     @Test
-    public void testGetOutputStream() {
+    void testGetOutputStream() {
         // Cannot convert a byte[] to an OutputStream.
         assertThrows(UnsupportedOperationException.class, super::testGetOutputStream);
     }
 
     @Override
     @Test
-    public void testGetPath() {
+    void testGetPath() {
         // Cannot convert a byte[] to a Path.
         assertThrows(UnsupportedOperationException.class, super::testGetPath);
     }
 
     @Override
     @Test
-    public void testGetWriter() {
+    void testGetRandomAccessFile() {
+        // Cannot convert a RandomAccessFile to a File.
+        assertThrows(UnsupportedOperationException.class, super::testGetRandomAccessFile);
+    }
+
+    @Override
+    @ParameterizedTest
+    @EnumSource(StandardOpenOption.class)
+    void testGetRandomAccessFile(final OpenOption openOption) {
+        // Cannot convert a RandomAccessFile to a File.
+        assertThrows(UnsupportedOperationException.class, () -> super.testGetRandomAccessFile(openOption));
+    }
+
+    @Override
+    @Test
+    void testGetWriter() {
         // Cannot convert a byte[] to a Writer.
         assertThrows(UnsupportedOperationException.class, super::testGetWriter);
     }

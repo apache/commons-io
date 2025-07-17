@@ -7,7 +7,7 @@
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *   https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -32,11 +32,6 @@ import org.junit.jupiter.api.BeforeEach;
 public abstract class AbstractCloseableListTest {
     private final List<Closeable> closeableList = new ArrayList<>();
 
-    @AfterEach
-    public void cleanup() {
-        IOUtils.closeQuietly(closeableList);
-    }
-
     /**
      * Adds a Closeable to close after each test.
      *
@@ -44,13 +39,18 @@ public abstract class AbstractCloseableListTest {
      * @param t The Closeable.
      * @return The Closeable.
      */
-    protected <T extends Closeable> T closeAfterEachTest(final T t) {
+    protected <T extends Closeable> T addCloseable(final T t) {
         closeableList.add(t);
         return t;
     }
 
+    @AfterEach
+    public void cleanup() {
+        IOUtils.closeQuietly(closeableList);
+    }
+
     @BeforeEach
-    public void setup() {
+    public void clearCloseable() {
         closeableList.clear();
     }
 }

@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,8 +18,11 @@ package org.apache.commons.io.input;
 
 import static org.apache.commons.io.IOUtils.EOF;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -31,7 +34,6 @@ import java.util.Objects;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.charset.CharsetEncoders;
 
@@ -43,14 +45,14 @@ import org.apache.commons.io.charset.CharsetEncoders;
  * Since in general it is not possible to predict the number of characters to be read from the {@link Reader} to satisfy a read request on the
  * {@link ReaderInputStream}, all reads from the {@link Reader} are buffered. There is therefore no well defined correlation between the current position of the
  * {@link Reader} and that of the {@link ReaderInputStream}. This also implies that in general there is no need to wrap the underlying {@link Reader} in a
- * {@link java.io.BufferedReader}.
+ * {@link BufferedReader}.
  * </p>
  * <p>
- * {@link ReaderInputStream} implements the inverse transformation of {@link java.io.InputStreamReader}; in the following example, reading from {@code in2}
+ * {@link ReaderInputStream} implements the inverse transformation of {@link InputStreamReader}; in the following example, reading from {@code in2}
  * would return the same byte sequence as reading from {@code in} (provided that the initial byte sequence is legal with respect to the charset encoding):
  * </p>
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  * <pre>
  * InputStream inputStream = ...
@@ -62,14 +64,14 @@ import org.apache.commons.io.charset.CharsetEncoders;
  *   .get();
  * </pre>
  * <p>
- * {@link ReaderInputStream} implements the same transformation as {@link java.io.OutputStreamWriter}, except that the control flow is reversed: both classes
- * transform a character stream into a byte stream, but {@link java.io.OutputStreamWriter} pushes data to the underlying stream, while {@link ReaderInputStream}
+ * {@link ReaderInputStream} implements the same transformation as {@link OutputStreamWriter}, except that the control flow is reversed: both classes
+ * transform a character stream into a byte stream, but {@link OutputStreamWriter} pushes data to the underlying stream, while {@link ReaderInputStream}
  * pulls it from the underlying stream.
  * </p>
  * <p>
  * Note that while there are use cases where there is no alternative to using this class, very often the need to use this class is an indication of a flaw in
  * the design of the code. This class is typically used in situations where an existing API only accepts an {@link InputStream}, but where the most natural way
- * to produce the data is as a character stream, i.e. by providing a {@link Reader} instance. An example of a situation where this problem may appear is when
+ * to produce the data is as a character stream, by providing a {@link Reader} instance. An example of a situation where this problem may appear is when
  * implementing the {@code javax.activation.DataSource} interface from the Java Activation Framework.
  * </p>
  * <p>
@@ -79,13 +81,16 @@ import org.apache.commons.io.charset.CharsetEncoders;
  * Instances of {@link ReaderInputStream} are not thread safe.
  * </p>
  *
+ * @see Builder
  * @see org.apache.commons.io.output.WriterOutputStream
  * @since 2.0
  */
-public class ReaderInputStream extends InputStream {
+public class ReaderInputStream extends AbstractInputStream {
 
+    // @formatter:off
     /**
-     * Builds a new {@link ReaderInputStream} instance.
+     * Builds a new {@link ReaderInputStream}.
+     *
      * <p>
      * For example:
      * </p>
@@ -96,31 +101,49 @@ public class ReaderInputStream extends InputStream {
      *   .get();}
      * </pre>
      *
+     * @see #get()
      * @since 2.12.0
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<ReaderInputStream, Builder> {
 
         private CharsetEncoder charsetEncoder = newEncoder(getCharset());
 
         /**
-         * Constructs a new instance.
+         * Constructs a new builder of {@link ReaderInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
+         * Builds a new {@link ReaderInputStream}.
+         *
          * <p>
-         * This builder use the aspects Reader, Charset, CharsetEncoder, buffer size.
+         * You must set an aspect that supports {@link #getReader()}, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * You must provide an origin that can be converted to a Reader by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
+         * This builder uses the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link #getReader()} gets the target aspect.</li>
+         * <li>{@link #getBufferSize()}</li>
+         * <li>{@link #getCharset()}</li>
+         * <li>{@link CharsetEncoder}</li>
+         * </ul>
          *
          * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide a Reader.
-         * @throws IllegalStateException if the {@code origin} is {@code null}.
-         * @see AbstractOrigin#getReader(Charset)
+         * @throws UnsupportedOperationException if the origin cannot provide a {@link Reader}.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws IOException                   if an I/O error occurs converting to a {@link Reader} using {@link #getReader()}.
+         * @see #getReader()
+         * @see CharsetEncoder
+         * @see #getBufferSize()
+         * @see #getUnchecked()
          */
-        @SuppressWarnings("resource")
         @Override
         public ReaderInputStream get() throws IOException {
-            return new ReaderInputStream(checkOrigin().getReader(getCharset()), charsetEncoder, getBufferSize());
+            return new ReaderInputStream(this);
         }
 
         CharsetEncoder getCharsetEncoder() {
@@ -138,7 +161,7 @@ public class ReaderInputStream extends InputStream {
          * Sets the charset encoder. Assumes that the caller has configured the encoder.
          *
          * @param newEncoder the charset encoder, null resets to a default encoder.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setCharsetEncoder(final CharsetEncoder newEncoder) {
             charsetEncoder = CharsetEncoders.toCharsetEncoder(newEncoder, () -> newEncoder(getCharsetDefault()));
@@ -197,9 +220,14 @@ public class ReaderInputStream extends InputStream {
 
     private boolean endOfInput;
 
+    @SuppressWarnings("resource") // caller closes.
+    private ReaderInputStream(final Builder builder) throws IOException {
+        this(builder.getReader(), builder.charsetEncoder, builder.getBufferSize());
+    }
+
     /**
-     * Constructs a new {@link ReaderInputStream} that uses the default character encoding with a default input buffer size of
-     * {@value IOUtils#DEFAULT_BUFFER_SIZE} characters.
+     * Constructs a new {@link ReaderInputStream} that uses the virtual machine's {@link Charset#defaultCharset() default charset} with a default input buffer
+     * size of {@value IOUtils#DEFAULT_BUFFER_SIZE} characters.
      *
      * @param reader the target {@link Reader}
      * @deprecated Use {@link ReaderInputStream#builder()} instead
@@ -323,6 +351,14 @@ public class ReaderInputStream extends InputStream {
         this(reader, Charsets.toCharset(charsetName), bufferSize);
     }
 
+    @Override
+    public int available() throws IOException {
+        if (encoderOut.hasRemaining()) {
+            return encoderOut.remaining();
+        }
+        return 0;
+    }
+
     /**
      * Closes the stream. This method will cause the underlying {@link Reader} to be closed.
      *
@@ -331,6 +367,7 @@ public class ReaderInputStream extends InputStream {
     @Override
     public void close() throws IOException {
         reader.close();
+        super.close();
     }
 
     /**
@@ -384,6 +421,7 @@ public class ReaderInputStream extends InputStream {
      */
     @Override
     public int read() throws IOException {
+        checkOpen();
         for (;;) {
             if (encoderOut.hasRemaining()) {
                 return encoderOut.get() & 0xFF;

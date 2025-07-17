@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,9 +23,10 @@ import java.util.Iterator;
 import java.util.Objects;
 
 /**
- * An {@link Iterator} for a {@link IOIterator} that throws {@link UncheckedIOException} instead of {@link IOException}.
- *
+ * An {@link Iterator} for an {@link IOIterator} that throws {@link UncheckedIOException} instead of {@link IOException}.
+ * <p>
  * Keep package-private for now.
+ * </p>
  *
  * @param <E> the type of elements returned by this iterator.
  */
@@ -44,7 +45,7 @@ final class UncheckedIOIterator<E> implements Iterator<E> {
 
     @Override
     public boolean hasNext() {
-        return Uncheck.get(delegate::hasNext);
+        return Uncheck.getAsBoolean(delegate::hasNext);
     }
 
     @Override

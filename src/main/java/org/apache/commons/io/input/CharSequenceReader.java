@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -185,7 +185,7 @@ public class CharSequenceReader extends Reader implements Serializable {
     }
 
     /**
-     * Read a single character.
+     * Reads a single character.
      *
      * @return the next character from the character sequence
      * or -1 if the end has been reached.
@@ -199,7 +199,7 @@ public class CharSequenceReader extends Reader implements Serializable {
     }
 
     /**
-     * Read the specified number of characters into the array.
+     * Reads the specified number of characters into the array.
      *
      * @param array The array to store the characters in
      * @param offset The starting position in the array to store

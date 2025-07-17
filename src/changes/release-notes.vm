@@ -6,7 +6,7 @@
 ## "License"); you may not use this file except in compliance
 ## with the License.  You may obtain a copy of the License at
 ##
-##  http://www.apache.org/licenses/LICENSE-2.0
+##  https://www.apache.org/licenses/LICENSE-2.0
 ##
 ## Unless required by applicable law or agreed to in writing,
 ## software distributed under the License is distributed on an
@@ -15,21 +15,18 @@
 ## specific language governing permissions and limitations
 ## under the License.
 
-Apache Commons IO 
-Version ${version}
-Release Notes
+Apache Commons IO ${version} Release Notes
 
-INTRODUCTION:
+The ${developmentTeam} is pleased to announce the release of ${project.name} ${version}.
 
-Commons IO is a package of Java utility classes like java.io.  
-Classes in this package are considered to be so standard and of such high 
-reuse as to justify existence in java.io.
+Introduction
+------------
 
 $introduction.replaceAll("(?<!\015)\012", "
 ")
 
 ##
-## N.B. the available variables are described here:
+## The available variables are described here:
 ## http://maven.apache.org/plugins/maven-changes-plugin/examples/using-a-custom-announcement-template.html
 ##
 ## Hack to improve layout: replace all pairs of spaces with a single new-line
@@ -40,14 +37,14 @@ $release.description.replaceAll("  ", "
 #if ($release.getActions().size() == 0)
 No changes defined in this version.
 #else
-Changes in this version include:
-
 ## indent to be used if there is no issue attribute.
 ## should be the same as the indent in the changes.xml file
-## less 2 spaces for the 'o' and trailing space
-#set($indent='          ')
+## less 2 spaces for the '*' and trailing space
+#set($indent='         ')
 #if ($release.getActions('add').size() !=0)
-New features:
+New features
+------------
+
 #foreach($actionItem in $release.getActions('add'))
 ## Use replaceAll to fix up LF-only line ends on Windows.
 #set($action=$actionItem.getAction().replaceAll("\n","
@@ -70,7 +67,9 @@ o#if($!issue != "") $issue: #else$indent#end ${action} #if($!dueto != "")Thanks 
 #end
 
 #if ($release.getActions('fix').size() !=0)
-Fixed Bugs:
+Fixed Bugs
+----------
+
 #foreach($actionItem in $release.getActions('fix'))
 ## Use replaceAll to fix up LF-only line ends on Windows.
 #set($action=$actionItem.getAction().replaceAll("\n","
@@ -93,7 +92,9 @@ o#if($!issue != "") $issue: #else$indent#end ${action} #if($!dueto != "")Thanks 
 #end
 
 #if ($release.getActions('update').size() !=0)
-Changes:
+Changes
+-------
+
 #foreach($actionItem in $release.getActions('update'))
 ## Use replaceAll to fix up LF-only line ends on Windows.
 #set($action=$actionItem.getAction().replaceAll("\n","
@@ -116,7 +117,9 @@ o#if($!issue != "") $issue: #else$indent#end ${action} #if($!dueto != "")Thanks 
 #end
 
 #if ($release.getActions('remove').size() !=0)
-Removed:
+Removed
+-------
+
 #foreach($actionItem in $release.getActions('remove'))
 ## Use replaceAll to fix up LF-only line ends on Windows.
 #set($action=$actionItem.getAction().replaceAll("\n","
@@ -140,10 +143,6 @@ o#if($!issue != "") $issue: #else$indent#end ${action} #if($!dueto != "")Thanks 
 ## End of main loop
 #end
 ##
-Compatibility with 2.6:
-Binary compatible: Yes.
-Source compatible: Yes.
-Semantic compatible: Yes.
 
 Commons IO 2.7 and up requires Java 8 or above.
 Commons IO 2.6 requires Java 7 or above.
@@ -151,7 +150,7 @@ Commons IO 2.3 through 2.5 requires Java 6 or above.
 Commons IO 2.2 requires Java 5 or above.
 Commons IO 1.4 requires Java 1.3 or above.
 
-Historical list of changes: ${project.url}changes-report.html
+Historical list of changes: ${project.url}changes.html
 
 For complete information on ${project.name}, including instructions on how to submit bug reports,
 patches, or suggestions for improvement, see the ${project.name} website:
@@ -163,4 +162,5 @@ Download page: ${project.url}download_io.cgi
 Have fun!
 -Apache Commons Team
 
-==============================================================================
+------------------------------------------------------------------------------
+

@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -57,7 +57,6 @@ public class DeletablePath extends AbstractPathWrapper implements Closeable {
     /**
      * Deletes the delegate path.
      * @param deleteOptions How to handle deletion.
-     *
      * @return The visitor used to delete the given directory.
      * @throws IOException if an I/O error is thrown by a visitor method or if an I/O error occurs.
      */

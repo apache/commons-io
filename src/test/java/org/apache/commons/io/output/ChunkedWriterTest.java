@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link ChunkedWriter}.
  */
-public class ChunkedWriterTest {
+class ChunkedWriterTest {
 
     @SuppressWarnings("resource") // closed by caller.
     private OutputStreamWriter getOutputStreamWriter(final AtomicInteger numWrites) {
@@ -44,13 +44,13 @@ public class ChunkedWriterTest {
     }
 
     @Test
-    public void testNegative_chunkSize_not_permitted() {
+    void testNegative_chunkSize_not_permitted() {
         assertThrows(IllegalArgumentException.class,
                () -> new ChunkedWriter(new OutputStreamWriter(new ByteArrayOutputStream()), 0));
     }
 
     @Test
-    public void testWrite_four_chunks() throws Exception {
+    void testWrite_four_chunks() throws Exception {
         final AtomicInteger numWrites = new AtomicInteger();
         try (OutputStreamWriter osw = getOutputStreamWriter(numWrites)) {
             try (ChunkedWriter chunked = new ChunkedWriter(osw, 10)) {
@@ -62,7 +62,7 @@ public class ChunkedWriterTest {
     }
 
     @Test
-    public void testWrite_two_chunks_default_constructor() throws Exception {
+    void testWrite_two_chunks_default_constructor() throws Exception {
         final AtomicInteger numWrites = new AtomicInteger();
         try (OutputStreamWriter osw = getOutputStreamWriter(numWrites)) {
             try (ChunkedWriter chunked = new ChunkedWriter(osw)) {

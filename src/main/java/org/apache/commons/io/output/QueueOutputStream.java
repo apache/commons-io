@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,7 +28,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.apache.commons.io.input.QueueInputStream;
 
 /**
- * Simple alternative to JDK {@link java.io.PipedOutputStream}; queue input stream provides what's written in queue
+ * Simple alternative to JDK {@link PipedOutputStream}; queue input stream provides what's written in queue
  * output stream.
  * <p>
  * Example usage:

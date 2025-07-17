@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,15 +21,13 @@ import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Provider;
+import java.util.Arrays;
 import java.util.Objects;
 
-import org.apache.commons.io.build.AbstractStreamBuilder;
-
 /**
- * This class is an example for using an {@link ObservableInputStream}. It creates its own {@link org.apache.commons.io.input.ObservableInputStream.Observer},
- * which calculates a checksum using a {@link MessageDigest}, for example, a SHA-512 sum.
+ * Calculates a checksum using a {@link MessageDigest}, for example, a SHA-512 sum.
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  * <p>
  * See the MessageDigest section in the <a href= "https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#MessageDigest"> Java
@@ -38,13 +36,17 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * <p>
  * <em>Note</em>: Neither {@link ObservableInputStream}, nor {@link MessageDigest}, are thread safe, so is {@link MessageDigestCalculatingInputStream}.
  * </p>
+ *
+ * @see Builder
  * @deprecated Use {@link MessageDigestInputStream}.
  */
 @Deprecated
 public class MessageDigestCalculatingInputStream extends ObservableInputStream {
 
+    // @formatter:off
     /**
-     * Builds a new {@link MessageDigestCalculatingInputStream} instance.
+     * Builds a new {@link MessageDigestCalculatingInputStream}.
+     *
      * <p>
      * For example:
      * </p>
@@ -54,15 +56,23 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
      *   .setMessageDigest("SHA-512")
      *   .get();}
      * </pre>
+     * <p>
+     * <em>The MD5 cryptographic algorithm is weak and should not be used.</em>
+     * </p>
      *
+     * @see #get()
      * @since 2.12.0
      */
-    public static class Builder extends AbstractStreamBuilder<MessageDigestCalculatingInputStream, Builder> {
+    // @formatter:on
+    public static class Builder extends AbstractBuilder<Builder> {
 
         private MessageDigest messageDigest;
 
         /**
-         * Constructs a new Builder.
+         * Constructs a new builder of {@link MessageDigestCalculatingInputStream}.
+         * <p>
+         * The default for compatibility is the MD5 cryptographic algorithm which is weak and should not be used.
+         * </p>
          */
         public Builder() {
             try {
@@ -74,29 +84,36 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
         }
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link MessageDigestCalculatingInputStream}.
          * <p>
-         * This builder use the aspects InputStream, OpenOption[], and MessageDigest.
+         * You must set an aspect that supports {@link #getInputStream()}, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * You must provide an origin that can be converted to an InputStream by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
+         * This builder uses the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link #getInputStream()} gets the target aspect.</li>
+         * <li>{@link MessageDigest}</li>
+         * </ul>
          *
          * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide an InputStream.
+         * @throws NullPointerException if messageDigest is null.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
+         * @throws IOException                   if an I/O error occurs converting to an {@link InputStream} using {@link #getInputStream()}.
          * @see #getInputStream()
+         * @see #getUnchecked()
          */
-        @SuppressWarnings("resource")
         @Override
         public MessageDigestCalculatingInputStream get() throws IOException {
-            return new MessageDigestCalculatingInputStream(getInputStream(), messageDigest);
+            setObservers(Arrays.asList(new MessageDigestMaintainingObserver(messageDigest)));
+            return new MessageDigestCalculatingInputStream(this);
         }
 
         /**
          * Sets the message digest.
          * <p>
-         * The MD5 cryptographic algorithm is weak and should not be used.
+         * <em>The MD5 cryptographic algorithm is weak and should not be used.</em>
          * </p>
          *
          * @param messageDigest the message digest.
@@ -108,7 +125,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
         /**
          * Sets the name of the name of the message digest algorithm.
          * <p>
-         * The MD5 cryptographic algorithm is weak and should not be used.
+         * <em>The MD5 cryptographic algorithm is weak and should not be used.</em>
          * </p>
          *
          * @param algorithm the name of the algorithm. See the MessageDigest section in the
@@ -150,7 +167,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
     }
 
     /**
-     * The default message digest algorithm.
+     * The default message digest algorithm {@code "MD5"}.
      * <p>
      * The MD5 cryptographic algorithm is weak and should not be used.
      * </p>
@@ -168,7 +185,10 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
     }
 
     /**
-     * Gets a MessageDigest object that implements the default digest algorithm.
+     * Gets a MessageDigest object that implements the default digest algorithm {@code "MD5"}.
+     * <p>
+     * The MD5 cryptographic algorithm is weak and should not be used.
+     * </p>
      *
      * @return a Message Digest object that implements the default algorithm.
      * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation.
@@ -179,6 +199,11 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
     }
 
     private final MessageDigest messageDigest;
+
+    private MessageDigestCalculatingInputStream(final Builder builder) throws IOException {
+        super(builder);
+        this.messageDigest = builder.messageDigest;
+    }
 
     /**
      * Constructs a new instance, which calculates a signature on the given stream, using a {@link MessageDigest} with the "MD5" algorithm.

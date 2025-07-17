@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -76,8 +76,9 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * Returns the logical NOT of the underlying filter's return value for the same File.
-     * @param file the File to check
      *
+     * @param file the File to check
+     * @param attributes the path's basic attributes (may be null).
      * @return true if the filter returns false
      * @since 2.9.0
      */

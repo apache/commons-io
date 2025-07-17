@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -38,9 +38,10 @@ import org.apache.commons.io.input.XmlStreamReader;
 /**
  * Character stream that handles all the necessary work to figure out the charset encoding of the XML document written to the stream.
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  *
+ * @see Builder
  * @see XmlStreamReader
  * @since 2.0
  */
@@ -48,7 +49,8 @@ public class XmlStreamWriter extends Writer {
 
     // @formatter:off
     /**
-     * Builds a new {@link XmlStreamWriter} instance.
+     * Builds a new {@link XmlStreamWriter}.
+     *
      * <p>
      * For example:
      * </p>
@@ -59,13 +61,14 @@ public class XmlStreamWriter extends Writer {
      *   .get();}
      * </pre>
      *
+     * @see #get()
      * @since 2.12.0
      */
     // @formatter:off
     public static class Builder extends AbstractStreamBuilder<XmlStreamWriter, Builder> {
 
         /**
-         * Constructs a new Builder.
+         * Constructs a new builder of {@link XmlStreamWriter}.
          */
         public Builder() {
             setCharsetDefault(StandardCharsets.UTF_8);
@@ -73,24 +76,28 @@ public class XmlStreamWriter extends Writer {
         }
 
         /**
-         * Constructs a new instance.
+         * Builds a new {@link XmlStreamWriter}.
          * <p>
-         * This builder use the aspect OutputStream, OpenOption[], and Charset.
+         * You must set an aspect that supports {@link #getOutputStream()} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * You must provide an origin that can be converted to an OutputStream by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
+         * This builder uses the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link #getOutputStream()}</li>
+         * <li>{@link #getCharset()}</li>
+         * </ul>
          *
          * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide an OutputStream.
-         * @throws IOException                   if an I/O error occurs.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws UnsupportedOperationException if the origin cannot be converted to an {@link OutputStream}.
+         * @throws IOException                   if an I/O error occurs converting to an {@link OutputStream} using {@link #getOutputStream()}.
          * @see #getOutputStream()
+         * @see #getUnchecked()
          */
-        @SuppressWarnings("resource")
         @Override
         public XmlStreamWriter get() throws IOException {
-            return new XmlStreamWriter(getOutputStream(), getCharset());
+            return new XmlStreamWriter(this);
         }
 
     }
@@ -116,6 +123,11 @@ public class XmlStreamWriter extends Writer {
     private Writer writer;
 
     private Charset charset;
+
+    @SuppressWarnings("resource") // caller closes.
+    private XmlStreamWriter(final Builder builder) throws IOException {
+        this(builder.getOutputStream(), builder.getCharset());
+    }
 
     /**
      * Constructs a new XML stream writer for the specified file

@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link AndFileFilter}.
  */
-public class AndFileFilterTest extends AbstractConditionalFileFilterTest {
+class AndFileFilterTest extends AbstractConditionalFileFilterTest {
 
   private static final String DEFAULT_WORKING_PATH = "./AndFileFilterTestCase/";
   private static final String WORKING_PATH_NAME_PROPERTY_KEY = AndFileFilterTest.class.getName() + ".workingDirectory";
@@ -298,7 +298,7 @@ public class AndFileFilterTest extends AbstractConditionalFileFilterTest {
   }
 
   @Test
-  public void testSetTestFiltersClearsOld() {
+  void testSetTestFiltersClearsOld() {
     // test that new filters correctly clear old filters
     final List<IOFileFilter> simpleEmptyFileFilter = Collections.singletonList(EmptyFileFilter.EMPTY);
     final AndFileFilter andFileFilter = new AndFileFilter(simpleEmptyFileFilter);

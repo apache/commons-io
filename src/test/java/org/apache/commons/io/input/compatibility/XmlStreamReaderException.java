@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,7 +20,7 @@ import java.io.InputStream;
 
 /**
  * The XmlStreamReaderException is thrown by the XmlStreamReader constructors if
- * the charset encoding can not be determined according to the XML 1.0
+ * the charset encoding cannot be determined according to the XML 1.0
  * specification and RFC 3023.
  * <p>
  * The exception returns the unconsumed InputStream to allow the application to

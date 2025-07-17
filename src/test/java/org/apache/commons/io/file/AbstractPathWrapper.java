@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.FileSystem;
+import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.WatchEvent.Kind;
@@ -78,6 +79,16 @@ public abstract class AbstractPathWrapper implements Path {
         }
         final AbstractPathWrapper other = (AbstractPathWrapper) obj;
         return Objects.equals(path, other.path);
+    }
+
+    /**
+     * Delegates to {@link Files#exists(Path, LinkOption...)}.
+     *
+     * @param options See {@link Files#exists(Path, LinkOption...)}.
+     * @return See {@link Files#exists(Path, LinkOption...)}.
+     */
+    public boolean exists(final LinkOption... options) {
+        return Files.exists(path, options);
     }
 
     @Override

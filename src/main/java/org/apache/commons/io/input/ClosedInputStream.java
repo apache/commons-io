@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,7 +24,7 @@ import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 
 /**
- * Always returns {@link IOUtils#EOF} to all attempts to read something from the stream.
+ * Always returns {@link IOUtils#EOF} to all attempts to read something from an input stream.
  * <p>
  * Typically uses of this class include testing for corner cases in methods that accept input streams and acting as a
  * sentinel value instead of a {@code null} input stream.
@@ -50,9 +50,26 @@ public class ClosedInputStream extends InputStream {
     public static final ClosedInputStream CLOSED_INPUT_STREAM = INSTANCE;
 
     /**
-     * Returns -1 to indicate that the stream is closed.
+     * Returns {@link #INSTANCE} if the given InputStream is null, otherwise returns the given input stream.
      *
-     * @return always -1
+     * @param in the InputStream to test.
+     * @return {@link #INSTANCE} if the given InputStream is null, otherwise returns the given input stream.
+     */
+    static InputStream ifNull(final InputStream in) {
+        return in != null ? in : INSTANCE;
+    }
+
+    /**
+     * Constructs a new instance.
+     */
+    public ClosedInputStream() {
+        // empty
+    }
+
+    /**
+     * Returns {@code -1} to indicate that the stream is closed.
+     *
+     * @return always {@code -1}.
      */
     @Override
     public int read() {
@@ -60,12 +77,12 @@ public class ClosedInputStream extends InputStream {
     }
 
     /**
-     * Returns -1 to indicate that the stream is closed.
+     * Returns {@code -1} to indicate that the stream is closed.
      *
      * @param b ignored.
      * @param off ignored.
      * @param len ignored.
-     * @return always -1
+     * @return always -1.
      */
     @Override
     public int read(final byte[] b, final int off, final int len) throws IOException {

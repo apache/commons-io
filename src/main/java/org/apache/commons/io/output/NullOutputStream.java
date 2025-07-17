@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,7 +22,7 @@ import java.io.OutputStream;
 /**
  * Never writes data. Calls never go beyond this class.
  * <p>
- * This output stream has no destination (file/socket etc.) and all bytes written to it are ignored and lost.
+ * This output stream has no destination and all bytes written to it are ignored.
  * </p>
  */
 public class NullOutputStream extends OutputStream {
@@ -44,46 +44,48 @@ public class NullOutputStream extends OutputStream {
 
     /**
      * Deprecated in favor of {@link #INSTANCE}.
-     *
+     * <p>
      * TODO: Will be private in 3.0.
+     * </p>
      *
      * @deprecated Use {@link #INSTANCE}.
      */
     @Deprecated
     public NullOutputStream() {
+        // empty
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
+     * Does nothing.
      *
-     * @param b The bytes to write
-     * @throws IOException never
+     * @param b The This method ignores this parameter.
+     * @throws IOException This method never throws any exceptions.
      */
     @Override
     public void write(final byte[] b) throws IOException {
-        // To /dev/null
+        // noop
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
+     * Does nothing.
      *
-     * @param b The bytes to write
-     * @param off The start offset
-     * @param len The number of bytes to write
+     * @param b This method ignores this parameter.
+     * @param off This method ignores this parameter.
+     * @param len This method ignores this parameter.
      */
     @Override
     public void write(final byte[] b, final int off, final int len) {
-        // To /dev/null
+        // noop
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
+     * Does nothing.
      *
-     * @param b The byte to write
+     * @param b This method ignores this parameter.
      */
     @Override
     public void write(final int b) {
-        // To /dev/null
+        // noop
     }
 
 }

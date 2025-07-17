@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,9 +28,10 @@ import org.apache.commons.io.function.Uncheck;
 /**
  * A {@link FilterWriter} that throws {@link UncheckedIOException} instead of {@link IOException}.
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  *
+ * @see Builder
  * @see FilterWriter
  * @see IOException
  * @see UncheckedIOException
@@ -40,7 +41,8 @@ public final class UncheckedFilterWriter extends FilterWriter {
 
     // @formatter:off
     /**
-     * Builds a new {@link UncheckedFilterWriter} instance.
+     * Builds a new {@link UncheckedFilterWriter}.
+     *
      * <p>
      * Using File IO:
      * </p>
@@ -57,28 +59,40 @@ public final class UncheckedFilterWriter extends FilterWriter {
      *   .setPath(path)
      *   .get();}
      * </pre>
+     *
+     * @see #get()
      */
     // @formatter:on
     public static class Builder extends AbstractStreamBuilder<UncheckedFilterWriter, Builder> {
 
         /**
-         * Constructs a new instance.
+         * Constructs a builder of {@link UncheckedFilterWriter}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
+         * Builds a new {@link UncheckedFilterWriter}.
          * <p>
-         * This builder use the aspects Writer, OpenOption[], and Charset.
+         * You must set an aspect that supports {@link #getWriter()} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * You must provide an origin that can be converted to a Writer by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
+         * This builder uses the following aspects:
          * </p>
+         * <ul>
+         * <li>{@link #getWriter()}</li>
+         * </ul>
          *
          * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide a Writer.
+         * @throws UnsupportedOperationException if the origin cannot provide a {@link Writer}.
+         * @throws IOException                   if an I/O error occurs converting to an {@link Writer} using {@link #getWriter()}.
          * @see #getWriter()
+         * @see #getUnchecked()
          */
-        @SuppressWarnings("resource")
         @Override
         public UncheckedFilterWriter get() throws IOException {
-            return new UncheckedFilterWriter(getWriter());
+            return new UncheckedFilterWriter(this);
         }
 
     }
@@ -95,11 +109,14 @@ public final class UncheckedFilterWriter extends FilterWriter {
     /**
      * Constructs a new filtered writer.
      *
-     * @param writer a Writer object providing the underlying stream.
-     * @throws NullPointerException if {@code writer} is {@code null}.
+     * @param builder a Writer object providing the underlying stream.
+     * @throws IOException
+     * @throws NullPointerException if {@code builder} the its {@code Writer} is {@code null}.
+     * @throws IOException          if an I/O error occurs converting to an {@link Writer} using {@link #getWriter()}.
      */
-    private UncheckedFilterWriter(final Writer writer) {
-        super(writer);
+    @SuppressWarnings("resource") // Caller closes.
+    private UncheckedFilterWriter(final Builder builder) throws IOException {
+        super(builder.getWriter());
     }
 
     /**

@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 /**On
  * Tests {@link TeeOutputStream}.
  */
-public class TeeOutputStreamTest {
+class TeeOutputStreamTest {
 
     private void assertByteArrayEquals(final String msg, final byte[] array1, final byte[] array2) {
         assertEquals(array1.length, array2.length, msg + ": array size mismatch");
@@ -45,7 +45,7 @@ public class TeeOutputStreamTest {
      * exception on {@link TeeOutputStream#close()}.
      */
     @Test
-    public void testIOExceptionOnClose() throws IOException {
+    void testIOExceptionOnClose() throws IOException {
         final OutputStream badOs = new ThrowOnCloseOutputStream();
         final ByteArrayOutputStream goodOs = mock(ByteArrayOutputStream.class);
         final TeeOutputStream tos = new TeeOutputStream(badOs, goodOs);
@@ -59,7 +59,7 @@ public class TeeOutputStreamTest {
      * exception on {@link TeeOutputStream#close()}.
      */
     @Test
-    public void testIOExceptionOnCloseBranch() throws IOException {
+    void testIOExceptionOnCloseBranch() throws IOException {
         final OutputStream badOs = new ThrowOnCloseOutputStream();
         final ByteArrayOutputStream goodOs = mock(ByteArrayOutputStream.class);
         final TeeOutputStream tos = new TeeOutputStream(goodOs, badOs);
@@ -69,7 +69,7 @@ public class TeeOutputStreamTest {
     }
 
     @Test
-    public void testTee() throws IOException {
+    void testTee() throws IOException {
         final ByteArrayOutputStream baos1 = new ByteArrayOutputStream();
         final ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
         final ByteArrayOutputStream expected = new ByteArrayOutputStream();

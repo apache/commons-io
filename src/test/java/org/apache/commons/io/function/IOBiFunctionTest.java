@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,9 +17,10 @@
 
 package org.apache.commons.io.function;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -34,7 +35,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOBiFunction}.
  */
-public class IOBiFunctionTest {
+class IOBiFunctionTest {
 
     @SuppressWarnings("unused")
     private boolean not(final boolean value) throws IOException {
@@ -47,12 +48,12 @@ public class IOBiFunctionTest {
      * @throws IOException thrown on test failure
      */
     @Test
-    public void testAndThenIOFunction() throws IOException {
+    void testAndThenIOFunction() throws IOException {
         final IOBiFunction<Path, LinkOption[], Boolean> isDirectory = Files::isDirectory;
         final IOFunction<Boolean, Boolean> not = this::not;
-        assertEquals(true, isDirectory.apply(PathUtils.current(), PathUtils.EMPTY_LINK_OPTION_ARRAY));
+        assertTrue(isDirectory.apply(PathUtils.current(), PathUtils.EMPTY_LINK_OPTION_ARRAY));
         final IOBiFunction<Path, LinkOption[], Boolean> andThen = isDirectory.andThen(not);
-        assertEquals(false, andThen.apply(PathUtils.current(), PathUtils.EMPTY_LINK_OPTION_ARRAY));
+        assertFalse(andThen.apply(PathUtils.current(), PathUtils.EMPTY_LINK_OPTION_ARRAY));
     }
 
     /**
@@ -61,16 +62,16 @@ public class IOBiFunctionTest {
      * @throws IOException thrown on test failure
      */
     @Test
-    public void testApply() throws IOException {
+    void testApply() throws IOException {
         final IOBiFunction<Path, LinkOption[], Boolean> isDirectory = Files::isDirectory;
-        assertEquals(true, isDirectory.apply(PathUtils.current(), PathUtils.EMPTY_LINK_OPTION_ARRAY));
+        assertTrue(isDirectory.apply(PathUtils.current(), PathUtils.EMPTY_LINK_OPTION_ARRAY));
     }
 
     /**
      * Tests {@link IOBiFunction#apply(Object, Object)}.
      */
     @Test
-    public void testApplyThrowsException() {
+    void testApplyThrowsException() {
         final IOBiFunction<Path, LinkOption[], Boolean> isDirectory = (t, u) -> {
             throw new IOException("Boom!");
         };
@@ -78,7 +79,7 @@ public class IOBiFunctionTest {
     }
 
     @Test
-    public void testAsBiFunction() {
+    void testAsBiFunction() {
         final Map<String, Long> map = new HashMap<>();
         map.put("1", 0L);
         final IOBiFunction<String, Long, Long> f = (t, u) -> Files.size(PathUtils.current());

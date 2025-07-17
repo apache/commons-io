@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link UncheckedAppendable}.
  */
-public class UncheckedAppendableTest {
+class UncheckedAppendableTest {
 
     private IOException exception;
 
@@ -45,43 +45,43 @@ public class UncheckedAppendableTest {
     }
 
     @Test
-    public void testAppendChar() {
+    void testAppendChar() {
         appendableString.append('a').append('b');
         assertEquals("ab", appendableString.toString());
     }
 
     @Test
-    public void testAppendCharSequence() {
+    void testAppendCharSequence() {
         appendableString.append("a").append("b");
         assertEquals("ab", appendableString.toString());
     }
 
     @Test
-    public void testAppendCharSequenceIndexed() {
+    void testAppendCharSequenceIndexed() {
         appendableString.append("a", 0, 1).append("b", 0, 1);
         assertEquals("ab", appendableString.toString());
     }
 
     @Test
-    public void testAppendCharSequenceIndexedThrows() {
+    void testAppendCharSequenceIndexedThrows() {
         final UncheckedIOException e = assertThrows(UncheckedIOException.class, () -> appendableBroken.append("a", 0, 1));
         assertEquals(exception, e.getCause());
     }
 
     @Test
-    public void testAppendCharSequenceThrows() {
+    void testAppendCharSequenceThrows() {
         final UncheckedIOException e = assertThrows(UncheckedIOException.class, () -> appendableBroken.append("a"));
         assertEquals(exception, e.getCause());
     }
 
     @Test
-    public void testAppendCharThrows() {
+    void testAppendCharThrows() {
         final UncheckedIOException e2 = assertThrows(UncheckedIOException.class, () -> appendableBroken.append('a'));
         assertEquals(exception, e2.getCause());
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         assertEquals("ab", UncheckedAppendable.on(new StringWriter(2).append("ab")).toString());
     }
 

@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,7 +30,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Tests {@link BrokenWriter}.
  */
-public class BrokenWriterTest {
+class BrokenWriterTest {
 
     private static BrokenWriter createBrokenWriter(final Throwable exception) {
         if (exception instanceof IOException) {
@@ -41,7 +41,7 @@ public class BrokenWriterTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testAppendChar(final Class<Exception> clazz) throws Exception {
+    void testAppendChar(final Class<Exception> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenWriter brokenWriter = createBrokenWriter(exception);
@@ -50,7 +50,7 @@ public class BrokenWriterTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testAppendCharSequence(final Class<Throwable> clazz) throws Exception {
+    void testAppendCharSequence(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenWriter brokenWriter = createBrokenWriter(exception);
@@ -59,7 +59,7 @@ public class BrokenWriterTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testAppendCharSequenceIndexed(final Class<Throwable> clazz) throws Exception {
+    void testAppendCharSequenceIndexed(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenWriter brokenWriter = createBrokenWriter(exception);
@@ -68,7 +68,7 @@ public class BrokenWriterTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testClose(final Class<Throwable> clazz) throws Exception {
+    void testClose(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenWriter brokenWriter = createBrokenWriter(exception);
@@ -77,7 +77,7 @@ public class BrokenWriterTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testFlush(final Class<Throwable> clazz) throws Exception {
+    void testFlush(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenWriter brokenWriter = createBrokenWriter(exception);
@@ -85,12 +85,12 @@ public class BrokenWriterTest {
     }
 
     @Test
-    public void testInstance() {
+    void testInstance() {
         assertNotNull(BrokenWriter.INSTANCE);
     }
 
     @Test
-    public void testTryWithResources() {
+    void testTryWithResources() {
         final IOException thrown = assertThrows(IOException.class, () -> {
             try (Writer newWriter = new BrokenWriter()) {
                 newWriter.write(1);
@@ -106,7 +106,7 @@ public class BrokenWriterTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testWriteCharArray(final Class<Throwable> clazz) throws Exception {
+    void testWriteCharArray(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenWriter brokenWriter = createBrokenWriter(exception);
@@ -115,7 +115,7 @@ public class BrokenWriterTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testWriteCharArrayIndexed(final Class<Throwable> clazz) throws Exception {
+    void testWriteCharArrayIndexed(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenWriter brokenWriter = createBrokenWriter(exception);
@@ -124,7 +124,7 @@ public class BrokenWriterTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testWriteInt(final Class<Throwable> clazz) throws Exception {
+    void testWriteInt(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenWriter brokenWriter = createBrokenWriter(exception);
@@ -133,7 +133,7 @@ public class BrokenWriterTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testWriteString(final Class<Throwable> clazz) throws Exception {
+    void testWriteString(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenWriter brokenWriter = createBrokenWriter(exception);
@@ -142,7 +142,7 @@ public class BrokenWriterTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testWriteStringIndexed(final Class<Throwable> clazz) throws Exception {
+    void testWriteStringIndexed(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenWriter brokenWriter = createBrokenWriter(exception);

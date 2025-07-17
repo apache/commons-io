@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,7 +20,7 @@
  * for {@link java.io.File}s and {@link java.nio.file.Path}.
  * <h2>Sorting</h2>
  * <p>
- * All the comparators include <i>convenience</i> utility <code>sort(File...)</code> and
+ * All the comparators include <em>convenience</em> utility <code>sort(File...)</code> and
  * <code>sort(List)</code> methods.
  * </p>
  * <p>
@@ -42,7 +42,7 @@
  * to compare (and sort lists or arrays of files) by combining a number of other comparators.
  * </p>
  * <p>
- * For example, to sort an array of files by type (i.e. directory or file)
+ * For example, to sort an array of files by type (directory or file)
  * and then by name:
  * </p>
  * <pre>
@@ -55,8 +55,8 @@
  * </pre>
  * <h2>Singleton Instances (thread-safe)</h2>
  * <p>
- * The {@link java.util.Comparator} implementations have some <i>convenience</i>
- * singleton(<i>thread-safe</i>) instances ready to use:
+ * The {@link java.util.Comparator} implementations have some <em>convenience</em>
+ * singleton(<em>thread-safe</em>) instances ready to use:
  * </p>
  * <ul>
  * <li><a href="DefaultFileComparator.html">DefaultFileComparator</a> - default file compare:

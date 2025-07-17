@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link DemuxInputStream}.
  */
-public class DemuxInputStreamTest {
+class DemuxInputStreamTest {
 
     private static final class ReaderThread extends Thread {
         private final DemuxInputStream demuxInputStream;
@@ -153,8 +153,8 @@ public class DemuxInputStreamTest {
     }
 
     @Test
-    public void testInputStream() throws Exception {
-        try (final DemuxInputStream input = new DemuxInputStream()) {
+    void testInputStream() throws Exception {
+        try (DemuxInputStream input = new DemuxInputStream()) {
             startReader(T1, DATA1, input);
             startReader(T2, DATA2, input);
             startReader(T3, DATA3, input);
@@ -171,8 +171,8 @@ public class DemuxInputStreamTest {
     }
 
     @Test
-    public void testOutputStream() throws Exception {
-        try (final DemuxOutputStream output = new DemuxOutputStream()) {
+    void testOutputStream() throws Exception {
+        try (DemuxOutputStream output = new DemuxOutputStream()) {
             startWriter(T1, DATA1, output);
             startWriter(T2, DATA2, output);
             startWriter(T3, DATA3, output);
@@ -189,8 +189,8 @@ public class DemuxInputStreamTest {
     }
 
     @Test
-    public void testReadEOF() throws Exception {
-        try (final DemuxInputStream input = new DemuxInputStream()) {
+    void testReadEOF() throws Exception {
+        try (DemuxInputStream input = new DemuxInputStream()) {
             assertEquals(IOUtils.EOF, input.read());
         }
     }

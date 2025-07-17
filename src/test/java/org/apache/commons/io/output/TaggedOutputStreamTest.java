@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -31,10 +31,10 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link TaggedOutputStream}.
  */
-public class TaggedOutputStreamTest  {
+class TaggedOutputStreamTest  {
 
     @Test
-    public void testBrokenStream() {
+    void testBrokenStream() {
         final IOException exception = new IOException("test exception");
         final TaggedOutputStream stream = new TaggedOutputStream(new BrokenOutputStream(exception));
 
@@ -82,7 +82,7 @@ public class TaggedOutputStreamTest  {
     }
 
     @Test
-    public void testNormalStream() {
+    void testNormalStream() {
         try (ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
             try (OutputStream stream = new TaggedOutputStream(buffer)) {
                 stream.write('a');
@@ -100,7 +100,7 @@ public class TaggedOutputStreamTest  {
     }
 
     @Test
-    public void testOtherException() throws Exception {
+    void testOtherException() throws Exception {
         final IOException exception = new IOException("test exception");
         try (TaggedOutputStream stream = new TaggedOutputStream(ClosedOutputStream.INSTANCE)) {
 

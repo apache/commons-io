@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,6 +17,7 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.Serializable;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
@@ -28,7 +29,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
- * A {@link java.io.FileFilter} providing conditional AND logic across a list of
+ * A {@link FileFilter} providing conditional AND logic across a list of
  * file filters. This filter returns {@code true} if all filters in the
  * list return {@code true}. Otherwise, it returns {@code false}.
  * Checking of the file filter list stops when the first filter returns
@@ -41,9 +42,7 @@ import java.util.stream.Stream;
  * @since 1.0
  * @see FileFilterUtils#and(IOFileFilter...)
  */
-public class AndFileFilter
-        extends AbstractFileFilter
-        implements ConditionalFileFilter, Serializable {
+public class AndFileFilter extends AbstractFileFilter implements ConditionalFileFilter, Serializable {
 
     private static final long serialVersionUID = 7215974688563965257L;
 
@@ -79,8 +78,8 @@ public class AndFileFilter
 
     /**
      * Constructs a new instance for the give filters.
-     * @param fileFilters filters to OR.
      *
+     * @param fileFilters filters to OR.
      * @since 2.9.0
      */
     public AndFileFilter(final IOFileFilter... fileFilters) {
@@ -143,7 +142,7 @@ public class AndFileFilter
      */
     @Override
     public void addFileFilter(final IOFileFilter fileFilter) {
-        this.fileFilters.add(Objects.requireNonNull(fileFilter, "fileFilter"));
+        fileFilters.add(Objects.requireNonNull(fileFilter, "fileFilter"));
     }
 
     /**
@@ -161,11 +160,11 @@ public class AndFileFilter
      */
     @Override
     public List<IOFileFilter> getFileFilters() {
-        return Collections.unmodifiableList(this.fileFilters);
+        return Collections.unmodifiableList(fileFilters);
     }
 
     private boolean isEmpty() {
-        return this.fileFilters.isEmpty();
+        return fileFilters.isEmpty();
     }
 
     /**
@@ -173,7 +172,7 @@ public class AndFileFilter
      */
     @Override
     public boolean removeFileFilter(final IOFileFilter ioFileFilter) {
-        return this.fileFilters.remove(ioFileFilter);
+        return fileFilters.remove(ioFileFilter);
     }
 
     /**
@@ -186,7 +185,7 @@ public class AndFileFilter
     }
 
     /**
-     * Provide a String representation of this file filter.
+     * Builds a String representation of this file filter.
      *
      * @return a String representation
      */

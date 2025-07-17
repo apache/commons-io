@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,10 +30,10 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link DeletingPathVisitor}.
  */
-public class PathUtilsDeleteTest extends AbstractTempDirTest {
+class PathUtilsDeleteTest extends AbstractTempDirTest {
 
     @Test
-    public void testDeleteDirectory1FileSize0() throws IOException {
+    void testDeleteDirectory1FileSize0() throws IOException {
         final String fileName = "file-size-0.bin";
         FileUtils.copyFileToDirectory(
             Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0/" + fileName).toFile(),
@@ -57,7 +57,7 @@ public class PathUtilsDeleteTest extends AbstractTempDirTest {
      * Tests a directory with one file of size 0.
      */
     @Test
-    public void testDeleteDirectory1FileSize0ForceOff() throws IOException {
+    void testDeleteDirectory1FileSize0ForceOff() throws IOException {
         testDeleteDirectory1FileSize0();
     }
 
@@ -65,22 +65,22 @@ public class PathUtilsDeleteTest extends AbstractTempDirTest {
      * Tests a directory with one file of size 0.
      */
     @Test
-    public void testDeleteDirectory1FileSize0ForceOn() throws IOException {
+    void testDeleteDirectory1FileSize0ForceOn() throws IOException {
         testDeleteDirectory1FileSize0();
     }
 
     @Test
-    public void testDeleteDirectory1FileSize0NoOption() throws IOException {
+    void testDeleteDirectory1FileSize0NoOption() throws IOException {
         testDeleteDirectory1FileSize0(PathUtils.EMPTY_DELETE_OPTION_ARRAY);
     }
 
     @Test
-    public void testDeleteDirectory1FileSize0OverrideReadonly() throws IOException {
+    void testDeleteDirectory1FileSize0OverrideReadonly() throws IOException {
         testDeleteDirectory1FileSize0(StandardDeleteOption.OVERRIDE_READ_ONLY);
     }
 
     @Test
-    public void testDeleteDirectory1FileSize1() throws IOException {
+    void testDeleteDirectory1FileSize1() throws IOException {
         final String fileName = "file-size-1.bin";
         FileUtils.copyFileToDirectory(
             Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/" + fileName).toFile(),
@@ -105,7 +105,7 @@ public class PathUtilsDeleteTest extends AbstractTempDirTest {
      * Tests a directory with one file of size 1.
      */
     @Test
-    public void testDeleteDirectory1FileSize1ForceOff() throws IOException {
+    void testDeleteDirectory1FileSize1ForceOff() throws IOException {
         testDeleteDirectory1FileSize1();
     }
 
@@ -113,17 +113,17 @@ public class PathUtilsDeleteTest extends AbstractTempDirTest {
      * Tests a directory with one file of size 1.
      */
     @Test
-    public void testDeleteDirectory1FileSize1ForceOn() throws IOException {
+    void testDeleteDirectory1FileSize1ForceOn() throws IOException {
         testDeleteDirectory1FileSize1();
     }
 
     @Test
-    public void testDeleteDirectory1FileSize1NoOption() throws IOException {
+    void testDeleteDirectory1FileSize1NoOption() throws IOException {
         testDeleteDirectory1FileSize1(PathUtils.EMPTY_DELETE_OPTION_ARRAY);
     }
 
     @Test
-    public void testDeleteDirectory1FileSize1OverrideReadOnly() throws IOException {
+    void testDeleteDirectory1FileSize1OverrideReadOnly() throws IOException {
         testDeleteDirectory1FileSize1(StandardDeleteOption.OVERRIDE_READ_ONLY);
     }
 
@@ -131,7 +131,7 @@ public class PathUtilsDeleteTest extends AbstractTempDirTest {
      * Tests an empty folder.
      */
     @Test
-    public void testDeleteEmptyDirectory() throws IOException {
+    void testDeleteEmptyDirectory() throws IOException {
         testDeleteEmptyDirectory(PathUtils.delete(tempDirPath));
         // This will throw if not empty.
         Files.deleteIfExists(tempDirPath);
@@ -154,7 +154,7 @@ public class PathUtilsDeleteTest extends AbstractTempDirTest {
      * Tests an empty folder.
      */
     @Test
-    public void testDeleteEmptyDirectoryForceOff() throws IOException {
+    void testDeleteEmptyDirectoryForceOff() throws IOException {
         testDeleteEmptyDirectory();
     }
 
@@ -162,17 +162,17 @@ public class PathUtilsDeleteTest extends AbstractTempDirTest {
      * Tests an empty folder.
      */
     @Test
-    public void testDeleteEmptyDirectoryForceOn() throws IOException {
+    void testDeleteEmptyDirectoryForceOn() throws IOException {
         testDeleteEmptyDirectory();
     }
 
     @Test
-    public void testDeleteEmptyDirectoryNoOption() throws IOException {
+    void testDeleteEmptyDirectoryNoOption() throws IOException {
         testDeleteEmptyDirectory(PathUtils.EMPTY_DELETE_OPTION_ARRAY);
     }
 
     @Test
-    public void testDeleteEmptyDirectoryOverrideReadOnly() throws IOException {
+    void testDeleteEmptyDirectoryOverrideReadOnly() throws IOException {
         testDeleteEmptyDirectory(StandardDeleteOption.OVERRIDE_READ_ONLY);
     }
 
@@ -180,7 +180,7 @@ public class PathUtilsDeleteTest extends AbstractTempDirTest {
      * Tests a file that does not exist.
      */
     @Test
-    public void testDeleteFileDoesNotExist() throws IOException {
+    void testDeleteFileDoesNotExist() throws IOException {
         assertCounts(0, 0, 0, PathUtils.deleteFile(tempDirPath.resolve("file-does-not-exist.bin")));
         // This will throw if not empty.
         Files.deleteIfExists(tempDirPath);

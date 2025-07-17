@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,10 +27,10 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOTriConsumer}.
  */
-public class IOTriConsumerTest {
+class IOTriConsumerTest {
 
     @Test
-    public void testAccept() throws IOException {
+    void testAccept() throws IOException {
         final AtomicReference<String> ref = new AtomicReference<>();
         final IOTriConsumer<String, Integer, Character> consumer = (s, i, b) -> ref.set(s + i + b);
         consumer.accept("A", 1, 'b');
@@ -38,7 +38,7 @@ public class IOTriConsumerTest {
     }
 
     @Test
-    public void testAndThen() throws IOException {
+    void testAndThen() throws IOException {
         final AtomicReference<String> ref = new AtomicReference<>();
         final IOTriConsumer<String, Integer, Character> consumer1 = (s, i, b) -> ref.set(s + i + b);
         final IOTriConsumer<String, Integer, Character> consumer2 = (s, i, b) -> ref.set(ref.get() + b + i + s);
@@ -47,7 +47,7 @@ public class IOTriConsumerTest {
     }
 
     @Test
-    public void testNoop() throws IOException {
+    void testNoop() throws IOException {
         IOTriConsumer.noop().accept(null, null, null);
     }
 

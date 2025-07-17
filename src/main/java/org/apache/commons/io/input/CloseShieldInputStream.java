@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,6 +29,17 @@ import java.io.InputStream;
  * @since 1.4
  */
 public class CloseShieldInputStream extends ProxyInputStream {
+
+    /**
+     * Constructs a proxy that only shields {@link System#in} from closing.
+     *
+     * @param inputStream the candidate input stream.
+     * @return the given stream or a proxy on {@link System#in}.
+     * @since 2.17.0
+     */
+    public static InputStream systemIn(final InputStream inputStream) {
+        return inputStream == System.in ? wrap(inputStream) : inputStream;
+    }
 
     /**
      * Constructs a proxy that shields the given input stream from being closed.

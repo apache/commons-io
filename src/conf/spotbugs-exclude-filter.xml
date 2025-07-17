@@ -7,7 +7,7 @@
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+       https://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,7 +19,6 @@
     xmlns="https://github.com/spotbugs/filter/3.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="https://github.com/spotbugs/filter/3.0.0 https://raw.githubusercontent.com/spotbugs/spotbugs/3.1.0/spotbugs/etc/findbugsfilter.xsd">
-
   <!-- TODO Can any of these be done without breaking binary compatibility? -->
   <Match>
     <Class name="~.*" />
@@ -29,59 +28,87 @@
       <Bug pattern="MS_EXPOSE_REP" />
     </Or>
   </Match>
-
   <!-- https://github.com/spotbugs/spotbugs/issues/2710 -->
   <Match>
     <Class name="~.*" />
     <Bug pattern="CT_CONSTRUCTOR_THROW" />
   </Match>
-
   <!--  See discussion on https://issues.apache.org/jira/browse/IO-216 -->
   <Match>
     <Class name="org.apache.commons.io.output.LockableFileWriter" />
     <Method name="close" params="" returns="void" />
     <Bug pattern="RV_RETURN_VALUE_IGNORED_BAD_PRACTICE" />
   </Match>
-
   <!-- The constructors intentionally do not copy the input byte array -->
   <Match>
     <Class name="org.apache.commons.io.input.UnsynchronizedByteArrayInputStream" />
     <Method name="&lt;init&gt;" />
     <Bug pattern="EI_EXPOSE_REP2" />
   </Match>
-
+  <Match>
+    <Class name="org.apache.commons.io.input.UnsynchronizedByteArrayInputStream" />
+    <!-- Unsynchronized* classes are not thread-safe by design. -->
+    <Bug pattern="AT_STALE_THREAD_WRITE_OF_PRIMITIVE" />
+  </Match>
+  <Match>
+    <!-- Unsynchronized* classes are not thread-safe by design. -->
+    <Class name="org.apache.commons.io.input.UnsynchronizedBufferedInputStream" />
+    <Bug pattern="AT_STALE_THREAD_WRITE_OF_PRIMITIVE, AT_NONATOMIC_OPERATIONS_ON_SHARED_VARIABLE" />
+  </Match>
   <!-- The encoding is irrelevant as output is binned -->
   <Match>
     <Class name="org.apache.commons.io.output.NullPrintStream" />
     <Bug pattern="DM_DEFAULT_ENCODING" />
   </Match>
-
   <!-- Deprecated -->
   <Match>
     <Class name="org.apache.commons.io.file.PathUtils" />
     <Field name="NOFOLLOW_LINK_OPTION_ARRAY" />
     <Bug pattern="MS_PKGPROTECT" />
   </Match>
-
   <!-- Deprecated -->
   <Match>
     <Class name="org.apache.commons.io.monitor.FileAlterationObserver" />
     <Field name="fileFilter" />
     <Bug pattern="SE_TRANSIENT_FIELD_NOT_RESTORED" />
   </Match>
-
   <!-- Deprecated -->
   <Match>
     <Class name="org.apache.commons.io.monitor.FileAlterationObserver" />
     <Field name="listeners" />
     <Bug pattern="SE_TRANSIENT_FIELD_NOT_RESTORED" />
   </Match>
-
   <!-- This class only throws unchecked exceptions. -->
   <Match>
     <Class name="org.apache.commons.io.function.UncheckedIOIterator" />
     <Method name="next" />
     <Bug pattern="IT_NO_SUCH_ELEMENT" />
   </Match>
-
+  <!-- OK by me and can't break BC anyway. -->
+  <Match>
+    <Class name="org.apache.commons.io.file.CleaningPathVisitor" />
+    <Method name="withBigIntegerCounters" />
+    <Bug pattern="HSM_HIDING_METHOD" />
+  </Match>
+  <!-- OK by me and can't break BC anyway. -->
+  <Match>
+    <Class name="org.apache.commons.io.file.CleaningPathVisitor" />
+    <Method name="withLongCounters" />
+    <Bug pattern="HSM_HIDING_METHOD" />
+  </Match>
+  <!-- This class is not thread-safe. Should this be a TO-DO?. -->
+  <Match>
+    <Class name="org.apache.commons.io.input.NullInputStream" />
+    <Bug pattern="AT_NONATOMIC_64BIT_PRIMITIVE, AT_NONATOMIC_OPERATIONS_ON_SHARED_VARIABLE" />
+  </Match>
+  <!-- This class is not thread-safe. Should this be a TO-DO?. -->
+  <Match>
+    <Class name="org.apache.commons.io.input.NullReader" />
+    <Bug pattern="AT_NONATOMIC_64BIT_PRIMITIVE, AT_NONATOMIC_OPERATIONS_ON_SHARED_VARIABLE, AT_STALE_THREAD_WRITE_OF_PRIMITIVE" />
+  </Match>
+  <!-- This class is not thread-safe. Should this be a TO-DO?. -->
+  <Match>
+    <Class name="org.apache.commons.io.input.BOMInputStream" />
+    <Bug pattern="AT_STALE_THREAD_WRITE_OF_PRIMITIVE" />
+  </Match>
 </FindBugsFilter>

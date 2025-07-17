@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,13 +18,23 @@
 package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.Set;
 import java.util.SortedMap;
+import java.util.stream.Stream;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Tests {@link Charsets}.
@@ -53,19 +63,55 @@ public class CharsetsTest {
     /**
      * For parameterized tests.
      *
+     * @return {@code Charset.availableCharsets().values()}.
+     */
+    public static Collection<Charset> availableCharsetsValues() {
+        return Charset.availableCharsets().values();
+    }
+
+    static Stream<Arguments> charsetAliasProvider() {
+        return Charset.availableCharsets().entrySet().stream()
+                .flatMap(entry -> entry.getValue().aliases().stream().map(a -> Arguments.of(entry.getValue(), a)));
+    }
+
+    /**
+     * For parameterized tests.
+     *
      * @return {@code Charset.requiredCharsets().keySet()}.
      */
     public static Set<String> getRequiredCharsetNames() {
         return Charsets.requiredCharsets().keySet();
     }
 
-    @Test
-    public void testIso8859_1() {
-        assertEquals("ISO-8859-1", Charsets.ISO_8859_1.name());
+    @ParameterizedTest
+    @MethodSource("charsetAliasProvider")
+    void testIsAlias(final Charset charset, final String charsetAlias) {
+        assertTrue(Charsets.isAlias(charset, charsetAlias));
+        assertTrue(Charsets.isAlias(charset, charsetAlias.toLowerCase()));
+        assertTrue(Charsets.isAlias(charset, charsetAlias.toUpperCase()));
+        assertTrue(Charsets.isAlias(charset, charset.name()));
+        assertFalse(Charsets.isAlias(charset, null));
     }
 
     @Test
-    public void testRequiredCharsets() {
+    void testIso8859_1() {
+        assertEquals("ISO-8859-1", Charsets.ISO_8859_1.name());
+    }
+
+    @ParameterizedTest
+    @MethodSource("availableCharsetsValues")
+    void testIsUTF8Charset(final Charset charset) {
+        assumeFalse(StandardCharsets.UTF_8.equals(charset));
+        charset.aliases().forEach(n -> assertFalse(Charsets.isUTF8(Charset.forName(n))));
+    }
+
+    void testIsUTF8CharsetUTF8() {
+        assertTrue(Charsets.isUTF8(StandardCharsets.UTF_8));
+        StandardCharsets.UTF_8.aliases().forEach(n -> assertTrue(Charsets.isUTF8(Charset.forName(n))));
+    }
+
+    @Test
+    void testRequiredCharsets() {
         final SortedMap<String, Charset> requiredCharsets = Charsets.requiredCharsets();
         // test for what we expect to be there as of Java 6
         // Make sure the object at the given key is the right one
@@ -78,7 +124,7 @@ public class CharsetsTest {
     }
 
     @Test
-    public void testToCharset_String() {
+    void testToCharset_String() {
         assertEquals(Charset.defaultCharset(), Charsets.toCharset((String) null));
         assertEquals(Charset.defaultCharset(), Charsets.toCharset((Charset) null));
         assertEquals(Charset.defaultCharset(), Charsets.toCharset(Charset.defaultCharset()));
@@ -86,38 +132,49 @@ public class CharsetsTest {
     }
 
     @Test
-    public void testToCharset_String_Charset() {
-        assertEquals(null, Charsets.toCharset((String) null, null));
+    void testToCharsetDefault() {
+        assertEquals(Charset.defaultCharset(), Charsets.toCharsetDefault((String) null, null));
+        assertEquals(Charset.defaultCharset(), Charsets.toCharsetDefault(StringUtils.EMPTY, null));
+        assertEquals(Charset.defaultCharset(), Charsets.toCharsetDefault(".", null));
+        assertEquals(Charset.defaultCharset(), Charsets.toCharsetDefault(null, Charset.defaultCharset()));
+        assertEquals(Charset.defaultCharset(), Charsets.toCharsetDefault(Charset.defaultCharset().name(), Charset.defaultCharset()));
+        assertEquals(StandardCharsets.UTF_8, Charsets.toCharsetDefault(StandardCharsets.UTF_8.name(), Charset.defaultCharset()));
+        assertEquals(StandardCharsets.UTF_8, Charsets.toCharsetDefault(StandardCharsets.UTF_8.name(), null));
+    }
+
+    @Test
+    void testToCharsetWithStringCharset() {
+        assertNull(Charsets.toCharset((String) null, null));
         assertEquals(Charset.defaultCharset(), Charsets.toCharset((String) null, Charset.defaultCharset()));
         assertEquals(Charset.defaultCharset(), Charsets.toCharset((Charset) null, Charset.defaultCharset()));
-        assertEquals(null, Charsets.toCharset((Charset) null, null));
+        assertNull(Charsets.toCharset((Charset) null, null));
         assertEquals(Charset.defaultCharset(), Charsets.toCharset(Charset.defaultCharset(), Charset.defaultCharset()));
         assertEquals(StandardCharsets.UTF_8, Charsets.toCharset(StandardCharsets.UTF_8, Charset.defaultCharset()));
         assertEquals(StandardCharsets.UTF_8, Charsets.toCharset(StandardCharsets.UTF_8, null));
     }
 
     @Test
-    public void testUsAscii() {
+    void testUsAscii() {
         assertEquals(StandardCharsets.US_ASCII.name(), Charsets.US_ASCII.name());
     }
 
     @Test
-    public void testUtf16() {
+    void testUtf16() {
         assertEquals(StandardCharsets.UTF_16.name(), Charsets.UTF_16.name());
     }
 
     @Test
-    public void testUtf16Be() {
+    void testUtf16Be() {
         assertEquals(StandardCharsets.UTF_16BE.name(), Charsets.UTF_16BE.name());
     }
 
     @Test
-    public void testUtf16Le() {
+    void testUtf16Le() {
         assertEquals(StandardCharsets.UTF_16LE.name(), Charsets.UTF_16LE.name());
     }
 
     @Test
-    public void testUtf8() {
+    void testUtf8() {
         assertEquals(StandardCharsets.UTF_8.name(), Charsets.UTF_8.name());
     }
 

@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -61,14 +61,14 @@ public class QueueOutputStreamTest {
     }
 
     @Test
-    public void testNullArgument() {
+    void testNullArgument() {
         assertThrows(NullPointerException.class, () -> new QueueOutputStream(null), "queue is required");
     }
 
     @Test
-    public void testWriteInterrupted() throws Exception {
+    void testWriteInterrupted() throws Exception {
         try (QueueOutputStream outputStream = new QueueOutputStream(new LinkedBlockingQueue<>(1));
-                final QueueInputStream inputStream = outputStream.newQueueInputStream()) {
+                QueueInputStream inputStream = outputStream.newQueueInputStream()) {
 
             final int timeout = 1;
             final Exchanger<Thread> writerThreadExchanger = new Exchanger<>();
@@ -97,9 +97,9 @@ public class QueueOutputStreamTest {
     }
 
     @Test
-    public void testWriteString() throws Exception {
+    void testWriteString() throws Exception {
         try (QueueOutputStream outputStream = new QueueOutputStream();
-                final QueueInputStream inputStream = outputStream.newQueueInputStream()) {
+                QueueInputStream inputStream = outputStream.newQueueInputStream()) {
             outputStream.write("ABC".getBytes(UTF_8));
             final String value = IOUtils.toString(inputStream, UTF_8);
             assertEquals("ABC", value);
@@ -107,9 +107,9 @@ public class QueueOutputStreamTest {
     }
 
     @Test
-    public void testWriteStringMultiThread() throws Exception {
+    void testWriteStringMultiThread() throws Exception {
         try (QueueOutputStream outputStream = callInThrowAwayThread(QueueOutputStream::new);
-                final QueueInputStream inputStream = callInThrowAwayThread(outputStream::newQueueInputStream)) {
+                QueueInputStream inputStream = callInThrowAwayThread(outputStream::newQueueInputStream)) {
             callInThrowAwayThread(() -> {
                 outputStream.write("ABC".getBytes(UTF_8));
                 return null;

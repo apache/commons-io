@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,6 +19,7 @@ package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.commons.lang3.SystemUtils;
@@ -29,15 +30,15 @@ import org.junit.jupiter.api.condition.OS;
 /**
  * Tests {@link FileSystem}.
  */
-public class FileSystemTest {
+class FileSystemTest {
 
     @Test
-    public void testGetBlockSize() {
+    void testGetBlockSize() {
         assertTrue(FileSystem.getCurrent().getBlockSize() >= 0);
     }
 
     @Test
-    public void testGetCurrent() {
+    void testGetCurrent() {
         if (SystemUtils.IS_OS_WINDOWS) {
             assertEquals(FileSystem.WINDOWS, FileSystem.getCurrent());
         }
@@ -50,7 +51,13 @@ public class FileSystemTest {
     }
 
     @Test
-    public void testIsLegalName() {
+    void testGetIllegalFileNameChars() {
+        final FileSystem current = FileSystem.getCurrent();
+        assertNotSame(current.getIllegalFileNameChars(), current.getIllegalFileNameChars());
+    }
+
+    @Test
+    void testIsLegalName() {
         for (final FileSystem fs : FileSystem.values()) {
             assertFalse(fs.isLegalFileName(""), fs.name()); // Empty is always illegal
             assertFalse(fs.isLegalFileName(null), fs.name()); // null is always illegal
@@ -58,13 +65,13 @@ public class FileSystemTest {
             assertTrue(fs.isLegalFileName("0"), fs.name()); // Assume simple name always legal
             for (final String candidate : fs.getReservedFileNames()) {
                 // Reserved file names are not legal
-                assertFalse(fs.isLegalFileName(candidate));
+                assertFalse(fs.isLegalFileName(candidate), candidate);
             }
         }
     }
 
     @Test
-    public void testIsReservedFileName() {
+    void testIsReservedFileName() {
         for (final FileSystem fs : FileSystem.values()) {
             for (final String candidate : fs.getReservedFileNames()) {
                 assertTrue(fs.isReservedFileName(candidate));
@@ -74,7 +81,7 @@ public class FileSystemTest {
 
     @Test
     @EnabledOnOs(OS.WINDOWS)
-    public void testIsReservedFileNameOnWindows() {
+    void testIsReservedFileNameOnWindows() {
         final FileSystem fs = FileSystem.WINDOWS;
         for (final String candidate : fs.getReservedFileNames()) {
             // System.out.printf("Reserved %s exists: %s%n", candidate, Files.exists(Paths.get(candidate)));
@@ -101,7 +108,7 @@ public class FileSystemTest {
     }
 
     @Test
-    public void testReplacementWithNUL() {
+    void testReplacementWithNUL() {
         for (final FileSystem fs : FileSystem.values()) {
             try {
                 fs.toLegalFileName("Test", '\0'); // Assume NUL is always illegal
@@ -112,7 +119,7 @@ public class FileSystemTest {
     }
 
     @Test
-    public void testSorted() {
+    void testSorted() {
         for (final FileSystem fs : FileSystem.values()) {
             final char[] chars = fs.getIllegalFileNameChars();
             for (int i = 0; i < chars.length - 1; i++) {
@@ -122,7 +129,7 @@ public class FileSystemTest {
     }
 
     @Test
-    public void testSupportsDriveLetter() {
+    void testSupportsDriveLetter() {
         assertTrue(FileSystem.WINDOWS.supportsDriveLetter());
         assertFalse(FileSystem.GENERIC.supportsDriveLetter());
         assertFalse(FileSystem.LINUX.supportsDriveLetter());
@@ -130,7 +137,7 @@ public class FileSystemTest {
     }
 
     @Test
-    public void testToLegalFileNameWindows() {
+    void testToLegalFileNameWindows() {
         final FileSystem fs = FileSystem.WINDOWS;
         final char replacement = '-';
         for (char i = 0; i < 32; i++) {

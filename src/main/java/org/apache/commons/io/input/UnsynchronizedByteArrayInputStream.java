@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,69 +25,100 @@ import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
- * This is an alternative to {@link java.io.ByteArrayInputStream} which removes the synchronization overhead for non-concurrent access; as such this class is
+ * This is an alternative to {@link ByteArrayInputStream} which removes the synchronization overhead for non-concurrent access; as such this class is
  * not thread-safe.
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  *
+ * @see Builder
  * @see ByteArrayInputStream
  * @since 2.7
  */
 //@NotThreadSafe
 public class UnsynchronizedByteArrayInputStream extends InputStream {
 
+    // @formatter:off
     /**
-     * Builds a new {@link UnsynchronizedByteArrayInputStream} instance.
+     * Builds a new {@link UnsynchronizedByteArrayInputStream}.
+     *
      * <p>
      * Using a Byte Array:
      * </p>
-     *
      * <pre>{@code
-     * UnsynchronizedByteArrayInputStream s = UnsynchronizedByteArrayInputStream.builder().setByteArray(byteArray).setOffset(0).setLength(byteArray.length)
-     *         .get();
+     * UnsynchronizedByteArrayInputStream s = UnsynchronizedByteArrayInputStream.builder()
+     *   .setByteArray(byteArray)
+     *   .setOffset(0)
+     *   .setLength(byteArray.length)
+     *   .get();
      * }
      * </pre>
      * <p>
      * Using File IO:
      * </p>
-     *
      * <pre>{@code
-     * UnsynchronizedByteArrayInputStream s = UnsynchronizedByteArrayInputStream.builder().setFile(file).setOffset(0).setLength(byteArray.length).get();
+     * UnsynchronizedByteArrayInputStream s = UnsynchronizedByteArrayInputStream.builder()
+     *   .setFile(file)
+     *   .setOffset(0)
+     *   .setLength(byteArray.length)
+     *   .get();
      * }
      * </pre>
      * <p>
      * Using NIO Path:
      * </p>
-     *
      * <pre>{@code
-     * UnsynchronizedByteArrayInputStream s = UnsynchronizedByteArrayInputStream.builder().setPath(path).setOffset(0).setLength(byteArray.length).get();
+     * UnsynchronizedByteArrayInputStream s = UnsynchronizedByteArrayInputStream.builder()
+     *   .setPath(path)
+     *   .setOffset(0)
+     *   .setLength(byteArray.length)
+     *   .get();
      * }
      * </pre>
+     *
+     * @see #get()
      */
+    // @formatter:on
     public static class Builder extends AbstractStreamBuilder<UnsynchronizedByteArrayInputStream, Builder> {
 
         private int offset;
         private int length;
 
         /**
-         * Constructs a new instance.
+         * Constructs a builder of {@link UnsynchronizedByteArrayInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        private byte[] checkOriginByteArray() throws IOException {
+            return checkOrigin().getByteArray();
+        }
+
+        /**
+         * Builds a new {@link UnsynchronizedByteArrayInputStream}.
          * <p>
-         * This builder use the aspects byte[], offset and length.
+         * You must set an aspect that supports {@code byte[]} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * You must provide an origin that can be converted to a byte[] by this builder, otherwise, this call will throw an
-         * {@link UnsupportedOperationException}.
+         * This builder uses the following aspects:
          * </p>
+         * <ul>
+         * <li>{@code byte[]}</li>
+         * <li>offset</li>
+         * <li>length</li>
+         * </ul>
          *
          * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide a byte[].
+         * @throws UnsupportedOperationException if the origin cannot provide a {@code byte[]}.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws IOException                   if an I/O error occurs converting to an {@code byte[]} using {@link AbstractOrigin#getByteArray()}.
          * @see AbstractOrigin#getByteArray()
+         * @see #getUnchecked()
          */
         @Override
         public UnsynchronizedByteArrayInputStream get() throws IOException {
-            return new UnsynchronizedByteArrayInputStream(checkOrigin().getByteArray(), offset, length);
+            return new UnsynchronizedByteArrayInputStream(this);
         }
 
         @Override
@@ -100,7 +131,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
          * Sets the length.
          *
          * @param length Must be greater or equal to 0.
-         * @return this.
+         * @return {@code this} instance.
          */
         public Builder setLength(final int length) {
             if (length < 0) {
@@ -114,7 +145,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
          * Sets the offset.
          *
          * @param offset Must be greater or equal to 0.
-         * @return this.
+         * @return {@code this} instance.
          */
         public Builder setOffset(final int offset) {
             if (offset < 0) {
@@ -160,7 +191,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
     /**
      * End Of Data.
      *
-     * Similar to data.length, i.e. the last readable offset + 1.
+     * Similar to data.length, which is the last readable offset + 1.
      */
     private final int eod;
 
@@ -173,6 +204,10 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      * The current mark (if any).
      */
     private int markedOffset;
+
+    private UnsynchronizedByteArrayInputStream(final Builder builder) throws IOException {
+        this(builder.checkOriginByteArray(), builder.offset, builder.length);
+    }
 
     /**
      * Constructs a new byte array input stream.
@@ -190,7 +225,6 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      *
      * @param data   the buffer
      * @param offset the offset into the buffer
-     *
      * @throws IllegalArgumentException if the offset is less than zero
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
@@ -205,7 +239,6 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      * @param data   the buffer
      * @param offset the offset into the buffer
      * @param length the length of the buffer
-     *
      * @throws IllegalArgumentException if the offset or length less than zero
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */

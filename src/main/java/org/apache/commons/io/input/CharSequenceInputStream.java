@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -42,13 +42,19 @@ import org.apache.commons.io.function.Uncheck;
  * <p>
  * <strong>Note:</strong> Supports {@link #mark(int)} and {@link #reset()}.
  * </p>
+ * <p>
+ * To build an instance, use {@link Builder}.
+ * </p>
  *
+ * @see Builder
  * @since 2.2
  */
 public class CharSequenceInputStream extends InputStream {
 
+    //@formatter:off
     /**
-     * Builds a new {@link CharSequenceInputStream} instance.
+     * Builds a new {@link CharSequenceInputStream}.
+     *
      * <p>
      * For example:
      * </p>
@@ -71,24 +77,42 @@ public class CharSequenceInputStream extends InputStream {
      *   .get();}
      * </pre>
      *
+     * @see #get()
      * @since 2.13.0
      */
+    //@formatter:on
     public static class Builder extends AbstractStreamBuilder<CharSequenceInputStream, Builder> {
 
         private CharsetEncoder charsetEncoder = newEncoder(getCharset());
 
         /**
-         * Constructs a new instance.
+         * Constructs a new builder of {@link CharSequenceInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
+         * Builds a new {@link CharSequenceInputStream}.
          * <p>
-         * This builder use the aspects the CharSequence, buffer size, and Charset.
+         * You must set an aspect that supports {@link #getCharSequence()}, otherwise, this method throws an exception.
          * </p>
+         * <p>
+         * This builder uses the following aspects:
+         * </p>
+         * <ul>
+         * <li>{@link #getCharSequence()} gets the target aspect.</li>
+         * <li>{@link #getBufferSize()}</li>
+         * <li>{@link CharsetEncoder}</li>
+         * </ul>
          *
          * @return a new instance.
          * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character.
+         * @see #getUnchecked()
          */
         @Override
         public CharSequenceInputStream get() {
-            return Uncheck.get(() -> new CharSequenceInputStream(getCharSequence(), getBufferSize(), charsetEncoder));
+            return Uncheck.get(() -> new CharSequenceInputStream(this));
         }
 
         CharsetEncoder getCharsetEncoder() {
@@ -106,7 +130,7 @@ public class CharSequenceInputStream extends InputStream {
          * Sets the charset encoder. Assumes that the caller has configured the encoder.
          *
          * @param newEncoder the charset encoder.
-         * @return this
+         * @return {@code this} instance.
          * @since 2.13.0
          */
         public Builder setCharsetEncoder(final CharsetEncoder newEncoder) {
@@ -143,6 +167,25 @@ public class CharSequenceInputStream extends InputStream {
     private int cBufMark; // position in cBuf
     private final CharsetEncoder charsetEncoder;
 
+    private CharSequenceInputStream(final Builder builder) {
+        this.charsetEncoder = builder.charsetEncoder;
+        // Ensure that buffer is long enough to hold a complete character
+        this.bBuf = ByteBuffer.allocate(ReaderInputStream.checkMinBufferSize(builder.charsetEncoder, builder.getBufferSize()));
+        this.bBuf.flip();
+        this.cBuf = CharBuffer.wrap(Uncheck.get(() -> builder.getCharSequence()));
+        this.cBufMark = NO_MARK;
+        this.bBufMark = NO_MARK;
+        try {
+            fillBuffer();
+        } catch (final CharacterCodingException ex) {
+            // Reset everything without filling the buffer
+            // so the same exception can be thrown again later.
+            this.bBuf.clear();
+            this.bBuf.flip();
+            this.cBuf.rewind();
+        }
+    }
+
     /**
      * Constructs a new instance with a buffer size of {@link IOUtils#DEFAULT_BUFFER_SIZE}.
      *
@@ -167,28 +210,7 @@ public class CharSequenceInputStream extends InputStream {
      */
     @Deprecated
     public CharSequenceInputStream(final CharSequence cs, final Charset charset, final int bufferSize) {
-        // @formatter:off
-        this(cs, bufferSize, newEncoder(charset));
-        // @formatter:on
-    }
-
-    private CharSequenceInputStream(final CharSequence cs, final int bufferSize, final CharsetEncoder charsetEncoder) {
-        this.charsetEncoder = charsetEncoder;
-        // Ensure that buffer is long enough to hold a complete character
-        this.bBuf = ByteBuffer.allocate(ReaderInputStream.checkMinBufferSize(charsetEncoder, bufferSize));
-        this.bBuf.flip();
-        this.cBuf = CharBuffer.wrap(cs);
-        this.cBufMark = NO_MARK;
-        this.bBufMark = NO_MARK;
-        try {
-            fillBuffer();
-        } catch (final CharacterCodingException ex) {
-            // Reset everything without filling the buffer
-            // so the same exception can be thrown again later.
-            this.bBuf.clear();
-            this.bBuf.flip();
-            this.cBuf.rewind();
-        }
+        this(builder().setCharSequence(cs).setCharset(charset).setBufferSize(bufferSize));
     }
 
     /**
@@ -231,7 +253,7 @@ public class CharSequenceInputStream extends InputStream {
 
     @Override
     public void close() throws IOException {
-        // noop
+        bBuf.position(bBuf.limit());
     }
 
     /**

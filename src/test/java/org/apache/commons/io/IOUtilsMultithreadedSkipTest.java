@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -40,7 +40,7 @@ import org.junit.jupiter.api.Test;
 /**
  * See Jira ticket IO-802.
  */
-public class IOUtilsMultithreadedSkipTest {
+class IOUtilsMultithreadedSkipTest {
 
     private static final String FIXTURE = "TIKA-4065.bin";
     long seed = 1;
@@ -84,14 +84,14 @@ public class IOUtilsMultithreadedSkipTest {
         // thisSeed = -727624427837034313l;
         final Random random = new Random(thisSeed);
         final byte[] bytes;
-        try (final InputStream inputStream = getClass().getResourceAsStream(FIXTURE)) {
+        try (InputStream inputStream = getClass().getResourceAsStream(FIXTURE)) {
             bytes = IOUtils.toByteArray(inputStream);
         }
         final int numSkips = random.nextInt(bytes.length) / 100 + 1;
 
         final int[] skips = generateSkips(bytes, numSkips, random);
         final int[] expected;
-        try (final InputStream inflate = inflate(bytes)) {
+        try (InputStream inflate = inflate(bytes)) {
             expected = generateExpected(inflate, skips);
         }
 
@@ -135,12 +135,12 @@ public class IOUtilsMultithreadedSkipTest {
     }
 
     @Test
-    public void testSkipFullyOnInflaterInputStream_New_bytes() throws Exception {
+    void testSkipFullyOnInflaterInputStream_New_bytes() throws Exception {
         testSkipFullyOnInflaterInputStream(() -> new byte[4096]);
     }
 
     @Test
-    public void testSkipFullyOnInflaterInputStream_ThreadLocal() throws Exception {
+    void testSkipFullyOnInflaterInputStream_ThreadLocal() throws Exception {
         testSkipFullyOnInflaterInputStream(threadLocal::get);
     }
 

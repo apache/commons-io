@@ -6,7 +6,7 @@
  *  (the "License"); you may not use this file except in compliance with
  *  the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,10 +20,9 @@ import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.zip.CheckedInputStream;
 import java.util.zip.Checksum;
-
-import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
  * Automatically verifies a {@link Checksum} value once the stream is exhausted or the count threshold is reached.
@@ -34,19 +33,24 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * <p>
  * If you do not need the verification or threshold feature, then use a plain {@link CheckedInputStream}.
  * </p>
+ * <p>
+ * To build an instance, use {@link Builder}.
+ * </p>
  *
+ * @see Builder
  * @since 2.16.0
  */
 public final class ChecksumInputStream extends CountingInputStream {
 
     // @formatter:off
     /**
-     * Builds a new {@link ChecksumInputStream} instance.
+     * Builds a new {@link ChecksumInputStream}.
+     *
      * <p>
-     * There is no default {@link Checksum}; you MUST provide one.
+     * There is no default {@link Checksum}; you MUST provide one. This avoids any issue with a default {@link Checksum} being proven deficient or insecure
+     * in the future.
      * </p>
      * <h2>Using NIO</h2>
-     *
      * <pre>{@code
      * ChecksumInputStream s = ChecksumInputStream.builder()
      *   .setPath(Paths.get("MyFile.xml"))
@@ -54,9 +58,7 @@ public final class ChecksumInputStream extends CountingInputStream {
      *   .setExpectedChecksumValue(12345)
      *   .get();
      * }</pre>
-     *
      * <h2>Using IO</h2>
-     *
      * <pre>{@code
      * ChecksumInputStream s = ChecksumInputStream.builder()
      *   .setFile(new File("MyFile.xml"))
@@ -64,7 +66,6 @@ public final class ChecksumInputStream extends CountingInputStream {
      *   .setExpectedChecksumValue(12345)
      *   .get();
      * }</pre>
-     *
      * <h2>Validating only part of an InputStream</h2>
      * <p>
      * The following validates the first 100 bytes of the given input.
@@ -91,13 +92,15 @@ public final class ChecksumInputStream extends CountingInputStream {
      *   .setCountThreshold(100)
      *   .get();
      * }</pre>
+     *
+     * @see #get()
      */
     // @formatter:on
-    public static class Builder extends AbstractStreamBuilder<ChecksumInputStream, Builder> {
+    public static class Builder extends AbstractBuilder<ChecksumInputStream, Builder> {
 
         /**
-         * There is no default checksum, you MUST provide one. This avoids any issue with a default {@link Checksum}
-         * being proven deficient or insecure in the future.
+         * There is no default {@link Checksum}, you MUST provide one. This avoids any issue with a default {@link Checksum} being proven deficient or insecure
+         * in the future.
          */
         private Checksum checksum;
 
@@ -116,30 +119,45 @@ public final class ChecksumInputStream extends CountingInputStream {
         private long expectedChecksumValue;
 
         /**
-         * Constructs a new instance.
-         * <p>
-         * This builder requires an input convertible by {@link #getInputStream()}.
-         * </p>
-         * <p>
-         * You must provide an origin that can be converted to an InputStream by this builder, otherwise, this call will
-         * throw an {@link UnsupportedOperationException}.
-         * </p>
-         *
-         * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide an InputStream.
-         * @see #getInputStream()
+         * Constructs a new builder of {@link ChecksumInputStream}.
          */
-        @SuppressWarnings("resource")
-        @Override
-        public ChecksumInputStream get() throws IOException {
-            return new ChecksumInputStream(getInputStream(), checksum, expectedChecksumValue, countThreshold);
+        public Builder() {
+            // empty
         }
 
         /**
-         * Sets the Checksum.
+         * Builds a new {@link ChecksumInputStream}.
+         * <p>
+         * You must set an aspect that supports {@link #getInputStream()}, otherwise, this method throws an exception.
+         * </p>
+         * <p>
+         * This builder uses the following aspects:
+         * </p>
+         * <ul>
+         * <li>{@link #getInputStream()} gets the target aspect.</li>
+         * <li>{@link Checksum}</li>
+         * <li>expectedChecksumValue</li>
+         * <li>countThreshold</li>
+         * </ul>
+         *
+         * @return a new instance.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
+         * @throws IOException                   if an I/O error occurs converting to an {@link InputStream} using {@link #getInputStream()}.
+         * @see #getInputStream()
+         * @see #getUnchecked()
+         */
+        @Override
+        public ChecksumInputStream get() throws IOException {
+            return new ChecksumInputStream(this);
+        }
+
+        /**
+         * Sets the Checksum. There is no default {@link Checksum}, you MUST provide one. This avoids any issue with a default {@link Checksum} being proven
+         * deficient or insecure in the future.
          *
          * @param checksum the Checksum.
-         * @return this.
+         * @return {@code this} instance.
          */
         public Builder setChecksum(final Checksum checksum) {
             this.checksum = checksum;
@@ -154,7 +172,7 @@ public final class ChecksumInputStream extends CountingInputStream {
          * </p>
          *
          * @param countThreshold the count threshold. A negative number means the threshold is unbound.
-         * @return this.
+         * @return {@code this} instance.
          */
         public Builder setCountThreshold(final long countThreshold) {
             this.countThreshold = countThreshold;
@@ -165,7 +183,7 @@ public final class ChecksumInputStream extends CountingInputStream {
          * The expected {@link Checksum} value once the stream is exhausted or the count threshold is reached.
          *
          * @param expectedChecksumValue The expected Checksum value.
-         * @return this.
+         * @return {@code this} instance.
          */
         public Builder setExpectedChecksumValue(final long expectedChecksumValue) {
             this.expectedChecksumValue = expectedChecksumValue;
@@ -198,17 +216,13 @@ public final class ChecksumInputStream extends CountingInputStream {
     /**
      * Constructs a new instance.
      *
-     * @param in                    the stream to wrap.
-     * @param checksum              a Checksum implementation.
-     * @param expectedChecksumValue the expected checksum.
-     * @param countThreshold        the count threshold to limit how much input is consumed, a negative number means the
-     *                              threshold is unbound.
+     * @param builder build parameters.
      */
-    private ChecksumInputStream(final InputStream in, final Checksum checksum, final long expectedChecksumValue,
-            final long countThreshold) {
-        super(new CheckedInputStream(in, checksum));
-        this.countThreshold = countThreshold;
-        this.expectedChecksumValue = expectedChecksumValue;
+    @SuppressWarnings("resource")
+    private ChecksumInputStream(final Builder builder) throws IOException {
+        super(new CheckedInputStream(builder.getInputStream(), Objects.requireNonNull(builder.checksum, "builder.checksum")), builder);
+        this.countThreshold = builder.countThreshold;
+        this.expectedChecksumValue = builder.expectedChecksumValue;
     }
 
     @Override

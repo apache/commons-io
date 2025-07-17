@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link TeeInputStream}.
  */
-public class TeeInputStreamTest  {
+class TeeInputStreamTest  {
 
     private final String ASCII = StandardCharsets.US_ASCII.name();
 
@@ -58,7 +58,7 @@ public class TeeInputStreamTest  {
      * exception on {@link TeeInputStream#close()}, if specified to do so.
      */
     @Test
-    public void testCloseBranchIOException() throws Exception {
+    void testCloseBranchIOException() throws Exception {
         final ByteArrayInputStream goodIs = mock(ByteArrayInputStream.class);
         final OutputStream badOs = new ThrowOnCloseOutputStream();
 
@@ -71,12 +71,21 @@ public class TeeInputStreamTest  {
         verify(goodIs, times(2)).close();
     }
 
+    @SuppressWarnings({ "resource" })
+    @Test
+    void testCloseHandleIOException() throws IOException {
+        ProxyInputStreamTest
+                .testCloseHandleIOException(new TeeInputStream(new BrokenInputStream((Throwable) new IOException()), new ByteArrayOutputStream(), false));
+        ProxyInputStreamTest
+                .testCloseHandleIOException(new TeeInputStream(new BrokenInputStream((Throwable) new IOException()), new ByteArrayOutputStream(), true));
+    }
+
     /**
      * Tests that the branch {@code OutputStream} is closed when closing the main {@code InputStream} throws an
      * exception on {@link TeeInputStream#close()}, if specified to do so.
      */
     @Test
-    public void testCloseMainIOException() throws IOException {
+    void testCloseMainIOException() throws IOException {
         final InputStream badIs = new ThrowOnCloseInputStream();
         final ByteArrayOutputStream goodOs = mock(ByteArrayOutputStream.class);
 
@@ -90,7 +99,7 @@ public class TeeInputStreamTest  {
     }
 
     @Test
-    public void testMarkReset() throws Exception {
+    void testMarkReset() throws Exception {
         assertEquals('a', tee.read());
         tee.mark(1);
         assertEquals('b', tee.read());
@@ -102,7 +111,7 @@ public class TeeInputStreamTest  {
     }
 
     @Test
-    public void testReadEverything() throws Exception {
+    void testReadEverything() throws Exception {
         assertEquals('a', tee.read());
         assertEquals('b', tee.read());
         assertEquals('c', tee.read());
@@ -111,18 +120,18 @@ public class TeeInputStreamTest  {
     }
 
     @Test
-    public void testReadNothing() throws Exception {
+    void testReadNothing() throws Exception {
         assertEquals("", output.toString(ASCII));
     }
 
     @Test
-    public void testReadOneByte() throws Exception {
+    void testReadOneByte() throws Exception {
         assertEquals('a', tee.read());
         assertEquals("a", output.toString(ASCII));
     }
 
     @Test
-    public void testReadToArray() throws Exception {
+    void testReadToArray() throws Exception {
         final byte[] buffer = new byte[8];
         assertEquals(3, tee.read(buffer));
         assertEquals('a', buffer[0]);
@@ -133,7 +142,7 @@ public class TeeInputStreamTest  {
     }
 
     @Test
-    public void testReadToArrayWithOffset() throws Exception {
+    void testReadToArrayWithOffset() throws Exception {
         final byte[] buffer = new byte[8];
         assertEquals(3, tee.read(buffer, 4, 4));
         assertEquals('a', buffer[4]);
@@ -144,7 +153,7 @@ public class TeeInputStreamTest  {
     }
 
     @Test
-    public void testSkip() throws Exception {
+    void testSkip() throws Exception {
         assertEquals('a', tee.read());
         assertEquals(1, tee.skip(1));
         assertEquals('c', tee.read());

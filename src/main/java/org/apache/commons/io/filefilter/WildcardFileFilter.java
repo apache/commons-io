@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -40,7 +40,7 @@ import org.apache.commons.io.file.PathUtils;
  * command lines. The check is case-sensitive by default. See {@link FilenameUtils#wildcardMatchOnSystem(String,String)} for more information.
  * </p>
  * <p>
- * To build an instance, see {@link Builder}.
+ * To build an instance, use {@link Builder}.
  * </p>
  * <p>
  * For example:
@@ -63,15 +63,15 @@ import org.apache.commons.io.file.PathUtils;
  * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(
  *     WildcardFileFilter.builder().setWildcards("*test*.java~*~").get());
  * //
- * // Walk one dir
- * Files.<b>walkFileTree</b>(dir, Collections.emptySet(), 1, visitor);
+ * // Walk one directory
+ * Files.<strong>walkFileTree</strong>(dir, Collections.emptySet(), 1, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getFileList());
  * //
  * visitor.getPathCounters().reset();
  * //
- * // Walk dir tree
- * Files.<b>walkFileTree</b>(dir, visitor);
+ * // Walk directory tree
+ * Files.<strong>walkFileTree</strong>(dir, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getDirList());
  * System.out.println(visitor.getFileList());
@@ -98,16 +98,23 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
         /** Whether the comparison is case-sensitive. */
         private IOCase ioCase = IOCase.SENSITIVE;
 
+        /**
+         * Constructs a new builder of {@link WildcardFileFilter}.
+         */
+        public Builder() {
+            // empty
+        }
+
         @Override
         public WildcardFileFilter get() {
-            return new WildcardFileFilter(ioCase, wildcards);
+            return new WildcardFileFilter(this);
         }
 
         /**
          * Sets how to handle case sensitivity, null means case-sensitive.
          *
          * @param ioCase how to handle case sensitivity, null means case-sensitive.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setIoCase(final IOCase ioCase) {
             this.ioCase = IOCase.value(ioCase, IOCase.SENSITIVE);
@@ -118,7 +125,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
          * Sets the list of wildcards to match, not null.
          *
          * @param wildcards the list of wildcards to match, not null.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setWildcards(final List<String> wildcards) {
             setWildcards(requireWildcards(wildcards).toArray(EMPTY_STRING_ARRAY));
@@ -129,7 +136,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
          * Sets the wildcards to match, not null.
          *
          * @param wildcards the wildcards to match, not null.
-         * @return this
+         * @return {@code this} instance.
          */
         public Builder setWildcards(final String... wildcards) {
             this.wildcards = requireWildcards(wildcards);
@@ -159,6 +166,10 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
 
     /** Whether the comparison is case-sensitive. */
     private final IOCase ioCase;
+
+    private WildcardFileFilter(final Builder builder) {
+        this(builder.ioCase, builder.wildcards);
+    }
 
     /**
      * Constructs a new wildcard filter for an array of wildcards specifying case-sensitivity.
@@ -250,7 +261,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
     }
 
     /**
-     * Checks to see if the file name matches one of the wildcards.
+     * Tests to see if the file name matches one of the wildcards.
      *
      * @param file the file to check
      * @return true if the file name matches one of the wildcards
@@ -261,7 +272,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
     }
 
     /**
-     * Checks to see if the file name matches one of the wildcards.
+     * Tests to see if the file name matches one of the wildcards.
      *
      * @param dir  the file directory (ignored)
      * @param name the file name
@@ -273,10 +284,10 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
     }
 
     /**
-     * Checks to see if the file name matches one of the wildcards.
+     * Tests to see if the file name matches one of the wildcards.
      *
      * @param path the file to check
-     *
+     * @param attributes the path's basic attributes (may be null).
      * @return true if the file name matches one of the wildcards.
      * @since 2.9.0
      */

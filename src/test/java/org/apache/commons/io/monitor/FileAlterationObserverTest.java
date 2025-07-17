@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,19 +26,25 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOCase;
+import org.apache.commons.io.comparator.NameFileComparator;
 import org.apache.commons.io.filefilter.CanReadFileFilter;
 import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.monitor.FileAlterationObserver.Builder;
 import org.junit.jupiter.api.Test;
 
 /**
  * {@link FileAlterationObserver} Test Case.
  */
-public class FileAlterationObserverTest extends AbstractMonitorTest {
+class FileAlterationObserverTest extends AbstractMonitorTest {
+
+    private static final String PATH_STRING_FIXTURE = "/foo";
 
     /**
      * Constructs a new instance.
      */
-    public FileAlterationObserverTest() {
+    FileAlterationObserverTest() {
         listener = new CollectionFileListener(true);
     }
 
@@ -49,12 +55,16 @@ public class FileAlterationObserverTest extends AbstractMonitorTest {
         observer.checkAndNotify();
     }
 
+    private String directoryToUnixString(final FileAlterationObserver observer) {
+        return FilenameUtils.separatorsToUnix(observer.getDirectory().toString());
+    }
+
     /**
      * Test add/remove listeners.
      */
     @Test
-    public void testAddRemoveListeners() {
-        final FileAlterationObserver observer = new FileAlterationObserver("/foo");
+    void testAddRemoveListeners() {
+        final FileAlterationObserver observer = FileAlterationObserver.builder().setFile(PATH_STRING_FIXTURE).getUnchecked();
         // Null Listener
         observer.addListener(null);
         assertFalse(observer.getListeners().iterator().hasNext(), "Listeners[1]");
@@ -74,12 +84,137 @@ public class FileAlterationObserverTest extends AbstractMonitorTest {
         assertFalse(observer.getListeners().iterator().hasNext(), "Listeners[5]");
     }
 
+    @Test
+    void testBuilder_File() {
+        final File file = new File(PATH_STRING_FIXTURE);
+        final FileAlterationObserver observer = FileAlterationObserver.builder().setFile(file).getUnchecked();
+        assertEquals(file, observer.getDirectory());
+    }
+
+    @Test
+    void testBuilder_File_FileFilter() {
+        final File file = new File(PATH_STRING_FIXTURE);
+        // @formatter:off
+        final FileAlterationObserver observer = FileAlterationObserver.builder()
+                .setFile(file)
+                .setFileFilter(CanReadFileFilter.CAN_READ)
+                .getUnchecked();
+        // @formatter:on
+        assertEquals(file, observer.getDirectory());
+        assertEquals(CanReadFileFilter.CAN_READ, observer.getFileFilter());
+    }
+
+    @Test
+    void testBuilder_File_FileFilter_IOCase() {
+        final File file = new File(PATH_STRING_FIXTURE);
+        // @formatter:off
+        final FileAlterationObserver observer = FileAlterationObserver.builder()
+                .setFile(file)
+                .setFileFilter(CanReadFileFilter.CAN_READ)
+                .setIOCase(IOCase.INSENSITIVE)
+                .getUnchecked();
+        // @formatter:on
+        assertEquals(file, observer.getDirectory());
+        assertEquals(CanReadFileFilter.CAN_READ, observer.getFileFilter());
+        assertEquals(NameFileComparator.NAME_INSENSITIVE_COMPARATOR, observer.getComparator());
+    }
+
+    @Test
+    void testBuilder_String() {
+        final String file = PATH_STRING_FIXTURE;
+        final FileAlterationObserver observer = FileAlterationObserver.builder().setFile(file).getUnchecked();
+        assertEquals(file, directoryToUnixString(observer));
+    }
+
+    @Test
+    void testBuilder_String_FileFilter() {
+        final String file = PATH_STRING_FIXTURE;
+        // @formatter:off
+        final FileAlterationObserver observer = FileAlterationObserver.builder()
+                .setFile(file)
+                .setFileFilter(CanReadFileFilter.CAN_READ)
+                .getUnchecked();
+        // @formatter:on
+        assertEquals(file, directoryToUnixString(observer));
+        assertEquals(CanReadFileFilter.CAN_READ, observer.getFileFilter());
+    }
+
+    @Test
+    void testBuilder_String_FileFilter_IOCase() {
+        final String file = PATH_STRING_FIXTURE;
+        // @formatter:off
+        final FileAlterationObserver observer = FileAlterationObserver.builder()
+                .setFile(file)
+                .setFileFilter(CanReadFileFilter.CAN_READ)
+                .setIOCase(IOCase.INSENSITIVE)
+                .getUnchecked();
+        // @formatter:on
+        assertEquals(file, directoryToUnixString(observer));
+        assertEquals(CanReadFileFilter.CAN_READ, observer.getFileFilter());
+        assertEquals(NameFileComparator.NAME_INSENSITIVE_COMPARATOR, observer.getComparator());
+    }
+
+    @Test
+    void testConstructor_File() {
+        final File file = new File(PATH_STRING_FIXTURE);
+        @SuppressWarnings("deprecation")
+        final FileAlterationObserver observer = new FileAlterationObserver(file);
+        assertEquals(file, observer.getDirectory());
+    }
+
+    @Test
+    void testConstructor_File_FileFilter() {
+        final File file = new File(PATH_STRING_FIXTURE);
+        @SuppressWarnings("deprecation")
+        final FileAlterationObserver observer = new FileAlterationObserver(file, CanReadFileFilter.CAN_READ);
+        assertEquals(file, observer.getDirectory());
+        assertEquals(CanReadFileFilter.CAN_READ, observer.getFileFilter());
+    }
+
+    @Test
+    void testConstructor_File_FileFilter_IOCase() {
+        final File file = new File(PATH_STRING_FIXTURE);
+        @SuppressWarnings("deprecation")
+        final FileAlterationObserver observer = new FileAlterationObserver(file, CanReadFileFilter.CAN_READ, IOCase.INSENSITIVE);
+        assertEquals(file, observer.getDirectory());
+        assertEquals(CanReadFileFilter.CAN_READ, observer.getFileFilter());
+        assertEquals(NameFileComparator.NAME_INSENSITIVE_COMPARATOR, observer.getComparator());
+    }
+
+    @Test
+    void testConstructor_String() {
+        final String file = PATH_STRING_FIXTURE;
+        @SuppressWarnings("deprecation")
+        final FileAlterationObserver observer = new FileAlterationObserver(file);
+        assertEquals(file, directoryToUnixString(observer));
+    }
+
+    @Test
+    void testConstructor_String_FileFilter() {
+        final String file = PATH_STRING_FIXTURE;
+        @SuppressWarnings("deprecation")
+        final FileAlterationObserver observer = new FileAlterationObserver(file, CanReadFileFilter.CAN_READ);
+        assertEquals(file, directoryToUnixString(observer));
+        assertEquals(CanReadFileFilter.CAN_READ, observer.getFileFilter());
+    }
+
+    @Test
+    void testConstructor_String_FileFilter_IOCase() {
+        final String file = PATH_STRING_FIXTURE;
+        @SuppressWarnings("deprecation")
+        final FileAlterationObserver observer = new FileAlterationObserver(file, CanReadFileFilter.CAN_READ, IOCase.INSENSITIVE);
+        assertEquals(file, directoryToUnixString(observer));
+        assertEquals(CanReadFileFilter.CAN_READ, observer.getFileFilter());
+        assertEquals(NameFileComparator.NAME_INSENSITIVE_COMPARATOR, observer.getComparator());
+    }
+
     /**
-     * Test checkAndNotify() method
-     * @throws Exception
+     * Tests checkAndNotify() method
+     *
+     * @throws Exception Thrown on test failure.
      */
     @Test
-    public void testDirectory() throws Exception {
+    void testDirectory() throws Exception {
         checkAndNotify();
         checkCollectionsEmpty("A");
         final File testDirA = new File(testDir, "test-dir-A");
@@ -135,21 +270,22 @@ public class FileAlterationObserverTest extends AbstractMonitorTest {
 
     /**
      * Test checkAndNotify() creating
+     *
      * @throws IOException if an I/O error occurs.
      */
     @Test
-    public void testFileCreate() throws IOException {
+    void testFileCreate() throws IOException {
         checkAndNotify();
         checkCollectionsEmpty("A");
         File testDirA = new File(testDir, "test-dir-A");
         testDirA.mkdir();
-        testDir  = touch(testDir);
+        testDir = touch(testDir);
         testDirA = touch(testDirA);
-        File testDirAFile1 =       new File(testDirA, "A-file1.java");
+        File testDirAFile1 = new File(testDirA, "A-file1.java");
         final File testDirAFile2 = touch(new File(testDirA, "A-file2.java"));
-        File testDirAFile3 =       new File(testDirA, "A-file3.java");
+        File testDirAFile3 = new File(testDirA, "A-file3.java");
         final File testDirAFile4 = touch(new File(testDirA, "A-file4.java"));
-        File testDirAFile5 =       new File(testDirA, "A-file5.java");
+        File testDirAFile5 = new File(testDirA, "A-file5.java");
 
         checkAndNotify();
         checkCollectionSizes("B", 1, 0, 0, 2, 0, 0);
@@ -170,7 +306,7 @@ public class FileAlterationObserverTest extends AbstractMonitorTest {
 
         // Create file with name < first entry
         testDirAFile1 = touch(testDirAFile1);
-        testDirA      = touch(testDirA);
+        testDirA = touch(testDirA);
         checkAndNotify();
         checkCollectionSizes("D", 0, 1, 0, 1, 0, 0);
         assertTrue(testDirAFile1.exists(), "D testDirAFile1 exists");
@@ -178,7 +314,7 @@ public class FileAlterationObserverTest extends AbstractMonitorTest {
 
         // Create file with name between 2 entries
         testDirAFile3 = touch(testDirAFile3);
-        testDirA      = touch(testDirA);
+        testDirA = touch(testDirA);
         checkAndNotify();
         checkCollectionSizes("E", 0, 1, 0, 1, 0, 0);
         assertTrue(testDirAFile3.exists(), "E testDirAFile3 exists");
@@ -186,7 +322,7 @@ public class FileAlterationObserverTest extends AbstractMonitorTest {
 
         // Create file with name > last entry
         testDirAFile5 = touch(testDirAFile5);
-        testDirA      = touch(testDirA);
+        testDirA = touch(testDirA);
         checkAndNotify();
         checkCollectionSizes("F", 0, 1, 0, 1, 0, 0);
         assertTrue(testDirAFile5.exists(), "F testDirAFile5 exists");
@@ -195,15 +331,16 @@ public class FileAlterationObserverTest extends AbstractMonitorTest {
 
     /**
      * Test checkAndNotify() deleting
+     *
      * @throws IOException if an I/O error occurs.
      */
     @Test
-    public void testFileDelete() throws IOException {
+    void testFileDelete() throws IOException {
         checkAndNotify();
         checkCollectionsEmpty("A");
         File testDirA = new File(testDir, "test-dir-A");
         testDirA.mkdir();
-        testDir  = touch(testDir);
+        testDir = touch(testDir);
         testDirA = touch(testDirA);
         final File testDirAFile1 = touch(new File(testDirA, "A-file1.java"));
         final File testDirAFile2 = touch(new File(testDirA, "A-file2.java"));
@@ -255,15 +392,16 @@ public class FileAlterationObserverTest extends AbstractMonitorTest {
 
     /**
      * Test checkAndNotify() creating
+     *
      * @throws IOException if an I/O error occurs.
      */
     @Test
-    public void testFileUpdate() throws IOException {
+    void testFileUpdate() throws IOException {
         checkAndNotify();
         checkCollectionsEmpty("A");
         File testDirA = new File(testDir, "test-dir-A");
         testDirA.mkdir();
-        testDir  = touch(testDir);
+        testDir = touch(testDir);
         testDirA = touch(testDirA);
         File testDirAFile1 = touch(new File(testDirA, "A-file1.java"));
         final File testDirAFile2 = touch(new File(testDirA, "A-file2.java"));
@@ -290,21 +428,21 @@ public class FileAlterationObserverTest extends AbstractMonitorTest {
 
         // Update first entry
         testDirAFile1 = touch(testDirAFile1);
-        testDirA      = touch(testDirA);
+        testDirA = touch(testDirA);
         checkAndNotify();
         checkCollectionSizes("D", 0, 1, 0, 0, 1, 0);
         assertTrue(listener.getChangedFiles().contains(testDirAFile1), "D testDirAFile1");
 
         // Update file with name between 2 entries
         testDirAFile3 = touch(testDirAFile3);
-        testDirA      = touch(testDirA);
+        testDirA = touch(testDirA);
         checkAndNotify();
         checkCollectionSizes("E", 0, 1, 0, 0, 1, 0);
         assertTrue(listener.getChangedFiles().contains(testDirAFile3), "E testDirAFile3");
 
         // Update last entry
         testDirAFile5 = touch(testDirAFile5);
-        testDirA      = touch(testDirA);
+        testDirA = touch(testDirA);
         checkAndNotify();
         checkCollectionSizes("F", 0, 1, 0, 0, 1, 0);
         assertTrue(listener.getChangedFiles().contains(testDirAFile5), "F testDirAFile5");
@@ -312,10 +450,11 @@ public class FileAlterationObserverTest extends AbstractMonitorTest {
 
     /**
      * Test checkAndNotify() method
+     *
      * @throws IOException if an I/O error occurs.
      */
     @Test
-    public void testObserveSingleFile() throws IOException {
+    void testObserveSingleFile() throws IOException {
         final File testDirA = new File(testDir, "test-dir-A");
         File testDirAFile1 = new File(testDirA, "A-file1.java");
         testDirA.mkdir();
@@ -328,7 +467,7 @@ public class FileAlterationObserverTest extends AbstractMonitorTest {
 
         // Create
         testDirAFile1 = touch(testDirAFile1);
-        File testDirAFile2 = touch(new File(testDirA, "A-file2.txt"));  /* filter should ignore */
+        File testDirAFile2 = touch(new File(testDirA, "A-file2.txt")); /* filter should ignore */
         File testDirAFile3 = touch(new File(testDirA, "A-file3.java")); /* filter should ignore */
         assertTrue(testDirAFile1.exists(), "B testDirAFile1 exists");
         assertTrue(testDirAFile2.exists(), "B testDirAFile2 exists");
@@ -367,15 +506,13 @@ public class FileAlterationObserverTest extends AbstractMonitorTest {
      * Test toString().
      */
     @Test
-    public void testToString() {
-        final File file = new File("/foo");
-
-        FileAlterationObserver observer = new FileAlterationObserver(file);
+    void testToString() {
+        final File file = new File(PATH_STRING_FIXTURE);
+        final Builder builder = FileAlterationObserver.builder();
+        FileAlterationObserver observer = builder.setFile(file).getUnchecked();
         assertEquals("FileAlterationObserver[file='" + file.getPath() + "', true, listeners=0]", observer.toString());
-
-        observer = new FileAlterationObserver(file, CanReadFileFilter.CAN_READ);
+        observer = builder.setFileFilter(CanReadFileFilter.CAN_READ).getUnchecked();
         assertEquals("FileAlterationObserver[file='" + file.getPath() + "', CanReadFileFilter, listeners=0]", observer.toString());
-
         assertEquals(file, observer.getDirectory());
     }
 }

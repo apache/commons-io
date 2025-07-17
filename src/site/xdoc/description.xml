@@ -7,7 +7,7 @@ The ASF licenses this file to You under the Apache License, Version 2.0
 (the "License"); you may not use this file except in compliance with
 the License.  You may obtain a copy of the License at
 
-     http://www.apache.org/licenses/LICENSE-2.0
+     https://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,13 +15,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<document>
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
  <properties>
   <title>User guide</title>
-  <author email="dev@commons.apache.org">Commons Documentation Team</author>
+  <author email="dev@commons.apache.org">Apache Commons Team</author>
  </properties>
   <body>
-
     <section name="User guide">
         <p>
             Commons-IO contains
@@ -32,13 +33,11 @@ limitations under the License.
             <a href="#File comparators">file comparators</a> and
             <a href="#Streams">stream implementations</a>.
         </p>
-
         <p>
             For a more detailed descriptions, take a look at the
             <a href="api-release/index.html">Javadocs</a>.
         </p>
     </section>
-
     <section name="Utility classes">
         <subsection name="IOUtils">
             <p>
@@ -52,30 +51,27 @@ limitations under the License.
             </p>
 
             <source>
- InputStream in = new URL( "https://commons.apache.org" ).openStream();
+ InputStream in = new URL("https://commons.apache.org").openStream();
  try {
-   InputStreamReader inR = new InputStreamReader( in );
-   BufferedReader buf = new BufferedReader( inR );
+   InputStreamReader inR = new InputStreamReader(in);
+   BufferedReader buf = new BufferedReader(inR);
    String line;
-   while ( ( line = buf.readLine() ) != null ) {
-     System.out.println( line );
+   while ((line = buf.readLine()) != null) {
+     System.out.println(line);
    }
  } finally {
    in.close();
  }</source>
-
             <p>
                 With the IOUtils class, that could be done with:
             </p>
-
             <source>
- InputStream in = new URL( "https://commons.apache.org" ).openStream();
+ InputStream in = new URL("https://commons.apache.org").openStream();
  try {
-   System.out.println( IOUtils.toString( in ) );
+   System.out.println(IOUtils.toString(in));
  } finally {
    IOUtils.closeQuietly(in);
  }</source>
-
             <p>
                 In certain application domains, such IO operations are
                 common, and this class can save a great deal of time. And you can
@@ -87,9 +83,7 @@ limitations under the License.
                 Using the above technique to read a 1GB file would result in an
                 attempt to create a 1GB String object!
             </p>
-
         </subsection>
-
         <subsection name="FileUtils">
             <p>
                 The <a href="apidocs/index.html?org/apache/commons/io/FileUtils.html">FileUtils</a>
@@ -136,9 +130,7 @@ limitations under the License.
             <source>
  long freeSpace = FileSystemUtils.freeSpace("C:/");</source>
         </subsection>
-
     </section>
-
     <section name="Endian classes">
         <p>
             Different computer architectures adopt different
@@ -148,33 +140,26 @@ limitations under the License.
             subsequent bytes at higher addresses. For "Big Endian"
             architectures (eg Motorola), the situation is reversed.
         </p>
-
         <p>
-        There are two classes in this package of relevance:
+          There are two classes in this package of relevance:
         </p>
-
         <ul>
            <li>
            The <a href="apidocs/index.html?org/apache/commons/io/EndianUtils.html">EndianUtils</a>
            class contains static methods for swapping the Endian-ness
            of Java primitives and streams.
            </li>
-
            <li>
            The <a href="apidocs/index.html?org/apache/commons/io/input/SwappedDataInputStream.html">SwappedDataInputStream</a>
            class is an implementation of the <code>DataInput</code> interface. With
            this, one can read data from files of non-native Endian-ness.
            </li>
         </ul>
-
         <p>
             For more information, see
-            <a
-                href="http://www.cs.umass.edu/~verts/cs32/endian.html">http://www.cs.umass.edu/~verts/cs32/endian.html</a>
+            <a href="http://www.cs.umass.edu/~verts/cs32/endian.html">http://www.cs.umass.edu/~verts/cs32/endian.html</a>
          </p>
-
     </section>
-
     <section name="Line iterator">
         <p>
             The <code>org.apache.commons.io.LineIterator</code> class
@@ -194,7 +179,6 @@ limitations under the License.
    LineIterator.closeQuietly(iterator);
  }</source>
     </section>
-
     <section name="File filters">
         <p>
             The <code>org.apache.commons.io.filefilter</code>
@@ -212,10 +196,9 @@ limitations under the License.
         <p>
             See the
             <a href="apidocs/index.html?org/apache/commons/io/filefilter/package-summary.html">filefilter</a>
-            package javadoc for more details.
+            package Javadoc for more details.
         </p>
     </section>
-
     <section name="File comparators">
         <p>
             The <code>org.apache.commons.io.comparator</code>
@@ -227,33 +210,81 @@ limitations under the License.
         <p>
             See the
             <a href="apidocs/index.html?org/apache/commons/io/comparator/package-summary.html">comparator</a>
-            package javadoc for more details.
+            package Javadoc for more details.
         </p>
     </section>
-
+    <section name="Safe Deserialization">
+      <p>
+        You can safely deserialize any input using a <a href="apidocs/index.html?org/apache/commons/io/serialization/ValidatingObjectInputStream.html">ValidatingObjectInputStream</a>.
+      </p>
+      <p>
+        Here is the only way to safely read a <code>HashMap</code> of <code>String</code> keys and <code>Integer</code> values:
+      </p>
+      <source>
+        ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
+          .setPath(Paths.get("MyFile.ser"))
+          .get();
+        vois.accept(HashMap.class, Number.class, Integer.class);
+        HashMap&lt;String, Integer&gt; map2 = (HashMap&lt;String, Integer&gt;) vois.readObject();
+      </source>
+      <p>
+        Here is an example that performs a roundtrip:
+      </p>
+      <source>
+        // Data
+        final HashMap&lt;String, Integer&gt; map1 = new HashMap&lt;&gt;();
+        map1.put("1", 1);
+        // Write
+        final byte[] byteArray;
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                final ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+            oos.writeObject(map1);
+            oos.flush();
+            byteArray = baos.toByteArray();
+        }
+        // Read
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
+                ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder().setInputStream(bais).get()) {
+            // String.class is automatically accepted
+            vois.accept(HashMap.class, Number.class, Integer.class);
+            final HashMap&lt;String, Integer&gt; map2 = (HashMap&lt;String, Integer&gt;) vois.readObject();
+            assertEquals(map1, map2);
+        }
+        // Reusing a configuration
+        final ObjectStreamClassPredicate predicate = new ObjectStreamClassPredicate()
+                .accept(HashMap.class, Number.class, Integer.class);
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
+                ValidatingObjectInputStream vois = ValidatingObjectInputStream.builder()
+                        .setPredicate(predicate)
+                        .setInputStream(bais)
+                        .get()) {
+            // String.class is automatically accepted
+            final HashMap&lt;String, Integer&gt; map2 = (HashMap&lt;String, Integer&gt;) vois.readObject();
+            assertEquals(map1, map2);
+        }
+      </source>
+    </section>
     <section name="Streams">
         <p>
             The <code>org.apache.commons.io.input</code> and
             <code>org.apache.commons.io.output</code> packages
             contain various useful implementations of streams.
             These include:
-            <ul>
-            <li>Null output stream - that silently absorbs all data sent to it</li>
-            <li>Tee output stream - that sends output data to two streams instead of one</li>
-            <li>Byte array output stream - that is a faster version of the JDK class</li>
-            <li>Counting streams - that count the number of bytes passed</li>
-            <li>Proxy streams - that delegate to the correct method in the proxy</li>
-            <li>Lockable writer - that provides synchronization of writes using a lock file</li>
-            </ul>
         </p>
+        <ul>
+          <li>Null output stream - that silently absorbs all data sent to it</li>
+          <li>Tee output stream - that sends output data to two streams instead of one</li>
+          <li>Byte array output stream - that is a faster version of the JDK class</li>
+          <li>Counting streams - that count the number of bytes passed</li>
+          <li>Proxy streams - that delegate to the correct method in the proxy</li>
+          <li>Lockable writer - that provides synchronization of writes using a lock file</li>
+          </ul>
         <p>
             See the
             <a href="apidocs/index.html?org/apache/commons/io/input/package-summary.html">input</a> or
             <a href="apidocs/index.html?org/apache/commons/io/output/package-summary.html">output</a>
-            package javadoc for more details.
+            package Javadoc for more details.
         </p>
     </section>
-
   </body>
-
 </document>

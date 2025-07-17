@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -64,11 +64,9 @@ public class HexDump {
      *
      * @param data  the byte array to be dumped
      * @param appendable  the Appendable to which the data is to be written
-     *
      * @throws IOException is thrown if anything goes wrong writing
      *         the data to appendable
      * @throws NullPointerException if the output appendable is null
-     *
      * @since 2.12.0
      */
     public static void dump(final byte[] data, final Appendable appendable)
@@ -96,13 +94,11 @@ public class HexDump {
      * @param appendable  the Appendable to which the data is to be written
      * @param index initial index into the byte array
      * @param length number of bytes to dump from the array
-     *
      * @throws IOException is thrown if anything goes wrong writing
      *         the data to appendable
      * @throws ArrayIndexOutOfBoundsException if the index or length is
      *         outside the data array's bounds
      * @throws NullPointerException if the output appendable is null
-     *
      * @since 2.12.0
      */
     public static void dump(final byte[] data, final long offset,
@@ -172,13 +168,15 @@ public class HexDump {
      * All bytes between the given index (inclusive) and the end of the
      * data array are dumped.
      * </p>
+     * <p>
+     * This method uses the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * </p>
      *
      * @param data  the byte array to be dumped
      * @param offset  offset of the byte array within a larger entity
      * @param stream  the OutputStream to which the data is to be
      *               written
      * @param index initial index into the byte array
-     *
      * @throws IOException is thrown if anything goes wrong writing
      *         the data to stream
      * @throws ArrayIndexOutOfBoundsException if the index is
@@ -199,30 +197,29 @@ public class HexDump {
     /**
      * Dumps a byte value into a StringBuilder.
      *
-     * @param _cbuffer the StringBuilder to dump the value in
+     * @param builder the StringBuilder to dump the value in
      * @param value  the byte value to be dumped
      * @return StringBuilder containing the dumped value.
      */
-    private static StringBuilder dump(final StringBuilder _cbuffer, final byte value) {
+    private static StringBuilder dump(final StringBuilder builder, final byte value) {
         for (int j = 0; j < 2; j++) {
-            _cbuffer.append(HEX_CODES[value >> SHIFTS[j + 6] & 15]);
+            builder.append(HEX_CODES[value >> SHIFTS[j + 6] & 15]);
         }
-        return _cbuffer;
+        return builder;
     }
 
     /**
      * Dumps a long value into a StringBuilder.
      *
-     * @param _lbuffer the StringBuilder to dump the value in
+     * @param builder the StringBuilder to dump the value in
      * @param value  the long value to be dumped
      * @return StringBuilder containing the dumped value.
      */
-    private static StringBuilder dump(final StringBuilder _lbuffer, final long value) {
+    private static StringBuilder dump(final StringBuilder builder, final long value) {
         for (int j = 0; j < 8; j++) {
-            _lbuffer
-                    .append(HEX_CODES[(int) (value >> SHIFTS[j]) & 15]);
+            builder.append(HEX_CODES[(int) (value >> SHIFTS[j]) & 15]);
         }
-        return _lbuffer;
+        return builder;
     }
 
     /**

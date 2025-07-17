@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,6 +17,7 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.Serializable;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
@@ -28,7 +29,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
- * A {@link java.io.FileFilter} providing conditional OR logic across a list of file filters. This filter returns
+ * A {@link FileFilter} providing conditional OR logic across a list of file filters. This filter returns
  * {@code true} if any filters in the list return {@code true}. Otherwise, it returns {@code false}. Checking of the
  * file filter list stops when the first filter returns {@code true}.
  * <h2>Deprecating Serialization</h2>
@@ -76,7 +77,6 @@ public class OrFileFilter extends AbstractFileFilter implements ConditionalFileF
     /**
      * Constructs a new instance for the give filters.
      * @param fileFilters filters to OR.
-     *
      * @since 2.9.0
      */
     public OrFileFilter(final IOFileFilter... fileFilters) {

@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -157,7 +157,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * What {@link DirectoryWalker} does provide for cancellation is:
  * </p>
  * <ul>
- * <li>{@link CancelException} which can be thrown in any of the <i>lifecycle</i> methods to stop processing.</li>
+ * <li>{@link CancelException} which can be thrown in any of the <em>lifecycle</em> methods to stop processing.</li>
  * <li>The {@code walk()} method traps thrown {@link CancelException} and calls the {@code handleCancelled()}
  * method, providing a place for custom cancel processing.</li>
  * </ul>
@@ -186,11 +186,11 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *
  * <p>
  * This example provides a public {@code cancel()} method that can be called by another thread to stop the
- * processing. A typical example use-case would be a cancel button on a GUI. Calling this method sets a
- * <a href="https://java.sun.com/docs/books/jls/second_edition/html/classes.doc.html#36930"> volatile</a> flag to ensure
- * it will work properly in a multi-threaded environment. The flag is returned by the {@code handleIsCancelled()}
- * method, which will cause the walk to stop immediately. The {@code handleCancelled()} method will be the next,
- * and last, callback method received once cancellation has occurred.
+ * processing. A typical example use-case is a cancel button on a GUI. Calling this method sets a
+ * <a href='https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#d5e12277'>(@code volatile}</a>
+ * flag to ensure it works properly in a multi-threaded environment.
+ * The flag is returned by the {@code handleIsCancelled()} method, which causes the walk to stop
+ * immediately. The {@code handleCancelled()} method will be the next, and last, callback method received once cancellation has occurred.
  * </p>
  *
  * <pre>
@@ -215,8 +215,8 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * <h3 id="internal">3.2 Internal</h3>
  *
  * <p>
- * This shows an example of how internal cancellation processing could be implemented. <b>Note</b> the decision logic
- * and throwing a {@link CancelException} could be implemented in any of the <i>lifecycle</i> methods.
+ * This shows an example of how internal cancellation processing could be implemented. <strong>Note</strong> the decision logic
+ * and throwing a {@link CancelException} could be implemented in any of the <em>lifecycle</em> methods.
  * </p>
  *
  * <pre>
@@ -323,14 +323,14 @@ public abstract class DirectoryWalker<T> {
     private final int depthLimit;
 
     /**
-     * Constructs an instance with no filtering and unlimited <i>depth</i>.
+     * Constructs an instance with no filtering and unlimited <em>depth</em>.
      */
     protected DirectoryWalker() {
         this(null, -1);
     }
 
     /**
-     * Constructs an instance with a filter and limit the <i>depth</i> navigated to.
+     * Constructs an instance with a filter and limit the <em>depth</em> navigated to.
      * <p>
      * The filter controls which files and directories will be navigated to as
      * part of the walk. The {@link FileFilterUtils} class is useful for combining
@@ -339,7 +339,7 @@ public abstract class DirectoryWalker<T> {
      * </p>
      *
      * @param filter  the filter to apply, null means visit all files
-     * @param depthLimit  controls how <i>deep</i> the hierarchy is
+     * @param depthLimit  controls how <em>deep</em> the hierarchy is
      *  navigated to (less than 0 means unlimited)
      */
     protected DirectoryWalker(final FileFilter filter, final int depthLimit) {
@@ -349,7 +349,7 @@ public abstract class DirectoryWalker<T> {
 
     /**
      * Constructs an instance with a directory and a file filter and an optional
-     * limit on the <i>depth</i> navigated to.
+     * limit on the <em>depth</em> navigated to.
      * <p>
      * The filters control which files and directories will be navigated to as part
      * of the walk. This constructor uses {@link FileFilterUtils#makeDirectoryOnly(IOFileFilter)}
@@ -359,7 +359,7 @@ public abstract class DirectoryWalker<T> {
      *
      * @param directoryFilter  the filter to apply to directories, null means visit all directories
      * @param fileFilter  the filter to apply to files, null means visit all files
-     * @param depthLimit  controls how <i>deep</i> the hierarchy is
+     * @param depthLimit  controls how <em>deep</em> the hierarchy is
      *  navigated to (less than 0 means unlimited)
      */
     protected DirectoryWalker(IOFileFilter directoryFilter, IOFileFilter fileFilter, final int depthLimit) {
@@ -644,7 +644,7 @@ public abstract class DirectoryWalker<T> {
             final int childDepth = depth + 1;
             if (depthLimit < 0 || childDepth <= depthLimit) {
                 checkIfCancelled(directory, depth, results);
-                File[] childFiles = filter == null ? directory.listFiles() : directory.listFiles(filter);
+                File[] childFiles = directory.listFiles(filter);
                 childFiles = filterDirectoryContents(directory, depth, childFiles);
                 if (childFiles == null) {
                     handleRestricted(directory, childDepth, results);

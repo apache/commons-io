@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,7 +26,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 /**
  * This filter accepts {@link File}s that can be read.
  * <p>
- * Example, showing how to print out a list of the current directory's <i>readable</i> files:
+ * Example, showing how to print out a list of the current directory's <em>readable</em> files:
  * </p>
  * <h2>Using Classic IO</h2>
  * <pre>
@@ -38,7 +38,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * </pre>
  *
  * <p>
- * Example, showing how to print out a list of the current directory's <i>un-readable</i> files:
+ * Example, showing how to print out a list of the current directory's <em>un-readable</em> files:
  *
  * <pre>
  * File dir = FileUtils.current();
@@ -49,7 +49,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * </pre>
  *
  * <p>
- * Example, showing how to print out a list of the current directory's <i>read-only</i> files:
+ * Example, showing how to print out a list of the current directory's <em>read-only</em> files:
  *
  * <pre>
  * File dir = FileUtils.current();
@@ -67,13 +67,13 @@ import java.nio.file.attribute.BasicFileAttributes;
  */
 public class CanReadFileFilter extends AbstractFileFilter implements Serializable {
 
-    /** Singleton instance of <i>readable</i> filter */
+    /** Singleton instance of <em>readable</em> filter */
     public static final IOFileFilter CAN_READ = new CanReadFileFilter();
 
-    /** Singleton instance of not <i>readable</i> filter */
+    /** Singleton instance of not <em>readable</em> filter */
     public static final IOFileFilter CANNOT_READ = CAN_READ.negate();
 
-    /** Singleton instance of <i>read-only</i> filter */
+    /** Singleton instance of <em>read-only</em> filter */
     public static final IOFileFilter READ_ONLY = CAN_READ.and(CanWriteFileFilter.CANNOT_WRITE);
 
     private static final long serialVersionUID = 3179904805251622989L;
@@ -85,7 +85,7 @@ public class CanReadFileFilter extends AbstractFileFilter implements Serializabl
     }
 
     /**
-     * Checks to see if the file can be read.
+     * Tests to see if the file can be read.
      *
      * @param file the File to check.
      * @return {@code true} if the file can be read, otherwise {@code false}.
@@ -96,9 +96,10 @@ public class CanReadFileFilter extends AbstractFileFilter implements Serializabl
     }
 
     /**
-     * Checks to see if the file can be read.
-     * @param file the File to check.
+     * Tests to see if the file can be read.
      *
+     * @param file the File to check.
+     * @param attributes the path's basic attributes (may be null).
      * @return {@code true} if the file can be read, otherwise {@code false}.
      * @since 2.9.0
      */

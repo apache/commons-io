@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,7 +23,7 @@ import java.util.Comparator;
 import org.apache.commons.io.FileUtils;
 
 /**
- * Compare the <b>last modified date/time</b> of two files for order
+ * Compare the <strong>last modified date/time</strong> of two files for order
  * (see {@link FileUtils#lastModifiedUnchecked(File)}).
  * <p>
  * This comparator can be used to sort lists or arrays of files
@@ -38,7 +38,7 @@ import org.apache.commons.io.FileUtils;
  *       ((AbstractFileComparator) LastModifiedFileComparator.LASTMODIFIED_COMPARATOR).sort(list);
  * </pre>
  * <p>
- * Example of doing a <i>reverse</i> sort of an array of files using the
+ * Example of doing a <em>reverse</em> sort of an array of files using the
  * {@link #LASTMODIFIED_REVERSE} singleton instance:
  * </p>
  * <pre>
@@ -61,6 +61,13 @@ public class LastModifiedFileComparator extends AbstractFileComparator implement
 
     /** Reverse last modified comparator instance. */
     public static final Comparator<File> LASTMODIFIED_REVERSE = new ReverseFileComparator(LASTMODIFIED_COMPARATOR);
+
+    /**
+     * Construct a new instance.
+     */
+    public LastModifiedFileComparator() {
+        // empty
+    }
 
     /**
      * Compares the last modified date/time of two files.

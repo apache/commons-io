@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,9 +17,12 @@
 
 package org.apache.commons.io.build;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
+import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.file.OpenOption;
@@ -81,6 +84,13 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     private IntUnaryOperator bufferSizeChecker = defaultSizeChecker;
 
     /**
+     * Constructs a new instance for subclasses.
+     */
+    public AbstractStreamBuilder() {
+        // empty
+    }
+
+    /**
      * Applies the buffer size request.
      *
      * @param size the size request.
@@ -95,7 +105,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      *
      * @return the buffer size, defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
      */
-    protected int getBufferSize() {
+    public int getBufferSize() {
         return bufferSize;
     }
 
@@ -104,7 +114,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      *
      * @return the buffer size default, defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
      */
-    protected int getBufferSizeDefault() {
+    public int getBufferSizeDefault() {
         return bufferSizeDefault;
     }
 
@@ -112,13 +122,13 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * Gets a CharSequence from the origin with a Charset.
      *
      * @return An input stream
-     * @throws IOException                   if an I/O error occurs.
-     * @throws UnsupportedOperationException if the origin cannot be converted to a CharSequence.
      * @throws IllegalStateException         if the {@code origin} is {@code null}.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a CharSequence.
+     * @throws IOException                   if an I/O error occurs.
      * @see AbstractOrigin#getCharSequence(Charset)
      * @since 2.13.0
      */
-    protected CharSequence getCharSequence() throws IOException {
+    public CharSequence getCharSequence() throws IOException {
         return checkOrigin().getCharSequence(getCharset());
     }
 
@@ -136,44 +146,59 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      *
      * @return the Charset default, defaults to {@link Charset#defaultCharset()}.
      */
-    protected Charset getCharsetDefault() {
+    public Charset getCharsetDefault() {
         return charsetDefault;
     }
 
     /**
-     * Gets an input stream from the origin with open options.
+     * Gets a File from the origin.
+     *
+     * @return A File
+     * @throws IllegalStateException         if the {@code origin} is {@code null}.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a {@link File}.
+     * @see AbstractOrigin#getPath()
+     * @since 2.18.0
+     */
+    public File getFile() {
+        return checkOrigin().getFile();
+    }
+
+    /**
+     * Gets an InputStream from the origin with OpenOption[].
      *
      * @return An input stream
+     * @throws IllegalStateException         if the {@code origin} is {@code null}.
+     * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
      * @throws IOException                   if an I/O error occurs.
-     * @throws UnsupportedOperationException if the origin cannot be converted to an InputStream.
      * @see AbstractOrigin#getInputStream(OpenOption...)
-     * @throws IllegalStateException if the {@code origin} is {@code null}.
+     * @see #getOpenOptions()
      * @since 2.13.0
      */
-    protected InputStream getInputStream() throws IOException {
+    public InputStream getInputStream() throws IOException {
         return checkOrigin().getInputStream(getOpenOptions());
     }
 
     /**
-     * Gets the OpenOption.
+     * Gets the OpenOption array.
      *
-     * @return the OpenOption.
+     * @return the OpenOption array.
      */
-    protected OpenOption[] getOpenOptions() {
+    public OpenOption[] getOpenOptions() {
         return openOptions;
     }
 
     /**
-     * Gets an OutputStream from the origin with open options.
+     * Gets an OutputStream from the origin with OpenOption[].
      *
      * @return An OutputStream
-     * @throws IOException                   if an I/O error occurs.
-     * @throws UnsupportedOperationException if the origin cannot be converted to an OutputStream.
      * @throws IllegalStateException         if the {@code origin} is {@code null}.
+     * @throws UnsupportedOperationException if the origin cannot be converted to an {@link OutputStream}.
+     * @throws IOException                   if an I/O error occurs.
      * @see AbstractOrigin#getOutputStream(OpenOption...)
+     * @see #getOpenOptions()
      * @since 2.13.0
      */
-    protected OutputStream getOutputStream() throws IOException {
+    public OutputStream getOutputStream() throws IOException {
         return checkOrigin().getOutputStream(getOpenOptions());
     }
 
@@ -181,26 +206,55 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * Gets a Path from the origin.
      *
      * @return A Path
-     * @throws UnsupportedOperationException if the origin cannot be converted to a Path.
      * @throws IllegalStateException         if the {@code origin} is {@code null}.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a {@link Path}.
      * @see AbstractOrigin#getPath()
      * @since 2.13.0
      */
-    protected Path getPath() {
+    public Path getPath() {
         return checkOrigin().getPath();
     }
 
     /**
-     * Gets an writer from the origin with open options.
+     * Gets a RandomAccessFile from the origin.
+     *
+     * @return A RandomAccessFile
+     * @throws IllegalStateException         if the {@code origin} is {@code null}.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a {@link RandomAccessFile}.
+     * @throws IOException                   if an I/O error occurs.
+     * @since 2.18.0
+     */
+    public RandomAccessFile getRandomAccessFile() throws IOException {
+        return checkOrigin().getRandomAccessFile(getOpenOptions());
+    }
+
+    /**
+     * Gets a Reader from the origin with a Charset.
+     *
+     * @return A Reader
+     * @throws IllegalStateException         if the {@code origin} is {@code null}.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a {@link Reader}.
+     * @throws IOException                   if an I/O error occurs.
+     * @see AbstractOrigin#getReader(Charset)
+     * @see #getCharset()
+     * @since 2.16.0
+     */
+    public Reader getReader() throws IOException {
+        return checkOrigin().getReader(getCharset());
+    }
+
+    /**
+     * Gets a Writer from the origin with an OpenOption[].
      *
      * @return An writer.
-     * @throws IOException                   if an I/O error occurs.
-     * @throws UnsupportedOperationException if the origin cannot be converted to a Writer.
      * @throws IllegalStateException         if the {@code origin} is {@code null}.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a {@link Writer}.
+     * @throws IOException                   if an I/O error occurs.
      * @see AbstractOrigin#getOutputStream(OpenOption...)
+     * @see #getOpenOptions()
      * @since 2.13.0
      */
-    protected Writer getWriter() throws IOException {
+    public Writer getWriter() throws IOException {
         return checkOrigin().getWriter(getCharset(), getOpenOptions());
     }
 
@@ -211,7 +265,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * </p>
      *
      * @param bufferSize the buffer size.
-     * @return this.
+     * @return {@code this} instance.
      */
     public B setBufferSize(final int bufferSize) {
         this.bufferSize = checkBufferSize(bufferSize > 0 ? bufferSize : bufferSizeDefault);
@@ -225,7 +279,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * </p>
      *
      * @param bufferSize the buffer size, null resets to the default.
-     * @return this.
+     * @return {@code this} instance.
      */
     public B setBufferSize(final Integer bufferSize) {
         setBufferSize(bufferSize != null ? bufferSize : bufferSizeDefault);
@@ -236,7 +290,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * Sets the buffer size checker function. Throws a {@link IllegalArgumentException} by default.
      *
      * @param bufferSizeChecker the buffer size checker function. null resets to the default behavior.
-     * @return this
+     * @return {@code this} instance.
      * @since 2.14.0
      */
     public B setBufferSizeChecker(final IntUnaryOperator bufferSizeChecker) {
@@ -251,7 +305,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * </p>
      *
      * @param bufferSizeDefault the buffer size, null resets to the default.
-     * @return this.
+     * @return {@code this} instance.
      */
     protected B setBufferSizeDefault(final int bufferSizeDefault) {
         this.bufferSizeDefault = bufferSizeDefault;
@@ -263,7 +317,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * exceeded, this methods throws an {@link IllegalArgumentException}.
      *
      * @param bufferSizeMax maximum buffer size checked by the buffer size checker.
-     * @return this.
+     * @return {@code this} instance.
      * @since 2.14.0
      */
     public B setBufferSizeMax(final int bufferSizeMax) {
@@ -278,7 +332,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * </p>
      *
      * @param charset the Charset, null resets to the default.
-     * @return this.
+     * @return {@code this} instance.
      */
     public B setCharset(final Charset charset) {
         this.charset = Charsets.toCharset(charset, charsetDefault);
@@ -292,7 +346,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * </p>
      *
      * @param charset the Charset name, null resets to the default.
-     * @return this.
+     * @return {@code this} instance.
      */
     public B setCharset(final String charset) {
         return setCharset(Charsets.toCharset(charset, charsetDefault));
@@ -305,7 +359,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * </p>
      *
      * @param defaultCharset the Charset name, null resets to the default.
-     * @return this.
+     * @return {@code this} instance.
      */
     protected B setCharsetDefault(final Charset defaultCharset) {
         this.charsetDefault = defaultCharset;
@@ -322,7 +376,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * </p>
      *
      * @param openOptions the OpenOption[] name, null resets to the default.
-     * @return this.
+     * @return {@code this} instance.
      * @since 2.13.0
      * @see #setInputStream(InputStream)
      * @see #setOutputStream(OutputStream)

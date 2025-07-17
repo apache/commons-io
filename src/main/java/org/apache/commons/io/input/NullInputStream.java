@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,9 +23,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * A functional, light weight {@link InputStream} that emulates a stream of a specified size.
+ * A lightweight {@link InputStream} that emulates a stream of a specified size.
  * <p>
- * This implementation provides a light weight object for testing with an {@link InputStream} where the contents don't matter.
+ * This implementation provides a lightweight object for testing with an {@link InputStream} where the contents don't matter.
  * </p>
  * <p>
  * One use case would be for testing the handling of large {@link InputStream} as it can emulate that scenario without the overhead of actually processing large
@@ -38,12 +38,15 @@ import java.io.InputStream;
  *
  * <pre>
  *  public class TestInputStream extends NullInputStream {
+ *
  *      public TestInputStream(int size) {
  *          super(size);
  *      }
+ *
  *      protected int processByte() {
  *          return ... // return required value here
  *      }
+ *
  *      protected void processBytes(byte[] bytes, int offset, int length) {
  *          for (int i = offset; i &lt; length; i++) {
  *              bytes[i] = ... // set array value here
@@ -51,28 +54,39 @@ import java.io.InputStream;
  *      }
  *  }
  * </pre>
+ * <p>
+ * This class is not thread-safe.
+ * </p>
  *
  * @since 1.3
  */
-public class NullInputStream extends InputStream {
+public class NullInputStream extends AbstractInputStream {
 
     /**
      * The singleton instance.
      *
+     * <p>
+     * Since instances hold state, call {@link #init()} to reuse.
+     * </p>
+     *
      * @since 2.12.0
+     * @deprecated Not reusable without calling {@link #init()} to reset state.
      */
+    @Deprecated
     public static final NullInputStream INSTANCE = new NullInputStream();
 
     private final long size;
     private long position;
     private long mark = -1;
     private long readLimit;
-    private boolean eof;
     private final boolean throwEofException;
     private final boolean markSupported;
 
     /**
      * Constructs an {@link InputStream} that emulates a size 0 stream which supports marking and does not throw EOFException.
+     * <p>
+     * This is an "empty" input stream.
+     * </p>
      *
      * @since 2.7
      */
@@ -102,13 +116,11 @@ public class NullInputStream extends InputStream {
         this.throwEofException = throwEofException;
     }
 
-    /**
-     * Returns the number of bytes that can be read.
-     *
-     * @return The number of bytes that can be read.
-     */
     @Override
     public int available() {
+        if (isClosed()) {
+            return 0;
+        }
         final long avail = size - position;
         if (avail <= 0) {
             return 0;
@@ -132,14 +144,13 @@ public class NullInputStream extends InputStream {
     }
 
     /**
-     * Closes this input stream - resets the internal state to the initial values.
+     * Closes this input stream.
      *
      * @throws IOException If an error occurs.
      */
     @Override
     public void close() throws IOException {
-        eof = false;
-        position = 0;
+        super.close();
         mark = -1;
     }
 
@@ -165,12 +176,25 @@ public class NullInputStream extends InputStream {
      * Handles End of File.
      *
      * @return {@code -1} if {@code throwEofException} is set to {@code false}
-     * @throws EOFException if {@code throwEofException} is set to {@code true}.
+     * @throws IOException if {@code throwEofException} is set to {@code true}.
      */
-    private int handleEof() throws EOFException {
-        eof = true;
+    private int handleEof() throws IOException {
         checkThrowEof("handleEof()");
         return EOF;
+    }
+
+    /**
+     * Initializes or re-initializes this instance for reuse.
+     *
+     * @return this instance.
+     * @since 2.17.0
+     */
+    public NullInputStream init() {
+        setClosed(false);
+        position = 0;
+        mark = -1;
+        readLimit = 0;
+        return this;
     }
 
     /**
@@ -189,9 +213,9 @@ public class NullInputStream extends InputStream {
     }
 
     /**
-     * Tests whether <i>mark</i> is supported.
+     * Tests whether <em>mark</em> is supported.
      *
-     * @return Whether <i>mark</i> is supported or not.
+     * @return Whether <em>mark</em> is supported or not.
      */
     @Override
     public boolean markSupported() {
@@ -202,6 +226,7 @@ public class NullInputStream extends InputStream {
      * Returns a byte value for the {@code read()} method.
      * <p>
      * This implementation returns zero.
+     * </p>
      *
      * @return This implementation always returns zero.
      */
@@ -234,10 +259,7 @@ public class NullInputStream extends InputStream {
      */
     @Override
     public int read() throws IOException {
-        if (eof) {
-            checkThrowEof("read()");
-            return EOF;
-        }
+        checkOpen();
         if (position == size) {
             return handleEof();
         }
@@ -270,10 +292,10 @@ public class NullInputStream extends InputStream {
      */
     @Override
     public int read(final byte[] bytes, final int offset, final int length) throws IOException {
-        if (eof) {
-            checkThrowEof("read(byte[], int, int)");
-            return EOF;
+        if (bytes.length == 0 || length == 0) {
+            return 0;
         }
+        checkOpen();
         if (position == size) {
             return handleEof();
         }
@@ -305,7 +327,7 @@ public class NullInputStream extends InputStream {
             throw new IOException("Marked position [" + mark + "] is no longer valid - passed the read limit [" + readLimit + "]");
         }
         position = mark;
-        eof = false;
+        setClosed(false);
     }
 
     /**
@@ -318,7 +340,7 @@ public class NullInputStream extends InputStream {
      */
     @Override
     public long skip(final long numberOfBytes) throws IOException {
-        if (eof) {
+        if (isClosed()) {
             checkThrowEof("skip(long)");
             return EOF;
         }

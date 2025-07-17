@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,11 +27,11 @@ import org.junit.jupiter.api.Test;
 /**
  * Test case for {@link StringBuilderWriter}.
  */
-public class StringBuilderWriterTest {
+class StringBuilderWriterTest {
     private static final char[] FOOBAR_CHARS = {'F', 'o', 'o', 'B', 'a', 'r'};
 
     @Test
-    public void testAppendChar() throws IOException {
+    void testAppendChar() throws IOException {
         try (Writer writer = new StringBuilderWriter()) {
             writer.append('F').append('o').append('o');
             assertEquals("Foo", writer.toString());
@@ -39,7 +39,7 @@ public class StringBuilderWriterTest {
     }
 
     @Test
-    public void testAppendCharSequence() throws IOException {
+    void testAppendCharSequence() throws IOException {
         try (Writer writer = new StringBuilderWriter()) {
             writer.append("Foo").append("Bar");
             assertEquals("FooBar", writer.toString());
@@ -47,7 +47,7 @@ public class StringBuilderWriterTest {
     }
 
     @Test
-    public void testAppendCharSequencePortion() throws IOException {
+    void testAppendCharSequencePortion() throws IOException {
         try (Writer writer = new StringBuilderWriter()) {
             writer.append("FooBar", 3, 6).append(new StringBuffer("FooBar"), 0, 3);
             assertEquals("BarFoo", writer.toString());
@@ -55,7 +55,7 @@ public class StringBuilderWriterTest {
     }
 
     @Test
-    public void testAppendConstructCapacity() throws IOException {
+    void testAppendConstructCapacity() throws IOException {
         try (Writer writer = new StringBuilderWriter(100)) {
             writer.append("Foo");
             assertEquals("Foo", writer.toString());
@@ -63,7 +63,7 @@ public class StringBuilderWriterTest {
     }
 
     @Test
-    public void testAppendConstructNull() throws IOException {
+    void testAppendConstructNull() throws IOException {
         try (Writer writer = new StringBuilderWriter(null)) {
             writer.append("Foo");
             assertEquals("Foo", writer.toString());
@@ -71,7 +71,7 @@ public class StringBuilderWriterTest {
     }
 
     @Test
-    public void testAppendConstructStringBuilder() {
+    void testAppendConstructStringBuilder() {
         final StringBuilder builder = new StringBuilder("Foo");
         try (StringBuilderWriter writer = new StringBuilderWriter(builder)) {
             writer.append("Bar");
@@ -81,7 +81,7 @@ public class StringBuilderWriterTest {
     }
 
     @Test
-    public void testClose() throws IOException {
+    void testClose() throws IOException {
         try (Writer writer = new StringBuilderWriter()) {
             writer.append("Foo");
             writer.close();
@@ -91,7 +91,7 @@ public class StringBuilderWriterTest {
     }
 
     @Test
-    public void testWriteChar() throws IOException {
+    void testWriteChar() throws IOException {
         try (Writer writer = new StringBuilderWriter()) {
             writer.write('F');
             assertEquals("F", writer.toString());
@@ -103,7 +103,7 @@ public class StringBuilderWriterTest {
     }
 
     @Test
-    public void testWriteCharArray() throws IOException {
+    void testWriteCharArray() throws IOException {
         try (Writer writer = new StringBuilderWriter()) {
             writer.write(new char[] { 'F', 'o', 'o' });
             assertEquals("Foo", writer.toString());
@@ -113,7 +113,7 @@ public class StringBuilderWriterTest {
     }
 
     @Test
-    public void testWriteCharArrayPortion() throws IOException {
+    void testWriteCharArrayPortion() throws IOException {
         try (Writer writer = new StringBuilderWriter()) {
             writer.write(FOOBAR_CHARS, 3, 3);
             assertEquals("Bar", writer.toString());
@@ -123,7 +123,7 @@ public class StringBuilderWriterTest {
     }
 
     @Test
-    public void testWriteString() throws IOException {
+    void testWriteString() throws IOException {
         try (Writer writer = new StringBuilderWriter()) {
             writer.write("Foo");
             assertEquals("Foo", writer.toString());
@@ -133,7 +133,7 @@ public class StringBuilderWriterTest {
     }
 
     @Test
-    public void testWriteStringPortion() throws IOException {
+    void testWriteStringPortion() throws IOException {
         try (Writer writer = new StringBuilderWriter()) {
             writer.write("FooBar", 3, 3);
             assertEquals("Bar", writer.toString());

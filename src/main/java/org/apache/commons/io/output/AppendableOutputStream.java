@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,18 +18,18 @@ package org.apache.commons.io.output;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
 
 /**
  * OutputStream implementation that writes the data to an {@link Appendable}
  * Object.
  * <p>
- * For example, can be used with any {@link java.io.Writer} or a {@link StringBuilder}
+ * For example, can be used with any {@link Writer} or a {@link StringBuilder}
  * or {@link StringBuffer}.
  * </p>
  *
  * @since 2.5
  * @see Appendable
- *
  * @param <T> The type of the {@link Appendable} wrapped by this AppendableOutputStream.
  */
 public class AppendableOutputStream <T extends Appendable> extends OutputStream {
@@ -55,7 +55,7 @@ public class AppendableOutputStream <T extends Appendable> extends OutputStream 
     }
 
     /**
-     * Write a character to the underlying appendable.
+     * Writes a character to the underlying appendable.
      *
      * @param b the character to write
      * @throws IOException upon error

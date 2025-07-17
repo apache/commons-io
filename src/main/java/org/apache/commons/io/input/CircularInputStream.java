@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,7 +32,7 @@ import org.apache.commons.io.IOUtils;
  * @see InfiniteCircularInputStream
  * @since 2.8.0
  */
-public class CircularInputStream extends InputStream {
+public class CircularInputStream extends AbstractInputStream {
 
     /**
      * Throws an {@link IllegalArgumentException} if the input contains -1.
@@ -70,8 +70,20 @@ public class CircularInputStream extends InputStream {
     }
 
     @Override
+    public int available() throws IOException {
+        // A negative targetByteCount means an infinite target count.
+        return isClosed() ? 0 : targetByteCount <= Integer.MAX_VALUE ? Math.max(Integer.MAX_VALUE, (int) targetByteCount) : Integer.MAX_VALUE;
+    }
+
+    @Override
+    public void close() throws IOException {
+        super.close();
+        byteCount = targetByteCount;
+    }
+
+    @Override
     public int read() {
-        if (targetByteCount >= 0) {
+        if (targetByteCount >= 0 || isClosed()) {
             if (byteCount == targetByteCount) {
                 return IOUtils.EOF;
             }

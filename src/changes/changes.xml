@@ -7,7 +7,7 @@
  (the "License"); you may not use this file except in compliance with
  the License.  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -38,16 +38,209 @@ then tweak the source formatting if necessary and regenerate, then commit
 
 The <action> type attribute can be add,update,fix,remove.
 -->
-
-<document xmlns="http://maven.apache.org/changes/1.0.0"
+<document xmlns="http://maven.apache.org/changes/2.0.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
+          xsi:schemaLocation="http://maven.apache.org/changes/2.0.0 https://maven.apache.org/xsd/changes-2.0.0.xsd">
   <properties>
     <title>Apache Commons IO Release Notes</title>
   </properties>
   <body>
-    <release version="2.16.0" date="202Y-MM-DD" description="Java 8 is required.">
-      <!-- Fix -->
+    <release version="2.20.0" date="2025-07-13" description="Version 2.19.1: Java 8 or later is required.">
+      <!-- FIX -->
+      <action dev="ggregory" type="fix"                due-to="Jesse Glick">[javadoc] Rename parameter of ProxyOutputStream.write(int) #740.</action>
+      <action dev="ggregory" type="fix" issue="IO-875" due-to="Pierre Baumard, Gary Gregory">CopyDirectoryVisitor ignores fileFilter #743.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">org.apache.commons.io.build.AbstractOrigin.getReader(Charset) now maps a null Charset to the default Charset.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">org.apache.commons.io.build.AbstractOrigin.AbstractRandomAccessFileOrigin.getReader(Charset) now maps a null Charset to the default Charset.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">org.apache.commons.io.build.AbstractOrigin.ByeArrayOrigin.getReader(Charset) now maps a null Charset to the default Charset.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">org.apache.commons.io.build.AbstractOrigin.InputStreamOrigin.getReader(Charset) now maps a null Charset to the default Charset.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">org.apache.commons.io.build.AbstractOrigin.getWriter(Charset) now maps a null Charset to the default Charset.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">org.apache.commons.io.build.AbstractOrigin.AbstractRandomAccessFileOrigin.getWriter(Charset) now maps a null Charset to the default Charset.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">org.apache.commons.io.build.AbstractOrigin.OutputStreamOrigin.getWriter(Charset) now maps a null Charset to the default Charset.</action>
+      <action dev="ggregory" type="fix"                due-to="Ryan Kurtz, Gary Gregory">FileUtils.readLines(File, Charset) now maps a null Charset to the default Charset #744.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Fix SpotBugs [ERROR] Medium: Shared primitive variable "atSlashCr" in one thread may not yield the value of the most recent write from another thread [org.apache.commons.io.input.WindowsLineEndingInputStream, org.apache.commons.io.input.WindowsLineEndingInputStream] At WindowsLineEndingInputStream.java:[line 77]Another occurrence at WindowsLineEndingInputStream.java:[line 81] AT_STALE_THREAD_WRITE_OF_PRIMITIVE.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Fix SpotBugs [ERROR] Medium: Shared primitive variable "atSlashCr" in one thread may not yield the value of the most recent write from another thread [org.apache.commons.io.input.WindowsLineEndingInputStream] At WindowsLineEndingInputStream.java:[line 112] AT_STALE_THREAD_WRITE_OF_PRIMITIVE.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Fix SpotBugs [ERROR] Medium: Shared primitive variable "atSlashLf" in one thread may not yield the value of the most recent write from another thread [org.apache.commons.io.input.WindowsLineEndingInputStream] At WindowsLineEndingInputStream.java:[line 113] AT_STALE_THREAD_WRITE_OF_PRIMITIVE.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Fix SpotBugs [ERROR] Medium: Shared primitive variable "atSlashLf" in one thread may not yield the value of the most recent write from another thread [org.apache.commons.io.input.UnixLineEndingInputStream] At UnixLineEndingInputStream.java:[line 75] AT_STALE_THREAD_WRITE_OF_PRIMITIVE.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Fix SpotBugs [ERROR] Medium: Shared primitive variable "atEos" in one thread may not yield the value of the most recent write from another thread [org.apache.commons.io.input.UnixLineEndingInputStream] At UnixLineEndingInputStream.java:[line 120] AT_STALE_THREAD_WRITE_OF_PRIMITIVE.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Fix SpotBugs [ERROR] Medium: Shared primitive variable "atSlashCr" in one thread may not yield the value of the most recent write from another thread [org.apache.commons.io.input.UnixLineEndingInputStream] At UnixLineEndingInputStream.java:[line 124] AT_STALE_THREAD_WRITE_OF_PRIMITIVE.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Fix SpotBugs [ERROR] Medium: Shared primitive variable "atSlashLf" in one thread may not yield the value of the most recent write from another thread [org.apache.commons.io.input.UnixLineEndingInputStream] At UnixLineEndingInputStream.java:[line 125] AT_STALE_THREAD_WRITE_OF_PRIMITIVE.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Fix SpotBugs [ERROR] Medium: Shared primitive variable "closed" in one thread may not yield the value of the most recent write from another thread [org.apache.commons.io.input.ProxyInputStream] At ProxyInputStream.java:[line 233] AT_STALE_THREAD_WRITE_OF_PRIMITIVE.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Fix SpotBugs [ERROR] Medium: Shared primitive variable "propagateClose" in one thread may not yield the value of the most recent write from another thread [org.apache.commons.io.input.BoundedInputStream] At BoundedInputStream.java:[line 555] AT_STALE_THREAD_WRITE_OF_PRIMITIVE.</action>
+      <action dev="ggregory" type="fix"                due-to="maxxedev, Piotr P. Karwasz, Gary Gregory">QueueInputStream reads all but the first byte without waiting. #748.</action> 
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Javadoc fixes and improvements.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NPE in org.apache.commons.io.filefilter.WildcardFilter.accept(File).</action>
+      <action dev="ggregory" type="fix" issue="IO-874" due-to="Andy Russell, Joerg Budischewski">FileUtils.forceDelete can delete a broken symlink again #756.</action>
+      <action dev="ggregory" type="fix"                due-to="Alex Benusovich">Fix infinite loop in AbstractByteArrayOutputStream. #758.</action>
+      <!-- ADD -->
+      <action dev="ggregory" type="add" issue="IO-875" due-to="Pierre Baumard, Gary Gregory">Add org.apache.commons.io.file.CountingPathVisitor.accept(Path, BasicFileAttributes) #743.</action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">Add org.apache.commons.io.Charsets.isAlias(Charset, String).</action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">Add org.apache.commons.io.Charsets.isUTF8(Charset).</action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">Add org.apache.commons.io.Charsets.toCharsetDefault(String, Charset).</action>
+      <action dev="ggregory" type="add" issue="IO-279" due-to="Joerg Budischewski, Gary Gregory">Add Tailer ignoreTouch option #757.</action>
+      <!-- UPDATE -->
+      <action dev="ggregory" type="update" due-to="Dependabot, Gary Gregory">Bump commons.bytebuddy.version from 1.17.5 to 1.17.6 #754.</action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory">Bump org.apache.commons:commons-parent from 81 to 85.</action>
+      <action dev="ggregory" type="update" due-to="Dependabot, Gary Gregory">Bump org.apache.commons:commons-lang3 from 3.17.0 to 3.18.0 #761.</action>
+    </release>
+    <release version="2.19.0" date="2025-04-08" description="Version 2.19.0: Java 8 or later is required.">
+      <!-- FIX -->
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate constructor Counters.Counters() to be private in 4.0.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate constructor Charsets.Charsets() to be private in 4.0.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Pick up maven-antrun-plugin version from parent POM org.apache:apache.</action> 
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Javadoc is missing its Overview page.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Remove -nouses directive from maven-bundle-plugin. OSGi package imports now state 'uses' definitions for package imports, this doesn't affect JPMS (from org.apache.commons:commons-parent:80).</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate DeferredFileOutputStream.getStream() in favor of getOutputStream().</action>
+      <action dev="ggregory" type="fix" issue="IO-868" due-to="Julian Reschke, Gary Gregory">Improve Javadoc for a BoundedInputStream builder() throwing IOException.</action>
+      <action dev="ggregory" type="fix" issue="IO-868" due-to="Julian Reschke, Gary Gregory">Improve Javadoc for all implementations of AbstractOriginSupplier#get().</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">The Consumer to IOUtils.closeQuietly(Closeable, Consumer) now accepts Exception, not just IOException.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">The Consumer to IOUtils.close(Closeable, IOConsumer) now accepts wrapped Exception, not just IOException.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Use Uncheck.getAsBoolean(IOBooleanSupplier) to avoid boxing and unboxing of boolean values.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid unnecessary boxing and unboxing of long values in FileUtils.sizeOf(File).</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid unnecessary boxing and unboxing of int values in UncheckedBufferedReader.read().</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid unnecessary boxing and unboxing of int values in UncheckedFilterInputStream.available() and read().</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid unnecessary boxing and unboxing of int values in UncheckedFilterReader.read().</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">FileChannels.contentEquals(FileChannel, FileChannel, int) can return false when comparing a non-blocking channel.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate FileChannels.contentEquals(FileChannel, FileChannel, int) in favor of FileChannels.contentEquals(SeekableByteChannel, SeekableByteChannel, int).</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Improve performance of IOUtils.contentEquals(InputStream, InputStream) by about 13%.</action>
+      <action dev="ggregory" type="fix" issue="IO-870" due-to="Gary Gregory">PathUtils.copyFileToDirectory() across file systems #728.</action>
+      <action dev="ggregory" type="fix" issue="IO-871" due-to="Éamonn McManus, Gary Gregory">IOUtils.contentEquals is incorrect when InputStream.available under-reports.</action>
+      <action dev="ggregory" type="fix" issue="IO-873" due-to="Gary Gregory">java.lang.ArithmeticException: long overflow java.lang.Math.addExact(Math.java:932) at org.apache.commons.io.file.attribute.FileTimes.ntfsTimeToFileTime(FileTimes.java:164). See also https://issues.apache.org/jira/browse/MDEP-978.</action>
+      <action dev="ggregory" type="fix" issue="IO-873" due-to="Gary Gregory">java.lang.ArithmeticException: long overflow java.lang.Math.addExact(Math.java:932) at org.apache.commons.io.file.attribute.FileTimes.ntfsTimeToDate(long).</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">FileTimes.toNtfsTime(*) methods can overflow result values.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Fix Javadoc for ChunkedOutputStream.Builder.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">General Javadoc improvements.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Calling QueueInputStream.QueueInputStream(null) maps to the same kind of default blocking queue as QueueInputStream.Builder.setBlockingQueue(null).</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">CopyDirectoryVisitor creates incorrect file names when copying between different file systems that use different file system separators ("/" versus "\"); fixes PathUtils.copyDirectory(Path, Path, CopyOption...).</action>
+      <action dev="ggregory" type="fix"                due-to="zhouchongwen, Gary Gregory">ThreadUtils.sleep(Duration) should handle the underlying OS time changing.</action>
+      <!-- ADD -->
+      <action dev="ggregory" type="add" issue="IO-860" due-to="Nico Strecker, Gary Gregory">Add ThrottledInputStream.Builder.setMaxBytes(long, ChronoUnit).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IOIterable.</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">ReversedLinesFileReader implements IOIterable&lt;String&gt;.</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add AbstractByteArrayOutputStream.write(CharSequence, Charset).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add AbstractByteArrayOutputStream.write(byte[]).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add RandomAccessFileOutputStream.getRandomAccessFile().</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add ProxyInputStream.setReference(InputStream), was package-private setIn(InputStream).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add ProxyOutputStream.setReference(OutputStream).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add RandomAccessFileInputStream.copy(long, long, OutputStream).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add ProxyOutputStream.Builder.</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add ByteOrderMark.matches(int[]).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add BrokenOutputStream.BrokenOutputStream(Function&lt;String&gt;, Throwable>) and deprecate Supplier&lt;String&gt; constructor.</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IOBooleanSupplier.</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add Uncheck.getAsBoolean(IOBooleanSupplier).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add FileChannels.contentEquals(SeekableByteChannel, SeekableByteChannel, int).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add FileChannels.contentEquals(ReadableByteChannel, ReadableByteChannel, int).</action>
+      <action dev="ggregory" type="add" issue="IO-872" due-to="Gary Gregory">Add SimplePathVisitor.AbstractBuilder.</action>
+      <action dev="ggregory" type="add" issue="IO-872" due-to="Gary Gregory">Add CountingPathVisitor.AbstractBuilder and CountingPathVisitor.Builder.</action>
+      <action dev="ggregory" type="add" issue="IO-872" due-to="Gary Gregory">Add AccumulatorPathVisitor.Builder and builder().</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add PathUtils.contentEquals(FileSystem, FileSystem).</action>
+      <!-- UPDATE -->
+      <action dev="ggregory" type="update"             due-to="Dependabot, Gary Gregory">Bump commons.bytebuddy.version from 1.15.10 to 1.17.5 #710, #715, #720, #734, #735.</action>
+      <action dev="ggregory" type="update"             due-to="Gary Gregory">Bump commons-codec:commons-codec from 1.17.1 to 1.18.0. #717.</action>
+      <action dev="ggregory" type="update"             due-to="Gary Gregory">Bump org.apache.commons:commons-parent from 78 to 81.</action>
+    </release>
+    <release version="2.18.0" date="2024-11-16" description="Version 2.18.0: Java 8 is required.">
+      <!-- FIX -->
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Clean ups in unit tests.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Fix some Javadoc issues.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">RandomAccessFileMode.toString() is more helpful for debugging when it inherits from Enum.</action>      
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Fix implicit narrowing conversion in compound assignment in UnsynchronizedBufferedReader.skip(long).</action>
+      <action dev="ggregory" type="fix" issue="IO-860" due-to="Stefan Feenstra, Gary Gregory">Missing reserved file names in FileSystem.WINDOWS (superscript digits for COM and LPT).</action>
+      <action dev="ggregory" type="fix" issue="IO-856" due-to="Thomas Hartwig, Gary Gregory">FileUtils.listFiles(final File, String[], boolean) can throw NoSuchFileException #697, #699.</action>
+      <action dev="ggregory" type="fix" issue="IO-859" due-to="JD Dean, Gary Gregory">FileUtils.forceDelete on non-existent file on Windows throws IOException rather than FileNotFoundException.</action>
+      <action dev="ggregory" type="fix"                due-to="Éamonn McManus">Use Unicode escapes for superscript characters. #701.</action>
+      <action dev="ggregory" type="fix" issue="IO-863" due-to="Éamonn McManus, Gary Gregory">Recent incompatible change to FileUtils.listFiles re extensions, see also IO-856.</action>
+      <action dev="ggregory" type="fix" issue="IO-857" due-to="Dmitry, Gary Gregory">Javadoc: Update details for PathUtils "clean" behavior.</action>
+      <!-- ADD -->
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add @FunctionalInterface to ClassNameMatcher.</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add ValidatingObjectInputStream.Builder and ValidatingObjectInputStream.builder().</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add a "Safe Deserialization" section to the User Guide for the site.</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IORandomAccessFile.</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add RandomAccessFileMode.io(String).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add FileAlterationObserver.Builder() and deprecate most constructors.</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IOUtils.readLines(CharSequence).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add ValidatingObjectInputStream.ObjectStreamClassPredicate to allow configuration reuse.</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add RandomAccessFileMode.accept(Path, IOConsumer&lt;RandomAccessFile&gt;).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add RandomAccessFileMode.apply(Path, IOFunction&lt;RandomAccessFile&gt;, T).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IOIntConsumer.</action>
+      <action dev="ggregory" type="add" issue="IO-861" due-to="Gary Gregory">Add ProxyInputStream.AbstractBuilder. Supports setting a consumer for ProxyInputStream.afterRead(int).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add support to AutoCloseInputStream for setting a consumer for ProxyInputStream.afterRead(int).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add support to BOMInputStream for setting a consumer for ProxyInputStream.afterRead(int).</action>
+      <action dev="ggregory" type="add" issue="IO-861" due-to="Gary Gregory">Add support to BoundedInputStream for setting a consumer for ProxyInputStream.afterRead(int).</action>
+      <action dev="ggregory" type="add" issue="IO-861" due-to="Gary Gregory">Add support to BoundedInputStream for setting a consumer for BoundedInputStream.onMaxLength(long, long).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add support to ChecksumInputStream for setting a consumer for ProxyInputStream.afterRead(int).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add support to ThrottledInputStream for setting a consumer for ProxyInputStream.afterRead(int).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add support to ObservableInputStream for setting a consumer for ProxyInputStream.afterRead(int).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add support to MessageDigestCalculatingInputStream for setting a consumer for ProxyInputStream.afterRead(int).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add support to MessageDigestInputStream for setting a consumer for ProxyInputStream.afterRead(int).</action>
+      <!-- UPDATE -->
+      <action dev="ggregory" type="update"             due-to="Gary Gregory">Bump org.apache.commons:commons-parent from 74 to 78 #670, #676, #679, #688.</action>
+      <action dev="ggregory" type="update"             due-to="Gary Gregory">Bump commons.bytebuddy.version from 1.15.1 to 1.15.10 #672, #673, #685, #686, #694, #696, #698.</action>
+      <action dev="ggregory" type="update"             due-to="Gary Gregory">Update AbstractStreamBuilder getters from protected to public.</action>
+    </release>
+    <release version="2.17.0" date="2024-09-15" description="Version 2.17.0: Java 8 is required.">
+      <!-- ADD --> 
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IOIterator.adapt(Iterable).</action>
+      <action dev="ggregory" type="add" issue="IO-831" due-to="Elliotte Rusty Harold, Thach Le, Gary Gregory">Add getInputStream() for 'https' and 'http' in URIOrigin #630.</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IOSupplier.getUnchecked().</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add CloseShieldInputStream.systemIn(InputStream).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add NullInputStream.init().</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add AbstractInputStream and refactor duplicate code.</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add UnsynchronizedReader.</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add UnsynchronizedBufferedReader.</action>
+      <!-- FIX -->
+      <action dev="sebb" type="fix" issue="IO-858">FileUtilsWaitForTest does not test anything useful.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Add missing unit tests.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">FileUtils.lastModifiedFileTime(File) calls Objects.requireNonNull() on the wrong object.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">PathUtils.deleteOnExit(Path) calls Objects.requireNonNull() on the wrong object.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate LineIterator.nextLine() in favor of next().</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Fix PMD UnnecessaryFullyQualifiedName.</action>
+      <action dev="ggregory" type="fix"                due-to="sullis">Add test for CircularByteBuffer clear() #620.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">PathUtils.isPosix(Path, LinkOption...) should return false on null input.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">AutoCloseInputStream(InputStream) uses ClosedInputStream.INSTANCE when its input is null.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NullPointerException in ProxyInputStream.available() when the underlying input stream is null.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NullPointerException in ProxyInputStream.markSupported() when the underlying input stream is null.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid NullPointerException in ProxyInputStream.mark(int) when the underlying input stream is null.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">BufferedFileChannelInputStream.available() returns 0 before any reads.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">BufferedFileChannelInputStream.available() should return 0 instead of -1 at the end of the stream.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">BufferedFileChannelInputStream.available() should return 0 when the stream is closed instead of throwing an exception.</action>      
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">CharSequenceInputStream.available() should return 0 after the stream is closed.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">BoundedInputStream.available() should return 0 when the stream is closed.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">CircularInputStream.available() should return 0 when the stream is closed.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">InfiniteCircularInputStream.available() should return 0 when the stream is closed.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">ChecksumInputStream(InputStream, Checksum, long, long) should fail-fast on null Checksum input.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate NullInputStream.INSTANCE in favor of constructors.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">NullInputStream.available() should return 0 after the stream is closed.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">MemoryMappedFileInputStream.available() should return 0 after the stream is closed.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">RandomAccessFileInputStream.available() should return 0 after the stream is closed.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">ReaderInputStream.available() should return 0 after the stream is closed.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">AutoCloseInputStream does not call handleIOException() on close() when the proxied stream throws an IOException.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">BoundedInputStream does not call handleIOException() on close() when the proxied stream throws an IOException.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">NullInputStream.read(*) should throw IOException when it is closed.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">NullInputStream.read(byte[]) should return 0 when the input byte array in length 0.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">NullInputStream.read(byte[], int, int) should return 0 when the input byte array in length 0 or requested length is 0.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">MarkShieldInputStream.read(*) should throw IOException when it is closed.</action>
+      <action dev="ggregory" type="fix"                due-to="aelaort">Replace deprecated constant FileFileFilter.FILE in Javadoc #657.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Pick up exec-maven-plugin version from parent POM.</action>
+      <!-- UPDATE -->
+      <action dev="ggregory" type="update"             due-to="Dependabot">Bump tests commons.bytebuddy.version from 1.14.13 to 1.15.1 #615, #621, #631, #635, #642, #658, #663, #665.</action>
+      <action dev="ggregory" type="update"             due-to="Dependabot">Bump tests commons-codec:commons-codec from 1.16.1 to 1.17.1 #644.</action>
+      <action dev="ggregory" type="update"             due-to="Dependabot">Bump org.codehaus.mojo:exec-maven-plugin from 3.2.0 to 3.4.1 #632, #652, #659.</action>
+      <action dev="ggregory" type="update"             due-to="Dependabot">Bump org.apache.commons:commons-parent from 69 to 74 #628, #637, #649, #661, #664.</action>
+      <action dev="ggregory" type="update"             due-to="Dependabot">Bump org.apache.commons:commons-lang3 from 3.14.0 to 3.17.0 #645, #653, #666.</action>     
+    </release>
+    <release version="2.16.1" date="2024-04-04" description="Java 8 is required.">
+      <!-- FIX -->
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Reimplement FileSystemUtils using NIO.</action>
+      <action dev="ggregory" type="fix" issue="IO-851" due-to="Sebb, Gary Gregory">FileSystemUtils no longer throws IllegalStateException.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Avoid possible NullPointerException in FileUtils.listAccumulate(File, IOFileFilter, IOFileFilter, FileVisitOption...).</action>
+      <action dev="ggregory" type="fix" issue="IO-853" due-to="Mike Drob, Gary Gregory">BoundedInputStream.reset() not updating count.</action>
+      <action dev="ggregory" type="fix" issue="IO-854" due-to="rproserpio, Bill Orpet, Gary Gregory">ThresholdingOutputStream: a negative threshold should behave like a zero threshold and trigger the event on the first write #609.</action>
+      <!-- UPDATE -->
+      <action dev="ggregory" type="update"             due-to="Gary Gregory">Bump commons.bytebuddy.version from 1.14.12 to 1.14.13 #605.</action>
+      <action dev="ggregory" type="update"             due-to="Gary Gregory, Dependabot">Bump org.apache.commons:commons-parent from 67 to 69 #608.</action>
+    </release>
+    <release version="2.16.0" date="2024-03-25" description="Java 8 is required.">
+      <!-- FIX -->
       <action dev="ggregory" type="fix" due-to="Elliotte Rusty Harold">Fix and re-enable testSkip_RequiredCharsets #518.</action>
       <action dev="ggregory" type="fix" issue="IO-824" due-to="Miguel Munoz, Gary Gregory">SymbolicLineFileFilter documentation fixes.</action>
       <action dev="ggregory" type="fix" issue="IO-795" due-to="Miguel Munoz, Gary Gregory">CharSequenceInputStream.reset() only works once #520.</action>
@@ -84,15 +277,35 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" issue="IO-818" due-to="Gary Gregory">NullInputStream breaks InputStream's read method contract.</action>
       <action dev="ggregory" type="fix"                due-to="Elliotte Rusty Harold">Javadoc shouldn't reference 1.x behavior #539.</action>
       <action dev="ggregory" type="fix" issue="IO-829" due-to="Elliotte Rusty Harold, Gary Gregory">Don't decode and reencode characters in a potentially different charset in AbstractOrigin.CharSequenceOrigin.getReader(Charset).</action>
-      <action dev="ggregory" type="fix" due-to="Gary Gregory">Let subclasses of CountingInputStream.afterRead(int) throw IOException.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Let subclasses of CountingInputStream.afterRead(int) throw IOException.</action>
       <action dev="ggregory" type="fix" issue="IO-807" due-to="Elliotte Rusty Harold, Gary Gregory">Characterization test for broken symlinks when copying directories #547.</action>
-      <action dev="ggregory" type="fix" due-to="Gary Gregory">ClosedInputStream.read(byte[], int, int) does not always return -1.</action>
-      <action dev="ggregory" type="fix" due-to="Gary Gregory">ClosedOutputStream.write(byte[], int, int) does not always throw IOException.</action>
-      <action dev="ggregory" type="fix" due-to="Sylwester Lachiewicz, Gary Gregory">XmlStreamReader can't parse an XML document with a multi-line prolog #550.</action>
-      <action dev="ggregory" type="fix" due-to="Andreas Hubold, Gary Gregory">XmlStreamReader can't parse XML an document with an external parsed entity prolog.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">ClosedInputStream.read(byte[], int, int) does not always return -1.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">ClosedOutputStream.write(byte[], int, int) does not always throw IOException.</action>
+      <action dev="ggregory" type="fix"                due-to="Sylwester Lachiewicz, Gary Gregory">XmlStreamReader can't parse an XML document with a multi-line prolog #550.</action>
+      <action dev="ggregory" type="fix"                due-to="Andreas Hubold, Gary Gregory">XmlStreamReader can't parse XML an document with an external parsed entity prolog.</action>
       <action dev="ggregory" type="fix" issue="IO-836" due-to="Elliotte Rusty Harold">Update FileNameUtils Javadoc #554.</action>
       <action dev="ggregory" type="fix" issue="IO-807" due-to="Jordi Sola, Elliotte Rusty Harold">Copy symlinks, not the files the symlinks point to #558.</action>
-      <action dev="ggregory" type="fix" due-to="Gary Gregory">Pickup apache-rat-plugin version from parent POM.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Pickup apache-rat-plugin version from parent POM.</action>
+      <action dev="ggregory" type="fix"                due-to="Elliotte Rusty Harold">Add test for copying a symlink FileUtilsTest#testCopyFile_symLink() #564.</action>
+      <action dev="ggregory" type="fix"                due-to="Elliotte Rusty Harold">Make copyFile copy symbolic links by value rather than reference #565.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate CopyUtils 0-argument constructor.</action>
+      <action dev="ggregory" type="fix" issue="IO-843" due-to="Gary Gregory, Elliotte Rusty Harold">Deprecate EndianUtils 0-argument constructor.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate FileSystemUtils 0-argument constructor.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate FilenameUtils 0-argument constructor.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate RandomAccessFiles 0-argument constructor.</action>
+      <action dev="ggregory" type="fix"                due-to="Elliotte Rusty Harold, Gary Gregory">Clarify and correct EndianUtils and SwappedDataInputStream API doc #566.</action>
+      <action dev="ggregory" type="fix"                due-to="Elliotte Rusty Harold">Add characterization test for copying a symlinked directory #570.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">RandomAccessFileInputStream.builder().get() now throws ISE instead of NPE.</action>
+      <action dev="ggregory" type="fix" issue="IO-845" due-to="Elliotte Rusty Harold">Test links to targets outside the source directory #571.</action>
+      <action dev="ggregory" type="fix"                due-to="Elliotte Rusty Harold">Focus Javadoc on current version rather than past versions #573, #574.</action>
+      <action dev="ggregory" type="fix" issue="IO-469" due-to="Grigory Fadeev, Kristian Rosenvold, Elliotte Rusty Harold">"Self-suppression not permitted" while using BrokenOutput and BrokenInput streams with try-with-resources.</action>
+      <action dev="ggregory" type="fix" issue="IO-405" due-to="Elliotte Rusty Harold">Handle zero and negative thresholds #587.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Deprecate CountingInputStream in favor of BoundedInputStream.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">PathUtils.setPosixPermissions(...) only sets permissions if needed.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">PathUtils.setReadOnly(...) only sets permissions if needed.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">PathUtils.deleteFile(..., DeleteOption...) only sets permissions if needed.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">CleaningPathVisitor only sets permissions if needed.</action>
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">DeletingPathVisitor only sets permissions if needed.</action>
       <!-- Add -->
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add and use PathUtils.getFileName(Path, Function&lt;Path, R&gt;).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add and use PathUtils.getFileNameString().</action>
@@ -113,8 +326,15 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add ThrottledInputStream.</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IORunnable.noop().</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add ChecksumInputStream and test #548.</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add AbstractStreamBuilder.getReader().</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add Maven property project.build.outputTimestamp for build reproducibility.</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add ProxyInputStream.unwrap().</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add a running count and builder to BoundedInputStream.</action>
       <!--  UPDATE -->
-      <action dev="ggregory" type="fix"                due-to="Gary Gregory">Bump commons.bytebuddy.version from 1.14.10 to 1.14.11 #534.</action>
+      <action dev="ggregory" type="update"             due-to="Gary Gregory">Bump commons.bytebuddy.version from 1.14.10 to 1.14.12 #534, #592.</action>
+      <action dev="ggregory" type="update"             due-to="Gary Gregory">Bump org.apache.commons:commons-parent from 65 to 67.</action>
+      <action dev="ggregory" type="update"             due-to="Dependabot">Bump commons-codec:commons-codec from 1.16.0 to 1.16.1 #583.</action>
+      <action dev="ggregory" type="update"             due-to="Dependabot">Bump org.codehaus.mojo:exec-maven-plugin from 3.1.1 to 3.2.0 #593.</action>
     </release>
     <release version="2.15.1" date="2023-11-24" description="Java 8 is required.">
       <!-- FIX -->
@@ -1773,7 +1993,7 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action issue="IO-239" dev="sebb" type="update">
          Convert IOCase to a Java 1.5+ Enumeration
-         [N.B. this is binary compatible]
+         [this is binary compatible]
       </action>
       <action issue="IO-233" dev="sebb" type="add">
          Add Methods for Buffering Streams/Writers To IOUtils

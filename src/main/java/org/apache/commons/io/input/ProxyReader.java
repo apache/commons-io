@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -40,11 +40,11 @@ public abstract class ProxyReader extends FilterReader {
     /**
      * Constructs a new ProxyReader.
      *
-     * @param proxy  the Reader to delegate to
+     * @param delegate  the Reader to delegate to
      */
-    public ProxyReader(final Reader proxy) {
-        super(proxy);
-        // the proxy is stored in a protected superclass variable named 'in'
+    public ProxyReader(final Reader delegate) {
+        // the delegate is stored in a protected superclass variable named 'in'
+        super(delegate);
     }
 
     /**
@@ -60,9 +60,9 @@ public abstract class ProxyReader extends FilterReader {
      * {@link #reset()}. You need to explicitly override those methods if
      * you want to add post-processing steps also to them.
      *
-     * @since 2.0
      * @param n number of chars read, or -1 if the end of stream was reached
      * @throws IOException if the post-processing fails
+     * @since 2.0
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void afterRead(final int n) throws IOException {
@@ -83,9 +83,9 @@ public abstract class ProxyReader extends FilterReader {
      * {@link #reset()}. You need to explicitly override those methods if
      * you want to add pre-processing steps also to them.
      *
-     * @since 2.0
      * @param n number of chars that the caller asked to be read
      * @throws IOException if the pre-processing fails
+     * @since 2.0
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void beforeRead(final int n) throws IOException {
@@ -120,13 +120,13 @@ public abstract class ProxyReader extends FilterReader {
 
     /**
      * Invokes the delegate's {@code mark(int)} method.
-     * @param idx read ahead limit
+     * @param readAheadLimit read ahead limit
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public synchronized void mark(final int idx) throws IOException {
+    public synchronized void mark(final int readAheadLimit) throws IOException {
         try {
-            in.mark(idx);
+            in.mark(readAheadLimit);
         } catch (final IOException e) {
             handleIOException(e);
         }

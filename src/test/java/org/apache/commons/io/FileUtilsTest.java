@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,6 +17,7 @@
 package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -24,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
@@ -79,6 +81,7 @@ import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
 import org.apache.commons.io.file.AbstractTempDirTest;
+import org.apache.commons.io.file.Counters.PathCounters;
 import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.io.file.TempDirectory;
 import org.apache.commons.io.file.TempFile;
@@ -86,12 +89,16 @@ import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.io.test.TestUtils;
+import org.apache.commons.lang3.SystemProperties;
 import org.apache.commons.lang3.SystemUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -99,7 +106,7 @@ import org.junit.jupiter.params.provider.ValueSource;
  * Tests {@link FileUtils}.
  */
 @SuppressWarnings({"deprecation", "ResultOfMethodCallIgnored"}) // unit tests include tests of many deprecated methods
-public class FileUtilsTest extends AbstractTempDirTest {
+class FileUtilsTest extends AbstractTempDirTest {
 
     /**
      * DirectoryWalker implementation that recursively lists all files and directories.
@@ -164,9 +171,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     private File testFile1;
     private File testFile2;
-
     private long testFile1Size;
-
     private long testFile2Size;
 
     private void assertContentMatchesAfterCopyURLToFileFor(final String resourceName, final File destination) throws IOException {
@@ -188,11 +193,13 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     private void consumeRemaining(final Iterator<File> iterator) {
         if (iterator != null) {
-            iterator.forEachRemaining(e -> {});
+            iterator.forEachRemaining(e -> {
+                // noop
+            });
         }
     }
 
-    private Path createCircularOsSymLink(final String linkName, final String targetName) throws IOException {
+    private Path createCircularOsSymbolicLink(final String linkName, final String targetName) throws IOException {
         return Files.createSymbolicLink(Paths.get(linkName), Paths.get(targetName));
     }
 
@@ -200,7 +207,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
      * May throw java.nio.file.FileSystemException: C:\Users\...\FileUtilsTestCase\cycle: A required privilege is not held
      * by the client. On Windows, you are fine if you run a terminal with admin karma.
      */
-    private void createCircularSymLink(final File file) throws IOException {
+    private void createCircularSymbolicLink(final File file) throws IOException {
         assertTrue(file.exists());
         final String linkName = file + "/cycle";
         final String targetName = file + "/..";
@@ -214,10 +221,10 @@ public class FileUtilsTest extends AbstractTempDirTest {
             // On Windows, you are fine if you run a terminal with admin karma.
             Files.createSymbolicLink(linkPath, targetPath);
         } catch (final UnsupportedOperationException e) {
-            createCircularOsSymLink(linkName, targetName);
+            createCircularOsSymbolicLink(linkName, targetName);
         }
         // Sanity check:
-        assertTrue(Files.isSymbolicLink(linkPath), () -> "Expected a sym link here: " + linkName);
+        assertTrue(Files.isSymbolicLink(linkPath), () -> "Expected a symbolic link here: " + linkName);
     }
 
     private void createFilesForTestCopyDirectory(final File grandParentDir, final File parentDir, final File childDir) throws IOException {
@@ -241,12 +248,12 @@ public class FileUtilsTest extends AbstractTempDirTest {
         FileUtils.writeStringToFile(file6, "File 6 in grandChild2", "UTF8");
     }
 
-    private Path createTempSymlinkedRelativeDir() throws IOException {
+    private ImmutablePair<Path, Path> createTempSymbolicLinkedRelativeDir() throws IOException {
         final Path targetDir = tempDirPath.resolve("subdir");
-        final Path symlinkDir = tempDirPath.resolve("symlinked-dir");
+        final Path symLinkedDir = tempDirPath.resolve("symlinked-dir");
         Files.createDirectory(targetDir);
-        Files.createSymbolicLink(symlinkDir, targetDir);
-        return symlinkDir;
+        Files.createSymbolicLink(symLinkedDir, targetDir);
+        return ImmutablePair.of(symLinkedDir, targetDir);
     }
 
     private Set<String> getFilePathSet(final List<File> files) {
@@ -269,9 +276,8 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     private void iterateFilesAndDirs(final File dir, final IOFileFilter fileFilter,
         final IOFileFilter dirFilter, final Collection<File> expectedFilesAndDirs) {
-        final Iterator<File> iterator;
+        final Iterator<File> iterator = FileUtils.iterateFilesAndDirs(dir, fileFilter, dirFilter);
         int filesCount = 0;
-        iterator = FileUtils.iterateFilesAndDirs(dir, fileFilter, dirFilter);
         try {
             final List<File> actualFiles = new ArrayList<>();
             while (iterator.hasNext()) {
@@ -288,12 +294,12 @@ public class FileUtilsTest extends AbstractTempDirTest {
         }
     }
 
-    void openOutputStream_noParent(final boolean createFile) throws Exception {
+    private void openOutputStream_noParent(final boolean createFile) throws Exception {
         final File file = new File("test.txt");
         assertNull(file.getParentFile());
         try {
             if (createFile) {
-                TestUtils.createLineBasedFile(file, new String[]{"Hello"});
+                TestUtils.createLineFileUtf8(file, new String[]{"Hello"});
             }
             try (FileOutputStream out = FileUtils.openOutputStream(file)) {
                 out.write(0);
@@ -308,19 +314,12 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     private boolean setLastModifiedMillis(final File testFile, final long millis) {
         return testFile.setLastModified(millis);
-//        try {
-//            Files.setLastModifiedTime(testFile.toPath(), FileTime.fromMillis(millis));
-//        } catch (IOException e) {
-//            return false;
-//        }
-//        return true;
     }
 
     @BeforeEach
     public void setUp() throws Exception {
         testFile1 = new File(tempDirFile, "file1-test.txt");
         testFile2 = new File(tempDirFile, "file1a-test.txt");
-
         testFile1Size = testFile1.length();
         testFile2Size = testFile2.length();
         if (!testFile1.getParentFile().exists()) {
@@ -359,99 +358,9 @@ public class FileUtilsTest extends AbstractTempDirTest {
         }
     }
 
-    @Test
-    public void test_openInputStream_exists() throws Exception {
-        final File file = new File(tempDirFile, "test.txt");
-        TestUtils.createLineBasedFile(file, new String[]{"Hello"});
-        try (FileInputStream in = FileUtils.openInputStream(file)) {
-            assertEquals('H', in.read());
-        }
-    }
-
-    @Test
-    public void test_openInputStream_existsButIsDirectory() {
-        final File directory = new File(tempDirFile, "subdir");
-        directory.mkdirs();
-        assertThrows(IOException.class, () -> FileUtils.openInputStream(directory));
-    }
-
-    @Test
-    public void test_openInputStream_notExists() {
-        final File directory = new File(tempDirFile, "test.txt");
-        assertThrows(IOException.class, () -> FileUtils.openInputStream(directory));
-    }
-
-    @Test
-    public void test_openOutputStream_exists() throws Exception {
-        final File file = new File(tempDirFile, "test.txt");
-        TestUtils.createLineBasedFile(file, new String[]{"Hello"});
-        try (FileOutputStream out = FileUtils.openOutputStream(file)) {
-            out.write(0);
-        }
-        assertTrue(file.exists());
-    }
-
-    @Test
-    public void test_openOutputStream_existsButIsDirectory() {
-        final File directory = new File(tempDirFile, "subdir");
-        directory.mkdirs();
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.openOutputStream(directory));
-    }
-
-    /**
-     * Requires admin privileges on Windows.
-     *
-     * @throws Exception For example java.nio.file.FileSystemException:
-     *                   C:\Users\you\AppData\Local\Temp\junit2324629522183300191\FileUtilsTest8613879743106252609\symlinked-dir: A required privilege is
-     *                   not held by the client.
-     */
-    @Test
-    public void test_openOutputStream_intoExistingSymlinkedDir() throws Exception {
-        final Path symlinkedDir = createTempSymlinkedRelativeDir();
-
-        final File file = symlinkedDir.resolve("test.txt").toFile();
-        try (FileOutputStream out = FileUtils.openOutputStream(file)) {
-            out.write(0);
-        }
-        assertTrue(file.exists());
-    }
-
-    @Test
-    public void test_openOutputStream_noParentCreateFile() throws Exception {
-        openOutputStream_noParent(true);
-    }
-
-    @Test
-    public void test_openOutputStream_noParentNoFile() throws Exception {
-        openOutputStream_noParent(false);
-    }
-
-    @Test
-    public void test_openOutputStream_notExists() throws Exception {
-        final File file = new File(tempDirFile, "a/test.txt");
-        try (FileOutputStream out = FileUtils.openOutputStream(file)) {
-            out.write(0);
-        }
-        assertTrue(file.exists());
-    }
-
-    @Test
-    public void test_openOutputStream_notExistsCannotCreate() {
-        // according to Wikipedia, most filing systems have a 256 limit on filename
-        final String longStr =
-                "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
-                        "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
-                        "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
-                        "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
-                        "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
-                        "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz";  // 300 chars
-        final File file = new File(tempDirFile, "a/" + longStr + "/test.txt");
-        assertThrows(IOException.class, () -> FileUtils.openOutputStream(file));
-    }
-
     // byteCountToDisplaySize
     @Test
-    public void testByteCountToDisplaySizeBigInteger() {
+    void testByteCountToDisplaySizeBigInteger() {
         final BigInteger b1023 = BigInteger.valueOf(1023);
         final BigInteger b1025 = BigInteger.valueOf(1025);
         final BigInteger KB1 = BigInteger.valueOf(1024);
@@ -486,7 +395,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     @SuppressWarnings("NumericOverflow")
     @Test
-    public void testByteCountToDisplaySizeLong() {
+    void testByteCountToDisplaySizeLong() {
         assertEquals("0 bytes", FileUtils.byteCountToDisplaySize(0));
         assertEquals("1 bytes", FileUtils.byteCountToDisplaySize(1));
         assertEquals("1023 bytes", FileUtils.byteCountToDisplaySize(1023));
@@ -511,7 +420,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testByteCountToDisplaySizeNumber() {
+    void testByteCountToDisplaySizeNumber() {
         assertEquals("0 bytes", FileUtils.byteCountToDisplaySize(Integer.valueOf(0)));
         assertEquals("1 bytes", FileUtils.byteCountToDisplaySize(Integer.valueOf(1)));
         assertEquals("1023 bytes", FileUtils.byteCountToDisplaySize(Integer.valueOf(1023)));
@@ -536,7 +445,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testChecksum() throws Exception {
+    void testChecksum() throws Exception {
         // create a test file
         final String text = "Imagination is more important than knowledge - Einstein";
         final File file = new File(tempDirFile, "checksum-test.txt");
@@ -557,7 +466,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testChecksumCRC32() throws Exception {
+    void testChecksumCRC32() throws Exception {
         // create a test file
         final String text = "Imagination is more important than knowledge - Einstein";
         final File file = new File(tempDirFile, "checksum-test.txt");
@@ -575,7 +484,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testChecksumDouble() throws Exception {
+    void testChecksumDouble() throws Exception {
         // create a test file
         final String text1 = "Imagination is more important than knowledge - Einstein";
         final File file1 = new File(tempDirFile, "checksum-test.txt");
@@ -602,12 +511,12 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testChecksumOnDirectory() {
+    void testChecksumOnDirectory() {
         assertThrows(IllegalArgumentException.class, () -> FileUtils.checksum(FileUtils.current(), new CRC32()));
     }
 
     @Test
-    public void testChecksumOnNullChecksum() throws Exception {
+    void testChecksumOnNullChecksum() throws Exception {
         // create a test file
         final String text = "Imagination is more important than knowledge - Einstein";
         final File file = new File(tempDirFile, "checksum-test.txt");
@@ -616,13 +525,13 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testChecksumOnNullFile() {
+    void testChecksumOnNullFile() {
         assertThrows(NullPointerException.class, () -> FileUtils.checksum(null, new CRC32()));
     }
 
     // Compare sizes of a directory tree using long and BigInteger methods
     @Test
-    public void testCompareSizeOf() {
+    void testCompareSizeOf() {
         final File start = new File("src/test/java");
         final long sizeLong1 = FileUtils.sizeOf(start);
         final BigInteger sizeBig = FileUtils.sizeOfAsBigInteger(start);
@@ -632,49 +541,35 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testContentEquals() throws Exception {
+    void testContentEquals() throws Exception {
         // Non-existent files
         final File file = new File(tempDirFile, getName());
         final File file2 = new File(tempDirFile, getName() + "2");
         assertTrue(FileUtils.contentEquals(null, null));
         assertFalse(FileUtils.contentEquals(null, file));
         assertFalse(FileUtils.contentEquals(file, null));
-        // both don't  exist
+        // both don't exist
         assertTrue(FileUtils.contentEquals(file, file));
         assertTrue(FileUtils.contentEquals(file, file2));
         assertTrue(FileUtils.contentEquals(file2, file2));
         assertTrue(FileUtils.contentEquals(file2, file));
-
         // Directories
         assertThrows(IllegalArgumentException.class, () -> FileUtils.contentEquals(tempDirFile, tempDirFile));
-
         // Different files
-        final File objFile1 =
-                new File(tempDirFile, getName() + ".object");
-        FileUtils.copyURLToFile(
-                getClass().getResource("/java/lang/Object.class"),
-                objFile1);
-
-        final File objFile1b =
-                new File(tempDirFile, getName() + ".object2");
-        FileUtils.copyURLToFile(
-                getClass().getResource("/java/lang/Object.class"),
-                objFile1b);
-
-        final File objFile2 =
-                new File(tempDirFile, getName() + ".collection");
-        FileUtils.copyURLToFile(
-                getClass().getResource("/java/util/Collection.class"),
-                objFile2);
-
+        final File objFile1 = new File(tempDirFile, getName() + ".object");
+        FileUtils.copyURLToFile(getClass().getResource("/java/lang/Object.class"), objFile1);
+        final File objFile1b = new File(tempDirFile, getName() + ".object2");
+        FileUtils.copyURLToFile(getClass().getResource("/java/lang/Object.class"), objFile1b);
+        final File objFile2 = new File(tempDirFile, getName() + ".collection");
+        FileUtils.copyURLToFile(getClass().getResource("/java/util/Collection.class"), objFile2);
+        // equals to other
         assertFalse(FileUtils.contentEquals(objFile1, objFile2));
         assertFalse(FileUtils.contentEquals(objFile1b, objFile2));
         assertTrue(FileUtils.contentEquals(objFile1, objFile1b));
-
+        // equals to self
         assertTrue(FileUtils.contentEquals(objFile1, objFile1));
         assertTrue(FileUtils.contentEquals(objFile1b, objFile1b));
         assertTrue(FileUtils.contentEquals(objFile2, objFile2));
-
         // Equal files
         file.createNewFile();
         file2.createNewFile();
@@ -683,7 +578,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testContentEqualsIgnoreEOL() throws Exception {
+    void testContentEqualsIgnoreEOL() throws Exception {
         // Non-existent files
         final File file1 = new File(tempDirFile, getName());
         final File file2 = new File(tempDirFile, getName() + "2");
@@ -757,38 +652,77 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(FileUtils.contentEqualsIgnoreEOL(file1, file2, null));
     }
 
+    /**
+     * See what happens when copyDirectory copies a directory that is a symlink
+     * to another directory containing non-symlinked files.
+     * This is a characterization test to explore current behavior, and arguably
+     * represents a bug. This behavior, and the test, is likely to change
+     * and should not be relied on.
+     */
     @Test
-    public void testCopyDirectory_symLink() throws IOException {
-        // Make a file
-        final File sourceDirectory = new File(tempDirFile, "source_directory");
-        sourceDirectory.mkdir();
-        final File targetFile = new File(sourceDirectory, "hello.txt");
-        FileUtils.writeStringToFile(targetFile, "HELLO WORLD", "UTF8");
+    void testCopyDir_SymbolicLink() throws Exception {
+        // Make a directory
+        final File realDirectory = new File(tempDirFile, "real_directory");
+        realDirectory.mkdir();
+        final File content = new File(realDirectory, "hello.txt");
+        FileUtils.writeStringToFile(content, "HELLO WORLD", "UTF8");
 
-        // Make a symlink to the file
-        final Path targetPath = targetFile.toPath();
-        final Path linkPath = sourceDirectory.toPath().resolve("linkfile");
-        Files.createSymbolicLink(linkPath, targetPath);
-        assumeTrue(Files.isSymbolicLink(linkPath), () -> "Expected a symlink here: " + linkPath);
-        assumeTrue(Files.exists(linkPath));
-        assumeTrue(Files.exists(linkPath, LinkOption.NOFOLLOW_LINKS));
+        // Make a symlink to the directory
+        final Path linkPath = tempDirFile.toPath().resolve("link_to_directory");
+        Files.createSymbolicLink(linkPath, realDirectory.toPath());
 
-        // Now copy sourceDirectory, including the broken link, to another directory
+        // Now copy symlink
         final File destination = new File(tempDirFile, "destination");
-        FileUtils.copyDirectory(sourceDirectory, destination);
-        assertTrue(destination.exists());
-        final Path copiedSymlink = new File(destination, "linkfile").toPath();
 
-        // test for the existence of the copied symbolic link as a link
-        assertTrue(Files.isSymbolicLink(copiedSymlink));
-        assertTrue(Files.exists(copiedSymlink));
+        // Is the copy a symlink or an actual directory?
+        FileUtils.copyDirectory(linkPath.toFile(), destination);
+
+        // delete the original file so that if we can read the bytes from the
+        // copied directory it's definitely been copied, not linked.
+        assumeTrue(content.delete());
+
+        assertFalse(Files.isSymbolicLink(destination.toPath()));
+        final File copied_content = new File(destination, "hello.txt");
+        final String actual = FileUtils.readFileToString(copied_content, "UTF8");
+        assertEquals("HELLO WORLD", actual);
+    }
+
+    @Test
+    void testCopyDir_SymbolicLinkCycle() throws Exception {
+        // Make a directory
+        final File topDirectory = new File(tempDirFile, "topDirectory");
+        topDirectory.mkdir();
+        final File content = new File(topDirectory, "hello.txt");
+        FileUtils.writeStringToFile(content, "HELLO WORLD", "UTF8");
+        final File childDirectory = new File(topDirectory, "child_directory");
+        childDirectory.mkdir();
+
+        // Make a symlink to the top directory
+        final Path linkPath = childDirectory.toPath().resolve("link_to_top");
+        Files.createSymbolicLink(linkPath, topDirectory.toPath());
+
+        // Now copy symlink
+        final File destination = new File(tempDirFile, "destination");
+        FileUtils.copyDirectory(linkPath.toFile(), destination);
+
+        // delete the original file so that if we can read the bytes from the
+        // copied directory it's definitely been copied, not linked.
+        assumeTrue(content.delete());
+
+        assertFalse(Files.isSymbolicLink(destination.toPath()));
+        final File copied_content = new File(destination, "hello.txt");
+        final String actual = FileUtils.readFileToString(copied_content, "UTF8");
+        assertEquals("HELLO WORLD", actual);
+
+        final File[] copied = destination.listFiles();
+        assertEquals(2, copied.length);
     }
 
     /**
      * Tests IO-807.
      */
     @Test
-    public void testCopyDirectory_brokenSymLink() throws IOException {
+    void testCopyDirectory_brokenSymbolicLink() throws IOException {
         // Make a file
         final File sourceDirectory = new File(tempDirFile, "source_directory");
         sourceDirectory.mkdir();
@@ -823,7 +757,66 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyDirectoryExceptions() {
+    void testCopyDirectory_SymbolicLink() throws IOException {
+        // Make a file
+        final File sourceDirectory = new File(tempDirFile, "source_directory");
+        sourceDirectory.mkdir();
+        final File targetFile = new File(sourceDirectory, "hello.txt");
+        FileUtils.writeStringToFile(targetFile, "HELLO WORLD", "UTF8");
+
+        // Make a symlink to the file
+        final Path targetPath = targetFile.toPath();
+        final Path linkPath = sourceDirectory.toPath().resolve("linkfile");
+        Files.createSymbolicLink(linkPath, targetPath);
+        assumeTrue(Files.isSymbolicLink(linkPath), () -> "Expected a symlink here: " + linkPath);
+        assumeTrue(Files.exists(linkPath));
+        assumeTrue(Files.exists(linkPath, LinkOption.NOFOLLOW_LINKS));
+
+        // Now copy sourceDirectory to another directory
+        final File destination = new File(tempDirFile, "destination");
+        FileUtils.copyDirectory(sourceDirectory, destination);
+        assertTrue(destination.exists());
+        final Path copiedSymlink = new File(destination, "linkfile").toPath();
+
+        // test for the existence of the copied symbolic link as a link
+        assertTrue(Files.isSymbolicLink(copiedSymlink));
+        assertTrue(Files.exists(copiedSymlink));
+    }
+
+    /**
+     * Test what happens when copyDirectory copies a directory that contains a symlink
+     * to a file outside the copied directory.
+     */
+    @Test
+    void testCopyDirectory_SymbolicLinkExternalFile() throws Exception {
+        // make a file
+        final File content = new File(tempDirFile, "hello.txt");
+        FileUtils.writeStringToFile(content, "HELLO WORLD", "UTF8");
+
+        // Make a directory
+        final File realDirectory = new File(tempDirFile, "real_directory");
+        realDirectory.mkdir();
+
+        // Make a symlink to the file
+        final Path linkPath = realDirectory.toPath().resolve("link_to_file");
+        Files.createSymbolicLink(linkPath, content.toPath());
+
+        // Now copy the directory
+        final File destination = new File(tempDirFile, "destination");
+        FileUtils.copyDirectory(realDirectory, destination);
+
+        // test that the copied directory contains a link to the original file
+        final File copiedLink = new File(destination, "link_to_file");
+        assertTrue(Files.isSymbolicLink(copiedLink.toPath()));
+        final String actual = FileUtils.readFileToString(copiedLink, "UTF8");
+        assertEquals("HELLO WORLD", actual);
+
+        final Path source = Files.readSymbolicLink(copiedLink.toPath());
+        assertEquals(content.toPath(), source);
+    }
+
+    @Test
+    void testCopyDirectoryExceptions() {
         //
         // NullPointerException
         assertThrows(NullPointerException.class, () -> FileUtils.copyDirectory(null, null));
@@ -842,7 +835,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyDirectoryFiltered() throws IOException {
+    void testCopyDirectoryFiltered() throws IOException {
         final File grandParentDir = new File(tempDirFile, "grandparent");
         final File parentDir = new File(grandParentDir, "parent");
         final File childDir = new File(parentDir, "child");
@@ -860,7 +853,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyDirectoryPreserveDates() throws Exception {
+    void testCopyDirectoryPreserveDates() throws Exception {
         final File source = new File(tempDirFile, "source");
         final File sourceDirectory = new File(source, "directory");
         final File sourceFile = new File(sourceDirectory, "hello.txt");
@@ -928,7 +921,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     /** Tests IO-141 */
     @Test
-    public void testCopyDirectoryToChild() throws IOException {
+    void testCopyDirectoryToChild() throws IOException {
         final File grandParentDir = new File(tempDirFile, "grandparent");
         final File parentDir = new File(grandParentDir, "parent");
         final File childDir = new File(parentDir, "child");
@@ -944,19 +937,19 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyDirectoryToDirectory_NonExistingDest() throws Exception {
+    void testCopyDirectoryToDirectory_NonExistingDest() throws Exception {
         if (!testFile1.getParentFile().exists()) {
             fail("Cannot create file " + testFile1
                     + " as the parent directory does not exist");
         }
-        try (final OutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
+        try (OutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
             TestUtils.generateTestData(output1, 1234);
         }
         if (!testFile2.getParentFile().exists()) {
             fail("Cannot create file " + testFile2
                     + " as the parent directory does not exist");
         }
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()))) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()))) {
             TestUtils.generateTestData(output, 4321);
         }
         final File srcDir = tempDirFile;
@@ -980,19 +973,19 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyDirectoryToExistingDest() throws Exception {
+    void testCopyDirectoryToExistingDest() throws Exception {
         if (!testFile1.getParentFile().exists()) {
             fail("Cannot create file " + testFile1
                     + " as the parent directory does not exist");
         }
-        try (final OutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
+        try (OutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
             TestUtils.generateTestData(output1, 1234);
         }
         if (!testFile2.getParentFile().exists()) {
             fail("Cannot create file " + testFile2
                     + " as the parent directory does not exist");
         }
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()))) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()))) {
             TestUtils.generateTestData(output, 4321);
         }
         final File srcDir = tempDirFile;
@@ -1000,7 +993,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         subDir.mkdir();
         final File subFile = new File(subDir, "A.txt");
         FileUtils.writeStringToFile(subFile, "HELLO WORLD", "UTF8");
-        final File destDir = new File(System.getProperty("java.io.tmpdir"), "tmp-FileUtilsTestCase");
+        final File destDir = new File(SystemProperties.getJavaIoTmpdir(), "tmp-FileUtilsTestCase");
         FileUtils.deleteDirectory(destDir);
         destDir.mkdirs();
 
@@ -1014,7 +1007,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     /** Test IO-141 */
     @Test
-    public void testCopyDirectoryToGrandChild() throws IOException {
+    void testCopyDirectoryToGrandChild() throws IOException {
         final File grandParentDir = new File(tempDirFile, "grandparent");
         final File parentDir = new File(grandParentDir, "parent");
         final File childDir = new File(parentDir, "child");
@@ -1030,7 +1023,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     /** Tests IO-217 FileUtils.copyDirectoryToDirectory makes infinite loops */
     @Test
-    public void testCopyDirectoryToItself() throws Exception {
+    void testCopyDirectoryToItself() throws Exception {
         final File dir = new File(tempDirFile, "itself");
         dir.mkdirs();
         FileUtils.copyDirectoryToDirectory(dir, dir);
@@ -1038,19 +1031,19 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyDirectoryToNonExistingDest() throws Exception {
+    void testCopyDirectoryToNonExistingDest() throws Exception {
         if (!testFile1.getParentFile().exists()) {
             fail("Cannot create file " + testFile1
                     + " as the parent directory does not exist");
         }
-        try (final OutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
+        try (OutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
             TestUtils.generateTestData(output1, 1234);
         }
         if (!testFile2.getParentFile().exists()) {
             fail("Cannot create file " + testFile2
                     + " as the parent directory does not exist");
         }
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()));) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()));) {
             TestUtils.generateTestData(output, 4321);
         }
         final File srcDir = tempDirFile;
@@ -1076,7 +1069,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
      * the dir name 'parent' which is the parent of the 'parent/child' dir.
      */
     @Test
-    public void testCopyDirectoryWithPotentialFalsePartialMatch() throws IOException {
+    void testCopyDirectoryWithPotentialFalsePartialMatch() throws IOException {
         final File grandParentDir = new File(tempDirFile, "grandparent");
         final File parentDir = new File(grandParentDir, "parent");
         final File parDir = new File(grandParentDir, "par");
@@ -1100,7 +1093,28 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyFile1() throws Exception {
+    void testCopyFile_SymbolicLink() throws Exception {
+        // Make a file
+        final File sourceDirectory = new File(tempDirFile, "source_directory");
+        sourceDirectory.mkdir();
+        final File targetFile = new File(sourceDirectory, "hello.txt");
+        FileUtils.writeStringToFile(targetFile, "HELLO WORLD", "UTF8");
+
+        // Make a symlink to the file
+        final Path targetPath = targetFile.toPath();
+        final Path linkPath = sourceDirectory.toPath().resolve("linkfile");
+        Files.createSymbolicLink(linkPath, targetPath);
+
+        // Now copy symlink to another directory
+        final File destination = new File(tempDirFile, "destination");
+        FileUtils.copyFile(linkPath.toFile(), destination);
+        assertFalse(Files.isSymbolicLink(destination.toPath()));
+        final String contents = FileUtils.readFileToString(destination, StandardCharsets.UTF_8);
+        assertEquals("HELLO WORLD", contents);
+    }
+
+    @Test
+    void testCopyFile1() throws Exception {
         final File destination = new File(tempDirFile, "copy1.txt");
 
         backDateFile10Minutes(testFile1); // set test file back 10 minutes
@@ -1112,7 +1126,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyFile1ToDir() throws Exception {
+    void testCopyFile1ToDir() throws Exception {
         final File directory = new File(tempDirFile, "subdir");
         if (!directory.exists()) {
             directory.mkdirs();
@@ -1131,7 +1145,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyFile2() throws Exception {
+    void testCopyFile2() throws Exception {
         final File destination = new File(tempDirFile, "copy2.txt");
 
         backDateFile10Minutes(testFile1); // set test file back 10 minutes
@@ -1143,7 +1157,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyFile2ToDir() throws Exception {
+    void testCopyFile2ToDir() throws Exception {
         final File directory = new File(tempDirFile, "subdir");
         if (!directory.exists()) {
             directory.mkdirs();
@@ -1159,7 +1173,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyFile2WithoutFileDatePreservation() throws Exception {
+    void testCopyFile2WithoutFileDatePreservation() throws Exception {
         final File destFile = new File(tempDirFile, "copy2.txt");
 
         backDateFile10Minutes(testFile1); // set test file back 10 minutes
@@ -1183,29 +1197,26 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     @Test
     @Disabled
-    public void testCopyFileLarge() throws Exception {
+    void testCopyFileLarge() throws Exception {
 
         final File largeFile = new File(tempDirFile, "large.txt");
         final File destination = new File(tempDirFile, "copylarge.txt");
 
-        System.out.println("START:   " + new java.util.Date());
         if (!largeFile.getParentFile().exists()) {
             fail("Cannot create file " + largeFile
                     + " as the parent directory does not exist");
         }
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(largeFile.toPath()))) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(largeFile.toPath()))) {
             TestUtils.generateTestData(output, FileUtils.ONE_GB);
         }
-        System.out.println("CREATED: " + new java.util.Date());
         FileUtils.copyFile(largeFile, destination);
-        System.out.println("COPIED:  " + new java.util.Date());
 
         assertTrue(destination.exists(), "Check Exist");
         assertEquals(largeFile.length(), destination.length(), "Check Full copy");
     }
 
     @Test
-    public void testCopyFileToOutputStream() throws Exception {
+    void testCopyFileToOutputStream() throws Exception {
         final ByteArrayOutputStream destination = new ByteArrayOutputStream();
         FileUtils.copyFile(testFile1, destination);
         assertEquals(testFile1Size, destination.size(), "Check Full copy size");
@@ -1214,7 +1225,19 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyToDirectoryWithDirectory() throws IOException {
+    void testCopyFileToReadOnlyDirectory() throws Exception {
+        final File directory = new File(tempDirFile, "readonly");
+        if (!directory.exists()) {
+            assumeTrue(directory.mkdirs());
+        }
+        assumeTrue(directory.setWritable(false));
+
+        assertThrows(IOException.class, () -> FileUtils.copyFileToDirectory(testFile1, directory),
+            "Should not be able to copy a file into a readonly directory");
+    }
+
+    @Test
+    void testCopyToDirectoryWithDirectory() throws IOException {
         final File destDirectory = new File(tempDirFile, "destination");
         if (!destDirectory.exists()) {
             destDirectory.mkdirs();
@@ -1245,7 +1268,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyToDirectoryWithFile() throws IOException {
+    void testCopyToDirectoryWithFile() throws IOException {
         final File directory = new File(tempDirFile, "subdir");
         if (!directory.exists()) {
             directory.mkdirs();
@@ -1258,18 +1281,18 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyToDirectoryWithFileSourceDoesNotExist() {
+    void testCopyToDirectoryWithFileSourceDoesNotExist() {
         assertThrows(IOException.class,
                 () -> FileUtils.copyToDirectory(new File(tempDirFile, "doesNotExists"), tempDirFile));
     }
 
     @Test
-    public void testCopyToDirectoryWithFileSourceIsNull() {
+    void testCopyToDirectoryWithFileSourceIsNull() {
         assertThrows(NullPointerException.class, () -> FileUtils.copyToDirectory((File) null, tempDirFile));
     }
 
     @Test
-    public void testCopyToDirectoryWithIterable() throws IOException {
+    void testCopyToDirectoryWithIterable() throws IOException {
         final File directory = new File(tempDirFile, "subdir");
         if (!directory.exists()) {
             directory.mkdirs();
@@ -1291,19 +1314,17 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyToDirectoryWithIterableSourceDoesNotExist() {
-        assertThrows(IOException.class,
-                () -> FileUtils.copyToDirectory(Collections.singleton(new File(tempDirFile, "doesNotExists")),
-                        tempDirFile));
+    void testCopyToDirectoryWithIterableSourceDoesNotExist() {
+        assertThrows(IOException.class, () -> FileUtils.copyToDirectory(Collections.singleton(new File(tempDirFile, "doesNotExists")), tempDirFile));
     }
 
     @Test
-    public void testCopyToDirectoryWithIterableSourceIsNull() {
+    void testCopyToDirectoryWithIterableSourceIsNull() {
         assertThrows(NullPointerException.class, () -> FileUtils.copyToDirectory((List<File>) null, tempDirFile));
     }
 
     @Test
-    public void testCopyToSelf() throws Exception {
+    void testCopyToSelf() throws Exception {
         final File destination = new File(tempDirFile, "copy3.txt");
         //Prepare a test file
         FileUtils.copyFile(testFile1, destination);
@@ -1311,7 +1332,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyURLToFile() throws Exception {
+    void testCopyURLToFile() throws Exception {
         // Creates file
         final File file = new File(tempDirFile, getName());
         assertContentMatchesAfterCopyURLToFileFor("/java/lang/Object.class", file);
@@ -1319,20 +1340,20 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testCopyURLToFileCreatesParentDirs() throws Exception {
+    void testCopyURLToFileCreatesParentDirs() throws Exception {
         final File file = managedTempDirPath.resolve("subdir").resolve(getName()).toFile();
         assertContentMatchesAfterCopyURLToFileFor("/java/lang/Object.class", file);
     }
 
     @Test
-    public void testCopyURLToFileReplacesExisting() throws Exception {
+    void testCopyURLToFileReplacesExisting() throws Exception {
         final File file = new File(tempDirFile, getName());
         assertContentMatchesAfterCopyURLToFileFor("/java/lang/Object.class", file);
         assertContentMatchesAfterCopyURLToFileFor("/java/lang/String.class", file);
     }
 
     @Test
-    public void testCopyURLToFileWithTimeout() throws Exception {
+    void testCopyURLToFileWithTimeout() throws Exception {
         // Creates file
         final File file = new File(tempDirFile, "testCopyURLToFileWithTimeout");
 
@@ -1345,14 +1366,13 @@ public class FileUtilsTest extends AbstractTempDirTest {
              InputStream resStream = getClass().getResourceAsStream(resourceName);) {
             assertTrue(IOUtils.contentEquals(resStream, fis), "Content is not equal.");
         }
-        //TODO Maybe test copy to itself like for copyFile()
     }
 
     /**
      * Tests a directory with one file of size 0.
      */
     @Test
-    public void testCountFolders1FileSize0() {
+    void testCountFolders1FileSize0() {
         assertEquals(0, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0").toFile()));
     }
 
@@ -1360,7 +1380,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
      * Tests a directory with one file of size 1.
      */
     @Test
-    public void testCountFolders1FileSize1() {
+    void testCountFolders1FileSize1() {
         assertEquals(1, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1").toFile()));
     }
 
@@ -1368,7 +1388,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
      * Tests a directory with two subdirectories, each containing one file of size 1.
      */
     @Test
-    public void testCountFolders2FileSize2() {
+    void testCountFolders2FileSize2() {
         assertEquals(2, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2").toFile()));
     }
 
@@ -1376,12 +1396,12 @@ public class FileUtilsTest extends AbstractTempDirTest {
      * Tests a directory with two subdirectories, each containing one file of size 1.
      */
     @Test
-    public void testCountFolders2FileSize4() {
+    void testCountFolders2FileSize4() {
         assertEquals(8, FileUtils.sizeOfDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-4").toFile()));
     }
 
     @Test
-    public void testCreateParentDirectories() throws IOException {
+    void testCreateParentDirectories() throws IOException {
         // If a directory already exists, nothing happens.
         FileUtils.createParentDirectories(FileUtils.current());
         // null is a noop
@@ -1389,7 +1409,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testDecodeUrl() {
+    void testDecodeUrl() {
         assertEquals("", FileUtils.decodeUrl(""));
         assertEquals("foo", FileUtils.decodeUrl("foo"));
         assertEquals("+", FileUtils.decodeUrl("+"));
@@ -1400,12 +1420,12 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testDecodeUrlEncodingUtf8() {
+    void testDecodeUrlEncodingUtf8() {
         assertEquals("\u00E4\u00F6\u00FC\u00DF", FileUtils.decodeUrl("%C3%A4%C3%B6%C3%BC%C3%9F"));
     }
 
     @Test
-    public void testDecodeUrlLenient() {
+    void testDecodeUrlLenient() {
         assertEquals(" ", FileUtils.decodeUrl(" "));
         assertEquals("\u00E4\u00F6\u00FC\u00DF", FileUtils.decodeUrl("\u00E4\u00F6\u00FC\u00DF"));
         assertEquals("%", FileUtils.decodeUrl("%"));
@@ -1415,23 +1435,86 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testDecodeUrlNullSafe() {
+    void testDecodeUrlNullSafe() {
         assertNull(FileUtils.decodeUrl(null));
     }
 
     @Test
-    public void testDelete() throws Exception {
+    void testDelete() throws Exception {
         assertEquals(testFile1, FileUtils.delete(testFile1));
         assertThrows(IOException.class, () -> FileUtils.delete(new File("does not exist.nope")));
     }
 
     @Test
-    public void testDeleteDirectoryWithNonDirectory() {
+    void testDeleteDirectoryFailsOnFile() {
+        // Fail request to delete a directory for a file
         assertThrows(IllegalArgumentException.class, () -> FileUtils.deleteDirectory(testFile1));
     }
 
     @Test
-    public void testDeleteQuietlyDir() throws IOException {
+    void testDeleteDirectoryNoopIfAbsent() {
+        // Noop on non-existent entry
+        assertDoesNotThrow(() -> FileUtils.deleteDirectory(new File("does not exist.nope")));
+    }
+
+    @Test
+    void testDeleteDirectorySymbolicLink() throws IOException {
+        final Path symlinkedDir = createTempSymbolicLinkedRelativeDir().getLeft();
+        FileUtils.deleteDirectory(symlinkedDir.toFile());
+        assertFalse(Files.exists(symlinkedDir));
+    }
+
+    @Test
+    void testDeleteDirectorySymbolicLinkAbsent() throws IOException {
+        final ImmutablePair<Path, Path> pair = createTempSymbolicLinkedRelativeDir();
+        final Path symlinkedDir = pair.getLeft();
+        final Path targetDir = pair.getRight();
+        assertTrue(Files.exists(symlinkedDir), symlinkedDir::toString);
+        Files.delete(symlinkedDir);
+        assertTrue(Files.exists(targetDir), targetDir::toString);
+        assertFalse(Files.exists(symlinkedDir), symlinkedDir::toString);
+        // actual test
+        FileUtils.deleteDirectory(symlinkedDir.toFile());
+        assertFalse(Files.exists(symlinkedDir), symlinkedDir::toString);
+    }
+
+    @Test
+    void testDeleteDirectorySymbolicLinkAbsentDeepTarget() throws IOException {
+        final ImmutablePair<Path, Path> pair = createTempSymbolicLinkedRelativeDir();
+        final Path symLinkedDir = pair.getLeft();
+        final Path targetDir = pair.getRight();
+        // more setup
+        final Path targetDir2 = targetDir.resolve("subdir2");
+        final Path symLinkedDir2 = targetDir.resolve("symlinked-dir2");
+        Files.createDirectory(targetDir2);
+        Files.createSymbolicLink(symLinkedDir2, targetDir2);
+        assertTrue(Files.exists(symLinkedDir2), symLinkedDir2::toString);
+        // remove target directory, keeping symbolic link
+        Files.delete(targetDir2);
+        assertFalse(Files.exists(targetDir2), targetDir2::toString);
+        assertFalse(Files.exists(symLinkedDir2), symLinkedDir2::toString);
+        // actual test
+        FileUtils.deleteDirectory(targetDir.toFile());
+        assertFalse(Files.exists(targetDir), targetDir::toString);
+    }
+
+    @Test
+    void testDeleteDirectorySymbolicLinkAbsentTarget() throws IOException {
+        final ImmutablePair<Path, Path> pair = createTempSymbolicLinkedRelativeDir();
+        final Path symlinkedDir = pair.getLeft();
+        final Path targetDir = pair.getRight();
+        assertTrue(Files.exists(symlinkedDir), symlinkedDir::toString);
+        // remove target directory, keeping symbolic link
+        Files.delete(targetDir);
+        assertFalse(Files.exists(targetDir), targetDir::toString);
+        assertFalse(Files.exists(symlinkedDir), symlinkedDir::toString);
+        // actual test
+        FileUtils.deleteDirectory(symlinkedDir.toFile());
+        assertFalse(Files.exists(symlinkedDir), symlinkedDir::toString);
+    }
+
+    @Test
+    void testDeleteQuietlyDir() throws IOException {
         final File testDirectory = new File(tempDirFile, "testDeleteQuietlyDir");
         final File testFile = new File(testDirectory, "testDeleteQuietlyFile");
         testDirectory.mkdirs();
@@ -1439,7 +1522,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
             fail("Cannot create file " + testFile
                     + " as the parent directory does not exist");
         }
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
             TestUtils.generateTestData(output, 0);
         }
 
@@ -1451,13 +1534,13 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testDeleteQuietlyFile() throws IOException {
+    void testDeleteQuietlyFile() throws IOException {
         final File testFile = new File(tempDirFile, "testDeleteQuietlyFile");
         if (!testFile.getParentFile().exists()) {
             fail("Cannot create file " + testFile
                     + " as the parent directory does not exist");
         }
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
             TestUtils.generateTestData(output, 0);
         }
 
@@ -1467,12 +1550,12 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testDeleteQuietlyForNull() {
+    void testDeleteQuietlyForNull() {
         FileUtils.deleteQuietly(null);
     }
 
     @Test
-    public void testDeleteQuietlyNonExistent() {
+    void testDeleteQuietlyNonExistent() {
         final File testFile = new File("testDeleteQuietlyNonExistent");
         assertFalse(testFile.exists());
         FileUtils.deleteQuietly(testFile);
@@ -1482,7 +1565,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
      * Tests the FileUtils implementation.
      */
     @Test
-    public void testFileUtils() throws Exception {
+    void testFileUtils() throws Exception {
         // Loads file from classpath
         final File file1 = new File(tempDirFile, "test.txt");
         final String fileName = file1.getAbsolutePath();
@@ -1509,7 +1592,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testForceDeleteAFile1() throws Exception {
+    void testForceDeleteAFile1() throws Exception {
         final File destination = new File(tempDirFile, "copy1.txt");
         destination.createNewFile();
         assertTrue(destination.exists(), "Copy1.txt doesn't exist to delete");
@@ -1518,7 +1601,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testForceDeleteAFile2() throws Exception {
+    void testForceDeleteAFile2() throws Exception {
         final File destination = new File(tempDirFile, "copy2.txt");
         destination.createNewFile();
         assertTrue(destination.exists(), "Copy2.txt doesn't exist to delete");
@@ -1527,23 +1610,83 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testForceDeleteAFile3() {
+    void testForceDeleteAFileDoesNotExist() {
         final File destination = new File(tempDirFile, "no_such_file");
         assertFalse(destination.exists(), "Check No Exist");
-        assertThrows(IOException.class, () -> FileUtils.forceDelete(destination));
+        assertThrowsExactly(FileNotFoundException.class, () -> FileUtils.forceDelete(destination));
 
     }
 
     @Test
-    public void testForceDeleteDir() throws Exception {
+    public void testForceDeleteBrokenSymlink() throws Exception {
+        final ImmutablePair<Path, Path> pair = createTempSymbolicLinkedRelativeDir();
+        final Path symlinkedDir = pair.getLeft();
+        final Path targetDir = pair.getRight();
+
+        Files.delete(targetDir);
+        assertFalse(Files.exists(symlinkedDir));
+        assertTrue(Files.isSymbolicLink(symlinkedDir));
+
+        FileUtils.forceDelete(symlinkedDir.toFile());
+
+        // check targeted symlink is gone
+        assertFalse(Files.exists(symlinkedDir));
+        assertFalse(Files.isSymbolicLink(symlinkedDir));
+    }
+
+    @Test
+    void testForceDeleteDir() throws Exception {
         final File testDirectory = tempDirFile;
         assertTrue(testDirectory.exists(), "TestDirectory must exist");
         FileUtils.forceDelete(testDirectory);
         assertFalse(testDirectory.exists(), "TestDirectory must not exist");
     }
 
+    /**
+     * TODO Passes on macOS, fails on Linux and Windows with AccessDeniedException.
+     */
     @Test
-    public void testForceDeleteReadOnlyFile() throws Exception {
+    @EnabledOnOs(value = OS.MAC)
+    void testForceDeleteReadOnlyDirectory() throws Exception {
+        try (TempDirectory destDir = TempDirectory.create("dir-");
+                TempFile destination = TempFile.create(destDir, "test-", ".txt")) {
+            // sanity check structure
+            assertTrue(Files.isDirectory(destDir.get()));
+            assertEquals(destDir.get(), destination.get().getParent());
+            // sanity check attributes
+            final File file = destination.toFile();
+            assertTrue(file.setReadOnly());
+            assertTrue(file.canRead());
+            assertFalse(file.canWrite());
+            // sanity check that File.delete() deletes a read-only directory.
+            final PathCounters delete = destDir.delete();
+            assertEquals(1, delete.getDirectoryCounter().get());
+            assertEquals(1, delete.getFileCounter().get());
+            assertFalse(file.exists());
+            assertFalse(destDir.exists());
+        }
+        try (TempDirectory destDir = TempDirectory.create("dir-");
+                TempFile destination = TempFile.create(destDir, "test-", ".txt")) {
+            // sanity check structure
+            assertTrue(Files.isDirectory(destDir.get()));
+            assertEquals(destDir.get(), destination.get().getParent());
+            // sanity check attributes
+            final File dir = destDir.toFile();
+            // real test
+            assertTrue(dir.setReadOnly());
+            assertTrue(dir.canRead());
+            assertFalse(dir.canWrite());
+            assertTrue(dir.exists(), "File doesn't exist to delete");
+            // TODO Passes on macOS, fails on Linux and Windows with AccessDeniedException.
+            FileUtils.forceDelete(dir);
+            assertFalse(destination.exists(), "Check deletion");
+            assertFalse(dir.exists(), "Check deletion");
+            assertFalse(destDir.exists(), "Check deletion");
+        }
+    }
+
+    @Test
+    void testForceDeleteReadOnlyFile() throws Exception {
         try (TempFile destination = TempFile.create("test-", ".txt")) {
             final File file = destination.toFile();
             assertTrue(file.setReadOnly());
@@ -1565,7 +1708,97 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testForceMkdir() throws Exception {
+    public void testForceDeleteSymlink() throws Exception {
+        final ImmutablePair<Path, Path> pair = createTempSymbolicLinkedRelativeDir();
+        final Path symlinkedDir = pair.getLeft();
+        final Path targetDir = pair.getRight();
+
+        assertTrue(Files.exists(symlinkedDir));
+        assertTrue(Files.isSymbolicLink(symlinkedDir));
+        assertTrue(Files.exists(targetDir));
+
+        FileUtils.forceDelete(symlinkedDir.toFile());
+
+        // check targeted symlink is gone
+        assertFalse(Files.exists(symlinkedDir));
+        assertFalse(Files.isSymbolicLink(symlinkedDir));
+        // dir targeted by symlink is not deleted
+        assertTrue(Files.exists(targetDir));
+    }
+
+    /**
+     * TODO Passes on macOS, fails on Linux and Windows with AccessDeniedException.
+     */
+    @Test
+    @EnabledOnOs(value = OS.MAC)
+    void testForceDeleteUnwritableDirectory() throws Exception {
+        try (TempDirectory destDir = TempDirectory.create("dir-");
+                TempFile file = TempFile.create(destDir, "test-", ".txt")) {
+            // sanity check structure
+            assertTrue(Files.isDirectory(destDir.get()));
+            assertEquals(destDir.get(), file.get().getParent());
+            // sanity check attributes
+            final File dir = destDir.toFile();
+            assertTrue(dir.canWrite());
+            // Windows: setWritable(false) returns false.
+            assertTrue(dir.setWritable(false), () -> "setWritable(false) on " + dir);
+            assertFalse(dir.canWrite());
+            assertTrue(dir.canRead());
+            // sanity check that File.delete() cannot delete non-empty directories.
+            assertFalse(dir.delete());
+            // delete underlying file.
+            assertFalse(file.toFile().delete());
+            // reset attribute so we can delete file and auto-close/delete dir.
+            assertTrue(dir.setWritable(true));
+            assertTrue(file.toFile().delete());
+        }
+        try (TempDirectory destDir = TempDirectory.create("dir-");
+                TempFile file = TempFile.create(destDir, "test-", ".txt")) {
+            // sanity check structure
+            assertTrue(Files.isDirectory(destDir.get()));
+            assertEquals(destDir.get(), file.get().getParent());
+            // sanity check attributes
+            final File dir = destDir.toFile();
+            assertTrue(dir.canWrite());
+            assertTrue(dir.setWritable(false));
+            assertFalse(dir.canWrite());
+            assertTrue(dir.canRead());
+            // sanity check that File.delete() cannot delete non-empty directories.
+            assertFalse(dir.delete());
+            // test
+            // Linux: Fails with AccessDeniedException.
+            FileUtils.forceDelete(dir);
+            assertFalse(file.exists());
+            assertFalse(dir.exists());
+        }
+    }
+
+    @Test
+    void testForceDeleteUnwritableFile() throws Exception {
+        try (TempFile destination = TempFile.create("test-", ".txt")) {
+            final File file = destination.toFile();
+            assertTrue(file.canWrite());
+            assertTrue(file.setWritable(false));
+            assertFalse(file.canWrite());
+            assertTrue(file.canRead());
+            // sanity check that File.delete() deletes unwritable files.
+            assertTrue(file.delete());
+        }
+        try (TempFile destination = TempFile.create("test-", ".txt")) {
+            final File file = destination.toFile();
+            // real test
+            assertTrue(file.canWrite());
+            assertTrue(file.setWritable(false));
+            assertFalse(file.canWrite());
+            assertTrue(file.canRead());
+            assertTrue(file.exists(), "File doesn't exist to delete");
+            FileUtils.forceDelete(file);
+            assertFalse(file.exists(), "Check deletion");
+        }
+    }
+
+    @Test
+    void testForceMkdir() throws Exception {
         // Tests with existing directory
         FileUtils.forceMkdir(tempDirFile);
 
@@ -1588,7 +1821,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testForceMkdirParent() throws Exception {
+    void testForceMkdirParent() throws Exception {
         // Tests with existing directory
         assertTrue(tempDirFile.exists());
         final File testParentDir = new File(tempDirFile, "testForceMkdirParent");
@@ -1608,7 +1841,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testGetFile() {
+    void testGetFile() {
         final File expected_A = new File("src");
         final File expected_B = new File(expected_A, "main");
         final File expected_C = new File(expected_B, "java");
@@ -1620,7 +1853,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testGetFile_Parent() {
+    void testGetFile_Parent() {
         final File parent = new File("parent");
         final File expected_A = new File(parent, "src");
         final File expected_B = new File(expected_A, "main");
@@ -1633,30 +1866,31 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testGetTempDirectory() {
+    void testGetTempDirectory() {
         final File tempDirectory = new File(FileUtils.getTempDirectoryPath());
         assertEquals(tempDirectory, FileUtils.getTempDirectory());
     }
 
     @Test
-    public void testGetTempDirectoryPath() {
-        assertEquals(System.getProperty("java.io.tmpdir"), FileUtils.getTempDirectoryPath());
+    void testGetTempDirectoryPath() {
+        assertEquals(SystemProperties.getJavaIoTmpdir(), FileUtils.getTempDirectoryPath());
     }
 
     @Test
-    public void testGetUserDirectory() {
-        final File userDirectory = new File(System.getProperty("user.home"));
+    void testGetUserDirectory() {
+        final File userDirectory = new File(SystemProperties.getUserHome());
         assertEquals(userDirectory, FileUtils.getUserDirectory());
     }
 
     @Test
-    public void testGetUserDirectoryPath() {
-        assertEquals(System.getProperty("user.home"), FileUtils.getUserDirectoryPath());
+    void testGetUserDirectoryPath() {
+        assertEquals(SystemProperties.getUserHome(), FileUtils.getUserDirectoryPath());
     }
 
     @Test
-    public void testIO276() throws Exception {
+    void testIO276() throws Exception {
         final File dir = new File("target", "IO276");
+        Files.deleteIfExists(dir.toPath());
         assertTrue(dir.mkdirs(), dir + " should not be present");
         final File file = new File(dir, "IO276.txt");
         assertTrue(file.createNewFile(), file + " should not be present");
@@ -1665,7 +1899,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testIO300() {
+    void testIO300() {
         final File testDirectory = tempDirFile;
         final File src = new File(testDirectory, "dir1");
         final File dest = new File(src, "dir2");
@@ -1676,7 +1910,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testIO575() throws IOException {
+    void testIO575() throws IOException {
         final Path sourceDir = Files.createTempDirectory("source-dir");
         final String fileName = "some-file";
         final Path sourceFile = Files.createFile(sourceDir.resolve(fileName));
@@ -1698,7 +1932,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testIsDirectory() throws IOException {
+    void testIsDirectory() throws IOException {
         assertFalse(FileUtils.isDirectory(null));
 
         assertTrue(FileUtils.isDirectory(tempDirFile));
@@ -1713,7 +1947,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testIsEmptyDirectory() throws IOException {
+    void testIsEmptyDirectory() throws IOException {
         try (TempDirectory tempDir = TempDirectory.create(getClass().getCanonicalName())) {
             final File tempDirAsFile = tempDir.toFile();
             Assertions.assertTrue(FileUtils.isEmptyDirectory(tempDirAsFile));
@@ -1723,7 +1957,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     @ParameterizedTest
     @ValueSource(longs = {1L, 100L, 1_000L, 10_000L, 100_000L, 1_000_000L})
-    public void testIsFileNewerOlder(final long millis) throws Exception {
+    void testIsFileNewerOlder(final long millis) throws Exception {
         // Files
         final File oldFile = new File(tempDirFile, "FileUtils-old.txt");
         final File refFile = new File(tempDirFile, "FileUtils-reference.txt");
@@ -1742,12 +1976,12 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final FileTime newFileTime = FileTime.from(actualMillis * 4, TimeUnit.MILLISECONDS);
 
         // Create fixtures
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(oldPath))) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(oldPath))) {
             TestUtils.generateTestData(output, 0);
         }
         Files.setLastModifiedTime(oldPath, oldFileTime);
 
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(refPath))) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(refPath))) {
             TestUtils.generateTestData(output, 0);
         }
         Files.setLastModifiedTime(refPath, refFileTime);
@@ -1763,7 +1997,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         final LocalTime localTime0 = LocalTime.MIDNIGHT;
         final OffsetTime offsetTime0 = OffsetTime.of(localTime0, ZoneOffset.UTC);
 
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(newPath))) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(newPath))) {
             TestUtils.generateTestData(output, 0);
         }
         Files.setLastModifiedTime(newPath, newFileTime);
@@ -1847,7 +2081,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         // Null reference Date
         assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(oldFile, (Date) null));
 
-        // ----- Test isFileOlder() exceptions -----
+        // Test isFileOlder() exceptions
         // Null File
         assertThrows(NullPointerException.class, () -> FileUtils.isFileOlder(null, now));
 
@@ -1862,7 +2096,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testIsRegularFile() throws IOException {
+    void testIsRegularFile() throws IOException {
         assertFalse(FileUtils.isRegularFile(null));
 
         assertFalse(FileUtils.isRegularFile(tempDirFile));
@@ -1873,7 +2107,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testIterateFiles() throws Exception {
+    void testIterateFiles() throws Exception {
         final File srcDir = tempDirFile;
         final File subDir = new File(srcDir, "list_test");
         final File subSubDir = new File(subDir, "subSubDir");
@@ -1933,7 +2167,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testIterateFilesAndDirs() throws IOException {
+    void testIterateFilesAndDirs() throws IOException {
         final File srcDir = tempDirFile;
         // temporaryFolder/srcDir
         // - subdir1
@@ -1950,40 +2184,32 @@ public class FileUtilsTest extends AbstractTempDirTest {
         assertTrue(subDir3.mkdir());
         assertTrue(subDir4.mkdir());
         final File someFile = new File(subDir2, "a.txt");
-        final WildcardFileFilter fileFilterAllFiles =  WildcardFileFilter.builder().setWildcards("*.*").get();
+        final WildcardFileFilter fileFilterAllFiles = WildcardFileFilter.builder().setWildcards("*.*").get();
         final WildcardFileFilter fileFilterAllDirs = WildcardFileFilter.builder().setWildcards("*").get();
         final WildcardFileFilter fileFilterExtTxt = WildcardFileFilter.builder().setWildcards("*.txt").get();
-        try {
-            try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(someFile.toPath()))) {
-                TestUtils.generateTestData(output, 100);
-            }
-            //
-            // "*.*" and "*"
-            Collection<File> expectedFilesAndDirs = Arrays.asList(subDir1, subDir2, someFile, subDir3, subDir4);
-            iterateFilesAndDirs(subDir1, fileFilterAllFiles, fileFilterAllDirs, expectedFilesAndDirs);
-            //
-            // "*.txt" and "*"
-            expectedFilesAndDirs = Arrays.asList(subDir1, subDir2, someFile, subDir3, subDir4);
-            iterateFilesAndDirs(subDir1, fileFilterExtTxt, fileFilterAllDirs, expectedFilesAndDirs);
-            //
-            // "*.*" and "subdir2"
-            expectedFilesAndDirs = Arrays.asList(subDir1, subDir2, someFile);
-            iterateFilesAndDirs(subDir1, fileFilterAllFiles, new NameFileFilter("subdir2"), expectedFilesAndDirs);
-            //
-            // "*.txt" and "subdir2"
-            expectedFilesAndDirs = Arrays.asList(subDir1, subDir2, someFile);
-            iterateFilesAndDirs(subDir1, fileFilterExtTxt, new NameFileFilter("subdir2"), expectedFilesAndDirs);
-        } finally {
-            someFile.delete();
-            subDir4.delete();
-            subDir3.delete();
-            subDir2.delete();
-            subDir1.delete();
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(someFile.toPath()))) {
+            TestUtils.generateTestData(output, 100);
         }
+        //
+        // "*.*" and "*"
+        Collection<File> expectedFilesAndDirs = Arrays.asList(subDir1, subDir2, someFile, subDir3, subDir4);
+        iterateFilesAndDirs(subDir1, fileFilterAllFiles, fileFilterAllDirs, expectedFilesAndDirs);
+        //
+        // "*.txt" and "*"
+        expectedFilesAndDirs = Arrays.asList(subDir1, subDir2, someFile, subDir3, subDir4);
+        iterateFilesAndDirs(subDir1, fileFilterExtTxt, fileFilterAllDirs, expectedFilesAndDirs);
+        //
+        // "*.*" and "subdir2"
+        expectedFilesAndDirs = Arrays.asList(subDir1, subDir2, someFile);
+        iterateFilesAndDirs(subDir1, fileFilterAllFiles, new NameFileFilter("subdir2"), expectedFilesAndDirs);
+        //
+        // "*.txt" and "subdir2"
+        expectedFilesAndDirs = Arrays.asList(subDir1, subDir2, someFile);
+        iterateFilesAndDirs(subDir1, fileFilterExtTxt, new NameFileFilter("subdir2"), expectedFilesAndDirs);
     }
 
     @Test
-    public void testIterateFilesOnlyNoDirs() throws IOException {
+    void testIterateFilesOnlyNoDirs() throws IOException {
         final File directory = tempDirFile;
         assertTrue(new File(directory, "TEST").mkdir());
         assertTrue(new File(directory, "test.txt").createNewFile());
@@ -1993,58 +2219,46 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testListFiles() throws Exception {
+    void testListFiles() throws Exception {
         final File srcDir = tempDirFile;
         final File subDir = new File(srcDir, "list_test");
         final File subDir2 = new File(subDir, "subdir");
         subDir.mkdir();
         subDir2.mkdir();
-        try {
-
-            final String[] expectedFileNames = { "a.txt", "b.txt", "c.txt", "d.txt", "e.txt", "f.txt" };
-            final int[] fileSizes = { 123, 234, 345, 456, 678, 789 };
-
-            for (int i = 0; i < expectedFileNames.length; ++i) {
-                final File theFile = new File(subDir, expectedFileNames[i]);
-                if (!theFile.getParentFile().exists()) {
-                    fail("Cannot create file " + theFile + " as the parent directory does not exist");
-                }
-                try (final BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(theFile.toPath()))) {
-                    TestUtils.generateTestData(output, fileSizes[i]);
-                }
+        final String[] expectedFileNames = { "a.txt", "b.txt", "c.txt", "d.txt", "e.txt", "f.txt" };
+        final int[] fileSizes = { 123, 234, 345, 456, 678, 789 };
+        for (int i = 0; i < expectedFileNames.length; ++i) {
+            final File theFile = new File(subDir, expectedFileNames[i]);
+            if (!theFile.getParentFile().exists()) {
+                fail("Cannot create file " + theFile + " as the parent directory does not exist");
             }
-
-            // @formatter:off
+            try (BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(theFile.toPath()))) {
+                TestUtils.generateTestData(output, fileSizes[i]);
+            }
+        }
+        // @formatter:off
             final Collection<File> actualFiles = FileUtils.listFiles(subDir,
                     WildcardFileFilter.builder().setWildcards("*.*").get(),
                     WildcardFileFilter.builder().setWildcards("*").get());
             // @formatter:on
-
-            final int count = actualFiles.size();
-            final Object[] fileObjs = actualFiles.toArray();
-
-            assertEquals(expectedFileNames.length, actualFiles.size(), actualFiles::toString);
-
-            final Map<String, String> foundFileNames = new HashMap<>();
-
-            for (int i = 0; i < count; ++i) {
-                boolean found = false;
-                for (int j = 0; !found && j < expectedFileNames.length; ++j) {
-                    if (expectedFileNames[j].equals(((File) fileObjs[i]).getName())) {
-                        foundFileNames.put(expectedFileNames[j], expectedFileNames[j]);
-                        found = true;
-                    }
+        final int count = actualFiles.size();
+        final Object[] fileObjs = actualFiles.toArray();
+        assertEquals(expectedFileNames.length, actualFiles.size(), actualFiles::toString);
+        final Map<String, String> foundFileNames = new HashMap<>();
+        for (int i = 0; i < count; ++i) {
+            boolean found = false;
+            for (int j = 0; !found && j < expectedFileNames.length; ++j) {
+                if (expectedFileNames[j].equals(((File) fileObjs[i]).getName())) {
+                    foundFileNames.put(expectedFileNames[j], expectedFileNames[j]);
+                    found = true;
                 }
             }
-
-            assertEquals(foundFileNames.size(), expectedFileNames.length, foundFileNames::toString);
-        } finally {
-            subDir.delete();
         }
+        assertEquals(foundFileNames.size(), expectedFileNames.length, foundFileNames::toString);
     }
 
     @Test
-    public void testListFilesOnlyNoDirs() throws IOException {
+    void testListFilesOnlyNoDirs() throws IOException {
         final File directory = tempDirFile;
         assertTrue(new File(directory, "TEST").mkdir());
         assertTrue(new File(directory, "test.txt").createNewFile());
@@ -2056,43 +2270,35 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testListFilesWithDirs() throws IOException {
+    void testListFilesWithDirs() throws IOException {
         final File srcDir = tempDirFile;
-
         final File subDir1 = new File(srcDir, "subdir");
         final File subDir2 = new File(subDir1, "subdir2");
         subDir1.mkdir();
         subDir2.mkdir();
-        try {
-            final File someFile = new File(subDir2, "a.txt");
-            if (!someFile.getParentFile().exists()) {
-                fail("Cannot create file " + someFile + " as the parent directory does not exist");
-            }
-            try (final BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(someFile.toPath()))) {
-                TestUtils.generateTestData(output, 100);
-            }
-
-            final File subDir3 = new File(subDir2, "subdir3");
-            subDir3.mkdir();
-
-            // @formatter:off
+        final File someFile = new File(subDir2, "a.txt");
+        if (!someFile.getParentFile().exists()) {
+            fail("Cannot create file " + someFile + " as the parent directory does not exist");
+        }
+        try (BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(someFile.toPath()))) {
+            TestUtils.generateTestData(output, 100);
+        }
+        final File subDir3 = new File(subDir2, "subdir3");
+        subDir3.mkdir();
+        // @formatter:off
             final Collection<File> files = FileUtils.listFilesAndDirs(subDir1,
                     WildcardFileFilter.builder().setWildcards("*.*").get(),
                     WildcardFileFilter.builder().setWildcards("*").get());
             // @formatter:on
-
-            assertEquals(4, files.size());
-            assertTrue(files.contains(subDir1), "Should contain the directory.");
-            assertTrue(files.contains(subDir2), "Should contain the directory.");
-            assertTrue(files.contains(someFile), "Should contain the file.");
-            assertTrue(files.contains(subDir3), "Should contain the directory.");
-        } finally {
-            subDir1.delete();
-        }
+        assertEquals(4, files.size());
+        assertTrue(files.contains(subDir1), "Should contain the directory.");
+        assertTrue(files.contains(subDir2), "Should contain the directory.");
+        assertTrue(files.contains(someFile), "Should contain the file.");
+        assertTrue(files.contains(subDir3), "Should contain the directory.");
     }
 
     @Test
-    public void testMoveDirectory_CopyDelete() throws Exception {
+    void testMoveDirectory_CopyDelete() throws Exception {
 
         final File dir = tempDirFile;
         final File src = new File(dir, "testMoveDirectory2Source") {
@@ -2111,7 +2317,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
             fail("Cannot create file " + testFile
                     + " as the parent directory does not exist");
         }
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
             TestUtils.generateTestData(output, 0);
         }
         final File destination = new File(dir, "testMoveDirectory1Dest");
@@ -2130,7 +2336,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testMoveDirectory_Errors() throws Exception {
+    void testMoveDirectory_Errors() throws Exception {
         assertThrows(NullPointerException.class, () -> FileUtils.moveDirectory(null, new File("foo")));
         assertThrows(NullPointerException.class, () -> FileUtils.moveDirectory(new File("foo"), null));
         assertThrows(FileNotFoundException.class, () -> FileUtils.moveDirectory(new File("non-existent"), new File("foo")));
@@ -2139,7 +2345,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         if (!testFile.getParentFile().exists()) {
             fail("Cannot create file " + testFile + " as the parent directory does not exist");
         }
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
             TestUtils.generateTestData(output, 0);
         }
         assertThrows(IllegalArgumentException.class, () -> FileUtils.moveDirectory(testFile, new File("foo")));
@@ -2153,7 +2359,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testMoveDirectory_Rename() throws Exception {
+    void testMoveDirectoryRename() throws Exception {
         final File dir = tempDirFile;
         final File src = new File(dir, "testMoveDirectory1Source");
         final File testDir = new File(src, "foo");
@@ -2163,7 +2369,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
             fail("Cannot create file " + testFile
                     + " as the parent directory does not exist");
         }
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
             TestUtils.generateTestData(output, 0);
         }
         final File destination = new File(dir, "testMoveDirectory1Dest");
@@ -2182,7 +2388,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testMoveDirectoryToDirectory() throws Exception {
+    void testMoveDirectoryToDirectory() throws Exception {
         final File dir = tempDirFile;
         final File src = new File(dir, "testMoveDirectory1Source");
         final File testChildDir = new File(src, "foo");
@@ -2192,7 +2398,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
             fail("Cannot create file " + testFile
                     + " as the parent directory does not exist");
         }
-        try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
             TestUtils.generateTestData(output, 0);
         }
         final File destDir = new File(dir, "testMoveDirectory1Dest");
@@ -2214,7 +2420,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testMoveDirectoryToDirectory_Errors() throws Exception {
+    void testMoveDirectoryToDirectoryErrors() throws Exception {
         assertThrows(NullPointerException.class, () -> FileUtils.moveDirectoryToDirectory(null, new File("foo"), true));
         assertThrows(NullPointerException.class, () -> FileUtils.moveDirectoryToDirectory(new File("foo"), null, true));
         final File testFile1 = new File(tempDirFile, "testMoveFileFile1");
@@ -2222,13 +2428,13 @@ public class FileUtilsTest extends AbstractTempDirTest {
         if (!testFile1.getParentFile().exists()) {
             fail("Cannot create file " + testFile1 + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
+        try (BufferedOutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
             TestUtils.generateTestData(output1, 0);
         }
         if (!testFile2.getParentFile().exists()) {
             fail("Cannot create file " + testFile2 + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()))) {
+        try (BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()))) {
             TestUtils.generateTestData(output, 0);
         }
         assertThrows(IOException.class, () -> FileUtils.moveDirectoryToDirectory(testFile1, testFile2, true));
@@ -2238,7 +2444,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testMoveFile_CopyDelete() throws Exception {
+    void testMoveFile_CopyDelete() throws Exception {
         final File destination = new File(tempDirFile, "move2.txt");
         final File src = new File(testFile1.getAbsolutePath()) {
             private static final long serialVersionUID = 1L;
@@ -2256,7 +2462,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testMoveFile_CopyDelete_Failed() {
+    void testMoveFile_CopyDelete_Failed() {
         final File destination = new File(tempDirFile, "move3.txt");
         final File src = new File(testFile1.getAbsolutePath()) {
             private static final long serialVersionUID = 1L;
@@ -2282,7 +2488,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testMoveFile_CopyDelete_WithFileDatePreservation() throws Exception {
+    void testMoveFile_CopyDelete_WithFileDatePreservation() throws Exception {
         final File destination = new File(tempDirFile, "move2.txt");
 
         backDateFile10Minutes(testFile1); // set test file back 10 minutes
@@ -2309,7 +2515,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testMoveFile_CopyDelete_WithoutFileDatePreservation() throws Exception {
+    void testMoveFile_CopyDelete_WithoutFileDatePreservation() throws Exception {
         final File destination = new File(tempDirFile, "move2.txt");
 
         backDateFile10Minutes(testFile1); // set test file back 10 minutes
@@ -2345,7 +2551,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testMoveFile_Errors() throws Exception {
+    void testMoveFile_Errors() throws Exception {
         assertThrows(NullPointerException.class, () -> FileUtils.moveFile(null, new File("foo")));
         assertThrows(NullPointerException.class, () -> FileUtils.moveFile(new File("foo"), null));
         assertThrows(FileNotFoundException.class, () -> FileUtils.moveFile(new File("non-existent"), new File("foo")));
@@ -2373,7 +2579,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testMoveFile_Rename() throws Exception {
+    void testMoveFile_Rename() throws Exception {
         final File destination = new File(tempDirFile, "move1.txt");
 
         FileUtils.moveFile(testFile1, destination);
@@ -2382,7 +2588,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testMoveFileToDirectory() throws Exception {
+    void testMoveFileToDirectory() throws Exception {
         final File destDir = new File(tempDirFile, "moveFileDestDir");
         final File movedFile = new File(destDir, testFile1.getName());
         assertFalse(destDir.exists(), "Check Exist before");
@@ -2394,7 +2600,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testMoveFileToDirectory_Errors() throws Exception {
+    void testMoveFileToDirectoryErrors() throws Exception {
         assertThrows(NullPointerException.class, () -> FileUtils.moveFileToDirectory(null, new File("foo"), true));
         assertThrows(NullPointerException.class, () -> FileUtils.moveFileToDirectory(new File("foo"), null, true));
         final File testFile1 = new File(tempDirFile, "testMoveFileFile1");
@@ -2402,7 +2608,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         if (!testFile1.getParentFile().exists()) {
             fail("Cannot create file " + testFile1 + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
+        try (BufferedOutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
             TestUtils.generateTestData(output1, 0);
         }
         if (!testFile2.getParentFile().exists()) {
@@ -2421,7 +2627,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testMoveToDirectory() throws Exception {
+    void testMoveToDirectory() throws Exception {
         final File destDir = new File(tempDirFile, "testMoveToDirectoryDestDir");
         final File testDir = new File(tempDirFile, "testMoveToDirectoryTestDir");
         final File testFile = new File(tempDirFile, "testMoveToDirectoryTestFile");
@@ -2455,7 +2661,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testMoveToDirectory_Errors() throws Exception {
+    void testMoveToDirectory_Errors() throws Exception {
         assertThrows(NullPointerException.class, () -> FileUtils.moveDirectoryToDirectory(null, new File("foo"), true));
         assertThrows(NullPointerException.class, () -> FileUtils.moveDirectoryToDirectory(new File("foo"), null, true));
         final File nonExistent = new File(tempDirFile, "non-existent");
@@ -2465,7 +2671,96 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testReadFileToByteArray() throws Exception {
+    void testOpenInputStream_exists() throws Exception {
+        final File file = new File(tempDirFile, "test.txt");
+        TestUtils.createLineFileUtf8(file, new String[]{"Hello"});
+        try (FileInputStream in = FileUtils.openInputStream(file)) {
+            assertEquals('H', in.read());
+        }
+    }
+
+    @Test
+    void testOpenInputStream_existsButIsDirectory() {
+        final File directory = new File(tempDirFile, "subdir");
+        directory.mkdirs();
+        assertThrows(IOException.class, () -> FileUtils.openInputStream(directory));
+    }
+
+    @Test
+    void testOpenInputStream_notExists() {
+        final File directory = new File(tempDirFile, "test.txt");
+        assertThrows(IOException.class, () -> FileUtils.openInputStream(directory));
+    }
+
+    @Test
+    void testOpenOutputStream_exists() throws Exception {
+        final File file = new File(tempDirFile, "test.txt");
+        TestUtils.createLineFileUtf8(file, new String[]{"Hello"});
+        try (FileOutputStream out = FileUtils.openOutputStream(file)) {
+            out.write(0);
+        }
+        assertTrue(file.exists());
+    }
+
+    @Test
+    void testOpenOutputStream_existsButIsDirectory() {
+        final File directory = new File(tempDirFile, "subdir");
+        directory.mkdirs();
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.openOutputStream(directory));
+    }
+
+    /**
+     * Requires admin privileges on Windows.
+     *
+     * @throws Exception For example java.nio.file.FileSystemException:
+     *                   C:\Users\you\AppData\Local\Temp\junit2324629522183300191\FileUtilsTest8613879743106252609\symlinked-dir: A required privilege is
+     *                   not held by the client.
+     */
+    @Test
+    void testOpenOutputStream_intoExistingSymlinkedDir() throws Exception {
+        final Path symlinkedDir = createTempSymbolicLinkedRelativeDir().getLeft();
+        final File file = symlinkedDir.resolve("test.txt").toFile();
+        try (FileOutputStream out = FileUtils.openOutputStream(file)) {
+            out.write(0);
+        }
+        assertTrue(file.exists());
+    }
+
+    @Test
+    void testOpenOutputStream_noParentCreateFile() throws Exception {
+        openOutputStream_noParent(true);
+    }
+
+    @Test
+    void testOpenOutputStream_noParentNoFile() throws Exception {
+        openOutputStream_noParent(false);
+    }
+
+    @Test
+    void testOpenOutputStream_notExists() throws Exception {
+        final File file = new File(tempDirFile, "a/test.txt");
+        try (FileOutputStream out = FileUtils.openOutputStream(file)) {
+            out.write(0);
+        }
+        assertTrue(file.exists());
+    }
+
+    @Test
+    void testOpenOutputStream_notExistsCannotCreate() {
+        // according to Wikipedia, most filing systems have a 256 limit on filename
+        final String longStr =
+                "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
+                        "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
+                        "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
+                        "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
+                        "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
+                        "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz";  // 300 chars
+        final File file = new File(tempDirFile, "a/" + longStr + "/test.txt");
+        assertThrows(IOException.class, () -> FileUtils.openOutputStream(file));
+    }
+
+    @Test
+    void testReadFileToByteArray() throws Exception {
         final File file = new File(tempDirFile, "read.txt");
         Files.write(file.toPath(), new byte[] {11, 21, 31});
 
@@ -2477,7 +2772,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testReadFileToByteArray_Errors() {
+    void testReadFileToByteArray_Errors() {
         assertThrows(NullPointerException.class, () -> FileUtils.readFileToByteArray(null));
         assertThrows(IOException.class, () -> FileUtils.readFileToByteArray(new File("non-exsistent")));
         assertThrows(IOException.class, () -> FileUtils.readFileToByteArray(tempDirFile));
@@ -2485,7 +2780,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     @Test
     @EnabledIf("isPosixFilePermissionsSupported")
-    public void testReadFileToByteArray_IOExceptionOnPosixFileSystem() throws Exception {
+    void testReadFileToByteArray_IOExceptionOnPosixFileSystem() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "cant-read.txt");
         TestUtils.createFile(file, 100);
         Files.setPosixFilePermissions(file.toPath(), PosixFilePermissions.fromString("---------"));
@@ -2494,7 +2789,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testReadFileToString_Errors() {
+    void testReadFileToString_Errors() {
         assertThrows(NullPointerException.class, () -> FileUtils.readFileToString(null));
         assertThrows(IOException.class, () -> FileUtils.readFileToString(new File("non-exsistent")));
         assertThrows(IOException.class, () -> FileUtils.readFileToString(tempDirFile));
@@ -2503,7 +2798,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     @Test
     @EnabledIf("isPosixFilePermissionsSupported")
-    public void testReadFileToString_IOExceptionOnPosixFileSystem() throws Exception {
+    void testReadFileToString_IOExceptionOnPosixFileSystem() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "cant-read.txt");
         TestUtils.createFile(file, 100);
         Files.setPosixFilePermissions(file.toPath(), PosixFilePermissions.fromString("---------"));
@@ -2512,40 +2807,48 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testReadFileToStringWithDefaultEncoding() throws Exception {
+    void testReadFileToStringWithDefaultEncoding() throws Exception {
         final File file = new File(tempDirFile, "read.obj");
-        final String fixture = "Hello /u1234";
+        // Don't use non-ASCII in this test fixture because this test uses the default platform encoding.
+        final String fixture = "Hello 1234";
         Files.write(file.toPath(), fixture.getBytes());
-
         assertEquals(fixture, FileUtils.readFileToString(file));
     }
 
     @Test
-    public void testReadFileToStringWithEncoding() throws Exception {
+    void testReadFileToStringWithEncoding() throws Exception {
         final File file = new File(tempDirFile, "read.obj");
-        final byte[] text = "Hello /u1234".getBytes(StandardCharsets.UTF_8);
+        final byte[] text = "Hello \u1234".getBytes(StandardCharsets.UTF_8);
         Files.write(file.toPath(), text);
 
         final String data = FileUtils.readFileToString(file, "UTF8");
-        assertEquals("Hello /u1234", data);
+        assertEquals("Hello \u1234", data);
     }
 
     @Test
-    public void testReadLines() throws Exception {
+    @EnabledIf("isPosixFilePermissionsSupported")
+    void testReadLines_IOExceptionOnPosixFileSystem() throws Exception {
+        final File file = TestUtils.newFile(tempDirFile, "cant-read.txt");
+        TestUtils.createFile(file, 100);
+        Files.setPosixFilePermissions(file.toPath(), PosixFilePermissions.fromString("---------"));
+        assertThrows(IOException.class, () -> FileUtils.readLines(file));
+    }
+
+    @Test
+    void testReadLinesDefaults() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        try {
-            final String[] data = {"hello", "/u1234", "", "this is", "some text"};
-            TestUtils.createLineBasedFile(file, data);
-
-            final List<String> lines = FileUtils.readLines(file, UTF_8);
-            assertEquals(Arrays.asList(data), lines);
-        } finally {
-            TestUtils.deleteFile(file);
-        }
+        final String[] data = { "hello", "this is", "some text" };
+        TestUtils.createLineFileUtf8(file, data);
+        final List<String> lines1 = FileUtils.readLines(file);
+        final List<String> lines2 = FileUtils.readLines(file, (Charset) null);
+        final List<String> lines3 = FileUtils.readLines(file, Charset.defaultCharset());
+        assertEquals(lines1, Arrays.asList(data));
+        assertEquals(lines1, lines2);
+        assertEquals(lines1, lines3);
     }
 
     @Test
-    public void testReadLines_Errors() {
+    void testReadLinesErrors() {
         assertThrows(NullPointerException.class, () -> FileUtils.readLines(null));
         assertThrows(IOException.class, () -> FileUtils.readLines(new File("non-exsistent")));
         assertThrows(IOException.class, () -> FileUtils.readLines(tempDirFile));
@@ -2553,62 +2856,48 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    @EnabledIf("isPosixFilePermissionsSupported")
-    public void testReadLines_IOExceptionOnPosixFileSystem() throws Exception {
-        final File file = TestUtils.newFile(tempDirFile, "cant-read.txt");
-        TestUtils.createFile(file, 100);
-        Files.setPosixFilePermissions(file.toPath(), PosixFilePermissions.fromString("---------"));
-
-        assertThrows(IOException.class, () -> FileUtils.readLines(file));
+    void testReadLinesUTF8() throws Exception {
+        final File file = TestUtils.newFile(tempDirFile, "lines.txt");
+        final String[] data = { "hello", "\u1234", "", "this is", "some text" };
+        TestUtils.createLineFileUtf8(file, data);
+        final List<String> lines = FileUtils.readLines(file, UTF_8);
+        assertEquals(Arrays.asList(data), lines);
     }
 
     @Test
-    public void testSizeOf() throws Exception {
+    void testSizeOf() throws Exception {
         final File file = new File(tempDirFile, getName());
-
         // Null argument
         assertThrows(NullPointerException.class, () -> FileUtils.sizeOf(null));
-
         // Non-existent file
         assertThrows(IllegalArgumentException.class, () -> FileUtils.sizeOf(file));
-
         // Creates file
         file.createNewFile();
-
         // New file
         assertEquals(0, FileUtils.sizeOf(file));
         file.delete();
-
         // Existing file
         assertEquals(testFile1Size, FileUtils.sizeOf(testFile1), "Unexpected files size");
-
         // Existing directory
         assertEquals(TEST_DIRECTORY_SIZE, FileUtils.sizeOf(tempDirFile), "Unexpected directory size");
     }
 
     @Test
-    public void testSizeOfAsBigInteger() throws Exception {
+    void testSizeOfAsBigInteger() throws Exception {
         final File file = new File(tempDirFile, getName());
-
         // Null argument
         assertThrows(NullPointerException.class, () -> FileUtils.sizeOfAsBigInteger(null));
         // Non-existent file
         assertThrows(IllegalArgumentException.class, () -> FileUtils.sizeOfAsBigInteger(file));
-
         // Creates file
         file.createNewFile();
-
         // New file
         assertEquals(BigInteger.ZERO, FileUtils.sizeOfAsBigInteger(file));
         file.delete();
-
         // Existing file
-        assertEquals(BigInteger.valueOf(testFile1Size), FileUtils.sizeOfAsBigInteger(testFile1),
-                "Unexpected files size");
-
+        assertEquals(BigInteger.valueOf(testFile1Size), FileUtils.sizeOfAsBigInteger(testFile1), "Unexpected files size");
         // Existing directory
-        assertEquals(TEST_DIRECTORY_SIZE_BI, FileUtils.sizeOfAsBigInteger(tempDirFile),
-                "Unexpected directory size");
+        assertEquals(TEST_DIRECTORY_SIZE_BI, FileUtils.sizeOfAsBigInteger(tempDirFile), "Unexpected directory size");
     }
 
     /**
@@ -2619,27 +2908,21 @@ public class FileUtilsTest extends AbstractTempDirTest {
      *                   not held by the client.
      */
     @Test
-    public void testSizeOfDirectory() throws Exception {
+    void testSizeOfDirectory() throws Exception {
         final File file = new File(tempDirFile, getName());
-
         // Null argument
         assertThrows(NullPointerException.class, () -> FileUtils.sizeOfDirectory(null));
         // Non-existent file
         assertThrows(IllegalArgumentException.class, () -> FileUtils.sizeOfAsBigInteger(file));
-
         // Creates file
         file.createNewFile();
-
         // Existing file
         assertThrows(IllegalArgumentException.class, () -> FileUtils.sizeOfDirectory(file));
-
         // Existing directory
         file.delete();
         file.mkdir();
-
         // Create a cyclic symlink
-        this.createCircularSymLink(file);
-
+        createCircularSymbolicLink(file);
         assertEquals(TEST_DIRECTORY_SIZE, FileUtils.sizeOfDirectory(file), "Unexpected directory size");
     }
 
@@ -2651,32 +2934,24 @@ public class FileUtilsTest extends AbstractTempDirTest {
      *                   not held by the client.
      */
     @Test
-    public void testSizeOfDirectoryAsBigInteger() throws Exception {
+    void testSizeOfDirectoryAsBigInteger() throws Exception {
         final File file = new File(tempDirFile, getName());
-
         // Null argument
         assertThrows(NullPointerException.class, () -> FileUtils.sizeOfDirectoryAsBigInteger(null));
         // Non-existent file
         assertThrows(UncheckedIOException.class, () -> FileUtils.sizeOfDirectoryAsBigInteger(file));
-
         // Creates file
         file.createNewFile();
-
         // Existing file
         assertThrows(IllegalArgumentException.class, () -> FileUtils.sizeOfDirectoryAsBigInteger(file));
-
         // Existing directory
         file.delete();
         file.mkdir();
-
-        createCircularSymLink(file);
-
+        createCircularSymbolicLink(file);
         assertEquals(TEST_DIRECTORY_SIZE_BI, FileUtils.sizeOfDirectoryAsBigInteger(file), "Unexpected directory size");
-
         // Existing directory which size is greater than zero
         file.delete();
         file.mkdir();
-
         final File nonEmptyFile = new File(file, "non-emptyFile" + System.nanoTime());
         assertTrue(nonEmptyFile.getParentFile().exists(), () -> "Cannot create file " + nonEmptyFile + " as the parent directory does not exist");
         final OutputStream output = new BufferedOutputStream(Files.newOutputStream(nonEmptyFile.toPath()));
@@ -2685,35 +2960,33 @@ public class FileUtilsTest extends AbstractTempDirTest {
         } finally {
             IOUtils.closeQuietly(output);
         }
-
         assertEquals(TEST_DIRECTORY_SIZE_GT_ZERO_BI, FileUtils.sizeOfDirectoryAsBigInteger(file), "Unexpected directory size");
-
         nonEmptyFile.delete();
         file.delete();
     }
 
     @Test
-    public void testToFile1() throws Exception {
+    void testToFile1() throws Exception {
         final URL url = new URL("file", null, "a/b/c/file.txt");
         final File file = FileUtils.toFile(url);
         assertTrue(file.toString().contains("file.txt"));
     }
 
     @Test
-    public void testToFile2() throws Exception {
+    void testToFile2() throws Exception {
         final URL url = new URL("file", null, "a/b/c/file%20n%61me%2520.tx%74");
         final File file = FileUtils.toFile(url);
         assertTrue(file.toString().contains("file name%20.txt"));
     }
 
     @Test
-    public void testToFile3() throws Exception {
+    void testToFile3() throws Exception {
         assertNull(FileUtils.toFile(null));
         assertNull(FileUtils.toFile(new URL("http://jakarta.apache.org")));
     }
 
     @Test
-    public void testToFile4() throws Exception {
+    void testToFile4() throws Exception {
         final URL url = new URL("file", null, "a/b/c/file%%20%me.txt%");
         final File file = FileUtils.toFile(url);
         assertTrue(file.toString().contains("file% %me.txt%"));
@@ -2721,14 +2994,14 @@ public class FileUtilsTest extends AbstractTempDirTest {
 
     /* IO-252 */
     @Test
-    public void testToFile5() throws Exception {
+    void testToFile5() throws Exception {
         final URL url = new URL("file", null, "both%20are%20100%20%25%20true");
         final File file = FileUtils.toFile(url);
         assertEquals("both are 100 % true", file.toString());
     }
 
     @Test
-    public void testToFiles1() throws Exception {
+    void testToFiles1() throws Exception {
         final URL[] urls = {
                 new URL("file", null, "file1.txt"),
                 new URL("file", null, "file2.txt"),
@@ -2741,7 +3014,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testToFiles2() throws Exception {
+    void testToFiles2() throws Exception {
         final URL[] urls = {
                 new URL("file", null, "file1.txt"),
                 null,
@@ -2754,7 +3027,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testToFiles3() throws Exception {
+    void testToFiles3() throws Exception {
         final URL[] urls = null;
         final File[] files = FileUtils.toFiles(urls);
 
@@ -2762,7 +3035,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testToFiles3a() throws Exception {
+    void testToFiles3a() throws Exception {
         final URL[] urls = {}; // empty array
         final File[] files = FileUtils.toFiles(urls);
 
@@ -2770,7 +3043,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testToFiles4() throws Exception {
+    void testToFiles4() throws Exception {
         final URL[] urls = {
                 new URL("file", null, "file1.txt"),
                 new URL("http", "jakarta.apache.org", "file1.txt"),
@@ -2779,16 +3052,15 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testToFileUtf8() throws Exception {
+    void testToFileUtf8() throws Exception {
         final URL url = new URL("file", null, "/home/%C3%A4%C3%B6%C3%BC%C3%9F");
         final File file = FileUtils.toFile(url);
         assertTrue(file.toString().contains("\u00E4\u00F6\u00FC\u00DF"));
     }
 
     @Test
-    public void testTouch() throws IOException {
+    void testTouch() throws IOException {
         assertThrows(NullPointerException.class, () -> FileUtils.touch(null));
-
         final File file = new File(tempDirFile, "touch.txt");
         if (file.exists()) {
             file.delete();
@@ -2802,7 +3074,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
         }
         assertEquals(1, file.length(), "Wrote one byte to file");
         final long y2k = new GregorianCalendar(2000, 0, 1).getTime().getTime();
-        final boolean res = setLastModifiedMillis(file, y2k);  // 0L fails on Win98
+        final boolean res = setLastModifiedMillis(file, y2k); // 0L fails on Win98
         assertTrue(res, "Bad test: set lastModified failed");
         assertEquals(y2k, getLastModifiedMillis(file), "Bad test: set lastModified set incorrect value");
         final long nowMillis = System.currentTimeMillis();
@@ -2815,7 +3087,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testTouchDirDoesNotExist() throws Exception {
+    void testTouchDirDoesNotExist() throws Exception {
         final File file = new File("target/does-not-exist", "touchme.txt");
         final File parentDir = file.getParentFile();
         file.delete();
@@ -2828,7 +3100,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testToURLs1() throws Exception {
+    void testToURLs1() throws Exception {
         final File[] files = {
                 new File(tempDirFile, "file1.txt"),
                 new File(tempDirFile, "file2.txt"),
@@ -2848,57 +3120,46 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testToURLs2() {
-        final File[] files = new File[] {
-            new File(tempDirFile, "file1.txt"),
-            null,
-        };
-        assertThrows(NullPointerException.class, () -> FileUtils.toURLs(files),
-                "Can't convert null URL");
+    void testToURLs2() {
+        final File[] files = { new File(tempDirFile, "file1.txt"), null, };
+        assertThrows(NullPointerException.class, () -> FileUtils.toURLs(files), "Can't convert null URL");
     }
 
     @Test
-    public void testToURLs3() {
+    void testToURLs3() {
         final File[] files = null;
-        assertThrows(NullPointerException.class, () -> FileUtils.toURLs(files),
-                "Can't convert null list");
+        assertThrows(NullPointerException.class, () -> FileUtils.toURLs(files), "Can't convert null list");
     }
 
     @Test
-    public void testToURLs3a() throws Exception {
+    void testToURLs3a() throws Exception {
         final File[] files = {}; // empty array
         final URL[] urls = FileUtils.toURLs(files);
-
         assertEquals(0, urls.length);
     }
 
     @Test
-    public void testWrite_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
+    void testWrite_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
-
         FileUtils.write(file, "this is brand new data", false);
-
         final String expected = "this is brand new data";
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testWrite_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
+    void testWrite_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
-
         FileUtils.write(file, "this is brand new data", true);
-
-        final String expected = "This line was there before you..."
-                + "this is brand new data";
+        final String expected = "This line was there before you...this is brand new data";
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testWriteByteArrayToFile() throws Exception {
+    void testWriteByteArrayToFile() throws Exception {
         final File file = new File(tempDirFile, "write.obj");
         final byte[] data = {11, 21, 31};
         FileUtils.writeByteArrayToFile(file, data);
@@ -2906,32 +3167,27 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testWriteByteArrayToFile_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
+    void testWriteByteArrayToFile_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
-
         FileUtils.writeByteArrayToFile(file, "this is brand new data".getBytes(), false);
-
         final String expected = "this is brand new data";
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testWriteByteArrayToFile_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
+    void testWriteByteArrayToFile_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
-
         FileUtils.writeByteArrayToFile(file, "this is brand new data".getBytes(), true);
-
-        final String expected = "This line was there before you..."
-                + "this is brand new data";
+        final String expected = "This line was there before you...this is brand new data";
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testWriteByteArrayToFile_WithOffsetAndLength() throws Exception {
+    void testWriteByteArrayToFile_WithOffsetAndLength() throws Exception {
         final File file = new File(tempDirFile, "write.obj");
         final byte[] data = {11, 21, 32, 41, 51};
         final byte[] writtenData = new byte[3];
@@ -2941,82 +3197,70 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testWriteByteArrayToFile_WithOffsetAndLength_WithAppendOptionTrue_ShouldDeletePreviousFileLines() throws Exception {
+    void testWriteByteArrayToFile_WithOffsetAndLength_WithAppendOptionTrue_ShouldDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
-
         final byte[] data = "SKIP_THIS_this is brand new data_AND_SKIP_THIS".getBytes(StandardCharsets.UTF_8);
         FileUtils.writeByteArrayToFile(file, data, 10, 22, false);
-
         final String expected = "this is brand new data";
         final String actual = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testWriteByteArrayToFile_WithOffsetAndLength_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
+    void testWriteByteArrayToFile_WithOffsetAndLength_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
-
         final byte[] data = "SKIP_THIS_this is brand new data_AND_SKIP_THIS".getBytes(StandardCharsets.UTF_8);
         FileUtils.writeByteArrayToFile(file, data, 10, 22, true);
-
         final String expected = "This line was there before you..." + "this is brand new data";
         final String actual = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testWriteCharSequence1() throws Exception {
+    void testWriteCharSequence1() throws Exception {
         final File file = new File(tempDirFile, "write.txt");
-        FileUtils.write(file, "Hello /u1234", "UTF8");
-        final byte[] text = "Hello /u1234".getBytes(StandardCharsets.UTF_8);
+        FileUtils.write(file, "Hello \u1234", "UTF8");
+        final byte[] text = "Hello \u1234".getBytes(StandardCharsets.UTF_8);
         TestUtils.assertEqualContent(text, file);
     }
 
     @Test
-    public void testWriteCharSequence2() throws Exception {
+    void testWriteCharSequence2() throws Exception {
         final File file = new File(tempDirFile, "write.txt");
-        FileUtils.write(file, "Hello /u1234", (String) null);
-        final byte[] text = "Hello /u1234".getBytes();
+        FileUtils.write(file, "Hello \u1234", (String) null);
+        final byte[] text = "Hello \u1234".getBytes();
         TestUtils.assertEqualContent(text, file);
     }
 
     @Test
-    public void testWriteLines_3arg_nullSeparator() throws Exception {
-        final Object[] data = {
-                "hello", new StringBuffer("world"), "", "this is", null, "some text"};
+    void testWriteLines_3arg_nullSeparator() throws Exception {
+        final Object[] data = { "hello", new StringBuffer("world"), "", "this is", null, "some text" };
         final List<Object> list = Arrays.asList(data);
-
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
         FileUtils.writeLines(file, StandardCharsets.US_ASCII.name(), list);
-
-        final String expected = "hello" + System.lineSeparator() + "world" + System.lineSeparator() +
-                System.lineSeparator() + "this is" + System.lineSeparator() +
-                System.lineSeparator() + "some text" + System.lineSeparator();
+        final String expected = "hello" + System.lineSeparator() + "world" + System.lineSeparator() + System.lineSeparator() + "this is"
+                + System.lineSeparator() + System.lineSeparator() + "some text" + System.lineSeparator();
         final String actual = FileUtils.readFileToString(file, StandardCharsets.US_ASCII.name());
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testWriteLines_3argsWithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
+    void testWriteLines_3argsWithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
-
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
         final List<String> linesToAppend = Arrays.asList("my first line", "The second Line");
         FileUtils.writeLines(file, linesToAppend, false);
-
-        final String expected = "my first line"
-                + System.lineSeparator() + "The second Line"
-                + System.lineSeparator();
+        final String expected = "my first line" + System.lineSeparator() + "The second Line" + System.lineSeparator();
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testWriteLines_3argsWithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
+    void testWriteLines_3argsWithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
 
         final List<String> linesToAppend = Arrays.asList("my first line", "The second Line");
         FileUtils.writeLines(file, linesToAppend, true);
@@ -3030,7 +3274,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testWriteLines_4arg() throws Exception {
+    void testWriteLines_4arg() throws Exception {
         final Object[] data = {
                 "hello", new StringBuffer("world"), "", "this is", null, "some text"};
         final List<Object> list = Arrays.asList(data);
@@ -3044,7 +3288,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testWriteLines_4arg_nullSeparator() throws Exception {
+    void testWriteLines_4arg_nullSeparator() throws Exception {
         final Object[] data = {
                 "hello", new StringBuffer("world"), "", "this is", null, "some text"};
         final List<Object> list = Arrays.asList(data);
@@ -3060,7 +3304,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testWriteLines_4arg_Writer_nullData() throws Exception {
+    void testWriteLines_4arg_Writer_nullData() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
         FileUtils.writeLines(file, StandardCharsets.US_ASCII.name(), null, "*");
 
@@ -3068,7 +3312,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testWriteLines_4argsWithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
+    void testWriteLines_4argsWithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
 
@@ -3083,7 +3327,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testWriteLines_4argsWithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
+    void testWriteLines_4argsWithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
 
@@ -3099,7 +3343,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testWriteLines_5argsWithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
+    void testWriteLines_5argsWithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
 
@@ -3114,7 +3358,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testWriteLines_5argsWithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
+    void testWriteLines_5argsWithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
 
@@ -3130,7 +3374,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testWriteLinesEncoding_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
+    void testWriteLinesEncoding_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
 
@@ -3145,7 +3389,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testWriteLinesEncoding_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
+    void testWriteLinesEncoding_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
 
@@ -3161,7 +3405,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testWriteLinesUnsupportedCharset() throws Exception {
+    void testWriteLinesUnsupportedCharset() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
 
         final List<String> lines = Arrays.asList("my first line", "The second Line");
@@ -3169,7 +3413,7 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testWriteStringToFile_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
+    void testWriteStringToFile_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
 
@@ -3181,23 +3425,20 @@ public class FileUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testWriteStringToFile_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
+    void testWriteStringToFile_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
-
         FileUtils.writeStringToFile(file, "this is brand new data", true);
-
-        final String expected = "This line was there before you..."
-                + "this is brand new data";
+        final String expected = "This line was there before you...this is brand new data";
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testWriteStringToFileIntoNonExistentSubdir() throws Exception {
+    void testWriteStringToFileIntoNonExistentSubdir() throws Exception {
         final File file = new File(tempDirFile, "subdir/write.txt");
-        FileUtils.writeStringToFile(file, "Hello /u1234", (Charset) null);
-        final byte[] text = "Hello /u1234".getBytes();
+        FileUtils.writeStringToFile(file, "Hello \u1234", (Charset) null);
+        final byte[] text = "Hello \u1234".getBytes();
         TestUtils.assertEqualContent(text, file);
     }
 
@@ -3209,86 +3450,74 @@ public class FileUtilsTest extends AbstractTempDirTest {
      *                   not held by the client.
      */
     @Test
-    public void testWriteStringToFileIntoSymlinkedDir() throws Exception {
-        final Path symlinkDir = createTempSymlinkedRelativeDir();
-
+    void testWriteStringToFileIntoSymlinkedDir() throws Exception {
+        final Path symlinkDir = createTempSymbolicLinkedRelativeDir().getLeft();
         final File file = symlinkDir.resolve("file").toFile();
-        FileUtils.writeStringToFile(file, "Hello /u1234", StandardCharsets.UTF_8);
-
-        final byte[] text = "Hello /u1234".getBytes();
+        FileUtils.writeStringToFile(file, "Hello \u1234", StandardCharsets.UTF_8);
+        final byte[] text = "Hello \u1234".getBytes(StandardCharsets.UTF_8);
         TestUtils.assertEqualContent(text, file);
     }
 
     @Test
-    public void testWriteStringToFileWithCharset() throws Exception {
+    void testWriteStringToFileWithCharset() throws Exception {
         final File file = new File(tempDirFile, "write.txt");
-        FileUtils.writeStringToFile(file, "Hello /u1234", "UTF8");
-        final byte[] text = "Hello /u1234".getBytes(StandardCharsets.UTF_8);
+        FileUtils.writeStringToFile(file, "Hello \u1234", "UTF8");
+        final byte[] text = "Hello \u1234".getBytes(StandardCharsets.UTF_8);
         TestUtils.assertEqualContent(text, file);
     }
 
     @Test
-    public void testWriteStringToFileWithEncoding_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
+    void testWriteStringToFileWithEncoding_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
-
         FileUtils.writeStringToFile(file, "this is brand new data", (String) null, false);
-
         final String expected = "this is brand new data";
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testWriteStringToFileWithEncoding_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
+    void testWriteStringToFileWithEncoding_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
-
         FileUtils.writeStringToFile(file, "this is brand new data", (String) null, true);
-
-        final String expected = "This line was there before you..."
-                + "this is brand new data";
+        final String expected = "This line was there before you...this is brand new data";
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testWriteStringToFileWithNullCharset() throws Exception {
+    void testWriteStringToFileWithNullCharset() throws Exception {
         final File file = new File(tempDirFile, "write.txt");
-        FileUtils.writeStringToFile(file, "Hello /u1234", (Charset) null);
-        final byte[] text = "Hello /u1234".getBytes();
+        FileUtils.writeStringToFile(file, "Hello \u1234", (Charset) null);
+        final byte[] text = "Hello \u1234".getBytes();
         TestUtils.assertEqualContent(text, file);
     }
 
     @Test
-    public void testWriteStringToFileWithNullStringCharset() throws Exception {
+    void testWriteStringToFileWithNullStringCharset() throws Exception {
         final File file = new File(tempDirFile, "write.txt");
-        FileUtils.writeStringToFile(file, "Hello /u1234", (String) null);
-        final byte[] text = "Hello /u1234".getBytes();
+        FileUtils.writeStringToFile(file, "Hello \u1234", (String) null);
+        final byte[] text = "Hello \u1234".getBytes();
         TestUtils.assertEqualContent(text, file);
     }
 
     @Test
-    public void testWriteWithEncoding_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
+    void testWriteWithEncoding_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
-
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
         FileUtils.write(file, "this is brand new data", (String) null, false);
-
         final String expected = "this is brand new data";
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testWriteWithEncoding_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
+    void testWriteWithEncoding_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
         final File file = TestUtils.newFile(tempDirFile, "lines.txt");
-        FileUtils.writeStringToFile(file, "This line was there before you...");
-
+        FileUtils.writeStringToFile(file, "This line was there before you...", StandardCharsets.UTF_8);
         FileUtils.write(file, "this is brand new data", (String) null, true);
-
-        final String expected = "This line was there before you..."
-                + "this is brand new data";
+        final String expected = "This line was there before you...this is brand new data";
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
