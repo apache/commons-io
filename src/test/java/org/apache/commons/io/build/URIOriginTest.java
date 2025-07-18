@@ -48,8 +48,8 @@ class URIOriginTest extends AbstractOriginTest<URI, URIOrigin> {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "http://example.com",
-            "https://example.com"
+            "http://apache.com",
+            "https://apache.com"
     })
     void testGetInputStream(final String uri) throws Exception {
         final AbstractOrigin.URIOrigin origin = new AbstractOrigin.URIOrigin(new URI(uri));
