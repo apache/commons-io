@@ -45,7 +45,12 @@ The <action> type attribute can be add,update,fix,remove.
     <title>Apache Commons IO Release Notes</title>
   </properties>
   <body>
-    <release version="2.20.0" date="2025-07-13" description="Version 2.19.1: Java 8 or later is required.">
+    <release version="2.20.1" date="YYYY-MM-DD" description="Version 2.20.1: Java 8 or later is required.">
+      <!-- FIX -->
+      <!-- ADD -->
+      <!-- UPDATE -->
+  </release>
+    <release version="2.20.0" date="2025-07-13" description="Version 2.20.0: Java 8 or later is required.">
       <!-- FIX -->
       <action dev="ggregory" type="fix"                due-to="Jesse Glick">[javadoc] Rename parameter of ProxyOutputStream.write(int) #740.</action>
       <action dev="ggregory" type="fix" issue="IO-875" due-to="Pierre Baumard, Gary Gregory">CopyDirectoryVisitor ignores fileFilter #743.</action>
