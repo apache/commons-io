@@ -110,7 +110,7 @@ class IOUtilsMultithreadedSkipTest {
                                 final int c = is.read();
                                 assertEquals(expected[skipIndex], c, "failed on seed=" + seed + " iteration=" + iteration);
                             } catch (final EOFException e) {
-                                assertEquals(expected[skipIndex], is.read(), "failed on " + "seed=" + seed + " iteration=" + iteration);
+                                assertEquals(expected[skipIndex], is.read(), "failed on seed=" + seed + " iteration=" + iteration);
                             }
                         }
                     }

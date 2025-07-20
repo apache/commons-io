@@ -3213,7 +3213,7 @@ class FileUtilsTest extends AbstractTempDirTest {
         FileUtils.writeStringToFile(file, "This line was there before you...");
         final byte[] data = "SKIP_THIS_this is brand new data_AND_SKIP_THIS".getBytes(StandardCharsets.UTF_8);
         FileUtils.writeByteArrayToFile(file, data, 10, 22, true);
-        final String expected = "This line was there before you..." + "this is brand new data";
+        final String expected = "This line was there before you...this is brand new data";
         final String actual = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
         assertEquals(expected, actual);
     }
