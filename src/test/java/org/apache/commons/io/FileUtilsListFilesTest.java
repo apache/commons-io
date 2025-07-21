@@ -289,7 +289,7 @@ class FileUtilsListFilesTest {
             // collect() will fail on Java 24 and up here
             // GitHub CI:
             // Fails on Java 24 macOS, but OK on Windows and Ubuntu
-            // Fails on Java 25-EA Windows and macOS, but OK on Ubuntu 
+            // Fails on Java 25-EA Windows and macOS, but OK on Ubuntu
             // forEach() will fail on Java 24 and up here
             assumeFalse(SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_24));
             list = stream.collect(Collectors.toList());
@@ -315,7 +315,7 @@ class FileUtilsListFilesTest {
             // forEach() will fail on Java 24 and up here
             // GitHub CI:
             // Fails on Java 24 macOS, but OK on Windows and Ubuntu
-            // Fails on Java 25-EA Windows and macOS, but OK on Ubuntu 
+            // Fails on Java 25-EA Windows and macOS, but OK on Ubuntu
             // forEach() will fail on Java 24 and up here
             assumeFalse(SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_24));
             stream.forEach(list::add);
@@ -342,7 +342,7 @@ class FileUtilsListFilesTest {
             // hasNext() will fail on Java 24 and up here
             // GitHub CI:
             // Fails on Java 24 macOS, but OK on Windows and Ubuntu
-            // Fails on Java 25-EA Windows and macOS, but OK on Ubuntu 
+            // Fails on Java 25-EA Windows and macOS, but OK on Ubuntu
             // forEach() will fail on Java 24 and up here
             assumeFalse(SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_24));
             while (iterator.hasNext()) {
