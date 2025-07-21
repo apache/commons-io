@@ -38,7 +38,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnsupportedCharsetException;
 import java.nio.file.CopyOption;
 import java.nio.file.DirectoryStream;
-import java.nio.file.FileTreeWalker;
 import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
