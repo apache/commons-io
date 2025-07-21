@@ -38,6 +38,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnsupportedCharsetException;
 import java.nio.file.CopyOption;
 import java.nio.file.DirectoryStream;
+import java.nio.file.FileTreeWalker;
 import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -227,7 +228,7 @@ public class FileUtils {
      * </p>
      *
      * @param size the number of bytes
-     * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
+     * @return a human-readable display value (includes units - QB, RB, YB, ZB, EB, PB, TB, GB, MB, KB or bytes)
      * @throws NullPointerException if the given {@link BigInteger} is {@code null}.
      * @see <a href="https://issues.apache.org/jira/browse/IO-226">IO-226 - should the rounding be changed?</a>
      * @since 2.4
