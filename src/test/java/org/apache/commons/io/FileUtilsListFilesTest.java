@@ -55,7 +55,6 @@ class FileUtilsListFilesTest {
     @TempDir
     public File temporaryFolder;
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @BeforeEach
     public void setUp() throws Exception {
         File dir = temporaryFolder;
