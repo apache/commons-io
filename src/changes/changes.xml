@@ -50,6 +50,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">When testing on Java 21 and up, enable -XX:+EnableDynamicAgentLoading.</action>
       <action dev="ggregory" type="fix"                due-to="Gary Gregory">When testing on Java 24 and up, don't fail FileUtilsListFilesTest for a different behavior in the JRE.</action>
       <!-- ADD -->
+      <action dev="ggregory" type="add"                due-to="strangelookingnerd, Gary Gregory">FileUtils#byteCountToDisplaySize() supports Zettabyte, Yottabyte, Ronnabyte and Quettabyte #763.</action>
+      <action dev="ggregory" type="add"                due-to="strangelookingnerd, Gary Gregory">Add org.apache.commons.io.FileUtils.ONE_RB #763.</action>
+      <action dev="ggregory" type="add"                due-to="strangelookingnerd, Gary Gregory">Add org.apache.commons.io.FileUtils.ONE_QB #763.</action>
       <!-- UPDATE -->
   </release>
     <release version="2.20.0" date="2025-07-13" description="Version 2.20.0: Java 8 or later is required.">
