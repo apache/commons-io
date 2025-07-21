@@ -204,11 +204,15 @@ public class FileUtils {
 
     /**
      * The number of bytes in a ronnabyte.
+     *
+     * @since 2.21.0
      */
     public static final BigInteger ONE_RB = ONE_KB_BI.multiply(ONE_YB);
 
     /**
      * The number of bytes in a quettabyte.
+     *
+     * @since 2.21.0
      */
     public static final BigInteger ONE_QB = ONE_KB_BI.multiply(ONE_RB);
 
