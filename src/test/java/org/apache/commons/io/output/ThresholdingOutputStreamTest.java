@@ -72,7 +72,7 @@ class ThresholdingOutputStreamTest {
     }
 
     @Test
-    void testResetByteCountBrokenOutputStream() throws IOException {
+    void testResetByteCountBrokenOutputStream() {
         final int threshold = 1;
         final AtomicInteger counter = new AtomicInteger();
         final IOException e = assertThrows(IOException.class, () -> {

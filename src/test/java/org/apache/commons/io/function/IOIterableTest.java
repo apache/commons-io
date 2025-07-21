@@ -77,14 +77,14 @@ class IOIterableTest {
     }
 
     @Test
-    void testSpliterator() throws IOException {
+    void testSpliterator() {
         final AtomicInteger ref = new AtomicInteger();
         iterable.spliterator().forEachRemaining(e -> ref.incrementAndGet());
         assertEquals(2, ref.get());
     }
 
     @Test
-    void testUnrwap() throws IOException {
+    void testUnrwap() {
         assertSame(fixture.list, iterable.unwrap());
         assertSame(fixture.unwrap(), iterable.unwrap());
     }

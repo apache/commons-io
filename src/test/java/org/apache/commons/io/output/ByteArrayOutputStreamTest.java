@@ -504,7 +504,7 @@ class ByteArrayOutputStreamTest {
         return count;
     }
 
-    private int writeByte(final AbstractByteArrayOutputStream<?> baout, final java.io.ByteArrayOutputStream ref, final int[] instructions) throws IOException {
+    private int writeByte(final AbstractByteArrayOutputStream<?> baout, final java.io.ByteArrayOutputStream ref, final int[] instructions) {
         int written = 0;
         for (final int instruction : instructions) {
             written += writeByte(baout, ref, instruction);
