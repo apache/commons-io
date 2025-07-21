@@ -1956,8 +1956,8 @@ public final class PathUtils {
     @SuppressWarnings("resource") // Caller closes
     public static Stream<Path> walk(final Path start, final PathFilter pathFilter, final int maxDepth, final boolean readAttributes,
             final FileVisitOption... options) throws IOException {
-        return Files.walk(start, maxDepth, options)
-                .filter(path -> pathFilter.accept(path, readAttributes ? readBasicFileAttributesUnchecked(path) : null) == FileVisitResult.CONTINUE);
+        return Files.walk(start, maxDepth, options).filter(
+                path -> pathFilter.accept(path, readAttributes ? readBasicFileAttributes(path, EMPTY_LINK_OPTION_ARRAY) : null) == FileVisitResult.CONTINUE);
     }
 
     private static <R> R withPosixFileAttributes(final Path path, final LinkOption[] linkOptions, final boolean overrideReadOnly,
