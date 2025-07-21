@@ -47,7 +47,7 @@ file comparators, endian transformation classes, and much more.
     <connection>scm:git:https://gitbox.apache.org/repos/asf/commons-io.git</connection>
     <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/commons-io.git</developerConnection>
     <url>https://gitbox.apache.org/repos/asf?p=commons-io.git</url>
-    <tag>rel/commons-io-2.20.0</tag>
+    <tag>rel/commons-io-2.21.0</tag>
   </scm>
   <ciManagement>
     <system>GitHub</system>
