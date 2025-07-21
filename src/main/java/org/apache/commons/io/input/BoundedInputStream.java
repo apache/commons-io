@@ -263,10 +263,10 @@ public class BoundedInputStream extends ProxyInputStream {
          * <ul>
          * <li>{@link #getInputStream()} gets the target aspect.</li>
          * <li>{@link #getAfterRead()}</li>
-         * <li>{@link #getCount()}</li>
-         * <li>{@link #getMaxCount()}</li>
-         * <li>{@link #getOnMaxCount()}</li>
-         * <li>{@link #isPropagateClose()}</li>
+         * <li>{@code #getCount()}</li>
+         * <li>{@code #getMaxCount()}</li>
+         * <li>{@code #getOnMaxCount()}</li>
+         * <li>{@code #isPropagateClose()}</li>
          * </ul>
          *
          * @return a new instance.
