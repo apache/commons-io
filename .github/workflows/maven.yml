@@ -37,7 +37,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-13]
-        java: [ 8, 11, 17, 21 ]
+        java: [ 8, 11, 17, 21, 24 ]
         experimental: [false]
         # Keep the same parameter order as the matrix above
         include:
@@ -46,17 +46,7 @@ jobs:
             java: 21
             experimental: false
             deploy: true
-          # Experimental builds: Java 24-ea
-          - os: ubuntu-latest
-            java: 24
-            experimental: true
-          - os: windows-latest
-            java: 24
-            experimental: true
-          - os: macos-latest
-            java: 24
-            experimental: true
-          # Experimental builds: Java 24-ea
+          # Experimental builds: Java 25-ea
           - os: ubuntu-latest
             java: 25-ea
             experimental: true
