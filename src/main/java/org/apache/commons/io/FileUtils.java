@@ -194,12 +194,22 @@ public class FileUtils {
     /**
      * The number of bytes in a zettabyte.
      */
-    public static final BigInteger ONE_ZB = BigInteger.valueOf(ONE_KB).multiply(BigInteger.valueOf(ONE_EB));
+    public static final BigInteger ONE_ZB = ONE_KB_BI.multiply(ONE_EB_BI);
 
     /**
      * The number of bytes in a yottabyte.
      */
     public static final BigInteger ONE_YB = ONE_KB_BI.multiply(ONE_ZB);
+
+    /**
+     * The number of bytes in a ronnabyte.
+     */
+    public static final BigInteger ONE_RB = ONE_KB_BI.multiply(ONE_YB);
+
+    /**
+     * The number of bytes in a quettabyte.
+     */
+    public static final BigInteger ONE_QB = ONE_KB_BI.multiply(ONE_RB);
 
     /**
      * An empty array of type {@link File}.
@@ -227,7 +237,15 @@ public class FileUtils {
         Objects.requireNonNull(size, "size");
         final String displaySize;
 
-        if (size.divide(ONE_EB_BI).compareTo(BigInteger.ZERO) > 0) {
+        if (size.divide(ONE_QB).compareTo(BigInteger.ZERO) > 0) {
+            displaySize = size.divide(ONE_QB) + " QB";
+        } else if (size.divide(ONE_RB).compareTo(BigInteger.ZERO) > 0) {
+            displaySize = size.divide(ONE_RB) + " RB";
+        } else if (size.divide(ONE_YB).compareTo(BigInteger.ZERO) > 0) {
+            displaySize = size.divide(ONE_YB) + " YB";
+        } else if (size.divide(ONE_ZB).compareTo(BigInteger.ZERO) > 0) {
+            displaySize = size.divide(ONE_ZB) + " ZB";
+        } else if (size.divide(ONE_EB_BI).compareTo(BigInteger.ZERO) > 0) {
             displaySize = size.divide(ONE_EB_BI) + " EB";
         } else if (size.divide(ONE_PB_BI).compareTo(BigInteger.ZERO) > 0) {
             displaySize = size.divide(ONE_PB_BI) + " PB";
