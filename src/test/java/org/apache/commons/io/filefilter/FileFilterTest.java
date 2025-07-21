@@ -745,7 +745,7 @@ class FileFilterTest extends AbstractFilterTest {
     @Test
     void testMagicNumberFileFilterBytes() throws Exception {
         final byte[] classFileMagicNumber = {(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE};
-        final String xmlFileContent = "<?xml version=\"1.0\" encoding=\"UTF-8\">\n" + "<element>text</element>";
+        final String xmlFileContent = "<?xml version=\"1.0\" encoding=\"UTF-8\">\n<element>text</element>";
 
         final File classAFile = new File(temporaryFolder, "A.class");
         final Path classAPath = classAFile.toPath();
@@ -826,7 +826,7 @@ class FileFilterTest extends AbstractFilterTest {
     @Test
     void testMagicNumberFileFilterString() throws Exception {
         final byte[] classFileMagicNumber = {(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE};
-        final String xmlFileContent = "<?xml version=\"1.0\" encoding=\"UTF-8\">\n" + "<element>text</element>";
+        final String xmlFileContent = "<?xml version=\"1.0\" encoding=\"UTF-8\">\n<element>text</element>";
         final String xmlMagicNumber = "<?xml version=\"1.0\"";
 
         final File classFileA = new File(temporaryFolder, "A.class");
