@@ -158,6 +158,8 @@ file comparators, endian transformation classes, and much more.
     <commons.jacoco.branchRatio>0.85</commons.jacoco.branchRatio>
     <commons.jacoco.lineRatio>0.90</commons.jacoco.lineRatio>
     <commons.jacoco.complexityRatio>0.85</commons.jacoco.complexityRatio>
+    <!-- Java 21 and up -->
+    <EnableDynamicAgentLoading></EnableDynamicAgentLoading>
   </properties>
   <build>
     <!-- japicmp:cmp needs package to work from a jar -->
@@ -217,7 +219,7 @@ file comparators, endian transformation classes, and much more.
           <reuseForks>false</reuseForks>
           <!-- Limit memory size see IO-161 -->
           <!-- Mockito inline may need -XX:+EnableDynamicAgentLoading -->
-          <argLine>${argLine} -Xmx25M</argLine>
+          <argLine>${argLine} -Xmx25M ${EnableDynamicAgentLoading}</argLine>
           <includes>
             <!-- Only include test classes, not test data -->
             <include>**/*Test*.class</include>
@@ -343,6 +345,15 @@ file comparators, endian transformation classes, and much more.
       </activation>
       <properties>
         <maven.compiler.release>8</maven.compiler.release>
+      </properties>
+    </profile>
+    <profile>
+      <id>java21-up</id>
+      <activation>
+        <jdk>[21,)</jdk>
+      </activation>
+      <properties>
+        <EnableDynamicAgentLoading>-XX:+EnableDynamicAgentLoading</EnableDynamicAgentLoading>  
       </properties>
     </profile>
     <profile>

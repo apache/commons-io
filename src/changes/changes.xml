@@ -47,6 +47,7 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <release version="2.20.1" date="YYYY-MM-DD" description="Version 2.20.1: Java 8 or later is required.">
       <!-- FIX -->
+      <action dev="ggregory" type="fix"                due-to="Gary Gregory">When testing on Java 21 and up, enable -XX:+EnableDynamicAgentLoading.</action>
       <!-- ADD -->
       <!-- UPDATE -->
   </release>
