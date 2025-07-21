@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,7 +42,8 @@ import java.util.stream.Stream;
 import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
-import org.apache.commons.io.function.Uncheck;
+import org.apache.commons.lang3.JavaVersion;
+import org.apache.commons.lang3.SystemUtils;
 import org.apache.commons.lang3.function.Consumers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -216,24 +218,6 @@ class FileUtilsListFilesTest {
         assertTrue(FileUtils.listFiles(new File(temporaryFolder, "dir/does/not/exist/at/all"), null, false).isEmpty());
     }
 
-    @Test
-    void testListFilesWithDeletion() throws IOException {
-        final String[] extensions = {"xml", "txt"};
-        final List<File> list;
-        final File xFile = new File(temporaryFolder, "x.xml");
-        if (!xFile.createNewFile()) {
-            fail("could not create test file: " + xFile);
-        }
-        final Collection<File> files = FileUtils.listFiles(temporaryFolder, extensions, true);
-        assertEquals(5, files.size());
-        try (Stream<File> stream = Uncheck.get(() -> FileUtils.streamFiles(temporaryFolder, true, extensions))) {
-            assertTrue(xFile.delete());
-            list = stream.collect(Collectors.toList());
-            assertFalse(list.contains(xFile), list::toString);
-        }
-        assertEquals(4, list.size());
-    }
-
     /**
      * Tests <a href="https://issues.apache.org/jira/browse/IO-856">IO-856</a> ListFiles should not fail on vanishing files.
      */
@@ -287,6 +271,86 @@ class FileUtilsListFilesTest {
         // wait for the threads to finish
         c1.get();
         c2.get();
+    }
+
+    @Test
+    void testStreamFilesWithDeletionCollect() throws IOException {
+        final String[] extensions = {"xml", "txt"};
+        final File xFile = new File(temporaryFolder, "x.xml");
+        if (!xFile.createNewFile()) {
+            fail("could not create test file: " + xFile);
+        }
+        final Collection<File> files = FileUtils.listFiles(temporaryFolder, extensions, true);
+        assertEquals(5, files.size());
+        final List<File> list;
+        try (Stream<File> stream = FileUtils.streamFiles(temporaryFolder, true, extensions)) {
+            assertTrue(xFile.delete());
+            // TODO? Should we create a custom stream to ignore missing files for Java 24 and up?
+            // collect() will fail on Java 24 and up here
+            // GitHub CI:
+            // Fails on Java 24 macOS, but OK on Windows and Ubuntu
+            // Fails on Java 25-EA Windows and macOS, but OK on Ubuntu 
+            // forEach() will fail on Java 24 and up here
+            assumeFalse(SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_24));
+            list = stream.collect(Collectors.toList());
+            assertFalse(list.contains(xFile), list::toString);
+        }
+        assertEquals(4, list.size());
+    }
+
+    @Test
+    void testStreamFilesWithDeletionForEach() throws IOException {
+        final String[] extensions = {"xml", "txt"};
+        final File xFile = new File(temporaryFolder, "x.xml");
+        if (!xFile.createNewFile()) {
+            fail("could not create test file: " + xFile);
+        }
+        final Collection<File> files = FileUtils.listFiles(temporaryFolder, extensions, true);
+        assertEquals(5, files.size());
+        final List<File> list;
+        try (Stream<File> stream = FileUtils.streamFiles(temporaryFolder, true, extensions)) {
+            assertTrue(xFile.delete());
+            list = new ArrayList<>();
+            // TODO? Should we create a custom stream to ignore missing files for Java 24 and up?
+            // forEach() will fail on Java 24 and up here
+            // GitHub CI:
+            // Fails on Java 24 macOS, but OK on Windows and Ubuntu
+            // Fails on Java 25-EA Windows and macOS, but OK on Ubuntu 
+            // forEach() will fail on Java 24 and up here
+            assumeFalse(SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_24));
+            stream.forEach(list::add);
+            assertFalse(list.contains(xFile), list::toString);
+        }
+        assertEquals(4, list.size());
+    }
+
+    @Test
+    void testStreamFilesWithDeletionIterator() throws IOException {
+        final String[] extensions = {"xml", "txt"};
+        final File xFile = new File(temporaryFolder, "x.xml");
+        if (!xFile.createNewFile()) {
+            fail("could not create test file: " + xFile);
+        }
+        final Collection<File> files = FileUtils.listFiles(temporaryFolder, extensions, true);
+        assertEquals(5, files.size());
+        final List<File> list;
+        try (Stream<File> stream = FileUtils.streamFiles(temporaryFolder, true, extensions)) {
+            assertTrue(xFile.delete());
+            list = new ArrayList<>();
+            final Iterator<File> iterator = stream.iterator();
+            // TODO? Should we create a custom stream to ignore missing files for Java 24 and up?
+            // hasNext() will fail on Java 24 and up here
+            // GitHub CI:
+            // Fails on Java 24 macOS, but OK on Windows and Ubuntu
+            // Fails on Java 25-EA Windows and macOS, but OK on Ubuntu 
+            // forEach() will fail on Java 24 and up here
+            assumeFalse(SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_24));
+            while (iterator.hasNext()) {
+                list.add(iterator.next());
+            }
+            assertFalse(list.contains(xFile), list::toString);
+        }
+        assertEquals(4, list.size());
     }
 
     private Collection<String> toFileNames(final Collection<File> files) {
