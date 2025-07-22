@@ -116,6 +116,7 @@ class CompositeFileComparatorTest extends ComparatorAbstractTest {
         assertTrue(c.compare(moreFile, lessFile) > 0, "more");
     }
 
+    @Override
     @Test
     void testToString() {
         final List<Comparator<File>> list = new ArrayList<>();

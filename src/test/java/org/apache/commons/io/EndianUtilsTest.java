@@ -44,7 +44,7 @@ class EndianUtilsTest {
     }
 
     @Test
-    void testInvalidOffset() throws IOException {
+    void testInvalidOffset() {
         final byte[] bytes = {};
 
         assertThrows(IllegalArgumentException.class, () -> EndianUtils.readSwappedInteger(bytes, 0));

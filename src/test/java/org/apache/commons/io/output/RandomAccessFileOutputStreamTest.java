@@ -134,7 +134,7 @@ class RandomAccessFileOutputStreamTest {
     }
 
     @Test
-    void testWriteGetDefault() throws IOException {
+    void testWriteGetDefault() {
         assertThrows(IllegalStateException.class, () -> {
             try (RandomAccessFileOutputStream os = RandomAccessFileOutputStream.builder().get()) {
                 validateState(os);

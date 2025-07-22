@@ -107,7 +107,7 @@ class CopyDirectoryVisitorTest extends TestArguments {
     void testCopyDirectoryFilters(final PathCounters pathCounters) throws IOException {
         final Path sourceDir = Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-4");
         final CopyDirectoryVisitor visitFileTree = PathUtils.visitFileTree(new CopyDirectoryVisitor(pathCounters, new NameFileFilter("file-size-1.bin"),
-            new NameFileFilter("dirs-2-file-size-4", "dirs-a-file-size-1"), sourceDir, targetDir, null),
+            new NameFileFilter("dirs-2-file-size-4", "dirs-a-file-size-1"), sourceDir, targetDir, (CopyOption[]) null),
             sourceDir);
         assertCounts(2, 1, 2, visitFileTree);
         assertArrayEquals(PathUtils.EMPTY_COPY_OPTIONS, visitFileTree.getCopyOptions());

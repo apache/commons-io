@@ -370,6 +370,10 @@ class FileUtilsTest extends AbstractTempDirTest {
         final BigInteger TB1 = GB1.multiply(KB1);
         final BigInteger PB1 = TB1.multiply(KB1);
         final BigInteger EB1 = PB1.multiply(KB1);
+        final BigInteger ZB1 = EB1.multiply(KB1);
+        final BigInteger YB1 = ZB1.multiply(KB1);
+        final BigInteger RB1 = YB1.multiply(KB1);
+        final BigInteger QB1 = RB1.multiply(KB1);
         assertEquals("0 bytes", FileUtils.byteCountToDisplaySize(BigInteger.ZERO));
         assertEquals("1 bytes", FileUtils.byteCountToDisplaySize(BigInteger.ONE));
         assertEquals("1023 bytes", FileUtils.byteCountToDisplaySize(b1023));
@@ -386,6 +390,10 @@ class FileUtilsTest extends AbstractTempDirTest {
         assertEquals("1 TB", FileUtils.byteCountToDisplaySize(TB1));
         assertEquals("1 PB", FileUtils.byteCountToDisplaySize(PB1));
         assertEquals("1 EB", FileUtils.byteCountToDisplaySize(EB1));
+        assertEquals("1 ZB", FileUtils.byteCountToDisplaySize(ZB1));
+        assertEquals("1 YB", FileUtils.byteCountToDisplaySize(YB1));
+        assertEquals("1 RB", FileUtils.byteCountToDisplaySize(RB1));
+        assertEquals("1 QB", FileUtils.byteCountToDisplaySize(QB1));
         assertEquals("7 EB", FileUtils.byteCountToDisplaySize(Long.MAX_VALUE));
         // Other MAX_VALUEs
         assertEquals("63 KB", FileUtils.byteCountToDisplaySize(BigInteger.valueOf(Character.MAX_VALUE)));

@@ -59,7 +59,7 @@ class FileChannelsTest extends AbstractTempDirTest {
     private static final String CONTENT = StringUtils.repeat("x", SMALL_BUFFER_SIZE);
 
     @SuppressWarnings("resource") // Caller closes
-    private static FileChannel getChannel(final FileInputStream inNotEmpty, final FileChannelType fileChannelType, final int readSize) throws IOException {
+    private static FileChannel getChannel(final FileInputStream inNotEmpty, final FileChannelType fileChannelType, final int readSize) {
         return wrap(inNotEmpty.getChannel(), fileChannelType, readSize);
     }
 
@@ -84,7 +84,7 @@ class FileChannelsTest extends AbstractTempDirTest {
         return (byte) (~b & 0xff);
     }
 
-    private static FileChannel wrap(final FileChannel fc, final FileChannelType fileChannelType, final int readSize) throws IOException {
+    private static FileChannel wrap(final FileChannel fc, final FileChannelType fileChannelType, final int readSize) {
         switch (fileChannelType) {
         case NON_BLOCKING:
             return new NonBlockingFileChannelProxy(fc);
