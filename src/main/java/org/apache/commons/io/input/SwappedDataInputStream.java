@@ -44,7 +44,7 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
     }
 
     /**
-     * Return <code>{@link #readByte()} != 0</code>
+     * Return {@code {@link #readByte()} != 0}
      *
      * @return false if the byte read is zero, otherwise true
      * @throws IOException if an I/O error occurs.

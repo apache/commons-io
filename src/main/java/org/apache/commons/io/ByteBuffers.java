@@ -62,7 +62,7 @@ public final class ByteBuffers {
      *
      * @param capacity The new buffer's capacity, in bytes.
      * @return The new byte buffer.
-     * @throws IllegalArgumentException If the <code>capacity</code> is negative.
+     * @throws IllegalArgumentException If the {@code capacity} is negative.
      */
     public static ByteBuffer littleEndian(final int capacity) {
         return littleEndian(ByteBuffer.allocate(capacity));

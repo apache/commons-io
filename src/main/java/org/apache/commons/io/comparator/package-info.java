@@ -20,8 +20,8 @@
  * for {@link java.io.File}s and {@link java.nio.file.Path}.
  * <h2>Sorting</h2>
  * <p>
- * All the comparators include <em>convenience</em> utility <code>sort(File...)</code> and
- * <code>sort(List)</code> methods.
+ * All the comparators include <em>convenience</em> utility {@code sort(File...)} and
+ * {@code sort(List)} methods.
  * </p>
  * <p>
  * For example, to sort the files in a directory by name:
@@ -62,42 +62,42 @@
  * <li><a href="DefaultFileComparator.html">DefaultFileComparator</a> - default file compare:
  * <ul>
  * <li><a href="DefaultFileComparator.html#DEFAULT_COMPARATOR">DEFAULT_COMPARATOR</a>
- * - Compare using <code>File.compareTo(File)</code> method.
+ * - Compare using {@code File.compareTo(File)} method.
  * </li>
  * <li><a href="DefaultFileComparator.html#DEFAULT_REVERSE">DEFAULT_REVERSE</a>
- * - Reverse compare of <code>File.compareTo(File)</code> method.
+ * - Reverse compare of {@code File.compareTo(File)} method.
  * </li>
  * </ul>
  * </li>
  * <li><a href="DirectoryFileComparator.html">DirectoryFileComparator</a> - compare by type (directory or file):
  * <ul>
  * <li><a href="DirectoryFileComparator.html#DIRECTORY_COMPARATOR">DIRECTORY_COMPARATOR</a>
- * - Compare using <code>File.isDirectory()</code> method (directories &lt; files).
+ * - Compare using {@code File.isDirectory()} method (directories &lt; files).
  * </li>
  * <li><a href="DirectoryFileComparator.html#DIRECTORY_REVERSE">DIRECTORY_REVERSE</a>
- * - Reverse compare of <code>File.isDirectory()</code> method  (directories &gt;files).
+ * - Reverse compare of {@code File.isDirectory()} method  (directories &gt;files).
  * </li>
  * </ul>
  * </li>
  * <li><a href="ExtensionFileComparator.html">ExtensionFileComparator</a> - compare file extensions:
  * <ul>
  * <li><a href="ExtensionFileComparator.html#EXTENSION_COMPARATOR">EXTENSION_COMPARATOR</a>
- * - Compare using <code>FilenameUtils.getExtension(String)</code> method.
+ * - Compare using {@code FilenameUtils.getExtension(String)} method.
  * </li>
  * <li><a href="ExtensionFileComparator.html#EXTENSION_REVERSE">EXTENSION_REVERSE</a>
- * - Reverse compare of <code>FilenameUtils.getExtension(String)</code> method.
+ * - Reverse compare of {@code FilenameUtils.getExtension(String)} method.
  * </li>
  * <li><a href="ExtensionFileComparator.html#EXTENSION_INSENSITIVE_COMPARATOR">EXTENSION_INSENSITIVE_COMPARATOR</a>
- * - Case-insensitive compare using <code>FilenameUtils.getExtension(String)</code> method.
+ * - Case-insensitive compare using {@code FilenameUtils.getExtension(String)} method.
  * </li>
  * <li><a href="ExtensionFileComparator.html#EXTENSION_INSENSITIVE_REVERSE">EXTENSION_INSENSITIVE_REVERSE</a>
- * - Reverse case-insensitive compare of <code>FilenameUtils.getExtension(String)</code> method.
+ * - Reverse case-insensitive compare of {@code FilenameUtils.getExtension(String)} method.
  * </li>
  * <li><a href="ExtensionFileComparator.html#EXTENSION_SYSTEM_COMPARATOR">EXTENSION_SYSTEM_COMPARATOR</a>
- * -  System sensitive compare using <code>FilenameUtils.getExtension(String)</code> method.
+ * -  System sensitive compare using {@code FilenameUtils.getExtension(String)} method.
  * </li>
  * <li><a href="ExtensionFileComparator.html#EXTENSION_SYSTEM_REVERSE">EXTENSION_SYSTEM_REVERSE</a>
- * - Reverse system sensitive compare of <code>FilenameUtils.getExtension(String)</code> method.
+ * - Reverse system sensitive compare of {@code FilenameUtils.getExtension(String)} method.
  * </li>
  * </ul>
  * </li>
@@ -105,71 +105,71 @@
  * - compare the file's last modified date/time:
  * <ul>
  * <li><a href="LastModifiedFileComparator.html#LASTMODIFIED_COMPARATOR">LASTMODIFIED_COMPARATOR</a>
- * - Compare using <code>File.lastModified()</code> method.
+ * - Compare using {@code File.lastModified()} method.
  * </li>
  * <li><a href="LastModifiedFileComparator.html#LASTMODIFIED_REVERSE">LASTMODIFIED_REVERSE</a>
- * - Reverse compare of <code>File.lastModified()</code> method.
+ * - Reverse compare of {@code File.lastModified()} method.
  * </li>
  * </ul>
  * </li>
  * <li><a href="NameFileComparator.html">NameFileComparator</a> - compare file names:
  * <ul>
  * <li><a href="NameFileComparator.html#NAME_COMPARATOR">NAME_COMPARATOR</a>
- * - Compare using <code>File.getName()</code> method.
+ * - Compare using {@code File.getName()} method.
  * </li>
  * <li><a href="NameFileComparator.html#NAME_REVERSE">NAME_REVERSE</a>
- * - Reverse compare of <code>File.getName()</code> method.
+ * - Reverse compare of {@code File.getName()} method.
  * </li>
  * <li><a href="NameFileComparator.html#NAME_INSENSITIVE_COMPARATOR">NAME_INSENSITIVE_COMPARATOR</a>
- * - Case-insensitive compare using <code>File.getName()</code> method.
+ * - Case-insensitive compare using {@code File.getName()} method.
  * </li>
  * <li><a href="NameFileComparator.html#NAME_INSENSITIVE_REVERSE">NAME_INSENSITIVE_REVERSE</a>
- * - Reverse case-insensitive compare of <code>File.getName()</code> method.
+ * - Reverse case-insensitive compare of {@code File.getName()} method.
  * </li>
  * <li><a href="NameFileComparator.html#NAME_SYSTEM_COMPARATOR">NAME_SYSTEM_COMPARATOR</a>
- * -  System sensitive compare using <code>File.getName()</code> method.
+ * -  System sensitive compare using {@code File.getName()} method.
  * </li>
  * <li><a href="NameFileComparator.html#NAME_SYSTEM_REVERSE">NAME_SYSTEM_REVERSE</a>
- * - Reverse system sensitive compare of <code>File.getName()</code> method.
+ * - Reverse system sensitive compare of {@code File.getName()} method.
  * </li>
  * </ul>
  * </li>
  * <li><a href="PathFileComparator.html">PathFileComparator</a> - compare file paths:
  * <ul>
  * <li><a href="PathFileComparator.html#PATH_COMPARATOR">PATH_COMPARATOR</a>
- * - Compare using <code>File.getPath()</code> method.
+ * - Compare using {@code File.getPath()} method.
  * </li>
  * <li><a href="PathFileComparator.html#PATH_REVERSE">PATH_REVERSE</a>
- * - Reverse compare of <code>File.getPath()</code> method.
+ * - Reverse compare of {@code File.getPath()} method.
  * </li>
  * <li><a href="PathFileComparator.html#PATH_INSENSITIVE_COMPARATOR">PATH_INSENSITIVE_COMPARATOR</a>
- * - Case-insensitive compare using <code>File.getPath()</code> method.
+ * - Case-insensitive compare using {@code File.getPath()} method.
  * </li>
  * <li><a href="PathFileComparator.html#PATH_INSENSITIVE_REVERSE">PATH_INSENSITIVE_REVERSE</a>
- * - Reverse case-insensitive compare of <code>File.getPath()</code> method.
+ * - Reverse case-insensitive compare of {@code File.getPath()} method.
  * </li>
  * <li><a href="PathFileComparator.html#PATH_SYSTEM_COMPARATOR">PATH_SYSTEM_COMPARATOR</a>
- * -  System sensitive compare using <code>File.getPath()</code> method.
+ * -  System sensitive compare using {@code File.getPath()} method.
  * </li>
  * <li><a href="PathFileComparator.html#PATH_SYSTEM_REVERSE">PATH_SYSTEM_REVERSE</a>
- * - Reverse system sensitive compare of <code>File.getPath()</code> method.
+ * - Reverse system sensitive compare of {@code File.getPath()} method.
  * </li>
  * </ul>
  * </li>
  * <li><a href="SizeFileComparator.html">SizeFileComparator</a> - compare the file's size:
  * <ul>
  * <li><a href="SizeFileComparator.html#SIZE_COMPARATOR">SIZE_COMPARATOR</a>
- * - Compare using <code>File.length()</code> method (directories treated as zero length).
+ * - Compare using {@code File.length()} method (directories treated as zero length).
  * </li>
  * <li><a href="SizeFileComparator.html#SIZE_REVERSE">LASTMODIFIED_REVERSE</a>
- * - Reverse compare of <code>File.length()</code> method (directories treated as zero length).
+ * - Reverse compare of {@code File.length()} method (directories treated as zero length).
  * </li>
  * <li><a href="SizeFileComparator.html#SIZE_SUMDIR_COMPARATOR">SIZE_SUMDIR_COMPARATOR</a>
- * - Compare using <code>FileUtils.sizeOfDirectory(File)</code> method
+ * - Compare using {@code FileUtils.sizeOfDirectory(File)} method
  * (sums the size of a directory's contents).
  * </li>
  * <li><a href="SizeFileComparator.html#SIZE_SUMDIR_REVERSE">SIZE_SUMDIR_REVERSE</a>
- * - Reverse compare of <code>FileUtils.sizeOfDirectory(File)</code> method
+ * - Reverse compare of {@code FileUtils.sizeOfDirectory(File)} method
  * (sums the size of a directory's contents).
  * </li>
  * </ul>

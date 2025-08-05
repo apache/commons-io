@@ -148,7 +148,7 @@
  * }
  * </pre>
  * <h2>Using NIO</h2>
- * <p>You can combine Java <strong>file tree walking</strong> by using <code>java.nio.file.Files.walk()</code> APIs with filters:</p>
+ * <p>You can combine Java <strong>file tree walking</strong> by using {@code java.nio.file.Files.walk()} APIs with filters:</p>
  * <pre>
  * final Path dir = Paths.get("");
  * // We are interested in files older than one day
