@@ -53,6 +53,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add"                due-to="strangelookingnerd, Gary Gregory">FileUtils#byteCountToDisplaySize() supports Zettabyte, Yottabyte, Ronnabyte and Quettabyte #763.</action>
       <action dev="ggregory" type="add"                due-to="strangelookingnerd, Gary Gregory">Add org.apache.commons.io.FileUtils.ONE_RB #763.</action>
       <action dev="ggregory" type="add"                due-to="strangelookingnerd, Gary Gregory">Add org.apache.commons.io.FileUtils.ONE_QB #763.</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add org.apache.commons.io.output.ProxyOutputStream.writeRepeat(byte[], int, int, long).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add org.apache.commons.io.output.ProxyOutputStream.writeRepeat(byte[], long).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add org.apache.commons.io.output.ProxyOutputStream.writeRepeat(int, long).</action>
       <!-- UPDATE -->
       <action type="update" dev="ggregory"             due-to="Gary Gregory">Bump commons-codec:commons-codec from 1.18.0 to 1.19.0.</action>
   </release>

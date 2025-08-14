@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.io.output;
 
 import java.io.FilterOutputStream;
@@ -24,13 +25,10 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
- * A Proxy stream which acts as expected, that is it passes the method
- * calls on to the proxied stream and doesn't change which methods are
- * being called. It is an alternative base class to FilterOutputStream
- * to increase reusability.
+ * A Proxy stream which acts as expected, that is it passes the method calls on to the proxied stream and doesn't change which methods are being called. It is
+ * an alternative base class to FilterOutputStream to increase reusability.
  * <p>
- * See the protected methods for ways in which a subclass can easily decorate
- * a stream with custom pre-, post- or error processing functionality.
+ * See the protected methods for ways in which a subclass can easily decorate a stream with custom pre-, post- or error processing functionality.
  * </p>
  */
 public class ProxyOutputStream extends FilterOutputStream {
@@ -72,7 +70,6 @@ public class ProxyOutputStream extends FilterOutputStream {
         public ProxyOutputStream get() throws IOException {
             return new ProxyOutputStream(this);
         }
-
     }
 
     @SuppressWarnings("resource") // caller closes
@@ -84,7 +81,7 @@ public class ProxyOutputStream extends FilterOutputStream {
     /**
      * Constructs a new ProxyOutputStream.
      *
-     * @param delegate  the OutputStream to delegate to.
+     * @param delegate the OutputStream to delegate to.
      */
     public ProxyOutputStream(final OutputStream delegate) {
         // the delegate is stored in a protected superclass variable named 'out'
@@ -92,14 +89,11 @@ public class ProxyOutputStream extends FilterOutputStream {
     }
 
     /**
-     * Invoked by the write methods after the proxied call has returned
-     * successfully. The number of bytes written (1 for the
-     * {@link #write(int)} method, buffer length for {@link #write(byte[])},
-     * etc.) is given as an argument.
+     * Invoked by the write methods after the proxied call has returned successfully. The number of bytes written (1 for the {@link #write(int)} method, buffer
+     * length for {@link #write(byte[])}, etc.) is given as an argument.
      * <p>
-     * Subclasses can override this method to add common post-processing
-     * functionality without having to override all the write methods.
-     * The default implementation does nothing.
+     * Subclasses can override this method to add common post-processing functionality without having to override all the write methods. The default
+     * implementation does nothing.
      * </p>
      *
      * @param n number of bytes written.
@@ -112,13 +106,11 @@ public class ProxyOutputStream extends FilterOutputStream {
     }
 
     /**
-     * Invoked by the write methods before the call is proxied. The number
-     * of bytes to be written (1 for the {@link #write(int)} method, buffer
-     * length for {@link #write(byte[])}, etc.) is given as an argument.
+     * Invoked by the write methods before the call is proxied. The number of bytes to be written (1 for the {@link #write(int)} method, buffer length for
+     * {@link #write(byte[])}, etc.) is given as an argument.
      * <p>
-     * Subclasses can override this method to add common pre-processing
-     * functionality without having to override all the write methods.
-     * The default implementation does nothing.
+     * Subclasses can override this method to add common pre-processing functionality without having to override all the write methods. The default
+     * implementation does nothing.
      * </p>
      *
      * @param n number of bytes to be written.
@@ -157,8 +149,7 @@ public class ProxyOutputStream extends FilterOutputStream {
     /**
      * Handle any IOExceptions thrown.
      * <p>
-     * This method provides a point to implement custom exception.
-     * handling. The default behavior is to re-throw the exception.
+     * This method provides a point to implement custom exception. handling. The default behavior is to re-throw the exception.
      * </p>
      *
      * @param e The IOException thrown.
@@ -214,7 +205,7 @@ public class ProxyOutputStream extends FilterOutputStream {
     /**
      * Invokes the delegate's {@code write(byte[])} method.
      *
-     * @param b the bytes to write.
+     * @param b   the bytes to write.
      * @param off The start offset.
      * @param len The number of bytes to write.
      * @throws IOException if an I/O error occurs.
@@ -247,4 +238,50 @@ public class ProxyOutputStream extends FilterOutputStream {
         }
     }
 
+    /**
+     * Invokes the delegate's {@code write(byte[])} method for the {@code repeat} count.
+     *
+     * @param b      the bytes to write.
+     * @param off    The start offset.
+     * @param len    The number of bytes to write.
+     * @param repeat How many times to write the bytes in {@code b}.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.21.0
+     */
+    public void writeRepeat(final byte[] b, final int off, final int len, final long repeat) throws IOException {
+        long remains = repeat;
+        while (remains-- > 0) {
+            write(b, off, len);
+        }
+    }
+
+    /**
+     * Invokes the delegate's {@code write(byte[])} method for the {@code repeat} count.
+     *
+     * @param b      the bytes to write.
+     * @param repeat How many times to write the bytes in {@code b}.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.21.0
+     */
+    public void writeRepeat(final byte[] b, final long repeat) throws IOException {
+        long remains = repeat;
+        while (remains-- > 0) {
+            write(b);
+        }
+    }
+
+    /**
+     * Invokes the delegate's {@code write(int)} method.
+     *
+     * @param b      the byte to write.
+     * @param repeat How many times to write the byte in {@code b}.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.21.0
+     */
+    public void writeRepeat(final int b, final long repeat) throws IOException {
+        long remains = repeat;
+        while (remains-- > 0) {
+            write(b);
+        }
+    }
 }
