@@ -30,7 +30,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests {@link CloseShieldOutputStream}.
+ * Tests {@link ProxyOutputStream}.
  */
 class ProxyOutputStreamTest {
 
@@ -38,7 +38,9 @@ class ProxyOutputStreamTest {
 
     private ProxyOutputStream proxied;
 
-    private final AtomicBoolean hit = new AtomicBoolean();
+    private final AtomicBoolean hitByteArray = new AtomicBoolean();
+    private final AtomicBoolean hitByteArrayAt = new AtomicBoolean();
+    private final AtomicBoolean hitInt = new AtomicBoolean();
 
     @BeforeEach
     public void setUp() {
@@ -46,13 +48,19 @@ class ProxyOutputStreamTest {
 
             @Override
             public void write(final byte[] ba) {
-                hit.set(true);
+                hitByteArray.set(true);
                 super.write(ba);
             }
 
             @Override
+            public void write(final byte[] b, final int off, final int len) {
+                hitByteArrayAt.set(true);
+                super.write(b, off, len);
+            }
+
+            @Override
             public synchronized void write(final int ba) {
-                hit.set(true);
+                hitInt.set(true);
                 super.write(ba);
             }
         };
@@ -67,30 +75,48 @@ class ProxyOutputStreamTest {
     @SuppressWarnings("resource")
     @Test
     void testSetReference() throws Exception {
-        assertFalse(hit.get());
+        assertFalse(hitByteArray.get());
         proxied.setReference(new ByteArrayOutputStream());
         proxied.write('y');
-        assertFalse(hit.get());
+        assertFalse(hitByteArray.get());
         assertEquals(0, original.size());
         assertArrayEquals(ArrayUtils.EMPTY_BYTE_ARRAY, original.toByteArray());
     }
 
     @Test
-    void testWrite() throws Exception {
-        assertFalse(hit.get());
+    void testWriteByteArray() throws Exception {
+        assertFalse(hitByteArray.get());
+        proxied.write(new byte[] { 'y', 'z' });
+        assertTrue(hitByteArray.get());
+        assertEquals(2, original.size());
+        assertArrayEquals(new byte[] { 'y', 'z' }, original.toByteArray());
+    }
+
+    @Test
+    void testWriteByteArrayAt() throws Exception {
+        assertFalse(hitByteArrayAt.get());
+        proxied.write(new byte[] { 'y', 'z' }, 1, 1);
+        assertTrue(hitByteArrayAt.get());
+        assertEquals(1, original.size());
+        assertArrayEquals(new byte[] { 'z' }, original.toByteArray());
+    }
+
+    @Test
+    void testWriteInt() throws Exception {
+        assertFalse(hitInt.get());
         proxied.write('y');
-        assertTrue(hit.get());
+        assertTrue(hitInt.get());
         assertEquals(1, original.size());
         assertEquals('y', original.toByteArray()[0]);
     }
 
     @Test
     void testWriteNullArrayProxiesToUnderlying() throws Exception {
-        assertFalse(hit.get());
+        assertFalse(hitByteArray.get());
         final byte[] ba = null;
         assertThrows(NullPointerException.class, () -> original.write(ba));
-        assertTrue(hit.get());
+        assertTrue(hitByteArray.get());
         assertThrows(NullPointerException.class, () -> proxied.write(ba));
-        assertTrue(hit.get());
+        assertTrue(hitByteArray.get());
     }
 }
