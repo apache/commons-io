@@ -421,19 +421,44 @@ class FileUtilsTest extends AbstractTempDirTest {
         assertEquals("1 PB", FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 1024 * 1024));
         assertEquals("1 EB", FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 1024 * 1024 * 1024));
         assertEquals("7 EB", FileUtils.byteCountToDisplaySize(Long.MAX_VALUE));
-        // Constants
+        // Constants and round down.
         assertEquals("1 EB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_EB));
+        assertEquals("1 EB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_EB + 1));
         assertEquals("1 EB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_EB_BI));
+        assertEquals("1 EB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_EB_BI.add(BigInteger.ONE)));
         assertEquals("1 GB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_GB));
+        assertEquals("1 GB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_GB + 1));
         assertEquals("1 GB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_GB_BI));
+        assertEquals("1 GB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_GB_BI.add(BigInteger.ONE)));
         assertEquals("1 KB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_KB));
+        assertEquals("1 KB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_KB + 1));
         assertEquals("1 KB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_KB_BI));
+        assertEquals("1 KB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_KB_BI.add(BigInteger.ONE)));
         assertEquals("1 MB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_MB));
+        assertEquals("1 MB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_MB + 1));
         assertEquals("1 MB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_MB_BI));
+        assertEquals("1 MB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_MB_BI.add(BigInteger.ONE)));
         assertEquals("1 PB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_PB));
+        assertEquals("1 PB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_PB + 1));
         assertEquals("1 PB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_PB_BI));
+        assertEquals("1 PB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_PB_BI.add(BigInteger.ONE)));
         assertEquals("1 TB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_TB));
+        assertEquals("1 TB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_TB + 1));
         assertEquals("1 TB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_TB_BI));
+        assertEquals("1 TB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_TB_BI.add(BigInteger.ONE)));
+        // Constants and round down.
+        assertEquals("1023 PB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_EB - 1));
+        assertEquals("1023 PB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_EB_BI.subtract(BigInteger.ONE)));
+        assertEquals("1023 MB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_GB - 1));
+        assertEquals("1023 MB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_GB_BI.subtract(BigInteger.ONE)));
+        assertEquals("1023 bytes", FileUtils.byteCountToDisplaySize(FileUtils.ONE_KB - 1));
+        assertEquals("1023 bytes", FileUtils.byteCountToDisplaySize(FileUtils.ONE_KB_BI.subtract(BigInteger.ONE)));
+        assertEquals("1023 KB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_MB - 1));
+        assertEquals("1023 KB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_MB_BI.subtract(BigInteger.ONE)));
+        assertEquals("1023 TB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_PB - 1));
+        assertEquals("1023 TB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_PB_BI.subtract(BigInteger.ONE)));
+        assertEquals("1023 GB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_TB - 1));
+        assertEquals("1023 GB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_TB_BI.subtract(BigInteger.ONE)));
         // Other MAX_VALUEs
         assertEquals("63 KB", FileUtils.byteCountToDisplaySize(Character.MAX_VALUE));
         assertEquals("31 KB", FileUtils.byteCountToDisplaySize(Short.MAX_VALUE));

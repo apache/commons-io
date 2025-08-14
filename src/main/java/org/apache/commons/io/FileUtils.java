@@ -240,7 +240,6 @@ public class FileUtils {
     public static String byteCountToDisplaySize(final BigInteger size) {
         Objects.requireNonNull(size, "size");
         final String displaySize;
-
         if (size.divide(ONE_QB).compareTo(BigInteger.ZERO) > 0) {
             displaySize = size.divide(ONE_QB) + " QB";
         } else if (size.divide(ONE_RB).compareTo(BigInteger.ZERO) > 0) {
