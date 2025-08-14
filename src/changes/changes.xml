@@ -45,7 +45,7 @@ The <action> type attribute can be add,update,fix,remove.
     <title>Apache Commons IO Release Notes</title>
   </properties>
   <body>
-    <release version="2.20.1" date="YYYY-MM-DD" description="Version 2.20.1: Java 8 or later is required.">
+    <release version="2.21.0" date="YYYY-MM-DD" description="Version 2.20.1: Java 8 or later is required.">
       <!-- FIX -->
       <action type="fix" dev="ggregory"                due-to="Gary Gregory">When testing on Java 21 and up, enable -XX:+EnableDynamicAgentLoading.</action>
       <action type="fix" dev="ggregory"                due-to="Gary Gregory">When testing on Java 24 and up, don't fail FileUtilsListFilesTest for a different behavior in the JRE.</action>
