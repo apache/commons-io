@@ -421,6 +421,13 @@ class FileUtilsTest extends AbstractTempDirTest {
         assertEquals("1 PB", FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 1024 * 1024));
         assertEquals("1 EB", FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 1024 * 1024 * 1024));
         assertEquals("7 EB", FileUtils.byteCountToDisplaySize(Long.MAX_VALUE));
+        // Constants
+        assertEquals("1 EB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_EB));
+        assertEquals("1 GB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_GB));
+        assertEquals("1 KB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_KB));
+        assertEquals("1 MB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_MB));
+        assertEquals("1 PB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_PB));
+        assertEquals("1 TB", FileUtils.byteCountToDisplaySize(FileUtils.ONE_TB));
         // Other MAX_VALUEs
         assertEquals("63 KB", FileUtils.byteCountToDisplaySize(Character.MAX_VALUE));
         assertEquals("31 KB", FileUtils.byteCountToDisplaySize(Short.MAX_VALUE));
