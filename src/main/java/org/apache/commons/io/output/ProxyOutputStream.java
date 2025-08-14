@@ -84,7 +84,7 @@ public class ProxyOutputStream extends FilterOutputStream {
     /**
      * Constructs a new ProxyOutputStream.
      *
-     * @param delegate  the OutputStream to delegate to
+     * @param delegate  the OutputStream to delegate to.
      */
     public ProxyOutputStream(final OutputStream delegate) {
         // the delegate is stored in a protected superclass variable named 'out'
@@ -100,9 +100,10 @@ public class ProxyOutputStream extends FilterOutputStream {
      * Subclasses can override this method to add common post-processing
      * functionality without having to override all the write methods.
      * The default implementation does nothing.
+     * </p>
      *
-     * @param n number of bytes written
-     * @throws IOException if the post-processing fails
+     * @param n number of bytes written.
+     * @throws IOException if the post-processing fails.
      * @since 2.0
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
@@ -118,9 +119,10 @@ public class ProxyOutputStream extends FilterOutputStream {
      * Subclasses can override this method to add common pre-processing
      * functionality without having to override all the write methods.
      * The default implementation does nothing.
+     * </p>
      *
-     * @param n number of bytes to be written
-     * @throws IOException if the pre-processing fails
+     * @param n number of bytes to be written.
+     * @throws IOException if the pre-processing fails.
      * @since 2.0
      */
     @SuppressWarnings("unused") // Possibly thrown from subclasses.
@@ -130,6 +132,7 @@ public class ProxyOutputStream extends FilterOutputStream {
 
     /**
      * Invokes the delegate's {@code close()} method.
+     *
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -139,6 +142,7 @@ public class ProxyOutputStream extends FilterOutputStream {
 
     /**
      * Invokes the delegate's {@code flush()} method.
+     *
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -153,9 +157,11 @@ public class ProxyOutputStream extends FilterOutputStream {
     /**
      * Handle any IOExceptions thrown.
      * <p>
-     * This method provides a point to implement custom exception
+     * This method provides a point to implement custom exception.
      * handling. The default behavior is to re-throw the exception.
-     * @param e The IOException thrown
+     * </p>
+     *
+     * @param e The IOException thrown.
      * @throws IOException if an I/O error occurs.
      * @since 2.0
      */
@@ -189,15 +195,16 @@ public class ProxyOutputStream extends FilterOutputStream {
 
     /**
      * Invokes the delegate's {@code write(byte[])} method.
-     * @param bts the bytes to write
+     *
+     * @param b the bytes to write.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void write(final byte[] bts) throws IOException {
+    public void write(final byte[] b) throws IOException {
         try {
-            final int len = IOUtils.length(bts);
+            final int len = IOUtils.length(b);
             beforeWrite(len);
-            out.write(bts);
+            out.write(b);
             afterWrite(len);
         } catch (final IOException e) {
             handleIOException(e);
@@ -206,17 +213,18 @@ public class ProxyOutputStream extends FilterOutputStream {
 
     /**
      * Invokes the delegate's {@code write(byte[])} method.
-     * @param bts the bytes to write
-     * @param st The start offset
-     * @param end The number of bytes to write
+     *
+     * @param b the bytes to write.
+     * @param off The start offset.
+     * @param len The number of bytes to write.
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void write(final byte[] bts, final int st, final int end) throws IOException {
+    public void write(final byte[] b, final int off, final int len) throws IOException {
         try {
-            beforeWrite(end);
-            out.write(bts, st, end);
-            afterWrite(end);
+            beforeWrite(len);
+            out.write(b, off, len);
+            afterWrite(len);
         } catch (final IOException e) {
             handleIOException(e);
         }
@@ -224,7 +232,8 @@ public class ProxyOutputStream extends FilterOutputStream {
 
     /**
      * Invokes the delegate's {@code write(int)} method.
-     * @param b the byte to write
+     *
+     * @param b the byte to write.
      * @throws IOException if an I/O error occurs.
      */
     @Override
