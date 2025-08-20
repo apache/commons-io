@@ -132,7 +132,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * Accepts class names where the supplied ClassNameMatcher matches for deserialization, unless they are otherwise rejected.
          *
          * @param matcher a class name matcher to <em>accept</em> objects.
-         * @return this instance.
+         * @return {@code this} instance.
          * @since 2.18.0
          */
         public Builder accept(final ClassNameMatcher matcher) {
@@ -144,7 +144,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * Accepts class names that match the supplied pattern for deserialization, unless they are otherwise rejected.
          *
          * @param pattern a Pattern for compiled regular expression.
-         * @return this instance.
+         * @return {@code this} instance.
          * @since 2.18.0
          */
         public Builder accept(final Pattern pattern) {
@@ -157,7 +157,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          *
          * @param patterns Wildcard file name patterns as defined by {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String)
          *                 FilenameUtils.wildcardMatch}
-         * @return this instance.
+         * @return {@code this} instance.
          * @since 2.18.0
          */
         public Builder accept(final String... patterns) {
@@ -205,7 +205,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * Rejects the specified classes for deserialization, even if they are otherwise accepted.
          *
          * @param classes Classes to reject
-         * @return this instance.
+         * @return {@code this} instance.
          * @since 2.18.0
          */
         public Builder reject(final Class<?>... classes) {
@@ -217,7 +217,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * Rejects class names where the supplied ClassNameMatcher matches for deserialization, even if they are otherwise accepted.
          *
          * @param matcher the matcher to use
-         * @return this instance.
+         * @return {@code this} instance.
          * @since 2.18.0
          */
         public Builder reject(final ClassNameMatcher matcher) {
@@ -229,7 +229,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * Rejects class names that match the supplied pattern for deserialization, even if they are otherwise accepted.
          *
          * @param pattern standard Java regexp
-         * @return this instance.
+         * @return {@code this} instance.
          * @since 2.18.0
          */
         public Builder reject(final Pattern pattern) {
@@ -242,7 +242,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          *
          * @param patterns Wildcard file name patterns as defined by {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String)
          *                 FilenameUtils.wildcardMatch}
-         * @return this instance.
+         * @return {@code this} instance.
          * @since 2.18.0
          */
         public Builder reject(final String... patterns) {
@@ -254,7 +254,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * Sets the predicate, null resets to an empty new ObjectStreamClassPredicate.
          *
          * @param predicate the predicate.
-         * @return this instance.
+         * @return {@code this} instance.
          * @since 2.18.0
          */
         public Builder setPredicate(final ObjectStreamClassPredicate predicate) {
@@ -314,7 +314,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * </p>
      *
      * @param classes Classes to accept
-     * @return this instance.
+     * @return {@code this} instance.
      */
     public ValidatingObjectInputStream accept(final Class<?>... classes) {
         predicate.accept(classes);
@@ -328,7 +328,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * </p>
      *
      * @param matcher a class name matcher to <em>accept</em> objects.
-     * @return this instance.
+     * @return {@code this} instance.
      */
     public ValidatingObjectInputStream accept(final ClassNameMatcher matcher) {
         predicate.accept(matcher);
@@ -342,7 +342,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * </p>
      *
      * @param pattern a Pattern for compiled regular expression.
-     * @return this instance.
+     * @return {@code this} instance.
      */
     public ValidatingObjectInputStream accept(final Pattern pattern) {
         predicate.accept(pattern);
@@ -357,7 +357,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      *
      * @param patterns Wildcard file name patterns as defined by {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String)
      *                 FilenameUtils.wildcardMatch}.
-     * @return this instance.
+     * @return {@code this} instance.
      */
     public ValidatingObjectInputStream accept(final String... patterns) {
         predicate.accept(patterns);
@@ -412,7 +412,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * </p>
      *
      * @param classes Classes to reject.
-     * @return this instance.
+     * @return {@code this} instance.
      */
     public ValidatingObjectInputStream reject(final Class<?>... classes) {
         predicate.reject(classes);
@@ -426,7 +426,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * </p>
      *
      * @param matcher a class name matcher to <em>reject</em> objects.
-     * @return this instance.
+     * @return {@code this} instance.
      */
     public ValidatingObjectInputStream reject(final ClassNameMatcher matcher) {
         predicate.reject(matcher);
@@ -440,7 +440,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * </p>
      *
      * @param pattern a Pattern for compiled regular expression.
-     * @return this instance.
+     * @return {@code this} instance.
      */
     public ValidatingObjectInputStream reject(final Pattern pattern) {
         predicate.reject(pattern);
@@ -455,7 +455,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      *
      * @param patterns An array of wildcard file name patterns as defined by {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String)
      *                 FilenameUtils.wildcardMatch}
-     * @return this instance.
+     * @return {@code this} instance.
      */
     public ValidatingObjectInputStream reject(final String... patterns) {
         predicate.reject(patterns);
