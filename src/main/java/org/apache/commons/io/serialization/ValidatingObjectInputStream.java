@@ -462,9 +462,29 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
         return this;
     }
 
+    /**
+     * Checks that the given object's class name conforms to requirements and if so delegates to the superclass.
+     * <p>
+     * The reject list takes precedence over the accept list.
+     * </p>
+     */
     @Override
     protected Class<?> resolveClass(final ObjectStreamClass osc) throws IOException, ClassNotFoundException {
         checkClassName(osc.getName());
         return super.resolveClass(osc);
+    }
+
+    /**
+     * Checks that the given names conform to requirements and if so delegates to the superclass.
+     * <p>
+     * The reject list takes precedence over the accept list.
+     * </p>
+     */
+    @Override
+    protected Class<?> resolveProxyClass(final String[] interfaces) throws IOException, ClassNotFoundException {
+        for (final String interfaceName : interfaces) {
+            checkClassName(interfaceName);
+        }
+        return super.resolveProxyClass(interfaces);
     }
 }
