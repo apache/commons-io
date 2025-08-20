@@ -70,7 +70,7 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * </p>
      *
      * @param matcher a class name matcher to <em>accept</em> objects.
-     * @return this instance.
+     * @return {@code this} instance.
      */
     public ObjectStreamClassPredicate accept(final ClassNameMatcher matcher) {
         acceptMatchers.add(matcher);
@@ -84,7 +84,7 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * </p>
      *
      * @param pattern a Pattern for compiled regular expression.
-     * @return this instance.
+     * @return {@code this} instance.
      */
     public ObjectStreamClassPredicate accept(final Pattern pattern) {
         acceptMatchers.add(new RegexpClassNameMatcher(pattern));
@@ -99,7 +99,7 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      *
      * @param patterns Wildcard file name patterns as defined by {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String)
      *                 FilenameUtils.wildcardMatch}
-     * @return this instance.
+     * @return {@code this} instance.
      */
     public ObjectStreamClassPredicate accept(final String... patterns) {
         Stream.of(patterns).map(WildcardClassNameMatcher::new).forEach(acceptMatchers::add);
@@ -113,7 +113,7 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * </p>
      *
      * @param classes Classes to reject
-     * @return this instance.
+     * @return {@code this} instance.
      */
     public ObjectStreamClassPredicate reject(final Class<?>... classes) {
         Stream.of(classes).map(c -> new FullClassNameMatcher(c.getName())).forEach(rejectMatchers::add);
@@ -127,7 +127,7 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * </p>
      *
      * @param m the matcher to use
-     * @return this instance.
+     * @return {@code this} instance.
      */
     public ObjectStreamClassPredicate reject(final ClassNameMatcher m) {
         rejectMatchers.add(m);
@@ -141,7 +141,7 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      * </p>
      *
      * @param pattern standard Java regexp
-     * @return this instance.
+     * @return {@code this} instance.
      */
     public ObjectStreamClassPredicate reject(final Pattern pattern) {
         rejectMatchers.add(new RegexpClassNameMatcher(pattern));
@@ -156,7 +156,7 @@ public class ObjectStreamClassPredicate implements Predicate<ObjectStreamClass> 
      *
      * @param patterns Wildcard file name patterns as defined by {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String)
      *                 FilenameUtils.wildcardMatch}
-     * @return this instance.
+     * @return {@code this} instance.
      */
     public ObjectStreamClassPredicate reject(final String... patterns) {
         Stream.of(patterns).map(WildcardClassNameMatcher::new).forEach(rejectMatchers::add);

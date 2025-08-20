@@ -186,7 +186,7 @@ public class NullInputStream extends AbstractInputStream {
     /**
      * Initializes or re-initializes this instance for reuse.
      *
-     * @return this instance.
+     * @return {@code this} instance.
      * @since 2.17.0
      */
     public NullInputStream init() {

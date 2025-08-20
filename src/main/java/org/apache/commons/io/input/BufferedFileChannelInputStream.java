@@ -115,7 +115,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
          * </p>
          *
          * @param fileChannel the file channel.
-         * @return this instance.
+         * @return {@code this} instance.
          * @since 2.18.0
          */
         public Builder setFileChannel(final FileChannel fileChannel) {

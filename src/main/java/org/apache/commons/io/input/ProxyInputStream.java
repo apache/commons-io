@@ -88,7 +88,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
          * </p>
          *
          * @param afterRead the {@link ProxyInputStream#afterRead(int)} behavior.
-         * @return this instance.
+         * @return {@code this} instance.
          */
         public B setAfterRead(final IOIntConsumer afterRead) {
             this.afterRead = afterRead;
@@ -370,7 +370,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * Sets the underlying input stream.
      *
      * @param in The input stream to set in {@link java.io.FilterInputStream#in}.
-     * @return this instance.
+     * @return {@code this} instance.
      * @since 2.19.0
      */
     public ProxyInputStream setReference(final InputStream in) {

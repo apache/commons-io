@@ -164,7 +164,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * Sets the underlying output stream.
      *
      * @param out the underlying output stream.
-     * @return this instance.
+     * @return {@code this} instance.
      * @since 2.19.0
      */
     public ProxyOutputStream setReference(final OutputStream out) {

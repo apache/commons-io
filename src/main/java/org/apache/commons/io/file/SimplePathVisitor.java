@@ -62,7 +62,7 @@ public abstract class SimplePathVisitor extends SimpleFileVisitor<Path> implemen
          * </p>
          *
          * @param visitFileFailedFunction the function to call on {@link #visitFileFailed(Path, IOException)}.
-         * @return this instance.
+         * @return {@code this} instance.
          */
         public B setVisitFileFailedFunction(final IOBiFunction<Path, IOException, FileVisitResult> visitFileFailedFunction) {
             this.visitFileFailedFunction = visitFileFailedFunction;

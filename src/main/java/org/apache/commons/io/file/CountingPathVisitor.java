@@ -80,7 +80,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
          * Sets how to filter directories.
          *
          * @param directoryFilter how to filter files.
-         * @return this instance.
+         * @return {@code this} instance.
          */
         public B setDirectoryFilter(final PathFilter directoryFilter) {
             this.directoryFilter = directoryFilter != null ? directoryFilter : defaultDirectoryFilter();
@@ -91,7 +91,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
          * Sets how to transform directories, defaults to {@link UnaryOperator#identity()}.
          *
          * @param directoryTransformer how to filter files.
-         * @return this instance.
+         * @return {@code this} instance.
          */
         public B setDirectoryPostTransformer(final UnaryOperator<Path> directoryTransformer) {
             this.directoryPostTransformer = directoryTransformer != null ? directoryTransformer : defaultDirectoryTransformer();
@@ -102,7 +102,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
          * Sets how to filter files.
          *
          * @param fileFilter how to filter files.
-         * @return this instance.
+         * @return {@code this} instance.
          */
         public B setFileFilter(final PathFilter fileFilter) {
             this.fileFilter = fileFilter != null ? fileFilter : defaultFileFilter();
@@ -113,7 +113,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
          * Sets how to count path visits.
          *
          * @param pathCounters How to count path visits.
-         * @return this instance.
+         * @return {@code this} instance.
          */
         public B setPathCounters(final PathCounters pathCounters) {
             this.pathCounters = pathCounters != null ? pathCounters : defaultPathCounters();

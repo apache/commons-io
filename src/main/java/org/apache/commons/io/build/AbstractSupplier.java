@@ -140,7 +140,7 @@ public abstract class AbstractSupplier<T, B extends AbstractSupplier<T, B>> impl
      * (B) this
      * </pre>
      *
-     * @return this instance typed as the subclass type {@code B}.
+     * @return {@code this} instance typed as the subclass type {@code B}.
      */
     @SuppressWarnings("unchecked")
     protected B asThis() {

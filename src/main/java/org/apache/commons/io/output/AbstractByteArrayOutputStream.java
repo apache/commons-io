@@ -110,7 +110,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
     /**
      * Returns this instance typed to {@code T}.
      *
-     * @return this instance
+     * @return {@code this} instance
      */
     @SuppressWarnings("unchecked")
     protected T asThis() {
@@ -336,7 +336,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      *
      * @param data    The String to convert to bytes. not null.
      * @param charset The {@link Charset} o encode the {@code String}, null means the default encoding.
-     * @return this instance.
+     * @return {@code this} instance.
      * @since 2.19.0
      */
     public T write(final CharSequence data, final Charset charset) {

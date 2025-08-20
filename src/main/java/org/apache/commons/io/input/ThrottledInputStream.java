@@ -130,7 +130,7 @@ public final class ThrottledInputStream extends CountingInputStream {
          *
          * @param value the maximum bytes
          * @param chronoUnit a duration scale goal.
-         * @return this instance.
+         * @return {@code this} instance.
          * @throws IllegalArgumentException Thrown if maxBytesPerSecond &lt;= 0.
          * @since 2.19.0
          */
@@ -153,7 +153,7 @@ public final class ThrottledInputStream extends CountingInputStream {
          *
          * @param value the maximum bytes
          * @param duration a duration goal.
-         * @return this instance.
+         * @return {@code this} instance.
          * @throws IllegalArgumentException Thrown if maxBytesPerSecond &lt;= 0.
          */
         // Consider making public in the future
@@ -166,7 +166,7 @@ public final class ThrottledInputStream extends CountingInputStream {
          * Sets the maximum bytes per second.
          *
          * @param maxBytesPerSecond the maximum bytes per second.
-         * @return this instance.
+         * @return {@code this} instance.
          * @throws IllegalArgumentException Thrown if maxBytesPerSecond &lt;= 0.
          */
         private Builder setMaxBytesPerSecond(final double maxBytesPerSecond) {

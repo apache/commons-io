@@ -164,7 +164,7 @@ public class BoundedInputStream extends ProxyInputStream {
          * </p>
          *
          * @param onMaxCount the {@link ProxyInputStream#afterRead(int)} behavior.
-         * @return this instance.
+         * @return {@code this} instance.
          * @since 2.18.0
          */
         public T setOnMaxCount(final IOBiConsumer<Long, Long> onMaxCount) {
