@@ -2710,27 +2710,21 @@ public class IOUtils {
      * @throws IllegalArgumentException if {@code size} is less than zero.
      */
     static byte[] toByteArray(final IOTriFunction<byte[], Integer, Integer, Integer> input, final int size) throws IOException {
-
         if (size < 0) {
             throw new IllegalArgumentException("Size must be equal or greater than zero: " + size);
         }
-
         if (size == 0) {
             return EMPTY_BYTE_ARRAY;
         }
-
         final byte[] data = byteArray(size);
         int offset = 0;
         int read;
-
         while (offset < size && (read = input.apply(data, offset, size - offset)) != EOF) {
             offset += read;
         }
-
         if (offset != size) {
             throw new IOException("Unexpected read size, current: " + offset + ", expected: " + size);
         }
-
         return data;
     }
 
