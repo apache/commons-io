@@ -2671,9 +2671,6 @@ public class IOUtils {
      */
     @SuppressWarnings("resource")
     public static byte[] toByteArray(final InputStream input, final int size) throws IOException {
-        if (size == 0) {
-            return EMPTY_BYTE_ARRAY;
-        }
         return toByteArray(Objects.requireNonNull(input, "input")::read, size);
     }
 
@@ -2703,7 +2700,7 @@ public class IOUtils {
     /**
      * Gets the contents of an input as a {@code byte[]}.
      *
-     * @param input the input to read.
+     * @param input the input to read, not null.
      * @param size the size of the input to read, where 0 &lt; {@code size} &lt;= length of input.
      * @return byte [] of length {@code size}.
      * @throws IOException if an I/O error occurs or input length is smaller than parameter {@code size}.
