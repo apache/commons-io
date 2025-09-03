@@ -68,7 +68,7 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
     }
 
     /**
-     * Reads a 2 byte, unsigned, little endian UTF-16 code point.
+     * Reads a 2 byte, unsigned, little-endian UTF-16 code point.
      *
      * @return the UTF-16 code point read or -1 if the end of stream
      * @throws IOException if an I/O error occurs.
