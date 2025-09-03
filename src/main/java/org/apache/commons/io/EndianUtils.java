@@ -35,7 +35,7 @@ import java.io.OutputStream;
  * (e.g. Motorola 680X0), the situation is reversed.
  * Most methods and classes throughout Java &mdash; e.g. {@code DataInputStream} and
  * {@code Double.longBitsToDouble()} &mdash; assume data is laid out
- * in big endian order with the most significant byte first.
+ * in big-endian order with the most significant byte first.
  * The methods in this class read and write data in little-endian order,
  * generally by reversing the bytes and then using the
  * regular Java methods to convert the swapped bytes to a primitive type.
@@ -257,7 +257,7 @@ public class EndianUtils {
     }
 
     /**
-     * Converts a {@code double} value from big endian to little-endian
+     * Converts a {@code double} value from big-endian to little-endian
      * and vice versa. That is, it converts the {@code double} to bytes,
      * reverses the bytes, and then reinterprets those bytes as a new {@code double}.
      * This can be useful if you have a number that was read from the
@@ -271,7 +271,7 @@ public class EndianUtils {
     }
 
     /**
-     * Converts a {@code float} value from big endian to little-endian and vice versa.
+     * Converts a {@code float} value from big-endian to little-endian and vice versa.
      *
      * @param value value to convert
      * @return the converted value
@@ -281,7 +281,7 @@ public class EndianUtils {
     }
 
     /**
-     * Converts an {@code int} value from big endian to little-endian and vice versa.
+     * Converts an {@code int} value from big-endian to little-endian and vice versa.
      *
      * @param value value to convert
      * @return the converted value
@@ -295,7 +295,7 @@ public class EndianUtils {
     }
 
     /**
-     * Converts a {@code long} value from big endian to little-endian and vice versa.
+     * Converts a {@code long} value from big-endian to little-endian and vice versa.
      *
      * @param value value to convert
      * @return the converted value
@@ -313,7 +313,7 @@ public class EndianUtils {
     }
 
     /**
-     * Converts a {@code short} value from big endian to little-endian and vice versa.
+     * Converts a {@code short} value from big-endian to little-endian and vice versa.
      *
      * @param value value to convert
      * @return the converted value
