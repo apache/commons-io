@@ -76,7 +76,11 @@ public class RandomAccessFiles {
      *                     other I/O error occurs.
      */
     public static byte[] read(final RandomAccessFile input, final long position, final int length) throws IOException {
+        Objects.requireNonNull(input, "input");
         input.seek(position);
+        if (length < 0) {
+            throw new IllegalArgumentException("Size must be equal or greater than zero: " + length);
+        }
         return IOUtils.toByteArray(input::read, length);
     }
 
