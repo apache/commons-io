@@ -2684,6 +2684,7 @@ public class IOUtils {
      * @throws NullPointerException     if {@code input} is {@code null}.
      * @since 2.1
      */
+    @SuppressWarnings("resource")
     public static byte[] toByteArray(final InputStream input, final int size) throws IOException {
         Objects.requireNonNull(input, "input");
         if (size < 0) {
@@ -2782,7 +2783,7 @@ public class IOUtils {
     /**
      * Gets the contents of an input as a {@code byte[]}.
      *
-     * @param input the input to read.
+     * @param input the input to read, not null.
      * @param size the size of the input to read, where 0 &lt; {@code size} &lt;= length of input.
      * @return byte [] of length {@code size}.
      * @throws IOException if an I/O error occurs or input length is smaller than parameter {@code size}.
@@ -2792,19 +2793,15 @@ public class IOUtils {
         if (size == 0) {
             return EMPTY_BYTE_ARRAY;
         }
-
         final byte[] data = byteArray(size);
         int offset = 0;
         int read;
-
         while (offset < size && (read = input.apply(data, offset, size - offset)) != EOF) {
             offset += read;
         }
-
         if (offset != size) {
             throw new IOException("Unexpected read size, current: " + offset + ", expected: " + size);
         }
-
         return data;
     }
 
