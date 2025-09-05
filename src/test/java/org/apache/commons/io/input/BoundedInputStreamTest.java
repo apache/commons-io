@@ -93,15 +93,15 @@ class BoundedInputStreamTest {
 
     static Stream<Arguments> testAvailableAfterClose() throws IOException {
         // Case 1: behaves like ByteArrayInputStream — close() is a no-op, available() still returns a value (e.g., 42).
-        InputStream noOpClose = mock(InputStream.class);
+        final InputStream noOpClose = mock(InputStream.class);
         when(noOpClose.available()).thenReturn(42, 42);
 
         // Case 2: returns 0 after close (Commons memory-backed streams that ignore close but report 0 when exhausted).
-        InputStream returnsZeroAfterClose = mock(InputStream.class);
+        final InputStream returnsZeroAfterClose = mock(InputStream.class);
         when(returnsZeroAfterClose.available()).thenReturn(42, 0);
 
         // Case 3: throws IOException after close (e.g., FileInputStream-like behavior).
-        InputStream throwsAfterClose = mock(InputStream.class);
+        final InputStream throwsAfterClose = mock(InputStream.class);
         when(throwsAfterClose.available()).thenReturn(42).thenThrow(new IOException("Stream closed"));
 
         return Stream.of(
@@ -511,16 +511,16 @@ class BoundedInputStreamTest {
 
     static Stream<Arguments> testReadAfterClose() throws IOException {
         // Case 1: no-op close (ByteArrayInputStream-like): read() still returns a value after close
-        InputStream noOpClose = mock(InputStream.class);
+        final InputStream noOpClose = mock(InputStream.class);
         when(noOpClose.read()).thenReturn(42);
 
         // Case 2: returns EOF (-1) after close
-        InputStream returnsEofAfterClose = mock(InputStream.class);
+        final InputStream returnsEofAfterClose = mock(InputStream.class);
         when(returnsEofAfterClose.read()).thenReturn(IOUtils.EOF);
 
         // Case 3: throws IOException after close (FileInputStream-like)
-        InputStream throwsAfterClose = mock(InputStream.class);
-        IOException closed = new IOException("Stream closed");
+        final InputStream throwsAfterClose = mock(InputStream.class);
+        final IOException closed = new IOException("Stream closed");
         when(throwsAfterClose.read()).thenThrow(closed);
 
         return Stream.of(
@@ -552,7 +552,7 @@ class BoundedInputStreamTest {
         if (expectedAfterClose instanceof Integer) {
             assertEquals(expectedAfterClose, bounded.read(), caseName + " (after close)");
         } else if (expectedAfterClose instanceof IOException) {
-            IOException actual = assertThrows(IOException.class, bounded::read, caseName + " (after close)");
+            final IOException actual = assertThrows(IOException.class, bounded::read, caseName + " (after close)");
             // verify it's the exact instance we configured
             assertSame(expectedAfterClose, actual, caseName + " (exception instance)");
         } else {

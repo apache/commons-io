@@ -372,7 +372,7 @@ public class BoundedInputStream extends ProxyInputStream {
 
     @Override
     public int available() throws IOException {
-        int remaining = Math.toIntExact(Math.min(getRemaining(), Integer.MAX_VALUE));
+        final int remaining = Math.toIntExact(Math.min(getRemaining(), Integer.MAX_VALUE));
         return Math.min(super.available(), remaining);
     }
 
