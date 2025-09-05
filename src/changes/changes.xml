@@ -57,6 +57,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add org.apache.commons.io.output.ProxyOutputStream.writeRepeat(byte[], int, int, long).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add org.apache.commons.io.output.ProxyOutputStream.writeRepeat(byte[], long).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add org.apache.commons.io.output.ProxyOutputStream.writeRepeat(int, long).</action>
+      <action dev="pkarwasz" type="add"                due-to="Piotr P. Karwasz">Add length unit support in FileSystem limits.</action>
       <!-- UPDATE -->
       <action type="update" dev="ggregory"             due-to="Gary Gregory, Dependabot">Bump org.apache.commons:commons-parent from 85 to 87 #774.</action>
       <action type="update" dev="ggregory"             due-to="Gary Gregory">[test] Bump commons-codec:commons-codec from 1.18.0 to 1.19.0.</action>
