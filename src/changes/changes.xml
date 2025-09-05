@@ -51,6 +51,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory"                due-to="Gary Gregory">When testing on Java 24 and up, don't fail FileUtilsListFilesTest for a different behavior in the JRE.</action>
       <action type="fix" dev="ggregory"                due-to="Stanislav Fort, Gary Gregory">ValidatingObjectInputStream does not validate dynamic proxy interfaces.</action>
       <action type="fix" dev="pkarwasz"                due-to="Piotr P. Karwasz">BoundedInputStream.getRemaining() now reports Long.MAX_VALUE instead of 0 when no limit is set.</action>
+      <action type="fix" dev="pkarwasz"                due-to="Piotr P. Karwasz">BoundedInputStream.available() correctly accounts for the maximum read limit.</action>
       <!-- ADD -->
       <action dev="ggregory" type="add"                due-to="strangelookingnerd, Gary Gregory">FileUtils#byteCountToDisplaySize() supports Zettabyte, Yottabyte, Ronnabyte and Quettabyte #763.</action>
       <action dev="ggregory" type="add"                due-to="strangelookingnerd, Gary Gregory">Add org.apache.commons.io.FileUtils.ONE_RB #763.</action>

@@ -370,16 +370,10 @@ public class BoundedInputStream extends ProxyInputStream {
         super.afterRead(n);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int available() throws IOException {
-        if (isMaxCount()) {
-            onMaxLength(maxCount, getCount());
-            return 0;
-        }
-        return in.available();
+        int remaining = Math.toIntExact(Math.min(getRemaining(), Integer.MAX_VALUE));
+        return Math.min(super.available(), remaining);
     }
 
     /**

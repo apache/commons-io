@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io.input;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.IOUtils.EOF;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -23,6 +24,12 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -57,7 +64,7 @@ class BoundedInputStreamTest {
 
     @Test
     void testAfterReadConsumer() throws Exception {
-        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
+        final byte[] hello = "Hello".getBytes(UTF_8);
         final AtomicBoolean boolRef = new AtomicBoolean();
         // @formatter:off
         try (InputStream bounded = BoundedInputStream.builder()
@@ -84,21 +91,75 @@ class BoundedInputStreamTest {
         // @formatter:on
     }
 
-    @SuppressWarnings("resource")
-    @Test
-    void testAvailableAfterClose() throws Exception {
-        final InputStream shadow;
-        try (InputStream in = BoundedInputStream.builder().setCharSequence("Hi").get()) {
-            assertTrue(in.available() > 0);
-            shadow = in;
-        }
-        assertEquals(0, shadow.available());
+    static Stream<Arguments> testAvailableAfterClose() throws IOException {
+        // Case 1: behaves like ByteArrayInputStream — close() is a no-op, available() still returns a value (e.g., 42).
+        InputStream noOpClose = mock(InputStream.class);
+        when(noOpClose.available()).thenReturn(42, 42);
+
+        // Case 2: returns 0 after close (Commons memory-backed streams that ignore close but report 0 when exhausted).
+        InputStream returnsZeroAfterClose = mock(InputStream.class);
+        when(returnsZeroAfterClose.available()).thenReturn(42, 0);
+
+        // Case 3: throws IOException after close (e.g., FileInputStream-like behavior).
+        InputStream throwsAfterClose = mock(InputStream.class);
+        when(throwsAfterClose.available()).thenReturn(42).thenThrow(new IOException("Stream closed"));
+
+        return Stream.of(
+                Arguments.of("no-op close → still returns 42", noOpClose, 42),
+                Arguments.of("after close → returns 0", returnsZeroAfterClose, 42),
+                Arguments.of("after close → throws IOException", throwsAfterClose, 42));
     }
 
-    @Test
-    void testAvailableAfterOpen() throws Exception {
-        try (InputStream in = BoundedInputStream.builder().setCharSequence("Hi").get()) {
-            assertTrue(in.available() > 0);
+    @DisplayName("available() after close follows underlying stream semantics")
+    @ParameterizedTest(name = "{index} — {0}")
+    @MethodSource
+    void testAvailableAfterClose(String caseName, InputStream delegate, int expectedBeforeClose)
+            throws Exception {
+        final InputStream shadow;
+        try (InputStream in = BoundedInputStream.builder()
+                .setInputStream(delegate)
+                .setPropagateClose(true)
+                .get()) {
+            // Before close: pass-through behavior
+            assertEquals(expectedBeforeClose, in.available(), caseName + " (before close)");
+            shadow = in; // keep reference to call after close
+        }
+        // Verify the underlying stream was closed
+        verify(delegate, times(1)).close();
+        // After close: behavior depends on the underlying stream
+        assertEquals(0, shadow.available(), caseName + " (after close)");
+        // Interactions: available called only once before close.
+        verify(delegate, times(1)).available();
+        verifyNoMoreInteractions(delegate);
+    }
+
+    static Stream<Arguments> testAvailableUpperLimit() {
+        final byte[] helloWorld = "Hello World".getBytes(UTF_8);
+        return Stream.of(
+                // Limited by maxCount
+                Arguments.of(new ByteArrayInputStream(helloWorld), helloWorld.length - 1, helloWorld.length - 1, 0),
+                // Limited by data length
+                Arguments.of(new ByteArrayInputStream(helloWorld), helloWorld.length + 1, helloWorld.length, 0),
+                // Limited by Integer.MAX_VALUE
+                Arguments.of(
+                        new NullInputStream(Long.MAX_VALUE), Long.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE));
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void testAvailableUpperLimit(InputStream input, long maxCount, int expectedBeforeSkip, int expectedAfterSkip)
+            throws Exception {
+        try (BoundedInputStream bounded = BoundedInputStream.builder()
+                .setInputStream(input)
+                .setMaxCount(maxCount)
+                .get()) {
+            assertEquals(
+                    expectedBeforeSkip, bounded.available(), "available should be limited by maxCount and data length");
+            IOUtils.skip(bounded, expectedBeforeSkip);
+            assertEquals(
+                    expectedAfterSkip,
+                    bounded.available(),
+                    "after skipping available should be limited by maxCount and data length");
         }
     }
 
@@ -116,8 +177,8 @@ class BoundedInputStreamTest {
     @ParameterizedTest
     @ValueSource(longs = { -100, -1, 0, 1, 2, 4, 8, 16, 32, 64 })
     void testCounts(final long startCount) throws Exception {
-        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
-        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
+        final byte[] helloWorld = "Hello World".getBytes(UTF_8);
+        final byte[] hello = "Hello".getBytes(UTF_8);
         final long actualStart = startCount < 0 ? 0 : startCount;
         // limit = length
         try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).setCount(startCount)
@@ -207,10 +268,10 @@ class BoundedInputStreamTest {
 
     @Test
     void testMarkReset() throws Exception {
-        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
+        final byte[] helloWorld = "Hello World".getBytes(UTF_8);
         final int helloWorldLen = helloWorld.length;
-        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
-        final byte[] world = " World".getBytes(StandardCharsets.UTF_8);
+        final byte[] hello = "Hello".getBytes(UTF_8);
+        final byte[] world = " World".getBytes(UTF_8);
         final int helloLen = hello.length;
         // limit = -1
         try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).get()) {
@@ -306,7 +367,7 @@ class BoundedInputStreamTest {
 
     @Test
     void testOnMaxCountConsumer() throws Exception {
-        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
+        final byte[] hello = "Hello".getBytes(UTF_8);
         final AtomicBoolean boolRef = new AtomicBoolean();
         // @formatter:off
         try (BoundedInputStream bounded = BoundedInputStream.builder()
@@ -337,8 +398,8 @@ class BoundedInputStreamTest {
     @SuppressWarnings("deprecation")
     @Test
     void testOnMaxLength() throws Exception {
-        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
-        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
+        final byte[] helloWorld = "Hello World".getBytes(UTF_8);
+        final byte[] hello = "Hello".getBytes(UTF_8);
         final AtomicBoolean boolRef = new AtomicBoolean();
         // limit = length
         try (BoundedInputStream bounded = BoundedInputStream.builder()
@@ -435,7 +496,7 @@ class BoundedInputStreamTest {
     @SuppressWarnings("deprecation")
     @Test
     void testPublicConstructors() throws IOException {
-        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
+        final byte[] helloWorld = "Hello World".getBytes(UTF_8);
         try (ByteArrayInputStream baos = new ByteArrayInputStream(helloWorld);
                 BoundedInputStream inputStream = new BoundedInputStream(baos)) {
             assertSame(baos, inputStream.unwrap());
@@ -448,21 +509,65 @@ class BoundedInputStreamTest {
         }
     }
 
-    @SuppressWarnings("resource")
-    @Test
-    void testReadAfterClose() throws Exception {
-        final InputStream shadow;
-        try (InputStream in = BoundedInputStream.builder().setCharSequence("Hi").get()) {
-            assertTrue(in.available() > 0);
-            shadow = in;
+    static Stream<Arguments> testReadAfterClose() throws IOException {
+        // Case 1: no-op close (ByteArrayInputStream-like): read() still returns a value after close
+        InputStream noOpClose = mock(InputStream.class);
+        when(noOpClose.read()).thenReturn(42);
+
+        // Case 2: returns EOF (-1) after close
+        InputStream returnsEofAfterClose = mock(InputStream.class);
+        when(returnsEofAfterClose.read()).thenReturn(IOUtils.EOF);
+
+        // Case 3: throws IOException after close (FileInputStream-like)
+        InputStream throwsAfterClose = mock(InputStream.class);
+        IOException closed = new IOException("Stream closed");
+        when(throwsAfterClose.read()).thenThrow(closed);
+
+        return Stream.of(
+                Arguments.of("no-op close → still reads data", noOpClose, 42),
+                Arguments.of("after close → returns EOF", returnsEofAfterClose, IOUtils.EOF),
+                Arguments.of("after close → throws IOException", throwsAfterClose, closed));
+    }
+
+    @DisplayName("read() after close follows underlying stream semantics")
+    @ParameterizedTest(name = "{index} — {0}")
+    @MethodSource("testReadAfterClose")
+    void testReadAfterClose(
+            String caseName,
+            InputStream delegate,
+            Object expectedAfterClose // Integer (value) or IOException (expected thrown)
+            ) throws Exception {
+
+        final InputStream bounded;
+        try (InputStream in = BoundedInputStream.builder()
+                .setInputStream(delegate)
+                .setPropagateClose(true)
+                .get()) {
+            bounded = in; // call read() only after close
         }
-        assertEquals(IOUtils.EOF, shadow.read());
+
+        // Underlying stream should be closed exactly once
+        verify(delegate, times(1)).close();
+
+        if (expectedAfterClose instanceof Integer) {
+            assertEquals(expectedAfterClose, bounded.read(), caseName + " (after close)");
+        } else if (expectedAfterClose instanceof IOException) {
+            IOException actual = assertThrows(IOException.class, bounded::read, caseName + " (after close)");
+            // verify it's the exact instance we configured
+            assertSame(expectedAfterClose, actual, caseName + " (exception instance)");
+        } else {
+            fail("Unexpected expectedAfterClose type: " + expectedAfterClose);
+        }
+
+        // We only performed one read() (after close)
+        verify(delegate, times(1)).read();
+        verifyNoMoreInteractions(delegate);
     }
 
     @Test
     void testReadArray() throws Exception {
-        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
-        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
+        final byte[] helloWorld = "Hello World".getBytes(UTF_8);
+        final byte[] hello = "Hello".getBytes(UTF_8);
         try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).get()) {
             assertTrue(bounded.markSupported());
             compare("limit = -1", helloWorld, IOUtils.toByteArray(bounded));
@@ -541,8 +646,8 @@ class BoundedInputStreamTest {
 
     @Test
     void testReadSingle() throws Exception {
-        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
-        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
+        final byte[] helloWorld = "Hello World".getBytes(UTF_8);
+        final byte[] hello = "Hello".getBytes(UTF_8);
         // limit = length
         try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).setMaxCount(helloWorld.length)
                 .get()) {
@@ -579,8 +684,8 @@ class BoundedInputStreamTest {
 
     @Test
     void testReset() throws Exception {
-        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
-        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
+        final byte[] helloWorld = "Hello World".getBytes(UTF_8);
+        final byte[] hello = "Hello".getBytes(UTF_8);
         // limit = -1
         try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).get()) {
             assertTrue(bounded.markSupported());
