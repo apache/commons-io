@@ -29,12 +29,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.test.CustomIOException;
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 /**
@@ -491,6 +495,47 @@ class BoundedInputStreamTest {
             compare("limit < length", hello, IOUtils.toByteArray(bounded));
             // should be invariant
             assertTrue(bounded.markSupported());
+        }
+    }
+
+    static Stream<Arguments> testRemaining() {
+        return Stream.of(
+                // Unbounded: any negative maxCount is treated as "no limit".
+                Arguments.of("unbounded (EOF constant)", IOUtils.EOF, Long.MAX_VALUE),
+                Arguments.of("unbounded (arbitrary negative)", Long.MIN_VALUE, Long.MAX_VALUE),
+
+                // Bounded: remaining equals the configured limit, regardless of underlying data size.
+                Arguments.of("bounded (zero)", 0L, 0L),
+                Arguments.of("bounded (small)", 1024L, 1024L),
+                Arguments.of("bounded (Integer.MAX_VALUE)", Integer.MAX_VALUE, (long) Integer.MAX_VALUE),
+
+                // Bounded but extremely large: still not 'unbounded'.
+                Arguments.of("bounded (Long.MAX_VALUE)", Long.MAX_VALUE, Long.MAX_VALUE));
+    }
+
+    @DisplayName("getRemaining() reflects only the configured bound (not underlying data)")
+    @ParameterizedTest(name = "{index}: {0} -> initial remaining {2}")
+    @MethodSource
+    void testRemaining(final String caseName, final long maxCount, final long expectedInitialRemaining)
+            throws Exception {
+        final byte[] data = "Hello World".getBytes(StandardCharsets.UTF_8); // 11 bytes
+
+        try (BoundedInputStream in = BoundedInputStream.builder()
+                .setByteArray(data)
+                .setMaxCount(maxCount)
+                .get()) {
+            // Initial remaining respects the imposed limit (or is Long.MAX_VALUE if unbounded).
+            assertEquals(expectedInitialRemaining, in.getRemaining(), caseName + " (initial)");
+
+            // Skip more than the data length to exercise both bounded and unbounded paths.
+            final long skipped = IOUtils.skip(in, 42);
+
+            // For unbounded streams (EOF == -1), remaining stays the same.
+            // For bounded, it decreases by 'skipped'.
+            final long expectedAfterSkip =
+                    in.getMaxCount() == IOUtils.EOF ? expectedInitialRemaining : expectedInitialRemaining - skipped;
+
+            assertEquals(expectedAfterSkip, in.getRemaining(), caseName + " (after skip)");
         }
     }
 
