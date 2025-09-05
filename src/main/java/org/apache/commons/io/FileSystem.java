@@ -17,6 +17,13 @@
 
 package org.apache.commons.io;
 
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.CoderResult;
+import java.nio.charset.CodingErrorAction;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Objects;
@@ -36,7 +43,12 @@ public enum FileSystem {
     /**
      * Generic file system.
      */
-    GENERIC(4096, false, false, Integer.MAX_VALUE, Integer.MAX_VALUE, new int[] { 0 }, new String[] {}, false, false, '/'),
+    GENERIC(4096, false, false, 1020, 1024 * 1024, new int[] {
+            // @formatter:off
+            // ASCII NUL
+            0
+            // @formatter:on
+    }, new String[] {}, false, false, '/', LengthUnit.BYTES),
 
     /**
      * Linux file system.
@@ -48,7 +60,7 @@ public enum FileSystem {
             0,
              '/'
             // @formatter:on
-    }, new String[] {}, false, false, '/'),
+    }, new String[] {}, false, false, '/', LengthUnit.BYTES),
 
     /**
      * MacOS file system.
@@ -61,7 +73,7 @@ public enum FileSystem {
             '/',
              ':'
             // @formatter:on
-    }, new String[] {}, false, false, '/'),
+    }, new String[] {}, false, false, '/', LengthUnit.CHARS),
 
     /**
      * Windows file system.
@@ -78,7 +90,7 @@ public enum FileSystem {
      */
     // @formatter:off
     WINDOWS(4096, false, true,
-            255, 32000, // KEEP THIS ARRAY SORTED!
+            255, 32767, // KEEP THIS ARRAY SORTED!
             new int[] {
                     // KEEP THIS ARRAY SORTED!
                     // ASCII NUL
@@ -95,7 +107,7 @@ public enum FileSystem {
                     "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9",
                     "LPT\u00b2", "LPT\u00b3", "LPT\u00b9", // Superscript 2 3 1 in that order
                     "NUL", "PRN"
-            }, true, true, '\\');
+            }, true, true, '\\', LengthUnit.CHARS);
     // @formatter:on
 
     /**
@@ -315,6 +327,7 @@ public enum FileSystem {
     private final boolean supportsDriveLetter;
     private final char nameSeparator;
     private final char nameSeparatorOther;
+    private final LengthUnit lengthUnit;
 
     /**
      * Constructs a new instance.
@@ -329,10 +342,12 @@ public enum FileSystem {
      * @param reservedFileNamesExtensions TODO
      * @param supportsDriveLetter Whether this file system support driver letters.
      * @param nameSeparator The name separator, '\\' on Windows, '/' on Linux.
+     * @param lengthUnit The unit of measurement for length limits.
      */
     FileSystem(final int blockSize, final boolean caseSensitive, final boolean casePreserving,
         final int maxFileLength, final int maxPathLength, final int[] illegalFileNameChars,
-        final String[] reservedFileNames, final boolean reservedFileNamesExtensions, final boolean supportsDriveLetter, final char nameSeparator) {
+        final String[] reservedFileNames, final boolean reservedFileNamesExtensions, final boolean supportsDriveLetter,
+        final char nameSeparator, final LengthUnit lengthUnit) {
         this.blockSize = blockSize;
         this.maxFileNameLength = maxFileLength;
         this.maxPathLength = maxPathLength;
@@ -345,6 +360,7 @@ public enum FileSystem {
         this.supportsDriveLetter = supportsDriveLetter;
         this.nameSeparator = nameSeparator;
         this.nameSeparatorOther = FilenameUtils.flipSeparator(nameSeparator);
+        this.lengthUnit = lengthUnit;
     }
 
     /**
@@ -380,22 +396,44 @@ public enum FileSystem {
     }
 
     /**
-     * Gets the maximum length for file names. The file name does not include folders.
+     * Gets the maximum length for file names (excluding any folder path).
      *
-     * @return the maximum length for file names.
+     * <p><strong>Note:</strong> This excludes any folder path. The unit depends on the
+     * filesystem or OS; see {@link #getLengthUnit()} to check whether the value is in
+     * bytes or UTF-16 characters.</p>
+     *
+     * @return the maximum file name length.
      */
     public int getMaxFileNameLength() {
         return maxFileNameLength;
     }
 
     /**
-     * Gets the maximum length of the path to a file. This can include folders.
+     * Gets the maximum length for file paths (may include folders).
      *
-     * @return the maximum length of the path to a file.
+     * <p><strong>Note:</strong> This may include folder names as well as the file name.
+     * The unit is the same as {@link #getMaxFileNameLength()} and can be obtained
+     * from {@link #getLengthUnit()}.</p>
+     *
+     * @return the maximum file path length.
      */
     public int getMaxPathLength() {
         return maxPathLength;
     }
+
+    /**
+     * Gets the unit of measurement for length limits.
+     *
+     * <p>Depending on the platform, limits may be expressed in bytes or in UTF-16
+     * characters.</p>
+     *
+     * @return the unit for file name and path length limits.
+     * @since 2.21.0
+     */
+    public LengthUnit getLengthUnit() {
+        return lengthUnit;
+    }
+
 
     /**
      * Gets the name separator, '\\' on Windows, '/' on Linux.
@@ -446,16 +484,42 @@ public enum FileSystem {
     }
 
     /**
-     * Tests if a candidate file name (without a path) such as {@code "filename.ext"} or {@code "filename"} is a
-     * potentially legal file name. If the file name length exceeds {@link #getMaxFileNameLength()}, or if it contains
-     * an illegal character then the check fails.
+     * Tests if a candidate file name (without a path) is a legal file name.
+     *
+     * <p>Takes a file name like {@code "filename.ext"} or {@code "filename"} and checks:</p>
+     * <ul>
+     * <li>if the file name length is legal</li>
+     * <li>if the file name is not a reserved file name</li>
+     * <li>if the file name does not contain illegal characters</li>
+     * </ul>
      *
      * @param candidate
-     *            a candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}
+     *            A candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}
      * @return {@code true} if the candidate name is legal
      */
     public boolean isLegalFileName(final CharSequence candidate) {
-        if (candidate == null || candidate.length() == 0 || candidate.length() > maxFileNameLength) {
+        return isLegalFileName(candidate, Charset.defaultCharset());
+    }
+
+    /**
+     * Tests if a candidate file name (without a path) is a legal file name.
+     *
+     * <p>Takes a file name like {@code "filename.ext"} or {@code "filename"} and checks:</p>
+     * <ul>
+     * <li>if the file name length is legal</li>
+     * <li>if the file name is not a reserved file name</li>
+     * <li>if the file name does not contain illegal characters</li>
+     * </ul>
+     *
+     * @param candidate
+     *            A candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}
+     * @param charset
+     *            The charset to use when the file name length is measured in bytes
+     * @return {@code true} if the candidate name is legal
+     * @since 2.21.0
+     */
+    public boolean isLegalFileName(final CharSequence candidate, final Charset charset) {
+        if (!isLegalFileLength(candidate, charset)) {
             return false;
         }
         if (isReservedFileName(candidate)) {
@@ -504,24 +568,53 @@ public enum FileSystem {
     }
 
     /**
-     * Converts a candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"} to a legal file
-     * name. Illegal characters in the candidate name are replaced by the {@code replacement} character. If the file
-     * name length exceeds {@link #getMaxFileNameLength()}, then the name is truncated to
-     * {@link #getMaxFileNameLength()}.
+     * Converts a candidate file name (without a path) to a legal file name.
+     *
+     * <p>Takes a file name like {@code "filename.ext"} or {@code "filename"} and:</p>
+     * <ul>
+     *     <li>replaces illegal characters by the given replacement character</li>
+     *     <li>truncates the name to {@link #getMaxFileNameLength()} if necessary</li>
+     * </ul>
      *
      * @param candidate
-     *            a candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}
+     *            A candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}
      * @param replacement
      *            Illegal characters in the candidate name are replaced by this character
      * @return a String without illegal characters
      */
     public String toLegalFileName(final String candidate, final char replacement) {
+        return toLegalFileName(candidate, replacement, Charset.defaultCharset());
+    }
+
+    /**
+     * Converts a candidate file name (without a path) to a legal file name.
+     *
+     * <p>Takes a file name like {@code "filename.ext"} or {@code "filename"} and:</p>
+     * <ul>
+     *     <li>replaces illegal characters by the given replacement character</li>
+     *     <li>truncates the name to {@link #getMaxFileNameLength()} if necessary</li>
+     * </ul>
+     *
+     * @param candidate
+     *            A candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}
+     * @param replacement
+     *            Illegal characters in the candidate name are replaced by this character
+     * @param charset
+     *            The charset to use when the file name length is measured in bytes
+     * @return a String without illegal characters
+     * @since 2.21.0
+     */
+    public String toLegalFileName(final String candidate, final char replacement, final Charset charset) {
+        Objects.requireNonNull(candidate, "candidate");
+        if (candidate.isEmpty()) {
+            throw new IllegalArgumentException("The candidate file name is empty");
+        }
         if (isIllegalFileNameChar(replacement)) {
             // %s does not work properly with NUL
             throw new IllegalArgumentException(String.format("The replacement character '%s' cannot be one of the %s illegal characters: %s",
                 replacement == '\0' ? "\\0" : replacement, name(), Arrays.toString(illegalFileNameChars)));
         }
-        final String truncated = candidate.length() > maxFileNameLength ? candidate.substring(0, maxFileNameLength) : candidate;
+        final CharSequence truncated = truncateFileName(candidate, charset);
         final int[] array = truncated.chars().map(i -> isIllegalFileNameChar(i) ? replacement : i).toArray();
         return new String(array, 0, array.length);
     }
@@ -529,5 +622,77 @@ public enum FileSystem {
     CharSequence trimExtension(final CharSequence cs) {
         final int index = indexOf(cs, '.', 0);
         return index < 0 ? cs : cs.subSequence(0, index);
+    }
+
+    private boolean isLegalFileLength(final CharSequence candidate, final Charset charset) {
+        if (candidate == null || candidate.length() == 0) {
+            return false;
+        }
+        if (lengthUnit == LengthUnit.CHARS) {
+            return candidate.length() <= getMaxFileNameLength();
+        }
+        final CharsetEncoder encoder = charset.newEncoder();
+        try {
+            final ByteBuffer buffer = encoder.encode(CharBuffer.wrap(candidate));
+            return buffer.remaining() <= getMaxFileNameLength();
+        } catch (CharacterCodingException e) {
+            // If we can't encode, it's not legal
+            return false;
+        }
+    }
+
+    CharSequence truncateFileName(final CharSequence candidate, final Charset charset) {
+        final int maxFileNameLength = getMaxFileNameLength();
+        // Character-based limit: simple substring if needed.
+        if (lengthUnit == LengthUnit.CHARS) {
+            return candidate.length() <= maxFileNameLength ? candidate : candidate.subSequence(0, maxFileNameLength);
+        }
+
+        // Byte-based limit
+        return truncateByBytes(candidate, charset, maxFileNameLength);
+    }
+
+    static CharSequence truncateByBytes(final CharSequence candidate, final Charset charset, final int maxBytes) {
+        // Byte-based limit
+        final CharsetEncoder encoder = charset.newEncoder()
+                .onMalformedInput(CodingErrorAction.REPORT)
+                .onUnmappableCharacter(CodingErrorAction.REPORT);
+
+        if (!encoder.canEncode(candidate)) {
+            throw new IllegalArgumentException(
+                    "File name contains characters that cannot be encoded with charset " + charset.name());
+        }
+
+        // Fast path: if even the worst-case expansion fits, we're done.
+        if (candidate.length() <= Math.floor(maxBytes / encoder.maxBytesPerChar())) {
+            return candidate;
+        }
+
+        // Slow path: encode into a fixed-size byte buffer.
+        final ByteBuffer out = ByteBuffer.allocate(maxBytes);
+        final CharBuffer in = CharBuffer.wrap(candidate);
+
+        // Encode until the first character that would exceed the byte budget.
+        final CoderResult cr = encoder.encode(in, out, true);
+
+        if (cr.isUnderflow()) {
+            // Entire candidate fit within maxFileNameLength bytes.
+            return candidate;
+        }
+
+        // We ran out of space mid-encode: truncate BEFORE the offending character.
+        return candidate.subSequence(0, in.position());
+    }
+
+    /**
+     * Units of length for the file name and path length limits.
+     *
+     * @since 2.21.0
+     */
+    public enum LengthUnit {
+        /** Length in bytes. */
+        BYTES,
+        /** Length in UTF-16 characters. */
+        CHARS;
     }
 }
