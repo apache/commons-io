@@ -2638,23 +2638,24 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of an {@link InputStream} as a {@code byte[]}.
-     * <p>
-     * This method buffers the input internally, so there is no need to use a {@link BufferedInputStream}.
-     * </p>
+     * Reads all remaining bytes from the given {@link InputStream} into a new {@code byte[]}.
      *
-     * @param inputStream the {@link InputStream} to read.
-     * @return the requested byte array.
-     * @throws NullPointerException if the InputStream is {@code null}.
-     * @throws IOException          if an I/O error occurs or reading more than {@link Integer#MAX_VALUE} occurs.
+     * <p>The method accumulates the data in temporary buffers and returns a single array
+     * containing the entire contents once the end of the stream is reached.</p>
+     *
+     * @param input the {@link InputStream} to read; must not be {@code null}.
+     * @return a new byte array.
+     * @throws IllegalArgumentException if the size of the stream is greater than {@code Integer.MAX_VALUE}.
+     * @throws IOException          if an I/O error occurs while reading.
+     * @throws NullPointerException if {@code input} is {@code null}.
      */
-    public static byte[] toByteArray(final InputStream inputStream) throws IOException {
+    public static byte[] toByteArray(final InputStream input) throws IOException {
         // We use a ThresholdingOutputStream to avoid reading AND writing more than Integer.MAX_VALUE.
         try (UnsynchronizedByteArrayOutputStream ubaOutput = UnsynchronizedByteArrayOutputStream.builder().get();
                 ThresholdingOutputStream thresholdOutput = new ThresholdingOutputStream(Integer.MAX_VALUE, os -> {
                     throw new IllegalArgumentException(String.format("Cannot read more than %,d into a byte array", Integer.MAX_VALUE));
                 }, os -> ubaOutput)) {
-            copy(inputStream, thresholdOutput);
+            copy(input, thresholdOutput);
             return ubaOutput.toByteArray();
         }
     }
@@ -2662,18 +2663,8 @@ public class IOUtils {
     /**
      * Reads exactly {@code size} bytes from the given {@link InputStream} into a new {@code byte[]}.
      *
-     * <p>
-     *   This variant allocates the target array immediately and attempts to fill it in one pass.
-     *   It assumes that {@code size} is correct.
-     *   If the stream ends prematurely, an {@link EOFException} is thrown.
-     * </p>
-     *
-     * <p>
-     *   <strong>Important:</strong> This method does <em>not</em> defend against corrupted
-     *   or untrusted {@code size} values.
-     *   For untrusted input, use {@link #toByteArray(InputStream, int, int)} instead,
-     *   which validates that the stream contains at least {@code size} bytes before allocating the target array.
-     * </p>
+     * <p>The method allocates a single array of the requested size and fills it directly
+     * from the stream.</p>
      *
      * @param input the {@link InputStream} to read; must not be {@code null}.
      * @param size  the exact number of bytes to read; must be {@code >= 0}.
@@ -2691,21 +2682,13 @@ public class IOUtils {
     /**
      * Reads exactly {@code size} bytes from the given {@link InputStream} into a new {@code byte[]}.
      *
-     * <p>
-     *   This is a convenience overload of {@link #toByteArray(InputStream, int, int)} that accepts a
-     *   {@code long} size parameter. The value is checked to ensure it does not exceed
-     *   {@link Integer#MAX_VALUE} before being safely converted to {@code int}.
-     * </p>
-     *
-     * <p>
-     *   All behavior, validation rules, and exceptions are otherwise identical to
-     *   {@link #toByteArray(InputStream, int, int)}.
-     * </p>
+     * <p>The method allocates a single array of the requested size and fills it directly
+     * from the stream.</p>
      *
      * @param input the {@link InputStream} to read; must not be {@code null}.
      * @param size  the exact number of bytes to read; must be {@code >= 0} and {@code <= Integer.MAX_VALUE}.
      * @return a new byte array of length {@code size}.
-     * @throws IllegalArgumentException if {@code size} is negative or greater than {@link Integer#MAX_VALUE}.
+     * @throws IllegalArgumentException if {@code size} is negative or does not fit into an int.
      * @throws EOFException             if the stream ends before {@code size} bytes are read.
      * @throws IOException              if an I/O error occurs while reading.
      * @throws NullPointerException     if {@code input} is {@code null}.
@@ -2722,20 +2705,8 @@ public class IOUtils {
     /**
      * Reads exactly {@code size} bytes from the given {@link InputStream} into a new {@code byte[]}.
      *
-     * <p>
-     *   This variant validates that the stream actually contains {@code size} bytes.
-     *   It is suitable for untrusted input because it prevents oversized allocations when the provided {@code size}
-     *   is corrupted or malicious.
-     * </p>
-     *
-     * <ul>
-     *   <li>If {@code size <= bufferSize}, the array is allocated directly and filled in a single pass.</li>
-     *   <li>
-     *     If {@code size > bufferSize}, the stream is read incrementally using a buffer of length {@code bufferSize}.
-     *     This avoids allocating an excessively large array up front,
-     *     but may temporarily double memory usage due to buffering.
-     *   </li>
-     * </ul>
+     * <p>The method accumulates the data in temporary buffers of size at most {@code bufferSize}
+     * and returns a single array containing the entire contents once the end of the stream is reached.</p>
      *
      * @param input      the {@link InputStream} to read; must not be {@code null}.
      * @param size       the exact number of bytes to read; must be {@code >= 0}.
