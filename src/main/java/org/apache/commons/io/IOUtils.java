@@ -2684,13 +2684,8 @@ public class IOUtils {
      * @throws NullPointerException     if {@code input} is {@code null}.
      * @since 2.1
      */
-    @SuppressWarnings("resource")
     public static byte[] toByteArray(final InputStream input, final int size) throws IOException {
-        Objects.requireNonNull(input, "input");
-        if (size < 0) {
-            throw new IllegalArgumentException("Size must be equal or greater than zero: " + size);
-        }
-        return toByteArray(input::read, size);
+        return toByteArray(Objects.requireNonNull(input, "input")::read, size);
     }
 
     /**
@@ -2790,6 +2785,9 @@ public class IOUtils {
      * @throws IllegalArgumentException if {@code size} is less than zero.
      */
     static byte[] toByteArray(final IOTriFunction<byte[], Integer, Integer, Integer> input, final int size) throws IOException {
+        if (size < 0) {
+            throw new IllegalArgumentException("Size must be equal or greater than zero: " + size);
+        }
         if (size == 0) {
             return EMPTY_BYTE_ARRAY;
         }
