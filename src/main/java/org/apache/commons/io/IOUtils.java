@@ -2721,13 +2721,11 @@ public class IOUtils {
      */
     public static byte[] toByteArray(final InputStream input, final int size, final int bufferSize) throws IOException {
         Objects.requireNonNull(input, "input");
-        if (size < 0) {
-            throw new IllegalArgumentException("Size must be equal or greater than zero: " + size);
-        }
         if (bufferSize <= 0) {
             throw new IllegalArgumentException("Chunk size must be greater than zero: " + bufferSize);
         }
         if (size <= bufferSize) {
+            // throws if size < 0
             return toByteArray(input::read, size);
         }
         try (UnsynchronizedByteArrayOutputStream output = UnsynchronizedByteArrayOutputStream.builder()
