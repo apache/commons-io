@@ -405,9 +405,9 @@ public class BoundedInputStream extends ProxyInputStream {
     }
 
     /**
-     * Gets the max count of bytes to read.
+     * Returns the maximum number of bytes this stream is allowed to read.
      *
-     * @return The max count of bytes to read.
+     * @return the maximum number of bytes permitted, or {@value IOUtils#EOF} if unbounded.
      * @since 2.16.0
      */
     public long getMaxCount() {
@@ -427,13 +427,19 @@ public class BoundedInputStream extends ProxyInputStream {
     }
 
     /**
-     * Gets how many bytes remain to read.
+     * Returns the bytes remaining before the configured read limit is reached.
      *
-     * @return bytes how many bytes remain to read.
+     * <p>This method does <strong>not</strong> report the bytes available in the
+     * underlying stream; it only reflects the remaining allowance imposed by this
+     * {@code BoundedInputStream}.</p>
+     *
+     * @return the number of bytes left until the read limit is reached,
+     *         or {@link Long#MAX_VALUE} if no limit is set.
      * @since 2.16.0
      */
     public long getRemaining() {
-        return Math.max(0, getMaxCount() - getCount());
+        final long maxCount = getMaxCount();
+        return maxCount == EOF ? Long.MAX_VALUE : Math.max(0, maxCount - getCount());
     }
 
     private boolean isMaxCount() {
