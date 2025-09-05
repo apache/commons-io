@@ -24,8 +24,6 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractStreamBuilder;
-import org.apache.commons.io.function.Erase;
-import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.function.IOIntConsumer;
 
 /**
@@ -102,11 +100,6 @@ public abstract class ProxyInputStream extends FilterInputStream {
      */
     private volatile boolean closed;
 
-    /**
-     * Handles exceptions.
-     */
-    private final IOConsumer<IOException> exceptionHandler;
-
     private final IOIntConsumer afterRead;
 
     /**
@@ -130,7 +123,6 @@ public abstract class ProxyInputStream extends FilterInputStream {
     public ProxyInputStream(final InputStream proxy) {
         // the delegate is stored in a protected superclass variable named 'in'.
         super(proxy);
-        this.exceptionHandler = Erase::rethrow;
         this.afterRead = IOIntConsumer.NOOP;
     }
 
@@ -144,7 +136,6 @@ public abstract class ProxyInputStream extends FilterInputStream {
     protected ProxyInputStream(final InputStream proxy, final AbstractBuilder<?, ?> builder) {
         // the delegate is stored in a protected superclass instance variable named 'in'.
         super(proxy);
-        this.exceptionHandler = Erase::rethrow;
         this.afterRead = builder.getAfterRead() != null ? builder.getAfterRead() : IOIntConsumer.NOOP;
     }
 
@@ -245,7 +236,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * @since 2.0
      */
     protected void handleIOException(final IOException e) throws IOException {
-        exceptionHandler.accept(e);
+        throw e;
     }
 
     /**
