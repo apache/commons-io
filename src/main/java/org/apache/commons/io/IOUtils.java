@@ -2722,7 +2722,7 @@ public class IOUtils {
     public static byte[] toByteArray(final InputStream input, final int size, final int bufferSize) throws IOException {
         Objects.requireNonNull(input, "input");
         if (bufferSize <= 0) {
-            throw new IllegalArgumentException("Chunk size must be greater than zero: " + bufferSize);
+            throw new IllegalArgumentException("Buffer size must be greater than zero: " + bufferSize);
         }
         if (size <= bufferSize) {
             // throws if size < 0
