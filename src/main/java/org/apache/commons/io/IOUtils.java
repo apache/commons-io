@@ -2638,7 +2638,7 @@ public class IOUtils {
     }
 
     /**
-     * Reads all remaining bytes from the given {@link InputStream} into a new {@code byte[]}.
+     * Reads all the bytes from an input stream in a byte array.
      *
      * @param inputStream the {@link InputStream} to read; must not be {@code null}.
      * @return a new byte array.
