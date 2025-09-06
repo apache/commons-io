@@ -73,7 +73,6 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.io.output.NullWriter;
 import org.apache.commons.io.output.StringBuilderWriter;
-import org.apache.commons.io.output.ThresholdingOutputStream;
 import org.apache.commons.io.output.UnsynchronizedByteArrayOutputStream;
 
 /**
@@ -221,6 +220,21 @@ public class IOUtils {
      * Internal char array buffer, intended for write only operations.
      */
     private static final char[] SCRATCH_CHAR_BUFFER_WO = charArray();
+
+    /**
+     * The maximum size of an array in many Java VMs.
+     */
+    private static final int MAX_ARRAY_LENGTH = Integer.MAX_VALUE - 8;
+
+    /*
+     * Default maximum chunk size used when copying large streams into a byte array.
+     * <p>
+     * This value is somewhat arbitrary, currently aligned with the value used by
+     * <a href="https://github.com/python/cpython/blob/3.14/Lib/_pyio.py">Python</a>
+     * for copying streams.
+     * </p>
+     */
+    private static final int DEFAULT_CHUNK_SIZE = 128 * 1024;
 
     /**
      * Returns the given InputStream if it is already a {@link BufferedInputStream}, otherwise creates a
@@ -2640,25 +2654,33 @@ public class IOUtils {
     /**
      * Reads all the bytes from an input stream in a byte array.
      *
-     * @param inputStream the {@link InputStream} to read; must not be {@code null}.
-     * @return a new byte array.
-     * @throws IllegalArgumentException if the size of the stream is greater than {@code Integer.MAX_VALUE}.
-     * @throws IOException          if an I/O error occurs while reading.
-     * @throws NullPointerException if {@code inputStream} is {@code null}.
+     * <p>The memory used by this method is <strong>proportional</strong> to the number
+     * of bytes read, which is only limited by {@link Integer#MAX_VALUE}. This makes it unsuitable for
+     * processing large input streams, unless sufficient heap space is available.</p>
+     *
+     * @param inputStream The {@link InputStream} to read; must not be {@code null}.
+     * @return A new byte array.
+     * @throws IllegalArgumentException If the size of the stream is greater than the maximum array size.
+     * @throws IOException              If an I/O error occurs while reading.
+     * @throws NullPointerException     If {@code inputStream} is {@code null}.
      */
     public static byte[] toByteArray(final InputStream inputStream) throws IOException {
-        // We use a ThresholdingOutputStream to avoid reading AND writing more than Integer.MAX_VALUE.
-        try (UnsynchronizedByteArrayOutputStream ubaOutput = UnsynchronizedByteArrayOutputStream.builder().get();
-                ThresholdingOutputStream thresholdOutput = new ThresholdingOutputStream(Integer.MAX_VALUE, os -> {
-                    throw new IllegalArgumentException(String.format("Cannot read more than %,d into a byte array", Integer.MAX_VALUE));
-                }, os -> ubaOutput)) {
-            copy(inputStream, thresholdOutput);
-            return ubaOutput.toByteArray();
+        final UnsynchronizedByteArrayOutputStream output =
+                copyToOutputStream(inputStream, MAX_ARRAY_LENGTH + 1, DEFAULT_CHUNK_SIZE);
+        if (output.size() > MAX_ARRAY_LENGTH) {
+            throw new IllegalArgumentException(
+                    String.format("Cannot read more than %,d into a byte array", MAX_ARRAY_LENGTH));
         }
+        return output.toByteArray();
     }
 
     /**
      * Reads exactly {@code size} bytes from the given {@link InputStream} into a new {@code byte[]}.
+     *
+     * <p>The memory used by this method is <strong>proportional</strong> to the number
+     * of bytes read and limited by the specified {@code size}. This makes it suitable for
+     * processing large input streams, provided that <strong>sufficient</strong> heap space is
+     * available.</p>
      *
      * @param input the {@link InputStream} to read; must not be {@code null}.
      * @param size  the exact number of bytes to read; must be {@code >= 0}.
@@ -2670,11 +2692,16 @@ public class IOUtils {
      * @since 2.1
      */
     public static byte[] toByteArray(final InputStream input, final int size) throws IOException {
-        return toByteArray(Objects.requireNonNull(input, "input")::read, size);
+        return toByteArray(input, size, DEFAULT_CHUNK_SIZE);
     }
 
     /**
      * Reads exactly {@code size} bytes from the given {@link InputStream} into a new {@code byte[]}.
+     *
+     * <p>The memory used by this method is <strong>proportional</strong> to the number
+     * of bytes read and limited by the specified {@code size}. This makes it suitable for
+     * processing large input streams, provided that <strong>sufficient</strong> heap space is
+     * available.</p>
      *
      * @param input the {@link InputStream} to read; must not be {@code null}.
      * @param size  the exact number of bytes to read; must be {@code >= 0} and {@code <= Integer.MAX_VALUE}.
@@ -2696,46 +2723,63 @@ public class IOUtils {
     /**
      * Reads exactly {@code size} bytes from the given {@link InputStream} into a new {@code byte[]}.
      *
-     * <p>When reading from an untrusted stream, this variant lowers the risk of
-     * {@link OutOfMemoryError} by allocating data in buffers of up to {@code bufferSize}
-     * bytes rather than in one large array.</p>
+     * <p>The memory used by this method is <strong>proportional</strong> to the number
+     * of bytes read and limited by the specified {@code size}. This makes it suitable for
+     * processing large input streams, provided that <strong>sufficient</strong> heap space is
+     * available.</p>
      *
-     * <p>Note, however, that this approach requires additional temporary memory
-     * compared to {@link #toByteArray(InputStream, int)}.</p>
+     * <p>This method processes the input stream in successive chunks of up to
+     * {@code chunkSize} bytes.</p>
      *
      * @param input      the {@link InputStream} to read; must not be {@code null}.
      * @param size       the exact number of bytes to read; must be {@code >= 0}.
      *                   The actual bytes read are validated to equal {@code size}.
-     * @param bufferSize the buffer size for incremental reading; must be {@code > 0}.
+     * @param chunkSize  The chunk size for incremental reading; must be {@code > 0}.
      * @return a new byte array of length {@code size}.
-     * @throws IllegalArgumentException if {@code size} is negative or {@code bufferSize <= 0}.
+     * @throws IllegalArgumentException if {@code size} is negative or {@code chunkSize <= 0}.
      * @throws EOFException             if the stream ends before {@code size} bytes are read.
      * @throws IOException              if an I/O error occurs while reading.
      * @throws NullPointerException     if {@code input} is {@code null}.
      * @since 2.21.0
      */
-    public static byte[] toByteArray(final InputStream input, final int size, final int bufferSize) throws IOException {
+    public static byte[] toByteArray(final InputStream input, final int size, final int chunkSize) throws IOException {
         Objects.requireNonNull(input, "input");
-        if (bufferSize <= 0) {
-            throw new IllegalArgumentException("Buffer size must be greater than zero: " + bufferSize);
+        if (chunkSize <= 0) {
+            throw new IllegalArgumentException("Chunk size must be greater than zero: " + chunkSize);
         }
-        if (size <= bufferSize) {
+        if (size <= chunkSize) {
             // throws if size < 0
             return toByteArray(input::read, size);
         }
+        final UnsynchronizedByteArrayOutputStream output = copyToOutputStream(input, size, chunkSize);
+         if (output.size() != size) {
+            throw new EOFException("Unexpected read size, current: " + output.size() + ", expected: " + size);
+        }
+        return output.toByteArray();
+    }
+
+    /**
+     * Copies up to {@code size} bytes from the given {@link InputStream} into a new {@link UnsynchronizedByteArrayOutputStream}.
+     *
+     *
+     * @param input      The {@link InputStream} to read; must not be {@code null}.
+     * @param limit      The maximum number of bytes to read; must be {@code >= 0}.
+     *                   The actual bytes read are validated to equal {@code size}.
+     * @param bufferSize The buffer size of the output stream; must be {@code > 0}.
+     * @return a ByteArrayOutputStream containing the read bytes.
+     */
+    private static UnsynchronizedByteArrayOutputStream copyToOutputStream(
+            final InputStream input, final long limit, final int bufferSize) throws IOException {
         try (UnsynchronizedByteArrayOutputStream output = UnsynchronizedByteArrayOutputStream.builder()
                         .setBufferSize(bufferSize)
                         .get();
                 InputStream boundedInput = BoundedInputStream.builder()
-                        .setMaxCount(size)
+                        .setMaxCount(limit)
                         .setPropagateClose(false)
                         .setInputStream(input)
                         .get()) {
             output.write(boundedInput);
-            if (output.size() != size) {
-                throw new EOFException("Unexpected read size, current: " + output.size() + ", expected: " + size);
-            }
-            return output.toByteArray();
+            return output;
         }
     }
 
@@ -2756,13 +2800,9 @@ public class IOUtils {
             return EMPTY_BYTE_ARRAY;
         }
         final byte[] data = byteArray(size);
-        int offset = 0;
-        int read;
-        while (offset < size && (read = input.apply(data, offset, size - offset)) != EOF) {
-            offset += read;
-        }
-        if (offset != size) {
-            throw new IOException("Unexpected read size, current: " + offset + ", expected: " + size);
+        final int read = read(input, data, 0, size);
+        if (read != size) {
+            throw new IOException("Unexpected read size, current: " + read + ", expected: " + size);
         }
         return data;
     }
