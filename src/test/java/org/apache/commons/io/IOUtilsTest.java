@@ -90,6 +90,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * This is used to test {@link IOUtils} for correctness. The following checks are performed:
@@ -1657,6 +1660,48 @@ class IOUtilsTest {
             assertNotNull(out, "Out cannot be null");
             assertEquals(0, out.length, "Out length must be 0");
         }
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void testToByteArray_InputStream_Size_BufferSize_Succeeds(byte[] data, int size, int bufferSize) throws IOException {
+        final ByteArrayInputStream input = new ByteArrayInputStream(data);
+        final byte[] expected = Arrays.copyOf(data, size);
+        final byte[] actual = IOUtils.toByteArray(input, size, bufferSize);
+        assertArrayEquals(expected, actual);
+    }
+
+    private static Stream<Arguments> testToByteArray_InputStream_Size_BufferSize_Succeeds() {
+        final byte[] data = new byte[1024];
+        for (int i = 0; i < 1024; i++) {
+            data[i] = (byte) i;
+        }
+        return Stream.of(
+                // Eager reading
+                Arguments.of(data.clone(), 512, 1024),
+                // Incremental reading
+                Arguments.of(data.clone(), 1024, 512),
+                // No reading
+                Arguments.of(data.clone(), 0, 128));
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void testToByteArray_InputStream_Size_BufferSize_Throws(
+            int size, int bufferSize, Class<? extends Exception> exceptionClass) throws IOException {
+        try (InputStream input = new NullInputStream(0)) {
+            assertThrows(exceptionClass, () -> IOUtils.toByteArray(input, size, bufferSize));
+        }
+    }
+
+    static Stream<Arguments> testToByteArray_InputStream_Size_BufferSize_Throws() {
+        return Stream.of(
+                // Negative size
+                Arguments.of(-1, 128, IllegalArgumentException.class),
+                // Invalid buffer size
+                Arguments.of(0, 0, IllegalArgumentException.class),
+                // Huge size: should not cause OutOfMemoryError
+                Arguments.of(Integer.MAX_VALUE, 128, EOFException.class));
     }
 
     @Test
