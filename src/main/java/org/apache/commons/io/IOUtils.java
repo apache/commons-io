@@ -2643,19 +2643,19 @@ public class IOUtils {
      * <p>The method accumulates the data in temporary buffers and returns a single array
      * containing the entire contents once the end of the stream is reached.</p>
      *
-     * @param input the {@link InputStream} to read; must not be {@code null}.
+     * @param inputStream the {@link InputStream} to read; must not be {@code null}.
      * @return a new byte array.
      * @throws IllegalArgumentException if the size of the stream is greater than {@code Integer.MAX_VALUE}.
      * @throws IOException          if an I/O error occurs while reading.
-     * @throws NullPointerException if {@code input} is {@code null}.
+     * @throws NullPointerException if {@code inputStream} is {@code null}.
      */
-    public static byte[] toByteArray(final InputStream input) throws IOException {
+    public static byte[] toByteArray(final InputStream inputStream) throws IOException {
         // We use a ThresholdingOutputStream to avoid reading AND writing more than Integer.MAX_VALUE.
         try (UnsynchronizedByteArrayOutputStream ubaOutput = UnsynchronizedByteArrayOutputStream.builder().get();
                 ThresholdingOutputStream thresholdOutput = new ThresholdingOutputStream(Integer.MAX_VALUE, os -> {
                     throw new IllegalArgumentException(String.format("Cannot read more than %,d into a byte array", Integer.MAX_VALUE));
                 }, os -> ubaOutput)) {
-            copy(input, thresholdOutput);
+            copy(inputStream, thresholdOutput);
             return ubaOutput.toByteArray();
         }
     }
