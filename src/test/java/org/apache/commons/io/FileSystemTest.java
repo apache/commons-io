@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -33,7 +34,7 @@ import java.nio.file.Path;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import org.apache.commons.io.FileSystem.LengthUnit;
+import org.apache.commons.io.FileSystem.NameLengthStrategy;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemProperties;
 import org.apache.commons.lang3.SystemUtils;
@@ -49,12 +50,18 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 class FileSystemTest {
 
-    // 255 UTF-8 bytes == 85 UTF-16 chars of 3-byte UTF-8
-    private static final String FILE_NAME_255_BYTES = StringUtils.repeat('★', 85);
-    // 255 UTF-16 chars == 3 * 85 UTF-8 chars
-    private static final String FILE_NAME_255_CHARS = StringUtils.repeat(FILE_NAME_255_BYTES, 3);
-    // 1020 UTF-8 bytes
-    private static final String FILE_NAME_1020_BYTES = StringUtils.repeat(FILE_NAME_255_BYTES, 4);
+    /** A single UTF-8 character that encodes to 3 bytes. */
+    private static final String UTF8_3BYTE_CHAR = "★";
+
+    /** File name of 255 ASCII characters: 255 bytes == 255 UTF-16 chars. */
+    private static final String FILE_NAME_255_ASCII = StringUtils.repeat("a", 255);
+
+    /** File name of 85 UTF-16 chars, each 3 bytes in UTF-8: total 255 bytes. */
+    private static final String FILE_NAME_255_UTF8_BYTES = StringUtils.repeat(UTF8_3BYTE_CHAR, 85);
+
+    /** File name of 255 UTF-16 chars, each 3 bytes in UTF-8: total 765 bytes. */
+    private static final String FILE_NAME_255_UTF16_CHARS = StringUtils.repeat(UTF8_3BYTE_CHAR, 255);
+
 
     @Test
     void testGetBlockSize() {
@@ -80,14 +87,6 @@ class FileSystemTest {
         assertNotSame(current.getIllegalFileNameChars(), current.getIllegalFileNameChars());
     }
 
-    @ParameterizedTest
-    @EnumSource(FileSystem.class)
-    void testGetLengthUnit(FileSystem fs) {
-        final LengthUnit expected =
-                fs == FileSystem.WINDOWS || fs == FileSystem.MAC_OSX ? LengthUnit.CHARS : LengthUnit.BYTES;
-        assertEquals(expected, fs.getLengthUnit());
-    }
-
     @Test
     void testGetNameSeparator() {
         final FileSystem current = FileSystem.getCurrent();
@@ -109,11 +108,14 @@ class FileSystemTest {
 
     static Stream<Arguments> testIsLegalName_Length() {
         return Stream.of(
-                Arguments.of(FileSystem.GENERIC, FILE_NAME_1020_BYTES, UTF_8),
-                Arguments.of(FileSystem.LINUX, FILE_NAME_255_BYTES, UTF_8),
-                Arguments.of(FileSystem.MAC_OSX, FILE_NAME_255_CHARS, UTF_8),
-                Arguments.of(FileSystem.WINDOWS, FILE_NAME_255_CHARS, UTF_8)
-        );
+                Arguments.of(FileSystem.GENERIC, StringUtils.repeat(FILE_NAME_255_ASCII, 4), UTF_8),
+                Arguments.of(FileSystem.GENERIC, StringUtils.repeat(FILE_NAME_255_UTF8_BYTES, 4), UTF_8),
+                Arguments.of(FileSystem.LINUX, FILE_NAME_255_ASCII, UTF_8),
+                Arguments.of(FileSystem.LINUX, FILE_NAME_255_UTF8_BYTES, UTF_8),
+                Arguments.of(FileSystem.MAC_OSX, FILE_NAME_255_ASCII, UTF_8),
+                Arguments.of(FileSystem.MAC_OSX, FILE_NAME_255_UTF16_CHARS, UTF_8),
+                Arguments.of(FileSystem.WINDOWS, FILE_NAME_255_ASCII, UTF_8),
+                Arguments.of(FileSystem.WINDOWS, FILE_NAME_255_UTF16_CHARS, UTF_8));
     }
 
     @ParameterizedTest
@@ -126,8 +128,8 @@ class FileSystemTest {
 
     @Test
     void testIsLegalName_Encoding() {
-        assertFalse(FileSystem.GENERIC.isLegalFileName(FILE_NAME_255_BYTES, US_ASCII), "US-ASCII cannot represent all chars");
-        assertTrue(FileSystem.GENERIC.isLegalFileName(FILE_NAME_255_BYTES, UTF_8), "UTF-8 can represent all chars");
+        assertFalse(FileSystem.GENERIC.isLegalFileName(FILE_NAME_255_UTF8_BYTES, US_ASCII), "US-ASCII cannot represent all chars");
+        assertTrue(FileSystem.GENERIC.isLegalFileName(FILE_NAME_255_UTF8_BYTES, UTF_8), "UTF-8 can represent all chars");
     }
 
     @Test
@@ -190,16 +192,36 @@ class FileSystemTest {
     @Test
     void testMaxNameLength_MatchesRealSystem(@TempDir Path tempDir) {
         final FileSystem fs = FileSystem.getCurrent();
-        final String fileName = fs.getLengthUnit() == LengthUnit.BYTES ? FILE_NAME_255_BYTES : FILE_NAME_255_CHARS;
-        // OS accepts a maximum length name
-        assertDoesNotThrow(() -> Files.createFile(tempDir.resolve(fileName)), "OS accepts max length name");
-        // OS rejects a too-long name
-        final String tooLongName = fileName + "a";
-        assertThrows(
-                IOException.class, () -> Files.createFile(tempDir.resolve(tooLongName)), "OS rejects too-long name");
-        // Commons IO agrees
-        assertTrue(fs.isLegalFileName(fileName, UTF_8), "Commons IO accepts max length name");
-        assertFalse(fs.isLegalFileName(tooLongName, UTF_8), "Commons IO rejects too-long name");
+        final String[] validNames;
+        switch (fs.nameLengthStrategy) {
+            case BYTES:
+                validNames = new String[] { FILE_NAME_255_ASCII, FILE_NAME_255_UTF8_BYTES };
+                break;
+            case UTF16_CHARS:
+                validNames = new String[] { FILE_NAME_255_ASCII, FILE_NAME_255_UTF16_CHARS };
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + fs.nameLengthStrategy);
+        }
+        for (final String fileName : validNames) {
+            assertDoesNotThrow(() -> testFileName(tempDir, fileName), "OS accepts max length name");
+            assertTrue(fs.isLegalFileName(fileName, UTF_8), "Commons IO accepts max length name");
+            final String tooLongName = fileName + "a";
+            assertThrows(IOException.class, () -> testFileName(tempDir, tooLongName), "OS rejects too-long name");
+            assertFalse(fs.isLegalFileName(tooLongName, UTF_8), "Commons IO rejects too-long name");
+        }
+    }
+
+    private void testFileName(Path tempDir, String fileName) throws IOException {
+        final Path filePath = tempDir.resolve(fileName);
+        Files.createFile(filePath);
+        try (Stream<Path> files = Files.list(tempDir)) {
+            final boolean found = files.anyMatch(filePath::equals);
+            if (!found) {
+                throw new FileNotFoundException(fileName + " not found in " + tempDir);
+            }
+        }
+        Files.delete(filePath);
     }
 
     @Test
@@ -238,23 +260,26 @@ class FileSystemTest {
         assertThrows(IllegalArgumentException.class, () -> fs.toLegalFileName("test", ':'));
     }
 
-    static Stream<Arguments> testTruncateFileName() {
+    static Stream<Arguments> testNameLengthStrategyTruncate() {
         return Stream.of(
-                Arguments.of(FileSystem.GENERIC, "simple.txt", "simple.txt"),
-                Arguments.of(FileSystem.GENERIC, FILE_NAME_1020_BYTES + ".txt", FILE_NAME_1020_BYTES),
-                Arguments.of(FileSystem.LINUX, "simple.txt", "simple.txt"),
-                Arguments.of(FileSystem.LINUX, FILE_NAME_255_BYTES + ".txt", FILE_NAME_255_BYTES),
-                Arguments.of(FileSystem.MAC_OSX, "simple.txt", "simple.txt"),
-                Arguments.of(FileSystem.MAC_OSX, FILE_NAME_255_CHARS + ".txt", FILE_NAME_255_CHARS),
-                Arguments.of(FileSystem.WINDOWS, "simple.txt", "simple.txt"),
-                Arguments.of(FileSystem.WINDOWS, FILE_NAME_255_CHARS + ".txt", FILE_NAME_255_CHARS));
+                Arguments.of(NameLengthStrategy.BYTES, 255, "simple.txt", "simple.txt"),
+                Arguments.of(NameLengthStrategy.BYTES, 255, FILE_NAME_255_ASCII + ".txt", FILE_NAME_255_ASCII),
+                Arguments.of(
+                        NameLengthStrategy.BYTES, 255, FILE_NAME_255_UTF8_BYTES + ".txt", FILE_NAME_255_UTF8_BYTES),
+                Arguments.of(NameLengthStrategy.UTF16_CHARS, 255, "simple.txt", "simple.txt"),
+                Arguments.of(NameLengthStrategy.UTF16_CHARS, 255, FILE_NAME_255_ASCII + ".txt", FILE_NAME_255_ASCII),
+                Arguments.of(
+                        NameLengthStrategy.UTF16_CHARS,
+                        255,
+                        FILE_NAME_255_UTF16_CHARS + ".txt",
+                        FILE_NAME_255_UTF16_CHARS));
     }
 
     @ParameterizedTest(name = "{index}: {0} truncates {1} to {2}")
     @MethodSource
-    void testTruncateFileName(FileSystem fs, String input, String expected) {
-        final CharSequence out = fs.truncateFileName(input, UTF_8);
-        assertEquals(expected, out, fs.name());
+    void testNameLengthStrategyTruncate(NameLengthStrategy strategy, int limit, String input, String expected) {
+        final CharSequence out = strategy.truncate(input, limit, UTF_8);
+        assertEquals(expected, out, strategy.name() + " truncates to limit");
     }
 
     static Stream<Arguments> testTruncateByBytes_Succeeds() {
@@ -284,7 +309,7 @@ class FileSystemTest {
     @ParameterizedTest(name = "{index}: {0}")
     @MethodSource
     void testTruncateByBytes_Succeeds(String caseName, String input, Charset charset, int maxBytes, String expected) {
-        final CharSequence out = FileSystem.truncateByBytes(input, charset, maxBytes);
+        final CharSequence out = NameLengthStrategy.BYTES.truncate(input, maxBytes, charset);
         // If your contract returns null for null input, this still works; otherwise adjust.
         assertEquals(expected, Objects.toString(out, null), caseName);
     }
@@ -292,8 +317,8 @@ class FileSystemTest {
     @Test
     void testTruncateByBytes_UnmappableAsciiThrows() {
         final String in = "café"; // contains 'é' (not in ASCII)
-        final IllegalArgumentException ex =
-                assertThrows(IllegalArgumentException.class, () -> FileSystem.truncateByBytes(in, US_ASCII, 100));
+        final IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class, () -> NameLengthStrategy.BYTES.truncate(in, 100, US_ASCII));
         assertTrue(ex.getMessage().contains(US_ASCII.name()), "ex message contains charset name");
     }
 }

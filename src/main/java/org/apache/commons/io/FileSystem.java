@@ -48,7 +48,7 @@ public enum FileSystem {
             // ASCII NUL
             0
             // @formatter:on
-    }, new String[] {}, false, false, '/', LengthUnit.BYTES),
+    }, new String[] {}, false, false, '/', NameLengthStrategy.BYTES),
 
     /**
      * Linux file system.
@@ -60,7 +60,7 @@ public enum FileSystem {
             0,
              '/'
             // @formatter:on
-    }, new String[] {}, false, false, '/', LengthUnit.BYTES),
+    }, new String[] {}, false, false, '/', NameLengthStrategy.BYTES),
 
     /**
      * MacOS file system.
@@ -73,7 +73,7 @@ public enum FileSystem {
             '/',
              ':'
             // @formatter:on
-    }, new String[] {}, false, false, '/', LengthUnit.CHARS),
+    }, new String[] {}, false, false, '/', NameLengthStrategy.UTF16_CHARS),
 
     /**
      * Windows file system.
@@ -107,7 +107,7 @@ public enum FileSystem {
                     "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9",
                     "LPT\u00b2", "LPT\u00b3", "LPT\u00b9", // Superscript 2 3 1 in that order
                     "NUL", "PRN"
-            }, true, true, '\\', LengthUnit.CHARS);
+            }, true, true, '\\', NameLengthStrategy.UTF16_CHARS);
     // @formatter:on
 
     /**
@@ -327,7 +327,8 @@ public enum FileSystem {
     private final boolean supportsDriveLetter;
     private final char nameSeparator;
     private final char nameSeparatorOther;
-    private final LengthUnit lengthUnit;
+    // package-private for testing
+    final NameLengthStrategy nameLengthStrategy;
 
     /**
      * Constructs a new instance.
@@ -342,12 +343,12 @@ public enum FileSystem {
      * @param reservedFileNamesExtensions TODO
      * @param supportsDriveLetter Whether this file system support driver letters.
      * @param nameSeparator The name separator, '\\' on Windows, '/' on Linux.
-     * @param lengthUnit The unit of measurement for length limits.
+     * @param nameLengthStrategy The strategy for measuring and truncating file and path names.
      */
     FileSystem(final int blockSize, final boolean caseSensitive, final boolean casePreserving,
         final int maxFileLength, final int maxPathLength, final int[] illegalFileNameChars,
         final String[] reservedFileNames, final boolean reservedFileNamesExtensions, final boolean supportsDriveLetter,
-        final char nameSeparator, final LengthUnit lengthUnit) {
+        final char nameSeparator, final NameLengthStrategy nameLengthStrategy) {
         this.blockSize = blockSize;
         this.maxFileNameLength = maxFileLength;
         this.maxPathLength = maxPathLength;
@@ -360,7 +361,7 @@ public enum FileSystem {
         this.supportsDriveLetter = supportsDriveLetter;
         this.nameSeparator = nameSeparator;
         this.nameSeparatorOther = FilenameUtils.flipSeparator(nameSeparator);
-        this.lengthUnit = lengthUnit;
+        this.nameLengthStrategy = nameLengthStrategy;
     }
 
     /**
@@ -398,11 +399,23 @@ public enum FileSystem {
     /**
      * Gets the maximum length for file names (excluding any folder path).
      *
-     * <p><strong>Note:</strong> This excludes any folder path. The unit depends on the
-     * filesystem or OS; see {@link #getLengthUnit()} to check whether the value is in
-     * bytes or UTF-16 characters.</p>
+     * <p>This limit applies only to the file name itself, excluding any parent
+     * directories.</p>
      *
-     * @return the maximum file name length.
+     * <p>The value is expressed in Java {@code char} units (UTF-16 code units).</p>
+     *
+     * <p><strong>Note:</strong> Because many file systems enforce limits in
+     * <em>bytes</em> using a specific encoding rather than in UTF-16 code
+     * units, a name that fits this limit may still be rejected by the
+     * underlying file system.</p>
+     *
+     * <p>Use {@link #isLegalFileName} to check whether a given name is valid
+     * for the current file system and charset.</p>
+     *
+     * <p>However, any file name longer than this limit is guaranteed to be
+     * invalid on the current file system.</p>
+     *
+     * @return the maximum file name length in characters.
      */
     public int getMaxFileNameLength() {
         return maxFileNameLength;
@@ -411,29 +424,25 @@ public enum FileSystem {
     /**
      * Gets the maximum length for file paths (may include folders).
      *
-     * <p><strong>Note:</strong> This may include folder names as well as the file name.
-     * The unit is the same as {@link #getMaxFileNameLength()} and can be obtained
-     * from {@link #getLengthUnit()}.</p>
+     * <p>This may include folder names as well as the file name.</p>
      *
-     * @return the maximum file path length.
+     * <p>The value is expressed in Java {@code char} units (UTF-16 code units)
+     * and represents the longest path that can be safely passed to Java
+     * {@link java.io.File} and {@link java.nio.file.Path} APIs.</p>
+     *
+     * <p><strong>Note:</strong> many operating systems and file systems enforce
+     * path length limits in <em>bytes</em> using a specific encoding, rather than
+     * in UTF-16 code units. As a result, a path that fits within this limit may
+     * still be rejected by the underlying platform.</p>
+     *
+     * <p>Conversely, any path longer than this limit is guaranteed to fail with
+     * at least some operating system API calls.</p>
+     *
+     * @return the maximum file path length in characters.
      */
     public int getMaxPathLength() {
         return maxPathLength;
     }
-
-    /**
-     * Gets the unit of measurement for length limits.
-     *
-     * <p>Depending on the platform, limits may be expressed in bytes or in UTF-16
-     * characters.</p>
-     *
-     * @return the unit for file name and path length limits.
-     * @since 2.21.0
-     */
-    public LengthUnit getLengthUnit() {
-        return lengthUnit;
-    }
-
 
     /**
      * Gets the name separator, '\\' on Windows, '/' on Linux.
@@ -519,13 +528,11 @@ public enum FileSystem {
      * @since 2.21.0
      */
     public boolean isLegalFileName(final CharSequence candidate, final Charset charset) {
-        if (!isLegalFileLength(candidate, charset)) {
-            return false;
-        }
-        if (isReservedFileName(candidate)) {
-            return false;
-        }
-        return candidate.chars().noneMatch(this::isIllegalFileNameChar);
+        return candidate != null
+                && candidate.length() != 0
+                && nameLengthStrategy.isWithinLimit(candidate, getMaxFileNameLength(), charset)
+                && !isReservedFileName(candidate)
+                && candidate.chars().noneMatch(this::isIllegalFileNameChar);
     }
 
     /**
@@ -614,7 +621,7 @@ public enum FileSystem {
             throw new IllegalArgumentException(String.format("The replacement character '%s' cannot be one of the %s illegal characters: %s",
                 replacement == '\0' ? "\\0" : replacement, name(), Arrays.toString(illegalFileNameChars)));
         }
-        final CharSequence truncated = truncateFileName(candidate, charset);
+        final CharSequence truncated = nameLengthStrategy.truncate(candidate, getMaxFileNameLength(), charset);
         final int[] array = truncated.chars().map(i -> isIllegalFileNameChar(i) ? replacement : i).toArray();
         return new String(array, 0, array.length);
     }
@@ -624,75 +631,102 @@ public enum FileSystem {
         return index < 0 ? cs : cs.subSequence(0, index);
     }
 
-    private boolean isLegalFileLength(final CharSequence candidate, final Charset charset) {
-        if (candidate == null || candidate.length() == 0) {
-            return false;
-        }
-        if (lengthUnit == LengthUnit.CHARS) {
-            return candidate.length() <= getMaxFileNameLength();
-        }
-        final CharsetEncoder encoder = charset.newEncoder();
-        try {
-            final ByteBuffer buffer = encoder.encode(CharBuffer.wrap(candidate));
-            return buffer.remaining() <= getMaxFileNameLength();
-        } catch (CharacterCodingException e) {
-            // If we can't encode, it's not legal
-            return false;
-        }
-    }
-
-    CharSequence truncateFileName(final CharSequence candidate, final Charset charset) {
-        final int maxFileNameLength = getMaxFileNameLength();
-        // Character-based limit: simple substring if needed.
-        if (lengthUnit == LengthUnit.CHARS) {
-            return candidate.length() <= maxFileNameLength ? candidate : candidate.subSequence(0, maxFileNameLength);
-        }
-
-        // Byte-based limit
-        return truncateByBytes(candidate, charset, maxFileNameLength);
-    }
-
-    static CharSequence truncateByBytes(final CharSequence candidate, final Charset charset, final int maxBytes) {
-        // Byte-based limit
-        final CharsetEncoder encoder = charset.newEncoder()
-                .onMalformedInput(CodingErrorAction.REPORT)
-                .onUnmappableCharacter(CodingErrorAction.REPORT);
-
-        if (!encoder.canEncode(candidate)) {
-            throw new IllegalArgumentException(
-                    "File name contains characters that cannot be encoded with charset " + charset.name());
-        }
-
-        // Fast path: if even the worst-case expansion fits, we're done.
-        if (candidate.length() <= Math.floor(maxBytes / encoder.maxBytesPerChar())) {
-            return candidate;
-        }
-
-        // Slow path: encode into a fixed-size byte buffer.
-        final ByteBuffer out = ByteBuffer.allocate(maxBytes);
-        final CharBuffer in = CharBuffer.wrap(candidate);
-
-        // Encode until the first character that would exceed the byte budget.
-        final CoderResult cr = encoder.encode(in, out, true);
-
-        if (cr.isUnderflow()) {
-            // Entire candidate fit within maxFileNameLength bytes.
-            return candidate;
-        }
-
-        // We ran out of space mid-encode: truncate BEFORE the offending character.
-        return candidate.subSequence(0, in.position());
-    }
-
     /**
-     * Units of length for the file name and path length limits.
-     *
-     * @since 2.21.0
+     * Strategy for measuring and truncating file or path names in different units.
+     * Implementations measure length and can truncate to a specified limit.
      */
-    public enum LengthUnit {
-        /** Length in bytes. */
-        BYTES,
-        /** Length in UTF-16 characters. */
-        CHARS;
+    enum NameLengthStrategy {
+        /** Length measured as encoded bytes. */
+        BYTES {
+            @Override
+            int getLength(final CharSequence value, final Charset charset) {
+                final CharsetEncoder enc = charset.newEncoder()
+                        .onMalformedInput(CodingErrorAction.REPORT)
+                        .onUnmappableCharacter(CodingErrorAction.REPORT);
+                try {
+                    return enc.encode(CharBuffer.wrap(value)).remaining();
+                } catch (CharacterCodingException e) {
+                    // Unencodable ⇒ does not fit any byte limit.
+                    return Integer.MAX_VALUE;
+                }
+            }
+
+            @Override
+            CharSequence truncate(final CharSequence value, final int limit, final Charset charset) {
+                final CharsetEncoder encoder = charset.newEncoder()
+                        .onMalformedInput(CodingErrorAction.REPORT)
+                        .onUnmappableCharacter(CodingErrorAction.REPORT);
+
+                if (!encoder.canEncode(value)) {
+                    throw new IllegalArgumentException(
+                            "The value " + value + " cannot be encoded using " + charset.name());
+                }
+
+                // Fast path: if even the worst-case expansion fits, we're done.
+                if (value.length() <= Math.floor(limit / encoder.maxBytesPerChar())) {
+                    return value;
+                }
+
+                // Slow path: encode into a fixed-size byte buffer.
+                final ByteBuffer out = ByteBuffer.allocate(limit);
+                final CharBuffer in = CharBuffer.wrap(value);
+
+                // Encode until the first character that would exceed the byte budget.
+                final CoderResult cr = encoder.encode(in, out, true);
+
+                if (cr.isUnderflow()) {
+                    // Entire candidate fit within maxFileNameLength bytes.
+                    return value;
+                }
+
+                // We ran out of space mid-encode: truncate BEFORE the offending character.
+                return value.subSequence(0, in.position());
+            }
+        },
+
+        /** Length measured as UTF-16 code units (i.e., {@code CharSequence.length()}). */
+        UTF16_CHARS {
+            @Override
+            int getLength(final CharSequence value, final Charset charset) {
+                return value.length();
+            }
+
+            @Override
+            CharSequence truncate(final CharSequence value, final int limit, final Charset charset) {
+                return value.length() <= limit ? value : value.subSequence(0, limit);
+            }
+        };
+
+        /**
+         * Gets the measured length in this strategy’s unit.
+         *
+         * @param value The value to measure, not null.
+         * @param charset The charset to use when measuring in bytes.
+         * @return The length in this strategy’s unit.
+         */
+        abstract int getLength(CharSequence value, Charset charset);
+
+        /**
+         * Tests if the measured length is less or equal the {@code limit}.
+         *
+         * @param value The value to measure, not null.
+         * @param limit The limit to compare to.
+         * @param charset The charset to use when measuring in bytes.
+         * @return {@code true} if the measured length is less or equal the {@code limit}, {@code false} otherwise.
+         */
+        final boolean isWithinLimit(final CharSequence value, final int limit, final Charset charset) {
+            return getLength(value, charset) <= limit;
+        }
+
+        /**
+         * Truncates to {@code limit} in this strategy’s unit (no-op if already within limit).
+         *
+         * @param value The value to truncate, not null.
+         * @param limit The limit to truncate to.
+         * @param charset The charset to use when measuring in bytes.
+         * @return The truncated value, not null.
+         */
+        abstract CharSequence truncate(CharSequence value, int limit, Charset charset);
     }
+
 }
