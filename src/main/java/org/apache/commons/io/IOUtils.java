@@ -2640,9 +2640,6 @@ public class IOUtils {
     /**
      * Reads all remaining bytes from the given {@link InputStream} into a new {@code byte[]}.
      *
-     * <p>The method accumulates the data in temporary buffers and returns a single array
-     * containing the entire contents once the end of the stream is reached.</p>
-     *
      * @param inputStream the {@link InputStream} to read; must not be {@code null}.
      * @return a new byte array.
      * @throws IllegalArgumentException if the size of the stream is greater than {@code Integer.MAX_VALUE}.
@@ -2663,9 +2660,6 @@ public class IOUtils {
     /**
      * Reads exactly {@code size} bytes from the given {@link InputStream} into a new {@code byte[]}.
      *
-     * <p>The method allocates a single array of the requested size and fills it directly
-     * from the stream.</p>
-     *
      * @param input the {@link InputStream} to read; must not be {@code null}.
      * @param size  the exact number of bytes to read; must be {@code >= 0}.
      * @return a new byte array of length {@code size}.
@@ -2681,9 +2675,6 @@ public class IOUtils {
 
     /**
      * Reads exactly {@code size} bytes from the given {@link InputStream} into a new {@code byte[]}.
-     *
-     * <p>The method allocates a single array of the requested size and fills it directly
-     * from the stream.</p>
      *
      * @param input the {@link InputStream} to read; must not be {@code null}.
      * @param size  the exact number of bytes to read; must be {@code >= 0} and {@code <= Integer.MAX_VALUE}.
@@ -2705,8 +2696,12 @@ public class IOUtils {
     /**
      * Reads exactly {@code size} bytes from the given {@link InputStream} into a new {@code byte[]}.
      *
-     * <p>The method accumulates the data in temporary buffers of size at most {@code bufferSize}
-     * and returns a single array containing the entire contents once the end of the stream is reached.</p>
+     * <p>When reading from an untrusted stream, this variant lowers the risk of
+     * {@link OutOfMemoryError} by allocating data in buffers of up to {@code bufferSize}
+     * bytes rather than in one large array.</p>
+     *
+     * <p>Note, however, that this approach requires additional temporary memory
+     * compared to {@link #toByteArray(InputStream, int)}.</p>
      *
      * @param input      the {@link InputStream} to read; must not be {@code null}.
      * @param size       the exact number of bytes to read; must be {@code >= 0}.
