@@ -370,16 +370,11 @@ public class BoundedInputStream extends ProxyInputStream {
         super.afterRead(n);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int available() throws IOException {
-        if (isMaxCount()) {
-            onMaxLength(maxCount, getCount());
-            return 0;
-        }
-        return in.available();
+        // Safe cast: value is between 0 and Integer.MAX_VALUE
+        final int remaining = (int) Math.min(getRemaining(), Integer.MAX_VALUE);
+        return Math.min(super.available(), remaining);
     }
 
     /**
@@ -405,9 +400,9 @@ public class BoundedInputStream extends ProxyInputStream {
     }
 
     /**
-     * Gets the max count of bytes to read.
+     * Gets the maximum number of bytes to read.
      *
-     * @return The max count of bytes to read.
+     * @return The maximum number of bytes to read, or {@value IOUtils#EOF} if unbounded.
      * @since 2.16.0
      */
     public long getMaxCount() {
@@ -427,13 +422,21 @@ public class BoundedInputStream extends ProxyInputStream {
     }
 
     /**
-     * Gets how many bytes remain to read.
+     * Gets the number of bytes remaining to read before the maximum is reached.
      *
-     * @return bytes how many bytes remain to read.
+     * <p>
+     * This method does <strong>not</strong> report the bytes available in the
+     * underlying stream; it only reflects the remaining allowance imposed by this
+     * {@code BoundedInputStream}.
+     * </p>
+     *
+     * @return The number of bytes remaining to read before the maximum is reached,
+     *         or {@link Long#MAX_VALUE} if no bound is set.
      * @since 2.16.0
      */
     public long getRemaining() {
-        return Math.max(0, getMaxCount() - getCount());
+        final long maxCount = getMaxCount();
+        return maxCount == EOF ? Long.MAX_VALUE : Math.max(0, maxCount - getCount());
     }
 
     private boolean isMaxCount() {
