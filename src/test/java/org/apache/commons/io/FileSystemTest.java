@@ -203,7 +203,7 @@ class FileSystemTest {
                 validNames = new String[] { FILE_NAME_255_ASCII, FILE_NAME_255_UTF16_CHARS };
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + fs.nameLengthStrategy);
+                throw new IllegalStateException("Unexpected value: " + fs);
         }
         for (final String fileName : validNames) {
             assertDoesNotThrow(() -> testFileName(tempDir, fileName), "OS accepts max length name");
