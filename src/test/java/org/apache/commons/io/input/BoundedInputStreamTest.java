@@ -16,7 +16,6 @@
  */
 package org.apache.commons.io.input;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.IOUtils.EOF;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -41,7 +40,6 @@ import java.util.stream.Stream;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.test.CustomIOException;
 import org.apache.commons.lang3.mutable.MutableInt;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -64,7 +62,7 @@ class BoundedInputStreamTest {
 
     @Test
     void testAfterReadConsumer() throws Exception {
-        final byte[] hello = "Hello".getBytes(UTF_8);
+        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
         final AtomicBoolean boolRef = new AtomicBoolean();
         // @formatter:off
         try (InputStream bounded = BoundedInputStream.builder()
@@ -110,7 +108,6 @@ class BoundedInputStreamTest {
                 Arguments.of("after close → throws IOException", throwsAfterClose, 42));
     }
 
-    @DisplayName("available() after close follows underlying stream semantics")
     @ParameterizedTest(name = "{index} — {0}")
     @MethodSource
     void testAvailableAfterClose(String caseName, InputStream delegate, int expectedBeforeClose)
@@ -134,7 +131,7 @@ class BoundedInputStreamTest {
     }
 
     static Stream<Arguments> testAvailableUpperLimit() {
-        final byte[] helloWorld = "Hello World".getBytes(UTF_8);
+        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
         return Stream.of(
                 // Limited by maxCount
                 Arguments.of(new ByteArrayInputStream(helloWorld), helloWorld.length - 1, helloWorld.length - 1, 0),
@@ -177,8 +174,8 @@ class BoundedInputStreamTest {
     @ParameterizedTest
     @ValueSource(longs = { -100, -1, 0, 1, 2, 4, 8, 16, 32, 64 })
     void testCounts(final long startCount) throws Exception {
-        final byte[] helloWorld = "Hello World".getBytes(UTF_8);
-        final byte[] hello = "Hello".getBytes(UTF_8);
+        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
+        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
         final long actualStart = startCount < 0 ? 0 : startCount;
         // limit = length
         try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).setCount(startCount)
@@ -268,10 +265,10 @@ class BoundedInputStreamTest {
 
     @Test
     void testMarkReset() throws Exception {
-        final byte[] helloWorld = "Hello World".getBytes(UTF_8);
+        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
         final int helloWorldLen = helloWorld.length;
-        final byte[] hello = "Hello".getBytes(UTF_8);
-        final byte[] world = " World".getBytes(UTF_8);
+        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
+        final byte[] world = " World".getBytes(StandardCharsets.UTF_8);
         final int helloLen = hello.length;
         // limit = -1
         try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).get()) {
@@ -367,7 +364,7 @@ class BoundedInputStreamTest {
 
     @Test
     void testOnMaxCountConsumer() throws Exception {
-        final byte[] hello = "Hello".getBytes(UTF_8);
+        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
         final AtomicBoolean boolRef = new AtomicBoolean();
         // @formatter:off
         try (BoundedInputStream bounded = BoundedInputStream.builder()
@@ -398,8 +395,8 @@ class BoundedInputStreamTest {
     @SuppressWarnings("deprecation")
     @Test
     void testOnMaxLength() throws Exception {
-        final byte[] helloWorld = "Hello World".getBytes(UTF_8);
-        final byte[] hello = "Hello".getBytes(UTF_8);
+        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
+        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
         final AtomicBoolean boolRef = new AtomicBoolean();
         // limit = length
         try (BoundedInputStream bounded = BoundedInputStream.builder()
@@ -496,7 +493,7 @@ class BoundedInputStreamTest {
     @SuppressWarnings("deprecation")
     @Test
     void testPublicConstructors() throws IOException {
-        final byte[] helloWorld = "Hello World".getBytes(UTF_8);
+        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
         try (ByteArrayInputStream baos = new ByteArrayInputStream(helloWorld);
                 BoundedInputStream inputStream = new BoundedInputStream(baos)) {
             assertSame(baos, inputStream.unwrap());
@@ -529,7 +526,6 @@ class BoundedInputStreamTest {
                 Arguments.of("after close → throws IOException", throwsAfterClose, closed));
     }
 
-    @DisplayName("read() after close follows underlying stream semantics")
     @ParameterizedTest(name = "{index} — {0}")
     @MethodSource("testReadAfterClose")
     void testReadAfterClose(
@@ -566,8 +562,8 @@ class BoundedInputStreamTest {
 
     @Test
     void testReadArray() throws Exception {
-        final byte[] helloWorld = "Hello World".getBytes(UTF_8);
-        final byte[] hello = "Hello".getBytes(UTF_8);
+        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
+        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
         try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).get()) {
             assertTrue(bounded.markSupported());
             compare("limit = -1", helloWorld, IOUtils.toByteArray(bounded));
@@ -618,7 +614,6 @@ class BoundedInputStreamTest {
                 Arguments.of("bounded (Long.MAX_VALUE)", Long.MAX_VALUE, Long.MAX_VALUE));
     }
 
-    @DisplayName("getRemaining() reflects only the configured bound (not underlying data)")
     @ParameterizedTest(name = "{index}: {0} -> initial remaining {2}")
     @MethodSource
     void testRemaining(final String caseName, final long maxCount, final long expectedInitialRemaining)
@@ -646,8 +641,8 @@ class BoundedInputStreamTest {
 
     @Test
     void testReadSingle() throws Exception {
-        final byte[] helloWorld = "Hello World".getBytes(UTF_8);
-        final byte[] hello = "Hello".getBytes(UTF_8);
+        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
+        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
         // limit = length
         try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).setMaxCount(helloWorld.length)
                 .get()) {
@@ -684,8 +679,8 @@ class BoundedInputStreamTest {
 
     @Test
     void testReset() throws Exception {
-        final byte[] helloWorld = "Hello World".getBytes(UTF_8);
-        final byte[] hello = "Hello".getBytes(UTF_8);
+        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
+        final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
         // limit = -1
         try (BoundedInputStream bounded = BoundedInputStream.builder().setInputStream(new ByteArrayInputStream(helloWorld)).get()) {
             assertTrue(bounded.markSupported());
