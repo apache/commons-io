@@ -212,7 +212,7 @@ public enum FileSystem {
         }
     }
 
-    /**
+    /*
      * Finds the index of the first dot in a CharSequence.
      */
     private static int indexOfFirstDot(final CharSequence cs) {
