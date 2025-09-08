@@ -424,7 +424,8 @@ public enum FileSystem {
     /**
      * Gets the maximum length for file paths (may include folders).
      *
-     * <p>This may include folder names as well as the file name.</p>
+     * <p>This value is inclusive of all path components and separators.
+     * For a limit of each path component see {@link #getMaxFileNameLength()}.</p>
      *
      * <p>The value is expressed in Java {@code char} units (UTF-16 code units)
      * and represents the longest path that can be safely passed to Java
