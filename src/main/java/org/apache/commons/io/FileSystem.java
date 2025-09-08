@@ -213,73 +213,15 @@ public enum FileSystem {
     }
 
     /**
-     * Copied from Apache Commons Lang CharSequenceUtils.
-     *
-     * Returns the index within {@code cs} of the first occurrence of the
-     * specified character, starting the search at the specified index.
-     * <p>
-     * If a character with value {@code searchChar} occurs in the
-     * character sequence represented by the {@code cs}
-     * object at an index no smaller than {@code start}, then
-     * the index of the first such occurrence is returned. For values
-     * of {@code searchChar} in the range from 0 to 0xFFFF (inclusive),
-     * this is the smallest value <em>k</em> such that:
-     * </p>
-     * <blockquote><pre>
-     * (this.charAt(<em>k</em>) == searchChar) &amp;&amp; (<em>k</em> &gt;= start)
-     * </pre></blockquote>
-     * is true. For other values of {@code searchChar}, it is the
-     * smallest value <em>k</em> such that:
-     * <blockquote><pre>
-     * (this.codePointAt(<em>k</em>) == searchChar) &amp;&amp; (<em>k</em> &gt;= start)
-     * </pre></blockquote>
-     * <p>
-     * is true. In either case, if no such character occurs in {@code cs}
-     * at or after position {@code start}, then
-     * {@code -1} is returned.
-     * </p>
-     * <p>
-     * There is no restriction on the value of {@code start}. If it
-     * is negative, it has the same effect as if it were zero: the entire
-     * {@link CharSequence} may be searched. If it is greater than
-     * the length of {@code cs}, it has the same effect as if it were
-     * equal to the length of {@code cs}: {@code -1} is returned.
-     * </p>
-     * <p>All indices are specified in {@code char} values
-     * (Unicode code units).
-     * </p>
-     *
-     * @param cs  the {@link CharSequence} to be processed, not null
-     * @param searchChar  the char to be searched for
-     * @param start  the start index, negative starts at the string start
-     * @return the index where the search char was found, -1 if not found
-     * @since 3.6 updated to behave more like {@link String}
+     * Finds the index of the first dot in a CharSequence.
      */
-    private static int indexOf(final CharSequence cs, final int searchChar, int start) {
+    private static int indexOfFirstDot(final CharSequence cs) {
         if (cs instanceof String) {
-            return ((String) cs).indexOf(searchChar, start);
+            return ((String) cs).indexOf('.');
         }
-        final int sz = cs.length();
-        if (start < 0) {
-            start = 0;
-        }
-        if (searchChar < Character.MIN_SUPPLEMENTARY_CODE_POINT) {
-            for (int i = start; i < sz; i++) {
-                if (cs.charAt(i) == searchChar) {
-                    return i;
-                }
-            }
-            return -1;
-        }
-        //supplementary characters (LANG1300)
-        if (searchChar <= Character.MAX_CODE_POINT) {
-            final char[] chars = Character.toChars(searchChar);
-            for (int i = start; i < sz - 1; i++) {
-                final char high = cs.charAt(i);
-                final char low = cs.charAt(i + 1);
-                if (high == chars[0] && low == chars[1]) {
-                    return i;
-                }
+        for (int i = 0; i < cs.length(); i++) {
+            if (cs.charAt(i) == '.') {
+                return i;
             }
         }
         return -1;
@@ -628,8 +570,9 @@ public enum FileSystem {
     }
 
     CharSequence trimExtension(final CharSequence cs) {
-        final int index = indexOf(cs, '.', 0);
-        return index < 0 ? cs : cs.subSequence(0, index);
+        final int index = indexOfFirstDot(cs);
+        // An initial dot is not an extension
+        return index < 1 ? cs : cs.subSequence(0, index);
     }
 
     /**
@@ -647,7 +590,7 @@ public enum FileSystem {
                 try {
                     return enc.encode(CharBuffer.wrap(value)).remaining();
                 } catch (CharacterCodingException e) {
-                    // Unencodable ⇒ does not fit any byte limit.
+                    // Unencodable, does not fit any byte limit.
                     return Integer.MAX_VALUE;
                 }
             }
@@ -669,19 +612,36 @@ public enum FileSystem {
                 }
 
                 // Slow path: encode into a fixed-size byte buffer.
-                final ByteBuffer out = ByteBuffer.allocate(limit);
-                final CharBuffer in = CharBuffer.wrap(value);
+                // 1. Compute length of extension in bytes (if any).
+                final int extensionStart = indexOfFirstDot(value);
+                final boolean hasExtension = extensionStart > 0;
+                final int extensionLength = hasExtension ? getLength(value.subSequence(extensionStart, value.length()), charset) : 0;
+                if (hasExtension && extensionLength >= limit) {
+                    // Extension itself does not fit
+                    throw new IllegalArgumentException(
+                            "The extension of " + value + " is too long to fit within " + limit + " bytes");
+                }
+
+                // 2. Compute the byte size of the non-extension part.
+                final ByteBuffer byteBuffer = ByteBuffer.allocate(limit - extensionLength);
+                final CharBuffer charBuffer = CharBuffer.allocate(value.length());
 
                 // Encode until the first character that would exceed the byte budget.
-                final CoderResult cr = encoder.encode(in, out, true);
+                charBuffer.append(value, 0, hasExtension ? extensionStart : value.length());
+                charBuffer.rewind();
+                final CoderResult cr = encoder.encode(charBuffer, byteBuffer, true);
 
                 if (cr.isUnderflow()) {
                     // Entire candidate fit within maxFileNameLength bytes.
                     return value;
                 }
 
-                // We ran out of space mid-encode: truncate BEFORE the offending character.
-                return value.subSequence(0, in.position());
+                // We ran out of space mid-encode: append the extension (if any) and return the charBuffer.
+                if (hasExtension) {
+                    charBuffer.append(value, extensionStart, value.length());
+                }
+                charBuffer.flip();
+                return charBuffer;
             }
         },
 
@@ -694,7 +654,35 @@ public enum FileSystem {
 
             @Override
             CharSequence truncate(final CharSequence value, final int limit, final Charset charset) {
-                return value.length() <= limit ? value : value.subSequence(0, limit);
+                // Fast path: no truncation needed.
+                if (value.length() <= limit) {
+                    return value;
+                }
+                // Slow path: truncate to limit.
+                // 1. Compute length of extension in chars (if any).
+                final int extensionStart = indexOfFirstDot(value);
+                final boolean hasExtension = extensionStart > 0;
+                final int extensionLength = hasExtension ? value.length() - extensionStart : 0;
+                // 2. Truncate the non-extension part and append the extension (if any).
+                if (hasExtension && extensionLength >= limit) {
+                    // Extension itself does not fit
+                    throw new IllegalArgumentException("The extension of " + value + " is too long to fit within " + limit + " characters");
+                }
+                final int safeLimit = safeCutPoint(value, limit - extensionLength);
+                if (extensionLength == 0) {
+                    return value.subSequence(0, safeLimit);
+                }
+                return value.subSequence(0, safeLimit).toString() + value.subSequence(extensionStart, value.length());
+            }
+
+            private int safeCutPoint(final CharSequence value, final int limit) {
+                // Ensure we do not cut a surrogate pair in half.
+                if (Character.isHighSurrogate(value.charAt(limit - 1))) {
+                    if (Character.isLowSurrogate(value.charAt(limit))) {
+                        return limit - 1;
+                    }
+                }
+                return limit;
             }
         };
 

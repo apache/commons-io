@@ -19,6 +19,8 @@ package org.apache.commons.io;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.commons.io.FileSystem.NameLengthStrategy.BYTES;
+import static org.apache.commons.io.FileSystem.NameLengthStrategy.UTF16_CHARS;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -44,6 +46,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Tests {@link FileSystem}.
@@ -61,7 +64,6 @@ class FileSystemTest {
 
     /** File name of 255 UTF-16 chars, each 3 bytes in UTF-8: total 765 bytes. */
     private static final String FILE_NAME_255_UTF16_CHARS = StringUtils.repeat(UTF8_3BYTE_CHAR, 255);
-
 
     @Test
     void testGetBlockSize() {
@@ -262,24 +264,42 @@ class FileSystemTest {
 
     static Stream<Arguments> testNameLengthStrategyTruncate() {
         return Stream.of(
-                Arguments.of(NameLengthStrategy.BYTES, 255, "simple.txt", "simple.txt"),
-                Arguments.of(NameLengthStrategy.BYTES, 255, FILE_NAME_255_ASCII + ".txt", FILE_NAME_255_ASCII),
+                Arguments.of(BYTES, 255, "simple.txt", "simple.txt"),
+                Arguments.of(BYTES, 255, "." + FILE_NAME_255_ASCII, "." + FILE_NAME_255_ASCII.substring(0, 254)),
+                Arguments.of(BYTES, 255, FILE_NAME_255_ASCII + "aaaa", FILE_NAME_255_ASCII),
+                Arguments.of(BYTES, 255, FILE_NAME_255_ASCII + ".txt", FILE_NAME_255_ASCII.substring(0, 251) + ".txt"),
+                Arguments.of(BYTES, 255, FILE_NAME_255_UTF8_BYTES + "aaaa", FILE_NAME_255_UTF8_BYTES),
                 Arguments.of(
-                        NameLengthStrategy.BYTES, 255, FILE_NAME_255_UTF8_BYTES + ".txt", FILE_NAME_255_UTF8_BYTES),
-                Arguments.of(NameLengthStrategy.UTF16_CHARS, 255, "simple.txt", "simple.txt"),
-                Arguments.of(NameLengthStrategy.UTF16_CHARS, 255, FILE_NAME_255_ASCII + ".txt", FILE_NAME_255_ASCII),
+                        BYTES,
+                        255,
+                        FILE_NAME_255_UTF8_BYTES + ".txt",
+                        FILE_NAME_255_UTF8_BYTES.substring(0, 83) + ".txt"),
+                Arguments.of(UTF16_CHARS, 255, "simple.txt", "simple.txt"),
+                Arguments.of(UTF16_CHARS, 255, "." + FILE_NAME_255_ASCII, "." + FILE_NAME_255_ASCII.substring(0, 254)),
                 Arguments.of(
-                        NameLengthStrategy.UTF16_CHARS,
+                        UTF16_CHARS, 255, FILE_NAME_255_ASCII + ".txt", FILE_NAME_255_ASCII.substring(0, 251) + ".txt"),
+                Arguments.of(UTF16_CHARS, 255, FILE_NAME_255_ASCII + "aaaa", FILE_NAME_255_ASCII),
+                Arguments.of(
+                        UTF16_CHARS,
                         255,
                         FILE_NAME_255_UTF16_CHARS + ".txt",
-                        FILE_NAME_255_UTF16_CHARS));
+                        FILE_NAME_255_UTF16_CHARS.substring(0, 251) + ".txt"),
+                Arguments.of(UTF16_CHARS, 255, FILE_NAME_255_UTF16_CHARS + "aaaa", FILE_NAME_255_UTF16_CHARS),
+                Arguments.of(
+                        UTF16_CHARS,
+                        7,
+                        "😀😀.txt" // each emoji is 2 UTF-16 chars
+                        ,
+                        "😀.txt"),
+                // High surrogate not followed by low surrogate (invalid UTF-16 sequence)
+                Arguments.of(UTF16_CHARS, 5, "\uD83Da.txt", "\uD83D.txt"));
     }
 
     @ParameterizedTest(name = "{index}: {0} truncates {1} to {2}")
     @MethodSource
     void testNameLengthStrategyTruncate(NameLengthStrategy strategy, int limit, String input, String expected) {
         final CharSequence out = strategy.truncate(input, limit, UTF_8);
-        assertEquals(expected, out, strategy.name() + " truncates to limit");
+        assertEquals(expected, out.toString(), strategy.name() + " truncates to limit");
     }
 
     static Stream<Arguments> testTruncateByBytes_Succeeds() {
@@ -309,7 +329,7 @@ class FileSystemTest {
     @ParameterizedTest(name = "{index}: {0}")
     @MethodSource
     void testTruncateByBytes_Succeeds(String caseName, String input, Charset charset, int maxBytes, String expected) {
-        final CharSequence out = NameLengthStrategy.BYTES.truncate(input, maxBytes, charset);
+        final CharSequence out = BYTES.truncate(input, maxBytes, charset);
         // If your contract returns null for null input, this still works; otherwise adjust.
         assertEquals(expected, Objects.toString(out, null), caseName);
     }
@@ -318,7 +338,16 @@ class FileSystemTest {
     void testTruncateByBytes_UnmappableAsciiThrows() {
         final String in = "café"; // contains 'é' (not in ASCII)
         final IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class, () -> NameLengthStrategy.BYTES.truncate(in, 100, US_ASCII));
+                IllegalArgumentException.class, () -> BYTES.truncate(in, 100, US_ASCII));
         assertTrue(ex.getMessage().contains(US_ASCII.name()), "ex message contains charset name");
+    }
+
+    @ParameterizedTest
+    @EnumSource(NameLengthStrategy.class)
+    void testNameLengthStrategyTruncate_ExtensionTooLong(NameLengthStrategy strategy) {
+        final String in = "a.txt"; // ".txt" is 4 chars
+        final IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class, () -> strategy.truncate(in, 4, UTF_8));
+        assertTrue(ex.getMessage().contains("extension"), "ex message contains 'extension'");
     }
 }
