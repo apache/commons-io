@@ -223,16 +223,14 @@ public class IOUtils {
 
     /**
      * The maximum size of an array in many Java VMs.
+     * <p>
+     *     The constant is copied from OpenJDK's {@link jdk.internal.util.ArraysSupport#SOFT_MAX_ARRAY_LENGTH}.
+     * </p>
      */
-    private static final int MAX_ARRAY_LENGTH = Integer.MAX_VALUE - 8;
+    private static final int SOFT_MAX_ARRAY_LENGTH = Integer.MAX_VALUE - 8;
 
     /*
      * Default maximum chunk size used when copying large streams into a byte array.
-     * <p>
-     * This value is somewhat arbitrary, currently aligned with the value used by
-     * <a href="https://github.com/python/cpython/blob/3.14/Lib/_pyio.py">Python</a>
-     * for copying streams.
-     * </p>
      */
     private static final int DEFAULT_CHUNK_SIZE = 128 * 1024;
 
@@ -2666,10 +2664,10 @@ public class IOUtils {
      */
     public static byte[] toByteArray(final InputStream inputStream) throws IOException {
         final UnsynchronizedByteArrayOutputStream output =
-                copyToOutputStream(inputStream, MAX_ARRAY_LENGTH + 1, DEFAULT_CHUNK_SIZE);
-        if (output.size() > MAX_ARRAY_LENGTH) {
+                copyToOutputStream(inputStream, SOFT_MAX_ARRAY_LENGTH + 1, DEFAULT_CHUNK_SIZE);
+        if (output.size() > SOFT_MAX_ARRAY_LENGTH) {
             throw new IllegalArgumentException(
-                    String.format("Cannot read more than %,d into a byte array", MAX_ARRAY_LENGTH));
+                    String.format("Cannot read more than %,d into a byte array", SOFT_MAX_ARRAY_LENGTH));
         }
         return output.toByteArray();
     }
