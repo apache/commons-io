@@ -103,9 +103,9 @@ class BoundedInputStreamTest {
         when(throwsAfterClose.available()).thenReturn(42).thenThrow(new IOException("Stream closed"));
 
         return Stream.of(
-                Arguments.of("no-op close → still returns 42", noOpClose, 42),
-                Arguments.of("after close → returns 0", returnsZeroAfterClose, 42),
-                Arguments.of("after close → throws IOException", throwsAfterClose, 42));
+                Arguments.of("underlying stream still returns 42 after close", noOpClose, 42),
+                Arguments.of("underlying stream returns 0 after close", returnsZeroAfterClose, 42),
+                Arguments.of("underlying stream throws IOException after close", throwsAfterClose, 42));
     }
 
     @ParameterizedTest(name = "{index} — {0}")
@@ -521,9 +521,9 @@ class BoundedInputStreamTest {
         when(throwsAfterClose.read()).thenThrow(closed);
 
         return Stream.of(
-                Arguments.of("no-op close → still reads data", noOpClose, 42),
-                Arguments.of("after close → returns EOF", returnsEofAfterClose, IOUtils.EOF),
-                Arguments.of("after close → throws IOException", throwsAfterClose, closed));
+                Arguments.of("underlying stream still reads data after close", noOpClose, 42),
+                Arguments.of("underlying stream returns EOF after close", returnsEofAfterClose, IOUtils.EOF),
+                Arguments.of("underlying stream throws IOException after close", throwsAfterClose, closed));
     }
 
     @ParameterizedTest(name = "{index} — {0}")
