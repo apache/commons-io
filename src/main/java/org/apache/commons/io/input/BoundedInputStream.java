@@ -156,7 +156,8 @@ public class BoundedInputStream extends ProxyInputStream {
         /**
          * Sets the default {@link BoundedInputStream#onMaxLength(long, long)} behavior, {@code null} resets to a NOOP.
          * <p>
-         * The first Long is the number of bytes remaining to read before the maximum is reached count of bytes to read. The second Long is the count of bytes read.
+         * The first Long is the number of bytes remaining to read before the maximum is reached count of bytes to read. The second Long is the count of bytes
+         * read.
          * </p>
          * <p>
          * This does <em>not</em> override a {@code BoundedInputStream} subclass' implementation of the {@link BoundedInputStream#onMaxLength(long, long)}
