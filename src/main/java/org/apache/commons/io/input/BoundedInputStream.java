@@ -400,9 +400,9 @@ public class BoundedInputStream extends ProxyInputStream {
     }
 
     /**
-     * Gets the maximum number of bytes this stream is allowed to read.
+     * Gets the maximum number of bytes to read.
      *
-     * @return The maximum number of bytes permitted, or {@value IOUtils#EOF} if unbounded.
+     * @return The maximum number of bytes to read, or {@value IOUtils#EOF} if unbounded.
      * @since 2.16.0
      */
     public long getMaxCount() {
