@@ -350,7 +350,7 @@ public class BoundedInputStream extends ProxyInputStream {
      */
     @Deprecated
     public BoundedInputStream(final InputStream inputStream, final long maxCount) {
-        // Some badly designed methods - e.g. the Servlet API - overload length
+        // Some badly designed methods, for example the Servlet API, overload length
         // such that "-1" means stream finished
         this(inputStream, builder().setMaxCount(maxCount));
     }
@@ -358,7 +358,7 @@ public class BoundedInputStream extends ProxyInputStream {
     /**
      * Adds the number of read bytes to the count.
      *
-     * @param n number of bytes read, or -1 if no more bytes are available
+     * @param n number of bytes read, or -1 if no more bytes are available.
      * @throws IOException Not thrown here but subclasses may throw.
      * @since 2.0
      */
@@ -455,7 +455,7 @@ public class BoundedInputStream extends ProxyInputStream {
     /**
      * Invokes the delegate's {@link InputStream#mark(int)} method.
      *
-     * @param readLimit read ahead limit
+     * @param readLimit read ahead limit.
      */
     @Override
     public synchronized void mark(final int readLimit) {
@@ -466,7 +466,7 @@ public class BoundedInputStream extends ProxyInputStream {
     /**
      * Invokes the delegate's {@link InputStream#markSupported()} method.
      *
-     * @return true if mark is supported, otherwise false
+     * @return true if mark is supported, otherwise false.
      */
     @Override
     public boolean markSupported() {
@@ -508,7 +508,7 @@ public class BoundedInputStream extends ProxyInputStream {
     /**
      * Invokes the delegate's {@link InputStream#read(byte[])} method.
      *
-     * @param b the buffer to read the bytes into
+     * @param b the buffer to read the bytes into.
      * @return the number of bytes read or -1 if the end of stream or the limit has been reached.
      * @throws IOException if an I/O error occurs.
      */
@@ -520,9 +520,9 @@ public class BoundedInputStream extends ProxyInputStream {
     /**
      * Invokes the delegate's {@link InputStream#read(byte[], int, int)} method.
      *
-     * @param b   the buffer to read the bytes into
-     * @param off The start offset
-     * @param len The number of bytes to read
+     * @param b   the buffer to read the bytes into.
+     * @param off The start offset.
+     * @param len The number of bytes to read.
      * @return the number of bytes read or -1 if the end of stream or the limit has been reached.
      * @throws IOException if an I/O error occurs.
      */
@@ -561,8 +561,8 @@ public class BoundedInputStream extends ProxyInputStream {
     /**
      * Invokes the delegate's {@link InputStream#skip(long)} method.
      *
-     * @param n the number of bytes to skip
-     * @return the actual number of bytes skipped
+     * @param n the number of bytes to skip.
+     * @return the actual number of bytes skipped.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -579,7 +579,7 @@ public class BoundedInputStream extends ProxyInputStream {
     /**
      * Invokes the delegate's {@link InputStream#toString()} method.
      *
-     * @return the delegate's {@link InputStream#toString()}
+     * @return the delegate's {@link InputStream#toString()}.
      */
     @Override
     public String toString() {
