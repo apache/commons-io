@@ -676,10 +676,8 @@ public enum FileSystem {
 
             private int safeCutPoint(final CharSequence value, final int limit) {
                 // Ensure we do not cut a surrogate pair in half.
-                if (Character.isHighSurrogate(value.charAt(limit - 1))) {
-                    if (Character.isLowSurrogate(value.charAt(limit))) {
-                        return limit - 1;
-                    }
+                if (Character.isHighSurrogate(value.charAt(limit - 1)) && Character.isLowSurrogate(value.charAt(limit))) {
+                    return limit - 1;
                 }
                 return limit;
             }
