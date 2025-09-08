@@ -269,8 +269,7 @@ public enum FileSystem {
     private final boolean supportsDriveLetter;
     private final char nameSeparator;
     private final char nameSeparatorOther;
-    // package-private for testing
-    final NameLengthStrategy nameLengthStrategy;
+    private final NameLengthStrategy nameLengthStrategy;
 
     /**
      * Constructs a new instance.

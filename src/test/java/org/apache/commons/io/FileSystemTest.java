@@ -194,11 +194,12 @@ class FileSystemTest {
     void testMaxNameLength_MatchesRealSystem(@TempDir Path tempDir) {
         final FileSystem fs = FileSystem.getCurrent();
         final String[] validNames;
-        switch (fs.nameLengthStrategy) {
-            case BYTES:
+        switch (fs) {
+            case LINUX:
                 validNames = new String[] { FILE_NAME_255_ASCII, FILE_NAME_255_UTF8_BYTES };
                 break;
-            case UTF16_CHARS:
+            case MAC_OSX:
+            case WINDOWS:
                 validNames = new String[] { FILE_NAME_255_ASCII, FILE_NAME_255_UTF16_CHARS };
                 break;
             default:
