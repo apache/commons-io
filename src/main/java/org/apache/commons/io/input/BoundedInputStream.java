@@ -422,14 +422,16 @@ public class BoundedInputStream extends ProxyInputStream {
     }
 
     /**
-     * Gets the bytes remaining before the configured read limit is reached.
+     * Gets the number of bytes remaining to read before the maximum is reached.
      *
-     * <p>This method does <strong>not</strong> report the bytes available in the
+     * <p>
+     * This method does <strong>not</strong> report the bytes available in the
      * underlying stream; it only reflects the remaining allowance imposed by this
-     * {@code BoundedInputStream}.</p>
+     * {@code BoundedInputStream}.
+     * </p>
      *
-     * @return The number of bytes left until the read limit is reached,
-     *         or {@link Long#MAX_VALUE} if no limit is set.
+     * @return The number of bytes remaining to read before the maximum is reached,
+     *         or {@link Long#MAX_VALUE} if no bound is set.
      * @since 2.16.0
      */
     public long getRemaining() {
