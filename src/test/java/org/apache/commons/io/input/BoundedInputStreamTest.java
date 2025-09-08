@@ -51,6 +51,72 @@ import org.junit.jupiter.params.provider.ValueSource;
  */
 class BoundedInputStreamTest {
 
+    static Stream<Arguments> testAvailableAfterClose() throws IOException {
+        // Case 1: behaves like ByteArrayInputStream — close() is a no-op, available() still returns a value (e.g., 42).
+        final InputStream noOpClose = mock(InputStream.class);
+        when(noOpClose.available()).thenReturn(42, 42);
+
+        // Case 2: returns 0 after close (Commons memory-backed streams that ignore close but report 0 when exhausted).
+        final InputStream returnsZeroAfterClose = mock(InputStream.class);
+        when(returnsZeroAfterClose.available()).thenReturn(42, 0);
+
+        // Case 3: throws IOException after close (e.g., FileInputStream-like behavior).
+        final InputStream throwsAfterClose = mock(InputStream.class);
+        when(throwsAfterClose.available()).thenReturn(42).thenThrow(new IOException("Stream closed"));
+
+        return Stream.of(
+                Arguments.of("underlying stream still returns 42 after close", noOpClose, 42),
+                Arguments.of("underlying stream returns 0 after close", returnsZeroAfterClose, 42),
+                Arguments.of("underlying stream throws IOException after close", throwsAfterClose, 42));
+    }
+
+    static Stream<Arguments> testAvailableUpperLimit() {
+        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
+        return Stream.of(
+                // Limited by maxCount
+                Arguments.of(new ByteArrayInputStream(helloWorld), helloWorld.length - 1, helloWorld.length - 1, 0),
+                // Limited by data length
+                Arguments.of(new ByteArrayInputStream(helloWorld), helloWorld.length + 1, helloWorld.length, 0),
+                // Limited by Integer.MAX_VALUE
+                Arguments.of(
+                        new NullInputStream(Long.MAX_VALUE), Long.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE));
+    }
+
+    static Stream<Arguments> testReadAfterClose() throws IOException {
+        // Case 1: no-op close (ByteArrayInputStream-like): read() still returns a value after close
+        final InputStream noOpClose = mock(InputStream.class);
+        when(noOpClose.read()).thenReturn(42);
+
+        // Case 2: returns EOF (-1) after close
+        final InputStream returnsEofAfterClose = mock(InputStream.class);
+        when(returnsEofAfterClose.read()).thenReturn(IOUtils.EOF);
+
+        // Case 3: throws IOException after close (FileInputStream-like)
+        final InputStream throwsAfterClose = mock(InputStream.class);
+        final IOException closed = new IOException("Stream closed");
+        when(throwsAfterClose.read()).thenThrow(closed);
+
+        return Stream.of(
+                Arguments.of("underlying stream still reads data after close", noOpClose, 42),
+                Arguments.of("underlying stream returns EOF after close", returnsEofAfterClose, IOUtils.EOF),
+                Arguments.of("underlying stream throws IOException after close", throwsAfterClose, closed));
+    }
+
+    static Stream<Arguments> testRemaining() {
+        return Stream.of(
+                // Unbounded: any negative maxCount is treated as "no limit".
+                Arguments.of("unbounded (EOF constant)", IOUtils.EOF, Long.MAX_VALUE),
+                Arguments.of("unbounded (arbitrary negative)", Long.MIN_VALUE, Long.MAX_VALUE),
+
+                // Bounded: remaining equals the configured limit, regardless of underlying data size.
+                Arguments.of("bounded (zero)", 0L, 0L),
+                Arguments.of("bounded (small)", 1024L, 1024L),
+                Arguments.of("bounded (Integer.MAX_VALUE)", Integer.MAX_VALUE, (long) Integer.MAX_VALUE),
+
+                // Bounded but extremely large: still not 'unbounded'.
+                Arguments.of("bounded (Long.MAX_VALUE)", Long.MAX_VALUE, Long.MAX_VALUE));
+    }
+
     private void compare(final String message, final byte[] expected, final byte[] actual) {
         assertEquals(expected.length, actual.length, () -> message + " (array length equals check)");
         final MutableInt mi = new MutableInt();
@@ -89,25 +155,6 @@ class BoundedInputStreamTest {
         // @formatter:on
     }
 
-    static Stream<Arguments> testAvailableAfterClose() throws IOException {
-        // Case 1: behaves like ByteArrayInputStream — close() is a no-op, available() still returns a value (e.g., 42).
-        final InputStream noOpClose = mock(InputStream.class);
-        when(noOpClose.available()).thenReturn(42, 42);
-
-        // Case 2: returns 0 after close (Commons memory-backed streams that ignore close but report 0 when exhausted).
-        final InputStream returnsZeroAfterClose = mock(InputStream.class);
-        when(returnsZeroAfterClose.available()).thenReturn(42, 0);
-
-        // Case 3: throws IOException after close (e.g., FileInputStream-like behavior).
-        final InputStream throwsAfterClose = mock(InputStream.class);
-        when(throwsAfterClose.available()).thenReturn(42).thenThrow(new IOException("Stream closed"));
-
-        return Stream.of(
-                Arguments.of("underlying stream still returns 42 after close", noOpClose, 42),
-                Arguments.of("underlying stream returns 0 after close", returnsZeroAfterClose, 42),
-                Arguments.of("underlying stream throws IOException after close", throwsAfterClose, 42));
-    }
-
     @ParameterizedTest(name = "{index} — {0}")
     @MethodSource
     void testAvailableAfterClose(String caseName, InputStream delegate, int expectedBeforeClose)
@@ -128,18 +175,6 @@ class BoundedInputStreamTest {
         // Interactions: available called only once before close.
         verify(delegate, times(1)).available();
         verifyNoMoreInteractions(delegate);
-    }
-
-    static Stream<Arguments> testAvailableUpperLimit() {
-        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
-        return Stream.of(
-                // Limited by maxCount
-                Arguments.of(new ByteArrayInputStream(helloWorld), helloWorld.length - 1, helloWorld.length - 1, 0),
-                // Limited by data length
-                Arguments.of(new ByteArrayInputStream(helloWorld), helloWorld.length + 1, helloWorld.length, 0),
-                // Limited by Integer.MAX_VALUE
-                Arguments.of(
-                        new NullInputStream(Long.MAX_VALUE), Long.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE));
     }
 
     @ParameterizedTest
@@ -506,26 +541,6 @@ class BoundedInputStreamTest {
         }
     }
 
-    static Stream<Arguments> testReadAfterClose() throws IOException {
-        // Case 1: no-op close (ByteArrayInputStream-like): read() still returns a value after close
-        final InputStream noOpClose = mock(InputStream.class);
-        when(noOpClose.read()).thenReturn(42);
-
-        // Case 2: returns EOF (-1) after close
-        final InputStream returnsEofAfterClose = mock(InputStream.class);
-        when(returnsEofAfterClose.read()).thenReturn(IOUtils.EOF);
-
-        // Case 3: throws IOException after close (FileInputStream-like)
-        final InputStream throwsAfterClose = mock(InputStream.class);
-        final IOException closed = new IOException("Stream closed");
-        when(throwsAfterClose.read()).thenThrow(closed);
-
-        return Stream.of(
-                Arguments.of("underlying stream still reads data after close", noOpClose, 42),
-                Arguments.of("underlying stream returns EOF after close", returnsEofAfterClose, IOUtils.EOF),
-                Arguments.of("underlying stream throws IOException after close", throwsAfterClose, closed));
-    }
-
     @ParameterizedTest(name = "{index} — {0}")
     @MethodSource("testReadAfterClose")
     void testReadAfterClose(
@@ -599,46 +614,6 @@ class BoundedInputStreamTest {
         }
     }
 
-    static Stream<Arguments> testRemaining() {
-        return Stream.of(
-                // Unbounded: any negative maxCount is treated as "no limit".
-                Arguments.of("unbounded (EOF constant)", IOUtils.EOF, Long.MAX_VALUE),
-                Arguments.of("unbounded (arbitrary negative)", Long.MIN_VALUE, Long.MAX_VALUE),
-
-                // Bounded: remaining equals the configured limit, regardless of underlying data size.
-                Arguments.of("bounded (zero)", 0L, 0L),
-                Arguments.of("bounded (small)", 1024L, 1024L),
-                Arguments.of("bounded (Integer.MAX_VALUE)", Integer.MAX_VALUE, (long) Integer.MAX_VALUE),
-
-                // Bounded but extremely large: still not 'unbounded'.
-                Arguments.of("bounded (Long.MAX_VALUE)", Long.MAX_VALUE, Long.MAX_VALUE));
-    }
-
-    @ParameterizedTest(name = "{index}: {0} -> initial remaining {2}")
-    @MethodSource
-    void testRemaining(final String caseName, final long maxCount, final long expectedInitialRemaining)
-            throws Exception {
-        final byte[] data = "Hello World".getBytes(StandardCharsets.UTF_8); // 11 bytes
-
-        try (BoundedInputStream in = BoundedInputStream.builder()
-                .setByteArray(data)
-                .setMaxCount(maxCount)
-                .get()) {
-            // Initial remaining respects the imposed limit (or is Long.MAX_VALUE if unbounded).
-            assertEquals(expectedInitialRemaining, in.getRemaining(), caseName + " (initial)");
-
-            // Skip more than the data length to exercise both bounded and unbounded paths.
-            final long skipped = IOUtils.skip(in, 42);
-
-            // For unbounded streams (EOF == -1), remaining stays the same.
-            // For bounded, it decreases by 'skipped'.
-            final long expectedAfterSkip =
-                    in.getMaxCount() == IOUtils.EOF ? expectedInitialRemaining : expectedInitialRemaining - skipped;
-
-            assertEquals(expectedAfterSkip, in.getRemaining(), caseName + " (after skip)");
-        }
-    }
-
     @Test
     void testReadSingle() throws Exception {
         final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
@@ -674,6 +649,31 @@ class BoundedInputStreamTest {
             assertEquals(-1, bounded.read(), "limit < length end");
             // should be invariant
             assertTrue(bounded.markSupported());
+        }
+    }
+
+    @ParameterizedTest(name = "{index}: {0} -> initial remaining {2}")
+    @MethodSource
+    void testRemaining(final String caseName, final long maxCount, final long expectedInitialRemaining)
+            throws Exception {
+        final byte[] data = "Hello World".getBytes(StandardCharsets.UTF_8); // 11 bytes
+
+        try (BoundedInputStream in = BoundedInputStream.builder()
+                .setByteArray(data)
+                .setMaxCount(maxCount)
+                .get()) {
+            // Initial remaining respects the imposed limit (or is Long.MAX_VALUE if unbounded).
+            assertEquals(expectedInitialRemaining, in.getRemaining(), caseName + " (initial)");
+
+            // Skip more than the data length to exercise both bounded and unbounded paths.
+            final long skipped = IOUtils.skip(in, 42);
+
+            // For unbounded streams (EOF == -1), remaining stays the same.
+            // For bounded, it decreases by 'skipped'.
+            final long expectedAfterSkip =
+                    in.getMaxCount() == IOUtils.EOF ? expectedInitialRemaining : expectedInitialRemaining - skipped;
+
+            assertEquals(expectedAfterSkip, in.getRemaining(), caseName + " (after skip)");
         }
     }
 
