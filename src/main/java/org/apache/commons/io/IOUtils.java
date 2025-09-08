@@ -2663,11 +2663,9 @@ public class IOUtils {
      * @throws NullPointerException     If {@code inputStream} is {@code null}.
      */
     public static byte[] toByteArray(final InputStream inputStream) throws IOException {
-        final UnsynchronizedByteArrayOutputStream output =
-                copyToOutputStream(inputStream, SOFT_MAX_ARRAY_LENGTH + 1, DEFAULT_CHUNK_SIZE);
+        final UnsynchronizedByteArrayOutputStream output = copyToOutputStream(inputStream, SOFT_MAX_ARRAY_LENGTH + 1, DEFAULT_CHUNK_SIZE);
         if (output.size() > SOFT_MAX_ARRAY_LENGTH) {
-            throw new IllegalArgumentException(
-                    String.format("Cannot read more than %,d into a byte array", SOFT_MAX_ARRAY_LENGTH));
+            throw new IllegalArgumentException(String.format("Cannot read more than %,d into a byte array", SOFT_MAX_ARRAY_LENGTH));
         }
         return output.toByteArray();
     }
@@ -2758,7 +2756,6 @@ public class IOUtils {
 
     /**
      * Copies up to {@code size} bytes from the given {@link InputStream} into a new {@link UnsynchronizedByteArrayOutputStream}.
-     *
      *
      * @param input      The {@link InputStream} to read; must not be {@code null}.
      * @param limit      The maximum number of bytes to read; must be {@code >= 0}.
