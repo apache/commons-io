@@ -2682,7 +2682,7 @@ public class IOUtils {
      * @since 2.1
      */
     public static byte[] toByteArray(final InputStream input, final int size) throws IOException {
-        return toByteArray(input::read, size);
+        return toByteArray(Objects.requireNonNull(input, "input")::read, size);
     }
 
     /**
