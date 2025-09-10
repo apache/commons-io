@@ -73,7 +73,7 @@ public enum FileSystem {
             '/',
              ':'
             // @formatter:on
-    }, new String[] {}, false, false, '/', NameLengthStrategy.UTF16_CODE_UNITS),
+    }, new String[] {}, false, false, '/', NameLengthStrategy.BYTES),
 
     /**
      * Windows file system.

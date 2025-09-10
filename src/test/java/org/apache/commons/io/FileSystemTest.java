@@ -62,7 +62,7 @@ class FileSystemTest {
     private static final String FILE_NAME_255_UTF8_BYTES = StringUtils.repeat(UTF8_3BYTE_CHAR, 85);
 
     /** File name of 255 UTF-16 chars, each 3 bytes in UTF-8: total 765 bytes. */
-    private static final String FILE_NAME_255_UTF16_CHARS = StringUtils.repeat(UTF8_3BYTE_CHAR, 255);
+    private static final String FILE_NAME_255_UTF16_CODE_UNITS = StringUtils.repeat(UTF8_3BYTE_CHAR, 255);
 
     @Test
     void testGetBlockSize() {
@@ -114,9 +114,9 @@ class FileSystemTest {
                 Arguments.of(FileSystem.LINUX, FILE_NAME_255_ASCII, UTF_8),
                 Arguments.of(FileSystem.LINUX, FILE_NAME_255_UTF8_BYTES, UTF_8),
                 Arguments.of(FileSystem.MAC_OSX, FILE_NAME_255_ASCII, UTF_8),
-                Arguments.of(FileSystem.MAC_OSX, FILE_NAME_255_UTF16_CHARS, UTF_8),
+                Arguments.of(FileSystem.MAC_OSX, FILE_NAME_255_UTF8_BYTES, UTF_8),
                 Arguments.of(FileSystem.WINDOWS, FILE_NAME_255_ASCII, UTF_8),
-                Arguments.of(FileSystem.WINDOWS, FILE_NAME_255_UTF16_CHARS, UTF_8));
+                Arguments.of(FileSystem.WINDOWS, FILE_NAME_255_UTF16_CODE_UNITS, UTF_8));
     }
 
     @ParameterizedTest
@@ -200,7 +200,7 @@ class FileSystemTest {
                 break;
             case MAC_OSX:
             case WINDOWS:
-                validNames = new String[] { FILE_NAME_255_ASCII, FILE_NAME_255_UTF16_CHARS };
+                validNames = new String[] { FILE_NAME_255_ASCII, FILE_NAME_255_UTF16_CODE_UNITS};
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + fs);
@@ -282,9 +282,9 @@ class FileSystemTest {
                 Arguments.of(
                         UTF16_CODE_UNITS,
                         255,
-                        FILE_NAME_255_UTF16_CHARS + ".txt",
-                        FILE_NAME_255_UTF16_CHARS.substring(0, 251) + ".txt"),
-                Arguments.of(UTF16_CODE_UNITS, 255, FILE_NAME_255_UTF16_CHARS + "aaaa", FILE_NAME_255_UTF16_CHARS),
+                        FILE_NAME_255_UTF16_CODE_UNITS + ".txt",
+                        FILE_NAME_255_UTF16_CODE_UNITS.substring(0, 251) + ".txt"),
+                Arguments.of(UTF16_CODE_UNITS, 255, FILE_NAME_255_UTF16_CODE_UNITS + "aaaa", FILE_NAME_255_UTF16_CODE_UNITS),
                 Arguments.of(
                         UTF16_CODE_UNITS,
                         7,
