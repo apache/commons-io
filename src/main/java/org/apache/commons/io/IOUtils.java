@@ -229,11 +229,6 @@ public class IOUtils {
      */
     private static final int SOFT_MAX_ARRAY_LENGTH = Integer.MAX_VALUE - 8;
 
-    /*
-     * Default maximum chunk size used when copying large streams into a byte array.
-     */
-    private static final int DEFAULT_CHUNK_SIZE = 128 * 1024;
-
     /**
      * Returns the given InputStream if it is already a {@link BufferedInputStream}, otherwise creates a
      * BufferedInputStream from the given InputStream.
@@ -2663,7 +2658,7 @@ public class IOUtils {
      * @throws NullPointerException     If {@code inputStream} is {@code null}.
      */
     public static byte[] toByteArray(final InputStream inputStream) throws IOException {
-        final UnsynchronizedByteArrayOutputStream output = copyToOutputStream(inputStream, SOFT_MAX_ARRAY_LENGTH + 1, DEFAULT_CHUNK_SIZE);
+        final UnsynchronizedByteArrayOutputStream output = copyToOutputStream(inputStream, SOFT_MAX_ARRAY_LENGTH + 1, DEFAULT_BUFFER_SIZE);
         if (output.size() > SOFT_MAX_ARRAY_LENGTH) {
             throw new IllegalArgumentException(String.format("Cannot read more than %,d into a byte array", SOFT_MAX_ARRAY_LENGTH));
         }
