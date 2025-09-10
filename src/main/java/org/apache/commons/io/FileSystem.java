@@ -660,10 +660,9 @@ public enum FileSystem {
                 // Slow path: truncate to limit.
                 // 1. Compute length of extension in chars (if any).
                 final int extensionStart = indexOfFirstDot(value);
-                final boolean hasExtension = extensionStart > 0;
-                final int extensionLength = hasExtension ? value.length() - extensionStart : 0;
+                final int extensionLength = extensionStart > 0 ? value.length() - extensionStart : 0;
                 // 2. Truncate the non-extension part and append the extension (if any).
-                if (hasExtension && extensionLength >= limit) {
+                if (extensionLength >= limit) {
                     // Extension itself does not fit
                     throw new IllegalArgumentException("The extension of " + value + " is too long to fit within " + limit + " characters");
                 }
