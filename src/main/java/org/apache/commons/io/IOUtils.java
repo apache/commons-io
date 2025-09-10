@@ -2788,9 +2788,13 @@ public class IOUtils {
             return EMPTY_BYTE_ARRAY;
         }
         final byte[] data = byteArray(size);
-        final int read = read(input, data, 0, size);
-        if (read != size) {
-            throw new IOException("Unexpected read size, current: " + read + ", expected: " + size);
+        int offset = 0;
+        int read;
+        while (offset < size && (read = input.apply(data, offset, size - offset)) != EOF) {
+            offset += read;
+        }
+        if (offset != size) {
+            throw new IOException("Unexpected read size, current: " + offset + ", expected: " + size);
         }
         return data;
     }
