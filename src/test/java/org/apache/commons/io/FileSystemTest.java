@@ -195,10 +195,10 @@ class FileSystemTest {
         final FileSystem fs = FileSystem.getCurrent();
         final String[] validNames;
         switch (fs) {
+            case MAC_OSX:
             case LINUX:
                 validNames = new String[] { FILE_NAME_255_ASCII, FILE_NAME_255_UTF8_BYTES };
                 break;
-            case MAC_OSX:
             case WINDOWS:
                 validNames = new String[] { FILE_NAME_255_ASCII, FILE_NAME_255_UTF16_CODE_UNITS};
                 break;
