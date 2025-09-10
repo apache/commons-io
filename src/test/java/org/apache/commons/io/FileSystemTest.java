@@ -20,7 +20,7 @@ package org.apache.commons.io;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.FileSystem.NameLengthStrategy.BYTES;
-import static org.apache.commons.io.FileSystem.NameLengthStrategy.UTF16_CHARS;
+import static org.apache.commons.io.FileSystem.NameLengthStrategy.UTF16_CODE_UNITS;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -274,25 +274,25 @@ class FileSystemTest {
                         255,
                         FILE_NAME_255_UTF8_BYTES + ".txt",
                         FILE_NAME_255_UTF8_BYTES.substring(0, 83) + ".txt"),
-                Arguments.of(UTF16_CHARS, 255, "simple.txt", "simple.txt"),
-                Arguments.of(UTF16_CHARS, 255, "." + FILE_NAME_255_ASCII, "." + FILE_NAME_255_ASCII.substring(0, 254)),
+                Arguments.of(UTF16_CODE_UNITS, 255, "simple.txt", "simple.txt"),
+                Arguments.of(UTF16_CODE_UNITS, 255, "." + FILE_NAME_255_ASCII, "." + FILE_NAME_255_ASCII.substring(0, 254)),
                 Arguments.of(
-                        UTF16_CHARS, 255, FILE_NAME_255_ASCII + ".txt", FILE_NAME_255_ASCII.substring(0, 251) + ".txt"),
-                Arguments.of(UTF16_CHARS, 255, FILE_NAME_255_ASCII + "aaaa", FILE_NAME_255_ASCII),
+                        UTF16_CODE_UNITS, 255, FILE_NAME_255_ASCII + ".txt", FILE_NAME_255_ASCII.substring(0, 251) + ".txt"),
+                Arguments.of(UTF16_CODE_UNITS, 255, FILE_NAME_255_ASCII + "aaaa", FILE_NAME_255_ASCII),
                 Arguments.of(
-                        UTF16_CHARS,
+                        UTF16_CODE_UNITS,
                         255,
                         FILE_NAME_255_UTF16_CHARS + ".txt",
                         FILE_NAME_255_UTF16_CHARS.substring(0, 251) + ".txt"),
-                Arguments.of(UTF16_CHARS, 255, FILE_NAME_255_UTF16_CHARS + "aaaa", FILE_NAME_255_UTF16_CHARS),
+                Arguments.of(UTF16_CODE_UNITS, 255, FILE_NAME_255_UTF16_CHARS + "aaaa", FILE_NAME_255_UTF16_CHARS),
                 Arguments.of(
-                        UTF16_CHARS,
+                        UTF16_CODE_UNITS,
                         7,
                         "😀😀.txt" // each emoji is 2 UTF-16 chars
                         ,
                         "😀.txt"),
                 // High surrogate not followed by low surrogate (invalid UTF-16 sequence)
-                Arguments.of(UTF16_CHARS, 5, "\uD83Da.txt", "\uD83D.txt"));
+                Arguments.of(UTF16_CODE_UNITS, 5, "\uD83Da.txt", "\uD83D.txt"));
     }
 
     @ParameterizedTest(name = "{index}: {0} truncates {1} to {2}")

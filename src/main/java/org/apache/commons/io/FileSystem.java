@@ -73,7 +73,7 @@ public enum FileSystem {
             '/',
              ':'
             // @formatter:on
-    }, new String[] {}, false, false, '/', NameLengthStrategy.UTF16_CHARS),
+    }, new String[] {}, false, false, '/', NameLengthStrategy.UTF16_CODE_UNITS),
 
     /**
      * Windows file system.
@@ -107,7 +107,7 @@ public enum FileSystem {
                     "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9",
                     "LPT\u00b2", "LPT\u00b3", "LPT\u00b9", // Superscript 2 3 1 in that order
                     "NUL", "PRN"
-            }, true, true, '\\', NameLengthStrategy.UTF16_CHARS);
+            }, true, true, '\\', NameLengthStrategy.UTF16_CODE_UNITS);
     // @formatter:on
 
     /**
@@ -645,7 +645,7 @@ public enum FileSystem {
         },
 
         /** Length measured as UTF-16 code units (i.e., {@code CharSequence.length()}). */
-        UTF16_CHARS {
+        UTF16_CODE_UNITS {
             @Override
             int getLength(final CharSequence value, final Charset charset) {
                 return value.length();
