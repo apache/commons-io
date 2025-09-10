@@ -2648,8 +2648,9 @@ public class IOUtils {
      * Reads all the bytes from an input stream in a byte array.
      *
      * <p>The memory used by this method is <strong>proportional</strong> to the number
-     * of bytes read, which is only limited by {@link Integer#MAX_VALUE}. This makes it unsuitable for
-     * processing large input streams, unless sufficient heap space is available.</p>
+     * of bytes read, which is only limited by {@link Integer#MAX_VALUE}. Only streams
+     * which fit into a single byte array with roughly 2 GiB limit can be processed
+     * with this method.</p>
      *
      * @param inputStream The {@link InputStream} to read; must not be {@code null}.
      * @return A new byte array.
@@ -2658,6 +2659,7 @@ public class IOUtils {
      * @throws NullPointerException     If {@code inputStream} is {@code null}.
      */
     public static byte[] toByteArray(final InputStream inputStream) throws IOException {
+        // Using SOFT_MAX_ARRAY_LENGTH guarantees that size() will not overflow
         final UnsynchronizedByteArrayOutputStream output = copyToOutputStream(inputStream, SOFT_MAX_ARRAY_LENGTH + 1, DEFAULT_BUFFER_SIZE);
         if (output.size() > SOFT_MAX_ARRAY_LENGTH) {
             throw new IllegalArgumentException(String.format("Cannot read more than %,d into a byte array", SOFT_MAX_ARRAY_LENGTH));
