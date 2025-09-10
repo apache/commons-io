@@ -2673,10 +2673,9 @@ public class IOUtils {
     /**
      * Reads exactly {@code size} bytes from the given {@link InputStream} into a new {@code byte[]}.
      *
-     * <p>The memory used by this method is <strong>proportional</strong> to the number
-     * of bytes read and limited by the specified {@code size}. This makes it suitable for
-     * processing large input streams, provided that <strong>sufficient</strong> heap space is
-     * available.</p>
+     * <p>This variant provides no safeguards against allocating very large arrays.
+     * For large streams, prefer {@link #toByteArray(InputStream, int, int)},
+     * which enforces stricter memory usage constraints.</p>
      *
      * @param input the {@link InputStream} to read; must not be {@code null}.
      * @param size  the exact number of bytes to read; must be {@code >= 0}.
@@ -2688,16 +2687,15 @@ public class IOUtils {
      * @since 2.1
      */
     public static byte[] toByteArray(final InputStream input, final int size) throws IOException {
-        return toByteArray(input, size, DEFAULT_CHUNK_SIZE);
+        return toByteArray(input::read, size);
     }
 
     /**
      * Reads exactly {@code size} bytes from the given {@link InputStream} into a new {@code byte[]}.
      *
-     * <p>The memory used by this method is <strong>proportional</strong> to the number
-     * of bytes read and limited by the specified {@code size}. This makes it suitable for
-     * processing large input streams, provided that <strong>sufficient</strong> heap space is
-     * available.</p>
+     * <p>This variant provides no safeguards against allocating very large arrays.
+     * For large streams, prefer {@link #toByteArray(InputStream, int, int)},
+     * which enforces stricter memory usage constraints.</p>
      *
      * @param input the {@link InputStream} to read; must not be {@code null}.
      * @param size  the exact number of bytes to read; must be {@code >= 0} and {@code <= Integer.MAX_VALUE}.
