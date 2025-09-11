@@ -17,13 +17,16 @@
 
 package org.apache.commons.io;
 
+import static java.nio.charset.StandardCharsets.ISO_8859_1;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.FileSystem.NameLengthStrategy.BYTES;
 import static org.apache.commons.io.FileSystem.NameLengthStrategy.UTF16_CODE_UNITS;
+import static org.apache.commons.lang3.StringUtils.repeat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -37,7 +40,6 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.FileSystem.NameLengthStrategy;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemProperties;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Test;
@@ -52,17 +54,41 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 class FileSystemTest {
 
-    /** A single UTF-8 character that encodes to 3 bytes. */
-    private static final String UTF8_3BYTE_CHAR = "★";
+    /** A single ASCII character that encodes to 1 UTF-8 byte. */
+    private static final String CHAR_UTF8_1B = "a";
 
-    /** File name of 255 ASCII characters: 255 bytes == 255 UTF-16 chars. */
-    private static final String FILE_NAME_255_ASCII = StringUtils.repeat("a", 255);
+    /** A single Unicode character that encodes to 2 UTF-8 bytes. */
+    private static final String CHAR_UTF8_2B = "é";
 
-    /** File name of 85 UTF-16 chars, each 3 bytes in UTF-8: total 255 bytes. */
-    private static final String FILE_NAME_255_UTF8_BYTES = StringUtils.repeat(UTF8_3BYTE_CHAR, 85);
+    /** A single Unicode character that encodes to 3 UTF-8 bytes. */
+    private static final String CHAR_UTF8_3B = "★";
 
-    /** File name of 255 UTF-16 chars, each 3 bytes in UTF-8: total 765 bytes. */
-    private static final String FILE_NAME_255_UTF16_CODE_UNITS = StringUtils.repeat(UTF8_3BYTE_CHAR, 255);
+    /** A single Unicode codepoint that encodes to 2 UTF-16 code units and 4 UTF-8 bytes. */
+    private static final String CHAR_UTF8_4B = "😀";
+
+    /** File name of 255 bytes and 255 UTF-16 code units. */
+    private static final String FILE_NAME_255BYTES_UTF8_1B = repeat(CHAR_UTF8_1B, 255);
+
+    /** File name of 255 bytes and 128 UTF-16 code units. */
+    private static final String FILE_NAME_255BYTES_UTF8_2B = repeat(CHAR_UTF8_2B, 127) + CHAR_UTF8_1B;
+
+    /** File name of 255 bytes and 85 UTF-16 code units. */
+    private static final String FILE_NAME_255BYTES_UTF8_3B = repeat(CHAR_UTF8_3B, 85);
+
+    /** File name of 255 bytes and 64 UTF-16 code units. */
+    private static final String FILE_NAME_255BYTES_UTF8_4B = repeat(CHAR_UTF8_4B, 63) + CHAR_UTF8_3B;
+
+    /** File name of 255 bytes and 255 UTF-16 code units. */
+    private static final String FILE_NAME_255CHARS_UTF8_1B = FILE_NAME_255BYTES_UTF8_1B;
+
+    /** File name of 510 bytes and 255 UTF-16 code units. */
+    private static final String FILE_NAME_255CHARS_UTF8_2B = repeat(CHAR_UTF8_2B, 255);
+
+    /** File name of 765 bytes and 255 UTF-16 code units. */
+    private static final String FILE_NAME_255CHARS_UTF8_3B = repeat(CHAR_UTF8_3B, 255);
+
+    /** File name of 511 bytes and 255 UTF-16 code units. */
+    private static final String FILE_NAME_255CHARS_UTF8_4B = repeat(CHAR_UTF8_4B, 127) + CHAR_UTF8_3B;
 
     @Test
     void testGetBlockSize() {
@@ -109,17 +135,30 @@ class FileSystemTest {
 
     static Stream<Arguments> testIsLegalName_Length() {
         return Stream.of(
-                Arguments.of(FileSystem.GENERIC, StringUtils.repeat(FILE_NAME_255_ASCII, 4), UTF_8),
-                Arguments.of(FileSystem.GENERIC, StringUtils.repeat(FILE_NAME_255_UTF8_BYTES, 4), UTF_8),
-                Arguments.of(FileSystem.LINUX, FILE_NAME_255_ASCII, UTF_8),
-                Arguments.of(FileSystem.LINUX, FILE_NAME_255_UTF8_BYTES, UTF_8),
-                Arguments.of(FileSystem.MAC_OSX, FILE_NAME_255_ASCII, UTF_8),
-                Arguments.of(FileSystem.MAC_OSX, FILE_NAME_255_UTF8_BYTES, UTF_8),
-                Arguments.of(FileSystem.WINDOWS, FILE_NAME_255_ASCII, UTF_8),
-                Arguments.of(FileSystem.WINDOWS, FILE_NAME_255_UTF16_CODE_UNITS, UTF_8));
+                Arguments.of(FileSystem.GENERIC, repeat(FILE_NAME_255BYTES_UTF8_1B, 4), UTF_8),
+                Arguments.of(FileSystem.GENERIC, repeat(FILE_NAME_255BYTES_UTF8_2B, 4), UTF_8),
+                Arguments.of(FileSystem.GENERIC, repeat(FILE_NAME_255BYTES_UTF8_3B, 4), UTF_8),
+                Arguments.of(FileSystem.GENERIC, repeat(FILE_NAME_255BYTES_UTF8_4B, 4), UTF_8),
+                Arguments.of(FileSystem.LINUX, FILE_NAME_255BYTES_UTF8_1B, UTF_8),
+                Arguments.of(FileSystem.LINUX, FILE_NAME_255BYTES_UTF8_2B, UTF_8),
+                Arguments.of(FileSystem.LINUX, FILE_NAME_255BYTES_UTF8_3B, UTF_8),
+                Arguments.of(FileSystem.LINUX, FILE_NAME_255BYTES_UTF8_4B, UTF_8),
+                Arguments.of(FileSystem.MAC_OSX, FILE_NAME_255BYTES_UTF8_1B, UTF_8),
+                Arguments.of(FileSystem.MAC_OSX, FILE_NAME_255BYTES_UTF8_2B, UTF_8),
+                Arguments.of(FileSystem.MAC_OSX, FILE_NAME_255BYTES_UTF8_3B, UTF_8),
+                Arguments.of(FileSystem.MAC_OSX, FILE_NAME_255BYTES_UTF8_4B, UTF_8),
+                Arguments.of(FileSystem.WINDOWS, FILE_NAME_255CHARS_UTF8_1B, UTF_8),
+                Arguments.of(FileSystem.WINDOWS, FILE_NAME_255CHARS_UTF8_2B, UTF_8),
+                Arguments.of(FileSystem.WINDOWS, FILE_NAME_255CHARS_UTF8_3B, UTF_8),
+                Arguments.of(FileSystem.WINDOWS, FILE_NAME_255CHARS_UTF8_4B, UTF_8),
+                // Repeat some tests with other encodings for GENERIC and LINUX
+                Arguments.of(FileSystem.GENERIC, repeat(FILE_NAME_255BYTES_UTF8_1B, 4), US_ASCII),
+                Arguments.of(FileSystem.GENERIC, repeat(CHAR_UTF8_2B, 1020), ISO_8859_1),
+                Arguments.of(FileSystem.LINUX, FILE_NAME_255BYTES_UTF8_1B, US_ASCII),
+                Arguments.of(FileSystem.LINUX, repeat(CHAR_UTF8_2B, 255), ISO_8859_1));
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "{index}: {0} with charset {2}")
     @MethodSource
     void testIsLegalName_Length(FileSystem fs, String nameAtLimit, Charset charset) {
         assertTrue(fs.isLegalFileName(nameAtLimit, charset), fs.name() + " length at limit");
@@ -129,8 +168,8 @@ class FileSystemTest {
 
     @Test
     void testIsLegalName_Encoding() {
-        assertFalse(FileSystem.GENERIC.isLegalFileName(FILE_NAME_255_UTF8_BYTES, US_ASCII), "US-ASCII cannot represent all chars");
-        assertTrue(FileSystem.GENERIC.isLegalFileName(FILE_NAME_255_UTF8_BYTES, UTF_8), "UTF-8 can represent all chars");
+        assertFalse(FileSystem.GENERIC.isLegalFileName(FILE_NAME_255BYTES_UTF8_3B, US_ASCII), "US-ASCII cannot represent all chars");
+        assertTrue(FileSystem.GENERIC.isLegalFileName(FILE_NAME_255BYTES_UTF8_3B, UTF_8), "UTF-8 can represent all chars");
     }
 
     @Test
@@ -197,24 +236,73 @@ class FileSystemTest {
         switch (fs) {
             case MAC_OSX:
             case LINUX:
-                validNames = new String[] { FILE_NAME_255_ASCII, FILE_NAME_255_UTF8_BYTES };
+                // Names with 255 UTF-8 bytes are legal
+                validNames = new String[] {
+                    FILE_NAME_255BYTES_UTF8_1B,
+                    FILE_NAME_255BYTES_UTF8_2B,
+                    FILE_NAME_255BYTES_UTF8_3B,
+                    FILE_NAME_255BYTES_UTF8_4B
+                };
                 break;
             case WINDOWS:
-                validNames = new String[] { FILE_NAME_255_ASCII, FILE_NAME_255_UTF16_CODE_UNITS};
+                // Names with 255 UTF-16 code units are legal
+                validNames = new String[] {
+                    FILE_NAME_255CHARS_UTF8_1B,
+                    FILE_NAME_255CHARS_UTF8_2B,
+                    FILE_NAME_255CHARS_UTF8_3B,
+                    FILE_NAME_255CHARS_UTF8_4B
+                };
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + fs);
         }
+        int failures = 0;
         for (final String fileName : validNames) {
-            assertDoesNotThrow(() -> testFileName(tempDir, fileName), "OS accepts max length name");
-            assertTrue(fs.isLegalFileName(fileName, UTF_8), "Commons IO accepts max length name");
+            // 1) OS should accept names at the documented limit.
+            assertDoesNotThrow(
+                    () -> createAndDelete(tempDir, fileName), "OS should accept max-length name: " + fileName);
+
+            // 2) Library should consider them legal.
+            assertTrue(fs.isLegalFileName(fileName, UTF_8), "Commons IO should accept max-length name: " + fileName);
+
+            // 3) For “one over” the limit: Commons IO must reject; OS may or may not enforce strictly.
             final String tooLongName = fileName + "a";
-            assertThrows(IOException.class, () -> testFileName(tempDir, tooLongName), "OS rejects too-long name");
-            assertFalse(fs.isLegalFileName(tooLongName, UTF_8), "Commons IO rejects too-long name");
+
+            // Library contract: must be illegal.
+            assertFalse(
+                    fs.isLegalFileName(tooLongName, UTF_8), "Commons IO should reject too-long name: " + tooLongName);
+
+            // OS behavior: may or may not reject.
+            try {
+                // Some file systems do not enforce the limit, for example XFS on Linux
+                createAndDelete(tempDir, tooLongName);
+            } catch (final Throwable e) {
+                failures++;
+                assertInstanceOf(IOException.class, e, "OS rejects too-long name");
+            }
+        }
+        // On Linux and Windows the API and the filesystem measure name length
+        // in the same unit as the underlying limit (255 bytes on Linux/most POSIX,
+        // 255 UTF-16 code units on Windows).
+        // So all “too-long” variants should fail.
+        //
+        // macOS is trickier because the API and filesystem limits don’t always match:
+        //
+        // - POSIX API layer (getdirentries/readdir): 1023 bytes per component since macOS 10.5.
+        //   https://man.freebsd.org/cgi/man.cgi?query=dir&sektion=5&apropos=0&manpath=macOS+15.6
+        // - HFS+: enforces 255 UTF-16 code units per component.
+        // - APFS: enforces 255 UTF-8 bytes per component.
+        //
+        // Because of this mismatch, depending on which filesystem is mounted,
+        // either all or only FILE_NAME_255BYTES_UTF8_1B + "a" will be rejected.
+        if (SystemUtils.IS_OS_MAC_OSX) {
+            assertTrue(failures == 1 || failures == 4, "At least one name too long was rejected");
+        } else {
+            assertEquals(4, failures, "All too-long names were rejected");
         }
     }
 
-    private void testFileName(Path tempDir, String fileName) throws IOException {
+    private static void createAndDelete(Path tempDir, String fileName) throws IOException {
         final Path filePath = tempDir.resolve(fileName);
         Files.createFile(filePath);
         try (Stream<Path> files = Files.list(tempDir)) {
@@ -265,26 +353,26 @@ class FileSystemTest {
     static Stream<Arguments> testNameLengthStrategyTruncate() {
         return Stream.of(
                 Arguments.of(BYTES, 255, "simple.txt", "simple.txt"),
-                Arguments.of(BYTES, 255, "." + FILE_NAME_255_ASCII, "." + FILE_NAME_255_ASCII.substring(0, 254)),
-                Arguments.of(BYTES, 255, FILE_NAME_255_ASCII + "aaaa", FILE_NAME_255_ASCII),
-                Arguments.of(BYTES, 255, FILE_NAME_255_ASCII + ".txt", FILE_NAME_255_ASCII.substring(0, 251) + ".txt"),
-                Arguments.of(BYTES, 255, FILE_NAME_255_UTF8_BYTES + "aaaa", FILE_NAME_255_UTF8_BYTES),
+                Arguments.of(BYTES, 255, "." + FILE_NAME_255BYTES_UTF8_1B, "." + FILE_NAME_255BYTES_UTF8_1B.substring(0, 254)),
+                Arguments.of(BYTES, 255, FILE_NAME_255BYTES_UTF8_1B + "aaaa", FILE_NAME_255BYTES_UTF8_1B),
+                Arguments.of(BYTES, 255, FILE_NAME_255BYTES_UTF8_1B + ".txt", FILE_NAME_255BYTES_UTF8_1B.substring(0, 251) + ".txt"),
+                Arguments.of(BYTES, 255, FILE_NAME_255BYTES_UTF8_3B + "aaaa", FILE_NAME_255BYTES_UTF8_3B),
                 Arguments.of(
                         BYTES,
                         255,
-                        FILE_NAME_255_UTF8_BYTES + ".txt",
-                        FILE_NAME_255_UTF8_BYTES.substring(0, 83) + ".txt"),
+                        FILE_NAME_255BYTES_UTF8_3B + ".txt",
+                        FILE_NAME_255BYTES_UTF8_3B.substring(0, 83) + ".txt"),
                 Arguments.of(UTF16_CODE_UNITS, 255, "simple.txt", "simple.txt"),
-                Arguments.of(UTF16_CODE_UNITS, 255, "." + FILE_NAME_255_ASCII, "." + FILE_NAME_255_ASCII.substring(0, 254)),
+                Arguments.of(UTF16_CODE_UNITS, 255, "." + FILE_NAME_255BYTES_UTF8_1B, "." + FILE_NAME_255BYTES_UTF8_1B.substring(0, 254)),
                 Arguments.of(
-                        UTF16_CODE_UNITS, 255, FILE_NAME_255_ASCII + ".txt", FILE_NAME_255_ASCII.substring(0, 251) + ".txt"),
-                Arguments.of(UTF16_CODE_UNITS, 255, FILE_NAME_255_ASCII + "aaaa", FILE_NAME_255_ASCII),
+                        UTF16_CODE_UNITS, 255, FILE_NAME_255BYTES_UTF8_1B + ".txt", FILE_NAME_255BYTES_UTF8_1B.substring(0, 251) + ".txt"),
+                Arguments.of(UTF16_CODE_UNITS, 255, FILE_NAME_255BYTES_UTF8_1B + "aaaa", FILE_NAME_255BYTES_UTF8_1B),
                 Arguments.of(
                         UTF16_CODE_UNITS,
                         255,
-                        FILE_NAME_255_UTF16_CODE_UNITS + ".txt",
-                        FILE_NAME_255_UTF16_CODE_UNITS.substring(0, 251) + ".txt"),
-                Arguments.of(UTF16_CODE_UNITS, 255, FILE_NAME_255_UTF16_CODE_UNITS + "aaaa", FILE_NAME_255_UTF16_CODE_UNITS),
+                        FILE_NAME_255CHARS_UTF8_3B + ".txt",
+                        FILE_NAME_255CHARS_UTF8_3B.substring(0, 251) + ".txt"),
+                Arguments.of(UTF16_CODE_UNITS, 255, FILE_NAME_255CHARS_UTF8_3B + "aaaa", FILE_NAME_255CHARS_UTF8_3B),
                 Arguments.of(
                         UTF16_CODE_UNITS,
                         7,
