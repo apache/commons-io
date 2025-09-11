@@ -2030,11 +2030,11 @@ public class IOUtils {
      * @throws IllegalArgumentException if length is negative.
      * @throws EOFException             if the number of bytes read was incorrect.
      * @since 2.5
+     * @deprecated Use {@link #toByteArray(InputStream, int)}.
      */
+    @Deprecated
     public static byte[] readFully(final InputStream input, final int length) throws IOException {
-        final byte[] buffer = byteArray(length);
-        readFully(input, buffer, 0, buffer.length);
-        return buffer;
+        return toByteArray(input, length);
     }
 
     /**

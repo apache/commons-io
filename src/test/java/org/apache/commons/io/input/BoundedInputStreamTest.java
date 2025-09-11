@@ -23,24 +23,99 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.test.CustomIOException;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Tests for {@link BoundedInputStream}.
  */
 class BoundedInputStreamTest {
+
+    static Stream<Arguments> testAvailableAfterClose() throws IOException {
+        // Case 1: behaves like ByteArrayInputStream — close() is a no-op, available() still returns a value (e.g., 42).
+        final InputStream noOpClose = mock(InputStream.class);
+        when(noOpClose.available()).thenReturn(42, 42);
+
+        // Case 2: returns 0 after close (Commons memory-backed streams that ignore close but report 0 when exhausted).
+        final InputStream returnsZeroAfterClose = mock(InputStream.class);
+        when(returnsZeroAfterClose.available()).thenReturn(42, 0);
+
+        // Case 3: throws IOException after close (e.g., FileInputStream-like behavior).
+        final InputStream throwsAfterClose = mock(InputStream.class);
+        when(throwsAfterClose.available()).thenReturn(42).thenThrow(new IOException("Stream closed"));
+
+        return Stream.of(
+                Arguments.of("underlying stream still returns 42 after close", noOpClose, 42),
+                Arguments.of("underlying stream returns 0 after close", returnsZeroAfterClose, 42),
+                Arguments.of("underlying stream throws IOException after close", throwsAfterClose, 42));
+    }
+
+    static Stream<Arguments> testAvailableUpperLimit() {
+        final byte[] helloWorld = "Hello World".getBytes(StandardCharsets.UTF_8);
+        return Stream.of(
+                // Limited by maxCount
+                Arguments.of(new ByteArrayInputStream(helloWorld), helloWorld.length - 1, helloWorld.length - 1, 0),
+                // Limited by data length
+                Arguments.of(new ByteArrayInputStream(helloWorld), helloWorld.length + 1, helloWorld.length, 0),
+                // Limited by Integer.MAX_VALUE
+                Arguments.of(
+                        new NullInputStream(Long.MAX_VALUE), Long.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE));
+    }
+
+    static Stream<Arguments> testReadAfterClose() throws IOException {
+        // Case 1: no-op close (ByteArrayInputStream-like): read() still returns a value after close
+        final InputStream noOpClose = mock(InputStream.class);
+        when(noOpClose.read()).thenReturn(42);
+
+        // Case 2: returns EOF (-1) after close
+        final InputStream returnsEofAfterClose = mock(InputStream.class);
+        when(returnsEofAfterClose.read()).thenReturn(IOUtils.EOF);
+
+        // Case 3: throws IOException after close (FileInputStream-like)
+        final InputStream throwsAfterClose = mock(InputStream.class);
+        final IOException closed = new IOException("Stream closed");
+        when(throwsAfterClose.read()).thenThrow(closed);
+
+        return Stream.of(
+                Arguments.of("underlying stream still reads data after close", noOpClose, 42),
+                Arguments.of("underlying stream returns EOF after close", returnsEofAfterClose, IOUtils.EOF),
+                Arguments.of("underlying stream throws IOException after close", throwsAfterClose, closed));
+    }
+
+    static Stream<Arguments> testRemaining() {
+        return Stream.of(
+                // Unbounded: any negative maxCount is treated as "no limit".
+                Arguments.of("unbounded (EOF constant)", IOUtils.EOF, Long.MAX_VALUE),
+                Arguments.of("unbounded (arbitrary negative)", Long.MIN_VALUE, Long.MAX_VALUE),
+
+                // Bounded: remaining equals the configured limit, regardless of underlying data size.
+                Arguments.of("bounded (zero)", 0L, 0L),
+                Arguments.of("bounded (small)", 1024L, 1024L),
+                Arguments.of("bounded (Integer.MAX_VALUE)", Integer.MAX_VALUE, (long) Integer.MAX_VALUE),
+
+                // Bounded but extremely large: still not 'unbounded'.
+                Arguments.of("bounded (Long.MAX_VALUE)", Long.MAX_VALUE, Long.MAX_VALUE));
+    }
 
     private void compare(final String message, final byte[] expected, final byte[] actual) {
         assertEquals(expected.length, actual.length, () -> message + " (array length equals check)");
@@ -80,21 +155,43 @@ class BoundedInputStreamTest {
         // @formatter:on
     }
 
-    @SuppressWarnings("resource")
-    @Test
-    void testAvailableAfterClose() throws Exception {
+    @ParameterizedTest(name = "{index} — {0}")
+    @MethodSource
+    void testAvailableAfterClose(String caseName, InputStream delegate, int expectedBeforeClose)
+            throws Exception {
         final InputStream shadow;
-        try (InputStream in = BoundedInputStream.builder().setCharSequence("Hi").get()) {
-            assertTrue(in.available() > 0);
-            shadow = in;
+        try (InputStream in = BoundedInputStream.builder()
+                .setInputStream(delegate)
+                .setPropagateClose(true)
+                .get()) {
+            // Before close: pass-through behavior
+            assertEquals(expectedBeforeClose, in.available(), caseName + " (before close)");
+            shadow = in; // keep reference to call after close
         }
-        assertEquals(0, shadow.available());
+        // Verify the underlying stream was closed
+        verify(delegate, times(1)).close();
+        // After close: behavior depends on the underlying stream
+        assertEquals(0, shadow.available(), caseName + " (after close)");
+        // Interactions: available called only once before close.
+        verify(delegate, times(1)).available();
+        verifyNoMoreInteractions(delegate);
     }
 
-    @Test
-    void testAvailableAfterOpen() throws Exception {
-        try (InputStream in = BoundedInputStream.builder().setCharSequence("Hi").get()) {
-            assertTrue(in.available() > 0);
+    @ParameterizedTest
+    @MethodSource
+    void testAvailableUpperLimit(InputStream input, long maxCount, int expectedBeforeSkip, int expectedAfterSkip)
+            throws Exception {
+        try (BoundedInputStream bounded = BoundedInputStream.builder()
+                .setInputStream(input)
+                .setMaxCount(maxCount)
+                .get()) {
+            assertEquals(
+                    expectedBeforeSkip, bounded.available(), "available should be limited by maxCount and data length");
+            IOUtils.skip(bounded, expectedBeforeSkip);
+            assertEquals(
+                    expectedAfterSkip,
+                    bounded.available(),
+                    "after skipping available should be limited by maxCount and data length");
         }
     }
 
@@ -444,15 +541,38 @@ class BoundedInputStreamTest {
         }
     }
 
-    @SuppressWarnings("resource")
-    @Test
-    void testReadAfterClose() throws Exception {
-        final InputStream shadow;
-        try (InputStream in = BoundedInputStream.builder().setCharSequence("Hi").get()) {
-            assertTrue(in.available() > 0);
-            shadow = in;
+    @ParameterizedTest(name = "{index} — {0}")
+    @MethodSource("testReadAfterClose")
+    void testReadAfterClose(
+            String caseName,
+            InputStream delegate,
+            Object expectedAfterClose // Integer (value) or IOException (expected thrown)
+            ) throws Exception {
+
+        final InputStream bounded;
+        try (InputStream in = BoundedInputStream.builder()
+                .setInputStream(delegate)
+                .setPropagateClose(true)
+                .get()) {
+            bounded = in; // call read() only after close
         }
-        assertEquals(IOUtils.EOF, shadow.read());
+
+        // Underlying stream should be closed exactly once
+        verify(delegate, times(1)).close();
+
+        if (expectedAfterClose instanceof Integer) {
+            assertEquals(expectedAfterClose, bounded.read(), caseName + " (after close)");
+        } else if (expectedAfterClose instanceof IOException) {
+            final IOException actual = assertThrows(IOException.class, bounded::read, caseName + " (after close)");
+            // verify it's the exact instance we configured
+            assertSame(expectedAfterClose, actual, caseName + " (exception instance)");
+        } else {
+            fail("Unexpected expectedAfterClose type: " + expectedAfterClose);
+        }
+
+        // We only performed one read() (after close)
+        verify(delegate, times(1)).read();
+        verifyNoMoreInteractions(delegate);
     }
 
     @Test
@@ -529,6 +649,31 @@ class BoundedInputStreamTest {
             assertEquals(-1, bounded.read(), "limit < length end");
             // should be invariant
             assertTrue(bounded.markSupported());
+        }
+    }
+
+    @ParameterizedTest(name = "{index}: {0} -> initial remaining {2}")
+    @MethodSource
+    void testRemaining(final String caseName, final long maxCount, final long expectedInitialRemaining)
+            throws Exception {
+        final byte[] data = "Hello World".getBytes(StandardCharsets.UTF_8); // 11 bytes
+
+        try (BoundedInputStream in = BoundedInputStream.builder()
+                .setByteArray(data)
+                .setMaxCount(maxCount)
+                .get()) {
+            // Initial remaining respects the imposed limit (or is Long.MAX_VALUE if unbounded).
+            assertEquals(expectedInitialRemaining, in.getRemaining(), caseName + " (initial)");
+
+            // Skip more than the data length to exercise both bounded and unbounded paths.
+            final long skipped = IOUtils.skip(in, 42);
+
+            // For unbounded streams (EOF == -1), remaining stays the same.
+            // For bounded, it decreases by 'skipped'.
+            final long expectedAfterSkip =
+                    in.getMaxCount() == IOUtils.EOF ? expectedInitialRemaining : expectedInitialRemaining - skipped;
+
+            assertEquals(expectedAfterSkip, in.getRemaining(), caseName + " (after skip)");
         }
     }
 

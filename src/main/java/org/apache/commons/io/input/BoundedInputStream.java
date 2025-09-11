@@ -73,12 +73,12 @@ import org.apache.commons.io.function.IOBiConsumer;
  *   .get();
  * }
  * </pre>
- * <h2>Listening for the max count reached</h2>
+ * <h2>Listening for the maximum count reached</h2>
  * <pre>{@code
  * BoundedInputStream s = BoundedInputStream.builder()
  *   .setPath(Paths.get("MyFile.xml"))
  *   .setMaxCount(1024)
- *   .setOnMaxCount((max, count) -> System.out.printf("Max count %,d reached with a last read count of %,d%n", max, count))
+ *   .setOnMaxCount((max, count) -> System.out.printf("Maximum count %,d reached with a last read count of %,d%n", max, count))
  *   .get();
  * }
  * </pre>
@@ -98,7 +98,7 @@ public class BoundedInputStream extends ProxyInputStream {
         /** The current count of bytes counted. */
         private long count;
 
-        /** The max count of bytes to read. */
+        /** The maximum count of bytes to read. */
         private long maxCount = EOF;
 
         private IOBiConsumer<Long, Long> onMaxCount = IOBiConsumer.noop();
@@ -156,7 +156,8 @@ public class BoundedInputStream extends ProxyInputStream {
         /**
          * Sets the default {@link BoundedInputStream#onMaxLength(long, long)} behavior, {@code null} resets to a NOOP.
          * <p>
-         * The first Long is the max count of bytes to read. The second Long is the count of bytes read.
+         * The first Long is the number of bytes remaining to read before the maximum is reached count of bytes to read. The second Long is the count of bytes
+         * read.
          * </p>
          * <p>
          * This does <em>not</em> override a {@code BoundedInputStream} subclass' implementation of the {@link BoundedInputStream#onMaxLength(long, long)}
@@ -299,7 +300,7 @@ public class BoundedInputStream extends ProxyInputStream {
     /** The current mark. */
     private long mark;
 
-    /** The max count of bytes to read. */
+    /** The maximum count of bytes to read. */
     private final long maxCount;
 
     private final IOBiConsumer<Long, Long> onMaxCount;
@@ -350,7 +351,7 @@ public class BoundedInputStream extends ProxyInputStream {
      */
     @Deprecated
     public BoundedInputStream(final InputStream inputStream, final long maxCount) {
-        // Some badly designed methods - e.g. the Servlet API - overload length
+        // Some badly designed methods, for example the Servlet API, overload length
         // such that "-1" means stream finished
         this(inputStream, builder().setMaxCount(maxCount));
     }
@@ -358,7 +359,7 @@ public class BoundedInputStream extends ProxyInputStream {
     /**
      * Adds the number of read bytes to the count.
      *
-     * @param n number of bytes read, or -1 if no more bytes are available
+     * @param n number of bytes read, or -1 if no more bytes are available.
      * @throws IOException Not thrown here but subclasses may throw.
      * @since 2.0
      */
@@ -370,16 +371,11 @@ public class BoundedInputStream extends ProxyInputStream {
         super.afterRead(n);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int available() throws IOException {
-        if (isMaxCount()) {
-            onMaxLength(maxCount, getCount());
-            return 0;
-        }
-        return in.available();
+        // Safe cast: value is between 0 and Integer.MAX_VALUE
+        final int remaining = (int) Math.min(getRemaining(), Integer.MAX_VALUE);
+        return Math.min(super.available(), remaining);
     }
 
     /**
@@ -405,9 +401,9 @@ public class BoundedInputStream extends ProxyInputStream {
     }
 
     /**
-     * Gets the max count of bytes to read.
+     * Gets the maximum number of bytes to read.
      *
-     * @return The max count of bytes to read.
+     * @return The maximum number of bytes to read, or {@value IOUtils#EOF} if unbounded.
      * @since 2.16.0
      */
     public long getMaxCount() {
@@ -415,9 +411,9 @@ public class BoundedInputStream extends ProxyInputStream {
     }
 
     /**
-     * Gets the max count of bytes to read.
+     * Gets the maximum count of bytes to read.
      *
-     * @return The max count of bytes to read.
+     * @return The maximum count of bytes to read.
      * @since 2.12.0
      * @deprecated Use {@link #getMaxCount()}.
      */
@@ -427,13 +423,21 @@ public class BoundedInputStream extends ProxyInputStream {
     }
 
     /**
-     * Gets how many bytes remain to read.
+     * Gets the number of bytes remaining to read before the maximum is reached.
      *
-     * @return bytes how many bytes remain to read.
+     * <p>
+     * This method does <strong>not</strong> report the bytes available in the
+     * underlying stream; it only reflects the remaining allowance imposed by this
+     * {@code BoundedInputStream}.
+     * </p>
+     *
+     * @return The number of bytes remaining to read before the maximum is reached,
+     *         or {@link Long#MAX_VALUE} if no bound is set.
      * @since 2.16.0
      */
     public long getRemaining() {
-        return Math.max(0, getMaxCount() - getCount());
+        final long maxCount = getMaxCount();
+        return maxCount == EOF ? Long.MAX_VALUE : Math.max(0, maxCount - getCount());
     }
 
     private boolean isMaxCount() {
@@ -452,7 +456,7 @@ public class BoundedInputStream extends ProxyInputStream {
     /**
      * Invokes the delegate's {@link InputStream#mark(int)} method.
      *
-     * @param readLimit read ahead limit
+     * @param readLimit read ahead limit.
      */
     @Override
     public synchronized void mark(final int readLimit) {
@@ -463,7 +467,7 @@ public class BoundedInputStream extends ProxyInputStream {
     /**
      * Invokes the delegate's {@link InputStream#markSupported()} method.
      *
-     * @return true if mark is supported, otherwise false
+     * @return true if mark is supported, otherwise false.
      */
     @Override
     public boolean markSupported() {
@@ -476,7 +480,7 @@ public class BoundedInputStream extends ProxyInputStream {
      * Delegates to the consumer set in {@link Builder#setOnMaxCount(IOBiConsumer)}.
      * </p>
      *
-     * @param max The max count of bytes to read.
+     * @param max The maximum count of bytes to read.
      * @param count     The count of bytes read.
      * @throws IOException Subclasses may throw.
      * @since 2.12.0
@@ -505,7 +509,7 @@ public class BoundedInputStream extends ProxyInputStream {
     /**
      * Invokes the delegate's {@link InputStream#read(byte[])} method.
      *
-     * @param b the buffer to read the bytes into
+     * @param b the buffer to read the bytes into.
      * @return the number of bytes read or -1 if the end of stream or the limit has been reached.
      * @throws IOException if an I/O error occurs.
      */
@@ -517,9 +521,9 @@ public class BoundedInputStream extends ProxyInputStream {
     /**
      * Invokes the delegate's {@link InputStream#read(byte[], int, int)} method.
      *
-     * @param b   the buffer to read the bytes into
-     * @param off The start offset
-     * @param len The number of bytes to read
+     * @param b   the buffer to read the bytes into.
+     * @param off The start offset.
+     * @param len The number of bytes to read.
      * @return the number of bytes read or -1 if the end of stream or the limit has been reached.
      * @throws IOException if an I/O error occurs.
      */
@@ -558,8 +562,8 @@ public class BoundedInputStream extends ProxyInputStream {
     /**
      * Invokes the delegate's {@link InputStream#skip(long)} method.
      *
-     * @param n the number of bytes to skip
-     * @return the actual number of bytes skipped
+     * @param n the number of bytes to skip.
+     * @return the actual number of bytes skipped.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -576,7 +580,7 @@ public class BoundedInputStream extends ProxyInputStream {
     /**
      * Invokes the delegate's {@link InputStream#toString()} method.
      *
-     * @return the delegate's {@link InputStream#toString()}
+     * @return the delegate's {@link InputStream#toString()}.
      */
     @Override
     public String toString() {
