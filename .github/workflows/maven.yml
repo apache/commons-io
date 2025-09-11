@@ -18,6 +18,8 @@ name: Java CI
 on:
   workflow_dispatch:
   push:
+    branches:
+      - 'master'
     paths-ignore:
       - '**/workflows/*.yml'
       - '!**/workflows/maven.yml'
