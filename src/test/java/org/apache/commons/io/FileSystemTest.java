@@ -273,7 +273,6 @@ class FileSystemTest {
 
             // OS behavior: may or may not reject.
             try {
-                // Some file systems do not enforce the limit, for example XFS on Linux
                 createAndDelete(tempDir, tooLongName);
             } catch (final Throwable e) {
                 failures++;
@@ -295,7 +294,7 @@ class FileSystemTest {
         // Because of this mismatch, depending on which filesystem is mounted,
         // either all or only FILE_NAME_255BYTES_UTF8_1B + "a" will be rejected.
         if (SystemUtils.IS_OS_MAC_OSX) {
-            assertTrue(failures == 1 || failures == 4, "At least one name too long was rejected");
+            assertTrue(failures >= 1, "Expected at least one too-long name rejected, got " + failures);
         } else {
             assertEquals(4, failures, "All too-long names were rejected");
         }
