@@ -17,6 +17,8 @@
 
 package org.apache.commons.io;
 
+import static java.nio.charset.StandardCharsets.UTF_16;
+
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharacterCodingException;
@@ -653,6 +655,11 @@ public enum FileSystem {
 
             @Override
             CharSequence truncate(final CharSequence value, final int limit, final Charset charset) {
+                if (!UTF_16.newEncoder().canEncode(value)) {
+                    throw new IllegalArgumentException(
+                            "The value " + value + " can not be encoded using " + UTF_16.name());
+                }
+
                 // Fast path: no truncation needed.
                 if (value.length() <= limit) {
                     return value;
@@ -675,7 +682,7 @@ public enum FileSystem {
 
             private int safeCutPoint(final CharSequence value, final int limit) {
                 // Ensure we do not cut a surrogate pair in half.
-                if (Character.isHighSurrogate(value.charAt(limit - 1)) && Character.isLowSurrogate(value.charAt(limit))) {
+                if (Character.isHighSurrogate(value.charAt(limit - 1))) {
                     return limit - 1;
                 }
                 return limit;

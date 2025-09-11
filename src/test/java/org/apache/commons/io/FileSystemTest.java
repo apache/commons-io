@@ -36,7 +36,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.FileSystem.NameLengthStrategy;
@@ -350,92 +349,73 @@ class FileSystemTest {
         assertThrows(IllegalArgumentException.class, () -> fs.toLegalFileName("test", ':'));
     }
 
-    static Stream<Arguments> testNameLengthStrategyTruncate() {
+    static Stream<Arguments> testNameLengthStrategyTruncate_Succeeds() {
         return Stream.of(
-                Arguments.of(BYTES, 255, "simple.txt", "simple.txt"),
-                Arguments.of(BYTES, 255, "." + FILE_NAME_255BYTES_UTF8_1B, "." + FILE_NAME_255BYTES_UTF8_1B.substring(0, 254)),
-                Arguments.of(BYTES, 255, FILE_NAME_255BYTES_UTF8_1B + "aaaa", FILE_NAME_255BYTES_UTF8_1B),
-                Arguments.of(BYTES, 255, FILE_NAME_255BYTES_UTF8_1B + ".txt", FILE_NAME_255BYTES_UTF8_1B.substring(0, 251) + ".txt"),
-                Arguments.of(BYTES, 255, FILE_NAME_255BYTES_UTF8_3B + "aaaa", FILE_NAME_255BYTES_UTF8_3B),
-                Arguments.of(
-                        BYTES,
-                        255,
-                        FILE_NAME_255BYTES_UTF8_3B + ".txt",
-                        FILE_NAME_255BYTES_UTF8_3B.substring(0, 83) + ".txt"),
-                Arguments.of(UTF16_CODE_UNITS, 255, "simple.txt", "simple.txt"),
-                Arguments.of(UTF16_CODE_UNITS, 255, "." + FILE_NAME_255BYTES_UTF8_1B, "." + FILE_NAME_255BYTES_UTF8_1B.substring(0, 254)),
-                Arguments.of(
-                        UTF16_CODE_UNITS, 255, FILE_NAME_255BYTES_UTF8_1B + ".txt", FILE_NAME_255BYTES_UTF8_1B.substring(0, 251) + ".txt"),
-                Arguments.of(UTF16_CODE_UNITS, 255, FILE_NAME_255BYTES_UTF8_1B + "aaaa", FILE_NAME_255BYTES_UTF8_1B),
-                Arguments.of(
-                        UTF16_CODE_UNITS,
-                        255,
-                        FILE_NAME_255CHARS_UTF8_3B + ".txt",
-                        FILE_NAME_255CHARS_UTF8_3B.substring(0, 251) + ".txt"),
-                Arguments.of(UTF16_CODE_UNITS, 255, FILE_NAME_255CHARS_UTF8_3B + "aaaa", FILE_NAME_255CHARS_UTF8_3B),
-                Arguments.of(
-                        UTF16_CODE_UNITS,
-                        7,
-                        "😀😀.txt" // each emoji is 2 UTF-16 chars
-                        ,
-                        "😀.txt"),
-                // High surrogate not followed by low surrogate (invalid UTF-16 sequence)
-                Arguments.of(UTF16_CODE_UNITS, 5, "\uD83Da.txt", "\uD83D.txt"));
+                // Truncation by bytes
+                // -------------------
+                //
+                // Simple name without truncation
+                Arguments.of(BYTES, 10, "simple.txt", "simple.txt"),
+                // Name starting with dot
+                Arguments.of(BYTES, 10, "." + repeat(CHAR_UTF8_1B, 10), "." + repeat(CHAR_UTF8_1B, 9)),
+                Arguments.of(BYTES, 20, "." + repeat(CHAR_UTF8_2B, 10), "." + repeat(CHAR_UTF8_2B, 9)),
+                Arguments.of(BYTES, 30, "." + repeat(CHAR_UTF8_3B, 10), "." + repeat(CHAR_UTF8_3B, 9)),
+                Arguments.of(BYTES, 40, "." + repeat(CHAR_UTF8_4B, 10), "." + repeat(CHAR_UTF8_4B, 9)),
+                // Names with extensions
+                Arguments.of(BYTES, 13, repeat(CHAR_UTF8_1B, 10) + ".txt", repeat(CHAR_UTF8_1B, 9) + ".txt"),
+                Arguments.of(BYTES, 23, repeat(CHAR_UTF8_2B, 10) + ".txt", repeat(CHAR_UTF8_2B, 9) + ".txt"),
+                Arguments.of(BYTES, 33, repeat(CHAR_UTF8_3B, 10) + ".txt", repeat(CHAR_UTF8_3B, 9) + ".txt"),
+                Arguments.of(BYTES, 43, repeat(CHAR_UTF8_4B, 10) + ".txt", repeat(CHAR_UTF8_4B, 9) + ".txt"),
+                // Names without extensions
+                Arguments.of(BYTES, 9, repeat(CHAR_UTF8_1B, 10), repeat(CHAR_UTF8_1B, 9)),
+                Arguments.of(BYTES, 19, repeat(CHAR_UTF8_2B, 10), repeat(CHAR_UTF8_2B, 9)),
+                Arguments.of(BYTES, 29, repeat(CHAR_UTF8_3B, 10), repeat(CHAR_UTF8_3B, 9)),
+                Arguments.of(BYTES, 39, repeat(CHAR_UTF8_4B, 10), repeat(CHAR_UTF8_4B, 9)),
+                // Truncation by UTF-16 code units
+                // -------------------------------
+                // Simple name without truncation
+                Arguments.of(UTF16_CODE_UNITS, 10, "simple.txt", "simple.txt"),
+                // Name starting with dot
+                Arguments.of(UTF16_CODE_UNITS, 10, "." + repeat(CHAR_UTF8_1B, 10), "." + repeat(CHAR_UTF8_1B, 9)),
+                Arguments.of(UTF16_CODE_UNITS, 10, "." + repeat(CHAR_UTF8_2B, 10), "." + repeat(CHAR_UTF8_2B, 9)),
+                Arguments.of(UTF16_CODE_UNITS, 10, "." + repeat(CHAR_UTF8_3B, 10), "." + repeat(CHAR_UTF8_3B, 9)),
+                Arguments.of(UTF16_CODE_UNITS, 20, "." + repeat(CHAR_UTF8_4B, 10), "." + repeat(CHAR_UTF8_4B, 9)),
+                // Names with extensions
+                Arguments.of(UTF16_CODE_UNITS, 13, repeat(CHAR_UTF8_1B, 10) + ".txt", repeat(CHAR_UTF8_1B, 9) + ".txt"),
+                Arguments.of(UTF16_CODE_UNITS, 13, repeat(CHAR_UTF8_2B, 10) + ".txt", repeat(CHAR_UTF8_2B, 9) + ".txt"),
+                Arguments.of(UTF16_CODE_UNITS, 13, repeat(CHAR_UTF8_3B, 10) + ".txt", repeat(CHAR_UTF8_3B, 9) + ".txt"),
+                Arguments.of(UTF16_CODE_UNITS, 23, repeat(CHAR_UTF8_4B, 10) + ".txt", repeat(CHAR_UTF8_4B, 9) + ".txt"),
+                // Names without extensions
+                Arguments.of(UTF16_CODE_UNITS, 9, repeat(CHAR_UTF8_1B, 10), repeat(CHAR_UTF8_1B, 9)),
+                Arguments.of(UTF16_CODE_UNITS, 9, repeat(CHAR_UTF8_2B, 10), repeat(CHAR_UTF8_2B, 9)),
+                Arguments.of(UTF16_CODE_UNITS, 9, repeat(CHAR_UTF8_3B, 10), repeat(CHAR_UTF8_3B, 9)),
+                Arguments.of(UTF16_CODE_UNITS, 19, repeat(CHAR_UTF8_4B, 10), repeat(CHAR_UTF8_4B, 9)));
     }
 
     @ParameterizedTest(name = "{index}: {0} truncates {1} to {2}")
     @MethodSource
-    void testNameLengthStrategyTruncate(NameLengthStrategy strategy, int limit, String input, String expected) {
+    void testNameLengthStrategyTruncate_Succeeds(NameLengthStrategy strategy, int limit, String input, String expected) {
         final CharSequence out = strategy.truncate(input, limit, UTF_8);
         assertEquals(expected, out.toString(), strategy.name() + " truncates to limit");
     }
 
-    static Stream<Arguments> testTruncateByBytes_Succeeds() {
+    static Stream<Arguments> testNameLengthStrategyTruncate_Throws() {
         return Stream.of(
-                // ASCII (UTF-8) — fits
-                Arguments.of("ASCII fits (UTF-8)", "hello", UTF_8, 5, "hello"),
-                // ASCII (UTF-8) — truncate
-                Arguments.of("ASCII truncated (UTF-8)", "hello", UTF_8, 4, "hell"),
-                // Empty input
-                Arguments.of("Empty input", "", UTF_8, 10, ""),
-                // Zero budget → empty
-                Arguments.of("Zero-byte limit", "anything", UTF_8, 0, ""),
-                // UTF-8: 2-byte char exact fit
-                Arguments.of("UTF-8: 2-byte char exact fit", "é", UTF_8, 2, "é"),
-                // UTF-8: 2-byte + ASCII; 3 fits both, 2 fits only 2-byte, 1 fits neither
-                Arguments.of("UTF-8: 2-byte + ASCII, both fit", "éa", UTF_8, 3, "éa"),
-                Arguments.of("UTF-8: 2-byte + ASCII, truncate before ASCII", "éa", UTF_8, 2, "é"),
-                Arguments.of("UTF-8: 2-byte + ASCII, truncate all", "éa", UTF_8, 1, ""),
-                // UTF-8: emoji + ASCII; 5 fits both, 4 fits only emoji, 3 fits neither
-                Arguments.of("UTF-8: emoji + ASCII, both fit", "😀a", UTF_8, 5, "😀a"),
-                Arguments.of("UTF-8: emoji + ASCII, truncate before ASCII", "😀a", UTF_8, 4, "😀"),
-                Arguments.of("UTF-8: emoji + ASCII, truncate all", "😀a", UTF_8, 3, ""),
-                // Large limit (fast-path should accept)
-                Arguments.of("Large limit fast-path (UTF-8)", "ok", UTF_8, 8, "ok"));
+                // Encoding issues
+                Arguments.of(BYTES, 10, "café", US_ASCII, "US-ASCII"),
+                Arguments.of(UTF16_CODE_UNITS, 10, "\uD800.txt", UTF_8, "UTF-16"),
+                Arguments.of(UTF16_CODE_UNITS, 10, "\uDC00.txt", UTF_8, "UTF-16"),
+                // Extension too long
+                Arguments.of(BYTES, 4, "a.txt", UTF_8, "extension"),
+                Arguments.of(UTF16_CODE_UNITS, 4, "a.txt", UTF_8, "extension"));
     }
 
-    @ParameterizedTest(name = "{index}: {0}")
+    @ParameterizedTest(name = "{index}: {0} truncates {2} with limit {1} throws")
     @MethodSource
-    void testTruncateByBytes_Succeeds(String caseName, String input, Charset charset, int maxBytes, String expected) {
-        final CharSequence out = BYTES.truncate(input, maxBytes, charset);
-        // If your contract returns null for null input, this still works; otherwise adjust.
-        assertEquals(expected, Objects.toString(out, null), caseName);
-    }
-
-    @Test
-    void testTruncateByBytes_UnmappableAsciiThrows() {
-        final String in = "café"; // contains 'é' (not in ASCII)
-        final IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class, () -> BYTES.truncate(in, 100, US_ASCII));
-        assertTrue(ex.getMessage().contains(US_ASCII.name()), "ex message contains charset name");
-    }
-
-    @ParameterizedTest
-    @EnumSource(NameLengthStrategy.class)
-    void testNameLengthStrategyTruncate_ExtensionTooLong(NameLengthStrategy strategy) {
-        final String in = "a.txt"; // ".txt" is 4 chars
-        final IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class, () -> strategy.truncate(in, 4, UTF_8));
-        assertTrue(ex.getMessage().contains("extension"), "ex message contains 'extension'");
+    void testNameLengthStrategyTruncate_Throws(
+            NameLengthStrategy strategy, int limit, String input, Charset charset, String message) {
+        final IllegalArgumentException ex =
+                assertThrows(IllegalArgumentException.class, () -> strategy.truncate(input, limit, charset));
+        assertTrue(ex.getMessage().contains(message), "ex message contains " + message);
     }
 }
