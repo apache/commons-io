@@ -2670,8 +2670,8 @@ public class IOUtils {
     /**
      * Reads exactly {@code size} bytes from the given {@link InputStream} into a new {@code byte[]}.
      *
-     * <p>This variant provides no safeguards against allocating very large arrays.
-     * For large streams, prefer {@link #toByteArray(InputStream, int, int)},
+     * <p>This variant always allocates the whole requested array size,
+     * for a dynamic growing variant use {@link #toByteArray(InputStream, int, int)},
      * which enforces stricter memory usage constraints.</p>
      *
      * @param input the {@link InputStream} to read; must not be {@code null}.
@@ -2690,8 +2690,8 @@ public class IOUtils {
     /**
      * Reads exactly {@code size} bytes from the given {@link InputStream} into a new {@code byte[]}.
      *
-     * <p>This variant provides no safeguards against allocating very large arrays.
-     * For large streams, prefer {@link #toByteArray(InputStream, int, int)},
+     * <p>This variant always allocates the whole requested array size,
+     * for a dynamic growing variant use {@link #toByteArray(InputStream, int, int)},
      * which enforces stricter memory usage constraints.</p>
      *
      * @param input the {@link InputStream} to read; must not be {@code null}.
