@@ -39,6 +39,7 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.FileSystem.NameLengthStrategy;
+import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.SystemProperties;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Test;
@@ -68,7 +69,7 @@ class FileSystemTest {
     /**
      * A grapheme cluster that encodes to 69 UTF-8 bytes and 31 UTF-16 code units: 👩🏻‍🦰‍👨🏿‍🦲‍👧🏽‍🦱‍👦🏼‍🦳
      * <p>
-     *     This should be treated as a single character for truncation purposes,
+     *     This should be treated as a single character in JDK 20+ for truncation purposes,
      *     even if it contains parts that have a meaning on their own.
      * </p>
      * <ul>
@@ -376,6 +377,16 @@ class FileSystemTest {
     }
 
     static Stream<Arguments> testNameLengthStrategyTruncate_Succeeds() {
+        // The grapheme cluster CHAR_UTF8_69B is treated as a single character in JDK 20+,
+        final String woman;
+        final String redHeadWoman;
+        if (SystemUtils.isJavaVersionAtMost(JavaVersion.JAVA_19)) {
+            woman = CHAR_UTF8_69B.substring(0, 2); // 👩
+            redHeadWoman = CHAR_UTF8_69B.substring(0, 7); // 👩🏻‍🦰
+        } else {
+            woman = "";
+            redHeadWoman = "";
+        }
         return Stream.of(
                 // Truncation by bytes
                 // -------------------
@@ -394,7 +405,6 @@ class FileSystemTest {
                 Arguments.of(BYTES, 23, repeat(CHAR_UTF8_2B, 10) + ".txt", repeat(CHAR_UTF8_2B, 9) + ".txt"),
                 Arguments.of(BYTES, 33, repeat(CHAR_UTF8_3B, 10) + ".txt", repeat(CHAR_UTF8_3B, 9) + ".txt"),
                 Arguments.of(BYTES, 43, repeat(CHAR_UTF8_4B, 10) + ".txt", repeat(CHAR_UTF8_4B, 9) + ".txt"),
-                Arguments.of(BYTES, 75, repeat(CHAR_UTF8_69B, 2) + ".txt", repeat(CHAR_UTF8_69B, 1) + ".txt"),
                 // Names without extensions
                 Arguments.of(BYTES, 1, CHAR_UTF8_1B, CHAR_UTF8_1B),
                 Arguments.of(BYTES, 2, CHAR_UTF8_2B, CHAR_UTF8_2B),
@@ -407,8 +417,8 @@ class FileSystemTest {
                 // Grapheme cluster
                 Arguments.of(BYTES, 69, CHAR_UTF8_69B, CHAR_UTF8_69B),
                 // Will not cut 4 or 15 bytes of the grapheme cluster
-                Arguments.of(BYTES, 69 + 4, repeat(CHAR_UTF8_69B, 2), repeat(CHAR_UTF8_69B, 1)),
-                Arguments.of(BYTES, 69 + 15, repeat(CHAR_UTF8_69B, 2), repeat(CHAR_UTF8_69B, 1)),
+                Arguments.of(BYTES, 69 + 4, repeat(CHAR_UTF8_69B, 2), CHAR_UTF8_69B + woman),
+                Arguments.of(BYTES, 69 + 15, repeat(CHAR_UTF8_69B, 2), CHAR_UTF8_69B + redHeadWoman),
                 // Truncation by UTF-16 code units
                 // -------------------------------
                 // Empty
@@ -420,7 +430,6 @@ class FileSystemTest {
                 Arguments.of(UTF16_CODE_UNITS, 10, "." + repeat(CHAR_UTF8_2B, 10), "." + repeat(CHAR_UTF8_2B, 9)),
                 Arguments.of(UTF16_CODE_UNITS, 10, "." + repeat(CHAR_UTF8_3B, 10), "." + repeat(CHAR_UTF8_3B, 9)),
                 Arguments.of(UTF16_CODE_UNITS, 20, "." + repeat(CHAR_UTF8_4B, 10), "." + repeat(CHAR_UTF8_4B, 9)),
-                Arguments.of(UTF16_CODE_UNITS, 34, "." + repeat(CHAR_UTF8_69B, 2), "." + repeat(CHAR_UTF8_69B, 1)),
                 // Names with extensions
                 Arguments.of(UTF16_CODE_UNITS, 13, repeat(CHAR_UTF8_1B, 10) + ".txt", repeat(CHAR_UTF8_1B, 9) + ".txt"),
                 Arguments.of(UTF16_CODE_UNITS, 13, repeat(CHAR_UTF8_2B, 10) + ".txt", repeat(CHAR_UTF8_2B, 9) + ".txt"),
@@ -438,8 +447,8 @@ class FileSystemTest {
                 // Grapheme cluster
                 Arguments.of(UTF16_CODE_UNITS, 31, CHAR_UTF8_69B, CHAR_UTF8_69B),
                 // Will not cut 2 or 7 UTF-16 code units of the grapheme cluster
-                Arguments.of(UTF16_CODE_UNITS, 31 + 2, repeat(CHAR_UTF8_69B, 2), repeat(CHAR_UTF8_69B, 1)),
-                Arguments.of(UTF16_CODE_UNITS, 31 + 7, repeat(CHAR_UTF8_69B, 2), repeat(CHAR_UTF8_69B, 1)));
+                Arguments.of(UTF16_CODE_UNITS, 31 + 2, repeat(CHAR_UTF8_69B, 2), CHAR_UTF8_69B + woman),
+                Arguments.of(UTF16_CODE_UNITS, 31 + 7, repeat(CHAR_UTF8_69B, 2), CHAR_UTF8_69B + redHeadWoman));
     }
 
     @ParameterizedTest(name = "{index}: {0} truncates {1} to {2}")
@@ -450,7 +459,7 @@ class FileSystemTest {
     }
 
     static Stream<Arguments> testNameLengthStrategyTruncate_Throws() {
-        return Stream.of(
+        final Stream<Arguments> common = Stream.of(
                 // Encoding issues
                 Arguments.of(BYTES, 10, "café", US_ASCII, "US-ASCII"),
                 Arguments.of(UTF16_CODE_UNITS, 10, "\uD800.txt", UTF_8, "UTF-16"),
@@ -460,9 +469,16 @@ class FileSystemTest {
                 Arguments.of(UTF16_CODE_UNITS, 4, "a.txt", UTF_8, "extension"),
                 // Limit too small
                 Arguments.of(BYTES, 3, CHAR_UTF8_4B, UTF_8, "truncated to 1 character"),
-                Arguments.of(BYTES, 68, CHAR_UTF8_69B, UTF_8, "truncated to 29 characters"),
-                Arguments.of(UTF16_CODE_UNITS, 1, CHAR_UTF8_4B, UTF_8, "truncated to 1 character"),
-                Arguments.of(UTF16_CODE_UNITS, 30, CHAR_UTF8_69B, UTF_8, "truncated to 30 characters"));
+                Arguments.of(UTF16_CODE_UNITS, 1, CHAR_UTF8_4B, UTF_8, "truncated to 1 character"));
+        return SystemUtils.isJavaVersionAtMost(JavaVersion.JAVA_19)
+                ? common
+                : Stream.concat(
+                        common,
+                        // In JDK 20+ the grapheme cluster CHAR_UTF8_69B is treated as a single character,
+                        // so cannot be truncated to 2 or 7 code units
+                        Stream.of(
+                                Arguments.of(BYTES, 68, CHAR_UTF8_69B, UTF_8, "truncated to 29 characters"),
+                                Arguments.of(UTF16_CODE_UNITS, 30, CHAR_UTF8_69B, UTF_8, "truncated to 30 characters")));
     }
 
     @ParameterizedTest(name = "{index}: {0} truncates {2} with limit {1} throws")
