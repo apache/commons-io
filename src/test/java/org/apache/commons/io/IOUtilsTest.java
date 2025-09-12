@@ -1651,7 +1651,7 @@ class IOUtilsTest {
 
     @ParameterizedTest
     @MethodSource
-    void testToByteArray_InputStream_Size_BufferSize_Succeeds(byte[] data, int size, int bufferSize) throws IOException {
+    void testToByteArray_InputStream_Size_BufferSize_Succeeds(final byte[] data, final int size, final int bufferSize) throws IOException {
         final ByteArrayInputStream input = new ByteArrayInputStream(data);
         final byte[] expected = Arrays.copyOf(data, size);
         final byte[] actual = IOUtils.toByteArray(input, size, bufferSize);
@@ -1661,7 +1661,7 @@ class IOUtilsTest {
     @ParameterizedTest
     @MethodSource
     void testToByteArray_InputStream_Size_BufferSize_Throws(
-            int size, int bufferSize, Class<? extends Exception> exceptionClass) throws IOException {
+            final int size, final int bufferSize, final Class<? extends Exception> exceptionClass) throws IOException {
         try (InputStream input = new NullInputStream(0)) {
             assertThrows(exceptionClass, () -> IOUtils.toByteArray(input, size, bufferSize));
         }
