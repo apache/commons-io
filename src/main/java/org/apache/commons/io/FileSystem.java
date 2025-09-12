@@ -26,6 +26,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
+import java.text.BreakIterator;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Objects;
@@ -570,10 +571,43 @@ public enum FileSystem {
         return new String(array, 0, array.length);
     }
 
-    CharSequence trimExtension(final CharSequence cs) {
+    static CharSequence trimExtension(final CharSequence cs) {
         final int index = indexOfFirstDot(cs);
         // An initial dot is not an extension
         return index < 1 ? cs : cs.subSequence(0, index);
+    }
+
+    static CharSequence[] splitExtension(final CharSequence value) {
+        final int index = indexOfFirstDot(value);
+        // An initial dot is not an extension
+        return index < 1
+                ? new CharSequence[] {value, ""}
+                : new CharSequence[] {value.subSequence(0, index), value.subSequence(index, value.length())};
+    }
+
+    /**
+     * Truncates a string respecting grapheme cluster boundaries.
+     *
+     * @param value The value to truncate.
+     * @param limit The maximum length.
+     * @return The truncated value.
+     * @throws IllegalArgumentException If the first grapheme cluster is longer than the limit.
+     */
+    private static CharSequence safeTruncate(final CharSequence value, final int limit) {
+        if (value.length() <= limit) {
+            return value;
+        }
+        final BreakIterator boundary = BreakIterator.getCharacterInstance(Locale.ROOT);
+        final String text = value.toString();
+        boundary.setText(text);
+        final int end = boundary.preceding(limit + 1);
+        assert end != BreakIterator.DONE;
+        if (end == 0) {
+            final String limitMessage = limit <= 1 ? "1 character" : limit + " characters";
+            throw new IllegalArgumentException("The value " + value + " can not be truncated to " + limitMessage
+                    + " without breaking the first codepoint or grapheme cluster");
+        }
+        return text.substring(0, end);
     }
 
     /**
@@ -614,22 +648,19 @@ public enum FileSystem {
 
                 // Slow path: encode into a fixed-size byte buffer.
                 // 1. Compute length of extension in bytes (if any).
-                final int extensionStart = indexOfFirstDot(value);
-                final boolean hasExtension = extensionStart > 0;
-                final int extensionLength = hasExtension ? getLength(value.subSequence(extensionStart, value.length()), charset) : 0;
-                if (hasExtension && extensionLength >= limit) {
+                final CharSequence[] parts = splitExtension(value);
+                final int extensionLength = getLength(parts[1], charset);
+                if (extensionLength > 0 && extensionLength >= limit) {
                     // Extension itself does not fit
                     throw new IllegalArgumentException(
                             "The extension of " + value + " is too long to fit within " + limit + " bytes");
                 }
 
-                // 2. Compute the byte size of the non-extension part.
+                // 2. Compute the character part that fits within the remaining byte budget.
                 final ByteBuffer byteBuffer = ByteBuffer.allocate(limit - extensionLength);
-                final CharBuffer charBuffer = CharBuffer.allocate(value.length());
+                final CharBuffer charBuffer = CharBuffer.wrap(parts[0]);
 
                 // Encode until the first character that would exceed the byte budget.
-                charBuffer.append(value, 0, hasExtension ? extensionStart : value.length());
-                charBuffer.rewind();
                 final CoderResult cr = encoder.encode(charBuffer, byteBuffer, true);
 
                 if (cr.isUnderflow()) {
@@ -637,12 +668,8 @@ public enum FileSystem {
                     return value;
                 }
 
-                // We ran out of space mid-encode: append the extension (if any) and return the charBuffer.
-                if (hasExtension) {
-                    charBuffer.append(value, extensionStart, value.length());
-                }
-                charBuffer.flip();
-                return charBuffer;
+                final CharSequence truncated = safeTruncate(value, charBuffer.position());
+                return extensionLength == 0 ? truncated : truncated.toString() + parts[1];
             }
         },
 
@@ -664,28 +691,20 @@ public enum FileSystem {
                 if (value.length() <= limit) {
                     return value;
                 }
+
                 // Slow path: truncate to limit.
                 // 1. Compute length of extension in chars (if any).
-                final int extensionStart = indexOfFirstDot(value);
-                final int extensionLength = extensionStart > 0 ? value.length() - extensionStart : 0;
-                // 2. Truncate the non-extension part and append the extension (if any).
-                if (extensionLength >= limit) {
+                final CharSequence[] parts = splitExtension(value);
+                final int extensionLength = parts[1].length();
+                if (extensionLength > 0 && extensionLength >= limit) {
                     // Extension itself does not fit
-                    throw new IllegalArgumentException("The extension of " + value + " is too long to fit within " + limit + " characters");
+                    throw new IllegalArgumentException(
+                            "The extension of " + value + " is too long to fit within " + limit + " characters");
                 }
-                final int safeLimit = safeCutPoint(value, limit - extensionLength);
-                if (extensionLength == 0) {
-                    return value.subSequence(0, safeLimit);
-                }
-                return value.subSequence(0, safeLimit).toString() + value.subSequence(extensionStart, value.length());
-            }
 
-            private int safeCutPoint(final CharSequence value, final int limit) {
-                // Ensure we do not cut a surrogate pair in half.
-                if (Character.isHighSurrogate(value.charAt(limit - 1))) {
-                    return limit - 1;
-                }
-                return limit;
+                // 2. Truncate the non-extension part and append the extension (if any).
+                final CharSequence truncated = safeTruncate(value, limit - extensionLength);
+                return extensionLength == 0 ? truncated : truncated.toString() + parts[1];
             }
         };
 

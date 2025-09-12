@@ -65,6 +65,33 @@ class FileSystemTest {
     /** A single Unicode codepoint that encodes to 2 UTF-16 code units and 4 UTF-8 bytes. */
     private static final String CHAR_UTF8_4B = "😀";
 
+    /**
+     * A grapheme cluster that encodes to 69 UTF-8 bytes and 31 UTF-16 code units: 👩🏻‍🦰‍👨🏿‍🦲‍👧🏽‍🦱‍👦🏼‍🦳
+     * <p>
+     *     This should be treated as a single character for truncation purposes,
+     *     even if it contains parts that have a meaning on their own.
+     * </p>
+     * <ul>
+     *     <li>{@code 👩}: 4 UTF-8 bytes and 2 UTF-16 code points.</li>
+     *     <li>{@code 👩🏻‍🦰}: 15 UTF-8 bytes and 7 UTF-16 code points.</li>
+     * </ul>
+     */
+    private static final String CHAR_UTF8_69B =
+            // woman + light skin + ZWJ + red hair = 15 bytes
+            "\uD83D\uDC69\uD83C\uDFFB\u200D\uD83E\uDDB0"
+                    // ZWJ = 3 bytes
+                    + "\u200D"
+                    // man + dark skin + ZWJ + bald = 15 bytes
+                    + "\uD83D\uDC68\uD83C\uDFFF\u200D\uD83E\uDDB2"
+                    // ZWJ = 3 bytes
+                    + "\u200D"
+                    // girl + medium skin + ZWJ + curly hair = 15 bytes
+                    + "\uD83D\uDC67\uD83C\uDFFD\u200D\uD83E\uDDB1"
+                    // ZWJ = 3 bytes
+                    + "\u200D"
+                    // boy + medium-light skin + ZWJ + white hair = 15 bytes
+                    + "\uD83D\uDC66\uD83C\uDFFC\u200D\uD83E\uDDB3";
+
     /** File name of 255 bytes and 255 UTF-16 code units. */
     private static final String FILE_NAME_255BYTES_UTF8_1B = repeat(CHAR_UTF8_1B, 255);
 
@@ -353,6 +380,8 @@ class FileSystemTest {
                 // Truncation by bytes
                 // -------------------
                 //
+                // Empty
+                Arguments.of(BYTES, 0, "", ""),
                 // Simple name without truncation
                 Arguments.of(BYTES, 10, "simple.txt", "simple.txt"),
                 // Name starting with dot
@@ -365,13 +394,25 @@ class FileSystemTest {
                 Arguments.of(BYTES, 23, repeat(CHAR_UTF8_2B, 10) + ".txt", repeat(CHAR_UTF8_2B, 9) + ".txt"),
                 Arguments.of(BYTES, 33, repeat(CHAR_UTF8_3B, 10) + ".txt", repeat(CHAR_UTF8_3B, 9) + ".txt"),
                 Arguments.of(BYTES, 43, repeat(CHAR_UTF8_4B, 10) + ".txt", repeat(CHAR_UTF8_4B, 9) + ".txt"),
+                Arguments.of(BYTES, 75, repeat(CHAR_UTF8_69B, 2) + ".txt", repeat(CHAR_UTF8_69B, 1) + ".txt"),
                 // Names without extensions
+                Arguments.of(BYTES, 1, CHAR_UTF8_1B, CHAR_UTF8_1B),
+                Arguments.of(BYTES, 2, CHAR_UTF8_2B, CHAR_UTF8_2B),
+                Arguments.of(BYTES, 3, CHAR_UTF8_3B, CHAR_UTF8_3B),
+                Arguments.of(BYTES, 4, CHAR_UTF8_4B, CHAR_UTF8_4B),
                 Arguments.of(BYTES, 9, repeat(CHAR_UTF8_1B, 10), repeat(CHAR_UTF8_1B, 9)),
                 Arguments.of(BYTES, 19, repeat(CHAR_UTF8_2B, 10), repeat(CHAR_UTF8_2B, 9)),
                 Arguments.of(BYTES, 29, repeat(CHAR_UTF8_3B, 10), repeat(CHAR_UTF8_3B, 9)),
                 Arguments.of(BYTES, 39, repeat(CHAR_UTF8_4B, 10), repeat(CHAR_UTF8_4B, 9)),
+                // Grapheme cluster
+                Arguments.of(BYTES, 69, CHAR_UTF8_69B, CHAR_UTF8_69B),
+                // Will not cut 4 or 15 bytes of the grapheme cluster
+                Arguments.of(BYTES, 69 + 4, repeat(CHAR_UTF8_69B, 2), repeat(CHAR_UTF8_69B, 1)),
+                Arguments.of(BYTES, 69 + 15, repeat(CHAR_UTF8_69B, 2), repeat(CHAR_UTF8_69B, 1)),
                 // Truncation by UTF-16 code units
                 // -------------------------------
+                // Empty
+                Arguments.of(UTF16_CODE_UNITS, 0, "", ""),
                 // Simple name without truncation
                 Arguments.of(UTF16_CODE_UNITS, 10, "simple.txt", "simple.txt"),
                 // Name starting with dot
@@ -379,16 +420,26 @@ class FileSystemTest {
                 Arguments.of(UTF16_CODE_UNITS, 10, "." + repeat(CHAR_UTF8_2B, 10), "." + repeat(CHAR_UTF8_2B, 9)),
                 Arguments.of(UTF16_CODE_UNITS, 10, "." + repeat(CHAR_UTF8_3B, 10), "." + repeat(CHAR_UTF8_3B, 9)),
                 Arguments.of(UTF16_CODE_UNITS, 20, "." + repeat(CHAR_UTF8_4B, 10), "." + repeat(CHAR_UTF8_4B, 9)),
+                Arguments.of(UTF16_CODE_UNITS, 34, "." + repeat(CHAR_UTF8_69B, 2), "." + repeat(CHAR_UTF8_69B, 1)),
                 // Names with extensions
                 Arguments.of(UTF16_CODE_UNITS, 13, repeat(CHAR_UTF8_1B, 10) + ".txt", repeat(CHAR_UTF8_1B, 9) + ".txt"),
                 Arguments.of(UTF16_CODE_UNITS, 13, repeat(CHAR_UTF8_2B, 10) + ".txt", repeat(CHAR_UTF8_2B, 9) + ".txt"),
                 Arguments.of(UTF16_CODE_UNITS, 13, repeat(CHAR_UTF8_3B, 10) + ".txt", repeat(CHAR_UTF8_3B, 9) + ".txt"),
                 Arguments.of(UTF16_CODE_UNITS, 23, repeat(CHAR_UTF8_4B, 10) + ".txt", repeat(CHAR_UTF8_4B, 9) + ".txt"),
                 // Names without extensions
+                Arguments.of(UTF16_CODE_UNITS, 1, CHAR_UTF8_1B, CHAR_UTF8_1B),
+                Arguments.of(UTF16_CODE_UNITS, 1, CHAR_UTF8_2B, CHAR_UTF8_2B),
+                Arguments.of(UTF16_CODE_UNITS, 1, CHAR_UTF8_3B, CHAR_UTF8_3B),
+                Arguments.of(UTF16_CODE_UNITS, 2, CHAR_UTF8_4B, CHAR_UTF8_4B),
                 Arguments.of(UTF16_CODE_UNITS, 9, repeat(CHAR_UTF8_1B, 10), repeat(CHAR_UTF8_1B, 9)),
                 Arguments.of(UTF16_CODE_UNITS, 9, repeat(CHAR_UTF8_2B, 10), repeat(CHAR_UTF8_2B, 9)),
                 Arguments.of(UTF16_CODE_UNITS, 9, repeat(CHAR_UTF8_3B, 10), repeat(CHAR_UTF8_3B, 9)),
-                Arguments.of(UTF16_CODE_UNITS, 19, repeat(CHAR_UTF8_4B, 10), repeat(CHAR_UTF8_4B, 9)));
+                Arguments.of(UTF16_CODE_UNITS, 19, repeat(CHAR_UTF8_4B, 10), repeat(CHAR_UTF8_4B, 9)),
+                // Grapheme cluster
+                Arguments.of(UTF16_CODE_UNITS, 31, CHAR_UTF8_69B, CHAR_UTF8_69B),
+                // Will not cut 2 or 7 UTF-16 code units of the grapheme cluster
+                Arguments.of(UTF16_CODE_UNITS, 31 + 2, repeat(CHAR_UTF8_69B, 2), repeat(CHAR_UTF8_69B, 1)),
+                Arguments.of(UTF16_CODE_UNITS, 31 + 7, repeat(CHAR_UTF8_69B, 2), repeat(CHAR_UTF8_69B, 1)));
     }
 
     @ParameterizedTest(name = "{index}: {0} truncates {1} to {2}")
@@ -406,7 +457,12 @@ class FileSystemTest {
                 Arguments.of(UTF16_CODE_UNITS, 10, "\uDC00.txt", UTF_8, "UTF-16"),
                 // Extension too long
                 Arguments.of(BYTES, 4, "a.txt", UTF_8, "extension"),
-                Arguments.of(UTF16_CODE_UNITS, 4, "a.txt", UTF_8, "extension"));
+                Arguments.of(UTF16_CODE_UNITS, 4, "a.txt", UTF_8, "extension"),
+                // Limit too small
+                Arguments.of(BYTES, 3, CHAR_UTF8_4B, UTF_8, "truncated to 1 character"),
+                Arguments.of(BYTES, 68, CHAR_UTF8_69B, UTF_8, "truncated to 29 characters"),
+                Arguments.of(UTF16_CODE_UNITS, 1, CHAR_UTF8_4B, UTF_8, "truncated to 1 character"),
+                Arguments.of(UTF16_CODE_UNITS, 30, CHAR_UTF8_69B, UTF_8, "truncated to 30 characters"));
     }
 
     @ParameterizedTest(name = "{index}: {0} truncates {2} with limit {1} throws")
@@ -415,6 +471,7 @@ class FileSystemTest {
             NameLengthStrategy strategy, int limit, String input, Charset charset, String message) {
         final IllegalArgumentException ex =
                 assertThrows(IllegalArgumentException.class, () -> strategy.truncate(input, limit, charset));
-        assertTrue(ex.getMessage().contains(message), "ex message contains " + message);
+        final String exMessage = ex.getMessage();
+        assertTrue(exMessage.contains(message), "ex message contains " + message + ": " + exMessage);
     }
 }
