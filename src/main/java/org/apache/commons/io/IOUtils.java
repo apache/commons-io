@@ -1635,6 +1635,30 @@ public class IOUtils {
     }
 
     /**
+     * Copies up to {@code size} bytes from the given {@link InputStream} into a new {@link UnsynchronizedByteArrayOutputStream}.
+     *
+     * @param input      The {@link InputStream} to read; must not be {@code null}.
+     * @param limit      The maximum number of bytes to read; must be {@code >= 0}.
+     *                   The actual bytes read are validated to equal {@code size}.
+     * @param bufferSize The buffer size of the output stream; must be {@code > 0}.
+     * @return a ByteArrayOutputStream containing the read bytes.
+     */
+    private static UnsynchronizedByteArrayOutputStream copyToOutputStream(
+            final InputStream input, final long limit, final int bufferSize) throws IOException {
+        try (UnsynchronizedByteArrayOutputStream output = UnsynchronizedByteArrayOutputStream.builder()
+                        .setBufferSize(bufferSize)
+                        .get();
+                InputStream boundedInput = BoundedInputStream.builder()
+                        .setMaxCount(limit)
+                        .setPropagateClose(false)
+                        .setInputStream(input)
+                        .get()) {
+            output.write(boundedInput);
+            return output;
+        }
+    }
+
+    /**
      * Fills the given array with 0s.
      *
      * @param arr The non-null array to fill.
@@ -2690,30 +2714,6 @@ public class IOUtils {
     /**
      * Reads exactly {@code size} bytes from the given {@link InputStream} into a new {@code byte[]}.
      *
-     * <p>This variant always allocates the whole requested array size,
-     * for a dynamic growing variant use {@link #toByteArray(InputStream, int, int)},
-     * which enforces stricter memory usage constraints.</p>
-     *
-     * @param input the {@link InputStream} to read; must not be {@code null}.
-     * @param size  the exact number of bytes to read; must be {@code >= 0} and {@code <= Integer.MAX_VALUE}.
-     * @return a new byte array of length {@code size}.
-     * @throws IllegalArgumentException if {@code size} is negative or does not fit into an int.
-     * @throws EOFException             if the stream ends before {@code size} bytes are read.
-     * @throws IOException              if an I/O error occurs while reading.
-     * @throws NullPointerException     if {@code input} is {@code null}.
-     * @see #toByteArray(InputStream, int, int)
-     * @since 2.1
-     */
-    public static byte[] toByteArray(final InputStream input, final long size) throws IOException {
-        if (size > Integer.MAX_VALUE) {
-            throw new IllegalArgumentException("Size cannot be greater than Integer max value: " + size);
-        }
-        return toByteArray(input, (int) size);
-    }
-
-    /**
-     * Reads exactly {@code size} bytes from the given {@link InputStream} into a new {@code byte[]}.
-     *
      * <p>The memory used by this method is <strong>proportional</strong> to the number
      * of bytes read and limited by the specified {@code size}. This makes it suitable for
      * processing large input streams, provided that <strong>sufficient</strong> heap space is
@@ -2750,27 +2750,27 @@ public class IOUtils {
     }
 
     /**
-     * Copies up to {@code size} bytes from the given {@link InputStream} into a new {@link UnsynchronizedByteArrayOutputStream}.
+     * Reads exactly {@code size} bytes from the given {@link InputStream} into a new {@code byte[]}.
      *
-     * @param input      The {@link InputStream} to read; must not be {@code null}.
-     * @param limit      The maximum number of bytes to read; must be {@code >= 0}.
-     *                   The actual bytes read are validated to equal {@code size}.
-     * @param bufferSize The buffer size of the output stream; must be {@code > 0}.
-     * @return a ByteArrayOutputStream containing the read bytes.
+     * <p>This variant always allocates the whole requested array size,
+     * for a dynamic growing variant use {@link #toByteArray(InputStream, int, int)},
+     * which enforces stricter memory usage constraints.</p>
+     *
+     * @param input the {@link InputStream} to read; must not be {@code null}.
+     * @param size  the exact number of bytes to read; must be {@code >= 0} and {@code <= Integer.MAX_VALUE}.
+     * @return a new byte array of length {@code size}.
+     * @throws IllegalArgumentException if {@code size} is negative or does not fit into an int.
+     * @throws EOFException             if the stream ends before {@code size} bytes are read.
+     * @throws IOException              if an I/O error occurs while reading.
+     * @throws NullPointerException     if {@code input} is {@code null}.
+     * @see #toByteArray(InputStream, int, int)
+     * @since 2.1
      */
-    private static UnsynchronizedByteArrayOutputStream copyToOutputStream(
-            final InputStream input, final long limit, final int bufferSize) throws IOException {
-        try (UnsynchronizedByteArrayOutputStream output = UnsynchronizedByteArrayOutputStream.builder()
-                        .setBufferSize(bufferSize)
-                        .get();
-                InputStream boundedInput = BoundedInputStream.builder()
-                        .setMaxCount(limit)
-                        .setPropagateClose(false)
-                        .setInputStream(input)
-                        .get()) {
-            output.write(boundedInput);
-            return output;
+    public static byte[] toByteArray(final InputStream input, final long size) throws IOException {
+        if (size > Integer.MAX_VALUE) {
+            throw new IllegalArgumentException("Size cannot be greater than Integer max value: " + size);
         }
+        return toByteArray(input, (int) size);
     }
 
     /**

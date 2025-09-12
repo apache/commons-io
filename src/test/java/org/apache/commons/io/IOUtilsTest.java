@@ -128,6 +128,30 @@ class IOUtilsTest {
         IO.clear();
     }
 
+    private static Stream<Arguments> testToByteArray_InputStream_Size_BufferSize_Succeeds() {
+        final byte[] data = new byte[1024];
+        for (int i = 0; i < 1024; i++) {
+            data[i] = (byte) i;
+        }
+        return Stream.of(
+                // Eager reading
+                Arguments.of(data.clone(), 512, 1024),
+                // Incremental reading
+                Arguments.of(data.clone(), 1024, 512),
+                // No reading
+                Arguments.of(data.clone(), 0, 128));
+    }
+
+    static Stream<Arguments> testToByteArray_InputStream_Size_BufferSize_Throws() {
+        return Stream.of(
+                // Negative size
+                Arguments.of(-1, 128, IllegalArgumentException.class),
+                // Invalid buffer size
+                Arguments.of(0, 0, IllegalArgumentException.class),
+                // Huge size: should not cause OutOfMemoryError
+                Arguments.of(Integer.MAX_VALUE, 128, EOFException.class));
+    }
+
     @TempDir
     public File temporaryFolder;
 
@@ -1291,6 +1315,8 @@ class IOUtilsTest {
         assertEquals(fileSize, content.getBytes().length);
     }
 
+    // Tests from IO-305
+
     @Test
     void testResourceToString_ExistingResourceAtRootPackage_WithClassLoader() throws Exception {
         final long fileSize = TestResources.getFile("test-file-simple-utf8.bin").length();
@@ -1310,8 +1336,6 @@ class IOUtilsTest {
         assertNotNull(content);
         assertEquals(fileSize, content.getBytes().length);
     }
-
-    // Tests from IO-305
 
     @Test
     void testResourceToString_ExistingResourceAtSubPackage_WithClassLoader() throws Exception {
@@ -1625,6 +1649,24 @@ class IOUtilsTest {
         }
     }
 
+    @ParameterizedTest
+    @MethodSource
+    void testToByteArray_InputStream_Size_BufferSize_Succeeds(byte[] data, int size, int bufferSize) throws IOException {
+        final ByteArrayInputStream input = new ByteArrayInputStream(data);
+        final byte[] expected = Arrays.copyOf(data, size);
+        final byte[] actual = IOUtils.toByteArray(input, size, bufferSize);
+        assertArrayEquals(expected, actual);
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void testToByteArray_InputStream_Size_BufferSize_Throws(
+            int size, int bufferSize, Class<? extends Exception> exceptionClass) throws IOException {
+        try (InputStream input = new NullInputStream(0)) {
+            assertThrows(exceptionClass, () -> IOUtils.toByteArray(input, size, bufferSize));
+        }
+    }
+
     @Test
     void testToByteArray_InputStream_SizeIllegal() throws Exception {
         try (InputStream fin = Files.newInputStream(testFilePath)) {
@@ -1660,48 +1702,6 @@ class IOUtilsTest {
             assertNotNull(out, "Out cannot be null");
             assertEquals(0, out.length, "Out length must be 0");
         }
-    }
-
-    @ParameterizedTest
-    @MethodSource
-    void testToByteArray_InputStream_Size_BufferSize_Succeeds(byte[] data, int size, int bufferSize) throws IOException {
-        final ByteArrayInputStream input = new ByteArrayInputStream(data);
-        final byte[] expected = Arrays.copyOf(data, size);
-        final byte[] actual = IOUtils.toByteArray(input, size, bufferSize);
-        assertArrayEquals(expected, actual);
-    }
-
-    private static Stream<Arguments> testToByteArray_InputStream_Size_BufferSize_Succeeds() {
-        final byte[] data = new byte[1024];
-        for (int i = 0; i < 1024; i++) {
-            data[i] = (byte) i;
-        }
-        return Stream.of(
-                // Eager reading
-                Arguments.of(data.clone(), 512, 1024),
-                // Incremental reading
-                Arguments.of(data.clone(), 1024, 512),
-                // No reading
-                Arguments.of(data.clone(), 0, 128));
-    }
-
-    @ParameterizedTest
-    @MethodSource
-    void testToByteArray_InputStream_Size_BufferSize_Throws(
-            int size, int bufferSize, Class<? extends Exception> exceptionClass) throws IOException {
-        try (InputStream input = new NullInputStream(0)) {
-            assertThrows(exceptionClass, () -> IOUtils.toByteArray(input, size, bufferSize));
-        }
-    }
-
-    static Stream<Arguments> testToByteArray_InputStream_Size_BufferSize_Throws() {
-        return Stream.of(
-                // Negative size
-                Arguments.of(-1, 128, IllegalArgumentException.class),
-                // Invalid buffer size
-                Arguments.of(0, 0, IllegalArgumentException.class),
-                // Huge size: should not cause OutOfMemoryError
-                Arguments.of(Integer.MAX_VALUE, 128, EOFException.class));
     }
 
     @Test
