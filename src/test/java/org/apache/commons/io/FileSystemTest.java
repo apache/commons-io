@@ -117,7 +117,7 @@ class FileSystemTest {
     /** File name of 511 bytes and 255 UTF-16 code units. */
     private static final String FILE_NAME_255CHARS_UTF8_4B = repeat(CHAR_UTF8_4B, 127) + CHAR_UTF8_3B;
 
-    private static void createAndDelete(Path tempDir, String fileName) throws IOException {
+    private static void createAndDelete(final Path tempDir, final String fileName) throws IOException {
         final Path filePath = tempDir.resolve(fileName);
         Files.createFile(filePath);
         try (Stream<Path> files = Files.list(tempDir)) {
@@ -303,7 +303,7 @@ class FileSystemTest {
 
     @ParameterizedTest(name = "{index}: {0} with charset {2}")
     @MethodSource
-    void testIsLegalName_Length(FileSystem fs, String nameAtLimit, Charset charset) {
+    void testIsLegalName_Length(final FileSystem fs, final String nameAtLimit, final Charset charset) {
         assertTrue(fs.isLegalFileName(nameAtLimit, charset), fs.name() + " length at limit");
         final String nameOverLimit = nameAtLimit + "a";
         assertFalse(fs.isLegalFileName(nameOverLimit, charset), fs.name() + " length over limit");
@@ -346,7 +346,7 @@ class FileSystemTest {
     }
 
     @Test
-    void testMaxNameLength_MatchesRealSystem(@TempDir Path tempDir) {
+    void testMaxNameLength_MatchesRealSystem(@TempDir final Path tempDir) {
         final FileSystem fs = FileSystem.getCurrent();
         final String[] validNames;
         switch (fs) {
@@ -419,7 +419,7 @@ class FileSystemTest {
 
     @ParameterizedTest(name = "{index}: {0} truncates {1} to {2}")
     @MethodSource
-    void testNameLengthStrategyTruncate_Succeeds(NameLengthStrategy strategy, int limit, String input, String expected) {
+    void testNameLengthStrategyTruncate_Succeeds(final NameLengthStrategy strategy, final int limit, final String input, final String expected) {
         final CharSequence out = strategy.truncate(input, limit, UTF_8);
         assertEquals(expected, out.toString(), strategy.name() + " truncates to limit");
     }
@@ -427,7 +427,7 @@ class FileSystemTest {
     @ParameterizedTest(name = "{index}: {0} truncates {2} with limit {1} throws")
     @MethodSource
     void testNameLengthStrategyTruncate_Throws(
-            NameLengthStrategy strategy, int limit, String input, Charset charset, String message) {
+            final NameLengthStrategy strategy, final int limit, final String input, final Charset charset, final String message) {
         final IllegalArgumentException ex =
                 assertThrows(IllegalArgumentException.class, () -> strategy.truncate(input, limit, charset));
         final String exMessage = ex.getMessage();

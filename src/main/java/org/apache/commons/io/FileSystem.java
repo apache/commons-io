@@ -127,7 +127,7 @@ public enum FileSystem {
                         .onUnmappableCharacter(CodingErrorAction.REPORT);
                 try {
                     return enc.encode(CharBuffer.wrap(value)).remaining();
-                } catch (CharacterCodingException e) {
+                } catch (final CharacterCodingException e) {
                     // Unencodable, does not fit any byte limit.
                     return Integer.MAX_VALUE;
                 }
