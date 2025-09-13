@@ -157,7 +157,7 @@ class BoundedInputStreamTest {
 
     @ParameterizedTest(name = "{index} — {0}")
     @MethodSource
-    void testAvailableAfterClose(String caseName, InputStream delegate, int expectedBeforeClose)
+    void testAvailableAfterClose(final String caseName, final InputStream delegate, final int expectedBeforeClose)
             throws Exception {
         final InputStream shadow;
         try (InputStream in = BoundedInputStream.builder()
@@ -179,7 +179,7 @@ class BoundedInputStreamTest {
 
     @ParameterizedTest
     @MethodSource
-    void testAvailableUpperLimit(InputStream input, long maxCount, int expectedBeforeSkip, int expectedAfterSkip)
+    void testAvailableUpperLimit(final InputStream input, final long maxCount, final int expectedBeforeSkip, final int expectedAfterSkip)
             throws Exception {
         try (BoundedInputStream bounded = BoundedInputStream.builder()
                 .setInputStream(input)
@@ -544,9 +544,9 @@ class BoundedInputStreamTest {
     @ParameterizedTest(name = "{index} — {0}")
     @MethodSource("testReadAfterClose")
     void testReadAfterClose(
-            String caseName,
-            InputStream delegate,
-            Object expectedAfterClose // Integer (value) or IOException (expected thrown)
+            final String caseName,
+            final InputStream delegate,
+            final Object expectedAfterClose // Integer (value) or IOException (expected thrown)
             ) throws Exception {
 
         final InputStream bounded;

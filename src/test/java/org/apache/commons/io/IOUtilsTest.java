@@ -90,6 +90,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * This is used to test {@link IOUtils} for correctness. The following checks are performed:
@@ -123,6 +126,30 @@ class IOUtilsTest {
     public static void beforeAll() {
         // Not required, just to exercise the method and make sure there are no adverse side-effect when recycling thread locals.
         IO.clear();
+    }
+
+    private static Stream<Arguments> testToByteArray_InputStream_Size_BufferSize_Succeeds() {
+        final byte[] data = new byte[1024];
+        for (int i = 0; i < 1024; i++) {
+            data[i] = (byte) i;
+        }
+        return Stream.of(
+                // Eager reading
+                Arguments.of(data.clone(), 512, 1024),
+                // Incremental reading
+                Arguments.of(data.clone(), 1024, 512),
+                // No reading
+                Arguments.of(data.clone(), 0, 128));
+    }
+
+    static Stream<Arguments> testToByteArray_InputStream_Size_BufferSize_Throws() {
+        return Stream.of(
+                // Negative size
+                Arguments.of(-1, 128, IllegalArgumentException.class),
+                // Invalid buffer size
+                Arguments.of(0, 0, IllegalArgumentException.class),
+                // Huge size: should not cause OutOfMemoryError
+                Arguments.of(Integer.MAX_VALUE, 128, EOFException.class));
     }
 
     @TempDir
@@ -1288,6 +1315,8 @@ class IOUtilsTest {
         assertEquals(fileSize, content.getBytes().length);
     }
 
+    // Tests from IO-305
+
     @Test
     void testResourceToString_ExistingResourceAtRootPackage_WithClassLoader() throws Exception {
         final long fileSize = TestResources.getFile("test-file-simple-utf8.bin").length();
@@ -1307,8 +1336,6 @@ class IOUtilsTest {
         assertNotNull(content);
         assertEquals(fileSize, content.getBytes().length);
     }
-
-    // Tests from IO-305
 
     @Test
     void testResourceToString_ExistingResourceAtSubPackage_WithClassLoader() throws Exception {
@@ -1619,6 +1646,24 @@ class IOUtilsTest {
             assertEquals(0, fin.available(), "Not all bytes were read");
             assertEquals(FILE_SIZE, out.length, "Wrong output size: out.length=" + out.length + "!=" + FILE_SIZE);
             TestUtils.assertEqualContent(out, testFile);
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void testToByteArray_InputStream_Size_BufferSize_Succeeds(final byte[] data, final int size, final int bufferSize) throws IOException {
+        final ByteArrayInputStream input = new ByteArrayInputStream(data);
+        final byte[] expected = Arrays.copyOf(data, size);
+        final byte[] actual = IOUtils.toByteArray(input, size, bufferSize);
+        assertArrayEquals(expected, actual);
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void testToByteArray_InputStream_Size_BufferSize_Throws(
+            final int size, final int bufferSize, final Class<? extends Exception> exceptionClass) throws IOException {
+        try (InputStream input = new NullInputStream(0)) {
+            assertThrows(exceptionClass, () -> IOUtils.toByteArray(input, size, bufferSize));
         }
     }
 
