@@ -117,47 +117,16 @@ class FileSystemTest {
     /** File name of 511 bytes and 255 UTF-16 code units. */
     private static final String FILE_NAME_255CHARS_UTF8_4B = repeat(CHAR_UTF8_4B, 127) + CHAR_UTF8_3B;
 
-    @Test
-    void testGetBlockSize() {
-        assertTrue(FileSystem.getCurrent().getBlockSize() >= 0);
-    }
-
-    @Test
-    void testGetCurrent() {
-        if (SystemUtils.IS_OS_WINDOWS) {
-            assertEquals(FileSystem.WINDOWS, FileSystem.getCurrent());
+    private static void createAndDelete(Path tempDir, String fileName) throws IOException {
+        final Path filePath = tempDir.resolve(fileName);
+        Files.createFile(filePath);
+        try (Stream<Path> files = Files.list(tempDir)) {
+            final boolean found = files.anyMatch(filePath::equals);
+            if (!found) {
+                throw new FileNotFoundException(fileName + " not found in " + tempDir);
+            }
         }
-        if (SystemUtils.IS_OS_LINUX) {
-            assertEquals(FileSystem.LINUX, FileSystem.getCurrent());
-        }
-        if (SystemUtils.IS_OS_MAC_OSX) {
-            assertEquals(FileSystem.MAC_OSX, FileSystem.getCurrent());
-        }
-    }
-
-    @Test
-    void testGetIllegalFileNameChars() {
-        final FileSystem current = FileSystem.getCurrent();
-        assertNotSame(current.getIllegalFileNameChars(), current.getIllegalFileNameChars());
-    }
-
-    @Test
-    void testGetNameSeparator() {
-        final FileSystem current = FileSystem.getCurrent();
-        assertEquals(SystemProperties.getFileSeparator(), Character.toString(current.getNameSeparator()));
-    }
-
-    @ParameterizedTest
-    @EnumSource(FileSystem.class)
-    void testIsLegalName(final FileSystem fs) {
-        assertFalse(fs.isLegalFileName(""), fs.name()); // Empty is always illegal
-        assertFalse(fs.isLegalFileName(null), fs.name()); // null is always illegal
-        assertFalse(fs.isLegalFileName("\0"), fs.name()); // Assume NUL is always illegal
-        assertTrue(fs.isLegalFileName("0"), fs.name()); // Assume simple name always legal
-        for (final String candidate : fs.getReservedFileNames()) {
-            // Reserved file names are not legal
-            assertFalse(fs.isLegalFileName(candidate), candidate);
-        }
+        Files.delete(filePath);
     }
 
     static Stream<Arguments> testIsLegalName_Length() {
@@ -183,197 +152,6 @@ class FileSystemTest {
                 Arguments.of(FileSystem.GENERIC, repeat(CHAR_UTF8_2B, 1020), ISO_8859_1),
                 Arguments.of(FileSystem.LINUX, FILE_NAME_255BYTES_UTF8_1B, US_ASCII),
                 Arguments.of(FileSystem.LINUX, repeat(CHAR_UTF8_2B, 255), ISO_8859_1));
-    }
-
-    @ParameterizedTest(name = "{index}: {0} with charset {2}")
-    @MethodSource
-    void testIsLegalName_Length(FileSystem fs, String nameAtLimit, Charset charset) {
-        assertTrue(fs.isLegalFileName(nameAtLimit, charset), fs.name() + " length at limit");
-        final String nameOverLimit = nameAtLimit + "a";
-        assertFalse(fs.isLegalFileName(nameOverLimit, charset), fs.name() + " length over limit");
-    }
-
-    @Test
-    void testIsLegalName_Encoding() {
-        assertFalse(FileSystem.GENERIC.isLegalFileName(FILE_NAME_255BYTES_UTF8_3B, US_ASCII), "US-ASCII cannot represent all chars");
-        assertTrue(FileSystem.GENERIC.isLegalFileName(FILE_NAME_255BYTES_UTF8_3B, UTF_8), "UTF-8 can represent all chars");
-    }
-
-    @Test
-    void testIsReservedFileName() {
-        for (final FileSystem fs : FileSystem.values()) {
-            for (final String candidate : fs.getReservedFileNames()) {
-                assertTrue(fs.isReservedFileName(candidate));
-            }
-        }
-    }
-
-    @Test
-    void testIsReservedFileNameOnWindows() {
-        final FileSystem fs = FileSystem.WINDOWS;
-        for (final String candidate : fs.getReservedFileNames()) {
-            // System.out.printf("Reserved %s exists: %s%n", candidate, Files.exists(Paths.get(candidate)));
-            assertTrue(fs.isReservedFileName(candidate));
-            assertTrue(fs.isReservedFileName(candidate + ".txt"), candidate);
-        }
-
-// This can hang when trying to create files for some reserved names, but it is interesting to keep
-//
-//        for (final String candidate : fs.getReservedFileNames()) {
-//            System.out.printf("Testing %s%n", candidate);
-//            assertTrue(fs.isReservedFileName(candidate));
-//            final Path path = Paths.get(candidate);
-//            final boolean exists = Files.exists(path);
-//            try {
-//                PathUtils.writeString(path, "Hello World!", StandardCharsets.UTF_8);
-//            } catch (IOException ignored) {
-//                // Asking to create a reserved file either:
-//                // - Throws an exception, for example "AUX"
-//                // - Is a NOOP, for example "COM3"
-//            }
-//            assertEquals(exists, Files.exists(path), path.toString());
-//        }
-    }
-
-    @Test
-    void testReplacementWithNUL() {
-        for (final FileSystem fs : FileSystem.values()) {
-            try {
-                fs.toLegalFileName("Test", '\0'); // Assume NUL is always illegal
-            } catch (final IllegalArgumentException iae) {
-                assertTrue(iae.getMessage().startsWith("The replacement character '\\0'"), iae.getMessage());
-            }
-        }
-    }
-
-    @Test
-    void testSorted() {
-        for (final FileSystem fs : FileSystem.values()) {
-            final char[] chars = fs.getIllegalFileNameChars();
-            for (int i = 0; i < chars.length - 1; i++) {
-                assertTrue(chars[i] < chars[i + 1], fs.name());
-            }
-        }
-    }
-
-    @Test
-    void testMaxNameLength_MatchesRealSystem(@TempDir Path tempDir) {
-        final FileSystem fs = FileSystem.getCurrent();
-        final String[] validNames;
-        switch (fs) {
-            case MAC_OSX:
-            case LINUX:
-                // Names with 255 UTF-8 bytes are legal
-                validNames = new String[] {
-                    FILE_NAME_255BYTES_UTF8_1B,
-                    FILE_NAME_255BYTES_UTF8_2B,
-                    FILE_NAME_255BYTES_UTF8_3B,
-                    FILE_NAME_255BYTES_UTF8_4B
-                };
-                break;
-            case WINDOWS:
-                // Names with 255 UTF-16 code units are legal
-                validNames = new String[] {
-                    FILE_NAME_255CHARS_UTF8_1B,
-                    FILE_NAME_255CHARS_UTF8_2B,
-                    FILE_NAME_255CHARS_UTF8_3B,
-                    FILE_NAME_255CHARS_UTF8_4B
-                };
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + fs);
-        }
-        int failures = 0;
-        for (final String fileName : validNames) {
-            // 1) OS should accept names at the documented limit.
-            assertDoesNotThrow(
-                    () -> createAndDelete(tempDir, fileName), "OS should accept max-length name: " + fileName);
-
-            // 2) Library should consider them legal.
-            assertTrue(fs.isLegalFileName(fileName, UTF_8), "Commons IO should accept max-length name: " + fileName);
-
-            // 3) For “one over” the limit: Commons IO must reject; OS may or may not enforce strictly.
-            final String tooLongName = fileName + "a";
-
-            // Library contract: must be illegal.
-            assertFalse(
-                    fs.isLegalFileName(tooLongName, UTF_8), "Commons IO should reject too-long name: " + tooLongName);
-
-            // OS behavior: may or may not reject.
-            try {
-                createAndDelete(tempDir, tooLongName);
-            } catch (final Throwable e) {
-                failures++;
-                assertInstanceOf(IOException.class, e, "OS rejects too-long name");
-            }
-        }
-        // On Linux and Windows the API and the filesystem measure name length
-        // in the same unit as the underlying limit (255 bytes on Linux/most POSIX,
-        // 255 UTF-16 code units on Windows).
-        // So all “too-long” variants should fail.
-        //
-        // macOS is trickier because the API and filesystem limits don’t always match:
-        //
-        // - POSIX API layer (getdirentries/readdir): 1023 bytes per component since macOS 10.5.
-        //   https://man.freebsd.org/cgi/man.cgi?query=dir&sektion=5&apropos=0&manpath=macOS+15.6
-        // - HFS+: enforces 255 UTF-16 code units per component.
-        // - APFS: enforces 255 UTF-8 bytes per component.
-        //
-        // Because of this mismatch, depending on which filesystem is mounted,
-        // either all or only FILE_NAME_255BYTES_UTF8_1B + "a" will be rejected.
-        if (SystemUtils.IS_OS_MAC_OSX) {
-            assertTrue(failures >= 1, "Expected at least one too-long name rejected, got " + failures);
-        } else {
-            assertEquals(4, failures, "All too-long names were rejected");
-        }
-    }
-
-    private static void createAndDelete(Path tempDir, String fileName) throws IOException {
-        final Path filePath = tempDir.resolve(fileName);
-        Files.createFile(filePath);
-        try (Stream<Path> files = Files.list(tempDir)) {
-            final boolean found = files.anyMatch(filePath::equals);
-            if (!found) {
-                throw new FileNotFoundException(fileName + " not found in " + tempDir);
-            }
-        }
-        Files.delete(filePath);
-    }
-
-    @Test
-    void testSupportsDriveLetter() {
-        assertTrue(FileSystem.WINDOWS.supportsDriveLetter());
-        assertFalse(FileSystem.GENERIC.supportsDriveLetter());
-        assertFalse(FileSystem.LINUX.supportsDriveLetter());
-        assertFalse(FileSystem.MAC_OSX.supportsDriveLetter());
-    }
-
-    @Test
-    void testToLegalFileNameWindows() {
-        final FileSystem fs = FileSystem.WINDOWS;
-        final char replacement = '-';
-        for (char i = 0; i < 32; i++) {
-            assertEquals(replacement, fs.toLegalFileName(String.valueOf(i), replacement).charAt(0));
-        }
-        final char[] illegal = { '<', '>', ':', '"', '/', '\\', '|', '?', '*' };
-        for (char i = 0; i < illegal.length; i++) {
-            assertEquals(replacement, fs.toLegalFileName(String.valueOf(i), replacement).charAt(0));
-        }
-        for (char i = 'a'; i < 'z'; i++) {
-            assertEquals(i, fs.toLegalFileName(String.valueOf(i), replacement).charAt(0));
-        }
-        for (char i = 'A'; i < 'Z'; i++) {
-            assertEquals(i, fs.toLegalFileName(String.valueOf(i), replacement).charAt(0));
-        }
-        for (char i = '0'; i < '9'; i++) {
-            assertEquals(i, fs.toLegalFileName(String.valueOf(i), replacement).charAt(0));
-        }
-        // Null and empty
-        assertThrows(NullPointerException.class, () -> fs.toLegalFileName(null, '_'));
-        assertThrows(IllegalArgumentException.class, () -> fs.toLegalFileName("", '_'));
-        // Illegal replacement
-        assertThrows(IllegalArgumentException.class, () -> fs.toLegalFileName("test", '\0'));
-        assertThrows(IllegalArgumentException.class, () -> fs.toLegalFileName("test", ':'));
     }
 
     static Stream<Arguments> testNameLengthStrategyTruncate_Succeeds() {
@@ -451,13 +229,6 @@ class FileSystemTest {
                 Arguments.of(UTF16_CODE_UNITS, 31 + 7, repeat(CHAR_UTF8_69B, 2), CHAR_UTF8_69B + redHeadWoman));
     }
 
-    @ParameterizedTest(name = "{index}: {0} truncates {1} to {2}")
-    @MethodSource
-    void testNameLengthStrategyTruncate_Succeeds(NameLengthStrategy strategy, int limit, String input, String expected) {
-        final CharSequence out = strategy.truncate(input, limit, UTF_8);
-        assertEquals(expected, out.toString(), strategy.name() + " truncates to limit");
-    }
-
     static Stream<Arguments> testNameLengthStrategyTruncate_Throws() {
         final Stream<Arguments> common = Stream.of(
                 // Encoding issues
@@ -481,6 +252,178 @@ class FileSystemTest {
                                 Arguments.of(UTF16_CODE_UNITS, 30, CHAR_UTF8_69B, UTF_8, "truncated to 30 characters")));
     }
 
+    @Test
+    void testGetBlockSize() {
+        assertTrue(FileSystem.getCurrent().getBlockSize() >= 0);
+    }
+
+    @Test
+    void testGetCurrent() {
+        if (SystemUtils.IS_OS_WINDOWS) {
+            assertEquals(FileSystem.WINDOWS, FileSystem.getCurrent());
+        }
+        if (SystemUtils.IS_OS_LINUX) {
+            assertEquals(FileSystem.LINUX, FileSystem.getCurrent());
+        }
+        if (SystemUtils.IS_OS_MAC_OSX) {
+            assertEquals(FileSystem.MAC_OSX, FileSystem.getCurrent());
+        }
+    }
+
+    @Test
+    void testGetIllegalFileNameChars() {
+        final FileSystem current = FileSystem.getCurrent();
+        assertNotSame(current.getIllegalFileNameChars(), current.getIllegalFileNameChars());
+    }
+
+    @Test
+    void testGetNameSeparator() {
+        final FileSystem current = FileSystem.getCurrent();
+        assertEquals(SystemProperties.getFileSeparator(), Character.toString(current.getNameSeparator()));
+    }
+
+    @ParameterizedTest
+    @EnumSource(FileSystem.class)
+    void testIsLegalName(final FileSystem fs) {
+        assertFalse(fs.isLegalFileName(""), fs.name()); // Empty is always illegal
+        assertFalse(fs.isLegalFileName(null), fs.name()); // null is always illegal
+        assertFalse(fs.isLegalFileName("\0"), fs.name()); // Assume NUL is always illegal
+        assertTrue(fs.isLegalFileName("0"), fs.name()); // Assume simple name always legal
+        for (final String candidate : fs.getReservedFileNames()) {
+            // Reserved file names are not legal
+            assertFalse(fs.isLegalFileName(candidate), candidate);
+        }
+    }
+
+    @Test
+    void testIsLegalName_Encoding() {
+        assertFalse(FileSystem.GENERIC.isLegalFileName(FILE_NAME_255BYTES_UTF8_3B, US_ASCII), "US-ASCII cannot represent all chars");
+        assertTrue(FileSystem.GENERIC.isLegalFileName(FILE_NAME_255BYTES_UTF8_3B, UTF_8), "UTF-8 can represent all chars");
+    }
+
+    @ParameterizedTest(name = "{index}: {0} with charset {2}")
+    @MethodSource
+    void testIsLegalName_Length(FileSystem fs, String nameAtLimit, Charset charset) {
+        assertTrue(fs.isLegalFileName(nameAtLimit, charset), fs.name() + " length at limit");
+        final String nameOverLimit = nameAtLimit + "a";
+        assertFalse(fs.isLegalFileName(nameOverLimit, charset), fs.name() + " length over limit");
+    }
+
+    @Test
+    void testIsReservedFileName() {
+        for (final FileSystem fs : FileSystem.values()) {
+            for (final String candidate : fs.getReservedFileNames()) {
+                assertTrue(fs.isReservedFileName(candidate));
+            }
+        }
+    }
+
+    @Test
+    void testIsReservedFileNameOnWindows() {
+        final FileSystem fs = FileSystem.WINDOWS;
+        for (final String candidate : fs.getReservedFileNames()) {
+            // System.out.printf("Reserved %s exists: %s%n", candidate, Files.exists(Paths.get(candidate)));
+            assertTrue(fs.isReservedFileName(candidate));
+            assertTrue(fs.isReservedFileName(candidate + ".txt"), candidate);
+        }
+
+// This can hang when trying to create files for some reserved names, but it is interesting to keep
+//
+//        for (final String candidate : fs.getReservedFileNames()) {
+//            System.out.printf("Testing %s%n", candidate);
+//            assertTrue(fs.isReservedFileName(candidate));
+//            final Path path = Paths.get(candidate);
+//            final boolean exists = Files.exists(path);
+//            try {
+//                PathUtils.writeString(path, "Hello World!", StandardCharsets.UTF_8);
+//            } catch (IOException ignored) {
+//                // Asking to create a reserved file either:
+//                // - Throws an exception, for example "AUX"
+//                // - Is a NOOP, for example "COM3"
+//            }
+//            assertEquals(exists, Files.exists(path), path.toString());
+//        }
+    }
+
+    @Test
+    void testMaxNameLength_MatchesRealSystem(@TempDir Path tempDir) {
+        final FileSystem fs = FileSystem.getCurrent();
+        final String[] validNames;
+        switch (fs) {
+            case MAC_OSX:
+            case LINUX:
+                // Names with 255 UTF-8 bytes are legal
+                validNames = new String[] {
+                    FILE_NAME_255BYTES_UTF8_1B,
+                    FILE_NAME_255BYTES_UTF8_2B,
+                    FILE_NAME_255BYTES_UTF8_3B,
+                    FILE_NAME_255BYTES_UTF8_4B
+                };
+                break;
+            case WINDOWS:
+                // Names with 255 UTF-16 code units are legal
+                validNames = new String[] {
+                    FILE_NAME_255CHARS_UTF8_1B,
+                    FILE_NAME_255CHARS_UTF8_2B,
+                    FILE_NAME_255CHARS_UTF8_3B,
+                    FILE_NAME_255CHARS_UTF8_4B
+                };
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + fs);
+        }
+        int failures = 0;
+        for (final String fileName : validNames) {
+            // 1) OS should accept names at the documented limit.
+            assertDoesNotThrow(
+                    () -> createAndDelete(tempDir, fileName), "OS should accept max-length name: " + fileName);
+
+            // 2) Library should consider them legal.
+            assertTrue(fs.isLegalFileName(fileName, UTF_8), "Commons IO should accept max-length name: " + fileName);
+
+            // 3) For “one over” the limit: Commons IO must reject; OS may or may not enforce strictly.
+            final String tooLongName = fileName + "a";
+
+            // Library contract: must be illegal.
+            assertFalse(
+                    fs.isLegalFileName(tooLongName, UTF_8), "Commons IO should reject too-long name: " + tooLongName);
+
+            // OS behavior: may or may not reject.
+            try {
+                createAndDelete(tempDir, tooLongName);
+            } catch (final Throwable e) {
+                failures++;
+                assertInstanceOf(IOException.class, e, "OS rejects too-long name");
+            }
+        }
+        // On Linux and Windows the API and the filesystem measure name length
+        // in the same unit as the underlying limit (255 bytes on Linux/most POSIX,
+        // 255 UTF-16 code units on Windows).
+        // So all “too-long” variants should fail.
+        //
+        // macOS is trickier because the API and filesystem limits don’t always match:
+        //
+        // - POSIX API layer (getdirentries/readdir): 1023 bytes per component since macOS 10.5.
+        //   https://man.freebsd.org/cgi/man.cgi?query=dir&sektion=5&apropos=0&manpath=macOS+15.6
+        // - HFS+: enforces 255 UTF-16 code units per component.
+        // - APFS: enforces 255 UTF-8 bytes per component.
+        //
+        // Because of this mismatch, depending on which filesystem is mounted,
+        // either all or only FILE_NAME_255BYTES_UTF8_1B + "a" will be rejected.
+        if (SystemUtils.IS_OS_MAC_OSX) {
+            assertTrue(failures >= 1, "Expected at least one too-long name rejected, got " + failures);
+        } else {
+            assertEquals(4, failures, "All too-long names were rejected");
+        }
+    }
+
+    @ParameterizedTest(name = "{index}: {0} truncates {1} to {2}")
+    @MethodSource
+    void testNameLengthStrategyTruncate_Succeeds(NameLengthStrategy strategy, int limit, String input, String expected) {
+        final CharSequence out = strategy.truncate(input, limit, UTF_8);
+        assertEquals(expected, out.toString(), strategy.name() + " truncates to limit");
+    }
+
     @ParameterizedTest(name = "{index}: {0} truncates {2} with limit {1} throws")
     @MethodSource
     void testNameLengthStrategyTruncate_Throws(
@@ -489,5 +432,62 @@ class FileSystemTest {
                 assertThrows(IllegalArgumentException.class, () -> strategy.truncate(input, limit, charset));
         final String exMessage = ex.getMessage();
         assertTrue(exMessage.contains(message), "ex message contains " + message + ": " + exMessage);
+    }
+
+    @Test
+    void testReplacementWithNUL() {
+        for (final FileSystem fs : FileSystem.values()) {
+            try {
+                fs.toLegalFileName("Test", '\0'); // Assume NUL is always illegal
+            } catch (final IllegalArgumentException iae) {
+                assertTrue(iae.getMessage().startsWith("The replacement character '\\0'"), iae.getMessage());
+            }
+        }
+    }
+
+    @Test
+    void testSorted() {
+        for (final FileSystem fs : FileSystem.values()) {
+            final char[] chars = fs.getIllegalFileNameChars();
+            for (int i = 0; i < chars.length - 1; i++) {
+                assertTrue(chars[i] < chars[i + 1], fs.name());
+            }
+        }
+    }
+
+    @Test
+    void testSupportsDriveLetter() {
+        assertTrue(FileSystem.WINDOWS.supportsDriveLetter());
+        assertFalse(FileSystem.GENERIC.supportsDriveLetter());
+        assertFalse(FileSystem.LINUX.supportsDriveLetter());
+        assertFalse(FileSystem.MAC_OSX.supportsDriveLetter());
+    }
+
+    @Test
+    void testToLegalFileNameWindows() {
+        final FileSystem fs = FileSystem.WINDOWS;
+        final char replacement = '-';
+        for (char i = 0; i < 32; i++) {
+            assertEquals(replacement, fs.toLegalFileName(String.valueOf(i), replacement).charAt(0));
+        }
+        final char[] illegal = { '<', '>', ':', '"', '/', '\\', '|', '?', '*' };
+        for (char i = 0; i < illegal.length; i++) {
+            assertEquals(replacement, fs.toLegalFileName(String.valueOf(i), replacement).charAt(0));
+        }
+        for (char i = 'a'; i < 'z'; i++) {
+            assertEquals(i, fs.toLegalFileName(String.valueOf(i), replacement).charAt(0));
+        }
+        for (char i = 'A'; i < 'Z'; i++) {
+            assertEquals(i, fs.toLegalFileName(String.valueOf(i), replacement).charAt(0));
+        }
+        for (char i = '0'; i < '9'; i++) {
+            assertEquals(i, fs.toLegalFileName(String.valueOf(i), replacement).charAt(0));
+        }
+        // Null and empty
+        assertThrows(NullPointerException.class, () -> fs.toLegalFileName(null, '_'));
+        assertThrows(IllegalArgumentException.class, () -> fs.toLegalFileName("", '_'));
+        // Illegal replacement
+        assertThrows(IllegalArgumentException.class, () -> fs.toLegalFileName("test", '\0'));
+        assertThrows(IllegalArgumentException.class, () -> fs.toLegalFileName("test", ':'));
     }
 }
