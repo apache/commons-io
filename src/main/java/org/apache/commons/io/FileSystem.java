@@ -244,9 +244,7 @@ public enum FileSystem {
     }
 
     /**
-     * <p>
      * Is {@code true} if this is Linux.
-     * </p>
      * <p>
      * The field will return {@code false} if {@code OS_NAME} is {@code null}.
      * </p>
@@ -254,9 +252,7 @@ public enum FileSystem {
     private static final boolean IS_OS_LINUX = getOsMatchesName("Linux");
 
     /**
-     * <p>
      * Is {@code true} if this is Mac.
-     * </p>
      * <p>
      * The field will return {@code false} if {@code OS_NAME} is {@code null}.
      * </p>
@@ -269,9 +265,7 @@ public enum FileSystem {
     private static final String OS_NAME_WINDOWS_PREFIX = "Windows";
 
     /**
-     * <p>
      * Is {@code true} if this is Windows.
-     * </p>
      * <p>
      * The field will return {@code false} if {@code OS_NAME} is {@code null}.
      * </p>
@@ -322,9 +316,7 @@ public enum FileSystem {
     }
 
     /**
-     * <p>
      * Gets a System property, defaulting to {@code null} if the property cannot be read.
-     * </p>
      * <p>
      * If a {@link SecurityException} is caught, the return value is {@code null} and a message is written to
      * {@code System.err}.
@@ -390,6 +382,7 @@ public enum FileSystem {
     private static String replace(final String path, final char oldChar, final char newChar) {
         return path == null ? null : path.replace(oldChar, newChar);
     }
+
     /**
      * Truncates a string respecting grapheme cluster boundaries.
      *
@@ -453,7 +446,7 @@ public enum FileSystem {
      * @param maxPathLength The maximum length of the path to a file. This can include folders.
      * @param illegalFileNameChars Illegal characters for this file system.
      * @param reservedFileNames The reserved file names.
-     * @param reservedFileNamesExtensions TODO
+     * @param reservedFileNamesExtensions The reserved file name extensions.
      * @param supportsDriveLetter Whether this file system support driver letters.
      * @param nameSeparator The name separator, '\\' on Windows, '/' on Linux.
      * @param nameLengthStrategy The strategy for measuring and truncating file and path names.
@@ -479,6 +472,7 @@ public enum FileSystem {
 
     /**
      * Gets the file allocation block size in bytes.
+     *
      * @return the file allocation block size in bytes.
      * @since 2.12.0
      */
@@ -512,21 +506,26 @@ public enum FileSystem {
     /**
      * Gets the maximum length for file names (excluding any folder path).
      *
-     * <p>This limit applies only to the file name itself, excluding any parent
-     * directories.</p>
+     * <p>
+     * This limit applies only to the file name itself, excluding any parent directories.
+     * </p>
      *
-     * <p>The value is expressed in Java {@code char} units (UTF-16 code units).</p>
+     * <p>
+     * The value is expressed in Java {@code char} units (UTF-16 code units).
+     * </p>
      *
-     * <p><strong>Note:</strong> Because many file systems enforce limits in
-     * <em>bytes</em> using a specific encoding rather than in UTF-16 code
-     * units, a name that fits this limit may still be rejected by the
-     * underlying file system.</p>
+     * <p>
+     * <strong>Note:</strong> Because many file systems enforce limits in <em>bytes</em> using a specific encoding rather than in UTF-16 code units, a name that
+     * fits this limit may still be rejected by the underlying file system.
+     * </p>
      *
-     * <p>Use {@link #isLegalFileName} to check whether a given name is valid
-     * for the current file system and charset.</p>
+     * <p>
+     * Use {@link #isLegalFileName} to check whether a given name is valid for the current file system and charset.
+     * </p>
      *
-     * <p>However, any file name longer than this limit is guaranteed to be
-     * invalid on the current file system.</p>
+     * <p>
+     * However, any file name longer than this limit is guaranteed to be invalid on the current file system.
+     * </p>
      *
      * @return the maximum file name length in characters.
      */
@@ -537,20 +536,23 @@ public enum FileSystem {
     /**
      * Gets the maximum length for file paths (may include folders).
      *
-     * <p>This value is inclusive of all path components and separators.
-     * For a limit of each path component see {@link #getMaxFileNameLength()}.</p>
+     * <p>
+     * This value is inclusive of all path components and separators. For a limit of each path component see {@link #getMaxFileNameLength()}.
+     * </p>
      *
-     * <p>The value is expressed in Java {@code char} units (UTF-16 code units)
-     * and represents the longest path that can be safely passed to Java
-     * {@link java.io.File} and {@link java.nio.file.Path} APIs.</p>
+     * <p>
+     * The value is expressed in Java {@code char} units (UTF-16 code units) and represents the longest path that can be safely passed to Java
+     * {@link java.io.File} and {@link java.nio.file.Path} APIs.
+     * </p>
      *
-     * <p><strong>Note:</strong> many operating systems and file systems enforce
-     * path length limits in <em>bytes</em> using a specific encoding, rather than
-     * in UTF-16 code units. As a result, a path that fits within this limit may
-     * still be rejected by the underlying platform.</p>
+     * <p>
+     * <strong>Note:</strong> many operating systems and file systems enforce path length limits in <em>bytes</em> using a specific encoding, rather than in
+     * UTF-16 code units. As a result, a path that fits within this limit may still be rejected by the underlying platform.
+     * </p>
      *
-     * <p>Conversely, any path longer than this limit is guaranteed to fail with
-     * at least some operating system API calls.</p>
+     * <p>
+     * Conversely, any path longer than this limit is guaranteed to fail with at least some operating system API calls.
+     * </p>
      *
      * @return the maximum file path length in characters.
      */
@@ -599,7 +601,7 @@ public enum FileSystem {
      * Tests if the given character is illegal in a file name, {@code false} otherwise.
      *
      * @param c
-     *            the character to test
+     *            the character to test.
      * @return {@code true} if the given character is illegal in a file name, {@code false} otherwise.
      */
     private boolean isIllegalFileNameChar(final int c) {
@@ -617,8 +619,8 @@ public enum FileSystem {
      * </ul>
      *
      * @param candidate
-     *            A candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}
-     * @return {@code true} if the candidate name is legal
+     *            A candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}.
+     * @return {@code true} if the candidate name is legal.
      */
     public boolean isLegalFileName(final CharSequence candidate) {
         return isLegalFileName(candidate, Charset.defaultCharset());
@@ -635,10 +637,10 @@ public enum FileSystem {
      * </ul>
      *
      * @param candidate
-     *            A candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}
+     *            A candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}.
      * @param charset
-     *            The charset to use when the file name length is measured in bytes
-     * @return {@code true} if the candidate name is legal
+     *            The charset to use when the file name length is measured in bytes.
+     * @return {@code true} if the candidate name is legal.
      * @since 2.21.0
      */
     public boolean isLegalFileName(final CharSequence candidate, final Charset charset) {
@@ -653,7 +655,7 @@ public enum FileSystem {
      * Tests whether the given string is a reserved file name.
      *
      * @param candidate
-     *            the string to test
+     *            the string to test.
      * @return {@code true} if the given string is a reserved file name.
      */
     public boolean isReservedFileName(final CharSequence candidate) {
@@ -664,8 +666,8 @@ public enum FileSystem {
     /**
      * Converts all separators to the Windows separator of backslash.
      *
-     * @param path the path to be changed, null ignored
-     * @return the updated path
+     * @param path the path to be changed, null ignored.
+     * @return the updated path.
      * @since 2.12.0
      */
     public String normalizeSeparators(final String path) {
@@ -698,10 +700,10 @@ public enum FileSystem {
      * </ul>
      *
      * @param candidate
-     *            A candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}
+     *            A candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}.
      * @param replacement
-     *            Illegal characters in the candidate name are replaced by this character
-     * @return a String without illegal characters
+     *            Illegal characters in the candidate name are replaced by this character.
+     * @return a String without illegal characters.
      */
     public String toLegalFileName(final String candidate, final char replacement) {
         return toLegalFileName(candidate, replacement, Charset.defaultCharset());
@@ -717,12 +719,12 @@ public enum FileSystem {
      * </ul>
      *
      * @param candidate
-     *            A candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}
+     *            A candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}.
      * @param replacement
-     *            Illegal characters in the candidate name are replaced by this character
+     *            Illegal characters in the candidate name are replaced by this character.
      * @param charset
-     *            The charset to use when the file name length is measured in bytes
-     * @return a String without illegal characters
+     *            The charset to use when the file name length is measured in bytes.
+     * @return a String without illegal characters.
      * @since 2.21.0
      */
     public String toLegalFileName(final String candidate, final char replacement, final Charset charset) {
