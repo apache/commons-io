@@ -63,7 +63,7 @@ class FileSystemTest {
     /** A single Unicode character that encodes to 3 UTF-8 bytes. */
     private static final String CHAR_UTF8_3B = "★";
 
-    /** A single Unicode codepoint that encodes to 2 UTF-16 code units and 4 UTF-8 bytes. */
+    /** A single Unicode code point that encodes to 2 UTF-16 code units and 4 UTF-8 bytes. */
     private static final String CHAR_UTF8_4B = "😀";
 
     /**
@@ -94,28 +94,28 @@ class FileSystemTest {
                     + "\uD83D\uDC66\uD83C\uDFFC\u200D\uD83E\uDDB3";
 
     /** File name of 255 bytes and 255 UTF-16 code units. */
-    private static final String FILE_NAME_255BYTES_UTF8_1B = repeat(CHAR_UTF8_1B, 255);
+    private static final String FILE_NAME_255_BYTES_UTF8_1B = repeat(CHAR_UTF8_1B, 255);
 
     /** File name of 255 bytes and 128 UTF-16 code units. */
-    private static final String FILE_NAME_255BYTES_UTF8_2B = repeat(CHAR_UTF8_2B, 127) + CHAR_UTF8_1B;
+    private static final String FILE_NAME_255_BYTES_UTF8_2B = repeat(CHAR_UTF8_2B, 127) + CHAR_UTF8_1B;
 
     /** File name of 255 bytes and 85 UTF-16 code units. */
-    private static final String FILE_NAME_255BYTES_UTF8_3B = repeat(CHAR_UTF8_3B, 85);
+    private static final String FILE_NAME_255_BYTES_UTF8_3B = repeat(CHAR_UTF8_3B, 85);
 
     /** File name of 255 bytes and 64 UTF-16 code units. */
-    private static final String FILE_NAME_255BYTES_UTF8_4B = repeat(CHAR_UTF8_4B, 63) + CHAR_UTF8_3B;
+    private static final String FILE_NAME_255_BYTES_UTF8_4B = repeat(CHAR_UTF8_4B, 63) + CHAR_UTF8_3B;
 
     /** File name of 255 bytes and 255 UTF-16 code units. */
-    private static final String FILE_NAME_255CHARS_UTF8_1B = FILE_NAME_255BYTES_UTF8_1B;
+    private static final String FILE_NAME_255_CHARS_UTF8_1B = FILE_NAME_255_BYTES_UTF8_1B;
 
     /** File name of 510 bytes and 255 UTF-16 code units. */
-    private static final String FILE_NAME_255CHARS_UTF8_2B = repeat(CHAR_UTF8_2B, 255);
+    private static final String FILE_NAME_255_CHARS_UTF8_2B = repeat(CHAR_UTF8_2B, 255);
 
     /** File name of 765 bytes and 255 UTF-16 code units. */
-    private static final String FILE_NAME_255CHARS_UTF8_3B = repeat(CHAR_UTF8_3B, 255);
+    private static final String FILE_NAME_255_CHARS_UTF8_3B = repeat(CHAR_UTF8_3B, 255);
 
     /** File name of 511 bytes and 255 UTF-16 code units. */
-    private static final String FILE_NAME_255CHARS_UTF8_4B = repeat(CHAR_UTF8_4B, 127) + CHAR_UTF8_3B;
+    private static final String FILE_NAME_255_CHARS_UTF8_4B = repeat(CHAR_UTF8_4B, 127) + CHAR_UTF8_3B;
 
     private static void createAndDelete(final Path tempDir, final String fileName) throws IOException {
         final Path filePath = tempDir.resolve(fileName);
@@ -131,26 +131,26 @@ class FileSystemTest {
 
     static Stream<Arguments> testIsLegalName_Length() {
         return Stream.of(
-                Arguments.of(FileSystem.GENERIC, repeat(FILE_NAME_255BYTES_UTF8_1B, 4), UTF_8),
-                Arguments.of(FileSystem.GENERIC, repeat(FILE_NAME_255BYTES_UTF8_2B, 4), UTF_8),
-                Arguments.of(FileSystem.GENERIC, repeat(FILE_NAME_255BYTES_UTF8_3B, 4), UTF_8),
-                Arguments.of(FileSystem.GENERIC, repeat(FILE_NAME_255BYTES_UTF8_4B, 4), UTF_8),
-                Arguments.of(FileSystem.LINUX, FILE_NAME_255BYTES_UTF8_1B, UTF_8),
-                Arguments.of(FileSystem.LINUX, FILE_NAME_255BYTES_UTF8_2B, UTF_8),
-                Arguments.of(FileSystem.LINUX, FILE_NAME_255BYTES_UTF8_3B, UTF_8),
-                Arguments.of(FileSystem.LINUX, FILE_NAME_255BYTES_UTF8_4B, UTF_8),
-                Arguments.of(FileSystem.MAC_OSX, FILE_NAME_255BYTES_UTF8_1B, UTF_8),
-                Arguments.of(FileSystem.MAC_OSX, FILE_NAME_255BYTES_UTF8_2B, UTF_8),
-                Arguments.of(FileSystem.MAC_OSX, FILE_NAME_255BYTES_UTF8_3B, UTF_8),
-                Arguments.of(FileSystem.MAC_OSX, FILE_NAME_255BYTES_UTF8_4B, UTF_8),
-                Arguments.of(FileSystem.WINDOWS, FILE_NAME_255CHARS_UTF8_1B, UTF_8),
-                Arguments.of(FileSystem.WINDOWS, FILE_NAME_255CHARS_UTF8_2B, UTF_8),
-                Arguments.of(FileSystem.WINDOWS, FILE_NAME_255CHARS_UTF8_3B, UTF_8),
-                Arguments.of(FileSystem.WINDOWS, FILE_NAME_255CHARS_UTF8_4B, UTF_8),
+                Arguments.of(FileSystem.GENERIC, repeat(FILE_NAME_255_BYTES_UTF8_1B, 4), UTF_8),
+                Arguments.of(FileSystem.GENERIC, repeat(FILE_NAME_255_BYTES_UTF8_2B, 4), UTF_8),
+                Arguments.of(FileSystem.GENERIC, repeat(FILE_NAME_255_BYTES_UTF8_3B, 4), UTF_8),
+                Arguments.of(FileSystem.GENERIC, repeat(FILE_NAME_255_BYTES_UTF8_4B, 4), UTF_8),
+                Arguments.of(FileSystem.LINUX, FILE_NAME_255_BYTES_UTF8_1B, UTF_8),
+                Arguments.of(FileSystem.LINUX, FILE_NAME_255_BYTES_UTF8_2B, UTF_8),
+                Arguments.of(FileSystem.LINUX, FILE_NAME_255_BYTES_UTF8_3B, UTF_8),
+                Arguments.of(FileSystem.LINUX, FILE_NAME_255_BYTES_UTF8_4B, UTF_8),
+                Arguments.of(FileSystem.MAC_OSX, FILE_NAME_255_BYTES_UTF8_1B, UTF_8),
+                Arguments.of(FileSystem.MAC_OSX, FILE_NAME_255_BYTES_UTF8_2B, UTF_8),
+                Arguments.of(FileSystem.MAC_OSX, FILE_NAME_255_BYTES_UTF8_3B, UTF_8),
+                Arguments.of(FileSystem.MAC_OSX, FILE_NAME_255_BYTES_UTF8_4B, UTF_8),
+                Arguments.of(FileSystem.WINDOWS, FILE_NAME_255_CHARS_UTF8_1B, UTF_8),
+                Arguments.of(FileSystem.WINDOWS, FILE_NAME_255_CHARS_UTF8_2B, UTF_8),
+                Arguments.of(FileSystem.WINDOWS, FILE_NAME_255_CHARS_UTF8_3B, UTF_8),
+                Arguments.of(FileSystem.WINDOWS, FILE_NAME_255_CHARS_UTF8_4B, UTF_8),
                 // Repeat some tests with other encodings for GENERIC and LINUX
-                Arguments.of(FileSystem.GENERIC, repeat(FILE_NAME_255BYTES_UTF8_1B, 4), US_ASCII),
+                Arguments.of(FileSystem.GENERIC, repeat(FILE_NAME_255_BYTES_UTF8_1B, 4), US_ASCII),
                 Arguments.of(FileSystem.GENERIC, repeat(CHAR_UTF8_2B, 1020), ISO_8859_1),
-                Arguments.of(FileSystem.LINUX, FILE_NAME_255BYTES_UTF8_1B, US_ASCII),
+                Arguments.of(FileSystem.LINUX, FILE_NAME_255_BYTES_UTF8_1B, US_ASCII),
                 Arguments.of(FileSystem.LINUX, repeat(CHAR_UTF8_2B, 255), ISO_8859_1));
     }
 
@@ -297,8 +297,8 @@ class FileSystemTest {
 
     @Test
     void testIsLegalName_Encoding() {
-        assertFalse(FileSystem.GENERIC.isLegalFileName(FILE_NAME_255BYTES_UTF8_3B, US_ASCII), "US-ASCII cannot represent all chars");
-        assertTrue(FileSystem.GENERIC.isLegalFileName(FILE_NAME_255BYTES_UTF8_3B, UTF_8), "UTF-8 can represent all chars");
+        assertFalse(FileSystem.GENERIC.isLegalFileName(FILE_NAME_255_BYTES_UTF8_3B, US_ASCII), "US-ASCII cannot represent all chars");
+        assertTrue(FileSystem.GENERIC.isLegalFileName(FILE_NAME_255_BYTES_UTF8_3B, UTF_8), "UTF-8 can represent all chars");
     }
 
     @ParameterizedTest(name = "{index}: {0} with charset {2}")
@@ -350,44 +350,42 @@ class FileSystemTest {
         final FileSystem fs = FileSystem.getCurrent();
         final String[] validNames;
         switch (fs) {
-            case MAC_OSX:
-            case LINUX:
-                // Names with 255 UTF-8 bytes are legal
+        case MAC_OSX:
+        case LINUX:
+            // Names with 255 UTF-8 bytes are legal
+            // @formatter:off
                 validNames = new String[] {
-                    FILE_NAME_255BYTES_UTF8_1B,
-                    FILE_NAME_255BYTES_UTF8_2B,
-                    FILE_NAME_255BYTES_UTF8_3B,
-                    FILE_NAME_255BYTES_UTF8_4B
+                    FILE_NAME_255_BYTES_UTF8_1B,
+                    FILE_NAME_255_BYTES_UTF8_2B,
+                    FILE_NAME_255_BYTES_UTF8_3B,
+                    FILE_NAME_255_BYTES_UTF8_4B
                 };
-                break;
-            case WINDOWS:
-                // Names with 255 UTF-16 code units are legal
+                // @formatter:on
+            break;
+        case WINDOWS:
+            // Names with 255 UTF-16 code units are legal
+            // @formatter:off
                 validNames = new String[] {
-                    FILE_NAME_255CHARS_UTF8_1B,
-                    FILE_NAME_255CHARS_UTF8_2B,
-                    FILE_NAME_255CHARS_UTF8_3B,
-                    FILE_NAME_255CHARS_UTF8_4B
+                    FILE_NAME_255_CHARS_UTF8_1B,
+                    FILE_NAME_255_CHARS_UTF8_2B,
+                    FILE_NAME_255_CHARS_UTF8_3B,
+                    FILE_NAME_255_CHARS_UTF8_4B
                 };
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + fs);
+                // @formatter:on
+            break;
+        default:
+            throw new IllegalStateException("Unexpected value: " + fs);
         }
         int failures = 0;
         for (final String fileName : validNames) {
             // 1) OS should accept names at the documented limit.
-            assertDoesNotThrow(
-                    () -> createAndDelete(tempDir, fileName), "OS should accept max-length name: " + fileName);
-
+            assertDoesNotThrow(() -> createAndDelete(tempDir, fileName), "OS should accept max-length name: " + fileName);
             // 2) Library should consider them legal.
             assertTrue(fs.isLegalFileName(fileName, UTF_8), "Commons IO should accept max-length name: " + fileName);
-
             // 3) For “one over” the limit: Commons IO must reject; OS may or may not enforce strictly.
             final String tooLongName = fileName + "a";
-
             // Library contract: must be illegal.
-            assertFalse(
-                    fs.isLegalFileName(tooLongName, UTF_8), "Commons IO should reject too-long name: " + tooLongName);
-
+            assertFalse(fs.isLegalFileName(tooLongName, UTF_8), "Commons IO should reject too-long name: " + tooLongName);
             // OS behavior: may or may not reject.
             try {
                 createAndDelete(tempDir, tooLongName);
@@ -404,7 +402,7 @@ class FileSystemTest {
         // macOS is trickier because the API and filesystem limits don’t always match:
         //
         // - POSIX API layer (getdirentries/readdir): 1023 bytes per component since macOS 10.5.
-        //   https://man.freebsd.org/cgi/man.cgi?query=dir&sektion=5&apropos=0&manpath=macOS+15.6
+        // https://man.freebsd.org/cgi/man.cgi?query=dir&sektion=5&apropos=0&manpath=macOS+15.6
         // - HFS+: enforces 255 UTF-16 code units per component.
         // - APFS: enforces 255 UTF-8 bytes per component.
         //
@@ -426,10 +424,9 @@ class FileSystemTest {
 
     @ParameterizedTest(name = "{index}: {0} truncates {2} with limit {1} throws")
     @MethodSource
-    void testNameLengthStrategyTruncate_Throws(
-            final NameLengthStrategy strategy, final int limit, final String input, final Charset charset, final String message) {
-        final IllegalArgumentException ex =
-                assertThrows(IllegalArgumentException.class, () -> strategy.truncate(input, limit, charset));
+    void testNameLengthStrategyTruncate_Throws(final NameLengthStrategy strategy, final int limit, final String input, final Charset charset,
+            final String message) {
+        final IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> strategy.truncate(input, limit, charset));
         final String exMessage = ex.getMessage();
         assertTrue(exMessage.contains(message), "ex message contains " + message + ": " + exMessage);
     }
