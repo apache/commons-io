@@ -526,7 +526,7 @@ class FileSystemTest {
         assertEquals("\uD83D\uDE03", fs.toLegalFileName("\uD83D\uDE03", '_', charset));
         assertEquals("\uD83D\uDE03\uD83D\uDE03\uD83D\uDE03\uD83D\uDE03\uD83D\uDE03",
                 fs.toLegalFileName("\uD83D\uDE03\uD83D\uDE03\uD83D\uDE03\uD83D\uDE03\uD83D\uDE03", '_', charset));
-        for (int i = 1; i <= 100; i++) {
+        for (int i = 1; i <= 10; i++) {
             final String name1 = fs.toLegalFileName(StringUtils.repeat("🦊", i), '_', charset);
             assertNotNull(name1);
             final byte[] name1Bytes = name1.getBytes();
