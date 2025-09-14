@@ -138,39 +138,30 @@ public enum FileSystem {
                 final CharsetEncoder encoder = charset.newEncoder()
                         .onMalformedInput(CodingErrorAction.REPORT)
                         .onUnmappableCharacter(CodingErrorAction.REPORT);
-
                 if (!encoder.canEncode(value)) {
-                    throw new IllegalArgumentException(
-                            "The value " + value + " cannot be encoded using " + charset.name());
+                    throw new IllegalArgumentException("The value " + value + " cannot be encoded using " + charset.name());
                 }
-
                 // Fast path: if even the worst-case expansion fits, we're done.
                 if (value.length() <= Math.floor(limit / encoder.maxBytesPerChar())) {
                     return value;
                 }
-
                 // Slow path: encode into a fixed-size byte buffer.
                 // 1. Compute length of extension in bytes (if any).
                 final CharSequence[] parts = splitExtension(value);
                 final int extensionLength = getLength(parts[1], charset);
                 if (extensionLength > 0 && extensionLength >= limit) {
                     // Extension itself does not fit
-                    throw new IllegalArgumentException(
-                            "The extension of " + value + " is too long to fit within " + limit + " bytes");
+                    throw new IllegalArgumentException("The extension of " + value + " is too long to fit within " + limit + " bytes");
                 }
-
                 // 2. Compute the character part that fits within the remaining byte budget.
                 final ByteBuffer byteBuffer = ByteBuffer.allocate(limit - extensionLength);
                 final CharBuffer charBuffer = CharBuffer.wrap(parts[0]);
-
                 // Encode until the first character that would exceed the byte budget.
                 final CoderResult cr = encoder.encode(charBuffer, byteBuffer, true);
-
                 if (cr.isUnderflow()) {
                     // Entire candidate fit within maxFileNameLength bytes.
                     return value;
                 }
-
                 final CharSequence truncated = safeTruncate(value, charBuffer.position());
                 return extensionLength == 0 ? truncated : truncated.toString() + parts[1];
             }
@@ -186,25 +177,20 @@ public enum FileSystem {
             @Override
             CharSequence truncate(final CharSequence value, final int limit, final Charset charset) {
                 if (!UTF_16.newEncoder().canEncode(value)) {
-                    throw new IllegalArgumentException(
-                            "The value " + value + " can not be encoded using " + UTF_16.name());
+                    throw new IllegalArgumentException("The value " + value + " can not be encoded using " + UTF_16.name());
                 }
-
                 // Fast path: no truncation needed.
                 if (value.length() <= limit) {
                     return value;
                 }
-
                 // Slow path: truncate to limit.
                 // 1. Compute length of extension in chars (if any).
                 final CharSequence[] parts = splitExtension(value);
                 final int extensionLength = parts[1].length();
                 if (extensionLength > 0 && extensionLength >= limit) {
                     // Extension itself does not fit
-                    throw new IllegalArgumentException(
-                            "The extension of " + value + " is too long to fit within " + limit + " characters");
+                    throw new IllegalArgumentException("The extension of " + value + " is too long to fit within " + limit + " characters");
                 }
-
                 // 2. Truncate the non-extension part and append the extension (if any).
                 final CharSequence truncated = safeTruncate(value, limit - extensionLength);
                 return extensionLength == 0 ? truncated : truncated.toString() + parts[1];
@@ -560,6 +546,10 @@ public enum FileSystem {
         return maxPathLength;
     }
 
+    NameLengthStrategy getNameLengthStrategy() {
+        return nameLengthStrategy;
+    }
+
     /**
      * Gets the name separator, '\\' on Windows, '/' on Linux.
      *
@@ -703,11 +693,26 @@ public enum FileSystem {
      *            A candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}.
      * @param replacement
      *            Illegal characters in the candidate name are replaced by this character.
+     * @param charset
+     *            The charset to use when the file name length is measured in bytes.
      * @return a String without illegal characters.
+     * @since 2.21.0
      */
-    public String toLegalFileName(final String candidate, final char replacement) {
-        return toLegalFileName(candidate, replacement, Charset.defaultCharset());
+    public String toLegalFileName(final CharSequence candidate, final char replacement, final Charset charset) {
+        Objects.requireNonNull(candidate, "candidate");
+        if (candidate.length() == 0) {
+            throw new IllegalArgumentException("The candidate file name is empty");
+        }
+        if (isIllegalFileNameChar(replacement)) {
+            // %s does not work properly with NUL
+            throw new IllegalArgumentException(String.format("The replacement character '%s' cannot be one of the %s illegal characters: %s",
+                replacement == '\0' ? "\\0" : replacement, name(), Arrays.toString(illegalFileNameChars)));
+        }
+        final CharSequence truncated = nameLengthStrategy.truncate(candidate, getMaxFileNameLength(), charset);
+        final int[] array = truncated.chars().map(i -> isIllegalFileNameChar(i) ? replacement : i).toArray();
+        return new String(array, 0, array.length);
     }
+
 
     /**
      * Converts a candidate file name (without a path) to a legal file name.
@@ -722,24 +727,10 @@ public enum FileSystem {
      *            A candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}.
      * @param replacement
      *            Illegal characters in the candidate name are replaced by this character.
-     * @param charset
-     *            The charset to use when the file name length is measured in bytes.
      * @return a String without illegal characters.
-     * @since 2.21.0
      */
-    public String toLegalFileName(final String candidate, final char replacement, final Charset charset) {
-        Objects.requireNonNull(candidate, "candidate");
-        if (candidate.isEmpty()) {
-            throw new IllegalArgumentException("The candidate file name is empty");
-        }
-        if (isIllegalFileNameChar(replacement)) {
-            // %s does not work properly with NUL
-            throw new IllegalArgumentException(String.format("The replacement character '%s' cannot be one of the %s illegal characters: %s",
-                replacement == '\0' ? "\\0" : replacement, name(), Arrays.toString(illegalFileNameChars)));
-        }
-        final CharSequence truncated = nameLengthStrategy.truncate(candidate, getMaxFileNameLength(), charset);
-        final int[] array = truncated.chars().map(i -> isIllegalFileNameChar(i) ? replacement : i).toArray();
-        return new String(array, 0, array.length);
+    public String toLegalFileName(final String candidate, final char replacement) {
+        return toLegalFileName(candidate, replacement, Charset.defaultCharset());
     }
 
 }

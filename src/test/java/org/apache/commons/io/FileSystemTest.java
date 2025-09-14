@@ -27,19 +27,28 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.stream.Stream;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.FileSystem.NameLengthStrategy;
 import org.apache.commons.lang3.JavaVersion;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemProperties;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Test;
@@ -48,6 +57,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * Tests {@link FileSystem}.
@@ -250,6 +262,20 @@ class FileSystemTest {
                         Stream.of(
                                 Arguments.of(BYTES, 68, CHAR_UTF8_69B, UTF_8, "truncated to 29 characters"),
                                 Arguments.of(UTF16_CODE_UNITS, 30, CHAR_UTF8_69B, UTF_8, "truncated to 30 characters")));
+    }
+
+    private String parseXmlRootValue(final Path xmlPath, final Charset charset) throws SAXException, IOException, ParserConfigurationException {
+        final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        try (BufferedReader reader = Files.newBufferedReader(xmlPath, charset)) {
+            final Document document = builder.parse(new InputSource(reader));
+            return document.getDocumentElement().getTextContent();
+        }
+    }
+
+    private String parseXmlRootValue(final String xmlString) throws SAXException, IOException, ParserConfigurationException {
+        final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        final Document document = builder.parse(new InputSource(new StringReader(xmlString)));
+        return document.getDocumentElement().getTextContent();
     }
 
     @Test
@@ -487,4 +513,60 @@ class FileSystemTest {
         assertThrows(IllegalArgumentException.class, () -> fs.toLegalFileName("test", '\0'));
         assertThrows(IllegalArgumentException.class, () -> fs.toLegalFileName("test", ':'));
     }
+
+    @ParameterizedTest
+    @EnumSource(FileSystem.class)
+    void testXmlRoundtrip(final FileSystem fs, @TempDir final Path tempDir) throws Exception {
+        final Charset charset = Charset.defaultCharset();
+        assertEquals("a", fs.toLegalFileName("a", '_', charset));
+        assertEquals("abcdefghijklmno", fs.toLegalFileName("abcdefghijklmno", '_', charset));
+        assertEquals("\u4F60\u597D\u55CE", fs.toLegalFileName("\u4F60\u597D\u55CE", '_', charset));
+        assertEquals("\u2713\u2714", fs.toLegalFileName("\u2713\u2714", '_', charset));
+        assertEquals("\uD83D\uDE80\u2728\uD83C\uDF89", fs.toLegalFileName("\uD83D\uDE80\u2728\uD83C\uDF89", '_', charset));
+        assertEquals("\uD83D\uDE03", fs.toLegalFileName("\uD83D\uDE03", '_', charset));
+        assertEquals("\uD83D\uDE03\uD83D\uDE03\uD83D\uDE03\uD83D\uDE03\uD83D\uDE03",
+                fs.toLegalFileName("\uD83D\uDE03\uD83D\uDE03\uD83D\uDE03\uD83D\uDE03\uD83D\uDE03", '_', charset));
+        for (int i = 1; i <= 100; i++) {
+            final String name1 = fs.toLegalFileName(StringUtils.repeat("🦊", i), '_', charset);
+            assertNotNull(name1);
+            final byte[] name1Bytes = name1.getBytes();
+            final String xmlString1 = toXmlString(name1, charset);
+            final Path path = tempDir.resolve(name1);
+            Files.write(path, xmlString1.getBytes(charset));
+            final String xmlFromPath = parseXmlRootValue(path, charset);
+            assertEquals(name1, xmlFromPath, "i =  " + i);
+            final String name2 = new String(name1Bytes, charset);
+            assertEquals(name1, name2);
+            final String xmlString2 = toXmlString(name2, charset);
+            assertEquals(xmlString1, xmlString2);
+            final String parsedValue = Objects.toString(parseXmlRootValue(xmlString2), "");
+            assertEquals(name1, parsedValue, "i =  " + i);
+            assertEquals(name2, parsedValue, "i =  " + i);
+        }
+        for (int i = 1; i <= 100; i++) {
+            final String name1 = fs.toLegalFileName(fs.getNameLengthStrategy().truncate(
+                    "👩🏻‍👨🏻‍👦🏻‍👦🏻👩🏼‍👨🏼‍👦🏼‍👦🏼👩🏽‍👨🏽‍👦🏽‍👦🏽👩🏾‍👨🏾‍👦🏾‍👦🏾👩🏿‍👨🏿‍👦🏿‍👦🏿👩🏻‍👨🏻‍👦🏻‍👦🏻👩🏼‍👨🏼‍👦🏼‍👦🏼👩🏽‍👨🏽‍👦🏽‍👦🏽👩🏾‍👨🏾‍👦🏾‍👦🏾👩🏿‍👨🏿‍👦🏿‍👦🏿",
+                    // TODO hack 100: truncate blows up when it can't.
+                    100 + i, charset), '_', charset);
+            assertNotNull(name1);
+            final byte[] name1Bytes = name1.getBytes();
+            final String xmlString1 = toXmlString(name1, charset);
+            final Path path = tempDir.resolve(name1);
+            Files.write(path, xmlString1.getBytes(charset));
+            final String xmlFromPath = parseXmlRootValue(path, charset);
+            assertEquals(name1, xmlFromPath, "i =  " + i);
+            final String name2 = new String(name1Bytes, charset);
+            assertEquals(name1, name2);
+            final String xmlString2 = toXmlString(name2, charset);
+            assertEquals(xmlString1, xmlString2);
+            final String parsedValue = Objects.toString(parseXmlRootValue(xmlString2), "");
+            assertEquals(name1, parsedValue, "i =  " + i);
+            assertEquals(name2, parsedValue, "i =  " + i);
+        }
+    }
+
+    private String toXmlString(final String s, final Charset charset) {
+        return String.format("<?xml version=\"1.0\" encoding=\"%s\"?><data>%s</data>", charset.name(), s);
+    }
+
 }
