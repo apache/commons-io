@@ -37,6 +37,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
@@ -517,7 +518,7 @@ class FileSystemTest {
     @ParameterizedTest
     @EnumSource(FileSystem.class)
     void testXmlRoundtrip(final FileSystem fs, @TempDir final Path tempDir) throws Exception {
-        final Charset charset = Charset.defaultCharset();
+        final Charset charset = StandardCharsets.UTF_8;
         assertEquals("a", fs.toLegalFileName("a", '_', charset));
         assertEquals("abcdefghijklmno", fs.toLegalFileName("abcdefghijklmno", '_', charset));
         assertEquals("\u4F60\u597D\u55CE", fs.toLegalFileName("\u4F60\u597D\u55CE", '_', charset));
