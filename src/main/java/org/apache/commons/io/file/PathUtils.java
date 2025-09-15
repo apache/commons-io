@@ -1097,6 +1097,19 @@ public final class PathUtils {
     }
 
     /**
+     * Gets the system property with the specified name as a Path, or the default value as a Path if there is no property with that key.
+     *
+     * @param key the name of the system property.
+     * @param defaultPath a default path, may be null.
+     * @return the resulting {@code Path}, or the default value as a Path if there is no property with that key.
+     * @since 2.21.0
+     */
+    public static Path getPath(final String key, final String defaultPath) {
+        final String property = System.getProperty(Objects.toString(key, defaultPath), defaultPath);
+        return property != null ? Paths.get(property) : null;
+    }
+
+    /**
      * Shorthand for {@code Files.getFileAttributeView(path, PosixFileAttributeView.class)}.
      *
      * @param path    the path to the file.

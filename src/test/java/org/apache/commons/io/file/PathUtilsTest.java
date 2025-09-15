@@ -352,6 +352,18 @@ class PathUtilsTest extends AbstractTempDirTest {
     }
 
     @Test
+    void testGetPath() {
+        final String validKey = "user.dir";
+        final Path value = Paths.get(System.getProperty(validKey));
+        assertEquals(value, PathUtils.getPath(validKey, null));
+        assertEquals(value, PathUtils.getPath(validKey, validKey));
+        final String invalidKey = "this property key does not exist";
+        assertEquals(value, PathUtils.getPath(invalidKey, value.toString()));
+        assertNull(PathUtils.getPath(invalidKey, null));
+        assertEquals(value, PathUtils.getPath(null, value.toString()));
+    }
+
+    @Test
     void testGetTempDirectory() {
         final Path tempDirectory = Paths.get(SystemProperties.getJavaIoTmpdir());
         assertEquals(tempDirectory, PathUtils.getTempDirectory());
