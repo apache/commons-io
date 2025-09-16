@@ -2380,9 +2380,10 @@ public class FileUtils {
      * @param files The list to add found Files, not null.
      * @param recursive Whether or not to recurse into subdirectories.
      * @param filter How to filter files, not null.
+     * @return The given list.
      */
     @SuppressWarnings("null")
-    private static void listFiles(final File directory, final List<File> files, final boolean recursive, final FilenameFilter filter) {
+    private static List<File> listFiles(final File directory, final List<File> files, final boolean recursive, final FilenameFilter filter) {
         final File[] listFiles = directory.listFiles();
         if (listFiles != null) {
             // Only allocate if you must.
@@ -2398,6 +2399,7 @@ public class FileUtils {
                 dirs.forEach(d -> listFiles(d, files, true, filter));
             }
         }
+        return files;
     }
 
     /**
@@ -2411,11 +2413,7 @@ public class FileUtils {
      * @return a collection of {@link File} with the matching files.
      */
     public static Collection<File> listFiles(final File directory, final String[] extensions, final boolean recursive) {
-        // IO-856: Don't use NIO to path walk, allocate as little as possible while traversing.
-        final List<File> files = new ArrayList<>();
-        final FilenameFilter filter = extensions != null ? toSuffixFileFilter(extensions) : TrueFileFilter.INSTANCE;
-        listFiles(directory, files, recursive, filter);
-        return files;
+        return listFiles(directory, new ArrayList<>(), recursive, extensions != null ? toSuffixFileFilter(extensions) : TrueFileFilter.INSTANCE);
     }
 
     /**
