@@ -361,6 +361,7 @@ class PathUtilsTest extends AbstractTempDirTest {
         assertEquals(value, PathUtils.getPath(invalidKey, value.toString()));
         assertNull(PathUtils.getPath(invalidKey, null));
         assertEquals(value, PathUtils.getPath(null, value.toString()));
+        assertEquals(value, PathUtils.getPath("", value.toString()));
     }
 
     @Test

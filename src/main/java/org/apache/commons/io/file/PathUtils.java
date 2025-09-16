@@ -1105,7 +1105,7 @@ public final class PathUtils {
      * @since 2.21.0
      */
     public static Path getPath(final String key, final String defaultPath) {
-        final String property = System.getProperty(Objects.toString(key, defaultPath), defaultPath);
+        final String property = key != null && !key.isEmpty() ? System.getProperty(key, defaultPath) : defaultPath;
         return property != null ? Paths.get(property) : null;
     }
 
