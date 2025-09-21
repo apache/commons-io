@@ -81,11 +81,11 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
 
     @AfterEach
     void cleanup() {
-        T originRo = getOriginRo().get();
+        final T originRo = getOriginRo().get();
         if (originRo instanceof Closeable) {
             IOUtils.closeQuietly((Closeable) originRo);
         }
-        T originRw = getOriginRw().get();
+        final T originRw = getOriginRw().get();
         if (originRw instanceof Closeable) {
             IOUtils.closeQuietly((Closeable) originRw);
         }
