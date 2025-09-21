@@ -22,6 +22,8 @@ import java.io.File;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import org.apache.commons.io.file.PathUtils;
+
 public abstract class AbstractIOFileFilterTest {
 
     final class TesterFalseFileFilter extends FalseFileFilter {
@@ -125,10 +127,9 @@ public abstract class AbstractIOFileFilterTest {
         }
     }
 
-    public static File determineWorkingDirectoryPath(final String key, final String defaultPath) {
+    public static File getWorkingDirectoryPath(final String key, final String defaultPath) {
         // Look for a system property to specify the working directory
-        final String workingPathName = System.getProperty(key, defaultPath);
-        return new File(workingPathName);
+        return PathUtils.getPath(key, defaultPath).toFile();
     }
 
     public static void resetFalseFilters(final TesterFalseFileFilter[] filters) {

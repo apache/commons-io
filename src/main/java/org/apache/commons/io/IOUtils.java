@@ -371,7 +371,7 @@ public class IOUtils {
     /**
      * Returns a new byte array of the given size.
      *
-     * TODO Consider guarding or warning against large allocations...
+     * TODO Consider guarding or warning against large allocations.
      *
      * @param size array size.
      * @return a new byte array of the given size.
@@ -1867,9 +1867,11 @@ public class IOUtils {
 
     /**
      * Reads bytes from an input stream.
+     * <p>
      * This implementation guarantees that it will read as many bytes
      * as possible before giving up; this may not always be the case for
      * subclasses of {@link InputStream}.
+     * </p>
      *
      * @param input where to read input from.
      * @param buffer destination.
@@ -1883,9 +1885,11 @@ public class IOUtils {
 
     /**
      * Reads bytes from an input stream.
+     * <p>
      * This implementation guarantees that it will read as many bytes
      * as possible before giving up; this may not always be the case for
      * subclasses of {@link InputStream}.
+     * </p>
      *
      * @param input where to read input.
      * @param buffer destination.
@@ -1961,9 +1965,11 @@ public class IOUtils {
 
     /**
      * Reads characters from an input character stream.
+     * <p>
      * This implementation guarantees that it will read as many characters
      * as possible before giving up; this may not always be the case for
      * subclasses of {@link Reader}.
+     * </p>
      *
      * @param reader where to read input from.
      * @param buffer destination.
@@ -1977,9 +1983,11 @@ public class IOUtils {
 
     /**
      * Reads characters from an input character stream.
+     * <p>
      * This implementation guarantees that it will read as many characters
      * as possible before giving up; this may not always be the case for
      * subclasses of {@link Reader}.
+     * </p>
      *
      * @param reader where to read input from.
      * @param buffer destination.
@@ -2337,18 +2345,18 @@ public class IOUtils {
 
     /**
      * Skips bytes from an input byte stream.
-     * This implementation guarantees that it will read as many bytes
-     * as possible before giving up; this may not always be the case for
-     * skip() implementations in subclasses of {@link InputStream}.
      * <p>
-     * Note that the implementation uses {@link InputStream#read(byte[], int, int)} rather
-     * than delegating to {@link InputStream#skip(long)}.
-     * This means that the method may be considerably less efficient than using the actual skip implementation,
-     * this is done to guarantee that the correct number of bytes are skipped.
+     * This implementation guarantees that it will read as many bytes as possible before giving up; this may not always be the case for skip() implementations
+     * in subclasses of {@link InputStream}.
+     * </p>
+     * <p>
+     * Note that the implementation uses {@link InputStream#read(byte[], int, int)} rather than delegating to {@link InputStream#skip(long)}. This means that
+     * the method may be considerably less efficient than using the actual skip implementation, this is done to guarantee that the correct number of bytes are
+     * skipped.
      * </p>
      *
      * @param input byte stream to skip.
-     * @param skip number of bytes to skip.
+     * @param skip  number of bytes to skip.
      * @return number of bytes actually skipped.
      * @throws IOException              if there is a problem reading the file.
      * @throws IllegalArgumentException if toSkip is negative.
@@ -2584,22 +2592,18 @@ public class IOUtils {
     }
 
     /**
-     * Fetches entire contents of an {@link InputStream} and represent
-     * same data as result InputStream.
+     * Fetches entire contents of an {@link InputStream} and represent same data as result InputStream.
      * <p>
      * This method is useful where,
      * </p>
      * <ul>
      * <li>Source InputStream is slow.</li>
-     * <li>It has network resources associated, so we cannot keep it open for
-     * long time.</li>
+     * <li>It has network resources associated, so we cannot keep it open for long time.</li>
      * <li>It has network timeout associated.</li>
      * </ul>
      * <p>
-     * It can be used in favor of {@link #toByteArray(InputStream)}, since it
-     * avoids unnecessary allocation and copy of byte[].<br>
-     * This method buffers the input internally, so there is no need to use a
-     * {@link BufferedInputStream}.
+     * It can be used in favor of {@link #toByteArray(InputStream)}, since it avoids unnecessary allocation and copy of byte[].<br>
+     * This method buffers the input internally, so there is no need to use a {@link BufferedInputStream}.
      * </p>
      *
      * @param input Stream to be fully buffered.
@@ -2612,26 +2616,22 @@ public class IOUtils {
     }
 
     /**
-     * Fetches entire contents of an {@link InputStream} and represent
-     * same data as result InputStream.
+     * Fetches entire contents of an {@link InputStream} and represent same data as result InputStream.
      * <p>
      * This method is useful where,
      * </p>
      * <ul>
      * <li>Source InputStream is slow.</li>
-     * <li>It has network resources associated, so we cannot keep it open for
-     * long time.</li>
+     * <li>It has network resources associated, so we cannot keep it open for long time.</li>
      * <li>It has network timeout associated.</li>
      * </ul>
      * <p>
-     * It can be used in favor of {@link #toByteArray(InputStream)}, since it
-     * avoids unnecessary allocation and copy of byte[].<br>
-     * This method buffers the input internally, so there is no need to use a
-     * {@link BufferedInputStream}.
+     * It can be used in favor of {@link #toByteArray(InputStream)}, since it avoids unnecessary allocation and copy of byte[].<br>
+     * This method buffers the input internally, so there is no need to use a {@link BufferedInputStream}.
      * </p>
      *
      * @param input Stream to be fully buffered.
-     * @param size the initial buffer size
+     * @param size  the initial buffer size.
      * @return A fully buffered stream.
      * @throws IOException if an I/O error occurs.
      * @since 2.5
@@ -2644,9 +2644,9 @@ public class IOUtils {
      * Returns the given reader if it is a {@link BufferedReader}, otherwise creates a BufferedReader from the given
      * reader.
      *
-     * @param reader the reader to wrap or return (not null)
-     * @return the given reader or a new {@link BufferedReader} for the given reader
-     * @throws NullPointerException if the input parameter is null
+     * @param reader the reader to wrap or return (not null).
+     * @return the given reader or a new {@link BufferedReader} for the given reader.
+     * @throws NullPointerException if the input parameter is null.
      * @see #buffer(Reader)
      * @since 2.2
      */
@@ -2658,10 +2658,10 @@ public class IOUtils {
      * Returns the given reader if it is a {@link BufferedReader}, otherwise creates a BufferedReader from the given
      * reader.
      *
-     * @param reader the reader to wrap or return (not null)
+     * @param reader the reader to wrap or return (not null).
      * @param size the buffer size, if a new BufferedReader is created.
-     * @return the given reader or a new {@link BufferedReader} for the given reader
-     * @throws NullPointerException if the input parameter is null
+     * @return the given reader or a new {@link BufferedReader} for the given reader.
+     * @throws NullPointerException if the input parameter is null.
      * @see #buffer(Reader)
      * @since 2.5
      */

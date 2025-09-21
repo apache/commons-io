@@ -62,6 +62,8 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add org.apache.commons.io.output.ProxyOutputStream.writeRepeat(int, long).</action>
       <action dev="pkarwasz" type="add"                due-to="Piotr P. Karwasz">Add length unit support in FileSystem limits.</action>
       <action dev="pkarwasz" type="add"                due-to="Piotr P. Karwasz">Add IOUtils.toByteArray(InputStream, int, int) for safer chunked reading with size validation.</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add org.apache.commons.io.file.PathUtils.getPath(String, String).</action>
+      <action dev="ggregory" type="add"                due-to="Gary Gregory">Add org.apache.commons.io.channels.ByteArraySeekableByteChannel.</action>
       <action dev="pkarwasz" type="add"                due-to="Piotr P. Karwasz">Add ByteArrayChannel, a simple in-memory `SeekableByteChannel` implementation.</action>
       <action dev="pkarwasz" type="add"                due-to="Piotr P. Karwasz">Add NIO channel support to `AbstractStreamBuilder`.</action>
       <!-- UPDATE -->

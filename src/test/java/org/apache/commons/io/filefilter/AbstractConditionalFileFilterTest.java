@@ -60,7 +60,7 @@ public abstract class AbstractConditionalFileFilterTest extends AbstractIOFileFi
 
     @BeforeEach
     public void setUp() {
-        this.workingPath = determineWorkingDirectoryPath(getWorkingPathNamePropertyKey(), getDefaultWorkingPath());
+        this.workingPath = getWorkingDirectoryPath(getWorkingPathNamePropertyKey(), getDefaultWorkingPath());
         this.file = new File(this.workingPath, TEST_FILE_NAME_PREFIX + 1 + TEST_FILE_TYPE);
         this.trueFilters = new TesterTrueFileFilter[4];
         this.falseFilters = new TesterFalseFileFilter[4];

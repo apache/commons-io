@@ -2103,12 +2103,12 @@ public class FileUtils {
      * All files found are filtered by an IOFileFilter.
      * </p>
      *
-     * @param directory  the directory to search in
+     * @param directory  The directory to search.
      * @param fileFilter filter to apply when finding files.
      * @param dirFilter  optional filter to apply when finding subdirectories.
      *                   If this parameter is {@code null}, subdirectories will not be included in the
      *                   search. Use TrueFileFilter.INSTANCE to match all directories.
-     * @return an iterator of {@link File} for the matching files
+     * @return an iterator of {@link File} for the matching files.
      * @see org.apache.commons.io.filefilter.FileFilterUtils
      * @see org.apache.commons.io.filefilter.NameFileFilter
      * @since 1.2
@@ -2124,11 +2124,11 @@ public class FileUtils {
      * The resulting iterator MUST be consumed in its entirety in order to close its underlying stream.
      * </p>
      *
-     * @param directory  the directory to search in
-     * @param extensions an array of extensions, for example, {"java","xml"}. If this
+     * @param directory  The directory to search.
+     * @param extensions an array of extensions, for example, <code>{"java", "xml"}</code>. If this
      *                   parameter is {@code null}, all files are returned.
-     * @param recursive  if true all subdirectories are searched as well
-     * @return an iterator of {@link File} with the matching files
+     * @param recursive  if true all subdirectories are searched as well.
+     * @return an iterator of {@link File} with the matching files.
      * @since 1.2
      */
     public static Iterator<File> iterateFiles(final File directory, final String[] extensions, final boolean recursive) {
@@ -2148,12 +2148,12 @@ public class FileUtils {
      * The resulting iterator includes the subdirectories themselves.
      * </p>
      *
-     * @param directory  the directory to search in
+     * @param directory  The directory to search.
      * @param fileFilter filter to apply when finding files.
      * @param dirFilter  optional filter to apply when finding subdirectories.
      *                   If this parameter is {@code null}, subdirectories will not be included in the
      *                   search. Use TrueFileFilter.INSTANCE to match all directories.
-     * @return an iterator of {@link File} for the matching files
+     * @return an iterator of {@link File} for the matching files.
      * @see org.apache.commons.io.filefilter.FileFilterUtils
      * @see org.apache.commons.io.filefilter.NameFileFilter
      * @since 2.2
@@ -2234,8 +2234,8 @@ public class FileUtils {
     /**
      * Returns an Iterator for the lines in a {@link File} using the default encoding for the VM.
      *
-     * @param file the file to open for input, must not be {@code null}
-     * @return an Iterator of the lines in the file, never {@code null}
+     * @param file the file to open for input, must not be {@code null}.
+     * @return an Iterator of the lines in the file, never {@code null}.
      * @throws NullPointerException if file is {@code null}.
      * @throws FileNotFoundException if the file does not exist, is a directory rather than a regular file, or for some
      *         other reason cannot be opened for reading.
@@ -2263,7 +2263,7 @@ public class FileUtils {
      * try {
      *   while (it.hasNext()) {
      *     String line = it.nextLine();
-     *     /// do something with line
+     *     // do something with line
      *   }
      * } finally {
      *   LineIterator.closeQuietly(iterator);
@@ -2274,8 +2274,8 @@ public class FileUtils {
      * underlying stream is closed.
      * </p>
      *
-     * @param file     the file to open for input, must not be {@code null}
-     * @param charsetName the name of the requested charset, {@code null} means platform default
+     * @param file     the file to open for input, must not be {@code null}.
+     * @param charsetName the name of the requested charset, {@code null} means platform default.
      * @return a LineIterator for lines in the file, never {@code null}; MUST be closed by the caller.
      * @throws NullPointerException if file is {@code null}.
      * @throws FileNotFoundException if the file does not exist, is a directory rather than a regular file, or for some
@@ -2349,7 +2349,7 @@ public class FileUtils {
      * </p>
      * <p>
      * An example: If you want to search through all directories called
-     * "temp" you pass in {@code FileFilterUtils.NameFileFilter("temp")}
+     * "temp" you pass in {@code FileFilterUtils.NameFileFilter("temp")}.
      * </p>
      * <p>
      * Another common usage of this method is find files in a directory
@@ -2357,13 +2357,13 @@ public class FileUtils {
      * in {@code FileFilterUtils.makeCVSAware(null)}.
      * </p>
      *
-     * @param directory  the directory to search in
+     * @param directory  The directory to search.
      * @param fileFilter filter to apply when finding files. Must not be {@code null},
      *                   use {@link TrueFileFilter#INSTANCE} to match all files in selected directories.
      * @param dirFilter  optional filter to apply when finding subdirectories.
      *                   If this parameter is {@code null}, subdirectories will not be included in the
      *                   search. Use {@link TrueFileFilter#INSTANCE} to match all directories.
-     * @return a collection of {@link File} with the matching files
+     * @return a collection of {@link File} with the matching files.
      * @see org.apache.commons.io.filefilter.FileFilterUtils
      * @see org.apache.commons.io.filefilter.NameFileFilter
      */
@@ -2380,9 +2380,10 @@ public class FileUtils {
      * @param files The list to add found Files, not null.
      * @param recursive Whether or not to recurse into subdirectories.
      * @param filter How to filter files, not null.
+     * @return The given list.
      */
     @SuppressWarnings("null")
-    private static void listFiles(final File directory, final List<File> files, final boolean recursive, final FilenameFilter filter) {
+    private static List<File> listFiles(final File directory, final List<File> files, final boolean recursive, final FilenameFilter filter) {
         final File[] listFiles = directory.listFiles();
         if (listFiles != null) {
             // Only allocate if you must.
@@ -2398,24 +2399,21 @@ public class FileUtils {
                 dirs.forEach(d -> listFiles(d, files, true, filter));
             }
         }
+        return files;
     }
 
     /**
      * Lists files within a given directory (and optionally its subdirectories)
      * which match an array of extensions.
      *
-     * @param directory  the directory to search in
-     * @param extensions an array of extensions, for example, {"java","xml"}. If this
+     * @param directory  The directory to search.
+     * @param extensions an array of extensions, for example, <code>{"java", "xml"}</code>. If this
      *                   parameter is {@code null}, all files are returned.
      * @param recursive  if true all subdirectories are searched as well
-     * @return a collection of {@link File} with the matching files
+     * @return a collection of {@link File} with the matching files.
      */
     public static Collection<File> listFiles(final File directory, final String[] extensions, final boolean recursive) {
-        // IO-856: Don't use NIO to path walk, allocate as little as possible while traversing.
-        final List<File> files = new ArrayList<>();
-        final FilenameFilter filter = extensions != null ? toSuffixFileFilter(extensions) : TrueFileFilter.INSTANCE;
-        listFiles(directory, files, recursive, filter);
-        return files;
+        return listFiles(directory, new ArrayList<>(), recursive, extensions != null ? toSuffixFileFilter(extensions) : TrueFileFilter.INSTANCE);
     }
 
     /**
@@ -2426,12 +2424,12 @@ public class FileUtils {
      * any subdirectories that match the directory filter.
      * </p>
      *
-     * @param directory  the directory to search in
+     * @param directory  The directory to search.
      * @param fileFilter filter to apply when finding files.
      * @param dirFilter  optional filter to apply when finding subdirectories.
      *                   If this parameter is {@code null}, subdirectories will not be included in the
      *                   search. Use TrueFileFilter.INSTANCE to match all directories.
-     * @return a collection of {@link File} with the matching files
+     * @return a collection of {@link File} with the matching files.
      * @see org.apache.commons.io.FileUtils#listFiles
      * @see org.apache.commons.io.filefilter.FileFilterUtils
      * @see org.apache.commons.io.filefilter.NameFileFilter
@@ -2543,7 +2541,7 @@ public class FileUtils {
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
      * @throws FileExistsException if the destination file exists.
      * @throws FileNotFoundException if the source file does not exist.
-     * @throws IllegalArgumentException if {@code srcFile} is a directory
+     * @throws IllegalArgumentException if {@code srcFile} is a directory.
      * @throws IOException if an error occurs.
      * @since 1.4
      */
@@ -2563,7 +2561,7 @@ public class FileUtils {
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
      * @throws FileExistsException if the destination file exists.
      * @throws FileNotFoundException if the source file does not exist.
-     * @throws IllegalArgumentException if {@code srcFile} is a directory
+     * @throws IllegalArgumentException if {@code srcFile} is a directory.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
      * @since 2.9.0
      */
@@ -2589,7 +2587,7 @@ public class FileUtils {
      * </p>
      *
      * @param srcFile the file to be moved.
-     * @param destDir the directory to move the file into
+     * @param destDir the directory to move the file into.
      * @param createDestDir if {@code true} create the destination directory. If {@code false} throw an
      *        IOException if the destination directory does not already exist.
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
@@ -2599,7 +2597,7 @@ public class FileUtils {
      * @throws IOException if the directory was not created along with all its parent directories, if enabled.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
      * @throws SecurityException See {@link File#mkdirs()}.
-     * @throws IllegalArgumentException if {@code destDir} exists but is not a directory
+     * @throws IllegalArgumentException if {@code destDir} exists but is not a directory.
      * @since 1.4
      */
     public static void moveFileToDirectory(final File srcFile, final File destDir, final boolean createDestDir) throws IOException {
@@ -2766,7 +2764,7 @@ public class FileUtils {
      * @throws IOException          if an I/O error occurs, including when the file does not exist, is a directory rather than a regular file, or for some other
      *                              reason why the file cannot be opened for reading.
      * @since 1.3.1
-     * @deprecated Use {@link #readFileToString(File, Charset)} instead (and specify the appropriate encoding)
+     * @deprecated Use {@link #readFileToString(File, Charset)} instead (and specify the appropriate encoding).
      */
     @Deprecated
     public static String readFileToString(final File file) throws IOException {
@@ -2815,7 +2813,7 @@ public class FileUtils {
      * @throws IOException          if an I/O error occurs, including when the file does not exist, is a directory rather than a regular file, or for some other
      *                              reason why the file cannot be opened for reading.
      * @since 1.3
-     * @deprecated Use {@link #readLines(File, Charset)} instead (and specify the appropriate encoding)
+     * @deprecated Use {@link #readLines(File, Charset)} instead (and specify the appropriate encoding).
      */
     @Deprecated
     public static List<String> readLines(final File file) throws IOException {
@@ -2915,8 +2913,7 @@ public class FileUtils {
      *
      * @param sourceFile The source file to query.
      * @param targetFile The target file or directory to set.
-     * @return {@code true} if and only if the operation succeeded;
-     *          {@code false} otherwise
+     * @return {@code true} if and only if the operation succeeded; {@code false} otherwise.
      * @throws NullPointerException if sourceFile is {@code null}.
      * @throws NullPointerException if targetFile is {@code null}.
      */
@@ -3038,9 +3035,9 @@ public class FileUtils {
      * closed stream causes a {@link IllegalStateException}.
      * </p>
      *
-     * @param directory  the directory to search in
+     * @param directory  The directory to search.
      * @param recursive  if true all subdirectories are searched as well
-     * @param extensions an array of extensions, for example, {"java","xml"}. If this parameter is {@code null}, all files are returned.
+     * @param extensions an array of extensions, for example, <code>{"java", "xml"}</code>. If this parameter is {@code null}, all files are returned.
      * @return a Stream of {@link File} for matching files.
      * @throws IOException if an I/O error is thrown when accessing the starting file.
      * @since 2.9.0
