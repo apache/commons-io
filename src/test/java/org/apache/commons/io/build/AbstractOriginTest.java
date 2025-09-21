@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,6 +46,7 @@ import java.util.Objects;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractOrigin.RandomAccessFileOrigin;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -71,10 +73,22 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
     protected Path tempPath;
 
     @BeforeEach
-    public void beforeEach() throws IOException {
+    void beforeEach() throws IOException {
         setOriginRo(newOriginRo());
         resetOriginRw();
         setOriginRw(newOriginRw());
+    }
+
+    @AfterEach
+    void cleanup() {
+        T originRo = getOriginRo().get();
+        if (originRo instanceof Closeable) {
+            IOUtils.closeQuietly((Closeable) originRo);
+        }
+        T originRw = getOriginRw().get();
+        if (originRw instanceof Closeable) {
+            IOUtils.closeQuietly((Closeable) originRw);
+        }
     }
 
     protected AbstractOrigin<T, B> getOriginRo() {
