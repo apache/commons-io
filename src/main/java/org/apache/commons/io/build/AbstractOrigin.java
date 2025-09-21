@@ -48,7 +48,7 @@ import org.apache.commons.io.IORandomAccessFile;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.RandomAccessFileMode;
 import org.apache.commons.io.RandomAccessFiles;
-import org.apache.commons.io.channels.ByteArrayChannel;
+import org.apache.commons.io.channels.ByteArraySeekableByteChannel;
 import org.apache.commons.io.input.BufferedFileChannelInputStream;
 import org.apache.commons.io.input.CharSequenceInputStream;
 import org.apache.commons.io.input.CharSequenceReader;
@@ -426,7 +426,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public ReadableByteChannel getReadableByteChannel(OpenOption... options) throws IOException {
-            return ByteArrayChannel.wrap(getByteArray());
+            return ByteArraySeekableByteChannel.wrap(getByteArray());
         }
 
         @Override
@@ -492,7 +492,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public ReadableByteChannel getReadableByteChannel(OpenOption... options) throws IOException {
-            return ByteArrayChannel.wrap(getByteArray());
+            return ByteArraySeekableByteChannel.wrap(getByteArray());
         }
 
         @Override

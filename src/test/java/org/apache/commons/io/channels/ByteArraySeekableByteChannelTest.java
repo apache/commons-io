@@ -19,10 +19,12 @@
 
 package org.apache.commons.io.channels;
 
+import static org.apache.commons.lang3.ArrayUtils.EMPTY_BYTE_ARRAY;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -30,14 +32,66 @@ import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.stream.Stream;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.function.IOSupplier;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class ByteArraySeekableByteChannelTest {
 
-    private final byte[] testData = "Some data".getBytes(StandardCharsets.UTF_8);
+    private static final byte[] testData = "Some data".getBytes(StandardCharsets.UTF_8);
+
+    private static byte[] getTestData() {
+        return testData.clone();
+    }
+
+    static Stream<Arguments> testConstructor() {
+        return Stream.of(
+                Arguments.of(
+                        (IOSupplier<ByteArraySeekableByteChannel>) ByteArraySeekableByteChannel::new,
+                        EMPTY_BYTE_ARRAY,
+                        IOUtils.DEFAULT_BUFFER_SIZE),
+                Arguments.of(
+                        (IOSupplier<ByteArraySeekableByteChannel>) () -> new ByteArraySeekableByteChannel(8),
+                        EMPTY_BYTE_ARRAY,
+                        8),
+                Arguments.of(
+                        (IOSupplier<ByteArraySeekableByteChannel>) () -> new ByteArraySeekableByteChannel(16),
+                        EMPTY_BYTE_ARRAY,
+                        16),
+                Arguments.of(
+                        (IOSupplier<ByteArraySeekableByteChannel>)
+                                () -> ByteArraySeekableByteChannel.wrap(EMPTY_BYTE_ARRAY),
+                        EMPTY_BYTE_ARRAY,
+                        0),
+                Arguments.of(
+                        (IOSupplier<ByteArraySeekableByteChannel>)
+                                () -> ByteArraySeekableByteChannel.wrap(getTestData()),
+                        getTestData(),
+                        testData.length));
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void testConstructor(IOSupplier<ByteArraySeekableByteChannel> supplier, byte[] expected, int capacity) throws IOException {
+        try (ByteArraySeekableByteChannel channel = supplier.get()) {
+            assertEquals(0, channel.position());
+            assertEquals(expected.length, channel.size());
+            assertEquals(capacity, channel.data.length);
+            assertArrayEquals(expected, channel.toByteArray());
+        }
+    }
+
+    @Test
+    void testConstructorInvalid() {
+        assertThrows(IllegalArgumentException.class, () -> new ByteArraySeekableByteChannel(-1));
+        assertThrows(NullPointerException.class, () -> ByteArraySeekableByteChannel.wrap(null));
+    }
 
     /*
      * <q>If the stream is already closed then invoking this method has no effect.</q>
@@ -59,7 +113,7 @@ class ByteArraySeekableByteChannelTest {
     @ParameterizedTest
     @ValueSource(ints = { 0, 1, 2, 3, 4, 5, 6 })
     void testReadingFromAPositionAfterEndReturnsEOF(final int size) throws Exception {
-        try (SeekableByteChannel c = new ByteArraySeekableByteChannel(size)) {
+        try (SeekableByteChannel c = ByteArraySeekableByteChannel.wrap(new byte[size])) {
             final int position = 2;
             c.position(position);
             assertEquals(position, c.position());
@@ -71,7 +125,7 @@ class ByteArraySeekableByteChannelTest {
 
     @Test
     void testShouldReadContentsProperly() throws IOException {
-        try (ByteArraySeekableByteChannel c = new ByteArraySeekableByteChannel(testData)) {
+        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
             final ByteBuffer readBuffer = ByteBuffer.allocate(testData.length);
             final int readCount = c.read(readBuffer);
             assertEquals(testData.length, readCount);
@@ -82,7 +136,7 @@ class ByteArraySeekableByteChannelTest {
 
     @Test
     void testShouldReadContentsWhenBiggerBufferSupplied() throws IOException {
-        try (ByteArraySeekableByteChannel c = new ByteArraySeekableByteChannel(testData)) {
+        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
             final ByteBuffer readBuffer = ByteBuffer.allocate(testData.length + 1);
             final int readCount = c.read(readBuffer);
             assertEquals(testData.length, readCount);
@@ -93,7 +147,7 @@ class ByteArraySeekableByteChannelTest {
 
     @Test
     void testShouldReadDataFromSetPosition() throws IOException {
-        try (ByteArraySeekableByteChannel c = new ByteArraySeekableByteChannel(testData)) {
+        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
             final ByteBuffer readBuffer = ByteBuffer.allocate(4);
             c.position(5L);
             final int readCount = c.read(readBuffer);
@@ -105,7 +159,7 @@ class ByteArraySeekableByteChannelTest {
 
     @Test
     void testShouldSetProperPosition() throws IOException {
-        try (ByteArraySeekableByteChannel c = new ByteArraySeekableByteChannel(testData)) {
+        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
             final long posAtFour = c.position(4L).position();
             final long posAtTheEnd = c.position(testData.length).position();
             final long posPastTheEnd = c.position(testData.length + 1L).position();
@@ -117,7 +171,7 @@ class ByteArraySeekableByteChannelTest {
 
     @Test
     void testShouldSetProperPositionOnTruncate() throws IOException {
-        try (ByteArraySeekableByteChannel c = new ByteArraySeekableByteChannel(testData)) {
+        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
             c.position(testData.length);
             c.truncate(4L);
             assertEquals(4L, c.position());
@@ -127,7 +181,7 @@ class ByteArraySeekableByteChannelTest {
 
     @Test
     void testShouldSignalEOFWhenPositionAtTheEnd() throws IOException {
-        try (ByteArraySeekableByteChannel c = new ByteArraySeekableByteChannel(testData)) {
+        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
             final ByteBuffer readBuffer = ByteBuffer.allocate(testData.length);
             c.position(testData.length + 1);
             final int readCount = c.read(readBuffer);
@@ -167,7 +221,7 @@ class ByteArraySeekableByteChannelTest {
 
     @Test
     void testShouldTruncateContentsProperly() throws ClosedChannelException {
-        try (ByteArraySeekableByteChannel c = new ByteArraySeekableByteChannel(testData)) {
+        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
             c.truncate(4);
             final byte[] bytes = Arrays.copyOf(c.array(), (int) c.size());
             assertEquals("Some", new String(bytes, StandardCharsets.UTF_8));
@@ -179,7 +233,7 @@ class ByteArraySeekableByteChannelTest {
     @Test
     void testShouldWriteDataProperly() throws IOException {
         try (ByteArraySeekableByteChannel c = new ByteArraySeekableByteChannel()) {
-            final ByteBuffer inData = ByteBuffer.wrap(testData);
+            final ByteBuffer inData = ByteBuffer.wrap(getTestData());
             final int writeCount = c.write(inData);
             assertEquals(testData.length, writeCount);
             assertEquals(testData.length, c.position());
@@ -190,7 +244,7 @@ class ByteArraySeekableByteChannelTest {
 
     @Test
     void testShouldWriteDataProperlyAfterPositionSet() throws IOException {
-        try (ByteArraySeekableByteChannel c = new ByteArraySeekableByteChannel(testData)) {
+        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
             final ByteBuffer inData = ByteBuffer.wrap(testData);
             final ByteBuffer expectedData = ByteBuffer.allocate(testData.length + 5).put(testData, 0, 5).put(testData);
             c.position(5L);
@@ -201,6 +255,28 @@ class ByteArraySeekableByteChannelTest {
         }
     }
     // https://docs.oracle.com/javase/8/docs/api/java/nio/channels/SeekableByteChannel.html#size()
+
+    static Stream<Arguments> testShouldResizeWhenWritingMoreDataThanCapacity() {
+        return Stream.of(
+                // Resize from 0
+                Arguments.of(EMPTY_BYTE_ARRAY, 1),
+                // Resize less than double
+                Arguments.of(new byte[8], 1),
+                // Resize more that double
+                Arguments.of(new byte[8], 20));
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void testShouldResizeWhenWritingMoreDataThanCapacity(byte[] data, int wanted) throws IOException {
+        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(data)) {
+            c.position(data.length);
+            final ByteBuffer inData = ByteBuffer.wrap(new byte[wanted]);
+            final int writeCount = c.write(inData);
+            assertEquals(wanted, writeCount);
+            assertTrue(c.data.length >= data.length + wanted, "Capacity not increased sufficiently");
+        }
+    }
 
     /*
      * <q>ClosedChannelException - If this channel is closed</q>
@@ -239,7 +315,7 @@ class ByteArraySeekableByteChannelTest {
      */
     @Test
     void testTruncateDoesntChangeSmallPosition() throws Exception {
-        try (SeekableByteChannel c = new ByteArraySeekableByteChannel(testData)) {
+        try (SeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
             c.position(1);
             c.truncate(testData.length - 1);
             assertEquals(testData.length - 1, c.size());
@@ -252,7 +328,7 @@ class ByteArraySeekableByteChannelTest {
      */
     @Test
     void testTruncateMovesPositionWhenNewSizeIsBiggerThanSizeAndPositionIsEvenBigger() throws Exception {
-        try (SeekableByteChannel c = new ByteArraySeekableByteChannel(testData)) {
+        try (SeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
             c.position(2 * testData.length);
             c.truncate(testData.length + 1);
             assertEquals(testData.length, c.size());
@@ -266,7 +342,7 @@ class ByteArraySeekableByteChannelTest {
      */
     @Test
     void testTruncateMovesPositionWhenNotResizingButPositionBiggerThanSize() throws Exception {
-        try (SeekableByteChannel c = new ByteArraySeekableByteChannel(testData)) {
+        try (SeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
             c.position(2 * testData.length);
             c.truncate(testData.length);
             assertEquals(testData.length, c.size());
@@ -279,7 +355,7 @@ class ByteArraySeekableByteChannelTest {
      */
     @Test
     void testTruncateMovesPositionWhenShrinkingBeyondPosition() throws Exception {
-        try (SeekableByteChannel c = new ByteArraySeekableByteChannel(testData)) {
+        try (SeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
             c.position(4);
             c.truncate(3);
             assertEquals(3, c.size());
@@ -292,7 +368,7 @@ class ByteArraySeekableByteChannelTest {
      */
     @Test
     void testTruncateToBiggerSizeDoesntChangeAnything() throws Exception {
-        try (SeekableByteChannel c = new ByteArraySeekableByteChannel(testData)) {
+        try (SeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
             assertEquals(testData.length, c.size());
             c.truncate(testData.length + 1);
             assertEquals(testData.length, c.size());
@@ -307,7 +383,7 @@ class ByteArraySeekableByteChannelTest {
      */
     @Test
     void testTruncateToCurrentSizeDoesntChangeAnything() throws Exception {
-        try (SeekableByteChannel c = new ByteArraySeekableByteChannel(testData)) {
+        try (SeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
             assertEquals(testData.length, c.size());
             c.truncate(testData.length);
             assertEquals(testData.length, c.size());
@@ -359,7 +435,7 @@ class ByteArraySeekableByteChannelTest {
         try (SeekableByteChannel c = new ByteArraySeekableByteChannel()) {
             c.position(2);
             assertEquals(2, c.position());
-            final ByteBuffer inData = ByteBuffer.wrap(testData);
+            final ByteBuffer inData = ByteBuffer.wrap(getTestData());
             assertEquals(testData.length, c.write(inData));
             assertEquals(testData.length + 2, c.size());
             c.position(2);
