@@ -224,10 +224,11 @@ public class IOUtils {
     /**
      * The maximum size of an array in many Java VMs.
      * <p>
-     * The constant is copied from OpenJDK's {@link jdk.internal.util.ArraysSupport#SOFT_MAX_ARRAY_LENGTH}.
+     * The constant is copied from OpenJDK's {@code jdk.internal.util.ArraysSupport#SOFT_MAX_ARRAY_LENGTH}.
      * </p>
+     * @since 2.21.0
      */
-    private static final int SOFT_MAX_ARRAY_LENGTH = Integer.MAX_VALUE - 8;
+    public static final int SOFT_MAX_ARRAY_LENGTH = Integer.MAX_VALUE - 8;
 
     /**
      * Returns the given InputStream if it is already a {@link BufferedInputStream}, otherwise creates a

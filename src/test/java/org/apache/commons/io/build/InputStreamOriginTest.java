@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.OpenOption;
 import java.nio.file.StandardOpenOption;
@@ -60,13 +61,6 @@ class InputStreamOriginTest extends AbstractOriginTest<InputStream, InputStreamO
 
     @Override
     @Test
-    void testGetOutputStream() {
-        // Cannot convert a InputStream to an OutputStream.
-        assertThrows(UnsupportedOperationException.class, super::testGetOutputStream);
-    }
-
-    @Override
-    @Test
     void testGetPath() {
         // Cannot convert a InputStream to a Path.
         assertThrows(UnsupportedOperationException.class, super::testGetPath);
@@ -89,9 +83,22 @@ class InputStreamOriginTest extends AbstractOriginTest<InputStream, InputStreamO
 
     @Override
     @Test
+    void testGetOutputStream() {
+        // Cannot convert a InputStream to an OutputStream.
+        assertThrows(UnsupportedOperationException.class, super::testGetOutputStream);
+    }
+
+    @Override
+    @Test
     void testGetWriter() {
         // Cannot convert a InputStream to a Writer.
         assertThrows(UnsupportedOperationException.class, super::testGetWriter);
     }
 
+    @Override
+    @Test
+    void testGetWritableByteChannel() throws IOException {
+        // Cannot convert a InputStream to a WritableByteChannel.
+        assertThrows(UnsupportedOperationException.class, super::testGetWritableByteChannel);
+    }
 }

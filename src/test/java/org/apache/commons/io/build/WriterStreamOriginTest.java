@@ -18,6 +18,7 @@ package org.apache.commons.io.build;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.file.OpenOption;
@@ -91,13 +92,6 @@ class WriterStreamOriginTest extends AbstractOriginTest<Writer, WriterOrigin> {
 
     @Override
     @Test
-    void testGetInputStream() {
-        // Cannot convert a Writer to an InputStream.
-        assertThrows(UnsupportedOperationException.class, super::testGetInputStream);
-    }
-
-    @Override
-    @Test
     void testGetPath() {
         // Cannot convert a Writer to a Path.
         assertThrows(UnsupportedOperationException.class, super::testGetPath);
@@ -120,9 +114,27 @@ class WriterStreamOriginTest extends AbstractOriginTest<Writer, WriterOrigin> {
 
     @Override
     @Test
+    void testGetInputStream() {
+        // Cannot convert a Writer to an InputStream.
+        assertThrows(UnsupportedOperationException.class, super::testGetInputStream);
+    }
+
+    @Override
+    @Test
     void testGetReader() {
         // Cannot convert a Writer to a Reader.
         assertThrows(UnsupportedOperationException.class, super::testGetReader);
+    }
+
+    @Override
+    void testGetReadableByteChannel() throws IOException {
+        // Cannot convert a Writer to a ReadableByteChannel.
+        assertThrows(UnsupportedOperationException.class, super::testGetReadableByteChannel);
+    }
+
+    @Override
+    void testGetWritableByteChannel() throws IOException {
+        super.testGetWritableByteChannel(false);
     }
 
     @Override

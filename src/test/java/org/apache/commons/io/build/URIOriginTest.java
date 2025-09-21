@@ -18,11 +18,16 @@ package org.apache.commons.io.build;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import org.apache.commons.io.build.AbstractOrigin.URIOrigin;
+import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -43,7 +48,14 @@ class URIOriginTest extends AbstractOriginTest<URI, URIOrigin> {
 
     @Override
     protected URIOrigin newOriginRw() {
-        return new URIOrigin(Paths.get(FILE_NAME_RW).toUri());
+        return new URIOrigin(tempPath.resolve(FILE_NAME_RW).toUri());
+    }
+
+    @Override
+    protected void resetOriginRw() throws IOException {
+        // Reset the file
+        final Path rwPath = tempPath.resolve(FILE_NAME_RW);
+        Files.write(rwPath, ArrayUtils.EMPTY_BYTE_ARRAY, StandardOpenOption.CREATE);
     }
 
     @ParameterizedTest

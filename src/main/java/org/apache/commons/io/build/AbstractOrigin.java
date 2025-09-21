@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.commons.io.build;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,13 +29,17 @@ import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URI;
+import java.nio.channels.Channel;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.SeekableByteChannel;
+import java.nio.channels.WritableByteChannel;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.nio.file.spi.FileSystemProvider;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -44,7 +48,7 @@ import org.apache.commons.io.IORandomAccessFile;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.RandomAccessFileMode;
 import org.apache.commons.io.RandomAccessFiles;
-import org.apache.commons.io.file.spi.FileSystemProviders;
+import org.apache.commons.io.channels.ByteArrayChannel;
 import org.apache.commons.io.input.BufferedFileChannelInputStream;
 import org.apache.commons.io.input.CharSequenceInputStream;
 import org.apache.commons.io.input.CharSequenceReader;
@@ -53,15 +57,246 @@ import org.apache.commons.io.output.RandomAccessFileOutputStream;
 import org.apache.commons.io.output.WriterOutputStream;
 
 /**
- * Abstracts the origin of data for builders like a {@link File}, {@link Path}, {@link Reader}, {@link Writer}, {@link InputStream}, {@link OutputStream}, and
- * {@link URI}.
+ * Abstract base class that encapsulates the <em>origin</em> of data used by Commons IO builders.
  * <p>
- * Some methods may throw {@link UnsupportedOperationException} if that method is not implemented in a concrete subclass, see {@link #getFile()} and
- * {@link #getPath()}.
+ * An origin represents where bytes/characters come from or go to, such as a {@link File}, {@link Path},
+ * {@link Reader}, {@link Writer}, {@link InputStream}, {@link OutputStream}, or {@link URI}. Concrete subclasses
+ * expose only the operations that make sense for the underlying source or sink; invoking an unsupported operation
+ * results in {@link UnsupportedOperationException} (see, for example, {@link #getFile()} and {@link #getPath()}).
  * </p>
  *
- * @param <T> the type of instances to build.
- * @param <B> the type of builder subclass.
+ * <p>
+ * The table below summarizes which views and conversions are supported for each origin type.
+ * Column headers show the target view; cells indicate whether that view is available from the origin in that row.
+ * </p>
+ *
+ * <table>
+ *   <caption>Origin support matrix</caption>
+ *   <thead>
+ *     <tr>
+ *       <th>Origin Type</th>
+ *       <th>byte[]</th>
+ *       <th>CS</th>
+ *       <th>File</th>
+ *       <th>Path</th>
+ *       <th>RAF</th>
+ *       <th>IS</th>
+ *       <th>Reader</th>
+ *       <th>RBC</th>
+ *       <th>OS</th>
+ *       <th>Writer</th>
+ *       <th>WBC</th>
+ *     </tr>
+ *   </thead>
+ *   <tbody>
+ *     <tr>
+ *       <td>byte[]</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *     </tr>
+ *     <tr>
+ *       <td>CharSequence (CS)</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✔<sup>1</sup></td>
+ *       <td>✔</td>
+ *       <td>✔<sup>1</sup></td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *     </tr>
+ *     <tr>
+ *       <td>File</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *     </tr>
+ *     <tr>
+ *       <td>Path</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *     </tr>
+ *     <tr>
+ *       <td>IORandomAccessFile</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *     </tr>
+ *     <tr>
+ *       <td>RandomAccessFile (RAF)</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *     </tr>
+ *     <tr>
+ *       <td>InputStream (IS)</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *     </tr>
+ *     <tr>
+ *       <td>Reader</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✔<sup>1</sup></td>
+ *       <td>✔</td>
+ *       <td>✔<sup>1</sup></td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *     </tr>
+ *     <tr>
+ *       <td>ReadableByteChannel (RBC)</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *     </tr>
+ *     <tr>
+ *       <td>OutputStream (OS)</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *     </tr>
+ *     <tr>
+ *       <td>Writer</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✔<sup>1</sup></td>
+ *       <td>✔</td>
+ *       <td>✔<sup>1</sup></td>
+ *     </tr>
+ *     <tr>
+ *       <td>WritableByteChannel (WBC)</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *     </tr>
+ *     <tr>
+ *       <td>URI (FileSystem)</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *     </tr>
+ *     <tr>
+ *       <td>URI (http/https))</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *     </tr>
+ *   </tbody>
+ * </table>
+ *
+ * <p><strong>Legend</strong></p>
+ * <ul>
+ *   <li>✔ = Supported</li>
+ *   <li>✖ = Not supported (throws {@link UnsupportedOperationException})</li>
+ *   <li><sup>1</sup> = Characters are converted to bytes using the default {@link Charset}.</li>
+ * </ul>
+ *
+ * @param <T> the type produced by the builder.
+ * @param <B> the concrete builder subclass type.
  * @since 2.12.0
  */
 public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends AbstractSupplier<T, B> {
@@ -138,6 +373,16 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         }
 
         @Override
+        public ReadableByteChannel getReadableByteChannel(OpenOption... options) throws IOException {
+            return getRandomAccessFile(options).getChannel();
+        }
+
+        @Override
+        public WritableByteChannel getWritableByteChannel(OpenOption... options) throws IOException {
+            return getRandomAccessFile(options).getChannel();
+        }
+
+        @Override
         public long size() throws IOException {
             return origin.length();
         }
@@ -171,7 +416,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          */
         @Override
         public InputStream getInputStream(final OpenOption... options) throws IOException {
-            return new ByteArrayInputStream(origin);
+            return new ByteArrayInputStream(getByteArray());
         }
 
         @Override
@@ -180,10 +425,14 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         }
 
         @Override
+        public ReadableByteChannel getReadableByteChannel(OpenOption... options) throws IOException {
+            return ByteArrayChannel.wrap(getByteArray());
+        }
+
+        @Override
         public long size() throws IOException {
             return origin.length;
         }
-
     }
 
     /**
@@ -203,7 +452,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         @Override
         public byte[] getByteArray() {
             // TODO Pass in a Charset? Consider if call sites actually need this.
-            return origin.toString().getBytes(Charset.defaultCharset());
+            return getCharSequence(null).toString().getBytes(Charset.defaultCharset());
         }
 
         /**
@@ -227,7 +476,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         @Override
         public InputStream getInputStream(final OpenOption... options) throws IOException {
             // TODO Pass in a Charset? Consider if call sites actually need this.
-            return CharSequenceInputStream.builder().setCharSequence(getCharSequence(Charset.defaultCharset())).get();
+            return CharSequenceInputStream.builder().setCharSequence(getCharSequence(null)).get();
         }
 
         /**
@@ -238,7 +487,12 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          */
         @Override
         public Reader getReader(final Charset charset) throws IOException {
-            return new CharSequenceReader(get());
+            return new CharSequenceReader(getCharSequence(charset));
+        }
+
+        @Override
+        public ReadableByteChannel getReadableByteChannel(OpenOption... options) throws IOException {
+            return ByteArrayChannel.wrap(getByteArray());
         }
 
         @Override
@@ -267,7 +521,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public byte[] getByteArray(final long position, final int length) throws IOException {
-            try (RandomAccessFile raf = RandomAccessFileMode.READ_ONLY.create(origin)) {
+            try (RandomAccessFile raf = RandomAccessFileMode.READ_ONLY.create(getFile())) {
                 return RandomAccessFiles.read(raf, position, length);
             }
         }
@@ -280,9 +534,18 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public Path getPath() {
-            return get().toPath();
+            return getFile().toPath();
         }
 
+        @Override
+        public ReadableByteChannel getReadableByteChannel(OpenOption... options) throws IOException {
+            return Files.newByteChannel(getPath(), options);
+        }
+
+        @Override
+        public WritableByteChannel getWritableByteChannel(OpenOption... options) throws IOException {
+            return Files.newByteChannel(getPath(), options);
+        }
     }
 
     /**
@@ -304,7 +567,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public byte[] getByteArray() throws IOException {
-            return IOUtils.toByteArray(origin);
+            return IOUtils.toByteArray(getInputStream());
         }
 
         /**
@@ -324,6 +587,18 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return new InputStreamReader(getInputStream(), Charsets.toCharset(charset));
         }
 
+        @Override
+        public ReadableByteChannel getReadableByteChannel(OpenOption... options) throws IOException {
+            return Channels.newChannel(getInputStream(options));
+        }
+
+        public long size() throws IOException {
+            if (origin instanceof FileInputStream) {
+                final FileInputStream fileInputStream = (FileInputStream) origin;
+                return fileInputStream.getChannel().size();
+            }
+            throw unsupportedOperation("size");
+        }
     }
 
     /**
@@ -392,7 +667,12 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          */
         @Override
         public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
-            return new OutputStreamWriter(origin, Charsets.toCharset(charset));
+            return new OutputStreamWriter(getOutputStream(options), Charsets.toCharset(charset));
+        }
+
+        @Override
+        public WritableByteChannel getWritableByteChannel(OpenOption... options) throws IOException {
+            return Channels.newChannel(getOutputStream(options));
         }
     }
 
@@ -415,12 +695,12 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public byte[] getByteArray(final long position, final int length) throws IOException {
-            return RandomAccessFileMode.READ_ONLY.apply(origin, raf -> RandomAccessFiles.read(raf, position, length));
+            return RandomAccessFileMode.READ_ONLY.apply(getPath(), raf -> RandomAccessFiles.read(raf, position, length));
         }
 
         @Override
         public File getFile() {
-            return get().toFile();
+            return getPath().toFile();
         }
 
         @Override
@@ -429,6 +709,15 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return get();
         }
 
+        @Override
+        public ReadableByteChannel getReadableByteChannel(OpenOption... options) throws IOException {
+            return Files.newByteChannel(getPath(), options);
+        }
+
+        @Override
+        public WritableByteChannel getWritableByteChannel(OpenOption... options) throws IOException {
+            return Files.newByteChannel(getPath(), options);
+        }
     }
 
     /**
@@ -474,7 +763,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         @Override
         public byte[] getByteArray() throws IOException {
             // TODO Pass in a Charset? Consider if call sites actually need this.
-            return IOUtils.toByteArray(origin, Charset.defaultCharset());
+            return IOUtils.toByteArray(getReader(null), Charset.defaultCharset());
         }
 
         /**
@@ -485,7 +774,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          */
         @Override
         public CharSequence getCharSequence(final Charset charset) throws IOException {
-            return IOUtils.toString(origin);
+            return IOUtils.toString(getReader(charset));
         }
 
         /**
@@ -497,7 +786,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         @Override
         public InputStream getInputStream(final OpenOption... options) throws IOException {
             // TODO Pass in a Charset? Consider if call sites actually need this.
-            return ReaderInputStream.builder().setReader(origin).setCharset(Charset.defaultCharset()).get();
+            return ReaderInputStream.builder().setReader(getReader(null)).setCharset(Charset.defaultCharset()).get();
         }
 
         /**
@@ -510,6 +799,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         public Reader getReader(final Charset charset) throws IOException {
             // No conversion
             return get();
+        }
+
+        @Override
+        public ReadableByteChannel getReadableByteChannel(OpenOption... options) throws IOException {
+            return Channels.newChannel(getInputStream());
         }
     }
 
@@ -539,10 +833,6 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         public InputStream getInputStream(final OpenOption... options) throws IOException {
             final URI uri = get();
             final String scheme = uri.getScheme();
-            final FileSystemProvider fileSystemProvider = FileSystemProviders.installed().getFileSystemProvider(scheme);
-            if (fileSystemProvider != null) {
-                return Files.newInputStream(fileSystemProvider.getPath(uri), options);
-            }
             if (SCHEME_HTTP.equalsIgnoreCase(scheme) || SCHEME_HTTPS.equalsIgnoreCase(scheme)) {
                 return uri.toURL().openStream();
             }
@@ -552,6 +842,21 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         @Override
         public Path getPath() {
             return Paths.get(get());
+        }
+
+        @Override
+        public ReadableByteChannel getReadableByteChannel(OpenOption... options) throws IOException {
+            final URI uri = get();
+            final String scheme = uri.getScheme();
+            if (SCHEME_HTTP.equalsIgnoreCase(scheme) || SCHEME_HTTPS.equalsIgnoreCase(scheme)) {
+                return Channels.newChannel(uri.toURL().openStream());
+            }
+            return Files.newByteChannel(getPath(), options);
+        }
+
+        @Override
+        public WritableByteChannel getWritableByteChannel(OpenOption... options) throws IOException {
+            return Files.newByteChannel(getPath(), options);
         }
     }
 
@@ -581,7 +886,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         @Override
         public OutputStream getOutputStream(final OpenOption... options) throws IOException {
             // TODO Pass in a Charset? Consider if call sites actually need this.
-            return WriterOutputStream.builder().setWriter(origin).setCharset(Charset.defaultCharset()).get();
+            return WriterOutputStream.builder().setWriter(getWriter(null)).setCharset(Charset.defaultCharset()).get();
         }
 
         /**
@@ -597,6 +902,79 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
             // No conversion
             return get();
+        }
+
+        @Override
+        public WritableByteChannel getWritableByteChannel(OpenOption... options) throws IOException {
+            return Channels.newChannel(getOutputStream());
+        }
+    }
+
+    /**
+     * A {@link Channel} origin.
+     *
+     * @since 2.21.0
+     */
+    public static class ChannelOrigin extends AbstractOrigin<Channel, ChannelOrigin> {
+
+        /**
+         * Constructs a new instance for the given origin.
+         *
+         * @param origin The origin, not null.
+         */
+        public ChannelOrigin(final Channel origin) {
+            super(origin);
+        }
+
+        @Override
+        public byte[] getByteArray() throws IOException {
+            return IOUtils.toByteArray(getInputStream());
+        }
+
+        @Override
+        public InputStream getInputStream(final OpenOption... options) throws IOException {
+            return Channels.newInputStream(getReadableByteChannel(options));
+        }
+
+        @Override
+        public Reader getReader(Charset charset) throws IOException {
+            return Channels.newReader(
+                    getReadableByteChannel(), Charsets.toCharset(charset).newDecoder(), -1);
+        }
+
+        @Override
+        public OutputStream getOutputStream(final OpenOption... options) throws IOException {
+            return Channels.newOutputStream(getWritableByteChannel(options));
+        }
+
+        @Override
+        public Writer getWriter(Charset charset, OpenOption... options) throws IOException {
+            return Channels.newWriter(
+                    getWritableByteChannel(options), Charsets.toCharset(charset).newEncoder(), -1);
+        }
+
+        @Override
+        public ReadableByteChannel getReadableByteChannel(OpenOption... options) throws IOException {
+            if (origin instanceof ReadableByteChannel) {
+                return (ReadableByteChannel) origin;
+            }
+            throw unsupportedOperation("getReadableByteChannel");
+        }
+
+        @Override
+        public WritableByteChannel getWritableByteChannel(OpenOption... options) throws IOException {
+            if (origin instanceof WritableByteChannel) {
+                return (WritableByteChannel) origin;
+            }
+            throw unsupportedOperation("getWritableByteChannel");
+        }
+
+        @Override
+        public long size() throws IOException {
+            if (origin instanceof SeekableByteChannel) {
+                return ((SeekableByteChannel) origin).size();
+            }
+            throw unsupportedOperation("size");
         }
     }
 
@@ -675,8 +1053,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * @throws UnsupportedOperationException if this method is not implemented in a concrete subclass.
      */
     public File getFile() {
-        throw new UnsupportedOperationException(
-                String.format("%s#getFile() for %s origin %s", getSimpleClassName(), origin.getClass().getSimpleName(), origin));
+        throw unsupportedOperation("getFile");
     }
 
     /**
@@ -710,8 +1087,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * @throws UnsupportedOperationException if this method is not implemented in a concrete subclass.
      */
     public Path getPath() {
-        throw new UnsupportedOperationException(
-                String.format("%s#getPath() for %s origin %s", getSimpleClassName(), origin.getClass().getSimpleName(), origin));
+        throw unsupportedOperation("getPath");
     }
 
     /**
@@ -756,6 +1132,32 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     }
 
     /**
+     * Gets this origin as a ReadableByteChannel, if possible.
+     *
+     * @param options options specifying how a file-based origin is opened, ignored otherwise.
+     * @return a new ReadableByteChannel on the origin.
+     * @throws IOException                   if an I/O error occurs.
+     * @throws UnsupportedOperationException if this origin cannot be converted to a ReadableByteChannel.
+     * @since 2.21.0
+     */
+    public ReadableByteChannel getReadableByteChannel(final OpenOption... options) throws IOException {
+        return Channels.newChannel(getInputStream(options));
+    }
+
+    /**
+     * Gets this origin as a WritableByteChannel, if possible.
+     *
+     * @param options options specifying how a file-based origin is opened, ignored otherwise.
+     * @return a new WritableByteChannel on the origin.
+     * @throws IOException                   if an I/O error occurs.
+     * @throws UnsupportedOperationException if this origin cannot be converted to a WritableByteChannel.
+     * @since 2.21.0
+     */
+    public WritableByteChannel getWritableByteChannel(final OpenOption... options) throws IOException {
+        return Channels.newChannel(getOutputStream(options));
+    }
+
+    /**
      * Gets the size of the origin, if possible.
      *
      * @return the size of the origin in bytes or characters.
@@ -769,5 +1171,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     @Override
     public String toString() {
         return getSimpleClassName() + "[" + origin.toString() + "]";
+    }
+
+    UnsupportedOperationException unsupportedOperation(String method) {
+        return new UnsupportedOperationException(String.format(
+                "%s#%s() for %s origin %s",
+                getSimpleClassName(), method, origin.getClass().getSimpleName(), origin));
     }
 }

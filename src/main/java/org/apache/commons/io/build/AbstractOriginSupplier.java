@@ -24,11 +24,15 @@ import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URI;
+import java.nio.channels.Channel;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.apache.commons.io.IORandomAccessFile;
 import org.apache.commons.io.build.AbstractOrigin.ByteArrayOrigin;
+import org.apache.commons.io.build.AbstractOrigin.ChannelOrigin;
 import org.apache.commons.io.build.AbstractOrigin.CharSequenceOrigin;
 import org.apache.commons.io.build.AbstractOrigin.FileOrigin;
 import org.apache.commons.io.build.AbstractOrigin.IORandomAccessFileOrigin;
@@ -180,6 +184,10 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
      */
     protected static WriterOrigin newWriterOrigin(final Writer origin) {
         return new WriterOrigin(origin);
+    }
+
+    private static ChannelOrigin newChannelOrigin(final Channel origin) {
+        return new ChannelOrigin(origin);
     }
 
     /**
@@ -367,5 +375,27 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
      */
     public B setWriter(final Writer origin) {
         return setOrigin(newWriterOrigin(origin));
+    }
+
+    /**
+     * Sets a new origin.
+     *
+     * @param origin the new origin.
+     * @return {@code this} instance.
+     * @since 2.21.0
+     */
+    public B setReadableByteChannel(final ReadableByteChannel origin) {
+        return setOrigin(newChannelOrigin(origin));
+    }
+
+    /**
+     * Sets a new origin.
+     *
+     * @param origin the new origin.
+     * @return {@code this} instance.
+     * @since 2.21.0
+     */
+    public B setWritableByteChannel(final WritableByteChannel origin) {
+        return setOrigin(newChannelOrigin(origin));
     }
 }

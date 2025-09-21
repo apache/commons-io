@@ -64,13 +64,6 @@ class CharSequenceOriginTest extends AbstractOriginTest<CharSequence, CharSequen
 
     @Override
     @Test
-    void testGetOutputStream() {
-        // Cannot convert a CharSequence to an OutputStream.
-        assertThrows(UnsupportedOperationException.class, super::testGetOutputStream);
-    }
-
-    @Override
-    @Test
     void testGetPath() {
         // Cannot convert a CharSequence to a Path.
         assertThrows(UnsupportedOperationException.class, super::testGetPath);
@@ -91,6 +84,27 @@ class CharSequenceOriginTest extends AbstractOriginTest<CharSequence, CharSequen
         assertThrows(UnsupportedOperationException.class, () -> super.testGetRandomAccessFile(openOption));
     }
 
+    @Override
+    @Test
+    void testGetOutputStream() {
+        // Cannot convert a CharSequence to an OutputStream.
+        assertThrows(UnsupportedOperationException.class, super::testGetOutputStream);
+    }
+
+    @Override
+    @Test
+    void testGetWriter() {
+        // Cannot convert a CharSequence to a Writer.
+        assertThrows(UnsupportedOperationException.class, super::testGetWriter);
+    }
+
+    @Override
+    @Test
+    void testGetWritableByteChannel() throws IOException {
+        // Cannot convert a CharSequence to a WritableByteChannel.
+        assertThrows(UnsupportedOperationException.class, super::testGetWritableByteChannel);
+    }
+
     @Test
     void testGetReaderIgnoreCharset() throws IOException {
         // The CharSequenceOrigin ignores the given Charset.
@@ -107,13 +121,6 @@ class CharSequenceOriginTest extends AbstractOriginTest<CharSequence, CharSequen
             assertNotNull(reader);
             assertEquals(getFixtureStringFromFile(), IOUtils.toString(reader));
         }
-    }
-
-    @Override
-    @Test
-    void testGetWriter() {
-        // Cannot convert a CharSequence to a Writer.
-        assertThrows(UnsupportedOperationException.class, super::testGetWriter);
     }
 
 }

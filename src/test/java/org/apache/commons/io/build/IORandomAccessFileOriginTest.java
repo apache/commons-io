@@ -17,6 +17,7 @@
 package org.apache.commons.io.build;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 
 import org.apache.commons.io.IORandomAccessFile;
@@ -38,8 +39,7 @@ class IORandomAccessFileOriginTest extends AbstractOriginTest<IORandomAccessFile
 
     @SuppressWarnings("resource")
     @Override
-    protected IORandomAccessFileOrigin newOriginRw() throws FileNotFoundException {
-        return new IORandomAccessFileOrigin(RandomAccessFileMode.READ_WRITE.io(FILE_NAME_RW));
+    protected IORandomAccessFileOrigin newOriginRw() throws IOException {
+        return new IORandomAccessFileOrigin(RandomAccessFileMode.READ_WRITE.io(tempPath.resolve(FILE_NAME_RW).toFile().getPath()));
     }
-
 }
