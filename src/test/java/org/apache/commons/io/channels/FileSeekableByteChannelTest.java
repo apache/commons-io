@@ -19,14 +19,17 @@ package org.apache.commons.io.channels;
 
 import java.io.IOException;
 import java.nio.channels.SeekableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 
 /**
  * A sanity test to make sure {@link AbstractSeekableByteChannelTest} works for files.
  */
-public class ByteArraySeekableByteChannelTest extends AbstractSeekableByteChannelTest {
+public class FileSeekableByteChannelTest extends AbstractSeekableByteChannelTest {
     
     protected SeekableByteChannel createChannel() throws IOException {
-        return new ByteArraySeekableByteChannel();
+        return Files.newByteChannel(tempFile, StandardOpenOption.CREATE, StandardOpenOption.READ, StandardOpenOption.WRITE,
+                StandardOpenOption.TRUNCATE_EXISTING);
     }
 
 }
