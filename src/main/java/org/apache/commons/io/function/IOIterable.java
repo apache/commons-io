@@ -18,6 +18,7 @@
 package org.apache.commons.io.function;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
 
 /**
@@ -27,6 +28,17 @@ import java.util.Objects;
  * @since 2.19.0
  */
 public interface IOIterable<T> {
+
+    /**
+     * Creates an {@link Iterable} for this instance that throws {@link UncheckedIOException} instead of
+     * {@link IOException}.
+     *
+     * @return an {@link UncheckedIOException} {@link Iterable}.
+     * @since 2.21.0
+     */
+    default Iterable<T> asIterable() {
+        return new UncheckedIOIterable<>(this);
+    }
 
     /**
      * Like {@link Iterable#iterator()}.
