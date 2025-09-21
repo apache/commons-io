@@ -66,7 +66,7 @@ class ByteArraySeekableByteChannelCompressTest {
     @ParameterizedTest
     @ValueSource(ints = { 0, 1, 2, 3, 4, 5, 6 })
     void testReadingFromAPositionAfterEndReturnsEOF(final int size) throws Exception {
-        try (SeekableByteChannel c = new ByteArraySeekableByteChannel(size)) {
+        try (SeekableByteChannel c = ByteArraySeekableByteChannel.wrap(new byte[size])) {
             final int position = 2;
             c.position(position);
             assertEquals(position, c.position());
