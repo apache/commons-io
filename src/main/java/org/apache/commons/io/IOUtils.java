@@ -226,6 +226,7 @@ public class IOUtils {
      * <p>
      * The constant is copied from OpenJDK's {@code jdk.internal.util.ArraysSupport#SOFT_MAX_ARRAY_LENGTH}.
      * </p>
+     *
      * @since 2.21.0
      */
     public static final int SOFT_MAX_ARRAY_LENGTH = Integer.MAX_VALUE - 8;

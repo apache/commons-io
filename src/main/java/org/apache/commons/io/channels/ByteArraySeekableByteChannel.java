@@ -32,22 +32,16 @@ import org.apache.commons.io.IOUtils;
 /**
  * A {@link SeekableByteChannel} implementation backed by a byte array.
  * <p>
- * When this channel is used for writing, an internal buffer grows to accommodate incoming data. The natural size limit is the value of
- * {@link Integer#MAX_VALUE} and it's not possible to {@link #position(long) set the position} or {@link #truncate(long) truncate} to a value bigger than that.
- * The raw internal buffer is accessed via {@link ByteArraySeekableByteChannel#array()}.
- * </p>
- * <p>
- * This class never throws {@link ClosedChannelException} because a byte array is not a resource you open or close.
- * </p>
- * <p>
- * This class isn't thread-safe.
+ * When used for writing, the internal buffer grows to accommodate incoming data. The natural size limit is the value of {@link IOUtils#SOFT_MAX_ARRAY_LENGTH}
+ * and it's not possible to {@link #position(long) set the position} or {@link #truncate(long) truncate} to a value bigger than that. The raw internal buffer is
+ * accessed via {@link ByteArraySeekableByteChannel#array()}.
  * </p>
  *
  * @since 2.21.0
  */
 public class ByteArraySeekableByteChannel implements SeekableByteChannel {
 
-    private static final int NAIVE_RESIZE_LIMIT = Integer.MAX_VALUE >> 1;
+    private static final int RESIZE_LIMIT = Integer.MAX_VALUE >> 1;
 
     /**
      * Constructs a channel that wraps the given byte array.
@@ -79,7 +73,7 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
      * </p>
      */
     public ByteArraySeekableByteChannel() {
-        this(IOUtils.DEFAULT_BUFFER_SIZE);
+        this(0);
     }
 
     /**
@@ -130,15 +124,22 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
         return Arrays.copyOf(data, size);
     }
 
-    @Override
-    public void close() {
-        closed = true;
-    }
-
-    private void ensureOpen() throws ClosedChannelException {
+    private void checkOpen() throws ClosedChannelException {
         if (!isOpen()) {
             throw new ClosedChannelException();
         }
+    }
+
+    private int checkRange(final long newSize, final String method) {
+        if (newSize < 0L || newSize > IOUtils.SOFT_MAX_ARRAY_LENGTH) {
+            throw new IllegalArgumentException(String.format("%s must be in range [0..%,d]: %,d", method, IOUtils.SOFT_MAX_ARRAY_LENGTH, newSize));
+        }
+        return (int) newSize;
+    }
+
+    @Override
+    public void close() {
+        closed = true;
     }
 
     /**
@@ -157,29 +158,37 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
 
     @Override
     public long position() throws ClosedChannelException {
-        ensureOpen();
-        return position;
+        checkOpen();
+        lock.lock();
+        try {
+            return position;
+        } finally {
+            lock.unlock();
+        }
     }
 
     @Override
     public SeekableByteChannel position(final long newPosition) throws IOException {
-        ensureOpen();
-        if (newPosition < 0L || newPosition > Integer.MAX_VALUE) {
-            throw new IOException("Position must be in range [0.." + Integer.MAX_VALUE + "]");
+        checkOpen();
+        final int intPos = checkRange(newPosition, "position()");
+        lock.lock();
+        try {
+            position = intPos;
+        } finally {
+            lock.unlock();
         }
-        position = (int) newPosition;
         return this;
     }
 
     @Override
     public int read(final ByteBuffer buf) throws IOException {
-        ensureOpen();
+        checkOpen();
         lock.lock();
         try {
             int wanted = buf.remaining();
             final int possible = size - position;
             if (possible <= 0) {
-                return -1;
+                return IOUtils.EOF;
             }
             if (wanted > possible) {
                 wanted = possible;
@@ -197,7 +206,7 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
         if (len == 0) {
             len = 1;
         }
-        if (newLength < NAIVE_RESIZE_LIMIT) {
+        if (newLength < RESIZE_LIMIT) {
             while (len < newLength) {
                 len <<= 1;
             }
@@ -209,7 +218,7 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
 
     @Override
     public long size() throws ClosedChannelException {
-        ensureOpen();
+        checkOpen();
         lock.lock();
         try {
             return size;
@@ -220,17 +229,15 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
 
     @Override
     public SeekableByteChannel truncate(final long newSize) throws ClosedChannelException {
-        ensureOpen();
+        checkOpen();
+        final int intSize = checkRange(newSize, "truncate()");
         lock.lock();
         try {
-            if (newSize < 0L || newSize > Integer.MAX_VALUE) {
-                throw new IllegalArgumentException("Size must be range [0.." + Integer.MAX_VALUE + "]");
+            if (size > intSize) {
+                size = intSize;
             }
-            if (size > newSize) {
-                size = (int) newSize;
-            }
-            if (position > newSize) {
-                position = (int) newSize;
+            if (position > intSize) {
+                position = intSize;
             }
         } finally {
             lock.unlock();
@@ -240,7 +247,7 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
 
     @Override
     public int write(final ByteBuffer b) throws IOException {
-        ensureOpen();
+        checkOpen();
         lock.lock();
         try {
             final int wanted = b.remaining();

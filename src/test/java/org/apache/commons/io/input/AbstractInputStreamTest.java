@@ -53,6 +53,7 @@ public abstract class AbstractInputStreamTest {
 
     protected static byte[] ExpectedBytes;
     protected static Path InputPath;
+
     @TempDir
     static Path tempDir;
 
