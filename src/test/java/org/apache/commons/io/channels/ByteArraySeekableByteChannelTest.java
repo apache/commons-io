@@ -24,7 +24,8 @@ import java.nio.channels.SeekableByteChannel;
  * A sanity test to make sure {@link AbstractSeekableByteChannelTest} works for files.
  */
 public class ByteArraySeekableByteChannelTest extends AbstractSeekableByteChannelTest {
-    
+
+    @Override
     protected SeekableByteChannel createChannel() throws IOException {
         return new ByteArraySeekableByteChannel();
     }

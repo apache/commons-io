@@ -26,7 +26,8 @@ import java.nio.file.StandardOpenOption;
  * A sanity test to make sure {@link AbstractSeekableByteChannelTest} works for files.
  */
 public class FileSeekableByteChannelTest extends AbstractSeekableByteChannelTest {
-    
+
+    @Override
     protected SeekableByteChannel createChannel() throws IOException {
         return Files.newByteChannel(tempFile, StandardOpenOption.CREATE, StandardOpenOption.READ, StandardOpenOption.WRITE,
                 StandardOpenOption.TRUNCATE_EXISTING);
