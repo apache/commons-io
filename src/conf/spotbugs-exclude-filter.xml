@@ -111,4 +111,9 @@
     <Class name="org.apache.commons.io.input.BOMInputStream" />
     <Bug pattern="AT_STALE_THREAD_WRITE_OF_PRIMITIVE" />
   </Match>
+  <!-- This class is not thread-safe. Should this be a TO-DO?. -->
+  <Match>
+    <Class name="org.apache.commons.io.channels.ByteArraySeekableByteChannel" />
+    <Bug pattern="AT_STALE_THREAD_WRITE_OF_PRIMITIVE, AT_NONATOMIC_OPERATIONS_ON_SHARED_VARIABLE" />
+  </Match>
 </FindBugsFilter>
