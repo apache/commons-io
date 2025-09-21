@@ -52,31 +52,31 @@ abstract class AbstractSeekableByteChannelTest {
     class BasicTest {
 
         @Test
-        void testInitialPosition() throws IOException {
-            assertEquals(0, channel.position());
-        }
-
-        @Test
-        void testIsClosedAfterClose() throws IOException {
-            channel.close();
-            assertFalse(channel.isOpen());
-        }
-
-        @Test
-        void testMultipleClose() throws IOException {
+        void testCloseMultipleTimes() throws IOException {
             channel.close();
             channel.close(); // Should not throw
             assertFalse(channel.isOpen());
         }
 
         @Test
-        void testNewEntitySize() throws IOException {
-            assertEquals(0, channel.size());
+        void testIsOpenAfterClose() throws IOException {
+            channel.close();
+            assertFalse(channel.isOpen());
         }
 
         @Test
-        void testNewIsOpen() {
+        void testIsOpennOnNew() {
             assertTrue(channel.isOpen());
+        }
+
+        @Test
+        void testPositionOnNew() throws IOException {
+            assertEquals(0, channel.position());
+        }
+
+        @Test
+        void testSizeOnNew() throws IOException {
+            assertEquals(0, channel.size());
         }
     }
 
@@ -84,7 +84,7 @@ abstract class AbstractSeekableByteChannelTest {
     class IntegrationTest {
 
         @Test
-        void ConcurrentPositionAndSizeQueries() throws IOException {
+        void testConcurrentPositionAndSizeQueries() throws IOException {
             final byte[] data = "test data".getBytes();
             channel.write(ByteBuffer.wrap(data));
             final long size = channel.size();
@@ -168,11 +168,6 @@ abstract class AbstractSeekableByteChannelTest {
     class PositionTest {
 
         @Test
-        void testNegativePosition() {
-            assertThrows(IllegalArgumentException.class, () -> channel.position(-1));
-        }
-
-        @Test
         void testPositionBeyondSize() throws IOException {
             channel.write(ByteBuffer.wrap("test".getBytes()));
             channel.position(100);
@@ -191,6 +186,11 @@ abstract class AbstractSeekableByteChannelTest {
             final SeekableByteChannel result = channel.position(newPosition);
             assertSame(channel, result); // Javadoc: "This channel"
             assertEquals(expectedPosition, channel.position());
+        }
+
+        @Test
+        void testPositionNegative() {
+            assertThrows(IllegalArgumentException.class, () -> channel.position(-1));
         }
 
         @Test
@@ -278,18 +278,35 @@ abstract class AbstractSeekableByteChannelTest {
     class SizeTest {
 
         @Test
-        void testSameSizeOnOverwrite() throws IOException {
-            channel.write(ByteBuffer.wrap("Hello World".getBytes()));
+        void testSizeAfterTruncateToLargerSize() throws IOException {
+            channel.write(ByteBuffer.wrap("Hello".getBytes()));
+            assertEquals(5, channel.size());
+            channel.truncate(10);
+            assertEquals(5, channel.size()); // Size should remain unchanged
+        }
+
+        @Test
+        void testSizeAfterWrite() throws IOException {
+            assertEquals(0, channel.size());
+            channel.write(ByteBuffer.wrap("Hello".getBytes()));
+            assertEquals(5, channel.size());
+            channel.write(ByteBuffer.wrap(" World".getBytes()));
             assertEquals(11, channel.size());
-            channel.position(6);
-            channel.write(ByteBuffer.wrap("Test".getBytes()));
-            assertEquals(11, channel.size()); // Size should not change
         }
 
         @Test
         void testSizeOnClosed() throws IOException {
             channel.close();
             assertThrows(ClosedChannelException.class, () -> channel.size());
+        }
+
+        @Test
+        void testSizeSameOnOverwrite() throws IOException {
+            channel.write(ByteBuffer.wrap("Hello World".getBytes()));
+            assertEquals(11, channel.size());
+            channel.position(6);
+            channel.write(ByteBuffer.wrap("Test".getBytes()));
+            assertEquals(11, channel.size()); // Size should not change
         }
 
         @Test
@@ -307,23 +324,6 @@ abstract class AbstractSeekableByteChannelTest {
             if (channel.position() > 5) {
                 assertEquals(5, channel.position());
             }
-        }
-
-        @Test
-        void testTruncateToLargerSize() throws IOException {
-            channel.write(ByteBuffer.wrap("Hello".getBytes()));
-            assertEquals(5, channel.size());
-            channel.truncate(10);
-            assertEquals(5, channel.size()); // Size should remain unchanged
-        }
-
-        @Test
-        void testWriteGrowsSize() throws IOException {
-            assertEquals(0, channel.size());
-            channel.write(ByteBuffer.wrap("Hello".getBytes()));
-            assertEquals(5, channel.size());
-            channel.write(ByteBuffer.wrap(" World".getBytes()));
-            assertEquals(11, channel.size());
         }
     }
 
@@ -368,6 +368,13 @@ abstract class AbstractSeekableByteChannelTest {
         }
 
         @Test
+        void testWriteToClosedChannel() throws IOException {
+            channel.close();
+            final ByteBuffer buffer = ByteBuffer.wrap("test".getBytes());
+            assertThrows(ClosedChannelException.class, () -> channel.write(buffer));
+        }
+
+        @Test
         void tesWriteBytes() throws IOException {
             final byte[] data = "Hello, World!".getBytes();
             final ByteBuffer buffer = ByteBuffer.wrap(data);
@@ -375,13 +382,6 @@ abstract class AbstractSeekableByteChannelTest {
             assertEquals(data.length, byteCount);
             assertEquals(data.length, channel.position());
             assertEquals(data.length, channel.size());
-        }
-
-        @Test
-        void writeToClosedChannel() throws IOException {
-            channel.close();
-            final ByteBuffer buffer = ByteBuffer.wrap("test".getBytes());
-            assertThrows(ClosedChannelException.class, () -> channel.write(buffer));
         }
     }
 
