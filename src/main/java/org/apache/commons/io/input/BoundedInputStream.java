@@ -312,7 +312,7 @@ public class BoundedInputStream extends ProxyInputStream {
      */
     private boolean propagateClose = true;
 
-    BoundedInputStream(final Builder builder) throws IOException {
+    private BoundedInputStream(final Builder builder) throws IOException {
         super(builder);
         this.count = builder.getCount();
         this.maxCount = builder.getMaxCount();
@@ -334,7 +334,7 @@ public class BoundedInputStream extends ProxyInputStream {
         this(in, EOF);
     }
 
-    BoundedInputStream(final InputStream inputStream, final Builder builder) {
+    private BoundedInputStream(final InputStream inputStream, final Builder builder) {
         super(inputStream, builder);
         this.count = builder.getCount();
         this.maxCount = builder.getMaxCount();
