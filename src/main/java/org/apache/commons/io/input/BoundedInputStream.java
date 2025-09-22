@@ -573,6 +573,15 @@ public class BoundedInputStream extends ProxyInputStream {
         return skip;
     }
 
+    /**
+     * Converts a request to read {@code len} bytes to a lower count if reading would put us over the limit.
+     * <p>
+     * If a {@code maxCount} is not set, then return max{@code maxCount}.
+     * </p>
+     *
+     * @param len The requested byte count.
+     * @return How many bytes to actually attempt to read.
+     */
     private long toReadLen(final long len) {
         return maxCount >= 0 ? Math.min(len, maxCount - getCount()) : len;
     }
