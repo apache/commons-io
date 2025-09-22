@@ -77,7 +77,7 @@ public class BoundedReader extends Reader {
      *                       is no way to pass past maxCharsFromTargetReader, even if this value is greater.
      *
      * @throws IOException If an I/O error occurs while calling the underlying reader's mark method
-     * @see java.io.Reader#mark(int)
+     * @see Reader#mark(int)
      */
     @Override
     public void mark(final int readAheadLimit) throws IOException {
@@ -93,7 +93,7 @@ public class BoundedReader extends Reader {
      *
      * @return -1 on EOF or the character read
      * @throws IOException If an I/O error occurs while calling the underlying reader's read method
-     * @see java.io.Reader#read()
+     * @see Reader#read()
      */
     @Override
     public int read() throws IOException {
@@ -117,7 +117,7 @@ public class BoundedReader extends Reader {
      * @param len  The number of chars to read
      * @return the number of chars read
      * @throws IOException If an I/O error occurs while calling the underlying reader's read method
-     * @see java.io.Reader#read(char[], int, int)
+     * @see Reader#read(char[], int, int)
      */
     @Override
     public int read(final char[] cbuf, final int off, final int len) throws IOException {
@@ -136,7 +136,7 @@ public class BoundedReader extends Reader {
      * Resets the target to the latest mark,
      *
      * @throws IOException If an I/O error occurs while calling the underlying reader's reset method
-     * @see java.io.Reader#reset()
+     * @see Reader#reset()
      */
     @Override
     public void reset() throws IOException {

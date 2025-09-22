@@ -62,7 +62,7 @@ public class SequenceReader extends Reader {
     /*
      * (non-Javadoc)
      *
-     * @see java.io.Reader#close()
+     * @see Reader#close()
      */
     @Override
     public void close() throws IOException {
@@ -92,7 +92,7 @@ public class SequenceReader extends Reader {
     /*
      * (non-Javadoc)
      *
-     * @see java.io.Reader#read(char[], int, int)
+     * @see Reader#read(char[], int, int)
      */
     @Override
     public int read() throws IOException {
@@ -110,7 +110,7 @@ public class SequenceReader extends Reader {
     /*
      * (non-Javadoc)
      *
-     * @see java.io.Reader#read()
+     * @see Reader#read()
      */
     @Override
     public int read(final char[] cbuf, int off, int len) throws IOException {

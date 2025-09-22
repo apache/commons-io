@@ -88,13 +88,13 @@ public class NullWriter extends Writer {
         return this;
     }
 
-    /** @see java.io.Writer#close() */
+    /** @see Writer#close() */
     @Override
     public void close() {
         //to /dev/null
     }
 
-    /** @see java.io.Writer#flush() */
+    /** @see Writer#flush() */
     @Override
     public void flush() {
         //to /dev/null
