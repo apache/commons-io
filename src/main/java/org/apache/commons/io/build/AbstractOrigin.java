@@ -594,6 +594,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return Channels.newChannel(getInputStream(options));
         }
 
+        @Override
         public long size() throws IOException {
             if (origin instanceof FileInputStream) {
                 final FileInputStream fileInputStream = (FileInputStream) origin;
