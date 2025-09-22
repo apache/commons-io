@@ -27,6 +27,8 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -80,6 +82,7 @@ import org.apache.commons.io.output.CountingOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.io.output.NullWriter;
 import org.apache.commons.io.output.StringBuilderWriter;
+import org.apache.commons.io.output.UnsynchronizedByteArrayOutputStream;
 import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.io.test.ThrowOnCloseReader;
 import org.apache.commons.lang3.StringUtils;
@@ -93,6 +96,8 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 /**
  * This is used to test {@link IOUtils} for correctness. The following checks are performed:
@@ -1965,4 +1970,23 @@ class IOUtilsTest {
         }
     }
 
+    @Test
+    void testToByteArray_ThrowsIOExceptionOnHugeStream() {
+        try (MockedStatic<IOUtils> utils = Mockito.mockStatic(IOUtils.class, Mockito.CALLS_REAL_METHODS)) {
+            // Prepare the mocks
+            final UnsynchronizedByteArrayOutputStream mockOutputStream =
+                    mock(UnsynchronizedByteArrayOutputStream.class);
+            utils.when(() -> IOUtils.copyToOutputStream(
+                            Mockito.any(InputStream.class), Mockito.anyLong(), Mockito.anyInt()))
+                    .thenReturn(mockOutputStream);
+            when(mockOutputStream.size()).thenReturn(IOUtils.SOFT_MAX_ARRAY_LENGTH + 1);
+
+            // Test and check
+            final InputStream mockInputStream = mock(InputStream.class);
+            final IOException exception = assertThrows(IOException.class, () -> IOUtils.toByteArray(mockInputStream));
+            assertTrue(
+                    exception.getMessage().contains(String.format("%,d", IOUtils.SOFT_MAX_ARRAY_LENGTH)),
+                    "Exception message does not contain the maximum length");
+        }
+    }
 }
