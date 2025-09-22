@@ -62,6 +62,13 @@ class IOIterableTest {
     }
 
     @Test
+    void testAsIterable() throws IOException {
+        final AtomicInteger ref = new AtomicInteger();
+        iterable.asIterable().iterator().forEachRemaining(e -> ref.incrementAndGet());
+        assertEquals(2, ref.get());
+    }
+
+    @Test
     void testForEach() throws IOException {
         final AtomicInteger ref = new AtomicInteger();
         assertThrows(NullPointerException.class, () -> iterable.forEach(null));
