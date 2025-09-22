@@ -83,7 +83,7 @@ public class ByteArraySeekableByteChannelTest extends AbstractSeekableByteChanne
         try (ByteArraySeekableByteChannel channel = supplier.get()) {
             assertEquals(0, channel.position());
             assertEquals(expected.length, channel.size());
-            assertEquals(capacity, channel.data.length);
+            assertEquals(capacity, channel.array().length);
             assertArrayEquals(expected, channel.toByteArray());
         }
     }
@@ -112,7 +112,7 @@ public class ByteArraySeekableByteChannelTest extends AbstractSeekableByteChanne
             final ByteBuffer inData = ByteBuffer.wrap(new byte[wanted]);
             final int writeCount = c.write(inData);
             assertEquals(wanted, writeCount);
-            assertTrue(c.data.length >= data.length + wanted, "Capacity not increased sufficiently");
+            assertTrue(c.array().length >= data.length + wanted, "Capacity not increased sufficiently");
         }
     }
 

@@ -59,8 +59,7 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
         return new ByteArraySeekableByteChannel(bytes, bytes.length);
     }
 
-    // package-private for testing
-    byte[] data;
+    private byte[] data;
     private volatile boolean closed;
     private int position;
     private int size;
