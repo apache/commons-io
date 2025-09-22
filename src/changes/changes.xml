@@ -64,10 +64,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="pkarwasz" type="add"                due-to="Piotr P. Karwasz">Add IOUtils.toByteArray(InputStream, int, int) for safer chunked reading with size validation.</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add org.apache.commons.io.file.PathUtils.getPath(String, String).</action>
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add org.apache.commons.io.channels.ByteArraySeekableByteChannel.</action>
-      <action dev="pkarwasz" type="add"                due-to="Piotr P. Karwasz">Add ByteArrayChannel, a simple in-memory `SeekableByteChannel` implementation.</action>
       <action dev="pkarwasz" type="add"                due-to="Piotr P. Karwasz">Add NIO channel support to `AbstractStreamBuilder`.</action>
       <!-- UPDATE -->
-      <action type="update" dev="ggregory"             due-to="Gary Gregory, Dependabot">Bump org.apache.commons:commons-parent from 85 to 87 #774.</action>
+      <action type="update" dev="ggregory"             due-to="Gary Gregory, Dependabot">Bump org.apache.commons:commons-parent from 85 to 88 #774, #783.</action>
       <action type="update" dev="ggregory"             due-to="Gary Gregory">[test] Bump commons-codec:commons-codec from 1.18.0 to 1.19.0.</action>
       <action type="update" dev="ggregory"             due-to="Gary Gregory">[test] Bump commons.bytebuddy.version from 1.17.6 to 1.17.7 #769.</action>
       <!-- REMOVE -->
