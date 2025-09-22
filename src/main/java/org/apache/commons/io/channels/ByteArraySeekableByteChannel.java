@@ -44,19 +44,24 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
     private static final int RESIZE_LIMIT = Integer.MAX_VALUE >> 1;
 
     /**
-     * Constructs a channel that wraps the given byte array.
-     * <p>
-     * The resulting channel will share the given array as its buffer, until a write operation
-     * requires a larger capacity.
-     * The initial size of the channel is the length of the given array, and the initial position is 0.
-     * </p>
-     * @param bytes The byte array to wrap; must not be {@code null}.
-     * @return A new channel that wraps the given byte array; never {@code null}.
-     * @throws NullPointerException If the byte array is {@code null}.
+     * Constructs a new channel backed directly by the given byte array.
+     *
+     * <p>The channel initially contains the full contents of the array, with its
+     * size set to {@code bytes.length} and its position set to {@code 0}.</p>
+     *
+     * <p>Reads and writes operate on the shared array.
+     * If a write operation extends beyond the current capacity, the channel will
+     * automatically allocate a larger backing array and copy the existing contents.</p>
+     *
+     * @param bytes The byte array to wrap, must not be {@code null}
+     * @return A new channel that uses the given array as its initial backing store
+     * @throws NullPointerException If {@code bytes} is {@code null}
+     * @see #array()
+     * @see java.io.ByteArrayInputStream#ByteArrayInputStream(byte[])
      */
     public static ByteArraySeekableByteChannel wrap(byte[] bytes) {
         Objects.requireNonNull(bytes, "bytes");
-        return new ByteArraySeekableByteChannel(bytes, bytes.length);
+        return new ByteArraySeekableByteChannel(bytes);
     }
 
     private byte[] data;
@@ -66,37 +71,40 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
     private final ReentrantLock lock = new ReentrantLock();
 
     /**
-     * Constructs a new instance using a default empty buffer.
+     * Constructs a new instance, with a default internal buffer capacity.
      * <p>
-     * The initial size of the channel is 0, and the initial position is 0.
+     * The initial size and position of the channel are 0.
      * </p>
+     * <p>
+     * The default initial capacity is 32 bytes, although the capacity will grow as needed when writing data.
+     * </p>
+     * @see java.io.ByteArrayOutputStream#ByteArrayOutputStream()
      */
     public ByteArraySeekableByteChannel() {
-        this(0);
+        this(32);
     }
 
     /**
-     * Constructs a new instance from a size of storage to be allocated.
+     * Constructs a new instance, with an internal buffer of the given capacity, in bytes.
      * <p>
-     * The initial size of the channel is 0, and the initial position is 0.
+     * The initial size and position of the channel are 0.
      * </p>
-     * @param size size of internal buffer to allocate, in bytes.
+     * @param size Capacity of the internal buffer to allocate, in bytes.
+     * @see java.io.ByteArrayOutputStream#ByteArrayOutputStream(int)
      */
     public ByteArraySeekableByteChannel(final int size) {
-        this(byteArray(size), 0);
-    }
-
-    private static byte[] byteArray(int value) {
-        if (value < 0) {
+        if (size < 0) {
             throw new IllegalArgumentException("Size must be non-negative");
         }
-        return new byte[value];
-    }
-
-    private ByteArraySeekableByteChannel(byte[] data, int size) {
-        this.data = data;
+        this.data = new byte[size];
         this.position = 0;
         this.size = size;
+    }
+
+    private ByteArraySeekableByteChannel(byte[] data) {
+        this.data = data;
+        this.position = 0;
+        this.size = data.length;
     }
 
     /**

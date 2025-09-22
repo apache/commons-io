@@ -56,7 +56,7 @@ public class ByteArraySeekableByteChannelTest extends AbstractSeekableByteChanne
                 Arguments.of(
                         (IOSupplier<ByteArraySeekableByteChannel>) ByteArraySeekableByteChannel::new,
                         EMPTY_BYTE_ARRAY,
-                        0),
+                        32),
                 Arguments.of(
                         (IOSupplier<ByteArraySeekableByteChannel>) () -> new ByteArraySeekableByteChannel(8),
                         EMPTY_BYTE_ARRAY,
