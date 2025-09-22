@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.io.build;
 
 import java.io.ByteArrayInputStream;
@@ -416,7 +417,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          */
         @Override
         public InputStream getInputStream(final OpenOption... options) throws IOException {
-            return new ByteArrayInputStream(getByteArray());
+            return new ByteArrayInputStream(origin);
         }
 
         @Override
@@ -433,6 +434,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         public long size() throws IOException {
             return origin.length;
         }
+
     }
 
     /**
@@ -452,7 +454,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         @Override
         public byte[] getByteArray() {
             // TODO Pass in a Charset? Consider if call sites actually need this.
-            return getCharSequence(null).toString().getBytes(Charset.defaultCharset());
+            return origin.toString().getBytes(Charset.defaultCharset());
         }
 
         /**
@@ -476,7 +478,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         @Override
         public InputStream getInputStream(final OpenOption... options) throws IOException {
             // TODO Pass in a Charset? Consider if call sites actually need this.
-            return CharSequenceInputStream.builder().setCharSequence(getCharSequence(null)).get();
+            return CharSequenceInputStream.builder().setCharSequence(getCharSequence(Charset.defaultCharset())).get();
         }
 
         /**
@@ -487,7 +489,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          */
         @Override
         public Reader getReader(final Charset charset) throws IOException {
-            return new CharSequenceReader(getCharSequence(charset));
+            return new CharSequenceReader(get());
         }
 
         @Override
@@ -521,7 +523,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public byte[] getByteArray(final long position, final int length) throws IOException {
-            try (RandomAccessFile raf = RandomAccessFileMode.READ_ONLY.create(getFile())) {
+            try (RandomAccessFile raf = RandomAccessFileMode.READ_ONLY.create(origin)) {
                 return RandomAccessFiles.read(raf, position, length);
             }
         }
@@ -534,7 +536,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public Path getPath() {
-            return getFile().toPath();
+            return get().toPath();
         }
 
         @Override
@@ -567,7 +569,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public byte[] getByteArray() throws IOException {
-            return IOUtils.toByteArray(getInputStream());
+            return IOUtils.toByteArray(origin);
         }
 
         /**
@@ -667,7 +669,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          */
         @Override
         public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
-            return new OutputStreamWriter(getOutputStream(options), Charsets.toCharset(charset));
+            return new OutputStreamWriter(origin, Charsets.toCharset(charset));
         }
 
         @Override
@@ -695,12 +697,12 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public byte[] getByteArray(final long position, final int length) throws IOException {
-            return RandomAccessFileMode.READ_ONLY.apply(getPath(), raf -> RandomAccessFiles.read(raf, position, length));
+            return RandomAccessFileMode.READ_ONLY.apply(origin, raf -> RandomAccessFiles.read(raf, position, length));
         }
 
         @Override
         public File getFile() {
-            return getPath().toFile();
+            return get().toFile();
         }
 
         @Override
@@ -763,7 +765,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         @Override
         public byte[] getByteArray() throws IOException {
             // TODO Pass in a Charset? Consider if call sites actually need this.
-            return IOUtils.toByteArray(getReader(null), Charset.defaultCharset());
+            return IOUtils.toByteArray(origin, Charset.defaultCharset());
         }
 
         /**
@@ -774,7 +776,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          */
         @Override
         public CharSequence getCharSequence(final Charset charset) throws IOException {
-            return IOUtils.toString(getReader(charset));
+            return IOUtils.toString(origin);
         }
 
         /**
@@ -786,7 +788,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         @Override
         public InputStream getInputStream(final OpenOption... options) throws IOException {
             // TODO Pass in a Charset? Consider if call sites actually need this.
-            return ReaderInputStream.builder().setReader(getReader(null)).setCharset(Charset.defaultCharset()).get();
+            return ReaderInputStream.builder().setReader(origin).setCharset(Charset.defaultCharset()).get();
         }
 
         /**
@@ -886,7 +888,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         @Override
         public OutputStream getOutputStream(final OpenOption... options) throws IOException {
             // TODO Pass in a Charset? Consider if call sites actually need this.
-            return WriterOutputStream.builder().setWriter(getWriter(null)).setCharset(Charset.defaultCharset()).get();
+            return WriterOutputStream.builder().setWriter(origin).setCharset(Charset.defaultCharset()).get();
         }
 
         /**
