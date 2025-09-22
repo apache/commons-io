@@ -1,0 +1,269 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.commons.io.channels;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
+import java.nio.channels.ByteChannel;
+import java.nio.channels.Channel;
+import java.nio.channels.ClosedChannelException;
+import java.nio.channels.GatheringByteChannel;
+import java.nio.channels.NetworkChannel;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.ScatteringByteChannel;
+import java.nio.channels.SeekableByteChannel;
+import java.nio.channels.WritableByteChannel;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+class ChannelsTest {
+
+    static Stream<Class<? extends Channel>> testedInterfaces() {
+        return Stream.of(
+                Channel.class,
+                ReadableByteChannel.class,
+                ScatteringByteChannel.class,
+                WritableByteChannel.class,
+                GatheringByteChannel.class,
+                ByteChannel.class,
+                SeekableByteChannel.class,
+                NetworkChannel.class);
+    }
+
+    @ParameterizedTest
+    @MethodSource("testedInterfaces")
+    void testPreservesInterfaces(Class<? extends Channel> channelClass) {
+        final Channel channel = mock(channelClass);
+        final Channel shield = Channels.closeShield(channel);
+        assertNotSame(channel, shield);
+        assertTrue(channelClass.isInstance(shield));
+    }
+
+    @ParameterizedTest
+    @MethodSource("testedInterfaces")
+    void testCloseIsShielded(Class<? extends Channel> channelClass) throws Exception {
+        final Channel channel = mock(channelClass);
+        when(channel.isOpen()).thenReturn(true, false, true, false);
+        final Channel shield = Channels.closeShield(channel);
+        // Reflects delegate state initially
+        assertTrue(shield.isOpen(), "isOpen reflects delegate state");
+        assertFalse(shield.isOpen(), "isOpen reflects delegate state");
+        verify(channel, times(2)).isOpen();
+
+        shield.close();
+        // Reflects shield state after close
+        assertFalse(shield.isOpen(), "isOpen reflects shield state");
+        assertFalse(shield.isOpen(), "isOpen reflects shield state");
+        verify(channel, times(2)).isOpen();
+    }
+
+    @ParameterizedTest
+    @MethodSource("testedInterfaces")
+    void testCloseDoesNotCloseDelegate(Class<? extends Channel> channelClass) throws Exception {
+        final Channel channel = mock(channelClass);
+        final Channel shield = Channels.closeShield(channel);
+        shield.close();
+        verify(channel, never()).close();
+    }
+
+    @ParameterizedTest
+    @MethodSource("testedInterfaces")
+    void testCloseIsIdempotent(Class<? extends Channel> channelClass) throws Exception {
+        final Channel channel = mock(channelClass);
+        final Channel shield = Channels.closeShield(channel);
+        shield.close();
+        assertFalse(shield.isOpen());
+        shield.close();
+        assertFalse(shield.isOpen());
+        verifyNoInteractions(channel);
+    }
+
+    @ParameterizedTest
+    @MethodSource("testedInterfaces")
+    void testEquals(Class<? extends Channel> channelClass) throws Exception {
+        final Channel channel = mock(channelClass);
+        final Channel shield = Channels.closeShield(channel);
+        final Channel anotherShield = Channels.closeShield(channel);
+        assertTrue(shield.equals(shield), "reflexive");
+        assertFalse(shield.equals(null), "null is not equal");
+        assertFalse(shield.equals(channel), "shield not equal to delegate");
+        assertTrue(shield.equals(anotherShield), "shields of same delegate are equal");
+    }
+
+    @ParameterizedTest
+    @MethodSource("testedInterfaces")
+    void testHashCode(Class<? extends Channel> channelClass) throws Exception {
+        final Channel channel = mock(channelClass);
+        final Channel shield = Channels.closeShield(channel);
+        final Channel anotherShield = Channels.closeShield(channel);
+        assertEquals(shield.hashCode(), channel.hashCode(), "delegates hashCode");
+        assertEquals(shield.hashCode(), anotherShield.hashCode(), "shields of same delegate have same hashCode");
+    }
+
+    @ParameterizedTest
+    @MethodSource("testedInterfaces")
+    void testToString(Class<? extends Channel> channelClass) throws Exception {
+        final Channel channel = mock(channelClass);
+        when(channel.toString()).thenReturn("MyChannel");
+        final Channel shield = Channels.closeShield(channel);
+        final String shieldString = shield.toString();
+        assertTrue(shieldString.contains("CloseShield"));
+        assertTrue(shieldString.contains("MyChannel"));
+    }
+
+    @Test
+    void testReadableByteChannelMethods() throws Exception {
+        final ReadableByteChannel channel = mock(ReadableByteChannel.class);
+        when(channel.isOpen()).thenReturn(true);
+        final ReadableByteChannel shield = Channels.closeShield(channel);
+        // Before close read() should delegate
+        when(channel.read(null)).thenReturn(42);
+        assertEquals(42, shield.read(null));
+        verify(channel).read(null);
+        // After close read() should throw ClosedChannelException
+        shield.close();
+        assertThrows(ClosedChannelException.class, () -> shield.read(null));
+        verifyNoMoreInteractions(channel);
+    }
+
+    @Test
+    void testScatteringByteChannelMethods() throws Exception {
+        final ScatteringByteChannel channel = mock(ScatteringByteChannel.class);
+        when(channel.isOpen()).thenReturn(true);
+        final ScatteringByteChannel shield = Channels.closeShield(channel);
+        // Before close read() should delegate
+        when(channel.read(null, 0, 0)).thenReturn(42L);
+        assertEquals(42, shield.read(null, 0, 0));
+        verify(channel).read(null, 0, 0);
+        // After close read() should throw ClosedChannelException
+        shield.close();
+        assertThrows(ClosedChannelException.class, () -> shield.read(null, 0, 0));
+        verifyNoMoreInteractions(channel);
+    }
+
+    @Test
+    void testWritableByteChannelMethods() throws Exception {
+        final WritableByteChannel channel = mock(WritableByteChannel.class);
+        when(channel.isOpen()).thenReturn(true);
+        final WritableByteChannel shield = Channels.closeShield(channel);
+        // Before close write() should delegate
+        when(channel.write(null)).thenReturn(42);
+        assertEquals(42, shield.write(null));
+        verify(channel).write(null);
+        // After close write() should throw ClosedChannelException
+        shield.close();
+        assertThrows(ClosedChannelException.class, () -> shield.write(null));
+        verifyNoMoreInteractions(channel);
+    }
+
+    @Test
+    void testGatheringByteChannelMethods() throws Exception {
+        final GatheringByteChannel channel = mock(GatheringByteChannel.class);
+        when(channel.isOpen()).thenReturn(true);
+        final GatheringByteChannel shield = Channels.closeShield(channel);
+        // Before close write() should delegate
+        when(channel.write(null, 0, 0)).thenReturn(42L);
+        assertEquals(42, shield.write(null, 0, 0));
+        verify(channel).write(null, 0, 0);
+        // After close write() should throw ClosedChannelException
+        shield.close();
+        assertThrows(ClosedChannelException.class, () -> shield.write(null, 0, 0));
+        verifyNoMoreInteractions(channel);
+    }
+
+    @Test
+    void testSeekableByteChannelMethods() throws Exception {
+        final SeekableByteChannel channel = mock(SeekableByteChannel.class);
+        when(channel.isOpen()).thenReturn(true);
+        final SeekableByteChannel shield = Channels.closeShield(channel);
+        // Before close position() and size() should delegate
+        when(channel.position()).thenReturn(42L);
+        when(channel.size()).thenReturn(84L);
+        assertEquals(42, shield.position());
+        assertEquals(84, shield.size());
+        verify(channel).position();
+        verify(channel).size();
+        // Before close position(long) and truncate(long) should delegate
+        when(channel.position(21)).thenReturn(channel);
+        when(channel.truncate(21)).thenReturn(channel);
+        assertEquals(shield, shield.position(21));
+        assertEquals(shield, shield.truncate(21));
+        verify(channel).position(21);
+        verify(channel).truncate(21);
+        // After close position() should throw ClosedChannelException
+        shield.close();
+        assertThrows(ClosedChannelException.class, shield::position);
+        assertThrows(ClosedChannelException.class, () -> shield.position(0));
+        assertThrows(ClosedChannelException.class, shield::size);
+        assertThrows(ClosedChannelException.class, () -> shield.truncate(0));
+        verifyNoMoreInteractions(channel);
+    }
+
+    @Test
+    void testNetworkChannelMethods() throws Exception {
+        final NetworkChannel channel = mock(NetworkChannel.class);
+        when(channel.isOpen()).thenReturn(true);
+        final NetworkChannel shield = Channels.closeShield(channel);
+        // Before close getOption(), setOption(), getLocalAddress() and bind() should delegate
+        when(channel.getOption(null)).thenReturn("foo");
+        when(channel.setOption(null, null)).thenReturn(channel);
+        when(channel.getLocalAddress()).thenReturn(null);
+        when(channel.bind(null)).thenReturn(channel);
+        assertEquals("foo", shield.getOption(null));
+        assertEquals(shield, shield.setOption(null, null));
+        assertEquals(null, shield.getLocalAddress());
+        assertEquals(shield, shield.bind(null));
+        verify(channel).getOption(null);
+        verify(channel).setOption(null, null);
+        verify(channel).getLocalAddress();
+        verify(channel).bind(null);
+        // After close supportedOptions() should still work
+        shield.close();
+        assertDoesNotThrow(shield::supportedOptions);
+        verify(channel).supportedOptions();
+        // But the remaining methods should throw ClosedChannelException
+        assertThrows(ClosedChannelException.class, () -> shield.setOption(null, null));
+        assertThrows(ClosedChannelException.class, () -> shield.getOption(null));
+        assertThrows(ClosedChannelException.class, shield::getLocalAddress);
+        assertThrows(ClosedChannelException.class, () -> shield.bind(null));
+        verifyNoMoreInteractions(channel);
+    }
+
+    @Test
+    void testDoesNotDoubleWrap() {
+        final ByteChannel channel = mock(ByteChannel.class);
+        final ByteChannel shield1 = Channels.closeShield(channel);
+        final ByteChannel shield2 = Channels.closeShield(shield1);
+        assertSame(shield1, shield2);
+    }
+}
