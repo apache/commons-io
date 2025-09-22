@@ -98,7 +98,7 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
         }
         this.data = new byte[size];
         this.position = 0;
-        this.size = size;
+        this.size = 0;
     }
 
     private ByteArraySeekableByteChannel(byte[] data) {
