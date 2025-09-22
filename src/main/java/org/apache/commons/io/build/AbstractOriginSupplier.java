@@ -25,8 +25,6 @@ import java.io.Reader;
 import java.io.Writer;
 import java.net.URI;
 import java.nio.channels.Channel;
-import java.nio.channels.ReadableByteChannel;
-import java.nio.channels.WritableByteChannel;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -186,7 +184,14 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
         return new WriterOrigin(origin);
     }
 
-    private static ChannelOrigin newChannelOrigin(final Channel origin) {
+    /**
+     * Constructs a new channel origin for a channel.
+     *
+     * @param origin the channel.
+     * @return a new channel origin.
+     * @since 2.21.0
+     */
+    protected static ChannelOrigin newChannelOrigin(final Channel origin) {
         return new ChannelOrigin(origin);
     }
 
@@ -384,18 +389,7 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
      * @return {@code this} instance.
      * @since 2.21.0
      */
-    public B setReadableByteChannel(final ReadableByteChannel origin) {
-        return setOrigin(newChannelOrigin(origin));
-    }
-
-    /**
-     * Sets a new origin.
-     *
-     * @param origin the new origin.
-     * @return {@code this} instance.
-     * @since 2.21.0
-     */
-    public B setWritableByteChannel(final WritableByteChannel origin) {
+    public B setChannel(final Channel origin) {
         return setOrigin(newChannelOrigin(origin));
     }
 }

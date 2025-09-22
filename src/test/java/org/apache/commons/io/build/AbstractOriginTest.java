@@ -287,8 +287,10 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
 
     @Test
     void testGetReadableByteChannel() throws IOException {
-        try (ReadableByteChannel channel = getOriginRo().getReadableByteChannel(StandardOpenOption.READ)) {
-            final SeekableByteChannel seekable = channel instanceof SeekableByteChannel ? (SeekableByteChannel) channel : null;
+        try (ReadableByteChannel channel =
+                getOriginRo().getChannel(ReadableByteChannel.class, StandardOpenOption.READ)) {
+            final SeekableByteChannel seekable =
+                    channel instanceof SeekableByteChannel ? (SeekableByteChannel) channel : null;
             assertNotNull(channel);
             assertTrue(channel.isOpen());
             if (seekable != null) {
@@ -315,12 +317,12 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
 
     @Test
     void testGetWritableByteChannel() throws IOException {
-        testGetWritableByteChannel(true);
-    }
-
-    void testGetWritableByteChannel(boolean supportsRead) throws IOException {
-        try (WritableByteChannel channel = getOriginRw().getWritableByteChannel(StandardOpenOption.WRITE)) {
-            final SeekableByteChannel seekable = channel instanceof SeekableByteChannel ? (SeekableByteChannel) channel : null;
+        final boolean supportsRead;
+        try (WritableByteChannel channel =
+                getOriginRw().getChannel(WritableByteChannel.class, StandardOpenOption.WRITE)) {
+            supportsRead = channel instanceof ReadableByteChannel;
+            final SeekableByteChannel seekable =
+                    channel instanceof SeekableByteChannel ? (SeekableByteChannel) channel : null;
             assertNotNull(channel);
             assertTrue(channel.isOpen());
             if (seekable != null) {
@@ -335,14 +337,16 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
         }
         if (supportsRead) {
             setOriginRw(newOriginRw());
-            try (ReadableByteChannel channel = getOriginRw().getReadableByteChannel(StandardOpenOption.READ)) {
+            try (ReadableByteChannel channel =
+                    getOriginRw().getChannel(ReadableByteChannel.class, StandardOpenOption.READ)) {
                 assertNotNull(channel);
                 assertTrue(channel.isOpen());
                 checkRead(channel);
             }
         }
         setOriginRw(newOriginRw());
-        try (WritableByteChannel channel = getOriginRw().getWritableByteChannel(StandardOpenOption.WRITE)) {
+        try (WritableByteChannel channel =
+                getOriginRw().getChannel(WritableByteChannel.class, StandardOpenOption.WRITE)) {
             final SeekableByteChannel seekable =
                     channel instanceof SeekableByteChannel ? (SeekableByteChannel) channel : null;
             assertNotNull(channel);

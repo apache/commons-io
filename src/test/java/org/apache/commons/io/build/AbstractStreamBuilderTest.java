@@ -19,7 +19,6 @@ package org.apache.commons.io.build;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -99,7 +98,7 @@ class AbstractStreamBuilderTest {
                 // We can convert FileInputStream to ReadableByteChannel, but not the reverse.
                 // Therefore, we don't use Files.newInputStream.
                 b -> b.setInputStream(new FileInputStream(AbstractOriginTest.FILE_NAME_RO)),
-                b -> b.setReadableByteChannel(Files.newByteChannel(path)),
+                b -> b.setChannel(Files.newByteChannel(path)),
                 b -> b.setURI(uri));
     }
 
@@ -126,9 +125,8 @@ class AbstractStreamBuilderTest {
     void getGetSeekableByteChannel(IOConsumer<Builder> configurer) throws Exception {
         final Builder builder = builder();
         configurer.accept(builder);
-        try (ReadableByteChannel channel = assertDoesNotThrow(builder::getReadableByteChannel)) {
+        try (ReadableByteChannel channel = assertDoesNotThrow(() -> builder.getChannel(SeekableByteChannel.class))) {
             assertTrue(channel.isOpen());
-            assertInstanceOf(SeekableByteChannel.class, channel);
         }
     }
 }

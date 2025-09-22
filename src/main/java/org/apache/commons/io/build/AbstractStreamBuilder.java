@@ -24,8 +24,8 @@ import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.channels.Channel;
 import java.nio.channels.ReadableByteChannel;
-import java.nio.channels.WritableByteChannel;
 import java.nio.charset.Charset;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
@@ -261,33 +261,20 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     }
 
     /**
-     * Gets a ReadableByteChannel from the origin with OpenOption[].
+     * Gets a Channel from the origin with OpenOption[].
      *
-     * @return A ReadableByteChannel.
+     * @param channelType The channel type, not null.
+     * @return A channel of the specified type.
+     * @param <C>         The channel type.
      * @throws IllegalStateException         if the {@code origin} is {@code null}.
      * @throws UnsupportedOperationException if the origin cannot be converted to a {@link ReadableByteChannel}.
      * @throws IOException                   if an I/O error occurs.
-     * @see AbstractOrigin#getReadableByteChannel(OpenOption...)
+     * @see AbstractOrigin#getChannel
      * @see #getOpenOptions()
      * @since 2.21.0
      */
-    public ReadableByteChannel getReadableByteChannel() throws IOException {
-        return checkOrigin().getReadableByteChannel(getOpenOptions());
-    }
-
-    /**
-     * Gets a WritableByteChannel from the origin with OpenOption[].
-     *
-     * @return A WritableByteChannel.
-     * @throws IllegalStateException         if the {@code origin} is {@code null}.
-     * @throws UnsupportedOperationException if the origin cannot be converted to a {@link WritableByteChannel}.
-     * @throws IOException                   if an I/O error occurs.
-     * @see AbstractOrigin#getWritableByteChannel(OpenOption...)
-     * @see #getOpenOptions()
-     * @since 2.21.0
-     */
-    public WritableByteChannel getWritableByteChannel() throws IOException {
-        return checkOrigin().getWritableByteChannel(getOpenOptions());
+    public <C extends Channel> C getChannel(Class<C> channelType) throws IOException {
+        return checkOrigin().getChannel(channelType, getOpenOptions());
     }
 
     /**

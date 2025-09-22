@@ -94,7 +94,7 @@ class ChannelOriginTest extends AbstractOriginTest<Channel, ChannelOrigin> {
         final ChannelOrigin origin = new ChannelOrigin(channel);
         assertThrows(UnsupportedOperationException.class, origin::getOutputStream);
         assertThrows(UnsupportedOperationException.class, () -> origin.getWriter(null));
-        assertThrows(UnsupportedOperationException.class, origin::getWritableByteChannel);
+        assertThrows(UnsupportedOperationException.class, () -> origin.getChannel(WritableByteChannel.class));
     }
 
     @Test
@@ -103,6 +103,6 @@ class ChannelOriginTest extends AbstractOriginTest<Channel, ChannelOrigin> {
         final ChannelOrigin origin = new ChannelOrigin(channel);
         assertThrows(UnsupportedOperationException.class, origin::getInputStream);
         assertThrows(UnsupportedOperationException.class, () -> origin.getReader(null));
-        assertThrows(UnsupportedOperationException.class, origin::getReadableByteChannel);
+        assertThrows(UnsupportedOperationException.class, () -> origin.getChannel(ReadableByteChannel.class));
     }
 }

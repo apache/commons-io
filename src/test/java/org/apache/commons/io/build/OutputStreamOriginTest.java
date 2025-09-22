@@ -134,11 +134,6 @@ class OutputStreamOriginTest extends AbstractOriginTest<OutputStream, OutputStre
     }
 
     @Override
-    void testGetWritableByteChannel() throws IOException {
-        super.testGetWritableByteChannel(false);
-    }
-
-    @Override
     @Test
     void testSize() {
         // Cannot convert a Writer to a size.
