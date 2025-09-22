@@ -1731,6 +1731,21 @@ class IOUtilsTest {
     }
 
     @Test
+    void testToByteArray_ThrowsIOExceptionOnHugeStream() {
+        try (MockedStatic<IOUtils> utils = Mockito.mockStatic(IOUtils.class, Mockito.CALLS_REAL_METHODS)) {
+            // Prepare the mocks
+            final UnsynchronizedByteArrayOutputStream mockOutputStream = mock(UnsynchronizedByteArrayOutputStream.class);
+            utils.when(() -> IOUtils.copyToOutputStream(Mockito.any(InputStream.class), Mockito.anyLong(), Mockito.anyInt())).thenReturn(mockOutputStream);
+            when(mockOutputStream.size()).thenReturn(IOUtils.SOFT_MAX_ARRAY_LENGTH + 1);
+            // Test and check
+            final InputStream mockInputStream = mock(InputStream.class);
+            final IOException exception = assertThrows(IOException.class, () -> IOUtils.toByteArray(mockInputStream));
+            assertTrue(exception.getMessage().contains(String.format("%,d", IOUtils.SOFT_MAX_ARRAY_LENGTH)),
+                    "Exception message does not contain the maximum length");
+        }
+    }
+
+    @Test
     void testToByteArray_URI() throws Exception {
         final URI url = testFile.toURI();
         final byte[] actual = IOUtils.toByteArray(url);
@@ -1967,26 +1982,6 @@ class IOUtilsTest {
                 IOUtils.write(data, os, StandardCharsets.UTF_8);
                 assertEquals(data.length(), os.getByteCount());
             }
-        }
-    }
-
-    @Test
-    void testToByteArray_ThrowsIOExceptionOnHugeStream() {
-        try (MockedStatic<IOUtils> utils = Mockito.mockStatic(IOUtils.class, Mockito.CALLS_REAL_METHODS)) {
-            // Prepare the mocks
-            final UnsynchronizedByteArrayOutputStream mockOutputStream =
-                    mock(UnsynchronizedByteArrayOutputStream.class);
-            utils.when(() -> IOUtils.copyToOutputStream(
-                            Mockito.any(InputStream.class), Mockito.anyLong(), Mockito.anyInt()))
-                    .thenReturn(mockOutputStream);
-            when(mockOutputStream.size()).thenReturn(IOUtils.SOFT_MAX_ARRAY_LENGTH + 1);
-
-            // Test and check
-            final InputStream mockInputStream = mock(InputStream.class);
-            final IOException exception = assertThrows(IOException.class, () -> IOUtils.toByteArray(mockInputStream));
-            assertTrue(
-                    exception.getMessage().contains(String.format("%,d", IOUtils.SOFT_MAX_ARRAY_LENGTH)),
-                    "Exception message does not contain the maximum length");
         }
     }
 }
