@@ -77,14 +77,11 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
      * <p>
      * The initial size and position of the channel are 0.
      * </p>
-     * <p>
-     * The default initial capacity is 32 bytes, although the capacity will grow as needed when writing data.
-     * </p>
      *
      * @see ByteArrayOutputStream#ByteArrayOutputStream()
      */
     public ByteArraySeekableByteChannel() {
-        this(32);
+        this(IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
     /**

@@ -29,6 +29,7 @@ import java.nio.channels.SeekableByteChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.function.IOSupplier;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -56,7 +57,7 @@ public class ByteArraySeekableByteChannelTest extends AbstractSeekableByteChanne
                 Arguments.of(
                         (IOSupplier<ByteArraySeekableByteChannel>) ByteArraySeekableByteChannel::new,
                         EMPTY_BYTE_ARRAY,
-                        32),
+                        IOUtils.DEFAULT_BUFFER_SIZE),
                 Arguments.of(
                         (IOSupplier<ByteArraySeekableByteChannel>) () -> new ByteArraySeekableByteChannel(8),
                         EMPTY_BYTE_ARRAY,
