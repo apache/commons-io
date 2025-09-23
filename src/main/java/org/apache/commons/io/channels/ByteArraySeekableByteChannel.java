@@ -19,6 +19,8 @@
 
 package org.apache.commons.io.channels;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedChannelException;
@@ -57,7 +59,7 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
      * @return A new channel that uses the given array as its initial backing store
      * @throws NullPointerException If {@code bytes} is {@code null}
      * @see #array()
-     * @see java.io.ByteArrayInputStream#ByteArrayInputStream(byte[])
+     * @see ByteArrayInputStream#ByteArrayInputStream(byte[])
      */
     public static ByteArraySeekableByteChannel wrap(byte[] bytes) {
         Objects.requireNonNull(bytes, "bytes");
@@ -78,7 +80,8 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
      * <p>
      * The default initial capacity is 32 bytes, although the capacity will grow as needed when writing data.
      * </p>
-     * @see java.io.ByteArrayOutputStream#ByteArrayOutputStream()
+     *
+     * @see ByteArrayOutputStream#ByteArrayOutputStream()
      */
     public ByteArraySeekableByteChannel() {
         this(32);
@@ -89,8 +92,9 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
      * <p>
      * The initial size and position of the channel are 0.
      * </p>
+     *
      * @param size Capacity of the internal buffer to allocate, in bytes.
-     * @see java.io.ByteArrayOutputStream#ByteArrayOutputStream(int)
+     * @see ByteArrayOutputStream#ByteArrayOutputStream(int)
      */
     public ByteArraySeekableByteChannel(final int size) {
         if (size < 0) {
