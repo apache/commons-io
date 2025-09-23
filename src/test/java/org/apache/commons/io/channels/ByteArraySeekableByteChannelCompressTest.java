@@ -42,7 +42,7 @@ class ByteArraySeekableByteChannelCompressTest {
 
     private final byte[] testData = "Some data".getBytes(StandardCharsets.UTF_8);
 
-    private byte[] getTestData() {
+    private byte[] cloneTestData() {
         return testData.clone();
     }
 
@@ -78,7 +78,7 @@ class ByteArraySeekableByteChannelCompressTest {
 
     @Test
     void testShouldReadContentsProperly() throws IOException {
-        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
+        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(cloneTestData())) {
             final ByteBuffer readBuffer = ByteBuffer.allocate(testData.length);
             final int readCount = c.read(readBuffer);
             assertEquals(testData.length, readCount);
@@ -89,7 +89,7 @@ class ByteArraySeekableByteChannelCompressTest {
 
     @Test
     void testShouldReadContentsWhenBiggerBufferSupplied() throws IOException {
-        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
+        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(cloneTestData())) {
             final ByteBuffer readBuffer = ByteBuffer.allocate(testData.length + 1);
             final int readCount = c.read(readBuffer);
             assertEquals(testData.length, readCount);
@@ -100,7 +100,7 @@ class ByteArraySeekableByteChannelCompressTest {
 
     @Test
     void testShouldReadDataFromSetPosition() throws IOException {
-        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
+        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(cloneTestData())) {
             final ByteBuffer readBuffer = ByteBuffer.allocate(4);
             c.position(5L);
             final int readCount = c.read(readBuffer);
@@ -112,7 +112,7 @@ class ByteArraySeekableByteChannelCompressTest {
 
     @Test
     void testShouldSetProperPosition() throws IOException {
-        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
+        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(cloneTestData())) {
             final long posAtFour = c.position(4L).position();
             final long posAtTheEnd = c.position(testData.length).position();
             final long posPastTheEnd = c.position(testData.length + 1L).position();
@@ -124,7 +124,7 @@ class ByteArraySeekableByteChannelCompressTest {
 
     @Test
     void testShouldSetProperPositionOnTruncate() throws IOException {
-        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
+        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(cloneTestData())) {
             c.position(testData.length);
             c.truncate(4L);
             assertEquals(4L, c.position());
@@ -134,7 +134,7 @@ class ByteArraySeekableByteChannelCompressTest {
 
     @Test
     void testShouldSignalEOFWhenPositionAtTheEnd() throws IOException {
-        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
+        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(cloneTestData())) {
             final ByteBuffer readBuffer = ByteBuffer.allocate(testData.length);
             c.position(testData.length + 1);
             final int readCount = c.read(readBuffer);
@@ -174,7 +174,7 @@ class ByteArraySeekableByteChannelCompressTest {
 
     @Test
     void testShouldTruncateContentsProperly() throws ClosedChannelException {
-        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
+        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(cloneTestData())) {
             c.truncate(4);
             final byte[] bytes = Arrays.copyOf(c.array(), (int) c.size());
             assertEquals("Some", new String(bytes, StandardCharsets.UTF_8));
@@ -197,7 +197,7 @@ class ByteArraySeekableByteChannelCompressTest {
 
     @Test
     void testShouldWriteDataProperlyAfterPositionSet() throws IOException {
-        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
+        try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(cloneTestData())) {
             final ByteBuffer inData = ByteBuffer.wrap(testData);
             final ByteBuffer expectedData = ByteBuffer.allocate(testData.length + 5).put(testData, 0, 5).put(testData);
             c.position(5L);
@@ -246,7 +246,7 @@ class ByteArraySeekableByteChannelCompressTest {
      */
     @Test
     void testTruncateDoesntChangeSmallPosition() throws Exception {
-        try (SeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
+        try (SeekableByteChannel c = ByteArraySeekableByteChannel.wrap(cloneTestData())) {
             c.position(1);
             c.truncate(testData.length - 1);
             assertEquals(testData.length - 1, c.size());
@@ -259,7 +259,7 @@ class ByteArraySeekableByteChannelCompressTest {
      */
     @Test
     void testTruncateMovesPositionWhenNewSizeIsBiggerThanSizeAndPositionIsEvenBigger() throws Exception {
-        try (SeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
+        try (SeekableByteChannel c = ByteArraySeekableByteChannel.wrap(cloneTestData())) {
             c.position(2 * testData.length);
             c.truncate(testData.length + 1);
             assertEquals(testData.length, c.size());
@@ -273,7 +273,7 @@ class ByteArraySeekableByteChannelCompressTest {
      */
     @Test
     void testTruncateMovesPositionWhenNotResizingButPositionBiggerThanSize() throws Exception {
-        try (SeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
+        try (SeekableByteChannel c = ByteArraySeekableByteChannel.wrap(cloneTestData())) {
             c.position(2 * testData.length);
             c.truncate(testData.length);
             assertEquals(testData.length, c.size());
@@ -286,7 +286,7 @@ class ByteArraySeekableByteChannelCompressTest {
      */
     @Test
     void testTruncateMovesPositionWhenShrinkingBeyondPosition() throws Exception {
-        try (SeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
+        try (SeekableByteChannel c = ByteArraySeekableByteChannel.wrap(cloneTestData())) {
             c.position(4);
             c.truncate(3);
             assertEquals(3, c.size());
@@ -299,7 +299,7 @@ class ByteArraySeekableByteChannelCompressTest {
      */
     @Test
     void testTruncateToBiggerSizeDoesntChangeAnything() throws Exception {
-        try (SeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
+        try (SeekableByteChannel c = ByteArraySeekableByteChannel.wrap(cloneTestData())) {
             assertEquals(testData.length, c.size());
             c.truncate(testData.length + 1);
             assertEquals(testData.length, c.size());
@@ -314,7 +314,7 @@ class ByteArraySeekableByteChannelCompressTest {
      */
     @Test
     void testTruncateToCurrentSizeDoesntChangeAnything() throws Exception {
-        try (SeekableByteChannel c = ByteArraySeekableByteChannel.wrap(getTestData())) {
+        try (SeekableByteChannel c = ByteArraySeekableByteChannel.wrap(cloneTestData())) {
             assertEquals(testData.length, c.size());
             c.truncate(testData.length);
             assertEquals(testData.length, c.size());
