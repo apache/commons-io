@@ -87,6 +87,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <th>OS</th>
  *       <th>Writer</th>
  *       <th>WBC</th>
+ *       <th>Channel type<sup>2</sup></th>
  *     </tr>
  *   </thead>
  *   <tbody>
@@ -103,6 +104,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>✖</td>
  *       <td>✖</td>
  *       <td>✖</td>
+ *       <td>SBC</td>
  *     </tr>
  *     <tr>
  *       <td>CharSequence (CS)</td>
@@ -117,6 +119,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>✖</td>
  *       <td>✖</td>
  *       <td>✖</td>
+ *       <td>SBC</td>
  *     </tr>
  *     <tr>
  *       <td>File</td>
@@ -131,6 +134,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>✔</td>
  *       <td>✔</td>
  *       <td>✔</td>
+ *       <td>FC</td>
  *     </tr>
  *     <tr>
  *       <td>Path</td>
@@ -145,6 +149,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>✔</td>
  *       <td>✔</td>
  *       <td>✔</td>
+ *       <td>FC</td>
  *     </tr>
  *     <tr>
  *       <td>IORandomAccessFile</td>
@@ -159,6 +164,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>✔</td>
  *       <td>✔</td>
  *       <td>✔</td>
+ *       <td>FC</td>
  *     </tr>
  *     <tr>
  *       <td>RandomAccessFile (RAF)</td>
@@ -173,6 +179,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>✔</td>
  *       <td>✔</td>
  *       <td>✔</td>
+ *       <td>FC</td>
  *     </tr>
  *     <tr>
  *       <td>InputStream (IS)</td>
@@ -187,6 +194,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>✖</td>
  *       <td>✖</td>
  *       <td>✖</td>
+ *       <td>RBC</td>
  *     </tr>
  *     <tr>
  *       <td>Reader</td>
@@ -201,6 +209,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>✖</td>
  *       <td>✖</td>
  *       <td>✖</td>
+ *       <td>RBC</td>
  *     </tr>
  *     <tr>
  *       <td>ReadableByteChannel (RBC)</td>
@@ -215,6 +224,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>✖</td>
  *       <td>✖</td>
  *       <td>✖</td>
+ *       <td>RBC</td>
  *     </tr>
  *     <tr>
  *       <td>OutputStream (OS)</td>
@@ -229,6 +239,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>✔</td>
  *       <td>✔</td>
  *       <td>✔</td>
+ *       <td>WBC</td>
  *     </tr>
  *     <tr>
  *       <td>Writer</td>
@@ -243,6 +254,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>✔<sup>1</sup></td>
  *       <td>✔</td>
  *       <td>✔<sup>1</sup></td>
+ *       <td>WBC</td>
  *     </tr>
  *     <tr>
  *       <td>WritableByteChannel (WBC)</td>
@@ -257,6 +269,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>✔</td>
  *       <td>✔</td>
  *       <td>✔</td>
+ *       <td>WBC</td>
  *     </tr>
  *     <tr>
  *       <td>URI (FileSystem)</td>
@@ -271,6 +284,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>✔</td>
  *       <td>✔</td>
  *       <td>✔</td>
+ *       <td>FC</td>
  *     </tr>
  *     <tr>
  *       <td>URI (http/https))</td>
@@ -285,6 +299,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>✖</td>
  *       <td>✖</td>
  *       <td>✖</td>
+ *       <td>RBC</td>
  *     </tr>
  *   </tbody>
  * </table>
@@ -294,6 +309,15 @@ import org.apache.commons.io.output.WriterOutputStream;
  *   <li>✔ = Supported</li>
  *   <li>✖ = Not supported (throws {@link UnsupportedOperationException})</li>
  *   <li><sup>1</sup> = Characters are converted to bytes using the default {@link Charset}.</li>
+ *   <li><sup>2</sup> Minimum channel type provided by the origin:
+ *     <ul>
+ *         <li>RBC = ReadableByteChannel</li>
+ *         <li>WBC = WritableByteChannel</li>
+ *         <li>SBC = SeekableByteChannel</li>
+ *         <li>FC = FileChannel</li>
+ *     </ul>
+ *     The exact channel type may be a subtype of the minimum shown.
+ *   </li>
  * </ul>
  *
  * @param <T> the type produced by the builder.
