@@ -48,10 +48,6 @@ public class ByteArraySeekableByteChannelTest extends AbstractSeekableByteChanne
 
     private static final byte[] testData = "Some data".getBytes(StandardCharsets.UTF_8);
 
-    private static byte[] getTestData() {
-        return testData.clone();
-    }
-
     static Stream<Arguments> testConstructor() {
         return Stream.of(
                 Arguments.of(
@@ -73,8 +69,8 @@ public class ByteArraySeekableByteChannelTest extends AbstractSeekableByteChanne
                         0),
                 Arguments.of(
                         (IOSupplier<ByteArraySeekableByteChannel>)
-                                () -> ByteArraySeekableByteChannel.wrap(getTestData()),
-                        getTestData(),
+                                () -> ByteArraySeekableByteChannel.wrap(testData),
+                        testData,
                         testData.length));
     }
 
