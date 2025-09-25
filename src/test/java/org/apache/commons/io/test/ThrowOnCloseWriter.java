@@ -41,7 +41,7 @@ public class ThrowOnCloseWriter extends ProxyWriter {
         super(proxy);
     }
 
-    /** @see java.io.Writer#close() */
+    /** @see Writer#close() */
     @Override
     public void close() throws IOException {
         throw new IOException(getClass().getSimpleName() + ".close() called.");

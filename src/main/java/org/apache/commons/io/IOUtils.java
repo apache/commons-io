@@ -274,7 +274,7 @@ public class IOUtils {
      *
      * @param outputStream the OutputStream to wrap or return (not null).
      * @return the given OutputStream or a new {@link BufferedOutputStream} for the given OutputStream
-     * @throws NullPointerException if the input parameter is null..
+     * @throws NullPointerException if the input parameter is null.
      * @since 2.5
      */
     @SuppressWarnings("resource") // parameter null check
@@ -396,7 +396,7 @@ public class IOUtils {
     /**
      * Returns a new char array of the given size.
      *
-     * TODO Consider guarding or warning against large allocations...
+     * TODO Consider guarding or warning against large allocations.
      *
      * @param size array size.
      * @return a new char array of the given size.
@@ -1645,7 +1645,7 @@ public class IOUtils {
      * @param bufferSize The buffer size of the output stream; must be {@code > 0}.
      * @return a ByteArrayOutputStream containing the read bytes.
      */
-    private static UnsynchronizedByteArrayOutputStream copyToOutputStream(
+    static UnsynchronizedByteArrayOutputStream copyToOutputStream(
             final InputStream input, final long limit, final int bufferSize) throws IOException {
         try (UnsynchronizedByteArrayOutputStream output = UnsynchronizedByteArrayOutputStream.builder()
                         .setBufferSize(bufferSize)
@@ -2680,15 +2680,14 @@ public class IOUtils {
      *
      * @param inputStream The {@link InputStream} to read; must not be {@code null}.
      * @return A new byte array.
-     * @throws IllegalArgumentException If the size of the stream is greater than the maximum array size.
-     * @throws IOException              If an I/O error occurs while reading.
+     * @throws IOException              If an I/O error occurs while reading or if the maximum array size is exceeded.
      * @throws NullPointerException     If {@code inputStream} is {@code null}.
      */
     public static byte[] toByteArray(final InputStream inputStream) throws IOException {
         // Using SOFT_MAX_ARRAY_LENGTH guarantees that size() will not overflow
         final UnsynchronizedByteArrayOutputStream output = copyToOutputStream(inputStream, SOFT_MAX_ARRAY_LENGTH + 1, DEFAULT_BUFFER_SIZE);
         if (output.size() > SOFT_MAX_ARRAY_LENGTH) {
-            throw new IllegalArgumentException(String.format("Cannot read more than %,d into a byte array", SOFT_MAX_ARRAY_LENGTH));
+            throw new IOException(String.format("Cannot read more than %,d into a byte array", SOFT_MAX_ARRAY_LENGTH));
         }
         return output.toByteArray();
     }

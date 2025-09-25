@@ -41,7 +41,7 @@ public class ThrowOnCloseOutputStream extends ProxyOutputStream {
         super(proxy);
     }
 
-    /** @see java.io.OutputStream#close() */
+    /** @see OutputStream#close() */
     @Override
     public void close() throws IOException {
         throw new IOException(getClass().getSimpleName() + ".close() called.");

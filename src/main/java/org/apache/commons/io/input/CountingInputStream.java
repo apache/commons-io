@@ -28,6 +28,7 @@ import java.io.InputStream;
  * A typical use case would be during debugging, to ensure that data is being
  * read as expected.
  * </p>
+ *
  * @deprecated Use {@link BoundedInputStream} (unbounded by default).
  */
 @Deprecated
@@ -149,7 +150,7 @@ public class CountingInputStream extends ProxyInputStream {
      * @param length  the number of bytes to skip
      * @return the actual number of bytes skipped
      * @throws IOException if an I/O error occurs.
-     * @see java.io.InputStream#skip(long)
+     * @see InputStream#skip(long)
      */
     @Override
     public synchronized long skip(final long length) throws IOException {

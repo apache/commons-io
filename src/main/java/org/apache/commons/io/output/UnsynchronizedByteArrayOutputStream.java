@@ -111,8 +111,10 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      * <li>It has network resources associated, so we cannot keep it open for long time.</li>
      * <li>It has network timeout associated.</li>
      * </ul>
+     * <p>
      * It can be used in favor of {@link #toByteArray()}, since it avoids unnecessary allocation and copy of byte[].<br>
      * This method buffers the input internally, so there is no need to use a {@link BufferedInputStream}.
+     * </p>
      *
      * @param input Stream to be fully buffered.
      * @return A fully buffered stream.
@@ -132,11 +134,13 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      * <li>It has network resources associated, so we cannot keep it open for long time.</li>
      * <li>It has network timeout associated.</li>
      * </ul>
+     * <p>
      * It can be used in favor of {@link #toByteArray()}, since it avoids unnecessary allocation and copy of byte[].<br>
      * This method buffers the input internally, so there is no need to use a {@link BufferedInputStream}.
+     * </p>
      *
      * @param input Stream to be fully buffered.
-     * @param size the initial buffer size
+     * @param size the initial buffer size.
      * @return A fully buffered stream.
      * @throws IOException if an I/O error occurs.
      */
@@ -149,7 +153,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
     }
 
     /**
-     * Constructs a new byte array output stream. The buffer capacity is initially
+     * Constructs a new byte array output stream. The buffer capacity is initially.
      *
      * {@value AbstractByteArrayOutputStream#DEFAULT_SIZE} bytes, though its size increases if necessary.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
@@ -166,8 +170,8 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
     /**
      * Constructs a new byte array output stream, with a buffer capacity of the specified size, in bytes.
      *
-     * @param size the initial size
-     * @throws IllegalArgumentException if size is negative
+     * @param size the initial size.
+     * @throws IllegalArgumentException if size is negative.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}. Will be private in 3.0.0.
      */
     @Deprecated

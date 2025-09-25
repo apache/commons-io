@@ -56,7 +56,7 @@ public class WindowsLineEndingInputStream extends InputStream {
     /**
      * Closes the stream. Also closes the underlying stream.
      *
-     * @throws IOException upon error
+     * @throws IOException If an I/O error occurs.
      */
     @Override
     public void close() throws IOException {

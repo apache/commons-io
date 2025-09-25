@@ -80,7 +80,7 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
      * @return a proxy class implementing the interfaces
      * @throws IOException in case of an I/O error
      * @throws ClassNotFoundException if the Class cannot be found
-     * @see java.io.ObjectInputStream#resolveProxyClass(String[])
+     * @see ObjectInputStream#resolveProxyClass(String[])
      * @since 2.1
      */
     @Override

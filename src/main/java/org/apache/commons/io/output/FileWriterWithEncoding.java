@@ -128,8 +128,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
             if (charsetEncoder != null && getCharset() != null && !charsetEncoder.charset().equals(getCharset())) {
                 throw new IllegalStateException(String.format("Mismatched Charset(%s) and CharsetEncoder(%s)", getCharset(), charsetEncoder.charset()));
             }
-            final Object encoder = charsetEncoder != null ? charsetEncoder : getCharset();
-            return encoder;
+            return charsetEncoder != null ? charsetEncoder : getCharset();
         }
 
         /**
@@ -209,11 +208,11 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param file    the file to write to, not null
-     * @param charset the encoding to use, not null
-     * @throws NullPointerException if the file or encoding is null
-     * @throws IOException          in case of an I/O error
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @param file    the file to write to, not null.
+     * @param charset the encoding to use, not null.
+     * @throws NullPointerException if the file or encoding is null.
+     * @throws IOException          in case of an I/O error.
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public FileWriterWithEncoding(final File file, final Charset charset) throws IOException {
@@ -228,7 +227,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
      * @param append   true if content should be appended, false to overwrite.
      * @throws NullPointerException if the file is null.
      * @throws IOException          in case of an I/O error.
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     @SuppressWarnings("resource") // Call site is responsible for closing a new instance.
@@ -239,11 +238,11 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param file           the file to write to, not null
-     * @param charsetEncoder the encoding to use, not null
-     * @throws NullPointerException if the file or encoding is null
-     * @throws IOException          in case of an I/O error
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @param file           the file to write to, not null.
+     * @param charsetEncoder the encoding to use, not null.
+     * @throws NullPointerException if the file or encoding is null.
+     * @throws IOException          in case of an I/O error.
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public FileWriterWithEncoding(final File file, final CharsetEncoder charsetEncoder) throws IOException {
@@ -258,7 +257,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
      * @param append         true if content should be appended, false to overwrite.
      * @throws NullPointerException if the file is null.
      * @throws IOException          in case of an I/O error.
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     @SuppressWarnings("resource") // Call site is responsible for closing a new instance.
@@ -269,11 +268,11 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param file        the file to write to, not null
-     * @param charsetName the name of the requested charset, not null
-     * @throws NullPointerException if the file or encoding is null
-     * @throws IOException          in case of an I/O error
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @param file        the file to write to, not null.
+     * @param charsetName the name of the requested charset, not null.
+     * @throws NullPointerException if the file or encoding is null.
+     * @throws IOException          in case of an I/O error.
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public FileWriterWithEncoding(final File file, final String charsetName) throws IOException {
@@ -288,7 +287,7 @@ public class FileWriterWithEncoding extends ProxyWriter {
      * @param append      true if content should be appended, false to overwrite.
      * @throws NullPointerException if the file is null.
      * @throws IOException          in case of an I/O error.
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     @SuppressWarnings("resource") // Call site is responsible for closing a new instance.
@@ -303,11 +302,11 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param fileName the name of the file to write to, not null
-     * @param charset  the charset to use, not null
-     * @throws NullPointerException if the file name or encoding is null
-     * @throws IOException          in case of an I/O error
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @param fileName the name of the file to write to, not null.
+     * @param charset  the charset to use, not null.
+     * @throws NullPointerException if the file name or encoding is null.
+     * @throws IOException          in case of an I/O error.
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public FileWriterWithEncoding(final String fileName, final Charset charset) throws IOException {
@@ -317,12 +316,12 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param fileName the name of the file to write to, not null
-     * @param charset  the encoding to use, not null
-     * @param append   true if content should be appended, false to overwrite
-     * @throws NullPointerException if the file name or encoding is null
-     * @throws IOException          in case of an I/O error
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @param fileName the name of the file to write to, not null.
+     * @param charset  the encoding to use, not null.
+     * @param append   true if content should be appended, false to overwrite.
+     * @throws NullPointerException if the file name or encoding is null.
+     * @throws IOException          in case of an I/O error.
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public FileWriterWithEncoding(final String fileName, final Charset charset, final boolean append) throws IOException {
@@ -332,11 +331,11 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param fileName the name of the file to write to, not null
-     * @param encoding the encoding to use, not null
-     * @throws NullPointerException if the file name or encoding is null
-     * @throws IOException          in case of an I/O error
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @param fileName the name of the file to write to, not null.
+     * @param encoding the encoding to use, not null.
+     * @throws NullPointerException if the file name or encoding is null.
+     * @throws IOException          in case of an I/O error.
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public FileWriterWithEncoding(final String fileName, final CharsetEncoder encoding) throws IOException {
@@ -346,12 +345,12 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param fileName       the name of the file to write to, not null
-     * @param charsetEncoder the encoding to use, not null
-     * @param append         true if content should be appended, false to overwrite
-     * @throws NullPointerException if the file name or encoding is null
-     * @throws IOException          in case of an I/O error
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @param fileName       the name of the file to write to, not null.
+     * @param charsetEncoder the encoding to use, not null.
+     * @param append         true if content should be appended, false to overwrite.
+     * @throws NullPointerException if the file name or encoding is null.
+     * @throws IOException          in case of an I/O error.
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public FileWriterWithEncoding(final String fileName, final CharsetEncoder charsetEncoder, final boolean append) throws IOException {
@@ -361,11 +360,11 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param fileName    the name of the file to write to, not null
-     * @param charsetName the name of the requested charset, not null
-     * @throws NullPointerException if the file name or encoding is null
-     * @throws IOException          in case of an I/O error
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @param fileName    the name of the file to write to, not null.
+     * @param charsetName the name of the requested charset, not null.
+     * @throws NullPointerException if the file name or encoding is null.
+     * @throws IOException          in case of an I/O error.
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public FileWriterWithEncoding(final String fileName, final String charsetName) throws IOException {
@@ -375,12 +374,12 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param fileName    the name of the file to write to, not null
-     * @param charsetName the name of the requested charset, not null
-     * @param append      true if content should be appended, false to overwrite
-     * @throws NullPointerException if the file name or encoding is null
-     * @throws IOException          in case of an I/O error
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @param fileName    the name of the file to write to, not null.
+     * @param charsetName the name of the requested charset, not null.
+     * @param append      true if content should be appended, false to overwrite.
+     * @throws NullPointerException if the file name or encoding is null.
+     * @throws IOException          in case of an I/O error.
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public FileWriterWithEncoding(final String fileName, final String charsetName, final boolean append) throws IOException {

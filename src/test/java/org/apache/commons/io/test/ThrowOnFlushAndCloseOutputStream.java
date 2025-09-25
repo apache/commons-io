@@ -43,7 +43,7 @@ public class ThrowOnFlushAndCloseOutputStream extends ProxyOutputStream {
         this.throwOnClose = throwOnClose;
     }
 
-    /** @see java.io.OutputStream#close() */
+    /** @see OutputStream#close() */
     @Override
     public void close() throws IOException {
         if (throwOnClose) {
@@ -52,7 +52,7 @@ public class ThrowOnFlushAndCloseOutputStream extends ProxyOutputStream {
         super.close();
     }
 
-    /** @see java.io.OutputStream#flush() */
+    /** @see OutputStream#flush() */
     @Override
     public void flush() throws IOException {
         if (throwOnFlush) {

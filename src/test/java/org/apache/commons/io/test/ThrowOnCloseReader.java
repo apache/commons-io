@@ -41,7 +41,7 @@ public class ThrowOnCloseReader extends ProxyReader {
         super(proxy);
     }
 
-    /** @see java.io.Reader#close() */
+    /** @see Reader#close() */
     @Override
     public void close() throws IOException {
         throw new IOException(getClass().getSimpleName() + ".close() called.");

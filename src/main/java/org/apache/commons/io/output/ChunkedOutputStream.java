@@ -109,7 +109,7 @@ public class ChunkedOutputStream extends FilterOutputStream {
     }
 
     /**
-     * The maximum chunk size to us when writing data arrays
+     * The maximum chunk size to us when writing data arrays.
      */
     private final int chunkSize;
 
@@ -132,8 +132,8 @@ public class ChunkedOutputStream extends FilterOutputStream {
     /**
      * Constructs a new stream that uses a chunk size of {@link IOUtils#DEFAULT_BUFFER_SIZE}.
      *
-     * @param stream the stream to wrap
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @param stream the stream to wrap.
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public ChunkedOutputStream(final OutputStream stream) {
@@ -145,8 +145,8 @@ public class ChunkedOutputStream extends FilterOutputStream {
      *
      * @param stream    the stream to wrap
      * @param chunkSize the chunk size to use; must be a positive number.
-     * @throws IllegalArgumentException if the chunk size is &lt;= 0
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @throws IllegalArgumentException if the chunk size is &lt;= 0.
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public ChunkedOutputStream(final OutputStream stream, final int chunkSize) {
@@ -165,9 +165,9 @@ public class ChunkedOutputStream extends FilterOutputStream {
     /**
      * Writes the data buffer in chunks to the underlying stream
      *
-     * @param data      the data to write
-     * @param srcOffset the offset
-     * @param length    the length of data to write
+     * @param data      the data to write.
+     * @param srcOffset the offset.
+     * @param length    the length of data to write.
      * @throws IOException if an I/O error occurs.
      */
     @Override

@@ -46,7 +46,7 @@ public class ThrowOnCloseInputStream extends ProxyInputStream {
     /**
      * Always throws IOException.
      *
-     * @see java.io.InputStream#close()
+     * @see InputStream#close()
      */
     @Override
     public void close() throws IOException {
