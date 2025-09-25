@@ -1155,7 +1155,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * @throws UnsupportedOperationException If this origin cannot be converted to a channel of the given type.
      * @since 2.21.0
      */
-    public <C extends Channel> C getChannel(Class<C> channelType, OpenOption... options) throws IOException {
+    public final <C extends Channel> C getChannel(Class<C> channelType, OpenOption... options) throws IOException {
         Objects.requireNonNull(channelType, "channelType");
         final Channel channel = getChannel(options);
         if (channelType.isInstance(channel)) {
