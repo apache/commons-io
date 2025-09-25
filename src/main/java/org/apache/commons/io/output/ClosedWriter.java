@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.io.output;
 
 import java.io.IOException;
@@ -22,8 +23,8 @@ import java.io.Writer;
 /**
  * Throws an IOException on all attempts to write with {@link #close()} implemented as a noop.
  * <p>
- * Typically uses of this class include testing for corner cases in methods that accept a writer and acting as a
- * sentinel value instead of a {@code null} writer.
+ * Typically uses of this class include testing for corner cases in methods that accept a writer and acting as a sentinel value instead of a {@code null}
+ * writer.
  * </p>
  *
  * @since 2.7
@@ -36,7 +37,6 @@ public class ClosedWriter extends Writer {
      * @since 2.12.0
      */
     public static final ClosedWriter INSTANCE = new ClosedWriter();
-
     /**
      * The singleton instance.
      *
@@ -70,10 +70,10 @@ public class ClosedWriter extends Writer {
     /**
      * Throws an {@link IOException} to indicate that the writer is closed.
      *
-     * @param cbuf ignored
-     * @param off ignored
-     * @param len ignored
-     * @throws IOException always thrown
+     * @param cbuf ignored.
+     * @param off  ignored.
+     * @param len  ignored.
+     * @throws IOException always thrown.
      */
     @Override
     public void write(final char[] cbuf, final int off, final int len) throws IOException {

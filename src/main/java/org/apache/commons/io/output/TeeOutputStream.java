@@ -79,7 +79,7 @@ public class TeeOutputStream extends ProxyOutputStream {
     /**
      * Writes the bytes to both streams.
      *
-     * @param b the bytes to write
+     * @param b the bytes to write.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -91,9 +91,9 @@ public class TeeOutputStream extends ProxyOutputStream {
     /**
      * Writes the specified bytes to both streams.
      *
-     * @param b   the bytes to write
-     * @param off The start offset
-     * @param len The number of bytes to write
+     * @param b   the bytes to write.
+     * @param off The start offset.
+     * @param len The number of bytes to write.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -105,7 +105,7 @@ public class TeeOutputStream extends ProxyOutputStream {
     /**
      * Writes a byte to both streams.
      *
-     * @param b the byte to write
+     * @param b the byte to write.
      * @throws IOException if an I/O error occurs.
      */
     @Override

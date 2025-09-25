@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.io.output;
 
 import java.io.FilterWriter;
@@ -23,9 +24,7 @@ import java.io.Writer;
 import org.apache.commons.io.IOUtils;
 
 /**
- * Writer which breaks larger output blocks into chunks.
- * Native code may need to copy the input array; if the write buffer
- * is very large this can cause OOME.
+ * Writer which breaks larger output blocks into chunks. Native code may need to copy the input array; if the write buffer is very large this can cause OOME.
  *
  * @since 2.5
  */
@@ -37,13 +36,14 @@ public class ChunkedWriter extends FilterWriter {
     private static final int DEFAULT_CHUNK_SIZE = IOUtils.DEFAULT_BUFFER_SIZE;
 
     /**
-     * The maximum chunk size to us when writing data arrays
+     * The maximum chunk size to us when writing data arrays.
      */
     private final int chunkSize;
 
     /**
      * Constructs a new writer that uses a chunk size of {@link #DEFAULT_CHUNK_SIZE}
-     * @param writer the writer to wrap
+     *
+     * @param writer the writer to wrap.
      */
     public ChunkedWriter(final Writer writer) {
         this(writer, DEFAULT_CHUNK_SIZE);
@@ -52,25 +52,25 @@ public class ChunkedWriter extends FilterWriter {
     /**
      * Constructs a new writer that uses the specified chunk size.
      *
-     * @param writer the writer to wrap
+     * @param writer    the writer to wrap.
      * @param chunkSize the chunk size to use; must be a positive number.
-     * @throws IllegalArgumentException if the chunk size is &lt;= 0
+     * @throws IllegalArgumentException if the chunk size is &lt;= 0.
      */
     public ChunkedWriter(final Writer writer, final int chunkSize) {
-       super(writer);
-       if (chunkSize <= 0) {
-           throw new IllegalArgumentException();
-       }
-       this.chunkSize = chunkSize;
+        super(writer);
+        if (chunkSize <= 0) {
+            throw new IllegalArgumentException();
+        }
+        this.chunkSize = chunkSize;
     }
 
     /**
      * Writes the data buffer in chunks to the underlying writer.
      *
-     * @param data The data
-     * @param srcOffset the offset
-     * @param length the number of bytes to write
-     * @throws IOException upon error
+     * @param data      The data.
+     * @param srcOffset the offset.
+     * @param length    the number of bytes to write.
+     * @throws IOException If an I/O error occurs.
      */
     @Override
     public void write(final char[] data, final int srcOffset, final int length) throws IOException {
@@ -83,5 +83,4 @@ public class ChunkedWriter extends FilterWriter {
             dstOffset += chunk;
         }
     }
-
 }

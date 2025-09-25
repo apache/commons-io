@@ -28,21 +28,19 @@ import java.io.OutputStream;
 public class ByteArrayOutputStream extends AbstractByteArrayOutputStream<ByteArrayOutputStream> {
 
     /**
-     * Fetches entire contents of an {@link InputStream} and represent
-     * same data as result InputStream.
+     * Fetches entire contents of an {@link InputStream} and represent same data as result InputStream.
      * <p>
      * This method is useful where,
      * </p>
      * <ul>
      * <li>Source InputStream is slow.</li>
-     * <li>It has network resources associated, so we cannot keep it open for
-     * long time.</li>
+     * <li>It has network resources associated, so we cannot keep it open for long time.</li>
      * <li>It has network timeout associated.</li>
      * </ul>
-     * It can be used in favor of {@link #toByteArray()}, since it
-     * avoids unnecessary allocation and copy of byte[].<br>
-     * This method buffers the input internally, so there is no need to use a
-     * {@link BufferedInputStream}.
+     * <p>
+     * It can be used in favor of {@link #toByteArray()}, since it avoids unnecessary allocation and copy of byte[].<br>
+     * This method buffers the input internally, so there is no need to use a {@link BufferedInputStream}.
+     * </p>
      *
      * @param input Stream to be fully buffered.
      * @return A fully buffered stream.
@@ -55,24 +53,22 @@ public class ByteArrayOutputStream extends AbstractByteArrayOutputStream<ByteArr
     }
 
     /**
-     * Fetches entire contents of an {@link InputStream} and represent
-     * same data as result InputStream.
+     * Fetches entire contents of an {@link InputStream} and represent same data as result InputStream.
      * <p>
      * This method is useful where,
      * </p>
      * <ul>
      * <li>Source InputStream is slow.</li>
-     * <li>It has network resources associated, so we cannot keep it open for
-     * long time.</li>
+     * <li>It has network resources associated, so we cannot keep it open for long time.</li>
      * <li>It has network timeout associated.</li>
      * </ul>
-     * It can be used in favor of {@link #toByteArray()}, since it
-     * avoids unnecessary allocation and copy of byte[].<br>
-     * This method buffers the input internally, so there is no need to use a
-     * {@link BufferedInputStream}.
+     * <p>
+     * It can be used in favor of {@link #toByteArray()}, since it avoids unnecessary allocation and copy of byte[].<br>
+     * This method buffers the input internally, so there is no need to use a {@link BufferedInputStream}.
+     * </p>
      *
      * @param input Stream to be fully buffered.
-     * @param size the initial buffer size
+     * @param size  the initial buffer size.
      * @return A fully buffered stream.
      * @throws IOException if an I/O error occurs.
      * @since 2.5

@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.io.output;
 
 import java.io.IOException;
@@ -65,10 +66,10 @@ public class ClosedOutputStream extends OutputStream {
     /**
      * Throws an {@link IOException} to indicate that the stream is closed.
      *
-     * @param b   ignored
-     * @param off ignored
-     * @param len ignored
-     * @throws IOException always thrown
+     * @param b   ignored.
+     * @param off ignored.
+     * @param len ignored.
+     * @throws IOException always thrown.
      */
     @Override
     public void write(final byte b[], final int off, final int len) throws IOException {
@@ -78,8 +79,8 @@ public class ClosedOutputStream extends OutputStream {
     /**
      * Throws an {@link IOException} to indicate that the stream is closed.
      *
-     * @param b ignored
-     * @throws IOException always thrown
+     * @param b ignored.
+     * @throws IOException always thrown.
      */
     @Override
     public void write(final int b) throws IOException {

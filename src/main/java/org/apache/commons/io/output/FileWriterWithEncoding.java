@@ -238,10 +238,10 @@ public class FileWriterWithEncoding extends ProxyWriter {
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param file           the file to write to, not null
-     * @param charsetEncoder the encoding to use, not null
-     * @throws NullPointerException if the file or encoding is null
-     * @throws IOException          in case of an I/O error
+     * @param file           the file to write to, not null.
+     * @param charsetEncoder the encoding to use, not null.
+     * @throws NullPointerException if the file or encoding is null.
+     * @throws IOException          in case of an I/O error.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated

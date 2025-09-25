@@ -72,9 +72,9 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
         /**
          * Constructs an InputStream subclass.
          *
-         * @param buffer the buffer
-         * @param offset the offset into the buffer
-         * @param length the length of the buffer
+         * @param buffer the buffer.
+         * @param offset the offset into the buffer.
+         * @param length the length of the buffer.
          * @return the InputStream subclass.
          */
         T construct(byte[] buffer, int offset, int length);
@@ -123,7 +123,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      * The methods in this class can be called after the stream has been closed without generating an {@link IOException}.
      *
      * @throws IOException never (this method should not declare this exception but it has to now due to backwards
-     *         compatibility)
+     *         compatibility).
      */
     @Override
     public void close() throws IOException {
@@ -134,7 +134,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      * Makes a new buffer available either by allocating
      * a new one or re-cycling an existing one.
      *
-     * @param newCount  the size of the buffer if one is created
+     * @param newCount  the size of the buffer if one is created.
      */
     protected void needNewBuffer(final int newCount) {
         if (currentBufferIndex < buffers.size() - 1) {
@@ -190,7 +190,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
     /**
      * Returns the current size of the byte array.
      *
-     * @return the current size of the byte array
+     * @return the current size of the byte array.
      */
     public abstract int size();
 
@@ -198,7 +198,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      * Gets the current contents of this byte stream as a byte array.
      * The result is independent of this stream.
      *
-     * @return the current contents of this output stream, as a byte array
+     * @return the current contents of this output stream, as a byte array.
      * @see java.io.ByteArrayOutputStream#toByteArray()
      */
     public abstract byte[] toByteArray();
@@ -207,7 +207,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      * Gets the current contents of this byte stream as a byte array.
      * The result is independent of this stream.
      *
-     * @return the current contents of this output stream, as a byte array
+     * @return the current contents of this output stream, as a byte array.
      * @see java.io.ByteArrayOutputStream#toByteArray()
      */
     protected byte[] toByteArrayImpl() {
@@ -278,10 +278,10 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
     /**
      * Gets the current contents of this byte stream as a string using the virtual machine's {@link Charset#defaultCharset() default charset}.
      *
-     * @return the contents of the byte array as a String
+     * @return the contents of the byte array as a String.
      * @see java.io.ByteArrayOutputStream#toString()
      * @see Charset#defaultCharset()
-     * @deprecated Use {@link #toString(String)} instead
+     * @deprecated Use {@link #toString(String)} instead.
      */
     @Override
     @Deprecated
@@ -294,8 +294,8 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      * Gets the current contents of this byte stream as a string
      * using the specified encoding.
      *
-     * @param charset  the character encoding
-     * @return the string converted from the byte array
+     * @param charset  the character encoding.
+     * @return the string converted from the byte array.
      * @see java.io.ByteArrayOutputStream#toString(String)
      * @since 2.5
      */
@@ -307,9 +307,9 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
      * Gets the current contents of this byte stream as a string
      * using the specified encoding.
      *
-     * @param enc  the name of the character encoding
-     * @return the string converted from the byte array
-     * @throws UnsupportedEncodingException if the encoding is not supported
+     * @param enc  the name of the character encoding.
+     * @return the string converted from the byte array.
+     * @throws UnsupportedEncodingException if the encoding is not supported.
      * @see java.io.ByteArrayOutputStream#toString(String)
      */
     public String toString(final String enc) throws UnsupportedEncodingException {
@@ -345,14 +345,12 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
     }
 
     /**
-     * Writes the entire contents of the specified input stream to this
-     * byte stream. Bytes from the input stream are read directly into the
-     * internal buffer of this stream.
+     * Writes the entire contents of the specified input stream to this byte stream. Bytes from the input stream are read directly into the internal buffer of
+     * this stream.
      *
-     * @param in the input stream to read from
-     * @return total number of bytes read from the input stream
-     *         (and written to this stream)
-     * @throws IOException if an I/O error occurs while reading the input stream
+     * @param in the input stream to read from.
+     * @return total number of bytes read from the input stream (and written to this stream)
+     * @throws IOException if an I/O error occurs while reading the input stream.
      * @since 1.4
      */
     public abstract int write(InputStream in) throws IOException;
@@ -362,9 +360,10 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
 
     /**
      * Writes the bytes to the byte array.
-     * @param b the bytes to write
-     * @param off The start offset
-     * @param len The number of bytes to write
+     *
+     * @param b the bytes to write.
+     * @param off The start offset.
+     * @param len The number of bytes to write.
      */
     protected void writeImpl(final byte[] b, final int off, final int len) {
         final int newCount = count + len;
@@ -383,14 +382,12 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
     }
 
     /**
-     * Writes the entire contents of the specified input stream to this
-     * byte stream. Bytes from the input stream are read directly into the
-     * internal buffer of this stream.
+     * Writes the entire contents of the specified input stream to this byte stream. Bytes from the input stream are read directly into the internal buffer of
+     * this stream.
      *
-     * @param in the input stream to read from
-     * @return total number of bytes read from the input stream
-     *         (and written to this stream)
-     * @throws IOException if an I/O error occurs while reading the input stream
+     * @param in the input stream to read from.
+     * @return total number of bytes read from the input stream (and written to this stream).
+     * @throws IOException if an I/O error occurs while reading the input stream.
      * @since 2.7
      */
     protected int writeImpl(final InputStream in) throws IOException {
@@ -412,7 +409,8 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
 
     /**
      * Writes a byte to byte array.
-     * @param b the byte to write
+     *
+     * @param b the byte to write.
      */
     protected void writeImpl(final int b) {
         int inBufferPos = count - filledBufferSum;
@@ -425,21 +423,19 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
     }
 
     /**
-     * Writes the entire contents of this byte stream to the
-     * specified output stream.
+     * Writes the entire contents of this byte stream to the specified output stream.
      *
-     * @param out  the output stream to write to
-     * @throws IOException if an I/O error occurs, such as if the stream is closed
+     * @param out the output stream to write to.
+     * @throws IOException if an I/O error occurs, such as if the stream is closed.
      * @see java.io.ByteArrayOutputStream#writeTo(OutputStream)
      */
     public abstract void writeTo(OutputStream out) throws IOException;
 
     /**
-     * Writes the entire contents of this byte stream to the
-     * specified output stream.
+     * Writes the entire contents of this byte stream to the specified output stream.
      *
-     * @param out  the output stream to write to
-     * @throws IOException if an I/O error occurs, such as if the stream is closed
+     * @param out the output stream to write to.
+     * @throws IOException if an I/O error occurs, such as if the stream is closed.
      * @see java.io.ByteArrayOutputStream#writeTo(OutputStream)
      */
     protected void writeToImpl(final OutputStream out) throws IOException {

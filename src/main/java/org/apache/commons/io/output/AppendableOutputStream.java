@@ -58,7 +58,7 @@ public class AppendableOutputStream <T extends Appendable> extends OutputStream 
      * Writes a character to the underlying appendable.
      *
      * @param b the character to write
-     * @throws IOException upon error
+     * @throws IOException If an I/O error occurs.
      */
     @Override
     public void write(final int b) throws IOException {

@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.io.output;
 
 import java.io.IOException;
@@ -38,9 +39,8 @@ public class DemuxOutputStream extends OutputStream {
     /**
      * Binds the specified stream to the current thread.
      *
-     * @param output
-     *            the stream to bind
-     * @return the OutputStream that was previously active
+     * @param output the stream to bind.
+     * @return the OutputStream that was previously active.
      */
     public OutputStream bindStream(final OutputStream output) {
         final OutputStream stream = outputStreamThreadLocal.get();
@@ -51,8 +51,7 @@ public class DemuxOutputStream extends OutputStream {
     /**
      * Closes stream associated with current thread.
      *
-     * @throws IOException
-     *             if an error occurs
+     * @throws IOException if an error occurs.
      */
     @SuppressWarnings("resource") // we actually close the stream here
     @Override
@@ -63,8 +62,7 @@ public class DemuxOutputStream extends OutputStream {
     /**
      * Flushes stream associated with current thread.
      *
-     * @throws IOException
-     *             if an error occurs
+     * @throws IOException if an error occurs.
      */
     @Override
     public void flush() throws IOException {
@@ -78,10 +76,8 @@ public class DemuxOutputStream extends OutputStream {
     /**
      * Writes byte to stream associated with current thread.
      *
-     * @param ch
-     *            the byte to write to stream
-     * @throws IOException
-     *             if an error occurs
+     * @param ch the byte to write to stream.
+     * @throws IOException if an error occurs.
      */
     @Override
     public void write(final int ch) throws IOException {

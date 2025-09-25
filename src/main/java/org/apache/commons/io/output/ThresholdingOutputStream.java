@@ -206,7 +206,7 @@ public class ThresholdingOutputStream extends OutputStream {
     /**
      * Sets the byteCount to count. Useful for re-opening an output stream that has previously been written to.
      *
-     * @param count The number of bytes that have already been written to the output stream
+     * @param count The number of bytes that have already been written to the output stream.
      * @since 2.5
      */
     protected void setByteCount(final long count) {

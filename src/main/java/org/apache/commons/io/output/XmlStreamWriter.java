@@ -133,10 +133,10 @@ public class XmlStreamWriter extends Writer {
      * Constructs a new XML stream writer for the specified file
      * with a default encoding of UTF-8.
      *
-     * @param file The file to write to
+     * @param file The file to write to.
      * @throws FileNotFoundException if there is an error creating or
-     * opening the file
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * opening the file.
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public XmlStreamWriter(final File file) throws FileNotFoundException {
@@ -147,11 +147,11 @@ public class XmlStreamWriter extends Writer {
      * Constructs a new XML stream writer for the specified file
      * with the specified default encoding.
      *
-     * @param file The file to write to
-     * @param defaultEncoding The default encoding if not encoding could be detected
+     * @param file The file to write to.
+     * @param defaultEncoding The default encoding if not encoding could be detected.
      * @throws FileNotFoundException if there is an error creating or
-     * opening the file
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * opening the file.
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     @SuppressWarnings("resource")
@@ -163,8 +163,8 @@ public class XmlStreamWriter extends Writer {
      * Constructs a new XML stream writer for the specified output stream
      * with a default encoding of UTF-8.
      *
-     * @param out The output stream
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @param out The output stream.
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public XmlStreamWriter(final OutputStream out) {
@@ -175,8 +175,8 @@ public class XmlStreamWriter extends Writer {
      * Constructs a new XML stream writer for the specified output stream
      * with the specified default encoding.
      *
-     * @param out The output stream
-     * @param defaultEncoding The default encoding if not encoding could be detected
+     * @param out The output stream.
+     * @param defaultEncoding The default encoding if not encoding could be detected.
      */
     private XmlStreamWriter(final OutputStream out, final Charset defaultEncoding) {
         this.out = out;
@@ -187,9 +187,9 @@ public class XmlStreamWriter extends Writer {
      * Constructs a new XML stream writer for the specified output stream
      * with the specified default encoding.
      *
-     * @param out The output stream
-     * @param defaultEncoding The default encoding if not encoding could be detected
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @param out The output stream.
+     * @param defaultEncoding The default encoding if not encoding could be detected.
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public XmlStreamWriter(final OutputStream out, final String defaultEncoding) {
@@ -199,7 +199,7 @@ public class XmlStreamWriter extends Writer {
     /**
      * Closes the underlying writer.
      *
-     * @throws IOException if an error occurs closing the underlying writer
+     * @throws IOException if an error occurs closing the underlying writer.
      */
     @Override
     public void close() throws IOException {
@@ -214,10 +214,10 @@ public class XmlStreamWriter extends Writer {
     /**
      * Detects the encoding.
      *
-     * @param cbuf the buffer to write the characters from
-     * @param off The start offset
-     * @param len The number of characters to write
-     * @throws IOException if an error occurs detecting the encoding
+     * @param cbuf the buffer to write the characters from.
+     * @param off The start offset.
+     * @param len The number of characters to write.
+     * @throws IOException if an error occurs detecting the encoding.
      */
     private void detectEncoding(final char[] cbuf, final int off, final int len)
             throws IOException {
@@ -269,7 +269,7 @@ public class XmlStreamWriter extends Writer {
     /**
      * Flushes the underlying writer.
      *
-     * @throws IOException if an error occurs flushing the underlying writer
+     * @throws IOException if an error occurs flushing the underlying writer.
      */
     @Override
     public void flush() throws IOException {
@@ -281,7 +281,7 @@ public class XmlStreamWriter extends Writer {
     /**
      * Returns the default encoding.
      *
-     * @return the default encoding
+     * @return the default encoding.
      */
     public String getDefaultEncoding() {
         return defaultCharset.name();
@@ -290,7 +290,7 @@ public class XmlStreamWriter extends Writer {
     /**
      * Returns the detected encoding.
      *
-     * @return the detected encoding
+     * @return the detected encoding.
      */
     public String getEncoding() {
         return charset.name();
@@ -299,10 +299,10 @@ public class XmlStreamWriter extends Writer {
     /**
      * Writes the characters to the underlying writer, detecting encoding.
      *
-     * @param cbuf the buffer to write the characters from
-     * @param off The start offset
-     * @param len The number of characters to write
-     * @throws IOException if an error occurs detecting the encoding
+     * @param cbuf the buffer to write the characters from.
+     * @param off The start offset.
+     * @param len The number of characters to write.
+     * @throws IOException if an error occurs detecting the encoding.
      */
     @Override
     public void write(final char[] cbuf, final int off, final int len) throws IOException {

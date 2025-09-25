@@ -199,7 +199,7 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
      * @param pos  Where to start copying. The offset position, measured in bytes from the beginning of the file, at which to set the file pointer.
      * @param size The number of bytes to copy.
      * @param os   Where to copy.
-     * @return The number of bytes copied..
+     * @return The number of bytes copied.
      * @throws IOException if {@code pos} is less than {@code 0} or if an I/O error occurs.
      * @since 2.19.0
      */

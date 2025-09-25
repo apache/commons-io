@@ -274,7 +274,7 @@ public class IOUtils {
      *
      * @param outputStream the OutputStream to wrap or return (not null).
      * @return the given OutputStream or a new {@link BufferedOutputStream} for the given OutputStream
-     * @throws NullPointerException if the input parameter is null..
+     * @throws NullPointerException if the input parameter is null.
      * @since 2.5
      */
     @SuppressWarnings("resource") // parameter null check
@@ -396,7 +396,7 @@ public class IOUtils {
     /**
      * Returns a new char array of the given size.
      *
-     * TODO Consider guarding or warning against large allocations...
+     * TODO Consider guarding or warning against large allocations.
      *
      * @param size array size.
      * @return a new char array of the given size.

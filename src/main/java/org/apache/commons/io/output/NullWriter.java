@@ -51,9 +51,10 @@ public class NullWriter extends Writer {
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
-     * @param c The character to write
-     * @return this writer
+     * Does nothing, like writing to {@code /dev/null}.
+     *
+     * @param c The character to write.
+     * @return this writer.
      * @since 2.0
      */
     @Override
@@ -63,8 +64,9 @@ public class NullWriter extends Writer {
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
-     * @param csq The character sequence to write
+     * Does nothing, like writing to {@code /dev/null}.
+     *
+     * @param csq The character sequence to write.
      * @return this writer
      * @since 2.0
      */
@@ -75,11 +77,12 @@ public class NullWriter extends Writer {
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
-     * @param csq The character sequence to write
-     * @param start The index of the first character to write
-     * @param end  The index of the first character to write (exclusive)
-     * @return this writer
+     * Does nothing, like writing to {@code /dev/null}.
+     *
+     * @param csq The character sequence to write.
+     * @param start The index of the first character to write.
+     * @param end  The index of the first character to write (exclusive).
+     * @return this writer.
      * @since 2.0
      */
     @Override
@@ -101,7 +104,8 @@ public class NullWriter extends Writer {
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
+     * Does nothing, like writing to {@code /dev/null}.
+     *
      * @param chr The characters to write
      */
     @Override
@@ -110,10 +114,11 @@ public class NullWriter extends Writer {
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
-     * @param chr The characters to write
-     * @param st The start offset
-     * @param end The number of characters to write
+     * Does nothing, like writing to {@code /dev/null}.
+     *
+     * @param chr The characters to write.
+     * @param st The start offset.
+     * @param end The number of characters to write.
      */
     @Override
     public void write(final char[] chr, final int st, final int end) {
@@ -121,7 +126,8 @@ public class NullWriter extends Writer {
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
+     * Does nothing, like writing to {@code /dev/null}.
+     *
      * @param b The character to write.
      */
     @Override
@@ -130,8 +136,9 @@ public class NullWriter extends Writer {
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
-     * @param str The string to write
+     * Does nothing, like writing to {@code /dev/null}.
+     *
+     * @param str The string to write.
      */
     @Override
     public void write(final String str) {
@@ -139,10 +146,11 @@ public class NullWriter extends Writer {
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
-     * @param str The string to write
-     * @param st The start offset
-     * @param end The number of characters to write
+     * Does nothing, like writing to {@code /dev/null}.
+     *
+     * @param str The string to write.
+     * @param st The start offset.
+     * @param end The number of characters to write.
      */
     @Override
     public void write(final String str, final int st, final int end) {
