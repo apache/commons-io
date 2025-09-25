@@ -37,19 +37,16 @@ import java.util.Set;
  */
 public final class CloseShieldChannel {
 
-    private static Class<?>[] collectChannelInterfaces(final Class<?> type) {
-        final Set<Class<?>> out = new LinkedHashSet<>();
-        collectChannelInterfaces(type, out);
-        return out.toArray(new Class<?>[0]);
-    }
+    private static final Class<?>[] EMPTY = {};
 
-    private static void collectChannelInterfaces(final Class<?> type, final Set<Class<?>> out) {
+    private static Set<Class<?>> collectChannelInterfaces(final Class<?> type, final Set<Class<?>> out) {
         // Visit interfaces
         for (final Class<?> iface : type.getInterfaces()) {
             if (Channel.class.isAssignableFrom(iface) && out.add(iface)) {
                 collectChannelInterfaces(iface, out);
             }
         }
+        return out;
     }
 
     /**
@@ -63,18 +60,14 @@ public final class CloseShieldChannel {
     public static <T extends Channel> T wrap(final T channel) {
         Objects.requireNonNull(channel, "channel");
         // Fast path: already our shield
-        if (Proxy.isProxyClass(channel.getClass())) {
-            if (Proxy.getInvocationHandler(channel) instanceof CloseShieldChannelHandler) {
-                return channel;
-            }
+        if (Proxy.isProxyClass(channel.getClass()) && Proxy.getInvocationHandler(channel) instanceof CloseShieldChannelHandler) {
+            return channel;
         }
         // Collect only Channel sub-interfaces.
-        Class<?>[] ifaces = collectChannelInterfaces(channel.getClass());
-        if (ifaces.length == 0) {
-            ifaces = new Class<?>[] { Channel.class }; // fallback to root surface
-        }
+        final Set<Class<?>> set = collectChannelInterfaces(channel.getClass(), new LinkedHashSet<>());
+        // fallback to root surface
         return (T) Proxy.newProxyInstance(channel.getClass().getClassLoader(), // use delegate's loader
-                ifaces, new CloseShieldChannelHandler(channel));
+                set.isEmpty() ? new Class<?>[] { Channel.class } : set.toArray(EMPTY), new CloseShieldChannelHandler(channel));
     }
 
     private CloseShieldChannel() {

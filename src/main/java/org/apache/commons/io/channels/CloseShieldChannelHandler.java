@@ -103,7 +103,7 @@ final class CloseShieldChannelHandler implements InvocationHandler {
     private Object invokeObjectMethod(final Object proxy, final Method method, final Object[] args) {
         switch (method.getName()) {
         case "toString":
-            return "CloseShield(" + delegate + ")";
+            return "CloseShieldChannel(" + delegate + ")";
         case "hashCode":
             return Objects.hashCode(delegate);
         case "equals": {
