@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.io.channels;
 
 import java.lang.reflect.InvocationHandler;
@@ -28,49 +29,6 @@ import java.util.Objects;
 
 final class CloseShieldChannelHandler implements InvocationHandler {
 
-    private final Channel delegate;
-    private volatile boolean closed;
-
-    CloseShieldChannelHandler(final Channel delegate) {
-        this.delegate = Objects.requireNonNull(delegate, "delegate");
-    }
-
-    @Override
-    public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
-        final Class<?> declaringClass = method.getDeclaringClass();
-        final String name = method.getName();
-        final int parameterCount = method.getParameterCount();
-
-        // 1) java.lang.Object methods
-        if (declaringClass == Object.class) {
-            return invokeObjectMethod(proxy, method, args);
-        }
-
-        // 2) Channel.close(): mark shield closed, do NOT close the delegate
-        if (parameterCount == 0 && name.equals("close")) {
-            closed = true;
-            return null;
-        }
-
-        // 3) Channel.isOpen(): reflect shield state only
-        if (parameterCount == 0 && name.equals("isOpen")) {
-            return !closed && delegate.isOpen();
-        }
-
-        // 4) After the shield is closed, only allow a tiny allowlist of safe queries
-        if (closed && !isAllowedAfterClose(declaringClass, name, parameterCount)) {
-            throw new ClosedChannelException();
-        }
-
-        // 5) Delegate to the underlying channel and unwrap target exceptions
-        try {
-            final Object result = method.invoke(delegate, args);
-            return returnsThis(declaringClass, name, parameterCount) ? proxy : result;
-        } catch (InvocationTargetException e) {
-            throw e.getCause();
-        }
-    }
-
     /**
      * Tests whether the given method is allowed to be called after the shield is closed.
      *
@@ -79,7 +37,7 @@ final class CloseShieldChannelHandler implements InvocationHandler {
      * @param parameterCount The number of parameters.
      * @return {@code true} if the method is allowed after {@code close()}, {@code false} otherwise.
      */
-    private static boolean isAllowedAfterClose(Class<?> declaringClass, String name, int parameterCount) {
+    private static boolean isAllowedAfterClose(final Class<?> declaringClass, final String name, final int parameterCount) {
         // JDK explicitly allows NetworkChannel.supportedOptions() post-close
         return parameterCount == 0 && name.equals("supportedOptions") && NetworkChannel.class.equals(declaringClass);
     }
@@ -92,7 +50,7 @@ final class CloseShieldChannelHandler implements InvocationHandler {
      * @param parameterCount The number of parameters.
      * @return {@code true} if the method returns 'this', {@code false} otherwise.
      */
-    private static boolean returnsThis(Class<?> declaringClass, String name, int parameterCount) {
+    private static boolean returnsThis(final Class<?> declaringClass, final String name, final int parameterCount) {
         if (SeekableByteChannel.class.equals(declaringClass)) {
             // SeekableByteChannel.position(long) and truncate(long) return 'this'
             return parameterCount == 1 && (name.equals("position") || name.equals("truncate"));
@@ -104,32 +62,69 @@ final class CloseShieldChannelHandler implements InvocationHandler {
         return false;
     }
 
-    private Object invokeObjectMethod(final Object proxy, final Method method, final Object[] args)
-            throws ReflectiveOperationException {
+    private final Channel delegate;
+    private volatile boolean closed;
+
+    CloseShieldChannelHandler(final Channel delegate) {
+        this.delegate = Objects.requireNonNull(delegate, "delegate");
+    }
+
+    @Override
+    public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
+        final Class<?> declaringClass = method.getDeclaringClass();
+        final String name = method.getName();
+        final int parameterCount = method.getParameterCount();
+        // 1) java.lang.Object methods
+        if (declaringClass == Object.class) {
+            return invokeObjectMethod(proxy, method, args);
+        }
+        // 2) Channel.close(): mark shield closed, do NOT close the delegate
+        if (parameterCount == 0 && name.equals("close")) {
+            closed = true;
+            return null;
+        }
+        // 3) Channel.isOpen(): reflect shield state only
+        if (parameterCount == 0 && name.equals("isOpen")) {
+            return !closed && delegate.isOpen();
+        }
+        // 4) After the shield is closed, only allow a tiny allowlist of safe queries
+        if (closed && !isAllowedAfterClose(declaringClass, name, parameterCount)) {
+            throw new ClosedChannelException();
+        }
+        // 5) Delegate to the underlying channel and unwrap target exceptions
+        try {
+            final Object result = method.invoke(delegate, args);
+            return returnsThis(declaringClass, name, parameterCount) ? proxy : result;
+        } catch (final InvocationTargetException e) {
+            throw e.getCause();
+        }
+    }
+
+    private Object invokeObjectMethod(final Object proxy, final Method method, final Object[] args) {
         switch (method.getName()) {
-            case "toString":
-                return "CloseShield(" + delegate + ")";
-            case "hashCode":
-                return Objects.hashCode(delegate);
-            case "equals": {
-                final Object other = args[0];
-                if (other == null) {
-                    return false;
-                }
-                if (proxy == other) {
-                    return true;
-                }
-                if (Proxy.isProxyClass(other.getClass())) {
-                    final InvocationHandler h = Proxy.getInvocationHandler(other);
-                    if (h instanceof CloseShieldChannelHandler) {
-                        return Objects.equals(((CloseShieldChannelHandler) h).delegate, this.delegate);
-                    }
-                }
+        case "toString":
+            return "CloseShield(" + delegate + ")";
+        case "hashCode":
+            return Objects.hashCode(delegate);
+        case "equals": {
+            final Object other = args[0];
+            if (other == null) {
                 return false;
             }
-            default:
-                // Not possible, all non-final Object methods are handled above
-                return null;
+            if (proxy == other) {
+                return true;
+            }
+            if (Proxy.isProxyClass(other.getClass())) {
+                final InvocationHandler h = Proxy.getInvocationHandler(other);
+                if (h instanceof CloseShieldChannelHandler) {
+                    return Objects.equals(((CloseShieldChannelHandler) h).delegate, this.delegate);
+                }
+            }
+            return false;
+        }
+        default:
+            // Not possible, all non-final Object methods are handled above
+            return null;
         }
     }
 }
