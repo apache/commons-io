@@ -46,7 +46,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-class ChannelsTest {
+class CloseShieldChannelTest {
 
     static Stream<Class<? extends Channel>> testedInterfaces() {
         return Stream.of(
@@ -64,7 +64,7 @@ class ChannelsTest {
     @MethodSource("testedInterfaces")
     void testPreservesInterfaces(Class<? extends Channel> channelClass) {
         final Channel channel = mock(channelClass);
-        final Channel shield = Channels.closeShield(channel);
+        final Channel shield = CloseShieldChannel.wrap(channel);
         assertNotSame(channel, shield);
         assertTrue(channelClass.isInstance(shield));
     }
@@ -74,7 +74,7 @@ class ChannelsTest {
     void testCloseIsShielded(Class<? extends Channel> channelClass) throws Exception {
         final Channel channel = mock(channelClass);
         when(channel.isOpen()).thenReturn(true, false, true, false);
-        final Channel shield = Channels.closeShield(channel);
+        final Channel shield = CloseShieldChannel.wrap(channel);
         // Reflects delegate state initially
         assertTrue(shield.isOpen(), "isOpen reflects delegate state");
         assertFalse(shield.isOpen(), "isOpen reflects delegate state");
@@ -91,7 +91,7 @@ class ChannelsTest {
     @MethodSource("testedInterfaces")
     void testCloseDoesNotCloseDelegate(Class<? extends Channel> channelClass) throws Exception {
         final Channel channel = mock(channelClass);
-        final Channel shield = Channels.closeShield(channel);
+        final Channel shield = CloseShieldChannel.wrap(channel);
         shield.close();
         verify(channel, never()).close();
     }
@@ -100,7 +100,7 @@ class ChannelsTest {
     @MethodSource("testedInterfaces")
     void testCloseIsIdempotent(Class<? extends Channel> channelClass) throws Exception {
         final Channel channel = mock(channelClass);
-        final Channel shield = Channels.closeShield(channel);
+        final Channel shield = CloseShieldChannel.wrap(channel);
         shield.close();
         assertFalse(shield.isOpen());
         shield.close();
@@ -112,8 +112,8 @@ class ChannelsTest {
     @MethodSource("testedInterfaces")
     void testEquals(Class<? extends Channel> channelClass) throws Exception {
         final Channel channel = mock(channelClass);
-        final Channel shield = Channels.closeShield(channel);
-        final Channel anotherShield = Channels.closeShield(channel);
+        final Channel shield = CloseShieldChannel.wrap(channel);
+        final Channel anotherShield = CloseShieldChannel.wrap(channel);
         assertTrue(shield.equals(shield), "reflexive");
         assertFalse(shield.equals(null), "null is not equal");
         assertFalse(shield.equals(channel), "shield not equal to delegate");
@@ -124,8 +124,8 @@ class ChannelsTest {
     @MethodSource("testedInterfaces")
     void testHashCode(Class<? extends Channel> channelClass) throws Exception {
         final Channel channel = mock(channelClass);
-        final Channel shield = Channels.closeShield(channel);
-        final Channel anotherShield = Channels.closeShield(channel);
+        final Channel shield = CloseShieldChannel.wrap(channel);
+        final Channel anotherShield = CloseShieldChannel.wrap(channel);
         assertEquals(shield.hashCode(), channel.hashCode(), "delegates hashCode");
         assertEquals(shield.hashCode(), anotherShield.hashCode(), "shields of same delegate have same hashCode");
     }
@@ -135,7 +135,7 @@ class ChannelsTest {
     void testToString(Class<? extends Channel> channelClass) throws Exception {
         final Channel channel = mock(channelClass);
         when(channel.toString()).thenReturn("MyChannel");
-        final Channel shield = Channels.closeShield(channel);
+        final Channel shield = CloseShieldChannel.wrap(channel);
         final String shieldString = shield.toString();
         assertTrue(shieldString.contains("CloseShield"));
         assertTrue(shieldString.contains("MyChannel"));
@@ -145,7 +145,7 @@ class ChannelsTest {
     void testReadableByteChannelMethods() throws Exception {
         final ReadableByteChannel channel = mock(ReadableByteChannel.class);
         when(channel.isOpen()).thenReturn(true);
-        final ReadableByteChannel shield = Channels.closeShield(channel);
+        final ReadableByteChannel shield = CloseShieldChannel.wrap(channel);
         // Before close read() should delegate
         when(channel.read(null)).thenReturn(42);
         assertEquals(42, shield.read(null));
@@ -160,7 +160,7 @@ class ChannelsTest {
     void testScatteringByteChannelMethods() throws Exception {
         final ScatteringByteChannel channel = mock(ScatteringByteChannel.class);
         when(channel.isOpen()).thenReturn(true);
-        final ScatteringByteChannel shield = Channels.closeShield(channel);
+        final ScatteringByteChannel shield = CloseShieldChannel.wrap(channel);
         // Before close read() should delegate
         when(channel.read(null, 0, 0)).thenReturn(42L);
         assertEquals(42, shield.read(null, 0, 0));
@@ -175,7 +175,7 @@ class ChannelsTest {
     void testWritableByteChannelMethods() throws Exception {
         final WritableByteChannel channel = mock(WritableByteChannel.class);
         when(channel.isOpen()).thenReturn(true);
-        final WritableByteChannel shield = Channels.closeShield(channel);
+        final WritableByteChannel shield = CloseShieldChannel.wrap(channel);
         // Before close write() should delegate
         when(channel.write(null)).thenReturn(42);
         assertEquals(42, shield.write(null));
@@ -190,7 +190,7 @@ class ChannelsTest {
     void testGatheringByteChannelMethods() throws Exception {
         final GatheringByteChannel channel = mock(GatheringByteChannel.class);
         when(channel.isOpen()).thenReturn(true);
-        final GatheringByteChannel shield = Channels.closeShield(channel);
+        final GatheringByteChannel shield = CloseShieldChannel.wrap(channel);
         // Before close write() should delegate
         when(channel.write(null, 0, 0)).thenReturn(42L);
         assertEquals(42, shield.write(null, 0, 0));
@@ -205,7 +205,7 @@ class ChannelsTest {
     void testSeekableByteChannelMethods() throws Exception {
         final SeekableByteChannel channel = mock(SeekableByteChannel.class);
         when(channel.isOpen()).thenReturn(true);
-        final SeekableByteChannel shield = Channels.closeShield(channel);
+        final SeekableByteChannel shield = CloseShieldChannel.wrap(channel);
         // Before close position() and size() should delegate
         when(channel.position()).thenReturn(42L);
         when(channel.size()).thenReturn(84L);
@@ -233,7 +233,7 @@ class ChannelsTest {
     void testNetworkChannelMethods() throws Exception {
         final NetworkChannel channel = mock(NetworkChannel.class);
         when(channel.isOpen()).thenReturn(true);
-        final NetworkChannel shield = Channels.closeShield(channel);
+        final NetworkChannel shield = CloseShieldChannel.wrap(channel);
         // Before close getOption(), setOption(), getLocalAddress() and bind() should delegate
         when(channel.getOption(null)).thenReturn("foo");
         when(channel.setOption(null, null)).thenReturn(channel);
@@ -262,8 +262,8 @@ class ChannelsTest {
     @Test
     void testDoesNotDoubleWrap() {
         final ByteChannel channel = mock(ByteChannel.class);
-        final ByteChannel shield1 = Channels.closeShield(channel);
-        final ByteChannel shield2 = Channels.closeShield(shield1);
+        final ByteChannel shield1 = CloseShieldChannel.wrap(channel);
+        final ByteChannel shield2 = CloseShieldChannel.wrap(shield1);
         assertSame(shield1, shield2);
     }
 }

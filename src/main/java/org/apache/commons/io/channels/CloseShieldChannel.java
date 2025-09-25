@@ -24,27 +24,27 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * Channel utilities.
+ * Utility to create a close-shielding proxy for a {@link Channel}.
+ *
+ * <p>The returned proxy will implement all {@link Channel} sub-interfaces that the delegate implements.</p>
  *
  * @since 2.21.0
  */
-public final class Channels {
+public final class CloseShieldChannel {
 
-    private Channels() {
+    private CloseShieldChannel() {
         // no instance
     }
 
     /**
-     * Returns a close-shielding proxy for the given channel.
-     *
-     * <p>The proxy implements only the {@link Channel} sub-interfaces that the delegate implements.</p>
+     * Wraps a channel to shield it from being closed.
      *
      * @param channel The underlying channel to shield, not {@code null}.
      * @param <T>     Any Channel type (interface or class).
      * @return A proxy that shields {@code close()} and enforces closed semantics on other calls.
      */
     @SuppressWarnings("unchecked")
-    public static <T extends Channel> T closeShield(final T channel) {
+    public static <T extends Channel> T wrap(final T channel) {
         Objects.requireNonNull(channel, "channel");
 
         // Fast path: already our shield
