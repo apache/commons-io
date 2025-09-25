@@ -61,6 +61,13 @@ class InputStreamOriginTest extends AbstractOriginTest<InputStream, InputStreamO
 
     @Override
     @Test
+    void testGetOutputStream() {
+        // Cannot convert a InputStream to an OutputStream.
+        assertThrows(UnsupportedOperationException.class, super::testGetOutputStream);
+    }
+
+    @Override
+    @Test
     void testGetPath() {
         // Cannot convert a InputStream to a Path.
         assertThrows(UnsupportedOperationException.class, super::testGetPath);
@@ -83,9 +90,9 @@ class InputStreamOriginTest extends AbstractOriginTest<InputStream, InputStreamO
 
     @Override
     @Test
-    void testGetOutputStream() {
-        // Cannot convert a InputStream to an OutputStream.
-        assertThrows(UnsupportedOperationException.class, super::testGetOutputStream);
+    void testGetWritableByteChannel() throws IOException {
+        // Cannot convert a InputStream to a WritableByteChannel.
+        assertThrows(UnsupportedOperationException.class, super::testGetWritableByteChannel);
     }
 
     @Override
@@ -93,12 +100,5 @@ class InputStreamOriginTest extends AbstractOriginTest<InputStream, InputStreamO
     void testGetWriter() {
         // Cannot convert a InputStream to a Writer.
         assertThrows(UnsupportedOperationException.class, super::testGetWriter);
-    }
-
-    @Override
-    @Test
-    void testGetWritableByteChannel() throws IOException {
-        // Cannot convert a InputStream to a WritableByteChannel.
-        assertThrows(UnsupportedOperationException.class, super::testGetWritableByteChannel);
     }
 }

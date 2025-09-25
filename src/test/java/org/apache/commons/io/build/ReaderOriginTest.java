@@ -59,6 +59,13 @@ class ReaderOriginTest extends AbstractOriginTest<Reader, ReaderOrigin> {
 
     @Override
     @Test
+    void testGetOutputStream() {
+        // Cannot convert a Reader to an OutputStream.
+        assertThrows(UnsupportedOperationException.class, super::testGetOutputStream);
+    }
+
+    @Override
+    @Test
     void testGetPath() {
         // Cannot convert a Reader to a Path.
         assertThrows(UnsupportedOperationException.class, super::testGetPath);
@@ -81,9 +88,9 @@ class ReaderOriginTest extends AbstractOriginTest<Reader, ReaderOrigin> {
 
     @Override
     @Test
-    void testGetOutputStream() {
-        // Cannot convert a Reader to an OutputStream.
-        assertThrows(UnsupportedOperationException.class, super::testGetOutputStream);
+    void testGetWritableByteChannel() throws IOException {
+        // Cannot convert a InputStream to a WritableByteChannel.
+        assertThrows(UnsupportedOperationException.class, super::testGetWritableByteChannel);
     }
 
     @Override
@@ -91,12 +98,5 @@ class ReaderOriginTest extends AbstractOriginTest<Reader, ReaderOrigin> {
     void testGetWriter() {
         // Cannot convert a Reader to a Writer.
         assertThrows(UnsupportedOperationException.class, super::testGetWriter);
-    }
-
-    @Override
-    @Test
-    void testGetWritableByteChannel() throws IOException {
-        // Cannot convert a InputStream to a WritableByteChannel.
-        assertThrows(UnsupportedOperationException.class, super::testGetWritableByteChannel);
     }
 }

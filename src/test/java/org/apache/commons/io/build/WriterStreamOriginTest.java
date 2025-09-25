@@ -92,6 +92,13 @@ class WriterStreamOriginTest extends AbstractOriginTest<Writer, WriterOrigin> {
 
     @Override
     @Test
+    void testGetInputStream() {
+        // Cannot convert a Writer to an InputStream.
+        assertThrows(UnsupportedOperationException.class, super::testGetInputStream);
+    }
+
+    @Override
+    @Test
     void testGetPath() {
         // Cannot convert a Writer to a Path.
         assertThrows(UnsupportedOperationException.class, super::testGetPath);
@@ -110,13 +117,6 @@ class WriterStreamOriginTest extends AbstractOriginTest<Writer, WriterOrigin> {
     void testGetRandomAccessFile(final OpenOption openOption) {
         // Cannot convert a RandomAccessFile to a File.
         assertThrows(UnsupportedOperationException.class, () -> super.testGetRandomAccessFile(openOption));
-    }
-
-    @Override
-    @Test
-    void testGetInputStream() {
-        // Cannot convert a Writer to an InputStream.
-        assertThrows(UnsupportedOperationException.class, super::testGetInputStream);
     }
 
     @Override
