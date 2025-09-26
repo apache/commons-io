@@ -366,6 +366,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         }
 
         @Override
+        protected Channel getChannel(final OpenOption... options) throws IOException {
+            return getRandomAccessFile(options).getChannel();
+        }
+
+        @Override
         public CharSequence getCharSequence(final Charset charset) throws IOException {
             return new String(getByteArray(), charset);
         }
@@ -398,11 +403,6 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         }
 
         @Override
-        protected Channel getChannel(final OpenOption... options) throws IOException {
-            return getRandomAccessFile(options).getChannel();
-        }
-
-        @Override
         public long size() throws IOException {
             return origin.length();
         }
@@ -428,6 +428,17 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return get();
         }
 
+        @Override
+        protected Channel getChannel(final OpenOption... options) throws IOException {
+            for (final OpenOption option : options) {
+                if (option == StandardOpenOption.WRITE) {
+                    throw new UnsupportedOperationException(
+                            "Only READ is supported for byte[] origins: " + Arrays.toString(options));
+                }
+            }
+            return ByteArraySeekableByteChannel.wrap(getByteArray());
+        }
+
         /**
          * {@inheritDoc}
          * <p>
@@ -445,21 +456,72 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         }
 
         @Override
-        protected Channel getChannel(final OpenOption... options) throws IOException {
-            for (final OpenOption option : options) {
-                if (option == StandardOpenOption.WRITE) {
-                    throw new UnsupportedOperationException(
-                            "Only READ is supported for byte[] origins: " + Arrays.toString(options));
-                }
-            }
-            return ByteArraySeekableByteChannel.wrap(getByteArray());
-        }
-
-        @Override
         public long size() throws IOException {
             return origin.length;
         }
 
+    }
+
+    /**
+     * A {@link Channel} origin.
+     *
+     * @since 2.21.0
+     */
+    public static class ChannelOrigin extends AbstractOrigin<Channel, ChannelOrigin> {
+
+        /**
+         * Constructs a new instance for the given origin.
+         *
+         * @param origin The origin, not null.
+         */
+        public ChannelOrigin(final Channel origin) {
+            super(origin);
+        }
+
+        @Override
+        public byte[] getByteArray() throws IOException {
+            return IOUtils.toByteArray(getInputStream());
+        }
+
+        @Override
+        protected Channel getChannel(final OpenOption... options) throws IOException {
+            // No conversion
+            return get();
+        }
+
+        @Override
+        public InputStream getInputStream(final OpenOption... options) throws IOException {
+            return Channels.newInputStream(getChannel(ReadableByteChannel.class, options));
+        }
+
+        @Override
+        public OutputStream getOutputStream(final OpenOption... options) throws IOException {
+            return Channels.newOutputStream(getChannel(WritableByteChannel.class, options));
+        }
+
+        @Override
+        public Reader getReader(final Charset charset) throws IOException {
+            return Channels.newReader(
+                    getChannel(ReadableByteChannel.class),
+                    Charsets.toCharset(charset).newDecoder(),
+                    -1);
+        }
+
+        @Override
+        public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
+            return Channels.newWriter(
+                    getChannel(WritableByteChannel.class, options),
+                    Charsets.toCharset(charset).newEncoder(),
+                    -1);
+        }
+
+        @Override
+        public long size() throws IOException {
+            if (origin instanceof SeekableByteChannel) {
+                return ((SeekableByteChannel) origin).size();
+            }
+            throw unsupportedOperation("size");
+        }
     }
 
     /**
@@ -480,6 +542,17 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         public byte[] getByteArray() {
             // TODO Pass in a Charset? Consider if call sites actually need this.
             return origin.toString().getBytes(Charset.defaultCharset());
+        }
+
+        @Override
+        protected Channel getChannel(final OpenOption... options) throws IOException {
+            for (final OpenOption option : options) {
+                if (option == StandardOpenOption.WRITE) {
+                    throw new UnsupportedOperationException(
+                            "Only READ is supported for CharSequence origins: " + Arrays.toString(options));
+                }
+            }
+            return ByteArraySeekableByteChannel.wrap(getByteArray());
         }
 
         /**
@@ -518,17 +591,6 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         }
 
         @Override
-        protected Channel getChannel(final OpenOption... options) throws IOException {
-            for (final OpenOption option : options) {
-                if (option == StandardOpenOption.WRITE) {
-                    throw new UnsupportedOperationException(
-                            "Only READ is supported for CharSequence origins: " + Arrays.toString(options));
-                }
-            }
-            return ByteArraySeekableByteChannel.wrap(getByteArray());
-        }
-
-        @Override
         public long size() throws IOException {
             return origin.length();
         }
@@ -560,6 +622,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         }
 
         @Override
+        protected Channel getChannel(final OpenOption... options) throws IOException {
+            return Files.newByteChannel(getPath(), options);
+        }
+
+        @Override
         public File getFile() {
             // No conversion
             return get();
@@ -568,11 +635,6 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         @Override
         public Path getPath() {
             return get().toPath();
-        }
-
-        @Override
-        protected Channel getChannel(final OpenOption... options) throws IOException {
-            return Files.newByteChannel(getPath(), options);
         }
     }
 
@@ -598,6 +660,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return IOUtils.toByteArray(origin);
         }
 
+        @Override
+        protected Channel getChannel(final OpenOption... options) throws IOException {
+            return Channels.newChannel(getInputStream(options));
+        }
+
         /**
          * {@inheritDoc}
          * <p>
@@ -613,11 +680,6 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         @Override
         public Reader getReader(final Charset charset) throws IOException {
             return new InputStreamReader(getInputStream(), Charsets.toCharset(charset));
-        }
-
-        @Override
-        protected Channel getChannel(final OpenOption... options) throws IOException {
-            return Channels.newChannel(getInputStream(options));
         }
 
         @Override
@@ -676,6 +738,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             super(origin);
         }
 
+        @Override
+        protected Channel getChannel(final OpenOption... options) throws IOException {
+            return Channels.newChannel(getOutputStream(options));
+        }
+
         /**
          * {@inheritDoc}
          * <p>
@@ -697,11 +764,6 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         @Override
         public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
             return new OutputStreamWriter(origin, Charsets.toCharset(charset));
-        }
-
-        @Override
-        protected Channel getChannel(final OpenOption... options) throws IOException {
-            return Channels.newChannel(getOutputStream(options));
         }
     }
 
@@ -728,6 +790,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         }
 
         @Override
+        protected Channel getChannel(final OpenOption... options) throws IOException {
+            return Files.newByteChannel(getPath(), options);
+        }
+
+        @Override
         public File getFile() {
             return get().toFile();
         }
@@ -736,11 +803,6 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         public Path getPath() {
             // No conversion
             return get();
-        }
-
-        @Override
-        protected Channel getChannel(final OpenOption... options) throws IOException {
-            return Files.newByteChannel(getPath(), options);
         }
     }
 
@@ -790,6 +852,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return IOUtils.toByteArray(origin, Charset.defaultCharset());
         }
 
+        @Override
+        protected Channel getChannel(final OpenOption... options) throws IOException {
+            return Channels.newChannel(getInputStream());
+        }
+
         /**
          * {@inheritDoc}
          * <p>
@@ -824,11 +891,6 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             // No conversion
             return get();
         }
-
-        @Override
-        protected Channel getChannel(final OpenOption... options) throws IOException {
-            return Channels.newChannel(getInputStream());
-        }
     }
 
     /**
@@ -846,6 +908,16 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          */
         public URIOrigin(final URI origin) {
             super(origin);
+        }
+
+        @Override
+        protected Channel getChannel(final OpenOption... options) throws IOException {
+            final URI uri = get();
+            final String scheme = uri.getScheme();
+            if (SCHEME_HTTP.equalsIgnoreCase(scheme) || SCHEME_HTTPS.equalsIgnoreCase(scheme)) {
+                return Channels.newChannel(uri.toURL().openStream());
+            }
+            return Files.newByteChannel(getPath(), options);
         }
 
         @Override
@@ -867,16 +939,6 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         public Path getPath() {
             return Paths.get(get());
         }
-
-        @Override
-        protected Channel getChannel(final OpenOption... options) throws IOException {
-            final URI uri = get();
-            final String scheme = uri.getScheme();
-            if (SCHEME_HTTP.equalsIgnoreCase(scheme) || SCHEME_HTTPS.equalsIgnoreCase(scheme)) {
-                return Channels.newChannel(uri.toURL().openStream());
-            }
-            return Files.newByteChannel(getPath(), options);
-        }
     }
 
     /**
@@ -894,6 +956,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          */
         public WriterOrigin(final Writer origin) {
             super(origin);
+        }
+
+        @Override
+        protected Channel getChannel(final OpenOption... options) throws IOException {
+            return Channels.newChannel(getOutputStream());
         }
 
         /**
@@ -921,73 +988,6 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
             // No conversion
             return get();
-        }
-
-        @Override
-        protected Channel getChannel(final OpenOption... options) throws IOException {
-            return Channels.newChannel(getOutputStream());
-        }
-    }
-
-    /**
-     * A {@link Channel} origin.
-     *
-     * @since 2.21.0
-     */
-    public static class ChannelOrigin extends AbstractOrigin<Channel, ChannelOrigin> {
-
-        /**
-         * Constructs a new instance for the given origin.
-         *
-         * @param origin The origin, not null.
-         */
-        public ChannelOrigin(final Channel origin) {
-            super(origin);
-        }
-
-        @Override
-        public byte[] getByteArray() throws IOException {
-            return IOUtils.toByteArray(getInputStream());
-        }
-
-        @Override
-        public InputStream getInputStream(final OpenOption... options) throws IOException {
-            return Channels.newInputStream(getChannel(ReadableByteChannel.class, options));
-        }
-
-        @Override
-        public Reader getReader(final Charset charset) throws IOException {
-            return Channels.newReader(
-                    getChannel(ReadableByteChannel.class),
-                    Charsets.toCharset(charset).newDecoder(),
-                    -1);
-        }
-
-        @Override
-        public OutputStream getOutputStream(final OpenOption... options) throws IOException {
-            return Channels.newOutputStream(getChannel(WritableByteChannel.class, options));
-        }
-
-        @Override
-        public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
-            return Channels.newWriter(
-                    getChannel(WritableByteChannel.class, options),
-                    Charsets.toCharset(charset).newEncoder(),
-                    -1);
-        }
-
-        @Override
-        protected Channel getChannel(final OpenOption... options) throws IOException {
-            // No conversion
-            return get();
-        }
-
-        @Override
-        public long size() throws IOException {
-            if (origin instanceof SeekableByteChannel) {
-                return ((SeekableByteChannel) origin).size();
-            }
-            throw unsupportedOperation("size");
         }
     }
 
@@ -1045,6 +1045,39 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             throw new IllegalArgumentException("Couldn't read array (start: " + start + ", length: " + length + ", data length: " + bytes.length + ").");
         }
         return Arrays.copyOfRange(bytes, start, start + length);
+    }
+
+    /**
+     * Gets this origin as a Channel of the given type, if possible.
+     *
+     * @param channelType The type of channel to return.
+     * @param options Options specifying how a file-based origin is opened, ignored otherwise.
+     * @return A new Channel on the origin of the given type.
+     * @param <C> The type of channel to return.
+     * @throws IOException                   If an I/O error occurs.
+     * @throws UnsupportedOperationException If this origin cannot be converted to a channel of the given type.
+     * @since 2.21.0
+     */
+    public final <C extends Channel> C getChannel(final Class<C> channelType, final OpenOption... options) throws IOException {
+        Objects.requireNonNull(channelType, "channelType");
+        final Channel channel = getChannel(options);
+        if (channelType.isInstance(channel)) {
+            return channelType.cast(channel);
+        }
+        throw unsupportedChannelType(channelType);
+    }
+
+    /**
+     * Gets this origin as a Channel, if possible.
+     *
+     * @param options Options specifying how a file-based origin is opened, ignored otherwise.
+     * @return A new Channel on the origin.
+     * @throws IOException                   If an I/O error occurs.
+     * @throws UnsupportedOperationException If this origin cannot be converted to a channel.
+     * @since 2.21.0
+     */
+    protected Channel getChannel(final OpenOption... options) throws IOException {
+        throw unsupportedOperation("getChannel");
     }
 
     /**
@@ -1145,39 +1178,6 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     }
 
     /**
-     * Gets this origin as a Channel of the given type, if possible.
-     *
-     * @param channelType The type of channel to return.
-     * @param options Options specifying how a file-based origin is opened, ignored otherwise.
-     * @return A new Channel on the origin of the given type.
-     * @param <C> The type of channel to return.
-     * @throws IOException                   If an I/O error occurs.
-     * @throws UnsupportedOperationException If this origin cannot be converted to a channel of the given type.
-     * @since 2.21.0
-     */
-    public final <C extends Channel> C getChannel(final Class<C> channelType, final OpenOption... options) throws IOException {
-        Objects.requireNonNull(channelType, "channelType");
-        final Channel channel = getChannel(options);
-        if (channelType.isInstance(channel)) {
-            return channelType.cast(channel);
-        }
-        throw unsupportedChannelType(channelType);
-    }
-
-    /**
-     * Gets this origin as a Channel, if possible.
-     *
-     * @param options Options specifying how a file-based origin is opened, ignored otherwise.
-     * @return A new Channel on the origin.
-     * @throws IOException                   If an I/O error occurs.
-     * @throws UnsupportedOperationException If this origin cannot be converted to a channel.
-     * @since 2.21.0
-     */
-    protected Channel getChannel(final OpenOption... options) throws IOException {
-        throw unsupportedOperation("getChannel");
-    }
-
-    /**
      * Gets the size of the origin, if possible.
      *
      * @return the size of the origin in bytes or characters.
@@ -1193,12 +1193,6 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         return getSimpleClassName() + "[" + origin.toString() + "]";
     }
 
-    UnsupportedOperationException unsupportedOperation(final String method) {
-        return new UnsupportedOperationException(String.format(
-                "%s#%s() for %s origin %s",
-                getSimpleClassName(), method, origin.getClass().getSimpleName(), origin));
-    }
-
     UnsupportedOperationException unsupportedChannelType(final Class<? extends Channel> channelType) {
         return new UnsupportedOperationException(String.format(
                 "%s#getChannel(%s) for %s origin %s",
@@ -1206,5 +1200,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
                 channelType.getSimpleName(),
                 origin.getClass().getSimpleName(),
                 origin));
+    }
+
+    UnsupportedOperationException unsupportedOperation(final String method) {
+        return new UnsupportedOperationException(String.format(
+                "%s#%s() for %s origin %s",
+                getSimpleClassName(), method, origin.getClass().getSimpleName(), origin));
     }
 }

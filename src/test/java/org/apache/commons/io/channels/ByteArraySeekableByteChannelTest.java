@@ -41,11 +41,6 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 public class ByteArraySeekableByteChannelTest extends AbstractSeekableByteChannelTest {
 
-    @Override
-    protected SeekableByteChannel createChannel() throws IOException {
-        return new ByteArraySeekableByteChannel();
-    }
-
     private static final byte[] testData = "Some data".getBytes(StandardCharsets.UTF_8);
 
     static Stream<Arguments> testConstructor() {
@@ -74,6 +69,21 @@ public class ByteArraySeekableByteChannelTest extends AbstractSeekableByteChanne
                         testData.length));
     }
 
+    static Stream<Arguments> testShouldResizeWhenWritingMoreDataThanCapacity() {
+        return Stream.of(
+                // Resize from 0
+                Arguments.of(EMPTY_BYTE_ARRAY, 1),
+                // Resize less than double
+                Arguments.of(new byte[8], 1),
+                // Resize more that double
+                Arguments.of(new byte[8], 20));
+    }
+
+    @Override
+    protected SeekableByteChannel createChannel() throws IOException {
+        return new ByteArraySeekableByteChannel();
+    }
+
     @ParameterizedTest
     @MethodSource
     void testConstructor(final IOSupplier<ByteArraySeekableByteChannel> supplier, final byte[] expected, final int capacity) throws IOException {
@@ -89,16 +99,6 @@ public class ByteArraySeekableByteChannelTest extends AbstractSeekableByteChanne
     void testConstructorInvalid() {
         assertThrows(IllegalArgumentException.class, () -> new ByteArraySeekableByteChannel(-1));
         assertThrows(NullPointerException.class, () -> ByteArraySeekableByteChannel.wrap(null));
-    }
-
-    static Stream<Arguments> testShouldResizeWhenWritingMoreDataThanCapacity() {
-        return Stream.of(
-                // Resize from 0
-                Arguments.of(EMPTY_BYTE_ARRAY, 1),
-                // Resize less than double
-                Arguments.of(new byte[8], 1),
-                // Resize more that double
-                Arguments.of(new byte[8], 20));
     }
 
     @ParameterizedTest

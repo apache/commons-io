@@ -62,6 +62,17 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
     }
 
     /**
+     * Constructs a new channel origin for a channel.
+     *
+     * @param origin the channel.
+     * @return a new channel origin.
+     * @since 2.21.0
+     */
+    protected static ChannelOrigin newChannelOrigin(final Channel origin) {
+        return new ChannelOrigin(origin);
+    }
+
+    /**
      * Constructs a new CharSequence origin for a CharSequence.
      *
      * @param origin the CharSequence.
@@ -185,17 +196,6 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
     }
 
     /**
-     * Constructs a new channel origin for a channel.
-     *
-     * @param origin the channel.
-     * @return a new channel origin.
-     * @since 2.21.0
-     */
-    protected static ChannelOrigin newChannelOrigin(final Channel origin) {
-        return new ChannelOrigin(origin);
-    }
-
-    /**
      * The underlying origin.
      */
     private AbstractOrigin<?, ?> origin;
@@ -246,6 +246,17 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
      */
     public B setByteArray(final byte[] origin) {
         return setOrigin(newByteArrayOrigin(origin));
+    }
+
+    /**
+     * Sets a new origin.
+     *
+     * @param origin the new origin.
+     * @return {@code this} instance.
+     * @since 2.21.0
+     */
+    public B setChannel(final Channel origin) {
+        return setOrigin(newChannelOrigin(origin));
     }
 
     /**
@@ -380,16 +391,5 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
      */
     public B setWriter(final Writer origin) {
         return setOrigin(newWriterOrigin(origin));
-    }
-
-    /**
-     * Sets a new origin.
-     *
-     * @param origin the new origin.
-     * @return {@code this} instance.
-     * @since 2.21.0
-     */
-    public B setChannel(final Channel origin) {
-        return setOrigin(newChannelOrigin(origin));
     }
 }

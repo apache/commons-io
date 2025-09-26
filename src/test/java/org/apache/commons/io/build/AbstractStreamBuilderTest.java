@@ -58,31 +58,6 @@ class AbstractStreamBuilderTest {
 
     }
 
-    private void assertResult(final char[] arr, final int size) {
-        assertNotNull(arr);
-        assertEquals(size, arr.length);
-        for (final char c : arr) {
-            assertEquals('a', c);
-        }
-    }
-
-    protected Builder builder() {
-        return new Builder();
-    }
-
-    @Test
-    void testBufferSizeChecker() {
-        // sanity
-        final Builder builder = builder();
-        assertResult(builder.get(), builder.getBufferSize());
-        // basic failure
-        assertThrows(IllegalArgumentException.class, () -> builder().setBufferSizeMax(2).setBufferSize(3));
-        // reset
-        assertResult(builder.setBufferSizeMax(2).setBufferSizeMax(0).setBufferSize(3).get(), 3);
-        // resize
-        assertResult(builder().setBufferSizeMax(2).setBufferSizeChecker(i -> 100).setBufferSize(3).get(), 100);
-    }
-
     private static Stream<IOConsumer<Builder>> fileBasedConfigurers() throws URISyntaxException {
         final URI uri = Objects.requireNonNull(
                         AbstractStreamBuilderTest.class.getResource(AbstractOriginTest.FILE_RES_RO))
@@ -102,17 +77,16 @@ class AbstractStreamBuilderTest {
                 b -> b.setURI(uri));
     }
 
-    /**
-     * Tests various ways to obtain a {@link java.io.InputStream}.
-     *
-     * @param configurer Lambda to configure the builder.
-     */
-    @ParameterizedTest
-    @MethodSource("fileBasedConfigurers")
-    void testGetInputStream(final IOConsumer<Builder> configurer) throws Exception {
-        final Builder builder = builder();
-            configurer.accept(builder);
-        assertNotNull(builder.getInputStream());
+    private void assertResult(final char[] arr, final int size) {
+        assertNotNull(arr);
+        assertEquals(size, arr.length);
+        for (final char c : arr) {
+            assertEquals('a', c);
+        }
+    }
+
+    protected Builder builder() {
+        return new Builder();
     }
 
     /**
@@ -128,5 +102,31 @@ class AbstractStreamBuilderTest {
         try (ReadableByteChannel channel = assertDoesNotThrow(() -> builder.getChannel(SeekableByteChannel.class))) {
             assertTrue(channel.isOpen());
         }
+    }
+
+    @Test
+    void testBufferSizeChecker() {
+        // sanity
+        final Builder builder = builder();
+        assertResult(builder.get(), builder.getBufferSize());
+        // basic failure
+        assertThrows(IllegalArgumentException.class, () -> builder().setBufferSizeMax(2).setBufferSize(3));
+        // reset
+        assertResult(builder.setBufferSizeMax(2).setBufferSizeMax(0).setBufferSize(3).get(), 3);
+        // resize
+        assertResult(builder().setBufferSizeMax(2).setBufferSizeChecker(i -> 100).setBufferSize(3).get(), 100);
+    }
+
+    /**
+     * Tests various ways to obtain a {@link java.io.InputStream}.
+     *
+     * @param configurer Lambda to configure the builder.
+     */
+    @ParameterizedTest
+    @MethodSource("fileBasedConfigurers")
+    void testGetInputStream(final IOConsumer<Builder> configurer) throws Exception {
+        final Builder builder = builder();
+            configurer.accept(builder);
+        assertNotNull(builder.getInputStream());
     }
 }

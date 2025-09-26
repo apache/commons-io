@@ -121,6 +121,23 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     }
 
     /**
+     * Gets a Channel from the origin with OpenOption[].
+     *
+     * @param channelType The channel type, not null.
+     * @return A channel of the specified type.
+     * @param <C>         The channel type.
+     * @throws IllegalStateException         if the {@code origin} is {@code null}.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a {@link ReadableByteChannel}.
+     * @throws IOException                   if an I/O error occurs.
+     * @see AbstractOrigin#getChannel
+     * @see #getOpenOptions()
+     * @since 2.21.0
+     */
+    public <C extends Channel> C getChannel(final Class<C> channelType) throws IOException {
+        return checkOrigin().getChannel(channelType, getOpenOptions());
+    }
+
+    /**
      * Gets a CharSequence from the origin with a Charset.
      *
      * @return An input stream
@@ -258,23 +275,6 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      */
     public Writer getWriter() throws IOException {
         return checkOrigin().getWriter(getCharset(), getOpenOptions());
-    }
-
-    /**
-     * Gets a Channel from the origin with OpenOption[].
-     *
-     * @param channelType The channel type, not null.
-     * @return A channel of the specified type.
-     * @param <C>         The channel type.
-     * @throws IllegalStateException         if the {@code origin} is {@code null}.
-     * @throws UnsupportedOperationException if the origin cannot be converted to a {@link ReadableByteChannel}.
-     * @throws IOException                   if an I/O error occurs.
-     * @see AbstractOrigin#getChannel
-     * @see #getOpenOptions()
-     * @since 2.21.0
-     */
-    public <C extends Channel> C getChannel(final Class<C> channelType) throws IOException {
-        return checkOrigin().getChannel(channelType, getOpenOptions());
     }
 
     /**

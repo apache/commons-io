@@ -79,6 +79,23 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
         setOriginRw(newOriginRw());
     }
 
+    private void checkRead(final ReadableByteChannel channel) throws IOException {
+        final ByteBuffer buffer = ByteBuffer.allocate(RO_LENGTH);
+        int read = channel.read(buffer);
+        assertEquals(RO_LENGTH, read);
+        assertArrayEquals(getFixtureByteArray(), buffer.array());
+        // Channel is at EOF
+        buffer.clear();
+        read = channel.read(buffer);
+        assertEquals(-1, read);
+    }
+
+    private void checkWrite(final WritableByteChannel channel) throws IOException {
+        final ByteBuffer buffer = ByteBuffer.wrap(getFixtureByteArray());
+        final int written = channel.write(buffer);
+        assertEquals(RO_LENGTH, written);
+    }
+
     @AfterEach
     void cleanup() {
         final T originRo = getOriginRo().get();
@@ -89,6 +106,14 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
         if (originRw instanceof Closeable) {
             IOUtils.closeQuietly((Closeable) originRw);
         }
+    }
+
+    byte[] getFixtureByteArray() throws IOException {
+        return IOUtils.resourceToByteArray(FILE_RES_RO);
+    }
+
+    String getFixtureString() throws IOException {
+        return IOUtils.resourceToString(FILE_RES_RO, StandardCharsets.UTF_8);
     }
 
     protected AbstractOrigin<T, B> getOriginRo() {
@@ -108,24 +133,16 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
 
     protected abstract B newOriginRw() throws IOException;
 
+    protected void resetOriginRw() throws IOException {
+        // No-op
+    }
+
     protected void setOriginRo(final AbstractOrigin<T, B> origin) {
         this.originRo = origin;
     }
 
     protected void setOriginRw(final AbstractOrigin<T, B> origin) {
         this.originRw = origin;
-    }
-
-    protected void resetOriginRw() throws IOException {
-        // No-op
-    }
-
-    byte[] getFixtureByteArray() throws IOException {
-        return IOUtils.resourceToByteArray(FILE_RES_RO);
-    }
-
-    String getFixtureString() throws IOException {
-        return IOUtils.resourceToString(FILE_RES_RO, StandardCharsets.UTF_8);
     }
 
     @Test
@@ -259,33 +276,6 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
     }
 
     @Test
-    void testGetReader() throws IOException {
-        try (Reader reader = getOriginRo().getReader(Charset.defaultCharset())) {
-            assertNotNull(reader);
-        }
-        setOriginRo(newOriginRo());
-        try (Reader reader = getOriginRo().getReader(null)) {
-            assertNotNull(reader);
-        }
-        setOriginRo(newOriginRo());
-        try (Reader reader = getOriginRo().getReader(StandardCharsets.UTF_8)) {
-            assertNotNull(reader);
-            assertEquals(getFixtureString(), IOUtils.toString(reader));
-        }
-    }
-
-    @Test
-    void testGetWriter() throws IOException {
-        try (Writer writer = getOriginRw().getWriter(Charset.defaultCharset())) {
-            assertNotNull(writer);
-        }
-        setOriginRw(newOriginRw());
-        try (Writer writer = getOriginRw().getWriter(null)) {
-            assertNotNull(writer);
-        }
-    }
-
-    @Test
     void testGetReadableByteChannel() throws IOException {
         try (ReadableByteChannel channel =
                 getOriginRo().getChannel(ReadableByteChannel.class, StandardOpenOption.READ)) {
@@ -304,15 +294,20 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
         }
     }
 
-    private void checkRead(final ReadableByteChannel channel) throws IOException {
-        final ByteBuffer buffer = ByteBuffer.allocate(RO_LENGTH);
-        int read = channel.read(buffer);
-        assertEquals(RO_LENGTH, read);
-        assertArrayEquals(getFixtureByteArray(), buffer.array());
-        // Channel is at EOF
-        buffer.clear();
-        read = channel.read(buffer);
-        assertEquals(-1, read);
+    @Test
+    void testGetReader() throws IOException {
+        try (Reader reader = getOriginRo().getReader(Charset.defaultCharset())) {
+            assertNotNull(reader);
+        }
+        setOriginRo(newOriginRo());
+        try (Reader reader = getOriginRo().getReader(null)) {
+            assertNotNull(reader);
+        }
+        setOriginRo(newOriginRo());
+        try (Reader reader = getOriginRo().getReader(StandardCharsets.UTF_8)) {
+            assertNotNull(reader);
+            assertEquals(getFixtureString(), IOUtils.toString(reader));
+        }
     }
 
     @Test
@@ -367,10 +362,15 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
         }
     }
 
-    private void checkWrite(final WritableByteChannel channel) throws IOException {
-        final ByteBuffer buffer = ByteBuffer.wrap(getFixtureByteArray());
-        final int written = channel.write(buffer);
-        assertEquals(RO_LENGTH, written);
+    @Test
+    void testGetWriter() throws IOException {
+        try (Writer writer = getOriginRw().getWriter(Charset.defaultCharset())) {
+            assertNotNull(writer);
+        }
+        setOriginRw(newOriginRw());
+        try (Writer writer = getOriginRw().getWriter(null)) {
+            assertNotNull(writer);
+        }
     }
 
     @Test

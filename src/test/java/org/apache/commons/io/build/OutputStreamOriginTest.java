@@ -121,16 +121,16 @@ class OutputStreamOriginTest extends AbstractOriginTest<OutputStream, OutputStre
 
     @Override
     @Test
-    void testGetReader() {
-        // Cannot convert a OutputStream to a Reader.
-        assertThrows(UnsupportedOperationException.class, super::testGetReader);
+    void testGetReadableByteChannel() throws IOException {
+        // Cannot convert a OutputStream to a ReadableByteChannel.
+        assertThrows(UnsupportedOperationException.class, super::testGetReadableByteChannel);
     }
 
     @Override
     @Test
-    void testGetReadableByteChannel() throws IOException {
-        // Cannot convert a OutputStream to a ReadableByteChannel.
-        assertThrows(UnsupportedOperationException.class, super::testGetReadableByteChannel);
+    void testGetReader() {
+        // Cannot convert a OutputStream to a Reader.
+        assertThrows(UnsupportedOperationException.class, super::testGetReader);
     }
 
     @Override

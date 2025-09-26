@@ -84,6 +84,12 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
         this(IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
+    private ByteArraySeekableByteChannel(final byte[] data) {
+        this.data = data;
+        this.position = 0;
+        this.size = data.length;
+    }
+
     /**
      * Constructs a new instance, with an internal buffer of the given capacity, in bytes.
      * <p>
@@ -102,12 +108,6 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
         this.size = 0;
     }
 
-    private ByteArraySeekableByteChannel(final byte[] data) {
-        this.data = data;
-        this.position = 0;
-        this.size = data.length;
-    }
-
     /**
      * Gets the raw byte array backing this channel, <em>this is not a copy</em>.
      * <p>
@@ -118,18 +118,6 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
      */
     public byte[] array() {
         return data;
-    }
-
-    /**
-     * Gets a copy of the data stored in this channel.
-     * <p>
-     * The returned array is a copy of the internal buffer, sized to the actual data stored in this channel.
-     * </p>
-     *
-     * @return a new byte array containing the data stored in this channel.
-     */
-    public byte[] toByteArray() {
-        return Arrays.copyOf(data, size);
     }
 
     private void checkOpen() throws ClosedChannelException {
@@ -233,6 +221,18 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
         } finally {
             lock.unlock();
         }
+    }
+
+    /**
+     * Gets a copy of the data stored in this channel.
+     * <p>
+     * The returned array is a copy of the internal buffer, sized to the actual data stored in this channel.
+     * </p>
+     *
+     * @return a new byte array containing the data stored in this channel.
+     */
+    public byte[] toByteArray() {
+        return Arrays.copyOf(data, size);
     }
 
     @Override
