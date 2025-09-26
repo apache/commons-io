@@ -422,6 +422,13 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             super(origin);
         }
 
+        /**
+         * {@inheritDoc}
+         *
+         * <p>
+         * No conversion should occur when calling this method.
+         * </p>
+         */
         @Override
         public byte[] getByteArray() {
             // No conversion
@@ -483,6 +490,13 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return IOUtils.toByteArray(getInputStream());
         }
 
+        /**
+         * {@inheritDoc}
+         *
+         * <p>
+         * No conversion should occur when calling this method.
+         * </p>
+         */
         @Override
         protected Channel getChannel(final OpenOption... options) throws IOException {
             // No conversion
@@ -560,6 +574,9 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          * <p>
          * The {@code charset} parameter is ignored since a {@link CharSequence} does not need a {@link Charset} to be read.
          * </p>
+         * <p>
+         * No conversion should occur when calling this method.
+         * </p>
          */
         @Override
         public CharSequence getCharSequence(final Charset charset) {
@@ -626,6 +643,13 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return Files.newByteChannel(getPath(), options);
         }
 
+        /**
+         * {@inheritDoc}
+         *
+         * <p>
+         * No conversion should occur when calling this method.
+         * </p>
+         */
         @Override
         public File getFile() {
             // No conversion
@@ -669,6 +693,9 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          * {@inheritDoc}
          * <p>
          * The {@code options} parameter is ignored since a {@link InputStream} does not need an {@link OpenOption} to be read.
+         * </p>
+         * <p>
+         * No conversion should occur when calling this method.
          * </p>
          */
         @Override
@@ -748,6 +775,9 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          * <p>
          * The {@code options} parameter is ignored since a {@link OutputStream} does not need an {@link OpenOption} to be written.
          * </p>
+         * <p>
+         * No conversion should occur when calling this method.
+         * </p>
          */
         @Override
         public OutputStream getOutputStream(final OpenOption... options) {
@@ -799,6 +829,13 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return get().toFile();
         }
 
+        /**
+         * {@inheritDoc}
+         *
+         * <p>
+         * No conversion should occur when calling this method.
+         * </p>
+         */
         @Override
         public Path getPath() {
             // No conversion
@@ -884,6 +921,9 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          * {@inheritDoc}
          * <p>
          * The {@code charset} parameter is ignored since a {@link Reader} does not need a {@link Charset} to be read.
+         * </p>
+         * <p>
+         * No conversion should occur when calling this method.
          * </p>
          */
         @Override
@@ -982,6 +1022,9 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          * </p>
          * <p>
          * The {@code options} parameter is ignored since a {@link Writer} does not need an {@link OpenOption} to be written.
+         * </p>
+         * <p>
+         * No conversion should occur when calling this method.
          * </p>
          */
         @Override
