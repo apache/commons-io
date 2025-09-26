@@ -19,6 +19,7 @@ package org.apache.commons.io.build;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,13 +30,17 @@ import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URI;
+import java.nio.channels.Channel;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.SeekableByteChannel;
+import java.nio.channels.WritableByteChannel;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.nio.file.spi.FileSystemProvider;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -44,7 +49,7 @@ import org.apache.commons.io.IORandomAccessFile;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.RandomAccessFileMode;
 import org.apache.commons.io.RandomAccessFiles;
-import org.apache.commons.io.file.spi.FileSystemProviders;
+import org.apache.commons.io.channels.ByteArraySeekableByteChannel;
 import org.apache.commons.io.input.BufferedFileChannelInputStream;
 import org.apache.commons.io.input.CharSequenceInputStream;
 import org.apache.commons.io.input.CharSequenceReader;
@@ -53,15 +58,270 @@ import org.apache.commons.io.output.RandomAccessFileOutputStream;
 import org.apache.commons.io.output.WriterOutputStream;
 
 /**
- * Abstracts the origin of data for builders like a {@link File}, {@link Path}, {@link Reader}, {@link Writer}, {@link InputStream}, {@link OutputStream}, and
- * {@link URI}.
+ * Abstract base class that encapsulates the <em>origin</em> of data used by Commons IO builders.
  * <p>
- * Some methods may throw {@link UnsupportedOperationException} if that method is not implemented in a concrete subclass, see {@link #getFile()} and
- * {@link #getPath()}.
+ * An origin represents where bytes/characters come from or go to, such as a {@link File}, {@link Path},
+ * {@link Reader}, {@link Writer}, {@link InputStream}, {@link OutputStream}, or {@link URI}. Concrete subclasses
+ * expose only the operations that make sense for the underlying source or sink; invoking an unsupported operation
+ * results in {@link UnsupportedOperationException} (see, for example, {@link #getFile()} and {@link #getPath()}).
  * </p>
  *
- * @param <T> the type of instances to build.
- * @param <B> the type of builder subclass.
+ * <p>
+ * The table below summarizes which views and conversions are supported for each origin type.
+ * Column headers show the target view; cells indicate whether that view is available from the origin in that row.
+ * </p>
+ *
+ * <table>
+ *   <caption>Origin support matrix</caption>
+ *   <thead>
+ *     <tr>
+ *       <th>Origin Type</th>
+ *       <th>byte[]</th>
+ *       <th>CS</th>
+ *       <th>File</th>
+ *       <th>Path</th>
+ *       <th>RAF</th>
+ *       <th>IS</th>
+ *       <th>Reader</th>
+ *       <th>RBC</th>
+ *       <th>OS</th>
+ *       <th>Writer</th>
+ *       <th>WBC</th>
+ *       <th>Channel type<sup>2</sup></th>
+ *     </tr>
+ *   </thead>
+ *   <tbody>
+ *     <tr>
+ *       <td>byte[]</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>SBC</td>
+ *     </tr>
+ *     <tr>
+ *       <td>CharSequence (CS)</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✔<sup>1</sup></td>
+ *       <td>✔</td>
+ *       <td>✔<sup>1</sup></td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>SBC</td>
+ *     </tr>
+ *     <tr>
+ *       <td>File</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>FC</td>
+ *     </tr>
+ *     <tr>
+ *       <td>Path</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>FC</td>
+ *     </tr>
+ *     <tr>
+ *       <td>IORandomAccessFile</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>FC</td>
+ *     </tr>
+ *     <tr>
+ *       <td>RandomAccessFile (RAF)</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>FC</td>
+ *     </tr>
+ *     <tr>
+ *       <td>InputStream (IS)</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>RBC</td>
+ *     </tr>
+ *     <tr>
+ *       <td>Reader</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✔<sup>1</sup></td>
+ *       <td>✔</td>
+ *       <td>✔<sup>1</sup></td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>RBC</td>
+ *     </tr>
+ *     <tr>
+ *       <td>ReadableByteChannel (RBC)</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>RBC</td>
+ *     </tr>
+ *     <tr>
+ *       <td>OutputStream (OS)</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>WBC</td>
+ *     </tr>
+ *     <tr>
+ *       <td>Writer</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✔<sup>1</sup></td>
+ *       <td>✔</td>
+ *       <td>✔<sup>1</sup></td>
+ *       <td>WBC</td>
+ *     </tr>
+ *     <tr>
+ *       <td>WritableByteChannel (WBC)</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>WBC</td>
+ *     </tr>
+ *     <tr>
+ *       <td>URI (FileSystem)</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>FC</td>
+ *     </tr>
+ *     <tr>
+ *       <td>URI (http/https))</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✔</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>✖</td>
+ *       <td>RBC</td>
+ *     </tr>
+ *   </tbody>
+ * </table>
+ *
+ * <p><strong>Legend</strong></p>
+ * <ul>
+ *   <li>✔ = Supported</li>
+ *   <li>✖ = Not supported (throws {@link UnsupportedOperationException})</li>
+ *   <li><sup>1</sup> = Characters are converted to bytes using the default {@link Charset}.</li>
+ *   <li><sup>2</sup> Minimum channel type provided by the origin:
+ *     <ul>
+ *         <li>RBC = ReadableByteChannel</li>
+ *         <li>WBC = WritableByteChannel</li>
+ *         <li>SBC = SeekableByteChannel</li>
+ *         <li>FC = FileChannel</li>
+ *     </ul>
+ *     The exact channel type may be a subtype of the minimum shown.
+ *   </li>
+ * </ul>
+ *
+ * @param <T> the type produced by the builder.
+ * @param <B> the concrete builder subclass type.
  * @since 2.12.0
  */
 public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends AbstractSupplier<T, B> {
@@ -138,6 +398,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         }
 
         @Override
+        protected Channel getChannel(OpenOption... options) throws IOException {
+            return getRandomAccessFile(options).getChannel();
+        }
+
+        @Override
         public long size() throws IOException {
             return origin.length();
         }
@@ -177,6 +442,17 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         @Override
         public Reader getReader(final Charset charset) throws IOException {
             return new InputStreamReader(getInputStream(), Charsets.toCharset(charset));
+        }
+
+        @Override
+        protected Channel getChannel(OpenOption... options) throws IOException {
+            for (final OpenOption option : options) {
+                if (option == StandardOpenOption.WRITE) {
+                    throw new UnsupportedOperationException(
+                            "Only READ is supported for byte[] origins: " + Arrays.toString(options));
+                }
+            }
+            return ByteArraySeekableByteChannel.wrap(getByteArray());
         }
 
         @Override
@@ -242,6 +518,17 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         }
 
         @Override
+        protected Channel getChannel(OpenOption... options) throws IOException {
+            for (final OpenOption option : options) {
+                if (option == StandardOpenOption.WRITE) {
+                    throw new UnsupportedOperationException(
+                            "Only READ is supported for CharSequence origins: " + Arrays.toString(options));
+                }
+            }
+            return ByteArraySeekableByteChannel.wrap(getByteArray());
+        }
+
+        @Override
         public long size() throws IOException {
             return origin.length();
         }
@@ -283,6 +570,10 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return get().toPath();
         }
 
+        @Override
+        protected Channel getChannel(OpenOption... options) throws IOException {
+            return Files.newByteChannel(getPath(), options);
+        }
     }
 
     /**
@@ -324,6 +615,19 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return new InputStreamReader(getInputStream(), Charsets.toCharset(charset));
         }
 
+        @Override
+        protected Channel getChannel(OpenOption... options) throws IOException {
+            return Channels.newChannel(getInputStream(options));
+        }
+
+        @Override
+        public long size() throws IOException {
+            if (origin instanceof FileInputStream) {
+                final FileInputStream fileInputStream = (FileInputStream) origin;
+                return fileInputStream.getChannel().size();
+            }
+            throw unsupportedOperation("size");
+        }
     }
 
     /**
@@ -394,6 +698,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
             return new OutputStreamWriter(origin, Charsets.toCharset(charset));
         }
+
+        @Override
+        protected Channel getChannel(OpenOption... options) throws IOException {
+            return Channels.newChannel(getOutputStream(options));
+        }
     }
 
     /**
@@ -429,6 +738,10 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             return get();
         }
 
+        @Override
+        protected Channel getChannel(OpenOption... options) throws IOException {
+            return Files.newByteChannel(getPath(), options);
+        }
     }
 
     /**
@@ -511,6 +824,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
             // No conversion
             return get();
         }
+
+        @Override
+        protected Channel getChannel(OpenOption... options) throws IOException {
+            return Channels.newChannel(getInputStream());
+        }
     }
 
     /**
@@ -539,10 +857,6 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         public InputStream getInputStream(final OpenOption... options) throws IOException {
             final URI uri = get();
             final String scheme = uri.getScheme();
-            final FileSystemProvider fileSystemProvider = FileSystemProviders.installed().getFileSystemProvider(scheme);
-            if (fileSystemProvider != null) {
-                return Files.newInputStream(fileSystemProvider.getPath(uri), options);
-            }
             if (SCHEME_HTTP.equalsIgnoreCase(scheme) || SCHEME_HTTPS.equalsIgnoreCase(scheme)) {
                 return uri.toURL().openStream();
             }
@@ -552,6 +866,16 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         @Override
         public Path getPath() {
             return Paths.get(get());
+        }
+
+        @Override
+        protected Channel getChannel(OpenOption... options) throws IOException {
+            final URI uri = get();
+            final String scheme = uri.getScheme();
+            if (SCHEME_HTTP.equalsIgnoreCase(scheme) || SCHEME_HTTPS.equalsIgnoreCase(scheme)) {
+                return Channels.newChannel(uri.toURL().openStream());
+            }
+            return Files.newByteChannel(getPath(), options);
         }
     }
 
@@ -597,6 +921,73 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
             // No conversion
             return get();
+        }
+
+        @Override
+        protected Channel getChannel(OpenOption... options) throws IOException {
+            return Channels.newChannel(getOutputStream());
+        }
+    }
+
+    /**
+     * A {@link Channel} origin.
+     *
+     * @since 2.21.0
+     */
+    public static class ChannelOrigin extends AbstractOrigin<Channel, ChannelOrigin> {
+
+        /**
+         * Constructs a new instance for the given origin.
+         *
+         * @param origin The origin, not null.
+         */
+        public ChannelOrigin(final Channel origin) {
+            super(origin);
+        }
+
+        @Override
+        public byte[] getByteArray() throws IOException {
+            return IOUtils.toByteArray(getInputStream());
+        }
+
+        @Override
+        public InputStream getInputStream(final OpenOption... options) throws IOException {
+            return Channels.newInputStream(getChannel(ReadableByteChannel.class, options));
+        }
+
+        @Override
+        public Reader getReader(Charset charset) throws IOException {
+            return Channels.newReader(
+                    getChannel(ReadableByteChannel.class),
+                    Charsets.toCharset(charset).newDecoder(),
+                    -1);
+        }
+
+        @Override
+        public OutputStream getOutputStream(final OpenOption... options) throws IOException {
+            return Channels.newOutputStream(getChannel(WritableByteChannel.class, options));
+        }
+
+        @Override
+        public Writer getWriter(Charset charset, OpenOption... options) throws IOException {
+            return Channels.newWriter(
+                    getChannel(WritableByteChannel.class, options),
+                    Charsets.toCharset(charset).newEncoder(),
+                    -1);
+        }
+
+        @Override
+        protected Channel getChannel(OpenOption... options) throws IOException {
+            // No conversion
+            return get();
+        }
+
+        @Override
+        public long size() throws IOException {
+            if (origin instanceof SeekableByteChannel) {
+                return ((SeekableByteChannel) origin).size();
+            }
+            throw unsupportedOperation("size");
         }
     }
 
@@ -675,8 +1066,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * @throws UnsupportedOperationException if this method is not implemented in a concrete subclass.
      */
     public File getFile() {
-        throw new UnsupportedOperationException(
-                String.format("%s#getFile() for %s origin %s", getSimpleClassName(), origin.getClass().getSimpleName(), origin));
+        throw unsupportedOperation("getFile");
     }
 
     /**
@@ -710,8 +1100,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * @throws UnsupportedOperationException if this method is not implemented in a concrete subclass.
      */
     public Path getPath() {
-        throw new UnsupportedOperationException(
-                String.format("%s#getPath() for %s origin %s", getSimpleClassName(), origin.getClass().getSimpleName(), origin));
+        throw unsupportedOperation("getPath");
     }
 
     /**
@@ -756,6 +1145,39 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     }
 
     /**
+     * Gets this origin as a Channel of the given type, if possible.
+     *
+     * @param channelType The type of channel to return.
+     * @param options Options specifying how a file-based origin is opened, ignored otherwise.
+     * @return A new Channel on the origin of the given type.
+     * @param <C> The type of channel to return.
+     * @throws IOException                   If an I/O error occurs.
+     * @throws UnsupportedOperationException If this origin cannot be converted to a channel of the given type.
+     * @since 2.21.0
+     */
+    public final <C extends Channel> C getChannel(Class<C> channelType, OpenOption... options) throws IOException {
+        Objects.requireNonNull(channelType, "channelType");
+        final Channel channel = getChannel(options);
+        if (channelType.isInstance(channel)) {
+            return channelType.cast(channel);
+        }
+        throw unsupportedChannelType(channelType);
+    }
+
+    /**
+     * Gets this origin as a Channel, if possible.
+     *
+     * @param options Options specifying how a file-based origin is opened, ignored otherwise.
+     * @return A new Channel on the origin.
+     * @throws IOException                   If an I/O error occurs.
+     * @throws UnsupportedOperationException If this origin cannot be converted to a channel.
+     * @since 2.21.0
+     */
+    protected Channel getChannel(OpenOption... options) throws IOException {
+        throw unsupportedOperation("getChannel");
+    }
+
+    /**
      * Gets the size of the origin, if possible.
      *
      * @return the size of the origin in bytes or characters.
@@ -769,5 +1191,20 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     @Override
     public String toString() {
         return getSimpleClassName() + "[" + origin.toString() + "]";
+    }
+
+    UnsupportedOperationException unsupportedOperation(String method) {
+        return new UnsupportedOperationException(String.format(
+                "%s#%s() for %s origin %s",
+                getSimpleClassName(), method, origin.getClass().getSimpleName(), origin));
+    }
+
+    UnsupportedOperationException unsupportedChannelType(Class<? extends Channel> channelType) {
+        return new UnsupportedOperationException(String.format(
+                "%s#getChannel(%s) for %s origin %s",
+                getSimpleClassName(),
+                channelType.getSimpleName(),
+                origin.getClass().getSimpleName(),
+                origin));
     }
 }

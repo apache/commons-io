@@ -19,12 +19,14 @@
 
 package org.apache.commons.io.channels;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SeekableByteChannel;
 import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.io.IOUtils;
@@ -37,41 +39,73 @@ import org.apache.commons.io.IOUtils;
  * accessed via {@link ByteArraySeekableByteChannel#array()}.
  * </p>
  *
- * @since 2.19.0
+ * @since 2.21.0
  */
 public class ByteArraySeekableByteChannel implements SeekableByteChannel {
 
     private static final int RESIZE_LIMIT = Integer.MAX_VALUE >> 1;
+
+    /**
+     * Constructs a new channel backed directly by the given byte array.
+     *
+     * <p>The channel initially contains the full contents of the array, with its
+     * size set to {@code bytes.length} and its position set to {@code 0}.</p>
+     *
+     * <p>Reads and writes operate on the shared array.
+     * If a write operation extends beyond the current capacity, the channel will
+     * automatically allocate a larger backing array and copy the existing contents.</p>
+     *
+     * @param bytes The byte array to wrap, must not be {@code null}
+     * @return A new channel that uses the given array as its initial backing store
+     * @throws NullPointerException If {@code bytes} is {@code null}
+     * @see #array()
+     * @see ByteArrayInputStream#ByteArrayInputStream(byte[])
+     */
+    public static ByteArraySeekableByteChannel wrap(byte[] bytes) {
+        Objects.requireNonNull(bytes, "bytes");
+        return new ByteArraySeekableByteChannel(bytes);
+    }
+
     private byte[] data;
-    private final AtomicBoolean closed = new AtomicBoolean();
+    private volatile boolean closed;
     private int position;
     private int size;
     private final ReentrantLock lock = new ReentrantLock();
 
     /**
-     * Constructs a new instance using a default empty buffer.
+     * Constructs a new instance, with a default internal buffer capacity.
+     * <p>
+     * The initial size and position of the channel are 0.
+     * </p>
+     *
+     * @see ByteArrayOutputStream#ByteArrayOutputStream()
      */
     public ByteArraySeekableByteChannel() {
-        this(0);
+        this(IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
     /**
-     * Constructs a new instance from a byte array.
+     * Constructs a new instance, with an internal buffer of the given capacity, in bytes.
+     * <p>
+     * The initial size and position of the channel are 0.
+     * </p>
      *
-     * @param data input data or pre-allocated array.
-     */
-    public ByteArraySeekableByteChannel(final byte[] data) {
-        this.data = data;
-        this.size = data.length;
-    }
-
-    /**
-     * Constructs a new instance from a size of storage to be allocated.
-     *
-     * @param size size of internal buffer to allocate, in bytes.
+     * @param size Capacity of the internal buffer to allocate, in bytes.
+     * @see ByteArrayOutputStream#ByteArrayOutputStream(int)
      */
     public ByteArraySeekableByteChannel(final int size) {
-        this(new byte[size]);
+        if (size < 0) {
+            throw new IllegalArgumentException("Size must be non-negative");
+        }
+        this.data = new byte[size];
+        this.position = 0;
+        this.size = 0;
+    }
+
+    private ByteArraySeekableByteChannel(byte[] data) {
+        this.data = data;
+        this.position = 0;
+        this.size = data.length;
     }
 
     /**
@@ -84,6 +118,18 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
      */
     public byte[] array() {
         return data;
+    }
+
+    /**
+     * Gets a copy of the data stored in this channel.
+     * <p>
+     * The returned array is a copy of the internal buffer, sized to the actual data stored in this channel.
+     * </p>
+     *
+     * @return a new byte array containing the data stored in this channel.
+     */
+    public byte[] toByteArray() {
+        return Arrays.copyOf(data, size);
     }
 
     private void checkOpen() throws ClosedChannelException {
@@ -101,7 +147,7 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
 
     @Override
     public void close() {
-        closed.set(true);
+        closed = true;
     }
 
     /**
@@ -115,7 +161,7 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
 
     @Override
     public boolean isOpen() {
-        return !closed.get();
+        return !closed;
     }
 
     @Override
@@ -165,7 +211,7 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
 
     private void resize(final int newLength) {
         int len = data.length;
-        if (len <= 0) {
+        if (len == 0) {
             len = 1;
         }
         if (newLength < RESIZE_LIMIT) {
@@ -212,13 +258,12 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
         checkOpen();
         lock.lock();
         try {
-            int wanted = b.remaining();
-            final int possibleWithoutResize = size - position;
+            final int wanted = b.remaining();
+            final int possibleWithoutResize = Math.max(0, size - position);
             if (wanted > possibleWithoutResize) {
                 final int newSize = position + wanted;
-                if (newSize < 0) { // overflow
-                    resize(IOUtils.SOFT_MAX_ARRAY_LENGTH);
-                    wanted = IOUtils.SOFT_MAX_ARRAY_LENGTH - position;
+                if (newSize < 0 || newSize > IOUtils.SOFT_MAX_ARRAY_LENGTH) { // overflow
+                    throw new OutOfMemoryError("required array size " + Integer.toUnsignedString(newSize) + " too large");
                 } else {
                     resize(newSize);
                 }

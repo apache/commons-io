@@ -20,6 +20,7 @@ package org.apache.commons.io.build;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 
 import org.apache.commons.io.RandomAccessFileMode;
@@ -41,8 +42,8 @@ class RandomAccessFileOriginTest extends AbstractRandomAccessFileOriginTest<Rand
 
     @SuppressWarnings("resource")
     @Override
-    protected RandomAccessFileOrigin newOriginRw() throws FileNotFoundException {
-        return new RandomAccessFileOrigin(RandomAccessFileMode.READ_WRITE.create(FILE_NAME_RW));
+    protected RandomAccessFileOrigin newOriginRw() throws IOException {
+        return new RandomAccessFileOrigin(RandomAccessFileMode.READ_WRITE.create(tempPath.resolve(FILE_NAME_RW)));
     }
 
     @Override

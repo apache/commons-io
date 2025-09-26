@@ -111,6 +111,13 @@ class CharSequenceOriginTest extends AbstractOriginTest<CharSequence, CharSequen
 
     @Override
     @Test
+    void testGetWritableByteChannel() throws IOException {
+        // Cannot convert a CharSequence to a WritableByteChannel.
+        assertThrows(UnsupportedOperationException.class, super::testGetWritableByteChannel);
+    }
+
+    @Override
+    @Test
     void testGetWriter() {
         // Cannot convert a CharSequence to a Writer.
         assertThrows(UnsupportedOperationException.class, super::testGetWriter);

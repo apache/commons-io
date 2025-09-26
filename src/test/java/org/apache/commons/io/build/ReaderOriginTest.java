@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.OpenOption;
 import java.nio.file.StandardOpenOption;
@@ -87,9 +88,15 @@ class ReaderOriginTest extends AbstractOriginTest<Reader, ReaderOrigin> {
 
     @Override
     @Test
+    void testGetWritableByteChannel() throws IOException {
+        // Cannot convert a InputStream to a WritableByteChannel.
+        assertThrows(UnsupportedOperationException.class, super::testGetWritableByteChannel);
+    }
+
+    @Override
+    @Test
     void testGetWriter() {
         // Cannot convert a Reader to a Writer.
         assertThrows(UnsupportedOperationException.class, super::testGetWriter);
     }
-
 }

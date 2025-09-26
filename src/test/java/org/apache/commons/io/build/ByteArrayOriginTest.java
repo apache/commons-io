@@ -84,9 +84,15 @@ class ByteArrayOriginTest extends AbstractOriginTest<byte[], ByteArrayOrigin> {
 
     @Override
     @Test
+    void testGetWritableByteChannel() throws IOException {
+        // Cannot convert a byte[] to a WritableByteChannel.
+        assertThrows(UnsupportedOperationException.class, super::testGetWritableByteChannel);
+    }
+
+    @Override
+    @Test
     void testGetWriter() {
         // Cannot convert a byte[] to a Writer.
         assertThrows(UnsupportedOperationException.class, super::testGetWriter);
     }
-
 }

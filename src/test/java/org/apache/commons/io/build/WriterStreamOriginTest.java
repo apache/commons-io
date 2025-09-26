@@ -18,6 +18,7 @@ package org.apache.commons.io.build;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.file.OpenOption;
@@ -123,6 +124,12 @@ class WriterStreamOriginTest extends AbstractOriginTest<Writer, WriterOrigin> {
     void testGetReader() {
         // Cannot convert a Writer to a Reader.
         assertThrows(UnsupportedOperationException.class, super::testGetReader);
+    }
+
+    @Override
+    void testGetReadableByteChannel() throws IOException {
+        // Cannot convert a Writer to a ReadableByteChannel.
+        assertThrows(UnsupportedOperationException.class, super::testGetReadableByteChannel);
     }
 
     @Override

@@ -18,6 +18,7 @@ package org.apache.commons.io.build;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.OpenOption;
 import java.nio.file.StandardOpenOption;
@@ -123,6 +124,13 @@ class OutputStreamOriginTest extends AbstractOriginTest<OutputStream, OutputStre
     void testGetReader() {
         // Cannot convert a OutputStream to a Reader.
         assertThrows(UnsupportedOperationException.class, super::testGetReader);
+    }
+
+    @Override
+    @Test
+    void testGetReadableByteChannel() throws IOException {
+        // Cannot convert a OutputStream to a ReadableByteChannel.
+        assertThrows(UnsupportedOperationException.class, super::testGetReadableByteChannel);
     }
 
     @Override
