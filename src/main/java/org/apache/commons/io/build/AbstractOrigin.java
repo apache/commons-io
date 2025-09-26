@@ -107,7 +107,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>SBC</td>
  *     </tr>
  *     <tr>
- *       <td>CharSequence (CS)</td>
+ *       <td>{@link CharSequence} (CS)</td>
  *       <td>✔</td>
  *       <td>✔</td>
  *       <td>✖</td>
@@ -122,7 +122,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>SBC</td>
  *     </tr>
  *     <tr>
- *       <td>File</td>
+ *       <td>{@link File}</td>
  *       <td>✔</td>
  *       <td>✔</td>
  *       <td>✔</td>
@@ -137,7 +137,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>FC</td>
  *     </tr>
  *     <tr>
- *       <td>Path</td>
+ *       <td>{@link Path}</td>
  *       <td>✔</td>
  *       <td>✔</td>
  *       <td>✔</td>
@@ -152,7 +152,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>FC</td>
  *     </tr>
  *     <tr>
- *       <td>IORandomAccessFile</td>
+ *       <td>{@link IORandomAccessFile}</td>
  *       <td>✔</td>
  *       <td>✔</td>
  *       <td>✔</td>
@@ -167,7 +167,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>FC</td>
  *     </tr>
  *     <tr>
- *       <td>RandomAccessFile (RAF)</td>
+ *       <td>{@link RandomAccessFile} (RAF)</td>
  *       <td>✔</td>
  *       <td>✔</td>
  *       <td>✖</td>
@@ -182,7 +182,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>FC</td>
  *     </tr>
  *     <tr>
- *       <td>InputStream (IS)</td>
+ *       <td>{@link InputStream} (IS)</td>
  *       <td>✔</td>
  *       <td>✔</td>
  *       <td>✖</td>
@@ -197,7 +197,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>RBC</td>
  *     </tr>
  *     <tr>
- *       <td>Reader</td>
+ *       <td>{@link Reader}</td>
  *       <td>✔</td>
  *       <td>✔</td>
  *       <td>✖</td>
@@ -212,7 +212,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>RBC</td>
  *     </tr>
  *     <tr>
- *       <td>ReadableByteChannel (RBC)</td>
+ *       <td>{@link ReadableByteChannel} (RBC)</td>
  *       <td>✔</td>
  *       <td>✔</td>
  *       <td>✖</td>
@@ -227,7 +227,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>RBC</td>
  *     </tr>
  *     <tr>
- *       <td>OutputStream (OS)</td>
+ *       <td>{@link OutputStream} (OS)</td>
  *       <td>✖</td>
  *       <td>✖</td>
  *       <td>✖</td>
@@ -242,7 +242,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>WBC</td>
  *     </tr>
  *     <tr>
- *       <td>Writer</td>
+ *       <td>{@link Writer}</td>
  *       <td>✖</td>
  *       <td>✖</td>
  *       <td>✖</td>
@@ -257,7 +257,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>WBC</td>
  *     </tr>
  *     <tr>
- *       <td>WritableByteChannel (WBC)</td>
+ *       <td>{@link WritableByteChannel} (WBC)</td>
  *       <td>✖</td>
  *       <td>✖</td>
  *       <td>✖</td>
@@ -272,7 +272,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>WBC</td>
  *     </tr>
  *     <tr>
- *       <td>URI (FileSystem)</td>
+ *       <td>{@link URI} (FileSystem)</td>
  *       <td>✔</td>
  *       <td>✔</td>
  *       <td>✔</td>
@@ -287,7 +287,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>FC</td>
  *     </tr>
  *     <tr>
- *       <td>URI (http/https)</td>
+ *       <td>{@link URI} (http/https)</td>
  *       <td>✔</td>
  *       <td>✔</td>
  *       <td>✖</td>
