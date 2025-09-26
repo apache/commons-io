@@ -59,10 +59,9 @@ class AbstractStreamBuilderTest {
     }
 
     private static Stream<IOConsumer<Builder>> fileBasedConfigurers() throws URISyntaxException {
-        final URI uri = Objects.requireNonNull(
-                        AbstractStreamBuilderTest.class.getResource(AbstractOriginTest.FILE_RES_RO))
-                .toURI();
+        final URI uri = Objects.requireNonNull(AbstractStreamBuilderTest.class.getResource(AbstractOriginTest.FILE_RES_RO)).toURI();
         final Path path = Paths.get(AbstractOriginTest.FILE_NAME_RO);
+        // @formatter:off
         return Stream.of(
                 b -> b.setByteArray(ArrayUtils.EMPTY_BYTE_ARRAY),
                 b -> b.setFile(AbstractOriginTest.FILE_NAME_RO),
@@ -75,6 +74,7 @@ class AbstractStreamBuilderTest {
                 b -> b.setInputStream(new FileInputStream(AbstractOriginTest.FILE_NAME_RO)),
                 b -> b.setChannel(Files.newByteChannel(path)),
                 b -> b.setURI(uri));
+        // @formatter:on
     }
 
     private void assertResult(final char[] arr, final int size) {
@@ -126,7 +126,7 @@ class AbstractStreamBuilderTest {
     @MethodSource("fileBasedConfigurers")
     void testGetInputStream(final IOConsumer<Builder> configurer) throws Exception {
         final Builder builder = builder();
-            configurer.accept(builder);
+        configurer.accept(builder);
         assertNotNull(builder.getInputStream());
     }
 }

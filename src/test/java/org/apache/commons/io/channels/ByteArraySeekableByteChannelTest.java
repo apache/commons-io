@@ -45,28 +45,11 @@ public class ByteArraySeekableByteChannelTest extends AbstractSeekableByteChanne
 
     static Stream<Arguments> testConstructor() {
         return Stream.of(
-                Arguments.of(
-                        (IOSupplier<ByteArraySeekableByteChannel>) ByteArraySeekableByteChannel::new,
-                        EMPTY_BYTE_ARRAY,
-                        IOUtils.DEFAULT_BUFFER_SIZE),
-                Arguments.of(
-                        (IOSupplier<ByteArraySeekableByteChannel>) () -> new ByteArraySeekableByteChannel(8),
-                        EMPTY_BYTE_ARRAY,
-                        8),
-                Arguments.of(
-                        (IOSupplier<ByteArraySeekableByteChannel>) () -> new ByteArraySeekableByteChannel(16),
-                        EMPTY_BYTE_ARRAY,
-                        16),
-                Arguments.of(
-                        (IOSupplier<ByteArraySeekableByteChannel>)
-                                () -> ByteArraySeekableByteChannel.wrap(EMPTY_BYTE_ARRAY),
-                        EMPTY_BYTE_ARRAY,
-                        0),
-                Arguments.of(
-                        (IOSupplier<ByteArraySeekableByteChannel>)
-                                () -> ByteArraySeekableByteChannel.wrap(testData),
-                        testData,
-                        testData.length));
+                Arguments.of((IOSupplier<ByteArraySeekableByteChannel>) ByteArraySeekableByteChannel::new, EMPTY_BYTE_ARRAY, IOUtils.DEFAULT_BUFFER_SIZE),
+                Arguments.of((IOSupplier<ByteArraySeekableByteChannel>) () -> new ByteArraySeekableByteChannel(8), EMPTY_BYTE_ARRAY, 8),
+                Arguments.of((IOSupplier<ByteArraySeekableByteChannel>) () -> new ByteArraySeekableByteChannel(16), EMPTY_BYTE_ARRAY, 16),
+                Arguments.of((IOSupplier<ByteArraySeekableByteChannel>) () -> ByteArraySeekableByteChannel.wrap(EMPTY_BYTE_ARRAY), EMPTY_BYTE_ARRAY, 0),
+                Arguments.of((IOSupplier<ByteArraySeekableByteChannel>) () -> ByteArraySeekableByteChannel.wrap(testData), testData, testData.length));
     }
 
     static Stream<Arguments> testShouldResizeWhenWritingMoreDataThanCapacity() {
