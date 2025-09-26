@@ -109,7 +109,7 @@ class AbstractStreamBuilderTest {
      */
     @ParameterizedTest
     @MethodSource("fileBasedConfigurers")
-    void testGetInputStream(IOConsumer<Builder> configurer) throws Exception {
+    void testGetInputStream(final IOConsumer<Builder> configurer) throws Exception {
         final Builder builder = builder();
             configurer.accept(builder);
         assertNotNull(builder.getInputStream());
@@ -122,7 +122,7 @@ class AbstractStreamBuilderTest {
      */
     @ParameterizedTest
     @MethodSource("fileBasedConfigurers")
-    void getGetSeekableByteChannel(IOConsumer<Builder> configurer) throws Exception {
+    void getGetSeekableByteChannel(final IOConsumer<Builder> configurer) throws Exception {
         final Builder builder = builder();
         configurer.accept(builder);
         try (ReadableByteChannel channel = assertDoesNotThrow(() -> builder.getChannel(SeekableByteChannel.class))) {

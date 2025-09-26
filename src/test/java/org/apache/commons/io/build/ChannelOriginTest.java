@@ -83,7 +83,7 @@ class ChannelOriginTest extends AbstractOriginTest<Channel, ChannelOrigin> {
     @Override
     @ParameterizedTest
     @EnumSource(StandardOpenOption.class)
-    void testGetRandomAccessFile(OpenOption openOption) {
+    void testGetRandomAccessFile(final OpenOption openOption) {
         // A FileByteChannel cannot be converted into a RandomAccessFile.
         assertThrows(UnsupportedOperationException.class, () -> super.testGetRandomAccessFile(openOption));
     }

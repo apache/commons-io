@@ -304,7 +304,7 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
         }
     }
 
-    private void checkRead(ReadableByteChannel channel) throws IOException {
+    private void checkRead(final ReadableByteChannel channel) throws IOException {
         final ByteBuffer buffer = ByteBuffer.allocate(RO_LENGTH);
         int read = channel.read(buffer);
         assertEquals(RO_LENGTH, read);
@@ -367,7 +367,7 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
         }
     }
 
-    private void checkWrite(WritableByteChannel channel) throws IOException {
+    private void checkWrite(final WritableByteChannel channel) throws IOException {
         final ByteBuffer buffer = ByteBuffer.wrap(getFixtureByteArray());
         final int written = channel.write(buffer);
         assertEquals(RO_LENGTH, written);

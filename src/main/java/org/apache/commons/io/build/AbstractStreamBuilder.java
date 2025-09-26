@@ -273,7 +273,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @see #getOpenOptions()
      * @since 2.21.0
      */
-    public <C extends Channel> C getChannel(Class<C> channelType) throws IOException {
+    public <C extends Channel> C getChannel(final Class<C> channelType) throws IOException {
         return checkOrigin().getChannel(channelType, getOpenOptions());
     }
 

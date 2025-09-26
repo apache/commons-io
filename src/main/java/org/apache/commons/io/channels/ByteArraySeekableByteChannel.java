@@ -61,7 +61,7 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
      * @see #array()
      * @see ByteArrayInputStream#ByteArrayInputStream(byte[])
      */
-    public static ByteArraySeekableByteChannel wrap(byte[] bytes) {
+    public static ByteArraySeekableByteChannel wrap(final byte[] bytes) {
         Objects.requireNonNull(bytes, "bytes");
         return new ByteArraySeekableByteChannel(bytes);
     }
@@ -102,7 +102,7 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
         this.size = 0;
     }
 
-    private ByteArraySeekableByteChannel(byte[] data) {
+    private ByteArraySeekableByteChannel(final byte[] data) {
         this.data = data;
         this.position = 0;
         this.size = data.length;
@@ -264,9 +264,8 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
                 final int newSize = position + wanted;
                 if (newSize < 0 || newSize > IOUtils.SOFT_MAX_ARRAY_LENGTH) { // overflow
                     throw new OutOfMemoryError("required array size " + Integer.toUnsignedString(newSize) + " too large");
-                } else {
-                    resize(newSize);
                 }
+                resize(newSize);
             }
             b.get(data, position, wanted);
             position += wanted;

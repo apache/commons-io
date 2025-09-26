@@ -76,7 +76,7 @@ public class ByteArraySeekableByteChannelTest extends AbstractSeekableByteChanne
 
     @ParameterizedTest
     @MethodSource
-    void testConstructor(IOSupplier<ByteArraySeekableByteChannel> supplier, byte[] expected, int capacity) throws IOException {
+    void testConstructor(final IOSupplier<ByteArraySeekableByteChannel> supplier, final byte[] expected, final int capacity) throws IOException {
         try (ByteArraySeekableByteChannel channel = supplier.get()) {
             assertEquals(0, channel.position());
             assertEquals(expected.length, channel.size());
@@ -103,7 +103,7 @@ public class ByteArraySeekableByteChannelTest extends AbstractSeekableByteChanne
 
     @ParameterizedTest
     @MethodSource
-    void testShouldResizeWhenWritingMoreDataThanCapacity(byte[] data, int wanted) throws IOException {
+    void testShouldResizeWhenWritingMoreDataThanCapacity(final byte[] data, final int wanted) throws IOException {
         try (ByteArraySeekableByteChannel c = ByteArraySeekableByteChannel.wrap(data)) {
             c.position(data.length);
             final ByteBuffer inData = ByteBuffer.wrap(new byte[wanted]);
