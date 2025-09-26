@@ -287,7 +287,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  *       <td>FC</td>
  *     </tr>
  *     <tr>
- *       <td>URI (http/https))</td>
+ *       <td>URI (http/https)</td>
  *       <td>✔</td>
  *       <td>✔</td>
  *       <td>✖</td>
