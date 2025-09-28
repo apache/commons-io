@@ -68,6 +68,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add"                due-to="Gary Gregory">Add IOIterable.asIterable().</action>
       <action dev="pkarwasz" type="add"                due-to="Piotr P. Karwasz">Add NIO channel support to `AbstractStreamBuilder`.</action>
       <action dev="pkarwasz" type="add"                due-to="Piotr P. Karwasz">Add CloseShieldChannel to close-shielded NIO Channels #786.</action>
+      <action dev="pkarwasz" type="add"                due-to="Piotr P. Karwasz">AbstractOrigin now implements Closeable #789.</action>
       <!-- UPDATE -->
       <action type="update" dev="ggregory"             due-to="Gary Gregory, Dependabot">Bump org.apache.commons:commons-parent from 85 to 88 #774, #783.</action>
       <action type="update" dev="ggregory"             due-to="Gary Gregory">[test] Bump commons-codec:commons-codec from 1.18.0 to 1.19.0.</action>
