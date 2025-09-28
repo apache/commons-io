@@ -73,7 +73,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  * </p>
  *
  * <table>
- *   <caption>Origin support matrix</caption>
+ *   <caption>Supported Conversions</caption>
  *   <thead>
  *     <tr>
  *       <th>Origin Type</th>
