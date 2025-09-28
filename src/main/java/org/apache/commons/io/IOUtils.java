@@ -407,6 +407,36 @@ public class IOUtils {
     }
 
     /**
+     * Checks if the sub-range described by an offset and length is valid for an array of the given length.
+     *
+     * <p>This method is functionally equivalent to
+     * {@code java.util.Objects#checkFromIndexSize(int, int, int)} introduced in Java 9,
+     * but is provided here for use on Java 8.</p>
+     *
+     * <p>The range is valid if all of the following hold:</p>
+     * <ul>
+     *   <li>{@code off >= 0}</li>
+     *   <li>{@code len >= 0}</li>
+     *   <li>{@code arrayLength >= 0}</li>
+     *   <li>{@code off + len <= arrayLength}</li>
+     * </ul>
+     *
+     * <p>If the range is invalid, this method throws an
+     * {@link IndexOutOfBoundsException} with a descriptive message.</p>
+     *
+     * @param off         the starting offset into the array
+     * @param len         the number of elements in the range
+     * @param arrayLength the length of the array to be checked against
+     * @throws IndexOutOfBoundsException if the range {@code [off, off + len)} is out of bounds
+     * @since 2.21.0
+     */
+    public static void checkFromIndexSize(final int off, final int len, final int arrayLength) {
+        if ((off | len | arrayLength) < 0 || arrayLength - len < off) {
+            throw new IndexOutOfBoundsException(String.format("Range [%s, %<s + %s) out of bounds for length %s", off, len, arrayLength));
+        }
+    }
+
+    /**
      * Clears any state.
      * <ul>
      * <li>Removes the current thread's value for thread-local variables.</li>
