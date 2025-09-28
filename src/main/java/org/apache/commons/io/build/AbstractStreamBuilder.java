@@ -17,6 +17,7 @@
 
 package org.apache.commons.io.build;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -121,7 +122,15 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     }
 
     /**
-     * Gets a Channel from the origin with OpenOption[].
+     * Gets the origin as a {@link Channel} of the given type, if supported.
+     *
+     * <p>If the origin is not already open, it will be opened using the options provided by
+     * {@link #getOpenOptions()}.</p>
+     *
+     * <p>Calling this method transfers ownership of the underlying resource to the caller.
+     * The caller is responsible for closing the returned stream once it is no longer needed.
+     * If the origin itself implements {@link Closeable}, closing the returned stream will
+     * also close the underlying origin resource.</p>
      *
      * @param channelType The channel type, not null.
      * @return A channel of the specified type.
@@ -133,6 +142,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @see #getOpenOptions()
      * @since 2.21.0
      */
+    @SuppressWarnings("resource")
     public <C extends Channel> C getChannel(final Class<C> channelType) throws IOException {
         return checkOrigin().getChannel(channelType, getOpenOptions());
     }
@@ -147,6 +157,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @see AbstractOrigin#getCharSequence(Charset)
      * @since 2.13.0
      */
+    @SuppressWarnings("resource")
     public CharSequence getCharSequence() throws IOException {
         return checkOrigin().getCharSequence(getCharset());
     }
@@ -178,12 +189,21 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @see AbstractOrigin#getPath()
      * @since 2.18.0
      */
+    @SuppressWarnings("resource")
     public File getFile() {
         return checkOrigin().getFile();
     }
 
     /**
-     * Gets an InputStream from the origin with OpenOption[].
+     * Gets the origin as an {@link InputStream}, if supported.
+     *
+     * <p>If the origin is not already open, it will be opened using the options provided by
+     * {@link #getOpenOptions()}.</p>
+     *
+     * <p>Calling this method transfers ownership of the underlying resource to the caller.
+     * The caller is responsible for closing the returned stream once it is no longer needed.
+     * If the origin itself implements {@link Closeable}, closing the returned stream will
+     * also close the underlying origin resource.</p>
      *
      * @return An input stream
      * @throws IllegalStateException         if the {@code origin} is {@code null}.
@@ -193,6 +213,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @see #getOpenOptions()
      * @since 2.13.0
      */
+    @SuppressWarnings("resource")
     public InputStream getInputStream() throws IOException {
         return checkOrigin().getInputStream(getOpenOptions());
     }
@@ -207,7 +228,15 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     }
 
     /**
-     * Gets an OutputStream from the origin with OpenOption[].
+     * Gets the origin as an {@link OutputStream}, if supported.
+     *
+     * <p>If the origin is not already open, it will be opened using the options provided by
+     * {@link #getOpenOptions()}.</p>
+     *
+     * <p>Calling this method transfers ownership of the underlying resource to the caller.
+     * The caller is responsible for closing the returned stream once it is no longer needed.
+     * If the origin itself implements {@link Closeable}, closing the returned stream will
+     * also close the underlying origin resource.</p>
      *
      * @return An OutputStream
      * @throws IllegalStateException         if the {@code origin} is {@code null}.
@@ -217,6 +246,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @see #getOpenOptions()
      * @since 2.13.0
      */
+    @SuppressWarnings("resource")
     public OutputStream getOutputStream() throws IOException {
         return checkOrigin().getOutputStream(getOpenOptions());
     }
@@ -230,12 +260,21 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @see AbstractOrigin#getPath()
      * @since 2.13.0
      */
+    @SuppressWarnings("resource")
     public Path getPath() {
         return checkOrigin().getPath();
     }
 
     /**
-     * Gets a RandomAccessFile from the origin.
+     * Gets the origin as an {@link OutputStream}, if supported.
+     *
+     * <p>If the origin is not already open, it will be opened using the options provided by
+     * {@link #getOpenOptions()}.</p>
+     *
+     * <p>Calling this method transfers ownership of the underlying resource to the caller.
+     * The caller is responsible for closing the returned stream once it is no longer needed.
+     * If the origin itself implements {@link Closeable}, closing the returned stream will
+     * also close the underlying origin resource.</p>
      *
      * @return A RandomAccessFile
      * @throws IllegalStateException         if the {@code origin} is {@code null}.
@@ -243,12 +282,21 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @throws IOException                   if an I/O error occurs.
      * @since 2.18.0
      */
+    @SuppressWarnings("resource")
     public RandomAccessFile getRandomAccessFile() throws IOException {
         return checkOrigin().getRandomAccessFile(getOpenOptions());
     }
 
     /**
-     * Gets a Reader from the origin with a Charset.
+     * Gets the origin as an {@link OutputStream}, if supported.
+     *
+     * <p>If the origin is not already open, it will be opened using the options provided by
+     * {@link #getOpenOptions()}.</p>
+     *
+     * <p>Calling this method transfers ownership of the underlying resource to the caller.
+     * The caller is responsible for closing the returned stream once it is no longer needed.
+     * If the origin itself implements {@link Closeable}, closing the returned stream will
+     * also close the underlying origin resource.</p>
      *
      * @return A Reader
      * @throws IllegalStateException         if the {@code origin} is {@code null}.
@@ -258,12 +306,21 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @see #getCharset()
      * @since 2.16.0
      */
+    @SuppressWarnings("resource")
     public Reader getReader() throws IOException {
         return checkOrigin().getReader(getCharset());
     }
 
     /**
-     * Gets a Writer from the origin with an OpenOption[].
+     * Gets the origin as an {@link OutputStream}, if supported.
+     *
+     * <p>If the origin is not already open, it will be opened using the options provided by
+     * {@link #getOpenOptions()}.</p>
+     *
+     * <p>Calling this method transfers ownership of the underlying resource to the caller.
+     * The caller is responsible for closing the returned stream once it is no longer needed.
+     * If the origin itself implements {@link Closeable}, closing the returned stream will
+     * also close the underlying origin resource.</p>
      *
      * @return An writer.
      * @throws IllegalStateException         if the {@code origin} is {@code null}.
@@ -273,6 +330,7 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      * @see #getOpenOptions()
      * @since 2.13.0
      */
+    @SuppressWarnings("resource")
     public Writer getWriter() throws IOException {
         return checkOrigin().getWriter(getCharset(), getOpenOptions());
     }

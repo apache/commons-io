@@ -94,7 +94,7 @@ class CharSequenceOriginTest extends AbstractOriginTest<CharSequence, CharSequen
     @Test
     void testGetReaderIgnoreCharset() throws IOException {
         // The CharSequenceOrigin ignores the given Charset.
-        try (Reader reader = getOriginRo().getReader(StandardCharsets.UTF_16LE)) {
+        try (Reader reader = newOriginRo().getReader(StandardCharsets.UTF_16LE)) {
             assertNotNull(reader);
             assertEquals(getFixtureStringFromFile(), IOUtils.toString(reader));
         }
@@ -103,7 +103,7 @@ class CharSequenceOriginTest extends AbstractOriginTest<CharSequence, CharSequen
     @Test
     void testGetReaderIgnoreCharsetNull() throws IOException {
         // The CharSequenceOrigin ignores the given Charset.
-        try (Reader reader = getOriginRo().getReader(null)) {
+        try (Reader reader = newOriginRo().getReader(null)) {
             assertNotNull(reader);
             assertEquals(getFixtureStringFromFile(), IOUtils.toString(reader));
         }

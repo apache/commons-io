@@ -23,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,8 +45,6 @@ import java.util.Objects;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractOrigin.RandomAccessFileOrigin;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -66,17 +63,16 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
     protected static final String FILE_NAME_RW = AbstractOriginTest.class.getSimpleName() + ".txt";
     private static final int RO_LENGTH = 20;
 
-    protected AbstractOrigin<T, B> originRo;
-    protected AbstractOrigin<T, B> originRw;
-
     @TempDir
     protected Path tempPath;
 
-    @BeforeEach
-    void beforeEach() throws IOException {
-        setOriginRo(newOriginRo());
-        resetOriginRw();
-        setOriginRw(newOriginRw());
+    /**
+     * Asserts that the origin is open.
+     *
+     * @param origin The origin to test.
+     */
+    protected void assertOpen(final AbstractOrigin<T, B> origin) {
+        // No-op
     }
 
     private void checkRead(final ReadableByteChannel channel) throws IOException {
@@ -96,32 +92,12 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
         assertEquals(RO_LENGTH, written);
     }
 
-    @AfterEach
-    void cleanup() {
-        final T originRo = getOriginRo().get();
-        if (originRo instanceof Closeable) {
-            IOUtils.closeQuietly((Closeable) originRo);
-        }
-        final T originRw = getOriginRw().get();
-        if (originRw instanceof Closeable) {
-            IOUtils.closeQuietly((Closeable) originRw);
-        }
-    }
-
     byte[] getFixtureByteArray() throws IOException {
         return IOUtils.resourceToByteArray(FILE_RES_RO);
     }
 
     String getFixtureString() throws IOException {
         return IOUtils.resourceToString(FILE_RES_RO, StandardCharsets.UTF_8);
-    }
-
-    protected AbstractOrigin<T, B> getOriginRo() {
-        return Objects.requireNonNull(originRo, "originRo");
-    }
-
-    protected AbstractOrigin<T, B> getOriginRw() {
-        return Objects.requireNonNull(originRw, "originRw");
     }
 
     @SuppressWarnings("resource")
@@ -133,50 +109,56 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
 
     protected abstract B newOriginRw() throws IOException;
 
-    protected void resetOriginRw() throws IOException {
-        // No-op
-    }
-
-    protected void setOriginRo(final AbstractOrigin<T, B> origin) {
-        this.originRo = origin;
-    }
-
-    protected void setOriginRw(final AbstractOrigin<T, B> origin) {
-        this.originRw = origin;
-    }
-
     @Test
     void testGetByteArray() throws IOException {
-        assertArrayEquals(getFixtureByteArray(), getOriginRo().getByteArray());
+        try (AbstractOrigin<T, B> originRo = newOriginRo()) {
+            assertArrayEquals(getFixtureByteArray(), originRo.getByteArray());
+            assertOpen(originRo);
+        }
     }
 
     @Test
     void testGetByteArrayAt_0_0() throws IOException {
-        assertArrayEquals(new byte[] {}, getOriginRo().getByteArray(0, 0));
+        try (AbstractOrigin<T, B> originRo = newOriginRo()) {
+            assertArrayEquals(new byte[] {}, originRo.getByteArray(0, 0));
+            assertOpen(originRo);
+        }
     }
 
     @Test
     void testGetByteArrayAt_0_1() throws IOException {
-        assertArrayEquals(new byte[] { '1' }, getOriginRo().getByteArray(0, 1));
+        try (AbstractOrigin<T, B> originRo = newOriginRo()) {
+            assertArrayEquals(new byte[] { '1' }, originRo.getByteArray(0, 1));
+            assertOpen(originRo);
+        }
     }
 
     @Test
     void testGetByteArrayAt_1_1() throws IOException {
-        assertArrayEquals(new byte[] { '2' }, getOriginRo().getByteArray(1, 1));
+        try (AbstractOrigin<T, B> originRo = newOriginRo()) {
+            assertArrayEquals(new byte[] { '2' }, originRo.getByteArray(1, 1));
+            assertOpen(originRo);
+        }
     }
 
     @Test
     void testGetCharSequence() throws IOException {
-        final CharSequence charSequence = getOriginRo().getCharSequence(StandardCharsets.UTF_8);
-        assertNotNull(charSequence);
-        assertEquals(getFixtureString(), charSequence.toString());
+        try (AbstractOrigin<T, B> originRo = newOriginRo()) {
+            final CharSequence charSequence = originRo.getCharSequence(StandardCharsets.UTF_8);
+            assertNotNull(charSequence);
+            assertEquals(getFixtureString(), charSequence.toString());
+            assertOpen(originRo);
+        }
     }
 
     @Test
     void testGetFile() throws IOException {
-        testGetFile(getOriginRo().getFile(), RO_LENGTH);
-        FileUtils.touch(getOriginRw().getFile());
-        testGetFile(getOriginRw().getFile(), 0);
+        try (AbstractOrigin<T, B> originRo = newOriginRo();
+             AbstractOrigin<T, B> originRw = newOriginRw()) {
+            testGetFile(originRo.getFile(), RO_LENGTH);
+            FileUtils.touch(originRw.getFile());
+            testGetFile(originRw.getFile(), 0);
+        }
     }
 
     private void testGetFile(final File file, final long expectedLen) throws IOException {
@@ -188,7 +170,7 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
 
     @Test
     void testGetInputStream() throws IOException {
-        try (InputStream inputStream = getOriginRo().getInputStream()) {
+        try (InputStream inputStream = newOriginRo().getInputStream()) {
             assertNotNull(inputStream);
             assertArrayEquals(getFixtureByteArray(), IOUtils.toByteArray(inputStream));
         }
@@ -196,16 +178,19 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
 
     @Test
     void testGetOutputStream() throws IOException {
-        try (OutputStream output = getOriginRw().getOutputStream()) {
+        try (OutputStream output = newOriginRw().getOutputStream()) {
             assertNotNull(output);
         }
     }
 
     @Test
     void testGetPath() throws IOException {
-        testGetPath(getOriginRo().getPath(), RO_LENGTH);
-        FileUtils.touch(getOriginRw().getPath().toFile());
-        testGetPath(getOriginRw().getPath(), 0);
+        try (AbstractOrigin<T, B> originRo = newOriginRo();
+             AbstractOrigin<T, B> originRw = newOriginRw()) {
+            testGetPath(originRo.getPath(), RO_LENGTH);
+            FileUtils.touch(originRw.getPath().toFile());
+            testGetPath(originRw.getPath(), 0);
+        }
     }
 
     private void testGetPath(final Path path, final long expectedLen) throws IOException {
@@ -217,35 +202,37 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
 
     @Test
     void testGetRandomAccessFile() throws IOException {
+        final AbstractOrigin<T, B> originRo = newOriginRo();
+        final AbstractOrigin<T, B> originRw = newOriginRw();
         // Default
-        try (RandomAccessFile raf = getOriginRo().getRandomAccessFile()) {
+        try (RandomAccessFile raf = originRo.getRandomAccessFile()) {
             assertNotNull(raf);
             assertTrue(isValid(raf));
         }
-        final boolean isRafOriginRo = getOriginRo() instanceof RandomAccessFileOrigin;
-        final boolean isRafOriginRw = getOriginRw() instanceof RandomAccessFileOrigin;
+        final boolean isRafOriginRo = originRo instanceof RandomAccessFileOrigin;
+        final boolean isRafOriginRw = originRw instanceof RandomAccessFileOrigin;
         // Same as above, but underlying resource is now closed.
-        try (RandomAccessFile raf = getOriginRo().getRandomAccessFile()) {
+        try (RandomAccessFile raf = originRo.getRandomAccessFile()) {
             assertNotNull(raf);
             assertFalse(isRafOriginRo && isValid(raf));
         }
         // Read
-        try (RandomAccessFile raf = getOriginRo().getRandomAccessFile(StandardOpenOption.READ)) {
+        try (RandomAccessFile raf = originRo.getRandomAccessFile(StandardOpenOption.READ)) {
             assertNotNull(raf);
             assertFalse(isRafOriginRo && isValid(raf));
         }
         // Write, first access
-        try (RandomAccessFile raf = getOriginRw().getRandomAccessFile(StandardOpenOption.WRITE)) {
+        try (RandomAccessFile raf = originRw.getRandomAccessFile(StandardOpenOption.WRITE)) {
             assertNotNull(raf);
-            if (isRafOriginRw || getOriginRw().getFile() != null) {
-                assertTrue(isValid(raf), () -> getOriginRw().toString());
+            if (isRafOriginRw || originRw.getFile() != null) {
+                assertTrue(isValid(raf), () -> originRw.toString());
             } else {
                 // Can't get there from here.
-                assertFalse(isValid(raf), () -> getOriginRw().toString());
+                assertFalse(isValid(raf), () -> originRw.toString());
             }
         }
         // Read, Write, underlying resource is now closed.
-        try (RandomAccessFile raf = getOriginRw().getRandomAccessFile(StandardOpenOption.READ, StandardOpenOption.WRITE)) {
+        try (RandomAccessFile raf = originRw.getRandomAccessFile(StandardOpenOption.READ, StandardOpenOption.WRITE)) {
             assertNotNull(raf);
             assertFalse(isRafOriginRw && isValid(raf));
         }
@@ -254,22 +241,23 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
     @ParameterizedTest
     @EnumSource(StandardOpenOption.class)
     void testGetRandomAccessFile(final OpenOption openOption) throws IOException {
+        final AbstractOrigin<T, B> originRw = newOriginRw();
         // Default
-        try (RandomAccessFile raf = getOriginRw().getRandomAccessFile()) {
+        try (RandomAccessFile raf = originRw.getRandomAccessFile()) {
             assertNotNull(raf);
             assertTrue(isValid(raf));
         }
         // Same as above, but underlying resource is now closed.
-        final boolean isRafOrigin = getOriginRw() instanceof RandomAccessFileOrigin;
-        try (RandomAccessFile raf = getOriginRw().getRandomAccessFile()) {
+        final boolean isRafOrigin = originRw instanceof RandomAccessFileOrigin;
+        try (RandomAccessFile raf = originRw.getRandomAccessFile()) {
             assertNotNull(raf);
             assertFalse(isRafOrigin && isValid(raf));
         }
-        try (RandomAccessFile raf = getOriginRw().getRandomAccessFile(openOption)) {
+        try (RandomAccessFile raf = originRw.getRandomAccessFile(openOption)) {
             assertNotNull(raf);
             assertFalse(isRafOrigin && isValid(raf));
         }
-        try (RandomAccessFile raf = getOriginRw().getRandomAccessFile(openOption)) {
+        try (RandomAccessFile raf = originRw.getRandomAccessFile(openOption)) {
             assertNotNull(raf);
             assertFalse(isRafOrigin && isValid(raf));
         }
@@ -277,7 +265,7 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
 
     @Test
     void testGetReadableByteChannel() throws IOException {
-        try (ReadableByteChannel channel = getOriginRo().getChannel(ReadableByteChannel.class, StandardOpenOption.READ)) {
+        try (ReadableByteChannel channel = newOriginRo().getChannel(ReadableByteChannel.class, StandardOpenOption.READ)) {
             final SeekableByteChannel seekable = channel instanceof SeekableByteChannel ? (SeekableByteChannel) channel : null;
             assertNotNull(channel);
             assertTrue(channel.isOpen());
@@ -294,15 +282,13 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
 
     @Test
     void testGetReader() throws IOException {
-        try (Reader reader = getOriginRo().getReader(Charset.defaultCharset())) {
+        try (Reader reader = newOriginRo().getReader(Charset.defaultCharset())) {
             assertNotNull(reader);
         }
-        setOriginRo(newOriginRo());
-        try (Reader reader = getOriginRo().getReader(null)) {
+        try (Reader reader = newOriginRo().getReader(null)) {
             assertNotNull(reader);
         }
-        setOriginRo(newOriginRo());
-        try (Reader reader = getOriginRo().getReader(StandardCharsets.UTF_8)) {
+        try (Reader reader = newOriginRo().getReader(StandardCharsets.UTF_8)) {
             assertNotNull(reader);
             assertEquals(getFixtureString(), IOUtils.toString(reader));
         }
@@ -311,7 +297,7 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
     @Test
     void testGetWritableByteChannel() throws IOException {
         final boolean supportsRead;
-        try (WritableByteChannel channel = getOriginRw().getChannel(WritableByteChannel.class, StandardOpenOption.WRITE)) {
+        try (WritableByteChannel channel = newOriginRw().getChannel(WritableByteChannel.class, StandardOpenOption.WRITE)) {
             supportsRead = channel instanceof ReadableByteChannel;
             final SeekableByteChannel seekable = channel instanceof SeekableByteChannel ? (SeekableByteChannel) channel : null;
             assertNotNull(channel);
@@ -327,15 +313,13 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
             }
         }
         if (supportsRead) {
-            setOriginRw(newOriginRw());
-            try (ReadableByteChannel channel = getOriginRw().getChannel(ReadableByteChannel.class, StandardOpenOption.READ)) {
+            try (ReadableByteChannel channel = newOriginRw().getChannel(ReadableByteChannel.class, StandardOpenOption.READ)) {
                 assertNotNull(channel);
                 assertTrue(channel.isOpen());
                 checkRead(channel);
             }
         }
-        setOriginRw(newOriginRw());
-        try (WritableByteChannel channel = getOriginRw().getChannel(WritableByteChannel.class, StandardOpenOption.WRITE)) {
+        try (WritableByteChannel channel = newOriginRw().getChannel(WritableByteChannel.class, StandardOpenOption.WRITE)) {
             final SeekableByteChannel seekable = channel instanceof SeekableByteChannel ? (SeekableByteChannel) channel : null;
             assertNotNull(channel);
             assertTrue(channel.isOpen());
@@ -357,17 +341,18 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
 
     @Test
     void testGetWriter() throws IOException {
-        try (Writer writer = getOriginRw().getWriter(Charset.defaultCharset())) {
+        try (Writer writer = newOriginRw().getWriter(Charset.defaultCharset())) {
             assertNotNull(writer);
         }
-        setOriginRw(newOriginRw());
-        try (Writer writer = getOriginRw().getWriter(null)) {
+        try (Writer writer = newOriginRw().getWriter(null)) {
             assertNotNull(writer);
         }
     }
 
     @Test
     void testSize() throws IOException {
-        assertEquals(RO_LENGTH, getOriginRo().getByteArray().length);
+        try (AbstractOrigin<T, B> originRo = newOriginRo()) {
+            assertEquals(RO_LENGTH, originRo.getByteArray().length);
+        }
     }
 }

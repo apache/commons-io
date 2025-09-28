@@ -16,13 +16,23 @@
  */
 package org.apache.commons.io.build;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.IORandomAccessFile;
 import org.apache.commons.io.RandomAccessFileMode;
 import org.apache.commons.io.build.AbstractOrigin.IORandomAccessFileOrigin;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests {@link IORandomAccessFileOrigin}.
@@ -41,5 +51,36 @@ class IORandomAccessFileOriginTest extends AbstractOriginTest<IORandomAccessFile
     @Override
     protected IORandomAccessFileOrigin newOriginRw() throws IOException {
         return new IORandomAccessFileOrigin(RandomAccessFileMode.READ_WRITE.io(tempPath.resolve(FILE_NAME_RW).toFile().getPath()));
+    }
+
+    @Test
+    void testClosesOrigin() throws IOException {
+        final FileChannel channel = mock(FileChannel.class);
+        final IORandomAccessFile resource = mock(IORandomAccessFile.class);
+        when(resource.getChannel()).thenReturn(channel);
+        final AbstractOrigin.IORandomAccessFileOrigin origin = new AbstractOrigin.IORandomAccessFileOrigin(resource);
+
+        // These wrappers close the underlying Channel.
+        origin.getInputStream().close();
+        verify(channel, times(1)).close();
+
+        origin.getReader(StandardCharsets.UTF_8).close();
+        verify(channel, times(2)).close();
+
+        origin.getChannel(ReadableByteChannel.class).close();
+        verify(channel, times(3)).close();
+
+        origin.getChannel(WritableByteChannel.class).close();
+        verify(channel, times(4)).close();
+
+        // These wrappers close the underlying RandomAccessFile.
+        origin.getOutputStream().close();
+        verify(resource, times(1)).close();
+
+        origin.getWriter(StandardCharsets.UTF_8).close();
+        verify(resource, times(2)).close();
+
+        origin.getRandomAccessFile().close();
+        verify(resource, times(3)).close();
     }
 }

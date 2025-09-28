@@ -16,12 +16,18 @@
  */
 package org.apache.commons.io.build;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.OpenOption;
 import java.nio.file.StandardOpenOption;
 
@@ -39,6 +45,11 @@ import org.junit.jupiter.params.provider.EnumSource;
  * @see Reader
  */
 class ReaderOriginTest extends AbstractOriginTest<Reader, ReaderOrigin> {
+    @Override
+    protected void assertOpen(AbstractOrigin<Reader, ReaderOrigin> origin) {
+        // If the underlying FileInputStream is closed, ready() calls available() which throws IOException.
+        assertDoesNotThrow(() -> origin.get().ready(), "Reader not open");
+    }
 
     @Override
     protected ReaderOrigin newOriginRo() throws FileNotFoundException {
@@ -48,6 +59,21 @@ class ReaderOriginTest extends AbstractOriginTest<Reader, ReaderOrigin> {
     @Override
     protected ReaderOrigin newOriginRw() {
         return new ReaderOrigin(new CharSequenceReader("World"));
+    }
+
+    @Test
+    void testClosesOrigin() throws IOException {
+        final Reader resource = mock(Reader.class);
+        final ReaderOrigin origin = new ReaderOrigin(resource);
+
+        origin.getInputStream().close();
+        verify(resource, times(1)).close();
+
+        origin.getReader(StandardCharsets.UTF_8).close();
+        verify(resource, times(2)).close();
+
+        origin.getChannel(ReadableByteChannel.class).close();
+        verify(resource, times(3)).close();
     }
 
     @Override

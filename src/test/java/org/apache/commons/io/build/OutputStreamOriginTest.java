@@ -17,9 +17,14 @@
 package org.apache.commons.io.build;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.channels.WritableByteChannel;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.OpenOption;
 import java.nio.file.StandardOpenOption;
 
@@ -46,6 +51,21 @@ class OutputStreamOriginTest extends AbstractOriginTest<OutputStream, OutputStre
     @Override
     protected OutputStreamOrigin newOriginRw() {
         return new OutputStreamOrigin(new ByteArrayOutputStream());
+    }
+
+    @Test
+    void testClosesOrigin() throws IOException {
+        final OutputStream resource = mock(OutputStream.class);
+        final OutputStreamOrigin origin = new OutputStreamOrigin(resource);
+
+        origin.getOutputStream().close();
+        verify(resource, times(1)).close();
+
+        origin.getWriter(StandardCharsets.UTF_8).close();
+        verify(resource, times(2)).close();
+
+        origin.getChannel(WritableByteChannel.class).close();
+        verify(resource, times(3)).close();
     }
 
     @Override

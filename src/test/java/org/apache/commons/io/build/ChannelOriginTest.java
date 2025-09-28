@@ -18,6 +18,7 @@ package org.apache.commons.io.build;
 
 import static java.nio.file.StandardOpenOption.READ;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
@@ -26,7 +27,6 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.OpenOption;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
@@ -34,12 +34,16 @@ import java.util.Collections;
 import java.util.HashSet;
 
 import org.apache.commons.io.build.AbstractOrigin.ChannelOrigin;
-import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
 class ChannelOriginTest extends AbstractOriginTest<Channel, ChannelOrigin> {
+    @Override
+    protected void assertOpen(AbstractOrigin<Channel, ChannelOrigin> origin) {
+        assertTrue(origin.get().isOpen(), "Channel not open");
+    }
+
     @Override
     protected ChannelOrigin newOriginRo() throws IOException {
         return new ChannelOrigin(Files.newByteChannel(Paths.get(FILE_NAME_RO), Collections.singleton(READ)));
@@ -47,16 +51,8 @@ class ChannelOriginTest extends AbstractOriginTest<Channel, ChannelOrigin> {
 
     @Override
     protected ChannelOrigin newOriginRw() throws IOException {
-        return new ChannelOrigin(Files.newByteChannel(
-                tempPath.resolve(FILE_NAME_RW),
-                new HashSet<>(Arrays.asList(StandardOpenOption.READ, StandardOpenOption.WRITE))));
-    }
-
-    @Override
-    protected void resetOriginRw() throws IOException {
-        // Reset the file
-        final Path rwPath = tempPath.resolve(FILE_NAME_RW);
-        Files.write(rwPath, ArrayUtils.EMPTY_BYTE_ARRAY, StandardOpenOption.CREATE);
+        return new ChannelOrigin(Files.newByteChannel(tempPath.resolve(FILE_NAME_RW), new HashSet<>(Arrays.asList(StandardOpenOption.READ,
+                StandardOpenOption.WRITE, StandardOpenOption.CREATE))));
     }
 
     @Override

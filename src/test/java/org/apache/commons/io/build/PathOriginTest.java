@@ -17,13 +17,11 @@
 package org.apache.commons.io.build;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.build.AbstractOrigin.PathOrigin;
-import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * Tests {@link PathOrigin}.
@@ -41,13 +39,9 @@ class PathOriginTest extends AbstractOriginTest<Path, PathOrigin> {
 
     @Override
     protected PathOrigin newOriginRw() throws IOException {
-        return new PathOrigin(tempPath.resolve(FILE_NAME_RW));
+        final Path path = tempPath.resolve(FILE_NAME_RW);
+        FileUtils.touch(path.toFile());
+        return new PathOrigin(path);
     }
 
-    @Override
-    protected void resetOriginRw() throws IOException {
-        // Reset the file
-        final Path rwPath = tempPath.resolve(FILE_NAME_RW);
-        Files.write(rwPath, ArrayUtils.EMPTY_BYTE_ARRAY, StandardOpenOption.CREATE);
-    }
 }

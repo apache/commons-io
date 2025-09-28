@@ -18,10 +18,18 @@
 package org.apache.commons.io.build;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.RandomAccessFileMode;
 import org.apache.commons.io.build.AbstractOrigin.RandomAccessFileOrigin;
@@ -44,6 +52,37 @@ class RandomAccessFileOriginTest extends AbstractRandomAccessFileOriginTest<Rand
     @Override
     protected RandomAccessFileOrigin newOriginRw() throws IOException {
         return new RandomAccessFileOrigin(RandomAccessFileMode.READ_WRITE.create(tempPath.resolve(FILE_NAME_RW)));
+    }
+
+    @Test
+    void testClosesOrigin() throws IOException {
+        final FileChannel channel = mock(FileChannel.class);
+        final RandomAccessFile resource = mock(RandomAccessFile.class);
+        when(resource.getChannel()).thenReturn(channel);
+        final RandomAccessFileOrigin origin = new RandomAccessFileOrigin(resource);
+
+        // These wrappers close the underlying Channel.
+        origin.getInputStream().close();
+        verify(channel, times(1)).close();
+
+        origin.getReader(StandardCharsets.UTF_8).close();
+        verify(channel, times(2)).close();
+
+        origin.getChannel(ReadableByteChannel.class).close();
+        verify(channel, times(3)).close();
+
+        origin.getChannel(WritableByteChannel.class).close();
+        verify(channel, times(4)).close();
+
+        // These wrappers close the underlying RandomAccessFile.
+        origin.getOutputStream().close();
+        verify(resource, times(1)).close();
+
+        origin.getWriter(StandardCharsets.UTF_8).close();
+        verify(resource, times(2)).close();
+
+        origin.getRandomAccessFile().close();
+        verify(resource, times(3)).close();
     }
 
     @Override

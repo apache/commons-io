@@ -16,12 +16,18 @@
  */
 package org.apache.commons.io.build;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.OpenOption;
 import java.nio.file.StandardOpenOption;
 
@@ -39,6 +45,11 @@ import org.junit.jupiter.params.provider.EnumSource;
  * @see InputStream
  */
 class InputStreamOriginTest extends AbstractOriginTest<InputStream, InputStreamOrigin> {
+    @Override
+    protected void assertOpen(AbstractOrigin<InputStream, InputStreamOrigin> origin) {
+        // If the FileInputStream is closed, available() throws IOException.
+        assertDoesNotThrow(() -> origin.get().available(), "InputStream not open");
+    }
 
     @SuppressWarnings("resource")
     @Override
@@ -50,6 +61,21 @@ class InputStreamOriginTest extends AbstractOriginTest<InputStream, InputStreamO
     @Override
     protected InputStreamOrigin newOriginRw() {
         return new InputStreamOrigin(CharSequenceInputStream.builder().setCharSequence("World").get());
+    }
+
+    @Test
+    void testClosesOrigin() throws IOException {
+        final InputStream resource = mock(InputStream.class);
+        final InputStreamOrigin origin = new InputStreamOrigin(resource);
+
+        origin.getInputStream().close();
+        verify(resource, times(1)).close();
+
+        origin.getReader(StandardCharsets.UTF_8).close();
+        verify(resource, times(2)).close();
+
+        origin.getChannel(ReadableByteChannel.class).close();
+        verify(resource, times(3)).close();
     }
 
     @Override
