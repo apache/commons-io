@@ -1136,9 +1136,9 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     }
 
     /**
-     * Gets this origin as a Path, if possible.
+     * Gets this origin as a File, if possible.
      *
-     * @return this origin as a Path, if possible.
+     * @return this origin as a File, if possible.
      * @throws UnsupportedOperationException if this method is not implemented in a concrete subclass.
      */
     public File getFile() {
