@@ -32,6 +32,7 @@ import java.io.Writer;
 import java.net.URI;
 import java.nio.channels.Channel;
 import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.channels.WritableByteChannel;
@@ -312,10 +313,10 @@ import org.apache.commons.io.output.WriterOutputStream;
  *   <li><sup>1</sup> = Characters are converted to bytes using the default {@link Charset}.</li>
  *   <li><sup>2</sup> Minimum channel type provided by the origin:
  *     <ul>
- *         <li>RBC = ReadableByteChannel</li>
- *         <li>WBC = WritableByteChannel</li>
- *         <li>SBC = SeekableByteChannel</li>
- *         <li>FC = FileChannel</li>
+ *         <li>RBC = {@linkplain ReadableByteChannel}</li>
+ *         <li>WBC = {@linkplain WritableByteChannel}</li>
+ *         <li>SBC = {@linkplain SeekableByteChannel}</li>
+ *         <li>FC = {@linkplain FileChannel}</li>
  *     </ul>
  *     The exact channel type may be a subtype of the minimum shown.
  *   </li>
