@@ -440,8 +440,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         protected Channel getChannel(final OpenOption... options) throws IOException {
             for (final OpenOption option : options) {
                 if (option == StandardOpenOption.WRITE) {
-                    throw new UnsupportedOperationException(
-                            "Only READ is supported for byte[] origins: " + Arrays.toString(options));
+                    throw new UnsupportedOperationException("Only READ is supported for byte[] origins: " + Arrays.toString(options));
                 }
             }
             return ByteArraySeekableByteChannel.wrap(getByteArray());
@@ -524,10 +523,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
-            return Channels.newWriter(
-                    getChannel(WritableByteChannel.class, options),
-                    Charsets.toCharset(charset).newEncoder(),
-                    -1);
+            return Channels.newWriter(getChannel(WritableByteChannel.class, options), Charsets.toCharset(charset).newEncoder(), -1);
         }
 
         @Override
@@ -563,8 +559,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         protected Channel getChannel(final OpenOption... options) throws IOException {
             for (final OpenOption option : options) {
                 if (option == StandardOpenOption.WRITE) {
-                    throw new UnsupportedOperationException(
-                            "Only READ is supported for CharSequence origins: " + Arrays.toString(options));
+                    throw new UnsupportedOperationException("Only READ is supported for CharSequence origins: " + Arrays.toString(options));
                 }
             }
             return ByteArraySeekableByteChannel.wrap(getByteArray());
@@ -713,8 +708,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         @Override
         public long size() throws IOException {
             if (origin instanceof FileInputStream) {
-                final FileInputStream fileInputStream = (FileInputStream) origin;
-                return fileInputStream.getChannel().size();
+                return ((FileInputStream) origin).getChannel().size();
             }
             throw unsupportedOperation("size");
         }
