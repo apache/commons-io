@@ -20,6 +20,8 @@ package org.apache.commons.io.output;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * Throws an IOException on all attempts to write with {@link #close()} implemented as a noop.
  * <p>
@@ -77,6 +79,7 @@ public class ClosedWriter extends Writer {
      */
     @Override
     public void write(final char[] cbuf, final int off, final int len) throws IOException {
+        IOUtils.checkFromIndexSize(cbuf, off, len);
         throw new IOException("write(" + new String(cbuf) + ", " + off + ", " + len + ") failed: stream is closed");
     }
 }

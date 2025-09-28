@@ -271,10 +271,12 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      */
     @Override
     public int read(final char[] buffer, int offset, final int length) throws IOException {
-        checkOpen();
-        if (offset < 0 || offset > buffer.length - length || length < 0) {
-            throw new IndexOutOfBoundsException();
+        IOUtils.checkFromIndexSize(buffer, offset, length);
+        if (length == 0) {
+            return 0;
         }
+        checkOpen();
+
         int outstanding = length;
         while (outstanding > 0) {
 

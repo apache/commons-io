@@ -71,6 +71,10 @@ public class ClosedReader extends Reader {
      */
     @Override
     public int read(final char[] cbuf, final int off, final int len) {
+        IOUtils.checkFromIndexSize(cbuf, off, len);
+        if (len == 0) {
+            return 0;
+        }
         return EOF;
     }
 

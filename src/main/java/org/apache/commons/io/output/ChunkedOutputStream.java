@@ -172,6 +172,7 @@ public class ChunkedOutputStream extends FilterOutputStream {
      */
     @Override
     public void write(final byte[] data, final int srcOffset, final int length) throws IOException {
+        IOUtils.checkFromIndexSize(data, srcOffset, length);
         int bytes = length;
         int dstOffset = srcOffset;
         while (bytes > 0) {

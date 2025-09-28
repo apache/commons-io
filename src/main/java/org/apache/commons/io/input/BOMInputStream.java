@@ -444,6 +444,10 @@ public class BOMInputStream extends ProxyInputStream {
      */
     @Override
     public int read(final byte[] buf, int off, int len) throws IOException {
+        IOUtils.checkFromIndexSize(buf, off, len);
+        if (len == 0) {
+            return 0;
+        }
         int firstCount = 0;
         int b = 0;
         while (len > 0 && b >= 0) {

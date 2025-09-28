@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.function.Uncheck;
@@ -214,9 +215,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
 
     @Override
     public void write(final byte[] b, final int off, final int len) {
-        if (off < 0 || off > b.length || len < 0 || off + len > b.length || off + len < 0) {
-            throw new IndexOutOfBoundsException(String.format("offset=%,d, length=%,d", off, len));
-        }
+        IOUtils.checkFromIndexSize(b, off, len);
         if (len == 0) {
             return;
         }

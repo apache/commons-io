@@ -74,6 +74,7 @@ public class ChunkedWriter extends FilterWriter {
      */
     @Override
     public void write(final char[] data, final int srcOffset, final int length) throws IOException {
+        IOUtils.checkFromIndexSize(data, srcOffset, length);
         int bytes = length;
         int dstOffset = srcOffset;
         while (bytes > 0) {

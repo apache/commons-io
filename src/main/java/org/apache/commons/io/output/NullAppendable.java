@@ -19,6 +19,8 @@ package org.apache.commons.io.output;
 
 import java.io.IOException;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * Appends all data to the famous <strong>/dev/null</strong>.
  * <p>
@@ -51,6 +53,7 @@ public class NullAppendable implements Appendable { // NOPMD Class will be final
 
     @Override
     public Appendable append(final CharSequence csq, final int start, final int end) throws IOException {
+        IOUtils.checkFromToIndex(csq, start, end);
         return this;
     }
 

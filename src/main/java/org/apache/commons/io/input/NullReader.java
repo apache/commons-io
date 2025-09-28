@@ -22,6 +22,8 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.Reader;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * A functional, lightweight {@link Reader} that emulates
  * a reader of a specified size.
@@ -276,6 +278,10 @@ public class NullReader extends Reader {
      */
     @Override
     public int read(final char[] chars, final int offset, final int length) throws IOException {
+        IOUtils.checkFromIndexSize(chars, offset, length);
+        if (length == 0) {
+            return 0;
+        }
         if (eof) {
             throw new IOException("Read after end of file");
         }

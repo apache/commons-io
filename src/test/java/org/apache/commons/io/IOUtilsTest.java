@@ -400,6 +400,56 @@ class IOUtilsTest {
         }
     }
 
+    static Stream<Arguments> testCheckFromToIndexValidCases() {
+        return Stream.of(
+                // Valid cases
+                Arguments.of(0, 0, 42),
+                Arguments.of(0, 1, 42),
+                Arguments.of(0, 42, 42),
+                Arguments.of(41, 42, 42),
+                Arguments.of(42, 42, 42)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void testCheckFromToIndexValidCases(int from, int to, int arrayLength) {
+        assertDoesNotThrow(() -> IOUtils.checkFromToIndex(from, to, arrayLength));
+    }
+
+    static Stream<Arguments> testCheckFromToIndexInvalidCases() {
+        return Stream.of(
+                Arguments.of(-1, 0, 42),
+                Arguments.of(0, -1, 42),
+                Arguments.of(0, 0, -1),
+                // from > to
+                Arguments.of(1, 0, 42),
+                // to > arrayLength
+                Arguments.of(0, 43, 42),
+                Arguments.of(1, 43, 42)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void testCheckFromToIndexInvalidCases(int from, int to, int arrayLength) {
+        final IndexOutOfBoundsException ex = assertThrows(IndexOutOfBoundsException.class, () -> IOUtils.checkFromToIndex(from, to, arrayLength));
+        assertTrue(ex.getMessage().contains(String.valueOf(from)));
+        assertTrue(ex.getMessage().contains(String.valueOf(to)));
+        assertTrue(ex.getMessage().contains(String.valueOf(arrayLength)));
+        // Optional requirement: compare the exception message for Java 8 and Java 9+
+        if (SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_9)) {
+            final IndexOutOfBoundsException jreEx = assertThrows(IndexOutOfBoundsException.class, () -> {
+                try {
+                    Objects.class.getDeclaredMethod("checkFromToIndex", int.class, int.class, int.class).invoke(null, from, to, arrayLength);
+                } catch (InvocationTargetException ite) {
+                    throw ite.getTargetException();
+                }
+            });
+            assertEquals(jreEx.getMessage(), ex.getMessage());
+        }
+    }
+
     @Test
     void testClose() {
         assertDoesNotThrow(() -> IOUtils.close((Closeable) null));

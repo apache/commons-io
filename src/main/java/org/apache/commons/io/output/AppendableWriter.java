@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Objects;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * Writer implementation that writes the data to an {@link Appendable} Object.
  * <p>
@@ -124,10 +126,7 @@ public class AppendableWriter<T extends Appendable> extends Writer {
      */
     @Override
     public void write(final char[] cbuf, final int off, final int len) throws IOException {
-        Objects.requireNonNull(cbuf, "cbuf");
-        if (len < 0 || off + len > cbuf.length) {
-            throw new IndexOutOfBoundsException("Array Size=" + cbuf.length + ", offset=" + off + ", length=" + len);
-        }
+        IOUtils.checkFromIndexSize(cbuf, off, len);
         for (int i = 0; i < len; i++) {
             appendable.append(cbuf[off + i]);
         }

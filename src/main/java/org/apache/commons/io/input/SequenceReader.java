@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Objects;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.function.Uncheck;
 
 /**
@@ -114,9 +115,9 @@ public class SequenceReader extends Reader {
      */
     @Override
     public int read(final char[] cbuf, int off, int len) throws IOException {
-        Objects.requireNonNull(cbuf, "cbuf");
-        if (len < 0 || off < 0 || off + len > cbuf.length) {
-            throw new IndexOutOfBoundsException("Array Size=" + cbuf.length + ", offset=" + off + ", length=" + len);
+        IOUtils.checkFromIndexSize(cbuf, off, len);
+        if (len == 0) {
+            return 0;
         }
         int count = 0;
         while (reader != null) {

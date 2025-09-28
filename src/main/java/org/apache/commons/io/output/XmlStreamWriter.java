@@ -306,6 +306,7 @@ public class XmlStreamWriter extends Writer {
      */
     @Override
     public void write(final char[] cbuf, final int off, final int len) throws IOException {
+        IOUtils.checkFromIndexSize(cbuf, off, len);
         if (prologWriter != null) {
             detectEncoding(cbuf, off, len);
         } else {

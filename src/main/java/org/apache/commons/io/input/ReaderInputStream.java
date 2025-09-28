@@ -30,7 +30,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
-import java.util.Objects;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
@@ -456,14 +455,11 @@ public class ReaderInputStream extends AbstractInputStream {
      */
     @Override
     public int read(final byte[] array, int off, int len) throws IOException {
-        Objects.requireNonNull(array, "array");
-        if (len < 0 || off < 0 || off + len > array.length) {
-            throw new IndexOutOfBoundsException("Array size=" + array.length + ", offset=" + off + ", length=" + len);
-        }
-        int read = 0;
+        IOUtils.checkFromIndexSize(array, off, len);
         if (len == 0) {
             return 0; // Always return 0 if len == 0
         }
+        int read = 0;
         while (len > 0) {
             if (encoderOut.hasRemaining()) { // Data from the last read not fully copied
                 final int c = Math.min(encoderOut.remaining(), len);

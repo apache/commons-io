@@ -20,7 +20,8 @@ import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.Reader;
 import java.io.Serializable;
-import java.util.Objects;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * {@link Reader} implementation that can read from String, StringBuffer,
@@ -209,13 +210,12 @@ public class CharSequenceReader extends Reader implements Serializable {
      */
     @Override
     public int read(final char[] array, final int offset, final int length) {
+        IOUtils.checkFromIndexSize(array, offset, length);
+        if (length == 0) {
+            return 0;
+        }
         if (idx >= end()) {
             return EOF;
-        }
-        Objects.requireNonNull(array, "array");
-        if (length < 0 || offset < 0 || offset + length > array.length) {
-            throw new IndexOutOfBoundsException("Array Size=" + array.length +
-                    ", offset=" + offset + ", length=" + length);
         }
 
         if (charSequence instanceof String) {

@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 
 import org.apache.commons.io.IOExceptionList;
 import org.apache.commons.io.IOIndexedException;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.function.IOConsumer;
 
 /**
@@ -128,6 +129,7 @@ public class FilterCollectionWriter extends Writer {
     @SuppressWarnings("resource") // no allocation
     @Override
     public void write(final char[] cbuf, final int off, final int len) throws IOException {
+        IOUtils.checkFromIndexSize(cbuf, off, len);
         forAllWriters(w -> w.write(cbuf, off, len));
     }
 
@@ -159,6 +161,7 @@ public class FilterCollectionWriter extends Writer {
     @SuppressWarnings("resource") // no allocation
     @Override
     public void write(final String str, final int off, final int len) throws IOException {
+        IOUtils.checkFromIndexSize(str, off, len);
         forAllWriters(w -> w.write(str, off, len));
     }
 

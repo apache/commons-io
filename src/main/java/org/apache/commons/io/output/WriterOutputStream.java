@@ -448,6 +448,7 @@ public class WriterOutputStream extends OutputStream {
      */
     @Override
     public void write(final byte[] b, int off, int len) throws IOException {
+        IOUtils.checkFromIndexSize(b, off, len);
         while (len > 0) {
             final int c = Math.min(len, decoderIn.remaining());
             decoderIn.put(b, off, c);

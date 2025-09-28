@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
@@ -288,9 +289,9 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
 
     @Override
     public int read(final byte[] dest, final int off, final int len) {
-        Objects.requireNonNull(dest, "dest");
-        if (off < 0 || len < 0 || off + len > dest.length) {
-            throw new IndexOutOfBoundsException();
+        IOUtils.checkFromIndexSize(dest, off, len);
+        if (len == 0) {
+            return 0;
         }
 
         if (offset >= eod) {

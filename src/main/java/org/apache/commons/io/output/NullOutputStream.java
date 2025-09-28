@@ -19,6 +19,8 @@ package org.apache.commons.io.output;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * Never writes data. Calls never go beyond this class.
  * <p>
@@ -75,7 +77,7 @@ public class NullOutputStream extends OutputStream {
      */
     @Override
     public void write(final byte[] b, final int off, final int len) {
-        // noop
+        IOUtils.checkFromIndexSize(b, off, len);
     }
 
     /**

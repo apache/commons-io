@@ -22,6 +22,8 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * A lightweight {@link InputStream} that emulates a stream of a specified size.
  * <p>
@@ -292,7 +294,8 @@ public class NullInputStream extends AbstractInputStream {
      */
     @Override
     public int read(final byte[] bytes, final int offset, final int length) throws IOException {
-        if (bytes.length == 0 || length == 0) {
+        IOUtils.checkFromIndexSize(bytes, offset, length);
+        if (length == 0) {
             return 0;
         }
         checkOpen();

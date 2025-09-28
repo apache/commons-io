@@ -17,6 +17,8 @@
 
 package org.apache.commons.io;
 
+import static java.util.Objects.requireNonNull;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -244,7 +246,7 @@ public class IOUtils {
     public static BufferedInputStream buffer(final InputStream inputStream) {
         // reject null early on rather than waiting for IO operation to fail
         // not checked by BufferedInputStream
-        Objects.requireNonNull(inputStream, "inputStream");
+        requireNonNull(inputStream, "inputStream");
         return inputStream instanceof BufferedInputStream ?
                 (BufferedInputStream) inputStream : new BufferedInputStream(inputStream);
     }
@@ -263,7 +265,7 @@ public class IOUtils {
     public static BufferedInputStream buffer(final InputStream inputStream, final int size) {
         // reject null early on rather than waiting for IO operation to fail
         // not checked by BufferedInputStream
-        Objects.requireNonNull(inputStream, "inputStream");
+        requireNonNull(inputStream, "inputStream");
         return inputStream instanceof BufferedInputStream ?
                 (BufferedInputStream) inputStream : new BufferedInputStream(inputStream, size);
     }
@@ -281,7 +283,7 @@ public class IOUtils {
     public static BufferedOutputStream buffer(final OutputStream outputStream) {
         // reject null early on rather than waiting for IO operation to fail
         // not checked by BufferedInputStream
-        Objects.requireNonNull(outputStream, "outputStream");
+        requireNonNull(outputStream, "outputStream");
         return outputStream instanceof BufferedOutputStream ?
                 (BufferedOutputStream) outputStream : new BufferedOutputStream(outputStream);
     }
@@ -300,7 +302,7 @@ public class IOUtils {
     public static BufferedOutputStream buffer(final OutputStream outputStream, final int size) {
         // reject null early on rather than waiting for IO operation to fail
         // not checked by BufferedInputStream
-        Objects.requireNonNull(outputStream, "outputStream");
+        requireNonNull(outputStream, "outputStream");
         return outputStream instanceof BufferedOutputStream ?
                 (BufferedOutputStream) outputStream : new BufferedOutputStream(outputStream, size);
     }
@@ -407,32 +409,109 @@ public class IOUtils {
     }
 
     /**
-     * Checks if the sub-range described by an offset and length is valid for an array of the given length.
-     *
-     * <p>This method is functionally equivalent to
-     * {@code java.util.Objects#checkFromIndexSize(int, int, int)} introduced in Java 9,
-     * but is provided here for use on Java 8.</p>
+     * Checks if the sub-range described by an offset and length is valid for the given array.
      *
      * <p>The range is valid if all of the following hold:</p>
      * <ul>
      *   <li>{@code off >= 0}</li>
      *   <li>{@code len >= 0}</li>
-     *   <li>{@code arrayLength >= 0}</li>
-     *   <li>{@code off + len <= arrayLength}</li>
+     *   <li>{@code off + len <= array.length}</li>
      * </ul>
      *
      * <p>If the range is invalid, this method throws an
      * {@link IndexOutOfBoundsException} with a descriptive message.</p>
      *
-     * @param off         the starting offset into the array
-     * @param len         the number of elements in the range
-     * @param arrayLength the length of the array to be checked against
-     * @throws IndexOutOfBoundsException if the range {@code [off, off + len)} is out of bounds
+     * @param array       The array to be checked against
+     * @param off         The starting offset into the array
+     * @param len         The number of elements in the range
+     * @throws NullPointerException      If the array is null
+     * @throws IndexOutOfBoundsException If the range {@code [off, off + len)} is out of bounds
      * @since 2.21.0
      */
-    public static void checkFromIndexSize(final int off, final int len, final int arrayLength) {
+    public static void checkFromIndexSize(final byte[] array, final int off, final int len) {
+        checkFromIndexSize(off, len, requireNonNull(array, "byte array").length);
+    }
+
+    /**
+     * Checks if the sub-range described by an offset and length is valid for the given array.
+     *
+     * <p>The range is valid if all of the following hold:</p>
+     * <ul>
+     *   <li>{@code off >= 0}</li>
+     *   <li>{@code len >= 0}</li>
+     *   <li>{@code off + len <= array.length}</li>
+     * </ul>
+     *
+     * <p>If the range is invalid, this method throws an
+     * {@link IndexOutOfBoundsException} with a descriptive message.</p>
+     *
+     * @param array       The array to be checked against
+     * @param off         The starting offset into the array
+     * @param len         The number of elements in the range
+     * @throws NullPointerException      If the array is null
+     * @throws IndexOutOfBoundsException If the range {@code [off, off + len)} is out of bounds
+     * @since 2.21.0
+     */
+    public static void checkFromIndexSize(final char[] array, final int off, final int len) {
+        checkFromIndexSize(off, len, requireNonNull(array, "char array").length);
+    }
+
+    /**
+     * Checks if the sub-range described by an offset and length is valid for the given string.
+     *
+     * <p>The range is valid if all of the following hold:</p>
+     * <ul>
+     *   <li>{@code off >= 0}</li>
+     *   <li>{@code len >= 0}</li>
+     *   <li>{@code off + len <= array.length}</li>
+     * </ul>
+     *
+     * <p>If the range is invalid, this method throws an
+     * {@link IndexOutOfBoundsException} with a descriptive message.</p>
+     *
+     * @param str         The char sequence to be checked against
+     * @param off         The starting offset into the array
+     * @param len         The number of elements in the range
+     * @throws NullPointerException      If the array is null
+     * @throws IndexOutOfBoundsException If the range {@code [off, off + len)} is out of bounds
+     * @since 2.21.0
+     */
+    public static void checkFromIndexSize(final String str, final int off, final int len) {
+        checkFromIndexSize(off, len, requireNonNull(str, "str").length());
+    }
+
+    static void checkFromIndexSize(final int off, final int len, final int arrayLength) {
         if ((off | len | arrayLength) < 0 || arrayLength - len < off) {
             throw new IndexOutOfBoundsException(String.format("Range [%s, %<s + %s) out of bounds for length %s", off, len, arrayLength));
+        }
+    }
+
+    /**
+     * Checks if the sub-sequence described by fromIndex (inclusive) and toIndex (exclusive) is valid for the given {@link CharSequence}.
+     *
+     * <p>The range is valid if all of the following hold:</p>
+     * <ul>
+     *     <li>{@code fromIndex >= 0}</li>
+     *     <li>{@code fromIndex <= toIndex}</li>
+     *     <li>{@code toIndex <= seq.length()}</li>
+     * </ul>
+     *
+     * <p>If the range is invalid, this method throws an {@link IndexOutOfBoundsException} with a descriptive message.</p>
+     *
+     * @param seq The char sequence to be checked against
+     * @param fromIndex The starting index into the char sequence (inclusive)
+     * @param toIndex The ending index into the char sequence (exclusive)
+     * @throws NullPointerException If the char sequence is null
+     * @throws IndexOutOfBoundsException If the range {@code [fromIndex, toIndex)} is out of bounds
+     * @since 2.21.0
+     */
+    public static void checkFromToIndex(final CharSequence seq, int fromIndex, final int toIndex) {
+        checkFromToIndex(fromIndex, toIndex, requireNonNull(seq, "char sequence").length());
+    }
+
+    static void checkFromToIndex(final int fromIndex, final int toIndex, final int length) {
+        if (fromIndex < 0 | toIndex < fromIndex | length < toIndex) {
+            throw new IndexOutOfBoundsException(String.format("Range [%s, %s) out of bounds for length %s", fromIndex, toIndex, length));
         }
     }
 
@@ -1217,7 +1296,7 @@ public class IOUtils {
      */
     @SuppressWarnings("resource") // streams are closed by the caller.
     public static QueueInputStream copy(final java.io.ByteArrayOutputStream outputStream) throws IOException {
-        Objects.requireNonNull(outputStream, "outputStream");
+        requireNonNull(outputStream, "outputStream");
         final QueueInputStream in = new QueueInputStream();
         outputStream.writeTo(in.newQueueOutputStream());
         return in;
@@ -1398,7 +1477,7 @@ public class IOUtils {
      * @since 2.9.0
      */
     public static long copy(final URL url, final File file) throws IOException {
-        try (OutputStream outputStream = Files.newOutputStream(Objects.requireNonNull(file, "file").toPath())) {
+        try (OutputStream outputStream = Files.newOutputStream(requireNonNull(file, "file").toPath())) {
             return copy(url, outputStream);
         }
     }
@@ -1421,7 +1500,7 @@ public class IOUtils {
      * @since 2.9.0
      */
     public static long copy(final URL url, final OutputStream outputStream) throws IOException {
-        try (InputStream inputStream = Objects.requireNonNull(url, "url").openStream()) {
+        try (InputStream inputStream = requireNonNull(url, "url").openStream()) {
             return copyLarge(inputStream, outputStream);
         }
     }
@@ -1470,8 +1549,8 @@ public class IOUtils {
     @SuppressWarnings("resource") // streams are closed by the caller.
     public static long copyLarge(final InputStream inputStream, final OutputStream outputStream, final byte[] buffer)
         throws IOException {
-        Objects.requireNonNull(inputStream, "inputStream");
-        Objects.requireNonNull(outputStream, "outputStream");
+        requireNonNull(inputStream, "inputStream");
+        requireNonNull(outputStream, "outputStream");
         long count = 0;
         int n;
         while (EOF != (n = inputStream.read(buffer))) {
@@ -2739,7 +2818,7 @@ public class IOUtils {
      * @since 2.1
      */
     public static byte[] toByteArray(final InputStream input, final int size) throws IOException {
-        return toByteArray(Objects.requireNonNull(input, "input")::read, size);
+        return toByteArray(requireNonNull(input, "input")::read, size);
     }
 
     /**
@@ -2765,7 +2844,7 @@ public class IOUtils {
      * @since 2.21.0
      */
     public static byte[] toByteArray(final InputStream input, final int size, final int chunkSize) throws IOException {
-        Objects.requireNonNull(input, "input");
+        requireNonNull(input, "input");
         if (chunkSize <= 0) {
             throw new IllegalArgumentException("Chunk size must be greater than zero: " + chunkSize);
         }
@@ -3913,7 +3992,7 @@ public class IOUtils {
      * @since 2.7
      */
     public static Writer writer(final Appendable appendable) {
-        Objects.requireNonNull(appendable, "appendable");
+        requireNonNull(appendable, "appendable");
         if (appendable instanceof Writer) {
             return (Writer) appendable;
         }

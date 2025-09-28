@@ -20,6 +20,8 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * {@link Writer} implementation that outputs to a {@link StringBuilder}.
  * <p>
@@ -149,9 +151,8 @@ public class StringBuilderWriter extends Writer implements Serializable {
      */
     @Override
     public void write(final char[] value, final int offset, final int length) {
-        if (value != null) {
-            builder.append(value, offset, length);
-        }
+        IOUtils.checkFromIndexSize(value, offset, length);
+        builder.append(value, offset, length);
     }
 
     /**

@@ -18,6 +18,8 @@ package org.apache.commons.io.output;
 
 import java.io.Writer;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * Never writes data. Calls never go beyond this class.
  * <p>
@@ -87,7 +89,7 @@ public class NullWriter extends Writer {
      */
     @Override
     public Writer append(final CharSequence csq, final int start, final int end) {
-        //to /dev/null
+        IOUtils.checkFromToIndex(csq, start, end);
         return this;
     }
 
@@ -154,7 +156,7 @@ public class NullWriter extends Writer {
      */
     @Override
     public void write(final String str, final int st, final int end) {
-        //to /dev/null
+        IOUtils.checkFromIndexSize(str, st, end);
     }
 
 }

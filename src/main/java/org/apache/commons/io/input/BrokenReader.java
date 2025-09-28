@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.function.Supplier;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.function.Erase;
 
 /**
@@ -114,6 +115,10 @@ public class BrokenReader extends Reader {
      */
     @Override
     public int read(final char[] cbuf, final int off, final int len) throws IOException {
+        IOUtils.checkFromIndexSize(cbuf, off, len);
+        if (len == 0) {
+            return 0;
+        }
         throw rethrow();
     }
 

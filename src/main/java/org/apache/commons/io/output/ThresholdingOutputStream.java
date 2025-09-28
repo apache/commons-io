@@ -19,6 +19,7 @@ package org.apache.commons.io.output;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.function.IOFunction;
 
@@ -249,6 +250,7 @@ public class ThresholdingOutputStream extends OutputStream {
     @SuppressWarnings("resource") // the underlying stream is managed by a subclass.
     @Override
     public void write(final byte[] b, final int off, final int len) throws IOException {
+        IOUtils.checkFromIndexSize(b, off, len);
         // TODO we could write the sub-array up the threshold, fire the event,
         // and then write the rest so the event is always fired at the precise point.
         checkThreshold(len);

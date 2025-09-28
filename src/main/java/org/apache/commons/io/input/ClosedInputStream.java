@@ -86,6 +86,10 @@ public class ClosedInputStream extends InputStream {
      */
     @Override
     public int read(final byte[] b, final int off, final int len) throws IOException {
+        IOUtils.checkFromIndexSize(b, off, len);
+        if (len == 0) {
+            return 0;
+        }
         return EOF;
     }
 
