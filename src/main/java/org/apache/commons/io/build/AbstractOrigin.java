@@ -1050,7 +1050,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      *
      * @since 2.21.0
      */
