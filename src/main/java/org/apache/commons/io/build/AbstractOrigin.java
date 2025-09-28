@@ -720,7 +720,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     }
 
     /**
-     * A {@link IORandomAccessFile} origin.
+     * An {@link IORandomAccessFile} origin.
      *
      * @since 2.18.0
      */
