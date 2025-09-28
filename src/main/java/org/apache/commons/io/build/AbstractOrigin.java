@@ -58,10 +58,11 @@ import org.apache.commons.io.output.RandomAccessFileOutputStream;
 import org.apache.commons.io.output.WriterOutputStream;
 
 /**
- * Abstract base class that encapsulates the <em>origin</em> of data used by Commons IO builders.
+ * Abstracts and wraps an <em>origin</em> for builders, where an origin is a {@code byte[]}, {@link Channel}, {@link CharSequence}, {@link File},
+ * {@link InputStream}, {@link IORandomAccessFile}, {@link OutputStream}, {@link Path}, {@link RandomAccessFile}, {@link Reader}, {@link URI},
+ * or {@link Writer}.
  * <p>
- * An origin represents where bytes/characters come from or go to, such as a {@link File}, {@link Path},
- * {@link Reader}, {@link Writer}, {@link InputStream}, {@link OutputStream}, or {@link URI}. Concrete subclasses
+ * An origin represents where bytes/characters come from or go to. Concrete subclasses
  * expose only the operations that make sense for the underlying source or sink; invoking an unsupported operation
  * results in {@link UnsupportedOperationException} (see, for example, {@link #getFile()} and {@link #getPath()}).
  * </p>

@@ -20,7 +20,7 @@ package org.apache.commons.io.build;
 import org.apache.commons.io.function.IOSupplier;
 
 /**
- * Abstracts supplying an instance of {@code T}.
+ * Abstracts <em>supplying</em> an instance of type {@code T} where {@code T} is unbounded. This class carries no state.
  * <p>
  * Extend this class to implement the builder pattern.
  * </p>
@@ -120,6 +120,7 @@ import org.apache.commons.io.function.IOSupplier;
  *
  * @param <T> the type of instances to build.
  * @param <B> the type of builder subclass.
+ * @see IOSupplier
  * @since 2.12.0
  */
 public abstract class AbstractSupplier<T, B extends AbstractSupplier<T, B>> implements IOSupplier<T> {
