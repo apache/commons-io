@@ -17,8 +17,6 @@
 
 package org.apache.commons.io;
 
-import static java.util.Objects.requireNonNull;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -246,7 +244,7 @@ public class IOUtils {
     public static BufferedInputStream buffer(final InputStream inputStream) {
         // reject null early on rather than waiting for IO operation to fail
         // not checked by BufferedInputStream
-        requireNonNull(inputStream, "inputStream");
+        Objects.requireNonNull(inputStream, "inputStream");
         return inputStream instanceof BufferedInputStream ?
                 (BufferedInputStream) inputStream : new BufferedInputStream(inputStream);
     }
@@ -265,7 +263,7 @@ public class IOUtils {
     public static BufferedInputStream buffer(final InputStream inputStream, final int size) {
         // reject null early on rather than waiting for IO operation to fail
         // not checked by BufferedInputStream
-        requireNonNull(inputStream, "inputStream");
+        Objects.requireNonNull(inputStream, "inputStream");
         return inputStream instanceof BufferedInputStream ?
                 (BufferedInputStream) inputStream : new BufferedInputStream(inputStream, size);
     }
@@ -283,7 +281,7 @@ public class IOUtils {
     public static BufferedOutputStream buffer(final OutputStream outputStream) {
         // reject null early on rather than waiting for IO operation to fail
         // not checked by BufferedInputStream
-        requireNonNull(outputStream, "outputStream");
+        Objects.requireNonNull(outputStream, "outputStream");
         return outputStream instanceof BufferedOutputStream ?
                 (BufferedOutputStream) outputStream : new BufferedOutputStream(outputStream);
     }
@@ -302,7 +300,7 @@ public class IOUtils {
     public static BufferedOutputStream buffer(final OutputStream outputStream, final int size) {
         // reject null early on rather than waiting for IO operation to fail
         // not checked by BufferedInputStream
-        requireNonNull(outputStream, "outputStream");
+        Objects.requireNonNull(outputStream, "outputStream");
         return outputStream instanceof BufferedOutputStream ?
                 (BufferedOutputStream) outputStream : new BufferedOutputStream(outputStream, size);
     }
@@ -429,7 +427,7 @@ public class IOUtils {
      * @since 2.21.0
      */
     public static void checkFromIndexSize(final byte[] array, final int off, final int len) {
-        checkFromIndexSize(off, len, requireNonNull(array, "byte array").length);
+        checkFromIndexSize(off, len, Objects.requireNonNull(array, "byte array").length);
     }
 
     /**
@@ -453,7 +451,7 @@ public class IOUtils {
      * @since 2.21.0
      */
     public static void checkFromIndexSize(final char[] array, final int off, final int len) {
-        checkFromIndexSize(off, len, requireNonNull(array, "char array").length);
+        checkFromIndexSize(off, len, Objects.requireNonNull(array, "char array").length);
     }
 
     /**
@@ -477,7 +475,7 @@ public class IOUtils {
      * @since 2.21.0
      */
     public static void checkFromIndexSize(final String str, final int off, final int len) {
-        checkFromIndexSize(off, len, requireNonNull(str, "str").length());
+        checkFromIndexSize(off, len, Objects.requireNonNull(str, "str").length());
     }
 
     static void checkFromIndexSize(final int off, final int len, final int arrayLength) {
@@ -1298,7 +1296,7 @@ public class IOUtils {
      */
     @SuppressWarnings("resource") // streams are closed by the caller.
     public static QueueInputStream copy(final java.io.ByteArrayOutputStream outputStream) throws IOException {
-        requireNonNull(outputStream, "outputStream");
+        Objects.requireNonNull(outputStream, "outputStream");
         final QueueInputStream in = new QueueInputStream();
         outputStream.writeTo(in.newQueueOutputStream());
         return in;
@@ -1479,7 +1477,7 @@ public class IOUtils {
      * @since 2.9.0
      */
     public static long copy(final URL url, final File file) throws IOException {
-        try (OutputStream outputStream = Files.newOutputStream(requireNonNull(file, "file").toPath())) {
+        try (OutputStream outputStream = Files.newOutputStream(Objects.requireNonNull(file, "file").toPath())) {
             return copy(url, outputStream);
         }
     }
@@ -1502,7 +1500,7 @@ public class IOUtils {
      * @since 2.9.0
      */
     public static long copy(final URL url, final OutputStream outputStream) throws IOException {
-        try (InputStream inputStream = requireNonNull(url, "url").openStream()) {
+        try (InputStream inputStream = Objects.requireNonNull(url, "url").openStream()) {
             return copyLarge(inputStream, outputStream);
         }
     }
@@ -1551,8 +1549,8 @@ public class IOUtils {
     @SuppressWarnings("resource") // streams are closed by the caller.
     public static long copyLarge(final InputStream inputStream, final OutputStream outputStream, final byte[] buffer)
         throws IOException {
-        requireNonNull(inputStream, "inputStream");
-        requireNonNull(outputStream, "outputStream");
+        Objects.requireNonNull(inputStream, "inputStream");
+        Objects.requireNonNull(outputStream, "outputStream");
         long count = 0;
         int n;
         while (EOF != (n = inputStream.read(buffer))) {
@@ -2820,7 +2818,7 @@ public class IOUtils {
      * @since 2.1
      */
     public static byte[] toByteArray(final InputStream input, final int size) throws IOException {
-        return toByteArray(requireNonNull(input, "input")::read, size);
+        return toByteArray(Objects.requireNonNull(input, "input")::read, size);
     }
 
     /**
@@ -2846,7 +2844,7 @@ public class IOUtils {
      * @since 2.21.0
      */
     public static byte[] toByteArray(final InputStream input, final int size, final int chunkSize) throws IOException {
-        requireNonNull(input, "input");
+        Objects.requireNonNull(input, "input");
         if (chunkSize <= 0) {
             throw new IllegalArgumentException("Chunk size must be greater than zero: " + chunkSize);
         }
@@ -3994,7 +3992,7 @@ public class IOUtils {
      * @since 2.7
      */
     public static Writer writer(final Appendable appendable) {
-        requireNonNull(appendable, "appendable");
+        Objects.requireNonNull(appendable, "appendable");
         if (appendable instanceof Writer) {
             return (Writer) appendable;
         }
