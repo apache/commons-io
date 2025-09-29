@@ -420,8 +420,8 @@ public class IOUtils {
      *
      * <p>Typical usage in {@link InputStream#read(byte[], int, int)} and {@link OutputStream#write(byte[], int, int)} implementations:</p>
      *
-     * <pre>{@code
-     * @Override
+     * <pre><code>
+     * {@code @Override}
      * public int read(byte[] b, int off, int len) throws IOException {
      *     IOUtils.checkFromIndexSize(b, off, len);
      *     if (len == 0) {
@@ -431,7 +431,7 @@ public class IOUtils {
      *     // perform read...
      * }
      *
-     * @Override
+     * {@code @Override}
      * public void write(byte[] b, int off, int len) throws IOException {
      *     IOUtils.checkFromIndexSize(b, off, len);
      *     if (len == 0) {
@@ -440,7 +440,7 @@ public class IOUtils {
      *     ensureOpen();
      *     // perform write...
      * }
-     * }</pre>
+     * </code></pre>
      *
      * @param array the array against which the range is validated
      * @param off   the starting offset into the array (inclusive)
@@ -469,8 +469,8 @@ public class IOUtils {
      *
      * <p>Typical usage in {@link Reader#read(char[], int, int)} and {@link Writer#write(char[], int, int)} implementations:</p>
      *
-     * <pre>{@code
-     * @Override
+     * <pre><code>
+     * {@code @Override}
      * public int read(char[] cbuf, int off, int len) throws IOException {
      *     ensureOpen();
      *     IOUtils.checkFromIndexSize(cbuf, off, len);
@@ -480,7 +480,7 @@ public class IOUtils {
      *     // perform read...
      * }
      *
-     * @Override
+     * {@code @Override}
      * public void write(char[] cbuf, int off, int len) throws IOException {
      *     ensureOpen();
      *     IOUtils.checkFromIndexSize(cbuf, off, len);
@@ -489,7 +489,7 @@ public class IOUtils {
      *     }
      *     // perform write...
      * }
-     * }</pre>
+     * </code></pre>
      *
      * @param array the array against which the range is validated
      * @param off   the starting offset into the array (inclusive)
@@ -518,8 +518,8 @@ public class IOUtils {
      *
      * <p>Typical usage in {@link Writer#write(String, int, int)} implementations:</p>
      *
-     * <pre>{@code
-     * @Override
+     * <pre><code>
+     * {@code @Override}
      * public void write(String str, int off, int len) throws IOException {
      *     IOUtils.checkFromIndexSize(str, off, len);
      *     if (len == 0) {
@@ -527,7 +527,7 @@ public class IOUtils {
      *     }
      *     // perform write...
      * }
-     * }</pre>
+     * </code></pre>
      *
      * @param str the string against which the range is validated
      * @param off the starting offset into the string (inclusive)
@@ -563,14 +563,14 @@ public class IOUtils {
      *
      * <p>Typical usage in {@link Appendable#append(CharSequence, int, int)} implementations:</p>
      *
-     * <pre>{@code
-     * @Override
+     * <pre><code>
+     * {@code @Override}
      * public Appendable append(CharSequence csq, int start, int end) throws IOException {
      *     IOUtils.checkFromToIndex(csq, start, end);
      *     // perform append...
      *     return this;
      * }
-     * }</pre>
+     * </code></pre>
      *
      * @param seq       the character sequence to validate (may be {@code null}, treated as {@code "null"})
      * @param fromIndex the starting index (inclusive)
