@@ -205,8 +205,8 @@ class ProxyWriterTest {
     @Test
     void testNullCharArray() throws Exception {
         try (ProxyWriter proxy = new ProxyWriter(NullWriter.INSTANCE)) {
-            proxy.write((char[]) null);
-            proxy.write((char[]) null, 0, 0);
+            assertThrows(NullPointerException.class, () -> proxy.write((char[]) null));
+            assertThrows(NullPointerException.class, () -> proxy.write((char[]) null, 0, 0));
         }
     }
 
@@ -220,8 +220,9 @@ class ProxyWriterTest {
     @Test
     void testNullString() throws Exception {
         try (ProxyWriter proxy = new ProxyWriter(NullWriter.INSTANCE)) {
-            proxy.write((String) null);
-            proxy.write((String) null, 0, 0);
+            // Default implementation delegates to write(char[], int, int)
+            assertThrows(NullPointerException.class, () -> proxy.write((String) null));
+            assertThrows(NullPointerException.class, () -> proxy.write((String) null, 0, 0));
         }
     }
 

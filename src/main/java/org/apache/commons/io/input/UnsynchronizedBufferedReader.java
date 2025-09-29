@@ -271,11 +271,16 @@ public class UnsynchronizedBufferedReader extends UnsynchronizedReader {
      */
     @Override
     public int read(final char[] buffer, int offset, final int length) throws IOException {
+        /*
+         * First throw on a closed reader, then check the parameters.
+         *
+         * This behavior is not specified in the Javadoc, but is followed by most readers in java.io.
+         */
+        checkOpen();
         IOUtils.checkFromIndexSize(buffer, offset, length);
         if (length == 0) {
             return 0;
         }
-        checkOpen();
 
         int outstanding = length;
         while (outstanding > 0) {

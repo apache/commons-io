@@ -249,7 +249,7 @@ class NullInputStreamTest {
         try (InputStream in = new NullInputStream()) {
             assertEquals(0, in.available());
             in.close();
-            assertEquals(0, in.read(new byte[0], 0, 1));
+            assertThrows(IndexOutOfBoundsException.class, () -> in.read(new byte[0], 0, 1));
             assertEquals(0, in.read(new byte[1], 0, 0));
             assertThrows(IOException.class, () -> in.read(new byte[2], 0, 1));
         }

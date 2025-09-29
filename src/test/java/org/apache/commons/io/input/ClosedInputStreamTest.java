@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.io.InputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -86,7 +87,7 @@ class ClosedInputStreamTest {
         try (ClosedInputStream cis = new ClosedInputStream()) {
             assertEquals(EOF, cis.read(new byte[4096]));
             assertEquals(EOF, cis.read(new byte[1]));
-            assertEquals(EOF, cis.read(new byte[0]));
+            assertEquals(0, cis.read(IOUtils.EMPTY_BYTE_ARRAY));
         }
     }
 
@@ -95,7 +96,7 @@ class ClosedInputStreamTest {
         try (ClosedInputStream cis = new ClosedInputStream()) {
             assertEquals(EOF, cis.read(new byte[4096], 0, 1));
             assertEquals(EOF, cis.read(new byte[1], 0, 1));
-            assertEquals(EOF, cis.read(new byte[0], 0, 0));
+            assertEquals(0, cis.read(IOUtils.EMPTY_BYTE_ARRAY, 0, 0));
         }
     }
 

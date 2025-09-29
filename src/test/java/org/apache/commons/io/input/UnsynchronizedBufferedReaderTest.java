@@ -353,35 +353,46 @@ class UnsynchronizedBufferedReaderTest {
      * @throws IOException test failure.
      */
     @Test
-    void testReadArray() throws IOException {
+    void testReadArray1() throws IOException {
         final char[] ca = new char[2];
         try (UnsynchronizedBufferedReader toRet = new UnsynchronizedBufferedReader(new InputStreamReader(new ByteArrayInputStream(new byte[0])))) {
-            /* Null buffer should throw NPE even when len == 0 */
+            /* Validate parameters, before returning 0 */
             assertThrows(NullPointerException.class, () -> toRet.read(null, 1, 0));
+            assertThrows(IndexOutOfBoundsException.class, () -> toRet.read(ca, 1, 5));
+            /* Read zero bytes should return 0 */
+            assertEquals(0, toRet.read(ca, 0, 0));
             toRet.close();
-            assertThrows(IOException.class, () -> toRet.read(null, 1, 0));
-            /* Closed reader should throw IOException reading zero bytes */
-            assertThrows(IOException.class, () -> toRet.read(ca, 0, 0));
             /*
-             * Closed reader should throw IOException in preference to index out of bounds
+             * After close, readers in java.io consistently throw IOException before checking parameters or returning 0.
              */
-            // Read should throw IOException before
-            // ArrayIndexOutOfBoundException
+            assertThrows(IOException.class, () -> toRet.read(null, 1, 0));
             assertThrows(IOException.class, () -> toRet.read(ca, 1, 5));
+            assertThrows(IOException.class, () -> toRet.read(ca, 0, 0));
         }
+    }
+
+    @Test
+    void testReadArray2() throws IOException {
+        final char[] ca = new char[2];
         // Test to ensure that a drained stream returns 0 at EOF
         try (UnsynchronizedBufferedReader toRet2 = new UnsynchronizedBufferedReader(new InputStreamReader(new ByteArrayInputStream(new byte[2])))) {
             assertEquals(2, toRet2.read(ca, 0, 2));
             assertEquals(-1, toRet2.read(ca, 0, 2));
             assertEquals(0, toRet2.read(ca, 0, 0));
         }
+    }
 
+    @Test
+    void testReadArray3() throws IOException {
         // Test for method int UnsynchronizedBufferedReader.read(char [], int, int)
         final char[] buf = new char[testString.length()];
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
         br.read(buf, 50, 500);
         assertTrue(new String(buf, 50, 500).equals(testString.substring(0, 500)));
+    }
 
+    @Test
+    void testReadArray4() throws IOException {
         try (UnsynchronizedBufferedReader bufin = new UnsynchronizedBufferedReader(new Reader() {
             int size = 2;
             int pos;
@@ -424,11 +435,18 @@ class UnsynchronizedBufferedReaderTest {
             final int result = bufin.read(new char[2], 0, 2);
             assertEquals(result, 1);
         }
+    }
+
+    @Test
+    void testReadArray_HARMONY_831() throws IOException {
         // regression for HARMONY-831
         try (Reader reader = new UnsynchronizedBufferedReader(new PipedReader(), 9)) {
             assertThrows(IndexOutOfBoundsException.class, () -> reader.read(new char[] {}, 7, 0));
         }
+    }
 
+    @Test
+    void testReadArray_HARMONY_54() throws IOException {
         // Regression for HARMONY-54
         final char[] ch = {};
         @SuppressWarnings("resource")
@@ -456,13 +474,12 @@ class UnsynchronizedBufferedReaderTest {
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
         final char[] nullCharArray = null;
         final char[] charArray = testString.toCharArray();
-        assertThrows(IndexOutOfBoundsException.class, () -> br.read(nullCharArray, -1, -1));
-        assertThrows(IndexOutOfBoundsException.class, () -> br.read(nullCharArray, -1, 0));
+        assertThrows(NullPointerException.class, () -> br.read(nullCharArray, -1, 0));
         assertThrows(NullPointerException.class, () -> br.read(nullCharArray, 0, -1));
-        assertThrows(NullPointerException.class, () -> br.read(nullCharArray, 0, 0));
-        assertThrows(NullPointerException.class, () -> br.read(nullCharArray, 0, 1));
-        assertThrows(IndexOutOfBoundsException.class, () -> br.read(charArray, -1, -1));
+        assertThrows(NullPointerException.class, () -> br.read(nullCharArray, 1, 1));
         assertThrows(IndexOutOfBoundsException.class, () -> br.read(charArray, -1, 0));
+        assertThrows(IndexOutOfBoundsException.class, () -> br.read(charArray, 0, -1));
+        assertThrows(IndexOutOfBoundsException.class, () -> br.read(charArray, charArray.length, 1));
 
         br.read(charArray, 0, 0);
         br.read(charArray, 0, charArray.length);

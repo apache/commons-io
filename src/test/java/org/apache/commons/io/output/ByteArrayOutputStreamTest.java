@@ -177,7 +177,7 @@ class ByteArrayOutputStreamTest {
     @MethodSource("baosFactories")
     void testInvalidWriteOffsetUnder(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
         try (AbstractByteArrayOutputStream<?> baout = baosFactory.newInstance()) {
-            assertThrows(IndexOutOfBoundsException.class, () -> baout.write(null, -1, 0));
+            assertThrows(IndexOutOfBoundsException.class, () -> baout.write(IOUtils.EMPTY_BYTE_ARRAY, -1, 0));
         }
     }
 

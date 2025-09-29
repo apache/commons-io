@@ -112,6 +112,7 @@ public class NullWriter extends Writer {
      */
     @Override
     public void write(final char[] chr) {
+        write(chr, 0, chr.length);
         //to /dev/null
     }
 
@@ -124,6 +125,7 @@ public class NullWriter extends Writer {
      */
     @Override
     public void write(final char[] chr, final int st, final int end) {
+        IOUtils.checkFromIndexSize(chr, st, end);
         //to /dev/null
     }
 
@@ -144,6 +146,7 @@ public class NullWriter extends Writer {
      */
     @Override
     public void write(final String str) {
+        write(str, 0, str.length());
         //to /dev/null
     }
 
@@ -151,12 +154,13 @@ public class NullWriter extends Writer {
      * Does nothing, like writing to {@code /dev/null}.
      *
      * @param str The string to write.
-     * @param st The start offset.
-     * @param end The number of characters to write.
+     * @param off The start offset.
+     * @param len The number of characters to write.
      */
     @Override
-    public void write(final String str, final int st, final int end) {
-        IOUtils.checkFromIndexSize(str, st, end);
+    public void write(final String str, final int off, final int len) {
+        IOUtils.checkFromIndexSize(str, off, len);
+        //to /dev/null
     }
 
 }

@@ -46,7 +46,7 @@ class ClosedReaderTest {
         try (Reader reader = new ClosedReader()) {
             assertEquals(EOF, reader.read(new char[4096]));
             assertEquals(EOF, reader.read(new char[1]));
-            assertEquals(EOF, reader.read(new char[0]));
+            assertEquals(0, reader.read(new char[0]));
         }
     }
 
@@ -55,7 +55,7 @@ class ClosedReaderTest {
         try (Reader reader = new ClosedReader()) {
             assertEquals(EOF, reader.read(CharBuffer.wrap(new char[4096])));
             assertEquals(EOF, reader.read(CharBuffer.wrap(new char[1])));
-            assertEquals(EOF, reader.read(CharBuffer.wrap(new char[0])));
+            assertEquals(0, reader.read(CharBuffer.wrap(new char[0])));
         }
     }
 
@@ -64,7 +64,7 @@ class ClosedReaderTest {
         try (Reader reader = new ClosedReader()) {
             assertEquals(EOF, reader.read(new char[4096]));
             assertEquals(EOF, reader.read(new char[1]));
-            assertEquals(EOF, reader.read(new char[0]));
+            assertEquals(0, reader.read(new char[0]));
         }
     }
 

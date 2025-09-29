@@ -496,9 +496,11 @@ public class IOUtils {
      *     <li>{@code toIndex <= seq.length()}</li>
      * </ul>
      *
+     * <p>If {@code seq} is null, it is treated as the string "null".</p>
+     *
      * <p>If the range is invalid, this method throws an {@link IndexOutOfBoundsException} with a descriptive message.</p>
      *
-     * @param seq The char sequence to be checked against
+     * @param seq The char sequence to be checked against, may be {@code null}
      * @param fromIndex The starting index into the char sequence (inclusive)
      * @param toIndex The ending index into the char sequence (exclusive)
      * @throws NullPointerException If the char sequence is null
@@ -506,7 +508,7 @@ public class IOUtils {
      * @since 2.21.0
      */
     public static void checkFromToIndex(final CharSequence seq, int fromIndex, final int toIndex) {
-        checkFromToIndex(fromIndex, toIndex, requireNonNull(seq, "char sequence").length());
+        checkFromToIndex(fromIndex, toIndex, seq != null ? seq.length() : 4);
     }
 
     static void checkFromToIndex(final int fromIndex, final int toIndex, final int length) {
