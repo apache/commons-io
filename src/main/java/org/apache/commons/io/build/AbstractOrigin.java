@@ -18,6 +18,7 @@
 package org.apache.commons.io.build;
 
 import java.io.ByteArrayInputStream;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -67,7 +68,24 @@ import org.apache.commons.io.output.WriterOutputStream;
  * expose only the operations that make sense for the underlying source or sink; invoking an unsupported operation
  * results in {@link UnsupportedOperationException} (see, for example, {@link #getFile()} and {@link #getPath()}).
  * </p>
- *
+ * <p>
+ * An instance doesn't own its origin, it holds on to it to allow conversions. There are two use cases related to resource management for a Builder:
+ * </p>
+ * <ul>
+ * <li>
+ * A client allocates a {@linkplain Closeable} (or {@linkplain AutoCloseable}) resource, creates a Builder, and gives the Builder that resource by calling a
+ * setter method. No matter what happens next, the client is responsible for releasing the resource ({@code Closeable.close()}). In this case, the origin
+ * wraps but doesn't own the closeable resource. There is no transfer of ownership.
+ * </li>
+ * <li>
+ * A client creates a Builder and gives it a non-Closeable object, like a File or a Path. The client then calls the Builder's factory method
+ * (like {@linkplain #get()}), and that call returns a Closeable or a resource that requires releasing in some other way. No matter what happens next, the
+ * client is responsible for releasing that resource. In this case, the origin doesn't wrap a closeable resource.
+ * </li>
+ * </ul>
+ * <p>
+ * In both cases, the client causes the allocation and is responsible for releasing the resource. 
+ * </p>
  * <p>
  * The table below summarizes which views and conversions are supported for each origin type.
  * Column headers show the target view; cells indicate whether that view is available from the origin in that row.
