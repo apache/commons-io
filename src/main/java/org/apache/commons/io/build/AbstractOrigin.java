@@ -33,6 +33,7 @@ import java.io.Writer;
 import java.net.URI;
 import java.nio.channels.Channel;
 import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.channels.WritableByteChannel;
@@ -59,10 +60,11 @@ import org.apache.commons.io.output.RandomAccessFileOutputStream;
 import org.apache.commons.io.output.WriterOutputStream;
 
 /**
- * Abstract base class that encapsulates the <em>origin</em> of data used by Commons IO builders.
+ * Abstracts and wraps an <em>origin</em> for builders, where an origin is a {@code byte[]}, {@link Channel}, {@link CharSequence}, {@link File},
+ * {@link InputStream}, {@link IORandomAccessFile}, {@link OutputStream}, {@link Path}, {@link RandomAccessFile}, {@link Reader}, {@link URI},
+ * or {@link Writer}.
  * <p>
- * An origin represents where bytes/characters come from or go to, such as a {@link File}, {@link Path},
- * {@link Reader}, {@link Writer}, {@link InputStream}, {@link OutputStream}, or {@link URI}. Concrete subclasses
+ * An origin represents where bytes/characters come from or go to. Concrete subclasses
  * expose only the operations that make sense for the underlying source or sink; invoking an unsupported operation
  * results in {@link UnsupportedOperationException} (see, for example, {@link #getFile()} and {@link #getPath()}).
  * </p>
@@ -73,7 +75,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  * </p>
  *
  * <table>
- *   <caption>Origin support matrix</caption>
+ *   <caption>Supported Conversions</caption>
  *   <thead>
  *     <tr>
  *       <th>Origin Type</th>
@@ -312,10 +314,10 @@ import org.apache.commons.io.output.WriterOutputStream;
  *   <li><sup>1</sup> = Characters are converted to bytes using the default {@link Charset}.</li>
  *   <li><sup>2</sup> Minimum channel type provided by the origin:
  *     <ul>
- *         <li>RBC = ReadableByteChannel</li>
- *         <li>WBC = WritableByteChannel</li>
- *         <li>SBC = SeekableByteChannel</li>
- *         <li>FC = FileChannel</li>
+ *         <li>RBC = {@linkplain ReadableByteChannel}</li>
+ *         <li>WBC = {@linkplain WritableByteChannel}</li>
+ *         <li>SBC = {@linkplain SeekableByteChannel}</li>
+ *         <li>FC = {@linkplain FileChannel}</li>
  *     </ul>
  *     The exact channel type may be a subtype of the minimum shown.
  *   </li>
@@ -440,8 +442,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         protected Channel getChannel(final OpenOption... options) throws IOException {
             for (final OpenOption option : options) {
                 if (option == StandardOpenOption.WRITE) {
-                    throw new UnsupportedOperationException(
-                            "Only READ is supported for byte[] origins: " + Arrays.toString(options));
+                    throw new UnsupportedOperationException("Only READ is supported for byte[] origins: " + Arrays.toString(options));
                 }
             }
             return ByteArraySeekableByteChannel.wrap(getByteArray());
@@ -524,10 +525,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
 
         @Override
         public Writer getWriter(final Charset charset, final OpenOption... options) throws IOException {
-            return Channels.newWriter(
-                    getChannel(WritableByteChannel.class, options),
-                    Charsets.toCharset(charset).newEncoder(),
-                    -1);
+            return Channels.newWriter(getChannel(WritableByteChannel.class, options), Charsets.toCharset(charset).newEncoder(), -1);
         }
 
         @Override
@@ -563,8 +561,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         protected Channel getChannel(final OpenOption... options) throws IOException {
             for (final OpenOption option : options) {
                 if (option == StandardOpenOption.WRITE) {
-                    throw new UnsupportedOperationException(
-                            "Only READ is supported for CharSequence origins: " + Arrays.toString(options));
+                    throw new UnsupportedOperationException("Only READ is supported for CharSequence origins: " + Arrays.toString(options));
                 }
             }
             return ByteArraySeekableByteChannel.wrap(getByteArray());
@@ -713,15 +710,14 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         @Override
         public long size() throws IOException {
             if (origin instanceof FileInputStream) {
-                final FileInputStream fileInputStream = (FileInputStream) origin;
-                return fileInputStream.getChannel().size();
+                return ((FileInputStream) origin).getChannel().size();
             }
             throw unsupportedOperation("size");
         }
     }
 
     /**
-     * A {@link IORandomAccessFile} origin.
+     * An {@link IORandomAccessFile} origin.
      *
      * @since 2.18.0
      */
@@ -1169,9 +1165,9 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     }
 
     /**
-     * Gets this origin as a Path, if possible.
+     * Gets this origin as a File, if possible.
      *
-     * @return this origin as a Path, if possible.
+     * @return this origin as a File, if possible.
      * @throws UnsupportedOperationException if this method is not implemented in a concrete subclass.
      */
     public File getFile() {

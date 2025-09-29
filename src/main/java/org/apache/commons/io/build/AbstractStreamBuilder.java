@@ -37,7 +37,9 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.file.PathUtils;
 
 /**
- * Abstracts building a typed instance of {@code T}.
+ * Abstracts <em>building</em> a typed instance of type {@code T} where {@code T} is unbounded. This class contains various properties like a buffer size,
+ * buffer size checker, a buffer size default, buffer size maximum, Charset, Charset default, default size checker, and open options. A subclass may use all,
+ * some, or none of these properties in building instances of {@code T}.
  *
  * @param <T> the type of instances to build.
  * @param <B> the type of builder subclass.

@@ -43,7 +43,7 @@ import org.apache.commons.io.build.AbstractOrigin.URIOrigin;
 import org.apache.commons.io.build.AbstractOrigin.WriterOrigin;
 
 /**
- * Abstracts building an instance of {@code T}.
+ * Abstracts <em>building</em> an instance of type {@code T} where {@code T} is unbounded from a wrapped {@linkplain AbstractOrigin origin}.
  *
  * @param <T> the type of instances to build.
  * @param <B> the type of builder subclass.
