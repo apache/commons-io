@@ -84,7 +84,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  * </li>
  * </ul>
  * <p>
- * In both cases, the client causes the allocation and is responsible for releasing the resource. 
+ * In both cases, the client causes the allocation and is responsible for releasing the resource.
  * </p>
  * <p>
  * The table below summarizes which views and conversions are supported for each origin type.

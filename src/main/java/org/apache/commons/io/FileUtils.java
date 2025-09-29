@@ -2409,7 +2409,7 @@ public class FileUtils {
      * @param directory  The directory to search.
      * @param extensions an array of extensions, for example, <code>{"java", "xml"}</code>. If this
      *                   parameter is {@code null}, all files are returned.
-     * @param recursive  if true all subdirectories are searched as well
+     * @param recursive  if true all subdirectories are searched as well.
      * @return a collection of {@link File} with the matching files.
      */
     public static Collection<File> listFiles(final File directory, final String[] extensions, final boolean recursive) {
@@ -2473,7 +2473,7 @@ public class FileUtils {
      * @param srcDir the directory to be moved.
      * @param destDir the destination directory.
      * @throws NullPointerException if any of the given {@link File}s are {@code null}.
-     * @throws IllegalArgumentException if {@code srcDir} exists but is not a directory
+     * @throws IllegalArgumentException if {@code srcDir} exists but is not a directory.
      * @throws FileNotFoundException if the source does not exist.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeed.
      * @since 1.4
@@ -2664,8 +2664,8 @@ public class FileUtils {
      * directory. An exception is thrown if the file exists but cannot be read.
      * </p>
      *
-     * @param file the file to open for input, must not be {@code null}
-     * @return a new {@link FileInputStream} for the specified file
+     * @param file the file to open for input, must not be {@code null}.
+     * @return a new {@link FileInputStream} for the specified file.
      * @throws NullPointerException if file is {@code null}.
      * @throws FileNotFoundException if the file does not exist, is a directory rather than a regular file, or for some
      *         other reason cannot be opened for reading.
@@ -2692,7 +2692,7 @@ public class FileUtils {
      * An exception is thrown if the parent directory cannot be created.
      * </p>
      *
-     * @param file the file to open for output, must not be {@code null}
+     * @param file the file to open for output, must not be {@code null}.
      * @return a new {@link FileOutputStream} for the specified file
      * @throws NullPointerException if the file object is {@code null}.
      * @throws IllegalArgumentException if the file object is a directory
@@ -2719,13 +2719,13 @@ public class FileUtils {
      * An exception is thrown if the parent directory cannot be created.
      * </p>
      *
-     * @param file   the file to open for output, must not be {@code null}
+     * @param file   the file to open for output, must not be {@code null}.
      * @param append if {@code true}, then bytes will be added to the
-     *               end of the file rather than overwriting
-     * @return a new {@link FileOutputStream} for the specified file
+     *               end of the file rather than overwriting.
+     * @return a new {@link FileOutputStream} for the specified file.
      * @throws NullPointerException if the file object is {@code null}.
-     * @throws IllegalArgumentException if the file object is a directory
-     * @throws IOException if the directories could not be created, or the file is not writable
+     * @throws IllegalArgumentException if the file object is a directory.
+     * @throws IOException if the directories could not be created, or the file is not writable.
      * @since 2.1
      */
     public static FileOutputStream openOutputStream(final File file, final boolean append) throws IOException {
@@ -2742,8 +2742,8 @@ public class FileUtils {
      * Reads the contents of a file into a byte array.
      * The file is always closed.
      *
-     * @param file the file to read, must not be {@code null}
-     * @return the file contents, never {@code null}
+     * @param file the file to read, must not be {@code null}.
+     * @return the file contents, never {@code null}.
      * @throws NullPointerException if file is {@code null}.
      * @throws IOException if an I/O error occurs, including when the file does not exist, is a directory rather than a
      *         regular file, or for some other reason why the file cannot be opened for reading.
@@ -2758,8 +2758,8 @@ public class FileUtils {
      * Reads the contents of a file into a String using the virtual machine's {@link Charset#defaultCharset() default charset}. The
      * file is always closed.
      *
-     * @param file the file to read, must not be {@code null}
-     * @return the file contents, never {@code null}
+     * @param file the file to read, must not be {@code null}.
+     * @return the file contents, never {@code null}.
      * @throws NullPointerException if file is {@code null}.
      * @throws IOException          if an I/O error occurs, including when the file does not exist, is a directory rather than a regular file, or for some other
      *                              reason why the file cannot be opened for reading.
@@ -2775,9 +2775,9 @@ public class FileUtils {
      * Reads the contents of a file into a String.
      * The file is always closed.
      *
-     * @param file     the file to read, must not be {@code null}
-     * @param charsetName the name of the requested charset, {@code null} means platform default
-     * @return the file contents, never {@code null}
+     * @param file     the file to read, must not be {@code null}.
+     * @param charsetName the name of the requested charset, {@code null} means platform default.
+     * @return the file contents, never {@code null}.
      * @throws NullPointerException if file is {@code null}.
      * @throws IOException if an I/O error occurs, including when the file does not exist, is a directory rather than a
      *         regular file, or for some other reason why the file cannot be opened for reading.
@@ -2790,9 +2790,9 @@ public class FileUtils {
     /**
      * Reads the contents of a file into a String. The file is always closed.
      *
-     * @param file     the file to read, must not be {@code null}
-     * @param charsetName the name of the requested charset, {@code null} means platform default
-     * @return the file contents, never {@code null}
+     * @param file     the file to read, must not be {@code null}.
+     * @param charsetName the name of the requested charset, {@code null} means platform default.
+     * @return the file contents, never {@code null}.
      * @throws NullPointerException if file is {@code null}.
      * @throws IOException if an I/O error occurs, including when the file does not exist, is a directory rather than a
      *         regular file, or for some other reason why the file cannot be opened for reading.
@@ -2807,8 +2807,8 @@ public class FileUtils {
      * Reads the contents of a file line by line to a List of Strings using the virtual machine's {@link Charset#defaultCharset() default charset}.
      * The file is always closed.
      *
-     * @param file the file to read, must not be {@code null}
-     * @return the list of Strings representing each line in the file, never {@code null}
+     * @param file the file to read, must not be {@code null}.
+     * @return the list of Strings representing each line in the file, never {@code null}.
      * @throws NullPointerException if file is {@code null}.
      * @throws IOException          if an I/O error occurs, including when the file does not exist, is a directory rather than a regular file, or for some other
      *                              reason why the file cannot be opened for reading.
@@ -2824,9 +2824,9 @@ public class FileUtils {
      * Reads the contents of a file line by line to a List of Strings.
      * The file is always closed.
      *
-     * @param file     the file to read, must not be {@code null}
-     * @param charset the charset to use, {@code null} means platform default
-     * @return the list of Strings representing each line in the file, never {@code null}
+     * @param file     the file to read, must not be {@code null}.
+     * @param charset the charset to use, {@code null} means platform default.
+     * @return the list of Strings representing each line in the file, never {@code null}.
      * @throws NullPointerException if file is {@code null}.
      * @throws IOException if an I/O error occurs, including when the file does not exist, is a directory rather than a
      *         regular file, or for some other reason why the file cannot be opened for reading.
@@ -2839,9 +2839,9 @@ public class FileUtils {
     /**
      * Reads the contents of a file line by line to a List of Strings. The file is always closed.
      *
-     * @param file     the file to read, must not be {@code null}
-     * @param charsetName the name of the requested charset, {@code null} means platform default
-     * @return the list of Strings representing each line in the file, never {@code null}
+     * @param file     the file to read, must not be {@code null}.
+     * @param charsetName the name of the requested charset, {@code null} means platform default.
+     * @return the list of Strings representing each line in the file, never {@code null}.
      * @throws NullPointerException if file is {@code null}.
      * @throws IOException if an I/O error occurs, including when the file does not exist, is a directory rather than a
      *         regular file, or for some other reason why the file cannot be opened for reading.
@@ -2880,7 +2880,7 @@ public class FileUtils {
      * @param directory The {@link File} to check.
      * @param name The parameter name to use in the exception message in case of null input or if the file is not a directory.
      * @throws NullPointerException if the given {@link File} is {@code null}.
-     * @throws FileNotFoundException if the given {@link File} does not exist
+     * @throws FileNotFoundException if the given {@link File} does not exist.
      * @throws IllegalArgumentException if the given {@link File} exists but is not a directory.
      */
     private static void requireDirectoryExists(final File directory, final String name) throws FileNotFoundException {
@@ -2995,7 +2995,7 @@ public class FileUtils {
      * @param directory directory to inspect, must not be {@code null}.
      * @return size of directory in bytes, 0 if directory is security restricted, a negative number when the real total
      * is greater than {@link Long#MAX_VALUE}.
-     * @throws IllegalArgumentException if the given {@link File} exists but is not a directory
+     * @throws IllegalArgumentException if the given {@link File} exists but is not a directory.
      * @throws NullPointerException if the directory is {@code null}.
      * @throws UncheckedIOException if an IO error occurs.
      */
@@ -3013,7 +3013,7 @@ public class FileUtils {
      *
      * @param directory directory to inspect, must not be {@code null}.
      * @return size of directory in bytes, 0 if directory is security restricted.
-     * @throws IllegalArgumentException if the given {@link File} exists but is not a directory
+     * @throws IllegalArgumentException if the given {@link File} exists but is not a directory.
      * @throws NullPointerException if the directory is {@code null}.
      * @throws UncheckedIOException if an IO error occurs.
      * @since 2.4
@@ -3036,7 +3036,7 @@ public class FileUtils {
      * </p>
      *
      * @param directory  The directory to search.
-     * @param recursive  if true all subdirectories are searched as well
+     * @param recursive  if true all subdirectories are searched as well.
      * @param extensions an array of extensions, for example, <code>{"java", "xml"}</code>. If this parameter is {@code null}, all files are returned.
      * @return a Stream of {@link File} for matching files.
      * @throws IOException if an I/O error is thrown when accessing the starting file.
@@ -3054,16 +3054,12 @@ public class FileUtils {
     /**
      * Converts from a {@link URL} to a {@link File}.
      * <p>
-     * Syntax such as {@code file:///my%20docs/file.txt} will be
-     * correctly decoded to {@code /my docs/file.txt}.
-     * UTF-8 is used to decode percent-encoded octets to characters.
-     * Additionally, malformed percent-encoded octets are handled leniently by
-     * passing them through literally.
+     * Syntax such as {@code file:///my%20docs/file.txt} will be correctly decoded to {@code /my docs/file.txt}. UTF-8 is used to decode percent-encoded octets
+     * to characters. Additionally, malformed percent-encoded octets are handled leniently by passing them through literally.
      * </p>
      *
-     * @param url the file URL to convert, {@code null} returns {@code null}
-     * @return the equivalent {@link File} object, or {@code null}
-     * if the URL's protocol is not {@code file}
+     * @param url the file URL to convert, {@code null} returns {@code null}.
+     * @return the equivalent {@link File} object, or {@code null} if the URL's protocol is not {@code file}.
      */
     public static File toFile(final URL url) {
         if (url == null || !isFileProtocol(url)) {
@@ -3076,22 +3072,17 @@ public class FileUtils {
     /**
      * Converts each of an array of {@link URL} to a {@link File}.
      * <p>
-     * Returns an array of the same size as the input.
-     * If the input is {@code null}, an empty array is returned.
-     * If the input contains {@code null}, the output array contains {@code null} at the same
-     * index.
+     * Returns an array of the same size as the input. If the input is {@code null}, an empty array is returned. If the input contains {@code null}, the output
+     * array contains {@code null} at the same index.
      * </p>
      * <p>
-     * This method will decode the URL.
-     * Syntax such as {@code file:///my%20docs/file.txt} will be
-     * correctly decoded to {@code /my docs/file.txt}.
+     * This method will decode the URL. Syntax such as {@code file:///my%20docs/file.txt} will be correctly decoded to {@code /my docs/file.txt}.
      * </p>
      *
-     * @param urls the file URLs to convert, {@code null} returns empty array
-     * @return a non-{@code null} array of Files matching the input, with a {@code null} item
-     * if there was a {@code null} at that index in the input array
-     * @throws IllegalArgumentException if any file is not a URL file
-     * @throws IllegalArgumentException if any file is incorrectly encoded
+     * @param urls the file URLs to convert, {@code null} returns empty array.
+     * @return a non-{@code null} array of Files matching the input, with a {@code null} item if there was a {@code null} at that index in the input array.
+     * @throws IllegalArgumentException if any file is not a URL file.
+     * @throws IllegalArgumentException if any file is incorrectly encoded.
      * @since 1.1
      */
     public static File[] toFiles(final URL... urls) {
@@ -3127,8 +3118,8 @@ public class FileUtils {
     /**
      * Converts whether or not to recurse into a recursion max depth.
      *
-     * @param recursive whether or not to recurse
-     * @return the recursion depth
+     * @param recursive whether or not to recurse.
+     * @return the recursion depth.
      */
     private static int toMaxDepth(final boolean recursive) {
         return recursive ? Integer.MAX_VALUE : 1;
@@ -3137,9 +3128,9 @@ public class FileUtils {
     /**
      * Converts an array of file extensions to suffixes.
      *
-     * @param extensions an array of extensions. Format: {"java", "xml"}
-     * @return an array of suffixes. Format: {".java", ".xml"}
-     * @throws NullPointerException if the parameter is null
+     * @param extensions an array of extensions, for example: {@code ["java", "xml"]}.
+     * @return an array of suffixes, for example: {@code [".java", ".xml"]}.
+     * @throws NullPointerException if the parameter is null.
      */
     private static String[] toSuffixes(final String... extensions) {
         return Stream.of(Objects.requireNonNull(extensions, "extensions")).map(s -> s.charAt(0) == '.' ? s : "." + s).toArray(String[]::new);
@@ -3168,10 +3159,10 @@ public class FileUtils {
      * Returns an array of the same size as the input.
      * </p>
      *
-     * @param files the files to convert, must not be {@code null}
-     * @return an array of URLs matching the input
-     * @throws IOException          if a file cannot be converted
-     * @throws NullPointerException if any argument is null
+     * @param files the files to convert, must not be {@code null}.
+     * @return an array of URLs matching the input.
+     * @throws IOException          if a file cannot be converted.
+     * @throws NullPointerException if any argument is null.
      */
     public static URL[] toURLs(final File... files) throws IOException {
         Objects.requireNonNull(files, "files");
@@ -3210,10 +3201,10 @@ public class FileUtils {
      * true up to the maximum time specified in seconds.
      * </p>
      *
-     * @param file    the file to check, must not be {@code null}
-     * @param seconds the maximum time in seconds to wait
-     * @return true if file exists
-     * @throws NullPointerException if the file is {@code null}
+     * @param file    the file to check, must not be {@code null}.
+     * @param seconds the maximum time in seconds to wait.
+     * @return true if file exists.
+     * @throws NullPointerException if the file is {@code null}.
      */
     public static boolean waitFor(final File file, final int seconds) {
         Objects.requireNonNull(file, PROTOCOL_FILE);
@@ -3223,11 +3214,11 @@ public class FileUtils {
     /**
      * Writes a CharSequence to a file creating the file if it does not exist using the virtual machine's {@link Charset#defaultCharset() default charset}.
      *
-     * @param file the file to write
-     * @param data the content to write to the file
-     * @throws IOException in case of an I/O error
+     * @param file the file to write.
+     * @param data the content to write to the file.
+     * @throws IOException in case of an I/O error.
      * @since 2.0
-     * @deprecated Use {@link #write(File, CharSequence, Charset)} instead (and specify the appropriate encoding)
+     * @deprecated Use {@link #write(File, CharSequence, Charset)} instead (and specify the appropriate encoding).
      */
     @Deprecated
     public static void write(final File file, final CharSequence data) throws IOException {
@@ -3237,12 +3228,12 @@ public class FileUtils {
     /**
      * Writes a CharSequence to a file creating the file if it does not exist using the virtual machine's {@link Charset#defaultCharset() default charset}.
      *
-     * @param file   the file to write
-     * @param data   the content to write to the file
-     * @param append if {@code true}, then the data will be added to the end of the file rather than overwriting
-     * @throws IOException in case of an I/O error
+     * @param file   the file to write.
+     * @param data   the content to write to the file.
+     * @param append if {@code true}, then the data will be added to the end of the file rather than overwriting.
+     * @throws IOException in case of an I/O error.
      * @since 2.1
-     * @deprecated Use {@link #write(File, CharSequence, Charset, boolean)} instead (and specify the appropriate encoding)
+     * @deprecated Use {@link #write(File, CharSequence, Charset, boolean)} instead (and specify the appropriate encoding).
      */
     @Deprecated
     public static void write(final File file, final CharSequence data, final boolean append) throws IOException {
@@ -3252,10 +3243,10 @@ public class FileUtils {
     /**
      * Writes a CharSequence to a file creating the file if it does not exist.
      *
-     * @param file     the file to write
-     * @param data     the content to write to the file
-     * @param charset the name of the requested charset, {@code null} means platform default
-     * @throws IOException in case of an I/O error
+     * @param file     the file to write.
+     * @param data     the content to write to the file.
+     * @param charset the name of the requested charset, {@code null} means platform default.
+     * @throws IOException in case of an I/O error.
      * @since 2.3
      */
     public static void write(final File file, final CharSequence data, final Charset charset) throws IOException {
@@ -3265,12 +3256,12 @@ public class FileUtils {
     /**
      * Writes a CharSequence to a file creating the file if it does not exist.
      *
-     * @param file     the file to write
-     * @param data     the content to write to the file
-     * @param charset the charset to use, {@code null} means platform default
-     * @param append   if {@code true}, then the data will be added to the
-     *                 end of the file rather than overwriting
-     * @throws IOException in case of an I/O error
+     * @param file     the file to write.
+     * @param data     the content to write to the file.
+     * @param charset the charset to use, {@code null} means platform default.
+     * @param append   if {@code true}, then the data will be added to the.
+     *                 end of the file rather than overwriting.
+     * @throws IOException in case of an I/O error.
      * @since 2.3
      */
     public static void write(final File file, final CharSequence data, final Charset charset, final boolean append) throws IOException {
