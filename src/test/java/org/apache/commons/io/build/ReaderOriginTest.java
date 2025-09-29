@@ -125,4 +125,10 @@ class ReaderOriginTest extends AbstractOriginTest<Reader, ReaderOrigin> {
         // Cannot convert a Reader to a Writer.
         assertThrows(UnsupportedOperationException.class, super::testGetWriter);
     }
+
+    @Override
+    void testSize() throws IOException {
+        // Size is unknown.
+        assertThrows(UnsupportedOperationException.class, super::testSize);
+    }
 }

@@ -18,7 +18,6 @@
 package org.apache.commons.io.build;
 
 import java.io.ByteArrayInputStream;
-import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -327,7 +326,7 @@ import org.apache.commons.io.output.WriterOutputStream;
  * @param <B> the concrete builder subclass type.
  * @since 2.12.0
  */
-public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends AbstractSupplier<T, B> implements Closeable {
+public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends AbstractSupplier<T, B> {
 
     /**
      * A {@link RandomAccessFile} origin.
@@ -1046,18 +1045,6 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @since 2.21.0
-     */
-    @Override
-    public void close() throws IOException {
-        if (origin instanceof Closeable) {
-            ((Closeable) origin).close();
-        }
-    }
-
-    /**
      * Gets the origin.
      *
      * @return the origin.
@@ -1100,12 +1087,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     }
 
     /**
-     * Gets this origin as a {@link Channel} of the given type, if supported.
-     *
-     * <p>Calling this method transfers ownership of the underlying resource to the caller.
-     * The caller is responsible for closing the returned stream once it is no longer needed.
-     * If the origin itself implements {@link Closeable}, closing the returned stream will
-     * also close the underlying origin resource.</p>
+     * Gets this origin as a Channel of the given type, if possible.
      *
      * @param channelType The type of channel to return.
      * @param options Options specifying how a file-based origin is opened, ignored otherwise.
@@ -1121,26 +1103,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         if (channelType.isInstance(channel)) {
             return channelType.cast(channel);
         }
-        final UnsupportedOperationException e = unsupportedChannelType(channelType);
-        // Ensure the underlying resource is closed to prevent leaks if getChannel() created a new resource.
-        try {
-            channel.close();
-        } catch (IOException ex) {
-            e.addSuppressed(ex);
-        }
-        throw e;
+        throw unsupportedChannelType(channelType);
     }
 
     /**
-     * Gets this origin as a {@link Channel} of the given type, if supported.
-     *
-     * <p>Subclasses overriding this method must adhere to the following requirements:</p>
-     * <ul>
-     *   <li>If the origin is file-based, the {@code options} parameter determines how the file is opened.
-     *       Otherwise, the parameter should be ignored.</li>
-     *   <li>If the origin itself implements {@link Closeable}, closing the returned channel must also
-     *       close the underlying origin resource.</li>
-     * </ul>
+     * Gets this origin as a Channel, if possible.
      *
      * @param options Options specifying how a file-based origin is opened, ignored otherwise.
      * @return A new Channel on the origin.
@@ -1175,12 +1142,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     }
 
     /**
-     * Gets this origin as an {@link InputStream}, if supported.
-     *
-     * <p>Calling this method transfers ownership of the underlying resource to the caller.
-     * The caller is responsible for closing the returned stream once it is no longer needed.
-     * If the origin itself implements {@link Closeable}, closing the returned stream will
-     * also close the underlying origin resource.</p>
+     * Gets this origin as an InputStream, if possible.
      *
      * @param options options specifying how the file is opened
      * @return this origin as an InputStream, if possible.
@@ -1192,12 +1154,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     }
 
     /**
-     * Gets this origin as an {@link OutputStream}, if supported.
-     *
-     * <p>Calling this method transfers ownership of the underlying resource to the caller.
-     * The caller is responsible for closing the returned stream once it is no longer needed.
-     * If the origin itself implements {@link Closeable}, closing the returned stream will
-     * also close the underlying origin resource.</p>
+     * Gets this origin as an OutputStream, if possible.
      *
      * @param options options specifying how the file is opened
      * @return this origin as an OutputStream, if possible.
@@ -1219,12 +1176,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     }
 
     /**
-     * Gets this origin as an {@link RandomAccessFile}, if supported.
-     *
-     * <p>Calling this method transfers ownership of the underlying resource to the caller.
-     * The caller is responsible for closing the returned stream once it is no longer needed.
-     * If the origin itself implements {@link Closeable}, closing the returned stream will
-     * also close the underlying origin resource.</p>
+     * Gets this origin as a RandomAccessFile, if possible.
      *
      * @param openOption options like {@link StandardOpenOption}.
      * @return this origin as a RandomAccessFile, if possible.
@@ -1237,12 +1189,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     }
 
     /**
-     * Gets this origin as a {@link Reader}, if supported.
-     *
-     * <p>Calling this method transfers ownership of the underlying resource to the caller.
-     * The caller is responsible for closing the returned stream once it is no longer needed.
-     * If the origin itself implements {@link Closeable}, closing the returned stream will
-     * also close the underlying origin resource.</p>
+     * Gets a new Reader on the origin, buffered by default.
      *
      * @param charset the charset to use for decoding, null maps to the default Charset.
      * @return a new Reader on the origin.
@@ -1257,12 +1204,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
     }
 
     /**
-     * Gets this origin as a {@link Writer}, if supported.
-     *
-     * <p>Calling this method transfers ownership of the underlying resource to the caller.
-     * The caller is responsible for closing the returned stream once it is no longer needed.
-     * If the origin itself implements {@link Closeable}, closing the returned stream will
-     * also close the underlying origin resource.</p>
+     * Gets a new Writer on the origin, buffered by default.
      *
      * @param charset the charset to use for encoding
      * @param options options specifying how the file is opened

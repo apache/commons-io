@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -92,6 +93,13 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
         assertEquals(RO_LENGTH, written);
     }
 
+    private void close(AbstractOrigin<T, B> origin) throws IOException {
+        final T target = origin.get();
+        if (target instanceof Closeable) {
+            ((Closeable) target).close();
+        }
+    }
+
     byte[] getFixtureByteArray() throws IOException {
         return IOUtils.resourceToByteArray(FILE_RES_RO);
     }
@@ -111,54 +119,55 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
 
     @Test
     void testGetByteArray() throws IOException {
-        try (AbstractOrigin<T, B> originRo = newOriginRo()) {
-            assertArrayEquals(getFixtureByteArray(), originRo.getByteArray());
-            assertOpen(originRo);
-        }
+        final AbstractOrigin<T, B> originRo = newOriginRo();
+        assertArrayEquals(getFixtureByteArray(), originRo.getByteArray());
+        assertOpen(originRo);
+        close(originRo);
     }
 
     @Test
     void testGetByteArrayAt_0_0() throws IOException {
-        try (AbstractOrigin<T, B> originRo = newOriginRo()) {
-            assertArrayEquals(new byte[] {}, originRo.getByteArray(0, 0));
-            assertOpen(originRo);
-        }
+        final AbstractOrigin<T, B> originRo = newOriginRo();
+        assertArrayEquals(new byte[]{}, originRo.getByteArray(0, 0));
+        assertOpen(originRo);
+        close(originRo);
     }
 
     @Test
     void testGetByteArrayAt_0_1() throws IOException {
-        try (AbstractOrigin<T, B> originRo = newOriginRo()) {
-            assertArrayEquals(new byte[] { '1' }, originRo.getByteArray(0, 1));
-            assertOpen(originRo);
-        }
+        final AbstractOrigin<T, B> originRo = newOriginRo();
+        assertArrayEquals(new byte[] { '1' }, originRo.getByteArray(0, 1));
+        assertOpen(originRo);
+        close(originRo);
     }
 
     @Test
     void testGetByteArrayAt_1_1() throws IOException {
-        try (AbstractOrigin<T, B> originRo = newOriginRo()) {
-            assertArrayEquals(new byte[] { '2' }, originRo.getByteArray(1, 1));
-            assertOpen(originRo);
-        }
+        final AbstractOrigin<T, B> originRo = newOriginRo();
+        assertArrayEquals(new byte[] { '2' }, originRo.getByteArray(1, 1));
+        assertOpen(originRo);
+        close(originRo);
     }
 
     @Test
     void testGetCharSequence() throws IOException {
-        try (AbstractOrigin<T, B> originRo = newOriginRo()) {
-            final CharSequence charSequence = originRo.getCharSequence(StandardCharsets.UTF_8);
-            assertNotNull(charSequence);
-            assertEquals(getFixtureString(), charSequence.toString());
-            assertOpen(originRo);
-        }
+        final AbstractOrigin<T, B> originRo = newOriginRo();
+        final CharSequence charSequence = originRo.getCharSequence(StandardCharsets.UTF_8);
+        assertNotNull(charSequence);
+        assertEquals(getFixtureString(), charSequence.toString());
+        assertOpen(originRo);
+        close(originRo);
     }
 
     @Test
     void testGetFile() throws IOException {
-        try (AbstractOrigin<T, B> originRo = newOriginRo();
-             AbstractOrigin<T, B> originRw = newOriginRw()) {
-            testGetFile(originRo.getFile(), RO_LENGTH);
-            FileUtils.touch(originRw.getFile());
-            testGetFile(originRw.getFile(), 0);
-        }
+        final AbstractOrigin<T, B> originRo = newOriginRo();
+        testGetFile(originRo.getFile(), RO_LENGTH);
+        close(originRo);
+        final AbstractOrigin<T, B> originRw = newOriginRw();
+        FileUtils.touch(originRw.getFile());
+        testGetFile(originRw.getFile(), 0);
+        close(originRw);
     }
 
     private void testGetFile(final File file, final long expectedLen) throws IOException {
@@ -185,12 +194,13 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
 
     @Test
     void testGetPath() throws IOException {
-        try (AbstractOrigin<T, B> originRo = newOriginRo();
-             AbstractOrigin<T, B> originRw = newOriginRw()) {
-            testGetPath(originRo.getPath(), RO_LENGTH);
-            FileUtils.touch(originRw.getPath().toFile());
-            testGetPath(originRw.getPath(), 0);
-        }
+        final AbstractOrigin<T, B> originRo = newOriginRo();
+        testGetPath(originRo.getPath(), RO_LENGTH);
+        close(originRo);
+        final AbstractOrigin<T, B> originRw = newOriginRw();
+        FileUtils.touch(originRw.getPath().toFile());
+        testGetPath(originRw.getPath(), 0);
+        close(originRw);
     }
 
     private void testGetPath(final Path path, final long expectedLen) throws IOException {
@@ -351,8 +361,10 @@ public abstract class AbstractOriginTest<T, B extends AbstractOrigin<T, B>> {
 
     @Test
     void testSize() throws IOException {
-        try (AbstractOrigin<T, B> originRo = newOriginRo()) {
-            assertEquals(RO_LENGTH, originRo.getByteArray().length);
-        }
+        final AbstractOrigin<T, B> originRo = newOriginRo();
+        assertEquals(RO_LENGTH, originRo.size());
+        assertEquals(RO_LENGTH, originRo.getByteArray().length);
+        assertOpen(originRo);
+        close(originRo);
     }
 }
