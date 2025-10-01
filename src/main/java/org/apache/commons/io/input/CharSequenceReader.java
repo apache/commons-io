@@ -20,7 +20,8 @@ import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.Reader;
 import java.io.Serializable;
-import java.util.Objects;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * {@link Reader} implementation that can read from String, StringBuffer,
@@ -204,18 +205,18 @@ public class CharSequenceReader extends Reader implements Serializable {
      * @param array The array to store the characters in
      * @param offset The starting position in the array to store
      * @param length The maximum number of characters to read
-     * @return The number of characters read or -1 if there are
-     * no more
+     * @return The number of characters read or -1 if there are no more
+     * @throws NullPointerException if the array is {@code null}.
+     * @throws IndexOutOfBoundsException if {@code offset} or {@code length} are negative, or if {@code offset + length} is greater than {@code array.length}.
      */
     @Override
     public int read(final char[] array, final int offset, final int length) {
+        IOUtils.checkFromIndexSize(array, offset, length);
+        if (length == 0) {
+            return 0;
+        }
         if (idx >= end()) {
             return EOF;
-        }
-        Objects.requireNonNull(array, "array");
-        if (length < 0 || offset < 0 || offset + length > array.length) {
-            throw new IndexOutOfBoundsException("Array Size=" + array.length +
-                    ", offset=" + offset + ", length=" + length);
         }
 
         if (charSequence instanceof String) {

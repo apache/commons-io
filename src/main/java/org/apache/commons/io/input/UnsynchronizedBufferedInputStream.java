@@ -306,18 +306,15 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
      */
     @Override
     public int read(final byte[] dest, int offset, final int length) throws IOException {
+        IOUtils.checkFromIndexSize(dest, offset, length);
+        if (length == 0) {
+            return 0;
+        }
         // Use local ref since buf may be invalidated by an unsynchronized
         // close()
         byte[] localBuf = buffer;
         if (localBuf == null) {
             throw new IOException("Stream is closed");
-        }
-        // avoid int overflow
-        if (offset > dest.length - length || offset < 0 || length < 0) {
-            throw new IndexOutOfBoundsException();
-        }
-        if (length == 0) {
-            return 0;
         }
         final InputStream localIn = inputStream;
         if (localIn == null) {

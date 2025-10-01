@@ -27,6 +27,7 @@ import java.nio.channels.FileChannel.MapMode;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
@@ -216,6 +217,10 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
 
     @Override
     public int read(final byte[] b, final int off, final int len) throws IOException {
+        IOUtils.checkFromIndexSize(b, off, len);
+        if (len == 0) {
+            return 0;
+        }
         checkOpen();
         if (!buffer.hasRemaining()) {
             nextBuffer();

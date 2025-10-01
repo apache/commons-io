@@ -30,6 +30,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
@@ -341,9 +342,7 @@ public class ReadAheadInputStream extends FilterInputStream {
 
     @Override
     public int read(final byte[] b, final int offset, int len) throws IOException {
-        if (offset < 0 || len < 0 || len > b.length - offset) {
-            throw new IndexOutOfBoundsException();
-        }
+        IOUtils.checkFromIndexSize(b, offset, len);
         if (len == 0) {
             return 0;
         }

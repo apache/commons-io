@@ -50,6 +50,7 @@ import java.io.Reader;
 import java.io.SequenceInputStream;
 import java.io.StringReader;
 import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URI;
@@ -65,6 +66,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -85,7 +87,9 @@ import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.commons.io.output.UnsynchronizedByteArrayOutputStream;
 import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.io.test.ThrowOnCloseReader;
+import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -346,6 +350,104 @@ class IOUtilsTest {
     @Test
     void testByteArrayWithNegativeSize() {
         assertThrows(NegativeArraySizeException.class, () -> IOUtils.byteArray(-1));
+    }
+
+    static Stream<Arguments> testCheckFromIndexSizeValidCases() {
+        return Stream.of(
+                // Valid cases
+                Arguments.of(0, 0, 42),
+                Arguments.of(0, 1, 42),
+                Arguments.of(0, 42, 42),
+                Arguments.of(41, 1, 42),
+                Arguments.of(42, 0, 42)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void testCheckFromIndexSizeValidCases(int off, int len, int arrayLength) {
+        assertDoesNotThrow(() -> IOUtils.checkFromIndexSize(off, len, arrayLength));
+    }
+
+    static Stream<Arguments> testCheckFromIndexSizeInvalidCases() {
+        return Stream.of(
+                Arguments.of(-1, 0, 42),
+                Arguments.of(0, -1, 42),
+                Arguments.of(0, 0, -1),
+                // off + len > arrayLength
+                Arguments.of(1, 42, 42),
+                Arguments.of(Integer.MAX_VALUE, 1, Integer.MAX_VALUE)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void testCheckFromIndexSizeInvalidCases(int off, int len, int arrayLength) {
+        final IndexOutOfBoundsException ex = assertThrows(IndexOutOfBoundsException.class, () -> IOUtils.checkFromIndexSize(off, len, arrayLength));
+        assertTrue(ex.getMessage().contains(String.valueOf(off)));
+        assertTrue(ex.getMessage().contains(String.valueOf(len)));
+        assertTrue(ex.getMessage().contains(String.valueOf(arrayLength)));
+        // Optional requirement: compare the exception message for Java 8 and Java 9+
+        if (SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_9)) {
+            final IndexOutOfBoundsException jreEx = assertThrows(IndexOutOfBoundsException.class, () -> {
+                try {
+                    Objects.class.getDeclaredMethod("checkFromIndexSize", int.class, int.class, int.class).invoke(null, off, len, arrayLength);
+                } catch (InvocationTargetException ite) {
+                    throw ite.getTargetException();
+                }
+            });
+            assertEquals(jreEx.getMessage(), ex.getMessage());
+        }
+    }
+
+    static Stream<Arguments> testCheckFromToIndexValidCases() {
+        return Stream.of(
+                // Valid cases
+                Arguments.of(0, 0, 42),
+                Arguments.of(0, 1, 42),
+                Arguments.of(0, 42, 42),
+                Arguments.of(41, 42, 42),
+                Arguments.of(42, 42, 42)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void testCheckFromToIndexValidCases(int from, int to, int arrayLength) {
+        assertDoesNotThrow(() -> IOUtils.checkFromToIndex(from, to, arrayLength));
+    }
+
+    static Stream<Arguments> testCheckFromToIndexInvalidCases() {
+        return Stream.of(
+                Arguments.of(-1, 0, 42),
+                Arguments.of(0, -1, 42),
+                Arguments.of(0, 0, -1),
+                // from > to
+                Arguments.of(1, 0, 42),
+                // to > arrayLength
+                Arguments.of(0, 43, 42),
+                Arguments.of(1, 43, 42)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void testCheckFromToIndexInvalidCases(int from, int to, int arrayLength) {
+        final IndexOutOfBoundsException ex = assertThrows(IndexOutOfBoundsException.class, () -> IOUtils.checkFromToIndex(from, to, arrayLength));
+        assertTrue(ex.getMessage().contains(String.valueOf(from)));
+        assertTrue(ex.getMessage().contains(String.valueOf(to)));
+        assertTrue(ex.getMessage().contains(String.valueOf(arrayLength)));
+        // Optional requirement: compare the exception message for Java 8 and Java 9+
+        if (SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_9)) {
+            final IndexOutOfBoundsException jreEx = assertThrows(IndexOutOfBoundsException.class, () -> {
+                try {
+                    Objects.class.getDeclaredMethod("checkFromToIndex", int.class, int.class, int.class).invoke(null, from, to, arrayLength);
+                } catch (InvocationTargetException ite) {
+                    throw ite.getTargetException();
+                }
+            });
+            assertEquals(jreEx.getMessage(), ex.getMessage());
+        }
     }
 
     @Test

@@ -125,12 +125,9 @@ public class CircularBufferInputStream extends FilterInputStream {
 
     @Override
     public int read(final byte[] targetBuffer, final int offset, final int length) throws IOException {
-        Objects.requireNonNull(targetBuffer, "targetBuffer");
-        if (offset < 0) {
-            throw new IllegalArgumentException("Offset must not be negative");
-        }
-        if (length < 0) {
-            throw new IllegalArgumentException("Length must not be negative");
+        IOUtils.checkFromIndexSize(targetBuffer, offset, length);
+        if (length == 0) {
+            return 0;
         }
         if (!haveBytes(length)) {
             return EOF;

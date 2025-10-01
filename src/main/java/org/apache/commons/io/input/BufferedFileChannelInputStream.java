@@ -254,8 +254,9 @@ public final class BufferedFileChannelInputStream extends InputStream {
 
     @Override
     public synchronized int read(final byte[] b, final int offset, int len) throws IOException {
-        if (offset < 0 || len < 0 || offset + len < 0 || offset + len > b.length) {
-            throw new IndexOutOfBoundsException();
+        IOUtils.checkFromIndexSize(b, offset, len);
+        if (len == 0) {
+            return 0;
         }
         if (!refill()) {
             return EOF;

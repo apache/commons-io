@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io.output;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
@@ -34,11 +36,18 @@ class NullOutputStreamTest {
         nos.close();
         nos.write("allowed".getBytes());
         nos.write(255);
+        // Test arguments validation
+        final byte[] b = new byte[1];
+        assertThrows(IndexOutOfBoundsException.class, () -> nos.write(b, -1, 0));
+        assertThrows(IndexOutOfBoundsException.class, () -> nos.write(b, 0, -1));
+        assertThrows(IndexOutOfBoundsException.class, () -> nos.write(b, 0, 2));
+        assertThrows(NullPointerException.class, () -> nos.write(null, 0, 0));
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     void testNewInstance() throws IOException {
-        try (NullOutputStream nos = NullOutputStream.INSTANCE) {
+        try (NullOutputStream nos = new NullOutputStream()) {
             process(nos);
         }
     }

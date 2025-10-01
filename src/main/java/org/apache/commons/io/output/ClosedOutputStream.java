@@ -20,6 +20,8 @@ package org.apache.commons.io.output;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * Throws an IOException on all attempts to write to the stream.
  * <p>
@@ -66,13 +68,16 @@ public class ClosedOutputStream extends OutputStream {
     /**
      * Throws an {@link IOException} to indicate that the stream is closed.
      *
-     * @param b   ignored.
-     * @param off ignored.
-     * @param len ignored.
+     * @param b   Byte array, never {@code null}.
+     * @param off The start offset in the byte array.
+     * @param len The number of bytes to write.
+     * @throws NullPointerException if the byte array is {@code null}.
+     * @throws IndexOutOfBoundsException if {@code off} or {@code len} are negative, or if {@code off + len} is greater than {@code b.length}.
      * @throws IOException always thrown.
      */
     @Override
     public void write(final byte b[], final int off, final int len) throws IOException {
+        IOUtils.checkFromIndexSize(b, off, len);
         throw new IOException("write(byte[], int, int) failed: stream is closed");
     }
 

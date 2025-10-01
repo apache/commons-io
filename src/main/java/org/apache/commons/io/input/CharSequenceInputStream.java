@@ -28,7 +28,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
-import java.util.Objects;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
@@ -319,10 +318,7 @@ public class CharSequenceInputStream extends InputStream {
 
     @Override
     public int read(final byte[] array, int off, int len) throws IOException {
-        Objects.requireNonNull(array, "array");
-        if (len < 0 || off + len > array.length) {
-            throw new IndexOutOfBoundsException("Array Size=" + array.length + ", offset=" + off + ", length=" + len);
-        }
+        IOUtils.checkFromIndexSize(array, off, len);
         if (len == 0) {
             return 0; // must return 0 for zero length read
         }

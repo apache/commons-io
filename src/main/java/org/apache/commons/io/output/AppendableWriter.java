@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Objects;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * Writer implementation that writes the data to an {@link Appendable} Object.
  * <p>
@@ -77,6 +79,8 @@ public class AppendableWriter<T extends Appendable> extends Writer {
      * @param start the index of the first character in the subsequence
      * @param end   the index of the character following the last character in the subsequence
      * @return this writer
+     * @throws IndexOutOfBoundsException If {@code start} or {@code end} are negative, {@code start} is greater than
+     *                                   {@code end}, or {@code end} is greater than {@code csq.length()}.
      * @throws IOException If an I/O error occurs.
      */
     @Override
@@ -120,14 +124,13 @@ public class AppendableWriter<T extends Appendable> extends Writer {
      * @param cbuf an array with the characters to write.
      * @param off  offset from which to start writing characters.
      * @param len  number of characters to write.
+     * @throws NullPointerException if the array is {@code null}.
+     * @throws IndexOutOfBoundsException if {@code off} or {@code len} are negative, or if {@code off + len} is greater than {@code cbuf.length}.
      * @throws IOException If an I/O error occurs.
      */
     @Override
     public void write(final char[] cbuf, final int off, final int len) throws IOException {
-        Objects.requireNonNull(cbuf, "cbuf");
-        if (len < 0 || off + len > cbuf.length) {
-            throw new IndexOutOfBoundsException("Array Size=" + cbuf.length + ", offset=" + off + ", length=" + len);
-        }
+        IOUtils.checkFromIndexSize(cbuf, off, len);
         for (int i = 0; i < len; i++) {
             appendable.append(cbuf[off + i]);
         }
@@ -150,6 +153,8 @@ public class AppendableWriter<T extends Appendable> extends Writer {
      * @param str a string.
      * @param off offset from which to start writing characters.
      * @param len number of characters to write.
+     * @throws NullPointerException if the string is {@code null}.
+     * @throws IndexOutOfBoundsException if {@code off} or {@code len} are negative, or if {@code off + len} is greater than {@code str.length()}.
      * @throws IOException If an I/O error occurs.
      */
     @Override

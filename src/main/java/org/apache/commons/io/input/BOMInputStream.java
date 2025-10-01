@@ -419,8 +419,10 @@ public class BOMInputStream extends ProxyInputStream {
      * Invokes the delegate's {@code read(byte[])} method, detecting and optionally skipping BOM.
      *
      * @param buf
-     *            the buffer to read the bytes into
+     *            the buffer to read the bytes into, never {@code null}
      * @return the number of bytes read (excluding BOM) or -1 if the end of stream
+     * @throws NullPointerException
+     *             if the buffer is {@code null}
      * @throws IOException
      *             if an I/O error occurs
      */
@@ -439,11 +441,19 @@ public class BOMInputStream extends ProxyInputStream {
      * @param len
      *            The number of bytes to read (excluding BOM)
      * @return the number of bytes read or -1 if the end of stream
+     * @throws NullPointerException
+     *             if the buffer is {@code null}
+     * @throws IndexOutOfBoundsException
+     *             if {@code off} or {@code len} are negative, or if {@code off + len} is greater than {@code buf.length}
      * @throws IOException
      *             if an I/O error occurs
      */
     @Override
     public int read(final byte[] buf, int off, int len) throws IOException {
+        IOUtils.checkFromIndexSize(buf, off, len);
+        if (len == 0) {
+            return 0;
+        }
         int firstCount = 0;
         int b = 0;
         while (len > 0 && b >= 0) {

@@ -30,6 +30,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.output.QueueOutputStream;
 
@@ -244,13 +245,7 @@ public class QueueInputStream extends InputStream {
      */
     @Override
     public int read(final byte[] b, final int offset, final int length) {
-        if (b == null) {
-            throw new NullPointerException();
-        }
-        if (offset < 0 || length < 0 || length > b.length - offset) {
-            throw new IndexOutOfBoundsException(
-                    String.format("Range [%d, %<d + %d) out of bounds for length %d", offset, length, b.length));
-        }
+        IOUtils.checkFromIndexSize(b, offset, length);
         if (length == 0) {
             return 0;
         }

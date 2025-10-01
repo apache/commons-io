@@ -23,6 +23,8 @@ import static org.apache.commons.io.IOUtils.EOF;
 import java.io.IOException;
 import java.io.Reader;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * A reader that imposes a limit to the number of characters that can be read from an underlying reader, returning EOF
  * when this limit is reached, regardless of state of underlying reader.
@@ -116,11 +118,14 @@ public class BoundedReader extends Reader {
      * @param off  The offset
      * @param len  The number of chars to read
      * @return the number of chars read
+     * @throws NullPointerException if the buffer is {@code null}.
+     * @throws IndexOutOfBoundsException if {@code off} or {@code len} are negative, or if {@code off + len} is greater than {@code cbuf.length}.
      * @throws IOException If an I/O error occurs while calling the underlying reader's read method
      * @see Reader#read(char[], int, int)
      */
     @Override
     public int read(final char[] cbuf, final int off, final int len) throws IOException {
+        IOUtils.checkFromIndexSize(cbuf, off, len);
         int c;
         for (int i = 0; i < len; i++) {
             c = read();

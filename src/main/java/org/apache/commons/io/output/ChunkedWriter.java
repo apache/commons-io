@@ -70,10 +70,14 @@ public class ChunkedWriter extends FilterWriter {
      * @param data      The data.
      * @param srcOffset the offset.
      * @param length    the number of bytes to write.
+     * @throws NullPointerException if the data is {@code null}.
+     * @throws IndexOutOfBoundsException if {@code srcOffset} or {@code length} are negative,
+     *                                   or if {@code srcOffset + length} is greater than {@code data.length}.
      * @throws IOException If an I/O error occurs.
      */
     @Override
     public void write(final char[] data, final int srcOffset, final int length) throws IOException {
+        IOUtils.checkFromIndexSize(data, srcOffset, length);
         int bytes = length;
         int dstOffset = srcOffset;
         while (bytes > 0) {

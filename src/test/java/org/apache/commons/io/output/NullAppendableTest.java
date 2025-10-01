@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io.output;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
@@ -32,7 +34,12 @@ class NullAppendableTest {
         appendable.append("A");
         appendable.append("A", 0, 1);
         appendable.append(null, 0, 1);
-        appendable.append(null, -1, -1);
+        // Check argument validation
+        final CharSequence csq = "ABCDE";
+        assertThrows(IndexOutOfBoundsException.class, () -> appendable.append(csq, -1, 0));
+        assertThrows(IndexOutOfBoundsException.class, () -> appendable.append(csq, 0, -1));
+        assertThrows(IndexOutOfBoundsException.class, () -> appendable.append(csq, 1, 0));
+        assertThrows(IndexOutOfBoundsException.class, () -> appendable.append(csq, 0, 6));
     }
 
 }

@@ -407,6 +407,183 @@ public class IOUtils {
     }
 
     /**
+     * Validates that the sub-range {@code [off, off + len)} is within the bounds of the given array.
+     *
+     * <p>The range is valid if all of the following hold:</p>
+     * <ul>
+     *   <li>{@code off >= 0}</li>
+     *   <li>{@code len >= 0}</li>
+     *   <li>{@code off + len <= array.length}</li>
+     * </ul>
+     *
+     * <p>If the range is invalid, throws {@link IndexOutOfBoundsException} with a descriptive message.</p>
+     *
+     * <p>Typical usage in {@link InputStream#read(byte[], int, int)} and {@link OutputStream#write(byte[], int, int)} implementations:</p>
+     *
+     * <pre><code>
+     * public int read(byte[] b, int off, int len) throws IOException {
+     *     IOUtils.checkFromIndexSize(b, off, len);
+     *     if (len == 0) {
+     *         return 0;
+     *     }
+     *     ensureOpen();
+     *     // perform read...
+     * }
+     *
+     * public void write(byte[] b, int off, int len) throws IOException {
+     *     IOUtils.checkFromIndexSize(b, off, len);
+     *     if (len == 0) {
+     *         return;
+     *     }
+     *     ensureOpen();
+     *     // perform write...
+     * }
+     * </code></pre>
+     *
+     * @param array the array against which the range is validated
+     * @param off   the starting offset into the array (inclusive)
+     * @param len   the number of elements to access
+     * @throws NullPointerException      if {@code array} is {@code null}
+     * @throws IndexOutOfBoundsException if the range {@code [off, off + len)} is out of bounds for {@code array}
+     * @see InputStream#read(byte[], int, int)
+     * @see OutputStream#write(byte[], int, int)
+     * @since 2.21.0
+     */
+    public static void checkFromIndexSize(final byte[] array, final int off, final int len) {
+        checkFromIndexSize(off, len, Objects.requireNonNull(array, "byte array").length);
+    }
+
+    /**
+     * Validates that the sub-range {@code [off, off + len)} is within the bounds of the given array.
+     *
+     * <p>The range is valid if all of the following hold:</p>
+     * <ul>
+     *   <li>{@code off >= 0}</li>
+     *   <li>{@code len >= 0}</li>
+     *   <li>{@code off + len <= array.length}</li>
+     * </ul>
+     *
+     * <p>If the range is invalid, throws {@link IndexOutOfBoundsException} with a descriptive message.</p>
+     *
+     * <p>Typical usage in {@link Reader#read(char[], int, int)} and {@link Writer#write(char[], int, int)} implementations:</p>
+     *
+     * <pre><code>
+     * public int read(char[] cbuf, int off, int len) throws IOException {
+     *     ensureOpen();
+     *     IOUtils.checkFromIndexSize(cbuf, off, len);
+     *     if (len == 0) {
+     *         return 0;
+     *     }
+     *     // perform read...
+     * }
+     *
+     * public void write(char[] cbuf, int off, int len) throws IOException {
+     *     ensureOpen();
+     *     IOUtils.checkFromIndexSize(cbuf, off, len);
+     *     if (len == 0) {
+     *         return;
+     *     }
+     *     // perform write...
+     * }
+     * </code></pre>
+     *
+     * @param array the array against which the range is validated
+     * @param off   the starting offset into the array (inclusive)
+     * @param len   the number of characters to access
+     * @throws NullPointerException      if {@code array} is {@code null}
+     * @throws IndexOutOfBoundsException if the range {@code [off, off + len)} is out of bounds for {@code array}
+     * @see Reader#read(char[], int, int)
+     * @see Writer#write(char[], int, int)
+     * @since 2.21.0
+     */
+    public static void checkFromIndexSize(final char[] array, final int off, final int len) {
+        checkFromIndexSize(off, len, Objects.requireNonNull(array, "char array").length);
+    }
+
+    /**
+     * Validates that the sub-range {@code [off, off + len)} is within the bounds of the given string.
+     *
+     * <p>The range is valid if all of the following hold:</p>
+     * <ul>
+     *   <li>{@code off >= 0}</li>
+     *   <li>{@code len >= 0}</li>
+     *   <li>{@code off + len <= str.length()}</li>
+     * </ul>
+     *
+     * <p>If the range is invalid, throws {@link IndexOutOfBoundsException} with a descriptive message.</p>
+     *
+     * <p>Typical usage in {@link Writer#write(String, int, int)} implementations:</p>
+     *
+     * <pre><code>
+     * public void write(String str, int off, int len) throws IOException {
+     *     IOUtils.checkFromIndexSize(str, off, len);
+     *     if (len == 0) {
+     *         return;
+     *     }
+     *     // perform write...
+     * }
+     * </code></pre>
+     *
+     * @param str the string against which the range is validated
+     * @param off the starting offset into the string (inclusive)
+     * @param len the number of characters to write
+     * @throws NullPointerException      if {@code str} is {@code null}
+     * @throws IndexOutOfBoundsException if the range {@code [off, off + len)} is out of bounds for {@code str}
+     * @see Writer#write(String, int, int)
+     * @since 2.21.0
+     */
+    public static void checkFromIndexSize(final String str, final int off, final int len) {
+        checkFromIndexSize(off, len, Objects.requireNonNull(str, "str").length());
+    }
+
+    static void checkFromIndexSize(final int off, final int len, final int arrayLength) {
+        if ((off | len | arrayLength) < 0 || arrayLength - len < off) {
+            throw new IndexOutOfBoundsException(String.format("Range [%s, %<s + %s) out of bounds for length %s", off, len, arrayLength));
+        }
+    }
+
+    /**
+     * Validates that the sub-sequence {@code [fromIndex, toIndex)} is within the bounds of the given {@link CharSequence}.
+     *
+     * <p>The sub-sequence is valid if all of the following hold:</p>
+     * <ul>
+     *   <li>{@code fromIndex >= 0}</li>
+     *   <li>{@code fromIndex <= toIndex}</li>
+     *   <li>{@code toIndex <= seq.length()}</li>
+     * </ul>
+     *
+     * <p>If {@code seq} is {@code null}, it is treated as the literal string {@code "null"} (length {@code 4}).</p>
+     *
+     * <p>If the range is invalid, throws {@link IndexOutOfBoundsException} with a descriptive message.</p>
+     *
+     * <p>Typical usage in {@link Appendable#append(CharSequence, int, int)} implementations:</p>
+     *
+     * <pre><code>
+     * public Appendable append(CharSequence csq, int start, int end) throws IOException {
+     *     IOUtils.checkFromToIndex(csq, start, end);
+     *     // perform append...
+     *     return this;
+     * }
+     * </code></pre>
+     *
+     * @param seq       the character sequence to validate (may be {@code null}, treated as {@code "null"})
+     * @param fromIndex the starting index (inclusive)
+     * @param toIndex   the ending index (exclusive)
+     * @throws IndexOutOfBoundsException if the range {@code [fromIndex, toIndex)} is out of bounds for {@code seq}
+     * @see Appendable#append(CharSequence, int, int)
+     * @since 2.21.0
+     */
+    public static void checkFromToIndex(final CharSequence seq, final int fromIndex, final int toIndex) {
+        checkFromToIndex(fromIndex, toIndex, seq != null ? seq.length() : 4);
+    }
+
+    static void checkFromToIndex(final int fromIndex, final int toIndex, final int length) {
+        if (fromIndex < 0 || toIndex < fromIndex || length < toIndex) {
+            throw new IndexOutOfBoundsException(String.format("Range [%s, %s) out of bounds for length %s", fromIndex, toIndex, length));
+        }
+    }
+
+    /**
      * Clears any state.
      * <ul>
      * <li>Removes the current thread's value for thread-local variables.</li>

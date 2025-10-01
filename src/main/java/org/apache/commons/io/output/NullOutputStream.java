@@ -19,6 +19,8 @@ package org.apache.commons.io.output;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * Never writes data. Calls never go beyond this class.
  * <p>
@@ -67,15 +69,20 @@ public class NullOutputStream extends OutputStream {
     }
 
     /**
-     * Does nothing.
+     * No-op operation.
      *
-     * @param b This method ignores this parameter.
-     * @param off This method ignores this parameter.
-     * @param len This method ignores this parameter.
+     * <p>Validates the arguments but does not write the data.</p>
+     *
+     * @param b   The byte array to write from, not {@code null}.
+     * @param off The offset to start at.
+     * @param len The number of bytes to write.
+     * @throws NullPointerException      If {@code b} is {@code null}.
+     * @throws IndexOutOfBoundsException If {@code off} or {@code len} are negative, {@code off + len} is greater than
+     *                                   {@code b.length}.
      */
     @Override
     public void write(final byte[] b, final int off, final int len) {
-        // noop
+        IOUtils.checkFromIndexSize(b, off, len);
     }
 
     /**

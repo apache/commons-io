@@ -43,7 +43,13 @@ class ClosedWriterTest {
     @Test
     void testWrite() throws IOException {
         try (ClosedWriter cw = new ClosedWriter()) {
-            assertThrows(IOException.class, () -> cw.write(new char[0], 0, 0));
+            final char[] cbuf = new char[1];
+            assertThrows(IOException.class, () -> cw.write(new char[0], 0, 1));
+            // In writers, testing for closed always comes before argument validation
+            assertThrows(IOException.class, () -> cw.write(cbuf, -1, 0));
+            assertThrows(IOException.class, () -> cw.write(cbuf, 0, -1));
+            assertThrows(IOException.class, () -> cw.write(cbuf, 0, 2));
+            assertThrows(IOException.class, () -> cw.write((char[]) null, 0, 0));
         }
     }
 

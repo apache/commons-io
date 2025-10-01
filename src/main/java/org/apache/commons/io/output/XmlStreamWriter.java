@@ -302,10 +302,14 @@ public class XmlStreamWriter extends Writer {
      * @param cbuf the buffer to write the characters from.
      * @param off The start offset.
      * @param len The number of characters to write.
+     * @throws NullPointerException if the buffer is {@code null}.
+     * @throws IndexOutOfBoundsException if {@code off} or {@code len} are negative,
+     *                                   or if {@code off + len} is greater than {@code cbuf.length}.
      * @throws IOException if an error occurs detecting the encoding.
      */
     @Override
     public void write(final char[] cbuf, final int off, final int len) throws IOException {
+        IOUtils.checkFromIndexSize(cbuf, off, len);
         if (prologWriter != null) {
             detectEncoding(cbuf, off, len);
         } else {

@@ -39,6 +39,11 @@ class ProxyReaderTest {
         }
 
         @Override
+        public int read(final char[] chars, final int offset, final int length) throws IOException {
+            return chars == null ? 0 : super.read(chars, offset, length);
+        }
+
+        @Override
         public int read(final CharBuffer target) throws IOException {
             return target == null ? 0 : super.read(target);
         }
