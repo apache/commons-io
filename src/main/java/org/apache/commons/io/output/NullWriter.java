@@ -97,6 +97,7 @@ public class NullWriter extends Writer {
     @Override
     public Writer append(final CharSequence csq, final int start, final int end) {
         IOUtils.checkFromToIndex(csq, start, end);
+        //to /dev/null
         return this;
     }
 
