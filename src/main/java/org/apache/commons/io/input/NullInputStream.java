@@ -243,9 +243,9 @@ public class NullInputStream extends AbstractInputStream {
      * This implementation leaves the byte array unchanged.
      * </p>
      *
-     * @param bytes  The byte array
-     * @param offset The offset to start at.
-     * @param length The number of bytes.
+     * @param bytes  The byte array, never {@code null}.
+     * @param offset The offset to start at, always non-negative.
+     * @param length The number of bytes to process, always non-negative and at most {@code bytes.length - offset}.
      */
     protected void processBytes(final byte[] bytes, final int offset, final int length) {
         // do nothing - overridable by subclass
@@ -274,6 +274,7 @@ public class NullInputStream extends AbstractInputStream {
      *
      * @param bytes The byte array to read into
      * @return The number of bytes read or {@code -1} if the end of file has been reached and {@code throwEofException} is set to {@code false}.
+     * @throws NullPointerException if the byte array is {@code null}.
      * @throws EOFException if the end of file is reached and {@code throwEofException} is set to {@code true}.
      * @throws IOException  if trying to read past the end of file.
      */
@@ -289,6 +290,8 @@ public class NullInputStream extends AbstractInputStream {
      * @param offset The offset to start reading bytes into.
      * @param length The number of bytes to read.
      * @return The number of bytes read or {@code -1} if the end of file has been reached and {@code throwEofException} is set to {@code false}.
+     * @throws NullPointerException if the byte array is {@code null}.
+     * @throws IndexOutOfBoundsException if {@code offset} or {@code length} are negative, or if {@code offset + length} is greater than {@code bytes.length}.
      * @throws EOFException if the end of file is reached and {@code throwEofException} is set to {@code true}.
      * @throws IOException  if trying to read past the end of file.
      */
