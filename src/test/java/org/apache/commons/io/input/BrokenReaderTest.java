@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.CharBuffer;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -45,7 +46,7 @@ class BrokenReaderTest {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenReader brokenReader = createBrokenReader(exception);
-        assertEquals(exception, assertThrows(clazz, () -> brokenReader.close()));
+        assertEquals(exception, assertThrows(clazz, brokenReader::close));
     }
 
     @Test
@@ -68,7 +69,7 @@ class BrokenReaderTest {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenReader brokenReader = createBrokenReader(exception);
-        assertEquals(exception, assertThrows(clazz, () -> brokenReader.read()));
+        assertEquals(exception, assertThrows(clazz, brokenReader::read));
     }
 
     @ParameterizedTest
@@ -78,6 +79,8 @@ class BrokenReaderTest {
         @SuppressWarnings("resource")
         final BrokenReader brokenReader = createBrokenReader(exception);
         assertEquals(exception, assertThrows(clazz, () -> brokenReader.read(new char[1])));
+        // Also throws the exception before checking arguments
+        assertEquals(exception, assertThrows(clazz, () -> brokenReader.read((char[]) null)));
     }
 
     @ParameterizedTest
@@ -86,7 +89,26 @@ class BrokenReaderTest {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenReader brokenReader = createBrokenReader(exception);
-        assertEquals(exception, assertThrows(clazz, () -> brokenReader.read(new char[1], 0, 1)));
+        final char[] cbuf = new char[1];
+        assertEquals(exception, assertThrows(clazz, () -> brokenReader.read(cbuf, 0, 1)));
+        // Also throws the exception before checking arguments
+        assertEquals(exception, assertThrows(clazz, () -> brokenReader.read(cbuf, -1, 1)));
+        assertEquals(exception, assertThrows(clazz, () -> brokenReader.read(cbuf, 0, -1)));
+        assertEquals(exception, assertThrows(clazz, () -> brokenReader.read(cbuf, 1, 1)));
+        assertEquals(exception, assertThrows(clazz, () -> brokenReader.read(null, 0, 0)));
+
+    }
+
+    @ParameterizedTest
+    @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
+    void testReadCharBuffer(final Class<Throwable> clazz) throws Exception {
+        final Throwable exception = clazz.newInstance();
+        @SuppressWarnings("resource")
+        final BrokenReader brokenReader = createBrokenReader(exception);
+        final CharBuffer charBuffer = CharBuffer.allocate(1);
+        assertEquals(exception, assertThrows(clazz, () -> brokenReader.read(charBuffer)));
+        // Also throws the exception before checking arguments
+        assertEquals(exception, assertThrows(clazz, () -> brokenReader.read((CharBuffer) null)));
     }
 
     @ParameterizedTest
@@ -95,7 +117,7 @@ class BrokenReaderTest {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenReader brokenReader = createBrokenReader(exception);
-        assertEquals(exception, assertThrows(clazz, () -> brokenReader.ready()));
+        assertEquals(exception, assertThrows(clazz, brokenReader::ready));
     }
 
     @ParameterizedTest
@@ -104,7 +126,7 @@ class BrokenReaderTest {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenReader brokenReader = createBrokenReader(exception);
-        assertEquals(exception, assertThrows(clazz, () -> brokenReader.reset()));
+        assertEquals(exception, assertThrows(clazz, brokenReader::reset));
     }
 
     @ParameterizedTest
