@@ -205,8 +205,9 @@ public class CharSequenceReader extends Reader implements Serializable {
      * @param array The array to store the characters in
      * @param offset The starting position in the array to store
      * @param length The maximum number of characters to read
-     * @return The number of characters read or -1 if there are
-     * no more
+     * @return The number of characters read or -1 if there are no more
+     * @throws NullPointerException if the array is {@code null}.
+     * @throws IndexOutOfBoundsException if {@code offset} or {@code length} are negative, or if {@code offset + length} is greater than {@code array.length}.
      */
     @Override
     public int read(final char[] array, final int offset, final int length) {

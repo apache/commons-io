@@ -79,6 +79,8 @@ public class AppendableWriter<T extends Appendable> extends Writer {
      * @param start the index of the first character in the subsequence
      * @param end   the index of the character following the last character in the subsequence
      * @return this writer
+     * @throws IndexOutOfBoundsException If {@code start} or {@code end} are negative, {@code start} is greater than
+     *                                   {@code end}, or {@code end} is greater than {@code csq.length()}.
      * @throws IOException If an I/O error occurs.
      */
     @Override
@@ -122,6 +124,8 @@ public class AppendableWriter<T extends Appendable> extends Writer {
      * @param cbuf an array with the characters to write.
      * @param off  offset from which to start writing characters.
      * @param len  number of characters to write.
+     * @throws NullPointerException if the array is {@code null}.
+     * @throws IndexOutOfBoundsException if {@code off} or {@code len} are negative, or if {@code off + len} is greater than {@code cbuf.length}.
      * @throws IOException If an I/O error occurs.
      */
     @Override
@@ -149,6 +153,8 @@ public class AppendableWriter<T extends Appendable> extends Writer {
      * @param str a string.
      * @param off offset from which to start writing characters.
      * @param len number of characters to write.
+     * @throws NullPointerException if the string is {@code null}.
+     * @throws IndexOutOfBoundsException if {@code off} or {@code len} are negative, or if {@code off + len} is greater than {@code str.length()}.
      * @throws IOException If an I/O error occurs.
      */
     @Override

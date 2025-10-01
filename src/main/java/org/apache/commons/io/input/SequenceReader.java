@@ -108,11 +108,6 @@ public class SequenceReader extends Reader {
         return c;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see Reader#read()
-     */
     @Override
     public int read(final char[] cbuf, int off, int len) throws IOException {
         IOUtils.checkFromIndexSize(cbuf, off, len);

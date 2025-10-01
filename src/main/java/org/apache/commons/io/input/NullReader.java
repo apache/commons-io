@@ -272,6 +272,8 @@ public class NullReader extends Reader {
      * @return The number of characters read or {@code -1}
      * if the end of file has been reached and
      * {@code throwEofException} is set to {@code false}.
+     * @throws NullPointerException if the array is {@code null}.
+     * @throws IndexOutOfBoundsException if {@code offset} or {@code length} are negative, or if {@code offset + length} is greater than {@code chars.length}.
      * @throws EOFException if the end of file is reached and
      * {@code throwEofException} is set to {@code true}.
      * @throws IOException if trying to read past the end of file.

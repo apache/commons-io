@@ -431,6 +431,7 @@ public class WriterOutputStream extends OutputStream {
      * Writes bytes from the specified byte array to the stream.
      *
      * @param b the byte array containing the bytes to write.
+     * @throws NullPointerException if the byte array is {@code null}.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -444,6 +445,8 @@ public class WriterOutputStream extends OutputStream {
      * @param b   the byte array containing the bytes to write.
      * @param off the start offset in the byte array.
      * @param len the number of bytes to write.
+     * @throws NullPointerException      if the byte array is {@code null}.
+     * @throws IndexOutOfBoundsException if {@code off} or {@code len} are negative, or if {@code off + len} is greater than {@code b.length}.
      * @throws IOException if an I/O error occurs.
      */
     @Override
