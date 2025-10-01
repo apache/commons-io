@@ -228,6 +228,7 @@ public class ThresholdingOutputStream extends OutputStream {
      * Writes {@code b.length} bytes from the specified byte array to this output stream.
      *
      * @param b The array of bytes to be written.
+     * @throws NullPointerException if the byte array is {@code null}.
      * @throws IOException if an error occurs.
      */
     @SuppressWarnings("resource") // the underlying stream is managed by a subclass.
@@ -245,6 +246,8 @@ public class ThresholdingOutputStream extends OutputStream {
      * @param b The byte array from which the data will be written.
      * @param off The start offset in the byte array.
      * @param len The number of bytes to write.
+     * @throws NullPointerException if the byte array is {@code null}.
+     * @throws IndexOutOfBoundsException if {@code off} or {@code len} are negative, or if {@code off + len} is greater than {@code b.length}.
      * @throws IOException if an error occurs.
      */
     @SuppressWarnings("resource") // the underlying stream is managed by a subclass.
