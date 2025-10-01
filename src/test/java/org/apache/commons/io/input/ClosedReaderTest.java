@@ -18,6 +18,7 @@ package org.apache.commons.io.input;
 
 import static org.apache.commons.io.IOUtils.EOF;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -47,24 +48,38 @@ class ClosedReaderTest {
             assertEquals(EOF, reader.read(new char[4096]));
             assertEquals(EOF, reader.read(new char[1]));
             assertEquals(0, reader.read(new char[0]));
+            assertThrows(NullPointerException.class, () -> reader.read((char[]) null));
         }
     }
 
     @Test
     void testReadArrayIndex() throws Exception {
         try (Reader reader = new ClosedReader()) {
-            assertEquals(EOF, reader.read(CharBuffer.wrap(new char[4096])));
-            assertEquals(EOF, reader.read(CharBuffer.wrap(new char[1])));
-            assertEquals(0, reader.read(CharBuffer.wrap(new char[0])));
+            final char[] cbuf = new char[4096];
+            assertEquals(EOF, reader.read(cbuf, 0, 2048));
+            assertEquals(EOF, reader.read(cbuf, 2048, 2048));
+            assertEquals(0, reader.read(cbuf, 4096, 0));
+            assertThrows(IndexOutOfBoundsException.class, () -> reader.read(cbuf, -1, 1));
+            assertThrows(IndexOutOfBoundsException.class, () -> reader.read(cbuf, 0, 4097));
+            assertThrows(IndexOutOfBoundsException.class, () -> reader.read(cbuf, 1, -1));
+
+            assertEquals(EOF, reader.read(new char[1]));
+            assertEquals(0, reader.read(new char[0]));
+            assertThrows(NullPointerException.class, () -> reader.read(null, 0, 0));
         }
     }
 
     @Test
     void testReadCharBuffer() throws Exception {
         try (Reader reader = new ClosedReader()) {
-            assertEquals(EOF, reader.read(new char[4096]));
-            assertEquals(EOF, reader.read(new char[1]));
-            assertEquals(0, reader.read(new char[0]));
+            final CharBuffer charBuffer = CharBuffer.wrap(new char[4096]);
+            assertEquals(EOF, reader.read(charBuffer));
+            charBuffer.position(4096);
+            assertEquals(0, reader.read(charBuffer));
+
+            assertEquals(EOF, reader.read(CharBuffer.wrap(new char[1])));
+            assertEquals(0, reader.read(CharBuffer.wrap(new char[0])));
+            assertThrows(NullPointerException.class, () -> reader.read((CharBuffer) null));
         }
     }
 
