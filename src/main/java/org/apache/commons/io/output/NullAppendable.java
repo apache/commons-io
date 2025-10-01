@@ -51,6 +51,21 @@ public class NullAppendable implements Appendable { // NOPMD Class will be final
         return this;
     }
 
+    /**
+     * Appends a subsequence of the specified character sequence to this Appendable.
+     *
+     * @param csq   The character sequence from which a subsequence will be
+     *              appended.
+     *              If {@code csq} is {@code null}, it is treated as if it were
+     *              {@code "null"}.
+     * @param start The index of the first character in the subsequence.
+     * @param end   The index of the character following the last character in the
+     *              subsequence.
+     * @return {@code this} instance.
+     * @throws IndexOutOfBoundsException if {@code start} or {@code end} are negative, {@code end} is
+     *                                   greater than {@code csq.length()}, or {@code start} is greater
+     *                                   than {@code end}.
+     */
     @Override
     public Appendable append(final CharSequence csq, final int start, final int end) throws IOException {
         IOUtils.checkFromToIndex(csq, start, end);
