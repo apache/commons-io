@@ -79,8 +79,6 @@ class BrokenReaderTest {
         @SuppressWarnings("resource")
         final BrokenReader brokenReader = createBrokenReader(exception);
         assertEquals(exception, assertThrows(clazz, () -> brokenReader.read(new char[1])));
-        // Also throws the exception before checking arguments
-        assertEquals(exception, assertThrows(clazz, () -> brokenReader.read((char[]) null)));
     }
 
     @ParameterizedTest
@@ -107,8 +105,6 @@ class BrokenReaderTest {
         final BrokenReader brokenReader = createBrokenReader(exception);
         final CharBuffer charBuffer = CharBuffer.allocate(1);
         assertEquals(exception, assertThrows(clazz, () -> brokenReader.read(charBuffer)));
-        // Also throws the exception before checking arguments
-        assertEquals(exception, assertThrows(clazz, () -> brokenReader.read((CharBuffer) null)));
     }
 
     @ParameterizedTest

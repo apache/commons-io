@@ -121,30 +121,6 @@ public class BrokenReader extends Reader {
     /**
      * Throws the configured exception.
      *
-     * @param target ignored.
-     * @return nothing.
-     * @throws IOException always throws the exception configured in a constructor.
-     */
-    @Override
-    public int read(CharBuffer target) throws IOException {
-        throw rethrow();
-    }
-
-    /**
-     * Throws the configured exception.
-     *
-     * @param cbuf ignored.
-     * @return nothing.
-     * @throws IOException always throws the exception configured in a constructor.
-     */
-    @Override
-    public int read(char[] cbuf) throws IOException {
-        throw rethrow();
-    }
-
-    /**
-     * Throws the configured exception.
-     *
      * @return nothing.
      * @throws IOException always throws the exception configured in a constructor.
      */
