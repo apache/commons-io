@@ -578,7 +578,7 @@ public class IOUtils {
     }
 
     static void checkFromToIndex(final int fromIndex, final int toIndex, final int length) {
-        if (fromIndex < 0 | toIndex < fromIndex | length < toIndex) {
+        if (fromIndex < 0 || toIndex < fromIndex || length < toIndex) {
             throw new IndexOutOfBoundsException(String.format("Range [%s, %s) out of bounds for length %s", fromIndex, toIndex, length));
         }
     }
