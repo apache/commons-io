@@ -68,9 +68,11 @@ public class ClosedOutputStream extends OutputStream {
     /**
      * Throws an {@link IOException} to indicate that the stream is closed.
      *
-     * @param b   ignored.
-     * @param off ignored.
-     * @param len ignored.
+     * @param b   Byte array, never {@code null}.
+     * @param off The start offset in the byte array.
+     * @param len The number of bytes to write.
+     * @throws NullPointerException if the byte array is {@code null}.
+     * @throws IndexOutOfBoundsException if {@code off} or {@code len} are negative, or if {@code off + len} is greater than {@code b.length}.
      * @throws IOException always thrown.
      */
     @Override
