@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.function.Supplier;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.function.Erase;
 
 /**
@@ -122,7 +121,6 @@ public class BrokenWriter extends Writer {
      */
     @Override
     public void write(final char[] cbuf, final int off, final int len) throws IOException {
-        IOUtils.checkFromIndexSize(cbuf, off, len);
         throw rethrow();
     }
 

@@ -55,6 +55,7 @@ class BrokenWriterTest {
         @SuppressWarnings("resource")
         final BrokenWriter brokenWriter = createBrokenWriter(exception);
         assertEquals(exception, assertThrows(clazz, () -> brokenWriter.append("01")));
+        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.append(null)));
     }
 
     @ParameterizedTest
@@ -64,6 +65,7 @@ class BrokenWriterTest {
         @SuppressWarnings("resource")
         final BrokenWriter brokenWriter = createBrokenWriter(exception);
         assertEquals(exception, assertThrows(clazz, () -> brokenWriter.append("01", 0, 1)));
+        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.append(null, 0, 4)));
     }
 
     @ParameterizedTest
@@ -72,7 +74,7 @@ class BrokenWriterTest {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenWriter brokenWriter = createBrokenWriter(exception);
-        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.close()));
+        assertEquals(exception, assertThrows(clazz, brokenWriter::close));
     }
 
     @ParameterizedTest
@@ -81,7 +83,7 @@ class BrokenWriterTest {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenWriter brokenWriter = createBrokenWriter(exception);
-        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.flush()));
+        assertEquals(exception, assertThrows(clazz, brokenWriter::flush));
     }
 
     @Test
@@ -119,7 +121,13 @@ class BrokenWriterTest {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenWriter brokenWriter = createBrokenWriter(exception);
-        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.write(new char[1], 0, 1)));
+        final char[] cbuf = new char[1];
+        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.write(cbuf, 0, 1)));
+        // Verify that the exception is thrown before checking the parameters.
+        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.write(cbuf, -1, 0)));
+        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.write(cbuf, 0, -1)));
+        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.write(cbuf, 0, 2)));
+        assertEquals(exception, assertThrows(clazz, () -> brokenWriter.write((char[]) null, 0, 0)));
     }
 
     @ParameterizedTest
