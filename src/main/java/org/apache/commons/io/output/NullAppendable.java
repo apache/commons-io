@@ -52,7 +52,7 @@ public class NullAppendable implements Appendable { // NOPMD Class will be final
     }
 
     /**
-     * Appends a subsequence of the specified character sequence to this Appendable.
+     * Does nothing except argument validation, like writing to {@code /dev/null}.
      *
      * @param csq   The character sequence from which a subsequence will be
      *              appended.
@@ -62,7 +62,7 @@ public class NullAppendable implements Appendable { // NOPMD Class will be final
      * @param end   The index of the character following the last character in the
      *              subsequence.
      * @return {@code this} instance.
-     * @throws IndexOutOfBoundsException if {@code start} or {@code end} are negative, {@code end} is
+     * @throws IndexOutOfBoundsException If {@code start} or {@code end} are negative, {@code end} is
      *                                   greater than {@code csq.length()}, or {@code start} is greater
      *                                   than {@code end}.
      */

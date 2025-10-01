@@ -79,12 +79,19 @@ public class NullWriter extends Writer {
     }
 
     /**
-     * Does nothing, like writing to {@code /dev/null}.
+     * Does nothing except argument validation, like writing to {@code /dev/null}.
      *
-     * @param csq The character sequence to write.
-     * @param start The index of the first character to write.
-     * @param end  The index of the first character to write (exclusive).
-     * @return this writer.
+     * @param csq   The character sequence from which a subsequence will be
+     *              appended.
+     *              If {@code csq} is {@code null}, it is treated as if it were
+     *              {@code "null"}.
+     * @param start The index of the first character in the subsequence.
+     * @param end   The index of the character following the last character in the
+     *              subsequence.
+     * @return {@code this} instance.
+     * @throws IndexOutOfBoundsException If {@code start} or {@code end} are negative, {@code end} is
+     *                                   greater than {@code csq.length()}, or {@code start} is greater
+     *                                   than {@code end}.
      * @since 2.0
      */
     @Override
@@ -106,9 +113,10 @@ public class NullWriter extends Writer {
     }
 
     /**
-     * Does nothing, like writing to {@code /dev/null}.
+     * Does nothing except argument validation, like writing to {@code /dev/null}.
      *
-     * @param chr The characters to write
+     * @param chr The characters to write, not {@code null}.
+     * @throws NullPointerException if {@code chr} is {@code null}.
      */
     @Override
     public void write(final char[] chr) {
@@ -117,15 +125,17 @@ public class NullWriter extends Writer {
     }
 
     /**
-     * Does nothing, like writing to {@code /dev/null}.
+     * Does nothing except argument validation, like writing to {@code /dev/null}.
      *
-     * @param chr The characters to write.
-     * @param st The start offset.
-     * @param end The number of characters to write.
+     * @param cbuf The characters to write, not {@code null}.
+     * @param off  The start offset.
+     * @param len  The number of characters to write.
+     * @throws NullPointerException      if {@code chr} is {@code null}.
+     * @throws IndexOutOfBoundsException If ({@code off} or {@code len} are negative, or {@code off + len} is greater than {@code cbuf.length}.
      */
     @Override
-    public void write(final char[] chr, final int st, final int end) {
-        IOUtils.checkFromIndexSize(chr, st, end);
+    public void write(final char[] cbuf, final int off, final int len) {
+        IOUtils.checkFromIndexSize(cbuf, off, len);
         //to /dev/null
     }
 
@@ -140,9 +150,10 @@ public class NullWriter extends Writer {
     }
 
     /**
-     * Does nothing, like writing to {@code /dev/null}.
+     * Does nothing except argument validation, like writing to {@code /dev/null}.
      *
-     * @param str The string to write.
+     * @param str The string to write, not {@code null}.
+     * @throws NullPointerException if {@code str} is {@code null}.
      */
     @Override
     public void write(final String str) {
@@ -151,11 +162,13 @@ public class NullWriter extends Writer {
     }
 
     /**
-     * Does nothing, like writing to {@code /dev/null}.
+     * Does nothing except argument validation, like writing to {@code /dev/null}.
      *
-     * @param str The string to write.
+     * @param str The string to write, not {@code null}.
      * @param off The start offset.
      * @param len The number of characters to write.
+     * @throws NullPointerException      If {@code str} is {@code null}.
+     * @throws IndexOutOfBoundsException If ({@code off} or {@code len} are negative, or {@code off + len} is greater than {@code str.length()}.
      */
     @Override
     public void write(final String str, final int off, final int len) {
