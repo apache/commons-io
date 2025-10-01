@@ -18,7 +18,6 @@ package org.apache.commons.io.input;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.nio.CharBuffer;
 import java.util.function.Supplier;
 
 import org.apache.commons.io.function.Erase;
