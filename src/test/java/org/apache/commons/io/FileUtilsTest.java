@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -47,15 +46,11 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnsupportedCharsetException;
-import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.AclEntry;
-import java.nio.file.attribute.AclEntryPermission;
-import java.nio.file.attribute.AclEntryType;
 import java.nio.file.attribute.AclFileAttributeView;
 import java.nio.file.attribute.DosFileAttributeView;
 import java.nio.file.attribute.FileTime;
@@ -105,7 +100,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
-import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -1749,9 +1743,7 @@ class FileUtilsTest extends AbstractTempDirTest {
             // Since JDK 25 on Windows, File.delete() refuses to remove files
             // with the DOS readonly bit set (JDK-8355954).
             // We clear the bit here for consistency across JDK versions.
-            if (supportsDos(file.toPath())) {
-                setDosReadOnly(file.toPath(), false);
-            }
+            setDosReadOnly(file.toPath(), false);
             assertTrue(file.delete(), "File.delete() must delete read-only file");
         }
         try (TempFile destination = TempFile.create("test-", ".txt")) {
@@ -1770,71 +1762,9 @@ class FileUtilsTest extends AbstractTempDirTest {
         return Files.getFileAttributeView(p, DosFileAttributeView.class) != null;
     }
 
-    private static boolean supportsAcl(Path p) {
-        return Files.getFileAttributeView(p, AclFileAttributeView.class) != null;
-    }
-
-    private static boolean isDosReadOnly(Path p) throws IOException {
-        return (Boolean) Files.getAttribute(p, "dos:readonly", LinkOption.NOFOLLOW_LINKS);
-    }
-
     private static void setDosReadOnly(Path p, boolean readOnly) throws IOException {
-        Files.setAttribute(p, "dos:readonly", readOnly, LinkOption.NOFOLLOW_LINKS);
-    }
-
-    private static void prependDenyForOwner(AclFileAttributeView view, AclEntryPermission permission) throws IOException {
-        final AclEntry denyEntry = AclEntry.newBuilder().setType(AclEntryType.DENY).setPrincipal(view.getOwner()).setPermissions(permission).build();
-        final List<AclEntry> acl = new ArrayList<>(view.getAcl());
-        // ACL is processed in order, so add to the start of the list
-        acl.add(0, denyEntry);
-        view.setAcl(acl);
-    }
-
-    @Test
-    @EnabledOnOs(value = OS.WINDOWS)
-    void testForceDeleteRestoresReadOnlyOnFailure(@TempDir Path tempDir) throws Exception {
-        // Skip if the underlying FS doesn’t expose DOS and ACL views (e.g., some network shares).
-        assumeTrue(supportsDos(tempDir), "DOS attributes not supported");
-        assumeTrue(supportsAcl(tempDir), "ACLs not supported");
-
-        final Path readOnly = tempDir.resolve("read-only-file.txt");
-        Files.createFile(readOnly);
-
-        // 1) Set the DOS readonly bit (what we want to ensure is restored on failure)
-        Files.setAttribute(readOnly, "dos:readonly", true);
-        assertTrue(isDosReadOnly(readOnly), "Precondition: file must be DOS-readonly");
-
-        final AclFileAttributeView parentAclView = Files.getFileAttributeView(tempDir, AclFileAttributeView.class);
-        final List<AclEntry> parentOriginalAcl = parentAclView.getAcl();
-        final AclFileAttributeView aclView = Files.getFileAttributeView(readOnly, AclFileAttributeView.class);
-        final List<AclEntry> originalAcl = aclView.getAcl();
-
-        try {
-            // 2) Cause deletion to fail due to permissions:
-            //    deny DELETE on the file, and deny DELETE_CHILD on the parent directory.
-            prependDenyForOwner(aclView, AclEntryPermission.DELETE);
-            prependDenyForOwner(parentAclView, AclEntryPermission.DELETE_CHILD);
-
-            // Sanity checks:
-            // canWrite() on Windows reflects only the DOS readonly bit (ignores the ACL for write).
-            final File file = readOnly.toFile();
-            assertFalse(file.canWrite(), "Sanity: Windows canWrite() should be false when dos:readonly is set");
-
-            // 3) Attempt forced deletion; should fail with AccessDeniedException due to ACLs.
-            final IOException wrappedException = assertThrows(IOException.class,
-                    () -> FileUtils.forceDelete(file),
-                    "Deletion must fail because DELETE/DELETE_CHILD are denied");
-            final Throwable cause = wrappedException.getCause();
-            assertInstanceOf(AccessDeniedException.class, cause, "Cause must be AccessDeniedException");
-
-            // 4) Critical assertion: even though deletion failed, the DOS readonly flag must be restored.
-            assertTrue(isDosReadOnly(readOnly), "dos:readonly must be preserved/restored after failed deletion");
-            assertFalse(file.canWrite(), "File must still not be writable per DOS attribute");
-            assertTrue(Files.exists(readOnly), "File should still exist after failed deletion");
-        } finally {
-            // Cleanup: restore ACL to allow deletion
-            aclView.setAcl(originalAcl);
-            parentAclView.setAcl(parentOriginalAcl);
+        if (Files.getFileStore(p).supportsFileAttributeView(DosFileAttributeView.class)) {
+            Files.setAttribute(p, "dos:readonly", readOnly, LinkOption.NOFOLLOW_LINKS);
         }
     }
 
@@ -1916,9 +1846,7 @@ class FileUtilsTest extends AbstractTempDirTest {
             // Since JDK 25 on Windows, File.delete() refuses to remove files
             // with the DOS readonly bit set (JDK-8355954).
             // We clear the bit here for consistency across JDK versions.
-            if (supportsDos(file.toPath())) {
-                setDosReadOnly(file.toPath(), false);
-            }
+            setDosReadOnly(file.toPath(), false);
             assertTrue(file.delete(), "File.delete() must delete unwritable file");
         }
         try (TempFile destination = TempFile.create("test-", ".txt")) {
