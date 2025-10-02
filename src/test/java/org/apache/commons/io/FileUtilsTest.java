@@ -46,12 +46,17 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnsupportedCharsetException;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.AclEntry;
+import java.nio.file.attribute.AclEntryPermission;
+import java.nio.file.attribute.AclEntryType;
 import java.nio.file.attribute.AclFileAttributeView;
+import java.nio.file.attribute.DosFileAttributeView;
 import java.nio.file.attribute.FileTime;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
@@ -99,6 +104,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -1731,25 +1737,103 @@ class FileUtilsTest extends AbstractTempDirTest {
         }
     }
 
+    private boolean isAtLeastJava25() {
+        try {
+            return Integer.parseInt(SystemUtils.JAVA_SPECIFICATION_VERSION) >= 25;
+        } catch (final NumberFormatException e) {
+            return false;
+        }
+    }
+
     @Test
     void testForceDeleteReadOnlyFile() throws Exception {
         try (TempFile destination = TempFile.create("test-", ".txt")) {
             final File file = destination.toFile();
-            assertTrue(file.setReadOnly());
-            assertTrue(file.canRead());
-            assertFalse(file.canWrite());
+            assertTrue(file.setReadOnly(), "Setting file read-only successful");
+            assertTrue(file.canRead(), "File must be readable");
+            assertFalse(file.canWrite(), "File must not be writable");
+            assertTrue(file.exists(), "File doesn't exist to delete");
             // sanity check that File.delete() deletes read-only files.
-            assertTrue(file.delete());
+            if (SystemUtils.IS_OS_WINDOWS && isAtLeastJava25()) {
+                // On Windows with Java 25+ File.delete() no longer deletes read-only files.
+                // See: https://bugs.openjdk.org/browse/JDK-8355954
+                assertTrue(file.setWritable(true), "Setting file writable successful");
+            }
+            assertTrue(file.delete(), "File.delete() must delete read-only file");
         }
         try (TempFile destination = TempFile.create("test-", ".txt")) {
             final File file = destination.toFile();
             // real test
-            assertTrue(file.setReadOnly());
-            assertTrue(file.canRead());
-            assertFalse(file.canWrite());
+            assertTrue(file.setReadOnly(), "Setting file read-only successful");
+            assertTrue(file.canRead(), "File must be readable");
+            assertFalse(file.canWrite(), "File must not be writable");
             assertTrue(file.exists(), "File doesn't exist to delete");
             FileUtils.forceDelete(file);
-            assertFalse(file.exists(), "Check deletion");
+            assertFalse(file.exists(), "FileUtils.forceDelete() must delete read-only file");
+        }
+    }
+
+    private static boolean supportsDos(Path p) {
+        return Files.getFileAttributeView(p, DosFileAttributeView.class) != null;
+    }
+
+    private static boolean supportsAcl(Path p) {
+        return Files.getFileAttributeView(p, AclFileAttributeView.class) != null;
+    }
+
+    private static boolean isDosReadOnly(Path p) throws IOException {
+        return (Boolean) Files.getAttribute(p, "dos:readonly", LinkOption.NOFOLLOW_LINKS);
+    }
+
+    private static void prependDenyForOwner(AclFileAttributeView view, AclEntryPermission permission) throws IOException {
+        final AclEntry denyEntry = AclEntry.newBuilder().setType(AclEntryType.DENY).setPrincipal(view.getOwner()).setPermissions(permission).build();
+        final List<AclEntry> acl = new ArrayList<>(view.getAcl());
+        // ACL is processed in order, so add to the start of the list
+        acl.add(0, denyEntry);
+        view.setAcl(acl);
+    }
+
+    @Test
+    @EnabledOnOs(value = OS.WINDOWS)
+    void testForceDeleteRestoresReadOnlyOnFailure(@TempDir Path tempDir) throws Exception {
+        // Skip if the underlying FS doesn’t expose DOS and ACL views (e.g., some network shares).
+        assumeTrue(supportsDos(tempDir), "DOS attributes not supported");
+        assumeTrue(supportsAcl(tempDir), "ACLs not supported");
+
+        final Path readOnly = tempDir.resolve("read-only-file.txt");
+        Files.createFile(readOnly);
+
+        // 1) Set the DOS readonly bit (what we want to ensure is restored on failure)
+        Files.setAttribute(readOnly, "dos:readonly", true);
+        assertTrue(isDosReadOnly(readOnly), "Precondition: file must be DOS-readonly");
+
+        final AclFileAttributeView parentAclView = Files.getFileAttributeView(tempDir, AclFileAttributeView.class);
+        final List<AclEntry> parentOriginalAcl = parentAclView.getAcl();
+        final AclFileAttributeView aclView = Files.getFileAttributeView(readOnly, AclFileAttributeView.class);
+        final List<AclEntry> originalAcl = aclView.getAcl();
+
+        try {
+            // 2) Cause deletion to fail due to permissions:
+            //    deny DELETE on the file, and deny DELETE_CHILD on the parent directory.
+            prependDenyForOwner(aclView, AclEntryPermission.DELETE);
+            prependDenyForOwner(parentAclView, AclEntryPermission.DELETE_CHILD);
+
+            // Sanity checks:
+            // canWrite() on Windows reflects only the DOS readonly bit (ignores the ACL for write).
+            final File file = readOnly.toFile();
+            assertFalse(file.canWrite(), "Sanity: Windows canWrite() should be false when dos:readonly is set");
+
+            // 3) Attempt forced deletion; should fail with AccessDeniedException due to ACLs.
+            assertThrows(AccessDeniedException.class, () -> FileUtils.forceDelete(file), "Deletion must fail because DELETE/DELETE_CHILD are denied");
+
+            // 4) Critical assertion: even though deletion failed, the DOS readonly flag must be restored.
+            assertTrue(isDosReadOnly(readOnly), "dos:readonly must be preserved/restored after failed deletion");
+            assertFalse(file.canWrite(), "File must still not be writable per DOS attribute");
+            assertTrue(Files.exists(readOnly), "File should still exist after failed deletion");
+        } finally {
+            // Cleanup: restore ACL to allow deletion
+            aclView.setAcl(originalAcl);
+            parentAclView.setAcl(parentOriginalAcl);
         }
     }
 
@@ -1823,23 +1907,29 @@ class FileUtilsTest extends AbstractTempDirTest {
     void testForceDeleteUnwritableFile() throws Exception {
         try (TempFile destination = TempFile.create("test-", ".txt")) {
             final File file = destination.toFile();
-            assertTrue(file.canWrite());
-            assertTrue(file.setWritable(false));
-            assertFalse(file.canWrite());
-            assertTrue(file.canRead());
+            assertTrue(file.canWrite(), "File must be writable");
+            assertTrue(file.setWritable(false), "Setting file unwritable successful");
+            assertFalse(file.canWrite(), "File must not be writable");
+            assertTrue(file.canRead(), "File must be readable");
+            assertTrue(file.exists(), "File must exist to delete");
             // sanity check that File.delete() deletes unwritable files.
-            assertTrue(file.delete());
+            if (SystemUtils.IS_OS_WINDOWS && isAtLeastJava25()) {
+                // On Windows with Java 25+ File.delete() no longer deletes read-only files.
+                // See: https://bugs.openjdk.org/browse/JDK-8355954
+                assertTrue(file.setWritable(true), "Setting file writable successful");
+            }
+            assertTrue(file.delete(), "File.delete() must delete unwritable file");
         }
         try (TempFile destination = TempFile.create("test-", ".txt")) {
             final File file = destination.toFile();
             // real test
-            assertTrue(file.canWrite());
-            assertTrue(file.setWritable(false));
-            assertFalse(file.canWrite());
-            assertTrue(file.canRead());
-            assertTrue(file.exists(), "File doesn't exist to delete");
+            assertTrue(file.canWrite(), "File must be writable");
+            assertTrue(file.setWritable(false), "Setting file unwritable successful");
+            assertFalse(file.canWrite(), "File must not be writable");
+            assertTrue(file.canRead(), "File must be readable");
+            assertTrue(file.exists(), "File must exist to delete");
             FileUtils.forceDelete(file);
-            assertFalse(file.exists(), "Check deletion");
+            assertFalse(file.exists(), "FileUtils.forceDelete() must delete unwritable file");
         }
     }
 
