@@ -1737,14 +1737,6 @@ class FileUtilsTest extends AbstractTempDirTest {
         }
     }
 
-    private boolean isAtLeastJava25() {
-        try {
-            return Integer.parseInt(SystemUtils.JAVA_SPECIFICATION_VERSION) >= 25;
-        } catch (final NumberFormatException e) {
-            return false;
-        }
-    }
-
     @Test
     void testForceDeleteReadOnlyFile() throws Exception {
         try (TempFile destination = TempFile.create("test-", ".txt")) {
@@ -1753,11 +1745,11 @@ class FileUtilsTest extends AbstractTempDirTest {
             assertTrue(file.canRead(), "File must be readable");
             assertFalse(file.canWrite(), "File must not be writable");
             assertTrue(file.exists(), "File doesn't exist to delete");
-            // sanity check that File.delete() deletes read-only files.
-            if (SystemUtils.IS_OS_WINDOWS && isAtLeastJava25()) {
-                // On Windows with Java 25+ File.delete() no longer deletes read-only files.
-                // See: https://bugs.openjdk.org/browse/JDK-8355954
-                assertTrue(file.setWritable(true), "Setting file writable successful");
+            // Since JDK 25 on Windows, File.delete() refuses to remove files
+            // with the DOS readonly bit set (JDK-8355954).
+            // We clear the bit here for consistency across JDK versions.
+            if (supportsDos(file.toPath())) {
+                setDosReadOnly(file.toPath(), false);
             }
             assertTrue(file.delete(), "File.delete() must delete read-only file");
         }
@@ -1783,6 +1775,10 @@ class FileUtilsTest extends AbstractTempDirTest {
 
     private static boolean isDosReadOnly(Path p) throws IOException {
         return (Boolean) Files.getAttribute(p, "dos:readonly", LinkOption.NOFOLLOW_LINKS);
+    }
+
+    private static void setDosReadOnly(Path p, boolean readOnly) throws IOException {
+        Files.setAttribute(p, "dos:readonly", readOnly, LinkOption.NOFOLLOW_LINKS);
     }
 
     private static void prependDenyForOwner(AclFileAttributeView view, AclEntryPermission permission) throws IOException {
@@ -1912,11 +1908,11 @@ class FileUtilsTest extends AbstractTempDirTest {
             assertFalse(file.canWrite(), "File must not be writable");
             assertTrue(file.canRead(), "File must be readable");
             assertTrue(file.exists(), "File must exist to delete");
-            // sanity check that File.delete() deletes unwritable files.
-            if (SystemUtils.IS_OS_WINDOWS && isAtLeastJava25()) {
-                // On Windows with Java 25+ File.delete() no longer deletes read-only files.
-                // See: https://bugs.openjdk.org/browse/JDK-8355954
-                assertTrue(file.setWritable(true), "Setting file writable successful");
+            // Since JDK 25 on Windows, File.delete() refuses to remove files
+            // with the DOS readonly bit set (JDK-8355954).
+            // We clear the bit here for consistency across JDK versions.
+            if (supportsDos(file.toPath())) {
+                setDosReadOnly(file.toPath(), false);
             }
             assertTrue(file.delete(), "File.delete() must delete unwritable file");
         }
