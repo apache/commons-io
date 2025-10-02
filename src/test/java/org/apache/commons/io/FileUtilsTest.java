@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -1820,7 +1821,11 @@ class FileUtilsTest extends AbstractTempDirTest {
             assertFalse(file.canWrite(), "Sanity: Windows canWrite() should be false when dos:readonly is set");
 
             // 3) Attempt forced deletion; should fail with AccessDeniedException due to ACLs.
-            assertThrows(AccessDeniedException.class, () -> FileUtils.forceDelete(file), "Deletion must fail because DELETE/DELETE_CHILD are denied");
+            final IOException wrappedException = assertThrows(IOException.class,
+                    () -> FileUtils.forceDelete(file),
+                    "Deletion must fail because DELETE/DELETE_CHILD are denied");
+            final Throwable cause = wrappedException.getCause();
+            assertInstanceOf(AccessDeniedException.class, cause, "Cause must be AccessDeniedException");
 
             // 4) Critical assertion: even though deletion failed, the DOS readonly flag must be restored.
             assertTrue(isDosReadOnly(readOnly), "dos:readonly must be preserved/restored after failed deletion");
