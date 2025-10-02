@@ -716,7 +716,6 @@ public final class PathUtils {
         } catch (final AccessDeniedException ignored) {
             // Ignore and try again below.
         }
-        final Path parent = getParent(file);
         FileAndParentAttributesHolder attributesHolder = null;
         try {
             if (overrideReadOnly(deleteOptions)) {
