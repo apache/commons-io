@@ -229,32 +229,34 @@ public final class PathUtils {
         }
 
         private static BasicFileAttributes getAttributes(final Path path, final LinkOption... linkOptions) throws IOException {
-            if (path == null || Files.notExists(path, linkOptions)) {
+            // Attention: Files.notExists() is not the inverse of Files.exists()!
+            if (path == null || !Files.exists(path, linkOptions)) {
                 return null;
             }
             final FileStore fileStore = Files.getFileStore(path);
-            // WindowsFileStore does not support PosixFileAttributeView, while LinuxFileStore might support DosFileAttributeView.
-            // Therefore, we check for DosFileAttributeView first.
-            if (fileStore.supportsFileAttributeView(DosFileAttributeView.class)) {
-                return Files.readAttributes(path, DosFileAttributes.class, linkOptions);
-            }
+            // On Windows, only DosFileAttributeView is supported.
+            // On Unix-like systems, PosixFileAttributeView is standard, but
+            // DosFileAttributeView may also be available (newer JDKs / some FS).
+            // Prefer Posix if present, otherwise fall back to Dos.
             if (fileStore.supportsFileAttributeView(PosixFileAttributeView.class)) {
                 return Files.readAttributes(path, PosixFileAttributes.class, linkOptions);
+            } else if (fileStore.supportsFileAttributeView(DosFileAttributeView.class)) {
+                return Files.readAttributes(path, DosFileAttributes.class, linkOptions);
             }
             return null;
         }
 
         private static void restoreAttributes(final Path path, final BasicFileAttributes attributes, final LinkOption... linkOptions) throws IOException {
-            if (path == null || Files.notExists(path, linkOptions) || attributes == null) {
+            // Attention: Files.notExists() is not the inverse of Files.exists()!
+            if (path == null || !Files.exists(path, linkOptions) || attributes == null) {
                 return;
-            }
-            if (attributes instanceof DosFileAttributes) {
-                final DosFileAttributes dosAttributes = (DosFileAttributes) attributes;
-                setDosReadOnly(path, dosAttributes.isReadOnly(), linkOptions);
             }
             if (attributes instanceof PosixFileAttributes) {
                 final PosixFileAttributes posixAttributes = (PosixFileAttributes) attributes;
                 Files.setPosixFilePermissions(path, posixAttributes.permissions());
+            } else if (attributes instanceof DosFileAttributes) {
+                final DosFileAttributes dosAttributes = (DosFileAttributes) attributes;
+                setDosReadOnly(path, dosAttributes.isReadOnly(), linkOptions);
             }
         }
     }
@@ -1651,13 +1653,8 @@ public final class PathUtils {
         return targetDirectory.resolve(Objects.equals(separatorSource, separatorTarget) ? otherString : otherString.replace(separatorSource, separatorTarget));
     }
 
-    private static boolean setDosReadOnly(final Path path, final boolean readOnly, final LinkOption... linkOptions) throws IOException {
-        final DosFileAttributeView dosFileAttributeView = getDosFileAttributeView(path, linkOptions);
-        if (dosFileAttributeView != null) {
-            dosFileAttributeView.setReadOnly(readOnly);
-            return true;
-        }
-        return false;
+    private static void setDosReadOnly(final Path path, final boolean readOnly, final LinkOption... linkOptions) throws IOException {
+        Files.setAttribute(path, "dos:readonly", readOnly, linkOptions);
     }
 
     /**
@@ -1763,7 +1760,7 @@ public final class PathUtils {
      * This behavior is OS dependent.
      * </p>
      *
-     * @param path        The path to set.
+     * @param path        The path to set, not {@code null}.
      * @param readOnly    true for read-only, false for not read-only.
      * @param linkOptions options indicating how to handle symbolic links.
      * @return The given path.
@@ -1771,30 +1768,32 @@ public final class PathUtils {
      * @since 2.8.0
      */
     public static Path setReadOnly(final Path path, final boolean readOnly, final LinkOption... linkOptions) throws IOException {
-        try {
-            // Windows is simplest
-            if (setDosReadOnly(path, readOnly, linkOptions)) {
-                return path;
-            }
-        } catch (final IOException ignored) {
-            // Retry with POSIX below.
-        }
+        // On Windows, only DosFileAttributeView is supported.
+        // On Unix-like systems, PosixFileAttributeView is standard, but
+        // DosFileAttributeView may also be available (newer JDKs / some FS).
+        // Prefer Posix if present, otherwise fall back to Dos.
         final Path parent = getParent(path);
-        if (!isPosix(parent, linkOptions)) { // Test parent because we may not the permissions to test the file.
-            throw new IOException(String.format("DOS or POSIX file operations not available for '%s', linkOptions %s", path, Arrays.toString(linkOptions)));
+        final FileStore fileStore = Files.getFileStore(parent != null ? parent : path);
+        // Test parent because we may not the permissions to test the file.
+        if (fileStore.supportsFileAttributeView(PosixFileAttributeView.class)) {
+            // POSIX
+            if (readOnly) {
+                // RO
+                // File, then parent dir (if any).
+                setPosixReadOnlyFile(path, readOnly, linkOptions);
+                setPosixDeletePermissions(parent, false, linkOptions);
+            } else {
+                // RE
+                // Parent dir (if any), then file.
+                setPosixDeletePermissions(parent, true, linkOptions);
+            }
+            return path;
+        } else if (fileStore.supportsFileAttributeView(DosFileAttributeView.class)) {
+            // Windows
+            setDosReadOnly(path, readOnly, linkOptions);
+            return path;
         }
-        // POSIX
-        if (readOnly) {
-            // RO
-            // File, then parent dir (if any).
-            setPosixReadOnlyFile(path, readOnly, linkOptions);
-            setPosixDeletePermissions(parent, false, linkOptions);
-        } else {
-            // RE
-            // Parent dir (if any), then file.
-            setPosixDeletePermissions(parent, true, linkOptions);
-        }
-        return path;
+        throw new IOException(String.format("DOS or POSIX file operations not available for '%s', linkOptions %s", path, Arrays.toString(linkOptions)));
     }
 
     /**
