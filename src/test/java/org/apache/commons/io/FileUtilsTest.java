@@ -52,6 +52,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.AclFileAttributeView;
+import java.nio.file.attribute.DosFileAttributeView;
 import java.nio.file.attribute.FileTime;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
@@ -1735,21 +1736,31 @@ class FileUtilsTest extends AbstractTempDirTest {
     void testForceDeleteReadOnlyFile() throws Exception {
         try (TempFile destination = TempFile.create("test-", ".txt")) {
             final File file = destination.toFile();
-            assertTrue(file.setReadOnly());
-            assertTrue(file.canRead());
-            assertFalse(file.canWrite());
-            // sanity check that File.delete() deletes read-only files.
-            assertTrue(file.delete());
+            assertTrue(file.setReadOnly(), "Setting file read-only successful");
+            assertTrue(file.canRead(), "File must be readable");
+            assertFalse(file.canWrite(), "File must not be writable");
+            assertTrue(file.exists(), "File doesn't exist to delete");
+            // Since JDK 25 on Windows, File.delete() refuses to remove files
+            // with the DOS readonly bit set (JDK-8355954).
+            // We clear the bit here for consistency across JDK versions.
+            setDosReadOnly(file.toPath(), false);
+            assertTrue(file.delete(), "File.delete() must delete read-only file");
         }
         try (TempFile destination = TempFile.create("test-", ".txt")) {
             final File file = destination.toFile();
             // real test
-            assertTrue(file.setReadOnly());
-            assertTrue(file.canRead());
-            assertFalse(file.canWrite());
+            assertTrue(file.setReadOnly(), "Setting file read-only successful");
+            assertTrue(file.canRead(), "File must be readable");
+            assertFalse(file.canWrite(), "File must not be writable");
             assertTrue(file.exists(), "File doesn't exist to delete");
             FileUtils.forceDelete(file);
-            assertFalse(file.exists(), "Check deletion");
+            assertFalse(file.exists(), "FileUtils.forceDelete() must delete read-only file");
+        }
+    }
+
+    private static void setDosReadOnly(Path p, boolean readOnly) throws IOException {
+        if (Files.getFileStore(p).supportsFileAttributeView(DosFileAttributeView.class)) {
+            Files.setAttribute(p, "dos:readonly", readOnly, LinkOption.NOFOLLOW_LINKS);
         }
     }
 
@@ -1823,23 +1834,27 @@ class FileUtilsTest extends AbstractTempDirTest {
     void testForceDeleteUnwritableFile() throws Exception {
         try (TempFile destination = TempFile.create("test-", ".txt")) {
             final File file = destination.toFile();
-            assertTrue(file.canWrite());
-            assertTrue(file.setWritable(false));
-            assertFalse(file.canWrite());
-            assertTrue(file.canRead());
-            // sanity check that File.delete() deletes unwritable files.
-            assertTrue(file.delete());
+            assertTrue(file.canWrite(), "File must be writable");
+            assertTrue(file.setWritable(false), "Setting file unwritable successful");
+            assertFalse(file.canWrite(), "File must not be writable");
+            assertTrue(file.canRead(), "File must be readable");
+            assertTrue(file.exists(), "File must exist to delete");
+            // Since JDK 25 on Windows, File.delete() refuses to remove files
+            // with the DOS readonly bit set (JDK-8355954).
+            // We clear the bit here for consistency across JDK versions.
+            setDosReadOnly(file.toPath(), false);
+            assertTrue(file.delete(), "File.delete() must delete unwritable file");
         }
         try (TempFile destination = TempFile.create("test-", ".txt")) {
             final File file = destination.toFile();
             // real test
-            assertTrue(file.canWrite());
-            assertTrue(file.setWritable(false));
-            assertFalse(file.canWrite());
-            assertTrue(file.canRead());
-            assertTrue(file.exists(), "File doesn't exist to delete");
+            assertTrue(file.canWrite(), "File must be writable");
+            assertTrue(file.setWritable(false), "Setting file unwritable successful");
+            assertFalse(file.canWrite(), "File must not be writable");
+            assertTrue(file.canRead(), "File must be readable");
+            assertTrue(file.exists(), "File must exist to delete");
             FileUtils.forceDelete(file);
-            assertFalse(file.exists(), "Check deletion");
+            assertFalse(file.exists(), "FileUtils.forceDelete() must delete unwritable file");
         }
     }
 
