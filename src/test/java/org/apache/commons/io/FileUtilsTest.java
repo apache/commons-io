@@ -1758,10 +1758,6 @@ class FileUtilsTest extends AbstractTempDirTest {
         }
     }
 
-    private static boolean supportsDos(Path p) {
-        return Files.getFileAttributeView(p, DosFileAttributeView.class) != null;
-    }
-
     private static void setDosReadOnly(Path p, boolean readOnly) throws IOException {
         if (Files.getFileStore(p).supportsFileAttributeView(DosFileAttributeView.class)) {
             Files.setAttribute(p, "dos:readonly", readOnly, LinkOption.NOFOLLOW_LINKS);

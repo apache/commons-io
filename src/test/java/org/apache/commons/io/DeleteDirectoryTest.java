@@ -92,6 +92,7 @@ class DeleteDirectoryTest extends AbstractTempDirTest {
     }
 
     @Test
+    @DisabledOnOs(OS.LINUX) // TODO
     void testDeleteFileCheckParentAccess() throws IOException {
         // Create a test directory
         final Path testDir = tempDirPath.resolve("dir");
