@@ -1238,7 +1238,7 @@ class IOUtilsTest {
         final byte[] buffer = new byte[size];
         final InputStream input = new ByteArrayInputStream(new byte[size]);
 
-        assertThrows(IllegalArgumentException.class, () -> IOUtils.readFully(input, buffer, 0, -1), "Should have failed with IllegalArgumentException");
+        assertThrows(IndexOutOfBoundsException.class, () -> IOUtils.readFully(input, buffer, 0, -1), "Should have failed with IndexOutOfBoundsException");
 
         IOUtils.readFully(input, buffer, 0, 0);
         IOUtils.readFully(input, buffer, 0, size - 1);
@@ -1285,7 +1285,7 @@ class IOUtilsTest {
 
         IOUtils.readFully(input, buffer, 0, 0);
         IOUtils.readFully(input, buffer, 0, size - 3);
-        assertThrows(IllegalArgumentException.class, () -> IOUtils.readFully(input, buffer, 0, -1), "Should have failed with IllegalArgumentException");
+        assertThrows(IndexOutOfBoundsException.class, () -> IOUtils.readFully(input, buffer, 0, -1), "Should have failed with IndexOutOfBoundsException");
         assertThrows(EOFException.class, () -> IOUtils.readFully(input, buffer, 0, 5), "Should have failed with EOFException");
         IOUtils.closeQuietly(input);
     }
