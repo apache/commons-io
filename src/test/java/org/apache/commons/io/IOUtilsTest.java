@@ -158,7 +158,9 @@ class IOUtilsTest {
                 Arguments.of(-1, 128, IllegalArgumentException.class),
                 // Invalid buffer size
                 Arguments.of(0, 0, IllegalArgumentException.class),
-                // Huge size: should not cause OutOfMemoryError
+                // Truncation with requested size < chunk size
+                Arguments.of(64, 128, EOFException.class),
+                // Truncation with requested size > chunk size
                 Arguments.of(Integer.MAX_VALUE, 128, EOFException.class));
     }
 
@@ -1754,6 +1756,13 @@ class IOUtilsTest {
             assertEquals(0, fin.available(), "Not all bytes were read");
             assertEquals(FILE_SIZE, out.length, "Wrong output size: out.length=" + out.length + "!=" + FILE_SIZE);
             TestUtils.assertEqualContent(out, testFile);
+        }
+    }
+
+    @Test
+    void testToByteArray_InputStream_Size_Truncated() throws Exception {
+        try (InputStream in = new NullInputStream(0)) {
+            assertThrows(EOFException.class, () -> IOUtils.toByteArray(in, 1), "Should have failed with EOFException");
         }
     }
 

@@ -2957,6 +2957,7 @@ public class IOUtils {
      * @param input the input to read, not null.
      * @param size the size of the input to read, where 0 &lt; {@code size} &lt;= length of input.
      * @return byte [] of length {@code size}.
+     * @throws EOFException if the end of the input is reached before reading {@code size} bytes.
      * @throws IOException if an I/O error occurs or input length is smaller than parameter {@code size}.
      * @throws IllegalArgumentException if {@code size} is less than zero.
      */
@@ -2974,7 +2975,7 @@ public class IOUtils {
             offset += read;
         }
         if (offset != size) {
-            throw new IOException("Unexpected read size, current: " + offset + ", expected: " + size);
+            throw new EOFException("Unexpected read size, current: " + offset + ", expected: " + size);
         }
         return data;
     }
