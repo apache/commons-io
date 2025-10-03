@@ -1195,6 +1195,31 @@ class IOUtilsTest {
         }
     }
 
+    static Stream<Arguments> invalidRead_InputStream_Offset_ArgumentsProvider() {
+        final InputStream input = new ByteArrayInputStream(new byte[10]);
+        final byte[] b = new byte[10];
+        return Stream.of(
+            // input is null
+            Arguments.of(null, b, 0, 1, NullPointerException.class),
+            // b is null
+            Arguments.of(input, null, 0, 1, NullPointerException.class),
+            // off is negative
+            Arguments.of(input, b, -1, 1, IndexOutOfBoundsException.class),
+            // len is negative
+            Arguments.of(input, b, 0, -1, IndexOutOfBoundsException.class),
+            // off + len is too big
+            Arguments.of(input, b, 1, 10, IndexOutOfBoundsException.class),
+            // off + len is too big
+            Arguments.of(input, b, 10, 1, IndexOutOfBoundsException.class)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidRead_InputStream_Offset_ArgumentsProvider")
+    void testRead_InputStream_Offset_ArgumentsValidation(InputStream input, byte[] b, int off, int len, Class<? extends Throwable> expected) {
+        assertThrows(expected, () -> IOUtils.read(input, b, off, len));
+    }
+
     @Test
     void testReadFully_InputStream__ReturnByteArray() throws Exception {
         final byte[] bytes = "abcd1234".getBytes(StandardCharsets.UTF_8);
@@ -1213,7 +1238,7 @@ class IOUtilsTest {
         final byte[] buffer = new byte[size];
         final InputStream input = new ByteArrayInputStream(new byte[size]);
 
-        assertThrows(IllegalArgumentException.class, () -> IOUtils.readFully(input, buffer, 0, -1), "Should have failed with IllegalArgumentException");
+        assertThrows(IndexOutOfBoundsException.class, () -> IOUtils.readFully(input, buffer, 0, -1), "Should have failed with IndexOutOfBoundsException");
 
         IOUtils.readFully(input, buffer, 0, 0);
         IOUtils.readFully(input, buffer, 0, size - 1);
@@ -1260,7 +1285,7 @@ class IOUtilsTest {
 
         IOUtils.readFully(input, buffer, 0, 0);
         IOUtils.readFully(input, buffer, 0, size - 3);
-        assertThrows(IllegalArgumentException.class, () -> IOUtils.readFully(input, buffer, 0, -1), "Should have failed with IllegalArgumentException");
+        assertThrows(IndexOutOfBoundsException.class, () -> IOUtils.readFully(input, buffer, 0, -1), "Should have failed with IndexOutOfBoundsException");
         assertThrows(EOFException.class, () -> IOUtils.readFully(input, buffer, 0, 5), "Should have failed with EOFException");
         IOUtils.closeQuietly(input);
     }
@@ -1272,6 +1297,12 @@ class IOUtilsTest {
         IOUtils.readFully(reader, buffer, 2, 8);
         assertEquals("wxabcd1234", new String(buffer));
         IOUtils.closeQuietly(reader);
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidRead_InputStream_Offset_ArgumentsProvider")
+    void testReadFully_InputStream_Offset_ArgumentsValidation(InputStream input, byte[] b, int off, int len, Class<? extends Throwable> expected) {
+        assertThrows(expected, () -> IOUtils.read(input, b, off, len));
     }
 
     @Test
