@@ -2054,6 +2054,7 @@ public class IOUtils {
      * @param input where to read input from.
      * @param buffer destination.
      * @return actual length read; may be less than requested if EOF was reached.
+     * @throws NullPointerException if {@code input} or {@code buffer} is null.
      * @throws IOException if a read error occurs.
      * @since 2.2
      */
@@ -2074,40 +2075,19 @@ public class IOUtils {
      * @param offset initial offset into buffer.
      * @param length length to read, must be &gt;= 0.
      * @return actual length read; may be less than requested if EOF was reached.
-     * @throws IllegalArgumentException if length is negative.
+     * @throws NullPointerException     if {@code input} or {@code buffer} is null.
+     * @throws IndexOutOfBoundsException if {@code offset} or {@code length} is negative, or if
+     *                                   {@code offset + length} is greater than {@code buffer.length}.
      * @throws IOException              if a read error occurs.
      * @since 2.2
      */
     public static int read(final InputStream input, final byte[] buffer, final int offset, final int length)
             throws IOException {
-        if (length == 0) {
-            return 0;
-        }
-        return read(input::read, buffer, offset, length);
-    }
-
-    /**
-     * Reads bytes from an input. This implementation guarantees that it will read as many bytes as possible before giving up; this may not always be the case
-     * for subclasses of {@link InputStream}.
-     *
-     * @param input  How to read input.
-     * @param buffer destination.
-     * @param offset initial offset into buffer.
-     * @param length length to read, must be &gt;= 0.
-     * @return actual length read; may be less than requested if EOF was reached.
-     * @throws IllegalArgumentException if length is negative.
-     * @throws IOException              if a read error occurs.
-     * @since 2.2
-     */
-    static int read(final IOTriFunction<byte[], Integer, Integer, Integer> input, final byte[] buffer, final int offset, final int length)
-            throws IOException {
-        if (length < 0) {
-            throw new IllegalArgumentException("Length must not be negative: " + length);
-        }
+        checkFromIndexSize(buffer, offset, length);
         int remaining = length;
         while (remaining > 0) {
             final int location = length - remaining;
-            final int count = input.apply(buffer, offset + location, remaining);
+            final int count = input.read(buffer, offset + location, remaining);
             if (EOF == count) {
                 break;
             }
@@ -2172,15 +2152,15 @@ public class IOUtils {
      * @param offset initial offset into buffer.
      * @param length length to read, must be &gt;= 0.
      * @return actual length read; may be less than requested if EOF was reached.
-     * @throws IllegalArgumentException if length is negative.
+     * @throws NullPointerException     if {@code reader} or {@code buffer} is null.
+     * @throws IndexOutOfBoundsException if {@code offset} or {@code length} is negative, or if
+     *                                   {@code offset + length} is greater than {@code buffer.length}.
      * @throws IOException              if a read error occurs.
      * @since 2.2
      */
     public static int read(final Reader reader, final char[] buffer, final int offset, final int length)
             throws IOException {
-        if (length < 0) {
-            throw new IllegalArgumentException("Length must not be negative: " + length);
-        }
+        checkFromIndexSize(buffer, offset, length);
         int remaining = length;
         while (remaining > 0) {
             final int location = length - remaining;
@@ -2202,9 +2182,9 @@ public class IOUtils {
      *
      * @param input where to read input from.
      * @param buffer destination.
-     * @throws IOException              if there is a problem reading the file.
-     * @throws IllegalArgumentException if length is negative.
+     * @throws NullPointerException     if {@code input} or {@code buffer} is null.
      * @throws EOFException             if the number of bytes read was incorrect.
+     * @throws IOException              if there is a problem reading the file.
      * @since 2.2
      */
     public static void readFully(final InputStream input, final byte[] buffer) throws IOException {
@@ -2222,9 +2202,11 @@ public class IOUtils {
      * @param buffer destination.
      * @param offset initial offset into buffer.
      * @param length length to read, must be &gt;= 0.
-     * @throws IOException              if there is a problem reading the file.
-     * @throws IllegalArgumentException if length is negative.
+     * @throws NullPointerException     if {@code input} or {@code buffer} is null.
+     * @throws IndexOutOfBoundsException if {@code offset} or {@code length} is negative, or if
+     *                                   {@code offset + length} is greater than {@code buffer.length}.
      * @throws EOFException             if the number of bytes read was incorrect.
+     * @throws IOException              if there is a problem reading the file.
      * @since 2.2
      */
     public static void readFully(final InputStream input, final byte[] buffer, final int offset, final int length)
@@ -2286,9 +2268,9 @@ public class IOUtils {
      *
      * @param reader where to read input from.
      * @param buffer destination.
-     * @throws IOException              if there is a problem reading the file.
-     * @throws IllegalArgumentException if length is negative.
+     * @throws NullPointerException     if {@code reader} or {@code buffer} is null.
      * @throws EOFException             if the number of characters read was incorrect.
+     * @throws IOException              if there is a problem reading the file.
      * @since 2.2
      */
     public static void readFully(final Reader reader, final char[] buffer) throws IOException {
@@ -2306,9 +2288,11 @@ public class IOUtils {
      * @param buffer destination.
      * @param offset initial offset into buffer.
      * @param length length to read, must be &gt;= 0.
-     * @throws IOException              if there is a problem reading the file.
-     * @throws IllegalArgumentException if length is negative.
+     * @throws NullPointerException     if {@code reader} or {@code buffer} is null.
+     * @throws IndexOutOfBoundsException if {@code offset} or {@code length} is negative, or if
+     *                                   {@code offset + length} is greater than {@code buffer.length}.
      * @throws EOFException             if the number of characters read was incorrect.
+     * @throws IOException              if there is a problem reading the file.
      * @since 2.2
      */
     public static void readFully(final Reader reader, final char[] buffer, final int offset, final int length)
