@@ -239,7 +239,7 @@ public class ReadAheadInputStream extends FilterInputStream {
             final boolean shutdownExecutorService) {
         super(Objects.requireNonNull(inputStream, "inputStream"));
         if (bufferSizeInBytes <= 0) {
-            throw new IllegalArgumentException("bufferSizeInBytes should be greater than 0, but the value is " + bufferSizeInBytes);
+            throw new IllegalArgumentException(String.format("bufferSizeInBytes <= 0, bufferSizeInBytes = %,d", bufferSizeInBytes));
         }
         this.executorService = Objects.requireNonNull(executorService, "executorService");
         this.shutdownExecutorService = shutdownExecutorService;

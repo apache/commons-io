@@ -2898,15 +2898,16 @@ public class IOUtils {
     public static byte[] toByteArray(final InputStream input, final int size, final int chunkSize) throws IOException {
         Objects.requireNonNull(input, "input");
         if (chunkSize <= 0) {
-            throw new IllegalArgumentException("Chunk size must be greater than zero: " + chunkSize);
+            throw new IllegalArgumentException(String.format("chunkSize <= 0, chunkSize = %,d", chunkSize));
         }
         if (size <= chunkSize) {
             // throws if size < 0
             return toByteArray(input::read, size);
         }
         final UnsynchronizedByteArrayOutputStream output = copyToOutputStream(input, size, chunkSize);
-         if (output.size() != size) {
-            throw new EOFException("Unexpected read size, current: " + output.size() + ", expected: " + size);
+        final int outSize = output.size();
+        if (outSize != size) {
+            throw new EOFException(String.format("Expected read size: %,d, actual: %,d", size, outSize));
         }
         return output.toByteArray();
     }
@@ -2930,7 +2931,7 @@ public class IOUtils {
      */
     public static byte[] toByteArray(final InputStream input, final long size) throws IOException {
         if (size > Integer.MAX_VALUE) {
-            throw new IllegalArgumentException("Size cannot be greater than Integer max value: " + size);
+            throw new IllegalArgumentException(String.format("size > Integer.MAX_VALUE, size = %,d", size));
         }
         return toByteArray(input, (int) size);
     }
@@ -2947,7 +2948,7 @@ public class IOUtils {
      */
     static byte[] toByteArray(final IOTriFunction<byte[], Integer, Integer, Integer> input, final int size) throws IOException {
         if (size < 0) {
-            throw new IllegalArgumentException("Size must be equal or greater than zero: " + size);
+            throw new IllegalArgumentException(String.format("size < 0, size = %,d", size));
         }
         if (size == 0) {
             return EMPTY_BYTE_ARRAY;
@@ -2959,7 +2960,7 @@ public class IOUtils {
             offset += read;
         }
         if (offset != size) {
-            throw new EOFException("Unexpected read size, current: " + offset + ", expected: " + size);
+            throw new EOFException(String.format("Expected read size: %,d, actual: %,d", size, offset));
         }
         return data;
     }
