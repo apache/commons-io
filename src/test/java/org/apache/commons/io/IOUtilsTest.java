@@ -683,13 +683,10 @@ class IOUtilsTest {
         final long size = (long) Integer.MAX_VALUE + (long) 1;
         final Reader in = new NullReader(size);
         final Writer out = NullWriter.INSTANCE;
-
         // Test copy() method
         assertEquals(-1, IOUtils.copy(in, out));
-
         // reset the input
         in.close();
-
         // Test consume() method
         assertEquals(size, IOUtils.consume(in), "consume()");
     }
@@ -913,12 +910,9 @@ class IOUtilsTest {
             // Create our byte[]. Rely on testInputStreamToByteArray() to make sure this is valid.
             in = IOUtils.toByteArray(fin);
         }
-
         try (OutputStream fout = Files.newOutputStream(destination.toPath())) {
             CopyUtils.copy(in, fout);
-
             fout.flush();
-
             TestUtils.checkFile(destination, testFile);
             TestUtils.checkWrite(fout);
         }
@@ -933,7 +927,6 @@ class IOUtilsTest {
             // Create our byte[]. Rely on testInputStreamToByteArray() to make sure this is valid.
             in = IOUtils.toByteArray(fin);
         }
-
         try (Writer fout = Files.newBufferedWriter(destination.toPath())) {
             CopyUtils.copy(in, fout);
             fout.flush();
@@ -951,11 +944,9 @@ class IOUtilsTest {
             // Create our String. Rely on testReaderToString() to make sure this is valid.
             str = IOUtils.toString(fin);
         }
-
         try (Writer fout = Files.newBufferedWriter(destination.toPath())) {
             CopyUtils.copy(str, fout);
             fout.flush();
-
             TestUtils.checkFile(destination, testFile);
             TestUtils.checkWrite(fout);
         }
@@ -970,19 +961,16 @@ class IOUtilsTest {
             // Create streams
             is = new CharArrayReader(carr);
             os = new CharArrayWriter();
-
             // Test our copy method
             // for extra length, it reads till EOF
             assertEquals(200, IOUtils.copyLarge(is, os, 0, 2000));
             final char[] oarr = os.toCharArray();
-
             // check that output length is correct
             assertEquals(200, oarr.length);
             // check that output data corresponds to input data
             assertEquals(1, oarr[1]);
             assertEquals(79, oarr[79]);
             assertEquals((char) -1, oarr[80]);
-
         } finally {
             IOUtils.closeQuietly(is);
             IOUtils.closeQuietly(os);
@@ -997,18 +985,15 @@ class IOUtilsTest {
             // Create streams
             is = new CharArrayReader(carr);
             os = new CharArrayWriter();
-
             // Test our copy method
             assertEquals(200, IOUtils.copyLarge(is, os, 0, -1));
             final char[] oarr = os.toCharArray();
-
             // check that output length is correct
             assertEquals(200, oarr.length);
             // check that output data corresponds to input data
             assertEquals(1, oarr[1]);
             assertEquals(79, oarr[79]);
             assertEquals((char) -1, oarr[80]);
-
         } finally {
             IOUtils.closeQuietly(is);
             IOUtils.closeQuietly(os);
@@ -1023,18 +1008,15 @@ class IOUtilsTest {
             // Create streams
             is = new CharArrayReader(carr);
             os = new CharArrayWriter();
-
             // Test our copy method
             assertEquals(100, IOUtils.copyLarge(is, os, 0, 100));
             final char[] oarr = os.toCharArray();
-
             // check that output length is correct
             assertEquals(100, oarr.length);
             // check that output data corresponds to input data
             assertEquals(1, oarr[1]);
             assertEquals(79, oarr[79]);
             assertEquals((char) -1, oarr[80]);
-
         } finally {
             IOUtils.closeQuietly(is);
             IOUtils.closeQuietly(os);
@@ -1049,18 +1031,15 @@ class IOUtilsTest {
             // Create streams
             is = new CharArrayReader(carr);
             os = new CharArrayWriter();
-
             // Test our copy method
             assertEquals(100, IOUtils.copyLarge(is, os, 10, 100));
             final char[] oarr = os.toCharArray();
-
             // check that output length is correct
             assertEquals(100, oarr.length);
             // check that output data corresponds to input data
             assertEquals(11, oarr[1]);
             assertEquals(79, oarr[69]);
             assertEquals((char) -1, oarr[70]);
-
         } finally {
             IOUtils.closeQuietly(is);
             IOUtils.closeQuietly(os);
@@ -1076,15 +1055,12 @@ class IOUtilsTest {
 
     @Test
     void testCopyLarge_ExtraLength() throws IOException {
-        try (ByteArrayInputStream is = new ByteArrayInputStream(iarr);
-            ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+        try (ByteArrayInputStream is = new ByteArrayInputStream(iarr); ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             // Create streams
-
             // Test our copy method
             // for extra length, it reads till EOF
             assertEquals(200, IOUtils.copyLarge(is, os, 0, 2000));
             final byte[] oarr = os.toByteArray();
-
             // check that output length is correct
             assertEquals(200, oarr.length);
             // check that output data corresponds to input data
@@ -1096,12 +1072,10 @@ class IOUtilsTest {
 
     @Test
     void testCopyLarge_FullLength() throws IOException {
-        try (ByteArrayInputStream is = new ByteArrayInputStream(iarr);
-            ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+        try (ByteArrayInputStream is = new ByteArrayInputStream(iarr); ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             // Test our copy method
             assertEquals(200, IOUtils.copyLarge(is, os, 0, -1));
             final byte[] oarr = os.toByteArray();
-
             // check that output length is correct
             assertEquals(200, oarr.length);
             // check that output data corresponds to input data
@@ -1113,12 +1087,10 @@ class IOUtilsTest {
 
     @Test
     void testCopyLarge_NoSkip() throws IOException {
-        try (ByteArrayInputStream is = new ByteArrayInputStream(iarr);
-            ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+        try (ByteArrayInputStream is = new ByteArrayInputStream(iarr); ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             // Test our copy method
             assertEquals(100, IOUtils.copyLarge(is, os, 0, 100));
             final byte[] oarr = os.toByteArray();
-
             // check that output length is correct
             assertEquals(100, oarr.length);
             // check that output data corresponds to input data
@@ -1130,12 +1102,10 @@ class IOUtilsTest {
 
     @Test
     void testCopyLarge_Skip() throws IOException {
-        try (ByteArrayInputStream is = new ByteArrayInputStream(iarr);
-            ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+        try (ByteArrayInputStream is = new ByteArrayInputStream(iarr); ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             // Test our copy method
             assertEquals(100, IOUtils.copyLarge(is, os, 10, 100));
             final byte[] oarr = os.toByteArray();
-
             // check that output length is correct
             assertEquals(100, oarr.length);
             // check that output data corresponds to input data
@@ -1162,18 +1132,15 @@ class IOUtilsTest {
             // Create streams
             is = new ByteArrayInputStream(iarr);
             os = new ByteArrayOutputStream();
-
             // Test our copy method
             assertEquals(100, IOUtils.copyLarge(is, os, -10, 100));
             final byte[] oarr = os.toByteArray();
-
             // check that output length is correct
             assertEquals(100, oarr.length);
             // check that output data corresponds to input data
             assertEquals(1, oarr[1]);
             assertEquals(79, oarr[79]);
             assertEquals(-1, oarr[80]);
-
         } finally {
             IOUtils.closeQuietly(is);
             IOUtils.closeQuietly(os);
@@ -1191,7 +1158,7 @@ class IOUtilsTest {
             assertEquals(0, buffer.remaining());
             assertEquals(0, input.read(buffer));
             buffer.clear();
-            assertThrows(EOFException.class, () -> IOUtils.readFully(input, buffer), "Should have failed with EOFException");
+            assertThrows(EOFException.class, () -> IOUtils.readFully(input, buffer));
         } finally {
             IOUtils.closeQuietly(input, fileInputStream);
         }
@@ -1226,11 +1193,8 @@ class IOUtilsTest {
     void testReadFully_InputStream__ReturnByteArray() throws Exception {
         final byte[] bytes = "abcd1234".getBytes(StandardCharsets.UTF_8);
         final ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
-
         final byte[] result = IOUtils.readFully(stream, bytes.length);
-
         IOUtils.closeQuietly(stream);
-
         assertEqualContent(result, bytes);
     }
 
@@ -1240,11 +1204,11 @@ class IOUtilsTest {
         final byte[] buffer = new byte[size];
         final InputStream input = new ByteArrayInputStream(new byte[size]);
 
-        assertThrows(IndexOutOfBoundsException.class, () -> IOUtils.readFully(input, buffer, 0, -1), "Should have failed with IndexOutOfBoundsException");
+        assertThrows(IndexOutOfBoundsException.class, () -> IOUtils.readFully(input, buffer, 0, -1));
 
         IOUtils.readFully(input, buffer, 0, 0);
         IOUtils.readFully(input, buffer, 0, size - 1);
-        assertThrows(EOFException.class, () -> IOUtils.readFully(input, buffer, 0, 2), "Should have failed with EOFException");
+        assertThrows(EOFException.class, () -> IOUtils.readFully(input, buffer, 0, 2));
         IOUtils.closeQuietly(input);
     }
 
@@ -1273,7 +1237,7 @@ class IOUtilsTest {
             assertEquals(0, input.read(buffer));
             IOUtils.readFully(input, buffer);
             buffer.clear();
-            assertThrows(EOFException.class, () -> IOUtils.readFully(input, buffer), "Should have failed with EOFxception");
+            assertThrows(EOFException.class, () -> IOUtils.readFully(input, buffer));
         } finally {
             IOUtils.closeQuietly(input, fileInputStream);
         }
@@ -1287,8 +1251,8 @@ class IOUtilsTest {
 
         IOUtils.readFully(input, buffer, 0, 0);
         IOUtils.readFully(input, buffer, 0, size - 3);
-        assertThrows(IndexOutOfBoundsException.class, () -> IOUtils.readFully(input, buffer, 0, -1), "Should have failed with IndexOutOfBoundsException");
-        assertThrows(EOFException.class, () -> IOUtils.readFully(input, buffer, 0, 5), "Should have failed with EOFException");
+        assertThrows(IndexOutOfBoundsException.class, () -> IOUtils.readFully(input, buffer, 0, -1));
+        assertThrows(EOFException.class, () -> IOUtils.readFully(input, buffer, 0, 5));
         IOUtils.closeQuietly(input);
     }
 
@@ -1628,13 +1592,11 @@ class IOUtilsTest {
     @Test
     void testSkipFully_InputStream() throws Exception {
         final int size = 1027;
-
         try (InputStream input = new ByteArrayInputStream(new byte[size])) {
-            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1), "Should have failed with IllegalArgumentException");
-
+            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1));
             IOUtils.skipFully(input, 0);
             IOUtils.skipFully(input, size - 1);
-            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 2), "Should have failed with IOException");
+            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 2));
         }
     }
 
@@ -1643,11 +1605,10 @@ class IOUtilsTest {
         final int size = 1027;
         final Supplier<byte[]> bas = () -> new byte[size];
         try (InputStream input = new ByteArrayInputStream(new byte[size])) {
-            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1, bas), "Should have failed with IllegalArgumentException");
-
+            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1, bas));
             IOUtils.skipFully(input, 0, bas);
             IOUtils.skipFully(input, size - 1, bas);
-            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 2, bas), "Should have failed with IOException");
+            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 2, bas));
         }
     }
 
@@ -1657,11 +1618,10 @@ class IOUtilsTest {
         final byte[] ba = new byte[size];
         final Supplier<byte[]> bas = () -> ba;
         try (InputStream input = new ByteArrayInputStream(new byte[size])) {
-            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1, bas), "Should have failed with IllegalArgumentException");
-
+            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1, bas));
             IOUtils.skipFully(input, 0, bas);
             IOUtils.skipFully(input, size - 1, bas);
-            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 2, bas), "Should have failed with IOException");
+            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 2, bas));
         }
     }
 
@@ -1670,11 +1630,10 @@ class IOUtilsTest {
         final int size = 1027;
         final ThreadLocal<byte[]> tl = ThreadLocal.withInitial(() -> new byte[size]);
         try (InputStream input = new ByteArrayInputStream(new byte[size])) {
-            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1, tl::get), "Should have failed with IllegalArgumentException");
-
+            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1, tl::get));
             IOUtils.skipFully(input, 0, tl::get);
             IOUtils.skipFully(input, size - 1, tl::get);
-            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 2, tl::get), "Should have failed with IOException");
+            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 2, tl::get));
         }
     }
 
@@ -1683,10 +1642,10 @@ class IOUtilsTest {
         final FileInputStream fileInputStream = new FileInputStream(testFile);
         final FileChannel fileChannel = fileInputStream.getChannel();
         try {
-            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(fileChannel, -1), "Should have failed with IllegalArgumentException");
+            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(fileChannel, -1));
             IOUtils.skipFully(fileChannel, 0);
             IOUtils.skipFully(fileChannel, FILE_SIZE - 1);
-            assertThrows(IOException.class, () -> IOUtils.skipFully(fileChannel, 2), "Should have failed with IOException");
+            assertThrows(IOException.class, () -> IOUtils.skipFully(fileChannel, 2));
         } finally {
             IOUtils.closeQuietly(fileChannel, fileInputStream);
         }
@@ -1698,8 +1657,8 @@ class IOUtilsTest {
         try (Reader input = new CharArrayReader(new char[size])) {
             IOUtils.skipFully(input, 0);
             IOUtils.skipFully(input, size - 3);
-            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1), "Should have failed with IllegalArgumentException");
-            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 5), "Should have failed with IOException");
+            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1));
+            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 5));
         }
     }
 
@@ -1711,7 +1670,6 @@ class IOUtilsTest {
             // Create our String. Rely on testReaderToString() to make sure this is valid.
             str = IOUtils.toString(fin);
         }
-
         try (OutputStream fout = Files.newOutputStream(destination.toPath())) {
             CopyUtils.copy(str, fout);
             // Note: this method *does* flush. It is equivalent to:
@@ -1720,7 +1678,6 @@ class IOUtilsTest {
             // _out.flush();
             // out = fout;
             // note: we don't flush here; this IOUtils method does it for us
-
             TestUtils.checkFile(destination, testFile);
             TestUtils.checkWrite(fout);
         }
@@ -1791,7 +1748,7 @@ class IOUtilsTest {
     @Test
     void testToByteArray_InputStream_Size_Truncated() throws Exception {
         try (InputStream in = new NullInputStream(0)) {
-            assertThrows(EOFException.class, () -> IOUtils.toByteArray(in, 1), "Should have failed with EOFException");
+            assertThrows(EOFException.class, () -> IOUtils.toByteArray(in, 1));
         }
     }
 
@@ -1816,8 +1773,7 @@ class IOUtilsTest {
     @Test
     void testToByteArray_InputStream_SizeIllegal() throws Exception {
         try (InputStream fin = Files.newInputStream(testFilePath)) {
-            final IOException exc = assertThrows(IOException.class, () -> IOUtils.toByteArray(fin, testFile.length() + 1),
-                    "Should have failed with IOException");
+            final IOException exc = assertThrows(IOException.class, () -> IOUtils.toByteArray(fin, testFile.length() + 1));
             assertTrue(exc.getMessage().startsWith("Expected read size"), exc.getMessage());
         }
     }
@@ -1825,8 +1781,7 @@ class IOUtilsTest {
     @Test
     void testToByteArray_InputStream_SizeLong() throws Exception {
         try (InputStream fin = Files.newInputStream(testFilePath)) {
-            final IllegalArgumentException exc = assertThrows(IllegalArgumentException.class, () -> IOUtils.toByteArray(fin, (long) Integer.MAX_VALUE + 1),
-                    "Should have failed with IllegalArgumentException");
+            final IllegalArgumentException exc = assertThrows(IllegalArgumentException.class, () -> IOUtils.toByteArray(fin, (long) Integer.MAX_VALUE + 1));
             assertTrue(exc.getMessage().startsWith("size > Integer.MAX_VALUE"), exc.getMessage());
         }
     }
@@ -1864,7 +1819,6 @@ class IOUtilsTest {
         try (Reader fin = Files.newBufferedReader(testFilePath)) {
             // Create our String. Rely on testReaderToString() to make sure this is valid.
             final String str = IOUtils.toString(fin);
-
             final byte[] out = IOUtils.toByteArray(str);
             assertEqualContent(str.getBytes(), out);
         }
