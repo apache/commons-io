@@ -179,7 +179,7 @@ public class CopyUtils {
      * Copies and convert bytes from an {@link InputStream} to chars on a
      * {@link Writer}.
      * <p>
-     * This method uses the virtual machine's {@link Charset#defaultCharset() default charset} for byte-to-char conversion.
+     * This method uses the virtual machine's {@linkplain Charset#defaultCharset() default charset} for byte-to-char conversion.
      * </p>
      *
      * @param input the {@link InputStream} to read from
@@ -221,7 +221,7 @@ public class CopyUtils {
      * Serialize chars from a {@link Reader} to bytes on an
      * {@link OutputStream}, and flush the {@link OutputStream}.
      * <p>
-     * This method uses the virtual machine's {@link Charset#defaultCharset() default charset} for byte-to-char conversion.
+     * This method uses the virtual machine's {@linkplain Charset#defaultCharset() default charset} for byte-to-char conversion.
      * </p>
      *
      * @param input the {@link Reader} to read from
@@ -293,7 +293,7 @@ public class CopyUtils {
      * {@link OutputStream}, and
      * flush the {@link OutputStream}.
      * <p>
-     * This method uses the virtual machine's {@link Charset#defaultCharset() default charset} for byte-to-char conversion.
+     * This method uses the virtual machine's {@linkplain Charset#defaultCharset() default charset} for byte-to-char conversion.
      * </p>
      *
      * @param input the {@link String} to read from

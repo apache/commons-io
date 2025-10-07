@@ -276,7 +276,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
     }
 
     /**
-     * Gets the current contents of this byte stream as a string using the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * Gets the current contents of this byte stream as a string using the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      *
      * @return the contents of the byte array as a String.
      * @see java.io.ByteArrayOutputStream#toString()

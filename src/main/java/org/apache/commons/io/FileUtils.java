@@ -2755,7 +2755,7 @@ public class FileUtils {
     }
 
     /**
-     * Reads the contents of a file into a String using the virtual machine's {@link Charset#defaultCharset() default charset}. The
+     * Reads the contents of a file into a String using the virtual machine's {@linkplain Charset#defaultCharset() default charset}. The
      * file is always closed.
      *
      * @param file the file to read, must not be {@code null}.
@@ -2804,7 +2804,7 @@ public class FileUtils {
     }
 
     /**
-     * Reads the contents of a file line by line to a List of Strings using the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * Reads the contents of a file line by line to a List of Strings using the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      * The file is always closed.
      *
      * @param file the file to read, must not be {@code null}.
@@ -3212,7 +3212,7 @@ public class FileUtils {
     }
 
     /**
-     * Writes a CharSequence to a file creating the file if it does not exist using the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * Writes a CharSequence to a file creating the file if it does not exist using the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      *
      * @param file the file to write.
      * @param data the content to write to the file.
@@ -3226,7 +3226,7 @@ public class FileUtils {
     }
 
     /**
-     * Writes a CharSequence to a file creating the file if it does not exist using the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * Writes a CharSequence to a file creating the file if it does not exist using the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      *
      * @param file   the file to write.
      * @param data   the content to write to the file.
@@ -3501,7 +3501,7 @@ public class FileUtils {
     }
 
     /**
-     * Writes a String to a file creating the file if it does not exist using the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * Writes a String to a file creating the file if it does not exist using the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      *
      * @param file the file to write
      * @param data the content to write to the file
@@ -3514,7 +3514,7 @@ public class FileUtils {
     }
 
     /**
-     * Writes a String to a file creating the file if it does not exist using the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * Writes a String to a file creating the file if it does not exist using the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      *
      * @param file   the file to write
      * @param data   the content to write to the file

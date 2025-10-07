@@ -218,7 +218,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements Seriali
      * MagicNumberFileFilter tarFileFilter = MagicNumberFileFilter("ustar", 257);
      * </pre>
      * <p>
-     * This method uses the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * This method uses the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      * </p>
      *
      * @param magicNumber the magic number to look for in the file.

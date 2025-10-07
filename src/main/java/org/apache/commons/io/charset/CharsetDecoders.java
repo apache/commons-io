@@ -30,7 +30,7 @@ public final class CharsetDecoders {
     /**
      * Returns the given non-null CharsetDecoder or a new default CharsetDecoder.
      * <p>
-     * Null input maps to the virtual machine's {@link Charset#defaultCharset() default charset} decoder.
+     * Null input maps to the virtual machine's {@linkplain Charset#defaultCharset() default charset} decoder.
      * </p>
      *
      * @param charsetDecoder The CharsetDecoder to test.

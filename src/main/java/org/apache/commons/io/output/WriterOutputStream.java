@@ -251,9 +251,9 @@ public class WriterOutputStream extends OutputStream {
     }
 
     /**
-     * Constructs a new {@link WriterOutputStream} that uses the virtual machine's {@link Charset#defaultCharset() default charset} and with a default output
-     * buffer size of {@value #BUFFER_SIZE} characters. The output buffer will only be flushed when it overflows or when {@link #flush()} or {@link #close()} is
-     * called.
+     * Constructs a new {@link WriterOutputStream} that uses the virtual machine's {@linkplain Charset#defaultCharset() default charset} and with a default
+     * output buffer size of {@value #BUFFER_SIZE} characters. The output buffer will only be flushed when it overflows or when {@link #flush()} or
+     * {@link #close()} is called.
      *
      * @param writer the target {@link Writer}.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.

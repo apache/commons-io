@@ -204,7 +204,7 @@ public class LockableFileWriter extends Writer {
     /**
      * Constructs a LockableFileWriter.
      * <p>
-     * The new instance uses the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * The new instance uses the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      * </p>
      *
      * @param file    the file to write to, not null.
