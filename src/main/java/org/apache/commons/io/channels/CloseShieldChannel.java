@@ -40,11 +40,15 @@ public final class CloseShieldChannel {
     private static final Class<?>[] EMPTY = {};
 
     private static Set<Class<?>> collectChannelInterfaces(final Class<?> type, final Set<Class<?>> out) {
+        Class<?> currentType = type;
         // Visit interfaces
-        for (final Class<?> iface : type.getInterfaces()) {
-            if (Channel.class.isAssignableFrom(iface) && out.add(iface)) {
-                collectChannelInterfaces(iface, out);
+        while (currentType != null) {
+            for (final Class<?> iface : currentType.getInterfaces()) {
+                if (Channel.class.isAssignableFrom(iface) && out.add(iface)) {
+                    collectChannelInterfaces(iface, out);
+                }
             }
+            currentType = currentType.getSuperclass();
         }
         return out;
     }
@@ -53,11 +57,10 @@ public final class CloseShieldChannel {
      * Wraps a channel to shield it from being closed.
      *
      * @param channel The underlying channel to shield, not {@code null}.
-     * @param <T>     Any Channel type (interface or class).
      * @return A proxy that shields {@code close()} and enforces closed semantics on other calls.
      */
     @SuppressWarnings({ "unchecked", "resource" }) // caller closes
-    public static <T extends Channel> T wrap(final T channel) {
+    public static Channel wrap(final Channel channel) {
         Objects.requireNonNull(channel, "channel");
         // Fast path: already our shield
         if (Proxy.isProxyClass(channel.getClass()) && Proxy.getInvocationHandler(channel) instanceof CloseShieldChannelHandler) {
@@ -66,8 +69,30 @@ public final class CloseShieldChannel {
         // Collect only Channel sub-interfaces.
         final Set<Class<?>> set = collectChannelInterfaces(channel.getClass(), new LinkedHashSet<>());
         // fallback to root surface
-        return (T) Proxy.newProxyInstance(channel.getClass().getClassLoader(), // use delegate's loader
+        return (Channel) Proxy.newProxyInstance(channel.getClass().getClassLoader(), // use delegate's loader
                 set.isEmpty() ? new Class<?>[] { Channel.class } : set.toArray(EMPTY), new CloseShieldChannelHandler(channel));
+    }
+
+    /**
+     * Wraps a channel to shield it from being closed.
+     *
+     * @param channel The underlying channel to shield, not {@code null} and must implement {@code type}.
+     * @param type    The interface the returned proxy must implement;
+     *                the proxy will also implement all other {@link Channel} sub-interfaces that the delegate implements.
+     * @param <T>     A type that extends {@link Channel}.
+     * @return A proxy that shields {@code close()} and enforces closed semantics on other calls.
+     * @throws IllegalArgumentException if {@code type} is not an interface or if {@code channel} does not implement {@code type}.
+     */
+    @SuppressWarnings({ "unchecked", "resource" }) // caller closes
+    public static <T extends Channel> T wrap(final T channel, Class<T> type) {
+        Objects.requireNonNull(type, "type");
+        if (!type.isInterface()) {
+            throw new IllegalArgumentException(type.getName() + " is not an interface");
+        }
+        if (!type.isInstance(channel)) {
+            throw new IllegalArgumentException("channel of type " + channel.getClass().getName() + " is not an instance of " + type.getName());
+        }
+        return type.cast(wrap(channel));
     }
 
     private CloseShieldChannel() {

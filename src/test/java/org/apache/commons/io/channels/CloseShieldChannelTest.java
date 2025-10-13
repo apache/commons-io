@@ -20,6 +20,7 @@ package org.apache.commons.io.channels;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -32,11 +33,13 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.nio.channels.AsynchronousByteChannel;
 import java.nio.channels.AsynchronousChannel;
 import java.nio.channels.ByteChannel;
 import java.nio.channels.Channel;
 import java.nio.channels.ClosedChannelException;
+import java.nio.channels.FileChannel;
 import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.InterruptibleChannel;
 import java.nio.channels.MulticastChannel;
@@ -45,9 +48,12 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.ScatteringByteChannel;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.channels.WritableByteChannel;
+import java.nio.file.Path;
 import java.util.stream.Stream;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -116,8 +122,8 @@ class CloseShieldChannelTest {
     @Test
     void testDoesNotDoubleWrap() {
         final ByteChannel channel = mock(ByteChannel.class);
-        final ByteChannel shield1 = CloseShieldChannel.wrap(channel);
-        final ByteChannel shield2 = CloseShieldChannel.wrap(shield1);
+        final ByteChannel shield1 = CloseShieldChannel.wrap(channel, ByteChannel.class);
+        final ByteChannel shield2 = CloseShieldChannel.wrap(shield1, ByteChannel.class);
         assertSame(shield1, shield2);
     }
 
@@ -137,7 +143,7 @@ class CloseShieldChannelTest {
     void testGatheringByteChannelMethods() throws Exception {
         final GatheringByteChannel channel = mock(GatheringByteChannel.class);
         when(channel.isOpen()).thenReturn(true);
-        final GatheringByteChannel shield = CloseShieldChannel.wrap(channel);
+        final GatheringByteChannel shield = CloseShieldChannel.wrap(channel, GatheringByteChannel.class);
         // Before close write() should delegate
         when(channel.write(null, 0, 0)).thenReturn(42L);
         assertEquals(42, shield.write(null, 0, 0));
@@ -162,7 +168,7 @@ class CloseShieldChannelTest {
     void testNetworkChannelMethods() throws Exception {
         final NetworkChannel channel = mock(NetworkChannel.class);
         when(channel.isOpen()).thenReturn(true);
-        final NetworkChannel shield = CloseShieldChannel.wrap(channel);
+        final NetworkChannel shield = CloseShieldChannel.wrap(channel, NetworkChannel.class);
         // Before close getOption(), setOption(), getLocalAddress() and bind() should delegate
         when(channel.getOption(null)).thenReturn("foo");
         when(channel.setOption(null, null)).thenReturn(channel);
@@ -201,7 +207,7 @@ class CloseShieldChannelTest {
     void testReadableByteChannelMethods() throws Exception {
         final ReadableByteChannel channel = mock(ReadableByteChannel.class);
         when(channel.isOpen()).thenReturn(true);
-        final ReadableByteChannel shield = CloseShieldChannel.wrap(channel);
+        final ReadableByteChannel shield = CloseShieldChannel.wrap(channel, ReadableByteChannel.class);
         // Before close read() should delegate
         when(channel.read(null)).thenReturn(42);
         assertEquals(42, shield.read(null));
@@ -216,7 +222,7 @@ class CloseShieldChannelTest {
     void testScatteringByteChannelMethods() throws Exception {
         final ScatteringByteChannel channel = mock(ScatteringByteChannel.class);
         when(channel.isOpen()).thenReturn(true);
-        final ScatteringByteChannel shield = CloseShieldChannel.wrap(channel);
+        final ScatteringByteChannel shield = CloseShieldChannel.wrap(channel, ScatteringByteChannel.class);
         // Before close read() should delegate
         when(channel.read(null, 0, 0)).thenReturn(42L);
         assertEquals(42, shield.read(null, 0, 0));
@@ -231,7 +237,7 @@ class CloseShieldChannelTest {
     void testSeekableByteChannelMethods() throws Exception {
         final SeekableByteChannel channel = mock(SeekableByteChannel.class);
         when(channel.isOpen()).thenReturn(true);
-        final SeekableByteChannel shield = CloseShieldChannel.wrap(channel);
+        final SeekableByteChannel shield = CloseShieldChannel.wrap(channel, SeekableByteChannel.class);
         // Before close position() and size() should delegate
         when(channel.position()).thenReturn(42L);
         when(channel.size()).thenReturn(84L);
@@ -270,7 +276,7 @@ class CloseShieldChannelTest {
     void testWritableByteChannelMethods() throws Exception {
         final WritableByteChannel channel = mock(WritableByteChannel.class);
         when(channel.isOpen()).thenReturn(true);
-        final WritableByteChannel shield = CloseShieldChannel.wrap(channel);
+        final WritableByteChannel shield = CloseShieldChannel.wrap(channel, WritableByteChannel.class);
         // Before close write() should delegate
         when(channel.write(null)).thenReturn(42);
         assertEquals(42, shield.write(null));
@@ -279,5 +285,46 @@ class CloseShieldChannelTest {
         shield.close();
         assertThrows(ClosedChannelException.class, () -> shield.write(null));
         verifyNoMoreInteractions(channel);
+    }
+
+    @Test
+    void testCorrectlyDetectsInterfaces(@TempDir Path tempDir) throws IOException {
+        final Path testFile = tempDir.resolve("test.txt");
+        FileUtils.touch(testFile.toFile());
+        try (FileChannel channel = FileChannel.open(testFile); Channel shield = CloseShieldChannel.wrap(channel)) {
+            assertInstanceOf(SeekableByteChannel.class, shield);
+            assertInstanceOf(GatheringByteChannel.class, shield);
+            assertInstanceOf(WritableByteChannel.class, shield);
+            assertInstanceOf(ScatteringByteChannel.class, shield);
+            assertInstanceOf(ReadableByteChannel.class, shield);
+            assertInstanceOf(InterruptibleChannel.class, shield);
+            assertInstanceOf(ByteChannel.class, shield);
+            assertInstanceOf(Channel.class, shield);
+            // These are not interfaces, so can not be implemented
+            assertFalse(shield instanceof FileChannel, "not FileChannel");
+        }
+    }
+
+    @Test
+    void testThrowsIllegalArgumentException(@TempDir Path tempDir) throws Exception {
+        final Path testFile = tempDir.resolve("test.txt");
+        FileUtils.touch(testFile.toFile());
+        // Argument is not an interface
+        try (FileChannel channel = FileChannel.open(testFile)) {
+            final IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> CloseShieldChannel.wrap(channel, FileChannel.class));
+            assertTrue(ex.getMessage().contains("not an interface"));
+        }
+        // Argument is not an instance of the specified interface.
+        //
+        // This situation is rare in normal code because the compiler enforces type compatibility
+        // when T is known at compile time. However, it can still occur at runtime if a value is
+        // passed through an unchecked cast or comes from a raw type, bypassing generic type checks.
+        try (Channel channel = mock(Channel.class)) {
+            @SuppressWarnings("rawtypes")
+            final Class channelClass = ReadableByteChannel.class;
+            @SuppressWarnings("unchecked")
+            final IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> CloseShieldChannel.wrap(channel, channelClass));
+            assertTrue(ex.getMessage().contains("not an instance of"));
+        }
     }
 }
