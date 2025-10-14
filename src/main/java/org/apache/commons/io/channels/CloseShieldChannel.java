@@ -31,9 +31,8 @@ import java.util.Set;
 /**
  * Creates a close-shielding proxy for a {@link Channel}.
  *
- * <p>
- * The returned proxy will implement all {@link Channel} sub-interfaces that the delegate implements.
- * </p>
+ * <p>The returned proxy implements all {@link Channel} sub-interfaces that are both
+ * supported by this implementation and actually implemented by the given delegate.</p>
  *
  * @see Channel
  * @see Closeable
@@ -48,7 +47,7 @@ public final class CloseShieldChannel {
         // Visit interfaces
         while (currentType != null) {
             for (final Class<?> iface : currentType.getInterfaces()) {
-                if (Channel.class.isAssignableFrom(iface) && out.add(iface)) {
+                if (CloseShieldChannelHandler.isSupported(iface) && out.add(iface)) {
                     collectChannelInterfaces(iface, out);
                 }
             }
