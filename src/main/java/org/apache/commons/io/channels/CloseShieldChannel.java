@@ -20,6 +20,9 @@ package org.apache.commons.io.channels;
 import java.io.Closeable;
 import java.lang.reflect.Proxy;
 import java.nio.channels.Channel;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.SeekableByteChannel;
+import java.nio.channels.WritableByteChannel;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -59,7 +62,7 @@ public final class CloseShieldChannel {
      * @param channel The underlying channel to shield, not {@code null}.
      * @return A proxy that shields {@code close()} and enforces closed semantics on other calls.
      */
-    @SuppressWarnings({ "unchecked", "resource" }) // caller closes
+    @SuppressWarnings({ "resource" }) // caller closes
     public static Channel wrap(final Channel channel) {
         Objects.requireNonNull(channel, "channel");
         // Fast path: already our shield
@@ -76,23 +79,31 @@ public final class CloseShieldChannel {
     /**
      * Wraps a channel to shield it from being closed.
      *
-     * @param channel The underlying channel to shield, not {@code null} and must implement {@code type}.
-     * @param type    The interface the returned proxy must implement;
-     *                the proxy will also implement all other {@link Channel} sub-interfaces that the delegate implements.
-     * @param <T>     A type that extends {@link Channel}.
+     * @param channel The underlying channel to shield, not {@code null}.
      * @return A proxy that shields {@code close()} and enforces closed semantics on other calls.
-     * @throws IllegalArgumentException if {@code type} is not an interface or if {@code channel} does not implement {@code type}.
      */
-    @SuppressWarnings({ "unchecked", "resource" }) // caller closes
-    public static <T extends Channel> T wrap(final T channel, Class<T> type) {
-        Objects.requireNonNull(type, "type");
-        if (!type.isInterface()) {
-            throw new IllegalArgumentException(type.getName() + " is not an interface");
-        }
-        if (!type.isInstance(channel)) {
-            throw new IllegalArgumentException("channel of type " + channel.getClass().getName() + " is not an instance of " + type.getName());
-        }
-        return type.cast(wrap(channel));
+    public static ReadableByteChannel wrap(final ReadableByteChannel channel) {
+        return (ReadableByteChannel) wrap((Channel) channel);
+    }
+
+    /**
+     * Wraps a channel to shield it from being closed.
+     *
+     * @param channel The underlying channel to shield, not {@code null}.
+     * @return A proxy that shields {@code close()} and enforces closed semantics on other calls.
+     */
+    public static WritableByteChannel wrap(final WritableByteChannel channel) {
+        return (WritableByteChannel) wrap((Channel) channel);
+    }
+
+    /**
+     * Wraps a channel to shield it from being closed.
+     *
+     * @param channel The underlying channel to shield, not {@code null}.
+     * @return A proxy that shields {@code close()} and enforces closed semantics on other calls.
+     */
+    public static SeekableByteChannel wrap(final SeekableByteChannel channel) {
+        return (SeekableByteChannel) wrap((Channel) channel);
     }
 
     private CloseShieldChannel() {

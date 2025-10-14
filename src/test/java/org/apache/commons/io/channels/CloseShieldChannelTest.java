@@ -121,9 +121,9 @@ class CloseShieldChannelTest {
 
     @Test
     void testDoesNotDoubleWrap() {
-        final ByteChannel channel = mock(ByteChannel.class);
-        final ByteChannel shield1 = CloseShieldChannel.wrap(channel, ByteChannel.class);
-        final ByteChannel shield2 = CloseShieldChannel.wrap(shield1, ByteChannel.class);
+        final Channel channel = mock(Channel.class);
+        final Channel shield1 = CloseShieldChannel.wrap(channel);
+        final Channel shield2 = CloseShieldChannel.wrap(shield1);
         assertSame(shield1, shield2);
     }
 
@@ -143,7 +143,7 @@ class CloseShieldChannelTest {
     void testGatheringByteChannelMethods() throws Exception {
         final GatheringByteChannel channel = mock(GatheringByteChannel.class);
         when(channel.isOpen()).thenReturn(true);
-        final GatheringByteChannel shield = CloseShieldChannel.wrap(channel, GatheringByteChannel.class);
+        final GatheringByteChannel shield = (GatheringByteChannel) CloseShieldChannel.wrap(channel);
         // Before close write() should delegate
         when(channel.write(null, 0, 0)).thenReturn(42L);
         assertEquals(42, shield.write(null, 0, 0));
@@ -168,7 +168,7 @@ class CloseShieldChannelTest {
     void testNetworkChannelMethods() throws Exception {
         final NetworkChannel channel = mock(NetworkChannel.class);
         when(channel.isOpen()).thenReturn(true);
-        final NetworkChannel shield = CloseShieldChannel.wrap(channel, NetworkChannel.class);
+        final NetworkChannel shield = (NetworkChannel) CloseShieldChannel.wrap(channel);
         // Before close getOption(), setOption(), getLocalAddress() and bind() should delegate
         when(channel.getOption(null)).thenReturn("foo");
         when(channel.setOption(null, null)).thenReturn(channel);
@@ -207,7 +207,7 @@ class CloseShieldChannelTest {
     void testReadableByteChannelMethods() throws Exception {
         final ReadableByteChannel channel = mock(ReadableByteChannel.class);
         when(channel.isOpen()).thenReturn(true);
-        final ReadableByteChannel shield = CloseShieldChannel.wrap(channel, ReadableByteChannel.class);
+        final ReadableByteChannel shield = CloseShieldChannel.wrap(channel);
         // Before close read() should delegate
         when(channel.read(null)).thenReturn(42);
         assertEquals(42, shield.read(null));
@@ -222,7 +222,7 @@ class CloseShieldChannelTest {
     void testScatteringByteChannelMethods() throws Exception {
         final ScatteringByteChannel channel = mock(ScatteringByteChannel.class);
         when(channel.isOpen()).thenReturn(true);
-        final ScatteringByteChannel shield = CloseShieldChannel.wrap(channel, ScatteringByteChannel.class);
+        final ScatteringByteChannel shield = (ScatteringByteChannel) CloseShieldChannel.wrap(channel);
         // Before close read() should delegate
         when(channel.read(null, 0, 0)).thenReturn(42L);
         assertEquals(42, shield.read(null, 0, 0));
@@ -237,7 +237,7 @@ class CloseShieldChannelTest {
     void testSeekableByteChannelMethods() throws Exception {
         final SeekableByteChannel channel = mock(SeekableByteChannel.class);
         when(channel.isOpen()).thenReturn(true);
-        final SeekableByteChannel shield = CloseShieldChannel.wrap(channel, SeekableByteChannel.class);
+        final SeekableByteChannel shield = CloseShieldChannel.wrap(channel);
         // Before close position() and size() should delegate
         when(channel.position()).thenReturn(42L);
         when(channel.size()).thenReturn(84L);
@@ -276,7 +276,7 @@ class CloseShieldChannelTest {
     void testWritableByteChannelMethods() throws Exception {
         final WritableByteChannel channel = mock(WritableByteChannel.class);
         when(channel.isOpen()).thenReturn(true);
-        final WritableByteChannel shield = CloseShieldChannel.wrap(channel, WritableByteChannel.class);
+        final WritableByteChannel shield = CloseShieldChannel.wrap(channel);
         // Before close write() should delegate
         when(channel.write(null)).thenReturn(42);
         assertEquals(42, shield.write(null));
@@ -302,29 +302,6 @@ class CloseShieldChannelTest {
             assertInstanceOf(Channel.class, shield);
             // These are not interfaces, so can not be implemented
             assertFalse(shield instanceof FileChannel, "not FileChannel");
-        }
-    }
-
-    @Test
-    void testThrowsIllegalArgumentException(@TempDir Path tempDir) throws Exception {
-        final Path testFile = tempDir.resolve("test.txt");
-        FileUtils.touch(testFile.toFile());
-        // Argument is not an interface
-        try (FileChannel channel = FileChannel.open(testFile)) {
-            final IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> CloseShieldChannel.wrap(channel, FileChannel.class));
-            assertTrue(ex.getMessage().contains("not an interface"));
-        }
-        // Argument is not an instance of the specified interface.
-        //
-        // This situation is rare in normal code because the compiler enforces type compatibility
-        // when T is known at compile time. However, it can still occur at runtime if a value is
-        // passed through an unchecked cast or comes from a raw type, bypassing generic type checks.
-        try (Channel channel = mock(Channel.class)) {
-            @SuppressWarnings("rawtypes")
-            final Class channelClass = ReadableByteChannel.class;
-            @SuppressWarnings("unchecked")
-            final IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> CloseShieldChannel.wrap(channel, channelClass));
-            assertTrue(ex.getMessage().contains("not an instance of"));
         }
     }
 }
