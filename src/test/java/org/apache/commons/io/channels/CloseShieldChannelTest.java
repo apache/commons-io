@@ -20,6 +20,7 @@ package org.apache.commons.io.channels;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -32,11 +33,13 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.nio.channels.AsynchronousByteChannel;
 import java.nio.channels.AsynchronousChannel;
 import java.nio.channels.ByteChannel;
 import java.nio.channels.Channel;
 import java.nio.channels.ClosedChannelException;
+import java.nio.channels.FileChannel;
 import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.InterruptibleChannel;
 import java.nio.channels.MulticastChannel;
@@ -45,9 +48,12 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.ScatteringByteChannel;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.channels.WritableByteChannel;
+import java.nio.file.Path;
 import java.util.stream.Stream;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -279,5 +285,23 @@ class CloseShieldChannelTest {
         shield.close();
         assertThrows(ClosedChannelException.class, () -> shield.write(null));
         verifyNoMoreInteractions(channel);
+    }
+
+    @Test
+    void testCorrectlyDetectsInterfaces(@TempDir Path tempDir) throws IOException {
+        final Path testFile = tempDir.resolve("test.txt");
+        FileUtils.touch(testFile.toFile());
+        try (FileChannel channel = FileChannel.open(testFile); Channel shield = CloseShieldChannel.wrap(channel)) {
+            assertInstanceOf(SeekableByteChannel.class, shield);
+            assertInstanceOf(GatheringByteChannel.class, shield);
+            assertInstanceOf(WritableByteChannel.class, shield);
+            assertInstanceOf(ScatteringByteChannel.class, shield);
+            assertInstanceOf(ReadableByteChannel.class, shield);
+            assertInstanceOf(InterruptibleChannel.class, shield);
+            assertInstanceOf(ByteChannel.class, shield);
+            assertInstanceOf(Channel.class, shield);
+            // These are not interfaces, so can not be implemented
+            assertFalse(shield instanceof FileChannel, "not FileChannel");
+        }
     }
 }
