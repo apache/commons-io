@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>88</version>
+    <version>89</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
@@ -146,7 +146,7 @@ file comparators, endian transformation classes, and much more.
     </commons.osgi.import>
     <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-io/</commons.scmPubUrl>
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
-    <commons.bytebuddy.version>1.17.7</commons.bytebuddy.version>
+    <commons.bytebuddy.version>1.17.8</commons.bytebuddy.version>
     <japicmp.skip>false</japicmp.skip>
     <commons.release.isDistModule>true</commons.release.isDistModule>
     <!-- JaCoCo: Don't make code coverage worse than: -->

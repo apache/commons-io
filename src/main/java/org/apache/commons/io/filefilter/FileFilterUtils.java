@@ -153,7 +153,7 @@ public class FileFilterUtils {
      * @return a filter that ANDs the two specified filters
      * @see #and(IOFileFilter...)
      * @see AndFileFilter
-     * @deprecated use {@link #and(IOFileFilter...)}
+     * @deprecated Use {@link #and(IOFileFilter...)}
      */
     @Deprecated
     public static IOFileFilter andFileFilter(final IOFileFilter filter1, final IOFileFilter filter2) {
@@ -603,7 +603,7 @@ public class FileFilterUtils {
      * @return a filter that ORs the two specified filters
      * @see #or(IOFileFilter...)
      * @see OrFileFilter
-     * @deprecated use {@link #or(IOFileFilter...)}
+     * @deprecated Use {@link #or(IOFileFilter...)}
      */
     @Deprecated
     public static IOFileFilter orFileFilter(final IOFileFilter filter1, final IOFileFilter filter2) {

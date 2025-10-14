@@ -354,7 +354,7 @@ public class ReversedLinesFileReader implements Closeable, IOIterable<String> {
     }
 
     /**
-     * Constructs a ReversedLinesFileReader with default block size of 4KB and the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * Constructs a ReversedLinesFileReader with default block size of 4KB and the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      *
      * @param file the file to be read
      * @throws IOException if an I/O error occurs.

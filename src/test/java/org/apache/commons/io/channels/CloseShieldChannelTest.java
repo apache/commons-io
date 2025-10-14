@@ -115,6 +115,24 @@ class CloseShieldChannelTest {
     }
 
     @Test
+    void testCorrectlyDetectsInterfaces(@TempDir Path tempDir) throws IOException {
+        final Path testFile = tempDir.resolve("test.txt");
+        FileUtils.touch(testFile.toFile());
+        try (FileChannel channel = FileChannel.open(testFile); Channel shield = CloseShieldChannel.wrap(channel)) {
+            assertInstanceOf(SeekableByteChannel.class, shield);
+            assertInstanceOf(GatheringByteChannel.class, shield);
+            assertInstanceOf(WritableByteChannel.class, shield);
+            assertInstanceOf(ScatteringByteChannel.class, shield);
+            assertInstanceOf(ReadableByteChannel.class, shield);
+            assertInstanceOf(InterruptibleChannel.class, shield);
+            assertInstanceOf(ByteChannel.class, shield);
+            assertInstanceOf(Channel.class, shield);
+            // These are not interfaces, so can not be implemented
+            assertFalse(shield instanceof FileChannel, "not FileChannel");
+        }
+    }
+
+    @Test
     void testDoesNotDoubleWrap() {
         final Channel channel = mock(Channel.class);
         final Channel shield1 = CloseShieldChannel.wrap(channel);
@@ -280,23 +298,5 @@ class CloseShieldChannelTest {
         shield.close();
         assertThrows(ClosedChannelException.class, () -> shield.write(null));
         verifyNoMoreInteractions(channel);
-    }
-
-    @Test
-    void testCorrectlyDetectsInterfaces(@TempDir Path tempDir) throws IOException {
-        final Path testFile = tempDir.resolve("test.txt");
-        FileUtils.touch(testFile.toFile());
-        try (FileChannel channel = FileChannel.open(testFile); Channel shield = CloseShieldChannel.wrap(channel)) {
-            assertInstanceOf(SeekableByteChannel.class, shield);
-            assertInstanceOf(GatheringByteChannel.class, shield);
-            assertInstanceOf(WritableByteChannel.class, shield);
-            assertInstanceOf(ScatteringByteChannel.class, shield);
-            assertInstanceOf(ReadableByteChannel.class, shield);
-            assertInstanceOf(InterruptibleChannel.class, shield);
-            assertInstanceOf(ByteChannel.class, shield);
-            assertInstanceOf(Channel.class, shield);
-            // These are not interfaces, so can not be implemented
-            assertFalse(shield instanceof FileChannel, "not FileChannel");
-        }
     }
 }

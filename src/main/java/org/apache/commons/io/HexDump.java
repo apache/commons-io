@@ -169,7 +169,7 @@ public class HexDump {
      * data array are dumped.
      * </p>
      * <p>
-     * This method uses the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * This method uses the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      * </p>
      *
      * @param data  the byte array to be dumped

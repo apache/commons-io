@@ -500,6 +500,12 @@ public class IOUtils {
         checkFromIndexSize(off, len, Objects.requireNonNull(array, "char array").length);
     }
 
+    static void checkFromIndexSize(final int off, final int len, final int arrayLength) {
+        if ((off | len | arrayLength) < 0 || arrayLength - len < off) {
+            throw new IndexOutOfBoundsException(String.format("Range [%s, %<s + %s) out of bounds for length %s", off, len, arrayLength));
+        }
+    }
+
     /**
      * Validates that the sub-range {@code [off, off + len)} is within the bounds of the given string.
      *
@@ -534,12 +540,6 @@ public class IOUtils {
      */
     public static void checkFromIndexSize(final String str, final int off, final int len) {
         checkFromIndexSize(off, len, Objects.requireNonNull(str, "str").length());
-    }
-
-    static void checkFromIndexSize(final int off, final int len, final int arrayLength) {
-        if ((off | len | arrayLength) < 0 || arrayLength - len < off) {
-            throw new IndexOutOfBoundsException(String.format("Range [%s, %<s + %s) out of bounds for length %s", off, len, arrayLength));
-        }
     }
 
     /**
@@ -1269,7 +1269,7 @@ public class IOUtils {
 
     /**
      * Copies bytes from an {@link InputStream} to chars on a
-     * {@link Writer} using the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * {@link Writer} using the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@link BufferedInputStream}.
@@ -1421,8 +1421,8 @@ public class IOUtils {
     }
 
     /**
-     * Copies chars from a {@link Reader} to bytes on an {@link OutputStream} using the the virtual machine's {@link Charset#defaultCharset() default charset},
-     * and calling flush.
+     * Copies chars from a {@link Reader} to bytes on an {@link OutputStream} using the the virtual machine's {@linkplain Charset#defaultCharset() default
+     * charset}, and calling flush.
      * <p>
      * This method buffers the input internally, so there is no need to use a {@link BufferedReader}.
      * </p>
@@ -2054,6 +2054,7 @@ public class IOUtils {
      * @param input where to read input from.
      * @param buffer destination.
      * @return actual length read; may be less than requested if EOF was reached.
+     * @throws NullPointerException if {@code input} or {@code buffer} is null.
      * @throws IOException if a read error occurs.
      * @since 2.2
      */
@@ -2074,40 +2075,19 @@ public class IOUtils {
      * @param offset initial offset into buffer.
      * @param length length to read, must be &gt;= 0.
      * @return actual length read; may be less than requested if EOF was reached.
-     * @throws IllegalArgumentException if length is negative.
+     * @throws NullPointerException     if {@code input} or {@code buffer} is null.
+     * @throws IndexOutOfBoundsException if {@code offset} or {@code length} is negative, or if
+     *                                   {@code offset + length} is greater than {@code buffer.length}.
      * @throws IOException              if a read error occurs.
      * @since 2.2
      */
     public static int read(final InputStream input, final byte[] buffer, final int offset, final int length)
             throws IOException {
-        if (length == 0) {
-            return 0;
-        }
-        return read(input::read, buffer, offset, length);
-    }
-
-    /**
-     * Reads bytes from an input. This implementation guarantees that it will read as many bytes as possible before giving up; this may not always be the case
-     * for subclasses of {@link InputStream}.
-     *
-     * @param input  How to read input.
-     * @param buffer destination.
-     * @param offset initial offset into buffer.
-     * @param length length to read, must be &gt;= 0.
-     * @return actual length read; may be less than requested if EOF was reached.
-     * @throws IllegalArgumentException if length is negative.
-     * @throws IOException              if a read error occurs.
-     * @since 2.2
-     */
-    static int read(final IOTriFunction<byte[], Integer, Integer, Integer> input, final byte[] buffer, final int offset, final int length)
-            throws IOException {
-        if (length < 0) {
-            throw new IllegalArgumentException("Length must not be negative: " + length);
-        }
+        checkFromIndexSize(buffer, offset, length);
         int remaining = length;
         while (remaining > 0) {
             final int location = length - remaining;
-            final int count = input.apply(buffer, offset + location, remaining);
+            final int count = input.read(buffer, offset + location, remaining);
             if (EOF == count) {
                 break;
             }
@@ -2172,15 +2152,15 @@ public class IOUtils {
      * @param offset initial offset into buffer.
      * @param length length to read, must be &gt;= 0.
      * @return actual length read; may be less than requested if EOF was reached.
-     * @throws IllegalArgumentException if length is negative.
+     * @throws NullPointerException     if {@code reader} or {@code buffer} is null.
+     * @throws IndexOutOfBoundsException if {@code offset} or {@code length} is negative, or if
+     *                                   {@code offset + length} is greater than {@code buffer.length}.
      * @throws IOException              if a read error occurs.
      * @since 2.2
      */
     public static int read(final Reader reader, final char[] buffer, final int offset, final int length)
             throws IOException {
-        if (length < 0) {
-            throw new IllegalArgumentException("Length must not be negative: " + length);
-        }
+        checkFromIndexSize(buffer, offset, length);
         int remaining = length;
         while (remaining > 0) {
             final int location = length - remaining;
@@ -2202,9 +2182,9 @@ public class IOUtils {
      *
      * @param input where to read input from.
      * @param buffer destination.
-     * @throws IOException              if there is a problem reading the file.
-     * @throws IllegalArgumentException if length is negative.
+     * @throws NullPointerException     if {@code input} or {@code buffer} is null.
      * @throws EOFException             if the number of bytes read was incorrect.
+     * @throws IOException              if there is a problem reading the file.
      * @since 2.2
      */
     public static void readFully(final InputStream input, final byte[] buffer) throws IOException {
@@ -2222,9 +2202,11 @@ public class IOUtils {
      * @param buffer destination.
      * @param offset initial offset into buffer.
      * @param length length to read, must be &gt;= 0.
-     * @throws IOException              if there is a problem reading the file.
-     * @throws IllegalArgumentException if length is negative.
+     * @throws NullPointerException     if {@code input} or {@code buffer} is null.
+     * @throws IndexOutOfBoundsException if {@code offset} or {@code length} is negative, or if
+     *                                   {@code offset + length} is greater than {@code buffer.length}.
      * @throws EOFException             if the number of bytes read was incorrect.
+     * @throws IOException              if there is a problem reading the file.
      * @since 2.2
      */
     public static void readFully(final InputStream input, final byte[] buffer, final int offset, final int length)
@@ -2286,9 +2268,9 @@ public class IOUtils {
      *
      * @param reader where to read input from.
      * @param buffer destination.
-     * @throws IOException              if there is a problem reading the file.
-     * @throws IllegalArgumentException if length is negative.
+     * @throws NullPointerException     if {@code reader} or {@code buffer} is null.
      * @throws EOFException             if the number of characters read was incorrect.
+     * @throws IOException              if there is a problem reading the file.
      * @since 2.2
      */
     public static void readFully(final Reader reader, final char[] buffer) throws IOException {
@@ -2306,9 +2288,11 @@ public class IOUtils {
      * @param buffer destination.
      * @param offset initial offset into buffer.
      * @param length length to read, must be &gt;= 0.
-     * @throws IOException              if there is a problem reading the file.
-     * @throws IllegalArgumentException if length is negative.
+     * @throws NullPointerException     if {@code reader} or {@code buffer} is null.
+     * @throws IndexOutOfBoundsException if {@code offset} or {@code length} is negative, or if
+     *                                   {@code offset + length} is greater than {@code buffer.length}.
      * @throws EOFException             if the number of characters read was incorrect.
+     * @throws IOException              if there is a problem reading the file.
      * @since 2.2
      */
     public static void readFully(final Reader reader, final char[] buffer, final int offset, final int length)
@@ -2335,7 +2319,7 @@ public class IOUtils {
 
     /**
      * Gets the contents of an {@link InputStream} as a list of Strings,
-     * one entry per line, using the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * one entry per line, using the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@link BufferedInputStream}.
@@ -2914,15 +2898,16 @@ public class IOUtils {
     public static byte[] toByteArray(final InputStream input, final int size, final int chunkSize) throws IOException {
         Objects.requireNonNull(input, "input");
         if (chunkSize <= 0) {
-            throw new IllegalArgumentException("Chunk size must be greater than zero: " + chunkSize);
+            throw new IllegalArgumentException(String.format("chunkSize <= 0, chunkSize = %,d", chunkSize));
         }
         if (size <= chunkSize) {
             // throws if size < 0
             return toByteArray(input::read, size);
         }
         final UnsynchronizedByteArrayOutputStream output = copyToOutputStream(input, size, chunkSize);
-         if (output.size() != size) {
-            throw new EOFException("Unexpected read size, current: " + output.size() + ", expected: " + size);
+        final int outSize = output.size();
+        if (outSize != size) {
+            throw new EOFException(String.format("Expected read size: %,d, actual: %,d", size, outSize));
         }
         return output.toByteArray();
     }
@@ -2946,7 +2931,7 @@ public class IOUtils {
      */
     public static byte[] toByteArray(final InputStream input, final long size) throws IOException {
         if (size > Integer.MAX_VALUE) {
-            throw new IllegalArgumentException("Size cannot be greater than Integer max value: " + size);
+            throw new IllegalArgumentException(String.format("size > Integer.MAX_VALUE, size = %,d", size));
         }
         return toByteArray(input, (int) size);
     }
@@ -2957,12 +2942,13 @@ public class IOUtils {
      * @param input the input to read, not null.
      * @param size the size of the input to read, where 0 &lt; {@code size} &lt;= length of input.
      * @return byte [] of length {@code size}.
+     * @throws EOFException if the end of the input is reached before reading {@code size} bytes.
      * @throws IOException if an I/O error occurs or input length is smaller than parameter {@code size}.
      * @throws IllegalArgumentException if {@code size} is less than zero.
      */
     static byte[] toByteArray(final IOTriFunction<byte[], Integer, Integer, Integer> input, final int size) throws IOException {
         if (size < 0) {
-            throw new IllegalArgumentException("Size must be equal or greater than zero: " + size);
+            throw new IllegalArgumentException(String.format("size < 0, size = %,d", size));
         }
         if (size == 0) {
             return EMPTY_BYTE_ARRAY;
@@ -2974,14 +2960,14 @@ public class IOUtils {
             offset += read;
         }
         if (offset != size) {
-            throw new IOException("Unexpected read size, current: " + offset + ", expected: " + size);
+            throw new EOFException(String.format("Expected read size: %,d, actual: %,d", size, offset));
         }
         return data;
     }
 
     /**
      * Gets the contents of a {@link Reader} as a {@code byte[]}
-     * using the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * using the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@link BufferedReader}.
@@ -3046,7 +3032,7 @@ public class IOUtils {
 
     /**
      * Gets the contents of a {@link String} as a {@code byte[]}
-     * using the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * using the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      * <p>
      * This is the same as {@link String#getBytes()}.
      * </p>
@@ -3107,7 +3093,7 @@ public class IOUtils {
 
     /**
      * Gets the contents of an {@link InputStream} as a character array
-     * using the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * using the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@link BufferedInputStream}.
@@ -3192,7 +3178,7 @@ public class IOUtils {
 
     /**
      * Converts the specified CharSequence to an input stream, encoded as bytes
-     * using the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * using the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      *
      * @param input the CharSequence to convert.
      * @return an input stream.
@@ -3237,7 +3223,7 @@ public class IOUtils {
 
     /**
      * Converts the specified string to an input stream, encoded as bytes
-     * using the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * using the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      *
      * @param input the string to convert.
      * @return an input stream.
@@ -3282,7 +3268,7 @@ public class IOUtils {
 
     /**
      * Gets the contents of a {@code byte[]} as a String
-     * using the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * using the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      *
      * @param input the byte array to read.
      * @return the requested String.
@@ -3314,7 +3300,7 @@ public class IOUtils {
 
     /**
      * Gets the contents of an {@link InputStream} as a String
-     * using the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * using the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * {@link BufferedInputStream}.
@@ -3443,7 +3429,7 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents at the given URI using the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * Gets the contents at the given URI using the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      *
      * @param uri The URI source.
      * @return The contents of the URL as a String.
@@ -3484,7 +3470,7 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents at the given URL using the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * Gets the contents at the given URL using the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      *
      * @param url The URL source.
      * @return The contents of the URL as a String.
@@ -3542,7 +3528,7 @@ public class IOUtils {
 
     /**
      * Writes bytes from a {@code byte[]} to chars on a {@link Writer}
-     * using the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * using the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      * <p>
      * This method uses {@link String#String(byte[])}.
      * </p>
@@ -3605,7 +3591,7 @@ public class IOUtils {
     /**
      * Writes chars from a {@code char[]} to bytes on an {@link OutputStream}.
      * <p>
-     * This method uses the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * This method uses the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      * </p>
      *
      * @param data   the char array to write, do not modify during output, null ignored.
@@ -3756,7 +3742,7 @@ public class IOUtils {
 
     /**
      * Writes chars from a {@link String} to bytes on an
-     * {@link OutputStream} using the virtual machine's {@link Charset#defaultCharset() default charset}.
+     * {@link OutputStream} using the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
      * <p>
      * This method uses {@link String#getBytes()}.
      * </p>
@@ -3955,7 +3941,7 @@ public class IOUtils {
 
     /**
      * Writes the {@link #toString()} value of each item in a collection to an {@link OutputStream} line by line, using the virtual machine's
-     * {@link Charset#defaultCharset() default charset} and the specified line ending.
+     * {@linkplain Charset#defaultCharset() default charset} and the specified line ending.
      *
      * @param lines      the lines to write, null entries produce blank lines.
      * @param lineEnding the line separator to use, null is system default.
