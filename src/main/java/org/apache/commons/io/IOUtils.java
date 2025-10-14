@@ -500,6 +500,12 @@ public class IOUtils {
         checkFromIndexSize(off, len, Objects.requireNonNull(array, "char array").length);
     }
 
+    static void checkFromIndexSize(final int off, final int len, final int arrayLength) {
+        if ((off | len | arrayLength) < 0 || arrayLength - len < off) {
+            throw new IndexOutOfBoundsException(String.format("Range [%s, %<s + %s) out of bounds for length %s", off, len, arrayLength));
+        }
+    }
+
     /**
      * Validates that the sub-range {@code [off, off + len)} is within the bounds of the given string.
      *
@@ -534,12 +540,6 @@ public class IOUtils {
      */
     public static void checkFromIndexSize(final String str, final int off, final int len) {
         checkFromIndexSize(off, len, Objects.requireNonNull(str, "str").length());
-    }
-
-    static void checkFromIndexSize(final int off, final int len, final int arrayLength) {
-        if ((off | len | arrayLength) < 0 || arrayLength - len < off) {
-            throw new IndexOutOfBoundsException(String.format("Range [%s, %<s + %s) out of bounds for length %s", off, len, arrayLength));
-        }
     }
 
     /**

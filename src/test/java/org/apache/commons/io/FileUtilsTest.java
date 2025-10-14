@@ -170,9 +170,15 @@ class FileUtilsTest extends AbstractTempDirTest {
      */
     private static final ListDirectoryWalker LIST_WALKER = new ListDirectoryWalker();
 
+    private static void setDosReadOnly(Path p, boolean readOnly) throws IOException {
+        if (Files.getFileStore(p).supportsFileAttributeView(DosFileAttributeView.class)) {
+            Files.setAttribute(p, "dos:readonly", readOnly, LinkOption.NOFOLLOW_LINKS);
+        }
+    }
     private File testFile1;
     private File testFile2;
     private long testFile1Size;
+
     private long testFile2Size;
 
     private void assertContentMatchesAfterCopyURLToFileFor(final String resourceName, final File destination) throws IOException {
@@ -1755,12 +1761,6 @@ class FileUtilsTest extends AbstractTempDirTest {
             assertTrue(file.exists(), "File doesn't exist to delete");
             FileUtils.forceDelete(file);
             assertFalse(file.exists(), "FileUtils.forceDelete() must delete read-only file");
-        }
-    }
-
-    private static void setDosReadOnly(Path p, boolean readOnly) throws IOException {
-        if (Files.getFileStore(p).supportsFileAttributeView(DosFileAttributeView.class)) {
-            Files.setAttribute(p, "dos:readonly", readOnly, LinkOption.NOFOLLOW_LINKS);
         }
     }
 

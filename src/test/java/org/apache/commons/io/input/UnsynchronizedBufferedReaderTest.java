@@ -347,6 +347,33 @@ class UnsynchronizedBufferedReaderTest {
         }
     }
 
+    @Test
+    void testReadArray_HARMONY_54() throws IOException {
+        // Regression for HARMONY-54
+        final char[] ch = {};
+        @SuppressWarnings("resource")
+        final UnsynchronizedBufferedReader reader = new UnsynchronizedBufferedReader(new CharArrayReader(ch));
+        // Check exception thrown when the reader is open.
+        assertThrows(NullPointerException.class, () -> reader.read(null, 1, 0));
+
+        // Now check IOException is thrown in preference to
+        // NullPointerexception when the reader is closed.
+        reader.close();
+        assertThrows(IOException.class, () -> reader.read(null, 1, 0));
+
+        // And check that the IOException is thrown before
+        // ArrayIndexOutOfBoundException
+        assertThrows(IOException.class, () -> reader.read(ch, 0, 42));
+    }
+
+    @Test
+    void testReadArray_HARMONY_831() throws IOException {
+        // regression for HARMONY-831
+        try (Reader reader = new UnsynchronizedBufferedReader(new PipedReader(), 9)) {
+            assertThrows(IndexOutOfBoundsException.class, () -> reader.read(new char[] {}, 7, 0));
+        }
+    }
+
     /**
      * Tests {@link UnsynchronizedBufferedReader#read(char[], int, int)}.
      *
@@ -435,33 +462,6 @@ class UnsynchronizedBufferedReaderTest {
             final int result = bufin.read(new char[2], 0, 2);
             assertEquals(result, 1);
         }
-    }
-
-    @Test
-    void testReadArray_HARMONY_831() throws IOException {
-        // regression for HARMONY-831
-        try (Reader reader = new UnsynchronizedBufferedReader(new PipedReader(), 9)) {
-            assertThrows(IndexOutOfBoundsException.class, () -> reader.read(new char[] {}, 7, 0));
-        }
-    }
-
-    @Test
-    void testReadArray_HARMONY_54() throws IOException {
-        // Regression for HARMONY-54
-        final char[] ch = {};
-        @SuppressWarnings("resource")
-        final UnsynchronizedBufferedReader reader = new UnsynchronizedBufferedReader(new CharArrayReader(ch));
-        // Check exception thrown when the reader is open.
-        assertThrows(NullPointerException.class, () -> reader.read(null, 1, 0));
-
-        // Now check IOException is thrown in preference to
-        // NullPointerexception when the reader is closed.
-        reader.close();
-        assertThrows(IOException.class, () -> reader.read(null, 1, 0));
-
-        // And check that the IOException is thrown before
-        // ArrayIndexOutOfBoundException
-        assertThrows(IOException.class, () -> reader.read(ch, 0, 42));
     }
 
     /**

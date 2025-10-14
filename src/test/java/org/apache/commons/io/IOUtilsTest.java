@@ -138,6 +138,71 @@ class IOUtilsTest {
         IO.clear();
     }
 
+    static Stream<Arguments> invalidRead_InputStream_Offset_ArgumentsProvider() {
+        final InputStream input = new ByteArrayInputStream(new byte[10]);
+        final byte[] b = new byte[10];
+        return Stream.of(
+            // input is null
+            Arguments.of(null, b, 0, 1, NullPointerException.class),
+            // b is null
+            Arguments.of(input, null, 0, 1, NullPointerException.class),
+            // off is negative
+            Arguments.of(input, b, -1, 1, IndexOutOfBoundsException.class),
+            // len is negative
+            Arguments.of(input, b, 0, -1, IndexOutOfBoundsException.class),
+            // off + len is too big
+            Arguments.of(input, b, 1, 10, IndexOutOfBoundsException.class),
+            // off + len is too big
+            Arguments.of(input, b, 10, 1, IndexOutOfBoundsException.class)
+        );
+    }
+
+    static Stream<Arguments> testCheckFromIndexSizeInvalidCases() {
+        return Stream.of(
+                Arguments.of(-1, 0, 42),
+                Arguments.of(0, -1, 42),
+                Arguments.of(0, 0, -1),
+                // off + len > arrayLength
+                Arguments.of(1, 42, 42),
+                Arguments.of(Integer.MAX_VALUE, 1, Integer.MAX_VALUE)
+        );
+    }
+
+    static Stream<Arguments> testCheckFromIndexSizeValidCases() {
+        return Stream.of(
+                // Valid cases
+                Arguments.of(0, 0, 42),
+                Arguments.of(0, 1, 42),
+                Arguments.of(0, 42, 42),
+                Arguments.of(41, 1, 42),
+                Arguments.of(42, 0, 42)
+        );
+    }
+
+    static Stream<Arguments> testCheckFromToIndexInvalidCases() {
+        return Stream.of(
+                Arguments.of(-1, 0, 42),
+                Arguments.of(0, -1, 42),
+                Arguments.of(0, 0, -1),
+                // from > to
+                Arguments.of(1, 0, 42),
+                // to > arrayLength
+                Arguments.of(0, 43, 42),
+                Arguments.of(1, 43, 42)
+        );
+    }
+
+    static Stream<Arguments> testCheckFromToIndexValidCases() {
+        return Stream.of(
+                // Valid cases
+                Arguments.of(0, 0, 42),
+                Arguments.of(0, 1, 42),
+                Arguments.of(0, 42, 42),
+                Arguments.of(41, 42, 42),
+                Arguments.of(42, 42, 42)
+        );
+    }
+
     private static Stream<Arguments> testToByteArray_InputStream_Size_BufferSize_Succeeds() {
         final byte[] data = new byte[1024];
         for (int i = 0; i < 1024; i++) {
@@ -354,34 +419,6 @@ class IOUtilsTest {
         assertThrows(NegativeArraySizeException.class, () -> IOUtils.byteArray(-1));
     }
 
-    static Stream<Arguments> testCheckFromIndexSizeValidCases() {
-        return Stream.of(
-                // Valid cases
-                Arguments.of(0, 0, 42),
-                Arguments.of(0, 1, 42),
-                Arguments.of(0, 42, 42),
-                Arguments.of(41, 1, 42),
-                Arguments.of(42, 0, 42)
-        );
-    }
-
-    @ParameterizedTest
-    @MethodSource
-    void testCheckFromIndexSizeValidCases(int off, int len, int arrayLength) {
-        assertDoesNotThrow(() -> IOUtils.checkFromIndexSize(off, len, arrayLength));
-    }
-
-    static Stream<Arguments> testCheckFromIndexSizeInvalidCases() {
-        return Stream.of(
-                Arguments.of(-1, 0, 42),
-                Arguments.of(0, -1, 42),
-                Arguments.of(0, 0, -1),
-                // off + len > arrayLength
-                Arguments.of(1, 42, 42),
-                Arguments.of(Integer.MAX_VALUE, 1, Integer.MAX_VALUE)
-        );
-    }
-
     @ParameterizedTest
     @MethodSource
     void testCheckFromIndexSizeInvalidCases(int off, int len, int arrayLength) {
@@ -402,34 +439,10 @@ class IOUtilsTest {
         }
     }
 
-    static Stream<Arguments> testCheckFromToIndexValidCases() {
-        return Stream.of(
-                // Valid cases
-                Arguments.of(0, 0, 42),
-                Arguments.of(0, 1, 42),
-                Arguments.of(0, 42, 42),
-                Arguments.of(41, 42, 42),
-                Arguments.of(42, 42, 42)
-        );
-    }
-
     @ParameterizedTest
     @MethodSource
-    void testCheckFromToIndexValidCases(int from, int to, int arrayLength) {
-        assertDoesNotThrow(() -> IOUtils.checkFromToIndex(from, to, arrayLength));
-    }
-
-    static Stream<Arguments> testCheckFromToIndexInvalidCases() {
-        return Stream.of(
-                Arguments.of(-1, 0, 42),
-                Arguments.of(0, -1, 42),
-                Arguments.of(0, 0, -1),
-                // from > to
-                Arguments.of(1, 0, 42),
-                // to > arrayLength
-                Arguments.of(0, 43, 42),
-                Arguments.of(1, 43, 42)
-        );
+    void testCheckFromIndexSizeValidCases(int off, int len, int arrayLength) {
+        assertDoesNotThrow(() -> IOUtils.checkFromIndexSize(off, len, arrayLength));
     }
 
     @ParameterizedTest
@@ -450,6 +463,12 @@ class IOUtilsTest {
             });
             assertEquals(jreEx.getMessage(), ex.getMessage());
         }
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void testCheckFromToIndexValidCases(int from, int to, int arrayLength) {
+        assertDoesNotThrow(() -> IOUtils.checkFromToIndex(from, to, arrayLength));
     }
 
     @Test
@@ -1147,6 +1166,12 @@ class IOUtilsTest {
         }
     }
 
+    @ParameterizedTest
+    @MethodSource("invalidRead_InputStream_Offset_ArgumentsProvider")
+    void testRead_InputStream_Offset_ArgumentsValidation(InputStream input, byte[] b, int off, int len, Class<? extends Throwable> expected) {
+        assertThrows(expected, () -> IOUtils.read(input, b, off, len));
+    }
+
     @Test
     void testRead_ReadableByteChannel() throws Exception {
         final ByteBuffer buffer = ByteBuffer.allocate(FILE_SIZE);
@@ -1162,31 +1187,6 @@ class IOUtilsTest {
         } finally {
             IOUtils.closeQuietly(input, fileInputStream);
         }
-    }
-
-    static Stream<Arguments> invalidRead_InputStream_Offset_ArgumentsProvider() {
-        final InputStream input = new ByteArrayInputStream(new byte[10]);
-        final byte[] b = new byte[10];
-        return Stream.of(
-            // input is null
-            Arguments.of(null, b, 0, 1, NullPointerException.class),
-            // b is null
-            Arguments.of(input, null, 0, 1, NullPointerException.class),
-            // off is negative
-            Arguments.of(input, b, -1, 1, IndexOutOfBoundsException.class),
-            // len is negative
-            Arguments.of(input, b, 0, -1, IndexOutOfBoundsException.class),
-            // off + len is too big
-            Arguments.of(input, b, 1, 10, IndexOutOfBoundsException.class),
-            // off + len is too big
-            Arguments.of(input, b, 10, 1, IndexOutOfBoundsException.class)
-        );
-    }
-
-    @ParameterizedTest
-    @MethodSource("invalidRead_InputStream_Offset_ArgumentsProvider")
-    void testRead_InputStream_Offset_ArgumentsValidation(InputStream input, byte[] b, int off, int len, Class<? extends Throwable> expected) {
-        assertThrows(expected, () -> IOUtils.read(input, b, off, len));
     }
 
     @Test
@@ -1219,6 +1219,12 @@ class IOUtilsTest {
         IOUtils.readFully(stream, buffer, 2, 8);
         assertEquals("wxabcd1234", new String(buffer, 0, buffer.length, StandardCharsets.UTF_8));
         IOUtils.closeQuietly(stream);
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidRead_InputStream_Offset_ArgumentsProvider")
+    void testReadFully_InputStream_Offset_ArgumentsValidation(InputStream input, byte[] b, int off, int len, Class<? extends Throwable> expected) {
+        assertThrows(expected, () -> IOUtils.read(input, b, off, len));
     }
 
     @Test
@@ -1263,12 +1269,6 @@ class IOUtilsTest {
         IOUtils.readFully(reader, buffer, 2, 8);
         assertEquals("wxabcd1234", new String(buffer));
         IOUtils.closeQuietly(reader);
-    }
-
-    @ParameterizedTest
-    @MethodSource("invalidRead_InputStream_Offset_ArgumentsProvider")
-    void testReadFully_InputStream_Offset_ArgumentsValidation(InputStream input, byte[] b, int off, int len, Class<? extends Throwable> expected) {
-        assertThrows(expected, () -> IOUtils.read(input, b, off, len));
     }
 
     @Test
@@ -1745,13 +1745,6 @@ class IOUtilsTest {
         }
     }
 
-    @Test
-    void testToByteArray_InputStream_Size_Truncated() throws Exception {
-        try (InputStream in = new NullInputStream(0)) {
-            assertThrows(EOFException.class, () -> IOUtils.toByteArray(in, 1));
-        }
-    }
-
     @ParameterizedTest
     @MethodSource
     void testToByteArray_InputStream_Size_BufferSize_Succeeds(final byte[] data, final int size, final int bufferSize) throws IOException {
@@ -1767,6 +1760,13 @@ class IOUtilsTest {
             final int size, final int bufferSize, final Class<? extends Exception> exceptionClass) throws IOException {
         try (InputStream input = new NullInputStream(0)) {
             assertThrows(exceptionClass, () -> IOUtils.toByteArray(input, size, bufferSize));
+        }
+    }
+
+    @Test
+    void testToByteArray_InputStream_Size_Truncated() throws Exception {
+        try (InputStream in = new NullInputStream(0)) {
+            assertThrows(EOFException.class, () -> IOUtils.toByteArray(in, 1));
         }
     }
 
