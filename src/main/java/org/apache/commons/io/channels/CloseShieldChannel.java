@@ -40,11 +40,15 @@ public final class CloseShieldChannel {
     private static final Class<?>[] EMPTY = {};
 
     private static Set<Class<?>> collectChannelInterfaces(final Class<?> type, final Set<Class<?>> out) {
+        Class<?> currentType = type;
         // Visit interfaces
-        for (final Class<?> iface : type.getInterfaces()) {
-            if (Channel.class.isAssignableFrom(iface) && out.add(iface)) {
-                collectChannelInterfaces(iface, out);
+        while (currentType != null) {
+            for (final Class<?> iface : currentType.getInterfaces()) {
+                if (Channel.class.isAssignableFrom(iface) && out.add(iface)) {
+                    collectChannelInterfaces(iface, out);
+                }
             }
+            currentType = currentType.getSuperclass();
         }
         return out;
     }
