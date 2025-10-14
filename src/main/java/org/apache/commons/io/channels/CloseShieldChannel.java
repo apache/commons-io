@@ -19,6 +19,7 @@ package org.apache.commons.io.channels;
 
 import java.io.Closeable;
 import java.lang.reflect.Proxy;
+import java.nio.channels.ByteChannel;
 import java.nio.channels.Channel;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.SeekableByteChannel;
@@ -74,6 +75,16 @@ public final class CloseShieldChannel {
         // fallback to root surface
         return (Channel) Proxy.newProxyInstance(channel.getClass().getClassLoader(), // use delegate's loader
                 set.isEmpty() ? new Class<?>[] { Channel.class } : set.toArray(EMPTY), new CloseShieldChannelHandler(channel));
+    }
+
+    /**
+     * Wraps a channel to shield it from being closed.
+     *
+     * @param channel The underlying channel to shield, not {@code null}.
+     * @return A proxy that shields {@code close()} and enforces closed semantics on other calls.
+     */
+    public static ByteChannel wrap(final ByteChannel channel) {
+        return (ByteChannel) wrap((Channel) channel);
     }
 
     /**
