@@ -134,9 +134,9 @@ class CloseShieldChannelTest {
 
     @Test
     void testDoesNotDoubleWrap() {
-        final Channel channel = mock(Channel.class);
-        final Channel shield1 = CloseShieldChannel.wrap(channel);
-        final Channel shield2 = CloseShieldChannel.wrap(shield1);
+        final ByteChannel channel = mock(ByteChannel.class);
+        final ByteChannel shield1 = CloseShieldChannel.wrap(channel);
+        final ByteChannel shield2 = CloseShieldChannel.wrap(shield1);
         assertSame(shield1, shield2);
     }
 
