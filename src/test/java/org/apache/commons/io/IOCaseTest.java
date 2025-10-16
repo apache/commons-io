@@ -303,24 +303,8 @@ class IOCaseTest {
     }
 
     @Test
-    void test_getScratchByteArrayWriteOnly() {
-        final byte[] array = IOUtils.getScratchByteArrayWriteOnly();
-        assert0(array);
-        Arrays.fill(array, (byte) 1);
-        assert0(IOUtils.getScratchCharArray());
-    }
-
-    @Test
     void test_getScratchCharArray() {
         final char[] array = IOUtils.getScratchCharArray();
-        assert0(array);
-        Arrays.fill(array, (char) 1);
-        assert0(IOUtils.getScratchCharArray());
-    }
-
-    @Test
-    void test_getScratchCharArrayWriteOnly() {
-        final char[] array = IOUtils.getScratchCharArrayWriteOnly();
         assert0(array);
         Arrays.fill(array, (char) 1);
         assert0(IOUtils.getScratchCharArray());

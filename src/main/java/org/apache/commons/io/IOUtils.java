@@ -204,22 +204,12 @@ public class IOUtils {
     /**
      * Internal byte array buffer, intended for both reading and writing.
      */
-    private static final ThreadLocal<byte[]> SCRATCH_BYTE_BUFFER_RW = ThreadLocal.withInitial(IOUtils::byteArray);
-
-    /**
-     * Internal byte array buffer, intended for write only operations.
-     */
-    private static final byte[] SCRATCH_BYTE_BUFFER_WO = byteArray();
+    private static final ThreadLocal<byte[]> SCRATCH_BYTE_BUFFER = ThreadLocal.withInitial(IOUtils::byteArray);
 
     /**
      * Internal char array buffer, intended for both reading and writing.
      */
-    private static final ThreadLocal<char[]> SCRATCH_CHAR_BUFFER_RW = ThreadLocal.withInitial(IOUtils::charArray);
-
-    /**
-     * Internal char array buffer, intended for write only operations.
-     */
-    private static final char[] SCRATCH_CHAR_BUFFER_WO = charArray();
+    private static final ThreadLocal<char[]> SCRATCH_CHAR_BUFFER = ThreadLocal.withInitial(IOUtils::charArray);
 
     /**
      * The maximum size of an array in many Java VMs.
@@ -592,10 +582,8 @@ public class IOUtils {
      * @see IO#clear()
      */
     static void clear() {
-        SCRATCH_BYTE_BUFFER_RW.remove();
-        SCRATCH_CHAR_BUFFER_RW.remove();
-        Arrays.fill(SCRATCH_BYTE_BUFFER_WO, (byte) 0);
-        Arrays.fill(SCRATCH_CHAR_BUFFER_WO, (char) 0);
+        SCRATCH_BYTE_BUFFER.remove();
+        SCRATCH_CHAR_BUFFER.remove();
     }
 
     /**
@@ -1865,16 +1853,7 @@ public class IOUtils {
      * @return the internal byte array buffer, intended for both reading and writing.
      */
     static byte[] getScratchByteArray() {
-        return fill0(SCRATCH_BYTE_BUFFER_RW.get());
-    }
-
-    /**
-     * Gets the internal byte array intended for write only operations.
-     *
-     * @return the internal byte array intended for write only operations.
-     */
-    static byte[] getScratchByteArrayWriteOnly() {
-        return fill0(SCRATCH_BYTE_BUFFER_WO);
+        return fill0(SCRATCH_BYTE_BUFFER.get());
     }
 
     /**
@@ -1883,16 +1862,7 @@ public class IOUtils {
      * @return the char byte array buffer, intended for both reading and writing.
      */
     static char[] getScratchCharArray() {
-        return fill0(SCRATCH_CHAR_BUFFER_RW.get());
-    }
-
-    /**
-     * Gets the internal char array intended for write only operations.
-     *
-     * @return the internal char array intended for write only operations.
-     */
-    static char[] getScratchCharArrayWriteOnly() {
-        return fill0(SCRATCH_CHAR_BUFFER_WO);
+        return fill0(SCRATCH_CHAR_BUFFER.get());
     }
 
     /**
@@ -2527,7 +2497,7 @@ public class IOUtils {
      * @since 2.0
      */
     public static long skip(final InputStream input, final long skip) throws IOException {
-        return skip(input, skip, IOUtils::getScratchByteArrayWriteOnly);
+        return skip(input, skip, IOUtils::getScratchByteArray);
     }
 
     /**
@@ -2636,7 +2606,7 @@ public class IOUtils {
         long remain = toSkip;
         while (remain > 0) {
             // See https://issues.apache.org/jira/browse/IO-203 for why we use read() rather than delegating to skip()
-            final char[] charArray = getScratchCharArrayWriteOnly();
+            final char[] charArray = getScratchCharArray();
             final long n = reader.read(charArray, 0, (int) Math.min(remain, charArray.length));
             if (n < 0) { // EOF
                 break;
@@ -2667,7 +2637,7 @@ public class IOUtils {
      * @since 2.0
      */
     public static void skipFully(final InputStream input, final long toSkip) throws IOException {
-        final long skipped = skip(input, toSkip, IOUtils::getScratchByteArrayWriteOnly);
+        final long skipped = skip(input, toSkip);
         if (skipped != toSkip) {
             throw new EOFException("Bytes to skip: " + toSkip + " actual: " + skipped);
         }
