@@ -47,9 +47,11 @@ import java.nio.channels.ScatteringByteChannel;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.ClassUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -60,7 +62,10 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 class CloseShieldChannelTest {
 
-    static Stream<Class<? extends Channel>> testedInterfaces() {
+    /**
+     * JRE {@link Channel} interfaces.
+     */
+    static Stream<Class<? extends Channel>> channelInterfaces() {
         // @formatter:off
         return Stream.of(
                 AsynchronousChannel.class,
@@ -76,8 +81,15 @@ class CloseShieldChannelTest {
         // @formatter:on
     }
 
+    /**
+     * Gets all interfaces implemented by the class {@link FileChannel}.
+     */
+    static List<Class<?>> fileChannelInterfaces() {
+        return ClassUtils.getAllInterfaces(FileChannel.class);
+    }
+
     @ParameterizedTest
-    @MethodSource("testedInterfaces")
+    @MethodSource("channelInterfaces")
     void testCloseDoesNotCloseDelegate(final Class<? extends Channel> channelClass) throws Exception {
         final Channel channel = mock(channelClass);
         final Channel shield = CloseShieldChannel.wrap(channel);
@@ -86,7 +98,7 @@ class CloseShieldChannelTest {
     }
 
     @ParameterizedTest
-    @MethodSource("testedInterfaces")
+    @MethodSource("channelInterfaces")
     void testCloseIsIdempotent(final Class<? extends Channel> channelClass) throws Exception {
         final Channel channel = mock(channelClass);
         final Channel shield = CloseShieldChannel.wrap(channel);
@@ -98,9 +110,9 @@ class CloseShieldChannelTest {
     }
 
     @ParameterizedTest
-    @MethodSource("testedInterfaces")
-    void testCloseIsShielded(final Class<? extends Channel> channelClass) throws Exception {
-        final Channel channel = mock(channelClass);
+    @MethodSource("channelInterfaces")
+    void testCloseIsShielded(final Class<? extends Channel> channelInterface) throws Exception {
+        final Channel channel = mock(channelInterface);
         when(channel.isOpen()).thenReturn(true, false, true, false);
         final Channel shield = CloseShieldChannel.wrap(channel);
         // Reflects delegate state initially
@@ -115,19 +127,12 @@ class CloseShieldChannelTest {
     }
 
     @Test
-    void testCorrectlyDetectsInterfaces(@TempDir Path tempDir) throws IOException {
+    void testWrapFileChannel(final @TempDir Path tempDir) throws IOException {
         final Path testFile = tempDir.resolve("test.txt");
         FileUtils.touch(testFile.toFile());
         try (FileChannel channel = FileChannel.open(testFile); Channel shield = CloseShieldChannel.wrap(channel)) {
-            assertInstanceOf(SeekableByteChannel.class, shield);
-            assertInstanceOf(GatheringByteChannel.class, shield);
-            assertInstanceOf(WritableByteChannel.class, shield);
-            assertInstanceOf(ScatteringByteChannel.class, shield);
-            assertInstanceOf(ReadableByteChannel.class, shield);
-            assertInstanceOf(InterruptibleChannel.class, shield);
-            assertInstanceOf(ByteChannel.class, shield);
-            assertInstanceOf(Channel.class, shield);
-            // These are not interfaces, so can not be implemented
+            fileChannelInterfaces().forEach(iface -> assertInstanceOf(iface, shield));
+            // FileChannel is not an interface, so can not be implemented.
             assertFalse(shield instanceof FileChannel, "not FileChannel");
         }
     }
@@ -141,7 +146,7 @@ class CloseShieldChannelTest {
     }
 
     @ParameterizedTest
-    @MethodSource("testedInterfaces")
+    @MethodSource("channelInterfaces")
     void testEquals(final Class<? extends Channel> channelClass) throws Exception {
         final Channel channel = mock(channelClass);
         final Channel shield = CloseShieldChannel.wrap(channel);
@@ -168,7 +173,7 @@ class CloseShieldChannelTest {
     }
 
     @ParameterizedTest
-    @MethodSource("testedInterfaces")
+    @MethodSource("channelInterfaces")
     void testHashCode(final Class<? extends Channel> channelClass) throws Exception {
         final Channel channel = mock(channelClass);
         final Channel shield = CloseShieldChannel.wrap(channel);
@@ -208,7 +213,7 @@ class CloseShieldChannelTest {
     }
 
     @ParameterizedTest
-    @MethodSource("testedInterfaces")
+    @MethodSource("channelInterfaces")
     void testPreservesInterfaces(final Class<? extends Channel> channelClass) {
         final Channel channel = mock(channelClass);
         final Channel shield = CloseShieldChannel.wrap(channel);
@@ -275,7 +280,7 @@ class CloseShieldChannelTest {
     }
 
     @ParameterizedTest
-    @MethodSource("testedInterfaces")
+    @MethodSource("channelInterfaces")
     void testToString(final Class<? extends Channel> channelClass) throws Exception {
         final Channel channel = mock(channelClass);
         when(channel.toString()).thenReturn("MyChannel");
