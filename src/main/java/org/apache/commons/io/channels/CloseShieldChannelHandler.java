@@ -43,17 +43,16 @@ final class CloseShieldChannelHandler implements InvocationHandler {
 
     static {
         final Set<Class<?>> interfaces = new HashSet<>();
+        interfaces.add(AsynchronousChannel.class);
+        interfaces.add(ByteChannel.class);
         interfaces.add(Channel.class);
+        interfaces.add(GatheringByteChannel.class);
+        interfaces.add(InterruptibleChannel.class);
+        interfaces.add(NetworkChannel.class);
         interfaces.add(ReadableByteChannel.class);
         interfaces.add(ScatteringByteChannel.class);
-        interfaces.add(WritableByteChannel.class);
-        interfaces.add(GatheringByteChannel.class);
-        interfaces.add(ByteChannel.class);
         interfaces.add(SeekableByteChannel.class);
-        interfaces.add(NetworkChannel.class);
-        // Similar to Closeable
-        interfaces.add(AsynchronousChannel.class);
-        interfaces.add(InterruptibleChannel.class);
+        interfaces.add(WritableByteChannel.class);
         SUPPORTED_INTERFACES = Collections.unmodifiableSet(interfaces);
     }
 

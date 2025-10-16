@@ -19,9 +19,14 @@ package org.apache.commons.io.channels;
 
 import java.io.Closeable;
 import java.lang.reflect.Proxy;
+import java.nio.channels.AsynchronousChannel;
 import java.nio.channels.ByteChannel;
 import java.nio.channels.Channel;
+import java.nio.channels.GatheringByteChannel;
+import java.nio.channels.InterruptibleChannel;
+import java.nio.channels.NetworkChannel;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.ScatteringByteChannel;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.util.LinkedHashSet;
@@ -31,8 +36,23 @@ import java.util.Set;
 /**
  * Creates a close-shielding proxy for a {@link Channel}.
  *
- * <p>The returned proxy implements all {@link Channel} sub-interfaces that are both
- * supported by this implementation and actually implemented by the given delegate.</p>
+ * <p>The returned proxy implements all {@link Channel} sub-interfaces that are both supported by this implementation and actually implemented by the given
+ * delegate.</p>
+ *
+ * <p>The following interfaces are supported:</p>
+ *
+ * <ul>
+ * <li>{@link AsynchronousChannel}</li>
+ * <li>{@link ByteChannel}</li>
+ * <li>{@link Channel}</li>
+ * <li>{@link GatheringByteChannel}</li>
+ * <li>{@link InterruptibleChannel}</li>
+ * <li>{@link NetworkChannel}</li>
+ * <li>{@link ReadableByteChannel}</li>
+ * <li>{@link ScatteringByteChannel}</li>
+ * <li>{@link SeekableByteChannel}</li>
+ * <li>{@link WritableByteChannel}</li>
+ * </ul>
  *
  * @see Channel
  * @see Closeable
@@ -60,10 +80,13 @@ public final class CloseShieldChannel {
      * Wraps a channel to shield it from being closed.
      *
      * @param channel The underlying channel to shield, not {@code null}.
+     * @param <T>     A supported channel type.
      * @return A proxy that shields {@code close()} and enforces closed semantics on other calls.
+     * @throws ClassCastException if {@code T} is not a supported channel type.
+     * @throws NullPointerException if {@code channel} is {@code null}.
      */
-    @SuppressWarnings({ "resource" }) // caller closes
-    public static Channel wrap(final Channel channel) {
+    @SuppressWarnings({ "unchecked", "resource" }) // caller closes
+    public static <T extends Channel> T wrap(final T channel) {
         Objects.requireNonNull(channel, "channel");
         // Fast path: already our shield
         if (Proxy.isProxyClass(channel.getClass()) && Proxy.getInvocationHandler(channel) instanceof CloseShieldChannelHandler) {
@@ -72,48 +95,8 @@ public final class CloseShieldChannel {
         // Collect only Channel sub-interfaces.
         final Set<Class<?>> set = collectChannelInterfaces(channel.getClass(), new LinkedHashSet<>());
         // fallback to root surface
-        return (Channel) Proxy.newProxyInstance(channel.getClass().getClassLoader(), // use delegate's loader
+        return (T) Proxy.newProxyInstance(channel.getClass().getClassLoader(), // use delegate's loader
                 set.isEmpty() ? new Class<?>[] { Channel.class } : set.toArray(EMPTY), new CloseShieldChannelHandler(channel));
-    }
-
-    /**
-     * Wraps a channel to shield it from being closed.
-     *
-     * @param channel The underlying channel to shield, not {@code null}.
-     * @return A proxy that shields {@code close()} and enforces closed semantics on other calls.
-     */
-    public static ByteChannel wrap(final ByteChannel channel) {
-        return (ByteChannel) wrap((Channel) channel);
-    }
-
-    /**
-     * Wraps a channel to shield it from being closed.
-     *
-     * @param channel The underlying channel to shield, not {@code null}.
-     * @return A proxy that shields {@code close()} and enforces closed semantics on other calls.
-     */
-    public static ReadableByteChannel wrap(final ReadableByteChannel channel) {
-        return (ReadableByteChannel) wrap((Channel) channel);
-    }
-
-    /**
-     * Wraps a channel to shield it from being closed.
-     *
-     * @param channel The underlying channel to shield, not {@code null}.
-     * @return A proxy that shields {@code close()} and enforces closed semantics on other calls.
-     */
-    public static WritableByteChannel wrap(final WritableByteChannel channel) {
-        return (WritableByteChannel) wrap((Channel) channel);
-    }
-
-    /**
-     * Wraps a channel to shield it from being closed.
-     *
-     * @param channel The underlying channel to shield, not {@code null}.
-     * @return A proxy that shields {@code close()} and enforces closed semantics on other calls.
-     */
-    public static SeekableByteChannel wrap(final SeekableByteChannel channel) {
-        return (SeekableByteChannel) wrap((Channel) channel);
     }
 
     private CloseShieldChannel() {

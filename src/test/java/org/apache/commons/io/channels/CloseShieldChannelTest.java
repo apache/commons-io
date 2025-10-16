@@ -156,7 +156,7 @@ class CloseShieldChannelTest {
     void testGatheringByteChannelMethods() throws Exception {
         final GatheringByteChannel channel = mock(GatheringByteChannel.class);
         when(channel.isOpen()).thenReturn(true);
-        final GatheringByteChannel shield = (GatheringByteChannel) CloseShieldChannel.wrap(channel);
+        final GatheringByteChannel shield = CloseShieldChannel.wrap(channel);
         // Before close write() should delegate
         when(channel.write(null, 0, 0)).thenReturn(42L);
         assertEquals(42, shield.write(null, 0, 0));
@@ -181,7 +181,7 @@ class CloseShieldChannelTest {
     void testNetworkChannelMethods() throws Exception {
         final NetworkChannel channel = mock(NetworkChannel.class);
         when(channel.isOpen()).thenReturn(true);
-        final NetworkChannel shield = (NetworkChannel) CloseShieldChannel.wrap(channel);
+        final NetworkChannel shield = CloseShieldChannel.wrap(channel);
         // Before close getOption(), setOption(), getLocalAddress() and bind() should delegate
         when(channel.getOption(null)).thenReturn("foo");
         when(channel.setOption(null, null)).thenReturn(channel);
@@ -235,7 +235,7 @@ class CloseShieldChannelTest {
     void testScatteringByteChannelMethods() throws Exception {
         final ScatteringByteChannel channel = mock(ScatteringByteChannel.class);
         when(channel.isOpen()).thenReturn(true);
-        final ScatteringByteChannel shield = (ScatteringByteChannel) CloseShieldChannel.wrap(channel);
+        final ScatteringByteChannel shield = CloseShieldChannel.wrap(channel);
         // Before close read() should delegate
         when(channel.read(null, 0, 0)).thenReturn(42L);
         assertEquals(42, shield.read(null, 0, 0));
