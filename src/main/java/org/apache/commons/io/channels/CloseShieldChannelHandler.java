@@ -39,10 +39,10 @@ import java.util.Set;
 
 final class CloseShieldChannelHandler implements InvocationHandler {
 
-    private static final Set<Class<?>> SUPPORTED_INTERFACES;
+    private static final Set<Class<? extends Channel>> SUPPORTED_INTERFACES;
 
     static {
-        final Set<Class<?>> interfaces = new HashSet<>();
+        final Set<Class<? extends Channel>> interfaces = new HashSet<>();
         interfaces.add(AsynchronousChannel.class);
         interfaces.add(ByteChannel.class);
         interfaces.add(Channel.class);
