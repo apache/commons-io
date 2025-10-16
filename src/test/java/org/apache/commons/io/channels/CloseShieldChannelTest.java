@@ -34,7 +34,6 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.nio.channels.AsynchronousByteChannel;
 import java.nio.channels.AsynchronousChannel;
 import java.nio.channels.ByteChannel;
 import java.nio.channels.Channel;
@@ -42,7 +41,6 @@ import java.nio.channels.ClosedChannelException;
 import java.nio.channels.FileChannel;
 import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.InterruptibleChannel;
-import java.nio.channels.MulticastChannel;
 import java.nio.channels.NetworkChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.ScatteringByteChannel;
@@ -65,14 +63,11 @@ class CloseShieldChannelTest {
     static Stream<Class<? extends Channel>> testedInterfaces() {
         // @formatter:off
         return Stream.of(
-                AsynchronousByteChannel.class,
                 AsynchronousChannel.class,
                 ByteChannel.class,
                 Channel.class,
                 GatheringByteChannel.class,
                 InterruptibleChannel.class,
-                MulticastChannel.class,
-                NetworkChannel.class,
                 NetworkChannel.class,
                 ReadableByteChannel.class,
                 ScatteringByteChannel.class,

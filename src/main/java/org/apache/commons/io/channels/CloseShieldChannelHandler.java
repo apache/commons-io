@@ -21,13 +21,44 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.nio.channels.AsynchronousChannel;
+import java.nio.channels.ByteChannel;
 import java.nio.channels.Channel;
 import java.nio.channels.ClosedChannelException;
+import java.nio.channels.GatheringByteChannel;
+import java.nio.channels.InterruptibleChannel;
 import java.nio.channels.NetworkChannel;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.ScatteringByteChannel;
 import java.nio.channels.SeekableByteChannel;
+import java.nio.channels.WritableByteChannel;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 final class CloseShieldChannelHandler implements InvocationHandler {
+
+    private static final Set<Class<?>> SUPPORTED_INTERFACES;
+
+    static {
+        final Set<Class<?>> interfaces = new HashSet<>();
+        interfaces.add(AsynchronousChannel.class);
+        interfaces.add(ByteChannel.class);
+        interfaces.add(Channel.class);
+        interfaces.add(GatheringByteChannel.class);
+        interfaces.add(InterruptibleChannel.class);
+        interfaces.add(NetworkChannel.class);
+        interfaces.add(ReadableByteChannel.class);
+        interfaces.add(ScatteringByteChannel.class);
+        interfaces.add(SeekableByteChannel.class);
+        interfaces.add(WritableByteChannel.class);
+        SUPPORTED_INTERFACES = Collections.unmodifiableSet(interfaces);
+    }
+
+    static boolean isSupported(final Class<?> interfaceClass) {
+        return SUPPORTED_INTERFACES.contains(interfaceClass);
+    }
 
     /**
      * Tests whether the given method is allowed to be called after the shield is closed.
