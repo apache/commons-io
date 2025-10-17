@@ -198,7 +198,7 @@ public class IOUtils {
          *
          * @param array the byte array to release.
          */
-        static void releaseScratchByteArray(byte[] array) {
+        static void releaseScratchByteArray(final byte[] array) {
             final Object[] holder = SCRATCH_BYTE_BUFFER_HOLDER.get();
             if (array == holder[1]) {
                 Arrays.fill(array, (byte) 0);
@@ -211,7 +211,7 @@ public class IOUtils {
          *
          * @param array the char array to release.
          */
-        static void releaseScratchCharArray(char[] array) {
+        static void releaseScratchCharArray(final char[] array) {
             final Object[] holder = SCRATCH_CHAR_BUFFER_HOLDER.get();
             if (array == holder[1]) {
                 Arrays.fill(array, (char) 0);

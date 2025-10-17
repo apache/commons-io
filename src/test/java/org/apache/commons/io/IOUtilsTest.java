@@ -421,7 +421,7 @@ class IOUtilsTest {
 
     @ParameterizedTest
     @MethodSource
-    void testCheckFromIndexSizeInvalidCases(int off, int len, int arrayLength) {
+    void testCheckFromIndexSizeInvalidCases(final int off, final int len, final int arrayLength) {
         final IndexOutOfBoundsException ex = assertThrows(IndexOutOfBoundsException.class, () -> IOUtils.checkFromIndexSize(off, len, arrayLength));
         assertTrue(ex.getMessage().contains(String.valueOf(off)));
         assertTrue(ex.getMessage().contains(String.valueOf(len)));
@@ -431,7 +431,7 @@ class IOUtilsTest {
             final IndexOutOfBoundsException jreEx = assertThrows(IndexOutOfBoundsException.class, () -> {
                 try {
                     Objects.class.getDeclaredMethod("checkFromIndexSize", int.class, int.class, int.class).invoke(null, off, len, arrayLength);
-                } catch (InvocationTargetException ite) {
+                } catch (final InvocationTargetException ite) {
                     throw ite.getTargetException();
                 }
             });
@@ -441,13 +441,13 @@ class IOUtilsTest {
 
     @ParameterizedTest
     @MethodSource
-    void testCheckFromIndexSizeValidCases(int off, int len, int arrayLength) {
+    void testCheckFromIndexSizeValidCases(final int off, final int len, final int arrayLength) {
         assertDoesNotThrow(() -> IOUtils.checkFromIndexSize(off, len, arrayLength));
     }
 
     @ParameterizedTest
     @MethodSource
-    void testCheckFromToIndexInvalidCases(int from, int to, int arrayLength) {
+    void testCheckFromToIndexInvalidCases(final int from, final int to, final int arrayLength) {
         final IndexOutOfBoundsException ex = assertThrows(IndexOutOfBoundsException.class, () -> IOUtils.checkFromToIndex(from, to, arrayLength));
         assertTrue(ex.getMessage().contains(String.valueOf(from)));
         assertTrue(ex.getMessage().contains(String.valueOf(to)));
@@ -457,7 +457,7 @@ class IOUtilsTest {
             final IndexOutOfBoundsException jreEx = assertThrows(IndexOutOfBoundsException.class, () -> {
                 try {
                     Objects.class.getDeclaredMethod("checkFromToIndex", int.class, int.class, int.class).invoke(null, from, to, arrayLength);
-                } catch (InvocationTargetException ite) {
+                } catch (final InvocationTargetException ite) {
                     throw ite.getTargetException();
                 }
             });
@@ -467,7 +467,7 @@ class IOUtilsTest {
 
     @ParameterizedTest
     @MethodSource
-    void testCheckFromToIndexValidCases(int from, int to, int arrayLength) {
+    void testCheckFromToIndexValidCases(final int from, final int to, final int arrayLength) {
         assertDoesNotThrow(() -> IOUtils.checkFromToIndex(from, to, arrayLength));
     }
 
@@ -1168,7 +1168,8 @@ class IOUtilsTest {
 
     @ParameterizedTest
     @MethodSource("invalidRead_InputStream_Offset_ArgumentsProvider")
-    void testRead_InputStream_Offset_ArgumentsValidation(InputStream input, byte[] b, int off, int len, Class<? extends Throwable> expected) {
+    void testRead_InputStream_Offset_ArgumentsValidation(final InputStream input, final byte[] b, final int off, final int len,
+            final Class<? extends Throwable> expected) {
         assertThrows(expected, () -> IOUtils.read(input, b, off, len));
     }
 
@@ -1223,7 +1224,8 @@ class IOUtilsTest {
 
     @ParameterizedTest
     @MethodSource("invalidRead_InputStream_Offset_ArgumentsProvider")
-    void testReadFully_InputStream_Offset_ArgumentsValidation(InputStream input, byte[] b, int off, int len, Class<? extends Throwable> expected) {
+    void testReadFully_InputStream_Offset_ArgumentsValidation(final InputStream input, final byte[] b, final int off, final int len,
+            final Class<? extends Throwable> expected) {
         assertThrows(expected, () -> IOUtils.read(input, b, off, len));
     }
 

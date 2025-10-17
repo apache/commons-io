@@ -170,7 +170,7 @@ class FileUtilsTest extends AbstractTempDirTest {
      */
     private static final ListDirectoryWalker LIST_WALKER = new ListDirectoryWalker();
 
-    private static void setDosReadOnly(Path p, boolean readOnly) throws IOException {
+    private static void setDosReadOnly(final Path p, final boolean readOnly) throws IOException {
         if (Files.getFileStore(p).supportsFileAttributeView(DosFileAttributeView.class)) {
             Files.setAttribute(p, "dos:readonly", readOnly, LinkOption.NOFOLLOW_LINKS);
         }

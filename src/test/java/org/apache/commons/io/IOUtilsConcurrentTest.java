@@ -48,7 +48,7 @@ class IOUtilsConcurrentTest {
         private final long expectedChecksumValue;
         private final Reader reader;
 
-        ChecksumReader(Reader reader, long expectedChecksumValue) {
+        ChecksumReader(final Reader reader, final long expectedChecksumValue) {
             this.reader = reader;
             this.checksum = new CRC32();
             this.expectedChecksumValue = expectedChecksumValue;
@@ -69,7 +69,7 @@ class IOUtilsConcurrentTest {
         }
 
         @Override
-        public int read(char[] cbuf, int off, int len) throws IOException {
+        public int read(final char[] cbuf, final int off, final int len) throws IOException {
             final int n = reader.read(cbuf, off, len);
             if (n > 0) {
                 final byte[] bytes = new String(cbuf, off, n).getBytes(Charset.defaultCharset());
@@ -171,7 +171,7 @@ class IOUtilsConcurrentTest {
 
     @ParameterizedTest
     @MethodSource
-    void testConcurrentInputStreamTasks(IOConsumer<InputStream> consumer) throws InterruptedException {
+    void testConcurrentInputStreamTasks(final IOConsumer<InputStream> consumer) throws InterruptedException {
         final ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
         try {
             final List<Future<Void>> futures = IntStream.range(0, THREAD_COUNT * RUNS_PER_THREAD)
@@ -194,7 +194,7 @@ class IOUtilsConcurrentTest {
 
     @ParameterizedTest
     @MethodSource
-    void testConcurrentReaderTasks(IOConsumer<Reader> consumer) throws InterruptedException {
+    void testConcurrentReaderTasks(final IOConsumer<Reader> consumer) throws InterruptedException {
         final ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
         try {
             final List<Future<Void>> futures = IntStream.range(0, THREAD_COUNT * RUNS_PER_THREAD)
