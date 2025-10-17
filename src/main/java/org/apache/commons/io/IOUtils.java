@@ -178,9 +178,9 @@ public class IOUtils {
         }
 
         /**
-         * Gets the char byte array buffer.
+         * Gets the char array buffer.
          *
-         * @return the char byte array buffer.
+         * @return the char array buffer.
          */
         static char[] getScratchCharArray() {
             final Object[] holder = SCRATCH_CHAR_BUFFER_HOLDER.get();
