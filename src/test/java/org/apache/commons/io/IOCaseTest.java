@@ -313,7 +313,7 @@ class IOCaseTest {
         final byte[] array3 = IOUtils.ScratchBufferHolder.getScratchByteArray();
         try {
             assert0(array3);
-            assertSame(array,  array3);
+            assertSame(array, array3);
         } finally {
             IOUtils.ScratchBufferHolder.releaseScratchByteArray(array3);
         }
@@ -337,7 +337,7 @@ class IOCaseTest {
         final char[] array3 = IOUtils.ScratchBufferHolder.getScratchCharArray();
         try {
             assert0(array3);
-            assertSame(array,  array3);
+            assertSame(array, array3);
         } finally {
             IOUtils.ScratchBufferHolder.releaseScratchCharArray(array3);
         }

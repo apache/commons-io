@@ -209,7 +209,7 @@ public class IOUtils {
         /**
          * If the argument is the internal char array, release it for reuse.
          *
-         * @param array the byte array to release.
+         * @param array the char array to release.
          */
         static void releaseScratchCharArray(char[] array) {
             final Object[] holder = SCRATCH_CHAR_BUFFER_HOLDER.get();
