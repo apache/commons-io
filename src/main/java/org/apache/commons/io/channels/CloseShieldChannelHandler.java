@@ -56,10 +56,6 @@ final class CloseShieldChannelHandler implements InvocationHandler {
         SUPPORTED_INTERFACES = Collections.unmodifiableSet(interfaces);
     }
 
-    static boolean isSupported(final Class<?> interfaceClass) {
-        return SUPPORTED_INTERFACES.contains(interfaceClass);
-    }
-
     /**
      * Tests whether the given method is allowed to be called after the shield is closed.
      *
@@ -71,6 +67,10 @@ final class CloseShieldChannelHandler implements InvocationHandler {
     private static boolean isAllowedAfterClose(final Class<?> declaringClass, final String name, final int parameterCount) {
         // JDK explicitly allows NetworkChannel.supportedOptions() post-close
         return parameterCount == 0 && name.equals("supportedOptions") && NetworkChannel.class.equals(declaringClass);
+    }
+
+    static boolean isSupported(final Class<?> interfaceClass) {
+        return SUPPORTED_INTERFACES.contains(interfaceClass);
     }
 
     /**

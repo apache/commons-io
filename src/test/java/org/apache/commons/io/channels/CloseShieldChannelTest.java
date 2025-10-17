@@ -127,17 +127,6 @@ class CloseShieldChannelTest {
     }
 
     @Test
-    void testWrapFileChannel(final @TempDir Path tempDir) throws IOException {
-        final Path testFile = tempDir.resolve("test.txt");
-        FileUtils.touch(testFile.toFile());
-        try (FileChannel channel = FileChannel.open(testFile); Channel shield = CloseShieldChannel.wrap(channel)) {
-            fileChannelInterfaces().forEach(iface -> assertInstanceOf(iface, shield));
-            // FileChannel is not an interface, so can not be implemented.
-            assertFalse(shield instanceof FileChannel, "not FileChannel");
-        }
-    }
-
-    @Test
     void testDoesNotDoubleWrap() {
         final ByteChannel channel = mock(ByteChannel.class);
         final ByteChannel shield1 = CloseShieldChannel.wrap(channel);
@@ -288,6 +277,17 @@ class CloseShieldChannelTest {
         final String shieldString = shield.toString();
         assertTrue(shieldString.contains("CloseShield"));
         assertTrue(shieldString.contains("MyChannel"));
+    }
+
+    @Test
+    void testWrapFileChannel(final @TempDir Path tempDir) throws IOException {
+        final Path testFile = tempDir.resolve("test.txt");
+        FileUtils.touch(testFile.toFile());
+        try (FileChannel channel = FileChannel.open(testFile); Channel shield = CloseShieldChannel.wrap(channel)) {
+            fileChannelInterfaces().forEach(iface -> assertInstanceOf(iface, shield));
+            // FileChannel is not an interface, so can not be implemented.
+            assertFalse(shield instanceof FileChannel, "not FileChannel");
+        }
     }
 
     @Test
