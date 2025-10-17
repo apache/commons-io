@@ -278,14 +278,18 @@ public class CopyUtils {
             final Reader input,
             final Writer output)
                 throws IOException {
-        final char[] buffer = IOUtils.getScratchCharArray();
-        int count = 0;
-        int n;
-        while (EOF != (n = input.read(buffer))) {
-            output.write(buffer, 0, n);
-            count += n;
+        final char[] buffer = IOUtils.ScratchBufferHolder.getScratchCharArray();
+        try {
+            int count = 0;
+            int n;
+            while (EOF != (n = input.read(buffer))) {
+                output.write(buffer, 0, n);
+                count += n;
+            }
+            return count;
+        } finally {
+            IOUtils.ScratchBufferHolder.releaseScratchCharArray(buffer);
         }
-        return count;
     }
 
     /**

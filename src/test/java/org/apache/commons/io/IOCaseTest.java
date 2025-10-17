@@ -18,6 +18,7 @@ package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -296,34 +297,50 @@ class IOCaseTest {
 
     @Test
     void test_getScratchByteArray() {
-        final byte[] array = IOUtils.getScratchByteArray();
-        assert0(array);
-        Arrays.fill(array, (byte) 1);
-        assert0(IOUtils.getScratchCharArray());
-    }
-
-    @Test
-    void test_getScratchByteArrayWriteOnly() {
-        final byte[] array = IOUtils.getScratchByteArrayWriteOnly();
-        assert0(array);
-        Arrays.fill(array, (byte) 1);
-        assert0(IOUtils.getScratchCharArray());
+        final byte[] array = IOUtils.ScratchBufferHolder.getScratchByteArray();
+        try {
+            assert0(array);
+            Arrays.fill(array, (byte) 1);
+            // Get another array, while the first is still in use
+            final byte[] array2 = IOUtils.ScratchBufferHolder.getScratchByteArray();
+            assert0(array2);
+            assertNotSame(array, array2);
+        } finally {
+            // Release first array
+            IOUtils.ScratchBufferHolder.releaseScratchByteArray(array);
+        }
+        // The first array should be reset and reusable
+        final byte[] array3 = IOUtils.ScratchBufferHolder.getScratchByteArray();
+        try {
+            assert0(array3);
+            assertSame(array, array3);
+        } finally {
+            IOUtils.ScratchBufferHolder.releaseScratchByteArray(array3);
+        }
     }
 
     @Test
     void test_getScratchCharArray() {
-        final char[] array = IOUtils.getScratchCharArray();
-        assert0(array);
-        Arrays.fill(array, (char) 1);
-        assert0(IOUtils.getScratchCharArray());
-    }
-
-    @Test
-    void test_getScratchCharArrayWriteOnly() {
-        final char[] array = IOUtils.getScratchCharArrayWriteOnly();
-        assert0(array);
-        Arrays.fill(array, (char) 1);
-        assert0(IOUtils.getScratchCharArray());
+        final char[] array = IOUtils.ScratchBufferHolder.getScratchCharArray();
+        try {
+            assert0(array);
+            Arrays.fill(array, (char) 1);
+            // Get another array, while the first is still in use
+            final char[] array2 = IOUtils.ScratchBufferHolder.getScratchCharArray();
+            assert0(array2);
+            assertNotSame(array, array2);
+        } finally {
+            // Release first array
+            IOUtils.ScratchBufferHolder.releaseScratchCharArray(array);
+        }
+        // The first array should be reset and reusable
+        final char[] array3 = IOUtils.ScratchBufferHolder.getScratchCharArray();
+        try {
+            assert0(array3);
+            assertSame(array, array3);
+        } finally {
+            IOUtils.ScratchBufferHolder.releaseScratchCharArray(array3);
+        }
     }
 
     @Test
