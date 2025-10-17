@@ -30,6 +30,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Arrays;
 
+import org.apache.commons.io.IOUtils.ScratchBytes;
+import org.apache.commons.io.IOUtils.ScratchChars;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -297,49 +299,48 @@ class IOCaseTest {
 
     @Test
     void test_getScratchByteArray() {
-        final byte[] array = IOUtils.ScratchBufferHolder.getScratchByteArray();
-        try {
+        final byte[] array;
+        try (ScratchBytes scratch = IOUtils.ScratchBytes.get()) {
+            array = scratch.array();
             assert0(array);
             Arrays.fill(array, (byte) 1);
             // Get another array, while the first is still in use
-            final byte[] array2 = IOUtils.ScratchBufferHolder.getScratchByteArray();
-            assert0(array2);
-            assertNotSame(array, array2);
-        } finally {
-            // Release first array
-            IOUtils.ScratchBufferHolder.releaseScratchByteArray(array);
+            // The test doesn't need the try here but that's the pattern.
+            try (ScratchBytes scratch2 = IOUtils.ScratchBytes.get()) {
+                assertNotSame(scratch, scratch2);
+                final byte[] array2 = scratch2.array();
+                assert0(array2);
+                assertNotSame(array, array2);
+            }
         }
         // The first array should be reset and reusable
-        final byte[] array3 = IOUtils.ScratchBufferHolder.getScratchByteArray();
-        try {
+        try (ScratchBytes scratch = IOUtils.ScratchBytes.get()) {
+            final byte[] array3 = scratch.array();
             assert0(array3);
             assertSame(array, array3);
-        } finally {
-            IOUtils.ScratchBufferHolder.releaseScratchByteArray(array3);
         }
     }
 
     @Test
     void test_getScratchCharArray() {
-        final char[] array = IOUtils.ScratchBufferHolder.getScratchCharArray();
-        try {
+        final char[] array;
+        try (ScratchChars scratch = IOUtils.ScratchChars.get()) {
+            array = scratch.array();
             assert0(array);
             Arrays.fill(array, (char) 1);
             // Get another array, while the first is still in use
-            final char[] array2 = IOUtils.ScratchBufferHolder.getScratchCharArray();
-            assert0(array2);
-            assertNotSame(array, array2);
-        } finally {
-            // Release first array
-            IOUtils.ScratchBufferHolder.releaseScratchCharArray(array);
+            // The test doesn't need the try here but that's the pattern.
+            try (ScratchChars scratch2 = IOUtils.ScratchChars.get()) {
+                final char[] array2 = scratch2.array();
+                assert0(array2);
+                assertNotSame(array, array2);
+            }
         }
         // The first array should be reset and reusable
-        final char[] array3 = IOUtils.ScratchBufferHolder.getScratchCharArray();
-        try {
+        try (ScratchChars scratch = IOUtils.ScratchChars.get()) {
+            final char[] array3 = scratch.array();
             assert0(array3);
             assertSame(array, array3);
-        } finally {
-            IOUtils.ScratchBufferHolder.releaseScratchCharArray(array3);
         }
     }
 

@@ -29,6 +29,8 @@ import java.io.StringReader;
 import java.io.Writer;
 import java.nio.charset.Charset;
 
+import org.apache.commons.io.IOUtils.ScratchChars;
+
 /**
  * This class provides static utility methods for buffered
  * copying between sources ({@link InputStream}, {@link Reader},
@@ -278,8 +280,8 @@ public class CopyUtils {
             final Reader input,
             final Writer output)
                 throws IOException {
-        final char[] buffer = IOUtils.ScratchBufferHolder.getScratchCharArray();
-        try {
+        try (ScratchChars scratch = IOUtils.ScratchChars.get()) {
+            final char[] buffer = scratch.array();
             int count = 0;
             int n;
             while (EOF != (n = input.read(buffer))) {
@@ -287,8 +289,6 @@ public class CopyUtils {
                 count += n;
             }
             return count;
-        } finally {
-            IOUtils.ScratchBufferHolder.releaseScratchCharArray(buffer);
         }
     }
 

@@ -133,7 +133,7 @@ public class IOUtils {
     // or return one of them.
 
     /**
-     * Holder for per-thread internal scratch buffers.
+     * Holder for per-thread internal scratch buffer.
      *
      * <p>Buffers are created lazily and reused within the same thread to reduce allocation overhead. In the rare case of reentrant access, a temporary buffer
      * is allocated to avoid data corruption.</p>
@@ -141,80 +141,120 @@ public class IOUtils {
      * <p>Typical usage:</p>
      *
      * <pre>{@code
-     * final byte[] buffer = ScratchBufferHolder.getScratchByteArray();
-     * try {
+     * try (ScratchBytes scratch = ScratchBytes.get()) {
      *     // use the buffer
-     * } finally {
-     *     ScratchBufferHolder.releaseScratchByteArray(buffer);
+     *     byte[] bytes = scratch.array();
+     *     // ...
      * }
      * }</pre>
      */
-    static final class ScratchBufferHolder {
+    static final class ScratchBytes implements AutoCloseable {
 
         /**
-         * Holder for internal byte array buffer.
+         * Wraps an internal byte array.
+         *
+         * [0] boolean in use.
+         * [1] byte[] buffer.
          */
-        private static final ThreadLocal<Object[]> SCRATCH_BYTE_BUFFER_HOLDER = ThreadLocal.withInitial(() -> new Object[] { false, byteArray() });
-
-        /**
-         * Holder for internal char array buffer.
-         */
-        private static final ThreadLocal<Object[]> SCRATCH_CHAR_BUFFER_HOLDER = ThreadLocal.withInitial(() -> new Object[] { false, charArray() });
-
+        private static final ThreadLocal<Object[]> LOCAL = ThreadLocal.withInitial(() -> new Object[] { false, new ScratchBytes(byteArray()) });
 
         /**
          * Gets the internal byte array buffer.
          *
          * @return the internal byte array buffer.
          */
-        static byte[] getScratchByteArray() {
-            final Object[] holder = SCRATCH_BYTE_BUFFER_HOLDER.get();
+        static ScratchBytes get() {
+            final Object[] holder = LOCAL.get();
             // If already in use, return a new array
             if ((boolean) holder[0]) {
-                return byteArray();
+                return new ScratchBytes(byteArray());
             }
             holder[0] = true;
-            return (byte[]) holder[1];
+            return (ScratchBytes) holder[1];
+        }
+
+        private final byte[] buffer;
+
+        private ScratchBytes(final byte[] buffer) {
+            this.buffer = buffer;
+        }
+
+        byte[] array() {
+            return buffer;
         }
 
         /**
-         * Gets the char array buffer.
-         *
-         * @return the char array buffer.
+         * If the buffer is the internal array, clear and release it for reuse.
          */
-        static char[] getScratchCharArray() {
-            final Object[] holder = SCRATCH_CHAR_BUFFER_HOLDER.get();
-            // If already in use, return a new array
-            if ((boolean) holder[0]) {
-                return charArray();
-            }
-            holder[0] = true;
-            return (char[]) holder[1];
-        }
-
-
-        /**
-         * If the argument is the internal byte array, release it for reuse.
-         *
-         * @param array the byte array to release.
-         */
-        static void releaseScratchByteArray(final byte[] array) {
-            final Object[] holder = SCRATCH_BYTE_BUFFER_HOLDER.get();
-            if (array == holder[1]) {
-                Arrays.fill(array, (byte) 0);
+        @Override
+        public void close() {
+            final Object[] holder = LOCAL.get();
+            if (buffer == ((ScratchBytes) holder[1]).buffer) {
+                Arrays.fill(buffer, (byte) 0);
                 holder[0] = false;
             }
         }
+    }
+
+    /**
+     * Holder for per-thread internal scratch buffer.
+     *
+     * <p>Buffers are created lazily and reused within the same thread to reduce allocation overhead. In the rare case of reentrant access, a temporary buffer
+     * is allocated to avoid data corruption.</p>
+     *
+     * <p>Typical usage:</p>
+     *
+     * <pre>{@code
+     * try (ScratchChars scratch = ScratchChars.get()) {
+     *     // use the buffer
+     *     char[] bytes = scratch.array();
+     *     // ...
+     * }
+     * }</pre>
+     */
+    static final class ScratchChars implements AutoCloseable {
 
         /**
-         * If the argument is the internal char array, release it for reuse.
+         * Wraps an internal char array.
          *
-         * @param array the char array to release.
+         * [0] boolean in use.
+         * [1] char[] buffer.
          */
-        static void releaseScratchCharArray(final char[] array) {
-            final Object[] holder = SCRATCH_CHAR_BUFFER_HOLDER.get();
-            if (array == holder[1]) {
-                Arrays.fill(array, (char) 0);
+        private static final ThreadLocal<Object[]> LOCAL = ThreadLocal.withInitial(() -> new Object[] { false, new ScratchChars(charArray()) });
+
+        /**
+         * Gets the internal char array buffer.
+         *
+         * @return the internal char array buffer.
+         */
+        static ScratchChars get() {
+            final Object[] holder = LOCAL.get();
+            // If already in use, return a new array
+            if ((boolean) holder[0]) {
+                return new ScratchChars(charArray());
+            }
+            holder[0] = true;
+            return (ScratchChars) holder[1];
+        }
+
+        private final char[] buffer;
+
+        private ScratchChars(final char[] buffer) {
+            this.buffer = buffer;
+        }
+
+        char[] array() {
+            return buffer;
+        }
+
+        /**
+         * If the buffer is the internal array, clear and release it for reuse.
+         */
+        @Override
+        public void close() {
+            final Object[] holder = LOCAL.get();
+            if (buffer == ((ScratchChars) holder[1]).buffer) {
+                Arrays.fill(buffer, (char) 0);
                 holder[0] = false;
             }
         }
@@ -660,8 +700,8 @@ public class IOUtils {
      * @see IO#clear()
      */
     static void clear() {
-        ScratchBufferHolder.SCRATCH_BYTE_BUFFER_HOLDER.remove();
-        ScratchBufferHolder.SCRATCH_CHAR_BUFFER_HOLDER.remove();
+        ScratchBytes.LOCAL.remove();
+        ScratchChars.LOCAL.remove();
     }
 
     /**
@@ -1205,14 +1245,14 @@ public class IOUtils {
         }
 
         // reuse one
-        final char[] array1 = ScratchBufferHolder.getScratchCharArray();
-        // but allocate another
-        final char[] array2 = charArray();
-        int pos1;
-        int pos2;
-        int count1;
-        int count2;
-        try {
+        try (ScratchChars scratch = IOUtils.ScratchChars.get()) {
+            final char[] array1 = scratch.array();
+            // but allocate another
+            final char[] array2 = charArray();
+            int pos1;
+            int pos2;
+            int count1;
+            int count2;
             while (true) {
                 pos1 = 0;
                 pos2 = 0;
@@ -1240,8 +1280,6 @@ public class IOUtils {
                     }
                 }
             }
-        } finally {
-            ScratchBufferHolder.releaseScratchCharArray(array1);
         }
     }
 
@@ -1722,11 +1760,8 @@ public class IOUtils {
      * @since 2.2
      */
     public static long copyLarge(final InputStream input, final OutputStream output, final long inputOffset, final long length) throws IOException {
-        final byte[] buffer = ScratchBufferHolder.getScratchByteArray();
-        try {
-            return copyLarge(input, output, inputOffset, length, buffer);
-        } finally {
-            ScratchBufferHolder.releaseScratchByteArray(buffer);
+        try (ScratchBytes scratch = ScratchBytes.get()) {
+            return copyLarge(input, output, inputOffset, length, scratch.array());
         }
     }
 
@@ -1797,11 +1832,8 @@ public class IOUtils {
      * @since 1.3
      */
     public static long copyLarge(final Reader reader, final Writer writer) throws IOException {
-        final char[] buffer = ScratchBufferHolder.getScratchCharArray();
-        try {
-            return copyLarge(reader, writer, buffer);
-        } finally {
-            ScratchBufferHolder.releaseScratchCharArray(buffer);
+        try (ScratchChars scratch = IOUtils.ScratchChars.get()) {
+            return copyLarge(reader, writer, scratch.array());
         }
     }
 
@@ -1849,11 +1881,8 @@ public class IOUtils {
      * @since 2.2
      */
     public static long copyLarge(final Reader reader, final Writer writer, final long inputOffset, final long length) throws IOException {
-        final char[] buffer = ScratchBufferHolder.getScratchCharArray();
-        try {
-            return copyLarge(reader, writer, inputOffset, length, buffer);
-        } finally {
-            ScratchBufferHolder.releaseScratchCharArray(buffer);
+        try (ScratchChars scratch = IOUtils.ScratchChars.get()) {
+            return copyLarge(reader, writer, inputOffset, length, scratch.array());
         }
     }
 
@@ -2553,11 +2582,8 @@ public class IOUtils {
      * @since 2.0
      */
     public static long skip(final InputStream input, final long skip) throws IOException {
-        final byte[] buffer = ScratchBufferHolder.getScratchByteArray();
-        try {
-            return skip(input, skip, () -> buffer);
-        } finally {
-            ScratchBufferHolder.releaseScratchByteArray(buffer);
+        try (ScratchBytes scratch = ScratchBytes.get()) {
+            return skip(input, skip, scratch::array);
         }
     }
 
@@ -2665,18 +2691,16 @@ public class IOUtils {
             throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
         }
         long remain = toSkip;
-        final char[] charArray = ScratchBufferHolder.getScratchCharArray();
-        try {
+        try (ScratchChars scratch = IOUtils.ScratchChars.get()) {
+            final char[] chars = scratch.array();
             while (remain > 0) {
                 // See https://issues.apache.org/jira/browse/IO-203 for why we use read() rather than delegating to skip()
-                final long n = reader.read(charArray, 0, (int) Math.min(remain, charArray.length));
+                final long n = reader.read(chars, 0, (int) Math.min(remain, chars.length));
                 if (n < 0) { // EOF
                     break;
                 }
                 remain -= n;
             }
-        } finally {
-            ScratchBufferHolder.releaseScratchCharArray(charArray);
         }
         return toSkip - remain;
     }
