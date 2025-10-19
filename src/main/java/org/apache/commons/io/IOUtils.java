@@ -1499,7 +1499,9 @@ public class IOUtils {
      * @since 2.7
      */
     public static long copy(final Reader reader, final Appendable output) throws IOException {
-        return copy(reader, output, CharBuffer.allocate(DEFAULT_BUFFER_SIZE));
+        try (ScratchChars scratch = IOUtils.ScratchChars.get()) {
+            return copy(reader, output, CharBuffer.wrap(scratch.array()));
+        }
     }
 
     /**
@@ -1702,7 +1704,9 @@ public class IOUtils {
      */
     public static long copyLarge(final InputStream inputStream, final OutputStream outputStream)
             throws IOException {
-        return copy(inputStream, outputStream, DEFAULT_BUFFER_SIZE);
+        try (ScratchBytes scratch = ScratchBytes.get()) {
+            return copyLarge(inputStream, outputStream, scratch.array());
+        }
     }
 
     /**
@@ -2651,16 +2655,18 @@ public class IOUtils {
         if (toSkip < 0) {
             throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
         }
-        final ByteBuffer skipByteBuffer = ByteBuffer.allocate((int) Math.min(toSkip, DEFAULT_BUFFER_SIZE));
         long remain = toSkip;
-        while (remain > 0) {
-            skipByteBuffer.position(0);
-            skipByteBuffer.limit((int) Math.min(remain, DEFAULT_BUFFER_SIZE));
-            final int n = input.read(skipByteBuffer);
-            if (n == EOF) {
-                break;
+        try (ScratchBytes scratch = ScratchBytes.get()) {
+            final ByteBuffer skipByteBuffer = ByteBuffer.wrap(scratch.array());
+            while (remain > 0) {
+                skipByteBuffer.position(0);
+                skipByteBuffer.limit((int) Math.min(remain, DEFAULT_BUFFER_SIZE));
+                final int n = input.read(skipByteBuffer);
+                if (n == EOF) {
+                    break;
+                }
+                remain -= n;
             }
-            remain -= n;
         }
         return toSkip - remain;
     }
