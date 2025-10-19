@@ -156,7 +156,9 @@ public class IOUtils {
          * [0] boolean in use.
          * [1] byte[] buffer.
          */
-        private static final ThreadLocal<Object[]> LOCAL = ThreadLocal.withInitial(() -> new Object[] { false, new ScratchBytes(byteArray()) });
+        private static final ThreadLocal<Object[]> LOCAL = ThreadLocal.withInitial(() -> new Object[] { false, byteArray() });
+
+        private static final ScratchBytes INSTANCE = new ScratchBytes(null);
 
         /**
          * Gets the internal byte array buffer.
@@ -170,9 +172,12 @@ public class IOUtils {
                 return new ScratchBytes(byteArray());
             }
             holder[0] = true;
-            return (ScratchBytes) holder[1];
+            return INSTANCE;
         }
 
+        /**
+         * The buffer, or null if using the thread-local buffer.
+         */
         private final byte[] buffer;
 
         private ScratchBytes(final byte[] buffer) {
@@ -180,7 +185,7 @@ public class IOUtils {
         }
 
         byte[] array() {
-            return buffer;
+            return buffer != null ? buffer : (byte[]) LOCAL.get()[1];
         }
 
         /**
@@ -188,9 +193,9 @@ public class IOUtils {
          */
         @Override
         public void close() {
-            final Object[] holder = LOCAL.get();
-            if (buffer == ((ScratchBytes) holder[1]).buffer) {
-                Arrays.fill(buffer, (byte) 0);
+            if (buffer == null) {
+                final Object[] holder = LOCAL.get();
+                Arrays.fill((byte[]) holder[1], (byte) 0);
                 holder[0] = false;
             }
         }
@@ -220,7 +225,9 @@ public class IOUtils {
          * [0] boolean in use.
          * [1] char[] buffer.
          */
-        private static final ThreadLocal<Object[]> LOCAL = ThreadLocal.withInitial(() -> new Object[] { false, new ScratchChars(charArray()) });
+        private static final ThreadLocal<Object[]> LOCAL = ThreadLocal.withInitial(() -> new Object[] { false, charArray() });
+
+        private static final ScratchChars INSTANCE = new ScratchChars(null);
 
         /**
          * Gets the internal char array buffer.
@@ -234,9 +241,12 @@ public class IOUtils {
                 return new ScratchChars(charArray());
             }
             holder[0] = true;
-            return (ScratchChars) holder[1];
+            return INSTANCE;
         }
 
+        /**
+         * The buffer, or null if using the thread-local buffer.
+         */
         private final char[] buffer;
 
         private ScratchChars(final char[] buffer) {
@@ -244,7 +254,7 @@ public class IOUtils {
         }
 
         char[] array() {
-            return buffer;
+            return buffer != null ? buffer : (char[]) LOCAL.get()[1];
         }
 
         /**
@@ -252,9 +262,9 @@ public class IOUtils {
          */
         @Override
         public void close() {
-            final Object[] holder = LOCAL.get();
-            if (buffer == ((ScratchChars) holder[1]).buffer) {
-                Arrays.fill(buffer, (char) 0);
+            if (buffer == null) {
+                final Object[] holder = LOCAL.get();
+                Arrays.fill((char[]) holder[1], (char) 0);
                 holder[0] = false;
             }
         }
