@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link AutoCloseInputStream}.
  */
-public class AutoCloseInputStreamTest {
+class AutoCloseInputStreamTest {
 
     private byte[] data;
 
@@ -50,7 +50,7 @@ public class AutoCloseInputStreamTest {
     }
 
     @Test
-    public void testAfterReadConsumer() throws Exception {
+    void testAfterReadConsumer() throws Exception {
         final byte[] hello = "Hello".getBytes(StandardCharsets.UTF_8);
         final AtomicBoolean boolRef = new AtomicBoolean();
         // @formatter:off
@@ -77,7 +77,7 @@ public class AutoCloseInputStreamTest {
     }
 
     @Test
-    public void testAvailableAfterClose() throws IOException {
+    void testAvailableAfterClose() throws IOException {
         final InputStream shadow;
         try (InputStream inputStream = new AutoCloseInputStream(new ByteArrayInputStream(data))) {
             assertEquals(3, inputStream.available());
@@ -87,7 +87,7 @@ public class AutoCloseInputStreamTest {
     }
 
     @Test
-    public void testAvailableAll() throws IOException {
+    void testAvailableAll() throws IOException {
         try (InputStream inputStream = new AutoCloseInputStream(new ByteArrayInputStream(data))) {
             assertEquals(3, inputStream.available());
             IOUtils.toByteArray(inputStream);
@@ -96,7 +96,7 @@ public class AutoCloseInputStreamTest {
     }
 
     @Test
-    public void testAvailableNull() throws IOException {
+    void testAvailableNull() throws IOException {
         try (InputStream inputStream = new AutoCloseInputStream(null)) {
             assertEquals(0, inputStream.available());
             assertEquals(0, inputStream.available());
@@ -104,13 +104,13 @@ public class AutoCloseInputStreamTest {
     }
 
     @Test
-    public void testBuilderGet() {
+    void testBuilderGet() {
         // java.lang.IllegalStateException: origin == null
         assertThrows(IllegalStateException.class, () -> AutoCloseInputStream.builder().get());
     }
 
     @Test
-    public void testClose() throws IOException {
+    void testClose() throws IOException {
         stream.close();
         assertTrue(stream.isClosed(), "closed");
         assertEquals(-1, stream.read(), "read()");
@@ -118,19 +118,19 @@ public class AutoCloseInputStreamTest {
     }
 
     @Test
-    public void testCloseHandleIOException() throws IOException {
+    void testCloseHandleIOException() throws IOException {
         ProxyInputStreamTest.testCloseHandleIOException(AutoCloseInputStream.builder());
     }
 
     @Test
-    public void testFinalize() throws Throwable {
+    void testFinalize() throws Throwable {
         stream.finalize();
         assertTrue(stream.isClosed(), "closed");
         assertEquals(-1, stream.read(), "read()");
     }
 
     @Test
-    public void testRead() throws IOException {
+    void testRead() throws IOException {
         for (final byte element : data) {
             assertEquals(element, stream.read(), "read()");
             assertFalse(stream.isClosed(), "closed");
@@ -140,7 +140,7 @@ public class AutoCloseInputStreamTest {
     }
 
     @Test
-    public void testReadBuffer() throws IOException {
+    void testReadBuffer() throws IOException {
         final byte[] b = new byte[data.length * 2];
         int total = 0;
         for (int n = 0; n != -1; n = stream.read(b)) {
@@ -156,7 +156,7 @@ public class AutoCloseInputStreamTest {
     }
 
     @Test
-    public void testReadBufferOffsetLength() throws IOException {
+    void testReadBufferOffsetLength() throws IOException {
         final byte[] b = new byte[data.length * 2];
         int total = 0;
         for (int n = 0; n != -1; n = stream.read(b, total, b.length - total)) {
@@ -191,35 +191,35 @@ public class AutoCloseInputStreamTest {
     }
 
     @Test
-    public void testResetBeforeEndCtor() throws IOException {
-        try (final AutoCloseInputStream inputStream = new AutoCloseInputStream(new ByteArrayInputStream("1234".getBytes()))) {
+    void testResetBeforeEndCtor() throws IOException {
+        try (AutoCloseInputStream inputStream = new AutoCloseInputStream(new ByteArrayInputStream("1234".getBytes()))) {
             testResetBeforeEnd(inputStream);
         }
     }
 
     @Test
-    public void testResetBeforeEndSetByteArray() throws IOException {
-        try (final AutoCloseInputStream inputStream = AutoCloseInputStream.builder().setByteArray("1234".getBytes()).get()) {
+    void testResetBeforeEndSetByteArray() throws IOException {
+        try (AutoCloseInputStream inputStream = AutoCloseInputStream.builder().setByteArray("1234".getBytes()).get()) {
             testResetBeforeEnd(inputStream);
         }
     }
 
     @Test
-    public void testResetBeforeEndSetCharSequence() throws IOException {
-        try (final AutoCloseInputStream inputStream = AutoCloseInputStream.builder().setCharSequence("1234").get()) {
+    void testResetBeforeEndSetCharSequence() throws IOException {
+        try (AutoCloseInputStream inputStream = AutoCloseInputStream.builder().setCharSequence("1234").get()) {
             testResetBeforeEnd(inputStream);
         }
     }
 
     @Test
-    public void testResetBeforeEndSetInputStream() throws IOException {
-        try (final AutoCloseInputStream inputStream = AutoCloseInputStream.builder().setInputStream(new ByteArrayInputStream("1234".getBytes())).get()) {
+    void testResetBeforeEndSetInputStream() throws IOException {
+        try (AutoCloseInputStream inputStream = AutoCloseInputStream.builder().setInputStream(new ByteArrayInputStream("1234".getBytes())).get()) {
             testResetBeforeEnd(inputStream);
         }
     }
 
     @Test
-    public void testrReadAfterClose() throws IOException {
+    void testrReadAfterClose() throws IOException {
         final InputStream shadow;
         try (InputStream inputStream = new AutoCloseInputStream(new ByteArrayInputStream(data))) {
             assertEquals(3, inputStream.available());

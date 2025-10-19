@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,9 +19,11 @@ package org.apache.commons.io.input;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.util.Objects;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
@@ -56,20 +58,26 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
     // @formatter:on
     public static class Builder extends AbstractStreamBuilder<RandomAccessFileInputStream, Builder> {
 
-        // private RandomAccessFile randomAccessFile;
         private boolean propagateClose;
+
+        /**
+         * Constructs a new builder of {@link RandomAccessFileInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
 
         /**
          * Builds a new {@link RandomAccessFileInputStream}.
          * <p>
-         * You must set input that supports {@link RandomAccessFile} or {@link File}, otherwise, this method throws an exception. Only set one of
+         * You must set an aspect that supports {@link RandomAccessFile} or {@link File}, otherwise, this method throws an exception. Only set one of
          * RandomAccessFile or an origin that can be converted to a File.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
-         * <li>{@link RandomAccessFile}</li>
+         * <li>{@link RandomAccessFile} gets the target aspect.</li>
          * <li>{@link File}</li>
          * <li>closeOnClose</li>
          * </ul>
@@ -77,17 +85,18 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @throws IllegalStateException         if both RandomAccessFile and origin are set.
-         * @throws UnsupportedOperationException if the origin cannot be converted to a {@link File}.
+         * @throws UnsupportedOperationException if the origin cannot be converted to a {@link RandomAccessFile}.
+         * @throws IOException                   if an I/O error occurs converting to an {@link RandomAccessFile} using {@link #getRandomAccessFile()}.
          * @see AbstractOrigin#getFile()
+         * @see #getUnchecked()
          */
-        @SuppressWarnings("resource") // Caller closes depending on settings
         @Override
         public RandomAccessFileInputStream get() throws IOException {
-            return new RandomAccessFileInputStream(getRandomAccessFile(), propagateClose);
+            return new RandomAccessFileInputStream(this);
         }
 
         /**
-         * Sets whether to close the underlying file when this stream is closed.
+         * Sets whether to close the underlying file when this stream is closed, defaults to false for compatibility.
          *
          * @param propagateClose Whether to close the underlying file when this stream is closed.
          * @return {@code this} instance.
@@ -123,6 +132,11 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
     private final boolean propagateClose;
     private final RandomAccessFile randomAccessFile;
 
+    @SuppressWarnings("resource") // caller closes.
+    private RandomAccessFileInputStream(final Builder builder) throws IOException {
+        this(builder.getRandomAccessFile(), builder.propagateClose);
+    }
+
     /**
      * Constructs a new instance configured to leave the underlying file open when this stream is closed.
      *
@@ -149,19 +163,16 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
 
     /**
      * Gets an estimate of the number of bytes that can be read (or skipped over) from this input stream.
-     *
+     * <p>
      * If there are more than {@link Integer#MAX_VALUE} bytes available, return {@link Integer#MAX_VALUE}.
+     * </p>
      *
      * @return An estimate of the number of bytes that can be read.
      * @throws IOException If an I/O error occurs.
      */
     @Override
     public int available() throws IOException {
-        final long avail = availableLong();
-        if (avail > Integer.MAX_VALUE) {
-            return Integer.MAX_VALUE;
-        }
-        return (int) avail;
+        return Math.toIntExact(Math.min(availableLong(), Integer.MAX_VALUE));
     }
 
     /**
@@ -183,6 +194,21 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
     }
 
     /**
+     * Copies our bytes from the given starting position for a size to the output stream.
+     *
+     * @param pos  Where to start copying. The offset position, measured in bytes from the beginning of the file, at which to set the file pointer.
+     * @param size The number of bytes to copy.
+     * @param os   Where to copy.
+     * @return The number of bytes copied.
+     * @throws IOException if {@code pos} is less than {@code 0} or if an I/O error occurs.
+     * @since 2.19.0
+     */
+    public long copy(final long pos, final long size, final OutputStream os) throws IOException {
+        randomAccessFile.seek(pos);
+        return IOUtils.copyLarge(this, os, 0, size);
+    }
+
+    /**
      * Gets the underlying file.
      *
      * @return the underlying file.
@@ -192,7 +218,7 @@ public class RandomAccessFileInputStream extends AbstractInputStream {
     }
 
     /**
-     * Tests whether to close the underlying file when this stream is closed.
+     * Tests whether to close the underlying file when this stream is closed, defaults to false for compatibility.
      *
      * @return Whether to close the underlying file when this stream is closed.
      */

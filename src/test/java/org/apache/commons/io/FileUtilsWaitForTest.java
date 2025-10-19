@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -34,13 +34,13 @@ import org.junit.jupiter.api.Timeout;
  *
  * @see FileUtils
  */
-public class FileUtilsWaitForTest {
+class FileUtilsWaitForTest {
 
     // Assume that this file does not exist
     private final File NOSUCHFILE = new File("a.b.c.d." + System.currentTimeMillis());
 
     @Test
-    public void testIO_488() throws InterruptedException {
+    void testIO_488() throws InterruptedException {
         final long start = System.currentTimeMillis();
         final AtomicBoolean wasInterrupted = new AtomicBoolean();
         final int seconds = 3;
@@ -60,31 +60,31 @@ public class FileUtilsWaitForTest {
 
     @Test
     @Timeout(value = 30, unit = TimeUnit.MILLISECONDS) // Should complete quickly as the path is present
-    public void testWaitFor0() {
+    void testWaitFor0() {
         assertTrue(FileUtils.waitFor(FileUtils.current(), 0));
     }
 
     @Test
     @Timeout(value = 30, unit = TimeUnit.MILLISECONDS) // Should complete quickly even though the path is missing
-    public void testWaitFor0Absent() {
+    void testWaitFor0Absent() {
         assertFalse(FileUtils.waitFor(NOSUCHFILE, 0));
     }
 
     @Test
     @Timeout(value = 30, unit = TimeUnit.MILLISECONDS) // Should complete quickly as the path is present
-    public void testWaitFor10() {
+    void testWaitFor10() {
         assertTrue(FileUtils.waitFor(FileUtils.current(), 10));
     }
 
     @Test
     @Timeout(value = 30, unit = TimeUnit.MILLISECONDS) // Should complete quickly as the path is present
-    public void testWaitFor100() {
+    void testWaitFor100() {
         assertTrue(FileUtils.waitFor(FileUtils.current(), 100));
     }
 
     @Test
     @Timeout(value = 3, unit = TimeUnit.SECONDS) // Allow for timeout waiting for non-existent file
-    public void testWaitFor5Absent() {
+    void testWaitFor5Absent() {
         final long start = System.currentTimeMillis();
         assertFalse(FileUtils.waitFor(NOSUCHFILE, 2));
         final long elapsed = System.currentTimeMillis() - start;
@@ -93,13 +93,13 @@ public class FileUtilsWaitForTest {
 
     @Test
     @Timeout(value = 300, unit = TimeUnit.MILLISECONDS) // Should complete quickly as the path is present
-    public void testWaitForNegativeDuration() {
+    void testWaitForNegativeDuration() {
         assertTrue(FileUtils.waitFor(FileUtils.current(), -1));
     }
 
     @Test
     @Timeout(value = 30, unit = TimeUnit.MILLISECONDS) // Should complete quickly even though the path is missing
-    public void testWaitForNegativeDurationAbsent() {
+    void testWaitForNegativeDurationAbsent() {
         assertFalse(FileUtils.waitFor(NOSUCHFILE, -1));
     }
 

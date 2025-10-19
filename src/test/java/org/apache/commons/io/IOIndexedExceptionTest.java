@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,10 +28,10 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOIndexedException}.
  */
-public class IOIndexedExceptionTest {
+class IOIndexedExceptionTest {
 
     @Test
-    public void testEdge() {
+    void testEdge() {
         final IOIndexedException exception = new IOIndexedException(-1, null);
         assertEquals(-1, exception.getIndex());
         assertNull(exception.getCause());
@@ -39,7 +39,7 @@ public class IOIndexedExceptionTest {
     }
 
     @Test
-    public void testPlain() {
+    void testPlain() {
         final EOFException e = new EOFException("end");
         final IOIndexedException exception = new IOIndexedException(0, e);
         assertEquals(0, exception.getIndex());

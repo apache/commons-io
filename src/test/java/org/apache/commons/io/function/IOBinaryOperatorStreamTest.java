@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOBinaryOperator}.
  */
-public class IOBinaryOperatorStreamTest {
+class IOBinaryOperatorStreamTest {
 
     private static final IOBinaryOperator<Path> MIN_BY_IO_BO = IOBinaryOperator.minBy(IOComparatorTest.REAL_PATH_COMP);
     private static final BinaryOperator<Path> MIN_BY_BO = MIN_BY_IO_BO.asBinaryOperator();
@@ -45,7 +45,7 @@ public class IOBinaryOperatorStreamTest {
     private static final BinaryOperator<Path> REAL_PATH_BO = REAL_PATH_IO_BO.asBinaryOperator();
 
     @Test
-    public void testAsBinaryOperator() {
+    void testAsBinaryOperator() {
         assertThrows(UncheckedIOException.class,
             () -> Stream.of(TestConstants.ABS_PATH_A, TestConstants.ABS_PATH_A).reduce(TestUtils.<Path>throwingIOBinaryOperator().asBinaryOperator()).get());
         assertEquals(TestConstants.ABS_PATH_A, Stream.of(TestConstants.ABS_PATH_A, TestConstants.ABS_PATH_A).reduce(MAX_BY_BO).get());
@@ -55,7 +55,7 @@ public class IOBinaryOperatorStreamTest {
     /**
      */
     @Test
-    public void testMaxBy() {
+    void testMaxBy() {
         assertEquals(TestConstants.ABS_PATH_A, Stream.of(TestConstants.ABS_PATH_A, TestConstants.ABS_PATH_A).reduce(MAX_BY_BO).get());
         // in-line lambda ok:
         final IOBinaryOperator<Path> binIoOp = IOBinaryOperator.maxBy((t, u) -> t.toRealPath().compareTo(u));
@@ -70,7 +70,7 @@ public class IOBinaryOperatorStreamTest {
     }
 
     @Test
-    public void testMinBy() {
+    void testMinBy() {
         assertEquals(TestConstants.ABS_PATH_A, Stream.of(TestConstants.ABS_PATH_A, TestConstants.ABS_PATH_A).reduce(MIN_BY_BO).get());
         // in-line lambda ok:
         final IOBinaryOperator<Path> binIoOp = IOBinaryOperator.minBy((t, u) -> t.toRealPath().compareTo(u));
@@ -85,7 +85,7 @@ public class IOBinaryOperatorStreamTest {
     }
 
     @Test
-    public void testReduce() throws IOException {
+    void testReduce() throws IOException {
         // A silly example to pass in a IOBinaryOperator.
         final Path current = PathUtils.current();
         final Path expected;

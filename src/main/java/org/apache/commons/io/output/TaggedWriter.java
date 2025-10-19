@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -72,7 +72,7 @@ public class TaggedWriter extends ProxyWriter {
     /**
      * Constructs a tagging decorator for the given writer.
      *
-     * @param proxy writer to be decorated
+     * @param proxy writer to be decorated.
      */
     public TaggedWriter(final Writer proxy) {
         super(proxy);
@@ -81,7 +81,7 @@ public class TaggedWriter extends ProxyWriter {
     /**
      * Tags any IOExceptions thrown, wrapping and re-throwing.
      *
-     * @param e The IOException thrown
+     * @param e The IOException thrown.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -92,9 +92,9 @@ public class TaggedWriter extends ProxyWriter {
     /**
      * Tests if the given exception was caused by this writer.
      *
-     * @param exception an exception
+     * @param exception an exception.
      * @return {@code true} if the exception was thrown by this writer,
-     *         {@code false} otherwise
+     *         {@code false} otherwise.
      */
     public boolean isCauseOf(final Exception exception) {
         return TaggedIOException.isTaggedWith(exception, tag);
@@ -107,8 +107,8 @@ public class TaggedWriter extends ProxyWriter {
      * original wrapped exception. Returns normally if the exception was
      * not thrown by this writer.
      *
-     * @param exception an exception
-     * @throws IOException original exception, if any, thrown by this writer
+     * @param exception an exception.
+     * @throws IOException original exception, if any, thrown by this writer.
      */
     public void throwIfCauseOf(final Exception exception) throws IOException {
         TaggedIOException.throwCauseIfTaggedWith(exception, tag);

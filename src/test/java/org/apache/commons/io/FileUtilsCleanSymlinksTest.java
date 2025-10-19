@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,7 +33,7 @@ import org.junit.jupiter.api.io.TempDir;
  * Test cases for FileUtils.cleanDirectory() method that involve symlinks.
  * &amp; FileUtils.isSymlink(File file)
  */
-public class FileUtilsCleanSymlinksTest {
+class FileUtilsCleanSymlinksTest {
 
     @TempDir
     public File top;
@@ -54,7 +54,7 @@ public class FileUtilsCleanSymlinksTest {
     }
 
     @Test
-    public void testCleanDirWithASymlinkDir() throws Exception {
+    void testCleanDirWithASymlinkDir() throws Exception {
         if (SystemProperties.getOsName().startsWith("Win")) {
             // Can't use "ln" for symlinks on the command line in Windows.
             return;
@@ -85,11 +85,11 @@ public class FileUtilsCleanSymlinksTest {
         assertEquals(0, realOuter.list().length);
 
         // ensure that the contents of the symlink were NOT removed.
-        assertEquals(1, randomDirectory.list().length, "Contents of sym link should not have been removed");
+        assertEquals(1, randomDirectory.list().length, "Contents of symbolic link should not have been removed");
     }
 
     @Test
-    public void testCleanDirWithParentSymlinks() throws Exception {
+    void testCleanDirWithParentSymlinks() throws Exception {
         if (SystemProperties.getOsName().startsWith("Win")) {
             // Can't use "ln" for symlinks on the command line in Windows.
             return;
@@ -125,11 +125,11 @@ public class FileUtilsCleanSymlinksTest {
         assertEquals(0, realParent.list().length);
 
         // ensure that the contents of the symlink were NOT removed.
-        assertEquals(1, randomDirectory.list().length, "Contents of sym link should not have been removed");
+        assertEquals(1, randomDirectory.list().length, "Contents of symbolic link should not have been removed");
     }
 
     @Test
-    public void testCleanDirWithSymlinkFile() throws Exception {
+    void testCleanDirWithSymlinkFile() throws Exception {
         if (SystemProperties.getOsName().startsWith("Win")) {
             // Can't use "ln" for symlinks on the command line in Windows.
             return;
@@ -163,7 +163,7 @@ public class FileUtilsCleanSymlinksTest {
     }
 
     @Test
-    public void testCorrectlyIdentifySymlinkWithParentSymLink() throws Exception {
+    void testCorrectlyIdentifySymlinkWithParentSymLink() throws Exception {
         if (SystemProperties.getOsName().startsWith("Win")) {
             // Can't use "ln" for symlinks on the command line in Windows.
             return;
@@ -186,7 +186,7 @@ public class FileUtilsCleanSymlinksTest {
     }
 
     @Test
-    public void testIdentifiesBrokenSymlinkFile() throws Exception {
+    void testIdentifiesBrokenSymlinkFile() throws Exception {
         if (SystemProperties.getOsName().startsWith("Win")) {
             // Can't use "ln" for symlinks on the command line in Windows.
             return;
@@ -206,7 +206,7 @@ public class FileUtilsCleanSymlinksTest {
     }
 
     @Test
-    public void testIdentifiesSymlinkDir() throws Exception {
+    void testIdentifiesSymlinkDir() throws Exception {
         if (SystemProperties.getOsName().startsWith("Win")) {
             // Can't use "ln" for symlinks on the command line in Windows.
             return;
@@ -223,7 +223,7 @@ public class FileUtilsCleanSymlinksTest {
     }
 
     @Test
-    public void testIdentifiesSymlinkFile() throws Exception {
+    void testIdentifiesSymlinkFile() throws Exception {
         if (SystemProperties.getOsName().startsWith("Win")) {
             // Can't use "ln" for symlinks on the command line in Windows.
             return;
@@ -240,7 +240,7 @@ public class FileUtilsCleanSymlinksTest {
     }
 
     @Test
-    public void testStillClearsIfGivenDirectoryIsASymlink() throws Exception {
+    void testStillClearsIfGivenDirectoryIsASymlink() throws Exception {
         if (SystemProperties.getOsName().startsWith("Win")) {
             // Can't use "ln" for symlinks on the command line in Windows.
             return;

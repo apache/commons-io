@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,10 +24,12 @@ import static org.apache.commons.io.IOUtils.buffer;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.channels.Channels;
 import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.channels.FileChannels;
 import org.apache.commons.lang3.StringUtils;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -43,14 +45,19 @@ import org.openjdk.jmh.infra.Blackhole;
 /**
  * Test different implementations of {@link IOUtils#contentEquals(InputStream, InputStream)}.
  *
- * <pre>
- * IOUtilsContentEqualsInputStreamsBenchmark.testFileCurrent          avgt    5      1518342.821 ▒     201890.705  ns/op
- * IOUtilsContentEqualsInputStreamsBenchmark.testFilePr118            avgt    5      1578606.938 ▒      66980.718  ns/op
- * IOUtilsContentEqualsInputStreamsBenchmark.testFileRelease_2_8_0    avgt    5      2439163.068 ▒     265765.294  ns/op
- * IOUtilsContentEqualsInputStreamsBenchmark.testStringCurrent        avgt    5  10389834700.000 ▒  330301175.219  ns/op
- * IOUtilsContentEqualsInputStreamsBenchmark.testStringPr118          avgt    5  10890915400.000 ▒ 3251289634.067  ns/op
- * IOUtilsContentEqualsInputStreamsBenchmark.testStringRelease_2_8_0  avgt    5  12522802960.000 ▒  111147669.527  ns/op
- * </pre>
+ * <pre>{@code
+Benchmark                                                          Mode  Cnt           Score           Error  Units
+IOUtilsContentEqualsInputStreamsBenchmark.testFileChannels         avgt    5       65105.350 ±      2655.812  ns/op
+IOUtilsContentEqualsInputStreamsBenchmark.testFileCurrent          avgt    5       75452.987 ±       260.088  ns/op
+IOUtilsContentEqualsInputStreamsBenchmark.testFilePr118            avgt    5       74346.141 ±      2138.149  ns/op
+IOUtilsContentEqualsInputStreamsBenchmark.testFileRelease_2_8_0    avgt    5      157246.303 ±       215.369  ns/op
+IOUtilsContentEqualsInputStreamsBenchmark.testStringCurrent        avgt    5   623344988.622 ± 574407721.150  ns/op
+IOUtilsContentEqualsInputStreamsBenchmark.testStringFileChannels   avgt    5   132847058.786 ±   1760007.730  ns/op
+IOUtilsContentEqualsInputStreamsBenchmark.testStringPr118          avgt    5   459079096.521 ± 512827244.936  ns/op
+IOUtilsContentEqualsInputStreamsBenchmark.testStringRelease_2_8_0  avgt    5  2555773583.300 ±  18112219.764  ns/op
+
+[INFO] Finished at: 2025-03-03T21:11:56-05:00
+ * }</pre>
  */
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
@@ -101,6 +108,16 @@ public class IOUtilsContentEqualsInputStreamsBenchmark {
 
     }
 
+    public static boolean contentEqualsFileChannels(final InputStream input1, final InputStream input2) throws IOException {
+        if (input1 == input2) {
+            return true;
+        }
+        if (input1 == null || input2 == null) {
+            return false;
+        }
+        return FileChannels.contentEquals(Channels.newChannel(input1), Channels.newChannel(input2), IOUtils.DEFAULT_BUFFER_SIZE);
+    }
+
     public static boolean contentEqualsPr118(final InputStream input1, final InputStream input2) throws IOException {
         if (input1 == input2) {
             return true;
@@ -142,6 +159,24 @@ public class IOUtilsContentEqualsInputStreamsBenchmark {
                 }
             }
         }
+    }
+
+    @Benchmark
+    public boolean[] testFileChannels() throws IOException {
+        final boolean[] res = new boolean[3];
+        try (InputStream input1 = getClass().getResourceAsStream(TEST_PATH_A);
+            InputStream input2 = getClass().getResourceAsStream(TEST_PATH_B)) {
+            res[0] = contentEqualsFileChannels(input1, input1);
+        }
+        try (InputStream input1 = getClass().getResourceAsStream(TEST_PATH_A);
+            InputStream input2 = getClass().getResourceAsStream(TEST_PATH_A)) {
+            res[1] = contentEqualsFileChannels(input1, input2);
+        }
+        try (InputStream input1 = getClass().getResourceAsStream(TEST_PATH_16K_A);
+            InputStream input2 = getClass().getResourceAsStream(TEST_PATH_16K_A_COPY)) {
+            res[2] = contentEqualsFileChannels(input1, input2);
+        }
+        return res;
     }
 
     @Benchmark
@@ -199,7 +234,7 @@ public class IOUtilsContentEqualsInputStreamsBenchmark {
     }
 
     @Benchmark
-    public void testStringCurrent(final Blackhole blackhole) throws IOException {
+    void testStringCurrent(final Blackhole blackhole) throws IOException {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 try (InputStream inputReader1 = IOUtils.toInputStream(STRINGS[i], DEFAULT_CHARSET);
@@ -211,7 +246,19 @@ public class IOUtilsContentEqualsInputStreamsBenchmark {
     }
 
     @Benchmark
-    public void testStringPr118(final Blackhole blackhole) throws IOException {
+    void testStringFileChannels(final Blackhole blackhole) throws IOException {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                try (InputStream input1 = IOUtils.toInputStream(STRINGS[i], DEFAULT_CHARSET);
+                    InputStream input2 = IOUtils.toInputStream(STRINGS[j], DEFAULT_CHARSET)) {
+                    blackhole.consume(contentEqualsFileChannels(input1, input2));
+                }
+            }
+        }
+    }
+
+    @Benchmark
+    void testStringPr118(final Blackhole blackhole) throws IOException {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 try (InputStream input1 = IOUtils.toInputStream(STRINGS[i], DEFAULT_CHARSET);
@@ -223,7 +270,7 @@ public class IOUtilsContentEqualsInputStreamsBenchmark {
     }
 
     @Benchmark
-    public void testStringRelease_2_8_0(final Blackhole blackhole) throws IOException {
+    void testStringRelease_2_8_0(final Blackhole blackhole) throws IOException {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 try (InputStream input1 = IOUtils.toInputStream(STRINGS[i], DEFAULT_CHARSET);

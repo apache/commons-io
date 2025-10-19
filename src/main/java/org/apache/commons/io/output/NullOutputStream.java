@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,10 +19,12 @@ package org.apache.commons.io.output;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * Never writes data. Calls never go beyond this class.
  * <p>
- * This output stream has no destination (file/socket etc.) and all bytes written to it are ignored and lost.
+ * This output stream has no destination and all bytes written to it are ignored.
  * </p>
  */
 public class NullOutputStream extends OutputStream {
@@ -44,46 +46,53 @@ public class NullOutputStream extends OutputStream {
 
     /**
      * Deprecated in favor of {@link #INSTANCE}.
-     *
+     * <p>
      * TODO: Will be private in 3.0.
+     * </p>
      *
      * @deprecated Use {@link #INSTANCE}.
      */
     @Deprecated
     public NullOutputStream() {
+        // empty
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
+     * Does nothing.
      *
-     * @param b The bytes to write
-     * @throws IOException never
+     * @param b The This method ignores this parameter.
+     * @throws IOException This method never throws any exceptions.
      */
     @Override
     public void write(final byte[] b) throws IOException {
-        // To /dev/null
+        // noop
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
+     * No-op operation.
      *
-     * @param b The bytes to write
-     * @param off The start offset
-     * @param len The number of bytes to write
+     * <p>Validates the arguments but does not write the data.</p>
+     *
+     * @param b   The byte array to write from, not {@code null}.
+     * @param off The offset to start at.
+     * @param len The number of bytes to write.
+     * @throws NullPointerException      If {@code b} is {@code null}.
+     * @throws IndexOutOfBoundsException If {@code off} or {@code len} are negative, {@code off + len} is greater than
+     *                                   {@code b.length}.
      */
     @Override
     public void write(final byte[] b, final int off, final int len) {
-        // To /dev/null
+        IOUtils.checkFromIndexSize(b, off, len);
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
+     * Does nothing.
      *
-     * @param b The byte to write
+     * @param b This method ignores this parameter.
      */
     @Override
     public void write(final int b) {
-        // To /dev/null
+        // noop
     }
 
 }

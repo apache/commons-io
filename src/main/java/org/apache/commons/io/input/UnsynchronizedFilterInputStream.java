@@ -6,7 +6,7 @@
  *  (the "License"); you may not use this file except in compliance with
  *  the License.  You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -71,12 +71,19 @@ public class UnsynchronizedFilterInputStream extends InputStream {
     public static class Builder extends AbstractStreamBuilder<UnsynchronizedFilterInputStream, Builder> {
 
         /**
+         * Constructs a new builder of {@link UnsynchronizedFilterInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link UnsynchronizedFilterInputStream}.
          * <p>
-         * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link #getInputStream()}, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
          * <li>{@link #getInputStream()}</li>
@@ -85,13 +92,13 @@ public class UnsynchronizedFilterInputStream extends InputStream {
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
-         * @throws IOException                   if an I/O error occurs.
+         * @throws IOException                   if an I/O error occurs converting to an {@link InputStream} using {@link #getInputStream()}.
          * @see #getInputStream()
+         * @see #getUnchecked()
          */
-        @SuppressWarnings("resource") // Caller closes.
         @Override
         public UnsynchronizedFilterInputStream get() throws IOException {
-            return new UnsynchronizedFilterInputStream(getInputStream());
+            return new UnsynchronizedFilterInputStream(this);
         }
 
     }
@@ -109,6 +116,10 @@ public class UnsynchronizedFilterInputStream extends InputStream {
      * The source input stream that is filtered.
      */
     protected volatile InputStream inputStream;
+
+    UnsynchronizedFilterInputStream(final Builder builder) throws IOException {
+        this.inputStream = builder.getInputStream();
+    }
 
     /**
      * Constructs a new {@code FilterInputStream} with the specified input stream as source.

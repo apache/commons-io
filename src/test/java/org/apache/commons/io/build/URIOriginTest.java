@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,11 +18,16 @@ package org.apache.commons.io.build;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import org.apache.commons.io.build.AbstractOrigin.URIOrigin;
+import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -34,7 +39,7 @@ import org.junit.jupiter.params.provider.ValueSource;
  *
  * @see URI
  */
-public class URIOriginTest extends AbstractOriginTest<URI, URIOrigin> {
+class URIOriginTest extends AbstractOriginTest<URI, URIOrigin> {
 
     @Override
     protected URIOrigin newOriginRo() {
@@ -43,17 +48,24 @@ public class URIOriginTest extends AbstractOriginTest<URI, URIOrigin> {
 
     @Override
     protected URIOrigin newOriginRw() {
-        return new URIOrigin(Paths.get(FILE_NAME_RW).toUri());
+        return new URIOrigin(tempPath.resolve(FILE_NAME_RW).toUri());
+    }
+
+    @Override
+    protected void resetOriginRw() throws IOException {
+        // Reset the file
+        final Path rwPath = tempPath.resolve(FILE_NAME_RW);
+        Files.write(rwPath, ArrayUtils.EMPTY_BYTE_ARRAY, StandardOpenOption.CREATE);
     }
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "http://example.com",
-            "https://example.com"
+            "http://apache.com",
+            "https://apache.com"
     })
     void testGetInputStream(final String uri) throws Exception {
         final AbstractOrigin.URIOrigin origin = new AbstractOrigin.URIOrigin(new URI(uri));
-        try (final InputStream in = origin.getInputStream()) {
+        try (InputStream in = origin.getInputStream()) {
             assertNotEquals(-1, in.read());
         }
     }
@@ -61,7 +73,7 @@ public class URIOriginTest extends AbstractOriginTest<URI, URIOrigin> {
     @Test
     void testGetInputStreamFileURI() throws Exception {
         final AbstractOrigin.URIOrigin origin = getOriginRo().asThis();
-        try (final InputStream in = origin.getInputStream()) {
+        try (InputStream in = origin.getInputStream()) {
             assertNotEquals(-1, in.read());
         }
     }

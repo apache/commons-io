@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,6 +24,8 @@ import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.channels.Channel;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.Charset;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
@@ -34,7 +36,9 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.file.PathUtils;
 
 /**
- * Abstracts building a typed instance of {@code T}.
+ * Abstracts <em>building</em> a typed instance of type {@code T} where {@code T} is unbounded. This class contains various properties like a buffer size,
+ * buffer size checker, a buffer size default, buffer size maximum, Charset, Charset default, default size checker, and open options. A subclass may use all,
+ * some, or none of these properties in building instances of {@code T}.
  *
  * @param <T> the type of instances to build.
  * @param <B> the type of builder subclass.
@@ -84,6 +88,13 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     private IntUnaryOperator bufferSizeChecker = defaultSizeChecker;
 
     /**
+     * Constructs a new instance for subclasses.
+     */
+    public AbstractStreamBuilder() {
+        // empty
+    }
+
+    /**
      * Applies the buffer size request.
      *
      * @param size the size request.
@@ -109,6 +120,23 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
      */
     public int getBufferSizeDefault() {
         return bufferSizeDefault;
+    }
+
+    /**
+     * Gets a Channel from the origin with OpenOption[].
+     *
+     * @param channelType The channel type, not null.
+     * @return A channel of the specified type.
+     * @param <C>         The channel type.
+     * @throws IllegalStateException         if the {@code origin} is {@code null}.
+     * @throws UnsupportedOperationException if the origin cannot be converted to a {@link ReadableByteChannel}.
+     * @throws IOException                   if an I/O error occurs.
+     * @see AbstractOrigin#getChannel
+     * @see #getOpenOptions()
+     * @since 2.21.0
+     */
+    public <C extends Channel> C getChannel(final Class<C> channelType) throws IOException {
+        return checkOrigin().getChannel(channelType, getOpenOptions());
     }
 
     /**

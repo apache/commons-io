@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -40,7 +40,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOConsumer}.
  */
-public class IOConsumerTest {
+class IOConsumerTest {
 
     @Test
     void testAccept() throws IOException {
@@ -64,7 +64,7 @@ public class IOConsumerTest {
     }
 
     @Test
-    public void testAsConsumer() {
+    void testAsConsumer() {
         assertThrows(UncheckedIOException.class, () -> Optional.of("a").ifPresent(TestUtils.throwingIOConsumer().asConsumer()));
         final AtomicReference<String> ref = new AtomicReference<>();
         final IOConsumer<String> consumer1 = s -> ref.set(s + "1");
@@ -73,7 +73,7 @@ public class IOConsumerTest {
     }
 
     @Test
-    public void testForAllArrayOf1() throws IOException {
+    void testForAllArrayOf1() throws IOException {
         IOConsumer.forAll(TestUtils.throwingIOConsumer(), (String[]) null);
         IOConsumer.forAll(null, (String[]) null);
         assertThrows(IOExceptionList.class, () -> IOConsumer.forAll(TestUtils.throwingIOConsumer(), "1"));
@@ -85,7 +85,7 @@ public class IOConsumerTest {
     }
 
     @Test
-    public void testForAllArrayOf2() throws IOException {
+    void testForAllArrayOf2() throws IOException {
         IOConsumer.forAll(TestUtils.throwingIOConsumer(), (String[]) null);
         IOConsumer.forAll(null, (String[]) null);
         assertThrows(IOExceptionList.class, () -> IOConsumer.forAll(TestUtils.throwingIOConsumer(), "1", "2"));
@@ -97,7 +97,7 @@ public class IOConsumerTest {
     }
 
     @Test
-    public void testForAllIterableOf1() throws IOException {
+    void testForAllIterableOf1() throws IOException {
         IOConsumer.forAll(TestUtils.throwingIOConsumer(), (Iterable<Object>) null);
         IOConsumer.forAll(null, (Iterable<Object>) null);
         assertThrows(IOExceptionList.class, () -> IOConsumer.forAll(TestUtils.throwingIOConsumer(), Arrays.asList("1")));
@@ -109,7 +109,7 @@ public class IOConsumerTest {
     }
 
     @Test
-    public void testForAllIterableOf2() throws IOException {
+    void testForAllIterableOf2() throws IOException {
         IOConsumer.forAll(TestUtils.throwingIOConsumer(), (Iterable<Object>) null);
         IOConsumer.forAll(null, (Iterable<Object>) null);
         assertThrows(IOExceptionList.class, () -> IOConsumer.forAll(TestUtils.throwingIOConsumer(), Arrays.asList("1", "2")));
@@ -121,7 +121,7 @@ public class IOConsumerTest {
     }
 
     @Test
-    public void testForAllStreamOf1() throws IOException {
+    void testForAllStreamOf1() throws IOException {
         IOConsumer.forAll(TestUtils.throwingIOConsumer(), (Stream<Object>) null);
         IOConsumer.forAll(null, (Stream<Object>) null);
         assertThrows(IOExceptionList.class, () -> IOConsumer.forAll(TestUtils.throwingIOConsumer(), Arrays.asList("1").stream()));
@@ -133,7 +133,7 @@ public class IOConsumerTest {
     }
 
     @Test
-    public void testForAllStreamOf2() throws IOException {
+    void testForAllStreamOf2() throws IOException {
         IOConsumer.forAll(TestUtils.throwingIOConsumer(), (Stream<Object>) null);
         IOConsumer.forAll(null, (Stream<Object>) null);
         assertThrows(IOExceptionList.class, () -> IOConsumer.forAll(TestUtils.throwingIOConsumer(), Arrays.asList("1", "2").stream()));
@@ -145,7 +145,7 @@ public class IOConsumerTest {
     }
 
     @Test
-    public void testNoop() {
+    void testNoop() {
         final Closeable nullCloseable = null;
         final IOConsumer<IOException> noopConsumer = IOConsumer.noop(); // noop consumer doesn't throw
         assertDoesNotThrow(() -> IOUtils.close(nullCloseable, noopConsumer));

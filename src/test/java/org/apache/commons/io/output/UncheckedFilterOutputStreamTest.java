@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link BrokenWriter}.
  */
-public class UncheckedFilterOutputStreamTest {
+class UncheckedFilterOutputStreamTest {
 
     private IOException exception;
 
@@ -48,65 +48,65 @@ public class UncheckedFilterOutputStreamTest {
     }
 
     @Test
-    public void testClose() {
+    void testClose() {
         stringWriter.close();
     }
 
     @Test
-    public void testCloseThrows() {
+    void testCloseThrows() {
         assertEquals(exception, assertThrows(UncheckedIOException.class, () -> brokenWriter.close()).getCause());
     }
 
     @Test
-    public void testEquals() {
+    void testEquals() {
         stringWriter.equals(null);
     }
 
     @Test
     @Disabled("What should happen here?")
-    public void testEqualsThrows() {
+    void testEqualsThrows() {
         assertEquals(exception, assertThrows(UncheckedIOException.class, () -> brokenWriter.equals(null)).getCause());
     }
 
     @Test
-    public void testFlush() {
+    void testFlush() {
         stringWriter.flush();
     }
 
     @Test
-    public void testFlushThrows() {
+    void testFlushThrows() {
         assertEquals(exception, assertThrows(UncheckedIOException.class, () -> brokenWriter.flush()).getCause());
     }
 
     @Test
-    public void testHashCode() {
+    void testHashCode() {
         stringWriter.hashCode();
     }
 
     @Test
     @Disabled("What should happen here?")
-    public void testHashCodeThrows() {
+    void testHashCodeThrows() {
         assertEquals(exception, assertThrows(UncheckedIOException.class, () -> brokenWriter.hashCode()).getCause());
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         stringWriter.toString();
     }
 
     @Test
     @Disabled("What should happen here?")
-    public void testToStringThrows() {
+    void testToStringThrows() {
         assertEquals(exception, assertThrows(UncheckedIOException.class, () -> brokenWriter.toString()).getCause());
     }
 
     @Test
-    public void testWriteInt() {
+    void testWriteInt() {
         stringWriter.write(1);
     }
 
     @Test
-    public void testWriteIntThrows() {
+    void testWriteIntThrows() {
         assertEquals(exception, assertThrows(UncheckedIOException.class, () -> brokenWriter.write(1)).getCause());
     }
 

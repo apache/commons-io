@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -43,10 +43,10 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link MessageDigestInputStream}.
  */
-public class MessageDigestInputStreamTest {
+class MessageDigestInputStreamTest {
 
-    static byte[] generateRandomByteStream(final int pSize) {
-        final byte[] buffer = new byte[pSize];
+    static byte[] generateRandomByteStream(final int size) {
+        final byte[] buffer = new byte[size];
         final Random rnd = new Random();
         rnd.nextBytes(buffer);
         return buffer;
@@ -66,7 +66,7 @@ public class MessageDigestInputStreamTest {
     }
 
     @Test
-    public void testAfterReadConsumer() throws Exception {
+    void testAfterReadConsumer() throws Exception {
         final AtomicBoolean boolRef = new AtomicBoolean();
         // @formatter:off
         try (InputStream bounded = MessageDigestInputStream.builder()
@@ -95,7 +95,7 @@ public class MessageDigestInputStreamTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testAvailableAfterClose() throws Exception {
+    void testAvailableAfterClose() throws Exception {
         final InputStream shadow;
         try (InputStream in = createInputStream()) {
             assertTrue(in.available() > 0);
@@ -105,7 +105,7 @@ public class MessageDigestInputStreamTest {
     }
 
     @Test
-    public void testAvailableAfterOpen() throws Exception {
+    void testAvailableAfterOpen() throws Exception {
         try (InputStream in = createInputStream()) {
             assertTrue(in.available() > 0);
             assertNotEquals(IOUtils.EOF, in.read());
@@ -114,7 +114,7 @@ public class MessageDigestInputStreamTest {
     }
 
     @Test
-    public void testNoDefault() throws Exception {
+    void testNoDefault() throws Exception {
         // No default by design, call MUST set a message digest
         // Fail-fast, no need to try to process any input origin
         assertThrows(NullPointerException.class, () -> MessageDigestInputStream.builder().get());
@@ -122,7 +122,7 @@ public class MessageDigestInputStreamTest {
     }
 
     @Test
-    public void testNormalUse() throws Exception {
+    void testNormalUse() throws Exception {
         for (int i = 256; i < 8192; i *= 2) {
             final byte[] buffer = generateRandomByteStream(i);
             final byte[] expect = DigestUtils.sha512(buffer);
@@ -140,7 +140,7 @@ public class MessageDigestInputStreamTest {
     }
 
     @Test
-    public void testReadAfterClose_ByteArrayInputStream() throws Exception {
+    void testReadAfterClose_ByteArrayInputStream() throws Exception {
         try (InputStream in = createInputStream()) {
             in.close();
             assertNotEquals(IOUtils.EOF, in.read());
@@ -149,7 +149,7 @@ public class MessageDigestInputStreamTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testReadAfterClose_ChannelInputStream() throws Exception {
+    void testReadAfterClose_ChannelInputStream() throws Exception {
         try (InputStream in = createInputStream(Files.newInputStream(Paths.get("src/test/resources/org/apache/commons/io/abitmorethan16k.txt")))) {
             in.close();
             // ChannelInputStream throws when closed

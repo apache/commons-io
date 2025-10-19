@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,11 +18,23 @@
 package org.apache.commons.io.function;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 final class TestUtils {
+
+    static boolean compareAndSetThrowsIO(final AtomicBoolean ref, final boolean update) throws IOException {
+        return compareAndSetThrowsIO(ref, false, update);
+    }
+
+    static boolean compareAndSetThrowsIO(final AtomicBoolean ref, final boolean expected, final boolean update) throws IOException {
+        if (!ref.compareAndSet(expected, update)) {
+            throw new IOException("Unexpected");
+        }
+        return ref.get(); // same as update
+    }
 
     static int compareAndSetThrowsIO(final AtomicInteger ref, final int update) throws IOException {
         return compareAndSetThrowsIO(ref, 0, update);

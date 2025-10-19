@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -44,7 +44,7 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
     }
 
     /**
-     * Return <code>{@link #readByte()} != 0</code>
+     * Return {@code {@link #readByte()} != 0}
      *
      * @return false if the byte read is zero, otherwise true
      * @throws IOException if an I/O error occurs.
@@ -68,7 +68,7 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
     }
 
     /**
-     * Reads a 2 byte, unsigned, little endian UTF-16 code point.
+     * Reads a 2 byte, unsigned, little-endian UTF-16 code point.
      *
      * @return the UTF-16 code point read or -1 if the end of stream
      * @throws IOException if an I/O error occurs.

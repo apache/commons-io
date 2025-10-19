@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -39,6 +39,7 @@ import java.util.stream.Stream;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -47,20 +48,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-public class ReaderInputStreamTest {
+class ReaderInputStreamTest {
 
     private static final String UTF_16 = StandardCharsets.UTF_16.name();
     private static final String UTF_8 = StandardCharsets.UTF_8.name();
     private static final String TEST_STRING = "\u00e0 peine arriv\u00e9s nous entr\u00e2mes dans sa chambre";
-    private static final String LARGE_TEST_STRING;
-
-    static {
-        final StringBuilder buffer = new StringBuilder();
-        for (int i = 0; i < 100; i++) {
-            buffer.append(TEST_STRING);
-        }
-        LARGE_TEST_STRING = buffer.toString();
-    }
+    private static final String LARGE_TEST_STRING = StringUtils.repeat(TEST_STRING, 100);
 
     static Stream<Arguments> charsetData() {
         // @formatter:off
@@ -83,7 +76,7 @@ public class ReaderInputStreamTest {
     }
 
     @Test
-    public void testAvailableAfterClose() throws IOException {
+    void testAvailableAfterClose() throws IOException {
         try (InputStream inputStream = createInputStream()) {
             inputStream.close();
             assertEquals(0, inputStream.available());
@@ -91,7 +84,7 @@ public class ReaderInputStreamTest {
     }
 
     @Test
-    public void testAvailableAfterOpen() throws IOException {
+    void testAvailableAfterOpen() throws IOException {
         try (InputStream inputStream = createInputStream()) {
             // Nothing read, may block
             assertEquals(0, inputStream.available());
@@ -103,7 +96,7 @@ public class ReaderInputStreamTest {
 
     @Test
     @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
-    public void testBufferSmallest() throws IOException {
+    void testBufferSmallest() throws IOException {
         final Charset charset = StandardCharsets.UTF_8;
         // @formatter:off
         try (InputStream in = new ReaderInputStream(
@@ -123,7 +116,7 @@ public class ReaderInputStreamTest {
     }
 
     @Test
-    public void testBufferTooSmall() {
+    void testBufferTooSmall() {
         assertThrows(IllegalArgumentException.class, () -> new ReaderInputStream(new StringReader("\uD800"), StandardCharsets.UTF_8, -1));
         assertThrows(IllegalArgumentException.class, () -> new ReaderInputStream(new StringReader("\uD800"), StandardCharsets.UTF_8, 0));
         assertThrows(IllegalArgumentException.class, () -> new ReaderInputStream(new StringReader("\uD800"), StandardCharsets.UTF_8, 1));
@@ -131,7 +124,7 @@ public class ReaderInputStreamTest {
 
     @ParameterizedTest
     @MethodSource("charsetData")
-    public void testCharsetEncoderFlush(final String charsetName, final String data) throws IOException {
+    void testCharsetEncoderFlush(final String charsetName, final String data) throws IOException {
         final Charset charset = Charset.forName(charsetName);
         final byte[] expected = data.getBytes(charset);
         try (InputStream in = new ReaderInputStream(new StringReader(data), charset)) {
@@ -146,7 +139,7 @@ public class ReaderInputStreamTest {
      * Tests https://issues.apache.org/jira/browse/IO-277
      */
     @Test
-    public void testCharsetMismatchInfiniteLoop() throws IOException {
+    void testCharsetMismatchInfiniteLoop() throws IOException {
         // Input is UTF-8 bytes: 0xE0 0xB2 0xA0
         final char[] inputChars = { (char) 0xE0, (char) 0xB2, (char) 0xA0 };
         // Charset charset = Charset.forName("UTF-8"); // works
@@ -158,16 +151,16 @@ public class ReaderInputStreamTest {
 
     @Test
     @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
-    public void testCodingError() throws IOException {
+    void testCodingError() throws IOException {
         // Encoder which throws on malformed or unmappable input
         CharsetEncoder encoder = StandardCharsets.UTF_8.newEncoder();
-        try (final ReaderInputStream in = new ReaderInputStream(new StringReader("\uD800"), encoder)) {
+        try (ReaderInputStream in = new ReaderInputStream(new StringReader("\uD800"), encoder)) {
             // Does not throws an exception because the input is an underflow and not an error
             assertDoesNotThrow(() -> in.read());
             // assertThrows(IllegalStateException.class, () -> in.read());
         }
         encoder = StandardCharsets.UTF_8.newEncoder();
-        try (final ReaderInputStream in = ReaderInputStream.builder().setReader(new StringReader("\uD800")).setCharsetEncoder(encoder).get()) {
+        try (ReaderInputStream in = ReaderInputStream.builder().setReader(new StringReader("\uD800")).setCharsetEncoder(encoder).get()) {
             // TODO WIP
             assertDoesNotThrow(() -> in.read());
             // assertThrows(IllegalStateException.class, () -> in.read());
@@ -181,7 +174,7 @@ public class ReaderInputStreamTest {
      */
     @Test
     @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
-    public void testCodingErrorAction() throws IOException {
+    void testCodingErrorAction() throws IOException {
         final Charset charset = StandardCharsets.UTF_8;
         final CharsetEncoder encoder = charset.newEncoder().onMalformedInput(CodingErrorAction.REPORT);
         try (InputStream in = new ReaderInputStream(new StringReader("\uD800aa"), encoder, (int) ReaderInputStream.minBufferSize(encoder))) {
@@ -195,7 +188,7 @@ public class ReaderInputStreamTest {
 
     @Test
     @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
-    public void testConstructNullCharset() throws IOException {
+    void testConstructNullCharset() throws IOException {
         final Charset charset = Charset.defaultCharset();
         final Charset encoder = null;
         try (ReaderInputStream in = new ReaderInputStream(new StringReader("ABC"), encoder, (int) ReaderInputStream.minBufferSize(charset.newEncoder()))) {
@@ -206,7 +199,7 @@ public class ReaderInputStreamTest {
 
     @Test
     @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
-    public void testConstructNullCharsetEncoder() throws IOException {
+    void testConstructNullCharsetEncoder() throws IOException {
         final Charset charset = Charset.defaultCharset();
         final CharsetEncoder encoder = null;
         try (ReaderInputStream in = new ReaderInputStream(new StringReader("ABC"), encoder, (int) ReaderInputStream.minBufferSize(charset.newEncoder()))) {
@@ -217,7 +210,7 @@ public class ReaderInputStreamTest {
 
     @Test
     @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
-    public void testConstructNullCharsetNameEncoder() throws IOException {
+    void testConstructNullCharsetNameEncoder() throws IOException {
         final Charset charset = Charset.defaultCharset();
         final String charsetName = null;
         try (ReaderInputStream in = new ReaderInputStream(new StringReader("ABC"), charsetName, (int) ReaderInputStream.minBufferSize(charset.newEncoder()))) {
@@ -232,33 +225,33 @@ public class ReaderInputStreamTest {
     }
 
     @Test
-    public void testIo803SAXException() throws IOException {
+    void testIo803SAXException() throws IOException {
         final StringReader reader = new StringReader("");
-        try (final ReaderInputStream inputStream = ReaderInputStream.builder().setCharset(StandardCharsets.UTF_8).setReader(reader).get()) {
+        try (ReaderInputStream inputStream = ReaderInputStream.builder().setCharset(StandardCharsets.UTF_8).setReader(reader).get()) {
             final InputSource inputSource = new InputSource(inputStream);
             assertThrows(SAXException.class, () -> DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputSource));
         }
     }
 
     @Test
-    public void testIo803StringReaderSanityCheck() {
+    void testIo803StringReaderSanityCheck() {
         final StringReader reader = new StringReader("");
         final InputSource inputSource = new InputSource(reader);
         assertThrows(SAXException.class, () -> DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputSource));
     }
 
     @Test
-    public void testLargeUTF8WithBufferedRead() throws IOException {
+    void testLargeUTF8WithBufferedRead() throws IOException {
         testWithBufferedRead(LARGE_TEST_STRING, UTF_8);
     }
 
     @Test
-    public void testLargeUTF8WithSingleByteRead() throws IOException {
+    void testLargeUTF8WithSingleByteRead() throws IOException {
         testWithSingleByteRead(LARGE_TEST_STRING, UTF_8);
     }
 
     @Test
-    public void testReadAfterClose() throws IOException {
+    void testReadAfterClose() throws IOException {
         try (InputStream inputStream = createInputStream()) {
             inputStream.close();
             assertThrows(IOException.class, inputStream::read);
@@ -266,7 +259,7 @@ public class ReaderInputStreamTest {
     }
 
     @Test
-    public void testReadEofTwice() throws IOException {
+    void testReadEofTwice() throws IOException {
         try (ReaderInputStream reader = ReaderInputStream.builder().setCharset(StandardCharsets.UTF_8).setReader(new StringReader("123")).get()) {
             assertEquals('1', reader.read());
             assertEquals('2', reader.read());
@@ -278,7 +271,7 @@ public class ReaderInputStreamTest {
 
     @SuppressWarnings("deprecation")
     @Test
-    public void testReadZero() throws Exception {
+    void testReadZero() throws Exception {
         final String inStr = "test";
         try (ReaderInputStream inputStream = new ReaderInputStream(new StringReader(inStr))) {
             testReadZero(inStr, inputStream);
@@ -298,7 +291,7 @@ public class ReaderInputStreamTest {
 
     @SuppressWarnings("deprecation")
     @Test
-    public void testReadZeroEmptyString() throws Exception {
+    void testReadZeroEmptyString() throws Exception {
         try (ReaderInputStream inputStream = new ReaderInputStream(new StringReader(""))) {
             final byte[] bytes = new byte[30];
             // Should always return 0 for length == 0
@@ -310,32 +303,32 @@ public class ReaderInputStreamTest {
     }
 
     @Test
-    public void testResetCharset() {
+    void testResetCharset() {
         assertNotNull(ReaderInputStream.builder().setReader(new StringReader("\uD800")).setCharset((Charset) null).getCharset());
     }
 
     @Test
-    public void testResetCharsetEncoder() {
+    void testResetCharsetEncoder() {
         assertNotNull(ReaderInputStream.builder().setReader(new StringReader("\uD800")).setCharsetEncoder(null).getCharsetEncoder());
     }
 
     @Test
-    public void testResetCharsetName() {
+    void testResetCharsetName() {
         assertNotNull(ReaderInputStream.builder().setReader(new StringReader("\uD800")).setCharset((String) null).getCharset());
     }
 
     @Test
-    public void testUTF16WithSingleByteRead() throws IOException {
+    void testUTF16WithSingleByteRead() throws IOException {
         testWithSingleByteRead(TEST_STRING, UTF_16);
     }
 
     @Test
-    public void testUTF8WithBufferedRead() throws IOException {
+    void testUTF8WithBufferedRead() throws IOException {
         testWithBufferedRead(TEST_STRING, UTF_8);
     }
 
     @Test
-    public void testUTF8WithSingleByteRead() throws IOException {
+    void testUTF8WithSingleByteRead() throws IOException {
         testWithSingleByteRead(TEST_STRING, UTF_8);
     }
 

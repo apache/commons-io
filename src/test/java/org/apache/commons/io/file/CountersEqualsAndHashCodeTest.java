@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,15 +22,15 @@ import org.apache.commons.io.file.Counters.PathCounters;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class CountersEqualsAndHashCodeTest {
+class CountersEqualsAndHashCodeTest {
 
     @Test
-    public void testBigIntegerCounterEquals() {
+    void testBigIntegerCounterEquals() {
         testEquals(Counters.bigIntegerCounter(), Counters.bigIntegerCounter());
     }
 
     @Test
-    public void testBigIntegerHashCode() {
+    void testBigIntegerHashCode() {
         testHashCodes(Counters.bigIntegerCounter(), Counters.bigIntegerCounter());
     }
 
@@ -83,43 +83,43 @@ public class CountersEqualsAndHashCodeTest {
     }
 
     @Test
-    public void testLongCounterEquals() {
+    void testLongCounterEquals() {
         testEquals(Counters.longCounter(), Counters.longCounter());
     }
 
     @Test
-    public void testLongCounterHashCodes() {
+    void testLongCounterHashCodes() {
         testHashCodes(Counters.longCounter(), Counters.longCounter());
     }
 
     @Test
-    public void testLongCounterMixEquals() {
+    void testLongCounterMixEquals() {
         testEquals(Counters.longCounter(), Counters.bigIntegerCounter());
         testEquals(Counters.bigIntegerCounter(), Counters.longCounter());
     }
 
     @Test
-    public void testLongPathCountersEqualsByteCounters() {
+    void testLongPathCountersEqualsByteCounters() {
         testEqualsByteCounters(Counters.longPathCounters(), Counters.longPathCounters());
     }
 
     @Test
-    public void testLongPathCountersEqualsDirectoryCounters() {
+    void testLongPathCountersEqualsDirectoryCounters() {
         testEqualsDirectoryCounters(Counters.longPathCounters(), Counters.longPathCounters());
     }
 
     @Test
-    public void testLongPathCountersEqualsFileCounters() {
+    void testLongPathCountersEqualsFileCounters() {
         testEqualsFileCounters(Counters.longPathCounters(), Counters.longPathCounters());
     }
 
     @Test
-    public void testLongPathCountersHashCodeFileCounters() {
+    void testLongPathCountersHashCodeFileCounters() {
         testHashCodeFileCounters(Counters.longPathCounters(), Counters.longPathCounters());
     }
 
     @Test
-    public void testMix() {
+    void testMix() {
         testHashCodeFileCounters(Counters.longPathCounters(), Counters.bigIntegerPathCounters());
     }
 }

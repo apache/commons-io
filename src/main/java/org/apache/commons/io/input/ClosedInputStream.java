@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -60,9 +60,16 @@ public class ClosedInputStream extends InputStream {
     }
 
     /**
-     * Returns -1 to indicate that the stream is closed.
+     * Constructs a new instance.
+     */
+    public ClosedInputStream() {
+        // empty
+    }
+
+    /**
+     * Returns {@code -1} to indicate that the stream is closed.
      *
-     * @return always -1
+     * @return always {@code -1}.
      */
     @Override
     public int read() {
@@ -70,15 +77,21 @@ public class ClosedInputStream extends InputStream {
     }
 
     /**
-     * Returns -1 to indicate that the stream is closed.
+     * Returns {@code -1} to indicate that the stream is closed.
      *
-     * @param b ignored.
-     * @param off ignored.
-     * @param len ignored.
-     * @return always -1
+     * @param b The buffer to read bytes into.
+     * @param off The start offset.
+     * @param len The number of bytes to read.
+     * @return If len is zero, then {@code 0}; otherwise {@code -1}.
+     * @throws NullPointerException if the byte array is {@code null}.
+     * @throws IndexOutOfBoundsException if {@code off} or {@code len} are negative, or if {@code off + len} is greater than {@code b.length}.
      */
     @Override
     public int read(final byte[] b, final int off, final int len) throws IOException {
+        IOUtils.checkFromIndexSize(b, off, len);
+        if (len == 0) {
+            return 0;
+        }
         return EOF;
     }
 

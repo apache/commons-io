@@ -7,7 +7,7 @@
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *   https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -26,10 +26,10 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link WildcardClassNameMatcher}.
  */
-public class WildcardClassNameMatcherTest {
+class WildcardClassNameMatcherTest {
 
     @Test
-    public void testNoPattern() {
+    void testNoPattern() {
         final ClassNameMatcher ca = new WildcardClassNameMatcher("org.foo");
         assertTrue(ca.matches("org.foo"));
         assertFalse(ca.matches("org.foo.and.more"));
@@ -37,14 +37,14 @@ public class WildcardClassNameMatcherTest {
     }
 
     @Test
-    public void testStar() {
+    void testStar() {
         final ClassNameMatcher ca = new WildcardClassNameMatcher("org*");
         assertTrue(ca.matches("org.foo.should.match"));
         assertFalse(ca.matches("bar.should.not.match"));
     }
 
     @Test
-    public void testStarAndQuestionMark() {
+    void testStarAndQuestionMark() {
         final ClassNameMatcher ca = new WildcardClassNameMatcher("org?apache?something*");
         assertTrue(ca.matches("org.apache_something.more"));
         assertFalse(ca.matches("org..apache_something.more"));

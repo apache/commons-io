@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,6 +17,8 @@
 package org.apache.commons.io.output;
 
 import java.io.Writer;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * Never writes data. Calls never go beyond this class.
@@ -51,9 +53,10 @@ public class NullWriter extends Writer {
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
-     * @param c The character to write
-     * @return this writer
+     * Does nothing, like writing to {@code /dev/null}.
+     *
+     * @param c The character to write.
+     * @return this writer.
      * @since 2.0
      */
     @Override
@@ -63,8 +66,9 @@ public class NullWriter extends Writer {
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
-     * @param csq The character sequence to write
+     * Does nothing, like writing to {@code /dev/null}.
+     *
+     * @param csq The character sequence to write.
      * @return this writer
      * @since 2.0
      */
@@ -75,77 +79,101 @@ public class NullWriter extends Writer {
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
-     * @param csq The character sequence to write
-     * @param start The index of the first character to write
-     * @param end  The index of the first character to write (exclusive)
-     * @return this writer
+     * Does nothing except argument validation, like writing to {@code /dev/null}.
+     *
+     * @param csq   The character sequence from which a subsequence will be
+     *              appended.
+     *              If {@code csq} is {@code null}, it is treated as if it were
+     *              {@code "null"}.
+     * @param start The index of the first character in the subsequence.
+     * @param end   The index of the character following the last character in the
+     *              subsequence.
+     * @return {@code this} instance.
+     * @throws IndexOutOfBoundsException If {@code start} or {@code end} are negative, {@code end} is
+     *                                   greater than {@code csq.length()}, or {@code start} is greater
+     *                                   than {@code end}.
      * @since 2.0
      */
     @Override
     public Writer append(final CharSequence csq, final int start, final int end) {
+        IOUtils.checkFromToIndex(csq, start, end);
         //to /dev/null
         return this;
     }
 
-    /** @see java.io.Writer#close() */
+    /** @see Writer#close() */
     @Override
     public void close() {
         //to /dev/null
     }
 
-    /** @see java.io.Writer#flush() */
+    /** @see Writer#flush() */
     @Override
     public void flush() {
         //to /dev/null
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
-     * @param chr The characters to write
+     * Does nothing except argument validation, like writing to {@code /dev/null}.
+     *
+     * @param chr The characters to write, not {@code null}.
+     * @throws NullPointerException if {@code chr} is {@code null}.
      */
     @Override
     public void write(final char[] chr) {
+        write(chr, 0, chr.length);
         //to /dev/null
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
-     * @param chr The characters to write
-     * @param st The start offset
-     * @param end The number of characters to write
+     * Does nothing except argument validation, like writing to {@code /dev/null}.
+     *
+     * @param cbuf The characters to write, not {@code null}.
+     * @param off  The start offset.
+     * @param len  The number of characters to write.
+     * @throws NullPointerException      if {@code chr} is {@code null}.
+     * @throws IndexOutOfBoundsException If ({@code off} or {@code len} are negative, or {@code off + len} is greater than {@code cbuf.length}.
      */
     @Override
-    public void write(final char[] chr, final int st, final int end) {
+    public void write(final char[] cbuf, final int off, final int len) {
+        IOUtils.checkFromIndexSize(cbuf, off, len);
         //to /dev/null
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
-     * @param idx The character to write
+     * Does nothing, like writing to {@code /dev/null}.
+     *
+     * @param b The character to write.
      */
     @Override
-    public void write(final int idx) {
+    public void write(final int b) {
         //to /dev/null
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
-     * @param str The string to write
+     * Does nothing except argument validation, like writing to {@code /dev/null}.
+     *
+     * @param str The string to write, not {@code null}.
+     * @throws NullPointerException if {@code str} is {@code null}.
      */
     @Override
     public void write(final String str) {
+        write(str, 0, str.length());
         //to /dev/null
     }
 
     /**
-     * Does nothing - output to {@code /dev/null}.
-     * @param str The string to write
-     * @param st The start offset
-     * @param end The number of characters to write
+     * Does nothing except argument validation, like writing to {@code /dev/null}.
+     *
+     * @param str The string to write, not {@code null}.
+     * @param off The start offset.
+     * @param len The number of characters to write.
+     * @throws NullPointerException      If {@code str} is {@code null}.
+     * @throws IndexOutOfBoundsException If ({@code off} or {@code len} are negative, or {@code off + len} is greater than {@code str.length()}.
      */
     @Override
-    public void write(final String str, final int st, final int end) {
+    public void write(final String str, final int off, final int len) {
+        IOUtils.checkFromIndexSize(str, off, len);
         //to /dev/null
     }
 

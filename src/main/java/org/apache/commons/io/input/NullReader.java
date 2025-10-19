@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,11 +22,13 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.Reader;
 
+import org.apache.commons.io.IOUtils;
+
 /**
- * A functional, light weight {@link Reader} that emulates
+ * A functional, lightweight {@link Reader} that emulates
  * a reader of a specified size.
  * <p>
- * This implementation provides a light weight
+ * This implementation provides a lightweight
  * object for testing with an {@link Reader}
  * where the contents don't matter.
  * </p>
@@ -61,6 +63,9 @@ import java.io.Reader;
  *      }
  *  }
  * </pre>
+ * <p>
+ * This class is not thread-safe.
+ * </p>
  *
  * @since 1.3
  */
@@ -74,12 +79,13 @@ public class NullReader extends Reader {
     public static final NullReader INSTANCE = new NullReader();
 
     private final long size;
+    private final boolean throwEofException;
+    private final boolean markSupported;
+
     private long position;
     private long mark = -1;
     private long readLimit;
     private boolean eof;
-    private final boolean throwEofException;
-    private final boolean markSupported;
 
     /**
      * Constructs a {@link Reader} that emulates a size 0 reader
@@ -119,7 +125,7 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Closes this Reader - resets the internal state to
+     * Closes this Reader. Resets the internal state to
      * the initial values.
      *
      * @throws IOException If an error occurs.
@@ -148,7 +154,7 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Returns the current position.
+     * Gets the current position.
      *
      * @return the current position.
      */
@@ -157,7 +163,7 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Returns the size this {@link Reader} emulates.
+     * Gets the size this {@link Reader} emulates.
      *
      * @return The size of the reader to emulate.
      */
@@ -182,7 +188,7 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Indicates whether <em>mark</em> is supported.
+     * Tests whether <em>mark</em> is supported.
      *
      * @return Whether <em>mark</em> is supported or not.
      */
@@ -266,12 +272,18 @@ public class NullReader extends Reader {
      * @return The number of characters read or {@code -1}
      * if the end of file has been reached and
      * {@code throwEofException} is set to {@code false}.
+     * @throws NullPointerException if the array is {@code null}.
+     * @throws IndexOutOfBoundsException if {@code offset} or {@code length} are negative, or if {@code offset + length} is greater than {@code chars.length}.
      * @throws EOFException if the end of file is reached and
      * {@code throwEofException} is set to {@code true}.
      * @throws IOException if trying to read past the end of file.
      */
     @Override
     public int read(final char[] chars, final int offset, final int length) throws IOException {
+        IOUtils.checkFromIndexSize(chars, offset, length);
+        if (length == 0) {
+            return 0;
+        }
         if (eof) {
             throw new IOException("Read after end of file");
         }

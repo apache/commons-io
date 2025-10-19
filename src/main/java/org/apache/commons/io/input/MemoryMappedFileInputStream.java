@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,6 +27,7 @@ import java.nio.channels.FileChannel.MapMode;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
@@ -92,7 +93,7 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
     public static class Builder extends AbstractStreamBuilder<MemoryMappedFileInputStream, Builder> {
 
         /**
-         * Constructs a new {@link Builder}.
+         * Constructs a new builder of {@link MemoryMappedFileInputStream}.
          */
         public Builder() {
             setBufferSizeDefault(DEFAULT_BUFFER_SIZE);
@@ -102,26 +103,27 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
         /**
          * Builds a new {@link MemoryMappedFileInputStream}.
          * <p>
-         * You must set input that supports {@link #getPath()}, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link #getPath()}, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
-         * <li>{@link #getPath()}</li>
+         * <li>{@link #getPath()} gets the target aspect.</li>
          * <li>{@link #getBufferSize()}</li>
          * </ul>
          *
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @throws UnsupportedOperationException if the origin cannot be converted to a {@link Path}.
-         * @throws IOException                   if an I/O error occurs.
+         * @throws IOException                   if an I/O error occurs converting to an {@link Path} using {@link #getPath()}.
          * @see #getPath()
          * @see #getBufferSize()
+         * @see #getUnchecked()
          */
         @Override
         public MemoryMappedFileInputStream get() throws IOException {
-            return new MemoryMappedFileInputStream(getPath(), getBufferSize());
+            return new MemoryMappedFileInputStream(this);
         }
     }
 
@@ -155,13 +157,12 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
     /**
      * Constructs a new instance.
      *
-     * @param file The path of the file to open.
-     * @param bufferSize Size of the sliding buffer.
+     * @param builder The builder.
      * @throws IOException If an I/O error occurs.
      */
-    private MemoryMappedFileInputStream(final Path file, final int bufferSize) throws IOException {
-        this.bufferSize = bufferSize;
-        this.channel = FileChannel.open(file, StandardOpenOption.READ);
+    private MemoryMappedFileInputStream(final Builder builder) throws IOException {
+        this.bufferSize = builder.getBufferSize();
+        this.channel = FileChannel.open(builder.getPath(), StandardOpenOption.READ);
     }
 
     @Override
@@ -216,6 +217,10 @@ public final class MemoryMappedFileInputStream extends AbstractInputStream {
 
     @Override
     public int read(final byte[] b, final int off, final int len) throws IOException {
+        IOUtils.checkFromIndexSize(b, off, len);
+        if (len == 0) {
+            return 0;
+        }
         checkOpen();
         if (!buffer.hasRemaining()) {
             nextBuffer();

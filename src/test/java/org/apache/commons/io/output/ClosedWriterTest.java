@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,13 +25,13 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link ClosedWriter}.
  */
-public class ClosedWriterTest {
+class ClosedWriterTest {
 
     /**
      * Test the {@code flush()} method.
      */
     @Test
-    public void testFlush() throws IOException {
+    void testFlush() throws IOException {
         try (ClosedWriter cw = new ClosedWriter()) {
             assertThrows(IOException.class, () -> cw.flush());
         }
@@ -41,9 +41,15 @@ public class ClosedWriterTest {
      * Test the {@code write(cbuf, off, len)} method.
      */
     @Test
-    public void testWrite() throws IOException {
+    void testWrite() throws IOException {
         try (ClosedWriter cw = new ClosedWriter()) {
-            assertThrows(IOException.class, () -> cw.write(new char[0], 0, 0));
+            final char[] cbuf = new char[1];
+            assertThrows(IOException.class, () -> cw.write(new char[0], 0, 1));
+            // In writers, testing for closed always comes before argument validation
+            assertThrows(IOException.class, () -> cw.write(cbuf, -1, 0));
+            assertThrows(IOException.class, () -> cw.write(cbuf, 0, -1));
+            assertThrows(IOException.class, () -> cw.write(cbuf, 0, 2));
+            assertThrows(IOException.class, () -> cw.write((char[]) null, 0, 0));
         }
     }
 

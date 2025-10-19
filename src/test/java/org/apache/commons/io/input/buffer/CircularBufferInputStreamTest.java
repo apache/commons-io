@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link CircularBufferInputStream}.
  */
-public class CircularBufferInputStreamTest {
+class CircularBufferInputStreamTest {
 
     /**
      * System.currentTimeMillis(), when this test was written. Always using the same seed should ensure a reproducible test.
@@ -51,9 +51,9 @@ public class CircularBufferInputStreamTest {
     }
 
     @Test
-    public void testIO683() throws IOException {
+    void testIO683() throws IOException {
         final byte[] buffer = {0, 1, -2, -2, -1, 4};
-        try (ByteArrayInputStream bais = new ByteArrayInputStream(buffer); final CircularBufferInputStream cbis = new CircularBufferInputStream(bais)) {
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(buffer); CircularBufferInputStream cbis = new CircularBufferInputStream(bais)) {
             int b;
             int i = 0;
             while ((b = cbis.read()) != -1) {
@@ -65,7 +65,7 @@ public class CircularBufferInputStreamTest {
     }
 
     @Test
-    public void testRandomRead() throws Exception {
+    void testRandomRead() throws Exception {
         final byte[] inputBuffer = newInputBuffer();
         final byte[] bufferCopy = new byte[inputBuffer.length];
         final ByteArrayInputStream bais = new ByteArrayInputStream(inputBuffer);

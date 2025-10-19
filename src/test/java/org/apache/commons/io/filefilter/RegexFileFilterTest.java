@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link RegexFileFilter}.
  */
-public class RegexFileFilterTest {
+class RegexFileFilterTest {
 
     public void assertFiltering(final IOFileFilter filter, final File file, final boolean expected) {
         // Note. This only tests the (File, String) version if the parent of
@@ -89,7 +89,7 @@ public class RegexFileFilterTest {
     }
 
     @Test
-    public void testRegex() throws IOException {
+    void testRegex() throws IOException {
         RegexFileFilter filter = new RegexFileFilter("^.*[tT]est(-\\d+)?\\.java$");
         assertSerializable(filter);
         assertFiltering(filter, new File("Test.java"), true);
@@ -142,7 +142,7 @@ public class RegexFileFilterTest {
     }
 
     @Test
-    public void testRegexEdgeCases() {
+    void testRegexEdgeCases() {
         assertThrows(NullPointerException.class, () -> assertSerializable(new RegexFileFilter((String) null)));
         assertThrows(NullPointerException.class, () -> assertSerializable(new RegexFileFilter(null, Pattern.CASE_INSENSITIVE)));
         assertThrows(NullPointerException.class, () -> assertSerializable(new RegexFileFilter(null, IOCase.INSENSITIVE)));
@@ -156,7 +156,7 @@ public class RegexFileFilterTest {
      */
     @SuppressWarnings("unchecked")
     @Test
-    public void testRegexFileNameOnly() throws IOException {
+    void testRegexFileNameOnly() throws IOException {
         final Path path = Paths.get("folder", "Foo.java");
         final String patternStr = "Foo.*";
         assertFiltering(assertSerializable(new RegexFileFilter(patternStr)), path, true);

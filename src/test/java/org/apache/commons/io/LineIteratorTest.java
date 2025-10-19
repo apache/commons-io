@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -41,7 +41,7 @@ import org.junit.jupiter.api.io.TempDir;
 /**
  * Tests {@link LineIterator}.
  */
-public class LineIteratorTest {
+class LineIteratorTest {
 
     private static final String UTF_8 = StandardCharsets.UTF_8.name();
 
@@ -65,7 +65,6 @@ public class LineIteratorTest {
      *
      * @param file target file
      * @param lineCount number of lines to create
-     *
      * @throws IOException If an I/O error occurs
      */
     private List<String> createLinesFile(final File file, final int lineCount) throws IOException {
@@ -80,7 +79,6 @@ public class LineIteratorTest {
      * @param file target file
      * @param encoding the encoding to use while writing the lines
      * @param lineCount number of lines to create
-     *
      * @throws IOException If an I/O error occurs
      */
     private List<String> createLinesFile(final File file, final String encoding, final int lineCount) throws IOException {
@@ -107,7 +105,6 @@ public class LineIteratorTest {
      * Utility method to create and test a file with a specified number of lines.
      *
      * @param lineCount the lines to create in the test file
-     *
      * @throws IOException If an I/O error occurs while creating the file
      */
     private void doTestFileWithSpecifiedLines(final int lineCount) throws IOException {
@@ -136,7 +133,7 @@ public class LineIteratorTest {
     }
 
     @Test
-    public void testCloseEarly() throws Exception {
+    void testCloseEarly() throws Exception {
         final String encoding = UTF_8;
 
         final File testFile = new File(temporaryFolder, "LineIterator-closeEarly.txt");
@@ -160,7 +157,7 @@ public class LineIteratorTest {
     }
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         assertThrows(NullPointerException.class, () -> new LineIterator(null));
     }
 
@@ -197,7 +194,7 @@ public class LineIteratorTest {
     }
 
     @Test
-    public void testFilteringBufferedReader() throws Exception {
+    void testFilteringBufferedReader() throws Exception {
         final String encoding = UTF_8;
 
         final String fileName = "LineIterator-Filter-test.txt";
@@ -209,7 +206,7 @@ public class LineIteratorTest {
     }
 
     @Test
-    public void testFilteringFileReader() throws Exception {
+    void testFilteringFileReader() throws Exception {
         final String encoding = UTF_8;
 
         final String fileName = "LineIterator-Filter-test.txt";
@@ -221,7 +218,7 @@ public class LineIteratorTest {
     }
 
     @Test
-    public void testInvalidEncoding() throws Exception {
+    void testInvalidEncoding() throws Exception {
         final String encoding = "XXXXXXXX";
 
         final File testFile = new File(temporaryFolder, "LineIterator-invalidEncoding.txt");
@@ -231,13 +228,13 @@ public class LineIteratorTest {
     }
 
     @Test
-    public void testMissingFile() throws Exception {
+    void testMissingFile() throws Exception {
         final File testFile = new File(temporaryFolder, "dummy-missing-file.txt");
         assertThrows(NoSuchFileException.class, () -> FileUtils.lineIterator(testFile, UTF_8));
     }
 
     @Test
-    public void testNextLineOnlyDefaultEncoding() throws Exception {
+    void testNextLineOnlyDefaultEncoding() throws Exception {
         final File testFile = new File(temporaryFolder, "LineIterator-nextOnly.txt");
         final List<String> lines = createLinesFile(testFile, 3);
 
@@ -246,7 +243,7 @@ public class LineIteratorTest {
     }
 
     @Test
-    public void testNextLineOnlyNullEncoding() throws Exception {
+    void testNextLineOnlyNullEncoding() throws Exception {
         final String encoding = null;
 
         final File testFile = new File(temporaryFolder, "LineIterator-nextOnly.txt");
@@ -257,7 +254,7 @@ public class LineIteratorTest {
     }
 
     @Test
-    public void testNextLineOnlyUtf8Encoding() throws Exception {
+    void testNextLineOnlyUtf8Encoding() throws Exception {
         final String encoding = UTF_8;
 
         final File testFile = new File(temporaryFolder, "LineIterator-nextOnly.txt");
@@ -268,7 +265,7 @@ public class LineIteratorTest {
     }
 
     @Test
-    public void testNextOnly() throws Exception {
+    void testNextOnly() throws Exception {
         final String encoding = null;
 
         final File testFile = new File(temporaryFolder, "LineIterator-nextOnly.txt");
@@ -284,7 +281,7 @@ public class LineIteratorTest {
     }
 
     @Test
-    public void testNextWithException() throws Exception {
+    void testNextWithException() throws Exception {
         final Reader reader = new BufferedReader(new StringReader("")) {
             @Override
             public String readLine() throws IOException {
@@ -297,22 +294,22 @@ public class LineIteratorTest {
     }
 
     @Test
-    public void testOneLines() throws Exception {
+    void testOneLines() throws Exception {
         doTestFileWithSpecifiedLines(1);
     }
 
     @Test
-    public void testThreeLines() throws Exception {
+    void testThreeLines() throws Exception {
         doTestFileWithSpecifiedLines(3);
     }
 
     @Test
-    public void testTwoLines() throws Exception {
+    void testTwoLines() throws Exception {
         doTestFileWithSpecifiedLines(2);
     }
 
     @Test
-    public void testValidEncoding() throws Exception {
+    void testValidEncoding() throws Exception {
         final String encoding = UTF_8;
 
         final File testFile = new File(temporaryFolder, "LineIterator-validEncoding.txt");
@@ -329,7 +326,7 @@ public class LineIteratorTest {
     }
 
     @Test
-    public void testZeroLines() throws Exception {
+    void testZeroLines() throws Exception {
         doTestFileWithSpecifiedLines(0);
     }
 

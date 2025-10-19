@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -48,15 +48,15 @@ import org.apache.commons.io.file.PathUtils;
  * final Path dir = PathUtils.current();
  * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new PrefixFileFilter("Test"));
  * //
- * // Walk one dir
- * Files.<b>walkFileTree</b>(dir, Collections.emptySet(), 1, visitor);
+ * // Walk one directory
+ * Files.<strong>walkFileTree</strong>(dir, Collections.emptySet(), 1, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getFileList());
  * //
  * visitor.getPathCounters().reset();
  * //
- * // Walk dir tree
- * Files.<b>walkFileTree</b>(dir, visitor);
+ * // Walk directory tree
+ * Files.<strong>walkFileTree</strong>(dir, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getDirList());
  * System.out.println(visitor.getFileList());
@@ -122,6 +122,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * <p>
      * The array is not cloned, so could be changed after constructing the
      * instance. This would be inadvisable however.
+     * </p>
      *
      * @param prefixes  the prefixes to allow, must not be null
      * @throws IllegalArgumentException if the prefix array is null
@@ -161,7 +162,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
     }
 
     /**
-     * Checks to see if the file name starts with the prefix.
+     * Tests to see if the file name starts with the prefix.
      *
      * @param file  the File to check
      * @return true if the file name starts with one of our prefixes
@@ -172,7 +173,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
     }
 
     /**
-     * Checks to see if the file name starts with the prefix.
+     * Tests to see if the file name starts with the prefix.
      *
      * @param file  the File directory
      * @param name  the file name
@@ -184,9 +185,10 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
     }
 
     /**
-     * Checks to see if the file name starts with the prefix.
-     * @param file  the File to check
+     * Tests to see if the file name starts with the prefix.
      *
+     * @param file  the File to check
+     * @param attributes the path's basic attributes (may be null).
      * @return true if the file name starts with one of our prefixes
      * @since 2.9.0
      */
@@ -200,7 +202,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
     }
 
     /**
-     * Provide a String representation of this file filter.
+     * Provides a String representation of this file filter.
      *
      * @return a String representation
      */

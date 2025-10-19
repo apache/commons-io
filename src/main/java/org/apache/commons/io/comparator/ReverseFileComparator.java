@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -40,7 +40,7 @@ final class ReverseFileComparator extends AbstractFileComparator implements Seri
      *
      * @param delegate The comparator to delegate to.
      */
-    public ReverseFileComparator(final Comparator<File> delegate) {
+    ReverseFileComparator(final Comparator<File> delegate) {
         this.delegate = Objects.requireNonNull(delegate, "delegate");
     }
 
@@ -49,8 +49,8 @@ final class ReverseFileComparator extends AbstractFileComparator implements Seri
      *
      * @param file1 The first file to compare.
      * @param file2 The second file to compare.
-     * @return the result from the delegate {@link Comparator#compare(Object, Object)} reversing the value (i.e.
-     *         positive becomes negative and vice versa).
+     * @return the result from the delegate {@link Comparator#compare(Object, Object)} reversing the value,
+     *         positive becomes negative and vice versa.
      */
     @Override
     public int compare(final File file1, final File file2) {

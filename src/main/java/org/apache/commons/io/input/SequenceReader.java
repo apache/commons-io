@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Objects;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.function.Uncheck;
 
 /**
@@ -62,7 +63,7 @@ public class SequenceReader extends Reader {
     /*
      * (non-Javadoc)
      *
-     * @see java.io.Reader#close()
+     * @see Reader#close()
      */
     @Override
     public void close() throws IOException {
@@ -92,7 +93,7 @@ public class SequenceReader extends Reader {
     /*
      * (non-Javadoc)
      *
-     * @see java.io.Reader#read(char[], int, int)
+     * @see Reader#read(char[], int, int)
      */
     @Override
     public int read() throws IOException {
@@ -107,16 +108,11 @@ public class SequenceReader extends Reader {
         return c;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.io.Reader#read()
-     */
     @Override
     public int read(final char[] cbuf, int off, int len) throws IOException {
-        Objects.requireNonNull(cbuf, "cbuf");
-        if (len < 0 || off < 0 || off + len > cbuf.length) {
-            throw new IndexOutOfBoundsException("Array Size=" + cbuf.length + ", offset=" + off + ", length=" + len);
+        IOUtils.checkFromIndexSize(cbuf, off, len);
+        if (len == 0) {
+            return 0;
         }
         int count = 0;
         while (reader != null) {

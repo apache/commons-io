@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,10 +28,10 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link HexDump}.
  */
-public class HexDumpTest {
+class HexDumpTest {
 
     @Test
-    public void testDumpAppendable() throws IOException {
+    void testDumpAppendable() throws IOException {
         final byte[] testArray = new byte[256];
 
         for (int j = 0; j < 256; j++) {
@@ -95,7 +95,7 @@ public class HexDumpTest {
     }
 
     @Test
-    public void testDumpOutputStream() throws IOException {
+    void testDumpOutputStream() throws IOException {
         final byte[] testArray = new byte[256];
 
         for (int j = 0; j < 256; j++) {

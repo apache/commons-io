@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -40,7 +40,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  *
  * <p>
  * Example, showing how to print out a list of the
- * current directory's <em>visible</em> (i.e. not hidden) files:
+ * current directory's <em>visible</em> (not hidden) files:
  * </p>
  *
  * <pre>
@@ -56,15 +56,15 @@ import java.nio.file.attribute.BasicFileAttributes;
  * final Path dir = PathUtils.current();
  * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(HiddenFileFilter.HIDDEN);
  * //
- * // Walk one dir
- * Files.<b>walkFileTree</b>(dir, Collections.emptySet(), 1, visitor);
+ * // Walk one directory
+ * Files.<strong>walkFileTree</strong>(dir, Collections.emptySet(), 1, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getFileList());
  * //
  * visitor.getPathCounters().reset();
  * //
- * // Walk dir tree
- * Files.<b>walkFileTree</b>(dir, visitor);
+ * // Walk directory tree
+ * Files.<strong>walkFileTree</strong>(dir, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getDirList());
  * System.out.println(visitor.getFileList());
@@ -93,7 +93,7 @@ public class HiddenFileFilter extends AbstractFileFilter implements Serializable
     }
 
     /**
-     * Checks to see if the file is hidden.
+     * Tests to see if the file is hidden.
      *
      * @param file  the File to check
      * @return {@code true} if the file is
@@ -105,11 +105,11 @@ public class HiddenFileFilter extends AbstractFileFilter implements Serializable
     }
 
     /**
-     * Checks to see if the file is hidden.
-     * @param file  the File to check
+     * Tests to see if the file is hidden.
      *
-     * @return {@code true} if the file is
-     *  <em>hidden</em>, otherwise {@code false}.
+     * @param file       the File to check
+     * @param attributes the path's basic attributes (may be null).
+     * @return {@code true} if the file is <em>hidden</em>, otherwise {@code false}.
      * @since 2.9.0
      */
     @Override

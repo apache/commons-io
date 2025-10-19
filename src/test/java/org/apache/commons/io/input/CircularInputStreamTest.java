@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link CircularInputStream}.
  */
-public class CircularInputStreamTest {
+class CircularInputStreamTest {
 
     private void assertStreamOutput(final byte[] toCycle, final byte[] expected) throws IOException {
         final byte[] actual = new byte[expected.length];
@@ -49,7 +49,7 @@ public class CircularInputStreamTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testAvailableAfterClose() throws Exception {
+    void testAvailableAfterClose() throws Exception {
         final InputStream shadow;
         try (InputStream in = createInputStream(new byte[] { 1, 2 }, 4)) {
             assertTrue(in.available() > 0);
@@ -62,7 +62,7 @@ public class CircularInputStreamTest {
     }
 
     @Test
-    public void testAvailableAfterOpen() throws Exception {
+    void testAvailableAfterOpen() throws Exception {
         try (InputStream in = createInputStream(new byte[] { 1, 2 }, 1)) {
             assertTrue(in.available() > 0);
             assertEquals(1, in.read());
@@ -71,31 +71,31 @@ public class CircularInputStreamTest {
     }
 
     @Test
-    public void testContainsEofInputSize0() {
+    void testContainsEofInputSize0() {
         assertThrows(IllegalArgumentException.class, () -> createInputStream(new byte[] { -1 }, 0));
     }
 
     @Test
-    public void testCount0() throws IOException {
+    void testCount0() throws IOException {
         try (InputStream in = createInputStream(new byte[] { 1, 2 }, 0)) {
             assertEquals(IOUtils.EOF, in.read());
         }
     }
 
     @Test
-    public void testCount0InputSize0() {
+    void testCount0InputSize0() {
         assertThrows(IllegalArgumentException.class, () -> createInputStream(new byte[] {}, 0));
     }
 
     @Test
-    public void testCount0InputSize1() throws IOException {
+    void testCount0InputSize1() throws IOException {
         try (InputStream in = createInputStream(new byte[] { 1 }, 0)) {
             assertEquals(IOUtils.EOF, in.read());
         }
     }
 
     @Test
-    public void testCount1InputSize1() throws IOException {
+    void testCount1InputSize1() throws IOException {
         try (InputStream in = createInputStream(new byte[] { 1 }, 1)) {
             assertEquals(1, in.read());
             assertEquals(IOUtils.EOF, in.read());
@@ -103,20 +103,20 @@ public class CircularInputStreamTest {
     }
 
     @Test
-    public void testCycleBytes() throws IOException {
+    void testCycleBytes() throws IOException {
         final byte[] input = { 1, 2 };
         final byte[] expected = { 1, 2, 1, 2, 1 };
         assertStreamOutput(input, expected);
     }
 
     @Test
-    public void testNullInputSize0() {
+    void testNullInputSize0() {
         assertThrows(NullPointerException.class, () -> createInputStream(null, 0));
     }
 
     @SuppressWarnings("resource")
     @Test
-    public void testReaderAfterClose() throws Exception {
+    void testReaderAfterClose() throws Exception {
         final InputStream shadow;
         try (InputStream in = createInputStream(new byte[] { 1, 2 }, 4)) {
             assertTrue(in.available() > 0);
@@ -129,7 +129,7 @@ public class CircularInputStreamTest {
     }
 
     @Test
-    public void testWholeRangeOfBytes() throws IOException {
+    void testWholeRangeOfBytes() throws IOException {
         final int size = Byte.MAX_VALUE - Byte.MIN_VALUE + 1;
         final byte[] contentToCycle = new byte[size];
         byte value = Byte.MIN_VALUE;

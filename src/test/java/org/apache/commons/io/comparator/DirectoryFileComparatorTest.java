@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link DirectoryFileComparator}.
  */
-public class DirectoryFileComparatorTest extends ComparatorAbstractTest {
+class DirectoryFileComparatorTest extends ComparatorAbstractTest {
 
     @BeforeEach
     public void setUp() {
@@ -43,7 +43,7 @@ public class DirectoryFileComparatorTest extends ComparatorAbstractTest {
      */
     @Override
     @Test
-    public void testSortArray() {
+    void testSortArray() {
         // skip sort test
     }
 
@@ -51,7 +51,7 @@ public class DirectoryFileComparatorTest extends ComparatorAbstractTest {
      * Test the comparator array sort.
      */
     @Override
-    public void testSortList() {
+    void testSortList() {
         // skip sort test
     }
 }

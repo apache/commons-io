@@ -6,7 +6,7 @@
  *  (the "License"); you may not use this file except in compliance with
  *  the License.  You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -84,12 +84,19 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
     public static class Builder extends AbstractStreamBuilder<UnsynchronizedBufferedInputStream, Builder> {
 
         /**
+         * Constructs a builder of {@link UnsynchronizedBufferedInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link UnsynchronizedBufferedInputStream}.
          * <p>
-         * You must set input that supports {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
          * <li>{@link #getInputStream()}</li>
@@ -99,14 +106,14 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
-         * @throws IOException                   if an I/O error occurs.
+         * @throws IOException                   if an I/O error occurs converting to an {@link InputStream} using {@link #getInputStream()}.
          * @see #getInputStream()
          * @see #getBufferSize()
+         * @see #getUnchecked()
          */
-        @SuppressWarnings("resource") // Caller closes.
         @Override
         public UnsynchronizedBufferedInputStream get() throws IOException {
-            return new UnsynchronizedBufferedInputStream(getInputStream(), getBufferSize());
+            return new UnsynchronizedBufferedInputStream(this);
         }
 
     }
@@ -140,16 +147,18 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
      * Constructs a new {@code BufferedInputStream} on the {@link InputStream} {@code in}. The buffer size is specified by the parameter {@code size} and all
      * reads are now filtered through this stream.
      *
-     * @param in   the input stream the buffer reads from.
-     * @param size the size of buffer to allocate.
+     * @param builder   A builder providing the input stream and buffer size.
+     * @throws IOException if an I/O error occurs.
      * @throws IllegalArgumentException if {@code size < 0}.
      */
-    private UnsynchronizedBufferedInputStream(final InputStream in, final int size) {
-        super(in);
-        if (size <= 0) {
+    @SuppressWarnings("resource")
+    private UnsynchronizedBufferedInputStream(final Builder builder) throws IOException {
+        super(builder.getInputStream());
+        final int bufferSize = builder.getBufferSize();
+        if (bufferSize <= 0) {
             throw new IllegalArgumentException("Size must be > 0");
         }
-        buffer = new byte[size];
+        buffer = new byte[bufferSize];
     }
 
     /**
@@ -297,18 +306,15 @@ public final class UnsynchronizedBufferedInputStream extends UnsynchronizedFilte
      */
     @Override
     public int read(final byte[] dest, int offset, final int length) throws IOException {
+        IOUtils.checkFromIndexSize(dest, offset, length);
+        if (length == 0) {
+            return 0;
+        }
         // Use local ref since buf may be invalidated by an unsynchronized
         // close()
         byte[] localBuf = buffer;
         if (localBuf == null) {
             throw new IOException("Stream is closed");
-        }
-        // avoid int overflow
-        if (offset > dest.length - length || offset < 0 || length < 0) {
-            throw new IndexOutOfBoundsException();
-        }
-        if (length == 0) {
-            return 0;
         }
         final InputStream localIn = inputStream;
         if (localIn == null) {

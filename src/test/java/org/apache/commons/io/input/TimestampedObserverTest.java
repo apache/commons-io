@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -34,10 +34,10 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link TimestampedObserver}.
  */
-public class TimestampedObserverTest {
+class TimestampedObserverTest {
 
     @Test
-    public void test() throws IOException, InterruptedException {
+    void test() throws IOException, InterruptedException {
         final Instant before = Instant.now();
         // Some OS' clock granularity may be high.
         ThreadUtils.sleep(Duration.ofMillis(20));
@@ -66,7 +66,7 @@ public class TimestampedObserverTest {
     }
 
     @Test
-    public void testExample() throws IOException {
+    void testExample() throws IOException {
         final TimestampedObserver timestampedObserver = new TimestampedObserver();
         final byte[] buffer = MessageDigestInputStreamTest
             .generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);

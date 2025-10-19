@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,7 +33,7 @@ import org.junit.jupiter.api.io.TempDir;
  *
  * @see FileUtils#directoryContains(File, File)
  */
-public class FileUtilsDirectoryContainsTest {
+class FileUtilsDirectoryContainsTest {
 
     private File directory1;
     private File directory2;
@@ -72,7 +72,7 @@ public class FileUtilsDirectoryContainsTest {
     }
 
     @Test
-    public void testCanonicalPath() throws IOException {
+    void testCanonicalPath() throws IOException {
         assertTrue(FileUtils.directoryContains(directory1, file1ByRelativeDirectory2));
         assertTrue(FileUtils.directoryContains(directory2, file2ByRelativeDirectory1));
 
@@ -81,7 +81,7 @@ public class FileUtilsDirectoryContainsTest {
     }
 
     @Test
-    public void testDirectoryContainsDirectory() throws IOException {
+    void testDirectoryContainsDirectory() throws IOException {
         assertTrue(FileUtils.directoryContains(top, directory1));
         assertTrue(FileUtils.directoryContains(top, directory2));
         assertTrue(FileUtils.directoryContains(top, directory3));
@@ -89,13 +89,13 @@ public class FileUtilsDirectoryContainsTest {
     }
 
     @Test
-    public void testDirectoryContainsFile() throws IOException {
+    void testDirectoryContainsFile() throws IOException {
         assertTrue(FileUtils.directoryContains(directory1, file1));
         assertTrue(FileUtils.directoryContains(directory2, file2));
     }
 
     @Test
-    public void testDirectoryDoesNotContainFile() throws IOException {
+    void testDirectoryDoesNotContainFile() throws IOException {
         assertFalse(FileUtils.directoryContains(directory1, file2));
         assertFalse(FileUtils.directoryContains(directory2, file1));
 
@@ -104,7 +104,7 @@ public class FileUtilsDirectoryContainsTest {
     }
 
     @Test
-    public void testDirectoryDoesNotContainsDirectory() throws IOException {
+    void testDirectoryDoesNotContainsDirectory() throws IOException {
         assertFalse(FileUtils.directoryContains(directory1, top));
         assertFalse(FileUtils.directoryContains(directory2, top));
         assertFalse(FileUtils.directoryContains(directory3, top));
@@ -112,14 +112,14 @@ public class FileUtilsDirectoryContainsTest {
     }
 
     @Test
-    public void testDirectoryDoesNotExist() {
+    void testDirectoryDoesNotExist() {
         final File dir = new File("DOESNOTEXIST");
         assertFalse(dir.exists());
         assertThrows(FileNotFoundException.class, () -> FileUtils.directoryContains(dir, file1));
     }
 
     @Test
-    public void testFileDoesNotExist() throws IOException {
+    void testFileDoesNotExist() throws IOException {
         assertFalse(FileUtils.directoryContains(top, null));
         final File file = new File("DOESNOTEXIST");
         assertFalse(file.exists());
@@ -131,7 +131,7 @@ public class FileUtilsDirectoryContainsTest {
      * @throws IOException If an I/O error occurs
      */
     @Test
-    public void testFileDoesNotExistBug() throws IOException {
+    void testFileDoesNotExistBug() throws IOException {
         final File file = new File(top, "DOESNOTEXIST");
         assertTrue(top.exists(), "Check directory exists");
         assertFalse(file.exists(), "Check file does not exist");
@@ -139,7 +139,7 @@ public class FileUtilsDirectoryContainsTest {
     }
 
     @Test
-    public void testFileHavingSamePrefixBug() throws IOException {
+    void testFileHavingSamePrefixBug() throws IOException {
         final File foo = new File(top, "foo");
         final File foobar = new File(top, "foobar");
         final File fooTxt = new File(top, "foo.txt");
@@ -152,18 +152,18 @@ public class FileUtilsDirectoryContainsTest {
     }
 
     @Test
-    public void testIO466() throws IOException {
+    void testIO466() throws IOException {
             final File fooFile = new File(directory1.getParent(), "directory1.txt");
             assertFalse(FileUtils.directoryContains(directory1, fooFile));
     }
 
     @Test
-    public void testSameFile() {
+    void testSameFile() {
         assertThrows(IllegalArgumentException.class, () -> FileUtils.directoryContains(file1, file1));
     }
 
     @Test
-    public void testUnrealizedContainment() {
+    void testUnrealizedContainment() {
         final File dir = new File("DOESNOTEXIST");
         final File file = new File(dir, "DOESNOTEXIST2");
         assertFalse(dir.exists());

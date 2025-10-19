@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -39,7 +39,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Tests {@link PathUtils}.
  */
-public class PathUtilsVisitorTest {
+class PathUtilsVisitorTest {
 
     static Stream<Arguments> testParameters() {
         return AccumulatorPathVisitorTest.testParameters();
@@ -53,7 +53,7 @@ public class PathUtilsVisitorTest {
      */
     @ParameterizedTest
     @MethodSource("testParameters")
-    public void testCountEmptyFolder(final Supplier<AccumulatorPathVisitor> supplier) throws IOException {
+    void testCountEmptyFolder(final Supplier<AccumulatorPathVisitor> supplier) throws IOException {
         final Path tempDir = tempDirFile.toPath();
         final CountingPathVisitor countingPathVisitor = CountingPathVisitor.withLongCounters();
         final PathVisitorFileFilter countingFileFilter = new PathVisitorFileFilter(countingPathVisitor);
@@ -67,7 +67,7 @@ public class PathUtilsVisitorTest {
      */
     @ParameterizedTest
     @MethodSource("testParameters")
-    public void testCountFolders1FileSize0(final Supplier<AccumulatorPathVisitor> supplier) throws IOException {
+    void testCountFolders1FileSize0(final Supplier<AccumulatorPathVisitor> supplier) throws IOException {
         final CountingPathVisitor countingPathVisitor = CountingPathVisitor.withLongCounters();
         final PathVisitorFileFilter countingFileFilter = new PathVisitorFileFilter(countingPathVisitor);
         Files.walkFileTree(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0"),
@@ -80,7 +80,7 @@ public class PathUtilsVisitorTest {
      */
     @ParameterizedTest
     @MethodSource("testParameters")
-    public void testCountFolders1FileSize1(final Supplier<AccumulatorPathVisitor> supplier) throws IOException {
+    void testCountFolders1FileSize1(final Supplier<AccumulatorPathVisitor> supplier) throws IOException {
         final CountingPathVisitor countingPathVisitor = CountingPathVisitor.withLongCounters();
         final PathVisitorFileFilter countingFileFilter = new PathVisitorFileFilter(countingPathVisitor);
         Files.walkFileTree(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1"),
@@ -93,7 +93,7 @@ public class PathUtilsVisitorTest {
      */
     @ParameterizedTest
     @MethodSource("testParameters")
-    public void testCountFolders2FileSize2(final Supplier<AccumulatorPathVisitor> supplier) throws IOException {
+    void testCountFolders2FileSize2(final Supplier<AccumulatorPathVisitor> supplier) throws IOException {
         final CountingPathVisitor countingPathVisitor = CountingPathVisitor.withLongCounters();
         final PathVisitorFileFilter countingFileFilter = new PathVisitorFileFilter(countingPathVisitor);
         Files.walkFileTree(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2"),

@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,10 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.io.output;
 
 import java.io.IOException;
 import java.io.OutputStream;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * Throws an IOException on all attempts to write to the stream.
@@ -46,6 +49,13 @@ public class ClosedOutputStream extends OutputStream {
     public static final ClosedOutputStream CLOSED_OUTPUT_STREAM = INSTANCE;
 
     /**
+     * Construct a new instance.
+     */
+    public ClosedOutputStream() {
+        // empty
+    }
+
+    /**
      * Throws an {@link IOException} to indicate that the stream is closed.
      *
      * @throws IOException always thrown
@@ -58,21 +68,24 @@ public class ClosedOutputStream extends OutputStream {
     /**
      * Throws an {@link IOException} to indicate that the stream is closed.
      *
-     * @param b   ignored
-     * @param off ignored
-     * @param len ignored
-     * @throws IOException always thrown
+     * @param b   Byte array, never {@code null}.
+     * @param off The start offset in the byte array.
+     * @param len The number of bytes to write.
+     * @throws NullPointerException if the byte array is {@code null}.
+     * @throws IndexOutOfBoundsException if {@code off} or {@code len} are negative, or if {@code off + len} is greater than {@code b.length}.
+     * @throws IOException always thrown.
      */
     @Override
     public void write(final byte b[], final int off, final int len) throws IOException {
+        IOUtils.checkFromIndexSize(b, off, len);
         throw new IOException("write(byte[], int, int) failed: stream is closed");
     }
 
     /**
      * Throws an {@link IOException} to indicate that the stream is closed.
      *
-     * @param b ignored
-     * @throws IOException always thrown
+     * @param b ignored.
+     * @throws IOException always thrown.
      */
     @Override
     public void write(final int b) throws IOException {

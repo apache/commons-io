@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -49,9 +49,16 @@ public class ObservableInputStream extends ProxyInputStream {
      * @param <T> The subclass.
      * @since 2.18.0
      */
-    public static abstract class AbstractBuilder<T extends AbstractBuilder<T>> extends ProxyInputStream.AbstractBuilder<ObservableInputStream, T> {
+    public abstract static class AbstractBuilder<T extends AbstractBuilder<T>> extends ProxyInputStream.AbstractBuilder<ObservableInputStream, T> {
 
         private List<Observer> observers;
+
+        /**
+         * Constructs a new instance for subclasses.
+         */
+        public AbstractBuilder() {
+            // empty
+        }
 
         /**
          * Sets the list of observer callbacks.
@@ -64,13 +71,19 @@ public class ObservableInputStream extends ProxyInputStream {
 
     }
 
-
     /**
      * Builds instances of {@link ObservableInputStream}.
      *
      * @since 2.18.0
      */
     public static class Builder extends AbstractBuilder<Builder> {
+
+        /**
+         * Constructs a new builder of {@link ObservableInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
 
         @Override
         public ObservableInputStream get() throws IOException {
@@ -82,7 +95,14 @@ public class ObservableInputStream extends ProxyInputStream {
     /**
      * Abstracts observer callback for {@link ObservableInputStream}s.
      */
-    public static abstract class Observer {
+    public abstract static class Observer {
+
+        /**
+         * Constructs a new instance for subclasses.
+         */
+        public Observer() {
+            // empty
+        }
 
         /**
          * Called to indicate that the {@link ObservableInputStream} has been closed.
@@ -145,7 +165,7 @@ public class ObservableInputStream extends ProxyInputStream {
 
     private final List<Observer> observers;
 
-    ObservableInputStream(final AbstractBuilder builder) throws IOException {
+    ObservableInputStream(final AbstractBuilder<?> builder) throws IOException {
         super(builder);
         this.observers = builder.observers;
     }

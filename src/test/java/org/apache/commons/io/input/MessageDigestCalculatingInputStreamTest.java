@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -43,7 +43,7 @@ import org.junit.jupiter.api.Test;
  * Tests {@link MessageDigestCalculatingInputStream}.
  */
 @SuppressWarnings("deprecation")
-public class MessageDigestCalculatingInputStreamTest {
+class MessageDigestCalculatingInputStreamTest {
 
     private InputStream createInputStream() throws IOException {
         final ByteArrayInputStream origin = new ByteArrayInputStream(MessageDigestInputStreamTest.generateRandomByteStream(256));
@@ -55,7 +55,7 @@ public class MessageDigestCalculatingInputStreamTest {
     }
 
     @Test
-    public void testAfterReadConsumer() throws Exception {
+    void testAfterReadConsumer() throws Exception {
         final AtomicBoolean boolRef = new AtomicBoolean();
         // @formatter:off
         try (InputStream bounded = MessageDigestCalculatingInputStream.builder()
@@ -82,7 +82,7 @@ public class MessageDigestCalculatingInputStreamTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testAvailableAfterClose() throws Exception {
+    void testAvailableAfterClose() throws Exception {
         final InputStream shadow;
         try (InputStream in = createInputStream()) {
             assertTrue(in.available() > 0);
@@ -92,7 +92,7 @@ public class MessageDigestCalculatingInputStreamTest {
     }
 
     @Test
-    public void testAvailableAfterOpen() throws Exception {
+    void testAvailableAfterOpen() throws Exception {
         try (InputStream in = createInputStream()) {
             assertTrue(in.available() > 0);
             assertNotEquals(IOUtils.EOF, in.read());
@@ -101,12 +101,12 @@ public class MessageDigestCalculatingInputStreamTest {
     }
 
     @Test
-    public void testCloseHandleIOException() throws IOException {
+    void testCloseHandleIOException() throws IOException {
         ProxyInputStreamTest.testCloseHandleIOException(MessageDigestCalculatingInputStream.builder());
     }
 
     @Test
-    public void testNormalUse() throws Exception {
+    void testNormalUse() throws Exception {
         for (int i = 256; i < 8192; i *= 2) {
             final byte[] buffer = MessageDigestInputStreamTest.generateRandomByteStream(i);
             final MessageDigest defaultMessageDigest = MessageDigestCalculatingInputStream.getDefaultMessageDigest();
@@ -149,7 +149,7 @@ public class MessageDigestCalculatingInputStreamTest {
     }
 
     @Test
-    public void testReadAfterClose_ByteArrayInputStream() throws Exception {
+    void testReadAfterClose_ByteArrayInputStream() throws Exception {
         try (InputStream in = createInputStream()) {
             in.close();
             // ByteArrayInputStream does not throw on a closed stream.
@@ -159,7 +159,7 @@ public class MessageDigestCalculatingInputStreamTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testReadAfterClose_ChannelInputStream() throws Exception {
+    void testReadAfterClose_ChannelInputStream() throws Exception {
         try (InputStream in = createInputStream(Files.newInputStream(Paths.get("src/test/resources/org/apache/commons/io/abitmorethan16k.txt")))) {
             in.close();
             // ChannelInputStream throws when closed

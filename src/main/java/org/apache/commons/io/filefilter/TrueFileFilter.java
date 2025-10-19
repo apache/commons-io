@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -82,8 +82,9 @@ public class TrueFileFilter implements IOFileFilter, Serializable {
 
     /**
      * Returns true.
-     * @param file the file to check (ignored)
      *
+     * @param file the file to check (ignored)
+     * @param attributes the path's basic attributes (may be null).
      * @return true
      * @since 2.9.0
      */

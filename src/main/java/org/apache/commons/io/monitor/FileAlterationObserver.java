@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,6 +30,7 @@ import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
+import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractOriginSupplier;
 import org.apache.commons.io.comparator.NameFileComparator;
 import org.apache.commons.io.filefilter.TrueFileFilter;
@@ -141,12 +142,19 @@ public class FileAlterationObserver implements Serializable {
             // empty
         }
 
+        private File checkOriginFile() {
+            return checkOrigin().getFile();
+        }
+
         /**
          * Gets a new {@link FileAlterationObserver} instance.
+         *
+         * @throws IOException                   if an I/O error occurs converting to an {@link File} using {@link AbstractOrigin#getFile()}.
+         * @see #getUnchecked()
          */
         @Override
         public FileAlterationObserver get() throws IOException {
-            return new FileAlterationObserver(rootEntry != null ? rootEntry : new FileEntry(checkOrigin().getFile()), fileFilter, toComparator(ioCase));
+            return new FileAlterationObserver(this);
         }
 
         /**
@@ -210,7 +218,7 @@ public class FileAlterationObserver implements Serializable {
     /**
      * List of listeners.
      */
-    private transient final List<FileAlterationListener> listeners = new CopyOnWriteArrayList<>();
+    private final transient List<FileAlterationListener> listeners = new CopyOnWriteArrayList<>();
 
     /**
      * The root directory to observe.
@@ -220,12 +228,16 @@ public class FileAlterationObserver implements Serializable {
     /**
      * The file filter or null if none.
      */
-    private transient final FileFilter fileFilter;
+    private final transient FileFilter fileFilter;
 
     /**
      * Compares file names.
      */
     private final Comparator<File> comparator;
+
+    private FileAlterationObserver(final Builder builder) {
+        this(builder.rootEntry != null ? builder.rootEntry : new FileEntry(builder.checkOriginFile()), builder.fileFilter, toComparator(builder.ioCase));
+    }
 
     /**
      * Constructs an observer for the specified directory.

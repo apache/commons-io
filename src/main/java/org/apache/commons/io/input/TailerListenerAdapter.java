@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,9 +24,16 @@ package org.apache.commons.io.input;
 public class TailerListenerAdapter implements TailerListener {
 
     /**
+     * Constructs a new instance.
+     */
+    public TailerListenerAdapter() {
+        // empty
+    }
+
+    /**
      * Called each time the Tailer reaches the end of the file.
      *
-     * <b>Note:</b> this is called from the tailer thread.
+     * <strong>Note:</strong> this is called from the tailer thread.
      *
      * Note: a future version of commons-io will pull this method up to the TailerListener interface,
      * for now clients must subclass this class to use this feature.
@@ -57,7 +64,8 @@ public class TailerListenerAdapter implements TailerListener {
     }
 
     /**
-     * Handles an Exception .
+     * Handles an Exception.
+     *
      * @param ex the exception.
      */
     @Override
@@ -67,6 +75,7 @@ public class TailerListenerAdapter implements TailerListener {
 
     /**
      * Handles a line from a Tailer.
+     *
      * @param line the line.
      */
     @Override
@@ -77,6 +86,7 @@ public class TailerListenerAdapter implements TailerListener {
     /**
      * The tailer will call this method during construction,
      * giving the listener a method of stopping the tailer.
+     *
      * @param tailer the tailer.
      */
     @Override

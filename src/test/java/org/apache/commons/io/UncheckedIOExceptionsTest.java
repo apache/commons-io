@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,13 +27,13 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link UncheckedIOExceptions}.
  */
-public class UncheckedIOExceptionsTest {
+class UncheckedIOExceptionsTest {
 
     /**
      * Tests {@link UncheckedIOExceptions#create(Object)}.
      */
     @Test
-    public void testCreate() {
+    void testCreate() {
         final Object message = "test";
         try {
             throw UncheckedIOExceptions.create(message);
@@ -47,7 +47,7 @@ public class UncheckedIOExceptionsTest {
      * Tests {@link UncheckedIOExceptions#wrap(IOException, Object)}.
      */
     @Test
-    public void testWrap() {
+    void testWrap() {
         final Object message1 = "test1";
         final Object message2 = "test2";
         try {

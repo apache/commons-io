@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,7 +30,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Tests {@link BrokenInputStream}.
  */
-public class BrokenInputStreamTest {
+class BrokenInputStreamTest {
 
     private static BrokenInputStream createBrokenInputStream(final Throwable exception) {
         if (exception instanceof IOException) {
@@ -41,7 +41,7 @@ public class BrokenInputStreamTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testAvailable(final Class<Exception> clazz) throws Exception {
+    void testAvailable(final Class<Exception> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenInputStream stream = createBrokenInputStream(exception);
@@ -50,7 +50,7 @@ public class BrokenInputStreamTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testClose(final Class<Exception> clazz) throws Exception {
+    void testClose(final Class<Exception> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenInputStream stream = createBrokenInputStream(exception);
@@ -58,12 +58,12 @@ public class BrokenInputStreamTest {
     }
 
     @Test
-    public void testInstance() {
+    void testInstance() {
         assertNotNull(BrokenInputStream.INSTANCE);
     }
 
     @Test
-    public void testIO469() throws Throwable {
+    void testIO469() throws Throwable {
         // The exception handling and nested blocks here look ugly.
         // Do NOT try to rationalize them by combining them, using try-with-resources or assertThrows,
         // or any similar improvements one would make in normal code. This tests
@@ -92,7 +92,7 @@ public class BrokenInputStreamTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testRead(final Class<Exception> clazz) throws Exception {
+    void testRead(final Class<Exception> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenInputStream stream = createBrokenInputStream(exception);
@@ -103,7 +103,7 @@ public class BrokenInputStreamTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testReset(final Class<Exception> clazz) throws Exception {
+    void testReset(final Class<Exception> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenInputStream stream = createBrokenInputStream(exception);
@@ -112,7 +112,7 @@ public class BrokenInputStreamTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testSkip(final Class<Exception> clazz) throws Exception {
+    void testSkip(final Class<Exception> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenInputStream stream = createBrokenInputStream(exception);
@@ -120,7 +120,7 @@ public class BrokenInputStreamTest {
     }
 
     @Test
-    public void testTryWithResources() {
+    void testTryWithResources() {
         final IOException thrown = assertThrows(IOException.class, () -> {
             try (InputStream newStream = new BrokenInputStream()) {
                 newStream.read();

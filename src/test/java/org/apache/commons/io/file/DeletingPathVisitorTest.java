@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -38,7 +38,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Tests {@link DeletingPathVisitor}.
  */
-public class DeletingPathVisitorTest extends AbstractTempDirTest {
+class DeletingPathVisitorTest extends AbstractTempDirTest {
 
     private static final String ARGS = "org.apache.commons.io.file.TestArguments#";
 
@@ -52,7 +52,7 @@ public class DeletingPathVisitorTest extends AbstractTempDirTest {
      */
     @ParameterizedTest
     @MethodSource(ARGS + "deletingPathVisitors")
-    public void testDeleteEmptyDirectory(final DeletingPathVisitor visitor) throws IOException {
+    void testDeleteEmptyDirectory(final DeletingPathVisitor visitor) throws IOException {
         applyDeleteEmptyDirectory(visitor);
         // This will throw if not empty.
         Files.deleteIfExists(tempDirPath);
@@ -63,7 +63,7 @@ public class DeletingPathVisitorTest extends AbstractTempDirTest {
      */
     @ParameterizedTest
     @MethodSource(ARGS + "pathCounters")
-    public void testDeleteEmptyDirectoryNullCtorArg(final PathCounters pathCounters) throws IOException {
+    void testDeleteEmptyDirectoryNullCtorArg(final PathCounters pathCounters) throws IOException {
         applyDeleteEmptyDirectory(new DeletingPathVisitor(pathCounters, (String[]) null));
         // This will throw if not empty.
         Files.deleteIfExists(tempDirPath);
@@ -74,7 +74,7 @@ public class DeletingPathVisitorTest extends AbstractTempDirTest {
      */
     @ParameterizedTest
     @MethodSource(ARGS + "deletingPathVisitors")
-    public void testDeleteFolders1FileSize0(final DeletingPathVisitor visitor) throws IOException {
+    void testDeleteFolders1FileSize0(final DeletingPathVisitor visitor) throws IOException {
         PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0"), tempDirPath);
         assertCounts(1, 1, 0, PathUtils.visitFileTree(visitor, tempDirPath));
         // This will throw if not empty.
@@ -86,7 +86,7 @@ public class DeletingPathVisitorTest extends AbstractTempDirTest {
      */
     @ParameterizedTest
     @MethodSource(ARGS + "deletingPathVisitors")
-    public void testDeleteFolders1FileSize1(final DeletingPathVisitor visitor) throws IOException {
+    void testDeleteFolders1FileSize1(final DeletingPathVisitor visitor) throws IOException {
         PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1"), tempDirPath);
         assertCounts(1, 1, 1, PathUtils.visitFileTree(visitor, tempDirPath));
         // This will throw if not empty.
@@ -98,7 +98,7 @@ public class DeletingPathVisitorTest extends AbstractTempDirTest {
      */
     @ParameterizedTest
     @MethodSource(ARGS + "pathCounters")
-    public void testDeleteFolders1FileSize1Skip(final PathCounters pathCounters) throws IOException {
+    void testDeleteFolders1FileSize1Skip(final PathCounters pathCounters) throws IOException {
         PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1"), tempDirPath);
         final String skipFileName = "file-size-1.bin";
         final CountingPathVisitor visitor = new DeletingPathVisitor(pathCounters, skipFileName);
@@ -113,7 +113,7 @@ public class DeletingPathVisitorTest extends AbstractTempDirTest {
      */
     @ParameterizedTest
     @MethodSource(ARGS + "deletingPathVisitors")
-    public void testDeleteFolders2FileSize2(final DeletingPathVisitor visitor) throws IOException {
+    void testDeleteFolders2FileSize2(final DeletingPathVisitor visitor) throws IOException {
         PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2"), tempDirPath);
         assertCounts(3, 2, 2, PathUtils.visitFileTree(visitor, tempDirPath));
         // This will throw if not empty.
@@ -121,7 +121,7 @@ public class DeletingPathVisitorTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testEqualsHashCode() {
+    void testEqualsHashCode() {
         final DeletingPathVisitor visitor0 = DeletingPathVisitor.withLongCounters();
         final DeletingPathVisitor visitor1 = DeletingPathVisitor.withLongCounters();
         assertEquals(visitor0, visitor0);
@@ -143,9 +143,9 @@ public class DeletingPathVisitorTest extends AbstractTempDirTest {
      * Tests https://issues.apache.org/jira/browse/IO-850
      */
     @Test
-    public void testIO850DirectoriesAndFiles() throws IOException {
+    void testIO850DirectoriesAndFiles() throws IOException {
         final Path rootDir = Files.createDirectory(managedTempDirPath.resolve("IO850"));
-        createTempSymlinkedRelativeDir(rootDir);
+        createTempSymbolicLinkedRelativeDir(rootDir);
         final Path targetDir = rootDir.resolve(SUB_DIR);
         final Path symlinkDir = rootDir.resolve(SYMLINKED_DIR);
         Files.write(targetDir.resolve("file0.txt"), "Hello".getBytes(StandardCharsets.UTF_8));
@@ -164,9 +164,9 @@ public class DeletingPathVisitorTest extends AbstractTempDirTest {
      * Tests https://issues.apache.org/jira/browse/IO-850
      */
     @Test
-    public void testIO850DirectoriesOnly() throws IOException {
+    void testIO850DirectoriesOnly() throws IOException {
         final Path rootDir = Files.createDirectory(managedTempDirPath.resolve("IO850"));
-        createTempSymlinkedRelativeDir(rootDir);
+        createTempSymbolicLinkedRelativeDir(rootDir);
         final Path targetDir = rootDir.resolve(SUB_DIR);
         final Path symlinkDir = rootDir.resolve(SYMLINKED_DIR);
         final DeletingPathVisitor visitor = DeletingPathVisitor.withLongCounters();

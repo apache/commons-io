@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -67,7 +67,7 @@ public class QueueOutputStream extends OutputStream {
     /**
      * Constructs a new instance with given buffer.
      *
-     * @param blockingQueue backing queue for the stream
+     * @param blockingQueue backing queue for the stream.
      */
     public QueueOutputStream(final BlockingQueue<Integer> blockingQueue) {
         this.blockingQueue = Objects.requireNonNull(blockingQueue, "blockingQueue");
@@ -77,7 +77,7 @@ public class QueueOutputStream extends OutputStream {
      * Constructs a new QueueInputStream instance connected to this. Writes to this output stream will be visible to the
      * input stream.
      *
-     * @return QueueInputStream connected to this stream
+     * @return QueueInputStream connected to this stream.
      */
     public QueueInputStream newQueueInputStream() {
         return QueueInputStream.builder().setBlockingQueue(blockingQueue).get();

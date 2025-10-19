@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,7 +18,6 @@ package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
@@ -29,6 +28,7 @@ import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Stack;
 import java.util.stream.Stream;
 
@@ -45,7 +45,7 @@ import com.google.common.jimfs.Jimfs;
 /**
  * Test checks symmetric behavior with BufferedReader.
  */
-public class ReversedLinesFileReaderParamFileTest {
+class ReversedLinesFileReaderParamFileTest {
 
     private static final String UTF_16BE = StandardCharsets.ISO_8859_1.name();
     private static final String UTF_16LE = StandardCharsets.UTF_16LE.name();
@@ -87,31 +87,18 @@ public class ReversedLinesFileReaderParamFileTest {
 
     private void testDataIntegrityWithBufferedReader(final Path filePath, final FileSystem fileSystem, final Charset charset,
             final ReversedLinesFileReader reversedLinesFileReader) throws IOException {
+        final List<String> allLines = Files.readAllLines(filePath, Charsets.toCharset(charset));
         final Stack<String> lineStack = new Stack<>();
-        String line;
-
-        try (BufferedReader bufferedReader = Files.newBufferedReader(filePath, Charsets.toCharset(charset))) {
-            // read all lines in normal order
-            while ((line = bufferedReader.readLine()) != null) {
-                lineStack.push(line);
-            }
-        }
-
+        lineStack.addAll(allLines);
         // read in reverse order and compare with lines from stack
-        while ((line = reversedLinesFileReader.readLine()) != null) {
-            final String lineFromBufferedReader = lineStack.pop();
-            assertEquals(lineFromBufferedReader, line);
-        }
+        reversedLinesFileReader.forEach(line -> assertEquals(lineStack.pop(), line));
         assertEquals(0, lineStack.size(), "Stack should be empty");
-
-        if (fileSystem != null) {
-            fileSystem.close();
-        }
+        IOUtils.close(fileSystem);
     }
 
     @ParameterizedTest(name = "{0}, encoding={1}, blockSize={2}, useNonDefaultFileSystem={3}, isResource={4}")
     @MethodSource
-    public void testDataIntegrityWithBufferedReader(final String fileName, final String charsetName, final Integer blockSize,
+    void testDataIntegrityWithBufferedReader(final String fileName, final String charsetName, final Integer blockSize,
             final boolean useNonDefaultFileSystem, final boolean isResource) throws IOException, URISyntaxException {
 
         Path filePath = isResource ? TestResources.getPath(fileName) : Paths.get(fileName);

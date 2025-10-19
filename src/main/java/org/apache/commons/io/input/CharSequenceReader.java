@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,7 +20,8 @@ import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.Reader;
 import java.io.Serializable;
-import java.util.Objects;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * {@link Reader} implementation that can read from String, StringBuffer,
@@ -185,7 +186,7 @@ public class CharSequenceReader extends Reader implements Serializable {
     }
 
     /**
-     * Read a single character.
+     * Reads a single character.
      *
      * @return the next character from the character sequence
      * or -1 if the end has been reached.
@@ -199,23 +200,23 @@ public class CharSequenceReader extends Reader implements Serializable {
     }
 
     /**
-     * Read the specified number of characters into the array.
+     * Reads the specified number of characters into the array.
      *
      * @param array The array to store the characters in
      * @param offset The starting position in the array to store
      * @param length The maximum number of characters to read
-     * @return The number of characters read or -1 if there are
-     * no more
+     * @return The number of characters read or -1 if there are no more
+     * @throws NullPointerException if the array is {@code null}.
+     * @throws IndexOutOfBoundsException if {@code offset} or {@code length} are negative, or if {@code offset + length} is greater than {@code array.length}.
      */
     @Override
     public int read(final char[] array, final int offset, final int length) {
+        IOUtils.checkFromIndexSize(array, offset, length);
+        if (length == 0) {
+            return 0;
+        }
         if (idx >= end()) {
             return EOF;
-        }
-        Objects.requireNonNull(array, "array");
-        if (length < 0 || offset < 0 || offset + length > array.length) {
-            throw new IndexOutOfBoundsException("Array Size=" + array.length +
-                    ", offset=" + offset + ", length=" + length);
         }
 
         if (charSequence instanceof String) {

@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -64,11 +64,9 @@ public class HexDump {
      *
      * @param data  the byte array to be dumped
      * @param appendable  the Appendable to which the data is to be written
-     *
      * @throws IOException is thrown if anything goes wrong writing
      *         the data to appendable
      * @throws NullPointerException if the output appendable is null
-     *
      * @since 2.12.0
      */
     public static void dump(final byte[] data, final Appendable appendable)
@@ -96,13 +94,11 @@ public class HexDump {
      * @param appendable  the Appendable to which the data is to be written
      * @param index initial index into the byte array
      * @param length number of bytes to dump from the array
-     *
      * @throws IOException is thrown if anything goes wrong writing
      *         the data to appendable
      * @throws ArrayIndexOutOfBoundsException if the index or length is
      *         outside the data array's bounds
      * @throws NullPointerException if the output appendable is null
-     *
      * @since 2.12.0
      */
     public static void dump(final byte[] data, final long offset,
@@ -172,13 +168,15 @@ public class HexDump {
      * All bytes between the given index (inclusive) and the end of the
      * data array are dumped.
      * </p>
+     * <p>
+     * This method uses the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
+     * </p>
      *
      * @param data  the byte array to be dumped
      * @param offset  offset of the byte array within a larger entity
      * @param stream  the OutputStream to which the data is to be
      *               written
      * @param index initial index into the byte array
-     *
      * @throws IOException is thrown if anything goes wrong writing
      *         the data to stream
      * @throws ArrayIndexOutOfBoundsException if the index is

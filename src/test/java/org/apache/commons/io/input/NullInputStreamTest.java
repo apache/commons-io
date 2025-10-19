@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -34,15 +34,15 @@ import org.junit.platform.commons.util.StringUtils;
 /**
  * Tests {@link NullInputStream}.
  */
-public class NullInputStreamTest {
+class NullInputStreamTest {
 
     private static final class TestNullInputStream extends NullInputStream {
 
-        public TestNullInputStream(final int size) {
+        TestNullInputStream(final int size) {
             super(size);
         }
 
-        public TestNullInputStream(final int size, final boolean markSupported, final boolean throwEofException) {
+        TestNullInputStream(final int size, final boolean markSupported, final boolean throwEofException) {
             super(size, markSupported, throwEofException);
         }
 
@@ -67,7 +67,7 @@ public class NullInputStreamTest {
     @SuppressWarnings("resource")
     @ParameterizedTest
     @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
-    public void testAvailableAfterClose(final int len) throws Exception {
+    void testAvailableAfterClose(final int len) throws Exception {
         final InputStream shadow;
         try (InputStream in = new TestNullInputStream(len, false, false)) {
             assertEquals(len, in.available());
@@ -78,7 +78,7 @@ public class NullInputStreamTest {
 
     @ParameterizedTest
     @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
-    public void testAvailableAfterOpen(final int len) throws Exception {
+    void testAvailableAfterOpen(final int len) throws Exception {
         try (InputStream in = new TestNullInputStream(len, false, false)) {
             assertEquals(len, in.available());
         }
@@ -86,12 +86,12 @@ public class NullInputStreamTest {
 
     @SuppressWarnings("deprecation")
     @Test
-    public void testDeprecatedSingleton() throws Exception {
+    void testDeprecatedSingleton() throws Exception {
         assertNotNull(NullInputStream.INSTANCE);
     }
 
     @Test
-    public void testEOFException() throws Exception {
+    void testEOFException() throws Exception {
         try (InputStream input = new TestNullInputStream(2, false, true)) {
             assertEquals(0, input.read(), "Read 1");
             assertEquals(1, input.read(), "Read 2");
@@ -100,7 +100,7 @@ public class NullInputStreamTest {
     }
 
     @Test
-    public void testMarkAndReset() throws Exception {
+    void testMarkAndReset() throws Exception {
         int position = 0;
         final int readLimit = 10;
         try (InputStream input = new TestNullInputStream(100, true, false)) {
@@ -139,7 +139,7 @@ public class NullInputStreamTest {
     }
 
     @Test
-    public void testMarkNotSupported() throws Exception {
+    void testMarkNotSupported() throws Exception {
         try (InputStream input = new TestNullInputStream(100, false, true)) {
             assertFalse(input.markSupported(), "Mark Should NOT be Supported");
 
@@ -152,7 +152,7 @@ public class NullInputStreamTest {
     }
 
     @Test
-    public void testRead() throws Exception {
+    void testRead() throws Exception {
         final int size = 5;
         try (InputStream input = new TestNullInputStream(size)) {
             for (int i = 0; i < size; i++) {
@@ -175,7 +175,7 @@ public class NullInputStreamTest {
     }
 
     @Test
-    public void testReadAfterClose() throws Exception {
+    void testReadAfterClose() throws Exception {
         try (InputStream in = new NullInputStream()) {
             assertEquals(0, in.available());
             in.close();
@@ -185,7 +185,7 @@ public class NullInputStreamTest {
 
     @ParameterizedTest
     @MethodSource(AbstractInputStreamTest.ARRAY_LENGTHS_NAME)
-    public void testReadAfterClose(final int len) throws Exception {
+    void testReadAfterClose(final int len) throws Exception {
         try (InputStream in = new TestNullInputStream(len, false, false)) {
             assertEquals(len, in.available());
             in.close();
@@ -194,7 +194,7 @@ public class NullInputStreamTest {
     }
 
     @Test
-    public void testReadByteArray() throws Exception {
+    void testReadByteArray() throws Exception {
         final byte[] bytes = new byte[10];
         try (NullInputStream input = new TestNullInputStream(15)) {
 
@@ -235,7 +235,7 @@ public class NullInputStreamTest {
     }
 
     @Test
-    public void testReadByteArrayAfterClose() throws Exception {
+    void testReadByteArrayAfterClose() throws Exception {
         try (InputStream in = new NullInputStream()) {
             assertEquals(0, in.available());
             in.close();
@@ -245,18 +245,18 @@ public class NullInputStreamTest {
     }
 
     @Test
-    public void testReadByteArrayIntIntAfterClose() throws Exception {
+    void testReadByteArrayIntIntAfterClose() throws Exception {
         try (InputStream in = new NullInputStream()) {
             assertEquals(0, in.available());
             in.close();
-            assertEquals(0, in.read(new byte[0], 0, 1));
+            assertThrows(IndexOutOfBoundsException.class, () -> in.read(new byte[0], 0, 1));
             assertEquals(0, in.read(new byte[1], 0, 0));
             assertThrows(IOException.class, () -> in.read(new byte[2], 0, 1));
         }
     }
 
     @Test
-    public void testReadByteArrayThrowAtEof() throws Exception {
+    void testReadByteArrayThrowAtEof() throws Exception {
         final byte[] bytes = new byte[10];
         try (NullInputStream input = new TestNullInputStream(15, true, true)) {
 
@@ -297,7 +297,7 @@ public class NullInputStreamTest {
     }
 
     @Test
-    public void testReadThrowAtEof() throws Exception {
+    void testReadThrowAtEof() throws Exception {
         final int size = 5;
         try (InputStream input = new TestNullInputStream(size, true, true)) {
             for (int i = 0; i < size; i++) {
@@ -321,7 +321,7 @@ public class NullInputStreamTest {
     }
 
     @Test
-    public void testSkip() throws Exception {
+    void testSkip() throws Exception {
         try (InputStream input = new TestNullInputStream(10, true, false)) {
             assertEquals(0, input.read(), "Read 1");
             assertEquals(1, input.read(), "Read 2");
@@ -334,7 +334,7 @@ public class NullInputStreamTest {
     }
 
     @Test
-    public void testSkipThrowAtEof() throws Exception {
+    void testSkipThrowAtEof() throws Exception {
         try (InputStream input = new TestNullInputStream(10, true, true)) {
             assertEquals(0, input.read(), "Read 1");
             assertEquals(1, input.read(), "Read 2");

@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,7 +20,7 @@ import java.io.OutputStream;
 
 /**
  * A decorating output stream that counts the number of bytes that have passed
- * through the stream so far.
+ * through.
  * <p>
  * A typical use case would be during debugging, to ensure that data is being
  * written as expected.
@@ -34,7 +34,7 @@ public class CountingOutputStream extends ProxyOutputStream {
     /**
      * Constructs a new CountingOutputStream.
      *
-     * @param out  the OutputStream to write to
+     * @param out  the OutputStream to write to.
      */
     public CountingOutputStream(final OutputStream out) {
         super(out);
@@ -43,7 +43,7 @@ public class CountingOutputStream extends ProxyOutputStream {
     /**
      * Updates the count with the number of bytes that are being written.
      *
-     * @param n number of bytes to be written to the stream
+     * @param n number of bytes to be written to the stream.
      * @since 2.0
      */
     @Override
@@ -59,7 +59,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * result in incorrect count for files over 2GB.
      * </p>
      *
-     * @return the number of bytes accumulated
+     * @return the number of bytes accumulated.
      * @since 1.3
      */
     public synchronized long getByteCount() {
@@ -74,8 +74,8 @@ public class CountingOutputStream extends ProxyOutputStream {
      * See {@link #getByteCount()} for a method using a {@code long}.
      * </p>
      *
-     * @return the number of bytes accumulated
-     * @throws ArithmeticException if the byte count is too large
+     * @return the number of bytes accumulated.
+     * @throws ArithmeticException if the byte count is too large.
      */
     public int getCount() {
         final long result = getByteCount();
@@ -93,7 +93,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * result in incorrect count for files over 2GB.
      * </p>
      *
-     * @return the count previous to resetting
+     * @return the count previous to resetting.
      * @since 1.3
      */
     public synchronized long resetByteCount() {
@@ -110,8 +110,8 @@ public class CountingOutputStream extends ProxyOutputStream {
      * See {@link #resetByteCount()} for a method using a {@code long}.
      * </p>
      *
-     * @return the count previous to resetting
-     * @throws ArithmeticException if the byte count is too large
+     * @return the count previous to resetting.
+     * @throws ArithmeticException if the byte count is too large.
      */
     public int resetCount() {
         final long result = resetByteCount();

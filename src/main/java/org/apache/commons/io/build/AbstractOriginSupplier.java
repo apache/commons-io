@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,11 +24,13 @@ import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URI;
+import java.nio.channels.Channel;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.apache.commons.io.IORandomAccessFile;
 import org.apache.commons.io.build.AbstractOrigin.ByteArrayOrigin;
+import org.apache.commons.io.build.AbstractOrigin.ChannelOrigin;
 import org.apache.commons.io.build.AbstractOrigin.CharSequenceOrigin;
 import org.apache.commons.io.build.AbstractOrigin.FileOrigin;
 import org.apache.commons.io.build.AbstractOrigin.IORandomAccessFileOrigin;
@@ -41,7 +43,7 @@ import org.apache.commons.io.build.AbstractOrigin.URIOrigin;
 import org.apache.commons.io.build.AbstractOrigin.WriterOrigin;
 
 /**
- * Abstracts building an instance of {@code T}.
+ * Abstracts <em>building</em> an instance of type {@code T} where {@code T} is unbounded from a wrapped {@linkplain AbstractOrigin origin}.
  *
  * @param <T> the type of instances to build.
  * @param <B> the type of builder subclass.
@@ -57,6 +59,17 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
      */
     protected static ByteArrayOrigin newByteArrayOrigin(final byte[] origin) {
         return new ByteArrayOrigin(origin);
+    }
+
+    /**
+     * Constructs a new channel origin for a channel.
+     *
+     * @param origin the channel.
+     * @return a new channel origin.
+     * @since 2.21.0
+     */
+    protected static ChannelOrigin newChannelOrigin(final Channel origin) {
+        return new ChannelOrigin(origin);
     }
 
     /**
@@ -176,7 +189,7 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
      * Constructs a new writer origin for a file.
      *
      * @param origin the writer.
-     * @return a new writer .
+     * @return a new writer.
      */
     protected static WriterOrigin newWriterOrigin(final Writer origin) {
         return new WriterOrigin(origin);
@@ -186,6 +199,13 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
      * The underlying origin.
      */
     private AbstractOrigin<?, ?> origin;
+
+    /**
+     * Constructs a new instance for subclasses.
+     */
+    public AbstractOriginSupplier() {
+        // empty
+    }
 
     /**
      * Checks whether the origin is null.
@@ -226,6 +246,17 @@ public abstract class AbstractOriginSupplier<T, B extends AbstractOriginSupplier
      */
     public B setByteArray(final byte[] origin) {
         return setOrigin(newByteArrayOrigin(origin));
+    }
+
+    /**
+     * Sets a new origin.
+     *
+     * @param origin the new origin.
+     * @return {@code this} instance.
+     * @since 2.21.0
+     */
+    public B setChannel(final Channel origin) {
+        return setOrigin(newChannelOrigin(origin));
     }
 
     /**

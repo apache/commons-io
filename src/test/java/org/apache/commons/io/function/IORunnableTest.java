@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IORunnable}.
  */
-public class IORunnableTest {
+class IORunnableTest {
 
     /**
      * Tests {@link IORunnable#run()}.
@@ -42,7 +42,7 @@ public class IORunnableTest {
      * @throws IOException thrown on test failure
      */
     @Test
-    public void testAccept() throws IOException {
+    void testAccept() throws IOException {
         final AtomicReference<String> ref = new AtomicReference<>();
         final IORunnable runnable = () -> ref.set("A1");
         runnable.run();
@@ -50,7 +50,7 @@ public class IORunnableTest {
     }
 
     @Test
-    public void testAsRunnable() throws Exception {
+    void testAsRunnable() throws Exception {
         assertThrows(UncheckedIOException.class, () -> Executors.callable(TestConstants.THROWING_IO_RUNNABLE.asRunnable()).call());
         final IORunnable runnable = () -> Files.size(PathUtils.current());
         assertNull(Executors.callable(runnable.asRunnable()).call());
@@ -58,7 +58,7 @@ public class IORunnableTest {
 
     @SuppressWarnings("cast")
     @Test
-    public void testNoop() throws IOException {
+    void testNoop() throws IOException {
         assertTrue(IORunnable.noop() instanceof IORunnable);
         IORunnable.noop().run();
     }

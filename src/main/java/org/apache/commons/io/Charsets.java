@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -157,6 +157,39 @@ public class Charsets {
     public static final Charset UTF_8 = StandardCharsets.UTF_8;
 
     /**
+     * Tests whether the given non-null Charset has an alias of the given name.
+     *
+     * @param charset a non-null Charset.
+     * @param charsetName The name to test.
+     * @return whether the given non-null charset name is a UTF-8 alias.
+     * @since 2.20.0
+     */
+    public static boolean isAlias(final Charset charset, final String charsetName) {
+        return charsetName != null && (charset.name().equalsIgnoreCase(charsetName) || charset.aliases().stream().anyMatch(charsetName::equalsIgnoreCase));
+    }
+
+    /**
+     * Tests whether a given encoding is UTF-8. If the given charset is null, then check the platform's default encoding.
+     *
+     * @param charset If the given charset is null, then check the platform's default encoding.
+     * @return whether a given encoding is UTF-8.
+     * @since 2.20.0
+     */
+    public static boolean isUTF8(final Charset charset) {
+        return isUTF8Alias(toCharset(charset).name());
+    }
+
+    /**
+     * Tests whether the given non-null charset name is a UTF-8 alias.
+     *
+     * @param charsetName a non-null charset name.
+     * @return whether the given non-null charset name is a UTF-8 alias.
+     */
+    private static boolean isUTF8Alias(final String charsetName) {
+        return isAlias(StandardCharsets.UTF_8, charsetName);
+    }
+
+    /**
      * Constructs a sorted map from canonical charset names to charset objects required of every implementation of the
      * Java platform.
      * <p>
@@ -173,11 +206,12 @@ public class Charsets {
     }
 
     /**
-     * Returns the given Charset or the default Charset if the given Charset is null.
+     * Returns the given Charset or the {@link Charset#defaultCharset() default Charset} if the given Charset is null.
      *
      * @param charset
      *            A charset or null.
      * @return the given Charset or the default Charset if the given Charset is null
+     * @see Charset#defaultCharset()
      */
     public static Charset toCharset(final Charset charset) {
         return charset == null ? Charset.defaultCharset() : charset;
@@ -188,7 +222,7 @@ public class Charsets {
      *
      * @param charset The charset to test, may be null.
      * @param defaultCharset The charset to return if charset is null, may be null.
-     * @return a Charset .
+     * @return a Charset.
      * @since 2.12.0
      */
     public static Charset toCharset(final Charset charset, final Charset defaultCharset) {
@@ -196,11 +230,12 @@ public class Charsets {
     }
 
     /**
-     * Returns a Charset for the named charset. If the name is null, return the default Charset.
+     * Returns a Charset for the named charset. If the name is null, return the {@link Charset#defaultCharset() default Charset}.
      *
      * @param charsetName The name of the requested charset, may be null.
      * @return a Charset for the named charset.
      * @throws UnsupportedCharsetException If the named charset is unavailable (unchecked exception).
+     * @see Charset#defaultCharset()
      */
     public static Charset toCharset(final String charsetName) throws UnsupportedCharsetException {
         return toCharset(charsetName, Charset.defaultCharset());
@@ -210,12 +245,42 @@ public class Charsets {
      * Returns a Charset for the named charset. If the name is null, return the given default Charset.
      *
      * @param charsetName The name of the requested charset, may be null.
-     * @param defaultCharset The name charset to return if charsetName is null, may be null.
+     * @param defaultCharset The charset to return if charsetName is null, may be null.
      * @return a Charset for the named charset.
      * @throws UnsupportedCharsetException If the named charset is unavailable (unchecked exception).
      * @since 2.12.0
      */
     public static Charset toCharset(final String charsetName, final Charset defaultCharset) throws UnsupportedCharsetException {
         return charsetName == null ? defaultCharset : Charset.forName(charsetName);
+    }
+
+    /**
+     * Returns a Charset for the named charset or the {@code defaultCharset}.
+     * <p>
+     * If {@code charsetName} cannot load a charset, return {@code defaultCharset}. Therefore, this method should never fail and always return a Charset.
+     * </p>
+     *
+     * @param charsetName    The name of the requested charset, may be null.
+     * @param defaultCharset The charset to return if charsetName is null or there is a problem, may be null which returns {@link Charset#defaultCharset()}.
+     * @return a Charset for the named charset or {@code defaultCharset} if any errors occur.
+     * @see Charset#defaultCharset()
+     * @since 2.20.0
+     */
+    public static Charset toCharsetDefault(final String charsetName, final Charset defaultCharset) {
+        try {
+            return toCharset(charsetName);
+        } catch (final RuntimeException ignored) {
+            return toCharset(defaultCharset);
+        }
+    }
+
+    /**
+     * Construct a new instance.
+     *
+     * @deprecated Will be private in 4.0
+     */
+    @Deprecated
+    public Charsets() {
+        // empty
     }
 }

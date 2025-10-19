@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -67,26 +67,34 @@ public final class UncheckedFilterReader extends FilterReader {
     public static class Builder extends AbstractStreamBuilder<UncheckedFilterReader, Builder> {
 
         /**
+         * Constructs a new builder of {@link UncheckedFilterReader}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link UncheckedFilterReader}.
          * <p>
-         * You must set input that supports {@link #getReader()} on this builder, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link #getReader()} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
          * <li>{@link #getReader()}</li>
          * </ul>
          *
          * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide a Reader.
+         * @throws UnsupportedOperationException if the origin cannot provide a {@link Reader}.
          * @throws IllegalStateException if the {@code origin} is {@code null}.
          * @see #getReader()
+         * @see #getUnchecked()
          */
         @Override
         public UncheckedFilterReader get() {
             // This an unchecked class, so this method is as well.
-            return Uncheck.get(() -> new UncheckedFilterReader(getReader()));
+            return Uncheck.get(() -> new UncheckedFilterReader(this));
         }
 
     }
@@ -103,11 +111,13 @@ public final class UncheckedFilterReader extends FilterReader {
     /**
      * Constructs a new filtered reader.
      *
-     * @param reader a Reader object providing the underlying stream.
+     * @param builder a Builder object providing the underlying stream.
+     * @throws IOException          if an I/O error occurs.
      * @throws NullPointerException if {@code reader} is {@code null}.
      */
-    private UncheckedFilterReader(final Reader reader) {
-        super(reader);
+    @SuppressWarnings("resource")
+    private UncheckedFilterReader(final Builder builder) throws IOException {
+        super(builder.getReader());
     }
 
     /**
@@ -131,7 +141,7 @@ public final class UncheckedFilterReader extends FilterReader {
      */
     @Override
     public int read() throws UncheckedIOException {
-        return Uncheck.get(super::read);
+        return Uncheck.getAsInt(super::read);
     }
 
     /**
@@ -163,7 +173,7 @@ public final class UncheckedFilterReader extends FilterReader {
      */
     @Override
     public boolean ready() throws UncheckedIOException {
-        return Uncheck.get(super::ready);
+        return Uncheck.getAsBoolean(super::ready);
     }
 
     /**

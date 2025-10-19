@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,8 +30,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Tests {@link BrokenOutputStream}.
  */
-public class BrokenOutputStreamTest {
-
+class BrokenOutputStreamTest {
     private static BrokenOutputStream createBrokenOutputStream(final Throwable exception) {
         if (exception instanceof IOException) {
             return new BrokenOutputStream((IOException) exception);
@@ -41,7 +40,7 @@ public class BrokenOutputStreamTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testClose(final Class<Throwable> clazz) throws Exception {
+    void testClose(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenOutputStream stream = createBrokenOutputStream(exception);
@@ -50,7 +49,7 @@ public class BrokenOutputStreamTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testFlush(final Class<Throwable> clazz) throws Exception {
+    void testFlush(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenOutputStream stream = createBrokenOutputStream(exception);
@@ -58,28 +57,27 @@ public class BrokenOutputStreamTest {
     }
 
     @Test
-    public void testInstance() {
+    void testInstance() {
         assertNotNull(BrokenOutputStream.INSTANCE);
     }
 
     @Test
-    public void testTryWithResources() {
+    void testTryWithResources() {
         final IOException thrown = assertThrows(IOException.class, () -> {
             try (OutputStream newStream = new BrokenOutputStream()) {
                 newStream.write(1);
             }
         });
-        assertEquals("Broken output stream", thrown.getMessage());
-
+        assertEquals("Broken output stream: write(int)", thrown.getMessage());
         final Throwable[] suppressed = thrown.getSuppressed();
         assertEquals(1, suppressed.length);
         assertEquals(IOException.class, suppressed[0].getClass());
-        assertEquals("Broken output stream", suppressed[0].getMessage());
+        assertEquals("Broken output stream: close()", suppressed[0].getMessage());
     }
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testWriteByteArray(final Class<Throwable> clazz) throws Exception {
+    void testWriteByteArray(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenOutputStream stream = createBrokenOutputStream(exception);
@@ -88,7 +86,7 @@ public class BrokenOutputStreamTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testWriteByteArrayIndexed(final Class<Throwable> clazz) throws Exception {
+    void testWriteByteArrayIndexed(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenOutputStream stream = createBrokenOutputStream(exception);
@@ -97,11 +95,10 @@ public class BrokenOutputStreamTest {
 
     @ParameterizedTest
     @MethodSource("org.apache.commons.io.BrokenTestFactories#parameters")
-    public void testWriteInt(final Class<Throwable> clazz) throws Exception {
+    void testWriteInt(final Class<Throwable> clazz) throws Exception {
         final Throwable exception = clazz.newInstance();
         @SuppressWarnings("resource")
         final BrokenOutputStream stream = createBrokenOutputStream(exception);
         assertEquals(exception, assertThrows(clazz, () -> stream.write(1)));
     }
-
 }

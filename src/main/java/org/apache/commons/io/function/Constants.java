@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,12 +26,16 @@ final class Constants {
      * No-op singleton.
      */
     @SuppressWarnings("rawtypes")
-    static final IOBiConsumer IO_BI_CONSUMER = (t, u) -> {/* No-op */};
+    static final IOBiConsumer IO_BI_CONSUMER = (t, u) -> {
+        // noop
+    };
 
     /**
      * No-op singleton.
      */
-    static final IORunnable IO_RUNNABLE = () -> {/* No-op */};
+    static final IORunnable IO_RUNNABLE = () -> {
+        // noop
+    };
 
     /**
      * No-op singleton.
@@ -59,7 +63,9 @@ final class Constants {
      * No-op singleton.
      */
     @SuppressWarnings("rawtypes")
-    static final IOTriConsumer IO_TRI_CONSUMER = (t, u, v) -> {/* No-op */};
+    static final IOTriConsumer IO_TRI_CONSUMER = (t, u, v) -> {
+        // noop
+    };
 
     private Constants() {
         // We don't want instances

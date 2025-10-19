@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -71,15 +71,15 @@ import org.apache.commons.io.RandomAccessFiles;
  * final Path dir = PathUtils.current();
  * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(MagicNumberFileFilter("ustar", 257));
  * //
- * // Walk one dir
- * Files.<b>walkFileTree</b>(dir, Collections.emptySet(), 1, visitor);
+ * // Walk one directory
+ * Files.<strong>walkFileTree</strong>(dir, Collections.emptySet(), 1, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getFileList());
  * //
  * visitor.getPathCounters().reset();
  * //
- * // Walk dir tree
- * Files.<b>walkFileTree</b>(dir, visitor);
+ * // Walk directory tree
+ * Files.<strong>walkFileTree</strong>(dir, visitor);
  * System.out.println(visitor.getPathCounters());
  * System.out.println(visitor.getDirList());
  * System.out.println(visitor.getFileList());
@@ -139,7 +139,6 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements Seriali
      * </pre>
      *
      * @param magicNumber the magic number to look for in the file.
-     *
      * @throws IllegalArgumentException if {@code magicNumber} is
      *         {@code null}, or contains no bytes.
      */
@@ -166,7 +165,6 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements Seriali
      *
      * @param magicNumbers the magic number to look for in the file.
      * @param offset the byte offset in the file to start comparing bytes.
-     *
      * @throws IllegalArgumentException if {@code magicNumber}
      *         contains no bytes, or {@code offset}
      *         is a negative number.
@@ -217,29 +215,21 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements Seriali
      * </p>
      *
      * <pre>
-     * MagicNumberFileFilter tarFileFilter =
-     *     MagicNumberFileFilter("ustar", 257);
+     * MagicNumberFileFilter tarFileFilter = MagicNumberFileFilter("ustar", 257);
      * </pre>
+     * <p>
+     * This method uses the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
+     * </p>
      *
      * @param magicNumber the magic number to look for in the file.
      *        The string is converted to bytes using the platform default charset.
      * @param offset the byte offset in the file to start comparing bytes.
-     *
      * @throws IllegalArgumentException if {@code magicNumber} is
      *         the empty String, or {@code offset} is
      *         a negative number.
      */
     public MagicNumberFileFilter(final String magicNumber, final long offset) {
-        Objects.requireNonNull(magicNumber, "magicNumber");
-        if (magicNumber.isEmpty()) {
-            throw new IllegalArgumentException("The magic number must contain at least one byte");
-        }
-        if (offset < 0) {
-            throw new IllegalArgumentException("The offset cannot be negative");
-        }
-
-        this.magicNumbers = magicNumber.getBytes(Charset.defaultCharset()); // explicitly uses the platform default charset
-        this.byteOffset = offset;
+        this(magicNumber.getBytes(Charset.defaultCharset()), offset);
     }
 
     /**
@@ -254,13 +244,12 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements Seriali
      * </p>
      *
      * @param file the file to accept or reject.
-     *
      * @return {@code true} if the file contains the filter's magic number
      *         at the specified offset, {@code false} otherwise.
      */
     @Override
     public boolean accept(final File file) {
-        if (file != null && file.isFile() && file.canRead()) {
+        if (isFile(file) && file.canRead()) {
             try {
                 return RandomAccessFileMode.READ_ONLY.apply(file.toPath(),
                         raf -> Arrays.equals(magicNumbers, RandomAccessFiles.read(raf, byteOffset, magicNumbers.length)));
@@ -276,13 +265,13 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements Seriali
      * Accepts the provided file if the file contains the file filter's magic
      * number at the specified offset.
      * </p>
-     *
      * <p>
      * If any {@link IOException}s occur while reading the file, the file will
      * be rejected.
+     *
      * </p>
      * @param file the file to accept or reject.
-     *
+     * @param attributes the path's basic attributes (may be null).
      * @return {@code true} if the file contains the filter's magic number
      *         at the specified offset, {@code false} otherwise.
      * @since 2.9.0
@@ -300,8 +289,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements Seriali
                     }
                     return toFileVisitResult(Arrays.equals(this.magicNumbers, byteBuffer.array()));
                 }
-            }
-            catch (final IOException ignored) {
+            } catch (final IOException ignored) {
                 // Do nothing, fall through and do not accept file
             }
         }

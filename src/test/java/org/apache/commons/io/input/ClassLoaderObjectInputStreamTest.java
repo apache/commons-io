@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link ClassLoaderObjectInputStream}.
  */
-public class ClassLoaderObjectInputStreamTest {
+class ClassLoaderObjectInputStreamTest {
 
     /**
      * Note: This test case tests the simplest functionality of ObjectInputStream. IF we really wanted to test
@@ -80,7 +80,7 @@ public class ClassLoaderObjectInputStreamTest {
     }
 
     @Test
-    public void testExpected() throws Exception {
+    void testExpected() throws Exception {
         final Boolean input = Boolean.FALSE;
         final InputStream bais = new ByteArrayInputStream(SerializationUtils.serialize(input));
         try (ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais)) {
@@ -90,7 +90,7 @@ public class ClassLoaderObjectInputStreamTest {
     }
 
     @Test
-    public void testLong() throws Exception {
+    void testLong() throws Exception {
         final Long input = 123L;
         final InputStream bais = new ByteArrayInputStream(SerializationUtils.serialize(input));
         try (ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais)) {
@@ -100,7 +100,7 @@ public class ClassLoaderObjectInputStreamTest {
     }
 
     @Test
-    public void testObject1() throws Exception {
+    void testObject1() throws Exception {
         final TestFixture input = new TestFixture(123, null);
         final InputStream bais = new ByteArrayInputStream(SerializationUtils.serialize(input));
         try (ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais)) {
@@ -110,7 +110,7 @@ public class ClassLoaderObjectInputStreamTest {
     }
 
     @Test
-    public void testObject2() throws Exception {
+    void testObject2() throws Exception {
         final TestFixture input = new TestFixture(123, 0);
         final InputStream bais = new ByteArrayInputStream(SerializationUtils.serialize(input));
         try (ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais)) {
@@ -120,10 +120,10 @@ public class ClassLoaderObjectInputStreamTest {
     }
 
     @Test
-    public void testPrimitiveLong() throws Exception {
+    void testPrimitiveLong() throws Exception {
         final long input = 12345L;
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try (final ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(baos)) {
             oos.writeLong(input);
         }
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
@@ -134,7 +134,7 @@ public class ClassLoaderObjectInputStreamTest {
     }
 
     @Test
-    public void testResolveProxyClass() throws Exception {
+    void testResolveProxyClass() throws Exception {
         final InputStream bais = new ByteArrayInputStream(SerializationUtils.serialize(Boolean.FALSE));
         try (ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais)) {
             final String[] interfaces = {Comparable.class.getName()};
@@ -144,7 +144,7 @@ public class ClassLoaderObjectInputStreamTest {
     }
 
     @Test
-    public void testResolveProxyClassWithMultipleInterfaces() throws Exception {
+    void testResolveProxyClassWithMultipleInterfaces() throws Exception {
         final InputStream bais = new ByteArrayInputStream(SerializationUtils.serialize(Boolean.FALSE));
         try (ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais)) {
             final String[] interfaces = {Comparable.class.getName(), Serializable.class.getName(), Runnable.class.getName()};

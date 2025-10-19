@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -57,10 +57,10 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link FileFilterUtils}.
  */
-public class FileFilterTest extends AbstractFilterTest {
+class FileFilterTest extends AbstractFilterTest {
 
     @Test
-    public void testAgeFilter() throws Exception {
+    void testAgeFilter() throws Exception {
         final File oldFile = new File(temporaryFolder, "old.txt");
         final Path oldPath = oldFile.toPath();
         final File reference = new File(temporaryFolder, "reference.txt");
@@ -155,7 +155,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testAnd() throws IOException {
+    void testAnd() throws IOException {
         final IOFileFilter trueFilter = TrueFileFilter.INSTANCE;
         final IOFileFilter falseFilter = FalseFileFilter.INSTANCE;
         assertFiltering(trueFilter.and(trueFilter), new File("foo.test"), true);
@@ -165,7 +165,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testAnd2() throws IOException {
+    void testAnd2() throws IOException {
         final IOFileFilter trueFilter = TrueFileFilter.INSTANCE;
         final IOFileFilter falseFilter = FalseFileFilter.INSTANCE;
         assertFiltering(new AndFileFilter(trueFilter, trueFilter), new File("foo.test"), true);
@@ -183,7 +183,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testAndArray() throws IOException {
+    void testAndArray() throws IOException {
         final IOFileFilter trueFilter = TrueFileFilter.INSTANCE;
         final IOFileFilter falseFilter = FalseFileFilter.INSTANCE;
         assertFiltering(new AndFileFilter(trueFilter, trueFilter, trueFilter), new File("foo.test"), true);
@@ -197,7 +197,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testCanExecute() throws Exception {
+    void testCanExecute() throws Exception {
         assumeTrue(SystemUtils.IS_OS_WINDOWS);
         try (TempFile executablePath = TempFile.create(getClass().getSimpleName(), null)) {
             final File executableFile = executablePath.toFile();
@@ -218,7 +218,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testCanRead() throws Exception {
+    void testCanRead() throws Exception {
         final File readOnlyFile = new File(temporaryFolder, "read-only-file1.txt");
         final Path readOnlyPath = readOnlyFile.toPath();
         if (!readOnlyFile.getParentFile().exists()) {
@@ -244,7 +244,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testCanWrite() throws Exception {
+    void testCanWrite() throws Exception {
         final File readOnlyFile = new File(temporaryFolder, "read-only-file2.txt");
         final Path readOnlyPath = readOnlyFile.toPath();
         if (!readOnlyFile.getParentFile().exists()) {
@@ -268,7 +268,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testDelegateFileFilter() throws IOException {
+    void testDelegateFileFilter() throws IOException {
         final OrFileFilter orFilter = new OrFileFilter();
         final File testFile = new File("test.txt");
 
@@ -285,14 +285,14 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testDelegation() { // TODO improve these tests
+    void testDelegation() { // TODO improve these tests
         assertNotNull(FileFilterUtils.asFileFilter((FileFilter) FalseFileFilter.INSTANCE));
         assertNotNull(FileFilterUtils.asFileFilter((FilenameFilter) FalseFileFilter.INSTANCE).toString());
     }
 
     @SuppressWarnings("deprecation")
     @Test
-    public void testDeprecatedWildcard() throws IOException {
+    void testDeprecatedWildcard() throws IOException {
         IOFileFilter filter = new WildcardFilter("*.txt");
         final List<String> patternList = Arrays.asList("*.txt", "*.xml", "*.gif");
         final IOFileFilter listFilter = new WildcardFilter(patternList);
@@ -371,7 +371,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testDirectory() throws IOException {
+    void testDirectory() throws IOException {
         // XXX: This test presumes the current working dir is the base dir of the source checkout.
         final IOFileFilter filter = new DirectoryFileFilter();
 
@@ -398,7 +398,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testEmpty() throws Exception {
+    void testEmpty() throws Exception {
 
         // Empty Dir
         final File emptyDirFile = new File(temporaryFolder, "empty-dir");
@@ -450,12 +450,12 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testEnsureTestCoverage() {
+    void testEnsureTestCoverage() {
         assertNotNull(new FileFilterUtils()); // dummy for test coverage
     }
 
     @Test
-    public void testFalse() throws IOException {
+    void testFalse() throws IOException {
         final IOFileFilter filter = FileFilterUtils.falseFileFilter();
         assertFiltering(filter, new File("foo.test"), false);
         assertFiltering(filter, new File("foo.test").toPath(), false);
@@ -470,13 +470,13 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testFileEqualsFilter() throws IOException {
+    void testFileEqualsFilter() throws IOException {
         assertFooBarFileFiltering(
             new FileEqualsFileFilter(new File("foo")).or(new FileEqualsFileFilter(new File("bar"))));
     }
 
     @Test
-    public void testFileFilterUtils_and() throws IOException {
+    void testFileFilterUtils_and() throws IOException {
         final IOFileFilter trueFilter = TrueFileFilter.INSTANCE;
         final IOFileFilter falseFilter = FalseFileFilter.INSTANCE;
         assertFiltering(FileFilterUtils.and(trueFilter, trueFilter, trueFilter), new File("foo.test"), true);
@@ -486,7 +486,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testFileFilterUtils_or() throws IOException {
+    void testFileFilterUtils_or() throws IOException {
         final IOFileFilter trueFilter = TrueFileFilter.INSTANCE;
         final IOFileFilter falseFilter = FalseFileFilter.INSTANCE;
         final File testFile = new File("foo.test");
@@ -497,7 +497,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testFiles() throws IOException {
+    void testFiles() throws IOException {
         // XXX: This test presumes the current working dir is the base dir of the source checkout.
         final IOFileFilter filter = FileFileFilter.INSTANCE;
 
@@ -524,7 +524,7 @@ public class FileFilterTest extends AbstractFilterTest {
      * properly filters files from the list.
      */
     @Test
-    public void testFilterArray_fromList() throws Exception {
+    void testFilterArray_fromList() throws Exception {
         final File fileA = TestUtils.newFile(temporaryFolder, "A");
         final File fileB = TestUtils.newFile(temporaryFolder, "B");
         final List<File> fileList = Arrays.asList(fileA, fileB);
@@ -542,7 +542,7 @@ public class FileFilterTest extends AbstractFilterTest {
      * files from the list.
      */
     @Test
-    public void testFilterArray_IOFileFilter() throws Exception {
+    void testFilterArray_IOFileFilter() throws Exception {
         final File fileA = TestUtils.newFile(temporaryFolder, "A");
         final File fileB = TestUtils.newFile(temporaryFolder, "B");
 
@@ -559,7 +559,7 @@ public class FileFilterTest extends AbstractFilterTest {
      * files from the list.
      */
     @Test
-    public void testFilterArray_PathVisitorFileFilter_FileExistsNo() throws Exception {
+    void testFilterArray_PathVisitorFileFilter_FileExistsNo() throws Exception {
         final File fileA = TestUtils.newFile(temporaryFolder, "A");
         final File fileB = TestUtils.newFile(temporaryFolder, "B");
 
@@ -576,7 +576,7 @@ public class FileFilterTest extends AbstractFilterTest {
      * files from the list.
      */
     @Test
-    public void testFilterArray_PathVisitorFileFilter_FileExistsYes() throws Exception {
+    void testFilterArray_PathVisitorFileFilter_FileExistsYes() throws Exception {
         final File fileA = TestUtils.newFile(temporaryFolder, "A");
         final File fileB = TestUtils.newFile(temporaryFolder, "B");
         FileUtils.write(fileA, "test", StandardCharsets.US_ASCII);
@@ -593,7 +593,7 @@ public class FileFilterTest extends AbstractFilterTest {
      * Test method for {@link FileFilterUtils#filter(IOFileFilter, File...)} that tests {@code null} parameters.
      */
     @Test
-    public void testFilterFilesArrayNullParameters() throws Exception {
+    void testFilterFilesArrayNullParameters() throws Exception {
         final File fileA = TestUtils.newFile(temporaryFolder, "A");
         final File fileB = TestUtils.newFile(temporaryFolder, "B");
         assertThrows(NullPointerException.class, () -> FileFilterUtils.filter(null, fileA, fileB));
@@ -610,7 +610,7 @@ public class FileFilterTest extends AbstractFilterTest {
      * properly filters files from the list.
      */
     @Test
-    public void testFilterList() throws Exception {
+    void testFilterList() throws Exception {
         final File fileA = TestUtils.newFile(temporaryFolder, "A");
         final File fileB = TestUtils.newFile(temporaryFolder, "B");
         final List<File> fileList = Arrays.asList(fileA, fileB);
@@ -628,7 +628,7 @@ public class FileFilterTest extends AbstractFilterTest {
      * filters files from the list.
      */
     @Test
-    public void testFilterList_fromArray() throws Exception {
+    void testFilterList_fromArray() throws Exception {
         final File fileA = TestUtils.newFile(temporaryFolder, "A");
         final File fileB = TestUtils.newFile(temporaryFolder, "B");
 
@@ -645,7 +645,7 @@ public class FileFilterTest extends AbstractFilterTest {
      * parameters and {@code null} elements in the provided list.
      */
     @Test
-    public void testFilterListNullParameters() {
+    void testFilterListNullParameters() {
         assertThrows(NullPointerException.class, () -> FileFilterUtils.filterList(null, Collections.emptyList()));
 
         final IOFileFilter filter = FileFilterUtils.trueFileFilter();
@@ -661,7 +661,7 @@ public class FileFilterTest extends AbstractFilterTest {
      * Test method for {@link FileFilterUtils#filter(IOFileFilter, Path...)}.
      */
     @Test
-    public void testFilterPathsArrayNullParameters() throws Exception {
+    void testFilterPathsArrayNullParameters() throws Exception {
         final Path fileA = TestUtils.newFile(temporaryFolder, "A").toPath();
         final Path fileB = TestUtils.newFile(temporaryFolder, "B").toPath();
         assertThrows(NullPointerException.class, () -> PathUtils.filter(null, fileA, fileB));
@@ -678,7 +678,7 @@ public class FileFilterTest extends AbstractFilterTest {
      * properly filters files from the set.
      */
     @Test
-    public void testFilterSet() throws Exception {
+    void testFilterSet() throws Exception {
         final File fileA = TestUtils.newFile(temporaryFolder, "A");
         final File fileB = TestUtils.newFile(temporaryFolder, "B");
         final Set<File> fileList = new HashSet<>(Arrays.asList(fileA, fileB));
@@ -696,7 +696,7 @@ public class FileFilterTest extends AbstractFilterTest {
      * filters files from the set.
      */
     @Test
-    public void testFilterSet_fromArray() throws Exception {
+    void testFilterSet_fromArray() throws Exception {
         final File fileA = TestUtils.newFile(temporaryFolder, "A");
         final File fileB = TestUtils.newFile(temporaryFolder, "B");
 
@@ -713,7 +713,7 @@ public class FileFilterTest extends AbstractFilterTest {
      * parameters and {@code null} elements in the provided set.
      */
     @Test
-    public void testFilterSetNullParameters() {
+    void testFilterSetNullParameters() {
         assertThrows(NullPointerException.class, () -> FileFilterUtils.filterSet(null, Collections.emptySet()));
 
         final IOFileFilter filter = FileFilterUtils.trueFileFilter();
@@ -724,7 +724,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testHidden() throws IOException {
+    void testHidden() throws IOException {
         final File hiddenDirFile = new File(SVN_DIR_NAME);
         final Path hiddenDirPath = hiddenDirFile.toPath();
         if (hiddenDirFile.exists()) {
@@ -743,9 +743,9 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testMagicNumberFileFilterBytes() throws Exception {
+    void testMagicNumberFileFilterBytes() throws Exception {
         final byte[] classFileMagicNumber = {(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE};
-        final String xmlFileContent = "<?xml version=\"1.0\" encoding=\"UTF-8\">\n" + "<element>text</element>";
+        final String xmlFileContent = "<?xml version=\"1.0\" encoding=\"UTF-8\">\n<element>text</element>";
 
         final File classAFile = new File(temporaryFolder, "A.class");
         final Path classAPath = classAFile.toPath();
@@ -789,7 +789,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testMagicNumberFileFilterBytesOffset() throws Exception {
+    void testMagicNumberFileFilterBytesOffset() throws Exception {
         final byte[] tarMagicNumber = {0x75, 0x73, 0x74, 0x61, 0x72};
         final long tarMagicNumberOffset = 257;
 
@@ -824,9 +824,9 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testMagicNumberFileFilterString() throws Exception {
+    void testMagicNumberFileFilterString() throws Exception {
         final byte[] classFileMagicNumber = {(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE};
-        final String xmlFileContent = "<?xml version=\"1.0\" encoding=\"UTF-8\">\n" + "<element>text</element>";
+        final String xmlFileContent = "<?xml version=\"1.0\" encoding=\"UTF-8\">\n<element>text</element>";
         final String xmlMagicNumber = "<?xml version=\"1.0\"";
 
         final File classFileA = new File(temporaryFolder, "A.class");
@@ -855,7 +855,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testMagicNumberFileFilterStringOffset() throws Exception {
+    void testMagicNumberFileFilterStringOffset() throws Exception {
         final String tarMagicNumber = "ustar";
         final long tarMagicNumberOffset = 257;
 
@@ -890,7 +890,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testMagicNumberFileFilterValidation() {
+    void testMagicNumberFileFilterValidation() {
         assertThrows(NullPointerException.class, () -> new MagicNumberFileFilter((String) null, 0));
         assertThrows(IllegalArgumentException.class, () -> new MagicNumberFileFilter("0", -1));
         assertThrows(IllegalArgumentException.class, () -> new MagicNumberFileFilter("", 0));
@@ -900,7 +900,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testMakeCVSAware() throws Exception {
+    void testMakeCVSAware() throws Exception {
         final IOFileFilter filter1 = FileFilterUtils.makeCVSAware(null);
         final IOFileFilter filter2 = FileFilterUtils.makeCVSAware(FileFilterUtils.nameFileFilter("test-file1.txt"));
 
@@ -942,7 +942,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testMakeDirectoryOnly() throws Exception {
+    void testMakeDirectoryOnly() throws Exception {
         assertSame(DirectoryFileFilter.DIRECTORY, FileFilterUtils.makeDirectoryOnly(null));
 
         final IOFileFilter filter = FileFilterUtils.makeDirectoryOnly(FileFilterUtils.nameFileFilter("B"));
@@ -980,7 +980,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testMakeFileOnly() throws Exception {
+    void testMakeFileOnly() throws Exception {
         assertSame(FileFileFilter.INSTANCE, FileFilterUtils.makeFileOnly(null));
 
         final IOFileFilter filter = FileFilterUtils.makeFileOnly(FileFilterUtils.nameFileFilter("B"));
@@ -1018,7 +1018,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testMakeSVNAware() throws Exception {
+    void testMakeSVNAware() throws Exception {
         final IOFileFilter filter1 = FileFilterUtils.makeSVNAware(null);
         final IOFileFilter filter2 = FileFilterUtils.makeSVNAware(FileFilterUtils.nameFileFilter("test-file1.txt"));
 
@@ -1060,7 +1060,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testNameFilter() throws IOException {
+    void testNameFilter() throws IOException {
         final NameFileFilter filter = new NameFileFilter("foo", "bar");
         assertFooBarFileFiltering(filter);
         assertFiltering(filter, (File) null, false);
@@ -1068,7 +1068,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testNameFilterNullArgument() {
+    void testNameFilterNullArgument() {
         final String test = null;
         final String failMessage = "constructing a NameFileFilter with a null String argument should fail.";
         assertThrows(NullPointerException.class, () -> new NameFileFilter(test), failMessage);
@@ -1076,18 +1076,18 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testNameFilterNullArrayArgument() {
+    void testNameFilterNullArrayArgument() {
         assertThrows(NullPointerException.class, () -> new NameFileFilter((String[]) null));
     }
 
     @Test
-    public void testNameFilterNullListArgument() {
+    void testNameFilterNullListArgument() {
         final List<String> test = null;
         assertThrows(NullPointerException.class, () -> new NameFileFilter(test));
     }
 
     @Test
-    public void testNegate() throws IOException {
+    void testNegate() throws IOException {
         final IOFileFilter filter = FileFilterUtils.notFileFilter(FileFilterUtils.trueFileFilter());
         assertFiltering(filter, new File("foo.test"), false);
         assertFiltering(filter, new File("foo"), false);
@@ -1097,13 +1097,13 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testNullFilters() {
+    void testNullFilters() {
         assertThrows(NullPointerException.class, () -> FileFilterUtils.toList((IOFileFilter) null));
         assertThrows(NullPointerException.class, () -> FileFilterUtils.toList(new IOFileFilter[] {null}));
     }
 
     @Test
-    public void testOr() throws IOException {
+    void testOr() throws IOException {
         final IOFileFilter trueFilter = TrueFileFilter.INSTANCE;
         final IOFileFilter falseFilter = FalseFileFilter.INSTANCE;
         final File testFile = new File("foo.test");
@@ -1150,13 +1150,13 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testPathEqualsFilter() throws IOException {
+    void testPathEqualsFilter() throws IOException {
         assertFooBarFileFiltering(
             new PathEqualsFileFilter(Paths.get("foo")).or(new PathEqualsFileFilter(Paths.get("bar"))));
     }
 
     @Test
-    public void testPrefix() throws IOException {
+    void testPrefix() throws IOException {
         IOFileFilter filter = new PrefixFileFilter("foo", "bar");
         final File testFile = new File("test");
         final Path testPath = testFile.toPath();
@@ -1220,7 +1220,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testPrefixCaseInsensitive() throws IOException {
+    void testPrefixCaseInsensitive() throws IOException {
 
         IOFileFilter filter = new PrefixFileFilter(new String[] {"foo", "bar"}, IOCase.INSENSITIVE);
         assertFiltering(filter, new File("foo.test1"), true);
@@ -1255,7 +1255,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testSizeFilterOnFiles() throws Exception {
+    void testSizeFilterOnFiles() throws Exception {
         final File smallFile = new File(temporaryFolder, "small.txt");
         if (!smallFile.getParentFile().exists()) {
             fail("Cannot create file " + smallFile + " as the parent directory does not exist");
@@ -1302,7 +1302,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testSizeFilterOnPaths() throws Exception {
+    void testSizeFilterOnPaths() throws Exception {
         final Path smallFile = Paths.get(temporaryFolder.toString(), "small.txt");
         if (Files.notExists(smallFile.getParent())) {
             fail("Cannot create file " + smallFile + " as the parent directory does not exist");
@@ -1349,7 +1349,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testSuffix() throws IOException {
+    void testSuffix() throws IOException {
         IOFileFilter filter = new SuffixFileFilter("tes", "est");
         final File testFile = new File("test");
         final Path testPath = testFile.toPath();
@@ -1406,7 +1406,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testSuffixCaseInsensitive() throws IOException {
+    void testSuffixCaseInsensitive() throws IOException {
 
         IOFileFilter filter = new SuffixFileFilter(new String[] {"tes", "est"}, IOCase.INSENSITIVE);
         assertFiltering(filter, new File("foo.tes"), true);
@@ -1440,7 +1440,7 @@ public class FileFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testTrue() throws IOException {
+    void testTrue() throws IOException {
         final IOFileFilter filter = FileFilterUtils.trueFileFilter();
         assertFiltering(filter, new File("foo.test"), true);
         assertFiltering(filter, new File("foo"), true);

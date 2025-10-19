@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -39,7 +39,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link TeeReader}.
  */
-public class TeeReaderTest  {
+class TeeReaderTest  {
 
     private StringBuilderWriter output;
 
@@ -57,7 +57,7 @@ public class TeeReaderTest  {
      * exception on {@link TeeReader#close()}, if specified to do so.
      */
     @Test
-    public void testCloseBranchIOException() throws Exception {
+    void testCloseBranchIOException() throws Exception {
         final StringReader goodR = mock(StringReader.class);
         final Writer badW = new ThrowOnCloseWriter();
 
@@ -75,7 +75,7 @@ public class TeeReaderTest  {
      * exception on {@link TeeReader#close()}, if specified to do so.
      */
     @Test
-    public void testCloseMainIOException() throws IOException {
+    void testCloseMainIOException() throws IOException {
         final Reader badR = new ThrowOnCloseReader();
         final StringWriter goodW = mock(StringWriter.class);
 
@@ -89,7 +89,7 @@ public class TeeReaderTest  {
     }
 
     @Test
-    public void testMarkReset() throws Exception {
+    void testMarkReset() throws Exception {
         assertEquals('a', tee.read());
         tee.mark(1);
         assertEquals('b', tee.read());
@@ -101,7 +101,7 @@ public class TeeReaderTest  {
     }
 
     @Test
-    public void testReadEverything() throws Exception {
+    void testReadEverything() throws Exception {
         assertEquals('a', tee.read());
         assertEquals('b', tee.read());
         assertEquals('c', tee.read());
@@ -110,18 +110,18 @@ public class TeeReaderTest  {
     }
 
     @Test
-    public void testReadNothing() {
+    void testReadNothing() {
         assertEquals("", output.toString());
     }
 
     @Test
-    public void testReadOneChar() throws Exception {
+    void testReadOneChar() throws Exception {
         assertEquals('a', tee.read());
         assertEquals("a", output.toString());
     }
 
     @Test
-    public void testReadToArray() throws Exception {
+    void testReadToArray() throws Exception {
         final char[] buffer = new char[8];
         assertEquals(3, tee.read(buffer));
         assertEquals('a', buffer[0]);
@@ -132,7 +132,7 @@ public class TeeReaderTest  {
     }
 
     @Test
-    public void testReadToArrayWithOffset() throws Exception {
+    void testReadToArrayWithOffset() throws Exception {
         final char[] buffer = new char[8];
         assertEquals(3, tee.read(buffer, 4, 4));
         assertEquals('a', buffer[4]);
@@ -143,7 +143,7 @@ public class TeeReaderTest  {
     }
 
     @Test
-    public void testReadToCharBuffer() throws Exception {
+    void testReadToCharBuffer() throws Exception {
         final CharBuffer buffer = CharBuffer.allocate(8);
         buffer.position(1);
         assertEquals(3, tee.read(buffer));
@@ -158,7 +158,7 @@ public class TeeReaderTest  {
     }
 
     @Test
-    public void testSkip() throws Exception {
+    void testSkip() throws Exception {
         assertEquals('a', tee.read());
         assertEquals(1, tee.skip(1));
         assertEquals('c', tee.read());

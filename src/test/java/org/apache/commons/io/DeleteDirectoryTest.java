@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -44,7 +44,7 @@ import org.junit.jupiter.api.condition.OS;
  * </p>
  */
 @DisabledOnOs(OS.WINDOWS)
-public class DeleteDirectoryTest extends AbstractTempDirTest {
+class DeleteDirectoryTest extends AbstractTempDirTest {
 
     private void testDeleteDirectory(final IOConsumer<Path> deleter) throws IOException {
         // Create a test file
@@ -77,23 +77,23 @@ public class DeleteDirectoryTest extends AbstractTempDirTest {
     }
 
     @Test
-    public void testDeleteDirectoryWithFileUtils() throws IOException {
+    void testDeleteDirectoryWithFileUtils() throws IOException {
         testDeleteDirectory(dir -> FileUtils.deleteDirectory(dir.toFile()));
     }
 
     @Test
-    public void testDeleteDirectoryWithPathUtils() throws IOException {
+    void testDeleteDirectoryWithPathUtils() throws IOException {
         testDeleteDirectory(PathUtils::deleteDirectory);
     }
 
     @Test
-    public void testDeleteDirectoryWithPathUtilsOverrideReadOnly() throws IOException {
+    void testDeleteDirectoryWithPathUtilsOverrideReadOnly() throws IOException {
         testDeleteDirectory(dir -> PathUtils.deleteDirectory(dir, StandardDeleteOption.OVERRIDE_READ_ONLY));
     }
 
     @Test
     @DisabledOnOs(OS.LINUX) // TODO
-    public void testDeleteFileCheckParentAccess() throws IOException {
+    void testDeleteFileCheckParentAccess() throws IOException {
         // Create a test directory
         final Path testDir = tempDirPath.resolve("dir");
         Files.createDirectory(testDir);

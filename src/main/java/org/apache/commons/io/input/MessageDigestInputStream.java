@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -76,7 +76,7 @@ public final class MessageDigestInputStream extends ObservableInputStream {
         private MessageDigest messageDigest;
 
         /**
-         * Constructs a new {@link Builder}.
+         * Constructs a new builder of {@link MessageDigestInputStream}.
          */
         public Builder() {
             // empty
@@ -85,13 +85,13 @@ public final class MessageDigestInputStream extends ObservableInputStream {
         /**
          * Builds new {@link MessageDigestInputStream}.
          * <p>
-         * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link #getInputStream()}, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
-         * <li>{@link #getPath()}</li>
+         * <li>{@link #getInputStream()} gets the target aspect.</li>
          * <li>{@link MessageDigest}</li>
          * </ul>
          *
@@ -99,8 +99,9 @@ public final class MessageDigestInputStream extends ObservableInputStream {
          * @throws NullPointerException if messageDigest is null.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
-         * @throws IOException                   if an I/O error occurs.
+         * @throws IOException                   if an I/O error occurs converting to an {@link InputStream} using {@link #getInputStream()}.
          * @see #getInputStream()
+         * @see #getUnchecked()
          */
         @Override
         public MessageDigestInputStream get() throws IOException {

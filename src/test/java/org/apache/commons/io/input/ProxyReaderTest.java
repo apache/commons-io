@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link ProxyReader}.
  */
-public class ProxyReaderTest {
+class ProxyReaderTest {
 
     /** Custom NullReader implementation. */
     private static final class CustomNullReader extends NullReader {
@@ -36,6 +36,11 @@ public class ProxyReaderTest {
         @Override
         public int read(final char[] chars) throws IOException {
             return chars == null ? 0 : super.read(chars);
+        }
+
+        @Override
+        public int read(final char[] chars, final int offset, final int length) throws IOException {
+            return chars == null ? 0 : super.read(chars, offset, length);
         }
 
         @Override
@@ -52,7 +57,7 @@ public class ProxyReaderTest {
     }
 
     @Test
-    public void testNullCharArray() throws Exception {
+    void testNullCharArray() throws Exception {
         try (ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0))) {
             proxy.read((char[]) null);
             proxy.read(null, 0, 0);
@@ -60,7 +65,7 @@ public class ProxyReaderTest {
     }
 
     @Test
-    public void testNullCharBuffer() throws Exception {
+    void testNullCharBuffer() throws Exception {
         try (ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0))) {
             proxy.read((CharBuffer) null);
         }

@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,6 +28,8 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
 import java.nio.charset.Charset;
+
+import org.apache.commons.io.IOUtils.ScratchChars;
 
 /**
  * This class provides static utility methods for buffered
@@ -178,7 +180,9 @@ public class CopyUtils {
     /**
      * Copies and convert bytes from an {@link InputStream} to chars on a
      * {@link Writer}.
-     * The platform's default encoding is used for the byte-to-char conversion.
+     * <p>
+     * This method uses the virtual machine's {@linkplain Charset#defaultCharset() default charset} for byte-to-char conversion.
+     * </p>
      *
      * @param input the {@link InputStream} to read from
      * @param output the {@link Writer} to write to
@@ -218,7 +222,9 @@ public class CopyUtils {
     /**
      * Serialize chars from a {@link Reader} to bytes on an
      * {@link OutputStream}, and flush the {@link OutputStream}.
-     * Uses the default platform encoding.
+     * <p>
+     * This method uses the virtual machine's {@linkplain Charset#defaultCharset() default charset} for byte-to-char conversion.
+     * </p>
      *
      * @param input the {@link Reader} to read from
      * @param output the {@link OutputStream} to write to
@@ -274,21 +280,25 @@ public class CopyUtils {
             final Reader input,
             final Writer output)
                 throws IOException {
-        final char[] buffer = IOUtils.getScratchCharArray();
-        int count = 0;
-        int n;
-        while (EOF != (n = input.read(buffer))) {
-            output.write(buffer, 0, n);
-            count += n;
+        try (ScratchChars scratch = IOUtils.ScratchChars.get()) {
+            final char[] buffer = scratch.array();
+            int count = 0;
+            int n;
+            while (EOF != (n = input.read(buffer))) {
+                output.write(buffer, 0, n);
+                count += n;
+            }
+            return count;
         }
-        return count;
     }
 
     /**
      * Serialize chars from a {@link String} to bytes on an
      * {@link OutputStream}, and
      * flush the {@link OutputStream}.
-     * Uses the platform default encoding.
+     * <p>
+     * This method uses the virtual machine's {@linkplain Charset#defaultCharset() default charset} for byte-to-char conversion.
+     * </p>
      *
      * @param input the {@link String} to read from
      * @param output the {@link OutputStream} to write to

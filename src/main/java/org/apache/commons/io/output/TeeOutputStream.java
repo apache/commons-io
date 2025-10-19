@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Classic splitter of {@link OutputStream}. Named after the UNIX 'tee' command. It allows a stream to be branched off
+ * Classic splitter of {@link OutputStream}. Named after the Unix 'tee' command. It allows a stream to be branched off
  * so there are now two streams.
  */
 public class TeeOutputStream extends ProxyOutputStream {
@@ -79,7 +79,7 @@ public class TeeOutputStream extends ProxyOutputStream {
     /**
      * Writes the bytes to both streams.
      *
-     * @param b the bytes to write
+     * @param b the bytes to write.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -91,9 +91,9 @@ public class TeeOutputStream extends ProxyOutputStream {
     /**
      * Writes the specified bytes to both streams.
      *
-     * @param b   the bytes to write
-     * @param off The start offset
-     * @param len The number of bytes to write
+     * @param b   the bytes to write.
+     * @param off The start offset.
+     * @param len The number of bytes to write.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -105,7 +105,7 @@ public class TeeOutputStream extends ProxyOutputStream {
     /**
      * Writes a byte to both streams.
      *
-     * @param b the byte to write
+     * @param b the byte to write.
      * @throws IOException if an I/O error occurs.
      */
     @Override

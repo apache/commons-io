@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -167,7 +167,7 @@ public class Counters {
     /**
      * Counts files, directories, and sizes, as a visit proceeds, using BigInteger numbers.
      */
-    private final static class BigIntegerPathCounters extends AbstractPathCounters {
+    private static final class BigIntegerPathCounters extends AbstractPathCounters {
 
         /**
          * Constructs a new initialized instance.
@@ -228,7 +228,7 @@ public class Counters {
     /**
      * Counts using a {@code long} number.
      */
-    private final static class LongCounter implements Counter {
+    private static final class LongCounter implements Counter {
 
         private long value;
 
@@ -289,7 +289,7 @@ public class Counters {
     /**
      * Counts files, directories, and sizes, as a visit proceeds, using long numbers.
      */
-    private final static class LongPathCounters extends AbstractPathCounters {
+    private static final class LongPathCounters extends AbstractPathCounters {
 
         /**
          * Constructs a new initialized instance.
@@ -303,7 +303,7 @@ public class Counters {
     /**
      * Counts nothing.
      */
-    private final static class NoopCounter implements Counter {
+    private static final class NoopCounter implements Counter {
 
         static final NoopCounter INSTANCE = new NoopCounter();
 
@@ -450,5 +450,15 @@ public class Counters {
      */
     public static PathCounters noopPathCounters() {
         return NoopPathCounters.INSTANCE;
+    }
+
+    /**
+     * Construct a new instance.
+     *
+     * @deprecated Will be private in 4.0
+     */
+    @Deprecated
+    public Counters() {
+        // empty
     }
 }

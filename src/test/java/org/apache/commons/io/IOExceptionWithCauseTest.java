@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,13 +27,13 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOExceptionWithCause}.
  */
-public class IOExceptionWithCauseTest {
+class IOExceptionWithCauseTest {
 
     /**
      * Tests the {@link IOExceptionWithCause#IOExceptionWithCause(String,Throwable)} constructor.
      */
     @Test
-    public void testIOExceptionStringThrowable() {
+    void testIOExceptionStringThrowable() {
         final Throwable cause = new IllegalArgumentException("cause");
         final IOException exception = new IOException("message", cause);
         validate(exception, cause, "message");
@@ -44,7 +44,7 @@ public class IOExceptionWithCauseTest {
      */
 
     @Test
-    public void testIOExceptionThrowable() {
+    void testIOExceptionThrowable() {
         final Throwable cause = new IllegalArgumentException("cause");
         final IOException exception = new IOException(cause);
         validate(exception, cause, "java.lang.IllegalArgumentException: cause");

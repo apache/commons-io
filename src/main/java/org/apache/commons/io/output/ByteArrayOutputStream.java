@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,28 +21,28 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * Implements a ThreadSafe version of {@link AbstractByteArrayOutputStream} using instance synchronization.
  */
 //@ThreadSafe
-public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
+public class ByteArrayOutputStream extends AbstractByteArrayOutputStream<ByteArrayOutputStream> {
 
     /**
-     * Fetches entire contents of an {@link InputStream} and represent
-     * same data as result InputStream.
+     * Fetches entire contents of an {@link InputStream} and represent same data as result InputStream.
      * <p>
      * This method is useful where,
      * </p>
      * <ul>
      * <li>Source InputStream is slow.</li>
-     * <li>It has network resources associated, so we cannot keep it open for
-     * long time.</li>
+     * <li>It has network resources associated, so we cannot keep it open for long time.</li>
      * <li>It has network timeout associated.</li>
      * </ul>
-     * It can be used in favor of {@link #toByteArray()}, since it
-     * avoids unnecessary allocation and copy of byte[].<br>
-     * This method buffers the input internally, so there is no need to use a
-     * {@link BufferedInputStream}.
+     * <p>
+     * It can be used in favor of {@link #toByteArray()}, since it avoids unnecessary allocation and copy of byte[].<br>
+     * This method buffers the input internally, so there is no need to use a {@link BufferedInputStream}.
+     * </p>
      *
      * @param input Stream to be fully buffered.
      * @return A fully buffered stream.
@@ -55,24 +55,22 @@ public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
     }
 
     /**
-     * Fetches entire contents of an {@link InputStream} and represent
-     * same data as result InputStream.
+     * Fetches entire contents of an {@link InputStream} and represent same data as result InputStream.
      * <p>
      * This method is useful where,
      * </p>
      * <ul>
      * <li>Source InputStream is slow.</li>
-     * <li>It has network resources associated, so we cannot keep it open for
-     * long time.</li>
+     * <li>It has network resources associated, so we cannot keep it open for long time.</li>
      * <li>It has network timeout associated.</li>
      * </ul>
-     * It can be used in favor of {@link #toByteArray()}, since it
-     * avoids unnecessary allocation and copy of byte[].<br>
-     * This method buffers the input internally, so there is no need to use a
-     * {@link BufferedInputStream}.
+     * <p>
+     * It can be used in favor of {@link #toByteArray()}, since it avoids unnecessary allocation and copy of byte[].<br>
+     * This method buffers the input internally, so there is no need to use a {@link BufferedInputStream}.
+     * </p>
      *
      * @param input Stream to be fully buffered.
-     * @param size the initial buffer size
+     * @param size  the initial buffer size.
      * @return A fully buffered stream.
      * @throws IOException if an I/O error occurs.
      * @since 2.5
@@ -134,13 +132,7 @@ public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
 
     @Override
     public void write(final byte[] b, final int off, final int len) {
-        if (off < 0
-                || off > b.length
-                || len < 0
-                || off + len > b.length
-                || off + len < 0) {
-            throw new IndexOutOfBoundsException();
-        }
+        IOUtils.checkFromIndexSize(b, off, len);
         if (len == 0) {
             return;
         }

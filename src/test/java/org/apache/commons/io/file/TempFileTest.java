@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,11 +29,11 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link TempFile}.
  */
-public class TempFileTest {
+class TempFileTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testCreatePath() throws IOException {
+    void testCreatePath() throws IOException {
         final TempFile ref;
         try (TempFile tempDir = TempFile.create(Paths.get("target"), "prefix", ".suffix")) {
             ref = tempDir;
@@ -48,7 +48,7 @@ public class TempFileTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void testCreateString() throws IOException {
+    void testCreateString() throws IOException {
         final TempFile ref;
         try (TempFile tempDir = TempFile.create(getClass().getCanonicalName(), ".suffix")) {
             ref = tempDir;

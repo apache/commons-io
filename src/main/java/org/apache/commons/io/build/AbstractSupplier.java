@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,7 +20,7 @@ package org.apache.commons.io.build;
 import org.apache.commons.io.function.IOSupplier;
 
 /**
- * Abstracts supplying an instance of {@code T}.
+ * Abstracts <em>supplying</em> an instance of type {@code T} where {@code T} is unbounded. This class carries no state.
  * <p>
  * Extend this class to implement the builder pattern.
  * </p>
@@ -120,9 +120,17 @@ import org.apache.commons.io.function.IOSupplier;
  *
  * @param <T> the type of instances to build.
  * @param <B> the type of builder subclass.
+ * @see IOSupplier
  * @since 2.12.0
  */
 public abstract class AbstractSupplier<T, B extends AbstractSupplier<T, B>> implements IOSupplier<T> {
+
+    /**
+     * Constructs a new instance for subclasses.
+     */
+    public AbstractSupplier() {
+        // empty
+    }
 
     /**
      * Returns this instance typed as the subclass type {@code B}.
@@ -133,7 +141,7 @@ public abstract class AbstractSupplier<T, B extends AbstractSupplier<T, B>> impl
      * (B) this
      * </pre>
      *
-     * @return this instance typed as the subclass type {@code B}.
+     * @return {@code this} instance typed as the subclass type {@code B}.
      */
     @SuppressWarnings("unchecked")
     protected B asThis() {

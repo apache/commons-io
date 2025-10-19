@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -215,7 +215,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * <h3 id="internal">3.2 Internal</h3>
  *
  * <p>
- * This shows an example of how internal cancellation processing could be implemented. <b>Note</b> the decision logic
+ * This shows an example of how internal cancellation processing could be implemented. <strong>Note</strong> the decision logic
  * and throwing a {@link CancelException} could be implemented in any of the <em>lifecycle</em> methods.
  * </p>
  *
@@ -644,7 +644,7 @@ public abstract class DirectoryWalker<T> {
             final int childDepth = depth + 1;
             if (depthLimit < 0 || childDepth <= depthLimit) {
                 checkIfCancelled(directory, depth, results);
-                File[] childFiles = filter == null ? directory.listFiles() : directory.listFiles(filter);
+                File[] childFiles = directory.listFiles(filter);
                 childFiles = filterDirectoryContents(directory, depth, childFiles);
                 if (childFiles == null) {
                     handleRestricted(directory, childDepth, results);

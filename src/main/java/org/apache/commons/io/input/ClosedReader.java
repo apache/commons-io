@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -49,21 +49,39 @@ public class ClosedReader extends Reader {
     @Deprecated
     public static final ClosedReader CLOSED_READER = INSTANCE;
 
+    /**
+     * Construct a new instance.
+     */
+    public ClosedReader() {
+        // empty
+    }
+
     @Override
     public void close() throws IOException {
         // noop
     }
 
     /**
-     * Returns -1 to indicate that the stream is closed.
+     * A no-op read method that always indicates end-of-stream.
      *
-     * @param cbuf ignored
-     * @param off ignored
-     * @param len ignored
-     * @return always -1
+     * <p>Behavior:</p>
+     * <ul>
+     *   <li>If {@code len == 0}, returns {@code 0} immediately (no characters are read).</li>
+     *   <li>Otherwise, always returns {@value IOUtils#EOF} to signal that the stream is closed or at end-of-stream.</li>
+     * </ul>
+     *
+     * @param cbuf The destination buffer.
+     * @param off  The offset at which to start storing characters.
+     * @param len  The maximum number of characters to read.
+     * @return {@code 0} if {@code len == 0}; otherwise always {@value IOUtils#EOF}.
+     * @throws IndexOutOfBoundsException If {@code off < 0}, {@code len < 0}, or {@code off + len > cbuf.length}.
      */
     @Override
     public int read(final char[] cbuf, final int off, final int len) {
+        IOUtils.checkFromIndexSize(cbuf, off, len);
+        if (len == 0) {
+            return 0;
+        }
         return EOF;
     }
 

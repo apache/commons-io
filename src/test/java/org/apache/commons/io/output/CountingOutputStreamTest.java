@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,16 +29,16 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link CountingOutputStream}.
  */
-public class CountingOutputStreamTest {
+class CountingOutputStreamTest {
 
     private void assertByteArrayEquals(final String msg, final byte[] array, final int start, final int end) {
         for (int i = start; i < end; i++) {
-            assertEquals(array[i], i-start, msg+": array[" + i + "] mismatch");
+            assertEquals(array[i], i - start, msg + ": array[" + i + "] mismatch");
         }
     }
 
     @Test
-    public void testCounting() throws IOException {
+    void testCounting() throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try (CountingOutputStream cos = new CountingOutputStream(baos)) {
 
@@ -78,7 +78,7 @@ public class CountingOutputStreamTest {
      * Test for files > 2GB in size - see issue IO-84
      */
     @Test
-    public void testLargeFiles_IO84() throws Exception {
+    void testLargeFiles_IO84() throws Exception {
         final long size = (long) Integer.MAX_VALUE + (long) 1;
 
         final NullInputStream mock = new NullInputStream(size);

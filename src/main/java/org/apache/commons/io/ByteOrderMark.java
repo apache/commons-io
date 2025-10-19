@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -202,6 +202,10 @@ public class ByteOrderMark implements Serializable {
         return charsetName;
     }
 
+    int[] getRawBytes() {
+        return bytes;
+    }
+
     /**
      * Computes the hash code for this BOM.
      *
@@ -224,6 +228,33 @@ public class ByteOrderMark implements Serializable {
      */
     public int length() {
         return bytes.length;
+    }
+
+    /**
+     * Tests whether the given array starts with the bytes for this BOM.
+     *
+     * @param test the array to test.
+     * @return whether the given array starts with the bytes for this BOM.
+     * @since 2.19.0
+     */
+    public boolean matches(final int[] test) {
+        // Our test are never null.
+        if (bytes == test) {
+            return true;
+        }
+        if (test == null) {
+            return false;
+        }
+        final int length = bytes.length;
+        if (test.length < length) {
+            return false;
+        }
+        for (int i = 0; i < length; i++) {
+            if (bytes[i] != test[i]) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -85,7 +85,7 @@ public class CanReadFileFilter extends AbstractFileFilter implements Serializabl
     }
 
     /**
-     * Checks to see if the file can be read.
+     * Tests to see if the file can be read.
      *
      * @param file the File to check.
      * @return {@code true} if the file can be read, otherwise {@code false}.
@@ -96,9 +96,10 @@ public class CanReadFileFilter extends AbstractFileFilter implements Serializabl
     }
 
     /**
-     * Checks to see if the file can be read.
-     * @param file the File to check.
+     * Tests to see if the file can be read.
      *
+     * @param file the File to check.
+     * @param attributes the path's basic attributes (may be null).
      * @return {@code true} if the file can be read, otherwise {@code false}.
      * @since 2.9.0
      */

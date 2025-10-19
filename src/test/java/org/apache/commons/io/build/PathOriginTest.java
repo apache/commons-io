@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,10 +16,14 @@
  */
 package org.apache.commons.io.build;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import org.apache.commons.io.build.AbstractOrigin.PathOrigin;
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * Tests {@link PathOrigin}.
@@ -28,7 +32,7 @@ import org.apache.commons.io.build.AbstractOrigin.PathOrigin;
  *
  * @see Path
  */
-public class PathOriginTest extends AbstractOriginTest<Path, PathOrigin> {
+class PathOriginTest extends AbstractOriginTest<Path, PathOrigin> {
 
     @Override
     protected PathOrigin newOriginRo() {
@@ -36,8 +40,14 @@ public class PathOriginTest extends AbstractOriginTest<Path, PathOrigin> {
     }
 
     @Override
-    protected PathOrigin newOriginRw() {
-        return new PathOrigin(Paths.get(FILE_NAME_RW));
+    protected PathOrigin newOriginRw() throws IOException {
+        return new PathOrigin(tempPath.resolve(FILE_NAME_RW));
     }
 
+    @Override
+    protected void resetOriginRw() throws IOException {
+        // Reset the file
+        final Path rwPath = tempPath.resolve(FILE_NAME_RW);
+        Files.write(rwPath, ArrayUtils.EMPTY_BYTE_ARRAY, StandardOpenOption.CREATE);
+    }
 }

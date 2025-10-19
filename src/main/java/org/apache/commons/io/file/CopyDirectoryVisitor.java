@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -45,7 +45,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
     private final Path targetDirectory;
 
     /**
-     * Constructs a new visitor that deletes files except for the files and directories explicitly given.
+     * Constructs an instance that copies all files.
      *
      * @param pathCounter How to count visits.
      * @param sourceDirectory The source directory
@@ -60,7 +60,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
     }
 
     /**
-     * Constructs a new visitor that deletes files except for the files and directories explicitly given.
+     * Constructs an instance that copies files matching the given file and directory filters.
      *
      * @param pathCounter How to count visits.
      * @param fileFilter How to filter file paths.
@@ -141,8 +141,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + Arrays.hashCode(copyOptions);
-        result = prime * result + Objects.hash(sourceDirectory, targetDirectory);
-        return result;
+        return prime * result + Objects.hash(sourceDirectory, targetDirectory);
     }
 
     @Override
@@ -157,22 +156,26 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
 
     /**
      * Relativizes against {@code sourceDirectory}, then resolves against {@code targetDirectory}.
-     *
-     * We have to call {@link Path#toString()} relative value because we cannot use paths belonging to different
-     * FileSystems in the Path methods, usually this leads to {@link ProviderMismatchException}.
+     * <p>
+     * We call {@link Path#toString()} on the relativized value because we cannot use paths from different FileSystems which throws
+     * {@link ProviderMismatchException}. Special care is taken to handle differences in file system separators.
+     * </p>
      *
      * @param directory the directory to relativize.
      * @return a new path, relativized against sourceDirectory, then resolved against targetDirectory.
      */
     private Path resolveRelativeAsString(final Path directory) {
-        return targetDirectory.resolve(sourceDirectory.relativize(directory).toString());
+        return PathUtils.resolve(targetDirectory, sourceDirectory.relativize(directory));
     }
 
     @Override
     public FileVisitResult visitFile(final Path sourceFile, final BasicFileAttributes attributes) throws IOException {
         final Path targetFile = resolveRelativeAsString(sourceFile);
-        copy(sourceFile, targetFile);
-        return super.visitFile(targetFile, attributes);
+        if (accept(sourceFile, attributes)) {
+            copy(sourceFile, targetFile);
+            updateFileCounters(targetFile, attributes);
+        }
+        return FileVisitResult.CONTINUE;
     }
 
 }

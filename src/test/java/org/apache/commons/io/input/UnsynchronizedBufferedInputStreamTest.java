@@ -6,7 +6,7 @@
  *  (the "License"); you may not use this file except in compliance with
  *  the License.  You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -42,7 +42,7 @@ import org.junit.jupiter.api.Test;
  * Provenance: Apache Harmony and modified.
  * </p>
  */
-public class UnsynchronizedBufferedInputStreamTest {
+class UnsynchronizedBufferedInputStreamTest {
 
     private static final int BUFFER_SIZE = 4096;
 
@@ -91,7 +91,7 @@ public class UnsynchronizedBufferedInputStreamTest {
      * @throws IOException Thrown on test failure.
      */
     @Test
-    public void test_available() throws IOException {
+    void test_available() throws IOException {
         assertEquals(DATA.length(), is.available(), "Returned incorrect number of available bytes");
 
         // Test that a closed stream throws an IOE for available()
@@ -110,7 +110,7 @@ public class UnsynchronizedBufferedInputStreamTest {
      * @throws IOException Thrown on test failure.
      */
     @Test
-    public void test_close() throws IOException {
+    void test_close() throws IOException {
         builder().setInputStream(isFile).get().close();
 
         try (InputStream in = new InputStream() {
@@ -158,7 +158,7 @@ public class UnsynchronizedBufferedInputStreamTest {
      * Tests {@link UnsynchronizedBufferedInputStream#Builder()}.
      */
     @Test
-    public void test_ConstructorLjava_io_InputStream() {
+    void test_ConstructorLjava_io_InputStream() {
         assertThrows(NullPointerException.class, () -> builder().setInputStream(null).get());
     }
 
@@ -166,7 +166,7 @@ public class UnsynchronizedBufferedInputStreamTest {
      * Tests {@link UnsynchronizedBufferedInputStream#Builder()}.
      */
     @Test
-    public void test_ConstructorLjava_io_InputStreamI() throws IOException {
+    void test_ConstructorLjava_io_InputStreamI() throws IOException {
         assertThrows(NullPointerException.class, () -> builder().setInputStream(null).setBufferSize(1).get());
 
         // Test for method UnsynchronizedBufferedInputStream(InputStream, int)
@@ -195,7 +195,7 @@ public class UnsynchronizedBufferedInputStreamTest {
      * @throws IOException Thrown on test failure.
      */
     @Test
-    public void test_markI() throws IOException {
+    void test_markI() throws IOException {
         final byte[] buf1 = new byte[100];
         final byte[] buf2 = new byte[100];
         is.skip(3000);
@@ -256,7 +256,7 @@ public class UnsynchronizedBufferedInputStreamTest {
      * Tests {@link UnsynchronizedBufferedInputStream#markSupported()}.
      */
     @Test
-    public void test_markSupported() {
+    void test_markSupported() {
         assertTrue(is.markSupported(), "markSupported returned incorrect value");
     }
 
@@ -266,7 +266,7 @@ public class UnsynchronizedBufferedInputStreamTest {
      * @throws IOException Thrown on test failure.
      */
     @Test
-    public void test_read() throws IOException {
+    void test_read() throws IOException {
         final InputStreamReader isr = new InputStreamReader(is);
         final int c = isr.read();
         assertEquals(DATA.charAt(0), c, "read returned incorrect char");
@@ -289,7 +289,7 @@ public class UnsynchronizedBufferedInputStreamTest {
      * @throws IOException Thrown on test failure.
      */
     @Test
-    public void test_read$BII() throws IOException {
+    void test_read$BII() throws IOException {
         final byte[] buf1 = new byte[100];
         is.skip(3000);
         is.mark(1000);
@@ -297,7 +297,8 @@ public class UnsynchronizedBufferedInputStreamTest {
         assertTrue(new String(buf1, 0, buf1.length).equals(DATA.substring(3000, 3100)), "Failed to read correct data");
 
         try (UnsynchronizedBufferedInputStream bufin = builder().setInputStream(new InputStream() {
-            int size = 2, pos = 0;
+            int size = 2;
+            int pos;
 
             byte[] contents = new byte[size];
 
@@ -340,7 +341,7 @@ public class UnsynchronizedBufferedInputStreamTest {
      * @throws IOException Thrown on test failure.
      */
     @Test
-    public void test_reset() throws IOException {
+    void test_reset() throws IOException {
         final byte[] buf1 = new byte[10];
         final byte[] buf2 = new byte[10];
         is.mark(2000);
@@ -364,7 +365,7 @@ public class UnsynchronizedBufferedInputStreamTest {
      * @throws IOException Thrown on test failure.
      */
     @Test
-    public void test_reset_scenario1() throws IOException {
+    void test_reset_scenario1() throws IOException {
         final byte[] input = "12345678900".getBytes();
         final UnsynchronizedBufferedInputStream bufin = builder().setInputStream(new ByteArrayInputStream(input)).get();
         bufin.read();
@@ -379,7 +380,7 @@ public class UnsynchronizedBufferedInputStreamTest {
      * @throws IOException Thrown on test failure.
      */
     @Test
-    public void test_reset_scenario2() throws IOException {
+    void test_reset_scenario2() throws IOException {
         final byte[] input = "12345678900".getBytes();
         final UnsynchronizedBufferedInputStream bufin = builder().setInputStream(new ByteArrayInputStream(input)).get();
         bufin.mark(5);
@@ -393,7 +394,7 @@ public class UnsynchronizedBufferedInputStreamTest {
      * @throws IOException Thrown on test failure.
      */
     @Test
-    public void test_skip_NullInputStream() throws IOException {
+    void test_skip_NullInputStream() throws IOException {
         assertThrows(NullPointerException.class, () -> builder().setInputStream(null).setBufferSize(5).get());
     }
 
@@ -403,7 +404,7 @@ public class UnsynchronizedBufferedInputStreamTest {
      * @throws IOException Thrown on test failure.
      */
     @Test
-    public void test_skipJ() throws IOException {
+    void test_skipJ() throws IOException {
         final byte[] buf1 = new byte[10];
         is.mark(2000);
         is.skip(1000);

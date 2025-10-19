@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -98,7 +98,7 @@ public class FilterCollectionWriter extends Writer {
     /**
      * Flushes the stream.
      *
-     * @throws IOException If an I/O error occurs
+     * @throws IOException If an I/O error occurs.
      */
     @SuppressWarnings("resource") // no allocation
     @Override
@@ -120,10 +120,10 @@ public class FilterCollectionWriter extends Writer {
     /**
      * Writes a portion of an array of characters.
      *
-     * @param cbuf Buffer of characters to be written
-     * @param off  Offset from which to start reading characters
-     * @param len  Number of characters to be written
-     * @throws IOException If an I/O error occurs
+     * @param cbuf Buffer of characters to be written.
+     * @param off  Offset from which to start reading characters.
+     * @param len  Number of characters to be written.
+     * @throws IOException If an I/O error occurs.
      */
     @SuppressWarnings("resource") // no allocation
     @Override
@@ -134,7 +134,7 @@ public class FilterCollectionWriter extends Writer {
     /**
      * Writes a single character.
      *
-     * @throws IOException If an I/O error occurs
+     * @throws IOException If an I/O error occurs.
      */
     @SuppressWarnings("resource") // no allocation
     @Override
@@ -151,10 +151,10 @@ public class FilterCollectionWriter extends Writer {
     /**
      * Writes a portion of a string.
      *
-     * @param str String to be written
-     * @param off Offset from which to start reading characters
-     * @param len Number of characters to be written
-     * @throws IOException If an I/O error occurs
+     * @param str String to be written.
+     * @param off Offset from which to start reading characters.
+     * @param len Number of characters to be written.
+     * @throws IOException If an I/O error occurs.
      */
     @SuppressWarnings("resource") // no allocation
     @Override

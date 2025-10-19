@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,6 +27,8 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -45,8 +47,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.SequenceInputStream;
 import java.io.StringReader;
 import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URI;
@@ -60,7 +64,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -76,15 +84,25 @@ import org.apache.commons.io.output.CountingOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.io.output.NullWriter;
 import org.apache.commons.io.output.StringBuilderWriter;
+import org.apache.commons.io.output.UnsynchronizedByteArrayOutputStream;
 import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.io.test.ThrowOnCloseReader;
+import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.ArgumentMatchers;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 /**
  * This is used to test {@link IOUtils} for correctness. The following checks are performed:
@@ -98,7 +116,7 @@ import org.junit.jupiter.api.io.TempDir;
  * Due to interdependencies in IOUtils and IOUtilsTest, one bug may cause multiple tests to fail.
  */
 @SuppressWarnings("deprecation") // deliberately testing deprecated code
-public class IOUtilsTest {
+class IOUtilsTest {
 
     private static final String UTF_8 = StandardCharsets.UTF_8.name();
 
@@ -118,6 +136,97 @@ public class IOUtilsTest {
     public static void beforeAll() {
         // Not required, just to exercise the method and make sure there are no adverse side-effect when recycling thread locals.
         IO.clear();
+    }
+
+    static Stream<Arguments> invalidRead_InputStream_Offset_ArgumentsProvider() {
+        final InputStream input = new ByteArrayInputStream(new byte[10]);
+        final byte[] b = new byte[10];
+        return Stream.of(
+            // input is null
+            Arguments.of(null, b, 0, 1, NullPointerException.class),
+            // b is null
+            Arguments.of(input, null, 0, 1, NullPointerException.class),
+            // off is negative
+            Arguments.of(input, b, -1, 1, IndexOutOfBoundsException.class),
+            // len is negative
+            Arguments.of(input, b, 0, -1, IndexOutOfBoundsException.class),
+            // off + len is too big
+            Arguments.of(input, b, 1, 10, IndexOutOfBoundsException.class),
+            // off + len is too big
+            Arguments.of(input, b, 10, 1, IndexOutOfBoundsException.class)
+        );
+    }
+
+    static Stream<Arguments> testCheckFromIndexSizeInvalidCases() {
+        return Stream.of(
+                Arguments.of(-1, 0, 42),
+                Arguments.of(0, -1, 42),
+                Arguments.of(0, 0, -1),
+                // off + len > arrayLength
+                Arguments.of(1, 42, 42),
+                Arguments.of(Integer.MAX_VALUE, 1, Integer.MAX_VALUE)
+        );
+    }
+
+    static Stream<Arguments> testCheckFromIndexSizeValidCases() {
+        return Stream.of(
+                // Valid cases
+                Arguments.of(0, 0, 42),
+                Arguments.of(0, 1, 42),
+                Arguments.of(0, 42, 42),
+                Arguments.of(41, 1, 42),
+                Arguments.of(42, 0, 42)
+        );
+    }
+
+    static Stream<Arguments> testCheckFromToIndexInvalidCases() {
+        return Stream.of(
+                Arguments.of(-1, 0, 42),
+                Arguments.of(0, -1, 42),
+                Arguments.of(0, 0, -1),
+                // from > to
+                Arguments.of(1, 0, 42),
+                // to > arrayLength
+                Arguments.of(0, 43, 42),
+                Arguments.of(1, 43, 42)
+        );
+    }
+
+    static Stream<Arguments> testCheckFromToIndexValidCases() {
+        return Stream.of(
+                // Valid cases
+                Arguments.of(0, 0, 42),
+                Arguments.of(0, 1, 42),
+                Arguments.of(0, 42, 42),
+                Arguments.of(41, 42, 42),
+                Arguments.of(42, 42, 42)
+        );
+    }
+
+    private static Stream<Arguments> testToByteArray_InputStream_Size_BufferSize_Succeeds() {
+        final byte[] data = new byte[1024];
+        for (int i = 0; i < 1024; i++) {
+            data[i] = (byte) i;
+        }
+        return Stream.of(
+                // Eager reading
+                Arguments.of(data.clone(), 512, 1024),
+                // Incremental reading
+                Arguments.of(data.clone(), 1024, 512),
+                // No reading
+                Arguments.of(data.clone(), 0, 128));
+    }
+
+    static Stream<Arguments> testToByteArray_InputStream_Size_BufferSize_Throws() {
+        return Stream.of(
+                // Negative size
+                Arguments.of(-1, 128, IllegalArgumentException.class),
+                // Invalid buffer size
+                Arguments.of(0, 0, IllegalArgumentException.class),
+                // Truncation with requested size < chunk size
+                Arguments.of(64, 128, EOFException.class),
+                // Truncation with requested size > chunk size
+                Arguments.of(Integer.MAX_VALUE, 128, EOFException.class));
     }
 
     @TempDir
@@ -168,7 +277,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testAsBufferedInputStream() {
+    void testAsBufferedInputStream() {
         final InputStream is = new InputStream() {
             @Override
             public int read() throws IOException {
@@ -181,7 +290,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testAsBufferedInputStreamWithBufferSize() {
+    void testAsBufferedInputStreamWithBufferSize() {
         final InputStream is = new InputStream() {
             @Override
             public int read() throws IOException {
@@ -195,7 +304,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testAsBufferedNull() {
+    void testAsBufferedNull() {
         final String npeExpectedMessage = "Expected NullPointerException";
         assertThrows(NullPointerException.class, () -> IOUtils.buffer((InputStream) null), npeExpectedMessage);
         assertThrows(NullPointerException.class, () -> IOUtils.buffer((OutputStream) null), npeExpectedMessage);
@@ -204,7 +313,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testAsBufferedOutputStream() {
+    void testAsBufferedOutputStream() {
         final OutputStream is = new OutputStream() {
             @Override
             public void write(final int b) throws IOException {
@@ -216,7 +325,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testAsBufferedOutputStreamWithBufferSize() {
+    void testAsBufferedOutputStreamWithBufferSize() {
         final OutputStream os = new OutputStream() {
             @Override
             public void write(final int b) throws IOException {
@@ -229,7 +338,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testAsBufferedReader() {
+    void testAsBufferedReader() {
         final Reader is = new Reader() {
             @Override
             public void close() throws IOException {
@@ -246,7 +355,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testAsBufferedReaderWithBufferSize() {
+    void testAsBufferedReaderWithBufferSize() {
         final Reader r = new Reader() {
             @Override
             public void close() throws IOException {
@@ -264,7 +373,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testAsBufferedWriter() {
+    void testAsBufferedWriter() {
         final Writer nullWriter = NullWriter.INSTANCE;
         final BufferedWriter bis = IOUtils.buffer(nullWriter);
         assertNotSame(nullWriter, bis);
@@ -272,7 +381,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testAsBufferedWriterWithBufferSize() {
+    void testAsBufferedWriterWithBufferSize() {
         final Writer nullWriter = NullWriter.INSTANCE;
         final BufferedWriter bw = IOUtils.buffer(nullWriter, 2024);
         assertNotSame(nullWriter, bw);
@@ -281,7 +390,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testAsWriterAppendable() throws IOException {
+    void testAsWriterAppendable() throws IOException {
         final Appendable a = new StringBuffer();
         try (Writer w = IOUtils.writer(a)) {
             assertNotSame(w, a);
@@ -291,12 +400,12 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testAsWriterNull() {
+    void testAsWriterNull() {
         assertThrows(NullPointerException.class, () -> IOUtils.writer(null));
     }
 
     @Test
-    public void testAsWriterStringBuilder() throws IOException {
+    void testAsWriterStringBuilder() throws IOException {
         final Appendable a = new StringBuilder();
         try (Writer w = IOUtils.writer(a)) {
             assertNotSame(w, a);
@@ -306,45 +415,112 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testByteArrayWithNegativeSize() {
+    void testByteArrayWithNegativeSize() {
         assertThrows(NegativeArraySizeException.class, () -> IOUtils.byteArray(-1));
     }
 
+    @ParameterizedTest
+    @MethodSource
+    void testCheckFromIndexSizeInvalidCases(final int off, final int len, final int arrayLength) {
+        final IndexOutOfBoundsException ex = assertThrows(IndexOutOfBoundsException.class, () -> IOUtils.checkFromIndexSize(off, len, arrayLength));
+        assertTrue(ex.getMessage().contains(String.valueOf(off)));
+        assertTrue(ex.getMessage().contains(String.valueOf(len)));
+        assertTrue(ex.getMessage().contains(String.valueOf(arrayLength)));
+        // Optional requirement: compare the exception message for Java 8 and Java 9+
+        if (SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_9)) {
+            final IndexOutOfBoundsException jreEx = assertThrows(IndexOutOfBoundsException.class, () -> {
+                try {
+                    Objects.class.getDeclaredMethod("checkFromIndexSize", int.class, int.class, int.class).invoke(null, off, len, arrayLength);
+                } catch (final InvocationTargetException ite) {
+                    throw ite.getTargetException();
+                }
+            });
+            assertEquals(jreEx.getMessage(), ex.getMessage());
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void testCheckFromIndexSizeValidCases(final int off, final int len, final int arrayLength) {
+        assertDoesNotThrow(() -> IOUtils.checkFromIndexSize(off, len, arrayLength));
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void testCheckFromToIndexInvalidCases(final int from, final int to, final int arrayLength) {
+        final IndexOutOfBoundsException ex = assertThrows(IndexOutOfBoundsException.class, () -> IOUtils.checkFromToIndex(from, to, arrayLength));
+        assertTrue(ex.getMessage().contains(String.valueOf(from)));
+        assertTrue(ex.getMessage().contains(String.valueOf(to)));
+        assertTrue(ex.getMessage().contains(String.valueOf(arrayLength)));
+        // Optional requirement: compare the exception message for Java 8 and Java 9+
+        if (SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_9)) {
+            final IndexOutOfBoundsException jreEx = assertThrows(IndexOutOfBoundsException.class, () -> {
+                try {
+                    Objects.class.getDeclaredMethod("checkFromToIndex", int.class, int.class, int.class).invoke(null, from, to, arrayLength);
+                } catch (final InvocationTargetException ite) {
+                    throw ite.getTargetException();
+                }
+            });
+            assertEquals(jreEx.getMessage(), ex.getMessage());
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void testCheckFromToIndexValidCases(final int from, final int to, final int arrayLength) {
+        assertDoesNotThrow(() -> IOUtils.checkFromToIndex(from, to, arrayLength));
+    }
+
     @Test
-    public void testClose() {
+    void testClose() {
         assertDoesNotThrow(() -> IOUtils.close((Closeable) null));
         assertDoesNotThrow(() -> IOUtils.close(new StringReader("s")));
         assertThrows(IOException.class, () -> IOUtils.close(new ThrowOnCloseReader(new StringReader("s"))));
     }
 
     @Test
-    public void testCloseConsumer() {
+    void testCloseConsumer() {
+        // null consumer
         final Closeable nullCloseable = null;
-        assertDoesNotThrow(() -> IOUtils.close(nullCloseable, null)); // null consumer
-        assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), null)); // null consumer
-        assertDoesNotThrow(() -> IOUtils.close(new ThrowOnCloseReader(new StringReader("s")), null)); // null consumer
-
-        final IOConsumer<IOException> nullConsumer = null; // null consumer doesn't throw
+        assertDoesNotThrow(() -> IOUtils.close(nullCloseable, null));
+        assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), null));
+        assertDoesNotThrow(() -> IOUtils.close(new ThrowOnCloseReader(new StringReader("s")), null));
+        // null consumer doesn't throw
+        final IOConsumer<IOException> nullConsumer = null;
         assertDoesNotThrow(() -> IOUtils.close(nullCloseable, nullConsumer));
         assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), nullConsumer));
         assertDoesNotThrow(() -> IOUtils.close(new ThrowOnCloseReader(new StringReader("s")), nullConsumer));
-
-        final IOConsumer<IOException> silentConsumer = IOConsumer.noop(); // noop consumer doesn't throw
+        // noop consumer doesn't throw
+        final IOConsumer<IOException> silentConsumer = IOConsumer.noop();
         assertDoesNotThrow(() -> IOUtils.close(nullCloseable, silentConsumer));
         assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), silentConsumer));
         assertDoesNotThrow(() -> IOUtils.close(new ThrowOnCloseReader(new StringReader("s")), silentConsumer));
-
-        final IOConsumer<IOException> noisyConsumer = i -> {
-            throw i;
-        }; // consumer passes on the throw
-        assertDoesNotThrow(() -> IOUtils.close(nullCloseable, noisyConsumer)); // no throw
-        assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), noisyConsumer)); // no throw
-        assertThrows(IOException.class,
-            () -> IOUtils.close(new ThrowOnCloseReader(new StringReader("s")), noisyConsumer)); // closeable throws
+        // consumer passes on the throw
+        final IOConsumer<IOException> noisyConsumer = ExceptionUtils::rethrow;
+        // no throw
+        assertDoesNotThrow(() -> IOUtils.close(nullCloseable, noisyConsumer));
+        // no throw
+        assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), noisyConsumer));
+        // closeable throws
+        assertThrows(IOException.class, () -> IOUtils.close(new ThrowOnCloseReader(new StringReader("s")), noisyConsumer));
+        // consumes other than IOException
+        final AtomicBoolean b = new AtomicBoolean();
+        final IOConsumer<IOException> consumer = e -> b.set(true);
+        // IOException subclass
+        assertDoesNotThrow(() -> IOUtils.close(new BrokenOutputStream((Throwable) new EOFException()), consumer));
+        assertTrue(b.get());
+        b.set(false);
+        // RuntimeException
+        assertDoesNotThrow(() -> IOUtils.close(new BrokenOutputStream(new RuntimeException()), consumer));
+        assertTrue(b.get());
+        b.set(false);
+        // RuntimeException subclass
+        assertDoesNotThrow(() -> IOUtils.close(new BrokenOutputStream(new UnsupportedOperationException()), consumer));
+        assertTrue(b.get());
     }
 
     @Test
-    public void testCloseMulti() {
+    void testCloseMulti() {
         final Closeable nullCloseable = null;
         final Closeable[] closeables = {null, null};
         assertDoesNotThrow(() -> IOUtils.close(nullCloseable, nullCloseable));
@@ -355,7 +531,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testCloseQuietly_AllCloseableIOException() {
+    void testCloseQuietly_AllCloseableIOException() {
         final Closeable closeable = BrokenInputStream.INSTANCE;
         assertDoesNotThrow(() -> IOUtils.closeQuietly(closeable, null, closeable));
         assertDoesNotThrow(() -> IOUtils.closeQuietly(Arrays.asList(closeable, null, closeable)));
@@ -364,18 +540,45 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testCloseQuietly_CloseableIOException() {
-        assertDoesNotThrow(() -> {
-            IOUtils.closeQuietly(BrokenInputStream.INSTANCE);
-        });
-        assertDoesNotThrow(() -> {
-            IOUtils.closeQuietly(BrokenOutputStream.INSTANCE);
-        });
+    void testCloseQuietly_CloseableException() {
+        // IOException
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(BrokenInputStream.INSTANCE));
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(BrokenOutputStream.INSTANCE));
+        // IOException subclass
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(new BrokenOutputStream((Throwable) new EOFException())));
+        // RuntimeException
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(new BrokenOutputStream(new RuntimeException())));
+        // RuntimeException subclass
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(new BrokenOutputStream(new UnsupportedOperationException())));
+    }
+
+    @Test
+    void testCloseQuietly_CloseableExceptionConsumer() {
+        final AtomicBoolean b = new AtomicBoolean();
+        final Consumer<Exception> consumer = e -> b.set(true);
+        // IOException
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(BrokenInputStream.INSTANCE, consumer));
+        assertTrue(b.get());
+        b.set(false);
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(BrokenOutputStream.INSTANCE, consumer));
+        assertTrue(b.get());
+        b.set(false);
+        // IOException subclass
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(new BrokenOutputStream((Throwable) new EOFException()), consumer));
+        assertTrue(b.get());
+        b.set(false);
+        // RuntimeException
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(new BrokenOutputStream(new RuntimeException()), consumer));
+        assertTrue(b.get());
+        b.set(false);
+        // RuntimeException subclass
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(new BrokenOutputStream(new UnsupportedOperationException()), consumer));
+        assertTrue(b.get());
     }
 
     @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test
-    public void testCloseQuietly_Selector() {
+    void testCloseQuietly_Selector() {
         Selector selector = null;
         try {
             selector = Selector.open();
@@ -387,7 +590,7 @@ public class IOUtilsTest {
 
     @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test
-    public void testCloseQuietly_SelectorIOException() {
+    void testCloseQuietly_SelectorIOException() {
         final Selector selector = new SelectorAdapter() {
             @Override
             public void close() throws IOException {
@@ -399,14 +602,14 @@ public class IOUtilsTest {
 
     @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test
-    public void testCloseQuietly_SelectorNull() {
+    void testCloseQuietly_SelectorNull() {
         final Selector selector = null;
         IOUtils.closeQuietly(selector);
     }
 
     @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test
-    public void testCloseQuietly_SelectorTwice() {
+    void testCloseQuietly_SelectorTwice() {
         Selector selector = null;
         try {
             selector = Selector.open();
@@ -418,13 +621,13 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testCloseQuietly_ServerSocket() {
+    void testCloseQuietly_ServerSocket() {
         assertDoesNotThrow(() -> IOUtils.closeQuietly((ServerSocket) null));
         assertDoesNotThrow(() -> IOUtils.closeQuietly(new ServerSocket()));
     }
 
     @Test
-    public void testCloseQuietly_ServerSocketIOException() {
+    void testCloseQuietly_ServerSocketIOException() {
         assertDoesNotThrow(() -> {
             IOUtils.closeQuietly(new ServerSocket() {
                 @Override
@@ -436,13 +639,13 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testCloseQuietly_Socket() {
+    void testCloseQuietly_Socket() {
         assertDoesNotThrow(() -> IOUtils.closeQuietly((Socket) null));
         assertDoesNotThrow(() -> IOUtils.closeQuietly(new Socket()));
     }
 
     @Test
-    public void testCloseQuietly_SocketIOException() {
+    void testCloseQuietly_SocketIOException() {
         assertDoesNotThrow(() -> {
             IOUtils.closeQuietly(new Socket() {
                 @Override
@@ -454,14 +657,14 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testCloseURLConnection() {
+    void testCloseURLConnection() {
         assertDoesNotThrow(() -> IOUtils.close((URLConnection) null));
         assertDoesNotThrow(() -> IOUtils.close(new URL("https://www.apache.org/").openConnection()));
         assertDoesNotThrow(() -> IOUtils.close(new URL("file:///").openConnection()));
     }
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals('/', IOUtils.DIR_SEPARATOR_UNIX);
         assertEquals('\\', IOUtils.DIR_SEPARATOR_WINDOWS);
         assertEquals("\n", IOUtils.LINE_SEPARATOR_UNIX);
@@ -479,7 +682,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testConsumeInputStream() throws Exception {
+    void testConsumeInputStream() throws Exception {
         final long size = (long) Integer.MAX_VALUE + (long) 1;
         final NullInputStream in = new NullInputStream(size);
         final OutputStream out = NullOutputStream.INSTANCE;
@@ -495,23 +698,20 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testConsumeReader() throws Exception {
+    void testConsumeReader() throws Exception {
         final long size = (long) Integer.MAX_VALUE + (long) 1;
         final Reader in = new NullReader(size);
         final Writer out = NullWriter.INSTANCE;
-
         // Test copy() method
         assertEquals(-1, IOUtils.copy(in, out));
-
         // reset the input
         in.close();
-
         // Test consume() method
         assertEquals(size, IOUtils.consume(in), "consume()");
     }
 
     @Test
-    public void testContentEquals_InputStream_InputStream() throws Exception {
+    void testContentEquals_InputStream_InputStream() throws Exception {
         {
             assertTrue(IOUtils.contentEquals((InputStream) null, null));
         }
@@ -558,16 +758,16 @@ public class IOUtilsTest {
             new ByteArrayInputStream(bytes2XDefaultA)));
         // FileInputStream a bit more than 16 k.
         try (
-            final FileInputStream input1 = new FileInputStream(
+            FileInputStream input1 = new FileInputStream(
                 "src/test/resources/org/apache/commons/io/abitmorethan16k.txt");
-            final FileInputStream input2 = new FileInputStream(
+            FileInputStream input2 = new FileInputStream(
                 "src/test/resources/org/apache/commons/io/abitmorethan16kcopy.txt")) {
             assertTrue(IOUtils.contentEquals(input1, input1));
         }
     }
 
     @Test
-    public void testContentEquals_Reader_Reader() throws Exception {
+    void testContentEquals_Reader_Reader() throws Exception {
         {
             assertTrue(IOUtils.contentEquals((Reader) null, null));
         }
@@ -597,7 +797,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testContentEqualsIgnoreEOL() throws Exception {
+    void testContentEqualsIgnoreEOL() throws Exception {
         {
             assertTrue(IOUtils.contentEqualsIgnoreEOL(null, null));
         }
@@ -645,19 +845,93 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testCopy_ByteArray_OutputStream() throws Exception {
+    void testContentEqualsSequenceInputStream() throws Exception {
+        // https://issues.apache.org/jira/browse/IO-866
+        // not equals
+        // @formatter:off
+        assertFalse(IOUtils.contentEquals(
+                new ByteArrayInputStream("ab".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("a".getBytes()),
+                    new ByteArrayInputStream("b-".getBytes()))));
+        assertFalse(IOUtils.contentEquals(
+                new ByteArrayInputStream("ab".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("a-".getBytes()),
+                    new ByteArrayInputStream("b".getBytes()))));
+        assertFalse(IOUtils.contentEquals(
+                new ByteArrayInputStream("ab-".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("a".getBytes()),
+                    new ByteArrayInputStream("b".getBytes()))));
+        assertFalse(IOUtils.contentEquals(
+                new ByteArrayInputStream("".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("a".getBytes()),
+                    new ByteArrayInputStream("b".getBytes()))));
+        assertFalse(IOUtils.contentEquals(
+                new ByteArrayInputStream("".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("".getBytes()),
+                    new ByteArrayInputStream("b".getBytes()))));
+        assertFalse(IOUtils.contentEquals(
+                new ByteArrayInputStream("ab".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("".getBytes()),
+                    new ByteArrayInputStream("".getBytes()))));
+        // equals
+        assertTrue(IOUtils.contentEquals(
+                new ByteArrayInputStream("".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("".getBytes()),
+                    new ByteArrayInputStream("".getBytes()))));
+        assertTrue(IOUtils.contentEquals(
+                new ByteArrayInputStream("ab".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("a".getBytes()),
+                    new ByteArrayInputStream("b".getBytes()))));
+        assertTrue(IOUtils.contentEquals(
+                new ByteArrayInputStream("ab".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("ab".getBytes()),
+                    new ByteArrayInputStream("".getBytes()))));
+        assertTrue(IOUtils.contentEquals(
+                new ByteArrayInputStream("ab".getBytes()),
+                new SequenceInputStream(
+                    new ByteArrayInputStream("".getBytes()),
+                    new ByteArrayInputStream("ab".getBytes()))));
+        // @formatter:on
+        final byte[] prefixLen32 = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2 };
+        final byte[] suffixLen2 = { 1, 2 };
+        final byte[] fileContents = "someTexts".getBytes(StandardCharsets.UTF_8);
+        Files.write(testFile.toPath(), fileContents);
+        final byte[] expected = new byte[prefixLen32.length + fileContents.length + suffixLen2.length];
+        System.arraycopy(prefixLen32, 0, expected, 0, prefixLen32.length);
+        System.arraycopy(fileContents, 0, expected, prefixLen32.length, fileContents.length);
+        System.arraycopy(suffixLen2, 0, expected, prefixLen32.length + fileContents.length, suffixLen2.length);
+        // @formatter:off
+        assertTrue(IOUtils.contentEquals(
+                new ByteArrayInputStream(expected),
+                new SequenceInputStream(
+                    Collections.enumeration(
+                        Arrays.asList(
+                            new ByteArrayInputStream(prefixLen32),
+                            new FileInputStream(testFile),
+                            new ByteArrayInputStream(suffixLen2))))));
+        // @formatter:on
+    }
+
+    @Test
+    void testCopy_ByteArray_OutputStream() throws Exception {
         final File destination = TestUtils.newFile(temporaryFolder, "copy8.txt");
         final byte[] in;
         try (InputStream fin = Files.newInputStream(testFilePath)) {
             // Create our byte[]. Rely on testInputStreamToByteArray() to make sure this is valid.
             in = IOUtils.toByteArray(fin);
         }
-
         try (OutputStream fout = Files.newOutputStream(destination.toPath())) {
             CopyUtils.copy(in, fout);
-
             fout.flush();
-
             TestUtils.checkFile(destination, testFile);
             TestUtils.checkWrite(fout);
         }
@@ -665,14 +939,13 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testCopy_ByteArray_Writer() throws Exception {
+    void testCopy_ByteArray_Writer() throws Exception {
         final File destination = TestUtils.newFile(temporaryFolder, "copy7.txt");
         final byte[] in;
         try (InputStream fin = Files.newInputStream(testFilePath)) {
             // Create our byte[]. Rely on testInputStreamToByteArray() to make sure this is valid.
             in = IOUtils.toByteArray(fin);
         }
-
         try (Writer fout = Files.newBufferedWriter(destination.toPath())) {
             CopyUtils.copy(in, fout);
             fout.flush();
@@ -683,18 +956,16 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testCopy_String_Writer() throws Exception {
+    void testCopy_String_Writer() throws Exception {
         final File destination = TestUtils.newFile(temporaryFolder, "copy6.txt");
         final String str;
         try (Reader fin = Files.newBufferedReader(testFilePath)) {
             // Create our String. Rely on testReaderToString() to make sure this is valid.
             str = IOUtils.toString(fin);
         }
-
         try (Writer fout = Files.newBufferedWriter(destination.toPath())) {
             CopyUtils.copy(str, fout);
             fout.flush();
-
             TestUtils.checkFile(destination, testFile);
             TestUtils.checkWrite(fout);
         }
@@ -702,26 +973,23 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testCopyLarge_CharExtraLength() throws IOException {
+    void testCopyLarge_CharExtraLength() throws IOException {
         CharArrayReader is = null;
         CharArrayWriter os = null;
         try {
             // Create streams
             is = new CharArrayReader(carr);
             os = new CharArrayWriter();
-
             // Test our copy method
             // for extra length, it reads till EOF
             assertEquals(200, IOUtils.copyLarge(is, os, 0, 2000));
             final char[] oarr = os.toCharArray();
-
             // check that output length is correct
             assertEquals(200, oarr.length);
             // check that output data corresponds to input data
             assertEquals(1, oarr[1]);
             assertEquals(79, oarr[79]);
             assertEquals((char) -1, oarr[80]);
-
         } finally {
             IOUtils.closeQuietly(is);
             IOUtils.closeQuietly(os);
@@ -729,25 +997,22 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testCopyLarge_CharFullLength() throws IOException {
+    void testCopyLarge_CharFullLength() throws IOException {
         CharArrayReader is = null;
         CharArrayWriter os = null;
         try {
             // Create streams
             is = new CharArrayReader(carr);
             os = new CharArrayWriter();
-
             // Test our copy method
             assertEquals(200, IOUtils.copyLarge(is, os, 0, -1));
             final char[] oarr = os.toCharArray();
-
             // check that output length is correct
             assertEquals(200, oarr.length);
             // check that output data corresponds to input data
             assertEquals(1, oarr[1]);
             assertEquals(79, oarr[79]);
             assertEquals((char) -1, oarr[80]);
-
         } finally {
             IOUtils.closeQuietly(is);
             IOUtils.closeQuietly(os);
@@ -755,25 +1020,22 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testCopyLarge_CharNoSkip() throws IOException {
+    void testCopyLarge_CharNoSkip() throws IOException {
         CharArrayReader is = null;
         CharArrayWriter os = null;
         try {
             // Create streams
             is = new CharArrayReader(carr);
             os = new CharArrayWriter();
-
             // Test our copy method
             assertEquals(100, IOUtils.copyLarge(is, os, 0, 100));
             final char[] oarr = os.toCharArray();
-
             // check that output length is correct
             assertEquals(100, oarr.length);
             // check that output data corresponds to input data
             assertEquals(1, oarr[1]);
             assertEquals(79, oarr[79]);
             assertEquals((char) -1, oarr[80]);
-
         } finally {
             IOUtils.closeQuietly(is);
             IOUtils.closeQuietly(os);
@@ -781,25 +1043,22 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testCopyLarge_CharSkip() throws IOException {
+    void testCopyLarge_CharSkip() throws IOException {
         CharArrayReader is = null;
         CharArrayWriter os = null;
         try {
             // Create streams
             is = new CharArrayReader(carr);
             os = new CharArrayWriter();
-
             // Test our copy method
             assertEquals(100, IOUtils.copyLarge(is, os, 10, 100));
             final char[] oarr = os.toCharArray();
-
             // check that output length is correct
             assertEquals(100, oarr.length);
             // check that output data corresponds to input data
             assertEquals(11, oarr[1]);
             assertEquals(79, oarr[69]);
             assertEquals((char) -1, oarr[70]);
-
         } finally {
             IOUtils.closeQuietly(is);
             IOUtils.closeQuietly(os);
@@ -807,23 +1066,20 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testCopyLarge_CharSkipInvalid() {
+    void testCopyLarge_CharSkipInvalid() {
         try (CharArrayReader is = new CharArrayReader(carr); CharArrayWriter os = new CharArrayWriter()) {
             assertThrows(EOFException.class, () -> IOUtils.copyLarge(is, os, 1000, 100));
         }
     }
 
     @Test
-    public void testCopyLarge_ExtraLength() throws IOException {
-        try (ByteArrayInputStream is = new ByteArrayInputStream(iarr);
-            ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+    void testCopyLarge_ExtraLength() throws IOException {
+        try (ByteArrayInputStream is = new ByteArrayInputStream(iarr); ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             // Create streams
-
             // Test our copy method
             // for extra length, it reads till EOF
             assertEquals(200, IOUtils.copyLarge(is, os, 0, 2000));
             final byte[] oarr = os.toByteArray();
-
             // check that output length is correct
             assertEquals(200, oarr.length);
             // check that output data corresponds to input data
@@ -834,13 +1090,11 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testCopyLarge_FullLength() throws IOException {
-        try (ByteArrayInputStream is = new ByteArrayInputStream(iarr);
-            ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+    void testCopyLarge_FullLength() throws IOException {
+        try (ByteArrayInputStream is = new ByteArrayInputStream(iarr); ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             // Test our copy method
             assertEquals(200, IOUtils.copyLarge(is, os, 0, -1));
             final byte[] oarr = os.toByteArray();
-
             // check that output length is correct
             assertEquals(200, oarr.length);
             // check that output data corresponds to input data
@@ -851,13 +1105,11 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testCopyLarge_NoSkip() throws IOException {
-        try (ByteArrayInputStream is = new ByteArrayInputStream(iarr);
-            ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+    void testCopyLarge_NoSkip() throws IOException {
+        try (ByteArrayInputStream is = new ByteArrayInputStream(iarr); ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             // Test our copy method
             assertEquals(100, IOUtils.copyLarge(is, os, 0, 100));
             final byte[] oarr = os.toByteArray();
-
             // check that output length is correct
             assertEquals(100, oarr.length);
             // check that output data corresponds to input data
@@ -868,13 +1120,11 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testCopyLarge_Skip() throws IOException {
-        try (ByteArrayInputStream is = new ByteArrayInputStream(iarr);
-            ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+    void testCopyLarge_Skip() throws IOException {
+        try (ByteArrayInputStream is = new ByteArrayInputStream(iarr); ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             // Test our copy method
             assertEquals(100, IOUtils.copyLarge(is, os, 10, 100));
             final byte[] oarr = os.toByteArray();
-
             // check that output length is correct
             assertEquals(100, oarr.length);
             // check that output data corresponds to input data
@@ -885,7 +1135,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testCopyLarge_SkipInvalid() throws IOException {
+    void testCopyLarge_SkipInvalid() throws IOException {
         try (ByteArrayInputStream is = new ByteArrayInputStream(iarr);
             ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             // Test our copy method
@@ -894,33 +1144,37 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testCopyLarge_SkipWithInvalidOffset() throws IOException {
+    void testCopyLarge_SkipWithInvalidOffset() throws IOException {
         ByteArrayInputStream is = null;
         ByteArrayOutputStream os = null;
         try {
             // Create streams
             is = new ByteArrayInputStream(iarr);
             os = new ByteArrayOutputStream();
-
             // Test our copy method
             assertEquals(100, IOUtils.copyLarge(is, os, -10, 100));
             final byte[] oarr = os.toByteArray();
-
             // check that output length is correct
             assertEquals(100, oarr.length);
             // check that output data corresponds to input data
             assertEquals(1, oarr[1]);
             assertEquals(79, oarr[79]);
             assertEquals(-1, oarr[80]);
-
         } finally {
             IOUtils.closeQuietly(is);
             IOUtils.closeQuietly(os);
         }
     }
 
+    @ParameterizedTest
+    @MethodSource("invalidRead_InputStream_Offset_ArgumentsProvider")
+    void testRead_InputStream_Offset_ArgumentsValidation(final InputStream input, final byte[] b, final int off, final int len,
+            final Class<? extends Throwable> expected) {
+        assertThrows(expected, () -> IOUtils.read(input, b, off, len));
+    }
+
     @Test
-    public void testRead_ReadableByteChannel() throws Exception {
+    void testRead_ReadableByteChannel() throws Exception {
         final ByteBuffer buffer = ByteBuffer.allocate(FILE_SIZE);
         final FileInputStream fileInputStream = new FileInputStream(testFile);
         final FileChannel input = fileInputStream.getChannel();
@@ -930,40 +1184,37 @@ public class IOUtilsTest {
             assertEquals(0, buffer.remaining());
             assertEquals(0, input.read(buffer));
             buffer.clear();
-            assertThrows(EOFException.class, () -> IOUtils.readFully(input, buffer), "Should have failed with EOFException");
+            assertThrows(EOFException.class, () -> IOUtils.readFully(input, buffer));
         } finally {
             IOUtils.closeQuietly(input, fileInputStream);
         }
     }
 
     @Test
-    public void testReadFully_InputStream__ReturnByteArray() throws Exception {
+    void testReadFully_InputStream__ReturnByteArray() throws Exception {
         final byte[] bytes = "abcd1234".getBytes(StandardCharsets.UTF_8);
         final ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
-
         final byte[] result = IOUtils.readFully(stream, bytes.length);
-
         IOUtils.closeQuietly(stream);
-
         assertEqualContent(result, bytes);
     }
 
     @Test
-    public void testReadFully_InputStream_ByteArray() throws Exception {
+    void testReadFully_InputStream_ByteArray() throws Exception {
         final int size = 1027;
         final byte[] buffer = new byte[size];
         final InputStream input = new ByteArrayInputStream(new byte[size]);
 
-        assertThrows(IllegalArgumentException.class, () -> IOUtils.readFully(input, buffer, 0, -1), "Should have failed with IllegalArgumentException");
+        assertThrows(IndexOutOfBoundsException.class, () -> IOUtils.readFully(input, buffer, 0, -1));
 
         IOUtils.readFully(input, buffer, 0, 0);
         IOUtils.readFully(input, buffer, 0, size - 1);
-        assertThrows(EOFException.class, () -> IOUtils.readFully(input, buffer, 0, 2), "Should have failed with EOFException");
+        assertThrows(EOFException.class, () -> IOUtils.readFully(input, buffer, 0, 2));
         IOUtils.closeQuietly(input);
     }
 
     @Test
-    public void testReadFully_InputStream_Offset() throws Exception {
+    void testReadFully_InputStream_Offset() throws Exception {
         final InputStream stream = CharSequenceInputStream.builder().setCharSequence("abcd1234").setCharset(StandardCharsets.UTF_8).get();
         final byte[] buffer = "wx00000000".getBytes(StandardCharsets.UTF_8);
         IOUtils.readFully(stream, buffer, 2, 8);
@@ -971,8 +1222,15 @@ public class IOUtilsTest {
         IOUtils.closeQuietly(stream);
     }
 
+    @ParameterizedTest
+    @MethodSource("invalidRead_InputStream_Offset_ArgumentsProvider")
+    void testReadFully_InputStream_Offset_ArgumentsValidation(final InputStream input, final byte[] b, final int off, final int len,
+            final Class<? extends Throwable> expected) {
+        assertThrows(expected, () -> IOUtils.read(input, b, off, len));
+    }
+
     @Test
-    public void testReadFully_ReadableByteChannel() throws Exception {
+    void testReadFully_ReadableByteChannel() throws Exception {
         final ByteBuffer buffer = ByteBuffer.allocate(FILE_SIZE);
         final FileInputStream fileInputStream = new FileInputStream(testFile);
         final FileChannel input = fileInputStream.getChannel();
@@ -987,27 +1245,27 @@ public class IOUtilsTest {
             assertEquals(0, input.read(buffer));
             IOUtils.readFully(input, buffer);
             buffer.clear();
-            assertThrows(EOFException.class, () -> IOUtils.readFully(input, buffer), "Should have failed with EOFxception");
+            assertThrows(EOFException.class, () -> IOUtils.readFully(input, buffer));
         } finally {
             IOUtils.closeQuietly(input, fileInputStream);
         }
     }
 
     @Test
-    public void testReadFully_Reader() throws Exception {
+    void testReadFully_Reader() throws Exception {
         final int size = 1027;
         final char[] buffer = new char[size];
         final Reader input = new CharArrayReader(new char[size]);
 
         IOUtils.readFully(input, buffer, 0, 0);
         IOUtils.readFully(input, buffer, 0, size - 3);
-        assertThrows(IllegalArgumentException.class, () -> IOUtils.readFully(input, buffer, 0, -1), "Should have failed with IllegalArgumentException");
-        assertThrows(EOFException.class, () -> IOUtils.readFully(input, buffer, 0, 5), "Should have failed with EOFException");
+        assertThrows(IndexOutOfBoundsException.class, () -> IOUtils.readFully(input, buffer, 0, -1));
+        assertThrows(EOFException.class, () -> IOUtils.readFully(input, buffer, 0, 5));
         IOUtils.closeQuietly(input);
     }
 
     @Test
-    public void testReadFully_Reader_Offset() throws Exception {
+    void testReadFully_Reader_Offset() throws Exception {
         final Reader reader = new StringReader("abcd1234");
         final char[] buffer = "wx00000000".toCharArray();
         IOUtils.readFully(reader, buffer, 2, 8);
@@ -1016,12 +1274,12 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testReadLines_CharSequence() throws IOException {
+    void testReadLines_CharSequence() throws IOException {
         final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         CharSequence csq = null;
         try {
-            final String[] data = {"hello", "/u1234", "", "this is", "some text"};
-            TestUtils.createLineBasedFile(file, data);
+            final String[] data = {"hello", "\u1234", "", "this is", "some text"};
+            TestUtils.createLineFileUtf8(file, data);
             csq = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
             final List<String> lines = IOUtils.readLines(csq);
             assertEquals(Arrays.asList(data), lines);
@@ -1031,12 +1289,12 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testReadLines_CharSequenceAsStringBuilder() throws IOException {
+    void testReadLines_CharSequenceAsStringBuilder() throws IOException {
         final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         StringBuilder csq = null;
         try {
-            final String[] data = {"hello", "/u1234", "", "this is", "some text"};
-            TestUtils.createLineBasedFile(file, data);
+            final String[] data = {"hello", "\u1234", "", "this is", "some text"};
+            TestUtils.createLineFileUtf8(file, data);
             csq = new StringBuilder(new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8));
             final List<String> lines = IOUtils.readLines(csq);
             assertEquals(Arrays.asList(data), lines);
@@ -1046,12 +1304,12 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testReadLines_InputStream() throws Exception {
+    void testReadLines_InputStream() throws Exception {
         final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         InputStream in = null;
         try {
             final String[] data = {"hello", "world", "", "this is", "some text"};
-            TestUtils.createLineBasedFile(file, data);
+            TestUtils.createLineFileUtf8(file, data);
 
             in = Files.newInputStream(file.toPath());
             final List<String> lines = IOUtils.readLines(in);
@@ -1064,13 +1322,12 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testReadLines_InputStream_String() throws Exception {
+    void testReadLines_InputStream_String() throws Exception {
         final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         InputStream in = null;
         try {
-            final String[] data = {"hello", "/u1234", "", "this is", "some text"};
-            TestUtils.createLineBasedFile(file, data);
-
+            final String[] data = { "\u4f60\u597d", "hello", "\u1234", "", "this is", "some text" };
+            TestUtils.createLineFileUtf8(file, data);
             in = Files.newInputStream(file.toPath());
             final List<String> lines = IOUtils.readLines(in, UTF_8);
             assertEquals(Arrays.asList(data), lines);
@@ -1082,12 +1339,13 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testReadLines_Reader() throws Exception {
+    void testReadLines_Reader() throws Exception {
         final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         Reader in = null;
         try {
-            final String[] data = {"hello", "/u1234", "", "this is", "some text"};
-            TestUtils.createLineBasedFile(file, data);
+            // Don't use non-ASCII in this test fixture because this test uses the default platform encoding.
+            final String[] data = {"hello", "1234", "", "this is", "some text"};
+            TestUtils.createLineFileUtf8(file, data);
             in = new InputStreamReader(Files.newInputStream(file.toPath()));
             final List<String> lines = IOUtils.readLines(in);
             assertEquals(Arrays.asList(data), lines);
@@ -1099,7 +1357,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testResourceToByteArray_ExistingResourceAtRootPackage() throws Exception {
+    void testResourceToByteArray_ExistingResourceAtRootPackage() throws Exception {
         final long fileSize = TestResources.getFile("test-file-utf8.bin").length();
         final byte[] bytes = IOUtils.resourceToByteArray("/org/apache/commons/io/test-file-utf8.bin");
         assertNotNull(bytes);
@@ -1107,7 +1365,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testResourceToByteArray_ExistingResourceAtRootPackage_WithClassLoader() throws Exception {
+    void testResourceToByteArray_ExistingResourceAtRootPackage_WithClassLoader() throws Exception {
         final long fileSize = TestResources.getFile("test-file-utf8.bin").length();
         final byte[] bytes = IOUtils.resourceToByteArray("org/apache/commons/io/test-file-utf8.bin",
             ClassLoader.getSystemClassLoader());
@@ -1116,7 +1374,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testResourceToByteArray_ExistingResourceAtSubPackage() throws Exception {
+    void testResourceToByteArray_ExistingResourceAtSubPackage() throws Exception {
         final long fileSize = TestResources.getFile("FileUtilsTestDataCR.dat").length();
         final byte[] bytes = IOUtils.resourceToByteArray("/org/apache/commons/io/FileUtilsTestDataCR.dat");
         assertNotNull(bytes);
@@ -1124,7 +1382,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testResourceToByteArray_ExistingResourceAtSubPackage_WithClassLoader() throws Exception {
+    void testResourceToByteArray_ExistingResourceAtSubPackage_WithClassLoader() throws Exception {
         final long fileSize = TestResources.getFile("FileUtilsTestDataCR.dat").length();
         final byte[] bytes = IOUtils.resourceToByteArray("org/apache/commons/io/FileUtilsTestDataCR.dat",
             ClassLoader.getSystemClassLoader());
@@ -1133,51 +1391,31 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testResourceToByteArray_NonExistingResource() {
+    void testResourceToByteArray_NonExistingResource() {
         assertThrows(IOException.class, () -> IOUtils.resourceToByteArray("/non-existing-file.bin"));
     }
 
     @Test
-    public void testResourceToByteArray_NonExistingResource_WithClassLoader() {
+    void testResourceToByteArray_NonExistingResource_WithClassLoader() {
         assertThrows(IOException.class,
             () -> IOUtils.resourceToByteArray("non-existing-file.bin", ClassLoader.getSystemClassLoader()));
     }
 
     @Test
-    public void testResourceToByteArray_Null() {
+    void testResourceToByteArray_Null() {
         assertThrows(NullPointerException.class, () -> IOUtils.resourceToByteArray(null));
     }
 
     @Test
-    public void testResourceToByteArray_Null_WithClassLoader() {
+    void testResourceToByteArray_Null_WithClassLoader() {
         assertThrows(NullPointerException.class,
             () -> IOUtils.resourceToByteArray(null, ClassLoader.getSystemClassLoader()));
     }
 
     @Test
-    public void testResourceToString_ExistingResourceAtRootPackage() throws Exception {
+    void testResourceToString_ExistingResourceAtRootPackage() throws Exception {
         final long fileSize = TestResources.getFile("test-file-simple-utf8.bin").length();
         final String content = IOUtils.resourceToString("/org/apache/commons/io/test-file-simple-utf8.bin",
-            StandardCharsets.UTF_8);
-
-        assertNotNull(content);
-        assertEquals(fileSize, content.getBytes().length);
-    }
-
-    @Test
-    public void testResourceToString_ExistingResourceAtRootPackage_WithClassLoader() throws Exception {
-        final long fileSize = TestResources.getFile("test-file-simple-utf8.bin").length();
-        final String content = IOUtils.resourceToString("org/apache/commons/io/test-file-simple-utf8.bin",
-            StandardCharsets.UTF_8, ClassLoader.getSystemClassLoader());
-
-        assertNotNull(content);
-        assertEquals(fileSize, content.getBytes().length);
-    }
-
-    @Test
-    public void testResourceToString_ExistingResourceAtSubPackage() throws Exception {
-        final long fileSize = TestResources.getFile("FileUtilsTestDataCR.dat").length();
-        final String content = IOUtils.resourceToString("/org/apache/commons/io/FileUtilsTestDataCR.dat",
             StandardCharsets.UTF_8);
 
         assertNotNull(content);
@@ -1187,7 +1425,27 @@ public class IOUtilsTest {
     // Tests from IO-305
 
     @Test
-    public void testResourceToString_ExistingResourceAtSubPackage_WithClassLoader() throws Exception {
+    void testResourceToString_ExistingResourceAtRootPackage_WithClassLoader() throws Exception {
+        final long fileSize = TestResources.getFile("test-file-simple-utf8.bin").length();
+        final String content = IOUtils.resourceToString("org/apache/commons/io/test-file-simple-utf8.bin",
+            StandardCharsets.UTF_8, ClassLoader.getSystemClassLoader());
+
+        assertNotNull(content);
+        assertEquals(fileSize, content.getBytes().length);
+    }
+
+    @Test
+    void testResourceToString_ExistingResourceAtSubPackage() throws Exception {
+        final long fileSize = TestResources.getFile("FileUtilsTestDataCR.dat").length();
+        final String content = IOUtils.resourceToString("/org/apache/commons/io/FileUtilsTestDataCR.dat",
+            StandardCharsets.UTF_8);
+
+        assertNotNull(content);
+        assertEquals(fileSize, content.getBytes().length);
+    }
+
+    @Test
+    void testResourceToString_ExistingResourceAtSubPackage_WithClassLoader() throws Exception {
         final long fileSize = TestResources.getFile("FileUtilsTestDataCR.dat").length();
         final String content = IOUtils.resourceToString("org/apache/commons/io/FileUtilsTestDataCR.dat",
             StandardCharsets.UTF_8, ClassLoader.getSystemClassLoader());
@@ -1197,49 +1455,49 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testResourceToString_NonExistingResource() {
+    void testResourceToString_NonExistingResource() {
         assertThrows(IOException.class,
             () -> IOUtils.resourceToString("/non-existing-file.bin", StandardCharsets.UTF_8));
     }
 
     @Test
-    public void testResourceToString_NonExistingResource_WithClassLoader() {
+    void testResourceToString_NonExistingResource_WithClassLoader() {
         assertThrows(IOException.class, () -> IOUtils.resourceToString("non-existing-file.bin", StandardCharsets.UTF_8,
             ClassLoader.getSystemClassLoader()));
     }
 
     @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test
-    public void testResourceToString_NullCharset() throws Exception {
+    void testResourceToString_NullCharset() throws Exception {
         IOUtils.resourceToString("/org/apache/commons/io//test-file-utf8.bin", null);
     }
 
     @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test
-    public void testResourceToString_NullCharset_WithClassLoader() throws Exception {
+    void testResourceToString_NullCharset_WithClassLoader() throws Exception {
         IOUtils.resourceToString("org/apache/commons/io/test-file-utf8.bin", null, ClassLoader.getSystemClassLoader());
     }
 
     @Test
-    public void testResourceToString_NullResource() {
+    void testResourceToString_NullResource() {
         assertThrows(NullPointerException.class, () -> IOUtils.resourceToString(null, StandardCharsets.UTF_8));
     }
 
     @Test
-    public void testResourceToString_NullResource_WithClassLoader() {
+    void testResourceToString_NullResource_WithClassLoader() {
         assertThrows(NullPointerException.class,
             () -> IOUtils.resourceToString(null, StandardCharsets.UTF_8, ClassLoader.getSystemClassLoader()));
     }
 
     @Test
-    public void testResourceToURL_ExistingResourceAtRootPackage() throws Exception {
+    void testResourceToURL_ExistingResourceAtRootPackage() throws Exception {
         final URL url = IOUtils.resourceToURL("/org/apache/commons/io/test-file-utf8.bin");
         assertNotNull(url);
         assertTrue(url.getFile().endsWith("/test-file-utf8.bin"));
     }
 
     @Test
-    public void testResourceToURL_ExistingResourceAtRootPackage_WithClassLoader() throws Exception {
+    void testResourceToURL_ExistingResourceAtRootPackage_WithClassLoader() throws Exception {
         final URL url = IOUtils.resourceToURL("org/apache/commons/io/test-file-utf8.bin",
             ClassLoader.getSystemClassLoader());
         assertNotNull(url);
@@ -1247,14 +1505,14 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testResourceToURL_ExistingResourceAtSubPackage() throws Exception {
+    void testResourceToURL_ExistingResourceAtSubPackage() throws Exception {
         final URL url = IOUtils.resourceToURL("/org/apache/commons/io/FileUtilsTestDataCR.dat");
         assertNotNull(url);
         assertTrue(url.getFile().endsWith("/org/apache/commons/io/FileUtilsTestDataCR.dat"));
     }
 
     @Test
-    public void testResourceToURL_ExistingResourceAtSubPackage_WithClassLoader() throws Exception {
+    void testResourceToURL_ExistingResourceAtSubPackage_WithClassLoader() throws Exception {
         final URL url = IOUtils.resourceToURL("org/apache/commons/io/FileUtilsTestDataCR.dat",
             ClassLoader.getSystemClassLoader());
 
@@ -1263,27 +1521,27 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testResourceToURL_NonExistingResource() {
+    void testResourceToURL_NonExistingResource() {
         assertThrows(IOException.class, () -> IOUtils.resourceToURL("/non-existing-file.bin"));
     }
 
     @Test
-    public void testResourceToURL_NonExistingResource_WithClassLoader() {
+    void testResourceToURL_NonExistingResource_WithClassLoader() {
         assertThrows(IOException.class,
             () -> IOUtils.resourceToURL("non-existing-file.bin", ClassLoader.getSystemClassLoader()));
     }
 
     @Test
-    public void testResourceToURL_Null() {
+    void testResourceToURL_Null() {
         assertThrows(NullPointerException.class, () -> IOUtils.resourceToURL(null));
     }
 
     @Test
-    public void testResourceToURL_Null_WithClassLoader() {
+    void testResourceToURL_Null_WithClassLoader() {
         assertThrows(NullPointerException.class, () -> IOUtils.resourceToURL(null, ClassLoader.getSystemClassLoader()));
     }
 
-    public void testSingleEOL(final String s1, final String s2, final boolean ifEquals) {
+    void testSingleEOL(final String s1, final String s2, final boolean ifEquals) {
         assertEquals(ifEquals, IOUtils.contentEqualsIgnoreEOL(
                 new CharArrayReader(s1.toCharArray()),
                 new CharArrayReader(s2.toCharArray())
@@ -1303,7 +1561,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testSkip_FileReader() throws Exception {
+    void testSkip_FileReader() throws Exception {
         try (Reader in = Files.newBufferedReader(testFilePath)) {
             assertEquals(FILE_SIZE - 10, IOUtils.skip(in, FILE_SIZE - 10));
             assertEquals(10, IOUtils.skip(in, 20));
@@ -1312,7 +1570,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testSkip_InputStream() throws Exception {
+    void testSkip_InputStream() throws Exception {
         try (InputStream in = Files.newInputStream(testFilePath)) {
             assertEquals(FILE_SIZE - 10, IOUtils.skip(in, FILE_SIZE - 10));
             assertEquals(10, IOUtils.skip(in, 20));
@@ -1321,7 +1579,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testSkip_ReadableByteChannel() throws Exception {
+    void testSkip_ReadableByteChannel() throws Exception {
         final FileInputStream fileInputStream = new FileInputStream(testFile);
         final FileChannel fileChannel = fileInputStream.getChannel();
         try {
@@ -1334,92 +1592,86 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testSkipFully_InputStream() throws Exception {
+    void testSkipFully_InputStream() throws Exception {
         final int size = 1027;
-
-        try (final InputStream input = new ByteArrayInputStream(new byte[size])) {
-            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1), "Should have failed with IllegalArgumentException");
-
+        try (InputStream input = new ByteArrayInputStream(new byte[size])) {
+            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1));
             IOUtils.skipFully(input, 0);
             IOUtils.skipFully(input, size - 1);
-            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 2), "Should have failed with IOException");
+            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 2));
         }
     }
 
     @Test
-    public void testSkipFully_InputStream_Buffer_New_bytes() throws Exception {
+    void testSkipFully_InputStream_Buffer_New_bytes() throws Exception {
         final int size = 1027;
         final Supplier<byte[]> bas = () -> new byte[size];
-        try (final InputStream input = new ByteArrayInputStream(new byte[size])) {
-            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1, bas), "Should have failed with IllegalArgumentException");
-
+        try (InputStream input = new ByteArrayInputStream(new byte[size])) {
+            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1, bas));
             IOUtils.skipFully(input, 0, bas);
             IOUtils.skipFully(input, size - 1, bas);
-            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 2, bas), "Should have failed with IOException");
+            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 2, bas));
         }
     }
 
     @Test
-    public void testSkipFully_InputStream_Buffer_Reuse_bytes() throws Exception {
+    void testSkipFully_InputStream_Buffer_Reuse_bytes() throws Exception {
         final int size = 1027;
         final byte[] ba = new byte[size];
         final Supplier<byte[]> bas = () -> ba;
-        try (final InputStream input = new ByteArrayInputStream(new byte[size])) {
-            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1, bas), "Should have failed with IllegalArgumentException");
-
+        try (InputStream input = new ByteArrayInputStream(new byte[size])) {
+            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1, bas));
             IOUtils.skipFully(input, 0, bas);
             IOUtils.skipFully(input, size - 1, bas);
-            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 2, bas), "Should have failed with IOException");
+            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 2, bas));
         }
     }
 
     @Test
-    public void testSkipFully_InputStream_Buffer_Reuse_ThreadLocal() throws Exception {
+    void testSkipFully_InputStream_Buffer_Reuse_ThreadLocal() throws Exception {
         final int size = 1027;
         final ThreadLocal<byte[]> tl = ThreadLocal.withInitial(() -> new byte[size]);
-        try (final InputStream input = new ByteArrayInputStream(new byte[size])) {
-            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1, tl::get), "Should have failed with IllegalArgumentException");
-
+        try (InputStream input = new ByteArrayInputStream(new byte[size])) {
+            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1, tl::get));
             IOUtils.skipFully(input, 0, tl::get);
             IOUtils.skipFully(input, size - 1, tl::get);
-            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 2, tl::get), "Should have failed with IOException");
+            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 2, tl::get));
         }
     }
 
     @Test
-    public void testSkipFully_ReadableByteChannel() throws Exception {
+    void testSkipFully_ReadableByteChannel() throws Exception {
         final FileInputStream fileInputStream = new FileInputStream(testFile);
         final FileChannel fileChannel = fileInputStream.getChannel();
         try {
-            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(fileChannel, -1), "Should have failed with IllegalArgumentException");
+            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(fileChannel, -1));
             IOUtils.skipFully(fileChannel, 0);
             IOUtils.skipFully(fileChannel, FILE_SIZE - 1);
-            assertThrows(IOException.class, () -> IOUtils.skipFully(fileChannel, 2), "Should have failed with IOException");
+            assertThrows(IOException.class, () -> IOUtils.skipFully(fileChannel, 2));
         } finally {
             IOUtils.closeQuietly(fileChannel, fileInputStream);
         }
     }
 
     @Test
-    public void testSkipFully_Reader() throws Exception {
+    void testSkipFully_Reader() throws Exception {
         final int size = 1027;
-        try (final Reader input = new CharArrayReader(new char[size])) {
+        try (Reader input = new CharArrayReader(new char[size])) {
             IOUtils.skipFully(input, 0);
             IOUtils.skipFully(input, size - 3);
-            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1), "Should have failed with IllegalArgumentException");
-            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 5), "Should have failed with IOException");
+            assertThrows(IllegalArgumentException.class, () -> IOUtils.skipFully(input, -1));
+            assertThrows(IOException.class, () -> IOUtils.skipFully(input, 5));
         }
     }
 
     @Test
-    public void testStringToOutputStream() throws Exception {
+    void testStringToOutputStream() throws Exception {
         final File destination = TestUtils.newFile(temporaryFolder, "copy5.txt");
         final String str;
         try (Reader fin = Files.newBufferedReader(testFilePath)) {
             // Create our String. Rely on testReaderToString() to make sure this is valid.
             str = IOUtils.toString(fin);
         }
-
         try (OutputStream fout = Files.newOutputStream(destination.toPath())) {
             CopyUtils.copy(str, fout);
             // Note: this method *does* flush. It is equivalent to:
@@ -1428,7 +1680,6 @@ public class IOUtilsTest {
             // _out.flush();
             // out = fout;
             // note: we don't flush here; this IOUtils method does it for us
-
             TestUtils.checkFile(destination, testFile);
             TestUtils.checkWrite(fout);
         }
@@ -1436,7 +1687,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testToBufferedInputStream_InputStream() throws Exception {
+    void testToBufferedInputStream_InputStream() throws Exception {
         try (InputStream fin = Files.newInputStream(testFilePath)) {
             final InputStream in = IOUtils.toBufferedInputStream(fin);
             final byte[] out = IOUtils.toByteArray(in);
@@ -1448,7 +1699,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testToBufferedInputStreamWithBufferSize_InputStream() throws Exception {
+    void testToBufferedInputStreamWithBufferSize_InputStream() throws Exception {
         try (InputStream fin = Files.newInputStream(testFilePath)) {
             final InputStream in = IOUtils.toBufferedInputStream(fin, 2048);
             final byte[] out = IOUtils.toByteArray(in);
@@ -1460,7 +1711,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testToByteArray_InputStream() throws Exception {
+    void testToByteArray_InputStream() throws Exception {
         try (InputStream fin = Files.newInputStream(testFilePath)) {
             final byte[] out = IOUtils.toByteArray(fin);
             assertNotNull(out);
@@ -1472,23 +1723,21 @@ public class IOUtilsTest {
 
     @Test
     @Disabled("Disable by default as it uses too much memory and can cause builds to fail.")
-    public void testToByteArray_InputStream_LongerThanIntegerMaxValue() throws Exception {
+    void testToByteArray_InputStream_LongerThanIntegerMaxValue() throws Exception {
         final CircularInputStream cin = new CircularInputStream(IOUtils.byteArray(), Integer.MAX_VALUE + 1L);
         assertThrows(IllegalArgumentException.class, () -> IOUtils.toByteArray(cin));
     }
 
     @Test
-    public void testToByteArray_InputStream_NegativeSize() throws Exception {
+    void testToByteArray_InputStream_NegativeSize() throws Exception {
         try (InputStream fin = Files.newInputStream(testFilePath)) {
-            final IllegalArgumentException exc = assertThrows(IllegalArgumentException.class, () -> IOUtils.toByteArray(fin, -1),
-                    "Should have failed with IllegalArgumentException");
-            assertTrue(exc.getMessage().startsWith("Size must be equal or greater than zero"),
-                    "Exception message does not start with \"Size must be equal or greater than zero\"");
+            final IllegalArgumentException exc = assertThrows(IllegalArgumentException.class, () -> IOUtils.toByteArray(fin, -1));
+            assertTrue(exc.getMessage().startsWith("size < 0"), exc.getMessage());
         }
     }
 
     @Test
-    public void testToByteArray_InputStream_Size() throws Exception {
+    void testToByteArray_InputStream_Size() throws Exception {
         try (InputStream fin = Files.newInputStream(testFilePath)) {
             final byte[] out = IOUtils.toByteArray(fin, testFile.length());
             assertNotNull(out);
@@ -1498,27 +1747,49 @@ public class IOUtilsTest {
         }
     }
 
-    @Test
-    public void testToByteArray_InputStream_SizeIllegal() throws Exception {
-        try (InputStream fin = Files.newInputStream(testFilePath)) {
-            final IOException exc = assertThrows(IOException.class, () -> IOUtils.toByteArray(fin, testFile.length() + 1),
-                    "Should have failed with IOException");
-            assertTrue(exc.getMessage().startsWith("Unexpected read size"), "Exception message does not start with \"Unexpected read size\"");
+    @ParameterizedTest
+    @MethodSource
+    void testToByteArray_InputStream_Size_BufferSize_Succeeds(final byte[] data, final int size, final int bufferSize) throws IOException {
+        final ByteArrayInputStream input = new ByteArrayInputStream(data);
+        final byte[] expected = Arrays.copyOf(data, size);
+        final byte[] actual = IOUtils.toByteArray(input, size, bufferSize);
+        assertArrayEquals(expected, actual);
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void testToByteArray_InputStream_Size_BufferSize_Throws(
+            final int size, final int bufferSize, final Class<? extends Exception> exceptionClass) throws IOException {
+        try (InputStream input = new NullInputStream(0)) {
+            assertThrows(exceptionClass, () -> IOUtils.toByteArray(input, size, bufferSize));
         }
     }
 
     @Test
-    public void testToByteArray_InputStream_SizeLong() throws Exception {
-        try (InputStream fin = Files.newInputStream(testFilePath)) {
-            final IllegalArgumentException exc = assertThrows(IllegalArgumentException.class, () -> IOUtils.toByteArray(fin, (long) Integer.MAX_VALUE + 1),
-                    "Should have failed with IllegalArgumentException");
-            assertTrue(exc.getMessage().startsWith("Size cannot be greater than Integer max value"),
-                    "Exception message does not start with \"Size cannot be greater than Integer max value\"");
+    void testToByteArray_InputStream_Size_Truncated() throws Exception {
+        try (InputStream in = new NullInputStream(0)) {
+            assertThrows(EOFException.class, () -> IOUtils.toByteArray(in, 1));
         }
     }
 
     @Test
-    public void testToByteArray_InputStream_SizeOne() throws Exception {
+    void testToByteArray_InputStream_SizeIllegal() throws Exception {
+        try (InputStream fin = Files.newInputStream(testFilePath)) {
+            final IOException exc = assertThrows(IOException.class, () -> IOUtils.toByteArray(fin, testFile.length() + 1));
+            assertTrue(exc.getMessage().startsWith("Expected read size"), exc.getMessage());
+        }
+    }
+
+    @Test
+    void testToByteArray_InputStream_SizeLong() throws Exception {
+        try (InputStream fin = Files.newInputStream(testFilePath)) {
+            final IllegalArgumentException exc = assertThrows(IllegalArgumentException.class, () -> IOUtils.toByteArray(fin, (long) Integer.MAX_VALUE + 1));
+            assertTrue(exc.getMessage().startsWith("size > Integer.MAX_VALUE"), exc.getMessage());
+        }
+    }
+
+    @Test
+    void testToByteArray_InputStream_SizeOne() throws Exception {
         try (InputStream fin = Files.newInputStream(testFilePath)) {
             final byte[] out = IOUtils.toByteArray(fin, 1);
             assertNotNull(out, "Out cannot be null");
@@ -1527,8 +1798,8 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testToByteArray_InputStream_SizeZero() throws Exception {
-        try (InputStream fin =Files.newInputStream(testFilePath)) {
+    void testToByteArray_InputStream_SizeZero() throws Exception {
+        try (InputStream fin = Files.newInputStream(testFilePath)) {
             final byte[] out = IOUtils.toByteArray(fin, 0);
             assertNotNull(out, "Out cannot be null");
             assertEquals(0, out.length, "Out length must be 0");
@@ -1536,7 +1807,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testToByteArray_Reader() throws IOException {
+    void testToByteArray_Reader() throws IOException {
         final String charsetName = UTF_8;
         final byte[] expected = charsetName.getBytes(charsetName);
         byte[] actual = IOUtils.toByteArray(new InputStreamReader(new ByteArrayInputStream(expected)));
@@ -1546,32 +1817,48 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testToByteArray_String() throws Exception {
+    void testToByteArray_String() throws Exception {
         try (Reader fin = Files.newBufferedReader(testFilePath)) {
             // Create our String. Rely on testReaderToString() to make sure this is valid.
             final String str = IOUtils.toString(fin);
-
             final byte[] out = IOUtils.toByteArray(str);
             assertEqualContent(str.getBytes(), out);
         }
     }
 
     @Test
-    public void testToByteArray_URI() throws Exception {
+    void testToByteArray_ThrowsIOExceptionOnHugeStream() throws IOException {
+        try (MockedStatic<IOUtils> utils = Mockito.mockStatic(IOUtils.class, Mockito.CALLS_REAL_METHODS);
+                UnsynchronizedByteArrayOutputStream mockOutputStream = mock(UnsynchronizedByteArrayOutputStream.class)) {
+            // Prepare the mocks
+            utils.when(() -> IOUtils.copyToOutputStream(ArgumentMatchers.any(InputStream.class), ArgumentMatchers.anyLong(), ArgumentMatchers.anyInt()))
+                    .thenReturn(mockOutputStream);
+            when(mockOutputStream.size()).thenReturn(IOUtils.SOFT_MAX_ARRAY_LENGTH + 1);
+            // Test and check
+            try (InputStream mockInputStream = mock(InputStream.class)) {
+                final IOException exception = assertThrows(IOException.class, () -> IOUtils.toByteArray(mockInputStream));
+                assertTrue(exception.getMessage().contains(String.format("%,d", IOUtils.SOFT_MAX_ARRAY_LENGTH)),
+                        "Exception message does not contain the maximum length");
+            }
+        }
+    }
+
+    @Test
+    void testToByteArray_URI() throws Exception {
         final URI url = testFile.toURI();
         final byte[] actual = IOUtils.toByteArray(url);
         assertEquals(FILE_SIZE, actual.length);
     }
 
     @Test
-    public void testToByteArray_URL() throws Exception {
+    void testToByteArray_URL() throws Exception {
         final URL url = testFile.toURI().toURL();
         final byte[] actual = IOUtils.toByteArray(url);
         assertEquals(FILE_SIZE, actual.length);
     }
 
     @Test
-    public void testToByteArray_URLConnection() throws Exception {
+    void testToByteArray_URLConnection() throws Exception {
         final byte[] actual;
         try (CloseableURLConnection urlConnection = CloseableURLConnection.open(testFile.toURI())) {
             actual = IOUtils.toByteArray(urlConnection);
@@ -1580,7 +1867,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testToCharArray_InputStream() throws Exception {
+    void testToCharArray_InputStream() throws Exception {
         try (InputStream fin = Files.newInputStream(testFilePath)) {
             final char[] out = IOUtils.toCharArray(fin);
             assertNotNull(out);
@@ -1591,7 +1878,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testToCharArray_InputStream_CharsetName() throws Exception {
+    void testToCharArray_InputStream_CharsetName() throws Exception {
         try (InputStream fin = Files.newInputStream(testFilePath)) {
             final char[] out = IOUtils.toCharArray(fin, UTF_8);
             assertNotNull(out);
@@ -1602,7 +1889,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testToCharArray_Reader() throws Exception {
+    void testToCharArray_Reader() throws Exception {
         try (Reader fr = Files.newBufferedReader(testFilePath)) {
             final char[] out = IOUtils.toCharArray(fr);
             assertNotNull(out);
@@ -1619,7 +1906,7 @@ public class IOUtilsTest {
      * @throws Exception on error
      */
     @Test
-    public void testToInputStream_CharSequence() throws Exception {
+    void testToInputStream_CharSequence() throws Exception {
         final CharSequence csq = new StringBuilder("Abc123Xyz!");
         InputStream inStream = IOUtils.toInputStream(csq); // deliberately testing deprecated method
         byte[] bytes = IOUtils.toByteArray(inStream);
@@ -1640,7 +1927,7 @@ public class IOUtilsTest {
      * @throws Exception on error
      */
     @Test
-    public void testToInputStream_String() throws Exception {
+    void testToInputStream_String() throws Exception {
         final String str = "Abc123Xyz!";
         InputStream inStream = IOUtils.toInputStream(str);
         byte[] bytes = IOUtils.toByteArray(inStream);
@@ -1654,7 +1941,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testToString_ByteArray() throws Exception {
+    void testToString_ByteArray() throws Exception {
         try (InputStream fin = Files.newInputStream(testFilePath)) {
             final byte[] in = IOUtils.toByteArray(fin);
             // Create our byte[]. Rely on testInputStreamToByteArray() to make sure this is valid.
@@ -1664,7 +1951,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testToString_InputStream() throws Exception {
+    void testToString_InputStream() throws Exception {
         try (InputStream fin = Files.newInputStream(testFilePath)) {
             final String out = IOUtils.toString(fin);
             assertNotNull(out);
@@ -1674,7 +1961,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testToString_InputStreamSupplier() throws Exception {
+    void testToString_InputStreamSupplier() throws Exception {
         final String out = IOUtils.toString(() -> Files.newInputStream(testFilePath), Charset.defaultCharset());
         assertNotNull(out);
         assertEquals(FILE_SIZE, out.length(), "Wrong output size");
@@ -1684,7 +1971,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testToString_Reader() throws Exception {
+    void testToString_Reader() throws Exception {
         try (Reader fin = Files.newBufferedReader(testFilePath)) {
             final String out = IOUtils.toString(fin);
             assertNotNull(out);
@@ -1693,7 +1980,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testToString_URI() throws Exception {
+    void testToString_URI() throws Exception {
         final URI url = testFile.toURI();
         final String out = IOUtils.toString(url);
         assertNotNull(out);
@@ -1708,17 +1995,17 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testToString_URI_CharsetName() throws Exception {
+    void testToString_URI_CharsetName() throws Exception {
         testToString_URI(StandardCharsets.US_ASCII.name());
     }
 
     @Test
-    public void testToString_URI_CharsetNameNull() throws Exception {
+    void testToString_URI_CharsetNameNull() throws Exception {
         testToString_URI(null);
     }
 
     @Test
-    public void testToString_URL() throws Exception {
+    void testToString_URL() throws Exception {
         final URL url = testFile.toURI().toURL();
         final String out = IOUtils.toString(url);
         assertNotNull(out);
@@ -1733,12 +2020,12 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testToString_URL_CharsetName() throws Exception {
+    void testToString_URL_CharsetName() throws Exception {
         testToString_URL(StandardCharsets.US_ASCII.name());
     }
 
     @Test
-    public void testToString_URL_CharsetNameNull() throws Exception {
+    void testToString_URL_CharsetNameNull() throws Exception {
         testToString_URL(null);
     }
 
@@ -1753,7 +2040,7 @@ public class IOUtilsTest {
      * </pre>
      */
     @Test
-    public void testWriteBigString() throws IOException {
+    void testWriteBigString() throws IOException {
         // 3_000_000 is a size that we can allocate for the test string with Java 8 on the command line as:
         // mvn clean test -Dtest=IOUtilsTest -DtestBigString=3000000
         // 6_000_000 failed with the above
@@ -1776,7 +2063,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testWriteLines() throws IOException {
+    void testWriteLines() throws IOException {
         final String[] data = {"The", "quick"};
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         IOUtils.writeLines(Arrays.asList(data), "\n", out, StandardCharsets.UTF_16.name());
@@ -1785,7 +2072,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void testWriteLittleString() throws IOException {
+    void testWriteLittleString() throws IOException {
         final String data = "\uD83D";
         // White-box test to check that not closing the internal channel is not a problem.
         for (int i = 0; i < 1_000_000; i++) {
@@ -1795,5 +2082,4 @@ public class IOUtilsTest {
             }
         }
     }
-
 }

@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.File;
 import java.util.Objects;
 import java.util.stream.Stream;
+
+import org.apache.commons.io.file.PathUtils;
 
 public abstract class AbstractIOFileFilterTest {
 
@@ -125,10 +127,9 @@ public abstract class AbstractIOFileFilterTest {
         }
     }
 
-    public static File determineWorkingDirectoryPath(final String key, final String defaultPath) {
+    public static File getWorkingDirectoryPath(final String key, final String defaultPath) {
         // Look for a system property to specify the working directory
-        final String workingPathName = System.getProperty(key, defaultPath);
-        return new File(workingPathName);
+        return PathUtils.getPath(key, defaultPath).toFile();
     }
 
     public static void resetFalseFilters(final TesterFalseFileFilter[] filters) {

@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,24 +29,24 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link CharsetDecoders}.
  */
-public class CharsetDecodersTest {
+class CharsetDecodersTest {
 
     @Test
-    public void testToCharsetDecoders_default() {
+    void testToCharsetDecoders_default() {
         final CharsetDecoder charsetEncoder = CharsetDecoders.toCharsetDecoder(Charset.defaultCharset().newDecoder());
         assertNotNull(charsetEncoder);
         assertEquals(Charset.defaultCharset(), charsetEncoder.charset());
     }
 
     @Test
-    public void testToCharsetDecoders_ISO_8859_1() {
+    void testToCharsetDecoders_ISO_8859_1() {
         final CharsetDecoder charsetEncoder = CharsetDecoders.toCharsetDecoder(StandardCharsets.ISO_8859_1.newDecoder());
         assertNotNull(charsetEncoder);
         assertEquals(StandardCharsets.ISO_8859_1, charsetEncoder.charset());
     }
 
     @Test
-    public void testToCharsetDecoders_null() {
+    void testToCharsetDecoders_null() {
         final CharsetDecoder charsetEncoder = CharsetDecoders.toCharsetDecoder(null);
         assertNotNull(charsetEncoder);
         assertEquals(Charset.defaultCharset(), charsetEncoder.charset());

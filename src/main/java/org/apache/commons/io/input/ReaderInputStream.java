@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,7 +30,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
-import java.util.Objects;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
@@ -71,7 +70,7 @@ import org.apache.commons.io.charset.CharsetEncoders;
  * <p>
  * Note that while there are use cases where there is no alternative to using this class, very often the need to use this class is an indication of a flaw in
  * the design of the code. This class is typically used in situations where an existing API only accepts an {@link InputStream}, but where the most natural way
- * to produce the data is as a character stream, i.e. by providing a {@link Reader} instance. An example of a situation where this problem may appear is when
+ * to produce the data is as a character stream, by providing a {@link Reader} instance. An example of a situation where this problem may appear is when
  * implementing the {@code javax.activation.DataSource} interface from the Java Activation Framework.
  * </p>
  * <p>
@@ -110,32 +109,40 @@ public class ReaderInputStream extends AbstractInputStream {
         private CharsetEncoder charsetEncoder = newEncoder(getCharset());
 
         /**
+         * Constructs a new builder of {@link ReaderInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link ReaderInputStream}.
          *
          * <p>
-         * You must set input that supports {@link #getReader()}, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link #getReader()}, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
-         * <li>{@link #getReader()}</li>
+         * <li>{@link #getReader()} gets the target aspect.</li>
          * <li>{@link #getBufferSize()}</li>
          * <li>{@link #getCharset()}</li>
          * <li>{@link CharsetEncoder}</li>
          * </ul>
          *
          * @return a new instance.
-         * @throws UnsupportedOperationException if the origin cannot provide a Reader.
-         * @throws IllegalStateException if the {@code origin} is {@code null}.
+         * @throws UnsupportedOperationException if the origin cannot provide a {@link Reader}.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws IOException                   if an I/O error occurs converting to a {@link Reader} using {@link #getReader()}.
          * @see #getReader()
          * @see CharsetEncoder
          * @see #getBufferSize()
+         * @see #getUnchecked()
          */
-        @SuppressWarnings("resource")
         @Override
         public ReaderInputStream get() throws IOException {
-            return new ReaderInputStream(getReader(), charsetEncoder, getBufferSize());
+            return new ReaderInputStream(this);
         }
 
         CharsetEncoder getCharsetEncoder() {
@@ -212,9 +219,14 @@ public class ReaderInputStream extends AbstractInputStream {
 
     private boolean endOfInput;
 
+    @SuppressWarnings("resource") // caller closes.
+    private ReaderInputStream(final Builder builder) throws IOException {
+        this(builder.getReader(), builder.charsetEncoder, builder.getBufferSize());
+    }
+
     /**
-     * Constructs a new {@link ReaderInputStream} that uses the default character encoding with a default input buffer size of
-     * {@value IOUtils#DEFAULT_BUFFER_SIZE} characters.
+     * Constructs a new {@link ReaderInputStream} that uses the virtual machine's {@linkplain Charset#defaultCharset() default charset} with a default input
+     * buffer size of {@value IOUtils#DEFAULT_BUFFER_SIZE} characters.
      *
      * @param reader the target {@link Reader}
      * @deprecated Use {@link ReaderInputStream#builder()} instead
@@ -423,8 +435,9 @@ public class ReaderInputStream extends AbstractInputStream {
     /**
      * Reads the specified number of bytes into an array.
      *
-     * @param b the byte array to read into
+     * @param b the byte array to read into, must not be {@code null}
      * @return the number of bytes read or {@code -1} if the end of the stream has been reached
+     * @throws NullPointerException if the byte array is {@code null}.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -439,18 +452,17 @@ public class ReaderInputStream extends AbstractInputStream {
      * @param off   the offset to start reading bytes into
      * @param len   the number of bytes to read
      * @return the number of bytes read or {@code -1} if the end of the stream has been reached
+     * @throws NullPointerException      if the byte array is {@code null}.
+     * @throws IndexOutOfBoundsException if {@code off} or {@code len} are negative, or if {@code off + len} is greater than {@code array.length}.
      * @throws IOException if an I/O error occurs.
      */
     @Override
     public int read(final byte[] array, int off, int len) throws IOException {
-        Objects.requireNonNull(array, "array");
-        if (len < 0 || off < 0 || off + len > array.length) {
-            throw new IndexOutOfBoundsException("Array size=" + array.length + ", offset=" + off + ", length=" + len);
-        }
-        int read = 0;
+        IOUtils.checkFromIndexSize(array, off, len);
         if (len == 0) {
             return 0; // Always return 0 if len == 0
         }
+        int read = 0;
         while (len > 0) {
             if (encoderOut.hasRemaining()) { // Data from the last read not fully copied
                 final int c = Math.min(encoderOut.remaining(), len);

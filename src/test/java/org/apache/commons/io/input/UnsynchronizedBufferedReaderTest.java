@@ -6,7 +6,7 @@
  *  (the "License"); you may not use this file except in compliance with
  *  the License.  You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -43,7 +43,7 @@ import org.junit.jupiter.api.Test;
  * Provenance: Apache Harmony {@code BufferedReaderTest}, copied, and modified.
  * </p>
  */
-public class UnsynchronizedBufferedReaderTest {
+class UnsynchronizedBufferedReaderTest {
 
     private UnsynchronizedBufferedReader br;
 
@@ -134,7 +134,7 @@ public class UnsynchronizedBufferedReaderTest {
      * @throws IOException test failure.
      */
     @Test
-    public void testClose() throws IOException {
+    void testClose() throws IOException {
         // Test for method void UnsynchronizedBufferedReader.close()
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
         br.close();
@@ -142,8 +142,8 @@ public class UnsynchronizedBufferedReaderTest {
     }
 
     @Test
-    public void testEmptyInput() throws Exception {
-        try (final UnsynchronizedBufferedReader br = new UnsynchronizedBufferedReader(new StringReader(""))) {
+    void testEmptyInput() throws Exception {
+        try (UnsynchronizedBufferedReader br = new UnsynchronizedBufferedReader(new StringReader(""))) {
             assertEquals(EOF, br.read());
             assertEquals(EOF, br.peek());
             assertNull(br.readLine());
@@ -157,7 +157,7 @@ public class UnsynchronizedBufferedReaderTest {
      * @throws IOException test failure.
      */
     @Test
-    public void testMark() throws IOException {
+    void testMark() throws IOException {
         // Test for method void UnsynchronizedBufferedReader.mark(int)
         char[] buf = null;
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
@@ -226,42 +226,10 @@ public class UnsynchronizedBufferedReaderTest {
      * Tests {@link UnsynchronizedBufferedReader#markSupported()}.
      */
     @Test
-    public void testMarkSupported() {
+    void testMarkSupported() {
         // Test for method boolean UnsynchronizedBufferedReader.markSupported()
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
         assertTrue(br.markSupported());
-    }
-
-    /**
-     * Tests {@link UnsynchronizedBufferedReader#read()}.
-     *
-     * @throws IOException test failure.
-     */
-    @Test
-    public void testRead() throws IOException {
-        // Test for method int UnsynchronizedBufferedReader.read()
-        br = new UnsynchronizedBufferedReader(new StringReader(testString));
-        final int r = br.read();
-        assertEquals(testString.charAt(0), r);
-        br = new UnsynchronizedBufferedReader(new StringReader(new String(new char[] { '\u8765' })));
-        assertEquals(br.read(), '\u8765');
-        //
-        final char[] chars = new char[256];
-        for (int i = 0; i < 256; i++) {
-            chars[i] = (char) i;
-        }
-        try (Reader in = new UnsynchronizedBufferedReader(new StringReader(new String(chars)), 12)) {
-            assertEquals(0, in.read()); // Fill the buffer
-            final char[] buf = new char[14];
-            in.read(buf, 0, 14); // Read greater than the buffer
-            assertTrue(new String(buf).equals(new String(chars, 1, 14)));
-            assertEquals(15, in.read()); // Check next byte
-        }
-        //
-        // regression test for HARMONY-841
-        try (Reader reader = new UnsynchronizedBufferedReader(new CharArrayReader(new char[5], 1, 0), 2)) {
-            assertEquals(reader.read(), -1);
-        }
     }
 
     /**
@@ -270,7 +238,7 @@ public class UnsynchronizedBufferedReaderTest {
      * @throws IOException test failure.
      */
     @Test
-    public void testPeek() throws IOException {
+    void testPeek() throws IOException {
         // Test for method int UnsynchronizedBufferedReader.read()
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
         final int p = br.peek();
@@ -308,7 +276,7 @@ public class UnsynchronizedBufferedReaderTest {
      * @throws IOException test failure.
      */
     @Test
-    public void testPeekArray() throws IOException {
+    void testPeekArray() throws IOException {
         // Test for method int UnsynchronizedBufferedReader.read()
         final char[] peekBuf1 = new char[1];
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
@@ -348,42 +316,113 @@ public class UnsynchronizedBufferedReaderTest {
     }
 
     /**
+     * Tests {@link UnsynchronizedBufferedReader#read()}.
+     *
+     * @throws IOException test failure.
+     */
+    @Test
+    void testRead() throws IOException {
+        // Test for method int UnsynchronizedBufferedReader.read()
+        br = new UnsynchronizedBufferedReader(new StringReader(testString));
+        final int r = br.read();
+        assertEquals(testString.charAt(0), r);
+        br = new UnsynchronizedBufferedReader(new StringReader(new String(new char[] { '\u8765' })));
+        assertEquals(br.read(), '\u8765');
+        //
+        final char[] chars = new char[256];
+        for (int i = 0; i < 256; i++) {
+            chars[i] = (char) i;
+        }
+        try (Reader in = new UnsynchronizedBufferedReader(new StringReader(new String(chars)), 12)) {
+            assertEquals(0, in.read()); // Fill the buffer
+            final char[] buf = new char[14];
+            in.read(buf, 0, 14); // Read greater than the buffer
+            assertTrue(new String(buf).equals(new String(chars, 1, 14)));
+            assertEquals(15, in.read()); // Check next byte
+        }
+        //
+        // regression test for HARMONY-841
+        try (Reader reader = new UnsynchronizedBufferedReader(new CharArrayReader(new char[5], 1, 0), 2)) {
+            assertEquals(reader.read(), -1);
+        }
+    }
+
+    @Test
+    void testReadArray_HARMONY_54() throws IOException {
+        // Regression for HARMONY-54
+        final char[] ch = {};
+        @SuppressWarnings("resource")
+        final UnsynchronizedBufferedReader reader = new UnsynchronizedBufferedReader(new CharArrayReader(ch));
+        // Check exception thrown when the reader is open.
+        assertThrows(NullPointerException.class, () -> reader.read(null, 1, 0));
+
+        // Now check IOException is thrown in preference to
+        // NullPointerexception when the reader is closed.
+        reader.close();
+        assertThrows(IOException.class, () -> reader.read(null, 1, 0));
+
+        // And check that the IOException is thrown before
+        // ArrayIndexOutOfBoundException
+        assertThrows(IOException.class, () -> reader.read(ch, 0, 42));
+    }
+
+    @Test
+    void testReadArray_HARMONY_831() throws IOException {
+        // regression for HARMONY-831
+        try (Reader reader = new UnsynchronizedBufferedReader(new PipedReader(), 9)) {
+            assertThrows(IndexOutOfBoundsException.class, () -> reader.read(new char[] {}, 7, 0));
+        }
+    }
+
+    /**
      * Tests {@link UnsynchronizedBufferedReader#read(char[], int, int)}.
      *
      * @throws IOException test failure.
      */
     @Test
-    public void testReadArray() throws IOException {
+    void testReadArray1() throws IOException {
         final char[] ca = new char[2];
         try (UnsynchronizedBufferedReader toRet = new UnsynchronizedBufferedReader(new InputStreamReader(new ByteArrayInputStream(new byte[0])))) {
-            /* Null buffer should throw NPE even when len == 0 */
+            /* Validate parameters, before returning 0 */
             assertThrows(NullPointerException.class, () -> toRet.read(null, 1, 0));
+            assertThrows(IndexOutOfBoundsException.class, () -> toRet.read(ca, 1, 5));
+            /* Read zero bytes should return 0 */
+            assertEquals(0, toRet.read(ca, 0, 0));
             toRet.close();
-            assertThrows(IOException.class, () -> toRet.read(null, 1, 0));
-            /* Closed reader should throw IOException reading zero bytes */
-            assertThrows(IOException.class, () -> toRet.read(ca, 0, 0));
             /*
-             * Closed reader should throw IOException in preference to index out of bounds
+             * After close, readers in java.io consistently throw IOException before checking parameters or returning 0.
              */
-            // Read should throw IOException before
-            // ArrayIndexOutOfBoundException
+            assertThrows(IOException.class, () -> toRet.read(null, 1, 0));
             assertThrows(IOException.class, () -> toRet.read(ca, 1, 5));
+            assertThrows(IOException.class, () -> toRet.read(ca, 0, 0));
         }
+    }
+
+    @Test
+    void testReadArray2() throws IOException {
+        final char[] ca = new char[2];
         // Test to ensure that a drained stream returns 0 at EOF
         try (UnsynchronizedBufferedReader toRet2 = new UnsynchronizedBufferedReader(new InputStreamReader(new ByteArrayInputStream(new byte[2])))) {
             assertEquals(2, toRet2.read(ca, 0, 2));
             assertEquals(-1, toRet2.read(ca, 0, 2));
             assertEquals(0, toRet2.read(ca, 0, 0));
         }
+    }
 
+    @Test
+    void testReadArray3() throws IOException {
         // Test for method int UnsynchronizedBufferedReader.read(char [], int, int)
         final char[] buf = new char[testString.length()];
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
         br.read(buf, 50, 500);
         assertTrue(new String(buf, 50, 500).equals(testString.substring(0, 500)));
+    }
 
+    @Test
+    void testReadArray4() throws IOException {
         try (UnsynchronizedBufferedReader bufin = new UnsynchronizedBufferedReader(new Reader() {
-            int size = 2, pos = 0;
+            int size = 2;
+            int pos;
 
             char[] contents = new char[size];
 
@@ -423,26 +462,6 @@ public class UnsynchronizedBufferedReaderTest {
             final int result = bufin.read(new char[2], 0, 2);
             assertEquals(result, 1);
         }
-        // regression for HARMONY-831
-        try (Reader reader = new UnsynchronizedBufferedReader(new PipedReader(), 9)) {
-            assertThrows(IndexOutOfBoundsException.class, () -> reader.read(new char[] {}, 7, 0));
-        }
-
-        // Regression for HARMONY-54
-        final char[] ch = {};
-        @SuppressWarnings("resource")
-        final UnsynchronizedBufferedReader reader = new UnsynchronizedBufferedReader(new CharArrayReader(ch));
-        // Check exception thrown when the reader is open.
-        assertThrows(NullPointerException.class, () -> reader.read(null, 1, 0));
-
-        // Now check IOException is thrown in preference to
-        // NullPointerexception when the reader is closed.
-        reader.close();
-        assertThrows(IOException.class, () -> reader.read(null, 1, 0));
-
-        // And check that the IOException is thrown before
-        // ArrayIndexOutOfBoundException
-        assertThrows(IOException.class, () -> reader.read(ch, 0, 42));
     }
 
     /**
@@ -451,17 +470,16 @@ public class UnsynchronizedBufferedReaderTest {
      * @throws IOException test failure.
      */
     @Test
-    public void testReadArrayException() throws IOException {
+    void testReadArrayException() throws IOException {
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
         final char[] nullCharArray = null;
         final char[] charArray = testString.toCharArray();
-        assertThrows(IndexOutOfBoundsException.class, () -> br.read(nullCharArray, -1, -1));
-        assertThrows(IndexOutOfBoundsException.class, () -> br.read(nullCharArray, -1, 0));
+        assertThrows(NullPointerException.class, () -> br.read(nullCharArray, -1, 0));
         assertThrows(NullPointerException.class, () -> br.read(nullCharArray, 0, -1));
-        assertThrows(NullPointerException.class, () -> br.read(nullCharArray, 0, 0));
-        assertThrows(NullPointerException.class, () -> br.read(nullCharArray, 0, 1));
-        assertThrows(IndexOutOfBoundsException.class, () -> br.read(charArray, -1, -1));
+        assertThrows(NullPointerException.class, () -> br.read(nullCharArray, 1, 1));
         assertThrows(IndexOutOfBoundsException.class, () -> br.read(charArray, -1, 0));
+        assertThrows(IndexOutOfBoundsException.class, () -> br.read(charArray, 0, -1));
+        assertThrows(IndexOutOfBoundsException.class, () -> br.read(charArray, charArray.length, 1));
 
         br.read(charArray, 0, 0);
         br.read(charArray, 0, charArray.length);
@@ -483,7 +501,7 @@ public class UnsynchronizedBufferedReaderTest {
      * @throws IOException test failure.
      */
     @Test
-    public void testReadLine() throws IOException {
+    void testReadLine() throws IOException {
         // Test for method java.lang.String UnsynchronizedBufferedReader.readLine()
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
         final String r = br.readLine();
@@ -497,12 +515,12 @@ public class UnsynchronizedBufferedReaderTest {
      * @throws IOException test failure.
      */
     @Test
-    public void testReadLineIgnoresEbcdic85Characters() throws IOException {
+    void testReadLineIgnoresEbcdic85Characters() throws IOException {
         assertLines("A\u0085B", "A\u0085B");
     }
 
     @Test
-    public void testReadLineSeparators() throws IOException {
+    void testReadLineSeparators() throws IOException {
         assertLines("A\nB\nC", "A", "B", "C");
         assertLines("A\rB\rC", "A", "B", "C");
         assertLines("A\r\nB\r\nC", "A", "B", "C");
@@ -522,7 +540,7 @@ public class UnsynchronizedBufferedReaderTest {
      * @throws IOException test failure.
      */
     @Test
-    public void testReady() throws IOException {
+    void testReady() throws IOException {
         // Test for method boolean UnsynchronizedBufferedReader.ready()
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
         assertTrue(br.ready());
@@ -534,7 +552,7 @@ public class UnsynchronizedBufferedReaderTest {
      * @throws IOException test failure.
      */
     @Test
-    public void testReset() throws IOException {
+    void testReset() throws IOException {
         // Test for method void UnsynchronizedBufferedReader.reset()
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
         br.skip(500);
@@ -550,7 +568,7 @@ public class UnsynchronizedBufferedReaderTest {
     }
 
     @Test
-    public void testReset_IOException() throws Exception {
+    void testReset_IOException() throws Exception {
         final int[] expected = { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', -1 };
         br = new UnsynchronizedBufferedReader(new StringReader("1234567890"), 9);
         br.mark(9);
@@ -579,7 +597,7 @@ public class UnsynchronizedBufferedReaderTest {
      * @throws IOException test failure.
      */
     @Test
-    public void testSkip() throws IOException {
+    void testSkip() throws IOException {
         // Test for method long UnsynchronizedBufferedReader.skip(long)
         br = new UnsynchronizedBufferedReader(new StringReader(testString));
         br.skip(500);

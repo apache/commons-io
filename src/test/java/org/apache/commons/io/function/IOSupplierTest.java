@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link IOSupplier}.
  */
-public class IOSupplierTest {
+class IOSupplierTest {
 
     private AtomicReference<String> ref1;
 
@@ -53,7 +53,7 @@ public class IOSupplierTest {
     }
 
     @Test
-    public void testAsSupplier() {
+    void testAsSupplier() {
         assertThrows(UncheckedIOException.class, () -> TestConstants.THROWING_IO_SUPPLIER.asSupplier().get());
         final String s1 = "string1";
         final String s2 = "string2";
@@ -65,7 +65,7 @@ public class IOSupplierTest {
     }
 
     @Test
-    public void testGet() throws IOException {
+    void testGet() throws IOException {
         assertThrows(IOException.class, () -> TestConstants.THROWING_IO_SUPPLIER.get());
         assertThrows(IOException.class, () -> {
             throw new IOException();
@@ -75,7 +75,7 @@ public class IOSupplierTest {
     }
 
     @Test
-    public void testGetUnchecked() {
+    void testGetUnchecked() {
         assertThrows(UncheckedIOException.class, () -> TestConstants.THROWING_IO_SUPPLIER.asSupplier().get());
         final String s1 = "string1";
         final String s2 = "string2";

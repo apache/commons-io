@@ -7,7 +7,7 @@
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *   https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
  * to verify which settings it requires, as the object uses a number of primitive
  * and java.* member objects.
  */
-public class MoreComplexObjectTest extends AbstractCloseableListTest {
+class MoreComplexObjectTest extends AbstractCloseableListTest {
 
     private InputStream inputStream;
     private MoreComplexObject original;
@@ -60,7 +60,7 @@ public class MoreComplexObjectTest extends AbstractCloseableListTest {
      * Trusting java.* is probably reasonable and avoids having to be too detailed in the accepts.
      */
     @Test
-    public void testTrustJavaIncludingArrays() throws IOException, ClassNotFoundException {
+    void testTrustJavaIncludingArrays() throws IOException, ClassNotFoundException {
         // @formatter:off
         assertSerialization(addCloseable(
                 ValidatingObjectInputStream.builder()
@@ -77,7 +77,7 @@ public class MoreComplexObjectTest extends AbstractCloseableListTest {
      * verbose.
      */
     @Test
-    public void testTrustJavaLang() throws IOException, ClassNotFoundException {
+    void testTrustJavaLang() throws IOException, ClassNotFoundException {
         // @formatter:off
         assertSerialization(addCloseable(
                 ValidatingObjectInputStream.builder()
@@ -95,7 +95,7 @@ public class MoreComplexObjectTest extends AbstractCloseableListTest {
      * That's not as safe as it's hard to get an exhaustive blacklist, but might be ok in controlled environments.
      */
     @Test
-    public void testUseBlacklist() throws IOException, ClassNotFoundException {
+    void testUseBlacklist() throws IOException, ClassNotFoundException {
         final String [] blacklist = {
                 "org.apache.commons.collections.functors.InvokerTransformer",
                 "org.codehaus.groovy.runtime.ConvertedClosure",

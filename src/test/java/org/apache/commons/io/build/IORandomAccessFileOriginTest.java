@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,6 +17,7 @@
 package org.apache.commons.io.build;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 
 import org.apache.commons.io.IORandomAccessFile;
@@ -28,7 +29,7 @@ import org.apache.commons.io.build.AbstractOrigin.IORandomAccessFileOrigin;
  *
  * @see RandomAccessFile
  */
-public class IORandomAccessFileOriginTest extends AbstractOriginTest<IORandomAccessFile, IORandomAccessFileOrigin> {
+class IORandomAccessFileOriginTest extends AbstractOriginTest<IORandomAccessFile, IORandomAccessFileOrigin> {
 
     @SuppressWarnings("resource")
     @Override
@@ -38,8 +39,7 @@ public class IORandomAccessFileOriginTest extends AbstractOriginTest<IORandomAcc
 
     @SuppressWarnings("resource")
     @Override
-    protected IORandomAccessFileOrigin newOriginRw() throws FileNotFoundException {
-        return new IORandomAccessFileOrigin(RandomAccessFileMode.READ_WRITE.io(FILE_NAME_RW));
+    protected IORandomAccessFileOrigin newOriginRw() throws IOException {
+        return new IORandomAccessFileOrigin(RandomAccessFileMode.READ_WRITE.io(tempPath.resolve(FILE_NAME_RW).toFile().getPath()));
     }
-
 }

@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,24 +26,24 @@ import org.junit.jupiter.api.Test;
 /**
  * Test for {@link ByteOrderParser}.
  */
-public class ByteOrderParserTest {
+class ByteOrderParserTest {
 
     private ByteOrder parseByteOrder(final String value) {
         return ByteOrderParser.parseByteOrder(value);
     }
 
     @Test
-    public void testParseBig() {
+    void testParseBig() {
         assertEquals(ByteOrder.BIG_ENDIAN, parseByteOrder("BIG_ENDIAN"));
     }
 
     @Test
-    public void testParseLittle() {
+    void testParseLittle() {
         assertEquals(ByteOrder.LITTLE_ENDIAN, parseByteOrder("LITTLE_ENDIAN"));
     }
 
     @Test
-    public void testThrowsException() {
+    void testThrowsException() {
         assertThrows(IllegalArgumentException.class, () -> parseByteOrder("some value"));
     }
 }

@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,13 +21,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractOrigin;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.function.Uncheck;
 import org.apache.commons.io.input.UnsynchronizedByteArrayInputStream;
 
 /**
- * Implements a version of {@link AbstractByteArrayOutputStream} <b>without</b> any concurrent thread safety.
+ * Implements a version of {@link AbstractByteArrayOutputStream} <strong>without</strong> any concurrent thread safety.
  * <p>
  * To build an instance, use {@link Builder}.
  * </p>
@@ -36,7 +37,7 @@ import org.apache.commons.io.input.UnsynchronizedByteArrayInputStream;
  * @since 2.7
  */
 //@NotThreadSafe
-public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArrayOutputStream {
+public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArrayOutputStream<UnsynchronizedByteArrayOutputStream> {
 
     // @formatter:off
     /**
@@ -65,10 +66,17 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
     public static class Builder extends AbstractStreamBuilder<UnsynchronizedByteArrayOutputStream, Builder> {
 
         /**
+         * Constructs a new builder of {@link UnsynchronizedByteArrayOutputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link UnsynchronizedByteArrayOutputStream}.
          *
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
          * <li>{@link #getBufferSize()}</li>
@@ -76,10 +84,11 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
          *
          * @return a new instance.
          * @see AbstractOrigin#getByteArray()
+         * @see #getUnchecked()
          */
         @Override
         public UnsynchronizedByteArrayOutputStream get() {
-            return new UnsynchronizedByteArrayOutputStream(getBufferSize());
+            return new UnsynchronizedByteArrayOutputStream(this);
         }
 
     }
@@ -103,8 +112,10 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      * <li>It has network resources associated, so we cannot keep it open for long time.</li>
      * <li>It has network timeout associated.</li>
      * </ul>
+     * <p>
      * It can be used in favor of {@link #toByteArray()}, since it avoids unnecessary allocation and copy of byte[].<br>
      * This method buffers the input internally, so there is no need to use a {@link BufferedInputStream}.
+     * </p>
      *
      * @param input Stream to be fully buffered.
      * @return A fully buffered stream.
@@ -124,11 +135,13 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      * <li>It has network resources associated, so we cannot keep it open for long time.</li>
      * <li>It has network timeout associated.</li>
      * </ul>
+     * <p>
      * It can be used in favor of {@link #toByteArray()}, since it avoids unnecessary allocation and copy of byte[].<br>
      * This method buffers the input internally, so there is no need to use a {@link BufferedInputStream}.
+     * </p>
      *
      * @param input Stream to be fully buffered.
-     * @param size the initial buffer size
+     * @param size the initial buffer size.
      * @return A fully buffered stream.
      * @throws IOException if an I/O error occurs.
      */
@@ -141,7 +154,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
     }
 
     /**
-     * Constructs a new byte array output stream. The buffer capacity is initially
+     * Constructs a new byte array output stream. The buffer capacity is initially.
      *
      * {@value AbstractByteArrayOutputStream#DEFAULT_SIZE} bytes, though its size increases if necessary.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
@@ -151,11 +164,15 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
         this(DEFAULT_SIZE);
     }
 
+    private UnsynchronizedByteArrayOutputStream(final Builder builder) {
+        this(builder.getBufferSize());
+    }
+
     /**
      * Constructs a new byte array output stream, with a buffer capacity of the specified size, in bytes.
      *
-     * @param size the initial size
-     * @throws IllegalArgumentException if size is negative
+     * @param size the initial size.
+     * @throws IllegalArgumentException if size is negative.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}. Will be private in 3.0.0.
      */
     @Deprecated
@@ -198,9 +215,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
 
     @Override
     public void write(final byte[] b, final int off, final int len) {
-        if (off < 0 || off > b.length || len < 0 || off + len > b.length || off + len < 0) {
-            throw new IndexOutOfBoundsException(String.format("offset=%,d, length=%,d", off, len));
-        }
+        IOUtils.checkFromIndexSize(b, off, len);
         if (len == 0) {
             return;
         }

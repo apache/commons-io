@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -37,8 +37,8 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * This class provides a simple alternative to {@link FileWriter} that will use a lock file to prevent duplicate writes.
  * </p>
  * <p>
- * <b>Note:</b> The lock file is deleted when {@link #close()} is called - or if the main file cannot be opened initially. In the (unlikely) event that the lock
- * file cannot be deleted, an exception is thrown.
+ * <strong>Note:</strong> The lock file is deleted when {@link #close()} is called - or if the main file cannot be opened initially. In the (unlikely) event
+ * that the lock file cannot be deleted, an exception is thrown.
  * </p>
  * <p>
  * By default, the file will be overwritten, but this may be changed to append. The lock directory may be specified, but defaults to the system property
@@ -77,23 +77,27 @@ public class LockableFileWriter extends Writer {
         private AbstractOrigin<?, ?> lockDirectory = newFileOrigin(FileUtils.getTempDirectoryPath());
 
         /**
-         * Builds a new {@link LockableFileWriter}.
+         * Constructs a new builder of {@link LockableFileWriter}.
          */
         public Builder() {
             setBufferSizeDefault(AbstractByteArrayOutputStream.DEFAULT_SIZE);
             setBufferSize(AbstractByteArrayOutputStream.DEFAULT_SIZE);
         }
 
+        private File checkOriginFile() {
+            return checkOrigin().getFile();
+        }
+
         /**
          * Constructs a new instance.
          * <p>
-         * You must set input that supports {@link File} on this builder, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link File} on this builder, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
-         * <li>{@link File}</li>
+         * <li>{@link File} is the target aspect.</li>
          * <li>{@link #getCharset()}</li>
          * <li>append</li>
          * <li>lockDirectory</li>
@@ -101,12 +105,14 @@ public class LockableFileWriter extends Writer {
          *
          * @return a new instance.
          * @throws UnsupportedOperationException if the origin cannot provide a File.
-         * @throws IllegalStateException if the {@code origin} is {@code null}.
+         * @throws IllegalStateException         if the {@code origin} is {@code null}.
+         * @throws IOException                   if an I/O error occurs converting to an {@link File} using {@link #getFile()}.
          * @see AbstractOrigin#getFile()
+         * @see #getUnchecked()
          */
         @Override
         public LockableFileWriter get() throws IOException {
-            return new LockableFileWriter(checkOrigin().getFile(), getCharset(), append, lockDirectory.getFile().toString());
+            return new LockableFileWriter(this);
         }
 
         /**
@@ -147,9 +153,6 @@ public class LockableFileWriter extends Writer {
     /** The extension for the lock file. */
     private static final String LCK = ".lck";
 
-    // Cannot extend ProxyWriter, as requires writer to be
-    // known when super() is called
-
     /**
      * Constructs a new {@link Builder}.
      *
@@ -166,13 +169,18 @@ public class LockableFileWriter extends Writer {
     /** The lock file. */
     private final File lockFile;
 
+    private LockableFileWriter(final Builder builder) throws IOException {
+        this(builder.checkOriginFile(), builder.getCharset(), builder.append, builder.lockDirectory.getFile().toString());
+    }
+
+
     /**
      * Constructs a LockableFileWriter. If the file exists, it is overwritten.
      *
-     * @param file the file to write to, not null
-     * @throws NullPointerException if the file is null
-     * @throws IOException          in case of an I/O error
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @param file the file to write to, not null.
+     * @throws NullPointerException if the file is null.
+     * @throws IOException          in case of an I/O error.
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public LockableFileWriter(final File file) throws IOException {
@@ -182,11 +190,11 @@ public class LockableFileWriter extends Writer {
     /**
      * Constructs a LockableFileWriter.
      *
-     * @param file   the file to write to, not null
-     * @param append true if content should be appended, false to overwrite
-     * @throws NullPointerException if the file is null
-     * @throws IOException          in case of an I/O error
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @param file   the file to write to, not null.
+     * @param append true if content should be appended, false to overwrite.
+     * @throws NullPointerException if the file is null.
+     * @throws IOException          in case of an I/O error.
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public LockableFileWriter(final File file, final boolean append) throws IOException {
@@ -195,13 +203,16 @@ public class LockableFileWriter extends Writer {
 
     /**
      * Constructs a LockableFileWriter.
+     * <p>
+     * The new instance uses the virtual machine's {@linkplain Charset#defaultCharset() default charset}.
+     * </p>
      *
-     * @param file    the file to write to, not null
-     * @param append  true if content should be appended, false to overwrite
-     * @param lockDir the directory in which the lock file should be held
-     * @throws NullPointerException if the file is null
-     * @throws IOException          in case of an I/O error
-     * @deprecated Use {@link #LockableFileWriter(File, Charset, boolean, String)} instead
+     * @param file    the file to write to, not null.
+     * @param append  true if content should be appended, false to overwrite.
+     * @param lockDir the directory in which the lock file should be held.
+     * @throws NullPointerException if the file is null.
+     * @throws IOException          in case of an I/O error.
+     * @deprecated Use {@link #LockableFileWriter(File, Charset, boolean, String)} instead.
      */
     @Deprecated
     public LockableFileWriter(final File file, final boolean append, final String lockDir) throws IOException {
@@ -211,12 +222,12 @@ public class LockableFileWriter extends Writer {
     /**
      * Constructs a LockableFileWriter with a file encoding.
      *
-     * @param file    the file to write to, not null
-     * @param charset the charset to use, null means platform default
-     * @throws NullPointerException if the file is null
-     * @throws IOException          in case of an I/O error
+     * @param file    the file to write to, not null.
+     * @param charset the charset to use, null means platform default.
+     * @throws NullPointerException if the file is null.
+     * @throws IOException          in case of an I/O error.
      * @since 2.3
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public LockableFileWriter(final File file, final Charset charset) throws IOException {
@@ -226,14 +237,14 @@ public class LockableFileWriter extends Writer {
     /**
      * Constructs a LockableFileWriter with a file encoding.
      *
-     * @param file    the file to write to, not null
-     * @param charset the name of the requested charset, null means platform default
-     * @param append  true if content should be appended, false to overwrite
-     * @param lockDir the directory in which the lock file should be held
-     * @throws NullPointerException if the file is null
-     * @throws IOException          in case of an I/O error
+     * @param file    the file to write to, not null.
+     * @param charset the name of the requested charset, null means platform default.
+     * @param append  true if content should be appended, false to overwrite.
+     * @param lockDir the directory in which the lock file should be held.
+     * @throws NullPointerException if the file is null.
+     * @throws IOException          in case of an I/O error.
      * @since 2.3
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public LockableFileWriter(final File file, final Charset charset, final boolean append, final String lockDir) throws IOException {
@@ -245,16 +256,13 @@ public class LockableFileWriter extends Writer {
         if (absFile.isDirectory()) {
             throw new IOException("File specified is a directory");
         }
-
         // init lock file
         final File lockDirFile = new File(lockDir != null ? lockDir : FileUtils.getTempDirectoryPath());
         FileUtils.forceMkdir(lockDirFile);
         testLockDir(lockDirFile);
         lockFile = new File(lockDirFile, absFile.getName() + LCK);
-
         // check if locked
         createLock();
-
         // init wrapped writer
         out = initWriter(absFile, charset, append);
     }
@@ -262,13 +270,13 @@ public class LockableFileWriter extends Writer {
     /**
      * Constructs a LockableFileWriter with a file encoding.
      *
-     * @param file        the file to write to, not null
-     * @param charsetName the name of the requested charset, null means platform default
-     * @throws NullPointerException                         if the file is null
-     * @throws IOException                                  in case of an I/O error
+     * @param file        the file to write to, not null.
+     * @param charsetName the name of the requested charset, null means platform default.
+     * @throws NullPointerException                         if the file is null.
+     * @throws IOException                                  in case of an I/O error.
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
      *                                                      supported.
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public LockableFileWriter(final File file, final String charsetName) throws IOException {
@@ -278,15 +286,15 @@ public class LockableFileWriter extends Writer {
     /**
      * Constructs a LockableFileWriter with a file encoding.
      *
-     * @param file        the file to write to, not null
-     * @param charsetName the encoding to use, null means platform default
-     * @param append      true if content should be appended, false to overwrite
-     * @param lockDir     the directory in which the lock file should be held
-     * @throws NullPointerException                         if the file is null
-     * @throws IOException                                  in case of an I/O error
+     * @param file        the file to write to, not null.
+     * @param charsetName the encoding to use, null means platform default.
+     * @param append      true if content should be appended, false to overwrite.
+     * @param lockDir     the directory in which the lock file should be held.
+     * @throws NullPointerException                         if the file is null.
+     * @throws IOException                                  in case of an I/O error.
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
      *                                                      supported.
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public LockableFileWriter(final File file, final String charsetName, final boolean append, final String lockDir) throws IOException {
@@ -296,10 +304,10 @@ public class LockableFileWriter extends Writer {
     /**
      * Constructs a LockableFileWriter. If the file exists, it is overwritten.
      *
-     * @param fileName the file to write to, not null
-     * @throws NullPointerException if the file is null
-     * @throws IOException          in case of an I/O error
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @param fileName the file to write to, not null.
+     * @throws NullPointerException if the file is null.
+     * @throws IOException          in case of an I/O error.
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public LockableFileWriter(final String fileName) throws IOException {
@@ -309,11 +317,11 @@ public class LockableFileWriter extends Writer {
     /**
      * Constructs a LockableFileWriter.
      *
-     * @param fileName file to write to, not null
-     * @param append   true if content should be appended, false to overwrite
-     * @throws NullPointerException if the file is null
-     * @throws IOException          in case of an I/O error
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @param fileName file to write to, not null.
+     * @param append   true if content should be appended, false to overwrite.
+     * @throws NullPointerException if the file is null.
+     * @throws IOException          in case of an I/O error.
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public LockableFileWriter(final String fileName, final boolean append) throws IOException {
@@ -323,12 +331,12 @@ public class LockableFileWriter extends Writer {
     /**
      * Constructs a LockableFileWriter.
      *
-     * @param fileName the file to write to, not null
-     * @param append   true if content should be appended, false to overwrite
-     * @param lockDir  the directory in which the lock file should be held
-     * @throws NullPointerException if the file is null
-     * @throws IOException          in case of an I/O error
-     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}
+     * @param fileName the file to write to, not null.
+     * @param append   true if content should be appended, false to overwrite.
+     * @param lockDir  the directory in which the lock file should be held.
+     * @throws NullPointerException if the file is null.
+     * @throws IOException          in case of an I/O error.
+     * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated
     public LockableFileWriter(final String fileName, final boolean append, final String lockDir) throws IOException {
@@ -352,7 +360,7 @@ public class LockableFileWriter extends Writer {
     /**
      * Creates the lock file.
      *
-     * @throws IOException if we cannot create the file
+     * @throws IOException if we cannot create the file.
      */
     private void createLock() throws IOException {
         synchronized (LockableFileWriter.class) {
@@ -376,17 +384,16 @@ public class LockableFileWriter extends Writer {
     /**
      * Initializes the wrapped file writer. Ensure that a cleanup occurs if the writer creation fails.
      *
-     * @param file    the file to be accessed
-     * @param charset the charset to use
-     * @param append  true to append
-     * @return The initialized writer
-     * @throws IOException if an error occurs
+     * @param file    the file to be accessed.
+     * @param charset the charset to use.
+     * @param append  true to append.
+     * @return The initialized writer.
+     * @throws IOException if an error occurs.
      */
     private Writer initWriter(final File file, final Charset charset, final boolean append) throws IOException {
         final boolean fileExistedAlready = file.exists();
         try {
             return new OutputStreamWriter(new FileOutputStream(file.getAbsolutePath(), append), Charsets.toCharset(charset));
-
         } catch (final IOException | RuntimeException ex) {
             FileUtils.deleteQuietly(lockFile);
             if (!fileExistedAlready) {
@@ -399,9 +406,9 @@ public class LockableFileWriter extends Writer {
     /**
      * Tests that we can write to the lock directory.
      *
-     * @param lockDir the File representing the lock directory
-     * @throws IOException if we cannot write to the lock directory
-     * @throws IOException if we cannot find the lock file
+     * @param lockDir the File representing the lock directory.
+     * @throws IOException if we cannot write to the lock directory.
+     * @throws IOException if we cannot find the lock file.
      */
     private void testLockDir(final File lockDir) throws IOException {
         if (!lockDir.exists()) {
@@ -415,7 +422,7 @@ public class LockableFileWriter extends Writer {
     /**
      * Writes the characters from an array.
      *
-     * @param cbuf the characters to write
+     * @param cbuf the characters to write.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -426,9 +433,9 @@ public class LockableFileWriter extends Writer {
     /**
      * Writes the specified characters from an array.
      *
-     * @param cbuf the characters to write
-     * @param off  The start offset
-     * @param len  The number of characters to write
+     * @param cbuf the characters to write.
+     * @param off  The start offset.
+     * @param len  The number of characters to write.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -439,7 +446,7 @@ public class LockableFileWriter extends Writer {
     /**
      * Writes a character.
      *
-     * @param c the character to write
+     * @param c the character to write.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -450,7 +457,7 @@ public class LockableFileWriter extends Writer {
     /**
      * Writes the characters from a string.
      *
-     * @param str the string to write
+     * @param str the string to write.
      * @throws IOException if an I/O error occurs.
      */
     @Override
@@ -461,9 +468,9 @@ public class LockableFileWriter extends Writer {
     /**
      * Writes the specified characters from a string.
      *
-     * @param str the string to write
-     * @param off The start offset
-     * @param len The number of characters to write
+     * @param str the string to write.
+     * @param off The start offset.
+     * @param len The number of characters to write.
      * @throws IOException if an I/O error occurs.
      */
     @Override

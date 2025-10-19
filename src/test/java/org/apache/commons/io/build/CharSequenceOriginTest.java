@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -39,7 +39,7 @@ import org.junit.jupiter.params.provider.EnumSource;
  *
  * @see CharSequence
  */
-public class CharSequenceOriginTest extends AbstractOriginTest<CharSequence, CharSequenceOrigin> {
+class CharSequenceOriginTest extends AbstractOriginTest<CharSequence, CharSequenceOrigin> {
 
     private String getFixtureStringFromFile() throws IOException {
         return IOUtils.resourceToString(FILE_RES_RO, StandardCharsets.UTF_8);
@@ -57,28 +57,28 @@ public class CharSequenceOriginTest extends AbstractOriginTest<CharSequence, Cha
 
     @Override
     @Test
-    public void testGetFile() {
+    void testGetFile() {
         // Cannot convert a CharSequence to a File.
         assertThrows(UnsupportedOperationException.class, super::testGetFile);
     }
 
     @Override
     @Test
-    public void testGetOutputStream() {
+    void testGetOutputStream() {
         // Cannot convert a CharSequence to an OutputStream.
         assertThrows(UnsupportedOperationException.class, super::testGetOutputStream);
     }
 
     @Override
     @Test
-    public void testGetPath() {
+    void testGetPath() {
         // Cannot convert a CharSequence to a Path.
         assertThrows(UnsupportedOperationException.class, super::testGetPath);
     }
 
     @Override
     @Test
-    public void testGetRandomAccessFile() {
+    void testGetRandomAccessFile() {
         // Cannot convert a RandomAccessFile to a File.
         assertThrows(UnsupportedOperationException.class, super::testGetRandomAccessFile);
     }
@@ -86,15 +86,24 @@ public class CharSequenceOriginTest extends AbstractOriginTest<CharSequence, Cha
     @Override
     @ParameterizedTest
     @EnumSource(StandardOpenOption.class)
-    public void testGetRandomAccessFile(final OpenOption openOption) {
+    void testGetRandomAccessFile(final OpenOption openOption) {
         // Cannot convert a RandomAccessFile to a File.
         assertThrows(UnsupportedOperationException.class, () -> super.testGetRandomAccessFile(openOption));
     }
 
     @Test
-    public void testGetReaderIgnoreCharset() throws IOException {
+    void testGetReaderIgnoreCharset() throws IOException {
         // The CharSequenceOrigin ignores the given Charset.
-        try (final Reader reader = getOriginRo().getReader(StandardCharsets.UTF_16LE)) {
+        try (Reader reader = getOriginRo().getReader(StandardCharsets.UTF_16LE)) {
+            assertNotNull(reader);
+            assertEquals(getFixtureStringFromFile(), IOUtils.toString(reader));
+        }
+    }
+
+    @Test
+    void testGetReaderIgnoreCharsetNull() throws IOException {
+        // The CharSequenceOrigin ignores the given Charset.
+        try (Reader reader = getOriginRo().getReader(null)) {
             assertNotNull(reader);
             assertEquals(getFixtureStringFromFile(), IOUtils.toString(reader));
         }
@@ -102,7 +111,14 @@ public class CharSequenceOriginTest extends AbstractOriginTest<CharSequence, Cha
 
     @Override
     @Test
-    public void testGetWriter() {
+    void testGetWritableByteChannel() throws IOException {
+        // Cannot convert a CharSequence to a WritableByteChannel.
+        assertThrows(UnsupportedOperationException.class, super::testGetWritableByteChannel);
+    }
+
+    @Override
+    @Test
+    void testGetWriter() {
         // Cannot convert a CharSequence to a Writer.
         assertThrows(UnsupportedOperationException.class, super::testGetWriter);
     }

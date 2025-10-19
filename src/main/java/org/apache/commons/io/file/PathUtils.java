@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,6 +30,7 @@ import java.nio.charset.Charset;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.CopyOption;
 import java.nio.file.DirectoryStream;
+import java.nio.file.FileSystem;
 import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
@@ -61,6 +62,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -68,6 +70,7 @@ import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
@@ -93,6 +96,51 @@ public final class PathUtils {
      * Private worker/holder that computes and tracks relative path names and their equality. We reuse the sorted relative lists when comparing directories.
      */
     private static final class RelativeSortedPaths {
+
+        /**
+         * Compares lists of paths regardless of their file systems.
+         *
+         * @param list1 the first list.
+         * @param list2 the second list.
+         * @return whether the lists are equal.
+         */
+        private static boolean equalsIgnoreFileSystem(final List<Path> list1, final List<Path> list2) {
+            if (list1.size() != list2.size()) {
+                return false;
+            }
+            // compare both lists using iterators
+            final Iterator<Path> iterator1 = list1.iterator();
+            final Iterator<Path> iterator2 = list2.iterator();
+            while (iterator1.hasNext() && iterator2.hasNext()) {
+                if (!equalsIgnoreFileSystem(iterator1.next(), iterator2.next())) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private static boolean equalsIgnoreFileSystem(final Path path1, final Path path2) {
+            final FileSystem fileSystem1 = path1.getFileSystem();
+            final FileSystem fileSystem2 = path2.getFileSystem();
+            if (fileSystem1 == fileSystem2) {
+                return path1.equals(path2);
+            }
+            final String separator1 = fileSystem1.getSeparator();
+            final String separator2 = fileSystem2.getSeparator();
+            final String string1 = path1.toString();
+            final String string2 = path2.toString();
+            if (Objects.equals(separator1, separator2)) {
+                // Separators are the same, so we can use toString comparison
+                return Objects.equals(string1, string2);
+            }
+            // Compare paths from different file systems component by component.
+            return extractKey(separator1, string1).equals(extractKey(separator2, string2));
+        }
+
+        static String extractKey(final String separator, final String string) {
+            // Replace the file separator in a path string with a string that is not legal in a path on Windows, Linux, and macOS.
+            return string.replaceAll("\\" + separator, ">");
+        }
 
         final boolean equals;
         // final List<Path> relativeDirList1; // might need later?
@@ -133,12 +181,12 @@ public final class PathUtils {
                     } else {
                         tmpRelativeDirList1 = visitor1.relativizeDirectories(dir1, true, null);
                         tmpRelativeDirList2 = visitor2.relativizeDirectories(dir2, true, null);
-                        if (!tmpRelativeDirList1.equals(tmpRelativeDirList2)) {
+                        if (!equalsIgnoreFileSystem(tmpRelativeDirList1, tmpRelativeDirList2)) {
                             equals = false;
                         } else {
                             tmpRelativeFileList1 = visitor1.relativizeFiles(dir1, true, null);
                             tmpRelativeFileList2 = visitor2.relativizeFiles(dir2, true, null);
-                            equals = tmpRelativeFileList1.equals(tmpRelativeFileList2);
+                            equals = equalsIgnoreFileSystem(tmpRelativeFileList1, tmpRelativeFileList2);
                         }
                     }
                 }
@@ -151,40 +199,33 @@ public final class PathUtils {
     }
 
     private static final OpenOption[] OPEN_OPTIONS_TRUNCATE = { StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING };
-
     private static final OpenOption[] OPEN_OPTIONS_APPEND = { StandardOpenOption.CREATE, StandardOpenOption.APPEND };
-
     /**
      * Empty {@link CopyOption} array.
      *
      * @since 2.8.0
      */
     public static final CopyOption[] EMPTY_COPY_OPTIONS = {};
-
     /**
      * Empty {@link DeleteOption} array.
      *
      * @since 2.8.0
      */
     public static final DeleteOption[] EMPTY_DELETE_OPTION_ARRAY = {};
-
     /**
      * Empty {@link FileAttribute} array.
      *
      * @since 2.13.0
      */
     public static final FileAttribute<?>[] EMPTY_FILE_ATTRIBUTE_ARRAY = {};
-
     /**
      * Empty {@link FileVisitOption} array.
      */
     public static final FileVisitOption[] EMPTY_FILE_VISIT_OPTION_ARRAY = {};
-
     /**
      * Empty {@link LinkOption} array.
      */
     public static final LinkOption[] EMPTY_LINK_OPTION_ARRAY = {};
-
     /**
      * {@link LinkOption} array for {@link LinkOption#NOFOLLOW_LINKS}.
      *
@@ -193,19 +234,16 @@ public final class PathUtils {
      */
     @Deprecated
     public static final LinkOption[] NOFOLLOW_LINK_OPTION_ARRAY = { LinkOption.NOFOLLOW_LINKS };
-
     /**
      * A LinkOption used to follow link in this class, the inverse of {@link LinkOption#NOFOLLOW_LINKS}.
      *
      * @since 2.12.0
      */
     static final LinkOption NULL_LINK_OPTION = null;
-
     /**
      * Empty {@link OpenOption} array.
      */
     public static final OpenOption[] EMPTY_OPEN_OPTION_ARRAY = {};
-
     /**
      * Empty {@link Path} array.
      *
@@ -223,11 +261,12 @@ public final class PathUtils {
      * @return file tree information.
      */
     private static AccumulatorPathVisitor accumulate(final Path directory, final int maxDepth, final FileVisitOption[] fileVisitOptions) throws IOException {
-        return visitFileTree(AccumulatorPathVisitor.withLongCounters(), directory, toFileVisitOptionSet(fileVisitOptions), maxDepth);
+        return visitFileTree(AccumulatorPathVisitor.builder().setDirectoryPostTransformer(PathUtils::stripTrailingSeparator).get(), directory,
+                toFileVisitOptionSet(fileVisitOptions), maxDepth);
     }
 
     /**
-     * Cleans a directory including subdirectories without deleting directories.
+     * Cleans a directory by only deleting files, including in subdirectories, but without deleting the directories.
      *
      * @param directory directory to clean.
      * @return The visitation path counters.
@@ -238,7 +277,7 @@ public final class PathUtils {
     }
 
     /**
-     * Cleans a directory including subdirectories without deleting directories.
+     * Cleans a directory by only deleting files, including in subdirectories, but without deleting the directories.
      *
      * @param directory     directory to clean.
      * @param deleteOptions How to handle deletion.
@@ -262,6 +301,44 @@ public final class PathUtils {
      */
     private static int compareLastModifiedTimeTo(final Path file, final FileTime fileTime, final LinkOption... options) throws IOException {
         return getLastModifiedTime(file, options).compareTo(fileTime);
+    }
+
+    /**
+     * Compares the files of two FileSystems to determine if they are equal or not while considering file contents. The comparison includes all files in all
+     * subdirectories.
+     * <p>
+     * For example, to compare two ZIP files:
+     * </p>
+     *
+     * <pre>
+     * final Path zipPath1 = Paths.get("file1.zip");
+     * final Path zipPath2 = Paths.get("file2.zip");
+     * try (FileSystem fileSystem1 = FileSystems.newFileSystem(zipPath1, null); FileSystem fileSystem2 = FileSystems.newFileSystem(zipPath2, null)) {
+     *     assertTrue(PathUtils.directoryAndFileContentEquals(dir1, dir2));
+     * }
+     * </pre>
+     *
+     * @param fileSystem1 The first FileSystem.
+     * @param fileSystem2 The second FileSystem.
+     * @return Whether the two FileSystem contain the same files while considering file contents.
+     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @since 2.19.0
+     */
+    public static boolean contentEquals(final FileSystem fileSystem1, final FileSystem fileSystem2) throws IOException {
+        if (Objects.equals(fileSystem1, fileSystem2)) {
+            return true;
+        }
+        final List<Path> sortedList1 = toSortedList(fileSystem1.getRootDirectories());
+        final List<Path> sortedList2 = toSortedList(fileSystem2.getRootDirectories());
+        if (sortedList1.size() != sortedList2.size()) {
+            return false;
+        }
+        for (int i = 0; i < sortedList1.size(); i++) {
+            if (!directoryAndFileContentEquals(sortedList1.get(i), sortedList2.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -321,7 +398,10 @@ public final class PathUtils {
      * @see Files#copy(Path, Path, CopyOption...)
      */
     public static Path copyFileToDirectory(final Path sourceFile, final Path targetDirectory, final CopyOption... copyOptions) throws IOException {
-        return Files.copy(sourceFile, targetDirectory.resolve(sourceFile.getFileName()), copyOptions);
+        // Path.resolve() naturally won't work across FileSystem unless we convert to a String
+        final Path sourceFileName = Objects.requireNonNull(sourceFile.getFileName(), "source file name");
+        final Path targetFile = resolve(targetDirectory, sourceFileName);
+        return Files.copy(sourceFile, targetFile, copyOptions);
     }
 
     /**
@@ -406,7 +486,6 @@ public final class PathUtils {
      * Gets the current directory.
      *
      * @return the current directory.
-     *
      * @since 2.9.0
      */
     public static Path current() {
@@ -524,7 +603,7 @@ public final class PathUtils {
      * @param file The file to delete.
      * @return A visitor with path counts set to 1 file, 0 directories, and the size of the deleted file.
      * @throws IOException         if an I/O error occurs.
-     * @throws NoSuchFileException if the file is a directory.
+     * @throws NoSuchFileException if the file is a directory
      */
     public static PathCounters deleteFile(final Path file) throws IOException {
         return deleteFile(file, EMPTY_DELETE_OPTION_ARRAY);
@@ -559,7 +638,7 @@ public final class PathUtils {
     public static PathCounters deleteFile(final Path file, final LinkOption[] linkOptions, final DeleteOption... deleteOptions)
             throws NoSuchFileException, IOException {
         //
-        // TODO Needs clean up
+        // TODO Needs clean up?
         //
         if (Files.isDirectory(file, linkOptions)) {
             throw new NoSuchFileException(file.toString());
@@ -609,7 +688,7 @@ public final class PathUtils {
     }
 
     /**
-     * Compares the file sets of two Paths to determine if they are equal or not while considering file contents. The comparison includes all files in all
+     * Compares the files of two Paths to determine if they are equal or not while considering file contents. The comparison includes all files in all
      * subdirectories.
      *
      * @param path1 The first directory.
@@ -653,12 +732,18 @@ public final class PathUtils {
         // Both visitors contain the same normalized paths, we can compare file contents.
         final List<Path> fileList1 = relativeSortedPaths.relativeFileList1;
         final List<Path> fileList2 = relativeSortedPaths.relativeFileList2;
+        final boolean sameFileSystem = isSameFileSystem(path1, path2);
         for (final Path path : fileList1) {
-            final int binarySearch = Collections.binarySearch(fileList2, path);
-            if (binarySearch <= -1) {
+            final int binarySearch = sameFileSystem ? Collections.binarySearch(fileList2, path)
+                    : Collections.binarySearch(fileList2, path,
+                            Comparator.comparing(p -> RelativeSortedPaths.extractKey(p.getFileSystem().getSeparator(), p.toString())));
+            if (binarySearch < 0) {
                 throw new IllegalStateException("Unexpected mismatch.");
             }
-            if (!fileContentEquals(path1.resolve(path), path2.resolve(path), linkOptions, openOptions)) {
+            if (sameFileSystem && !fileContentEquals(path1.resolve(path), path2.resolve(path), linkOptions, openOptions)) {
+                return false;
+            }
+            if (!fileContentEquals(path1.resolve(path.toString()), path2.resolve(path.toString()), linkOptions, openOptions)) {
                 return false;
             }
         }
@@ -705,8 +790,8 @@ public final class PathUtils {
      * File content is accessed through {@link Files#newInputStream(Path,OpenOption...)}.
      * </p>
      *
-     * @param path1 the first stream.
-     * @param path2 the second stream.
+     * @param path1 the first file path.
+     * @param path2 the second file path.
      * @return true if the content of the streams are equal or they both don't exist, false otherwise.
      * @throws NullPointerException if either input is null.
      * @throws IOException          if an I/O error occurs.
@@ -722,8 +807,8 @@ public final class PathUtils {
      * File content is accessed through {@link RandomAccessFileMode#create(Path)}.
      * </p>
      *
-     * @param path1       the first stream.
-     * @param path2       the second stream.
+     * @param path1       the first file path.
+     * @param path2       the second file path.
      * @param linkOptions options specifying how files are followed.
      * @param openOptions ignored.
      * @return true if the content of the streams are equal or they both don't exist, false otherwise.
@@ -762,7 +847,7 @@ public final class PathUtils {
             // lengths differ, cannot be equal
             return false;
         }
-        if (path1.equals(path2)) {
+        if (isSameFileSystem(path1, path2) && path1.equals(path2)) {
             // same file
             return true;
         }
@@ -800,11 +885,9 @@ public final class PathUtils {
      *
      * @param filter the filter to apply to the set of files.
      * @param paths  the array of files to apply the filter to.
-     *
      * @return a subset of {@code files} that is accepted by the file filter.
      * @throws NullPointerException     if the filter is {@code null}
      * @throws IllegalArgumentException if {@code files} contains a {@code null} value.
-     *
      * @since 2.9.0
      */
     public static Path[] filter(final PathFilter filter, final Path... paths) {
@@ -858,7 +941,7 @@ public final class PathUtils {
     /**
      * Gets the base name (the part up to and not including the last ".") of the last path segment of a file name.
      * <p>
-     * Will return the file name itself if it doesn't contain any dots. All leading directories of the {@code file name} parameter are skipped.
+     * Will return the file name itself if it doesn't contain any periods. All leading directories of the {@code file name} parameter are skipped.
      * </p>
      *
      * @return the base name of file name
@@ -888,8 +971,9 @@ public final class PathUtils {
     /**
      * Gets the extension of a Path.
      * <p>
-     * This method returns the textual part of the Path after the last dot.
+     * This method returns the textual part of the Path after the last period.
      * </p>
+     *
      * <pre>
      * foo.txt      --&gt; "txt"
      * a/b/c.jpg    --&gt; "jpg"
@@ -912,8 +996,8 @@ public final class PathUtils {
     /**
      * Gets the Path's file name and apply the given function if the file name is non-null.
      *
-     * @param <R> The function's result type.
-     * @param path the path to query.
+     * @param <R>      The function's result type.
+     * @param path     the path to query.
      * @param function function to apply to the file name.
      * @return the Path's file name as a string or null.
      * @see Path#getFileName()
@@ -1010,6 +1094,19 @@ public final class PathUtils {
 
     private static Path getParent(final Path path) {
         return path == null ? null : path.getParent();
+    }
+
+    /**
+     * Gets the system property with the specified name as a Path, or the default value as a Path if there is no property with that key.
+     *
+     * @param key the name of the system property.
+     * @param defaultPath a default path, may be null.
+     * @return the resulting {@code Path}, or the default value as a Path if there is no property with that key.
+     * @since 2.21.0
+     */
+    public static Path getPath(final String key, final String defaultPath) {
+        final String property = key != null && !key.isEmpty() ? System.getProperty(key, defaultPath) : defaultPath;
+        return property != null ? Paths.get(property) : null;
     }
 
     /**
@@ -1256,6 +1353,10 @@ public final class PathUtils {
         return path != null && Files.isRegularFile(path, options);
     }
 
+    static boolean isSameFileSystem(final Path path1, final Path path2) {
+        return path1.getFileSystem() == path2.getFileSystem();
+    }
+
     /**
      * Creates a new DirectoryStream for Paths rooted at the given directory.
      * <p>
@@ -1467,6 +1568,18 @@ public final class PathUtils {
             throw new IllegalArgumentException("File system element for parameter '" + fileParamName + "' does not exist: '" + file + "'");
         }
         return file;
+    }
+
+    static Path resolve(final Path targetDirectory, final Path otherPath) {
+        final FileSystem fileSystemTarget = targetDirectory.getFileSystem();
+        final FileSystem fileSystemSource = otherPath.getFileSystem();
+        if (fileSystemTarget == fileSystemSource) {
+            return targetDirectory.resolve(otherPath);
+        }
+        final String separatorSource = fileSystemSource.getSeparator();
+        final String separatorTarget = fileSystemTarget.getSeparator();
+        final String otherString = otherPath.toString();
+        return targetDirectory.resolve(Objects.equals(separatorSource, separatorTarget) ? otherString : otherString.replace(separatorSource, separatorTarget));
     }
 
     private static boolean setDosReadOnly(final Path path, final boolean readOnly, final LinkOption... linkOptions) throws IOException {
@@ -1681,6 +1794,12 @@ public final class PathUtils {
         return countDirectoryAsBigInteger(directory).getByteCounter().getBigInteger();
     }
 
+    private static Path stripTrailingSeparator(final Path dir) {
+        final String separator = dir.getFileSystem().getSeparator();
+        final String fileName = getFileNameString(dir);
+        return fileName != null && fileName.endsWith(separator) ? dir.resolveSibling(fileName.substring(0, fileName.length() - 1)) : dir;
+    }
+
     /**
      * Converts an array of {@link FileVisitOption} to a {@link Set}.
      *
@@ -1691,8 +1810,18 @@ public final class PathUtils {
         return fileVisitOptions == null ? EnumSet.noneOf(FileVisitOption.class) : Stream.of(fileVisitOptions).collect(Collectors.toSet());
     }
 
+    private static <T> List<T> toList(final Iterable<T> iterable) {
+        return StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList());
+    }
+
+    private static List<Path> toSortedList(final Iterable<Path> rootDirectories) {
+        final List<Path> list = toList(rootDirectories);
+        Collections.sort(list);
+        return list;
+    }
+
     /**
-     * Implements behavior similar to the UNIX "touch" utility. Creates a new file with size 0, or, if the file exists, just updates the file's modified time.
+     * Implements behavior similar to the Unix "touch" utility. Creates a new file with size 0, or, if the file exists, just updates the file's modified time.
      * this method creates parent directories if they do not exist.
      *
      * @param file the file to touch.
@@ -1721,7 +1850,6 @@ public final class PathUtils {
      * @param directory See {@link Files#walkFileTree(Path,FileVisitor)}.
      * @param <T>       See {@link Files#walkFileTree(Path,FileVisitor)}.
      * @return the given visitor.
-     *
      * @throws NoSuchFileException  if the directory does not exist.
      * @throws IOException          if an I/O error is thrown by a visitor method.
      * @throws NullPointerException if the directory is {@code null}.
@@ -1742,7 +1870,6 @@ public final class PathUtils {
      * @param visitor  See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
      * @param <T>      See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
      * @return the given visitor.
-     *
      * @throws IOException if an I/O error is thrown by a visitor method.
      */
     public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final Path start, final Set<FileVisitOption> options,
@@ -1761,7 +1888,6 @@ public final class PathUtils {
      * @param more    See {@link Paths#get(String,String[])}.
      * @param <T>     See {@link Files#walkFileTree(Path,FileVisitor)}.
      * @return the given visitor.
-     *
      * @throws IOException if an I/O error is thrown by a visitor method.
      */
     public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final String first, final String... more) throws IOException {
@@ -1777,7 +1903,6 @@ public final class PathUtils {
      * @param uri     See {@link Paths#get(URI)}.
      * @param <T>     See {@link Files#walkFileTree(Path,FileVisitor)}.
      * @return the given visitor.
-     *
      * @throws IOException if an I/O error is thrown by a visitor method.
      */
     public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final URI uri) throws IOException {
@@ -1844,8 +1969,8 @@ public final class PathUtils {
     @SuppressWarnings("resource") // Caller closes
     public static Stream<Path> walk(final Path start, final PathFilter pathFilter, final int maxDepth, final boolean readAttributes,
             final FileVisitOption... options) throws IOException {
-        return Files.walk(start, maxDepth, options)
-                .filter(path -> pathFilter.accept(path, readAttributes ? readBasicFileAttributesUnchecked(path) : null) == FileVisitResult.CONTINUE);
+        return Files.walk(start, maxDepth, options).filter(
+                path -> pathFilter.accept(path, readAttributes ? readBasicFileAttributes(path, EMPTY_LINK_OPTION_ARRAY) : null) == FileVisitResult.CONTINUE);
     }
 
     private static <R> R withPosixFileAttributes(final Path path, final LinkOption[] linkOptions, final boolean overrideReadOnly,
@@ -1887,5 +2012,4 @@ public final class PathUtils {
     private PathUtils() {
         // do not instantiate.
     }
-
 }

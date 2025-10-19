@@ -7,7 +7,7 @@
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ *    https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -22,6 +22,8 @@ import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.IOException;
 import java.io.Reader;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * A reader that imposes a limit to the number of characters that can be read from an underlying reader, returning EOF
@@ -77,7 +79,7 @@ public class BoundedReader extends Reader {
      *                       is no way to pass past maxCharsFromTargetReader, even if this value is greater.
      *
      * @throws IOException If an I/O error occurs while calling the underlying reader's mark method
-     * @see java.io.Reader#mark(int)
+     * @see Reader#mark(int)
      */
     @Override
     public void mark(final int readAheadLimit) throws IOException {
@@ -93,7 +95,7 @@ public class BoundedReader extends Reader {
      *
      * @return -1 on EOF or the character read
      * @throws IOException If an I/O error occurs while calling the underlying reader's read method
-     * @see java.io.Reader#read()
+     * @see Reader#read()
      */
     @Override
     public int read() throws IOException {
@@ -116,11 +118,14 @@ public class BoundedReader extends Reader {
      * @param off  The offset
      * @param len  The number of chars to read
      * @return the number of chars read
+     * @throws NullPointerException if the buffer is {@code null}.
+     * @throws IndexOutOfBoundsException if {@code off} or {@code len} are negative, or if {@code off + len} is greater than {@code cbuf.length}.
      * @throws IOException If an I/O error occurs while calling the underlying reader's read method
-     * @see java.io.Reader#read(char[], int, int)
+     * @see Reader#read(char[], int, int)
      */
     @Override
     public int read(final char[] cbuf, final int off, final int len) throws IOException {
+        IOUtils.checkFromIndexSize(cbuf, off, len);
         int c;
         for (int i = 0; i < len; i++) {
             c = read();
@@ -136,7 +141,7 @@ public class BoundedReader extends Reader {
      * Resets the target to the latest mark,
      *
      * @throws IOException If an I/O error occurs while calling the underlying reader's reset method
-     * @see java.io.Reader#reset()
+     * @see Reader#reset()
      */
     @Override
     public void reset() throws IOException {

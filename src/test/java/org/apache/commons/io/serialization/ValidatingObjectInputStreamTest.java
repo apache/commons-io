@@ -7,7 +7,7 @@
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *   https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -41,7 +41,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link ValidatingObjectInputStream}.
  */
-public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
+class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
 
     private static final ClassNameMatcher ALWAYS_TRUE = className -> true;
     private MockSerializedClass testObject;
@@ -71,52 +71,52 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     @Test
-    public void testAcceptCustomMatcherBuilder() throws Exception {
+    void testAcceptCustomMatcherBuilder() throws Exception {
         assertSerialization(addCloseable(newBuilder().accept(ALWAYS_TRUE).get()));
     }
 
     @Test
-    public void testAcceptCustomMatcherInstance() throws Exception {
+    void testAcceptCustomMatcherInstance() throws Exception {
         assertSerialization(addCloseable(newFixture()).accept(ALWAYS_TRUE));
     }
 
     @Test
-    public void testAcceptOneFail() throws Exception {
+    void testAcceptOneFail() throws Exception {
         assertThrows(InvalidClassException.class, () -> assertSerialization(addCloseable(newFixture()).accept(Integer.class)));
     }
 
     @Test
-    public void testAcceptOnePassBuilder() throws Exception {
+    void testAcceptOnePassBuilder() throws Exception {
         assertSerialization(addCloseable(newBuilder().accept(MockSerializedClass.class).get()));
     }
 
     @Test
-    public void testAcceptOnePassInstance() throws Exception {
+    void testAcceptOnePassInstance() throws Exception {
         assertSerialization(addCloseable(newFixture()).accept(MockSerializedClass.class));
     }
 
     @Test
-    public void testAcceptPatternBuilder() throws Exception {
+    void testAcceptPatternBuilder() throws Exception {
         assertSerialization(addCloseable(newBuilder().accept(Pattern.compile(".*MockSerializedClass.*")).get()));
     }
 
     @Test
-    public void testAcceptPatternInstance() throws Exception {
+    void testAcceptPatternInstance() throws Exception {
         assertSerialization(addCloseable(newFixture()).accept(Pattern.compile(".*MockSerializedClass.*")));
     }
 
     @Test
-    public void testAcceptWildcardBuilder() throws Exception {
+    void testAcceptWildcardBuilder() throws Exception {
         assertSerialization(addCloseable(newBuilder().accept("org.apache.commons.io.*").get()));
     }
 
     @Test
-    public void testAcceptWildcardInstance() throws Exception {
+    void testAcceptWildcardInstance() throws Exception {
         assertSerialization(addCloseable(newFixture()).accept("org.apache.commons.io.*"));
     }
 
     @Test
-    public void testBuildDefault() throws Exception {
+    void testBuildDefault() throws Exception {
         final byte[] serialized = SerializationUtils.serialize("");
         try (InputStream is = newBuilder().setInputStream(new ByteArrayInputStream(serialized)).get()) {
             // empty
@@ -124,12 +124,12 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     @Test
-    public void testConstructor() throws Exception {
+    void testConstructor() throws Exception {
         assertSerialization(addCloseable(newFixture()).accept(ALWAYS_TRUE));
     }
 
     @Test
-    public void testCustomInvalidMethod() {
+    void testCustomInvalidMethod() {
         final class CustomVOIS extends ValidatingObjectInputStream {
             CustomVOIS(final InputStream is) throws IOException {
                 super(is);
@@ -145,7 +145,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     @Test
-    public void testExceptionIncludesClassName() throws Exception {
+    void testExceptionIncludesClassName() throws Exception {
         final InvalidClassException ice = assertThrows(InvalidClassException.class, () -> assertSerialization(addCloseable(newFixture())));
         final String name = MockSerializedClass.class.getName();
         assertTrue(ice.getMessage().contains(name), "Expecting message to contain " + name);
@@ -156,7 +156,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
      */
     @SuppressWarnings({ "unchecked" })
     @Test
-    public void testJavadocExample() throws Exception {
+    void testJavadocExample() throws Exception {
         // @formatter:off
         // Defining Object fixture
         final HashMap<String, Integer> map1 = new HashMap<>();
@@ -164,7 +164,7 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
         // Writing serialized fixture
         final byte[] byteArray;
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                final ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+                ObjectOutputStream oos = new ObjectOutputStream(baos)) {
             oos.writeObject(map1);
             oos.flush();
             byteArray = baos.toByteArray();
@@ -195,106 +195,106 @@ public class ValidatingObjectInputStreamTest extends AbstractCloseableListTest {
     }
 
     @Test
-    public void testNoAccept() {
+    void testNoAccept() {
         assertThrows(InvalidClassException.class, () -> assertSerialization(addCloseable(newFixture())));
     }
 
     @Test
-    public void testOurTestClassAcceptedFirst() throws Exception {
+    void testOurTestClassAcceptedFirst() throws Exception {
         assertSerialization(addCloseable(newFixture()).accept(MockSerializedClass.class, Integer.class));
     }
 
     @Test
-    public void testOurTestClassAcceptedFirstWildcard() throws Exception {
+    void testOurTestClassAcceptedFirstWildcard() throws Exception {
         assertSerialization(addCloseable(newFixture()).accept("*MockSerializedClass", "*Integer"));
     }
 
     @Test
-    public void testOurTestClassAcceptedSecond() throws Exception {
+    void testOurTestClassAcceptedSecond() throws Exception {
         assertSerialization(addCloseable(newFixture()).accept(Integer.class, MockSerializedClass.class));
     }
 
     @Test
-    public void testOurTestClassAcceptedSecondWildcard() throws Exception {
+    void testOurTestClassAcceptedSecondWildcard() throws Exception {
         assertSerialization(addCloseable(newFixture()).accept("*Integer", "*MockSerializedClass"));
     }
 
     @Test
-    public void testOurTestClassNotAccepted() {
+    void testOurTestClassNotAccepted() {
         assertThrows(InvalidClassException.class, () -> assertSerialization(addCloseable(newFixture()).accept(Integer.class)));
     }
 
     @Test
-    public void testOurTestClassOnlyAccepted() throws Exception {
+    void testOurTestClassOnlyAccepted() throws Exception {
         assertSerialization(addCloseable(newFixture()).accept(MockSerializedClass.class));
     }
 
     @Test
-    public void testRejectBuilder() {
+    void testRejectBuilder() {
         assertThrows(InvalidClassException.class,
                 () -> assertSerialization(addCloseable(newBuilder().accept(Long.class).reject(MockSerializedClass.class, Integer.class).get())));
     }
 
     @Test
-    public void testRejectCustomMatcherBuilder() {
+    void testRejectCustomMatcherBuilder() {
         assertThrows(InvalidClassException.class,
                 () -> assertSerialization(addCloseable(newBuilder().accept(MockSerializedClass.class).reject(ALWAYS_TRUE).get())));
     }
 
     @Test
-    public void testRejectCustomMatcherInstance() {
+    void testRejectCustomMatcherInstance() {
         assertThrows(InvalidClassException.class, () -> assertSerialization(addCloseable(newFixture()).accept(MockSerializedClass.class).reject(ALWAYS_TRUE)));
     }
 
     @Test
-    public void testRejectInstance() {
+    void testRejectInstance() {
         assertThrows(InvalidClassException.class,
                 () -> assertSerialization(addCloseable(newFixture()).accept(Long.class).reject(MockSerializedClass.class, Integer.class)));
     }
 
     @Test
-    public void testRejectOnly() {
+    void testRejectOnly() {
         assertThrows(InvalidClassException.class, () -> assertSerialization(addCloseable(newFixture()).reject(Integer.class)));
     }
 
     @Test
-    public void testRejectPattern() {
+    void testRejectPattern() {
         assertThrows(InvalidClassException.class,
                 () -> assertSerialization(addCloseable(newFixture()).accept(MockSerializedClass.class).reject(Pattern.compile("org.*"))));
     }
 
     @Test
-    public void testRejectPrecedenceBuilder() {
+    void testRejectPrecedenceBuilder() {
         assertThrows(InvalidClassException.class,
                 () -> assertSerialization(addCloseable(newBuilder().accept(MockSerializedClass.class).reject(MockSerializedClass.class, Integer.class).get())));
     }
 
     @Test
-    public void testRejectPrecedenceInstance() {
+    void testRejectPrecedenceInstance() {
         assertThrows(InvalidClassException.class,
                 () -> assertSerialization(addCloseable(newFixture()).accept(MockSerializedClass.class).reject(MockSerializedClass.class, Integer.class)));
     }
 
     @Test
-    public void testRejectWildcardBuilder() {
+    void testRejectWildcardBuilder() {
         assertThrows(InvalidClassException.class,
                 () -> assertSerialization(addCloseable(newBuilder().accept(MockSerializedClass.class).reject("org.*").get())));
     }
 
     @Test
-    public void testRejectWildcardInstance() {
+    void testRejectWildcardInstance() {
         assertThrows(InvalidClassException.class, () -> assertSerialization(addCloseable(newFixture()).accept(MockSerializedClass.class).reject("org.*")));
     }
 
     @Test
-    public void testReuseConfiguration() throws Exception {
+    void testReuseConfiguration() throws Exception {
         // Defining Object fixture
         final HashMap<String, Integer> map1 = new HashMap<>();
         map1.put("1", 1);
         // Writing serialized fixture
         final byte[] byteArray;
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                final ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+                ObjectOutputStream oos = new ObjectOutputStream(baos)) {
             oos.writeObject(map1);
             oos.flush();
             byteArray = baos.toByteArray();

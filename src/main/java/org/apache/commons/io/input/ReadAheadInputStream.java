@@ -3,7 +3,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,6 +30,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**
@@ -72,15 +73,22 @@ public class ReadAheadInputStream extends FilterInputStream {
         private ExecutorService executorService;
 
         /**
+         * Constructs a new builder of {@link ReadAheadInputStream}.
+         */
+        public Builder() {
+            // empty
+        }
+
+        /**
          * Builds a new {@link ReadAheadInputStream}.
          * <p>
-         * You must set input that supports {@link #getInputStream()}, otherwise, this method throws an exception.
+         * You must set an aspect that supports {@link #getInputStream()}, otherwise, this method throws an exception.
          * </p>
          * <p>
-         * This builder use the following aspects:
+         * This builder uses the following aspects:
          * </p>
          * <ul>
-         * <li>{@link #getInputStream()}</li>
+         * <li>{@link #getInputStream()} gets the target aspect.</li>
          * <li>{@link #getBufferSize()}</li>
          * <li>{@link ExecutorService}</li>
          * </ul>
@@ -88,15 +96,14 @@ public class ReadAheadInputStream extends FilterInputStream {
          * @return a new instance.
          * @throws IllegalStateException         if the {@code origin} is {@code null}.
          * @throws UnsupportedOperationException if the origin cannot be converted to an {@link InputStream}.
-         * @throws IOException                   if an I/O error occurs.
+         * @throws IOException                   if an I/O error occurs converting to an {@link InputStream} using {@link #getInputStream()}.
          * @see #getInputStream()
          * @see #getBufferSize()
+         * @see #getUnchecked()
          */
-        @SuppressWarnings("resource")
         @Override
         public ReadAheadInputStream get() throws IOException {
-            return new ReadAheadInputStream(getInputStream(), getBufferSize(), executorService != null ? executorService : newExecutorService(),
-                    executorService == null);
+            return new ReadAheadInputStream(this);
         }
 
         /**
@@ -189,6 +196,12 @@ public class ReadAheadInputStream extends FilterInputStream {
 
     private final Condition asyncReadComplete = stateChangeLock.newCondition();
 
+    @SuppressWarnings("resource")
+    private ReadAheadInputStream(final Builder builder) throws IOException {
+        this(builder.getInputStream(), builder.getBufferSize(), builder.executorService != null ? builder.executorService : newExecutorService(),
+                builder.executorService == null);
+    }
+
     /**
      * Constructs an instance with the specified buffer size and read-ahead threshold
      *
@@ -226,7 +239,7 @@ public class ReadAheadInputStream extends FilterInputStream {
             final boolean shutdownExecutorService) {
         super(Objects.requireNonNull(inputStream, "inputStream"));
         if (bufferSizeInBytes <= 0) {
-            throw new IllegalArgumentException("bufferSizeInBytes should be greater than 0, but the value is " + bufferSizeInBytes);
+            throw new IllegalArgumentException(String.format("bufferSizeInBytes <= 0, bufferSizeInBytes = %,d", bufferSizeInBytes));
         }
         this.executorService = Objects.requireNonNull(executorService, "executorService");
         this.shutdownExecutorService = shutdownExecutorService;
@@ -329,9 +342,7 @@ public class ReadAheadInputStream extends FilterInputStream {
 
     @Override
     public int read(final byte[] b, final int offset, int len) throws IOException {
-        if (offset < 0 || len < 0 || len > b.length - offset) {
-            throw new IndexOutOfBoundsException();
-        }
+        IOUtils.checkFromIndexSize(b, offset, len);
         if (len == 0) {
             return 0;
         }
@@ -364,7 +375,7 @@ public class ReadAheadInputStream extends FilterInputStream {
     }
 
     /**
-     * Read data from underlyingInputStream to readAheadBuffer asynchronously.
+     * Reads data from underlyingInputStream to readAheadBuffer asynchronously.
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -407,7 +418,8 @@ public class ReadAheadInputStream extends FilterInputStream {
             //
             // So there is no race condition in both the situations.
             int read = 0;
-            int off = 0, len = arr.length;
+            int off = 0;
+            int len = arr.length;
             Throwable exception = null;
             try {
                 // try to fill the read ahead buffer.

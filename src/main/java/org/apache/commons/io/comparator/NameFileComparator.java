@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,7 +23,7 @@ import java.util.Comparator;
 import org.apache.commons.io.IOCase;
 
 /**
- * Compare the <b>names</b> of two files for order (see {@link File#getName()}).
+ * Compare the <strong>names</strong> of two files for order (see {@link File#getName()}).
  * <p>
  * This comparator can be used to sort lists or arrays of files
  * by their name either in a case-sensitive, case-insensitive or

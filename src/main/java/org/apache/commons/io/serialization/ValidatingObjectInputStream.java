@@ -7,7 +7,7 @@
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *   https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -107,7 +107,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
         private ObjectStreamClassPredicate predicate = new ObjectStreamClassPredicate();
 
         /**
-         * Constructs a new instance.
+         * Constructs a new builder of {@link ValidatingObjectInputStream}.
          *
          * @deprecated Use {@link #builder()}.
          */
@@ -132,7 +132,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * Accepts class names where the supplied ClassNameMatcher matches for deserialization, unless they are otherwise rejected.
          *
          * @param matcher a class name matcher to <em>accept</em> objects.
-         * @return this instance.
+         * @return {@code this} instance.
          * @since 2.18.0
          */
         public Builder accept(final ClassNameMatcher matcher) {
@@ -144,7 +144,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * Accepts class names that match the supplied pattern for deserialization, unless they are otherwise rejected.
          *
          * @param pattern a Pattern for compiled regular expression.
-         * @return this instance.
+         * @return {@code this} instance.
          * @since 2.18.0
          */
         public Builder accept(final Pattern pattern) {
@@ -157,7 +157,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          *
          * @param patterns Wildcard file name patterns as defined by {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String)
          *                 FilenameUtils.wildcardMatch}
-         * @return this instance.
+         * @return {@code this} instance.
          * @since 2.18.0
          */
         public Builder accept(final String... patterns) {
@@ -165,9 +165,30 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
             return this;
         }
 
+        /**
+         * Builds a new {@link ValidatingObjectInputStream}.
+         * <p>
+         * You must set an aspect that supports {@link #getInputStream()} on this builder, otherwise, this method throws an exception.
+         * </p>
+         * <p>
+         * This builder uses the following aspects:
+         * </p>
+         * <ul>
+         * <li>{@link #getInputStream()} gets the target aspect.</li>
+         * <li>predicate</li>
+         * <li>charsetDecoder</li>
+         * <li>writeImmediately</li>
+         * </ul>
+         *
+         * @return a new instance.
+         * @throws UnsupportedOperationException if the origin cannot provide a {@link InputStream}.
+         * @throws IOException                   if an I/O error occurs converting to an {@link InputStream} using {@link #getInputStream()}.
+         * @see #getWriter()
+         * @see #getUnchecked()
+         */
         @Override
         public ValidatingObjectInputStream get() throws IOException {
-            return new ValidatingObjectInputStream(getInputStream(), predicate);
+            return new ValidatingObjectInputStream(this);
         }
 
         /**
@@ -184,7 +205,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * Rejects the specified classes for deserialization, even if they are otherwise accepted.
          *
          * @param classes Classes to reject
-         * @return this instance.
+         * @return {@code this} instance.
          * @since 2.18.0
          */
         public Builder reject(final Class<?>... classes) {
@@ -196,7 +217,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * Rejects class names where the supplied ClassNameMatcher matches for deserialization, even if they are otherwise accepted.
          *
          * @param matcher the matcher to use
-         * @return this instance.
+         * @return {@code this} instance.
          * @since 2.18.0
          */
         public Builder reject(final ClassNameMatcher matcher) {
@@ -208,7 +229,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * Rejects class names that match the supplied pattern for deserialization, even if they are otherwise accepted.
          *
          * @param pattern standard Java regexp
-         * @return this instance.
+         * @return {@code this} instance.
          * @since 2.18.0
          */
         public Builder reject(final Pattern pattern) {
@@ -221,7 +242,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          *
          * @param patterns Wildcard file name patterns as defined by {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String)
          *                 FilenameUtils.wildcardMatch}
-         * @return this instance.
+         * @return {@code this} instance.
          * @since 2.18.0
          */
         public Builder reject(final String... patterns) {
@@ -233,7 +254,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
          * Sets the predicate, null resets to an empty new ObjectStreamClassPredicate.
          *
          * @param predicate the predicate.
-         * @return this instance.
+         * @return {@code this} instance.
          * @since 2.18.0
          */
         public Builder setPredicate(final ObjectStreamClassPredicate predicate) {
@@ -254,6 +275,11 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
     }
 
     private final ObjectStreamClassPredicate predicate;
+
+    @SuppressWarnings("resource") // caller closes/
+    private ValidatingObjectInputStream(final Builder builder) throws IOException {
+        this(builder.getInputStream(), builder.predicate);
+    }
 
     /**
      * Constructs an instance to deserialize the specified input stream. At least one accept method needs to be called to specify which classes can be
@@ -288,7 +314,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * </p>
      *
      * @param classes Classes to accept
-     * @return this instance.
+     * @return {@code this} instance.
      */
     public ValidatingObjectInputStream accept(final Class<?>... classes) {
         predicate.accept(classes);
@@ -302,7 +328,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * </p>
      *
      * @param matcher a class name matcher to <em>accept</em> objects.
-     * @return this instance.
+     * @return {@code this} instance.
      */
     public ValidatingObjectInputStream accept(final ClassNameMatcher matcher) {
         predicate.accept(matcher);
@@ -316,7 +342,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * </p>
      *
      * @param pattern a Pattern for compiled regular expression.
-     * @return this instance.
+     * @return {@code this} instance.
      */
     public ValidatingObjectInputStream accept(final Pattern pattern) {
         predicate.accept(pattern);
@@ -331,7 +357,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      *
      * @param patterns Wildcard file name patterns as defined by {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String)
      *                 FilenameUtils.wildcardMatch}.
-     * @return this instance.
+     * @return {@code this} instance.
      */
     public ValidatingObjectInputStream accept(final String... patterns) {
         predicate.accept(patterns);
@@ -386,7 +412,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * </p>
      *
      * @param classes Classes to reject.
-     * @return this instance.
+     * @return {@code this} instance.
      */
     public ValidatingObjectInputStream reject(final Class<?>... classes) {
         predicate.reject(classes);
@@ -400,7 +426,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * </p>
      *
      * @param matcher a class name matcher to <em>reject</em> objects.
-     * @return this instance.
+     * @return {@code this} instance.
      */
     public ValidatingObjectInputStream reject(final ClassNameMatcher matcher) {
         predicate.reject(matcher);
@@ -414,7 +440,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * </p>
      *
      * @param pattern a Pattern for compiled regular expression.
-     * @return this instance.
+     * @return {@code this} instance.
      */
     public ValidatingObjectInputStream reject(final Pattern pattern) {
         predicate.reject(pattern);
@@ -429,16 +455,36 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      *
      * @param patterns An array of wildcard file name patterns as defined by {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String)
      *                 FilenameUtils.wildcardMatch}
-     * @return this instance.
+     * @return {@code this} instance.
      */
     public ValidatingObjectInputStream reject(final String... patterns) {
         predicate.reject(patterns);
         return this;
     }
 
+    /**
+     * Checks that the given object's class name conforms to requirements and if so delegates to the superclass.
+     * <p>
+     * The reject list takes precedence over the accept list.
+     * </p>
+     */
     @Override
     protected Class<?> resolveClass(final ObjectStreamClass osc) throws IOException, ClassNotFoundException {
         checkClassName(osc.getName());
         return super.resolveClass(osc);
+    }
+
+    /**
+     * Checks that the given names conform to requirements and if so delegates to the superclass.
+     * <p>
+     * The reject list takes precedence over the accept list.
+     * </p>
+     */
+    @Override
+    protected Class<?> resolveProxyClass(final String[] interfaces) throws IOException, ClassNotFoundException {
+        for (final String interfaceName : interfaces) {
+            checkClassName(interfaceName);
+        }
+        return super.resolveProxyClass(interfaces);
     }
 }

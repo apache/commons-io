@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,6 +18,7 @@ package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -29,12 +30,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Arrays;
 
+import org.apache.commons.io.IOUtils.ScratchBytes;
+import org.apache.commons.io.IOUtils.ScratchChars;
 import org.junit.jupiter.api.Test;
 
 /**
  * Tests {@link IOCase}.
  */
-public class IOCaseTest {
+class IOCaseTest {
 
     private static final boolean WINDOWS = File.separatorChar == '\\';
 
@@ -52,7 +55,7 @@ public class IOCaseTest {
 
     private IOCase serialize(final IOCase value) throws Exception {
         final ByteArrayOutputStream buf = new ByteArrayOutputStream();
-        try (final ObjectOutputStream out = new ObjectOutputStream(buf)) {
+        try (ObjectOutputStream out = new ObjectOutputStream(buf)) {
             out.writeObject(value);
             out.flush();
         }
@@ -63,7 +66,7 @@ public class IOCaseTest {
     }
 
     @Test
-    public void test_checkCompare_case() {
+    void test_checkCompare_case() {
         assertEquals(0, IOCase.SENSITIVE.checkCompareTo("ABC", "ABC"));
         assertTrue(IOCase.SENSITIVE.checkCompareTo("ABC", "abc") < 0);
         assertTrue(IOCase.SENSITIVE.checkCompareTo("abc", "ABC") > 0);
@@ -78,7 +81,7 @@ public class IOCaseTest {
     }
 
     @Test
-    public void test_checkCompare_functionality() {
+    void test_checkCompare_functionality() {
         assertTrue(IOCase.SENSITIVE.checkCompareTo("ABC", "") > 0);
         assertTrue(IOCase.SENSITIVE.checkCompareTo("", "ABC") < 0);
         assertTrue(IOCase.SENSITIVE.checkCompareTo("ABC", "DEF") < 0);
@@ -91,7 +94,7 @@ public class IOCaseTest {
         assertThrows(NullPointerException.class, () -> IOCase.SENSITIVE.checkCompareTo(null, null));
     }
     @Test
-    public void test_checkEndsWith_case() {
+    void test_checkEndsWith_case() {
         assertTrue(IOCase.SENSITIVE.checkEndsWith("ABC", "BC"));
         assertFalse(IOCase.SENSITIVE.checkEndsWith("ABC", "Bc"));
 
@@ -103,7 +106,7 @@ public class IOCaseTest {
     }
 
     @Test
-    public void test_checkEndsWith_functionality() {
+    void test_checkEndsWith_functionality() {
         assertTrue(IOCase.SENSITIVE.checkEndsWith("ABC", ""));
         assertFalse(IOCase.SENSITIVE.checkEndsWith("ABC", "A"));
         assertFalse(IOCase.SENSITIVE.checkEndsWith("ABC", "AB"));
@@ -120,7 +123,7 @@ public class IOCaseTest {
     }
 
     @Test
-    public void test_checkEquals_case() {
+    void test_checkEquals_case() {
         assertTrue(IOCase.SENSITIVE.checkEquals("ABC", "ABC"));
         assertFalse(IOCase.SENSITIVE.checkEquals("ABC", "Abc"));
 
@@ -132,7 +135,7 @@ public class IOCaseTest {
     }
 
     @Test
-    public void test_checkEquals_functionality() {
+    void test_checkEquals_functionality() {
         assertFalse(IOCase.SENSITIVE.checkEquals("ABC", ""));
         assertFalse(IOCase.SENSITIVE.checkEquals("ABC", "A"));
         assertFalse(IOCase.SENSITIVE.checkEquals("ABC", "AB"));
@@ -149,7 +152,7 @@ public class IOCaseTest {
     }
 
     @Test
-    public void test_checkIndexOf_case() {
+    void test_checkIndexOf_case() {
         assertEquals(1,  IOCase.SENSITIVE.checkIndexOf("ABC", 0, "BC"));
         assertEquals(-1, IOCase.SENSITIVE.checkIndexOf("ABC", 0, "Bc"));
         assertEquals(-1, IOCase.SENSITIVE.checkIndexOf(null, 0, "Bc"));
@@ -164,7 +167,7 @@ public class IOCaseTest {
     }
 
     @Test
-    public void test_checkIndexOf_functionality() {
+    void test_checkIndexOf_functionality() {
 
         // start
         assertEquals(0,   IOCase.SENSITIVE.checkIndexOf("ABCDEFGHIJ", 0, "A"));
@@ -208,7 +211,7 @@ public class IOCaseTest {
     }
 
     @Test
-    public void test_checkRegionMatches_case() {
+    void test_checkRegionMatches_case() {
         assertTrue(IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "AB"));
         assertFalse(IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "Ab"));
 
@@ -220,7 +223,7 @@ public class IOCaseTest {
     }
 
     @Test
-    public void test_checkRegionMatches_functionality() {
+    void test_checkRegionMatches_functionality() {
         assertTrue(IOCase.SENSITIVE.checkRegionMatches("ABC", 0, ""));
         assertTrue(IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "A"));
         assertTrue(IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "AB"));
@@ -250,7 +253,7 @@ public class IOCaseTest {
     }
 
     @Test
-    public void test_checkStartsWith_case() {
+    void test_checkStartsWith_case() {
         assertTrue(IOCase.SENSITIVE.checkStartsWith("ABC", "AB"));
         assertFalse(IOCase.SENSITIVE.checkStartsWith("ABC", "Ab"));
 
@@ -262,7 +265,7 @@ public class IOCaseTest {
     }
 
     @Test
-    public void test_checkStartsWith_functionality() {
+    void test_checkStartsWith_functionality() {
         assertTrue(IOCase.SENSITIVE.checkStartsWith("ABC", ""));
         assertTrue(IOCase.SENSITIVE.checkStartsWith("ABC", "A"));
         assertTrue(IOCase.SENSITIVE.checkStartsWith("ABC", "AB"));
@@ -279,7 +282,7 @@ public class IOCaseTest {
     }
 
     @Test
-    public void test_forName() {
+    void test_forName() {
         assertEquals(IOCase.SENSITIVE, IOCase.forName("Sensitive"));
         assertEquals(IOCase.INSENSITIVE, IOCase.forName("Insensitive"));
         assertEquals(IOCase.SYSTEM, IOCase.forName("System"));
@@ -288,67 +291,82 @@ public class IOCaseTest {
     }
 
     @Test
-    public void test_getName() {
+    void test_getName() {
         assertEquals("Sensitive", IOCase.SENSITIVE.getName());
         assertEquals("Insensitive", IOCase.INSENSITIVE.getName());
         assertEquals("System", IOCase.SYSTEM.getName());
     }
 
     @Test
-    public void test_getScratchByteArray() {
-        final byte[] array = IOUtils.getScratchByteArray();
-        assert0(array);
-        Arrays.fill(array, (byte) 1);
-        assert0(IOUtils.getScratchCharArray());
+    void test_getScratchByteArray() {
+        final byte[] array;
+        try (ScratchBytes scratch = IOUtils.ScratchBytes.get()) {
+            array = scratch.array();
+            assert0(array);
+            Arrays.fill(array, (byte) 1);
+            // Get another array, while the first is still in use
+            // The test doesn't need the try here but that's the pattern.
+            try (ScratchBytes scratch2 = IOUtils.ScratchBytes.get()) {
+                assertNotSame(scratch, scratch2);
+                final byte[] array2 = scratch2.array();
+                assert0(array2);
+                assertNotSame(array, array2);
+            }
+        }
+        // The first array should be reset and reusable
+        try (ScratchBytes scratch = IOUtils.ScratchBytes.get()) {
+            final byte[] array3 = scratch.array();
+            assert0(array3);
+            assertSame(array, array3);
+        }
     }
 
     @Test
-    public void test_getScratchByteArrayWriteOnly() {
-        final byte[] array = IOUtils.getScratchByteArrayWriteOnly();
-        assert0(array);
-        Arrays.fill(array, (byte) 1);
-        assert0(IOUtils.getScratchCharArray());
+    void test_getScratchCharArray() {
+        final char[] array;
+        try (ScratchChars scratch = IOUtils.ScratchChars.get()) {
+            array = scratch.array();
+            assert0(array);
+            Arrays.fill(array, (char) 1);
+            // Get another array, while the first is still in use
+            // The test doesn't need the try here but that's the pattern.
+            try (ScratchChars scratch2 = IOUtils.ScratchChars.get()) {
+                final char[] array2 = scratch2.array();
+                assert0(array2);
+                assertNotSame(array, array2);
+            }
+        }
+        // The first array should be reset and reusable
+        try (ScratchChars scratch = IOUtils.ScratchChars.get()) {
+            final char[] array3 = scratch.array();
+            assert0(array3);
+            assertSame(array, array3);
+        }
     }
 
     @Test
-    public void test_getScratchCharArray() {
-        final char[] array = IOUtils.getScratchCharArray();
-        assert0(array);
-        Arrays.fill(array, (char) 1);
-        assert0(IOUtils.getScratchCharArray());
-    }
-
-    @Test
-    public void test_getScratchCharArrayWriteOnly() {
-        final char[] array = IOUtils.getScratchCharArrayWriteOnly();
-        assert0(array);
-        Arrays.fill(array, (char) 1);
-        assert0(IOUtils.getScratchCharArray());
-    }
-
-    @Test
-    public void test_isCaseSensitive() {
+    void test_isCaseSensitive() {
         assertTrue(IOCase.SENSITIVE.isCaseSensitive());
         assertFalse(IOCase.INSENSITIVE.isCaseSensitive());
         assertEquals(!WINDOWS, IOCase.SYSTEM.isCaseSensitive());
     }
 
     @Test
-    public void test_isCaseSensitive_static() {
+    void test_isCaseSensitive_static() {
         assertTrue(IOCase.isCaseSensitive(IOCase.SENSITIVE));
         assertFalse(IOCase.isCaseSensitive(IOCase.INSENSITIVE));
         assertEquals(!WINDOWS, IOCase.isCaseSensitive(IOCase.SYSTEM));
     }
 
     @Test
-    public void test_serialization() throws Exception {
+    void test_serialization() throws Exception {
         assertSame(IOCase.SENSITIVE, serialize(IOCase.SENSITIVE));
         assertSame(IOCase.INSENSITIVE, serialize(IOCase.INSENSITIVE));
         assertSame(IOCase.SYSTEM, serialize(IOCase.SYSTEM));
     }
 
     @Test
-    public void test_toString() {
+    void test_toString() {
         assertEquals("Sensitive", IOCase.SENSITIVE.toString());
         assertEquals("Insensitive", IOCase.INSENSITIVE.toString());
         assertEquals("System", IOCase.SYSTEM.toString());

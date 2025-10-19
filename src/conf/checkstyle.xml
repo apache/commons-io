@@ -7,7 +7,7 @@ The ASF licenses this file to You under the Apache License, Version 2.0
 (the "License"); you may not use this file except in compliance with
 the License.  You may obtain a copy of the License at
 
-     http://www.apache.org/licenses/LICENSE-2.0
+     https://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,37 +20,12 @@ limitations under the License.
     "https://checkstyle.org/dtds/configuration_1_3.dtd">
 <module name="Checker">
   <property name="localeLanguage" value="en" />
-  <module name="JavadocPackage">
-    <!-- setting allowLegacy means it will check for package.html instead of just package-info.java -->
-    <property name="allowLegacy" value="true" />
-  </module>
   <module name="FileTabCharacter">
     <property name="fileExtensions" value="java,xml" />
   </module>
+  <module name="JavadocPackage" />
   <module name="LineLength">
     <property name="max" value="160" />
-  </module>
-  <module name="TreeWalker">
-    <module name="WhitespaceAfter" />
-    <module name="AvoidStarImport" />
-    <module name="RedundantImport" />
-    <module name="UnusedImports" />
-    <module name="ImportOrder">
-      <property name="option" value="top"/>
-      <property name="groups" value="java,javax,org"/>
-      <property name="ordered" value="true"/>
-      <property name="separated" value="true"/>
-    </module>
-    <module name="NeedBraces" />
-    <module name="LeftCurly" />
-    <module name="JavadocMethod" />
-    <module name="FinalLocalVariable" />
-    <!-- No Trailing whitespace -->
-    <module name="Regexp">
-      <property name="format" value="[ \t]+$" />
-      <property name="illegalPattern" value="true" />
-      <property name="message" value="Trailing whitespace" />
-    </module>
   </module>
   <!-- @author tags are deprecated -->
   <module name="RegexpSingleline">
@@ -58,5 +33,52 @@ limitations under the License.
     <property name="message" value="Deprecated @author tag" />
     <property name="fileExtensions" value="java" />
     <property name="severity" value="warning" />
+  </module>
+  <module name="TreeWalker">
+    <module name="AvoidStarImport" />
+    <module name="CovariantEquals" />
+    <module name="DefaultComesLast" />
+    <module name="EmptyBlock">
+      <property name="option" value="text" />
+    </module>
+    <module name="EqualsHashCode" />
+    <module name="ExplicitInitialization" />
+    <module name="FallThrough" />
+    <module name="FinalLocalVariable" />
+    <module name="IllegalImport" />
+    <module name="IllegalInstantiation" />
+    <module name="ImportOrder">
+      <property name="option" value="top"/>
+      <property name="groups" value="java,javax,org"/>
+      <property name="ordered" value="true"/>
+      <property name="separated" value="true"/>
+    </module>
+    <module name="JavadocMethod" />
+    <module name="LeftCurly" />
+    <module name="MissingOverride" />
+    <module name="ModifierOrder" />
+    <module name="MultipleVariableDeclarations" />
+    <module name="NeedBraces" />
+    <module name="ParenPad" />
+    <module name="RedundantImport" />
+    <module name="RedundantModifier" />
+    <module name="RightCurly" />
+    <!-- No Trailing whitespace -->
+    <module name="Regexp">
+      <property name="format" value="[ \t]+$" />
+      <property name="illegalPattern" value="true" />
+      <property name="message" value="Trailing whitespace" />
+    </module>
+    <module name="SimplifyBooleanExpression" />
+    <module name="SimplifyBooleanReturn" />
+    <module name="StringLiteralEquality" />
+    <module name="SuperClone" />
+    <module name="SuperFinalize" />
+    <module name="TypecastParenPad" />
+    <module name="UnnecessaryParentheses" />
+    <module name="UnusedImports" />
+    <module name="UpperEll" />
+    <module name="WhitespaceAfter" />
+    <module name="WhitespaceAround" />
   </module>
 </module>

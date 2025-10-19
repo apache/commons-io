@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -64,7 +64,8 @@ public abstract class TestUtils {
      * @throws IOException If an I/O error occurs while reading the file contents
      */
     public static void assertEqualContent(final byte[] b0, final Path file) throws IOException {
-        int count = 0, numRead = 0;
+        int count = 0;
+        int numRead = 0;
         final byte[] b1 = new byte[b0.length];
         try (InputStream is = Files.newInputStream(file)) {
             while (count < b0.length && numRead >= 0) {
@@ -97,7 +98,8 @@ public abstract class TestUtils {
      * @throws IOException If an I/O error occurs while reading the file contents
      */
     public static void assertEqualContent(final char[] c0, final Path file) throws IOException {
-        int count = 0, numRead = 0;
+        int count = 0;
+        int numRead = 0;
         final char[] c1 = new char[c0.length];
         try (Reader ir = Files.newBufferedReader(file)) {
             while (count < c0.length && numRead >= 0) {
@@ -116,7 +118,7 @@ public abstract class TestUtils {
      */
     private static void assertEqualContent(final File f0, final File f1)
             throws IOException {
-        /* This doesn't work because the filesize isn't updated until the file
+        /* This doesn't work because the file size isn't updated until the file
          * is closed.
         assertTrue( "The files " + f0 + " and " + f1 +
                     " have differing file sizes (" + f0.length() +
@@ -182,7 +184,7 @@ public abstract class TestUtils {
         }
     }
 
-    public static void createLineBasedFile(final File file, final String[] data) throws IOException {
+    public static void createLineFileUtf8(final File file, final String[] data) throws IOException {
         if (file.getParentFile() != null && !file.getParentFile().exists()) {
             throw new IOException("Cannot create file " + file + " as the parent directory does not exist");
         }
@@ -239,11 +241,11 @@ public abstract class TestUtils {
     /**
      * Sleeps for a guaranteed number of milliseconds unless interrupted.
      *
-     * This method exists because Thread.sleep(100) can sleep for 0, 70, 100 or 200ms or anything else
-     * it deems appropriate. Read the docs on Thread.sleep for further details.
+     * This method exists because Thread.sleep(100) can sleep for 0, 70, 100 or 200ms or anything else it deems appropriate. Read the docs on Thread.sleep for
+     * further details.
      *
      * @param millis the number of milliseconds to sleep.
-     * @throws InterruptedException if interrupted.
+     * @throws InterruptedException if {@code interrupt()} was called for this Thread while it was sleeping.
      */
     public static void sleep(final long millis) throws InterruptedException {
         ThreadUtils.sleep(Duration.ofMillis(millis));
@@ -257,9 +259,22 @@ public abstract class TestUtils {
     public static void sleepQuietly(final long millis) {
         try {
             sleep(millis);
-        } catch (final InterruptedException ignored){
+        } catch (final InterruptedException ignored) {
             // ignore InterruptedException.
         }
+    }
+
+    /**
+     * Sleeps to the next full second boundary.
+     * <p>
+     * Use this method when to set a guaranteed newer file system timestamp. POSIX file systems only guarantee one second resolution, for example some macOS
+     * file systems.
+     * </p>
+     *
+     * @throws InterruptedException if {@code interrupt()} was called for this Thread while it was sleeping.
+     */
+    public static void sleepToNextSecond() throws InterruptedException {
+        sleep(1001 - System.currentTimeMillis() % 1000);
     }
 
     private TestUtils() {

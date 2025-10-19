@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,10 +32,10 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link TaggedReader}.
  */
-public class TaggedReaderTest {
+class TaggedReaderTest {
 
     @Test
-    public void testBrokenReader() {
+    void testBrokenReader() {
         final IOException exception = new IOException("test exception");
         final TaggedReader reader = new TaggedReader(new BrokenReader(exception));
 
@@ -59,7 +59,7 @@ public class TaggedReaderTest {
     }
 
     @Test
-    public void testEmptyReader() throws IOException {
+    void testEmptyReader() throws IOException {
         try (Reader reader = new TaggedReader(ClosedReader.INSTANCE)) {
             assertFalse(reader.ready());
             assertEquals(-1, reader.read());
@@ -69,7 +69,7 @@ public class TaggedReaderTest {
     }
 
     @Test
-    public void testNormalReader() throws IOException {
+    void testNormalReader() throws IOException {
         try (Reader reader = new TaggedReader(new StringReader("abc"))) {
             assertTrue(reader.ready());
             assertEquals('a', reader.read());
@@ -83,7 +83,7 @@ public class TaggedReaderTest {
     }
 
     @Test
-    public void testOtherException() throws Exception {
+    void testOtherException() throws Exception {
         final IOException exception = new IOException("test exception");
         try (TaggedReader reader = new TaggedReader(ClosedReader.INSTANCE)) {
 

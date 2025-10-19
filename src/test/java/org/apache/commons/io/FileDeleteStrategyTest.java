@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,13 +32,13 @@ import org.junit.jupiter.api.io.TempDir;
 /**
  * Tests {@link FileDeleteStrategy}.
  */
-public class FileDeleteStrategyTest {
+class FileDeleteStrategyTest {
 
     @TempDir
     public File temporaryFolder;
 
     @Test
-    public void testDeleteForce() throws Exception {
+    void testDeleteForce() throws Exception {
         final File baseDir = temporaryFolder;
         final File subDir = new File(baseDir, "test");
         assertTrue(subDir.mkdir());
@@ -64,7 +64,7 @@ public class FileDeleteStrategyTest {
     }
 
     @Test
-    public void testDeleteNormal() throws Exception {
+    void testDeleteNormal() throws Exception {
         final File baseDir = temporaryFolder;
         final File subDir = new File(baseDir, "test");
         assertTrue(subDir.mkdir());
@@ -97,13 +97,13 @@ public class FileDeleteStrategyTest {
     }
 
     @Test
-    public void testDeleteNull() throws Exception {
+    void testDeleteNull() throws Exception {
         assertThrows(NullPointerException.class, () -> FileDeleteStrategy.NORMAL.delete(null));
         assertTrue(FileDeleteStrategy.NORMAL.deleteQuietly(null));
     }
 
     @Test
-    public void testDeleteQuietlyNormal() throws Exception {
+    void testDeleteQuietlyNormal() throws Exception {
         final File baseDir = temporaryFolder;
         final File subDir = new File(baseDir, "test");
         assertTrue(subDir.mkdir());
@@ -136,7 +136,7 @@ public class FileDeleteStrategyTest {
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         assertEquals("FileDeleteStrategy[Normal]", FileDeleteStrategy.NORMAL.toString());
         assertEquals("FileDeleteStrategy[Force]", FileDeleteStrategy.FORCE.toString());
     }

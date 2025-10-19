@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -38,7 +38,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 /**
  * Tests {@link RandomAccessFileMode}.
  */
-public class RandomAccessFileModeTest {
+class RandomAccessFileModeTest {
 
     private static final byte[] BYTES_FIXTURE = "Foo".getBytes(StandardCharsets.US_ASCII);
 
@@ -56,7 +56,7 @@ public class RandomAccessFileModeTest {
 
     @ParameterizedTest
     @EnumSource(RandomAccessFileMode.class)
-    public void testCreateFile(final RandomAccessFileMode randomAccessFileMode) throws IOException {
+    void testCreateFile(final RandomAccessFileMode randomAccessFileMode) throws IOException {
         final byte[] expected = BYTES_FIXTURE;
         final Path fixture = writeFixture(expected);
         try (RandomAccessFile randomAccessFile = randomAccessFileMode.create(fixture.toFile())) {
@@ -66,7 +66,7 @@ public class RandomAccessFileModeTest {
 
     @ParameterizedTest
     @EnumSource(RandomAccessFileMode.class)
-    public void testCreatePath(final RandomAccessFileMode randomAccessFileMode) throws IOException {
+    void testCreatePath(final RandomAccessFileMode randomAccessFileMode) throws IOException {
         final byte[] expected = BYTES_FIXTURE;
         final Path fixture = writeFixture(expected);
         randomAccessFileMode.accept(fixture, raf -> assertArrayEquals(expected, read(raf)));
@@ -74,7 +74,7 @@ public class RandomAccessFileModeTest {
 
     @ParameterizedTest
     @EnumSource(RandomAccessFileMode.class)
-    public void testCreateString(final RandomAccessFileMode randomAccessFileMode) throws IOException {
+    void testCreateString(final RandomAccessFileMode randomAccessFileMode) throws IOException {
         final byte[] expected = BYTES_FIXTURE;
         final Path fixture = writeFixture(expected);
         try (RandomAccessFile randomAccessFile = randomAccessFileMode.create(fixture.toString())) {
@@ -83,7 +83,7 @@ public class RandomAccessFileModeTest {
     }
 
     @Test
-    public void testGetMode() {
+    void testGetMode() {
         assertEquals("r", RandomAccessFileMode.READ_ONLY.getMode());
         assertEquals("rw", RandomAccessFileMode.READ_WRITE.getMode());
         assertEquals("rwd", RandomAccessFileMode.READ_WRITE_SYNC_CONTENT.getMode());
@@ -91,7 +91,7 @@ public class RandomAccessFileModeTest {
     }
 
     @Test
-    public void testImplies() {
+    void testImplies() {
         assertTrue(RandomAccessFileMode.READ_WRITE_SYNC_ALL.implies(RandomAccessFileMode.READ_WRITE_SYNC_CONTENT));
         assertTrue(RandomAccessFileMode.READ_WRITE_SYNC_CONTENT.implies(RandomAccessFileMode.READ_WRITE));
         assertTrue(RandomAccessFileMode.READ_WRITE.implies(RandomAccessFileMode.READ_ONLY));
@@ -100,7 +100,7 @@ public class RandomAccessFileModeTest {
 
     @ParameterizedTest
     @EnumSource(RandomAccessFileMode.class)
-    public void testIoString(final RandomAccessFileMode randomAccessFileMode) throws IOException {
+    void testIoString(final RandomAccessFileMode randomAccessFileMode) throws IOException {
         final byte[] expected = BYTES_FIXTURE;
         final Path fixture = writeFixture(expected);
         try (IORandomAccessFile randomAccessFile = randomAccessFileMode.io(fixture.toString())) {
@@ -112,7 +112,7 @@ public class RandomAccessFileModeTest {
      * Tests the standard {@link Enum#toString()} behavior.
      */
     @Test
-    public void testToString() {
+    void testToString() {
         assertEquals("READ_ONLY", RandomAccessFileMode.READ_ONLY.toString());
         assertEquals("READ_WRITE", RandomAccessFileMode.READ_WRITE.toString());
         assertEquals("READ_WRITE_SYNC_ALL", RandomAccessFileMode.READ_WRITE_SYNC_ALL.toString());
@@ -121,18 +121,18 @@ public class RandomAccessFileModeTest {
 
     @ParameterizedTest
     @EnumSource(LinkOption.class)
-    public void testValueOf(final LinkOption option) {
+    void testValueOf(final LinkOption option) {
         assertTrue(RandomAccessFileMode.valueOf(option).implies(RandomAccessFileMode.READ_ONLY));
     }
 
     @ParameterizedTest
     @EnumSource(StandardOpenOption.class)
-    public void testValueOf(final StandardOpenOption option) {
+    void testValueOf(final StandardOpenOption option) {
         assertTrue(RandomAccessFileMode.valueOf(option).implies(RandomAccessFileMode.READ_ONLY));
     }
 
     @Test
-    public void testValueOfMode() {
+    void testValueOfMode() {
         assertEquals(RandomAccessFileMode.READ_ONLY, RandomAccessFileMode.valueOfMode("r"));
         assertEquals(RandomAccessFileMode.READ_WRITE, RandomAccessFileMode.valueOfMode("rw"));
         assertEquals(RandomAccessFileMode.READ_WRITE_SYNC_CONTENT, RandomAccessFileMode.valueOfMode("rwd"));
@@ -140,7 +140,7 @@ public class RandomAccessFileModeTest {
     }
 
     @Test
-    public void testValueOfOpenOptions() {
+    void testValueOfOpenOptions() {
         // READ_ONLY
         assertEquals(RandomAccessFileMode.READ_ONLY, RandomAccessFileMode.valueOf(StandardOpenOption.READ));
         // READ_WRITE

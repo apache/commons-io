@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -38,9 +38,9 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
     private static final long serialVersionUID = -8723373124984771318L;
 
     /** The File filter */
-    private transient final FileFilter fileFilter;
+    private final transient FileFilter fileFilter;
     /** The Filename filter */
-    private transient final FilenameFilter fileNameFilter;
+    private final transient FilenameFilter fileNameFilter;
 
     /**
      * Constructs a delegate file filter around an existing FileFilter.
@@ -65,7 +65,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
     }
 
     /**
-     * Checks the filter.
+     * Tests the filter.
      *
      * @param file  the file to check
      * @return true if the filter matches
@@ -79,7 +79,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
     }
 
     /**
-     * Checks the filter.
+     * Tests the filter.
      *
      * @param dir  the directory
      * @param name  the file name in the directory

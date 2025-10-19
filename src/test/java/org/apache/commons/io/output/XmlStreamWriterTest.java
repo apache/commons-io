@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -31,7 +31,7 @@ import org.junitpioneer.jupiter.DefaultLocale;
 /**
  * Tests {@link XmlStreamWriter}.
  */
-public class XmlStreamWriterTest {
+class XmlStreamWriterTest {
 
     /** French */
     private static final String TEXT_LATIN1 = "eacute: \u00E9";
@@ -54,7 +54,7 @@ public class XmlStreamWriterTest {
             throws IOException {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         final XmlStreamWriter writerCheck;
-        try (final XmlStreamWriter writer = XmlStreamWriter.builder().setOutputStream(out).setCharset(defaultEncodingName).get()) {
+        try (XmlStreamWriter writer = XmlStreamWriter.builder().setOutputStream(out).setCharset(defaultEncodingName).get()) {
             writerCheck = writer;
             writer.write(xml);
         }
@@ -90,7 +90,7 @@ public class XmlStreamWriterTest {
     }
 
     @Test
-    public void testDefaultEncoding() throws IOException {
+    void testDefaultEncoding() throws IOException {
         checkXmlWriter(TEXT_UNICODE, null, null);
         checkXmlWriter(TEXT_UNICODE, null, StandardCharsets.UTF_8.name());
         checkXmlWriter(TEXT_UNICODE, null, StandardCharsets.UTF_16.name());
@@ -99,13 +99,13 @@ public class XmlStreamWriterTest {
     }
 
     @Test
-    public void testEBCDICEncoding() throws IOException {
+    void testEBCDICEncoding() throws IOException {
         checkXmlWriter("simple text in EBCDIC", "CP1047");
     }
 
     @Test
-    public void testEmpty() throws IOException {
-        try (final ByteArrayOutputStream out = new ByteArrayOutputStream();
+    void testEmpty() throws IOException {
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream();
                 XmlStreamWriter writer = new XmlStreamWriter(out)) {
             writer.flush();
             writer.write("");
@@ -113,7 +113,7 @@ public class XmlStreamWriterTest {
             writer.write(".");
             writer.flush();
         }
-        try (final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream();
                 XmlStreamWriter writer = XmlStreamWriter.builder().setOutputStream(out).get()) {
             writer.flush();
             writer.write("");
@@ -124,56 +124,56 @@ public class XmlStreamWriterTest {
     }
 
     @Test
-    public void testEUC_JPEncoding() throws IOException {
+    void testEUC_JPEncoding() throws IOException {
         checkXmlWriter(TEXT_EUC_JP, "EUC-JP");
     }
 
     @Test
-    public void testLatin15Encoding() throws IOException {
+    void testLatin15Encoding() throws IOException {
         checkXmlWriter(TEXT_LATIN15, "ISO-8859-15");
     }
 
     @Test
-    public void testLatin1Encoding() throws IOException {
+    void testLatin1Encoding() throws IOException {
         checkXmlWriter(TEXT_LATIN1, StandardCharsets.ISO_8859_1.name());
     }
 
     @Test
-    public void testLatin7Encoding() throws IOException {
+    void testLatin7Encoding() throws IOException {
         checkXmlWriter(TEXT_LATIN7, "ISO-8859-7");
     }
 
     /** Turkish language has specific rules to convert dotted and dotless i character. */
     @Test
     @DefaultLocale(language = "tr")
-    public void testLowerCaseEncodingWithTurkishLocale_IO_557() throws IOException {
+    void testLowerCaseEncodingWithTurkishLocale_IO_557() throws IOException {
         checkXmlWriter(TEXT_UNICODE, "utf-8");
         checkXmlWriter(TEXT_LATIN1, "iso-8859-1");
         checkXmlWriter(TEXT_LATIN7, "iso-8859-7");
     }
 
     @Test
-    public void testNoXmlHeader() throws IOException {
+    void testNoXmlHeader() throws IOException {
         checkXmlContent("<text>text with no XML header</text>", StandardCharsets.UTF_8.name(), null);
     }
 
     @Test
-    public void testUTF16BEEncoding() throws IOException {
+    void testUTF16BEEncoding() throws IOException {
         checkXmlWriter(TEXT_UNICODE, StandardCharsets.UTF_16BE.name());
     }
 
     @Test
-    public void testUTF16Encoding() throws IOException {
+    void testUTF16Encoding() throws IOException {
         checkXmlWriter(TEXT_UNICODE, StandardCharsets.UTF_16.name());
     }
 
     @Test
-    public void testUTF16LEEncoding() throws IOException {
+    void testUTF16LEEncoding() throws IOException {
         checkXmlWriter(TEXT_UNICODE, StandardCharsets.UTF_16LE.name());
     }
 
     @Test
-    public void testUTF8Encoding() throws IOException {
+    void testUTF8Encoding() throws IOException {
         checkXmlWriter(TEXT_UNICODE, StandardCharsets.UTF_8.name());
     }
 }

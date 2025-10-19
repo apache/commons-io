@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,10 +32,10 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link TaggedInputStream}.
  */
-public class TaggedInputStreamTest  {
+class TaggedInputStreamTest  {
 
     @Test
-    public void testBrokenStream() {
+    void testBrokenStream() {
         final IOException exception = new IOException("test exception");
         final TaggedInputStream stream =
             new TaggedInputStream(new BrokenInputStream(exception));
@@ -61,12 +61,12 @@ public class TaggedInputStreamTest  {
 
     @SuppressWarnings({ "resource" })
     @Test
-    public void testCloseHandleIOException() throws IOException {
+    void testCloseHandleIOException() throws IOException {
         ProxyInputStreamTest.testCloseHandleIOException(new TaggedInputStream(new BrokenInputStream((Throwable) new IOException())));
     }
 
     @Test
-    public void testEmptyStream() throws IOException {
+    void testEmptyStream() throws IOException {
         try (InputStream stream = new TaggedInputStream(ClosedInputStream.INSTANCE)) {
             assertEquals(0, stream.available());
             assertEquals(-1, stream.read());
@@ -76,7 +76,7 @@ public class TaggedInputStreamTest  {
     }
 
     @Test
-    public void testNormalStream() throws IOException {
+    void testNormalStream() throws IOException {
         try (InputStream stream = new TaggedInputStream(new ByteArrayInputStream(new byte[] {'a', 'b', 'c'}))) {
             assertEquals(3, stream.available());
             assertEquals('a', stream.read());
@@ -90,7 +90,7 @@ public class TaggedInputStreamTest  {
     }
 
     @Test
-    public void testOtherException() throws Exception {
+    void testOtherException() throws Exception {
         final IOException exception = new IOException("test exception");
         try (TaggedInputStream stream = new TaggedInputStream(ClosedInputStream.INSTANCE)) {
 

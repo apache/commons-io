@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,10 +22,12 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.commons.io.IOUtils;
+
 /**
- * A light weight {@link InputStream} that emulates a stream of a specified size.
+ * A lightweight {@link InputStream} that emulates a stream of a specified size.
  * <p>
- * This implementation provides a light weight object for testing with an {@link InputStream} where the contents don't matter.
+ * This implementation provides a lightweight object for testing with an {@link InputStream} where the contents don't matter.
  * </p>
  * <p>
  * One use case would be for testing the handling of large {@link InputStream} as it can emulate that scenario without the overhead of actually processing large
@@ -54,6 +56,9 @@ import java.io.InputStream;
  *      }
  *  }
  * </pre>
+ * <p>
+ * This class is not thread-safe.
+ * </p>
  *
  * @since 1.3
  */
@@ -183,7 +188,7 @@ public class NullInputStream extends AbstractInputStream {
     /**
      * Initializes or re-initializes this instance for reuse.
      *
-     * @return this instance.
+     * @return {@code this} instance.
      * @since 2.17.0
      */
     public NullInputStream init() {
@@ -223,6 +228,7 @@ public class NullInputStream extends AbstractInputStream {
      * Returns a byte value for the {@code read()} method.
      * <p>
      * This implementation returns zero.
+     * </p>
      *
      * @return This implementation always returns zero.
      */
@@ -237,9 +243,9 @@ public class NullInputStream extends AbstractInputStream {
      * This implementation leaves the byte array unchanged.
      * </p>
      *
-     * @param bytes  The byte array
-     * @param offset The offset to start at.
-     * @param length The number of bytes.
+     * @param bytes  The byte array, never {@code null}.
+     * @param offset The offset to start at, always non-negative.
+     * @param length The number of bytes to process, always non-negative and at most {@code bytes.length - offset}.
      */
     protected void processBytes(final byte[] bytes, final int offset, final int length) {
         // do nothing - overridable by subclass
@@ -268,6 +274,7 @@ public class NullInputStream extends AbstractInputStream {
      *
      * @param bytes The byte array to read into
      * @return The number of bytes read or {@code -1} if the end of file has been reached and {@code throwEofException} is set to {@code false}.
+     * @throws NullPointerException if the byte array is {@code null}.
      * @throws EOFException if the end of file is reached and {@code throwEofException} is set to {@code true}.
      * @throws IOException  if trying to read past the end of file.
      */
@@ -283,12 +290,15 @@ public class NullInputStream extends AbstractInputStream {
      * @param offset The offset to start reading bytes into.
      * @param length The number of bytes to read.
      * @return The number of bytes read or {@code -1} if the end of file has been reached and {@code throwEofException} is set to {@code false}.
+     * @throws NullPointerException if the byte array is {@code null}.
+     * @throws IndexOutOfBoundsException if {@code offset} or {@code length} are negative, or if {@code offset + length} is greater than {@code bytes.length}.
      * @throws EOFException if the end of file is reached and {@code throwEofException} is set to {@code true}.
      * @throws IOException  if trying to read past the end of file.
      */
     @Override
     public int read(final byte[] bytes, final int offset, final int length) throws IOException {
-        if (bytes.length == 0 || length == 0) {
+        IOUtils.checkFromIndexSize(bytes, offset, length);
+        if (length == 0) {
             return 0;
         }
         checkOpen();
