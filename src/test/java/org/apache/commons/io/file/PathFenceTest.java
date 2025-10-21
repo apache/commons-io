@@ -19,6 +19,7 @@ package org.apache.commons.io.file;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -28,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -42,16 +44,29 @@ public class PathFenceTest {
         return Files.createDirectory(tempDir.resolve(other));
     }
 
+    private Path getRelPathToTop() {
+        final Path startPath = PathUtils.current().toAbsolutePath();
+        final Path parent = startPath;
+        final int nameCount = parent.getNameCount();
+        final String relName = StringUtils.repeat("../", nameCount);
+        final Path relPath = Paths.get(relName);
+        // sanity checks
+        final Path rootPath = relPath.toAbsolutePath().normalize();
+        assertNull(rootPath.getFileName());
+        assertEquals(startPath.getRoot(), rootPath);
+        return relPath;
+    }
+
     @Test
     void testAbsolutePath(@TempDir final Path fenceRootPath) throws Exception {
         // tempDir is the fence
-        final Path childTest = fenceRootPath.resolve("child/file.txt");
+        final Path resolved = fenceRootPath.resolve("child/file.txt");
         final PathFence fence = PathFence.builder().setRoots(fenceRootPath).get();
         // getPath with an absolute string should be allowed
-        final Path childOk = fence.apply(childTest.toString());
-        assertEquals(childTest.toAbsolutePath().normalize(), childOk.toAbsolutePath().normalize());
+        final Path childOk = fence.apply(resolved.toString());
+        assertEquals(resolved.toAbsolutePath().normalize(), childOk.toAbsolutePath().normalize());
         // check with a Path instance should return the same instance when allowed
-        assertSame(childTest, fence.apply(childTest));
+        assertSame(resolved, fence.apply(resolved));
     }
 
     @ParameterizedTest
@@ -62,6 +77,18 @@ public class PathFenceTest {
         final Path path = Paths.get(test);
         assertEquals(path, fence.apply(test));
         assertSame(path, fence.apply(path));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "/a/b", "/a/b/c", "/a/b/c/d", "a", "a/b", "a/b/c", "a/b/c/d" })
+    public void testEscapeAttempt(final Path fenceRootPath) {
+        final Path resolved = fenceRootPath.resolve("../../etc/passwd");
+        final Path relative = Paths.get("../../etc/passwd");
+        final PathFence fence = PathFence.builder().setRoots(fenceRootPath).get();
+        assertThrows(IllegalArgumentException.class, () -> fence.apply(resolved));
+        assertThrows(IllegalArgumentException.class, () -> fence.apply(relative));
+        assertThrows(IllegalArgumentException.class, () -> fence.apply(resolved.toString()));
+        assertThrows(IllegalArgumentException.class, () -> fence.apply(relative.toString()));
     }
 
     @Test
@@ -81,10 +108,9 @@ public class PathFenceTest {
     @Test
     void testNormalization(@TempDir final Path tempDir) throws Exception {
         final Path fenceRootPath = createDirectory(tempDir, "root-one");
-        final Path weird = fenceRootPath.resolve("subdir/../other.txt");
+        final Path resolved = fenceRootPath.resolve("subdir/../other.txt");
         final PathFence fence = PathFence.builder().setRoots(fenceRootPath).get();
-        // Path contains '..' but after normalization it's still inside the base
-        assertSame(weird, fence.apply(weird));
+        assertSame(resolved, fence.apply(resolved));
     }
 
     @Test
@@ -98,4 +124,21 @@ public class PathFenceTest {
         assertTrue(msg.contains("not in the fence"), () -> "Expected message to mention fence: " + msg);
         assertTrue(msg.contains(other.toAbsolutePath().toString()), () -> "Expected message to contain the path: " + msg);
     }
+
+    @Test
+    void testResolveRelative() throws Exception {
+        final PathFence fence = PathFence.builder().setRoots(Paths.get("/foo/bar")).get();
+        final Path relPathTop = getRelPathToTop();
+        final Path relPath = relPathTop.resolve("foo/bar");
+        assertSame(relPath, fence.apply(relPath));
+    }
+
+    @Test
+    void testResolveRelativeRoot() throws Exception {
+        final Path relPathTop = getRelPathToTop();
+        final PathFence fence = PathFence.builder().setRoots(relPathTop.resolve("foo/bar")).get();
+        final Path relPath = relPathTop.resolve("foo/bar");
+        assertSame(relPath, fence.apply(relPath));
+    }
+
 }
