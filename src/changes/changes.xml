@@ -57,6 +57,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory"                due-to="Gary Gregory, Piotr P. Karwasz">Javadoc general improvements.</action>
       <action type="fix" dev="ggregory"                due-to="Piotr P. Karwasz">IOUtils.toByteArray() now throws EOFException when not enough data is available #796.</action>
       <action type="fix" dev="pkarwasz"                due-to="Piotr P. Karwasz">Fix IOUtils.skip() usage in concurrent scenarios.</action>
+      <action type="fix" dev="ggregory"                due-to="J Hawkins">[javadoc] Fix XmlStreamReader Javadoc to indicate the correct class that is built #806.</action> 
       <!-- ADD -->
       <action dev="ggregory" type="add"                due-to="strangelookingnerd, Gary Gregory">FileUtils#byteCountToDisplaySize() supports Zettabyte, Yottabyte, Ronnabyte and Quettabyte #763.</action>
       <action dev="ggregory" type="add"                due-to="strangelookingnerd, Gary Gregory">Add org.apache.commons.io.FileUtils.ONE_RB #763.</action>
