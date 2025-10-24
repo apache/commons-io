@@ -57,6 +57,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory"                due-to="Gary Gregory, Piotr P. Karwasz">Javadoc general improvements.</action>
       <action type="fix" dev="ggregory"                due-to="Piotr P. Karwasz">IOUtils.toByteArray() now throws EOFException when not enough data is available #796.</action>
       <action type="fix" dev="pkarwasz"                due-to="Piotr P. Karwasz">Fix IOUtils.skip() usage in concurrent scenarios.</action>
+      <action type="fix" dev="ggregory"                due-to="J Hawkins">[javadoc] Fix XmlStreamReader Javadoc to indicate the correct class that is built #806.</action> 
       <!-- ADD -->
       <action dev="ggregory" type="add"                due-to="strangelookingnerd, Gary Gregory">FileUtils#byteCountToDisplaySize() supports Zettabyte, Yottabyte, Ronnabyte and Quettabyte #763.</action>
       <action dev="ggregory" type="add"                due-to="strangelookingnerd, Gary Gregory">Add org.apache.commons.io.FileUtils.ONE_RB #763.</action>
@@ -73,7 +74,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="pkarwasz" type="add"                due-to="Piotr P. Karwasz">Add CloseShieldChannel to close-shielded NIO Channels #786.</action>
       <action dev="pkarwasz" type="add"                due-to="Piotr P. Karwasz">Added IOUtils.checkFromIndexSize as a Java 8 backport of Objects.checkFromIndexSize #790.</action>
       <!-- UPDATE -->
-      <action type="update" dev="ggregory"             due-to="Gary Gregory, Dependabot">Bump org.apache.commons:commons-parent from 85 to 89 #774, #783.</action>
+      <action type="update" dev="ggregory"             due-to="Gary Gregory, Dependabot">Bump org.apache.commons:commons-parent from 85 to 90 #774, #783, #808.</action>
       <action type="update" dev="ggregory"             due-to="Gary Gregory">[test] Bump commons-codec:commons-codec from 1.18.0 to 1.19.0.</action>
       <action type="update" dev="ggregory"             due-to="Gary Gregory, Dependabot">[test] Bump commons.bytebuddy.version from 1.17.6 to 1.17.8 #769.</action>
       <action type="update" dev="ggregory"             due-to="Gary Gregory">[test] Bump org.apache.commons:commons-lang3 from 3.18.0 to 3.19.0.</action>
