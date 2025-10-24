@@ -576,19 +576,19 @@ class IOUtilsTest {
         assertTrue(b.get());
     }
 
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test
     void testCloseQuietly_Selector() {
-        Selector selector = null;
-        try {
-            selector = Selector.open();
-        } catch (final IOException ignore) {
-        } finally {
-            IOUtils.closeQuietly(selector);
-        }
+        assertDoesNotThrow(() -> {
+            Selector selector = null;
+            try {
+                selector = Selector.open();
+            } catch (final IOException ignore) {
+            } finally {
+                IOUtils.closeQuietly(selector);
+            }
+        });
     }
 
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test
     void testCloseQuietly_SelectorIOException() {
         final Selector selector = new SelectorAdapter() {
@@ -597,27 +597,27 @@ class IOUtilsTest {
                 throw new IOException();
             }
         };
-        IOUtils.closeQuietly(selector);
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(selector));
     }
 
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test
     void testCloseQuietly_SelectorNull() {
         final Selector selector = null;
-        IOUtils.closeQuietly(selector);
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(selector));
     }
 
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test
     void testCloseQuietly_SelectorTwice() {
-        Selector selector = null;
-        try {
-            selector = Selector.open();
-        } catch (final IOException ignore) {
-        } finally {
-            IOUtils.closeQuietly(selector);
-            IOUtils.closeQuietly(selector);
-        }
+        assertDoesNotThrow(() -> {
+            Selector selector = null;
+            try {
+                selector = Selector.open();
+            } catch (final IOException ignore) {
+            } finally {
+                IOUtils.closeQuietly(selector);
+                IOUtils.closeQuietly(selector);
+            }
+        });
     }
 
     @Test
@@ -1466,16 +1466,14 @@ class IOUtilsTest {
             ClassLoader.getSystemClassLoader()));
     }
 
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test
-    void testResourceToString_NullCharset() throws Exception {
-        IOUtils.resourceToString("/org/apache/commons/io//test-file-utf8.bin", null);
+    void testResourceToString_NullCharset() {
+        assertDoesNotThrow(() -> IOUtils.resourceToString("/org/apache/commons/io//test-file-utf8.bin", null));
     }
 
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test
-    void testResourceToString_NullCharset_WithClassLoader() throws Exception {
-        IOUtils.resourceToString("org/apache/commons/io/test-file-utf8.bin", null, ClassLoader.getSystemClassLoader());
+    void testResourceToString_NullCharset_WithClassLoader() {
+        assertDoesNotThrow(() -> IOUtils.resourceToString("org/apache/commons/io/test-file-utf8.bin", null, ClassLoader.getSystemClassLoader()));
     }
 
     @Test
