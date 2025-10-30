@@ -666,17 +666,17 @@ class FileUtilsTest extends AbstractTempDirTest {
         assertFalse(FileUtils.contentEqualsIgnoreEOL(tfile1, tfile3, null));
         assertFalse(FileUtils.contentEqualsIgnoreEOL(tfile2, tfile3, null));
 
-        final URL urlCR = getClass().getResource("FileUtilsTestDataCR.dat");
+        final URL urlCR = getClass().getResource("FileUtilsTestDataCR.bin");
         assertNotNull(urlCR);
         final File cr = new File(urlCR.toURI());
         assertTrue(cr.exists());
 
-        final URL urlCRLF = getClass().getResource("FileUtilsTestDataCRLF.dat");
+        final URL urlCRLF = getClass().getResource("FileUtilsTestDataCRLF.bin");
         assertNotNull(urlCRLF);
         final File crlf = new File(urlCRLF.toURI());
         assertTrue(crlf.exists());
 
-        final URL urlLF = getClass().getResource("FileUtilsTestDataLF.dat");
+        final URL urlLF = getClass().getResource("FileUtilsTestDataLF.bin");
         assertNotNull(urlLF);
         final File lf = new File(urlLF.toURI());
         assertTrue(lf.exists());
