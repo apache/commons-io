@@ -25,7 +25,7 @@ limitations under the License.
 <body>
 <section name="Overview">
 <p>
-  Commons IO uses <a href="http://maven.apache.org">Maven</a> its build system.
+  Commons IO uses <a href="https://maven.apache.org">Maven</a> its build system.
 </p>
 <p>
   Commons IO requires a minimum of JDK 8 to build.
@@ -46,7 +46,7 @@ limitations under the License.
 </section>
 <section name="Maven Goals">
   <p>
-    The following <a href="http://maven.apache.org">Maven</a> commands can be used to build io:
+    The following <a href="https://maven.apache.org">Maven</a> commands can be used to build io:
   </p>
   <ul>
     <li><code>mvn</code> - runs the default Maven goal which performs all build checks</li>

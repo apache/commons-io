@@ -40,7 +40,7 @@ import java.util.Objects;
  *
  * @see org.apache.commons.io.input.BOMInputStream
  * @see <a href="https://en.wikipedia.org/wiki/Byte_order_mark">Wikipedia: Byte Order Mark</a>
- * @see <a href="http://www.w3.org/TR/2006/REC-xml-20060816/#sec-guessing">W3C: Autodetection of Character Encodings
+ * @see <a href="https://www.w3.org/TR/2006/REC-xml-20060816/#sec-guessing">W3C: Autodetection of Character Encodings
  *      (Non-Normative)</a>
  * @since 2.0
  */

@@ -46,7 +46,7 @@ import org.apache.commons.io.IOUtils.ScratchChars;
  * released when the associated Stream is garbage-collected. It is not a good
  * idea to rely on this mechanism. For a good overview of the distinction
  * between "memory management" and "resource management", see
- * <a href="http://www.unixreview.com/articles/1998/9804/9804ja/ja.htm">this
+ * <a href="https://www.unixreview.com/articles/1998/9804/9804ja/ja.htm">this
  * UnixReview article</a>.
  * <p>
  * For byte-to-char methods, a {@code copy} variant allows the encoding
@@ -148,7 +148,7 @@ public class CopyUtils {
      * @param input the byte array to read from
      * @param output the {@link Writer} to write to
      * @param encoding The name of a supported character encoding. See the
-     * <a href="http://www.iana.org/assignments/character-sets">IANA
+     * <a href="https://www.iana.org/assignments/character-sets">IANA
      * Charset Registry</a> for a list of valid encoding types.
      * @throws IOException In case of an I/O problem
      */
@@ -206,7 +206,7 @@ public class CopyUtils {
      * @param input the {@link InputStream} to read from
      * @param output the {@link Writer} to write to
      * @param encoding The name of a supported character encoding. See the
-     * <a href="http://www.iana.org/assignments/character-sets">IANA
+     * <a href="https://www.iana.org/assignments/character-sets">IANA
      * Charset Registry</a> for a list of valid encoding types.
      * @throws IOException In case of an I/O problem
      */
@@ -251,7 +251,7 @@ public class CopyUtils {
      * @param input the {@link Reader} to read from
      * @param output the {@link OutputStream} to write to
      * @param encoding The name of a supported character encoding. See the
-     * <a href="http://www.iana.org/assignments/character-sets">IANA
+     * <a href="https://www.iana.org/assignments/character-sets">IANA
      * Charset Registry</a> for a list of valid encoding types.
      * @throws IOException In case of an I/O problem
      * @since 2.5
@@ -327,7 +327,7 @@ public class CopyUtils {
      * @param input the {@link String} to read from
      * @param output the {@link OutputStream} to write to
      * @param encoding The name of a supported character encoding. See the
-     * <a href="http://www.iana.org/assignments/character-sets">IANA
+     * <a href="https://www.iana.org/assignments/character-sets">IANA
      * Charset Registry</a> for a list of valid encoding types.
      * @throws IOException In case of an I/O problem
      * @since 2.5
