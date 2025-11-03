@@ -659,7 +659,7 @@ class TailerTest {
             // write a few lines
             writeLines(file, "line7", "line8", "line9");
             TestUtils.sleep(testDelayMillis);
-            // May be > 3 times due to underlying OS behavior wrt streams
+            // May be > 3 times due to underlying OS behavior and streams.
             assertTrue(listener.reachedEndOfFile >= 3, "end of file reached at least 3 times");
         }
     }

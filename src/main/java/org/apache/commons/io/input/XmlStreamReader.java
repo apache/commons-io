@@ -42,7 +42,6 @@ import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.function.IOConsumer;
-import org.apache.commons.io.output.XmlStreamWriter;
 
 /**
  * Character stream that handles all the necessary Voodoo to figure out the charset encoding of the XML document within the stream.
@@ -76,7 +75,7 @@ public class XmlStreamReader extends Reader {
 
     // @formatter:off
     /**
-     * Builds a new {@link XmlStreamWriter}.
+     * Builds a new {@link XmlStreamReader}.
      *
      * Constructs a Reader using an InputStream and the associated content-type header. This constructor is lenient regarding the encoding detection.
      * <p>
@@ -131,7 +130,7 @@ public class XmlStreamReader extends Reader {
         }
 
         /**
-         * Builds a new {@link XmlStreamWriter}.
+         * Builds a new {@link XmlStreamReader}.
          * <p>
          * You must set an aspect that supports {@link #getInputStream()}, otherwise, this method throws an exception.
          * </p>

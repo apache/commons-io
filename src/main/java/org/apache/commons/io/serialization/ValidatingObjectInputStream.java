@@ -74,7 +74,7 @@ import org.apache.commons.io.build.AbstractStreamBuilder;
  * }
  * }</pre>
  * <p>
- * Design inspired by a <a href="http://www.ibm.com/developerworks/library/se-lookahead/">IBM DeveloperWorks Article</a>.
+ * Design inspired by a <a href="https://www.ibm.com/developerworks/library/se-lookahead/">IBM DeveloperWorks Article</a>.
  * </p>
  *
  * @since 2.5

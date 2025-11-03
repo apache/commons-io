@@ -366,6 +366,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          * </p>
          *
          * @param origin The origin, not null.
+         * @throws NullPointerException if {@code origin} is {@code null}.
          */
         public AbstractRandomAccessFileOrigin(final T origin) {
             super(origin);
@@ -437,6 +438,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          * Constructs a new instance for the given origin.
          *
          * @param origin The origin, not null.
+         * @throws NullPointerException if {@code origin} is {@code null}.
          */
         public ByteArrayOrigin(final byte[] origin) {
             super(origin);
@@ -499,6 +501,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          * Constructs a new instance for the given origin.
          *
          * @param origin The origin, not null.
+         * @throws NullPointerException if {@code origin} is {@code null}.
          */
         public ChannelOrigin(final Channel origin) {
             super(origin);
@@ -563,6 +566,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          * Constructs a new instance for the given origin.
          *
          * @param origin The origin, not null.
+         * @throws NullPointerException if {@code origin} is {@code null}.
          */
         public CharSequenceOrigin(final CharSequence origin) {
             super(origin);
@@ -641,6 +645,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          * Constructs a new instance for the given origin.
          *
          * @param origin The origin, not null.
+         * @throws NullPointerException if {@code origin} is {@code null}.
          */
         public FileOrigin(final File origin) {
             super(origin);
@@ -689,6 +694,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          * Constructs a new instance for the given origin.
          *
          * @param origin The origin, not null.
+         * @throws NullPointerException if {@code origin} is {@code null}.
          */
         public InputStreamOrigin(final InputStream origin) {
             super(origin);
@@ -774,6 +780,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          * Constructs a new instance for the given origin.
          *
          * @param origin The origin, not null.
+         * @throws NullPointerException if {@code origin} is {@code null}.
          */
         public OutputStreamOrigin(final OutputStream origin) {
             super(origin);
@@ -823,6 +830,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          * Constructs a new instance for the given origin.
          *
          * @param origin The origin, not null.
+         * @throws NullPointerException if {@code origin} is {@code null}.
          */
         public PathOrigin(final Path origin) {
             super(origin);
@@ -892,6 +900,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          * Constructs a new instance for the given origin.
          *
          * @param origin The origin, not null.
+         * @throws NullPointerException if {@code origin} is {@code null}.
          */
         public ReaderOrigin(final Reader origin) {
             super(origin);
@@ -959,6 +968,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          * Constructs a new instance for the given origin.
          *
          * @param origin The origin, not null.
+         * @throws NullPointerException if {@code origin} is {@code null}.
          */
         public URIOrigin(final URI origin) {
             super(origin);
@@ -1007,6 +1017,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
          * Constructs a new instance for the given origin.
          *
          * @param origin The origin, not null.
+         * @throws NullPointerException if {@code origin} is {@code null}.
          */
         public WriterOrigin(final Writer origin) {
             super(origin);
@@ -1057,15 +1068,16 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * Constructs a new instance for subclasses.
      *
      * @param origin The origin, not null.
+     * @throws NullPointerException if {@code origin} is {@code null}.
      */
     protected AbstractOrigin(final T origin) {
         this.origin = Objects.requireNonNull(origin, "origin");
     }
 
     /**
-     * Gets the origin.
+     * Gets the origin, never null.
      *
-     * @return the origin.
+     * @return the origin, never null.
      */
     @Override
     public T get() {
@@ -1113,6 +1125,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * @param <C> The type of channel to return.
      * @throws IOException                   If an I/O error occurs.
      * @throws UnsupportedOperationException If this origin cannot be converted to a channel of the given type.
+     * @see #getChannel(OpenOption...)
      * @since 2.21.0
      */
     public final <C extends Channel> C getChannel(final Class<C> channelType, final OpenOption... options) throws IOException {
@@ -1131,6 +1144,7 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
      * @return A new Channel on the origin.
      * @throws IOException                   If an I/O error occurs.
      * @throws UnsupportedOperationException If this origin cannot be converted to a channel.
+     * @see #getChannel(Class, OpenOption...)
      * @since 2.21.0
      */
     protected Channel getChannel(final OpenOption... options) throws IOException {
@@ -1217,6 +1231,11 @@ public abstract class AbstractOrigin<T, B extends AbstractOrigin<T, B>> extends 
         return Files.newBufferedReader(getPath(), Charsets.toCharset(charset));
     }
 
+    /**
+     * Gets simple name of the underlying class.
+     *
+     * @return The simple name of the underlying class.
+     */
     private String getSimpleClassName() {
         return getClass().getSimpleName();
     }

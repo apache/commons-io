@@ -1596,7 +1596,7 @@ public class IOUtils {
      * This method buffers the input internally, so there is no need to use a {@link BufferedReader}.
      * </p>
      * <p>
-     * Character encoding names can be found at <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * Character encoding names can be found at <a href="https://www.iana.org/assignments/character-sets">IANA</a>.
      * </p>
      * <p>
      * Due to the implementation of OutputStreamWriter, this method performs a flush.
@@ -2426,7 +2426,7 @@ public class IOUtils {
      * one entry per line, using the specified character encoding.
      * <p>
      * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * <a href="https://www.iana.org/assignments/character-sets">IANA</a>.
      * </p>
      * <p>
      * This method buffers the input internally, so there is no need to use a
@@ -3080,7 +3080,7 @@ public class IOUtils {
      * using the specified character encoding.
      * <p>
      * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * <a href="https://www.iana.org/assignments/character-sets">IANA</a>.
      * </p>
      * <p>
      * This method buffers the input internally, so there is no need to use a
@@ -3207,7 +3207,7 @@ public class IOUtils {
      * using the specified character encoding.
      * <p>
      * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * <a href="https://www.iana.org/assignments/character-sets">IANA</a>.
      * </p>
      * <p>
      * This method buffers the input internally, so there is no need to use a
@@ -3277,7 +3277,7 @@ public class IOUtils {
      * using the specified character encoding.
      * <p>
      * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * <a href="https://www.iana.org/assignments/character-sets">IANA</a>.
      * </p>
      *
      * @param input the CharSequence to convert.
@@ -3322,7 +3322,7 @@ public class IOUtils {
      * using the specified character encoding.
      * <p>
      * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * <a href="https://www.iana.org/assignments/character-sets">IANA</a>.
      * </p>
      *
      * @param input the string to convert.
@@ -3355,7 +3355,7 @@ public class IOUtils {
      * using the specified character encoding.
      * <p>
      * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * <a href="https://www.iana.org/assignments/character-sets">IANA</a>.
      * </p>
      *
      * @param input the byte array to read.
@@ -3413,7 +3413,7 @@ public class IOUtils {
      * using the specified character encoding.
      * <p>
      * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * <a href="https://www.iana.org/assignments/character-sets">IANA</a>.
      * </p>
      * <p>
      * This method buffers the input internally, so there is no need to use a
@@ -3639,7 +3639,7 @@ public class IOUtils {
     /**
      * Writes bytes from a {@code byte[]} to chars on a {@link Writer} using the specified character encoding.
      * <p>
-     * Character encoding names can be found at <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * Character encoding names can be found at <a href="https://www.iana.org/assignments/character-sets">IANA</a>.
      * </p>
      * <p>
      * This method uses {@link String#String(byte[], String)}.
@@ -3698,7 +3698,7 @@ public class IOUtils {
     /**
      * Writes chars from a {@code char[]} to bytes on an {@link OutputStream} using the specified character encoding.
      * <p>
-     * Character encoding names can be found at <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * Character encoding names can be found at <a href="https://www.iana.org/assignments/character-sets">IANA</a>.
      * </p>
      * <p>
      * This method uses {@link String#String(char[])} and {@link String#getBytes(String)}.
@@ -3775,7 +3775,7 @@ public class IOUtils {
     /**
      * Writes chars from a {@link CharSequence} to bytes on an {@link OutputStream} using the specified character encoding.
      * <p>
-     * Character encoding names can be found at <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * Character encoding names can be found at <a href="https://www.iana.org/assignments/character-sets">IANA</a>.
      * </p>
      * <p>
      * This method uses {@link String#getBytes(String)}.
@@ -3858,7 +3858,7 @@ public class IOUtils {
      * {@link OutputStream} using the specified character encoding.
      * <p>
      * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * <a href="https://www.iana.org/assignments/character-sets">IANA</a>.
      * </p>
      * <p>
      * This method uses {@link String#getBytes(String)}.
@@ -3918,7 +3918,7 @@ public class IOUtils {
      * {@link OutputStream} using the specified character encoding.
      * <p>
      * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * <a href="https://www.iana.org/assignments/character-sets">IANA</a>.
      * </p>
      * <p>
      * This method uses {@link String#getBytes(String)}.
@@ -4064,7 +4064,7 @@ public class IOUtils {
      * Writes the {@link #toString()} value of each item in a collection to an {@link OutputStream} line by line, using the specified character encoding and the
      * specified line ending.
      * <p>
-     * Character encoding names can be found at <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * Character encoding names can be found at <a href="https://www.iana.org/assignments/character-sets">IANA</a>.
      * </p>
      *
      * @param lines       the lines to write, null entries produce blank lines.

@@ -1375,16 +1375,16 @@ class IOUtilsTest {
 
     @Test
     void testResourceToByteArray_ExistingResourceAtSubPackage() throws Exception {
-        final long fileSize = TestResources.getFile("FileUtilsTestDataCR.dat").length();
-        final byte[] bytes = IOUtils.resourceToByteArray("/org/apache/commons/io/FileUtilsTestDataCR.dat");
+        final long fileSize = TestResources.getFile("FileUtilsTestDataCR.bin").length();
+        final byte[] bytes = IOUtils.resourceToByteArray("/org/apache/commons/io/FileUtilsTestDataCR.bin");
         assertNotNull(bytes);
         assertEquals(fileSize, bytes.length);
     }
 
     @Test
     void testResourceToByteArray_ExistingResourceAtSubPackage_WithClassLoader() throws Exception {
-        final long fileSize = TestResources.getFile("FileUtilsTestDataCR.dat").length();
-        final byte[] bytes = IOUtils.resourceToByteArray("org/apache/commons/io/FileUtilsTestDataCR.dat",
+        final long fileSize = TestResources.getFile("FileUtilsTestDataCR.bin").length();
+        final byte[] bytes = IOUtils.resourceToByteArray("org/apache/commons/io/FileUtilsTestDataCR.bin",
             ClassLoader.getSystemClassLoader());
         assertNotNull(bytes);
         assertEquals(fileSize, bytes.length);
@@ -1436,8 +1436,8 @@ class IOUtilsTest {
 
     @Test
     void testResourceToString_ExistingResourceAtSubPackage() throws Exception {
-        final long fileSize = TestResources.getFile("FileUtilsTestDataCR.dat").length();
-        final String content = IOUtils.resourceToString("/org/apache/commons/io/FileUtilsTestDataCR.dat",
+        final long fileSize = TestResources.getFile("FileUtilsTestDataCR.bin").length();
+        final String content = IOUtils.resourceToString("/org/apache/commons/io/FileUtilsTestDataCR.bin",
             StandardCharsets.UTF_8);
 
         assertNotNull(content);
@@ -1446,8 +1446,8 @@ class IOUtilsTest {
 
     @Test
     void testResourceToString_ExistingResourceAtSubPackage_WithClassLoader() throws Exception {
-        final long fileSize = TestResources.getFile("FileUtilsTestDataCR.dat").length();
-        final String content = IOUtils.resourceToString("org/apache/commons/io/FileUtilsTestDataCR.dat",
+        final long fileSize = TestResources.getFile("FileUtilsTestDataCR.bin").length();
+        final String content = IOUtils.resourceToString("org/apache/commons/io/FileUtilsTestDataCR.bin",
             StandardCharsets.UTF_8, ClassLoader.getSystemClassLoader());
 
         assertNotNull(content);
@@ -1506,18 +1506,18 @@ class IOUtilsTest {
 
     @Test
     void testResourceToURL_ExistingResourceAtSubPackage() throws Exception {
-        final URL url = IOUtils.resourceToURL("/org/apache/commons/io/FileUtilsTestDataCR.dat");
+        final URL url = IOUtils.resourceToURL("/org/apache/commons/io/FileUtilsTestDataCR.bin");
         assertNotNull(url);
-        assertTrue(url.getFile().endsWith("/org/apache/commons/io/FileUtilsTestDataCR.dat"));
+        assertTrue(url.getFile().endsWith("/org/apache/commons/io/FileUtilsTestDataCR.bin"));
     }
 
     @Test
     void testResourceToURL_ExistingResourceAtSubPackage_WithClassLoader() throws Exception {
-        final URL url = IOUtils.resourceToURL("org/apache/commons/io/FileUtilsTestDataCR.dat",
+        final URL url = IOUtils.resourceToURL("org/apache/commons/io/FileUtilsTestDataCR.bin",
             ClassLoader.getSystemClassLoader());
 
         assertNotNull(url);
-        assertTrue(url.getFile().endsWith("/org/apache/commons/io/FileUtilsTestDataCR.dat"));
+        assertTrue(url.getFile().endsWith("/org/apache/commons/io/FileUtilsTestDataCR.bin"));
     }
 
     @Test
