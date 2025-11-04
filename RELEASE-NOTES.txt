@@ -1,4 +1,82 @@
 
+Apache Commons IO 2.21.0 Release Notes
+
+The Apache Commons IO team is pleased to announce the release of Apache Commons IO 2.21.0.
+
+Introduction
+------------
+
+The Apache Commons IO library contains utility classes, stream implementations, file filters,
+file comparators, endian transformation classes, and much more.
+
+Version 2.21.0: Java 8 or later is required.
+
+New features
+------------
+
+o          FileUtils#byteCountToDisplaySize() supports Zettabyte, Yottabyte, Ronnabyte and Quettabyte #763. Thanks to strangelookingnerd, Gary Gregory. 
+o          Add org.apache.commons.io.FileUtils.ONE_RB #763. Thanks to strangelookingnerd, Gary Gregory. 
+o          Add org.apache.commons.io.FileUtils.ONE_QB #763. Thanks to strangelookingnerd, Gary Gregory. 
+o          Add org.apache.commons.io.output.ProxyOutputStream.writeRepeat(byte[], int, int, long). Thanks to Gary Gregory. 
+o          Add org.apache.commons.io.output.ProxyOutputStream.writeRepeat(byte[], long). Thanks to Gary Gregory. 
+o          Add org.apache.commons.io.output.ProxyOutputStream.writeRepeat(int, long). Thanks to Gary Gregory. 
+o          Add length unit support in FileSystem limits. Thanks to Piotr P. Karwasz. 
+o          Add IOUtils.toByteArray(InputStream, int, int) for safer chunked reading with size validation. Thanks to Piotr P. Karwasz. 
+o          Add org.apache.commons.io.file.PathUtils.getPath(String, String). Thanks to Gary Gregory. 
+o          Add org.apache.commons.io.channels.ByteArraySeekableByteChannel. Thanks to Gary Gregory. 
+o          Add IOIterable.asIterable(). Thanks to Gary Gregory. 
+o          Add NIO channel support to `AbstractStreamBuilder`. Thanks to Piotr P. Karwasz. 
+o          Add CloseShieldChannel to close-shielded NIO Channels #786. Thanks to Piotr P. Karwasz. 
+o          Added IOUtils.checkFromIndexSize as a Java 8 backport of Objects.checkFromIndexSize #790. Thanks to Piotr P. Karwasz. 
+
+Fixed Bugs
+----------
+
+o          When testing on Java 21 and up, enable -XX:+EnableDynamicAgentLoading. Thanks to Gary Gregory. 
+o          When testing on Java 24 and up, don't fail FileUtilsListFilesTest for a different behavior in the JRE. Thanks to Gary Gregory. 
+o          ValidatingObjectInputStream does not validate dynamic proxy interfaces. Thanks to Stanislav Fort, Gary Gregory. 
+o          BoundedInputStream.getRemaining() now reports Long.MAX_VALUE instead of 0 when no limit is set. Thanks to Piotr P. Karwasz. 
+o          BoundedInputStream.available() correctly accounts for the maximum read limit. Thanks to Piotr P. Karwasz. 
+o          Deprecate IOUtils.readFully(InputStream, int) in favor of toByteArray(InputStream, int). Thanks to Gary Gregory, Piotr P. Karwasz. 
+o          IOUtils.toByteArray(InputStream) now throws IOException on byte array overflow. Thanks to Piotr P. Karwasz. 
+o          Javadoc general improvements. Thanks to Gary Gregory, Piotr P. Karwasz. 
+o          IOUtils.toByteArray() now throws EOFException when not enough data is available #796. Thanks to Piotr P. Karwasz. 
+o          Fix IOUtils.skip() usage in concurrent scenarios. Thanks to Piotr P. Karwasz. 
+o          [javadoc] Fix XmlStreamReader Javadoc to indicate the correct class that is built #806. Thanks to J Hawkins. 
+
+Changes
+-------
+
+o          Bump org.apache.commons:commons-parent from 85 to 91 #774, #783, #808. Thanks to Gary Gregory, Dependabot. 
+o          [test] Bump commons-codec:commons-codec from 1.18.0 to 1.19.0. Thanks to Gary Gregory. 
+o          [test] Bump commons.bytebuddy.version from 1.17.6 to 1.17.8 #769. Thanks to Gary Gregory, Dependabot. 
+o          [test] Bump org.apache.commons:commons-lang3 from 3.18.0 to 3.19.0. Thanks to Gary Gregory. 
+
+Removed
+-------
+
+o          Inline private constant field ProxyInputStream.exceptionHandler #780. Thanks to Piotr P. Karwasz. 
+Commons IO 2.7 and up requires Java 8 or above.
+Commons IO 2.6 requires Java 7 or above.
+Commons IO 2.3 through 2.5 requires Java 6 or above.
+Commons IO 2.2 requires Java 5 or above.
+Commons IO 1.4 requires Java 1.3 or above.
+
+Historical list of changes: https://commons.apache.org/proper/commons-io/changes.html
+
+For complete information on Apache Commons IO, including instructions on how to submit bug reports,
+patches, or suggestions for improvement, see the Apache Commons IO website:
+
+https://commons.apache.org/proper/commons-io/
+
+Download page: https://commons.apache.org/proper/commons-io/download_io.cgi
+
+Have fun!
+-Apache Commons Team
+
+------------------------------------------------------------------------------
+
+
 Apache Commons IO 2.20.0 Release Notes
 
 The Apache Commons IO team is pleased to announce the release of Apache Commons IO 2.20.0.
