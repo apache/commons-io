@@ -38,7 +38,7 @@ jobs:
     continue-on-error: ${{ matrix.experimental }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-13]
+        os: [ubuntu-latest, windows-latest, macos-latest]
         java: [ 8, 11, 17, 21, 25 ]
         experimental: [false]
         # Keep the same parameter order as the matrix above
@@ -72,7 +72,7 @@ jobs:
     - name: Set up JDK ${{ matrix.java }}
       uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
       with:
-        distribution: 'temurin'
+        distribution: ${{ runner.os == 'macOS' && matrix.java == '8' && 'zulu' || 'temurin' }}
         java-version: ${{ matrix.java }}
         # these values cause the plugin to set up the Maven settings.xml file
         server-id: apache.snapshots.https # Value of the distributionManagement/repository/id field of the pom.xml
