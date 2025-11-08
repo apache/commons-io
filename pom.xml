@@ -33,7 +33,6 @@ file comparators, endian transformation classes, and much more.
   </description>
   <url>https://commons.apache.org/proper/commons-io/</url>
   <issueManagement>
-    <system>jira</system>
     <url>https://issues.apache.org/jira/browse/IO</url>
   </issueManagement>
   <distributionManagement>
