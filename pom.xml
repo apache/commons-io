@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>92</version>
+    <version>93</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
@@ -32,9 +32,6 @@ The Apache Commons IO library contains utility classes, stream implementations, 
 file comparators, endian transformation classes, and much more.
   </description>
   <url>https://commons.apache.org/proper/commons-io/</url>
-  <issueManagement>
-    <url>https://issues.apache.org/jira/browse/IO</url>
-  </issueManagement>
   <distributionManagement>
     <site>
       <id>apache.website</id>
@@ -42,16 +39,6 @@ file comparators, endian transformation classes, and much more.
       <url>scm:svn:https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-io/</url>
     </site>
   </distributionManagement>
-  <scm>
-    <connection>scm:git:https://gitbox.apache.org/repos/asf/commons-io.git</connection>
-    <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/commons-io.git</developerConnection>
-    <url>https://gitbox.apache.org/repos/asf?p=commons-io.git</url>
-    <tag>rel/commons-io-2.21.0</tag>
-  </scm>
-  <ciManagement>
-    <system>GitHub</system>
-    <url>https://github.com/apache/commons-io/actions</url>
-  </ciManagement>
   <dependencies>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
