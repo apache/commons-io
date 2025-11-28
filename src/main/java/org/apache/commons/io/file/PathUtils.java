@@ -1412,7 +1412,7 @@ public final class PathUtils {
     /**
      * Returns true if the given options contain {@link StandardDeleteOption#OVERRIDE_READ_ONLY}.
      *
-     * @param deleteOptions the array to test
+     * @param deleteOptions the array to test.
      * @return true if the given options contain {@link StandardDeleteOption#OVERRIDE_READ_ONLY}.
      */
     private static boolean overrideReadOnly(final DeleteOption... deleteOptions) {
