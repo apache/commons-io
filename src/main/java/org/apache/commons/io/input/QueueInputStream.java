@@ -229,7 +229,7 @@ public class QueueInputStream extends InputStream {
 
     /**
      * Reads up to {@code length} bytes of data from the input stream into
-     * an array of bytes.  The first byte is read while honoring the timeout; the rest are read while <i>not</i> honoring
+     * an array of bytes.  The first byte is read while honoring the timeout; the rest are read while <em>not</em> honoring
      * the timeout. The number of bytes actually read is returned as an integer.
      *
      * @param b     the buffer into which the data is read.

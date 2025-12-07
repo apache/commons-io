@@ -19,12 +19,12 @@
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>91</version>
+    <version>93</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
   <artifactId>commons-io</artifactId>
-  <version>2.21.0-SNAPSHOT</version>
+  <version>2.21.1-SNAPSHOT</version>
   <name>Apache Commons IO</name>
   <inceptionYear>2002</inceptionYear>
   <description>
@@ -32,10 +32,6 @@ The Apache Commons IO library contains utility classes, stream implementations, 
 file comparators, endian transformation classes, and much more.
   </description>
   <url>https://commons.apache.org/proper/commons-io/</url>
-  <issueManagement>
-    <system>jira</system>
-    <url>https://issues.apache.org/jira/browse/IO</url>
-  </issueManagement>
   <distributionManagement>
     <site>
       <id>apache.website</id>
@@ -43,16 +39,6 @@ file comparators, endian transformation classes, and much more.
       <url>scm:svn:https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-io/</url>
     </site>
   </distributionManagement>
-  <scm>
-    <connection>scm:git:https://gitbox.apache.org/repos/asf/commons-io.git</connection>
-    <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/commons-io.git</developerConnection>
-    <url>https://gitbox.apache.org/repos/asf?p=commons-io.git</url>
-    <tag>rel/commons-io-2.21.0</tag>
-  </scm>
-  <ciManagement>
-    <system>GitHub</system>
-    <url>https://github.com/apache/commons-io/actions</url>
-  </ciManagement>
   <dependencies>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -93,13 +79,13 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.19.0</version>
+      <version>3.20.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
-      <version>1.19.0</version>
+      <version>1.20.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -115,11 +101,11 @@ file comparators, endian transformation classes, and much more.
     <commons.componentid>io</commons.componentid>
     <commons.module.name>org.apache.commons.io</commons.module.name>
     <commons.rc.version>RC1</commons.rc.version>
-    <commons.bc.version>2.20.0</commons.bc.version>
-    <commons.release.version>2.21.0</commons.release.version>
-    <commons.release.next>2.21.1</commons.release.next>
+    <commons.bc.version>2.21.0</commons.bc.version>
+    <commons.release.version>2.21.1</commons.release.version>
+    <commons.release.next>2.21.2</commons.release.next>
     <!-- project.build.outputTimestamp is managed by Maven plugins, see https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
-    <project.build.outputTimestamp>2025-07-18T21:12:04Z</project.build.outputTimestamp>
+    <project.build.outputTimestamp>2025-11-06T21:58:17Z</project.build.outputTimestamp>
     <commons.release.desc>(requires Java 8)</commons.release.desc>
     <commons.jira.id>IO</commons.jira.id>
     <commons.jira.pid>12310477</commons.jira.pid>
@@ -146,7 +132,7 @@ file comparators, endian transformation classes, and much more.
     </commons.osgi.import>
     <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-io/</commons.scmPubUrl>
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
-    <commons.bytebuddy.version>1.17.8</commons.bytebuddy.version>
+    <commons.bytebuddy.version>1.18.2</commons.bytebuddy.version>
     <japicmp.skip>false</japicmp.skip>
     <commons.release.isDistModule>true</commons.release.isDistModule>
     <!-- JaCoCo: Don't make code coverage worse than: -->
@@ -170,11 +156,11 @@ file comparators, endian transformation classes, and much more.
           <groupId>org.apache.rat</groupId>
           <artifactId>apache-rat-plugin</artifactId>
           <configuration>
-            <excludes>
-              <exclude>src/test/resources/**/*.bin</exclude>
-              <exclude>src/test/resources/dir-equals-tests/**</exclude>
-              <exclude>test/**</exclude>
-            </excludes>
+            <inputExcludes>
+              <inputExclude>src/test/resources/**/*.bin</inputExclude>
+              <inputExclude>src/test/resources/dir-equals-tests/**</inputExclude>
+              <inputExclude>test/**</inputExclude>
+            </inputExcludes>
           </configuration>
         </plugin>
         <plugin>

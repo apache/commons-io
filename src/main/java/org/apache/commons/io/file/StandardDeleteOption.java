@@ -38,7 +38,7 @@ public enum StandardDeleteOption implements DeleteOption {
      *
      * For now, assume the array is not sorted.
      *
-     * @param options the array to test
+     * @param options the array to test.
      * @return true if the given options contain {@link StandardDeleteOption#OVERRIDE_READ_ONLY}.
      */
     public static boolean overrideReadOnly(final DeleteOption[] options) {

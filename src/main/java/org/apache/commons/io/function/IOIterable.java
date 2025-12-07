@@ -44,8 +44,8 @@ public interface IOIterable<T> {
      * Like {@link Iterable#iterator()}.
      *
      * @param action The action to be performed for each element.
-     * @throws NullPointerException if the specified action is null.
-     * @throws IOException thrown by the given action.
+     * @throws NullPointerException Thrown if the specified action is null.
+     * @throws IOException          Thrown if an I/O error occurs for a remaining element, or the given action throws.
      * @see Iterable#iterator()
      */
     default void forEach(final IOConsumer<? super T> action) throws IOException {

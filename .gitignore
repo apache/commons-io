@@ -1,5 +1,3 @@
-### https://raw.github.com/github/gitignore/14b7566ce157ce95b07006466bacee160f242284/maven.gitignore
-
 target/
 pom.xml.tag
 pom.xml.releaseBackup
@@ -7,16 +5,19 @@ pom.xml.versionsBackup
 pom.xml.next
 release.properties
 
-
 site-content
 /.classpath
 /.project
 /.settings/
 
-### Ignore IntelliJ files
+# Ignore IntelliJ files
 /.idea/
 *.iml
 /bin/
 
-### Ignore Visual Studio code files
+# Ignore Visual Studio code files
 /.vscode/
+
+# NetBeans files
+nb-configuration.xml
+nbactions.xml
