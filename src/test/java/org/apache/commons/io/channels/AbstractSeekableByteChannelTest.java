@@ -47,7 +47,7 @@ import org.junit.jupiter.params.provider.ValueSource;
  */
 abstract class AbstractSeekableByteChannelTest {
 
-    private SeekableByteChannel channel;
+    protected SeekableByteChannel channel;
 
     @TempDir
     protected Path tempDir;
@@ -86,6 +86,7 @@ abstract class AbstractSeekableByteChannelTest {
         channel.close(); // Should not throw
         assertFalse(channel.isOpen());
     }
+
 
     @Test
     void testConcurrentPositionAndSizeQueries() throws IOException {
@@ -136,6 +137,20 @@ abstract class AbstractSeekableByteChannelTest {
         assertEquals(4, channel.size()); // Size should not change
     }
 
+    @Test
+    void testPositionBeyondSizeRead() throws IOException {
+        final ByteBuffer buffer = ByteBuffer.allocate(1);
+        channel.position(channel.size() + 1);
+        assertEquals(channel.size() + 1, channel.position());
+        assertEquals(-1, channel.read(buffer));
+        channel.position(Integer.MAX_VALUE + 1L);
+        assertEquals(Integer.MAX_VALUE + 1L, channel.position());
+        assertEquals(-1, channel.read(buffer));
+        assertThrows(IllegalArgumentException.class, () -> channel.position(-1));
+        assertThrows(IllegalArgumentException.class, () -> channel.position(Integer.MIN_VALUE));
+        assertThrows(IllegalArgumentException.class, () -> channel.position(Long.MIN_VALUE));
+    }
+
     @ParameterizedTest
     @CsvSource({ "0, 0", "5, 5", "10, 10", "100, 100" })
     void testPositionInBounds(final long newPosition, final long expectedPosition) throws IOException {
@@ -148,6 +163,7 @@ abstract class AbstractSeekableByteChannelTest {
         assertSame(channel, result); // Javadoc: "This channel"
         assertEquals(expectedPosition, channel.position());
     }
+
 
     @Test
     void testPositionNegative() {
@@ -290,6 +306,18 @@ abstract class AbstractSeekableByteChannelTest {
         channel.position(6);
         channel.write(ByteBuffer.wrap("Test".getBytes()));
         assertEquals(11, channel.size()); // Size should not change
+    }
+
+    @Test
+    void testTrucateBeyondSizeReadWrite() throws IOException {
+        final ByteBuffer buffer = ByteBuffer.allocate(1);
+        channel.truncate(channel.size() + 1);
+        assertEquals(-1, channel.read(buffer));
+        channel.truncate(Integer.MAX_VALUE + 1L);
+        assertEquals(-1, channel.read(buffer));
+        assertThrows(IllegalArgumentException.class, () -> channel.truncate(-1));
+        assertThrows(IllegalArgumentException.class, () -> channel.truncate(Integer.MIN_VALUE));
+        assertThrows(IllegalArgumentException.class, () -> channel.truncate(Long.MIN_VALUE));
     }
 
     @Test
