@@ -265,18 +265,19 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
         try {
             final int wanted = b.remaining();
             // intPos <= Integer.MAX_VALUE
-            int intPos = (int) position;
-            final int possibleWithoutResize = Math.max(0, size - intPos);
-            if (wanted > possibleWithoutResize) {
-                final int newSize = intPos + wanted;
-                if (newSize < 0 || newSize > IOUtils.SOFT_MAX_ARRAY_LENGTH) { // overflow
-                    throw new IOException(String.format("Required array size %,d is too large.", Integer.toUnsignedString(newSize)));
-                }
-                resize(newSize);
+            final int intPos = (int) position;
+            final long newPosition = position + wanted;
+            if (newPosition > IOUtils.SOFT_MAX_ARRAY_LENGTH) {
+                throw new IOException(String.format("Requested array size %,d is too large.", newPosition));
+            }
+            if (newPosition > size) {
+                final int newPositionInt = (int) newPosition;
+                // Ensure that newPositionInt ≤ data.length
+                resize(newPositionInt);
+                size = newPositionInt;
             }
             b.get(data, intPos, wanted);
-            // intPos + wanted is at most (Integer.MAX_VALUE - intPos) + intPos
-            position = intPos += wanted;
+            position = newPosition;
             if (size < intPos) {
                 size = intPos;
             }
