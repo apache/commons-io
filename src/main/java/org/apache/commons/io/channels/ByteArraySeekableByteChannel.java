@@ -270,7 +270,7 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
             if (wanted > possibleWithoutResize) {
                 final int newSize = intPos + wanted;
                 if (newSize < 0 || newSize > IOUtils.SOFT_MAX_ARRAY_LENGTH) { // overflow
-                    throw new OutOfMemoryError("required array size " + Integer.toUnsignedString(newSize) + " too large");
+                    throw new IOException(String.format("Required array size %,d is too large.", Integer.toUnsignedString(newSize)));
                 }
                 resize(newSize);
             }
