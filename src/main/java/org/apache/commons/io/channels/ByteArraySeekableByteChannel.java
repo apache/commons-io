@@ -68,7 +68,7 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
 
     private byte[] data;
     private volatile boolean closed;
-    private int position;
+    private long position;
     private int size;
     private final ReentrantLock lock = new ReentrantLock();
 
@@ -126,11 +126,10 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
         }
     }
 
-    private int checkRange(final long newSize, final String method) {
-        if (newSize < 0L || newSize > IOUtils.SOFT_MAX_ARRAY_LENGTH) {
-            throw new IllegalArgumentException(String.format("%s must be in range [0..%,d]: %,d", method, IOUtils.SOFT_MAX_ARRAY_LENGTH, newSize));
+    private void checkRange(final long newSize, final String method) {
+        if (newSize < 0L) {
+            throw new IllegalArgumentException(String.format("%s must be positive: %,d", method, newSize));
         }
-        return (int) newSize;
     }
 
     @Override
@@ -166,10 +165,10 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
     @Override
     public SeekableByteChannel position(final long newPosition) throws IOException {
         checkOpen();
-        final int intPos = checkRange(newPosition, "position()");
+        checkRange(newPosition, "position()");
         lock.lock();
         try {
-            position = intPos;
+            position = newPosition;
         } finally {
             lock.unlock();
         }
@@ -181,15 +180,18 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
         checkOpen();
         lock.lock();
         try {
+            if (position > Integer.MAX_VALUE) {
+                return IOUtils.EOF;
+            }
             int wanted = buf.remaining();
-            final int possible = size - position;
+            final int possible = size - (int) position;
             if (possible <= 0) {
                 return IOUtils.EOF;
             }
             if (wanted > possible) {
                 wanted = possible;
             }
-            buf.put(data, position, wanted);
+            buf.put(data, (int) position, wanted);
             position += wanted;
             return wanted;
         } finally {
@@ -238,14 +240,14 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
     @Override
     public SeekableByteChannel truncate(final long newSize) throws ClosedChannelException {
         checkOpen();
-        final int intSize = checkRange(newSize, "truncate()");
+        checkRange(newSize, "truncate()");
         lock.lock();
         try {
-            if (size > intSize) {
-                size = intSize;
+            if (size > newSize) {
+                size = (int) newSize;
             }
-            if (position > intSize) {
-                position = intSize;
+            if (position > newSize) {
+                position = newSize;
             }
         } finally {
             lock.unlock();
@@ -256,21 +258,28 @@ public class ByteArraySeekableByteChannel implements SeekableByteChannel {
     @Override
     public int write(final ByteBuffer b) throws IOException {
         checkOpen();
+        if (position > Integer.MAX_VALUE) {
+            throw new IOException("position > Integer.MAX_VALUE");
+        }
         lock.lock();
         try {
             final int wanted = b.remaining();
-            final int possibleWithoutResize = Math.max(0, size - position);
-            if (wanted > possibleWithoutResize) {
-                final int newSize = position + wanted;
-                if (newSize < 0 || newSize > IOUtils.SOFT_MAX_ARRAY_LENGTH) { // overflow
-                    throw new OutOfMemoryError("required array size " + Integer.toUnsignedString(newSize) + " too large");
-                }
-                resize(newSize);
+            // intPos <= Integer.MAX_VALUE
+            final int intPos = (int) position;
+            final long newPosition = position + wanted;
+            if (newPosition > IOUtils.SOFT_MAX_ARRAY_LENGTH) {
+                throw new IOException(String.format("Requested array size %,d is too large.", newPosition));
             }
-            b.get(data, position, wanted);
-            position += wanted;
-            if (size < position) {
-                size = position;
+            if (newPosition > size) {
+                final int newPositionInt = (int) newPosition;
+                // Ensure that newPositionInt ≤ data.length
+                resize(newPositionInt);
+                size = newPositionInt;
+            }
+            b.get(data, intPos, wanted);
+            position = newPosition;
+            if (size < intPos) {
+                size = intPos;
             }
             return wanted;
         } finally {

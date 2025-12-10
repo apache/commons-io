@@ -84,6 +84,22 @@ public class ByteArraySeekableByteChannelTest extends AbstractSeekableByteChanne
         assertThrows(NullPointerException.class, () -> ByteArraySeekableByteChannel.wrap(null));
     }
 
+    @Test
+    void testPositionBeyondSizeReadWrite() throws IOException {
+        final ByteBuffer buffer = ByteBuffer.allocate(1);
+        channel.position(channel.size() + 1);
+        assertEquals(channel.size() + 1, channel.position());
+        assertEquals(-1, channel.read(buffer));
+        channel.position(Integer.MAX_VALUE + 1L);
+        assertEquals(Integer.MAX_VALUE + 1L, channel.position());
+        assertEquals(-1, channel.read(buffer));
+        // ByteArraySeekableByteChannel has a hard boundary at Integer.MAX_VALUE, files don't.
+        assertThrows(IOException.class, () -> channel.write(buffer));
+        assertThrows(IllegalArgumentException.class, () -> channel.position(-1));
+        assertThrows(IllegalArgumentException.class, () -> channel.position(Integer.MIN_VALUE));
+        assertThrows(IllegalArgumentException.class, () -> channel.position(Long.MIN_VALUE));
+    }
+
     @ParameterizedTest
     @MethodSource
     void testShouldResizeWhenWritingMoreDataThanCapacity(final byte[] data, final int wanted) throws IOException {
