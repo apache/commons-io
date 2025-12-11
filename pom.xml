@@ -24,7 +24,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
   <artifactId>commons-io</artifactId>
-  <version>2.21.1-SNAPSHOT</version>
+  <version>2.22.0-SNAPSHOT</version>
   <name>Apache Commons IO</name>
   <inceptionYear>2002</inceptionYear>
   <description>
@@ -102,8 +102,8 @@ file comparators, endian transformation classes, and much more.
     <commons.module.name>org.apache.commons.io</commons.module.name>
     <commons.rc.version>RC1</commons.rc.version>
     <commons.bc.version>2.21.0</commons.bc.version>
-    <commons.release.version>2.21.1</commons.release.version>
-    <commons.release.next>2.21.2</commons.release.next>
+    <commons.release.version>2.22.0</commons.release.version>
+    <commons.release.next>2.22.1</commons.release.next>
     <!-- project.build.outputTimestamp is managed by Maven plugins, see https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
     <project.build.outputTimestamp>2025-11-06T21:58:17Z</project.build.outputTimestamp>
     <commons.release.desc>(requires Java 8)</commons.release.desc>
